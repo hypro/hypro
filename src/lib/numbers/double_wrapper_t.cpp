@@ -159,6 +159,11 @@ namespace hypro
 		result.dou = std::abs(dou);
 	}
 	
+	void double_wrapper_t::from_double(const double d)
+	{
+		dou = d;
+	}
+	
 	double double_wrapper_t::to_double() const
 	{
 		return dou;

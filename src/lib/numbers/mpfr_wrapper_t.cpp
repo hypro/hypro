@@ -10,18 +10,21 @@ namespace hypro
 {
 	mpfr_wrapper_t::mpfr_wrapper_t()
 	{
-		mpfr_init(mpfr);
+		mpfr_init2(mpfr, MPFR_PREC_MIN);
+		rnd = MPFR_RNDN;
 	}
 	
-	mpfr_wrapper_t::mpfr_wrapper_t(mpfr_t & mpfr_number, mpfr_rnd_t rounding_mode)
+	mpfr_wrapper_t::mpfr_wrapper_t(mpfr_t & mpfr_number, mpfr_rnd_t rounding_mode, mpfr_prec_t precision)
 	{
-		mpfr_init_set(mpfr, mpfr_number, rounding_mode);
+		mpfr_init2(mpfr, precision);
+		mpfr_set(mpfr, mpfr_number, rounding_mode);
 		rnd = rounding_mode;
 	}
 	
-	mpfr_wrapper_t::mpfr_wrapper_t(double double_number, mpfr_rnd_t rounding_mode)
+	mpfr_wrapper_t::mpfr_wrapper_t(double double_number, mpfr_rnd_t rounding_mode, mpfr_prec_t precision)
 	{
-		mpfr_init_set_d(mpfr, double_number, rounding_mode);
+		mpfr_init2(mpfr, precision);
+		mpfr_set_d(mpfr, double_number, rounding_mode);
 		rnd = rounding_mode;
 	}
 	
@@ -35,9 +38,9 @@ namespace hypro
 		mpfr_set(result, mpfr, rnd);
 	}
 	
-	void mpfr_wrapper_t::set_mpfr(const mpfr_t & m)
+	void mpfr_wrapper_t::set_mpfr(const mpfr_t & mpfr_number)
 	{
-		mpfr_set(mpfr, m, rnd);
+		mpfr_set(mpfr, mpfr_number, rnd);
 	}
 	
 	void mpfr_wrapper_t::get_rnd(mpfr_rnd_t & result) const
@@ -45,9 +48,19 @@ namespace hypro
 		result = rnd;
 	}
 	
-	void mpfr_wrapper_t::set_rnd(const mpfr_rnd_t & r)
+	void mpfr_wrapper_t::set_rnd(const mpfr_rnd_t & rounding_mode)
 	{
-		rnd = r;
+		rnd = rounding_mode;
+	}
+	
+	void mpfr_wrapper_t::get_prec(mpfr_prec_t & result) const
+	{
+		result = mpfr_get_prec(mpfr);
+	}
+	
+	void mpfr_wrapper_t::set_prec(const mpfr_prec_t & precision)
+	{
+		mpfr_set_prec(mpfr, precision);
 	}
 	
 	bool mpfr_wrapper_t::operator == (const mpfr_wrapper_t & m) const
@@ -183,6 +196,11 @@ namespace hypro
 	void mpfr_wrapper_t::abs(mpfr_wrapper_t & result) const
 	{
 		mpfr_abs(result.mpfr, mpfr, result.rnd);
+	}
+	
+	void mpfr_wrapper_t::from_double(const double d)
+	{
+		mpfr_set_d(mpfr, d, rnd);
 	}
 	
 	double mpfr_wrapper_t::to_double() const

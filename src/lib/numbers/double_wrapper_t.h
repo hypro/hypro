@@ -20,14 +20,14 @@ namespace hypro
 		double_wrapper_t();
 		double_wrapper_t(const double d);
 		virtual ~double_wrapper_t();
-		
+
 		bool operator == (const double_wrapper_t & m) const;
 		bool operator != (const double_wrapper_t & m) const;
 		bool operator > (const double_wrapper_t & m) const;
 		bool operator < (const double_wrapper_t & m) const;
 		bool operator <= (const double_wrapper_t & m) const;
 		bool operator >= (const double_wrapper_t & m) const;
-	
+
 		double_wrapper_t & operator = (const double_wrapper_t & m);
 		double_wrapper_t & operator += (const double_wrapper_t & m);
 		double_wrapper_t & operator -= (const double_wrapper_t & m);
@@ -35,18 +35,19 @@ namespace hypro
 		double_wrapper_t & operator /= (const double_wrapper_t & m);
 		double_wrapper_t & operator ++ ();
 		double_wrapper_t & operator -- ();
-	
+
 		const double_wrapper_t operator + (const double_wrapper_t & m) const;
 		const double_wrapper_t operator - (const double_wrapper_t & m) const;
 		const double_wrapper_t operator * (const double_wrapper_t & m) const;
 		const double_wrapper_t operator / (const double_wrapper_t & m) const;
-		
+
 		void sqrt(double_wrapper_t & result) const;
-		void cbrt(double_wrapper_t & result) const;		// Currently not supported
+		void cbrt(double_wrapper_t & result) const;							// Currently not supported
 		void root(double_wrapper_t & result, unsigned long int k) const;	// Currently not supported
 		void pow(double_wrapper_t & result, double_wrapper_t & m) const;
 		void abs(double_wrapper_t & result) const;
-		
+
+		void from_double(const double d);
 		double to_double() const;
 	};
 }
