@@ -3,15 +3,20 @@ add_subdirectory(numbers)
 add_subdirectory(representations)
 
 set(lib_hypro_sources
-	${lib_hypro_number_sources}
-	${lib_hypro_representation_sources}
-	${lib_hypro_datastructure_sources}
+	
 )
 
 if(${STATICLIB_SWITCH} STREQUAL "ON")
 	set(STATICLIB "STATIC")
+else()
+	set(STATICLIB "SHARED")
 endif()
 
-add_library(lib_${PROJECT_NAME} ${STATICLIB} ${lib_hypro_sources})
+add_library(${PROJECT_NAME} ${STATICLIB} 
+	${lib_hypro_sources}
+	$<TARGET_OBJECTS:datastructures>
+	$<TARGET_OBJECTS:numbers>
+	$<TARGET_OBJECTS:representations>
+)
 
-target_link_libraries(lib_${PROJECT_NAME} ${libraries})
+target_link_libraries(${PROJECT_NAME} ${libraries})

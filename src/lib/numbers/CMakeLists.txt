@@ -1,7 +1,7 @@
 set(lib_hypro_number_sources
-	numbers/double_wrapper_t.cpp
-	numbers/mpfr_wrapper_t.cpp
-PARENT_SCOPE)
+	double_wrapper_t.cpp
+	mpfr_wrapper_t.cpp
+)
 
 set(lib_hypro_number_headers
 	double_wrapper_t.h
@@ -10,3 +10,5 @@ set(lib_hypro_number_headers
 	mpfr_wrapper_t.h
 	number_t.h
 )
+
+add_library(numbers OBJECT ${lib_hypro_number_sources})
