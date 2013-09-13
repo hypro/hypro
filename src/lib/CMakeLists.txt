@@ -13,3 +13,5 @@ if(${STATICLIB_SWITCH} STREQUAL "ON")
 endif()
 
 add_library(lib_${PROJECT_NAME} ${STATICLIB} ${lib_hypro_sources})
+
+target_link_libraries(lib_${PROJECT_NAME} ${libraries})

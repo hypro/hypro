@@ -62,9 +62,19 @@ enable_testing()
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
+
+find_package(MPFR REQUIRED)
+include_directories(${MPFR_INCLUDE_DIRS})
+set(libraries ${libraries} ${MPFR_LIBRARIES})
+
+find_package(GMP REQUIRED)
+include_directories(${GMP_INCLUDE_DIRS})
+set(libraries ${libraries} ${GMP_LIBRARIES})
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.2. required libraries
@@ -75,7 +85,6 @@ find_package(GTest REQUIRED)
 # # # # # # # # # # # # # # # # # # # # # #
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
-
 
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
