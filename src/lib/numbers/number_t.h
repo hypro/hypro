@@ -4,49 +4,49 @@
  * Version: September 2013
  */
 
-#ifndef NUMBER_T_H_
-#define NUMBER_T_H_
+#ifndef NUMBER_FloatType_H_
+#define NUMBER_FloatType_H_
 
 namespace hypro
 {
-	template<class T>
+	template<class FloatType>
 	class number_t
 	{
 	public:
 		// boolean operators
-		virtual bool operator == (const T & m) const = 0;
-		virtual bool operator != (const T & m) const = 0;
-		virtual bool operator > (const T & m) const = 0;
-		virtual bool operator < (const T & m) const = 0;
-		virtual bool operator <= (const T & m) const = 0;
-		virtual bool operator >= (const T & m) const = 0;
+		bool operator == (const FloatType& m) const;
+		bool operator != (const FloatType& m) const;
+		bool operator > (const FloatType& m) const;
+		bool operator < (const FloatType& m) const;
+		bool operator <= (const FloatType& m) const;
+		bool operator >= (const FloatType& m) const;
 
 		// changing operators
-		virtual T & operator = (const T & m) = 0;
-		virtual T & operator += (const T & m) = 0;
-		virtual T & operator -= (const T & m) = 0;
-		virtual T & operator *= (const T & m) = 0;
-		virtual T & operator /= (const T & m) = 0;
-		virtual T & operator ++ () = 0;
-		virtual T & operator -- () = 0;
+		FloatType& operator = (const FloatType& m);
+		FloatType& operator += (const FloatType& m);
+		FloatType& operator -= (const FloatType& m);
+		FloatType& operator *= (const FloatType& m);
+		FloatType& operator /= (const FloatType& m);
+		FloatType& operator ++ ();
+		FloatType& operator -- ();
 
 		// returning value operators
-		virtual const T operator + (const T & m) const = 0;
-		virtual const T operator - (const T & m) const = 0;
-		virtual const T operator * (const T & m) const = 0;
-		virtual const T operator / (const T & m) const = 0;
+		const FloatType operator + (const FloatType& m) const;
+		const FloatType operator - (const FloatType& m) const;
+		const FloatType operator * (const FloatType& m) const;
+		const FloatType operator / (const FloatType& m) const;
 
 		// more complex operators
-		virtual void sqrt(T & result) const = 0;
-		virtual void cbrt(T & result) const = 0;
-		virtual void root(T & result, unsigned long int k) const = 0;
-		virtual void pow(T & result, T & m) const = 0;
-		virtual void abs(T & result) const = 0;
+		void sqrt(FloatType& result) const;
+		void cbrt(FloatType& result) const;
+		void root(FloatType& result, unsigned long int k) const;
+		void pow(FloatType& result, FloatType& m) const;
+		void abs(FloatType& result) const;
 
 		// convertion with double
-		virtual void from_double(const double d) = 0;
-		virtual double to_double() const = 0;
+		void from_double(const double d);
+		double to_double() const;
 	};
 }
 
-#endif /*NUMBER_T_H_*/
+#endif /*NUMBER_FloatType_H_*/
