@@ -18,5 +18,5 @@ add_library(${PROJECT_NAME} ${STATICLIB}
 	$<TARGET_OBJECTS:numbers>
 	$<TARGET_OBJECTS:representations>
 )
-
+include_directories(${PROJECT_DIR}/src/lib/numbers)
 target_link_libraries(${PROJECT_NAME} ${libraries})

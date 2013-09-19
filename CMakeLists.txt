@@ -5,7 +5,6 @@
 # Project name: HyPro                                         #
 # Contact: Xin Chen chen@cs.rwth-aachen.de                    #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
-#          Nils Jansen nils.jansen@cs.rwth-aachen.de          #
 # 							      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

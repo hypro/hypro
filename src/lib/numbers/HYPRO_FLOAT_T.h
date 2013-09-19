@@ -6,14 +6,12 @@
 
 #pragma once
 
-#include "number_t.h"
-#include "HYPRO_INT_T.h"
 #include <string>
 
 namespace hypro
 {
 	template<class FloatType>
-	class HYPRO_FLOAT_T : public number_t<FloatType>
+	class HYPRO_FLOAT_T
 	{
             private:
                 /**
@@ -25,11 +23,34 @@ namespace hypro
                 /**
                  * Constructors & Destructors
                  */
-                HYPRO_FLOAT_T();
-                HYPRO_FLOAT_T(const double& _double);
-                HYPRO_FLOAT_T(const std::string _str);
-                HYPRO_FLOAT_T(const FloatType&);
+                HYPRO_FLOAT_T() : mValue(){}
+                
+                HYPRO_FLOAT_T(const double& _double)
+                {
+//                    mValue = FloatType.fromDouble(_double);
+                }
+                
+                HYPRO_FLOAT_T(const std::string _str)
+                {
+//                    mValue = FloatType.fromString(_str);
+                }
+                
+                HYPRO_FLOAT_T(const FloatType& _float) : mValue(_float){}
+                
                 ~HYPRO_FLOAT_T();
+                
+                /**
+                 * Getter & Setter
+                 */
+                FloatType& rValue()
+                {
+                    return mValue;
+                }
+                
+                void setValue(FloatType _value)
+                {
+                    mValue = _value;
+                }
                 
                 /**
                  * Operators
@@ -129,9 +150,9 @@ namespace hypro
 		void cbrt(HYPRO_FLOAT_T& result) const;
 		void root(HYPRO_FLOAT_T& result, unsigned long int k) const;
                 
-		void pow(HYPRO_FLOAT_T& result, HYPRO_INT_T& _rhs) const
+		void pow(HYPRO_FLOAT_T& result, unsigned long int _exp) const
                 {
-                    result = HYPRO_FLOAT_T(mValue.pow(_rhs.mValue));
+                    result = HYPRO_FLOAT_T(mValue.pow(_exp));
                 }
 		
                 void abs(HYPRO_FLOAT_T& result) const

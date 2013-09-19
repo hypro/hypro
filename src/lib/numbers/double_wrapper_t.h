@@ -12,7 +12,8 @@
 
 namespace hypro
 {
-	class double_wrapper_t : public HYPRO_FLOAT_T<double_wrapper_t>
+//	class double_wrapper_t : public HYPRO_FLOAT_T<double_wrapper_t>
+	class double_wrapper_t
 	{
 	private:
 		double dou;

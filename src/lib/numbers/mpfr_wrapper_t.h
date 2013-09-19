@@ -12,7 +12,8 @@
 
 namespace hypro
 {
-	class mpfr_wrapper_t : public HYPRO_FLOAT_T<mpfr_wrapper_t>
+//	class mpfr_wrapper_t : public HYPRO_FLOAT_T<mpfr_wrapper_t>
+	class mpfr_wrapper_t
 	{
 	private:
 		mpfr_t mpfr;	// the mpfr number
