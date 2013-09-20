@@ -71,11 +71,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 find_package(MPFR REQUIRED)
 include_directories(${MPFR_INCLUDE_DIRS})
-set(libraries ${libraries} ${MPFR_LIBRARIES})
+set(libraries ${libraries} ${MPFR_LIBRARY})
 
 find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIRS})
-set(libraries ${libraries} ${GMP_LIBRARIES})
+set(libraries ${libraries} ${GMP_LIBRARY})
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.2. required libraries

@@ -1,5 +1,6 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src )
+	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib )
+        link_directories(${CMAKE_BUILD_DIR}/lib)
 
 	################################
 	# Unit Tests
@@ -7,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	add_executable(runNumberTests
 		NumberTest.cpp
 	)
-	target_link_libraries(runNumberTests gtest gtest_main hypro ${libraries})
+	target_link_libraries(runNumberTests gtest gtest_main hypro  ${libraries})
 	add_test( NAME numbers COMMAND runNumberTests )
 endif()
 

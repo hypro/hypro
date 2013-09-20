@@ -30,7 +30,6 @@ namespace hypro
 	
 	mpfr_wrapper_t::~mpfr_wrapper_t()
 	{
-		mpfr_clear(mpfr);
 	}
 	
 	void mpfr_wrapper_t::get_mpfr(mpfr_t & result) const

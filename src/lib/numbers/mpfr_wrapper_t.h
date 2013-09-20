@@ -4,10 +4,8 @@
  * Version: Septemper 2013
  */
 
-#ifndef MPFR_WRAPPER_T_H_
-#define MPFR_WRAPPER_T_H_
+#pragma once
 
-#include "HYPRO_FLOAT_T.h"
 #include "mpfr.h"
 
 namespace hypro
@@ -43,7 +41,7 @@ namespace hypro
 		/**
 		 * Destructor
 		 */
-		virtual ~mpfr_wrapper_t();
+		~mpfr_wrapper_t();
 		
 		
 		/**
@@ -117,5 +115,3 @@ namespace hypro
 		double to_double() const;
 	};
 }
-
-#endif /*MPFR_WRAPPER_T_H_*/

@@ -18,5 +18,12 @@ add_library(${PROJECT_NAME} ${STATICLIB}
 	$<TARGET_OBJECTS:numbers>
 	$<TARGET_OBJECTS:representations>
 )
-include_directories(${PROJECT_DIR}/src/lib/numbers)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME} ${libraries})
+
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
+install(FILES ${lib_hypro_number_headers} DESTINATION include)

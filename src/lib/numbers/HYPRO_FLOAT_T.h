@@ -37,7 +37,7 @@ namespace hypro
                 
                 HYPRO_FLOAT_T(const FloatType& _float) : mValue(_float){}
                 
-                ~HYPRO_FLOAT_T();
+                ~HYPRO_FLOAT_T(){}
                 
                 /**
                  * Getter & Setter
