@@ -38,7 +38,7 @@ namespace hypro {
     number Point<number>::getDistanceDependentProbabiltity(Point<number> & mean, unsigned intlength, float rate) const {
         number dist;
         for (unsigned i = 0; i < getDimension(); i++) {
-            dist += pow(mCoordinates[i] - mean[i], 2);
+            dist += (mCoordinates[i] - mean[i]).pow(number(2));
         }
         dist /= rate;
         if (dist < 1) return 1;
