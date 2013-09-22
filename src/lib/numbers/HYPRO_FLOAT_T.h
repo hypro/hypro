@@ -1,6 +1,6 @@
 /**
  * Abstract base class for all floating number types.
- * Autho: Benedikt Seidl
+ * Author: Benedikt Seidl
  * Version: September 2013
  */
 
