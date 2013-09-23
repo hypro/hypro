@@ -7,6 +7,7 @@
 #pragma once
 
 #include "mpfr.h"
+#include <string>
 
 namespace hypro
 {
@@ -28,7 +29,7 @@ namespace hypro
 		 * @param rounding_mode the rounding mode
 		 * @param precision the precision
 		 */
-		mpfr_wrapper_t(mpfr_t & mpfr_number, mpfr_rnd_t rounding_mode = MPFR_RNDN, mpfr_prec_t precision = MPFR_PREC_MIN);
+		mpfr_wrapper_t(const mpfr_t & mpfr_number, const mpfr_rnd_t rounding_mode = MPFR_RNDN, const mpfr_prec_t precision = MPFR_PREC_MIN);
 		
 		/**
 		 * Constructor
@@ -36,7 +37,15 @@ namespace hypro
 		 * @param rounding_mode the rounding mode
 		 * @param precision the precision
 		 */
-		mpfr_wrapper_t(const double double_number, mpfr_rnd_t rounding_mode = MPFR_RNDN, mpfr_prec_t precision = MPFR_PREC_MIN);
+		mpfr_wrapper_t(const double double_number, const mpfr_rnd_t rounding_mode = MPFR_RNDN, const mpfr_prec_t precision = MPFR_PREC_MIN);
+		
+		/**
+		 * Constructor
+		 * @param string_number the string number
+		 * @param rounding_mode the rounding mode
+		 * @param precision the precision
+		 */
+		mpfr_wrapper_t(const std::string & string_number, const mpfr_rnd_t rounding_mode = MPFR_RNDN, const mpfr_prec_t precision = MPFR_PREC_MIN);
 		
 		/**
 		 * Destructor
@@ -104,14 +113,14 @@ namespace hypro
 		const mpfr_wrapper_t operator / (const mpfr_wrapper_t & m) const;
 		
 		// more complex operators
-		void sqrt(mpfr_wrapper_t & result) const;
-		void cbrt(mpfr_wrapper_t & result) const;
-		void root(mpfr_wrapper_t & result, unsigned long int k) const;
-		void pow(mpfr_wrapper_t & result, mpfr_wrapper_t & m) const;
-		void abs(mpfr_wrapper_t & result) const;
+		mpfr_wrapper_t sqrt() const;
+		mpfr_wrapper_t cbrt() const;
+		mpfr_wrapper_t root(unsigned long int k) const;
+		mpfr_wrapper_t pow(mpfr_wrapper_t & m) const;
+		mpfr_wrapper_t abs() const;
 		
 		// convertion with double
-		void from_double(const double d);
-		double to_double() const;
+		double toDouble() const;
+		std::string toString() const;
 	};
 }

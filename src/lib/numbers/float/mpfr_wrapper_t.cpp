@@ -14,22 +14,30 @@ namespace hypro
 		rnd = MPFR_RNDN;
 	}
 	
-	mpfr_wrapper_t::mpfr_wrapper_t(mpfr_t & mpfr_number, mpfr_rnd_t rounding_mode, mpfr_prec_t precision)
+	mpfr_wrapper_t::mpfr_wrapper_t(const mpfr_t & mpfr_number, const mpfr_rnd_t rounding_mode, const mpfr_prec_t precision)
 	{
 		mpfr_init2(mpfr, precision);
 		mpfr_set(mpfr, mpfr_number, rounding_mode);
 		rnd = rounding_mode;
 	}
 	
-	mpfr_wrapper_t::mpfr_wrapper_t(double double_number, mpfr_rnd_t rounding_mode, mpfr_prec_t precision)
+	mpfr_wrapper_t::mpfr_wrapper_t(const double double_number, const mpfr_rnd_t rounding_mode, const mpfr_prec_t precision)
 	{
 		mpfr_init2(mpfr, precision);
 		mpfr_set_d(mpfr, double_number, rounding_mode);
 		rnd = rounding_mode;
 	}
 	
+	mpfr_wrapper_t::mpfr_wrapper_t(const std::string & string_number, const mpfr_rnd_t rounding_mode, const mpfr_prec_t precision)
+	{
+		mpfr_init2(mpfr, precision);
+		mpfr_set_str(mpfr, string_number.c_str(), 0, rounding_mode);	// TODO: not sure if 0 is right here...
+		rnd = rounding_mode;
+	}
+
 	mpfr_wrapper_t::~mpfr_wrapper_t()
 	{
+		mpfr_clear(mpfr);
 	}
 	
 	void mpfr_wrapper_t::get_mpfr(mpfr_t & result) const
@@ -172,38 +180,49 @@ namespace hypro
 		return result;
 	}
 	
-	void mpfr_wrapper_t::sqrt(mpfr_wrapper_t & result) const
+	mpfr_wrapper_t mpfr_wrapper_t::sqrt() const
 	{
-		mpfr_sqrt(result.mpfr, mpfr, result.rnd);
+		mpfr_wrapper_t result;
+		mpfr_sqrt(result.mpfr, mpfr, rnd);
+		return result;
 	}
 	
-	void mpfr_wrapper_t::cbrt(mpfr_wrapper_t & result) const
+	mpfr_wrapper_t mpfr_wrapper_t::cbrt() const
 	{
-		mpfr_cbrt(result.mpfr, mpfr, result.rnd);
+		mpfr_wrapper_t result;
+		mpfr_cbrt(result.mpfr, mpfr, rnd);
+		return result;
 	}
 	
-	void mpfr_wrapper_t::root(mpfr_wrapper_t & result, unsigned long int k) const
+	mpfr_wrapper_t mpfr_wrapper_t::root(unsigned long int k) const
 	{
-		mpfr_root(result.mpfr, mpfr, k, result.rnd);
+		mpfr_wrapper_t result;
+		mpfr_root(result.mpfr, mpfr, k, rnd);
+		return result;
 	}
 	
-	void mpfr_wrapper_t::pow(mpfr_wrapper_t & result, mpfr_wrapper_t & m) const
+	mpfr_wrapper_t mpfr_wrapper_t::pow(mpfr_wrapper_t & m) const
 	{
-		mpfr_pow(result.mpfr, mpfr, m.mpfr, result.rnd);
+		mpfr_wrapper_t result;
+		mpfr_pow(result.mpfr, mpfr, m.mpfr, rnd);
+		return result;
 	}
 	
-	void mpfr_wrapper_t::abs(mpfr_wrapper_t & result) const
+	mpfr_wrapper_t mpfr_wrapper_t::abs() const
 	{
-		mpfr_abs(result.mpfr, mpfr, result.rnd);
+		mpfr_wrapper_t result;
+		mpfr_abs(result.mpfr, mpfr, rnd);
+		return result;
 	}
 	
-	void mpfr_wrapper_t::from_double(const double d)
-	{
-		mpfr_set_d(mpfr, d, rnd);
-	}
-	
-	double mpfr_wrapper_t::to_double() const
+	double mpfr_wrapper_t::toDouble() const
 	{
 		return mpfr_get_d(mpfr, rnd);
+	}
+	
+	std::string mpfr_wrapper_t::toString() const
+	{
+		// TODO
+		return "";
 	}
 }
