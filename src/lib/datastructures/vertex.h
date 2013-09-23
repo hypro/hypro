@@ -17,7 +17,7 @@
 #include <set>
 #include <fstream>
 //#include "boost/lexical_cast.hpp"
-#include "config.h"
+//#include "config.h"
 #include "point.h"
 
 namespace hypro {
@@ -25,19 +25,20 @@ namespace hypro {
 /**
  *
  */
+/*
     class Vertex;
     typedef std::vector<Vertex> vVec;
     typedef std::vector<Vertex>::iterator vVecIt; 
     typedef std::list<Vertex> vList;
     typedef std::list<Vertex>::iterator vListIt;
     typedef std::set<Vertex> vSet;
-    typedef std::set<Vertex>::iterator vSetIt; 
+    typedef std::set<Vertex>::iterator vSetIt;*/ 
     
 	/**
 	 * @class Vertex
 	 */
-	template<class number>
-	class Vertex : public Point<number> {
+	template<class NumberType>
+	class Vertex : public Point<NumberType> {
 	public:
 		/**
 		 *
@@ -45,7 +46,7 @@ namespace hypro {
 		 * @param color
 		 * @return
 		 */
-		Vertex(unsigned dimension=  MAXIMAL_DIMENSION, bool color = false) : Point(dimension) {
+		Vertex(unsigned dimension = Point<NumberType>::DEFAULT_DIMENSION, bool color = false) : Point<NumberType>(dimension) {
 			mColor = color;
 		}
 	
@@ -55,7 +56,7 @@ namespace hypro {
 		 * @param color
 		 * @return
 		 */
-		Vertex(std::vector<int> coordinates, bool color) : Point(coordinates) {
+		Vertex(std::vector<NumberType> coordinates, bool color) : Point<NumberType>(coordinates) {
 			mColor = color;
 		}
 	
@@ -65,7 +66,7 @@ namespace hypro {
 		 * @param color
 		 * @return
 		 */
-		Vertex(const Point& p, bool color) : Point(p) {
+		Vertex(const Point<NumberType> & p, bool color) : Point<NumberType>(p) {
 			mColor = color;
 		}
 	
@@ -92,12 +93,14 @@ namespace hypro {
 			mColor = !mColor;
 		}
 	
-        std::string toString(bool parentheses = true) const {
-            if (parentheses) return Point::toString(true) + " " + 
+        /*
+         * TODO
+         * std::string toString(bool parentheses = true) const {
+            if (parentheses) return Point<NumberType>::toString(true) + " " + 
                     "[" + boost::lexical_cast<std::string>(mColor) +"]";
             else return Point::toString(false) + " " + 
                     boost::lexical_cast<std::string>(mColor);
-        }
+        }*/
 
 
         friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) {
