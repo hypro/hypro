@@ -4,6 +4,10 @@
  * Last modified Septemper 10, 2013
  * 
  * @author Sebastian Junges
+ * 
+ * NOTICE: All functions are located in this header file because this is a templated class.
+ * For more information see http://stackoverflow.com/questions/8752837/undefined-reference-to-template-class-constructor
+ * 
  */
 #ifndef POINT_H_
 #define POINT_H_
@@ -35,21 +39,188 @@ namespace hypro {
     template<class NumberType>
     class Point {
     public:
-    	static const unsigned DEFAULT_DIMENSION = 2;
     	static const int POINT_RAND_MAX = 100;
     	
-        std::string toString(const bool parentheses = true) const;
-        std::vector<Point> getAllNeighborsForAFixedDimension(int fixedDim) const;
-        std::vector<Point> getAllNeighbours(bool pointself=false) const;
-        NumberType getGaussianProbability(Point<NumberType> & mean) const;
-        NumberType getDistanceDependentProbabiltity(Point<NumberType> & mean, unsigned intlength, float rate) const;        
-        void setCoordinates(NumberType coordinates[], unsigned dimension = DEFAULT_DIMENSION, unsigned offset = 0);
-        NumberType sum() const;
-        void insertCoordinates(std::vector<NumberType> coordinates, unsigned offset = 0);
-        static Point<NumberType> coordinateMax(const Point<NumberType> & p1, const Point<NumberType> & p2);
-        void nextPointOnGrid(const Point<NumberType> & bounds);
-        void moveRandom();
+    	/**
+	     * @brief gives the next point according to some (hardcoded) ordering.
+	     * @param bounds The grid lies between the origin and this point.
+	     *
+	     */
+    	void nextPointOnGrid(const Point<NumberType> & bounds) {
+            for(unsigned i=getDimension(); i>0.; i--) {
+                if (mCoordinates[i-1] < bounds[i-1]) {
+                    mCoordinates[i-1]++;
+                    return;
+                }
+                else {
+                    mCoordinates[i-1] = 0;
+                }
+            }
+        }
+    	
+    	NumberType getGaussianProbability(Point<NumberType> & mean) const{
+        	return 0;
+        }
+    	
+    	NumberType getDistanceDependentProbabiltity(Point<NumberType> & mean, unsigned intlength, float rate) const{
+            NumberType dist;
+            for (unsigned i = 0; i < getDimension(); i++) {
+                dist += (mCoordinates[i] - mean[i]).pow(NumberType(2));
+            }
+            dist /= rate;
+            if (dist < 1) return 1;
+            return (((NumberType) intlength * (NumberType) getDimension()*(NumberType) getDimension() / dist));
+        }
+    	
+    	/**
+	     * @param parentheses Decides if the output is surrounded by parentheses. 
+	     * @return The coordinates of the point.
+	     */
+	    std::string toString(const bool parentheses = true) const{
+            unsigned dimension = mCoordinates.size();
+            std::string result;
 
+            if (parentheses) {
+                result += "(";
+            }
+
+            for (unsigned i = 0; i < dimension - 1; i++) {
+                result += mCoordinates[i].toString() + " ";
+            }
+            result += mCoordinates[dimension - 1].toString();
+
+            if (parentheses) {
+                result += ")";
+            }
+            return result;
+
+        }
+        
+	    /**
+         * @brief random move in one direction.
+         */
+        void moveRandom(){
+            unsigned dim = getDimension();
+            unsigned value = rand();
+            unsigned dir = value%dim;
+            bool neg = (rand() & 1);
+            if (neg) mCoordinates[dir]--;
+            else mCoordinates[dir]++;
+        }
+        
+        /**
+         * Set dimension coordinates, beginning at offset.
+         * @param coordinates
+         * @param dimension the dimension of the setted point.
+         * @param offset first coordinate that is set.
+         */
+        void setCoordinates(NumberType coordinates[], unsigned dimension = 2, unsigned offset = 0){
+            mCoordinates.reserve(dimension + offset);
+            for (unsigned i = 0; i < dimension; i++) {
+                mCoordinates[i + offset] = coordinates[i];
+            }
+        }
+        
+        /**
+         * 
+         * @return the sum of all coordinates
+         */
+        NumberType sum() const{
+            NumberType sum = 0;
+            for (unsigned i = 0; i < getDimension(); i++) {
+                sum += mCoordinates[i];
+            }
+            return sum;
+        }
+        
+        /**
+         * 
+         * @param coordinates
+         * @param offset
+         */
+        void insertCoordinates(std::vector<NumberType> & coordinates, unsigned offset = 0) {
+            typename std::vector<NumberType>::iterator it = mCoordinates.begin();
+            mCoordinates.reserve(coordinates.size());
+            while (offset > 0) {
+                it++;
+                offset--;
+            }
+            mCoordinates.insert(it, coordinates.begin(), coordinates.end());
+        }
+        
+        /**
+         * @brief: function to calculate points in the neighborhood, with one fixed dimension.
+         * @return std::vector with all points in the neighborhood, with a fixed dimension, and except the point itself.
+         */
+        std::vector<Point<NumberType> > getAllNeighborsForAFixedDimension(int fixedDim) const {
+            std::vector<Point<NumberType> > neighbors;
+            unsigned dim = getDimension();
+
+            // TODO comment
+            int nrofNeighbors = (pow(2, (dim - 1)) - 1);
+            neighbors.reserve(nrofNeighbors);
+
+            std::vector<NumberType> coordinates;
+            coordinates.resize(dim);
+
+            for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
+                //calculate the next neighbor we going to check
+                for (int k = dim - 1; k >= 0; k--) {
+                    if (k > fixedDim) {
+                        coordinates[k] = mCoordinates[k] - ((neighborNr >> (dim - k - 1)) & 1);
+                    } else if (k == fixedDim) {
+                        coordinates[k] = mCoordinates[k];
+                    } else { // k < fixed
+                        coordinates[k] = mCoordinates[k] - ((neighborNr >> (dim - k - 1 - 1)) & 1);
+                    }
+                }
+                Point<NumberType> neighbor = Point<NumberType>(coordinates);
+                neighbors.push_back(neighbor);
+            }
+            return neighbors;
+        }
+        
+        /**
+         *
+         * @param fixedDim
+         * @return Vector filled with neighbours with coordinate[fixedDim] equal to the points coordinate.
+         *  point is not an element of the returned vector.
+         */
+        std::vector<Point<NumberType> > getAllNeighbours(bool pointself=false) const{
+            std::vector<Point<NumberType> > neighbors = getAllNeighborsForAFixedDimension(0);
+            unsigned nrneighbors = neighbors.size();
+            //TODO comment!
+            for (unsigned i = 0; i < nrneighbors; i++) {
+                Point<NumberType> neighborpredecessor = Point(neighbors[i]).getPredecessorInDimension(0);
+                neighbors.push_back(neighborpredecessor);
+            }
+
+            Point<NumberType> pointPredecessor = getPredecessorInDimension(0);
+            neighbors.push_back(pointPredecessor);
+            
+            if (pointself) {
+                neighbors.push_back(*this);
+            }
+
+            return neighbors;
+        }
+   
+        // --------------------------------------------------------------------------------------------
+        
+        /**
+         * 
+         * @param p1 One point
+         * @param p2 Other point
+         * @return A point with the coordinate-wise maximum of p1 and p2.
+         */
+        static Point<NumberType> coordinateMax(const Point<NumberType> & p1, const Point<NumberType> & p2) {
+            Point<NumberType> p = Point<NumberType>(p1.getDimension());
+            for (unsigned k = 0; k < p.getDimension(); k++) {
+                (p1[k] > p2[k]) ? p[k] = p1[k] : p[k] = p2[k];
+            }
+            return p;
+        }
+        
         /**
          * Constructors & Destructor
          */
@@ -58,7 +229,7 @@ namespace hypro {
          * Constructs a point with the passed dimension.
          * @param dim
          */
-        Point(unsigned dim = Point<NumberType>::DEFAULT_DIMENSION) {
+        Point(unsigned dim = 2) {
             mCoordinates.reserve(dim);
         }
         
@@ -341,7 +512,7 @@ namespace hypro {
          * @return
          */
         friend std::ostream & operator<< (std::ostream& ostr, const Point<NumberType> & p) {
-            //ostr << p.toString();
+            ostr << p.toString();
             return ostr;
         }
         

@@ -105,16 +105,17 @@ TEST(Point, Constructor)
 { 
     Point<hypro_float_t> p = Point<hypro_float_t>();
     //komisch:
-    //ASSERT_EQ(p.getDimension(), Point<hypro_float_t>::DEFAULT_DIMENSION);
+    ASSERT_EQ(p.getDimension(), (unsigned) 2);
     
     p = Point<hypro_float_t>(5);
     ASSERT_EQ(p.getDimension(), (unsigned) 5);
     
     //komisch:
-    /*p = Point<hypro_float_t>(7, hypro_float_t(4));
+    hypro_float_t initialValue(4);
+    p = Point<hypro_float_t>(7, initialValue);
     ASSERT_EQ(p.getDimension(), (unsigned) 7);
     ASSERT_EQ(p[0], hypro_float_t(7));
-    ASSERT_EQ(p[6], hypro_float_t(7));*/
+    ASSERT_EQ(p[6], hypro_float_t(7));
     
     Point<hypro_float_t> pCopy = Point<hypro_float_t>(p);
     ASSERT_EQ(p, pCopy);

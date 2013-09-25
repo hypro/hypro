@@ -46,7 +46,7 @@ namespace hypro {
 		 * @param color
 		 * @return
 		 */
-		Vertex(unsigned dimension = Point<NumberType>::DEFAULT_DIMENSION, bool color = false) : Point<NumberType>(dimension) {
+		Vertex(unsigned dimension = 2, bool color = false) : Point<NumberType>(dimension) {
 			mColor = color;
 		}
 	
