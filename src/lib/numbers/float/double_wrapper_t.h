@@ -4,11 +4,11 @@
  * Version: Septemper 2013
  */
 
-#ifndef DOUBLE_WRAPPER_T_H_
-#define DOUBLE_WRAPPER_T_H_
+#pragma once
 
 #include <cmath>
 #include <string>
+#include <sstream>
 
 namespace hypro
 {
@@ -53,5 +53,3 @@ namespace hypro
 		std::string toString() const;
 	};
 }
-
-#endif /*DOUBLE_WRAPPER_T_H_*/

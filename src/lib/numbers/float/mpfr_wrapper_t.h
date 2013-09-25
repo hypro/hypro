@@ -8,6 +8,7 @@
 
 #include "mpfr.h"
 #include <string>
+#include <sstream>
 
 namespace hypro
 {

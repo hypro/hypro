@@ -222,7 +222,9 @@ namespace hypro
 	
 	std::string mpfr_wrapper_t::toString() const
 	{
-		// TODO
-		return "";
+		// TODO: perhaps not the best method
+		std::stringstream str;
+		str << toDouble();   
+		return str.str();
 	}
 }

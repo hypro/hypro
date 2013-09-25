@@ -104,13 +104,11 @@ TEST_F(PointTest, BooleanTest)
 TEST(Point, Constructor)
 { 
     Point<hypro_float_t> p = Point<hypro_float_t>();
-    //komisch:
     ASSERT_EQ(p.getDimension(), (unsigned) 2);
     
     p = Point<hypro_float_t>(5);
     ASSERT_EQ(p.getDimension(), (unsigned) 5);
     
-    //komisch:
     hypro_float_t initialValue(4);
     p = Point<hypro_float_t>(7, initialValue);
     ASSERT_EQ(p.getDimension(), (unsigned) 7);

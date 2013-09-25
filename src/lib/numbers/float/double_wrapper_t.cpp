@@ -20,7 +20,12 @@ namespace hypro
 	
 	double_wrapper_t::double_wrapper_t(const std::string & _s)
 	{
-		// TODO
+		std::istringstream i(_s);
+		double x;
+		if (!(i >> x))
+			mValue = 0;
+		else
+			mValue = x;
 	}
 	
 	double_wrapper_t::~double_wrapper_t()
@@ -164,7 +169,8 @@ namespace hypro
 	
 	std::string double_wrapper_t::toString() const
 	{
-		// TODO
-		return "";
+		std::stringstream str;
+		str << mValue;   
+		return str.str();
 	}
 }
