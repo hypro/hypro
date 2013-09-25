@@ -50,7 +50,7 @@ namespace hypro {
      * @return The coordinates of the point.
      */
     template<class NumberType>
-    std::string Point<NumberType>::toString(bool parentheses) const {
+    std::string Point<NumberType>::toString(const bool parentheses) const {
         unsigned dimension = mCoordinates.size();
         std::string result;
 

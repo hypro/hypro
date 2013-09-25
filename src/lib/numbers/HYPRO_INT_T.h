@@ -147,6 +147,18 @@ namespace hypro
             return HYPRO_INT_T<IntType>(mValue / _rhs.mValue);
         }
 		
+		HYPRO_INT_T<IntType> & operator ++ ()
+		{
+			mValue++;
+			return *this;
+		}
+		
+		HYPRO_INT_T<IntType> & operator -- ()
+		{
+			mValue--;
+			return *this;
+		}
+		
 		/**
 		 * special operators
 		 */

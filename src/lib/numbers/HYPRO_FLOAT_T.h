@@ -29,12 +29,12 @@ namespace hypro
         
         HYPRO_FLOAT_T(const double _double)
         {
-        	mValue.fromDouble(_double);
+        	mValue = FloatType(_double);
         }
         
         HYPRO_FLOAT_T(const std::string & _str)
         {
-        	mValue.fromString(_str);
+        	mValue = FloatType(_str);
         }
         
         HYPRO_FLOAT_T(const FloatType& _float) : mValue(_float){}
@@ -126,6 +126,18 @@ namespace hypro
             mValue /= _rhs.mValue;
             return *this;
         }
+		
+		HYPRO_FLOAT_T<FloatType> & operator ++ ()
+		{
+			++ mValue;
+			return *this;
+		}
+		
+		HYPRO_FLOAT_T<FloatType> & operator -- ()
+		{
+			-- mValue;
+			return *this;
+		}
                 
 		const HYPRO_FLOAT_T<FloatType> operator + (const HYPRO_FLOAT_T<FloatType> & _rhs) const
         {

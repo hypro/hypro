@@ -38,7 +38,7 @@ namespace hypro {
     	static const unsigned DEFAULT_DIMENSION = 2;
     	static const int POINT_RAND_MAX = 100;
     	
-        std::string toString(bool parentheses = true) const;
+        std::string toString(const bool parentheses = true) const;
         std::vector<Point> getAllNeighborsForAFixedDimension(int fixedDim) const;
         std::vector<Point> getAllNeighbours(bool pointself=false) const;
         NumberType getGaussianProbability(Point<NumberType> & mean) const;
@@ -50,14 +50,24 @@ namespace hypro {
         void nextPointOnGrid(const Point<NumberType> & bounds);
         void moveRandom();
 
+        /**
+         * Constructors & Destructor
+         */
 
-
+        /**
+         * Constructs a point with the passed dimension.
+         * @param dim
+         */
         Point(unsigned dim = Point<NumberType>::DEFAULT_DIMENSION) {
             mCoordinates.reserve(dim);
         }
         
-        Point(unsigned dim, NumberType & initialValue)
-        {
+        /**
+         * Constructs a point with the passed dimension and sets the coordinates to the initial value.
+         * @param dim
+         * @param initialValue
+         */
+        Point(unsigned dim, NumberType & initialValue) {
         	mCoordinates.reserve(dim);
             for (unsigned d = 0; d < dim; d++) {
                 mCoordinates.push_back(initialValue);
@@ -67,7 +77,6 @@ namespace hypro {
         /**
          * Constructs a point with the passed coordinates
          * @param coordinates
-         * @return
          */
         Point(std::vector<NumberType> & coordinates) {
             mCoordinates.clear();
@@ -77,14 +86,12 @@ namespace hypro {
         /**
          * Copy constructor
          * @param p
-         * @return
          */
         Point(const Point<NumberType> & p) {
             mCoordinates.assign(p.mCoordinates.begin(), p.mCoordinates.end());
         }
         
-        ~Point()
-        {
+        ~Point() {
         	mCoordinates.clear();
         }
 
@@ -93,7 +100,7 @@ namespace hypro {
          * @param d Dimension in which the coordinate is increased.
          */
         void IncrementInFixedDim(unsigned d) {
-            mCoordinates[d]++;
+            ++(mCoordinates.at(d));
         }
 
         /**
@@ -111,7 +118,7 @@ namespace hypro {
          * @param d Dimension in which the coordinate is decreased.
          */
         void DecrementInFixedDim(unsigned d) {
-            mCoordinates[d]--;
+            --(mCoordinates.at(d));
         }
 
         /**
@@ -160,6 +167,7 @@ namespace hypro {
 
         /**
          *  Resizing the coordinates vector.
+         * @param dim the new dimension
          */
         void setDimension(unsigned dim) {
             mCoordinates.resize(dim);
@@ -266,6 +274,27 @@ namespace hypro {
         }
 
         /**
+         * Comparison operator for the map.
+         * This is not true for greater distance to the origin.
+         * It simply compares the entries for every dimension
+         * As soon as they are different the method returns
+         *
+         * @param p1
+         * @param p2
+         * @return
+         */
+        friend bool operator>(const Point<NumberType> & p1, const Point<NumberType> & p2) {
+            unsigned dim = p2.mCoordinates.size();
+            for (unsigned i = 0; i < dim; i++) {
+                if (p1.mCoordinates[Point::getStaticDimensionOrder(dim)[i]] != p2.mCoordinates[Point::getStaticDimensionOrder(dim)[i]]) {
+                    return (p1.mCoordinates[Point::getStaticDimensionOrder(dim)[i]] > p2.mCoordinates[Point::getStaticDimensionOrder(dim)[i]]);
+                }
+            }
+            //Points are equal.
+            return false;
+        }
+
+        /**
          *
          * @param p1
          * @param p2
@@ -311,8 +340,8 @@ namespace hypro {
          * @param p
          * @return
          */
-        friend std::ostream & operator<<(std::ostream& ostr, const Point<NumberType> & p) {
-            ostr << p.toString();
+        friend std::ostream & operator<< (std::ostream& ostr, const Point<NumberType> & p) {
+            //ostr << p.toString();
             return ostr;
         }
         
