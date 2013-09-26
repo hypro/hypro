@@ -31,7 +31,7 @@ namespace hypro
 	mpfr_wrapper_t::mpfr_wrapper_t(const std::string & string_number, const mpfr_rnd_t rounding_mode, const mpfr_prec_t precision)
 	{
 		mpfr_init2(mpfr, precision);
-		mpfr_set_str(mpfr, string_number.c_str(), 0, rounding_mode);	// TODO: not sure if 0 is right here...
+		mpfr_set_str(mpfr, string_number.c_str(), 0, rounding_mode);	//  base == 0 to detect base
 		rnd = rounding_mode;
 	}
 

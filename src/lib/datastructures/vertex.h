@@ -110,10 +110,10 @@ namespace hypro {
         
         friend std::istream& operator>>(std::istream& istr, Vertex& v) {
             for (unsigned d = 0; d < v.getDimension(); d++) {
-                    istr >> v.mCoordinates[d];
-                }
-                istr >> v.mColor; 
-                return istr;
+                istr >> v.mCoordinates[d];
+            }
+            istr >> v.mColor; 
+            return istr;
         }
 	
 	private:

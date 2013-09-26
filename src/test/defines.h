@@ -12,5 +12,5 @@
 #include "numbers/HYPRO_FLOAT_T.h"
 #include "numbers/HYPRO_INT_T.h"
 
-typedef hypro::HYPRO_FLOAT_T<hypro::double_wrapper_t> hypro_float_t;
+typedef hypro::HYPRO_FLOAT_T<hypro::mpfr_wrapper_t> hypro_float_t;
 typedef hypro::HYPRO_INT_T<hypro::int_wrapper_t> hypro_int_t;

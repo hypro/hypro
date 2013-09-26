@@ -61,8 +61,6 @@ TEST_F(PointTest, FirstTest)
     p1.setCoordinate(1, 7);
     ASSERT_EQ(p1[0], hypro_float_t(4));
     ASSERT_EQ(p1[1], hypro_float_t(7));
-    
-    EXPECT_EQ(true, true);
 }
 
 TEST_F(PointTest, OperationTest)
@@ -74,8 +72,6 @@ TEST_F(PointTest, OperationTest)
 	ASSERT_TRUE(p2.move(p3));
 	ASSERT_EQ(p2[0], hypro_float_t(-2));
 	ASSERT_EQ(p2[1], hypro_float_t(21));
-    
-    EXPECT_EQ(true, true);
 }
 
 TEST_F(PointTest, BooleanTest)
@@ -97,8 +93,6 @@ TEST_F(PointTest, BooleanTest)
 	p2[1] = hypro_float_t(6);
 	ASSERT_EQ(p1, p2);
 	ASSERT_NE(p1, p3);
-    
-    EXPECT_EQ(true, true);
 }
 
 TEST(Point, Constructor)
@@ -117,6 +111,4 @@ TEST(Point, Constructor)
     
     Point<hypro_float_t> pCopy = Point<hypro_float_t>(p);
     ASSERT_EQ(p, pCopy);
-    
-    EXPECT_EQ(true, true);
 }
