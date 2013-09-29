@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "defines.h"
-#include "datastructures/point.h"
+#include "datastructures/Point.h"
 
 using namespace hypro;
 
