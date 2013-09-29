@@ -10,19 +10,19 @@ protected:
 	virtual void SetUp()
 	{
 		// p1
-		std::vector<hypro_float_t> coordinates1(2);
+		std::vector<hypro_float_t> coordinates1;
 		coordinates1.push_back(hypro_float_t(2));
 		coordinates1.push_back(hypro_float_t(5));
 		p1 = Point<hypro_float_t>(coordinates1);
 		
 		// p2
-		std::vector<hypro_float_t> coordinates2(2);
+		std::vector<hypro_float_t> coordinates2;
 		coordinates2.push_back(hypro_float_t(7));
 		coordinates2.push_back(hypro_float_t(8));
 		p2 = Point<hypro_float_t>(coordinates2);
 		
 		// p3
-		std::vector<hypro_float_t> coordinates3(2);
+		std::vector<hypro_float_t> coordinates3;
 		coordinates3.push_back(hypro_float_t(-9));
 		coordinates3.push_back(hypro_float_t(13));
 		p3 = Point<hypro_float_t>(coordinates3);
@@ -65,6 +65,7 @@ TEST_F(PointTest, FirstTest)
 
 TEST_F(PointTest, OperationTest)
 {	
+	std::cout << p1 << "\n" << p2 << std::endl;
 	ASSERT_FALSE(p1.move(p2));
 	ASSERT_EQ(p1[0], hypro_float_t(9));
 	ASSERT_EQ(p1[1], hypro_float_t(13));
@@ -81,8 +82,8 @@ TEST_F(PointTest, BooleanTest)
 	
 	p1[0] = hypro_float_t(3);
 	p2[0] = hypro_float_t(3);
-	ASSERT_TRUE(p1.CompareReducedDimension(p2, 1));
-	ASSERT_FALSE(p1.CompareReducedDimension(p3, 1));
+	ASSERT_TRUE(p1.compareReducedDimension(p2, 1));
+	ASSERT_FALSE(p1.compareReducedDimension(p3, 1));
 	ASSERT_TRUE(p1.haveEqualCoordinate(p2));
 	ASSERT_FALSE(p1.haveEqualCoordinate(p3));
 	
@@ -97,7 +98,7 @@ TEST_F(PointTest, BooleanTest)
 
 TEST(Point, Constructor)
 { 
-    Point<hypro_float_t> p = Point<hypro_float_t>();
+    Point<hypro_float_t> p;
     ASSERT_EQ(p.getDimension(), (unsigned) 2);
     
     p = Point<hypro_float_t>(5);

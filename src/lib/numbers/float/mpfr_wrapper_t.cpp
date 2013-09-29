@@ -11,6 +11,7 @@ namespace hypro
 	mpfr_wrapper_t::mpfr_wrapper_t()
 	{
 		mpfr_init2(mpfr, MPFR_PREC_MIN);
+		mpfr_set_d(mpfr, 0, MPFR_RNDN);
 		rnd = MPFR_RNDN;
 	}
 	
