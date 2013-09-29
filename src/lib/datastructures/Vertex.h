@@ -12,12 +12,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
-#include <list>
-#include <set>
-#include <fstream>
+//#include <map>
+//#include <list>
+//#include <set>
+//#include <fstream>
 //#include "boost/lexical_cast.hpp"
 //#include "config.h"
+
 #include "point.h"
 
 namespace hypro {

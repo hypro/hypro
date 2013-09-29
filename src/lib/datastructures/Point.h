@@ -15,10 +15,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
-#include <fstream>
-#include <cmath>
-#include <cstdlib>
+//#include <map>
+//#include <fstream>
+//#include <cmath>
+//#include <cstdlib>
 //#include "boost/lexical_cast.hpp"
 
 
@@ -242,10 +242,11 @@ namespace hypro {
          * @param initialValue
          */
         Point(const unsigned dim = 2, const NumberType & initialValue = NumberType()) {
-        	mCoordinates.reserve(dim);
+        	mCoordinates.assign(dim, initialValue);
+        	/*mCoordinates.reserve(dim);
             for (unsigned d = 0; d < dim; d++) {
                 mCoordinates.push_back(initialValue);
-            }
+            }*/
         }
 
         /**
@@ -253,8 +254,7 @@ namespace hypro {
          * @param coordinates
          */
         Point(const std::vector<NumberType> & coordinates) {
-            mCoordinates.clear();
-            mCoordinates.insert(mCoordinates.begin(), coordinates.begin(), coordinates.end());
+            mCoordinates.assign(coordinates.begin(), coordinates.end());
         }
 
         /**
@@ -411,7 +411,7 @@ namespace hypro {
          * @param nrOfDimensions compares only the first nrOfDimensions coordinates
          * @return true, if the first nrOfDimensions coordinates are equal.
          */
-        bool CompareReducedDimension(const Point<NumberType> & p2, unsigned nrOfDimensions) const {
+        bool compareReducedDimension(const Point<NumberType> & p2, unsigned nrOfDimensions) const {
             for (unsigned d = 0; d < nrOfDimensions; d++) {
                 if (mCoordinates[d] != p2[d]) return false;
             }
