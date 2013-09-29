@@ -106,9 +106,11 @@ TEST(Point, Constructor)
     hypro_float_t initialValue(4);
     p = Point<hypro_float_t>(7, initialValue);
     ASSERT_EQ(p.getDimension(), (unsigned) 7);
-    ASSERT_EQ(p[0], hypro_float_t(7));
-    ASSERT_EQ(p[6], hypro_float_t(7));
+    ASSERT_EQ(p[0], hypro_float_t(4));
+    ASSERT_EQ(p[6], hypro_float_t(4));
     
     Point<hypro_float_t> pCopy = Point<hypro_float_t>(p);
     ASSERT_EQ(p, pCopy);
+    
+    ASSERT_NE(Point<hypro_float_t>(3), Point<hypro_float_t>(7));
 }

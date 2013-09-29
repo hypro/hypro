@@ -229,16 +229,19 @@ namespace hypro {
          * Constructs a point with the passed dimension.
          * @param dim
          */
-        Point(unsigned dim = 2) {
+        /*Point(unsigned dim = 2) {
             mCoordinates.reserve(dim);
-        }
+            for(unsigned d = 0; d < dim; d++) {
+            	mCoordinates.push_back(NumberType());
+            }
+        }*/
         
         /**
          * Constructs a point with the passed dimension and sets the coordinates to the initial value.
          * @param dim
          * @param initialValue
          */
-        Point(unsigned dim, NumberType & initialValue) {
+        Point(const unsigned dim = 2, const NumberType & initialValue = NumberType()) {
         	mCoordinates.reserve(dim);
             for (unsigned d = 0; d < dim; d++) {
                 mCoordinates.push_back(initialValue);
@@ -249,7 +252,7 @@ namespace hypro {
          * Constructs a point with the passed coordinates
          * @param coordinates
          */
-        Point(std::vector<NumberType> & coordinates) {
+        Point(const std::vector<NumberType> & coordinates) {
             mCoordinates.clear();
             mCoordinates.insert(mCoordinates.begin(), coordinates.begin(), coordinates.end());
         }
@@ -303,7 +306,6 @@ namespace hypro {
             return pred;
         }
 
-        // TODO !!! rand() doesn't work here
         static Point & Random(const Point& boundary) {
             Point p = Point(boundary.getDimension());
             for (unsigned d = 0; d < boundary.getDimension(); d++) {
@@ -472,6 +474,7 @@ namespace hypro {
          * @return true, if they are equal.
          */
         friend bool operator==(const Point<NumberType> & p1, const Point<NumberType> & p2) {
+        	if(p1.getDimension() != p2.getDimension()) return false;
             for (unsigned i = 0; i < p1.mCoordinates.size(); i++) {
                 if (p1.mCoordinates[i] != p2.mCoordinates[i]) return false;
             }
@@ -480,6 +483,7 @@ namespace hypro {
         }
 
         friend bool operator!=(const Point<NumberType> & p1, const Point<NumberType> & p2) {
+        	if(p1.getDimension() != p2.getDimension()) return true;
             for (unsigned i = 0; i < p1.mCoordinates.size(); i++) {
                 if (p1[i] != p2[i]) return true;
             }

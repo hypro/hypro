@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 namespace hypro
 {
@@ -201,5 +202,16 @@ namespace hypro
 		{
 			return mValue.toString();
 		}
+
+        /**
+         *
+         * @param ostr
+         * @param p
+         * @return
+         */
+        friend std::ostream & operator<< (std::ostream& ostr, const HYPRO_FLOAT_T<FloatType> & p) {
+            ostr << p.toString();
+            return ostr;
+        }
 	};
 }
