@@ -6,10 +6,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	# Unit Tests
 	################################
 	add_executable(runNumberTests
-		NumberTest.cpp
-		FloatTest.cpp
-		PointTest.cpp
-		VertexTest.cpp
+		#NumberTest.cpp
+		#FloatTest.cpp
+                FloatTest2.cpp
+		#PointTest.cpp
+		#VertexTest.cpp
 	)
 	target_link_libraries(runNumberTests gtest gtest_main hypro  ${libraries})
 	add_test( NAME numbers COMMAND runNumberTests )
