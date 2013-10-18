@@ -30,8 +30,14 @@ namespace hypro
              * Constructors & Destructors
              */
 
+            FLOAT_T<FloatType>()
+            {
+                mValue = 0;
+            }
+            
             FLOAT_T<FloatType>(const double _double)
             {
+                mValue = _double;
             }
 
 //            template<>
@@ -80,16 +86,34 @@ namespace hypro
              * arithmetic operations
              */
             
-            void add(FLOAT_T& _res, const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd )
+            FLOAT_T& add( const FLOAT_T<FloatType>& _op2, RND _rnd )
             {
-                
+                // TODO: Include rounding
+                this->mValue = this->mValue + _op2.mValue;
+                return *this;
             }
             
-            FLOAT_T<FloatType> add(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            FLOAT_T& add(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
             {
-                
+                // TODO: Include rounding
+                this->mValue = _op1.mValue + _op2.mValue;
+                return *this;
             }
 
+            FLOAT_T& sub(const FLOAT_T& _op2, RND _rnd)
+            {
+                // TODO: Include rounding
+                this->mValue = this->mValue - _op2.mValue;
+                return *this;
+            }
+            
+            FLOAT_T& sub(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            {
+                // TODO: Include rounding
+                this->mValue = _op1.mValue - _op2.mValue;
+                return *this;
+            }
+            
             /**
              * special operators
              */
@@ -154,6 +178,7 @@ namespace hypro
             FLOAT_T()
             {
                 mpfr_init(mValue);
+                mpfr_set_zero(mValue, 1);
             }
             
             FLOAT_T(const double _double, RND _rnd)
@@ -162,9 +187,9 @@ namespace hypro
                 mpfr_set_d(mValue,_double,convRnd(_rnd));
             }
 
-            FLOAT_T<mpfr_t>(const double _double, precision _prec){}
+            FLOAT_T(const double _double, precision _prec){}
 
-            FLOAT_T<mpfr_t>(const double _double, RND _rnd, precision _prec)
+            FLOAT_T(const double _double, RND _rnd, precision _prec)
             {
                 mpfr_init2(mValue,_prec);
                 mpfr_set_d(mValue,_double,convRnd(_rnd));
@@ -201,16 +226,29 @@ namespace hypro
              * arithmetic operations
              */
             
-            void add(mpfr_t& _res, const mpfr_t& _op1, const mpfr_t& _op2, RND _rnd )
+            FLOAT_T<mpfr_t>& add( const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
-                mpfr_add(_res, _op1, _op2, convRnd(_rnd));
+                mpfr_add(this->mValue, this->mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
             }
 
-            FLOAT_T<mpfr_t> add(const mpfr_t& _op1, const mpfr_t& _op2, RND _rnd)
+            FLOAT_T<mpfr_t>& add( const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
-                FLOAT_T<mpfr_t> res;
-                mpfr_add(res.mValue, _op1, _op2, convRnd(_rnd));
-                return res;
+                
+                mpfr_add(this->mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
+            FLOAT_T<mpfr_t>& sub( const FLOAT_T<mpfr_t>& _op2, RND _rnd )
+            {
+                mpfr_sub(this->mValue, this->mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
+            FLOAT_T<mpfr_t>& sub( const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd )
+            {
+                mpfr_sub(this->mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
             }
 
             /**
