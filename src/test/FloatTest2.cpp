@@ -23,7 +23,7 @@ TEST(FloatTest, ArithmeticOperators)
     
     hypro::FLOAT_T<mpfr_t> result;
     
-    result = f1.sub(f2,hypro::N);
+    result = f1.mul(f2,hypro::N);
     std::cout << f1 << std::endl;
 }
 

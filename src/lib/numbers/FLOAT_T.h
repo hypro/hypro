@@ -12,6 +12,7 @@
 
 #include <string>
 #include <iostream>
+#include <stdexcept>
 
 namespace hypro
 {
@@ -55,7 +56,7 @@ namespace hypro
 //                mValue = _double;
 //            }
 
-            FLOAT_T(const FloatType& _float){}
+            FLOAT_T(const FloatType& _float) : mValue(_float){}
 
             template<typename DifferentType>
             FLOAT_T(const DifferentType& _float)
@@ -89,28 +90,58 @@ namespace hypro
             FLOAT_T& add( const FLOAT_T<FloatType>& _op2, RND _rnd )
             {
                 // TODO: Include rounding
-                this->mValue = this->mValue + _op2.mValue;
+                mValue = mValue + _op2.mValue;
                 return *this;
             }
             
             FLOAT_T& add(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
             {
                 // TODO: Include rounding
-                this->mValue = _op1.mValue + _op2.mValue;
+                mValue = _op1.mValue + _op2.mValue;
                 return *this;
             }
 
             FLOAT_T& sub(const FLOAT_T& _op2, RND _rnd)
             {
                 // TODO: Include rounding
-                this->mValue = this->mValue - _op2.mValue;
+                mValue = mValue - _op2.mValue;
                 return *this;
             }
             
             FLOAT_T& sub(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
             {
                 // TODO: Include rounding
-                this->mValue = _op1.mValue - _op2.mValue;
+                mValue = _op1.mValue - _op2.mValue;
+                return *this;
+            }
+            
+            FLOAT_T& mul(const FLOAT_T& _op2, RND _rnd)
+            {
+                // TODO: Include rounding
+                mValue = mValue * _op2.mValue;
+                return *this;
+            }
+            
+            FLOAT_T& mul(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            {
+                // TODO: Include rounding
+                mValue = _op1.mValue * _op2.mValue;
+                return *this;
+            }
+            
+            FLOAT_T& div(const FLOAT_T& _op2, RND _rnd) throw (std::invalid_argument)
+            {
+                if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                // TODO: Include rounding
+                mValue = mValue - _op2.mValue;
+                return *this;
+            }
+            
+            FLOAT_T& div(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd) throw (std::invalid_argument)
+            {
+                if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                // TODO: Include rounding
+                mValue = _op1.mValue - _op2.mValue;
                 return *this;
             }
             
@@ -118,30 +149,35 @@ namespace hypro
              * special operators
              */
 
-//            FLOAT_T<FloatType> sqrt() const
-//            {
-//                return FLOAT_T<FloatType>(mValue.sqrt());
-//            }
-//
-//            FLOAT_T<FloatType> cbrt() const
-//            {
-//                    return FLOAT_T<FloatType>(mValue.cbrt());;
-//            }
-//
-//            FLOAT_T<FloatType> root(unsigned long int k) const
-//            {
-//                    return FLOAT_T<FloatType>(mValue.root(k));
-//            }
-//
-//            FLOAT_T<FloatType> pow(unsigned long int _exp) const
-//            {
-//                return FLOAT_T<FloatType>(mValue.pow(_exp));
-//            }
-//
-//            FLOAT_T<FloatType> abs() const
-//            {
-//                return FLOAT_T<FloatType>(mValue.abs());
-//            }
+            FLOAT_T& sqrt()
+            {
+                mValue = sqrt(mValue);
+                return *this;
+            }
+
+            FLOAT_T& cbrt()
+            {
+                mValue = cbrt(mValue);
+                return *this;
+            }
+
+            FLOAT_T& root(unsigned long int _k)
+            {
+                // TODO
+                return *this;
+            }
+
+            FLOAT_T& pow(unsigned long int _exp)
+            {
+                mValue = pow(mValue, _exp);
+                return *this;
+            }
+
+            FLOAT_T& abs( RND _rnd)
+            {
+                mValue = abs(mValue);
+                return *this;
+            }
 
             /**
              * conversion operators
@@ -184,7 +220,14 @@ namespace hypro
             FLOAT_T(const double _double, RND _rnd)
             {
                 mpfr_init(mValue);
-                mpfr_set_d(mValue,_double,convRnd(_rnd));
+                if( _double == 0)
+                {
+                    mpfr_set_zero(mValue, 1);
+                }
+                else
+                {
+                    mpfr_set_d(mValue,_double,convRnd(_rnd));
+                }
             }
 
             FLOAT_T(const double _double, precision _prec){}
@@ -192,7 +235,14 @@ namespace hypro
             FLOAT_T(const double _double, RND _rnd, precision _prec)
             {
                 mpfr_init2(mValue,_prec);
-                mpfr_set_d(mValue,_double,convRnd(_rnd));
+                if( _double == 0)
+                {
+                    mpfr_set_zero(mValue, 1);
+                }
+                else
+                {
+                    mpfr_set_d(mValue,_double,convRnd(_rnd));
+                }
             }
 
             FLOAT_T(const FLOAT_T<mpfr_t>& _float) : mValue( _float.mValue ){}
@@ -228,57 +278,88 @@ namespace hypro
             
             FLOAT_T<mpfr_t>& add( const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
-                mpfr_add(this->mValue, this->mValue, _op2.mValue, convRnd(_rnd));
+                mpfr_add(mValue, mValue, _op2.mValue, convRnd(_rnd));
                 return *this;
             }
 
             FLOAT_T<mpfr_t>& add( const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
                 
-                mpfr_add(this->mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                mpfr_add(mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
                 return *this;
             }
             
             FLOAT_T<mpfr_t>& sub( const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
-                mpfr_sub(this->mValue, this->mValue, _op2.mValue, convRnd(_rnd));
+                mpfr_sub(mValue, mValue, _op2.mValue, convRnd(_rnd));
                 return *this;
             }
             
             FLOAT_T<mpfr_t>& sub( const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd )
             {
-                mpfr_sub(this->mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                mpfr_sub(mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
                 return *this;
             }
 
+            FLOAT_T<mpfr_t>& mul(const FLOAT_T<mpfr_t>& _op2, RND _rnd)
+            {
+                mpfr_mul(mValue, mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
+            FLOAT_T<mpfr_t>& mul(const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd)
+            {
+                mpfr_mul(mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
+            FLOAT_T<mpfr_t>& div(const FLOAT_T<mpfr_t>& _op2, RND _rnd) throw (std::invalid_argument)
+            {
+                if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                mpfr_div(mValue, mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
+            FLOAT_T<mpfr_t>& div(const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd) throw (std::invalid_argument)
+            {
+                if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                mpfr_div(mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
+                return *this;
+            }
+            
             /**
              * special operators
              */
 
-//            FLOAT_T<FloatType> sqrt() const
-//            {
-//                return FLOAT_T<FloatType>(mValue.sqrt());
-//            }
-//
-//            FLOAT_T<FloatType> cbrt() const
-//            {
-//                    return FLOAT_T<FloatType>(mValue.cbrt());;
-//            }
-//
-//            FLOAT_T<FloatType> root(unsigned long int k) const
-//            {
-//                    return FLOAT_T<FloatType>(mValue.root(k));
-//            }
-//
-//            FLOAT_T<FloatType> pow(unsigned long int _exp) const
-//            {
-//                return FLOAT_T<FloatType>(mValue.pow(_exp));
-//            }
-//
-//            FLOAT_T<FloatType> abs() const
-//            {
-//                return FLOAT_T<FloatType>(mValue.abs());
-//            }
+            FLOAT_T<mpfr_t>& sqrt(RND _rnd)
+            {
+                mpfr_sqrt(mValue, mValue, convRnd(_rnd));
+                return *this;
+            }
+
+            FLOAT_T<mpfr_t>& cbrt(RND _rnd)
+            {
+                mpfr_cbrt(mValue, mValue, convRnd(_rnd));
+                return *this;
+            }
+
+            FLOAT_T<mpfr_t>& root(unsigned long int _k, RND _rnd)
+            {
+                mpfr_root(mValue, mValue, _k, convRnd(_rnd));
+                return *this;
+            }
+
+            FLOAT_T<mpfr_t>& pow(unsigned long int _exp, RND _rnd)
+            {
+                mpfr_pow_ui(mValue, mValue, _exp, convRnd(_exp));
+                return *this;
+            }
+
+            FLOAT_T<mpfr_t>& abs(RND _rnd) const
+            {
+                mpfr_abs(mValue, mValue, convRnd(_rnd));
+                return *this;
+            }
 
             /**
              * conversion operators
