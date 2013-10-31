@@ -18,22 +18,8 @@ class FLOAT_T<mpfr_t>
             mpfr_set_zero(mValue, 1);
         }
 
-        FLOAT_T(const double _double, RND _rnd)
-        {
-            mpfr_init(mValue);
-            if( _double == 0)
-            {
-                mpfr_set_zero(mValue, 1);
-            }
-            else
-            {
-                mpfr_set_d(mValue,_double,convRnd(_rnd));
-            }
-        }
-
-        FLOAT_T(const double _double, precision _prec){}
-
-        FLOAT_T(const double _double, RND _rnd, precision _prec)
+        // Default precision is initially set to 53 bits in mpfr implementation
+        FLOAT_T(const double _double, precision _prec=53, const RND _rnd=RND::N)
         {
             mpfr_init2(mValue,_prec);
             if( _double == 0)
@@ -46,26 +32,82 @@ class FLOAT_T<mpfr_t>
             }
         }
 
-        FLOAT_T(const FLOAT_T<mpfr_t>& _float) : mValue( _float.mValue ){}
-
-        template<typename DifferentType>
-        FLOAT_T(const DifferentType& _float)
+        // Default precision is initially set to 53 bits in mpfr implementation
+        FLOAT_T(const float _float, precision _prec=53, const RND _rnd=RND::N)
         {
-            // TODO: Write specialized conversion operators here.
+            mpfr_init2(mValue, _prec);
+            if( _float == 0)
+            {
+                mpfr_set_zero(mValue, 1);
+            }
+            else
+            {
+                mpfr_set_flt(mValue, _float, convRnd(_rnd));
+            }
         }
 
-        ~FLOAT_T(){}
-        // TODO: Do we require specialized destructors?
+        // Default precision is initially set to 53 bits in mpfr implementation
+        FLOAT_T(const int _int, precision _prec=53, const RND _rnd=RND::N)
+        {
+            mpfr_init2(mValue,_prec);
+            if( _int == 0)
+            {
+                mpfr_set_zero(mValue, 1);
+            }
+            else
+            {
+                mpfr_set_si(mValue,_int,convRnd(_rnd));
+            }
+        }
+        
+        FLOAT_T(const mpfr_t& _mpfrNumber)
+        {
+            mpfr_init2(mValue,mpfr_get_prec(_mpfrNumber));
+            mpfr_set(mValue, _mpfrNumber, MPFR_RNDN);
+        }
 
+        FLOAT_T(const FLOAT_T<mpfr_t>& _float) : mValue( _float.mValue ){}
+
+        ~FLOAT_T(){}
+
+        
+        /*******************
+         * Getter & Setter *
+         *******************/
+        
+        const mpfr_t& getValue() const
+        {
+            return mValue;
+        }
+        
+        const precision getPrec() const
+        {
+            return mpfr_get_prec(mValue);
+        }
+        
+        FLOAT_T<mpfr_t>& setPrec( const precision& _prec, const RND _rnd=RND::N )
+        {
+            mpfr_prec_round(mValue, convPrec(_prec), convRnd(_rnd));
+            return *this;
+        }
+        
+        
         /*************
          * Operators *
          *************/
-
-//            FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
-//            {
-//                mValue = _rhs.mValue;
-//                return *this;
-//            }
+        
+        FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
+        {
+            mpfr_set(mValue, _rhs.mValue, MPFR_RNDN);
+            return *this;
+        }
+        
+        FLOAT_T<mpfr_t>& safeSet (const FLOAT_T<mpfr_t>& _rhs, const RND _rnd=RND::N)
+        {
+            mpfr_set_prec(mValue, mpfr_get_prec(_rhs.mValue));
+            mpfr_set(mValue, _rhs.mValue, convRnd(_rnd));
+            return *this;
+        }
 
         /**
          * Boolean operators 
@@ -166,19 +208,19 @@ class FLOAT_T<mpfr_t>
          * conversion operators
          */
 
-//            double toDouble() const
-//            {
-//                    return mValue.toDouble();
-//            }
-//
-//            std::string toString() const
-//            {
-//                    return mValue.toString();
-//            }
-//
+        double toDouble(RND _rnd=RND::N) const
+        {
+            return mpfr_get_d(mValue, convRnd(_rnd));
+        }
+        
         friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<mpfr_t> & p) {
             ostr << p.toString();
             return ostr;
+        }
+        
+        friend bool operator== (const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        {
+            return mpfr_cmp(_lhs.mValue,_rhs.mValue) == 0;
         }
 
         std::string toString() const
@@ -191,7 +233,7 @@ class FLOAT_T<mpfr_t>
 
     private:
 
-        mpfr_rnd_t convRnd(RND _rnd) const
+        inline mpfr_rnd_t convRnd(RND _rnd) const
         {
             switch(_rnd)
             {
@@ -213,5 +255,10 @@ class FLOAT_T<mpfr_t>
                 default:
                     return MPFR_RNDNA;
             }
+        }
+        
+        inline mpfr_prec_t convPrec(precision _prec) const
+        {
+            return _prec;
         }
 };

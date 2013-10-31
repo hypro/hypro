@@ -8,7 +8,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	add_executable(runNumberTests
 		#NumberTest.cpp
 		#FloatTest.cpp
-                FloatTest2.cpp
+                mpfrFloatTest.cpp
+                doubleFloatTest.cpp
 		#PointTest.cpp
 		#VertexTest.cpp
 	)
