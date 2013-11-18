@@ -62,13 +62,6 @@ namespace hypro
             {
                 mValue = _int;
             }
-            
-
-//            template<>
-//            FLOAT_T<double>(const double _double)
-//            {
-//                mValue = _double;
-//            }
 
             FLOAT_T<FloatType>(const double _double, precision _prec){}
 
@@ -224,7 +217,7 @@ namespace hypro
             }
             
 
-            friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<FloatType> & p) {
+            friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<FloatType>& p) {
                 ostr << p.toString();
                 return ostr;
             }
@@ -233,7 +226,35 @@ namespace hypro
             {
                 return _lhs.mValue == _rhs.mValue;
             }
-
+            
+            /**
+             * Overloaded operators
+             */
+            
+            friend FLOAT_T<FloatType> operator +(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            {
+                return FLOAT_T<FloatType>(_lhs.mValue + _rhs.mValue);
+            }
+            
+            friend FLOAT_T<FloatType> operator -(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            {
+                return _lhs - _rhs;
+            }
+            
+            friend FLOAT_T<FloatType> operator *(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            {
+                return _lhs * _rhs;
+            }
+            
+            friend FLOAT_T<FloatType> operator /(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            {
+                return _lhs / _rhs;
+            }
+            
+            /**
+             * Auxiliary Functions
+             */
+            
             std::string toString() const
             {
                 std::stringstream str;

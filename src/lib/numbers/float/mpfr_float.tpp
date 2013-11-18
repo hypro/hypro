@@ -222,6 +222,34 @@ class FLOAT_T<mpfr_t>
         {
             return mpfr_cmp(_lhs.mValue,_rhs.mValue) == 0;
         }
+        
+        /**
+        * Overloaded operators
+        */
+
+        friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        {
+            return FLOAT_T<mpfr_t>(_lhs.mValue + _rhs.mValue);
+        }
+
+        friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        {
+            return _lhs - _rhs;
+        }
+
+        friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        {
+            return _lhs * _rhs;
+        }
+
+        friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        {
+            return _lhs / _rhs;
+        }
+            
+        /**
+         * Auxiliary Functions
+         */
 
         std::string toString() const
         {
