@@ -35,7 +35,7 @@ namespace hypro
     class FLOAT_T
     {
         private:
-            FloatType mValue;
+            FloatType mValue;		// mpfr_t
         
         public:
     	
@@ -144,17 +144,17 @@ namespace hypro
                 return *this;
             }
             
-            FLOAT_T& mul(const FLOAT_T& _op2, RND _rnd)
+            FLOAT_T& mul_assign(const FLOAT_T& _op2, RND _rnd)
             {
                 // TODO: Include rounding
                 mValue = mValue * _op2.mValue;
                 return *this;
             }
             
-            FLOAT_T& mul(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            void mul(FLOAT_T& result, const FLOAT_T& _op2, RND _rnd) const
             {
                 // TODO: Include rounding
-                mValue = _op1.mValue * _op2.mValue;
+                result.mValue = mValue * _op2.mValue;
                 return *this;
             }
             
