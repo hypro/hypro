@@ -127,7 +127,6 @@ class FLOAT_T<mpfr_t>
 
         FLOAT_T<mpfr_t>& add( const FLOAT_T<mpfr_t>& _op1, const FLOAT_T<mpfr_t>& _op2, RND _rnd )
         {
-
             mpfr_add(mValue, _op1.mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
@@ -229,22 +228,31 @@ class FLOAT_T<mpfr_t>
 
         friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
-            return FLOAT_T<mpfr_t>(_lhs.mValue + _rhs.mValue);
+            FLOAT_T<mpfr_t> res;
+            mpfr_add(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
+            return res;
         }
 
         friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
-            return _lhs - _rhs;
+            FLOAT_T<mpfr_t> res;
+            mpfr_sub(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
+            return res;
         }
 
         friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
-            return _lhs * _rhs;
+            FLOAT_T<mpfr_t> res;
+            mpfr_mul(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
+            return res;
         }
 
         friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
-            return _lhs / _rhs;
+            // TODO: mpfr_div results in infty when dividing by zero, although this should not be defined.
+            FLOAT_T<mpfr_t> res;
+            mpfr_div(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
+            return res;
         }
             
         /**
