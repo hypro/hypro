@@ -76,7 +76,6 @@ class FLOAT_T<mpfr_t>
         {
             mpfr_clear(mValue);
         }
-
         
         /*******************
          * Getter & Setter *
