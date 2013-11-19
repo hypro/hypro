@@ -17,13 +17,13 @@
 namespace hypro
 {
 		// nearest, towards zero, towards infty, towards -infty, away from zero
-    enum HYPRO_RND		// changed
+    enum HYPRO_RND
     {
-     HYPRO_RNDN=0,
-     HYPRO_RNDZ=1,
-     HYPRO_RNDU=2,
-     HYPRO_RNDD=3,
-     HYPRO_RNDA=4
+        HYPRO_RNDN=0,
+        HYPRO_RNDZ=1,
+        HYPRO_RNDU=2,
+        HYPRO_RNDD=3,
+        HYPRO_RNDA=4
     };
 
     typedef unsigned long precision;
@@ -115,7 +115,7 @@ namespace hypro
              * Operators *
              *************/
             
-            FLOAT_T<FloatType>& operator = (const FLOAT_T<FloatType> & _rhs)
+            inline FLOAT_T<FloatType>& operator = (const FLOAT_T<FloatType> & _rhs)
             {
                 mValue = _rhs.mValue;
                 return *this;
@@ -125,39 +125,67 @@ namespace hypro
              * Boolean operators 
              */
             
-            // TODO
+            inline bool operator == ( const FLOAT_T<FloatType>& _rhs) const
+            {
+                return mValue == _rhs.mValue;
+            }
+
+            inline bool operator != ( const FLOAT_T<FloatType> & _rhs) const
+            {
+                return mValue != _rhs.mValue;
+            }
+
+            inline bool operator > ( const FLOAT_T<FloatType> & _rhs) const
+            {
+                return mValue > _rhs.mValue;
+            }
+
+            inline bool operator < ( const FLOAT_T<FloatType> & _rhs) const
+            {
+                return mValue < _rhs.mValue;
+            }
+
+            inline bool operator <= ( const FLOAT_T<FloatType> & _rhs) const
+            {
+                return mValue <= _rhs.mValue;
+            }
+
+            inline bool operator >= ( const FLOAT_T<FloatType> & _rhs) const
+            {
+                return mValue >= _rhs.mValue;
+            }
             
             /**
              * arithmetic operations
              */
             
-            FLOAT_T& add_assign( const FLOAT_T<FloatType>& _op2, HYPRO_RND _rnd )
+            inline FLOAT_T& add_assign( const FLOAT_T<FloatType>& _op2, HYPRO_RND _rnd )
             {
                 // TODO: Include rounding
                 mValue = mValue + _op2.mValue;
                 return *this;
             }
             
-            void add( FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
+            inline void add( FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
                 _result.mValue = mValue + _op2.mValue;
             }
 
-            FLOAT_T& sub_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
+            inline FLOAT_T& sub_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
             {
                 // TODO: Include rounding
                 mValue = mValue - _op2.mValue;
                 return *this;
             }
             
-            void sub(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
+            inline void sub(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
                 _result.mValue = mValue - _op2.mValue;
             }
             
-            FLOAT_T& mul_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
+            inline FLOAT_T& mul_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
             {
                 // TODO: Include rounding
                 mValue = mValue * _op2.mValue;
@@ -165,13 +193,13 @@ namespace hypro
                 return *this;
             }
             
-            void mul(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
+            inline void mul(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
                 _result.mValue = mValue * _op2.mValue;
             }
             
-            FLOAT_T& div_assign(const FLOAT_T& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
+            inline FLOAT_T& div_assign(const FLOAT_T& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
             {
                 if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
                 // TODO: Include rounding
@@ -179,7 +207,7 @@ namespace hypro
                 return *this;
             }
             
-            void div(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument) 
+            inline void div(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument) 
             {
                 if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
                 // TODO: Include rounding
@@ -190,31 +218,31 @@ namespace hypro
              * special operators
              */
 
-            FLOAT_T& sqrt()
+            inline FLOAT_T& sqrt()
             {
                 mValue = sqrt(mValue);
                 return *this;
             }
 
-            FLOAT_T& cbrt()
+            inline FLOAT_T& cbrt()
             {
                 mValue = cbrt(mValue);
                 return *this;
             }
 
-            FLOAT_T& root(unsigned long int _k)
+            inline FLOAT_T& root(unsigned long int _k)
             {
                 // TODO
                 return *this;
             }
 
-            FLOAT_T& pow(unsigned long int _exp)
+            inline FLOAT_T& pow(unsigned long int _exp)
             {
                 mValue = pow(mValue, _exp);
                 return *this;
             }
 
-            FLOAT_T& abs( HYPRO_RND _rnd)
+            inline FLOAT_T& abs( HYPRO_RND _rnd)
             {
                 mValue = abs(mValue);
                 return *this;
@@ -223,18 +251,18 @@ namespace hypro
             /**
              * conversion operators
              */
-            double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
+            inline double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
             {
                 return (double) mValue;
             }
             
 
-            friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<FloatType>& p) {
+            inline friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<FloatType>& p) {
                 ostr << p.toString();
                 return ostr;
             }
             
-            friend bool operator== (const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            inline friend bool operator== (const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
                 return _lhs.mValue == _rhs.mValue;
             }
@@ -243,22 +271,22 @@ namespace hypro
              * Overloaded operators
              */
             
-            friend FLOAT_T<FloatType> operator +(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            inline friend FLOAT_T<FloatType> operator +(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
                 return FLOAT_T<FloatType>(_lhs.mValue + _rhs.mValue);
             }
             
-            friend FLOAT_T<FloatType> operator -(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            inline friend FLOAT_T<FloatType> operator -(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
                 return _lhs - _rhs;
             }
             
-            friend FLOAT_T<FloatType> operator *(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            inline friend FLOAT_T<FloatType> operator *(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
                 return _lhs * _rhs;
             }
             
-            friend FLOAT_T<FloatType> operator /(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+            inline friend FLOAT_T<FloatType> operator /(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
                 return _lhs / _rhs;
             }
@@ -267,7 +295,7 @@ namespace hypro
              * Auxiliary Functions
              */
             
-            std::string toString() const
+            inline std::string toString() const
             {
                 std::stringstream str;
                 str << mValue;   

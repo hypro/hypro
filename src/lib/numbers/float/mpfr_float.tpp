@@ -103,16 +103,16 @@ class FLOAT_T<mpfr_t>
          * Operators *
          *************/
         
-        FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
+        inline FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
         {
-        		if(this == &_rhs)
-        			return *this;
+            if(this == &_rhs)
+                return *this;
         		
             mpfr_set(mValue, _rhs.mValue, MPFR_RNDN);
             return *this;
         }
         
-        FLOAT_T<mpfr_t>& safeSet (const FLOAT_T<mpfr_t>& _rhs, const HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN)
+        inline FLOAT_T<mpfr_t>& safeSet (const FLOAT_T<mpfr_t>& _rhs, const HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN)
         {
             mpfr_set_prec(mValue, mpfr_get_prec(_rhs.mValue));
             mpfr_set(mValue, _rhs.mValue, convRnd(_rnd));
@@ -123,53 +123,81 @@ class FLOAT_T<mpfr_t>
          * Boolean operators 
          */
 
-        // TODO
+        inline bool operator == ( const FLOAT_T<mpfr_t>& _rhs) const
+        {
+            return mpfr_cmp(mValue,_rhs.mValue) == 0;
+        }
+
+        inline bool operator != ( const FLOAT_T<mpfr_t> & _rhs) const
+        {
+            return mpfr_equal_p(mValue, _rhs.mValue) == 0;
+        }
+
+        inline bool operator > ( const FLOAT_T<mpfr_t> & _rhs) const
+        {
+            return mpfr_greater_p(mValue, _rhs.mValue) != 0;
+        }
+
+        inline bool operator < ( const FLOAT_T<mpfr_t> & _rhs) const
+        {
+            return mpfr_less_p(mValue, _rhs.mValue) != 0;
+        }
+
+        inline bool operator <= ( const FLOAT_T<mpfr_t> & _rhs) const
+        {
+            return mpfr_lessequal_p(mValue, _rhs.mValue) != 0;
+        }
+
+        inline bool operator >= ( const FLOAT_T<mpfr_t> & _rhs) const
+        {
+            return mpfr_greaterequal_p(mValue, _rhs.mValue) != 0;
+        }
 
         /**
          * arithmetic operations
          */
 
-        FLOAT_T<mpfr_t>& add_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
+        inline FLOAT_T<mpfr_t>& add_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
         {
             mpfr_add(mValue, mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
 
-        void add( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
+        inline void add( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
         {
             mpfr_add(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
         }
 
-        FLOAT_T<mpfr_t>& sub_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
+        inline FLOAT_T<mpfr_t>& sub_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
         {
             mpfr_sub(mValue, mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
 
-        void sub( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
+        inline void sub( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
         {
             mpfr_sub(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
         }
 
-        FLOAT_T<mpfr_t>& mul_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& mul_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
         {
             mpfr_mul(mValue, mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
 
-        void mul( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
+        inline void mul( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
         {
             mpfr_mul(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
         }
 
-        FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
+        inline FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
         {
             if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
             mpfr_div(mValue, mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
 
-        void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument)
+        inline void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument)
         {
             if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
             mpfr_div(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
@@ -179,25 +207,25 @@ class FLOAT_T<mpfr_t>
          * special operators
          */
 
-        FLOAT_T<mpfr_t>& sqrt(HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& sqrt(HYPRO_RND _rnd)
         {
             mpfr_sqrt(mValue, mValue, convRnd(_rnd));
             return *this;
         }
 
-        FLOAT_T<mpfr_t>& cbrt(HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& cbrt(HYPRO_RND _rnd)
         {
             mpfr_cbrt(mValue, mValue, convRnd(_rnd));
             return *this;
         }
 
-        FLOAT_T<mpfr_t>& root(unsigned long int _k, HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& root(unsigned long int _k, HYPRO_RND _rnd)
         {
             mpfr_root(mValue, mValue, _k, convRnd(_rnd));
             return *this;
         }
 
-        FLOAT_T<mpfr_t>& pow(unsigned long int _exp, HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& pow(unsigned long int _exp, HYPRO_RND _rnd)
         {
             mpfr_pow_ui(mValue, mValue, _exp, convRnd(_rnd));
             return *this;
@@ -213,47 +241,42 @@ class FLOAT_T<mpfr_t>
          * conversion operators
          */
 
-        double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
+        inline double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
         {
             return mpfr_get_d(mValue, convRnd(_rnd));
         }
         
-        friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<mpfr_t> & p) {
+        inline friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<mpfr_t> & p) {
             ostr << p.toString();
             return ostr;
-        }
-        
-        friend bool operator== (const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
-        {
-            return mpfr_cmp(_lhs.mValue,_rhs.mValue) == 0;
         }
         
         /**
         * Overloaded operators
         */
 
-        friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        inline friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_add(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        inline friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_sub(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        inline friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_mul(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        inline friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             // TODO: mpfr_div results in infty when dividing by zero, although this should not be defined.
             FLOAT_T<mpfr_t> res;
@@ -265,7 +288,7 @@ class FLOAT_T<mpfr_t>
          * Auxiliary Functions
          */
 
-        std::string toString() const
+        inline std::string toString() const
         {
             // TODO: Better rounding mode?
             std::stringstream str;
