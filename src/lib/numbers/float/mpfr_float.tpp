@@ -68,7 +68,10 @@ class FLOAT_T<mpfr_t>
 
         FLOAT_T(const FLOAT_T<mpfr_t>& _float) : mValue( _float.mValue ){}
 
-        ~FLOAT_T(){}
+        ~FLOAT_T()
+        {
+        	mpfr_clear(mValue);
+        }
 
         
         /*******************
@@ -98,6 +101,9 @@ class FLOAT_T<mpfr_t>
         
         FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
         {
+        		if(this == &_rhs)
+        			return *this;
+        		
             mpfr_set(mValue, _rhs.mValue, MPFR_RNDN);
             return *this;
         }

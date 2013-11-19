@@ -16,7 +16,16 @@
 
 namespace hypro
 {
-    enum RND{N=0, Z=1, U=2, D=3, A=4}; // nearest, towards zero, towards infty, towards -infty, away from zero
+		// nearest, towards zero, towards infty, towards -infty, away from zero
+    enum HYPRO_RND		// changed
+    {
+     HYPRO_RNDN=0,
+     HYPRO_RNDZ=1,
+     HYPRO_RNDU=2,
+     HYPRO_RNDD=3,
+     HYPRO_RNDA=4
+    };
+
     typedef unsigned long precision;
     
     template<typename FloatType>
@@ -35,7 +44,7 @@ namespace hypro
     class FLOAT_T
     {
         private:
-            FloatType mValue;		// mpfr_t
+            FloatType mValue;
         
         public:
     	
@@ -72,7 +81,10 @@ namespace hypro
 //                mValue = _double;
 //            }
             
-            ~FLOAT_T(){}
+            ~FLOAT_T()
+            {
+            	// TODO: clear mValue if needed
+            }
 
             
             /*******************
@@ -148,6 +160,7 @@ namespace hypro
             {
                 // TODO: Include rounding
                 mValue = mValue * _op2.mValue;
+                // mValue.mul_assign(_op2.mValue, _rnd);
                 return *this;
             }
             
