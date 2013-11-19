@@ -9,7 +9,7 @@ TEST(mpfrFloatTest, Constructor)
     double dVal = 4;
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf1 = hypro::FLOAT_T<mpfr_t>(dVal));
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf2 = hypro::FLOAT_T<mpfr_t>(dVal,10));
-    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(dVal,10,hypro::RND::A));
+    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(dVal,10,hypro::HYPRO_RNDA));
     dVal = 0;
     EXPECT_EQ(true, mpfr_zero_p(hypro::FLOAT_T<mpfr_t>(dVal).getValue()) != 0);
     
@@ -17,7 +17,7 @@ TEST(mpfrFloatTest, Constructor)
     float fVal = 4;
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf1 = hypro::FLOAT_T<mpfr_t>(fVal));
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf2 = hypro::FLOAT_T<mpfr_t>(fVal,10));
-    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(fVal,10,hypro::RND::A));
+    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(fVal,10,hypro::HYPRO_RNDA));
     fVal = 0;
     EXPECT_EQ(true, mpfr_zero_p(hypro::FLOAT_T<mpfr_t>(fVal).getValue()) != 0);
     
@@ -25,7 +25,7 @@ TEST(mpfrFloatTest, Constructor)
     int iVal = 4;
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf1 = hypro::FLOAT_T<mpfr_t>(iVal));
     ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf2 = hypro::FLOAT_T<mpfr_t>(iVal,10));
-    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(iVal,10,hypro::RND::A));
+    ASSERT_NO_THROW(hypro::FLOAT_T<mpfr_t> hf3 = hypro::FLOAT_T<mpfr_t>(iVal,10,hypro::HYPRO_RNDA));
     iVal = 0;
     EXPECT_EQ(true, mpfr_zero_p(hypro::FLOAT_T<mpfr_t>(iVal).getValue()) != 0);
     
@@ -67,7 +67,7 @@ TEST(mpfrFloatTest, Multiplication)
     
     hypro::FLOAT_T<mpfr_t> result;
     
-    result = f1.mul(f2,hypro::N);
+    result = f1.mul_assign(f2,hypro::HYPRO_RNDN);
     std::cout << f1 << std::endl;
 }
 

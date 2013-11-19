@@ -55,7 +55,7 @@ TEST(doubleFloatTest, Multiplication)
     
     hypro::FLOAT_T<double> result;
     
-    result = f1.mul(f2,hypro::N);
+    result = f1.mul_assign(f2,hypro::HYPRO_RNDN);
     std::cout << f1 << std::endl;
 }
 

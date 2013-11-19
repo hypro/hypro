@@ -75,7 +75,7 @@ namespace hypro
             FLOAT_T<FloatType>(const double _double, precision _prec){}
 
 //            template<>
-//            FLOAT_T<double>(const double _double, RND _rnd, precision _prec)
+//            FLOAT_T<double>(const double _double, HYPRO_RND _rnd, precision _prec)
 //            {
 //                // TODO: What if a lesser precision than the default double precision is chosen? -> truncate with respect to _rnd!
 //                mValue = _double;
@@ -102,7 +102,7 @@ namespace hypro
                return 0;
            }
 
-           FLOAT_T<FloatType>& setPrec( const precision& _prec, const RND _rnd=RND::N )
+           FLOAT_T<FloatType>& setPrec( const precision& _prec, const HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN )
            {
                // TODO
                return *this;
@@ -128,35 +128,33 @@ namespace hypro
              * arithmetic operations
              */
             
-            FLOAT_T& add( const FLOAT_T<FloatType>& _op2, RND _rnd )
+            FLOAT_T& add_assign( const FLOAT_T<FloatType>& _op2, HYPRO_RND _rnd )
             {
                 // TODO: Include rounding
                 mValue = mValue + _op2.mValue;
                 return *this;
             }
             
-            FLOAT_T& add(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            void add( FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
-                mValue = _op1.mValue + _op2.mValue;
-                return *this;
+                _result.mValue = mValue + _op2.mValue;
             }
 
-            FLOAT_T& sub(const FLOAT_T& _op2, RND _rnd)
+            FLOAT_T& sub_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
             {
                 // TODO: Include rounding
                 mValue = mValue - _op2.mValue;
                 return *this;
             }
             
-            FLOAT_T& sub(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd)
+            void sub(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
-                mValue = _op1.mValue - _op2.mValue;
-                return *this;
+                _result.mValue = mValue - _op2.mValue;
             }
             
-            FLOAT_T& mul_assign(const FLOAT_T& _op2, RND _rnd)
+            FLOAT_T& mul_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
             {
                 // TODO: Include rounding
                 mValue = mValue * _op2.mValue;
@@ -164,27 +162,25 @@ namespace hypro
                 return *this;
             }
             
-            void mul(FLOAT_T& result, const FLOAT_T& _op2, RND _rnd) const
+            void mul(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
                 // TODO: Include rounding
-                result.mValue = mValue * _op2.mValue;
-                return *this;
+                _result.mValue = mValue * _op2.mValue;
             }
             
-            FLOAT_T& div(const FLOAT_T& _op2, RND _rnd) throw (std::invalid_argument)
+            FLOAT_T& div_assign(const FLOAT_T& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
             {
                 if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
                 // TODO: Include rounding
-                mValue = mValue - _op2.mValue;
+                mValue = mValue / _op2.mValue;
                 return *this;
             }
             
-            FLOAT_T& div(const FLOAT_T& _op1, const FLOAT_T& _op2, RND _rnd) throw (std::invalid_argument)
+            void div(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument) 
             {
                 if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
                 // TODO: Include rounding
-                mValue = _op1.mValue - _op2.mValue;
-                return *this;
+                _result.mValue = mValue / _op2.mValue;
             }
             
             /**
@@ -215,7 +211,7 @@ namespace hypro
                 return *this;
             }
 
-            FLOAT_T& abs( RND _rnd)
+            FLOAT_T& abs( HYPRO_RND _rnd)
             {
                 mValue = abs(mValue);
                 return *this;
@@ -224,7 +220,7 @@ namespace hypro
             /**
              * conversion operators
              */
-            double toDouble(RND _rnd=RND::N) const
+            double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
             {
                 return (double) mValue;
             }
