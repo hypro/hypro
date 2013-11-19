@@ -66,11 +66,15 @@ class FLOAT_T<mpfr_t>
             mpfr_set(mValue, _mpfrNumber, MPFR_RNDN);
         }
 
-        FLOAT_T(const FLOAT_T<mpfr_t>& _float) : mValue( _float.mValue ){}
+        FLOAT_T(const FLOAT_T<mpfr_t>& _float)
+        {
+            mpfr_init2(mValue, mpfr_get_prec(_float.mValue));
+            mpfr_set(mValue, _float.mValue, MPFR_RNDN);
+        }
 
         ~FLOAT_T()
         {
-        	mpfr_clear(mValue);
+            mpfr_clear(mValue);
         }
 
         

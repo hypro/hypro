@@ -28,8 +28,7 @@ TEST(doubleFloatTest, Constructor)
     hypro::FLOAT_T<double> hf1 = hypro::FLOAT_T<double>(dVal);
     
     // copy constructor test
-    ASSERT_EQ(hf1, hypro::FLOAT_T<double>(hf1));
-    SUCCEED();
+    //ASSERT_EQ(hf1, hypro::FLOAT_T<double>(hf1));
 }
 
 TEST(doubleFloatTest, BooleanOperators)

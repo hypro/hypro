@@ -81,6 +81,9 @@ namespace hypro
 //                mValue = _double;
 //            }
             
+            FLOAT_T<FloatType>(const FLOAT_T<FloatType>& _float) : mValue(_float.mValue)
+            {}
+            
             ~FLOAT_T()
             {
             	// TODO: clear mValue if needed

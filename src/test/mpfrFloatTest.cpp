@@ -34,13 +34,14 @@ TEST(mpfrFloatTest, Constructor)
     mpfr_init(mVal);
     mpfr_set_d(mVal,  3.14159265358979323846264338327950288419716939937510582097494459230781640628620899, MPFR_RNDNA);
     hypro::FLOAT_T<mpfr_t> hf1 = hypro::FLOAT_T<mpfr_t>(mVal);
-//    std::cout << hf1 << std::endl;
+    std::cout << hf1 << std::endl;
     hf1.setPrec(10);
     EXPECT_EQ(10, hf1.getPrec());
-//    std::cout << hf1 << std::endl;
+    std::cout << hf1 << std::endl;
     
     // copy constructor test
     ASSERT_EQ(hf1, hypro::FLOAT_T<mpfr_t>(hf1));
+    
     SUCCEED();
 }
 
