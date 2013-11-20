@@ -290,9 +290,11 @@ class FLOAT_T<mpfr_t>
         inline std::string toString() const
         {
             // TODO: Better rounding mode?
-            std::stringstream str;
-            str << mpfr_get_d(mValue, convRnd(HYPRO_RND::HYPRO_RNDN));   
-            return str.str();
+//            std::string out;
+            char out[30];
+//            str << mpfr_get_d(mValue, MPFR_RNDN);
+            mpfr_sprintf(out, "%.10RDe", mValue);
+            return std::string(out);
         }
 
     private:

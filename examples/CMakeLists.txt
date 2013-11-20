@@ -9,6 +9,7 @@ set( EXAMPLES
     ################################
     # insert examples in this list #
     ################################
+    example_addition
     example_test
 )
 

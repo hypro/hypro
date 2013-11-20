@@ -14,6 +14,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <mpfr.h>
+
 namespace hypro
 {
 		// nearest, towards zero, towards infty, towards -infty, away from zero
@@ -297,9 +299,10 @@ namespace hypro
             
             inline std::string toString() const
             {
-                std::stringstream str;
-                str << mValue;   
-                return str.str();
+//                std::stringstream str;
+//                str << mValue;   
+//                return str.str();
+                return std::to_string(mValue);
             }
     };
     
