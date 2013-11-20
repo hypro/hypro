@@ -12,7 +12,7 @@
 
 #include <string>
 #include <iostream>
-#include <stdexcept>
+#include <assert.h>
 
 #include <mpfr.h>
 
@@ -201,17 +201,17 @@ namespace hypro
                 _result.mValue = mValue * _op2.mValue;
             }
             
-            inline FLOAT_T& div_assign(const FLOAT_T& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
+            inline FLOAT_T& div_assign(const FLOAT_T& _op2, HYPRO_RND _rnd)
             {
-                if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                assert( _op2 != 0 );
                 // TODO: Include rounding
                 mValue = mValue / _op2.mValue;
                 return *this;
             }
             
-            inline void div(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument) 
+            inline void div(FLOAT_T& _result, const FLOAT_T& _op2, HYPRO_RND _rnd) const
             {
-                if( _op2 == 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+                assert( _op2 != 0 );
                 // TODO: Include rounding
                 _result.mValue = mValue / _op2.mValue;
             }

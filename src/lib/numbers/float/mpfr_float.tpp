@@ -189,16 +189,16 @@ class FLOAT_T<mpfr_t>
             mpfr_mul(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) throw (std::invalid_argument)
+        inline FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
         {
-            if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+            assert( mpfr_zero_p(_op2.mValue) != 0 );
             mpfr_div(mValue, mValue, _op2.mValue, convRnd(_rnd));
             return *this;
         }
 
-        inline void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const throw (std::invalid_argument)
+        inline void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
         {
-            if( mpfr_zero_p(_op2.mValue) != 0 ) throw ( std::invalid_argument( "Division by zero not allowed." ) );
+            assert( mpfr_zero_p(_op2.mValue) != 0 );
             mpfr_div(_result.mValue, this->mValue, _op2.mValue, convRnd(_rnd));
         }
 
