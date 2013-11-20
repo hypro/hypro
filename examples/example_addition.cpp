@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     int count = 0;
     while (count < 100000000)
     {
-        result.add(hf1,hf2,hypro::HYPRO_RNDN);
+        hf1.add(result,hf2,hypro::HYPRO_RNDN);
         ++count;
     }
     std::cout << "Total time(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
