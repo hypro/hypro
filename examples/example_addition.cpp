@@ -9,6 +9,7 @@
 #include "../src/lib/numbers/FLOAT_T.h"
 #include <chrono>
 #include <mpfr.h>
+#include <set>
 
 using namespace std;
 
@@ -19,6 +20,7 @@ int main(int argc, char** argv) {
 
     typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::microseconds timeunit;
+    const int runs = 10;
     
     double f1 = 3.141592654;
     double f2 = 1.414;
@@ -38,23 +40,42 @@ int main(int argc, char** argv) {
     mpfr_set_d(mf1,f1,MPFR_RNDN);
     mpfr_set_d(mf2,f2,MPFR_RNDN);
     
-    clock::time_point start = clock::now();
-    int count = 0;
-    while (count < 100000000)
+    std::set<std::pair<long int,long int> > results;
+    for( int index = 0 ; index < runs ; ++index)
     {
-        hf1.add(result,hf2,hypro::HYPRO_RNDN);
-        ++count;
+        std::pair<long int,long int> testresult;
+        clock::time_point start = clock::now();
+        int count = 0;
+        while (count < 100000000)
+        {
+            hf1.add(result,hf2,hypro::HYPRO_RNDN);
+            ++count;
+        }
+        std::cout << "Total time(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+        testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+        
+        start = clock::now();
+        count = 0;
+        while (count < 100000000)
+        {
+            mpfr_add(mResult, mf1, mf2, MPFR_RNDN);
+            ++count;
+        }
+        std::cout << "Total time(MPFR): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+        testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+        results.insert(testresult);
     }
-    std::cout << "Total time(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
     
-    start = clock::now();
-    count = 0;
-    while (count < 100000000)
+    double avgHypro = 0;
+    double avgMpfr = 0;
+    
+    for(auto resultIt = results.begin(); resultIt != results.end(); ++resultIt )
     {
-        mpfr_add(mResult, mf1, mf2, MPFR_RNDN);
-        ++count;
+        avgHypro += double((*resultIt).first/double(runs));
+        avgMpfr += double((*resultIt).second/double(runs));
     }
-    std::cout << "Total time(MPFR): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+    
+    std::cout << "AVGHypro: " << avgHypro << ", AVGMpfr: " << avgMpfr << std::endl;
     
     return 0;
 }
