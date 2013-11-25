@@ -251,7 +251,7 @@ class FLOAT_T<mpfr_t>
         }
         
         /**
-        * Overloaded operators
+        * Operators
         */
 
         inline friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
@@ -281,6 +281,43 @@ class FLOAT_T<mpfr_t>
             FLOAT_T<mpfr_t> res;
             mpfr_div(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
+        }
+        
+        inline friend FLOAT_T<mpfr_t>& operator++(FLOAT_T<mpfr_t>& _num)
+        {
+            mpfr_add_ui(_num.mValue, _num.mValue, 1, MPFR_RNDN);
+            return _num;
+        }
+        
+        inline friend FLOAT_T<mpfr_t>& operator--(FLOAT_T<mpfr_t>& _num)
+        {
+            mpfr_sub_ui(_num.mValue, _num.mValue, 1, MPFR_RNDN);
+            return _num;
+        }
+        
+        inline FLOAT_T<mpfr_t>& operator +=(const FLOAT_T<mpfr_t>& _rhs)
+        {
+            mpfr_add(mValue, mValue, _rhs.mValue, MPFR_RNDN);
+            return *this;
+        }
+
+        inline FLOAT_T<mpfr_t>& operator -=(const FLOAT_T<mpfr_t>& _rhs)
+        {
+            mpfr_sub(mValue,mValue, _rhs.mValue, MPFR_RNDN);
+            return *this;
+        }
+
+        inline FLOAT_T<mpfr_t>& operator *=(const FLOAT_T<mpfr_t>& _rhs)
+        {
+            mpfr_mul(mValue, mValue, _rhs.mValue, MPFR_RNDN);
+            return *this;
+        }
+
+        inline FLOAT_T<mpfr_t>& operator /=(const FLOAT_T<mpfr_t>& _rhs)
+        {
+            // TODO: mpfr_div results in infty when dividing by zero, although this should not be defined.
+            mpfr_div(mValue, mValue, _rhs.mValue, MPFR_RNDN);
+            return *this;
         }
             
         /**

@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 #include "defines.h"
-#include "../lib/numbers/FLOAT_T.h"
-#include <mpfr.h>
 
 TEST(mpfrFloatTest, Constructor)
 { 

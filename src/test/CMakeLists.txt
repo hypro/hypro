@@ -6,14 +6,19 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     # Unit Tests
     ################################
     add_executable(runNumberTests
-            #NumberTest.cpp
-            #FloatTest.cpp
             mpfrFloatTest.cpp
             doubleFloatTest.cpp
-            #PointTest.cpp
-            #VertexTest.cpp
+            PointTest.cpp
+            VertexTest.cpp
     )
+
+    add_executable(runDatastructureTests
+            PointTest.cpp
+            VertexTest.cpp
+    )
+
     add_dependencies(runNumberTests googletest)
+    add_dependencies(runDatastructureTests googletest)
     #target_link_libraries(runNumberTests gtest gtest_main hypro  ${libraries})
     target_link_libraries(runNumberTests 
                             #${binary_dir}/gtest
@@ -26,5 +31,17 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
                             hypro  
                             ${libraries})
     add_test( NAME numbers COMMAND runNumberTests )
+
+    target_link_libraries(runDatastructureTests 
+                            #${binary_dir}/gtest
+                            #${binary_dir}/gtest_main
+                            #debug ${binary_dir}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
+                            #optimized ${binary_dir}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
+                            ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
+                            ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${Suffix}
+                            ${Pthread}
+                            hypro  
+                            ${libraries})
+    add_test( NAME datastructures COMMAND runDatastructureTests )
 endif()
 

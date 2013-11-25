@@ -1,31 +1,22 @@
 /** 
- * @file   vertex.h
- * Created on Mar 24, 2011
- * Last modified June 23, 2011
+ * @file Vertex.h
  * 
+ * @author Stefan Schupp
  * @author Sebastian Junges
+ * 
+ * @since 2011-03-24
+ * @version 2013-11-25
  */
 
-#ifndef VERTEX_H_
-#define VERTEX_H_
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <vector>
-//#include <map>
-//#include <list>
-//#include <set>
-//#include <fstream>
-//#include "boost/lexical_cast.hpp"
-//#include "config.h"
 
-#include "point.h"
+#include "Point.h"
 
 namespace hypro {
-
-/**
- *
- */
 /*
     class Vertex;
     typedef std::vector<Vertex> vVec;
@@ -35,92 +26,93 @@ namespace hypro {
     typedef std::set<Vertex> vSet;
     typedef std::set<Vertex>::iterator vSetIt;*/ 
     
-	/**
-	 * @class Vertex
-	 */
-	template<class NumberType>
-	class Vertex : public Point<NumberType> {
-	public:
-		/**
-		 *
-		 * @param dimension
-		 * @param color
-		 * @return
-		 */
-		Vertex(unsigned dimension = 2, bool color = false) : Point<NumberType>(dimension) {
-			mColor = color;
-		}
-	
-		/**
-		 *
-		 * @param coordinates
-		 * @param color
-		 * @return
-		 */
-		Vertex(std::vector<NumberType> coordinates, bool color) : Point<NumberType>(coordinates) {
-			mColor = color;
-		}
-	
-		/**
-		 *
-		 * @param p
-		 * @param color
-		 * @return
-		 */
-		Vertex(const Point<NumberType> & p, bool color) : Point<NumberType>(p) {
-			mColor = color;
-		}
-	
-		/**
-		 *
-		 * @return the color of the vertex.
-		 */
-		bool getColor() const{
-			return mColor;
-		}
-	
-		/**
-		 *
-		 * @param c the new value for this vertex' color.
-		 */
-		void setColor(bool c) {
-			mColor = c;
-		}
-	
-		/**
-		 * Inverts the color.
-		 */
-		void invertColor() {
-			mColor = !mColor;
-		}
-	
-        /*
-         * TODO
-         * std::string toString(bool parentheses = true) const {
-            if (parentheses) return Point<NumberType>::toString(true) + " " + 
-                    "[" + boost::lexical_cast<std::string>(mColor) +"]";
-            else return Point::toString(false) + " " + 
-                    boost::lexical_cast<std::string>(mColor);
-        }*/
+    template<class NumberType>
+    class Vertex : public Point<NumberType> 
+    {
+        private:
+            bool mColor;
 
-
-        friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) {
-            ostr << v.toString();
-            return ostr;
-        }
-        
-        friend std::istream& operator>>(std::istream& istr, Vertex& v) {
-            for (unsigned d = 0; d < v.getDimension(); d++) {
-                istr >> v.mCoordinates[d];
+        public:
+            /**
+             *
+             * @param dimension
+             * @param color
+             * @return
+             */
+            Vertex(unsigned dimension = 2, bool color = false) : Point<NumberType>(dimension) 
+            {
+                mColor = color;
             }
-            istr >> v.mColor; 
-            return istr;
-        }
-	
-	private:
-		bool mColor;
-	};
 
+            /**
+             *
+             * @param coordinates
+             * @param color
+             * @return
+             */
+            Vertex(std::vector<NumberType> coordinates, bool color) : Point<NumberType>(coordinates) 
+            {
+                mColor = color;
+            }
+
+            /**
+             *
+             * @param p
+             * @param color
+             * @return
+             */
+            Vertex(const Point<NumberType> & p, bool color) : Point<NumberType>(p) 
+            {
+                mColor = color;
+            }
+
+            /**
+             *
+             * @return the color of the vertex.
+             */
+            bool color() const
+            {
+                return mColor;
+            }
+
+            /**
+             *
+             * @param c the new value for this vertex' color.
+             */
+            void setColor(bool c = true) 
+            {
+                mColor = c;
+            }
+
+            /**
+             * Inverts the color.
+             */
+            void invertColor() 
+            {
+                mColor = !mColor;
+            }
+
+            friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
+            {
+                ostr << v.toString();
+                return ostr;
+            }
+
+            friend std::istream& operator>>(std::istream& istr, Vertex& v) 
+            {
+                for (unsigned d = 0; d < v.dimension(); d++) {
+                    istr >> v.mCoordinates.at(d);
+                }
+                istr >> v.mColor; 
+                return istr;
+            }
+
+            std::string toString(bool parentheses = true) const 
+            {
+                if (parentheses) 
+                    return Point<NumberType>::toString(true) + " " + "[" + mColor +"]";
+                else 
+                    return Point<NumberType>::toString(false) + " " + mColor;
+            }
+    };
 }
-#endif
-

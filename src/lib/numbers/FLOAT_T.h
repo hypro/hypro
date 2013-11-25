@@ -270,7 +270,7 @@ namespace hypro
             }
             
             /**
-             * Overloaded operators
+             * Operators
              */
             
             inline friend FLOAT_T<FloatType> operator +(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
@@ -280,17 +280,53 @@ namespace hypro
             
             inline friend FLOAT_T<FloatType> operator -(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
-                return _lhs - _rhs;
+                return FLOAT_T<FloatType>(_lhs.mValue - _rhs.mValue);
             }
             
             inline friend FLOAT_T<FloatType> operator *(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
-                return _lhs * _rhs;
+                return FLOAT_T<FloatType>(_lhs.mValue * _rhs.mValue);
             }
             
             inline friend FLOAT_T<FloatType> operator /(const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
             {
-                return _lhs / _rhs;
+                return FLOAT_T<FloatType>(_lhs.mValue / _rhs.mValue);
+            }
+            
+            inline friend FLOAT_T<FloatType>& operator ++(FLOAT_T<FloatType>& _num)
+            {
+                _num.mValue +=1;
+                return _num;
+            }
+            
+            inline friend FLOAT_T<FloatType>& operator --(FLOAT_T<FloatType>& _num)
+            {
+                _num.mValue -=1;
+                return _num;
+            }
+            
+            inline FLOAT_T<FloatType>& operator +=(const FLOAT_T<FloatType>& _rhs)
+            {
+                mValue + _rhs.mValue;
+                return *this;
+            }
+            
+            inline FLOAT_T<FloatType>& operator -=(const FLOAT_T<FloatType>& _rhs)
+            {
+                mValue - _rhs.mValue;
+                return *this;
+            }
+            
+            inline FLOAT_T<FloatType>& operator *=(const FLOAT_T<FloatType>& _rhs)
+            {
+                mValue * _rhs.mValue;
+                return *this;
+            }
+            
+            inline FLOAT_T<FloatType>& operator /=(const FLOAT_T<FloatType>& _rhs)
+            {
+                mValue / _rhs.mValue;
+                return *this;
             }
             
             /**
