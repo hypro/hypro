@@ -220,34 +220,59 @@ namespace hypro
              * special operators
              */
 
-            inline FLOAT_T& sqrt()
+            inline FLOAT_T& sqrt_assign()
             {
                 mValue = sqrt(mValue);
                 return *this;
             }
+            
+            inline void sqrt(FLOAT_T& _result)
+            {
+            	_result.mValue = sqrt(mValue);
+            }
 
-            inline FLOAT_T& cbrt()
+            inline FLOAT_T& cbrt_assign()
             {
                 mValue = cbrt(mValue);
                 return *this;
             }
+            
+            inline FLOAT_T& cbrt(FLOAT_T& _result)
+            {
+            	_result.mValue = cbrt(mValue);
+            }
 
-            inline FLOAT_T& root(unsigned long int _k)
+            inline FLOAT_T& root_assign(unsigned long int _k)
             {
                 // TODO
                 return *this;
             }
+            
+            inline void root(FLOAT_T& _result, unsigned long int _k)
+            {
+            	// TODO
+            }
 
-            inline FLOAT_T& pow(unsigned long int _exp)
+            inline FLOAT_T& pow_assign(unsigned long int _exp)
             {
                 mValue = pow(mValue, _exp);
                 return *this;
             }
+            
+            inline void pow(FLOAT_T& _result, unsigned long int _exp)
+            {
+            	_result.mValue = pow(mValue, _exp);
+            }
 
-            inline FLOAT_T& abs( HYPRO_RND _rnd)
+            inline FLOAT_T& abs_assign()
             {
                 mValue = abs(mValue);
                 return *this;
+            }
+            
+            inline void abs(FLOAT_T& _result)
+            {
+            	_result.mValue = abs(mValue);
             }
 
             /**
