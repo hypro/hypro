@@ -31,16 +31,47 @@ TEST(doubleFloatTest, Constructor)
 
 TEST(doubleFloatTest, BooleanOperators)
 {
+	double v1 = 7;
+    hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
+    double v2 = 2;
+    hypro::FLOAT_T<double> f2 = hypro::FLOAT_T<double>(v2);
+    double v3 = 7;
+    hypro::FLOAT_T<double> f3 = hypro::FLOAT_T<double>(v3);
+    
+    ASSERT_GT(f1, f2);
+    ASSERT_LT(f2, f1);
+    ASSERT_NE(f1, f2);
+    ASSERT_GE(f1, f3);
+    ASSERT_LE(f1, f3);
+    ASSERT_EQ(f1, f3);
 }
 
 TEST(doubleFloatTest, Addition)
 {
+	double v1 = 7;
+    hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
+    double v2 = 2;
+    hypro::FLOAT_T<double> f2 = hypro::FLOAT_T<double>(v2);
     
+    double vResult = 9;
+    hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.add_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
 }
 
 TEST(doubleFloatTest, Subtraction)
 {
+	double v1 = 9;
+    hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
+    double v2 = 5;
+    hypro::FLOAT_T<double> f2 = hypro::FLOAT_T<double>(v2);
     
+    double vResult = 4;
+    hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.sub_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
 }
 
 TEST(doubleFloatTest, Multiplication)
@@ -50,20 +81,31 @@ TEST(doubleFloatTest, Multiplication)
     double v2 = 3;
     hypro::FLOAT_T<double> f2 = hypro::FLOAT_T<double>(v2);
     
-    hypro::FLOAT_T<double> result;
+    double vResult = 12;
+    hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
     
-    result = f1.mul_assign(f2,hypro::HYPRO_RNDN);
-    std::cout << f1 << std::endl;
+    f1.mul_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
 }
 
 TEST(doubleFloatTest, Division)
 {
+    double v1 = 8;
+    hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
+    double v2 = 4;
+    hypro::FLOAT_T<double> f2 = hypro::FLOAT_T<double>(v2);
     
+    double vResult = 2;
+    hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.div_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
 }
 
 TEST(doubleFloatTest, Roots)
 {
-	
+	double v1 = 16;
+	hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
 }
 
 TEST(doubleFloatTest, ConversionOperators)
