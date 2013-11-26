@@ -56,6 +56,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 enable_testing()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	message(“OSX”)
+endif()
+
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
 #
