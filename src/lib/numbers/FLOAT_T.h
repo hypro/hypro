@@ -14,6 +14,7 @@
 #include <iostream>
 #include <assert.h>
 
+#include <math.h>
 #include <mpfr.h>
 
 namespace hypro
@@ -220,59 +221,103 @@ namespace hypro
              * special operators
              */
 
-            inline FLOAT_T& sqrt_assign()
+            inline FLOAT_T& sqrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
             {
                 mValue = sqrt(mValue);
                 return *this;
             }
             
-            inline void sqrt(FLOAT_T& _result)
+            inline void sqrt(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
             {
             	_result.mValue = sqrt(mValue);
             }
 
-            inline FLOAT_T& cbrt_assign()
+            inline FLOAT_T& cbrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
             {
                 mValue = cbrt(mValue);
                 return *this;
             }
             
-            inline FLOAT_T& cbrt(FLOAT_T& _result)
+            inline FLOAT_T& cbrt(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
             {
             	_result.mValue = cbrt(mValue);
             }
 
-            inline FLOAT_T& root_assign(unsigned long int _k)
+            inline FLOAT_T& root_assign(unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
             {
                 // TODO
                 return *this;
             }
             
-            inline void root(FLOAT_T& _result, unsigned long int _k)
+            inline void root(FLOAT_T& _result, unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
             {
             	// TODO
             }
 
-            inline FLOAT_T& pow_assign(unsigned long int _exp)
+            inline FLOAT_T& pow_assign(unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
             {
                 mValue = pow(mValue, _exp);
                 return *this;
             }
             
-            inline void pow(FLOAT_T& _result, unsigned long int _exp)
+            inline void pow(FLOAT_T& _result, unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
             {
             	_result.mValue = pow(mValue, _exp);
             }
 
-            inline FLOAT_T& abs_assign()
+            inline FLOAT_T& abs_assign(HYPRO_RND _rnd = HYPRO_RNDN)
             {
                 mValue = abs(mValue);
                 return *this;
             }
             
-            inline void abs(FLOAT_T& _result)
+            inline void abs(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
             {
             	_result.mValue = abs(mValue);
+            }
+            
+            inline FLOAT_T& exp_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                mValue = exp(mValue);
+                return *this;
+            }
+            
+            inline void exp(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                _result.mValue = exp(mValue);
+            }
+            
+            inline FLOAT_T& sin_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                mValue = sin(mValue);
+                return *this;
+            }
+            
+            inline void sin(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                _result.mValue = sin(mValue);
+            }
+            
+            inline FLOAT_T& cos_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                mValue = cos(mValue);
+                return *this;
+            }
+            
+            inline void cos(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                _result.mValue = cos(mValue);
+            }
+            
+            inline FLOAT_T& log_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                mValue = log(mValue);
+                return *this;
+            }
+            
+            inline void log(FLOAT_T& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+            {
+                _result.mValue = log(mValue);
             }
 
             /**
@@ -289,10 +334,10 @@ namespace hypro
                 return ostr;
             }
             
-            inline friend bool operator== (const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
-            {
-                return _lhs.mValue == _rhs.mValue;
-            }
+//            inline friend bool operator== (const FLOAT_T<FloatType>& _lhs, const FLOAT_T<FloatType>& _rhs)
+//            {
+//                return _lhs.mValue == _rhs.mValue;
+//            }
             
             /**
              * Operators

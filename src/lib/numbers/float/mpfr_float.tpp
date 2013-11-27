@@ -206,35 +206,105 @@ class FLOAT_T<mpfr_t>
          * special operators
          */
 
-        inline FLOAT_T<mpfr_t>& sqrt(HYPRO_RND _rnd)
+        inline FLOAT_T<mpfr_t>& sqrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_sqrt(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& cbrt(HYPRO_RND _rnd)
+        inline void sqrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_sqrt(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& cbrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_cbrt(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& root(unsigned long int _k, HYPRO_RND _rnd)
+        inline void cbrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_cbrt(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& root_assign(unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_root(mValue, mValue, _k, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& pow(unsigned long int _exp, HYPRO_RND _rnd)
+        inline void root(FLOAT_T<mpfr_t>& _result, unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_root(_result.mValue, mValue, _k, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& pow_assign(unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_pow_ui(mValue, mValue, _exp, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-//        FLOAT_T<mpfr_t>& abs(HYPRO_RND _rnd) const
-//        {
-//            mpfr_abs(mValue, mValue, convRnd(_rnd));
-//            return *this;
-//        }
+        inline void pow(FLOAT_T<mpfr_t>& _result, unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_pow_ui(_result.mValue, mValue, _exp, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& abs_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_abs(mValue, mValue, mpfr_rnd_t(_rnd));
+            return *this;
+        }
+
+        inline void abs(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_abs(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+        
+        inline FLOAT_T<mpfr_t>& exp_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_exp(mValue, mValue, mpfr_rnd_t(_rnd));
+            return *this;
+        }
+
+        inline void exp(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_exp(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& sin_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_sin(mValue, mValue, mpfr_rnd_t(_rnd));
+            return *this;
+        }
+
+        inline void sin(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_sin(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& cos_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_cos(mValue, mValue, mpfr_rnd_t(_rnd));
+            return *this;
+        }
+
+        inline void cos(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_cos(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
+        inline FLOAT_T<mpfr_t>& log_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_log(mValue, mValue, mpfr_rnd_t(_rnd));
+            return *this;
+        }
+
+        inline void log(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        {
+            mpfr_log(_result.mValue, mValue, mpfr_rnd_t(_rnd));
+        }
+
 
         /**
          * conversion operators
