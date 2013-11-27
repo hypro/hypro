@@ -102,7 +102,7 @@ class FLOAT_T<mpfr_t>
          * Operators *
          *************/
         
-        inline FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
+        FLOAT_T<mpfr_t>& operator = (const FLOAT_T<mpfr_t>& _rhs)
         {
             if(this == &_rhs)
                 return *this;
@@ -111,7 +111,7 @@ class FLOAT_T<mpfr_t>
             return *this;
         }
         
-        inline FLOAT_T<mpfr_t>& safeSet (const FLOAT_T<mpfr_t>& _rhs, const HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& safeSet (const FLOAT_T<mpfr_t>& _rhs, const HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN)
         {
             mpfr_set_prec(mValue, mpfr_get_prec(_rhs.mValue));
             mpfr_set(mValue, _rhs.mValue, mpfr_rnd_t(_rnd));
@@ -122,32 +122,32 @@ class FLOAT_T<mpfr_t>
          * Boolean operators 
          */
 
-        inline bool operator == ( const FLOAT_T<mpfr_t>& _rhs) const
+        bool operator == ( const FLOAT_T<mpfr_t>& _rhs) const
         {
             return mpfr_cmp(mValue,_rhs.mValue) == 0;
         }
 
-        inline bool operator != ( const FLOAT_T<mpfr_t> & _rhs) const
+        bool operator != ( const FLOAT_T<mpfr_t> & _rhs) const
         {
             return mpfr_equal_p(mValue, _rhs.mValue) == 0;
         }
 
-        inline bool operator > ( const FLOAT_T<mpfr_t> & _rhs) const
+        bool operator > ( const FLOAT_T<mpfr_t> & _rhs) const
         {
             return mpfr_greater_p(mValue, _rhs.mValue) != 0;
         }
 
-        inline bool operator < ( const FLOAT_T<mpfr_t> & _rhs) const
+        bool operator < ( const FLOAT_T<mpfr_t> & _rhs) const
         {
             return mpfr_less_p(mValue, _rhs.mValue) != 0;
         }
 
-        inline bool operator <= ( const FLOAT_T<mpfr_t> & _rhs) const
+        bool operator <= ( const FLOAT_T<mpfr_t> & _rhs) const
         {
             return mpfr_lessequal_p(mValue, _rhs.mValue) != 0;
         }
 
-        inline bool operator >= ( const FLOAT_T<mpfr_t> & _rhs) const
+        bool operator >= ( const FLOAT_T<mpfr_t> & _rhs) const
         {
             return mpfr_greaterequal_p(mValue, _rhs.mValue) != 0;
         }
@@ -156,47 +156,47 @@ class FLOAT_T<mpfr_t>
          * arithmetic operations
          */
 
-        inline FLOAT_T<mpfr_t>& add_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
+        FLOAT_T<mpfr_t>& add_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
         {
             mpfr_add(mValue, mValue, _op2.mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void add( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
+        void add( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
         {
             mpfr_add(_result.mValue, this->mValue, _op2.mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& sub_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
+        FLOAT_T<mpfr_t>& sub_assign( const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd )
         {
             mpfr_sub(mValue, mValue, _op2.mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void sub( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
+        void sub( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd ) const
         {
             mpfr_sub(_result.mValue, this->mValue, _op2.mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& mul_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
+        FLOAT_T<mpfr_t>& mul_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
         {
             mpfr_mul(mValue, mValue, _op2.mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void mul( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
+        void mul( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
         {
             mpfr_mul(_result.mValue, this->mValue, _op2.mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
+        FLOAT_T<mpfr_t>& div_assign(const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd)
         {
             assert( mpfr_zero_p(_op2.mValue) != 0 );
             mpfr_div(mValue, mValue, _op2.mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
+        void div( FLOAT_T<mpfr_t>& _result, const FLOAT_T<mpfr_t>& _op2, HYPRO_RND _rnd) const
         {
             assert( mpfr_zero_p(_op2.mValue) != 0 );
             mpfr_div(_result.mValue, this->mValue, _op2.mValue, mpfr_rnd_t(_rnd));
@@ -206,101 +206,101 @@ class FLOAT_T<mpfr_t>
          * special operators
          */
 
-        inline FLOAT_T<mpfr_t>& sqrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& sqrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_sqrt(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void sqrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void sqrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_sqrt(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& cbrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& cbrt_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_cbrt(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void cbrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void cbrt(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_cbrt(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& root_assign(unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& root_assign(unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_root(mValue, mValue, _k, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void root(FLOAT_T<mpfr_t>& _result, unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
+        void root(FLOAT_T<mpfr_t>& _result, unsigned long int _k, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_root(_result.mValue, mValue, _k, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& pow_assign(unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& pow_assign(unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_pow_ui(mValue, mValue, _exp, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void pow(FLOAT_T<mpfr_t>& _result, unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
+        void pow(FLOAT_T<mpfr_t>& _result, unsigned long int _exp, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_pow_ui(_result.mValue, mValue, _exp, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& abs_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& abs_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_abs(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void abs(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void abs(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_abs(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
         
-        inline FLOAT_T<mpfr_t>& exp_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& exp_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_exp(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void exp(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void exp(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_exp(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& sin_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& sin_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_sin(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void sin(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void sin(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_sin(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& cos_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& cos_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_cos(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void cos(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void cos(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_cos(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
 
-        inline FLOAT_T<mpfr_t>& log_assign(HYPRO_RND _rnd = HYPRO_RNDN)
+        FLOAT_T<mpfr_t>& log_assign(HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_log(mValue, mValue, mpfr_rnd_t(_rnd));
             return *this;
         }
 
-        inline void log(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
+        void log(FLOAT_T<mpfr_t>& _result, HYPRO_RND _rnd = HYPRO_RNDN)
         {
             mpfr_log(_result.mValue, mValue, mpfr_rnd_t(_rnd));
         }
@@ -310,12 +310,12 @@ class FLOAT_T<mpfr_t>
          * conversion operators
          */
 
-        inline double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
+        double toDouble(HYPRO_RND _rnd=HYPRO_RND::HYPRO_RNDN) const
         {
             return mpfr_get_d(mValue, mpfr_rnd_t(_rnd));
         }
         
-        inline friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<mpfr_t> & p) {
+        friend std::ostream & operator<< (std::ostream& ostr, const FLOAT_T<mpfr_t> & p) {
             ostr << p.toString();
             return ostr;
         }
@@ -324,28 +324,28 @@ class FLOAT_T<mpfr_t>
         * Operators
         */
 
-        inline friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        friend FLOAT_T<mpfr_t> operator +(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_add(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        inline friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        friend FLOAT_T<mpfr_t> operator -(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_sub(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        inline friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        friend FLOAT_T<mpfr_t> operator *(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             FLOAT_T<mpfr_t> res;
             mpfr_mul(res.mValue, _lhs.mValue, _rhs.mValue, MPFR_RNDN);
             return res;
         }
 
-        inline friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
+        friend FLOAT_T<mpfr_t> operator /(const FLOAT_T<mpfr_t>& _lhs, const FLOAT_T<mpfr_t>& _rhs)
         {
             // TODO: mpfr_div results in infty when dividing by zero, although this should not be defined.
             FLOAT_T<mpfr_t> res;
@@ -353,37 +353,37 @@ class FLOAT_T<mpfr_t>
             return res;
         }
         
-        inline friend FLOAT_T<mpfr_t>& operator++(FLOAT_T<mpfr_t>& _num)
+        friend FLOAT_T<mpfr_t>& operator++(FLOAT_T<mpfr_t>& _num)
         {
             mpfr_add_ui(_num.mValue, _num.mValue, 1, MPFR_RNDN);
             return _num;
         }
         
-        inline friend FLOAT_T<mpfr_t>& operator--(FLOAT_T<mpfr_t>& _num)
+        friend FLOAT_T<mpfr_t>& operator--(FLOAT_T<mpfr_t>& _num)
         {
             mpfr_sub_ui(_num.mValue, _num.mValue, 1, MPFR_RNDN);
             return _num;
         }
         
-        inline FLOAT_T<mpfr_t>& operator +=(const FLOAT_T<mpfr_t>& _rhs)
+        FLOAT_T<mpfr_t>& operator +=(const FLOAT_T<mpfr_t>& _rhs)
         {
             mpfr_add(mValue, mValue, _rhs.mValue, MPFR_RNDN);
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& operator -=(const FLOAT_T<mpfr_t>& _rhs)
+        FLOAT_T<mpfr_t>& operator -=(const FLOAT_T<mpfr_t>& _rhs)
         {
             mpfr_sub(mValue,mValue, _rhs.mValue, MPFR_RNDN);
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& operator *=(const FLOAT_T<mpfr_t>& _rhs)
+        FLOAT_T<mpfr_t>& operator *=(const FLOAT_T<mpfr_t>& _rhs)
         {
             mpfr_mul(mValue, mValue, _rhs.mValue, MPFR_RNDN);
             return *this;
         }
 
-        inline FLOAT_T<mpfr_t>& operator /=(const FLOAT_T<mpfr_t>& _rhs)
+        FLOAT_T<mpfr_t>& operator /=(const FLOAT_T<mpfr_t>& _rhs)
         {
             // TODO: mpfr_div results in infty when dividing by zero, although this should not be defined.
             mpfr_div(mValue, mValue, _rhs.mValue, MPFR_RNDN);
@@ -394,7 +394,7 @@ class FLOAT_T<mpfr_t>
          * Auxiliary Functions
          */
 
-        inline std::string toString() const
+        std::string toString() const
         {
             // TODO: Better rounding mode?
 //            std::string out;
@@ -406,7 +406,7 @@ class FLOAT_T<mpfr_t>
 
     private:
 
-        inline mpfr_rnd_t convRnd(HYPRO_RND _rnd) const
+        mpfr_rnd_t convRnd(HYPRO_RND _rnd) const
         {
             switch(_rnd)
             {
@@ -430,7 +430,7 @@ class FLOAT_T<mpfr_t>
             }
         }
         
-        inline mpfr_prec_t convPrec(precision _prec) const
+        mpfr_prec_t convPrec(precision _prec) const
         {
             return _prec;
         }
