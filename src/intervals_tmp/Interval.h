@@ -32,10 +32,10 @@ public:
 	void set(const double c);
 
 	void setInf(const double l);
-	void setInf(const Interval & I);
+//	void setInf(const Interval & I);
 
 	void setSup(const double u);
-	void setSup(const Interval & S);
+//	void setSup(const Interval & S);
 
 	void split(Interval & left, Interval & right) const;		// split the interval at the midpoint
 	void split(list<Interval> & result, const int n) const;		// split the interval uniformly by n parts
@@ -45,8 +45,8 @@ public:
 	double sup() const;
 	double inf() const;
 
-	void sup(Interval & S) const;
-	void inf(Interval & I) const;
+//	void sup(Interval & S) const;
+//	void inf(Interval & I) const;
 
 	double midpoint() const;
 	void midpoint(Interval & M) const;
@@ -56,10 +56,10 @@ public:
 	bool within(const Interval & I, const double e) const;
 
 	double width() const;
-	void width(Interval & W) const;
+//	void width(Interval & W) const;
 
 	double mag() const;		// max{|lo|,|up|}
-	void mag(Interval & M) const;
+//	void mag(Interval & M) const;
 
 	void abs(Interval & result) const;
 	void abs_assign();		// absolute value
@@ -71,10 +71,10 @@ public:
 	bool operator != (const Interval & I) const;
 	bool operator > (const Interval & I) const;		// lo > up
 	bool operator < (const Interval & I) const;		// up < lo
-	bool operator <= (const Interval & I) const;	// lo < lo
-	bool operator >= (const Interval & I) const;	// up > up
+	bool operator <= (const Interval & I) const;	// lo < lo // may be changed
+	bool operator >= (const Interval & I) const;	// up > up // may be changed
 
-	bool smallereq(const Interval & I) const; 		// up <= lo
+	bool smallereq(const Interval & I) const; 		// up <= lo // may be changed
 
 	Interval & operator = (const Interval & I);
 	Interval & operator += (const Interval & I);
@@ -113,7 +113,7 @@ public:
 	void cos_assign();
 	void log_assign();
 
-	double widthRatio(const Interval & I) const;
+	double widthRatio(const Interval & I) const;    // may be removed
 
 	void toString(string & result) const;
 	void dump(FILE *fp) const;
