@@ -100,6 +100,13 @@ TEST(doubleFloatTest, Addition)
     ASSERT_EQ(result, f1);
 }
 
+/*
+ * Test the following operations
+ * 9 - 5 = 4
+ * 9 - -4 = 13
+ * 9 - 0 = 9
+ * 9 - -0 = 9
+ */
 TEST(doubleFloatTest, Subtraction)
 {
 	double v1 = 9;
@@ -109,6 +116,39 @@ TEST(doubleFloatTest, Subtraction)
     
     double vResult = 4;
     hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.sub_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
+    
+    v1 = 9;
+    f1 = hypro::FLOAT_T<double>(v1);
+    v2 = -4;
+    f2 = hypro::FLOAT_T<double>(v2);
+    
+    vResult = 13;
+    result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.sub_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
+    
+    v1 = 9;
+    f1 = hypro::FLOAT_T<double>(v1);
+    v2 = 0;
+    f2 = hypro::FLOAT_T<double>(v2);
+    
+    vResult = 9;
+    result = hypro::FLOAT_T<double>(vResult);
+    
+    f1.sub_assign(f2, hypro::HYPRO_RNDN);
+    ASSERT_EQ(result, f1);
+    
+    v1 = 9;
+    f1 = hypro::FLOAT_T<double>(v1);
+    v2 = -0;
+    f2 = hypro::FLOAT_T<double>(v2);
+    
+    vResult = 9;
+    result = hypro::FLOAT_T<double>(vResult);
     
     f1.sub_assign(f2, hypro::HYPRO_RNDN);
     ASSERT_EQ(result, f1);
