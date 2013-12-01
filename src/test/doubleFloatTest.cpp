@@ -100,12 +100,32 @@ TEST(doubleFloatTest, Division)
     
     f1.div_assign(f2, hypro::HYPRO_RNDN);
     ASSERT_EQ(result, f1);
+    
+    v2 = 0;
+    f2 = hypro::FLOAT_T<double>(v2);
+    
+    ASSERT_THROW(f1.div_assign(f2, hypro::HYPRO_RNDN));
 }
 
 TEST(doubleFloatTest, Roots)
 {
 	double v1 = 16;
 	hypro::FLOAT_T<double> f1 = hypro::FLOAT_T<double>(v1);
+	
+	double vResult = 4;
+	hypro::FLOAT_T<double> result = hypro::FLOAT_T<double>(vResult);
+	
+	f1.sqrt_assign();
+	ASSERT_EQ(result, f1);
+	
+	v1 = 27;
+	f1 = hypro::FLOAT_T<double>(v1);
+	
+	vResult = 3;
+	result = hypro::FLOAT_T<double>(vResult);
+	
+	f1.cbrt_assign();
+	ASSERT_EQ(result, f1);
 }
 
 TEST(doubleFloatTest, ConversionOperators)
@@ -113,4 +133,5 @@ TEST(doubleFloatTest, ConversionOperators)
 }
 
 TEST(doubleFloatTest, Precision)
-{}
+{
+}
