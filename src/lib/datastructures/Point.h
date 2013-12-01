@@ -35,8 +35,10 @@ namespace hypro {
     template<class numbertype>
     class Point 
     {
+    	typedef std::vector<FLOAT_T<numbertype> > vector_t;
+    	    	
     	protected:
-            std::vector<FLOAT_T<numbertype>> mCoordinates;
+            vector_t mCoordinates;
         
         public:
             static const int POINT_RAND_MAX = 100;
@@ -59,7 +61,7 @@ namespace hypro {
              * Constructs a point with the passed coordinates
              * @param coordinates
              */
-            Point(const std::vector<FLOAT_T<numbertype>>& coordinates) 
+            Point(const vector_t& coordinates) 
             {
                 mCoordinates.assign(coordinates.begin(), coordinates.end());
             }
@@ -93,7 +95,7 @@ namespace hypro {
                 return mCoordinates.at(dim);
             }
 
-            std::vector<FLOAT_T<numbertype>> coordinates() const 
+            vector_t coordinates() const 
             {
                 return mCoordinates;
             }
@@ -128,9 +130,9 @@ namespace hypro {
              * @param coordinates
              * @param offset
              */
-            void insertCoordinates(std::vector<FLOAT_T<numbertype>>& coordinates, unsigned offset = 0)
+            void insertCoordinates(vector_t& coordinates, unsigned offset = 0)
             {
-                typename std::vector<FLOAT_T<numbertype>>::iterator it = mCoordinates.begin();
+                typename vector_t::iterator it = mCoordinates.begin();
                 mCoordinates.reserve(coordinates.size());
                 while (offset > 0)
                 {
@@ -144,7 +146,7 @@ namespace hypro {
              *
              * @return iterator to begin of mCoordinates
              */
-            typename std::vector<FLOAT_T<numbertype>>::iterator getCoordinatesIteratorBegin() const
+            typename vector_t::iterator getCoordinatesIteratorBegin() const
             {
                 return mCoordinates.begin();
             }
@@ -153,7 +155,7 @@ namespace hypro {
              *
              * @return iterator to end of mCoordinates
              */
-            typename std::vector<FLOAT_T<numbertype>>::iterator getCoordinatesIteratorEnd() const
+            typename vector_t::iterator getCoordinatesIteratorEnd() const
             {
                 return mCoordinates.end();
             }
@@ -272,7 +274,7 @@ namespace hypro {
                 int nrofNeighbors = (pow(2, (dim - 1)) - 1);
                 neighbors.reserve(nrofNeighbors);
 
-                std::vector<FLOAT_T<numbertype>> coordinates;
+                vector_t coordinates;
                 coordinates.resize(dim);
 
                 for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
