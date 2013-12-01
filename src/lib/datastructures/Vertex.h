@@ -26,8 +26,8 @@ namespace hypro {
     typedef std::set<Vertex> vSet;
     typedef std::set<Vertex>::iterator vSetIt;*/ 
     
-    template<class NumberType>
-    class Vertex : public Point<NumberType> 
+    template<class numbertype>
+    class Vertex : public Point<numbertype> 
     {
         private:
             bool mColor;
@@ -39,7 +39,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(unsigned dimension = 2, bool color = false) : Point<NumberType>(dimension) 
+            Vertex(unsigned dimension = 2, bool color = false) : Point<numbertype>(dimension) 
             {
                 mColor = color;
             }
@@ -50,7 +50,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(std::vector<NumberType> coordinates, bool color) : Point<NumberType>(coordinates) 
+            Vertex(std::vector<numbertype> coordinates, bool color) : Point<numbertype>(coordinates) 
             {
                 mColor = color;
             }
@@ -61,7 +61,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(const Point<NumberType> & p, bool color) : Point<NumberType>(p) 
+            Vertex(const Point<numbertype> & p, bool color) : Point<numbertype>(p) 
             {
                 mColor = color;
             }
@@ -110,9 +110,9 @@ namespace hypro {
             std::string toString(bool parentheses = true) const 
             {
                 if (parentheses) 
-                    return Point<NumberType>::toString(true) + " " + "[" + mColor +"]";
+                    return Point<numbertype>::toString(true) + " " + "[" + mColor +"]";
                 else 
-                    return Point<NumberType>::toString(false) + " " + mColor;
+                    return Point<numbertype>::toString(false) + " " + mColor;
             }
     };
 }
