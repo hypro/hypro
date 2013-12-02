@@ -10,6 +10,12 @@ set( EXAMPLES
     # insert examples in this list #
     ################################
     example_addition
+    example_subtraction
+    example_multiplication
+    example_division
+    example_power
+    example_squareroot
+    example_cubicroot
     example_test
 )
 

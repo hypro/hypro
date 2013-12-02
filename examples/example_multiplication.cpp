@@ -1,8 +1,8 @@
 /* 
- * File:   example_adddition.cpp
- * Author: stefan
+ * File:   example_multiplication.cpp
+ * Author: Benedikt Seidl
  *
- * Created on November 20, 2013, 12:08 PM
+ * Created on December 02, 2013, 09:12 PM
  */
 
 #include <cstdlib>
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
         int count = 0;
         while (count < 100000000)
         {
-            hf1.add(result,hf2,hypro::HYPRO_RNDN);
+            hf1.mul(result,hf2,hypro::HYPRO_RNDN);
             ++count;
         }
         std::cout << "Total time(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
         count = 0;
         while (count < 100000000)
         {
-            mpfr_add(mResult, mf1, mf2, MPFR_RNDN);
+            mpfr_mul(mResult, mf1, mf2, MPFR_RNDN);
             ++count;
         }
         std::cout << "Total time(MPFR): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
