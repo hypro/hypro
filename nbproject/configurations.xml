@@ -136,13 +136,12 @@
           </df>
         </df>
         <df name="test">
-          <in>FloatTest.cpp</in>
           <in>IntTest.cpp</in>
           <in>PointTest.cpp</in>
           <in>VertexTest.cpp</in>
-          <in>doubleFloatTest.cpp</in>
+          <in>double_float_test.cpp</in>
           <in>main.cpp</in>
-          <in>mpfrFloatTest.cpp</in>
+          <in>mpfr_float_test.cpp</in>
         </df>
         <df name="tmlib_tmp">
           <in>TaylorModel.cpp</in>
@@ -731,10 +730,6 @@
         <ccTool>
         </ccTool>
       </item>
-      <item path="src/test/FloatTest.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
-      </item>
       <item path="src/test/IntTest.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
         </ccTool>
@@ -747,7 +742,7 @@
         <ccTool>
         </ccTool>
       </item>
-      <item path="src/test/doubleFloatTest.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/test/double_float_test.cpp" ex="false" tool="1" flavor2="8">
         <ccTool>
           <incDir>
             <pElem>build/ThirdParty/src/googletest/include</pElem>
@@ -764,7 +759,7 @@
         <ccTool>
         </ccTool>
       </item>
-      <item path="src/test/mpfrFloatTest.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/test/mpfr_float_test.cpp" ex="false" tool="1" flavor2="8">
         <ccTool>
           <incDir>
             <pElem>build/ThirdParty/src/googletest/include</pElem>
