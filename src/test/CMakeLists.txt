@@ -6,8 +6,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     # Unit Tests
     ################################
     add_executable(runNumberTests
-            mpfrFloatTest.cpp
-            doubleFloatTest.cpp
+            mpfr_float_test.cpp
+            double_float_test.cpp
     )
 
     add_executable(runDatastructureTests
