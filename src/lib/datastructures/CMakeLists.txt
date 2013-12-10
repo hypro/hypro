@@ -8,4 +8,4 @@ set(lib_hypro_datastructure_headers
         Vertex.h
 )
 
-add_library(datastructures OBJECT ${lib_hypro_datastructure_sources})
+#add_library(datastructures OBJECT ${lib_hypro_datastructure_sources})

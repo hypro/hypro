@@ -10,4 +10,4 @@ set(lib_hypro_representations_headers
 	GeometricObject.h
 )
 
-add_library(representations OBJECT ${lib_hypro_representations_sources})
+#add_library(representations OBJECT ${lib_hypro_representations_sources})

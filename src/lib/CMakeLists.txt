@@ -14,9 +14,9 @@ endif()
 
 add_library(${PROJECT_NAME} ${STATICLIB} 
 	${lib_hypro_sources}
-	$<TARGET_OBJECTS:datastructures>
-	$<TARGET_OBJECTS:numbers>
-	$<TARGET_OBJECTS:representations>
+	#$<TARGET_OBJECTS:datastructures>
+	#$<TARGET_OBJECTS:numbers>
+	#$<TARGET_OBJECTS:representations>
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME} ${libraries})

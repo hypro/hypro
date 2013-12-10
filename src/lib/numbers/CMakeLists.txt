@@ -7,4 +7,4 @@ set(lib_hypro_number_headers
         FLOAT_T.h
 PARENT_SCOPE)
 
-add_library(numbers OBJECT ${lib_hypro_number_sources})
+#add_library(numbers OBJECT ${lib_hypro_number_sources})
