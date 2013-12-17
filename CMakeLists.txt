@@ -57,7 +57,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 enable_testing()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	message(“OSX”)
+	message(OSX)
+	#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--with-gcc-toolchain") 
 endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
