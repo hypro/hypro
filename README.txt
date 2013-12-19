@@ -13,3 +13,4 @@ Stuff needed Hypro:
 -gmpxx (CARL)
 -cmake
 -cmake-curses-gui
+TEST
