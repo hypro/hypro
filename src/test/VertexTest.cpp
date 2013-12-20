@@ -6,7 +6,7 @@ using namespace hypro;
 
 TEST(Vertex, FirstTest)
 { 
-    Vertex<hypro_float_t> v;
+    Vertex<number_t> v;
     v.setColor(true);
     ASSERT_TRUE(v.color());
     v.invertColor();
@@ -15,10 +15,10 @@ TEST(Vertex, FirstTest)
 
 TEST(Vertex, Constructor)
 { 
-    Vertex<hypro_float_t> vertex1;
+    Vertex<number_t> vertex1;
     ASSERT_FALSE(vertex1.color());
     
-    Vertex<hypro_float_t> vertex2(3, true);
+    Vertex<number_t> vertex2(3, true);
     ASSERT_EQ(vertex2.dimension(), (unsigned) 3);
     ASSERT_TRUE(vertex2.color());
 }

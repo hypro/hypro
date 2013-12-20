@@ -1,5 +1,5 @@
 add_subdirectory(datastructures)
-add_subdirectory(numbers)
+#add_subdirectory(numbers)
 add_subdirectory(representations)
 
 set(lib_hypro_sources

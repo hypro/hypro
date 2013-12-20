@@ -75,6 +75,19 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
 
+find_package(carl REQUIRED)
+include_directories(${carl_INCLUDE_DIR})
+set(libraries ${libraries} ${carl_LIBRARY})
+if(carl_FOUND)
+    MESSAGE(STATUS "Found carl: ${carl_INCLUDE_DIR}")
+else()
+    MESSAGE(FATAL_ERROR "Could not find carl")
+endif()
+
+find_package(CLN REQUIRED)
+include_directories(${CLN_INCLUDE_DIRS})
+set(libraries ${libraries} ${CLN_LIBRARY})
+
 find_package(MPFR REQUIRED)
 include_directories(${MPFR_INCLUDE_DIRS})
 set(libraries ${libraries} ${MPFR_LIBRARY})
