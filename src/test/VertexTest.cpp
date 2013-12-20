@@ -4,7 +4,7 @@
 
 using namespace hypro;
 
-TEST(Vertex, FirstTest)
+TEST(Vertex, ColorTest)
 { 
     Vertex<number_t> v;
     v.setColor(true);

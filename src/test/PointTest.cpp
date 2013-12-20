@@ -39,7 +39,15 @@ protected:
     Point<number_t> p3;
 };
 
-TEST_F(PointTest, FirstTest)
+/**
+ * @covers Point::coordinate
+ * @covers Point::dimension
+ * @covers Point::IncrementInFixedDim
+ * @covers Point::IncrementInAllDim
+ * @covers Point::DecrementInFixedDim
+ * @covers Point::setCoordinate
+ */
+TEST_F(PointTest, CoordinateDimensionTest)
 { 
     ASSERT_EQ(p1[0], FLOAT_T<number_t>(2));
     ASSERT_EQ(p1[1], FLOAT_T<number_t>(5));
@@ -65,6 +73,9 @@ TEST_F(PointTest, FirstTest)
     ASSERT_EQ(p1[1], FLOAT_T<number_t>(7));
 }
 
+/**
+ * @covers Point::move
+ */
 TEST_F(PointTest, OperationTest)
 {	
     std::cout << p1 << "\n" << p2 << std::endl;
@@ -77,6 +88,11 @@ TEST_F(PointTest, OperationTest)
     ASSERT_EQ(p2[1], FLOAT_T<number_t>(21));
 }
 
+/**
+ * @covers Point::isInBoundary
+ * @covers Point::compareReducedDimension
+ * @covers Point::haveEqualCoordinate
+ */
 TEST_F(PointTest, BooleanTest)
 {
     ASSERT_TRUE(p1.isInBoundary(p2));
