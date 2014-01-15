@@ -1,7 +1,22 @@
+add_custom_target(resources)
+add_custom_target(install-resources)
+
+# Enable ExternalProject CMake module
+INCLUDE(ExternalProject)
+
+# Set default ExternalProject root directory
+SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/resources)
+
 if(GTEST_FOUND)
 	set(GTEST_LIBRARIES ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} PARENT_SCOPE)
-	include_directories(${GTEST_INCLUDE_DIR})
+	message("-- Use system version of GTest")
 else()
+	# Create configure command dependend on compiler
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+			set (cmake_command -Dgtest_force_shared_crt=ON -DCXX=/usr/bin/clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DCMAKE_CXX_FLAGS=-std=c++11 -DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 )
+	else()
+			set(cmake_command -Dgtest_force_shared_crt=ON)
+	endif()
 	# Add gtest (local build)
 	message("-- Use shipped version of GTest")
 	ExternalProject_Add(
@@ -12,8 +27,8 @@ else()
 		DOWNLOAD_COMMAND ""
 		SOURCE_DIR "${CMAKE_SOURCE_DIR}/resources/gtest-1.6.0"
 		# Force separate output paths for debug and release builds to allow easy
-		# identification of correct lib in subsequent TARGET_LINK_LIBRARIES commands
-		CMAKE_ARGS -Dgtest_force_shared_crt=ON
+		# identification of correct lib in subsequent TARGET_LINK_LIBRARIES 
+		CMAKE_ARGS ${cmake_command}
 		# Disable install step
 		INSTALL_COMMAND ""
 		# Wrap download, configure and build steps in a script to log output
@@ -26,7 +41,29 @@ else()
 	
 	# Specify MainTest's link libraries
 	ExternalProject_Get_Property(googletest binary_dir)
+	
 	set(GTEST_LIBRARIES ${binary_dir}/libgtest.a ${binary_dir}/libgtest_main.a PARENT_SCOPE)
 
 	add_dependencies(resources googletest)
+endif()
+
+if(EIGEN3_FOUND)
+	message("-- Use system version of Eigen3")
+else()
+	message("-- Use shipped version of Eigen3")
+	ExternalProject_Add(
+		eigen
+		DOWNLOAD_COMMAND ""
+		SOURCE_DIR "${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0"
+		CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build
+		#		   -DBUILD_SHARED_LIBS:BOOL=0
+		INSTALL_DIR ${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build
+		# Wrap download, configure and build steps in a script to log output
+		LOG_CONFIGURE ON
+		LOG_BUILD ON)
+
+
+	set( EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build/include" PARENT_SCOPE )
+	#set( EIGEN3_LIBRARY "${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build/lib/" PARENT_SCOPE )
+	add_dependencies(resources eigen)
 endif()

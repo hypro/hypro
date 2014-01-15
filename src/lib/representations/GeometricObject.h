@@ -17,10 +17,11 @@ namespace hypro
         virtual unsigned int get_dimension() const = 0;
 
         virtual void linear_transformation(T& result /*, ... */) const = 0;
-        virtual void minkowski_sum(T& result, const T& t) const = 0;
-        virtual bool intersection(T& result, const T& t) const = 0;
-        virtual void enclosure(T& result, const T& t) const = 0;
+        virtual void minkowski_sum(T& result, const T& rhs) const = 0;
+        virtual bool intersect(T& result, const T& rhs) const = 0;
+        virtual void hull(T& result, const T& rhs) const = 0;
         virtual bool contains(const Point<number> point) const = 0;
+		virtual void unite(T& result, const T& rhs) const = 0;
         // virtual bool empty() const = 0;
     };
 }

@@ -41,6 +41,7 @@ set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION} )
 
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
+option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 
 # general compiler and linker settings
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -std=c++0x -fPIC")
@@ -53,6 +54,7 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 enable_testing()
 
@@ -96,49 +98,17 @@ find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIRS})
 set(libraries ${libraries} ${GMP_LIBRARY})
 
+if(NOT FORCE_SHIPPED_RESOURCES)
+find_package(Eigen3)
+find_package(GTest)
+endif()
+
+set(libraries ${libraries} ${EIGEN3_LIBRARY} pthread)
+include_directories( ${EIGEN3_INCLUDE_DIR} )
+
 # # # # # # # # # # # # # # # # # # # # # #
 # C.2. required libraries
 # # # # # # # # # # # # # # # # # # # # # #
-
-#gTest as external project
-#find_package(GTest REQUIRED)
-if(${STATICLIB_SWITCH} STREQUAL "OFF")
-    file(WRITE gtest.patch "")
-    include(ExternalProject)
-    set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/ThirdParty)
-    
-    #download gTest
-    ExternalProject_Add(
-        googletest
-        SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
-        SVN_REVISION -r 660
-        TIMEOUT 10
-        PATCH_COMMAND svn patch ${CMAKE_SOURCE_DIR}/gtest.patch ${CMAKE_BINARY_DIR}/ThirdParty/src/googletest
-        # Force separate output paths for debug and release builds to allow easy
-        # identification of correct lib in subsequent TARGET_LINK_LIBRARIES commands
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                   -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs
-                   -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs
-                   -Dgtest_force_shared_crt=ON
-        # Disable install step
-        INSTALL_COMMAND ""
-        # Wrap download, configure and build steps in a script to log output
-        LOG_DOWNLOAD ON
-        LOG_CONFIGURE ON
-        LOG_BUILD ON
-    )
-
-    ExternalProject_Get_Property(googletest source_dir)
-    include_directories(${source_dir}/include)
-
-    ExternalProject_Get_Property(googletest binary_dir)
-    if(MSVC)
-      set(Suffix ".lib")
-    else()
-      set(Suffix ".a")
-      set(Pthread "-pthread")
-    endif()
-endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.3. Development and debug libraries.

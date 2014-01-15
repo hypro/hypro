@@ -407,7 +407,7 @@ namespace hypro {
 
             static Point moveRandomInBoundary(const Point<NumberType>& boundary)
             {
-                Point q = Point(dimension());
+                Point q = Point(boundary.dimension());
                 do 
                 {
 //                    q = Point(*this);
