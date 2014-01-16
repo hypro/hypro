@@ -3,4 +3,4 @@ Description: A C++ template library for linear algebra: vectors, matrices, and r
 Requires:
 Version: 3.2.0
 Libs:
-Cflags: -I/Users/stefan/hybridsystems/repositories/carl/resources/eigen-3.2.0/build/include/eigen3
+Cflags: -I/Users/stefan/hybridsystems/repositories/hypro/src/resources/eigen-3.2.0/build/include/eigen3

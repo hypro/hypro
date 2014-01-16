@@ -26,7 +26,7 @@ else()
 		#SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
 		#TIMEOUT 10
 		DOWNLOAD_COMMAND ""
-		SOURCE_DIR "${CMAKE_SOURCE_DIR}/resources/gtest-1.6.0"
+		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/gtest-1.6.0"
 		# Force separate output paths for debug and release builds to allow easy
 		# identification of correct lib in subsequent TARGET_LINK_LIBRARIES 
 		CMAKE_ARGS ${cmake_command}
@@ -55,8 +55,8 @@ else()
 	ExternalProject_Add(
 		eigen
 		DOWNLOAD_COMMAND ""
-		SOURCE_DIR "${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0"
-		CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build
+		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/eigen-3.2.0"
+		CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_SOURCE_DIR}/src/resources/eigen-3.2.0/build
 		#		   -DBUILD_SHARED_LIBS:BOOL=0
 		INSTALL_DIR ${CMAKE_SOURCE_DIR}/resources/eigen-3.2.0/build
 		# Wrap download, configure and build steps in a script to log output
