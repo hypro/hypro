@@ -1,5 +1,5 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-    include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib )
+    include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib ${include_dirs} )
     link_directories(${CMAKE_BUILD_DIR}/lib)
 
     ################################
@@ -12,14 +12,19 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     )
 
     add_dependencies(runDatastructureTests googletest)
+	
+#	get_cmake_property(_variableNames VARIABLES)
+#foreach (_variableName ${_variableNames})
+#    message(STATUS "${_variableName}=${${_variableName}}")
+#endforeach()
 
     target_link_libraries(runDatastructureTests 
                             #${binary_dir}/gtest
                             #${binary_dir}/gtest_main
                             #debug ${binary_dir}/DebugLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
                             #optimized ${binary_dir}/ReleaseLibs/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
-                            ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
-                            ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${Suffix}
+                            #${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
+                            #${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${Suffix}
                             ${Pthread}
                             hypro  
                             ${libraries})

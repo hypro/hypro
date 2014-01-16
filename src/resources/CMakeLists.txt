@@ -5,10 +5,11 @@ add_custom_target(install-resources)
 INCLUDE(ExternalProject)
 
 # Set default ExternalProject root directory
-SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/resources)
+SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/src/resources)
 
 if(GTEST_FOUND)
 	set(GTEST_LIBRARIES ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} PARENT_SCOPE)
+	#set(GTEST_INCLUDE_DIR ${GTEST_INCLUDE_DIR} PARENT_SCOPE)
 	message("-- Use system version of GTest")
 else()
 	# Create configure command dependend on compiler

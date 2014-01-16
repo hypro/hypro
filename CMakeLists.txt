@@ -55,8 +55,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
-enable_testing()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	message(OSX)
@@ -103,8 +102,14 @@ find_package(Eigen3)
 find_package(GTest)
 endif()
 
-set(libraries ${libraries} ${EIGEN3_LIBRARY} pthread)
-include_directories( ${EIGEN3_INCLUDE_DIR} )
+add_subdirectory(src)
+
+enable_testing()
+
+set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} pthread)
+include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} )
+
+add_subdirectory(src/test)
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.2. required libraries
@@ -118,5 +123,4 @@ include_directories( ${EIGEN3_INCLUDE_DIR} )
 # D. Invoke subdirectories.
 # # # # # # # # # # # # # # # # # # # # # #
 
-add_subdirectory(src)
-add_subdirectory(examples)
+add_subdirectory(examples EXCLUDE_FROM_ALL)
