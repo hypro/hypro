@@ -6,7 +6,7 @@ set(lib_hypro_representations_sources
 )
 
 set(lib_hypro_representations_headers
-        ${hypro_box_headers}
+	${hypro_box_headers}
 	GeometricObject.h
 )
 

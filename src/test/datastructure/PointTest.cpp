@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "defines.h"
-#include "datastructures/Point.h"
+#include "../defines.h"
+#include "../../lib/datastructures/Point.h"
 //#include "carl/numbers/FLOAT_T.h"
 
 using namespace hypro;

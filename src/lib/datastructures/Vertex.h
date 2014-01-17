@@ -1,11 +1,13 @@
 /** 
+ * A vertex is a point with a color assigned. The color determines is needed by
+ * some representations e.g. to determine if the vertex is part of the state set.
  * @file Vertex.h
  * 
- * @author Stefan Schupp
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * 
- * @since 2011-03-24
- * @version 2013-11-25
+ * @since	2011-03-24
+ * @version 2014-01-17
  */
 
 #pragma once
@@ -13,18 +15,25 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 
 #include "Point.h"
 
 namespace hypro {
-/*
+	template<typename NumberType>
     class Vertex;
-    typedef std::vector<Vertex> vVec;
-    typedef std::vector<Vertex>::iterator vVecIt; 
-    typedef std::list<Vertex> vList;
-    typedef std::list<Vertex>::iterator vListIt;
-    typedef std::set<Vertex> vSet;
-    typedef std::set<Vertex>::iterator vSetIt;*/ 
+	template<typename NumberType>
+    using vVec = typename std::vector<Vertex<NumberType>>;
+    template<typename NumberType>
+	using vVecIt = typename std::vector<Vertex<NumberType>>::iterator;
+    template<typename NumberType>
+	using vList = typename std::list<Vertex<NumberType>>;
+    template<typename NumberType>
+	using vListIt = typename std::list<Vertex<NumberType>>::iterator;
+    template<typename NumberType>
+	using vSet = typename std::set<Vertex<NumberType>>;
+    template<typename NumberType>
+	using vSetIt = typename std::set<Vertex<NumberType>>::iterator;
     
     template<class NumberType>
     class Vertex : public Point<NumberType> 

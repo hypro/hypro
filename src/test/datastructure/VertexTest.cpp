@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "defines.h"
+#include "../defines.h"
 #include "datastructures/Vertex.h"
 
 using namespace hypro;

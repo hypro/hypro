@@ -1,14 +1,14 @@
 /** 
- * @file   point.h
- * Created on Mar 12, 2011
- * Last modified Septemper 10, 2013
+ * The point class is the basis for all implementation. It consists of a vector
+ * of coordinates which forms a point in a n-dimensional space.
+ * @file   Point.h
  * 
- * @author Stefan Schupp
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * @author Benedikt Seidl
  * 
- * @since 2011-03-12
- * @version 2013-12-20
+ * @since	2011-03-12
+ * @version 2014-01-17
  */
 #pragma once
 
@@ -18,6 +18,7 @@
 #include <cmath>
 #include <assert.h>
 #include "carl/numbers/FLOAT_T.h"
+#include "../config.h"
 
 namespace hypro {
     
@@ -30,14 +31,21 @@ namespace hypro {
     typedef std::vector<Point>::iterator pVecIt;
     */
 
+	
     /*
      *  Class to store points in a MAXIMAL_DIMENSION space.
      */
     template<class NumberType>
     class Point 
     {
+		public:
+		typedef std::vector<carl::FLOAT_T<NumberType> > vector_t;
+		
+		protected:
+			vector_t mCoordinates;
+		
         public:
-            typedef std::vector<carl::FLOAT_T<NumberType> > vector_t;
+        
             
             static const int POINT_RAND_MAX = 100;
             
@@ -586,8 +594,5 @@ namespace hypro {
                 }
                 return result;
             }
-            	
-    	protected:
-            vector_t mCoordinates;
     };
 }
