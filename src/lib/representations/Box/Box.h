@@ -11,6 +11,7 @@
 #pragma once
 
 #include <Eigen/dense>
+#include "../../datastructures/Point.h"
 
 template<typename Number>
 class Box : GeometricObject<Box, Number>
@@ -41,6 +42,8 @@ public:
 	void minkowski_sum(Box& result, const Box& rhs) const;
 	bool intersect(Box& result, const Box& rhs) const;
 	void hull(Box& result, const Box& rhs) const;
-	bool contains(const Point <Number> point) const;
+	bool contains(const Point<Number>& point) const;
 	void unite(Box& result, const Box& rhs) const;
 };
+
+
