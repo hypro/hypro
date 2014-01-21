@@ -51,7 +51,7 @@ namespace hypro
 		 * @param point The point which is to be checked for membership.
 		 * @return True if the point is contained in the stateset.
 		 */
-        virtual bool contains(const Point<number> point) const = 0;
+        virtual bool contains(const Point<number>& point) const = 0;
 		
 		/**
 		 * Computes the union of the given stateset with a second one. Note that

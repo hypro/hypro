@@ -45,6 +45,22 @@ public:
 		return mBoundaries;
 	}
 	
+	/**
+	 * Inserts a new boundary for a variable.
+	 * @param val Pair of Variable and Interval.
+	 * @return True, if a new insertion has happened, else only update of an existing interval.
+	 */
+	bool insert(const std::pair<carl::Variable, carl::Interval<Number> val)
+	{
+		if(mBoundaries.find(val.first) == mBoundaries.end())
+		{
+			mBoundaries[val.first] = val.second;
+			return true;
+		}
+		mBoundaries.at(val.first) = val.second;
+		return false;
+	}
+	
 	bool hasVariable(const carl::Variable& var)
 	{
 		return mBoundaries.find(var) != mBoundaries.end();

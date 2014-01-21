@@ -81,11 +81,11 @@ bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
 template<typename Number>
 bool Box<Number>::hull(Box<Number>& result) const
 {
-	
+	result = *this;
 }
 
 template<typename Number>
-bool Box<Number>::contains(const Point <Number> point) const
+bool Box<Number>::contains(const Point<Number>& point) const
 {
 	
 }
@@ -93,7 +93,20 @@ bool Box<Number>::contains(const Point <Number> point) const
 template<typename Number>
 bool Box<Number>::unite(Box<Number>& result, const Box<Number>& rhs) const
 {
-	
+	for(auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
+	{
+		if(!rhs.hasVariable((*intervalIt).first))
+		{
+			result.clear();
+			return false;
+		}
+		Number lowerMin = (*intervalIt).second.lower() < rhs.interval((*intervalIt).first).lower() ? (*intervalIt).second.lower() : rhs.interval((*intervalIt).first).lower();
+		Number upperMax = (*intervalIt).second.upper() > rhs.interval((*intervalIt).first).upper() ? (*intervalIt).second.upper() : rhs.interval((*intervalIt).first).upper();
+		carl::BoundType lowerType = carl::getWeakestBoundType((*intervalIt).second.lowerBoundType(), rhs.interval((*intervalIt).first).lowerBoundType());
+		carl::BoundType upperType = carl::getWeakestBoundType((*intervalIt).second.upperBoundType(), rhs.interval((*intervalIt).first).upperBoundType());
+		result.insert( std::make_pair(lowerMin, Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
+	}
+	return true;
 }
 
 template<typename Number>
