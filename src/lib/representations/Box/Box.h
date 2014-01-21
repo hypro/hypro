@@ -10,7 +10,9 @@
 
 #pragma once
 
-#include <Eigen/dense>
+//‚#include <Eigen/dense>
+#include <map>
+#include <cassert>
 #include "../../datastructures/Point.h"
 
 template<typename Number>
@@ -20,7 +22,7 @@ class Box : GeometricObject<Box, Number>
 	 * Members
 	 **************************************************************************/
 protected:
-	MatrixXd mBoundaries;
+	std::map<carl::Variable, carl::Interval<Number>> mBoundaries;
 	
 public:
 	/***************************************************************************
@@ -29,21 +31,45 @@ public:
 	
 	Box();
 	
-	Box(unsigned dimension) : mBoundaries(dimension)
-	{}
+	/***************************************************************************
+	 * Getters & setters
+	 **************************************************************************/
+	
+	std::map<carl::Variable, carl::Interval<Number>& rBoundaries()
+	{
+		return mBoundaries;
+	}
+	
+	std::map<carl::Variable, carl::Interval<Number> boundaries()
+	{
+		return mBoundaries;
+	}
+	
+	bool hasVariable(const carl::Variable& var)
+	{
+		return mBoundaries.find(var) != mBoundaries.end();
+	}
+	
+	carl::Interval<Number>& rInterval(const carl::Variable& var);
+	carl::Interval<Number> interval(const carl::Variable& var) const;
 	
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/
 	
-	unsigned int get_dimension() const;
+	unsigned int get_dimension() const
+	{
+		return mBoundaries.size();
+	}
 	
-	void linear_transformation(Box& result /*, ... */) const;
-	void minkowski_sum(Box& result, const Box& rhs) const;
+	bool linear_transformation(Box& result /*, ... */) const;
+	bool minkowski_sum(Box& result, const Box& rhs) const;
 	bool intersect(Box& result, const Box& rhs) const;
-	void hull(Box& result, const Box& rhs) const;
+	bool hull(Box& result) const;
 	bool contains(const Point<Number>& point) const;
-	void unite(Box& result, const Box& rhs) const;
+	bool unite(Box& result, const Box& rhs) const;
+	
+	void clear();
 };
 
 
