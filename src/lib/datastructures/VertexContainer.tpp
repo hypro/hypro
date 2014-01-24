@@ -9,20 +9,18 @@
  * @version 2014-01-17
  */
 
-#include "vertexContainer.h"
-#include "defines.h"
-#include <boost/foreach.hpp>
+#include "VertexContainer.h"
 
 using std::list;
 
 namespace hypro {
 	template<typename Number>
-	VertexContainer<Number>::VertexContainer(unsigned dimension) : mDimension(dimension) {
-		
-	}
+	VertexContainer<Number>::VertexContainer(unsigned dimension) : mDimension(dimension)
+	{}
 	
 	template<typename Number>
-	VertexContainer<Number>::VertexContainer(const VertexContainer<Number>& orig) : mDimension(orig.mDimension){
+	VertexContainer<Number>::VertexContainer(const VertexContainer<Number>& orig) : mDimension(orig.mDimension)
+	{
 		vertices = orig.vertices;
 	}
 	
@@ -34,8 +32,9 @@ namespace hypro {
 	list<Vertex<Number>> VertexContainer<Number>::getSmallerVertices(const Point<Number>& p)
 	{
 		list<Vertex<Number>> verticesInBoundary;
-		foreach(Vertex<Number> v, vertices ) {
-			if(v.isInBoundary(p)) verticesInBoundary.push_back(v);
+		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ++vertexIt)
+		{
+			if((*vertexIt).isInBoundary(p)) verticesInBoundary.push_back(*vertexIt);
 		}
 		return verticesInBoundary;
 	}

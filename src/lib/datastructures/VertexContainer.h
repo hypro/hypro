@@ -38,11 +38,17 @@ namespace hypro {
 		 **********************************************************************/
 		VertexContainer(unsigned dimension=DEFAULT_DIM);
 		VertexContainer(const VertexContainer& orig);
-		virtual ~VertexContainer();
+		~VertexContainer()
+		{}
 		
 		/***********************************************************************
 		 * Getters & Setters
 		 **********************************************************************/
+		
+		unsigned dimension() const
+		{
+			return mDimension;
+		}
 		
 		std::list<Vertex<Number>> getSmallerVertices(const Point<Number>& p);
 		
@@ -234,5 +240,5 @@ namespace hypro {
 	
 		
 	};
-	
 }
+#include "VertexContainer.tpp"

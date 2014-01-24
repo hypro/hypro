@@ -10,8 +10,10 @@
 
 #include "Box.h"
 
+using namespace hypro;
+
 template<typename Number>
-carl::Interval<Number>& Box<Number::rInterval(const carl::Variable& var)
+carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var)
 {
 	auto intervalIt = mBoundaries.find(var);
 	if( intervalIt == mBoundaries.end() )
@@ -41,7 +43,7 @@ carl::Interval<Number> Box<Number>::interval(const carl::Variable& var) const
 }
 
 template<typename Number>
-void Box<Number>::linear_transformation(Box<Number>& result /*, ... */) const
+bool Box<Number>::linear_transformation(Box<Number>& result /*, ... */) const
 {
 	
 }
@@ -104,7 +106,7 @@ bool Box<Number>::unite(Box<Number>& result, const Box<Number>& rhs) const
 		Number upperMax = (*intervalIt).second.upper() > rhs.interval((*intervalIt).first).upper() ? (*intervalIt).second.upper() : rhs.interval((*intervalIt).first).upper();
 		carl::BoundType lowerType = carl::getWeakestBoundType((*intervalIt).second.lowerBoundType(), rhs.interval((*intervalIt).first).lowerBoundType());
 		carl::BoundType upperType = carl::getWeakestBoundType((*intervalIt).second.upperBoundType(), rhs.interval((*intervalIt).first).upperBoundType());
-		result.insert( std::make_pair(lowerMin, Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
+		result.insert( std::make_pair(lowerMin, carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
 	}
 	return true;
 }

@@ -52,16 +52,21 @@ namespace hypro {
             /**
              * Constructors & Destructor
              */
-
+		
             /**
              * Constructs a point with the passed dimension and sets the coordinates to the initial value.
              * @param dim
              * @param initialValue
              */
-            Point(const unsigned dim = 2, const carl::FLOAT_T<NumberType>& initialValue = carl::FLOAT_T<NumberType>()) 
+            Point(const carl::FLOAT_T<NumberType>& initialValue = carl::FLOAT_T<NumberType>(), const unsigned dim = 1)
             {
                 mCoordinates.assign(dim, initialValue);
             }
+		
+			Point(const NumberType& val)
+			{
+				mCoordinates.assign(1, carl::FLOAT_T<NumberType>(val));
+			}
 
             /**
              * Constructs a point with the passed coordinates
@@ -476,6 +481,7 @@ namespace hypro {
              */
             friend bool operator<(const Point<NumberType>& p1, const Point<NumberType>& p2)
             {
+				std::cout << "Dimension1: " << p1.dimension() << ", Dimension2: " << p2.dimension() << std::endl;
                 assert(p1.dimension() == p2.dimension());
                 unsigned dim = p2.dimension();
                 for (unsigned i = 0; i < dim; i++) 

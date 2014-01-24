@@ -14,9 +14,14 @@
 #include <map>
 #include <cassert>
 #include "../../datastructures/Point.h"
+#include "../GeometricObject.h"
+#include <carl/core/Variable.h>
+#include <carl/interval/Interval.h>
+
+namespace hypro {
 
 template<typename Number>
-class Box : GeometricObject<Box, Number>
+class Box : hypro::GeometricObject<Box<Number>, Number>
 {
 	/***************************************************************************
 	 * Members
@@ -35,12 +40,12 @@ public:
 	 * Getters & setters
 	 **************************************************************************/
 	
-	std::map<carl::Variable, carl::Interval<Number>& rBoundaries()
+	std::map<carl::Variable, carl::Interval<Number>>& rBoundaries()
 	{
 		return mBoundaries;
 	}
 	
-	std::map<carl::Variable, carl::Interval<Number> boundaries()
+	std::map<carl::Variable, carl::Interval<Number>> boundaries()
 	{
 		return mBoundaries;
 	}
@@ -50,7 +55,7 @@ public:
 	 * @param val Pair of Variable and Interval.
 	 * @return True, if a new insertion has happened, else only update of an existing interval.
 	 */
-	bool insert(const std::pair<carl::Variable, carl::Interval<Number> val)
+	bool insert(const std::pair<carl::Variable, carl::Interval<Number>> val)
 	{
 		if(mBoundaries.find(val.first) == mBoundaries.end())
 		{
@@ -88,4 +93,4 @@ public:
 	void clear();
 };
 
-
+}

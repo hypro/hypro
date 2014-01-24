@@ -114,16 +114,16 @@ TEST_F(PointTest, BooleanTest)
     ASSERT_NE(p1, p3);
 }
 
-TEST(Point, Constructor)
+TEST_F(PointTest, Constructor)
 { 
     Point<number_t> p;
-    ASSERT_EQ(p.dimension(), (unsigned) 2);
+    ASSERT_EQ(p.dimension(), 1);
     
-    p = Point<number_t>(5);
-    ASSERT_EQ(p.dimension(), (unsigned) 5);
+    p = Point<number_t>(1, 5);
+    ASSERT_EQ(p.dimension(), 5);
     
     FLOAT_T<number_t> initialValue(4);
-    p = Point<number_t>(7, initialValue);
+    p = Point<number_t>(initialValue, 7);
     ASSERT_EQ(p.dimension(), (unsigned) 7);
     ASSERT_EQ(p[0], FLOAT_T<number_t>(4));
     ASSERT_EQ(p[6], FLOAT_T<number_t>(4));

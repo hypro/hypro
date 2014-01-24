@@ -44,7 +44,7 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 
 # general compiler and linker settings
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -std=c++0x -fPIC")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -std=c++11 -fPIC")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
