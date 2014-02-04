@@ -14,5 +14,5 @@
 //#include "../lib/numbers/FLOAT_T.h"
 #include "carl/numbers/FLOAT_T.h"
 
-typedef mpfr_t number_t;
+typedef double number_t;
 //typedef hypro::HYPRO_INT_T<hypro::int_wrapper_t> hypro_int_t;

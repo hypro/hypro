@@ -11,17 +11,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
             VertexTest.cpp
 			VertexContainerTest.cpp
     )
-	
-	get_cmake_property(_variableNames VARIABLES)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
 
     add_dependencies(runDatastructureTests googletest)
 
     target_link_libraries(runDatastructureTests
-                            ${Pthread}
-                            ${PROJECT_NAME}
+							${PROJECT_NAME}
                             ${libraries})
     add_test( NAME datastructures COMMAND runDatastructureTests )
 endif()

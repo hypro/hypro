@@ -1,13 +1,13 @@
 add_subdirectory(datastructures)
 add_subdirectory(representations)
 
-set(GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
-set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} PARENT_SCOPE)
-#set(EIGEN3_LIBRARY ${EIGEN3_LIBRARY} PARENT_SCOPE)
+#set(GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
+#set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} PARENT_SCOPE)
+#set(LOG4CPLUS_LIBRARY ${LOG4CPLUS_LIBRARY} PARENT_SCOPE)
 
 set(lib_hypro_headers
 	config.h
-	${lib_hypro_number_headers}
+	#${lib_hypro_number_headers}
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
 )
@@ -31,6 +31,9 @@ add_library(${PROJECT_NAME} ${STATICLIB}
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
-
-
 install(FILES ${lib_hypro_headers} DESTINATION include)
+
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()

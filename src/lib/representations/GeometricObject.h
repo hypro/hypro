@@ -10,18 +10,17 @@
 
 namespace hypro
 {
-    template<class T, class number>
+    template<class Number>
     class GeometricObject
     {
     public:
-        virtual unsigned int get_dimension() const = 0;
-		
+        unsigned int get_dimension();		
 		/**
 		 * Applies a linear transformation on the given stateset.
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        virtual bool linear_transformation(T& result /*, ... */) const = 0;
+        bool linear_transformation(GeometricObject<Number>& result /*, ... */);
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.
@@ -29,7 +28,7 @@ namespace hypro
 		 * @param rhs The other righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        virtual bool minkowski_sum(T& result, const T& rhs) const = 0;
+        bool minkowski_sum(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
 		
 		/**
 		 * Intersects the given stateset with a second one.
@@ -37,21 +36,21 @@ namespace hypro
 		 * @param rhs The righthand-side stateset.
 		 * @return ç
 		 */
-        virtual bool intersect(T& result, const T& rhs) const = 0;
+        bool intersect(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
 		
 		/**
 		 * Computes the convex hull of the stateset.
 		 * @param result The resulting stateset.
 		 * @return * @return True if the operation has been successfully applied.
 		 */
-        virtual bool hull(T& result) const = 0;
+        bool hull(GeometricObject<Number>& result);
 		
 		/**
 		 * Checks the membership of a point.
 		 * @param point The point which is to be checked for membership.
 		 * @return True if the point is contained in the stateset.
 		 */
-        virtual bool contains(const Point<number>& point) const = 0;
+        bool contains(const Point<Number>& point);
 		
 		/**
 		 * Computes the union of the given stateset with a second one. Note that
@@ -61,7 +60,7 @@ namespace hypro
 		 * @param rhs The righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-		virtual bool unite(T& result, const T& rhs) const = 0;
+		bool unite(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
         // virtual bool empty() const = 0;
     };
 }

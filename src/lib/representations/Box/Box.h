@@ -21,7 +21,7 @@
 namespace hypro {
 
 template<typename Number>
-class Box : hypro::GeometricObject<Box<Number>, Number>
+class Box : hypro::GeometricObject<Number>
 {
 	/***************************************************************************
 	 * Members
@@ -34,7 +34,8 @@ public:
 	 * Constructors
 	 **************************************************************************/
 	
-	Box();
+	Box()
+	{}
 	
 	/***************************************************************************
 	 * Getters & setters

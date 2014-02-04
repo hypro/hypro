@@ -48,7 +48,7 @@ namespace hypro {
              * @param color
              * @return
              */
-		Vertex(unsigned dimension = 2, bool color = false) : Point<NumberType>(carl::FLOAT_T<NumberType>(), dimension)
+			Vertex(bool color = false) : Point<NumberType>()
             {
                 mColor = color;
             }
@@ -59,7 +59,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(std::vector<NumberType> coordinates, bool color) : Point<NumberType>(coordinates) 
+			Vertex(const typename Point<NumberType>::vector_t& coordinates, bool color = false) : Point<NumberType>(coordinates)
             {
                 mColor = color;
             }
@@ -70,7 +70,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(const Point<NumberType> & p, bool color) : Point<NumberType>(p) 
+            Vertex(const Point<NumberType>& p, bool color = false) : Point<NumberType>(p)
             {
                 mColor = color;
             }

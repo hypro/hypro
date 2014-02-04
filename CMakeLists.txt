@@ -78,7 +78,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 find_package(carl REQUIRED)
 include_directories(${carl_INCLUDE_DIR})
-set(libraries ${libraries} ${carl_LIBRARY})
+set(libraries ${libraries} ${carl_LIBRARIES})
 if(carl_FOUND)
     MESSAGE(STATUS "Found carl: ${carl_INCLUDE_DIR}")
 else()
@@ -98,6 +98,7 @@ include_directories(${GMP_INCLUDE_DIRS})
 set(libraries ${libraries} ${GMP_LIBRARY})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
+find_package(Log4cplus)
 find_package(Eigen3)
 find_package(GTest)
 endif()
@@ -106,8 +107,8 @@ add_subdirectory(src)
 
 enable_testing()
 
-set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} pthread)
-include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} )
+set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} ${LOG4CPLUS_LIBRARY} pthread)
+include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} ${LOG4CPLUS_INCLUDE_DIR} )
 
 add_subdirectory(src/test)
 

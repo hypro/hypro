@@ -10,8 +10,8 @@
 
 #include "Box.h"
 
-using namespace hypro;
-
+namespace hypro {
+	
 template<typename Number>
 carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var)
 {
@@ -115,4 +115,6 @@ template<typename Number>
 void Box<Number>::clear()
 {
 	mBoundaries.erase(mBoundaries.begin(), mBoundaries.end());
+}
+	
 }
