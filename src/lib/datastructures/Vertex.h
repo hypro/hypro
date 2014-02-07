@@ -103,7 +103,7 @@ namespace hypro {
 
             friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
             {
-                ostr << v.toString();
+                ostr << v << "[" << v.mColor << "]";
                 return ostr;
             }
 
@@ -114,14 +114,6 @@ namespace hypro {
                 }
                 istr >> v.mColor; 
                 return istr;
-            }
-
-            std::string toString(bool parentheses = true) const 
-            {
-                if (parentheses) 
-                    return Point<NumberType>::toString(true) + " " + "[" + mColor +"]";
-                else 
-                    return Point<NumberType>::toString(false) + " " + mColor;
             }
     };
 }

@@ -8,8 +8,6 @@ using namespace carl;
 
 class VertexContainerTest : public ::testing::Test
 {
-public:
-	typedef FLOAT_T<double> number_t;
 protected:
     virtual void SetUp()
     {
@@ -24,18 +22,14 @@ protected:
 		
         // p2
         Point<number_t>::vector_t coordinates2;
-		Variable a = pool.getFreshVariable();
-		Variable b = pool.getFreshVariable();
-        coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
-        coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
+        coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
+        coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
         p2 = Point<number_t>(coordinates2);
 		
         // p3
         Point<number_t>::vector_t coordinates3;
-		Variable c = pool.getFreshVariable();
-		Variable d = pool.getFreshVariable();
-        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
-		coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
+        coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(-9)) );
+		coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(13)) );
         p3 = Point<number_t>(coordinates3);
     }
 	
@@ -65,7 +59,7 @@ TEST_F(VertexContainerTest, Insertion)
 	EXPECT_EQ(test1.size(), 3);
 	EXPECT_EQ(test1.find(p1) != test1.end(), true);
 	EXPECT_EQ(test1.find(p2) != test1.end(), true);
-	EXPECT_EQ(test1.find(p3) != test1.end(), true);
+	EXPECT_EQ(test1.find(p3) != test1.end(), false);
 }
 
 TEST_F(VertexContainerTest, Deletion)
@@ -99,7 +93,7 @@ TEST_F(VertexContainerTest, Assignment)
 	EXPECT_EQ(test2.size(), 3);
 	EXPECT_EQ(test2.find(p1) != test2.end(), true);
 	EXPECT_EQ(test2.find(p2) != test2.end(), true);
-	EXPECT_EQ(test2.find(p3) != test2.end(), true);
+	EXPECT_EQ(test2.find(p3) != test2.end(), false);
 }
 
 TEST_F(VertexContainerTest, Access)

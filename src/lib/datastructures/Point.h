@@ -59,7 +59,7 @@ namespace hypro {
              * Constructors & Destructor
              */
 		
-			Point()
+			Point() : mCoordinates()
 			{}
 		
             /**
@@ -166,6 +166,11 @@ namespace hypro {
             {
                 return mCoordinates.size();
             }
+		
+			void removeDimension(const carl::Variable& i)
+			{
+				mCoordinates.erase(i);
+			}
 
             /**
              * Functions
@@ -400,7 +405,11 @@ namespace hypro {
             {
                 for (auto pointIt : mCoordinates)
                 {
-                    if ((pointIt).second < 0 || (pointIt).second > boundary[(pointIt).first]) return false;
+					if(!boundary.hasDimension(pointIt.first))
+					{
+						continue;
+					}
+                    if (pointIt.second > boundary.at(pointIt.first)) return false;
                 }
                 return true;
             }
@@ -421,6 +430,11 @@ namespace hypro {
             /**
              * Operators & Comparison functions
              */
+		
+			bool hasDimension(const carl::Variable& i) const
+			{
+				return (mCoordinates.find(i) != mCoordinates.end());
+			}
 
             bool haveEqualCoordinate(const Point<NumberType>& p2) const 
             {
@@ -428,7 +442,10 @@ namespace hypro {
                 {
                     for (auto pointIt : mCoordinates)
                     {
-                        if ( (pointIt).second == p2.mCoordinates.at((pointIt).first) ) return true;
+						if ( p2.hasDimension(pointIt.first))
+						{
+							if ( pointIt.second == p2.mCoordinates.at(pointIt.first) ) return true;
+						}
                     }
                 }
                 return false;
@@ -446,12 +463,12 @@ namespace hypro {
              */
             friend bool operator<(const Point<NumberType>& p1, const Point<NumberType>& p2)
             {
-                assert(p1.dimension() == p2.dimension());
                 for (auto pointIt : p1.mCoordinates)
                 {
-                    if ( (pointIt).second != p2.mCoordinates.at((pointIt).first) )
+					assert(p2.hasDimension(pointIt.first));
+                    if ( pointIt.second != p2.mCoordinates.at(pointIt.first) )
                     {
-                        return ( (pointIt).second < p2.mCoordinates.at((pointIt).first) );
+                        return ( pointIt.second < p2.mCoordinates.at(pointIt.first) );
                     }
                 }
                 return false;
@@ -483,7 +500,7 @@ namespace hypro {
                 if(p1.dimension() != p2.dimension()) return false;
                 for (auto pointIt : p1.mCoordinates)
                 {
-                    if ((pointIt).second != p2.mCoordinates.at((pointIt).first)) return false;
+                    if ( !p2.hasDimension(pointIt.first) || pointIt.second != p2.mCoordinates.at(pointIt.first)) return false;
                 }
                 return true;
             }
@@ -503,17 +520,24 @@ namespace hypro {
                 return mCoordinates[i];
             }
 
+			number at(const carl::Variable& i) const
+			{
+				return mCoordinates.at(i);
+			}
+		
+		
             /**
              *
              * @param i
              * @return
              */
-		
+		/*
 			const number& operator[] (const carl::Variable& i) const
             {
-                return mCoordinates.at(i);
+				std::cout << "Const" << std::endl;
+                return mCoordinates[i];
             }
-
+*/
             /**
              *
              * @param ostr
@@ -522,30 +546,14 @@ namespace hypro {
              */
             friend std::ostream & operator<< (std::ostream& ostr, const Point<NumberType>& p)
             {
-                ostr << p.toString();
+                ostr << "(";
+				
+				for (auto pointIt : p.mCoordinates) {
+                    ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
+                }
+				
+				ostr << ")";
                 return ostr;
-            }
-            
-            /**
-            * @param parentheses Decides if the output is surrounded by parentheses. 
-            * @return The coordinates of the point.
-            */
-            std::string toString(const bool parentheses = true) const
-            {
-                std::string result;
-
-                if (parentheses) {
-                    result += "(";
-                }
-
-                for (auto pointIt : mCoordinates) {
-                    result += (pointIt).second.toString() + " ";
-                }
-
-                if (parentheses) {
-                    result += ")";
-                }
-                return result;
             }
     };
 }

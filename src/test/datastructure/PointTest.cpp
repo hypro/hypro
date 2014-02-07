@@ -109,20 +109,24 @@ TEST_F(PointTest, OperationTest)
 TEST_F(PointTest, BooleanTest)
 {
     EXPECT_TRUE(p1.isInBoundary(p2));
-    EXPECT_FALSE(p2.isInBoundary(p1));
-
+    EXPECT_TRUE(p2.isInBoundary(p1));
+	EXPECT_TRUE(p1.isInBoundary(p1));
+	
     p1[x] = FLOAT_T<number_t>(3);
-    //p2[y] = FLOAT_T<number_t>(3);
-    EXPECT_TRUE(p1.haveEqualCoordinate(p2));
+    p2[x] = FLOAT_T<number_t>(4);
+	p2[y] = FLOAT_T<number_t>(5);
+	
+    EXPECT_TRUE(p1.haveEqualCoordinate(p1));
     EXPECT_FALSE(p1.haveEqualCoordinate(p3));
-
-    ASSERT_LT(p1, p2);
-    ASSERT_GT(p2, p3);
-
-    p1[y] = FLOAT_T<number_t>(6);
-    //p2[y] = FLOAT_T<number_t>(6);
+	p2.removeDimension(a);
+	p2.removeDimension(b);
+    EXPECT_LT(p1, p2);
+	
+    p2[x] = FLOAT_T<number_t>(3);
+	p2.removeDimension(a);
+	
     EXPECT_EQ(p1, p2);
-    ASSERT_NE(p1, p3);
+    EXPECT_NE(p1, p3);
 }
 
 TEST_F(PointTest, Constructor)

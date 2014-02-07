@@ -9,12 +9,10 @@ using namespace carl;
 
 class VertexTest : public ::testing::Test
 {
-public:
-	typedef FLOAT_T<double> number_t;
 protected:
     virtual void SetUp()
     {
-        // p1
+		// p1
         Point<number_t>::vector_t coordinates1;
 		VariablePool& pool = VariablePool::getInstance();
 		Variable x = pool.getFreshVariable(carl::VT_INT);
@@ -51,7 +49,7 @@ protected:
 
 
 TEST_F(VertexTest, ColorTest)
-{ 
+{
     Vertex<number_t> v;
     v.setColor(true);
     ASSERT_TRUE(v.color());
