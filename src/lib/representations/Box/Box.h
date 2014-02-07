@@ -23,11 +23,13 @@ namespace hypro {
 template<typename Number>
 class Box : hypro::GeometricObject<Number>
 {
+public:
+	typedef std::map<carl::Variable, carl::Interval<Number>> intervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 protected:
-	std::map<carl::Variable, carl::Interval<Number>> mBoundaries;
+	intervalMap mBoundaries;
 	
 public:
 	/***************************************************************************
@@ -41,12 +43,12 @@ public:
 	 * Getters & setters
 	 **************************************************************************/
 	
-	std::map<carl::Variable, carl::Interval<Number>>& rBoundaries()
+	intervalMap& rBoundaries()
 	{
 		return mBoundaries;
 	}
 	
-	std::map<carl::Variable, carl::Interval<Number>> boundaries()
+	intervalMap boundaries()
 	{
 		return mBoundaries;
 	}
@@ -65,6 +67,11 @@ public:
 		}
 		mBoundaries.at(val.first) = val.second;
 		return false;
+	}
+	
+	bool insert(const intervalMap& boundaries)
+	{
+		mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
 	
 	bool hasVariable(const carl::Variable& var)
