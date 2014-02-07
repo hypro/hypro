@@ -69,7 +69,7 @@ public:
 		return false;
 	}
 	
-	bool insert(const intervalMap& boundaries)
+	void insert(const intervalMap& boundaries)
 	{
 		mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}

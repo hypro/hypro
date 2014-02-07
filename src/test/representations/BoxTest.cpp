@@ -9,8 +9,6 @@ using namespace carl;
 
 class BoxTest : public ::testing::Test
 {
-public:
-	typedef FLOAT_T<double> number_t;
 protected:
     virtual void SetUp()
     {
@@ -42,12 +40,31 @@ TEST_F(BoxTest, Constructor)
 
 TEST_F(BoxTest, Access)
 {
-	
+	Box<number_t>::intervalMap tmp = box1.boundaries();
+	EXPECT_EQ(2, tmp[x].lower());
+	EXPECT_EQ(6, tmp[x].upper());
+	EXPECT_EQ(1, tmp[y].lower());
+	EXPECT_EQ(3, tmp[y].upper());
 }
 
 TEST_F(BoxTest, Insertion)
 {
-	
+	Box<number_t>::intervalMap tmp;
+	Variable z = pool.getFreshVariable("z");
+	tmp.insert(std::make_pair(z, Interval<number_t>(3,9)));
+	box1.insert(tmp);
+	EXPECT_EQ(true, box1.hasVariable(z));
+	/*
+	EXPECT_EQ(3, box1.interval(z).lower());
+	EXPECT_EQ(9, box1.interval(z).upper());
+	 */
+	Variable w = pool.getFreshVariable("w");
+	box1.insert(std::make_pair(w, Interval<number_t>(4,5)));
+	EXPECT_EQ(true, box1.hasVariable(w));
+	/*
+	EXPECT_EQ(4, box1.interval(w).lower());
+	EXPECT_EQ(5, box1.interval(w).upper());
+	 */
 }
 
 TEST_F(BoxTest, Union)
