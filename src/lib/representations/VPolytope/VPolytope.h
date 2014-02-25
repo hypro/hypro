@@ -11,35 +11,69 @@
 #include "../../datastructures/Point.h"
 #include "../GeometricObject.h"
 #include <carl/core/Variable.h>
+#include <set>
+#include <cassert>
 
 namespace hypro
 {
 
 template<typename Number>
-class VPolytope hypro::GeometricObject<Number>
+class VPolytope : hypro::GeometricObject<Number>
 {
     public: 
-        
+        typedef std::set<Point<Number> > vertices;
         /***************************************************************************
 	 * Members
 	 **************************************************************************/
     protected:
-	
+	vertices mVertices;
     public:
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
 
-        VPolytope(){}
+        VPolytope() : mVertices()
+        {}
 
+        VPolytope(const Point<Number>& point)
+        {
+            mVertices.insert(point);
+        }
+        
+        VPolytope(const vertices& points)
+        {
+            mVertices.insert(points.begin(), points.end());
+        }
+        
         VPolytope(const VPolytope& orig)
         {
-
+            mVertices.insert(orig.begin(), orig.end());
         }
 
         ~VPolytope()
         {}
+        
+        /***************************************************************************
+	 * General interface
+	 **************************************************************************/
+	
+	unsigned int dimension() const
+	{
+            assert(!mVertices.empty());
+            return mVertices.begin()->size();
+	}
+	
+	bool linear_transformation(VPolytope& result /*, ... */) const;
+	bool minkowski_sum(VPolytope& result, const VPolytope& rhs) const;
+	bool intersect(VPolytope& result, const VPolytope& rhs) const;
+	bool hull(VPolytope& result) const;
+	bool contains(const Point<Number>& point) const;
+	bool unite(VPolytope& result, const VPolytope& rhs) const;
+	
+	void clear();
 
 };
 
 }//namespace
+
+#include "VPolytope.tpp"

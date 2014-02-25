@@ -8,6 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runRepresentationTests
 					BoxTest.cpp
+                                        VPolytopeTest.cpp
     )
 
     add_dependencies(runRepresentationTests googletest)

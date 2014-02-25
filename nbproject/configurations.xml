@@ -139,12 +139,15 @@
               <in>Box.tpp</in>
             </df>
             <df name="VPolytope">
-              <in>VPolytope.cpp</in>
               <in>VPolytope.h</in>
+              <in>VPolytope.tpp</in>
             </df>
           </df>
         </df>
         <df name="test">
+          <df name="representations">
+            <in>VPolytopeTest.cpp</in>
+          </df>
           <in>IntTest.cpp</in>
           <in>PointTest.cpp</in>
           <in>VertexTest.cpp</in>
@@ -744,14 +747,14 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="src/lib/representations/VPolytope/VPolytope.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
       <item path="src/lib/representations/VPolytope/VPolytope.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/lib/representations/VPolytope/VPolytope.tpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
       <item path="src/test/IntTest.cpp" ex="false" tool="1" flavor2="4">
@@ -795,6 +798,11 @@
             <Elem>__pic__=2</Elem>
           </preprocessorList>
         </ccTool>
+      </item>
+      <item path="src/test/representations/VPolytopeTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="src/tmlib_tmp/TaylorModel.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>

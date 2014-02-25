@@ -1,5 +1,4 @@
 set(hypro_vpolytope_sources
-	VPolytope/VPolytope.cpp
 	PARENT_SCOPE
 )
 
