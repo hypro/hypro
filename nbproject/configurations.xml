@@ -134,6 +134,15 @@
               <in>int_wrapper_t.cpp</in>
             </df>
           </df>
+          <df name="representations">
+            <df name="Box">
+              <in>Box.tpp</in>
+            </df>
+            <df name="VPolytope">
+              <in>VPolytope.cpp</in>
+              <in>VPolytope.h</in>
+            </df>
+          </df>
         </df>
         <df name="test">
           <in>IntTest.cpp</in>
@@ -729,6 +738,21 @@
             flavor2="4">
         <ccTool>
         </ccTool>
+      </item>
+      <item path="src/lib/representations/Box/Box.tpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/lib/representations/VPolytope/VPolytope.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/lib/representations/VPolytope/VPolytope.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/test/IntTest.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>

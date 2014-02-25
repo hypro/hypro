@@ -5,12 +5,11 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2014-01-16
- * @version 2014-01-16
+ * @version 2014-02-11
  */
 
 #pragma once
 
-//‚#include <Eigen/dense>
 #include <map>
 #include <cassert>
 #include "../../datastructures/Point.h"
@@ -24,7 +23,7 @@ template<typename Number>
 class Box : hypro::GeometricObject<Number>
 {
 public:
-	typedef std::map<carl::Variable, carl::Interval<Number>> intervalMap;
+	typedef std::map<const carl::Variable, carl::Interval<Number>> intervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
@@ -36,8 +35,26 @@ public:
 	 * Constructors
 	 **************************************************************************/
 	
-	Box()
+	Box() : mBoundaries()
 	{}
+        
+        Box(const Box& orig)
+        {
+            mBoundaries = orig.boundaries();
+        }
+        
+        Box(const carl::Variable& var, const carl::Interval<Number>& val)
+        {
+            mBoundaries.insert(std::make_pair(var, val));
+        }
+        
+        Box(const intervalMap& intervals)
+        {
+            mBoundaries.insert(intervals.begin(), intervals.end());
+        }
+        
+        ~Box()
+        {}
 	
 	/***************************************************************************
 	 * Getters & setters
@@ -45,12 +62,12 @@ public:
 	
 	intervalMap& rBoundaries()
 	{
-		return mBoundaries;
+            return mBoundaries;
 	}
 	
-	intervalMap boundaries()
+	intervalMap boundaries() const
 	{
-		return mBoundaries;
+            return mBoundaries;
 	}
 	
 	/**
@@ -58,25 +75,36 @@ public:
 	 * @param val Pair of Variable and Interval.
 	 * @return True, if a new insertion has happened, else only update of an existing interval.
 	 */
-	bool insert(const std::pair<carl::Variable, carl::Interval<Number>> val)
+	bool insert(const std::pair<const carl::Variable, carl::Interval<Number>> val)
 	{
-		if(mBoundaries.find(val.first) == mBoundaries.end())
-		{
-			mBoundaries[val.first] = val.second;
-			return true;
-		}
-		mBoundaries.at(val.first) = val.second;
-		return false;
+            if(mBoundaries.find(val.first) == mBoundaries.end())
+            {
+                mBoundaries[val.first] = val.second;
+                return true;
+            }
+            mBoundaries.at(val.first) = val.second;
+            return false;
 	}
 	
+        bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
+	{
+            if(mBoundaries.find(var) == mBoundaries.end())
+            {
+                    mBoundaries[var] = val;
+                    return true;
+            }
+            mBoundaries.at(var) = val;
+            return false;
+	}
+        
 	void insert(const intervalMap& boundaries)
 	{
-		mBoundaries.insert(boundaries.begin(), boundaries.end());
+            mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
 	
 	bool hasVariable(const carl::Variable& var)
 	{
-		return mBoundaries.find(var) != mBoundaries.end();
+            return mBoundaries.find(var) != mBoundaries.end();
 	}
 	
 	carl::Interval<Number>& rInterval(const carl::Variable& var);
@@ -88,7 +116,7 @@ public:
 	
 	unsigned int get_dimension() const
 	{
-		return mBoundaries.size();
+            return mBoundaries.size();
 	}
 	
 	bool linear_transformation(Box& result /*, ... */) const;
@@ -102,3 +130,4 @@ public:
 };
 
 }
+#include "Box.tpp"

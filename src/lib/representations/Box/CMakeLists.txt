@@ -1,5 +1,4 @@
 set(hypro_box_sources
-	representations/Box/Box.cpp
 	PARENT_SCOPE
 )
 
