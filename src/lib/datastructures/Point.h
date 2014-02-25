@@ -41,33 +41,32 @@ namespace hypro {
     template<class NumberType>
     class Point 
     {
-		public:
-		//typedef std::vector<carl::FLOAT_T<NumberType> > vector_t;
-		typedef std::unordered_map<carl::Variable, carl::FLOAT_T<NumberType> > vector_t;
+        public:
+            //typedef std::vector<carl::FLOAT_T<NumberType> > vector_t;
+            typedef std::unordered_map<carl::Variable, carl::FLOAT_T<NumberType> > vector_t;
 	private:
-		typedef carl::FLOAT_T<NumberType> number;
-		
-		protected:
-			vector_t mCoordinates;
+            typedef carl::FLOAT_T<NumberType> number;
+
+        protected:
+            vector_t mCoordinates;
 		
         public:
         
-            
             static const int POINT_RAND_MAX = 100;
             
             /**
              * Constructors & Destructor
              */
 		
-			Point() : mCoordinates()
-			{}
+            Point() : mCoordinates()
+            {}
 		
             /**
              * Constructs a point with the passed dimension and sets the coordinates to the initial value.
              * @param dim
              * @param initialValue
              */
-			Point(const carl::Variable& var, const number& value = number())
+            Point(const carl::Variable& var, const number& value = number())
             {
                 mCoordinates[var] = value;
             }
@@ -104,7 +103,7 @@ namespace hypro {
              * @param  dim the dimension we want to get the value from.
              * @return 
              */
-			number coordinate(const carl::Variable& var) const
+            number coordinate(const carl::Variable& var) const
             {
                 assert(mCoordinates.count(var) > 0);
                 return mCoordinates.at(var);
@@ -115,17 +114,17 @@ namespace hypro {
                 return mCoordinates;
             }
         
-			vector_t& rCoordinates()
-			{
-				return mCoordinates;
-			}
+            vector_t& rCoordinates()
+            {
+                return mCoordinates;
+            }
 		
             /**
              * Set a specific coordinate
              * @param dim    the dimension that is changed
              * @param value  the new value
              */
-			void setCoordinate(const carl::Variable& dim, number value)
+            void setCoordinate(const carl::Variable& dim, number value)
             {
                 mCoordinates[dim] = value;
             }
@@ -144,7 +143,7 @@ namespace hypro {
              *
              * @return iterator to begin of mCoordinates
              */
-		typename vector_t::const_iterator getCoordinatesIteratorBegin() const
+            typename vector_t::const_iterator getCoordinatesIteratorBegin() const
             {
                 return mCoordinates.begin();
             }
@@ -153,7 +152,7 @@ namespace hypro {
              *
              * @return iterator to end of mCoordinates
              */
-		typename vector_t::const_iterator getCoordinatesIteratorEnd() const
+            typename vector_t::const_iterator getCoordinatesIteratorEnd() const
             {
                 return mCoordinates.end();
             }
@@ -167,10 +166,10 @@ namespace hypro {
                 return mCoordinates.size();
             }
 		
-			void removeDimension(const carl::Variable& i)
-			{
-				mCoordinates.erase(i);
-			}
+            void removeDimension(const carl::Variable& i)
+            {
+                mCoordinates.erase(i);
+            }
 
             /**
              * Functions
@@ -185,18 +184,18 @@ namespace hypro {
             {
                 bool negative = false;
                 for(auto pointIt = p.getCoordinatesIteratorBegin(); pointIt != p.getCoordinatesIteratorEnd(); ++pointIt)
-				{
-					if(mCoordinates.count((*pointIt).first) > 0)
-					{
-						mCoordinates[(*pointIt).first] += (*pointIt).second;
-					}
-					else
-					{
-						mCoordinates[(*pointIt).first] = (*pointIt).second;
-					}
-					if (mCoordinates.at((*pointIt).first) < 0) negative = true;
-				}
-				return negative;
+                {
+                    if(mCoordinates.count((*pointIt).first) > 0)
+                    {
+                        mCoordinates[(*pointIt).first] += (*pointIt).second;
+                    }
+                    else
+                    {
+                        mCoordinates[(*pointIt).first] = (*pointIt).second;
+                    }
+                    if (mCoordinates.at((*pointIt).first) < 0) negative = true;
+                }
+                return negative;
             }
 
             /**
@@ -268,7 +267,7 @@ namespace hypro {
              * @brief: function to calculate points in the neighborhood, with one fixed dimension.
              * @return std::vector with all points in the neighborhood, with a fixed dimension, and except the point itself.
              */
-			std::vector<Point<NumberType> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
+            std::vector<Point<NumberType> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
             {
                 std::vector<Point<NumberType> > neighbors;
                 unsigned dim = dimension();
@@ -346,7 +345,7 @@ namespace hypro {
              * Change the coordinates of the point. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is increased.
              */
-			void IncrementInFixedDim(const carl::Variable& d)
+            void IncrementInFixedDim(const carl::Variable& d)
             {
                 ++(mCoordinates.at(d));
             }
@@ -367,7 +366,7 @@ namespace hypro {
              * Change the point's coordinates. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is decreased.
              */
-			void DecrementInFixedDim(const carl::Variable& d)
+            void DecrementInFixedDim(const carl::Variable& d)
             {
                 --(mCoordinates.at(d));
             }
@@ -377,7 +376,7 @@ namespace hypro {
              * @param d
              * @return The point with coordinates [x(1), .., x(d-1), x(d)-1, x(d+1), ..., x(n) ]
              */
-			Point& getPredecessorInDimension(const carl::Variable& d) const
+            Point& getPredecessorInDimension(const carl::Variable& d) const
             {
                 Point<NumberType> pred = Point(*this);
                 pred.DecrementInFixedDim(d);
@@ -405,10 +404,10 @@ namespace hypro {
             {
                 for (auto pointIt : mCoordinates)
                 {
-					if(!boundary.hasDimension(pointIt.first))
-					{
-						continue;
-					}
+                    if(!boundary.hasDimension(pointIt.first))
+                    {
+                        continue;
+                    }
                     if (pointIt.second > boundary.at(pointIt.first)) return false;
                 }
                 return true;
@@ -431,10 +430,10 @@ namespace hypro {
              * Operators & Comparison functions
              */
 		
-			bool hasDimension(const carl::Variable& i) const
-			{
-				return (mCoordinates.find(i) != mCoordinates.end());
-			}
+            bool hasDimension(const carl::Variable& i) const
+            {
+                return (mCoordinates.find(i) != mCoordinates.end());
+            }
 
             bool haveEqualCoordinate(const Point<NumberType>& p2) const 
             {
@@ -442,10 +441,10 @@ namespace hypro {
                 {
                     for (auto pointIt : mCoordinates)
                     {
-						if ( p2.hasDimension(pointIt.first))
-						{
-							if ( pointIt.second == p2.mCoordinates.at(pointIt.first) ) return true;
-						}
+                        if ( p2.hasDimension(pointIt.first))
+                        {
+                            if ( pointIt.second == p2.mCoordinates.at(pointIt.first) ) return true;
+                        }
                     }
                 }
                 return false;
@@ -465,7 +464,7 @@ namespace hypro {
             {
                 for (auto pointIt : p1.mCoordinates)
                 {
-					assert(p2.hasDimension(pointIt.first));
+                    assert(p2.hasDimension(pointIt.first));
                     if ( pointIt.second != p2.mCoordinates.at(pointIt.first) )
                     {
                         return ( pointIt.second < p2.mCoordinates.at(pointIt.first) );
@@ -515,29 +514,16 @@ namespace hypro {
              * @param i
              * @return
              */
-			number& operator[] (const carl::Variable& i)
+            number& operator[] (const carl::Variable& i)
             {
                 return mCoordinates[i];
             }
 
-			number at(const carl::Variable& i) const
-			{
-				return mCoordinates.at(i);
-			}
-		
-		
-            /**
-             *
-             * @param i
-             * @return
-             */
-		/*
-			const number& operator[] (const carl::Variable& i) const
+            number at(const carl::Variable& i) const
             {
-				std::cout << "Const" << std::endl;
-                return mCoordinates[i];
+                return mCoordinates.at(i);
             }
-*/
+		
             /**
              *
              * @param ostr
@@ -546,13 +532,11 @@ namespace hypro {
              */
             friend std::ostream & operator<< (std::ostream& ostr, const Point<NumberType>& p)
             {
-                ostr << "(";
-				
-				for (auto pointIt : p.mCoordinates) {
+                ostr << "(";		
+                for (auto pointIt : p.mCoordinates) {
                     ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
-                }
-				
-				ostr << ")";
+                }		
+                ostr << ")";
                 return ostr;
             }
     };

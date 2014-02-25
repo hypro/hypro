@@ -90,8 +90,8 @@ public:
 	{
             if(mBoundaries.find(var) == mBoundaries.end())
             {
-                    mBoundaries[var] = val;
-                    return true;
+                mBoundaries[var] = val;
+                return true;
             }
             mBoundaries.at(var) = val;
             return false;
@@ -102,7 +102,7 @@ public:
             mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
 	
-	bool hasVariable(const carl::Variable& var)
+	bool hasVariable(const carl::Variable& var) const
 	{
             return mBoundaries.find(var) != mBoundaries.end();
 	}
@@ -110,6 +110,20 @@ public:
 	carl::Interval<Number>& rInterval(const carl::Variable& var);
 	carl::Interval<Number> interval(const carl::Variable& var) const;
 	
+        bool isEmpty() const
+        {
+            if(mBoundaries.size() == 0)
+                return true;
+            for(auto interval : mBoundaries)
+            {
+                if(interval.second.isEmpty())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/

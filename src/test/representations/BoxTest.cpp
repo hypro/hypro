@@ -2,6 +2,7 @@
 #include "../defines.h"
 #include "carl/numbers/FLOAT_T.h"
 #include <carl/core/VariablePool.h>
+#include "../../lib/datastructures/Point.h"
 #include "../../lib/representations/Box/Box.h"
 
 using namespace hypro;
@@ -16,6 +17,11 @@ protected:
         boundaries1.insert(std::make_pair(x, Interval<number_t>(2,6)));
         boundaries1.insert(std::make_pair(y, Interval<number_t>(1,3)));
         box1.insert(boundaries1);
+        
+        std::map<const carl::Variable, carl::Interval<number_t> > boundaries2;
+        boundaries2.insert(std::make_pair(x, Interval<number_t>(-1,6)));
+        boundaries2.insert(std::make_pair(y, Interval<number_t>(4,7)));
+        box2.insert(boundaries2);
     }
 	
     virtual void TearDown()
@@ -79,20 +85,30 @@ TEST_F(BoxTest, LinearTransformation)
 
 TEST_F(BoxTest, MinkowskiSum)
 {
-
+    Box<number_t> result;
+    box1.minkowski_sum(result, box2);
+    EXPECT_EQ(1 , result.interval(x).lower());
+    EXPECT_EQ(12 , result.interval(x).upper());
+    EXPECT_EQ(5 , result.interval(y).lower());
+    EXPECT_EQ(10 , result.interval(y).upper());
 }
 
 TEST_F(BoxTest, Intersection)
 {
-
+    Box<number_t> result;
+    box1.intersect(result, box2);
+    EXPECT_TRUE(result.isEmpty());
 }
 
 TEST_F(BoxTest, ConvexHull)
 {
-
+    //stupid for Boxes, only required for orthogonal polyhedra
 }
 
 TEST_F(BoxTest, Membership)
 {
-
+    Point<number_t> p;
+    p.setCoordinate(x, 4);
+    p.setCoordinate(y, 2);
+    EXPECT_TRUE(box1.contains(p));
 }

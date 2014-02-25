@@ -54,12 +54,12 @@ bool Box<Number>::minkowski_sum(Box<Number>& result, const Box<Number>& rhs) con
     result.clear();
     for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-            if (!rhs.hasVariable((*intervalIt).first))
-            {
-                    result.clear();
-                    return false;
-            }
-            result.insert( std::make_pair((*intervalIt).first), (*intervalIt).second.add(rhs.interval((*intervalIt).first)) );
+        if (!rhs.hasVariable((*intervalIt).first))
+        {
+            result.clear();
+            return false;
+        }
+        result.insert( std::make_pair((*intervalIt).first, (*intervalIt).second.add(rhs.interval((*intervalIt).first)) ));
     }
     return true;
 }
@@ -70,12 +70,19 @@ bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
     result.clear();
     for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-            if (!rhs.hasVariable((*intervalIt).first))
-            {
-                    result.clear();
-                    return false;
-            }
-            result.insert( std::make_pair((*intervalIt).first), (*intervalIt).second.intersect(rhs.interval((*intervalIt).first)) );
+        if (!rhs.hasVariable((*intervalIt).first))
+        {
+            result.clear();
+            return false;
+        }
+        std::cout << rhs.interval((*intervalIt).first) << std::endl;
+        carl::Interval<Number> res = (*intervalIt).second.intersect(rhs.interval((*intervalIt).first));
+        if( res.isEmpty() )
+        {
+            result.clear();
+            return false;
+        }
+        result.insert( std::make_pair((*intervalIt).first, res ) );
     }
     return true;
 }
@@ -89,7 +96,15 @@ bool Box<Number>::hull(Box<Number>& result) const
 template<typename Number>
 bool Box<Number>::contains(const Point<Number>& point) const
 {
-	
+    if( this->get_dimension() > point.dimension() )
+        return false;
+    
+    for(auto interval : mBoundaries)
+    {
+        if( !interval.second.contains(point.at(interval.first).value()))
+            return false;
+    }
+    return true;
 }
 
 template<typename Number>
@@ -97,16 +112,16 @@ bool Box<Number>::unite(Box<Number>& result, const Box<Number>& rhs) const
 {
     for(auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-            if(!rhs.hasVariable((*intervalIt).first))
-            {
-                    result.clear();
-                    return false;
-            }
-            Number lowerMin = (*intervalIt).second.lower() < rhs.interval((*intervalIt).first).lower() ? (*intervalIt).second.lower() : rhs.interval((*intervalIt).first).lower();
-            Number upperMax = (*intervalIt).second.upper() > rhs.interval((*intervalIt).first).upper() ? (*intervalIt).second.upper() : rhs.interval((*intervalIt).first).upper();
-            carl::BoundType lowerType = carl::getWeakestBoundType((*intervalIt).second.lowerBoundType(), rhs.interval((*intervalIt).first).lowerBoundType());
-            carl::BoundType upperType = carl::getWeakestBoundType((*intervalIt).second.upperBoundType(), rhs.interval((*intervalIt).first).upperBoundType());
-            result.insert( std::make_pair(lowerMin, carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
+        if(!rhs.hasVariable((*intervalIt).first))
+        {
+            result.clear();
+            return false;
+        }
+        Number lowerMin = (*intervalIt).second.lower() < rhs.interval((*intervalIt).first).lower() ? (*intervalIt).second.lower() : rhs.interval((*intervalIt).first).lower();
+        Number upperMax = (*intervalIt).second.upper() > rhs.interval((*intervalIt).first).upper() ? (*intervalIt).second.upper() : rhs.interval((*intervalIt).first).upper();
+        carl::BoundType lowerType = carl::getWeakestBoundType((*intervalIt).second.lowerBoundType(), rhs.interval((*intervalIt).first).lowerBoundType());
+        carl::BoundType upperType = carl::getWeakestBoundType((*intervalIt).second.upperBoundType(), rhs.interval((*intervalIt).first).upperBoundType());
+        result.insert( std::make_pair(lowerMin, carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
     }
     return true;
 }
