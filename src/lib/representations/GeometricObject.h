@@ -14,13 +14,18 @@ namespace hypro
     class GeometricObject
     {
     public:
-        unsigned int get_dimension();		
+                /**
+                 * Returns the dimension of this object.
+                 * 
+                 * @return  the dimension
+                 */
+        unsigned int getDimension();		
 		/**
 		 * Applies a linear transformation on the given stateset.
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool linear_transformation(GeometricObject<Number>& result /*, ... */);
+        bool linearTransformation(GeometricObject<Number>& result /*, ... */);
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.
@@ -28,7 +33,7 @@ namespace hypro
 		 * @param rhs The other righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool minkowski_sum(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
+        bool minkowskiSum(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
 		
 		/**
 		 * Intersects the given stateset with a second one.
@@ -60,7 +65,7 @@ namespace hypro
 		 * @param rhs The righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-		bool unite(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
+        bool unite(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
         // virtual bool empty() const = 0;
     };
 }

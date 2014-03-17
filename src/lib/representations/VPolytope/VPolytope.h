@@ -63,8 +63,8 @@ class VPolytope : hypro::GeometricObject<Number>
             return mVertices.begin()->size();
 	}
 	
-	bool linear_transformation(VPolytope& result /*, ... */) const;
-	bool minkowski_sum(VPolytope& result, const VPolytope& rhs) const;
+	bool linearTransformation(VPolytope& result /*, ... */) const;
+	bool minkowskiSum(VPolytope& result, const VPolytope& rhs) const;
 	bool intersect(VPolytope& result, const VPolytope& rhs) const;
 	bool hull(VPolytope& result) const;
 	bool contains(const Point<Number>& point) const;

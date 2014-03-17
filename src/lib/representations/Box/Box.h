@@ -128,13 +128,13 @@ public:
 	 * General interface
 	 **************************************************************************/
 	
-	unsigned int get_dimension() const
+	unsigned int getDimension() const
 	{
             return mBoundaries.size();
 	}
 	
-	bool linear_transformation(Box& result /*, ... */) const;
-	bool minkowski_sum(Box& result, const Box& rhs) const;
+	bool linearTransformation(Box& result /*, ... */) const;
+	bool minkowskiSum(Box& result, const Box& rhs) const;
 	bool intersect(Box& result, const Box& rhs) const;
 	bool hull(Box& result) const;
 	bool contains(const Point<Number>& point) const;

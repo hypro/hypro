@@ -6,18 +6,16 @@
  * @version 2014-02-25
  */
 
-#include "VPolytope.h"
-
 namespace hypro
 {
     template<typename Number>
-    bool VPolytope<Number>::linear_transformation(VPolytope<Number>& result /*, ... */) const
+    bool VPolytope<Number>::linearTransformation(VPolytope<Number>& result /*, ... */) const
     {
         return true;
     }
     
     template<typename Number>
-    bool VPolytope<Number>::minkowski_sum(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
+    bool VPolytope<Number>::minkowskiSum(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
     {
         result.clear();
         // add each rhs-vertex to each vertex of this polytope.

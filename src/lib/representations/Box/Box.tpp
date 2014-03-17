@@ -43,13 +43,13 @@ carl::Interval<Number> Box<Number>::interval(const carl::Variable& var) const
 }
 
 template<typename Number>
-bool Box<Number>::linear_transformation(Box<Number>& result /*, ... */) const
+bool Box<Number>::linearTransformation(Box<Number>& result /*, ... */) const
 {
-	
+    return false; // @todo
 }
 
 template<typename Number>
-bool Box<Number>::minkowski_sum(Box<Number>& result, const Box<Number>& rhs) const
+bool Box<Number>::minkowskiSum(Box<Number>& result, const Box<Number>& rhs) const
 {
     result.clear();
     for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
