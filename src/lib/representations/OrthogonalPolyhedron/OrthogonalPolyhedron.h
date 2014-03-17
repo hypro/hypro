@@ -44,14 +44,14 @@ namespace hypro
 
         NeighbourhoodContainer<Number> mNeighbourhood;
 
-        bool mBoxUpToDate;
-        Box<Number> mBox;
+        //bool mBoxUpToDate;
+        //Box<Number> mBox;
 
         bool mGridInitialized;
         std::map<Point<Number>, bool> mGrid;
 
         std::vector<Point<Number> > mBoundaryBox;
-        Point<Number> mBoundary;
+        //Point<Number> mBoundary;
         bool boundaryIsVertex;
 
         PolyhedronOrtRepresentation mRepresentation;
@@ -63,10 +63,10 @@ namespace hypro
     public:
         OrthogonalPolyhedron();
         OrthogonalPolyhedron(std::map<Point<Number>, bool>, Point<Number> bounds, unsigned dim);
-        OrthogonalPolyhedron(Vertex<Number>* vertices, unsigned nrVertices, unsigned dim, Point<Number> boundary);
+        OrthogonalPolyhedron(Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number> boundary*/);
         
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim);
-        OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, Point<Number> boundary);
+        //OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, Point<Number> boundary);
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, vVec<Number> extremeVertexList);
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, NeighbourhoodContainer<Number> neighbourhoods);
 
