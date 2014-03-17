@@ -50,6 +50,15 @@ TEST_F(BoxTest, Access)
     EXPECT_EQ(6, tmp[x].upper());
     EXPECT_EQ(1, tmp[y].lower());
     EXPECT_EQ(3, tmp[y].upper());
+    
+    Point<number_t>::vector_t coMax1;
+    coMax1.insert(std::make_pair(x, 6));
+    coMax1.insert(std::make_pair(y, 3));
+    EXPECT_EQ(Point<number_t>(coMax1), box1.max());
+    Point<number_t>::vector_t coMin1;
+    coMin1.insert(std::make_pair(x, 2));
+    coMin1.insert(std::make_pair(y, 1));
+    EXPECT_EQ(Point<number_t>(coMin1), box1.min());
 }
 
 TEST_F(BoxTest, Insertion)

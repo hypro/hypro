@@ -62,17 +62,52 @@ namespace hypro
         //Logger mLogger;
     public:
         OrthogonalPolyhedron();
-        OrthogonalPolyhedron(std::map<Point<Number>, bool>, Point<Number> bounds, unsigned dim);
-        OrthogonalPolyhedron(Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number> boundary*/);
+        //OrthogonalPolyhedron(std::map<Point<Number>&, bool>, Point<Number>& bounds, unsigned dim);
+        OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number>& boundary*/);
         
-        OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim);
-        //OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, Point<Number> boundary);
-        OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, vVec<Number> extremeVertexList);
-        OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, NeighbourhoodContainer<Number> neighbourhoods);
+        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim);
+        //OrthogonalPolyhedron(vVec<Number>& vertexList, unsigned dim, Point<Number>& boundary);
+        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList);
+        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const NeighbourhoodContainer<Number>& neighbourhoods);
+        
+        bool isEmpty();
+        bool isUniversal();
+
+        bool isMember(Point<Number>& pX, bool useOrig = false);
+
+        vVec<Number> getVertices();
+        bool isVertex(Point<Number>* pX);
+        bool checkVertexCondition(const Point<Number>& p);
+
+        OrthogonalPolyhedron<Number> calculateIntersection(OrthogonalPolyhedron<Number>& p2);
+        OrthogonalPolyhedron<Number> invert(Point<Number>& boundary);
+        OrthogonalPolyhedron<Number> calculateUnion(OrthogonalPolyhedron<Number>& p2);
+        OrthogonalPolyhedron<Number> calculateUnion(OrthogonalPolyhedron<Number>& p2, const Point<Number>& boundary);
+
+        void move(const Point<Number>& p);
+
+        void translateToNeighbourhoodRepresentation(bool clean = true);
+        void translateToExtremeVertexRepresentation(bool clean = true);
+        void induceGrid();
+        bool isInduced();
+
+        void clear();
+
+        PolyhedronOrtRepresentation getRepresentation();
+        void printGrid(); 
+        
+        inline unsigned getNrVertices() const { return mNrVertices; }
+        inline unsigned getDimension() const { return mVertices.dimension(); }
+        Point<Number> getBoundary() const; 
+         
+        friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number>& pol);
+        
+        //friend class PolyhedronParser;
 
     private:
         void preInit();
         void postInit();
+        void reserveInducedGrid();
         
         void insertVerticesInMap(VertexContainerIt<Number> begin, VertexContainerIt<Number> end, std::map<Point<Number>, bool>& map);
         
@@ -95,8 +130,6 @@ namespace hypro
         void verticesOnBoundary(const Point<Number>& boundary);
         Point<Number> calculateInduced(const Point<Number>& x);
         Vertex<Number> calculateInduced(const Point<Number>& x, bool c);
-
-        void ReserveInducedGrid();
 
         void setRepresentation(PolyhedronOrtRepresentation repr);
         void translateNeighbourToExtreme();

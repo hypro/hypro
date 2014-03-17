@@ -124,6 +124,26 @@ public:
             return false;
         }
         
+        Point<Number> max() const
+        {
+            typename Point<Number>::vector_t coordinates;
+            for(auto interval : mBoundaries)
+            {
+                coordinates.insert(std::make_pair(interval.first, interval.second.upper()));
+            }
+            return Point<Number>(coordinates);
+        }
+        
+        Point<Number> min() const
+        {
+            typename Point<Number>::vector_t coordinates;
+            for(auto interval : mBoundaries)
+            {
+                coordinates.insert(std::make_pair(interval.first, interval.second.lower()));
+            }
+            return Point<Number>(coordinates);
+        }
+        
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/

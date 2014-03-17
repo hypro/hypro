@@ -76,7 +76,7 @@ namespace reachLin {
         int  getNrVertices() const { return mNrVertices;}
         Point getBoundary() const; 
          
-         friend std::ostream& operator<<(std::ostream& ostr, const PolyhedronOrt& pol);
+        friend std::ostream& operator<<(std::ostream& ostr, const PolyhedronOrt& pol);
         
         friend class PolyhedronParser;
 
