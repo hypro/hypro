@@ -20,7 +20,7 @@ namespace hypro
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron() {}
     
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number> boundary*/) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number> boundary*/) :
         mRepresentation(VERTEX),
         mNrVertices(nrVertices),
         mGridInitialized(false),
@@ -36,7 +36,7 @@ namespace hypro
     }
     
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim) :
         mRepresentation(VERTEX),
         mNrVertices(vertexList.size()),
         //mBox(Box(dim)),
@@ -55,7 +55,7 @@ namespace hypro
      * is complete.
      */
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, vVec<Number> extremeVertexList) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList) :
         mRepresentation(EXTREMEVERTEX),
         mNrVertices(vertexList.size()),
         //mBox(Box(dim)),
@@ -81,7 +81,7 @@ namespace hypro
     }
     
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, NeighbourhoodContainer<Number> neighbourhoods) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const NeighbourhoodContainer<Number>& neighbourhoods) :
         mRepresentation(NEIGHBOUR),
         mNrVertices(vertexList.size()),
         //mBox(Box(dim)),
@@ -168,7 +168,7 @@ namespace hypro
      * @return: true if inside, false if not.
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::isMember(Point<Number> pointX, bool useOrig) {
+    bool OrthogonalPolyhedron<Number>::isMember(Point<Number>& pointX, bool useOrig) {
         bool result;
         //LOG4CPLUS_DEBUG(mLogger, "Membershiptest for " << pointX);
         // Okay, it could be a member
@@ -221,5 +221,31 @@ namespace hypro
         /*TODO Should not be here, throw an error.*/
         //LOG4CPLUS_ERROR(mLogger, "No Representation set.");
         return false;
+    }
+
+    /***************************************************************************
+     * Private methods
+     ***************************************************************************/
+
+    /**
+     * Checks if the origin lies within the Polyhedron or not.
+     * @return the color of the origin. (whether the origin is a member or not)
+     */
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::calculateOriginColour() {
+        Point<Number> origin = Point<Number>();
+
+        std::pair<bool, bool> v = mVertices.isVertex(origin);
+
+        if (!v.first) {
+            return false;
+        }
+
+        if (!v.second) {
+            //LOG4CPLUS_WARN(mLogger, "Origin is white but a Vertex");
+            mVertices.erase(origin);
+            return false;
+        }
+        return true;
     }
 }

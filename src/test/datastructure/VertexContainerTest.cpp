@@ -11,11 +11,12 @@ class VertexContainerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+        VariablePool& pool = VariablePool::getInstance();
+        Variable x = pool.getFreshVariable();
+        Variable y = pool.getFreshVariable();
+        
         // p1
         Point<number_t>::vector_t coordinates1;
-		VariablePool& pool = VariablePool::getInstance();
-		Variable x = pool.getFreshVariable();
-		Variable y = pool.getFreshVariable();
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p1 = Point<number_t>(coordinates1);
@@ -29,7 +30,7 @@ protected:
         // p3
         Point<number_t>::vector_t coordinates3;
         coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(-9)) );
-		coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(13)) );
+        coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(13)) );
         p3 = Point<number_t>(coordinates3);
     }
 	

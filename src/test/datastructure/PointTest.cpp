@@ -30,25 +30,32 @@ protected:
         // p3
         Point<number_t>::vector_t coordinates3;
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
-		coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
+        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
         p3 = Point<number_t>(coordinates3);
+        
+        // p4
+        Point<number_t>::vector_t coordinates4;
+        coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
+        coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
+        p4 = Point<number_t>(coordinates4);
     }
 
     virtual void TearDown()
     {
     }
 	
-	VariablePool& pool = VariablePool::getInstance();
-	Variable x = pool.getFreshVariable("x");
-	Variable y = pool.getFreshVariable("y");
-	Variable a = pool.getFreshVariable("a");
-	Variable b = pool.getFreshVariable("b");
-	Variable c = pool.getFreshVariable("c");
-	Variable d = pool.getFreshVariable("d");
+    VariablePool& pool = VariablePool::getInstance();
+    Variable x = pool.getFreshVariable("x");
+    Variable y = pool.getFreshVariable("y");
+    Variable a = pool.getFreshVariable("a");
+    Variable b = pool.getFreshVariable("b");
+    Variable c = pool.getFreshVariable("c");
+    Variable d = pool.getFreshVariable("d");
 	
     Point<number_t> p1;
     Point<number_t> p2;
     Point<number_t> p3;
+    Point<number_t> p4;
 };
 
 /**
@@ -110,23 +117,26 @@ TEST_F(PointTest, BooleanTest)
 {
     EXPECT_TRUE(p1.isInBoundary(p2));
     EXPECT_TRUE(p2.isInBoundary(p1));
-	EXPECT_TRUE(p1.isInBoundary(p1));
+    EXPECT_TRUE(p1.isInBoundary(p1));
 	
     p1[x] = FLOAT_T<number_t>(3);
     p2[x] = FLOAT_T<number_t>(4);
-	p2[y] = FLOAT_T<number_t>(5);
+    p2[y] = FLOAT_T<number_t>(5);
 	
     EXPECT_TRUE(p1.haveEqualCoordinate(p1));
     EXPECT_FALSE(p1.haveEqualCoordinate(p3));
-	p2.removeDimension(a);
-	p2.removeDimension(b);
+    p2.removeDimension(a);
+    p2.removeDimension(b);
     EXPECT_LT(p1, p2);
 	
     p2[x] = FLOAT_T<number_t>(3);
-	p2.removeDimension(a);
+    p2.removeDimension(a);
 	
     EXPECT_EQ(p1, p2);
     EXPECT_NE(p1, p3);
+    
+    EXPECT_TRUE(p3.haveSameDimensions(p4));
+    EXPECT_FALSE(p2.haveSameDimensions(p4));
 }
 
 TEST_F(PointTest, Constructor)

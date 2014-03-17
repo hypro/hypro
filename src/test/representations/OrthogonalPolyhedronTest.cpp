@@ -99,8 +99,8 @@ TEST_F(OrthogonalPolyhedronTest, IsUniversal)
     p2.isUniversal();
 }
 
-TEST_F(OrthogonalPolyhedronTest, IsMember)
+/*TEST_F(OrthogonalPolyhedronTest, IsMember)
 {
     p1.isMember(pt1, true);
     p2.isMember(pt2, false);
-}
+}*/

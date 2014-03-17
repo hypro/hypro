@@ -449,6 +449,30 @@ namespace hypro {
                 }
                 return false;
             }
+            
+            /**
+             * Checks if the point has the same dimensions as this point.
+             * The number of dimensions has to be equal as well as the actual
+             * variables used for those dimensions.
+             * 
+             * @param p
+             * @return True, if all dimension variables are equal
+             */
+            bool haveSameDimensions(const Point<NumberType>& p) const
+            {
+                if (dimension() != p.dimension())
+                {
+                    return false;
+                }
+                for (auto pointIt : mCoordinates)
+                {
+                    if ( !p.hasDimension(pointIt.first))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
 
             /**
              * Comparison operator for the map.
