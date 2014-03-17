@@ -71,7 +71,35 @@ class VPolytope : hypro::GeometricObject<Number>
 	bool unite(VPolytope& result, const VPolytope& rhs) const;
 	
 	void clear();
+        
+        /***************************************************************************
+	 * Getters, Setters, Iterators
+	 **************************************************************************/
+        
+        std::pair<typename vertices::iterator, bool> insert(const Point<Number>& i)
+        {
+            return mVertices.insert(i);
+        }
+        
+        typename vertices::iterator begin()
+        {
+            return mVertices.begin();
+        }
 
+        typename vertices::const_iterator begin() const
+        {
+            return mVertices.begin();
+        }
+        
+        typename vertices::iterator end()
+        {
+            return mVertices.end();
+        }
+
+        typename vertices::const_iterator end() const
+        {
+            return mVertices.end();
+        }
 };
 
 }//namespace

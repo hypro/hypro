@@ -143,7 +143,7 @@ namespace hypro {
              *
              * @return iterator to begin of mCoordinates
              */
-            typename vector_t::const_iterator getCoordinatesIteratorBegin() const
+            typename vector_t::const_iterator begin() const
             {
                 return mCoordinates.begin();
             }
@@ -152,7 +152,7 @@ namespace hypro {
              *
              * @return iterator to end of mCoordinates
              */
-            typename vector_t::const_iterator getCoordinatesIteratorEnd() const
+            typename vector_t::const_iterator end() const
             {
                 return mCoordinates.end();
             }
@@ -183,7 +183,7 @@ namespace hypro {
             bool move(const Point<NumberType>& p) 
             {
                 bool negative = false;
-                for(auto pointIt = p.getCoordinatesIteratorBegin(); pointIt != p.getCoordinatesIteratorEnd(); ++pointIt)
+                for(auto pointIt = p.begin(); pointIt != p.end(); ++pointIt)
                 {
                     if(mCoordinates.count((*pointIt).first) > 0)
                     {
@@ -540,4 +540,17 @@ namespace hypro {
                 return ostr;
             }
     };
+    
+    template<typename NumberType>
+    const Point<NumberType> operator+( const Point<NumberType>& lhs, const Point<NumberType>& rhs )
+    {
+        assert(lhs.dimension() == rhs.dimension());
+        Point<NumberType> result;
+        for( auto lCoordinate : lhs)
+        {
+            assert(rhs.hasDimension(lCoordinate.first));
+            result.setCoordinate(lCoordinate.first, lCoordinate.second+rhs.coordinate(lCoordinate.first));
+        }
+        return result;
+    }
 }
