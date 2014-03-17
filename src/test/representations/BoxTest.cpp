@@ -86,7 +86,7 @@ TEST_F(BoxTest, LinearTransformation)
 TEST_F(BoxTest, MinkowskiSum)
 {
     Box<number_t> result;
-    box1.minkowski_sum(result, box2);
+    box1.minkowskiSum(result, box2);
     EXPECT_EQ(1 , result.interval(x).lower());
     EXPECT_EQ(12 , result.interval(x).upper());
     EXPECT_EQ(5 , result.interval(y).lower());

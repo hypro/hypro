@@ -96,7 +96,7 @@ bool Box<Number>::hull(Box<Number>& result) const
 template<typename Number>
 bool Box<Number>::contains(const Point<Number>& point) const
 {
-    if( this->get_dimension() > point.dimension() )
+    if( this->getDimension() > point.dimension() )
         return false;
     
     for(auto interval : mBoundaries)
