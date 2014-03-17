@@ -34,5 +34,6 @@ protected:
 TEST_F(OrthogonalPolyhedronTest, Constructor)
 {
     OrthogonalPolyhedron<number_t> op1 = OrthogonalPolyhedron<number_t>();
+    OrthogonalPolyhedron<number_t> op2 = OrthogonalPolyhedron<number_t>();
     SUCCEED();
 }

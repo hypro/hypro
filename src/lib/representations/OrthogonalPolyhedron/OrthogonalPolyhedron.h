@@ -69,6 +69,40 @@ namespace hypro
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, Point<Number> boundary);
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, vVec<Number> extremeVertexList);
         OrthogonalPolyhedron(vVec<Number> vertexList, unsigned dim, NeighbourhoodContainer<Number> neighbourhoods);
+
+    private:
+        void preInit();
+        void postInit();
+        
+        void insertVerticesInMap(VertexContainerIt<Number> begin, VertexContainerIt<Number> end, std::map<Point<Number>, bool>& map);
+        
+        //IsMembership helper-functions.
+        bool checkAPoint(const Point<Number>& pX);
+        vVec<Number> calculateBoundaryBox(const Point<Number>& boundary);
+        vVec<Number> calculateBoundaryBoxRec(unsigned dim, vVec<Number> & boundaryBox);
+        bool calculateOriginColour();
+
+        bool isMemberBox(const Point<Number>& pX);
+
+        bool membershipRecursiveVertex(const Point<Number>& pX);
+        bool membershipNeighbour(const Point<Number>& pX);
+        bool membershipExtremeVertex(const Point<Number>& pX);
+
+        VertexContainerIt<Number> getVerticesIteratorBegin(bool extreme = false);
+        VertexContainerIt<Number> getVerticesIteratorEnd(bool extreme = false);
+
+        void verticesOnBoundaryRec(const Point<Number>& pt, bool color, unsigned dim);
+        void verticesOnBoundary(const Point<Number>& boundary);
+        Point<Number> calculateInduced(const Point<Number>& x);
+        Vertex<Number> calculateInduced(const Point<Number>& x, bool c);
+
+        void ReserveInducedGrid();
+
+        void setRepresentation(PolyhedronOrtRepresentation repr);
+        void translateNeighbourToExtreme();
+        void translateVertexToExtreme();
+
+        vList<Number> getSmallerVertices(const Point<Number>& p, bool extreme = false);
     };
     
 }//namespace
