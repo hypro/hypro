@@ -20,12 +20,11 @@ namespace hypro
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron() {}
     
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim, Point<Number> boundary) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, Point<Number> boundary) :
         mRepresentation(VERTEX),
         mNrVertices(nrVertices),
         mGridInitialized(false),
         mBoxUpToDate(false),
-        mBox(Box<Number>(dim)),
         mBoundary(boundary),
         mVertices(VertexContainer<Number>(dim))
     {
@@ -39,7 +38,6 @@ namespace hypro
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim) :
         mRepresentation(VERTEX),
         mNrVertices(vertexList.size()),
-        //mBox(Box(dim)),
         mVertices(VertexContainer<Number>(dim))
     {
         preInit();
@@ -58,7 +56,6 @@ namespace hypro
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList) :
         mRepresentation(EXTREMEVERTEX),
         mNrVertices(vertexList.size()),
-        //mBox(Box(dim)),
         mVertices(VertexContainer<Number>(dim))
     {
         preInit();
@@ -111,7 +108,7 @@ namespace hypro
 
         mInduced = false;
         mGridInitialized = false;
-        //mBoxUpToDate = false;
+        mBoxUpToDate = false;
         //mLogger = Logger::getInstance("reachLin.PolyhedronOrt");
 
         //LOG4CPLUS_INFO(mLogger, "New polyhedron created");
@@ -233,7 +230,7 @@ namespace hypro
      */
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::calculateOriginColour() {
-        Point<Number> origin = Point<Number>();
+        Point<Number> origin = mBoundary.newEmpty();
 
         std::pair<bool, bool> v = mVertices.isVertex(origin);
 

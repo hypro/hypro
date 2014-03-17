@@ -103,7 +103,11 @@ namespace hypro {
 
             friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
             {
-                ostr << v << "[" << v.mColor << "]";
+                ostr << "(";		
+                for (auto pointIt : v.mCoordinates) {
+                    ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
+                }		
+                ostr << ") [" << v.mColor << "]";
                 return ostr;
             }
 

@@ -30,27 +30,39 @@ namespace hypro {
 		 **********************************************************************/
 	private:
 		std::set<Vertex<Number>> vertices;
-		unsigned mDimension;
 		
 	public:
 		/***********************************************************************
 		 * Constructors & Destructors
 		 **********************************************************************/
-		VertexContainer(unsigned dimension=DEFAULT_DIM);
-		VertexContainer(const VertexContainer& orig);
-		~VertexContainer()
-		{}
+                VertexContainer(){}
+		VertexContainer(const VertexContainer& orig) { vertices = orig.vertices; }
+		~VertexContainer(){}
 		
 		/***********************************************************************
 		 * Getters & Setters
 		 **********************************************************************/
 		
-		unsigned dimension() const
+                unsigned dimension() const
+                {
+                    assert( vertices.size() > 0 );
+                    return (*vertices.begin()).dimension();
+                }
+                
+		unsigned size() const
 		{
-			return mDimension;
+			return vertices.size();
 		}
 		
-		std::list<Vertex<Number>> getSmallerVertices(const Point<Number>& p);
+		std::list<Vertex<Number>> getSmallerVertices(const Point<Number>& p)
+                {
+                        std::list<Vertex<Number>> verticesInBoundary;
+                        for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ++vertexIt)
+                        {
+                                if((*vertexIt).isInBoundary(p)) verticesInBoundary.push_back(*vertexIt);
+                        }
+                        return verticesInBoundary;
+                }
 		
 		/**
 		 *
@@ -68,7 +80,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline bool originIsVertex() const {
-			return (*(vertices.begin()) == Point<Number>(mDimension));
+			return (*(vertices.begin()) == Point<Number>());
 		}
 		
 		/***********************************************************************
@@ -78,12 +90,11 @@ namespace hypro {
 		VertexContainer<Number>& operator=(const VertexContainer<Number>& rhs) {
 			if(this == &rhs) return (*this);
 			vertices.clear();
-			mDimension=rhs.mDimension;
 			vertices = rhs.vertices;
 		}
 		
-		inline vSetIt<Number> find(const Point<Number>& p) const {
-			return vertices.find(Vertex<Number>(p,false));
+		inline vSetIt<Number> find(const Point<Number>& p, bool colour = false) const {
+			return vertices.find(Vertex<Number>(p,colour));
 		}
 		
 		inline vSetIt<Number> find(const Vertex<Number>& v) const {
@@ -126,8 +137,10 @@ namespace hypro {
 		 * @return A bidirectional iterator to the inserted Vertex.
 		 * Not safe.
 		 */
-		inline vSetCIt<Number> insert(const Vertex<Number>& v) {
-			return vertices.insert(v).first;
+		inline std::pair<vSetCIt<Number>, bool> insert(const Vertex<Number>& v) {
+                    std::cout << "insert: ";
+                    std::cout << "contained(" << ( vertices.find(v) != vertices.end() ) << "), :";
+			return vertices.insert(v);
 		}
 		
 		/**
@@ -147,7 +160,6 @@ namespace hypro {
 		 * @return
 		 */
 		inline vSetIt<Number> insert(const Point<Number>& p,const bool c=false) {
-			
 			return insert(Vertex<Number>(p,c));
 		}
 		
@@ -204,14 +216,6 @@ namespace hypro {
 			vertices.clear();
 		}
 		
-		/**
-		 *
-		 * @return the size
-		 */
-		inline unsigned size() {
-			return vertices.size();
-		}
-		
 		inline bool set(const Point<Number>& p, bool c) {
 			typename std::set<Vertex<Number>>::iterator it = vertices.find(Vertex<Number>(p,false));
 			if (it==vertices.end()) return false;
@@ -232,8 +236,8 @@ namespace hypro {
 		
 		
 		friend std::ostream& operator<<(std::ostream& ostr, const VertexContainer<Number>& cont) {
-			for(vSetIt<Number> it = cont.vertices.begin(); it != cont.vertices.end(); ++it ) {
-				ostr << *it << std::endl;
+			for(auto it = cont.begin(); it != cont.end(); ++it ) {
+				ostr << (*it) << "\n";
 			}
 			return ostr;
 		}
@@ -241,4 +245,3 @@ namespace hypro {
 		
 	};
 }
-#include "VertexContainer.tpp"

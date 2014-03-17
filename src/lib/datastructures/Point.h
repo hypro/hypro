@@ -38,14 +38,14 @@ namespace hypro {
     /*
      *  Class to store points in a MAXIMAL_DIMENSION space.
      */
-    template<class NumberType>
+    template<class Number>
     class Point 
     {
         public:
-            //typedef std::vector<carl::FLOAT_T<NumberType> > vector_t;
-            typedef std::unordered_map<carl::Variable, carl::FLOAT_T<NumberType> > vector_t;
+            //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
+            typedef std::unordered_map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 	private:
-            typedef carl::FLOAT_T<NumberType> number;
+            typedef carl::FLOAT_T<Number> number;
 
         protected:
             vector_t mCoordinates;
@@ -84,7 +84,7 @@ namespace hypro {
              * Copy constructor
              * @param p
              */
-            Point(const Point<NumberType>& p) 
+            Point(const Point<Number>& p) 
             {
                 mCoordinates.insert(p.mCoordinates.begin(), p.mCoordinates.end());
             }
@@ -176,11 +176,27 @@ namespace hypro {
              */
             
             /**
+             * Creates a new empty point (origin) with the same dimensions
+             * as this point.
+             * 
+             * @return new empty point
+             */
+            Point<Number> newEmpty()
+            {
+                vector_t coordinates;
+                for (auto pointIt : mCoordinates)
+                {
+                    coordinates.insert(std::make_pair(pointIt.first, Number(0)));
+                }
+                return Point<Number>(coordinates);
+            }
+            
+            /**
              * Method to move the point
              * @param p Point with coordinates describing the move.
              * @return true, if the result has a negative coordinate.
              */
-            bool move(const Point<NumberType>& p) 
+            bool move(const Point<Number>& p) 
             {
                 bool negative = false;
                 for(auto pointIt = p.begin(); pointIt != p.end(); ++pointIt)
@@ -203,7 +219,7 @@ namespace hypro {
 	     * @param bounds The grid lies between the origin and this point.
 	     *
 	     */
-            void nextPointOnGrid(const Point<NumberType>& bounds) 
+            void nextPointOnGrid(const Point<Number>& bounds) 
             {
                 for(auto pointIt : mCoordinates)
                 {
@@ -219,11 +235,11 @@ namespace hypro {
                 }
             }
     	
-            number getGaussianProbability(Point<NumberType> & mean) const{
+            number getGaussianProbability(Point<Number> & mean) const{
                 return 0;
             }
 
-            number getDistanceDependentProbabiltity(Point<NumberType> & mean, unsigned intlength, number rate) const
+            number getDistanceDependentProbabiltity(Point<Number> & mean, unsigned intlength, number rate) const
             {
                 number dist;
                 for (auto pointIt : mCoordinates)
@@ -267,9 +283,9 @@ namespace hypro {
              * @brief: function to calculate points in the neighborhood, with one fixed dimension.
              * @return std::vector with all points in the neighborhood, with a fixed dimension, and except the point itself.
              */
-            std::vector<Point<NumberType> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
+            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
             {
-                std::vector<Point<NumberType> > neighbors;
+                std::vector<Point<Number> > neighbors;
                 unsigned dim = dimension();
 
                 // TODO comment
@@ -292,7 +308,7 @@ namespace hypro {
                             coordinates[(*pointIt).first] = (*pointIt).second - ((neighborNr >> (dim - (*pointIt).first - 1 - 1)) & 1);
                         }
                     }
-                    Point<NumberType> neighbor = Point<NumberType>(coordinates);
+                    Point<Number> neighbor = Point<Number>(coordinates);
                     neighbors.push_back(neighbor);
                 }
                 return neighbors;
@@ -304,18 +320,18 @@ namespace hypro {
              * @return Vector filled with neighbours with coordinate[fixedDim] equal to the points coordinate.
              *  point is not an element of the returned vector.
              */
-            std::vector<Point<NumberType> > getAllNeighbours(bool pointself=false) const
+            std::vector<Point<Number> > getAllNeighbours(bool pointself=false) const
             {
-                std::vector<Point<NumberType> > neighbors = getAllNeighborsForAFixedDimension(0);
+                std::vector<Point<Number> > neighbors = getAllNeighborsForAFixedDimension(0);
                 unsigned nrneighbors = neighbors.size();
                 //TODO comment!
                 for (unsigned i = 0; i < nrneighbors; i++) 
                 {
-                    Point<NumberType> neighborpredecessor = Point(neighbors[i]).getPredecessorInDimension(0);
+                    Point<Number> neighborpredecessor = Point(neighbors[i]).getPredecessorInDimension(0);
                     neighbors.push_back(neighborpredecessor);
                 }
 
-                Point<NumberType> pointPredecessor = getPredecessorInDimension(0);
+                Point<Number> pointPredecessor = getPredecessorInDimension(0);
                 neighbors.push_back(pointPredecessor);
 
                 if (pointself) 
@@ -332,9 +348,9 @@ namespace hypro {
              * @param p2 Other point
              * @return A point with the coordinate-wise maximum of p1 and p2.
              */
-            static Point<NumberType> coordinateMax(const Point<NumberType>& p1, const Point<NumberType>& p2)
+            static Point<Number> coordinateMax(const Point<Number>& p1, const Point<Number>& p2)
             {
-                Point<NumberType> p = Point<NumberType>(p1.dimension());
+                Point<Number> p = Point<Number>(p1.dimension());
                 for (auto pointIt : p1.mCoordinates) {
                     ( (*pointIt).second > p2[(*pointIt).first]) ? p[(*pointIt).first] = (*pointIt).second : p[(*pointIt).first] = p2[(*pointIt).first];
                 }
@@ -345,7 +361,7 @@ namespace hypro {
              * Change the coordinates of the point. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is increased.
              */
-            void IncrementInFixedDim(const carl::Variable& d)
+            void incrementInFixedDim(const carl::Variable& d)
             {
                 ++(mCoordinates.at(d));
             }
@@ -354,7 +370,7 @@ namespace hypro {
              * 
              * @param val The value to be added to each coordinate
              */
-            void IncrementInAllDim(const number& val = 1)
+            void incrementInAllDim(const number& val = 1)
             {
                 for (auto pointIt : mCoordinates)
                 {
@@ -366,7 +382,7 @@ namespace hypro {
              * Change the point's coordinates. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is decreased.
              */
-            void DecrementInFixedDim(const carl::Variable& d)
+            void decrementInFixedDim(const carl::Variable& d)
             {
                 --(mCoordinates.at(d));
             }
@@ -378,7 +394,7 @@ namespace hypro {
              */
             Point& getPredecessorInDimension(const carl::Variable& d) const
             {
-                Point<NumberType> pred = Point(*this);
+                Point<Number> pred = Point(*this);
                 pred.DecrementInFixedDim(d);
                 return pred;
             }
@@ -400,7 +416,7 @@ namespace hypro {
              * @param boundary Point with coordinates that may not be exceeded in positive direction.
              * @return true, if every coordinate is within boundary[i] and 0. 
              */
-            bool isInBoundary(const Point<NumberType>& boundary) const 
+            bool isInBoundary(const Point<Number>& boundary) const 
             {
                 for (auto pointIt : mCoordinates)
                 {
@@ -414,7 +430,7 @@ namespace hypro {
             }
 
 			/*
-            static Point moveRandomInBoundary(const Point<NumberType>& boundary)
+            static Point moveRandomInBoundary(const Point<Number>& boundary)
             {
                 Point q = Point(boundary.dimension());
                 do 
@@ -435,7 +451,7 @@ namespace hypro {
                 return (mCoordinates.find(i) != mCoordinates.end());
             }
 
-            bool haveEqualCoordinate(const Point<NumberType>& p2) const 
+            bool haveEqualCoordinate(const Point<Number>& p2) const 
             {
                 if( dimension() == p2.dimension() )
                 {
@@ -458,7 +474,7 @@ namespace hypro {
              * @param p
              * @return True, if all dimension variables are equal
              */
-            bool haveSameDimensions(const Point<NumberType>& p) const
+            bool haveSameDimensions(const Point<Number>& p) const
             {
                 if (dimension() != p.dimension())
                 {
@@ -484,7 +500,7 @@ namespace hypro {
              * @param p2
              * @return
              */
-            friend bool operator<(const Point<NumberType>& p1, const Point<NumberType>& p2)
+            friend bool operator<(const Point<Number>& p1, const Point<Number>& p2)
             {
                 for (auto pointIt : p1.mCoordinates)
                 {
@@ -507,7 +523,7 @@ namespace hypro {
              * @param p2
              * @return
              */
-            friend bool operator>(const Point<NumberType> & p1, const Point<NumberType> & p2)
+            friend bool operator>(const Point<Number> & p1, const Point<Number> & p2)
             {
                 return p2 < p1;
             }
@@ -518,7 +534,7 @@ namespace hypro {
              * @param p2
              * @return true, if they are equal.
              */
-            friend bool operator==(const Point<NumberType> & p1, const Point<NumberType> & p2)
+            friend bool operator==(const Point<Number> & p1, const Point<Number> & p2)
             {
                 if(p1.dimension() != p2.dimension()) return false;
                 for (auto pointIt : p1.mCoordinates)
@@ -528,7 +544,7 @@ namespace hypro {
                 return true;
             }
 
-            friend bool operator!=(const Point<NumberType> & p1, const Point<NumberType> & p2)
+            friend bool operator!=(const Point<Number> & p1, const Point<Number> & p2)
             {
                 return !(p1 == p2);
             }
@@ -554,7 +570,7 @@ namespace hypro {
              * @param p
              * @return
              */
-            friend std::ostream & operator<< (std::ostream& ostr, const Point<NumberType>& p)
+            friend std::ostream & operator<< (std::ostream& ostr, const Point<Number>& p)
             {
                 ostr << "(";		
                 for (auto pointIt : p.mCoordinates) {
@@ -565,11 +581,11 @@ namespace hypro {
             }
     };
     
-    template<typename NumberType>
-    const Point<NumberType> operator+( const Point<NumberType>& lhs, const Point<NumberType>& rhs )
+    template<typename Number>
+    const Point<Number> operator+( const Point<Number>& lhs, const Point<Number>& rhs )
     {
         assert(lhs.dimension() == rhs.dimension());
-        Point<NumberType> result;
+        Point<Number> result;
         for( auto lCoordinate : lhs)
         {
             assert(rhs.hasDimension(lCoordinate.first));

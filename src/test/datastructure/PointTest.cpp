@@ -74,12 +74,12 @@ TEST_F(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(p1.coordinate(y), FLOAT_T<number_t>(5));
     EXPECT_EQ(p1.dimension(), (unsigned) 2);
     
-    p1.IncrementInFixedDim(y);
+    p1.incrementInFixedDim(y);
     EXPECT_EQ(p1[y], FLOAT_T<number_t>(6));
-    p1.IncrementInAllDim(FLOAT_T<number_t>(3));
+    p1.incrementInAllDim(FLOAT_T<number_t>(3));
     EXPECT_EQ(p1[x], FLOAT_T<number_t>(5));
     EXPECT_EQ(p1[y], FLOAT_T<number_t>(9));
-    p1.DecrementInFixedDim(y);
+    p1.decrementInFixedDim(y);
     EXPECT_EQ(p1[y], FLOAT_T<number_t>(8));
     
     p1[x] = FLOAT_T<number_t>(3);
@@ -106,6 +106,15 @@ TEST_F(PointTest, OperationTest)
     EXPECT_EQ(p2[b], FLOAT_T<number_t>(8));
 	EXPECT_EQ(p2[c], FLOAT_T<number_t>(-9));
     EXPECT_EQ(p2[d], FLOAT_T<number_t>(13));
+}
+
+/**
+ * @covers <>
+ */
+TEST_F(PointTest, BinaryOperatorTest)
+{
+    EXPECT_TRUE(p3 < p4);
+    EXPECT_FALSE(p4 > p4);
 }
 
 /**
@@ -159,6 +168,11 @@ TEST_F(PointTest, Constructor)
     
     Point<number_t> pCopy = Point<number_t>(p);
     EXPECT_EQ(p, pCopy);
+    
+    Point<number_t> empty = p1.newEmpty();
+    EXPECT_EQ(p1.dimension(), empty.dimension());
+    EXPECT_TRUE(p1.haveSameDimensions(empty));
+    EXPECT_EQ(0, empty[x]);
     
     //ASSERT_NE(Point<number_t>(3), Point<number_t>(7));
 }

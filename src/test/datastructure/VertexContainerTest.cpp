@@ -2,6 +2,7 @@
 #include "../defines.h"
 #include "../../lib/datastructures/VertexContainer.h"
 #include <carl/core/VariablePool.h>
+#include <cstdio>
 
 using namespace hypro;
 using namespace carl;
@@ -46,26 +47,35 @@ protected:
 TEST_F(VertexContainerTest, Constructor)
 {
 	VertexContainer<number_t> test1;
-	VertexContainer<number_t> test2 = VertexContainer<number_t>(4);
-	EXPECT_EQ(4, test2.dimension());
 	SUCCEED();
 }
 
 TEST_F(VertexContainerTest, Insertion)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>(4);
-	test1.insert(Vertex<number_t>(p1, true));
-	test1.insert(Vertex<number_t>(p2, true));
-	test1.insert(Vertex<number_t>(p3, false));
-	EXPECT_EQ(test1.size(), 3);
-	EXPECT_EQ(test1.find(p1) != test1.end(), true);
-	EXPECT_EQ(test1.find(p2) != test1.end(), true);
-	EXPECT_EQ(test1.find(p3) != test1.end(), false);
+	VertexContainer<number_t> test1 = VertexContainer<number_t>();
+	std::cout << (test1.insert(Vertex<number_t>(p1, true))).second << std::endl;
+        std::cout << test1.size() << std::endl; 
+        std::cout << (test1.insert(Vertex<number_t>(p2, true))).second << std::endl;
+        std::cout << test1.size() << std::endl; 
+	std::cout << (test1.insert(Vertex<number_t>(p3, false))).second << std::endl;
+        std::cout << test1.size() << std::endl; 
+        std::cout << test1 << std::endl;
+        
+        std::cout << "ITEM: " << *test1.find(p3) << std::endl;
+        
+        std::cout << "Manual comparison: p1 < p3: " << ( Vertex<number_t>(p1, true) < Vertex<number_t>(p3, false) ) << ", p1 > p3: " << ( Vertex<number_t>(p3, false) < Vertex<number_t>(p1, true) ) << std::endl;
+        std::cout << "Manual comparison: p1 == p3: " << ( Vertex<number_t>(p1, true) == Vertex<number_t>(p3, false) ) << std::endl;
+        
+	EXPECT_EQ(3, test1.size());
+        EXPECT_EQ(2, test1.dimension());
+	EXPECT_TRUE(test1.find(p1) != test1.end());
+	EXPECT_TRUE(test1.find(p2) != test1.end());
+	EXPECT_FALSE(test1.find(p3) != test1.end());
 }
 
 TEST_F(VertexContainerTest, Deletion)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>(4);
+	VertexContainer<number_t> test1 = VertexContainer<number_t>();
 	test1.insert(Vertex<number_t>(p1, true));
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
@@ -77,7 +87,7 @@ TEST_F(VertexContainerTest, Deletion)
 
 TEST_F(VertexContainerTest, Destructor)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>(4);
+	VertexContainer<number_t> test1 = VertexContainer<number_t>();
 	test1.insert(Vertex<number_t>(p1, true));
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
@@ -86,7 +96,7 @@ TEST_F(VertexContainerTest, Destructor)
 
 TEST_F(VertexContainerTest, Assignment)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>(4);
+	VertexContainer<number_t> test1 = VertexContainer<number_t>();
 	test1.insert(Vertex<number_t>(p1, true));
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
