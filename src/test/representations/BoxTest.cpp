@@ -51,6 +51,13 @@ TEST_F(BoxTest, Access)
     EXPECT_EQ(1, tmp[y].lower());
     EXPECT_EQ(3, tmp[y].upper());
     
+    EXPECT_EQ(2, box1.dimension());
+    EXPECT_EQ(2, box2.dimension());
+    EXPECT_EQ(0, box3.dimension());
+    
+    EXPECT_TRUE(box1.haveSameDimensions(box2));
+    EXPECT_FALSE(box1.haveSameDimensions(box3));
+    
     Point<number_t>::vector_t coMax1;
     coMax1.insert(std::make_pair(x, 6));
     coMax1.insert(std::make_pair(y, 3));
@@ -67,14 +74,14 @@ TEST_F(BoxTest, Insertion)
     Variable z = pool.getFreshVariable("z");
     tmp.insert(std::make_pair(z, Interval<number_t>(3,9)));
     box1.insert(tmp);
-    EXPECT_EQ(true, box1.hasVariable(z));
+    EXPECT_EQ(true, box1.hasDimension(z));
     
     EXPECT_EQ(3, box1.interval(z).lower());
     EXPECT_EQ(9, box1.interval(z).upper());
     
     Variable w = pool.getFreshVariable("w");
     box1.insert(std::make_pair(w, Interval<number_t>(4,5)));
-    EXPECT_EQ(true, box1.hasVariable(w));
+    EXPECT_EQ(true, box1.hasDimension(w));
     
     EXPECT_EQ(4, box1.interval(w).lower());
     EXPECT_EQ(5, box1.interval(w).upper());

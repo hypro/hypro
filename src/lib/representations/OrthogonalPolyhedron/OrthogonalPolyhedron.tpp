@@ -20,13 +20,13 @@ namespace hypro
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron() {}
     
     template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number> boundary*/) :
+    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim, Point<Number> boundary) :
         mRepresentation(VERTEX),
         mNrVertices(nrVertices),
         mGridInitialized(false),
-        //mBoxUpToDate(false),
-        //mBox(Box<Number>(dim)),
-        //mBoundary(boundary),
+        mBoxUpToDate(false),
+        mBox(Box<Number>(dim)),
+        mBoundary(boundary),
         mVertices(VertexContainer<Number>(dim))
     {
         preInit();

@@ -44,14 +44,14 @@ namespace hypro
 
         NeighbourhoodContainer<Number> mNeighbourhood;
 
-        //bool mBoxUpToDate;
-        //Box<Number> mBox;
+        bool mBoxUpToDate;
+        Box<Number> mBox;
 
         bool mGridInitialized;
         std::map<Point<Number>, bool> mGrid;
 
         std::vector<Point<Number> > mBoundaryBox;
-        //Point<Number> mBoundary;
+        Point<Number> mBoundary;
         bool boundaryIsVertex;
 
         PolyhedronOrtRepresentation mRepresentation;

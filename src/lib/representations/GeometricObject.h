@@ -19,7 +19,8 @@ namespace hypro
                  * 
                  * @return  the dimension
                  */
-        unsigned int getDimension();		
+        unsigned int dimension();		
+        
 		/**
 		 * Applies a linear transformation on the given stateset.
 		 * @param result The resulting stateset.

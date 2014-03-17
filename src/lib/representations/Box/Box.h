@@ -102,10 +102,34 @@ public:
             mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
 	
-	bool hasVariable(const carl::Variable& var) const
+	bool hasDimension(const carl::Variable& var) const
 	{
             return mBoundaries.find(var) != mBoundaries.end();
 	}
+            
+        /**
+         * Checks if the box has the same dimensions as this box.
+         * The number of dimensions has to be equal as well as the actual
+         * variables used for those dimensions.
+         * 
+         * @param p
+         * @return True, if all dimension variables are equal
+         */
+        bool haveSameDimensions(const Box<Number>& b) const
+        {
+            if (dimension() != b.dimension())
+            {
+                return false;
+            }
+            for (auto pointIt : mBoundaries)
+            {
+                if ( !b.hasDimension(pointIt.first))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 	
 	carl::Interval<Number>& rInterval(const carl::Variable& var);
 	carl::Interval<Number> interval(const carl::Variable& var) const;
@@ -148,7 +172,7 @@ public:
 	 * General interface
 	 **************************************************************************/
 	
-	unsigned int getDimension() const
+	unsigned int dimension() const
 	{
             return mBoundaries.size();
 	}

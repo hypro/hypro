@@ -54,7 +54,7 @@ bool Box<Number>::minkowskiSum(Box<Number>& result, const Box<Number>& rhs) cons
     result.clear();
     for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-        if (!rhs.hasVariable((*intervalIt).first))
+        if (!rhs.hasDimension((*intervalIt).first))
         {
             result.clear();
             return false;
@@ -70,7 +70,7 @@ bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
     result.clear();
     for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-        if (!rhs.hasVariable((*intervalIt).first))
+        if (!rhs.hasDimension((*intervalIt).first))
         {
             result.clear();
             return false;
@@ -96,7 +96,7 @@ bool Box<Number>::hull(Box<Number>& result) const
 template<typename Number>
 bool Box<Number>::contains(const Point<Number>& point) const
 {
-    if( this->getDimension() > point.dimension() )
+    if( this->dimension() > point.dimension() )
         return false;
     
     for(auto interval : mBoundaries)
@@ -112,7 +112,7 @@ bool Box<Number>::unite(Box<Number>& result, const Box<Number>& rhs) const
 {
     for(auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
     {
-        if(!rhs.hasVariable((*intervalIt).first))
+        if(!rhs.hasDimension((*intervalIt).first))
         {
             result.clear();
             return false;
