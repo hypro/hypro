@@ -7,15 +7,17 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     ################################
 
     add_executable(runRepresentationTests
-					BoxTest.cpp
-                                        VPolytopeTest.cpp
+        BoxTest.cpp
+        VPolytopeTest.cpp
+        OrthogonalPolyhedronTest.cpp
+        NeighbourhoodContainerTest.cpp
     )
 
     add_dependencies(runRepresentationTests googletest)
 
     target_link_libraries(runRepresentationTests
-                            ${libraries}
-							${PROJECT_NAME}
-	)
+        ${libraries}
+        ${PROJECT_NAME}
+    )
     add_test( NAME representations COMMAND runRepresentationTests )
 endif()
