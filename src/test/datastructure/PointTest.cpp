@@ -29,8 +29,8 @@ protected:
 
         // p3
         Point<number_t>::vector_t coordinates3;
-        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
-        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
+        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
+        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
         p3 = Point<number_t>(coordinates3);
         
         // p4
@@ -175,4 +175,25 @@ TEST_F(PointTest, Constructor)
     EXPECT_EQ(0, empty[x]);
     
     //ASSERT_NE(Point<number_t>(3), Point<number_t>(7));
+}
+
+TEST_F(PointTest, PolarCoordinates)
+{
+    std::vector<carl::FLOAT_T<number_t> > pc = p1.polarCoordinates(p1.origin(), false);
+    FLOAT_T<number_t> expectedRes;
+    expectedRes = 29;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p2.polarCoordinates(p2.origin(), false);
+    expectedRes = 113;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p3.polarCoordinates(p3.origin(), false);
+    expectedRes = 250;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p4.polarCoordinates(p3, false);
 }

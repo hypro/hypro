@@ -121,6 +121,9 @@
         <in>example_test.cpp</in>
       </df>
       <df name="src">
+        <df name="intervals_tmp">
+          <in>Interval.cpp</in>
+        </df>
         <df name="lib">
           <df name="numbers">
             <df name="float">
@@ -139,18 +142,18 @@
               <in>VPolytope.h</in>
               <in>VPolytope.tpp</in>
             </df>
-            <in>Polyhedron.h</in>
           </df>
         </df>
         <df name="test">
           <df name="representations">
-            <in>NeighbourhoodContainerTest.cpp</in>
-            <in>OrthogonalPolyhedronTest.cpp</in>
             <in>VPolytopeTest.cpp</in>
           </df>
           <in>IntTest.cpp</in>
           <in>PointTest.cpp</in>
           <in>VertexTest.cpp</in>
+          <in>double_float_test.cpp</in>
+          <in>main.cpp</in>
+          <in>mpfr_float_test.cpp</in>
         </df>
         <df name="tmlib_tmp">
           <in>TaylorModel.cpp</in>
@@ -714,6 +717,10 @@
         <ccTool>
         </ccTool>
       </item>
+      <item path="src/intervals_tmp/Interval.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool>
+        </ccTool>
+      </item>
       <item path="src/lib/numbers/float/double_wrapper_t.cpp"
             ex="false"
             tool="1"
@@ -740,11 +747,6 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="src/lib/representations/Polyhedron.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="src/lib/representations/VPolytope/VPolytope.h"
             ex="false"
             tool="3"
@@ -767,15 +769,35 @@
         <ccTool>
         </ccTool>
       </item>
-      <item path="src/test/representations/NeighbourhoodContainerTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="src/test/double_float_test.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+          <incDir>
+            <pElem>build/ThirdParty/src/googletest/include</pElem>
+            <pElem>src/lib</pElem>
+            <pElem>build/src/test</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>__PIC__=2</Elem>
+            <Elem>__pic__=2</Elem>
+          </preprocessorList>
+        </ccTool>
       </item>
-      <item path="src/test/representations/OrthogonalPolyhedronTest.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="src/test/main.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="src/test/mpfr_float_test.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool>
+          <incDir>
+            <pElem>build/ThirdParty/src/googletest/include</pElem>
+            <pElem>src/lib</pElem>
+            <pElem>build/src/test</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>__PIC__=2</Elem>
+            <Elem>__pic__=2</Elem>
+          </preprocessorList>
+        </ccTool>
       </item>
       <item path="src/test/representations/VPolytopeTest.cpp"
             ex="false"

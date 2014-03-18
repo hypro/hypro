@@ -19,4 +19,7 @@
 #define reachLin_PRIMITIVES_LOCATION "../polyhedra/"
 #define reachLin_NR_PRIMITIVES 100
 
+#define PI_UP 3.141592655
+#define PI_DN 3.141592654
+
 #endif

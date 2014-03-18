@@ -15,7 +15,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <cmath>
 #include <assert.h>
 #include <carl/numbers/FLOAT_T.h>
@@ -98,6 +98,16 @@ namespace hypro {
              * Getter & Setter
              */
             
+            Point<NumberType> origin() const
+            {
+                Point<NumberType> result;
+                for(auto dimension : mCoordinates)
+                {
+                    result.setCoordinate(dimension.first, 0);
+                }
+                return result;
+            }
+            
             /**
              * Returns the value of mCoordinates[dim].
              * @param  dim the dimension we want to get the value from.
@@ -170,6 +180,74 @@ namespace hypro {
             {
                 mCoordinates.erase(i);
             }
+            
+            std::vector<number> polarCoordinates( const Point<NumberType>& origin,  bool radians = true ) const
+            {
+                Point<NumberType> base = *this - origin;
+                std::cout << "Point: " << base << std::endl;
+                
+                
+                std::vector<number> result;
+                
+                // 1st component of the result is the radial part, the following components are the angles.
+                number radialCoordinate;
+                for(auto dimension : base.mCoordinates)
+                {
+                    number square;
+                    dimension.second.pow(square, 2);
+                    radialCoordinate += square;
+                }
+                radialCoordinate.sqrt_assign();
+                result.insert(result.begin(), radialCoordinate);
+                
+                std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
+                
+                // compute polar angles
+                number angle;
+                for(auto dimension = base.mCoordinates.begin(); dimension != --base.mCoordinates.end(); ++dimension)
+                {
+                    std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
+                    angle = 0;
+                    for(auto dimension2 = dimension; dimension2 != base.mCoordinates.end(); ++dimension2)
+                    {
+                        number square;
+                        angle += (*dimension2).second.pow(square, 2);
+                    }
+                    std::cout << "Summed squares: " << angle << std::endl;
+                    angle.sqrt_assign();
+                    angle = (*dimension).second / angle;
+                    std::cout << "After division: " << angle << std::endl;
+                    angle.acos_assign();
+                    std::cout << "After acos: " << angle << std::endl;
+                    if(!radians)
+                    {
+                        angle /= 2*PI_DN ;
+                        angle *= 360;
+                    }
+                    result.insert(result.end(), angle);
+                    std::cout << "Angle: " << angle << std::endl;
+                }
+                if((*base.mCoordinates.rbegin()).second < 0)
+                {
+                    std::cout << "Correct last angle: ";
+                    number tmp = result.back();
+                    result.pop_back();
+                    if(!radians)
+                    {
+                        tmp = 360 - tmp;
+                    }
+                    else
+                    {
+                        tmp = -1* tmp;
+                    }
+                    std::cout << tmp << std::endl;
+                    result.push_back(tmp);
+                }
+                
+                assert(result.size() == this->dimension());
+                return result;
+            }
+            
 
             /**
              * Functions
@@ -590,6 +668,19 @@ namespace hypro {
         {
             assert(rhs.hasDimension(lCoordinate.first));
             result.setCoordinate(lCoordinate.first, lCoordinate.second+rhs.coordinate(lCoordinate.first));
+        }
+        return result;
+    }
+    
+    template<typename NumberType>
+    const Point<NumberType> operator-( const Point<NumberType>& lhs, const Point<NumberType>& rhs )
+    {
+        assert(lhs.dimension() == rhs.dimension());
+        Point<NumberType> result;
+        for( auto lCoordinate : lhs)
+        {
+            assert(rhs.hasDimension(lCoordinate.first));
+            result.setCoordinate(lCoordinate.first, lCoordinate.second-rhs.coordinate(lCoordinate.first));
         }
         return result;
     }
