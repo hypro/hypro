@@ -12,7 +12,8 @@
 //#include "numbers/HYPRO_FLOAT_T.h"
 //#include "numbers/HYPRO_INT_T.h"
 //#include "../lib/numbers/FLOAT_T.h"
+#include "../lib/config.h"
 #include "carl/numbers/FLOAT_T.h"
 
-typedef double number_t;
+
 //typedef hypro::HYPRO_INT_T<hypro::int_wrapper_t> hypro_int_t;

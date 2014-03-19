@@ -26,7 +26,7 @@
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-typedef mpfr_t number;
+typedef double number_t;
 typedef carl::FLOAT_T<number_t> number;
 typedef carl::MultivariatePolynomial<number> Polynomial;
 

@@ -43,7 +43,7 @@ namespace hypro {
     {
         public:
             //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
-            typedef std::unordered_map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
+            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 	private:
             typedef carl::FLOAT_T<Number> number;
 
@@ -98,9 +98,9 @@ namespace hypro {
              * Getter & Setter
              */
             
-            Point<NumberType> origin() const
+            Point<Number> origin() const
             {
-                Point<NumberType> result;
+                Point<Number> result;
                 for(auto dimension : mCoordinates)
                 {
                     result.setCoordinate(dimension.first, 0);
@@ -181,9 +181,9 @@ namespace hypro {
                 mCoordinates.erase(i);
             }
             
-            std::vector<number> polarCoordinates( const Point<NumberType>& origin,  bool radians = true ) const
+            std::vector<number> polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
             {
-                Point<NumberType> base = *this - origin;
+                Point<Number> base = *this - origin;
                 std::cout << "Point: " << base << std::endl;
                 
                 
@@ -672,11 +672,11 @@ namespace hypro {
         return result;
     }
     
-    template<typename NumberType>
-    const Point<NumberType> operator-( const Point<NumberType>& lhs, const Point<NumberType>& rhs )
+    template<typename Number>
+    const Point<Number> operator-( const Point<Number>& lhs, const Point<Number>& rhs )
     {
         assert(lhs.dimension() == rhs.dimension());
-        Point<NumberType> result;
+        Point<Number> result;
         for( auto lCoordinate : lhs)
         {
             assert(rhs.hasDimension(lCoordinate.first));

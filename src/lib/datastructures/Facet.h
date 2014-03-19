@@ -12,15 +12,15 @@
 
 namespace hypro
 {
-    template<class NumberType>
+    template<class Number>
     class Facet
     {
         public:
         /**
          * Typedefs
          */
-            typedef std::set<Point<NumberType>> vertices;
-            typedef std::set<Point<NumberType>> neighbors;
+            typedef std::set<Point<Number>> vertices;
+            typedef std::set<Point<Number>> neighbors;
         
         /**
          * Members
@@ -40,7 +40,7 @@ namespace hypro
                     mHyperplane()
             {}
                 
-            Facet( const Facet<NumberType>& f) :
+            Facet( const Facet<Number>& f) :
                     mVertices(f.vertices()),
                     mNeighbors(f.neighbors()),
                     mHyperplane(f.hyperplane())
