@@ -3,10 +3,11 @@ set(lib_hypro_datastructure_sources
 )
 
 set(lib_hypro_datastructure_headers
+        Facet.h
         Point.h
         Vertex.h
-		VertexContainer.h
-		PARENT_SCOPE
+        VertexContainer.h
+        PARENT_SCOPE
 )
 
 #add_library(datastructures OBJECT ${lib_hypro_datastructure_sources})
