@@ -71,12 +71,9 @@ namespace hypro {
             coordinateValues& rCoordinates();
             unsigned factory() const;
             
-            /*
-            Point<Number> origin() const
-            {
-                return mFactory->origin();
-            }
-            */
+            
+            Point<Number> origin() const;
+            
             /**
              * Returns the value of mCoordinates[dim].
              * @param  dim the dimension we want to get the value from.
@@ -91,6 +88,8 @@ namespace hypro {
              * @param value  the new value
              */
             inline void setCoordinate(unsigned _index, carl::FLOAT_T<Number> value);
+            inline void setCoordinate(carl::Variable var, carl::FLOAT_T<Number> value);
+
             
             /**
              * 
@@ -333,8 +332,9 @@ namespace hypro {
              * @param i
              * @return
              */
+            
             carl::FLOAT_T<Number>& operator[] (const carl::Variable& i);
-
+            
             carl::FLOAT_T<Number> at(const carl::Variable& i) const;
 		
             /**

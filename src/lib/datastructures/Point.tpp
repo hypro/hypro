@@ -1,5 +1,6 @@
 #include "Point.h"
 #include "PointFactoryManager.h"
+#include "PointFactory.h"
 
 namespace hypro
 {
@@ -19,6 +20,12 @@ namespace hypro
     typename Point<Number>::coordinateValues& Point<Number>::rCoordinates()
     {
         return mCoordinates;
+    }
+    
+    template<typename Number>
+    Point<Number> Point<Number>::origin() const
+    {
+        return PointFactoryManager::instance().factory(mFactoryId)->origin();
     }
 
     template<typename Number>
@@ -43,6 +50,12 @@ namespace hypro
     inline void Point<Number>::setCoordinate(unsigned _index, carl::FLOAT_T<Number> value)
     {
         mCoordinates[_index] = value;
+    }
+    
+    template<typename Number>
+    inline void Point<Number>::setCoordinate(carl::Variable var, carl::FLOAT_T<Number> value)
+    {
+        mCoordinates[PointFactoryManager::instance().factory(mFactoryId)->variableIndex(var)] = value;
     }
 
     template<typename Number>
@@ -254,7 +267,7 @@ namespace hypro
     template<typename Number>
     void Point<Number>::incrementInFixedDim(const carl::Variable& d)
     {
-        ++(mCoordinates.at(d));
+        ++(mCoordinates.at(PointFactoryManager::instance().factory(mFactoryId)->variableIndex(d)));
     }
 
     template<typename Number>
@@ -262,7 +275,7 @@ namespace hypro
     {
         for (auto pointIt : mCoordinates)
         {
-            mCoordinates[(pointIt).first] += val;
+            mCoordinates[pointIt] += val;
         }
     }
 
@@ -336,12 +349,12 @@ namespace hypro
     template<typename Number>
     carl::FLOAT_T<Number>& Point<Number>::operator[] (const carl::Variable& i)
     {
-        return mCoordinates[i];
+        return mCoordinates[PointFactoryManager::instance().factory(mFactoryId)->variableIndex(i)];
     }
-
+    
     template<typename Number>
     carl::FLOAT_T<Number> Point<Number>::at(const carl::Variable& i) const
     {
-        return mCoordinates.at(i);
+        return mCoordinates.at(PointFactoryManager::instance().factory(mFactoryId)->variableIndex(i));
     }
 }
