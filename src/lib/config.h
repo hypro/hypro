@@ -1,13 +1,10 @@
-
-
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#pragma once
 
 #include <mpfr.h>
 #include <set>
 #include <map>
-#include "carl/numbers/FLOAT_T.h"
-#include "carl/core/MultivariatePolynomial.h"
+#include <carl/numbers/FLOAT_T.h>
+#include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>
 
 
@@ -36,4 +33,3 @@ typedef carl::MultivariatePolynomial<number> Polynomial;
 typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
 
-#endif

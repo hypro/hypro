@@ -11,11 +11,13 @@
 
 #pragma once
 
-#include "PointFactory.h"
 #include "../config.h"
 
 namespace hypro
 {
+    template<typename Number>
+    class PointFactory;
+    
     class PointFactoryManager
     {
         private:

@@ -1,5 +1,6 @@
 
 #include "PointFactoryManager.h"
+#include "PointFactory.h"
 
 namespace hypro
 {
