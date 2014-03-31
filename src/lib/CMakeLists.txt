@@ -14,7 +14,7 @@ set(lib_hypro_headers
 
 set(lib_hypro_sources
 	${lib_hypro_datastructure_sources}
-	representations/${lib_hypro_representation_sources}
+	${lib_hypro_representation_sources}
 )
 
 if(${STATICLIB_SWITCH} STREQUAL "ON")
@@ -25,9 +25,8 @@ endif()
 
 add_library(${PROJECT_NAME} ${STATICLIB} 
 	${lib_hypro_sources}
-	#$<TARGET_OBJECTS:datastructures>
-	$<TARGET_OBJECTS:representations>
 )
+
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME} ${libraries})
 

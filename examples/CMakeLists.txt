@@ -14,6 +14,7 @@ set( EXAMPLES
     example_multiplication
     example_division
     example_power
+    example_ppl_nncPolyhedra
     example_squareroot
     example_cubicroot
     example_test

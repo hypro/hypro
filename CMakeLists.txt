@@ -44,7 +44,7 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 
 # general compiler and linker settings
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -std=c++11 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -stdlib=libc++ -std=c++11 -fPIC")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
@@ -96,6 +96,10 @@ set(libraries ${libraries} ${MPFR_LIBRARY})
 find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIRS})
 set(libraries ${libraries} ${GMP_LIBRARY})
+
+find_package(PPL REQUIRED)
+include_directories(${PPL_INCLUDES})
+set(libraries ${libraries} ${PPL_LIBRARIES})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
 find_package(Log4cplus)

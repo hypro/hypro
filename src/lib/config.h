@@ -4,8 +4,12 @@
 #define CONFIG_H_
 
 #include <mpfr.h>
+#include <set>
+#include <map>
 #include "carl/numbers/FLOAT_T.h"
 #include "carl/core/MultivariatePolynomial.h"
+#include <carl/core/Variable.h>
+
 
 #define reachLin_VERSION_MAJOR 0
 #define reachLin_VERSION_MINOR 1
@@ -29,5 +33,7 @@
 typedef double number_t;
 typedef carl::FLOAT_T<number_t> number;
 typedef carl::MultivariatePolynomial<number> Polynomial;
+typedef std::map<carl::Variable, unsigned> varIdMap;
+typedef std::set<carl::Variable> variableSet;
 
 #endif

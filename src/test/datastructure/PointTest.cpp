@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/Point.h"
+#include "../../lib/datastructures/PointFactoryManager.h"
+#include "../../lib/config.h"
 #include <carl/core/VariablePool.h>
 #include "carl/numbers/FLOAT_T.h"
 
@@ -12,38 +13,48 @@ class PointTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+        Point<number_t>::coordinateMap coordinates1;
+        coordinates1.emplace( std::make_pair(x, FLOAT_T<number_t>(2)) );
+        coordinates1.emplace( std::make_pair(y, FLOAT_T<number_t>(5)) );
+        
+        pf1 = PointFactoryManager::instance().factory(coordinates1);
+        
+        Point<number_t>::coordinateMap coordinates2;
+        coordinates2.emplace( std::make_pair(a, FLOAT_T<number_t>(7)) );
+        coordinates2.emplace( std::make_pair(b, FLOAT_T<number_t>(8)) );
+        
+        pf2 = PointFactoryManager::instance().factory(coordinates2);
+        
+        Point<number_t>::coordinateMap coordinates3;
+        coordinates3.emplace( std::make_pair(c, FLOAT_T<number_t>(9)) );
+        coordinates3.emplace( std::make_pair(d, FLOAT_T<number_t>(-13)) );
+        
         // p1
-        Point<number_t>::vector_t coordinates1;
-		//VariablePool& pool = VariablePool::getInstance();
-		//Variable x = pool.getFreshVariable("x");
-		//Variable y = pool.getFreshVariable("y");
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p1 = Point<number_t>(coordinates1);
+        p1 = pf1->point(coordinates1);
 
         // p2
-        Point<number_t>::vector_t coordinates2;
-        coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
-        coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
-        p2 = Point<number_t>(coordinates2);
+        p2 = pf2->point(coordinates2);
 
         // p3
-        Point<number_t>::vector_t coordinates3;
-        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
-        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
-        p3 = Point<number_t>(coordinates3);
+        p3 = pf3->point(coordinates3);
         
+        /*
         // p4
         Point<number_t>::vector_t coordinates4;
-        coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
-        coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
-        p4 = Point<number_t>(coordinates4);
+        coordinates4.insert( std::make_pair(c, 5) );
+        coordinates4.insert( std::make_pair(d, 8) );
+        p4 = pf3.point(coordinates4);
+         */
     }
 
     virtual void TearDown()
     {
     }
-	
+    
+    PointFactory<number_t>* pf1;
+    PointFactory<number_t>* pf2;
+    PointFactory<number_t>* pf3;
+    
     VariablePool& pool = VariablePool::getInstance();
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
@@ -67,8 +78,8 @@ protected:
  * @covers Point::setCoordinate
  */
 TEST_F(PointTest, CoordinateDimensionTest)
-{
-	EXPECT_EQ(p1[x], FLOAT_T<number_t>(2));
+{	
+    EXPECT_EQ(p1[x], FLOAT_T<number_t>(2));
     EXPECT_EQ(p1[y], FLOAT_T<number_t>(5));
     EXPECT_EQ(p1.coordinate(x), FLOAT_T<number_t>(2));
     EXPECT_EQ(p1.coordinate(y), FLOAT_T<number_t>(5));
