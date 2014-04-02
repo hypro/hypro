@@ -4,8 +4,8 @@ add_subdirectory(Polytope)
 
 
 set(lib_hypro_representation_sources
-	#${CMAKE_CURRENT_SOURCE_DIR}/${hypro_box_sources}
-        #${CMAKE_CURRENT_SOURCE_DIR}/${hypro_vpolytope_sources}
+	${CMAKE_CURRENT_SOURCE_DIR}/${hypro_box_sources}
+        ${CMAKE_CURRENT_SOURCE_DIR}/${hypro_vpolytope_sources}
         ${CMAKE_CURRENT_SOURCE_DIR}/${hypro_polytope_sources}
         #${CMAKE_CURRENT_SOURCE_DIR}/${hypro_orthogonalpolyhedron_sources}
 	PARENT_SCOPE

@@ -10,7 +10,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
         BoxTest.cpp
         VPolytopeTest.cpp
         #OrthogonalPolyhedronTest.cpp
-        NeighbourhoodContainerTest.cpp
+        PolytopeTest.cpp
+        #NeighbourhoodContainerTest.cpp
     )
 
     add_dependencies(runRepresentationTests googletest)

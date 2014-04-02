@@ -28,8 +28,11 @@ namespace hypro {
     class Point 
     {
         public:
-            typedef std::map<carl::Variable, carl::FLOAT_T<Number>> coordinateMap;
-            typedef std::vector<carl::FLOAT_T<Number>> coordinateValues;
+            //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
+            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
+            typedef std::set<Point<Number>> pointSet;
+	private:
+            typedef carl::FLOAT_T<Number> number;
 
         protected:
             coordinateValues    mCoordinates;
