@@ -61,6 +61,8 @@ namespace hypro
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
+        
+        Polytope<Number>& operator= (const Polytope<Number>& rhs);
     };
 } // namespace
 

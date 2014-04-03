@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since       2014-04-02
- * @version     2014-04-02
+ * @version     2014-04-03
  */
 
 #pragma once
@@ -16,6 +16,8 @@
 #include <carl/core/VariablePool.h>
 #include <map>
 #include <cassert>
+
+using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro
 {
@@ -87,10 +89,33 @@ namespace polytope
             return (*target).second;
         }
         
+        unsigned inline dimension(const Parma_Polyhedra_Library::Variable& _var) const
+        {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
+            assert(mPplToCarl.find(_var) != mPplToCarl.end());
+            return (_var.space_dimension());
+        }
+        
         unsigned size() const
         {
             assert(mCarlToPpl.size() == mPplToCarl.size());
             return mCarlToPpl.size();
+        }
+        
+        void clear()
+        {
+            mCarlToPpl.erase(mCarlToPpl.begin(), mCarlToPpl.end());
+            mPplToCarl.erase(mPplToCarl.begin(), mPplToCarl.end());
+            mPplId = 0;
+        }
+        
+        void print() const
+        {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
+            for(auto& var : mCarlToPpl)
+            {
+                std::cout << var.first << " -> " << var.second << std::endl;
+            }
         }
     };
 }

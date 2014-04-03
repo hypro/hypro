@@ -50,6 +50,7 @@ protected:
 
     virtual void TearDown()
     {
+        hypro::polytope::VariablePool::getInstance().clear();
     }
 	
     carl::VariablePool& pool = VariablePool::getInstance();
@@ -78,7 +79,7 @@ TEST_F(PolytopeTest, Constructor)
     hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
     EXPECT_EQ(p1.dimension(), 2);
     EXPECT_FALSE(p1.rawPolyhedron().is_empty());
-    p1.rawPolyhedron().print();
+    hypro::Polytope<number_t> p3 = Polytope<number_t>(ps);
     
     hypro::Polytope<number_t> p2 = Polytope<number_t>(2);
     EXPECT_EQ(p2.dimension(), 2);
@@ -88,14 +89,37 @@ TEST_F(PolytopeTest, Constructor)
 
 TEST_F(PolytopeTest, Access)
 {
-    Point<number_t>::pointSet ps;
-    ps.insert(p1);
-    ps.insert(p2);
-    ps.insert(p3);
-    ps.insert(p4);
-    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
+    Point<number_t>::pointSet ps1;
+    ps1.insert(p1);
+    ps1.insert(p2);
+    ps1.insert(p3);
+    ps1.insert(p4);
+    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps1);
     EXPECT_EQ(p1.dimension(), 2);
     
+    
+    carl::Variable a = pool.getFreshVariable("a");
+    carl::Variable b = pool.getFreshVariable("b");
+    Point<number_t>::pointSet ps2;
+    Point<number_t>::vector_t coordinates;
+    coordinates.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
+    coordinates.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
+    Point<number_t> p5 = Point<number_t>(coordinates);
+    coordinates.clear();
+    coordinates.insert( std::make_pair(a, FLOAT_T<number_t>(1)) );
+    coordinates.insert( std::make_pair(b, FLOAT_T<number_t>(2)) );
+    Point<number_t> p6 = Point<number_t>(coordinates);
+    coordinates.clear();
+    coordinates.insert( std::make_pair(a, FLOAT_T<number_t>(4)) );
+    coordinates.insert( std::make_pair(b, FLOAT_T<number_t>(3)) );
+    Point<number_t> p7 = Point<number_t>(coordinates);
+    ps2.insert(p5);
+    ps2.insert(p6);
+    ps2.insert(p7);
+    /*
+    hypro::Polytope<number_t> p2 = Polytope<number_t>(ps2);
+    EXPECT_EQ(p2.dimension(), 2);
+    */
 }
 
 TEST_F(PolytopeTest, PointToGenerator)
@@ -122,7 +146,12 @@ TEST_F(PolytopeTest, PointToGenerator)
 
 TEST_F(PolytopeTest, Intersection)
 {
-    
+    Point<number_t>::pointSet ps;
+    ps.insert(p1);
+    ps.insert(p2);
+    ps.insert(p3);
+    ps.insert(p4);
+    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
 }
 
 TEST_F(PolytopeTest, Union)

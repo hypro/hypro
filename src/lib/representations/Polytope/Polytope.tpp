@@ -23,7 +23,7 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number>::Polytope(unsigned dimension) : mPolyhedron(2)
+    Polytope<Number>::Polytope(unsigned dimension) : mPolyhedron(dimension)
     {}
     
     template<typename Number>
@@ -34,7 +34,7 @@ namespace hypro
 
     template<typename Number>
     Polytope<Number>::Polytope(const Point<Number>& _point) : 
-        mPolyhedron(C_Polyhedron(_point.dimension()))
+        mPolyhedron(C_Polyhedron(polytope::pplDimension(_point)+1))
     {
         mPolyhedron.add_generator(polytope::pointToGenerator(_point));
     }
@@ -42,7 +42,8 @@ namespace hypro
     template<typename Number>
     Polytope<Number>::Polytope(const typename Point<Number>::pointSet& points)
     {
-        mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron((*points.begin()).dimension());
+        //mPolyhedron.initialize();
+        mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points)+1);
         for(auto& pointSetIt : points)
         {
             mPolyhedron.add_generator(polytope::pointToGenerator(pointSetIt));
@@ -113,5 +114,16 @@ namespace hypro
     bool Polytope<Number>::unite(Polytope<Number>& result, const Polytope<Number>& rhs)
     {
         
+    }
+    
+    template<typename Number>
+    Polytope<Number>& Polytope<Number>::operator= (const Polytope<Number>& rhs) 
+    { 
+      if (this != &rhs)
+      { 
+        Polytope<Number> tmp(rhs);
+        swap(tmp); 
+      } 
+      return *this;
     }
 }

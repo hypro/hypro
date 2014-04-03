@@ -7,8 +7,8 @@
  * @author Sebastian Junges
  * @author Benedikt Seidl
  * 
- * @since	2011-03-12
- * @version 2014-01-17
+ * @since	2011-01-17
+ * @version     2014-04-03
  */
 #pragma once
 
@@ -43,7 +43,7 @@ namespace hypro {
     {
         public:
             //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
-            typedef std::set<Point<Number>> pointSet;
+            typedef std::set<Point<Number> > pointSet;
             typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 	private:
             typedef carl::FLOAT_T<Number> number;
