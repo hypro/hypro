@@ -4,7 +4,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-04-02
- * @version     2014-04-02
+ * @version     2014-04-03
  */
 
 #include "gtest/gtest.h"
@@ -81,12 +81,20 @@ TEST_F(PolytopeTest, Constructor)
     p1.rawPolyhedron().print();
     
     hypro::Polytope<number_t> p2 = Polytope<number_t>(2);
+    EXPECT_EQ(p2.dimension(), 2);
     
     SUCCEED();
 }
 
 TEST_F(PolytopeTest, Access)
 {
+    Point<number_t>::pointSet ps;
+    ps.insert(p1);
+    ps.insert(p2);
+    ps.insert(p3);
+    ps.insert(p4);
+    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
+    EXPECT_EQ(p1.dimension(), 2);
     
 }
 

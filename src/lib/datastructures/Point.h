@@ -15,12 +15,26 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <cmath>
 #include <assert.h>
+#include <carl/numbers/FLOAT_T.h>
+#include <carl/core/Variable.h>
+
 #include "../config.h"
 
-
 namespace hypro {
+    
+    /**
+     * @class Point
+     */
+	/*
+    class Point;
+    typedef std::vector<Point> pVec;
+    typedef std::vector<Point>::iterator pVecIt;
+    */
+
+	
     /*
      *  Class to store points in a MAXIMAL_DIMENSION space.
      */
@@ -29,14 +43,13 @@ namespace hypro {
     {
         public:
             //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
-            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
             typedef std::set<Point<Number>> pointSet;
+            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 	private:
             typedef carl::FLOAT_T<Number> number;
 
         protected:
-            coordinateValues    mCoordinates;
-            unsigned       mFactoryId;
+            vector_t mCoordinates;
 		
         public:
         
@@ -45,108 +58,277 @@ namespace hypro {
             /**
              * Constructors & Destructor
              */
+		
+            Point() : mCoordinates()
+            {}
+		
+            /**
+             * Constructs a point with the passed dimension and sets the coordinates to the initial value.
+             * @param dim
+             * @param initialValue
+             */
+            Point(const carl::Variable& var, const number& value = number())
+            {
+                mCoordinates[var] = value;
+            }
 
             /**
              * Constructs a point with the passed coordinates
              * @param coordinates
              */
-            Point(const coordinateValues& _coordinates, unsigned _factory) : 
-                mCoordinates(_coordinates),
-                mFactoryId(_factory)
-            {}
+            Point(const vector_t& coordinates) 
+            {
+                mCoordinates.insert(coordinates.begin(), coordinates.end());
+            }
 
             /**
              * Copy constructor
              * @param p
              */
-            Point(const Point<Number>& p) :
-                mCoordinates(p.coordinates()),
-                mFactoryId(p.factory())
-            {}
+            Point(const Point<Number>& p) 
+            {
+                mCoordinates.insert(p.mCoordinates.begin(), p.mCoordinates.end());
+            }
 
-            ~Point();
+            ~Point() 
+            {
+                mCoordinates.clear();
+            }
             
             /**
              * Getter & Setter
              */
             
-            coordinateValues coordinates() const;
-            coordinateValues& rCoordinates();
-            unsigned factory() const;
-            
-            
-            Point<Number> origin() const;
+            Point<Number> origin() const
+            {
+                Point<Number> result;
+                for(auto dimension : mCoordinates)
+                {
+                    result.setCoordinate(dimension.first, 0);
+                }
+                return result;
+            }
             
             /**
              * Returns the value of mCoordinates[dim].
              * @param  dim the dimension we want to get the value from.
              * @return 
              */
-            carl::FLOAT_T<Number> coordinate(unsigned _index) const;
-            carl::FLOAT_T<Number> coordinate(carl::Variable _var) const;
-            
+            number coordinate(const carl::Variable& var) const
+            {
+                assert(mCoordinates.count(var) > 0);
+                return mCoordinates.at(var);
+            }
+
+            vector_t coordinates() const 
+            {
+                return mCoordinates;
+            }
+        
+            vector_t& rCoordinates()
+            {
+                return mCoordinates;
+            }
+		
             /**
              * Set a specific coordinate
              * @param dim    the dimension that is changed
              * @param value  the new value
              */
-            inline void setCoordinate(unsigned _index, carl::FLOAT_T<Number> value);
-            inline void setCoordinate(carl::Variable var, carl::FLOAT_T<Number> value);
-
+            void setCoordinate(const carl::Variable& dim, number value)
+            {
+                mCoordinates[dim] = value;
+            }
             
             /**
              * 
              * @param coordinates
              * @param offset
              */
-            /*
             void insertCoordinates(vector_t& coordinates)
             {
-                for(auto coordinate : coordinates)
-                {
-                    setCoordinate(coordinate.first, coordinate.second);
-                }
+                mCoordinates.insert(coordinates.begin(), coordinates.end());
             }
-            */
+            
             /**
              *
              * @return iterator to begin of mCoordinates
              */
-            typename coordinateValues::const_iterator begin() const;
+            typename vector_t::const_iterator begin() const
+            {
+                return mCoordinates.begin();
+            }
 
             /**
              *
              * @return iterator to end of mCoordinates
              */
-            typename coordinateValues::const_iterator end() const;
+            typename vector_t::const_iterator end() const
+            {
+                return mCoordinates.end();
+            }
 
             /**
              * 
              * @return The size of mCoordinates.
              */
-            unsigned dimension() const;
-            std::vector<carl::FLOAT_T<Number>> polarCoordinates( const Point<Number>& origin,  bool radians = true ) const;
+            unsigned dimension() const 
+            {
+                return mCoordinates.size();
+            }
+		
+            void removeDimension(const carl::Variable& i)
+            {
+                mCoordinates.erase(i);
+            }
+            
+            std::vector<number> polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
+            {
+                Point<Number> base = *this - origin;
+                std::cout << "Point: " << base << std::endl;
+                
+                
+                std::vector<number> result;
+                
+                // 1st component of the result is the radial part, the following components are the angles.
+                number radialCoordinate;
+                for(auto dimension : base.mCoordinates)
+                {
+                    number square;
+                    dimension.second.pow(square, 2);
+                    radialCoordinate += square;
+                }
+                radialCoordinate.sqrt_assign();
+                result.insert(result.begin(), radialCoordinate);
+                
+                std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
+                
+                // compute polar angles
+                number angle;
+                for(auto dimension = base.mCoordinates.begin(); dimension != --base.mCoordinates.end(); ++dimension)
+                {
+                    std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
+                    angle = 0;
+                    for(auto dimension2 = dimension; dimension2 != base.mCoordinates.end(); ++dimension2)
+                    {
+                        number square;
+                        angle += (*dimension2).second.pow(square, 2);
+                    }
+                    std::cout << "Summed squares: " << angle << std::endl;
+                    angle.sqrt_assign();
+                    angle = (*dimension).second / angle;
+                    std::cout << "After division: " << angle << std::endl;
+                    angle.acos_assign();
+                    std::cout << "After acos: " << angle << std::endl;
+                    if(!radians)
+                    {
+                        angle /= 2*PI_DN ;
+                        angle *= 360;
+                    }
+                    result.insert(result.end(), angle);
+                    std::cout << "Angle: " << angle << std::endl;
+                }
+                if((*base.mCoordinates.rbegin()).second < 0)
+                {
+                    std::cout << "Correct last angle: ";
+                    number tmp = result.back();
+                    result.pop_back();
+                    if(!radians)
+                    {
+                        tmp = 360 - tmp;
+                    }
+                    else
+                    {
+                        tmp = -1* tmp;
+                    }
+                    std::cout << tmp << std::endl;
+                    result.push_back(tmp);
+                }
+                
+                assert(result.size() == this->dimension());
+                return result;
+            }
+            
 
             /**
              * Functions
              */
             
             /**
+             * Creates a new empty point (origin) with the same dimensions
+             * as this point.
+             * 
+             * @return new empty point
+             */
+            Point<Number> newEmpty()
+            {
+                vector_t coordinates;
+                for (auto pointIt : mCoordinates)
+                {
+                    coordinates.insert(std::make_pair(pointIt.first, Number(0)));
+                }
+                return Point<Number>(coordinates);
+            }
+            
+            /**
              * Method to move the point
              * @param p Point with coordinates describing the move.
              * @return true, if the result has a negative coordinate.
              */
-            bool move(const Point<Number>& p);
+            bool move(const Point<Number>& p) 
+            {
+                bool negative = false;
+                for(auto pointIt = p.begin(); pointIt != p.end(); ++pointIt)
+                {
+                    if(mCoordinates.count((*pointIt).first) > 0)
+                    {
+                        mCoordinates[(*pointIt).first] += (*pointIt).second;
+                    }
+                    else
+                    {
+                        mCoordinates[(*pointIt).first] = (*pointIt).second;
+                    }
+                    if (mCoordinates.at((*pointIt).first) < 0) negative = true;
+                }
+                return negative;
+            }
 
             /**
 	     * @brief gives the next point according to some (hardcoded) ordering.
 	     * @param bounds The grid lies between the origin and this point.
 	     *
 	     */
-            void nextPointOnGrid(const Point<Number>& bounds);
+            void nextPointOnGrid(const Point<Number>& bounds) 
+            {
+                for(auto pointIt : mCoordinates)
+                {
+                    if ((*pointIt).second < bounds.coordinate((*pointIt).first))
+                    {
+                        ++mCoordinates[(*pointIt).first];
+                        return;
+                    }
+                    else 
+                    {
+                        mCoordinates[(*pointIt).first] = 0; //TODO: sure to set it to zero instead of setting it to bounds[i-1] ?
+                    }
+                }
+            }
     	
-            carl::FLOAT_T<Number> getGaussianProbability(Point<Number> & mean) const;
-            carl::FLOAT_T<Number> getDistanceDependentProbabiltity(Point<Number> & mean, unsigned intlength, carl::FLOAT_T<Number> rate) const;
+            number getGaussianProbability(Point<Number> & mean) const{
+                return 0;
+            }
+
+            number getDistanceDependentProbabiltity(Point<Number> & mean, unsigned intlength, number rate) const
+            {
+                number dist;
+                for (auto pointIt : mCoordinates)
+				{
+                    dist += ( (*pointIt).second - mean.coordinate((*pointIt).first) ).pow(number(2));
+                }
+                dist /= rate; //TODO: use proper rounding?
+                if (dist < 1) return 1;
+                return (((number) intlength * (number) dimension()*(number) dimension() / dist));
+            }
         
             /**
             * @brief random move in one direction.
@@ -166,13 +348,50 @@ namespace hypro {
              * 
              * @return the sum of all coordinates
              */
-            carl::FLOAT_T<Number> sum() const;
+            number sum() const
+            {
+                number sum = 0;
+                for (auto pointIt : mCoordinates)
+                {
+                    sum += (pointIt).second;
+                }
+                return sum;
+            }
 
             /**
              * @brief: function to calculate points in the neighborhood, with one fixed dimension.
              * @return std::vector with all points in the neighborhood, with a fixed dimension, and except the point itself.
              */
-            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const;
+            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
+            {
+                std::vector<Point<Number> > neighbors;
+                unsigned dim = dimension();
+
+                // TODO comment
+                int nrofNeighbors = (pow(2, (dim - 1)) - 1);
+
+                vector_t coordinates;
+
+                for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
+                    //calculate the next neighbor we going to check
+                    for (auto pointIt : mCoordinates)
+                    {
+                        if ((*pointIt).first > fixedDim)
+                        {
+                            coordinates[(*pointIt).first] = (*pointIt).second - ((neighborNr >> (dim - (*pointIt).first - 1)) & 1);
+                        } else if ( (*pointIt).first == fixedDim)
+                        {
+                            coordinates[(*pointIt).first] = (*pointIt).second;
+                        } else 
+                        { // k < fixed
+                            coordinates[(*pointIt).first] = (*pointIt).second - ((neighborNr >> (dim - (*pointIt).first - 1 - 1)) & 1);
+                        }
+                    }
+                    Point<Number> neighbor = Point<Number>(coordinates);
+                    neighbors.push_back(neighbor);
+                }
+                return neighbors;
+            }
 
             /**
              *
@@ -180,7 +399,27 @@ namespace hypro {
              * @return Vector filled with neighbours with coordinate[fixedDim] equal to the points coordinate.
              *  point is not an element of the returned vector.
              */
-            std::vector<Point<Number> > getAllNeighbours(bool pointself=false) const;
+            std::vector<Point<Number> > getAllNeighbours(bool pointself=false) const
+            {
+                std::vector<Point<Number> > neighbors = getAllNeighborsForAFixedDimension(0);
+                unsigned nrneighbors = neighbors.size();
+                //TODO comment!
+                for (unsigned i = 0; i < nrneighbors; i++) 
+                {
+                    Point<Number> neighborpredecessor = Point(neighbors[i]).getPredecessorInDimension(0);
+                    neighbors.push_back(neighborpredecessor);
+                }
+
+                Point<Number> pointPredecessor = getPredecessorInDimension(0);
+                neighbors.push_back(pointPredecessor);
+
+                if (pointself) 
+                {
+                    neighbors.push_back(*this);
+                }
+
+                return neighbors;
+            }
 
             /**
              * 
@@ -201,26 +440,43 @@ namespace hypro {
              * Change the coordinates of the point. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is increased.
              */
-            void incrementInFixedDim(const carl::Variable& d);
+            void incrementInFixedDim(const carl::Variable& d)
+            {
+                ++(mCoordinates.at(d));
+            }
 
             /**
              * 
              * @param val The value to be added to each coordinate
              */
-            void incrementInAllDim(const carl::FLOAT_T<Number>& val = 1);
+            void incrementInAllDim(const number& val = 1)
+            {
+                for (auto pointIt : mCoordinates)
+                {
+                    mCoordinates[(pointIt).first] += val;
+                }
+            }
 
             /**
              * Change the point's coordinates. Moving the point one step in a given dimension.
              * @param d Dimension in which the coordinate is decreased.
              */
-            void decrementInFixedDim(const carl::Variable& d);
+            void decrementInFixedDim(const carl::Variable& d)
+            {
+                --(mCoordinates.at(d));
+            }
 
             /**
              *
              * @param d
              * @return The point with coordinates [x(1), .., x(d-1), x(d)-1, x(d+1), ..., x(n) ]
              */
-            Point<Number>& getPredecessorInDimension(const carl::Variable& d) const;
+            Point& getPredecessorInDimension(const carl::Variable& d) const
+            {
+                Point<Number> pred = Point(*this);
+                pred.DecrementInFixedDim(d);
+                return pred;
+            }
 
 			/*
             static Point Random(const Point& boundary)
@@ -239,7 +495,18 @@ namespace hypro {
              * @param boundary Point with coordinates that may not be exceeded in positive direction.
              * @return true, if every coordinate is within boundary[i] and 0. 
              */
-            bool isInBoundary(const Point<Number>& boundary) const;
+            bool isInBoundary(const Point<Number>& boundary) const 
+            {
+                for (auto pointIt : mCoordinates)
+                {
+                    if(!boundary.hasDimension(pointIt.first))
+                    {
+                        continue;
+                    }
+                    if (pointIt.second > boundary.at(pointIt.first)) return false;
+                }
+                return true;
+            }
 
 			/*
             static Point moveRandomInBoundary(const Point<Number>& boundary)
@@ -258,8 +525,25 @@ namespace hypro {
              * Operators & Comparison functions
              */
 		
-            bool hasDimension(const carl::Variable& i) const;
-            bool haveEqualCoordinate(const Point<Number>& p2) const;
+            bool hasDimension(const carl::Variable& i) const
+            {
+                return (mCoordinates.find(i) != mCoordinates.end());
+            }
+
+            bool haveEqualCoordinate(const Point<Number>& p2) const 
+            {
+                if( dimension() == p2.dimension() )
+                {
+                    for (auto pointIt : mCoordinates)
+                    {
+                        if ( p2.hasDimension(pointIt.first))
+                        {
+                            if ( pointIt.second == p2.mCoordinates.at(pointIt.first) ) return true;
+                        }
+                    }
+                }
+                return false;
+            }
             
             /**
              * Checks if the point has the same dimensions as this point.
@@ -269,7 +553,21 @@ namespace hypro {
              * @param p
              * @return True, if all dimension variables are equal
              */
-            bool haveSameDimensions(const Point<Number>& p) const;
+            bool haveSameDimensions(const Point<Number>& p) const
+            {
+                if (dimension() != p.dimension())
+                {
+                    return false;
+                }
+                for (auto pointIt : mCoordinates)
+                {
+                    if ( !p.hasDimension(pointIt.first))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
 
             /**
              * Comparison operator for the map.
@@ -324,21 +622,26 @@ namespace hypro {
                 }
                 return true;
             }
-            
+
             friend bool operator!=(const Point<Number> & p1, const Point<Number> & p2)
             {
                 return !(p1 == p2);
             }
-            
+
             /**
              *
              * @param i
              * @return
              */
-            
-            carl::FLOAT_T<Number>& operator[] (const carl::Variable& i);
-            
-            carl::FLOAT_T<Number> at(const carl::Variable& i) const;
+            number& operator[] (const carl::Variable& i)
+            {
+                return mCoordinates[i];
+            }
+
+            number at(const carl::Variable& i) const
+            {
+                return mCoordinates.at(i);
+            }
 		
             /**
              *
@@ -383,5 +686,3 @@ namespace hypro {
         return result;
     }
 }
-
-#include "Point.tpp"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="90">
+<configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
       <df name="build">
@@ -138,6 +138,9 @@
             <df name="Box">
               <in>Box.tpp</in>
             </df>
+            <df name="Polytope">
+              <in>Polytope.tpp</in>
+            </df>
             <df name="VPolytope">
               <in>VPolytope.h</in>
               <in>VPolytope.tpp</in>
@@ -193,134 +196,96 @@
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/CMakeFiles/2.8.12.1/CompilerIdCXX/CMakeCXXCompilerId.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest-build/CMakeFiles/2.8.11.2/CompilerIdC/CMakeCCompilerId.c"
             ex="false"
             tool="0"
             flavor2="2">
-        <cTool>
-        </cTool>
       </item>
       <item path="build/ThirdParty/src/googletest-build/CMakeFiles/2.8.11.2/CompilerIdCXX/CMakeCXXCompilerId.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/codegear/gtest_all.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/codegear/gtest_link.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample1.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample10_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample1_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample2.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample2_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample3_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample4.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample4_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample5_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample6_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample7_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample8_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/samples/sample9_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-all.cc"
             ex="false"
@@ -341,50 +306,36 @@
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-filepath.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-port.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-printers.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-test-part.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest-typed-test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/src/gtest_main.cc"
             ex="false"
@@ -405,346 +356,251 @@
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-death-test_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-filepath_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-linked_ptr_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-listener_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-message_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-options_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-param-test2_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-param-test_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-port_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-printers_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-test-part_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-tuple_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-typed-test2_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-typed-test_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest-unittest-api_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_all_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_break_on_failure_unittest_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_catch_exceptions_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_color_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_env_var_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_environment_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_filter_unittest_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_help_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_list_tests_unittest_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_main_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_no_test_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_output_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_pred_impl_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_prod_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_repeat_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_shuffle_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_sole_header_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_stress_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_throw_on_failure_ex_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_throw_on_failure_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_uninitialized_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_unittest.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_xml_outfile1_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_xml_outfile2_test_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/gtest_xml_output_unittest_.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/test/production.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/xcode/Samples/FrameworkSample/widget.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="build/ThirdParty/src/googletest/xcode/Samples/FrameworkSample/widget_test.cc"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="examples/example_addition.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="examples/example_test.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/intervals_tmp/Interval.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/lib/numbers/float/double_wrapper_t.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/lib/numbers/float/mpfr_wrapper_t.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/lib/numbers/int/int_wrapper_t.cpp"
             ex="false"
             tool="1"
             flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/lib/representations/Box/Box.tpp"
             ex="false"
             tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/lib/representations/Polytope/Polytope.tpp"
+            ex="false"
+            tool="3"
             flavor2="0">
       </item>
       <item path="src/lib/representations/VPolytope/VPolytope.h"
@@ -758,16 +614,10 @@
             flavor2="0">
       </item>
       <item path="src/test/IntTest.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/test/PointTest.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/test/VertexTest.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/test/double_float_test.cpp" ex="false" tool="1" flavor2="8">
         <ccTool>
@@ -783,8 +633,6 @@
         </ccTool>
       </item>
       <item path="src/test/main.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
       <item path="src/test/mpfr_float_test.cpp" ex="false" tool="1" flavor2="8">
         <ccTool>
@@ -805,8 +653,6 @@
             flavor2="0">
       </item>
       <item path="src/tmlib_tmp/TaylorModel.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
       </item>
     </conf>
   </confs>

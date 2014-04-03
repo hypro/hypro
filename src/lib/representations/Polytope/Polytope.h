@@ -3,7 +3,7 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-01
+ * @version     2014-04-03
  */
 
 #pragma once
@@ -43,10 +43,17 @@ namespace hypro
          * Getters and Setters
          */
         
+        bool isEmpty() const;
+        
+        void addPoint(const Point<Number>& point);
+        
         // PPL related
         const C_Polyhedron& rawPolyhedron() const;
         C_Polyhedron& rRawPolyhedron();
         
+        /**
+         * Geometric Object interface
+         */
         unsigned int dimension() const;
         bool linearTransformation(Polytope<Number>& result /*, ... */);
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);

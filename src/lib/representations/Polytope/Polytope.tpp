@@ -3,7 +3,7 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-02
+ * @version     2014-04-03
  */
 
 #include "Polytope.h"
@@ -47,6 +47,18 @@ namespace hypro
         {
             mPolyhedron.add_generator(polytope::pointToGenerator(pointSetIt));
         }
+    }
+    
+    template<typename Number>
+    bool Polytope<Number>::isEmpty() const
+    {
+        return mPolyhedron.is_empty();
+    }
+    
+    template<typename Number>
+    void Polytope<Number>::addPoint(const Point<Number>& point)
+    {
+        mPolyhedron.add_generator(polytope::pointToGenerator(point));
     }
     
     template<typename Number>

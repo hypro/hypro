@@ -1,9 +1,12 @@
+/**
+ *  Testfile for the point datastructure.
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * @author Benedikt Seidl
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/PointFactoryManager.h"
-#include "../../lib/datastructures/PointFactory.h"
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/config.h"
 #include <carl/core/VariablePool.h>
 #include "carl/numbers/FLOAT_T.h"
 
@@ -15,48 +18,38 @@ class PointTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::coordinateMap coordinates1;
-        coordinates1.emplace( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.emplace( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        
-        pf1 = PointFactoryManager::instance().factory(coordinates1);
-        
-        Point<number_t>::coordinateMap coordinates2;
-        coordinates2.emplace( std::make_pair(a, FLOAT_T<number_t>(7)) );
-        coordinates2.emplace( std::make_pair(b, FLOAT_T<number_t>(8)) );
-        
-        pf2 = PointFactoryManager::instance().factory(coordinates2);
-        
-        Point<number_t>::coordinateMap coordinates3;
-        coordinates3.emplace( std::make_pair(c, FLOAT_T<number_t>(9)) );
-        coordinates3.emplace( std::make_pair(d, FLOAT_T<number_t>(-13)) );
-        
         // p1
-        p1 = pf1->point(coordinates1);
+        Point<number_t>::vector_t coordinates1;
+		//VariablePool& pool = VariablePool::getInstance();
+		//Variable x = pool.getFreshVariable("x");
+		//Variable y = pool.getFreshVariable("y");
+        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
+        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
+        p1 = Point<number_t>(coordinates1);
 
         // p2
-        p2 = pf2->point(coordinates2);
+        Point<number_t>::vector_t coordinates2;
+        coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
+        coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
+        p2 = Point<number_t>(coordinates2);
 
         // p3
-        p3 = pf3->point(coordinates3);
+        Point<number_t>::vector_t coordinates3;
+        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
+        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
+        p3 = Point<number_t>(coordinates3);
         
-        /*
         // p4
         Point<number_t>::vector_t coordinates4;
-        coordinates4.insert( std::make_pair(c, 5) );
-        coordinates4.insert( std::make_pair(d, 8) );
-        p4 = pf3.point(coordinates4);
-         */
+        coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
+        coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
+        p4 = Point<number_t>(coordinates4);
     }
 
     virtual void TearDown()
     {
     }
-    
-    PointFactory<number_t>* pf1;
-    PointFactory<number_t>* pf2;
-    PointFactory<number_t>* pf3;
-    
+	
     VariablePool& pool = VariablePool::getInstance();
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
@@ -80,7 +73,7 @@ protected:
  * @covers Point::setCoordinate
  */
 TEST_F(PointTest, CoordinateDimensionTest)
-{	
+{
     EXPECT_EQ(p1[x], FLOAT_T<number_t>(2));
     EXPECT_EQ(p1[y], FLOAT_T<number_t>(5));
     EXPECT_EQ(p1.coordinate(x), FLOAT_T<number_t>(2));
@@ -147,16 +140,13 @@ TEST_F(PointTest, BooleanTest)
 	
     EXPECT_TRUE(p1.haveEqualCoordinate(p1));
     EXPECT_FALSE(p1.haveEqualCoordinate(p3));
-    /*
     p2.removeDimension(a);
     p2.removeDimension(b);
     EXPECT_LT(p1, p2);
 	
-     
     p2[x] = FLOAT_T<number_t>(3);
     p2.removeDimension(a);
-    */
-    	
+	
     EXPECT_EQ(p1, p2);
     EXPECT_NE(p1, p3);
     
@@ -165,19 +155,19 @@ TEST_F(PointTest, BooleanTest)
 }
 
 TEST_F(PointTest, Constructor)
-{
-    Point<number_t> p = pf1->point();
+{ 
+    Point<number_t> p;
     EXPECT_EQ(p.dimension(), 0);
     
-    p = pf1->point(5);
-    EXPECT_EQ(p.dimension(), 5);
-    /*
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
+    p = Point<number_t>(y, 5);
+    EXPECT_EQ(p.dimension(), 1);
+    
+	p[pool.getFreshVariable()] = 2;
+	p[pool.getFreshVariable()] = 2;
+	p[pool.getFreshVariable()] = 2;
+	p[pool.getFreshVariable()] = 2;
+	p[pool.getFreshVariable()] = 2;
+	p[pool.getFreshVariable()] = 2;
 	
     EXPECT_EQ(p.dimension(), (unsigned) 7);
     EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
@@ -189,7 +179,7 @@ TEST_F(PointTest, Constructor)
     EXPECT_EQ(p1.dimension(), empty.dimension());
     EXPECT_TRUE(p1.haveSameDimensions(empty));
     EXPECT_EQ(0, empty[x]);
-    */
+    
     //ASSERT_NE(Point<number_t>(3), Point<number_t>(7));
 }
 
