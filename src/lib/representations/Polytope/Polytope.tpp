@@ -3,7 +3,7 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-03
+ * @version     2014-04-04
  */
 
 #include "Polytope.h"
@@ -51,6 +51,10 @@ namespace hypro
     }
     
     template<typename Number>
+    Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) : mPolyhedron(_rawPoly)
+    {}
+    
+    template<typename Number>
     bool Polytope<Number>::isEmpty() const
     {
         return mPolyhedron.is_empty();
@@ -95,13 +99,17 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::intersect(Polytope<Number>& result, const Polytope<Number>& rhs)
     {
-        
+        C_Polyhedron res = mPolyhedron;
+        res.intersection_assign(rhs.rawPolyhedron());
+        result = Polytope<Number>(res);
+        return true;
     }
     
     template<typename Number>
     bool Polytope<Number>::hull(Polytope<Number>& result)
     {
-        
+        // Todo: correct?
+        result = *this;
     }
     
     template<typename Number>
@@ -113,7 +121,10 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::unite(Polytope<Number>& result, const Polytope<Number>& rhs)
     {
-        
+        C_Polyhedron res = mPolyhedron;
+        res.poly_hull_assign(rhs.rawPolyhedron());
+        result = Polytope<Number>(res);
+        return true;
     }
     
     template<typename Number>
@@ -121,8 +132,8 @@ namespace hypro
     { 
       if (this != &rhs)
       { 
-        Polytope<Number> tmp(rhs);
-        swap(tmp); 
+        C_Polyhedron tmp(rhs.rawPolyhedron());
+        mPolyhedron.m_swap(tmp); 
       } 
       return *this;
     }

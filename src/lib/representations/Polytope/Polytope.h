@@ -3,7 +3,7 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-03
+ * @version     2014-04-04
  */
 
 #pragma once
@@ -36,6 +36,7 @@ namespace hypro
         Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
         Polytope(const typename Point<Number>::pointSet& points);
+        Polytope(const C_Polyhedron& _rawPoly);
         
         virtual ~Polytope();
         

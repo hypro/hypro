@@ -4,7 +4,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-04-02
- * @version     2014-04-03
+ * @version     2014-04-04
  */
 
 #include "gtest/gtest.h"
@@ -116,10 +116,17 @@ TEST_F(PolytopeTest, Access)
     ps2.insert(p5);
     ps2.insert(p6);
     ps2.insert(p7);
-    /*
+    
+    std::cout << "---" << std::endl;
+    hypro::polytope::VariablePool::getInstance().print();
+    
     hypro::Polytope<number_t> p2 = Polytope<number_t>(ps2);
+    
+    std::cout << "---" << std::endl;
+    hypro::polytope::VariablePool::getInstance().print();
+
     EXPECT_EQ(p2.dimension(), 2);
-    */
+    
 }
 
 TEST_F(PolytopeTest, PointToGenerator)
@@ -146,12 +153,34 @@ TEST_F(PolytopeTest, PointToGenerator)
 
 TEST_F(PolytopeTest, Intersection)
 {
-    Point<number_t>::pointSet ps;
-    ps.insert(p1);
-    ps.insert(p2);
-    ps.insert(p3);
-    ps.insert(p4);
-    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
+    Point<number_t>::pointSet ps1;
+    ps1.insert(p1);
+    ps1.insert(p2);
+    ps1.insert(p3);
+    ps1.insert(p4);
+    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps1);
+    
+    Point<number_t>::pointSet ps2;
+    Point<number_t>::vector_t coordinates;
+    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
+    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
+    Point<number_t> p5 = Point<number_t>(coordinates);
+    coordinates.clear();
+    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
+    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
+    Point<number_t> p6 = Point<number_t>(coordinates);
+    coordinates.clear();
+    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
+    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(3)) );
+    Point<number_t> p7 = Point<number_t>(coordinates);
+    ps2.insert(p5);
+    ps2.insert(p6);
+    ps2.insert(p7);
+    
+    hypro::Polytope<number_t> p2 = Polytope<number_t>(ps2);
+    hypro::Polytope<number_t> result;
+    
+    p1.intersect(result, p2);
 }
 
 TEST_F(PolytopeTest, Union)
