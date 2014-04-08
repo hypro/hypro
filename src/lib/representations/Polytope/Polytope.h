@@ -45,8 +45,8 @@ namespace hypro
          */
         
         bool isEmpty() const;
-        
         void addPoint(const Point<Number>& point);
+        void print() const;
         
         // PPL related
         const C_Polyhedron& rawPolyhedron() const;
