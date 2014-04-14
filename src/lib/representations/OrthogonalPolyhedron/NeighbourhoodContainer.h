@@ -20,11 +20,22 @@
 
 namespace hypro
 {
-
+    /**
+     * A neighbourhood container which maps points
+     * to their set of neighbour vertices.
+     */
     template<typename Number>
     class NeighbourhoodContainer {
+        
+    private:
+        std::map<Point<Number>, vSet<Number> > neighbourhoods;
+        //log4cplus::Logger mLogger;
+        
     public:
-        NeighbourhoodContainer();
+        NeighbourhoodContainer() : neighbourhoods()
+        {
+                //mLogger = log4cplus::Logger::getInstance("reachLin.NeighbourhoodContainer");
+        }
        
         void insertVertexAndNeighbours(const Point<Number>& p, vVecIt<Number> neighbourBegin, vVecIt<Number> neighbourEnd) {
             vSet<Number> neighbourhood = vSet<Number>(neighbourBegin, neighbourEnd);
@@ -39,10 +50,6 @@ namespace hypro
         
         vSetIt<Number> getNeighbourhoodBegin(const Point<Number>& p);
         vSetIt<Number> getNeighbourhoodEnd(const Point<Number>& p);
-        
-    private:
-        std::map<Point<Number>, vSet<Number> > neighbourhoods;
-        //log4cplus::Logger mLogger;
         
     };
     

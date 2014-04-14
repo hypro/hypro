@@ -174,10 +174,9 @@ public:
         friend bool operator==(const Box<Number> & b1, const Box<Number> & b2)
         {
             if(b1.dimension() != b2.dimension()) return false;
-            if (!b1.haveSameDimensions(b2)) return false;
             for (auto intervalIt : b1.mBoundaries)
             {
-                if (intervalIt.second != b2.mBoundaries.at(intervalIt.first)) return false;
+                if (!b2.hasDimension(intervalIt.first) || intervalIt.second != b2.mBoundaries.at(intervalIt.first)) return false;
             }
             return true;
         }

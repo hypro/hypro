@@ -11,11 +11,6 @@ namespace hypro
 {
     
     template<typename Number>
-    NeighbourhoodContainer<Number>::NeighbourhoodContainer() {
-        //mLogger = log4cplus::Logger::getInstance("reachLin.NeighbourhoodContainer");
-    }
-    
-    template<typename Number>
     void NeighbourhoodContainer<Number>::moveVertices(const Point<Number>& p) {
         typename std::map<Point<Number>, vSet<Number> > tmp;
         vSet<Number> tmpSet;
