@@ -91,6 +91,7 @@ template<typename Number>
 bool Box<Number>::hull(Box<Number>& result) const
 {
     result = *this;
+    return true;
 }
 
 template<typename Number>

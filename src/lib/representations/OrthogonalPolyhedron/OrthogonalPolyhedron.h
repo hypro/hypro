@@ -35,8 +35,17 @@ namespace hypro
     class OrthogonalPolyhedron : hypro::GeometricObject<Number>
     {
     private:
+        // the neighbourhood container which maps points to a set of vertices
         NeighbourhoodContainer<Number> mNeighbourhood;
+        
+        // the container of all vertices
+        VertexContainer<Number> mVertices;
+        
+        // the cached boundary box
+        bool mBoxUpToDate;
+        Box<Number> mBox;
 
+        /*
         bool mOriginColour;
         unsigned mNrVertices;
         
@@ -58,15 +67,32 @@ namespace hypro
 
         bool mInduced;
         std::vector< std::vector<Number> > mInducedGridPoints;
+        */
 
         //Logger mLogger;
     public:
         /***********************************************************************
          * Constructors
          ***********************************************************************/
+        
+        /**
+         * Empty constructor
+         */
         OrthogonalPolyhedron() {}
-        OrthogonalPolyhedron(const NeighbourhoodContainer<Number> neighbourhood)
-                : mNeighbourhood(neighbourhood) {}
+        
+        /**
+         * Constructor initialising values.
+         * @param neighbourhood
+         * @param vertices
+         */
+        OrthogonalPolyhedron(const NeighbourhoodContainer<Number>& neighbourhood, const VertexContainer<Number>& vertices)
+                : mNeighbourhood(neighbourhood), mVertices(vertices) {}
+        
+        /**
+         * Copy constructor
+         * @param copy
+         */
+        OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy);
         
         /*********
          * ALT

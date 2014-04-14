@@ -25,10 +25,11 @@ namespace hypro {
 	
 	template<typename Number>
 	class VertexContainer {
+            
+	private:
 		/***********************************************************************
 		 * Member
 		 **********************************************************************/
-	private:
 		std::set<Vertex<Number>> vertices;
 		
 	public:

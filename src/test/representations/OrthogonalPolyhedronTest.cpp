@@ -99,6 +99,12 @@ TEST_F(OrthogonalPolyhedronTest, IsUniversal)
     p2.isUniversal();
 }
 
+TEST_F(OrthogonalPolyhedronTest, dimension)
+{
+    ASSERT_EQ(2, p1.dimension());
+    ASSERT_EQ(2, p2.dimension());
+}
+
 /*TEST_F(OrthogonalPolyhedronTest, IsMember)
 {
     p1.isMember(pt1, true);

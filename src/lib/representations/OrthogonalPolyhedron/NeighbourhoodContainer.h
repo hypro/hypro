@@ -25,7 +25,6 @@ namespace hypro
     class NeighbourhoodContainer {
     public:
         NeighbourhoodContainer();
-        
        
         void insertVertexAndNeighbours(const Point<Number>& p, vVecIt<Number> neighbourBegin, vVecIt<Number> neighbourEnd) {
             vSet<Number> neighbourhood = vSet<Number>(neighbourBegin, neighbourEnd);

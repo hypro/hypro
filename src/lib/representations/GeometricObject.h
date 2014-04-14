@@ -47,7 +47,7 @@ namespace hypro
 		/**
 		 * Computes the convex hull of the stateset.
 		 * @param result The resulting stateset.
-		 * @return * @return True if the operation has been successfully applied.
+		 * @return True if the operation has been successfully applied.
 		 */
         bool hull(GeometricObject<Number>& result);
 		
@@ -67,6 +67,7 @@ namespace hypro
 		 * @return True if the operation has been successfully applied.
 		 */
         bool unite(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
+        
         // virtual bool empty() const = 0;
     };
 }

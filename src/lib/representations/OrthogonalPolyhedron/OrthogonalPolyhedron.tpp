@@ -7,9 +7,6 @@
  * @version 2014-03-17
  */
 
-#include "OrthogonalPolyhedron.h"
-
-
 namespace hypro
 {
 
@@ -180,40 +177,38 @@ namespace hypro
     
     template<typename Number>
     void OrthogonalPolyhedron<Number>::dimension() {
-        return 0;
+        return mVertices.dimension();
     }	
     
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result) {
-        
+        return false;
     }
 
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
-        
+        return false;
     }
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
-        
+        return false;
     }
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) {
-        
+        return false;
     }
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) {
-        if (!mBox.contains(point)) {
-            return false;
-        }
+        return false;
     }
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
-        
+        return false;
     }
         
     /**********************************
