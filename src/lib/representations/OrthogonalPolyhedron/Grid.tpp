@@ -13,7 +13,7 @@ namespace hypro
     {
         for (auto it = vertexContainer.begin(); it != vertexContainer.end(); ++it) {
             Vertex<Number> vertex = *it;
-            mGrid.insert(std::pair<Point<Number>, bool>(vertex, vertex.color()));
+            insert(vertex, vertex.color());
         }
     }
     
@@ -67,7 +67,7 @@ namespace hypro
                 // Therefore we are able to calculate the mColor of the point.
                 Point<Number> xPredecessor = Point<Number>(point);
                 xPredecessor.decrementInFixedDim(fixed);
-                bool xPredecessorColor = checkAPoint(xPredecessor);
+                bool xPredecessorColor = colourAt(xPredecessor);
 
                 //LOG4CPLUS_TRACE(mLogger, point << " is colored " << xPredecessorColor);
                 return xPredecessorColor;
@@ -78,7 +78,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Grid<Number>::checkAPoint(const Point<Number>& point) const
+    bool Grid<Number>::colourAt(const Point<Number>& point) const
     {
         //LOG4CPLUS_TRACE(mLogger, "Point checked: " << point);
 
@@ -95,7 +95,7 @@ namespace hypro
                 pColour = contains(point);
             }
             // save it for later use
-            mGrid.insert(std::pair<Point<Number>, bool> (point, pColour));
+            insert(point, pColour);
         } else {
             // we already calculated this one.
             pColour = gridIt->second;

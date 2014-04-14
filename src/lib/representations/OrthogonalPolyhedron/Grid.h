@@ -17,8 +17,7 @@
 namespace hypro
 {
     /**
-     * Represents a grid which maps points to a boolean whether
-     * the point is in the orthogonal polyhedron.
+     * Represents a grid which maps points to a its colour.
      */
     template<typename Number>
     class Grid
@@ -41,6 +40,17 @@ namespace hypro
             void insertVerticesInMap(const VertexContainer<Number>& vertexContainer);
             
             /**
+             * Inserts the value for the point.
+             * 
+             * @param point
+             * @param val
+             */
+            void insert(const Point<Number>& point, bool colour)
+            {
+                mGrid.insert(std::pair<Point<Number>, bool>(point, colour));
+            }
+            
+            /**
              * Recursive function to check if a point is within the polyhedron.
              * For the membership
              *
@@ -50,12 +60,12 @@ namespace hypro
             bool contains(const Point<Number>& point) const;
             
             /**
-             * @brief Used within membershipRecursiveVertex.
+             * Returns the colour of the given point.
              *
              * @param point
              * @return the colour of the point
              */
-            bool checkAPoint(const Point<Number>& point) const;
+            bool colourAt(const Point<Number>& point) const;
             
             /**
              * Clears the grid.
