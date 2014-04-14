@@ -616,10 +616,9 @@ namespace hypro {
             friend bool operator==(const Point<Number> & p1, const Point<Number> & p2)
             {
                 if(p1.dimension() != p2.dimension()) return false;
-                if(!p1.haveSameDimensions(p2)) return false;
                 for (auto pointIt : p1.mCoordinates)
                 {
-                    if (pointIt.second != p2.mCoordinates.at(pointIt.first)) return false;
+                    if ( !p2.hasDimension(pointIt.first) || pointIt.second != p2.mCoordinates.at(pointIt.first)) return false;
                 }
                 return true;
             }
