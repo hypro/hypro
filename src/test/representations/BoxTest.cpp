@@ -66,6 +66,13 @@ TEST_F(BoxTest, Access)
     coMin1.insert(std::make_pair(x, 2));
     coMin1.insert(std::make_pair(y, 1));
     EXPECT_EQ(Point<number_t>(coMin1), box1.min());
+    
+    EXPECT_EQ(box1, box1);
+    EXPECT_EQ(box2, box2);
+    EXPECT_EQ(box3, box3);
+    EXPECT_NE(box1, box2);
+    EXPECT_NE(box2, box3);
+    EXPECT_NE(box3, box1);
 }
 
 TEST_F(BoxTest, Insertion)
