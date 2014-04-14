@@ -31,17 +31,15 @@ namespace hypro
             vSet<Number> neighbourhood = vSet<Number>(neighbourBegin, neighbourEnd);
             neighbourhoods.insert(std::pair<Point<Number>, vSet<Number> >(p, neighbourhood));
         }
+
         void moveVertices(const Point<Number>& p);
         
         inline void clear() {
             neighbourhoods.clear();
         }
         
-        
         vSetIt<Number> getNeighbourhoodBegin(const Point<Number>& p);
         vSetIt<Number> getNeighbourhoodEnd(const Point<Number>& p);
-        
-        
         
     private:
         std::map<Point<Number>, vSet<Number> > neighbourhoods;

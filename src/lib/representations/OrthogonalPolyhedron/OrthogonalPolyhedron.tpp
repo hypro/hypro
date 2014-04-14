@@ -16,9 +16,7 @@ namespace hypro
     /***************************************************************************
      * Constructors
      ***************************************************************************/
-    template<typename Number>
-    OrthogonalPolyhedron<Number>::OrthogonalPolyhedron() {}
-    
+    /*
     template<typename Number>
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, Point<Number> boundary) :
         mRepresentation(VERTEX),
@@ -51,7 +49,7 @@ namespace hypro
     /**
      * A constructor where additionally the list of extreme Vertices can be passed. Should only be used if the list of EV
      * is complete.
-     */
+     ///*
     template<typename Number>
     OrthogonalPolyhedron<Number>::OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList) :
         mRepresentation(EXTREMEVERTEX),
@@ -123,6 +121,45 @@ namespace hypro
         //LOG4CPLUS_DEBUG(mLogger, "Origin is " << mOriginColour);
 
     }
+    
+    template<typename Number>
+    void OrthogonalPolyhedron<Number>::calculateBox() {
+        if (mVertices.begin() == mVertices.end()) {
+            // Empty vertex
+            return;
+        }
+
+        std::set<Vertex>::iterator it;
+        
+        Box<Number>::intervalMap map();
+
+        /*mMax.resize(mDimension);
+        mMin.resize(mDimension);
+
+        it = begin;
+        // Set the box to include the first vertex, so nothing goes wrong. (Before, we should make sure there is a first one)
+        for (unsigned d = 0; d < mDimension; d++) {
+            mMax[d] = it->getCoordinate(d);
+            // TODO speed it up if origin is a vertex..
+            mMin[d] = it->getCoordinate(d);
+        }
+
+        //Extend the box
+        for (unsigned d = 0; d < mDimension; d++) {
+            it = begin;
+            it++;
+            for (; it != end; ++it) {
+                if (it->getCoordinate(d) > mMax[d]) {
+                    mMax[d] = it->getCoordinate(d);
+                } else if (it->getCoordinate(d) < mMin[d]) {
+                    mMin[d] = it->getCoordinate(d);
+                }
+            }
+        }///
+        mBoxUpToDate = true;
+        mBoundary = mBox.max();
+    }
+    */
 
     template<typename Number>
     void OrthogonalPolyhedron<Number>::reserveInducedGrid() {
@@ -136,6 +173,52 @@ namespace hypro
     /***************************************************************************
      * Public methods
      ***************************************************************************/
+        
+    /**********************************
+     * Geometric Object functions
+     **********************************/
+    
+    template<typename Number>
+    void OrthogonalPolyhedron<Number>::dimension() {
+        return 0;
+    }	
+    
+        
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result) {
+        
+    }
+
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+        
+    }
+        
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+        
+    }
+        
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) {
+        
+    }
+        
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) {
+        if (!mBox.contains(point)) {
+            return false;
+        }
+    }
+        
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+        
+    }
+        
+    /**********************************
+     * Other functions
+     **********************************/
     
     /**
      * @brief emptiness check.

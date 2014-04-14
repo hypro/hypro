@@ -35,14 +35,14 @@ namespace hypro
     class OrthogonalPolyhedron : hypro::GeometricObject<Number>
     {
     private:
-        unsigned mNrVertices;
+        NeighbourhoodContainer<Number> mNeighbourhood;
 
         bool mOriginColour;
+        unsigned mNrVertices;
+        
         VertexContainer<Number> mVertices;
         VertexContainer<Number> mInducedVertices;
         VertexContainer<Number> mExtremeVertices;
-
-        NeighbourhoodContainer<Number> mNeighbourhood;
 
         bool mBoxUpToDate;
         Box<Number> mBox;
@@ -61,15 +61,39 @@ namespace hypro
 
         //Logger mLogger;
     public:
-        OrthogonalPolyhedron();
+        /***********************************************************************
+         * Constructors
+         ***********************************************************************/
+        OrthogonalPolyhedron() {}
+        OrthogonalPolyhedron(const NeighbourhoodContainer<Number> neighbourhood)
+                : mNeighbourhood(neighbourhood) {}
+        
+        /*********
+         * ALT
+         *********/
         //OrthogonalPolyhedron(std::map<Point<Number>&, bool>, Point<Number>& bounds, unsigned dim);
-        OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number>& boundary*/);
+        //OrthogonalPolyhedron(const Vertex<Number>* vertices, unsigned nrVertices, unsigned dim/*, Point<Number>& boundary*/);
         
-        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim);
+        //OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim);
         //OrthogonalPolyhedron(vVec<Number>& vertexList, unsigned dim, Point<Number>& boundary);
-        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList);
-        OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const NeighbourhoodContainer<Number>& neighbourhoods);
+        //OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const vVec<Number>& extremeVertexList);
+        //OrthogonalPolyhedron(const vVec<Number>& vertexList, unsigned dim, const NeighbourhoodContainer<Number>& neighbourhoods);
         
+        /***********************************************************************
+         * Geometric Object functions
+         ***********************************************************************/
+        
+        unsigned int dimension();		
+        bool linearTransformation(OrthogonalPolyhedron<Number>& result);
+        bool minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
+        bool intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
+        bool hull(OrthogonalPolyhedron<Number>& result);
+        bool contains(const Point<Number>& point);
+        bool unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
+        
+        /***********************************************************************
+         * Other functions
+         ***********************************************************************/
         bool isEmpty();
         bool isUniversal();
 
@@ -107,6 +131,7 @@ namespace hypro
     private:
         void preInit();
         void postInit();
+        void calculateBox();
         void reserveInducedGrid();
         
         void insertVerticesInMap(VertexContainerIt<Number> begin, VertexContainerIt<Number> end, std::map<Point<Number>, bool>& map);
