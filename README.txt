@@ -1,6 +1,6 @@
 
 
-Stuff needed Hypro:
+Stuff needed by Hypro:
 
 -mpfr
 -svn
@@ -13,3 +13,4 @@ Stuff needed Hypro:
 -gmpxx (CARL)
 -cmake
 -cmake-curses-gui
+-ppl
