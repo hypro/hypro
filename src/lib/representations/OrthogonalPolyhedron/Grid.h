@@ -27,9 +27,10 @@ namespace hypro
         
         private:
             gridMap mGrid;
+            std::vector<Point<Number> > mInducedGridPoints;
             
         public:
-            Grid() : mGrid() {}
+            Grid() {}
             Grid(const gridMap& grid) : mGrid(grid) {}
             
             /**
@@ -57,7 +58,7 @@ namespace hypro
              * @param point
              * @return true, if the point lies within the polyhedron.
              */
-            bool contains(const Point<Number>& point) const;
+            bool contains(const Point<Number>& point);
             
             /**
              * Returns the colour of the given point.
@@ -65,7 +66,7 @@ namespace hypro
              * @param point
              * @return the colour of the point
              */
-            bool colourAt(const Point<Number>& point) const;
+            bool colourAt(const Point<Number>& point);
             
             /**
              * Clears the grid.

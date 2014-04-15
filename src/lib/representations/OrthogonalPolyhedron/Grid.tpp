@@ -13,12 +13,12 @@ namespace hypro
     {
         for (auto it = vertexContainer.begin(); it != vertexContainer.end(); ++it) {
             Vertex<Number> vertex = *it;
-            insert(vertex, vertex.color());
+            this->insert(vertex, vertex.color());
         }
     }
     
     template<typename Number>
-    bool Grid<Number>::contains(const Point<Number>& point) const
+    bool Grid<Number>::contains(const Point<Number>& point)
     {        
         // The point we are to check.
         //LOG4CPLUS_TRACE(mLogger, "Recursive Memberpoint check for: " << point);
@@ -47,11 +47,11 @@ namespace hypro
                 Point<Number> neighbour = neighboursInFixed[i];
                 // we now have the next neighbour we have to check.
                 // Do we know the points' mColor already?
-                neighbourColour = checkAPoint(neighbour);
+                neighbourColour = this->colourAt(neighbour);
                 //Calculate its predecessor.
                 Point<Number> neighbourPredecessor = Point<Number>(neighbour).getPredecessorInDimension(fixed);
                 //And the color of this predecessor.
-                neighbourPredecessorColor = checkAPoint(neighbourPredecessor);
+                neighbourPredecessorColor = this->colourAt(neighbourPredecessor);
 
                 if (neighbourPredecessorColor != neighbourColour) {
                     // Since the condition has to hold for all neighbours for a fixed dimension,
@@ -67,7 +67,7 @@ namespace hypro
                 // Therefore we are able to calculate the mColor of the point.
                 Point<Number> xPredecessor = Point<Number>(point);
                 xPredecessor.decrementInFixedDim(fixed);
-                bool xPredecessorColor = colourAt(xPredecessor);
+                bool xPredecessorColor = this->colourAt(xPredecessor);
 
                 //LOG4CPLUS_TRACE(mLogger, point << " is colored " << xPredecessorColor);
                 return xPredecessorColor;
@@ -78,7 +78,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Grid<Number>::colourAt(const Point<Number>& point) const
+    bool Grid<Number>::colourAt(const Point<Number>& point)
     {
         //LOG4CPLUS_TRACE(mLogger, "Point checked: " << point);
 
@@ -95,7 +95,7 @@ namespace hypro
                 pColour = contains(point);
             }
             // save it for later use
-            insert(point, pColour);
+            this->insert(point, pColour);
         } else {
             // we already calculated this one.
             pColour = gridIt->second;
