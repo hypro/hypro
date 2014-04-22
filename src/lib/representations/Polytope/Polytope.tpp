@@ -92,7 +92,30 @@ namespace hypro
     template<typename Number>
     unsigned int Polytope<Number>::dimension() const
     {
-        return unsigned(mPolyhedron.space_dimension());
+        std::cout << "Dimension." << std::endl;
+        Generator_System gs = mPolyhedron.generators();
+        std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+        for(auto& generator : gs)
+        {
+            generator.print();
+            Generator::expr_type l = generator.expression();
+            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
+            {
+                if(l.get(variableIt) != 0)
+                {
+                    variables.insert(variableIt);
+                }
+            }
+//            for(auto linearIt = l.begin(); linearIt != l.end(); ++linearIt)
+//            {
+//                std::cout << (*linearIt) << std::endl;
+//                Parma_Polyhedra_Library::Expression_Adapter::dinner_type tmp = (*linarIt).inner();
+//                std::cout << "Inner: " << tmp << std::endl;
+//                
+//                //variables.insert(polytope::VariablePool::variable((*linearIt).variable()));
+//            }
+        }
+        return variables.size();
     }
     
     template<typename Number>

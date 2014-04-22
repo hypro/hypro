@@ -114,6 +114,7 @@ TEST_F(PolytopeTest, Access)
     ps1.insert(p4);
     hypro::Polytope<number_t> p1 = Polytope<number_t>(ps1);
     EXPECT_EQ(p1.dimension(), 2);
+    std::cout << "Ping." << std::endl;
     
     
     carl::Variable a = pool.getFreshVariable("a");
@@ -176,29 +177,25 @@ TEST_F(PolytopeTest, Intersection)
     ps1.insert(p2);
     ps1.insert(p3);
     ps1.insert(p4);
-    hypro::Polytope<number_t> p1 = Polytope<number_t>(ps1);
+    hypro::Polytope<number_t> pt1;
+    pt1.print();
+    pt1 = Polytope<number_t>(ps1);
+    pt1.print();
+    EXPECT_FALSE(pt1.rawPolyhedron().is_universe());
+    EXPECT_TRUE(pt1.rawPolyhedron().is_topologically_closed());
     
     Point<number_t>::pointSet ps2;
-    Point<number_t>::vector_t coordinates;
-    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
-    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
-    Point<number_t> p5 = Point<number_t>(coordinates);
-    coordinates.clear();
-    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
-    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
-    Point<number_t> p6 = Point<number_t>(coordinates);
-    coordinates.clear();
-    coordinates.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
-    coordinates.insert( std::make_pair(y, FLOAT_T<number_t>(3)) );
-    Point<number_t> p7 = Point<number_t>(coordinates);
     ps2.insert(p5);
     ps2.insert(p6);
     ps2.insert(p7);
+    hypro::Polytope<number_t> pt2 = Polytope<number_t>(ps2);
+    pt2.print();
     
-    hypro::Polytope<number_t> p2 = Polytope<number_t>(ps2);
-    hypro::Polytope<number_t> result;
-    
-    p1.intersect(result, p2);
+    hypro::Polytope<number_t> res;
+    pt1.intersect(res, pt2);
+    res.print();
+    res.hull(res);
+    res.print();
 }
 
 TEST_F(PolytopeTest, Union)
@@ -227,8 +224,6 @@ TEST_F(PolytopeTest, Union)
     res.print();
     res.hull(res);
     res.print();
-    Parma_Polyhedra_Library::Generator_System gs = res.rawPolyhedron().minimized_generators();
-    gs.print();
 }
 
 TEST_F(PolytopeTest, LinearTransformation)

@@ -98,7 +98,6 @@ TEST_F(BoxTest, Union)
 {
     cln::cl_RA tmp;
     carl::is_rational<cln::cl_RA> str;
-    bool test = str.value;
 }
 
 TEST_F(BoxTest, LinearTransformation)
@@ -126,9 +125,9 @@ TEST_F(BoxTest, Intersection)
 TEST_F(BoxTest, ConvexHull)
 {
     //stupid for Boxes, only required for orthogonal polyhedra
-    Box<number_t> result;
+    /*Box<number_t> result;
     EXPECT_TRUE(box1.hull(result));
-    EXPECT_EQ(box1, result);
+    EXPECT_EQ(box1, result);*/
 }
 
 TEST_F(BoxTest, Membership)

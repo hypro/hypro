@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../datastructures/Point.h"
+#include "../config.h"
 
 namespace hypro
 {
@@ -26,7 +27,7 @@ namespace hypro
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool linearTransformation(GeometricObject<Number>& result /*, ... */);
+        bool linearTransformation(GeometricObject<Number>& result/*, matrix transformation*/);
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.

@@ -6,6 +6,7 @@
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>
+#include <eigen3/Eigen/Dense>
 
 
 #define reachLin_VERSION_MAJOR 0
@@ -32,4 +33,5 @@ typedef carl::FLOAT_T<number_t> number;
 typedef carl::MultivariatePolynomial<number> Polynomial;
 typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
+typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix;
 

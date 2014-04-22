@@ -96,6 +96,26 @@ namespace polytope
             return (_var.space_dimension());
         }
         
+        std::set<const carl::Variable> carlVariables() const
+        {
+            std::set<const carl::Variable> variables;
+            for(auto variableIt : mCarlToPpl)
+            {
+                variables.insert(variableIt.first);
+            }
+            return variables;
+        }
+        
+        std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> pplVariables() const
+        {
+            std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+            for(auto& variableIt : mPplToCarl)
+            {
+                variables.insert(variableIt.first);
+            }
+            return variables;
+        }
+        
         unsigned size() const
         {
             assert(mCarlToPpl.size() == mPplToCarl.size());
