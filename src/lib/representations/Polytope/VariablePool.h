@@ -106,9 +106,9 @@ namespace polytope
             return variables;
         }
         
-        std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> pplVariables() const
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> pplVariables() const
         {
-            std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+            std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
             for(auto& variableIt : mPplToCarl)
             {
                 variables.insert(variableIt.first);
