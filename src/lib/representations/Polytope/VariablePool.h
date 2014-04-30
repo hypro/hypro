@@ -96,7 +96,7 @@ namespace polytope
             return (_var.space_dimension());
         }
         
-        std::set<const carl::Variable> carlVariables() const
+        std::set<const carl::Variable&> carlVariables() const
         {
             std::set<const carl::Variable> variables;
             for(auto variableIt : mCarlToPpl)
