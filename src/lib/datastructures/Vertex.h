@@ -48,7 +48,7 @@ namespace hypro {
              * @param color
              * @return
              */
-			Vertex(bool color = false) : Point<NumberType>()
+            Vertex(bool color = false) : Point<NumberType>()
             {
                 mColor = color;
             }
@@ -59,7 +59,7 @@ namespace hypro {
              * @param color
              * @return
              */
-			Vertex(const typename Point<NumberType>::vector_t& coordinates, bool color = false) : Point<NumberType>(coordinates)
+            Vertex(const typename Point<NumberType>::vector_t& coordinates, bool color = false) : Point<NumberType>(coordinates)
             {
                 mColor = color;
             }

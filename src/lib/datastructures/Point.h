@@ -22,6 +22,8 @@
 #include <carl/core/Variable.h>
 
 #include "../config.h"
+#include "hybridAutomata/Location.h"
+
 
 namespace hypro {
     
