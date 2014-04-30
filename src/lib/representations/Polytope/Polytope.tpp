@@ -94,7 +94,7 @@ namespace hypro
     {
         std::cout << "Dimension." << std::endl;
         Generator_System gs = mPolyhedron.generators();
-        std::set<const Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
         for(auto& generator : gs)
         {
             generator.print();
