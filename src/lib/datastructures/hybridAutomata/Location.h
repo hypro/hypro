@@ -28,3 +28,5 @@ namespace hypro
         {}
     };
 }
+
+#include "Location.tpp"
