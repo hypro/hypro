@@ -15,9 +15,19 @@ namespace hypro
     		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t; //typedef std::vector<carl::FLOAT_T<Number> > vector_t; ?
     		typedef Eigen::Matrix<Number, Dynamic, Dynamic> matrix_t;
     		typedef std::map<carl::Variable, smth_operator> operator_t; //TODO: logical operators? <,>,==,>=,<=
-    		typedef std::map<vector_t, matrix_t, operator_t> invariant_t;
-    		typedef std::map<matrix_t,vector_t,invariant_t> location_t;
     		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
+
+    		struct invariant {
+    			vector_t vec;
+    			matrix_t* mat;
+    			operator_t op;
+    		};
+
+    		struct location {
+    			vector_t vec;
+    			matrix_t* mat;
+    			invariant inv;
+    		};
 
     		/**
     		 * Member
@@ -28,9 +38,9 @@ namespace hypro
     		vector_t mVecInv;		//vector for invariants
     		matrix_t* mMatrixInv; 	//matrix for invariants
     		operator_t mOperatorInv; //operator (vector) for invariants
-    		invariant_t mInvariant;  //invariant: matrix, vector, and operator
+    		invariant mInvariant;  //invariant: matrix, vector, and operator
 
-    		location_t mLocation;  //location: matrix, vector, and invariant
+    		location mLocation;  //location: matrix, vector, and invariant
         
         public:
     		/**
@@ -38,7 +48,7 @@ namespace hypro
     		 */
     		Location(){}
     		Location(const Location& _loc);
-    		Location(const matrix_t* _mat, const vector_t _vec, const invariant_t _inv);
+    		Location(const matrix_t* _mat, const vector_t _vec, const invariant _inv);
         
     		~Location()
     		{}
@@ -48,13 +58,13 @@ namespace hypro
     		 */
     		vector_t getActivityVec();
     		matrix_t* getActivityMat();
-    		invariant_t getInvariant();
-    		location_t getLocation();
+    		invariant getInvariant();
+    		location getLocation();
 
     		void setActivityVec(vector_t _vec);
     		void setActivityMat(matrix_t* _mat);
-    		void setInvariant(invariant_t _inv);
-    		void setLocation(location_t _loc);
+    		void setInvariant(invariant _inv);
+    		void setLocation(location _loc);
 
     		bool checkInvariant(valuation_t _val);
     };

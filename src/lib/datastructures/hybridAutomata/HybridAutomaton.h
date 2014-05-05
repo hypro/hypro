@@ -14,12 +14,18 @@ namespace hypro
     class HybridAutomaton
     {
         private:
-			typedef hypro::Location<Number> location_t;
-			typedef hypro::Transition<Number> transition_t;
-			typedef std::set<location_t*> locationSet;
-			typedef std::set<transition_t*> transitionSet;
+			typedef hypro::Location<Number> location;
+			typedef hypro::Transition<Number> transition;
+			typedef std::set<location*> locationSet;
+			typedef std::set<transition*> transitionSet;
     		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
-    		typedef std::map<locationSet, locationSet, transitionSet, valuation_t> hybridAutomaton_t;
+
+    		struct hybridAutomaton {
+    			locationSet init;
+    			locationSet locs;
+    			transitionSet trans;
+    			valuation_t valuation;
+    		};
 
     		/**
     		 * Member
@@ -29,7 +35,7 @@ namespace hypro
     		transitionSet mTransitions;
     		valuation_t mValuation;
 
-    		hybridAutomaton_t mHybridAutomaton;
+    		hybridAutomaton mHybridAutomaton;
 
         public:
     		/**
@@ -49,12 +55,13 @@ namespace hypro
     		locationSet getLocations();
     		transitionSet getTransitions();
     		valuation_t getValuation();
-    		hybridAutomaton_t getHybridAutomaton();
+    		hybridAutomaton getHybridAutomaton();
 
     		void setInitialLocations(locationSet _initLocs);
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
     		void setValuation(valuation_t _val);
+    		void setHybridAutomaton(hybridAutomaton _hybrid);
 
     		//TODO add further functionality as needed
     };

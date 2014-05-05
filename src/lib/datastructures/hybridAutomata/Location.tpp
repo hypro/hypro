@@ -7,13 +7,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Location<Number>::Location(const matrix_t* _mat, const vector_t _vec, const invariant_t _inv){
+	Location<Number>::Location(const matrix_t* _mat, const vector_t _vec, const invariant _inv){
 		mMatrixAct = _mat;
 		mVecAct = _vec;
 		mInvariant = _inv;
 
-		//TODO
-		//mLocation.addToMap(mVecAct,mMatrixAct,mInvariant);
+		mLocation.vec = _vec;
+		mLocation.mat = _mat;
+		mLocation.inv = _inv;
 	}
 
 	vector_t getActivityVec() {
@@ -24,11 +25,11 @@ namespace hypro {
 		return mMatrixAct;
 	}
 
-	invariant_t getInvariant() {
+	invariant getInvariant() {
 		return mInvariant;
 	}
 
-	location_t getLocation() {
+	location getLocation() {
 		return mLocation;
 	}
 
@@ -40,11 +41,11 @@ namespace hypro {
 		mMatrixAct = _mat;
 	}
 
-	void setInvariant(invariant_t _inv) {
+	void setInvariant(invariant _inv) {
 		mInvariant = _inv;
 	}
 
-	void setLocation(location_t _loc) {
+	void setLocation(location _loc) {
 		mLocation = _loc;
 	}
 

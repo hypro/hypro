@@ -11,8 +11,10 @@ namespace hypro {
 		mTransitions = _trans;
 		mValuation = _initVal;
 
-		//TODO
-		//mHybridAutomaton.addToMap(mInitialLocations,mLocations,mTransitions,mValuation);
+		mHybridAutomaton.init = _initLocs;
+		mHybridAutomaton.locs = _locs;
+		mHybridAutomaton.trans = _trans;
+		mHybridAutomaton.valuation = _initVal;
 	}
 
 	locationSet getInitialLocations() {
@@ -31,7 +33,7 @@ namespace hypro {
 		return mValuation;
 	}
 
-	hybridAutomaton_t getHybridAutomaton() {
+	hybridAutomaton getHybridAutomaton() {
 		return mHybridAutomaton;
 	}
 
@@ -49,6 +51,10 @@ namespace hypro {
 
 	void setValuation(valuation_t _val) {
 		mValuation = _val;
+	}
+
+	void setHybridAutomaton(hybridAutomaton _hybrid) {
+		mHybridAutomaton = _hybrid;
 	}
 
 }
