@@ -51,7 +51,15 @@ namespace hypro {
 
 	bool checkInvariant(valuation_t _val) {
 		//TODO
-		//return mMatrixInv * _val <mOperatorInv> mVectorInv
+		//return mInvariant.mat * _val mInvariant.op mInvariant.vec
+	}
+
+	std::set<valuation_t> computeForwardTimeClosure(valuation_t _val) {
+		//TODO
+		//idea: create new valuation set, add _val initially
+		//then check invariant for upper bounds for variables
+		//compute all reachable valuations up to these bounds (details? script -> solve set of linear constraints)
+		//add to set, return set
 	}
 
 }

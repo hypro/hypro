@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include<Location.h>
+#include<Transition.h>
 
 namespace hypro
 {

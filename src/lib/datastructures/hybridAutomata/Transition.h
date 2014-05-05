@@ -15,9 +15,18 @@ namespace hypro
     class Transition
     {
         private:
+			enum operator_e {
+				==,
+				!=,
+				<,
+				>,
+				<=,
+				>=
+			};
+
     		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t; //typedef std::vector<carl::FLOAT_T<Number> > vector_t; ?
     		typedef Eigen::Matrix<Number, Dynamic, Dynamic> matrix_t;
-    		typedef std::map<carl::Variable, smth_operator> operator_t; //TODO: logical operators? <,>,==,>=,<=
+    		typedef std::map<carl::Variable, operator_e> operator_t;
     		typedef hypro::Location<Number> location;
     		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
 
@@ -108,10 +117,12 @@ namespace hypro
 
     		bool checkGuard(valuation_t _val) {
     			//TODO
-    			//return mMatrixGuard * _val <mGuard.Operator> mVecGuard
+    			//return mGuard.mat * _val mGuard.op mGuard.vec
     		}
 
-    		valuation_t execAssignment(valuation_t _val) {
+    		//previously: execAssignment (name tbd)
+    		//TODO set of valuations is returned? -> Script!
+    		valuation_t computePost(valuation_t _val) {
     			if (checkGuard(_val)) {
     				return mAssignment;
     			} else {
