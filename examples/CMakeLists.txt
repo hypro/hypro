@@ -13,6 +13,7 @@ set( EXAMPLES
     example_subtraction
     example_multiplication
     example_division
+    example_eigen_float_t
     example_power
     example_ppl_nncPolyhedra
     example_squareroot
