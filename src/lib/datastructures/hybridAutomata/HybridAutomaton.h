@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include<Location.h>
-#include<Transition.h>
+#include "Location.h"
+#include "Transition.h"
+#include "util.h"
 
 namespace hypro
 {
@@ -20,13 +21,12 @@ namespace hypro
 			typedef hypro::Transition<Number> transition;
 			typedef std::set<location*> locationSet;
 			typedef std::set<transition*> transitionSet;
-    		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
 
     		struct hybridAutomaton {
     			locationSet init;
     			locationSet locs;
     			transitionSet trans;
-    			valuation_t valuation;
+    			hypro::valuation_t valuation;
     		};
 
     		/**
@@ -35,7 +35,7 @@ namespace hypro
     		locationSet mInitialLocations;
     		locationSet mLocations;
     		transitionSet mTransitions;
-    		valuation_t mValuation;
+    		hypro::valuation_t mValuation;
 
     		hybridAutomaton mHybridAutomaton;
 
@@ -45,7 +45,7 @@ namespace hypro
     		 */
     		HybridAutomaton(){}
     		HybridAutomaton(const HybridAutomaton& _hybrid);
-    		HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, valuation_t _initVal);
+    		HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t _initVal);
 
     		~HybridAutomaton()
     		{}
@@ -53,19 +53,20 @@ namespace hypro
     		/**
     		 * Getter & Setter
     		 */
-    		locationSet getInitialLocations();
-    		locationSet getLocations();
-    		transitionSet getTransitions();
-    		valuation_t getValuation();
-    		hybridAutomaton getHybridAutomaton();
+    		locationSet initialLocations();
+    		locationSet locations();
+    		transitionSet transitions();
+    		hypro::valuation_t valuation();
+    		hybridAutomaton hybridAutomaton();
 
     		void setInitialLocations(locationSet _initLocs);
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
-    		void setValuation(valuation_t _val);
+    		void setValuation(hypro::valuation_t _val);
     		void setHybridAutomaton(hybridAutomaton _hybrid);
 
     		//TODO add further functionality as needed
+    		// computeForwardsReachability
     };
 }
 

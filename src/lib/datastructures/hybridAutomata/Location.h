@@ -6,45 +6,35 @@
 
 #pragma once
 
+#include "util.h"
+
 namespace hypro
 {
     template<typename Number>
     class Location
     {
         private:
-    		enum operator_e {
-    			<,
-    			>,
-    			<=,
-    			>=
-    		};
-
-    		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t; //typedef std::vector<carl::FLOAT_T<Number> > vector_t; ?
-    		typedef Eigen::Matrix<Number, Dynamic, Dynamic> matrix_t;
-    		typedef std::map<carl::Variable, operator_e> operator_t;
-    		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
-
     		struct invariant {
-    			vector_t vec;
-    			matrix_t* mat;
-    			operator_t op;
+    			hypro::vector_t vec;
+    			hypro::matrix_t* mat;
+    			hypro::operator_t op;
     		};
 
     		struct location {
-    			vector_t vec;
-    			matrix_t* mat;
+    			hypro::vector_t vec;
+    			hypro::matrix_t* mat;
     			invariant inv;
     		};
 
     		/**
     		 * Member
     		 */
-    		vector_t mVecAct; 	   //vector for activities
-    		matrix_t* mMatrixAct;  //matrix for activities
+    		hypro::vector_t mVecAct; 	   //vector for activities
+    		hypro::matrix_t* mMatrixAct;  //matrix for activities
 
-    		vector_t mVecInv;		//vector for invariants
-    		matrix_t* mMatrixInv; 	//matrix for invariants
-    		operator_t mOperatorInv; //operator (vector) for invariants
+    		hypro::vector_t mVecInv;		//vector for invariants
+    		hypro::matrix_t* mMatrixInv; 	//matrix for invariants
+    		hypro::operator_t mOperatorInv; //operator (vector) for invariants
     		invariant mInvariant;  //invariant: matrix, vector, and operator
 
     		location mLocation;  //location: matrix, vector, and invariant
@@ -55,7 +45,7 @@ namespace hypro
     		 */
     		Location(){}
     		Location(const Location& _loc);
-    		Location(const matrix_t* _mat, const vector_t _vec, const invariant _inv);
+    		Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const invariant _inv);
         
     		~Location()
     		{}
@@ -63,18 +53,18 @@ namespace hypro
     		/**
     		 * Getter & Setter
     		 */
-    		vector_t getActivityVec();
-    		matrix_t* getActivityMat();
-    		invariant getInvariant();
-    		location getLocation();
+    		hypro::vector_t activityVec();
+    		hypro::matrix_t* activityMat();
+    		invariant invariant();
+    		location location();
 
-    		void setActivityVec(vector_t _vec);
-    		void setActivityMat(matrix_t* _mat);
+    		void setActivityVec(hypro::vector_t _vec);
+    		void setActivityMat(hypro::matrix_t* _mat);
     		void setInvariant(invariant _inv);
     		void setLocation(location _loc);
 
-    		bool checkInvariant(valuation_t _val);
-    		std::set<valuation_t> computeForwardTimeClosure(valuation_t _val);
+    		bool checkInvariant(hypro::valuation_t _val);
+    		std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);
     };
 }
 

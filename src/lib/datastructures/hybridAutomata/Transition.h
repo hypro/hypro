@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include<Location.h>
+#include "Location.h"
+#include "util.h"
 
 namespace hypro
 {
@@ -15,45 +16,33 @@ namespace hypro
     class Transition
     {
         private:
-			enum operator_e {
-				==,
-				!=,
-				<,
-				>,
-				<=,
-				>=
-			};
 
-    		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t; //typedef std::vector<carl::FLOAT_T<Number> > vector_t; ?
-    		typedef Eigen::Matrix<Number, Dynamic, Dynamic> matrix_t;
-    		typedef std::map<carl::Variable, operator_e> operator_t;
     		typedef hypro::Location<Number> location;
-    		typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
 
     		struct guard {
-    			vector_t vec;
-    			matrix_t* mat;
-    			operator_t op;
+    			hypro::vector_t vec;
+    			hypro::matrix_t* mat;
+    			hypro::operator_t op;
     		};
 
     		struct transition {
     			location* locStart;
     			location* locTarget;
     			guard guard;
-    			valuation_t assign;
+    			hypro::valuation_t assign;
     		};
 
     		/**
     		 * Member
     		 */
-    		vector_t mVecGuard;
-    		matrix_t* mMatrixGuard;
+    		hypro::vector_t mVecGuard;
+    		hypro::matrix_t* mMatrixGuard;
     		guard mGuard;  //guard: matrix, vector, and operator
 
     		location* mStartLoc;  // start location
     		location* mTargetLoc; // target location
 
-    		valuation_t mAssignment; // assignment that takes place if guard is fulfilled
+    		hypro::valuation_t mAssignment; // assignment that takes place if guard is fulfilled
 
     		transition mTransition; // transition: two locations, a guard and an assignment
 
@@ -65,7 +54,7 @@ namespace hypro
 
     		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
 
-    		Transition(const location* _start, const location* _end, const guard _guard, const valuation_t _assign){
+    		Transition(const location* _start, const location* _end, const guard _guard, const hypro::valuation_t _assign){
     			mStartLoc = _start;
     			mTargetLoc = _end;
     			mGuard = _guard;
@@ -83,19 +72,19 @@ namespace hypro
     		/**
     		 * Getter & Setter
     		 */
-    		location* getStartLoc() {
+    		location* startLoc() {
     			return mStartLoc;
     		}
 
-    		location* getTargetLoc() {
+    		location* targetLoc() {
     			return mTargetLoc;
     		}
 
-    		guard getGuard() {
+    		guard guard() {
     			return mGuard;
     		}
 
-    		transition getTransition() {
+    		transition transition() {
     			return mTransition;
     		}
 
@@ -115,14 +104,14 @@ namespace hypro
     			mTransition = _trans;
     		}
 
-    		bool checkGuard(valuation_t _val) {
-    			//TODO
+    		bool checkGuard(hypro::valuation_t _val) {
+    			//TODO interval!
     			//return mGuard.mat * _val mGuard.op mGuard.vec
     		}
 
     		//previously: execAssignment (name tbd)
     		//TODO set of valuations is returned? -> Script!
-    		valuation_t computePost(valuation_t _val) {
+    		hypro::valuation_t computePost(hypro::valuation_t _val) {
     			if (checkGuard(_val)) {
     				return mAssignment;
     			} else {

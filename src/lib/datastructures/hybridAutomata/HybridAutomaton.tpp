@@ -5,7 +5,7 @@ namespace hypro {
 	HybridAutomaton(const HybridAutomaton& _hybrid) : mHybridAutomaton(_hybrid.mHybridAutomaton) {
 	}
 
-	HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, valuation_t _initVal) {
+	HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t _initVal) {
 		mInitialLocations = _initLocs;
 		mLocations = _locs;
 		mTransitions = _trans;
@@ -17,23 +17,23 @@ namespace hypro {
 		mHybridAutomaton.valuation = _initVal;
 	}
 
-	locationSet getInitialLocations() {
+	locationSet initialLocations() {
 		return mInitialLocations;
 	}
 
-	locationSet getLocations() {
+	locationSet locations() {
 		return mLocations;
 	}
 
-	transitionSet getTransitions() {
+	transitionSet transitions() {
 		return mTransitions;
 	}
 
-	valuation_t getValuation() {
+	hypro::valuation_t valuation() {
 		return mValuation;
 	}
 
-	hybridAutomaton getHybridAutomaton() {
+	hybridAutomaton hybridAutomaton() {
 		return mHybridAutomaton;
 	}
 
@@ -49,7 +49,7 @@ namespace hypro {
 		mTransitions = _trans;
 	}
 
-	void setValuation(valuation_t _val) {
+	void setValuation(hypro::valuation_t _val) {
 		mValuation = _val;
 	}
 
