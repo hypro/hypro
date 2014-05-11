@@ -1,5 +1,4 @@
 
-
 #pragma once
 
 #include "../../util/eigenTypetraits.h"
@@ -19,9 +18,9 @@ namespace hypro
 		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
 		typedef std::map<carl::Variable, operator_e> operator_t;
-		//typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
-		typedef std::map<carl::Variable, carl::Interval<FLOAT_T<Number>>> valuation_t; //a valuation is simply always an interval
+		typedef std::map<carl::Variable, carl::Interval<FLOAT_T<Number>>> valuation_t;
 
+		/*
 		template<typename Number>
 		bool compare(carl::FLOAT_T<Number> _lhs, carl::FLOAT_T<Number> _rhs, operator_t _op) {
 			bool result = false;
@@ -50,5 +49,6 @@ namespace hypro
 			}
 			return result;
 		}
+		*/
 
 }

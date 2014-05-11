@@ -104,6 +104,7 @@ namespace hypro
     			mTransition = _trans;
     		}
 
+    		/*
     		bool checkGuard(hypro::valuation_t _val) {
     			//TODO interval!
     			//return mGuard.mat * _val mGuard.op mGuard.vec
@@ -120,5 +121,6 @@ namespace hypro
     				return _val;
     			}
     		}
+    		*/
     };
 }

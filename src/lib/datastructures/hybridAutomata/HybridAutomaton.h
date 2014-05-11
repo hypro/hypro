@@ -65,8 +65,6 @@ namespace hypro
     		void setValuation(hypro::valuation_t _val);
     		void setHybridAutomaton(hybridAutomaton _hybrid);
 
-    		//TODO add further functionality as needed
-    		// computeForwardsReachability
     };
 }
 

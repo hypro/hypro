@@ -63,8 +63,8 @@ namespace hypro
     		void setInvariant(invariant _inv);
     		void setLocation(location _loc);
 
-    		bool checkInvariant(hypro::valuation_t _val);
-    		std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);
+    		//bool checkInvariant(hypro::valuation_t _val);
+    		//std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);
     };
 }
 

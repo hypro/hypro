@@ -49,6 +49,7 @@ namespace hypro {
 		mLocation = _loc;
 	}
 
+	/*
 	template<typename Number>
 	bool checkInvariant(hypro::valuation_t _val) {
 		//return mInvariant.mat * _val mInvariant.op mInvariant.vec
@@ -87,5 +88,7 @@ namespace hypro {
 		//compute all reachable valuations up to these bounds (details? script -> solve set of linear constraints)
 		//add to set, return set
 	}
+
+	*/
 
 }
