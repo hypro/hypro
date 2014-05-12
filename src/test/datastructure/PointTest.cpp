@@ -152,6 +152,15 @@ TEST_F(PointTest, BooleanTest)
     
     EXPECT_TRUE(p3.haveSameDimensions(p4));
     EXPECT_FALSE(p2.haveSameDimensions(p4));
+    
+    EXPECT_TRUE(p1.hasDimensions(p1.variables()));
+    EXPECT_TRUE(p2.hasDimensions(p2.variables()));
+    EXPECT_TRUE(p3.hasDimensions(p3.variables()));
+    EXPECT_TRUE(p4.hasDimensions(p4.variables()));
+    EXPECT_FALSE(p1.hasDimensions(p4.variables()));
+    EXPECT_FALSE(p4.hasDimensions(p1.variables()));
+    EXPECT_TRUE(p3.hasDimensions(p4.variables()));
+    EXPECT_TRUE(p4.hasDimensions(p3.variables()));
 }
 
 TEST_F(PointTest, Constructor)

@@ -68,6 +68,8 @@ TEST_F(GridTest, Constructor)
 {
     Grid<number_t> grid1();
     Grid<number_t>::gridMap map;
+    map.insert(std::pair<Point<number_t>, bool>(p1, true));
+    map.insert(std::pair<Point<number_t>, bool>(p2, false));
     Grid<number_t> grid2(map);
 }
 

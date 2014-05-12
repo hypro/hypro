@@ -6,8 +6,20 @@
  * @version 2014-04-14
  */
 
+#include "Grid.h"
+
+
 namespace hypro
 {
+    template<typename Number>
+    void Grid<Number>::reserveInducedGrid()
+    {
+        std::vector<Number> v;
+        for (auto it : variables()) {
+            mInducedGridPoints.insert(std::pair<carl::Variable, std::vector<Number> >(it, v));
+        }
+    }
+    
     template<typename Number>
     void Grid<Number>::insertVerticesInMap(const VertexContainer<Number>& vertexContainer)
     {
@@ -86,11 +98,10 @@ namespace hypro
         auto gridIt = mGrid.find(point);
 
         if (gridIt == mGrid.end()) { // not found
-            // @todo this optimization does not work now -.-
-            /*if (!isMemberBox(point)) {
+            if (mBoundingBox != NULL && !this->mBoundingBox.contains(point)) {
                 // neighbor is out of box, so its definitely white
                 pColour = false;
-            } else*/ {
+            } else {
                 // we have to calculate this one
                 pColour = contains(point);
             }
@@ -104,5 +115,62 @@ namespace hypro
         //LOG4CPLUS_TRACE(mLogger, "value: " << pColour);
         return pColour;
    }
+    
+    template<typename Number>
+    void Grid<Number>::induceGrid(const vSet<Number>& vertices)
+    {
+        for (auto it : mInducedGridPoints) {
+            it.second.push_back(Number(0));
+        }
+
+        // Projection of all points to the axes.
+        for (auto vertex : vertices) {
+            assert( vertex.hasDimensions(variables()));
+            for (auto it : mInducedGridPoints) {
+                it.second.push_back(vertex.coordinate(it.first));
+            }
+        }
+
+        // Sort every dimension, erase duplicate entries.
+        for (auto it : mInducedGridPoints) {
+            std::sort(it.second.begin(), it.second.end());
+            auto itr = std::unique(it.second.begin(), it.second.end());
+            it.second.resize(itr - it.second.begin());
+        }
+
+        /*DEBUGoutput.
+         * for (unsigned d = 0; d<mDimension; d++) {
+           std::cout << "Dimension " << d << ":";
+           for (unsigned i = 0; i<mInducedGridPoints[d].size(); i++) {
+                   std::cout << mInducedGridPoints[d][i] << " ";
+           }
+           std::cout<<endl;
+        }
+         */
+
+        /*
+        for (it = mVertices.begin(); it != mVertices.end(); it++) {
+            mInducedVertices.insert(calculateInduced(*it), it->getColor());
+        }
+        */
+
+        clear();
+        mInduced = true;
+    }
+    
+    template<typename Number>
+    Point<Number> Grid<Number>::calculateInduced(const Point<Number>& x) const
+    {
+        std::vector<Number> coordinates;
+        coordinates.reserve(dimension());
+        std::vector<int>::iterator it;
+        for (unsigned d = 0; d < dimension(); d++) {
+            it = std::lower_bound(mInducedGridPoints[d].begin(), mInducedGridPoints[d].end(), x[d] + 1);
+            coordinates.push_back((int) (it - 1 - mInducedGridPoints[d].begin()));
+        }
+        Point<Number> induced = Point<Number>(coordinates);
+        //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);
+        return induced;
+    }
         
 }

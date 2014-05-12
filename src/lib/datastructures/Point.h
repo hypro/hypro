@@ -183,6 +183,16 @@ namespace hypro {
                 mCoordinates.erase(i);
             }
             
+            std::vector<carl::Variable> variables() const
+            {
+                std::vector<carl::Variable> variables;
+                for(auto dimension : mCoordinates)
+                {
+                    variables.push_back(dimension.first);
+                }
+                return variables;
+            }
+            
             std::vector<number> polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
             {
                 Point<Number> base = *this - origin;
@@ -529,6 +539,15 @@ namespace hypro {
             bool hasDimension(const carl::Variable& i) const
             {
                 return (mCoordinates.find(i) != mCoordinates.end());
+            }
+            
+            bool hasDimensions(const std::vector<carl::Variable>& variables) const
+            {
+                if (dimension() != variables.size()) return false;
+                for (auto it : variables) {
+                    if (!hasDimension(it)) return false;
+                }
+                return true;
             }
 
             bool haveEqualCoordinate(const Point<Number>& p2) const 
