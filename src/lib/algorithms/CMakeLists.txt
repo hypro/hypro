@@ -5,6 +5,6 @@ set(lib_hypro_algorithms_sources
 )
 
 set(lib_hypro_algorithms_headers
-        ${reachability_headers}
+
         PARENT_SCOPE
 )

@@ -15,11 +15,11 @@ namespace hypro
 			GREATER
 		};
 
-		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
-		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
-		typedef std::map<carl::Variable, operator_e> operator_t;
+		//typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
+		//typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
+		//typedef std::map<carl::Variable, operator_e> operator_t;
 		//typedef std::map<carl::Variable, carl::FLOAT_T<Number>> valuation_t;
-		typedef std::map<carl::Variable, carl::Interval<FLOAT_T<Number>>> valuation_t; //a valuation is simply always handled as an interval
+		//typedef std::map<carl::Variable, carl::Interval<FLOAT_T<Number>>> valuation_t; //a valuation is simply always handled as an interval
 
 		/**
 		 * General purpose functionality
@@ -139,3 +139,4 @@ namespace hypro
 			}
 		}
 }
+
