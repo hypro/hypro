@@ -1,5 +1,6 @@
 add_subdirectory(datastructures)
 add_subdirectory(representations)
+add_subdirectory(parser)
 
 #set(GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
 #set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} PARENT_SCOPE)
@@ -10,11 +11,13 @@ set(lib_hypro_headers
 	#${lib_hypro_number_headers}
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
+        ${lib_hypro_parser_headers}
 )
 
 set(lib_hypro_sources
 	${lib_hypro_datastructure_sources}
 	${lib_hypro_representation_sources}
+        ${lib_hypro_parser_sources}
 )
 
 if(${STATICLIB_SWITCH} STREQUAL "ON")
