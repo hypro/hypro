@@ -9,6 +9,8 @@
 
 #pragma once
 
+#define BOOST_SPIRIT_USE_PHOENIX_V3
+
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
@@ -30,40 +32,36 @@ namespace phoenix = boost::phoenix;
 typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
-typedef ascii::space_type Skipper;
+typedef qi::space_type Skipper;
 
-class HyproParser : public qi::grammar<Iterator, Skipper>
-{
-    void parseInput(const std::string& pathToInputFile);
-    bool parse(std::istream& in, const std::string& filename);
-    
-    // Rules
-    
-    qi::rule<Iterator> main;
-};
+
+
+
 
 template<typename Iterator>
-struct MatrixParser : public qi::grammar<Iterator, std::vector<std::vector<double>>, Skipper>
+struct MatrixParser : public qi::grammar<Iterator, std::vector<std::vector<double>>(), Skipper>
 {
     MatrixParser() : MatrixParser::base_type(start)
     {
-        start =  "[" >> (qi::double_ % qi::char_(' ',',')) % ';' >> "]";
+        start =  "[" >> ((qi::double_ % qi::char_(' ',',')) % ';') >> "]";
     }
     
-    qi::rule<Iterator,std::vector<std::vector<double>>()> start;
+    qi::rule<Iterator,std::vector<std::vector<double>>(), Skipper> start;
 };
 
 template<typename Iterator>
+//struct StateParser : public qi::grammar<Iterator, Skipper>
 struct StateParser : public qi::grammar<Iterator, State(), Skipper>
 {
     MatrixParser<Iterator> mMatrixParser;
     
     StateParser() : StateParser::base_type(start)
     {
-        start = qi::lit("states") >> "{" >> qi::int_ >> "}." >> qi::char_("A","b","B")  >> "=" >> mMatrixParser;
+       start = qi::lit("states") > "{" > qi::int_ > "}." > qi::char_("AbB")  > "=" > mMatrixParser > ";";
     }
     
-    qi::rule<Iterator, State> start;
+    qi::rule<Iterator, State(), Skipper> start;
+    //qi::rule<Iterator, Skipper> start;
 };
 
 template<typename Iterator>
@@ -73,10 +71,50 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
     
     MainParser() : MainParser::base_type(main)
     {
+        //using phoenix::construct;
+        using phoenix::val;
+        
+        qi::debug(main);
+        
         main = mStateParser;
-    }
-    qi::rule<Iterator> main;
+        
+        qi::on_error<qi::fail>
+        (
+        main
+        , std::cout
+            << val("Error! Expecting ")
+            << qi::_4                               // what failed?
+            << val(" here: \"")
+            //<< construct<std::string>(qi::_3, qi::_2)   // iterators to error-pos, end
+            << val("\"")
+            << std::endl
+        );
+    }    
+    
+    qi::rule<Iterator, Skipper> main;
+    
 };
 
+
+
+
+
+
+class HyproParser : public qi::grammar<Iterator, Skipper>
+{   
+    private:
+    // Rules
+    MainParser<Iterator> mMainParser;
+    qi::rule<Iterator,Skipper> main;
+    
+    public:
+    HyproParser() : HyproParser::base_type(main)
+    {
+        main = mMainParser;
+    }    
+
+    void parseInput(const std::string& pathToInputFile);
+    bool parse(std::istream& in, const std::string& filename);
+};
 }
 }

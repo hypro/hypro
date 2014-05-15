@@ -20,7 +20,7 @@ namespace parser{
 
     bool HyproParser::parse(std::istream& in, const std::string& filename)
     {
-        //in.unsetf(std::ios::skipws);
+        in.unsetf(std::ios::skipws);
         BaseIteratorType basebegin(in);
         Iterator begin(basebegin);
         Iterator end;
@@ -28,6 +28,10 @@ namespace parser{
         
         // invoke qi parser
         bool result = qi::phrase_parse(begin, end, main, skipper);
+        
+        std::cout << std::string(begin, end) << std::endl;
+        
+        return result;
     }
 }
 }
