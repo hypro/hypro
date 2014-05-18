@@ -2,10 +2,12 @@
 
 namespace hypro {
 
-	HybridAutomaton(const HybridAutomaton& _hybrid) : mHybridAutomaton(_hybrid.mHybridAutomaton) {
+	template<typename Number>
+	HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton& _hybrid) : mHybridAutomaton(_hybrid.mHybridAutomaton) {
 	}
 
-	HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t _initVal) {
+	template<typename Number>
+	HybridAutomaton<Number>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t _initVal) {
 		mInitialLocations = _initLocs;
 		mLocations = _locs;
 		mTransitions = _trans;
@@ -17,43 +19,53 @@ namespace hypro {
 		mHybridAutomaton.valuation = _initVal;
 	}
 
-	locationSet initialLocations() {
+	template<typename Number>
+	std::set<hypro::Location<Number>*> HybridAutomaton<Number>::initialLocations() {
 		return mInitialLocations;
 	}
 
-	locationSet locations() {
+	template<typename Number>
+	std::set<hypro::Location<Number>*> HybridAutomaton<Number>::locations() {
 		return mLocations;
 	}
 
-	transitionSet transitions() {
+	template<typename Number>
+	std::set<hypro::Transition<Number>*> HybridAutomaton<Number>::transitions() {
 		return mTransitions;
 	}
 
-	hypro::valuation_t valuation() {
+	template<typename Number>
+	hypro::valuation_t HybridAutomaton<Number>::valuation() {
 		return mValuation;
 	}
 
-	hybridAutomaton hybridAutomaton() {
+	template<typename Number>
+	struct HybridAutomaton<Number>::hybridAutomaton HybridAutomaton<Number>::hybridAutomaton() {
 		return mHybridAutomaton;
 	}
 
-	void setInitialLocations(locationSet _initLocs) {
+	template<typename Number>
+	void HybridAutomaton<Number>::setInitialLocations(locationSet _initLocs) {
 		mInitialLocations = _initLocs;
 	}
 
-	void setLocations(locationSet _locs) {
+	template<typename Number>
+	void HybridAutomaton<Number>::setLocations(locationSet _locs) {
 		mLocations = _locs;
 	}
 
-	void setTransitions(transitionSet _trans) {
+	template<typename Number>
+	void HybridAutomaton<Number>::setTransitions(transitionSet _trans) {
 		mTransitions = _trans;
 	}
 
-	void setValuation(hypro::valuation_t _val) {
+	template<typename Number>
+	void HybridAutomaton<Number>::setValuation(hypro::valuation_t _val) {
 		mValuation = _val;
 	}
 
-	void setHybridAutomaton(hybridAutomaton _hybrid) {
+	template<typename Number>
+	void HybridAutomaton<Number>::setHybridAutomaton(struct hybridAutomaton _hybrid) {
 		mHybridAutomaton = _hybrid;
 	}
 

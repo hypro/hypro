@@ -121,7 +121,8 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::linearTransformation(Polytope<Number>& result /*, ... */)
     {
-        
+    	//@author Chris: just to get rid of the warning
+        return true;
     }
     
     template<typename Number>
@@ -146,6 +147,8 @@ namespace hypro
     {
         Generator_System gs = mPolyhedron.minimized_generators();
         result = Polytope<Number>(C_Polyhedron(gs));
+        //@author Chris: just to get rid of the warning
+        return true;
     }
     
     template<typename Number>

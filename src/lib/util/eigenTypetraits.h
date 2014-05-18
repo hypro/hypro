@@ -38,8 +38,8 @@ namespace Eigen
             // make sure to override this for floating-point types
             return Real(0);
         }
-        static inline number highest() { return number::maxVal(); }
-        static inline number lowest()  { return number::minVal(); }
+        //static inline number highest() { return number::maxVal(); }
+        //static inline number lowest()  { return number::minVal(); }
 
 
     };

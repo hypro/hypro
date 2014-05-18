@@ -7,7 +7,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Location<Number>::Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const invariant _inv){
+	Location<Number>::Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const struct invariant _inv){
 		mMatrixAct = _mat;
 		mVecAct = _vec;
 		mInvariant = _inv;
@@ -17,35 +17,50 @@ namespace hypro {
 		mLocation.inv = _inv;
 	}
 
-	hypro::vector_t activityVec() {
+	template<typename Number>
+	hypro::vector_t Location<Number>::activityVec() {
 		return mVecAct;
 	}
 
-	hypro::matrix_t* activityMat() {
+	template<typename Number>
+	hypro::matrix_t* Location<Number>::activityMat() {
 		return mMatrixAct;
 	}
 
-	invariant invariant() {
+	template<typename Number>
+	struct Location<Number>::invariant Location<Number>::invariant() {
 		return mInvariant;
 	}
 
-	location location() {
+	template<typename Number>
+	struct Location<Number>::location Location<Number>::location() {
 		return mLocation;
 	}
 
-	void setActivityVec(hypro::vector_t _vec) {
+	template<typename Number>
+	void Location<Number>::setActivityVec(hypro::vector_t _vec) {
 		mVecAct = _vec;
 	}
 
-	void setActivityMat(hypro::matrix_t* _mat) {
+	template<typename Number>
+	void Location<Number>::setActivityMat(hypro::matrix_t* _mat) {
 		mMatrixAct = _mat;
 	}
 
-	void setInvariant(invariant _inv) {
+	template<typename Number>
+	void Location<Number>::setInvariant(struct invariant _inv) {
 		mInvariant = _inv;
 	}
 
-	void setLocation(location _loc) {
+	template<typename Number>
+	void Location<Number>::setInvariant(hypro::matrix_t* _mat, hypro::vector_t _vec, hypro::operator_e _op) {
+		mInvariant.vec = _vec;
+		mInvariant.mat = _mat;
+		mInvariant.op = _op;
+	}
+
+	template<typename Number>
+	void Location<Number>::setLocation(struct location _loc) {
 		mLocation = _loc;
 	}
 

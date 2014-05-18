@@ -1,5 +1,8 @@
 set(hybrid_automata_headers
-
+    HybridAutomaton.h
+    Location.h
+    Transition.h
+    util.h
     PARENT_SCOPE
 )
 

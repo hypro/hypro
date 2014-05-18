@@ -22,6 +22,7 @@ namespace hypro
 			typedef std::set<location*> locationSet;
 			typedef std::set<transition*> transitionSet;
 
+        public:
     		struct hybridAutomaton {
     			locationSet init;
     			locationSet locs;
@@ -29,6 +30,7 @@ namespace hypro
     			hypro::valuation_t valuation;
     		};
 
+        private:
     		/**
     		 * Member
     		 */
@@ -63,7 +65,7 @@ namespace hypro
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
     		void setValuation(hypro::valuation_t _val);
-    		void setHybridAutomaton(hybridAutomaton _hybrid);
+    		void setHybridAutomaton(struct hybridAutomaton _hybrid);
 
     };
 }

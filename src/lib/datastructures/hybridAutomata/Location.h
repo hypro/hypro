@@ -13,11 +13,11 @@ namespace hypro
     template<typename Number>
     class Location
     {
-        private:
+        public:
     		struct invariant {
     			hypro::vector_t vec;
     			hypro::matrix_t* mat;
-    			hypro::operator_t op;
+    			hypro::operator_e op;
     		};
 
     		struct location {
@@ -25,6 +25,8 @@ namespace hypro
     			hypro::matrix_t* mat;
     			invariant inv;
     		};
+
+        private:
 
     		/**
     		 * Member
@@ -34,7 +36,7 @@ namespace hypro
 
     		hypro::vector_t mVecInv;		//vector for invariants
     		hypro::matrix_t* mMatrixInv; 	//matrix for invariants
-    		hypro::operator_t mOperatorInv; //operator (vector) for invariants
+    		hypro::operator_e mOperatorInv; //operator (vector) for invariants
     		invariant mInvariant;  //invariant: matrix, vector, and operator
 
     		location mLocation;  //location: matrix, vector, and invariant
@@ -45,7 +47,7 @@ namespace hypro
     		 */
     		Location(){}
     		Location(const Location& _loc);
-    		Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const invariant _inv);
+    		Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const struct invariant _inv);
         
     		~Location()
     		{}
@@ -60,8 +62,9 @@ namespace hypro
 
     		void setActivityVec(hypro::vector_t _vec);
     		void setActivityMat(hypro::matrix_t* _mat);
-    		void setInvariant(invariant _inv);
-    		void setLocation(location _loc);
+    		void setInvariant(struct invariant _inv);
+    		void setInvariant(hypro::matrix_t* _mat, hypro::vector_t _vec, hypro::operator_e _op);
+    		void setLocation(struct location _loc);
 
     		//bool checkInvariant(hypro::valuation_t _val);
     		//std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);

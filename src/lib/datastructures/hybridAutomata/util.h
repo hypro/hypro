@@ -2,10 +2,14 @@
 #pragma once
 
 #include "../../util/eigenTypetraits.h"
+#include "carl/interval/Interval.h"
+#include "carl/numbers/FLOAT_T.h"
+//#include "../../numbers/FLOAT_T.h"
+#include "../../representations/Polytope/Polytope.h"
+
 
 namespace hypro
 {
-	public:
 		enum operator_e {
 			EQ,
 			GEQ,
@@ -15,10 +19,12 @@ namespace hypro
 			GREATER
 		};
 
-		typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
-		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
+		typedef std::map<carl::Variable, carl::FLOAT_T<number> > vector_t;
+		typedef Eigen::Matrix<carl::FLOAT_T<number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
 		typedef std::map<carl::Variable, operator_e> operator_t;
-		typedef std::map<carl::Variable, carl::Interval<FLOAT_T<Number>>> valuation_t;
+		//typedef std::map<carl::Variable, carl::Interval<hypro::FLOAT_T<number>> valuation_t;
+		//typedef std::map<carl::Variable, hypro::Polytope<number>> valuation_t;
+		typedef hypro::Polytope<carl::FLOAT_T<number>> valuation_t;
 
 		/*
 		template<typename Number>

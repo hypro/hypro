@@ -19,19 +19,21 @@ namespace hypro
 
     		typedef hypro::Location<Number> location;
 
+        public:
     		struct guard {
     			hypro::vector_t vec;
     			hypro::matrix_t* mat;
-    			hypro::operator_t op;
+    			hypro::operator_e op;
     		};
 
     		struct transition {
     			location* locStart;
     			location* locTarget;
-    			guard guard;
+    			guard tGuard;
     			hypro::valuation_t assign;
     		};
 
+        private:
     		/**
     		 * Member
     		 */
@@ -54,7 +56,7 @@ namespace hypro
 
     		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
 
-    		Transition(const location* _start, const location* _end, const guard _guard, const hypro::valuation_t _assign){
+    		Transition(const location* _start, const location* _end, const struct guard _guard, const hypro::valuation_t _assign){
     			mStartLoc = _start;
     			mTargetLoc = _end;
     			mGuard = _guard;
@@ -62,7 +64,7 @@ namespace hypro
 
     			mTransition.locStart = _start;
     			mTransition.locTarget = _end;
-    			mTransition.guard = _guard;
+    			mTransition.tGuard = _guard;
     			mTransition.assign = _assign;
     		}
 
@@ -96,11 +98,11 @@ namespace hypro
     			mTargetLoc = _target;
     		}
 
-    		void setGuard(guard _guard) {
+    		void setGuard(struct guard _guard) {
     			mGuard = _guard;
     		}
 
-    		void setTransition(transition _trans) {
+    		void setTransition(struct transition _trans) {
     			mTransition = _trans;
     		}
 
