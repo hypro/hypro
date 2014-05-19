@@ -23,31 +23,37 @@ class GridTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+        Grid<number_t>::gridMap map1;
+        Grid<number_t>::gridMap map2;
+        
         // grid1
         Point<number_t>::vector_t coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(1)) );
         p1 = Point<number_t>(coordinates1);
-        grid1.insert(p1, true);
+        map1.insert(std::pair<Point<number_t>, bool>(p1, true));
         
         Point<number_t>::vector_t coordinates2;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
+        coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
+        coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
         p2 = Point<number_t>(coordinates2);
-        grid1.insert(p2, false);
+        map1.insert(std::pair<Point<number_t>, bool>(p2, false));
         
         // grid2
         Point<number_t>::vector_t coordinates3;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
+        coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
+        coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p3 = Point<number_t>(coordinates3);
-        grid2.insert(p3, true);
+        map2.insert(std::pair<Point<number_t>, bool>(p3, true));
         
         Point<number_t>::vector_t coordinates4;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
+        coordinates4.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
+        coordinates4.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p4 = Point<number_t>(coordinates4);
-        grid2.insert(p4, true);
+        map2.insert(std::pair<Point<number_t>, bool>(p4, true));
+        
+        grid1 = Grid<number_t>(map1);
+        grid2 = Grid<number_t>(map2);
     }
 	
     virtual void TearDown()
@@ -75,6 +81,6 @@ TEST_F(GridTest, Constructor)
 
 TEST_F(GridTest, ColourAt)
 {
-    //EXPECT_TRUE(grid1.colourAt(p1));
-    //EXPECT_FALSE(grid1.colourAt(p2));
+    EXPECT_TRUE(grid1.colourAt(p1));
+    EXPECT_FALSE(grid1.colourAt(p2));
 }

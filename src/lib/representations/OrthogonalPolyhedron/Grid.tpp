@@ -98,7 +98,7 @@ namespace hypro
         auto gridIt = mGrid.find(point);
 
         if (gridIt == mGrid.end()) { // not found
-            if (mBoundingBox != NULL && !this->mBoundingBox.contains(point)) {
+            if (!mBoundingBox.isEmpty() && !this->mBoundingBox.contains(point)) {
                 // neighbor is out of box, so its definitely white
                 pColour = false;
             } else {

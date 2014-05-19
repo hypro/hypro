@@ -52,11 +52,6 @@ namespace hypro
                 reserveInducedGrid();
             }
             
-            Grid(const gridMap& grid, const Box<Number> boundingBox) : mGrid(grid), mBoundingBox(boundingBox)
-            {
-                reserveInducedGrid();
-            }
-            
             /**
              * Returns the dimension of this grid.
              * @return dimension
@@ -80,6 +75,15 @@ namespace hypro
             bool induced()
             {
                 return mInduced;
+            }
+            
+            /**
+             * Updates the bounding box to optimize the contains method.
+             * @param boundingBox
+             */
+            void setBoundingBox(const Box<Number>& boundingBox)
+            {
+                mBoundingBox = boundingBox;
             }
             
             /**
