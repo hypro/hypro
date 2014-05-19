@@ -42,27 +42,47 @@ namespace hypro
         public:
             
             /**
-             * Constructors
+             * Constructor
              */
-            
             Grid() {}
-            
+
+            /**
+             * Constructor
+             * 
+             * @param grid
+             */
             Grid(const gridMap& grid) : mGrid(grid)
             {
                 reserveInducedGrid();
             }
             
             /**
+             * Returns the size ie. the number of points saved in this grid.
+             * 
+             * @return 
+             */
+            int size() const
+            {
+                return mGrid.size();
+            }
+            
+            /**
              * Returns the dimension of this grid.
              * @return dimension
              */
-            int dimension()
+            int dimension() const
             {
                 assert( mGrid.size() > 0 );
                 return (*mGrid.begin()).first.dimension();
             }
             
-            std::vector<carl::Variable> variables()
+            /**
+             * Returns the variables used in this grid. Only points with exactly
+             * this variables are allowed to be inserted into the grid.
+             * 
+             * @return 
+             */
+            std::vector<carl::Variable> variables() const
             {
                 assert( mGrid.size() > 0 );
                 return (*mGrid.begin()).first.variables();
@@ -72,13 +92,14 @@ namespace hypro
              * Returns whether the grid is induced.
              * @return induced
              */
-            bool induced()
+            bool induced() const
             {
                 return mInduced;
             }
             
             /**
-             * Updates the bounding box to optimize the contains method.
+             * Updates the bounding box to optimize the colourAt method.
+             * 
              * @param boundingBox
              */
             void setBoundingBox(const Box<Number>& boundingBox)
@@ -94,12 +115,15 @@ namespace hypro
             void insertVerticesInMap(const VertexContainer<Number>& vertexContainer);
             
             /**
-             * Calculates the coordinates of the induced grid
+             * Calculates the coordinates of the induced grid.
+             * 
+             * @param vertices
              */
             void induceGrid(const vSet<Number>& vertices);
             
             /**
              * Translate a point into its coordinates on the induced grid.
+             * 
              * @param point
              * @return induced point
              */
@@ -119,7 +143,6 @@ namespace hypro
             
             /**
              * Recursive function to check if a point is within the polyhedron.
-             * For the membership
              *
              * @param point
              * @return true, if the point lies within the polyhedron.
@@ -127,7 +150,10 @@ namespace hypro
             bool contains(const Point<Number>& point);
             
             /**
-             * Returns the colour of the given point.
+             * Returns the colour of the given point. This checks if the point
+             * is contained in the grid by the use of several optimations. It
+             * saves the colour of the point in the grid and also makes use of
+             * the bounding box if one is set.
              *
              * @param point
              * @return the colour of the point

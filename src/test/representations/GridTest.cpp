@@ -83,4 +83,26 @@ TEST_F(GridTest, ColourAt)
 {
     EXPECT_TRUE(grid1.colourAt(p1));
     EXPECT_FALSE(grid1.colourAt(p2));
+    p1[x] = FLOAT_T<number_t>(1.5);
+    EXPECT_TRUE(grid1.colourAt(p1));
+    p1[x] = FLOAT_T<number_t>(2);
+    EXPECT_FALSE(grid1.colourAt(p1));
+}
+
+TEST_F(GridTest, Contains)
+{
+    EXPECT_TRUE(grid1.contains(p1));
+    EXPECT_FALSE(grid1.contains(p2));
+    p1[x] = FLOAT_T<number_t>(1.5);
+    EXPECT_TRUE(grid1.contains(p1));
+    p1[x] = FLOAT_T<number_t>(2);
+    EXPECT_FALSE(grid1.contains(p1));
+}
+
+TEST_F(GridTest, CalculateInduced)
+{
+    //EXPECT_EQ(p1, grid1.calculateInduced(p1));
+    Point<number_t> p = Point<number_t>(p1);
+    p[x] = FLOAT_T<number_t>(1.5);
+    //EXPECT_EQ(p1, grid1.calculateInduced(p));
 }

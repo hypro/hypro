@@ -161,12 +161,13 @@ namespace hypro
     template<typename Number>
     Point<Number> Grid<Number>::calculateInduced(const Point<Number>& x) const
     {
-        std::vector<Number> coordinates;
-        coordinates.reserve(dimension());
-        std::vector<int>::iterator it;
-        for (unsigned d = 0; d < dimension(); d++) {
-            it = std::lower_bound(mInducedGridPoints[d].begin(), mInducedGridPoints[d].end(), x[d] + 1);
-            coordinates.push_back((int) (it - 1 - mInducedGridPoints[d].begin()));
+        typename Point<Number>::vector_t coordinates;
+        //typename std::vector<Number>::iterator it;
+        for (auto & inducedGridPointsIt : mInducedGridPoints) {
+            auto it = std::lower_bound(inducedGridPointsIt.second.begin(), inducedGridPointsIt.second.end(), x.coordinate(inducedGridPointsIt.first) + Number(1));
+            // @todo typecast???
+            coordinates.insert(std::pair<carl::Variable, Number>(inducedGridPointsIt.first,
+                    Number(inducedGridPointsIt.second.at(it - 1 - inducedGridPointsIt.second.begin()))));
         }
         Point<Number> induced = Point<Number>(coordinates);
         //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);
