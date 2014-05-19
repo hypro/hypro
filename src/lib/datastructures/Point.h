@@ -333,7 +333,7 @@ namespace hypro {
             {
                 number dist;
                 for (auto pointIt : mCoordinates)
-				{
+		{
                     dist += ( (*pointIt).second - mean.coordinate((*pointIt).first) ).pow(number(2));
                 }
                 dist /= rate; //TODO: use proper rounding?
@@ -382,20 +382,23 @@ namespace hypro {
                 int nrofNeighbors = (pow(2, (dim - 1)) - 1);
 
                 vector_t coordinates;
-
+                
+                // iterate through all neighbors
                 for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
-                    //calculate the next neighbor we going to check
-                    for (auto pointIt : mCoordinates)
-                    {
-                        if ((*pointIt).first > fixedDim)
-                        {
-                            coordinates[(*pointIt).first] = (*pointIt).second - ((neighborNr >> (dim - (*pointIt).first - 1)) & 1);
-                        } else if ( (*pointIt).first == fixedDim)
-                        {
-                            coordinates[(*pointIt).first] = (*pointIt).second;
-                        } else 
-                        { // k < fixed
-                            coordinates[(*pointIt).first] = (*pointIt).second - ((neighborNr >> (dim - (*pointIt).first - 1 - 1)) & 1);
+                    // then iterate through all dimensions
+                    int i = 0;
+                    for (auto& pointIt : mCoordinates) {
+                        // look if the bit of the current coordinate is set
+                        // thus the first point will have 1 less in every second dimension,
+                        // the second point will have 1 less in every fourth dimension etc.
+                        if (pointIt.first == fixedDim) {
+                            coordinates[pointIt.first] = pointIt.second;
+                        }    
+                        else if ((neighborNr >> i++) & 1) {
+                            coordinates[pointIt.first] = pointIt.second - 1;
+                        }
+                        else {
+                            coordinates[pointIt.first] = pointIt.second;
                         }
                     }
                     Point<Number> neighbor = Point<Number>(coordinates);
@@ -484,8 +487,8 @@ namespace hypro {
              */
             Point& getPredecessorInDimension(const carl::Variable& d) const
             {
-                Point<Number> pred = Point(*this);
-                pred.DecrementInFixedDim(d);
+                Point<Number> pred = Point<Number>(*this);
+                pred.decrementInFixedDim(d);
                 return pred;
             }
 
