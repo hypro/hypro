@@ -16,6 +16,7 @@
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
+#include "boost/variant.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -33,8 +34,7 @@ typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
 typedef qi::space_type Skipper;
-
-
+typedef std::vector<boost::variant<State, Transition> > Automaton;
 
 
 
@@ -43,17 +43,18 @@ struct MatrixParser : public qi::grammar<Iterator, std::vector<std::vector<doubl
 {
     MatrixParser() : MatrixParser::base_type(start)
     {
-        start =  "[" >> ((qi::double_ % qi::char_(' ',',')) % ';') >> "]";
+        start =  "[" >> ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') >> "]";
     }
     
     qi::rule<Iterator,std::vector<std::vector<double>>(), Skipper> start;
 };
 
 template<typename Iterator>
-//struct StateParser : public qi::grammar<Iterator, Skipper>
 struct StateParser : public qi::grammar<Iterator, State(), Skipper>
 {
     MatrixParser<Iterator> mMatrixParser;
+    
+    qi::debug(start);
     
     StateParser() : StateParser::base_type(start)
     {
@@ -61,13 +62,26 @@ struct StateParser : public qi::grammar<Iterator, State(), Skipper>
     }
     
     qi::rule<Iterator, State(), Skipper> start;
-    //qi::rule<Iterator, Skipper> start;
 };
 
 template<typename Iterator>
-struct MainParser : public qi::grammar<Iterator, Skipper>
+struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
+{
+    MatrixParser<Iterator> mMatrixParser;
+    
+    TransitionParser(): TransitionParser::base_type(start)
+    {
+        start = qi::lit("transitions") > "{" > qi::int_ > "}." > qi::string("eguards_dir") > "=" > mMatrixParser > ";";
+    }
+    
+    qi::rule<Iterator, Transition(), Skipper> start;
+};
+
+template<typename Iterator>
+struct MainParser : public qi::grammar<Iterator, Automaton, Skipper>
 {
     StateParser<Iterator> mStateParser;
+    TransitionParser<Iterator> mTransitionParser;
     
     MainParser() : MainParser::base_type(main)
     {
@@ -76,7 +90,8 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
         
         qi::debug(main);
         
-        main = mStateParser;
+        main = *(mStateParser | mTransitionParser);
+        //main = *(mStateParser);
         
         qi::on_error<qi::fail>
         (
@@ -91,21 +106,18 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
         );
     }    
     
-    qi::rule<Iterator, Skipper> main;
-    
+    qi::rule<Iterator, Automaton, Skipper> main;
 };
 
 
-
-
-
-
-class HyproParser : public qi::grammar<Iterator, Skipper>
+class HyproParser : public qi::grammar<Iterator, Automaton, Skipper>
 {   
     private:
     // Rules
     MainParser<Iterator> mMainParser;
-    qi::rule<Iterator,Skipper> main;
+    qi::rule<Iterator, Automaton, Skipper> main;
+    
+    qi::debug(main);
     
     public:
     HyproParser() : HyproParser::base_type(main)
@@ -116,5 +128,53 @@ class HyproParser : public qi::grammar<Iterator, Skipper>
     void parseInput(const std::string& pathToInputFile);
     bool parse(std::istream& in, const std::string& filename);
 };
+
+class Automaton_visitor
+    : public boost::static_visitor<>
+{
+public:
+
+    State& operator()(State& i) const
+    {
+        return i;
+    }
+
+    Transition& operator()(Transition& i) const
+    {
+        return i;
+    }
+};
+
+std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
+{
+    std::vector<const State*> states;
+    std::vector<const Transition*> transitions;
+    std::cout << rhs.size() << std::endl;
+    for(auto& item : rhs)
+    {
+        std::cout << "item" << std::endl;
+        if(const State* i = boost::get<State>(&item))
+        {
+            std::cout << "state..." << std::endl;
+            states.insert(states.end(), i);
+        }
+        if(const Transition* i = boost::get<Transition>(&item))
+        {
+            std::cout << "Transition..." << std::endl;
+            transitions.insert(transitions.end(), i);
+        }
+    }
+    for(auto& state : states)
+    {
+        lhs << state;
+    }
+    for(auto& transition : transitions)
+    {
+        lhs << transition;
+    }
+    return lhs;
+}
+
+
 }
 }

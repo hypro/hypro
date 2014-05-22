@@ -34,7 +34,59 @@ namespace parser
         int mId;
         char mType;
         std::vector<std::vector<double> > mMatrix;
+        
+        State() :
+        mId(),
+        mType(),
+        mMatrix()
+        {
+            std::cout << "Construct State." << std::endl;
+        }
+        
+        State(const int& _id, const char& _type, const std::vector<std::vector<double> >& _matrix) :
+        mId(_id),
+        mType(_type),
+        mMatrix(_matrix)
+        {
+            std::cout << "Construct State." << std::endl;
+        }
     };
+    
+    struct Transition
+    {
+        int mId;
+        std::string mType;
+        std::vector<std::vector<double> > mMatrix;
+    };
+    
+    std::ostream& operator<<(std::ostream& lhs, const std::vector<std::vector<double> >& rhs )
+    {
+        lhs << "[";
+        for(auto& row : rhs)
+        {
+            for(auto& value : row)
+            {
+                lhs << value << " ";
+            }
+            lhs << "; ";
+        }
+        lhs << "]";
+        return lhs;
+    }
+    
+    std::ostream& operator<<(std::ostream& lhs, const State& rhs)
+    {
+            std::cout << "ping." << std::endl;
+
+        lhs << "State(" << rhs.mId << ")." << rhs.mType << " = " << rhs.mMatrix;
+        return lhs;
+    }
+    
+    std::ostream& operator<<(std::ostream& lhs, const Transition& rhs)
+    {
+        lhs << "Transition(" << rhs.mId << ")." << rhs.mType << " = " << rhs.mMatrix;
+        return lhs;
+    }
     
     /*
     struct keywords : qi::symbols<std::string, std::string>
@@ -55,5 +107,12 @@ BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::State,
     (int, mId)
     (char, mType)
+    (std::vector<std::vector<double> >, mMatrix)
+    )
+        
+BOOST_FUSION_ADAPT_STRUCT(
+    hypro::parser::Transition,
+    (int, mId)
+    (std::string, mType)
     (std::vector<std::vector<double> >, mMatrix)
     )

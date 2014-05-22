@@ -25,9 +25,12 @@ namespace parser{
         Iterator begin(basebegin);
         Iterator end;
         Skipper skipper;
+        Automaton resultAutomaton;
         
         // invoke qi parser
-        bool result = qi::phrase_parse(begin, end, main, skipper);
+        bool result = qi::phrase_parse(begin, end, main, skipper, resultAutomaton);
+        
+        std::cout << "Result: " << resultAutomaton << std::endl;
         
         std::cout << std::string(begin, end) << std::endl;
         

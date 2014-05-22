@@ -22,8 +22,11 @@ namespace hypro {
 template<typename Number>
 class Box : hypro::GeometricObject<Number>
 {
+private:
+        typedef carl::FLOAT_T<Number> number;
+    
 public:
-	typedef std::map<const carl::Variable, carl::Interval<Number>> intervalMap;
+	typedef std::map<const carl::Variable, carl::Interval<number>> intervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
@@ -43,7 +46,7 @@ public:
             mBoundaries = orig.boundaries();
         }
         
-        Box(const carl::Variable& var, const carl::Interval<Number>& val)
+        Box(const carl::Variable& var, const carl::Interval<number>& val)
         {
             mBoundaries.insert(std::make_pair(var, val));
         }
@@ -75,7 +78,7 @@ public:
 	 * @param val Pair of Variable and Interval.
 	 * @return True, if a new insertion has happened, else only update of an existing interval.
 	 */
-	bool insert(const std::pair<const carl::Variable, carl::Interval<Number>> val)
+	bool insert(const std::pair<const carl::Variable, carl::Interval<number>> val)
 	{
             if(mBoundaries.find(val.first) == mBoundaries.end())
             {
@@ -86,7 +89,7 @@ public:
             return false;
 	}
 	
-        bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
+        bool insert(const carl::Variable& var, const carl::Interval<number>& val)
 	{
             if(mBoundaries.find(var) == mBoundaries.end())
             {
@@ -131,8 +134,8 @@ public:
             return true;
         }
 	
-	carl::Interval<Number>& rInterval(const carl::Variable& var);
-	carl::Interval<Number> interval(const carl::Variable& var) const;
+	carl::Interval<number>& rInterval(const carl::Variable& var);
+	carl::Interval<number> interval(const carl::Variable& var) const;
 	
         bool isEmpty() const
         {

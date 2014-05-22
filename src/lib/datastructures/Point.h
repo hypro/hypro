@@ -48,6 +48,7 @@ namespace hypro {
             typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 	private:
             typedef carl::FLOAT_T<Number> number;
+            typedef std::map<carl::Variable, Number> orig_number_map;
 
         protected:
             vector_t mCoordinates;
@@ -141,14 +142,27 @@ namespace hypro {
                 mCoordinates[dim] = value;
             }
             
+            void setCoordinate(const carl::Variable& dim, Number value)
+            {
+                mCoordinates[dim] = carl::FLOAT_T(value);
+            }
+            
             /**
              * 
              * @param coordinates
              * @param offset
              */
-            void insertCoordinates(vector_t& coordinates)
+            void insertCoordinates(const vector_t& coordinates)
             {
                 mCoordinates.insert(coordinates.begin(), coordinates.end());
+            }
+            
+            void insertCoordinates(const orig_number_map& coordinates)
+            {
+                for(auto& valuePair : coordinates)
+                {
+                    mCoordinates.insert(std::make_pair(valuePair.first, carl::FLOAT_T<Number>(valuePair.second)));
+                }
             }
             
             /**
