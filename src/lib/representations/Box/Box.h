@@ -26,12 +26,12 @@ private:
         typedef carl::FLOAT_T<Number> number;
     
 public:
-	typedef std::map<const carl::Variable, carl::Interval<number>> intervalMap;
+	typedef std::map<const carl::Variable, carl::Interval<Number>> intervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 protected:
-	intervalMap mBoundaries;
+	std::map<const carl::Variable, carl::Interval<carl::FLOAT_T<Number>>> mBoundaries;
 	
 public:
 	/***************************************************************************
@@ -46,7 +46,7 @@ public:
             mBoundaries = orig.boundaries();
         }
         
-        Box(const carl::Variable& var, const carl::Interval<number>& val)
+        Box(const carl::Variable& var, const carl::Interval<carl::FLOAT_T<Number>>& val)
         {
             mBoundaries.insert(std::make_pair(var, val));
         }
@@ -88,6 +88,19 @@ public:
             mBoundaries.at(val.first) = val.second;
             return false;
 	}
+        
+        bool insert(const std::pair<const carl::Variable, carl::Interval<Number>> val)
+	{
+            carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.lower());
+            carl::FLOAT_T<Number> upper = carl::FLOAT_T<Number>(val.upper());
+            if(mBoundaries.find(val.first) == mBoundaries.end())
+            {
+                mBoundaries[val.first] = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+                return true;
+            }
+            mBoundaries.at(val.first) = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+            return false;
+	}
 	
         bool insert(const carl::Variable& var, const carl::Interval<number>& val)
 	{
@@ -102,7 +115,12 @@ public:
         
 	void insert(const intervalMap& boundaries)
 	{
-            mBoundaries.insert(boundaries.begin(), boundaries.end());
+            for(auto& intervalPair : boundaries)
+            {
+                mBoundaries.insert(std::make_pair(intervalPair.first, 
+                        carl::Interval<carl::FLOAT_T<Number>>(intervalPair.second.lower(), intervalPair.second.lowerBoundType(), intervalPair.second.upper(), intervalPair.second.upperBoundType())));
+            }
+            //mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
 	
 	bool hasDimension(const carl::Variable& var) const
@@ -134,8 +152,8 @@ public:
             return true;
         }
 	
-	carl::Interval<number>& rInterval(const carl::Variable& var);
-	carl::Interval<number> interval(const carl::Variable& var) const;
+	carl::Interval<carl::FLOAT_T<Number>>& rInterval(const carl::Variable& var);
+	carl::Interval<carl::FLOAT_T<Number>> interval(const carl::Variable& var) const;
 	
         bool isEmpty() const
         {

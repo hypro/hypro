@@ -144,7 +144,7 @@ namespace hypro {
             
             void setCoordinate(const carl::Variable& dim, Number value)
             {
-                mCoordinates[dim] = carl::FLOAT_T(value);
+                mCoordinates[dim] = carl::FLOAT_T<Number>(value);
             }
             
             /**

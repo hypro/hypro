@@ -54,14 +54,13 @@ struct StateParser : public qi::grammar<Iterator, State(), Skipper>
 {
     MatrixParser<Iterator> mMatrixParser;
     
-    qi::debug(start);
-    
     StateParser() : StateParser::base_type(start)
     {
        start = qi::lit("states") > "{" > qi::int_ > "}." > qi::char_("AbB")  > "=" > mMatrixParser > ";";
     }
     
     qi::rule<Iterator, State(), Skipper> start;
+    //qi::debug(start);
 };
 
 template<typename Iterator>
@@ -117,7 +116,7 @@ class HyproParser : public qi::grammar<Iterator, Automaton, Skipper>
     MainParser<Iterator> mMainParser;
     qi::rule<Iterator, Automaton, Skipper> main;
     
-    qi::debug(main);
+    //qi::debug(main);
     
     public:
     HyproParser() : HyproParser::base_type(main)
