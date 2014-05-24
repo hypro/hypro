@@ -7,7 +7,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	HybridAutomaton<Number>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t _initVal) {
+	HybridAutomaton<Number>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t<Number> _initVal) {
 		mInitialLocations = _initLocs;
 		mLocations = _locs;
 		mTransitions = _trans;
@@ -35,7 +35,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	hypro::valuation_t HybridAutomaton<Number>::valuation() {
+	hypro::valuation_t<Number> HybridAutomaton<Number>::valuation() {
 		return mValuation;
 	}
 
@@ -60,7 +60,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HybridAutomaton<Number>::setValuation(hypro::valuation_t _val) {
+	void HybridAutomaton<Number>::setValuation(hypro::valuation_t<Number> _val) {
 		mValuation = _val;
 	}
 

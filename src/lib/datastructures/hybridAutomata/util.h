@@ -19,12 +19,15 @@ namespace hypro
 			GREATER
 		};
 
+		template<typename Number>
+		using valuation_t = hypro::Polytope<Number>;
+
 		typedef std::map<carl::Variable, carl::FLOAT_T<number> > vector_t;
 		typedef Eigen::Matrix<carl::FLOAT_T<number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
 		typedef std::map<carl::Variable, operator_e> operator_t;
 		//typedef std::map<carl::Variable, carl::Interval<hypro::FLOAT_T<number>> valuation_t;
 		//typedef std::map<carl::Variable, hypro::Polytope<number>> valuation_t;
-		typedef hypro::Polytope<carl::FLOAT_T<number>> valuation_t;
+		//typedef hypro::Polytope<carl::FLOAT_T<number>> valuation_t;
 
 		/*
 		template<typename Number>

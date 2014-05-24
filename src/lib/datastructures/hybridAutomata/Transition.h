@@ -30,7 +30,7 @@ namespace hypro
     			location* locStart;
     			location* locTarget;
     			guard tGuard;
-    			hypro::valuation_t assign;
+    			hypro::valuation_t<Number> assign;
     		};
 
         private:
@@ -44,7 +44,7 @@ namespace hypro
     		location* mStartLoc;  // start location
     		location* mTargetLoc; // target location
 
-    		hypro::valuation_t mAssignment; // assignment that takes place if guard is fulfilled
+    		hypro::valuation_t<Number> mAssignment; // assignment that takes place if guard is fulfilled
 
     		transition mTransition; // transition: two locations, a guard and an assignment
 
@@ -56,7 +56,7 @@ namespace hypro
 
     		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
 
-    		Transition(const location* _start, const location* _end, const struct guard _guard, const hypro::valuation_t _assign){
+    		Transition(const location* _start, const location* _end, const struct guard _guard, const hypro::valuation_t<Number> _assign){
     			mStartLoc = _start;
     			mTargetLoc = _end;
     			mGuard = _guard;
