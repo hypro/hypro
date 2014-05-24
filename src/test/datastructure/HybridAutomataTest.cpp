@@ -85,7 +85,7 @@ protected:
 
     	hypro::Polytope<double> poly = Polytope<double>(p1);
 
-    	//hybrid.setValuation(poly);
+    	hybrid.setValuation(poly);
 
     }
 
@@ -111,7 +111,7 @@ protected:
 TEST_F(HybridAutomataTest, LocationTest)
 {
 	//EXPECT_EQ(loc1.invariant().op,LEQ);
-	EXPECT_EQ(1,1);
+	//EXPECT_EQ(1,1);
 }
 
 TEST_F(HybridAutomataTest, TransitionTest)
