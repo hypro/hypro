@@ -85,16 +85,6 @@ namespace hypro
 			return true;   // a boundary was never violated
 		}
 
-		//TODO mehrere Intervalle -> std::pair oder map (evtl. hier nur für eine Var ausrechnen, dann in anderer Fkt. zusammenfassen)
-		template<typename Number>
-		carl::Interval<FLOAT_T<Number>> computeForwardTimeClosure(hypro::valuation_t _val) {
-			//TODO
-			//idea: create new valuation set, add _val initially
-			//then check invariant for upper bounds for variables -> FUNCTION: rückgabe jeweils ein t für eine var -> min suchen! -> obere grenze des intervals gegeben!
-			//compute all reachable valuations up to these bounds (details? script -> solve set of linear constraints)
-			//add to set, return set
-		}
-
 		/**
 		 * Functionality in context of a Transition
 		 */
@@ -126,17 +116,5 @@ namespace hypro
 			return true;   // a boundary was never violated
 		}
 
-		//previously: execAssignment (name tbd)
-		//TODO set of valuations is returned? -> Script!
-		template<typename Number>
-		valuation_t computePostCondition(hypro::Transition _trans, valuation_t _val) {
-			if (checkGuard(_val)) {
-					return _trans.mAssignment;
-			} else {
-				//TODO
-				//maybe throw error: transition may not be taken
-				return _val;
-			}
-		}
 }
 
