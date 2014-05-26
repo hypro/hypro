@@ -77,7 +77,7 @@ TEST_F(BoxTest, Access)
 
 TEST_F(BoxTest, Insertion)
 {
-    Box<number_t>::intervalMap tmp;
+    Box<number_t>::origNumberMap tmp;
     Variable z = pool.getFreshVariable("z");
     tmp.insert(std::make_pair(z, Interval<number_t>(3,9)));
     box1.insert(tmp);

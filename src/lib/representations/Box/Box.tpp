@@ -13,7 +13,7 @@
 namespace hypro {
 	
 template<typename Number>
-carl::Interval<carl::FLOAT_T<Number>>& Box<Number>::rInterval(const carl::Variable& var)
+carl::Interval<carl::FLOAT_T<Number> >& Box<Number>::rInterval(const carl::Variable& var)
 {
     auto intervalIt = mBoundaries.find(var);
     if( intervalIt == mBoundaries.end() )
@@ -28,13 +28,13 @@ carl::Interval<carl::FLOAT_T<Number>>& Box<Number>::rInterval(const carl::Variab
 }
 
 template<typename Number>
-carl::Interval<carl::FLOAT_T<Number>> Box<Number>::interval(const carl::Variable& var) const
+carl::Interval<carl::FLOAT_T<Number> > Box<Number>::interval(const carl::Variable& var) const
 {
     auto intervalIt = mBoundaries.find(var);
     if( intervalIt == mBoundaries.end() )
     {
         assert(false);
-        return carl::Interval<Number>();
+        return carl::Interval<carl::FLOAT_T<Number> >();
     }
     else
     {
@@ -76,7 +76,7 @@ bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
             return false;
         }
         std::cout << rhs.interval((*intervalIt).first) << std::endl;
-        carl::Interval<carl::FLOAT_T<Number>> res = (*intervalIt).second.intersect(rhs.interval((*intervalIt).first));
+        carl::Interval<carl::FLOAT_T<Number> > res = (*intervalIt).second.intersect(rhs.interval((*intervalIt).first));
         if( res.isEmpty() )
         {
             result.clear();

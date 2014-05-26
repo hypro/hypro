@@ -16,6 +16,7 @@
 #include "../GeometricObject.h"
 #include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
+#include <carl/numbers/FLOAT_T.h>
 
 namespace hypro {
 
@@ -26,12 +27,13 @@ private:
         typedef carl::FLOAT_T<Number> number;
     
 public:
-	typedef std::map<const carl::Variable, carl::Interval<Number>> intervalMap;
+	typedef std::map<const carl::Variable, carl::Interval<carl::FLOAT_T<Number> > > intervalMap;
+        typedef std::map<const carl::Variable, carl::Interval<Number> > origNumberMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 protected:
-	std::map<const carl::Variable, carl::Interval<carl::FLOAT_T<Number>>> mBoundaries;
+	intervalMap mBoundaries;
 	
 public:
 	/***************************************************************************
@@ -46,7 +48,7 @@ public:
             mBoundaries = orig.boundaries();
         }
         
-        Box(const carl::Variable& var, const carl::Interval<carl::FLOAT_T<Number>>& val)
+        Box(const carl::Variable& var, const carl::Interval<carl::FLOAT_T<Number> >& val)
         {
             mBoundaries.insert(std::make_pair(var, val));
         }
@@ -54,6 +56,15 @@ public:
         Box(const intervalMap& intervals)
         {
             mBoundaries.insert(intervals.begin(), intervals.end());
+        }
+        
+        Box(const origNumberMap& intervals)
+        {
+            for(auto& intervalPair : intervals)
+            {
+                mBoundaries.insert(std::make_pair(intervalPair.first, 
+                        carl::Interval<carl::FLOAT_T<Number>>(intervalPair.second.lower(), intervalPair.second.lowerBoundType(), intervalPair.second.upper(), intervalPair.second.upperBoundType())));
+            }
         }
         
         ~Box()
@@ -78,7 +89,7 @@ public:
 	 * @param val Pair of Variable and Interval.
 	 * @return True, if a new insertion has happened, else only update of an existing interval.
 	 */
-	bool insert(const std::pair<const carl::Variable, carl::Interval<number>> val)
+	bool insert(const std::pair<const carl::Variable, carl::Interval<carl::FLOAT_T<Number> > >& val)
 	{
             if(mBoundaries.find(val.first) == mBoundaries.end())
             {
@@ -89,20 +100,20 @@ public:
             return false;
 	}
         
-        bool insert(const std::pair<const carl::Variable, carl::Interval<Number>> val)
+        bool insert(const std::pair<const carl::Variable, carl::Interval<Number> >& val)
 	{
-            carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.lower());
-            carl::FLOAT_T<Number> upper = carl::FLOAT_T<Number>(val.upper());
+            carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.second.lower());
+            carl::FLOAT_T<Number> upper = carl::FLOAT_T<Number>(val.second.upper());
             if(mBoundaries.find(val.first) == mBoundaries.end())
             {
-                mBoundaries[val.first] = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+                mBoundaries[val.first] = carl::Interval<carl::FLOAT_T<Number> >(lower, val.second.lowerBoundType(), upper, val.second.upperBoundType());
                 return true;
             }
-            mBoundaries.at(val.first) = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+            mBoundaries.at(val.first) = carl::Interval<carl::FLOAT_T<Number> >(lower, val.second.lowerBoundType(), upper, val.second.upperBoundType());
             return false;
 	}
 	
-        bool insert(const carl::Variable& var, const carl::Interval<number>& val)
+        bool insert(const carl::Variable& var, const carl::Interval<carl::FLOAT_T<Number> >& val)
 	{
             if(mBoundaries.find(var) == mBoundaries.end())
             {
@@ -113,15 +124,32 @@ public:
             return false;
 	}
         
+        bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
+        {
+            carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.lower());
+            carl::FLOAT_T<Number> upper = carl::FLOAT_T<Number>(val.upper());
+            if(mBoundaries.find(var) == mBoundaries.end())
+            {
+                mBoundaries[var] = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+                return true;
+            }
+            mBoundaries.at(var) = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
+            return false;
+        }
+        
 	void insert(const intervalMap& boundaries)
 	{
+            mBoundaries.insert(boundaries.begin(), boundaries.end());
+	}
+        
+        void insert(const origNumberMap& boundaries)
+        {
             for(auto& intervalPair : boundaries)
             {
                 mBoundaries.insert(std::make_pair(intervalPair.first, 
                         carl::Interval<carl::FLOAT_T<Number>>(intervalPair.second.lower(), intervalPair.second.lowerBoundType(), intervalPair.second.upper(), intervalPair.second.upperBoundType())));
             }
-            //mBoundaries.insert(boundaries.begin(), boundaries.end());
-	}
+        }
 	
 	bool hasDimension(const carl::Variable& var) const
 	{
@@ -152,8 +180,8 @@ public:
             return true;
         }
 	
-	carl::Interval<carl::FLOAT_T<Number>>& rInterval(const carl::Variable& var);
-	carl::Interval<carl::FLOAT_T<Number>> interval(const carl::Variable& var) const;
+	carl::Interval<carl::FLOAT_T<Number> >& rInterval(const carl::Variable& var);
+	carl::Interval<carl::FLOAT_T<Number> > interval(const carl::Variable& var) const;
 	
         bool isEmpty() const
         {
@@ -171,7 +199,7 @@ public:
         
         Point<Number> max() const
         {
-            typename Point<Number>::vector_t coordinates;
+            typename Point<Number>::coordinates_map coordinates;
             for(auto interval : mBoundaries)
             {
                 coordinates.insert(std::make_pair(interval.first, interval.second.upper()));
@@ -181,7 +209,7 @@ public:
         
         Point<Number> min() const
         {
-            typename Point<Number>::vector_t coordinates;
+            typename Point<Number>::coordinates_map coordinates;
             for(auto interval : mBoundaries)
             {
                 coordinates.insert(std::make_pair(interval.first, interval.second.lower()));
