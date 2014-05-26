@@ -74,8 +74,8 @@ TEST_F(GridTest, Constructor)
 {
     Grid<number_t> grid1();
     Grid<number_t>::gridMap map;
-    map.insert(std::pair<Point<number_t>, bool>(p1, true));
-    map.insert(std::pair<Point<number_t>, bool>(p2, false));
+    map.insert(std::make_pair(p1, true));
+    map.insert(std::make_pair(p2, false));
     Grid<number_t> grid2(map);
 }
 
@@ -101,8 +101,8 @@ TEST_F(GridTest, Contains)
 
 TEST_F(GridTest, CalculateInduced)
 {
-    //EXPECT_EQ(p1, grid1.calculateInduced(p1));
+    EXPECT_EQ(p1, grid1.calculateInduced(p1));
     Point<number_t> p = Point<number_t>(p1);
     p[x] = FLOAT_T<number_t>(1.5);
-    //EXPECT_EQ(p1, grid1.calculateInduced(p));
+    EXPECT_EQ(p1, grid1.calculateInduced(p));
 }

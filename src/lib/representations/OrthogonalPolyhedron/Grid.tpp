@@ -14,9 +14,9 @@ namespace hypro
     template<typename Number>
     void Grid<Number>::reserveInducedGrid()
     {
-        std::vector<Number> v;
+        std::vector<carl::FLOAT_T<Number> > v;
         for (auto it : variables()) {
-            mInducedGridPoints.insert(std::pair<carl::Variable, std::vector<Number> >(it, v));
+            mInducedGridPoints.insert(std::make_pair(it, v));
         }
     }
     
@@ -161,13 +161,12 @@ namespace hypro
     template<typename Number>
     Point<Number> Grid<Number>::calculateInduced(const Point<Number>& x) const
     {
-        typename Point<Number>::vector_t coordinates;
+        typename Point<Number>::coordinateMap coordinates;
         //typename std::vector<Number>::iterator it;
         for (auto & inducedGridPointsIt : mInducedGridPoints) {
             auto it = std::lower_bound(inducedGridPointsIt.second.begin(), inducedGridPointsIt.second.end(), x.coordinate(inducedGridPointsIt.first) + Number(1));
-            // @todo typecast???
-            coordinates.insert(std::pair<carl::Variable, Number>(inducedGridPointsIt.first,
-                    Number(inducedGridPointsIt.second.at(it - 1 - inducedGridPointsIt.second.begin()))));
+            coordinates.insert(std::make_pair(inducedGridPointsIt.first,
+                    inducedGridPointsIt.second.at(it - 1 - inducedGridPointsIt.second.begin())));
         }
         Point<Number> induced = Point<Number>(coordinates);
         //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);

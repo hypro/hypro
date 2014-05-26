@@ -13,6 +13,7 @@
 #include "../../datastructures/VertexContainer.h"
 #include "../Box/Box.h"
 #include <carl/core/Variable.h>
+#include <carl/numbers/FLOAT_T.h>
 #include <map>
 #include <vector>
 
@@ -26,7 +27,7 @@ namespace hypro
     {
         public:
             typedef std::map<Point<Number>, bool> gridMap;
-            typedef std::map<carl::Variable, std::vector<Number> > gridPoints;
+            typedef std::map<carl::Variable, std::vector<carl::FLOAT_T<Number> > > gridPoints;
         
         private:
             gridMap mGrid;
