@@ -72,7 +72,7 @@ protected:
 
 TEST_F(GridTest, Constructor)
 {
-    Grid<number_t> grid1();
+    Grid<number_t> grid1;
     Grid<number_t>::gridMap map;
     map.insert(std::make_pair(p1, true));
     map.insert(std::make_pair(p2, false));

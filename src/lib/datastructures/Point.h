@@ -522,7 +522,7 @@ namespace hypro {
              * @param d
              * @return The point with coordinates [x(1), .., x(d-1), x(d)-1, x(d+1), ..., x(n) ]
              */
-            Point& getPredecessorInDimension(const carl::Variable& d) const
+            Point getPredecessorInDimension(const carl::Variable& d) const
             {
                 Point<Number> pred = Point<Number>(*this);
                 pred.decrementInFixedDim(d);

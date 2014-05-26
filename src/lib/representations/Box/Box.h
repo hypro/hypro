@@ -238,6 +238,17 @@ public:
             return !(b1 == b2);
         }
         
+        Box<Number>& operator= (const Box<Number>& rhs) 
+        { 
+          if (this != &rhs)
+          {
+            Box<Number> tmp(rhs);
+            std::swap(*this, tmp); 
+          } 
+          return *this;
+        }
+        
+        
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/
