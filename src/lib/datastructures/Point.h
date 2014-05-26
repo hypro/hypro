@@ -44,11 +44,11 @@ namespace hypro {
     {
         public:
             typedef std::set<Point<Number> > pointSet;
-            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > coordinates_map;
-            typedef std::map<carl::Variable, Number> orig_number_map;
+            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > coordinateMap;
+            typedef std::map<carl::Variable, Number> rawCoordinateMap;
 
         protected:
-            coordinates_map mCoordinates;
+            coordinateMap mCoordinates;
 		
         public:
         
@@ -85,7 +85,7 @@ namespace hypro {
              * Constructs a point with the passed coordinates
              * @param coordinates
              */
-            Point(const coordinates_map& coordinates) 
+            Point(const coordinateMap& coordinates) 
             {
                 mCoordinates.insert(coordinates.begin(), coordinates.end());
             }
@@ -94,7 +94,7 @@ namespace hypro {
              * Constructs a point with the passed coordinates
              * @param coordinates
              */
-            Point(const orig_number_map& coordinates) 
+            Point(const rawCoordinateMap& coordinates) 
             {
                 for (auto it : coordinates) {
                     mCoordinates.insert(std::make_pair(it.first, carl::FLOAT_T<Number>(it.second)));
@@ -145,12 +145,12 @@ namespace hypro {
                 return this->coordinate().value();
             }
 
-            coordinates_map coordinates() const 
+            coordinateMap coordinates() const 
             {
                 return mCoordinates;
             }
         
-            coordinates_map& rCoordinates()
+            coordinateMap& rCoordinates()
             {
                 return mCoordinates;
             }
@@ -175,12 +175,12 @@ namespace hypro {
              * @param coordinates
              * @param offset
              */
-            void insertCoordinates(const coordinates_map& coordinates)
+            void insertCoordinates(const coordinateMap& coordinates)
             {
                 mCoordinates.insert(coordinates.begin(), coordinates.end());
             }
             
-            void insertCoordinates(const orig_number_map& coordinates)
+            void insertCoordinates(const rawCoordinateMap& coordinates)
             {
                 for(auto& valuePair : coordinates)
                 {
@@ -192,7 +192,7 @@ namespace hypro {
              *
              * @return iterator to begin of mCoordinates
              */
-            typename coordinates_map::const_iterator begin() const
+            typename coordinateMap::const_iterator begin() const
             {
                 return mCoordinates.begin();
             }
@@ -201,7 +201,7 @@ namespace hypro {
              *
              * @return iterator to end of mCoordinates
              */
-            typename coordinates_map::const_iterator end() const
+            typename coordinateMap::const_iterator end() const
             {
                 return mCoordinates.end();
             }
@@ -310,7 +310,7 @@ namespace hypro {
              */
             Point<Number> newEmpty()
             {
-                coordinates_map coordinates;
+                coordinateMap coordinates;
                 for (auto pointIt : mCoordinates)
                 {
                     coordinates.insert(std::make_pair(pointIt.first, Number(0)));
@@ -418,7 +418,7 @@ namespace hypro {
                 // TODO comment
                 int nrofNeighbors = (pow(2, (dim - 1)) - 1);
 
-                coordinates_map coordinates;
+                coordinateMap coordinates;
                 
                 // iterate through all neighbors
                 for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {

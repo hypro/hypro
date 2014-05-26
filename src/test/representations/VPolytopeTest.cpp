@@ -13,7 +13,7 @@ class VPolytopeTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::coordinates_map coordinates;
+        Point<number_t>::coordinateMap coordinates;
         coordinates.insert(std::make_pair(x, 1));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 0));

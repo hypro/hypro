@@ -58,11 +58,11 @@ TEST_F(BoxTest, Access)
     EXPECT_TRUE(box1.haveSameDimensions(box2));
     EXPECT_FALSE(box1.haveSameDimensions(box3));
     
-    Point<number_t>::coordinates_map coMax1;
+    Point<number_t>::coordinateMap coMax1;
     coMax1.insert(std::make_pair(x, 6));
     coMax1.insert(std::make_pair(y, 3));
     EXPECT_EQ(Point<number_t>(coMax1), box1.max());
-    Point<number_t>::coordinates_map coMin1;
+    Point<number_t>::coordinateMap coMin1;
     coMin1.insert(std::make_pair(x, 2));
     coMin1.insert(std::make_pair(y, 1));
     EXPECT_EQ(Point<number_t>(coMin1), box1.min());
@@ -77,7 +77,7 @@ TEST_F(BoxTest, Access)
 
 TEST_F(BoxTest, Insertion)
 {
-    Box<number_t>::origNumberMap tmp;
+    Box<number_t>::rawIntervalMap tmp;
     Variable z = pool.getFreshVariable("z");
     tmp.insert(std::make_pair(z, Interval<number_t>(3,9)));
     box1.insert(tmp);

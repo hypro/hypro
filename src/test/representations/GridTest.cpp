@@ -27,26 +27,26 @@ protected:
         Grid<number_t>::gridMap map2;
         
         // grid1
-        Point<number_t>::coordinates_map coordinates1;
+        Point<number_t>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(1)) );
         p1 = Point<number_t>(coordinates1);
         map1.insert(std::pair<Point<number_t>, bool>(p1, true));
         
-        Point<number_t>::coordinates_map coordinates2;
+        Point<number_t>::coordinateMap coordinates2;
         coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
         coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
         p2 = Point<number_t>(coordinates2);
         map1.insert(std::pair<Point<number_t>, bool>(p2, false));
         
         // grid2
-        Point<number_t>::coordinates_map coordinates3;
+        Point<number_t>::coordinateMap coordinates3;
         coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p3 = Point<number_t>(coordinates3);
         map2.insert(std::pair<Point<number_t>, bool>(p3, true));
         
-        Point<number_t>::coordinates_map coordinates4;
+        Point<number_t>::coordinateMap coordinates4;
         coordinates4.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates4.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p4 = Point<number_t>(coordinates4);

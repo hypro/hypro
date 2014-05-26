@@ -19,25 +19,25 @@ protected:
     virtual void SetUp()
     {
         // p1
-        Point<number_t>::coordinates_map coordinates1;
+        Point<number_t>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p1 = Point<number_t>(coordinates1);
 
         // p2
-        Point<number_t>::coordinates_map coordinates2;
+        Point<number_t>::coordinateMap coordinates2;
         coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
         coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
         p2 = Point<number_t>(coordinates2);
 
         // p3
-        Point<number_t>::coordinates_map coordinates3;
+        Point<number_t>::coordinateMap coordinates3;
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
         coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
         p3 = Point<number_t>(coordinates3);
         
         // p4
-        Point<number_t>::coordinates_map coordinates4;
+        Point<number_t>::coordinateMap coordinates4;
         coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
         coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
         p4 = Point<number_t>(coordinates4);
@@ -198,7 +198,7 @@ TEST_F(PointTest, Constructor)
     EXPECT_TRUE(p1.haveSameDimensions(empty));
     EXPECT_EQ(0, empty[x]);
 
-    Point<number_t>::orig_number_map map;
+    Point<number_t>::rawCoordinateMap map;
     map.insert(std::make_pair(a, 123));
     map.insert(std::make_pair(b, 456));
     Point<number_t> p1(map);

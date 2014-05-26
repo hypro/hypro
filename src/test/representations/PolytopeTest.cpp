@@ -21,43 +21,43 @@ protected:
     virtual void SetUp()
     {
         // p1
-        Point<number_t>::coordinates_map coordinates1;
+        Point<number_t>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
         p1 = Point<number_t>(coordinates1);
 
         // p2
-        Point<number_t>::coordinates_map coordinates2;
+        Point<number_t>::coordinateMap coordinates2;
         coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(5)) );
         coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(7)) );
         p2 = Point<number_t>(coordinates2);
 
         // p3
-        Point<number_t>::coordinates_map coordinates3;
+        Point<number_t>::coordinateMap coordinates3;
         coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
         coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(7)) );
         p3 = Point<number_t>(coordinates3);
         
         // p4
-        Point<number_t>::coordinates_map coordinates4;
+        Point<number_t>::coordinateMap coordinates4;
         coordinates4.insert( std::make_pair(x, FLOAT_T<number_t>(8)) );
         coordinates4.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
         p4 = Point<number_t>(coordinates4);
         
         // p5
-        Point<number_t>::coordinates_map coordinates5;
+        Point<number_t>::coordinateMap coordinates5;
         coordinates5.insert( std::make_pair(x, FLOAT_T<number_t>(3)) );
         coordinates5.insert( std::make_pair(y, FLOAT_T<number_t>(3)) );
         p5 = Point<number_t>(coordinates5);
         
         // p6
-        Point<number_t>::coordinates_map coordinates6;
+        Point<number_t>::coordinateMap coordinates6;
         coordinates6.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
         coordinates6.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p6 = Point<number_t>(coordinates6);
         
         // p7
-        Point<number_t>::coordinates_map coordinates7;
+        Point<number_t>::coordinateMap coordinates7;
         coordinates7.insert( std::make_pair(x, FLOAT_T<number_t>(5)) );
         coordinates7.insert( std::make_pair(y, FLOAT_T<number_t>(3)) );
         p7 = Point<number_t>(coordinates7);
@@ -120,7 +120,7 @@ TEST_F(PolytopeTest, Access)
     carl::Variable a = pool.getFreshVariable("a");
     carl::Variable b = pool.getFreshVariable("b");
     Point<number_t>::pointSet ps2;
-    Point<number_t>::coordinates_map coordinates;
+    Point<number_t>::coordinateMap coordinates;
     coordinates.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
     coordinates.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
     Point<number_t> p5 = Point<number_t>(coordinates);

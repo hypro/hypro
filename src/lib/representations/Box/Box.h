@@ -28,7 +28,7 @@ private:
     
 public:
 	typedef std::map<const carl::Variable, carl::Interval<carl::FLOAT_T<Number> > > intervalMap;
-        typedef std::map<const carl::Variable, carl::Interval<Number> > origNumberMap;
+        typedef std::map<const carl::Variable, carl::Interval<Number> > rawIntervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
@@ -58,7 +58,7 @@ public:
             mBoundaries.insert(intervals.begin(), intervals.end());
         }
         
-        Box(const origNumberMap& intervals)
+        Box(const rawIntervalMap& intervals)
         {
             for(auto& intervalPair : intervals)
             {
@@ -142,7 +142,7 @@ public:
             mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
         
-        void insert(const origNumberMap& boundaries)
+        void insert(const rawIntervalMap& boundaries)
         {
             for(auto& intervalPair : boundaries)
             {
@@ -199,7 +199,7 @@ public:
         
         Point<Number> max() const
         {
-            typename Point<Number>::coordinates_map coordinates;
+            typename Point<Number>::coordinateMap coordinates;
             for(auto interval : mBoundaries)
             {
                 coordinates.insert(std::make_pair(interval.first, interval.second.upper()));
@@ -209,7 +209,7 @@ public:
         
         Point<Number> min() const
         {
-            typename Point<Number>::coordinates_map coordinates;
+            typename Point<Number>::coordinateMap coordinates;
             for(auto interval : mBoundaries)
             {
                 coordinates.insert(std::make_pair(interval.first, interval.second.lower()));
