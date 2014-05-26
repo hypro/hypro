@@ -98,20 +98,30 @@ protected:
     carl::Variable y = pool.getFreshVariable("y");
 
     // Location<double> loc1; ?
-	Location<double> loc1 = Location<double>();
-	Location<double> loc2 = Location<double>();
-	Transition<double> trans = Transition<double>();
-	HybridAutomaton<double> hybrid = HybridAutomaton<double>();
+    Location<double> loc1 = Location<double>();
+    Location<double> loc2 = Location<double>();
+    Transition<double> trans = Transition<double>();
+    HybridAutomaton<double> hybrid = HybridAutomaton<double>();
 
-	Point<double> p1;
+    Point<double> p1;
 
 };
 
+TEST_F(HybridAutomataTest, LocationConstructorTest)
+{
+    Location<double> locA;
+    matrix_t matr(2,2);
+    matr(0,0) = 1.0;
+    matr(0,1) = 0.0;
+    matr(1,0) = 1.0;
+    matr(0,1) = 0.0;
+    SUCCEED();
+}
 
 TEST_F(HybridAutomataTest, LocationTest)
 {
-	//EXPECT_EQ(loc1.invariant().op,LEQ);
-	//EXPECT_EQ(1,1);
+    EXPECT_EQ(loc1.invariant().op,LEQ);
+    //EXPECT_EQ(1,1);
 }
 
 TEST_F(HybridAutomataTest, TransitionTest)

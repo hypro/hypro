@@ -45,7 +45,15 @@ namespace hypro
     		/**
     		 * Constructors & Destructor
     		 */
-    		Location(){}
+    		Location() : 
+                    mVecAct(),
+                    mMatrixAct(),
+                    mVecInv(),
+                    mMatrixInv(),
+                    mOperatorInv(),
+                    mInvariant(),
+                    mLocation()
+                {}
     		Location(const Location& _loc);
     		Location(const hypro::matrix_t* _mat, const hypro::vector_t _vec, const struct invariant _inv);
         
