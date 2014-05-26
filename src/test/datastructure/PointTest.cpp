@@ -180,13 +180,13 @@ TEST_F(PointTest, Constructor)
     p = Point<number_t>(y, 5);
     EXPECT_EQ(p.dimension(), 1);
     
-	p[pool.getFreshVariable()] = 2;
-	p[pool.getFreshVariable()] = 2;
-	p[pool.getFreshVariable()] = 2;
-	p[pool.getFreshVariable()] = 2;
-	p[pool.getFreshVariable()] = 2;
-	p[pool.getFreshVariable()] = 2;
-	
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+
     EXPECT_EQ(p.dimension(), (unsigned) 7);
     EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
     
@@ -197,6 +197,13 @@ TEST_F(PointTest, Constructor)
     EXPECT_EQ(p1.dimension(), empty.dimension());
     EXPECT_TRUE(p1.haveSameDimensions(empty));
     EXPECT_EQ(0, empty[x]);
+
+    Point<number_t>::orig_number_map map;
+    map.insert(std::make_pair(a, 123));
+    map.insert(std::make_pair(b, 456));
+    Point<number_t> p1(map);
+    EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
+    EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
 }
 
 TEST_F(PointTest, PolarCoordinates)
