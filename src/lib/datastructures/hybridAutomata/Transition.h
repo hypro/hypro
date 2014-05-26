@@ -21,8 +21,8 @@ namespace hypro
 
         public:
     		struct guard {
-    			hypro::vector_t vec;
-    			hypro::matrix_t* mat;
+    			hypro::vector_t<Number> vec;
+    			hypro::matrix_t<Number>* mat;
     			hypro::operator_e op;
     		};
 
@@ -37,8 +37,8 @@ namespace hypro
     		/**
     		 * Member
     		 */
-    		hypro::vector_t mVecGuard;
-    		hypro::matrix_t* mMatrixGuard;
+    		hypro::vector_t<Number> mVecGuard;
+    		hypro::matrix_t<Number>* mMatrixGuard;
     		guard mGuard;  //guard: matrix, vector, and operator
 
     		location* mStartLoc;  // start location
