@@ -78,7 +78,7 @@ protected:
     	hybrid.setTransitions(transSet);
 
     	//Polytope for InitialValuation
-    	Point<double>::vector_t coordinates;
+    	Point<double>::coordinates_map coordinates;
         coordinates.insert( std::make_pair(x, FLOAT_T<double>(2)) );
         coordinates.insert( std::make_pair(y, FLOAT_T<double>(3)) );
         p1 = Point<double>(coordinates);

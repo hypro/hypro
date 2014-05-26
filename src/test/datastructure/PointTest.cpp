@@ -19,28 +19,25 @@ protected:
     virtual void SetUp()
     {
         // p1
-        Point<number_t>::vector_t coordinates1;
-		//VariablePool& pool = VariablePool::getInstance();
-		//Variable x = pool.getFreshVariable("x");
-		//Variable y = pool.getFreshVariable("y");
+        Point<number_t>::coordinates_map coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p1 = Point<number_t>(coordinates1);
 
         // p2
-        Point<number_t>::vector_t coordinates2;
+        Point<number_t>::coordinates_map coordinates2;
         coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
         coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
         p2 = Point<number_t>(coordinates2);
 
         // p3
-        Point<number_t>::vector_t coordinates3;
+        Point<number_t>::coordinates_map coordinates3;
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
         coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
         p3 = Point<number_t>(coordinates3);
         
         // p4
-        Point<number_t>::vector_t coordinates4;
+        Point<number_t>::coordinates_map coordinates4;
         coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
         coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
         p4 = Point<number_t>(coordinates4);
@@ -110,8 +107,8 @@ TEST_F(PointTest, OperationTest)
     EXPECT_TRUE(p2.move(p3));
     EXPECT_EQ(p2[a], FLOAT_T<number_t>(7));
     EXPECT_EQ(p2[b], FLOAT_T<number_t>(8));
-	EXPECT_EQ(p2[c], FLOAT_T<number_t>(-9));
-    EXPECT_EQ(p2[d], FLOAT_T<number_t>(13));
+    EXPECT_EQ(p2[c], FLOAT_T<number_t>(9));
+    EXPECT_EQ(p2[d], FLOAT_T<number_t>(-13));
 }
 
 /**
@@ -119,8 +116,14 @@ TEST_F(PointTest, OperationTest)
  */
 TEST_F(PointTest, BinaryOperatorTest)
 {
-    EXPECT_TRUE(p3 < p4);
+    EXPECT_TRUE(p4 < p3);
+    EXPECT_TRUE(p3 > p4);
+    EXPECT_FALSE(p4 > p3);
+    EXPECT_FALSE(p3 < p4);
+    EXPECT_FALSE(p4 < p4);
     EXPECT_FALSE(p4 > p4);
+    EXPECT_EQ(p4, p4);
+    EXPECT_NE(p3, p4);
 }
 
 /**
@@ -135,13 +138,14 @@ TEST_F(PointTest, BooleanTest)
     EXPECT_TRUE(p1.isInBoundary(p1));
 	
     p1[x] = FLOAT_T<number_t>(3);
-    p2[x] = FLOAT_T<number_t>(4);
-    p2[y] = FLOAT_T<number_t>(5);
     
     EXPECT_TRUE(p1.hasDimension(x));
     EXPECT_FALSE(p1.hasDimension(a));
     EXPECT_FALSE(p2.hasDimension(x));
     EXPECT_TRUE(p2.hasDimension(a));
+
+    p2[x] = FLOAT_T<number_t>(4);
+    p2[y] = FLOAT_T<number_t>(5);
 	
     EXPECT_TRUE(p1.haveEqualCoordinate(p1));
     EXPECT_FALSE(p1.haveEqualCoordinate(p3));
@@ -193,8 +197,6 @@ TEST_F(PointTest, Constructor)
     EXPECT_EQ(p1.dimension(), empty.dimension());
     EXPECT_TRUE(p1.haveSameDimensions(empty));
     EXPECT_EQ(0, empty[x]);
-    
-    //ASSERT_NE(Point<number_t>(3), Point<number_t>(7));
 }
 
 TEST_F(PointTest, PolarCoordinates)

@@ -17,19 +17,19 @@ protected:
         Variable y = pool.getFreshVariable();
         
         // p1
-        Point<number_t>::vector_t coordinates1;
+        Point<number_t>::coordinates_map coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p1 = Point<number_t>(coordinates1);
 		
         // p2
-        Point<number_t>::vector_t coordinates2;
+        Point<number_t>::coordinates_map coordinates2;
         coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
         coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
         p2 = Point<number_t>(coordinates2);
 		
         // p3
-        Point<number_t>::vector_t coordinates3;
+        Point<number_t>::coordinates_map coordinates3;
         coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(-9)) );
         coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(13)) );
         p3 = Point<number_t>(coordinates3);

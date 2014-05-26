@@ -31,22 +31,22 @@ protected:
         Variable x = pool.getFreshVariable(carl::VT_INT);
         Variable y = pool.getFreshVariable(carl::VT_INT);
         
-        Point<number_t>::vector_t coordinates1;
+        Point<number_t>::coordinates_map coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         pt1 = Point<number_t>(coordinates1);
         
-        Point<number_t>::vector_t coordinates2;
+        Point<number_t>::coordinates_map coordinates2;
         coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         pt2 = Point<number_t>(coordinates2);
         
-        Point<number_t>::vector_t coordinates3;
+        Point<number_t>::coordinates_map coordinates3;
         coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         Vertex<number_t> v1(coordinates1, false);
         
-        Point<number_t>::vector_t coordinates4;
+        Point<number_t>::coordinates_map coordinates4;
         coordinates4.insert( std::make_pair(x, FLOAT_T<number_t>(-3)) );
         coordinates4.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
         Vertex<number_t> v2(coordinates2, true);

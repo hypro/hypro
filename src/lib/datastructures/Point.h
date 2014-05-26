@@ -43,15 +43,12 @@ namespace hypro {
     class Point 
     {
         public:
-            //typedef std::vector<carl::FLOAT_T<Number> > vector_t;
             typedef std::set<Point<Number> > pointSet;
-            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
-	private:
-            typedef carl::FLOAT_T<Number> number;
+            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > coordinates_map;
             typedef std::map<carl::Variable, Number> orig_number_map;
 
         protected:
-            vector_t mCoordinates;
+            coordinates_map mCoordinates;
 		
         public:
         
@@ -69,18 +66,39 @@ namespace hypro {
              * @param dim
              * @param initialValue
              */
-            Point(const carl::Variable& var, const number& value = number())
+            Point(const carl::Variable& var, const carl::FLOAT_T<Number>& value = carl::FLOAT_T<Number>())
             {
                 mCoordinates[var] = value;
+            }
+		
+            /**
+             * Constructs a point with the passed dimension and sets the coordinates to the initial value.
+             * @param dim
+             * @param initialValue
+             */
+            Point(const carl::Variable& var, const Number& value = Number())
+            {
+                mCoordinates[var] = carl::FLOAT_T<Number>(value);
             }
 
             /**
              * Constructs a point with the passed coordinates
              * @param coordinates
              */
-            Point(const vector_t& coordinates) 
+            Point(const coordinates_map& coordinates) 
             {
                 mCoordinates.insert(coordinates.begin(), coordinates.end());
+            }
+
+            /**
+             * Constructs a point with the passed coordinates
+             * @param coordinates
+             */
+            Point(const orig_number_map& coordinates) 
+            {
+                for (auto it : coordinates) {
+                    mCoordinates.insert(std::make_pair(it.first, carl::FLOAT_T<Number>(it.second)));
+                }
             }
 
             /**
@@ -116,18 +134,23 @@ namespace hypro {
              * @param  dim the dimension we want to get the value from.
              * @return 
              */
-            number coordinate(const carl::Variable& var) const
+            carl::FLOAT_T<Number> coordinate(const carl::Variable& var) const
             {
                 assert(mCoordinates.count(var) > 0);
                 return mCoordinates.at(var);
             }
+            
+            Number rawCoordinate(const carl::Variable& var) const
+            {
+                return this->coordinate().value();
+            }
 
-            vector_t coordinates() const 
+            coordinates_map coordinates() const 
             {
                 return mCoordinates;
             }
         
-            vector_t& rCoordinates()
+            coordinates_map& rCoordinates()
             {
                 return mCoordinates;
             }
@@ -137,7 +160,7 @@ namespace hypro {
              * @param dim    the dimension that is changed
              * @param value  the new value
              */
-            void setCoordinate(const carl::Variable& dim, number value)
+            void setCoordinate(const carl::Variable& dim, carl::FLOAT_T<Number> value)
             {
                 mCoordinates[dim] = value;
             }
@@ -152,7 +175,7 @@ namespace hypro {
              * @param coordinates
              * @param offset
              */
-            void insertCoordinates(const vector_t& coordinates)
+            void insertCoordinates(const coordinates_map& coordinates)
             {
                 mCoordinates.insert(coordinates.begin(), coordinates.end());
             }
@@ -169,7 +192,7 @@ namespace hypro {
              *
              * @return iterator to begin of mCoordinates
              */
-            typename vector_t::const_iterator begin() const
+            typename coordinates_map::const_iterator begin() const
             {
                 return mCoordinates.begin();
             }
@@ -178,7 +201,7 @@ namespace hypro {
              *
              * @return iterator to end of mCoordinates
              */
-            typename vector_t::const_iterator end() const
+            typename coordinates_map::const_iterator end() const
             {
                 return mCoordinates.end();
             }
@@ -207,19 +230,19 @@ namespace hypro {
                 return variables;
             }
             
-            std::vector<number> polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
+            std::vector<carl::FLOAT_T<Number> > polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
             {
                 Point<Number> base = *this - origin;
                 std::cout << "Point: " << base << std::endl;
                 
                 
-                std::vector<number> result;
+                std::vector<carl::FLOAT_T<Number> > result;
                 
                 // 1st component of the result is the radial part, the following components are the angles.
-                number radialCoordinate;
+                carl::FLOAT_T<Number> radialCoordinate;
                 for(auto dimension : base.mCoordinates)
                 {
-                    number square;
+                    carl::FLOAT_T<Number> square;
                     dimension.second.pow(square, 2);
                     radialCoordinate += square;
                 }
@@ -229,14 +252,14 @@ namespace hypro {
                 std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
                 
                 // compute polar angles
-                number angle;
+                carl::FLOAT_T<Number> angle;
                 for(auto dimension = base.mCoordinates.begin(); dimension != --base.mCoordinates.end(); ++dimension)
                 {
                     std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
                     angle = 0;
                     for(auto dimension2 = dimension; dimension2 != base.mCoordinates.end(); ++dimension2)
                     {
-                        number square;
+                        carl::FLOAT_T<Number> square;
                         angle += (*dimension2).second.pow(square, 2);
                     }
                     std::cout << "Summed squares: " << angle << std::endl;
@@ -256,7 +279,7 @@ namespace hypro {
                 if((*base.mCoordinates.rbegin()).second < 0)
                 {
                     std::cout << "Correct last angle: ";
-                    number tmp = result.back();
+                    carl::FLOAT_T<Number> tmp = result.back();
                     result.pop_back();
                     if(!radians)
                     {
@@ -287,7 +310,7 @@ namespace hypro {
              */
             Point<Number> newEmpty()
             {
-                vector_t coordinates;
+                coordinates_map coordinates;
                 for (auto pointIt : mCoordinates)
                 {
                     coordinates.insert(std::make_pair(pointIt.first, Number(0)));
@@ -339,20 +362,20 @@ namespace hypro {
                 }
             }
     	
-            number getGaussianProbability(Point<Number> & mean) const{
+            carl::FLOAT_T<Number> getGaussianProbability(Point<Number> & mean) const{
                 return 0;
             }
 
-            number getDistanceDependentProbabiltity(Point<Number> & mean, unsigned intlength, number rate) const
+            carl::FLOAT_T<Number> getDistanceDependentProbabiltity(Point<Number> & mean, unsigned intlength, carl::FLOAT_T<Number> rate) const
             {
-                number dist;
+                carl::FLOAT_T<Number> dist;
                 for (auto pointIt : mCoordinates)
 		{
-                    dist += ( (*pointIt).second - mean.coordinate((*pointIt).first) ).pow(number(2));
+                    dist += ( (*pointIt).second - mean.coordinate((*pointIt).first) ).pow(carl::FLOAT_T<Number>(2));
                 }
                 dist /= rate; //TODO: use proper rounding?
                 if (dist < 1) return 1;
-                return (((number) intlength * (number) dimension()*(number) dimension() / dist));
+                return (((carl::FLOAT_T<Number>) intlength * (carl::FLOAT_T<Number>) dimension()*(carl::FLOAT_T<Number>) dimension() / dist));
             }
         
             /**
@@ -373,9 +396,9 @@ namespace hypro {
              * 
              * @return the sum of all coordinates
              */
-            number sum() const
+            carl::FLOAT_T<Number> sum() const
             {
-                number sum = 0;
+                carl::FLOAT_T<Number> sum = 0;
                 for (auto pointIt : mCoordinates)
                 {
                     sum += (pointIt).second;
@@ -395,7 +418,7 @@ namespace hypro {
                 // TODO comment
                 int nrofNeighbors = (pow(2, (dim - 1)) - 1);
 
-                vector_t coordinates;
+                coordinates_map coordinates;
                 
                 // iterate through all neighbors
                 for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
@@ -477,7 +500,7 @@ namespace hypro {
              * 
              * @param val The value to be added to each coordinate
              */
-            void incrementInAllDim(const number& val = 1)
+            void incrementInAllDim(const carl::FLOAT_T<Number>& val = 1)
             {
                 for (auto pointIt : mCoordinates)
                 {
@@ -584,7 +607,7 @@ namespace hypro {
             
             /**
              * Checks if the point has the same dimensions as this point.
-             * The number of dimensions has to be equal as well as the actual
+             * The carl::FLOAT_T<Number> of dimensions has to be equal as well as the actual
              * variables used for those dimensions.
              * 
              * @param p
@@ -670,12 +693,12 @@ namespace hypro {
              * @param i
              * @return
              */
-            number& operator[] (const carl::Variable& i)
+            carl::FLOAT_T<Number>& operator[] (const carl::Variable& i)
             {
                 return mCoordinates[i];
             }
 
-            number at(const carl::Variable& i) const
+            carl::FLOAT_T<Number> at(const carl::Variable& i) const
             {
                 return mCoordinates.at(i);
             }

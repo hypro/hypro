@@ -13,7 +13,7 @@ protected:
     virtual void SetUp()
     {
 		// p1
-        Point<number_t>::vector_t coordinates1;
+        Point<number_t>::coordinates_map coordinates1;
 		VariablePool& pool = VariablePool::getInstance();
 		Variable x = pool.getFreshVariable(carl::VT_INT);
 		Variable y = pool.getFreshVariable(carl::VT_INT);
@@ -22,7 +22,7 @@ protected:
         p1 = Point<number_t>(coordinates1);
 		
         // p2
-        Point<number_t>::vector_t coordinates2;
+        Point<number_t>::coordinates_map coordinates2;
 		Variable a = pool.getFreshVariable(carl::VT_INT);
 		Variable b = pool.getFreshVariable(carl::VT_INT);
         coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
@@ -30,7 +30,7 @@ protected:
         p2 = Point<number_t>(coordinates2);
 		
         // p3
-        Point<number_t>::vector_t coordinates3;
+        Point<number_t>::coordinates_map coordinates3;
 		Variable c = pool.getFreshVariable(carl::VT_INT);
 		Variable d = pool.getFreshVariable(carl::VT_INT);
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
