@@ -7,12 +7,19 @@
 #pragma once
 
 #include "util.h"
+//#include "Transition.h"
+
+class Transition;
 
 namespace hypro
 {
     template<typename Number>
     class Location
     {
+    	private:
+
+			typedef std::set<Transition*> transitionSet;
+
         public:
     		struct invariant {
     			hypro::vector_t<Number> vec;
@@ -23,6 +30,7 @@ namespace hypro
     		struct location {
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number>* mat;
+    			transitionSet trans;
     			invariant inv;
     		};
 
@@ -40,6 +48,8 @@ namespace hypro
     		invariant mInvariant;  //invariant: matrix, vector, and operator
 
     		location mLocation;  //location: matrix, vector, and invariant
+
+    		transitionSet mTransitions; //only (pointer to) outgoing transitions
         
         public:
     		/**
@@ -52,10 +62,11 @@ namespace hypro
                     mMatrixInv(),
                     mOperatorInv(),
                     mInvariant(),
-                    mLocation()
+                    mLocation(),
+                    mTransitions()
                 {}
     		Location(const Location& _loc);
-    		Location(const hypro::matrix_t<Number>* _mat, const hypro::vector_t<Number> _vec, const struct invariant _inv);
+    		Location(const hypro::matrix_t<Number>* _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const struct invariant _inv);
         
     		~Location()
     		{}
@@ -67,12 +78,14 @@ namespace hypro
     		hypro::matrix_t<Number>* activityMat();
     		invariant invariant();
     		location location();
+    		transitionSet transitions();
 
     		void setActivityVec(hypro::vector_t<Number> _vec);
     		void setActivityMat(hypro::matrix_t<Number>* _mat);
     		void setInvariant(struct invariant _inv);
     		void setInvariant(hypro::matrix_t<Number>* _mat, hypro::vector_t<Number> _vec, hypro::operator_e _op);
     		void setLocation(struct location _loc);
+    		void setTransitions(transitionSet _trans);
 
     		//bool checkInvariant(hypro::valuation_t _val);
     		//std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);

@@ -8,10 +8,13 @@ namespace hypro
     template<typename Number>
     class Forward
     {
+    	private:
+			//TODO maybe flowpipe is not a set, but union of segments (=polytopes)
+    		typedef std::set<hypro::valuation_t<Number>> flowpipe_t;
 
 		public:
 
-			std::set<hypro::valuation_t<Number>> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val,
+			flowpipe_t computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val,
 				double _timeBound, double _timeDiscretizationFactor) {
 
 				// [0,T] = [0,delta1] U [delta1, delta2] ...
@@ -52,7 +55,7 @@ namespace hypro
 					//firstSegment = hullPolytope.bloat();
 
 					//empty Flowpipe
-					std::set<hypro::valuation_t<Number>> flowPipe;
+					flowpipe_t flowPipe;
 					flowpipe.insert(firstSegment);
 
 					//for each time interval perform linear Transformation
@@ -74,12 +77,11 @@ namespace hypro
 						flowpipe.insert(resultPolytope);
 					}
 
+					return flowpipe;
+
 				} else {
 					//throw error, initValuation invalid
 				}
-
-				//TODO maybe flowpipe is not a set, but union of segments!
-
 
 				//TODO outdated
 				//idea: create new valuation set, add _val initially
@@ -100,7 +102,7 @@ namespace hypro
 			}
 
 			//TODO: time & step boundaries
-			void computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
+			std::set<flowpipe_t> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
 					//idea: alternate between time & discrete steps until boundary is reached
 					//start at initial location with initial valuation
 
@@ -109,7 +111,7 @@ namespace hypro
 					//if transition shall be taken (when? which one?)
 					// if (_hybrid.transitions().begin().startLoc() == _hybrid.initialLocations().begin()) ...
 					// TODO: umständlich -> bei Locations die ausgehenden Transitions speichern?
-					//computePostCondition(_hybrid.
+					//computePostCondition(_hybrid. ..)
 			}
 
     };

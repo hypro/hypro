@@ -7,14 +7,16 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Location<Number>::Location(const hypro::matrix_t<Number>* _mat, const hypro::vector_t<Number> _vec, const struct invariant _inv){
+	Location<Number>::Location(const hypro::matrix_t<Number>* _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const struct invariant _inv){
 		mMatrixAct = _mat;
 		mVecAct = _vec;
 		mInvariant = _inv;
+		mTransitions = _trans;
 
 		mLocation.vec = _vec;
 		mLocation.mat = _mat;
 		mLocation.inv = _inv;
+		mLocation.trans = _trans;
 	}
 
 	template<typename Number>
@@ -35,6 +37,11 @@ namespace hypro {
 	template<typename Number>
 	struct Location<Number>::location Location<Number>::location() {
 		return mLocation;
+	}
+
+	template<typename Number>
+	std::set<Transition*> Location<Number>::transitions() {
+		return mTransitions;
 	}
 
 	template<typename Number>
@@ -62,6 +69,11 @@ namespace hypro {
 	template<typename Number>
 	void Location<Number>::setLocation(struct location _loc) {
 		mLocation = _loc;
+	}
+
+	template<typename Number>
+	void Location<Number>::setTransitions(transitionSet _trans) {
+		mTransitions = _trans;
 	}
 
 	/*
