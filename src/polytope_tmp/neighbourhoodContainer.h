@@ -25,7 +25,6 @@ namespace reachLin {
     class NeighbourhoodContainer {
     public:
         NeighbourhoodContainer();
-        
        
         void insertVertexAndNeighbours(const Point& p, vVecIt neighbourBegin, vVecIt neighbourEnd) {
             set<Vertex> neighbourhood = set<Vertex>(neighbourBegin, neighbourEnd);
