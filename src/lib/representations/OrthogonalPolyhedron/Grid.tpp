@@ -23,119 +23,29 @@ namespace hypro
     template<typename Number>
     void Grid<Number>::insertVerticesInMap(const VertexContainer<Number>& vertexContainer)
     {
-        for (auto it = vertexContainer.begin(); it != vertexContainer.end(); ++it) {
-            Vertex<Number> vertex = *it;
-            this->insert(vertex, vertex.color());
+        for (auto it : vertexContainer) {
+            this->insert(it, it.color());
         }
     }
-    
-    template<typename Number>
-    bool Grid<Number>::contains(const Point<Number>& point)
-    {        
-        // The point we are to check.
-        //LOG4CPLUS_TRACE(mLogger, "Recursive Memberpoint check for: " << point);
-
-        bool neighbourColour = false;
-        bool neighbourPredecessorColor;
-
-        // Lookup if the point is already in the map.
-        auto gridIt = mGrid.find(point);
-        if (gridIt != mGrid.end()) {
-            //LOG4CPLUS_TRACE(mLogger, "Known:  " << gridIt->second);
-
-            // Known point
-            return gridIt->second;
-        }
-
-        // There exists a dimension
-        for (auto coordinateIt : point.coordinates()) {
-            auto fixed = coordinateIt.first;
-            
-            bool holdsforallneighbours = true;
-            //LOG4CPLUS_TRACE(mLogger, "Fixed Dimension: " << fixed);
-            // For all neighbours
-            auto neighboursInFixed = point.getAllNeighborsForAFixedDimension(fixed);
-            for (unsigned i = 0; i < neighboursInFixed.size(); i++) {
-                Point<Number> neighbour = neighboursInFixed[i];
-                // we now have the next neighbour we have to check.
-                // Do we know the points' mColor already?
-                neighbourColour = this->colourAt(neighbour);
-                //Calculate its predecessor.
-                Point<Number> neighbourPredecessor = Point<Number>(neighbour).getPredecessorInDimension(fixed);
-                //And the color of this predecessor.
-                neighbourPredecessorColor = this->colourAt(neighbourPredecessor);
-
-                if (neighbourPredecessorColor != neighbourColour) {
-                    // Since the condition has to hold for all neighbours for a fixed dimension,
-                    // this fixed dimension wont bring a result.
-                    //LOG4CPLUS_TRACE(mLogger, "Dimension: " << fixed << " will have no result");
-                    holdsforallneighbours = false;
-                    break;
-                }
-            }
-
-            if (holdsforallneighbours) {
-                // The condition neighbourPredecessorColor == neighbourColor did hold for all of them.
-                // Therefore we are able to calculate the mColor of the point.
-                Point<Number> xPredecessor = Point<Number>(point);
-                xPredecessor.decrementInFixedDim(fixed);
-                bool xPredecessorColor = this->colourAt(xPredecessor);
-
-                //LOG4CPLUS_TRACE(mLogger, point << " is colored " << xPredecessorColor);
-                return xPredecessorColor;
-            }
-        }
-        //LOG4CPLUS_ERROR(mLogger, "Looped through all dimensions without outcome in Membership ");
-        return false;
-    }
-    
-    template<typename Number>
-    bool Grid<Number>::colourAt(const Point<Number>& point)
-    {
-        //LOG4CPLUS_TRACE(mLogger, "Point checked: " << point);
-
-        bool pColour = false;
-        auto gridIt = mGrid.find(point);
-
-        if (gridIt == mGrid.end()) { // not found
-            if (!mBoundingBox.isEmpty() && !this->mBoundingBox.contains(point)) {
-                // neighbor is out of box, so its definitely white
-                pColour = false;
-            } else {
-                // we have to calculate this one
-                pColour = contains(point);
-            }
-            // save it for later use
-            this->insert(point, pColour);
-        } else {
-            // we already calculated this one.
-            pColour = gridIt->second;
-            //LOG4CPLUS_TRACE(mLogger, "We know this point!");
-        }
-        //LOG4CPLUS_TRACE(mLogger, "value: " << pColour);
-        return pColour;
-   }
     
     template<typename Number>
     void Grid<Number>::induceGrid(const vSet<Number>& vertices)
     {
         for (auto it : mInducedGridPoints) {
+            // insert origin as vertex
             it.second.push_back(Number(0));
-        }
-
-        // Projection of all points to the axes.
-        for (auto vertex : vertices) {
-            assert( vertex.hasDimensions(variables()));
-            for (auto it : mInducedGridPoints) {
+            
+            // Projection of all points to the axes.
+            for (auto vertex : vertices) {
+                assert( vertex.hasDimensions(variables()));
                 it.second.push_back(vertex.coordinate(it.first));
             }
-        }
-
-        // Sort every dimension, erase duplicate entries.
-        for (auto it : mInducedGridPoints) {
+            
+            // Sort every dimension, erase duplicate entries.
             std::sort(it.second.begin(), it.second.end());
             auto itr = std::unique(it.second.begin(), it.second.end());
             it.second.resize(itr - it.second.begin());
+            mInducedGridPoints[it.first] = it.second;
         }
 
         /*DEBUGoutput.
@@ -162,14 +72,33 @@ namespace hypro
     Point<Number> Grid<Number>::calculateInduced(const Point<Number>& x) const
     {
         typename Point<Number>::coordinateMap coordinates;
-        //typename std::vector<Number>::iterator it;
-        for (auto & inducedGridPointsIt : mInducedGridPoints) {
-            auto it = std::lower_bound(inducedGridPointsIt.second.begin(), inducedGridPointsIt.second.end(), x.coordinate(inducedGridPointsIt.first) + Number(1));
-            coordinates.insert(std::make_pair(inducedGridPointsIt.first,
-                    inducedGridPointsIt.second.at(it - 1 - inducedGridPointsIt.second.begin())));
+        
+        // if not induced, calculate the integer part of each coordinate
+        if (!mInduced) {
+            for (auto coordinateIt : x.coordinates()) {
+                coordinateIt.second.floor(coordinates[coordinateIt.first]);
+            }
+        } else {
+            //typename std::vector<Number>::iterator it;
+            for (auto inducedGridPointsIt : mInducedGridPoints) {
+        
+                auto fixed = inducedGridPointsIt.first;
+                auto inducedGridPoints = inducedGridPointsIt.second;
+        
+                std::cout << inducedGridPoints << std::endl;
+                
+                // get the position of the first element greater then the coordinate + 1
+                auto it = std::lower_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
+                        x.coordinate(fixed) + 1);
+                
+                // insert the element one before the element found above
+                coordinates.insert(std::make_pair(fixed,
+                        inducedGridPoints.at(it - 1 - inducedGridPoints.begin())));
+            }
+            //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);
         }
+        
         Point<Number> induced = Point<Number>(coordinates);
-        //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);
         return induced;
     }
         
