@@ -242,8 +242,8 @@ public:
         { 
           if (this != &rhs)
           {
-            Box<Number> tmp(rhs);
-            std::swap(*this, tmp); 
+              mBoundaries.clear();
+              mBoundaries.insert(rhs.boundaries().begin(), rhs.boundaries().end());
           } 
           return *this;
         }

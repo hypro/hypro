@@ -9,6 +9,7 @@ add_subdirectory(parser)
 set(lib_hypro_headers
 	config.h
 	#${lib_hypro_number_headers}
+        ${lib_hypro_algorithm_headers}
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
         ${lib_hypro_parser_headers}

@@ -119,9 +119,11 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result /*, ... */)
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
     {
     	//@author Chris: just to get rid of the warning
+        //for(int i = 0; i < )
+        
         return true;
     }
     

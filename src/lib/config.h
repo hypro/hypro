@@ -34,4 +34,5 @@ typedef carl::MultivariatePolynomial<number> Polynomial;
 typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
 typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix;
+typedef Eigen::Matrix<double, Eigen::Dynamic, 1> vector;
 
