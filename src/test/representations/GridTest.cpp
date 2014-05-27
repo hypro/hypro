@@ -13,6 +13,7 @@
 #include "../defines.h"
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
+#include "../../lib/datastructures/VertexContainer.h"
 #include "../../lib/representations/OrthogonalPolyhedron/Grid.h"
 #include <carl/core/VariablePool.h>
 
@@ -112,7 +113,31 @@ TEST_F(GridTest, CalculateInduced)
     EXPECT_EQ(p1, grid1.calculateInduced(p));
 }
 
-TEST_F(GridTest, induceGrid)
+TEST_F(GridTest, InsertVerticesInMap)
+{
+    VertexContainer<number_t> vertices;
+    Vertex<number_t>::rawCoordinateMap coordinates;
+    Vertex<number_t> v1, v2, v3;
+    
+    coordinates[x] = 1; coordinates[y] = 5;
+    v1 = Vertex<number_t>(coordinates, false);
+    coordinates[x] = 4; coordinates[y] = 7;
+    v2 = Vertex<number_t>(coordinates, true);
+    coordinates[x] = 6; coordinates[y] = 8;
+    v3 = Vertex<number_t>(coordinates, true);
+    
+    vertices.insert(v1);
+    vertices.insert(v2);
+    vertices.insert(v3);
+    
+    grid1.insertVerticesInMap(vertices);
+    
+    EXPECT_FALSE(grid1.colourAt(v1));
+    EXPECT_TRUE(grid1.colourAt(v2));
+    EXPECT_TRUE(grid1.colourAt(v3));
+}
+
+TEST_F(GridTest, InduceGrid)
 {
     vSet<number_t> vertices;
     Vertex<number_t>::rawCoordinateMap coordinates;

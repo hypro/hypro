@@ -6,9 +6,6 @@
  * @version 2014-04-14
  */
 
-#include "Grid.h"
-
-
 namespace hypro
 {
     template<typename Number>
