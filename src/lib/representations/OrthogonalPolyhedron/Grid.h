@@ -10,12 +10,10 @@
 
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
-#include "../../datastructures/VertexContainer.h"
-#include "../Box/Box.h"
 #include <carl/core/Variable.h>
 #include <carl/numbers/FLOAT_T.h>
-#include <map>
 #include <vector>
+#include <map>
 
 namespace hypro
 {
@@ -102,7 +100,7 @@ namespace hypro
              * 
              * @param vertexContainer
              */
-            void insertVerticesInMap(const VertexContainer<Number>& vertexContainer);
+            void insertVerticesInMap(const vSet<Number>& vertices);
             
             /**
              * Inserts the value for the point.
@@ -112,7 +110,7 @@ namespace hypro
              */
             void insert(const Point<Number>& point, bool colour)
             {
-                assert( point.hasDimensions(variables()) );
+                assert( mGridMap.empty() || point.hasDimensions(variables()) );
                 mGridMap[calculateInduced(point)] = colour;
             }
             

@@ -13,7 +13,6 @@
 #include "../defines.h"
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
-#include "../../lib/datastructures/VertexContainer.h"
 #include "../../lib/representations/OrthogonalPolyhedron/Grid.h"
 #include <carl/core/VariablePool.h>
 
@@ -115,7 +114,7 @@ TEST_F(GridTest, CalculateInduced)
 
 TEST_F(GridTest, InsertVerticesInMap)
 {
-    VertexContainer<number_t> vertices;
+    vSet<number_t> vertices;
     Vertex<number_t>::rawCoordinateMap coordinates;
     Vertex<number_t> v1, v2, v3;
     

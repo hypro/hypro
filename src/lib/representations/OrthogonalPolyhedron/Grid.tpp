@@ -18,9 +18,9 @@ namespace hypro
     }
     
     template<typename Number>
-    void Grid<Number>::insertVerticesInMap(const VertexContainer<Number>& vertexContainer)
+    void Grid<Number>::insertVerticesInMap(const vSet<Number>& vertices)
     {
-        for (auto it : vertexContainer) {
+        for (auto it : vertices) {
             this->insert(it, it.color());
         }
     }
@@ -62,6 +62,7 @@ namespace hypro
         */
 
         clear();
+        insertVerticesInMap(vertices);
         mInduced = true;
     }
     
