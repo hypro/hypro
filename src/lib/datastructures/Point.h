@@ -408,14 +408,16 @@ namespace hypro {
 
             /**
              * @brief: function to calculate points in the neighborhood, with one fixed dimension.
-             * @return std::vector with all points in the neighborhood, with a fixed dimension, and except the point itself.
+             * @param fixedDi
+             * @paran pointself
+             * @return std::vector with all points in the neighborhood, with a fixed dimension, and optional the point itself.
              */
-            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim) const
+            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& fixedDim, const bool pointself = false) const
             {
                 std::vector<Point<Number> > neighbors;
                 unsigned dim = dimension();
 
-                // TODO comment
+                // the number of neighbours is 2^(dimension - 1) - 1
                 int nrofNeighbors = (pow(2, (dim - 1)) - 1);
 
                 coordinateMap coordinates;
@@ -432,6 +434,11 @@ namespace hypro {
                             coordinates[pointIt.first] = pointIt.second;
                         }    
                         else if ((neighborNr >> i++) & 1) {
+                            // @todo to neighbors with negative coordinates
+                            /*if (pointIt.second < 1) {
+                                neighborOk = false;
+                                break;
+                            }*/
                             coordinates[pointIt.first] = pointIt.second - 1;
                         }
                         else {
@@ -441,34 +448,58 @@ namespace hypro {
                     Point<Number> neighbor = Point<Number>(coordinates);
                     neighbors.push_back(neighbor);
                 }
+                
+                if (pointself) {
+                    neighbors.push_back(*this);
+                }
+                
                 return neighbors;
             }
 
             /**
              *
-             * @param fixedDim
-             * @return Vector filled with neighbours with coordinate[fixedDim] equal to the points coordinate.
-             *  point is not an element of the returned vector.
+             * @param pointself
+             * @return Vector filled with neighbours in all dimensions.
+             *  point is optionally an element of the returned vector.
              */
-            std::vector<Point<Number> > getAllNeighbours(bool pointself=false) const
+            std::vector<Point<Number> > getAllNeighbours(const bool pointself=false) const
             {
-                std::vector<Point<Number> > neighbors = getAllNeighborsForAFixedDimension(0);
-                unsigned nrneighbors = neighbors.size();
-                //TODO comment!
-                for (unsigned i = 0; i < nrneighbors; i++) 
-                {
-                    Point<Number> neighborpredecessor = Point(neighbors[i]).getPredecessorInDimension(0);
-                    neighbors.push_back(neighborpredecessor);
+                std::vector<Point<Number> > neighbors;
+                unsigned dim = dimension();
+
+                // the number of neighbours is 2^(dimension) - 1
+                int nrofNeighbors = (pow(2, dim) - 1);
+
+                coordinateMap coordinates;
+                
+                // iterate through all neighbors
+                for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
+                    // then iterate through all dimensions
+                    int i = 0;
+                    for (auto& pointIt : mCoordinates) {
+                        // look if the bit of the current coordinate is set
+                        // thus the first point will have 1 less in every second dimension,
+                        // the second point will have 1 less in every fourth dimension etc.
+                        if ((neighborNr >> i++) & 1) {
+                            // @todo to neighbors with negative coordinates
+                            /*if (pointIt.second < 1) {
+                                neighborOk = false;
+                                break;
+                            }*/
+                            coordinates[pointIt.first] = pointIt.second - 1;
+                        }
+                        else {
+                            coordinates[pointIt.first] = pointIt.second;
+                        }
+                    }
+                    Point<Number> neighbor = Point<Number>(coordinates);
+                    neighbors.push_back(neighbor);
                 }
-
-                Point<Number> pointPredecessor = getPredecessorInDimension(0);
-                neighbors.push_back(pointPredecessor);
-
-                if (pointself) 
-                {
+                
+                if (pointself) {
                     neighbors.push_back(*this);
                 }
-
+                
                 return neighbors;
             }
 

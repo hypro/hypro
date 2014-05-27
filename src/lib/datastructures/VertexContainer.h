@@ -30,14 +30,14 @@ namespace hypro {
 		/***********************************************************************
 		 * Member
 		 **********************************************************************/
-		std::set<Vertex<Number>> vertices;
+		vSet<Number> mVertices;
 		
 	public:
 		/***********************************************************************
 		 * Constructors & Destructors
 		 **********************************************************************/
                 VertexContainer(){}
-		VertexContainer(const VertexContainer& orig) { vertices = orig.vertices; }
+		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
 		/***********************************************************************
@@ -46,19 +46,24 @@ namespace hypro {
 		
                 unsigned dimension() const
                 {
-                    assert( vertices.size() > 0 );
-                    return (*vertices.begin()).dimension();
+                    assert( mVertices.size() > 0 );
+                    return (*mVertices.begin()).dimension();
                 }
                 
 		unsigned size() const
 		{
-			return vertices.size();
+                    return mVertices.size();
 		}
-		
-		std::list<Vertex<Number>> getSmallerVertices(const Point<Number>& p)
+                
+                vSet<Number> vertices() const
                 {
-                        std::list<Vertex<Number>> verticesInBoundary;
-                        for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ++vertexIt)
+                    return mVertices;
+                }
+		
+		vList<Number> getSmallerVertices(const Point<Number>& p)
+                {
+                        vList<Number> verticesInBoundary;
+                        for(auto vertexIt = mVertices.begin(); vertexIt != mVertices.end(); ++vertexIt)
                         {
                                 if((*vertexIt).isInBoundary(p)) verticesInBoundary.push_back(*vertexIt);
                         }
@@ -71,8 +76,8 @@ namespace hypro {
 		 * @return
 		 */
 		inline std::pair<bool, bool> isVertex(const Point<Number>& p) const {
-			typename std::set<Vertex<Number>>::const_iterator it = vertices.find(Vertex<Number>(p,false));
-			if (it == vertices.end()) return std::pair<bool,bool>(false, false);
+			typename std::set<Vertex<Number>>::const_iterator it = mVertices.find(Vertex<Number>(p,false));
+			if (it == mVertices.end()) return std::pair<bool,bool>(false, false);
 			else return std::pair<bool, bool>(true, it->getColor());
 		}
 		
@@ -81,7 +86,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline bool originIsVertex() const {
-			return (*(vertices.begin()) == Point<Number>());
+			return (*(mVertices.begin()) == Point<Number>());
 		}
 		
 		/***********************************************************************
@@ -90,30 +95,30 @@ namespace hypro {
 		
 		VertexContainer<Number>& operator=(const VertexContainer<Number>& rhs) {
 			if(this == &rhs) return (*this);
-			vertices.clear();
-			vertices = rhs.vertices;
+			mVertices.clear();
+			mVertices = rhs.mVertices;
 		}
 		
 		inline vSetIt<Number> find(const Point<Number>& p, bool colour = false) const {
-			return vertices.find(Vertex<Number>(p,colour));
+			return mVertices.find(Vertex<Number>(p,colour));
 		}
 		
 		inline vSetIt<Number> find(const Vertex<Number>& v) const {
-			typename std::set<Vertex<Number>>::iterator it = vertices.find(v);
-			if (it->getColor() != v.getColor())  it = vertices.end();
+			typename std::set<Vertex<Number>>::iterator it = mVertices.find(v);
+			if (it->getColor() != v.getColor())  it = mVertices.end();
 			return it;
 		}
 		
 		inline void move(const Point<Number>& p) {
 			vSet<Number> tmp;
 			vSetIt<Number> tmpIt = tmp.begin();
-			for(vSetIt<Number> it = vertices.begin(); it != vertices.end(); ++it) {
+			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
 				Vertex<Number> v = Vertex<Number>(*it);
 				v.move(p);
 				tmp.insert(tmpIt, v);
 				tmpIt++;
 			}
-			vertices = tmp;
+			mVertices = tmp;
 		}
 		
 		/**
@@ -121,7 +126,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline vSetCIt<Number> begin() const {
-			return vertices.begin();
+			return mVertices.begin();
 		}
 		
 		/**
@@ -129,7 +134,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline vSetCIt<Number> end() const {
-			return vertices.end();
+			return mVertices.end();
 		}
 		
 		/**
@@ -140,8 +145,8 @@ namespace hypro {
 		 */
 		inline std::pair<vSetCIt<Number>, bool> insert(const Vertex<Number>& v) {
                     std::cout << "insert: ";
-                    std::cout << "contained(" << ( vertices.find(v) != vertices.end() ) << "), :";
-			return vertices.insert(v);
+                    std::cout << "contained(" << ( mVertices.find(v) != mVertices.end() ) << ")" << std::endl;
+			return mVertices.insert(v);
 		}
 		
 		/**
@@ -151,7 +156,7 @@ namespace hypro {
 		 */
 		template <typename ForwardIterator>
 		inline void insert(ForwardIterator begin, ForwardIterator end) {
-			vertices.insert(begin, end);
+			mVertices.insert(begin, end);
 		}
 		
 		/**
@@ -172,11 +177,11 @@ namespace hypro {
 		 */
 		template <typename BiIterator>
 		inline vSetIt<Number> insert(const Vertex<Number>& v, const BiIterator pos) {
-			return vertices.insert(pos,v);
+			return mVertices.insert(pos,v);
 		}
 		
 		inline vSetIt<Number> insertAtBack(const Vertex<Number>& v) {
-			return vertices.insert(--vertices.end(), v);
+			return mVertices.insert(--mVertices.end(), v);
 		}
 		
 		/**
@@ -197,7 +202,7 @@ namespace hypro {
 		 */
 		template <typename BiIterator>
 		inline void erase(BiIterator pos) {
-			vertices.erase(pos);
+			mVertices.erase(pos);
 		}
 		
 		/**
@@ -206,7 +211,7 @@ namespace hypro {
 		 */
 		inline void erase(const Point<Number>& p) {
 			Vertex<Number> v = Vertex<Number>(p,false);
-			vertices.erase(v);
+			mVertices.erase(v);
 			
 		}
 		
@@ -214,13 +219,13 @@ namespace hypro {
 		 * clears the underlying container.
 		 */
 		inline void clear() {
-			vertices.clear();
+			mVertices.clear();
 		}
 		
 		inline bool set(const Point<Number>& p, bool c) {
-			typename std::set<Vertex<Number>>::iterator it = vertices.find(Vertex<Number>(p,false));
-			if (it==vertices.end()) return false;
-			vertices.erase(it);
+			typename std::set<Vertex<Number>>::iterator it = mVertices.find(Vertex<Number>(p,false));
+			if (it==mVertices.end()) return false;
+			mVertices.erase(it);
 			insert(p,c,it);
 			return true;
 		}
