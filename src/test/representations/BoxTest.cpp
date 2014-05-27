@@ -1,6 +1,17 @@
+/**
+ * @file    BoxTest.cpp
+ * 
+ * @covers  Box
+ * 
+ * @author  Benedikt Seidl
+ * 
+ * @since
+ * @version 2014-05-27
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "carl/numbers/FLOAT_T.h"
+#include <carl/numbers/FLOAT_T.h>
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/representations/Box/Box.h"
@@ -73,6 +84,10 @@ TEST_F(BoxTest, Access)
     EXPECT_NE(box1, box2);
     EXPECT_NE(box2, box3);
     EXPECT_NE(box3, box1);
+    
+    Box<number_t> emptyBox;
+    EXPECT_FALSE(box1.isEmpty());
+    EXPECT_TRUE(emptyBox.isEmpty());
 }
 
 TEST_F(BoxTest, Insertion)

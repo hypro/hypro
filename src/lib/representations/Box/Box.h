@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2014-01-16
- * @version 2014-02-11
+ * @version 2014-05-27
  */
 
 #pragma once
@@ -238,7 +238,7 @@ public:
             return !(b1 == b2);
         }
         
-        Box<Number>& operator= (const Box<Number>& rhs) 
+        /*Box<Number>& operator= (const Box<Number>& rhs) 
         { 
           if (this != &rhs)
           {
@@ -246,7 +246,7 @@ public:
               mBoundaries.insert(rhs.boundaries().begin(), rhs.boundaries().end());
           } 
           return *this;
-        }
+        }*/
         
         
 	/***************************************************************************
