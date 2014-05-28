@@ -29,27 +29,51 @@ namespace hypro
         
     private:
         std::map<Point<Number>, vSet<Number> > neighbourhoods;
-        //log4cplus::Logger mLogger;
         
     public:
-        NeighbourhoodContainer() : neighbourhoods()
-        {
-                //mLogger = log4cplus::Logger::getInstance("reachLin.NeighbourhoodContainer");
-        }
+        NeighbourhoodContainer() {}
        
-        void insertVertexAndNeighbours(const Point<Number>& p, vVecIt<Number> neighbourBegin, vVecIt<Number> neighbourEnd) {
-            vSet<Number> neighbourhood = vSet<Number>(neighbourBegin, neighbourEnd);
-            neighbourhoods.insert(std::pair<Point<Number>, vSet<Number> >(p, neighbourhood));
+        void insertVertexAndNeighbours(const Point<Number>& p, vSetIt<Number> neighbourBegin, vSetIt<Number> neighbourEnd) {
+            vSet<Number> neighbourhood(neighbourBegin, neighbourEnd);
+            neighbourhoods.insert(std::make_pair(p, neighbourhood));
         }
-
-        void moveVertices(const Point<Number>& p);
         
-        inline void clear() {
+        void insertVertexAndNeighbours(const Point<Number>& p, vSet<Number>& neighbourhood)
+        {
+            neighbourhoods.insert(std::make_pair(p, neighbourhood));
+        }
+        
+        void clear()
+        {
             neighbourhoods.clear();
         }
         
-        vSetIt<Number> getNeighbourhoodBegin(const Point<Number>& p);
-        vSetIt<Number> getNeighbourhoodEnd(const Point<Number>& p);
+        bool empty()
+        {
+            return neighbourhoods.empty();
+        }
+        
+        vSetIt<Number> getNeighbourhoodBegin(const Point<Number>& p)
+        {
+            return neighbourhoods.find(p)->second.begin();
+        }
+        
+        vSetIt<Number> getNeighbourhoodEnd(const Point<Number>& p)
+        {
+            return neighbourhoods.find(p)->second.end();
+        }
+        
+        vSet<Number> getNeighbourhood(const Point<Number>& p)
+        {
+            return neighbourhoods.find(p)->second;
+        }
+        
+        bool hasNeighbourhood(const Point<Number>& p)
+        {
+            return neighbourhoods.find(p) != neighbourhoods.end();
+        }
+
+        void moveVertices(const Point<Number>& p);
         
     };
     

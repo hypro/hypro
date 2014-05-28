@@ -60,7 +60,7 @@ protected:
     virtual void TearDown()
     {
     }
-	
+
     VariablePool& pool = VariablePool::getInstance();
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");

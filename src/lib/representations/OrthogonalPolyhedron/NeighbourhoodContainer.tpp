@@ -30,22 +30,4 @@ namespace hypro
         neighbourhoods = tmp; 
     }
     
-    template<typename Number>
-    vSetIt<Number> NeighbourhoodContainer<Number>::getNeighbourhoodBegin(const Point<Number>& p) {
-        typename std::map<Point<Number>, vSet<Number> >::iterator it = neighbourhoods.find(p);
-        /*if (it == neighbourhoods.end()) {
-            LOG4CPLUS_FATAL(mLogger, "Point<Number> has no neighbourhood");
-        }*/
-        return it->second.begin();
-    }
-    
-    template<typename Number>
-    vSetIt<Number> NeighbourhoodContainer<Number>::getNeighbourhoodEnd(const Point<Number>& p) {
-        typename std::map<Point<Number>, vSet<Number> >::iterator it = neighbourhoods.find(p);
-        /*if (it == neighbourhoods.end()) {
-            LOG4CPLUS_FATAL(mLogger, "Point<Number> has no neighbourhood");
-        }*/
-        return it->second.end();
-    }
-    
 }//namespace
