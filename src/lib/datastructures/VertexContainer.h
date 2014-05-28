@@ -19,11 +19,6 @@
 namespace hypro {
 	
 	template<typename Number>
-	using vSetCIt = typename std::set<Vertex<Number>>::const_iterator;
-	template<typename Number>
-	using VertexContainerIt = typename std::set<Vertex<Number>>::iterator;
-	
-	template<typename Number>
 	class VertexContainer {
             
 	private:
@@ -87,7 +82,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline std::pair<bool, bool> isVertex(const Point<Number>& p) const {
-			typename std::set<Vertex<Number>>::const_iterator it = mVertices.find(Vertex<Number>(p,false));
+			vSetIt<Number> it = mVertices.find(Vertex<Number>(p,false));
 			if (it == mVertices.end()) return std::pair<bool,bool>(false, false);
 			else return std::pair<bool, bool>(true, it->getColor());
 		}
@@ -111,12 +106,12 @@ namespace hypro {
 		}
 		
 		inline vSetIt<Number> find(const Point<Number>& p, bool colour = false) const {
-			return mVertices.find(Vertex<Number>(p,colour));
+			return find(Vertex<Number>(p,colour));
 		}
 		
 		inline vSetIt<Number> find(const Vertex<Number>& v) const {
-			typename std::set<Vertex<Number>>::iterator it = mVertices.find(v);
-			if (it->getColor() != v.getColor())  it = mVertices.end();
+			vSetIt<Number> it = mVertices.find(v);
+			if (it->color() != v.color()) it = mVertices.end();
 			return it;
 		}
 		
@@ -136,7 +131,7 @@ namespace hypro {
 		 *
 		 * @return
 		 */
-		inline vSetCIt<Number> begin() const {
+		inline vSetIt<Number> begin() const {
 			return mVertices.begin();
 		}
 		
@@ -144,7 +139,7 @@ namespace hypro {
 		 *
 		 * @return
 		 */
-		inline vSetCIt<Number> end() const {
+		inline vSetIt<Number> end() const {
 			return mVertices.end();
 		}
 		
@@ -154,7 +149,7 @@ namespace hypro {
 		 * @return A bidirectional iterator to the inserted Vertex.
 		 * Not safe.
 		 */
-		inline std::pair<vSetCIt<Number>, bool> insert(const Vertex<Number>& v) {
+		inline std::pair<vSetIt<Number>, bool> insert(const Vertex<Number>& v) {
                     std::cout << "insert: ";
                     std::cout << "contained(" << ( mVertices.find(v) != mVertices.end() ) << ")" << std::endl;
                     return mVertices.insert(v);
@@ -176,7 +171,7 @@ namespace hypro {
 		 * @param c
 		 * @return
 		 */
-		inline std::pair<vSetCIt<Number>, bool> insert(const Point<Number>& p,const bool c=false) {
+		inline std::pair<vSetIt<Number>, bool> insert(const Point<Number>& p,const bool c=false) {
 			return insert(Vertex<Number>(p,c));
 		}
 		
