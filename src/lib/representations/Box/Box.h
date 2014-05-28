@@ -43,10 +43,8 @@ public:
 	Box() : mBoundaries()
 	{}
         
-        Box(const Box& orig)
-        {
-            mBoundaries = orig.boundaries();
-        }
+        Box(const Box& orig) : mBoundaries(orig.boundaries())
+        {}
         
         Box(const carl::Variable& var, const carl::Interval<carl::FLOAT_T<Number> >& val)
         {
@@ -238,15 +236,16 @@ public:
             return !(b1 == b2);
         }
         
-        /*Box<Number>& operator= (const Box<Number>& rhs) 
+        Box<Number>& operator= (const Box<Number>& rhs) 
         { 
-          if (this != &rhs)
-          {
-              mBoundaries.clear();
-              mBoundaries.insert(rhs.boundaries().begin(), rhs.boundaries().end());
-          } 
-          return *this;
-        }*/
+            if (*this != rhs)
+            {
+                this->mBoundaries.clear();
+                intervalMap tmp = rhs.boundaries();
+                this->mBoundaries.insert(tmp.begin(), tmp.end());
+            } 
+            return *this;
+        }
         
         
 	/***************************************************************************

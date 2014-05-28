@@ -7,6 +7,7 @@
  */
 
 #include "Polytope.h"
+#include "VariablePool.h"
 
 namespace hypro
 {
@@ -121,9 +122,16 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
     {
-    	//@author Chris: just to get rid of the warning
-        //for(int i = 0; i < )
-        
+        for(int i = 0; i < A.rows(); ++i)
+        {
+            Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> rowE = A.row(i);
+            Parma_Polyhedra_Library::Linear_Expression rowP;
+            for(int j = 0; j < rowE.collums(); ++j)
+            {
+                rowP.set_coefficient(polytope::VariablePool::getInstance().pplVarByIndex(j), rowE.collum(j));
+            }
+            this->mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP, b.row(i));
+        }
         return true;
     }
     
