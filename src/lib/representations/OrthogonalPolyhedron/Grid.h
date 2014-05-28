@@ -31,11 +31,7 @@ namespace hypro
             gridMap mGridMap;
             gridPoints mInducedGridPoints;
             bool mInduced = false;
-            
-            /**
-             * Reserves the induced grid for all dimensions.
-             */
-            void reserveInducedGrid();
+            std::vector<carl::Variable> mVariables;
             
         public:
             
@@ -43,15 +39,16 @@ namespace hypro
              * Constructor
              */
             Grid() {}
-
+            
             /**
-             * Constructor
-             * 
-             * @param grid
+             * Copy constructor
              */
-            Grid(const gridMap& grid) : mGridMap(grid)
+            Grid(const Grid<Number>& copy)
             {
-                reserveInducedGrid();
+                mGridMap.insert(copy.mGridMap.begin(), copy.mGridMap.end());
+                mInducedGridPoints.insert(copy.mInducedGridPoints.begin(), copy.mInducedGridPoints.end());
+                mInduced = copy.mInduced;
+                mVariables = copy.mVariables;
             }
             
             /**
@@ -70,8 +67,16 @@ namespace hypro
              */
             int dimension() const
             {
-                assert( mGridMap.size() > 0 );
-                return (*mGridMap.begin()).first.dimension();
+                return mVariables.size();
+            }
+            
+            /**
+             * Returns if this grid is empty.
+             * @return 
+             */
+            bool empty() const
+            {
+                return mGridMap.empty();
             }
             
             /**
@@ -82,9 +87,15 @@ namespace hypro
              */
             std::vector<carl::Variable> variables() const
             {
-                assert( mGridMap.size() > 0 );
-                return (*mGridMap.begin()).first.variables();
+                return mVariables;
             }
+            
+            /**
+             * Reserves the induced grid for all dimensions.
+             * 
+             * @param variables
+             */
+            void reserveInducedGrid(std::vector<carl::Variable>& variables);
             
             /**
              * Returns whether the grid is induced.
@@ -110,7 +121,7 @@ namespace hypro
              */
             void insert(const Point<Number>& point, bool colour)
             {
-                assert( mGridMap.empty() || point.hasDimensions(variables()) );
+                assert( point.hasDimensions(mVariables) );
                 mGridMap[calculateInduced(point)] = colour;
             }
             

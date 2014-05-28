@@ -27,34 +27,37 @@ protected:
         Grid<number_t>::gridMap map1;
         Grid<number_t>::gridMap map2;
         
-        // grid1
-        Point<number_t>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(1)) );
-        p1 = Point<number_t>(coordinates1);
-        map1.insert(std::make_pair(p1, true));
+        std::vector<carl::Variable> variables;
+        variables.push_back(x);
+        variables.push_back(y);
         
-        Point<number_t>::coordinateMap coordinates2;
-        coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(1)) );
-        coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(2)) );
-        p2 = Point<number_t>(coordinates2);
-        map1.insert(std::make_pair(p2, false));
+        grid1 = Grid<number_t>();
+        grid2 = Grid<number_t>();
+        grid1.reserveInducedGrid(variables);
+        grid2.reserveInducedGrid(variables);
+        
+        // grid1
+        Point<number_t>::coordinateMap coordinates;
+        coordinates[x] = FLOAT_T<number_t>(1);
+        coordinates[y] = FLOAT_T<number_t>(1);
+        p1 = Point<number_t>(coordinates);
+        grid1.insert(p1, true);
+        
+        coordinates[x] = FLOAT_T<number_t>(1);
+        coordinates[y] = FLOAT_T<number_t>(2);
+        p2 = Point<number_t>(coordinates);
+        grid1.insert(p2, false);
         
         // grid2
-        Point<number_t>::coordinateMap coordinates3;
-        coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p3 = Point<number_t>(coordinates3);
-        map2.insert(std::make_pair(p3, true));
+        coordinates[x] = FLOAT_T<number_t>(2);
+        coordinates[y] = FLOAT_T<number_t>(5);
+        p3 = Point<number_t>(coordinates);
+        grid1.insert(p3, true);
         
-        Point<number_t>::coordinateMap coordinates4;
-        coordinates4.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates4.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p4 = Point<number_t>(coordinates4);
-        map2.insert(std::make_pair(p4, true));
-        
-        grid1 = Grid<number_t>(map1);
-        grid2 = Grid<number_t>(map2);
+        coordinates[x] = FLOAT_T<number_t>(2);
+        coordinates[y] = FLOAT_T<number_t>(5);
+        p4 = Point<number_t>(coordinates);
+        grid1.insert(p4, true);
     }
 	
     virtual void TearDown()
@@ -73,11 +76,10 @@ protected:
 
 TEST_F(GridTest, Constructor)
 {
-    Grid<number_t> grid1;
-    Grid<number_t>::gridMap map;
-    map.insert(std::make_pair(p1, true));
-    map.insert(std::make_pair(p2, false));
-    Grid<number_t> grid2(map);
+    Grid<number_t> grid;
+    EXPECT_TRUE(grid.empty());
+    Grid<number_t> copy(grid);
+    EXPECT_TRUE(copy.empty());
 }
 
 TEST_F(GridTest, Insert)

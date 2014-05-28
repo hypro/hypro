@@ -9,10 +9,11 @@
 namespace hypro
 {
     template<typename Number>
-    void Grid<Number>::reserveInducedGrid()
+    void Grid<Number>::reserveInducedGrid(std::vector<carl::Variable>& variables)
     {
         std::vector<carl::FLOAT_T<Number> > v;
-        for (auto it : variables()) {
+        for (auto it : variables) {
+            mVariables.push_back(it);
             mInducedGridPoints.insert(std::make_pair(it, v));
         }
     }
@@ -34,7 +35,7 @@ namespace hypro
             
             // Projection of all points to the axes.
             for (auto vertex : vertices) {
-                assert( vertex.hasDimensions(variables()));
+                assert( vertex.hasDimensions(mVariables));
                 it.second.push_back(vertex.coordinate(it.first));
             }
             

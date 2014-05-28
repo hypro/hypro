@@ -88,7 +88,7 @@ bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
 template<typename Number>
 bool Box<Number>::hull(Box<Number>& result) const
 {
-    result = Box<Number>(*this);
+    result = *this;
     return true;
 }
 
