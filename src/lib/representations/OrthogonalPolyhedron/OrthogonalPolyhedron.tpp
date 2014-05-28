@@ -7,6 +7,9 @@
  * @version 2014-05-28
  */
 
+#include "OrthogonalPolyhedron.h"
+
+
 namespace hypro
 {
 
@@ -21,7 +24,7 @@ namespace hypro
      **********************************/
     
     template<typename Number>
-    void OrthogonalPolyhedron<Number>::dimension() {
+    unsigned int OrthogonalPolyhedron<Number>::dimension() {
         return mVertices.dimension();
     }	
         
@@ -60,13 +63,21 @@ namespace hypro
      **********************************/
     
     /**
-     * @brief emptiness check.
+     * Returns it the polyhedron is empty.
+     * 
      * @return true if number of vertices equals 0.
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::empty() {
-        mVertices.empty();
+    bool OrthogonalPolyhedron<Number>::empty() const {
+        return mVertices.empty();
     }
     
+    /**
+     * Returns the list of variables of this polyhedron
+     */
+    template<typename Number>
+    std::vector<carl::Variable> OrthogonalPolyhedron<Number>::variables() const {
+        return mVariables;
+    }
     
 }

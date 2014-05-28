@@ -46,6 +46,9 @@ namespace hypro
         Box<Number> mBox;
         bool mBoxUpToDate = false;
         
+        // the variables
+        std::vector<carl::Variable> mVariables;
+        
     public:
         
         /***********************************************************************
@@ -62,12 +65,13 @@ namespace hypro
          * @param vertices
          * @param induceGrid
          */
-        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true) : mVertices(vertices)
+        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true)
+                : mVertices(vertices), mVariables(vertices.variables())
         {
-            mGrid.reserveInducedGrid(vertices.variables());
+            mGrid.reserveInducedGrid(mVariables);
             if (induceGrid)
             {
-                mGrid.induceGrid(vertices);
+                mGrid.induceGrid(vertices.vertices());
             }
         }
         
@@ -77,10 +81,10 @@ namespace hypro
          */
         OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy)
         {
-            mVertices(copy.mVertices);
-            mGrid(copy.mGrid);
-            mNeighbourhood(copy.mNeighbourhood);
-            mBox(copy.mBox);
+            mVertices = copy.mVertices;
+            mGrid = copy.mGrid;
+            mNeighbourhood = copy.mNeighbourhood;
+            mBox = copy.mBox;
             mBoxUpToDate = copy.mBoxUpToDate;
         }
         
@@ -101,6 +105,7 @@ namespace hypro
          ***********************************************************************/
         
         bool empty() const;
+        std::vector<carl::Variable> variables() const;
         
     };
     

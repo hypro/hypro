@@ -6,7 +6,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2011-06-08
- * @version 2013-01-17
+ * @version 2014-05-28
  */
 
 #pragma once
@@ -157,7 +157,7 @@ namespace hypro {
 		inline std::pair<vSetCIt<Number>, bool> insert(const Vertex<Number>& v) {
                     std::cout << "insert: ";
                     std::cout << "contained(" << ( mVertices.find(v) != mVertices.end() ) << ")" << std::endl;
-			return mVertices.insert(v);
+                    return mVertices.insert(v);
 		}
 		
 		/**
@@ -176,7 +176,7 @@ namespace hypro {
 		 * @param c
 		 * @return
 		 */
-		inline vSetIt<Number> insert(const Point<Number>& p,const bool c=false) {
+		inline std::pair<vSetCIt<Number>, bool> insert(const Point<Number>& p,const bool c=false) {
 			return insert(Vertex<Number>(p,c));
 		}
 		
