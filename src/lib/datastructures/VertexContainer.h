@@ -50,10 +50,21 @@ namespace hypro {
                     return (*mVertices.begin()).dimension();
                 }
                 
+                std::vector<carl::Variable> variables() const
+                {
+                    assert( mVertices.size() > 0 );
+                    return (*mVertices.begin()).variables();
+                }
+                
 		unsigned size() const
 		{
                     return mVertices.size();
 		}
+                
+                bool empty() const
+                {
+                    return mVertices.empty();
+                }
                 
                 vSet<Number> vertices() const
                 {
