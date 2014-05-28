@@ -80,4 +80,53 @@ namespace hypro
         return mVariables;
     }
     
+    /**
+     * Returns and if necessary calculates the boundary box.
+     */
+    template<typename Number>
+    Box<Number> OrthogonalPolyhedron<Number>::boundaryBox() {
+        if (!mBoxUpToDate) {
+            updateBoundaryBox();
+        }
+        return mBoundaryBox;
+    }
+        
+
+    /***************************************************************************
+     * Private methods
+     ***************************************************************************/
+    
+    /**
+     * Updates the boundary box
+     */
+    template<typename Number>
+    void OrthogonalPolyhedron<Number>::updateBoundaryBox() {
+        // If there are no vertices, the box is empty
+        if (mVertices.empty()) {
+            mBoundaryBox.clear();
+        }
+        
+        vSetIt<Number> it = mVertices.begin();
+        
+        // Set the box to include the first vertex, so nothing goes wrong.
+        // (Before, we should make sure there is a first one)
+        for (auto dimensionIt : mVariables) {
+            mBoundaryBox.insert(dimensionIt, typename Box<Number>::floatInterval(it->at(dimensionIt), it->at(dimensionIt)));
+        }
+        
+        // Extend the box
+        for (auto dimensionIt : mVariables) {
+            for (; it != mVertices.end(); ++it) {
+                auto interval = mBoundaryBox.interval(dimensionIt);
+                auto val = it->at(dimensionIt);
+                if (val > interval.upper()) {
+                    interval.setUpper(val);
+                } else if (val < interval.lower()) {
+                    interval.setLower(val);
+                }
+            }
+        }
+        
+        mBoxUpToDate = true;
+    }
 }

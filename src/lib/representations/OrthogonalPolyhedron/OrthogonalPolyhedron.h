@@ -43,7 +43,7 @@ namespace hypro
         NeighbourhoodContainer<Number> mNeighbourhood;
         
         // the cached boundary box
-        Box<Number> mBox;
+        Box<Number> mBoundaryBox;
         bool mBoxUpToDate = false;
         
         // the variables
@@ -84,7 +84,7 @@ namespace hypro
             mVertices = copy.mVertices;
             mGrid = copy.mGrid;
             mNeighbourhood = copy.mNeighbourhood;
-            mBox = copy.mBox;
+            mBoundaryBox = copy.mBoundaryBox;
             mBoxUpToDate = copy.mBoxUpToDate;
         }
         
@@ -106,6 +106,11 @@ namespace hypro
         
         bool empty() const;
         std::vector<carl::Variable> variables() const;
+        Box<Number> boundaryBox();
+        
+    private:
+        
+        void updateBoundaryBox();
         
     };
     

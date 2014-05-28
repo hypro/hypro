@@ -14,11 +14,13 @@
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
 #include "../../lib/datastructures/VertexContainer.h"
+#include "../../lib/representations/Box/Box.h"
 #include "../../lib/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 #include "../../lib/representations/OrthogonalPolyhedron/NeighbourhoodContainer.h"
 
 #include <map>
 #include <carl/core/VariablePool.h>
+#include <carl/interval/Interval.h>
 
 using namespace hypro;
 using namespace carl;
@@ -81,4 +83,13 @@ TEST_F(OrthogonalPolyhedronTest, Properties)
     variables.push_back(y);
     ASSERT_EQ(2, p1.dimension());
     ASSERT_EQ(variables, p1.variables());
+}
+
+TEST_F(OrthogonalPolyhedronTest, BoundaryBox)
+{
+    Box<number_t> boundaryBox;
+    boundaryBox.insert(x, carl::Interval<number_t>(3, 7));
+    boundaryBox.insert(y, carl::Interval<number_t>(3, 6));
+    
+    EXPECT_EQ(boundaryBox, p1.boundaryBox());
 }
