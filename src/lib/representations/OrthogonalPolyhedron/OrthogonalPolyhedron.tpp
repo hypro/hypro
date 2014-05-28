@@ -45,7 +45,30 @@ namespace hypro
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) {
-        return false;
+        if (!mBoxUpToDate) {
+            updateBoundaryBox();
+        }
+        
+        int nrofVertices = pow(2, dimension());
+        VertexContainer<Number> container;
+        Vertex<Number> vertex;
+        
+        for (int vertexNr = 0; vertexNr < nrofVertices; vertexNr++) {
+            int i = 0;
+            for (auto variableIt : mVariables) {
+                // look if the bit of the current dimension is set
+                if ((vertexNr >> i++) & 1) {
+                    vertex[variableIt] = mBoundaryBox.interval(variableIt).upper();
+                } else {
+                    vertex[variableIt] = mBoundaryBox.interval(variableIt).lower();
+                }
+            }
+            vertex.setColor(vertexNr == 0);
+            container.insert(vertex);
+        }
+        result = OrthogonalPolyhedron<Number>(container);
+        
+        return true;
     }
         
     template<typename Number>

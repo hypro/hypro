@@ -73,6 +73,31 @@ TEST_F(OrthogonalPolyhedronTest, Constructor)
     SUCCEED();
 }
 
+TEST_F(OrthogonalPolyhedronTest, Hull)
+{
+    VertexContainer<number_t> container;
+    Point<number_t>::rawCoordinateMap coordinates;
+
+    coordinates[x] = 3; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 3; coordinates[y] = 6;
+    container.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 7; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 7; coordinates[y] = 6;
+    container.insert(Point<number_t>(coordinates), false);
+
+    OrthogonalPolyhedron<number_t> hull(container);
+    OrthogonalPolyhedron<number_t> result;
+    
+    EXPECT_TRUE(p1.hull(result));
+    // @todo implement equality operator ==
+    //EXPECT_EQ(hull, result);
+}
+
 TEST_F(OrthogonalPolyhedronTest, Properties)
 {
     ASSERT_FALSE(p1.empty());
