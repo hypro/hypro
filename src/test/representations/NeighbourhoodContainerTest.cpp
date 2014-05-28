@@ -40,7 +40,8 @@ protected:
 
 TEST_F(NeighbourhoodContainerTest, Constructor)
 {
-    NeighbourhoodContainer<number_t> nc1 = NeighbourhoodContainer<number_t>();
+    NeighbourhoodContainer<number_t> nc1;
+    NeighbourhoodContainer<number_t> copy(nc1);
     SUCCEED();
 }
 

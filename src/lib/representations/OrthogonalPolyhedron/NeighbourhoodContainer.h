@@ -4,7 +4,7 @@
  * @author  Benedikt Seidl
  *
  * @since   2014-03-17
- * @version 2014-03-17
+ * @version 2014-05-18
  */
 
 #pragma once
@@ -32,6 +32,11 @@ namespace hypro
         
     public:
         NeighbourhoodContainer() {}
+        
+        NeighbourhoodContainer(const NeighbourhoodContainer<Number>& copy)
+        {
+            neighbourhoods.insert(copy.neighbourhoods.begin(), copy.neighbourhoods.end());
+        }
        
         void insertVertexAndNeighbours(const Point<Number>& p, vSetIt<Number> neighbourBegin, vSetIt<Number> neighbourEnd) {
             vSet<Number> neighbourhood(neighbourBegin, neighbourEnd);
