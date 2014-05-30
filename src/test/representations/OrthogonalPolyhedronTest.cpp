@@ -98,6 +98,36 @@ TEST_F(OrthogonalPolyhedronTest, Hull)
     EXPECT_EQ(hull, result);
 }
 
+TEST_F(OrthogonalPolyhedronTest, Contains)
+{
+    Point<number_t>::rawCoordinateMap coordinates;
+    
+    coordinates[x] = 4; coordinates[x] = 5;
+    Point<number_t> pt1(coordinates);
+    
+    coordinates[x] = 4; coordinates[x] = 6;
+    Point<number_t> pt2(coordinates);
+    
+    coordinates[x] = 5; coordinates[x] = 5;
+    Point<number_t> pt3(coordinates);
+    
+    coordinates[x] = 1; coordinates[x] = 5;
+    Point<number_t> pt4(coordinates);
+    
+    coordinates[x] = 6; coordinates[x] = 4;
+    Point<number_t> pt5(coordinates);
+    
+    coordinates[x] = 5; coordinates[x] = 6.5;
+    Point<number_t> pt6(coordinates);
+    
+    EXPECT_TRUE(p1.contains(pt1));
+    EXPECT_TRUE(p1.contains(pt2));
+    EXPECT_TRUE(p1.contains(pt3));
+    EXPECT_FALSE(p1.contains(pt4));
+    EXPECT_FALSE(p1.contains(pt5));
+    EXPECT_FALSE(p1.contains(pt6));
+}
+
 TEST_F(OrthogonalPolyhedronTest, Properties)
 {
     EXPECT_FALSE(p1.empty());
