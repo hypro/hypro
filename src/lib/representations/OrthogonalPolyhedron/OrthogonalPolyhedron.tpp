@@ -139,13 +139,13 @@ namespace hypro
         
         // Extend the box
         for (auto dimensionIt : mVariables) {
-            for (; it != mVertices.end(); ++it) {
-                auto interval = mBoundaryBox.interval(dimensionIt);
+            for (it = mVertices.begin()++; it != mVertices.end(); ++it) {
+                auto interval = mBoundaryBox.pInterval(dimensionIt);
                 auto val = it->at(dimensionIt);
-                if (val > interval.upper()) {
-                    interval.setUpper(val);
-                } else if (val < interval.lower()) {
-                    interval.setLower(val);
+                if (val > interval->upper()) {
+                    interval->setUpper(val);
+                } else if (val < interval->lower()) {
+                    interval->setLower(val);
                 }
             }
         }

@@ -20,6 +20,7 @@
 
 #include <map>
 #include <carl/core/VariablePool.h>
+#include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
 
 using namespace hypro;
@@ -94,20 +95,19 @@ TEST_F(OrthogonalPolyhedronTest, Hull)
     OrthogonalPolyhedron<number_t> result;
     
     EXPECT_TRUE(p1.hull(result));
-    // @todo implement equality operator ==
-    //EXPECT_EQ(hull, result);
+    EXPECT_EQ(hull, result);
 }
 
 TEST_F(OrthogonalPolyhedronTest, Properties)
 {
-    ASSERT_FALSE(p1.empty());
-    ASSERT_TRUE(p2.empty());
+    EXPECT_FALSE(p1.empty());
+    EXPECT_TRUE(p2.empty());
     
     std::vector<carl::Variable> variables;
     variables.push_back(x);
     variables.push_back(y);
-    ASSERT_EQ(2, p1.dimension());
-    ASSERT_EQ(variables, p1.variables());
+    EXPECT_EQ(2, p1.dimension());
+    EXPECT_EQ(variables, p1.variables());
 }
 
 TEST_F(OrthogonalPolyhedronTest, BoundaryBox)

@@ -714,6 +714,12 @@ namespace hypro {
                 return true;
             }
 
+            /**
+             *
+             * @param p1
+             * @param p2
+             * @return true, if they are not equal.
+             */
             friend bool operator!=(const Point<Number> & p1, const Point<Number> & p2)
             {
                 return !(p1 == p2);

@@ -24,6 +24,8 @@
 #include <vector>
 #include <fstream>
 
+#include <carl/core/Variable.h>
+
 namespace hypro
 {
     
@@ -107,6 +109,20 @@ namespace hypro
         bool empty() const;
         std::vector<carl::Variable> variables() const;
         Box<Number> boundaryBox();
+        
+        /***********************************************************************
+         * Operators
+         ***********************************************************************/
+
+        friend bool operator==(const OrthogonalPolyhedron<Number> & op1, const OrthogonalPolyhedron<Number> & op2)
+        {
+            return op1.mVertices == op2.mVertices;
+        }
+
+        friend bool operator!=(const OrthogonalPolyhedron<Number> & op1, const OrthogonalPolyhedron<Number> & op2)
+        {
+            return op1.mVertices != op2.mVertices;
+        }
         
     private:
         

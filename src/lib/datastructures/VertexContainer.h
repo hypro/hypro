@@ -150,8 +150,6 @@ namespace hypro {
 		 * Not safe.
 		 */
 		inline std::pair<vSetIt<Number>, bool> insert(const Vertex<Number>& v) {
-                    std::cout << "insert: ";
-                    std::cout << "contained(" << ( mVertices.find(v) != mVertices.end() ) << ")" << std::endl;
                     return mVertices.insert(v);
 		}
 		
@@ -235,6 +233,28 @@ namespace hypro {
 			insert(p,c,it);
 			return true;
 		}
+
+                /**
+                 *
+                 * @param c1
+                 * @param c2
+                 * @return true, if they are equal.
+                 */
+                friend bool operator==(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
+                {
+                    return c1.mVertices == c2.mVertices;
+                }
+
+                /**
+                 *
+                 * @param c1
+                 * @param c2
+                 * @return true, if they are not equal.
+                 */
+                friend bool operator!=(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
+                {
+                    return c1.mVertices != c2.mVertices;
+                }
 		
 		/**
 		 *
