@@ -32,6 +32,7 @@ namespace hypro {
 		 * Constructors & Destructors
 		 **********************************************************************/
                 VertexContainer(){}
+                VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
 		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
@@ -92,7 +93,10 @@ namespace hypro {
 		 * @return
 		 */
 		inline bool originIsVertex() const {
-			return (*(mVertices.begin()) == Point<Number>());
+                    assert(mVertices.size() > 0);
+                    Vertex<Number> origin = mVertices.begin()->newEmpty();
+                    origin.setColor(true);
+                    return (*(mVertices.begin()) == origin);
 		}
 		
 		/***********************************************************************

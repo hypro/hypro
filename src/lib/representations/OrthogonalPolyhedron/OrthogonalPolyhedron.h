@@ -38,8 +38,14 @@ namespace hypro
         // the container of all vertices
         VertexContainer<Number> mVertices;
         
+        // the induced vertices connected to the grid
+        VertexContainer<Number> mInducedVertices;
+        
         // the grid the polyhedron is defined on
         Grid<Number> mGrid;
+        
+        // the colour of the origin
+        bool mOriginColour = false;
         
         // the neighbourhood container which maps points to a set of vertices
         NeighbourhoodContainer<Number> mNeighbourhood;
@@ -68,12 +74,15 @@ namespace hypro
          * @param induceGrid
          */
         OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true)
-                : mVertices(vertices), mVariables(vertices.variables())
+                : mVertices(vertices), mOriginColour(vertices.originIsVertex()), mVariables(vertices.variables())
         {
             mGrid.reserveInducedGrid(mVariables);
             if (induceGrid)
             {
                 mGrid.induceGrid(vertices.vertices());
+                mGrid.insertVerticesInMap(vertices.vertices());
+                vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+                mInducedVertices = VertexContainer<Number>(inducedVertices);
             }
         }
         
@@ -109,6 +118,7 @@ namespace hypro
         bool empty() const;
         std::vector<carl::Variable> variables() const;
         Box<Number> boundaryBox();
+        bool colourAt(const Point<Number>& point);
         
         /***********************************************************************
          * Operators

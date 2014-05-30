@@ -137,6 +137,25 @@ namespace hypro
             }
             
             /**
+             * 
+             * @param point
+             * @return 
+             */
+            typename gridMap::iterator find(const Point<Number>& point) const
+            {
+                return mGridMap.find(point);
+            }
+            
+            /**
+             * 
+             * @return 
+             */
+            typename gridMap::iterator end() const
+            {
+                return mGridMap.end();
+            }
+            
+            /**
              * Calculates the coordinates of the induced grid.
              * 
              * @param vertices

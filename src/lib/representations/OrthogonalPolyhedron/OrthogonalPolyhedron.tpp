@@ -73,7 +73,20 @@ namespace hypro
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) {
-        return false;
+        auto it = mGrid.find(point);
+        if (it != mGrid.end()) {
+            return it->second;
+        }
+        
+        if (!boundaryBox().contains(point)) {
+            return false;
+        }
+        
+        Point<Number> induced = mGrid.calculateInduced(point);
+        
+        // @todo
+        
+        return true;
     }
         
     template<typename Number>
@@ -113,6 +126,29 @@ namespace hypro
         }
         return mBoundaryBox;
     }
+    
+    /**
+     * Returns the colour at the given point.
+     * @see contains
+     */
+//    template<typename Number>
+//    bool OrthogonalPolyhedron<Number>::colourAt(const Point<Number>& point) {
+//        auto it = mGrid.find(point);
+//        // check if we already know the point
+//        if (it != mGrid.end()) {
+//            return it->second;
+//        }
+//        bool colour = false;
+//        // if the box does not contain it, we can be sure it is false
+//        if (!boundaryBox().contains(point)) {
+//            colour = false;
+//        } else {
+//            colour = contains(point);
+//        }
+//        // save the point for future use
+//        mGrid.insert(point, colour);
+//        return colour;
+//    }
         
 
     /***************************************************************************

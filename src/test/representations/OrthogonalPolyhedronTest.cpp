@@ -102,22 +102,22 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
 {
     Point<number_t>::rawCoordinateMap coordinates;
     
-    coordinates[x] = 4; coordinates[x] = 5;
+    coordinates[x] = 4; coordinates[y] = 5;
     Point<number_t> pt1(coordinates);
     
-    coordinates[x] = 4; coordinates[x] = 6;
+    coordinates[x] = 4; coordinates[y] = 6;
     Point<number_t> pt2(coordinates);
     
-    coordinates[x] = 5; coordinates[x] = 5;
+    coordinates[x] = 5; coordinates[y] = 5;
     Point<number_t> pt3(coordinates);
     
-    coordinates[x] = 1; coordinates[x] = 5;
+    coordinates[x] = 1; coordinates[y] = 5;
     Point<number_t> pt4(coordinates);
     
-    coordinates[x] = 6; coordinates[x] = 4;
+    coordinates[x] = 6; coordinates[y] = 4;
     Point<number_t> pt5(coordinates);
     
-    coordinates[x] = 5; coordinates[x] = 6.5;
+    coordinates[x] = 5; coordinates[y] = 6.5;
     Point<number_t> pt6(coordinates);
     
     EXPECT_TRUE(p1.contains(pt1));
