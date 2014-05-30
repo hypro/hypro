@@ -170,8 +170,17 @@ namespace hypro
              * Translates the points to induced points.
              * 
              * @param vertices
+             * @return induced vertices
              */
-            void translateToInduced(vSet<Number>& vertices) const;
+            vSet<Number> translateToInduced(const vSet<Number>& vertices) const;
+            
+            /**
+             * Translates the induced points to original points.
+             * 
+             * @param inducedVertices
+             * @return original vertices
+             */
+            vSet<Number> translateToOriginal(const vSet<Number>& inducedVertices) const;
             
             /**
              * Clears the grid.

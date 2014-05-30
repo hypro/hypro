@@ -228,3 +228,48 @@ TEST_F(GridTest, CalculateInduced)
     EXPECT_EQ(ip2, grid1.calculateInduced(p2));
     EXPECT_EQ(ip3, grid1.calculateInduced(p3));
 }
+
+TEST_F(GridTest, CalculateOriginal)
+{
+    grid1.induceGrid(vertices);
+    
+    Point<number_t>::rawCoordinateMap c;
+    
+    c[x] = 1; c[y] = 1;
+    Point<number_t> ip1(c);
+    c[x] = 1; c[y] = 5;
+    Point<number_t> op1(c);
+    
+    c[x] = 1; c[y] = 2;
+    Point<number_t> ip2(c);
+    c[x] = 1; c[y] = 6;
+    Point<number_t> op2(c);
+    
+    c[x] = 2; c[y] = 2;
+    Point<number_t> ip3(c);
+    c[x] = 4; c[y] = 6;
+    Point<number_t> op3(c);
+    
+    EXPECT_EQ(op1, grid1.calculateOriginal(ip1));
+    EXPECT_EQ(op2, grid1.calculateOriginal(ip2));
+    EXPECT_EQ(op3, grid1.calculateOriginal(ip3));
+}
+
+TEST_F(GridTest, Translate)
+{
+    grid1.induceGrid(vertices);
+    vSet<number_t> induced;
+    Point<number_t>::coordinateMap coordinates;
+
+    coordinates[x] = 1; coordinates[y] = 1;
+    induced.insert(Vertex<number_t>(coordinates, false));
+
+    coordinates[x] = 2; coordinates[y] = 2;
+    induced.insert(Vertex<number_t>(coordinates, true));
+
+    coordinates[x] = 3; coordinates[y] = 3;
+    induced.insert(Vertex<number_t>(coordinates, true));
+    
+    EXPECT_EQ(induced, grid1.translateToInduced(vertices));
+    EXPECT_EQ(vertices, grid1.translateToOriginal(induced));
+}

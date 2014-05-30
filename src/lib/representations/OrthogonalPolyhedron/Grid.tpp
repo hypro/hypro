@@ -146,8 +146,27 @@ namespace hypro
     }
     
     template<typename Number>
-    void Grid<Number>::translateToInduced(vSet<Number>& vertices) const
+    vSet<Number> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
     {
+        vSet<Number> induced;
+        for (auto it : vertices) {
+            Vertex<Number> v = calculateInduced(it);
+            v.setColor(it.color());
+            induced.insert(v);
+        }
+        return induced;
+    }
+    
+    template<typename Number>
+    vSet<Number> Grid<Number>::translateToOriginal(const vSet<Number>& inducedVertices) const
+    {
+        vSet<Number> original;
+        for (auto it : inducedVertices) {
+            Vertex<Number> v = calculateOriginal(it);
+            v.setColor(it.color());
+            original.insert(v);
+        }
+        return original;
     }
 
 }
