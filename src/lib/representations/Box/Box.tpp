@@ -11,17 +11,17 @@
 namespace hypro {
 	
 template<typename Number>
-carl::Interval<carl::FLOAT_T<Number> >& Box<Number>::rInterval(const carl::Variable& var)
+carl::Interval<carl::FLOAT_T<Number> >* Box<Number>::pInterval(const carl::Variable& var)
 {
     auto intervalIt = mBoundaries.find(var);
     if( intervalIt == mBoundaries.end() )
     {
         assert(false);
-        return carl::Interval<Number>();
+        return NULL;
     }
     else
     {
-        return (*intervalIt).second;
+        return &(*intervalIt).second;
     }
 }
 

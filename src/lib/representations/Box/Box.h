@@ -179,7 +179,7 @@ public:
             return true;
         }
 	
-	floatInterval& rInterval(const carl::Variable& var);
+	floatInterval* pInterval(const carl::Variable& var);
 	floatInterval interval(const carl::Variable& var) const;
 	
         bool isEmpty() const
@@ -246,6 +246,25 @@ public:
                 this->mBoundaries.insert(tmp.begin(), tmp.end());
             } 
             return *this;
+        }
+		
+        /**
+         *
+         * @param ostr
+         * @param b
+         * @return
+         */
+        friend std::ostream & operator<< (std::ostream& ostr, const Box<Number>& b)
+        {
+            ostr << "{";		
+            for (auto intervalIt : b.mBoundaries) {
+                if (intervalIt != *(b.mBoundaries.begin())) {
+                    ostr << ";";
+                }
+                ostr << " " << intervalIt.first << " " << intervalIt.second;
+            }		
+            ostr << " }";
+            return ostr;
         }
         
         
