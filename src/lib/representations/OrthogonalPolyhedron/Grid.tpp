@@ -6,6 +6,9 @@
  * @version 2014-04-14
  */
 
+#include "Grid.h"
+
+
 namespace hypro
 {
     template<typename Number>
@@ -63,12 +66,11 @@ namespace hypro
         */
 
         clear();
-        insertVerticesInMap(vertices);
         mInduced = true;
     }
     
     template<typename Number>
-    Point<Number> Grid<Number>::calculateInduced(const Point<Number>& x) const
+    Point<Number> Grid<Number>::nextPointOnGrid(const Point<Number>& x) const
     {
         typename Point<Number>::coordinateMap coordinates;
         
@@ -78,27 +80,74 @@ namespace hypro
                 coordinateIt.second.floor(coordinates[coordinateIt.first]);
             }
         } else {
-            //typename std::vector<Number>::iterator it;
             for (auto inducedGridPointsIt : mInducedGridPoints) {
         
                 auto fixed = inducedGridPointsIt.first;
                 auto inducedGridPoints = inducedGridPointsIt.second;
-        
-                std::cout << inducedGridPoints << std::endl;
                 
                 // get the position of the first element greater then the coordinate + 1
-                auto it = std::lower_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
-                        x.coordinate(fixed) + 1);
+                auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
+                        x.coordinate(fixed));
                 
                 // insert the element one before the element found above
                 coordinates.insert(std::make_pair(fixed,
                         inducedGridPoints.at(it - 1 - inducedGridPoints.begin())));
             }
-            //LOG4CPLUS_DEBUG(mLogger, "Calculating induced coordinates:" << x << " -> " << induced);
         }
         
-        Point<Number> induced = Point<Number>(coordinates);
+        Point<Number> induced(coordinates);
         return induced;
     }
+    
+    template<typename Number>
+    Point<Number> Grid<Number>::calculateInduced(const Point<Number>& point) const
+    {
+        if (!mInduced) {
+            return nextPointOnGrid(point);
+        }
         
+        typename Point<Number>::coordinateMap coordinates;
+        for (auto inducedGridPointsIt : mInducedGridPoints) {
+            auto fixed = inducedGridPointsIt.first;
+            auto inducedGridPoints = inducedGridPointsIt.second;
+
+            // get the position of the first element greater then the coordinate + 1
+            auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
+                    point.coordinate(fixed));
+
+            // insert the index of the element one before the element found above
+            coordinates.insert(std::make_pair(fixed, carl::FLOAT_T<Number>(it - 1 - inducedGridPoints.begin())));
+        }
+        
+        Point<Number> induced(coordinates);
+        return induced;
+    }
+    
+    template<typename Number>
+    Point<Number> Grid<Number>::calculateOriginal(const Point<Number>& inducedPoint) const
+    {
+        if (!mInduced) {
+            return inducedPoint;
+        }
+        
+        typename Point<Number>::coordinateMap coordinates;
+        for (auto coordinateIt : inducedPoint.coordinates()) {
+            auto fixed = coordinateIt.first;
+            auto inducedGridPoints = mInducedGridPoints.at(fixed);
+            // get the value of the element at the specified position
+            auto it = inducedGridPoints.at(coordinateIt.second.value());
+            
+            // insert the value
+            coordinates.insert(std::make_pair(fixed, it));
+        }
+        
+        Point<Number> induced(coordinates);
+        return induced;
+    }
+    
+    template<typename Number>
+    void Grid<Number>::translateToInduced(vSet<Number>& vertices) const
+    {
+    }
+
 }

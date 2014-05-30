@@ -122,7 +122,7 @@ namespace hypro
             void insert(const Point<Number>& point, bool colour)
             {
                 assert( point.hasDimensions(mVariables) );
-                mGridMap[calculateInduced(point)] = colour;
+                mGridMap[nextPointOnGrid(point)] = colour;
             }
             
             /**
@@ -133,7 +133,7 @@ namespace hypro
              */
             bool colourAt(const Point<Number>& point)
             {
-                return mGridMap[calculateInduced(point)];
+                return mGridMap[nextPointOnGrid(point)];
             }
             
             /**
@@ -144,12 +144,34 @@ namespace hypro
             void induceGrid(const vSet<Number>& vertices);
             
             /**
-             * Translate a point into its coordinates on the induced grid.
+             * Gets the next point on the gird.
+             * 
+             * @param point
+             * @return next point on grid
+             */
+            Point<Number> nextPointOnGrid(const Point<Number>& point) const;
+            
+            /**
+             * Calculates the coordinates of this point on the induced grid.
              * 
              * @param point
              * @return induced point
              */
             Point<Number> calculateInduced(const Point<Number>& point) const;
+            
+            /**
+             * Calculates the original coordinates of this induced point.
+             * @param inducedPoint
+             * @return original point
+             */
+            Point<Number> calculateOriginal(const Point<Number>& inducedPoint) const;
+            
+            /**
+             * Translates the points to induced points.
+             * 
+             * @param vertices
+             */
+            void translateToInduced(vSet<Number>& vertices) const;
             
             /**
              * Clears the grid.

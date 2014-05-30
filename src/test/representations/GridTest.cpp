@@ -58,6 +58,16 @@ protected:
         coordinates[y] = FLOAT_T<number_t>(5);
         p4 = Point<number_t>(coordinates);
         grid1.insert(p4, true);
+        
+        // vertices
+        coordinates[x] = 1; coordinates[y] = 5;
+        vertices.insert(Vertex<number_t>(coordinates, false));
+
+        coordinates[x] = 4; coordinates[y] = 6;
+        vertices.insert(Vertex<number_t>(coordinates, true));
+
+        coordinates[x] = 6; coordinates[y] = 8;
+        vertices.insert(Vertex<number_t>(coordinates, true));
     }
 	
     virtual void TearDown()
@@ -69,6 +79,8 @@ protected:
     Variable y = pool.getFreshVariable("y");
     
     Point<number_t> p1, p2, p3, p4;
+    
+    vSet<number_t> vertices;
 
     Grid<number_t> grid1;
     Grid<number_t> grid2;
@@ -106,14 +118,6 @@ TEST_F(GridTest, ColourAt)
     EXPECT_FALSE(grid1.colourAt(p1));
 }
 
-TEST_F(GridTest, CalculateInduced)
-{
-    EXPECT_EQ(p1, grid1.calculateInduced(p1));
-    Point<number_t> p = Point<number_t>(p1);
-    p[x] += FLOAT_T<number_t>(0.5);
-    EXPECT_EQ(p1, grid1.calculateInduced(p));
-}
-
 TEST_F(GridTest, InsertVerticesInMap)
 {
     vSet<number_t> vertices;
@@ -140,18 +144,6 @@ TEST_F(GridTest, InsertVerticesInMap)
 
 TEST_F(GridTest, InduceGrid)
 {
-    vSet<number_t> vertices;
-    Vertex<number_t>::rawCoordinateMap coordinates;
-    
-    coordinates[x] = 1; coordinates[y] = 5;
-    vertices.insert(Vertex<number_t>(coordinates, false));
-    
-    coordinates[x] = 4; coordinates[y] = 7;
-    vertices.insert(Vertex<number_t>(coordinates, true));
-    
-    coordinates[x] = 6; coordinates[y] = 8;
-    vertices.insert(Vertex<number_t>(coordinates, true));
-    
     EXPECT_FALSE(grid1.induced());
     
     grid1.induceGrid(vertices);
@@ -170,8 +162,69 @@ TEST_F(GridTest, InduceGrid)
     _p3[x] = 1; _p3[y] = 5;
     _p4[x] = 6; _p4[y] = 8;
     
-    EXPECT_EQ(_p1, grid1.calculateInduced(p1));
-    EXPECT_EQ(_p2, grid1.calculateInduced(p2));
-    EXPECT_EQ(_p3, grid1.calculateInduced(p3));
-    EXPECT_EQ(_p4, grid1.calculateInduced(p4));
+    EXPECT_EQ(_p1, grid1.nextPointOnGrid(p1));
+    EXPECT_EQ(_p2, grid1.nextPointOnGrid(p2));
+    EXPECT_EQ(_p3, grid1.nextPointOnGrid(p3));
+    EXPECT_EQ(_p4, grid1.nextPointOnGrid(p4));
+}
+
+TEST_F(GridTest, NextPointOnGrid)
+{
+    // check for original grid
+    
+    EXPECT_EQ(p1, grid1.nextPointOnGrid(p1));
+    Point<number_t> p = Point<number_t>(p1);
+    p[x] += FLOAT_T<number_t>(0.5);
+    EXPECT_EQ(p1, grid1.nextPointOnGrid(p));
+    
+    
+    // check for induced grid
+    grid1.induceGrid(vertices);
+    
+    Point<number_t>::rawCoordinateMap c;
+    
+    c[x] = 1; c[y] = 5;
+    Point<number_t> p1(c);
+    c[x] = 1; c[y] = 5;
+    Point<number_t> np1(c);
+    
+    c[x] = 2; c[y] = 6;
+    Point<number_t> p2(c);
+    c[x] = 1; c[y] = 6;
+    Point<number_t> np2(c);
+    
+    c[x] = 5; c[y] = 7;
+    Point<number_t> p3(c);
+    c[x] = 4; c[y] = 6;
+    Point<number_t> np3(c);
+    
+    EXPECT_EQ(np1, grid1.nextPointOnGrid(p1));
+    EXPECT_EQ(np2, grid1.nextPointOnGrid(p2));
+    EXPECT_EQ(np3, grid1.nextPointOnGrid(p3));
+}
+
+TEST_F(GridTest, CalculateInduced)
+{
+    grid1.induceGrid(vertices);
+    
+    Point<number_t>::rawCoordinateMap c;
+    
+    c[x] = 1; c[y] = 5;
+    Point<number_t> p1(c);
+    c[x] = 1; c[y] = 1;
+    Point<number_t> ip1(c);
+    
+    c[x] = 2; c[y] = 6;
+    Point<number_t> p2(c);
+    c[x] = 1; c[y] = 2;
+    Point<number_t> ip2(c);
+    
+    c[x] = 5; c[y] = 7;
+    Point<number_t> p3(c);
+    c[x] = 2; c[y] = 2;
+    Point<number_t> ip3(c);
+    
+    EXPECT_EQ(ip1, grid1.calculateInduced(p1));
+    EXPECT_EQ(ip2, grid1.calculateInduced(p2));
+    EXPECT_EQ(ip3, grid1.calculateInduced(p3));
 }
