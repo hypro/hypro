@@ -28,7 +28,7 @@ namespace hypro
 		template<typename Number>
 		using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
-		typedef std::map<carl::Variable, operator_e> operator_t;
+		//typedef std::map<carl::Variable, operator_e> operator_t;
 
 		//typedef std::map<carl::Variable, carl::FLOAT_T<number> > vector_t;
 		//typedef Eigen::Matrix<carl::FLOAT_T<number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;

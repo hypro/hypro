@@ -9,16 +9,19 @@
 #include "util.h"
 //#include "Transition.h"
 
-class Transition;
+
 
 namespace hypro
 {
+template<typename Number>
+class Transition;
+
     template<typename Number>
     class Location
     {
     	private:
 
-			typedef std::set<Transition*> transitionSet;
+			typedef std::set<Transition<Number>*> transitionSet;
 
         public:
     		struct invariant {

@@ -40,7 +40,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::set<Transition*> Location<Number>::transitions() {
+	std::set<Transition<Number>*> Location<Number>::transitions() {
 		return mTransitions;
 	}
 
@@ -64,6 +64,8 @@ namespace hypro {
 		mInvariant.vec = _vec;
 		mInvariant.mat = _mat;
 		mInvariant.op = _op;
+
+		mLocation.inv.op = mInvariant.op;
 	}
 
 	template<typename Number>

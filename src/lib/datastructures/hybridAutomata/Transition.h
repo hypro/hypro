@@ -86,6 +86,10 @@ namespace hypro
     			return mGuard;
     		}
 
+    		hypro::valuation_t<Number> assignment() {
+    			return mAssignment;
+    		}
+
     		transition transition() {
     			return mTransition;
     		}
@@ -104,6 +108,10 @@ namespace hypro
 
     		void setTransition(struct transition _trans) {
     			mTransition = _trans;
+    		}
+
+    		void setAssignment(hypro::valuation_t<Number> _val) {
+    			mAssignment = _val;
     		}
 
     		/*
