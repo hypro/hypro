@@ -81,7 +81,7 @@ protected:
     	std::set<hypro::Transition<double>*> transSet(transition, transition+1);
 
     	hybrid.setTransitions(transSet);
-    	//loc1.setTransitions(transSet);
+    	loc1.setTransitions(transSet);
 
     	//Polytope for InitialValuation
     	//Point<double>::coordinates_map coordinates;
@@ -95,6 +95,7 @@ protected:
     	hypro::Polytope<double> poly = Polytope<double>(p1);
 
     	hybrid.setValuation(poly);
+    	trans.setAssignment(poly);
 
 
     }
@@ -117,6 +118,7 @@ protected:
 
 };
 
+/*
 TEST_F(HybridAutomataTest, LocationConstructorTest)
 {
     //Location<double> locA;
@@ -128,15 +130,100 @@ TEST_F(HybridAutomataTest, LocationConstructorTest)
     matr(0,1) = 0.0;
     SUCCEED();
 }
+*/
 
 TEST_F(HybridAutomataTest, LocationTest)
 {
+	//invariant: operator
     EXPECT_EQ(loc1.invariant().op,LEQ);
-    EXPECT_EQ(1,2);
+    EXPECT_EQ(loc2.invariant().op,LEQ);
+    //EXPECT_EQ(loc2.location().inv.op,LEQ);
+
+    //invariant: vector
+	vector_t<double> invariantVec;
+	invariantVec.insert( std::make_pair(x, 10) );
+	invariantVec.insert( std::make_pair(y, 20) );
+    EXPECT_EQ(loc1.invariant().vec, invariantVec);
+    //EXPECT_EQ(loc2.invariant().vec, invariantVec);
+    //EXPECT_EQ(loc1.location().inv.vec, invariantVec);
+
+	vector_t<double> invariantVec2;
+	invariantVec2.insert( std::make_pair(x, 10) );
+	invariantVec2.insert( std::make_pair(y, 10) );
+	EXPECT_NE(loc1.invariant().vec, invariantVec2);
+
+	//invariant: matrix
+	matrix_t<double> invariantMat(2,2);
+	invariantMat(0,0) = 2;
+	invariantMat(0,1) = 0;
+	invariantMat(1,0) = 0;
+	invariantMat(1,1) = 3;
+
+	EXPECT_EQ(*loc1.invariant().mat, invariantMat);
+	//EXPECT_EQ(*loc2.invariant().mat, invariantMat);
+
+	matrix_t<double> invariantMat2(2,2);
+	invariantMat2(0,0) = 1;
+	invariantMat2(0,1) = 0;
+	invariantMat2(1,0) = 0;
+	invariantMat2(1,1) = 3;
+
+	EXPECT_NE(*loc1.invariant().mat, invariantMat2);
+
+	//location: matrix
+	matrix_t<double> locationMat(2,2);
+	locationMat(0,0) = 2;
+	locationMat(0,1) = 0;
+	locationMat(1,0) = 0;
+	locationMat(1,1) = 1;
+
+	loc1.setActivityMat(&locationMat);
+	EXPECT_EQ(*loc1.activityMat(), locationMat);
+	//EXPECT_EQ(*loc1.location().mat, locationMat);
+
+	matrix_t<double> locationMat2(2,2);
+	locationMat2(0,0) = 1;
+	locationMat2(0,1) = 0;
+	locationMat2(1,0) = 0;
+	locationMat2(1,1) = 1;
+
+	EXPECT_NE(*loc1.activityMat(), locationMat2);
+
+	//location: set of outgoing transitions
+/*
+	hypro::Transition<double>* transition[] = {&trans};
+	std::set<hypro::Transition<double>*> transSet(transition, transition+1);
+
+	EXPECT_EQ(loc1.transitions(), transSet);
+*/
+
+
+
 }
 
 TEST_F(HybridAutomataTest, TransitionTest)
 {
+	//transition: Start Location
+	//EXPECT_EQ(*trans.startLoc(), loc1);
+
+	//transition: End Location
+	//EXPECT_EQ(*trans.targetLoc(), loc2);
+
+	//transition: Assignment
+	vector_t<double> coordinates;
+    coordinates.insert( std::make_pair(x, 2) );
+    coordinates.insert( std::make_pair(y, 3) );
+    p1 = Point<double>(coordinates);
+
+	hypro::Polytope<double> poly = Polytope<double>(p1);
+	EXPECT_EQ(trans.assignment(), poly);
+
+	//transition: Guard
+	struct hypro::Transition<double>::guard guard;
+	guard.op = loc1.invariant().op;
+	guard.mat = loc1.invariant().mat;
+	guard.vec = loc1.invariant().vec;
+	//EXPECT_EQ(trans.guard(), guard);
 
 }
 
