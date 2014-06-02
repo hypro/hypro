@@ -94,8 +94,7 @@ namespace hypro {
 		 */
 		inline bool originIsVertex() const {
                     assert(mVertices.size() > 0);
-                    Vertex<Number> origin = mVertices.begin()->newEmpty();
-                    origin.setColor(true);
+                    Vertex<Number> origin = Vertex<Number>(mVertices.begin()->newEmpty(), true);
                     return (*(mVertices.begin()) == origin);
 		}
 		

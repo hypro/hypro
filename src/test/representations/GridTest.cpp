@@ -94,6 +94,13 @@ TEST_F(GridTest, Constructor)
     EXPECT_TRUE(copy.empty());
 }
 
+TEST_F(GridTest, Access)
+{
+    EXPECT_TRUE(grid1.find(p1) != grid1.end());
+    ++p1[x];
+    EXPECT_TRUE(grid1.find(p1) == grid1.end());
+}
+
 TEST_F(GridTest, Insert)
 {
     Point<number_t> p = Point<number_t>(p4);
@@ -171,7 +178,6 @@ TEST_F(GridTest, InduceGrid)
 TEST_F(GridTest, NextPointOnGrid)
 {
     // check for original grid
-    
     EXPECT_EQ(p1, grid1.nextPointOnGrid(p1));
     Point<number_t> p = Point<number_t>(p1);
     p[x] += FLOAT_T<number_t>(0.5);

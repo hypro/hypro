@@ -141,7 +141,7 @@ namespace hypro
              * @param point
              * @return 
              */
-            typename gridMap::iterator find(const Point<Number>& point) const
+            typename gridMap::const_iterator find(const Point<Number>& point) const
             {
                 return mGridMap.find(point);
             }
@@ -150,7 +150,7 @@ namespace hypro
              * 
              * @return 
              */
-            typename gridMap::iterator end() const
+            typename gridMap::const_iterator end() const
             {
                 return mGridMap.end();
             }

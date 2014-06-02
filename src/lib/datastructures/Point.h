@@ -308,7 +308,7 @@ namespace hypro {
              * 
              * @return new empty point
              */
-            Point<Number> newEmpty()
+            Point<Number> newEmpty() const
             {
                 coordinateMap coordinates;
                 for (auto pointIt : mCoordinates)

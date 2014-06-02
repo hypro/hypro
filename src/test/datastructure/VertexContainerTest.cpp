@@ -22,9 +22,6 @@ class VertexContainerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        VariablePool& pool = VariablePool::getInstance();
-        Variable x = pool.getFreshVariable();
-        Variable y = pool.getFreshVariable();
         
         // p1
         Point<number_t>::coordinateMap coordinates1;
@@ -48,6 +45,10 @@ protected:
     virtual void TearDown()
     {
     }
+    
+    VariablePool& pool = VariablePool::getInstance();
+    Variable x = pool.getFreshVariable("x");
+    Variable y = pool.getFreshVariable("y");
 	
     Point<number_t> p1;
     Point<number_t> p2;
@@ -147,4 +148,23 @@ TEST_F(VertexContainerTest, Access)
         EXPECT_TRUE(test1.find(Vertex<number_t>(p1, true))->color());
         EXPECT_TRUE(test1.find(Vertex<number_t>(p2, true))->color());
         EXPECT_FALSE(test1.find(Vertex<number_t>(p3, false))->color());
+}
+
+TEST_F(VertexContainerTest, OriginIsVertex)
+{
+    VertexContainer<number_t> test1 = VertexContainer<number_t>();
+    test1.insert(Vertex<number_t>(p1, true));
+    test1.insert(Vertex<number_t>(p2, true));
+    test1.insert(Vertex<number_t>(p3, false));
+    
+    EXPECT_FALSE(test1.originIsVertex());
+    
+    p1[x] = 0; p1[y] = 0;
+    test1.insert(Vertex<number_t>(p1, true));
+    
+    EXPECT_TRUE(test1.originIsVertex());
+    
+    test1.erase(p1);
+    test1.insert(Vertex<number_t>(p1, false));
+    EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
 }
