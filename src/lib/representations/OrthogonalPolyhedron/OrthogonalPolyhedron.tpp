@@ -73,20 +73,7 @@ namespace hypro
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) {
-        auto it = mGrid.find(point);
-        if (it != mGrid.end()) {
-            return it->second;
-        }
-        
-        if (!boundaryBox().contains(point)) {
-            return false;
-        }
-        
-        Point<Number> induced = mGrid.calculateInduced(point);
-        
-        // @todo
-        
-        return true;
+        return containsInduced(mGrid.calculateInduced(point));
     }
         
     template<typename Number>
@@ -126,29 +113,6 @@ namespace hypro
         }
         return mBoundaryBox;
     }
-    
-    /**
-     * Returns the colour at the given point.
-     * @see contains
-     */
-//    template<typename Number>
-//    bool OrthogonalPolyhedron<Number>::colourAt(const Point<Number>& point) {
-//        auto it = mGrid.find(point);
-//        // check if we already know the point
-//        if (it != mGrid.end()) {
-//            return it->second;
-//        }
-//        bool colour = false;
-//        // if the box does not contain it, we can be sure it is false
-//        if (!boundaryBox().contains(point)) {
-//            colour = false;
-//        } else {
-//            colour = contains(point);
-//        }
-//        // save the point for future use
-//        mGrid.insert(point, colour);
-//        return colour;
-//    }
         
 
     /***************************************************************************
@@ -188,4 +152,52 @@ namespace hypro
         
         mBoxUpToDate = true;
     }
+        
+    /**
+     * Checks if the orthogonal polyhedron contains the given induced point.
+     * Using only the induced point makes calculating neighbourship and predecessors much easier.
+     * 
+     * @param inducedPoint
+     * @return 
+     */
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::containsInduced(const Point<Number>& inducedPoint) {
+        // check if we already know the colour of this point
+        auto it = mGrid.findInduced(inducedPoint);
+        if (it != mGrid.end()) {
+            return it->second;
+        }
+        
+        bool colour = false;
+
+        // check if the point is in our boundary box
+        if (boundaryBox().contains(mGrid.calculateOriginal(inducedPoint))) {
+            // there exists a dimension
+            for (auto dimensionIt : mVariables) {
+                auto neighboursInFixed = inducedPoint.getAllNeighborsForAFixedDimension(dimensionIt);
+                bool dimensionOk = true;
+                
+                // for all neighbours we must ensure
+                for (auto neighbourIt : neighboursInFixed) {
+                    Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
+                    if (containsInduced(neighbourIt) != containsInduced(predecessor)) {
+                        dimensionOk = false;
+                        break;
+                    }
+                }
+                
+                // if the dimension is ok the point's colour is the same as its predecessor
+                if (dimensionOk) {
+                    Point<Number> predecessor = inducedPoint.getPredecessorInDimension(dimensionIt);
+                    colour = containsInduced(predecessor);
+                    break;
+                }
+            }
+        }
+        
+        // save calculated colour for later use
+        mGrid.insertInduced(inducedPoint, colour);
+        return colour;
+    }
+    
 }

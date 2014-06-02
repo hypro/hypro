@@ -117,12 +117,24 @@ namespace hypro
              * Inserts the value for the point.
              * 
              * @param point
-             * @param val
+             * @param colour
              */
             void insert(const Point<Number>& point, bool colour)
             {
                 assert( point.hasDimensions(mVariables) );
-                mGridMap[nextPointOnGrid(point)] = colour;
+                mGridMap.insert(std::make_pair(calculateInduced(point), colour));
+            }
+            
+            /**
+             * Inserts the value for the induced point.
+             *
+             * @param inducedPoint
+             * @param colour
+             */
+            void insertInduced(const Point<Number>& inducedPoint, bool colour)
+            {
+                assert( inducedPoint.hasDimensions(mVariables) );
+                mGridMap.insert(std::make_pair(inducedPoint, colour));
             }
             
             /**
@@ -133,7 +145,18 @@ namespace hypro
              */
             bool colourAt(const Point<Number>& point)
             {
-                return mGridMap[nextPointOnGrid(point)];
+                return mGridMap[calculateInduced(point)];
+            }
+            
+            /**
+             * Returns the colour of the given induced point
+             * 
+             * @param point
+             * @return the colour of the induced point
+             */
+            bool colourAtInduced(const Point<Number>& inducedPoint)
+            {
+                return mGridMap[inducedPoint];
             }
             
             /**
@@ -143,7 +166,17 @@ namespace hypro
              */
             typename gridMap::const_iterator find(const Point<Number>& point) const
             {
-                return mGridMap.find(point);
+                return mGridMap.find(calculateInduced(point));
+            }
+            
+            /**
+             * 
+             * @param inducedPoint
+             * @return 
+             */
+            typename gridMap::const_iterator findInduced(const Point<Number>& inducedPoint) const
+            {
+                return mGridMap.find(inducedPoint);
             }
             
             /**

@@ -110,6 +110,9 @@ TEST_F(GridTest, Insert)
     EXPECT_TRUE(grid1.colourAt(p4));
     EXPECT_TRUE(grid1.colourAt(p));
     
+    p[x] += FLOAT_T<number_t>(5);
+    p4[x] += FLOAT_T<number_t>(5);
+    
     grid1.insert(p, false);
     EXPECT_FALSE(grid1.colourAt(p4));
     EXPECT_FALSE(grid1.colourAt(p));

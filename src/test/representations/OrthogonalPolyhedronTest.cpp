@@ -31,7 +31,6 @@ class OrthogonalPolyhedronTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        VertexContainer<number_t> container;
         Point<number_t>::rawCoordinateMap coordinates;
         
         coordinates[x] = 3; coordinates[y] = 3;
@@ -62,6 +61,8 @@ protected:
     VariablePool& pool = VariablePool::getInstance();
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
+    
+    VertexContainer<number_t> container;
 
     OrthogonalPolyhedron<number_t> p1;
     OrthogonalPolyhedron<number_t> p2;
@@ -103,29 +104,66 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
     Point<number_t>::rawCoordinateMap coordinates;
     
     coordinates[x] = 4; coordinates[y] = 5;
-    Point<number_t> pt1(coordinates);
+    Point<number_t> pt1(coordinates); // true
     
     coordinates[x] = 4; coordinates[y] = 6;
-    Point<number_t> pt2(coordinates);
+    Point<number_t> pt2(coordinates); // false
     
     coordinates[x] = 5; coordinates[y] = 5;
-    Point<number_t> pt3(coordinates);
+    Point<number_t> pt3(coordinates); // true
     
     coordinates[x] = 1; coordinates[y] = 5;
-    Point<number_t> pt4(coordinates);
+    Point<number_t> pt4(coordinates); // false
     
     coordinates[x] = 6; coordinates[y] = 4;
-    Point<number_t> pt5(coordinates);
+    Point<number_t> pt5(coordinates); // false
     
     coordinates[x] = 5; coordinates[y] = 6.5;
-    Point<number_t> pt6(coordinates);
+    Point<number_t> pt6(coordinates); // false
+    
+    coordinates[x] = 4; coordinates[y] = 3;
+    Point<number_t> pt7(coordinates); // true
+    
+    coordinates[x] = 3; coordinates[y] = 5;
+    Point<number_t> pt8(coordinates); // true
+    
+    coordinates[x] = 5; coordinates[y] = 4;
+    Point<number_t> pt9(coordinates); // false
+    
+    coordinates[x] = 6; coordinates[y] = 5;
+    Point<number_t> pt10(coordinates); // true
+    
+    coordinates[x] = 7; coordinates[y] = 6;
+    Point<number_t> pt11(coordinates); // false
+    
+    coordinates[x] = 0; coordinates[y] = 0;
+    Point<number_t> pt12(coordinates); // false
+    
+    coordinates[x] = 1; coordinates[y] = 1;
+    Point<number_t> pt13(coordinates); // false
+    
+    coordinates[x] = 100; coordinates[y] = 100;
+    Point<number_t> pt14(coordinates); // false
     
     EXPECT_TRUE(p1.contains(pt1));
-    EXPECT_TRUE(p1.contains(pt2));
+    EXPECT_FALSE(p1.contains(pt2));
     EXPECT_TRUE(p1.contains(pt3));
     EXPECT_FALSE(p1.contains(pt4));
     EXPECT_FALSE(p1.contains(pt5));
     EXPECT_FALSE(p1.contains(pt6));
+    EXPECT_TRUE(p1.contains(pt7));
+    EXPECT_TRUE(p1.contains(pt8));
+    EXPECT_FALSE(p1.contains(pt9));
+    EXPECT_TRUE(p1.contains(pt10));
+    EXPECT_FALSE(p1.contains(pt11));
+    EXPECT_FALSE(p1.contains(pt12));
+    EXPECT_FALSE(p1.contains(pt13));
+    EXPECT_FALSE(p1.contains(pt14));
+    
+    // also check all vertices
+    for (auto vertexIt : container.vertices()) {
+        EXPECT_EQ(vertexIt.color(), p1.contains(vertexIt));
+    }
 }
 
 TEST_F(OrthogonalPolyhedronTest, Properties)

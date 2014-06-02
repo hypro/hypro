@@ -49,22 +49,6 @@ namespace hypro
             mInducedGridPoints[it.first] = it.second;
         }
 
-        /*DEBUGoutput.
-         * for (unsigned d = 0; d<mDimension; d++) {
-           std::cout << "Dimension " << d << ":";
-           for (unsigned i = 0; i<mInducedGridPoints[d].size(); i++) {
-                   std::cout << mInducedGridPoints[d][i] << " ";
-           }
-           std::cout<<endl;
-        }
-         */
-
-        /*
-        for (it = mVertices.begin(); it != mVertices.end(); it++) {
-            mInducedVertices.insert(calculateInduced(*it), it->getColor());
-        }
-        */
-
         clear();
         mInduced = true;
     }

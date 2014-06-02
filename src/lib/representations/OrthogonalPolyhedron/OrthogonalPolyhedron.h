@@ -70,8 +70,11 @@ namespace hypro
         
         /**
          * Constructor initialising values.
+         * 
+         * @todo does it really make sense to make induceGrid optional?
+         * 
          * @param vertices
-         * @param induceGrid
+         * @param induceGrid true by default
          */
         OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true)
                 : mVertices(vertices), mOriginColour(vertices.originIsVertex()), mVariables(vertices.variables())
@@ -118,7 +121,6 @@ namespace hypro
         bool empty() const;
         std::vector<carl::Variable> variables() const;
         Box<Number> boundaryBox();
-        bool colourAt(const Point<Number>& point);
         
         /***********************************************************************
          * Operators
@@ -137,6 +139,7 @@ namespace hypro
     private:
         
         void updateBoundaryBox();
+        bool containsInduced(const Point<Number>& inducedPoint);
         
     };
     
