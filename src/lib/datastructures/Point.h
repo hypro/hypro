@@ -511,11 +511,16 @@ namespace hypro {
              */
             static Point<Number> coordinateMax(const Point<Number>& p1, const Point<Number>& p2)
             {
-                Point<Number> p = Point<Number>(p1.dimension());
+                assert(p1.hasDimensions(p2.variables()));
+                coordinateMap coordinates;
                 for (auto pointIt : p1.mCoordinates) {
-                    ( (*pointIt).second > p2[(*pointIt).first]) ? p[(*pointIt).first] = (*pointIt).second : p[(*pointIt).first] = p2[(*pointIt).first];
+                    if (pointIt.second > p2.at(pointIt.first)) {
+                        coordinates[pointIt.first] = pointIt.second;
+                    } else {
+                        coordinates[pointIt.first] = p2.at(pointIt.first);
+                    }
                 }
-                return p;
+                return Point<Number>(coordinates);
             }
 
             /**
@@ -748,10 +753,10 @@ namespace hypro {
              */
             friend std::ostream & operator<< (std::ostream& ostr, const Point<Number>& p)
             {
-                ostr << "(";		
+                ostr << "( ";		
                 for (auto pointIt : p.mCoordinates) {
                     ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
-                }		
+                } 
                 ostr << ")";
                 return ostr;
             }

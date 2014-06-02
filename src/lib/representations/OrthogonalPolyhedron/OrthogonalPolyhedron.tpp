@@ -40,7 +40,65 @@ namespace hypro
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
-        return false;
+        assert(mVariables == rhs.mVariables);
+        
+        // first initialize the set of potential vertices
+        vSet<Number> potentialVertices;
+        for (auto vertexIt1 : mVertices.vertices()) {
+            for (auto vertexIt2 : rhs.mVertices.vertices()) {
+                Point<Number> max = Point<Number>::coordinateMax(vertexIt1, vertexIt2);
+                potentialVertices.insert(max);
+            }
+        }
+        
+        // create a temporary grid including all pootential vertices
+        Grid<Number> tmpGrid;
+        tmpGrid.reserveInducedGrid(mVariables);
+        tmpGrid.induceGrid(potentialVertices);
+        potentialVertices = tmpGrid.translateToInduced(potentialVertices);
+        
+        // the container to store the actual vertices
+        VertexContainer<Number> vertices;
+        
+        // check all potential vertices if they are in fact vertices
+        for (auto vertexIt : potentialVertices) {
+            // calculate the neighbour colouring intersection
+            auto neighbours = vertexIt.getAllNeighbours(true); // include the point itself
+            std::map<Point<Number>, bool> colouringIntersection;
+            for (auto neighbourIt : neighbours) {
+                Point<Number> original = tmpGrid.calculateOriginal(neighbourIt);
+                bool colour1 = contains(original);
+                bool colour2 = rhs.contains(original);
+                colouringIntersection.insert(std::make_pair(neighbourIt, colour1 && colour2));
+            }
+            
+            bool isVertex = true;
+            
+            // check the vertex condition
+            for (auto dimensionIt : mVariables) {
+                auto neighboursInFixed = vertexIt.getAllNeighborsForAFixedDimension(dimensionIt, true); // include the point itself
+                for (auto neighbourIt : neighboursInFixed) {
+                    Point<Number> predecessor = neighbourIt->getPredecessorInDimension(dimensionIt);
+                    if (colouringIntersection.at(neighbourIt) == colouringIntersection.at(predecessor)) {
+                        isVertex = false;
+                        break;
+                    }
+                }
+                
+                if (!isVertex) {
+                    break;
+                }
+            }
+            
+            // if the point is a vertex, add it with its calculated colour
+            if (isVertex) {
+                vertices.insert(vertexIt, colouringIntersection.at(vertexIt));
+            }
+        }
+        
+        result = OrthogonalPolyhedron<Number>(vertices);
+        
+        return true;
     }
         
     template<typename Number>

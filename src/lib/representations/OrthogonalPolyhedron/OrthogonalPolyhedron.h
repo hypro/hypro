@@ -126,14 +126,18 @@ namespace hypro
          * Operators
          ***********************************************************************/
 
-        friend bool operator==(const OrthogonalPolyhedron<Number> & op1, const OrthogonalPolyhedron<Number> & op2)
+        friend bool operator==(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2)
         {
             return op1.mVertices == op2.mVertices;
         }
 
-        friend bool operator!=(const OrthogonalPolyhedron<Number> & op1, const OrthogonalPolyhedron<Number> & op2)
+        friend bool operator!=(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2)
         {
             return op1.mVertices != op2.mVertices;
+        }
+        
+        friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number>& p) {
+            return ostr << p.mVertices;
         }
         
     private:

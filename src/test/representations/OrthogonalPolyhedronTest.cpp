@@ -34,24 +34,50 @@ protected:
         Point<number_t>::rawCoordinateMap coordinates;
         
         coordinates[x] = 3; coordinates[y] = 3;
-        container.insert(Point<number_t>(coordinates), true);
+        container1.insert(Point<number_t>(coordinates), true);
         
         coordinates[x] = 3; coordinates[y] = 6;
-        container.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<number_t>(coordinates), false);
         
         coordinates[x] = 5; coordinates[y] = 3;
-        container.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<number_t>(coordinates), false);
         
         coordinates[x] = 5; coordinates[y] = 5;
-        container.insert(Point<number_t>(coordinates), true);
+        container1.insert(Point<number_t>(coordinates), true);
         
         coordinates[x] = 7; coordinates[y] = 5;
-        container.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<number_t>(coordinates), false);
         
         coordinates[x] = 7; coordinates[y] = 6;
-        container.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<number_t>(coordinates), false);
         
-        p1 = OrthogonalPolyhedron<number_t>(container);
+        p1 = OrthogonalPolyhedron<number_t>(container1);
+        
+        coordinates[x] = 1; coordinates[y] = 3;
+        container2.insert(Point<number_t>(coordinates), true);
+        
+        coordinates[x] = 1; coordinates[y] = 4;
+        container2.insert(Point<number_t>(coordinates), false);
+        
+        coordinates[x] = 2; coordinates[y] = 4;
+        container2.insert(Point<number_t>(coordinates), true);
+        
+        coordinates[x] = 2; coordinates[y] = 5;
+        container2.insert(Point<number_t>(coordinates), false);
+        
+        coordinates[x] = 4; coordinates[y] = 5;
+        container2.insert(Point<number_t>(coordinates), false);
+        
+        coordinates[x] = 4; coordinates[y] = 2;
+        container2.insert(Point<number_t>(coordinates), false);
+        
+        coordinates[x] = 2; coordinates[y] = 2;
+        container2.insert(Point<number_t>(coordinates), true);
+        
+        coordinates[x] = 2; coordinates[y] = 3;
+        container2.insert(Point<number_t>(coordinates), true);
+        
+        p2 = OrthogonalPolyhedron<number_t>(container2);
     }
 	
     virtual void TearDown()
@@ -62,7 +88,8 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
     
-    VertexContainer<number_t> container;
+    VertexContainer<number_t> container1;
+    VertexContainer<number_t> container2;
 
     OrthogonalPolyhedron<number_t> p1;
     OrthogonalPolyhedron<number_t> p2;
@@ -73,6 +100,32 @@ TEST_F(OrthogonalPolyhedronTest, Constructor)
     OrthogonalPolyhedron<number_t> p;
     OrthogonalPolyhedron<number_t> copy(p);
     SUCCEED();
+}
+
+TEST_F(OrthogonalPolyhedronTest, Intersect)
+{
+    OrthogonalPolyhedron<number_t> result;
+    
+    VertexContainer<number_t> container;
+    Point<number_t>::rawCoordinateMap coordinates;
+        
+    coordinates[x] = 3; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 3; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 4; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 4; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), false);
+    
+    OrthogonalPolyhedron<number_t> expected(container);
+    
+//    p1.intersect(result, p2);
+    
+//    EXPECT_EQ(expected, result);
 }
 
 TEST_F(OrthogonalPolyhedronTest, Hull)
@@ -161,7 +214,7 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
     EXPECT_FALSE(p1.contains(pt14));
     
     // also check all vertices
-    for (auto vertexIt : container.vertices()) {
+    for (auto vertexIt : container1.vertices()) {
         EXPECT_EQ(vertexIt.color(), p1.contains(vertexIt));
     }
 }
@@ -169,7 +222,8 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
 TEST_F(OrthogonalPolyhedronTest, Properties)
 {
     EXPECT_FALSE(p1.empty());
-    EXPECT_TRUE(p2.empty());
+    OrthogonalPolyhedron<number_t> empty;
+    EXPECT_TRUE(empty.empty());
     
     std::vector<carl::Variable> variables;
     variables.push_back(x);

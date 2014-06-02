@@ -106,6 +106,7 @@ namespace hypro {
 			if(this == &rhs) return (*this);
 			mVertices.clear();
 			mVertices = rhs.mVertices;
+                        return *this;
 		}
 		
 		inline vSetIt<Number> find(const Point<Number>& p, bool colour = false) const {
