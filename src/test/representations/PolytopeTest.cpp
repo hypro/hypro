@@ -206,9 +206,7 @@ TEST_F(PolytopeTest, Union)
     ps1.insert(p3);
     ps1.insert(p4);
     hypro::Polytope<number_t> pt1;
-    pt1.print();
     pt1 = Polytope<number_t>(ps1);
-    pt1.print();
     EXPECT_FALSE(pt1.rawPolyhedron().is_universe());
     EXPECT_TRUE(pt1.rawPolyhedron().is_topologically_closed());
     
@@ -217,18 +215,59 @@ TEST_F(PolytopeTest, Union)
     ps2.insert(p6);
     ps2.insert(p7);
     hypro::Polytope<number_t> pt2 = Polytope<number_t>(ps2);
-    pt2.print();
     
     hypro::Polytope<number_t> res;
     pt1.unite(res, pt2);
-    res.print();
     res.hull(res);
-    res.print();
 }
 
 TEST_F(PolytopeTest, LinearTransformation)
 {
+    Point<number_t> pt1;
+    Point<number_t> pt2;
+    Point<number_t> pt3;
+    Point<number_t> pt4;
     
+    Point<number_t>::coordinateMap c1;
+    c1.insert( std::make_pair(x, FLOAT_T<number_t>(0)) );
+    c1.insert( std::make_pair(y, FLOAT_T<number_t>(0)) );
+    pt1 = Point<number_t>(c1);
+    Point<number_t>::coordinateMap c2;
+    c2.insert( std::make_pair(x, FLOAT_T<number_t>(0)) );
+    c2.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
+    pt2 = Point<number_t>(c2);
+    Point<number_t>::coordinateMap c3;
+    c3.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
+    c3.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
+    pt3 = Point<number_t>(c3);
+    Point<number_t>::coordinateMap c4;
+    c4.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
+    c4.insert( std::make_pair(y, FLOAT_T<number_t>(0)) );
+    pt4 = Point<number_t>(c4);
+    
+    Point<number_t>::pointSet ps1;
+    ps1.insert(pt1);
+    ps1.insert(pt2);
+    ps1.insert(pt3);
+    ps1.insert(pt4);
+    hypro::Polytope<number_t> poly1;
+    poly1 = Polytope<number_t>(ps1);
+    EXPECT_FALSE(poly1.rawPolyhedron().is_universe());
+    EXPECT_TRUE(poly1.rawPolyhedron().is_topologically_closed());
+    
+    matrix A = matrix(2,2);
+    vector b = vector(2,1);
+    
+    A(0,0) = FLOAT_T<number_t>(0);
+    A(1,0) = FLOAT_T<number_t>(1);
+    A(0,1) = FLOAT_T<number_t>(-1);
+    A(1,1) = FLOAT_T<number_t>(0);
+    b(0,0) = FLOAT_T<number_t>(0);
+    b(1,0) = FLOAT_T<number_t>(0);
+    
+    hypro::Polytope<number_t> result;
+    poly1.linearTransformation(result,A,b);
+    result.print();
 }
 
 TEST_F(PolytopeTest, MinkowskiSum)

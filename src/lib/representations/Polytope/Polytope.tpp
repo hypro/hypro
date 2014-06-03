@@ -98,7 +98,6 @@ namespace hypro
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
         for(auto& generator : gs)
         {
-            generator.print();
             Generator::expr_type l = generator.expression();
             for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
             {
@@ -122,15 +121,59 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
     {
+        using namespace Parma_Polyhedra_Library;
+        
+        std::cout << "Input: " << std::endl;
+        this->print();
+        //std::cout << "Matrix A: " << A << std::endl;
+        //std::cout << "Vector b: " << b << std::endl;
+        result = *this;
+        
+        std::vector<Parma_Polyhedra_Library::Variable> variables;
+        for(unsigned i = 0; i < A.rows(); ++i)
+            variables.push_back(polytope::VariablePool::getInstance().pplVarByIndex(i));
+        
+        const Generator_System generators = this->mPolyhedron.generators();
+        
+        // Create Eigen::Matrix from Polytope
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix;
+        unsigned gCount = 0;
+        for(Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end(); ++generatorIt)
+        {
+            std::cout << "Generator: ";
+            generatorIt->print();
+            std::cout << std::endl;
+            
+            unsigned vCount = 0;
+            for(auto& var : variables)
+            {
+                polytopeMatrix(vCount, gCount) = carl::FLOAT_T<Number>(generatorIt->coefficient(variables.at(vCount)));
+                ++vCount;
+            }
+            ++gCount;
+        }
+        
         for(int i = 0; i < A.rows(); ++i)
         {
             Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> rowE = A.row(i);
+            //std::cout << "Row: " << rowE << std::endl;
             Parma_Polyhedra_Library::Linear_Expression rowP;
-            for(int j = 0; j < rowE.collums(); ++j)
+            for(int j = 0; j < rowE.cols(); ++j)
             {
-                rowP.set_coefficient(polytope::VariablePool::getInstance().pplVarByIndex(j), rowE.collum(j));
+                std::cout << "Try to set coefficient: " << polytope::VariablePool::getInstance().pplVarByIndex(j) << " -> " << rowE(j).value() << std::endl;
+                rowP.set_coefficient(polytope::VariablePool::getInstance().pplVarByIndex(j), rowE(j).value()); // TODO: value() is temporary atm
             }
-            this->mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP, b.row(i));
+            std::cout << "PPL Linear_Expression: " << rowP << std::endl;
+            if(b(i).value() != 0)
+            {
+                result.mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP, b(i).value());
+            }
+            else
+            {
+                result.mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP);
+            }
+            
+            result.print();
         }
         return true;
     }

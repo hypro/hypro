@@ -55,5 +55,15 @@ namespace polytope
         }
         return result;
     }
+    
+    const unsigned gsSize(const Parma_Polyhedra_Library::Generator_System& gs)
+    {
+        using namespace Parma_Polyhedra_Library;
+        unsigned i = 0;
+        for(auto& g : gs)
+            ++i;
+                    
+        return i;
+    }
 }
 }

@@ -276,18 +276,18 @@ namespace hypro {
                     result.insert(result.end(), angle);
                     std::cout << "Angle: " << angle << std::endl;
                 }
-                if((*base.mCoordinates.rbegin()).second < 0)
+                if((*base.mCoordinates.rbegin()).second < carl::FLOAT_T<Number>(0))
                 {
                     std::cout << "Correct last angle: ";
                     carl::FLOAT_T<Number> tmp = result.back();
                     result.pop_back();
                     if(!radians)
                     {
-                        tmp = 360 - tmp;
+                        tmp = Number(360) - tmp;
                     }
                     else
                     {
-                        tmp = -1* tmp;
+                        tmp = -tmp;
                     }
                     std::cout << tmp << std::endl;
                     result.push_back(tmp);
@@ -313,7 +313,7 @@ namespace hypro {
                 coordinateMap coordinates;
                 for (auto pointIt : mCoordinates)
                 {
-                    coordinates.insert(std::make_pair(pointIt.first, Number(0)));
+                    coordinates.insert(std::make_pair(pointIt.first, carl::FLOAT_T<Number>(0)));
                 }
                 return Point<Number>(coordinates);
             }
@@ -336,7 +336,7 @@ namespace hypro {
                     {
                         mCoordinates[(*pointIt).first] = (*pointIt).second;
                     }
-                    if (mCoordinates.at((*pointIt).first) < 0) negative = true;
+                    if (mCoordinates.at((*pointIt).first) < carl::FLOAT_T<Number>(0)) negative = true;
                 }
                 return negative;
             }
@@ -357,7 +357,7 @@ namespace hypro {
                     }
                     else 
                     {
-                        mCoordinates[(*pointIt).first] = 0; //TODO: sure to set it to zero instead of setting it to bounds[i-1] ?
+                        mCoordinates[(*pointIt).first] = carl::FLOAT_T<Number>(0); //TODO: sure to set it to zero instead of setting it to bounds[i-1] ?
                     }
                 }
             }
