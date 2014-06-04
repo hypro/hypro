@@ -11,6 +11,8 @@
 
 #include <ppl.hh>
 #include <carl/core/Variable.h>
+#include "../../config.h"
+#include "../../util/eigenTypetraits.h"
 
 #include "VariablePool.h"
 #include "../../datastructures/Point.h"
@@ -28,6 +30,25 @@ namespace polytope
         {
             Linear_Expression tmp = (*pointIt).second.toDouble() * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
+        }
+        Generator result = Generator::point(ls);
+        return result;
+    }
+    
+    /**
+     * Creates a generator from a point, which is a colum-vector (mx1)
+     */
+    template<typename Number>
+    Parma_Polyhedra_Library::Generator pointToGenerator(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& point)
+    {
+        using namespace Parma_Polyhedra_Library;
+        Linear_Expression ls;
+        unsigned i = 0;
+        for(unsigned i = 0; i < point.rows(); ++i)
+        {
+            Linear_Expression tmp = point.row(i) * VariablePool::getInstance().pplVarByIndex(i);
+            ls += tmp;
+            ++i;
         }
         Generator result = Generator::point(ls);
         return result;

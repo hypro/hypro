@@ -20,11 +20,11 @@ namespace Eigen
         enum
         {
             IsComplex = 0,
-            IsInterger = 0,
+            IsInteger = 0,
             ReadCost = 1,
             AddCost = 1,
             MulCost = 1, 
-           IsSigned = 1,
+            IsSigned = 1,
             RequireInitialization = 1 // not sure - this indicates that the constructor has to be called
         };
 

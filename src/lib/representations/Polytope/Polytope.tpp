@@ -8,6 +8,7 @@
 
 #include "Polytope.h"
 #include "VariablePool.h"
+#include "util.h"
 
 namespace hypro
 {
@@ -119,7 +120,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const
     {
         using namespace Parma_Polyhedra_Library;
         
@@ -136,7 +137,7 @@ namespace hypro
         const Generator_System generators = this->mPolyhedron.generators();
         
         // Create Eigen::Matrix from Polytope
-        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix;
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix(variables.size(), polytope::gsSize(generators));
         unsigned gCount = 0;
         for(Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end(); ++generatorIt)
         {
@@ -147,12 +148,41 @@ namespace hypro
             unsigned vCount = 0;
             for(auto& var : variables)
             {
-                polytopeMatrix(vCount, gCount) = carl::FLOAT_T<Number>(generatorIt->coefficient(variables.at(vCount)));
+                std::cout << "Try: " << var << ", coeff: " << carl::FLOAT_T<Number>((int)raw_value(generatorIt->coefficient(var)).get_si()) << std::endl;
+                polytopeMatrix(vCount, gCount) =carl::FLOAT_T<Number>( (int)raw_value(generatorIt->coefficient(var)).get_si() );
+                //polytopeMatrix(vCount, gCount) carl::FLOAT_T<Number>( (int)raw_value(generatorIt->coefficient(var)).get_si() );
                 ++vCount;
             }
             ++gCount;
+            std::cout << "ping." << std::endl;
         }
         
+        // apply lineartransformation
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> res(variables.size(), polytope::gsSize(generators));
+        res = A*polytopeMatrix;
+        
+        std::cout << "colums: " << res.cols() << ", rows: " << res.rows() << std::endl;
+        
+        // clear actual generators and add new ones
+        typename Point<Number>::pointSet ps;
+        for(unsigned i = 0; i < res.cols(); ++i)
+        {
+            std::cout << res.col(i) << std::endl;
+            Point<Number> t;
+            for(unsigned j = 0; j < res.rows(); ++j)
+                t.setCoordinate(polytope::VariablePool::getInstance().carlVarByIndex(j), res.col(i)(j));
+            ps.insert(t);
+            std::cout << "point: " << t << std::endl;
+        }
+        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(ps)+1, Parma_Polyhedra_Library::EMPTY);
+        for(auto& pointSetIt : ps)
+        {
+            tmp.add_generator(polytope::pointToGenerator(pointSetIt));
+        }
+        result.mPolyhedron = tmp;
+        return true;
+        
+        /*
         for(int i = 0; i < A.rows(); ++i)
         {
             Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> rowE = A.row(i);
@@ -175,7 +205,7 @@ namespace hypro
             
             result.print();
         }
-        return true;
+        */
     }
     
     template<typename Number>

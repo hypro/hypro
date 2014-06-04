@@ -10,7 +10,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
         BoxTest.cpp
         VPolytopeTest.cpp
         #OrthogonalPolyhedronTest.cpp
-        #PolytopeTest.cpp
+        PolytopeTest.cpp
         NeighbourhoodContainerTest.cpp
         #GridTest.cpp
     )

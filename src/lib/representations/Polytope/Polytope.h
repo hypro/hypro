@@ -56,7 +56,7 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b);
+        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const;
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
