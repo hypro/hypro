@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\title{HyPro Input language specification}
+\begin{document}
+This document holds the HyPro language input specification.
+
+\begin{itemize}
+\item \begin{verbatim}
+ stateVector("VarA","VarB","VarC",...)
+        \end{verbatim}
+holds the used variables as a string and implicitly defines a global variable order.
+
+\item \begin{verbatim}
+ initial(
+   location "locationName"
+   valuation [representationName]
+ )
+        \end{verbatim}
+        
+\item \begin{verbatim}
+ location(
+   name "locationName"
+   flow [matrix]
+   invariant [matrix]
+ )
+        \end{verbatim}
+        
+\item \begin{verbatim}
+ transition(
+   name "transitionName"
+   startloc [location]
+   targetloc [location]
+   guard [matrix]
+   invariant [matrix]
+   reset [matrix]
+ )
+        \end{verbatim}
+
+\item \begin{verbatim}
+ matrix "matrixname" [ coefA, coefB;
+          coefC, coefD]
+        \end{verbatim}
+The name of the matrix can be ommited, if the matrix is not intended to be reused.
+
+\end{itemize}
+\end{document}
