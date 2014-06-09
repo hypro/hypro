@@ -15,24 +15,24 @@ protected:
 		// p1
         Point<number_t>::coordinateMap coordinates1;
 		VariablePool& pool = VariablePool::getInstance();
-		Variable x = pool.getFreshVariable(carl::VT_INT);
-		Variable y = pool.getFreshVariable(carl::VT_INT);
+		Variable x = pool.getFreshVariable(carl::VariableType::VT_INT);
+		Variable y = pool.getFreshVariable(carl::VariableType::VT_INT);
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
         p1 = Point<number_t>(coordinates1);
 		
         // p2
         Point<number_t>::coordinateMap coordinates2;
-		Variable a = pool.getFreshVariable(carl::VT_INT);
-		Variable b = pool.getFreshVariable(carl::VT_INT);
+		Variable a = pool.getFreshVariable(carl::VariableType::VT_INT);
+		Variable b = pool.getFreshVariable(carl::VariableType::VT_INT);
         coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
         coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
         p2 = Point<number_t>(coordinates2);
 		
         // p3
         Point<number_t>::coordinateMap coordinates3;
-		Variable c = pool.getFreshVariable(carl::VT_INT);
-		Variable d = pool.getFreshVariable(carl::VT_INT);
+		Variable c = pool.getFreshVariable(carl::VariableType::VT_INT);
+		Variable d = pool.getFreshVariable(carl::VariableType::VT_INT);
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
 		coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
         p3 = Point<number_t>(coordinates3);
