@@ -34,11 +34,6 @@ namespace hypro
     		/**
     		 * Member
     		 */
-    		locationSet mInitialLocations;
-    		locationSet mLocations;
-    		transitionSet mTransitions;
-    		hypro::valuation_t<Number> mValuation;
-
     		hybridAutomaton mHybridAutomaton;
 
         public:

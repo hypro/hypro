@@ -22,7 +22,7 @@ namespace hypro
         public:
     		struct guard {
     			hypro::vector_t<Number> vec;
-    			hypro::matrix_t<Number>* mat;
+    			hypro::matrix_t<Number> mat;
     			hypro::operator_e op;
     		};
 
@@ -37,15 +37,6 @@ namespace hypro
     		/**
     		 * Member
     		 */
-    		hypro::vector_t<Number> mVecGuard;
-    		hypro::matrix_t<Number>* mMatrixGuard;
-    		guard mGuard;  //guard: matrix, vector, and operator
-
-    		location* mStartLoc;  // start location
-    		location* mTargetLoc; // target location
-
-    		hypro::valuation_t<Number> mAssignment; // assignment that takes place if guard is fulfilled
-
     		transition mTransition; // transition: two locations, a guard and an assignment
 
         public:
@@ -57,11 +48,6 @@ namespace hypro
     		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
 
     		Transition(const location* _start, const location* _end, const struct guard _guard, const hypro::valuation_t<Number> _assign){
-    			mStartLoc = _start;
-    			mTargetLoc = _end;
-    			mGuard = _guard;
-    			mAssignment = _assign;
-
     			mTransition.locStart = _start;
     			mTransition.locTarget = _end;
     			mTransition.tGuard = _guard;
@@ -75,19 +61,19 @@ namespace hypro
     		 * Getter & Setter
     		 */
     		location* startLoc() {
-    			return mStartLoc;
+    			return mTransition.locStart;
     		}
 
     		location* targetLoc() {
-    			return mTargetLoc;
+    			return mTransition.locTarget;
     		}
 
     		guard guard() {
-    			return mGuard;
+    			return mTransition.tGuard;
     		}
 
     		hypro::valuation_t<Number> assignment() {
-    			return mAssignment;
+    			return mTransition.assign;
     		}
 
     		transition transition() {
@@ -95,15 +81,15 @@ namespace hypro
     		}
 
     		void setStartLoc(location* _start) {
-    			mStartLoc = _start;
+    			mTransition.locStart = _start;
     		}
 
     		void setTargetLoc(location* _target) {
-    			mTargetLoc = _target;
+    			mTransition.locTarget = _target;
     		}
 
     		void setGuard(struct guard _guard) {
-    			mGuard = _guard;
+    			mTransition.tGuard = _guard;
     		}
 
     		void setTransition(struct transition _trans) {
@@ -111,7 +97,7 @@ namespace hypro
     		}
 
     		void setAssignment(hypro::valuation_t<Number> _val) {
-    			mAssignment = _val;
+    			mTransition.assign = _val;
     		}
 
     		/*

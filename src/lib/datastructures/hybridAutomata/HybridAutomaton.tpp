@@ -8,11 +8,6 @@ namespace hypro {
 
 	template<typename Number>
 	HybridAutomaton<Number>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t<Number> _initVal) {
-		mInitialLocations = _initLocs;
-		mLocations = _locs;
-		mTransitions = _trans;
-		mValuation = _initVal;
-
 		mHybridAutomaton.init = _initLocs;
 		mHybridAutomaton.locs = _locs;
 		mHybridAutomaton.trans = _trans;
@@ -21,22 +16,22 @@ namespace hypro {
 
 	template<typename Number>
 	std::set<hypro::Location<Number>*> HybridAutomaton<Number>::initialLocations() {
-		return mInitialLocations;
+		return mHybridAutomaton.init;
 	}
 
 	template<typename Number>
 	std::set<hypro::Location<Number>*> HybridAutomaton<Number>::locations() {
-		return mLocations;
+		return mHybridAutomaton.locs;
 	}
 
 	template<typename Number>
 	std::set<hypro::Transition<Number>*> HybridAutomaton<Number>::transitions() {
-		return mTransitions;
+		return mHybridAutomaton.trans;
 	}
 
 	template<typename Number>
 	hypro::valuation_t<Number> HybridAutomaton<Number>::valuation() {
-		return mValuation;
+		return mHybridAutomaton.valuation;
 	}
 
 	template<typename Number>
@@ -46,22 +41,22 @@ namespace hypro {
 
 	template<typename Number>
 	void HybridAutomaton<Number>::setInitialLocations(locationSet _initLocs) {
-		mInitialLocations = _initLocs;
+		mHybridAutomaton.init = _initLocs;
 	}
 
 	template<typename Number>
 	void HybridAutomaton<Number>::setLocations(locationSet _locs) {
-		mLocations = _locs;
+		mHybridAutomaton.locs = _locs;
 	}
 
 	template<typename Number>
 	void HybridAutomaton<Number>::setTransitions(transitionSet _trans) {
-		mTransitions = _trans;
+		mHybridAutomaton.trans = _trans;
 	}
 
 	template<typename Number>
 	void HybridAutomaton<Number>::setValuation(hypro::valuation_t<Number> _val) {
-		mValuation = _val;
+		mHybridAutomaton.valuation = _val;
 	}
 
 	template<typename Number>
