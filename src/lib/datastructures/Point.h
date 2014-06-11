@@ -522,6 +522,18 @@ namespace hypro {
                 }
                 return Point<Number>(coordinates);
             }
+            
+            static Number inftyNorm(const Point<Number> p)
+            {
+                carl::FLOAT_T<Number> res = 0;
+                for(auto coordinateIt = p.mCoordinates.begin(); coordinateIt != p.mCoordinates.end(); ++coordinateIt)
+                {
+                    carl::FLOAT_T<Number> abs;
+                    coordinateIt->second.abs(abs);
+                    res = res > abs ? res : abs;
+                }
+                return res.value();
+            }
 
             /**
              * Change the coordinates of the point. Moving the point one step in a given dimension.

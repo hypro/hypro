@@ -21,8 +21,46 @@ namespace hypro
 {
 namespace polytope
 {
+    static inline std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables(const Parma_Polyhedra_Library::C_Polyhedron& poly)
+    {
+        Parma_Polyhedra_Library::Generator_System gs = poly.generators();
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+        for(auto& generator : gs)
+        {
+            Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
+            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
+            {
+                if(l.get(variableIt) != 0)
+                {
+                    variables.insert(variableIt);
+                }
+            }
+        }
+        return variables;
+    }
+    
+    static inline const unsigned gsSize(const Parma_Polyhedra_Library::Generator_System& gs)
+    {
+        using namespace Parma_Polyhedra_Library;
+        unsigned i = 0;
+        for(auto& g : gs)
+            ++i;
+                    
+        return i;
+    }
+    
+    static inline const unsigned csSize(const Parma_Polyhedra_Library::Constraint_System& cs)
+    {
+        using namespace Parma_Polyhedra_Library;
+        unsigned i = 0;
+        for(auto& c : cs)
+            ++i;
+                    
+        return i;
+    }
+    
     template<typename Number>
-    Parma_Polyhedra_Library::Generator pointToGenerator(const Point<Number>& point)
+    static inline Parma_Polyhedra_Library::Generator pointToGenerator(const Point<Number>& point)
     {
         using namespace Parma_Polyhedra_Library;
         Linear_Expression ls;
@@ -39,11 +77,10 @@ namespace polytope
      * Creates a generator from a point, which is a colum-vector (mx1)
      */
     template<typename Number>
-    Parma_Polyhedra_Library::Generator pointToGenerator(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& point)
+    static inline Parma_Polyhedra_Library::Generator pointToGenerator(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& point)
     {
         using namespace Parma_Polyhedra_Library;
         Linear_Expression ls;
-        unsigned i = 0;
         for(unsigned i = 0; i < point.rows(); ++i)
         {
             Linear_Expression tmp = point.row(i) * VariablePool::getInstance().pplVarByIndex(i);
@@ -55,7 +92,36 @@ namespace polytope
     }
     
     template<typename Number>
-    unsigned pplDimension(const Point<Number>& point)
+    static inline Point<Number> generatorToPoint(const Parma_Polyhedra_Library::Generator& gen, const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables)
+    {
+        Point<Number> result;
+        for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
+        {
+            result.setCoordinate(*varIt, gen.coefficient(*varIt));
+        }
+        return result;
+    }
+    
+    static inline unsigned pplDimension(const Parma_Polyhedra_Library::C_Polyhedron& poly)
+    {
+        Parma_Polyhedra_Library::Generator_System gs = poly.generators();
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+        for(auto& generator : gs)
+        {
+            Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
+            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
+            {
+                if(l.get(variableIt) != 0)
+                {
+                    variables.insert(variableIt);
+                }
+            }
+        }
+        return variables.size();
+    }
+    
+    template<typename Number>
+    static inline unsigned pplDimension(const Point<Number>& point)
     {
         unsigned result = 0;
         for(auto& coordinate : point)
@@ -66,7 +132,7 @@ namespace polytope
     }
     
     template<typename Number>
-    unsigned pplDimension(const typename std::set<Point<Number> >& points)
+    static inline unsigned pplDimension(const typename std::set<Point<Number> >& points)
     {
         unsigned result = 0;
         for(auto& point : points)
@@ -77,14 +143,27 @@ namespace polytope
         return result;
     }
     
-    const unsigned gsSize(const Parma_Polyhedra_Library::Generator_System& gs)
+    template<typename Number>
+    static inline Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeToMatrix(const Parma_Polyhedra_Library::C_Polyhedron& poly)
     {
-        using namespace Parma_Polyhedra_Library;
-        unsigned i = 0;
-        for(auto& g : gs)
-            ++i;
-                    
-        return i;
+        // TODO: What about the constant factor?
+        unsigned rowCount = 0;
+        unsigned columCount = 0;
+        Parma_Polyhedra_Library::Constraint_System cs = poly.constraints();
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables(poly);
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> result = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>(hypro::polytope::csSize(cs), pplDimension(poly));
+        for(auto constraintIt = cs.begin(); constraintIt != cs.end(); ++constraintIt)
+        {
+            Parma_Polyhedra_Library::Constraint::expr_type t = (*constraintIt).expression();
+            for(auto variableIt = vars.begin(); variableIt != vars.end(); ++variableIt)
+            {
+                Number val = t.get(*variableIt);
+                result(rowCount, columCount) = carl::FLOAT_T<Number>(val);
+                ++columCount;
+            }
+            ++rowCount;
+        }
+        return result;
     }
 }
 }

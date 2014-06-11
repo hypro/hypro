@@ -53,6 +53,37 @@ namespace hypro
     }
     
     template<typename Number>
+    Polytope<Number>::Polytope(const matrix& A, const vector& b)
+    {
+        assert(A.rows() == b.rows());
+        mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(A.rows(), Parma_Polyhedra_Library::UNIVERSE);
+        for(unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex)
+        {
+            Parma_Polyhedra_Library::Linear_Expression polynom;
+            for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
+            {
+                std::cout << hypro::polytope::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
+                polynom.set_coefficient(hypro::polytope::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
+            }
+            polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
+            Parma_Polyhedra_Library::Constraint constraint;
+            constraint = polynom <= 0;
+            //Parma_Polyhedra_Library::Generator gen = Generator::ray(polynom);
+            
+            std::cout << "Polynom: " << polynom << std::endl;
+            
+            //constraint = (polynom <= 0);
+            std::cout << "Constraint: ";
+            constraint.print();
+            std::cout << " Dimension: " << constraint.space_dimension()  << std::endl;
+            
+            
+            mPolyhedron.add_constraint(constraint);
+            //mPolyhedron.add_generator(gen);
+        }
+    }
+    
+    template<typename Number>
     Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) : mPolyhedron(_rawPoly)
     {}
     
@@ -66,6 +97,18 @@ namespace hypro
     void Polytope<Number>::addPoint(const Point<Number>& point)
     {
         mPolyhedron.add_generator(polytope::pointToGenerator(point));
+    }
+    
+    template<typename Number>
+    typename Point<Number>::pointSet Polytope<Number>::points() const
+    {
+        typename Point<Number>::pointSet result;
+        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
+        for(auto& generator : mPolyhedron.generators())
+        {
+            result.insert(generatorToPoint(generator, variables));
+        }
+        return result;
     }
     
     template<typename Number>
@@ -94,29 +137,7 @@ namespace hypro
     template<typename Number>
     unsigned int Polytope<Number>::dimension() const
     {
-        std::cout << "Dimension." << std::endl;
-        Generator_System gs = mPolyhedron.generators();
-        std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
-        for(auto& generator : gs)
-        {
-            Generator::expr_type l = generator.expression();
-            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
-            {
-                if(l.get(variableIt) != 0)
-                {
-                    variables.insert(variableIt);
-                }
-            }
-//            for(auto linearIt = l.begin(); linearIt != l.end(); ++linearIt)
-//            {
-//                std::cout << (*linearIt) << std::endl;
-//                Parma_Polyhedra_Library::Expression_Adapter::dinner_type tmp = (*linarIt).inner();
-//                std::cout << "Inner: " << tmp << std::endl;
-//                
-//                //variables.insert(polytope::VariablePool::variable((*linearIt).variable()));
-//            }
-        }
-        return variables.size();
+        return hypro::polytope::pplDimension(mPolyhedron);
     }
     
     template<typename Number>
@@ -181,31 +202,6 @@ namespace hypro
         }
         result.mPolyhedron = tmp;
         return true;
-        
-        /*
-        for(int i = 0; i < A.rows(); ++i)
-        {
-            Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> rowE = A.row(i);
-            //std::cout << "Row: " << rowE << std::endl;
-            Parma_Polyhedra_Library::Linear_Expression rowP;
-            for(int j = 0; j < rowE.cols(); ++j)
-            {
-                std::cout << "Try to set coefficient: " << polytope::VariablePool::getInstance().pplVarByIndex(j) << " -> " << rowE(j).value() << std::endl;
-                rowP.set_coefficient(polytope::VariablePool::getInstance().pplVarByIndex(j), rowE(j).value()); // TODO: value() is temporary atm
-            }
-            std::cout << "PPL Linear_Expression: " << rowP << std::endl;
-            if(b(i).value() != 0)
-            {
-                result.mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP, b(i).value());
-            }
-            else
-            {
-                result.mPolyhedron.affine_image(polytope::VariablePool::getInstance().pplVarByIndex(i), rowP);
-            }
-            
-            result.print();
-        }
-        */
     }
     
     template<typename Number>
@@ -247,6 +243,49 @@ namespace hypro
         res.poly_hull_assign(rhs.rawPolyhedron());
         result = Polytope<Number>(res);
         return true;
+    }
+    
+    template<typename Number>
+    Number Polytope<Number>::hausdorffError(const Number& delta) const
+    {
+        using namespace Eigen;
+        // TODO: Can we omit conversion to carl::FLOAT_T<Number> and use Number instead?
+        carl::FLOAT_T<Number> result;
+        carl::FLOAT_T<Number> d = carl::FLOAT_T<Number>(delta);
+        //TODO: What about the constant factor?
+        Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
+        matrix = hypro::polytope::polytopeToMatrix(mPolyhedron);
+        
+        // TODO: Matrix lpNorm function of Eigen does not work ...
+        //carl::FLOAT_T<Number> t = matrix.lpNorm<Infinity>();
+        
+        // calculate matrix infinity norm by hand
+        carl::FLOAT_T<Number> norm = 0;
+        for(unsigned rowCnt = 0; rowCnt < matrix.rows(); ++rowCnt)
+        {
+            for(unsigned colCnt = 0; colCnt < matrix.cols(); ++colCnt)
+            {
+                carl::FLOAT_T<Number> value = matrix(rowCnt, colCnt);
+                value.abs_assign();
+                norm = norm < value ? value : norm;
+            }
+        }
+        
+        //carl::FLOAT_T<Number> tmp = d * t;
+        carl::FLOAT_T<Number> tmp = d * norm;
+        tmp.exp(result);
+        result = result - 1 - tmp;
+        
+        // compute RX_0
+        Number max = 0;
+        for(auto& point : points())
+        {
+            Number inftyNorm = hypro::Point<Number>::inftyNorm(point);
+            max = max > inftyNorm ? max : inftyNorm;
+        }
+        result *= carl::FLOAT_T<Number>(max);
+        
+        return result.value();
     }
     
     template<typename Number>

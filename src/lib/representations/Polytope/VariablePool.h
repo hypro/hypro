@@ -96,6 +96,8 @@ namespace polytope
                 if(varPair.first.id() == _index)
                     return varPair.first;
             }
+            assert(false);
+            return Parma_Polyhedra_Library::Variable(0);
         }
         
         const carl::Variable& carlVarByIndex(unsigned _index) const
@@ -105,6 +107,8 @@ namespace polytope
                 if(varPair.first.id() == _index)
                     return varPair.second;
             }
+            assert(false);
+            return carl::Variable();
         }
         
         unsigned inline dimension(const Parma_Polyhedra_Library::Variable& _var) const

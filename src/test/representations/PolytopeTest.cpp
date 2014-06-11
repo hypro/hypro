@@ -102,6 +102,24 @@ TEST_F(PolytopeTest, Constructor)
     hypro::Polytope<number_t> p2 = Polytope<number_t>(2);
     EXPECT_EQ(p2.dimension(), 2);
     
+    Eigen::Matrix<FLOAT_T<number_t>, Eigen::Dynamic, Eigen::Dynamic> A = Eigen::Matrix<FLOAT_T<number_t>, Eigen::Dynamic, Eigen::Dynamic>(2,2);
+    A(0,0) = 1;
+    A(0,1) = 2;
+    A(1,0) = 1;
+    A(1,1) = 3;
+    
+    Eigen::Matrix<FLOAT_T<number_t>, Eigen::Dynamic, 1> b = Eigen::Matrix<FLOAT_T<number_t>, Eigen::Dynamic, 1>(2,1);
+    b(0,0) = 4;
+    b(1,0) = 5;
+    
+    hypro::polytope::VariablePool::getInstance().print();
+    
+    hypro::Polytope<number_t> p4 = Polytope<number_t>(A,b);
+    
+    p4.print();
+    
+    EXPECT_EQ(p4.dimension(), 2);
+    
     SUCCEED();
 }
 
@@ -114,8 +132,6 @@ TEST_F(PolytopeTest, Access)
     ps1.insert(p4);
     hypro::Polytope<number_t> p1 = Polytope<number_t>(ps1);
     EXPECT_EQ(p1.dimension(), 2);
-    std::cout << "Ping." << std::endl;
-    
     
     carl::Variable a = pool.getFreshVariable("a");
     carl::Variable b = pool.getFreshVariable("b");

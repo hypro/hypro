@@ -10,6 +10,8 @@
 
 #include <map>
 #include <cassert>
+#include <string>
+#include <sstream>
 #include <gmp.h>
 #include <ppl.hh>
 #include <carl/core/Variable.h>
@@ -36,6 +38,7 @@ namespace hypro
         Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
         Polytope(const typename Point<Number>::pointSet& points);
+        Polytope(const matrix& A, const vector& b);
         Polytope(const C_Polyhedron& _rawPoly);
         
         virtual ~Polytope();
@@ -46,6 +49,7 @@ namespace hypro
         
         bool isEmpty() const;
         void addPoint(const Point<Number>& point);
+        typename Point<Number>::pointSet points() const;
         void print() const;
         
         // PPL related
@@ -62,6 +66,12 @@ namespace hypro
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
+        
+        /**
+         * Polytope related
+         */
+        Number hausdorffError(const Number& delta) const;
+        
         
         Polytope<Number>& operator= (const Polytope<Number>& rhs);
     };
