@@ -14,6 +14,7 @@ set( EXAMPLES
     example_multiplication
     example_division
     example_eigen_float_t
+    example_matrixPolyhedra
     example_parser
     example_power
     example_ppl_nncPolyhedra

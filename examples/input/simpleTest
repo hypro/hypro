@@ -1,4 +1,1 @@
-states{1}.A = [0,1;0,0];
-states{1}.b = [0;-9.81];
-
-transitions{1}.eguards_dir = [1 0];
+location(name testlocation1 flow matrix test [0,1;1,0] invariant matrix test2 [0,2;2,0])

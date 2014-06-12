@@ -32,7 +32,7 @@ namespace parser{
         
         std::cout << "Result: " << resultAutomaton << std::endl;
         
-        std::cout << std::string(begin, end) << std::endl;
+        std::cout << "To parse: " << std::string(begin, end) << std::endl;
         
         return result;
     }
