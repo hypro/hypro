@@ -60,6 +60,7 @@ namespace hypro
         for(unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex)
         {
             Parma_Polyhedra_Library::Linear_Expression polynom;
+            polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
                 std::cout << hypro::polytope::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;

@@ -109,6 +109,15 @@ namespace hypro {
             {
                 mCoordinates.insert(p.mCoordinates.begin(), p.mCoordinates.end());
             }
+            
+            template<typename N>
+            Point(const Point<N>& p)
+            {
+                for(auto& coordinate : p.mCoordinates)
+                {
+                    mCoordinates.insert(std::make_pair(coordinate.first, coordinate.second));
+                }
+            }
 
             ~Point() 
             {

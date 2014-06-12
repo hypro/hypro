@@ -91,13 +91,12 @@ namespace polytope
         return result;
     }
     
-    template<typename Number>
-    static inline Point<Number> generatorToPoint(const Parma_Polyhedra_Library::Generator& gen, const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables)
+    static inline Point<double> generatorToPoint(const Parma_Polyhedra_Library::Generator& gen, const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables)
     {
-        Point<Number> result;
+        Point<double> result;
         for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
         {
-            result.setCoordinate(*varIt, gen.coefficient(*varIt));
+            result.setCoordinate(hypro::polytope::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
         }
         return result;
     }
