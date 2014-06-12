@@ -162,6 +162,7 @@ TEST_F(PolytopeTest, Access)
 
     EXPECT_EQ(p2.dimension(), 2);
     
+    hypro::Point<number_t>::pointSet points = p2.points();
 }
 
 TEST_F(PolytopeTest, PointToGenerator)

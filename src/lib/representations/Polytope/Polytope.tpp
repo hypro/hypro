@@ -107,7 +107,7 @@ namespace hypro
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
         for(auto& generator : mPolyhedron.generators())
         {
-            Point<Number> tmp(generatorToPoint(generator, variables));
+            Point<Number> tmp(polytope::generatorToPoint(generator, variables));
             result.insert(tmp);
         }
         return result;
