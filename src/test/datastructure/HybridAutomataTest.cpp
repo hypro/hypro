@@ -114,13 +114,13 @@ protected:
 
     struct hypro::Transition<double>::guard guard;
 
-    hypro::Location<double>* locations[];
+    hypro::Location<double>* locations[2];
     std::set<hypro::Location<double>*> locSet;
 
-    hypro::Location<double>* init[];
+    hypro::Location<double>* init[1];
     std::set<hypro::Location<double>*> initLocSet;
 
-    hypro::Transition<double>* transition[];
+    hypro::Transition<double>* transition[1];
 	std::set<hypro::Transition<double>*> transSet;
 
 	//Point<double>::coordinates_map coordinates;

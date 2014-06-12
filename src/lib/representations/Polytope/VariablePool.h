@@ -91,24 +91,26 @@ namespace polytope
         
         const Parma_Polyhedra_Library::Variable& pplVarByIndex(unsigned _index) const
         {
-            for(auto& varPair : mPplToCarl)
+            pplCarlMap::const_iterator varIt = mPplToCarl.begin();
+            for(;varIt != mPplToCarl.end(); ++varIt)
             {
-                if(varPair.first.id() == _index)
-                    return varPair.first;
+                if(varIt->first.id() == _index)
+                    break;
             }
-            assert(false);
-            return Parma_Polyhedra_Library::Variable(0);
+            assert(varIt != mPplToCarl.end());
+            return varIt->first;
         }
         
         const carl::Variable& carlVarByIndex(unsigned _index) const
         {
-            for(auto& varPair : mPplToCarl)
+            pplCarlMap::const_iterator varIt = mPplToCarl.begin();
+            for(;varIt != mPplToCarl.end(); ++varIt)
             {
-                if(varPair.first.id() == _index)
-                    return varPair.second;
+                if(varIt->first.id() == _index)
+                    break;
             }
-            assert(false);
-            return carl::Variable();
+            assert(varIt != mPplToCarl.end());
+            return varIt->second;
         }
         
         unsigned inline dimension(const Parma_Polyhedra_Library::Variable& _var) const
