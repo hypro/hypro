@@ -6,6 +6,7 @@
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>
+#include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 
 

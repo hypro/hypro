@@ -110,7 +110,15 @@ namespace hypro {
                 mCoordinates.insert(p.mCoordinates.begin(), p.mCoordinates.end());
             }
             
-            template<typename N>
+            /*
+            template<typename F = FloatType, DisableIf< std::is_same<F, double> > = dummy>
+            FLOAT_T<FloatType>(const FloatType& val, const CARL_RND=CARL_RND::N)
+            {
+                mValue = val;
+            }
+            */
+             
+            template<typename N = Number, typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
             Point(const Point<N>& p)
             {
                 for(auto& coordinate : p.mCoordinates)
