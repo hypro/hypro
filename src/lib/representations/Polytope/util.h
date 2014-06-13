@@ -149,16 +149,20 @@ namespace polytope
         // TODO: What about the constant factor?
         unsigned rowCount = 0;
         unsigned columCount = 0;
+        poly.print();
         Parma_Polyhedra_Library::Constraint_System cs = poly.constraints();
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables(poly);
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> result = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>(hypro::polytope::csSize(cs), pplDimension(poly));
+        //std::cout << "CSSize: " << hypro::polytope::csSize(cs) << ", Dimension: " << pplDimension(poly) << std::endl;
         for(auto constraintIt = cs.begin(); constraintIt != cs.end(); ++constraintIt)
         {
+            columCount = 0;
             Parma_Polyhedra_Library::Constraint::expr_type t = (*constraintIt).expression();
             for(auto variableIt = vars.begin(); variableIt != vars.end(); ++variableIt)
             {
-                Number val = t.get(*variableIt);
-                result(rowCount, columCount) = carl::FLOAT_T<Number>(val);
+                carl::FLOAT_T<Number> val = (int)Parma_Polyhedra_Library::raw_value(t.get(*variableIt)).get_si();
+                //std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl; 
+                result(rowCount, columCount) = val;
                 ++columCount;
             }
             ++rowCount;

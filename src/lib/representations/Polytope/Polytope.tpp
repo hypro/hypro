@@ -247,7 +247,7 @@ namespace hypro
         carl::FLOAT_T<Number> d = carl::FLOAT_T<Number>(delta);
         //TODO: What about the constant factor?
         Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
-        matrix = hypro::polytope::polytopeToMatrix(mPolyhedron);
+        matrix = hypro::polytope::polytopeToMatrix<Number>(mPolyhedron);
         
         // TODO: Matrix lpNorm function of Eigen does not work ...
         //carl::FLOAT_T<Number> t = matrix.lpNorm<Infinity>();
