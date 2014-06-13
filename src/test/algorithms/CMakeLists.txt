@@ -7,7 +7,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     ################################
 
     add_executable(runAlgorithmTests
-            
+            ForwardReachabilityTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)
