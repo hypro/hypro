@@ -39,6 +39,7 @@ namespace hypro
         Polytope(const Point<Number>& point);
         Polytope(const typename Point<Number>::pointSet& points);
         Polytope(const matrix& A, const vector& b);
+        Polytope(const matrix& A);
         Polytope(const C_Polyhedron& _rawPoly);
         
         virtual ~Polytope();
@@ -60,11 +61,12 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const;
+        bool linearTransformation(Polytope<Number>& result, const matrix& A) const;
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);
+        bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
         
         /**

@@ -76,6 +76,27 @@ namespace hypro
     }
     
     template<typename Number>
+    Polytope<Number>::Polytope(const matrix& A)
+    {
+        mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(A.rows(), Parma_Polyhedra_Library::UNIVERSE);
+        for(unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex)
+        {
+            Parma_Polyhedra_Library::Linear_Expression polynom;
+            polynom.set_space_dimension(A.cols());
+            for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
+            {
+                std::cout << hypro::polytope::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
+                polynom.set_coefficient(hypro::polytope::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
+            }
+            Parma_Polyhedra_Library::Constraint constraint;
+            constraint = polynom <= 0;
+            
+            mPolyhedron.add_constraint(constraint);
+            //mPolyhedron.add_generator(gen);
+        }
+    }
+    
+    template<typename Number>
     Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) : mPolyhedron(_rawPoly)
     {}
     
@@ -134,7 +155,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A) const
     {
         using namespace Parma_Polyhedra_Library;
         
@@ -227,6 +248,12 @@ namespace hypro
     bool Polytope<Number>::contains(const Point<Number>& point)
     {
         return mPolyhedron.contains(Polytope<Number>(point).rawPolyhedron());
+    }
+    
+    template<typename Number>
+    bool Polytope<Number>::contains(const Polytope<Number>& poly)
+    {
+        return mPolyhedron.contains(poly.rawPolyhedron());
     }
     
     template<typename Number>

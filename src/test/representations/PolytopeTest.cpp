@@ -273,17 +273,17 @@ TEST_F(PolytopeTest, LinearTransformation)
     EXPECT_TRUE(poly1.rawPolyhedron().is_topologically_closed());
     
     matrix A = matrix(2,2);
-    vector b = vector(2,1);
+    //vector b = vector(2,1);
     
     A(0,0) = FLOAT_T<number_t>(0);
     A(1,0) = FLOAT_T<number_t>(1);
     A(0,1) = FLOAT_T<number_t>(-1);
     A(1,1) = FLOAT_T<number_t>(0);
-    b(0,0) = FLOAT_T<number_t>(0);
-    b(1,0) = FLOAT_T<number_t>(0);
+    //b(0,0) = FLOAT_T<number_t>(0);
+    //b(1,0) = FLOAT_T<number_t>(0);
     
     hypro::Polytope<number_t> result;
-    poly1.linearTransformation(result,A,b);
+    poly1.linearTransformation(result,A);
     result.print();
 }
 
