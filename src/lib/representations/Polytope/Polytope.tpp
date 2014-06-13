@@ -69,15 +69,6 @@ namespace hypro
             polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
-            //Parma_Polyhedra_Library::Generator gen = Generator::ray(polynom);
-            
-            std::cout << "Polynom: " << polynom << std::endl;
-            
-            //constraint = (polynom <= 0);
-            std::cout << "Constraint: ";
-            constraint.print();
-            std::cout << " Dimension: " << constraint.space_dimension()  << std::endl;
-            
             
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);

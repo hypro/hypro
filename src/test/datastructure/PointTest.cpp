@@ -9,6 +9,7 @@
 #include "../../lib/datastructures/Point.h"
 #include <carl/core/VariablePool.h>
 #include "carl/numbers/FLOAT_T.h"
+#include <mpfr.h>
 
 using namespace hypro;
 using namespace carl;
@@ -204,6 +205,15 @@ TEST_F(PointTest, Constructor)
     Point<number_t> p1(map);
     EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
     EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
+    
+    // Test copy constructor and typecast constructor
+    Point<mpfr_t> alien;
+    alien[pool.getFreshVariable()] = 1;
+    alien[pool.getFreshVariable()] = 3;
+    
+    Point<mpfr_t> alien2 = alien;
+    Point<double> local = alien;
+    
 }
 
 TEST_F(PointTest, PolarCoordinates)

@@ -118,12 +118,13 @@ namespace hypro {
             }
             */
              
-            template<typename N = Number, typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
-            Point(const Point<N>& p)
+            template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
+            Point(const Point<F>& p)
             {
-                for(auto& coordinate : p.mCoordinates)
+                for(auto& coordinate : p.coordinates())
                 {
-                    mCoordinates.insert(std::make_pair(coordinate.first, coordinate.second));
+                    carl::FLOAT_T<Number> tmp = coordinate.second;
+                    mCoordinates.insert(std::make_pair(coordinate.first, tmp));
                 }
             }
 
@@ -157,9 +158,9 @@ namespace hypro {
                 return mCoordinates.at(var);
             }
             
-            Number rawCoordinate(const carl::Variable& var) const
+            const Number& rawCoordinate(const carl::Variable& var) const
             {
-                return this->coordinate().value();
+                return this->coordinate(var).value();
             }
 
             coordinateMap coordinates() const 
@@ -540,7 +541,7 @@ namespace hypro {
                 return Point<Number>(coordinates);
             }
             
-            static Number inftyNorm(const Point<Number> p)
+            static const Number& inftyNorm(const Point<Number> p)
             {
                 carl::FLOAT_T<Number> res = 0;
                 for(auto coordinateIt = p.mCoordinates.begin(); coordinateIt != p.mCoordinates.end(); ++coordinateIt)
