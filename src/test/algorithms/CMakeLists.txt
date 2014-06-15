@@ -8,6 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runAlgorithmTests
             ForwardReachabilityTest.cpp
+	    HyReachTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)
@@ -16,4 +17,14 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 							${PROJECT_NAME}
                             ${libraries})
     add_test( NAME algorithms COMMAND runAlgorithmTests )
+
+
+    add_dependencies(runReachabilityTests googletest)
+
+    target_link_libraries(runReachabilityTests
+        ${libraries}
+        ${PROJECT_NAME}
+    )
+    add_test( NAME reachability COMMAND runReachabilityTests )
+
 endif()
