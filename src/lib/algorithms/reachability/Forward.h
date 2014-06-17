@@ -19,25 +19,26 @@ namespace hypro
 
 				// [0,T] = [0,delta1] U [delta1, delta2] ...
 				// TODO: at the moment only one constant interval size
-				double timeInterval = _timeBound/_timeDiscretizationFactor;
+				Number timeInterval = _timeBound/_timeDiscretizationFactor;
 
-				hypro::Polytope<Number> poly;
-				//TODO Polytope Constructor?
-				//poly = Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
+				//Polytope that is defined by the invariant
+				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
 
 				//check if initial Valuation fulfills Invariant
-				if (poly.isMember(_val)  OR checkInvariant(_loc, _val)) {
+				//alternatively: checkInvariant(_loc,_val)
+				if ( poly.contains(_val) ) {
 
 					//approximate R_[0,delta](X0)
 					//rest is acquired by linear Transformation
 					//R_0(X0) is just the initial Polytope X0, since t=0 -> At is 0 matrix -> e^(At) is Einheitsmatrix
-					hypro::matrix_t deltaMatrix = *(_loc.activityMat()) * timeInterval;
+					hypro::matrix_t<Number> deltaMatrix = _loc.activityMat() * timeInterval;
 
 					//TODO check types (pointer)
-					hypro::matrix_t resultMatrix;
-					Eigen::MatrixExponential<hypro::matrix_t> expMatrix = Eigen::MatrixExponential<hypro::matrix_t>(deltaMatrix);
+					hypro::matrix_t<Number> resultMatrix;
+					//TODO MatrixExponential
+					//Eigen::MatrixExponential<hypro::matrix_t<Number>> expMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(deltaMatrix);
 					//result is stored in resultMatrix
-					expMatrix.compute(resultMatrix);
+					//expMatrix.compute(resultMatrix);
 
 					//e^(At)*X0 = polytope at t=delta
 					hypro::valuation_t<Number> deltaValuation = deltaMatrix * _val;
@@ -51,24 +52,42 @@ namespace hypro
 					unitePolytope.hull(hullPolytope);
 
 					//bloat hullPolytope (Hausdorff distance)
-					//TODO
-					//firstSegment = hullPolytope.bloat();
+					hypro::valuation_t<Number> firstSegment;
+					Number radius;
+					radius = hullPolytope.hausdorffError(timeInterval);
+
+					unsigned int dim;
+					dim = hullPolytope.dimension();
+
+					/*
+					 * Box
+					hypro::Box<Number> hausBox = hypro::computeBox(dim,radius);
+
+					// B + hullPolytope -> Konstruktor needed for Ball instead of Polytope?
+					hullPolytope.minkowskiSum(firstSegment, hausBox);
+					*/
+
+					hypro::valuation_t<Number> hausPoly = hypro::computePolytope(dim, radius);
+
+					//hullPolytope +_minkowski hausPoly
+					hullPolytope.minkowskiSum(firstSegment, hausPoly);
 
 					//empty Flowpipe
-					flowpipe_t flowPipe;
+					flowpipe_t flowpipe;
 					flowpipe.insert(firstSegment);
 
 					//for each time interval perform linear Transformation
-					for (double i=2*timeInterval, i<=_timeBound, i+=timeInterval) {
+					for (double i=2*timeInterval; i<=_timeBound; i+=timeInterval) {
 
 						//Polytope after linear transformation
 						hypro::valuation_t<Number> resultPolytope;
 
 						//e^(A*delta), where delta is dependent on i
-						hypro::matrix_t tempResult;
-						hypro::matrix_t tempDelta = *(_loc.activityMat()) * i;
-						Eigen::MatrixExponential<hypro::matrix_t> tempMatrix = Eigen::MatrixExponential<hypro::matrix_t>(tempDelta);
-						tempMatrix.compute(tempResult);
+						hypro::matrix_t<Number> tempResult;
+						hypro::matrix_t<Number> tempDelta = _loc.activityMat() * i;
+						//TODO MatrixExponential
+						//Eigen::MatrixExponential<hypro::matrix_t<Number>> tempMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(tempDelta);
+						//tempMatrix.compute(tempResult);
 
 						//perform linear transformation
 						firstSegment.linearTransformation(resultPolytope, tempResult);
@@ -92,8 +111,13 @@ namespace hypro
 
 			//basically: execute assignment (if guard is fulfilled)
 			hypro::valuation_t<Number> computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val) {
-				if (hypro::checkGuard(_trans, _val)) {
-						return _trans.mAssignment;
+				//alternatively: checkGuard(_trans,_val)
+
+				//Polytope that is defined by the invariant
+				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
+
+				if (poly.contains(_val)) {
+						return _trans.assignment();
 				} else {
 					//TODO
 					//maybe throw error: transition may not be taken

@@ -1,11 +1,14 @@
 
 #pragma once
 
-#include "../../util/eigenTypetraits.h"
+//#include "../../util/eigenTypetraits.h"
+#include "../../datastructures/hybridAutomata/util.h"
+#include "../../representations/Box/Box.h"
+#include "carl/core/VariablePool.h"
 
 namespace hypro
 {
-	public:
+		/*
 		enum operator_e {
 			EQ,
 			GEQ,
@@ -14,6 +17,7 @@ namespace hypro
 			LESS,
 			GREATER
 		};
+		*/
 
 		//typedef std::map<carl::Variable, carl::FLOAT_T<Number> > vector_t;
 		//typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
@@ -25,7 +29,7 @@ namespace hypro
 		 * General purpose functionality
 		 */
 		template<typename Number>
-		bool compare(carl::FLOAT_T<Number> _lhs, carl::FLOAT_T<Number> _rhs, operator_t _op) {
+		bool compare(carl::FLOAT_T<Number> _lhs, carl::FLOAT_T<Number> _rhs, hypro::operator_e _op) {
 			bool result = false;
 
 			switch (_op) {
@@ -56,6 +60,7 @@ namespace hypro
 		/**
 		 * Functionality in context of a Location
 		 */
+		/*
 		template<typename Number>
 		bool checkInvariant(hypro::Location _loc, valuation_t _val) {
 			//return mInvariant.mat * _val mInvariant.op mInvariant.vec
@@ -84,10 +89,12 @@ namespace hypro
 			}
 			return true;   // a boundary was never violated
 		}
+		*/
 
 		/**
 		 * Functionality in context of a Transition
 		 */
+		/*
 		template<typename Number>
 		bool checkGuard(hypro::Transition _trans, valuation_t _val) {
 			//return mGuard.mat * _val mGuard.op mGuard.vec
@@ -115,6 +122,39 @@ namespace hypro
 			}
 			return true;   // a boundary was never violated
 		}
+		*/
 
+		/**
+		 * Functionality for the Flowpipe
+		 */
+
+		template<typename Number>
+		hypro::Box<Number> computeBox(unsigned int _dim, Number _radius) {
+			hypro::Box<Number> box = new hypro::Box<Number>();
+		    carl::VariablePool& pool = carl::VariablePool::getInstance();
+	        std::map<const carl::Variable, carl::Interval<Number> > boundaries;
+
+			for (int i=0; i<_dim; ++i) {
+				carl::Variable x = pool.getFreshVariable(std::to_string(i));
+				boundaries.insert( std::make_pair(x, carl::Interval<Number>(-_radius,_radius)) );
+			}
+			box.insert(boundaries);
+			return box;
+		}
+
+		template<typename Number>
+		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
+			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
+			vector_t<Number> vec;
+			carl::VariablePool& pool = carl::VariablePool::getInstance();
+
+			for (int i=0; i<2*_dim; ++i) {
+				carl::Variable x = pool.getFreshVariable(std::to_string(i));
+		    	vec.insert( std::make_pair(x, _radius) );
+			}
+
+			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);
+			return poly;
+		}
 }
 
