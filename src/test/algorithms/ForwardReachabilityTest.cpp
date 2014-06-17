@@ -5,6 +5,7 @@
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "carl/core/VariablePool.h"
 #include "../../lib/datastructures/Point.h"
+#include "../../lib/algorithms/reachability/Forward.h"
 
 
 using namespace hypro;
