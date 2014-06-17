@@ -14,17 +14,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_dependencies(runAlgorithmTests googletest)
 
     target_link_libraries(runAlgorithmTests
-							${PROJECT_NAME}
-                            ${libraries})
+			${PROJECT_NAME}
+                        ${libraries})
     add_test( NAME algorithms COMMAND runAlgorithmTests )
-
-
-    add_dependencies(runReachabilityTests googletest)
-
-    target_link_libraries(runReachabilityTests
-        ${libraries}
-        ${PROJECT_NAME}
-    )
-    add_test( NAME reachability COMMAND runReachabilityTests )
 
 endif()
