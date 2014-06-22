@@ -102,40 +102,100 @@ namespace hypro
 					//throw error, initValuation invalid
 				}
 
-				//TODO outdated
-				//idea: create new valuation set, add _val initially
-				//then check invariant for upper bounds for variables -> FUNCTION: rückgabe jeweils ein t für eine var -> min suchen! -> obere grenze des intervals gegeben!
-				//compute all reachable valuations up to these bounds (details? script -> solve set of linear constraints)
-				//add to set, return set
 			}
 
 			//basically: execute assignment (if guard is fulfilled)
-			hypro::valuation_t<Number> computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val) {
+			bool computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
 				//alternatively: checkGuard(_trans,_val)
 
-				//Polytope that is defined by the invariant
+				//Polytope that is defined by the guard
 				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
 
 				if (poly.contains(_val)) {
-						return _trans.assignment();
+					result = _trans.assignment();
+					return true;
 				} else {
-					//TODO
-					//maybe throw error: transition may not be taken
-					return _val;
+					return false;
 				}
 			}
 
-			//TODO: time & step boundaries
-			std::set<flowpipe_t> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
-					//idea: alternate between time & discrete steps until boundary is reached
-					//start at initial location with initial valuation
 
-					//while (boundary not reached) {
-					//computeForwardTimeClosure(_hybrid.initialLocations().begin());
-					//if transition shall be taken (when? which one?)
-					// if (_hybrid.transitions().begin().startLoc() == _hybrid.initialLocations().begin()) ...
-					// TODO: umständlich -> bei Locations die ausgehenden Transitions speichern?
-					//computePostCondition(_hybrid. ..)
+			std::set<flowpipe_t> computeReach(std::set<flowpipe_t> _init, hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor,
+					std::map<flowpipe_t, hypro::Location<Number>> _map) {
+
+				std::set<flowpipe_t> reach;
+
+				//for each flowpipe in _init
+				for (typename std::set<flowpipe_t>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+
+					//get the location that belongs to the flowpipe
+					hypro::Location<Number> loc = _map[*it_pipe];
+
+					//polytope that belongs to the locations invariant
+					hypro::Polytope<Number> loc_inv = hypro::Polytope<Number>(loc.invariant().mat, loc.invariant().vec);
+
+					//for each outgoing transition of the location
+					std::set<Transition<Number>*> loc_transSet = loc.transitions();
+					for (typename std::set<Transition<Number*>>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
+						hypro::Transition<Number> trans = *(*it_trans);
+
+						//for each polytope that is part of the flowpipe
+						for (typename hypro::valuation_t<Number>::iterator it_val = *it_pipe.begin(); it_val != *it_pipe.end(); ++it_val) {
+							hypro::valuation_t<Number> postAssign;
+							//check if guard of transition is fulfilled
+							if (computePostCondition(trans, *it_val, postAssign)) {
+								hypro::Location<Number> tarLoc = *trans.targetLoc();
+								flowpipe_t newPipe = computeForwardTimeClosure(tarLoc, postAssign, _timeBound, _timeDiscretizationFactor);
+
+								//expand reach
+								reach.insert(newPipe);
+
+								//keep map consistent
+								_map.insert( std::make_pair(newPipe, tarLoc) );
+
+								//TODO to break or not to break? depends if assignment is always the same or not
+								break;
+							}
+						}
+					}
+				}
+				return reach;
+			}
+
+
+			//TODO: time & step boundaries
+			std::set<flowpipe_t> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor) {
+
+					std::set<flowpipe_t> R_new;
+					std::set<flowpipe_t> R;
+
+					std::map<flowpipe_t, hypro::Location<Number>> map;
+
+					//R_new = initialState
+					typename std::set<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
+					hypro::Location<Number> initLoc = *(*it);
+					flowpipe_t init = computeForwardTimeClosure(initLoc, _hybrid.valuation(), _timeBound, _timeDiscretizationFactor);
+					R_new.insert(init);
+
+					map.insert( std::make_pair(init, initLoc) );
+
+					while (!R_new.empty()) {
+						//R = R U R_new
+						if (!R.empty()) {
+							std::set_union(R.begin(), R.end(),
+										   R_new.begin(), R_new.end(),
+										   std::inserter(R, R.begin()));			//alternative?: std::back_inserter(R);
+						} else {
+							R = R_new;
+						}
+
+						//R_new = Reach(R_new)/R
+						std::set<flowpipe_t> R_temp = computeReach(R_new, _hybrid, _timeBound, _timeDiscretizationFactor, map);
+						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
+											std::inserter(R_new, R_new.begin()));
+					}
+					return R;
+
 			}
 
     };
