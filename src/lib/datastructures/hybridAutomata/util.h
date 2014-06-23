@@ -23,9 +23,12 @@ namespace hypro
 		using valuation_t = hypro::Polytope<Number>;
 
 		template<typename Number>
-		using vector_t = std::map<carl::Variable, Number>;
+		//using vector_t = std::map<carl::Variable, Number>;
+		//using vector_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1>;
+		using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
 		template<typename Number>
+		//using matrix_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
 		using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
 		//typedef std::map<carl::Variable, operator_e> operator_t;
