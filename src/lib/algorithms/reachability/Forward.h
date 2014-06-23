@@ -43,7 +43,8 @@ namespace hypro
 					expMatrix.compute(resultMatrix);
 
 					//e^(At)*X0 = polytope at t=delta
-					hypro::valuation_t<Number> deltaValuation = deltaMatrix * _val;
+					hypro::valuation_t<Number> deltaValuation;
+					_val.linearTransformation(deltaValuation, resultMatrix);
 
 					// R_0(X0) U R_delta(X0)
 					hypro::valuation_t<Number> unitePolytope;
