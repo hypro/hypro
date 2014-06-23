@@ -37,10 +37,10 @@ namespace hypro
 					//TODO check types (pointer)
 					hypro::matrix_t<Number> resultMatrix;
 					//TODO MatrixExponential
-                                        deltaMatrix.exp();
-					//Eigen::MatrixExponential<hypro::matrix_t<Number>> expMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(deltaMatrix);
+                    //deltaMatrix.exp();
+					Eigen::MatrixExponential<hypro::matrix_t<Number>> expMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(deltaMatrix);
 					//result is stored in resultMatrix
-					//expMatrix.compute(resultMatrix);
+					expMatrix.compute(resultMatrix);
 
 					//e^(At)*X0 = polytope at t=delta
 					hypro::valuation_t<Number> deltaValuation = deltaMatrix * _val;
@@ -88,8 +88,8 @@ namespace hypro
 						hypro::matrix_t<Number> tempResult;
 						hypro::matrix_t<Number> tempDelta = _loc.activityMat() * i;
 						//TODO MatrixExponential
-						//Eigen::MatrixExponential<hypro::matrix_t<Number>> tempMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(tempDelta);
-						//tempMatrix.compute(tempResult);
+						Eigen::MatrixExponential<hypro::matrix_t<Number>> tempMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(tempDelta);
+						tempMatrix.compute(tempResult);
 
 						//perform linear transformation
 						firstSegment.linearTransformation(resultPolytope, tempResult);
