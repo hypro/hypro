@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../config.h"
 #include "util.h"
 
 namespace hypro
@@ -36,6 +37,7 @@ namespace hypro
 					//TODO check types (pointer)
 					hypro::matrix_t<Number> resultMatrix;
 					//TODO MatrixExponential
+                                        deltaMatrix.exp();
 					//Eigen::MatrixExponential<hypro::matrix_t<Number>> expMatrix = Eigen::MatrixExponential<hypro::matrix_t<Number>>(deltaMatrix);
 					//result is stored in resultMatrix
 					//expMatrix.compute(resultMatrix);
