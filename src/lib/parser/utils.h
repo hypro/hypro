@@ -68,24 +68,24 @@ namespace parser
     struct State
     {
         std::string mName;
-        Matrix mFlow;
-        Matrix mInvariant;
+        /*//Matrix mFlow;
+        //Matrix mInvariant;
         
         State() :
-        mName(),
-        mFlow(),
-        mInvariant()
+        mName()//,
+        //mFlow(),
+        //mInvariant()
         {
             std::cout << "Construct empty state." << std::endl;
         }
         
-        State(std::vector<char> _name, Matrix _flow, Matrix _inv) :
-        mName(std::string(_name.begin(), _name.end())),
-        mFlow(_flow),
-        mInvariant(_inv)
+        State(std::string _name) ://, Matrix _flow, Matrix _inv) :
+        mName(_name)//,
+        //mFlow(_flow),
+        //mInvariant(_inv)
         {
             std::cout << "Construct filled state." << std::endl;
-        }
+        }*/
     };
     
     struct Transition
@@ -112,7 +112,7 @@ namespace parser
     
     std::ostream& operator<<(std::ostream& lhs, const State& rhs)
     {
-        lhs << "location(" << rhs.mName << ", Flow: " << rhs.mFlow << ", Invariant: " << rhs.mInvariant << ")";
+        lhs << "location("; //<< rhs.mName << ", Flow: " << rhs.mFlow << ", Invariant: " << rhs.mInvariant << ")";
         return lhs;
     }
     
@@ -152,8 +152,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::State,
     (std::string, mName)
-    (hypro::parser::Matrix, mFlow)
-    (hypro::parser::Matrix, mInvariant)
+    //(hypro::parser::Matrix, mFlow)
+    //(hypro::parser::Matrix, mInvariant)
     )
         
 BOOST_FUSION_ADAPT_STRUCT(

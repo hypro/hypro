@@ -8,6 +8,7 @@
 #include <carl/core/Variable.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
+#include <unsupported/Eigen/MatrixFunctions>
 
 
 #define reachLin_VERSION_MAJOR 0

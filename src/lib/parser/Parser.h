@@ -34,7 +34,8 @@ typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
 typedef qi::space_type Skipper;
-typedef std::vector<boost::variant<State, Transition> > Automaton;
+//typedef std::vector<boost::variant<State, Transition> > Automaton;
+typedef std::vector< State > Automaton;
 
 
 
@@ -67,7 +68,7 @@ struct StateParser : public qi::grammar<Iterator, State(), Skipper>
     
     StateParser() : StateParser::base_type(start)
     {
-       start = qi::lit("location") > "(" >> qi::lit("name") >> *(qi::char_) >> qi::lit("flow") >>  mMatrixParser >> qi::lit("invariant") >> mMatrixParser >> ")";
+       start %= "location" >> +(qi::char_);// > "(" >> qi::lit("name") >> *(qi::char_) >> qi::lit("flow") >>  mMatrixParser >> qi::lit("invariant") >> mMatrixParser >> ")";
     }
     
     qi::rule<Iterator, State(), Skipper> start;
@@ -100,8 +101,8 @@ struct MainParser : public qi::grammar<Iterator, Automaton, Skipper>
         
         qi::debug(main);
         
-        main = *(mStateParser | mTransitionParser);
-        //main = *(mStateParser);
+        //main = *(mStateParser | mTransitionParser);
+        main %= +(mStateParser);
         
         qi::on_error<qi::fail>
         (
@@ -132,7 +133,7 @@ class HyproParser : public qi::grammar<Iterator, Automaton, Skipper>
     public:
     HyproParser() : HyproParser::base_type(main)
     {
-        main = mMainParser;
+        main %= mMainParser;
     }    
 
     void parseInput(const std::string& pathToInputFile);
@@ -159,11 +160,11 @@ std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
 {
     std::vector<const State*> states;
     std::vector<const Transition*> transitions;
-    std::cout << rhs.size() << std::endl;
+    std::cout << "Size: " << rhs.size() << std::endl;
     for(auto& item : rhs)
     {
         std::cout << "item" << std::endl;
-        if(const State* i = boost::get<State>(&item))
+        /*if(const State* i = boost::get<State>(&item))
         {
             std::cout << "state..." << std::endl;
             states.insert(states.end(), i);
@@ -172,16 +173,17 @@ std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
         {
             std::cout << "Transition..." << std::endl;
             transitions.insert(transitions.end(), i);
-        }
+        }*/
+       lhs << item; 
     }
-    for(auto& state : states)
+    /*for(auto& state : states)
     {
         lhs << state;
     }
     for(auto& transition : transitions)
     {
         lhs << transition;
-    }
+    }*/
     return lhs;
 }
 

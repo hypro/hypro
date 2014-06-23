@@ -27,6 +27,7 @@ namespace parser{
         Skipper skipper;
         Automaton resultAutomaton;
         
+        std::cout << "To parse: " << std::string(begin, end) << std::endl;
         // invoke qi parser
         bool result = qi::phrase_parse(begin, end, main, skipper, resultAutomaton);
         
