@@ -19,8 +19,10 @@ protected:
     	/*
     	 * Location
     	 */
-    	invariantVec.insert( std::make_pair(x, 10) );
-    	invariantVec.insert( std::make_pair(y, 20) );
+    	//invariantVec.insert( std::make_pair(x, 10) );
+    	//invariantVec.insert( std::make_pair(y, 20) );
+    	invariantVec(0) = 10;
+    	invariantVec(1) = 20;
 
     	invariantOp = LEQ;
 
@@ -79,9 +81,15 @@ protected:
     	loc1->setTransitions(transSet);
 
     	//Polytope for InitialValuation & Guard Assignment
-        coordinates.insert( std::make_pair(x, 2) );
-        coordinates.insert( std::make_pair(y, 3) );
-        p1 = Point<double>(coordinates);
+        //coordinates.insert( std::make_pair(x, 2) );
+        //coordinates.insert( std::make_pair(y, 3) );
+    	coordinates(0) = 2;
+    	coordinates(1) = 3;
+
+    	std::map<carl::Variable, double> coordinate;
+        coordinate.insert( std::make_pair(x, 2) );
+        coordinate.insert( std::make_pair(y, 3) );
+        p1 = Point<double>(coordinate);
 
     	poly = Polytope<double>(p1);
 
@@ -129,11 +137,23 @@ protected:
     Point<double> p1;
     hypro::Polytope<double> poly;
 
+    hypro::Forward<double> forward;
+
 };
 
-TEST_F(ForwardReachabilityTest, LocationTest)
+TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
-
+	//hypro::valuation_t<double> result;
+	//hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
+	matrix_t<FLOAT_T<double>> testMat = matrix_t<FLOAT_T<double>>(2,2);
+	testMat(0,0) = 1;
+	testMat(1,0) = 1;
+	testMat(0,1) = 1;
+	testMat(0,0) = 1;
+	hypro::Polytope<double> poly2 = hypro::Polytope<double>(testMat);
+	//hypro::Polytope<double> poly2 = hypro::Polytope<double>(trans->guard().mat);
+	//bool test = forward.computePostCondition(*trans, poly, result);
+	//EXPECT_TRUE(test);
 }
 
 TEST_F(ForwardReachabilityTest, TransitionTest)
