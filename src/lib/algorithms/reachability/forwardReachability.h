@@ -6,16 +6,14 @@
 
 namespace hypro
 {
-    template<typename Number>
-    class Forward
+    namespace forwardReachability
     {
-    	private:
 			//TODO maybe flowpipe is not a set, but union of segments (=polytopes)
-    		typedef std::set<hypro::valuation_t<Number>> flowpipe_t;
+    		template<typename Number>
+    		using flowpipe_t = std::set<hypro::valuation_t<Number>>;
 
-		public:
-
-			flowpipe_t computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val,
+    		template<typename Number>
+			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val,
 				double _timeBound, double _timeDiscretizationFactor) {
 
 				// [0,T] = [0,delta1] U [delta1, delta2] ...
@@ -73,7 +71,7 @@ namespace hypro
 					hullPolytope.minkowskiSum(firstSegment, hausPoly);
 
 					//empty Flowpipe
-					flowpipe_t flowpipe;
+					flowpipe_t<Number> flowpipe;
 					flowpipe.insert(firstSegment);
 
 					//for each time interval perform linear Transformation
@@ -104,7 +102,8 @@ namespace hypro
 			}
 
 			//basically: execute assignment (if guard is fulfilled)
-			bool computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
+    		template<typename Number>
+			static bool computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
 				//alternatively: checkGuard(_trans,_val)
 
 				//Polytope that is defined by the guard
@@ -118,14 +117,14 @@ namespace hypro
 				}
 			}
 
+    		template<typename Number>
+			static std::set<flowpipe_t<Number>> computeReach(std::set<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor,
+					std::map<flowpipe_t<Number>, hypro::Location<Number>> _map) {
 
-			std::set<flowpipe_t> computeReach(std::set<flowpipe_t> _init, hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor,
-					std::map<flowpipe_t, hypro::Location<Number>> _map) {
-
-				std::set<flowpipe_t> reach;
+				std::set<flowpipe_t<Number>> reach;
 
 				//for each flowpipe in _init
-				for (typename std::set<flowpipe_t>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+				for (typename std::set<flowpipe_t<Number>>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
 
 					//get the location that belongs to the flowpipe
 					hypro::Location<Number> loc = _map[*it_pipe];
@@ -144,7 +143,7 @@ namespace hypro
 							//check if guard of transition is fulfilled
 							if (computePostCondition(trans, *it_val, postAssign)) {
 								hypro::Location<Number> tarLoc = *trans.targetLoc();
-								flowpipe_t newPipe = computeForwardTimeClosure(tarLoc, postAssign, _timeBound, _timeDiscretizationFactor);
+								flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, postAssign, _timeBound, _timeDiscretizationFactor);
 
 								//expand reach
 								reach.insert(newPipe);
@@ -163,17 +162,18 @@ namespace hypro
 
 
 			//TODO: time & step boundaries
-			std::set<flowpipe_t> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor) {
+    		template<typename Number>
+			static std::set<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor) {
 
-					std::set<flowpipe_t> R_new;
-					std::set<flowpipe_t> R;
+					std::set<flowpipe_t<Number>> R_new;
+					std::set<flowpipe_t<Number>> R;
 
-					std::map<flowpipe_t, hypro::Location<Number>> map;
+					std::map<flowpipe_t<Number>, hypro::Location<Number>> map;
 
 					//R_new = initialState
 					typename std::set<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
 					hypro::Location<Number> initLoc = *(*it);
-					flowpipe_t init = computeForwardTimeClosure(initLoc, _hybrid.valuation(), _timeBound, _timeDiscretizationFactor);
+					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation(), _timeBound, _timeDiscretizationFactor);
 					R_new.insert(init);
 
 					map.insert( std::make_pair(init, initLoc) );
@@ -189,7 +189,7 @@ namespace hypro
 						}
 
 						//R_new = Reach(R_new)/R
-						std::set<flowpipe_t> R_temp = computeReach(R_new, _hybrid, _timeBound, _timeDiscretizationFactor, map);
+						std::set<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, _timeBound, _timeDiscretizationFactor, map);
 						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 											std::inserter(R_new, R_new.begin()));
 					}
