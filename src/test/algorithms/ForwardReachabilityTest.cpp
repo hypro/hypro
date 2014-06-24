@@ -5,7 +5,7 @@
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "carl/core/VariablePool.h"
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/algorithms/reachability/Forward.h"
+#include "../../lib/algorithms/reachability/forwardReachability.h"
 
 
 using namespace hypro;
@@ -137,22 +137,20 @@ protected:
     Point<double> p1;
     hypro::Polytope<double> poly;
 
-    hypro::Forward<double> forward;
-
 };
 
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
-	//hypro::valuation_t<double> result;
-	//hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
-	matrix_t<FLOAT_T<double>> testMat = matrix_t<FLOAT_T<double>>(2,2);
-	testMat(0,0) = 1;
-	testMat(1,0) = 1;
-	testMat(0,1) = 1;
-	testMat(0,0) = 1;
-	hypro::Polytope<double> poly2 = hypro::Polytope<double>(testMat);
+	hypro::valuation_t<double> result;
+	hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
+	//matrix_t<FLOAT_T<double>> testMat = matrix_t<FLOAT_T<double>>(2,2);
+	//testMat(0,0) = 1;
+	//testMat(1,0) = 1;
+	//testMat(0,1) = 1;
+	//testMat(0,0) = 1;
+	//hypro::Polytope<double> poly2 = hypro::Polytope<double>(testMat);
 	//hypro::Polytope<double> poly2 = hypro::Polytope<double>(trans->guard().mat);
-	//bool test = forward.computePostCondition(*trans, poly, result);
+	bool test = forwardReachability::computePostCondition(*trans, poly, result);
 	//EXPECT_TRUE(test);
 }
 
