@@ -73,7 +73,7 @@ namespace hypro
             polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
-                std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
+                //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
                 polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
             }
             polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
@@ -95,7 +95,7 @@ namespace hypro
             polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
-                std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
+                //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
                 polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
             }
             Parma_Polyhedra_Library::Constraint constraint;
@@ -147,6 +147,15 @@ namespace hypro
     }
     
     template<typename Number>
+    void Polytope<Number>::writeToFile(std::string _filename) const
+    {
+        std::ofstream outputFile;
+        outputFile.open (_filename);
+        outputFile << *this;
+        outputFile.close();
+    }
+    
+    template<typename Number>
     const C_Polyhedron& Polytope<Number>::rawPolyhedron() const
     {
         return mPolyhedron;
@@ -169,10 +178,6 @@ namespace hypro
     {
         using namespace Parma_Polyhedra_Library;
         
-        std::cout << "Input: " << std::endl;
-        this->print();
-        //std::cout << "Matrix A: " << A << std::endl;
-        //std::cout << "Vector b: " << b << std::endl;
         result = *this;
         
         std::vector<Parma_Polyhedra_Library::Variable> variables;
@@ -186,26 +191,18 @@ namespace hypro
         unsigned gCount = 0;
         for(Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end(); ++generatorIt)
         {
-            std::cout << "Generator: ";
-            generatorIt->print();
-            std::cout << std::endl;
-            
             unsigned vCount = 0;
             for(auto& var : variables)
             {
-                std::cout << "Try: " << var << ", coeff: " << carl::FLOAT_T<Number>((int)raw_value(generatorIt->coefficient(var)).get_si()) << std::endl;
                 polytopeMatrix(vCount, gCount) =carl::FLOAT_T<Number>( (int)raw_value(generatorIt->coefficient(var)).get_si() );
                 ++vCount;
             }
             ++gCount;
-            std::cout << "ping." << std::endl;
         }
         
         // apply lineartransformation
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> res(variables.size(), polytope::gsSize(generators));
         res = A*polytopeMatrix;
-        
-        std::cout << "colums: " << res.cols() << ", rows: " << res.rows() << std::endl;
         
         // clear actual generators and add new ones
         typename Point<Number>::pointSet ps;
@@ -216,7 +213,6 @@ namespace hypro
             for(unsigned j = 0; j < res.rows(); ++j)
                 t.setCoordinate(VariablePool::getInstance().carlVarByIndex(j), res.col(i)(j));
             ps.insert(t);
-            std::cout << "point: " << t << std::endl;
         }
         C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(ps)+1, Parma_Polyhedra_Library::EMPTY);
         for(auto& pointSetIt : ps)

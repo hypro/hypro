@@ -53,6 +53,18 @@ namespace hypro
         void addPoint(const Point<Number>& point);
         typename Point<Number>::pointSet points() const;
         void print() const;
+        void writeToFile(std::string _filename) const;
+        friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
+        {
+            using namespace Parma_Polyhedra_Library::IO_Operators;
+            lhs << "[";
+            for(auto& generator : rhs.rawPolyhedron().generators())
+            {
+                lhs << generator;
+            }
+            lhs << "]" << std::endl;
+            return lhs;
+        }
         
         // PPL related
         const C_Polyhedron& rawPolyhedron() const;
