@@ -131,7 +131,7 @@ namespace hypro
 					hypro::Location<Number> loc = _map[*it_pipe];
 
 					//polytope that belongs to the locations invariant
-					hypro::Polytope<Number> loc_inv = hypro::Polytope<Number>(loc.invariant().mat, loc.invariant().vec);
+					//hypro::Polytope<Number> loc_inv = hypro::Polytope<Number>(loc.invariant().mat, loc.invariant().vec);
 
 					//for each outgoing transition of the location
 					std::set<Transition<Number>*> loc_transSet = loc.transitions();
