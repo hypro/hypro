@@ -52,6 +52,17 @@ namespace hypro
     }
     
     template<typename Number>
+    Polytope<Number>::Polytope(const typename std::set<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points)
+    {
+        mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
+        for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)
+        {
+            Generator tmp = polytope::pointToGenerator(*pointIt);
+            mPolyhedron.add_generator(tmp);
+        }
+    }
+    
+    template<typename Number>
     Polytope<Number>::Polytope(const matrix& A, const vector& b)
     {
         assert(A.rows() == b.rows());

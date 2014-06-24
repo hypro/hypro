@@ -38,6 +38,7 @@ namespace hypro
         Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
         Polytope(const typename Point<Number>::pointSet& points);
+        Polytope(const typename std::set<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points);
         Polytope(const matrix& A, const vector& b);
         Polytope(const matrix& A);
         Polytope(const C_Polyhedron& _rawPoly);

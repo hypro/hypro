@@ -144,6 +144,17 @@ namespace polytope
     }
     
     template<typename Number>
+    static inline unsigned pplDimension(const typename std::set<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
+    {
+        unsigned result = 0;
+        for(auto& point : points)
+        {
+            result = result < point.rows() ? point.rows() : result;
+        }
+        return result;
+    }
+    
+    template<typename Number>
     static inline Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeToMatrix(const Parma_Polyhedra_Library::C_Polyhedron& poly)
     {
         // TODO: What about the constant factor?
