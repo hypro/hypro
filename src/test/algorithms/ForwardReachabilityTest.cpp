@@ -104,7 +104,7 @@ protected:
     }
 
     //Variable Objects
-    carl::VariablePool& pool = VariablePool::getInstance();
+    carl::VariablePool& pool = carl::VariablePool::getInstance();
     carl::Variable x = pool.getFreshVariable("x");
     carl::Variable y = pool.getFreshVariable("y");
 

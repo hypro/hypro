@@ -13,8 +13,8 @@
 #include <carl/core/Variable.h>
 #include "../../config.h"
 #include "../../util/eigenTypetraits.h"
+#include "../../util/VariablePool.h"
 
-#include "VariablePool.h"
 #include "../../datastructures/Point.h"
 
 namespace hypro
@@ -28,7 +28,7 @@ namespace polytope
         for(auto& generator : gs)
         {
             Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
-            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
+            for(auto& variableIt : VariablePool::getInstance().pplVariables())
             {
                 if(l.get(variableIt) != 0)
                 {
@@ -97,7 +97,7 @@ namespace polytope
         Point<Number> result;
         for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
         {
-            result.setCoordinate(hypro::polytope::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
+            result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
         }
         return result;
     }
@@ -109,7 +109,7 @@ namespace polytope
         for(auto& generator : gs)
         {
             Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
-            for(auto& variableIt : polytope::VariablePool::getInstance().pplVariables())
+            for(auto& variableIt : VariablePool::getInstance().pplVariables())
             {
                 if(l.get(variableIt) != 0)
                 {

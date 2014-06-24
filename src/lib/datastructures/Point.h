@@ -100,6 +100,14 @@ namespace hypro {
                     mCoordinates.insert(std::make_pair(it.first, carl::FLOAT_T<Number>(it.second)));
                 }
             }
+            
+            Point(const vector& _vector)
+            {
+                for (unsigned rowIndex = 0; rowIndex <= _vector.rows(); ++rowIndex)
+                {
+                    mCoordinates.insert( std::make_pair(rowIndex, _vector(0,rowIndex)) );
+                }
+            }
 
             /**
              * Copy constructor

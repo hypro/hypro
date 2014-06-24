@@ -65,10 +65,10 @@ protected:
 
     virtual void TearDown()
     {
-        hypro::polytope::VariablePool::getInstance().clear();
+        hypro::VariablePool::getInstance().clear();
     }
 	
-    carl::VariablePool& pool = VariablePool::getInstance();
+    carl::VariablePool& pool = carl::VariablePool::getInstance();
     carl::Variable x = pool.getFreshVariable("x");
     carl::Variable y = pool.getFreshVariable("y");
 	
@@ -112,7 +112,7 @@ TEST_F(PolytopeTest, Constructor)
     b(0,0) = 4;
     b(1,0) = 5;
     
-    hypro::polytope::VariablePool::getInstance().print();
+    hypro::VariablePool::getInstance().print();
     
     hypro::Polytope<number_t> p4 = Polytope<number_t>(A,b);
     
@@ -153,12 +153,12 @@ TEST_F(PolytopeTest, Access)
     ps2.insert(p7);
     
     std::cout << "---" << std::endl;
-    hypro::polytope::VariablePool::getInstance().print();
+    hypro::VariablePool::getInstance().print();
     
     hypro::Polytope<number_t> p2 = Polytope<number_t>(ps2);
     
     std::cout << "---" << std::endl;
-    hypro::polytope::VariablePool::getInstance().print();
+    hypro::VariablePool::getInstance().print();
 
     EXPECT_EQ(p2.dimension(), 2);
     

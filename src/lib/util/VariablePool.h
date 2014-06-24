@@ -21,11 +21,9 @@ using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro
 {
-namespace polytope
-{
-    class VariablePool : public carl::Singleton<hypro::polytope::VariablePool>
+    class VariablePool : public carl::Singleton<hypro::VariablePool>
     {
-        friend carl::Singleton<hypro::polytope::VariablePool>;
+        friend carl::Singleton<hypro::VariablePool>;
     private:
         /**
          * Typedefs
@@ -162,5 +160,4 @@ namespace polytope
             }
         }
     };
-}
 }
