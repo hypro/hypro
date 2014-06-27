@@ -49,10 +49,34 @@ namespace hypro
          * Getters and Setters
          */
         
+        /**
+         * Returns true, if the generatorset is empty.
+         * @return 
+         */
         bool isEmpty() const;
+        
+        /**
+         * Adds a point to the polytope. Note that if the point lies inside the
+         * current polytope, this has no effect.
+         * @param point
+         */
         void addPoint(const Point<Number>& point);
+        
+        /**
+         * Returns the set of points which form the polytope.
+         * @return Pointset.
+         */
         typename Point<Number>::pointSet points() const;
+        
+        /**
+         * Prints the polytopes' generators obtained from the PPL to stdout.
+         */
         void print() const;
+        
+        /**
+         * Writes the polytope to a file in a matlab format.
+         * @param _filename The filename of the output file.
+         */
         void writeToFile(std::string _filename) const;
         friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
         {
@@ -66,7 +90,9 @@ namespace hypro
             return lhs;
         }
         
-        // PPL related
+        /**
+         * PPL related functions
+         */
         const C_Polyhedron& rawPolyhedron() const;
         C_Polyhedron& rRawPolyhedron();
         
