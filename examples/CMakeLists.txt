@@ -17,7 +17,7 @@ set( EXAMPLES
     example_hausdorffApprox
     example_matrixPolyhedra
     example_parser
-    example_polytopeFileWriter
+    #example_polytopeFileWriter
     example_power
     example_ppl_nncPolyhedra
     example_squareroot
