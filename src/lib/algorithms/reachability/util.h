@@ -145,12 +145,13 @@ namespace hypro
 		template<typename Number>
 		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
 			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
-			vector_t<Number> vec;
-			carl::VariablePool& pool = carl::VariablePool::getInstance();
+			hypro::vector_t<Number> vec;
+			//carl::VariablePool& pool = carl::VariablePool::getInstance();
 
 			for (int i=0; i<2*_dim; ++i) {
-				carl::Variable x = pool.getFreshVariable(std::to_string(i));
-		    	vec.insert( std::make_pair(x, _radius) );
+				//carl::Variable x = pool.getFreshVariable(std::to_string(i));
+		    	//vec.insert( std::make_pair(x, _radius) );
+				vec(i) = _radius;
 			}
 
 			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);

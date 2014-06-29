@@ -149,10 +149,12 @@ namespace hypro
     template<typename Number>
     void Polytope<Number>::writeToFile(std::string _filename) const
     {
+    	/*
         std::ofstream outputFile;
-        outputFile.open (_filename);
+        outputFile.open(_filename);
         outputFile << *this;
         outputFile.close();
+        */
     }
     
     template<typename Number>

@@ -37,3 +37,8 @@ typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
 typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, Eigen::Dynamic> matrix;
 typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, 1> vector;
+
+//author: ckugler
+//defines for Forward Reachability
+#define fReach_TIMEBOUND 100
+#define fReach_TIMEDISCRETIZATION 10

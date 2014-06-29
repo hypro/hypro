@@ -26,11 +26,16 @@ namespace hypro
     			hypro::operator_e op;
     		};
 
+    		struct assignment {
+    			hypro::vector_t<Number> translationVec;  //Translation Vector
+    			hypro::matrix_t<Number> transformMat;
+    		};
+
     		struct transition {
     			location* locStart;
     			location* locTarget;
     			guard tGuard;
-    			hypro::valuation_t<Number> assign;
+    			assignment tAssignment;
     		};
 
         private:
@@ -47,11 +52,11 @@ namespace hypro
 
     		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
 
-    		Transition(const location* _start, const location* _end, const struct guard _guard, const hypro::valuation_t<Number> _assign){
+    		Transition(const location* _start, const location* _end, const struct guard _guard, const assignment _assign){
     			mTransition.locStart = _start;
     			mTransition.locTarget = _end;
     			mTransition.tGuard = _guard;
-    			mTransition.assign = _assign;
+    			mTransition.tAssignment = _assign;
     		}
 
     		~Transition()
@@ -68,12 +73,12 @@ namespace hypro
     			return mTransition.locTarget;
     		}
 
-    		guard guard() {
+    		guard guard() const{
     			return mTransition.tGuard;
     		}
 
-    		hypro::valuation_t<Number> assignment() {
-    			return mTransition.assign;
+    		assignment assignment() const{
+    			return mTransition.tAssignment;
     		}
 
     		transition transition() {
@@ -96,8 +101,8 @@ namespace hypro
     			mTransition = _trans;
     		}
 
-    		void setAssignment(hypro::valuation_t<Number> _val) {
-    			mTransition.assign = _val;
+    		void setAssignment(struct assignment _val) {
+    			mTransition.tAssignment = _val;
     		}
 
     		/*

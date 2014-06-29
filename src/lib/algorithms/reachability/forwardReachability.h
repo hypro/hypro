@@ -13,12 +13,11 @@ namespace hypro
     		using flowpipe_t = std::set<hypro::valuation_t<Number>>;
 
     		template<typename Number>
-			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val,
-				double _timeBound, double _timeDiscretizationFactor) {
+			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val) {
 
 				// [0,T] = [0,delta1] U [delta1, delta2] ...
 				// TODO: at the moment only one constant interval size
-				Number timeInterval = _timeBound/_timeDiscretizationFactor;
+				int timeInterval = fReach_TIMEBOUND/fReach_TIMEDISCRETIZATION;
 
 				//Polytope that is defined by the invariant
 				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
@@ -75,7 +74,7 @@ namespace hypro
 					flowpipe.insert(firstSegment);
 
 					//for each time interval perform linear Transformation
-					for (double i=2*timeInterval; i<=_timeBound; i+=timeInterval) {
+					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
 
 						//Polytope after linear transformation
 						hypro::valuation_t<Number> resultPolytope;
@@ -103,14 +102,24 @@ namespace hypro
 
 			//basically: execute assignment (if guard is fulfilled)
     		template<typename Number>
-			static bool computePostCondition(hypro::Transition<Number> _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
+			static bool computePostCondition(const hypro::Transition<Number>& _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
 				//alternatively: checkGuard(_trans,_val)
 
 				//Polytope that is defined by the guard
-				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
+				hypro::Polytope<Number> guardPoly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
 
-				if (poly.contains(_val)) {
-					result = _trans.assignment();
+				//intersection between valuation polytope and guard polytope
+				hypro::Polytope<Number> intersectionPoly;
+				_val.intersect(intersectionPoly, guardPoly);
+
+				//check if the intersection is empty
+				if (!intersectionPoly.isEmpty()) {
+					hypro::vector_t<Number> translateVec = _trans.assignment().translationVec;
+					hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
+
+					//perform translation + transformation on intersection polytope
+					//TODO translation Vector
+					intersectionPoly.linearTransformation(result, transformMat);
 					return true;
 				} else {
 					return false;
@@ -118,8 +127,8 @@ namespace hypro
 			}
 
     		template<typename Number>
-			static std::set<flowpipe_t<Number>> computeReach(std::set<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor,
-					std::map<flowpipe_t<Number>, hypro::Location<Number>> _map) {
+			static std::set<flowpipe_t<Number>> computeReach(std::set<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid,
+					std::map<flowpipe_t<Number>, hypro::Location<Number>>& _map) {
 
 				std::set<flowpipe_t<Number>> reach;
 
@@ -137,24 +146,37 @@ namespace hypro
 					for (typename std::set<Transition<Number*>>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
 						hypro::Transition<Number> trans = *(*it_trans);
 
+						//resulting Polytope in new location
+						hypro::valuation_t<Number> targetValuation;
+
 						//for each polytope that is part of the flowpipe
 						for (typename hypro::valuation_t<Number>::iterator it_val = *it_pipe.begin(); it_val != *it_pipe.end(); ++it_val) {
 							hypro::valuation_t<Number> postAssign;
-							//check if guard of transition is fulfilled
+							//check if guard of transition is enabled (if yes compute Post Assignment Valuation)
 							if (computePostCondition(trans, *it_val, postAssign)) {
-								hypro::Location<Number> tarLoc = *trans.targetLoc();
-								flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, postAssign, _timeBound, _timeDiscretizationFactor);
 
-								//expand reach
-								reach.insert(newPipe);
-
-								//keep map consistent
-								_map.insert( std::make_pair(newPipe, tarLoc) );
-
-								//TODO to break or not to break? depends if assignment is always the same or not
-								break;
+								//targetValuation = targetValuation U postAssign
+								if (!targetValuation.isEmpty()) {
+									targetValuation.unite(targetValuation, postAssign);
+								} else {
+									targetValuation = postAssign;
+								}
 							}
 						}
+
+						//compute convex hull over all united polytopes
+						hypro::valuation_t<Number> hullPoly;
+						targetValuation.hull(hullPoly);
+
+						//compute new Flowpipe
+						hypro::Location<Number> tarLoc = *trans.targetLoc();
+						flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
+
+						//expand reach
+						reach.insert(newPipe);
+
+						//keep map consistent
+						_map.insert( std::make_pair(newPipe, tarLoc) );
 					}
 				}
 				return reach;
@@ -163,7 +185,7 @@ namespace hypro
 
 			//TODO: time & step boundaries
     		template<typename Number>
-			static std::set<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid, double _timeBound, double _timeDiscretizationFactor) {
+			static std::set<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
 
 					std::set<flowpipe_t<Number>> R_new;
 					std::set<flowpipe_t<Number>> R;
@@ -173,7 +195,7 @@ namespace hypro
 					//R_new = initialState
 					typename std::set<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
 					hypro::Location<Number> initLoc = *(*it);
-					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation(), _timeBound, _timeDiscretizationFactor);
+					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation());
 					R_new.insert(init);
 
 					map.insert( std::make_pair(init, initLoc) );
@@ -189,7 +211,7 @@ namespace hypro
 						}
 
 						//R_new = Reach(R_new)/R
-						std::set<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, _timeBound, _timeDiscretizationFactor, map);
+						std::set<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, map);
 						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 											std::inserter(R_new, R_new.begin()));
 					}
