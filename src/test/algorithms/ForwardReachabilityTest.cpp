@@ -19,8 +19,6 @@ protected:
     	/*
     	 * Location
     	 */
-    	//invariantVec.insert( std::make_pair(x, 10) );
-    	//invariantVec.insert( std::make_pair(y, 20) );
     	invariantVec(0) = 10;
     	invariantVec(1) = 20;
 
@@ -54,9 +52,13 @@ protected:
     	guard.mat = inv.mat;
     	guard.vec = inv.vec;
 
+    	assign.translationVec = inv.vec;
+    	assign.transformMat = inv.mat;
+
     	trans->setGuard(guard);
     	trans->setStartLoc(loc1);
     	trans->setTargetLoc(loc2);
+    	trans->setAssignment(assign);
 
     	/*
     	 * Hybrid Automaton
@@ -86,6 +88,13 @@ protected:
     	coordinates(0) = 2;
     	coordinates(1) = 3;
 
+		/*
+		 * should work (change in other test also)
+		std::set<vector_t<double>> vecSet;
+		vecSet.insert(coordinates);
+		poly = Polytope<double>(vecSet);
+		*/
+
     	std::map<carl::Variable, double> coordinate;
         coordinate.insert( std::make_pair(x, 2) );
         coordinate.insert( std::make_pair(y, 3) );
@@ -94,7 +103,6 @@ protected:
     	poly = Polytope<double>(p1);
 
     	hybrid.setValuation(poly);
-    	trans->setAssignment(poly);
     }
 
     virtual void TearDown()
@@ -123,6 +131,8 @@ protected:
 
     struct hypro::Transition<double>::guard guard;
 
+    struct hypro::Transition<double>::assignment assign;
+
     hypro::Location<double>* locations[2];
     std::set<hypro::Location<double>*> locSet;
 
@@ -142,7 +152,7 @@ protected:
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
 	hypro::valuation_t<double> result;
-	hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
+	//hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
 	//matrix_t<FLOAT_T<double>> testMat = matrix_t<FLOAT_T<double>>(2,2);
 	//testMat(0,0) = 1;
 	//testMat(1,0) = 1;
