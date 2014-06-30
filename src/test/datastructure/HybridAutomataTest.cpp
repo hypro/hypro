@@ -226,6 +226,6 @@ TEST_F(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_EQ(hybrid.transitions(), transSet);
 
 	//hybrid automaton: initial Valuation
-	//EXPECT_EQ(hybrid.valuation(), poly);
-	//EXPECT_EQ(poly,poly);
+	EXPECT_EQ(hybrid.valuation(), poly);
+	EXPECT_EQ(poly,poly);
 }
