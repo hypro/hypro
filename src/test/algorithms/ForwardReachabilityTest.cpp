@@ -19,15 +19,15 @@ protected:
     	/*
     	 * Location
     	 */
-    	invariantVec(0) = 10;
-    	invariantVec(1) = 20;
+    	invariantVec(0) = 16;
+    	invariantVec(1) = 16;
 
     	invariantOp = LEQ;
 
-    	invariantMat(0,0) = 2;
+    	invariantMat(0,0) = 1;
     	invariantMat(0,1) = 0;
     	invariantMat(1,0) = 0;
-    	invariantMat(1,1) = 3;
+    	invariantMat(1,1) = 1;
 
     	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -40,7 +40,7 @@ protected:
     	locationMat(0,0) = 2;
     	locationMat(0,1) = 0;
     	locationMat(1,0) = 0;
-    	locationMat(1,1) = 1;
+    	locationMat(1,1) = 2;
 
     	loc1->setActivityMat(locationMat);
     	loc2->setActivityMat(locationMat);
@@ -83,31 +83,57 @@ protected:
     	loc1->setTransitions(transSet);
 
     	//Polytope for InitialValuation & Guard Assignment
-        //coordinates.insert( std::make_pair(x, 2) );
-        //coordinates.insert( std::make_pair(y, 3) );
+
+
+		 //* should work (change in other test also)
     	coordinates(0) = 2;
     	coordinates(1) = 3;
 
-		/*
-		 * should work (change in other test also)
-		std::set<vector_t<double>> vecSet;
-		vecSet.insert(coordinates);
-		poly = Polytope<double>(vecSet);
-		*/
+		std::set<vector_t<double>> vecSet = std::set<vector_t<double>>();
 
+
+		std::set<vector_t<double>>::iterator it;
+		it = vecSet.begin();
+		//TODO ERROR inserting does not work? "no match for < operator"
+		//vecSet.insert(it,coordinates);
+
+		//poly = Polytope<double>(vecSet);
+
+		/*
     	std::map<carl::Variable, double> coordinate;
-        coordinate.insert( std::make_pair(x, 2) );
-        coordinate.insert( std::make_pair(y, 3) );
+        coordinate.insert( std::make_pair(x, 0) );
+        coordinate.insert( std::make_pair(y, 0) );
         p1 = Point<double>(coordinate);
 
     	poly = Polytope<double>(p1);
 
     	hybrid.setValuation(poly);
+    	*/
+
+    	//create Box
+    	boxVec(0) = 1;
+    	boxVec(1) = 0;
+    	boxVec(2) = 1;
+    	boxVec(3) = 0;
+
+    	boxMat(0,0) = 1;
+    	boxMat(0,1) = 0;
+    	boxMat(1,0) = -1;
+    	boxMat(1,1) = 0;
+    	boxMat(2,0) = 0;
+    	boxMat(2,1) = 1;
+    	boxMat(3,0) = 0;
+    	boxMat(3,1) = -1;
+
+    	//TODO ERROR polytope.tpp:77
+    	//poly = Polytope<double>(boxMat,boxVec);
+
+    	//hybrid.setValuation(poly);
     }
 
     virtual void TearDown()
     {
-    	//TODO
+    	//todo: tear down
     	//std::cout << loc1.invariant().mat << std::endl;
     }
 
@@ -123,7 +149,7 @@ protected:
     HybridAutomaton<double> hybrid = HybridAutomaton<double>();
 
     //Other Objects: Vectors, Matrices, Guards...
-    vector_t<double> invariantVec;
+    vector_t<double> invariantVec = vector_t<double>(2,1);
     operator_e invariantOp;
     matrix_t<double> invariantMat = matrix_t<double>(2,2);
 	struct Location<double>::invariant inv;
@@ -143,24 +169,21 @@ protected:
 	std::set<hypro::Transition<double>*> transSet;
 
 	//Point<double>::coordinates_map coordinates;
-	vector_t<double> coordinates;
+	vector_t<double> coordinates = vector_t<double>(2,1);
     Point<double> p1;
     hypro::Polytope<double> poly;
 
+    //Box
+    vector_t<double> boxVec = vector_t<double>(4,1);
+    matrix_t<double> boxMat = matrix_t<double>(4,2);
 };
 
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
 	hypro::valuation_t<double> result;
-	//hypro::Polytope<double> polytope = hypro::Polytope<double>(trans->guard().mat, trans->guard().vec);
-	//matrix_t<FLOAT_T<double>> testMat = matrix_t<FLOAT_T<double>>(2,2);
-	//testMat(0,0) = 1;
-	//testMat(1,0) = 1;
-	//testMat(0,1) = 1;
-	//testMat(0,0) = 1;
-	//hypro::Polytope<double> poly2 = hypro::Polytope<double>(testMat);
-	//hypro::Polytope<double> poly2 = hypro::Polytope<double>(trans->guard().mat);
-	bool test = forwardReachability::computePostCondition(*trans, poly, result);
+
+	//TODO ERROR polytope.tpp:207   (linearTransformation(...) in computePostCondition)
+	//bool test = forwardReachability::computePostCondition(*trans, poly, result);
 	//EXPECT_TRUE(test);
 }
 
