@@ -38,7 +38,7 @@ namespace hypro
         Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
         Polytope(const typename Point<Number>::pointSet& points);
-        Polytope(const typename std::set<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points);
+        Polytope(const typename std::set<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
         Polytope(const matrix& A, const vector& b);
         Polytope(const matrix& A);
         Polytope(const C_Polyhedron& _rawPoly);
@@ -100,7 +100,7 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        bool linearTransformation(Polytope<Number>& result, const matrix& A) const;
+        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector::Zero(1)) const;
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);

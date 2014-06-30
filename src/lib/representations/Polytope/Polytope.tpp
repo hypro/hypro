@@ -52,7 +52,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const typename std::set<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points)
+    Polytope<Number>::Polytope(const typename std::set<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points)
     {
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
         for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)
@@ -176,7 +176,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A) const
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const
     {
         using namespace Parma_Polyhedra_Library;
         
@@ -204,7 +204,8 @@ namespace hypro
         
         // apply lineartransformation
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> res(variables.size(), polytope::gsSize(generators));
-        res = A*polytopeMatrix;
+        if(b != vector::Zero(1))
+            res = A*polytopeMatrix + b;
         
         // clear actual generators and add new ones
         typename Point<Number>::pointSet ps;

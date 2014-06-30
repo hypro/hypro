@@ -43,9 +43,11 @@ namespace polytope
     {
         using namespace Parma_Polyhedra_Library;
         unsigned i = 0;
-        for(auto& g : gs)
+        for(const auto& g : gs)
+        {
             ++i;
-                    
+            (void)g; // just to suppress "unused variable" warning.
+        }           
         return i;
     }
     
@@ -53,8 +55,11 @@ namespace polytope
     {
         using namespace Parma_Polyhedra_Library;
         unsigned i = 0;
-        for(auto& c : cs)
+        for(const auto& c : cs)
+        {
             ++i;
+            (void)c; // just to suppress "unused variable" warning.
+        }
                     
         return i;
     }
