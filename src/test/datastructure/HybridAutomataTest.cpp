@@ -122,7 +122,7 @@ protected:
     HybridAutomaton<double> hybrid = HybridAutomaton<double>();
 
     //Other Objects: Vectors, Matrices, Guards...
-    vector_t<double> invariantVec;
+    vector_t<double> invariantVec = vector_t<double>(2,1);
     operator_e invariantOp;
     matrix_t<double> invariantMat = matrix_t<double>(2,2);
 	struct Location<double>::invariant inv;
@@ -142,7 +142,7 @@ protected:
 	std::set<hypro::Transition<double>*> transSet;
 
 	//Point<double>::coordinates_map coordinates;
-	vector_t<double> coordinates;
+	vector_t<double> coordinates = vector_t<double>(2,1);
     Point<double> p1;
     hypro::Polytope<double> poly;
 
@@ -161,7 +161,7 @@ TEST_F(HybridAutomataTest, LocationTest)
     EXPECT_EQ(loc1->location().inv.vec, invariantVec);
     EXPECT_EQ(loc2->location().inv.vec, invariantVec);
 
-	vector_t<double> invariantVec2;
+	vector_t<double> invariantVec2(2,1);
 	invariantVec2(0) = 10;
 	invariantVec2(1) = 10;
 	EXPECT_NE(loc1->invariant().vec, invariantVec2);
