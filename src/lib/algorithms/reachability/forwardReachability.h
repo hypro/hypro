@@ -118,8 +118,7 @@ namespace hypro
 					hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
 
 					//perform translation + transformation on intersection polytope
-					//TODO translation Vector
-					intersectionPoly.linearTransformation(result, transformMat);
+					intersectionPoly.linearTransformation(result, transformMat, translateVec);
 					return true;
 				} else {
 					return false;
