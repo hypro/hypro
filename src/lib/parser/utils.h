@@ -68,9 +68,9 @@ namespace parser
     struct State
     {
         std::string mName;
-        /*//Matrix mFlow;
+        //Matrix mFlow;
         //Matrix mInvariant;
-        
+        /*
         State() :
         mName()//,
         //mFlow(),
@@ -78,14 +78,14 @@ namespace parser
         {
             std::cout << "Construct empty state." << std::endl;
         }
-        
+        */
         State(std::string _name) ://, Matrix _flow, Matrix _inv) :
         mName(_name)//,
         //mFlow(_flow),
         //mInvariant(_inv)
         {
             std::cout << "Construct filled state." << std::endl;
-        }*/
+        }
     };
     
     struct Transition

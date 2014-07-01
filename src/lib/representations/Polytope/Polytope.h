@@ -78,6 +78,7 @@ namespace hypro
          * @param _filename The filename of the output file.
          */
         void writeToFile(std::string _filename) const;
+        
         friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
         {
             using namespace Parma_Polyhedra_Library::IO_Operators;

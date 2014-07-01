@@ -126,7 +126,7 @@ protected:
     	boxMat(3,1) = -1;
 
     	//TODO ERROR polytope.tpp:77
-    	//poly = Polytope<double>(boxMat,boxVec);
+    	poly = Polytope<double>(boxMat,boxVec);
 
     	//hybrid.setValuation(poly);
     }
@@ -183,7 +183,7 @@ TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 	hypro::valuation_t<double> result;
 
 	//TODO ERROR polytope.tpp:207   (linearTransformation(...) in computePostCondition)
-	//bool test = forwardReachability::computePostCondition(*trans, poly, result);
+	bool test = forwardReachability::computePostCondition(*trans, poly, result);
 	//EXPECT_TRUE(test);
 }
 

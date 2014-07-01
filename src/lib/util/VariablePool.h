@@ -87,7 +87,7 @@ namespace hypro
             return (*target).second;
         }
         
-        const Parma_Polyhedra_Library::Variable& pplVarByIndex(unsigned _index) const
+        const Parma_Polyhedra_Library::Variable& pplVarByIndex(unsigned _index)
         {
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)
@@ -95,11 +95,19 @@ namespace hypro
                 if(varIt->first.id() == _index)
                     break;
             }
-            assert(varIt != mPplToCarl.end());
-            return varIt->first;
+            if(varIt != mPplToCarl.end())
+                return varIt->first;
+            else
+            {
+                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
+                carl::Variable newCarlVar = mPool.getFreshVariable();
+                pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
+                mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
+                return (*target).first;
+            }
         }
         
-        const carl::Variable& carlVarByIndex(unsigned _index) const
+        const carl::Variable& carlVarByIndex(unsigned _index)
         {
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)
@@ -107,8 +115,16 @@ namespace hypro
                 if(varIt->first.id() == _index)
                     break;
             }
-            assert(varIt != mPplToCarl.end());
-            return varIt->second;
+            if(varIt != mPplToCarl.end())
+               return varIt->second;
+            else
+            {
+                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
+                carl::Variable newCarlVar = mPool.getFreshVariable();
+                pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
+                mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
+                return (*target).second;
+            }
         }
         
         unsigned inline dimension(const Parma_Polyhedra_Library::Variable& _var) const

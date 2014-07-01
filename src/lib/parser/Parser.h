@@ -89,7 +89,7 @@ struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
 };
 
 template<typename Iterator>
-struct MainParser : public qi::grammar<Iterator, Automaton, Skipper>
+struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
 {
     StateParser<Iterator> mStateParser;
     TransitionParser<Iterator> mTransitionParser;
@@ -117,16 +117,16 @@ struct MainParser : public qi::grammar<Iterator, Automaton, Skipper>
         );
     }    
     
-    qi::rule<Iterator, Automaton, Skipper> main;
+    qi::rule<Iterator, Automaton(), Skipper> main;
 };
 
 
-class HyproParser : public qi::grammar<Iterator, Automaton, Skipper>
+class HyproParser : public qi::grammar<Iterator, Automaton(), Skipper>
 {   
     private:
     // Rules
     MainParser<Iterator> mMainParser;
-    qi::rule<Iterator, Automaton, Skipper> main;
+    qi::rule<Iterator, Automaton(), Skipper> main;
     
     //qi::debug(main);
     
