@@ -96,7 +96,7 @@ protected:
 		//TODO ERROR inserting does not work? "no match for < operator"
 		vecSet.push_back(coordinates);
 
-		//poly = Polytope<double>(vecSet);
+		poly = Polytope<double>(vecSet);
 
 		/*
     	std::map<carl::Variable, double> coordinate;
@@ -125,7 +125,7 @@ protected:
     	boxMat(3,1) = -1;
 
     	//TODO ERROR polytope.tpp:77
-    	poly = Polytope<double>(boxMat,boxVec);
+    	//poly = Polytope<double>(boxMat,boxVec);
 
     	//hybrid.setValuation(poly);
     }
