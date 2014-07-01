@@ -74,7 +74,7 @@ namespace hypro
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
                 polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
-                std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
+                //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
             }
             polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
