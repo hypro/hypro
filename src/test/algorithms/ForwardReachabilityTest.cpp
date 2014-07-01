@@ -89,13 +89,12 @@ protected:
     	coordinates(0) = 2;
     	coordinates(1) = 3;
 
-		std::set<vector_t<double>> vecSet = std::set<vector_t<double>>();
+		std::vector< vector_t <double> > vecSet;
 
 
-		std::set<vector_t<double>>::iterator it;
-		it = vecSet.begin();
+		std::vector< vector_t <double> >::iterator it;
 		//TODO ERROR inserting does not work? "no match for < operator"
-		//vecSet.insert(it,coordinates);
+		vecSet.push_back(coordinates);
 
 		//poly = Polytope<double>(vecSet);
 
