@@ -110,6 +110,9 @@ namespace hypro
 
 				//intersection between valuation polytope and guard polytope
 				hypro::Polytope<Number> intersectionPoly;
+                                
+                                std::cout << "Dimension: " << _val.dimension() << "(" << _val.rawPolyhedron().space_dimension() << ")" << std::endl;
+                                
 				_val.intersect(intersectionPoly, guardPoly);
 
 				//check if the intersection is empty

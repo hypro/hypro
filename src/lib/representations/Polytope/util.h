@@ -84,7 +84,6 @@ namespace polytope
     template<typename Number>
     static inline Parma_Polyhedra_Library::Generator pointToGenerator(Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1> point)
     {
-        std::cout << "Ping" << std::endl;
         using namespace Parma_Polyhedra_Library;
         Linear_Expression ls;
         for(unsigned i = 0; i < point.rows(); ++i)
