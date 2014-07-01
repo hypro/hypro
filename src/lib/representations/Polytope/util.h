@@ -149,7 +149,7 @@ namespace polytope
     }
     
     template<typename Number>
-    static inline unsigned pplDimension(const typename std::set<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
+    static inline unsigned pplDimension(const typename std::vector<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
     {
         unsigned result = 0;
         for(auto& point : points)

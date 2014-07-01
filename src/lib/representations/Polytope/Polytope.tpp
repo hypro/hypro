@@ -52,7 +52,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const typename std::set<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points)
+    Polytope<Number>::Polytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points)
     {
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
         for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)

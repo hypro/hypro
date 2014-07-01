@@ -68,7 +68,7 @@ struct StateParser : public qi::grammar<Iterator, State(), Skipper>
     
     StateParser() : StateParser::base_type(start)
     {
-       start %= "location" >> +(qi::char_);// > "(" >> qi::lit("name") >> *(qi::char_) >> qi::lit("flow") >>  mMatrixParser >> qi::lit("invariant") >> mMatrixParser >> ")";
+       start = "location" >> +(qi::char_);// > "(" >> qi::lit("name") >> *(qi::char_) >> qi::lit("flow") >>  mMatrixParser >> qi::lit("invariant") >> mMatrixParser >> ")";
     }
     
     qi::rule<Iterator, State(), Skipper> start;
@@ -102,7 +102,7 @@ struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
         qi::debug(main);
         
         //main = *(mStateParser | mTransitionParser);
-        main %= +(mStateParser);
+        main = +(mStateParser);
         
         qi::on_error<qi::fail>
         (
@@ -133,7 +133,7 @@ class HyproParser : public qi::grammar<Iterator, Automaton(), Skipper>
     public:
     HyproParser() : HyproParser::base_type(main)
     {
-        main %= mMainParser;
+        main = mMainParser;
     }    
 
     void parseInput(const std::string& pathToInputFile);
