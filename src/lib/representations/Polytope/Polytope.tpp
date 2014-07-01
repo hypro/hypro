@@ -57,7 +57,9 @@ namespace hypro
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
         for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)
         {
+            std::cout << "Colums: " << pointIt->cols() << ", Rows: " << pointIt->rows() << std::endl;
             Generator tmp = polytope::pointToGenerator(*pointIt);
+            std::cout << "Created generator" << std::endl;
             mPolyhedron.add_generator(tmp);
         }
     }

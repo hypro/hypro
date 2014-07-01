@@ -99,7 +99,7 @@ namespace hypro
                 return varIt->first;
             else
             {
-                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
+                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(_index);
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
                 mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
@@ -119,7 +119,7 @@ namespace hypro
                return varIt->second;
             else
             {
-                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
+                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(_index);
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
                 mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
