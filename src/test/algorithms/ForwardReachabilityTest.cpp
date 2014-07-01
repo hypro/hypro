@@ -98,16 +98,16 @@ protected:
 
 		//poly = Polytope<double>(vecSet);
 
-		/*
+
     	std::map<carl::Variable, double> coordinate;
         coordinate.insert( std::make_pair(x, 0) );
         coordinate.insert( std::make_pair(y, 0) );
         p1 = Point<double>(coordinate);
 
-    	poly = Polytope<double>(p1);
+    	pPoly = Polytope<double>(p1);
 
-    	hybrid.setValuation(poly);
-    	*/
+    	//hybrid.setValuation(poly);
+
 
     	//create Box
     	boxVec(0) = 1;
@@ -171,6 +171,7 @@ protected:
 	vector_t<double> coordinates = vector_t<double>(2,1);
     Point<double> p1;
     hypro::Polytope<double> poly;
+    hypro::Polytope<double> pPoly;
 
     //Box
     vector_t<double> boxVec = vector_t<double>(4,1);
@@ -183,11 +184,66 @@ TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 
 	//TODO ERROR polytope.tpp:207   (linearTransformation(...) in computePostCondition)
 	bool test = forwardReachability::computePostCondition(*trans, poly, result);
-	//EXPECT_TRUE(test);
+	EXPECT_TRUE(test);
 }
 
-TEST_F(ForwardReachabilityTest, TransitionTest)
+TEST_F(ForwardReachabilityTest, ContainmentTest)
 {
+
+	//bool cTest = poly.contains(pPoly);
+
+	//EXPECT_TRUE(cTest);
+
+    //coordinate.insert( std::make_pair(x, 0) );
+    //coordinate.insert( std::make_pair(y, 0) );
+
+	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
+
+	pointVec(0) = 0;
+	pointVec(1) = 0;
+	pointVec(2) = 0;
+	pointVec(3) = 0;
+
+	Polytope<double> pointPoly;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+
+	bool contains = poly.contains(pointPoly);
+	EXPECT_TRUE(contains);
+
+	pointVec(0) = 0.5;
+	pointVec(1) = -0.5;
+	pointVec(2) = 0.75;
+	pointVec(3) = -0.75;
+
+	pointPoly = Polytope<double>(boxMat,pointVec);
+
+	bool contains2 = poly.contains(pointPoly);
+	EXPECT_TRUE(contains2);
+
+	pointVec(0) = 2;
+	pointVec(1) = -2;
+	pointVec(2) = 2;
+	pointVec(3) = -2;
+
+	pointPoly = Polytope<double>(boxMat,pointVec);
+
+	bool contains3 = poly.contains(pointPoly);
+	EXPECT_FALSE(contains3);
+
+	pointVec(0) = 2;
+	pointVec(1) = -2;
+	pointVec(2) = 0.5;
+	pointVec(3) = -0.5;
+
+	pointPoly = Polytope<double>(boxMat,pointVec);
+
+	bool contains4 = poly.contains(pointPoly);
+	EXPECT_FALSE(contains4);
+
+
+
+
+
 
 
 }
