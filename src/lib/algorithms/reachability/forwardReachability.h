@@ -22,6 +22,9 @@ namespace hypro
 				//Polytope that is defined by the invariant
 				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
 
+				//empty Flowpipe
+				flowpipe_t<Number> flowpipe;
+
 				//check if initial Valuation fulfills Invariant
 				//alternatively: checkInvariant(_loc,_val)
 				if ( poly.contains(_val) ) {
@@ -31,9 +34,9 @@ namespace hypro
 					//R_0(X0) is just the initial Polytope X0, since t=0 -> At is 0 matrix -> e^(At) is Einheitsmatrix
 					hypro::matrix_t<Number> deltaMatrix = _loc.activityMat() * timeInterval;
 
-					//TODO check types (pointer)
 					hypro::matrix_t<Number> resultMatrix;
 					//e^(At) = resultMatrix
+					//TODO needs to be fixed
 					resultMatrix = deltaMatrix.exp();
 
 					//e^(At)*X0 = polytope at t=delta
@@ -69,8 +72,7 @@ namespace hypro
 					//hullPolytope +_minkowski hausPoly
 					hullPolytope.minkowskiSum(firstSegment, hausPoly);
 
-					//empty Flowpipe
-					flowpipe_t<Number> flowpipe;
+					//insert first Segment into the empty flowpipe
 					flowpipe.push_back(firstSegment);
 
 					//for each time interval perform linear Transformation
@@ -83,19 +85,25 @@ namespace hypro
 						hypro::matrix_t<Number> tempResult;
 						hypro::matrix_t<Number> tempDelta = _loc.activityMat() * i;
 
+						//TODO needs to be fixed
 						tempResult = tempDelta.exp();
 
 						//perform linear transformation
 						firstSegment.linearTransformation(resultPolytope, tempResult);
 
-						//extend flowpipe
-						flowpipe.push_back(resultPolytope);
+						//extend flowpipe (only if still within Invariant of location)
+						if (poly.contains(resultPolytope)) {
+							flowpipe.push_back(resultPolytope);
+						} else {
+							break;
+						}
 					}
 
 					return flowpipe;
 
 				} else {
-					//throw error, initValuation invalid
+					//return an empty flowpipe
+					return flowpipe;
 				}
 
 			}
@@ -175,11 +183,15 @@ namespace hypro
 						hypro::Location<Number> tarLoc = *trans.targetLoc();
 						flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
 
-						//expand reach
-						reach.push_back(newPipe);
+						//if new Flowpipe is not empty
+						//(it is empty if even the first valuation/polytope does not satisfy the locations invariant)
+						if (!newPipe.empty()) {
+							//expand reach
+							reach.push_back(newPipe);
 
-						//keep map consistent
-						_map.insert( std::make_pair(newPipe, tarLoc) );
+							//keep map consistent
+							_map.insert( std::make_pair(newPipe, tarLoc) );
+						}
 					}
 				}
 				return reach;
@@ -199,7 +211,13 @@ namespace hypro
 					typename std::vector<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
 					hypro::Location<Number> initLoc = *(*it);
 					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation());
-					R_new.push_back(init);
+
+					if (!init.empty()) {
+						R_new.push_back(init);
+					} else {
+						//TODO
+						//the initial Valuation for the polytope was not valid (with respect to the Initial Locations Invariant)
+					}
 
 					map.insert( std::make_pair(init, initLoc) );
 
