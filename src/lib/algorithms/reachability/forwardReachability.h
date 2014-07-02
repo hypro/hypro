@@ -10,7 +10,7 @@ namespace hypro
     {
 			//TODO maybe flowpipe is not a set, but union of segments (=polytopes)
     		template<typename Number>
-    		using flowpipe_t = std::set<hypro::valuation_t<Number>>;
+    		using flowpipe_t = std::vector<hypro::valuation_t<Number>>;
 
     		template<typename Number>
 			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val) {
@@ -71,7 +71,7 @@ namespace hypro
 
 					//empty Flowpipe
 					flowpipe_t<Number> flowpipe;
-					flowpipe.insert(firstSegment);
+					flowpipe.push_back(firstSegment);
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
@@ -89,7 +89,7 @@ namespace hypro
 						firstSegment.linearTransformation(resultPolytope, tempResult);
 
 						//extend flowpipe
-						flowpipe.insert(resultPolytope);
+						flowpipe.push_back(resultPolytope);
 					}
 
 					return flowpipe;
@@ -110,7 +110,8 @@ namespace hypro
 
 				//intersection between valuation polytope and guard polytope
 				hypro::Polytope<Number> intersectionPoly;
-                                
+
+                //TODO remove
                                 std::cout << "Dimension: " << _val.dimension() << "(" << _val.rawPolyhedron().space_dimension() << ")" << std::endl;
                                 
 				_val.intersect(intersectionPoly, guardPoly);
@@ -129,13 +130,13 @@ namespace hypro
 			}
 
     		template<typename Number>
-			static std::set<flowpipe_t<Number>> computeReach(std::set<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid,
+			static std::vector<flowpipe_t<Number>> computeReach(std::vector<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid,
 					std::map<flowpipe_t<Number>, hypro::Location<Number>>& _map) {
 
-				std::set<flowpipe_t<Number>> reach;
+				std::vector<flowpipe_t<Number>> reach;
 
 				//for each flowpipe in _init
-				for (typename std::set<flowpipe_t<Number>>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+				for (typename std::vector<flowpipe_t<Number>>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
 
 					//get the location that belongs to the flowpipe
 					hypro::Location<Number> loc = _map[*it_pipe];
@@ -144,8 +145,8 @@ namespace hypro
 					//hypro::Polytope<Number> loc_inv = hypro::Polytope<Number>(loc.invariant().mat, loc.invariant().vec);
 
 					//for each outgoing transition of the location
-					std::set<Transition<Number>*> loc_transSet = loc.transitions();
-					for (typename std::set<Transition<Number*>>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
+					std::vector<Transition<Number>*> loc_transSet = loc.transitions();
+					for (typename std::vector<Transition<Number*>>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
 						hypro::Transition<Number> trans = *(*it_trans);
 
 						//resulting Polytope in new location
@@ -175,7 +176,7 @@ namespace hypro
 						flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
 
 						//expand reach
-						reach.insert(newPipe);
+						reach.push_back(newPipe);
 
 						//keep map consistent
 						_map.insert( std::make_pair(newPipe, tarLoc) );
@@ -187,18 +188,18 @@ namespace hypro
 
 			//TODO: time & step boundaries
     		template<typename Number>
-			static std::set<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
+			static std::vector<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
 
-					std::set<flowpipe_t<Number>> R_new;
-					std::set<flowpipe_t<Number>> R;
+					std::vector<flowpipe_t<Number>> R_new;
+					std::vector<flowpipe_t<Number>> R;
 
 					std::map<flowpipe_t<Number>, hypro::Location<Number>> map;
 
 					//R_new = initialState
-					typename std::set<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
+					typename std::vector<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
 					hypro::Location<Number> initLoc = *(*it);
 					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation());
-					R_new.insert(init);
+					R_new.push_back(init);
 
 					map.insert( std::make_pair(init, initLoc) );
 
@@ -213,7 +214,7 @@ namespace hypro
 						}
 
 						//R_new = Reach(R_new)/R
-						std::set<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, map);
+						std::vector<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, map);
 						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 											std::inserter(R_new, R_new.begin()));
 					}
