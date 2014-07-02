@@ -75,13 +75,30 @@ namespace hypro
         
         Parma_Polyhedra_Library::Variable& variable(const carl::Variable& _var)
         {
+            std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
+            std::cout << "Variable: " << _var << std::endl;
+            this->print();
             assert(mCarlToPpl.size() == mPplToCarl.size());
             carlPplMap::iterator target = mCarlToPpl.find(_var);
             if(target == mCarlToPpl.end())
             {
                 Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
-                mPplToCarl.insert(std::make_pair(newPplVar, _var));
+                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
+                bool test = (mPplToCarl.find(newPplVar) != mPplToCarl.end());
+                mPplToCarl.insert(std::make_pair(newPplVar, _var)).second;
+                
+                if (test)
+                    std::cout << "In" << std::endl;
+                else
+                    std::cout << "Not In" << std::endl;
+                std::cout << "before:" << std::endl;
+                for(auto& pair : mPplToCarl)
+                    std::cout << pair.first << " -> " << pair.second << std::endl;
                 target = mCarlToPpl.insert(std::make_pair(_var, newPplVar)).first;
+                std::cout << "after" << std::endl;
+                for(auto& pair : mPplToCarl)
+                    std::cout << pair.first << " -> " << pair.second << std::endl;
+                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
                 assert(mCarlToPpl.size() == mPplToCarl.size());
             }
             return (*target).second;
@@ -89,6 +106,8 @@ namespace hypro
         
         const Parma_Polyhedra_Library::Variable& pplVarByIndex(unsigned _index)
         {
+            std::cout << "BEFORE: " << _index << "CurId: "<< mPplId << std::endl;
+            assert(mCarlToPpl.size() == mPplToCarl.size());
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)
             {
@@ -99,16 +118,19 @@ namespace hypro
                 return varIt->first;
             else
             {
-                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(_index);
+                assert(_index == mPplId);
+                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
                 mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
+                assert(mCarlToPpl.size() == mPplToCarl.size());
                 return (*target).first;
             }
         }
         
         const carl::Variable& carlVarByIndex(unsigned _index)
         {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)
             {
@@ -123,6 +145,7 @@ namespace hypro
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
                 mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
+                assert(mCarlToPpl.size() == mPplToCarl.size());
                 return (*target).second;
             }
         }
@@ -136,6 +159,7 @@ namespace hypro
         
         std::set<carl::Variable> carlVariables() const
         {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
             std::set<carl::Variable> variables;
             for(auto variableIt = mCarlToPpl.begin(); variableIt != mCarlToPpl.end(); ++variableIt)
             {
@@ -146,6 +170,7 @@ namespace hypro
         
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> pplVariables() const
         {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
             std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
             for(auto variableIt = mPplToCarl.begin(); variableIt != mPplToCarl.end(); ++variableIt)
             {

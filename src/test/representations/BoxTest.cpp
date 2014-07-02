@@ -112,7 +112,6 @@ TEST_F(BoxTest, Insertion)
 TEST_F(BoxTest, Union)
 {
     cln::cl_RA tmp;
-    carl::is_rational<cln::cl_RA> str;
 }
 
 TEST_F(BoxTest, LinearTransformation)

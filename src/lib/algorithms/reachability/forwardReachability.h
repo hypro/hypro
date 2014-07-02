@@ -104,7 +104,7 @@ namespace hypro
     		template<typename Number>
 			static bool computePostCondition(const hypro::Transition<Number>& _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
 				//alternatively: checkGuard(_trans,_val)
-
+                    
 				//Polytope that is defined by the guard
 				hypro::Polytope<Number> guardPoly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
 

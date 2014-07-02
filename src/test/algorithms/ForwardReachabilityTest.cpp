@@ -84,27 +84,28 @@ protected:
 
     	//Polytope for InitialValuation & Guard Assignment
 
-
 		 //* should work (change in other test also)
     	coordinates(0) = 2;
     	coordinates(1) = 3;
 
-		std::vector< vector_t <double> > vecSet;
+        std::vector< vector_t <double> > vecSet;
 
 
-		std::vector< vector_t <double> >::iterator it;
-		//TODO ERROR inserting does not work? "no match for < operator"
-		vecSet.push_back(coordinates);
+        std::vector< vector_t <double> >::iterator it;
+        vecSet.push_back(coordinates);
 
-		//poly = Polytope<double>(vecSet);
-
+        poly = Polytope<double>(vecSet);
 
     	std::map<carl::Variable, double> coordinate;
         coordinate.insert( std::make_pair(x, 0) );
         coordinate.insert( std::make_pair(y, 0) );
         p1 = Point<double>(coordinate);
-
+        
+        std::cout << "PointPolyGeneratorStart" << std::endl;
+        
     	pPoly = Polytope<double>(p1);
+
+        std::cout << "PointPolyGeneratorEnd" << std::endl;
 
     	//hybrid.setValuation(poly);
 
@@ -125,7 +126,7 @@ protected:
     	boxMat(3,1) = -1;
 
     	//TODO ERROR polytope.tpp:77
-    	poly = Polytope<double>(boxMat,boxVec);
+    	//poly = Polytope<double>(boxMat,boxVec);
 
     	//hybrid.setValuation(poly);
     }
