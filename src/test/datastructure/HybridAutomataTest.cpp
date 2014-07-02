@@ -87,27 +87,27 @@ protected:
 		coordinates(0) = 2;
 		coordinates(1) = 3;
 
-		/*
-		 * should work (change in other test also)
-		std::set<vector_t<double>> vecSet;
-		vecSet.insert(coordinates);
-		poly = Polytope<double>(vecSet);
-		*/
+    	std::vector< vector_t <double> > vecSet;
+    	vecSet.push_back(coordinates);
 
+    	poly = Polytope<double>(vecSet);
+
+
+    	/*
 		std::map<carl::Variable, double> coordinate;
 		coordinate.insert( std::make_pair(x, 2) );
 		coordinate.insert( std::make_pair(y, 3) );
 		p1 = Point<double>(coordinate);
 
 		poly = Polytope<double>(p1);
+		*/
 
 		hybrid.setValuation(poly);
     }
 
     virtual void TearDown()
     {
-    	//TODO
-    	//std::cout << loc1.invariant().mat << std::endl;
+    	//TODO TearDown
     }
 
     //Variable Objects
@@ -226,6 +226,13 @@ TEST_F(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_EQ(hybrid.transitions(), transSet);
 
 	//hybrid automaton: initial Valuation
-	//EXPECT_EQ(hybrid.valuation(), poly);
-	//EXPECT_EQ(poly,poly);
+
+	/**TODO
+	 * Polytope/Polytope.h:88:21: error: cannot bind ‘std::ostream {aka std::basic_ostream<char>}’ lvalue to ‘std::basic_ostream<char>&&’
+                 lhs << generator;
+                     ^
+
+	 	EXPECT_EQ(hybrid.valuation(), poly);
+	 */
+
 }

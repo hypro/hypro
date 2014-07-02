@@ -84,32 +84,6 @@ protected:
 
     	//Polytope for InitialValuation & Guard Assignment
 
-		 //* should work (change in other test also)
-    	coordinates(0) = 2;
-    	coordinates(1) = 3;
-
-        std::vector< vector_t <double> > vecSet;
-
-
-        std::vector< vector_t <double> >::iterator it;
-        vecSet.push_back(coordinates);
-
-        poly = Polytope<double>(vecSet);
-
-    	std::map<carl::Variable, double> coordinate;
-        coordinate.insert( std::make_pair(x, 0) );
-        coordinate.insert( std::make_pair(y, 0) );
-        p1 = Point<double>(coordinate);
-        
-        std::cout << "PointPolyGeneratorStart" << std::endl;
-        
-    	pPoly = Polytope<double>(p1);
-
-        std::cout << "PointPolyGeneratorEnd" << std::endl;
-
-    	//hybrid.setValuation(poly);
-
-
     	//create Box
     	boxVec(0) = 1;
     	boxVec(1) = 0;
@@ -126,15 +100,40 @@ protected:
     	boxMat(3,1) = -1;
 
     	//TODO ERROR polytope.tpp:77
-    	//poly = Polytope<double>(boxMat,boxVec);
+    	poly = Polytope<double>(boxMat,boxVec);
 
-    	//hybrid.setValuation(poly);
+    	hybrid.setValuation(poly);
+
+
+    	/*
+    	 * Testing of other ways to construct a polytope
+    	 */
+
+		 // should work (change in other test also)
+    	coordinates(0) = 2;
+    	coordinates(1) = 3;
+
+    	std::vector< vector_t <double> > vecSet;
+    	vecSet.push_back(coordinates);
+
+    	//poly = Polytope<double>(vecSet);
+
+    	//--------
+    	std::map<carl::Variable, double> coordinate;
+    	coordinate.insert( std::make_pair(x, 0) );
+    	coordinate.insert( std::make_pair(y, 0) );
+    	p1 = Point<double>(coordinate);
+
+    	std::cout << "PointPolyGeneratorStart" << std::endl;
+
+    	pPoly = Polytope<double>(p1);
+
+    	std::cout << "PointPolyGeneratorEnd" << std::endl;
     }
 
     virtual void TearDown()
     {
-    	//todo: tear down
-    	//std::cout << loc1.invariant().mat << std::endl;
+    	//TODO: tear down
     }
 
     //Variable Objects
@@ -182,22 +181,76 @@ protected:
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
 	hypro::valuation_t<double> result;
+	bool inside = forwardReachability::computePostCondition(*trans, poly, result);
+	EXPECT_TRUE(inside);
 
-	//TODO ERROR polytope.tpp:207   (linearTransformation(...) in computePostCondition)
-	bool test = forwardReachability::computePostCondition(*trans, poly, result);
-	EXPECT_TRUE(test);
+	//place box outside of guard
+	boxVec(0) = 18;
+	boxVec(1) = -17;
+	boxVec(2) = 18;
+	boxVec(3) = -17;
+
+	Polytope<double> oPoly;
+	oPoly = Polytope<double>(boxMat,boxVec);
+
+	bool outside = forwardReachability::computePostCondition(*trans, oPoly, result);
+	EXPECT_FALSE(outside);
+}
+
+
+TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
+{
+	std::vector<hypro::valuation_t<double>> flowpipe;
+
+	//flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+
+	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number
+	//hypro::matrix_t<double> expMat(2,2);
+	//expMat = invariantMat.exp();
+
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> testMat(2,2);
+	testMat(0,0) = 1;
+   	testMat(0,1) = 0;
+   	testMat(1,0) = 0;
+   	testMat(1,1) = 1;
+
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> exponentialMat(2,2);
+   	exponentialMat = testMat.exp();
+
+}
+
+TEST_F(ForwardReachabilityTest, ComputeReachTest)
+{
+
+}
+
+TEST_F(ForwardReachabilityTest, ComputeForwardsReachabilityTest)
+{
+
 }
 
 TEST_F(ForwardReachabilityTest, ContainmentTest)
 {
 
-	//bool cTest = poly.contains(pPoly);
+	/*
+	 * Tests based on Polytope(Point) construktor
+	 */
 
-	//EXPECT_TRUE(cTest);
+	/**TODO
+	*C++ exception with description "PPL::C_Polyhedron::contains(y):
+	*this->space_dimension() == 2, y.space_dimension() == 4." thrown in the test body.
 
-    //coordinate.insert( std::make_pair(x, 0) );
+	bool cTest = poly.contains(pPoly);
+
+	EXPECT_TRUE(cTest);
+
+	//coordinate.insert( std::make_pair(x, 0) );
     //coordinate.insert( std::make_pair(y, 0) );
+	*/
 
+	/*
+	 * Tests based on Polytope(Matrix,Vektor) constructor
+	 */
 	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
 
 	pointVec(0) = 0;
@@ -240,16 +293,5 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 
 	bool contains4 = poly.contains(pointPoly);
 	EXPECT_FALSE(contains4);
-
-
-
-
-
-
-
-}
-
-TEST_F(ForwardReachabilityTest, HybridAutomatonTest)
-{
 
 }
