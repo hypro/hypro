@@ -217,6 +217,94 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> exponentialMat(2,2);
    	exponentialMat = testMat.exp();
 
+   	//---------
+   	/*
+
+   	//check size of flowpipe
+   	int size = flowpipe.size();
+   	EXPECT_EQ(size,5);
+
+   	//check each Segment of the flowpipe
+	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
+	Polytope<double> pointPoly;
+
+	//first Segment
+  	EXPECT_EQ(flowpipe.front(), poly);   //currently doesn't work (<< Operator)
+
+	pointVec(0) = 1;
+	pointVec(1) = -1;
+	pointVec(2) = 1;
+	pointVec(3) = -1;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(flowpipe.front().contains(pointPoly));
+
+	pointVec(0) = 2;
+	pointVec(1) = -2;
+	pointVec(2) = 2;
+	pointVec(3) = -2;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(flowpipe.front().contains(pointPoly));
+
+	//second Segment
+	pointVec(0) = 2;
+	pointVec(1) = -2;
+	pointVec(2) = 2;
+	pointVec(3) = -2;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(flowpipe[1].contains(pointPoly));
+
+	pointVec(0) = 3;
+	pointVec(1) = -3;
+	pointVec(2) = 3;
+	pointVec(3) = -3;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(flowpipe[1].contains(pointPoly));
+
+	//third Segment
+	pointVec(0) = 4;
+	pointVec(1) = -4;
+	pointVec(2) = 4;
+	pointVec(3) = -4;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(flowpipe[2].contains(pointPoly));
+
+	pointVec(0) = 5;
+	pointVec(1) = -5;
+	pointVec(2) = 5;
+	pointVec(3) = -5;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(flowpipe[2].contains(pointPoly));
+
+	//fourth Segment
+	pointVec(0) = 8;
+	pointVec(1) = -8;
+	pointVec(2) = 8;
+	pointVec(3) = -8;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(flowpipe[3].contains(pointPoly));
+
+	pointVec(0) = 9;
+	pointVec(1) = -9;
+	pointVec(2) = 9;
+	pointVec(3) = -9;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(flowpipe[3].contains(pointPoly));
+
+	//fifth Segment
+	pointVec(0) = 16;
+	pointVec(1) = -16;
+	pointVec(2) = 16;
+	pointVec(3) = -16;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(flowpipe[4].contains(pointPoly));
+
+	pointVec(0) = 17;
+	pointVec(1) = -17;
+	pointVec(2) = 17;
+	pointVec(3) = -17;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(flowpipe[4].contains(pointPoly));
+	*/
 }
 
 TEST_F(ForwardReachabilityTest, ComputeReachTest)
