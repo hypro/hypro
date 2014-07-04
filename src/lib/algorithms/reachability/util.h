@@ -145,10 +145,16 @@ namespace hypro
 		template<typename Number>
 		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
 			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
-			hypro::vector_t<Number> vec;
+			hypro::vector_t<Number> vec(2*_dim,1);
 			//carl::VariablePool& pool = carl::VariablePool::getInstance();
 
-			//TODO set rest of mat to 0?
+			//TODO set rest of mat to 0 - necessary to do explicitly?
+			for (int k=0; k<2*_dim; ++k) {
+				for (int l=0; l<_dim; ++l) {
+					mat(k,l) = 0;
+				}
+			}
+
 			int i = 0;
 			for (int z=0; z<_dim; ++z) {
 
@@ -164,6 +170,30 @@ namespace hypro
 
 			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);
 			return poly;
+		}
+
+		template<typename Number>
+		Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble(hypro::matrix_t<Number>& _mat) {
+			Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> resultMat(_mat.rows(),_mat.cols());
+
+			for (int i=0; i<_mat.rows(); ++i) {
+				for (int j=0; j<_mat.cols(); ++j) {
+					resultMat(i,j) = _mat(i,j).toDouble();
+				}
+			}
+			return resultMat;
+		}
+
+		template<typename Number>
+		hypro::matrix_t<Number> convertMatToFloatT(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& _mat) {
+			hypro::matrix_t<Number> resultMat(_mat.rows(),_mat.cols());
+
+			for (int i=0; i<_mat.rows(); ++i) {
+				for (int j=0; j<_mat.cols(); ++j) {
+					resultMat(i,j) = carl::FLOAT_T<Number>(_mat(i,j));
+				}
+			}
+			return resultMat;
 		}
 }
 

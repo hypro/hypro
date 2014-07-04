@@ -32,12 +32,24 @@ namespace hypro
 					//approximate R_[0,delta](X0)
 					//rest is acquired by linear Transformation
 					//R_0(X0) is just the initial Polytope X0, since t=0 -> At is 0 matrix -> e^(At) is Einheitsmatrix
-					hypro::matrix_t<Number> deltaMatrix = _loc.activityMat() * timeInterval;
+					hypro::matrix_t<Number> deltaMatrix(_loc.activityMat().rows(),_loc.activityMat().cols());
+					deltaMatrix = _loc.activityMat() * timeInterval;
 
-					hypro::matrix_t<Number> resultMatrix;
 					//e^(At) = resultMatrix
-					//TODO needs to be fixed
-					resultMatrix = deltaMatrix.exp();
+					hypro::matrix_t<Number> resultMatrix(deltaMatrix.rows(),deltaMatrix.cols());
+
+					//---
+					//TODO Workaround for:
+					//resultMatrix = deltaMatrix.exp();
+					//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
+
+					Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix(deltaMatrix.rows(),deltaMatrix.cols());
+					Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> expMatrix(deltaMatrix.rows(),deltaMatrix.cols());
+					doubleMatrix = hypro::convertMatToDouble(deltaMatrix);
+					expMatrix = doubleMatrix.exp();
+					resultMatrix = hypro::convertMatToFloatT(expMatrix);
+
+					//---
 
 					//e^(At)*X0 = polytope at t=delta
 					hypro::valuation_t<Number> deltaValuation;
@@ -82,11 +94,22 @@ namespace hypro
 						hypro::valuation_t<Number> resultPolytope;
 
 						//e^(A*delta), where delta is dependent on i
-						hypro::matrix_t<Number> tempResult;
-						hypro::matrix_t<Number> tempDelta = _loc.activityMat() * i;
+						hypro::matrix_t<Number> tempDelta(_loc.activityMat().rows(),_loc.activityMat().cols());
+						tempDelta = _loc.activityMat() * i;
+						hypro::matrix_t<Number> tempResult(tempDelta.rows(),tempDelta.cols());
 
-						//TODO needs to be fixed
-						tempResult = tempDelta.exp();
+						//---
+						//TODO Workaround for:
+						//tempResult = tempDelta.exp();
+						//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
+
+						Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> tDoubleMatrix(tempDelta.rows(),tempDelta.cols());
+						Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> tExpMatrix(tempDelta.rows(),tempDelta.cols());
+						tDoubleMatrix = hypro::convertMatToDouble(tempDelta);
+						tExpMatrix = tDoubleMatrix.exp();
+						tempResult = hypro::convertMatToFloatT(tExpMatrix);
+
+						//---
 
 						//perform linear transformation
 						firstSegment.linearTransformation(resultPolytope, tempResult);
@@ -120,7 +143,7 @@ namespace hypro
 				hypro::Polytope<Number> intersectionPoly;
 
                 //TODO remove
-                                std::cout << "Dimension: " << _val.dimension() << "(" << _val.rawPolyhedron().space_dimension() << ")" << std::endl;
+                //std::cout << "Dimension: " << _val.dimension() << "(" << _val.rawPolyhedron().space_dimension() << ")" << std::endl;
                                 
 				_val.intersect(intersectionPoly, guardPoly);
 
