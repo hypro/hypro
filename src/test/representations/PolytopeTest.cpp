@@ -95,6 +95,8 @@ TEST_F(PolytopeTest, Constructor)
     ps.insert(p3);
     ps.insert(p4);
     hypro::Polytope<number_t> p1 = Polytope<number_t>(ps);
+    std::cout << "P1" << std::endl;
+    p1.print();
     EXPECT_EQ(p1.dimension(), 2);
     EXPECT_FALSE(p1.rawPolyhedron().is_empty());
     hypro::Polytope<number_t> p3 = Polytope<number_t>(ps);

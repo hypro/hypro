@@ -67,12 +67,12 @@ namespace polytope
     template<typename Number>
     static inline Parma_Polyhedra_Library::Generator pointToGenerator(const Point<Number>& point)
     {
-        std::cout << "PTG." << std::endl;
+        //std::cout << "PTG." << std::endl;
         using namespace Parma_Polyhedra_Library;
         Linear_Expression ls;
         for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
         {
-            std::cout << "Var: " << (*pointIt).first << std::endl;
+            //std::cout << "Var: " << (*pointIt).first << std::endl;
             Linear_Expression tmp = (*pointIt).second.toDouble() * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
         }

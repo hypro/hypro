@@ -101,6 +101,9 @@ protected:
 
     	//TODO ERROR polytope.tpp:77
     	poly = Polytope<double>(boxMat,boxVec);
+        
+        std::cout << "Poly: " << std::endl;
+        poly.print();
 
     	hybrid.setValuation(poly);
 

@@ -37,7 +37,7 @@ namespace hypro
     Polytope<Number>::Polytope(const Point<Number>& _point) :
         mPolyhedron(C_Polyhedron(polytope::pplDimension(_point)+1, Parma_Polyhedra_Library::EMPTY))
     {
-        std::cout << "Try Ppint: " << _point << std::endl;
+        //std::cout << "Try Ppint: " << _point << std::endl;
         mPolyhedron.add_generator(polytope::pointToGenerator(_point));
     }
     
@@ -45,7 +45,7 @@ namespace hypro
     Polytope<Number>::Polytope(const typename Point<Number>::pointSet& points)
     {
         //mPolyhedron.initialize();
-        std::cout << "Try Ppints" << std::endl;
+        //std::cout << "Try Ppints" << std::endl;
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points)+1, Parma_Polyhedra_Library::EMPTY);
         for(auto& pointSetIt : points)
         {
