@@ -101,9 +101,9 @@ protected:
 
     	//TODO ERROR polytope.tpp:77
     	poly = Polytope<double>(boxMat,boxVec);
-        
-        std::cout << "Poly: " << std::endl;
-        poly.print();
+
+        //std::cout << "Poly: " << std::endl;
+        //poly.print();
 
     	hybrid.setValuation(poly);
 
@@ -113,13 +113,13 @@ protected:
     	 */
 
 		 // should work (change in other test also)
-    	coordinates(0) = 2;
-    	coordinates(1) = 3;
+    	coordinates(0) = 1;
+    	coordinates(1) = 1;
 
     	std::vector< vector_t <double> > vecSet;
     	vecSet.push_back(coordinates);
 
-    	//poly = Polytope<double>(vecSet);
+    	pPoly = Polytope<double>(vecSet);
 
     	//--------
     	std::map<carl::Variable, double> coordinate;
@@ -127,11 +127,11 @@ protected:
     	coordinate.insert( std::make_pair(y, 0) );
     	p1 = Point<double>(coordinate);
 
-    	std::cout << "PointPolyGeneratorStart" << std::endl;
+    	//std::cout << "PointPolyGeneratorStart" << std::endl;
 
-    	pPoly = Polytope<double>(p1);
+    	//pPoly = Polytope<double>(p1);
 
-    	std::cout << "PointPolyGeneratorEnd" << std::endl;
+    	//std::cout << "PointPolyGeneratorEnd" << std::endl;
     }
 
     virtual void TearDown()
@@ -205,12 +205,13 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
-	//flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
 	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number
 	//hypro::matrix_t<double> expMat(2,2);
 	//expMat = invariantMat.exp();
 
+	/*
 	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> testMat(2,2);
 	testMat(0,0) = 1;
    	testMat(0,1) = 0;
@@ -219,14 +220,16 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 
 	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> exponentialMat(2,2);
    	exponentialMat = testMat.exp();
+   	*/
 
    	//---------
-   	/*
 
    	//check size of flowpipe
    	int size = flowpipe.size();
-   	EXPECT_EQ(size,5);
+   	std::cout << size << std::endl;
+   	//EXPECT_EQ(size,5);
 
+   	/*
    	//check each Segment of the flowpipe
 	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
 	Polytope<double> pointPoly;
@@ -330,14 +333,14 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	/**TODO
 	*C++ exception with description "PPL::C_Polyhedron::contains(y):
 	*this->space_dimension() == 2, y.space_dimension() == 4." thrown in the test body.
-
+	*/
 	bool cTest = poly.contains(pPoly);
 
 	EXPECT_TRUE(cTest);
 
 	//coordinate.insert( std::make_pair(x, 0) );
     //coordinate.insert( std::make_pair(y, 0) );
-	*/
+	//*/
 
 	/*
 	 * Tests based on Polytope(Matrix,Vektor) constructor
@@ -384,5 +387,59 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 
 	bool contains4 = poly.contains(pointPoly);
 	EXPECT_FALSE(contains4);
+
+}
+
+TEST_F(ForwardReachabilityTest, UtilityTest)
+{
+
+	// computePolytope() Test
+	hypro::Polytope<double> testBoxPoly;
+	int dimension = 2;
+	double radius = 5;
+	testBoxPoly = hypro::computePolytope(dimension,radius);
+
+	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
+
+	pointVec(0) = 5;
+	pointVec(1) = 5;
+	pointVec(2) = 5;
+	pointVec(3) = 5;
+
+	Polytope<double> pointPoly;
+	pointPoly = Polytope<double>(boxMat,pointVec);
+
+	EXPECT_TRUE(pointPoly.contains(testBoxPoly));
+	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
+
+	pointVec(0) = 5;
+	pointVec(1) = -5;
+	pointVec(2) = 5;
+	pointVec(3) = -5;
+
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
+
+	pointVec(0) = 6;
+	pointVec(1) = -6;
+	pointVec(2) = 5;
+	pointVec(3) = -5;
+
+	pointPoly = Polytope<double>(boxMat,pointVec);
+	EXPECT_FALSE(testBoxPoly.contains(pointPoly));
+
+	// convertMatToDouble() Test
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMat(invariantMat.rows(),invariantMat.cols());
+	doubleMat = hypro::convertMatToDouble(invariantMat);
+	EXPECT_EQ(invariantMat(0,0).toDouble(), doubleMat(0,0));
+
+	//std::cout << doubleMat << std::endl;
+
+	// convertMatToFloatT() Test
+	matrix_t<double> floatTMat(doubleMat.rows(),doubleMat.cols());
+	floatTMat = hypro::convertMatToFloatT(doubleMat);
+	EXPECT_EQ(carl::FLOAT_T<double>(doubleMat(0,0)), floatTMat(0,0));
+
+	//std::cout << floatTMat << std::endl;
 
 }
