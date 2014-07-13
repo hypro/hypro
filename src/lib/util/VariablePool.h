@@ -106,7 +106,7 @@ namespace hypro
         
         const Parma_Polyhedra_Library::Variable& pplVarByIndex(unsigned _index)
         {
-            std::cout << "BEFORE: " << _index << "CurId: "<< mPplId << std::endl;
+            //std::cout << "BEFORE: " << _index << "CurId: "<< mPplId << std::endl;
             assert(mCarlToPpl.size() == mPplToCarl.size());
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)

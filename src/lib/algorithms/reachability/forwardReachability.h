@@ -19,14 +19,26 @@ namespace hypro
 				// TODO: at the moment only one constant interval size
 				int timeInterval = fReach_TIMEBOUND/fReach_TIMEDISCRETIZATION;
 
+				//TODO remove
+			   	std::cout <<  "Time Interval: ";
+			   	std::cout << timeInterval << std::endl;
+
 				//Polytope that is defined by the invariant
 				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
+
+				//TODO remove
+			   	std::cout << "invariant Polytope: ";
+			    poly.print();
 
 				//empty Flowpipe
 				flowpipe_t<Number> flowpipe;
 
 				//check if initial Valuation fulfills Invariant
 				//alternatively: checkInvariant(_loc,_val)
+
+				//TODO remove
+				std::cout << "Valuation fulfills Invariant?: ";
+				std::cout << poly.contains(_val) << std::endl;
 				if ( poly.contains(_val) ) {
 
 					//approximate R_[0,delta](X0)
@@ -34,6 +46,11 @@ namespace hypro
 					//R_0(X0) is just the initial Polytope X0, since t=0 -> At is 0 matrix -> e^(At) is Einheitsmatrix
 					hypro::matrix_t<Number> deltaMatrix(_loc.activityMat().rows(),_loc.activityMat().cols());
 					deltaMatrix = _loc.activityMat() * timeInterval;
+
+					//TODO remove
+				   	std::cout << "delta Matrix: " << std::endl;
+				   	std::cout << deltaMatrix << std::endl;
+				   	std::cout << "------" << std::endl;
 
 					//e^(At) = resultMatrix
 					hypro::matrix_t<Number> resultMatrix(deltaMatrix.rows(),deltaMatrix.cols());
@@ -49,24 +66,46 @@ namespace hypro
 					expMatrix = doubleMatrix.exp();
 					resultMatrix = hypro::convertMatToFloatT(expMatrix);
 
+					//TODO remove
+				   	std::cout << "e^(deltaMatrix): " << std::endl;
+				   	std::cout << resultMatrix << std::endl;
+				   	std::cout << "------" << std::endl;
+
 					//---
 
 					//e^(At)*X0 = polytope at t=delta
 					hypro::valuation_t<Number> deltaValuation;
 					_val.linearTransformation(deltaValuation, resultMatrix);
 
+					//TODO remove
+				   	std::cout << "Polytope at t=delta: ";
+				    deltaValuation.print();
+
 					// R_0(X0) U R_delta(X0)
 					hypro::valuation_t<Number> unitePolytope;
 					_val.unite(unitePolytope, deltaValuation);
+
+					//TODO remove
+				   	std::cout << "Polytope after unite with R0: ";
+				    unitePolytope.print();
 
 					// CH( R_0(X0) U R_delta(X0) )
 					hypro::valuation_t<Number> hullPolytope;
 					unitePolytope.hull(hullPolytope);
 
+					//TODO remove
+				   	std::cout << "Convex Hull (Polytope): ";
+				    hullPolytope.print();
+
 					//bloat hullPolytope (Hausdorff distance)
 					hypro::valuation_t<Number> firstSegment;
 					Number radius;
 					radius = hullPolytope.hausdorffError(timeInterval);
+
+					//TODO remove
+					std::cout << "\n";
+				   	std::cout << "Hausdorff Approximation: ";
+				    std::cout << radius << std::endl;
 
 					unsigned int dim;
 					dim = hullPolytope.dimension();
@@ -81,11 +120,23 @@ namespace hypro
 
 					hypro::valuation_t<Number> hausPoly = hypro::computePolytope(dim, radius);
 
+					//TODO remove
+				   	std::cout << "Hausdorff Polytope (Box): ";
+				    hausPoly.print();
+
 					//hullPolytope +_minkowski hausPoly
 					hullPolytope.minkowskiSum(firstSegment, hausPoly);
 
+					//TODO remove
+				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";
+				    firstSegment.print();
+
 					//insert first Segment into the empty flowpipe
 					flowpipe.push_back(firstSegment);
+
+					//set the last segment of the flowpipe
+					hypro::valuation_t<Number> lastSegment;
+					lastSegment = firstSegment;
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
@@ -93,10 +144,21 @@ namespace hypro
 						//Polytope after linear transformation
 						hypro::valuation_t<Number> resultPolytope;
 
+						/*
+						//TODO remove
+						std::cout << "--- Loop entered ---" << std::endl;
+					   	std::cout << "in loop: delta: " << i << std::endl;
+
 						//e^(A*delta), where delta is dependent on i
 						hypro::matrix_t<Number> tempDelta(_loc.activityMat().rows(),_loc.activityMat().cols());
+						//TODO check if this is correct
 						tempDelta = _loc.activityMat() * i;
 						hypro::matrix_t<Number> tempResult(tempDelta.rows(),tempDelta.cols());
+
+						//TODO remove
+					   	std::cout << "in loop: deltaMatrix: " << std::endl;
+					   	std::cout << tempDelta << std::endl;
+					   	std::cout << "------" << std::endl;
 
 						//---
 						//TODO Workaround for:
@@ -109,18 +171,40 @@ namespace hypro
 						tExpMatrix = tDoubleMatrix.exp();
 						tempResult = hypro::convertMatToFloatT(tExpMatrix);
 
-						//---
+						//TODO remove
+					   	std::cout << "in loop: e^(deltaMatrix): " << std::endl;
+					   	std::cout << tempResult << std::endl;
+					   	std::cout << "------" << std::endl;
 
-						//perform linear transformation
-						firstSegment.linearTransformation(resultPolytope, tempResult);
+						//---
+						*/
+
+						//perform linear transformation on the last segment of the flowpipe
+						//lastSegment.linearTransformation(resultPolytope, tempResult);
+						//TODO check: is this correct? e^(delta*A) never changes this way
+						lastSegment.linearTransformation(resultPolytope, resultMatrix);
+
+						//TODO remove
+					   	std::cout << "Next Flowpipe Segment: ";
+					    resultPolytope.print();
+
+						//TODO remove
+						std::cout << "still within Invariant?: ";
+						std::cout << poly.contains(resultPolytope) << std::endl;
 
 						//extend flowpipe (only if still within Invariant of location)
 						if (poly.contains(resultPolytope)) {
 							flowpipe.push_back(resultPolytope);
+
+							//update lastSegment
+							lastSegment = resultPolytope;
 						} else {
 							break;
 						}
 					}
+
+					//TODO remove
+					std::cout << "--- Loop left ---" << std::endl;
 
 					return flowpipe;
 

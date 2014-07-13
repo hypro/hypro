@@ -228,7 +228,7 @@ namespace hypro
         typename Point<Number>::pointSet ps;
         for(unsigned i = 0; i < res.cols(); ++i)
         {
-            std::cout << res.col(i) << std::endl;
+            //std::cout << res.col(i) << std::endl;
             Point<Number> t;
             for(unsigned j = 0; j < res.rows(); ++j)
                 t.setCoordinate(VariablePool::getInstance().carlVarByIndex(j), res.col(i)(j));
