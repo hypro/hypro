@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runAlgorithmTests
             ForwardReachabilityTest.cpp
-	    HyReachTest.cpp
+	    #HyReachTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)

@@ -37,7 +37,7 @@ protected:
 
     	loc2->setInvariant(inv);
 
-    	locationMat(0,0) = 2;
+    	locationMat(0,0) = 2; //1.386294
     	locationMat(0,1) = 0;
     	locationMat(1,0) = 0;
     	locationMat(1,1) = 2;
@@ -205,6 +205,10 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
+
+	//TODO remove
+   	std::cout << "original Box (Polytope): ";
+    poly.print();
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
 	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number
@@ -226,7 +230,10 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 
    	//check size of flowpipe
    	int size = flowpipe.size();
+
+   	std::cout <<  "Flowpipe size: ";
    	std::cout << size << std::endl;
+
    	//EXPECT_EQ(size,5);
 
    	/*
@@ -327,7 +334,7 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 {
 
 	/*
-	 * Tests based on Polytope(Point) construktor
+	 * Tests based on Polytope(Point) constructor
 	 */
 
 	/**TODO
