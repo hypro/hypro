@@ -123,13 +123,13 @@ protected:
 
     	//--------
     	std::map<carl::Variable, double> coordinate;
-    	coordinate.insert( std::make_pair(x, 0) );
-    	coordinate.insert( std::make_pair(y, 0) );
+    	coordinate.insert( std::make_pair(x, 1) );
+    	coordinate.insert( std::make_pair(y, 1) );
     	p1 = Point<double>(coordinate);
 
     	//std::cout << "PointPolyGeneratorStart" << std::endl;
 
-    	//pPoly = Polytope<double>(p1);
+    	pPoly = Polytope<double>(p1);
 
     	//std::cout << "PointPolyGeneratorEnd" << std::endl;
     }
@@ -205,10 +205,17 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
+        std::map<carl::Variable, double> coords;
+    	coords.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(0), 1) );
+    	coords.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(1), 1) );
+        Point<double> start = Point<double>(coords);
+        
+        hypro::Polytope<double> startPoly = hypro::Polytope<double>(start);
 
 	//TODO remove
    	std::cout << "original Box (Polytope): ";
-    poly.print();
+        poly.print();
+        //startPoly.print();
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
 	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number

@@ -223,6 +223,8 @@ namespace hypro
             res = (A*polytopeMatrix);
         }
             
+        std::cout << "[EIGEN] linear transformation result: " << res << std::endl;
+        
         
         // clear actual generators and add new ones
         typename Point<Number>::pointSet ps;

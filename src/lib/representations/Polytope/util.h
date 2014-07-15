@@ -72,7 +72,7 @@ namespace polytope
         Linear_Expression ls;
         for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
         {
-            //std::cout << "Var: " << (*pointIt).first << std::endl;
+            //std::cout << "Var: " << (*pointIt).first << " found as: " << VariablePool::getInstance().variable((*pointIt).first) << std::endl;
             Linear_Expression tmp = (*pointIt).second.toDouble() * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
         }
@@ -167,7 +167,7 @@ namespace polytope
         // TODO: What about the constant factor?
         unsigned rowCount = 0;
         unsigned columCount = 0;
-        poly.print();
+        //poly.print();
         Parma_Polyhedra_Library::Constraint_System cs = poly.constraints();
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables(poly);
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> result = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>(hypro::polytope::csSize(cs), pplDimension(poly));

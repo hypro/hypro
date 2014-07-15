@@ -75,30 +75,30 @@ namespace hypro
         
         Parma_Polyhedra_Library::Variable& variable(const carl::Variable& _var)
         {
-            std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
-            std::cout << "Variable: " << _var << std::endl;
-            this->print();
+            //std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
+            //std::cout << "Variable: " << _var << std::endl;
+            //this->print();
             assert(mCarlToPpl.size() == mPplToCarl.size());
             carlPplMap::iterator target = mCarlToPpl.find(_var);
             if(target == mCarlToPpl.end())
             {
                 Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
-                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
+                //std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
                 bool test = (mPplToCarl.find(newPplVar) != mPplToCarl.end());
                 mPplToCarl.insert(std::make_pair(newPplVar, _var)).second;
-                
+                /*
                 if (test)
                     std::cout << "In" << std::endl;
                 else
                     std::cout << "Not In" << std::endl;
                 std::cout << "before:" << std::endl;
                 for(auto& pair : mPplToCarl)
-                    std::cout << pair.first << " -> " << pair.second << std::endl;
+                    std::cout << pair.first << " -> " << pair.second << std::endl;*/
                 target = mCarlToPpl.insert(std::make_pair(_var, newPplVar)).first;
-                std::cout << "after" << std::endl;
+                /*std::cout << "after" << std::endl;
                 for(auto& pair : mPplToCarl)
                     std::cout << pair.first << " -> " << pair.second << std::endl;
-                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
+                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;*/
                 assert(mCarlToPpl.size() == mPplToCarl.size());
             }
             return (*target).second;
