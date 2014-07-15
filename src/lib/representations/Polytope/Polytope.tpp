@@ -301,7 +301,11 @@ namespace hypro
         carl::FLOAT_T<Number> d = carl::FLOAT_T<Number>(delta);
         //TODO: What about the constant factor?
         Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
-        matrix = hypro::polytope::polytopeToMatrix<Number>(mPolyhedron);
+    	std::cout << "in hausdorffError(): " << std::endl;
+    	this->print();
+        matrix = hypro::polytope::polytopeToMatrix<Number>(this->mPolyhedron);
+    	std::cout << "in hausdorffError() - matrix: " << std::endl;
+    	std::cout << matrix << std::endl;
         
         // TODO: Matrix lpNorm function of Eigen does not work ...
         //carl::FLOAT_T<Number> t = matrix.lpNorm<Infinity>();
