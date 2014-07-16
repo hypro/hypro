@@ -104,7 +104,15 @@ namespace polytope
         Point<Number> result;
         for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
         {
-            result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
+            if( gen.space_dimension() >= (*varIt).space_dimension() )
+            {
+                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
+            }
+            else
+            {
+                // TODO: What about variables that have a greater space dimension? I guess this does not matter, as they do not seem to be part of the generator
+                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), 0);
+            }
         }
         return result;
     }

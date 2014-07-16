@@ -335,8 +335,6 @@ namespace hypro
         }
         result *= carl::FLOAT_T<Number>(max);
         
-        std::cout << "End of hausdorff." << std::endl;
-        
         return result.value();
     }
     
