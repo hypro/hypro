@@ -131,6 +131,7 @@ namespace hypro
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
         for(auto& generator : mPolyhedron.generators())
         {
+            // TODO: Call generatorToPoint only with the variables occuring in the actual generator (some might be degenerated)
             Point<Number> tmp = polytope::generatorToPoint<Number>(generator, variables);
             result.insert(tmp);
         }
