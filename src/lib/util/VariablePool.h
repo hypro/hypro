@@ -84,8 +84,8 @@ namespace hypro
             {
                 Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
                 //std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
-                bool test = (mPplToCarl.find(newPplVar) != mPplToCarl.end());
-                mPplToCarl.insert(std::make_pair(newPplVar, _var)).second;
+                //bool test = (mPplToCarl.find(newPplVar) != mPplToCarl.end());
+                mPplToCarl.insert(std::make_pair(newPplVar, _var));
                 /*
                 if (test)
                     std::cout << "In" << std::endl;

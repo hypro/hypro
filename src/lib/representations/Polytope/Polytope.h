@@ -102,7 +102,7 @@ namespace hypro
          */
         unsigned int dimension() const;
         bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector()) const;
-        bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
+        bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);
@@ -112,7 +112,7 @@ namespace hypro
         /**
          * Polytope related
          */
-        Number hausdorffError(const Number& delta) const;
+        Number hausdorffError(const Number& delta, const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& matrix);
         
         
         Polytope<Number>& operator= (const Polytope<Number>& rhs);

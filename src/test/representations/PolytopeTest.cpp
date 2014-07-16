@@ -22,7 +22,7 @@ protected:
     {
         // p1
         Point<number_t>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(4)) );
+        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(4.34)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(4)) );
         p1 = Point<number_t>(coordinates1);
 
@@ -291,7 +291,68 @@ TEST_F(PolytopeTest, LinearTransformation)
 
 TEST_F(PolytopeTest, MinkowskiSum)
 {
+    Point<number_t>::pointSet ps1;
+    ps1.insert(p1);
+    ps1.insert(p2);
+    ps1.insert(p3);
+    ps1.insert(p4);
+    hypro::Polytope<number_t> ptpe1 = Polytope<number_t>(ps1);
     
+    Point<number_t>::pointSet ps2;
+    ps2.insert(p5);
+    ps2.insert(p6);
+    ps2.insert(p7);
+    hypro::Polytope<number_t> ptpe2 = Polytope<number_t>(ps2);
+    
+    hypro::Polytope<number_t> result;
+    ptpe1.minkowskiSum(result,ptpe2);
+    
+    result.print();
+    
+    Point<number_t>::coordinateMap c1;
+    c1.insert( std::make_pair(x, FLOAT_T<number_t>(9)) );
+    c1.insert( std::make_pair(y, FLOAT_T<number_t>(12)) );
+    p1 = Point<number_t>(c1);
+    
+    Point<number_t>::coordinateMap c2;
+    c2.insert( std::make_pair(x, FLOAT_T<number_t>(11)) );
+    c2.insert( std::make_pair(y, FLOAT_T<number_t>(12)) );
+    p2 = Point<number_t>(c2);
+    
+    Point<number_t>::coordinateMap c3;
+    c3.insert( std::make_pair(x, FLOAT_T<number_t>(8)) );
+    c3.insert( std::make_pair(y, FLOAT_T<number_t>(10)) );
+    p3 = Point<number_t>(c3);
+    
+    Point<number_t>::coordinateMap c4;
+    c4.insert( std::make_pair(x, FLOAT_T<number_t>(12)) );
+    c4.insert( std::make_pair(y, FLOAT_T<number_t>(10)) );
+    p4 = Point<number_t>(c4);
+    
+    Point<number_t>::coordinateMap c5;
+    c5.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
+    c5.insert( std::make_pair(y, FLOAT_T<number_t>(7)) );
+    p5 = Point<number_t>(c5);
+    
+    Point<number_t>::coordinateMap c6;
+    c6.insert( std::make_pair(x, FLOAT_T<number_t>(13)) );
+    c6.insert( std::make_pair(y, FLOAT_T<number_t>(7)) );
+    p6 = Point<number_t>(c6);
+    
+    Point<number_t>::coordinateMap c7;
+    c7.insert( std::make_pair(x, FLOAT_T<number_t>(13)) );
+    c7.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
+    p7 = Point<number_t>(c7);
+    
+    EXPECT_TRUE(result.contains(p1));
+    EXPECT_TRUE(result.contains(p2));
+    EXPECT_TRUE(result.contains(p3));
+    EXPECT_TRUE(result.contains(p4));
+    EXPECT_TRUE(result.contains(p5));
+    EXPECT_TRUE(result.contains(p6));
+    
+    EXPECT_FALSE(result.contains(p7));
+    //EXPECT_FALSE(result.contains(p8));
 }
 
 TEST_F(PolytopeTest, ConvexHull)

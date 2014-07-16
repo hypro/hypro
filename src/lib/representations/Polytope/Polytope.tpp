@@ -246,7 +246,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs)
+    bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const
     {
         result = *this;
         result.mPolyhedron.positive_time_elapse_assign(rhs.mPolyhedron);
@@ -293,17 +293,15 @@ namespace hypro
     }
     
     template<typename Number>
-    Number Polytope<Number>::hausdorffError(const Number& delta) const
+    Number Polytope<Number>::hausdorffError(const Number& delta, const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& matrix)
     {
         using namespace Eigen;
         // TODO: Can we omit conversion to carl::FLOAT_T<Number> and use Number instead?
         carl::FLOAT_T<Number> result;
         carl::FLOAT_T<Number> d = carl::FLOAT_T<Number>(delta);
         //TODO: What about the constant factor?
-        Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
-    	std::cout << "in hausdorffError(): " << std::endl;
-    	this->print();
-        matrix = hypro::polytope::polytopeToMatrix<Number>(this->mPolyhedron);
+        //Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
+        //matrix = hypro::polytope::polytopeToMatrix<Number>(this->mPolyhedron);
     	std::cout << "in hausdorffError() - matrix: " << std::endl;
     	std::cout << matrix << std::endl;
         
@@ -335,6 +333,8 @@ namespace hypro
             max = max > inftyNorm ? max : inftyNorm;
         }
         result *= carl::FLOAT_T<Number>(max);
+        
+        std::cout << "End of hausdorff." << std::endl;
         
         return result.value();
     }
