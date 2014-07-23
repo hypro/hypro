@@ -168,6 +168,14 @@ namespace hypro
 
 			}
 
+			std::cout << "in computePolytope(): Vector " << std::endl;
+			std::cout << vec << std::endl;
+			std::cout << "------" << std::endl;
+
+			std::cout << "in computePolytope(): Matrix " << std::endl;
+			std::cout << mat << std::endl;
+			std::cout << "------" << std::endl;
+
 			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);
 			return poly;
 		}

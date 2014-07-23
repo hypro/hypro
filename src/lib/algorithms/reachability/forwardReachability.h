@@ -108,7 +108,20 @@ namespace hypro
 				    std::cout << radius << std::endl;
 
 					unsigned int dim;
-					dim = hullPolytope.dimension();
+					//TODO
+					//dim = hullPolytope.dimension();
+					dim = 3;
+
+					//TODO remove
+					std::cout << "\n";
+				   	std::cout << "Hull Polytope Dimension: ";
+				    std::cout << hullPolytope.dimension() << std::endl;
+					std::cout << "\n";
+				   	std::cout << "Delta Polytope Dimension: ";
+				    std::cout << deltaValuation.dimension() << std::endl;
+					std::cout << "\n";
+				   	std::cout << "Input Box Dimension: ";
+				    std::cout << _val.dimension() << std::endl;
 
 					/*
 					 * Box
