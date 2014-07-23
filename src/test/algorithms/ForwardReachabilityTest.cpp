@@ -21,13 +21,19 @@ protected:
     	 */
     	invariantVec(0) = 16;
     	invariantVec(1) = 16;
+    	invariantVec(2) = 1;
 
     	invariantOp = LEQ;
 
     	invariantMat(0,0) = 1;
     	invariantMat(0,1) = 0;
+    	invariantMat(0,2) = 0;
     	invariantMat(1,0) = 0;
     	invariantMat(1,1) = 1;
+    	invariantMat(1,2) = 0;
+    	invariantMat(2,0) = 0;
+    	invariantMat(2,1) = 0;
+    	invariantMat(2,2) = 1;
 
     	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -37,10 +43,17 @@ protected:
 
     	loc2->setInvariant(inv);
 
-    	locationMat(0,0) = 2; //1.386294
+    	//note: 3rd variable is for the constant factor
+    	//here: x' = 2, y'= 2, z' = 0  (x' := derivative)
+    	locationMat(0,0) = 0;
     	locationMat(0,1) = 0;
+    	locationMat(0,2) = 2;
     	locationMat(1,0) = 0;
-    	locationMat(1,1) = 2;
+    	locationMat(1,1) = 0;
+    	locationMat(1,2) = 2;
+    	locationMat(2,0) = 0;
+    	locationMat(2,1) = 0;
+    	locationMat(2,2) = 0;
 
     	loc1->setActivityMat(locationMat);
     	loc2->setActivityMat(locationMat);
@@ -84,23 +97,37 @@ protected:
 
     	//Polytope for InitialValuation & Guard Assignment
 
-    	//create Box
+    	//create Box (note: 3rd variable is for the constant factor)
     	boxVec(0) = 1;
     	boxVec(1) = 0;
     	boxVec(2) = 1;
     	boxVec(3) = 0;
+    	boxVec(4) = 1;
+    	boxVec(5) = -1;
 
     	boxMat(0,0) = 1;
     	boxMat(0,1) = 0;
+    	boxMat(0,2) = 0;
     	boxMat(1,0) = -1;
     	boxMat(1,1) = 0;
+    	boxMat(1,2) = 0;
     	boxMat(2,0) = 0;
     	boxMat(2,1) = 1;
+    	boxMat(2,2) = 0;
     	boxMat(3,0) = 0;
     	boxMat(3,1) = -1;
+    	boxMat(3,2) = 0;
+    	boxMat(4,0) = 0;
+    	boxMat(4,1) = 0;
+    	boxMat(4,2) = 1;
+    	boxMat(5,0) = 0;
+    	boxMat(5,1) = 0;
+    	boxMat(5,2) = -1;
 
     	//TODO ERROR polytope.tpp:77
     	poly = Polytope<double>(boxMat,boxVec);
+
+    	std::cout << "Poly Dimension: " << poly.dimension() << std::endl;
 
         //std::cout << "Poly: " << std::endl;
         //poly.print();
@@ -151,11 +178,11 @@ protected:
     HybridAutomaton<double> hybrid = HybridAutomaton<double>();
 
     //Other Objects: Vectors, Matrices, Guards...
-    vector_t<double> invariantVec = vector_t<double>(2,1);
+    vector_t<double> invariantVec = vector_t<double>(3,1);
     operator_e invariantOp;
-    matrix_t<double> invariantMat = matrix_t<double>(2,2);
+    matrix_t<double> invariantMat = matrix_t<double>(3,3);
 	struct Location<double>::invariant inv;
-	matrix_t<double> locationMat = matrix_t<double>(2,2);
+	matrix_t<double> locationMat = matrix_t<double>(3,3);
 
     struct hypro::Transition<double>::guard guard;
 
@@ -177,8 +204,8 @@ protected:
     hypro::Polytope<double> pPoly;
 
     //Box
-    vector_t<double> boxVec = vector_t<double>(4,1);
-    matrix_t<double> boxMat = matrix_t<double>(4,2);
+    vector_t<double> boxVec = vector_t<double>(6,1);
+    matrix_t<double> boxMat = matrix_t<double>(6,3);
 };
 
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
@@ -213,9 +240,18 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
         hypro::Polytope<double> startPoly = hypro::Polytope<double>(start);
 
 	//TODO remove
+   	std::cout << "box Vector " << std::endl;
+   	std::cout << boxVec << std::endl;
+   	std::cout << "------" << std::endl;
+
+	std::cout << "box Matrix: " << std::endl;
+	std::cout << boxMat << std::endl;
+	std::cout << "------" << std::endl;
+
    	std::cout << "original Box (Polytope): ";
-        poly.print();
-        //startPoly.print();
+    poly.print();
+
+	//
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
 	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number
@@ -348,9 +384,10 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	*C++ exception with description "PPL::C_Polyhedron::contains(y):
 	*this->space_dimension() == 2, y.space_dimension() == 4." thrown in the test body.
 	*/
-	bool cTest = poly.contains(pPoly);
+	//TODO adjust pPoly to z variable!
+	//bool cTest = poly.contains(pPoly);
 
-	EXPECT_TRUE(cTest);
+	//EXPECT_TRUE(cTest);
 
 	//coordinate.insert( std::make_pair(x, 0) );
     //coordinate.insert( std::make_pair(y, 0) );
@@ -359,12 +396,15 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	/*
 	 * Tests based on Polytope(Matrix,Vektor) constructor
 	 */
-	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
+	hypro::vector_t<double> pointVec = hypro::vector_t<double>(6,1);
 
 	pointVec(0) = 0;
 	pointVec(1) = 0;
 	pointVec(2) = 0;
 	pointVec(3) = 0;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
+
 
 	Polytope<double> pointPoly;
 	pointPoly = Polytope<double>(boxMat,pointVec);
@@ -376,6 +416,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -0.5;
 	pointVec(2) = 0.75;
 	pointVec(3) = -0.75;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
 
 	pointPoly = Polytope<double>(boxMat,pointVec);
 
@@ -386,6 +428,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 2;
 	pointVec(3) = -2;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
 
 	pointPoly = Polytope<double>(boxMat,pointVec);
 
@@ -396,6 +440,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 0.5;
 	pointVec(3) = -0.5;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
 
 	pointPoly = Polytope<double>(boxMat,pointVec);
 
@@ -409,16 +455,18 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 
 	// computePolytope() Test
 	hypro::Polytope<double> testBoxPoly;
-	int dimension = 2;
+	int dimension = 3;
 	double radius = 5;
 	testBoxPoly = hypro::computePolytope(dimension,radius);
 
-	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
+	hypro::vector_t<double> pointVec = hypro::vector_t<double>(6,1);
 
 	pointVec(0) = 5;
 	pointVec(1) = 5;
 	pointVec(2) = 5;
 	pointVec(3) = 5;
+	pointVec(4) = 5;
+	pointVec(5) = 5;
 
 	Polytope<double> pointPoly;
 	pointPoly = Polytope<double>(boxMat,pointVec);
@@ -430,6 +478,8 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -5;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
 
 	pointPoly = Polytope<double>(boxMat,pointVec);
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -438,6 +488,8 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -6;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
+	pointVec(4) = 1;
+	pointVec(5) = -1;
 
 	pointPoly = Polytope<double>(boxMat,pointVec);
 	EXPECT_FALSE(testBoxPoly.contains(pointPoly));
