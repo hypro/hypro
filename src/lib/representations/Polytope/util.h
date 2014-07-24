@@ -119,19 +119,24 @@ namespace polytope
     
     static inline unsigned pplDimension(const Parma_Polyhedra_Library::C_Polyhedron& poly)
     {
+        std::cout << "Compute dimension." << std::endl;
         Parma_Polyhedra_Library::Generator_System gs = poly.generators();
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+        std::cout << "GS.size: " << gsSize(gs) << std::endl;
         for(auto& generator : gs)
         {
             Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
+            std::cout << "Generator: " << generator << std::endl;
             for(auto& variableIt : VariablePool::getInstance().pplVariables())
             {
-                if(l.get(variableIt) != 0)
+                if(l.coefficient(variableIt) != 0) // TODO: Workaround as != 0 showed strange behavior
                 {
+                    //std::cout << "Add: " << (variableIt) << " (" << l.coefficient(variableIt) << ")" << std::endl;
                     variables.insert(variableIt);
                 }
             }
         }
+        std::cout << "Compute dimension done." << std::endl;
         return variables.size();
     }
     
