@@ -45,16 +45,27 @@ protected:
 
     	//note: 3rd variable is for the constant factor
     	//here: x' = 2, y'= 2, z' = 0  (x' := derivative)
-    	locationMat(0,0) = 0;
+
+    	locationMat(0,0) = 0.69314718056;
     	locationMat(0,1) = 0;
-    	locationMat(0,2) = 2;
+    	locationMat(0,2) = 0;
     	locationMat(1,0) = 0;
-    	locationMat(1,1) = 0;
-    	locationMat(1,2) = 2;
+    	locationMat(1,1) = 0.69314718056;
+    	locationMat(1,2) = 0;
     	locationMat(2,0) = 0;
     	locationMat(2,1) = 0;
     	locationMat(2,2) = 0;
-
+    	/*
+    	locationMat(0,0) = 1;
+    	locationMat(0,1) = 0;
+    	locationMat(0,2) = 0;
+    	locationMat(1,0) = 0;
+    	locationMat(1,1) = 1;
+    	locationMat(1,2) = 0;
+    	locationMat(2,0) = 0;
+    	locationMat(2,1) = 0;
+    	locationMat(2,2) = 0;
+		*/
     	loc1->setActivityMat(locationMat);
     	loc2->setActivityMat(locationMat);
 
@@ -230,6 +241,7 @@ TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 
 TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
+
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
         std::map<carl::Variable, double> coords;
@@ -461,15 +473,20 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 
 	hypro::vector_t<double> pointVec = hypro::vector_t<double>(6,1);
 
+	//necessary test adjustment, because computePolytope() does not consider the last dimension
+	matrix_t<double> testMat = boxMat;
+	testMat(4,2) = 0;
+	testMat(5,2) = 0;
+
 	pointVec(0) = 5;
 	pointVec(1) = 5;
 	pointVec(2) = 5;
 	pointVec(3) = 5;
-	pointVec(4) = 5;
-	pointVec(5) = 5;
+	pointVec(4) = 0;
+	pointVec(5) = 0;
 
 	Polytope<double> pointPoly;
-	pointPoly = Polytope<double>(boxMat,pointVec);
+	pointPoly = Polytope<double>(testMat,pointVec);
 
 	EXPECT_TRUE(pointPoly.contains(testBoxPoly));
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -478,20 +495,20 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -5;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	pointVec(4) = 0;
+	pointVec(5) = 0;
 
-	pointPoly = Polytope<double>(boxMat,pointVec);
+	pointPoly = Polytope<double>(testMat,pointVec);
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
 
 	pointVec(0) = 6;
 	pointVec(1) = -6;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	pointVec(4) = 0;
+	pointVec(5) = 0;
 
-	pointPoly = Polytope<double>(boxMat,pointVec);
+	pointPoly = Polytope<double>(testMat,pointVec);
 	EXPECT_FALSE(testBoxPoly.contains(pointPoly));
 
 	// convertMatToDouble() Test
