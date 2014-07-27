@@ -17,9 +17,11 @@ namespace hypro
 
 				// [0,T] = [0,delta1] U [delta1, delta2] ...
 				// TODO: at the moment only one constant interval size
-				int timeInterval = fReach_TIMEBOUND/fReach_TIMEDISCRETIZATION;
+				double timeInterval = float(fReach_TIMEBOUND)/float(fReach_TIMEDISCRETIZATION);
 
 				//TODO remove
+				std::cout << "fReach_Timebound: " << fReach_TIMEBOUND << std::endl;
+				std::cout << "fReach_Timedisecretization: " << fReach_TIMEDISCRETIZATION << std::endl;
 			   	std::cout <<  "Time Interval: ";
 			   	std::cout << timeInterval << std::endl;
 
@@ -100,7 +102,7 @@ namespace hypro
 					//bloat hullPolytope (Hausdorff distance)
 					hypro::valuation_t<Number> firstSegment;
 					Number radius;
-					radius = hullPolytope.hausdorffError(timeInterval, _loc.activityMat());
+					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 					//TODO remove
 					std::cout << "\n";
@@ -108,20 +110,12 @@ namespace hypro
 				    std::cout << radius << std::endl;
 
 					unsigned int dim;
-					//TODO
-					//dim = hullPolytope.dimension();
-					dim = 3;
+					dim = hullPolytope.dimension();
 
 					//TODO remove
-					std::cout << "\n";
-				   	std::cout << "Hull Polytope Dimension: ";
-				    std::cout << hullPolytope.dimension() << std::endl;
-					std::cout << "\n";
-				   	std::cout << "Delta Polytope Dimension: ";
-				    std::cout << deltaValuation.dimension() << std::endl;
-					std::cout << "\n";
-				   	std::cout << "Input Box Dimension: ";
-				    std::cout << _val.dimension() << std::endl;
+				   	std::cout << "Hull Polytope Dimension: " << hullPolytope.dimension() << std::endl;
+				   	std::cout << "Delta Polytope Dimension: " << deltaValuation.dimension() << std::endl;
+				   	std::cout << "Input Box Dimension: " << _val.dimension() << std::endl;
 
 					/*
 					 * Box
@@ -153,6 +147,8 @@ namespace hypro
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
+
+						std::cout << "i in Loop: " << i << std::endl;
 
 						//Polytope after linear transformation
 						hypro::valuation_t<Number> resultPolytope;

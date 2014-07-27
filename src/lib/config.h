@@ -40,5 +40,5 @@ typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, 1> vector;
 
 //author: ckugler
 //defines for Forward Reachability
-#define fReach_TIMEBOUND 100
-#define fReach_TIMEDISCRETIZATION 100
+#define fReach_TIMEBOUND 10
+#define fReach_TIMEDISCRETIZATION 10

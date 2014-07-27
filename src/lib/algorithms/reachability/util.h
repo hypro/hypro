@@ -144,19 +144,26 @@ namespace hypro
 
 		template<typename Number>
 		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
-			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
-			hypro::vector_t<Number> vec(2*_dim,1);
+			//the last variable is always a placeholder for a constant translation factor
+			//do not bloat into that dimension
+			//unsigned int correctedDim = _dim-1;
+			//TODO: currently the additional row and column is just filled with 0s
+			unsigned int correctedDim = _dim;
+
+			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*correctedDim,correctedDim);
+			hypro::vector_t<Number> vec(2*correctedDim,1);
 			//carl::VariablePool& pool = carl::VariablePool::getInstance();
 
 			//TODO set rest of mat to 0 - necessary to do explicitly?
-			for (int k=0; k<2*_dim; ++k) {
-				for (int l=0; l<_dim; ++l) {
+			for (int k=0; k<2*correctedDim; ++k) {
+				for (int l=0; l<correctedDim; ++l) {
 					mat(k,l) = 0;
 				}
 			}
 
 			int i = 0;
-			for (int z=0; z<_dim; ++z) {
+			//TODO z<correctedDim
+			for (int z=0; z<correctedDim-1; ++z) {
 
 				vec(i) = _radius;
 				vec(i+1) = _radius;
