@@ -121,7 +121,11 @@ namespace hypro
     template<typename Number>
     void Polytope<Number>::addPoint(const Point<Number>& point)
     {
-        mPolyhedron.add_generator(polytope::pointToGenerator(point));
+        Generator tmp = polytope::pointToGenerator(point);
+        if(mPolyhedron.space_dimension() != tmp.space_dimension()) {
+            mPolyhedron.add_space_dimensions_and_embed(tmp.space_dimension());
+        }
+        mPolyhedron.add_generator(tmp);
     }
     
     template<typename Number>
@@ -270,6 +274,30 @@ namespace hypro
             while( neighborCounter < maxCounter ) 
         } while ( current != sink || neighborCounter != (2, deltaK));
         */
+        
+        
+        // unelegant version creating the powerset of all points and reducing it afterwards
+        //std::cout << "Result before: " << std::endl;
+        result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+        //result.print();
+        
+        for( auto& genA : mPolyhedron.generators() )
+        {
+            Point<Number> tmpA = polytope::generatorToPoint<Number>(genA, polytope::variables(mPolyhedron));
+            for( auto& genB : rhs.rawPolyhedron().generators() )
+            {
+                Point<Number> tmpB = polytope::generatorToPoint<Number>(genB, polytope::variables(rhs.rawPolyhedron()));
+                Point<Number> res = tmpA + tmpB;
+                
+                //std::cout << "Add point: " << res << std::endl;                
+                result.addPoint(res);
+                //std::cout << "Intermediate result:" << std::endl;
+                //result.print();
+            }
+        }
+        //std::cout << "Result:" << std::endl;
+        //result.print();
+        result.hull(result);
         return true;
     }
     
