@@ -27,7 +27,7 @@ namespace hypro
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool linearTransformation(GeometricObject<Number>& result/*, matrix transformation*/);
+        bool linearTransformation(GeometricObject<Number>& result, const matrix& A, const vector& b = vector());
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.

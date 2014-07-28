@@ -102,6 +102,8 @@ namespace hypro
          */
         unsigned int dimension() const;
         bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector()) const;
+        
+        // implemented according to Komei Fukuda 2004
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);

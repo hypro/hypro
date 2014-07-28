@@ -1,0 +1,3 @@
+libglpk_la-strspx.lo: misc/strspx.c misc/misc.h
+
+misc/misc.h:

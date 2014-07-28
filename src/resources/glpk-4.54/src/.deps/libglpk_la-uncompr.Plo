@@ -1,0 +1,5 @@
+libglpk_la-uncompr.lo: zlib/uncompr.c zlib/zlib.h zlib/zconf.h
+
+zlib/zlib.h:
+
+zlib/zconf.h:

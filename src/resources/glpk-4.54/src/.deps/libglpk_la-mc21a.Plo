@@ -1,0 +1,3 @@
+libglpk_la-mc21a.lo: misc/mc21a.c misc/mc21a.h
+
+misc/mc21a.h:

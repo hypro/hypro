@@ -1,3 +1,4 @@
+/* include/log4cplus/config/defines.hxx.  Generated from defines.hxx.in by configure.  */
 #ifndef LOG4CPLUS_CONFIG_DEFINES_HXX
 #define LOG4CPLUS_CONFIG_DEFINES_HXX
 
@@ -62,7 +63,7 @@
 #define LOG4CPLUS_HAVE_WCHAR_H 1
 
 /* */
-#define LOG4CPLUS_HAVE_ICONV_H 1
+/* #undef LOG4CPLUS_HAVE_ICONV_H */
 
 /* */
 #define LOG4CPLUS_HAVE_LIMITS_H 1
@@ -185,7 +186,7 @@
 
 /* Defined if the compiler provides C++11 <atomic> header and increment,
    decrement operations. */
-/* #undef LOG4CPLUS_HAVE_CXX11_ATOMICS */
+#define LOG4CPLUS_HAVE_CXX11_ATOMICS 1
 
 /* */
 #define LOG4CPLUS_HAVE_C99_VARIADIC_MACROS 1

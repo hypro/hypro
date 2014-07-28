@@ -250,8 +250,26 @@ namespace hypro
     template<typename Number>
     bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const
     {
-        result = *this;
-        result.mPolyhedron.positive_time_elapse_assign(rhs.mPolyhedron);
+        /*
+        typedef Point<Number> point;
+        // initialize algorithm
+        point::pointSet resultSet;
+        
+        // initialize sink node
+        point sink = *this->points().begin() + *rhs.points().begin();
+        point current = sink;
+        
+        // determine deltaK
+        int deltaK = 0; // TODO
+        
+        std::pair<int, int> neighborCounter = std::make_pair(1,0);
+        std::pair<int, int> maxCounter = std::make_pair(2, deltaK);
+        
+        do
+        {
+            while( neighborCounter < maxCounter ) 
+        } while ( current != sink || neighborCounter != (2, deltaK));
+        */
         return true;
     }
     

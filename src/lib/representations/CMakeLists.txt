@@ -12,10 +12,10 @@ set(lib_hypro_representation_sources
 )
 
 set(lib_hypro_representation_headers
-	${hypro_box_headers}
+	GeometricObject.h
+        ${hypro_box_headers}
         ${hypro_vpolytope_headers}
         ${hypro_polytope_headers}
         ${hypro_orthogonalpolyhedron_headers}
-	GeometricObject.h
 	PARENT_SCOPE
 )

@@ -6,6 +6,9 @@
  * @version 2014-02-25
  */
 
+#include "VPolytope.h"
+
+
 namespace hypro
 {
     template<typename Number>
@@ -68,6 +71,9 @@ namespace hypro
     template<typename Number>
     bool VPolytope<Number>::unite(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
     {
+        result.clear();
+        result.insert(this->mVertices.begin(), this->mVertices.end());
+        result.insert(rhs.mVertices.begin(),rhs.mVertices.end());
         return true;
     }
 
