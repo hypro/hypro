@@ -256,6 +256,23 @@ namespace hypro {
                 return variables;
             }
             
+            Point<Number> extAdd(const Point<Number>& lhs, const Point<Number>& rhs) 
+            {
+                Point<Number> result = lhs;
+                for(auto& coeffB : rhs.coordinates())
+                {
+                    if(result.hasDimension(coeffB.first)) 
+                    {
+                        result.setCoordinate(coeffB.first, result.coordinate(coeffB.first) + coeffB.second);
+                    }
+                    else
+                    {
+                        result.setCoordinate(coeffB.first, coeffB.second);
+                    }
+                }
+                return result;
+            }
+            
             std::vector<carl::FLOAT_T<Number> > polarCoordinates( const Point<Number>& origin,  bool radians = true ) const
             {
                 Point<Number> base = *this - origin;
