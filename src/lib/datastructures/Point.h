@@ -256,9 +256,9 @@ namespace hypro {
                 return variables;
             }
             
-            Point<Number> extAdd(const Point<Number>& lhs, const Point<Number>& rhs) 
+            Point<Number> extAdd(const Point<Number>& rhs) const
             {
-                Point<Number> result = lhs;
+                Point<Number> result = *this;
                 for(auto& coeffB : rhs.coordinates())
                 {
                     if(result.hasDimension(coeffB.first)) 
