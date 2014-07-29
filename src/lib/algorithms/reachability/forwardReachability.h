@@ -104,6 +104,9 @@ namespace hypro
 					Number radius;
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
+				   	//TODO REMOVE
+				   	radius = 1;
+
 					//TODO remove
 					std::cout << "\n";
 				   	std::cout << "Hausdorff Approximation: ";

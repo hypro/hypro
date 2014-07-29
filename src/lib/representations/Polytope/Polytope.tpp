@@ -287,7 +287,8 @@ namespace hypro
             for( auto& genB : rhs.rawPolyhedron().generators() )
             {
                 Point<Number> tmpB = polytope::generatorToPoint<Number>(genB, polytope::variables(rhs.rawPolyhedron()));
-                Point<Number> res = tmpA + tmpB;
+
+                Point<Number> res = tmpA.extAdd(tmpB);
                 
                 //std::cout << "Add point: " << res << std::endl;                
                 result.addPoint(res);

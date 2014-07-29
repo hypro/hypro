@@ -146,9 +146,9 @@ namespace hypro
 		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
 			//the last variable is always a placeholder for a constant translation factor
 			//do not bloat into that dimension
-			//unsigned int correctedDim = _dim-1;
+			unsigned int correctedDim = _dim-1;
 			//TODO: currently the additional row and column is just filled with 0s
-			unsigned int correctedDim = _dim;
+			//unsigned int correctedDim = _dim;
 
 			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*correctedDim,correctedDim);
 			hypro::vector_t<Number> vec(2*correctedDim,1);
@@ -163,7 +163,7 @@ namespace hypro
 
 			int i = 0;
 			//TODO z<correctedDim
-			for (int z=0; z<correctedDim-1; ++z) {
+			for (int z=0; z<correctedDim; ++z) {
 
 				vec(i) = _radius;
 				vec(i+1) = _radius;

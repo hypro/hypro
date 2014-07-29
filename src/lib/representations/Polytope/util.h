@@ -28,9 +28,10 @@ namespace polytope
         for(auto& generator : gs)
         {
             Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
+
             for(auto& variableIt : VariablePool::getInstance().pplVariables())
             {
-                if(l.get(variableIt) != 0)
+                if((int)Parma_Polyhedra_Library::raw_value(l.coefficient(variableIt)).get_si() != 0)
                 {
                     variables.insert(variableIt);
                 }
