@@ -75,10 +75,14 @@ namespace hypro
             polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
-                polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
+            	std::cout << "Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble() << std::endl;
+            	polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble());
+                //polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
                 //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
             }
-            polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
+            std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR).toDouble() << std::endl;
+            polynom.set_inhomogeneous_term(-(b(rowIndex,0)*fReach_DENOMINATOR).toDouble());
+            //polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
             

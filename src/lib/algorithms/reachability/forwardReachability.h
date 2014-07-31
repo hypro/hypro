@@ -105,7 +105,7 @@ namespace hypro
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 				   	//TODO REMOVE
-				   	radius = 1;
+				   	radius = 0.55;
 
 					//TODO remove
 					std::cout << "\n";
