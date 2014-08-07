@@ -202,12 +202,22 @@ namespace hypro
         // Create Eigen::Matrix from Polytope
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix(variables.size(), polytope::gsSize(generators));
         unsigned gCount = 0;
+        
+        carl::FLOAT_T<Number> coefficient;
+        carl::FLOAT_T<Number> divisor;
+        carl::FLOAT_T<Number> value;
+        
         for(Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end(); ++generatorIt)
         {
             unsigned vCount = 0;
+            // Assuming the divisor stays the same in one generator
+            divisor = fReach_DENOMINATOR/(int)raw_value(generatorIt->divisor()).get_si();
             for(auto& var : variables)
             {
-                polytopeMatrix(vCount, gCount) = carl::FLOAT_T<Number>( (int)raw_value(generatorIt->coefficient(var)).get_si() );
+                coefficient = (int)raw_value(generatorIt->coefficient(var)).get_si();
+                value = coefficient/divisor;
+                
+                polytopeMatrix(vCount, gCount) = value;
                 ++vCount;
             }
             ++gCount;
@@ -290,8 +300,11 @@ namespace hypro
             Point<Number> tmpA = polytope::generatorToPoint<Number>(genA, polytope::variables(mPolyhedron));
             for( auto& genB : rhs.rawPolyhedron().generators() )
             {
+                //std::cout << __func__ << " Generator: " << genB << std::endl;
                 Point<Number> tmpB = polytope::generatorToPoint<Number>(genB, polytope::variables(rhs.rawPolyhedron()));
-
+                
+                //std::cout << __func__ << " Point: " << tmpB << std::endl;
+                
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
                 //std::cout << "Add point: " << res << std::endl;                

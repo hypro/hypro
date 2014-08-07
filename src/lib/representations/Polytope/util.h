@@ -70,11 +70,13 @@ namespace polytope
     {
         //std::cout << "PTG." << std::endl;
         using namespace Parma_Polyhedra_Library;
+        double tmpValue;
         Linear_Expression ls;
         for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
         {
             //std::cout << "Var: " << (*pointIt).first << " found as: " << VariablePool::getInstance().variable((*pointIt).first) << std::endl;
-            Linear_Expression tmp = (*pointIt).second.toDouble() * VariablePool::getInstance().variable((*pointIt).first);
+            tmpValue = (*pointIt).second.toDouble() * fReach_DENOMINATOR;
+            Linear_Expression tmp = tmpValue * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
         }
         Generator result = Generator::point(ls);
@@ -88,10 +90,12 @@ namespace polytope
     static inline Parma_Polyhedra_Library::Generator pointToGenerator(Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1> point)
     {
         using namespace Parma_Polyhedra_Library;
+        double tmpValue;
         Linear_Expression ls;
         for(unsigned i = 0; i < point.rows(); ++i)
         {
-            Linear_Expression tmp = point(i,0).toDouble() * VariablePool::getInstance().pplVarByIndex(i);
+            tmpValue = point(i,0).toDouble() * fReach_DENOMINATOR;
+            Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex(i);
             ls += tmp;
             ++i;
         }
@@ -103,16 +107,23 @@ namespace polytope
     static inline Point<Number> generatorToPoint(const Parma_Polyhedra_Library::Generator& gen, const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables)
     {
         Point<Number> result;
+        carl::FLOAT_T<Number> coefficient;
+        carl::FLOAT_T<Number> divisor;
+        carl::FLOAT_T<Number> value;
         for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
         {
             if( gen.space_dimension() >= (*varIt).space_dimension() )
             {
-                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si());
+                coefficient = (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si();
+                divisor = fReach_DENOMINATOR / (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
+                value = coefficient/divisor;
+                //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }
             else
             {
                 // TODO: What about variables that have a greater space dimension? I guess this does not matter, as they do not seem to be part of the generator
-                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), 0);
+                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), carl::FLOAT_T<Number>(0));
             }
         }
         return result;
@@ -189,7 +200,7 @@ namespace polytope
             for(auto variableIt = vars.begin(); variableIt != vars.end(); ++variableIt)
             {
                 carl::FLOAT_T<Number> val = (int)Parma_Polyhedra_Library::raw_value(t.get(*variableIt)).get_si();
-                //std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl; 
+                std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl; 
                 result(rowCount, columCount) = val;
                 ++columCount;
             }
