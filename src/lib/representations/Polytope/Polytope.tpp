@@ -211,7 +211,7 @@ namespace hypro
         {
             unsigned vCount = 0;
             // Assuming the divisor stays the same in one generator
-            divisor = fReach_DENOMINATOR/(int)raw_value(generatorIt->divisor()).get_si();
+            divisor = (int)raw_value(generatorIt->divisor()).get_si();
             for(auto& var : variables)
             {
                 coefficient = (int)raw_value(generatorIt->coefficient(var)).get_si();
@@ -305,16 +305,18 @@ namespace hypro
                 
                 //std::cout << __func__ << " Point: " << tmpB << std::endl;
                 
+                std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
+                std::cout << "tmpA: " << tmpA << std::endl;
+
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                //std::cout << "Add point: " << res << std::endl;                
+                std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
                 //std::cout << "Intermediate result:" << std::endl;
                 //result.print();
             }
         }
-        //std::cout << "Result:" << std::endl;
-        //result.print();
+        //std::cout << "Result:" result.print() << std::endl;
         result.hull(result);
         return true;
     }

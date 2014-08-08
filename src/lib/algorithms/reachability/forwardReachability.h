@@ -105,7 +105,7 @@ namespace hypro
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 				   	//TODO REMOVE
-				   	radius = 0.55;
+				   	radius = 2.5;
 
 					//TODO remove
 					std::cout << "\n";
@@ -115,10 +115,12 @@ namespace hypro
 					unsigned int dim;
 					dim = hullPolytope.dimension();
 
+					/*
 					//TODO remove
 				   	std::cout << "Hull Polytope Dimension: " << hullPolytope.dimension() << std::endl;
 				   	std::cout << "Delta Polytope Dimension: " << deltaValuation.dimension() << std::endl;
 				   	std::cout << "Input Box Dimension: " << _val.dimension() << std::endl;
+				   	*/
 
 					/*
 					 * Box
