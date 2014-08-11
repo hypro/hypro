@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "../../datastructures/Point.h"
+#include "util.h"
 #include "../GeometricObject.h"
 #include <carl/core/Variable.h>
 #include <set>
