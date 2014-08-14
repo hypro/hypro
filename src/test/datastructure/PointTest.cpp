@@ -62,6 +62,70 @@ protected:
     Point<number_t> p4;
 };
 
+TEST_F(PointTest, Constructor)
+{ 
+    Point<number_t> p;
+    EXPECT_EQ(p.dimension(), 0);
+    
+    p = Point<number_t>(y, 5);
+    EXPECT_EQ(p.dimension(), 1);
+    
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+    p[pool.getFreshVariable()] = 2;
+
+    EXPECT_EQ(p.dimension(), (unsigned) 7);
+    EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
+    
+    Point<number_t> pCopy = Point<number_t>(p);
+    EXPECT_EQ(p, pCopy);
+    
+    Point<number_t> empty = p1.newEmpty();
+    EXPECT_EQ(p1.dimension(), empty.dimension());
+    EXPECT_TRUE(p1.haveSameDimensions(empty));
+    EXPECT_EQ(0, empty[x]);
+
+    Point<number_t>::rawCoordinateMap map;
+    map.insert(std::make_pair(a, 123));
+    map.insert(std::make_pair(b, 456));
+    Point<number_t> p1(map);
+    EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
+    EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
+    
+    // Test copy constructor and typecast constructor
+    Point<double> alien;
+    alien[pool.getFreshVariable()] = 1;
+    alien[pool.getFreshVariable()] = 3;
+    
+    Point<double> alien2 = alien;
+    Point<int> local = alien;
+    
+}
+
+TEST_F(PointTest, PolarCoordinates)
+{
+    std::vector<carl::FLOAT_T<number_t> > pc = p1.polarCoordinates(p1.origin(), false);
+    FLOAT_T<number_t> expectedRes;
+    expectedRes = 29;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p2.polarCoordinates(p2.origin(), false);
+    expectedRes = 113;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p3.polarCoordinates(p3.origin(), false);
+    expectedRes = 250;
+    expectedRes.sqrt_assign();
+    EXPECT_EQ(pc.at(0), expectedRes);
+    
+    pc = p4.polarCoordinates(p3, false);
+}
+
 /**
  * @covers Point::coordinate
  * @covers Point::dimension
@@ -171,70 +235,6 @@ TEST_F(PointTest, BooleanTest)
     EXPECT_FALSE(p4.hasDimensions(p1.variables()));
     EXPECT_TRUE(p3.hasDimensions(p4.variables()));
     EXPECT_TRUE(p4.hasDimensions(p3.variables()));
-}
-
-TEST_F(PointTest, Constructor)
-{ 
-    Point<number_t> p;
-    EXPECT_EQ(p.dimension(), 0);
-    
-    p = Point<number_t>(y, 5);
-    EXPECT_EQ(p.dimension(), 1);
-    
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-
-    EXPECT_EQ(p.dimension(), (unsigned) 7);
-    EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
-    
-    Point<number_t> pCopy = Point<number_t>(p);
-    EXPECT_EQ(p, pCopy);
-    
-    Point<number_t> empty = p1.newEmpty();
-    EXPECT_EQ(p1.dimension(), empty.dimension());
-    EXPECT_TRUE(p1.haveSameDimensions(empty));
-    EXPECT_EQ(0, empty[x]);
-
-    Point<number_t>::rawCoordinateMap map;
-    map.insert(std::make_pair(a, 123));
-    map.insert(std::make_pair(b, 456));
-    Point<number_t> p1(map);
-    EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
-    EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
-    
-    // Test copy constructor and typecast constructor
-    Point<mpfr_t> alien;
-    alien[pool.getFreshVariable()] = 1;
-    alien[pool.getFreshVariable()] = 3;
-    
-    Point<mpfr_t> alien2 = alien;
-    Point<double> local = alien;
-    
-}
-
-TEST_F(PointTest, PolarCoordinates)
-{
-    std::vector<carl::FLOAT_T<number_t> > pc = p1.polarCoordinates(p1.origin(), false);
-    FLOAT_T<number_t> expectedRes;
-    expectedRes = 29;
-    expectedRes.sqrt_assign();
-    EXPECT_EQ(pc.at(0), expectedRes);
-    
-    pc = p2.polarCoordinates(p2.origin(), false);
-    expectedRes = 113;
-    expectedRes.sqrt_assign();
-    EXPECT_EQ(pc.at(0), expectedRes);
-    
-    pc = p3.polarCoordinates(p3.origin(), false);
-    expectedRes = 250;
-    expectedRes.sqrt_assign();
-    EXPECT_EQ(pc.at(0), expectedRes);
-    
-    pc = p4.polarCoordinates(p3, false);
 }
 
 TEST_F(PointTest, Neighbours)
