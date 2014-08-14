@@ -102,7 +102,13 @@ TEST_F(PointTest, Constructor)
     
     Point<double> alien2 = alien;
     Point<int> local = alien;
+
     
+#ifdef USE_MPFR_FLOAT
+    // convert to mpfr
+    Point<mpfr_t> local2 = alien;
+#endif
+
 }
 
 TEST_F(PointTest, PolarCoordinates)
