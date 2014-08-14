@@ -24,22 +24,22 @@ namespace hypro
      **********************************/
     
     template<typename Number>
-    unsigned int OrthogonalPolyhedron<Number>::dimension() {
+    unsigned int OrthogonalPolyhedron<Number>::dimension() const {
         return mVertices.dimension();
     }	
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result) {
+    bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result) const {
         return false;
     }
 
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+    bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
         return false;
     }
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+    bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
         assert(mVariables == rhs.mVariables);
         
         // first initialize the set of potential vertices
@@ -51,7 +51,7 @@ namespace hypro
             }
         }
         
-        // create a temporary grid including all pootential vertices
+        // create a temporary grid including all potential vertices
         Grid<Number> tmpGrid;
         tmpGrid.reserveInducedGrid(mVariables);
         tmpGrid.induceGrid(potentialVertices);
@@ -72,37 +72,39 @@ namespace hypro
                 colouringIntersection.insert(std::make_pair(neighbourIt, colour1 && colour2));
             }
             
-            bool isVertex = true;
+            bool isVertex = true, pointExists;
             
-            // check the vertex condition
+            // check the vertex condition: ∀i ∈ {1, . . . , d}. ∃x' ∈ N i(x). c(x'i−) 6= c(x').
             for (auto dimensionIt : mVariables) {
                 auto neighboursInFixed = vertexIt.getAllNeighborsForAFixedDimension(dimensionIt, true); // include the point itself
+                pointExists = false;
                 for (auto neighbourIt : neighboursInFixed) {
-                    Point<Number> predecessor = neighbourIt->getPredecessorInDimension(dimensionIt);
-                    if (colouringIntersection.at(neighbourIt) == colouringIntersection.at(predecessor)) {
-                        isVertex = false;
+                    Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
+                    if (colouringIntersection.at(neighbourIt) != colouringIntersection.at(predecessor)) {
+                        pointExists = true;
                         break;
                     }
                 }
                 
-                if (!isVertex) {
+                if (!pointExists) {
+                    isVertex = false;
                     break;
                 }
             }
             
             // if the point is a vertex, add it with its calculated colour
             if (isVertex) {
-                vertices.insert(vertexIt, colouringIntersection.at(vertexIt));
+                vertices.insert(tmpGrid.calculateOriginal(vertexIt), colouringIntersection.at(vertexIt));
             }
         }
-        
+
         result = OrthogonalPolyhedron<Number>(vertices);
         
         return true;
     }
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) {
+    bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) const {
         if (!mBoxUpToDate) {
             updateBoundaryBox();
         }
@@ -130,12 +132,12 @@ namespace hypro
     }
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) {
+    bool OrthogonalPolyhedron<Number>::contains(const Point<Number>& point) const {
         return containsInduced(mGrid.calculateInduced(point));
     }
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) {
+    bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
         return false;
     }
         
@@ -165,7 +167,7 @@ namespace hypro
      * Returns and if necessary calculates the boundary box.
      */
     template<typename Number>
-    Box<Number> OrthogonalPolyhedron<Number>::boundaryBox() {
+    Box<Number> OrthogonalPolyhedron<Number>::boundaryBox() const {
         if (!mBoxUpToDate) {
             updateBoundaryBox();
         }
@@ -181,7 +183,7 @@ namespace hypro
      * Updates the boundary box
      */
     template<typename Number>
-    void OrthogonalPolyhedron<Number>::updateBoundaryBox() {
+    void OrthogonalPolyhedron<Number>::updateBoundaryBox() const {
         // If there are no vertices, the box is empty
         if (mVertices.empty()) {
             mBoundaryBox.clear();
@@ -219,7 +221,7 @@ namespace hypro
      * @return 
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::containsInduced(const Point<Number>& inducedPoint) {
+    bool OrthogonalPolyhedron<Number>::containsInduced(const Point<Number>& inducedPoint) const {
         // check if we already know the colour of this point
         auto it = mGrid.findInduced(inducedPoint);
         if (it != mGrid.end()) {

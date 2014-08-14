@@ -25,10 +25,10 @@ namespace hypro
     {
         public:
             typedef std::map<Point<Number>, bool> gridMap;
-            typedef std::map<carl::Variable, std::vector<carl::FLOAT_T<Number> > > gridPoints;
+            typedef std::map<const carl::Variable, std::vector<carl::FLOAT_T<Number> > > gridPoints;
         
         private:
-            gridMap mGridMap;
+            mutable gridMap mGridMap; // mutable to allow performance optimization
             gridPoints mInducedGridPoints;
             bool mInduced = false;
             std::vector<carl::Variable> mVariables;
@@ -95,7 +95,7 @@ namespace hypro
              * 
              * @param variables
              */
-            void reserveInducedGrid(std::vector<carl::Variable>& variables);
+            void reserveInducedGrid(const std::vector<carl::Variable>& variables);
             
             /**
              * Returns whether the grid is induced.
@@ -119,7 +119,7 @@ namespace hypro
              * @param point
              * @param colour
              */
-            void insert(const Point<Number>& point, bool colour)
+            void insert(const Point<Number>& point, bool colour) const
             {
                 assert( point.hasDimensions(mVariables) );
                 mGridMap.insert(std::make_pair(calculateInduced(point), colour));
@@ -131,7 +131,7 @@ namespace hypro
              * @param inducedPoint
              * @param colour
              */
-            void insertInduced(const Point<Number>& inducedPoint, bool colour)
+            void insertInduced(const Point<Number>& inducedPoint, bool colour) const
             {
                 assert( inducedPoint.hasDimensions(mVariables) );
                 mGridMap.insert(std::make_pair(inducedPoint, colour));
@@ -143,7 +143,7 @@ namespace hypro
              * @param point
              * @return the colour of the point
              */
-            bool colourAt(const Point<Number>& point)
+            bool colourAt(const Point<Number>& point) const
             {
                 return mGridMap[calculateInduced(point)];
             }
@@ -154,7 +154,7 @@ namespace hypro
              * @param point
              * @return the colour of the induced point
              */
-            bool colourAtInduced(const Point<Number>& inducedPoint)
+            bool colourAtInduced(const Point<Number>& inducedPoint) const
             {
                 return mGridMap[inducedPoint];
             }

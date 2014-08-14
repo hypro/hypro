@@ -50,9 +50,9 @@ namespace hypro
         // the neighbourhood container which maps points to a set of vertices
         NeighbourhoodContainer<Number> mNeighbourhood;
         
-        // the cached boundary box
-        Box<Number> mBoundaryBox;
-        bool mBoxUpToDate = false;
+        // the cached boundary box (mutable to allow performance optimization)
+        mutable Box<Number> mBoundaryBox;
+        mutable bool mBoxUpToDate = false;
         
         // the variables
         std::vector<carl::Variable> mVariables;
@@ -77,15 +77,19 @@ namespace hypro
          * @param induceGrid true by default
          */
         OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true)
-                : mVertices(vertices), mOriginColour(vertices.originIsVertex()), mVariables(vertices.variables())
         {
-            mGrid.reserveInducedGrid(mVariables);
-            if (induceGrid)
-            {
-                mGrid.induceGrid(vertices.vertices());
-                mGrid.insertVerticesInMap(vertices.vertices());
-                vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-                mInducedVertices = VertexContainer<Number>(inducedVertices);
+            mVertices = vertices;
+            if ( !vertices.empty() ) {
+                mOriginColour = vertices.originIsVertex();
+                mVariables = vertices.variables();
+                mGrid.reserveInducedGrid(mVariables);
+                if (induceGrid)
+                {
+                    mGrid.induceGrid(vertices.vertices());
+                    mGrid.insertVerticesInMap(vertices.vertices());
+                    vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+                    mInducedVertices = VertexContainer<Number>(inducedVertices);
+                }
             }
         }
         
@@ -106,13 +110,13 @@ namespace hypro
          * Geometric Object functions
          ***********************************************************************/
         
-        unsigned int dimension();		
-        bool linearTransformation(OrthogonalPolyhedron<Number>& result);
-        bool minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
-        bool intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
-        bool hull(OrthogonalPolyhedron<Number>& result);
-        bool contains(const Point<Number>& point);
-        bool unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs);
+        unsigned int dimension() const;
+        bool linearTransformation(OrthogonalPolyhedron<Number>& result) const;
+        bool minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
+        bool intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
+        bool hull(OrthogonalPolyhedron<Number>& result) const;
+        bool contains(const Point<Number>& point) const;
+        bool unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
         
         /***********************************************************************
          * Other functions
@@ -120,7 +124,7 @@ namespace hypro
         
         bool empty() const;
         std::vector<carl::Variable> variables() const;
-        Box<Number> boundaryBox();
+        Box<Number> boundaryBox() const;
         
         /***********************************************************************
          * Operators
@@ -142,8 +146,8 @@ namespace hypro
         
     private:
         
-        void updateBoundaryBox();
-        bool containsInduced(const Point<Number>& inducedPoint);
+        void updateBoundaryBox() const;
+        bool containsInduced(const Point<Number>& inducedPoint) const;
         
     };
     

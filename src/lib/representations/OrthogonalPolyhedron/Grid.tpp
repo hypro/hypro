@@ -12,7 +12,7 @@
 namespace hypro
 {
     template<typename Number>
-    void Grid<Number>::reserveInducedGrid(std::vector<carl::Variable>& variables)
+    void Grid<Number>::reserveInducedGrid(const std::vector<carl::Variable>& variables)
     {
         std::vector<carl::FLOAT_T<Number> > v;
         for (auto it : variables) {

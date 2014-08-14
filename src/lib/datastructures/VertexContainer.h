@@ -173,7 +173,7 @@ namespace hypro {
 		 * @param c
 		 * @return
 		 */
-		inline std::pair<vSetIt<Number>, bool> insert(const Point<Number>& p,const bool c=false) {
+		inline std::pair<vSetIt<Number>, bool> insert(const Point<Number>& p, const bool c=false) {
 			return insert(Vertex<Number>(p,c));
 		}
 		
@@ -200,7 +200,7 @@ namespace hypro {
 		 * @return
 		 */
 		template <typename BiIterator>
-		inline vSetIt<Number> insert(Point<Number> p, bool c, const BiIterator pos) {
+		inline vSetIt<Number> insert(const Point<Number> p, bool c, const BiIterator pos) {
 			return insert(Vertex<Number>(p,c),pos);
 		}
 		

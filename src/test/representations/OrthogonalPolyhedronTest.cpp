@@ -122,10 +122,12 @@ TEST_F(OrthogonalPolyhedronTest, Intersect)
     container.insert(Point<number_t>(coordinates), false);
     
     OrthogonalPolyhedron<number_t> expected(container);
+
+    std::cout << "p1:" << p1 << std::endl;
+    std::cout << "p2:" << p2 << std::endl;
+    p1.intersect(result, p2);
     
-//    p1.intersect(result, p2);
-    
-//    EXPECT_EQ(expected, result);
+    EXPECT_EQ(expected, result);
 }
 
 TEST_F(OrthogonalPolyhedronTest, Hull)
