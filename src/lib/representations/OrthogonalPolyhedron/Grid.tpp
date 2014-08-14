@@ -100,7 +100,7 @@ namespace hypro
                     point.coordinate(fixed));
 
             // insert the index of the element one before the element found above
-            coordinates.insert(std::make_pair(fixed, carl::FLOAT_T<Number>(it - 1 - inducedGridPoints.begin() )));
+            coordinates.insert(std::make_pair(fixed, carl::FLOAT_T<Number>( Number(it - 1 - inducedGridPoints.begin()) )));
         }
         
         Point<Number> induced(coordinates);
