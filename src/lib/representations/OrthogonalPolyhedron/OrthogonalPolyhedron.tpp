@@ -44,12 +44,7 @@ namespace hypro
         
         // first initialize the set of potential vertices
         vSet<Number> potentialVertices;
-        for (auto vertexIt1 : mVertices.vertices()) {
-            for (auto vertexIt2 : rhs.mVertices.vertices()) {
-                Point<Number> max = Point<Number>::coordinateMax(vertexIt1, vertexIt2);
-                potentialVertices.insert(max);
-            }
-        }
+        calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
         
         // create a temporary grid including all potential vertices
         Grid<Number> tmpGrid;
@@ -67,33 +62,13 @@ namespace hypro
             std::map<Point<Number>, bool> colouringIntersection;
             for (auto neighbourIt : neighbours) {
                 Point<Number> original = tmpGrid.calculateOriginal(neighbourIt);
-                bool colour1 = contains(original);
+                bool colour1 = this->contains(original);
                 bool colour2 = rhs.contains(original);
                 colouringIntersection.insert(std::make_pair(neighbourIt, colour1 && colour2));
             }
             
-            bool isVertex = true, pointExists;
-            
-            // check the vertex condition: ∀i ∈ {1, . . . , d}. ∃x' ∈ N i(x). c(x'i−) 6= c(x').
-            for (auto dimensionIt : mVariables) {
-                auto neighboursInFixed = vertexIt.getAllNeighborsForAFixedDimension(dimensionIt, true); // include the point itself
-                pointExists = false;
-                for (auto neighbourIt : neighboursInFixed) {
-                    Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
-                    if (colouringIntersection.at(neighbourIt) != colouringIntersection.at(predecessor)) {
-                        pointExists = true;
-                        break;
-                    }
-                }
-                
-                if (!pointExists) {
-                    isVertex = false;
-                    break;
-                }
-            }
-            
             // if the point is a vertex, add it with its calculated colour
-            if (isVertex) {
+            if (checkVertexCondition(vertexIt, colouringIntersection)) {
                 vertices.insert(tmpGrid.calculateOriginal(vertexIt), colouringIntersection.at(vertexIt));
             }
         }
@@ -138,7 +113,52 @@ namespace hypro
         
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
-        return false;
+        assert(mVariables == rhs.mVariables);
+        
+        // first initialize the set of potential vertices
+        vSet<Number> potentialVertices;
+        calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
+        for (auto vertexIt : this->mVertices.vertices()) {
+            if ( !rhs.contains(vertexIt) ) {
+                potentialVertices.insert(vertexIt);
+            }
+        }
+        for (auto vertexIt : rhs.mVertices.vertices()) {
+            if ( !this->contains(vertexIt) ) {
+                potentialVertices.insert(vertexIt);
+            }
+        }
+        
+        // create a temporary grid including all potential vertices
+        Grid<Number> tmpGrid;
+        tmpGrid.reserveInducedGrid(mVariables);
+        tmpGrid.induceGrid(potentialVertices);
+        potentialVertices = tmpGrid.translateToInduced(potentialVertices);
+        
+        // the container to store the actual vertices
+        VertexContainer<Number> vertices;
+        
+        // check all potential vertices if they are in fact vertices
+        for (auto vertexIt : potentialVertices) {
+            // calculate the neighbour colouring intersection
+            auto neighbours = vertexIt.getAllNeighbours(true); // include the point itself
+            std::map<Point<Number>, bool> colouringUnion;
+            for (auto neighbourIt : neighbours) {
+                Point<Number> original = tmpGrid.calculateOriginal(neighbourIt);
+                bool colour1 = this->contains(original);
+                bool colour2 = rhs.contains(original);
+                colouringUnion.insert(std::make_pair(neighbourIt, colour1 || colour2));
+            }
+            
+            // if the point is a vertex, add it with its calculated colour
+            if (checkVertexCondition(vertexIt, colouringUnion)) {
+                vertices.insert(tmpGrid.calculateOriginal(vertexIt), colouringUnion.at(vertexIt));
+            }
+        }
+
+        result = OrthogonalPolyhedron<Number>(vertices);
+        
+        return true;
     }
         
     /**********************************
@@ -258,6 +278,57 @@ namespace hypro
         // save calculated colour for later use
         mGrid.insertInduced(inducedPoint, colour);
         return colour;
+    }
+
+    /**
+     * Calculate all potential vertices by combining two sets of vertices.
+     * 
+     * @see intersect
+     * @see unite
+     * 
+     * @param potentialVertices
+     * @param vertices1
+     * @param vertices2
+     */
+    template<typename Number>
+    void OrthogonalPolyhedron<Number>::calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const {
+        for (auto vertexIt1 : vertices1) {
+            for (auto vertexIt2 : vertices2) {
+                Point<Number> max = Point<Number>::coordinateMax(vertexIt1, vertexIt2);
+                potentialVertices.insert(max);
+            }
+        }   
+    }
+    
+    /**
+     * Checks if the given point is a vertex based on the vertex condition.
+     * ∀i ∈ {1, . . . , d}. ∃x' ∈ N i(x). c(x'i−) 6= c(x').
+     * 
+     * @param vertex
+     * @param colouring
+     * @return bool
+     */
+    template<typename Number>
+    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool> colouring) const {
+        bool pointExists;
+        
+        for (auto dimensionIt : point.variables()) {
+            auto neighboursInFixed = point.getAllNeighborsForAFixedDimension(dimensionIt, true); // include the point itself
+            pointExists = false;
+            for (auto neighbourIt : neighboursInFixed) {
+                Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
+                if (colouring.at(neighbourIt) != colouring.at(predecessor)) {
+                    pointExists = true;
+                    break;
+                }
+            }
+
+            if (!pointExists) {
+                return false;
+            }
+        }
+        
+        return true;
     }
     
 }

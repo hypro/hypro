@@ -221,6 +221,63 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
     }
 }
 
+TEST_F(OrthogonalPolyhedronTest, Unite) {
+    OrthogonalPolyhedron<number_t> result;
+    
+    VertexContainer<number_t> container;
+    Point<number_t>::rawCoordinateMap coordinates;
+        
+    coordinates[x] = 1; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 1; coordinates[y] = 4;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 2; coordinates[y] = 2;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 2; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 2; coordinates[y] = 4;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 2; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 3; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 3; coordinates[y] = 6;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 4; coordinates[y] = 2;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 4; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 5; coordinates[y] = 3;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 5; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), true);
+        
+    coordinates[x] = 7; coordinates[y] = 5;
+    container.insert(Point<number_t>(coordinates), false);
+        
+    coordinates[x] = 7; coordinates[y] = 6;
+    container.insert(Point<number_t>(coordinates), false);
+    
+    OrthogonalPolyhedron<number_t> expected(container);
+
+    std::cout << "p1:" << p1 << std::endl;
+    std::cout << "p2:" << p2 << std::endl;
+    p1.unite(result, p2);
+    
+    EXPECT_EQ(expected, result);
+}
+
 TEST_F(OrthogonalPolyhedronTest, Properties)
 {
     EXPECT_FALSE(p1.empty());

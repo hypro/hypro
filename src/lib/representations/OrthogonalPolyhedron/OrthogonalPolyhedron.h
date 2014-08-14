@@ -148,6 +148,8 @@ namespace hypro
         
         void updateBoundaryBox() const;
         bool containsInduced(const Point<Number>& inducedPoint) const;
+        void calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const;
+        bool checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool> colouring) const;
         
     };
     
