@@ -75,7 +75,7 @@ namespace hypro
                 
                 // insert the element one before the element found above
                 coordinates.insert(std::make_pair(fixed,
-                        inducedGridPoints.at(it - 1 - inducedGridPoints.begin())));
+                        inducedGridPoints.at(it - inducedGridPoints.begin() - 1)));
             }
         }
         
