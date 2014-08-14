@@ -309,7 +309,7 @@ namespace hypro
      * @return bool
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool> colouring) const {
+    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool>& colouring) const {
         bool pointExists;
         
         for (auto dimensionIt : point.variables()) {
