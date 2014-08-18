@@ -241,6 +241,16 @@ namespace hypro
             {
                 mGridMap.clear();
             }
+            
+            Grid<Number>& operator=(const Grid<Number>& rhs)
+            {
+                if( this != &rhs )
+                {
+                    Grid<Number> tmp(rhs);
+                    std::swap(*this,tmp);
+                }
+                return *this;
+            }
     };
 }
 

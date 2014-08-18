@@ -842,4 +842,17 @@ namespace hypro {
         }
         return result;
     }
+    
+    template<typename Number>
+    carl::FLOAT_T<Number> operator*( const Point<Number>& lhs, const Point<Number>& rhs )
+    {
+        assert(lhs.dimension() == rhs.dimension());
+        carl::FLOAT_T<Number> result = 0;
+        for(auto lCoordinate : lhs)
+        {
+            assert(rhs.hasDimension(lCoordinate.first));
+            result += lCoordinate.second*rhs.coordinate(lCoordinate.first);
+        }
+        return result;
+    }
 }

@@ -3,7 +3,7 @@
 #include "carl/numbers/FLOAT_T.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/representations/VPolytope/VPolytope.h"
+#include "../../lib/representations/Polytopes/VPolytope/VPolytope.h"
 
 using namespace hypro;
 using namespace carl;
@@ -41,7 +41,7 @@ protected:
     Variable y = pool.getFreshVariable("y");
     Variable z = pool.getFreshVariable("z");
 
-    VPolytope<number_t>::vertices points;
+    VPolytope<number_t>::verticeSet points;
     
     VPolytope<number_t> vpt1;
     VPolytope<number_t> vpt2;
