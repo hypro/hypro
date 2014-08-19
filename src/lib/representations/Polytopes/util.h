@@ -16,12 +16,14 @@ namespace hypro
 namespace polytope
 {
     template<typename Number>
-    struct Hyperplane
+    class Hyperplane
     {
+        private:
         Point<Number>   mNormal;
         Number          mScalar;
         unsigned        mDimension;
         
+        public:
         Hyperplane() :
         mNormal(),
         mScalar(),
@@ -42,6 +44,12 @@ namespace polytope
         mScalar(scalar),
         mDimension(vector.dimension())
         {}
+        
+        unsigned dimension() const
+        {
+            return mNormal.dimension();
+        }
+        
     };
     
 
