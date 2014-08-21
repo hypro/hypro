@@ -127,7 +127,7 @@ namespace polytope
             void add(const Point<Number>* vector)
             {
                 mVectors.push_back(vector);
-                mDimension = mDimension < vector.dimension() ? vector.dimension : mDimension;
+                mDimension = mDimension < vector->dimension() ? vector->dimension : mDimension;
             }
             
             bool contains(const Point<Number>* vector) const
