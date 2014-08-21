@@ -11,7 +11,7 @@
 #include "../util.h"
 #include "../../GeometricObject.h"
 #include <carl/core/Variable.h>
-#include <Eigen/Geometry>
+#include <eigen3/Eigen/Geometry>
 #include <set>
 #include <cassert>
 

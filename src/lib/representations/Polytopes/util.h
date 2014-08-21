@@ -57,7 +57,7 @@ namespace polytope
     class Cone 
     {
         public:
-            typedef std::vector<const Point<Number> > vectors;
+            typedef std::vector<const Point<Number>* > vectors;
         private:
             vectors     mVectors;
             unsigned    mDimension;
@@ -103,13 +103,13 @@ namespace polytope
                 return mVectors.size();
             }
             
-            const Point<Number>& get(unsigned index) const
+            const Point<Number>* get(unsigned index) const
             {
                 assert(index < mVectors.size());
                 return mVectors.at(index);
             }
             
-            const Point<Number>& get(typename vectors::const_iterator pos) const
+            const Point<Number>* get(typename vectors::const_iterator pos) const
             {
                 return *pos;
             }
@@ -124,18 +124,19 @@ namespace polytope
                 return mVectors.end();
             }
             
-            void add(const Point<Number>& vector)
+            void add(const Point<Number>* vector)
             {
                 mVectors.push_back(vector);
                 mDimension = mDimension < vector.dimension() ? vector.dimension : mDimension;
             }
             
-            bool contains(const Point<Number>& vector) const
+            bool contains(const Point<Number>* vector) const
             {
+            	// Todo
                 return false;
             }
             
-            Cone<Number> operator=(const Cone<Number>& rhs) const
+            Cone<Number> operator=(const Cone<Number>& rhs)
             {
                 if( this != &rhs )
                 {
@@ -150,7 +151,7 @@ namespace polytope
     class Fan 
     {
         public:
-            typedef std::vector<const Cone<Number> > cones;
+            typedef std::vector<const Cone<Number>* > cones;
         private:
             cones       mCones;
             unsigned    mDimension;
@@ -180,7 +181,7 @@ namespace polytope
                 return mCones;
             }
             
-            const Cone<Number>& get(unsigned index) const
+            const Cone<Number>* get(unsigned index) const
             {
                 assert(index < mCones.size());
                 return mCones.at(index);
@@ -196,13 +197,13 @@ namespace polytope
                 return mCones.size();
             }
             
-            void add(const Cone<Number>& cone)
+            void add(const Cone<Number>* cone)
             {
                 mCones.push_back(cone);
-                mDimension = mDimension < cone.dimension() ? cone.dimension() : mDimension;
+                mDimension = mDimension < cone->dimension() ? cone->dimension() : mDimension;
             }
             
-            const Cone<Number>& containingCone(const Point<Number>& vector) const
+            const Cone<Number>* containingCone(const Point<Number>& vector) const
             {
                 // set up glpk
                 glp_prob *cones;
@@ -245,7 +246,7 @@ namespace polytope
                 glp_delete_prob(cones);
             }
             
-            Fan<Number> operator=(const Fan<Number>& rhs) const
+            Fan<Number> operator=(const Fan<Number>& rhs)
             {
                 if( this != &rhs )
                 {
