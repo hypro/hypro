@@ -137,7 +137,12 @@ namespace polytope
             
             Cone<Number> operator=(const Cone<Number>& rhs) const
             {
-                return Cone<Number>(rhs);
+                if( this != &rhs )
+                {
+                    Cone<Number> tmp(rhs);
+                    std::swap(*this,tmp);
+                }
+                return *this;
             }
     };
     
@@ -238,6 +243,16 @@ namespace polytope
                 // TODO output & result interpretation
                 
                 glp_delete_prob(cones);
+            }
+            
+            Fan<Number> operator=(const Fan<Number>& rhs) const
+            {
+                if( this != &rhs )
+                {
+                    Fan<Number> tmp(rhs);
+                    std::swap(*this,tmp);
+                }
+                return *this;
             }
     };
     

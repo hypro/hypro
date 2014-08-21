@@ -4,5 +4,7 @@ set(hypro_hpolytope_sources
 
 set(hypro_vpolytope_headers
 	HPolytope.h
+        util.h
+        simplex.h
 	PARENT_SCOPE
 )
