@@ -105,6 +105,7 @@ namespace hypro
         
         // implemented according to Komei Fukuda 2004
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
+        bool altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);
@@ -118,6 +119,15 @@ namespace hypro
         
         
         Polytope<Number>& operator= (const Polytope<Number>& rhs);
+
+        /**
+         * Auxiliary functions
+         */
+        int computeMaxVDegree(Polytope<Number> _poly);
+        Point<Number> computeInitVertex(Polytope<Number> _poly1, Polytope<Number> _poly2);
+        bool adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter);
+        Point<Number> localSearch(Point<Number> _vertex);
+
     };
 } // namespace
 

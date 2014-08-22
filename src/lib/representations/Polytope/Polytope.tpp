@@ -321,6 +321,87 @@ namespace hypro
         return true;
     }
     
+    //@author: Chris K.
+    template<typename Number>
+        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const {
+
+    	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+
+    	//delta = amount of vertices
+    	int delta_1 = computeDelta(this);
+    	int delta_2 = computeDelta(rhs);
+
+    	//initVertex = initial extreme point & root of spanning tree
+    	Point<Number> initVertex = computeInitVertex(this,rhs);
+    	result.addPoint(initVertex);
+
+    	//set currentVertex to initVertex
+    	Point<Number> currentVertex = initVertex;
+
+    	//counter initially (1,0)
+    	std::pair<int,int> counter;
+    	counter.first = 1;
+    	counter.second = 0;
+
+    	Point<Number> nextVertex;
+
+    	do {
+
+    		while (counter.first < 2 && counter.second < delta_2) {
+
+    			//increment counter by 1
+    			if (counter.second == delta_1) {
+    				counter.first = 2;
+    				counter.second = 1;
+    			} else {
+    				counter.second += 1;
+    			}
+
+    			//choose next Vertex, only continue if one exists
+    			if (adjOracle(nextVertex, currentVertex, counter)) {
+    				Point<Number> localSearchVertex = localSearch(nextVertex);
+    				if (localSearchVertex == currentVertex) {
+    					//reverse traverse
+    					currentVertex = nextVertex;
+    					counter.first = 1;
+    					counter.second =0;
+
+    					//add to result Poly
+    					result.addPoint(currentVertex);
+    				}
+    			}
+    		}
+    		if (currentVertex != initVertex) {
+    			//forward traverse
+    			Point<Number> temp = currentVertex;
+    			currentVertex = localSearch(currentVertex);
+
+    			//restore counter such that adjOracle(currentVertex,counter) = temp
+    			//approach: start at (1,1), increment till desired counter is found
+    			counter.first = 1;
+    			counter.second = 0;
+
+    			Point<Number> result;
+    			do {
+    	    			//increment counter by 1
+    	    			if (counter.second == delta_1) {
+    	    				counter.first = 2;
+    	    				counter.second = 1;
+    	    			} else {
+    	    				counter.second += 1;
+    	    			}
+    	    			bool not_used = adjOracle(result, currentVertex, counter);
+
+    			} while (result != temp);
+
+    		}
+
+    	} while ( (currentVertex != initVertex) && (counter.first != 2 && counter.second != delta_2) );
+
+    	return true;
+
+    }
+
     template<typename Number>
     bool Polytope<Number>::intersect(Polytope<Number>& result, const Polytope<Number>& rhs)
     {
@@ -426,4 +507,36 @@ namespace hypro
     { 
         return (rhs.rawPolyhedron() != lhs.rawPolyhedron());
     }
+
+    /**
+     * @author: Chris K.
+     * in the following: Utility functions for altMinkowskiSum()
+     */
+
+    //returns max. Vertex degree in a Polytope
+    template<typename Number>
+    int computeMaxVDegree(Polytope<Number> _poly) {
+    	return 0;
+    }
+
+    //returns one extreme point of P = P1+P2
+    template<typename Number>
+    Point<Number> computeInitVertex(Polytope<Number> _poly1, Polytope<Number> _poly2) {
+
+    }
+
+    //adjacency Oracle
+    //TODO add params
+    template<typename Number>
+    bool adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter) {
+    	return true;
+    }
+
+    //local Search function
+    //TODO add params
+    template<typename Number>
+    Point<Number> localSearch(Point<Number> _vertex){
+
+    }
+
 }

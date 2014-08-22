@@ -105,7 +105,7 @@ namespace hypro
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 				   	//TODO REMOVE
-				   	radius = 2.5;
+				   	//radius = 2.5;
 
 					//TODO remove
 					std::cout << "\n";
@@ -352,7 +352,7 @@ namespace hypro
 							R = R_new;
 						}
 
-						//R_new = Reach(R_new)/R
+						//R_new = Reach(R_new)\R
 						std::vector<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, map);
 						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 											std::inserter(R_new, R_new.begin()));
