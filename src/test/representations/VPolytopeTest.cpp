@@ -50,8 +50,8 @@ protected:
 
 TEST_F(VPolytopeTest, Constructor)
 {
-    VPolytope<number_t> aVPolytope = VPolytope<number_t>();
-    VPolytope<number_t> anotherVPolytope = VPolytope<number_t>(points);
+    //VPolytope<number_t> aVPolytope = VPolytope<number_t>();
+    //VPolytope<number_t> anotherVPolytope = VPolytope<number_t>(points);
     SUCCEED();
 }
 
@@ -74,13 +74,13 @@ TEST_F(VPolytopeTest, LinearTransformation)
 
 TEST_F(VPolytopeTest, MinkowskiSum)
 {
-    VPolytope<number_t> result;
+    //VPolytope<number_t> result;
 }
 
 TEST_F(VPolytopeTest, Intersection)
 {
-    VPolytope<number_t> result;
-    vpt1.intersect(result, vpt2);
+    //VPolytope<number_t> result;
+    //vpt1.intersect(result, vpt2);
 }
 
 TEST_F(VPolytopeTest, ConvexHull)
@@ -90,7 +90,7 @@ TEST_F(VPolytopeTest, ConvexHull)
 
 TEST_F(VPolytopeTest, Membership)
 {
-    Point<number_t> p;
-    p.setCoordinate(x, 4);
-    p.setCoordinate(y, 2);
+    //Point<number_t> p;
+    //p.setCoordinate(x, 4);
+    //p.setCoordinate(y, 2);
 }

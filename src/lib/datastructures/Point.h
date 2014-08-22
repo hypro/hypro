@@ -816,7 +816,7 @@ namespace hypro {
                 return *this;
             }
             
-            Point<Number>& operator*=(Number factor)
+            Point<Number>& operator*=(const carl::FLOAT_T<Number> factor)
             {
                 for( auto lCoordinate : mCoordinates)
                 {
@@ -908,7 +908,7 @@ namespace hypro {
     }
     
     template<typename Number>
-    const Point<Number> operator*( const Point<Number>& lhs, const Number& factor)
+    const Point<Number> operator*( const Point<Number>& lhs, const carl::FLOAT_T<Number>& factor)
     {
         Point<Number> result = lhs;
         for(auto& coordinate : result)

@@ -1,8 +1,9 @@
 /* 
  * File:   util.h
- * Author: stefan
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
- * Created on August 11, 2014, 4:15 PM
+ * @since   2014-08-11
+ * @version 2014-08-22
  */
 
 #pragma once
@@ -63,7 +64,7 @@ namespace polytope
         Point<Number> intersection(const Point<Number>& vector) const
         {
             Point<Number> result = vector;
-            Number factor = mScalar / (mNormal*vector);
+            carl::FLOAT_T<Number> factor = mScalar / (mNormal*vector);
             result *= factor;
             return result;
         }
