@@ -60,6 +60,13 @@ namespace polytope
             return mScalar;
         }
         
+        Point<Number> intersection(const Point<Number>& vector) const
+        {
+            Point<Number> result = vector;
+            Number factor = mScalar / (mNormal*vector);
+            result *= factor;
+            return result;
+        }
     };
     
 

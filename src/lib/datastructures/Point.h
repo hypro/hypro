@@ -815,6 +815,15 @@ namespace hypro {
                 }
                 return *this;
             }
+            
+            Point<Number>& operator*=(Number factor)
+            {
+                for( auto lCoordinate : mCoordinates)
+                {
+                    mCoordinates[lCoordinate.first] = lCoordinate.second*factor;
+                }
+                return *this;
+            }
 
             /**
              *
@@ -894,6 +903,17 @@ namespace hypro {
         {
             assert(rhs.hasDimension(lCoordinate.first));
             result += lCoordinate.second*rhs.coordinate(lCoordinate.first);
+        }
+        return result;
+    }
+    
+    template<typename Number>
+    const Point<Number> operator*( const Point<Number>& lhs, const Number& factor)
+    {
+        Point<Number> result = lhs;
+        for(auto& coordinate : result)
+        {
+            coordinate *= factor;
         }
         return result;
     }
