@@ -50,6 +50,16 @@ namespace polytope
             return mNormal.dimension();
         }
         
+        Point<Number> normal() const
+        {
+            return mNormal;
+        }
+        
+        Number offset() const
+        {
+            return mScalar;
+        }
+        
     };
     
 
@@ -59,29 +69,29 @@ namespace polytope
         public:
             typedef std::vector<const Hyperplane<Number>* > planes;
         private:
-            planes     mVectors;
+            planes     mPlanes;
             unsigned    mDimension;
         public:
             Cone() :
-            mVectors(),
+            mPlanes(),
             mDimension()
             {}
             
             ~Cone()
             {
-                mVectors.clear();
+                mPlanes.clear();
             }
             
             Cone(const Cone& orig) :
-            mVectors(orig.get()),
+            mPlanes(orig.get()),
             mDimension(orig.dimension())
             {}
             
             Cone(unsigned dimension) :
-            mVectors(dimension),
+            mPlanes(dimension),
             mDimension()
             {
-                assert(mVectors.max_size() == dimension);
+                assert(mPlanes.max_size() == dimension);
             }
             
             /*
@@ -90,7 +100,7 @@ namespace polytope
             
             const planes& get() const
             {
-                return mVectors;
+                return mPlanes;
             }
             
             unsigned dimension() const
@@ -100,13 +110,13 @@ namespace polytope
             
             unsigned size() const
             {
-                return mVectors.size();
+                return mPlanes.size();
             }
             
             const Hyperplane<Number>* get(unsigned index) const
             {
-                assert(index < mVectors.size());
-                return mVectors.at(index);
+                assert(index < mPlanes.size());
+                return mPlanes.at(index);
             }
             
             const Hyperplane<Number>* get(typename planes::const_iterator pos) const
@@ -116,18 +126,30 @@ namespace polytope
             
             typename planes::const_iterator begin()
             {
-                return mVectors.begin();
+                return mPlanes.begin();
             }
             
             typename planes::const_iterator end()
             {
-                return mVectors.end();
+                return mPlanes.end();
             }
             
             void add(const Hyperplane<Number>* plane)
             {
-                mVectors.push_back(plane);
+                mPlanes.push_back(plane);
                 mDimension = mDimension < plane->dimension() ? plane->dimension : mDimension;
+            }
+            
+            Point<Number> getUnitAverageVector() const
+            {
+                assert(!mPlanes.empty());
+                Point<Number> result;
+                unsigned numberPlanes = mPlanes.size();
+                for(auto& plane : mPlanes)
+                {
+                    result += (plane->normal()/numberPlanes);
+                }
+                return result;
             }
             
             bool contains(const Point<Number>* vector) const
@@ -215,10 +237,10 @@ namespace polytope
                 {
                     vectors.insert(vectors.end(), cone.begin(), cone.end());
                 }             
-                unsigned numVectors = vectors.size();
-                unsigned elements = this->mDimension * numVectors;
+                unsigned numPlanes = vectors.size();
+                unsigned elements = this->mDimension * numPlanes;
                 
-                glp_add_cols(cones, numVectors);
+                glp_add_cols(cones, numPlanes);
                 glp_add_rows(cones, this->mDimension);
                 
                 int ia[elements];
@@ -228,7 +250,7 @@ namespace polytope
                 
                 for(unsigned i = 1; i <= this->mDimension; ++i)
                 {
-                    for(unsigned j = 1; j <= numVectors; ++j)
+                    for(unsigned j = 1; j <= numPlanes; ++j)
                     {
                         ia[pos] = i;
                         ja[pos] = j;

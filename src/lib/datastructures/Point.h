@@ -784,6 +784,37 @@ namespace hypro {
             {
                 return !(p1 == p2);
             }
+            
+            Point<Number>& operator+=(const Point<Number>& rhs)
+            {
+                assert(this->dimension() == rhs.dimension());
+                for( auto lCoordinate : mCoordinates)
+                {
+                    assert(rhs.hasDimension(lCoordinate.first));
+                    mCoordinates[lCoordinate.first] = lCoordinate.second+rhs.coordinate(lCoordinate.first);
+                }
+                return *this;
+            }
+            
+            Point<Number>& operator-=(const Point<Number>& rhs)
+            {
+                assert(this->dimension() == rhs.dimension());
+                for( auto lCoordinate : mCoordinates)
+                {
+                    assert(rhs.hasDimension(lCoordinate.first));
+                    mCoordinates[lCoordinate.first] = lCoordinate.second-rhs.coordinate(lCoordinate.first);
+                }
+                return *this;
+            }
+            
+            Point<Number>& operator/=(unsigned quotient)
+            {
+                for( auto lCoordinate : mCoordinates)
+                {
+                    mCoordinates[lCoordinate.first] = lCoordinate.second/quotient;
+                }
+                return *this;
+            }
 
             /**
              *
@@ -839,6 +870,17 @@ namespace hypro {
         {
             assert(rhs.hasDimension(lCoordinate.first));
             result.setCoordinate(lCoordinate.first, lCoordinate.second-rhs.coordinate(lCoordinate.first));
+        }
+        return result;
+    }
+    
+    template<typename Number>
+    const Point<Number> operator/( const Point<Number>& lhs, unsigned quotient )
+    {
+        Point<Number> result;
+        for(auto& lCoordinate : lhs)
+        {
+            result.setCoordinate(lCoordinate.first,(lCoordinate.second/quotient));
         }
         return result;
     }
