@@ -23,6 +23,7 @@ set( EXAMPLES
     example_squareroot
     example_cubicroot
     example_test
+    example_vertexEnumeration
 )
 
 foreach( example ${EXAMPLES} )

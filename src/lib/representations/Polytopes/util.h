@@ -57,9 +57,9 @@ namespace polytope
     class Cone 
     {
         public:
-            typedef std::vector<const Point<Number>* > vectors;
+            typedef std::vector<const Hyperplane<Number>* > planes;
         private:
-            vectors     mVectors;
+            planes     mVectors;
             unsigned    mDimension;
         public:
             Cone() :
@@ -88,7 +88,7 @@ namespace polytope
              * Getters & setters
              */
             
-            const vectors& get() const
+            const planes& get() const
             {
                 return mVectors;
             }
@@ -103,31 +103,31 @@ namespace polytope
                 return mVectors.size();
             }
             
-            const Point<Number>* get(unsigned index) const
+            const Hyperplane<Number>* get(unsigned index) const
             {
                 assert(index < mVectors.size());
                 return mVectors.at(index);
             }
             
-            const Point<Number>* get(typename vectors::const_iterator pos) const
+            const Hyperplane<Number>* get(typename planes::const_iterator pos) const
             {
                 return *pos;
             }
             
-            typename vectors::const_iterator begin()
+            typename planes::const_iterator begin()
             {
                 return mVectors.begin();
             }
             
-            typename vectors::const_iterator end()
+            typename planes::const_iterator end()
             {
                 return mVectors.end();
             }
             
-            void add(const Point<Number>* vector)
+            void add(const Hyperplane<Number>* plane)
             {
-                mVectors.push_back(vector);
-                mDimension = mDimension < vector->dimension() ? vector->dimension : mDimension;
+                mVectors.push_back(plane);
+                mDimension = mDimension < plane->dimension() ? plane->dimension : mDimension;
             }
             
             bool contains(const Point<Number>* vector) const
