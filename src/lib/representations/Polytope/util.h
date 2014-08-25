@@ -76,7 +76,7 @@ namespace polytope
         {
             //std::cout << "Var: " << (*pointIt).first << " found as: " << VariablePool::getInstance().variable((*pointIt).first) << std::endl;
             tmpValue = (*pointIt).second.toDouble() * fReach_DENOMINATOR;
-            std::cout << "tmpValue: " << tmpValue << std::endl;
+            //std::cout << "tmpValue: " << tmpValue << std::endl;
             Linear_Expression tmp = tmpValue * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
         }
@@ -98,7 +98,6 @@ namespace polytope
             tmpValue = point(i,0).toDouble() * fReach_DENOMINATOR;
             Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex(i);
             ls += tmp;
-            ++i;
         }
         Generator result = Generator::point(ls, fReach_DENOMINATOR);
         return result;
@@ -118,7 +117,7 @@ namespace polytope
                 coefficient = (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si();
                 divisor = (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
                 value = coefficient/divisor;
-                std::cout << "Coordinates: " << value << std::endl;
+                //std::cout << "Coordinates: " << value << std::endl;
                 //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }

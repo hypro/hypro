@@ -20,6 +20,8 @@
 #include "../GeometricObject.h"
 #include "../../datastructures/Point.h"
 
+#include "../Polytopes/util.h"
+
 
 using namespace Parma_Polyhedra_Library;
 
@@ -103,8 +105,8 @@ namespace hypro
         unsigned int dimension() const;
         bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector()) const;
         
-        // implemented according to Komei Fukuda 2004
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
+        // implemented according to Komei Fukuda 2004
         bool altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
@@ -123,8 +125,9 @@ namespace hypro
         /**
          * Auxiliary functions
          */
-        int computeMaxVDegree(Polytope<Number> _poly);
-        Point<Number> computeInitVertex(Polytope<Number> _poly1, Polytope<Number> _poly2);
+        int computeMaxVDegree();
+        Point<Number> computeMaxPoint();
+        Point<Number> computeInitVertex(Polytope<Number> _secondPoly);
         bool adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter);
         Point<Number> localSearch(Point<Number> _vertex);
 

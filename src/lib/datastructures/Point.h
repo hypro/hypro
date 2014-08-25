@@ -49,6 +49,9 @@ namespace hypro {
 
         protected:
             coordinateMap mCoordinates;
+
+            //Adjacency List of this Point
+            std::vector<Point<Number>*> mNeighbors;
 		
         public:
         
@@ -155,6 +158,18 @@ namespace hypro {
              * Getter & Setter
              */
             
+            std::vector<Point<Number>*> neighbors() const {
+            	return mNeighbors;
+            }
+
+            void setNeighbors(std::vector<Point<Number>*> _neighbors) {
+            	mNeighbors = _neighbors;
+            }
+
+            void addNeighbor(Point<Number>* _neighbor) {
+            	mNeighbors.push_back(_neighbor);
+            }
+
             Point<Number> origin() const
             {
                 Point<Number> result;

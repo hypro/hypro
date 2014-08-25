@@ -75,12 +75,12 @@ namespace hypro
             polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
-            	std::cout << "Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble() << std::endl;
+            	//std::cout << "Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble() << std::endl;
             	polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble());
                 //polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
                 //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
             }
-            std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR).toDouble() << std::endl;
+            //std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR).toDouble() << std::endl;
             polynom.set_inhomogeneous_term(-(b(rowIndex,0)*fReach_DENOMINATOR).toDouble());
             //polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
@@ -305,12 +305,12 @@ namespace hypro
                 
                 //std::cout << __func__ << " Point: " << tmpB << std::endl;
                 
-                std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
-                std::cout << "tmpA: " << tmpA << std::endl;
+                //std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
+                //std::cout << "tmpA: " << tmpA << std::endl;
 
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                std::cout << "Add point: " << res << std::endl;
+                //std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
                 //std::cout << "Intermediate result:" << std::endl;
                 //result.print();
@@ -327,12 +327,12 @@ namespace hypro
 
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
-    	//delta = amount of vertices
-    	int delta_1 = computeDelta(this);
-    	int delta_2 = computeDelta(rhs);
+    	//delta = max vertex degree
+    	int delta_1 = this->computeMaxVDegree();
+    	int delta_2 = rhs.computeMaxVDegree();
 
     	//initVertex = initial extreme point & root of spanning tree
-    	Point<Number> initVertex = computeInitVertex(this,rhs);
+    	Point<Number> initVertex = this->computeInitVertex(rhs);
     	result.addPoint(initVertex);
 
     	//set currentVertex to initVertex
@@ -451,8 +451,8 @@ namespace hypro
         //TODO: What about the constant factor?
         //Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic> matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Dynamic, Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
         //matrix = hypro::polytope::polytopeToMatrix<Number>(this->mPolyhedron);
-    	std::cout << "in hausdorffError() - matrix: " << std::endl;
-    	std::cout << matrix << std::endl;
+    	//std::cout << "in hausdorffError() - matrix: " << std::endl;
+    	//std::cout << matrix << std::endl;
         
         // TODO: Matrix lpNorm function of Eigen does not work ...
         //carl::FLOAT_T<Number> t = matrix.lpNorm<Infinity>();
@@ -514,15 +514,43 @@ namespace hypro
      */
 
     //returns max. Vertex degree in a Polytope
+    //TODO has to be assured that no inner vertices exist -> assume convex Hull?
     template<typename Number>
-    int computeMaxVDegree(Polytope<Number> _poly) {
-    	return 0;
+    int Polytope<Number>::computeMaxVDegree() {
+    	std::set<Point<Number>> points = this->points();
+    	int max = 0;
+
+    	for (typename std::set<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
+    		if (max < it->neighbors().size()) {max=it->neighbors().size();}
+    	}
+
+    	return max;
+    }
+
+    //returns the point of of a Polytope with maximum x-value
+    //-> unique maximizer extreme point v of cx over P with c = (1,0,0..)
+    template<typename Number>
+    Point<Number> Polytope<Number>::computeMaxPoint() {
+    	std::set<Point<Number>> points = this->points();
+    	Point<Number> result = *points.begin();
+
+    	for (typename std::set<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
+    		auto coeff = it->coordinates().begin();
+    		if (result.coordinate(coeff->first) < it->coordinate(coeff->first)) {result = *it;}
+    	}
+
+    	return result;
     }
 
     //returns one extreme point of P = P1+P2
     template<typename Number>
-    Point<Number> computeInitVertex(Polytope<Number> _poly1, Polytope<Number> _poly2) {
+    Point<Number> Polytope<Number>::computeInitVertex(Polytope<Number> _secondPoly) {
+    	Point<Number> p1 = this->computeMaxPoint();
+    	Point<Number> p2 = _secondPoly.computeMaxPoint();
 
+    	Point<Number> res = p1.extAdd(p2);
+
+    	return res;
     }
 
     //adjacency Oracle
