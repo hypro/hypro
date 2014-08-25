@@ -9,6 +9,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_executable(runAlgorithmTests
             ForwardReachabilityTest.cpp
 	    #HyReachTest.cpp
+	    	MinkowskiSumTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)
