@@ -3,6 +3,7 @@
 #include <mpfr.h>
 #include <set>
 #include <map>
+#include "util/VariablePool.h"
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>

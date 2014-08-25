@@ -20,9 +20,9 @@ namespace polytope
     class Hyperplane
     {
         private:
-        Point<Number>   mNormal;
-        Number          mScalar;
-        unsigned        mDimension;
+        Point<Number>           mNormal;
+        carl::FLOAT_T<Number>   mScalar;
+        unsigned                mDimension;
         
         public:
         Hyperplane() :
@@ -42,7 +42,7 @@ namespace polytope
         
         Hyperplane(const Point<Number>& vector, const Number& scalar) :
         mNormal(vector),
-        mScalar(scalar),
+        mScalar(carl::FLOAT_T<Number>(scalar)),
         mDimension(vector.dimension())
         {}
         
@@ -58,7 +58,7 @@ namespace polytope
         
         Number offset() const
         {
-            return mScalar;
+            return mScalar.value();
         }
         
         Point<Number> intersection(const Point<Number>& vector) const
@@ -68,6 +68,12 @@ namespace polytope
             result *= factor;
             return result;
         }
+        
+        private:
+            const carl::FLOAT_T<Number>& internalOffset() const
+            {
+                return mScalar;
+            }
     };
     
 

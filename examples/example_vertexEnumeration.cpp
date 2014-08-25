@@ -10,5 +10,6 @@ using namespace hypro;
 
 
 int main(int argc, char** argv) {
+    HPolytope<double> poly(polytope::Hyperplane<double>(Point<double>({-1,-1}), 3));
     
 }

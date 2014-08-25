@@ -80,6 +80,16 @@ namespace hypro {
             {
                 mCoordinates[var] = carl::FLOAT_T<Number>(value);
             }
+            
+            Point(std::initializer_list<Number> coordinates)
+            {
+                unsigned count = 0;
+                for(auto& coordinate : coordinates)
+                {
+                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), carl::FLOAT_T<Number>(coordinate)) );
+                    ++count;
+                }
+            }
 
             /**
              * Constructs a point with the passed coordinates

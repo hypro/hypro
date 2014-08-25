@@ -36,7 +36,7 @@ protected:
     {
     }
 	
-    VariablePool& pool = VariablePool::getInstance();
+    carl::VariablePool& pool = carl::VariablePool::getInstance();
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
     Variable z = pool.getFreshVariable("z");

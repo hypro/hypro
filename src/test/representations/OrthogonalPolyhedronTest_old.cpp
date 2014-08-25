@@ -27,7 +27,7 @@ class OrthogonalPolyhedronTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        VariablePool& pool = VariablePool::getInstance();
+        carl::VariablePool& pool = carl::VariablePool::getInstance();
         Variable x = pool.getFreshVariable(carl::VT_INT);
         Variable y = pool.getFreshVariable(carl::VT_INT);
         

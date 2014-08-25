@@ -14,7 +14,7 @@ protected:
     {
 		// p1
         Point<number_t>::coordinateMap coordinates1;
-		VariablePool& pool = VariablePool::getInstance();
+		carl::VariablePool& pool = carl::VariablePool::getInstance();
 		Variable x = pool.getFreshVariable(carl::VariableType::VT_INT);
 		Variable y = pool.getFreshVariable(carl::VariableType::VT_INT);
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
