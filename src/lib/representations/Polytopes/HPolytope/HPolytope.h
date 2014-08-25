@@ -52,14 +52,14 @@ namespace hypro
             return mFan;
         }
         
-        std::pair<typename HyperplaneVector::iterator, bool> addConstraint(const polytope::Hyperplane<Number>& plane)
+        void addConstraint(const polytope::Hyperplane<Number>& plane)
         {
             assert(mDimension == 0 || mDimension == plane.dimension());
             if(mDimension == 0)
             {
                 mDimension = plane.dimension();
             }
-            return mHPlanes.insert(plane);
+            return mHPlanes.push_back(plane);
         }
         
         void addConstraints(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end)
