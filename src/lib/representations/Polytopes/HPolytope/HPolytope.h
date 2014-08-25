@@ -72,7 +72,7 @@ namespace hypro
             mHPlanes.insert(begin,end);
         }
         
-        const HyperplaneVector& vertices() const
+        const HyperplaneVector& constraints() const
         {
             return mHPlanes;
         }
@@ -102,19 +102,23 @@ namespace hypro
             return mHPlanes.end();
         }
         
+        std::vector<Point<Number> > vertexEnumeration() const;
+        
         /*
          * Operators
          */
         
+        polytope::Hyperplane<Number> operator[](unsigned i) const;
         HPolytope<Number>& operator= (const HPolytope<Number>& rhs);
+        std::ostream& operator<<(std::ostream& lhs);
         
     private:
         /*
          * Auxiliary functions
          */
         void calculateFan() const;
-        matrix getOptimalDictionary(const matrix A) const;
-        std::vector<Point<Number> > vertexEnumeration() const;
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> getOptimalDictionary(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A) const;
+        
     };
 
 } //namespace

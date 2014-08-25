@@ -56,9 +56,20 @@ namespace polytope
             return mNormal;
         }
         
+        void setNormal(const Point<Number>& normal)
+        {
+            mNormal = normal;
+            mDimension = normal.dimension();
+        }
+        
         Number offset() const
         {
             return mScalar.value();
+        }
+        
+        void setOffset(Number offset)
+        {
+            mScalar = carl::FLOAT_T<Number>(offset);
         }
         
         Point<Number> intersection(const Point<Number>& vector) const
@@ -76,6 +87,12 @@ namespace polytope
             }
     };
     
+    template<typename Number>
+    std::ostream& operator<<(std::ostream& lhs, const hypro::polytope::Hyperplane<Number>& rhs)
+    {
+        lhs << "( " << rhs.normal() << ", " << carl::FLOAT_T<Number>(rhs.offset()) << " )";
+        return lhs;
+    }
 
     template<typename Number>
     class Cone 
