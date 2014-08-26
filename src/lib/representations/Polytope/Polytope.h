@@ -32,6 +32,7 @@ namespace hypro
     {
     private:
         C_Polyhedron mPolyhedron;
+        std::vector<Point<Number>> mPoints;
 
     public:
         Polytope();
@@ -39,7 +40,7 @@ namespace hypro
         Polytope(unsigned dimension);
         Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
-        Polytope(const typename Point<Number>::pointSet& points);
+        Polytope(const typename std::vector<Point<Number>>& points);
         Polytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
         Polytope(const matrix& A, const vector& b);
         Polytope(const matrix& A);
@@ -68,7 +69,7 @@ namespace hypro
          * Returns the set of points which form the polytope.
          * @return Pointset.
          */
-        typename Point<Number>::pointSet points() const;
+        const std::vector<Point<Number>>& points() const;
         
         /**
          * Prints the polytopes' generators obtained from the PPL to stdout.
@@ -120,7 +121,7 @@ namespace hypro
         Number hausdorffError(const Number& delta, const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& matrix);
         
         
-        Polytope<Number>& operator= (const Polytope<Number>& rhs);
+        //Polytope<Number>& operator= (const Polytope<Number>& rhs);
 
         /**
          * Auxiliary functions

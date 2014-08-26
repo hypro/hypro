@@ -16,8 +16,10 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number>::Polytope(const Polytope& orig) : mPolyhedron(orig.mPolyhedron){
-    }
+    Polytope<Number>::Polytope(const Polytope& orig) :
+    mPolyhedron(orig.mPolyhedron),
+    mPoints(orig.mPoints)
+    {}
 
     template<typename Number>
     Polytope<Number>::~Polytope() {
@@ -39,10 +41,11 @@ namespace hypro
     {
         //std::cout << "Try Ppint: " << _point << std::endl;
         mPolyhedron.add_generator(polytope::pointToGenerator(_point));
+        mPoints.push_back(_point);
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const typename Point<Number>::pointSet& points)
+    Polytope<Number>::Polytope(const typename std::vector<Point<Number>>& points)
     {
         //mPolyhedron.initialize();
         //std::cout << "Try Ppints" << std::endl;
@@ -50,6 +53,7 @@ namespace hypro
         for(auto& pointSetIt : points)
         {
             mPolyhedron.add_generator(polytope::pointToGenerator(pointSetIt));
+            mPoints.push_back(pointSetIt);
         }
     }
     
@@ -61,6 +65,8 @@ namespace hypro
         {
             Generator tmp = polytope::pointToGenerator(*pointIt);
             mPolyhedron.add_generator(tmp);
+            Point<Number> tmpPoint = Point<Number>(*pointIt);
+            mPoints.push_back(tmpPoint);
         }
     }
     
@@ -113,7 +119,9 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) : mPolyhedron(_rawPoly)
+    Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) :
+    mPolyhedron(_rawPoly),
+    mPoints()
     {}
     
     template<typename Number>
@@ -130,11 +138,13 @@ namespace hypro
             mPolyhedron.add_space_dimensions_and_embed(tmp.space_dimension());
         }
         mPolyhedron.add_generator(tmp);
+        mPoints.push_back(point);
     }
     
     template<typename Number>
-    typename Point<Number>::pointSet Polytope<Number>::points() const
+    const std::vector<Point<Number>>& Polytope<Number>::points() const
     {
+    	/*
         typename Point<Number>::pointSet result;
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
         for(auto& generator : mPolyhedron.generators())
@@ -144,6 +154,8 @@ namespace hypro
             result.insert(tmp);
         }
         return result;
+        */
+    	return mPoints;
     }
     
     template<typename Number>
@@ -486,16 +498,18 @@ namespace hypro
         return result.value();
     }
     
+    /*
     template<typename Number>
     Polytope<Number>& Polytope<Number>::operator= (const Polytope<Number>& rhs) 
     { 
       if (this != &rhs)
       { 
-        C_Polyhedron tmp(rhs.rawPolyhedron());
-        mPolyhedron.m_swap(tmp); 
+        Polytope<Number> tmp(rhs);
+        std::swap(*this, tmp);
       } 
       return *this;
     }
+    */
     
     template<typename Number>
     bool operator== (const Polytope<Number>& rhs, const Polytope<Number>& lhs) 
@@ -517,10 +531,10 @@ namespace hypro
     //TODO has to be assured that no inner vertices exist -> assume convex Hull?
     template<typename Number>
     int Polytope<Number>::computeMaxVDegree() {
-    	std::set<Point<Number>> points = this->points();
+    	std::vector<Point<Number>> points = this->points();
     	int max = 0;
-
-    	for (typename std::set<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
+        //std::cout << "Points in compute..: " << this->points() << std::endl;
+    	for (typename std::vector<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
     		if (max < it->neighbors().size()) {max=it->neighbors().size();}
     	}
 
@@ -531,14 +545,21 @@ namespace hypro
     //-> unique maximizer extreme point v of cx over P with c = (1,0,0..)
     template<typename Number>
     Point<Number> Polytope<Number>::computeMaxPoint() {
-    	std::set<Point<Number>> points = this->points();
-    	Point<Number> result = *points.begin();
+    	Point<Number> result;
+    	if(!mPoints.empty())
+    	{
+    		result = *(mPoints.begin());
+			for (typename std::vector<Point<Number>>::iterator it=mPoints.begin(); it!=mPoints.end(); ++it) {
+				assert(it->dimension() == result.dimension());
+				assert(it->hasDimension(result.coordinates().begin()->first));
+				carl::FLOAT_T<Number> coeff = it->coordinate(result.coordinates().begin()->first);
+				if (result.coordinates().begin()->second < coeff)
+				{
+					result = *it;
+				}
+			}
 
-    	for (typename std::set<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
-    		auto coeff = it->coordinates().begin();
-    		if (result.coordinate(coeff->first) < it->coordinate(coeff->first)) {result = *it;}
     	}
-
     	return result;
     }
 
@@ -556,14 +577,39 @@ namespace hypro
     //adjacency Oracle
     //TODO add params
     template<typename Number>
-    bool adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter) {
+    bool Polytope<Number>::adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter) {
     	return true;
     }
 
     //local Search function
     //TODO add params
     template<typename Number>
-    Point<Number> localSearch(Point<Number> _vertex){
+    Point<Number> Polytope<Number>::localSearch(Point<Number> _vertex){
+    	/*
+    	//scalar?
+    	Hyperplane plane1 = polytope::Hyperplane(_vertex, scalar);
+
+    	//TODO get next point
+    	next = ;
+    	Hyperplane plane2 = polytope:Hyperplane(next, scalar);
+
+    	Cone cone1 = polytope::Cone();
+    	Cone cone2 = polytope::Cone();
+
+    	cone1.add(plane1);
+    	cone2.add(plane2);
+
+    	Point<Number> unitAvgVector1 = cone1.getUnitAverageVector();
+    	Point<Number> unitAvgVector2 = cone2.getUnitAverageVector();
+
+    	Fan fan1 = polytope::Fan();
+    	Fan fan2 = polytope::Fan();
+
+    	fan1.add(cone1);
+    	fan2.add(cone2);
+
+    	//fan1.containingCone() ?
+		*/
 
     }
 

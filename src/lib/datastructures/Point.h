@@ -51,7 +51,7 @@ namespace hypro {
             coordinateMap mCoordinates;
 
             //Adjacency List of this Point
-            std::vector<Point<Number>*> mNeighbors;
+            std::vector<Point<Number> > mNeighbors;
 		
         public:
         
@@ -116,9 +116,9 @@ namespace hypro {
             
             Point(const vector& _vector)
             {
-                for (unsigned rowIndex = 0; rowIndex <= _vector.rows(); ++rowIndex)
+                for (unsigned rowIndex = 0; rowIndex < _vector.rows(); ++rowIndex)
                 {
-                    mCoordinates.insert( std::make_pair(rowIndex, _vector(0,rowIndex)) );
+                    mCoordinates.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex(rowIndex), _vector(rowIndex,0) ) );
                 }
             }
 
@@ -129,6 +129,10 @@ namespace hypro {
             Point(const Point<Number>& p) 
             {
                 mCoordinates.insert(p.mCoordinates.begin(), p.mCoordinates.end());
+                for(auto& neighbor : p.mNeighbors)
+                {
+                	mNeighbors.push_back(neighbor);
+                }
             }
             
             /*
@@ -158,15 +162,15 @@ namespace hypro {
              * Getter & Setter
              */
             
-            std::vector<Point<Number>*> neighbors() const {
+            std::vector<Point<Number> > neighbors() const {
             	return mNeighbors;
             }
 
-            void setNeighbors(std::vector<Point<Number>*> _neighbors) {
+            void setNeighbors(const std::vector<Point<Number> >& _neighbors) {
             	mNeighbors = _neighbors;
             }
 
-            void addNeighbor(Point<Number>* _neighbor) {
+            void addNeighbor(const Point<Number>& _neighbor) {
             	mNeighbors.push_back(_neighbor);
             }
 
