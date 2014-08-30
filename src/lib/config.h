@@ -8,6 +8,7 @@
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>
 #include <carl/util/SFINAE.h>
+//#include "util/eigenTypetraits.h"
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 
@@ -44,3 +45,33 @@ typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, 1> vector;
 #define fReach_TIMEBOUND 10
 #define fReach_TIMEDISCRETIZATION 10
 #define fReach_DENOMINATOR 1000000
+
+namespace Eigen
+{
+    template<> struct NumTraits<number>
+    {
+        enum
+        {
+            IsComplex = 0,
+            IsInteger = 0,
+            ReadCost = 1,
+            AddCost = 1,
+            MulCost = 1, 
+            IsSigned = 1,
+            RequireInitialization = 1
+        };
+
+        typedef number Real;
+        typedef number NonInteger;
+        typedef number Nested;
+
+        static inline Real epsilon() { return Real(0); }
+        static inline Real dummy_precision()
+        {
+            // make sure to override this for floating-point types
+            return Real(0);
+        }
+        //static inline number highest() { return number::maxVal(); }
+        //static inline number lowest()  { return number::minVal(); }
+    };
+}
