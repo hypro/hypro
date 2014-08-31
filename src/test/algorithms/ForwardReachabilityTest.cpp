@@ -489,7 +489,7 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointPoly = Polytope<double>(testMat,pointVec);
 
 	EXPECT_TRUE(pointPoly.contains(testBoxPoly));
-/*	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
+	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
 
 	pointVec(0) = 5;
 	pointVec(1) = -5;
@@ -522,7 +522,7 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	matrix_t<double> floatTMat(doubleMat.rows(),doubleMat.cols());
 	floatTMat = hypro::convertMatToFloatT(doubleMat);
 	EXPECT_EQ(carl::FLOAT_T<double>(doubleMat(0,0)), floatTMat(0,0));
-	*/
+
 
 	//std::cout << floatTMat << std::endl;
 
