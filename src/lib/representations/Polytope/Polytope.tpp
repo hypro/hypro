@@ -373,6 +373,7 @@ namespace hypro
     			if (adjOracle(nextVertex, currentVertex, counter)) {
     				Point<Number> localSearchVertex = localSearch(nextVertex);
     				if (localSearchVertex == currentVertex) {
+    					//TODO set Neighbors of both accordingly?
     					//reverse traverse
     					currentVertex = nextVertex;
     					counter.first = 1;
@@ -571,14 +572,10 @@ namespace hypro
 
     	Point<Number> res = p1.extAdd(p2);
 
+    	//remember how the resulting point is composed (v= v1+v2)
+    	res.addToComposition(p1);
+    	res.addToComposition(p2);
     	return res;
-    }
-
-    //adjacency Oracle
-    //TODO add params
-    template<typename Number>
-    bool Polytope<Number>::adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter) {
-    	return true;
     }
 
     //local Search function

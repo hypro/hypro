@@ -129,7 +129,6 @@ namespace hypro
         int computeMaxVDegree();
         Point<Number> computeMaxPoint();
         Point<Number> computeInitVertex(Polytope<Number> _secondPoly);
-        bool adjOracle(Point<Number> result, Point<Number> _vertex, std::pair<int,int> _counter);
         Point<Number> localSearch(Point<Number> _vertex);
 
     };

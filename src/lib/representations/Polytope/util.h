@@ -17,6 +17,8 @@
 
 #include "../../datastructures/Point.h"
 
+#include "../Polytopes/util.h"
+
 namespace hypro
 {
 namespace polytope
@@ -209,5 +211,226 @@ namespace polytope
         }
         return result;
     }
+
+    /**
+     * @author Chris K.
+     * Utility Functions for the Minkowski Sum Computation according to Fukuda
+     */
+
+    template<typename Number>
+    vector computeEdge(Point<Number>& _point1, Point<Number>& _point2) {
+    	vector edge = vector(_point1.dimension(),1);
+    	std::vector<carl::Variable> variables = _point1.variables();
+    	int i = 0;
+
+    	for (auto it=variables.begin(); it != variables.end(); ++it) {
+    		//TODO check: [] or .at?
+    		edge(i) = _point2[*it] - _point1[*it];
+    		i++;
+    	}
+    	return edge;
+    }
+
+    template<typename Number>
+    Point<Number> computePoint(Point<Number>& _point, vector& _edge) {
+    	//TODO copy constructor appropriate?
+    	Point<Number> result = Point<Number>(_point);
+    	std::vector<carl::Variable> variables = _point.variables();
+
+    	assert(_point.dimension() == _edge.rows());
+    	int i = 0;
+
+    	for (auto it=variables.begin(); it != variables.end(); ++it) {
+    		//TODO check: [] or .at?
+    		result[*it] = result[*it] + _edge(i);
+    		i++;
+    	}
+    	return result;
+    }
+
+    //TODO (adjusted) replication of function in reachability/util.h -> merge?
+	template<typename Number>
+	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble(const vector& _vec) {
+		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultVec(_vec.rows(),1);
+
+		for (int i=0; i<_vec.rows(); ++i) {
+			resultVec(i) = _vec(i).toDouble();
+		}
+		return resultVec;
+	}
+
+    template<typename Number>
+    bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int> _counter) {
+    	//retrieve the edge that is defined by the counter (j,i)
+    	//first get both source & target vertex (dependent on the counter param.)
+    	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
+    	Point<Number> sourceVertex;
+    	Point<Number> targetVertex;
+    	if (_counter.first == 1 || _counter.first == 2) {
+    		sourceVertex = vertexComposition[_counter.first-1];
+    	}
+    	std::vector<Point<Number>> neighbors = sourceVertex.neighbors();
+    	if (neighbors.size() < _counter.second) {
+    		//this neighbor does not exist for this vertex
+    		return false;
+    	} else {
+    		targetVertex = neighbors[_counter.second-1];
+    	}
+
+    	//the edge is represented by a vector
+    	vector edge = computeEdge(sourceVertex,targetVertex);
+
+    	//check if there is a parallel edge in the other polytope that points in the same direction (not the origin of the sourceVertex)
+    	//add all non-parallel edges to a set (needed for constraints in LP)
+    	vector parallelEdge;
+    	//indicates whether a parallel edge has been identified
+    	bool parallelFlag = false;
+    	std::vector<vector> nonParallelEdges;
+    	Point<Number> otherSource;
+    	std::vector<Point<Number>> otherNeighbors;
+
+    	if (_counter.first == 1) {
+    		otherSource = vertexComposition[1];
+    	} else {
+    		otherSource = vertexComposition[0];
+    	}
+
+    	otherNeighbors = otherSource.neighbors();
+
+    	vector tempEdge;
+		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
+			tempEdge = computeEdge(otherSource, *it);
+
+			//check if edges are parallel (considering direction too)
+			//for this the following has to hold: (x dot_product y) / (|x|*|y|) = 1
+
+			//.dot() & .norm() not defined for FLOAT_T<Number>, conversion to Double necessary
+			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector(tempEdge.rows());
+			doubleVector = convertVecToDouble<Number>(tempEdge);
+			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector2(edge.rows());
+			doubleVector2 = convertVecToDouble<Number>(edge);
+
+			Number dotProduct = doubleVector.dot(doubleVector2);
+			Number normFactor = doubleVector.norm() * doubleVector2.norm();
+
+			if (dotProduct/normFactor == 1) {
+				parallelEdge = tempEdge;
+				parallelFlag = true;
+			} else {
+				nonParallelEdges.push_back(tempEdge);
+			}
+		}
+
+		//add all edges incident to the original source vertex to the Set of non-parallel edges as well
+		for (typename std::vector<Point<Number>>::iterator it=neighbors.begin(); it!= neighbors.end(); ++it) {
+			//dont add the original edge to the set
+			if (*it != neighbors[_counter.second-1]) {
+				vector tempEdge2 = computeEdge(sourceVertex, *it);
+				nonParallelEdges.push_back(tempEdge2);
+			}
+		}
+
+    	/*
+    	 * Setup Linear Feasibility Problem (in form of a min. LP) with GLPK
+    	 */
+		glp_prob *feasibility;
+		feasibility = glp_create_prob();
+		glp_set_obj_dir(feasibility, GLP_MAX);
+
+		//each row corresponds to one non-parallel edge (except for the first row, which refers to the edge we examine)
+		glp_add_rows(feasibility, nonParallelEdges.size()+1);
+
+		//set bound of first row
+		//TODO < 0 required, here: <= 0
+		glp_set_row_bnds(feasibility, 1, GLP_UP, 0.0, 0.0);
+
+		//constraints of auxiliary variables
+		for (int i=1; i <= nonParallelEdges.size(); ++i) {
+			//start from second row
+			glp_set_row_bnds(feasibility, i+1, GLP_LO, 0.0, 0.0);
+		}
+
+		//each column corresponds to one dimension of the vector
+		glp_add_cols(feasibility, edge.rows());
+
+		//coefficients of objective function (structural variables are not constrained)
+		for (int i=1; i<= edge.rows(); ++i) {
+			glp_set_obj_coef(feasibility, i, 1.0);
+		}
+
+		//setup the matrix coefficients
+		unsigned elements = (nonParallelEdges.size()+1) * (edge.rows());
+		std::cout << "source Vertex: " << sourceVertex << std::endl;
+		std::cout << "target Vertex: " << targetVertex << std::endl;
+		std::cout << "other source Vertex: " << otherSource << std::endl;
+		std::cout << "considered Edge: " << edge << std::endl;
+        int ia[elements];
+        int ja[elements];
+        double ar[elements];
+        unsigned pos = 1;
+
+        //setup the first row coefficients individually
+		for(unsigned j = 1; j <= edge.rows(); ++j)
+		{
+		  ia[pos] = 1;
+		  ja[pos] = j;
+		  ar[pos] = edge(j-1).toDouble();
+		  std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
+		  ++pos;
+		}
+
+        //then the rest (for the set of non-parallel edges)
+        for(unsigned i = 2; i <= nonParallelEdges.size()+1; ++i)
+          {
+              for(unsigned j = 1; j <= edge.rows(); ++j)
+              {
+                  ia[pos] = i;
+                  ja[pos] = j;
+                  vector tmpVec = nonParallelEdges.at(i-2);
+                  ar[pos] = tmpVec(j-1).toDouble();
+                  std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+                  ++pos;
+              }
+          }
+        assert(pos-1 <= elements);
+
+        glp_load_matrix(feasibility, elements, ia, ja, ar);
+        glp_simplex(feasibility, NULL);
+
+        std::cout << "Parallel Flag: " << parallelFlag << std::endl;
+
+        //check if a feasible solution exists
+        if (glp_get_status(feasibility) == GLP_NOFEAS) {
+        	return false;
+        } else {
+        	//if (glp_get_status(feasibility) == GLP_FEAS) {
+        		//since there is a feasible solution, our edge determines an edge direction of P=P1+P2
+        		//compute the new adjacent vertex in P using this information
+        		if (!parallelFlag) {
+        			//if there was no parallel edge: v_new = a1(v1,i1) + v2
+        			//a1(v1,i1) := i1-th vertex adjacent to v1 (ref. Fukuda)
+        			result = targetVertex.extAdd(otherSource);
+
+        			//set the composition of the new Vertex accordingly
+        			result.addToComposition(targetVertex);
+        			result.addToComposition(otherSource);
+        		} else {
+        			//if there was a parallel edge: v_new = a1(v1,i1) + a2(v2,i2)
+        			Point<Number> otherTargetVertex = computePoint(otherSource, parallelEdge);
+        			std::cout << "parallel Edge: " << parallelEdge << std::endl;
+        			std::cout << "Other Target Vertex: " << otherTargetVertex << std::endl;
+        			result = targetVertex.extAdd(otherTargetVertex);
+
+        			result.addToComposition(targetVertex);
+        			result.addToComposition(otherTargetVertex);
+        		}
+        	//}
+        }
+
+        glp_delete_prob(feasibility);
+
+        return true;
+    }
+
 }
 }
