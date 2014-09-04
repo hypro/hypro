@@ -259,5 +259,6 @@ TEST_F(MinkowskiSumTest, adjOracleTest)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, res, counter);
+	std::cout << "AdjOracle return value: " << exists << std::endl;
 	std::cout << "Computed Point: " << adjPoint << std::endl;
 }
