@@ -33,12 +33,12 @@ namespace hypro
     private:
         C_Polyhedron mPolyhedron;
         std::vector<Point<Number>> mPoints;
+        bool mPointsUpToDate;
 
     public:
         Polytope();
         Polytope(const Polytope& orig);
         Polytope(unsigned dimension);
-        Polytope(const carl::Variable& _var, double _val);
         Polytope(const Point<Number>& point);
         Polytope(const typename std::vector<Point<Number>>& points);
         Polytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
@@ -65,11 +65,13 @@ namespace hypro
          */
         void addPoint(const Point<Number>& point);
         
+        void updatePoints();
+
         /**
          * Returns the set of points which form the polytope.
          * @return Pointset.
          */
-        const std::vector<Point<Number>>& points() const;
+        const std::vector<Point<Number>>& points();
         
         /**
          * Prints the polytopes' generators obtained from the PPL to stdout.
@@ -104,11 +106,11 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector()) const;
+        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector());
         
-        bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
+        bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         // implemented according to Komei Fukuda 2004
-        bool altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const;
+        bool altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);

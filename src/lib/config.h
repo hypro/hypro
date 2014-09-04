@@ -46,6 +46,9 @@ typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, 1> vector;
 #define fReach_TIMEDISCRETIZATION 10
 #define fReach_DENOMINATOR 1000000
 
+//defines for Fukuda's Minkowski Sum
+#define EPSILON 0.000001
+
 namespace Eigen
 {
     template<> struct NumTraits<number>

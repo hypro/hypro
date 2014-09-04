@@ -297,6 +297,8 @@ namespace polytope
 
     	otherNeighbors = otherSource.neighbors();
 
+    	std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
+
     	vector tempEdge;
 		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
 			tempEdge = computeEdge(otherSource, *it);
@@ -335,14 +337,14 @@ namespace polytope
     	 */
 		glp_prob *feasibility;
 		feasibility = glp_create_prob();
-		glp_set_obj_dir(feasibility, GLP_MAX);
+		glp_set_obj_dir(feasibility, GLP_MIN);
 
 		//each row corresponds to one non-parallel edge (except for the first row, which refers to the edge we examine)
 		glp_add_rows(feasibility, nonParallelEdges.size()+1);
 
 		//set bound of first row
 		//TODO < 0 required, here: <= 0
-		glp_set_row_bnds(feasibility, 1, GLP_UP, 0.0, 0.0);
+		glp_set_row_bnds(feasibility, 1, GLP_UP, 0.0, -(EPSILON));
 
 		//constraints of auxiliary variables
 		for (int i=1; i <= nonParallelEdges.size(); ++i) {
@@ -357,6 +359,10 @@ namespace polytope
 		for (int i=1; i<= edge.rows(); ++i) {
 			glp_set_obj_coef(feasibility, i, 1.0);
 		}
+
+		//TODO x>=0, y>=0 for Lambda - can we even do that?
+		glp_set_col_bnds(feasibility, 1, GLP_LO, 0.0, 0.0);
+		glp_set_col_bnds(feasibility, 2, GLP_LO, 0.0, 0.0);
 
 		//setup the matrix coefficients
 		unsigned elements = (nonParallelEdges.size()+1) * (edge.rows());

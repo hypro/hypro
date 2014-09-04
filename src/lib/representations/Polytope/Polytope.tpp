@@ -12,13 +12,16 @@
 namespace hypro
 {
     template<typename Number>
-    Polytope<Number>::Polytope() {
+    Polytope<Number>::Polytope() :
+    mPointsUpToDate(true)
+    {
     }
 
     template<typename Number>
     Polytope<Number>::Polytope(const Polytope& orig) :
     mPolyhedron(orig.mPolyhedron),
-    mPoints(orig.mPoints)
+    mPoints(orig.mPoints),
+    mPointsUpToDate(orig.mPointsUpToDate)
     {}
 
     template<typename Number>
@@ -26,14 +29,11 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number>::Polytope(unsigned dimension) : mPolyhedron(dimension, Parma_Polyhedra_Library::EMPTY)
+    Polytope<Number>::Polytope(unsigned dimension) :
+    mPolyhedron(dimension, Parma_Polyhedra_Library::EMPTY),
+    mPoints(),
+    mPointsUpToDate(true)
     {}
-    
-    template<typename Number>
-    Polytope<Number>::Polytope(const carl::Variable& _var, double _val)
-    {
-
-    }
 
     template<typename Number>
     Polytope<Number>::Polytope(const Point<Number>& _point) :
@@ -42,6 +42,7 @@ namespace hypro
         //std::cout << "Try Ppint: " << _point << std::endl;
         mPolyhedron.add_generator(polytope::pointToGenerator(_point));
         mPoints.push_back(_point);
+        mPointsUpToDate = true;
     }
     
     template<typename Number>
@@ -55,6 +56,7 @@ namespace hypro
             mPolyhedron.add_generator(polytope::pointToGenerator(pointSetIt));
             mPoints.push_back(pointSetIt);
         }
+        mPointsUpToDate = true;
     }
     
     template<typename Number>
@@ -68,6 +70,7 @@ namespace hypro
             Point<Number> tmpPoint = Point<Number>(*pointIt);
             mPoints.push_back(tmpPoint);
         }
+        mPointsUpToDate = true;
     }
     
     template<typename Number>
@@ -94,7 +97,8 @@ namespace hypro
             
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);
-        }       
+        }
+        mPointsUpToDate = false;
     }
     
     template<typename Number>
@@ -116,12 +120,14 @@ namespace hypro
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);
         }
+        mPointsUpToDate = false;
     }
     
     template<typename Number>
     Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) :
     mPolyhedron(_rawPoly),
-    mPoints()
+    mPoints(),
+    mPointsUpToDate(false)
     {}
     
     template<typename Number>
@@ -142,7 +148,32 @@ namespace hypro
     }
     
     template<typename Number>
-    const std::vector<Point<Number>>& Polytope<Number>::points() const
+    void Polytope<Number>::updatePoints()
+    {
+    	if (!mPointsUpToDate) {
+			std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
+			for(auto& generator : mPolyhedron.generators())
+			{
+				// TODO: Call generatorToPoint only with the variables occuring in the actual generator (some might be degenerated)
+				Point<Number> tmp = polytope::generatorToPoint<Number>(generator, variables);
+				bool found = false;
+				for (auto& point : mPoints) {
+					if (point == tmp) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					mPoints.push_back(tmp);
+				}
+			}
+			mPointsUpToDate = true;
+    	}
+
+    }
+
+    template<typename Number>
+    const std::vector<Point<Number>>& Polytope<Number>::points()
     {
     	/*
         typename Point<Number>::pointSet result;
@@ -155,6 +186,9 @@ namespace hypro
         }
         return result;
         */
+    	if (!mPointsUpToDate) {
+    		updatePoints();
+    	}
     	return mPoints;
     }
     
@@ -199,7 +233,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b) const
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
     {
         using namespace Parma_Polyhedra_Library;
         
@@ -274,11 +308,14 @@ namespace hypro
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));
         }
         result.mPolyhedron = tmp;
+
+        mPointsUpToDate = false;
+
         return true;
     }
     
     template<typename Number>
-    bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const
+    bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs)
     {
         /*
         typedef Point<Number> point;
@@ -330,13 +367,16 @@ namespace hypro
         }
         //std::cout << "Result:" result.print() << std::endl;
         result.hull(result);
+
+        mPointsUpToDate = false;
+
         return true;
     }
     
     //@author: Chris K.
     template<typename Number>
-        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) const {
-
+        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) {
+    	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
     	//delta = max vertex degree
@@ -411,6 +451,8 @@ namespace hypro
 
     	} while ( (currentVertex != initVertex) && (counter.first != 2 && counter.second != delta_2) );
 
+    	mPointsUpToDate = false;
+
     	return true;
 
     }
@@ -421,6 +463,9 @@ namespace hypro
         C_Polyhedron res = mPolyhedron;
         res.intersection_assign(rhs.rawPolyhedron());
         result = Polytope<Number>(res);
+
+        mPointsUpToDate = false;
+
         return true;
     }
     
@@ -429,7 +474,9 @@ namespace hypro
     {
         Generator_System gs = mPolyhedron.minimized_generators();
         result = Polytope<Number>(C_Polyhedron(gs));
-        //@author Chris: just to get rid of the warning
+
+        mPointsUpToDate = false;
+
         return true;
     }
     
@@ -451,6 +498,9 @@ namespace hypro
         C_Polyhedron res = mPolyhedron;
         res.poly_hull_assign(rhs.rawPolyhedron());
         result = Polytope<Number>(res);
+
+        mPointsUpToDate = false;
+
         return true;
     }
     
@@ -547,6 +597,7 @@ namespace hypro
     template<typename Number>
     Point<Number> Polytope<Number>::computeMaxPoint() {
     	Point<Number> result;
+    	updatePoints();
     	if(!mPoints.empty())
     	{
     		result = *(mPoints.begin());
@@ -579,9 +630,35 @@ namespace hypro
     }
 
     //local Search function
-    //TODO add params
+    //TODO add param Point<Number> sink OR new function that computes & stores the m for the sink and just add the vector as a param
     template<typename Number>
     Point<Number> Polytope<Number>::localSearch(Point<Number> _vertex){
+
+    	//to prepare the LP, compute all incident edges of v1 & v2 for v=v1+v2
+    	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
+    	Point<Number> sourceVertex1 = vertexComposition[0];
+    	Point<Number> sourceVertex2 = vertexComposition[1];
+
+    	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
+    	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
+
+    	std::vector<vector> edges;
+
+    	//traverse neighbors of v1
+    	for (auto neighbor : neighbors1) {
+    		//TODO check if this works, else tmpEdge outside
+    		vector tmpEdge = computeEdge(sourceVertex1,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+    	//traverse neighbors of v2
+    	for (auto neighbor : neighbors2) {
+    		vector tmpEdge = computeEdge(sourceVertex2,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+
+
     	/*
     	//scalar?
     	Hyperplane plane1 = polytope::Hyperplane(_vertex, scalar);
