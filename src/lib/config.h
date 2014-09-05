@@ -48,6 +48,7 @@ typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, 1> vector;
 
 //defines for Fukuda's Minkowski Sum
 #define EPSILON 0.000001
+#define POS_CONSTANT 100
 
 namespace Eigen
 {

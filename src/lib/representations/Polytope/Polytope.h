@@ -131,7 +131,7 @@ namespace hypro
         int computeMaxVDegree();
         Point<Number> computeMaxPoint();
         Point<Number> computeInitVertex(Polytope<Number> _secondPoly);
-        Point<Number> localSearch(Point<Number> _vertex);
+        Point<Number> localSearch(Point<Number>& _vertex,  Point<Number>& _sinkMaximizerTarget);
 
     };
 } // namespace

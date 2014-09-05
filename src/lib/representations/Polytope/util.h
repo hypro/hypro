@@ -248,7 +248,6 @@ namespace polytope
     	return result;
     }
 
-    //TODO (adjusted) replication of function in reachability/util.h -> merge?
 	template<typename Number>
 	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble(const vector& _vec) {
 		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultVec(_vec.rows(),1);
@@ -355,12 +354,14 @@ namespace polytope
 		//each column corresponds to one dimension of the vector
 		glp_add_cols(feasibility, edge.rows());
 
-		//coefficients of objective function (structural variables are not constrained)
+		//coefficients of objective function
 		for (int i=1; i<= edge.rows(); ++i) {
 			glp_set_obj_coef(feasibility, i, 1.0);
 		}
 
-		//TODO x>=0, y>=0 for Lambda - can we even do that?
+		//TODO
+		//constrains for structural variables: x>=0, y>=0 for Lambda - can we even do that?
+		//not specified in Paper, but else there is no feasible primal solution
 		glp_set_col_bnds(feasibility, 1, GLP_LO, 0.0, 0.0);
 		glp_set_col_bnds(feasibility, 2, GLP_LO, 0.0, 0.0);
 
@@ -436,6 +437,114 @@ namespace polytope
         glp_delete_prob(feasibility);
 
         return true;
+    }
+
+    template<typename Number>
+    vector computeMaximizerVector(Point<Number>& _targetVertex, Point<Number>& _vertex) {
+
+    	//to prepare the LP, compute all incident edges of v1 & v2 for v=v1+v2
+    	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
+    	Point<Number> sourceVertex1 = vertexComposition[0];
+    	Point<Number> sourceVertex2 = vertexComposition[1];
+
+    	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
+    	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
+
+    	std::vector<vector> edges;
+    	vector tmpEdge;
+
+    	//traverse neighbors of v1
+    	for (auto neighbor : neighbors1) {
+    		//TODO check if this works, else tmpEdge outside
+    		tmpEdge = computeEdge(sourceVertex1,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+    	//traverse neighbors of v2
+    	for (auto neighbor : neighbors2) {
+    		tmpEdge = computeEdge(sourceVertex2,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+    	/*
+		 * Setup LP with GLPK
+		 */
+		glp_prob *maximizer;
+		maximizer = glp_create_prob();
+		glp_set_obj_dir(maximizer, GLP_MAX);
+
+		//we have one row for each edge in our set
+		glp_add_rows(maximizer, edges.size());
+
+		//constraints of auxiliary variables (bounds for rows)
+		for (int i=1; i <= edges.size(); ++i) {
+			glp_set_row_bnds(maximizer, i, GLP_UP, 0.0, 0.0);
+		}
+
+		//each column corresponds to one dimension of the vector + one column for Lambda0
+		//TODO consider p1 & p2 of different dimensions? (-> two edge sets)
+		glp_add_cols(maximizer, tmpEdge.rows()+1);
+
+		//coefficients of objective function: only Lambda0 has a non-zero coefficient (last column)
+		for (int i=1; i<= tmpEdge.rows(); ++i) {
+			glp_set_obj_coef(maximizer, i, 0.0);
+		}
+		glp_set_obj_coef(maximizer, tmpEdge.rows()+1, 1.0);
+
+		//constraints for structural variables
+		for (int i=1; i<= tmpEdge.rows(); ++i) {
+			glp_set_col_bnds(maximizer, i, GLP_DB, -1.0, 1.0);
+		}
+		glp_set_col_bnds(maximizer, tmpEdge.rows()+1, GLP_UP, 0.0, POS_CONSTANT);
+
+		//setup matrix coefficients
+		unsigned elements = (edges.size()) * (tmpEdge.rows()+1);
+        int ia[elements];
+        int ja[elements];
+        double ar[elements];
+        unsigned pos = 1;
+
+        for (unsigned i=1; i <= edges.size(); ++i) {
+
+        	//the rest depends on the current edge
+        	for (unsigned j=1; j <= tmpEdge.rows(); ++j) {
+				ia[pos] = i;
+				ja[pos] = j;
+				vector tmpVec = edges.at(i-1);
+				ar[pos] = tmpVec(j-1).toDouble();
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+				++pos;
+        	}
+
+        	//for each row the last column is handled individually (Lambda0)
+        	ia[pos] = i;
+        	ja[pos] = tmpEdge.rows()+1;
+        	ar[pos] = 1;
+        	std::cout << "Coeff. at (" << i << "," << tmpEdge.rows()+1 << "): " << ar[pos] << std::endl;
+        	++pos;
+        }
+
+        assert(pos-1 <= elements);
+
+        glp_load_matrix(maximizer, elements, ia, ja, ar);
+        glp_simplex(maximizer, NULL);
+
+        vector result = vector(tmpEdge.rows(),1);
+
+        //fill the result vector based on the optimal solution returned by the LP
+        for (unsigned i=1; i <= tmpEdge.rows(); ++i) {
+        	result(i-1) = glp_get_col_prim(maximizer, i);
+        }
+
+        //compute the target of this new edge
+        _targetVertex = computePoint(_vertex, result);
+
+        glp_delete_prob(maximizer);
+
+        return result;
+
+		/////////
+
     }
 
 }

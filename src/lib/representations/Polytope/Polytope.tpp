@@ -387,6 +387,10 @@ namespace hypro
     	Point<Number> initVertex = this->computeInitVertex(rhs);
     	result.addPoint(initVertex);
 
+    	//compute the maximizer vector (& its target) for the initial extreme point -> necessary for localSearch()
+    	Point<Number> sinkMaximizerTarget;
+    	vector sinkMaximizerVector = computeMaximizerVector(sinkMaximizerTarget, initVertex);
+
     	//set currentVertex to initVertex
     	Point<Number> currentVertex = initVertex;
 
@@ -411,7 +415,7 @@ namespace hypro
 
     			//choose next Vertex, only continue if one exists
     			if (adjOracle(nextVertex, currentVertex, counter)) {
-    				Point<Number> localSearchVertex = localSearch(nextVertex);
+    				Point<Number> localSearchVertex = localSearch(nextVertex, sinkMaximizerTarget);
     				if (localSearchVertex == currentVertex) {
     					//TODO set Neighbors of both accordingly?
     					//reverse traverse
@@ -632,58 +636,15 @@ namespace hypro
     //local Search function
     //TODO add param Point<Number> sink OR new function that computes & stores the m for the sink and just add the vector as a param
     template<typename Number>
-    Point<Number> Polytope<Number>::localSearch(Point<Number> _vertex){
+    Point<Number> Polytope<Number>::localSearch(Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget){
 
-    	//to prepare the LP, compute all incident edges of v1 & v2 for v=v1+v2
-    	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
-    	Point<Number> sourceVertex1 = vertexComposition[0];
-    	Point<Number> sourceVertex2 = vertexComposition[1];
+    	//compute the maximizer vector of the currently considered vertex
+    	Point<Number> maximizerTarget;
+    	vector maximizerVector = computeMaximizerVector(maximizerTarget, _vertex);
 
-    	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
-    	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
-
-    	std::vector<vector> edges;
-
-    	//traverse neighbors of v1
-    	for (auto neighbor : neighbors1) {
-    		//TODO check if this works, else tmpEdge outside
-    		vector tmpEdge = computeEdge(sourceVertex1,neighbor);
-    		edges.push_back(tmpEdge);
-    	}
-
-    	//traverse neighbors of v2
-    	for (auto neighbor : neighbors2) {
-    		vector tmpEdge = computeEdge(sourceVertex2,neighbor);
-    		edges.push_back(tmpEdge);
-    	}
+    	//TODO perform ray shooting between maximizerTarget & _sinkMaximizerTarget
 
 
-
-    	/*
-    	//scalar?
-    	Hyperplane plane1 = polytope::Hyperplane(_vertex, scalar);
-
-    	//TODO get next point
-    	next = ;
-    	Hyperplane plane2 = polytope:Hyperplane(next, scalar);
-
-    	Cone cone1 = polytope::Cone();
-    	Cone cone2 = polytope::Cone();
-
-    	cone1.add(plane1);
-    	cone2.add(plane2);
-
-    	Point<Number> unitAvgVector1 = cone1.getUnitAverageVector();
-    	Point<Number> unitAvgVector2 = cone2.getUnitAverageVector();
-
-    	Fan fan1 = polytope::Fan();
-    	Fan fan2 = polytope::Fan();
-
-    	fan1.add(cone1);
-    	fan2.add(cone2);
-
-    	//fan1.containingCone() ?
-		*/
 
     }
 
