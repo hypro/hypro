@@ -262,3 +262,15 @@ TEST_F(MinkowskiSumTest, adjOracleTest)
 	std::cout << "AdjOracle return value: " << exists << std::endl;
 	std::cout << "Computed Point: " << adjPoint << std::endl;
 }
+
+TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
+{
+	Point<double> v = polyAdj.computeInitVertex(polyAdj2);
+	std::cout << "Point v*: " << v << std::endl;
+
+	Point<double> target;
+	vector_t<double> result = polytope::computeMaximizerVector(target, v);
+	std::cout << "Vector: " << std::endl;
+	std::cout << result << std::endl;
+	std::cout << "Target Vertex: " << target << std::endl;
+}
