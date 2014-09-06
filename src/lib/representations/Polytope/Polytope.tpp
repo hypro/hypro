@@ -664,30 +664,29 @@ namespace hypro
     }
 
     //local Search function
-    //TODO add param Point<Number> sink OR new function that computes & stores the m for the sink and just add the vector as a param
     template<typename Number>
     Point<Number> Polytope<Number>::localSearch(Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget){
 
     	//compute the maximizer vector of the currently considered vertex
     	Point<Number> maximizerTarget;
-    	vector maximizerVector = computeMaximizerVector(maximizerTarget, _vertex);
+    	vector maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
 
     	//TODO perform ray shooting between maximizerTarget & _sinkMaximizerTarget
 
     	//compute the ray direction (a vector)
-    	vector ray = computeEdge(maximizerTarget, _sinkMaximizerTarget);
+    	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
     	//compute the normal cone of _vertex
-    	polytope::Cone<Number>* cone = computeCone(_vertex, maximizerVector);
+    	polytope::Cone<Number>* cone = polytope::computeCone(_vertex, maximizerVector);
 
     	//iterate through all planes and check which one intersects with the ray
     	carl::FLOAT_T<Number> factor;
-    	Point<Number>& origin = cone->origin();
-    	polytope::Hyperplane<Number>* intersectedPlane;
+    	Point<Number> origin = cone->origin();
+    	polytope::Hyperplane<Number> intersectedPlane;
 
     	for (auto& plane : cone->get()) {
     		if (plane->intersection(factor, ray)) {
-    			intersectedPlane = plane;
+    			intersectedPlane = *plane;
     			break;
     		}
     	}
@@ -697,12 +696,19 @@ namespace hypro
 
     	//iterate through all cones in the fan
     	for (auto& cone : this->mFan.get()) {
-    		for (auto& plane : cone.get()) {
+    		for (auto& plane : cone->get()) {
     			//check if our intersectedPlane is also present in the currently examined cone
     			//for that the Scalar has to be the same, and the cross product of both normals has to be 0 (=> normals are parallel)
-    			carl::FLOAT_T<Number> crossProduct = intersectedPlane->normal().cross(plane.normal());
-    			//TODO crossProduct ~ 0, not exactly (rounding error)
-    			if ((intersectedPlane->offset() == plane.offset()) && (crossProduct == 0)) {
+    			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(plane->normal());
+    			carl::FLOAT_T<Number> normFactor = intersectedPlane.normal().norm() * plane->normal().norm();
+    			bool parallel = false;
+
+    			//TODO ~ 1, not exactly (rounding error)
+    			if (dotProduct/normFactor == 1) {
+    				parallel = true;
+    			}
+
+    			if ((intersectedPlane.offset() == plane->offset()) && (parallel)) {
     					//found the plane
     					found = true;
     					break;
@@ -710,7 +716,7 @@ namespace hypro
     		}
     		if (found) {
     			//retrieve the origin of the cone that has the identical plane
-    			secondOrigin = cone.origin();
+    			secondOrigin = cone->origin();
     			break;
     		}
 

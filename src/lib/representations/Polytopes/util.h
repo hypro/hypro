@@ -51,7 +51,10 @@ namespace polytope
         	//here: hyperplane given in parameterform is converted to normalform
         	assert(_vectorSet.size() == 2);
         	//the normal vector of the hyperplane is the cross product of both directions
-        	mNormal = _vectorSet.at(0).cross(_vectorSet.at(1));
+        	vector vec1 = _vectorSet.at(0);
+        	vector vec2 = _vectorSet.at(1);
+        	//TODO .cross() doesnt work
+        	//mNormal = vec1.cross(vec2);
 
         	//the scalar is just the scalarproduct of the normal vector & a point in the hyperplane
         	mScalar = mNormal.dot(_vec);
@@ -156,7 +159,7 @@ namespace polytope
             {
                 return mPlanes;
             }
-            
+
             unsigned dimension() const
             {
                 return mDimension;
@@ -202,7 +205,7 @@ namespace polytope
             void add(const Hyperplane<Number>* plane)
             {
                 mPlanes.push_back(plane);
-                mDimension = mDimension < plane->dimension() ? plane->dimension : mDimension;
+                mDimension = mDimension < plane->dimension() ? plane->dimension() : mDimension;
             }
             
             Point<Number> getUnitAverageVector() const
