@@ -15,23 +15,45 @@ namespace hpolytope
     template<typename Number>
     static void pivot(std::vector<unsigned> B, std::vector<unsigned> N, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A, unsigned r, unsigned s)
     {
+        std::cout << __func__ << std::endl << A << ", r:" << r << ", s:" << s;
+        std::cout << ", B= ";
+        for(auto& item : B)
+            std::cout << item << " ";
+             
+        std::cout << ", N= ";
+        for(auto& item : N)
+            std::cout << item << " ";
+        
+        std::cout << std::endl;
+        
         // update table
         A(s,r) = 1/A(r,s);
-        for(unsigned i = 1; i <= A.rows(); ++i)
+        for(unsigned i = 0; i < B.size(); ++i)
         {
-            A(i,r) = A(i,s)/A(r,s);
+            if(B.at(i) != r)
+                A(B.at(i),r) = A(B.at(i),s)/A(r,s);
         }
-        for(unsigned j = 1; j <= A.cols(); ++j)
+        std::cout << __func__ << "A: " << std::endl << A << std::endl;
+        
+        for(unsigned j = 0; j < N.size(); ++j)
         {
-            A(s,j) = A(r,j)/A(r,s);
+            if(N.at(j) != s)
+                A(s,N.at(j)) = A(r,N.at(j))/A(r,s);
         }
-        for(unsigned i = 1; i <= A.rows(); ++i)
+        
+        std::cout << __func__ << "A: " << std::endl << A << std::endl;
+        
+        for(unsigned i = 0; i < B.size(); ++i)
         {
-            for(unsigned j = 1; j <= A.cols(); ++j)
+            for(unsigned j = 0; j < N.size(); ++j)
             {
-                A(i,j) = A(i,j) - (A(i,s)*A(r,j)/A(r,s));
+                std::cout << __func__ << " A(i,j)=" << A(B.at(i),N.at(j)) << ", A(i,s)=" << A(B.at(i),s) << ", A(r,j)=" << A(r,N.at(j)) << ", A(r,s)=" << A(r,s) << ", i=" << i <<", j=" << j << std::endl;
+                A(B.at(i),N.at(j)) = A(B.at(i),N.at(j)) - (A(B.at(i),s)*A(r,N.at(j))/A(r,s));
             }
         }
+        
+        std::cout << __func__ << "A: " << std::endl << A << std::endl;
+        
         // update basis and co-basis
         for(unsigned bPos = 0; bPos < B.size(); ++bPos)
         {
@@ -49,6 +71,8 @@ namespace hpolytope
                 break;
             }
         }
+        
+        std::cout << __func__ << " Res: " << std::endl << A << std::endl;
     }
     
     template<typename Number>
@@ -136,6 +160,7 @@ namespace hpolytope
             j = 1;
             i++;
         }
+        std::cout << __func__ << " New i: " << i << ", New j: " << j << std::endl;
     }
     
     template<typename Number>
@@ -146,12 +171,21 @@ namespace hpolytope
         std::vector<unsigned> tmpN = N;
         unsigned tmpR = r;
         unsigned tmpS = s;
+        
+        std::cout << __func__ << " Check(A, r,s): " << std::endl << tmpA << r << ", " << s << ": ";
+         
         pivot(tmpB, tmpN, tmpA, r, s);
         selectPivot(tmpA, tmpB, tmpN, tmpR, tmpS, f, g);
         if(tmpR == r && tmpS == s)
+        {
+            std::cout << "true" << std::endl;
             return true;
+        }
         else
+        {
+            std::cout << "false" << std::endl;
             return false;
+        }
     }
     
     template<typename Number>
@@ -165,10 +199,13 @@ namespace hpolytope
         unsigned g = n;
         do
         {
+            std::cout << __func__ << " I: " << i << ", J: " << j << std::endl;
             while( i <= m && !isReversePivot(B,N,A,i,j,f,g))
             {
                 increment(A,i,j);
             }
+            
+            std::cout << __func__ << " Incremented to I: " << i << ", J: " << j << std::endl;
             
             if( i <= m )
             {

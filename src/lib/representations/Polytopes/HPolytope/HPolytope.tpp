@@ -118,7 +118,13 @@ namespace hypro
         row_t allOnes = matrix_t::Constant(1,numCols, carl::FLOAT_T<Number>(-1));
         dictionary.row(numRows) = allOnes;
         
-        std::cout << "Optimal dictionary: " << dictionary << std::endl;
+        //std::cout << "Optimal dictionary: " << dictionary << std::endl;
+        for(unsigned index = 0; index < mHPlanes.size() - dimension; ++index)
+            B.push_back(index);
+        B.push_back(mHPlanes.size()+1);
+        
+        for(unsigned index = mHPlanes.size() - dimension ; index <= mHPlanes.size() ; ++index)
+            N.push_back(index);
         
         return dictionary;
     }
@@ -210,10 +216,29 @@ namespace hypro
         */
         
         // get unique optimal first Dictionary
-        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> dictionary = getOptimalDictionary(poly,this->dimension());
+        std::vector<unsigned> basis;
+        std::vector<unsigned> coBasis;
+        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> dictionary = getOptimalDictionary(poly,this->dimension(), basis, coBasis);
         
-        std::cout << "Optimal dictionary:" << std::endl;
-        std::cout << dictionary << std::endl;
+        std::cout << "Optimal dictionary:" << std::endl << dictionary << std::endl;
+        
+        std::cout << "Basis: ";
+        for(auto& val : basis)
+            std::cout << val;
+        std::cout << std::endl;
+        
+        std::cout << "CoBasis: ";
+        for(auto& val : coBasis)
+            std::cout << val;
+        std::cout << std::endl;
+        
+        // initialize values for the algorithm TODO: needed?
+        unsigned f = mHPlanes.size()+2;
+        unsigned g = mHPlanes.size()+1;
+        unsigned m = mHPlanes.size() - dimension() +1;
+        unsigned n = mHPlanes.size() +2;
+        
+        hpolytope::search(basis, coBasis, dictionary);
         
         return solution;
     }

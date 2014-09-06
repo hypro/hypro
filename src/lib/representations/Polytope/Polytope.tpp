@@ -293,16 +293,16 @@ namespace hypro
         
         
         // clear actual generators and add new ones
-        typename Point<Number>::pointSet ps;
+        std::vector<vector> ps;
         for(unsigned i = 0; i < res.cols(); ++i)
         {
             //std::cout << res.col(i) << std::endl;
-            Point<Number> t;
+            vector t = vector(res.rows());
             for(unsigned j = 0; j < res.rows(); ++j)
-                t.setCoordinate(VariablePool::getInstance().carlVarByIndex(j), res.col(i)(j));
-            ps.insert(t);
+                t(j) = res.col(i)(j);
+            ps.push_back(t);
         }
-        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(ps)+1, Parma_Polyhedra_Library::EMPTY);
+        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension<Number>(ps)+1, Parma_Polyhedra_Library::EMPTY);
         for(auto& pointSetIt : ps)
         {
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));

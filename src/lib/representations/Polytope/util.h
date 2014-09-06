@@ -175,6 +175,13 @@ namespace polytope
     }
     
     template<typename Number>
+    static inline unsigned pplDimension(const typename std::vector<vector>& points)
+    {
+        assert(!points.empty());
+        return VariablePool::getInstance().pplVarByIndex(points.at(0).rows()).id();
+    }
+    
+    template<typename Number>
     static inline unsigned pplDimension(const typename std::vector<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
     {
         unsigned result = 0;

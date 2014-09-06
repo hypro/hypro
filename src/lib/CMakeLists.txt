@@ -8,6 +8,8 @@ add_subdirectory(parser)
 
 set(lib_hypro_headers
 	config.h
+        util/VariablePool.h
+        util/eigenTypetraits.h
 	#${lib_hypro_number_headers}
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
