@@ -303,3 +303,30 @@ TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 	std::cout << "Computed Edge (Scalar Product <= 0): " << std::endl;
 	std::cout << resultingEdge << std::endl;
 }
+
+TEST_F(MinkowskiSumTest, localSearchTest)
+{
+	Polytope<double> sumPoly = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+
+	Point<double> initVertex = polyAdj.computeInitVertex(polyAdj2);
+	std::cout << "Point v*: " << initVertex << std::endl;
+
+	sumPoly.addPoint(initVertex);
+
+	Point<double> adjPoint;
+	std::pair<int,int> counter;
+	counter.first = 1;
+	counter.second = 1;
+
+	bool exists = polytope::adjOracle(adjPoint, initVertex, counter);
+	std::cout << "AdjOracle returned Point: " << adjPoint << std::endl;
+
+	Point<double> sinkMaximizerTarget;
+	vector_t<double> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
+
+	polytope::Cone<double>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
+	sumPoly.rFan().add(cone);
+
+	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
+	std::cout << "Local Search result: " << f << std::endl;
+}
