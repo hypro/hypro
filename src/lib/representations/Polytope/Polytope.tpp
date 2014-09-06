@@ -320,7 +320,7 @@ namespace hypro
                 t(j) = res.col(i)(j);
             ps.push_back(t);
         }
-        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension<Number>(ps)+1, Parma_Polyhedra_Library::EMPTY);
+        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension<Number>(ps), Parma_Polyhedra_Library::EMPTY);
         for(auto& pointSetIt : ps)
         {
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));
@@ -414,7 +414,7 @@ namespace hypro
     	vector sinkMaximizerVector = computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
     	//compute the normal cone of the initial extreme point
-    	polytope::Cone<Number>* cone = computeCone(initVertex);
+    	polytope::Cone<Number>* cone = computeCone(initVertex, sinkMaximizerVector);
     	//add this normal cone to the fan of the polytope
     	result.rFan().add(cone);
 
@@ -678,12 +678,12 @@ namespace hypro
     	vector ray = computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
     	//compute the normal cone of _vertex
-    	polytope::Cone<Number>* cone = computeCone(_vertex);
+    	polytope::Cone<Number>* cone = computeCone(_vertex, maximizerVector);
 
     	//iterate through all planes and check which one intersects with the ray
     	carl::FLOAT_T<Number> factor;
     	Point<Number>& origin = cone->origin();
-    	polytope::Plane<Number>* intersectedPlane;
+    	polytope::Hyperplane<Number>* intersectedPlane;
 
     	for (auto& plane : cone->get()) {
     		if (plane->intersection(factor, ray)) {
@@ -700,7 +700,7 @@ namespace hypro
     		for (auto& plane : cone.get()) {
     			//check if our intersectedPlane is also present in the currently examined cone
     			//for that the Scalar has to be the same, and the cross product of both normals has to be 0 (=> normals are parallel)
-    			FLOAT_T<Number> crossProduct = intersectedPlane->normal().cross(plane.normal());
+    			carl::FLOAT_T<Number> crossProduct = intersectedPlane->normal().cross(plane.normal());
     			//TODO crossProduct ~ 0, not exactly (rounding error)
     			if ((intersectedPlane->offset() == plane.offset()) && (crossProduct == 0)) {
     					//found the plane

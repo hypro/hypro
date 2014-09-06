@@ -630,7 +630,7 @@ namespace polytope
     }
 
     template<typename Number>
-    polytope::Cone<Number>* computeCone(Point<Number>& _vertex) {
+    polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector& _maximizerVector) {
     	//edges if necessary
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
     	Point<Number> sourceVertex1 = vertexComposition[0];
@@ -656,8 +656,8 @@ namespace polytope
     	}
 
     	//TODO p1 & p2 of different dimension?
-    	unsigned dimension = this->dimension();
     	std::vector<vector> tmpEdges;
+    	unsigned dimension = tmpEdges.at(0).rows();
     	vector tmpVector;
     	std::vector<vector> resultVectorSet;
 
@@ -667,7 +667,7 @@ namespace polytope
     			//consider dimension-1 edges
     			tmpEdges.push_back(edges.at(j));
     		}
-    		tmpVector = polytope::computeNormalConeVector<Number>(tmpEdges, maximizerVector);
+    		tmpVector = polytope::computeNormalConeVector<Number>(tmpEdges, _maximizerVector);
     		resultVectorSet.push_back(tmpVector);
     	}
 
