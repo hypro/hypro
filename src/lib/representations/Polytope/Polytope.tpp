@@ -192,6 +192,24 @@ namespace hypro
     	return mPoints;
     }
     
+
+    //returns the fan of the Polytope
+    template<typename Number>
+    const polytope::Fan<Number>& Polytope<Number>::fan() {
+    	return mFan;
+    }
+
+    template<typename Number>
+    polytope::Fan<Number>& Polytope<Number>::rFan() {
+    	return mFan;
+    }
+
+    //sets the fan of the Polytope
+    template<typename Number>
+    void Polytope<Number>::setFan(const polytope::Fan<Number>& _fan){
+    	mFan = _fan;
+    }
+
     template<typename Number>
     void Polytope<Number>::print() const
     {
@@ -379,6 +397,10 @@ namespace hypro
     	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
+    	/**
+    	 * Preprocessing
+    	 */
+
     	//delta = max vertex degree
     	int delta_1 = this->computeMaxVDegree();
     	int delta_2 = rhs.computeMaxVDegree();
@@ -391,6 +413,11 @@ namespace hypro
     	Point<Number> sinkMaximizerTarget;
     	vector sinkMaximizerVector = computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
+    	//compute the normal cone of the initial extreme point
+    	polytope::Cone<Number>* cone = computeCone(initVertex);
+    	//add this normal cone to the fan of the polytope
+    	result.rFan().add(cone);
+
     	//set currentVertex to initVertex
     	Point<Number> currentVertex = initVertex;
 
@@ -398,6 +425,10 @@ namespace hypro
     	std::pair<int,int> counter;
     	counter.first = 1;
     	counter.second = 0;
+
+    	/**
+    	 * Reverse Search Algorithm
+    	 */
 
     	Point<Number> nextVertex;
 
@@ -414,7 +445,7 @@ namespace hypro
     			}
 
     			//choose next Vertex, only continue if one exists
-    			if (adjOracle(nextVertex, currentVertex, counter)) {
+    			if (polytope::adjOracle(nextVertex, currentVertex, counter)) {
     				Point<Number> localSearchVertex = localSearch(nextVertex, sinkMaximizerTarget);
     				if (localSearchVertex == currentVertex) {
     					//TODO set Neighbors of both accordingly?
@@ -447,7 +478,7 @@ namespace hypro
     	    			} else {
     	    				counter.second += 1;
     	    			}
-    	    			bool not_used = adjOracle(result, currentVertex, counter);
+    	    			bool not_used = polytope::adjOracle(result, currentVertex, counter);
 
     			} while (result != temp);
 
@@ -581,7 +612,6 @@ namespace hypro
      * @author: Chris K.
      * in the following: Utility functions for altMinkowskiSum()
      */
-
     //returns max. Vertex degree in a Polytope
     //TODO has to be assured that no inner vertices exist -> assume convex Hull?
     template<typename Number>
@@ -643,6 +673,63 @@ namespace hypro
     	vector maximizerVector = computeMaximizerVector(maximizerTarget, _vertex);
 
     	//TODO perform ray shooting between maximizerTarget & _sinkMaximizerTarget
+
+    	//compute the ray direction (a vector)
+    	vector ray = computeEdge(maximizerTarget, _sinkMaximizerTarget);
+
+    	//compute the normal cone of _vertex
+    	polytope::Cone<Number>* cone = computeCone(_vertex);
+
+    	//iterate through all planes and check which one intersects with the ray
+    	carl::FLOAT_T<Number> factor;
+    	Point<Number>& origin = cone->origin();
+    	polytope::Plane<Number>* intersectedPlane;
+
+    	for (auto& plane : cone->get()) {
+    		if (plane->intersection(factor, ray)) {
+    			intersectedPlane = plane;
+    			break;
+    		}
+    	}
+
+    	bool found = false;
+    	Point<Number> secondOrigin;
+
+    	//iterate through all cones in the fan
+    	for (auto& cone : this->mFan.get()) {
+    		for (auto& plane : cone.get()) {
+    			//check if our intersectedPlane is also present in the currently examined cone
+    			//for that the Scalar has to be the same, and the cross product of both normals has to be 0 (=> normals are parallel)
+    			FLOAT_T<Number> crossProduct = intersectedPlane->normal().cross(plane.normal());
+    			//TODO crossProduct ~ 0, not exactly (rounding error)
+    			if ((intersectedPlane->offset() == plane.offset()) && (crossProduct == 0)) {
+    					//found the plane
+    					found = true;
+    					break;
+    			}
+    		}
+    		if (found) {
+    			//retrieve the origin of the cone that has the identical plane
+    			secondOrigin = cone.origin();
+    			break;
+    		}
+
+    	}
+
+    	//add this normal cone to fan of polytope
+    	//Important! after localSearch has been applied (so that we dont search in our own cone)
+    	this->mFan.add(cone);
+
+    	return secondOrigin;
+
+    	//normal cone N(v;P) is the set of solutions Lambda to
+    	//ej(vj,i) *Lambda <= 0 for all valid edges
+    	// -> set of vectors?
+
+    	//TODO compute facets of the normal cone of v -> hyperplanes
+    	//then insert the line into the hyperplane equation
+    	//check if there is a solution
+    	//yes -> line intersects hyperplane; no -> no intersection; tautology -> parallel to each other
 
 
 

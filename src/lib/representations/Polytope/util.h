@@ -255,6 +255,9 @@ namespace polytope
     	return result;
     }
 
+    /**
+     * currently not needed anymore
+     *
 	template<typename Number>
 	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble(const vector& _vec) {
 		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultVec(_vec.rows(),1);
@@ -264,6 +267,7 @@ namespace polytope
 		}
 		return resultVec;
 	}
+	*/
 
     template<typename Number>
     bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int> _counter) {
@@ -312,7 +316,7 @@ namespace polytope
 			//check if edges are parallel (considering direction too)
 			//for this the following has to hold: (x dot_product y) / (|x|*|y|) = 1
 
-			//.dot() & .norm() not defined for FLOAT_T<Number>, conversion to Double necessary
+			/** OUTDATED: .dot() & .norm() not defined for FLOAT_T<Number>, conversion to Double necessary
 			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector(tempEdge.rows());
 			doubleVector = convertVecToDouble<Number>(tempEdge);
 			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector2(edge.rows());
@@ -320,6 +324,10 @@ namespace polytope
 
 			Number dotProduct = doubleVector.dot(doubleVector2);
 			Number normFactor = doubleVector.norm() * doubleVector2.norm();
+			*/
+
+			carl::FLOAT_T<Number> dotProduct = tempEdge.dot(edge);
+			carl::FLOAT_T<Number> normFactor = tempEdge.norm() * edge.norm();
 
 			if (dotProduct/normFactor == 1) {
 				parallelEdge = tempEdge;
@@ -550,8 +558,139 @@ namespace polytope
 
         return result;
 
-		/////////
+    }
 
+    template<typename Number>
+    vector computeNormalConeVector(std::vector<vector>& _edgeSet, vector& _maximizerVector) {
+
+    	/*
+		 * Setup LP with GLPK
+		 */
+		glp_prob *coneVector;
+		coneVector = glp_create_prob();
+		glp_set_obj_dir(coneVector, GLP_MAX);
+
+		//we have one row for each edge in our set
+		glp_add_rows(coneVector, _edgeSet.size());
+
+		//constraints of auxiliary variables (bounds for rows)
+		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
+			glp_set_row_bnds(coneVector, i, GLP_FX, 0.0, 0.0);
+		}
+
+		//each column corresponds to one dimension of a vector in our edgeSet
+		//TODO consider p1 & p2 of different dimensions? (-> two edge sets)
+		glp_add_cols(coneVector, _edgeSet.at(0).rows());
+
+		//coefficients of objective function:
+		//maximize the scalar product between the computed Maximizer Vector of the vertex in P and the vector of the cone that we look for
+		//=> this secures that our returned vector is oriented "the right way"
+		for (unsigned i=1; i <= _edgeSet.at(0).rows(); ++i) {
+			glp_set_obj_coef(coneVector, i, _maximizerVector(i-1).toDouble());
+		}
+
+		//constraints for structural variables
+		for (unsigned i=1; i<= _edgeSet.at(0).rows(); ++i) {
+			glp_set_col_bnds(coneVector, i, GLP_DB, -1.0, 1.0);
+		}
+
+		//setup matrix coefficients
+		unsigned elements = (_edgeSet.size()) * (_edgeSet.at(0).rows());
+		int ia[elements];
+		int ja[elements];
+		double ar[elements];
+		unsigned pos = 1;
+
+		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
+
+			for (unsigned j=1; j <= _edgeSet.at(0).rows(); ++j) {
+				ia[pos] = i;
+				ja[pos] = j;
+				vector tmpVec = _edgeSet.at(i-1);
+				ar[pos] = tmpVec(j-1).toDouble();
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+				++pos;
+			}
+		}
+		assert(pos-1 <= elements);
+
+		glp_load_matrix(coneVector, elements, ia, ja, ar);
+		glp_simplex(coneVector, NULL);
+
+		vector result = vector(_edgeSet.at(0).rows(),1);
+
+		//fill the result vector based on the optimal solution returned by the LP
+		for (unsigned i=1; i <= _edgeSet.at(0).rows(); ++i) {
+			result(i-1) = glp_get_col_prim(coneVector, i);
+		}
+
+		glp_delete_prob(coneVector);
+
+		return result;
+    }
+
+    template<typename Number>
+    polytope::Cone<Number>* computeCone(Point<Number>& _vertex) {
+    	//edges if necessary
+    	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
+    	Point<Number> sourceVertex1 = vertexComposition[0];
+    	Point<Number> sourceVertex2 = vertexComposition[1];
+
+    	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
+    	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
+
+    	std::vector<vector> edges;
+    	vector tmpEdge;
+
+    	//traverse neighbors of v1
+    	for (auto neighbor : neighbors1) {
+    		//TODO check if this works, else tmpEdge outside
+    		tmpEdge = computeEdge(sourceVertex1,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+    	//traverse neighbors of v2
+    	for (auto neighbor : neighbors2) {
+    		tmpEdge = computeEdge(sourceVertex2,neighbor);
+    		edges.push_back(tmpEdge);
+    	}
+
+    	//TODO p1 & p2 of different dimension?
+    	unsigned dimension = this->dimension();
+    	std::vector<vector> tmpEdges;
+    	vector tmpVector;
+    	std::vector<vector> resultVectorSet;
+
+    	//#dimension-1 edges define one (edge) vector of our cone
+    	for (unsigned i = 0; i < edges.size(); ++i) {
+    		for (unsigned j = 0; j < dimension-1; ++j) {
+    			//consider dimension-1 edges
+    			tmpEdges.push_back(edges.at(j));
+    		}
+    		tmpVector = polytope::computeNormalConeVector<Number>(tmpEdges, maximizerVector);
+    		resultVectorSet.push_back(tmpVector);
+    	}
+
+    	//two (edge) vectors define one hyperplane of our cone
+    	// -> iterate over resultVectorSet & consider every edge with its direct neighbor
+    	polytope::Cone<Number>* cone = new polytope::Cone<Number>(tmpVector.rows());
+    	//set the origin of the cone
+    	cone->setOrigin(_vertex);
+    	std::vector<vector> vectorPair;
+
+    	//fill cone
+    	for (unsigned i = 0; i < resultVectorSet.size()-1; ++i) {
+    		vectorPair.push_back(resultVectorSet.at(i));
+    		vectorPair.push_back(resultVectorSet.at(i+1));
+
+    		//convert Point<Number> to Vector by explicit cast
+    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector(_vertex), vectorPair);
+    		cone->add(plane);
+
+    		vectorPair.clear();
+    	}
+
+    	return cone;
     }
 
 }

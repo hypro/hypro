@@ -34,6 +34,7 @@ namespace hypro
         C_Polyhedron mPolyhedron;
         std::vector<Point<Number>> mPoints;
         bool mPointsUpToDate;
+        polytope::Fan<Number> mFan;
 
     public:
         Polytope();
@@ -73,6 +74,15 @@ namespace hypro
          */
         const std::vector<Point<Number>>& points();
         
+        //returns the fan of the Polytope
+        const polytope::Fan<Number>& fan();
+
+        //returns a reference to the fan of the Polytope
+        polytope::Fan<Number>& rFan();
+
+        //sets the fan of the Polytope
+        void setFan(const polytope::Fan<Number>& _fan);
+
         /**
          * Prints the polytopes' generators obtained from the PPL to stdout.
          */

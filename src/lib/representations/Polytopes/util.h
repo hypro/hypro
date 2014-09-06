@@ -20,7 +20,7 @@ namespace polytope
     class Hyperplane
     {
         private:
-        Point<Number>           mNormal;
+        vector		            mNormal;
         carl::FLOAT_T<Number>   mScalar;
         unsigned                mDimension;
         
@@ -40,26 +40,39 @@ namespace polytope
         mDimension(orig.mDimension)
         {}
         
-        Hyperplane(const Point<Number>& vector, const Number& scalar) :
+        Hyperplane(const vector& vector, const Number& scalar) :
         mNormal(vector),
         mScalar(carl::FLOAT_T<Number>(scalar)),
-        mDimension(vector.dimension())
+        mDimension(vector.rows())
         {}
         
+        Hyperplane(const vector& _vec, const std::vector<vector>& _vectorSet)
+        {
+        	//here: hyperplane given in parameterform is converted to normalform
+        	assert(_vectorSet.size() == 2);
+        	//the normal vector of the hyperplane is the cross product of both directions
+        	mNormal = _vectorSet.at(0).cross(_vectorSet.at(1));
+
+        	//the scalar is just the scalarproduct of the normal vector & a point in the hyperplane
+        	mScalar = mNormal.dot(_vec);
+
+        	mDimension = _vec.rows();
+        }
+
         unsigned dimension() const
         {
-            return mNormal.dimension();
+            return mNormal.rows();
         }
         
-        Point<Number> normal() const
+        vector normal() const
         {
             return mNormal;
         }
         
-        void setNormal(const Point<Number>& normal)
+        void setNormal(const vector& normal)
         {
             mNormal = normal;
-            mDimension = normal.dimension();
+            mDimension = normal.rows();
         }
         
         Number offset() const
@@ -72,12 +85,18 @@ namespace polytope
             mScalar = carl::FLOAT_T<Number>(offset);
         }
         
-        Point<Number> intersection(const Point<Number>& vector) const
+        bool intersection(carl::FLOAT_T<Number>& _result, const vector& _vector) const
         {
-            Point<Number> result = vector;
-            carl::FLOAT_T<Number> factor = mScalar / (mNormal*vector);
-            result *= factor;
-            return result;
+        	bool intersect = false;
+        	carl::FLOAT_T<Number> factor;
+            carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
+            if (dotProduct != 0) {
+            	intersect = true;
+            	factor = mScalar / dotProduct;
+            }
+            _result = factor;
+            //note: to get the intersection point -> _vector *= factor;
+            return intersect;
         }
         
         private:
@@ -102,10 +121,12 @@ namespace polytope
         private:
             planes     mPlanes;
             unsigned    mDimension;
+            Point<Number> mOrigin;
         public:
             Cone() :
             mPlanes(),
-            mDimension()
+            mDimension(),
+            mOrigin()
             {}
             
             ~Cone()
@@ -115,12 +136,14 @@ namespace polytope
             
             Cone(const Cone& orig) :
             mPlanes(orig.get()),
-            mDimension(orig.dimension())
+            mDimension(orig.dimension()),
+            mOrigin(orig.mOrigin)
             {}
             
             Cone(unsigned dimension) :
             mPlanes(dimension),
-            mDimension()
+            mDimension(),
+            mOrigin()
             {
                 assert(mPlanes.max_size() == dimension);
             }
@@ -144,6 +167,17 @@ namespace polytope
                 return mPlanes.size();
             }
             
+            const Point<Number>& origin() const
+			{
+            	return mOrigin;
+			}
+
+            void setOrigin(const Point<Number>& _origin)
+            {
+            	mOrigin = _origin;
+            	mDimension = _origin.dimension();
+            }
+
             const Hyperplane<Number>* get(unsigned index) const
             {
                 assert(index < mPlanes.size());
@@ -301,12 +335,16 @@ namespace polytope
             
             Fan<Number> operator=(const Fan<Number>& rhs)
             {
-                if( this != &rhs )
+               /* if( this != &rhs )
                 {
                     Fan<Number> tmp(rhs);
                     std::swap(*this,tmp);
                 }
                 return *this;
+                */
+            	this->mCones = rhs.get();
+            	this->mDimension = rhs.dimension();
+            	return *this;
             }
     };
     

@@ -898,6 +898,17 @@ namespace hypro {
                 ostr << ")";
                 return ostr;
             }
+
+            explicit operator vector() const
+        	{
+            	vector result = vector(mCoordinates.size());
+            	unsigned index = 0;
+            	for (auto& pointIt : mCoordinates) {
+            		result(index) = pointIt.second;
+            		++index;
+            	}
+            	return result;
+        	}
     };
     
     template<typename Number>
@@ -960,4 +971,5 @@ namespace hypro {
         }
         return result;
     }
+
 }
