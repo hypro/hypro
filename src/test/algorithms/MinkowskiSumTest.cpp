@@ -274,3 +274,32 @@ TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
 	std::cout << result << std::endl;
 	std::cout << "Target Vertex: " << target << std::endl;
 }
+
+TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
+{
+	Point<double> p;
+	Point<double>::coordinateMap coordinateMap;
+	coordinateMap.insert( std::make_pair(x, 0) );
+	coordinateMap.insert( std::make_pair(y, 1) );
+	p = Point<double>(coordinateMap);
+
+	vector_t<double> result = polytope::computeEdge(t1, p);
+	std::cout << "source Point: " << t1 << std::endl;
+	std::cout << "target Point: " << p << std::endl;
+	std::cout << "Edge: " << std::endl;
+	std::cout << result << std::endl;
+
+	std::vector<vector_t<double>> edgeSet;
+	edgeSet.push_back(result);
+
+	//for the maximizer vector we need v=v1+v2
+	Point<double> v = polyAdj.computeInitVertex(polyAdj2);
+	Point<double> target;
+	vector_t<double> maximizer = polytope::computeMaximizerVector(target, v);
+	std::cout << "Maximizer Vector: " << std::endl;
+	std::cout << maximizer << std::endl;
+
+	vector_t<double> resultingEdge = polytope::computeNormalConeVector<double>(edgeSet, maximizer);
+	std::cout << "Computed Edge (Scalar Product <= 0): " << std::endl;
+	std::cout << resultingEdge << std::endl;
+}
