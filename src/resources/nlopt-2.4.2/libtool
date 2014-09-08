@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (nlopt) 2.4.2
-# Libtool was configured on host informatik-2-137-226-194-157.nn.rwth-aachen.de:
+# Libtool was configured on host 97-028.vpn.rwth-aachen.de:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -164,7 +164,7 @@ old_postuninstall_cmds=""
 lock_old_archive_extraction=yes
 
 # A C compiler.
-LTCC="clang"
+LTCC="gcc"
 
 # LTCC compiler flags.
 LTCFLAGS="-g -O2"
@@ -305,7 +305,7 @@ reload_cmds="\$LTCC \$LTCFLAGS -nostdlib \${wl}-r -o \$output\$reload_objs"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$tool_oldlib"
 
 # A language specific compiler.
-CC="clang"
+CC="gcc"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes
@@ -10103,7 +10103,7 @@ reload_cmds="\$LTCC \$LTCFLAGS -nostdlib \${wl}-r -o \$output\$reload_objs"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$tool_oldlib"
 
 # A language specific compiler.
-CC="clang++"
+CC="g++"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes

@@ -1,0 +1,1 @@
+cmd='/usr/local/Cellar/cmake/3.0.1/bin/cmake;-Dgtest_force_shared_crt=ON;-DCXX=/usr/bin/clang++;-DCMAKE_CXX_FLAGS=-stdlib=libc++;-DCMAKE_CXX_FLAGS=-std=c++11;-DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1;-GUnix Makefiles;/Users/jongan/Dropbox/HiWi job stuffs/hypro/src/resources/gtest-1.6.0'

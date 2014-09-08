@@ -3,7 +3,7 @@
 #include "../../lib/datastructures/hybridAutomata/Location.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "carl/core/VariablePool.h"
+#include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/algorithms/reachability/forwardReachability.h"
 
