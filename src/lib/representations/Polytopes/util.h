@@ -224,18 +224,18 @@ namespace polytope
                 mPlanes.clear();
             }
             
-            Cone(const Cone& orig) :
-            mPlanes(orig.get()),
-            mDimension(orig.dimension()),
-            mOrigin(orig.mOrigin)
+            Cone(const Cone& _orig) :
+            mPlanes(_orig.get()),
+            mDimension(_orig.dimension()),
+            mOrigin(_orig.mOrigin)
             {}
             
-            Cone(unsigned dimension) :
-            mPlanes(dimension),
+            Cone(unsigned _dimension) :
+            mPlanes(_dimension),
             mDimension(),
             mOrigin()
             {
-                assert(mPlanes.max_size() == dimension);
+                assert(mPlanes.max_size() == _dimension);
             }
             
             /*
@@ -268,15 +268,15 @@ namespace polytope
             	mDimension = _origin.dimension();
             }
 
-            const Hyperplane<Number>* get(unsigned index) const
+            const Hyperplane<Number>* get(unsigned _index) const
             {
-                assert(index < mPlanes.size());
-                return mPlanes.at(index);
+                assert(_index < mPlanes.size());
+                return mPlanes.at(_index);
             }
             
-            const Hyperplane<Number>* get(typename planes::const_iterator pos) const
+            const Hyperplane<Number>* get(typename planes::const_iterator _pos) const
             {
-                return *pos;
+                return *_pos;
             }
             
             typename planes::const_iterator begin()
@@ -289,10 +289,10 @@ namespace polytope
                 return mPlanes.end();
             }
             
-            void add(const Hyperplane<Number>* plane)
+            void add(const Hyperplane<Number>* _plane)
             {
-                mPlanes.push_back(plane);
-                mDimension = mDimension < plane->dimension() ? plane->dimension() : mDimension;
+                mPlanes.push_back(_plane);
+                mDimension = mDimension < _plane->dimension() ? _plane->dimension() : mDimension;
             }
             
             Point<Number> getUnitAverageVector() const
@@ -307,17 +307,17 @@ namespace polytope
                 return result;
             }
             
-            bool contains(const Point<Number>* vector) const
+            bool contains(const Point<Number>* _vector) const
             {
             	// Todo
                 return false;
             }
             
-            Cone<Number> operator=(const Cone<Number>& rhs)
+            Cone<Number> operator=(const Cone<Number>& _rhs)
             {
-                if( this != &rhs )
+                if( this != &_rhs )
                 {
-                    Cone<Number> tmp(rhs);
+                    Cone<Number> tmp(_rhs);
                     std::swap(*this,tmp);
                 }
                 return *this;
@@ -344,9 +344,9 @@ namespace polytope
                 mCones.clear();
             }
             
-            Fan(const Fan& orig) :
-            mCones(orig.get()),
-            mDimension(orig.dimension())
+            Fan(const Fan& _orig) :
+            mCones(_orig.get()),
+            mDimension(_orig.dimension())
             {}
             
             /*
@@ -358,10 +358,10 @@ namespace polytope
                 return mCones;
             }
             
-            const Cone<Number>* get(unsigned index) const
+            const Cone<Number>* get(unsigned _index) const
             {
-                assert(index < mCones.size());
-                return mCones.at(index);
+                assert(_index < mCones.size());
+                return mCones.at(_index);
             }
             
             unsigned dimension() const
@@ -374,13 +374,13 @@ namespace polytope
                 return mCones.size();
             }
             
-            void add(const Cone<Number>* cone)
+            void add(const Cone<Number>* _cone)
             {
-                mCones.push_back(cone);
-                mDimension = mDimension < cone->dimension() ? cone->dimension() : mDimension;
+                mCones.push_back(_cone);
+                mDimension = mDimension < _cone->dimension() ? _cone->dimension() : mDimension;
             }
             
-            const Cone<Number>* containingCone(const Point<Number>& vector) const
+            const Cone<Number>* containingCone(const Point<Number>& _vector) const
             {
                 // set up glpk
                 glp_prob *cones;
@@ -423,7 +423,7 @@ namespace polytope
                 glp_delete_prob(cones);
             }
             
-            Fan<Number> operator=(const Fan<Number>& rhs)
+            Fan<Number> operator=(const Fan<Number>& _rhs)
             {
                /* if( this != &rhs )
                 {
@@ -432,8 +432,8 @@ namespace polytope
                 }
                 return *this;
                 */
-            	this->mCones = rhs.get();
-            	this->mDimension = rhs.dimension();
+            	this->mCones = _rhs.get();
+            	this->mDimension = _rhs.dimension();
             	return *this;
             }
     };
