@@ -20,7 +20,7 @@ namespace polytope
     class Hyperplane
     {
         private:
-        vector		            mNormal;
+        vector		        mNormal;
         carl::FLOAT_T<Number>   mScalar;
         unsigned                mDimension;
         
@@ -34,16 +34,79 @@ namespace polytope
         ~Hyperplane()
         {}
         
-        Hyperplane(const Hyperplane<Number>& orig) :
-        mNormal(orig.mNormal),
-        mScalar(orig.mScalar),
-        mDimension(orig.mDimension)
+        Hyperplane(const Hyperplane<Number>& _orig) :
+        mNormal(_orig.mNormal),
+        mScalar(_orig.mScalar),
+        mDimension(_orig.mDimension)
         {}
         
-        Hyperplane(const vector& vector, const Number& scalar) :
-        mNormal(vector),
-        mScalar(carl::FLOAT_T<Number>(scalar)),
-        mDimension(vector.rows())
+        /**
+         * Constructor from a Point - shpuld not be used.
+         * @param vector
+         * @param _off
+         */
+        Hyperplane(const Point<Number>& _vector, const carl::FLOAT_T<Number>& _off)
+        {
+            mNormal = vector(_vector.dimension());
+            unsigned pos = 0;
+            for(auto& coordinate : _vector)
+            {
+                mNormal(pos) = coordinate.second;
+                ++pos;
+            }
+            mScalar = _off;
+            mDimension = pos;
+        }
+        
+        Hyperplane(const Point<Number>& _vector, const Number& _off)
+        {
+            mNormal = vector(_vector.dimension());
+            unsigned pos = 0;
+            for(auto& coordinate : _vector)
+            {
+                mNormal(pos) = coordinate.second;
+                ++pos;
+            }
+            mScalar = carl::FLOAT_T<Number>(_off);
+            mDimension = pos;
+        }
+        
+        Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off)
+        {
+            mNormal = vector(_coordinates.size());
+            unsigned pos = 0;
+            for(auto& coordinate : _coordinates)
+            {
+                mNormal(pos) = coordinate;
+                ++pos;
+            }
+            mScalar = carl::FLOAT_T<Number>(_off);
+            mDimension = pos;
+        }
+        
+        Hyperplane(std::initializer_list<Number> _coordinates, const carl::FLOAT_T<Number>& _off)
+        {
+            mNormal = vector(_coordinates.size());
+            unsigned pos = 0;
+            for(auto& coordinate : _coordinates)
+            {
+                mNormal(pos) = coordinate;
+                ++pos;
+            }
+            mScalar = _off;
+            mDimension = pos;
+        }
+        
+        Hyperplane(const vector& _vector, const Number& _off) :
+        mNormal(_vector),
+        mScalar(carl::FLOAT_T<Number>(_off)),
+        mDimension(_vector.rows())
+        {}
+        
+        Hyperplane(const vector& _vector, const carl::FLOAT_T<Number>& _off) :
+        mNormal(_vector),
+        mScalar(_off),
+        mDimension(_vector.rows())
         {}
         
         Hyperplane(const vector& _vec, const std::vector<vector>& _vectorSet)
@@ -72,10 +135,10 @@ namespace polytope
             return mNormal;
         }
         
-        void setNormal(const vector& normal)
+        void setNormal(const vector& _normal)
         {
-            mNormal = normal;
-            mDimension = normal.rows();
+            mNormal = _normal;
+            mDimension = _normal.rows();
         }
         
         Number offset() const
@@ -83,9 +146,14 @@ namespace polytope
             return mScalar.value();
         }
         
-        void setOffset(Number offset)
+        void setOffset(Number _offset)
         {
-            mScalar = carl::FLOAT_T<Number>(offset);
+            mScalar = carl::FLOAT_T<Number>(_offset);
+        }
+        
+        void setOffset(const carl::FLOAT_T<Number>& _offset)
+        {
+            mScalar = _offset;
         }
         
         bool intersection(carl::FLOAT_T<Number>& _result, const vector& _vector) const
@@ -102,6 +170,25 @@ namespace polytope
             return intersect;
         }
         
+        bool intersection(Number _result, const vector& _vector) const
+        {
+        	bool intersect = false;
+        	carl::FLOAT_T<Number> factor;
+            carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
+            if (dotProduct != 0) {
+            	intersect = true;
+            	factor = mScalar / dotProduct;
+            }
+            _result = factor.value();
+            //note: to get the intersection point -> _vector *= factor;
+            return intersect;
+        }
+        
+        bool intersection(carl::FLOAT_T<Number>& _result, const Point<Number>& _vector) const
+        {
+            // TODO
+        }
+        
         private:
             const carl::FLOAT_T<Number>& internalOffset() const
             {
@@ -110,10 +197,10 @@ namespace polytope
     };
     
     template<typename Number>
-    std::ostream& operator<<(std::ostream& lhs, const hypro::polytope::Hyperplane<Number>& rhs)
+    std::ostream& operator<<(std::ostream& _lhs, const hypro::polytope::Hyperplane<Number>& _rhs)
     {
-        lhs << "( " << rhs.normal() << ", " << carl::FLOAT_T<Number>(rhs.offset()) << " )";
-        return lhs;
+        _lhs << "( " << _rhs.normal() << ", " << carl::FLOAT_T<Number>(_rhs.offset()) << " )";
+        return _lhs;
     }
 
     template<typename Number>

@@ -90,18 +90,23 @@ TEST_F(PolytopeUtilTest, HyperplaneConstructor)
 {
     Hyperplane<number_t> constructor1;
     
-    Point<number_t> norm(x,1);
-    norm.setCoordinate(y,3);
+    vector norm = vector(2);
+    norm(0) = 1;
+    norm(1) = 3;
     
     Hyperplane<number_t> constructor2(norm, 4.3);
-    Hyperplane<number_t> constructor3(constructor1);
+    
+    Hyperplane<number_t> constructor3({1,3}, 4.3);
+    
+    Hyperplane<number_t> constructor4(constructor1);
     SUCCEED();
 }
 
 TEST_F(PolytopeUtilTest, HyperplaneAccess)
 {
-    Point<number_t> norm(x,1);
-    norm.setCoordinate(y,3);
+    vector norm = vector(2);
+    norm(0) = 1;
+    norm(1) = 3;
     Hyperplane<number_t> access1(norm, 4.3);
     
     EXPECT_EQ(norm, access1.normal());
@@ -115,13 +120,17 @@ TEST_F(PolytopeUtilTest, HyperplaneIntersection)
     norm.setCoordinate(y,3);
     Hyperplane<number_t> intersection1(norm, 4.3);
     
-    Point<number_t> vector(x,2);
-    vector.setCoordinate(y,2);
+    vector vec = vector(2);
+    vec(0) = 2;
+    vec(1) = 2;
     
-    Point<number_t> result = intersection1.intersection(vector);
+    number_t result = 0.0;
+    intersection1.intersection(result, vec);
     
-    EXPECT_EQ(1.075, result.at(x));
-    EXPECT_EQ(1.075, result.at(y));
+    std::cout << "Result: " << result << std::endl;
+    
+    EXPECT_EQ(1.075, vec(0)*result);
+    EXPECT_EQ(1.075, vec(1)*result);
 }
 
 TEST_F(PolytopeUtilTest, ConeConstructor)

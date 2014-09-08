@@ -11,7 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
         VPolytopeTest.cpp
         #OrthogonalPolyhedronTest.cpp
         #PolytopeTest.cpp
-        #PolytopeUtilTest.cpp
+        PolytopeUtilTest.cpp
         NeighbourhoodContainerTest.cpp
         #GridTest.cpp
     )
