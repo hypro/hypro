@@ -94,18 +94,43 @@ namespace hypro
         auto varBlock = bottom.rightCols(dimension);
         auto constPart = bottom.leftCols(1);
         
-        matrix_t a = matrix_t(varBlock);
+        matrix_t tmp = matrix_t(varBlock);
         vector_t b = vector_t(constPart);
         
-        std::cout << "A: " << a << ", b: " << b << std::endl;
+        matrix_t a(tmp.rows(), 2*dimension+1);
+        a << tmp, -b, matrix_t::Identity(dimension,dimension);
         
-        vector_t sol = a.colPivHouseholderQr().solve(b);
-        std::cout << "Solution: " << sol << std::endl;
+        std::cout << "A: " << a << std::endl <<", b: " << b << std::endl;
         
-        matrix_t upperA = matrix_t(A.topRows(numRows));
+        //normalize rows for each variable and forward insertion
+        for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
+        {
+            a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
+            a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
+        }
         
-        std::cout << "UpperA: " << std::endl << upperA << std::endl;
+        std::cout << "After forward insertion: " << std::endl << a << std::endl;
         
+        // backward insertion
+        for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
+        {
+            if(a(rowIndex,rowIndex) != 1)
+            {
+                a.row(rowIndex) = a.row(rowIndex) / a(rowIndex,rowIndex);
+            }
+            a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
+        }
+        
+        std::cout << "After gaussian elimination: " << std::endl << a << std::endl;
+        
+        //vector_t sol = a.colPivHouseholderQr().solve(b);
+        //std::cout << "Solution: " << sol << std::endl;
+        
+        //matrix_t upperA = matrix_t(A.topRows(numRows));
+        
+        //std::cout << "UpperA: " << std::endl << upperA << std::endl;
+        
+        /*
         for(unsigned cIndex = 0; cIndex < upperA.cols()-1; ++cIndex)
         {
             dictionary.col(cIndex) = upperA.col(cIndex) * sol(cIndex,0);
@@ -126,7 +151,7 @@ namespace hypro
         
         for(unsigned index = mHPlanes.size() - dimension ; index <= mHPlanes.size() ; ++index)
             N.push_back(index);
-        
+        */
         return dictionary;
     }
     
