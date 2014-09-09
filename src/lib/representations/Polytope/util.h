@@ -321,7 +321,7 @@ namespace polytope
 
     	std::vector<Point<Number>> otherNeighbors = otherSource.neighbors();
 
-    	std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
+    	//std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
 
     	vector tempEdge;
 		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
@@ -412,7 +412,7 @@ namespace polytope
 		  ia[pos] = 1;
 		  ja[pos] = j;
 		  ar[pos] = edge(j-1).toDouble();
-		  std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
+		  //std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
 		  ++pos;
 		}
 
@@ -425,7 +425,7 @@ namespace polytope
                   ja[pos] = j;
                   vector tmpVec = nonParallelEdges.at(i-2);
                   ar[pos] = tmpVec(j-1).toDouble();
-                  std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+                  //std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
                   ++pos;
               }
           }

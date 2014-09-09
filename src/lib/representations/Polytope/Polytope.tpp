@@ -396,6 +396,7 @@ namespace hypro
         bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, Polytope<Number>& rhs) {
     	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+    	std::vector<Point<Number>> alreadyExploredVertices;
 
     	/**
     	 * Preprocessing
@@ -408,6 +409,7 @@ namespace hypro
     	//initVertex = initial extreme point & root of spanning tree
     	Point<Number> initVertex = this->computeInitVertex(rhs);
     	result.addPoint(initVertex);
+    	alreadyExploredVertices.push_back(initVertex);
     	std::cout << "---------------" << std::endl;
     	std::cout << "following Vertex is part of result: " << initVertex << std::endl;
     	std::cout << "---------------" << std::endl;
@@ -437,11 +439,17 @@ namespace hypro
     	std::cout << "-------------------------" << std::endl;
 
     	Point<Number> nextVertex;
-    	Point<Number> lastExploredVertex;
+    	std::vector<std::pair<int,int>> counterMemory;
+    	bool alreadyExplored;
 
     	do {
 
-    		while (counter.first < 2 && counter.second < delta_2) {
+    		while (counter.first < 2 || (counter.first==2 && counter.second < delta_2) ) {
+
+    	    	std::cout << "Max. Vertex Degree in Poly 1: " << delta_1 << std::endl;
+    	    	std::cout << "Max. Vertex Degree in Poly 2: " << delta_2 << std::endl;
+
+    	    	alreadyExplored = false;
 
     			//increment counter by 1
     			if (counter.second == delta_1) {
@@ -455,34 +463,66 @@ namespace hypro
 
     			//choose next Vertex, only continue if one exists
     			if (polytope::adjOracle(nextVertex, currentVertex, counter)) {
-    				if (nextVertex == lastExploredVertex) {
+					for (unsigned i=0; i < alreadyExploredVertices.size(); ++i) {
+	    				if (nextVertex == alreadyExploredVertices.at(i)) {
+	    					alreadyExplored = true;
+	        				std::cout << "Vertex has already been explored: "<< nextVertex << std::endl;
+	    				}
+					}
+    				if (alreadyExplored) {
+    					std::cout << "continue with next loop iteration" << std::endl;
+    					std::cout << "-------------------------" << std::endl;
     					//dont traverse back and forth between two vertices
-    					break;
+    					continue;
     				}
     				Point<Number> localSearchVertex = result.localSearch(nextVertex, sinkMaximizerTarget);
     				if (localSearchVertex == currentVertex) {
     					//TODO set Neighbors of both accordingly?
-    					lastExploredVertex = currentVertex;
+
     					//reverse traverse
     					currentVertex = nextVertex;
-
-    					counter.first = 1;
-    					counter.second =0;
 
     					//add to result Poly
     					result.addPoint(currentVertex);
     			    	std::cout << "---------------" << std::endl;
     			    	std::cout << "following Vertex is part of result: " << currentVertex << std::endl;
     			    	std::cout << "---------------" << std::endl;
+
+    					alreadyExploredVertices.push_back(currentVertex);
+    					//store the current counter value - needed if DFS comes back this vertex
+    					counterMemory.push_back(counter);
+    					std::cout << "---------------" << std::endl;
+    					std::cout << "Counter Memory Stack - add Counter: (" << counter.first << "," << counter.second << ")"  << std::endl;
+    					std::cout << "Already explored Vertices: " << alreadyExploredVertices << std::endl;
+    					std::cout << "---------------" << std::endl;
+
+    					counter.first = 1;
+    					counter.second = 0;
     				}
     			}
     		}
+	    	std::cout << "---------------" << std::endl;
+	    	std::cout << "While Loop left" << std::endl;
+	    	std::cout << "---------------" << std::endl;
     		if (currentVertex != initVertex) {
     			//forward traverse
     			Point<Number> temp = currentVertex;
     			currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
 
+    			std::cout << "Local Search finished" << std::endl;
+    			std::cout << "counterMemory size: " << counterMemory.size() << std::endl;
+
     			//restore counter such that adjOracle(currentVertex,counter) = temp
+    			//use the "stack" counterMemory for that
+    			counter = counterMemory.at(counterMemory.size()-1);
+    			counterMemory.pop_back();
+    			std::cout << "---------------" << std::endl;
+    			std::cout << "Counter restored to: (" << counter.first << "," << counter.second << ")"  << std::endl;
+    			std::cout << "While Loop Condition: " << ( (currentVertex != initVertex) || (counter.first != 2 && counter.second != delta_2) ) << std::endl;
+    			std::cout << "CurrrentVertex != initVertex: " << (currentVertex != initVertex) << std::endl;
+    			std::cout << "Counter != (2,2): " << (counter.first != 2 || counter.second != delta_2) << std::endl;
+    			std::cout << "---------------" << std::endl;
+    			/*
     			//approach: start at (1,1), increment till desired counter is found
     			counter.first = 1;
     			counter.second = 0;
@@ -498,11 +538,11 @@ namespace hypro
     	    			}
     	    			bool not_used = polytope::adjOracle(result, currentVertex, counter);
 
-    			} while (result != temp);
+    			} while (result != temp);*/
 
     		}
 
-    	} while ( (currentVertex != initVertex) && (counter.first != 2 && counter.second != delta_2) );
+    	} while ( (currentVertex != initVertex) || (counter.first != 2 || counter.second != delta_2) );
 
     	mPointsUpToDate = false;
 
@@ -689,18 +729,22 @@ namespace hypro
     	std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
     	std::cout << "-------------------------" << std::endl;
 
+    	//TODO REMOVE
+    	//std::cout.setstate(std::ios::failbit);
+    	//glp_term_out(GLP_ON);
+
     	//compute the maximizer vector of the currently considered vertex
     	Point<Number> maximizerTarget;
     	vector maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
 
-    	std::cout << "maximizerVector in localSearch: " << maximizerVector << std::endl;
+    	//std::cout << "maximizerVector in localSearch: " << maximizerVector << std::endl;
 
     	//compute the ray direction (a vector)
     	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
     	std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
     	std::cout << "End Point of Ray: " << _sinkMaximizerTarget << std::endl;
-    	std::cout << "Ray Vector: " << ray << std::endl;
+    	//std::cout << "Ray Vector: " << ray << std::endl;
 
     	//compute the normal cone of _vertex
     	polytope::Cone<Number>* cone = polytope::computeCone(_vertex, maximizerVector);
@@ -723,7 +767,7 @@ namespace hypro
     		}
     	}
 
-    	bool found = false;
+    	//bool found = false;
     	Point<Number> secondOrigin;
 
     	std::cout << "-----------------" << std::endl;
@@ -731,6 +775,41 @@ namespace hypro
 		std::cout << "Offset of Intersection Plane: " << intersectedPlane.offset() << std::endl;
 		std::cout << "-----------------" << std::endl;
 
+		std::vector<vector> decompositionEdges = polytope::computeEdgeSet(_vertex);
+		//std::cout << "Decomposition Edges: " << decompositionEdges << std::endl;
+
+		for (unsigned i=0; i < decompositionEdges.size(); i++) {
+			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(decompositionEdges.at(i));
+			carl::FLOAT_T<Number> normFactor = intersectedPlane.normal().norm() * decompositionEdges.at(i).norm();
+
+			if ( (dotProduct/normFactor == 1) || (dotProduct/normFactor == -1)) {
+				std::cout << "Parallel Edge found" << std::endl;
+				std::cout << "-----------------" << std::endl;
+
+				//we have to find out from which decomposition our edge came from
+				//and accordingly initialize a counter that describes the direction
+				unsigned half = decompositionEdges.size()/2;
+
+		    	std::pair<int,int> counter;
+		    	if (i+1 <= half) {
+		    		counter.first = 1;
+		    		counter.second = i+1;
+		    	} else {
+		    		counter.first = 2;
+		    		counter.second = i+1-half;
+		    	}
+
+		    	//now we have to retrieve the new vertex in this edge direction, using the adjacency oracle
+		    	//the result is stored in secondOrigin
+		    	bool res = polytope::adjOracle(secondOrigin, _vertex ,counter);
+		    	if (res) {
+		    		break;
+		    	}
+			}
+		}
+
+		//TODO REMOVE
+		/*
     	//iterate through all cones in the fan
     	for (auto& cone : this->mFan.get()) {
     		for (auto& plane : cone->get()) {
@@ -766,18 +845,24 @@ namespace hypro
 
         			if (dot/norm == 1) {
         				std::cout << "Candidate Edge is parallel to normal of IntersectedPlane" << std::endl;
-        				found = true;
-        				break;
+
+        				//a further check has to be made:
+        				//the candidate edge also has to be parallel to at least one edge in P1 or P2, else this edge direction would not exist
+        				for (auto& edge : decompositionEdges) {
+                			carl::FLOAT_T<Number> dotLast = edge.dot(candidateEdge);
+                			carl::FLOAT_T<Number> normLast = edge.norm() * candidateEdge.norm();
+        					if (dotLast/normLast == 1) {
+        						std::cout << "Solution found: there is also an edge in the decomposition that is parallel to the candidate" << std::endl;
+        						found = true;
+        						break;
+        					}
+        				}
+        				if (found) {
+        					break;
+        				}
         			}
     			}
 
-    			/*
-    			if ((intersectedPlane.offset() == plane->offset()) && (parallel)) {
-    					//found the plane
-    					std::cout << "Plane also has same Offset" << std::endl;
-    					found = true;
-    					break;
-    			}*/
     		}
     		if (found) {
     			//retrieve the origin of the cone that has the identical plane
@@ -786,10 +871,15 @@ namespace hypro
     		}
 
     	}
+    	*/
 
     	//add this normal cone to fan of polytope
     	//Important! after localSearch has been applied (so that we dont search in our own cone)
     	this->mFan.add(cone);
+
+    	//TODO REMOVE
+    	//std::cout.clear();
+    	//glp_term_out(GLP_OFF);
 
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "Local Search result: " << secondOrigin << std::endl;

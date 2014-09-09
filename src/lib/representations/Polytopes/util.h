@@ -189,6 +189,7 @@ namespace polytope
         bool intersection(carl::FLOAT_T<Number>& _result, const Point<Number>& _vector) const
         {
             // TODO
+        	return false;
         }
         
         private:
