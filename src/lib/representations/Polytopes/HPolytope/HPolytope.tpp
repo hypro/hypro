@@ -91,20 +91,20 @@ namespace hypro
         
         // Assumption: The last d equations of A are linear independent
         auto bottom = A.bottomRows(dimension);
-        auto varBlock = bottom.leftCols(dimension);
-        auto constPart = bottom.rightCols(1);
+        auto varBlock = bottom.rightCols(dimension);
+        auto constPart = bottom.leftCols(1);
         
         matrix_t a = matrix_t(varBlock);
         vector_t b = vector_t(constPart);
         
-        //std::cout << "A: " << a << ", b: " << b << std::endl;
+        std::cout << "A: " << a << ", b: " << b << std::endl;
         
         vector_t sol = a.colPivHouseholderQr().solve(b);
-        //std::cout << "Solution: " << sol << std::endl;
+        std::cout << "Solution: " << sol << std::endl;
         
         matrix_t upperA = matrix_t(A.topRows(numRows));
         
-        //std::cout << "UpperA: " << std::endl << upperA << std::endl;
+        std::cout << "UpperA: " << std::endl << upperA << std::endl;
         
         for(unsigned cIndex = 0; cIndex < upperA.cols()-1; ++cIndex)
         {
@@ -116,6 +116,7 @@ namespace hypro
         dictionary.conservativeResize(numRows+1,Eigen::NoChange_t());
         
         row_t allOnes = matrix_t::Constant(1,numCols, carl::FLOAT_T<Number>(-1));
+        allOnes(0) = carl::FLOAT_T<Number>(0);
         dictionary.row(numRows) = allOnes;
         
         //std::cout << "Optimal dictionary: " << dictionary << std::endl;
@@ -141,79 +142,21 @@ namespace hypro
         unsigned rowCount = 0;
         unsigned columCount = 0;
         
-        Polynomial constraint;
-        std::vector<Polynomial> constraints;
-        
         for(auto& hplane : mHPlanes)
         {
             columCount = 0;
-            for(auto& coordinate : hplane.normal())
-            {
-                constraint += coordinate.second*coordinate.first;
-                poly(rowCount, columCount) = -coordinate.second;
-                ++columCount;
-            }
             poly(rowCount, columCount) = carl::FLOAT_T<double>(hplane.offset());
-            constraint += carl::FLOAT_T<Number>(hplane.offset());
-            std::cout << "Created constraint: " << constraint << std::endl;
-            constraints.push_back(constraint);
-            constraint = Polynomial();
+            vector normal = hplane.normal();
+            for(unsigned index = 0; index < normal.rows(); ++index)
+            {
+                ++columCount;
+                poly(rowCount, columCount) = -normal(index);
+            }
             ++rowCount;
         }
         
         std::cout << "Poly Matrix: " << std::endl;
         std::cout << poly << std::endl;
-        
-        // create unique optimal dictionary from basis solution
-        /*
-        std::map<carl::Variable, Polynomial> reducedConstraints;
-        
-        Point<Number> firstNormal = mHPlanes.begin()->normal();
-        for(auto variableIt = firstNormal.begin(); variableIt != firstNormal.end(); ++variableIt)
-        {
-            carl::Variable tmpVar = variableIt->first;
-            std::cout << "Chosen Variable: " << tmpVar << std::endl;
-            if(constraints.back().has(tmpVar))
-            {
-                std::cout << "Chosen constraint: " << constraints.back() << std::endl;
-                carl::UnivariatePolynomial<Polynomial> tmp = constraints.back().toUnivariatePolynomial(tmpVar);
-                std::cout << "Univariate result: " << tmp << std::endl;
-
-                number coeff = tmp.lcoeff().constantPart();
-                std::cout << "leading coeff: " << coeff << std::endl;
-                tmp.truncate();
-                std::cout << "Truncated: " << tmp << std::endl;
-
-                Polynomial reducedConstraint = Polynomial(tmp.divideBy(coeff).quotient);
-                std::cout << "Reduced constraint: " << reducedConstraint << std::endl;
-
-                std::cout << "Remainder: " << tmp.divideBy(coeff).remainder << std::endl;
-
-                reducedConstraints.insert(std::make_pair(tmpVar, reducedConstraint));
-                std::cout << "Created reduced constraint: " << tmpVar << " -> " << reducedConstraint << std::endl;
-            }
-            else
-            {
-                Polynomial tmp = constraints.back();
-                reducedConstraints.insert(std::make_pair(tmpVar, tmp));
-                std::cout << "Created reduced constraint: " << tmpVar << " -> " << tmp << std::endl;
-            }
-            constraints.pop_back();
-        }
-        std::vector<Polynomial> dictionaryConstraints;
-        for(auto& constraint : constraints)
-        {
-            Polynomial dictConstraint = constraint;
-            std::cout << "Replace in: " << constraint << std::endl;
-            for(auto& reducedConstraintPair : reducedConstraints)
-            {
-                dictConstraint.substituteIn(reducedConstraintPair.first, reducedConstraintPair.second);
-                
-            }
-            dictionaryConstraints.push_back(dictConstraint);
-            std::cout << "Reduced constraint to: " << dictConstraint << std::endl;
-        }
-        */
         
         // get unique optimal first Dictionary
         std::vector<unsigned> basis;
