@@ -1,3 +1,3 @@
-#add_subdirectory(algorithms)
-#add_subdirectory(datastructure)
-#add_subdirectory(representations)
+add_subdirectory(algorithms)
+add_subdirectory(datastructure)
+add_subdirectory(representations)

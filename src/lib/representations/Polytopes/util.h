@@ -308,7 +308,7 @@ namespace polytope
             mDimension(),
             mOrigin()
             {
-                assert(mPlanes.size() == dimension);
+                assert(mPlanes.size() == _dimension);
             }
             
             /*
@@ -368,7 +368,7 @@ namespace polytope
                 return mPlanes.end();
             }
             
-            void add(Hyperplane<Number>* plane)
+            void add(Hyperplane<Number>* _plane)
 
             {
                 mPlanes.push_back(_plane);

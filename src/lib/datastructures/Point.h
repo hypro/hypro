@@ -137,7 +137,7 @@ namespace hypro {
                 	mNeighbors.push_back(neighbor);
                 }
 
-                for(auto& composite : p.mComposedOf)
+                for(auto& composite : _p.mComposedOf)
                 {
                 	mComposedOf.push_back(composite);
                 }
