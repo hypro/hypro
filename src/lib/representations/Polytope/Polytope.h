@@ -120,7 +120,7 @@ namespace hypro
         
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         // implemented according to Komei Fukuda 2004
-        bool altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
+        bool altMinkowskiSum(Polytope<Number>& result, Polytope<Number>& rhs);
         bool intersect(Polytope<Number>& result, const Polytope<Number>& rhs);
         bool hull(Polytope<Number>& result);
         bool contains(const Point<Number>& point);

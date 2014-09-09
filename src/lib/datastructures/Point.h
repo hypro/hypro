@@ -51,9 +51,10 @@ namespace hypro {
             coordinateMap mCoordinates;
 
             //Adjacency List of this Point (if applicable)
-            std::vector<Point<Number> > mNeighbors;
+            std::vector<Point<Number>* > mNeighbors;
             //Minkowsi Decompositon of this point (if applicable)
             std::vector<Point<Number> > mComposedOf;
+
 		
         public:
         
@@ -135,6 +136,11 @@ namespace hypro {
                 {
                 	mNeighbors.push_back(neighbor);
                 }
+
+                for(auto& composite : p.mComposedOf)
+                {
+                	mComposedOf.push_back(composite);
+                }
             }
             
             /*
@@ -165,14 +171,20 @@ namespace hypro {
              */
             
             std::vector<Point<Number> > neighbors() const {
-            	return mNeighbors;
+            	//return mNeighbors;
+            	//TODO fix (does this have bad side effects?)
+            	std::vector<Point<Number>> res;
+            	for (unsigned i =0; i<mNeighbors.size(); ++i) {
+            		res.push_back( *(mNeighbors.at(i)) );
+            	}
+            	return res;
             }
 
-            void setNeighbors(const std::vector<Point<Number> >& _neighbors) {
+            void setNeighbors(const std::vector<Point<Number>* >& _neighbors) {
             	mNeighbors = _neighbors;
             }
 
-            void addNeighbor(const Point<Number>& _neighbor) {
+            void addNeighbor(Point<Number>* _neighbor) {
             	mNeighbors.push_back(_neighbor);
             }
 

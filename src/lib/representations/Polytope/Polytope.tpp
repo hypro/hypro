@@ -393,7 +393,7 @@ namespace hypro
     
     //@author: Chris K.
     template<typename Number>
-        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs) {
+        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, Polytope<Number>& rhs) {
     	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
@@ -408,13 +408,16 @@ namespace hypro
     	//initVertex = initial extreme point & root of spanning tree
     	Point<Number> initVertex = this->computeInitVertex(rhs);
     	result.addPoint(initVertex);
+    	std::cout << "---------------" << std::endl;
+    	std::cout << "following Vertex is part of result: " << initVertex << std::endl;
+    	std::cout << "---------------" << std::endl;
 
     	//compute the maximizer vector (& its target) for the initial extreme point -> necessary for localSearch()
     	Point<Number> sinkMaximizerTarget;
-    	vector sinkMaximizerVector = computeMaximizerVector(sinkMaximizerTarget, initVertex);
+    	vector sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
     	//compute the normal cone of the initial extreme point
-    	polytope::Cone<Number>* cone = computeCone(initVertex, sinkMaximizerVector);
+    	polytope::Cone<Number>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
     	//add this normal cone to the fan of the polytope
     	result.rFan().add(cone);
 
@@ -429,8 +432,12 @@ namespace hypro
     	/**
     	 * Reverse Search Algorithm
     	 */
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "The Preprocessing Ends here - Start of Algorithm" << std::endl;
+    	std::cout << "-------------------------" << std::endl;
 
     	Point<Number> nextVertex;
+    	Point<Number> lastExploredVertex;
 
     	do {
 
@@ -444,25 +451,36 @@ namespace hypro
     				counter.second += 1;
     			}
 
+    			std::cout << "Counter tuple: (" << counter.first << "," << counter.second << ")" << std::endl;
+
     			//choose next Vertex, only continue if one exists
     			if (polytope::adjOracle(nextVertex, currentVertex, counter)) {
-    				Point<Number> localSearchVertex = localSearch(nextVertex, sinkMaximizerTarget);
+    				if (nextVertex == lastExploredVertex) {
+    					//dont traverse back and forth between two vertices
+    					break;
+    				}
+    				Point<Number> localSearchVertex = result.localSearch(nextVertex, sinkMaximizerTarget);
     				if (localSearchVertex == currentVertex) {
     					//TODO set Neighbors of both accordingly?
+    					lastExploredVertex = currentVertex;
     					//reverse traverse
     					currentVertex = nextVertex;
+
     					counter.first = 1;
     					counter.second =0;
 
     					//add to result Poly
     					result.addPoint(currentVertex);
+    			    	std::cout << "---------------" << std::endl;
+    			    	std::cout << "following Vertex is part of result: " << currentVertex << std::endl;
+    			    	std::cout << "---------------" << std::endl;
     				}
     			}
     		}
     		if (currentVertex != initVertex) {
     			//forward traverse
     			Point<Number> temp = currentVertex;
-    			currentVertex = localSearch(currentVertex);
+    			currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
 
     			//restore counter such that adjOracle(currentVertex,counter) = temp
     			//approach: start at (1,1), increment till desired counter is found
@@ -631,7 +649,7 @@ namespace hypro
     template<typename Number>
     Point<Number> Polytope<Number>::computeMaxPoint() {
     	Point<Number> result;
-    	updatePoints();
+    	//updatePoints();
     	if(!mPoints.empty())
     	{
     		result = *(mPoints.begin());
@@ -667,14 +685,22 @@ namespace hypro
     template<typename Number>
     Point<Number> Polytope<Number>::localSearch(Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget){
 
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
+    	std::cout << "-------------------------" << std::endl;
+
     	//compute the maximizer vector of the currently considered vertex
     	Point<Number> maximizerTarget;
     	vector maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
 
-    	//TODO perform ray shooting between maximizerTarget & _sinkMaximizerTarget
+    	std::cout << "maximizerVector in localSearch: " << maximizerVector << std::endl;
 
     	//compute the ray direction (a vector)
     	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
+
+    	std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
+    	std::cout << "End Point of Ray: " << _sinkMaximizerTarget << std::endl;
+    	std::cout << "Ray Vector: " << ray << std::endl;
 
     	//compute the normal cone of _vertex
     	polytope::Cone<Number>* cone = polytope::computeCone(_vertex, maximizerVector);
@@ -684,9 +710,15 @@ namespace hypro
     	Point<Number> origin = cone->origin();
     	polytope::Hyperplane<Number> intersectedPlane;
 
-    	for (auto& plane : cone->get()) {
-    		if (plane->intersection(factor, ray)) {
-    			intersectedPlane = *plane;
+    	std::vector<polytope::Hyperplane<Number>*> planes = cone->get();
+
+    	std::cout << "-----------------" << std::endl;
+    	std::cout << "Ray: " << ray << std::endl;
+
+    	for (typename std::vector<polytope::Hyperplane<Number>*>::iterator it=planes.begin(); it!=planes.end(); ++it) {
+    		if ((*it)->intersection(factor,ray)) {
+    			std::cout << "Intersection found " << std::endl;
+    			intersectedPlane = *(*it);
     			break;
     		}
     	}
@@ -694,29 +726,62 @@ namespace hypro
     	bool found = false;
     	Point<Number> secondOrigin;
 
+    	std::cout << "-----------------" << std::endl;
+		std::cout << "Normal of Intersection Plane: " << intersectedPlane.normal() << std::endl;
+		std::cout << "Offset of Intersection Plane: " << intersectedPlane.offset() << std::endl;
+		std::cout << "-----------------" << std::endl;
+
     	//iterate through all cones in the fan
     	for (auto& cone : this->mFan.get()) {
     		for (auto& plane : cone->get()) {
     			//check if our intersectedPlane is also present in the currently examined cone
     			//for that the Scalar has to be the same, and the cross product of both normals has to be 0 (=> normals are parallel)
+    			std::cout << "Normal of comparison Plane: " << plane->normal() << std::endl;
+    			std::cout << "Offset of comparison Plane: " << plane->offset() << std::endl;
+
     			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(plane->normal());
     			carl::FLOAT_T<Number> normFactor = intersectedPlane.normal().norm() * plane->normal().norm();
     			bool parallel = false;
 
+    			std::cout << "dotProduct: " << dotProduct << std::endl;
+    			std::cout << "normalizationFactor: " << normFactor << std::endl;
+
     			//TODO ~ 1, not exactly (rounding error)
     			if (dotProduct/normFactor == 1) {
+    				std::cout << "Parallel Plane found" << std::endl;
+        			std::cout << "-----------------" << std::endl;
     				parallel = true;
+    				//store the origin of the cone this plane belongs to
+    				secondOrigin = cone->origin();
     			}
 
+    			if (parallel) {
+    				//check if the edge between the input vertex and the possible parent is parallel to the normal of the intersectedPlane
+    				std::vector<vector> edges = polytope::computeEdgeSet(_vertex);
+    				vector candidateEdge = polytope::computeEdge(_vertex, secondOrigin);
+    				std::cout << "Candidate Edge: " << candidateEdge << std::endl;
+
+        			carl::FLOAT_T<Number> dot = intersectedPlane.normal().dot(candidateEdge);
+        			carl::FLOAT_T<Number> norm = intersectedPlane.normal().norm() * candidateEdge.norm();
+
+        			if (dot/norm == 1) {
+        				std::cout << "Candidate Edge is parallel to normal of IntersectedPlane" << std::endl;
+        				found = true;
+        				break;
+        			}
+    			}
+
+    			/*
     			if ((intersectedPlane.offset() == plane->offset()) && (parallel)) {
     					//found the plane
+    					std::cout << "Plane also has same Offset" << std::endl;
     					found = true;
     					break;
-    			}
+    			}*/
     		}
     		if (found) {
     			//retrieve the origin of the cone that has the identical plane
-    			secondOrigin = cone->origin();
+    			//secondOrigin = cone->origin();
     			break;
     		}
 
@@ -726,18 +791,11 @@ namespace hypro
     	//Important! after localSearch has been applied (so that we dont search in our own cone)
     	this->mFan.add(cone);
 
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "Local Search result: " << secondOrigin << std::endl;
+    	std::cout << "-------------------------" << std::endl;
+
     	return secondOrigin;
-
-    	//normal cone N(v;P) is the set of solutions Lambda to
-    	//ej(vj,i) *Lambda <= 0 for all valid edges
-    	// -> set of vectors?
-
-    	//TODO compute facets of the normal cone of v -> hyperplanes
-    	//then insert the line into the hyperplane equation
-    	//check if there is a solution
-    	//yes -> line intersects hyperplane; no -> no intersection; tautology -> parallel to each other
-
-
 
     }
 

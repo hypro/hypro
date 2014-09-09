@@ -239,7 +239,7 @@ namespace polytope
     }
 
     template<typename Number>
-    Point<Number> computePoint(Point<Number>& _point, vector& _edge) {
+    Point<Number> computePoint(Point<Number>& _point, vector& _edge, bool ofPolyFlag) {
     	//TODO copy constructor appropriate?
     	Point<Number> result = Point<Number>(_point);
     	std::vector<carl::Variable> variables = _point.variables();
@@ -252,6 +252,19 @@ namespace polytope
     		result[*it] = result[*it] + _edge(i);
     		i++;
     	}
+
+    	//if the flag was set, then we are looking for a point which is part of a polytope
+    	//has neighbors! we cannot just compute a new point
+    	if (ofPolyFlag) {
+    		for (unsigned i=0; i<_point.neighbors().size(); ++i) {
+    			// == operator for points only compares coordinates, not neighbors
+    			if (result == _point.neighbors().at(i)) {
+    				result = _point.neighbors().at(i);
+    				break;
+    			}
+    		}
+    	}
+
     	return result;
     }
 
@@ -270,12 +283,14 @@ namespace polytope
 	*/
 
     template<typename Number>
-    bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int> _counter) {
+    bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int>& _counter) {
     	//retrieve the edge that is defined by the counter (j,i)
     	//first get both source & target vertex (dependent on the counter param.)
+
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
     	Point<Number> sourceVertex;
     	Point<Number> targetVertex;
+
     	if (_counter.first == 1 || _counter.first == 2) {
     		sourceVertex = vertexComposition[_counter.first-1];
     	}
@@ -297,7 +312,6 @@ namespace polytope
     	bool parallelFlag = false;
     	std::vector<vector> nonParallelEdges;
     	Point<Number> otherSource;
-    	std::vector<Point<Number>> otherNeighbors;
 
     	if (_counter.first == 1) {
     		otherSource = vertexComposition[1];
@@ -305,7 +319,7 @@ namespace polytope
     		otherSource = vertexComposition[0];
     	}
 
-    	otherNeighbors = otherSource.neighbors();
+    	std::vector<Point<Number>> otherNeighbors = otherSource.neighbors();
 
     	std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
 
@@ -377,8 +391,9 @@ namespace polytope
 		//TODO
 		//constrains for structural variables: x>=0, y>=0 for Lambda - can we even do that?
 		//not specified in Paper, but else there is no feasible primal solution
-		glp_set_col_bnds(feasibility, 1, GLP_LO, 0.0, 0.0);
-		glp_set_col_bnds(feasibility, 2, GLP_LO, 0.0, 0.0);
+		for (unsigned i=1; i<=edge.rows(); ++i) {
+			glp_set_col_bnds(feasibility, i, GLP_DB, -1.0, 1.0);
+		}
 
 		//setup the matrix coefficients
 		unsigned elements = (nonParallelEdges.size()+1) * (edge.rows());
@@ -438,7 +453,7 @@ namespace polytope
         			result.addToComposition(otherSource);
         		} else {
         			//if there was a parallel edge: v_new = a1(v1,i1) + a2(v2,i2)
-        			Point<Number> otherTargetVertex = computePoint(otherSource, parallelEdge);
+        			Point<Number> otherTargetVertex = computePoint(otherSource, parallelEdge, true);
         			std::cout << "parallel Edge: " << parallelEdge << std::endl;
         			std::cout << "Other Target Vertex: " << otherTargetVertex << std::endl;
         			result = targetVertex.extAdd(otherTargetVertex);
@@ -451,6 +466,10 @@ namespace polytope
 
         glp_delete_prob(feasibility);
 
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "AdjOracle result: " << result << std::endl;
+    	std::cout << "-------------------------" << std::endl;
+
         return true;
     }
 
@@ -461,6 +480,8 @@ namespace polytope
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
     	Point<Number> sourceVertex1 = vertexComposition[0];
     	Point<Number> sourceVertex2 = vertexComposition[1];
+
+    	std::cout << "Decomposition: " << sourceVertex1 << ", " << sourceVertex2 << std::endl;
 
     	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
     	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
@@ -552,9 +573,13 @@ namespace polytope
         }
 
         //compute the target of this new edge
-        _targetVertex = computePoint(_vertex, result);
+        _targetVertex = computePoint(_vertex, result, false);
 
         glp_delete_prob(maximizer);
+
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "Computed MaximizerVector: " << result << std::endl;
+    	std::cout << "-------------------------" << std::endl;
 
         return result;
 
@@ -630,64 +655,75 @@ namespace polytope
     }
 
     template<typename Number>
-    polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector& _maximizerVector) {
-    	//edges if necessary
+    std::vector<vector> computeEdgeSet(Point<Number>& _vertex) {
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
-    	Point<Number> sourceVertex1 = vertexComposition[0];
-    	Point<Number> sourceVertex2 = vertexComposition[1];
+		Point<Number> sourceVertex1 = vertexComposition[0];
+		Point<Number> sourceVertex2 = vertexComposition[1];
 
-    	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
-    	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
+		std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
+		std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
 
-    	std::vector<vector> edges;
-    	vector tmpEdge;
+		std::vector<vector> edges;
+		vector tmpEdge;
 
-    	//traverse neighbors of v1
-    	for (auto neighbor : neighbors1) {
-    		//TODO check if this works, else tmpEdge outside
-    		tmpEdge = computeEdge(sourceVertex1,neighbor);
-    		edges.push_back(tmpEdge);
-    	}
+		//traverse neighbors of v1
+		for (auto neighbor : neighbors1) {
+			//TODO check if this works, else tmpEdge outside
+			tmpEdge = computeEdge(sourceVertex1,neighbor);
+			edges.push_back(tmpEdge);
+		}
 
-    	//traverse neighbors of v2
-    	for (auto neighbor : neighbors2) {
-    		tmpEdge = computeEdge(sourceVertex2,neighbor);
-    		edges.push_back(tmpEdge);
-    	}
+		//traverse neighbors of v2
+		for (auto neighbor : neighbors2) {
+			tmpEdge = computeEdge(sourceVertex2,neighbor);
+			edges.push_back(tmpEdge);
+		}
+
+		return edges;
+    }
+
+    template<typename Number>
+    polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector& _maximizerVector) {
+    	std::vector<vector> edges = computeEdgeSet(_vertex);
 
     	//TODO p1 & p2 of different dimension?
     	std::vector<vector> tmpEdges;
-    	unsigned dimension = tmpEdges.at(0).rows();
+    	unsigned dimension = edges.at(0).rows();
     	vector tmpVector;
     	std::vector<vector> resultVectorSet;
 
-    	//#dimension-1 edges define one (edge) vector of our cone
-    	for (unsigned i = 0; i < edges.size(); ++i) {
+        std::cout<< "Edges: " << edges << std::endl;
+
+    	//dimension-1 edges define one (edge) vector of our cone
+    	for (unsigned i = 0; i < edges.size()-1; ++i) {
+    		tmpEdges.clear();
     		for (unsigned j = 0; j < dimension-1; ++j) {
     			//consider dimension-1 edges
-    			tmpEdges.push_back(edges.at(j));
+    			tmpEdges.push_back(edges.at(i+j));
     		}
     		tmpVector = polytope::computeNormalConeVector<Number>(tmpEdges, _maximizerVector);
+            std::cout<< "Normal Cone Vector: " << tmpVector << std::endl;
     		resultVectorSet.push_back(tmpVector);
     	}
 
-    	//two (edge) vectors define one hyperplane of our cone
+    	//dimension-1 (edge) vectors define one hyperplane of our cone
     	// -> iterate over resultVectorSet & consider every edge with its direct neighbor
-    	polytope::Cone<Number>* cone = new polytope::Cone<Number>(tmpVector.rows());
+    	polytope::Cone<Number>* cone = new polytope::Cone<Number>();
     	//set the origin of the cone
     	cone->setOrigin(_vertex);
-    	std::vector<vector> vectorPair;
+    	std::vector<vector> vectorTuple;
 
     	//fill cone
     	for (unsigned i = 0; i < resultVectorSet.size()-1; ++i) {
-    		vectorPair.push_back(resultVectorSet.at(i));
-    		vectorPair.push_back(resultVectorSet.at(i+1));
+    		for (unsigned j=0; j <dimension-1; ++j) {
+    			vectorTuple.push_back(resultVectorSet.at(i+j));
+    		}
 
     		//convert Point<Number> to Vector by explicit cast
-    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector(_vertex), vectorPair);
+    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector(_vertex), vectorTuple);
     		cone->add(plane);
-
-    		vectorPair.clear();
+    		std::cout << "Plane added to the cone" << std::endl;
+    		vectorTuple.clear();
     	}
 
     	return cone;

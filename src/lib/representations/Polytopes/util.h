@@ -12,6 +12,8 @@
 #include "../../datastructures/Point.h"
 #include <glpk.h>
 
+//#include "../Polytope/util.h"
+
 namespace hypro
 {
 namespace polytope
@@ -112,15 +114,13 @@ namespace polytope
         Hyperplane(const vector& _vec, const std::vector<vector>& _vectorSet)
         {
         	//here: hyperplane given in parameterform is converted to normalform
-        	assert(_vectorSet.size() == 2);
-        	//the normal vector of the hyperplane is the cross product of both directions
-        	vector vec1 = _vectorSet.at(0);
-        	vector vec2 = _vectorSet.at(1);
-        	//TODO .cross() doesnt work
-        	//mNormal = vec1.cross(vec2);
+        	//the normal vector of the hyperplane is computed by solving a system of equations
+        	mNormal = computePlaneNormal(_vectorSet);
+        	std::cout<< "computed Plane Normal: " << mNormal << std::endl;
 
-        	//the scalar is just the scalarproduct of the normal vector & a point in the hyperplane
+        	//the scalar is just the scalar product of the normal vector & a point in the hyperplane
         	mScalar = mNormal.dot(_vec);
+        	std::cout<< "computed Offset: " << mScalar << std::endl;
 
         	mDimension = _vec.rows();
         }
@@ -160,7 +160,9 @@ namespace polytope
         {
         	bool intersect = false;
         	carl::FLOAT_T<Number> factor;
+        	std::cout << "mNormal: " << mNormal << std::endl;
             carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
+        	std::cout << "dotProduct: " << dotProduct << std::endl;
             if (dotProduct != 0) {
             	intersect = true;
             	factor = mScalar / dotProduct;
@@ -194,6 +196,77 @@ namespace polytope
             {
                 return mScalar;
             }
+
+           /**
+            * @author: Chris K
+            * Method to compute the normal of a plane based on two direction vectors
+            * simply computing the cross product does not work since the dimension is not necessarily 3
+            */
+            vector computePlaneNormal(const std::vector<vector>& _edgeSet) {
+
+            	/*
+        		 * Setup LP with GLPK
+        		 */
+        		glp_prob *normal;
+        		normal = glp_create_prob();
+        		glp_set_obj_dir(normal, GLP_MAX);
+
+        		//we have one row for each edge in our set
+        		glp_add_rows(normal, _edgeSet.size());
+
+        		//constraints of auxiliary variables (bounds for rows)
+        		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
+        			glp_set_row_bnds(normal, i, GLP_FX, 0.0, 0.0);
+        		}
+
+        		//each column corresponds to one dimension of a vector in our edgeSet
+        		//TODO consider p1 & p2 of different dimensions? (-> two edge sets)
+        		glp_add_cols(normal, _edgeSet.at(0).rows());
+
+        		//coefficients of objective function:
+        		for (unsigned i=1; i <= _edgeSet.at(0).rows(); ++i) {
+        			glp_set_obj_coef(normal, i, 1.0);
+        		}
+
+        		//constraints for structural variables
+        		for (unsigned i=1; i<= _edgeSet.at(0).rows(); ++i) {
+        			glp_set_col_bnds(normal, i, GLP_DB, -1.0, 1.0);
+        		}
+
+        		//setup matrix coefficients
+        		unsigned elements = (_edgeSet.size()) * (_edgeSet.at(0).rows());
+        		int ia[elements];
+        		int ja[elements];
+        		double ar[elements];
+        		unsigned pos = 1;
+
+        		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
+
+        			for (unsigned j=1; j <= _edgeSet.at(0).rows(); ++j) {
+        				ia[pos] = i;
+        				ja[pos] = j;
+        				vector tmpVec = _edgeSet.at(i-1);
+        				ar[pos] = tmpVec(j-1).toDouble();
+        				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+        				++pos;
+        			}
+        		}
+        		assert(pos-1 <= elements);
+
+        		glp_load_matrix(normal, elements, ia, ja, ar);
+        		glp_simplex(normal, NULL);
+
+        		vector result = vector(_edgeSet.at(0).rows(),1);
+
+        		//fill the result vector based on the optimal solution returned by the LP
+        		for (unsigned i=1; i <= _edgeSet.at(0).rows(); ++i) {
+        			result(i-1) = glp_get_col_prim(normal, i);
+        		}
+
+        		glp_delete_prob(normal);
+
+        		return result;
+            }
     };
     
     template<typename Number>
@@ -207,7 +280,7 @@ namespace polytope
     class Cone 
     {
         public:
-            typedef std::vector<const Hyperplane<Number>* > planes;
+            typedef std::vector<Hyperplane<Number>* > planes;
         private:
             planes     mPlanes;
             unsigned    mDimension;
@@ -235,7 +308,7 @@ namespace polytope
             mDimension(),
             mOrigin()
             {
-                assert(mPlanes.max_size() == _dimension);
+                assert(mPlanes.size() == dimension);
             }
             
             /*
@@ -246,6 +319,12 @@ namespace polytope
             {
                 return mPlanes;
             }
+
+            planes& rGet()
+            {
+            	return mPlanes;
+            }
+
 
             unsigned dimension() const
             {
@@ -289,7 +368,8 @@ namespace polytope
                 return mPlanes.end();
             }
             
-            void add(const Hyperplane<Number>* _plane)
+            void add(Hyperplane<Number>* plane)
+
             {
                 mPlanes.push_back(_plane);
                 mDimension = mDimension < _plane->dimension() ? _plane->dimension() : mDimension;
