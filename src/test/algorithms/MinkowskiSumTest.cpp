@@ -436,6 +436,7 @@ TEST_F(MinkowskiSumTest, localSearchTest)
 
 	Point<double> initVertex = polyAdj.computeInitVertex(polyAdj2);
 	std::cout << "Point v*: " << initVertex << std::endl;
+	std::cout << "-------------------------" << std::endl;
 
 	sumPoly.addPoint(initVertex);
 
@@ -445,25 +446,20 @@ TEST_F(MinkowskiSumTest, localSearchTest)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, initVertex, counter);
-	std::cout << "AdjOracle returned Point: " << adjPoint << std::endl;
-	std::cout << "-------------------------" << std::endl;
 
 	Point<double> sinkMaximizerTarget;
 	vector_t<double> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
     std::cout<< "sinkMaximizerVector: " << sinkMaximizerVector << std::endl;
     std::cout<< "sinkMaximizerTarget: " << sinkMaximizerTarget << std::endl;
+	std::cout << "-------------------------" << std::endl;
 
 	polytope::Cone<double>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
 	sumPoly.rFan().add(cone);
 
 	std::cout << "Sink Cone added to Fan." << std::endl;
-	std::cout << "-------------------------" << std::endl;
-	std::cout << "in the following: Local Search for Vertex:" << adjPoint << std::endl;
-	std::cout << "-------------------------" << std::endl;
 
 	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
-	std::cout << "Local Search result: " << f << std::endl;
 }*/
 
 /*
@@ -478,6 +474,7 @@ TEST_F(MinkowskiSumTest, localSearchTest3D)
 
 	Point<double> initVertex = polyQ.computeInitVertex(polyP);
 	std::cout << "Point v*: " << initVertex << std::endl;
+	std::cout << "-------------------------" << std::endl;
 
 	sumPoly.addPoint(initVertex);
 
@@ -487,34 +484,64 @@ TEST_F(MinkowskiSumTest, localSearchTest3D)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, initVertex, counter);
-	std::cout << "AdjOracle returned Point: " << adjPoint << std::endl;
-	std::cout << "-------------------------" << std::endl;
 
 	Point<double> sinkMaximizerTarget;
 	vector_t<double> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
     std::cout<< "sinkMaximizerVector: " << sinkMaximizerVector << std::endl;
     std::cout<< "sinkMaximizerTarget: " << sinkMaximizerTarget << std::endl;
+	std::cout << "-------------------------" << std::endl;
 
 	polytope::Cone<double>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
 	sumPoly.rFan().add(cone);
 
 	std::cout << "Sink Cone added to Fan." << std::endl;
-	std::cout << "-------------------------" << std::endl;
-	std::cout << "in the following: Local Search for Vertex:" << adjPoint << std::endl;
-	std::cout << "-------------------------" << std::endl;
 
 	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
-	std::cout << "Local Search result: " << f << std::endl;
 
 }*/
 
 TEST_F(MinkowskiSumTest, altMinkowskiSumTest)
 {
+	glp_term_out(GLP_OFF);
+	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
 	bool omega = polyAdj.altMinkowskiSum(omegaPoly,polyAdj2);
+	std::cout.clear();
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 }
+
+TEST_F(MinkowskiSumTest, origMinkowskiSumTest)
+{
+	Polytope<double> omegaPoly;
+	bool omega = polyAdj.minkowskiSum(omegaPoly,polyAdj2);
+	std::cout << "Return Value: " << omega << std::endl;
+	std::cout << "Computed Sum Polytope: ";
+	omegaPoly.print();
+}
+
+TEST_F(MinkowskiSumTest, altMinkowskiSumTest3D)
+{
+	glp_term_out(GLP_OFF);
+	std::cout.setstate(std::ios::failbit);
+	Polytope<double> omegaPoly;
+	bool omega = polyQ.altMinkowskiSum(omegaPoly,polyP);
+	std::cout.clear();
+	std::cout << "Return Value: " << omega << std::endl;
+	std::cout << "Computed Sum Polytope: ";
+	omegaPoly.print();
+}
+
+TEST_F(MinkowskiSumTest, origMinkowskiSumTest3D)
+{
+	Polytope<double> omegaPoly;
+	bool omega = polyQ.minkowskiSum(omegaPoly,polyP);
+	std::cout << "Return Value: " << omega << std::endl;
+	std::cout << "Computed Sum Polytope: ";
+	omegaPoly.print();
+}
+
+
 
