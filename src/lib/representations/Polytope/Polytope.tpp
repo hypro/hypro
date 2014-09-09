@@ -391,7 +391,10 @@ namespace hypro
         return true;
     }
     
-    //@author: Chris K.
+    /**
+     * @author: Chris K.
+     * Minkowski Sum computation based on Fukuda
+     */
     template<typename Number>
         bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, Polytope<Number>& rhs) {
     	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)

@@ -15,6 +15,16 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	Location<Number>::Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+			const transitionSet _trans, const struct invariant _inv, const hypro::matrix_t<Number> _extInputMat){
+		mLocation.vec = _vec;
+		mLocation.mat = _mat;
+		mLocation.inv = _inv;
+		mLocation.trans = _trans;
+		mLocation.extInputMat = _extInputMat;
+	}
+
+	template<typename Number>
 	hypro::vector_t<Number> Location<Number>::activityVec() {
 		return mLocation.vec;
 	}
@@ -22,6 +32,11 @@ namespace hypro {
 	template<typename Number>
 	hypro::matrix_t<Number> Location<Number>::activityMat() {
 		return mLocation.mat;
+	}
+
+	template<typename Number>
+	hypro::matrix_t<Number> Location<Number>::extInputMat() {
+		return mLocation.extInputMat;
 	}
 
 	template<typename Number>
@@ -47,6 +62,11 @@ namespace hypro {
 	template<typename Number>
 	void Location<Number>::setActivityMat(hypro::matrix_t<Number> _mat) {
 		mLocation.mat = _mat;
+	}
+
+	template<typename Number>
+	void Location<Number>::setExtInputMat(hypro::matrix_t<Number> _mat) {
+		mLocation.extInputMat = _mat;
 	}
 
 	template<typename Number>

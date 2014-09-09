@@ -33,6 +33,7 @@ class Transition;
     		struct location {
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number> mat;
+    			hypro::matrix_t<Number> extInputMat;
     			transitionSet trans;
     			invariant inv;
     		};
@@ -51,6 +52,8 @@ class Transition;
     		Location() : mLocation() {}
     		Location(const Location& _loc);
     		Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const struct invariant _inv);
+    		Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+    				const transitionSet _trans, const struct invariant _inv, const hypro::matrix_t<Number> _extInputMat);
         
     		~Location()
     		{}
@@ -63,6 +66,7 @@ class Transition;
     		invariant invariant();
     		location location();
     		transitionSet transitions();
+    		hypro::matrix_t<Number> extInputMat();
 
     		void setActivityVec(hypro::vector_t<Number> _vec);
     		void setActivityMat(hypro::matrix_t<Number> _mat);
@@ -70,6 +74,7 @@ class Transition;
     		void setInvariant(hypro::matrix_t<Number> _mat, hypro::vector_t<Number> _vec, hypro::operator_e _op);
     		void setLocation(struct location _loc);
     		void setTransitions(transitionSet _trans);
+    		void setExtInputMat(hypro::matrix_t<Number> _mat);
 
     		//bool checkInvariant(hypro::valuation_t _val);
     		//std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);
