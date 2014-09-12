@@ -18,8 +18,6 @@
 #include <map>
 #include <cmath>
 #include <assert.h>
-#include <carl/numbers/FLOAT_T.h>
-#include <carl/core/Variable.h>
 
 #include "../config.h"
 

@@ -101,7 +101,7 @@ TEST_F(PointTest, Constructor)
     alien[pool.getFreshVariable()] = 3;
     
     Point<double> alien2 = alien;
-    Point<int> local = alien;
+    Point<float> local = alien;
 
     
 #ifdef USE_MPFR_FLOAT

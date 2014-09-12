@@ -5,7 +5,7 @@ set(lib_hypro_datastructure_sources
 )
 
 set(lib_hypro_datastructure_headers
-        Facet.h
+        #Facet.h
         Point.h
         Vertex.h
         VertexContainer.h

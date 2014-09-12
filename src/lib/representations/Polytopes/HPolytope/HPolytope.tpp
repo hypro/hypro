@@ -91,6 +91,7 @@ namespace hypro
         
         // Assumption: The last d equations of A are linear independent
         auto bottom = A.bottomRows(dimension);
+        auto top = A.topRows(A.rows()-dimension);
         auto varBlock = bottom.rightCols(dimension);
         auto constPart = bottom.leftCols(1);
         
@@ -100,16 +101,12 @@ namespace hypro
         matrix_t a(tmp.rows(), 2*dimension+1);
         a << tmp, -b, matrix_t::Identity(dimension,dimension);
         
-        std::cout << "A: " << a << std::endl <<", b: " << b << std::endl;
-        
         //normalize rows for each variable and forward insertion
         for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
         {
             a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
             a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
         }
-        
-        std::cout << "After forward insertion: " << std::endl << a << std::endl;
         
         // backward insertion
         for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
@@ -121,21 +118,17 @@ namespace hypro
             a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
         }
         
-        std::cout << "After gaussian elimination: " << std::endl << a << std::endl;
+        auto substitutionBlock = a.rightCols(dimension+1);
         
-        //vector_t sol = a.colPivHouseholderQr().solve(b);
-        //std::cout << "Solution: " << sol << std::endl;
-        
-        //matrix_t upperA = matrix_t(A.topRows(numRows));
-        
-        //std::cout << "UpperA: " << std::endl << upperA << std::endl;
-        
-        /*
-        for(unsigned cIndex = 0; cIndex < upperA.cols()-1; ++cIndex)
+        for(unsigned rI = 0; rI < top.rows(); ++rI)
         {
-            dictionary.col(cIndex) = upperA.col(cIndex) * sol(cIndex,0);
+            dictionary(rI,0) = top(rI,0);
+            
+            for(unsigned dI = 1; dI < top.cols(); ++dI)
+            {
+                dictionary.row(rI) = dictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
+            }
         }
-        dictionary.col(upperA.cols()-1) = upperA.col(upperA.cols()-1);
         
         // Augment dictionary by a row of -1s
         dictionary.conservativeResize(numRows+1,Eigen::NoChange_t());
@@ -147,11 +140,11 @@ namespace hypro
         //std::cout << "Optimal dictionary: " << dictionary << std::endl;
         for(unsigned index = 0; index < mHPlanes.size() - dimension; ++index)
             B.push_back(index);
-        B.push_back(mHPlanes.size()+1);
+        //B.push_back(mHPlanes.size()+1);
         
-        for(unsigned index = mHPlanes.size() - dimension ; index <= mHPlanes.size() ; ++index)
+        for(unsigned index = mHPlanes.size() - dimension ; index < mHPlanes.size() ; ++index)
             N.push_back(index);
-        */
+        
         return dictionary;
     }
     

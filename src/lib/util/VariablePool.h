@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include <ppl.hh>
 #include <carl/util/Singleton.h>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
+#include <ppl.hh>
 #include <map>
 #include <cassert>
 

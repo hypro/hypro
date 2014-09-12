@@ -3,23 +3,23 @@
 #include <mpfr.h>
 #include <set>
 #include <map>
+
+#include <carl/core/MultivariatePolynomial.h>
 #include "util/VariablePool.h"
 #include <carl/numbers/FLOAT_T.h>
-#include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/Variable.h>
 #include <carl/util/SFINAE.h>
 //#include "util/eigenTypetraits.h"
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 
+// needed for vector outstream operator:
+using carl::operator<<;
 
 #define reachLin_VERSION_MAJOR 0
 #define reachLin_VERSION_MINOR 1
 
 #define DEBUG 1
-
-//#define LOG4CPLUS_DISABLE_TRACE
-
 
 #define DEFAULT_DIM 5
 #define MAXIMAL_DIMENSION 5

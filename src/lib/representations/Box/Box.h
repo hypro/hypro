@@ -14,9 +14,7 @@
 #include <cassert>
 #include "../../datastructures/Point.h"
 #include "../GeometricObject.h"
-#include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
-#include <carl/numbers/FLOAT_T.h>
 
 namespace hypro {
 

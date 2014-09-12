@@ -5,8 +5,7 @@
  * Created on August 29, 2014, 3:53 PM
  */
 
-#ifndef HYPERPLANE_H
-#define	HYPERPLANE_H
+#pragma once
 #include <Eigen/Dense>
 
 template<typename Number>
@@ -38,5 +37,4 @@ class Hyperplane
 };
 
 #include "Hyperplane.tpp"
-#endif	/* HYPERPLANE_H */
 
