@@ -444,6 +444,7 @@ namespace hypro
     	Point<Number> nextVertex;
     	std::vector<std::pair<int,int>> counterMemory;
     	bool alreadyExplored;
+    	std::map<Point<Number>, Point<Number>> parentMap;
 
     	do {
 
@@ -479,8 +480,12 @@ namespace hypro
     					continue;
     				}
     				Point<Number> localSearchVertex = result.localSearch(nextVertex, sinkMaximizerTarget);
+    				parentMap.insert( std::make_pair(nextVertex, localSearchVertex) );
     				if (localSearchVertex == currentVertex) {
-    					//TODO set Neighbors of both accordingly?
+    					//TODO problem: addNeighbor requires a pointer
+    					//set Neighbors of the new vertices accordingly
+    					//currentVertex.addNeighbor(&nextVertex);
+    					//nextVertex.addNeighbor(&currentVertex);
 
     					//reverse traverse
     					currentVertex = nextVertex;
@@ -509,8 +514,9 @@ namespace hypro
 	    	std::cout << "---------------" << std::endl;
     		if (currentVertex != initVertex) {
     			//forward traverse
-    			Point<Number> temp = currentVertex;
-    			currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
+    			//currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
+    			//instead of computing the local Search result again, retrieve the parent from the parentMap
+    			currentVertex = parentMap.at(currentVertex);
 
     			std::cout << "Local Search finished" << std::endl;
     			std::cout << "counterMemory size: " << counterMemory.size() << std::endl;

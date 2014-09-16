@@ -68,6 +68,10 @@ namespace hypro
         
         void updatePoints();
 
+        void setPointsUpToDate(bool _val){
+        	mPointsUpToDate = _val;
+        }
+
         /**
          * Returns the set of points which form the polytope.
          * @return Pointset.
