@@ -10,6 +10,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
             ForwardReachabilityTest.cpp
 	    #HyReachTest.cpp
             MinkowskiSumTest.cpp
+            SumPerformanceTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)

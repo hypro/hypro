@@ -511,6 +511,7 @@ TEST_F(MinkowskiSumTest, altMinkowskiSumTest)
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
+	//std::cout << "Neighbors of P1: " << omegaPoly.points().at(0).neighbors() << std::endl;
 }
 
 TEST_F(MinkowskiSumTest, origMinkowskiSumTest)
