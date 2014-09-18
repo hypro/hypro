@@ -468,6 +468,13 @@ namespace polytope
               }
           }
         assert(pos-1 <= elements);
+        
+        std::cout << "GLPK ja matrix: " << std::endl;
+        for(auto& val : ja)
+        {
+            std::cout << val << ", ";
+        }
+        std::cout << std::endl;
 
         glp_load_matrix(feasibility, elements, ia, ja, ar);
         glp_simplex(feasibility, NULL);
