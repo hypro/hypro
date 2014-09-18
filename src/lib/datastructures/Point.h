@@ -93,6 +93,18 @@ namespace hypro {
                     mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), carl::FLOAT_T<Number>(coordinate)) );
                     ++count;
                 }
+
+            }
+
+            //@author Chris K. (for Minkowski Sum Test)
+            Point(std::vector<Number> _coordinates)
+            {
+                unsigned count = 0;
+                for(unsigned j = 0; j < _coordinates.size(); ++j)
+                {
+                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), carl::FLOAT_T<Number>(_coordinates.at(j))) );
+                    ++count;
+                }
             }
 
             /**
