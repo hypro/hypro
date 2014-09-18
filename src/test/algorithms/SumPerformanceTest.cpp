@@ -196,7 +196,7 @@ protected:
     /*
      * Dimension test, variable amount of vertices (depending on dimension)
      */
-    constexpr long unsigned int dimension = 3;
+    constexpr long unsigned int dimension = 2;
     double vertices = std::pow(2,dimension);
     std::vector<double> tuple(dimension,0);
     std::vector<Point<double>*> pointSetD;
@@ -263,7 +263,7 @@ protected:
 	/*
 	 * second Poly (for dimension Test)
 	 */
-	/*
+
     std::vector<double> tuple2(dimension,0);
     std::vector<Point<double>*> pointSetE;
 
@@ -344,7 +344,7 @@ protected:
 	std::cout << "Vector: " << translation << std::endl;
 
 
-	bool ret = polyE.linearTransformation(polyE, transformation); */
+	bool ret = polyE.linearTransformation(polyE, transformation);
 
     }
 
@@ -375,17 +375,17 @@ TEST_F(SumPerformanceTest, playGroundTest)
 */
 
 	std::cout << "Points D: " << polyD.points() << std::endl;
-/*
+
 	for (unsigned i = 0; i < polyD.points().size(); ++i) {
 		std::cout << "Neighbors D" << i+1 << ": " << polyD.points().at(i).neighbors() << std::endl;
-	}*/
+	}
 
-	/*
+
 	std::cout << "Points E: " << polyE.points() << std::endl;
 
 	for (unsigned i = 0; i < polyE.points().size(); ++i) {
 		std::cout << "Neighbors E" << i+1 << ": " << polyE.points().at(i).neighbors() << std::endl;
-	}*/
+	}
 }
 
 /*
@@ -420,7 +420,7 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }*/
 
-
+/*
 TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
 {
 	glp_term_out(GLP_OFF);
@@ -450,5 +450,5 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
-}
+}*/
 
