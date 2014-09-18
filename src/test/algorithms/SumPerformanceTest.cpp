@@ -89,7 +89,7 @@ protected:
     	pointSetP.at(pointSetP.size()-2)->addNeighbor(pointSetP.at(0));
     	pointSetP.at(pointSetP.size()-1)->addNeighbor(pointSetP.at(1));
 
-    	//experimental
+    	//experimental: only allow integer values (for ease of debugging)
     	for (auto& point : pointSetP) {
     		std::vector<carl::Variable> variables = point->variables();
     		for (auto it=variables.begin(); it != variables.end(); ++it) {
@@ -195,8 +195,8 @@ protected:
 
     /*
      * Dimension test, variable amount of vertices (depending on dimension)
-     *//*
-    constexpr long unsigned int dimension = 5;
+     */
+    constexpr long unsigned int dimension = 3;
     double vertices = std::pow(2,dimension);
     std::vector<double> tuple(dimension,0);
     std::vector<Point<double>*> pointSetD;
@@ -209,16 +209,142 @@ protected:
         	tuple.at(tuple.size()-j-1) = bits[j];
         }
 
-        std::cout << "List: " << tuple << std::endl;
+        //std::cout << "List: " << tuple << std::endl;
     	Point<double>* d1 = new Point<double>(tuple);
-        std::cout << "Point: " << *d1 << std::endl;
+        //std::cout << "Point: " << *d1 << std::endl;
 
         pointSetD.push_back(d1);
     }
 
-    std::cout << "Testing the point constructor (with Initializer List {0,0,0,1}): " << std::endl;
-	Point<double>* d = new Point<double>({0,0,0,1});
-    std::cout << "Point d: " << *d << std::endl;*/
+    //set neighbors
+    Point<double> referencePoint;
+    for (auto& point : pointSetD) {
+    	for (auto& var : point->variables()) {
+        	referencePoint = Point<double>(*point);
+        	//std::cout << "Point: " << *point << std::endl;
+    		//std::cout << "Variable: " << var << std::endl;
+    		if (referencePoint.at(var) == 0) {
+    			//std::cout << "0->1" << std::endl;
+    			referencePoint.setCoordinate(var,1);
+    		} else {
+    			referencePoint.setCoordinate(var,0);
+    			//std::cout << "1->0" << std::endl;
+    		}
+
+    		for (unsigned j = 0; j < pointSetD.size(); ++j) {
+    			if (*pointSetD.at(j) == referencePoint ) {
+    				//std::cout << "Neighbor found: " << *pointSetD.at(j) << std::endl;
+    				bool alreadyNeighbor = false;
+    				for (auto& neighbor : point->neighbors()) {
+    					//std::cout << "Checking Neighbor: " << neighbor << std::endl;
+    					if (neighbor == *pointSetD.at(j)) {
+    						//std::cout << "Neighbor already in Set" << std::endl;
+    						alreadyNeighbor = true;
+    					}
+    				}
+    				if (!alreadyNeighbor) {
+    					pointSetD.at(j)->addNeighbor(point);
+    					point->addNeighbor(pointSetD.at(j));
+    				}
+    				break;
+    			}
+    		}
+    	}
+    }
+
+	for (unsigned i = 0; i < pointSetD.size(); ++i) {
+		polyD.addPoint(*pointSetD.at(i));
+	}
+
+	//necessary since updatePoints() seems bugged
+	polyD.setPointsUpToDate(true);
+
+
+	/*
+	 * second Poly (for dimension Test)
+	 */
+	/*
+    std::vector<double> tuple2(dimension,0);
+    std::vector<Point<double>*> pointSetE;
+
+    for (double i = 0; i < vertices; ++i) {
+        std::bitset<dimension> bits(i);
+        //std::cout << "Bits: " << bits.to_string() << std::endl;
+
+        for (unsigned j=0; j < tuple2.size(); ++j) {
+        	tuple2.at(tuple2.size()-j-1) = bits[j];
+        }
+
+        //std::cout << "List: " << tuple << std::endl;
+    	Point<double>* e1 = new Point<double>(tuple2);
+        //std::cout << "Point: " << *d1 << std::endl;
+
+        pointSetE.push_back(e1);
+    }
+
+    //set neighbors
+    Point<double> referencePoint2;
+    for (auto& point : pointSetE) {
+    	for (auto& var : point->variables()) {
+        	referencePoint2 = Point<double>(*point);
+        	//std::cout << "Point: " << *point << std::endl;
+    		//std::cout << "Variable: " << var << std::endl;
+    		if (referencePoint2.at(var) == 0) {
+    			//std::cout << "0->1" << std::endl;
+    			referencePoint2.setCoordinate(var,1);
+    		} else {
+    			referencePoint2.setCoordinate(var,0);
+    			//std::cout << "1->0" << std::endl;
+    		}
+
+    		for (unsigned j = 0; j < pointSetE.size(); ++j) {
+    			if (*pointSetE.at(j) == referencePoint2 ) {
+    				//std::cout << "Neighbor found: " << *pointSetD.at(j) << std::endl;
+    				bool alreadyNeighbor = false;
+    				for (auto& neighbor : point->neighbors()) {
+    					//std::cout << "Checking Neighbor: " << neighbor << std::endl;
+    					if (neighbor == *pointSetE.at(j)) {
+    						//std::cout << "Neighbor already in Set" << std::endl;
+    						alreadyNeighbor = true;
+    					}
+    				}
+    				if (!alreadyNeighbor) {
+    					pointSetE.at(j)->addNeighbor(point);
+    					point->addNeighbor(pointSetE.at(j));
+    				}
+    				break;
+    			}
+    		}
+    	}
+    }
+
+	for (unsigned i = 0; i < pointSetE.size(); ++i) {
+		polyE.addPoint(*pointSetE.at(i));
+	}
+
+	//necessary since updatePoints() seems bugged
+	polyE.setPointsUpToDate(true);
+
+	//move the polytope somewhere else (to differentiate it from polyD)
+	vector_t<double> translation = vector_t<double>(dimension,1);
+	matrix_t<double> transformation = matrix_t<double>(dimension,dimension);
+
+	for (unsigned i = 0; i < translation.rows(); ++i) {
+		translation(i) = 1;
+		for (unsigned j=0; j < transformation.cols(); ++j) {
+			if (i==j) {
+				transformation(i,j) = 2;
+			} else {
+				transformation(i,j) = 0;
+			}
+		}
+	}
+
+	std::cout << "Matrix: " << transformation << std::endl;
+	std::cout << "Vector: " << translation << std::endl;
+
+
+	bool ret = polyE.linearTransformation(polyE, transformation); */
 
     }
 
@@ -232,6 +358,7 @@ protected:
     hypro::Polytope<double> polyP = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
     hypro::Polytope<double> polyD = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+    hypro::Polytope<double> polyE = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 };
 
 TEST_F(SumPerformanceTest, playGroundTest)
@@ -246,10 +373,23 @@ TEST_F(SumPerformanceTest, playGroundTest)
 	std::cout << "Points Q: " << polyQ.points() << std::endl;
 
 */
+
+	std::cout << "Points D: " << polyD.points() << std::endl;
+/*
+	for (unsigned i = 0; i < polyD.points().size(); ++i) {
+		std::cout << "Neighbors D" << i+1 << ": " << polyD.points().at(i).neighbors() << std::endl;
+	}*/
+
+	/*
+	std::cout << "Points E: " << polyE.points() << std::endl;
+
+	for (unsigned i = 0; i < polyE.points().size(); ++i) {
+		std::cout << "Neighbors E" << i+1 << ": " << polyE.points().at(i).neighbors() << std::endl;
+	}*/
 }
 
-
-TEST_F(SumPerformanceTest, altMinkowskiSumVTest)
+/*
+TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 {
 	glp_term_out(GLP_OFF);
 	//glp_term_out(GLP_ON);
@@ -264,10 +404,10 @@ TEST_F(SumPerformanceTest, altMinkowskiSumVTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
-}
+}*/
 
 /*
-TEST_F(SumPerformanceTest, origMinkowskiSumVTest)
+TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 {
 	Polytope<double> omegaPoly;
 	bool omega = polyP.minkowskiSum(omegaPoly,polyQ);
@@ -281,4 +421,34 @@ TEST_F(SumPerformanceTest, origMinkowskiSumVTest)
 }*/
 
 
+TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
+{
+	glp_term_out(GLP_OFF);
+	//glp_term_out(GLP_ON);
+	std::cout.setstate(std::ios::failbit);
+	Polytope<double> omegaPoly;
+	bool omega = polyD.altMinkowskiSum(omegaPoly,polyD);
+	std::cout.clear();
+	std::cout << "-----------" << std::endl;
+	std::cout << "Dimension Test " << std::endl;
+	std::cout << "-----------" << std::endl;
+	std::cout << "Return Value: " << omega << std::endl;
+	std::cout << "Computed Sum Polytope: ";
+	omegaPoly.print();
+	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
+}
+
+
+TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
+{
+	Polytope<double> omegaPoly;
+	bool omega = polyD.minkowskiSum(omegaPoly,polyD);
+	std::cout << "-----------" << std::endl;
+	std::cout << "Dimension Test " << std::endl;
+	std::cout << "-----------" << std::endl;
+	std::cout << "Return Value: " << omega << std::endl;
+	std::cout << "Computed Sum Polytope: ";
+	omegaPoly.print();
+	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
+}
 
