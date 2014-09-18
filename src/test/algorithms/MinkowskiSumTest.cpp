@@ -352,7 +352,7 @@ TEST_F(MinkowskiSumTest, computePointTest)
 	edge(1) = 4;
 
 	Point<double> result = polytope::computePoint(*t1, edge, false);
-	std::cout << "source Point: " << t1 << std::endl;
+	std::cout << "source Point: " << *t1 << std::endl;
 	std::cout << "Edge: " << std::endl;
 	std::cout << edge << std::endl;
 	std::cout << "computed Point: " << result << std::endl;
@@ -367,7 +367,7 @@ TEST_F(MinkowskiSumTest, computeEdgeTest)
 	p = Point<double>(coordinateMap);
 
 	vector_t<double> result = polytope::computeEdge(*t1, p);
-	std::cout << "source Point: " << t1 << std::endl;
+	std::cout << "source Point: " << *t1 << std::endl;
 	std::cout << "target Point: " << p << std::endl;
 	std::cout << "computed Edge: " << std::endl;
 	std::cout << result << std::endl;
