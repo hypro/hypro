@@ -13,8 +13,12 @@ class SumPerformanceTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+    	/*
+    	 * Vertex Test, dimension always 3
+    	 */
+
     	//double dimension = 2;
-    	double vertexAmount = 20;
+    	double vertexAmount = 10;
     	double radius = 100;
     	double angle = 360/vertexAmount;
 
@@ -167,6 +171,14 @@ protected:
     	pointSetQ.at(pointSetQ.size()-2)->addNeighbor(pointSetQ.at(0));
     	pointSetQ.at(pointSetQ.size()-1)->addNeighbor(pointSetQ.at(1));
 
+    	//experimental
+    	for (auto& point : pointSetQ) {
+    		std::vector<carl::Variable> variables = point->variables();
+    		for (auto it=variables.begin(); it != variables.end(); ++it) {
+    			point->setCoordinate(*it, std::round(point->at(*it).toDouble()));
+    		}
+    	}
+
     	for (unsigned i = 0; i < pointSetQ.size(); ++i) {
     		polyQ.addPoint(*pointSetQ.at(i));
     	}
@@ -174,36 +186,40 @@ protected:
     	//necessary since updatePoints() seems bugged
     	polyQ.setPointsUpToDate(true);
 
-        /*
-    	std::vector<Point<double>*> pointSetQ;
 
-    	for (double i = 1; i <= vertexAmount; ++i) {
-    		Point<double>* q1 = new Point<double>({1,1+i-1,pow(i-1,2)});
-    		Point<double>* q2 = new Point<double>({2,1+i-1,pow(i-1,2)});
+    /*
+     * ----------------------------------------------
+     * ----------------------------------------------
+     * ----------------------------------------------
+     */
 
-    		q1->addNeighbor(q2);
-    		q2->addNeighbor(q1);
+    /*
+     * Dimension test, variable amount of vertices (depending on dimension)
+     */
+    constexpr long unsigned int dimension = 4;
+    double vertices = std::pow(2,dimension);
+    std::vector<double> tuple(dimension,0);
+    std::vector<Point<double>*> pointSetD;
 
-    		pointSetQ.push_back(q1);
-    		pointSetQ.push_back(q2);
+    for (double i = 0; i < vertices; ++i) {
+        std::bitset<dimension> bits(i);
+        //std::cout << "Bits: " << bits.to_string() << std::endl;
 
-    	}
+        for (unsigned j=0; j < tuple.size(); ++j) {
+        	tuple.at(tuple.size()-j-1) = bits[j];
+        }
 
-    	for(unsigned i = 0; i < pointSetQ.size()-2; ++i) {
-    		pointSetQ.at(i)->addNeighbor(pointSetQ.at(i+2));
-    		pointSetQ.at(i+2)->addNeighbor(pointSetQ.at(i));
-    	}
+        std::cout << "List: " << tuple << std::endl;
+    	Point<double>* d1 = new Point<double>(tuple);
+        std::cout << "Point: " << *d1 << std::endl;
 
-    	for (unsigned i = 0; i < pointSetQ.size(); ++i) {
-    		polyQ.addPoint(*pointSetQ.at(i));
-    	}
+        pointSetD.push_back(d1);
+    }
 
-    	//the first point has to be treated seperately
-    	pointSetQ.at(0)->addNeighbor(pointSetQ.at(pointSetQ.size()-2));
-    	pointSetQ.at(1)->addNeighbor(pointSetQ.at(pointSetQ.size()-1));
+    std::cout << "Testing the point constructor (with Initializer List {0,0,0,1}): " << std::endl;
+	Point<double>* d = new Point<double>({0,0,0,1});
+    std::cout << "Point d: " << *d << std::endl;
 
-    	//necessary since updatePoints() seems bugged
-    	polyQ.setPointsUpToDate(true);*/
     }
 
     virtual void TearDown()
@@ -214,11 +230,13 @@ protected:
 
     hypro::Polytope<double> polyQ = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
     hypro::Polytope<double> polyP = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
+
+    hypro::Polytope<double> polyD = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 };
 
 TEST_F(SumPerformanceTest, playGroundTest)
 {
-	std::cout << "Points P: " << polyP.points() << std::endl;
+	//std::cout << "Points P: " << polyP.points() << std::endl;
 
 	/*
 	for (unsigned i = 0; i < polyP.points().size(); ++i) {
@@ -230,29 +248,37 @@ TEST_F(SumPerformanceTest, playGroundTest)
 */
 }
 
-
-TEST_F(SumPerformanceTest, altMinkowskiSumTest)
+/*
+TEST_F(SumPerformanceTest, altMinkowskiSumVTest)
 {
 	glp_term_out(GLP_OFF);
 	//glp_term_out(GLP_ON);
 	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
-	bool omega = polyP.altMinkowskiSum(omegaPoly,polyP);
+	bool omega = polyP.altMinkowskiSum(omegaPoly,polyQ);
 	std::cout.clear();
+	std::cout << "-----------" << std::endl;
+	std::cout << "Vertex Test " << std::endl;
+	std::cout << "-----------" << std::endl;
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
+	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }
 
 
-TEST_F(SumPerformanceTest, origMinkowskiSumTest)
+TEST_F(SumPerformanceTest, origMinkowskiSumVTest)
 {
 	Polytope<double> omegaPoly;
-	bool omega = polyP.minkowskiSum(omegaPoly,polyP);
+	bool omega = polyP.minkowskiSum(omegaPoly,polyQ);
+	std::cout << "-----------" << std::endl;
+	std::cout << "Vertex Test " << std::endl;
+	std::cout << "-----------" << std::endl;
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
-}
+	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
+}*/
 
 
 
