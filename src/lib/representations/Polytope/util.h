@@ -473,20 +473,6 @@ namespace polytope
               }
           }
         assert(pos-1 <= elements);
-        
-        std::cout << "GLPK ja matrix: " << std::endl;
-        for(auto& val : ja)
-        {
-            std::cout << val << ", ";
-        }
-        std::cout << std::endl;
-
-        std::cout << "GLPK ia matrix: " << std::endl;
-        for(auto& val : ia)
-        {
-            std::cout << val << ", ";
-        }
-        std::cout << std::endl;
 
         glp_load_matrix(feasibility, elements, ia, ja, ar);
         glp_simplex(feasibility, NULL);
@@ -783,7 +769,7 @@ namespace polytope
         std::cout<< "Edges: " << edges << std::endl;
 
     	//dimension-1 edges define one (edge) vector of our cone
-    	for (unsigned i = 0; i < edges.size()-1; ++i) {
+    	for (unsigned i = 0; i <= edges.size()-dimension+1; ++i) {
     		tmpEdges.clear();
     		for (unsigned j = 0; j < dimension-1; ++j) {
     			//consider dimension-1 edges
@@ -802,7 +788,7 @@ namespace polytope
     	std::vector<vector> vectorTuple;
 
     	//fill cone
-    	for (unsigned i = 0; i < resultVectorSet.size()-1; ++i) {
+    	for (unsigned i = 0; i <= resultVectorSet.size()-dimension+1; ++i) {
     		for (unsigned j=0; j <dimension-1; ++j) {
     			vectorTuple.push_back(resultVectorSet.at(i+j));
     		}
