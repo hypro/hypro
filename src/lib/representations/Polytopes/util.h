@@ -235,10 +235,15 @@ namespace polytope
 
         		//setup matrix coefficients
         		unsigned elements = (_edgeSet.size()) * (_edgeSet.at(0).rows());
-        		int ia[elements];
-        		int ja[elements];
-        		double ar[elements];
+        		int ia[1+elements];
+        		int ja[1+elements];
+        		double ar[1+elements];
         		unsigned pos = 1;
+
+                //to prevent bugs
+                ia[0] = 0;
+                ja[0] = 0;
+                ar[0] = 0;
 
         		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
 
