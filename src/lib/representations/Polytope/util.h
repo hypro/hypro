@@ -232,7 +232,7 @@ namespace polytope
 
     	for (auto it=variables.begin(); it != variables.end(); ++it) {
     		//TODO check: [] or .at?
-    		edge(i) = _point2[*it] - _point1[*it];
+    		edge(i) = _point2.at(*it) - _point1.at(*it);
     		i++;
     	}
     	return edge;
@@ -249,7 +249,7 @@ namespace polytope
 
     	for (auto it=variables.begin(); it != variables.end(); ++it) {
     		//TODO check: [] or .at?
-    		result[*it] = result[*it] + _edge(i);
+    		result.setCoordinate(*it,result.at(*it) + _edge(i));
     		i++;
     	}
 
@@ -267,6 +267,24 @@ namespace polytope
 
     	return result;
     }
+
+    /*
+    //temporarily only needed for the performance tests
+	template<typename Number>
+	Point<Number>* computePoint(Point<Number>& _point, vector& _edge) {
+		Point<Number>* result = new Point<Number>();
+		std::vector<carl::Variable> variables = _point.variables();
+
+		assert(_point.dimension() == _edge.rows());
+		int i = 0;
+
+		for (auto it=variables.begin(); it != variables.end(); ++it) {
+			result->at(*it) = _point.at(*it) + _edge(i);
+			i++;
+		}
+
+    	return result;
+    }*/
 
     /**
      * currently not needed anymore
@@ -286,6 +304,9 @@ namespace polytope
     bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int>& _counter) {
     	//retrieve the edge that is defined by the counter (j,i)
     	//first get both source & target vertex (dependent on the counter param.)
+    	std::cout << "-------------------------" << std::endl;
+    	std::cout << "AdjOracle for vertex: " << _vertex  << std::endl;
+    	std::cout << "-------------------------" << std::endl;
 
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
     	Point<Number> sourceVertex;
@@ -297,6 +318,9 @@ namespace polytope
     	std::vector<Point<Number>> neighbors = sourceVertex.neighbors();
     	if (neighbors.size() < _counter.second) {
     		//this neighbor does not exist for this vertex
+        	std::cout << "-------------------------" << std::endl;
+        	std::cout << "AdjOracle result: no neighbor in this direction"  << std::endl;
+        	std::cout << "-------------------------" << std::endl;
     		return false;
     	} else {
     		targetVertex = neighbors[_counter.second-1];
@@ -324,6 +348,8 @@ namespace polytope
     	//std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
 
     	vector tempEdge;
+		carl::FLOAT_T<Number> dotProduct;
+		carl::FLOAT_T<Number> normFactor;
 		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
 			tempEdge = computeEdge(otherSource, *it);
 
@@ -340,10 +366,22 @@ namespace polytope
 			Number normFactor = doubleVector.norm() * doubleVector2.norm();
 			*/
 
-			carl::FLOAT_T<Number> dotProduct = tempEdge.dot(edge);
-			carl::FLOAT_T<Number> normFactor = tempEdge.norm() * edge.norm();
+			dotProduct = tempEdge.dot(edge);
+			normFactor = tempEdge.norm() * edge.norm();
 
-			if (dotProduct/normFactor == 1) {
+			//has to be done...
+			dotProduct = std::round(dotProduct.toDouble()*1000000);
+			normFactor = std::round(normFactor.toDouble()*1000000);
+
+			std::cout << "Dot Product: " << dotProduct << std::endl;
+			std::cout << "Norm Factor: " << normFactor << std::endl;
+			std::cout << "Parallelism Factor: " << dotProduct/normFactor << std::endl;
+			std::cout << "Value of the if condition: " << (dotProduct/normFactor == 1) << std::endl;
+
+			if ( (dotProduct/normFactor == 1+EPSILON) || (dotProduct/normFactor == 1-EPSILON) ||
+					(dotProduct/normFactor == -1+EPSILON) || (dotProduct/normFactor == -1-EPSILON) ||
+					(dotProduct/normFactor == -1) || (dotProduct/normFactor == 1)) {
+				std::cout << "Parallel Edge detected" << std::endl;
 				parallelEdge = tempEdge;
 				parallelFlag = true;
 			} else {
@@ -351,7 +389,7 @@ namespace polytope
 			}
 		}
 
-		//add all edges incident to the original source vertex to the Set of non-parallel edges as well
+		//add all edges incident of the original source vertex to the Set of non-parallel edges as well
 		for (typename std::vector<Point<Number>>::iterator it=neighbors.begin(); it!= neighbors.end(); ++it) {
 			//dont add the original edge to the set
 			if (*it != neighbors[_counter.second-1]) {
@@ -412,7 +450,7 @@ namespace polytope
 		  ia[pos] = 1;
 		  ja[pos] = j;
 		  ar[pos] = edge(j-1).toDouble();
-		  //std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
+		  std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
 		  ++pos;
 		}
 
@@ -425,7 +463,7 @@ namespace polytope
                   ja[pos] = j;
                   vector tmpVec = nonParallelEdges.at(i-2);
                   ar[pos] = tmpVec(j-1).toDouble();
-                  //std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+                  std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
                   ++pos;
               }
           }
@@ -438,6 +476,9 @@ namespace polytope
 
         //check if a feasible solution exists
         if (glp_get_status(feasibility) == GLP_NOFEAS) {
+        	std::cout << "-------------------------" << std::endl;
+        	std::cout << "AdjOracle result: no feasible solution" << std::endl;
+        	std::cout << "-------------------------" << std::endl;
         	return false;
         } else {
         	//if (glp_get_status(feasibility) == GLP_FEAS) {
@@ -491,7 +532,6 @@ namespace polytope
 
     	//traverse neighbors of v1
     	for (auto neighbor : neighbors1) {
-    		//TODO check if this works, else tmpEdge outside
     		tmpEdge = computeEdge(sourceVertex1,neighbor);
     		edges.push_back(tmpEdge);
     	}
@@ -501,6 +541,18 @@ namespace polytope
     		tmpEdge = computeEdge(sourceVertex2,neighbor);
     		edges.push_back(tmpEdge);
     	}
+
+    	//check for degeneracy of the summand polytopes
+    	std::vector<bool> degeneracyCheck(tmpEdge.rows(), true);
+    	for (auto& edge : edges) {
+    		for (unsigned i = 0; i < edge.rows(); ++i) {
+    			if (edge(i) != 0) {
+    				degeneracyCheck.at(i) = false;
+    			}
+    		}
+    	}
+
+		std::cout << "Bool Vector: " << degeneracyCheck << std::endl;
 
     	/*
 		 * Setup LP with GLPK
@@ -528,7 +580,14 @@ namespace polytope
 		glp_set_obj_coef(maximizer, tmpEdge.rows()+1, 1.0);
 
 		//constraints for structural variables
+		//TODO distinguish depending on degeneracy
 		for (int i=1; i<= tmpEdge.rows(); ++i) {
+			/*if (degeneracyCheck.at(i-1)) {
+				glp_set_col_bnds(maximizer, i, GLP_DB, 0.0, 0.0);
+			} else {
+    			std::cout << "Setting bound (-1,1): " << std::endl;
+				glp_set_col_bnds(maximizer, i, GLP_DB, -1.0, 1.0);
+			}*/
 			glp_set_col_bnds(maximizer, i, GLP_DB, -1.0, 1.0);
 		}
 		glp_set_col_bnds(maximizer, tmpEdge.rows()+1, GLP_UP, 0.0, POS_CONSTANT);

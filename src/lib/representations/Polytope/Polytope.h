@@ -78,6 +78,8 @@ namespace hypro
          */
         const std::vector<Point<Number>>& points();
         
+        std::vector<Point<Number>>& rPoints();
+
         //returns the fan of the Polytope
         const polytope::Fan<Number>& fan();
 

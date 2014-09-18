@@ -191,6 +191,16 @@ namespace hypro
     	}
     	return mPoints;
     }
+
+    template<typename Number>
+    std::vector<Point<Number>>& Polytope<Number>::rPoints()
+    {
+    	/*
+    	if (!mPointsUpToDate) {
+    		updatePoints();
+    	}*/
+    	return mPoints;
+    }
     
 
     //returns the fan of the Polytope
@@ -438,7 +448,9 @@ namespace hypro
     	 * Reverse Search Algorithm
     	 */
     	std::cout << "-------------------------" << std::endl;
+    	std::cout << "-------------------------" << std::endl;
     	std::cout << "The Preprocessing Ends here - Start of Algorithm" << std::endl;
+    	std::cout << "-------------------------" << std::endl;
     	std::cout << "-------------------------" << std::endl;
 
     	Point<Number> nextVertex;
@@ -791,7 +803,18 @@ namespace hypro
 			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(decompositionEdges.at(i));
 			carl::FLOAT_T<Number> normFactor = intersectedPlane.normal().norm() * decompositionEdges.at(i).norm();
 
-			if ( (dotProduct/normFactor == 1) || (dotProduct/normFactor == -1)) {
+			//has to be done...
+			dotProduct = std::round(dotProduct.toDouble()*1000000);
+			normFactor = std::round(normFactor.toDouble()*1000000);
+
+			std::cout << "Dot Product: " << dotProduct << std::endl;
+			std::cout << "Norm Factor: " << normFactor << std::endl;
+			std::cout << "Parallelism Factor: " << dotProduct/normFactor << std::endl;
+			std::cout << "Value of the if condition: " << (dotProduct/normFactor == 1) << std::endl;
+
+			if ( (dotProduct/normFactor == 1+EPSILON) || (dotProduct/normFactor == 1-EPSILON) ||
+					(dotProduct/normFactor == -1+EPSILON) || (dotProduct/normFactor == -1-EPSILON) ||
+					(dotProduct/normFactor == -1) || (dotProduct/normFactor == 1)) {
 				std::cout << "Parallel Edge found" << std::endl;
 				std::cout << "-----------------" << std::endl;
 
