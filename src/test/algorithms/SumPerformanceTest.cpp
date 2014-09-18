@@ -18,7 +18,7 @@ protected:
     	 */
 
     	//double dimension = 2;
-    	double vertexAmount = 10;
+    	double vertexAmount = 50;
     	double radius = 100;
     	double angle = 360/vertexAmount;
 
@@ -195,8 +195,8 @@ protected:
 
     /*
      * Dimension test, variable amount of vertices (depending on dimension)
-     */
-    constexpr long unsigned int dimension = 4;
+     *//*
+    constexpr long unsigned int dimension = 5;
     double vertices = std::pow(2,dimension);
     std::vector<double> tuple(dimension,0);
     std::vector<Point<double>*> pointSetD;
@@ -218,7 +218,7 @@ protected:
 
     std::cout << "Testing the point constructor (with Initializer List {0,0,0,1}): " << std::endl;
 	Point<double>* d = new Point<double>({0,0,0,1});
-    std::cout << "Point d: " << *d << std::endl;
+    std::cout << "Point d: " << *d << std::endl;*/
 
     }
 
@@ -248,7 +248,7 @@ TEST_F(SumPerformanceTest, playGroundTest)
 */
 }
 
-/*
+
 TEST_F(SumPerformanceTest, altMinkowskiSumVTest)
 {
 	glp_term_out(GLP_OFF);
@@ -266,7 +266,7 @@ TEST_F(SumPerformanceTest, altMinkowskiSumVTest)
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }
 
-
+/*
 TEST_F(SumPerformanceTest, origMinkowskiSumVTest)
 {
 	Polytope<double> omegaPoly;

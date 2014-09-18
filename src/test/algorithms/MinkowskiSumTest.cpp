@@ -64,25 +64,13 @@ protected:
 	     * one Polytope with Adjacency set up
 	     */
 
-    	Point<double>::coordinateMap coordinate;
-    	coordinate.insert( std::make_pair(x, 1) );
-    	coordinate.insert( std::make_pair(y, 1) );
-    	t1 = new Point<double>(coordinate);
+    	t1 = new Point<double>({1,1});
 
-    	Point<double>::coordinateMap coordinate2;
-    	coordinate2.insert( std::make_pair(x, 0) );
-    	coordinate2.insert( std::make_pair(y, 0) );
-    	t2 = new Point<double>(coordinate2);
+    	t2 = new Point<double>({0,0});
 
-    	Point<double>::coordinateMap coordinate3;
-    	coordinate3.insert( std::make_pair(x, 0) );
-    	coordinate3.insert( std::make_pair(y, 1) );
-    	t3 = new Point<double>(coordinate3);
+    	t3 = new Point<double>({0,1});
 
-    	Point<double>::coordinateMap coordinate4;
-    	coordinate4.insert( std::make_pair(x, 1) );
-    	coordinate4.insert( std::make_pair(y, 0) );
-    	t4 = new Point<double>(coordinate4);
+    	t4 = new Point<double>({1,0});
 
 	    t1->addNeighbor(t3);
 	    t1->addNeighbor(t4);
@@ -104,25 +92,13 @@ protected:
 	    /**
 	     * another Polytope with Adjacency set up
 	     */
-    	Point<double>::coordinateMap coordinate5;
-    	coordinate5.insert( std::make_pair(x, 2) );
-    	coordinate5.insert( std::make_pair(y, 2) );
-    	t5 = new Point<double>(coordinate5);
+    	t5 = new Point<double>({2,2});
 
-    	Point<double>::coordinateMap coordinate6;
-    	coordinate6.insert( std::make_pair(x, 1) );
-    	coordinate6.insert( std::make_pair(y, 1) );
-    	t6 = new Point<double>(coordinate6);
+    	t6 = new Point<double>({1,1});
 
-    	Point<double>::coordinateMap coordinate7;
-    	coordinate7.insert( std::make_pair(x, 1) );
-    	coordinate7.insert( std::make_pair(y, 2) );
-    	t7 = new Point<double>(coordinate7);
+    	t7 = new Point<double>({1,2});
 
-    	Point<double>::coordinateMap coordinate8;
-    	coordinate8.insert( std::make_pair(x, 2) );
-    	coordinate8.insert( std::make_pair(y, 1) );
-    	t8 = new Point<double>(coordinate8);
+    	t8 = new Point<double>({2,1});
 
 	    t5->addNeighbor(t7);
 	    t5->addNeighbor(t8);
@@ -248,12 +224,8 @@ protected:
 
     virtual void TearDown()
     {
-    	//TODO: tear down
 
     }
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
 
     Point<double>* t1;
     Point<double>* t2;
@@ -361,10 +333,7 @@ TEST_F(MinkowskiSumTest, computePointTest)
 TEST_F(MinkowskiSumTest, computeEdgeTest)
 {
 	Point<double> p;
-	Point<double>::coordinateMap coordinateMap;
-	coordinateMap.insert( std::make_pair(x, 4) );
-	coordinateMap.insert( std::make_pair(y, 3) );
-	p = Point<double>(coordinateMap);
+	p = Point<double>({4,3});
 
 	vector_t<double> result = polytope::computeEdge(*t1, p);
 	std::cout << "source Point: " << *t1 << std::endl;
@@ -404,10 +373,7 @@ TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
 TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 {
 	Point<double> p;
-	Point<double>::coordinateMap coordinateMap;
-	coordinateMap.insert( std::make_pair(x, 0) );
-	coordinateMap.insert( std::make_pair(y, 1) );
-	p = Point<double>(coordinateMap);
+	p = Point<double>({0,1});
 
 	vector_t<double> result = polytope::computeEdge(*t1, p);
 	std::cout << "source Point: " << t1 << std::endl;

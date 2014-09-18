@@ -160,10 +160,7 @@ protected:
     	pPoly = Polytope<double>(vecSet);
 
     	//--------
-    	std::map<carl::Variable, double> coordinate;
-    	coordinate.insert( std::make_pair(x, 1) );
-    	coordinate.insert( std::make_pair(y, 1) );
-    	p1 = Point<double>(coordinate);
+    	p1 = Point<double>({1,1});
 
     	//std::cout << "PointPolyGeneratorStart" << std::endl;
 
@@ -176,11 +173,6 @@ protected:
     {
     	//TODO: tear down
     }
-
-    //Variable Objects
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
     Location<double>* loc1 = new Location<double>();
@@ -244,10 +236,7 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
-        std::map<carl::Variable, double> coords;
-    	coords.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(0), 1) );
-    	coords.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(1), 1) );
-        Point<double> start = Point<double>(coords);
+        Point<double> start = Point<double>({1,1});
         
         hypro::Polytope<double> startPoly = hypro::Polytope<double>(start);
 
