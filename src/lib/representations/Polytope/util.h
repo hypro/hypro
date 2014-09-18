@@ -439,10 +439,15 @@ namespace polytope
 		std::cout << "target Vertex: " << targetVertex << std::endl;
 		std::cout << "other source Vertex: " << otherSource << std::endl;
 		std::cout << "considered Edge: " << edge << std::endl;
-        int ia[elements];
-        int ja[elements];
-        double ar[elements];
+        int ia[1+elements];
+        int ja[1+elements];
+        double ar[1+elements];
         unsigned pos = 1;
+
+        //to prevent bugs
+        ia[0] = 0;
+        ja[0] = 0;
+        ar[0] = 0;
 
         //setup the first row coefficients individually
 		for(unsigned j = 1; j <= edge.rows(); ++j)
@@ -471,6 +476,13 @@ namespace polytope
         
         std::cout << "GLPK ja matrix: " << std::endl;
         for(auto& val : ja)
+        {
+            std::cout << val << ", ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "GLPK ia matrix: " << std::endl;
+        for(auto& val : ia)
         {
             std::cout << val << ", ";
         }
@@ -601,10 +613,15 @@ namespace polytope
 
 		//setup matrix coefficients
 		unsigned elements = (edges.size()) * (tmpEdge.rows()+1);
-        int ia[elements];
-        int ja[elements];
-        double ar[elements];
+        int ia[1+elements];
+        int ja[1+elements];
+        double ar[1+elements];
         unsigned pos = 1;
+
+        //to prevent bugs
+        ia[0] = 0;
+        ja[0] = 0;
+        ar[0] = 0;
 
         for (unsigned i=1; i <= edges.size(); ++i) {
 
@@ -687,10 +704,15 @@ namespace polytope
 
 		//setup matrix coefficients
 		unsigned elements = (_edgeSet.size()) * (_edgeSet.at(0).rows());
-		int ia[elements];
-		int ja[elements];
-		double ar[elements];
+		int ia[1+elements];
+		int ja[1+elements];
+		double ar[1+elements];
 		unsigned pos = 1;
+
+        //to prevent bugs
+        ia[0] = 0;
+        ja[0] = 0;
+        ar[0] = 0;
 
 		for (unsigned i=1; i <= _edgeSet.size(); ++i) {
 
