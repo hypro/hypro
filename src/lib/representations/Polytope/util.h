@@ -11,11 +11,8 @@
 
 #include <ppl.hh>
 #include <carl/core/Variable.h>
-#include "../../config.h"
 #include "../../util/eigenTypetraits.h"
 #include "../../util/VariablePool.h"
-
-#include "../../datastructures/Point.h"
 
 #include "../Polytopes/util.h"
 
@@ -23,6 +20,9 @@ namespace hypro
 {
 namespace polytope
 {
+    using carl::operator<<;
+    
+    
     static inline std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables(const Parma_Polyhedra_Library::C_Polyhedron& poly)
     {
         Parma_Polyhedra_Library::Generator_System gs = poly.generators();

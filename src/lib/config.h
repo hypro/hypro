@@ -7,6 +7,7 @@
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
+#include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
 //#include "util/eigenTypetraits.h"
 #include <eigen3/Eigen/Dense>
