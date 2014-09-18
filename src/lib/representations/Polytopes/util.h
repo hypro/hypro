@@ -9,10 +9,9 @@
 #pragma once
 
 #include <cassert>
-#include "../../datastructures/Point.h"
 #include <glpk.h>
 
-//#include "../Polytope/util.h"
+#include "../../datastructures/Point.h"
 
 namespace hypro
 {

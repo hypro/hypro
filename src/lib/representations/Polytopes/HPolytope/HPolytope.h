@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "util.h"
+#include "../util.h"
 #include "simplex.h"
 
 namespace hypro

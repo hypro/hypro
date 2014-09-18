@@ -142,7 +142,7 @@ namespace hypro
             B.push_back(index);
         //B.push_back(mHPlanes.size()+1);
         
-        for(unsigned index = mHPlanes.size() - dimension ; index < mHPlanes.size() ; ++index)
+        for(unsigned index = 1 ; index < dictionary.cols() ; ++index)
             N.push_back(index);
         
         return dictionary;
@@ -193,9 +193,10 @@ namespace hypro
             std::cout << val;
         std::cout << std::endl;
         
-        // initialize values for the algorithm TODO: needed?
-        unsigned f = mHPlanes.size()+2;
-        unsigned g = mHPlanes.size()+1;
+        // Note: f and g mark the indices, not the enumeration as stored in B and N
+        unsigned f = dictionary.rows();
+        unsigned g = 0;
+
         unsigned m = mHPlanes.size() - dimension() +1;
         unsigned n = mHPlanes.size() +2;
         

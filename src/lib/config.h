@@ -5,13 +5,13 @@
 #include <map>
 
 #include <carl/core/MultivariatePolynomial.h>
-#include "util/VariablePool.h"
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
 #include <carl/util/SFINAE.h>
 //#include "util/eigenTypetraits.h"
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+#include "util/VariablePool.h"
 
 // needed for vector outstream operator:
 using carl::operator<<;

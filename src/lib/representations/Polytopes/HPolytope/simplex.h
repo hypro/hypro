@@ -15,6 +15,7 @@ namespace hpolytope
     template<typename Number>
     static void pivot(std::vector<unsigned> B, std::vector<unsigned> N, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A, unsigned r, unsigned s)
     {
+        /*
         std::cout << __func__ << std::endl << A << ", r:" << r << ", s:" << s;
         std::cout << ", B= ";
         for(auto& item : B)
@@ -25,50 +26,19 @@ namespace hpolytope
             std::cout << item << " ";
         
         std::cout << std::endl;
+        */
         
-        // update table
-        A(s,r) = 1/A(r,s);
-        for(unsigned i = 0; i < B.size(); ++i)
+        // set pivoting row first, assuming r,s = row, colum
+        A.row(r) = A.row(r)/A(r,s);
+        A.row(r) = -A.row(r);
+        
+        for(unsigned row = 0; row < A.rows(); ++row)
         {
-            if(B.at(i) != r)
-                A(B.at(i),r) = A(B.at(i),s)/A(r,s);
-        }
-        std::cout << __func__ << "A: " << std::endl << A << std::endl;
-        
-        for(unsigned j = 0; j < N.size(); ++j)
-        {
-            if(N.at(j) != s)
-                A(s,N.at(j)) = A(r,N.at(j))/A(r,s);
-        }
-        
-        std::cout << __func__ << "A: " << std::endl << A << std::endl;
-        
-        for(unsigned i = 0; i < B.size(); ++i)
-        {
-            for(unsigned j = 0; j < N.size(); ++j)
+            if(row != r)
             {
-                std::cout << __func__ << " A(i,j)=" << A(B.at(i),N.at(j)) << ", A(i,s)=" << A(B.at(i),s) << ", A(r,j)=" << A(r,N.at(j)) << ", A(r,s)=" << A(r,s) << ", i=" << i <<", j=" << j << std::endl;
-                A(B.at(i),N.at(j)) = A(B.at(i),N.at(j)) - (A(B.at(i),s)*A(r,N.at(j))/A(r,s));
-            }
-        }
-        
-        std::cout << __func__ << "A: " << std::endl << A << std::endl;
-        
-        // update basis and co-basis
-        for(unsigned bPos = 0; bPos < B.size(); ++bPos)
-        {
-            if(B[bPos] == r)
-            {
-                B[bPos] = s;
-                break;
-            }
-        }
-        for(unsigned nPos = 0; nPos < N.size(); ++nPos)
-        {
-            if(N[nPos] == s)
-            {
-                N[nPos] = r;
-                break;
+                carl::FLOAT_T<Number> coeff = A(row,s);
+                A.row(row) = A.row(row) + (coeff * A.row(r));
+                A(row,s) = A(r,s)*coeff;
             }
         }
         
@@ -108,46 +78,41 @@ namespace hpolytope
         return false;
     }
     
+    template<typename Number>
+    static bool isPrimalFeasible(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A)
+    {
+        
+    }
+    
     /**
-     * Select next pivot according to dual Bland's rule.
+     * Select next pivot according to Bland's rule.
      */
     template<typename Number>
     static bool selectPivot(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A, std::vector<unsigned> B, std::vector<unsigned> N, unsigned& i, unsigned& j, unsigned g, unsigned f)
     {
         // step 1
         unsigned r = 0;
-        bool set = false;
-        for(unsigned index = 0; index < B.size(); ++index)
+        unsigned s = 0;
+        carl::FLOAT_T<Number> min = A.maxCoeff();
+        bool secondSet = false;
+        for(; s < B.size(); ++s)
         {
-            if(B[index] < r && A(r,g) < 0)
+            if(A(f,B.at(s)) > 0)
             {
-                r = B[index];
-                set = true;
-                if(set)
+                for( ; r < B.size(); ++r)
                 {
-                    Number delta;
-                    bool secondset = false;
-                    for(unsigned j = 0; j < N.size(); ++j)
+                    if(A(r,s)<0 && -(A(r,g)/A(r,s)) < min)
                     {
-                        if(N[j] != N[g] && A(r,j) > 0)
-                        {
-                            if(!secondset)
-                            {
-                                delta = -(A(f,j)/A(r,j));
-                                secondset = true;
-                            }
-                            else
-                            {
-                                delta = -(A(f,j)/A(r,j)) < delta ? -(A(f,j)/A(r,j)) : delta;
-                            }
-                        }
+                        secondSet = true;
+                        break;
                     }
-                    assert(secondset);
-                    return false;
                 }
             }
+            if(secondSet)
+                break;
         }
-        
+        i = r;
+        j = s;
         return true;
     }
     
@@ -172,18 +137,18 @@ namespace hpolytope
         unsigned tmpR = r;
         unsigned tmpS = s;
         
-        std::cout << __func__ << " Check(A, r,s): " << std::endl << tmpA << r << ", " << s << ": ";
+        //std::cout << __func__ << " Check(A, r,s): " << std::endl << tmpA << r << ", " << s << ": ";
          
-        pivot(tmpB, tmpN, tmpA, r, s);
+        pivot(tmpB, tmpN, tmpA, s, r);
         selectPivot(tmpA, tmpB, tmpN, tmpR, tmpS, f, g);
         if(tmpR == r && tmpS == s)
         {
-            std::cout << "true" << std::endl;
+            std::cout << __func__ <<  ": true" << std::endl;
             return true;
         }
         else
         {
-            std::cout << "false" << std::endl;
+            std::cout << __func__ << ": false" << std::endl;
             return false;
         }
     }
@@ -191,27 +156,28 @@ namespace hpolytope
     template<typename Number>
     static void search(std::vector<unsigned> B, std::vector<unsigned> N, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A)
     {
-        unsigned i = 2;
-        unsigned j = 1;
+        unsigned i = 1;
+        unsigned j = 0;
         unsigned m = A.rows();
         unsigned n = A.cols();
         unsigned f = 1;
         unsigned g = n;
         do
         {
-            std::cout << __func__ << " I: " << i << ", J: " << j << std::endl;
+            std::cout << __func__ << ": I: " << i << ", J: " << j << std::endl;
             while( i <= m && !isReversePivot(B,N,A,i,j,f,g))
             {
                 increment(A,i,j);
             }
             
-            std::cout << __func__ << " Incremented to I: " << i << ", J: " << j << std::endl;
+            std::cout << __func__ << ": Incremented to I: " << i << ", J: " << j << std::endl;
             
             if( i <= m )
             {
                 pivot(B,N,A,i,j);
                 if( lexMin(B,N,A) )
                 {
+                    std::cout << __func__ << ": Found dictionary: " << std::endl << A << std::endl;
                     // generate output
                 }
                 i = 2;

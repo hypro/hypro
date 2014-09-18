@@ -4,7 +4,7 @@
  * @file Box.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
- * @since	2014-01-16
+ * @since   2014-01-16
  * @version 2014-05-27
  */
 
@@ -12,9 +12,8 @@
 
 #include <map>
 #include <cassert>
-#include "../../datastructures/Point.h"
-#include "../GeometricObject.h"
 #include <carl/interval/Interval.h>
+#include "../GeometricObject.h"
 
 namespace hypro {
 
