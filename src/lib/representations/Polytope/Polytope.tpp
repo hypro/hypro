@@ -265,7 +265,7 @@ namespace hypro
     {
         using namespace Parma_Polyhedra_Library;
         
-        result = *this;
+        //result = *this;
         
         std::vector<Parma_Polyhedra_Library::Variable> variables;
         for(unsigned i = 0; i < A.rows(); ++i)
@@ -297,9 +297,14 @@ namespace hypro
             ++gCount;
         }
         
+        //std::cout << __func__ << ": PolytopeMatrix: " << std::endl << polytopeMatrix << std::endl; 
+        
         // apply lineartransformation
         Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> res(variables.size(), polytope::gsSize(generators));
-        //std::cout << "ARows: " << A.rows() << ", ACols: " << A.cols() << ", polyRows: " << polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ", bRows: " << b.rows() << ", bCols: " << b.cols() << std::endl;
+        
+        //std::cout << __func__ << ": ARows: " << A.rows() << ", ACols: " << A.cols() << ", polyRows: " << polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ", bRows: " << b.rows() << ", bCols: " << b.cols() << std::endl;
+        
+        //std::cout << __func__ << ": b:" << std::endl << b << std::endl;
         if(b.rows() != 0)
         {
             res = (A*polytopeMatrix);
@@ -316,8 +321,8 @@ namespace hypro
             res = (A*polytopeMatrix);
         }
             
-        std::cout << "[EIGEN] linear transformation result: " << std::endl;
-        std::cout << res << std::endl;
+        //std::cout << "[EIGEN] linear transformation result: " << std::endl;
+        //std::cout << res << std::endl;
         
         
         // clear actual generators and add new ones
@@ -330,14 +335,40 @@ namespace hypro
                 t(j) = res.col(i)(j);
             ps.push_back(t);
         }
-        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension<Number>(ps), Parma_Polyhedra_Library::EMPTY);
+        C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(res.rows(), Parma_Polyhedra_Library::EMPTY);
+        
+        std::vector<Point<Number>> newPoints;
+        std::vector<Point<Number>*> tmpPoints;
+        
         for(auto& pointSetIt : ps)
         {
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));
+            Point<Number>* tmpPoint = new Point<Number>(pointSetIt);
+            newPoints.push_back(*tmpPoint);  // for mPoints
+            tmpPoints.push_back(tmpPoint);  // for mNeighbors for each point
         }
         result.mPolyhedron = tmp;
-
-        mPointsUpToDate = false;
+        
+        // update neighbor relations
+        for(unsigned pointIndex = 0; pointIndex < mPoints.size(); ++pointIndex)
+        {
+            //std::cout << "Create neighbor for original node: " << mPoints.at(pointIndex) << " , which is the new: " << newPoints.at(pointIndex) << std::endl;
+            std::vector<Point<Number> > tmpNeighbors = mPoints.at(pointIndex).neighbors();
+            for(unsigned neighborIndex = 0 ; neighborIndex <  tmpNeighbors.size(); ++neighborIndex)
+            {
+                for(unsigned refPoint = 0; refPoint < mPoints.size(); ++refPoint)
+                {
+                    if( mPoints.at(refPoint) == tmpNeighbors.at(neighborIndex))
+                    {
+                        //std::cout << "Add neighbor: " << tmpNeighbors.at(neighborIndex) << ", which is new " << *tmpPoints.at(refPoint) << std::endl;
+                        newPoints.at(pointIndex).addNeighbor(tmpPoints.at(refPoint));
+                    }
+                }
+            }
+        }
+        mPoints = newPoints;
+        
+        mPointsUpToDate = true;
 
         return true;
     }

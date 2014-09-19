@@ -119,8 +119,8 @@ namespace polytope
                 coefficient = (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si();
                 divisor = (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
                 value = coefficient/divisor;
-                //std::cout << "Coordinates: " << value << std::endl;
-                //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+                std::cout << "Coordinates: " << value << std::endl;
+                std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }
             else
