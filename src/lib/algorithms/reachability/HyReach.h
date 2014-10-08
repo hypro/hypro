@@ -1,13 +1,5 @@
 #include "hyreach_utils.h"
 
-//#include "NLF.h"
-//#include "NLP.h"
-//#include "OptPDS.h"
-
-// OPT++
-//using NEWMAT::ColumnVector;
-//using namespace::OPTPP;
-
 // Verbosity levels
 //#define VECTOR_GEN_VERBOSE
 //#define HELPER_METHODS_VERBOSE
@@ -17,6 +9,10 @@ using namespace::std;
 
 namespace hypro
 {
+    const unsigned int precision = 10000;
+          
+    #include "preprocessing.h"      
+          
 	/*
     * Strucutre defining the options for the reachability algorithm to use
     */
@@ -37,21 +33,20 @@ namespace hypro
 	       double timeStep;
 	       unsigned int numberOfTransitions;	// there will n more transitions be considered then indicated by this value
     	};	
-
-    //template<typename Number>
+        
     class HyReach
     {
       private:
          options opt;
          parameters params;
          
-         std::forward_list<matrix_t<double>> L; // list of directions
+         std::vector<matrix_t<double>> L; // list of directions
          
-         // TODO: datastructure to store results
+         // TODO: datastructure to store results (valuation?)
          // store information about time and location
               
-	  public:
-
+	  public:    	
+        
         /*
          *   Initiates the start of the hybrid analysis
          */
@@ -66,50 +61,84 @@ namespace hypro
              L = vectorgeneratorEXT(dimensions, opt.angle, opt.precision);
              
              // start preprocessing
-             for(auto iterator= model.initialLocations().begin(); iterator != model.initialLocations().end(); ++iterator)
-             { 
-               // for every initial location, initiate preprocessing
-               preprocessing_recursion(*iterator);
-             }
+             preprocess(&model);
                      
              // start analysis
              // TODO:
         }
-
-	/* OPT++
-	void init_problem(int ndim, NEWMAT::ColumnVector& x)
-	{
-		for (unsigned int i; i <= ndims; i++)
-		{
-			x(i) = 0;
-		}
-	}
-
-	void problem(int ndim, const NEWMAT::ColumnVector& x, double& fx, int& result)
-	{
-		// here could be done everything
-		double x1 = x(1) +3;
-		double x2 = x(2) +3;
-
-		fx = (x1*x1) + (x2*x2);
-		result = OPTPP::NLPFunction;
-	}
-
-	void solveProblem(int ndim)
-	{
-		OPTPP::NLF0 nlp(ndim, problem, init_problem);
-		OPTPP::OptPDS objfcn(&nlp);
-
-		objfcn.optimize();
-
-	}
-	*/
-	
-	
-	//private:            // public for test purpose
-		
-    	#include "vectorgenerator.h"
-    	#include "helperMethods.h"
-        #include "preprocessing.h"
-	
+    
     };
+
+
+/* 
+typedef struct {
+    double a, b;
+} my_constraint_data;
+
+ double myfunc(unsigned n, const double *x, double *grad, void *my_func_data)
+        {
+            if (grad) {
+                grad[0] = 0.0;
+                grad[1] = 0.5 / sqrt(x[1]);
+            }
+            return sqrt(x[1]);
+        }
+        
+        double myconstraint(unsigned n, const double *x, double *grad, void *data)
+        {
+            my_constraint_data *d = (my_constraint_data *) data;
+            double a = d->a, b = d->b;
+            if (grad) {
+                grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
+                grad[1] = -1.0;
+            }
+            return ((a*x[0] + b) * (a*x[0] + b) * (a*x[0] + b) - x[1]);
+         }
+        
+class NLOPTTEST
+{
+      public:
+             
+      void test()
+      {
+           nlopt::opt opt(nlopt::LD_MMA, 2);
+
+            std::vector<double> lb(2);
+            lb[0] = -HUGE_VAL; lb[1] = 0;
+            opt.set_lower_bounds(lb);
+            
+            opt.set_min_objective(myfunc, NULL);
+            
+            my_constraint_data data[2] = { {2,0}, {-1,1} };
+            opt.add_inequality_constraint(myconstraint, &data[0], 1e-8);
+            opt.add_inequality_constraint(myconstraint, &data[1], 1e-8);
+            
+            opt.set_xtol_rel(1e-4);
+            
+            std::vector<double> x(2);
+            x[0] = 1.234; x[1] = 5.678;
+            double minf;
+            nlopt::result result = opt.optimize(x, minf);
+            
+            if(result > 0 )
+            {
+                      std::cout << "success";
+                      std::cout << "\n";
+                      std::cout << "x: ";
+                      for( auto i = x.begin(); i != x.end(); ++i)
+                      {
+                           std::cout << *i << ' ';
+                           }
+                           
+                      std::cout << "\n";
+                      std::cout << "minf: ";
+                      std::cout << minf;
+            }
+            else
+            {
+                std::cout << "failure";
+            }
+      }
+
+      };
+*/
