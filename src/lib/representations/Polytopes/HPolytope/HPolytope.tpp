@@ -173,9 +173,6 @@ namespace hypro
             ++rowCount;
         }
         
-        std::cout << "Poly Matrix: " << std::endl;
-        std::cout << poly << std::endl;
-        
         // get unique optimal first Dictionary
         std::vector<unsigned> basis;
         std::vector<unsigned> coBasis;
