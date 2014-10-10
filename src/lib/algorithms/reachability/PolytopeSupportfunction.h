@@ -5,14 +5,8 @@
  
 #pragma once 
  
-//#define SUPPORTFUNCTION_VERBOSE
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #include "hyreach_utils.h" 
-
-// GLPK includes
-#include <stdio.h>            /* C input/output                       */
-#include <stdlib.h>           /* C standard library                   */
-#include <glpk.h>             /* GNU GLPK linear/mixed integer solver */
     
 namespace hypro
 {         
@@ -37,7 +31,7 @@ namespace hypro
             {
                  #ifdef SUPPORTFUNCTION_VERBOSE
     		         #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-    			       string method = "PolytopeSupportFunction:";
+    			       std::string method = "PolytopeSupportFunction:";
                      #endif
                  #endif
     
@@ -84,7 +78,7 @@ namespace hypro
         
         		for (int i = 0; i < numberOfConstraints; i++)
         		{
-        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, constraintConstants(i));
+        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, constraintConstants(i).toDouble());
         		}
     		
         		// add cols here
@@ -113,7 +107,7 @@ namespace hypro
         				    std::cout << method << " index j: " << ja[i+1] << '\n';
         				#endif
         			#endif
-        			ar[i+1] = constraints((int)(i / dimensionality), (int)(i%dimensionality));
+        			ar[i+1] = constraints((int)(i / dimensionality), (int)(i%dimensionality)).toDouble();
         
         			#ifdef SUPPORTFUNCTION_VERBOSE
         			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -155,16 +149,16 @@ namespace hypro
     	PolytopeSupportFunction(matrix_t<double> constraints, vector_t<double> constraintConstants, operator_e operation, unsigned int dimensionality) : SupportFunction(SupportFunctionType::Polytope_Type)
     	{
              // transform vector_t into matrix_t
-             matrix_t<double> constraintConstantsMatrix(constraints.rows(),1);
+       /*      matrix_t<double> constraintConstantsMatrix(constraints.rows(),1);
              unsigned int count = 0;
              for(auto iterator = constraintConstants.begin(); iterator != constraintConstants.end(); ++iterator)
              {
                  constraintConstantsMatrix(count,0) = iterator->second;
                  count++;
              }
-             
+       */      
              // call constructor functionality
-             initialize(constraints, constraintConstantsMatrix, operation, dimensionality);
+             initialize(constraints, constraintConstants, operation, dimensionality);
         }
     	
     	/**
@@ -182,7 +176,7 @@ namespace hypro
     		for (int i = 0; i < dimensions; i++)
     		{
     			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
-    			glp_set_obj_coef(lp, i+1, l(i));
+    			glp_set_obj_coef(lp, i+1, l(i,0).toDouble());
     		}
     
     		/* solve problem */
@@ -229,12 +223,19 @@ namespace hypro
     	~PolytopeSupportFunction()
     	{
             #ifdef SUPPORTFUNCTION_VERBOSE
-                   #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-    		           std::cout << "PolytopeSupportFunction: destructor" << '\n';
-    		       #endif
+                #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+    		        std::cout << "PolytopeSupportFunction: destructor" << '\n';
+    		    #endif
             #endif
+            
+            // free glpk resources
     		glp_delete_prob(lp);
-    		glp_free_env();
+    		
+    		#ifdef SUPPORTFUNCTION_VERBOSE
+    		    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+    			    std::cout << "PolytopeSupportFunction: destructor - complete" << '\n';
+	            #endif
+	        #endif 
     	}
     };
 }

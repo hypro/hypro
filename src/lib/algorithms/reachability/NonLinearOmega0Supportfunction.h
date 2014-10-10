@@ -6,17 +6,11 @@
 #define SUPPORTFUNCTION_VERBOSE 
 
 //#define BOXOPERATOR_VERBOSE
-#define CALCEPSILON_VERBOSE
+//#define CALCEPSILON_VERBOSE
 //#define CALCVALUES_VERBOSE
  
 #include "hyreach_utils.h" 
 #include "BoxSupportfunction.h"
-
-// TODO: This is still experimental !
-//#include <unsupported/Eigen/MatrixFunctions>       // exp() for matrices
-//#include <eigen3/Eigen/Dense> // already included by hyreach_utils
-//#include "../../util/eigenTypetraits.h" // already included by hyreach_utils
-#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>  // produces other problems (why not included by hyreach_utils->util.h?)
 
 // NLopt includes
 #include <nlopt.hpp>
@@ -90,7 +84,7 @@ namespace hypro
                      evaluationResult b = sf->evaluate(l2);
                      
                      // set entry in e to the correspondent maximum value
-                     e(i) = std::max(a.supportValue,b.supportValue);
+                     e(i,0) = std::max(a.supportValue,b.supportValue);
                      
                      #ifdef SUPPORTFUNCTION_VERBOSE
                          #ifdef BOXOPERATOR_VERBOSE
@@ -182,47 +176,7 @@ namespace hypro
     			#endif
     		 #endif
              
-             // compute exponential of temp   
-//			matrix_t<double> exptemp = matrix_t<double>::Zero(temp.rows(), temp.cols());  // TODO: implement correct use of matrix exponential
-            matrix_t<double> exptemp = exponentialmatrix(temp);
-/*			//DUMMY values:
-            exptemp(0,0)=0;
-			exptemp(0,1)=1;
-			exptemp(0,2)=2;
-			exptemp(0,3)=3;
-			exptemp(0,4)=4;
-			exptemp(0,5)=5;
-			exptemp(1,0)=10;
-			exptemp(1,1)=11;
-			exptemp(1,2)=12;
-			exptemp(1,3)=13;
-			exptemp(1,4)=14;
-			exptemp(1,5)=15;
-			exptemp(2,0)=20;
-			exptemp(2,1)=21;
-			exptemp(2,2)=22;
-			exptemp(2,3)=23;
-			exptemp(2,4)=24;
-			exptemp(2,5)=25;
-			exptemp(3,0)=30;
-			exptemp(3,1)=31;
-			exptemp(3,2)=32;
-			exptemp(3,3)=33;
-			exptemp(3,4)=34;
-			exptemp(3,5)=35;
-			exptemp(4,0)=40;
-			exptemp(4,1)=41;
-			exptemp(4,2)=42;
-			exptemp(4,3)=43;
-			exptemp(4,4)=44;
-			exptemp(4,5)=45;
-			exptemp(5,0)=50;
-			exptemp(5,1)=51;
-			exptemp(5,2)=52;
-			exptemp(5,3)=53;
-			exptemp(5,4)=54;
-			exptemp(5,5)=55; */
-			
+            matrix_t<double> exptemp = exponentialmatrix(temp);		// compute exponential of temp   
             
             #ifdef SUPPORTFUNCTION_VERBOSE
                 #ifdef CALCVALUES_VERBOSE
@@ -291,7 +245,7 @@ namespace hypro
              SymmetricCenteredBoxSupportFunction au_box = boxoperator(&au);
              temp = phi2.transpose() * &au_box;
              result = boxoperator(&temp);
-             epsilonpsi = &temp;
+             epsilonpsi = result.copyToHeap();
         }
         
         // fields to store temporary evaluation results (yield in improved performance)
@@ -313,7 +267,7 @@ namespace hypro
                double epsilonintersection =0;
                for (int i=0;i<(*self).absl.rows(); i++)
                {
-                   epsilonintersection = epsilonintersection+ min(x[0]*((*self).e_p(i,0)), (1-x[0])*((*self).e_n(i,0))*((*self).absl(i,0)));
+                   epsilonintersection = epsilonintersection+ min(x[0]*((*self).e_p(i,0).toDouble()), (1-x[0])*((*self).e_n(i,0).toDouble())*((*self).absl(i,0).toDouble()));
                }
 
                // result(edA,delta,u,x0,epsilonpsi,e_p, e_n,start,options,l)
@@ -390,6 +344,7 @@ namespace hypro
 
         /**
     	* This method computes the evaluation result for a specified direction l
+    	* TODO: optimization object can be declared and initialized outside the evaluate methods to improve performance (see glpk)
     	*/
     	evaluationResult evaluate(matrix_t<double> l)
     	{       
@@ -457,6 +412,15 @@ namespace hypro
         // destructor
         ~NonLinearOmega0Supportfunction()
         {
+            #ifdef SUPPORTFUNCTION_VERBOSE
+    			std::cout << " NonLinearOmega0Supportfunction: destructor " << '\n';
+	        #endif  
+	        
+            delete epsilonpsi; // has been explicitely copied to heap and can be deleted at this point
+            
+            #ifdef SUPPORTFUNCTION_VERBOSE
+    			std::cout << " NonLinearOmega0Supportfunction: destructor - complete" << '\n';
+	        #endif  
         }
         
     };

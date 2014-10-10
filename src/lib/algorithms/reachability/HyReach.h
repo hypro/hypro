@@ -42,8 +42,26 @@ namespace hypro
          
          std::vector<matrix_t<double>> L; // list of directions
          
+         /*
+         * This class will free some globally used ressources when the hyreach class is deleted
+         */
+         class CleanupOnExit
+         {
+               public:
+                 ~CleanupOnExit()
+                 {
+                      glp_free_env();  // tear down glpk environment
+                 }    
+         };
+         
+         CleanupOnExit cleanup_class; // private instance of the cleanup class. 
+                                      // Without this field, the cleanup classes destructor would not be used
+                                      // to free some ressources automatically when the HyReach object is deleted
+                                      
+               
          // TODO: datastructure to store results (valuation?)
          // store information about time and location
+           
               
 	  public:    	
         

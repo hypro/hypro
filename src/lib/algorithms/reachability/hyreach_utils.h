@@ -18,6 +18,11 @@
 #include <map>
 #include <list>
 
+// GLPK includes
+#include <stdio.h>            /* C input/output                       */
+#include <stdlib.h>           /* C standard library                   */
+#include <glpk.h>             /* GNU GLPK linear/mixed integer solver */
+
 // Supportfunction
 #include "SupportFunction.h"
 #include "PolytopeSupportfunction.h"

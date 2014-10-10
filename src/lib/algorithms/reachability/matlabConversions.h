@@ -20,7 +20,7 @@ namespace hypro
                {
                     for( int j=0; j<m.cols(); j++)
                     {
-                        fprintf(fp, "%f ", m(i,j)); 
+                        fprintf(fp, "%f ", m(i,j).toDouble()); 
                     }
                     if( i<m.rows()-1)
                     {

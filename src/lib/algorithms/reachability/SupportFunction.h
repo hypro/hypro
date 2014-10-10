@@ -3,12 +3,11 @@
  *  Author: Norman Hansen
  */
 
-//#pragma once
-//#define SUPPORTFUNCTION_VERBOSE
 #pragma once 
 #include "hyreach_utils.h" 
 
-#define SUPPORTFUNCTION_VERBOSE
+//#define SUPPORTFUNCTION_VERBOSE
+//#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 
 namespace hypro
 {
@@ -37,7 +36,7 @@ namespace hypro
          *  GLP_UNBND
          *  GLP_UNDEF
          
-         * For NonLinear:
+         * For NonLinear:  // TODO: add error status
                
          *
          *
@@ -52,6 +51,9 @@ namespace hypro
          */
     };
     
+    /*
+    * This is the super class for all support function objects.
+    */
     class SupportFunction
     {
       public:
@@ -100,17 +102,21 @@ namespace hypro
             }
         }
                          
-        // getter for the support function type
+        /*
+        * Getter for the support function type
+        */
         SupportFunctionType getSupportFunctionType()
         {
            return support_function_type;
         }
           
-        virtual ~SupportFunction(){}
+        virtual ~SupportFunction(){}    
         
       protected:
       
-          // the constructor can only be called from sub-classes
+          /* 
+          * The constructor can only be called from sub-classes (makes the class abstract)
+          */
           SupportFunction(SupportFunctionType type)
           {
               this->support_function_type = type;
@@ -118,6 +124,7 @@ namespace hypro
           
  
       private:
+              
           SupportFunctionType support_function_type;
     };
     
@@ -134,9 +141,11 @@ namespace hypro
       public:
           MultiplicationSupportfunction(matrix_t<double> factor, SupportFunction* fct, SupportFunctionType type): SupportFunction(type)
           {
-//              #ifdef  SUPPORTFUNCTION_VERBOSE 
-//                   std:: cout << "MultiplicationSupportfunction: constructor" << '\n';
-//              #endif                                         
+              #ifdef  SUPPORTFUNCTION_VERBOSE 
+                  #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                      std:: cout << "MultiplicationSupportfunction: constructor" << '\n';
+                  #endif
+              #endif                                         
               this->factor = factor.transpose();
               this->fct = fct;
           }
@@ -144,13 +153,18 @@ namespace hypro
           evaluationResult evaluate(matrix_t<double> l)
           { 
               #ifdef  SUPPORTFUNCTION_VERBOSE
-                  std:: cout << "MultiplicationSupportfunction: evaluate" << '\n';
+                  #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                      std:: cout << "MultiplicationSupportfunction: evaluate" << '\n';
+                  #endif
               #endif
+              
 //               #ifdef  SUPPORTFUNCTION_VERBOSE
-//                   std::cout << "MultiplicationSupportfunction:evaluate: factor = " << factor << '\n';
-//                   std::cout << "MultiplicationSupportfunction:evaluate: l = " << l << '\n';
-//                   std::cout << "MultiplicationSupportfunction:evaluate: factor * l = " << factor * l << '\n';
-//                   std::cout << "MultiplicationSupportfunction:evaluate: fct(l) = " << (fct->evaluate(l)).supportValue << '\n';
+//                   #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+//                       std::cout << "MultiplicationSupportfunction:evaluate: factor = " << factor << '\n';
+//                       std::cout << "MultiplicationSupportfunction:evaluate: l = " << l << '\n';
+//                       std::cout << "MultiplicationSupportfunction:evaluate: factor * l = " << factor * l << '\n';
+//                       std::cout << "MultiplicationSupportfunction:evaluate: fct(l) = " << (fct->evaluate(l)).supportValue << '\n';
+//                   #endif
 //               #endif
                              
                return fct->evaluate(factor * l);
@@ -160,9 +174,12 @@ namespace hypro
     // overload the * Operator for e.g. B*U (creates MultiplicationSupportfunction)
     const MultiplicationSupportfunction operator*(matrix_t<double> const& lhs, SupportFunction* const& rhs) 
     { 
-//      #ifdef  SUPPORTFUNCTION_VERBOSE
-//         std::cout << "Multiplication: " << lhs << " with support function (pointer)" << '\n';
-//      #endif
+      #ifdef  SUPPORTFUNCTION_VERBOSE
+          #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+              std::cout << "Multiplication *: " << lhs << " with support function (pointer)" << '\n';
+          #endif
+      #endif
+      
       MultiplicationSupportfunction result(lhs,rhs,rhs->getSupportFunctionType());
       return result;
     }

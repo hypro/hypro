@@ -6,7 +6,6 @@
  
 #include "hyreach_utils.h" 
 
-#define SUPPORTFUNCTION_VERBOSE
 //#define BOXSUPPORTFUNCTION_VERBOSE
 
 namespace hypro
@@ -22,6 +21,15 @@ namespace hypro
              matrix_t<double> e_t; // e is stored in transposed format
           
           public:
+                
+             /*
+             * This methods creates a copy of the instanciated object on the heap.
+             */   
+             SupportFunction* copyToHeap()
+             {
+                  SupportFunction* result = new SymmetricCenteredBoxSupportFunction(e);
+                  return result;
+             }    
                  
              SymmetricCenteredBoxSupportFunction(matrix_t<double> e): SupportFunction(SupportFunctionType::Box_Type)
              {
@@ -52,7 +60,7 @@ namespace hypro
                  
                  matrix_t<double> temp = e_t * (l.array().abs()).matrix();   
                              
-                 result.supportValue =  temp(0);
+                 result.supportValue =  temp(0).toDouble();
                  result.optimumValue = l*temp;
                  
                  #ifdef SUPPORTFUNCTION_VERBOSE
