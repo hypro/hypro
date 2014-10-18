@@ -1,7 +1,7 @@
 #include "Hyperplane.h"
 
 template<typename Number>
-Hyperplane<Number>::Hyperplane() {
+Hyperplane<Number>::Hyperplane() : mDimension(0) {
 }
 
 template<typename Number>
@@ -24,21 +24,24 @@ unsigned int Hyperplane<Number>::dimension() const {
     return mDimension;
 }
 template<typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, 1> Hyperplane<Number>::getDVector() const {
+Eigen::Matrix<Number, Eigen::Dynamic, 1> Hyperplane<Number>::vector() const {
     return d_;
 }
 
 template<typename Number>
-Number Hyperplane<Number>::getEValue() const {
+Number Hyperplane<Number>::scalar() const {
     return e_;
 }
 
 template<typename Number>
-void Hyperplane<Number>::setDVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector) {
-	d_ = d_vector;
+void Hyperplane<Number>::setVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector) {
+    if(mDimension==0) {
+        mDimension = d_vector.rows();
+    }
+    d_ = d_vector;
 }
 
 template<typename Number>
-void Hyperplane<Number>::setEValue(const Number e_scalar){
+void Hyperplane<Number>::setScalar(const Number e_scalar){
 	e_ = e_scalar;
 }

@@ -5,7 +5,8 @@
  * Created on August 29, 2014, 3:53 PM
  */
 
-#pragma once
+#ifndef HYPERPLANE_H
+#define	HYPERPLANE_H
 #include <Eigen/Dense>
 
 template<typename Number>
@@ -25,11 +26,11 @@ class Hyperplane
         
         unsigned int dimension() const;
 
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> getDVector() const;
-        Number getEValue() const;
+        Eigen::Matrix<Number, Eigen::Dynamic, 1> vector() const;
+        Number scalar() const;
 
-        void setDVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector);
-        void setEValue(const Number e_scalar);
+        void setVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector);
+        void setScalar(const Number e_scalar);
         
         
         
@@ -37,4 +38,5 @@ class Hyperplane
 };
 
 #include "Hyperplane.tpp"
+#endif	/* HYPERPLANE_H */
 
