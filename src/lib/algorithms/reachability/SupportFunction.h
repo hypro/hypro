@@ -12,7 +12,7 @@
 namespace hypro
 {
     // This enum represents the support function type and is used to identify support function without instanceof operations
-    enum SupportFunctionType {Box_Type, Polytope_Type, NonLinear_Type};
+    enum SupportFunctionType {Box_Type, Polytope_Type, NonLinear_Type, MinowskiSum_Type, Infinity_Type};
     
     /*
     * This structure describes the result of a support function evaluation
@@ -51,23 +51,73 @@ namespace hypro
          */
     };
     
+    // forwardDeclarations for further supportFunction types
+    class SummationSupportfunction;
+    class MultiplicationSupportfunction;
+    class ScalarMultiplicationSupportfunction;  
+    
     /*
     * This is the super class for all support function objects.
     */
     class SupportFunction
     {
-      public:
-               
+      private:
+          SupportFunctionType support_function_type;
+          artificialDirections* aD;
+      
+      protected:
+          /* 
+          * The constructor can only be called from sub-classes (makes the class abstract)
+          */
+          SupportFunction(SupportFunctionType type, artificialDirections* aD)
+          {
+              this->support_function_type = type;
+              this->aD = aD;
+          } 
+          
+            /*
+        	* This method should compute the evaluation result for a specified direction l
+        	*/
+            virtual evaluationResult evaluate(matrix_t<double> l)
+            { 
+                    #ifdef  SUPPORTFUNCTION_VERBOSE
+                       std::cout << "SupportFunction:evaluate: THIS SHOULD NEVER BE CALLED" << '\n';
+                    #endif
+                    evaluationResult result; 
+                    result.supportValue = 0; 
+                    result.errorCode = -1000; 
+                    return result;
+            }
+          
+      public:       
+        
         /**
-    	* This method should compute the evaluation result for a specified direction l
-    	*/
-        virtual evaluationResult evaluate(matrix_t<double> l)
+        * getter for the pointer to the structure for additional DImensions
+        */
+        artificialDirections* getAD()
+        {
+            return aD;
+        }
+          
+        /*
+        * catches efficiently the additional dimension cases
+        */
+        evaluationResult evaluate(matrix_t<double>* l)
         { 
-                #ifdef  SUPPORTFUNCTION_VERBOSE
-                   std::cout << "SupportFunction:evaluate: THIS SHOULD NEVER BE CALLED" << '\n';
-                #endif
                 evaluationResult result; 
-                result.supportValue = 0; 
+                if(l == aD->dir1_pt)
+                {
+                     result.supportValue = aD->dir1_eval;
+                }
+                else if(l == aD->dir2_pt)
+                {
+                     result.supportValue = aD->dir2_eval;
+                }
+                else
+                {
+                    return this->evaluate(*l);
+                }
+                
                 result.errorCode = -1000; 
                 return result;
         };
@@ -101,6 +151,31 @@ namespace hypro
                  result[i] = res.supportValue;
             }
         }
+        
+        /*
+        * This method evaluates the support function in all directions from list L
+        */  
+        void multiEvaluate(std::vector<matrix_t<double>>* L,  double* result )
+        {
+            #ifdef  SUPPORTFUNCTION_VERBOSE
+                   std::cout << "SupportFunction:multiEvaluate: evaluation of the support function in all directions L" << '\n';
+            #endif
+            double result_size = sizeof(result)/sizeof(result[0]);
+            if(result_size == L->size())
+            {
+                for(unsigned int i=0; i<L->size(); i++)
+                {
+                     evaluationResult res = this->evaluate(L->at(i));
+                     result[i] = res.supportValue;
+                }
+            }
+            #ifdef  SUPPORTFUNCTION_VERBOSE
+            else 
+            {
+                   std::cout << "SupportFunction:multiEvaluate: result has a different size than L" << '\n';
+            }
+            #endif
+        }
                          
         /*
         * Getter for the support function type
@@ -110,24 +185,91 @@ namespace hypro
            return support_function_type;
         }
           
-        virtual ~SupportFunction(){}    
+        virtual ~SupportFunction(){}
         
-      protected:
-      
-          /* 
-          * The constructor can only be called from sub-classes (makes the class abstract)
-          */
-          SupportFunction(SupportFunctionType type)
-          {
-              this->support_function_type = type;
-          } 
-          
- 
-      private:
-              
-          SupportFunctionType support_function_type;
+        // 
+        SummationSupportfunction* minowskisum(SupportFunction* lhs);
+        MultiplicationSupportfunction* multiply(matrix_t<double> lhs);
+        ScalarMultiplicationSupportfunction* multiply(double lhs);
     };
     
+    
+    /*
+    * Class representing the result of the minowski sum of two support functions
+    */
+    class SummationSupportfunction: public SupportFunction
+    {
+          private:
+              SupportFunction* fctA;
+              SupportFunction* fctB;
+              
+          protected:
+              evaluationResult evaluate(matrix_t<double> l);
+              
+          public:
+              SummationSupportfunction(SupportFunction* fctA, SupportFunction* fctB);
+    }; 
+    
+    /*
+    * Class representing the result of a scalar multiplication of a support function
+    */
+    class ScalarMultiplicationSupportfunction : public SupportFunction
+    {
+      private:
+              double factor;
+              SupportFunction* fct;
+              
+      protected:        
+              evaluationResult evaluate(matrix_t<double> l)
+              { 
+                  #ifdef  SUPPORTFUNCTION_VERBOSE
+                      #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                          std:: cout << "ScalarMultiplicationSupportfunction: evaluate" << '\n';
+                      #endif
+                  #endif                             
+                  evaluationResult res = (fct->evaluate(&l));
+                  res.optimumValue *= factor;
+                  res.supportValue *= factor;
+                  return res;
+              };
+          
+      public:
+          ScalarMultiplicationSupportfunction(double factor, SupportFunction* fct, SupportFunctionType type): SupportFunction(type, fct->getAD())
+          {
+              #ifdef  SUPPORTFUNCTION_VERBOSE 
+                  #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                      std:: cout << "ScalarMultiplicationSupportfunction: constructor" << '\n';
+                  #endif
+              #endif                                         
+              this->factor = factor;
+              this->fct = fct;
+          }
+    };        
+    
+        // overload the + Operator for two support function pointers
+    SummationSupportfunction* SupportFunction::minowskisum(SupportFunction* lhs) 
+        { 
+          #ifdef  SUPPORTFUNCTION_VERBOSE
+              #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                  std::cout << "Minowski Sum +: " << '\n';
+              #endif
+          #endif
+          SummationSupportfunction* result = new SummationSupportfunction(this,lhs);
+          return result;
+        }
+        
+         // overload the * Operator for e.g. delta*U (creates ScalarMultiplicationSupportfunction)
+   ScalarMultiplicationSupportfunction* SupportFunction::multiply(double lhs) 
+        { 
+          #ifdef  SUPPORTFUNCTION_VERBOSE
+              #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                  std::cout << "Multiplication *: " << lhs << " with support function (pointer)" << '\n';
+              #endif
+          #endif
+          
+          ScalarMultiplicationSupportfunction* result = new ScalarMultiplicationSupportfunction(lhs,this,this->getSupportFunctionType());
+          return result;
+        }
     
     /**
     * This class is used to represent the result of the multiplication between a geometric figure represented by a
@@ -138,8 +280,22 @@ namespace hypro
       private:
               matrix_t<double> factor;
               SupportFunction* fct;
+      
+      protected:        
+              evaluationResult evaluate(matrix_t<double> l)
+              { 
+                  #ifdef  SUPPORTFUNCTION_VERBOSE
+                      #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                          std:: cout << "MultiplicationSupportfunction: evaluate" << '\n';
+                      #endif
+                  #endif
+                   
+                   matrix_t<double> temp = factor * l;              
+                   return fct->evaluate(&temp);
+              }
+          
       public:
-          MultiplicationSupportfunction(matrix_t<double> factor, SupportFunction* fct, SupportFunctionType type): SupportFunction(type)
+          MultiplicationSupportfunction(matrix_t<double> factor, SupportFunction* fct, SupportFunctionType type): SupportFunction(type, fct->getAD())
           {
               #ifdef  SUPPORTFUNCTION_VERBOSE 
                   #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
@@ -149,30 +305,10 @@ namespace hypro
               this->factor = factor.transpose();
               this->fct = fct;
           }
-          
-          evaluationResult evaluate(matrix_t<double> l)
-          { 
-              #ifdef  SUPPORTFUNCTION_VERBOSE
-                  #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-                      std:: cout << "MultiplicationSupportfunction: evaluate" << '\n';
-                  #endif
-              #endif
-              
-//               #ifdef  SUPPORTFUNCTION_VERBOSE
-//                   #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-//                       std::cout << "MultiplicationSupportfunction:evaluate: factor = " << factor << '\n';
-//                       std::cout << "MultiplicationSupportfunction:evaluate: l = " << l << '\n';
-//                       std::cout << "MultiplicationSupportfunction:evaluate: factor * l = " << factor * l << '\n';
-//                       std::cout << "MultiplicationSupportfunction:evaluate: fct(l) = " << (fct->evaluate(l)).supportValue << '\n';
-//                   #endif
-//               #endif
-                             
-               return fct->evaluate(factor * l);
-          };
     };
     
     // overload the * Operator for e.g. B*U (creates MultiplicationSupportfunction)
-    const MultiplicationSupportfunction operator*(matrix_t<double> const& lhs, SupportFunction* const& rhs) 
+    MultiplicationSupportfunction* SupportFunction::multiply(matrix_t<double> lhs) 
     { 
       #ifdef  SUPPORTFUNCTION_VERBOSE
           #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
@@ -180,7 +316,79 @@ namespace hypro
           #endif
       #endif
       
-      MultiplicationSupportfunction result(lhs,rhs,rhs->getSupportFunctionType());
+      MultiplicationSupportfunction* result = new MultiplicationSupportfunction(lhs,this,this->getSupportFunctionType());
       return result;
-    }
+    }    
+    
+    SummationSupportfunction::SummationSupportfunction(SupportFunction* fctA, SupportFunction* fctB): SupportFunction(SupportFunctionType::MinowskiSum_Type, fctA->getAD())
+              {
+                  #ifdef  SUPPORTFUNCTION_VERBOSE 
+                      #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                          std:: cout << "SummationSupportfunction: constructor" << '\n';
+                      #endif
+                  #endif                                         
+                  this->fctA = fctA;
+                  this->fctB = fctB;
+              };
+              
+    evaluationResult SummationSupportfunction::evaluate(matrix_t<double> l)
+              { 
+                  #ifdef  SUPPORTFUNCTION_VERBOSE
+                      #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                          std:: cout << "SummationSupportfunction: evaluate" << '\n';
+                      #endif
+                  #endif                             
+                  evaluationResult resA = (fctA->evaluate(&l));
+                  evaluationResult resB = (fctB->evaluate(&l));
+                  
+                  resA.optimumValue += resB.optimumValue;
+                  resA.supportValue += resB.supportValue;
+                  return resA;
+              }
+              
+              
+    /*
+    * Represents a support function without boundaries (evaluationable in constant time)
+    */          
+    class InfinitySupportFunction : public SupportFunction
+    {
+      private:
+              evaluationResult result;
+              
+      protected:        
+              evaluationResult evaluate(matrix_t<double> l)
+              {               
+                    return result;
+              };
+      public:
+          InfinitySupportFunction(artificialDirections* aD) : SupportFunction(SupportFunctionType::Infinity_Type, aD)
+          {
+                result.supportValue = INFINITY; 
+                result.errorCode = 0; 
+          }
+    };
+    
+    /*
+    * Represents a support function describing the set zero (arbitrary dimensional)
+    */          
+    class ZeroSupportFunction : public SupportFunction
+    {
+      private:
+              evaluationResult result;
+              unsigned int dimensionality;
+     
+     protected:         
+              evaluationResult evaluate(matrix_t<double> l)
+              {               
+                    return result;
+              };
+          
+      public:
+          ZeroSupportFunction(unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Infinity_Type, aD)
+          {
+                result.supportValue = 0; 
+                result.errorCode = 0; 
+                this->dimensionality = dimensionality;
+          }
+    };
 }

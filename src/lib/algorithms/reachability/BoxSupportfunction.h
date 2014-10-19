@@ -20,28 +20,7 @@ namespace hypro
              matrix_t<double> e;        
              matrix_t<double> e_t; // e is stored in transposed format
           
-          public:
-                
-             /*
-             * This methods creates a copy of the instanciated object on the heap.
-             */   
-             SupportFunction* copyToHeap()
-             {
-                  SupportFunction* result = new SymmetricCenteredBoxSupportFunction(e);
-                  return result;
-             }    
-                 
-             SymmetricCenteredBoxSupportFunction(matrix_t<double> e): SupportFunction(SupportFunctionType::Box_Type)
-             {
-                 #ifdef SUPPORTFUNCTION_VERBOSE
-                     #ifdef BOXSUPPORTFUNCTION_VERBOSE
-                     std::cout << "SymmetricCenteredBoxSupportFunction: constructor" << '\n';
-                     #endif
-                 #endif
-                 this-> e = e;
-                 this-> e_t = e.transpose();
-             }    
-             
+          protected:
              /**
  	          * This method computes the evaluation result for a specified direction l
     	      */
@@ -71,6 +50,28 @@ namespace hypro
                                  
                  return result;
              }
+             
+          public:
+                
+             /*
+             * This methods creates a copy of the instanciated object on the heap.
+             */   
+             SupportFunction* copyToHeap()
+             {
+                  SupportFunction* result = new SymmetricCenteredBoxSupportFunction(e, getAD());
+                  return result;
+             }    
+                 
+             SymmetricCenteredBoxSupportFunction(matrix_t<double> e, artificialDirections* aD): SupportFunction(SupportFunctionType::Box_Type, aD)
+             {
+                 #ifdef SUPPORTFUNCTION_VERBOSE
+                     #ifdef BOXSUPPORTFUNCTION_VERBOSE
+                     std::cout << "SymmetricCenteredBoxSupportFunction: constructor" << '\n';
+                     #endif
+                 #endif
+                 this-> e = e;
+                 this-> e_t = e.transpose();
+             }    
              
              // getter for const e
              matrix_t<double> getE()

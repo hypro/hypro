@@ -106,6 +106,53 @@
 
 		return -1;		
 	}
+	
+	int contains(std::vector<matrix_t<double>>* directions, matrix_t<double> direction)
+	{
+        return contains(directions, &direction);
+    }
+	
+	int* computeDirectionMapping(std::vector<matrix_t<double>>* directions)
+	{
+          int* result = new int[directions->size()];
+          
+          for(unsigned int i=0; i<directions->size(); i++)
+          {
+              result[i] = contains(directions, -(directions->at(i)));
+          }
+          
+           return result;
+    }
+
+    /*
+    * Returns true if the list of integers "list" contains the value "item"
+    */
+    bool listContains(std::vector<int>* list, int item)
+    {
+         for(auto iterator = list->begin(); iterator != list->end(); ++iterator)
+         {
+                  if( *iterator == item )
+                  {
+                      return true;
+                  }
+         }
+         return false;
+    }
+
+    /*
+    * Converts a matrix to a list of directions
+    */
+/*    std::vector<matrix_t<double>>* Matrix2DirectionList(matrix_t<double> m)
+    {
+        std::vector<matrix_t<double>>* result = new std::vector<matrix_t<double>>(m.rows());
+        
+        for(unsigned int i=0; i<m.rows(); i++)
+        {
+            
+        }
+        
+        return result;
+    } */
 
     /**
 	*  Converts a list of directions into a matrix containing directions
@@ -173,9 +220,58 @@
 	}
 	
 	/*
+	* Converts a nx1 matrix into an array of doubles
+	*/
+	double* matrix2Array(matrix_t<double> m)
+	{
+            double* result = new double[m.rows()];
+            
+            for(int i=0; i<m.rows(); i++)
+            {
+                result[i] = m(i,0).toDouble();
+            }
+            
+            return result;
+    }
+    
+    /*
+	* Converts a vector into an array of doubles
+	*/
+	double* vector2Array(vector_t<double> v)
+	{
+            double* result = new double[v.size()];
+            
+            for(int i=0; i<v.size(); i++)
+            {
+                result[i] = v(i).toDouble();
+            }
+            
+            return result;
+    }
+	
+	/*
 	 *  returns the dimensionality (number of rows) of the matrix from the first initial location
 	 */
 	double getDimensionality(HybridAutomaton<double>* model)
 	{
            return ((*((*model).initialLocations().begin()))->activityMat()).rows();
+    }
+
+    /*
+    * adds a zero column to the matrix parameter
+    */
+    matrix_t<double> addZeroColumn(matrix_t<double> m)
+    {
+        matrix_t<double> result = matrix_t<double>::Zero(m.rows(), m.cols()+1);
+        
+        // copy m into result
+        for( unsigned int i=0; i<m.rows(); i++)
+        {
+             for( unsigned int j=0; i<m.cols(); j++)
+             {
+                  result(i,j) = m(i,j);
+             }
+        }
+        
+        return result;
     }
