@@ -3,9 +3,9 @@
 #include "../../lib/algorithms/reachability/HyReach.h"
 #include <string>
 
-#include "../../lib/algorithms/reachability/SupportFunction.h"
-#include "../../lib/algorithms/reachability/PolytopeSupportfunction.h"
-#include "../../lib/algorithms/reachability/NonLinearOmega0Supportfunction.h"
+//#include "../../lib/algorithms/reachability/SupportFunction.h"
+//#include "../../lib/algorithms/reachability/PolytopeSupportfunction.h"
+//#include "../../lib/algorithms/reachability/NonLinearOmega0Supportfunction.h"
 #include "../../lib/algorithms/reachability/hyreach_utils.h"
 
 using namespace hypro;
@@ -24,6 +24,10 @@ protected:
     {
     }
 };
+
+// #define STRUCTURALTEST
+
+#ifdef STRUCTURALTEST
 
 TEST_F(HyReachTest, VectorgeneratorTest)
 {
@@ -159,7 +163,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
     
     //hypro::SupportFunction Bsp = B * (&sp);
     //cout << "Bsp constructed" << '\n';
-    MultiplicationSupportfunction Bsp2 = B * (&sp);
+    MultiplicationSupportfunction* Bsp2 = sp.multiply(B);
     cout << "start evaluation of multiplication" << '\n';
     // for i=1:1:size(L,1)
 	for(auto iterator = L.begin(); iterator != L.end(); ++iterator)
@@ -168,7 +172,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	         //result = Bsp.evaluate(*iterator);
 	         //cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
 	         
-	         result = Bsp2.evaluate(*iterator);
+	         result = Bsp2->evaluate(*iterator);
 	         cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
     }
     //
@@ -181,6 +185,8 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	{
 		cout << "TEST FAILED!";
 	}
+	
+	delete Bsp2;
 }
 
 TEST_F(HyReachTest, NLOPTtest)
@@ -242,5 +248,50 @@ TEST_F(HyReachTest, NLOPTtest)
 	
 	SUCCEED();
 }
+#endif
+
+#define BB_TEST
+#ifdef BB_TEST
+// real test (bouncing ball)
+#include "TestModels/BouncingBall.cpp"
+
+TEST_F(HyReachTest, BouncingBallTest)
+{
+    // construct necessary analysis obejcts
+    HyReach reachabilityAnalysis;
+    HybridAutomaton<double>* model = createBB(); // model (hard coded and provided by included BouncingBall.cpp)
+    
+    // construct initial values
+    std::vector<matrix_t<double>> directionsalongdimensions = vectorgenerator(2);
+    matrix_t<double> initialConstraints = directionList2Matrix(&directionsalongdimensions);
+    matrix_t<double> initialconstraintValues(4,1);
+    initialconstraintValues(0,0) = 2;
+    initialconstraintValues(1,0) =-2;
+    initialconstraintValues(2,0) = 0;
+    initialconstraintValues(3,0) = 0;
+    
+    SupportFunction* U = 0;
+    
+    // configuration
+    parameters p;
+    p.numberOfTransitions = 2;
+    p.setsToCompute = 10;
+    p.timeHorizon = 1;
+    p.timeStep = 0.01;
+    
+    options opt;
+    opt.angle = PI_UP/2;
+    opt.precision = 10000;
+    
+    // start analysis (preprocessing & flowpipe construction)
+    reachabilityAnalysis.start(model, p, opt, initialConstraints, operator_e::LEQ, initialconstraintValues, U);
+
+    // clean heap
+    delete U;
+    delete model;    // TODO: delete all parts of the model
+}
+
+
+#endif
 
 }
