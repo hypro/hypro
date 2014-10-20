@@ -119,8 +119,14 @@ HybridAutomaton<double>* createBB()
         A(1,0) = 0;
         A(1,1) = 0;
 
+        // b
+        vector_t<double> b(2);
+        b(0) = 0;
+        b(1) = -9.81;
+    
 		loc1->setActivityMat(A);
-
+        loc1->setActivityVec(b);
+        
 		/*
 		 * Transition
 		 */

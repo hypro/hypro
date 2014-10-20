@@ -257,6 +257,8 @@ TEST_F(HyReachTest, NLOPTtest)
 
 TEST_F(HyReachTest, BouncingBallTest)
 {
+        std::cout << "BouncingBallTest:" << BL;
+        
     // construct necessary analysis obejcts
     HyReach reachabilityAnalysis;
     HybridAutomaton<double>* model = createBB(); // model (hard coded and provided by included BouncingBall.cpp)
@@ -269,6 +271,10 @@ TEST_F(HyReachTest, BouncingBallTest)
     initialconstraintValues(1,0) =-2;
     initialconstraintValues(2,0) = 0;
     initialconstraintValues(3,0) = 0;
+        std::cout << "initialConstraints:" << BL;
+        std::cout << initialConstraints << BL;
+        std::cout << "initialconstraintValues:" << BL;
+        std::cout << initialconstraintValues << BL;
     
     SupportFunction* U = 0;
     
@@ -283,15 +289,15 @@ TEST_F(HyReachTest, BouncingBallTest)
     opt.angle = PI_UP/2;
     opt.precision = 10000;
     
+        std::cout << "reachabilityAnalysis.start(...)" << BL;
     // start analysis (preprocessing & flowpipe construction)
     reachabilityAnalysis.start(model, p, opt, initialConstraints, operator_e::LEQ, initialconstraintValues, U);
-
+        std::cout << "reachabilityAnalysis terminated" << BL;
+    
     // clean heap
     delete U;
     delete model;    // TODO: delete all parts of the model
 }
-
-
 #endif
 
 }
