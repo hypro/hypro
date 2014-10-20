@@ -4,6 +4,8 @@
 //#define VECTOR_GEN_VERBOSE
 //#define HELPER_METHODS_VERBOSE
 //#define SUPPORTFUNCTION_VERBOSE
+#define FLOWPIPE_VERBOSE
+#define HYREACH_VERBOSE
 
 using namespace::std;
 
@@ -141,7 +143,7 @@ namespace hypro
          FlowpipeSegment* constructFlowpipe(location* loc, LocationInfo* locInfo, SupportFunction* X0, SupportFunction* U, unsigned int timeStep)
          {
               #ifdef FLOWPIPE_VERBOSE
-                  std::string method = "constructFlowpipe: ";
+                  std::string method = "constructFlowpipe(...): ";
               #endif
               
               // create flowpipe segment
@@ -152,12 +154,16 @@ namespace hypro
               X0->multiEvaluate(&L, &X0_values);
               
               #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "X0 evaluation" << X0_values << '\n';
+                      std::cout << method << "X0 evaluation':" << X0_values.transpose() << '\n';
               #endif
               
               // test for an intersection between X0 and the invariant
               if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values))
               {
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "testIntersection: true" << BL;;
+                  #endif
+                  
                   // compute flowpipe
                   // edA = delta * A -> precomputed in LocationInfo
                   // V = calcpV(B,U) -> precomputed in LocationInfo
@@ -169,7 +175,7 @@ namespace hypro
                   matrix_t<double> omega0_values(L.size(),1); // stores the evaluation of omega0
                   omega0.multiEvaluate(&L, &omega0_values);
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "omega0 evaluation" << omega0_values << '\n';
+                      std::cout << method << "omega0' evaluation: " << omega0_values.transpose() << '\n';
                   #endif
                   
                   // intersect Omega0 with invariant
@@ -177,7 +183,7 @@ namespace hypro
                   intersectWithInvariant(omega0_values, locInfo->invariant_constraints_in_L, locInfo->scaledConstraintValues);
                   
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "omega0 intersecting invariant" << omega0_values << '\n';
+                      std::cout << method << "omega0' intersecting invariant" << omega0_values.transpose() << '\n';
                   #endif
                   
                   // reconstruct omega0 intersects invariant and re-evaluate (creates tight constraints)
@@ -187,7 +193,7 @@ namespace hypro
                   set0.multiEvaluate(&L, set0_values);
                   
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "first set of the flowpipe" << set0_values << '\n';
+                      std::cout << method << "set0 of the flowpipe" << set0_values << '\n';
                   #endif
     
                   // add first computed set to the flowpipe (omega0 intersects invariant)
@@ -218,6 +224,10 @@ namespace hypro
                       i++;
                   }
                   
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "maxNumberOfCompleteSets: " << maxNumberOfCompleteSets << BL;
+                  #endif
+                  
                   // cut evaluation values which are not needed
                   flowpipe->sets = flowpipe->sets.block(0,0,maxNumberOfCompleteSets,L.size());
                    
@@ -229,6 +239,13 @@ namespace hypro
                        temp.multiEvaluate(&L,&temp_values);
                        flowpipe->addSetAtPosition(set0_values,i);
                   }
+                  
+                  #ifdef FLOWPIPE_VERBOSE
+                      // store flowpipe in file
+                      char* buffer = new char[100];
+                      sprintf(buffer, "matlab_flowpipe_loc%d_time%d", loc, timeStep);
+                      matrixToMatlab(buffer, flowpipe->sets);
+                  #endif
                   
                   // clear temporary used memory from the heap
                   delete multiplicationtemp;
@@ -256,17 +273,27 @@ namespace hypro
          */   
          void analyze(location* loc, unsigned int recursionNumber, SupportFunction* X0, SupportFunction* U, unsigned int timeStep)
          {
+             #ifdef HYREACH_VERBOSE
+                 std::string method = "analyze(...): ";
+                 std::cout << method << "recursionNumber:" << recursionNumber << BL;
+             #endif  
+             
               if( recursionNumber > 0)        // compute flowpipe only if there is a further recursion to performe
               {
                   // compute Flowpipe
-                  FlowpipeSegment* flowpipe = constructFlowpipe(loc, &(locationMap.find(loc)->second), X0, U, timeStep); //algoInv
-                  
+                  FlowpipeSegment* flowpipe = constructFlowpipe(loc, (locationMap.find(loc)->second), X0, U, timeStep); //algoInv
+                  #ifdef HYREACH_VERBOSE
+                      std::cout << method << "flowpipe constructed" << BL;
+                  #endif
                   // add segment to the final flowpipe (results)
                   results.push_back(flowpipe);
                   
                   // detect possible transitions -> flowpipe might NOT be shortened dependend on the chosen transition -> due to use of algoinv only reachable (in the invariant) sets are computed!
                   std::vector<possibleTransition>* possibleTransitions = getPossibleTransitions(loc, flowpipe);
-                  
+                  #ifdef HYREACH_VERBOSE
+                      std::cout << method << "possibleTransitions:" << possibleTransitions << BL;
+                  #endif
+             
                   // choose which transition to take -> Assuption: all
                   // iterate over this list and do for each the required transition handling:
                   matrix_t<double> valuesForNextSet;                    
@@ -302,7 +329,12 @@ namespace hypro
         {
              CleanupOnExit::removeFlowpipeSegments(&results); // remove potential previously computed results
              results.clear();
-                          
+             #ifdef HYREACH_VERBOSE
+                 std::string method = "start(): ";
+                 std::cout << method << "initial results:" << BL;
+                 std::cout << results << BL;
+             #endif  
+                        
              // copy the input values
              this->params = params;
              this->opt = opt;
@@ -310,35 +342,78 @@ namespace hypro
              // generate basic direction vectors
              unsigned int dimensions = getDimensionality(model);
              L = vectorgeneratorEXT(dimensions, opt.angle, opt.precision);
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "original L:" << BL;
+                 std::cout << L << BL;
+             #endif  
              additionalDirections = extendDimensions(&L);
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "extended L:" << BL;
+                 std::cout << L << BL;
+                 std::cout << method << "additionalDirections:" << BL;
+                 std::cout << "dir1':" << additionalDirections.dir1.transpose() << BL;
+                 std::cout << "dir2':" << additionalDirections.dir2.transpose() << BL;
+             #endif  
              oppositeDirectionMapping = computeDirectionMapping(&L);
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "oppositeDirectionMapping L:" << BL;
+                 printArray<int>(oppositeDirectionMapping, L.size());
+                 std::cout << BL;
+             #endif  
              dimensionality = (unsigned int)L[0].size();            // extended with additional dimensionality
              
              if( U == 0 )   // use zero function if none provided
              {
                  U = new ZeroSupportFunction(dimensionality, &additionalDirections);
+                 #ifdef HYREACH_VERBOSE
+                     std::cout << method << "U is ZeroSupportFunction" << BL;
+                 #endif
              }
              
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "start preprocessing .... ------------------------------------------------------------------------" << BL;
+             #endif
              // start preprocessing
              preprocess(model, &L, params.timeStep, U, &additionalDirections);
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "preprocessing completed. ------------------------------------------------------------------------ " << BL;
+             #endif
                   
              // Create X0 SupportFunction (extended by additional dimension)
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "original X0constraints: " << BL;
+                 std::cout << X0constraints << BL;
+                 std::cout << method << "original X0values: " << BL;
+                 std::cout << X0constraintValues << BL;
+             #endif
              X0constraints = addZeroColumn(X0constraints);
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "extended X0constraints: " << BL;
+                 std::cout << X0constraints;
+             #endif
              SupportFunction* X0 = new PolytopeSupportFunction(X0constraints,X0constraintValues, op, dimensionality, &additionalDirections);
                                         
              // start analysis (for every initial location)
              std::set<location*> initialLocations = model->initialLocations();
+
 	     	 for (auto iterator = initialLocations.begin(); iterator != initialLocations.end(); ++iterator)
 	      	 {
-	       		analyze(*iterator, 0, X0, U, 0);   // initiate recursion
+                #ifdef HYREACH_VERBOSE
+                    std::cout << method << "start analysis ... ----------------------" << BL;
+                #endif 
+	       		analyze(*iterator, params.numberOfTransitions, X0, U, 0);   // initiate recursion
 	       	 }
-	       	 
+	       	 #ifdef HYREACH_VERBOSE
+                 std::cout << method << "analysis done. -----------------------------" << BL;
+             #endif
+             
 	       	 delete X0;
         }
     
         ~HyReach()
         {
              CleanupOnExit::removeFlowpipeSegments(&results);
+             removePreprocessingMemory();
         }
     };
 

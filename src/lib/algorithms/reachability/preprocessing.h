@@ -105,13 +105,13 @@
 	{
 	  private:
 		location* origLocation;	// stores the original location from the model where the missing informations from LocationInfo are stored
-		matrix_t<double>* A;     // dynamic matrix A combined with b (from Ax +b)
-
+		matrix_t<double> A;     // dynamic matrix A combined with b (from Ax +b)
+        
       public:
         // additional generated information regarding the invariant
         SupportFunction* invariantSP; // support function representation of the invariant  (needed by algoInv)
-		mapping invariant_constraints_in_L;
-		mapping mirrored_invariant_constraints_in_L;
+		mapping invariant_constraints_in_L = 0;
+		mapping mirrored_invariant_constraints_in_L = 0;
 		std::vector<double> complete_invariant_evaluation;
 
         std::vector<matrix_t<double>>* constraintsAsDirections;    // store constraints as directions (normalized etc.)
@@ -125,57 +125,92 @@
         // getter for preprocessed A (additional dimension)
         matrix_t<double>* getA()
         {
-            return A;
+            return &A;
         }
-        
+
 	    /*
 	    * Constructor
 	    */
 		LocationInfo(location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* aD)
 		{
+            #ifdef LOCATIONINFO_VERBOSE
+                string method = "LocationInfo(): ";
+                std::cout << method << this << '\n';
+            #endif
 			origLocation = loc;
 			
 			// generate automatically the additional information
             
             // extract size information from invariant
-            unsigned int dimensionality = (unsigned int) ((*loc).invariant()).mat.cols();
+            //unsigned int dimensionality = (unsigned int) ((*loc).invariant()).mat.cols();
             unsigned int constraints = (unsigned int) ((*loc).invariant()).mat.rows();   // Assuption: the model contains only <= constraints
             
             #ifdef LOCATIONINFO_VERBOSE
-                string method = "LocationInfo: constructor: ";
-                if(dimensionality != (unsigned int)(L_pt->at(0)).cols())
-                {
-                    std::cout << method << "L and invariant of different dimensionality" << '\n';
-                }
+                //if(dimensionality != (unsigned int)(L_pt->at(0)).cols())
+                //{
+                //    std::cout << method << "L and invariant of different dimensionality" << '\n';
+                //}
             #endif
             
-            A = new matrix_t<double>( loc->activityMat().rows()+1,  loc->activityMat().cols()+1);
-            *A << loc->activityMat(), loc->activityVec(),
-            matrix_t<double>::Zero(loc->activityMat().rows()+1,1);
+            A.resize( loc->activityMat().rows()+1,  loc->activityMat().cols()+1);
+            #ifdef LOCATIONINFO_VERBOSE
+                std::cout << method << "original A:" << BL;
+                std::cout << loc->activityMat() << BL;
+                std::cout << method << "original b:" << BL;
+                std::cout << loc->activityVec() << BL;
+            #endif
             
+            matrix_t<double> temp = loc->activityMat();
+            vector_t<double> temp2 = loc->activityVec();
+            for(unsigned int i=0; i<loc->activityMat().rows(); i++)
+            {
+                for(unsigned int j=0; j<loc->activityMat().cols(); j++)
+                {
+                    A(i,j) = temp(i,j);
+                }
+                
+                A(i,loc->activityMat().cols()) = temp2(i);
+            }             
+            #ifdef LOCATIONINFO_VERBOSE
+                std::cout << method << "extended A:" << BL;
+                std::cout << A << BL;
+            #endif
             
             // generate PolytopeSupportFunction object for Invariant
             if((*loc).invariant().vec.size() > 0 )
             {
                 matrix_t<double> m = addZeroColumn((*loc).invariant().mat);              // add additional dimension
+                #ifdef LOCATIONINFO_VERBOSE
+                    std::cout << method << "original invariant matrix:" << BL;
+                    std::cout << (*loc).invariant().mat << BL;
+                    std::cout << method << "extended invariant matrix:" << BL;
+                    std::cout << m << BL;
+                    std::cout << method << "original invariant values:" << BL;
+                    std::cout << (*loc).invariant().vec << BL;
+                #endif
+                // note: no need to use normed directions and correspondent scaled values because the invariant support function will always 
+                // be evaluated to retrieve values from it an thus the values are computed correctly
                 invariantSP = new PolytopeSupportFunction(m, (*loc).invariant().vec, (*loc).invariant().op, (unsigned int) m.cols(), aD);
             }
             else
             {
+                #ifdef LOCATIONINFO_VERBOSE
+                    std::cout << method << "use infinity invariant" << BL;
+                #endif
                 invariantSP = new InfinitySupportFunction(aD);
             }
             
             // evaluate PolytopeSupportFunction object in every direction
             //invariantSP->multiEvaluate(L_pt, complete_invariant_evaluation);    // TODO: can only be done if all L are available!
             #ifdef LOCATIONINFO_VERBOSE
-                if(dimensionality != (unsigned int)(L_pt->at(0)).cols())
-                {
-                    std::cout << method << "invariant evaluation for L= " << '\n';
-                    printDirectionList(*L_pt);
-                    std::cout << "is: " << '\n';
-                    print(complete_invariant_evaluation);
-                    std::cout << '\n';
-                }
+                //if(dimensionality != (unsigned int)(L_pt->at(0)).cols())
+                //{
+                //    std::cout << method << "invariant evaluation for L: " << '\n';
+                //    printDirectionList(*L_pt);
+                //    std::cout << "is: " << '\n';
+                //    print(complete_invariant_evaluation);
+                //    std::cout << '\n';
+                //}
             #endif
             
             // create the mapping between constraints and entries in L
@@ -198,26 +233,38 @@
             #endif
             
             // construct parametrized values
-            edA = exponentialmatrix(delta*(loc->activityMat())) ;
+            edA = exponentialmatrix(delta*A) ;
             V = U->multiply(loc->activityVec());
+            #ifdef LOCATIONINFO_VERBOSE
+                 std::cout << method << "edA: " << edA << '\n';
+            #endif
 		}
         
         ~LocationInfo()
         {
             #ifdef LOCATIONINFO_VERBOSE
-                      std::cout << "LocationInfo: destructor" << '\n';
+                      std::cout << "~LocationInfo(): start " << this << '\n';
             #endif
             
             // delete constructed objects on the heap
             delete invariantSP;
-            delete[] invariant_constraints_in_L;
-            delete[] mirrored_invariant_constraints_in_L;
+            if( invariant_constraints_in_L != 0 )
+            {
+                delete[] invariant_constraints_in_L;
+            }
+            if( mirrored_invariant_constraints_in_L != 0 )
+            {
+                delete[] mirrored_invariant_constraints_in_L;
+            }
             
             delete scaledConstraintValues;
             delete constraintsAsDirections;
             
             delete V;
-            delete A;
+            
+            #ifdef LOCATIONINFO_VERBOSE
+                std::cout << "~LocationInfo(): end " << this << '\n';
+            #endif
         }
 	};
 
@@ -305,11 +352,11 @@
 	};
 
 	// typedefs for extended location handling
-	typedef std::map<Location<double>*, LocationInfo> LocationMap;
-	typedef std::pair<Location<double>*, LocationInfo> LocationPair;
+	typedef std::map<Location<double>*, LocationInfo*> LocationMap;
+	typedef std::pair<Location<double>*, LocationInfo*> LocationPair;
 
-	typedef std::map<Transition<double>*, TransitionInfo> TransitionMap;
-	typedef std::pair<Transition<double>*, TransitionInfo> TransitionPair;
+	typedef std::map<Transition<double>*, TransitionInfo*> TransitionMap;
+	typedef std::pair<Transition<double>*, TransitionInfo*> TransitionPair;
 	
 	
         LocationMap locationMap;    // maps each location to a locationInfo object containing additional static information
@@ -323,12 +370,10 @@
          */   
         void preprocess_location(location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* additionalDirections)
         {
-             // TODO: implement preprocessing for location
-             // add invariant directions (normalized) to L (at the end) if not already in L
-             // create LocationInfoObject
-             // add (location,LocationInfo) pair to location mapping
-             // (LocationInfo constructor computes all necessary values)
-             LocationInfo locInfo(loc, L_pt, delta, U, additionalDirections);
+             // preprocessing is done by construction of LocInfo object
+             LocationInfo* locInfo = new LocationInfo(loc, L_pt, delta, U, additionalDirections);
+             
+             // store a mapping between the original location and the object containing the preprocessed information
              LocationPair locPair(loc, locInfo);
              locationMap.insert(locPair);
         }
@@ -356,16 +401,25 @@
 		{
 			if (locationSet.find(loc) != locationSet.end())
 			{
+                #ifdef TRANSITIONINFO_VERBOSE
+                     std::cout << "preprocessing_recursion(...): considered location " << loc << " has already been preprocessed" << BL;
+                #endif
 				// the location has already been considered
 				return;
 			}
 			else
 			{
+                #ifdef TRANSITIONINFO_VERBOSE
+                     std::cout << "preprocessing_recursion(...): preprocess unprocessed location " << loc << BL;
+                #endif
 				// this  location has not yet been preprocessed
 				locationSet.insert(loc);
 
 				preprocess_location(loc, L_pt, delta, U, additionalDirections);
 
+                #ifdef TRANSITIONINFO_VERBOSE
+                     std::cout << "preprocessing_recursion(...): preprocess transitions" << BL;
+                #endif
 				// preprocess outgoing transitions
 				// iterate over outgoing transitions and preprocess them
                 // compute preprocessing for transition destinations
@@ -389,4 +443,15 @@
 	      	{
 	       		preprocessing_recursion(*iterator, L_pt, delta, U, additionalDirections) ;
 	       	}
+	       	#ifdef TRANSITIONINFO_VERBOSE
+                 std::cout << "preprocess(...): complete" << BL;
+            #endif
+        }
+
+        void removePreprocessingMemory()
+        {
+             // TODO: remove those objects and all objects inside
+             //LocationMap locationMap;   
+        	 //TransitionMap transitionMap;   
+        	 //std::set<location*> locationSet;
         }

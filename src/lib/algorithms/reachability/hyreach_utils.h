@@ -5,6 +5,8 @@
 
 #pragma once
 
+#define BL '\n'
+
 // model includes
 #include "util.h"
 #include "../../datastructures/hybridAutomata/util.h"
@@ -17,6 +19,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <iterator>
 
 // GLPK includes
 #include <stdio.h>            /* C input/output                       */

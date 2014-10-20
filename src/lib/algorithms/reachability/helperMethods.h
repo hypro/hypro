@@ -9,6 +9,17 @@
     
 //#define HELPER_METHODS_VERBOSE
 
+    /*
+    * This templated method can be used to print arrays of arbitrary type
+    */
+    template<typename Type>
+    void printArray(Type* array, unsigned int size)
+    {
+         for( unsigned int i=0; i< size; i++)
+         {
+             std::cout << array[i] << ", ";
+         }
+    }
 
     /*
 	* Prints the argument on the standard output
@@ -76,7 +87,7 @@
 	int contains(std::vector<matrix_t<double>>* directions, matrix_t<double>* direction)
 	{
 		#ifdef HELPER_METHODS_VERBOSE
-		       std::cout << "contains: check wether a list directions contains a specific direction ...  ";
+		       std::string method = "contains(...) ";
 		#endif
 
         unsigned int length = direction->rows();
@@ -93,7 +104,7 @@
 			if(equal)
 			{
 				#ifdef HELPER_METHODS_VERBOSE
-				       std::cout << "list contains \n" << temp <<"\n";
+				       std::cout << method << "list contains" << BL << temp << BL;
 				#endif
 
 				return i;
@@ -101,7 +112,8 @@
 		}
 
 		#ifdef HELPER_METHODS_VERBOSE
-		       std::cout << "no.\n";
+		       std::cout << method << "no suitable match found for " << BL;
+		       std::cout << *direction << BL;
 		#endif
 
 		return -1;		
@@ -112,13 +124,28 @@
         return contains(directions, &direction);
     }
 	
+	
 	int* computeDirectionMapping(std::vector<matrix_t<double>>* directions)
 	{
           int* result = new int[directions->size()];
+          #ifdef HELPER_METHODS_VERBOSE
+              std::string method = "computeDirectionMapping(...): ";
+              std::cout << method << "directions: " << BL;
+              std:: cout << *directions << BL;
+              
+              std:: cout << "for every direction: " << BL;
+          #endif
           
           for(unsigned int i=0; i<directions->size(); i++)
           {
+              #ifdef HELPER_METHODS_VERBOSE
+                  std::cout << method << "directions contains: " << BL;
+                  std:: cout << -directions->at(i) << BL;
+              #endif
               result[i] = contains(directions, -(directions->at(i)));
+              #ifdef HELPER_METHODS_VERBOSE
+                  std:: cout << "at position " << result[i] << BL;
+              #endif
           }
           
            return result;
@@ -262,16 +289,65 @@
     */
     matrix_t<double> addZeroColumn(matrix_t<double> m)
     {
-        matrix_t<double> result = matrix_t<double>::Zero(m.rows(), m.cols()+1);
+    
+        //matrix_t<double> result = matrix_t<double>::Zero(m.rows(), m.cols()+1);
+        int newcols = m.cols()+1;
+        matrix_t<double> result(m.rows(), m.cols()+1);
+        #ifdef HELPER_METHODS_VERBOSE
+            std::cout<< "empty result: " << result;
+            std::cout << "result rows: " << result.rows() << BL;
+            std::cout << "result cols: " << result.cols() << BL;
+            
+            std::cout << "m rows: " << m.rows() << BL;
+            std::cout << "m cols: " << m.cols() << BL;
+        #endif
         
         // copy m into result
         for( unsigned int i=0; i<m.rows(); i++)
         {
-             for( unsigned int j=0; i<m.cols(); j++)
+             for( unsigned int j=0; j<m.cols(); j++)
+             {
+                  //std::cout << "i: " << i << " j: " << j << BL;
+                  result(i,j) = m(i,j);
+                  std::cout << "result( " << i << ", " << j << ") = " << result(i,j) << BL;
+             }
+             
+             std::cout << "i: " << i << " j: " << newcols-1 << BL;
+             result(i,newcols-1) = 0;
+        }
+        
+        #ifdef HELPER_METHODS_VERBOSE
+            std::cout<< "complete result: " << result;
+        #endif
+        return result;
+        
+    
+    /*
+        int newcols = m.cols()+1;
+        matrix_t<double> result(m.rows(), newcols);
+    
+        #ifdef HELPER_METHODS_VERBOSE
+            std::cout<< "empty result: " << result;
+            std::cout << "result rows: " << result.rows() << BL;
+            std::cout << "result cols: " << result.cols() << BL;
+            
+            std::cout << "m rows: " << m.rows() << BL;
+            std::cout << "m cols: " << m.cols() << BL;
+        #endif
+        
+        for( unsigned int j=0; j<m.cols(); j++)
+        {
+             for( unsigned int i=0; i<m.rows(); i++)
              {
                   result(i,j) = m(i,j);
+                  std::cout << "result( " << i << ", " << j << ") = " << result(i,j) << BL;
              }
         }
         
-        return result;
+        for( unsigned int i=0; i<m.rows(); i++)
+        {
+            result(i,newcols-1) = 0;
+            std::cout << "result( " << i << ", " << newcols-1 << ") = " << result(i,newcols-1) << BL;
+        }
+         */    
     }

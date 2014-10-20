@@ -6,11 +6,13 @@
 
 namespace hypro
 {
-         
-          void matrixToMatlab(matrix_t<double> m)
+         /*
+         * writes a matrix_t<double> object into a file in matlab snytax
+         */
+          void matrixToMatlab(const char* file, matrix_t<double> m)
           {
                FILE *fp;
-               fp=fopen("matlab.txt", "w");
+               fp=fopen(file, "w");
                
                
                fprintf(fp, "[");

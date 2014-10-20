@@ -128,7 +128,7 @@ namespace hypro
         void multiEvaluate(std::vector<matrix_t<double>>* L,  matrix_t<double>* result )
         {
             #ifdef  SUPPORTFUNCTION_VERBOSE
-                   std::cout << "SupportFunction:evaluate: evaluation of the support function in all directions L" << '\n';
+                   std::cout << "SupportFunction:multiEvaluate1: evaluation of the support function in all directions L" << '\n';
             #endif
             for(unsigned int i=0; i<L->size(); i++)
             {
@@ -143,7 +143,7 @@ namespace hypro
         void multiEvaluate(std::vector<matrix_t<double>>* L,  std::vector<double> result )
         {
             #ifdef  SUPPORTFUNCTION_VERBOSE
-                   std::cout << "SupportFunction:evaluate: evaluation of the support function in all directions L" << '\n';
+                   std::cout << "SupportFunction:multiEvaluate2: evaluation of the support function in all directions L" << '\n';
             #endif
             for(unsigned int i=0; i<L->size(); i++)
             {
@@ -158,7 +158,7 @@ namespace hypro
         void multiEvaluate(std::vector<matrix_t<double>>* L,  double* result )
         {
             #ifdef  SUPPORTFUNCTION_VERBOSE
-                   std::cout << "SupportFunction:multiEvaluate: evaluation of the support function in all directions L" << '\n';
+                   std::cout << "SupportFunction:multiEvaluate3: evaluation of the support function in all directions L" << '\n';
             #endif
             double result_size = sizeof(result)/sizeof(result[0]);
             if(result_size == L->size())

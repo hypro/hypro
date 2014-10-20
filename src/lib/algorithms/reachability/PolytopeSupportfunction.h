@@ -5,6 +5,7 @@
  
 #pragma once 
  
+//#define SUPPORTFUNCTION_VERBOSE 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #include "hyreach_utils.h" 
     
@@ -50,8 +51,6 @@ namespace hypro
         		lp = glp_create_prob();
         		glp_set_prob_name(lp, "supportfunction");
         		glp_set_obj_dir(lp, GLP_MAX);
-    
-    
     
                 int numberOfConstraints = constraints.rows();
                 #ifdef SUPPORTFUNCTION_VERBOSE
