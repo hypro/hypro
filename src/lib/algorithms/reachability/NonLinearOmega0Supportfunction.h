@@ -6,8 +6,9 @@
 #define SUPPORTFUNCTION_VERBOSE 
 
 //#define BOXOPERATOR_VERBOSE
-//#define CALCEPSILON_VERBOSE
+#define CALCEPSILON_VERBOSE
 //#define CALCVALUES_VERBOSE
+#define TEST
  
 #include "hyreach_utils.h" 
 #include "BoxSupportfunction.h"
@@ -79,6 +80,13 @@ namespace hypro
                      l2 = *iterator;
                      ++iterator;
                      
+                     #ifdef SUPPORTFUNCTION_VERBOSE
+                         #ifdef BOXOPERATOR_VERBOSE
+                             std::cout << method << " l1 = " << l1 << '\n';
+                             std::cout << method << " l2 = " << l2 << '\n';
+                         #endif
+                     #endif
+                          
                      // get the correspondent evaluation results
                      evaluationResult a = sf->evaluate(&l1);
                      evaluationResult b = sf->evaluate(&l2);
@@ -88,15 +96,26 @@ namespace hypro
                      
                      #ifdef SUPPORTFUNCTION_VERBOSE
                          #ifdef BOXOPERATOR_VERBOSE
-                             std::cout << method << " l1 = " << l1 << '\n';
-                             std::cout << method << " l2 = " << l2 << '\n';
                              std::cout << method << " omega(l1) = " << a.supportValue << '\n';
                              std::cout << method << " omega(l2) = " << b.supportValue << '\n';
+                             std::cout << method << "e(" << i << ") = " << e(i,0) << BL;
                              std::cout << method << " end loop-iteration " <<i << '\n';
                          #endif
                      #endif
              } 
-             return new SymmetricCenteredBoxSupportFunction(e, getAD());
+             
+             #ifdef TEST
+                 SymmetricCenteredBoxSupportFunction* result = new SymmetricCenteredBoxSupportFunction(e, getAD());
+                 matrix_t<double> values(directionsAlongDimensions.size(),1);
+                 result->multiEvaluate(&directionsAlongDimensions, &values);
+                 std::cout << "boxoperator(sF): result multiEvaluation: " << BL << values << BL;
+                 
+                 sf->multiEvaluate(&directionsAlongDimensions, &values);
+                 std::cout << "boxoperator(sF): sF multiEvaluation: " << BL << values << BL;
+                 return result;
+             #else
+                 return new SymmetricCenteredBoxSupportFunction(e, getAD());
+             #endif
         }
         
         /*
@@ -135,7 +154,7 @@ namespace hypro
     			#endif
     		 #endif
     		 
-             matrix_t<double> Id = matrix_t<double>::Identity(dimensions, dimensions);
+             matrix_t<double> Id = matrix_t<double>::Identity(dimensions, dimensions) * delta;
              
              #ifdef SUPPORTFUNCTION_VERBOSE
                 #ifdef CALCVALUES_VERBOSE
@@ -217,7 +236,7 @@ namespace hypro
     		 delete result;
     		 
              // e_n
-             MultiplicationSupportfunction* a2ex0 = X0->multiply(Asquare.transpose() * edA.transpose());
+             MultiplicationSupportfunction* a2ex0 = X0->multiply(edA * Asquare);
              SymmetricCenteredBoxSupportFunction* a2ex0_box = boxoperator(a2ex0);
              temp = a2ex0_box->multiply(phi2.transpose());
              result = boxoperator(temp);
@@ -236,10 +255,30 @@ namespace hypro
     		 
              // epsilonpsi
              MultiplicationSupportfunction* au = V->multiply(*A);
+             #ifdef SUPPORTFUNCTION_VERBOSE
+                 #ifdef CALCEPSILON_VERBOSE
+                     std::cout << method << " au " <<'\n';
+                 #endif
+             #endif
              SymmetricCenteredBoxSupportFunction* au_box = boxoperator(au);
+             #ifdef SUPPORTFUNCTION_VERBOSE
+                 #ifdef CALCEPSILON_VERBOSE
+                    std::cout << method << " au_box " <<'\n';
+                 #endif
+             #endif
              delete au;
              temp = au_box->multiply(phi2.transpose());
+             #ifdef SUPPORTFUNCTION_VERBOSE
+                 #ifdef CALCEPSILON_VERBOSE
+                     std::cout << method << " temp " <<'\n';
+                 #endif
+             #endif
              epsilonpsi = boxoperator(temp);
+             #ifdef SUPPORTFUNCTION_VERBOSE
+                 #ifdef CALCEPSILON_VERBOSE
+                     std::cout << method << " epsilonpsi " <<'\n';
+                 #endif
+             #endif
              delete temp;
              //epsilonpsi = result.copyToHeap();
         }
@@ -255,9 +294,10 @@ namespace hypro
         // calcomega0delta.m
         static double myfunc(unsigned n, const double *x, double *grad, void *my_func_data)  // abs(l) provided using my_func_data
         {
+               std::cout << "x:" << x[0] << '\n';
+               
                //matrix_t<double>* l_pt = (matrix_t<double>*)my_func_data;
                NonLinearOmega0Supportfunction* self = (NonLinearOmega0Supportfunction*)my_func_data;
-               //cout << "myfunc l:" << '\n' << *l_pt << '\n';
                
                // epsilonintersection (function [res] = epsilonintersection(e_p, e_n,x,d,l))
                double epsilonintersection =0;
@@ -265,9 +305,11 @@ namespace hypro
                {
                    epsilonintersection = epsilonintersection+ MIN(x[0]*((*self).e_p(i,0).toDouble()), (1-x[0])*((*self).e_n(i,0).toDouble())*((*self).absl(i,0).toDouble()));
                }
-
+               std::cout << "epsilonintersection:" << epsilonintersection << '\n';
+               
                // result(edA,delta,u,x0,epsilonpsi,e_p, e_n,start,options,l)
                double res = -( ((1-x[0])*((*self).x0res.supportValue)) + (x[0]*((*self).edX0res.supportValue)) + (x[0]*((*self).delta)*((*self).Vres.supportValue)) + ((x[0]*x[0])*((*self).epsilonpsires.supportValue)) + epsilonintersection);   // +epsilonintersection(e_p,e_n,x,size(start,1),l)
+               std::cout << "res:" << res << BL;
                return res;
         }  
     
@@ -286,9 +328,20 @@ namespace hypro
     		 // precompute values needed during optimization (dependent on l)
     		 // improves evaluation speed of myfunc during optimization
     		 x0res = X0->evaluate(&l);
+    		 matrix_t<double> edAl = edA.transpose() * l; // edA * l
+    		 edX0res = X0->evaluate(&edAl);
     		 Vres = V->evaluate(&l);
     		 epsilonpsires = epsilonpsi->evaluate(&l);
     		 absl = l.array().abs().matrix();
+    		 
+   		     #ifdef SUPPORTFUNCTION_VERBOSE
+                std::cout << "NonLinearOmega0Supportfunction: evaluate: precomputed constants:" << BL;
+    			std::cout << "x0(l): " << x0res.supportValue << BL;
+    			std::cout << "edX0res(l): " << edX0res.supportValue << BL;
+    			std::cout << "Vres(l): " << Vres.supportValue << BL;
+    			std::cout << "epsilonpsires(l): " << epsilonpsires.supportValue << BL;
+    			std::cout << "absl: " << absl << BL;
+    		 #endif 
     		 
              // optimization parameter and start value
              std::vector<double> x(1);
@@ -364,10 +417,13 @@ namespace hypro
                                                         
              // initialize values used by boxoperators
              dimensions = (*A).rows();
-             directionsAlongDimensions = vectorgenerator(dimensions);
+             directionsAlongDimensions = vectorgenerator(dimensions); // 2 last directions are equivalent to artificial - caugth by SupportFunction.evaluate
+             // TODO: could be more efficient if the directions in the additional dimension are exactly the same (in memory with same pointer) as in aD
+             // in this case SUpportFunction.evaluate needs no second nested if branch
              
              #ifdef SUPPORTFUNCTION_VERBOSE
-    			std::cout << method << " generated Vectors along dimensions" << '\n';
+    			std::cout << method << " generated Vectors along dimensions:" << BL;
+    			printDirectionList(directionsAlongDimensions);
     		 #endif
     		
              this->A = A;

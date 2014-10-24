@@ -3,8 +3,8 @@
  *   Author: Norman Hansen
  */
  
-#define LOCATIONINFO_VERBOSE 
-#define TRANSITIONINFO_VERBOSE 
+//#define LOCATIONINFO_VERBOSE 
+//#define TRANSITIONINFO_VERBOSE 
  
 	//typedef std::set<location*> locationSet;
 	//typedef std::set<transition*> transitionSet;
@@ -112,7 +112,7 @@
         SupportFunction* invariantSP; // support function representation of the invariant  (needed by algoInv)
 		mapping invariant_constraints_in_L = 0;
 		mapping mirrored_invariant_constraints_in_L = 0;
-		std::vector<double> complete_invariant_evaluation;
+		std::vector<double>* complete_invariant_evaluation;
 
         std::vector<matrix_t<double>>* constraintsAsDirections;    // store constraints as directions (normalized etc.)
         std::vector<double>* scaledConstraintValues;   // since during the analysis the correspondent directions from L are used it is necessary to use scaled constraint values 
@@ -199,20 +199,7 @@
                 #endif
                 invariantSP = new InfinitySupportFunction(aD);
             }
-            
-            // evaluate PolytopeSupportFunction object in every direction
-            //invariantSP->multiEvaluate(L_pt, complete_invariant_evaluation);    // TODO: can only be done if all L are available!
-            #ifdef LOCATIONINFO_VERBOSE
-                //if(dimensionality != (unsigned int)(L_pt->at(0)).cols())
-                //{
-                //    std::cout << method << "invariant evaluation for L: " << '\n';
-                //    printDirectionList(*L_pt);
-                //    std::cout << "is: " << '\n';
-                //    print(complete_invariant_evaluation);
-                //    std::cout << '\n';
-                //}
-            #endif
-            
+                        
             // create the mapping between constraints and entries in L
             scaledConstraintValues = new std::vector<double>(constraints);
             constraintsAsDirections = new std::vector<matrix_t<double>>(constraints);
@@ -234,37 +221,28 @@
             
             // construct parametrized values
             edA = exponentialmatrix(delta*A) ;
-            V = U->multiply(loc->activityVec());
+            matrix_t<double> B = addZeroRow(loc->extInputMat());
+            V = U->multiply(B);
             #ifdef LOCATIONINFO_VERBOSE
                  std::cout << method << "edA: " << edA << '\n';
             #endif
 		}
         
-        ~LocationInfo()
+        /*
+        * This method is used instead of the Deconstructor to free allocated memory on the heap
+        */
+        void freeAllocatedMemory()
         {
-            #ifdef LOCATIONINFO_VERBOSE
-                      std::cout << "~LocationInfo(): start " << this << '\n';
-            #endif
-            
-            // delete constructed objects on the heap
+             // delete constructed objects on the heap
             delete invariantSP;
-            if( invariant_constraints_in_L != 0 )
-            {
-                delete[] invariant_constraints_in_L;
-            }
-            if( mirrored_invariant_constraints_in_L != 0 )
-            {
-                delete[] mirrored_invariant_constraints_in_L;
-            }
-            
+            delete[] invariant_constraints_in_L;
+            delete[] mirrored_invariant_constraints_in_L;
+  
             delete scaledConstraintValues;
             delete constraintsAsDirections;
             
+            delete complete_invariant_evaluation;
             delete V;
-            
-            #ifdef LOCATIONINFO_VERBOSE
-                std::cout << "~LocationInfo(): end " << this << '\n';
-            #endif
         }
 	};
 
@@ -443,6 +421,25 @@
 	      	{
 	       		preprocessing_recursion(*iterator, L_pt, delta, U, additionalDirections) ;
 	       	}
+	       	
+	       	// performe evaluation which can only be done if all L are known
+	       	// locations:
+            
+            for(auto iterator = locationMap.begin(); iterator != locationMap.end(); iterator++) 
+            {
+                // evaluate PolytopeSupportFunction for invariant object in every direction
+                delete iterator->second->complete_invariant_evaluation;
+                iterator->second->complete_invariant_evaluation = new std::vector<double>(L_pt->size());
+                iterator->second->invariantSP->multiEvaluate(L_pt, iterator->second->complete_invariant_evaluation);
+                #ifdef LOCATIONINFO_VERBOSE
+                       std::cout << "preprocess(...): " << "invariant evaluation for L: " << '\n';
+                       printDirectionList(*L_pt);
+                       std::cout << "is: " << '\n';
+                       print(*(iterator->second->complete_invariant_evaluation));
+                       std::cout << '\n';
+                #endif
+            }    
+                                     
 	       	#ifdef TRANSITIONINFO_VERBOSE
                  std::cout << "preprocess(...): complete" << BL;
             #endif
@@ -454,4 +451,6 @@
              //LocationMap locationMap;   
         	 //TransitionMap transitionMap;   
         	 //std::set<location*> locationSet;
+        	 
+        	 // call freeAllocatedMemory() on every locationinfo object to free LocationInfo resources
         }

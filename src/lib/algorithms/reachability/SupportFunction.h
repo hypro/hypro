@@ -6,7 +6,7 @@
 #pragma once 
 #include "hyreach_utils.h" 
 
-//#define SUPPORTFUNCTION_VERBOSE
+#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 
 namespace hypro
@@ -107,15 +107,44 @@ namespace hypro
                 evaluationResult result; 
                 if(l == aD->dir1_pt)
                 {
+                    #ifdef  SUPPORTFUNCTION_VERBOSE
+                    //   std::cout << "SupportFunction:evaluate: l: dir1 " << '\n';
+                    #endif
                      result.supportValue = aD->dir1_eval;
                 }
                 else if(l == aD->dir2_pt)
                 {
+                     #ifdef  SUPPORTFUNCTION_VERBOSE
+                    //   std::cout << "SupportFunction:evaluate: l: dir2 " << '\n';
+                    #endif
                      result.supportValue = aD->dir2_eval;
                 }
                 else
                 {
-                    return this->evaluate(*l);
+  /*                  matrix_t<double> l_dr = *l;
+                    if( l_dr(l_dr.size()-1,0) == aD->dir1(l_dr.size()-1,0) )
+                    {
+                        #ifdef  SUPPORTFUNCTION_VERBOSE
+                        //    std::cout << "SupportFunction:evaluate: l: dir1 " << '\n';
+                        #endif
+                        result.supportValue = aD->dir1_eval;
+                    }
+                    else if( l_dr(l_dr.size()-1,0) == aD->dir2(l_dr.size()-1,0) )
+                    {
+                        #ifdef  SUPPORTFUNCTION_VERBOSE
+                        //    std::cout << "SupportFunction:evaluate: l: dir2 " << '\n';
+                        #endif
+                        result.supportValue = aD->dir2_eval;
+                    }
+                    else
+                    {
+                        #ifdef  SUPPORTFUNCTION_VERBOSE
+                           //std::cout << "SupportFunction:evaluate: l: "<< l << '\n';
+                           //std::cout << "SupportFunction:evaluate: *l: " << '\n';
+                           //std::cout << *l << BL;
+                        #endif
+   */                     return this->evaluate(*l);
+    //                }
                 }
                 
                 result.errorCode = -1000; 
@@ -140,15 +169,17 @@ namespace hypro
         /*
         * This method evaluates the support function in all directions from list L
         */  
-        void multiEvaluate(std::vector<matrix_t<double>>* L,  std::vector<double> result )
+        void multiEvaluate(std::vector<matrix_t<double>>* L,  std::vector<double>* result )
         {
             #ifdef  SUPPORTFUNCTION_VERBOSE
                    std::cout << "SupportFunction:multiEvaluate2: evaluation of the support function in all directions L" << '\n';
+                   std::cout << "L: " << BL;
+                   printDirectionList(*L);
             #endif
             for(unsigned int i=0; i<L->size(); i++)
             {
                  evaluationResult res = this->evaluate(L->at(i));
-                 result[i] = res.supportValue;
+                 (*result)[i] = res.supportValue;
             }
         }
         
@@ -286,11 +317,19 @@ namespace hypro
               { 
                   #ifdef  SUPPORTFUNCTION_VERBOSE
                       #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-                          std:: cout << "MultiplicationSupportfunction: evaluate" << '\n';
+                          std:: cout << "MultiplicationSupportfunction: evaluate(l)" << '\n';
+                          std::cout << "factor: " << BL << factor << BL << "l: " << BL << l << BL;
                       #endif
                   #endif
                    
-                   matrix_t<double> temp = factor * l;              
+                   matrix_t<double> temp = factor * l; 
+                   
+                   #ifdef  SUPPORTFUNCTION_VERBOSE
+                      #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+                          std:: cout << "MultiplicationSupportfunction: evaluate(l): temp: " << BL << temp << '\n';
+                      #endif
+                  #endif
+                               
                    return fct->evaluate(&temp);
               }
           

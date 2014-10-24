@@ -193,7 +193,9 @@ namespace hypro
                   set0.multiEvaluate(&L, set0_values);
                   
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "set0 of the flowpipe" << set0_values << '\n';
+                      std::cout << method << "set0 of the flowpipe:"; //<< set0_values << '\n';
+                      printArray<double>(set0_values, L.size()); 
+                      std::cout << BL;
                   #endif
     
                   // add first computed set to the flowpipe (omega0 intersects invariant)
@@ -209,6 +211,9 @@ namespace hypro
                   unsigned int i=0;
                   while(processedDirections.size() != L.size())
                   {
+                      #ifdef FLOWPIPE_VERBOSE
+                          std::cout << method << "iterate over direction number: " << i << BL;
+                      #endif
                       int oppositeOfDirectionI = oppositeDirectionMapping[i];
                       if(oppositeOfDirectionI < 0)
                       {
@@ -217,19 +222,41 @@ namespace hypro
                       
                       if( !listContains(&processedDirections, (int) i))
                       { 
+                          #ifdef FLOWPIPE_VERBOSE
+                              std::cout << method << " not yet processed " << i << BL;
+                          #endif
                           unsigned int j = parallelizationHelper(flowpipe, locInfo, &set0, omega0.getEpsilonpsi(), &L.at(i), i, &L.at(oppositeOfDirectionI), oppositeOfDirectionI);
-                          maxNumberOfCompleteSets = MIN(maxNumberOfCompleteSets, j);                 
+                          maxNumberOfCompleteSets = MIN(maxNumberOfCompleteSets, j);  
+                          
+                          // mark processed directions as processed (by indices)
+                          processedDirections.push_back(i);
+                          processedDirections.push_back(oppositeOfDirectionI);  
+                          
+                          #ifdef FLOWPIPE_VERBOSE
+                              std::cout << method << " processing succesfull " << BL;
+                          #endif            
                       }
+                      #ifdef FLOWPIPE_VERBOSE
+                          else
+                          {
+                              std::cout << method << " already processed "<< BL;
+                          }
+                      #endif
                       
                       i++;
                   }
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "maxNumberOfCompleteSets: " << maxNumberOfCompleteSets << BL;
+                      std::cout << method << "original sets: " << BL << flowpipe->sets << BL;
                   #endif
                   
                   // cut evaluation values which are not needed
                   flowpipe->sets = flowpipe->sets.block(0,0,maxNumberOfCompleteSets,L.size());
+                  
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "reduced sets: " << BL << flowpipe->sets << BL;
+                  #endif
                    
                   // conversions in order to reconstruct non-redundant results (or should this be done instantly?)
                   matrix_t<double> temp_values(L.size(),1);
@@ -255,7 +282,7 @@ namespace hypro
               {
                   // no flowpipe constructed because X0 does not satisfy the invariant
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "no flowpipe constructed because intersection between X0 and the invariant are empty" << '\n';
+                      std::cout << method << "no flowpipe constructed because intersection between X0 and the invariant is empty" << '\n';
                   #endif
               }
               
@@ -389,7 +416,7 @@ namespace hypro
              X0constraints = addZeroColumn(X0constraints);
              #ifdef HYREACH_VERBOSE
                  std::cout << method << "extended X0constraints: " << BL;
-                 std::cout << X0constraints;
+                 std::cout << X0constraints << BL;
              #endif
              SupportFunction* X0 = new PolytopeSupportFunction(X0constraints,X0constraintValues, op, dimensionality, &additionalDirections);
                                         

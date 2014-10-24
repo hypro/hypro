@@ -319,35 +319,18 @@
         #ifdef HELPER_METHODS_VERBOSE
             std::cout<< "complete result: " << result;
         #endif
-        return result;
-        
+        return result;  
+    }
     
-    /*
-        int newcols = m.cols()+1;
-        matrix_t<double> result(m.rows(), newcols);
-    
-        #ifdef HELPER_METHODS_VERBOSE
-            std::cout<< "empty result: " << result;
-            std::cout << "result rows: " << result.rows() << BL;
-            std::cout << "result cols: " << result.cols() << BL;
-            
-            std::cout << "m rows: " << m.rows() << BL;
-            std::cout << "m cols: " << m.cols() << BL;
-        #endif
+    matrix_t<double> addZeroRow(matrix_t<double> m)
+    {
+         matrix_t<double> result(m.rows()+1,m.cols());
+         result.block(0,0,m.rows(),m.cols()) = m;
+         result.block(m.rows(),0,1,m.cols()) = matrix_t<double>::Zero(1,m.cols());
+         
+         #ifdef HELPER_METHODS_VERBOSE
+            std::cout<< "addZeroRow(m): m:" << BL << m << BL << "extended m: " << BL << result << BL;
+         #endif
         
-        for( unsigned int j=0; j<m.cols(); j++)
-        {
-             for( unsigned int i=0; i<m.rows(); i++)
-             {
-                  result(i,j) = m(i,j);
-                  std::cout << "result( " << i << ", " << j << ") = " << result(i,j) << BL;
-             }
-        }
-        
-        for( unsigned int i=0; i<m.rows(); i++)
-        {
-            result(i,newcols-1) = 0;
-            std::cout << "result( " << i << ", " << newcols-1 << ") = " << result(i,newcols-1) << BL;
-        }
-         */    
+         return result;
     }

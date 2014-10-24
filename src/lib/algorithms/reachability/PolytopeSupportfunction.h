@@ -51,6 +51,10 @@ namespace hypro
         		lp = glp_create_prob();
         		glp_set_prob_name(lp, "supportfunction");
         		glp_set_obj_dir(lp, GLP_MAX);
+        		
+        		#ifndef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+ 		            glp_term_out(GLP_OFF);
+        		#endif
     
                 int numberOfConstraints = constraints.rows();
                 #ifdef SUPPORTFUNCTION_VERBOSE
@@ -202,20 +206,59 @@ namespace hypro
     	* Creates a new supportFunction for the closed convex set described by constraints * x operation(>= or <=) constraintConstants
     	*/
     	PolytopeSupportFunction(matrix_t<double> constraints, matrix_t<double> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Polytope_Type, aD)
-    	{          
+    	{                        
+            matrix_t<double> extendedConstraints(constraints.rows()+2, constraints.cols());
+            extendedConstraints.block(0,0,constraints.rows(),constraints.cols()) = constraints;
+            extendedConstraints.block(extendedConstraints.rows()-2,0,1,constraints.cols()) = aD->dir1.transpose();
+            extendedConstraints.block(extendedConstraints.rows()-1,0,1,constraints.cols()) = aD->dir2.transpose();
+            
+            //constraintConstants.conservaticeResize(constraintConstants.rows()+2,1);
+            matrix_t<double> extendedConstraintConstants(constraintConstants.rows()+2,1);
+            extendedConstraintConstants.block(0,0,constraintConstants.rows(),1) = constraintConstants;
+            extendedConstraintConstants(extendedConstraintConstants.rows()-2,0) = aD->dir1_eval;
+            extendedConstraintConstants(extendedConstraintConstants.rows()-1,0) = aD->dir2_eval;
+            
+            #ifdef SUPPORTFUNCTION_VERBOSE
+ 		         #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+ 		             std::cout << "PolytopeSupportFunction()_1: new constraint/value pairs: " << BL;
+ 		             std::cout << extendedConstraints << BL;
+ 		             std::cout << extendedConstraintConstants << BL;
+                 #endif
+            #endif
+                            
             // call constructor functionality                                      
-    		initialize(constraints, constraintConstants, operation, dimensionality);
+    		initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
     	}
     	
     	PolytopeSupportFunction(matrix_t<double> constraints, vector_t<double> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Polytope_Type, aD)
     	{   
+             matrix_t<double> extendedConstraints(constraints.rows()+2, constraints.cols());
+             extendedConstraints.block(0,0,constraints.rows(),constraints.cols()) = constraints;
+             extendedConstraints.block(extendedConstraints.rows()-2,0,1,constraints.cols()) = aD->dir1.transpose();
+             extendedConstraints.block(extendedConstraints.rows()-1,0,1,constraints.cols()) = aD->dir2.transpose();
+            
+             matrix_t<double> extendedConstraintConstants(constraintConstants.size()+2,1);
+             extendedConstraintConstants.block(0,0,constraintConstants.size(),1) = constraintConstants;
+             extendedConstraintConstants(extendedConstraintConstants.size()-2,0) = aD->dir1_eval;
+             extendedConstraintConstants(extendedConstraintConstants.size()-1,0) = aD->dir2_eval;
+             
+             #ifdef SUPPORTFUNCTION_VERBOSE
+ 		         #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+ 		             std::cout << "PolytopeSupportFunction()_2: new constraint/value pairs: " << BL;
+ 		             std::cout << extendedConstraints << BL;
+ 		             std::cout << extendedConstraintConstants << BL;
+                 #endif
+             #endif
+                       
              // call constructor functionality
-             initialize(constraints, constraintConstants, operation, dimensionality);
+             initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
         }
         
-        // supports only <= operator by design
+        // supports only <= operator by design -> !!!! See first std::cout !!!!
         PolytopeSupportFunction(std::vector<matrix_t<double>>* constraints, matrix_t<double> constraintConstants, unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Polytope_Type, aD)
     	{   
+            std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the artificial dimensions are considered providing constraints and constraintConstants";
+            
             matrix_t<double> temp;
             
              #ifdef SUPPORTFUNCTION_VERBOSE

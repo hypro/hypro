@@ -2,22 +2,37 @@
 * This files contains the implementation of intersection related methods
 */
 
+#define INTERSECTION_VERBOSE
+
           /*
           * This method implements testIntersection from algoInv.m
           */
           bool testIntersection(std::vector<double>* d, mapping minus_invariants_in_L, matrix_t<double> set)
           {
-               unsigned int lenghtOfSet = set.size();
-               
+               #ifdef INTERSECTION_VERBOSE
+                   std::cout << "testIntersection(...): " << "d:" << d << BL;
+                   print(*d);
+                   std::cout << BL;
+                   std::cout << "mapping minus_invariants_in_L: d->size() = " << d->size() << BL;
+                   printArray<unsigned int>(minus_invariants_in_L, d->size());
+                   std::cout << BL << "set: " << BL << set << BL;
+               #endif
+                              
                   // loop over all L
-                  for(unsigned int i=0; i<lenghtOfSet; i++)
+                  for(unsigned int i=0; i<d->size(); i++)
                   {
                        if( -set( minus_invariants_in_L[i],1 ).toDouble() > d->at(i) )    // intersection condition
                        {
+                           #ifdef INTERSECTION_VERBOSE
+                                  std::cout << "testIntersection(...): " << "returns false" << BL;
+                           #endif
                            return false;
                        }
                   }
 
+               #ifdef INTERSECTION_VERBOSE
+                   std::cout << "testIntersection(...): " << "returns true" << BL;
+               #endif
                return true;
           }
           
