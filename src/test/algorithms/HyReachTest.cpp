@@ -281,9 +281,9 @@ TEST_F(HyReachTest, BouncingBallTest)
     // configuration
     parameters p;
     p.numberOfTransitions = 2;
-    p.setsToCompute = 10;
-    p.timeHorizon = 1;
-    p.timeStep = 0.01;
+    p.setsToCompute = 2;
+    p.timeHorizon = 0.2;
+    p.timeStep = 0.1;
     
     options opt;
     opt.angle = PI_UP/2;
@@ -299,5 +299,4 @@ TEST_F(HyReachTest, BouncingBallTest)
     delete model;    // TODO: delete all parts of the model
 }
 #endif
-
 }

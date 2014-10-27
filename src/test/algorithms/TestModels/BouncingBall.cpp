@@ -113,6 +113,7 @@ HybridAutomaton<double>* createBB()
 
 		//loc2->setInvariant(inv);
 
+        // A
 		matrix_t<double> A(2,2);
         A(0,0) = 0;
         A(0,1) = 1;
@@ -126,6 +127,15 @@ HybridAutomaton<double>* createBB()
     
 		loc1->setActivityMat(A);
         loc1->setActivityVec(b);
+        
+        // B
+        matrix_t<double> B(2,2);
+        B(0,0) = 1;
+        B(0,1) = 0;
+        B(1,0) = 0;
+        B(1,1) = 1;
+        
+        loc1->setExtInputMat(B);
         
 		/*
 		 * Transition
