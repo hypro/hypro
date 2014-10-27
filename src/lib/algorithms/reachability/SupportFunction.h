@@ -6,7 +6,7 @@
 #pragma once 
 #include "hyreach_utils.h" 
 
-#define SUPPORTFUNCTION_VERBOSE
+//#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 
 namespace hypro
@@ -63,7 +63,7 @@ namespace hypro
     {
       private:
           SupportFunctionType support_function_type;
-          artificialDirections* aD;
+          artificialDirections* aD = 0;
       
       protected:
           /* 
@@ -78,7 +78,7 @@ namespace hypro
             /*
         	* This method should compute the evaluation result for a specified direction l
         	*/
-            virtual evaluationResult evaluate(matrix_t<double> l)
+            virtual evaluationResult specificEvaluation(matrix_t<double> l)
             { 
                     #ifdef  SUPPORTFUNCTION_VERBOSE
                        std::cout << "SupportFunction:evaluate: THIS SHOULD NEVER BE CALLED" << '\n';
@@ -100,55 +100,34 @@ namespace hypro
         }
           
         /*
-        * catches efficiently the additional dimension cases
+        * Evaluates the support funciton and catches first efficiently the additional dimension cases
         */
         evaluationResult evaluate(matrix_t<double>* l)
         { 
-                evaluationResult result; 
-                if(l == aD->dir1_pt)
+                         /*
+                bool artificialDirection = (*l)(l->rows()-1,0) != 0;
+                
+                if( artificialDirection && aD != 0)  // check if l shall be evaluated or is an artificial direction
                 {
-                    #ifdef  SUPPORTFUNCTION_VERBOSE
-                    //   std::cout << "SupportFunction:evaluate: l: dir1 " << '\n';
-                    #endif
-                     result.supportValue = aD->dir1_eval;
-                }
-                else if(l == aD->dir2_pt)
-                {
-                     #ifdef  SUPPORTFUNCTION_VERBOSE
-                    //   std::cout << "SupportFunction:evaluate: l: dir2 " << '\n';
-                    #endif
-                     result.supportValue = aD->dir2_eval;
-                }
-                else
-                {
-  /*                  matrix_t<double> l_dr = *l;
-                    if( l_dr(l_dr.size()-1,0) == aD->dir1(l_dr.size()-1,0) )
+                    std::cout << "SupportFunction.evaluate(l): l aritifical:"<< BL << *l << BL;
+                    evaluationResult result; 
+                    if((*l)(l->rows()-1,0) > 0 )
                     {
-                        #ifdef  SUPPORTFUNCTION_VERBOSE
-                        //    std::cout << "SupportFunction:evaluate: l: dir1 " << '\n';
-                        #endif
-                        result.supportValue = aD->dir1_eval;
-                    }
-                    else if( l_dr(l_dr.size()-1,0) == aD->dir2(l_dr.size()-1,0) )
-                    {
-                        #ifdef  SUPPORTFUNCTION_VERBOSE
-                        //    std::cout << "SupportFunction:evaluate: l: dir2 " << '\n';
-                        #endif
-                        result.supportValue = aD->dir2_eval;
+                         // 0...0 1
+                         result.supportValue = aD->dir1_eval;
                     }
                     else
                     {
-                        #ifdef  SUPPORTFUNCTION_VERBOSE
-                           //std::cout << "SupportFunction:evaluate: l: "<< l << '\n';
-                           //std::cout << "SupportFunction:evaluate: *l: " << '\n';
-                           //std::cout << *l << BL;
-                        #endif
-   */                     return this->evaluate(*l);
-    //                }
+                        // 0...0 -1
+                        result.supportValue = aD->dir2_eval;
+                    }
+                    result.errorCode = 0; 
+                    return result;
                 }
-                
-                result.errorCode = -1000; 
-                return result;
+                else
+                { */
+                    return this->specificEvaluation(*l);
+                //}
         };
           
         /*
@@ -161,7 +140,7 @@ namespace hypro
             #endif
             for(unsigned int i=0; i<L->size(); i++)
             {
-                 evaluationResult res = this->evaluate(L->at(i));
+                 evaluationResult res = this->evaluate(&L->at(i));
                  (*result)(i,0) = res.supportValue;
             }
         }
@@ -178,7 +157,7 @@ namespace hypro
             #endif
             for(unsigned int i=0; i<L->size(); i++)
             {
-                 evaluationResult res = this->evaluate(L->at(i));
+                 evaluationResult res = this->evaluate(&L->at(i));
                  (*result)[i] = res.supportValue;
             }
         }
@@ -191,21 +170,12 @@ namespace hypro
             #ifdef  SUPPORTFUNCTION_VERBOSE
                    std::cout << "SupportFunction:multiEvaluate3: evaluation of the support function in all directions L" << '\n';
             #endif
-            double result_size = sizeof(result)/sizeof(result[0]);
-            if(result_size == L->size())
+
+            for(unsigned int i=0; i<L->size(); i++)
             {
-                for(unsigned int i=0; i<L->size(); i++)
-                {
-                     evaluationResult res = this->evaluate(L->at(i));
-                     result[i] = res.supportValue;
-                }
+                 evaluationResult res = this->evaluate(&L->at(i));
+                 result[i] = res.supportValue;
             }
-            #ifdef  SUPPORTFUNCTION_VERBOSE
-            else 
-            {
-                   std::cout << "SupportFunction:multiEvaluate: result has a different size than L" << '\n';
-            }
-            #endif
         }
                          
         /*
@@ -235,7 +205,7 @@ namespace hypro
               SupportFunction* fctB;
               
           protected:
-              evaluationResult evaluate(matrix_t<double> l);
+              evaluationResult specificEvaluation(matrix_t<double> l);
               
           public:
               SummationSupportfunction(SupportFunction* fctA, SupportFunction* fctB);
@@ -251,7 +221,7 @@ namespace hypro
               SupportFunction* fct;
               
       protected:        
-              evaluationResult evaluate(matrix_t<double> l)
+              evaluationResult specificEvaluation(matrix_t<double> l)
               { 
                   #ifdef  SUPPORTFUNCTION_VERBOSE
                       #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
@@ -313,7 +283,7 @@ namespace hypro
               SupportFunction* fct;
       
       protected:        
-              evaluationResult evaluate(matrix_t<double> l)
+              evaluationResult specificEvaluation(matrix_t<double> l)
               { 
                   #ifdef  SUPPORTFUNCTION_VERBOSE
                       #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
@@ -370,7 +340,7 @@ namespace hypro
                   this->fctB = fctB;
               };
               
-    evaluationResult SummationSupportfunction::evaluate(matrix_t<double> l)
+    evaluationResult SummationSupportfunction::specificEvaluation(matrix_t<double> l)
               { 
                   #ifdef  SUPPORTFUNCTION_VERBOSE
                       #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
@@ -395,7 +365,7 @@ namespace hypro
               evaluationResult result;
               
       protected:        
-              evaluationResult evaluate(matrix_t<double> l)
+              evaluationResult specificEvaluation(matrix_t<double> l)
               {               
                     return result;
               };
@@ -417,7 +387,7 @@ namespace hypro
               unsigned int dimensionality;
      
      protected:         
-              evaluationResult evaluate(matrix_t<double> l)
+              evaluationResult specificEvaluation(matrix_t<double> l)
               {               
                     return result;
               };

@@ -5,8 +5,8 @@
  
 #pragma once 
  
-//#define SUPPORTFUNCTION_VERBOSE 
-//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+#define SUPPORTFUNCTION_VERBOSE 
+#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #include "hyreach_utils.h" 
     
 namespace hypro
@@ -145,7 +145,7 @@ namespace hypro
             /*
         	* This method computes the evaluation result for a specified direction l
         	*/
-        	evaluationResult evaluate(matrix_t<double> l)
+        	evaluationResult specificEvaluation(matrix_t<double> l)
         	{
                 #ifdef SUPPORTFUNCTION_VERBOSE
         		    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -186,7 +186,7 @@ namespace hypro
                          result.supportValue = INFINITY;
                          break;
                     default: 
-                         std::cout << "Unable to find a suitable solution for the support function (linear program)";             
+                         std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << result.errorCode << '\n';             
                 }
                 
                 #ifdef SUPPORTFUNCTION_VERBOSE
@@ -257,7 +257,17 @@ namespace hypro
         // supports only <= operator by design -> !!!! See first std::cout !!!!
         PolytopeSupportFunction(std::vector<matrix_t<double>>* constraints, matrix_t<double> constraintConstants, unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Polytope_Type, aD)
     	{   
-            std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the artificial dimensions are considered providing constraints and constraintConstants";
+            std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << BL;
+            
+            std::cout << "C:" << BL;
+            printDirectionList(*constraints);
+            std::cout << BL << "d:" << constraintConstants;
+            
+            // reset artificial directions
+            constraintConstants(constraintConstants.rows()-2,0) = aD->dir1_eval;
+            constraintConstants(constraintConstants.rows()-1,0) = aD->dir2_eval;
+              
+            std::cout << BL << "resetted d:" << constraintConstants << BL;
             
             matrix_t<double> temp;
             
@@ -290,12 +300,18 @@ namespace hypro
         		#ifdef SUPPORTFUNCTION_VERBOSE
         		    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
         			    std::cout << method << " Constructed GLPK problem" << '\n' << "dimensionality: " << dimensionality << '\n';
+        			    std::cout << "constraintConstants as doubles: ";
         			#endif
         		#endif
-        
+
         		for (int i = 0; i < numberOfConstraints; i++)
         		{
         			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, constraintConstants(i).toDouble());
+        			#ifdef SUPPORTFUNCTION_VERBOSE
+        		        #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+        			        std::cout << constraintConstants(i) << "->" << constraintConstants(i).toDouble() << ", ";
+        			    #endif
+        		    #endif
         		}
 
         		// add cols here
@@ -307,31 +323,36 @@ namespace hypro
         			#endif
         		#endif
         
+                unsigned int counter = 1;
         		// convert constraint matrix
         		for (unsigned int i = 0; i < constraints->size(); i++)
         		{
-        			ia[i+1] = ((int)(i / dimensionality))+1;
+                    for(unsigned int j=0; j<constraints->at(i).size(); j++)
+                    {
+            			ia[counter] = i+1;
+            
+            			#ifdef SUPPORTFUNCTION_VERBOSE
+            			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+            				    std::cout << method << " index i: " << ia[counter]  << '\n';
+        			        #endif
+            			#endif
+            			ja[counter] = j+1;
+            
+            			#ifdef SUPPORTFUNCTION_VERBOSE
+            			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+            				    std::cout << method << " index j: " << ja[counter] << '\n';
+            				#endif
+            			#endif
+            			temp = constraints->at(i);
+            			ar[counter] = temp(j,0).toDouble();
         
-        			#ifdef SUPPORTFUNCTION_VERBOSE
-        			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-        				    std::cout << method << " index i: " << ia[i+1]  << '\n';
-    			        #endif
-        			#endif
-        			ja[i+1] = ((int)(i%dimensionality))+1;
-        
-        			#ifdef SUPPORTFUNCTION_VERBOSE
-        			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-        				    std::cout << method << " index j: " << ja[i+1] << '\n';
-        				#endif
-        			#endif
-        			temp = constraints->at((int)(i / dimensionality));
-        			ar[i+1] = temp((int)(i%dimensionality)).toDouble();
-        
-        			#ifdef SUPPORTFUNCTION_VERBOSE
-        			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-        				    std::cout << method << " value: " << ar[i+1] << '\n';
-        				#endif
-        			#endif
+            			#ifdef SUPPORTFUNCTION_VERBOSE
+            			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+            				    std::cout << method << " value: " << ar[counter] << '\n';
+            				#endif
+            			#endif
+        			    counter++;
+                    }
         		}
     
         		#ifdef SUPPORTFUNCTION_VERBOSE
@@ -343,7 +364,7 @@ namespace hypro
         			#endif
         		#endif
         
-        		glp_load_matrix(lp, constraints->size(), ia, ja, ar);
+        		glp_load_matrix(lp, dimensionality*constraints->size(), ia, ja, ar);
         		
         		#ifdef SUPPORTFUNCTION_VERBOSE
         		    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE

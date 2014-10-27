@@ -3,7 +3,7 @@
  *  Author: Norman Hansen
  */
  
-#define SUPPORTFUNCTION_VERBOSE 
+//#define SUPPORTFUNCTION_VERBOSE 
 
 //#define BOXOPERATOR_VERBOSE
 #define CALCEPSILON_VERBOSE
@@ -201,9 +201,9 @@ namespace hypro
              matrix_t<double> Asquare = ((*A)*(*A));
              #ifdef SUPPORTFUNCTION_VERBOSE
                  #ifdef CALCEPSILON_VERBOSE
-        		        std::string method = "calcepsilon:";
-        		        std::cout << method << " A = " << *A << '\n';
-        		        std::cout << method << " Asquare = " << Asquare << '\n';
+        		     std::string method = "calcepsilon:";
+        		     std::cout << method << " A = " << *A << '\n';
+        		     std::cout << method << " Asquare = " << Asquare << '\n';
         		 #endif
     		 #endif
     		 
@@ -225,7 +225,7 @@ namespace hypro
              e_p = result->getE();
              #ifdef SUPPORTFUNCTION_VERBOSE
                  #ifdef CALCEPSILON_VERBOSE
-                        std::cout << method << " e_p = " << e_p << '\n';
+                     std::cout << method << " e_p = " << e_p << '\n';
                  #endif
     		 #endif
     		 
@@ -294,7 +294,7 @@ namespace hypro
         // calcomega0delta.m
         static double myfunc(unsigned n, const double *x, double *grad, void *my_func_data)  // abs(l) provided using my_func_data
         {
-               std::cout << "x:" << x[0] << '\n';
+               //std::cout << "x:" << x[0] << '\n';
                
                //matrix_t<double>* l_pt = (matrix_t<double>*)my_func_data;
                NonLinearOmega0Supportfunction* self = (NonLinearOmega0Supportfunction*)my_func_data;
@@ -305,11 +305,22 @@ namespace hypro
                {
                    epsilonintersection = epsilonintersection+ MIN(x[0]*((*self).e_p(i,0).toDouble()), (1-x[0])*((*self).e_n(i,0).toDouble())*((*self).absl(i,0).toDouble()));
                }
-               std::cout << "epsilonintersection:" << epsilonintersection << '\n';
+               //std::cout << "epsilonintersection:" << epsilonintersection << '\n';
                
                // result(edA,delta,u,x0,epsilonpsi,e_p, e_n,start,options,l)
-               double res = -( ((1-x[0])*((*self).x0res.supportValue)) + (x[0]*((*self).edX0res.supportValue)) + (x[0]*((*self).delta)*((*self).Vres.supportValue)) + ((x[0]*x[0])*((*self).epsilonpsires.supportValue)) + epsilonintersection);   // +epsilonintersection(e_p,e_n,x,size(start,1),l)
-               std::cout << "res:" << res << BL;
+               double t1 = ((1-x[0])*((*self).x0res.supportValue));
+               double t2 = (x[0]*((*self).edX0res.supportValue));
+               double t3 = (x[0]*((*self).delta)*((*self).Vres.supportValue));
+               double t4 = ((x[0]*x[0])*((*self).epsilonpsires.supportValue));
+               
+               //std::cout << "t1: " << t1 << BL;
+               //std::cout << "t2: " << t2 << BL;
+               //std::cout << "(*self).edX0res.supportValue): " << (*self).edX0res.supportValue;
+               //std::cout << "t3: " << t3 << BL;
+               //std::cout << "t4: " << t4 << BL;
+               
+               double res = -(  t1 + t2 + t3 + t4 + epsilonintersection);   // +epsilonintersection(e_p,e_n,x,size(start,1),l)
+               //std::cout << "res:" << res << BL;
                return res;
         }  
     
@@ -318,7 +329,7 @@ namespace hypro
     	* This method computes the evaluation result for a specified direction l
     	* TODO: optimization object can be declared and initialized outside the evaluate methods to improve performance (see glpk)
     	*/
-    	evaluationResult evaluate(matrix_t<double> l)
+    	evaluationResult specificEvaluation(matrix_t<double> l)
     	{       
              #ifdef SUPPORTFUNCTION_VERBOSE
                 std::string method = "NonLinearOmega0Supportfunction: evaluate: ";
@@ -357,7 +368,7 @@ namespace hypro
              nlopt::opt opt( nlopt::LN_COBYLA, 1);
              opt.set_lower_bounds(lb);       // lower bounds
              opt.set_upper_bounds(ub);       // upper bounds
-             opt.set_min_objective(myfunc, &l);
+             opt.set_min_objective(myfunc, this);
              
              opt.set_xtol_rel(1e-8);
   

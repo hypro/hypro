@@ -6,6 +6,7 @@
 //#define SUPPORTFUNCTION_VERBOSE
 #define FLOWPIPE_VERBOSE
 #define HYREACH_VERBOSE
+#define PARALLHELPER_VERBOSE
 
 using namespace::std;
 
@@ -65,6 +66,12 @@ namespace hypro
          */
          unsigned int parallelizationHelper(FlowpipeSegment* results, LocationInfo* locInfo, SupportFunction* X0, SupportFunction* epsilonpsi, matrix_t<double>* l, unsigned int indexL, matrix_t<double>* l_opposite, unsigned int indexL_opposite)
          {
+              #ifdef PARALLHELPER_VERBOSE
+                  std::string method = "parallelizationHelper: ";
+                  std::cout << method << "indexL: " << indexL << " opposite: " << indexL_opposite << BL;
+                  std::cout << "setsToCompute(max): " << params.setsToCompute << BL;
+              #endif
+              
               unsigned int j=0;
               
               matrix_t<double> r_old = *l;
@@ -86,8 +93,15 @@ namespace hypro
               
               double p_omega = X0->evaluate(l).supportValue;
               double p_omega_minus = X0->evaluate(l_opposite).supportValue;
+              #ifdef PARALLHELPER_VERBOSE
+                  std::cout << method << "omega evaluated" << BL;
+              #endif
+              
               double p_I = I->evaluate(l).supportValue;
               double p_I_minus = I->evaluate(l_opposite).supportValue;
+              #ifdef PARALLHELPER_VERBOSE
+                  std::cout << method << "p_i evaluated" << BL;
+              #endif
               double I_minus = -p_I_minus;
               double I_plus = -p_I;
               
@@ -95,24 +109,44 @@ namespace hypro
               //res(2,1) = min(X0(-l),p_I_minus);  
               matrix_t<double> eA = locInfo->edA.transpose();
               
+              #ifdef PARALLHELPER_VERBOSE
+                  std::cout << method << "start while ..." << BL;
+              #endif
               while (results->sets(indexL,j) >= I_minus && j < params.setsToCompute && results->sets(indexL_opposite,j) >= I_plus)
               {
+                    std::cout << "j: " << j << BL;
+                    
                     j++;
                     
                     r_i = eA * r_old;
             
                     s_i = s_old + epsilonpsi->evaluate(&r_old).supportValue;
                     s_i_minus = s_old_minus + epsilonpsi->evaluate(&r_old_minus).supportValue;  
+                    #ifdef PARALLHELPER_VERBOSE
+                        std::cout << method << "s_i evaluated" << BL;
+                    #endif
             
                     p_omega = X0->evaluate(&r_i).supportValue + s_i;
                     p_omega_minus = X0->evaluate(&r_i_minus).supportValue + s_i_minus;
-            
+                    #ifdef PARALLHELPER_VERBOSE
+                        std::cout << method << "p_omega evaluated" << BL;
+                    #endif
+                    
                     k_i = MIN(k_old,p_I);
                     k_i_minus = MIN(k_old_minus,p_I_minus);
             
                     p_I = I->evaluate(&r_i).supportValue + s_i;
                     p_I_minus = I->evaluate(&r_i_minus).supportValue + s_i_minus;
-
+                    #ifdef PARALLHELPER_VERBOSE
+                        std::cout << method << "p_I evaluated" << BL;
+                        
+                        std::cout << "indexL: " << indexL << " j: " << j << BL;//" result: " << results->sets(indexL,j) << BL;
+                        std::cout << "indexL_opposite: " << indexL_opposite << " j: " << j << BL << BL; //" result: " << results->sets(indexL_opposite,j) << BL;
+                        
+                        std::cout << "set rows: " << results->sets.rows() << BL;
+                        std::cout << "set cols: " << results->sets.cols() << BL;
+                    #endif
+                    
                     results->sets(indexL,j) = MIN(p_omega,k_i);
                     results->sets(indexL_opposite,j) = MIN(p_omega_minus,k_i_minus);
 
@@ -126,10 +160,16 @@ namespace hypro
                     // if it does not fall into the invariant, cut it later out and stop analysis
                     if ((p_omega_minus>I_plus && results->sets(indexL,j) < I_minus) || (p_omega>I_minus && results->sets(indexL_opposite,j) < I_plus))   
                     { 
+                        #ifdef PARALLHELPER_VERBOSE
+                            std::cout << BL << method << "return because of complete invariant violation" << BL;
+                        #endif
                         return j-1;
                     }           
                }
                
+               #ifdef PARALLHELPER_VERBOSE
+                   std::cout << BL << method << "return after complete loop" << BL;
+               #endif
                return j;
          }
          
@@ -147,7 +187,7 @@ namespace hypro
               #endif
               
               // create flowpipe segment
-              FlowpipeSegment* flowpipe = new FlowpipeSegment(loc,timeStep,L.size(),(unsigned int) params.timeHorizon/params.timeStep);
+              FlowpipeSegment* flowpipe = new FlowpipeSegment(loc,timeStep,L.size(), params.setsToCompute);
               flowpipe->startTimestep = timeStep;
                   
               matrix_t<double> X0_values(L.size(),1); // stores the evaluation of X0
@@ -155,13 +195,18 @@ namespace hypro
               
               #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "X0 evaluation':" << X0_values.transpose() << '\n';
+                      
+                      matrix_t<double> V_values(L.size(),1);
+                      (locInfo->V)->multiEvaluate(&L, &V_values);
+                      std::cout << method << "V evaluation':" << V_values.transpose() << '\n';
               #endif
               
               // test for an intersection between X0 and the invariant
               if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values))
               {
                   #ifdef FLOWPIPE_VERBOSE
-                      std::cout << method << "testIntersection: true" << BL;;
+                      std::cout << method << "testIntersection: true" << BL;
+                      std::cout << "............. begin Omega0 construction" << BL;
                   #endif
                   
                   // compute flowpipe
@@ -184,26 +229,37 @@ namespace hypro
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "omega0' intersecting invariant" << omega0_values.transpose() << '\n';
+                      std::cout << "............. terminated Omega0 construction" << BL;
                   #endif
+                  
                   
                   // reconstruct omega0 intersects invariant and re-evaluate (creates tight constraints)
                   PolytopeSupportFunction set0(&L, omega0_values, dimensionality, &additionalDirections);
                   
                   double* set0_values = new double[L.size()]; // stores the evaluation of set0 (heap!)
                   set0.multiEvaluate(&L, set0_values);
-                  
+              
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "set0 of the flowpipe:"; //<< set0_values << '\n';
                       printArray<double>(set0_values, L.size()); 
-                      std::cout << BL;
+                      std::cout <<  "OK" << BL;
                   #endif
     
                   // add first computed set to the flowpipe (omega0 intersects invariant)
                   flowpipe->addSetAtPosition(set0_values,0);
     
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "added set0 to flowpipe" << BL;
+                  #endif
                   // psidelta is needed for the algorithm
                   SupportFunction* multiplicationtemp = locInfo->V->multiply(params.timeStep);
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "created multiplicationtemp" << BL;
+                  #endif
                   SupportFunction* psidelta = multiplicationtemp->minowskisum(omega0.getEpsilonpsi());
+                  #ifdef FLOWPIPE_VERBOSE
+                      std::cout << method << "created psidelta" << BL;
+                  #endif
                      
                   // start with the iteration of successive timesteps
                   unsigned int maxNumberOfCompleteSets = (unsigned int) params.timeHorizon/params.timeStep;
@@ -391,19 +447,22 @@ namespace hypro
              
              if( U == 0 )   // use zero function if none provided
              {
-                 U = new ZeroSupportFunction(dimensionality, &additionalDirections);
+                 U = new ZeroSupportFunction(dimensionality, 0); // 2nd parameter 0 will disable special handling for artificial directions during evaluation (since U does not know any additional dimension - will be introduced using B)
                  #ifdef HYREACH_VERBOSE
                      std::cout << method << "U is ZeroSupportFunction" << BL;
+                     matrix_t<double> u_eval(L.size(),1);
+                     U->multiEvaluate(&L, &u_eval);
+                     std::cout << method << "U evaluation:" << BL << u_eval << BL;
                  #endif
              }
              
              #ifdef HYREACH_VERBOSE
-                 std::cout << method << "start preprocessing .... ------------------------------------------------------------------------" << BL;
+                 std::cout << BL << BL << method << "start preprocessing .... ------------------------------------------------------------------------" << BL;
              #endif
              // start preprocessing
              preprocess(model, &L, params.timeStep, U, &additionalDirections);
              #ifdef HYREACH_VERBOSE
-                 std::cout << method << "preprocessing completed. ------------------------------------------------------------------------ " << BL;
+                 std::cout << method << "preprocessing completed. ------------------------------------------------------------------------ " << BL << BL;
              #endif
                   
              // Create X0 SupportFunction (extended by additional dimension)
@@ -443,77 +502,3 @@ namespace hypro
              removePreprocessingMemory();
         }
     };
-
-
-/* 
-typedef struct {
-    double a, b;
-} my_constraint_data;
-
- double myfunc(unsigned n, const double *x, double *grad, void *my_func_data)
-        {
-            if (grad) {
-                grad[0] = 0.0;
-                grad[1] = 0.5 / sqrt(x[1]);
-            }
-            return sqrt(x[1]);
-        }
-        
-        double myconstraint(unsigned n, const double *x, double *grad, void *data)
-        {
-            my_constraint_data *d = (my_constraint_data *) data;
-            double a = d->a, b = d->b;
-            if (grad) {
-                grad[0] = 3 * a * (a*x[0] + b) * (a*x[0] + b);
-                grad[1] = -1.0;
-            }
-            return ((a*x[0] + b) * (a*x[0] + b) * (a*x[0] + b) - x[1]);
-         }
-        
-class NLOPTTEST
-{
-      public:
-             
-      void test()
-      {
-           nlopt::opt opt(nlopt::LD_MMA, 2);
-
-            std::vector<double> lb(2);
-            lb[0] = -HUGE_VAL; lb[1] = 0;
-            opt.set_lower_bounds(lb);
-            
-            opt.set_min_objective(myfunc, NULL);
-            
-            my_constraint_data data[2] = { {2,0}, {-1,1} };
-            opt.add_inequality_constraint(myconstraint, &data[0], 1e-8);
-            opt.add_inequality_constraint(myconstraint, &data[1], 1e-8);
-            
-            opt.set_xtol_rel(1e-4);
-            
-            std::vector<double> x(2);
-            x[0] = 1.234; x[1] = 5.678;
-            double minf;
-            nlopt::result result = opt.optimize(x, minf);
-            
-            if(result > 0 )
-            {
-                      std::cout << "success";
-                      std::cout << "\n";
-                      std::cout << "x: ";
-                      for( auto i = x.begin(); i != x.end(); ++i)
-                      {
-                           std::cout << *i << ' ';
-                           }
-                           
-                      std::cout << "\n";
-                      std::cout << "minf: ";
-                      std::cout << minf;
-            }
-            else
-            {
-                std::cout << "failure";
-            }
-      }
-
-      };
-*/

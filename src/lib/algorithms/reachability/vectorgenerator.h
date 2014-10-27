@@ -221,8 +221,8 @@
         matrix_t<double>* dir2_pt;
         
         // constant evaluation results
-        double dir1_eval = 1;
-        double dir2_eval = -1;
+        static constexpr double dir1_eval = 1;
+        static constexpr double dir2_eval = -1;
     };
 	
 	/*

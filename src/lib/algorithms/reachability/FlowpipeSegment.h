@@ -1,6 +1,6 @@
 #include "hyreach_utils.h"
 
-//#define FLOWPIPE_VERBOSE
+#define FLOWPIPE_VERBOSE
 
 namespace hypro
 {
@@ -19,7 +19,7 @@ namespace hypro
         unsigned int startTimestep;     // Number of the timestep responsible for the first set in this flowpipe
              
         matrix_t<double> sets;     // Every column describes a set of the flowpipe
-                                   // public to be accessible directly by the algorithms filling the matrix with values
+                                        // public to be accessible directly by the algorithms filling the matrix with values
         /*
         * Constructor: initializes the object representing an empty segment of a flowpipe
         */
@@ -27,7 +27,8 @@ namespace hypro
         {
             this->generatingLocation = generatingLocation;
             this->startTimestep = startTimestep;
-            this->sets.resize(numberOfDirections, timeHorizon);
+            sets = matrix_t<double>::Zero(1,1);
+            this->sets.resize(numberOfDirections, timeHorizon+1);
         }    
          
         FlowpipeSegment(location* generatingLocation, transition* generatingTransition, unsigned int startTimestep, unsigned int numberOfDirections, unsigned int timeHorizon): FlowpipeSegment(generatingLocation, startTimestep, numberOfDirections, timeHorizon)
@@ -40,12 +41,27 @@ namespace hypro
         */ 
         void addSetAtPosition(double* set_descriptor, unsigned int position)
         {
+             #ifdef FLOWPIPE_VERBOSE
+                 std::cout << "addSetAtPosition: " << position << BL;
+             #endif
              if(position < (unsigned int)sets.rows())
              {
+                         #ifdef FLOWPIPE_VERBOSE
+                             std::cout << "valid position" << BL;
+                         #endif
+                         
+                         #ifdef FLOWPIPE_VERBOSE
+                             std::cout << "sets: rows() = " << sets.rows() << BL << "sets: cols() = " << sets.cols() << BL;
+                         #endif
+                         
                          for(int i=0; i<sets.rows(); i++)
                          {
                               sets(i,position) = set_descriptor[i];        
                          }
+                         #ifdef FLOWPIPE_VERBOSE
+                             std::cout << "new entry: " << BL;
+                             std::cout << sets.block(0,position,sets.rows(),1) << BL;
+                         #endif
              }
         }
         

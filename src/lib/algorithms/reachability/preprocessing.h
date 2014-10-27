@@ -3,7 +3,7 @@
  *   Author: Norman Hansen
  */
  
-//#define LOCATIONINFO_VERBOSE 
+#define LOCATIONINFO_VERBOSE 
 //#define TRANSITIONINFO_VERBOSE 
  
 	//typedef std::set<location*> locationSet;
@@ -379,7 +379,7 @@
 		{
 			if (locationSet.find(loc) != locationSet.end())
 			{
-                #ifdef TRANSITIONINFO_VERBOSE
+                #ifdef LOCATIONINFO_VERBOSE
                      std::cout << "preprocessing_recursion(...): considered location " << loc << " has already been preprocessed" << BL;
                 #endif
 				// the location has already been considered
@@ -387,7 +387,7 @@
 			}
 			else
 			{
-                #ifdef TRANSITIONINFO_VERBOSE
+                #ifdef LOCATIONINFO_VERBOSE
                      std::cout << "preprocessing_recursion(...): preprocess unprocessed location " << loc << BL;
                 #endif
 				// this  location has not yet been preprocessed

@@ -24,7 +24,7 @@ namespace hypro
              /**
  	          * This method computes the evaluation result for a specified direction l
     	      */
-       	     evaluationResult evaluate(matrix_t<double> l)
+       	     evaluationResult specificEvaluation(matrix_t<double> l)
         	 {
                  #ifdef SUPPORTFUNCTION_VERBOSE
                      #ifdef BOXSUPPORTFUNCTION_VERBOSE
