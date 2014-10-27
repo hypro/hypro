@@ -84,11 +84,13 @@ class Zonotope
          * @return True if intersect is found
          */
         bool intersect(Zonotope<Number>& result, 
-                        const Hyperplane<Number>& rhs);
+                        const Hyperplane<Number>& rhs,
+                        int method);
         
         bool intersect(Zonotope<Number>& result, 
                         const Hyperplane<Number>& rhs, 
-                        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine);
+                        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                        int method);
         
         // Intersection between Zonotope and Polyhedron 
         bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::C_Polyhedron& rhs);

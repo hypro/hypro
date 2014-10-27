@@ -8,6 +8,12 @@
 
 using namespace Parma_Polyhedra_Library;
 
+// Options for checking for intersect
+enum {
+    ALAMO = 1,
+    NDPROJECTION = 2
+};
+
 
 /**
  * Non-member functions
@@ -407,16 +413,18 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
 
 template<typename Number> 
 bool Zonotope<Number>::intersect(Zonotope<Number>& result,
-                                 const Hyperplane<Number>& hp) 
+                                 const Hyperplane<Number>& hp,
+                                 int method) 
 {
     Eigen::Matrix<Number , Eigen::Dynamic, Eigen::Dynamic> EMPTY_MATRIX(0,0);
-    return this->intersect(result, hp, EMPTY_MATRIX);
+    return this->intersect(result, hp, EMPTY_MATRIX, method);
 }
 
 template <typename Number>
 bool Zonotope<Number>::intersect(Zonotope<Number>& result, 
                                 const Hyperplane<Number>& hp, 
-                                Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine) 
+                                Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                                int method) 
 {
     assert(hp.dimension()==mDimension);
     
@@ -429,7 +437,16 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
         if (mDimension==2)
             intersectZonogoneHyperplane(*this, hp, result);
         else {
-            intersectNDProjection<Number>(*this, hp, result, minMaxOfLine);
+            switch (method) {
+                case ALAMO:
+                    intersectAlamo(*this, hp, result);
+                    break;
+                case NDPROJECTION:
+                default:
+                    intersectNDProjection<Number>(*this, hp, result, minMaxOfLine);
+                    break;
+            }
+            
         }
         return true;
     }
