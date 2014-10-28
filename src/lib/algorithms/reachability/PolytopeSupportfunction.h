@@ -5,8 +5,8 @@
  
 #pragma once 
  
-#define SUPPORTFUNCTION_VERBOSE 
-#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+//#define SUPPORTFUNCTION_VERBOSE 
+//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #include "hyreach_utils.h" 
     
 namespace hypro
@@ -259,15 +259,15 @@ namespace hypro
     	{   
             std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << BL;
             
-            std::cout << "C:" << BL;
-            printDirectionList(*constraints);
-            std::cout << BL << "d:" << constraintConstants;
+            //std::cout << "C:" << BL;
+            //printDirectionList(*constraints);
+            //std::cout << BL << "d:" << constraintConstants;
             
             // reset artificial directions
             constraintConstants(constraintConstants.rows()-2,0) = aD->dir1_eval;
             constraintConstants(constraintConstants.rows()-1,0) = aD->dir2_eval;
               
-            std::cout << BL << "resetted d:" << constraintConstants << BL;
+            //std::cout << BL << "resetted d:" << constraintConstants << BL;
             
             matrix_t<double> temp;
             
@@ -327,7 +327,7 @@ namespace hypro
         		// convert constraint matrix
         		for (unsigned int i = 0; i < constraints->size(); i++)
         		{
-                    for(unsigned int j=0; j<constraints->at(i).size(); j++)
+                    for(int j=0; j<constraints->at(i).size(); j++)
                     {
             			ia[counter] = i+1;
             

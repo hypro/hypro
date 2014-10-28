@@ -41,28 +41,28 @@ namespace hypro
         */ 
         void addSetAtPosition(double* set_descriptor, unsigned int position)
         {
-             #ifdef FLOWPIPE_VERBOSE
+   /*          #ifdef FLOWPIPE_VERBOSE
                  std::cout << "addSetAtPosition: " << position << BL;
              #endif
-             if(position < (unsigned int)sets.rows())
-             {
-                         #ifdef FLOWPIPE_VERBOSE
+  */          if(position < (unsigned int)sets.rows())
+              {
+  /*                       #ifdef FLOWPIPE_VERBOSE
                              std::cout << "valid position" << BL;
                          #endif
                          
                          #ifdef FLOWPIPE_VERBOSE
                              std::cout << "sets: rows() = " << sets.rows() << BL << "sets: cols() = " << sets.cols() << BL;
                          #endif
-                         
+  */                       
                          for(int i=0; i<sets.rows(); i++)
                          {
                               sets(i,position) = set_descriptor[i];        
                          }
-                         #ifdef FLOWPIPE_VERBOSE
+  /*                       #ifdef FLOWPIPE_VERBOSE
                              std::cout << "new entry: " << BL;
                              std::cout << sets.block(0,position,sets.rows(),1) << BL;
                          #endif
-             }
+  */           }
         }
         
         /*

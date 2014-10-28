@@ -6,9 +6,9 @@
 //#define SUPPORTFUNCTION_VERBOSE 
 
 //#define BOXOPERATOR_VERBOSE
-#define CALCEPSILON_VERBOSE
+//#define CALCEPSILON_VERBOSE
 //#define CALCVALUES_VERBOSE
-#define TEST
+//#define TEST_
  
 #include "hyreach_utils.h" 
 #include "BoxSupportfunction.h"
@@ -104,7 +104,7 @@ namespace hypro
                      #endif
              } 
              
-             #ifdef TEST
+             #ifdef TEST_
                  SymmetricCenteredBoxSupportFunction* result = new SymmetricCenteredBoxSupportFunction(e, getAD());
                  matrix_t<double> values(directionsAlongDimensions.size(),1);
                  result->multiEvaluate(&directionsAlongDimensions, &values);

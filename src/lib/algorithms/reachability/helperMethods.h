@@ -303,9 +303,9 @@
         #endif
         
         // copy m into result
-        for( unsigned int i=0; i<m.rows(); i++)
+        for( int i=0; i<m.rows(); i++)
         {
-             for( unsigned int j=0; j<m.cols(); j++)
+             for( int j=0; j<m.cols(); j++)
              {
                   //std::cout << "i: " << i << " j: " << j << BL;
                   result(i,j) = m(i,j);

@@ -162,9 +162,9 @@
             
             matrix_t<double> temp = loc->activityMat();
             vector_t<double> temp2 = loc->activityVec();
-            for(unsigned int i=0; i<loc->activityMat().rows(); i++)
+            for(int i=0; i<loc->activityMat().rows(); i++)
             {
-                for(unsigned int j=0; j<loc->activityMat().cols(); j++)
+                for(int j=0; j<loc->activityMat().cols(); j++)
                 {
                     A(i,j) = temp(i,j);
                 }
@@ -283,7 +283,7 @@
             #endif
             
             origTransition = trans;
-            const unsigned int dimensionality = (unsigned int) ((*trans).guard()).mat.cols(); 
+            //const unsigned int dimensionality = (unsigned int) ((*trans).guard()).mat.cols(); 
             unsigned int guards = (unsigned int) ((*trans).guard()).mat.rows();    // Assuption: the model contains only <= guards
             
             // create new objects on the heap to store relevant information

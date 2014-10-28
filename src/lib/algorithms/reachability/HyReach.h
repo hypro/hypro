@@ -6,7 +6,7 @@
 //#define SUPPORTFUNCTION_VERBOSE
 #define FLOWPIPE_VERBOSE
 #define HYREACH_VERBOSE
-#define PARALLHELPER_VERBOSE
+//#define PARALLHELPER_VERBOSE
 
 using namespace::std;
 
@@ -114,41 +114,57 @@ namespace hypro
               #endif
               while (results->sets(indexL,j) >= I_minus && j < params.setsToCompute && results->sets(indexL_opposite,j) >= I_plus)
               {
-                    std::cout << "j: " << j << BL;
-                    
                     j++;
                     
                     r_i = eA * r_old;
-            
+                    r_i_minus = -r_i;
+                    
+                    #ifdef PARALLHELPER_VERBOSE
+                        std::cout << method << "r_i = " << BL << r_i << BL;
+                        std::cout << method << "r_i_minus = " << BL << r_i_minus << BL;
+                    #endif
+                    
                     s_i = s_old + epsilonpsi->evaluate(&r_old).supportValue;
                     s_i_minus = s_old_minus + epsilonpsi->evaluate(&r_old_minus).supportValue;  
                     #ifdef PARALLHELPER_VERBOSE
                         std::cout << method << "s_i evaluated" << BL;
+                        std::cout << "s_i = " << s_i << BL;
+                        std::cout << "s_i_minus = " << s_i_minus << BL;
                     #endif
             
                     p_omega = X0->evaluate(&r_i).supportValue + s_i;
                     p_omega_minus = X0->evaluate(&r_i_minus).supportValue + s_i_minus;
                     #ifdef PARALLHELPER_VERBOSE
                         std::cout << method << "p_omega evaluated" << BL;
+                        
+                        std::cout << "p_omega = " << p_omega << BL;
+                        std::cout << "p_omega_minus = " << p_omega_minus << BL;
                     #endif
                     
                     k_i = MIN(k_old,p_I);
                     k_i_minus = MIN(k_old_minus,p_I_minus);
+                    #ifdef PARALLHELPER_VERBOSE                        
+                        std::cout << "k_i = " << k_i << BL;
+                        std::cout << "k_i_minus = " << k_i_minus << BL;
+                    #endif
             
                     p_I = I->evaluate(&r_i).supportValue + s_i;
                     p_I_minus = I->evaluate(&r_i_minus).supportValue + s_i_minus;
                     #ifdef PARALLHELPER_VERBOSE
                         std::cout << method << "p_I evaluated" << BL;
                         
-                        std::cout << "indexL: " << indexL << " j: " << j << BL;//" result: " << results->sets(indexL,j) << BL;
-                        std::cout << "indexL_opposite: " << indexL_opposite << " j: " << j << BL << BL; //" result: " << results->sets(indexL_opposite,j) << BL;
-                        
-                        std::cout << "set rows: " << results->sets.rows() << BL;
-                        std::cout << "set cols: " << results->sets.cols() << BL;
+                        std::cout << "p_I = " << p_I << BL;
+                        std::cout << "p_I_minus = " << p_I_minus << BL << BL << BL;
                     #endif
                     
                     results->sets(indexL,j) = MIN(p_omega,k_i);
                     results->sets(indexL_opposite,j) = MIN(p_omega_minus,k_i_minus);
+                    #ifdef PARALLHELPER_VERBOSE
+                        std::cout << method << "results:" << BL;
+                        
+                        std::cout << "+ = " << results->sets(indexL,j) << BL;
+                        std::cout << "- = " << results->sets(indexL_opposite,j) << BL;
+                    #endif
 
                     r_old = r_i;
                     r_old_minus = r_i_minus;
@@ -262,7 +278,7 @@ namespace hypro
                   #endif
                      
                   // start with the iteration of successive timesteps
-                  unsigned int maxNumberOfCompleteSets = (unsigned int) params.timeHorizon/params.timeStep;
+                  unsigned int maxNumberOfCompleteSets = params.setsToCompute;
                   std::vector<int> processedDirections;
                   unsigned int i=0;
                   while(processedDirections.size() != L.size())
@@ -283,6 +299,9 @@ namespace hypro
                           #endif
                           unsigned int j = parallelizationHelper(flowpipe, locInfo, &set0, omega0.getEpsilonpsi(), &L.at(i), i, &L.at(oppositeOfDirectionI), oppositeOfDirectionI);
                           maxNumberOfCompleteSets = MIN(maxNumberOfCompleteSets, j);  
+                          #ifdef FLOWPIPE_VERBOSE
+                              std::cout << method << " maxNumberOfCompleteSets = MIN(" << maxNumberOfCompleteSets << ", " << j << ") " << BL;
+                          #endif
                           
                           // mark processed directions as processed (by indices)
                           processedDirections.push_back(i);
@@ -304,29 +323,39 @@ namespace hypro
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "maxNumberOfCompleteSets: " << maxNumberOfCompleteSets << BL;
-                      std::cout << method << "original sets: " << BL << flowpipe->sets << BL;
+                      std::cout << method << "flowpipe sets: " << BL << flowpipe->sets << BL << BL;
+                      
+                      //std::cout << "rows: " << flowpipe->sets.rows() <<  " cols: " << flowpipe->sets.cols();
                   #endif
                   
                   // cut evaluation values which are not needed
-                  flowpipe->sets = flowpipe->sets.block(0,0,maxNumberOfCompleteSets,L.size());
+                  matrix_t<double> temp = flowpipe->sets.block(0,0,L.size(),maxNumberOfCompleteSets+1);
+                  flowpipe->sets = temp;
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "reduced sets: " << BL << flowpipe->sets << BL;
                   #endif
                    
                   // conversions in order to reconstruct non-redundant results (or should this be done instantly?)
-                  matrix_t<double> temp_values(L.size(),1);
-                  for( unsigned int i=0; i<maxNumberOfCompleteSets; i++)
+                  //matrix_t<double> temp_values(L.size(),1);
+                  double* temp_values = new double[L.size()];
+                  for( unsigned int i=1; i<=maxNumberOfCompleteSets; i++)      // first set has already been re-evaluated
                   {
+                       #ifdef FLOWPIPE_VERBOSE
+                           std::cout << method << "reevaluate set " << i << ": " << BL;
+                       #endif
                        PolytopeSupportFunction temp( &L, flowpipe->sets.col(i), dimensionality, &additionalDirections);
-                       temp.multiEvaluate(&L,&temp_values);
-                       flowpipe->addSetAtPosition(set0_values,i);
+                       temp.multiEvaluate(&L,temp_values);
+                       flowpipe->addSetAtPosition(temp_values,i);
                   }
                   
                   #ifdef FLOWPIPE_VERBOSE
+                      std::cout << "flowpipe:" << BL << flowpipe->sets << BL;
+                      
                       // store flowpipe in file
-                      char* buffer = new char[100];
-                      sprintf(buffer, "matlab_flowpipe_loc%d_time%d", loc, timeStep);
+                      
+                      char* buffer = new char[200];
+                      sprintf(buffer, "matlab_flowpipe_loc%d_time%d.txt", loc, timeStep);
                       matrixToMatlab(buffer, flowpipe->sets);
                   #endif
                   
