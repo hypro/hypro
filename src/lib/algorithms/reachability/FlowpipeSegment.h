@@ -37,6 +37,21 @@ namespace hypro
         } 
          
         /*
+        * returns the set with the specified index from the flowpipe
+        */ 
+        matrix_t<double> getSet(unsigned int index)
+        {
+            if(index < (unsigned int)sets.cols() )
+            {
+                return sets.col(index);
+            }
+            else
+            {
+                std::cout<< "!!!! Attempt to get a set with an index from the flowpipe which is not there" << BL;
+            }
+        } 
+         
+        /*
         * Adds the complete evaluation of a set at the specified position (column) in the sets matrix of this object
         */ 
         void addSetAtPosition(double* set_descriptor, unsigned int position)
@@ -75,7 +90,8 @@ namespace hypro
         
         unsigned int size()
         {
-            return (unsigned int) sets.size();
+            //return (unsigned int) sets.size();
+            return (unsigned int) sets.cols();
         }
          
         unsigned int  getLastTimestep()

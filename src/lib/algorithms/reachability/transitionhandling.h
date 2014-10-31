@@ -22,15 +22,77 @@
                 std::vector<convexSetOfFlowpipeSetIndexis> sets; // list of successive sets having an intersection with the guard (and I* etc.) of the transition 
          };
          
+         unsigned int* full =0;
+         
          /*
          * Computes a list of all transitions which could be taken considering the specified flowpipe
          */
          std::vector<possibleTransition>* getPossibleTransitions(location* loc, FlowpipeSegment* flowpipe)
          {
              std::vector<possibleTransition>* result = new std::vector<possibleTransition>(0);
-             // TODO:
-                     
-                     
+             
+                  if( full == 0)              // full is an array defining an identity mapping
+                  {
+                      full = new unsigned int[L.size()];
+                      for(unsigned int i=0; i<L.size(); i++)
+                      {
+                            full[i] = i;
+                      }
+                  }
+                      
+                 bool transitionadded = false;       // stores wether the actually considered transition has already a detected intersection with the flowpipe   
+                 convexSetOfFlowpipeSetIndexis* indices = 0;
+                 for(auto iterator = loc->transitions().begin(); iterator != loc->transitions().end(); ++iterator) // iterate over outgoing transitions
+                 {
+                       for(unsigned int i=0; i<flowpipe->size();i++) // iterate over sets in flowpipe
+                       {
+                             TransitionInfo* t = transitionMap.find(*iterator)->second;
+                             if(testIntersection( t->g_star_values , full , flowpipe->getSet(i))) // test for intersection
+                             {
+                                 // set intersects a guard
+                                 
+                                 if(transitionadded)
+                                 {
+                                     // this transition has already an intersection
+                                     if(indices->end+1 == i)
+                                     {
+                                          // consecutive sets intersect the guard
+                                          indices->end = i;
+                                     }
+                                     else
+                                     {
+                                         // use new convexSetOfFlowpipeSetIndexis struct
+                                         result->at(result->size()-1).sets.push_back(*indices);      // list copies values when adding the struct
+                                         
+                                         indices->start = i;
+                                         indices->end = i;
+                                     }
+                                 }
+                                 else
+                                 {
+                                     // the considered set is the first intersection for this transition
+                                     possibleTransition t;
+                                     t.flowpipeSegment = flowpipe;
+                                     t.transition_pt = (*iterator);
+                                     
+                                     if(indices != 0)
+                                     {
+                                         delete indices;
+                                     }
+                                     indices = new convexSetOfFlowpipeSetIndexis();
+                                     indices->start = i;
+                                     indices->end = i;
+                                     
+                                     result->push_back(t);                         // list copies values when adding the struct
+                                     transitionadded = true;
+                                 }
+                             }
+                       }
+                       
+                       transitionadded = false;    
+                 }    
+                 
+                 delete indices;
                      
              return result;        
          }

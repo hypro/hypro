@@ -408,24 +408,33 @@ namespace hypro
              
                   // choose which transition to take -> Assuption: all
                   // iterate over this list and do for each the required transition handling:
-                  matrix_t<double> valuesForNextSet;                    
+                  matrix_t<double> valuesForNextSet;    
+                  TransitionInfo* transitionInfo = 0;                
                   for(auto iterator = possibleTransitions->begin(); iterator != possibleTransitions->end(); ++iterator)
                   {           
                       // Note: iterator is a pointer to possibleTransition structure
+                      transitionInfo = transitionMap.find(iterator->transition_pt)->second;
                       
                       // cluster always all sets
                       valuesForNextSet = clustering(*iterator); // cluster all sets which are relevant for the construction of the initial set for the next node
                       
-                      // TODO:
                       // compute intersection                      
-                      // valuesForNextSet =
+                       valuesForNextSet = intersect(transitionInfo->sortedValues, valuesForNextSet);
+                      // reconstruct and evaluate to create tight bounds
+                      SupportFunction* intersectedSet = new PolytopeSupportFunction(&L,valuesForNextSet,X0->getAD()->dir1.size(),X0->getAD());
+                      //intersectedSet->multiEvaluate(L_pt, &valuesForNextSet);  // does not need to be done if reset is applied directly
                       
                       // compute reset
-                      // valuesForNextSet = ;
-                      
+                      SupportFunction* resetTemp = intersectedSet->multiply(iterator->transition_pt->assignment().transformMat);
+                      SupportFunction* resetSet = resetTemp->minowskisum(transitionInfo->getWfunction());
+                       
                       // start next Recursion (recursive call of this method)
-                      PolytopeSupportFunction nextX0(&L, valuesForNextSet, dimensionality, &additionalDirections);
-                      analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, &nextX0, U, timeStep + flowpipe->size());
+                      //PolytopeSupportFunction nextX0(&L, valuesForNextSet, dimensionality, &additionalDirections);
+                      analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, resetSet, U, timeStep + flowpipe->size());
+                      
+                      delete resetSet;
+                      delete resetTemp;
+                      delete intersectedSet;
                   }
                  
                   delete possibleTransitions; // clear heap memory as soon as possible
@@ -466,13 +475,6 @@ namespace hypro
                  std::cout << "dir1':" << additionalDirections.dir1.transpose() << BL;
                  std::cout << "dir2':" << additionalDirections.dir2.transpose() << BL;
              #endif  
-             oppositeDirectionMapping = computeDirectionMapping(&L);
-             #ifdef HYREACH_VERBOSE
-                 std::cout << method << "oppositeDirectionMapping L:" << BL;
-                 printArray<int>(oppositeDirectionMapping, L.size());
-                 std::cout << BL;
-             #endif  
-             dimensionality = (unsigned int)L[0].size();            // extended with additional dimensionality
              
              if( U == 0 )   // use zero function if none provided
              {
@@ -493,7 +495,15 @@ namespace hypro
              #ifdef HYREACH_VERBOSE
                  std::cout << method << "preprocessing completed. ------------------------------------------------------------------------ " << BL << BL;
              #endif
-                  
+             
+             oppositeDirectionMapping = computeDirectionMapping(&L);    // can only be done after preprocessing because preprocessing may introduce additional directions
+             #ifdef HYREACH_VERBOSE
+                 std::cout << method << "oppositeDirectionMapping L:" << BL;
+                 printArray<int>(oppositeDirectionMapping, L.size());
+                 std::cout << BL;
+             #endif  
+             dimensionality = (unsigned int)L[0].size();            // extended with additional dimensionality
+                
              // Create X0 SupportFunction (extended by additional dimension)
              #ifdef HYREACH_VERBOSE
                  std::cout << method << "original X0constraints: " << BL;

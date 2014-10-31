@@ -50,4 +50,16 @@
                    set( constraints_in_L_A[i],1 ) = MIN(set( constraints_in_L_A[i],0 ), inv_values->at(i) ); 
                }
           }
-
+          
+          /*
+          * Computes the intersection of two convex sets
+          */
+          matrix_t<double> intersect(matrix_t<double> set1, matrix_t<double> set2)
+          {
+              matrix_t<double> result(set1.size(),1);
+              for(int i=0; i<set1.size(); i++)
+              {
+                  result(i,0) = MIN(set1(i,0), set2(i,0));
+              }
+              return result;
+          }

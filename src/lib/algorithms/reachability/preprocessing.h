@@ -24,7 +24,14 @@
                    * Returns the index of direction in L after a possible insertion operation.
                    */
                    unsigned int addToL(std::vector<matrix_t<double>>* L_pt, matrix_t<double>* direction)
-                   {
+                   {   
+                       if(L_pt->at(0).rows() > direction->size())     // the entries of L are of higher dimensionality -> fill direction with 0
+                       {
+                           int dirRows = direction->rows();
+                           direction->resize(L_pt->at(0).rows(),1);
+                           direction->block(dirRows,0,L_pt->at(0).rows()-dirRows,1) = matrix_t<double>::Zero(1,1);   // fill with 0
+                       }
+                            
                        int x = contains(L_pt, direction);
                        if(x < 0)
                        {
@@ -43,7 +50,7 @@
                     * Normalizes the length of constraints to one (row-wise) and scales the constraintValues correspondingly. Furthermore,
                     * the constraints are rounded regarding global settings.
                     */
-                    void normalizeLinearConstraint(matrix_t<double> constraints, vector_t<double> constraintValues, std::vector<matrix_t<double>>* directions, std::vector<double>* scaledConstraintValues )
+                    void normalizeLinearConstraint(matrix_t<double> constraints, matrix_t<double> constraintValues, std::vector<matrix_t<double>>* directions, std::vector<double>* scaledConstraintValues )
                     {
                           constraints = addZeroColumn(constraints);  // add additional dimension
                          
@@ -58,7 +65,7 @@
                   
                                // add results for iteration i to the correspondent lists
                                directions->push_back(normedDirection);
-                               scaledConstraintValues->push_back( (constraintValues(i)).toDouble()/norm );
+                               scaledConstraintValues->push_back( (constraintValues(i,0)).toDouble()/norm );
                            }
                     }
                     
@@ -96,6 +103,39 @@
                         
                         return result;
                     }
+                    
+                    /*
+                    * removes zero rows from constraints and the correspondent values in values
+                    */
+                    void removeZeroRows(matrix_t<double>* constraints, matrix_t<double>* values)
+                    {
+                         std::list<int> nonzerorows(0);   // stores the indices of the rows not beeing zero
+                         
+                         // backup values
+                         matrix_t<double> b_constraints = *constraints;
+                         matrix_t<double> b_values = *values;
+                         
+                         // detect zero rows
+                         for(int i=0; i<b_constraints.rows(); i++)
+                         {
+                             if(!b_constraints.row(i).isZero())
+                             {
+                                 nonzerorows.push_back(i);
+                             }
+                         }
+                         
+                         // remove 0related values
+                         constraints->resize(nonzerorows.size(),constraints->cols());
+                         unsigned int i=0;
+                         for(auto iterator = nonzerorows.begin(); iterator != nonzerorows.end(); ++iterator)
+                         {
+                             constraints->block(i,0,1,constraints->cols()) = b_constraints.row(*iterator);
+                             i++;
+                         }
+                    }
+                    
+            public:
+                    virtual void freeAllocatedMemory() = 0;   // has to be overwritten and will be called to destroy previously created heap objects
     };
 
 	/*
@@ -254,27 +294,33 @@
 	  private:     
         transition* origTransition;	// stores the original transition from the model where the missing informations from TransitionInfo are stored
         
-		matrix_t<double> I_star_constraints;
-		matrix_t<double> I_star_values;
-		SupportFunction* guardfunction;
+		//SupportFunction* guardfunction;
 		SupportFunction* wfunction;
 
-        // TODO: what is I+ and I- (if from invariants of locations no need for computation!)
-		mapping iminus_constraints_in_L;
-		mapping mirrored_iminus_constraints_in_L;
-		mapping iplus_constraints_in_L;
-		mapping mirrored_iplus_constraints_in_L;
+      public:
+        // Minimal values of each guard for every direction (or inf if there is no guard in this direction). 
+        // May contain "redundant" constraint-values since there is no reconstruction using support functions performed
+        // The values are only used to compute the intersection with the guards and during that processing step, the reconstruction and evaluation will be performed
+		matrix_t<double> sortedValues;
 
+        mapping I_star_constraints_in_L;
+        mapping mirrored_I_star_constraints_in_L;
+        std::vector<matrix_t<double>>* IstarAsDirections;
+        std::vector<double>* scaledIstarValues;
+        
         // guard related values (analog to invariant from location)
 		mapping guard_constraints_in_L;
 		mapping mirrored_guard_constraints_in_L;
 		std::vector<matrix_t<double>>* guardsAsDirections;
         std::vector<double>* scaledGuardValues;
-
-        // Evaluation of ?
-		matrix_t<double> sortedValues;
-		
-      public:
+         
+        std::vector<double>* g_star_values;  
+        
+        SupportFunction* getWfunction()
+        {
+            return wfunction;
+        }
+             
         TransitionInfo(transition* trans, std::vector<matrix_t<double>>* L_pt)
         {
             #ifdef TRANSITIONINFO_VERBOSE
@@ -285,48 +331,85 @@
             origTransition = trans;
             //const unsigned int dimensionality = (unsigned int) ((*trans).guard()).mat.cols(); 
             unsigned int guards = (unsigned int) ((*trans).guard()).mat.rows();    // Assuption: the model contains only <= guards
+            unsigned int targetInv = (unsigned int) trans->targetLoc()->invariant().mat.rows();
             
             // create new objects on the heap to store relevant information
-            iminus_constraints_in_L = new unsigned int[guards];
-            mirrored_iminus_constraints_in_L = new unsigned int[guards];
-            iplus_constraints_in_L = new unsigned int[guards];
-            mirrored_iplus_constraints_in_L = new unsigned int[guards];
+            //iminus_constraints_in_L = new unsigned int[guards];
+            //mirrored_iminus_constraints_in_L = new unsigned int[guards];
+            //iplus_constraints_in_L = new unsigned int[guards];
+            //mirrored_iplus_constraints_in_L = new unsigned int[guards];
+            I_star_constraints_in_L = new unsigned int[targetInv];
+            mirrored_I_star_constraints_in_L = new unsigned int[targetInv];
+            IstarAsDirections = new std::vector<matrix_t<double>>(targetInv);
+            scaledIstarValues = new std::vector<double>(targetInv);
             
             guard_constraints_in_L = new unsigned int[guards];
             mirrored_guard_constraints_in_L = new unsigned int[guards];
             guardsAsDirections = new std::vector<matrix_t<double>>(guards);
             scaledGuardValues = new std::vector<double>(guards);
             
-            // generate automatically the additional information
-            // TODO:               
-            // what to do with I+, I- and I* ??
-            // construct support functions wfunction and guardfunction
+            // generate automatically the additional information for transitions
+ 
+            // construct support function wfunction
+            matrix_t<double> identity(trans->targetLoc()->invariant().mat.cols(), trans->targetLoc()->invariant().mat.cols());
+            identity.Identity(trans->targetLoc()->invariant().mat.cols(), trans->targetLoc()->invariant().mat.cols());
+            matrix_t<double> id(2*identity.rows(),identity.cols());
+            id.block(0,0,identity.rows(),identity.cols()) = identity;
+            id.block(identity.rows(),0,identity.rows(),identity.cols()) = -identity;
+            matrix_t<double> w(2*identity.rows(),1);
+            w.block(0,0,identity.rows(),1) = trans->assignment().translationVec;
+            w.block(identity.rows(),1,identity.rows(),1) = -trans->assignment().translationVec;
+            wfunction = new PolytopeSupportFunction(id,w,operator_e::LEQ, identity.cols(),0);
             
-            // handle guard
+            // handle guard (assumption: only inequality guards -> no need to differentiate between different guard types)
             // normalize every guard constraint
             normalizeLinearConstraint(((*trans).guard()).mat,((*trans).guard()).vec, guardsAsDirections, scaledGuardValues);
             // compute mapping and add missing directions to L
             guard_constraints_in_L = extendDirections(L_pt,guardsAsDirections);
             mirrored_guard_constraints_in_L = extendMirroredDirections(L_pt,guardsAsDirections);
+        
+            // generate I*
+            matrix_t<double> I_star_constraints = trans->targetLoc()->invariant().mat;     // initialize I* (values are not important, size is)
+		    matrix_t<double> I_star_values(I_star_constraints.rows(),1);
+
+            matrix_t<double> temp;
+            for(unsigned int i=0; i<targetInv; i++)
+            {
+                I_star_constraints.block(i,0,1,I_star_constraints.cols()) = trans->targetLoc()->invariant().mat.row(i) * trans->assignment().transformMat;
+                temp = - trans->targetLoc()->invariant().mat.row(i).transpose();
+                I_star_values(i,0) = trans->targetLoc()->invariant().vec(i) + wfunction->evaluate(&temp).supportValue;               
+            }
+        
+            //discard 0 entries -> would lead to unecessary tautologies in the equations
+            removeZeroRows(&I_star_constraints, &I_star_values);
+                        
+            // scale, round, delete redundant and add to L with correspondent mapping                        
+            normalizeLinearConstraint(I_star_constraints,I_star_values, IstarAsDirections, scaledIstarValues);
+            I_star_constraints_in_L = extendDirections(L_pt,IstarAsDirections);
+            mirrored_I_star_constraints_in_L = extendMirroredDirections(L_pt,IstarAsDirections);
+            
         }     
         
-        ~TransitionInfo()
+        void freeAllocatedMemory()
         {
-            #ifdef TRANSITIONINFO_VERBOSE
-                std::cout << "TransitionInfo: destructor" << '\n';
-            #endif
-            
-            // delete constructed heap objects
-            delete[] iminus_constraints_in_L;
-            delete[] mirrored_iminus_constraints_in_L;
-            delete[] iplus_constraints_in_L;
-            delete[] mirrored_iplus_constraints_in_L;
+             // delete constructed heap objects
+            //delete[] iminus_constraints_in_L;
+            //delete[] mirrored_iminus_constraints_in_L;
+            //delete[] iplus_constraints_in_L;
+            //delete[] mirrored_iplus_constraints_in_L;
             delete[] guard_constraints_in_L;
             delete[] mirrored_guard_constraints_in_L;
+            delete[] I_star_constraints_in_L;
+            delete[] mirrored_I_star_constraints_in_L;
             
             delete guardsAsDirections;
             delete scaledGuardValues;
-        }    
+            delete IstarAsDirections;
+            delete scaledIstarValues;
+            
+            delete wfunction;
+            delete g_star_values;
+        }
 	};
 
 	// typedefs for extended location handling
@@ -359,9 +442,14 @@
         /*
          *    This method computes additional static information for the specified transition
          */   
-        void preprocess_transition(transition* trans, artificialDirections* additionalDirections)
+        void preprocess_transition(transition* trans, std::vector<matrix_t<double>>* L_pt)
         {
-             // TODO: implement preprocessing for transition
+             // preprocessing is done by construction of TransInfo object
+             TransitionInfo* transInfo = new TransitionInfo(trans, L_pt);
+             
+             // store a mapping between the original transition and the object containing the preprocessed information
+             TransitionPair transPair(trans, transInfo);
+             transitionMap.insert(transPair);
         }
             
 		/**
@@ -404,7 +492,7 @@
 				transitionSet transitions = (*loc).transitions();
 				for(auto iterator = transitions.begin(); iterator != transitions.end(); ++iterator)
 				{
-                     preprocess_transition((*iterator), additionalDirections); // preprocess transition
+                     preprocess_transition((*iterator), L_pt); // preprocess transition
                      preprocessing_recursion((*iterator)->targetLoc(), L_pt, delta, U, additionalDirections); // preprocess connected location
                 }
 			}
@@ -438,7 +526,53 @@
                        print(*(iterator->second->complete_invariant_evaluation));
                        std::cout << '\n';
                 #endif
-            }    
+            }   
+            
+            // transitions
+            
+            // precompute G* and sorted values for every transition in the model (can only be done when L is complete)
+            matrix_t<double> temp(L_pt->size(),1); 
+            for(auto iterator = transitionMap.begin(); iterator != transitionMap.end(); ++iterator)
+            {
+                // Gstar
+                
+                delete iterator->second->g_star_values;
+                iterator->second->g_star_values = new std::vector<double>(L_pt->size());
+                // initialize g_star with Inf
+                for(int i=0; i< temp.size(); i++)
+                {
+                    temp(i,0) = INFINITY;
+                }
+                
+                // intersect with guards
+                for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
+                {
+                    temp(iterator->second->mirrored_guard_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_guard_constraints_in_L[i],0).toDouble(),iterator->second->scaledGuardValues->at(i));
+                }
+                
+                // intersect with istar
+                for(unsigned int i=0; i<iterator->second->IstarAsDirections->size(); i++)
+                {
+                    temp(iterator->second->mirrored_I_star_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_I_star_constraints_in_L[i],0).toDouble(),iterator->second->scaledIstarValues->at(i));
+                }
+                
+                SupportFunction* gstar = new PolytopeSupportFunction(L_pt,temp,L_pt->at(0).size(),additionalDirections);
+                gstar->multiEvaluate(L_pt,iterator->second->g_star_values);
+                
+                
+                // sorted values (do not need to be re-evaluated since this will be done when computing the intersection)
+                
+                for(int i=0; i< temp.size(); i++)
+                {
+                    temp(i,0) = INFINITY;
+                }
+                // intersect with guards
+                for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
+                {
+                    temp(iterator->second->guard_constraints_in_L[i],0) = MIN(temp(iterator->second->guard_constraints_in_L[i],0).toDouble(),iterator->second->scaledGuardValues->at(i));
+                }
+                iterator->second->sortedValues = temp;
+            }
                                      
 	       	#ifdef TRANSITIONINFO_VERBOSE
                  std::cout << "preprocess(...): complete" << BL;
