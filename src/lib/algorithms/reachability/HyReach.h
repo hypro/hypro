@@ -241,7 +241,7 @@ namespace hypro
                   
                   // intersect Omega0 with invariant
                   //values(state.invariant_constraints_in_L) = min(values(state.invariant_constraints_in_L),state.d);
-                  intersectWithInvariant(omega0_values, locInfo->invariant_constraints_in_L, locInfo->scaledConstraintValues);
+                  omega0_values = intersectWithInvariant(omega0_values, locInfo->invariant_constraints_in_L, locInfo->scaledConstraintValues);
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "omega0' intersecting invariant" << omega0_values.transpose() << '\n';
@@ -351,7 +351,6 @@ namespace hypro
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << "flowpipe:" << BL << flowpipe->sets << BL;
-                      
                       // store flowpipe in file
                       
                       char* buffer = new char[200];
@@ -425,9 +424,14 @@ namespace hypro
                       //intersectedSet->multiEvaluate(L_pt, &valuesForNextSet);  // does not need to be done if reset is applied directly
                       
                       // compute reset
-                      SupportFunction* resetTemp = intersectedSet->multiply(iterator->transition_pt->assignment().transformMat);
+                      SupportFunction* resetTemp = intersectedSet->multiply(transitionInfo->getR());
                       SupportFunction* resetSet = resetTemp->minowskisum(transitionInfo->getWfunction());
-                       
+                      #ifdef HYREACH_VERBOSE
+                           matrix_t<double> resetSet_values(L.size(),1);
+                           resetSet->multiEvaluate(&L,&resetSet_values);
+                           std::cout << method << "resetSet: " << BL << resetSet_values << BL;
+                      #endif
+                   
                       // start next Recursion (recursive call of this method)
                       //PolytopeSupportFunction nextX0(&L, valuesForNextSet, dimensionality, &additionalDirections);
                       analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, resetSet, U, timeStep + flowpipe->size());

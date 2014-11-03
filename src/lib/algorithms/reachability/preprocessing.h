@@ -4,7 +4,7 @@
  */
  
 #define LOCATIONINFO_VERBOSE 
-//#define TRANSITIONINFO_VERBOSE 
+#define TRANSITIONINFO_VERBOSE 
  
 	//typedef std::set<location*> locationSet;
 	//typedef std::set<transition*> transitionSet;
@@ -52,7 +52,10 @@
                     */
                     void normalizeLinearConstraint(matrix_t<double> constraints, matrix_t<double> constraintValues, std::vector<matrix_t<double>>* directions, std::vector<double>* scaledConstraintValues )
                     {
+                         std::cout << "normalizeLinearConstraint(...): " << BL << constraints << BL;
                           constraints = addZeroColumn(constraints);  // add additional dimension
+                         
+                          std::cout << "normalizeLinearConstraint(...): " <<  "constraints.rows(): " << constraints.rows() << BL;
                          
                           double norm = 0;
                           for( int i=0; i<constraints.rows(); i++)
@@ -64,8 +67,10 @@
                                normedDirection = round(normedDirection, precision);
                   
                                // add results for iteration i to the correspondent lists
-                               directions->push_back(normedDirection);
-                               scaledConstraintValues->push_back( (constraintValues(i,0)).toDouble()/norm );
+                               //directions->push_back(normedDirection);
+                               directions->at(i) = normedDirection;
+                               //scaledConstraintValues->push_back( (constraintValues(i,0)).toDouble()/norm );
+                               scaledConstraintValues->at(i) = (constraintValues(i,0)).toDouble()/norm;
                            }
                     }
                     
@@ -109,6 +114,8 @@
                     */
                     void removeZeroRows(matrix_t<double>* constraints, matrix_t<double>* values)
                     {
+                         std::cout << "original constraints: " << BL << *constraints << BL << "values: " << (*values).transpose() << BL;
+                         
                          std::list<int> nonzerorows(0);   // stores the indices of the rows not beeing zero
                          
                          // backup values
@@ -123,6 +130,8 @@
                                  nonzerorows.push_back(i);
                              }
                          }
+                         
+                         std::cout << "non-zero-rows: " << nonzerorows << BL;
                          
                          // remove 0related values
                          constraints->resize(nonzerorows.size(),constraints->cols());
@@ -294,7 +303,9 @@
 	  private:     
         transition* origTransition;	// stores the original transition from the model where the missing informations from TransitionInfo are stored
         
-		//SupportFunction* guardfunction;
+        matrix_t<double> R;
+        vector_t<double> w;
+        
 		SupportFunction* wfunction;
 
       public:
@@ -320,11 +331,16 @@
         {
             return wfunction;
         }
+        
+        matrix_t<double> getR()
+        {
+            return R;
+        }
              
-        TransitionInfo(transition* trans, std::vector<matrix_t<double>>* L_pt)
+        TransitionInfo(transition* trans, std::vector<matrix_t<double>>* L_pt, artificialDirections* aD)
         {
             #ifdef TRANSITIONINFO_VERBOSE
-            std::string method =  "TransitionInfo: constructor";
+            std::string method =  "TransitionInfo(...): ";
                 std::cout << method << '\n';
             #endif
             
@@ -334,10 +350,6 @@
             unsigned int targetInv = (unsigned int) trans->targetLoc()->invariant().mat.rows();
             
             // create new objects on the heap to store relevant information
-            //iminus_constraints_in_L = new unsigned int[guards];
-            //mirrored_iminus_constraints_in_L = new unsigned int[guards];
-            //iplus_constraints_in_L = new unsigned int[guards];
-            //mirrored_iplus_constraints_in_L = new unsigned int[guards];
             I_star_constraints_in_L = new unsigned int[targetInv];
             mirrored_I_star_constraints_in_L = new unsigned int[targetInv];
             IstarAsDirections = new std::vector<matrix_t<double>>(targetInv);
@@ -347,27 +359,68 @@
             mirrored_guard_constraints_in_L = new unsigned int[guards];
             guardsAsDirections = new std::vector<matrix_t<double>>(guards);
             scaledGuardValues = new std::vector<double>(guards);
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "fields initialized" << BL;
+            #endif
+            
+            // extend R and w according to the artifically created dimension
+            R = addZeroColumn(trans->assignment().transformMat);
+            R = addZeroRow(R);
+            R(R.rows()-1,R.cols()-1) = 1;
             
             // generate automatically the additional information for transitions
  
             // construct support function wfunction
-            matrix_t<double> identity(trans->targetLoc()->invariant().mat.cols(), trans->targetLoc()->invariant().mat.cols());
-            identity.Identity(trans->targetLoc()->invariant().mat.cols(), trans->targetLoc()->invariant().mat.cols());
+            unsigned int dim = L_pt->at(0).size();
+            matrix_t<double> identity(dim, dim);
+            identity.setIdentity();
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "identity: " << BL << identity << BL;
+            #endif
             matrix_t<double> id(2*identity.rows(),identity.cols());
-            id.block(0,0,identity.rows(),identity.cols()) = identity;
-            id.block(identity.rows(),0,identity.rows(),identity.cols()) = -identity;
-            matrix_t<double> w(2*identity.rows(),1);
-            w.block(0,0,identity.rows(),1) = trans->assignment().translationVec;
-            w.block(identity.rows(),1,identity.rows(),1) = -trans->assignment().translationVec;
-            wfunction = new PolytopeSupportFunction(id,w,operator_e::LEQ, identity.cols(),0);
+            id.block(0,0,dim,dim) = identity;
+            id.block(dim,0,dim,dim) = -identity;
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "id: " << BL << id << BL;
+            #endif
+            matrix_t<double> w(2*dim,1);
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "w (initial): " << BL << w << BL;
+            #endif
+            // extend w if necessary due to additional dimension
+            for(int i=0; i<trans->assignment().translationVec.size(); i++)
+            {
+                w(i,0) = i<trans->assignment().translationVec.size() ? trans->assignment().translationVec(i) : 1;
+                w(i+dim,0) = i<trans->assignment().translationVec.size() ? - trans->assignment().translationVec(i) : -1;
+            }
+            this->w = w;
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "this->w: " << BL << this->w << BL;
+            #endif
+ 
+            wfunction = new PolytopeSupportFunction(id,this->w,operator_e::LEQ, dim, aD);
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "wfunction created" << BL;
+            #endif
             
             // handle guard (assumption: only inequality guards -> no need to differentiate between different guard types)
             // normalize every guard constraint
             normalizeLinearConstraint(((*trans).guard()).mat,((*trans).guard()).vec, guardsAsDirections, scaledGuardValues);
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "normalized guards: " << BL;
+                printDirectionList(*guardsAsDirections);
+                std::cout << "scaled values: " << BL;
+                std::cout << *scaledGuardValues << BL;
+            #endif
             // compute mapping and add missing directions to L
             guard_constraints_in_L = extendDirections(L_pt,guardsAsDirections);
             mirrored_guard_constraints_in_L = extendMirroredDirections(L_pt,guardsAsDirections);
-        
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << "guard_constraints_in_L: ";
+                printArray<unsigned int>(guard_constraints_in_L, guardsAsDirections->size());
+                std::cout << BL <<  method << "guards preprocessed" << BL;
+            #endif
+            
             // generate I*
             matrix_t<double> I_star_constraints = trans->targetLoc()->invariant().mat;     // initialize I* (values are not important, size is)
 		    matrix_t<double> I_star_values(I_star_constraints.rows(),1);
@@ -379,15 +432,23 @@
                 temp = - trans->targetLoc()->invariant().mat.row(i).transpose();
                 I_star_values(i,0) = trans->targetLoc()->invariant().vec(i) + wfunction->evaluate(&temp).supportValue;               
             }
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "I* first step" << BL;
+            #endif
         
             //discard 0 entries -> would lead to unecessary tautologies in the equations
             removeZeroRows(&I_star_constraints, &I_star_values);
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "zero rows removed" << BL;
+            #endif
                         
             // scale, round, delete redundant and add to L with correspondent mapping                        
             normalizeLinearConstraint(I_star_constraints,I_star_values, IstarAsDirections, scaledIstarValues);
             I_star_constraints_in_L = extendDirections(L_pt,IstarAsDirections);
             mirrored_I_star_constraints_in_L = extendMirroredDirections(L_pt,IstarAsDirections);
-            
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "I* preprocessed" << BL;
+            #endif
         }     
         
         void freeAllocatedMemory()
@@ -442,10 +503,10 @@
         /*
          *    This method computes additional static information for the specified transition
          */   
-        void preprocess_transition(transition* trans, std::vector<matrix_t<double>>* L_pt)
+        void preprocess_transition(transition* trans, std::vector<matrix_t<double>>* L_pt, artificialDirections* additionalDirections)
         {
              // preprocessing is done by construction of TransInfo object
-             TransitionInfo* transInfo = new TransitionInfo(trans, L_pt);
+             TransitionInfo* transInfo = new TransitionInfo(trans, L_pt, additionalDirections);
              
              // store a mapping between the original transition and the object containing the preprocessed information
              TransitionPair transPair(trans, transInfo);
@@ -492,7 +553,11 @@
 				transitionSet transitions = (*loc).transitions();
 				for(auto iterator = transitions.begin(); iterator != transitions.end(); ++iterator)
 				{
-                     preprocess_transition((*iterator), L_pt); // preprocess transition
+                     preprocess_transition((*iterator), L_pt, additionalDirections); // preprocess transition
+                     
+                     #ifdef TRANSITIONINFO_VERBOSE
+                         std::cout << "preprocessing_recursion(...): recursive call follows" << BL;
+                     #endif
                      preprocessing_recursion((*iterator)->targetLoc(), L_pt, delta, U, additionalDirections); // preprocess connected location
                 }
 			}
@@ -509,7 +574,7 @@
 	      	{
 	       		preprocessing_recursion(*iterator, L_pt, delta, U, additionalDirections) ;
 	       	}
-	       	
+            
 	       	// performe evaluation which can only be done if all L are known
 	       	// locations:
             
@@ -558,7 +623,11 @@
                 
                 SupportFunction* gstar = new PolytopeSupportFunction(L_pt,temp,L_pt->at(0).size(),additionalDirections);
                 gstar->multiEvaluate(L_pt,iterator->second->g_star_values);
-                
+                #ifdef TRANSITIONINFO_VERBOSE
+                    std::cout << "preprocess(...): " << "G*: " << BL;
+                    print(*(iterator->second->g_star_values));
+                    std::cout << '\n';
+                #endif
                 
                 // sorted values (do not need to be re-evaluated since this will be done when computing the intersection)
                 
@@ -572,6 +641,10 @@
                     temp(iterator->second->guard_constraints_in_L[i],0) = MIN(temp(iterator->second->guard_constraints_in_L[i],0).toDouble(),iterator->second->scaledGuardValues->at(i));
                 }
                 iterator->second->sortedValues = temp;
+                #ifdef TRANSITIONINFO_VERBOSE
+                    std::cout << "preprocess(...): " << "sorted Values: " << (iterator->second->sortedValues) << BL;
+                    std::cout << '\n';
+                #endif
             }
                                      
 	       	#ifdef TRANSITIONINFO_VERBOSE
@@ -587,4 +660,5 @@
         	 //std::set<location*> locationSet;
         	 
         	 // call freeAllocatedMemory() on every locationinfo object to free LocationInfo resources
+       	     // call freeAllocatedMemory() on every transitioninfo object to free LocationInfo resources
         }

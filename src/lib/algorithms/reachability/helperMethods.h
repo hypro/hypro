@@ -26,11 +26,13 @@
 	*/
 	void printDirectionList(std::vector<matrix_t<double>> list)
 	{
+        //std::cout << "listsize: " << list.size() << BL;
 		for(auto iterator1 = list.begin(); iterator1 != list.end(); ++iterator1)
 		{
 			matrix_t<double> actual = *iterator1;
-            std::cout << actual.transpose() << "\n\n";
+            std::cout << actual.transpose() << "\n";
 		}
+		std::cout << BL;
 	}
 	
 	/*
