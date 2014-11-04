@@ -21,6 +21,7 @@ class Hyperplane
         Hyperplane();
         Hyperplane(unsigned int dimension);
         Hyperplane(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vector, Number e_scalar);
+        Hyperplane(const Hyperplane<Number>& other);
         
         virtual ~Hyperplane();
         
@@ -32,7 +33,7 @@ class Hyperplane
         void setVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector);
         void setScalar(const Number e_scalar);
         
-        
+        bool changeDimension(unsigned int newDimension);
         
 
 };

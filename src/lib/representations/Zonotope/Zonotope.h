@@ -9,14 +9,17 @@
 #define	ZONOTOPE_H
 
 #include <vector>
-#include "../Hyperplane/Hyperplane.h"
+#include "Hyperplane.h"
 #include <eigen3/Eigen/Dense>
 #include <ppl.hh>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
 
+
 //using namespace Parma_Polyhedra_Library;
+
+
 
 
 template <typename Number>
@@ -48,6 +51,12 @@ class Zonotope
          */
         Zonotope(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& center, 
 				const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generators);
+        
+        /**
+         * Copy Constructor - constructs a zonotope from an existing one.
+         * @param other Another Zonotope, from which a new zonotope is constructed
+         */
+        Zonotope(const Zonotope<Number>& other);
         
         virtual ~Zonotope();
         

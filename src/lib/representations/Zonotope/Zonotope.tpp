@@ -14,10 +14,32 @@ enum {
     NDPROJECTION = 2
 };
 
+template <typename Number>
+bool compareColumnVectors(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
+                          const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2) 
+{
+    Number x1(colvec1(0)), x2(colvec2(0)), y1(colvec2(1)), y2(colvec2(1));
+    
+    Number ang1 = x1/sqrt(pow(x1,2) + pow(y1,2));
+    Number ang2 = x2/sqrt(pow(x2,2) + pow(y2,2));
+    
+    return (ang1 < ang2);
+}
 
-/**
- * Non-member functions
- */
+template <typename Number> 
+bool compareYVal(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
+                 const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2)
+{
+    return (colvec1(1) < colvec2(1));
+}
+
+template<typename Number>
+bool compareXVal(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
+                 const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2)
+{
+    return (colvec1(0) < colvec2(0));
+}
+
 
 template <typename Number>
 struct Line_t {
@@ -32,6 +54,17 @@ struct Line_t {
     Eigen::Matrix<Number, 2,1> point;
     Eigen::Matrix<Number, 2,1> direction;
 };
+/**
+ * Non-member functions
+ */
+
+template <typename Number> 
+bool comparePoint(Eigen::Matrix<Number, 2, 1>& p1, Eigen::Matrix<Number, 2, 1>& p2) {
+    if (p1(0)!=p2(0))
+        return (p1(0) < p2(0));
+    else 
+        return (p1(1) < p2(1));
+}
 
 template <typename Number>
 void removeGenerator(unsigned int colToRemove, 
@@ -76,31 +109,6 @@ Eigen::Matrix<Number, 2, 1> computeLineIntersection(const Line_t<Number>& l1, co
     return resPt;
 }
 
-template <typename Number>
-bool compareColumnVectors(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
-                          const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2) 
-{
-    Number x1(colvec1(0)), x2(colvec2(0)), y1(colvec2(1)), y2(colvec2(1));
-    
-    Number ang1 = x1/sqrt(pow(x1,2) + pow(y1,2));
-    Number ang2 = x2/sqrt(pow(x2,2) + pow(y2,2));
-    
-    return (ang1 < ang2);
-}
-
-template <typename Number> 
-bool compareYVal(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
-                 const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2)
-{
-    return (colvec1(1) < colvec2(1));
-}
-
-template<typename Number>
-bool compareXVal(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec1, 
-                 const Eigen::Matrix<Number, Eigen::Dynamic, 1>& colvec2)
-{
-    return (colvec1(0) < colvec2(0));
-}
 
 
 /**
@@ -129,6 +137,14 @@ Zonotope<Number>::Zonotope(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& cente
     mDimension = center.rows();
     mCenter = center;
     mGenerators = generators;
+}
+
+template <typename Number>
+Zonotope<Number>::Zonotope(const Zonotope<Number>& other) {
+    assert(other.mDimension!=0);
+    mDimension = other.mDimension;
+    mCenter = other.mCenter;
+    mGenerators = other.mGenerators;
 }
 
 template <typename Number>
@@ -218,7 +234,8 @@ std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > Zonotope<Number>::compute
 template <typename Number>
 void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
                                              const Hyperplane<Number>& hp,
-                                             Zonotope<Number>& result) 
+                                             Zonotope<Number>& result,
+                                             Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine) 
 {
     assert(inputZonotope.dimension()==hp.dimension() && "Zonotope and Hyperplane have to be of similar dimensions");
     std::vector< Eigen::Matrix<Number, Eigen::Dynamic ,1> > vertices = inputZonotope.computeZonotopeBoundary();
@@ -321,6 +338,10 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     
     Zonotope<Number> resZonotope((p1+p2)/2, (p1-p2)/2);
     
+    minMaxOfLine.resize(2,2);
+    minMaxOfLine.row(0) = (comparePoint(p1, p2)) ? p1.transpose() : p2.transpose(); // min [x,y] here
+    minMaxOfLine.row(1) = (comparePoint(p1, p2)) ? p2.transpose() : p1.transpose(); // max [x,y] here
+    
     result = resZonotope;
 }
 
@@ -328,28 +349,30 @@ template<typename Number>
 void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
             Zonotope<Number>& resultZonotope)
 {
+    
+    assert(inputZonotope.dimension()==hp.dimension());
      // Determine intersect as Zonotope, according to Tabatabaeipour et al., 2013 
-        Number sgm = 0; // could be redundant
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> H = inputZonotope.generators();
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> HHT = H*H.transpose();
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> center = inputZonotope.center();
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = (HHT*hp.vector())/(hp.vector().transpose()*HHT*hp.vector()+sgm*sgm);
-        
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> new_gen, identity;
-        Zonotope<Number> zg(inputZonotope.dimension());
+    Number sgm = 0; // could be redundant
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> H = inputZonotope.generators();
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> HHT = H*H.transpose();
+    Eigen::Matrix<Number, Eigen::Dynamic, 1> center = inputZonotope.center();
+    Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = (HHT*hp.vector())/(hp.vector().transpose()*HHT*hp.vector()+sgm*sgm);
 
-        zg.setCenter(center+lambda*(hp.scalar()-hp.vector().transpose()*center));  
-        
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> new_gen, identity;
+    Zonotope<Number> zg(inputZonotope.dimension());
 
-        identity.resize(inputZonotope.dimension(), inputZonotope.dimension());
+    zg.setCenter(center+lambda*(hp.scalar()-hp.vector().transpose()*center));  
 
-        identity.setIdentity();
 
-        
-        new_gen =(identity - lambda*(hp.vector().transpose()))*H;    
-        zg.setGenerators(new_gen);
-        
-        resultZonotope = zg;
+    identity.resize(inputZonotope.dimension(), inputZonotope.dimension());
+
+    identity.setIdentity();
+
+
+    new_gen =(identity - lambda*(hp.vector().transpose()))*H;    
+    zg.setGenerators(new_gen);
+
+    resultZonotope = zg;
 }
 
 template<typename Number>
@@ -360,8 +383,11 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
     Eigen::Matrix<Number, Eigen::Dynamic, 1> dVec;
     Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel;
     dVec = hp.vector();
-    kernel = dVec.transpose().fullPivLu().kernel();
-        
+    Eigen::JacobiSVD<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > svd(dVec.transpose(), 
+                                                                                Eigen::ComputeFullU | Eigen::ComputeFullV);
+    // Using SVD to calculate nullspace (kernel)
+    kernel = svd.matrixV().block(0,1,svd.matrixV().rows(), svd.matrixV().cols()-1);
+    
     unsigned nd, dim;
     nd = kernel.cols();
     dim = inputZonotope.dimension();
@@ -372,7 +398,7 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
     resultGenerators.resize(dim, nd);
     dpQc = dVec.dot(inputZonotope.center());
     dpQg = dVec.transpose()*inputZonotope.generators();
-    
+
     for (unsigned i=0; i<nd; i++) {
         // construct 2 dimensional Zonotope
         Eigen::Matrix<Number, 2, 1> projCenter;
@@ -387,8 +413,9 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
         // Upon projection, the hyperplane now has a d vector of [1;0] but retains its e scalar
         Eigen::Matrix<Number, 2, 1> lgDVector(1,0);
         Hyperplane<Number> lg(lgDVector, hp.scalar());
-        
-        intersectZonogoneHyperplane(projZonotope, lg, tempResZonotope);
+                
+        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> dummyMinMax;
+        intersectZonogoneHyperplane(projZonotope, lg, tempResZonotope, dummyMinMax);
         
         Eigen::Matrix<Number, 2, 1> p1, p2;
         p1 = tempResZonotope.center() + tempResZonotope.generators();
@@ -434,20 +461,27 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
     
     bool hasIntersect = (emdc > -zs && zs > emdc);
     if (hasIntersect) {
-        if (mDimension==2)
-            intersectZonogoneHyperplane(*this, hp, result);
-        else {
-            switch (method) {
-                case ALAMO:
-                    intersectAlamo(*this, hp, result);
-                    break;
-                case NDPROJECTION:
-                default:
+
+        switch (method) {
+            case ALAMO:
+//                std::cout << "Using Alamo's method with dimension " << mDimension << std::endl;
+                intersectAlamo(*this, hp, result);
+                break;
+            case NDPROJECTION:
+            default:
+            {
+                if (mDimension==2) {
+//                    std::cout << "Using Girard's method with dimension 2 " << std::endl;
+                    intersectZonogoneHyperplane(*this, hp, result, minMaxOfLine);
+                }
+                else {
+//                    std::cout << "Using Girard's method with dimension " << mDimension << std::endl;
                     intersectNDProjection<Number>(*this, hp, result, minMaxOfLine);
-                    break;
+                }
+                break;
             }
-            
         }
+            
         return true;
     }
     else {
