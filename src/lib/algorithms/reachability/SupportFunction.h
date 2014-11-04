@@ -63,9 +63,10 @@ namespace hypro
     {
       private:
           SupportFunctionType support_function_type;
-          artificialDirections* aD = 0;
       
       protected:
+          artificialDirections* aD = 0;
+           
           /* 
           * The constructor can only be called from sub-classes (makes the class abstract)
           */
@@ -366,8 +367,24 @@ namespace hypro
               
       protected:        
               evaluationResult specificEvaluation(matrix_t<double> l)
-              {               
-                    return result;
+              {     
+   /*                 if(aD != 0) // catch artificial directions
+                    {  
+                            if( l == aD->dir1 )
+                            {
+                                evaluationResult res;
+                                res.supportValue = aD->dir1_eval;
+                                return res;
+                            }
+                            else if ( l == aD->dir2 )
+                            {
+                                 evaluationResult res;
+                                 res.supportValue = aD->dir2_eval;
+                                 return res;
+                            }
+                    }
+*/
+                    return result;     
               };
       public:
           InfinitySupportFunction(artificialDirections* aD) : SupportFunction(SupportFunctionType::Infinity_Type, aD)

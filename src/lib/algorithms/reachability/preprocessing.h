@@ -383,18 +383,19 @@
             #ifdef TRANSITIONINFO_VERBOSE
                 std::cout << method << "id: " << BL << id << BL;
             #endif
-            matrix_t<double> w(2*dim,1);
+            matrix_t<double> w_local(2*dim,1);
             #ifdef TRANSITIONINFO_VERBOSE
-                std::cout << method << "w (initial): " << BL << w << BL;
+                std::cout << method << "w_local: " << BL << w_local << BL;
             #endif
             // extend w if necessary due to additional dimension
-            for(int i=0; i<trans->assignment().translationVec.size(); i++)
+            for(int i=0; i<=trans->assignment().translationVec.size(); i++)
             {
-                w(i,0) = i<trans->assignment().translationVec.size() ? trans->assignment().translationVec(i) : 1;
-                w(i+dim,0) = i<trans->assignment().translationVec.size() ? - trans->assignment().translationVec(i) : -1;
+                w_local(i,0) = i<trans->assignment().translationVec.size() ? trans->assignment().translationVec(i) : 1;
+                w_local(i+dim,0) = i<trans->assignment().translationVec.size() ? - trans->assignment().translationVec(i) : -1;
             }
-            this->w = w;
+            this->w = w_local;
             #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << method << "w_local: " << BL << w_local << BL;
                 std::cout << method << "this->w: " << BL << this->w << BL;
             #endif
  
@@ -631,10 +632,14 @@
                 
                 // sorted values (do not need to be re-evaluated since this will be done when computing the intersection)
                 
-                for(int i=0; i< temp.size(); i++)
+                for(int i=0; i< temp.size()-2; i++)
                 {
                     temp(i,0) = INFINITY;
                 }
+                //last 2 entries are artificial
+                temp(temp.size()-2,0) = 1;
+                temp(temp.size()-1,0) = -1;
+                
                 // intersect with guards
                 for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
                 {

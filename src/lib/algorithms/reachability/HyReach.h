@@ -218,7 +218,7 @@ namespace hypro
               #endif
               
               // test for an intersection between X0 and the invariant
-              if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values))
+              if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values, locInfo->scaledConstraintValues->size()))
               {
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "testIntersection: true" << BL;
@@ -402,7 +402,7 @@ namespace hypro
                   // detect possible transitions -> flowpipe might NOT be shortened dependend on the chosen transition -> due to use of algoinv only reachable (in the invariant) sets are computed!
                   std::vector<possibleTransition>* possibleTransitions = getPossibleTransitions(loc, flowpipe);
                   #ifdef HYREACH_VERBOSE
-                      std::cout << method << "possibleTransitions:" << possibleTransitions << BL;
+                      std::cout << method << "#possibleTransitions:" << possibleTransitions->size() << BL;
                   #endif
              
                   // choose which transition to take -> Assuption: all
@@ -410,26 +410,50 @@ namespace hypro
                   matrix_t<double> valuesForNextSet;    
                   TransitionInfo* transitionInfo = 0;                
                   for(auto iterator = possibleTransitions->begin(); iterator != possibleTransitions->end(); ++iterator)
-                  {           
+                  {    
+                      #ifdef HYREACH_VERBOSE
+                           std::cout << method << "considering transition: " << BL;
+                      #endif 
+                              
                       // Note: iterator is a pointer to possibleTransition structure
                       transitionInfo = transitionMap.find(iterator->transition_pt)->second;
                       
                       // cluster always all sets
                       valuesForNextSet = clustering(*iterator); // cluster all sets which are relevant for the construction of the initial set for the next node
+                      #ifdef HYREACH_VERBOSE
+                           std::cout << method << "clustered values: " << valuesForNextSet.transpose() << BL;
+                      #endif 
                       
                       // compute intersection                      
-                       valuesForNextSet = intersect(transitionInfo->sortedValues, valuesForNextSet);
+                      valuesForNextSet = intersect(transitionInfo->sortedValues, valuesForNextSet);
+                      #ifdef HYREACH_VERBOSE
+                           std::cout << method << "valuesForNextSet: " << valuesForNextSet.transpose() << BL;
+                      #endif 
                       // reconstruct and evaluate to create tight bounds
                       SupportFunction* intersectedSet = new PolytopeSupportFunction(&L,valuesForNextSet,X0->getAD()->dir1.size(),X0->getAD());
-                      //intersectedSet->multiEvaluate(L_pt, &valuesForNextSet);  // does not need to be done if reset is applied directly
+                      #ifdef HYREACH_VERBOSE
+                           matrix_t<double> temp(valuesForNextSet.rows(),1);
+                           intersectedSet->multiEvaluate(&L, &temp);  // does not need to be done if reset is applied directly
+                           std::cout << method << "intersectedSet evaluation: " << temp.transpose() << BL << BL;
+                      #endif 
                       
                       // compute reset
                       SupportFunction* resetTemp = intersectedSet->multiply(transitionInfo->getR());
+                      #ifdef HYREACH_VERBOSE
+                           matrix_t<double> resetTemp_values(L.size(),1);
+                           resetTemp->multiEvaluate(&L,&resetTemp_values);
+                           std::cout << method << "resetTemp evaluation: " << BL << resetTemp_values.transpose() << BL << BL;
+                           
+                           matrix_t<double> w(L.size(),1);
+                           transitionInfo->getWfunction()->multiEvaluate(&L, &w);
+                           std::cout << method << "w evaluation: " << w.transpose() << BL;
+                      #endif
+                      
                       SupportFunction* resetSet = resetTemp->minowskisum(transitionInfo->getWfunction());
                       #ifdef HYREACH_VERBOSE
                            matrix_t<double> resetSet_values(L.size(),1);
                            resetSet->multiEvaluate(&L,&resetSet_values);
-                           std::cout << method << "resetSet: " << BL << resetSet_values << BL;
+                           std::cout << method << "resetSet evaluation: " << BL << resetSet_values.transpose() << BL;
                       #endif
                    
                       // start next Recursion (recursive call of this method)

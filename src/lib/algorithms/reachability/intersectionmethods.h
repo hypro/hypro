@@ -2,12 +2,14 @@
 * This files contains the implementation of intersection related methods
 */
 
-#define INTERSECTION_VERBOSE
+//#define INTERSECTION_VERBOSE
 
           /*
           * This method implements testIntersection from algoInv.m (ignores the two last entries)
+          * valuesToTest specifies the number of value pairs (d,set) to test. This is inteded to
+          * simplify the exclusen of additional dimensions for intersection tests
           */
-          bool testIntersection(std::vector<double>* d, mapping minus_invariants_in_L, matrix_t<double> set)
+          bool testIntersection(std::vector<double>* d, mapping minus_invariants_in_L, matrix_t<double> set, unsigned int valuesToTest)
           {
                #ifdef INTERSECTION_VERBOSE
                    std::cout << "testIntersection(...): " << "d:" << *d << BL;
@@ -19,7 +21,7 @@
                #endif
                               
                   // loop over all L
-                  for(unsigned int i=0; i<d->size(); i++)   // -2 because the 2 last directions are artificial
+                  for(unsigned int i=0; i<valuesToTest; i++)   // -2 because the 2 last directions are artificial
                   {
                        if( -set( minus_invariants_in_L[i],0 ).toDouble() > d->at(i) )    // intersection condition
                        {

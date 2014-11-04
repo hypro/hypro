@@ -9,6 +9,20 @@
     
 //#define HELPER_METHODS_VERBOSE
 
+    void printPossibleTransitions(std::vector<possibleTransition>* pT)
+    {
+         for(unsigned int i=0; i< pT->size(); i++)
+         {
+             possibleTransition t = pT->at(i);
+             std::cout << "transition: " << i << " Number of intersection parts: " << t.sets.size() << BL << "set indices: ";
+             for(unsigned int j=0; j<t.sets.size(); j++)
+             {
+                  convexSetOfFlowpipeSetIndexis c = t.sets.at(j);
+                  std::cout << "[" << c.start << ";" << c.end << "],";
+             }
+         }
+    }
+
     /*
     * This templated method can be used to print arrays of arbitrary type
     */

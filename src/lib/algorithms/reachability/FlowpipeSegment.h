@@ -48,6 +48,9 @@ namespace hypro
             else
             {
                 std::cout<< "!!!! Attempt to get a set with an index from the flowpipe which is not there" << BL;
+                matrix_t<double> result(1,1);    // will hopefully lead to errors
+                result(0,0) = 0;
+                return result;
             }
         } 
          

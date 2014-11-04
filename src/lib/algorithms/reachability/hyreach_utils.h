@@ -49,14 +49,34 @@ namespace hypro
 				resultMatrix = convertMatToFloatT<double>(expMatrix);
 				
 				return resultMatrix;
-        }
+        }               
 }
  
 #include "FlowpipeSegment.h"
 
 // some globally used methods
 namespace hypro
-{                	
+{     
+      /*
+         * This structure describes a set of consecutive sets in the flowpipe by the start and end indexis relatively to a specific flowpipeSegment
+         * The main purpose of this structure is to be used as elements of a list inside the possibleTransition structure
+         */
+         struct convexSetOfFlowpipeSetIndexis
+         {
+                unsigned int start;
+                unsigned int end;
+         };
+          
+         /*
+         * Structure describing a possible transition and a list of all associated sets of the currently considered flowpipe
+         */
+         struct possibleTransition
+         {
+                transition* transition_pt;      // transition
+                FlowpipeSegment* flowpipeSegment;  // flowpipe the set indexis relate to
+                std::vector<convexSetOfFlowpipeSetIndexis> sets; // list of successive sets having an intersection with the guard (and I* etc.) of the transition 
+         };
+                    	
 #include "helperMethods.h"      // make helper methods available
 #include "vectorgenerator.h"    // make vectorgenerator functionalities globally available
 }
