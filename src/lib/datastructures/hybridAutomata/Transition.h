@@ -1,6 +1,7 @@
 /* 
+ * Class that describes one transition of a hybrid automaton.
  * File:   transition.h
- * Author: stefan & chris
+ * Author: stefan & ckugler
  *
  * Created on April 30, 2014, 9:06 AM
  */
@@ -28,9 +29,10 @@ namespace hypro
 
     		struct assignment {
     			hypro::vector_t<Number> translationVec;  //Translation Vector
-    			hypro::matrix_t<Number> transformMat;
+    			hypro::matrix_t<Number> transformMat;    //Transformation Matrix
     		};
 
+    		//transition: two locations, a guard and an assignment
     		struct transition {
     			location* locStart;
     			location* locTarget;
@@ -42,7 +44,7 @@ namespace hypro
     		/**
     		 * Member
     		 */
-    		transition mTransition; // transition: two locations, a guard and an assignment
+    		transition mTransition;
 
         public:
     		/**
@@ -104,24 +106,5 @@ namespace hypro
     		void setAssignment(struct assignment _val) {
     			mTransition.tAssignment = _val;
     		}
-
-    		/*
-    		bool checkGuard(hypro::valuation_t _val) {
-    			//TODO interval!
-    			//return mGuard.mat * _val mGuard.op mGuard.vec
-    		}
-
-    		//previously: execAssignment (name tbd)
-    		//TODO set of valuations is returned? -> Script!
-    		hypro::valuation_t computePost(hypro::valuation_t _val) {
-    			if (checkGuard(_val)) {
-    				return mAssignment;
-    			} else {
-    				//TODO
-    				//maybe throw error: transition may not be taken
-    				return _val;
-    			}
-    		}
-    		*/
     };
 }

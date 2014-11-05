@@ -1,6 +1,7 @@
 /* 
+ * Class that describes a hybrid automaton.
  * File:   hybridAutomaton.h
- * Author: stefan & chris
+ * Author: stefan & ckugler
  *
  * Created on April 30, 2014, 9:06 AM
  */
@@ -23,6 +24,7 @@ namespace hypro
 			typedef std::set<transition*> transitionSet;
 
         public:
+			//hybrid automaton: a set of locations, a set of initial locations, a set of transitions and a valuation (currently a polytope)
     		struct hybridAutomaton {
     			locationSet init;
     			locationSet locs;

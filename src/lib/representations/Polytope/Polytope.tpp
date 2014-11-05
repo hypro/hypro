@@ -397,6 +397,8 @@ namespace hypro
         } while ( current != sink || neighborCounter != (2, deltaK));
         */
         
+        //TODO remove
+        std::cout.setstate(std::ios::failbit);
         
         // unelegant version creating the powerset of all points and reducing it afterwards
         //std::cout << "Result before: " << std::endl;
@@ -428,7 +430,8 @@ namespace hypro
         result.hull(result);
 
         mPointsUpToDate = false;
-
+        //TODO remove
+        std::cout.clear();
         return true;
     }
     
@@ -510,6 +513,11 @@ namespace hypro
 
     			//choose next Vertex, only continue if one exists
     			if (polytope::adjOracle(nextVertex, currentVertex, counter)) {
+					//set neighbors of the vertices accordingly - the adjacency oracle confirmed neighborship
+    				//TODO problem: addNeighbor requires a pointer
+					//currentVertex.addNeighbor(&nextVertex);
+					//nextVertex.addNeighbor(&currentVertex);
+
 					for (unsigned i=0; i < alreadyExploredVertices.size(); ++i) {
 	    				if (nextVertex == alreadyExploredVertices.at(i)) {
 	    					alreadyExplored = true;
@@ -525,10 +533,6 @@ namespace hypro
     				Point<Number> localSearchVertex = result.localSearch(nextVertex, sinkMaximizerTarget);
     				parentMap.insert( std::make_pair(nextVertex, localSearchVertex) );
     				if (localSearchVertex == currentVertex) {
-    					//TODO problem: addNeighbor requires a pointer
-    					//set Neighbors of the new vertices accordingly
-    					//currentVertex.addNeighbor(&nextVertex);
-    					//nextVertex.addNeighbor(&currentVertex);
 
     					//reverse traverse
     					currentVertex = nextVertex;
@@ -574,23 +578,6 @@ namespace hypro
     			std::cout << "CurrrentVertex != initVertex: " << (currentVertex != initVertex) << std::endl;
     			std::cout << "Counter != (2,2): " << (counter.first != 2 || counter.second != delta_2) << std::endl;
     			std::cout << "---------------" << std::endl;
-    			/*
-    			//approach: start at (1,1), increment till desired counter is found
-    			counter.first = 1;
-    			counter.second = 0;
-
-    			Point<Number> result;
-    			do {
-    	    			//increment counter by 1
-    	    			if (counter.second == delta_1) {
-    	    				counter.first = 2;
-    	    				counter.second = 1;
-    	    			} else {
-    	    				counter.second += 1;
-    	    			}
-    	    			bool not_used = polytope::adjOracle(result, currentVertex, counter);
-
-    			} while (result != temp);*/
 
     		}
 
@@ -644,7 +631,7 @@ namespace hypro
         res.poly_hull_assign(rhs.rawPolyhedron());
         result = Polytope<Number>(res);
 
-        mPointsUpToDate = false;
+        //mPointsUpToDate = false;
 
         return true;
     }
@@ -722,13 +709,15 @@ namespace hypro
      * @author: Chris K.
      * in the following: Utility functions for altMinkowskiSum()
      */
-    //returns max. Vertex degree in a Polytope
-    //TODO has to be assured that no inner vertices exist -> assume convex Hull?
+
+    /**
+     * returns the maximum vertex degree in a polytope
+     */
     template<typename Number>
     int Polytope<Number>::computeMaxVDegree() {
     	std::vector<Point<Number>> points = this->points();
     	int max = 0;
-        //std::cout << "Points in compute..: " << this->points() << std::endl;
+
     	for (typename std::vector<Point<Number>>::iterator it=points.begin(); it!=points.end(); ++it) {
     		if (max < it->neighbors().size()) {max=it->neighbors().size();}
     	}
@@ -736,12 +725,14 @@ namespace hypro
     	return max;
     }
 
-    //returns the point of of a Polytope with maximum x-value
-    //-> unique maximizer extreme point v of cx over P with c = (1,0,0..)
+
+    /**
+     * returns the vertex with maximum x-value for a given polytope
+     */
     template<typename Number>
     Point<Number> Polytope<Number>::computeMaxPoint() {
     	Point<Number> result;
-    	//updatePoints();
+
     	if(!mPoints.empty())
     	{
     		result = *(mPoints.begin());
@@ -759,7 +750,9 @@ namespace hypro
     	return result;
     }
 
-    //returns one extreme point of P = P1+P2
+    /**
+     * returns one vertex of the sum polytope P = P1+P2
+     */
     template<typename Number>
     Point<Number> Polytope<Number>::computeInitVertex(Polytope<Number> _secondPoly) {
     	Point<Number> p1 = this->computeMaxPoint();
@@ -773,7 +766,11 @@ namespace hypro
     	return res;
     }
 
-    //local Search function
+
+    /**
+     * the Local Search as per Fukuda's paper
+     * computes the parent of a given vertex w.r.t the sink of the spanning tree
+     */
     template<typename Number>
     Point<Number> Polytope<Number>::localSearch(Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget){
 
@@ -789,14 +786,11 @@ namespace hypro
     	Point<Number> maximizerTarget;
     	vector maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
 
-    	//std::cout << "maximizerVector in localSearch: " << maximizerVector << std::endl;
-
     	//compute the ray direction (a vector)
     	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
     	std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
     	std::cout << "End Point of Ray: " << _sinkMaximizerTarget << std::endl;
-    	//std::cout << "Ray Vector: " << ray << std::endl;
 
     	//compute the normal cone of _vertex
     	polytope::Cone<Number>* cone = polytope::computeCone(_vertex, maximizerVector);
@@ -819,7 +813,6 @@ namespace hypro
     		}
     	}
 
-    	//bool found = false;
     	Point<Number> secondOrigin;
 
     	std::cout << "-----------------" << std::endl;
@@ -828,7 +821,6 @@ namespace hypro
 		std::cout << "-----------------" << std::endl;
 
 		std::vector<vector> decompositionEdges = polytope::computeEdgeSet(_vertex);
-		//std::cout << "Decomposition Edges: " << decompositionEdges << std::endl;
 
 		for (unsigned i=0; i < decompositionEdges.size(); i++) {
 			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(decompositionEdges.at(i));
@@ -871,73 +863,7 @@ namespace hypro
 			}
 		}
 
-		//TODO REMOVE
-		/*
-    	//iterate through all cones in the fan
-    	for (auto& cone : this->mFan.get()) {
-    		for (auto& plane : cone->get()) {
-    			//check if our intersectedPlane is also present in the currently examined cone
-    			//for that the Scalar has to be the same, and the cross product of both normals has to be 0 (=> normals are parallel)
-    			std::cout << "Normal of comparison Plane: " << plane->normal() << std::endl;
-    			std::cout << "Offset of comparison Plane: " << plane->offset() << std::endl;
-
-    			carl::FLOAT_T<Number> dotProduct = intersectedPlane.normal().dot(plane->normal());
-    			carl::FLOAT_T<Number> normFactor = intersectedPlane.normal().norm() * plane->normal().norm();
-    			bool parallel = false;
-
-    			std::cout << "dotProduct: " << dotProduct << std::endl;
-    			std::cout << "normalizationFactor: " << normFactor << std::endl;
-
-    			//TODO ~ 1, not exactly (rounding error)
-    			if (dotProduct/normFactor == 1) {
-    				std::cout << "Parallel Plane found" << std::endl;
-        			std::cout << "-----------------" << std::endl;
-    				parallel = true;
-    				//store the origin of the cone this plane belongs to
-    				secondOrigin = cone->origin();
-    			}
-
-    			if (parallel) {
-    				//check if the edge between the input vertex and the possible parent is parallel to the normal of the intersectedPlane
-    				std::vector<vector> edges = polytope::computeEdgeSet(_vertex);
-    				vector candidateEdge = polytope::computeEdge(_vertex, secondOrigin);
-    				std::cout << "Candidate Edge: " << candidateEdge << std::endl;
-
-        			carl::FLOAT_T<Number> dot = intersectedPlane.normal().dot(candidateEdge);
-        			carl::FLOAT_T<Number> norm = intersectedPlane.normal().norm() * candidateEdge.norm();
-
-        			if (dot/norm == 1) {
-        				std::cout << "Candidate Edge is parallel to normal of IntersectedPlane" << std::endl;
-
-        				//a further check has to be made:
-        				//the candidate edge also has to be parallel to at least one edge in P1 or P2, else this edge direction would not exist
-        				for (auto& edge : decompositionEdges) {
-                			carl::FLOAT_T<Number> dotLast = edge.dot(candidateEdge);
-                			carl::FLOAT_T<Number> normLast = edge.norm() * candidateEdge.norm();
-        					if (dotLast/normLast == 1) {
-        						std::cout << "Solution found: there is also an edge in the decomposition that is parallel to the candidate" << std::endl;
-        						found = true;
-        						break;
-        					}
-        				}
-        				if (found) {
-        					break;
-        				}
-        			}
-    			}
-
-    		}
-    		if (found) {
-    			//retrieve the origin of the cone that has the identical plane
-    			//secondOrigin = cone->origin();
-    			break;
-    		}
-
-    	}
-    	*/
-
     	//add this normal cone to fan of polytope
-    	//Important! after localSearch has been applied (so that we dont search in our own cone)
     	this->mFan.add(cone);
 
     	//TODO REMOVE

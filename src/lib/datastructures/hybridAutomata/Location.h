@@ -1,15 +1,13 @@
 /* 
+ * Class that describes one location of a hybrid automaton.
  * File:   location.h
- * Author: stefan & chris
+ * Author: stefan & ckugler
  * Created on April 30, 2014, 9:06 AM
  */
 
 #pragma once
 
 #include "util.h"
-//#include "Transition.h"
-
-
 
 namespace hypro
 {
@@ -30,6 +28,7 @@ class Transition;
     			hypro::operator_e op;
     		};
 
+    		//location: activity (matrix & vector), invariant, a set of outgoing transitions and a matrix for external Input
     		struct location {
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number> mat;
@@ -43,7 +42,7 @@ class Transition;
     		/**
     		 * Member
     		 */
-    		location mLocation;  //location: matrix, vector, invariant and set of outgoing transitions
+    		location mLocation;
         
         public:
     		/**
@@ -76,8 +75,6 @@ class Transition;
     		void setTransitions(transitionSet _trans);
     		void setExtInputMat(hypro::matrix_t<Number> _mat);
 
-    		//bool checkInvariant(hypro::valuation_t _val);
-    		//std::set<hypro::valuation_t> computeForwardTimeClosure(hypro::valuation_t _val);
     };
 }
 

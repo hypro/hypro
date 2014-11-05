@@ -41,13 +41,18 @@ typedef std::set<carl::Variable> variableSet;
 typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, Eigen::Dynamic> matrix;
 typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, 1> vector;
 
-//author: ckugler
-//defines for Forward Reachability
+/**
+ * author: ckugler
+ * Defines for reachability algorithm based on polytopes
+ */
 #define fReach_TIMEBOUND 10
 #define fReach_TIMEDISCRETIZATION 10
 #define fReach_DENOMINATOR 1000000
 
-//defines for Fukuda's Minkowski Sum
+/**
+ * author: ckugler
+ * Defines for implementation of Fukuda's Minkowski Sum algorithm
+ */
 #define EPSILON 0.000001
 #define POS_CONSTANT 100
 

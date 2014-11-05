@@ -119,8 +119,8 @@ namespace polytope
                 coefficient = (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si();
                 divisor = (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
                 value = coefficient/divisor;
-                std::cout << "Coordinates: " << value << std::endl;
-                std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+                //std::cout << "Coordinates: " << value << std::endl;
+                //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }
             else
@@ -224,6 +224,9 @@ namespace polytope
      * Utility Functions for the Minkowski Sum Computation according to Fukuda
      */
 
+    /**
+     * computes the edge between two input points
+     */
     template<typename Number>
     vector computeEdge(Point<Number>& _point1, Point<Number>& _point2) {
     	vector edge = vector(_point1.dimension(),1);
@@ -231,16 +234,17 @@ namespace polytope
     	int i = 0;
 
     	for (auto it=variables.begin(); it != variables.end(); ++it) {
-    		//TODO check: [] or .at?
     		edge(i) = _point2.at(*it) - _point1.at(*it);
     		i++;
     	}
     	return edge;
     }
 
+    /**
+     * computes the target point given a starting point and an edge
+     */
     template<typename Number>
     Point<Number> computePoint(Point<Number>& _point, vector& _edge, bool ofPolyFlag) {
-    	//TODO copy constructor appropriate?
     	Point<Number> result = Point<Number>(_point);
     	std::vector<carl::Variable> variables = _point.variables();
 
@@ -248,7 +252,6 @@ namespace polytope
     	int i = 0;
 
     	for (auto it=variables.begin(); it != variables.end(); ++it) {
-    		//TODO check: [] or .at?
     		result.setCoordinate(*it,result.at(*it) + _edge(i));
     		i++;
     	}
@@ -268,38 +271,10 @@ namespace polytope
     	return result;
     }
 
-    /*
-    //temporarily only needed for the performance tests
-	template<typename Number>
-	Point<Number>* computePoint(Point<Number>& _point, vector& _edge) {
-		Point<Number>* result = new Point<Number>();
-		std::vector<carl::Variable> variables = _point.variables();
-
-		assert(_point.dimension() == _edge.rows());
-		int i = 0;
-
-		for (auto it=variables.begin(); it != variables.end(); ++it) {
-			result->at(*it) = _point.at(*it) + _edge(i);
-			i++;
-		}
-
-    	return result;
-    }*/
-
     /**
-     * currently not needed anymore
-     *
-	template<typename Number>
-	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble(const vector& _vec) {
-		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultVec(_vec.rows(),1);
-
-		for (int i=0; i<_vec.rows(); ++i) {
-			resultVec(i) = _vec(i).toDouble();
-		}
-		return resultVec;
-	}
-	*/
-
+     * the Adjacency Oracle as per Fukuda's paper
+     * computes one adjacent vertex in the sum polytope, given a specific direction (indirectly by the counter)
+     */
     template<typename Number>
     bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int>& _counter) {
     	//retrieve the edge that is defined by the counter (j,i)
@@ -345,8 +320,6 @@ namespace polytope
 
     	std::vector<Point<Number>> otherNeighbors = otherSource.neighbors();
 
-    	//std::cout << "Decomposition: " << sourceVertex << ", " << otherSource << std::endl;
-
     	vector tempEdge;
 		carl::FLOAT_T<Number> dotProduct;
 		carl::FLOAT_T<Number> normFactor;
@@ -356,20 +329,10 @@ namespace polytope
 			//check if edges are parallel (considering direction too)
 			//for this the following has to hold: (x dot_product y) / (|x|*|y|) = 1
 
-			/** OUTDATED: .dot() & .norm() not defined for FLOAT_T<Number>, conversion to Double necessary
-			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector(tempEdge.rows());
-			doubleVector = convertVecToDouble<Number>(tempEdge);
-			Eigen::Matrix<Number, Eigen::Dynamic, 1> doubleVector2(edge.rows());
-			doubleVector2 = convertVecToDouble<Number>(edge);
-
-			Number dotProduct = doubleVector.dot(doubleVector2);
-			Number normFactor = doubleVector.norm() * doubleVector2.norm();
-			*/
-
 			dotProduct = tempEdge.dot(edge);
 			normFactor = tempEdge.norm() * edge.norm();
 
-			//has to be done...
+			//has to be done... to avoid rounding problems
 			dotProduct = std::round(dotProduct.toDouble()*1000000);
 			normFactor = std::round(normFactor.toDouble()*1000000);
 
@@ -409,7 +372,7 @@ namespace polytope
 		glp_add_rows(feasibility, nonParallelEdges.size()+1);
 
 		//set bound of first row
-		//TODO < 0 required, here: <= 0
+		//since < 0 is not possible, we have <= -EPSILON
 		glp_set_row_bnds(feasibility, 1, GLP_UP, 0.0, -(EPSILON));
 
 		//constraints of auxiliary variables
@@ -426,9 +389,8 @@ namespace polytope
 			glp_set_obj_coef(feasibility, i, 1.0);
 		}
 
-		//TODO
-		//constrains for structural variables: x>=0, y>=0 for Lambda - can we even do that?
-		//not specified in Paper, but else there is no feasible primal solution
+		//constrains for structural variables: x>=0, y>=0 for Lambda
+		//not specified in paper, but else there is no feasible primal solution
 		for (unsigned i=1; i<=edge.rows(); ++i) {
 			glp_set_col_bnds(feasibility, i, GLP_DB, -1.0, 1.0);
 		}
@@ -486,7 +448,6 @@ namespace polytope
         	std::cout << "-------------------------" << std::endl;
         	return false;
         } else {
-        	//if (glp_get_status(feasibility) == GLP_FEAS) {
         		//since there is a feasible solution, our edge determines an edge direction of P=P1+P2
         		//compute the new adjacent vertex in P using this information
         		if (!parallelFlag) {
@@ -507,7 +468,6 @@ namespace polytope
         			result.addToComposition(targetVertex);
         			result.addToComposition(otherTargetVertex);
         		}
-        	//}
         }
 
         glp_delete_prob(feasibility);
@@ -519,6 +479,9 @@ namespace polytope
         return true;
     }
 
+    /**
+     * computes the unique maximizer vector for a given vertex (and also the target point of this vector)
+     */
     template<typename Number>
     vector computeMaximizerVector(Point<Number>& _targetVertex, Point<Number>& _vertex) {
 
@@ -575,7 +538,6 @@ namespace polytope
 		}
 
 		//each column corresponds to one dimension of the vector + one column for Lambda0
-		//TODO consider p1 & p2 of different dimensions? (-> two edge sets)
 		glp_add_cols(maximizer, tmpEdge.rows()+1);
 
 		//coefficients of objective function: only Lambda0 has a non-zero coefficient (last column)
@@ -585,14 +547,7 @@ namespace polytope
 		glp_set_obj_coef(maximizer, tmpEdge.rows()+1, 1.0);
 
 		//constraints for structural variables
-		//TODO distinguish depending on degeneracy
 		for (int i=1; i<= tmpEdge.rows(); ++i) {
-			/*if (degeneracyCheck.at(i-1)) {
-				glp_set_col_bnds(maximizer, i, GLP_DB, 0.0, 0.0);
-			} else {
-    			std::cout << "Setting bound (-1,1): " << std::endl;
-				glp_set_col_bnds(maximizer, i, GLP_DB, -1.0, 1.0);
-			}*/
 			glp_set_col_bnds(maximizer, i, GLP_DB, -1.0, 1.0);
 		}
 		glp_set_col_bnds(maximizer, tmpEdge.rows()+1, GLP_UP, 0.0, POS_CONSTANT);
@@ -654,6 +609,9 @@ namespace polytope
 
     }
 
+    /**
+     * computes one of dimension-1 vectors that contribute to the normal cone of a vertex
+     */
     template<typename Number>
     vector computeNormalConeVector(std::vector<vector>& _edgeSet, vector& _maximizerVector) {
 
@@ -673,7 +631,6 @@ namespace polytope
 		}
 
 		//each column corresponds to one dimension of a vector in our edgeSet
-		//TODO consider p1 & p2 of different dimensions? (-> two edge sets)
 		glp_add_cols(coneVector, _edgeSet.at(0).rows());
 
 		//coefficients of objective function:
@@ -728,6 +685,10 @@ namespace polytope
 		return result;
     }
 
+    /**
+     * for a given vertex in the sum polytope, computes all possible edge candidates
+     * i.e. consider all incident edges at the vertex decomposition
+     */
     template<typename Number>
     std::vector<vector> computeEdgeSet(Point<Number>& _vertex) {
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
@@ -742,7 +703,6 @@ namespace polytope
 
 		//traverse neighbors of v1
 		for (auto neighbor : neighbors1) {
-			//TODO check if this works, else tmpEdge outside
 			tmpEdge = computeEdge(sourceVertex1,neighbor);
 			edges.push_back(tmpEdge);
 		}
@@ -756,11 +716,13 @@ namespace polytope
 		return edges;
     }
 
+    /**
+     * computes the normal cone for a given vertex
+     */
     template<typename Number>
     polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector& _maximizerVector) {
     	std::vector<vector> edges = computeEdgeSet(_vertex);
 
-    	//TODO p1 & p2 of different dimension?
     	std::vector<vector> tmpEdges;
     	unsigned dimension = edges.at(0).rows();
     	vector tmpVector;
