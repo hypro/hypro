@@ -450,15 +450,23 @@ namespace hypro
                       #endif
                       
                       SupportFunction* resetSet = resetTemp->minowskisum(transitionInfo->getWfunction());
+                      matrix_t<double> resetSet_values(L.size(),1);
+                      resetSet->multiEvaluate(&L,&resetSet_values);
+                      // explicitely set the values for the artificial directions back to the constants and reconstruct the SupportFunction
+                      // this is necessary because the evaluation along the additional dimension of W() and resetTemp() is 1 (or -1) and thus the sum is 2 (or -2)
+                      // which are no valid values for evaluations along the additional dimensions.
+                      // Setting the evaluation of W() along those directions to 0 yields in a worst case scenario (everything is zero in a PolytopeSupportFunction)
+                      // where optimization errors occure.
+                      resetSet_values(resetSet_values.size()-2,0) = 1;
+                      resetSet_values(resetSet_values.size()-1,0) = -1;
                       #ifdef HYREACH_VERBOSE
-                           matrix_t<double> resetSet_values(L.size(),1);
-                           resetSet->multiEvaluate(&L,&resetSet_values);
                            std::cout << method << "resetSet evaluation: " << BL << resetSet_values.transpose() << BL;
                       #endif
                    
                       // start next Recursion (recursive call of this method)
                       //PolytopeSupportFunction nextX0(&L, valuesForNextSet, dimensionality, &additionalDirections);
-                      analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, resetSet, U, timeStep + flowpipe->size());
+                      PolytopeSupportFunction nextX0(&L, resetSet_values, dimensionality, &additionalDirections);
+                      analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, &nextX0, U, (timeStep + 1 + iterator->sets.begin()->start)); /*flowpipe->size()*/
                       
                       delete resetSet;
                       delete resetTemp;
