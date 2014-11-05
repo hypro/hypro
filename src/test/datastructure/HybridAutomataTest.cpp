@@ -1,3 +1,8 @@
+/**
+ * Testfile for hybrid automata.
+ * Author: ckugler
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/datastructures/hybridAutomata/Location.h"
@@ -12,11 +17,15 @@ using namespace carl;
 
 class HybridAutomataTest : public ::testing::Test
 {
+/**
+ * Test Setup:
+ * one hybrid automaton which consists of two locations that are connected by one transition
+ */
 protected:
     virtual void SetUp()
     {
       	/*
-		 * Location
+		 * Location Setup
 		 */
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
@@ -45,7 +54,7 @@ protected:
 		loc2->setActivityMat(locationMat);
 
 		/*
-		 * Transition
+		 * Transition Setup
 		 */
 		guard.op = inv.op;
 		guard.mat = inv.mat;
@@ -60,7 +69,7 @@ protected:
 		trans->setAssignment(assign);
 
 		/*
-		 * Hybrid Automaton
+		 * Hybrid Automaton Setup
 		 */
 		locations[0] = loc1;
 		locations[1] = loc2;
@@ -82,8 +91,6 @@ protected:
 		loc1->setTransitions(transSet);
 
 		//Polytope for InitialValuation & Guard Assignment
-		//coordinates.insert( std::make_pair(x, 2) );
-		//coordinates.insert( std::make_pair(y, 3) );
 		coordinates(0) = 2;
 		coordinates(1) = 3;
 
@@ -92,16 +99,6 @@ protected:
 
     	poly = Polytope<double>(vecSet);
 
-
-    	/*
-		std::map<carl::Variable, double> coordinate;
-		coordinate.insert( std::make_pair(x, 2) );
-		coordinate.insert( std::make_pair(y, 3) );
-		p1 = Point<double>(coordinate);
-
-		poly = Polytope<double>(p1);
-		*/
-
 		hybrid.setValuation(poly);
     }
 
@@ -109,11 +106,6 @@ protected:
     {
     	//TODO TearDown
     }
-
-    //Variable Objects
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
     Location<double>* loc1 = new Location<double>();
@@ -141,13 +133,14 @@ protected:
     hypro::Transition<double>* transition[1];
 	std::set<hypro::Transition<double>*> transSet;
 
-	//Point<double>::coordinates_map coordinates;
 	vector_t<double> coordinates = vector_t<double>(2,1);
-    Point<double> p1;
     hypro::Polytope<double> poly;
 
 };
 
+/**
+ * Location Test
+ */
 TEST_F(HybridAutomataTest, LocationTest)
 {
 	//invariant: operator
@@ -193,6 +186,9 @@ TEST_F(HybridAutomataTest, LocationTest)
 	EXPECT_EQ(loc1->transitions(), transSet);
 }
 
+/**
+ * Transition Test
+ */
 TEST_F(HybridAutomataTest, TransitionTest)
 {
 	//transition: Start Location
@@ -212,6 +208,9 @@ TEST_F(HybridAutomataTest, TransitionTest)
 
 }
 
+/**
+ * Hybrid Automaton Test
+ */
 TEST_F(HybridAutomataTest, HybridAutomatonTest)
 {
 	//hybrid automaton: initial Location
@@ -226,13 +225,8 @@ TEST_F(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_EQ(hybrid.transitions(), transSet);
 
 	//hybrid automaton: initial Valuation
-
-	/**TODO
-	 * Polytope/Polytope.h:88:21: error: cannot bind ‘std::ostream {aka std::basic_ostream<char>}’ lvalue to ‘std::basic_ostream<char>&&’
-                 lhs << generator;
-                     ^
-
-	 	EXPECT_EQ(hybrid.valuation(), poly);
-	 */
+	//equivalence has to be confirmed through console output
+	hybrid.valuation().print();
+	poly.print();
 
 }

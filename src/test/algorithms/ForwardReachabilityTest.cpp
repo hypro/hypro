@@ -1,3 +1,8 @@
+/**
+ * Testfile for the reachability computation based on polytopes.
+ * Author: ckugler
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/datastructures/hybridAutomata/Location.h"
@@ -13,6 +18,10 @@ using namespace carl;
 
 class ForwardReachabilityTest : public ::testing::Test
 {
+/**
+ * Test Setup:
+ * one hybrid automaton which consists of two locations that are connected by one transition
+ */
 protected:
     virtual void SetUp()
     {
@@ -43,9 +52,8 @@ protected:
 
     	loc2->setInvariant(inv);
 
-    	//note: 3rd variable is for the constant factor
+    	//note: 3rd variable is for the encoded constant factor
     	//here: x' = 2, y'= 2, z' = 0  (x' := derivative)
-
     	locationMat(0,0) = 0.69314718056;
     	locationMat(0,1) = 0;
     	locationMat(0,2) = 0;
@@ -55,17 +63,7 @@ protected:
     	locationMat(2,0) = 0;
     	locationMat(2,1) = 0;
     	locationMat(2,2) = 0;
-    	/*
-    	locationMat(0,0) = 1;
-    	locationMat(0,1) = 0;
-    	locationMat(0,2) = 0;
-    	locationMat(1,0) = 0;
-    	locationMat(1,1) = 1;
-    	locationMat(1,2) = 0;
-    	locationMat(2,0) = 0;
-    	locationMat(2,1) = 0;
-    	locationMat(2,2) = 0;
-		*/
+
     	loc1->setActivityMat(locationMat);
     	loc2->setActivityMat(locationMat);
 
@@ -135,13 +133,7 @@ protected:
     	boxMat(5,1) = 0;
     	boxMat(5,2) = -1;
 
-    	//TODO ERROR polytope.tpp:77
     	poly = Polytope<double>(boxMat,boxVec);
-
-    	std::cout << "Poly Dimension: " << poly.dimension() << std::endl;
-
-        //std::cout << "Poly: " << std::endl;
-        //poly.print();
 
     	hybrid.setValuation(poly);
 
@@ -150,7 +142,6 @@ protected:
     	 * Testing of other ways to construct a polytope
     	 */
 
-		 // should work (change in other test also)
     	coordinates(0) = 1;
     	coordinates(1) = 1;
 
@@ -162,11 +153,8 @@ protected:
     	//--------
     	p1 = Point<double>({1,1});
 
-    	//std::cout << "PointPolyGeneratorStart" << std::endl;
-
     	pPoly = Polytope<double>(p1);
 
-    	//std::cout << "PointPolyGeneratorEnd" << std::endl;
     }
 
     virtual void TearDown()
@@ -200,7 +188,6 @@ protected:
     hypro::Transition<double>* transition[1];
 	std::set<hypro::Transition<double>*> transSet;
 
-	//Point<double>::coordinates_map coordinates;
 	vector_t<double> coordinates = vector_t<double>(2,1);
     Point<double> p1;
     hypro::Polytope<double> poly;
@@ -211,6 +198,9 @@ protected:
     matrix_t<double> boxMat = matrix_t<double>(6,3);
 };
 
+/**
+ * Test for function computePostCondition()
+ */
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
 	hypro::valuation_t<double> result;
@@ -230,172 +220,41 @@ TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 	EXPECT_FALSE(outside);
 }
 
-
+/**
+ * Test for function computeForwardTimeClosure()
+ */
 TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
 
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
-        Point<double> start = Point<double>({1,1});
-        
-        hypro::Polytope<double> startPoly = hypro::Polytope<double>(start);
-
-	//TODO remove
-   	std::cout << "box Vector " << std::endl;
-   	std::cout << boxVec << std::endl;
-   	std::cout << "------" << std::endl;
-
-	std::cout << "box Matrix: " << std::endl;
-	std::cout << boxMat << std::endl;
-	std::cout << "------" << std::endl;
-
-   	std::cout << "original Box (Polytope): ";
+   	std::cout << "original Polytope (Box): ";
     poly.print();
 
-	//
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
-
-	//TODO should work, probably doesn't because of FLOAT_T<Number> instead of simply Number
-	//hypro::matrix_t<double> expMat(2,2);
-	//expMat = invariantMat.exp();
-
-	/*
-	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> testMat(2,2);
-	testMat(0,0) = 1;
-   	testMat(0,1) = 0;
-   	testMat(1,0) = 0;
-   	testMat(1,1) = 1;
-
-	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> exponentialMat(2,2);
-   	exponentialMat = testMat.exp();
-   	*/
-
-   	//---------
 
    	//check size of flowpipe
    	int size = flowpipe.size();
 
    	std::cout <<  "Flowpipe size: ";
    	std::cout << size << std::endl;
-
-   	//EXPECT_EQ(size,5);
-
-   	/*
-   	//check each Segment of the flowpipe
-	hypro::vector_t<double> pointVec = hypro::vector_t<double>(4,1);
-	Polytope<double> pointPoly;
-
-	//first Segment
-  	EXPECT_EQ(flowpipe.front(), poly);   //currently doesn't work (<< Operator)
-
-	pointVec(0) = 1;
-	pointVec(1) = -1;
-	pointVec(2) = 1;
-	pointVec(3) = -1;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_TRUE(flowpipe.front().contains(pointPoly));
-
-	pointVec(0) = 2;
-	pointVec(1) = -2;
-	pointVec(2) = 2;
-	pointVec(3) = -2;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_FALSE(flowpipe.front().contains(pointPoly));
-
-	//second Segment
-	pointVec(0) = 2;
-	pointVec(1) = -2;
-	pointVec(2) = 2;
-	pointVec(3) = -2;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_TRUE(flowpipe[1].contains(pointPoly));
-
-	pointVec(0) = 3;
-	pointVec(1) = -3;
-	pointVec(2) = 3;
-	pointVec(3) = -3;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_FALSE(flowpipe[1].contains(pointPoly));
-
-	//third Segment
-	pointVec(0) = 4;
-	pointVec(1) = -4;
-	pointVec(2) = 4;
-	pointVec(3) = -4;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_TRUE(flowpipe[2].contains(pointPoly));
-
-	pointVec(0) = 5;
-	pointVec(1) = -5;
-	pointVec(2) = 5;
-	pointVec(3) = -5;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_FALSE(flowpipe[2].contains(pointPoly));
-
-	//fourth Segment
-	pointVec(0) = 8;
-	pointVec(1) = -8;
-	pointVec(2) = 8;
-	pointVec(3) = -8;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_TRUE(flowpipe[3].contains(pointPoly));
-
-	pointVec(0) = 9;
-	pointVec(1) = -9;
-	pointVec(2) = 9;
-	pointVec(3) = -9;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_FALSE(flowpipe[3].contains(pointPoly));
-
-	//fifth Segment
-	pointVec(0) = 16;
-	pointVec(1) = -16;
-	pointVec(2) = 16;
-	pointVec(3) = -16;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_TRUE(flowpipe[4].contains(pointPoly));
-
-	pointVec(0) = 17;
-	pointVec(1) = -17;
-	pointVec(2) = 17;
-	pointVec(3) = -17;
-	pointPoly = Polytope<double>(boxMat,pointVec);
-	EXPECT_FALSE(flowpipe[4].contains(pointPoly));
-	*/
 }
 
-TEST_F(ForwardReachabilityTest, ComputeReachTest)
-{
-
-}
-
+/**
+ * Test for function computeForwardsReachability()
+ */
 TEST_F(ForwardReachabilityTest, ComputeForwardsReachabilityTest)
 {
-
+	//TODO
 }
 
+/**
+ * Containment Tests: if polytopes are created correctly
+ */
 TEST_F(ForwardReachabilityTest, ContainmentTest)
 {
-
 	/*
-	 * Tests based on Polytope(Point) constructor
-	 */
-
-	/**TODO
-	*C++ exception with description "PPL::C_Polyhedron::contains(y):
-	*this->space_dimension() == 2, y.space_dimension() == 4." thrown in the test body.
-	*/
-	//TODO adjust pPoly to z variable!
-	//bool cTest = poly.contains(pPoly);
-
-	//EXPECT_TRUE(cTest);
-
-	//coordinate.insert( std::make_pair(x, 0) );
-    //coordinate.insert( std::make_pair(y, 0) );
-	//*/
-
-	/*
-	 * Tests based on Polytope(Matrix,Vektor) constructor
+	 * Tests based on Polytope(Matrix,Vector) constructor
 	 */
 	hypro::vector_t<double> pointVec = hypro::vector_t<double>(6,1);
 
@@ -405,7 +264,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(3) = 0;
 	pointVec(4) = 1;
 	pointVec(5) = -1;
-
 
 	Polytope<double> pointPoly;
 	pointPoly = Polytope<double>(boxMat,pointVec);
@@ -450,12 +308,15 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	EXPECT_FALSE(contains4);
 
 }
+
 //TODO fix
-/*
+
 TEST_F(ForwardReachabilityTest, UtilityTest)
 {
 
-	// computePolytope() Test
+	/**
+	 * computePolytope() Test
+	 */
 	hypro::Polytope<double> testBoxPoly;
 	int dimension = 4;
 	double radius = 5;
@@ -463,17 +324,14 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 
 	hypro::vector_t<double> pointVec = hypro::vector_t<double>(6,1);
 
-	//necessary test adjustment, because computePolytope() does not consider the last dimension
 	matrix_t<double> testMat = boxMat;
-	testMat(4,2) = 0;
-	testMat(5,2) = 0;
 
 	pointVec(0) = 5;
 	pointVec(1) = 5;
 	pointVec(2) = 5;
 	pointVec(3) = 5;
-	pointVec(4) = 0;
-	pointVec(5) = 0;
+	pointVec(4) = 5;
+	pointVec(5) = 5;
 
 	Polytope<double> pointPoly;
 	pointPoly = Polytope<double>(testMat,pointVec);
@@ -485,8 +343,8 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -5;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 0;
-	pointVec(5) = 0;
+	pointVec(4) = 5;
+	pointVec(5) = -5;
 
 	pointPoly = Polytope<double>(testMat,pointVec);
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -495,25 +353,25 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -6;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 0;
-	pointVec(5) = 0;
+	pointVec(4) = 5;
+	pointVec(5) = -5;
 
 	pointPoly = Polytope<double>(testMat,pointVec);
 	EXPECT_FALSE(testBoxPoly.contains(pointPoly));
 
-	// convertMatToDouble() Test
+	/**
+	 * convertMatToDouble() Test
+	 */
 	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMat(invariantMat.rows(),invariantMat.cols());
 	doubleMat = hypro::convertMatToDouble(invariantMat);
 	EXPECT_EQ(invariantMat(0,0).toDouble(), doubleMat(0,0));
 
-	//std::cout << doubleMat << std::endl;
-
-	// convertMatToFloatT() Test
+	/**
+	 * convertMatToFloatT() Test
+	 */
 	matrix_t<double> floatTMat(doubleMat.rows(),doubleMat.cols());
 	floatTMat = hypro::convertMatToFloatT(doubleMat);
 	EXPECT_EQ(carl::FLOAT_T<double>(doubleMat(0,0)), floatTMat(0,0));
 
+}
 
-	//std::cout << floatTMat << std::endl;
-
-}*/

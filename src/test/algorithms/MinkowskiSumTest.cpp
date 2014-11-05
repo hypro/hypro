@@ -1,3 +1,8 @@
+/**
+ * Testfile for the computation of the Minkowski Sum according to Komei Fukuda.
+ * Author: ckugler
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/datastructures/hybridAutomata/util.h"
@@ -267,6 +272,9 @@ protected:
     hypro::Polytope<double> polyP = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 };
 
+/**
+ * computeMaxPoint() Test
+ */
 TEST_F(MinkowskiSumTest, computeMaxPointTest)
 {
    	std::cout << "Minkowski Sum - Polytope 1: ";
@@ -283,6 +291,9 @@ TEST_F(MinkowskiSumTest, computeMaxPointTest)
 	std::cout << "Point 2: " << res2 << std::endl;
 }
 
+/**
+ * computeInitVertex() Test
+ */
 TEST_F(MinkowskiSumTest, computeInitVertexTest)
 {
    	std::cout << "Minkowski Sum - Polytope 1: ";
@@ -303,6 +314,9 @@ TEST_F(MinkowskiSumTest, computeInitVertexTest)
 	result.print();
 }
 
+/**
+ * computeMaxVDegree() Test
+ */
 TEST_F(MinkowskiSumTest, computeMaxVDegreeTest)
 {
    	std::cout << "Minkowski Sum - Adjacency Polytope: ";
@@ -317,6 +331,9 @@ TEST_F(MinkowskiSumTest, computeMaxVDegreeTest)
 	std::cout << "Max Vertex Degree: " << result << std::endl;
 }
 
+/**
+ * computePoint() Test
+ */
 TEST_F(MinkowskiSumTest, computePointTest)
 {
 	vector_t<double> edge = vector_t<double>(2,1);
@@ -330,6 +347,9 @@ TEST_F(MinkowskiSumTest, computePointTest)
 	std::cout << "computed Point: " << result << std::endl;
 }
 
+/**
+ * computeEdge() Test
+ */
 TEST_F(MinkowskiSumTest, computeEdgeTest)
 {
 	Point<double> p;
@@ -343,6 +363,9 @@ TEST_F(MinkowskiSumTest, computeEdgeTest)
 
 }
 
+/**
+ * adjOracle() Test
+ */
 TEST_F(MinkowskiSumTest, adjOracleTest)
 {
 	Point<double> res = polyAdj.computeInitVertex(polyAdj2);
@@ -358,6 +381,9 @@ TEST_F(MinkowskiSumTest, adjOracleTest)
 	std::cout << "Computed Point: " << adjPoint << std::endl;
 }
 
+/**
+ * computeMaximizerVector() Test
+ */
 TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
 {
 	Point<double> v = polyAdj.computeInitVertex(polyAdj2);
@@ -370,6 +396,9 @@ TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
 	std::cout << "Target Vertex: " << target << std::endl;
 }
 
+/**
+ * computeNormalConeVector() Test
+ */
 TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 {
 	Point<double> p;
@@ -395,6 +424,10 @@ TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 	std::cout << "Computed Edge (Scalar Product <= 0): " << std::endl;
 	std::cout << resultingEdge << std::endl;
 }
+
+/**
+ * localSearch() Test for the 2D example
+ */
 /*
 TEST_F(MinkowskiSumTest, localSearchTest)
 {
@@ -428,6 +461,9 @@ TEST_F(MinkowskiSumTest, localSearchTest)
 	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
 }*/
 
+/**
+ * localSearch() Test for the 3D example
+ */
 /*
 TEST_F(MinkowskiSumTest, localSearchTest3D)
 {
@@ -467,19 +503,25 @@ TEST_F(MinkowskiSumTest, localSearchTest3D)
 
 }*/
 
+/**
+ * Test of the whole Minkowski Sum computation according to Fukuda
+ */
 TEST_F(MinkowskiSumTest, altMinkowskiSumTest)
 {
 	glp_term_out(GLP_OFF);
-	std::cout.setstate(std::ios::failbit);
+	//std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
 	bool omega = polyAdj.altMinkowskiSum(omegaPoly,polyAdj2);
-	std::cout.clear();
+	//std::cout.clear();
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	//std::cout << "Neighbors of P1: " << omegaPoly.points().at(0).neighbors() << std::endl;
 }
 
+/**
+ * Test of the brute force computation for the Minkowski Sum
+ */
 TEST_F(MinkowskiSumTest, origMinkowskiSumTest)
 {
 	Polytope<double> omegaPoly;
@@ -489,6 +531,10 @@ TEST_F(MinkowskiSumTest, origMinkowskiSumTest)
 	omegaPoly.print();
 }
 
+/**
+ * Test of the whole Minkowski Sum computation according to Fukuda (3D case)
+ */
+/*
 TEST_F(MinkowskiSumTest, altMinkowskiSumTest3D)
 {
 	glp_term_out(GLP_OFF);
@@ -501,6 +547,10 @@ TEST_F(MinkowskiSumTest, altMinkowskiSumTest3D)
 	omegaPoly.print();
 }
 
+/**
+ * Test of the brute force computation for the Minkowski Sum (3D case)
+ */
+/*
 TEST_F(MinkowskiSumTest, origMinkowskiSumTest3D)
 {
 	Polytope<double> omegaPoly;
@@ -508,7 +558,7 @@ TEST_F(MinkowskiSumTest, origMinkowskiSumTest3D)
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
-}
+}*/
 
 
 

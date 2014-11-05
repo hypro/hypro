@@ -1,8 +1,14 @@
+/**
+ * Performance test for the Minkowski Sum computation according to Komei Fukuda.
+ * Author: ckugler
+ */
+
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/datastructures/hybridAutomata/util.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
+#include <chrono>
 
 
 using namespace hypro;
@@ -11,6 +17,9 @@ using namespace carl;
 class SumPerformanceTest : public ::testing::Test
 {
 protected:
+    typedef std::chrono::high_resolution_clock clock;
+    ///
+    typedef std::chrono::microseconds timeunit;
     virtual void SetUp()
     {
     	/*
@@ -18,7 +27,7 @@ protected:
     	 */
 
     	//double dimension = 2;
-    	double vertexAmount = 50;
+    	double vertexAmount = 20;
     	double radius = 100;
     	double angle = 360/vertexAmount;
 
@@ -41,7 +50,6 @@ protected:
 
 		//edge from center to (0,0) [need only one, since direction is the same, only center changes]
 		vector_t<double> edgeP = polytope::computeEdge(centerP1, *point1);
-		//vector_t<double> edgeP2 = polytope::computeEdge(centerP2, p2);
 
 		//the rest iteratively
 		double offsetP = angle;
@@ -123,7 +131,6 @@ protected:
 
 		//edge from center to (0,0) [need only one, since direction is the same, only center changes]
 		vector_t<double> edgeQ = polytope::computeEdge(centerQ1, *qoint1);
-		//vector_t<double> edgeP2 = polytope::computeEdge(centerP2, p2);
 
 		//the rest iteratively
 		double offsetQ = angle;
@@ -196,22 +203,19 @@ protected:
     /*
      * Dimension test, variable amount of vertices (depending on dimension)
      */
-    constexpr long unsigned int dimension = 2;
+    constexpr long unsigned int dimension = 6;
     double vertices = std::pow(2,dimension);
     std::vector<double> tuple(dimension,0);
     std::vector<Point<double>*> pointSetD;
 
     for (double i = 0; i < vertices; ++i) {
         std::bitset<dimension> bits(i);
-        //std::cout << "Bits: " << bits.to_string() << std::endl;
 
         for (unsigned j=0; j < tuple.size(); ++j) {
         	tuple.at(tuple.size()-j-1) = bits[j];
         }
 
-        //std::cout << "List: " << tuple << std::endl;
     	Point<double>* d1 = new Point<double>(tuple);
-        //std::cout << "Point: " << *d1 << std::endl;
 
         pointSetD.push_back(d1);
     }
@@ -221,24 +225,18 @@ protected:
     for (auto& point : pointSetD) {
     	for (auto& var : point->variables()) {
         	referencePoint = Point<double>(*point);
-        	//std::cout << "Point: " << *point << std::endl;
-    		//std::cout << "Variable: " << var << std::endl;
+
     		if (referencePoint.at(var) == 0) {
-    			//std::cout << "0->1" << std::endl;
     			referencePoint.setCoordinate(var,1);
     		} else {
     			referencePoint.setCoordinate(var,0);
-    			//std::cout << "1->0" << std::endl;
     		}
 
     		for (unsigned j = 0; j < pointSetD.size(); ++j) {
     			if (*pointSetD.at(j) == referencePoint ) {
-    				//std::cout << "Neighbor found: " << *pointSetD.at(j) << std::endl;
     				bool alreadyNeighbor = false;
     				for (auto& neighbor : point->neighbors()) {
-    					//std::cout << "Checking Neighbor: " << neighbor << std::endl;
     					if (neighbor == *pointSetD.at(j)) {
-    						//std::cout << "Neighbor already in Set" << std::endl;
     						alreadyNeighbor = true;
     					}
     				}
@@ -269,15 +267,12 @@ protected:
 
     for (double i = 0; i < vertices; ++i) {
         std::bitset<dimension> bits(i);
-        //std::cout << "Bits: " << bits.to_string() << std::endl;
 
         for (unsigned j=0; j < tuple2.size(); ++j) {
         	tuple2.at(tuple2.size()-j-1) = bits[j];
         }
 
-        //std::cout << "List: " << tuple << std::endl;
     	Point<double>* e1 = new Point<double>(tuple2);
-        //std::cout << "Point: " << *d1 << std::endl;
 
         pointSetE.push_back(e1);
     }
@@ -287,24 +282,17 @@ protected:
     for (auto& point : pointSetE) {
     	for (auto& var : point->variables()) {
         	referencePoint2 = Point<double>(*point);
-        	//std::cout << "Point: " << *point << std::endl;
-    		//std::cout << "Variable: " << var << std::endl;
     		if (referencePoint2.at(var) == 0) {
-    			//std::cout << "0->1" << std::endl;
     			referencePoint2.setCoordinate(var,1);
     		} else {
     			referencePoint2.setCoordinate(var,0);
-    			//std::cout << "1->0" << std::endl;
     		}
 
     		for (unsigned j = 0; j < pointSetE.size(); ++j) {
     			if (*pointSetE.at(j) == referencePoint2 ) {
-    				//std::cout << "Neighbor found: " << *pointSetD.at(j) << std::endl;
     				bool alreadyNeighbor = false;
     				for (auto& neighbor : point->neighbors()) {
-    					//std::cout << "Checking Neighbor: " << neighbor << std::endl;
     					if (neighbor == *pointSetE.at(j)) {
-    						//std::cout << "Neighbor already in Set" << std::endl;
     						alreadyNeighbor = true;
     					}
     				}
@@ -340,11 +328,8 @@ protected:
 		}
 	}
 
-	std::cout << "Matrix: " << transformation << std::endl;
-	std::cout << "Vector: " << translation << std::endl;
-
-
-	bool ret = polyE.linearTransformation(polyE, transformation);
+	//the following line moves the polytope (optional)
+	//bool ret = polyE.linearTransformation(polyE, transformation, translation);
 
     }
 
@@ -361,18 +346,19 @@ protected:
     hypro::Polytope<double> polyE = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 };
 
+//only used for debugging, not a real test
+/*
 TEST_F(SumPerformanceTest, playGroundTest)
 {
 	//std::cout << "Points P: " << polyP.points() << std::endl;
 
-	/*
+
 	for (unsigned i = 0; i < polyP.points().size(); ++i) {
 		std::cout << "Neighbors P" << i+1 << ": " << polyP.points().at(i).neighbors() << std::endl;
-	}*/
-/*
-	std::cout << "Points Q: " << polyQ.points() << std::endl;
+	}
 
-*/
+	//std::cout << "Points Q: " << polyQ.points() << std::endl;
+
 
 	std::cout << "Points D: " << polyD.points() << std::endl;
 
@@ -386,8 +372,11 @@ TEST_F(SumPerformanceTest, playGroundTest)
 	for (unsigned i = 0; i < polyE.points().size(); ++i) {
 		std::cout << "Neighbors E" << i+1 << ": " << polyE.points().at(i).neighbors() << std::endl;
 	}
-}
+}*/
 
+/**
+ * Vertex Test - Fukuda
+ */
 /*
 TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 {
@@ -395,8 +384,15 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 	//glp_term_out(GLP_ON);
 	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
+
+    clock::time_point start = clock::now();
+
 	bool omega = polyP.altMinkowskiSum(omegaPoly,polyQ);
+
 	std::cout.clear();
+
+    std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << "ms" << std::endl;
+
 	std::cout << "-----------" << std::endl;
 	std::cout << "Vertex Test " << std::endl;
 	std::cout << "-----------" << std::endl;
@@ -406,11 +402,19 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }*/
 
+/**
+ * Vertex Test - brute force
+ */
 /*
 TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 {
 	Polytope<double> omegaPoly;
+	clock::time_point start2 = clock::now();
+
 	bool omega = polyP.minkowskiSum(omegaPoly,polyQ);
+
+    std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start2 ).count()/1000 << "ms" << std::endl;
+
 	std::cout << "-----------" << std::endl;
 	std::cout << "Vertex Test " << std::endl;
 	std::cout << "-----------" << std::endl;
@@ -420,15 +424,24 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }*/
 
-/*
+/**
+ * Dimension Test - Fukuda
+ */
 TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
 {
 	glp_term_out(GLP_OFF);
 	//glp_term_out(GLP_ON);
 	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
+
+	clock::time_point start3 = clock::now();
+
 	bool omega = polyD.altMinkowskiSum(omegaPoly,polyD);
+
 	std::cout.clear();
+
+	std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start3 ).count()/1000 << "ms" << std::endl;
+
 	std::cout << "-----------" << std::endl;
 	std::cout << "Dimension Test " << std::endl;
 	std::cout << "-----------" << std::endl;
@@ -438,11 +451,19 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
 }
 
-
+/**
+ * Dimension Test - brute force
+ */
 TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
 {
 	Polytope<double> omegaPoly;
+
+	clock::time_point start4 = clock::now();
+
 	bool omega = polyD.minkowskiSum(omegaPoly,polyD);
+
+	std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start4 ).count()/1000 << "ms" << std::endl;
+
 	std::cout << "-----------" << std::endl;
 	std::cout << "Dimension Test " << std::endl;
 	std::cout << "-----------" << std::endl;
@@ -450,5 +471,5 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
-}*/
+}
 
