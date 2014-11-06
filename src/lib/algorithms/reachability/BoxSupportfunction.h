@@ -18,7 +18,7 @@ namespace hypro
           private:
                   
              matrix_t<double> e;        
-             matrix_t<double> e_t; // e is stored in transposed format
+             matrix_t<double> e_t; // e is stored in transposed format too
           
           protected:
              /**

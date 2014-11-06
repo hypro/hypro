@@ -5,8 +5,6 @@
  
 #include "hyreach_utils.h" 
 
-using namespace std;
-
 namespace hypro
 {
     /*

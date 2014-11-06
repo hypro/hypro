@@ -3,8 +3,8 @@
  *   Author: Norman Hansen
  */
  
-#define LOCATIONINFO_VERBOSE 
-#define TRANSITIONINFO_VERBOSE 
+//#define LOCATIONINFO_VERBOSE 
+//#define TRANSITIONINFO_VERBOSE 
  
 	//typedef std::set<location*> locationSet;
 	//typedef std::set<transition*> transitionSet;
@@ -327,11 +327,17 @@
          
         std::vector<double>* g_star_values;  
         
+        /*
+        * Getter for W
+        */
         SupportFunction* getWfunction()
         {
             return wfunction;
         }
         
+        /*
+        * Getter for R
+        */
         matrix_t<double> getR()
         {
             return R;
@@ -390,6 +396,8 @@
             // extend w if necessary due to additional dimension
             for(int i=0; i<=trans->assignment().translationVec.size(); i++)
             {
+                // The values for the additional dimension for w are set to 1, because 0 for all entries (would be correct) leads to errors during the evaluation of the support function
+                // in order to provide correct results after a reset, the evaluation along correspondent directions for the reset-set is explicitely set to 1 at time of computation
                 w_local(i,0) = i<trans->assignment().translationVec.size() ? trans->assignment().translationVec(i) : 1;
                 w_local(i+dim,0) = i<trans->assignment().translationVec.size() ? - trans->assignment().translationVec(i) : -1;
             }
@@ -455,10 +463,6 @@
         void freeAllocatedMemory()
         {
              // delete constructed heap objects
-            //delete[] iminus_constraints_in_L;
-            //delete[] mirrored_iminus_constraints_in_L;
-            //delete[] iplus_constraints_in_L;
-            //delete[] mirrored_iplus_constraints_in_L;
             delete[] guard_constraints_in_L;
             delete[] mirrored_guard_constraints_in_L;
             delete[] I_star_constraints_in_L;
@@ -578,11 +582,13 @@
             
 	       	// performe evaluation which can only be done if all L are known
 	       	// locations:
-            
+            #ifdef LOCATIONINFO_VERBOSE
+                std::cout << "preprocess(...): evaluate locations: " << BL;
+            #endif
             for(auto iterator = locationMap.begin(); iterator != locationMap.end(); iterator++) 
             {
                 // evaluate PolytopeSupportFunction for invariant object in every direction
-                delete iterator->second->complete_invariant_evaluation;
+                //delete iterator->second->complete_invariant_evaluation;    // !!! may cause trouble
                 iterator->second->complete_invariant_evaluation = new std::vector<double>(L_pt->size());
                 iterator->second->invariantSP->multiEvaluate(L_pt, iterator->second->complete_invariant_evaluation);
                 #ifdef LOCATIONINFO_VERBOSE
@@ -595,21 +601,29 @@
             }   
             
             // transitions
-            
+            #ifdef TRANSITIONINFO_VERBOSE
+                std::cout << "preprocess(...): evaluate transitions: " << BL;
+//                std::cout << "transitionMap.begin(): " << *transitionMap.begin() << BL;
+//                std::cout << "transitionMap.end(): " << *transitionMap.end() << BL;
+//                std::cout << "transitionMap.size(): " << transitionMap.size() << BL;
+            #endif
             // precompute G* and sorted values for every transition in the model (can only be done when L is complete)
             matrix_t<double> temp(L_pt->size(),1); 
             for(auto iterator = transitionMap.begin(); iterator != transitionMap.end(); ++iterator)
-            {
+            {                     
                 // Gstar
                 
-                delete iterator->second->g_star_values;
+                //delete iterator->second->g_star_values; // !!! causes trouble
                 iterator->second->g_star_values = new std::vector<double>(L_pt->size());
                 // initialize g_star with Inf
                 for(int i=0; i< temp.size(); i++)
                 {
                     temp(i,0) = INFINITY;
                 }
-                
+                #ifdef TRANSITIONINFO_VERBOSE
+                    std::cout << "preprocess(...): G* temp initialized " << BL;
+                #endif
+            
                 // intersect with guards
                 for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
                 {
@@ -621,6 +635,9 @@
                 {
                     temp(iterator->second->mirrored_I_star_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_I_star_constraints_in_L[i],0).toDouble(),iterator->second->scaledIstarValues->at(i));
                 }
+                #ifdef TRANSITIONINFO_VERBOSE
+                    std::cout << "preprocess(...): G* temp intersected " << BL;
+                #endif
                 
                 SupportFunction* gstar = new PolytopeSupportFunction(L_pt,temp,L_pt->at(0).size(),additionalDirections);
                 gstar->multiEvaluate(L_pt,iterator->second->g_star_values);
@@ -639,6 +656,9 @@
                 //last 2 entries are artificial
                 temp(temp.size()-2,0) = 1;
                 temp(temp.size()-1,0) = -1;
+                #ifdef TRANSITIONINFO_VERBOSE
+                    std::cout << "preprocess(...): SortedValues temp initialized " << BL;
+                #endif
                 
                 // intersect with guards
                 for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
@@ -657,13 +677,20 @@
             #endif
         }
 
+        /*
+        * This method provides functionality to free memory allocated by the preprocessing step
+        */
         void removePreprocessingMemory()
-        {
-             // TODO: remove those objects and all objects inside
-             //LocationMap locationMap;   
-        	 //TransitionMap transitionMap;   
-        	 //std::set<location*> locationSet;
-        	 
-        	 // call freeAllocatedMemory() on every locationinfo object to free LocationInfo resources
-       	     // call freeAllocatedMemory() on every transitioninfo object to free LocationInfo resources
+        {        	 
+        	 // delete precomputed LocationInfo
+	       	 for(auto iterator = locationMap.begin(); iterator != locationMap.end(); ++iterator)
+	       	 {
+                      iterator->second->freeAllocatedMemory();
+             }
+	       	 
+	       	 // delete precomputed TransitionInfo
+	       	 for(auto iterator = transitionMap.begin(); iterator != transitionMap.end(); ++iterator)
+	       	 {
+                      iterator->second->freeAllocatedMemory();
+             }
         }

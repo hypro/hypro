@@ -263,6 +263,7 @@ namespace hypro
     
                   // add first computed set to the flowpipe (omega0 intersects invariant)
                   flowpipe->addSetAtPosition(set0_values,0);
+                  delete[] set0_values;
     
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "added set0 to flowpipe" << BL;
@@ -348,6 +349,7 @@ namespace hypro
                        temp.multiEvaluate(&L,temp_values);
                        flowpipe->addSetAtPosition(temp_values,i);
                   }
+                  delete[] temp_values;
                   
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << "flowpipe:" << BL << flowpipe->sets << BL;
@@ -421,7 +423,7 @@ namespace hypro
                       // cluster always all sets
                       valuesForNextSet = clustering(*iterator); // cluster all sets which are relevant for the construction of the initial set for the next node
                       #ifdef HYREACH_VERBOSE
-                           std::cout << method << "clustered values: " << valuesForNextSet.transpose() << BL;
+                           std::cout << method << "clustered values: " << valuesForNextSet.transpose() << BL;                           
                       #endif 
                       
                       // compute intersection                      
@@ -464,10 +466,10 @@ namespace hypro
                       #endif
                    
                       // start next Recursion (recursive call of this method)
-                      //PolytopeSupportFunction nextX0(&L, valuesForNextSet, dimensionality, &additionalDirections);
                       PolytopeSupportFunction nextX0(&L, resetSet_values, dimensionality, &additionalDirections);
                       analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, &nextX0, U, (timeStep + 1 + iterator->sets.begin()->start)); /*flowpipe->size()*/
                       
+                      // free memory
                       delete resetSet;
                       delete resetTemp;
                       delete intersectedSet;
@@ -482,7 +484,7 @@ namespace hypro
         /*
          *   Initiates the start of the hybrid analysis
          */
-        void start(HybridAutomaton<double>* model, parameters params, options opt, matrix_t<double> X0constraints,operator_e op, vector_t<double> X0constraintValues, SupportFunction* U)
+        void start(HybridAutomaton<double>* model, parameters params, options opt, matrix_t<double> X0constraints,operator_e op, vector_t<double> X0constraintValues, SupportFunction* U_param)
         {
              CleanupOnExit::removeFlowpipeSegments(&results); // remove potential previously computed results
              results.clear();
@@ -512,6 +514,7 @@ namespace hypro
                  std::cout << "dir2':" << additionalDirections.dir2.transpose() << BL;
              #endif  
              
+             SupportFunction* U = U_param;
              if( U == 0 )   // use zero function if none provided
              {
                  U = new ZeroSupportFunction(dimensionality, 0); // 2nd parameter 0 will disable special handling for artificial directions during evaluation (since U does not know any additional dimension - will be introduced using B)
@@ -568,12 +571,20 @@ namespace hypro
                  std::cout << method << "analysis done. -----------------------------" << BL;
              #endif
              
+             // clear memory
+             
 	       	 delete X0;
+	       	 if(U_param == 0) // delete 0 only if it has been constructed by this function
+	       	 {
+	       	     delete U;
+             }
+	       	 
+	       	 removePreprocessingMemory();
         }
     
         ~HyReach()
         {
              CleanupOnExit::removeFlowpipeSegments(&results);
-             removePreprocessingMemory();
+             //removePreprocessingMemory(); -> done at the end of start();
         }
     };

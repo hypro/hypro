@@ -135,12 +135,17 @@
 		return -1;		
 	}
 	
+	/*
+	* Delegator
+	*/
 	int contains(std::vector<matrix_t<double>>* directions, matrix_t<double> direction)
 	{
         return contains(directions, &direction);
     }
 	
-	
+	/*
+	* This method computes a mapping of directions to the opposite directions using an array of indices
+	*/
 	int* computeDirectionMapping(std::vector<matrix_t<double>>* directions)
 	{
           int* result = new int[directions->size()];
@@ -301,7 +306,7 @@
     }
 
     /*
-    * adds a zero column to the matrix parameter
+    * adds a zero column at the right side of the matrix m
     */
     matrix_t<double> addZeroColumn(matrix_t<double> m)
     {
@@ -338,6 +343,9 @@
         return result;  
     }
     
+    /*
+    * adds a zero row at the bottom of a matrix
+    */
     matrix_t<double> addZeroRow(matrix_t<double> m)
     {
          matrix_t<double> result(m.rows()+1,m.cols());

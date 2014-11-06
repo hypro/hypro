@@ -12,12 +12,13 @@
           bool testIntersection(std::vector<double>* d, mapping minus_invariants_in_L, matrix_t<double> set, unsigned int valuesToTest)
           {
                #ifdef INTERSECTION_VERBOSE
-                   std::cout << "testIntersection(...): " << "d:" << *d << BL;
-                   print(*d);
-                   std::cout << BL;
-                   std::cout << "mapping minus_invariants_in_L: d->size() = " << d->size() << BL;
-                   printArray<unsigned int>(minus_invariants_in_L, d->size());
-                   std::cout << BL << "set: " << BL << set << BL;
+                   //std::cout << "testIntersection(...): " << "d:" << *d << BL;
+                   //print(*d);
+                   //std::cout << BL;
+                   //std::cout << "mapping minus_invariants_in_L: d->size() = " << d->size() << BL;
+                   //printArray<unsigned int>(minus_invariants_in_L, d->size());
+                   //std::cout << BL << "set: " << BL << set << BL << "valuesToTest: " << valuesToTest;
+                   std::cout << "testIntersection: ";
                #endif
                               
                   // loop over all L
@@ -26,14 +27,14 @@
                        if( -set( minus_invariants_in_L[i],0 ).toDouble() > d->at(i) )    // intersection condition
                        {
                            #ifdef INTERSECTION_VERBOSE
-                                  std::cout << "testIntersection(...): " << "returns false" << BL;
+                                  std::cout << "returns false" << BL;
                            #endif
                            return false;
                        }
                   }
 
                #ifdef INTERSECTION_VERBOSE
-                   std::cout << "testIntersection(...): " << "returns true" << BL;
+                   std::cout << "returns true" << BL;
                #endif
                return true;
           }

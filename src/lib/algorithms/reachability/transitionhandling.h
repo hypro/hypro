@@ -1,5 +1,6 @@
 /*
 * This file is included by HyReach.h and contains the implementation of functionality and data related to the determination process of the transitions possible to take
+* Author: Norman Hansen
 */
 
 #define TRANSITIONHANDLING_VERBOSE
@@ -33,6 +34,7 @@
              #ifdef TRANSITIONHANDLING_VERBOSE
                  std::cout << method << "begin loop iterations" << BL;
                  unsigned int count =0;
+                 std::cout << method << "number of transitions: " << loc->transitions().size()<< BL;
              #endif
              
                  for(auto iterator = loc->transitions().begin(); iterator != loc->transitions().end(); ++iterator) // iterate over outgoing transitions
@@ -42,8 +44,15 @@
                            count++;
                        #endif   
                        
+                       #ifdef TRANSITIONHANDLING_VERBOSE
+                              std::cout << method << "ITERATOR: " << *iterator << BL;
+                       #endif 
+                       
                        for(unsigned int i=0; i<flowpipe->size();i++) // iterate over sets in flowpipe
                        {
+                                    #ifdef TRANSITIONHANDLING_VERBOSE
+                              std::cout << method << "ITERATOR: " << *iterator << BL;
+                       #endif 
                              TransitionInfo* t = transitionMap.find(*iterator)->second;
                              if(testIntersection( t->g_star_values , full , flowpipe->getSet(i), L.size()-2)) // test for intersection
                              {
@@ -94,6 +103,11 @@
                                  }
                              }
                        }
+                       
+                       #ifdef TRANSITIONHANDLING_VERBOSE
+                              std::cout << method << "ITERATOR: " << *iterator << BL;
+                       #endif        
+                       
                        
                        if(transitionadded)           // there is a set of the flowpipe which intersects the considered transition and has not yet been added
                        {

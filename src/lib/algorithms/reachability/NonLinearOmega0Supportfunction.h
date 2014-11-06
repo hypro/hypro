@@ -2,7 +2,7 @@
  *  This file contains everything related directly to support functions of polyhedra and their evaluation
  *  Author: Norman Hansen
  */
- 
+  
 //#define SUPPORTFUNCTION_VERBOSE 
 
 //#define BOXOPERATOR_VERBOSE
@@ -280,6 +280,7 @@ namespace hypro
                  #endif
              #endif
              delete temp;
+             delete au_box;
              //epsilonpsi = result.copyToHeap();
         }
         
@@ -481,6 +482,7 @@ namespace hypro
 	        #endif  
 	        
             delete epsilonpsi; // has been explicitely copied to heap and can be deleted at this point
+            delete edX0;
             
             #ifdef SUPPORTFUNCTION_VERBOSE
     			std::cout << " NonLinearOmega0Supportfunction: destructor - complete" << '\n';

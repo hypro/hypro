@@ -11,6 +11,7 @@ namespace hypro
 {
          /*
          * writes a matrix_t<double> object into a file in matlab snytax
+         * (only used for debug purpose)
          */
           void matrixToMatlab(const char* file, matrix_t<double> m)
           {               

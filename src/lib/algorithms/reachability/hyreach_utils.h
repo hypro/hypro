@@ -26,6 +26,7 @@
 #include <stdlib.h>           /* C standard library                   */
 #include <glpk.h>             /* GNU GLPK linear/mixed integer solver */
 
+// some Macros
 #define MIN( a, b ) ( a < b? a : b )
 #define MAX( a, b ) ( a > b? a : b )
 
@@ -54,7 +55,6 @@ namespace hypro
  
 #include "FlowpipeSegment.h"
 
-// some globally used methods
 namespace hypro
 {     
       /*
@@ -77,11 +77,11 @@ namespace hypro
                 std::vector<convexSetOfFlowpipeSetIndexis> sets; // list of successive sets having an intersection with the guard (and I* etc.) of the transition 
          };
                     	
-#include "helperMethods.h"      // make helper methods available
+#include "helperMethods.h"      // make helper methods available (print/convert)
 #include "vectorgenerator.h"    // make vectorgenerator functionalities globally available
 }
 
-// Supportfunction
+// Supportfunctions
 #include "SupportFunction.h"
 #include "PolytopeSupportfunction.h"
 #include "NonLinearOmega0Supportfunction.h"

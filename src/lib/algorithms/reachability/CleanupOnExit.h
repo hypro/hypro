@@ -1,6 +1,9 @@
-         
+/*
+ *  Author: Norman Hansen
+ */
+          
          /*
-         * This class will free some globally used ressources when the hyreach class is deleted
+         * This class will free some globally used ressources when the Hyreach class is deleted
          */
          class CleanupOnExit
          {

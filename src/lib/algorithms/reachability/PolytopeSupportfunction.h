@@ -18,9 +18,7 @@ namespace hypro
     class PolytopeSupportFunction : public SupportFunction{
     
     	private:
-    		//matrix_t<double> constraints;	// matrix describing constraints of a closed convex polyhedra
-    		//matrix_t<double> constraintConstants;	// vector describing constraints of a closed closed convex polyhedra
-    
+    		
     		glp_prob *lp;
     		int ia[1 + 1000], ja[1 + 1000];
     		double ar[1 + 1000];
@@ -37,9 +35,6 @@ namespace hypro
                  #endif
     
         		// TODO: depending on the operator, invert constraints
-        		
-        		//(*this).constraints = constraints;
-        		//(*this).constraintConstants = constraintConstants;
         
         		#ifdef SUPPORTFUNCTION_VERBOSE
         		    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -257,7 +252,7 @@ namespace hypro
         // supports only <= operator by design -> !!!! See first std::cout !!!!
         PolytopeSupportFunction(std::vector<matrix_t<double>>* constraints, matrix_t<double> constraintConstants, unsigned int dimensionality, artificialDirections* aD) : SupportFunction(SupportFunctionType::Polytope_Type, aD)
     	{   
-            std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << BL;
+            //std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << BL;
             
             //std::cout << "C:" << BL;
             //printDirectionList(*constraints);
