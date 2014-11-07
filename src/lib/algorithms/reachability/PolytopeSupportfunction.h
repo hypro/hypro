@@ -7,6 +7,7 @@
  
 //#define SUPPORTFUNCTION_VERBOSE 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+
 #include "hyreach_utils.h" 
     
 namespace hypro
@@ -20,8 +21,23 @@ namespace hypro
     	private:
     		
     		glp_prob *lp;
-    		int ia[1 + 1000], ja[1 + 1000];
-    		double ar[1 + 1000];
+    		int* ia;
+            int* ja;
+    		double* ar;
+    		
+    		void createArrays(unsigned int size)
+    		{
+                ia = new int[size+1];
+                ja = new int[size+1];
+                ar = new double[size+1];
+            }
+    		
+    		void deleteArrays()
+    		{
+                 delete[] ia;
+                 delete[] ja;
+                 delete[] ar;
+            }
     		
     		/**
             * Implements the functionality of the constructor. Used by both "real" constructors of this class
@@ -90,7 +106,9 @@ namespace hypro
         			    std::cout << method << " added constraints (values)" << '\n';
         			#endif
         		#endif
-        
+                
+                createArrays(constraints.size());
+                
         		// convert constraint matrix
         		for (int i = 0; i < constraints.size(); i++)
         		{
@@ -244,7 +262,7 @@ namespace hypro
  		             std::cout << extendedConstraintConstants << BL;
                  #endif
              #endif
-                       
+                     
              // call constructor functionality
              initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
         }
@@ -318,6 +336,8 @@ namespace hypro
         			#endif
         		#endif
         
+                createArrays(constraints->size()*constraints->at(0).size());
+        
                 unsigned int counter = 1;
         		// convert constraint matrix
         		for (unsigned int i = 0; i < constraints->size(); i++)
@@ -376,6 +396,8 @@ namespace hypro
     		        std::cout << "PolytopeSupportFunction: destructor" << '\n';
     		    #endif
             #endif
+            
+            deleteArrays();
             
             // free glpk resources
     		glp_delete_prob(lp);
