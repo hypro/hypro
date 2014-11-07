@@ -1,11 +1,26 @@
+/*
+ *  This file contains th main class providing the functionality to compute the reachable sets
+ *  of an hybrid automaton using support functions.
+ *  
+ *  Important notes:
+ *  - The method assumes, that all guards/invariants and constraints are provided in a normal form 
+ *    using only <= as comparison operator
+ *  - 
+ *
+ *  Author: Norman Hansen
+ */
+
+
 #include "hyreach_utils.h"
+
+//#define FILE_OUTPUT  //defining FILE_OUTPUT will lead to the creation of text files with the generated flowpipe segments in matlab syntax
 
 // Verbosity levels
 //#define VECTOR_GEN_VERBOSE
 //#define HELPER_METHODS_VERBOSE
 //#define SUPPORTFUNCTION_VERBOSE
-#define FLOWPIPE_VERBOSE
-#define HYREACH_VERBOSE
+//#define FLOWPIPE_VERBOSE
+//#define HYREACH_VERBOSE
 //#define PARALLHELPER_VERBOSE
 
 using namespace::std;
@@ -218,7 +233,7 @@ namespace hypro
               #endif
               
               // test for an intersection between X0 and the invariant
-              if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values, locInfo->scaledConstraintValues->size()))
+              if(testIntersection(locInfo->scaledConstraintValues,locInfo->mirrored_invariant_constraints_in_L, X0_values, locInfo->scaledConstraintValues->size(), false))
               {
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "testIntersection: true" << BL;
@@ -281,8 +296,10 @@ namespace hypro
                   // start with the iteration of successive timesteps
                   unsigned int maxNumberOfCompleteSets = params.setsToCompute;
                   std::vector<int> processedDirections;
-                  unsigned int i=0;
-                  while(processedDirections.size() != L.size())
+                  // 2 artificial directions will not be processed
+                  // therefore start with index 2
+                  unsigned int i=2;
+                  while(processedDirections.size() != L.size()-2)     
                   {
                       #ifdef FLOWPIPE_VERBOSE
                           std::cout << method << "iterate over direction number: " << i << BL;
@@ -333,6 +350,15 @@ namespace hypro
                   matrix_t<double> temp = flowpipe->sets.block(0,0,L.size(),maxNumberOfCompleteSets+1);
                   flowpipe->sets = temp;
                   
+                  // insert artificial evaluations for additional dimensions
+                  matrix_t<double> constant(2,flowpipe->sets.cols());
+                  for(int i= 0; i<flowpipe->sets.cols(); i++)
+                  {
+                          constant(0,i) = 1;
+                          constant(1,i) = -1;
+                  }
+                  flowpipe->sets.block(0,0,2,flowpipe->sets.cols()) = constant;
+                  
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << method << "reduced sets: " << BL << flowpipe->sets << BL;
                   #endif
@@ -354,7 +380,9 @@ namespace hypro
                   #ifdef FLOWPIPE_VERBOSE
                       std::cout << "flowpipe:" << BL << flowpipe->sets << BL;
                       // store flowpipe in file
-                      
+                  #endif
+                  
+                  #ifdef FILE_OUTPUT    
                       char* buffer = new char[200];
                       sprintf(buffer, "matlab_flowpipe_loc%d_time%d.txt", loc, timeStep);
                       matrixToMatlab(buffer, flowpipe->sets);
@@ -402,7 +430,7 @@ namespace hypro
                   results.push_back(flowpipe);
                   
                   // detect possible transitions -> flowpipe might NOT be shortened dependend on the chosen transition -> due to use of algoinv only reachable (in the invariant) sets are computed!
-                  std::vector<possibleTransition>* possibleTransitions = getPossibleTransitions(loc, flowpipe);
+                  std::vector<possibleTransition*>* possibleTransitions = getPossibleTransitions(loc, flowpipe);
                   #ifdef HYREACH_VERBOSE
                       std::cout << method << "#possibleTransitions:" << possibleTransitions->size() << BL;
                   #endif
@@ -418,10 +446,10 @@ namespace hypro
                       #endif 
                               
                       // Note: iterator is a pointer to possibleTransition structure
-                      transitionInfo = transitionMap.find(iterator->transition_pt)->second;
+                      transitionInfo = transitionMap.find((*iterator)->transition_pt)->second;
                       
                       // cluster always all sets
-                      valuesForNextSet = clustering(*iterator); // cluster all sets which are relevant for the construction of the initial set for the next node
+                      valuesForNextSet = clustering(**iterator); // cluster all sets which are relevant for the construction of the initial set for the next node
                       #ifdef HYREACH_VERBOSE
                            std::cout << method << "clustered values: " << valuesForNextSet.transpose() << BL;                           
                       #endif 
@@ -429,7 +457,7 @@ namespace hypro
                       // compute intersection                      
                       valuesForNextSet = intersect(transitionInfo->sortedValues, valuesForNextSet);
                       #ifdef HYREACH_VERBOSE
-                           std::cout << method << "valuesForNextSet: " << valuesForNextSet.transpose() << BL;
+                           std::cout << method << "valuesForNextSet: " << valuesForNextSet.transpose() << BL;                          
                       #endif 
                       // reconstruct and evaluate to create tight bounds
                       SupportFunction* intersectedSet = new PolytopeSupportFunction(&L,valuesForNextSet,X0->getAD()->dir1.size(),X0->getAD());
@@ -459,15 +487,15 @@ namespace hypro
                       // which are no valid values for evaluations along the additional dimensions.
                       // Setting the evaluation of W() along those directions to 0 yields in a worst case scenario (everything is zero in a PolytopeSupportFunction)
                       // where optimization errors occure.
-                      resetSet_values(resetSet_values.size()-2,0) = 1;
-                      resetSet_values(resetSet_values.size()-1,0) = -1;
+                      resetSet_values(0,0) = 1;
+                      resetSet_values(1,0) =-1;
                       #ifdef HYREACH_VERBOSE
                            std::cout << method << "resetSet evaluation: " << BL << resetSet_values.transpose() << BL;
                       #endif
                    
                       // start next Recursion (recursive call of this method)
                       PolytopeSupportFunction nextX0(&L, resetSet_values, dimensionality, &additionalDirections);
-                      analyze( iterator->transition_pt->transition().locTarget, recursionNumber-1, &nextX0, U, (timeStep + 1 + iterator->sets.begin()->start)); /*flowpipe->size()*/
+                      analyze( (*iterator)->transition_pt->transition().locTarget, recursionNumber-1, &nextX0, U, (timeStep + 1 + (*iterator)->sets.begin()->start)); /*flowpipe->size()*/
                       
                       // free memory
                       delete resetSet;
@@ -475,7 +503,8 @@ namespace hypro
                       delete intersectedSet;
                   }
                  
-                  delete possibleTransitions; // clear heap memory as soon as possible
+                  freePossibleTransitions(possibleTransitions);   // free allocated memory
+                  delete possibleTransitions;
               }
          }   
             
@@ -505,7 +534,9 @@ namespace hypro
                  std::cout << method << "original L:" << BL;
                  std::cout << L << BL;
              #endif  
-             additionalDirections = extendDimensions(&L);
+             std::vector<matrix_t<double>>* newL = 0;
+             additionalDirections = extendDimensions(&L, &newL);
+             L = *newL;
              #ifdef HYREACH_VERBOSE
                  std::cout << method << "extended L:" << BL;
                  std::cout << L << BL;

@@ -4,7 +4,7 @@
  
 #include "hyreach_utils.h"
 
-#define FLOWPIPE_VERBOSE
+//#define FLOWPIPE_VERBOSE
 
 namespace hypro
 {

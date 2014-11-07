@@ -3,21 +3,21 @@
 * Author: Norman Hansen
 */
 
-#define TRANSITIONHANDLING_VERBOSE
+//#define TRANSITIONHANDLING_VERBOSE
          
          unsigned int* full =0;
          
          /*
          * Computes a list of all transitions which could be taken considering the specified flowpipe
          */
-         std::vector<possibleTransition>* getPossibleTransitions(location* loc, FlowpipeSegment* flowpipe)
+         std::vector<possibleTransition*>* getPossibleTransitions(location* loc, FlowpipeSegment* flowpipe)
          {
              #ifdef TRANSITIONHANDLING_VERBOSE
                  std::string method = "getPossibleTransitions(...): ";
                  std::cout << method << "start" << BL;
              #endif
              
-             std::vector<possibleTransition>* result = new std::vector<possibleTransition>(0);
+             std::vector<possibleTransition*>* result = new std::vector<possibleTransition*>(0);
              
                   if( full == 0)              // full is an array defining an identity mapping
                   {
@@ -37,7 +37,8 @@
                  std::cout << method << "number of transitions: " << loc->transitions().size()<< BL;
              #endif
              
-                 for(auto iterator = loc->transitions().begin(); iterator != loc->transitions().end(); ++iterator) // iterate over outgoing transitions
+                 transitionSet temp = loc->transitions();
+                 for(auto iterator = temp.begin(); iterator != temp.end(); ++iterator) // iterate over outgoing transitions
                  {
                        #ifdef TRANSITIONHANDLING_VERBOSE
                            std::cout << method << "transition: " << count << BL;
@@ -47,14 +48,15 @@
                        #ifdef TRANSITIONHANDLING_VERBOSE
                               std::cout << method << "ITERATOR: " << *iterator << BL;
                        #endif 
+                       TransitionInfo* t = transitionMap.find(*iterator)->second;
                        
                        for(unsigned int i=0; i<flowpipe->size();i++) // iterate over sets in flowpipe
                        {
-                                    #ifdef TRANSITIONHANDLING_VERBOSE
-                              std::cout << method << "ITERATOR: " << *iterator << BL;
-                       #endif 
-                             TransitionInfo* t = transitionMap.find(*iterator)->second;
-                             if(testIntersection( t->g_star_values , full , flowpipe->getSet(i), L.size()-2)) // test for intersection
+                              #ifdef TRANSITIONHANDLING_VERBOSE
+                                  std::cout << method << "ITERATOR (inner): " << *iterator << BL;
+                              #endif 
+                             
+                             if(testIntersection( t->g_star_values , full , flowpipe->getSet(i), L.size(), true)) // test for intersection
                              {
                                  // set intersects a guard
                                  #ifdef TRANSITIONHANDLING_VERBOSE
@@ -74,7 +76,7 @@
                                      else
                                      {
                                          // use new convexSetOfFlowpipeSetIndexis struct
-                                         result->at(result->size()-1).sets.push_back(*indices);      // list copies values when adding the struct
+                                         result->at(result->size()-1)->sets.push_back(*indices);      // list copies values when adding the struct
                                          
                                          indices->start = i;
                                          indices->end = i;
@@ -86,12 +88,15 @@
                                          std::cout << method << "new transition" << BL;
                                      #endif
                                      // the considered set is the first intersection for this transition
-                                     possibleTransition t;
-                                     t.flowpipeSegment = flowpipe;
-                                     t.transition_pt = (*iterator);
+                                     possibleTransition* t = new possibleTransition;
+                                     t->flowpipeSegment = flowpipe;
+                                     t->transition_pt = (*iterator);
                                      
                                      if(indices != 0)
                                      {
+                                         #ifdef TRANSITIONHANDLING_VERBOSE
+                                             std::cout << method << "delete indices" << BL;
+                                         #endif
                                          delete indices;
                                      }
                                      indices = new convexSetOfFlowpipeSetIndexis();
@@ -111,7 +116,7 @@
                        
                        if(transitionadded)           // there is a set of the flowpipe which intersects the considered transition and has not yet been added
                        {
-                           result->at(result->size()-1).sets.push_back(*indices);             
+                           result->at(result->size()-1)->sets.push_back(*indices);             
                            transitionadded = false;   
                        } 
                  }    
@@ -194,4 +199,15 @@
          matrix_t<double> clustering(possibleTransition posTrans)
          {
              return clustering(&posTrans);
+         }
+         
+         void freePossibleTransitions(std::vector<possibleTransition*>* possibleTransitions)
+         {
+              std::vector<possibleTransition*> pT = *possibleTransitions;
+              
+              for(auto iterator = pT.begin(); iterator != pT.end(); ++iterator)
+              {
+                  possibleTransition* transitionpointer = *iterator;
+                  delete transitionpointer;
+              }
          }

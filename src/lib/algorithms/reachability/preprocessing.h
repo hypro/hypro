@@ -52,10 +52,10 @@
                     */
                     void normalizeLinearConstraint(matrix_t<double> constraints, matrix_t<double> constraintValues, std::vector<matrix_t<double>>* directions, std::vector<double>* scaledConstraintValues )
                     {
-                         std::cout << "normalizeLinearConstraint(...): " << BL << constraints << BL;
+                          //std::cout << "normalizeLinearConstraint(...): " << BL << constraints << BL;
                           constraints = addZeroColumn(constraints);  // add additional dimension
                          
-                          std::cout << "normalizeLinearConstraint(...): " <<  "constraints.rows(): " << constraints.rows() << BL;
+                          //std::cout << "normalizeLinearConstraint(...): " <<  "constraints.rows(): " << constraints.rows() << BL;
                          
                           double norm = 0;
                           for( int i=0; i<constraints.rows(); i++)
@@ -114,7 +114,7 @@
                     */
                     void removeZeroRows(matrix_t<double>* constraints, matrix_t<double>* values)
                     {
-                         std::cout << "original constraints: " << BL << *constraints << BL << "values: " << (*values).transpose() << BL;
+                         //std::cout << "original constraints: " << BL << *constraints << BL << "values: " << (*values).transpose() << BL;
                          
                          std::list<int> nonzerorows(0);   // stores the indices of the rows not beeing zero
                          
@@ -131,7 +131,7 @@
                              }
                          }
                          
-                         std::cout << "non-zero-rows: " << nonzerorows << BL;
+                         //std::cout << "non-zero-rows: " << nonzerorows << BL;
                          
                          // remove 0related values
                          constraints->resize(nonzerorows.size(),constraints->cols());
@@ -649,13 +649,13 @@
                 
                 // sorted values (do not need to be re-evaluated since this will be done when computing the intersection)
                 
-                for(int i=0; i< temp.size()-2; i++)
+                for(int i=0; i< temp.size(); i++)
                 {
                     temp(i,0) = INFINITY;
                 }
                 //last 2 entries are artificial
-                temp(temp.size()-2,0) = 1;
-                temp(temp.size()-1,0) = -1;
+                temp(0,0) = 1;
+                temp(1,0) = -1;
                 #ifdef TRANSITIONINFO_VERBOSE
                     std::cout << "preprocess(...): SortedValues temp initialized " << BL;
                 #endif

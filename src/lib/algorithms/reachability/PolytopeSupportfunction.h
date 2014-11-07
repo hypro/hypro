@@ -259,8 +259,8 @@ namespace hypro
             //std::cout << BL << "d:" << constraintConstants;
             
             // reset artificial directions
-            constraintConstants(constraintConstants.rows()-2,0) = aD->dir1_eval;
-            constraintConstants(constraintConstants.rows()-1,0) = aD->dir2_eval;
+            constraintConstants(0,0) = aD->dir1_eval;
+            constraintConstants(1,0) = aD->dir2_eval;
               
             //std::cout << BL << "resetted d:" << constraintConstants << BL;
             

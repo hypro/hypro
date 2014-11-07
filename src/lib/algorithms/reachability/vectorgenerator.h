@@ -228,24 +228,27 @@
 	/*
 	* replaces all directions by a direction of the original dimensionality+1 with the additional entry being 0
 	*/
-	artificialDirections extendDimensions(std::vector<matrix_t<double>>* directions)
+	artificialDirections extendDimensions(std::vector<matrix_t<double>>* directions, std::vector<matrix_t<double>>** extendedDirections)
 	{
+         std::vector<matrix_t<double>>* newDirections = new std::vector<matrix_t<double>>(directions->size()+2);
+         *extendedDirections = newDirections;
+                      
          matrix_t<double> l;
+         
+         matrix_t<double> newl(directions->at(0).size() + 1,1);
+         newl(l.rows(),0) = 0;        // add final 0 entry
+         
          // replace directions by direction of higher dimensionality
+         unsigned int count =2;        
          for(auto iterator = directions->begin(); iterator != directions->end(); ++iterator)
          {
              l = *iterator;
-             //directions->erase(iterator);
-             matrix_t<double> newl(l.rows()+1,1);
-             for(int i=0; i<l.rows(); i++)
-             {
-                     newl(i,0) = l(i,0);  // copy l to newl
-             }
-             newl(l.rows(),0) = 0;        // add final 0 entry
-             //directions->push_back(newl);
-             *iterator = newl;
+             
+             newl.block(0,0,l.rows(),l.cols()) = l;  // copy l to newl
+             newDirections->at(count) = newl;
+             count++;
          }
-         
+          
          // construct artificial directions
          artificialDirections result;
          result.dir1 = getZeroVector(l.rows()+1);
@@ -254,13 +257,11 @@
          result.dir1(l.rows(),0) = 1;
          result.dir2(l.rows(),0) = -1;
          
-         directions->push_back(result.dir1);
-         auto iterator = directions->begin();
-         result.dir1_pt = &(*iterator);
+         newDirections->at(0) = result.dir1;
+         newDirections->at(1) = result.dir2;
          
-         directions->push_back(result.dir2);
-         iterator = directions->begin();
-         result.dir2_pt = &(*iterator);
+         result.dir1_pt = &(*newDirections->begin());
+         result.dir2_pt = &(*(newDirections->begin()++));
          
          return result;
     }
