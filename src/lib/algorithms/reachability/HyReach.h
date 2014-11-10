@@ -403,7 +403,7 @@ namespace hypro
               return flowpipe;
          }    
           
-         #include "transitionHandling.h"
+         #include "transitionhandling.h"
           
          /*
          * Method to construct the flowpipe (called recursively by itself dependent on recursionNumber)

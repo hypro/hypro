@@ -21,6 +21,7 @@
 #include <fstream>
 #include <string>
 #include "utils.h"
+#include "componentParser.h"
 
 namespace hypro{
 namespace parser{
@@ -34,55 +35,66 @@ typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
 typedef qi::space_type Skipper;
-//typedef std::vector<boost::variant<State, Transition> > Automaton;
-typedef std::vector< State > Automaton;
+typedef std::vector<boost::variant<Initial, State, Transition> > Automaton;
+//typedef std::vector< State > Automaton;
 
 
 
 template<typename Iterator>
-struct InitialParser : public qi::grammar<Iterator, parser::Initial(), Skipper>
+struct InitialParser : public qi::grammar<Iterator, Initial(), Skipper>
 {
     InitialParser() : InitialParser::base_type(start)
     {
-        start =  qi::lit("matrix") >> *(qi::char_) >> "[" >> ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') >> "]";
+        start = qi::lit("initial") < 
+				qi::lit("(") <
+				(qi::uint_ % qi::no_skip[qi::char_(' ',',')]) <
+				qi::lit(")");
     }
     
-    qi::rule<Iterator,parser::Initial(), Skipper> start;
-};
-
-template<typename Iterator>
-struct MatrixParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
-{
-    MatrixParser() : MatrixParser::base_type(start)
-    {
-        start =  qi::lit("matrix") >> *(qi::char_) >> "[" >> ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') >> "]";
-    }
-    
-    qi::rule<Iterator,parser::Matrix(), Skipper> start;
+    qi::rule<Iterator, Initial(), Skipper> start;
 };
 
 template<typename Iterator>
 struct StateParser : public qi::grammar<Iterator, State(), Skipper>
 {
-    MatrixParser<Iterator> mMatrixParser;
+    FlowParser<Iterator> mFlowParser;
+	InvariantParser<Iterator> mInvariantParser;
+	NameParser<Iterator> mNameParser;
     
     StateParser() : StateParser::base_type(start)
     {
-       start = "location" >> +(qi::char_);// > "(" >> qi::lit("name") >> *(qi::char_) >> qi::lit("flow") >>  mMatrixParser >> qi::lit("invariant") >> mMatrixParser >> ")";
+       start = qi::lit("location") >
+			   qi::lit("(") > 
+			   mNameParser >
+			   -(qi::lit(",") > 
+			   mFlowParser) >
+			   -(qi::lit(",") > 
+			   mInvariantParser) >
+			   qi::lit(")");
     }
     
     qi::rule<Iterator, State(), Skipper> start;
-    //qi::debug(start);
 };
 
 template<typename Iterator>
 struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
 {
-    MatrixParser<Iterator> mMatrixParser;
+	NameParser<Iterator> mNameParser;
+    GuardParser<Iterator> mGuardParser;
+	ResetParser<Iterator> mResetParser;
     
     TransitionParser(): TransitionParser::base_type(start)
     {
-        start = qi::lit("transition") > "{" > qi::int_ > "}." > qi::string("eguards_dir") > "=" > mMatrixParser > ";";
+        start = qi::lit("transition") >
+				qi::lit("(") > -(qi::int_)  >
+				-(mNameParser > qi::lit(",")) >
+				qi::lexeme[(qi::lit("s") | qi::lit("S") ) > qi::lit("ource")] > qi::lit("=") > qi::uint_ > qi::lit(",") > 
+				qi::lexeme[(qi::lit("t") | qi::lit("T") ) > qi::lit("arget")] > qi::lit("=") > qi::uint_ >
+				-(qi::lit(",") > 
+				mGuardParser) >
+				-(qi::lit(",") > 
+				mResetParser) >
+				qi::lit(")");
     }
     
     qi::rule<Iterator, Transition(), Skipper> start;
@@ -93,6 +105,7 @@ struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
 {
     StateParser<Iterator> mStateParser;
     TransitionParser<Iterator> mTransitionParser;
+	//InitialParser<Iterator> mInitialParser;
     
     MainParser() : MainParser::base_type(main)
     {
@@ -101,8 +114,8 @@ struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
         
         qi::debug(main);
         
-        //main = *(mStateParser | mTransitionParser);
-        main = +(mStateParser);
+        //main = -(mInitialParser) < *(mStateParser | mTransitionParser);
+        main = *(mStateParser | mTransitionParser);
         
         qi::on_error<qi::fail>
         (

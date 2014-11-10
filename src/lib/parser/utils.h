@@ -31,17 +31,14 @@ namespace parser
     
     struct Initial
     {
-        std::string mLocation;
-        std::string mValuation;
+        std::vector<unsigned> mLocations;
         
         Initial() :
-        mLocation(),
-        mValuation()
+        mLocations()
         {}
         
-        Initial(std::vector<char> _loc, std::vector<char> _val) :
-        mLocation(std::string(_loc.begin(), _loc.end())),
-        mValuation(std::string(_val.begin(), _val.end()))
+        Initial(std::vector<unsigned> _loc) :
+        mLocations(_loc)
         {}
     };
     
@@ -68,21 +65,37 @@ namespace parser
     struct State
     {
         std::string mName;
-        //Matrix mFlow;
-        //Matrix mInvariant;
-        /*
+        Matrix mFlow;
+        Matrix mInvariant;
+        
         State() :
-        mName()//,
-        //mFlow(),
-        //mInvariant()
+        mName(),
+        mFlow(),
+		mInvariant()
         {
             std::cout << "Construct empty state." << std::endl;
         }
-        */
-        State(std::string _name) ://, Matrix _flow, Matrix _inv) :
-        mName(_name)//,
-        //mFlow(_flow),
-        //mInvariant(_inv)
+        
+        State(std::string _name) :
+        mName(_name),
+        mFlow(),
+        mInvariant()
+        {
+            std::cout << "Construct filled state." << std::endl;
+        }
+		
+		State(std::string _name, Matrix _flow) :
+        mName(_name),
+        mFlow(_flow),
+        mInvariant()
+        {
+            std::cout << "Construct filled state." << std::endl;
+        }
+		
+		State(std::string _name, Matrix _flow, Matrix _inv) :
+        mName(_name),
+        mFlow(_flow),
+        mInvariant(_inv)
         {
             std::cout << "Construct filled state." << std::endl;
         }
@@ -91,13 +104,60 @@ namespace parser
     struct Transition
     {
         int mId;
-        std::string mType;
-        Matrix mMatrix;
+		std::string mName;
+		unsigned mSource;
+		unsigned mTarget;
+        Matrix mGuard;
+		Matrix mReset;
+		
+		Transition() :
+		mId(-1),
+		mName(),
+		mSource(),
+		mTarget(),
+		mGuard(),
+		mReset()
+		{
+			std::cout << "Construct empty transition." << std::endl;
+		}
+		
+		Transition(int _id, std::string _name, unsigned _source, unsigned _target) :
+		mId(_id),
+		mName(_name),
+		mSource(_source),
+		mTarget(_target),
+		mGuard(),
+		mReset()
+		{
+			std::cout << "Construct filled transition." << std::endl;
+		}
+		
+		Transition(int _id, std::string _name, unsigned _source, unsigned _target, Matrix _guard) :
+		mId(_id),
+		mName(_name),
+		mSource(_source),
+		mTarget(_target),
+		mGuard(_guard),
+		mReset()
+		{
+			std::cout << "Construct filled transition." << std::endl;
+		}
+		
+		Transition(int _id, std::string _name, unsigned _source, unsigned _target, Matrix _guard, Matrix _reset) :
+		mId(_id),
+		mName(_name),
+		mSource(_source),
+		mTarget(_target),
+		mGuard(_guard),
+		mReset(_reset)
+		{
+			std::cout << "Construct filled transition." << std::endl;
+		}
     };
     
     std::ostream& operator<<(std::ostream& lhs, const Matrix& rhs )
     {
-        lhs << "[";
+        lhs << rhs.mName << " [";
         for(auto& row : rhs.mMatrix)
         {
             for(auto& value : row)
@@ -109,16 +169,37 @@ namespace parser
         lhs << "]";
         return lhs;
     }
+	
+	std::ostream& operator<<(std::ostream& lhs, const Initial& rhs)
+    {
+		lhs << "initial( ";
+		for(auto& state : rhs.mLocations)
+		{
+			lhs << state << ",";
+		}
+		lhs << ")";
+		return lhs;
+	}
     
     std::ostream& operator<<(std::ostream& lhs, const State& rhs)
     {
-        lhs << "location("; //<< rhs.mName << ", Flow: " << rhs.mFlow << ", Invariant: " << rhs.mInvariant << ")";
+        lhs << "location(" << std::endl <<
+				"\t Name = " << rhs.mName << std::endl << 
+				"\t Flow = " << rhs.mFlow << std::endl <<
+				"\t Inv = " << rhs.mInvariant << std::endl <<
+				")";
         return lhs;
     }
     
     std::ostream& operator<<(std::ostream& lhs, const Transition& rhs)
     {
-        lhs << "Transition(" << rhs.mId << ")." << rhs.mType << " = " << rhs.mMatrix;
+        lhs << "Transition( " << rhs.mId << std::endl << 
+				"\t Name = " << rhs.mName << std::endl <<
+				"\t Source = " << rhs.mSource << std::endl <<
+				"\t Target = " << rhs.mTarget << std::endl <<
+				"\t Guard = " << rhs.mGuard << std::endl <<
+				"\t Reset = " << rhs.mReset << std::endl <<
+				")";
         return lhs;
     }
     
@@ -139,8 +220,7 @@ namespace parser
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Initial,
-    (std::string, mLocation)
-    (std::string, mValuation)
+    (std::vector<unsigned>, mLocations)
     )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -152,13 +232,16 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::State,
     (std::string, mName)
-    //(hypro::parser::Matrix, mFlow)
-    //(hypro::parser::Matrix, mInvariant)
+	(hypro::parser::Matrix, mFlow)
+    (hypro::parser::Matrix, mInvariant)
     )
         
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Transition,
     (int, mId)
-    (std::string, mType)
-    (hypro::parser::Matrix, mMatrix)
+	(std::string, mName)
+	(unsigned, mSource)
+	(unsigned, mTarget)
+    (hypro::parser::Matrix, mGuard)
+	(hypro::parser::Matrix, mReset)
     )
