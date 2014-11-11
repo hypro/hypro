@@ -1,4 +1,4 @@
-/*
+ /*
  *  This file contains th main class providing the functionality to compute the reachable sets
  *  of an hybrid automaton using support functions.
  *  
@@ -564,6 +564,9 @@ namespace hypro
              preprocess(model, &L, params.timeStep, U, &additionalDirections);
              #ifdef HYREACH_VERBOSE
                  std::cout << method << "preprocessing completed. ------------------------------------------------------------------------ " << BL << BL;
+                 
+                 std::cout << method << "final L:" << BL;
+                 std::cout << L << BL;
              #endif
              
              oppositeDirectionMapping = computeDirectionMapping(&L);    // can only be done after preprocessing because preprocessing may introduce additional directions
@@ -613,6 +616,14 @@ namespace hypro
 	       	 removePreprocessingMemory();
         }
     
+        /*
+        * Getter for the generated results
+        */
+        std::list<FlowpipeSegment*> getResults()
+        {
+            return results;
+        }
+        
         ~HyReach()
         {
              CleanupOnExit::removeFlowpipeSegments(&results);

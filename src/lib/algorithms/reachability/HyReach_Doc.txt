@@ -1,0 +1,36 @@
+Analyse starten:
+
+siehe src/test/algorithms/HyReachTest.cpp Methode in Zeile 309 oder 261
+
+
+Resultate extrahieren:
+
+a) Zur Weiterverwendung in C++
+Nachdem die Analyse wie in "Analyse starten" gestartet wurde und Resultate berechnet hat,
+können diese als Rückgabewert der Methode getResults() des erstellten HyReach-Objekts als
+std::list<FlowpipeSegment*> weiterverwendet werden. Die generierten Resultate werden automatisch 
+aus dem SPeicher entfernt, wenn der Destruktor des zugehörigen Analyseobjekts aufgerufen wird.
+(Dies ist der Fall, wenn das HyReach-Objekt mit delete gelöscht wird oder dieses nicht mehr im
+aktuellen Scope ist und somit vom Stack gelöscht wird)
+
+
+b) Zum plotten in Matlab
+Dazu muss das Projekt mit gesetztet Preprozessor-Anweisung FILE_OUTPUT kompiliert 
+worden sein (src\lib\algorithms\reachability\HyReach.h Zeile 16).
+Ist dies der Fall wird im Ordner, in dem das Program ausgeführt wird eine Reihe von
+Dateien erstellt, die die Auswertungen in die verwendeten Richtungen L für die Mengen
+der Flowpipe enthalten. Jedes mal wenn eine Location betreten wird, wird dabei eine neue Datei
+erstellt. Der Name der Datei enthält die Adresse der Location (im Speicher) und ermöglicht so
+festzustellen, welche Teile der Flowpipe von der selben Location generiert wurden. Außerdem
+ist eine Zeitangabe im Dateinamen enthalten, die den Index der ersten Menge in der Datei bezüglich
+der Flowpipe angibt.
+Der Inhalt dieser Dateien kann direkt nach Matlab kopiert werden.
+Für die Richtungen L, welche in Matlab definiert werden müssen ist zu beachten, dass die C++ 
+Implementierung nicht die selbe Ordnung der Richtungen verwendet. Die 2 ersten Richtungen
+sind die künstlich hinzugefügten Richtungen (notwendig wegen b in x' = Ax+b), die IMMER
+hinzugefügt werden. Anschließend folgen die generierten Richtungen in Abhängigkeit des gewählten 
+Winkels. Die generierten Richtungen (in C++) können auch auf der Konsole angezeigt werden, indem 
+das Program mit HYREACH_VERBOSE kompiliert wird. Die Ausgabe "final L:" zeigt, die Richtungen, die 
+schlussendlich verwendet werden.
+Das Plotten kann dann mit der Funktion plotanalysisEXT(...) der Matlab Implementierung vorgenommen werden.
+
