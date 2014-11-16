@@ -1,6 +1,8 @@
 /* 
- * File:   Polytope.h
- * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * The class which represents a polytope.
+ *
+ * @file   Polytope.h
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
  * @version     2014-04-04
@@ -68,8 +70,14 @@ namespace hypro
          */
         void addPoint(const Point<Number>& point);
         
+        /*
+         *
+         */
         void updatePoints();
 
+        /*
+         *
+         */
         void setPointsUpToDate(bool _val){
         	mPointsUpToDate = _val;
         }
@@ -80,15 +88,24 @@ namespace hypro
          */
         const std::vector<Point<Number>>& points();
         
+        /*
+         *
+         */
         std::vector<Point<Number>>& rPoints();
 
-        //returns the fan of the Polytope
+        /*
+         * returns the fan of the Polytope
+         */
         const polytope::Fan<Number>& fan();
 
-        //returns a reference to the fan of the Polytope
+        /*
+         * returns a reference to the fan of the Polytope
+         */
         polytope::Fan<Number>& rFan();
 
-        //sets the fan of the Polytope
+        /*
+         * sets the fan of the Polytope
+         */
         void setFan(const polytope::Fan<Number>& _fan);
 
         /**
@@ -102,6 +119,9 @@ namespace hypro
          */
         void writeToFile(std::string _filename) const;
         
+        /*
+         *
+         */
         friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
         {
             using namespace Parma_Polyhedra_Library::IO_Operators;

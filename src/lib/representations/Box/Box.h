@@ -38,22 +38,41 @@ public:
 	 * Constructors
 	 **************************************************************************/
 	
+	/*
+	 * Creates a box without any specifications
+	 */
 	Box() : mBoundaries()
 	{}
-        
+        /*
+         * Creates a copy of a box?
+         * @param orig The box that's gonna be copied
+         */
         Box(const Box& orig) : mBoundaries(orig.boundaries())
         {}
         
+        /*
+         * Creates a box by
+         * @param var
+         * @param val
+         */
         Box(const carl::Variable& var, const floatInterval& val)
         {
             mBoundaries.insert(std::make_pair(var, val));
         }
         
+        /*
+         * Creates a box by
+         * @param intervals
+         */
         Box(const intervalMap& intervals)
         {
             mBoundaries.insert(intervals.begin(), intervals.end());
         }
         
+        /*
+         * Creates a box with
+         * @param intervals
+         */
         Box(const rawIntervalMap& intervals)
         {
             for(auto& intervalPair : intervals)
@@ -70,11 +89,17 @@ public:
 	 * Getters & setters
 	 **************************************************************************/
 	
+    /*
+     * @return
+     */
 	intervalMap& rBoundaries()
 	{
             return mBoundaries;
 	}
 	
+	/*
+	 * @return
+	 */
 	intervalMap boundaries() const
 	{
             return mBoundaries;
@@ -95,7 +120,11 @@ public:
             mBoundaries.at(val.first) = val.second;
             return false;
 	}
-        
+
+    /*
+     *@param val
+     *@return
+     */
         bool insert(const std::pair<const carl::Variable, carl::Interval<Number> >& val)
 	{
             carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.second.lower());
@@ -108,7 +137,12 @@ public:
             mBoundaries.at(val.first) = floatInterval(lower, val.second.lowerBoundType(), upper, val.second.upperBoundType());
             return false;
 	}
-	
+
+    /*
+     *@param var
+     *@param val
+     *@return
+     */
         bool insert(const carl::Variable& var, const floatInterval& val)
 	{
             if(mBoundaries.find(var) == mBoundaries.end())
@@ -120,6 +154,11 @@ public:
             return false;
 	}
         
+        /*
+         * @param var
+         * @param val
+         * @return
+         */
         bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
         {
             carl::FLOAT_T<Number> lower = carl::FLOAT_T<Number>(val.lower());
@@ -132,12 +171,20 @@ public:
             mBoundaries.at(var) = carl::Interval<carl::FLOAT_T<Number>>(lower, val.lowerBoundType(), upper, val.upperBoundType());
             return false;
         }
-        
+
+        /*
+         * Setter method for box boundaries
+         * @param boundaries Defines the new boundaries for the box
+         */
 	void insert(const intervalMap& boundaries)
 	{
             mBoundaries.insert(boundaries.begin(), boundaries.end());
 	}
-        
+
+	/*
+	 * Setter method for box boundaries
+     * @param boundaries Defines the new boundaries for the box
+	 */
         void insert(const rawIntervalMap& boundaries)
         {
             for(auto& intervalPair : boundaries)
@@ -147,6 +194,11 @@ public:
             }
         }
 	
+    /*
+     * Checks if the box has the same dimension as the variable.
+     * @param var
+     * @return
+     */
 	bool hasDimension(const carl::Variable& var) const
 	{
             return mBoundaries.find(var) != mBoundaries.end();
@@ -179,6 +231,9 @@ public:
 	floatInterval* pInterval(const carl::Variable& var);
 	floatInterval interval(const carl::Variable& var) const;
 	
+	/*
+	 * @return
+	 */
         bool isEmpty() const
         {
             if(mBoundaries.size() == 0)
@@ -192,7 +247,10 @@ public:
             }
             return false;
         }
-        
+
+        /*
+         * @return
+         */
         Point<Number> max() const
         {
             typename Point<Number>::coordinateMap coordinates;
@@ -203,6 +261,9 @@ public:
             return Point<Number>(coordinates);
         }
         
+        /*
+         * @return
+         */
         Point<Number> min() const
         {
             typename Point<Number>::coordinateMap coordinates;
@@ -214,6 +275,9 @@ public:
         }
 
         /**
+         * Checks if two boxes are equal
+         * @param b1 Contains the first box
+         * @param b2 Contains the second box
          * @return true, if they are equal.
          */
         friend bool operator==(const Box<Number> & b1, const Box<Number> & b2)
@@ -227,6 +291,8 @@ public:
         }
         
         /**
+         * @param b1
+         * @param b2
          * @return true. if they are not equal
          */
         friend bool operator!=(const Box<Number> & b1, const Box<Number> & b2)
@@ -234,6 +300,10 @@ public:
             return !(b1 == b2);
         }
         
+        /*
+         *@param rhs
+         *@return
+         */
         Box<Number>& operator= (const Box<Number>& rhs) 
         { 
             if (*this != rhs)
