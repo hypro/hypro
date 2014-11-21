@@ -43,13 +43,12 @@ namespace hypro
             /**
              * Copy constructor
              */
-            Grid(const Grid<Number>& copy)
-            {
-                mGridMap.insert(copy.mGridMap.begin(), copy.mGridMap.end());
-                mInducedGridPoints.insert(copy.mInducedGridPoints.begin(), copy.mInducedGridPoints.end());
-                mInduced = copy.mInduced;
-                mVariables = copy.mVariables;
-            }
+            Grid(const Grid<Number>& copy) :
+            	mGridMap(copy.mGridMap),
+            	mInducedGridPoints(copy.mInducedGridPoints),
+            	mInduced(copy.mInduced),
+            	mVariables(copy.mVariables)
+            {}
             
             /**
              * Returns the size ie. the number of points saved in this grid.
@@ -89,7 +88,7 @@ namespace hypro
             {
                 return mVariables;
             }
-            
+
             /**
              * Reserves the induced grid for all dimensions.
              * 
@@ -149,7 +148,7 @@ namespace hypro
             }
             
             /**
-             * Returns the colour of the given induced point
+             * Returns the colour of the given induced pointi
              * 
              * @param point
              * @return the colour of the induced point
@@ -180,7 +179,7 @@ namespace hypro
             }
             
             /**
-             * 
+             *
              * @return 
              */
             typename gridMap::const_iterator end() const
@@ -240,16 +239,6 @@ namespace hypro
             void clear()
             {
                 mGridMap.clear();
-            }
-            
-            Grid<Number>& operator=(const Grid<Number>& rhs)
-            {
-                if( this != &rhs )
-                {
-                    Grid<Number> tmp(rhs);
-                    std::swap(*this,tmp);
-                }
-                return *this;
             }
     };
 }

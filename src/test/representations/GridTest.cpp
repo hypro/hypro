@@ -24,15 +24,14 @@ class GridTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+
         Grid<number_t>::gridMap map1;
         Grid<number_t>::gridMap map2;
         
         std::vector<carl::Variable> variables;
         variables.push_back(x);
         variables.push_back(y);
-        
-        grid1 = Grid<number_t>();
-        grid2 = Grid<number_t>();
+
         grid1.reserveInducedGrid(variables);
         grid2.reserveInducedGrid(variables);
         

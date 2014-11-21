@@ -50,9 +50,9 @@ protected:
         
         coordinates[x] = 7; coordinates[y] = 6;
         container1.insert(Point<number_t>(coordinates), false);
-        
+
         p1 = OrthogonalPolyhedron<number_t>(container1);
-        
+
         coordinates[x] = 1; coordinates[y] = 3;
         container2.insert(Point<number_t>(coordinates), true);
         
@@ -287,7 +287,7 @@ TEST_F(OrthogonalPolyhedronTest, Properties)
     std::vector<carl::Variable> variables;
     variables.push_back(x);
     variables.push_back(y);
-    EXPECT_EQ(2, p1.dimension());
+    EXPECT_EQ((unsigned)2, p1.dimension());
     EXPECT_EQ(variables, p1.variables());
 }
 

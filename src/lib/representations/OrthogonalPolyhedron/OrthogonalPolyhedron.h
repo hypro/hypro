@@ -97,13 +97,17 @@ namespace hypro
          * Copy constructor
          * @param copy
          */
-        OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy)
+        OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy) :
+        	mVertices(copy.mVertices),
+        	mInducedVertices(copy.mInducedVertices),
+        	mGrid(copy.mGrid),
+        	mOriginColour(copy.mOriginColour),
+        	mNeighbourhood(copy.mNeighbourhood),
+        	mBoundaryBox(copy.mBoundaryBox),
+        	mBoxUpToDate(copy.mBoxUpToDate),
+        	mVariables(copy.mVariables)
         {
-            mVertices = copy.mVertices;
-            mGrid = copy.mGrid;
-            mNeighbourhood = copy.mNeighbourhood;
-            mBoundaryBox = copy.mBoundaryBox;
-            mBoxUpToDate = copy.mBoxUpToDate;
+        	std::cout << "ping. " << std::endl;
         }
         
         /***********************************************************************
@@ -143,7 +147,7 @@ namespace hypro
         friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number>& p) {
             return ostr << p.mVertices;
         }
-        
+
     private:
         
         void updateBoundaryBox() const;
