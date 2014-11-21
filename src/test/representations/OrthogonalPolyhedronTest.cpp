@@ -285,8 +285,8 @@ TEST_F(OrthogonalPolyhedronTest, Properties)
     EXPECT_TRUE(empty.empty());
     
     std::vector<carl::Variable> variables;
-    variables.push_back(x);
     variables.push_back(y);
+    variables.push_back(x);
     EXPECT_EQ((unsigned)2, p1.dimension());
     EXPECT_EQ(variables, p1.variables());
 }

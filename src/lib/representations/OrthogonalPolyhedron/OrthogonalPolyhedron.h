@@ -106,9 +106,7 @@ namespace hypro
         	mBoundaryBox(copy.mBoundaryBox),
         	mBoxUpToDate(copy.mBoxUpToDate),
         	mVariables(copy.mVariables)
-        {
-        	std::cout << "ping. " << std::endl;
-        }
+        {}
         
         /***********************************************************************
          * Geometric Object functions
