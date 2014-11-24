@@ -457,9 +457,11 @@ namespace hypro
     	Point<Number> initVertex = this->computeInitVertex(rhs);
     	result.addPoint(initVertex);
     	alreadyExploredVertices.push_back(initVertex);
+#ifdef fukuda_DEBUG
     	std::cout << "---------------" << std::endl;
     	std::cout << "following Vertex is part of result: " << initVertex << std::endl;
     	std::cout << "---------------" << std::endl;
+#endif
 
     	//compute the maximizer vector (& its target) for the initial extreme point -> necessary for localSearch()
     	Point<Number> sinkMaximizerTarget;
@@ -481,11 +483,13 @@ namespace hypro
     	/**
     	 * Reverse Search Algorithm
     	 */
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "The Preprocessing Ends here - Start of Algorithm" << std::endl;
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "-------------------------" << std::endl;
+#endif
 
     	Point<Number> nextVertex;
     	std::vector<std::pair<int,int>> counterMemory;
@@ -496,8 +500,10 @@ namespace hypro
 
     		while (counter.first < 2 || (counter.first==2 && counter.second < delta_2) ) {
 
+#ifdef fukuda_DEBUG
     	    	std::cout << "Max. Vertex Degree in Poly 1: " << delta_1 << std::endl;
     	    	std::cout << "Max. Vertex Degree in Poly 2: " << delta_2 << std::endl;
+#endif
 
     	    	alreadyExplored = false;
 
@@ -509,7 +515,9 @@ namespace hypro
     				counter.second += 1;
     			}
 
+#ifdef fukuda_DEBUG
     			std::cout << "Counter tuple: (" << counter.first << "," << counter.second << ")" << std::endl;
+#endif
 
     			//choose next Vertex, only continue if one exists
     			if (polytope::adjOracle(nextVertex, currentVertex, counter)) {
@@ -521,12 +529,16 @@ namespace hypro
 					for (unsigned i=0; i < alreadyExploredVertices.size(); ++i) {
 	    				if (nextVertex == alreadyExploredVertices.at(i)) {
 	    					alreadyExplored = true;
+#ifdef fukuda_DEBUG
 	        				std::cout << "Vertex has already been explored: "<< nextVertex << std::endl;
+#endif
 	    				}
 					}
     				if (alreadyExplored) {
+#ifdef fukuda_DEBUG
     					std::cout << "continue with next loop iteration" << std::endl;
     					std::cout << "-------------------------" << std::endl;
+#endif
     					//dont traverse back and forth between two vertices
     					continue;
     				}
@@ -539,45 +551,56 @@ namespace hypro
 
     					//add to result Poly
     					result.addPoint(currentVertex);
+#ifdef fukuda_DEBUG
     			    	std::cout << "---------------" << std::endl;
     			    	std::cout << "following Vertex is part of result: " << currentVertex << std::endl;
     			    	std::cout << "---------------" << std::endl;
+#endif
 
     					alreadyExploredVertices.push_back(currentVertex);
     					//store the current counter value - needed if DFS comes back this vertex
     					counterMemory.push_back(counter);
+#ifdef fukuda_DEBUG
     					std::cout << "---------------" << std::endl;
     					std::cout << "Counter Memory Stack - add Counter: (" << counter.first << "," << counter.second << ")"  << std::endl;
     					std::cout << "Already explored Vertices: " << alreadyExploredVertices << std::endl;
     					std::cout << "---------------" << std::endl;
+#endif
 
     					counter.first = 1;
     					counter.second = 0;
     				}
     			}
     		}
+#ifdef fukuda_DEBUG
 	    	std::cout << "---------------" << std::endl;
 	    	std::cout << "While Loop left" << std::endl;
 	    	std::cout << "---------------" << std::endl;
+#endif
     		if (currentVertex != initVertex) {
     			//forward traverse
     			//currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
     			//instead of computing the local Search result again, retrieve the parent from the parentMap
     			currentVertex = parentMap.at(currentVertex);
 
+#ifdef fukuda_DEBUG
     			std::cout << "Local Search finished" << std::endl;
     			std::cout << "counterMemory size: " << counterMemory.size() << std::endl;
+#endif
 
     			//restore counter such that adjOracle(currentVertex,counter) = temp
     			//use the "stack" counterMemory for that
     			counter = counterMemory.at(counterMemory.size()-1);
     			counterMemory.pop_back();
+
+#ifdef fukuda_DEBUG
     			std::cout << "---------------" << std::endl;
     			std::cout << "Counter restored to: (" << counter.first << "," << counter.second << ")"  << std::endl;
     			std::cout << "While Loop Condition: " << ( (currentVertex != initVertex) || (counter.first != 2 && counter.second != delta_2) ) << std::endl;
     			std::cout << "CurrrentVertex != initVertex: " << (currentVertex != initVertex) << std::endl;
     			std::cout << "Counter != (2,2): " << (counter.first != 2 || counter.second != delta_2) << std::endl;
     			std::cout << "---------------" << std::endl;
+#endif
 
     		}
 
@@ -774,13 +797,11 @@ namespace hypro
     template<typename Number>
     Point<Number> Polytope<Number>::localSearch(Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget){
 
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
     	std::cout << "-------------------------" << std::endl;
-
-    	//TODO REMOVE
-    	//std::cout.setstate(std::ios::failbit);
-    	//glp_term_out(GLP_ON);
+#endif
 
     	//compute the maximizer vector of the currently considered vertex
     	Point<Number> maximizerTarget;
@@ -789,8 +810,10 @@ namespace hypro
     	//compute the ray direction (a vector)
     	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
+#ifdef fukuda_DEBUG
     	std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
     	std::cout << "End Point of Ray: " << _sinkMaximizerTarget << std::endl;
+#endif
 
     	//compute the normal cone of _vertex
     	polytope::Cone<Number>* cone = polytope::computeCone(_vertex, maximizerVector);
@@ -802,12 +825,16 @@ namespace hypro
 
     	std::vector<polytope::Hyperplane<Number>*> planes = cone->get();
 
+#ifdef fukuda_DEBUG
     	std::cout << "-----------------" << std::endl;
     	std::cout << "Ray: " << ray << std::endl;
+#endif
 
     	for (typename std::vector<polytope::Hyperplane<Number>*>::iterator it=planes.begin(); it!=planes.end(); ++it) {
     		if ((*it)->intersection(factor,ray)) {
+#ifdef fukuda_DEBUG
     			std::cout << "Intersection found " << std::endl;
+#endif
     			intersectedPlane = *(*it);
     			break;
     		}
@@ -815,10 +842,12 @@ namespace hypro
 
     	Point<Number> secondOrigin;
 
+#ifdef fukuda_DEBUG
     	std::cout << "-----------------" << std::endl;
 		std::cout << "Normal of Intersection Plane: " << intersectedPlane.normal() << std::endl;
 		std::cout << "Offset of Intersection Plane: " << intersectedPlane.offset() << std::endl;
 		std::cout << "-----------------" << std::endl;
+#endif
 
 		std::vector<vector> decompositionEdges = polytope::computeEdgeSet(_vertex);
 
@@ -830,16 +859,20 @@ namespace hypro
 			dotProduct = std::round(dotProduct.toDouble()*1000000);
 			normFactor = std::round(normFactor.toDouble()*1000000);
 
+#ifdef fukuda_DEBUG
 			std::cout << "Dot Product: " << dotProduct << std::endl;
 			std::cout << "Norm Factor: " << normFactor << std::endl;
 			std::cout << "Parallelism Factor: " << dotProduct/normFactor << std::endl;
 			std::cout << "Value of the if condition: " << (dotProduct/normFactor == 1) << std::endl;
+#endif
 
 			if ( (dotProduct/normFactor == 1+EPSILON) || (dotProduct/normFactor == 1-EPSILON) ||
 					(dotProduct/normFactor == -1+EPSILON) || (dotProduct/normFactor == -1-EPSILON) ||
 					(dotProduct/normFactor == -1) || (dotProduct/normFactor == 1)) {
+#ifdef fukuda_DEBUG
 				std::cout << "Parallel Edge found" << std::endl;
 				std::cout << "-----------------" << std::endl;
+#endif
 
 				//we have to find out from which decomposition our edge came from
 				//and accordingly initialize a counter that describes the direction
@@ -866,13 +899,11 @@ namespace hypro
     	//add this normal cone to fan of polytope
     	this->mFan.add(cone);
 
-    	//TODO REMOVE
-    	//std::cout.clear();
-    	//glp_term_out(GLP_OFF);
-
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "Local Search result: " << secondOrigin << std::endl;
     	std::cout << "-------------------------" << std::endl;
+#endif
 
     	return secondOrigin;
 

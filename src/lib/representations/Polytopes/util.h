@@ -115,11 +115,15 @@ namespace polytope
         	//here: hyperplane given in parameterform is converted to normalform
         	//the normal vector of the hyperplane is computed by solving a system of equations
         	mNormal = computePlaneNormal(_vectorSet);
+#ifdef fukuda_DEBUG
         	std::cout<< "computed Plane Normal: " << mNormal << std::endl;
+#endif
 
         	//the scalar is just the scalar product of the normal vector & a point in the hyperplane
         	mScalar = mNormal.dot(_vec);
+#ifdef fukuda_DEBUG
         	std::cout<< "computed Offset: " << mScalar << std::endl;
+#endif
 
         	mDimension = _vec.rows();
         }
@@ -159,9 +163,13 @@ namespace polytope
         {
         	bool intersect = false;
         	carl::FLOAT_T<Number> factor;
+#ifdef fukuda_DEBUG
         	std::cout << "mNormal: " << mNormal << std::endl;
+#endif
             carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
+#ifdef fukuda_DEBUG
         	std::cout << "dotProduct: " << dotProduct << std::endl;
+#endif
             if (dotProduct != 0) {
             	intersect = true;
             	factor = mScalar / dotProduct;
@@ -252,7 +260,9 @@ namespace polytope
         				ja[pos] = j;
         				vector tmpVec = _edgeSet.at(i-1);
         				ar[pos] = tmpVec(j-1).toDouble();
+#ifdef fukuda_DEBUG
         				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+#endif
         				++pos;
         			}
         		}

@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../config.h"
 #include "util.h"
@@ -13,6 +15,9 @@ namespace hypro
 
     		/**
     		 * computes the reachability (= a flowpipe) for one location, based on an input valuation (a polytope)
+    		 * @param _loc TODO
+    		 * @param _val TODO
+    		 * @return
     		 */
     		template<typename Number>
 			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val) {
@@ -21,15 +26,17 @@ namespace hypro
 				//note: interval size is constant
 				double timeInterval = float(fReach_TIMEBOUND)/float(fReach_TIMEDISCRETIZATION);
 
-				//TODO remove?
+#ifdef fReach_DEBUG
 			   	std::cout <<  "Time Interval: " << timeInterval << std::endl;
+#endif
 
 				//Polytope that is defined by the invariant
 				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
 
-				//TODO remove?
+#ifdef fReach_DEBUG
 			   	std::cout << "invariant Polytope: ";
 			    poly.print();
+#endif
 
 				//new empty Flowpipe
 				flowpipe_t<Number> flowpipe;
@@ -37,9 +44,10 @@ namespace hypro
 			    flowpipe.push_back(_val);
 
 				//check if initial Valuation fulfills Invariant
-				//TODO remove?
+#ifdef fReach_DEBUG
 				std::cout << "Valuation fulfills Invariant?: ";
 				std::cout << poly.contains(_val) << std::endl;
+#endif
 
 				if ( poly.contains(_val) ) {
 
@@ -49,10 +57,11 @@ namespace hypro
 					hypro::matrix_t<Number> deltaMatrix(_loc.activityMat().rows(),_loc.activityMat().cols());
 					deltaMatrix = _loc.activityMat() * timeInterval;
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "delta Matrix: " << std::endl;
 				   	std::cout << deltaMatrix << std::endl;
 				   	std::cout << "------" << std::endl;
+#endif
 
 					//e^(At) = resultMatrix
 					hypro::matrix_t<Number> resultMatrix(deltaMatrix.rows(),deltaMatrix.cols());
@@ -67,10 +76,11 @@ namespace hypro
 					expMatrix = doubleMatrix.exp();
 					resultMatrix = hypro::convertMatToFloatT(expMatrix);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "e^(deltaMatrix): " << std::endl;
 				   	std::cout << resultMatrix << std::endl;
 				   	std::cout << "------" << std::endl;
+#endif
 
 					//---
 
@@ -78,51 +88,57 @@ namespace hypro
 					hypro::valuation_t<Number> deltaValuation;
 					_val.linearTransformation(deltaValuation, resultMatrix);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "Polytope at t=delta: ";
 				    deltaValuation.print();
+#endif
 
 					// R_0(X0) U R_delta(X0)
 					hypro::valuation_t<Number> unitePolytope;
 					_val.unite(unitePolytope, deltaValuation);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "Polytope after unite with R0: ";
 				    unitePolytope.print();
+#endif
 
 					// CH( R_0(X0) U R_delta(X0) )
 					hypro::valuation_t<Number> hullPolytope;
 					unitePolytope.hull(hullPolytope);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "Convex Hull (Polytope): ";
 				    hullPolytope.print();
+#endif
 
 					//bloat hullPolytope (Hausdorff distance)
 					hypro::valuation_t<Number> firstSegment;
 					Number radius;
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
-					//TODO remove
+#ifdef fReach_DEBUG
 					std::cout << "\n";
 				   	std::cout << "Hausdorff Approximation: ";
 				    std::cout << radius << std::endl;
+#endif
 
 					unsigned int dim;
 					dim = hullPolytope.dimension();
 
 					hypro::valuation_t<Number> hausPoly = hypro::computePolytope(dim, radius);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "Hausdorff Polytope (Box): ";
 				    hausPoly.print();
+#endif
 
 					//hullPolytope +_minkowski hausPoly
 					hullPolytope.minkowskiSum(firstSegment, hausPoly);
 
-					//TODO remove
+#ifdef fReach_DEBUG
 				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 				    firstSegment.print();
+#endif
 
 					//insert first Segment into the empty flowpipe
 					flowpipe.push_back(firstSegment);
@@ -134,24 +150,28 @@ namespace hypro
 					//Polytope after linear transformation
 					hypro::valuation_t<Number> resultPolytope;
 
+#ifdef fReach_DEBUG
 					std::cout << "--- Loop entered ---" << std::endl;
+#endif
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
 
+#ifdef fReach_DEBUG
 						std::cout << "i in Loop: " << i << std::endl;
+#endif
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
 						lastSegment.linearTransformation(resultPolytope, resultMatrix);
 
-						//TODO remove
+#ifdef fReach_DEBUG
 					   	std::cout << "Next Flowpipe Segment: ";
 					    resultPolytope.print();
 
-						//TODO remove
 						std::cout << "still within Invariant?: ";
 						std::cout << poly.contains(resultPolytope) << std::endl;
+#endif
 
 						//extend flowpipe (only if still within Invariant of location)
 						if (poly.contains(resultPolytope)) {
@@ -164,8 +184,9 @@ namespace hypro
 						}
 					}
 
-					//TODO remove
+#ifdef fReach_DEBUG
 					std::cout << "--- Loop left ---" << std::endl;
+#endif
 
 					return flowpipe;
 

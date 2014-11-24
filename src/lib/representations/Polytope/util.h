@@ -279,9 +279,11 @@ namespace polytope
     bool adjOracle(Point<Number>& result, Point<Number>& _vertex, std::pair<int,int>& _counter) {
     	//retrieve the edge that is defined by the counter (j,i)
     	//first get both source & target vertex (dependent on the counter param.)
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "AdjOracle for vertex: " << _vertex  << std::endl;
     	std::cout << "-------------------------" << std::endl;
+#endif
 
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
     	Point<Number> sourceVertex;
@@ -293,9 +295,11 @@ namespace polytope
     	std::vector<Point<Number>> neighbors = sourceVertex.neighbors();
     	if (neighbors.size() < _counter.second) {
     		//this neighbor does not exist for this vertex
+#ifdef fukuda_DEBUG
         	std::cout << "-------------------------" << std::endl;
         	std::cout << "AdjOracle result: no neighbor in this direction"  << std::endl;
         	std::cout << "-------------------------" << std::endl;
+#endif
     		return false;
     	} else {
     		targetVertex = neighbors[_counter.second-1];
@@ -336,15 +340,19 @@ namespace polytope
 			dotProduct = std::round(dotProduct.toDouble()*1000000);
 			normFactor = std::round(normFactor.toDouble()*1000000);
 
+#ifdef fukuda_DEBUG
 			std::cout << "Dot Product: " << dotProduct << std::endl;
 			std::cout << "Norm Factor: " << normFactor << std::endl;
 			std::cout << "Parallelism Factor: " << dotProduct/normFactor << std::endl;
 			std::cout << "Value of the if condition: " << (dotProduct/normFactor == 1) << std::endl;
+#endif
 
 			if ( (dotProduct/normFactor == 1+EPSILON) || (dotProduct/normFactor == 1-EPSILON) ||
 					(dotProduct/normFactor == -1+EPSILON) || (dotProduct/normFactor == -1-EPSILON) ||
 					(dotProduct/normFactor == -1) || (dotProduct/normFactor == 1)) {
+#ifdef fukuda_DEBUG
 				std::cout << "Parallel Edge detected" << std::endl;
+#endif
 				parallelEdge = tempEdge;
 				parallelFlag = true;
 			} else {
@@ -397,10 +405,12 @@ namespace polytope
 
 		//setup the matrix coefficients
 		unsigned elements = (nonParallelEdges.size()+1) * (edge.rows());
+#ifdef fukuda_DEBUG
 		std::cout << "source Vertex: " << sourceVertex << std::endl;
 		std::cout << "target Vertex: " << targetVertex << std::endl;
 		std::cout << "other source Vertex: " << otherSource << std::endl;
 		std::cout << "considered Edge: " << edge << std::endl;
+#endif
         int ia[1+elements];
         int ja[1+elements];
         double ar[1+elements];
@@ -417,7 +427,9 @@ namespace polytope
 		  ia[pos] = 1;
 		  ja[pos] = j;
 		  ar[pos] = edge(j-1).toDouble();
+#ifdef fukuda_DEBUG
 		  std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
+#endif
 		  ++pos;
 		}
 
@@ -430,7 +442,9 @@ namespace polytope
                   ja[pos] = j;
                   vector tmpVec = nonParallelEdges.at(i-2);
                   ar[pos] = tmpVec(j-1).toDouble();
+#ifdef fukuda_DEBUG
                   std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+#endif
                   ++pos;
               }
           }
@@ -439,13 +453,17 @@ namespace polytope
         glp_load_matrix(feasibility, elements, ia, ja, ar);
         glp_simplex(feasibility, NULL);
 
+#ifdef fukuda_DEBUG
         std::cout << "Parallel Flag: " << parallelFlag << std::endl;
+#endif
 
         //check if a feasible solution exists
         if (glp_get_status(feasibility) == GLP_NOFEAS) {
+#ifdef fukuda_DEBUG
         	std::cout << "-------------------------" << std::endl;
         	std::cout << "AdjOracle result: no feasible solution" << std::endl;
         	std::cout << "-------------------------" << std::endl;
+#endif
         	return false;
         } else {
         		//since there is a feasible solution, our edge determines an edge direction of P=P1+P2
@@ -461,8 +479,10 @@ namespace polytope
         		} else {
         			//if there was a parallel edge: v_new = a1(v1,i1) + a2(v2,i2)
         			Point<Number> otherTargetVertex = computePoint(otherSource, parallelEdge, true);
+#ifdef fukuda_DEBUG
         			std::cout << "parallel Edge: " << parallelEdge << std::endl;
         			std::cout << "Other Target Vertex: " << otherTargetVertex << std::endl;
+#endif
         			result = targetVertex.extAdd(otherTargetVertex);
 
         			result.addToComposition(targetVertex);
@@ -472,9 +492,11 @@ namespace polytope
 
         glp_delete_prob(feasibility);
 
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "AdjOracle result: " << result << std::endl;
     	std::cout << "-------------------------" << std::endl;
+#endif
 
         return true;
     }
@@ -490,7 +512,9 @@ namespace polytope
     	Point<Number> sourceVertex1 = vertexComposition[0];
     	Point<Number> sourceVertex2 = vertexComposition[1];
 
+#ifdef fukuda_DEBUG
     	std::cout << "Decomposition: " << sourceVertex1 << ", " << sourceVertex2 << std::endl;
+#endif
 
     	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
     	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
@@ -520,7 +544,9 @@ namespace polytope
     		}
     	}
 
+#ifdef fukuda_DEBUG
 		std::cout << "Bool Vector: " << degeneracyCheck << std::endl;
+#endif
 
     	/*
 		 * Setup LP with GLPK
@@ -572,7 +598,9 @@ namespace polytope
 				ja[pos] = j;
 				vector tmpVec = edges.at(i-1);
 				ar[pos] = tmpVec(j-1).toDouble();
+#ifdef fukuda_DEBUG
 				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+#endif
 				++pos;
         	}
 
@@ -580,7 +608,9 @@ namespace polytope
         	ia[pos] = i;
         	ja[pos] = tmpEdge.rows()+1;
         	ar[pos] = 1;
+#ifdef fukuda_DEBUG
         	std::cout << "Coeff. at (" << i << "," << tmpEdge.rows()+1 << "): " << ar[pos] << std::endl;
+#endif
         	++pos;
         }
 
@@ -601,9 +631,11 @@ namespace polytope
 
         glp_delete_prob(maximizer);
 
+#ifdef fukuda_DEBUG
     	std::cout << "-------------------------" << std::endl;
     	std::cout << "Computed MaximizerVector: " << result << std::endl;
     	std::cout << "-------------------------" << std::endl;
+#endif
 
         return result;
 
@@ -664,7 +696,9 @@ namespace polytope
 				ja[pos] = j;
 				vector tmpVec = _edgeSet.at(i-1);
 				ar[pos] = tmpVec(j-1).toDouble();
+#ifdef fukuda_DEBUG
 				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+#endif
 				++pos;
 			}
 		}
@@ -728,7 +762,9 @@ namespace polytope
     	vector tmpVector;
     	std::vector<vector> resultVectorSet;
 
+#ifdef fukuda_DEBUG
         std::cout<< "Edges: " << edges << std::endl;
+#endif
 
     	//dimension-1 edges define one (edge) vector of our cone
     	for (unsigned i = 0; i <= edges.size()-dimension+1; ++i) {
@@ -738,7 +774,9 @@ namespace polytope
     			tmpEdges.push_back(edges.at(i+j));
     		}
     		tmpVector = polytope::computeNormalConeVector<Number>(tmpEdges, _maximizerVector);
+#ifdef fukuda_DEBUG
             std::cout<< "Normal Cone Vector: " << tmpVector << std::endl;
+#endif
     		resultVectorSet.push_back(tmpVector);
     	}
 
@@ -758,7 +796,9 @@ namespace polytope
     		//convert Point<Number> to Vector by explicit cast
     		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector(_vertex), vectorTuple);
     		cone->add(plane);
+#ifdef fukuda_DEBUG
     		std::cout << "Plane added to the cone" << std::endl;
+#endif
     		vectorTuple.clear();
     	}
 

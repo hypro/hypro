@@ -48,6 +48,8 @@ typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, 1> vector;
 #define fReach_TIMEBOUND 10
 #define fReach_TIMEDISCRETIZATION 10
 #define fReach_DENOMINATOR 1000000
+//define for debugging: triggers console output
+//#define fReach_DEBUG
 
 /**
  * author: ckugler
@@ -55,6 +57,8 @@ typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, 1> vector;
  */
 #define EPSILON 0.000001
 #define POS_CONSTANT 100
+//define for debugging: triggers console output
+//#define fukuda_DEBUG
 
 namespace Eigen
 {
