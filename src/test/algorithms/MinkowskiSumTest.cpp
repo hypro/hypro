@@ -225,6 +225,9 @@ protected:
     	polyP.addPoint(*p6);
     	polyP.addPoint(*p7);
     	polyP.addPoint(*p8);
+
+    	//disables GLPK output
+    	glp_term_out(GLP_OFF);
     }
 
     virtual void TearDown()
@@ -277,18 +280,24 @@ protected:
  */
 TEST_F(MinkowskiSumTest, computeMaxPointTest)
 {
+#ifdef fukuda_DEBUG
    	std::cout << "Minkowski Sum - Polytope 1: ";
     poly.print();
   	std::cout << "Minkowski Sum - Polytope 2: ";
     poly2.print();
 
     std::cout << "Size Poly1: " << poly.points().size() << std::endl;
+#endif
 
 	Point<double> res = poly.computeMaxPoint();
+#ifdef fukuda_DEBUG
 	std::cout << "Point 1: " << res << std::endl;
+#endif
 
 	Point<double> res2 = poly2.computeMaxPoint();
+#ifdef fukuda_DEBUG
 	std::cout << "Point 2: " << res2 << std::endl;
+#endif
 }
 
 /**
@@ -296,22 +305,28 @@ TEST_F(MinkowskiSumTest, computeMaxPointTest)
  */
 TEST_F(MinkowskiSumTest, computeInitVertexTest)
 {
+#ifdef fukuda_DEBUG
    	std::cout << "Minkowski Sum - Polytope 1: ";
     poly.print();
   	std::cout << "Minkowski Sum - Polytope 2: ";
     poly2.print();
+#endif
 
 	Point<double> res = poly.computeInitVertex(poly2);
+#ifdef fukuda_DEBUG
 	std::cout << "Point v*: " << res << std::endl;
 
     std::cout << "v* composed of: " << res.composedOf() << std::endl;
+#endif
 
 	Polytope<double> result;
 	bool temp = poly.minkowskiSum(result,poly2);
 	ASSERT_TRUE(temp);
+#ifdef fukuda_DEBUG
 	std::cout << "--------" << std::endl;
 	std::cout << "as comparison - original MinkowskiSum result: ";
 	result.print();
+#endif
 }
 
 /**
@@ -319,16 +334,24 @@ TEST_F(MinkowskiSumTest, computeInitVertexTest)
  */
 TEST_F(MinkowskiSumTest, computeMaxVDegreeTest)
 {
+#ifdef fukuda_DEBUG
    	std::cout << "Minkowski Sum - Adjacency Polytope: ";
     polyAdj.print();
+#endif
 
     std::vector<Point<double>> tmp = polyAdj.points();
 
     std::vector<Point<double>>::iterator it=tmp.begin();
+#ifdef fukuda_DEBUG
     std::cout << "Point iterator (first Element): " << (*it) << std::endl;
+#endif
 
 	int result = polyAdj.computeMaxVDegree();
+	//just to prevent warning
+	result = result;
+#ifdef fukuda_DEBUG
 	std::cout << "Max Vertex Degree: " << result << std::endl;
+#endif
 }
 
 /**
@@ -341,10 +364,12 @@ TEST_F(MinkowskiSumTest, computePointTest)
 	edge(1) = 4;
 
 	Point<double> result = polytope::computePoint(*t1, edge, false);
+#ifdef fukuda_DEBUG
 	std::cout << "source Point: " << *t1 << std::endl;
 	std::cout << "Edge: " << std::endl;
 	std::cout << edge << std::endl;
 	std::cout << "computed Point: " << result << std::endl;
+#endif
 }
 
 /**
@@ -356,10 +381,12 @@ TEST_F(MinkowskiSumTest, computeEdgeTest)
 	p = Point<double>({4,3});
 
 	vector_t<double> result = polytope::computeEdge(*t1, p);
+#ifdef fukuda_DEBUG
 	std::cout << "source Point: " << *t1 << std::endl;
 	std::cout << "target Point: " << p << std::endl;
 	std::cout << "computed Edge: " << std::endl;
 	std::cout << result << std::endl;
+#endif
 
 }
 
@@ -369,7 +396,9 @@ TEST_F(MinkowskiSumTest, computeEdgeTest)
 TEST_F(MinkowskiSumTest, adjOracleTest)
 {
 	Point<double> res = polyAdj.computeInitVertex(polyAdj2);
+#ifdef fukuda_DEBUG
 	std::cout << "Point v*: " << res << std::endl;
+#endif
 
 	Point<double> adjPoint;
 	std::pair<int,int> counter;
@@ -377,8 +406,11 @@ TEST_F(MinkowskiSumTest, adjOracleTest)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, res, counter);
+	ASSERT_TRUE(exists);
+#ifdef fukuda_DEBUG
 	std::cout << "AdjOracle return value: " << exists << std::endl;
 	std::cout << "Computed Point: " << adjPoint << std::endl;
+#endif
 }
 
 /**
@@ -387,13 +419,17 @@ TEST_F(MinkowskiSumTest, adjOracleTest)
 TEST_F(MinkowskiSumTest, computeMaximizerVectorTest)
 {
 	Point<double> v = polyAdj.computeInitVertex(polyAdj2);
+#ifdef fukuda_DEBUG
 	std::cout << "Point v*: " << v << std::endl;
+#endif
 
 	Point<double> target;
 	vector_t<double> result = polytope::computeMaximizerVector(target, v);
+#ifdef fukuda_DEBUG
 	std::cout << "Vector: " << std::endl;
 	std::cout << result << std::endl;
 	std::cout << "Target Vertex: " << target << std::endl;
+#endif
 }
 
 /**
@@ -405,10 +441,12 @@ TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 	p = Point<double>({0,1});
 
 	vector_t<double> result = polytope::computeEdge(*t1, p);
+#ifdef fukuda_DEBUG
 	std::cout << "source Point: " << t1 << std::endl;
 	std::cout << "target Point: " << p << std::endl;
 	std::cout << "Edge: " << std::endl;
 	std::cout << result << std::endl;
+#endif
 
 	std::vector<vector_t<double>> edgeSet;
 	edgeSet.push_back(result);
@@ -417,25 +455,31 @@ TEST_F(MinkowskiSumTest, computeNormalConeVectorTest)
 	Point<double> v = polyAdj.computeInitVertex(polyAdj2);
 	Point<double> target;
 	vector_t<double> maximizer = polytope::computeMaximizerVector(target, v);
+#ifdef fukuda_DEBUG
 	std::cout << "Maximizer Vector: " << std::endl;
 	std::cout << maximizer << std::endl;
+#endif
 
 	vector_t<double> resultingEdge = polytope::computeNormalConeVector<double>(edgeSet, maximizer);
+#ifdef fukuda_DEBUG
 	std::cout << "Computed Edge (Scalar Product <= 0): " << std::endl;
 	std::cout << resultingEdge << std::endl;
+#endif
 }
 
 /**
  * localSearch() Test for the 2D example
  */
-/*
+
 TEST_F(MinkowskiSumTest, localSearchTest)
 {
 	Polytope<double> sumPoly = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
 	Point<double> initVertex = polyAdj.computeInitVertex(polyAdj2);
+#ifdef fukuda_DEBUG
 	std::cout << "Point v*: " << initVertex << std::endl;
 	std::cout << "-------------------------" << std::endl;
+#endif
 
 	sumPoly.addPoint(initVertex);
 
@@ -445,38 +489,47 @@ TEST_F(MinkowskiSumTest, localSearchTest)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, initVertex, counter);
+	ASSERT_TRUE(exists);
 
 	Point<double> sinkMaximizerTarget;
 	vector_t<double> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
+#ifdef fukuda_DEBUG
     std::cout<< "sinkMaximizerVector: " << sinkMaximizerVector << std::endl;
     std::cout<< "sinkMaximizerTarget: " << sinkMaximizerTarget << std::endl;
 	std::cout << "-------------------------" << std::endl;
+#endif
 
 	polytope::Cone<double>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
 	sumPoly.rFan().add(cone);
 
+#ifdef fukuda_DEBUG
 	std::cout << "Sink Cone added to Fan." << std::endl;
+#endif
 
 	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
-}*/
+}
 
 /**
  * localSearch() Test for the 3D example
  */
-/*
+
 TEST_F(MinkowskiSumTest, localSearchTest3D)
 {
+#ifdef fukuda_DEBUG
 	std::cout << "PolyQ: ";
 	polyQ.print();
 	std::cout << "PolyP: ";
 	polyP.print();
+#endif
 
 	Polytope<double> sumPoly = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
 
 	Point<double> initVertex = polyQ.computeInitVertex(polyP);
+#ifdef fukuda_DEBUG
 	std::cout << "Point v*: " << initVertex << std::endl;
 	std::cout << "-------------------------" << std::endl;
+#endif
 
 	sumPoly.addPoint(initVertex);
 
@@ -486,22 +539,27 @@ TEST_F(MinkowskiSumTest, localSearchTest3D)
 	counter.second = 1;
 
 	bool exists = polytope::adjOracle(adjPoint, initVertex, counter);
+	ASSERT_TRUE(exists);
 
 	Point<double> sinkMaximizerTarget;
 	vector_t<double> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
+#ifdef fukuda_DEBUG
     std::cout<< "sinkMaximizerVector: " << sinkMaximizerVector << std::endl;
     std::cout<< "sinkMaximizerTarget: " << sinkMaximizerTarget << std::endl;
 	std::cout << "-------------------------" << std::endl;
+#endif
 
 	polytope::Cone<double>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
 	sumPoly.rFan().add(cone);
 
+#ifdef fukuda_DEBUG
 	std::cout << "Sink Cone added to Fan." << std::endl;
+#endif
 
 	Point<double> f = sumPoly.localSearch(adjPoint, sinkMaximizerTarget);
 
-}*/
+}
 
 /**
  * Test of the whole Minkowski Sum computation according to Fukuda
@@ -509,13 +567,18 @@ TEST_F(MinkowskiSumTest, localSearchTest3D)
 TEST_F(MinkowskiSumTest, altMinkowskiSumTest)
 {
 	glp_term_out(GLP_OFF);
-	//std::cout.setstate(std::ios::failbit);
+#ifndef fukuda_DEBUG
+	std::cout.setstate(std::ios::failbit);
+#endif
 	Polytope<double> omegaPoly;
 	bool omega = polyAdj.altMinkowskiSum(omegaPoly,polyAdj2);
-	//std::cout.clear();
+	ASSERT_TRUE(omega);
+	std::cout.clear();
+#ifdef fukuda_DEBUG
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
+#endif
 	//std::cout << "Neighbors of P1: " << omegaPoly.points().at(0).neighbors() << std::endl;
 }
 
@@ -526,39 +589,51 @@ TEST_F(MinkowskiSumTest, origMinkowskiSumTest)
 {
 	Polytope<double> omegaPoly;
 	bool omega = polyAdj.minkowskiSum(omegaPoly,polyAdj2);
+	ASSERT_TRUE(omega);
+#ifdef fukuda_DEBUG
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
+#endif
 }
 
 /**
  * Test of the whole Minkowski Sum computation according to Fukuda (3D case)
  */
-/*
+
 TEST_F(MinkowskiSumTest, altMinkowskiSumTest3D)
 {
 	glp_term_out(GLP_OFF);
+#ifndef fukuda_DEBUG
 	std::cout.setstate(std::ios::failbit);
+#endif
 	Polytope<double> omegaPoly;
 	bool omega = polyQ.altMinkowskiSum(omegaPoly,polyP);
+	ASSERT_TRUE(omega);
 	std::cout.clear();
+#ifdef fukuda_DEBUG
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
+#endif
 }
+
 
 /**
  * Test of the brute force computation for the Minkowski Sum (3D case)
  */
-/*
+
 TEST_F(MinkowskiSumTest, origMinkowskiSumTest3D)
 {
 	Polytope<double> omegaPoly;
 	bool omega = polyQ.minkowskiSum(omegaPoly,polyP);
+	ASSERT_TRUE(omega);
+#ifdef fukuda_DEBUG
 	std::cout << "Return Value: " << omega << std::endl;
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
-}*/
+#endif
+}
 
 
 

@@ -226,7 +226,9 @@ TEST_F(HybridAutomataTest, HybridAutomatonTest)
 
 	//hybrid automaton: initial Valuation
 	//equivalence has to be confirmed through console output
+#ifdef fReach_DEBUG
 	hybrid.valuation().print();
 	poly.print();
+#endif
 
 }

@@ -228,16 +228,21 @@ TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 
 	std::vector<hypro::valuation_t<double>> flowpipe;
 
+#ifdef fReach_DEBUG
    	std::cout << "original Polytope (Box): ";
     poly.print();
+#endif
 
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
    	//check size of flowpipe
+#ifdef fReach_DEBUG
    	int size = flowpipe.size();
 
    	std::cout <<  "Flowpipe size: ";
    	std::cout << size << std::endl;
+#endif
+
 }
 
 /**
@@ -308,8 +313,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	EXPECT_FALSE(contains4);
 
 }
-
-//TODO fix
 
 TEST_F(ForwardReachabilityTest, UtilityTest)
 {

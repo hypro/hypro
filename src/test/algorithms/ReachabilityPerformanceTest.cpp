@@ -89,6 +89,7 @@ protected:
     	initVal.addPoint(*p3);
     	initVal.addPoint(*p4);
 
+#ifdef fReach_DEBUG
     	std::cout << "-------" << std::endl;
     	std::cout << "X0 Polytope: " << std::endl;
     	initVal.print();
@@ -97,6 +98,8 @@ protected:
     	//	std::cout << "Neighbors: " << point.neighbors() << std::endl;
     	//}
     	std::cout << "-------" << std::endl;
+#endif
+
     }
 
     virtual void TearDown()
@@ -175,9 +178,11 @@ TEST_F(ReachabilityPerformanceTest, ComputeFlowpipeTest)
 	//sort points anti-clockwise
 	std::vector<std::vector<std::vector<double>>> newPipe;
 
-	//std::cout << "-------" << std::endl;
-	//std::cout << "From here on: Order Set" << std::endl;
-	//std::cout << "-------" << std::endl;
+#ifdef fReach_DEBUG
+	std::cout << "-------" << std::endl;
+	std::cout << "From here on: Order Set" << std::endl;
+	std::cout << "-------" << std::endl;
+#endif
 
 	for(auto& segment :flowpipe) {
 		segment.setPointsUpToDate(false);
@@ -189,17 +194,23 @@ TEST_F(ReachabilityPerformanceTest, ComputeFlowpipeTest)
 			}
 			newSegment.push_back(coords);
 		}
-		//std::cout << "Unordered Set: " << std::endl;
-		//std::cout << newSegment << std::endl;
-		//std::cout << "-------" << std::endl;
+#ifdef fReach_DEBUG
+		std::cout << "Unordered Set: " << std::endl;
+		std::cout << newSegment << std::endl;
+		std::cout << "-------" << std::endl;
+#endif
 
 		std::vector<double> center = computeCenter(newSegment);
-		//std::cout << "Center: " << center << std::endl;
+#ifdef fReach_DEBUG
+		std::cout << "Center: " << center << std::endl;
+#endif
 
 		newSegment = sortSet(newSegment, center);
-		//std::cout << "Ordered Set: " << std::endl;
-		//std::cout << newSegment << std::endl;
-		//std::cout << "-------" << std::endl;
+#ifdef fReach_DEBUG
+		std::cout << "Ordered Set: " << std::endl;
+		std::cout << newSegment << std::endl;
+		std::cout << "-------" << std::endl;
+#endif
 
 		newPipe.push_back(newSegment);
 	}
@@ -240,10 +251,13 @@ TEST_F(ReachabilityPerformanceTest, ComputeFlowpipeTest)
 	}
 	fclose(fp);
 
-   	//int size = flowpipe.size();
    	std::cout.clear();
-   	//std::cout <<  "Flowpipe size: ";
-   	//std::cout << size << std::endl;
+
+#ifdef fReach_DEBUG
+   	int size = flowpipe.size();
+   	std::cout <<  "Flowpipe size: ";
+   	std::cout << size << std::endl;
+#endif
 
 }
 

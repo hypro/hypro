@@ -377,20 +377,22 @@ TEST_F(SumPerformanceTest, playGroundTest)
 /**
  * Vertex Test - Fukuda
  */
-/*
 TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 {
 	glp_term_out(GLP_OFF);
-	//glp_term_out(GLP_ON);
 	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
 
+#ifdef fukuda_DEBUG
     clock::time_point start = clock::now();
+#endif
 
 	bool omega = polyP.altMinkowskiSum(omegaPoly,polyQ);
+	ASSERT_TRUE(omega);
 
 	std::cout.clear();
 
+#ifdef fukuda_DEBUG
     std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << "ms" << std::endl;
 
 	std::cout << "-----------" << std::endl;
@@ -400,19 +402,23 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_VertexTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
-}*/
+#endif
+}
 
 /**
  * Vertex Test - brute force
  */
-/*
 TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 {
 	Polytope<double> omegaPoly;
+#ifdef fukuda_DEBUG
 	clock::time_point start2 = clock::now();
+#endif
 
 	bool omega = polyP.minkowskiSum(omegaPoly,polyQ);
+	ASSERT_TRUE(omega);
 
+#ifdef fukuda_DEBUG
     std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start2 ).count()/1000 << "ms" << std::endl;
 
 	std::cout << "-----------" << std::endl;
@@ -422,7 +428,8 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_VertexTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
-}*/
+#endif
+}
 
 /**
  * Dimension Test - Fukuda
@@ -434,12 +441,16 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
 	std::cout.setstate(std::ios::failbit);
 	Polytope<double> omegaPoly;
 
+#ifdef fukuda_DEBUG
 	clock::time_point start3 = clock::now();
+#endif
 
 	bool omega = polyD.altMinkowskiSum(omegaPoly,polyD);
+	ASSERT_TRUE(omega);
 
 	std::cout.clear();
 
+#ifdef fukuda_DEBUG
 	std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start3 ).count()/1000 << "ms" << std::endl;
 
 	std::cout << "-----------" << std::endl;
@@ -449,6 +460,7 @@ TEST_F(SumPerformanceTest, altMinkowskiSum_DimensionTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
+#endif
 }
 
 /**
@@ -458,10 +470,14 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
 {
 	Polytope<double> omegaPoly;
 
+#ifdef fukuda_DEBUG
 	clock::time_point start4 = clock::now();
+#endif
 
 	bool omega = polyD.minkowskiSum(omegaPoly,polyD);
+	ASSERT_TRUE(omega);
 
+#ifdef fukuda_DEBUG
 	std::cout << "Total time: " << std::chrono::duration_cast<timeunit>( clock::now() - start4 ).count()/1000 << "ms" << std::endl;
 
 	std::cout << "-----------" << std::endl;
@@ -471,5 +487,6 @@ TEST_F(SumPerformanceTest, origMinkowskiSum_DimensionTest)
 	std::cout << "Computed Sum Polytope: ";
 	omegaPoly.print();
 	std::cout << "Sum Size: " << omegaPoly.points().size() << std::endl;
+#endif
 }
 
