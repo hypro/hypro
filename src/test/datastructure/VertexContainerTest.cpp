@@ -77,8 +77,8 @@ TEST_F(VertexContainerTest, Insertion)
         std::cout << "Manual comparison: p1 < p3: " << ( Vertex<number_t>(p1, true) < Vertex<number_t>(p3, false) ) << ", p1 > p3: " << ( Vertex<number_t>(p3, false) < Vertex<number_t>(p1, true) ) << std::endl;
         std::cout << "Manual comparison: p1 == p3: " << ( Vertex<number_t>(p1, true) == Vertex<number_t>(p3, false) ) << std::endl;
         
-	EXPECT_EQ(3, test1.size());
-        EXPECT_EQ(2, test1.dimension());
+	EXPECT_EQ((unsigned) 3, test1.size());
+        EXPECT_EQ((unsigned) 2, test1.dimension());
 	EXPECT_FALSE(test1.find(p1) != test1.end());
 	EXPECT_FALSE(test1.find(p2) != test1.end());
 	EXPECT_TRUE(test1.find(p3) != test1.end());

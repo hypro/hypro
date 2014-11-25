@@ -62,9 +62,9 @@ TEST_F(BoxTest, Access)
     EXPECT_EQ(1, tmp[y].lower());
     EXPECT_EQ(3, tmp[y].upper());
     
-    EXPECT_EQ(2, box1.dimension());
-    EXPECT_EQ(2, box2.dimension());
-    EXPECT_EQ(0, box3.dimension());
+    EXPECT_EQ((unsigned) 2, box1.dimension());
+    EXPECT_EQ((unsigned) 2, box2.dimension());
+    EXPECT_EQ((unsigned) 0, box3.dimension());
     
     EXPECT_TRUE(box1.haveSameDimensions(box2));
     EXPECT_FALSE(box1.haveSameDimensions(box3));

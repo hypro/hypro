@@ -65,10 +65,10 @@ protected:
 TEST_F(PointTest, Constructor)
 { 
     Point<number_t> p;
-    EXPECT_EQ(p.dimension(), 0);
+    EXPECT_EQ(p.dimension(), (unsigned) 0);
     
     p = Point<number_t>(y, 5);
-    EXPECT_EQ(p.dimension(), 1);
+    EXPECT_EQ(p.dimension(), (unsigned) 1);
     
     p[pool.getFreshVariable()] = 2;
     p[pool.getFreshVariable()] = 2;
