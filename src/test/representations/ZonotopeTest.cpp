@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include "gtest/gtest.h"
-#include "../../lib/representations/Zonotope/Zonotope.h"
-#include "../../lib/representations/Hyperplane/Hyperplane.h"
+#include "../../lib/representations/Zonotope.h"
+#include "../../lib/representations/Hyperplane.h"
 
 /*
  * Google Test for Zonotope Implementation
@@ -41,6 +41,21 @@ TEST(ZonotopeTest, FullConstructor) {
     EXPECT_EQ(z2.generators(), gen);
 }
 
+TEST(ZonotopeTest, CopyConstructor) {
+    Eigen::Matrix<double, 3,2> gen;
+    Eigen::Matrix<double, 3,1> center;
+    center << 1,5,2;
+    gen << 1,2,
+            2,8,
+            9,1;
+    Zonotope<double> z1(center, gen);
+    Zonotope<double> z_copy(z1);
+    
+    EXPECT_EQ(z_copy.dimension(),z1.dimension());
+    EXPECT_EQ(z_copy.center(),z1.center());
+    EXPECT_EQ(z_copy.generators(),z1.generators());
+}
+
 TEST(ZonotopeOperationTest, ComputeZonotopeBoundary) {
     Zonotope<double> z1(2);
     Eigen::Matrix<double,2,1> center = {1.1941, 0.1068};
@@ -69,8 +84,8 @@ TEST(ZonotopeOperationTest, ZonogoneHPIntersect) {
     
     Hyperplane<double> hp(dVec, 0);
     Zonotope<double> z(center, generators), res;
-    
-    intersectZonogoneHyperplane(z, hp, res);
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dummy;
+    intersectZonogoneHyperplane(z, hp, res, dummy);
     std::cout << "Zonogone Hyperplane intersect: \n" << res.center() << std::endl;
     std::cout << "---" << std::endl;
     std::cout << res.generators() << std::endl;
@@ -161,7 +176,7 @@ TEST(ZonotopeOperationTest, MinkowskiSum) {
 //    hp.setVector(d_vector);
 //    hp.setScalar(30);
 //
-//    z1.intersect(res, hp);
+//    z1.intersect(res, hp, NDPROJECTION);
 //
 //    EXPECT_LT((res.center()-exp_center).array().abs().matrix().sum(), delta_center.sum());
 //    EXPECT_LT((res.generators()-exp_gen).array().abs().matrix().rowwise().sum().sum(), delta_gen.array().abs().matrix().rowwise().sum().sum());
