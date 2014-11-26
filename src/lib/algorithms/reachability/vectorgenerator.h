@@ -3,8 +3,9 @@
  *  Author: Norman Hansen
  */    
     
+#pragma once
 //#define VECTOR_GEN_VERBOSE
-
+namespace hypro {
     /*
 	* Creates a matrix defining a rotation along dimensions dim1 and dim2 by angle
 	*/
@@ -265,3 +266,4 @@
          
          return result;
     }
+}

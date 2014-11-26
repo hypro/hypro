@@ -76,10 +76,10 @@ namespace hypro
                 FlowpipeSegment* flowpipeSegment;  // flowpipe the set indexis relate to
                 std::vector<convexSetOfFlowpipeSetIndexis> sets; // list of successive sets having an intersection with the guard (and I* etc.) of the transition 
          };
-                    	
+}
+
 #include "helperMethods.h"      // make helper methods available (print/convert)
 #include "vectorgenerator.h"    // make vectorgenerator functionalities globally available
-}
 
 // Supportfunctions
 #include "SupportFunction.h"

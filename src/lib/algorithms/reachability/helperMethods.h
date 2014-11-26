@@ -4,10 +4,12 @@
  *  Author: Norman Hansen
  */
 
+#pragma once
 #include "hyreach_utils.h"    
 //#include "../../datastructures/hybridAutomata/util.h"
     
 //#define HELPER_METHODS_VERBOSE
+namespace hypro{
 
     void printPossibleTransitions(std::vector<possibleTransition*>* pT)
     {
@@ -358,3 +360,4 @@
         
          return result;
     }
+}

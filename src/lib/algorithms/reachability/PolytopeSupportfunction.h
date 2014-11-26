@@ -228,8 +228,8 @@ namespace hypro
             //constraintConstants.conservaticeResize(constraintConstants.rows()+2,1);
             matrix_t<double> extendedConstraintConstants(constraintConstants.rows()+2,1);
             extendedConstraintConstants.block(0,0,constraintConstants.rows(),1) = constraintConstants;
-            extendedConstraintConstants(extendedConstraintConstants.rows()-2,0) = aD->dir1_eval;
-            extendedConstraintConstants(extendedConstraintConstants.rows()-1,0) = aD->dir2_eval;
+            extendedConstraintConstants(extendedConstraintConstants.rows()-2,0) = artificialDirections::dir1_eval;
+            extendedConstraintConstants(extendedConstraintConstants.rows()-1,0) = artificialDirections::dir2_eval;
             
             #ifdef SUPPORTFUNCTION_VERBOSE
  		         #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -252,8 +252,8 @@ namespace hypro
             
              matrix_t<double> extendedConstraintConstants(constraintConstants.size()+2,1);
              extendedConstraintConstants.block(0,0,constraintConstants.size(),1) = constraintConstants;
-             extendedConstraintConstants(extendedConstraintConstants.size()-2,0) = aD->dir1_eval;
-             extendedConstraintConstants(extendedConstraintConstants.size()-1,0) = aD->dir2_eval;
+             extendedConstraintConstants(extendedConstraintConstants.size()-2,0) = artificialDirections::dir1_eval;
+             extendedConstraintConstants(extendedConstraintConstants.size()-1,0) = artificialDirections::dir2_eval;
              
              #ifdef SUPPORTFUNCTION_VERBOSE
  		         #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -277,8 +277,8 @@ namespace hypro
             //std::cout << BL << "d:" << constraintConstants;
             
             // reset artificial directions
-            constraintConstants(0,0) = aD->dir1_eval;
-            constraintConstants(1,0) = aD->dir2_eval;
+            constraintConstants(0,0) = artificialDirections::dir1_eval;
+            constraintConstants(1,0) = artificialDirections::dir2_eval;
               
             //std::cout << BL << "resetted d:" << constraintConstants << BL;
             
