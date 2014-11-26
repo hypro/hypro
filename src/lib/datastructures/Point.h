@@ -280,6 +280,19 @@ namespace hypro {
             }
             
             /**
+             * Sets the coordinates from the given vector
+             */
+            void coordinatesFromVector(const vector& vector)
+            {
+            	assert( vector.size() == mCoordinates.size() );
+            	unsigned index = 0;
+            	for (auto& pointIt : mCoordinates) {
+            		mCoordinates[pointIt.first] = vector(index);
+            		++index;
+            	}
+            }
+
+            /**
              *
              * @return iterator to begin of mCoordinates
              */
@@ -450,10 +463,19 @@ namespace hypro {
             }
 
             /**
-	     * @brief gives the next point according to some (hardcoded) ordering.
-	     * @param bounds The grid lies between the origin and this point.
-	     *
-	     */
+             * Makes a linear transformation, ie A * p + b
+             */
+            void linearTransformation(Point<Number>& result, const matrix& A, const vector& b = vector()) const
+            {
+            	result = newEmpty();
+            	result.coordinatesFromVector(A * vector(*this) + b);
+            }
+
+            /**
+             * @brief gives the next point according to some (hardcoded) ordering.
+             * @param bounds The grid lies between the origin and this point.
+             *
+             */
             void nextPointOnGrid(const Point<Number>& _bounds) 
             {
                 for(auto pointIt : mCoordinates)
@@ -478,7 +500,7 @@ namespace hypro {
             {
                 carl::FLOAT_T<Number> dist;
                 for (auto pointIt : mCoordinates)
-		{
+                {
                     dist += ( (*pointIt).second - _mean.coordinate((*pointIt).first) ).pow(carl::FLOAT_T<Number>(2));
                 }
                 dist /= _rate; //TODO: use proper rounding?

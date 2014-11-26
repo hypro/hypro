@@ -90,9 +90,9 @@ TEST_F(VertexContainerTest, Deletion)
 	test1.insert(Vertex<number_t>(p1, true));
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
-	EXPECT_EQ(test1.size(), 3);
+	EXPECT_EQ(test1.size(), (unsigned) 3);
 	test1.erase(p2);
-	EXPECT_EQ(test1.size(), 2);
+	EXPECT_EQ(test1.size(), (unsigned) 2);
 	EXPECT_EQ(test1.find(p2) != test1.end(), false);
 }
 
@@ -125,29 +125,29 @@ TEST_F(VertexContainerTest, Access)
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
         
-        EXPECT_EQ(test1.end(), test1.find(p1));
-        EXPECT_EQ(test1.end(), test1.find(p2));
-        EXPECT_NE(test1.end(), test1.find(p3));
-        
-        EXPECT_EQ(test1.end(), test1.find(p1, false));
-        EXPECT_EQ(test1.end(), test1.find(p2, false));
-        EXPECT_EQ(test1.end(), test1.find(p3, true));
-        
-        EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p1, true)));
-        EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p2, true)));
-        EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p3, false)));
-        
-        EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p1, false)));
-        EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p2, false)));
-        EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p3, true)));
-        
-        EXPECT_TRUE(test1.find(p1, true)->color());
-        EXPECT_TRUE(test1.find(p2, true)->color());
-        EXPECT_FALSE(test1.find(p3, false)->color());
-        
-        EXPECT_TRUE(test1.find(Vertex<number_t>(p1, true))->color());
-        EXPECT_TRUE(test1.find(Vertex<number_t>(p2, true))->color());
-        EXPECT_FALSE(test1.find(Vertex<number_t>(p3, false))->color());
+	EXPECT_EQ(test1.end(), test1.find(p1));
+	EXPECT_EQ(test1.end(), test1.find(p2));
+	EXPECT_NE(test1.end(), test1.find(p3));
+
+	EXPECT_EQ(test1.end(), test1.find(p1, false));
+	EXPECT_EQ(test1.end(), test1.find(p2, false));
+	EXPECT_EQ(test1.end(), test1.find(p3, true));
+
+	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p1, true)));
+	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p2, true)));
+	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p3, false)));
+
+	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p1, false)));
+	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p2, false)));
+	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p3, true)));
+
+	EXPECT_TRUE(test1.find(p1, true)->color());
+	EXPECT_TRUE(test1.find(p2, true)->color());
+	EXPECT_FALSE(test1.find(p3, false)->color());
+
+	EXPECT_TRUE(test1.find(Vertex<number_t>(p1, true))->color());
+	EXPECT_TRUE(test1.find(Vertex<number_t>(p2, true))->color());
+	EXPECT_FALSE(test1.find(Vertex<number_t>(p3, false))->color());
 }
 
 TEST_F(VertexContainerTest, OriginIsVertex)

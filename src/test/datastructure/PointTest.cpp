@@ -6,6 +6,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
+#include "../../lib/util/types.h"
 #include "../../lib/datastructures/Point.h"
 #include <carl/core/VariablePool.h>
 #include "carl/numbers/numbers.h"
@@ -290,4 +291,43 @@ TEST_F(PointTest, Neighbours)
     EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
     p3.decrementInFixedDim(c);
     EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
+}
+
+TEST_F(PointTest, LinearTransformation) {
+	matrix A = createMatrix(std::vector<std::vector<double> >({
+			std::vector<double>({4, 5}),
+			std::vector<double>({-2, 3})
+	}));
+
+	vector v = createVector(std::vector<double>({6, 1}));
+
+	Point<number_t> result;
+    Point<number_t>::coordinateMap coordinates;
+
+	p1.linearTransformation(result, A, v); // (2; 5)
+
+	coordinates.clear();
+	coordinates[x] = -3; coordinates[y] = 36;
+	EXPECT_EQ(Point<number_t>(coordinates), result);
+
+
+	p2.linearTransformation(result, A, v); // (7; 8)
+
+	coordinates.clear();
+	coordinates[a] = 6; coordinates[b] = 73;
+	EXPECT_EQ(Point<number_t>(coordinates), result);
+
+
+	p3.linearTransformation(result, A, v); // (9; -13)
+
+	coordinates.clear();
+	coordinates[c] = 54; coordinates[d] = -1;
+	EXPECT_EQ(Point<number_t>(coordinates), result);
+
+
+	p4.linearTransformation(result, A, v); // (5; 8)
+
+	coordinates.clear();
+	coordinates[c] = 0; coordinates[d] = 63;
+	EXPECT_EQ(Point<number_t>(coordinates), result);
 }
