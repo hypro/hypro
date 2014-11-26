@@ -9,7 +9,7 @@
 #define	ZONOTOPE_H
 
 #include <vector>
-#include "Hyperplane.h"
+#include "../Hyperplane/Hyperplane.h"
 #include <eigen3/Eigen/Dense>
 #include <ppl.hh>
 #include <cmath>

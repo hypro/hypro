@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include "gtest/gtest.h"
-#include "../../lib/representations/Zonotope.h"
-#include "../../lib/representations/Hyperplane.h"
+#include "../../lib/representations/Zonotope/Zonotope.h"
+#include "../../lib/representations/Hyperplane/Hyperplane.h"
 
 /*
  * Google Test for Zonotope Implementation
