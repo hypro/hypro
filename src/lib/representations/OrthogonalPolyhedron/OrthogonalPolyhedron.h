@@ -39,16 +39,16 @@ namespace hypro
         VertexContainer<Number> mVertices;
         
         // the induced vertices connected to the grid
-        VertexContainer<Number> mInducedVertices;
+        //VertexContainer<Number> mInducedVertices;
         
         // the grid the polyhedron is defined on
         Grid<Number> mGrid;
         
         // the colour of the origin
-        bool mOriginColour = false;
+        //bool mOriginColour = false;
         
         // the neighbourhood container which maps points to a set of vertices
-        NeighbourhoodContainer<Number> mNeighbourhood;
+        //NeighbourhoodContainer<Number> mNeighbourhood;
         
         // the cached boundary box (mutable to allow performance optimization)
         mutable Box<Number> mBoundaryBox;
@@ -80,15 +80,15 @@ namespace hypro
         {
             mVertices = vertices;
             if ( !vertices.empty() ) {
-                mOriginColour = vertices.originIsVertex();
+                //mOriginColour = vertices.originIsVertex();
                 mVariables = vertices.variables();
                 mGrid.reserveInducedGrid(mVariables);
                 if (induceGrid)
                 {
                     mGrid.induceGrid(vertices.vertices());
                     mGrid.insertVerticesInMap(vertices.vertices());
-                    vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-                    mInducedVertices = VertexContainer<Number>(inducedVertices);
+                    //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+                    //mInducedVertices = VertexContainer<Number>(inducedVertices);
                 }
             }
         }
@@ -99,10 +99,10 @@ namespace hypro
          */
         OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy) :
         	mVertices(copy.mVertices),
-        	mInducedVertices(copy.mInducedVertices),
+        	//mInducedVertices(copy.mInducedVertices),
         	mGrid(copy.mGrid),
-        	mOriginColour(copy.mOriginColour),
-        	mNeighbourhood(copy.mNeighbourhood),
+        	//mOriginColour(copy.mOriginColour),
+        	//mNeighbourhood(copy.mNeighbourhood),
         	mBoundaryBox(copy.mBoundaryBox),
         	mBoxUpToDate(copy.mBoxUpToDate),
         	mVariables(copy.mVariables)
