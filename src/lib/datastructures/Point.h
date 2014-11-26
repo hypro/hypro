@@ -284,7 +284,7 @@ namespace hypro {
              */
             void coordinatesFromVector(const vector& vector)
             {
-            	assert( vector.size() == mCoordinates.size() );
+            	assert( (unsigned) vector.size() == mCoordinates.size() );
             	unsigned index = 0;
             	for (auto& pointIt : mCoordinates) {
             		mCoordinates[pointIt.first] = vector(index);
@@ -301,7 +301,7 @@ namespace hypro {
                 return mCoordinates.begin();
             }
 
-            /**
+            /**passing
              *
              * @return iterator to end of mCoordinates
              */
@@ -465,10 +465,9 @@ namespace hypro {
             /**
              * Makes a linear transformation, ie A * p + b
              */
-            void linearTransformation(Point<Number>& result, const matrix& A, const vector& b = vector()) const
+            void linearTransformation(const matrix& A, const vector& b = vector())
             {
-            	result = newEmpty();
-            	result.coordinatesFromVector(A * vector(*this) + b);
+            	coordinatesFromVector(A * vector(*this) + b);
             }
 
             /**

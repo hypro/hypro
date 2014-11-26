@@ -29,8 +29,11 @@ namespace hypro
     }	
         
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result) const {
-        return false;
+    bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix& A, const vector& b) const {
+    	VertexContainer<Number> newVertices(mVertices);
+    	newVertices.linearTransformation(A, b);
+    	result = OrthogonalPolyhedron<Number>(newVertices);
+    	return true;
     }
 
     template<typename Number>

@@ -301,33 +301,32 @@ TEST_F(PointTest, LinearTransformation) {
 
 	vector v = createVector(std::vector<double>({6, 1}));
 
-	Point<number_t> result;
     Point<number_t>::coordinateMap coordinates;
 
-	p1.linearTransformation(result, A, v); // (2; 5)
+	p1.linearTransformation(A, v); // (2; 5)
 
 	coordinates.clear();
 	coordinates[x] = -3; coordinates[y] = 36;
-	EXPECT_EQ(Point<number_t>(coordinates), result);
+	EXPECT_EQ(Point<number_t>(coordinates), p1);
 
 
-	p2.linearTransformation(result, A, v); // (7; 8)
+	p2.linearTransformation(A, v); // (7; 8)
 
 	coordinates.clear();
 	coordinates[a] = 6; coordinates[b] = 73;
-	EXPECT_EQ(Point<number_t>(coordinates), result);
+	EXPECT_EQ(Point<number_t>(coordinates), p2);
 
 
-	p3.linearTransformation(result, A, v); // (9; -13)
+	p3.linearTransformation(A, v); // (9; -13)
 
 	coordinates.clear();
 	coordinates[c] = 54; coordinates[d] = -1;
-	EXPECT_EQ(Point<number_t>(coordinates), result);
+	EXPECT_EQ(Point<number_t>(coordinates), p3);
 
 
-	p4.linearTransformation(result, A, v); // (5; 8)
+	p4.linearTransformation(A, v); // (5; 8)
 
 	coordinates.clear();
 	coordinates[c] = 0; coordinates[d] = 63;
-	EXPECT_EQ(Point<number_t>(coordinates), result);
+	EXPECT_EQ(Point<number_t>(coordinates), p4);
 }

@@ -131,6 +131,18 @@ namespace hypro {
 			mVertices = tmp;
 		}
 		
+		inline void linearTransformation(const matrix& A, const vector& b) {
+			vSet<Number> tmp;
+			vSetIt<Number> tmpIt = tmp.begin();
+			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
+				Vertex<Number> v = Vertex<Number>(*it);
+				v.linearTransformation(A, b);
+				tmp.insert(tmpIt, v);
+				tmpIt++;
+			}
+			mVertices = tmp;
+		}
+
 		/**
 		 *
 		 * @return
@@ -238,27 +250,27 @@ namespace hypro {
 			return true;
 		}
 
-                /**
-                 *
-                 * @param c1
-                 * @param c2
-                 * @return true, if they are equal.
-                 */
-                friend bool operator==(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
-                {
-                    return c1.mVertices == c2.mVertices;
-                }
+		/**
+		 *
+		 * @param c1
+		 * @param c2
+		 * @return true, if they are equal.
+		 */
+		friend bool operator==(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
+		{
+			return c1.mVertices == c2.mVertices;
+		}
 
-                /**
-                 *
-                 * @param c1
-                 * @param c2
-                 * @return true, if they are not equal.
-                 */
-                friend bool operator!=(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
-                {
-                    return c1.mVertices != c2.mVertices;
-                }
+		/**
+		 *
+		 * @param c1
+		 * @param c2
+		 * @return true, if they are not equal.
+		 */
+		friend bool operator!=(const VertexContainer<Number> & c1, const VertexContainer<Number> & c2)
+		{
+			return c1.mVertices != c2.mVertices;
+		}
 		
 		/**
 		 *

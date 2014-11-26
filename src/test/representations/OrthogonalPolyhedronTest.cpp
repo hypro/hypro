@@ -11,6 +11,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
+#include "../../lib/util/types.h"
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
 #include "../../lib/datastructures/VertexContainer.h"
@@ -100,6 +101,100 @@ TEST_F(OrthogonalPolyhedronTest, Constructor)
     OrthogonalPolyhedron<number_t> p;
     OrthogonalPolyhedron<number_t> copy(p);
     SUCCEED();
+}
+
+TEST_F(OrthogonalPolyhedronTest, Properties)
+{
+    EXPECT_FALSE(p1.empty());
+    OrthogonalPolyhedron<number_t> empty;
+    EXPECT_TRUE(empty.empty());
+
+    std::vector<carl::Variable> variables;
+    variables.push_back(y);
+    variables.push_back(x);
+    EXPECT_EQ((unsigned)2, p1.dimension());
+    EXPECT_EQ(variables, p1.variables());
+}
+
+TEST_F(OrthogonalPolyhedronTest, BoundaryBox)
+{
+    Box<number_t> boundaryBox;
+    boundaryBox.insert(x, carl::Interval<number_t>(3, 7));
+    boundaryBox.insert(y, carl::Interval<number_t>(3, 6));
+
+    EXPECT_EQ(boundaryBox, p1.boundaryBox());
+}
+
+
+TEST_F(OrthogonalPolyhedronTest, LinearTransformation)
+{
+	matrix A = createMatrix(std::vector<std::vector<double> >({
+			std::vector<double>({5, -2}),
+			std::vector<double>({9, 3})
+	}));
+
+	vector v = createVector(std::vector<double>({7, 2}));
+
+
+    VertexContainer<number_t> container1;
+    Point<number_t>::rawCoordinateMap coordinates;
+
+    coordinates[x] = 38; coordinates[y] = 16;
+    container1.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 65; coordinates[y] = 31;
+    container1.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 44; coordinates[y] = 12;
+    container1.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 62; coordinates[y] = 22;
+    container1.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 68; coordinates[y] = 18;
+    container1.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 77; coordinates[y] = 23;
+    container1.insert(Point<number_t>(coordinates), false);
+
+    VertexContainer<number_t> container2;
+
+    coordinates[x] = 32; coordinates[y] = 20;
+    container2.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 41; coordinates[y] = 25;
+    container2.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 44; coordinates[y] = 23;
+    container2.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 53; coordinates[y] = 28;
+    container2.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 59; coordinates[y] = 24;
+    container2.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 32; coordinates[y] = 9;
+    container2.insert(Point<number_t>(coordinates), false);
+
+    coordinates[x] = 26; coordinates[y] = 13;
+    container2.insert(Point<number_t>(coordinates), true);
+
+    coordinates[x] = 35; coordinates[y] = 18;
+    container2.insert(Point<number_t>(coordinates), true);
+
+
+
+	OrthogonalPolyhedron<number_t> expected1(container1);
+	OrthogonalPolyhedron<number_t> expected2(container2);
+
+	OrthogonalPolyhedron<number_t> result1, result2;
+
+	p1.linearTransformation(result1, A, v);
+	p2.linearTransformation(result2, A, v);
+
+	EXPECT_EQ(expected1, result1);
+	EXPECT_EQ(expected2, result2);
 }
 
 TEST_F(OrthogonalPolyhedronTest, Intersect)
@@ -278,24 +373,3 @@ TEST_F(OrthogonalPolyhedronTest, Unite) {
     EXPECT_EQ(expected, result);
 }
 
-TEST_F(OrthogonalPolyhedronTest, Properties)
-{
-    EXPECT_FALSE(p1.empty());
-    OrthogonalPolyhedron<number_t> empty;
-    EXPECT_TRUE(empty.empty());
-    
-    std::vector<carl::Variable> variables;
-    variables.push_back(y);
-    variables.push_back(x);
-    EXPECT_EQ((unsigned)2, p1.dimension());
-    EXPECT_EQ(variables, p1.variables());
-}
-
-TEST_F(OrthogonalPolyhedronTest, BoundaryBox)
-{
-    Box<number_t> boundaryBox;
-    boundaryBox.insert(x, carl::Interval<number_t>(3, 7));
-    boundaryBox.insert(y, carl::Interval<number_t>(3, 6));
-    
-    EXPECT_EQ(boundaryBox, p1.boundaryBox());
-}
