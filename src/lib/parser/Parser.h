@@ -16,12 +16,17 @@
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
+#include <boost/spirit/include/phoenix_bind.hpp>
+#include <boost/phoenix/stl/container.hpp>
 #include "boost/variant.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cassert>
+#include "../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "utils.h"
 #include "componentParser.h"
+#include "../util/types.h"
 
 namespace hypro{
 namespace parser{
@@ -30,24 +35,25 @@ namespace spirit = boost::spirit;
 namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 namespace phoenix = boost::phoenix;
+namespace fusion = boost::fusion;
 
 typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
 typedef qi::space_type Skipper;
 typedef std::vector<boost::variant<Initial, State, Transition> > Automaton;
-//typedef std::vector< State > Automaton;
-
 
 
 template<typename Iterator>
 struct InitialParser : public qi::grammar<Iterator, Initial(), Skipper>
 {
+	shortLocationParser<Iterator> mLocationParser;
+	
     InitialParser() : InitialParser::base_type(start)
     {
-        start = qi::lit("initial") < 
-				qi::lit("(") <
-				(qi::uint_ % qi::no_skip[qi::char_(' ',',')]) <
+        start = qi::lit("initial") > 
+				qi::lit("(") >
+				mLocationParser >
 				qi::lit(")");
     }
     
@@ -100,23 +106,27 @@ struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
     qi::rule<Iterator, Transition(), Skipper> start;
 };
 
-template<typename Iterator>
-struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
+
+// TODO: Template this!
+struct MainParser : public qi::grammar<Iterator, Skipper>
 {
+	qi::rule<Iterator, Skipper> main;
     StateParser<Iterator> mStateParser;
     TransitionParser<Iterator> mTransitionParser;
-	//InitialParser<Iterator> mInitialParser;
+	InitialParser<Iterator> mInitialParser;
+	
+	std::vector<State> mStates;
+	std::vector<Transition> mTransitions;
+	Initial mInitial;
     
     MainParser() : MainParser::base_type(main)
     {
         //using phoenix::construct;
         using phoenix::val;
         
-        qi::debug(main);
-        
         //main = -(mInitialParser) < *(mStateParser | mTransitionParser);
-        main = *(mStateParser | mTransitionParser);
-        
+        //main = mInitialParser[mInitial(spirit::_val)] > *(mStateParser[ boost::phoenix::push_back(mStates, parser::State(spirit::_1)) ] | mTransitionParser[ boost::phoenix::push_back(mTransitions, spirit::_1) ]);
+        main = mInitialParser[ phoenix::bind(&hypro::parser::MainParser::setInitial, phoenix::ref(*this), qi::_1)] > *(mStateParser[ phoenix::bind(&hypro::parser::MainParser::push_back_State, phoenix::ref(*this), qi::_1) ] | mTransitionParser[ phoenix::bind(&hypro::parser::MainParser::push_back_Transition, phoenix::ref(*this), qi::_1) ]);
         qi::on_error<qi::fail>
         (
         main
@@ -129,29 +139,28 @@ struct MainParser : public qi::grammar<Iterator, Automaton(), Skipper>
             << std::endl
         );
     }    
+	
+	void push_back_State(const State& _in)
+	{
+		mStates.push_back(_in);
+	}
+	
+	void push_back_Transition(const Transition& _in)
+	{
+		mTransitions.push_back(_in);
+	}
+	
+	void setInitial(const Initial& _in)
+	{
+		mInitial = _in;
+	}
     
-    qi::rule<Iterator, Automaton(), Skipper> main;
-};
-
-
-class HyproParser : public qi::grammar<Iterator, Automaton(), Skipper>
-{   
-    private:
-    // Rules
-    MainParser<Iterator> mMainParser;
-    qi::rule<Iterator, Automaton(), Skipper> main;
-    
-    //qi::debug(main);
-    
-    public:
-    HyproParser() : HyproParser::base_type(main)
-    {
-        main = mMainParser;
-    }    
-
     void parseInput(const std::string& pathToInputFile);
     bool parse(std::istream& in, const std::string& filename);
+	
+	HybridAutomaton<double> createAutomaton();
 };
+
 
 class Automaton_visitor
     : public boost::static_visitor<>
@@ -176,7 +185,6 @@ std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
     std::cout << "Size: " << rhs.size() << std::endl;
     for(auto& item : rhs)
     {
-        std::cout << "item" << std::endl;
         /*if(const State* i = boost::get<State>(&item))
         {
             std::cout << "state..." << std::endl;
@@ -187,7 +195,7 @@ std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
             std::cout << "Transition..." << std::endl;
             transitions.insert(transitions.end(), i);
         }*/
-       lhs << item; 
+       lhs << item << std::endl; 
     }
     /*for(auto& state : states)
     {

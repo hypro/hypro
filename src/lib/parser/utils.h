@@ -15,6 +15,7 @@
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
+#include "boost/variant.hpp"
 #include <vector>
 
 namespace spirit = boost::spirit;
@@ -28,16 +29,17 @@ namespace parser
     // TODO temporary datastructures
     
     using namespace boost::fusion;
-    
+    typedef std::string locationId;
+	
     struct Initial
     {
-        std::vector<unsigned> mLocations;
+        std::string mLocations;
         
         Initial() :
         mLocations()
         {}
         
-        Initial(std::vector<unsigned> _loc) :
+        Initial(std::string _loc) :
         mLocations(_loc)
         {}
     };
@@ -99,6 +101,13 @@ namespace parser
         {
             std::cout << "Construct filled state." << std::endl;
         }
+		
+		State(const State& _in) :
+		mName(_in.mName),
+		mFlow(_in.mFlow),
+		mInvariant(_in.mInvariant)
+		{}
+
     };
     
     struct Transition
@@ -220,7 +229,7 @@ namespace parser
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Initial,
-    (std::vector<unsigned>, mLocations)
+    (std::string, mLocations)
     )
 
 BOOST_FUSION_ADAPT_STRUCT(

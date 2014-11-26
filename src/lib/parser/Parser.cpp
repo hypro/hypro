@@ -2,7 +2,7 @@
 
 namespace hypro{
 namespace parser{
-    void HyproParser::parseInput(const std::string& pathToInputFile)
+    void MainParser::parseInput(const std::string& pathToInputFile)
     {
         std::fstream infile( pathToInputFile );
         if( !infile.good() )
@@ -18,24 +18,51 @@ namespace parser{
         }
     }
 
-    bool HyproParser::parse(std::istream& in, const std::string& filename)
+    bool MainParser::parse(std::istream& in, const std::string& filename)
     {
         in.unsetf(std::ios::skipws);
         BaseIteratorType basebegin(in);
         Iterator begin(basebegin);
         Iterator end;
         Skipper skipper;
-        Automaton resultAutomaton;
         
         std::cout << "To parse: " << std::string(begin, end) << std::endl;
         // invoke qi parser
-        bool result = qi::phrase_parse(begin, end, main, skipper, resultAutomaton);
+        bool result = qi::phrase_parse(begin, end, main, skipper);
         
-        std::cout << "Result: " << resultAutomaton << std::endl;
+        std::cout << "Result: Done" << std::endl;
+		
+		for(auto& state : mStates)
+		{
+			std::cout << state << std::endl;
+		}
         
         std::cout << "To parse: " << std::string(begin, end) << std::endl;
         
+		// create automaton from parsed result.
+		
         return result;
     }
+	
+	HybridAutomaton<double> MainParser::createAutomaton()
+	{
+		HybridAutomaton<double> result;
+		
+		std::map<std::string, Location<double> > locations;
+		std::map<std::string, matrix > matrices;
+		
+		for(auto& state : mStates)
+		{
+			matrix flow = createMatrix(state.mFlow.mMatrix);
+			std::string name = state.mFlow.mName;
+			if(name != "")
+			{
+				bool inserted = matrices.insert(std::make_pair(name, flow)).second;
+				assert(inserted);
+			}
+		}
+		
+		return result;
+	}
 }
 }

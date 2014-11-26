@@ -54,6 +54,17 @@ namespace parser{
 	};
 	
 	template<typename Iterator>
+	struct shortLocationParser : public qi::grammar<Iterator, std::string(), Skipper>
+	{
+		shortLocationParser() : shortLocationParser::base_type(start)
+		{
+			start =  qi::lexeme[(qi::lit("l") | qi::lit("L") ) > qi::lit("ocation")] > qi::lit("=") > *(qi::char_-(qi::lit(",") | qi::lit(")")));
+		}
+
+		qi::rule<Iterator, std::string(), Skipper> start;
+	};
+	
+	template<typename Iterator>
 	struct FlowParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
 	{
 		MatrixParser<Iterator> mMatrixParser;
