@@ -26,5 +26,5 @@ namespace hypro
 
 		template<typename Number>
 		using matrix_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
-
+		
 }

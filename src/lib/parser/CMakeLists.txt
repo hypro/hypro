@@ -1,6 +1,8 @@
 set(lib_hypro_parser_headers
-    Parser.h
-    Utils.h
+	componentParser.h
+	helper.h
+	Parser.h
+    utils.h
     PARENT_SCOPE)
 
 set(lib_hypro_parser_sources

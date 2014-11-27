@@ -40,6 +40,7 @@ namespace parser{
         std::cout << "To parse: " << std::string(begin, end) << std::endl;
         
 		// create automaton from parsed result.
+		HybridAutomaton<double> automaton = createAutomaton();
 		
         return result;
     }
@@ -57,83 +58,10 @@ namespace parser{
 		// get flow
 		for(auto& state : mStates)
 		{
-			std::string name = state.mName;
-			std::string flowname = state.mFlow.mName;
-			matrix flow;
-			bool incomplete = false;
-			if(flowname != "")
-			{
-				auto pos = matrices.find(flowname);
-				if(pos == matrices.end())
-				{
-					if(!state.mFlow.mMatrix.empty())
-					{
-						flow = createMatrix(state.mFlow.mMatrix);
-						matrices.insert(std::make_pair(flowname, flow));
-					}
-					else
-					{
-						incomplete = true;
-					}
-				}
-				else
-				{
-					assert(state.mFlow.mMatrix.empty());
-					flow = (*pos).second;
-				}
-			}
-			else
-			{
-				flow = createMatrix(state.mFlow.mMatrix);
-			}
-			
-			// get invariant
-			std::string invname = state.mInvariant.mName;
-			matrix invMatrix;
-			if(invname != "")
-			{
-				auto pos = matrices.find(invname);
-				if(pos == matrices.end())
-				{
-					if(!state.mInvariant.mMatrix.empty())
-					{
-						invMatrix = createMatrix(state.mInvariant.mMatrix);
-						matrices.insert(std::make_pair(invname, flow));
-					}
-					else
-					{
-						incomplete = true;
-					}
-				}
-				else
-				{
-					assert(state.mInvariant.mMatrix.empty());
-					invMatrix = (*pos).second;
-				}
-			}
-			else
-			{
-				invMatrix = createMatrix(state.mFlow.mMatrix);
-			}
-			
-			// Todo: do we always compare with lesseq 0?
-			//vector vec = vector();
-			//vec = Eigen::DenseBase<typename Derived>::Zero(invMatrix.rows());
-			/*
-			if(!incomplete)
-			{
-				Location<double> loc;
-				loc.setActivityMat(flow);
-				loc.setInvariant(invMatrix, vec, hypro::operator_e::LEQ);
-				
-				// enlist loc
-				locations.insert(std::make_pair(name, loc));
-			}
-			else
-			{
-				incompleteStates.push(state);
-			}
-			 */ 
+			Location<double> loc;
+			bool success = createLocFromState(state,loc,matrices,incompleteStates);
+			if(success)
+				locations.insert(std::make_pair(state.mName, loc));
 		}
 		
 		return result;

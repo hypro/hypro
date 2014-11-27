@@ -75,6 +75,10 @@ class Transition;
     		void setTransitions(transitionSet _trans);
     		void setExtInputMat(hypro::matrix_t<Number> _mat);
 
+			friend std::ostream & operator<< (std::ostream& _ostr, const Location<Number>& _l)
+            {
+				_ostr << "location " << _l.mLocation.mat << std::endl;
+			}
     };
 }
 

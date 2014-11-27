@@ -4,7 +4,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since   2014-05-14
- * @version 2014-05-14
+ * @version 2014-11-27
  */
 
 #pragma once
@@ -27,6 +27,7 @@
 #include "utils.h"
 #include "componentParser.h"
 #include "../util/types.h"
+#include "helper.h"
 
 namespace hypro{
 namespace parser{
