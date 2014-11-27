@@ -43,26 +43,101 @@ namespace parser{
 		
         return result;
     }
+
 	
 	HybridAutomaton<double> MainParser::createAutomaton()
 	{
-		HybridAutomaton<double> result;
 		
+		HybridAutomaton<double> result;
+
 		std::map<std::string, Location<double> > locations;
 		std::map<std::string, matrix > matrices;
+		std::queue<State> incompleteStates;
 		
+		// get flow
 		for(auto& state : mStates)
 		{
-			matrix flow = createMatrix(state.mFlow.mMatrix);
-			std::string name = state.mFlow.mName;
-			if(name != "")
+			std::string name = state.mName;
+			std::string flowname = state.mFlow.mName;
+			matrix flow;
+			bool incomplete = false;
+			if(flowname != "")
 			{
-				bool inserted = matrices.insert(std::make_pair(name, flow)).second;
-				assert(inserted);
+				auto pos = matrices.find(flowname);
+				if(pos == matrices.end())
+				{
+					if(!state.mFlow.mMatrix.empty())
+					{
+						flow = createMatrix(state.mFlow.mMatrix);
+						matrices.insert(std::make_pair(flowname, flow));
+					}
+					else
+					{
+						incomplete = true;
+					}
+				}
+				else
+				{
+					assert(state.mFlow.mMatrix.empty());
+					flow = (*pos).second;
+				}
 			}
+			else
+			{
+				flow = createMatrix(state.mFlow.mMatrix);
+			}
+			
+			// get invariant
+			std::string invname = state.mInvariant.mName;
+			matrix invMatrix;
+			if(invname != "")
+			{
+				auto pos = matrices.find(invname);
+				if(pos == matrices.end())
+				{
+					if(!state.mInvariant.mMatrix.empty())
+					{
+						invMatrix = createMatrix(state.mInvariant.mMatrix);
+						matrices.insert(std::make_pair(invname, flow));
+					}
+					else
+					{
+						incomplete = true;
+					}
+				}
+				else
+				{
+					assert(state.mInvariant.mMatrix.empty());
+					invMatrix = (*pos).second;
+				}
+			}
+			else
+			{
+				invMatrix = createMatrix(state.mFlow.mMatrix);
+			}
+			
+			// Todo: do we always compare with lesseq 0?
+			//vector vec = vector();
+			//vec = Eigen::DenseBase<typename Derived>::Zero(invMatrix.rows());
+			/*
+			if(!incomplete)
+			{
+				Location<double> loc;
+				loc.setActivityMat(flow);
+				loc.setInvariant(invMatrix, vec, hypro::operator_e::LEQ);
+				
+				// enlist loc
+				locations.insert(std::make_pair(name, loc));
+			}
+			else
+			{
+				incompleteStates.push(state);
+			}
+			 */ 
 		}
 		
 		return result;
 	}
+	
 }
 }

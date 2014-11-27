@@ -12,16 +12,16 @@
 #include "../config.h"
 
 namespace hypro{
-	
+
 static matrix createMatrix(const std::vector<std::vector<double> >& _in)
 {
 	assert(!_in.empty());
-	matrix result = matrix(_in.size(), (*_in.begin()).size());
+	matrix result(_in.size(), (*_in.begin()).size());
 	for(unsigned lineId = 0; lineId != _in.size(); ++lineId)
 	{
 		for(unsigned rowId = 0; rowId != _in[lineId].size(); ++rowId)
 		{
-			result(lineId, rowId) = _in[lineId][rowId];
+			result(lineId, rowId) = number(_in[lineId][rowId]);
 		}
 	}
 	return result;
@@ -30,10 +30,10 @@ static matrix createMatrix(const std::vector<std::vector<double> >& _in)
 static vector createVector(const std::vector<double>& _in)
 {
 	assert(!_in.empty());
-	vector result = vector(_in.size());
+	vector result(_in.size());
 	for(unsigned rowId = 0; rowId != _in.size(); ++rowId)
 	{
-		result(rowId) = _in[rowId];
+		result(rowId) = number(_in[rowId]);
 	}
 	return result;
 }

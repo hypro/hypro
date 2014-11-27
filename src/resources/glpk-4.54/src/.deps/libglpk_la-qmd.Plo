@@ -1,3 +1,0 @@
-libglpk_la-qmd.lo: misc/qmd.c misc/qmd.h
-
-misc/qmd.h:

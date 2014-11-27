@@ -1,4 +1,4 @@
-prefix=/Users/stefan/hybridsystems/repositories/hypro/build/resources/nlopt-2.4.2
+prefix=/home/stefan/hybridsystems/repositories/hypro_svn/build/resources/nlopt-2.4.2
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

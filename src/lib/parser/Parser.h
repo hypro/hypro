@@ -127,7 +127,9 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
         //main = -(mInitialParser) < *(mStateParser | mTransitionParser);
         //main = mInitialParser[mInitial(spirit::_val)] > *(mStateParser[ boost::phoenix::push_back(mStates, parser::State(spirit::_1)) ] | mTransitionParser[ boost::phoenix::push_back(mTransitions, spirit::_1) ]);
         main = mInitialParser[ phoenix::bind(&hypro::parser::MainParser::setInitial, phoenix::ref(*this), qi::_1)] > *(mStateParser[ phoenix::bind(&hypro::parser::MainParser::push_back_State, phoenix::ref(*this), qi::_1) ] | mTransitionParser[ phoenix::bind(&hypro::parser::MainParser::push_back_Transition, phoenix::ref(*this), qi::_1) ]);
-        qi::on_error<qi::fail>
+       
+		
+		qi::on_error<qi::fail>
         (
         main
         , std::cout

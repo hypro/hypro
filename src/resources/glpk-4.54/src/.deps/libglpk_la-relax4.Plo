@@ -1,3 +1,0 @@
-libglpk_la-relax4.lo: misc/relax4.c misc/relax4.h
-
-misc/relax4.h:

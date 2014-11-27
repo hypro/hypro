@@ -1,3 +1,0 @@
-libglpk_la-mc13d.lo: misc/mc13d.c misc/mc13d.h
-
-misc/mc13d.h:
