@@ -33,11 +33,18 @@ namespace hypro
     	VertexContainer<Number> newVertices(mVertices);
     	newVertices.linearTransformation(A, b);
     	result = OrthogonalPolyhedron<Number>(newVertices);
-    	return true;
+    	// TODO: undefined behaviour, does not update colours of vertices nor fix the non-parallel edges
+    	return false;
     }
 
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
+    	// TODO
+    	// Definition: A+B = { a + b | a ∈ A, b ∈ B}
+    	// Idea: put one polyhedron on all the vertices of the other one
+    	// Problem: Which vertices to connect, which to remove?
+    	// Thoughts: do two vertices belong to former neighbours?
+    	//           store the "colour" of a moved polyhedron
         return false;
     }
         

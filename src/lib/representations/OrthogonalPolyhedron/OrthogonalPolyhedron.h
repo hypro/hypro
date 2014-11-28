@@ -69,28 +69,34 @@ namespace hypro
         OrthogonalPolyhedron() {}
         
         /**
-         * Constructor initialising values.
+         * Constructor getting a list of vertices which represent an orthogonal polyhedron.
          * 
          * @todo does it really make sense to make induceGrid optional?
+         * @todo actually validate the vertices
          * 
-         * @param vertices
+         * @param vertices a non-empty VertexContainer
          * @param induceGrid true by default
          */
-        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true)
-        {
-            mVertices = vertices;
-            if ( !vertices.empty() ) {
-                //mOriginColour = vertices.originIsVertex();
-                mVariables = vertices.variables();
-                mGrid.reserveInducedGrid(mVariables);
-                if (induceGrid)
-                {
-                    mGrid.induceGrid(vertices.vertices());
-                    mGrid.insertVerticesInMap(vertices.vertices());
-                    //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-                    //mInducedVertices = VertexContainer<Number>(inducedVertices);
-                }
-            }
+        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true) : mVertices(vertices) {
+			//mOriginColour = vertices.originIsVertex();
+			mVariables = vertices.variables();
+			mGrid.reserveInducedGrid(mVariables);
+			if (induceGrid)
+			{
+				mGrid.induceGrid(vertices.vertices());
+				mGrid.insertVerticesInMap(vertices.vertices());
+				//vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+				//mInducedVertices = VertexContainer<Number>(inducedVertices);
+			}
+        }
+
+        /**
+         * Constructor getting a list of points which should be contained in the orthogonal polyhedron.
+         *
+         * @param points
+         */
+        OrthogonalPolyhedron(const std::set<Point<Number> >& points) {
+        	// TODO compute the orthogonal polyhedron around the convex hull of all points
         }
         
         /**
@@ -132,13 +138,11 @@ namespace hypro
          * Operators
          ***********************************************************************/
 
-        friend bool operator==(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2)
-        {
+        friend bool operator==(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2) {
             return op1.mVertices == op2.mVertices;
         }
 
-        friend bool operator!=(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2)
-        {
+        friend bool operator!=(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2) {
             return op1.mVertices != op2.mVertices;
         }
         
