@@ -56,7 +56,7 @@ TEST(ZonotopeTest, CopyConstructor) {
     EXPECT_EQ(z_copy.generators(),z1.generators());
 }
 
-TEST(ZonotopeOperationTest, ComputeZonotopeBoundary) {
+TEST(ZonotopeAlgorithmTest, ComputeZonotopeBoundary) {
     Zonotope<double> z1(2);
     Eigen::Matrix<double,2,1> center = {1.1941, 0.1068};
     Eigen::Matrix<double, 2,6> generators;
@@ -76,7 +76,7 @@ TEST(ZonotopeOperationTest, ComputeZonotopeBoundary) {
     
 }
 
-TEST(ZonotopeOperationTest, ZonogoneHPIntersect) {
+TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
     Eigen::Matrix<double, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
     Eigen::Matrix<double, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
@@ -91,7 +91,7 @@ TEST(ZonotopeOperationTest, ZonogoneHPIntersect) {
     std::cout << res.generators() << std::endl;
 }
 
-TEST(ZonotopeOperationTest, MinkowskiSum) {
+TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
     Zonotope<double> z1(2), z2(2), z3(2);
 
     Eigen::Matrix<double,2,1> cen1, cen2, cen_res, gen_sum;
@@ -182,7 +182,7 @@ TEST(ZonotopeOperationTest, MinkowskiSum) {
 //    EXPECT_LT((res.generators()-exp_gen).array().abs().matrix().rowwise().sum().sum(), delta_gen.array().abs().matrix().rowwise().sum().sum());
 //}
 
-TEST(ZonotopeOperationTest, IntersectionPolytope) {
+TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
     
     Eigen::Matrix<double, 2,1> z_center;
     Eigen::Matrix<double, 2,2> z_gen;
@@ -202,7 +202,7 @@ TEST(ZonotopeOperationTest, IntersectionPolytope) {
     
     bool res = z1.intersect(result_zonotope, poly1);
     
-    EXPECT_EQ(res, true);
+    EXPECT_EQ(res, false);
     
     
 }
@@ -252,7 +252,7 @@ TEST(ZonotopeOperationTest, AddGenerators) {
     
 }
 
-TEST(ZonotopeOperationTest, Intersection2) {
+TEST(ZonotopeAlgorithmTest, Intersection2) {
     Zonotope<double> z1(3);
     Eigen::Matrix<double, 3,1> z_center, d, exp_center, delta;
     Eigen::Matrix<double, 3,7> generators;
@@ -271,7 +271,7 @@ TEST(ZonotopeOperationTest, Intersection2) {
              0.01,
              0.01;
     
-    generators <<0.01, 0.00645, 0.03163725, -5e-05, 0.0111647739218983,	0.00714545531001491,-0.0224310133091988,
+    generators <<0.01, 0.00645, 0.03163725, -5e-05, 0.0111647739218983, 0.00714545531001491,-0.0224310133091988,
                 0,0.0100000000000000,0.0490500000000000,0,0,0.0111647739218983,-0.0700969165912463,
                 0,0,0,0,0,0,0.0111647739218983;
     
@@ -283,7 +283,56 @@ TEST(ZonotopeOperationTest, Intersection2) {
     h1.setScalar(0);
     
     Zonotope<double> result;
-    z1.intersect(result, h1, ALAMO);
+    z1.intersect(result, h1, ZUtility::ALAMO);
     
    EXPECT_LT((result.center()-exp_center).array().abs().matrix().sum(), delta.sum());
+}
+
+TEST(ZonotopeAlgorithmTest, ConvexHull) {
+    Zonotope<double> z1(2), z2(2), result;
+    Eigen::Matrix<double, 2, 1> c1, c2, expected_center;
+    Eigen::Matrix<double, 2, 2> g1;
+    Eigen::Matrix<double, 2, 3> g2;
+    Eigen::Matrix<double, 2, 4> expected_generators;
+    
+    c1 << 2,1;
+    c2 << 1,1;
+    
+    g1 << 1,1,
+          0,1;
+    
+    g2 << 1,1,-0.5,
+          0,1,0.2;
+    
+    expected_center << 1.5, 1;
+    expected_generators << 1, 1, -0.5, -0.5,
+                            0, 1, 0, 0.2;
+    
+    z1.setCenter(c1);
+    z1.setGenerators(g1);
+    z2.setCenter(c2);
+    z2.setGenerators(g2);
+    
+    z1.convexHull(result, z2);
+   
+    EXPECT_EQ(result.center(), expected_center);
+    EXPECT_EQ(result.generators(), expected_generators);
+}
+
+
+TEST(ZonotopeAlgorithmTest, IntervalHull) {
+    Eigen::Matrix<double, 2, 1> center = {2.0,1.0};
+    Eigen::Matrix<double, 2, 3> generators;
+    Eigen::Matrix<double, 2, 2> expected_generators;
+    generators << 1, 4, 3,
+                  6, 2, 1;
+    expected_generators << 8, 0,
+                           0, 9;
+    Zonotope<double> result, zIH(center, generators);
+    
+    zIH.intervalHull(result);
+    
+    EXPECT_EQ(result.generators(), expected_generators);
+    EXPECT_EQ(result.center(), center);
+    
 }
