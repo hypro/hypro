@@ -56,13 +56,27 @@ namespace parser{
 		std::queue<State> incompleteStates;
 		
 		// get flow
-		for(auto& state : mStates)
+		for(const auto& state : mStates)
 		{
 			Location<double> loc;
 			bool success = createLocFromState(state,loc,matrices,incompleteStates);
 			if(success)
 				locations.insert(std::make_pair(state.mName, loc));
 		}
+		
+		// process incomplete states
+		std::queue<State> secondIncomplete;
+		while(!incompleteStates.empty())
+		{
+			Location<double> loc;
+			State state = incompleteStates.front();
+			bool success = createLocFromState(state,loc,matrices,secondIncomplete);
+			if(success)
+				locations.insert(std::make_pair(state.mName, loc));
+			incompleteStates.pop();
+		}
+		assert(incompleteStates.empty());
+		assert(secondIncomplete.empty());
 		
 		return result;
 	}

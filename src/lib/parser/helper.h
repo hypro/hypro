@@ -97,6 +97,7 @@ namespace parser {
 		}
 		else
 		{
+			std::cout << "Incomplete location " << _state.mName << std::endl;
 			_incompletes.push(_state);
 			return false;
 		}
