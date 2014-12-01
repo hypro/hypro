@@ -36,7 +36,7 @@ namespace parser{
 	{
 		MatrixParser() : MatrixParser::base_type(start)
 		{
-			start =  qi::lit("matrix") > *(qi::char_-(qi::lit("["))) > qi::lit("[") > ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') > qi::lit("]");
+			start =  qi::lit("matrix") > *(qi::char_-(qi::lit("[") | qi::lit(")") | qi::lit(","))) > -(qi::lit("[") > ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') > qi::lit("]"));
 		}
 
 		qi::rule<Iterator,parser::Matrix(), Skipper> start;

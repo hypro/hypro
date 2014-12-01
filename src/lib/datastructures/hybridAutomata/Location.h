@@ -77,7 +77,11 @@ class Transition;
 
 			friend std::ostream & operator<< (std::ostream& _ostr, const Location<Number>& _l)
             {
-				_ostr << "location " << _l.mLocation.mat << std::endl;
+				_ostr << "location(" << std::endl <<
+				"\t Flow = " << _l.mLocation.mat << std::endl <<
+				"\t Inv = " << _l.mLocation.inv.mat << std::endl <<
+				")";
+				return _ostr;
 			}
     };
 }
