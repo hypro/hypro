@@ -4,6 +4,7 @@ link_directories( ${PROJECT_BINARY_DIR}/src/lib
                   ${PROJECT_BINARY_DIR}
 )
 
+add_subdirectory(TwoTank)
 
 set( EXAMPLES 
     ################################
@@ -25,12 +26,22 @@ set( EXAMPLES
     example_cubicroot
     example_test
     example_vertexEnumeration
+    example_twotankreachability
 )
 
 foreach( example ${EXAMPLES} )
-    add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp )
-    if(${STATICLIB_SWITCH} STREQUAL "ON")
-        set_target_properties( ${example} PROPERTIES LINK_SEARCH_END_STATIC TRUE )
+    if (${example} STREQUAL example_twotankreachability)
+        find_package(MATLAB REQUIRED)
+        include_directories(${MATLAB_INCLUDE_DIR})
+        set(MATLAB_LIB ${MATLAB_LIB} ${MATLAB_LIBRARIES})
+        add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
+        target_link_libraries( ${example} ${MATLAB_LIB} ${PROJECT_NAME} )
+    else()
+        add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
+        target_link_libraries( ${example} ${PROJECT_NAME} )
     endif()
-    target_link_libraries( ${example} ${PROJECT_NAME} )
-endforeach( example )
+    if(${STATICLIB_SWITCH} STREQUAL "ON")
+            set_target_properties( ${example} PROPERTIES LINK_SEARCH_END_STATIC TRUE )
+    endif()
+        
+    endforeach( example )

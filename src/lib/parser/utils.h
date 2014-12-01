@@ -17,6 +17,7 @@
 #include <boost/fusion/include/io.hpp>
 #include "boost/variant.hpp"
 #include <vector>
+#include <queue>
 
 namespace spirit = boost::spirit;
 namespace qi = boost::spirit::qi;

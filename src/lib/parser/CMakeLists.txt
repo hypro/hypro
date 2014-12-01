@@ -6,5 +6,5 @@ set(lib_hypro_parser_headers
     PARENT_SCOPE)
 
 set(lib_hypro_parser_sources
-    parser/Parser.cpp
+    Parser.cpp
     PARENT_SCOPE)

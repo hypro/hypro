@@ -1,6 +1,6 @@
 add_subdirectory(datastructures)
 add_subdirectory(representations)
-add_subdirectory(parser)
+#add_subdirectory(parser)
 
 #set(GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
 #set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} PARENT_SCOPE)
