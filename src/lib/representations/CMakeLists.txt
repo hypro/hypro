@@ -3,7 +3,7 @@ add_subdirectory(Polytopes)
 add_subdirectory(Polytope)
 add_subdirectory(Zonotope)
 add_subdirectory(Hyperplane)
-
+add_subdirectory(OrthogonalPolyhedron)
 
 set(lib_hypro_representation_sources
 	${CMAKE_CURRENT_SOURCE_DIR}/${hypro_box_sources}

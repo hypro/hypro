@@ -79,7 +79,7 @@ Eigen::Matrix<Number, 2, 1> computeLineIntersection(const ZUtility::Line_t<Numbe
  *****************************************************************************/
 
 template <typename Number>
-Zonotope<Number>::Zonotope() : mDimension(0)
+Zonotope<Number>::Zonotope() : mDimension(0), mCenter(0,1), mGenerators(0,0)
 {
 }
 
@@ -87,9 +87,9 @@ template <typename Number>
 Zonotope<Number>::Zonotope(unsigned int dimension) {
     assert(dimension!=0 && "Zonotope cannot have dimension 0.");
     mDimension = dimension;
-    mCenter.resize(2,1);
+    mCenter.resize(mDimension,1);
     mCenter.setZero();
-    mGenerators.resize(2,1);
+    mGenerators.resize(mDimension,1);
     mGenerators.setZero();
 }
 

@@ -5,20 +5,20 @@
  * Created on June 22, 2014, 19:15 PM
  */
 
-#include <iostream>
-#include <cmath>
-#include "representations/Zonotope.h"
-#include <Eigen/Core>
-#include <Eigen/Dense>
-#include <unsupported/Eigen/MatrixFunctions>
-#include "Visualizer.h"
-#include <algorithm>
-#include "datastructures/HybridAutomaton.h"
-#include <map>
-#include "Utility.h"
 
 #ifndef RAHS_H
 #define RAHS_H
+
+#include <iostream>
+#include <cmath>
+#include "../../representations/Zonotope/Zonotope.h"
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <unsupported/Eigen/MatrixFunctions>
+#include <algorithm>
+#include "../../../../examples/TwoTank/hybridAutomaton/HybridAutomaton.h" // a temporary hack
+#include <map>
+#include "../../representations/Zonotope/ZUtility.h"
 
 template<typename Number> 
 class RAHS {
@@ -32,6 +32,8 @@ class RAHS {
         std::map <unsigned int, std::vector< Zonotope<Number> > > resulting_intersect_;
         std::map <unsigned int, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > min_intersect_;
         std::map <unsigned int, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > max_intersect_;
+        
+        std::map <unsigned int, Zonotope<Number> > pivotal_zonotopes_;
         bool mInitialized, mReadjusted;
         
         Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A_;
@@ -52,6 +54,10 @@ class RAHS {
         };
         
     private: // private functions
+        
+        void preclustering(const std::vector< Zonotope<Number> >& intersects, const Hyperplane<Number>& hp, Zonotope<Number>& finalIntersect, const ZUtility::Options& option);
+        void postclustering(const std::vector< Zonotope<Number> >& resultingIntersects, Zonotope<Number>& finalIntersect);
+        
         void overapproximateZonotope(Zonotope<Number>& z);
         void readjustMatrices();
         void readjust();
@@ -61,9 +67,9 @@ class RAHS {
                                         Zonotope<Number>& V,
                                         Zonotope<Number>& S);
         bool checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
-                                    Zonotope<Number>& Q,
+                                    const Zonotope<Number>& Q,
                                     Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
-                                    Options option);
+                                    const ZUtility::Options& option);
         
         void loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope);
         void overapproximatedConvexHull(Zonotope<Number>& Q, 
@@ -71,11 +77,11 @@ class RAHS {
         
          bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
-                                    int method);
+                                    const ZUtility::IntersectionMethod_t& method);
          
         bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
-                                    int method,
+                                    const ZUtility::IntersectionMethod_t& method,
                                     Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine);
         
         
@@ -85,7 +91,7 @@ class RAHS {
                                        Number r_scalar, 
                                        unsigned int order_reduction_threshold,
                                        Zonotope<Number>& res_V, Zonotope<Number>& res_S,
-                                       Options option);
+                                       const ZUtility::Options& option);
         
     public: // public functions
         RAHS(unsigned int dimension);
@@ -117,6 +123,8 @@ class RAHS {
          */
         std::map <unsigned int, std::vector< Zonotope<Number> > > resultingIntersections();
         
+        std::map <unsigned int, Zonotope<Number> > pivotalZonotopes();
+        
         /**
          * Current state loaded
          * @return Current state (a Zonotope)
@@ -146,7 +154,7 @@ class RAHS {
                                        unsigned int offset,
                                        Number r_scalar, 
                                        unsigned int order_reduction_threshold,
-                                       Options option);
+                                       const ZUtility::Options& option);
         
         
         

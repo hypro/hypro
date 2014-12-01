@@ -17,7 +17,11 @@
 
 TEST(ZonotopeTest, PlainConstructor) {
     Zonotope<double> z1;
-    std::cout << "Z1 Dimension: " << z1.dimension() << std::endl;
+    EXPECT_EQ(z1.dimension(), 0);
+    EXPECT_EQ(z1.center().rows(), 0);
+    EXPECT_EQ(z1.center().cols(), 1);
+    EXPECT_EQ(z1.generators().rows(), 0);
+    EXPECT_EQ(z1.generators().cols(), 0);
 }
 
 TEST(ZonotopeTest, DimConstructor) {
@@ -67,13 +71,6 @@ TEST(ZonotopeAlgorithmTest, ComputeZonotopeBoundary) {
     z1.setGenerators(generators);
     
     std::vector< Eigen::Matrix<double, Eigen::Dynamic, 1> > results = z1.computeZonotopeBoundary();
-    std::cout << "Compute Zonotope Boundaries: " << std::endl;
-    for (Eigen::Matrix<double, Eigen::Dynamic, 1>& mat : results) {
-        std::cout << mat << std::endl;
-        std::cout << "--" << std::endl;
-    }
-    std::cout << "Done with Computing Zonotope boundaries" << std::endl;
-    
 }
 
 TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
@@ -86,9 +83,6 @@ TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
     Zonotope<double> z(center, generators), res;
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dummy;
     intersectZonogoneHyperplane(z, hp, res, dummy);
-    std::cout << "Zonogone Hyperplane intersect: \n" << res.center() << std::endl;
-    std::cout << "---" << std::endl;
-    std::cout << res.generators() << std::endl;
 }
 
 TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
@@ -331,7 +325,7 @@ TEST(ZonotopeAlgorithmTest, IntervalHull) {
     Zonotope<double> result, zIH(center, generators);
     
     zIH.intervalHull(result);
-    
+        
     EXPECT_EQ(result.generators(), expected_generators);
     EXPECT_EQ(result.center(), center);
     
