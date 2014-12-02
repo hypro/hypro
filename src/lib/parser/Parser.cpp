@@ -51,28 +51,49 @@ namespace parser{
 		
 		HybridAutomaton<double> result;
 
-		std::map<std::string, Location<double> > locations;
+		std::map<unsigned, Location<double>* > locations;
+		std::map<unsigned, Transition<double>* > transitions;
 		std::map<std::string, matrix > matrices;
 		std::queue<State> incompleteStates;
+		std::queue<Transition> incompleteTransitions;
 		
-		// get flow
+		// get flow, first run
 		for(const auto& state : mStates)
 		{
-			Location<double> loc;
+			Location<double>* loc = NULL;
 			bool success = createLocFromState(state,loc,matrices,incompleteStates);
 			if(success)
+			{
 				locations.insert(std::make_pair(state.mName, loc));
+				result.addLocation(loc);
+			}
+				
+		}
+		
+		// get transitions, first run
+		for(const auto& transition : mTransitions)
+		{
+			Transition* tran = NULL;
+			bool success = createTransition(transition, tran, locations, matrices, incompleteTransitions);
+			if(success)
+			{
+				transitions.insert(std::make_pair(transition.mName, tran));
+				result.addTransition(tran);
+			}
 		}
 		
 		// process incomplete states
 		std::queue<State> secondIncomplete;
 		while(!incompleteStates.empty())
 		{
-			Location<double> loc;
+			Location<double>* loc = NULL;
 			State state = incompleteStates.front();
 			bool success = createLocFromState(state,loc,matrices,secondIncomplete);
 			if(success)
+			{
 				locations.insert(std::make_pair(state.mName, loc));
+				result.addLocation(loc);
+			}
 			incompleteStates.pop();
 		}
 		assert(incompleteStates.empty());

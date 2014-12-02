@@ -11,7 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	       HyReachTest.cpp
             #MinkowskiSumTest.cpp
             #SumPerformanceTest.cpp
-               rahsTwoTankTest.cpp
+              # rahsTwoTankTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)

@@ -56,27 +56,28 @@ namespace parser {
      */
 	static bool createLocFromState(
 			const State& _state, 
-			Location<double>& _loc,
+			Location<double>* _loc,
 			std::map<std::string, matrix>& _matrices, 
 			std::queue<State>& _incompletes)
 	{
-		bool incomplete;
+		bool incomplete = false;
 		std::string flowname = _state.mFlow.mName;
 		matrix flow;
 		std::pair<matrix, bool> res = insertMatrix(_state.mFlow.mMatrix, flowname, _matrices);
-		incomplete = res.second;
-		if(!incomplete)
+		bool incompleteFlow = res.second;
+		if(!incompleteFlow)
 			flow = res.first;
 		
 		// get invariant
 		std::string invname = _state.mInvariant.mName;
 		bool invariant = (!_state.mInvariant.mMatrix.empty() || invname != "");
 		matrix invMatrix;
+		bool incompleteInvariant = false;
 		if(invariant)
 		{
 			res = insertMatrix(_state.mInvariant.mMatrix, invname, _matrices);
-			incomplete = res.second;
-			if(!incomplete)
+			incompleteInvariant = res.second;
+			if(!incompleteInvariant)
 				invMatrix = res.first;
 		}
 
@@ -85,14 +86,16 @@ namespace parser {
 		for(unsigned i = 0; i<invMatrix.rows(); ++i)
 			vec(i) = double(0);
 
+		incomplete = incompleteFlow || incompleteInvariant;
 		if(!incomplete)
 		{
-			_loc.setActivityMat(flow);
-			_loc.setActivityVec(vec);
+			_loc = new hypro::Location<double>();
+			_loc->setActivityMat(flow);
+			_loc->setActivityVec(vec);
 			if(invariant)
-				_loc.setInvariant(invMatrix, vec, hypro::operator_e::LEQ);
+				_loc->setInvariant(invMatrix, vec, hypro::operator_e::LEQ);
 
-			std::cout << _loc << std::endl;
+			std::cout << *_loc << std::endl;
 			return true;
 		}
 		else
@@ -102,6 +105,83 @@ namespace parser {
 			return false;
 		}
 		
+	}
+	
+	static bool createTransition(
+		const hypro::parser::Transition& _transition, 
+		hypro::Transition<double>* _tran,
+		const std::map<unsigned, Location<double>* >& _locations,
+		std::map<std::string, matrix>& _matrices,
+		std::queue<Transition>& _incompletes
+	)
+	{
+		bool incomplete = false;
+		hypro::Transition<double>* result = new hypro::Transition<double>();
+		
+		auto sourceLocIt = _locations.find(_transition.mSource);
+		auto targetLocIt = _locations.find(_transition.mTarget);
+		if(sourceLocIt == _locations.end() || targetLocIt == _locations.end())
+			incomplete = true;
+		
+		std::pair<matrix,bool> res;
+		
+		bool incompleteGuard = false;
+		bool hasGuard = (!_transition.mGuard.mMatrix.empty() || _transition.mGuard.mName != "");
+		matrix guard;
+		if(hasGuard)
+		{
+			res = insertMatrix(_transition.mGuard.mMatrix, _transition.mGuard.mName, _matrices);
+			incompleteGuard = res.second;
+			if(!incompleteGuard)
+				guard = res.first;
+		}
+		
+		bool incompleteReset = false;
+		bool hasReset = (!_transition.mReset.mMatrix.empty() || _transition.mReset.mName != "");
+		matrix reset;
+		if(hasReset)
+		{
+			res = insertMatrix(_transition.mReset.mMatrix, _transition.mReset.mName, _matrices);
+			incompleteReset = res.second;
+			if(!incompleteReset)
+				reset = res.first;
+		}
+		
+		// Todo: do we always compare with lesseq 0?
+		hypro::vector_t<double> vecGuard = hypro::vector_t<double>(guard.rows());
+		for(unsigned i = 0; i<guard.rows(); ++i)
+			vecGuard(i) = double(0);
+		hypro::vector_t<double> vecReset = hypro::vector_t<double>(reset.rows());
+		for(unsigned i = 0; i<reset.rows(); ++i)
+			vecReset(i) = double(0);
+		
+		incomplete = incomplete || incompleteGuard || incompleteReset;
+		
+		if(!incomplete)
+		{
+			result->setStartLoc(sourceLocIt->second);
+			result->setTargetLoc(targetLocIt->second);
+			
+			hypro::guard tmpGuard;
+			tmpGuard.mat = guard;
+			tmpGuard.op = hypro::operator_e::LEQ;
+			tmpGuard.vec = vecGuard;
+			
+			hypro::assignment tmpReset;
+			tmpReset.mat = reset;
+			tmpReset.vec = vecReset;
+			
+			result->setGuard(tmpGuard);
+			result->setAssignment(tmpReset);
+			
+			return true;
+		}
+		else
+		{
+			std::cout << "Incomplete transition " << _transition.mName << std::endl;
+			_incompletes.push(_transition);
+			return false;
+		}
 	}
 	
 } // namespace

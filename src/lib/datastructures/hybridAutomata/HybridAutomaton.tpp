@@ -64,4 +64,13 @@ namespace hypro {
 		mHybridAutomaton = _hybrid;
 	}
 
+	template<typename Number>
+	void HybridAutomaton<Number>::addLocation(location* _location) {
+		mHybridAutomaton.locs.insert(_location);
+	}
+	
+	template<typename Number>
+	void HybridAutomaton<Number>::addTransition(transition* _transition) {
+		mHybridAutomaton.trans.insert(_transition);
+	}
 }

@@ -63,7 +63,9 @@ namespace hypro
     		void setTransitions(transitionSet _trans);
     		void setValuation(hypro::valuation_t<Number> _val);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
-
+			
+			void addLocation(location* _location);
+			void addTransition(transition* _transition);
     };
 }
 

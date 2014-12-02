@@ -30,17 +30,17 @@ namespace parser
     // TODO temporary datastructures
     
     using namespace boost::fusion;
-    typedef std::string locationId;
+    typedef unsigned locationId;
 	
     struct Initial
     {
-        std::string mLocations;
+        unsigned mLocations;
         
         Initial() :
         mLocations()
         {}
         
-        Initial(std::string _loc) :
+        Initial(unsigned _loc) :
         mLocations(_loc)
         {}
     };
@@ -67,7 +67,7 @@ namespace parser
     
     struct State
     {
-        std::string mName;
+        unsigned mName;
         Matrix mFlow;
         Matrix mInvariant;
         
@@ -79,7 +79,7 @@ namespace parser
             std::cout << "Construct empty state." << std::endl;
         }
         
-        State(std::string _name) :
+        State(unsigned _name) :
         mName(_name),
         mFlow(),
         mInvariant()
@@ -87,7 +87,7 @@ namespace parser
             std::cout << "Construct filled state." << std::endl;
         }
 		
-		State(std::string _name, Matrix _flow) :
+		State(unsigned _name, Matrix _flow) :
         mName(_name),
         mFlow(_flow),
         mInvariant()
@@ -95,7 +95,7 @@ namespace parser
             std::cout << "Construct filled state." << std::endl;
         }
 		
-		State(std::string _name, Matrix _flow, Matrix _inv) :
+		State(unsigned _name, Matrix _flow, Matrix _inv) :
         mName(_name),
         mFlow(_flow),
         mInvariant(_inv)
@@ -114,7 +114,7 @@ namespace parser
     struct Transition
     {
         int mId;
-		std::string mName;
+		unsigned mName;
 		unsigned mSource;
 		unsigned mTarget;
         Matrix mGuard;
@@ -131,7 +131,7 @@ namespace parser
 			std::cout << "Construct empty transition." << std::endl;
 		}
 		
-		Transition(int _id, std::string _name, unsigned _source, unsigned _target) :
+		Transition(int _id, unsigned _name, unsigned _source, unsigned _target) :
 		mId(_id),
 		mName(_name),
 		mSource(_source),
@@ -142,7 +142,7 @@ namespace parser
 			std::cout << "Construct filled transition." << std::endl;
 		}
 		
-		Transition(int _id, std::string _name, unsigned _source, unsigned _target, Matrix _guard) :
+		Transition(int _id, unsigned _name, unsigned _source, unsigned _target, Matrix _guard) :
 		mId(_id),
 		mName(_name),
 		mSource(_source),
@@ -153,7 +153,7 @@ namespace parser
 			std::cout << "Construct filled transition." << std::endl;
 		}
 		
-		Transition(int _id, std::string _name, unsigned _source, unsigned _target, Matrix _guard, Matrix _reset) :
+		Transition(int _id, unsigned _name, unsigned _source, unsigned _target, Matrix _guard, Matrix _reset) :
 		mId(_id),
 		mName(_name),
 		mSource(_source),
@@ -183,10 +183,11 @@ namespace parser
 	std::ostream& operator<<(std::ostream& lhs, const Initial& rhs)
     {
 		lhs << "initial( ";
-		for(auto& state : rhs.mLocations)
+		lhs << rhs.mLocations;
+		/*for(auto& state : rhs.mLocations)
 		{
 			lhs << state << ",";
-		}
+		}*/
 		lhs << ")";
 		return lhs;
 	}
@@ -230,7 +231,7 @@ namespace parser
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Initial,
-    (std::string, mLocations)
+    (unsigned, mLocations)
     )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -241,7 +242,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::State,
-    (std::string, mName)
+    (unsigned, mName)
 	(hypro::parser::Matrix, mFlow)
     (hypro::parser::Matrix, mInvariant)
     )
@@ -249,7 +250,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Transition,
     (int, mId)
-	(std::string, mName)
+	(unsigned, mName)
 	(unsigned, mSource)
 	(unsigned, mTarget)
     (hypro::parser::Matrix, mGuard)

@@ -43,25 +43,25 @@ namespace parser{
 	};
 	
 	template<typename Iterator>
-	struct NameParser : public qi::grammar<Iterator, std::string(), Skipper>
+	struct NameParser : public qi::grammar<Iterator, unsigned(), Skipper>
 	{
 		NameParser() : NameParser::base_type(start)
 		{
-			start =  qi::lexeme[(qi::lit("n") | qi::lit("N") ) > qi::lit("ame")] > qi::lit("=") > *(qi::char_-(qi::lit(",") | qi::lit(")")));
+			start =  qi::lexeme[(qi::lit("n") | qi::lit("N") ) > qi::lit("ame")] > qi::lit("=") > qi::uint_;
 		}
 
-		qi::rule<Iterator, std::string(), Skipper> start;
+		qi::rule<Iterator, unsigned(), Skipper> start;
 	};
 	
 	template<typename Iterator>
-	struct shortLocationParser : public qi::grammar<Iterator, std::string(), Skipper>
+	struct shortLocationParser : public qi::grammar<Iterator, unsigned(), Skipper>
 	{
 		shortLocationParser() : shortLocationParser::base_type(start)
 		{
-			start =  qi::lexeme[(qi::lit("l") | qi::lit("L") ) > qi::lit("ocation")] > qi::lit("=") > *(qi::char_-(qi::lit(",") | qi::lit(")")));
+			start =  qi::lexeme[(qi::lit("l") | qi::lit("L") ) > qi::lit("ocation")] > qi::lit("=") > qi::uint_;
 		}
 
-		qi::rule<Iterator, std::string(), Skipper> start;
+		qi::rule<Iterator, unsigned(), Skipper> start;
 	};
 	
 	template<typename Iterator>
