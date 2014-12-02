@@ -176,6 +176,51 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
 //    EXPECT_LT((res.generators()-exp_gen).array().abs().matrix().rowwise().sum().sum(), delta_gen.array().abs().matrix().rowwise().sum().sum());
 //}
 
+TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
+    Variable x(0), y(1);
+    Constraint hspace(y<=x-1);
+    Eigen::Matrix<double, 2,1> z_center(3,-10);
+    Eigen::Matrix<double, 2,2> z_gen;
+    z_gen << 0,1,
+             1,0;
+    Zonotope<double> z1(z_center, z_gen), result(2);
+     
+    // Case 1: Zonotope is wholly inside the halfspace
+    bool foundIntersect = z1.intersect(result, hspace);
+    // Expect: result zonotope is the original zonotope, nothing is changed 
+    // Intersection trivially present
+    EXPECT_TRUE(foundIntersect);
+    EXPECT_EQ(result.center(), z_center);
+    EXPECT_EQ(result.generators(), z_gen);
+    
+    // Case 2: Zonotope is wholly outside of the halfspace
+    z_center << -3,3;
+    z_gen << 0,1,
+             1,0;
+    z1.setCenter(z_center);
+    z1.setGenerators(z_gen);
+    foundIntersect = z1.intersect(result, hspace);
+    // Expect: No intersect was found
+    EXPECT_FALSE(foundIntersect);
+    
+    // Case 3: Zonotope intersects partially with halfspace
+    z_center << 0,0;
+    z_gen << 0,2,
+             2,0;
+    
+    z1.setCenter(z_center);
+    z1.setGenerators(z_gen);
+    
+    foundIntersect = z1.intersect(result, hspace);
+    // Expect: Intersect to be found, resulting zonotope is a different zonotope
+    // TODO: verify that the resulting zonotope is correct
+    EXPECT_TRUE(foundIntersect);
+    EXPECT_TRUE(result.center()!= z_center);
+//    EXPECT_TRUE(result.generators()!=z_gen);
+    
+    
+}
+
 TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
     
     Eigen::Matrix<double, 2,1> z_center;

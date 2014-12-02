@@ -724,7 +724,7 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& hal
     
     if (qd <= e) {
         if (qu <= e) {
-            
+            result = *this;
         }
         else {
             Number sigma = (e-qd)/2,
@@ -748,8 +748,8 @@ template<typename Number>
 bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& rhs) {
     // Get set of half spaces
     const Constraint_System& cs = rhs.constraints();
-    unsigned int dim = rhs.space_dimension();
-    Zonotope<Number> cur_zonotope(mCenter, mGenerators);
+//    unsigned int dim = rhs.space_dimension();
+    Zonotope<Number> curZonotope(*this);
     
     // Iterate through all constraints of the polyhedron
     for (Constraint constr : cs) {
@@ -796,7 +796,8 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& r
 //        else {
 //            return false;
 //        }
-        bool intersectFound = this->intersect(intermediateResult, constr);
+        bool intersectFound = curZonotope.intersect(intermediateResult, constr);
+        curZonotope = intermediateResult;
         if (!intersectFound) return false;
         
     }
