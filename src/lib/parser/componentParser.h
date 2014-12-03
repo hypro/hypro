@@ -32,6 +32,17 @@ namespace parser{
 	typedef qi::space_type Skipper;
 	
 	template<typename Iterator>
+	struct NumberParser : public qi::grammar<Iterator, parser::Number(), Skipper>
+	{
+		NumberParser() : NumberParser::base_type(start)
+		{
+			start = qi::int_ > -(qi::lit(".") > qi::uint_);
+		}
+		
+		qi::rule<Iterator, parser::Number(), Skipper> start;
+	};
+	
+	template<typename Iterator>
 	struct MatrixParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
 	{
 		MatrixParser() : MatrixParser::base_type(start)

@@ -34,6 +34,12 @@ namespace parser
     {
         unsigned mLocations;
     };
+	
+	struct Number
+	{
+		int integerPart;
+		unsigned rationalPart;
+	};
     
     struct Matrix
     {
@@ -113,6 +119,12 @@ BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Initial,
     (unsigned, mLocations)
     )
+		
+BOOST_FUSION_ADAPT_STRUCT(
+	hypro::parser::Number,
+	(int, integerPart)
+	(unsigned, rationalPart)
+	)
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Matrix,
