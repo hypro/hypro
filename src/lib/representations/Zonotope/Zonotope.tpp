@@ -717,25 +717,33 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& hal
         dVec(i) = -1*halfspace.coefficient(Variable(i)).get_d();
     }
     
-    Number zs = (dVec.transpose()*this->mGenerators).array().abs().sum();
-    Number dc = dVec.dot(this->mCenter);
+    return this->intersectWithHalfspace(result, dVec, e);    
+}
+
+template<typename Number>
+bool Zonotope<Number>::intersectWithHalfspace(Zonotope<Number>& result, 
+                                const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, 
+                                Number e_scalar) 
+{
+    Number zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
+    Number dc = d_vec.dot(this->mCenter);
     Number qu = dc + zs,
            qd = dc -zs;
     
-    if (qd <= e) {
-        if (qu <= e) {
+    if (qd <= e_scalar) {
+        if (qu <= e_scalar) {
             result = *this;
         }
         else {
-            Number sigma = (e-qd)/2,
-                    d = (qd+e)/2;
+            Number sigma = (e_scalar-qd)/2,
+                    d = (qd+e_scalar)/2;
             Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> HHT = this->mGenerators*this->mGenerators.transpose();
-            Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = HHT * dVec / ((dVec.transpose() * HHT * dVec) + sigma*sigma);
+            Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
             result.setCenter(this->mCenter + lambda*(d - dc));
             Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> identity;
             identity.resize(mDimension, mDimension);
             identity.setIdentity();
-            result.setGenerators((identity - lambda * dVec.transpose())*this->mGenerators);
+            result.setGenerators((identity - lambda * d_vec.transpose())*this->mGenerators);
             result.addGenerators(sigma*lambda);
         }
     }

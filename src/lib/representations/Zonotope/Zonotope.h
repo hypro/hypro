@@ -9,12 +9,13 @@
 #define	ZONOTOPE_H
 
 #include <vector>
-#include "../Hyperplane/Hyperplane.h"
 #include <eigen3/Eigen/Dense>
 #include <ppl.hh>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
+
+#include "../Hyperplane/Hyperplane.h"
 #include "ZUtility.h"
 
 
@@ -155,6 +156,7 @@ class Zonotope
         
         std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > computeZonotopeBoundary();
         
+        bool intersectWithHalfspace(Zonotope<Number>& result, const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, Number e_scalar);
         
         bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::Constraint& halfspace);
         
