@@ -3,8 +3,8 @@ set(hypro_polytope_sources
 )
 
 set(hypro_polytope_headers
-	Polytope.h
-        VariablePool.h
-        util.h
+	Polytope/Polytope.h
+	Polytope/Polytope.tpp
+    Polytope/util.h
 	PARENT_SCOPE
 )

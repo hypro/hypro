@@ -3,6 +3,6 @@ set(hypro_hyperplane_sources
 )
 
 set(hypro_hyperplane_headers
-	Hyperplane.h
+	Hyperplane/Hyperplane.h
 	PARENT_SCOPE
 )

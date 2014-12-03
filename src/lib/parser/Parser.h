@@ -159,7 +159,7 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
 	}
     
     void parseInput(const std::string& pathToInputFile);
-    bool parse(std::istream& in, const std::string& filename);
+    bool parse(std::istream& in, const std::string& filename, HybridAutomaton<double>& _result);
 	
 	HybridAutomaton<double> createAutomaton();
 };

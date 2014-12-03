@@ -3,7 +3,8 @@ set(hypro_hpolytope_sources
 )
 
 set(hypro_vpolytope_headers
-	HPolytope.h
-        simplex.h
+	HPolytope/HPolytope.h
+	HPolytope/HPolytope.tpp
+    HPolytope/simplex.h
 	PARENT_SCOPE
 )

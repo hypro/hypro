@@ -35,9 +35,8 @@ namespace parser {
 					return std::make_pair(result,true);
 				}
 			}
-			else // the matrix has already been defined - make sure it is not overridden
+			else // the matrix has already been defined - it cannot be overridden
 			{
-				assert(_rawMatrix.empty());
 				std::cout << "Insert already named matrix " << _name << std::endl;
 				return std::make_pair((*pos).second, false);
 			}
@@ -100,7 +99,6 @@ namespace parser {
 		}
 		else
 		{
-			std::cout << "Incomplete location " << _state.mName << std::endl;
 			_incompletes.push(_state);
 			return false;
 		}
@@ -162,14 +160,14 @@ namespace parser {
 			result->setStartLoc(sourceLocIt->second);
 			result->setTargetLoc(targetLocIt->second);
 			
-			hypro::guard tmpGuard;
+			struct hypro::Transition<double>::guard tmpGuard;
 			tmpGuard.mat = guard;
 			tmpGuard.op = hypro::operator_e::LEQ;
 			tmpGuard.vec = vecGuard;
 			
-			hypro::assignment tmpReset;
-			tmpReset.mat = reset;
-			tmpReset.vec = vecReset;
+			struct hypro::Transition<double>::assignment tmpReset;
+			tmpReset.transformMat = reset;
+			tmpReset.translationVec = vecReset;
 			
 			result->setGuard(tmpGuard);
 			result->setAssignment(tmpReset);
@@ -178,7 +176,6 @@ namespace parser {
 		}
 		else
 		{
-			std::cout << "Incomplete transition " << _transition.mName << std::endl;
 			_incompletes.push(_transition);
 			return false;
 		}

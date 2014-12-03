@@ -46,7 +46,7 @@ namespace hypro
     		HybridAutomaton(const HybridAutomaton& _hybrid);
     		HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t<Number> _initVal);
 
-    		~HybridAutomaton()
+    		virtual ~HybridAutomaton()
     		{}
 
     		/**
@@ -66,6 +66,9 @@ namespace hypro
 			
 			void addLocation(location* _location);
 			void addTransition(transition* _transition);
+			
+			// move operator
+			inline HybridAutomaton<Number>& operator= (HybridAutomaton<Number>&& _rhs);
     };
 }
 

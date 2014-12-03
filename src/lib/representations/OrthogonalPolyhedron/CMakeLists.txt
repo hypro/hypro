@@ -3,8 +3,8 @@ set(hypro_orthogonalpolyhedron_sources
 )
 
 set(hypro_orthogonalpolyhedron_headers
-	OrthogonalPolyhedron.h
-        NeighbourhoodContainer.h
-        Grid.h
+	OrthogonalPolyhedron/OrthogonalPolyhedron.h
+    OrthogonalPolyhedron/NeighbourhoodContainer.h
+    OrthogonalPolyhedron/Grid.h
 	PARENT_SCOPE
 )
