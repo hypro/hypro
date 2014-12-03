@@ -12,10 +12,12 @@
 #include "../src/lib/representations/Zonotope/Zonotope.h"
 #include "../src/lib/representations/Hyperplane/Hyperplane.h"
 #include "../src/lib/algorithms/reachability/RAHS.h"
-//#include "Visualizer.h"
 #include <fstream>
+
+#ifdef HAS_MATLAB
+#include "TwoTank/Visualizer.h"
 #include "mat.h"
-#include "matrix.h"
+#endif
 
 
 /*
@@ -212,123 +214,123 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double> * ha) {
 }
 
 int main() {
-//    Visualizer vis;
     hypro::HybridAutomaton<double> * ha1 = new hypro::HybridAutomaton<double>;
-    std::cout << "created new ha" << std::endl;
     createTwoTankHybridAutomata(ha1);
-    std::cout << "initialized ha"<< std::endl;
     RAHS<double> rahs(2);
     rahs.loadHybridAutomaton(ha1);
-    std::cout << "loaded HA" << std::endl;
+    std::cout << "loaded hybrid automaton..." << std::endl;
     ZUtility::Options opt = {ZUtility::NDPROJECTION, 3};
     rahs.startReachabilityAnalysis(140,1,0.01,20, opt);
+
+#ifdef HAS_MATLAB
+    Visualizer vis;
+    const unsigned long dims[2] = {1,rahs.flowpipe().size()};
     
-//    const unsigned long dims[2] = {1,rahs.flowpipe().size()};
-//    
-//    unsigned i=0;
-//    mxArray * res;
-//    mxArray * cell_array = vis.createCellArray(2, dims);
-//    for (Zonotope<double> zp : rahs.flowpipe()) {
-//        Zonotope<double> z2(zp,0,1);
-//        std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> > boundaries = z2.computeZonotopeBoundary();
-//        
-//        MatrixXd temp_matrix = zonotope2Matrix(zp);
-//        
-//        res = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());        
-//        vis.matrix2mxArray<double>(temp_matrix, res);        
-//        vis.setCellArray(cell_array, i, res);
-//        i++;
-//        
-//        
-//        if (i==3) {
-//            std::ofstream fs;
-//            fs.open("zonotopetest.txt");
-//            std::cout << "Num of points: " << boundaries.size() << std::endl;
-//            std::cout << "x: ";
-//            
-//            fs << "x :";
-//            for (unsigned i=0; i<boundaries.size(); i++) {
-//                std::cout << boundaries[i](0) << ",";
-//                fs << boundaries[i](0) << ", ";
-//            }
-//            std::cout << std::endl << "y:";
-//            fs << std::endl << "y: ";
-//            for (unsigned i=0; i<boundaries.size(); i++) {
-//                std::cout << boundaries[i](1) << ",";
-//                fs << boundaries[i](1) << ", ";
-//            }
-//            fs << "Generators: \n" << z2.generators() << std::endl;
-//            fs << "Center: \n" << z2.center() << std::endl;
-//            
-//            fs.close();
-//            
-////            std::cout << "Boundaries mat:\n" << boundariesMat << std::endl;
-//        }
-//    }
-//    vis.sendVariable2Matlab("Q", cell_array);
-//    
-//    mxDestroyArray(res);
-//    
-//    unsigned int count = 0;
-//    for (auto key: rahs.intersections()) {
-//        for (Zonotope<double> z : key.second) {
-//            count++;
-//        }
-//    }
-//    
-//    mxArray * res2;
-//    MATFile * matfile = matOpen("convexhull.mat", "w");
-//    MATFile * matfile2 = matOpen("intersect.mat", "w");
-//    if (matfile == NULL || matfile2 == NULL) {
-//        std::cout << "Open failed..." << std::endl;
-//    }
-//    
-//    const unsigned long dims3[2] = {1,count-1};
+    unsigned i=0;
+    mxArray * res;
+    mxArray * cell_array = vis.createCellArray(2, dims);
+    for (Zonotope<double> zp : rahs.flowpipe()) {
+        Zonotope<double> z2(zp,0,1);
+        std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> > boundaries = z2.computeZonotopeBoundary();
+        
+        MatrixXd temp_matrix = zonotope2Matrix(zp);
+        
+        res = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());        
+        vis.matrix2mxArray<double>(temp_matrix, res);        
+        vis.setCellArray(cell_array, i, res);
+        i++;
+        
+        
+        if (i==3) {
+            std::ofstream fs;
+            fs.open("zonotopetest.txt");
+            std::cout << "Num of points: " << boundaries.size() << std::endl;
+            std::cout << "x: ";
+            
+            fs << "x :";
+            for (unsigned i=0; i<boundaries.size(); i++) {
+                std::cout << boundaries[i](0) << ",";
+                fs << boundaries[i](0) << ", ";
+            }
+            std::cout << std::endl << "y:";
+            fs << std::endl << "y: ";
+            for (unsigned i=0; i<boundaries.size(); i++) {
+                std::cout << boundaries[i](1) << ",";
+                fs << boundaries[i](1) << ", ";
+            }
+            fs << "Generators: \n" << z2.generators() << std::endl;
+            fs << "Center: \n" << z2.center() << std::endl;
+            
+            fs.close();
+            
+//            std::cout << "Boundaries mat:\n" << boundariesMat << std::endl;
+        }
+    }
+    vis.sendVariable2Matlab("Q", cell_array);
+    
+    mxDestroyArray(res);
+    
+    unsigned int count = 0;
+    for (auto key: rahs.intersections()) {
+        for (Zonotope<double> z : key.second) {
+            count++;
+        }
+    }
+    
+    mxArray * res2;
+    MATFile * matfile = matOpen("convexhull.mat", "w");
+    MATFile * matfile2 = matOpen("intersect.mat", "w");
+    if (matfile == NULL || matfile2 == NULL) {
+        std::cout << "Open failed..." << std::endl;
+    }
+    
+    const unsigned long dims3[2] = {1,count-1};
+    count = 0;
+    mxArray * intersect_array = vis.createCellArray(2,dims3);
+    for (auto key: rahs.intersections()) {
+        for (Zonotope<double> z : key.second) {
+            Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
+            res2 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
+            vis.matrix2mxArray<double>(temp_matrix, res2);        
+            vis.setCellArray(intersect_array, count, res2);
+            count++;
+        }
+    }
+    
+//    mxArray * res3;
+//    const unsigned long dims4[2] = {1,rahs.pivotalZonotopes().size()};
+//    mxArray * pivotal_array = vis.createCellArray(2,dims4);
 //    count = 0;
-//    mxArray * intersect_array = vis.createCellArray(2,dims3);
-//    for (auto key: rahs.intersections()) {
-//        for (Zonotope<double> z : key.second) {
-//            Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
-//            res2 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
-//            vis.matrix2mxArray<double>(temp_matrix, res2);        
-//            vis.setCellArray(intersect_array, count, res2);
-//            count++;
-//        }
+//    // plot pivotal zonotopes
+//    for (auto zt: rahs.pivotalZonotopes()) {
+////        for (Zonotope<double> z : key.second) {
+////            Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
+////            res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
+////            vis.matrix2mxArray<double>(temp_matrix, res3);        
+////            vis.setCellArray(intersect_array, count, res3);
+////            count++;
+////        }
+//        Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(zt.second);
+//        res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());
+//        vis.matrix2mxArray<double>(temp_matrix, res3);
+//        vis.setCellArray(pivotal_array, count, res3);
+//        count++;
 //    }
-//    
-////    mxArray * res3;
-////    const unsigned long dims4[2] = {1,rahs.pivotalZonotopes().size()};
-////    mxArray * pivotal_array = vis.createCellArray(2,dims4);
-////    count = 0;
-////    // plot pivotal zonotopes
-////    for (auto zt: rahs.pivotalZonotopes()) {
-//////        for (Zonotope<double> z : key.second) {
-//////            Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
-//////            res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
-//////            vis.matrix2mxArray<double>(temp_matrix, res3);        
-//////            vis.setCellArray(intersect_array, count, res3);
-//////            count++;
-//////        }
-////        Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(zt.second);
-////        res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());
-////        vis.matrix2mxArray<double>(temp_matrix, res3);
-////        vis.setCellArray(pivotal_array, count, res3);
-////        count++;
-////    }
-//    
-//    
-//    
-//    vis.sendVariable2Matlab("intersect2", intersect_array);
-////    vis.sendVariable2Matlab("pivotal", pivotal_array);
-//
-////    matPutVariable(matfile, "convexhull", pivotal_array);
-//    matPutVariable(matfile2, "intersect", intersect_array);
-//    matClose(matfile);
-//    matClose(matfile2);
-//    vis.executeMatlabScript("plotReachableSets"); 
-//    std::cout << vis.buffer << std::endl;
-//    mxDestroyArray(res2);
-//    mxDestroyArray(intersect_array);
+    
+    
+    
+    vis.sendVariable2Matlab("intersect2", intersect_array);
+//    vis.sendVariable2Matlab("pivotal", pivotal_array);
+
+//    matPutVariable(matfile, "convexhull", pivotal_array);
+    matPutVariable(matfile2, "intersect", intersect_array);
+    matClose(matfile);
+    matClose(matfile2);
+    vis.executeMatlabScript("plotReachableSets"); 
+    std::cout << vis.buffer << std::endl;
+    mxDestroyArray(res2);
+    mxDestroyArray(intersect_array);
+#endif
     delete ha1;
 }
 

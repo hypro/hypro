@@ -373,5 +373,4 @@ TEST(ZonotopeAlgorithmTest, IntervalHull) {
         
     EXPECT_EQ(result.generators(), expected_generators);
     EXPECT_EQ(result.center(), center);
-    
 }
