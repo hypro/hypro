@@ -49,12 +49,14 @@ template<typename Iterator>
 struct InitialParser : public qi::grammar<Iterator, Initial(), Skipper>
 {
 	shortLocationParser<Iterator> mLocationParser;
+	NumberParser<Iterator> mNumberParser;
 	
     InitialParser() : InitialParser::base_type(start)
     {
         start = qi::lit("initial") > 
 				qi::lit("(") >
 				mLocationParser >
+				-mNumberParser >
 				qi::lit(")");
     }
     
@@ -158,7 +160,7 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
 		mInitial = _in;
 	}
     
-    void parseInput(const std::string& pathToInputFile);
+    HybridAutomaton<double> parseInput(const std::string& pathToInputFile);
     bool parse(std::istream& in, const std::string& filename, HybridAutomaton<double>& _result);
 	
 	HybridAutomaton<double> createAutomaton();

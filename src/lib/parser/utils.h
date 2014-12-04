@@ -30,16 +30,19 @@ namespace parser
     using namespace boost::fusion;
     typedef unsigned locationId;
 	
+	struct Number
+	{
+		long long integerPart;
+		unsigned long long rationalPart;
+	};
+	
     struct Initial
     {
         unsigned mLocations;
+		Number mNumber;
     };
 	
-	struct Number
-	{
-		int integerPart;
-		unsigned rationalPart;
-	};
+	
     
     struct Matrix
     {
@@ -83,10 +86,7 @@ namespace parser
     {
 		lhs << "initial( ";
 		lhs << rhs.mLocations;
-		/*for(auto& state : rhs.mLocations)
-		{
-			lhs << state << ",";
-		}*/
+		lhs << " Number: " << rhs.mNumber.integerPart << "." << rhs.mNumber.rationalPart;
 		lhs << ")";
 		return lhs;
 	}
@@ -116,15 +116,16 @@ namespace parser
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
+	hypro::parser::Number,
+	(long long, integerPart)
+	(unsigned long long, rationalPart)
+	)
+
+BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Initial,
     (unsigned, mLocations)
+	(hypro::parser::Number, mNumber)
     )
-		
-BOOST_FUSION_ADAPT_STRUCT(
-	hypro::parser::Number,
-	(int, integerPart)
-	(unsigned, rationalPart)
-	)
 
 BOOST_FUSION_ADAPT_STRUCT(
     hypro::parser::Matrix,

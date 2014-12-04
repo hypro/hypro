@@ -36,7 +36,7 @@ namespace parser{
 	{
 		NumberParser() : NumberParser::base_type(start)
 		{
-			start = qi::int_ > -(qi::lit(".") > qi::uint_);
+			start = qi::long_long > qi::lit(".") > qi::ulong_long;
 		}
 		
 		qi::rule<Iterator, parser::Number(), Skipper> start;

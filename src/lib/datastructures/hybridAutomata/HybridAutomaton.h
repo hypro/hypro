@@ -68,8 +68,30 @@ namespace hypro
 			void addTransition(transition* _transition);
 			
 			// move operator
-			inline HybridAutomaton<Number>& operator= (HybridAutomaton<Number>&& _rhs);
+			//inline HybridAutomaton<Number>& operator= (HybridAutomaton<Number>&& _rhs);
+			
+			friend std::ostream & operator<< (std::ostream& _ostr, const HybridAutomaton<Number>& _a) {
+				_ostr << "initial: " << std::endl;
+				for(auto initialIT = _a.mHybridAutomaton.init.begin(); initialIT != _a.mHybridAutomaton.init.end(); ++initialIT)
+				{
+					_ostr << **initialIT << std::endl;
+				}
+				_ostr << "locations: " << std::endl;
+				for(auto locationIT = _a.mHybridAutomaton.locs.begin(); locationIT != _a.mHybridAutomaton.locs.end(); ++locationIT)
+				{
+					_ostr << **locationIT << std::endl;
+				}
+				_ostr << "transitions: " << std::endl;
+				for(const auto& transition : _a.mHybridAutomaton.trans)
+				{
+					_ostr << *transition << std::endl;
+				}
+				return _ostr;
+			}
     };
+	
+	
+	
 }
 
 #include "HybridAutomaton.tpp"

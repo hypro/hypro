@@ -2,7 +2,7 @@
 
 namespace hypro{
 namespace parser{
-    void MainParser::parseInput(const std::string& pathToInputFile)
+    HybridAutomaton<double> MainParser::parseInput(const std::string& pathToInputFile)
     {
 		HybridAutomaton<double> resultAutomaton;
 		
@@ -18,6 +18,10 @@ namespace parser{
             std::cerr << "Parse error" << std::endl;
             exit(1);
         }
+		
+		std::cout << resultAutomaton << std::endl;
+		
+		return resultAutomaton;
     }
 
     bool MainParser::parse(std::istream& in, const std::string& filename, HybridAutomaton<double>& _result)
@@ -54,28 +58,38 @@ namespace parser{
 		std::queue<State> incompleteStates;
 		std::queue<Transition> incompleteTransitions;
 		
+		// set initial location - TODO
+		std::cout << __func__ << " Initial: " << mInitial << std::endl;
+		
 		// get flow, first run
 		for(const auto& state : mStates)
 		{
-			Location<double>* loc;
+			Location<double>* loc = new Location<double>();
 			bool success = createLocFromState(state,loc,matrices,incompleteStates);
 			if(success)
 			{
 				locations.insert(std::make_pair(state.mName, loc));
 				result.addLocation(loc);
 			}
-				
+			else
+			{
+				delete loc;
+			}
 		}
 		
 		// get transitions, first run
 		for(const auto& transition : mTransitions)
 		{
-			hypro::Transition<double>* tran;
+			hypro::Transition<double>* tran = new hypro::Transition<double>();
 			bool success = createTransition(transition, tran, locations, matrices, incompleteTransitions);
 			if(success)
 			{
 				transitions.insert(std::make_pair(transition.mName, tran));
 				result.addTransition(tran);
+			}
+			else
+			{
+				delete tran;
 			}
 		}
 		
@@ -83,13 +97,17 @@ namespace parser{
 		std::queue<State> secondIncomplete;
 		while(!incompleteStates.empty())
 		{
-			Location<double>* loc = NULL;
+			Location<double>* loc = new Location<double>();
 			State state = incompleteStates.front();
 			bool success = createLocFromState(state,loc,matrices,secondIncomplete);
 			if(success)
 			{
 				locations.insert(std::make_pair(state.mName, loc));
 				result.addLocation(loc);
+			}
+			else
+			{
+				delete loc;
 			}
 			incompleteStates.pop();
 		}
@@ -100,13 +118,17 @@ namespace parser{
 		std::queue<Transition> secondIncompleteTransitions;
 		while(!incompleteTransitions.empty())
 		{
-			hypro::Transition<double>* tran = NULL;
+			hypro::Transition<double>* tran = new hypro::Transition<double>();
 			Transition transition = incompleteTransitions.front();
 			bool success = createTransition(transition,tran,locations,matrices,secondIncompleteTransitions);
 			if(success)
 			{
 				transitions.insert(std::make_pair(transition.mName,tran));
 				result.addTransition(tran);
+			}
+			else
+			{
+				delete tran;
 			}
 			incompleteTransitions.pop();
 		}

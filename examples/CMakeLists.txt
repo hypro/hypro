@@ -32,7 +32,6 @@ set( EXAMPLES
 foreach( example ${EXAMPLES} )
     if (${example} STREQUAL example_twotankreachability)
         find_package(MATLAB)
-	set(${MATLAB_FOUND} false)
 	if (${MATLAB_FOUND})
 	    add_definitions(-DHAS_MATLAB)
             include_directories(${MATLAB_INCLUDE_DIR})

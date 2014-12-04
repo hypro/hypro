@@ -16,7 +16,6 @@ namespace parser {
 	
 	static std::pair<matrix, bool> insertMatrix(const std::vector<std::vector<double>>& _rawMatrix, const std::string& _name, std::map<std::string, matrix>& _matrices)
 	{
-		std::cout << "Name: " << _name << std::endl;
 		if(_name != "") // non-anonymous (named) matrix
 		{
 			auto pos = _matrices.find(_name);
@@ -26,7 +25,6 @@ namespace parser {
 				{
 					matrix result = createMatrix(_rawMatrix);
 					_matrices.insert(std::make_pair(_name, result));
-					std::cout << "added matrix " << _name << " to pool." << std::endl;
 					return std::make_pair(result,false);
 				}
 				else // the matrix is not given -> we wait after parsing if it is defined in the following locations
@@ -37,13 +35,11 @@ namespace parser {
 			}
 			else // the matrix has already been defined - it cannot be overridden
 			{
-				std::cout << "Insert already named matrix " << _name << std::endl;
 				return std::make_pair((*pos).second, false);
 			}
 		}
 		
 		// anonymous matrix - create once
-		std::cout << "anonymous matrix" << std::endl;
 		matrix result = createMatrix(_rawMatrix);
 		return std::make_pair(result,false);
 	}
@@ -55,7 +51,7 @@ namespace parser {
      */
 	static bool createLocFromState(
 			const State& _state, 
-			Location<double>* _loc,
+			Location<double> * const _loc,
 			std::map<std::string, matrix>& _matrices, 
 			std::queue<State>& _incompletes)
 	{
@@ -66,6 +62,7 @@ namespace parser {
 		bool incompleteFlow = res.second;
 		if(!incompleteFlow)
 			flow = res.first;
+			
 		
 		// get invariant
 		std::string invname = _state.mInvariant.mName;
@@ -88,13 +85,11 @@ namespace parser {
 		incomplete = incompleteFlow || incompleteInvariant;
 		if(!incomplete)
 		{
-			_loc = new hypro::Location<double>();
 			_loc->setActivityMat(flow);
 			_loc->setActivityVec(vec);
 			if(invariant)
 				_loc->setInvariant(invMatrix, vec, hypro::operator_e::LEQ);
 
-			std::cout << *_loc << std::endl;
 			return true;
 		}
 		else
@@ -114,7 +109,6 @@ namespace parser {
 	)
 	{
 		bool incomplete = false;
-		hypro::Transition<double>* result = new hypro::Transition<double>();
 		
 		auto sourceLocIt = _locations.find(_transition.mSource);
 		auto targetLocIt = _locations.find(_transition.mTarget);
@@ -157,8 +151,8 @@ namespace parser {
 		
 		if(!incomplete)
 		{
-			result->setStartLoc(sourceLocIt->second);
-			result->setTargetLoc(targetLocIt->second);
+			_tran->setStartLoc(sourceLocIt->second);
+			_tran->setTargetLoc(targetLocIt->second);
 			
 			struct hypro::Transition<double>::guard tmpGuard;
 			tmpGuard.mat = guard;
@@ -169,8 +163,8 @@ namespace parser {
 			tmpReset.transformMat = reset;
 			tmpReset.translationVec = vecReset;
 			
-			result->setGuard(tmpGuard);
-			result->setAssignment(tmpReset);
+			_tran->setGuard(tmpGuard);
+			_tran->setAssignment(tmpReset);
 			
 			return true;
 		}

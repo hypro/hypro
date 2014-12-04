@@ -25,11 +25,23 @@ namespace hypro
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number> mat;
     			hypro::operator_e op;
+				
+				friend std::ostream & operator<< (std::ostream& _ostr, const guard& _g)
+				{
+					_ostr << _g.mat << " + " << _g.vec << _g.op << "0";
+					return _ostr;
+				}
     		};
 
     		struct assignment {
     			hypro::vector_t<Number> translationVec;  //Translation Vector
     			hypro::matrix_t<Number> transformMat;    //Transformation Matrix
+				
+				friend std::ostream & operator<< (std::ostream& _ostr, const assignment& _a)
+				{
+					_ostr << _a.transformMat << " + " << _a.translationVec;
+					return _ostr;
+				}
     		};
 
     		//transition: two locations, a guard and an assignment
@@ -106,5 +118,16 @@ namespace hypro
     		void setAssignment(struct assignment _val) {
     			mTransition.tAssignment = _val;
     		}
+			
+			friend std::ostream & operator<< (std::ostream& _ostr, const Transition<Number>& _t)
+            {
+				_ostr << "transition(" << std::endl <<
+				"\t Source = " << *_t.mTransition.locStart << std::endl <<
+				"\t Target = " << *_t.mTransition.locTarget << std::endl << 
+				"\t Guard = " << _t.mTransition.tGuard << std::endl <<
+				"\t Reset = " << _t.mTransition.tAssignment << std::endl <<
+				")";
+				return _ostr;
+			}
     };
 }
