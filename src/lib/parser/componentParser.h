@@ -36,10 +36,12 @@ namespace parser{
 	{
 		NumberParser() : NumberParser::base_type(start)
 		{
-			start = qi::long_long > qi::lit(".") > qi::ulong_long;
+			start = integralPart > qi::lit(".") > rationalPart;
 		}
 		
 		qi::rule<Iterator, parser::Number(), Skipper> start;
+		qi::int_parser<long long,10,1,-1> integralPart;
+		qi::int_parser<unsigned long long,10,1,-1> rationalPart;
 	};
 	
 	template<typename Iterator>
