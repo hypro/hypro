@@ -7,3 +7,4 @@ nbproject
 build
 cmake/.swp
 examples/libmx.dylib
+src/resources/nlopt-2.4.2/

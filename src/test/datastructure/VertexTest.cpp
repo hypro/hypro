@@ -66,3 +66,13 @@ TEST_F(VertexTest, Constructor)
     ASSERT_EQ(vertex2.dimension(), (unsigned) 2);
     ASSERT_TRUE(vertex2.color());
 }
+
+TEST_F(VertexTest, Comparison)
+{
+    Vertex<number_t> v1(p1, true);
+    Vertex<number_t> v2(p1, false);
+    Vertex<number_t> v3(p1, true);
+    
+    EXPECT_NE(v1, v2);
+    EXPECT_EQ(v1, v3);
+}

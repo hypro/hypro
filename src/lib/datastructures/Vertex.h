@@ -20,23 +20,23 @@
 #include "Point.h"
 
 namespace hypro {
-	template<typename NumberType>
+	template<typename Number>
     class Vertex;
-	template<typename NumberType>
-    using vVec = typename std::vector<Vertex<NumberType>>;
-    template<typename NumberType>
-	using vVecIt = typename std::vector<Vertex<NumberType>>::iterator;
-    template<typename NumberType>
-	using vList = typename std::list<Vertex<NumberType>>;
-    template<typename NumberType>
-	using vListIt = typename std::list<Vertex<NumberType>>::iterator;
-    template<typename NumberType>
-	using vSet = typename std::set<Vertex<NumberType>>;
-    template<typename NumberType>
-	using vSetIt = typename std::set<Vertex<NumberType>>::iterator;
+	template<typename Number>
+    using vVec = typename std::vector<Vertex<Number>>;
+    template<typename Number>
+	using vVecIt = typename std::vector<Vertex<Number>>::iterator;
+    template<typename Number>
+	using vList = typename std::list<Vertex<Number>>;
+    template<typename Number>
+	using vListIt = typename std::list<Vertex<Number>>::iterator;
+    template<typename Number>
+	using vSet = typename std::set<Vertex<Number>>;
+    template<typename Number>
+	using vSetIt = typename std::set<Vertex<Number>>::iterator;
     
-    template<class NumberType>
-    class Vertex : public Point<NumberType> 
+    template<class Number>
+    class Vertex : public Point<Number> 
     {
         private:
             bool mColor;
@@ -48,7 +48,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(bool color = false) : Point<NumberType>()
+            Vertex(bool color = false) : Point<Number>()
             {
                 mColor = color;
             }
@@ -59,7 +59,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(const typename Point<NumberType>::coordinateMap& coordinates, bool color = false) : Point<NumberType>(coordinates)
+            Vertex(const typename Point<Number>::coordinateMap& coordinates, bool color = false) : Point<Number>(coordinates)
             {
                 mColor = color;
             }
@@ -70,7 +70,7 @@ namespace hypro {
              * @param color
              * @return
              */
-            Vertex(const Point<NumberType>& p, bool color = false) : Point<NumberType>(p)
+            Vertex(const Point<Number>& p, bool color = false) : Point<Number>(p)
             {
                 mColor = color;
             }
@@ -99,6 +99,34 @@ namespace hypro {
             void invertColor() 
             {
                 mColor = !mColor;
+            }
+
+            /**
+             *
+             * @param v1
+             * @param v2
+             * @return true, if they are equal.
+             */
+            friend bool operator==(const Vertex<Number> & _v1, const Vertex<Number> & _v2)
+            {
+                if(_v1.dimension() != _v2.dimension()) return false;
+                if(_v1.color() != _v2.color()) return false;
+                for (auto vertexIt : _v1.mCoordinates)
+                {
+                    if ( !_v2.hasDimension(vertexIt.first) || vertexIt.second != _v2.mCoordinates.at(vertexIt.first)) return false;
+                }
+                return true;
+            }
+
+            /**
+             *
+             * @param v1
+             * @param v2
+             * @return true, if they are not equal.
+             */
+            friend bool operator!=(const Vertex<Number> & _v1, const Vertex<Number> & _v2)
+            {
+                return !(_v1 == _v2);
             }
 
             friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
