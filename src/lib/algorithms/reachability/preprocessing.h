@@ -5,9 +5,6 @@
  
 //#define LOCATIONINFO_VERBOSE 
 //#define TRANSITIONINFO_VERBOSE 
- 
-	//typedef std::set<location*> locationSet;
-	//typedef std::set<transition*> transitionSet;
 
 	// this type is used to define mappings of indices to directions
 	typedef unsigned int* mapping;
@@ -571,7 +568,7 @@
 		/**
 		* Initiates the preprocessing for all locations, connected through paths beginning at an initial location
 		*/
-	    void preprocess(HybridAutomaton<double>* automaton,std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* additionalDirections)
+	    void preprocess(HybridAutomaton<double, valuation>* automaton,std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* additionalDirections)
 	    {
 	    	std::set<location*> locations = (*automaton).initialLocations();
 

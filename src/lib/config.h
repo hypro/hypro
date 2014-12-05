@@ -41,6 +41,14 @@ typedef std::set<carl::Variable> variableSet;
 typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, Eigen::Dynamic> matrix;
 typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, 1> vector;
 
+namespace hypro
+{
+template<typename Number>
+using vector_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1>;
+
+template<typename Number>
+using matrix_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
+}
 /**
  * author: ckugler
  * Defines for reachability algorithm based on polytopes

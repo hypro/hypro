@@ -13,34 +13,34 @@
 namespace hypro {
 namespace parser {
 	
-	
-	static std::pair<matrix, bool> insertMatrix(const std::vector<std::vector<double>>& _rawMatrix, const std::string& _name, std::map<std::string, matrix>& _matrices)
+	template<typename Number>
+	static std::pair<matrix_t<Number>, bool> insertMatrix(const std::vector<std::vector<Number>>& _rawMatrix, const std::string& _name, std::map<std::string, matrix_t<Number>>& _matrices)
 	{
-		if(_name != "") // non-anonymous (named) matrix
+		if(_name != "") // non-anonymous (named) matrix_t<Number>
 		{
 			auto pos = _matrices.find(_name);
-			if(pos == _matrices.end()) // create new named matrix
+			if(pos == _matrices.end()) // create new named matrix_t<Number>
 			{
 				if(!_rawMatrix.empty())
 				{
-					matrix result = createMatrix(_rawMatrix);
+					matrix_t<Number> result = createMatrix(_rawMatrix);
 					_matrices.insert(std::make_pair(_name, result));
 					return std::make_pair(result,false);
 				}
-				else // the matrix is not given -> we wait after parsing if it is defined in the following locations
+				else // the matrix_t<Number> is not given -> we wait after parsing if it is defined in the following locations
 				{
-					matrix result;
+					matrix_t<Number> result;
 					return std::make_pair(result,true);
 				}
 			}
-			else // the matrix has already been defined - it cannot be overridden
+			else // the matrix_t<Number> has already been defined - it cannot be overridden
 			{
 				return std::make_pair((*pos).second, false);
 			}
 		}
 		
-		// anonymous matrix - create once
-		matrix result = createMatrix(_rawMatrix);
+		// anonymous matrix_t<Number> - create once
+		matrix_t<Number> result = createMatrix(_rawMatrix);
 		return std::make_pair(result,false);
 	}
 
@@ -49,16 +49,17 @@ namespace parser {
      * @param _state The parsed state.
      * @return
      */
+	template<typename Number>
 	static bool createLocFromState(
-			const State& _state, 
-			Location<double> * const _loc,
-			std::map<std::string, matrix>& _matrices, 
-			std::queue<State>& _incompletes)
+			const State<Number>& _state, 
+			Location<Number> * const _loc,
+			std::map<std::string, matrix_t<Number>>& _matrices, 
+			std::queue<State<Number>>& _incompletes)
 	{
 		bool incomplete = false;
 		std::string flowname = _state.mFlow.mName;
-		matrix flow;
-		std::pair<matrix, bool> res = insertMatrix(_state.mFlow.mMatrix, flowname, _matrices);
+		matrix_t<Number> flow;
+		std::pair<matrix_t<Number>, bool> res = insertMatrix(_state.mFlow.mMatrix, flowname, _matrices);
 		bool incompleteFlow = res.second;
 		if(!incompleteFlow)
 			flow = res.first;
@@ -67,7 +68,7 @@ namespace parser {
 		// get invariant
 		std::string invname = _state.mInvariant.mName;
 		bool invariant = (!_state.mInvariant.mMatrix.empty() || invname != "");
-		matrix invMatrix;
+		matrix_t<Number> invMatrix;
 		bool incompleteInvariant = false;
 		if(invariant)
 		{
@@ -78,9 +79,9 @@ namespace parser {
 		}
 
 		// Todo: do we always compare with lesseq 0?
-		hypro::vector_t<double> vec = hypro::vector_t<double>(invMatrix.rows());
+		hypro::vector_t<Number> vec = hypro::vector_t<Number>(invMatrix.rows());
 		for(unsigned i = 0; i<invMatrix.rows(); ++i)
-			vec(i) = double(0);
+			vec(i) = Number(0);
 
 		incomplete = incompleteFlow || incompleteInvariant;
 		if(!incomplete)
@@ -100,12 +101,13 @@ namespace parser {
 		
 	}
 	
+	template<typename Number>
 	static bool createTransition(
-		const hypro::parser::Transition& _transition, 
-		hypro::Transition<double>* _tran,
-		const std::map<unsigned, Location<double>* >& _locations,
-		std::map<std::string, matrix>& _matrices,
-		std::queue<Transition>& _incompletes
+		const hypro::parser::Transition<Number>& _transition, 
+		hypro::Transition<Number>* _tran,
+		const std::map<unsigned, Location<Number>* >& _locations,
+		std::map<std::string, matrix_t<Number>>& _matrices,
+		std::queue<Transition<Number>>& _incompletes
 	)
 	{
 		bool incomplete = false;
@@ -115,11 +117,11 @@ namespace parser {
 		if(sourceLocIt == _locations.end() || targetLocIt == _locations.end())
 			incomplete = true;
 		
-		std::pair<matrix,bool> res;
+		std::pair<matrix_t<Number>,bool> res;
 		
 		bool incompleteGuard = false;
 		bool hasGuard = (!_transition.mGuard.mMatrix.empty() || _transition.mGuard.mName != "");
-		matrix guard;
+		matrix_t<Number> guard;
 		if(hasGuard)
 		{
 			res = insertMatrix(_transition.mGuard.mMatrix, _transition.mGuard.mName, _matrices);
@@ -130,7 +132,7 @@ namespace parser {
 		
 		bool incompleteReset = false;
 		bool hasReset = (!_transition.mReset.mMatrix.empty() || _transition.mReset.mName != "");
-		matrix reset;
+		matrix_t<Number> reset;
 		if(hasReset)
 		{
 			res = insertMatrix(_transition.mReset.mMatrix, _transition.mReset.mName, _matrices);
@@ -140,12 +142,12 @@ namespace parser {
 		}
 		
 		// Todo: do we always compare with lesseq 0?
-		hypro::vector_t<double> vecGuard = hypro::vector_t<double>(guard.rows());
+		hypro::vector_t<Number> vecGuard = hypro::vector_t<Number>(guard.rows());
 		for(unsigned i = 0; i<guard.rows(); ++i)
-			vecGuard(i) = double(0);
-		hypro::vector_t<double> vecReset = hypro::vector_t<double>(reset.rows());
+			vecGuard(i) = Number(0);
+		hypro::vector_t<Number> vecReset = hypro::vector_t<Number>(reset.rows());
 		for(unsigned i = 0; i<reset.rows(); ++i)
-			vecReset(i) = double(0);
+			vecReset(i) = Number(0);
 		
 		incomplete = incomplete || incompleteGuard || incompleteReset;
 		
@@ -154,12 +156,12 @@ namespace parser {
 			_tran->setStartLoc(sourceLocIt->second);
 			_tran->setTargetLoc(targetLocIt->second);
 			
-			struct hypro::Transition<double>::guard tmpGuard;
+			struct hypro::Transition<Number>::guard tmpGuard;
 			tmpGuard.mat = guard;
 			tmpGuard.op = hypro::operator_e::LEQ;
 			tmpGuard.vec = vecGuard;
 			
-			struct hypro::Transition<double>::assignment tmpReset;
+			struct hypro::Transition<Number>::assignment tmpReset;
 			tmpReset.transformMat = reset;
 			tmpReset.translationVec = vecReset;
 			

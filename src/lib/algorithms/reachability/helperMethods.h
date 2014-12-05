@@ -302,9 +302,9 @@ namespace hypro{
 	/*
 	 *  returns the dimensionality (number of rows) of the matrix from the first initial location
 	 */
-	double getDimensionality(HybridAutomaton<double>* model)
+	double getDimensionality(HybridAutomaton<double, valuation>* model)
 	{
-           return ((*((*model).initialLocations().begin()))->activityMat()).rows();
+           return model->dimension();
     }
 
     /*

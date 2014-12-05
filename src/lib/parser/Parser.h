@@ -42,7 +42,12 @@ typedef spirit::istream_iterator BaseIteratorType;
 typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 typedef PositionIteratorType Iterator;
 typedef qi::space_type Skipper;
-typedef std::vector<boost::variant<Initial, State, Transition> > Automaton;
+
+template<typename Number>
+using Automaton = std::vector<boost::variant<Initial, State<Number>, Transition<Number> > >;
+
+template<typename Number>
+using matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
 
 
 template<typename Iterator>
@@ -63,11 +68,11 @@ struct InitialParser : public qi::grammar<Iterator, Initial(), Skipper>
     qi::rule<Iterator, Initial(), Skipper> start;
 };
 
-template<typename Iterator>
-struct StateParser : public qi::grammar<Iterator, State(), Skipper>
+template<typename Iterator, typename Number>
+struct StateParser : public qi::grammar<Iterator, State<Number>(), Skipper>
 {
-    FlowParser<Iterator> mFlowParser;
-	InvariantParser<Iterator> mInvariantParser;
+    FlowParser<Iterator, Number> mFlowParser;
+	InvariantParser<Iterator, Number> mInvariantParser;
 	NameParser<Iterator> mNameParser;
     
     StateParser() : StateParser::base_type(start)
@@ -82,15 +87,15 @@ struct StateParser : public qi::grammar<Iterator, State(), Skipper>
 			   qi::lit(")");
     }
     
-    qi::rule<Iterator, State(), Skipper> start;
+    qi::rule<Iterator, State<Number>(), Skipper> start;
 };
 
-template<typename Iterator>
-struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
+template<typename Iterator, typename Number>
+struct TransitionParser : public qi::grammar<Iterator, Transition<Number>(), Skipper>
 {
 	NameParser<Iterator> mNameParser;
-    GuardParser<Iterator> mGuardParser;
-	ResetParser<Iterator> mResetParser;
+    GuardParser<Iterator, Number> mGuardParser;
+	ResetParser<Iterator, Number> mResetParser;
     
     TransitionParser(): TransitionParser::base_type(start)
     {
@@ -106,20 +111,20 @@ struct TransitionParser : public qi::grammar<Iterator, Transition(), Skipper>
 				qi::lit(")");
     }
     
-    qi::rule<Iterator, Transition(), Skipper> start;
+    qi::rule<Iterator, Transition<Number>(), Skipper> start;
 };
 
 
-// TODO: Template this!
+template<typename Number, typename Representation>
 struct MainParser : public qi::grammar<Iterator, Skipper>
 {
 	qi::rule<Iterator, Skipper> main;
-    StateParser<Iterator> mStateParser;
-    TransitionParser<Iterator> mTransitionParser;
+    StateParser<Iterator, Number> mStateParser;
+    TransitionParser<Iterator, Number> mTransitionParser;
 	InitialParser<Iterator> mInitialParser;
 	
-	std::vector<State> mStates;
-	std::vector<Transition> mTransitions;
+	std::vector<State<Number>> mStates;
+	std::vector<Transition<Number>> mTransitions;
 	Initial mInitial;
     
     MainParser() : MainParser::base_type(main)
@@ -129,7 +134,7 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
         
         //main = -(mInitialParser) < *(mStateParser | mTransitionParser);
         //main = mInitialParser[mInitial(spirit::_val)] > *(mStateParser[ boost::phoenix::push_back(mStates, parser::State(spirit::_1)) ] | mTransitionParser[ boost::phoenix::push_back(mTransitions, spirit::_1) ]);
-        main = mInitialParser[ phoenix::bind(&hypro::parser::MainParser::setInitial, phoenix::ref(*this), qi::_1)] > *(mStateParser[ phoenix::bind(&hypro::parser::MainParser::push_back_State, phoenix::ref(*this), qi::_1) ] | mTransitionParser[ phoenix::bind(&hypro::parser::MainParser::push_back_Transition, phoenix::ref(*this), qi::_1) ]);
+        main = mInitialParser[ phoenix::bind(&hypro::parser::MainParser<Number,Representation>::setInitial, phoenix::ref(*this), qi::_1)] > *(mStateParser[ phoenix::bind(&hypro::parser::MainParser<Number,Representation>::push_back_State, phoenix::ref(*this), qi::_1) ] | mTransitionParser[ phoenix::bind(&hypro::parser::MainParser<Number,Representation>::push_back_Transition, phoenix::ref(*this), qi::_1) ]);
        
 		
 		qi::on_error<qi::fail>
@@ -145,12 +150,12 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
         );
     }    
 	
-	void push_back_State(const State& _in)
+	void push_back_State(const State<Number>& _in)
 	{
 		mStates.push_back(_in);
 	}
 	
-	void push_back_Transition(const Transition& _in)
+	void push_back_Transition(const Transition<Number>& _in)
 	{
 		mTransitions.push_back(_in);
 	}
@@ -160,33 +165,35 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
 		mInitial = _in;
 	}
     
-    HybridAutomaton<double> parseInput(const std::string& pathToInputFile);
-    bool parse(std::istream& in, const std::string& filename, HybridAutomaton<double>& _result);
+    HybridAutomaton<Number,Representation> parseInput(const std::string& pathToInputFile);
+    bool parse(std::istream& in, const std::string& filename, HybridAutomaton<Number,Representation>& _result);
 	
-	HybridAutomaton<double> createAutomaton();
+	HybridAutomaton<Number,Representation> createAutomaton();
 };
 
 
+template<typename Number>
 class Automaton_visitor
     : public boost::static_visitor<>
 {
 public:
 
-    State& operator()(State& i) const
+    State<Number>& operator()(State<Number>& i) const
     {
         return i;
     }
 
-    Transition& operator()(Transition& i) const
+    Transition<Number>& operator()(Transition<Number>& i) const
     {
         return i;
     }
 };
 
-std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
+template<typename Number>
+std::ostream& operator<<(std::ostream& lhs, const Automaton<Number>& rhs)
 {
-    std::vector<const State*> states;
-    std::vector<const Transition*> transitions;
+    std::vector<const State<Number>*> states;
+    std::vector<const Transition<Number>*> transitions;
     std::cout << "Size: " << rhs.size() << std::endl;
     for(auto& item : rhs)
     {
@@ -213,6 +220,7 @@ std::ostream& operator<<(std::ostream& lhs, const Automaton& rhs)
     return lhs;
 }
 
+}
+}
 
-}
-}
+#include "Parser.tpp"

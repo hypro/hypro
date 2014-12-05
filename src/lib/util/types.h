@@ -13,27 +13,29 @@
 
 namespace hypro{
 
-static matrix createMatrix(const std::vector<std::vector<double> >& _in)
+template<typename Number>
+static hypro::matrix_t<Number> createMatrix(const std::vector<std::vector<Number> >& _in)
 {
 	assert(!_in.empty());
-	matrix result(_in.size(), (*_in.begin()).size());
+	hypro::matrix_t<Number> result(_in.size(), (*_in.begin()).size());
 	for(unsigned lineId = 0; lineId != _in.size(); ++lineId)
 	{
 		for(unsigned rowId = 0; rowId != _in[lineId].size(); ++rowId)
 		{
-			result(lineId, rowId) = number(_in[lineId][rowId]);
+			result(lineId, rowId) = Number(_in[lineId][rowId]);
 		}
 	}
 	return result;
 }
 
-static vector createVector(const std::vector<double>& _in)
+template<typename Number>
+static hypro::vector_t<Number> createVector(const std::vector<Number>& _in)
 {
 	assert(!_in.empty());
-	vector result(_in.size());
+	hypro::vector_t<Number> result(_in.size());
 	for(unsigned rowId = 0; rowId != _in.size(); ++rowId)
 	{
-		result(rowId) = number(_in[rowId]);
+		result(rowId) = Number(_in[rowId]);
 	}
 	return result;
 }

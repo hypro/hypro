@@ -56,7 +56,7 @@ HybridAutomaton<double>* createBB()
 // provide method to free memory?
 */
 
-HybridAutomaton<double>* createBB()
+HybridAutomaton<double, valuation>* createBB()
 {
     //Variable Objects
     carl::VariablePool& pool = carl::VariablePool::getInstance();
@@ -66,7 +66,7 @@ HybridAutomaton<double>* createBB()
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
     Location<double>* loc1 = new Location<double>();
     Transition<double>* trans = new Transition<double>();
-    HybridAutomaton<double>* hybrid = new HybridAutomaton<double>();
+    HybridAutomaton<double, valuation>* hybrid = new HybridAutomaton<double, valuation>();
 
     //Other Objects: Vectors, Matrices, Guards...
     //vector_t<double> invariantVec = vector_t<double>(2,1);

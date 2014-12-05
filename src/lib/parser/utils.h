@@ -43,31 +43,34 @@ namespace parser
     };
 	
 	
-    
+    template<typename Number>
     struct Matrix
     {
         std::string mName;
-        std::vector<std::vector<double> > mMatrix;
+        std::vector<std::vector<Number> > mMatrix;
     };
     
+	template<typename Number>
     struct State
     {
         unsigned mName;
-        Matrix mFlow;
-        Matrix mInvariant;
+        Matrix<Number> mFlow;
+        Matrix<Number> mInvariant;
     };
     
+	template<typename Number>
     struct Transition
     {
         int mId;
 		unsigned mName;
 		unsigned mSource;
 		unsigned mTarget;
-        Matrix mGuard;
-		Matrix mReset;
+        Matrix<Number> mGuard;
+		Matrix<Number> mReset;
     };
     
-    std::ostream& operator<<(std::ostream& lhs, const Matrix& rhs )
+	template<typename Number>
+    std::ostream& operator<<(std::ostream& lhs, const Matrix<Number>& rhs )
     {
         lhs << rhs.mName << " [";
         for(auto& row : rhs.mMatrix)
@@ -91,7 +94,8 @@ namespace parser
 		return lhs;
 	}
     
-    std::ostream& operator<<(std::ostream& lhs, const State& rhs)
+	template<typename Number>
+    std::ostream& operator<<(std::ostream& lhs, const State<Number>& rhs)
     {
         lhs << "location(" << std::endl <<
 				"\t Name = " << rhs.mName << std::endl << 
@@ -101,7 +105,8 @@ namespace parser
         return lhs;
     }
     
-    std::ostream& operator<<(std::ostream& lhs, const Transition& rhs)
+	template<typename Number>
+    std::ostream& operator<<(std::ostream& lhs, const Transition<Number>& rhs)
     {
         lhs << "Transition( " << rhs.mId << std::endl << 
 				"\t Name = " << rhs.mName << std::endl <<
@@ -127,25 +132,28 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(hypro::parser::Number, mNumber)
     )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    hypro::parser::Matrix,
+BOOST_FUSION_ADAPT_TPL_STRUCT(
+	(Number),
+    (hypro::parser::Matrix) (Number),
     (std::string, mName)
-    (std::vector<std::vector<double> >, mMatrix)
+    (std::vector<std::vector<Number> >, mMatrix)
     )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    hypro::parser::State,
+BOOST_FUSION_ADAPT_TPL_STRUCT(
+	(Number),
+    (hypro::parser::State) (Number),
     (unsigned, mName)
-	(hypro::parser::Matrix, mFlow)
-    (hypro::parser::Matrix, mInvariant)
+	(hypro::parser::Matrix<Number>, mFlow)
+    (hypro::parser::Matrix<Number>, mInvariant)
     )
         
-BOOST_FUSION_ADAPT_STRUCT(
-    hypro::parser::Transition,
+BOOST_FUSION_ADAPT_TPL_STRUCT(
+	(Number),
+    (hypro::parser::Transition) (Number),
     (int, mId)
 	(unsigned, mName)
 	(unsigned, mSource)
 	(unsigned, mTarget)
-    (hypro::parser::Matrix, mGuard)
-	(hypro::parser::Matrix, mReset)
+    (hypro::parser::Matrix<Number>, mGuard)
+	(hypro::parser::Matrix<Number>, mReset)
     )

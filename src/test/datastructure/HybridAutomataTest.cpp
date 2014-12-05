@@ -111,7 +111,7 @@ protected:
     Location<double>* loc1 = new Location<double>();
     Location<double>* loc2 = new Location<double>();
     hypro::Transition<double>* trans = new hypro::Transition<double>();
-    HybridAutomaton<double> hybrid = HybridAutomaton<double>();
+    HybridAutomaton<double, valuation> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...
     vector_t<double> invariantVec = vector_t<double>(2,1);

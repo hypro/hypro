@@ -44,15 +44,15 @@ namespace parser{
 		qi::int_parser<unsigned long long,10,1,-1> rationalPart;
 	};
 	
-	template<typename Iterator>
-	struct MatrixParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
+	template<typename Iterator, typename Number>
+	struct MatrixParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
 	{
 		MatrixParser() : MatrixParser::base_type(start)
 		{
 			start =  qi::lit("matrix") > *(qi::char_-(qi::lit("[") | qi::lit(")") | qi::lit(","))) > -(qi::lit("[") > ((qi::double_ % qi::no_skip[qi::char_(' ',',')]) % ';') > qi::lit("]"));
 		}
 
-		qi::rule<Iterator,parser::Matrix(), Skipper> start;
+		qi::rule<Iterator,parser::Matrix<Number>(), Skipper> start;
 	};
 	
 	template<typename Iterator>
@@ -77,56 +77,56 @@ namespace parser{
 		qi::rule<Iterator, unsigned(), Skipper> start;
 	};
 	
-	template<typename Iterator>
-	struct FlowParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
+	template<typename Iterator, typename Number>
+	struct FlowParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
 	{
-		MatrixParser<Iterator> mMatrixParser;
+		MatrixParser<Iterator, Number> mMatrixParser;
 		
 		FlowParser() : FlowParser::base_type(start)
 		{
 			start =  qi::lexeme[(qi::lit("f") | qi::lit("F") ) > qi::lit("low")] > qi::lit("=") > mMatrixParser;
 		}
 
-		qi::rule<Iterator, parser::Matrix(), Skipper> start;
+		qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
 	};
 	
-	template<typename Iterator>
-	struct InvariantParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
+	template<typename Iterator, typename Number>
+	struct InvariantParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
 	{
-		MatrixParser<Iterator> mMatrixParser;
+		MatrixParser<Iterator, Number> mMatrixParser;
 		
 		InvariantParser() : InvariantParser::base_type(start)
 		{
 			start =  qi::lexeme[(qi::lit("i") | qi::lit("I") ) > qi::lit("nvariant")] > qi::lit("=") > mMatrixParser;
 		}
 
-		qi::rule<Iterator, parser::Matrix(), Skipper> start;
+		qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
 	};
 	
-	template<typename Iterator>
-	struct GuardParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
+	template<typename Iterator, typename Number>
+	struct GuardParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
 	{
-		MatrixParser<Iterator> mMatrixParser;
+		MatrixParser<Iterator, Number> mMatrixParser;
 		
 		GuardParser() : GuardParser::base_type(start)
 		{
 			start =  qi::lexeme[(qi::lit("g") | qi::lit("G") ) > qi::lit("uard")] > qi::lit("=") > mMatrixParser;
 		}
 
-		qi::rule<Iterator, parser::Matrix(), Skipper> start;
+		qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
 	};
 	
-	template<typename Iterator>
-	struct ResetParser : public qi::grammar<Iterator, parser::Matrix(), Skipper>
+	template<typename Iterator, typename Number>
+	struct ResetParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
 	{
-		MatrixParser<Iterator> mMatrixParser;
+		MatrixParser<Iterator, Number> mMatrixParser;
 		
 		ResetParser() : ResetParser::base_type(start)
 		{
 			start =  qi::lexeme[(qi::lit("r") | qi::lit("R") ) > qi::lit("eset")] > qi::lit("=") > mMatrixParser;
 		}
 
-		qi::rule<Iterator, parser::Matrix(), Skipper> start;
+		qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
 	};
 	
 }

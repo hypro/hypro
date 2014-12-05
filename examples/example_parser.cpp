@@ -8,6 +8,6 @@
 int main(int argc, char** argv) {
     std::string filename = "../examples/input/simpleTest";
     
-    hypro::parser::MainParser parser;
+    hypro::parser::MainParser<double,hypro::valuation> parser;
     parser.parseInput(filename);
 }

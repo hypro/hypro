@@ -8,7 +8,7 @@
 
 namespace hypro
 {
-
+	
 		/*
 		 * General purpose functionality
 		 */

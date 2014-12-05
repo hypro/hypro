@@ -14,7 +14,9 @@
 
 namespace hypro
 {
-    template<typename Number>
+	typedef hypro::Polytope<number_t> valuation;
+	
+    template<typename Number, typename Representation>
     class HybridAutomaton
     {
         private:
@@ -29,7 +31,7 @@ namespace hypro
     			locationSet init;
     			locationSet locs;
     			transitionSet trans;
-    			hypro::valuation_t<Number> valuation;
+    			Representation valuation;
     		};
 
         private:
@@ -44,7 +46,7 @@ namespace hypro
     		 */
     		HybridAutomaton(){}
     		HybridAutomaton(const HybridAutomaton& _hybrid);
-    		HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, hypro::valuation_t<Number> _initVal);
+    		HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, Representation _initVal);
 
     		virtual ~HybridAutomaton()
     		{}
@@ -55,22 +57,23 @@ namespace hypro
     		locationSet initialLocations();
     		locationSet locations();
     		transitionSet transitions();
-    		hypro::valuation_t<Number> valuation();
+    		Representation valuation();
+			unsigned dimension() const;
     		hybridAutomaton hybridAutomaton();
 
     		void setInitialLocations(locationSet _initLocs);
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
-    		void setValuation(hypro::valuation_t<Number> _val);
+    		void setValuation(Representation _val);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
 			
 			void addLocation(location* _location);
 			void addTransition(transition* _transition);
 			
 			// move operator
-			//inline HybridAutomaton<Number>& operator= (HybridAutomaton<Number>&& _rhs);
+			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>&& _rhs);
 			
-			friend std::ostream & operator<< (std::ostream& _ostr, const HybridAutomaton<Number>& _a) {
+			friend std::ostream & operator<< (std::ostream& _ostr, const HybridAutomaton<Number,Representation>& _a) {
 				_ostr << "initial: " << std::endl;
 				for(auto initialIT = _a.mHybridAutomaton.init.begin(); initialIT != _a.mHybridAutomaton.init.end(); ++initialIT)
 				{
