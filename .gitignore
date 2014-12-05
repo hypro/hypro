@@ -1,0 +1,976 @@
+
+# /
+/src/resources/nlopt-2.4.2/
+/build
+/*.Po
+/build
+/*.Plo
+
+# /cmake/
+/cmake/*.Po
+/cmake/.swp
+
+# /cmake/Modules/
+/cmake/Modules/*.Po
+
+# /doc/
+/doc/*.Po
+
+# /examples/
+/examples/*.Po
+/examples/libmx.dylib
+
+# /examples/input/
+/examples/input/*.Po
+
+# /references/
+/references/*.Po
+
+# /src/
+/src/*.Po
+
+# /src/lib/
+/src/lib/*.Po
+
+# /src/lib/algorithms/
+/src/lib/algorithms/*.Po
+
+# /src/lib/algorithms/reachability/
+/src/lib/algorithms/reachability/*.Po
+
+# /src/lib/datastructures/
+/src/lib/datastructures/*.Po
+
+# /src/lib/datastructures/hybridAutomata/
+/src/lib/datastructures/hybridAutomata/*.Po
+
+# /src/lib/parser/
+/src/lib/parser/*.Po
+
+# /src/lib/representations/
+/src/lib/representations/*.Po
+
+# /src/lib/representations/Box/
+/src/lib/representations/Box/*.Po
+
+# /src/lib/representations/Hyperplane/
+/src/lib/representations/Hyperplane/*.Po
+
+# /src/lib/representations/OrthogonalPolyhedron/
+/src/lib/representations/OrthogonalPolyhedron/*.Po
+
+# /src/lib/representations/Polytope/
+/src/lib/representations/Polytope/*.Po
+
+# /src/lib/representations/Polytopes/
+/src/lib/representations/Polytopes/*.Po
+
+# /src/lib/representations/Polytopes/HPolytope/
+/src/lib/representations/Polytopes/HPolytope/*.Po
+
+# /src/lib/representations/Polytopes/VPolytope/
+/src/lib/representations/Polytopes/VPolytope/*.Po
+
+# /src/lib/representations/VPolytope/
+/src/lib/representations/VPolytope/*.Po
+
+# /src/lib/representations/Zonotope/
+/src/lib/representations/Zonotope/*.Po
+
+# /src/lib/util/
+/src/lib/util/*.Po
+
+# /src/polytope_tmp/
+/src/polytope_tmp/*.Po
+
+# /src/resources/
+/src/resources/*.Po
+
+# /src/resources/eigen-3.2.0/
+/src/resources/eigen-3.2.0/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/
+/src/resources/eigen-3.2.0/Eigen/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/
+/src/resources/eigen-3.2.0/Eigen/src/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Cholesky/
+/src/resources/eigen-3.2.0/Eigen/src/Cholesky/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/CholmodSupport/
+/src/resources/eigen-3.2.0/Eigen/src/CholmodSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/
+/src/resources/eigen-3.2.0/Eigen/src/Core/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/arch/
+/src/resources/eigen-3.2.0/Eigen/src/Core/arch/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/arch/AltiVec/
+/src/resources/eigen-3.2.0/Eigen/src/Core/arch/AltiVec/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/arch/Default/
+/src/resources/eigen-3.2.0/Eigen/src/Core/arch/Default/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/arch/NEON/
+/src/resources/eigen-3.2.0/Eigen/src/Core/arch/NEON/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/arch/SSE/
+/src/resources/eigen-3.2.0/Eigen/src/Core/arch/SSE/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/products/
+/src/resources/eigen-3.2.0/Eigen/src/Core/products/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Core/util/
+/src/resources/eigen-3.2.0/Eigen/src/Core/util/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Eigen2Support/
+/src/resources/eigen-3.2.0/Eigen/src/Eigen2Support/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Eigen2Support/Geometry/
+/src/resources/eigen-3.2.0/Eigen/src/Eigen2Support/Geometry/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Eigenvalues/
+/src/resources/eigen-3.2.0/Eigen/src/Eigenvalues/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Geometry/
+/src/resources/eigen-3.2.0/Eigen/src/Geometry/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Geometry/arch/
+/src/resources/eigen-3.2.0/Eigen/src/Geometry/arch/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Householder/
+/src/resources/eigen-3.2.0/Eigen/src/Householder/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/IterativeLinearSolvers/
+/src/resources/eigen-3.2.0/Eigen/src/IterativeLinearSolvers/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/Jacobi/
+/src/resources/eigen-3.2.0/Eigen/src/Jacobi/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/LU/
+/src/resources/eigen-3.2.0/Eigen/src/LU/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/LU/arch/
+/src/resources/eigen-3.2.0/Eigen/src/LU/arch/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/MetisSupport/
+/src/resources/eigen-3.2.0/Eigen/src/MetisSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/OrderingMethods/
+/src/resources/eigen-3.2.0/Eigen/src/OrderingMethods/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/PaStiXSupport/
+/src/resources/eigen-3.2.0/Eigen/src/PaStiXSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/PardisoSupport/
+/src/resources/eigen-3.2.0/Eigen/src/PardisoSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/QR/
+/src/resources/eigen-3.2.0/Eigen/src/QR/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SPQRSupport/
+/src/resources/eigen-3.2.0/Eigen/src/SPQRSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SVD/
+/src/resources/eigen-3.2.0/Eigen/src/SVD/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SparseCholesky/
+/src/resources/eigen-3.2.0/Eigen/src/SparseCholesky/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SparseCore/
+/src/resources/eigen-3.2.0/Eigen/src/SparseCore/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SparseLU/
+/src/resources/eigen-3.2.0/Eigen/src/SparseLU/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SparseQR/
+/src/resources/eigen-3.2.0/Eigen/src/SparseQR/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/StlSupport/
+/src/resources/eigen-3.2.0/Eigen/src/StlSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/SuperLUSupport/
+/src/resources/eigen-3.2.0/Eigen/src/SuperLUSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/UmfPackSupport/
+/src/resources/eigen-3.2.0/Eigen/src/UmfPackSupport/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/misc/
+/src/resources/eigen-3.2.0/Eigen/src/misc/*.Po
+
+# /src/resources/eigen-3.2.0/Eigen/src/plugins/
+/src/resources/eigen-3.2.0/Eigen/src/plugins/*.Po
+
+# /src/resources/eigen-3.2.0/bench/
+/src/resources/eigen-3.2.0/bench/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/
+/src/resources/eigen-3.2.0/bench/btl/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/actions/
+/src/resources/eigen-3.2.0/bench/btl/actions/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/cmake/
+/src/resources/eigen-3.2.0/bench/btl/cmake/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/data/
+/src/resources/eigen-3.2.0/bench/btl/data/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/generic_bench/
+/src/resources/eigen-3.2.0/bench/btl/generic_bench/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/generic_bench/init/
+/src/resources/eigen-3.2.0/bench/btl/generic_bench/init/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/generic_bench/static/
+/src/resources/eigen-3.2.0/bench/btl/generic_bench/static/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/generic_bench/timers/
+/src/resources/eigen-3.2.0/bench/btl/generic_bench/timers/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/generic_bench/utils/
+/src/resources/eigen-3.2.0/bench/btl/generic_bench/utils/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/
+/src/resources/eigen-3.2.0/bench/btl/libs/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/BLAS/
+/src/resources/eigen-3.2.0/bench/btl/libs/BLAS/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/STL/
+/src/resources/eigen-3.2.0/bench/btl/libs/STL/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/blitz/
+/src/resources/eigen-3.2.0/bench/btl/libs/blitz/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/eigen2/
+/src/resources/eigen-3.2.0/bench/btl/libs/eigen2/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/eigen3/
+/src/resources/eigen-3.2.0/bench/btl/libs/eigen3/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/gmm/
+/src/resources/eigen-3.2.0/bench/btl/libs/gmm/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/mtl4/
+/src/resources/eigen-3.2.0/bench/btl/libs/mtl4/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/tvmet/
+/src/resources/eigen-3.2.0/bench/btl/libs/tvmet/*.Po
+
+# /src/resources/eigen-3.2.0/bench/btl/libs/ublas/
+/src/resources/eigen-3.2.0/bench/btl/libs/ublas/*.Po
+
+# /src/resources/eigen-3.2.0/bench/spbench/
+/src/resources/eigen-3.2.0/bench/spbench/*.Po
+
+# /src/resources/eigen-3.2.0/blas/
+/src/resources/eigen-3.2.0/blas/*.Po
+
+# /src/resources/eigen-3.2.0/blas/testing/
+/src/resources/eigen-3.2.0/blas/testing/*.Po
+
+# /src/resources/eigen-3.2.0/cmake/
+/src/resources/eigen-3.2.0/cmake/*.Po
+
+# /src/resources/eigen-3.2.0/debug/
+/src/resources/eigen-3.2.0/debug/*.Po
+
+# /src/resources/eigen-3.2.0/debug/gdb/
+/src/resources/eigen-3.2.0/debug/gdb/*.Po
+
+# /src/resources/eigen-3.2.0/debug/msvc/
+/src/resources/eigen-3.2.0/debug/msvc/*.Po
+
+# /src/resources/eigen-3.2.0/demos/
+/src/resources/eigen-3.2.0/demos/*.Po
+
+# /src/resources/eigen-3.2.0/demos/mandelbrot/
+/src/resources/eigen-3.2.0/demos/mandelbrot/*.Po
+
+# /src/resources/eigen-3.2.0/demos/mix_eigen_and_c/
+/src/resources/eigen-3.2.0/demos/mix_eigen_and_c/*.Po
+
+# /src/resources/eigen-3.2.0/demos/opengl/
+/src/resources/eigen-3.2.0/demos/opengl/*.Po
+
+# /src/resources/eigen-3.2.0/doc/
+/src/resources/eigen-3.2.0/doc/*.Po
+
+# /src/resources/eigen-3.2.0/doc/examples/
+/src/resources/eigen-3.2.0/doc/examples/*.Po
+
+# /src/resources/eigen-3.2.0/doc/snippets/
+/src/resources/eigen-3.2.0/doc/snippets/*.Po
+
+# /src/resources/eigen-3.2.0/doc/special_examples/
+/src/resources/eigen-3.2.0/doc/special_examples/*.Po
+
+# /src/resources/eigen-3.2.0/failtest/
+/src/resources/eigen-3.2.0/failtest/*.Po
+
+# /src/resources/eigen-3.2.0/lapack/
+/src/resources/eigen-3.2.0/lapack/*.Po
+
+# /src/resources/eigen-3.2.0/scripts/
+/src/resources/eigen-3.2.0/scripts/*.Po
+
+# /src/resources/eigen-3.2.0/test/
+/src/resources/eigen-3.2.0/test/*.Po
+
+# /src/resources/eigen-3.2.0/test/eigen2/
+/src/resources/eigen-3.2.0/test/eigen2/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/
+/src/resources/eigen-3.2.0/unsupported/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/
+/src/resources/eigen-3.2.0/unsupported/Eigen/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/AutoDiff/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/AutoDiff/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/BVH/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/BVH/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/Eigenvalues/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/Eigenvalues/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/FFT/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/FFT/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/IterativeSolvers/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/IterativeSolvers/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/KroneckerProduct/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/KroneckerProduct/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/LevenbergMarquardt/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/LevenbergMarquardt/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/MatrixFunctions/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/MatrixFunctions/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/MoreVectorization/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/MoreVectorization/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/NonLinearOptimization/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/NonLinearOptimization/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/NumericalDiff/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/NumericalDiff/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/Polynomials/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/Polynomials/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/SVD/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/SVD/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/Skyline/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/Skyline/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/SparseExtra/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/SparseExtra/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/Eigen/src/Splines/
+/src/resources/eigen-3.2.0/unsupported/Eigen/src/Splines/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/bench/
+/src/resources/eigen-3.2.0/unsupported/bench/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/doc/
+/src/resources/eigen-3.2.0/unsupported/doc/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/doc/examples/
+/src/resources/eigen-3.2.0/unsupported/doc/examples/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/doc/snippets/
+/src/resources/eigen-3.2.0/unsupported/doc/snippets/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/test/
+/src/resources/eigen-3.2.0/unsupported/test/*.Po
+
+# /src/resources/eigen-3.2.0/unsupported/test/mpreal/
+/src/resources/eigen-3.2.0/unsupported/test/mpreal/*.Po
+
+# /src/resources/glpk-4.54/
+/src/resources/glpk-4.54/*.Po
+
+# /src/resources/glpk-4.54/doc/
+/src/resources/glpk-4.54/doc/*.Po
+
+# /src/resources/glpk-4.54/doc/notes/
+/src/resources/glpk-4.54/doc/notes/*.Po
+
+# /src/resources/glpk-4.54/examples/
+/src/resources/glpk-4.54/examples/*.Po
+
+# /src/resources/glpk-4.54/examples/.deps/
+/src/resources/glpk-4.54/examples/.deps/*.Po
+
+# /src/resources/glpk-4.54/examples/cplex/
+/src/resources/glpk-4.54/examples/cplex/*.Po
+
+# /src/resources/glpk-4.54/examples/csv/
+/src/resources/glpk-4.54/examples/csv/*.Po
+
+# /src/resources/glpk-4.54/examples/dbf/
+/src/resources/glpk-4.54/examples/dbf/*.Po
+
+# /src/resources/glpk-4.54/examples/oldapi/
+/src/resources/glpk-4.54/examples/oldapi/*.Po
+
+# /src/resources/glpk-4.54/examples/pbn/
+/src/resources/glpk-4.54/examples/pbn/*.Po
+
+# /src/resources/glpk-4.54/examples/sql/
+/src/resources/glpk-4.54/examples/sql/*.Po
+
+# /src/resources/glpk-4.54/m4/
+/src/resources/glpk-4.54/m4/*.Po
+
+# /src/resources/glpk-4.54/src/
+/src/resources/glpk-4.54/src/*.Po
+
+# /src/resources/glpk-4.54/src/.deps/
+/src/resources/glpk-4.54/src/.deps/*.Po
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios09.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glphbm.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_info.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi10.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_preprocess.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios12.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-qmd.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-mc21a.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_1.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-fhvint.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi05.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpipm.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-colamd.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-inflate.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp05.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmps.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-wclique1.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmat.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-triang.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_2.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-round2n.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi15.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi12.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi09.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi07.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi19.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-time.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi16.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios10.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-zio.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-gzread.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_post_tree.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-gzlib.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi08.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios11.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-env.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-alloc.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-cfg1.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glptsp.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-fhv.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_postorder.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-scf.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-crc32.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-sva.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_dump.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpspm.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl03.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-jd.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-okalg.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios07.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-ffalg.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-avl.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-strspx.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnet04.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-stdout.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnet05.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi11.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-minisat.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpscl.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-error.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi04.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-bfx.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-str2num.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-btf.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi18.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl04.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-keller.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-cfg.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpini02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-fp2rat.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp04.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios04.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-rng1.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-relax4.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glprgr.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi06.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-trees.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-strtrim.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-btfint.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl05.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios05.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-gzwrite.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-gcd.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl06.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_aat.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi17.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-mc13d.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-str2int.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi03.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnet03.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-rng.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-stream.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_control.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-ifu.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-luf.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios06.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpspx01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpspx02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-bfd.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_order.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp06.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-proxy1.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpsql.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-zutil.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_valid.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi14.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpsdf.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios03.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpgmp.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-inftrees.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-uncompr.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpcpx.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-dlsup.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-dmp.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpini01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-bignum.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpmpl01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-compress.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi21.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpnpp03.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi20.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-wclique.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-scfint.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpssx02.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpssx01.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-deflate.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-inffast.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-proxy.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-gzclose.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpios08.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-lux.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-lufint.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpapi13.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-amd_defaults.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-sgf.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-tls.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-glpdmx.Plo
+/src/resources/glpk-4.54/src/.deps/libglpk_la-adler32.Plo
+
+# /src/resources/glpk-4.54/src/amd/
+/src/resources/glpk-4.54/src/amd/*.Po
+
+# /src/resources/glpk-4.54/src/bflib/
+/src/resources/glpk-4.54/src/bflib/*.Po
+
+# /src/resources/glpk-4.54/src/cglib/
+/src/resources/glpk-4.54/src/cglib/*.Po
+
+# /src/resources/glpk-4.54/src/colamd/
+/src/resources/glpk-4.54/src/colamd/*.Po
+
+# /src/resources/glpk-4.54/src/env/
+/src/resources/glpk-4.54/src/env/*.Po
+
+# /src/resources/glpk-4.54/src/minisat/
+/src/resources/glpk-4.54/src/minisat/*.Po
+
+# /src/resources/glpk-4.54/src/misc/
+/src/resources/glpk-4.54/src/misc/*.Po
+
+# /src/resources/glpk-4.54/src/proxy/
+/src/resources/glpk-4.54/src/proxy/*.Po
+
+# /src/resources/glpk-4.54/src/zlib/
+/src/resources/glpk-4.54/src/zlib/*.Po
+
+# /src/resources/glpk-4.54/w32/
+/src/resources/glpk-4.54/w32/*.Po
+
+# /src/resources/glpk-4.54/w64/
+/src/resources/glpk-4.54/w64/*.Po
+
+# /src/resources/gtest-1.6.0/
+/src/resources/gtest-1.6.0/*.Po
+
+# /src/resources/gtest-1.6.0/build-aux/
+/src/resources/gtest-1.6.0/build-aux/*.Po
+
+# /src/resources/gtest-1.6.0/cmake/
+/src/resources/gtest-1.6.0/cmake/*.Po
+
+# /src/resources/gtest-1.6.0/codegear/
+/src/resources/gtest-1.6.0/codegear/*.Po
+
+# /src/resources/gtest-1.6.0/fused-src/
+/src/resources/gtest-1.6.0/fused-src/*.Po
+
+# /src/resources/gtest-1.6.0/fused-src/gtest/
+/src/resources/gtest-1.6.0/fused-src/gtest/*.Po
+
+# /src/resources/gtest-1.6.0/include/
+/src/resources/gtest-1.6.0/include/*.Po
+
+# /src/resources/gtest-1.6.0/include/gtest/
+/src/resources/gtest-1.6.0/include/gtest/*.Po
+
+# /src/resources/gtest-1.6.0/include/gtest/internal/
+/src/resources/gtest-1.6.0/include/gtest/internal/*.Po
+
+# /src/resources/gtest-1.6.0/m4/
+/src/resources/gtest-1.6.0/m4/*.Po
+
+# /src/resources/gtest-1.6.0/make/
+/src/resources/gtest-1.6.0/make/*.Po
+
+# /src/resources/gtest-1.6.0/msvc/
+/src/resources/gtest-1.6.0/msvc/*.Po
+
+# /src/resources/gtest-1.6.0/samples/
+/src/resources/gtest-1.6.0/samples/*.Po
+
+# /src/resources/gtest-1.6.0/scripts/
+/src/resources/gtest-1.6.0/scripts/*.Po
+
+# /src/resources/gtest-1.6.0/scripts/test/
+/src/resources/gtest-1.6.0/scripts/test/*.Po
+
+# /src/resources/gtest-1.6.0/src/
+/src/resources/gtest-1.6.0/src/*.Po
+
+# /src/resources/gtest-1.6.0/test/
+/src/resources/gtest-1.6.0/test/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/
+/src/resources/gtest-1.6.0/xcode/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Config/
+/src/resources/gtest-1.6.0/xcode/Config/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Resources/
+/src/resources/gtest-1.6.0/xcode/Resources/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/
+/src/resources/gtest-1.6.0/xcode/Samples/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/
+/src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/
+/src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/
+/src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/stefan.xcuserdatad/
+/src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/stefan.xcuserdatad/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/stefan.xcuserdatad/xcschemes/
+/src/resources/gtest-1.6.0/xcode/Samples/FrameworkSample/WidgetFramework.xcodeproj/xcuserdata/stefan.xcuserdatad/xcschemes/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/Scripts/
+/src/resources/gtest-1.6.0/xcode/Scripts/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/
+/src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/
+/src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/stefan.xcuserdatad/
+/src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/stefan.xcuserdatad/*.Po
+
+# /src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/stefan.xcuserdatad/xcschemes/
+/src/resources/gtest-1.6.0/xcode/gtest.xcodeproj/xcuserdata/stefan.xcuserdatad/xcschemes/*.Po
+
+# /src/resources/log4cplus-1.1.1/
+/src/resources/log4cplus-1.1.1/*.Po
+
+# /src/resources/log4cplus-1.1.1/android/
+/src/resources/log4cplus-1.1.1/android/*.Po
+
+# /src/resources/log4cplus-1.1.1/android/scripts/
+/src/resources/log4cplus-1.1.1/android/scripts/*.Po
+
+# /src/resources/log4cplus-1.1.1/cygport/
+/src/resources/log4cplus-1.1.1/cygport/*.Po
+
+# /src/resources/log4cplus-1.1.1/docs/
+/src/resources/log4cplus-1.1.1/docs/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/
+/src/resources/log4cplus-1.1.1/include/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/
+/src/resources/log4cplus-1.1.1/include/log4cplus/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/boost/
+/src/resources/log4cplus-1.1.1/include/log4cplus/boost/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/config/
+/src/resources/log4cplus-1.1.1/include/log4cplus/config/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/helpers/
+/src/resources/log4cplus-1.1.1/include/log4cplus/helpers/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/internal/
+/src/resources/log4cplus-1.1.1/include/log4cplus/internal/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/spi/
+/src/resources/log4cplus-1.1.1/include/log4cplus/spi/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/thread/
+/src/resources/log4cplus-1.1.1/include/log4cplus/thread/*.Po
+
+# /src/resources/log4cplus-1.1.1/include/log4cplus/thread/impl/
+/src/resources/log4cplus-1.1.1/include/log4cplus/thread/impl/*.Po
+
+# /src/resources/log4cplus-1.1.1/loggingserver/
+/src/resources/log4cplus-1.1.1/loggingserver/*.Po
+
+# /src/resources/log4cplus-1.1.1/m4/
+/src/resources/log4cplus-1.1.1/m4/*.Po
+
+# /src/resources/log4cplus-1.1.1/msvc10/
+/src/resources/log4cplus-1.1.1/msvc10/*.Po
+
+# /src/resources/log4cplus-1.1.1/msvc10/tests/
+/src/resources/log4cplus-1.1.1/msvc10/tests/*.Po
+
+# /src/resources/log4cplus-1.1.1/qt4debugappender/
+/src/resources/log4cplus-1.1.1/qt4debugappender/*.Po
+
+# /src/resources/log4cplus-1.1.1/scripts/
+/src/resources/log4cplus-1.1.1/scripts/*.Po
+
+# /src/resources/log4cplus-1.1.1/src/
+/src/resources/log4cplus-1.1.1/src/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/
+/src/resources/log4cplus-1.1.1/tests/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/appender_test/
+/src/resources/log4cplus-1.1.1/tests/appender_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/configandwatch_test/
+/src/resources/log4cplus-1.1.1/tests/configandwatch_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/customloglevel_test/
+/src/resources/log4cplus-1.1.1/tests/customloglevel_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/fileappender_test/
+/src/resources/log4cplus-1.1.1/tests/fileappender_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/filter_test/
+/src/resources/log4cplus-1.1.1/tests/filter_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/hierarchy_test/
+/src/resources/log4cplus-1.1.1/tests/hierarchy_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/loglog_test/
+/src/resources/log4cplus-1.1.1/tests/loglog_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/ndc_test/
+/src/resources/log4cplus-1.1.1/tests/ndc_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/ostream_test/
+/src/resources/log4cplus-1.1.1/tests/ostream_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/patternlayout_test/
+/src/resources/log4cplus-1.1.1/tests/patternlayout_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/performance_test/
+/src/resources/log4cplus-1.1.1/tests/performance_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/priority_test/
+/src/resources/log4cplus-1.1.1/tests/priority_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/propertyconfig_test/
+/src/resources/log4cplus-1.1.1/tests/propertyconfig_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/socket_test/
+/src/resources/log4cplus-1.1.1/tests/socket_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/thread_test/
+/src/resources/log4cplus-1.1.1/tests/thread_test/*.Po
+
+# /src/resources/log4cplus-1.1.1/tests/timeformat_test/
+/src/resources/log4cplus-1.1.1/tests/timeformat_test/*.Po
+
+# /src/resources/nlopt-2.4.2/
+/src/resources/nlopt-2.4.2/*.Po
+
+# /src/resources/nlopt-2.4.2/api/
+/src/resources/nlopt-2.4.2/api/*.Po
+
+# /src/resources/nlopt-2.4.2/api/.deps/
+/src/resources/nlopt-2.4.2/api/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/auglag/
+/src/resources/nlopt-2.4.2/auglag/*.Po
+
+# /src/resources/nlopt-2.4.2/auglag/.deps/
+/src/resources/nlopt-2.4.2/auglag/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/bobyqa/
+/src/resources/nlopt-2.4.2/bobyqa/*.Po
+
+# /src/resources/nlopt-2.4.2/bobyqa/.deps/
+/src/resources/nlopt-2.4.2/bobyqa/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/cdirect/
+/src/resources/nlopt-2.4.2/cdirect/*.Po
+
+# /src/resources/nlopt-2.4.2/cdirect/.deps/
+/src/resources/nlopt-2.4.2/cdirect/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/cobyla/
+/src/resources/nlopt-2.4.2/cobyla/*.Po
+
+# /src/resources/nlopt-2.4.2/cobyla/.deps/
+/src/resources/nlopt-2.4.2/cobyla/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/crs/
+/src/resources/nlopt-2.4.2/crs/*.Po
+
+# /src/resources/nlopt-2.4.2/crs/.deps/
+/src/resources/nlopt-2.4.2/crs/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/direct/
+/src/resources/nlopt-2.4.2/direct/*.Po
+
+# /src/resources/nlopt-2.4.2/direct/.deps/
+/src/resources/nlopt-2.4.2/direct/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/esch/
+/src/resources/nlopt-2.4.2/esch/*.Po
+
+# /src/resources/nlopt-2.4.2/esch/.deps/
+/src/resources/nlopt-2.4.2/esch/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/isres/
+/src/resources/nlopt-2.4.2/isres/*.Po
+
+# /src/resources/nlopt-2.4.2/isres/.deps/
+/src/resources/nlopt-2.4.2/isres/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/luksan/
+/src/resources/nlopt-2.4.2/luksan/*.Po
+
+# /src/resources/nlopt-2.4.2/luksan/.deps/
+/src/resources/nlopt-2.4.2/luksan/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/m4/
+/src/resources/nlopt-2.4.2/m4/*.Po
+
+# /src/resources/nlopt-2.4.2/mlsl/
+/src/resources/nlopt-2.4.2/mlsl/*.Po
+
+# /src/resources/nlopt-2.4.2/mlsl/.deps/
+/src/resources/nlopt-2.4.2/mlsl/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/mma/
+/src/resources/nlopt-2.4.2/mma/*.Po
+
+# /src/resources/nlopt-2.4.2/mma/.deps/
+/src/resources/nlopt-2.4.2/mma/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/neldermead/
+/src/resources/nlopt-2.4.2/neldermead/*.Po
+
+# /src/resources/nlopt-2.4.2/neldermead/.deps/
+/src/resources/nlopt-2.4.2/neldermead/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/newuoa/
+/src/resources/nlopt-2.4.2/newuoa/*.Po
+
+# /src/resources/nlopt-2.4.2/newuoa/.deps/
+/src/resources/nlopt-2.4.2/newuoa/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/octave/
+/src/resources/nlopt-2.4.2/octave/*.Po
+
+# /src/resources/nlopt-2.4.2/octave/.deps/
+/src/resources/nlopt-2.4.2/octave/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/praxis/
+/src/resources/nlopt-2.4.2/praxis/*.Po
+
+# /src/resources/nlopt-2.4.2/praxis/.deps/
+/src/resources/nlopt-2.4.2/praxis/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/slsqp/
+/src/resources/nlopt-2.4.2/slsqp/*.Po
+
+# /src/resources/nlopt-2.4.2/slsqp/.deps/
+/src/resources/nlopt-2.4.2/slsqp/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/stogo/
+/src/resources/nlopt-2.4.2/stogo/*.Po
+
+# /src/resources/nlopt-2.4.2/stogo/.deps/
+/src/resources/nlopt-2.4.2/stogo/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/swig/
+/src/resources/nlopt-2.4.2/swig/*.Po
+
+# /src/resources/nlopt-2.4.2/swig/.deps/
+/src/resources/nlopt-2.4.2/swig/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/test/
+/src/resources/nlopt-2.4.2/test/*.Po
+
+# /src/resources/nlopt-2.4.2/test/.deps/
+/src/resources/nlopt-2.4.2/test/.deps/*.Po
+
+# /src/resources/nlopt-2.4.2/util/
+/src/resources/nlopt-2.4.2/util/*.Po
+
+# /src/resources/nlopt-2.4.2/util/.deps/
+/src/resources/nlopt-2.4.2/util/.deps/*.Po
+
+# /src/test/
+/src/test/*.Po
+
+# /src/test/algorithms/
+/src/test/algorithms/*.Po
+
+# /src/test/algorithms/TestModels/
+/src/test/algorithms/TestModels/*.Po
+
+# /src/test/datastructure/
+/src/test/datastructure/*.Po
+
+# /src/test/representations/
+/src/test/representations/*.Po
+
+# /src/tmlib_tmp/
+/src/tmlib_tmp/*.Po
