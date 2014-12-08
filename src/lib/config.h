@@ -48,6 +48,9 @@ using vector_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1>;
 
 template<typename Number>
 using matrix_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
+
+template<typename Number>
+using scalar_t = carl::FLOAT_T<Number>;
 }
 /**
  * author: ckugler

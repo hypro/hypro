@@ -16,11 +16,14 @@
 #include <sstream>
 #include <iostream>
 #include "../../src/lib/representations/Zonotope/Zonotope.h"
+#include "../../src/lib/algorithms/reachability/util.h"
 
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> zonotope2Matrix(const Zonotope<Number>& z) {
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> center = z.center();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generator_matrix = z.generators();
+    hypro::vector_t<Number> zcenter = z.center();
+    hypro::matrix_t<Number> zgenerators = z.generators();
+    Eigen::Matrix<Number, Eigen::Dynamic, 1> center = hypro::convertVecToDouble(zcenter);
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generator_matrix = hypro::convertMatToDouble(zgenerators);
     Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> res;
     res.resize(center.rows(), generator_matrix.cols()+1);
     res << center, generator_matrix;

@@ -16,7 +16,7 @@ using namespace Parma_Polyhedra_Library;
  *****************************************************************************/
 
 template <typename Number> 
-bool comparePoint(Eigen::Matrix<Number, 2, 1>& p1, Eigen::Matrix<Number, 2, 1>& p2) {
+bool comparePoint(Eigen::Matrix<hypro::scalar_t<Number>, 2, 1>& p1, Eigen::Matrix<hypro::scalar_t<Number>, 2, 1>& p2) {
     if (p1(0)!=p2(0))
         return (p1(0) < p2(0));
     else 
@@ -25,7 +25,7 @@ bool comparePoint(Eigen::Matrix<Number, 2, 1>& p1, Eigen::Matrix<Number, 2, 1>& 
 
 template <typename Number>
 void removeGenerator(unsigned int colToRemove, 
-                    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& matrix) 
+                    hypro::matrix_t<Number>& matrix) 
 {
     unsigned int numRows = matrix.rows();
     unsigned int numCols = matrix.cols()-1;
@@ -41,9 +41,9 @@ void removeGenerator(unsigned int colToRemove,
 }
 
 template <typename Number>
-void removeEmptyGenerators(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generatorMatrix)  {
+void removeEmptyGenerators(hypro::matrix_t<Number>& generatorMatrix)  {
     unsigned dim = generatorMatrix.rows();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> zero_vector; 
+    hypro::vector_t<Number> zero_vector; 
     zero_vector.resize(dim,1);
     zero_vector.setZero();
     
@@ -60,9 +60,9 @@ void removeEmptyGenerators(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>
 }
 
 template <typename Number>
-Eigen::Matrix<Number, 2, 1> computeLineIntersection(const ZUtility::Line_t<Number>& l1, const ZUtility::Line_t<Number>& l2) {
-    Eigen::Matrix<Number,2,2> concatDirections;
-    Eigen::Matrix<Number,2,1> a, resPt;
+Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> computeLineIntersection(const ZUtility::Line_t<Number>& l1, const ZUtility::Line_t<Number>& l2) {
+    Eigen::Matrix<hypro::scalar_t<Number>,2,2> concatDirections;
+    Eigen::Matrix<hypro::scalar_t<Number>,2,1> a, resPt;
     
     concatDirections << l1.direction, -l2.direction;
     a = concatDirections.inverse()*(l2.point - l1.point);
@@ -94,8 +94,8 @@ Zonotope<Number>::Zonotope(unsigned int dimension) {
 }
 
 template <typename Number>
-Zonotope<Number>::Zonotope(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& center, 
-                            const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generators) {
+Zonotope<Number>::Zonotope(const hypro::vector_t<Number>& center, 
+                            const hypro::matrix_t<Number>& generators) {
     assert(center.rows()==generators.rows() && "Center and generators have to have same dimensionality.");
     mDimension = center.rows();
     mCenter = center;
@@ -117,8 +117,8 @@ Zonotope<Number>::Zonotope(const Zonotope<Number>& other, unsigned d1, unsigned 
             "d1 and d2 have to be in range of copied zonotope.");
     
     
-    Eigen::Matrix<Number, 2, 1> center;
-    Eigen::Matrix<Number, 2, Eigen::Dynamic> generators;
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> center;
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, Eigen::Dynamic> generators;
     center = {other.center()(d1), other.center()(d2)};
     
     generators.resize(Eigen::NoChange, other.numGenerators());
@@ -148,19 +148,19 @@ unsigned int Zonotope<Number>::dimension() const {
 }
 
 template <typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, 1> Zonotope<Number>::center() const  {
+hypro::vector_t<Number> Zonotope<Number>::center() const  {
     return mCenter;
 }
 
 template <typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Zonotope<Number>::generators() const {
+hypro::matrix_t<Number> Zonotope<Number>::generators() const {
     return mGenerators;
 }
 
 
 
 template <typename Number>
-void Zonotope<Number>::setCenter(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& center) {
+void Zonotope<Number>::setCenter(const hypro::vector_t<Number>& center) {
     if (mDimension==0) {
         mDimension = center.rows();
         mGenerators.resize(mDimension,1);
@@ -171,7 +171,7 @@ void Zonotope<Number>::setCenter(const Eigen::Matrix<Number, Eigen::Dynamic, 1>&
 }
 
 template <typename Number>
-void Zonotope<Number>::setGenerators(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& new_generators) {
+void Zonotope<Number>::setGenerators(const hypro::matrix_t<Number>& new_generators) {
     if (mDimension==0) {
         mDimension = new_generators.rows();
         mCenter.resize(mDimension,1);
@@ -182,7 +182,7 @@ void Zonotope<Number>::setGenerators(const Eigen::Matrix<Number, Eigen::Dynamic,
 }
 
 template <typename Number>
-bool Zonotope<Number>::addGenerators(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generators) {
+bool Zonotope<Number>::addGenerators(const hypro::matrix_t<Number>& generators) {
     if (mDimension==0) {
         mDimension = generators.rows();
     }
@@ -192,7 +192,7 @@ bool Zonotope<Number>::addGenerators(const Eigen::Matrix<Number, Eigen::Dynamic,
         setGenerators(generators);
     }
     else {
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> tmp = mGenerators;
+        hypro::matrix_t<Number> tmp = mGenerators;
         mGenerators.resize(tmp.rows(), generators.cols()+tmp.cols());
         mGenerators << tmp, generators;
     }
@@ -222,7 +222,7 @@ void Zonotope<Number>::removeGenerator(unsigned int colToRemove) {
 template <typename Number>
 void Zonotope<Number>::removeEmptyGenerators() {
 // TODO
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> zero_vector; 
+    hypro::vector_t<Number> zero_vector; 
     zero_vector.resize(mDimension,1);
     zero_vector.setZero();
     
@@ -279,7 +279,7 @@ bool Zonotope<Number>::minkowskiSum(Zonotope<Number>& result, const Zonotope<Num
     assert(mDimension==rhs.dimension() && "Zonotope on RHS must have same dimensionality as current.");
     
     result.setCenter(this->mCenter + rhs.mCenter);
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> tmp;
+    hypro::matrix_t<Number> tmp;
     tmp.resize(mDimension, rhs.numGenerators()+numGenerators());
     tmp << mGenerators, rhs.generators();
     result.setGenerators(tmp);
@@ -289,7 +289,7 @@ bool Zonotope<Number>::minkowskiSum(Zonotope<Number>& result, const Zonotope<Num
 }
 
 template <typename Number>
-bool Zonotope<Number>::linearTransformation(Zonotope<Number>& result, const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A) {
+bool Zonotope<Number>::linearTransformation(Zonotope<Number>& result, const hypro::matrix_t<Number>& A) {
     assert(A.cols()==mCenter.rows() && "Matrix's dimensionality is different from zonotope's center's dimensionality.");
     assert(A.cols()==mGenerators.rows() && "Matrix's dimensionality is different from zonotope's generators' dimensionality.");
     
@@ -301,18 +301,18 @@ bool Zonotope<Number>::linearTransformation(Zonotope<Number>& result, const Eige
 }
 
 template <typename Number>
-std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > Zonotope<Number>::computeZonotopeBoundary() {
+std::vector< hypro::vector_t<Number> > Zonotope<Number>::computeZonotopeBoundary() {
     assert(mDimension==2 && "Computing Zonotope boundaries only possible for Dim 2");
     
     this->removeEmptyGenerators();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generators = this->mGenerators;
+    hypro::matrix_t<Number> generators = this->mGenerators;
     
     unsigned i;
-    std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > sortArray, verticesArray;
+    std::vector< hypro::vector_t<Number> > sortArray, verticesArray;
     
     
     // Reflect generators if y-value is negative
-    Eigen::Matrix<Number, 1, Eigen::Dynamic> yValsRow = generators.row(1); 
+    Eigen::Matrix<hypro::scalar_t<Number>, 1, Eigen::Dynamic> yValsRow = generators.row(1); 
     
     for (i=0; i<yValsRow.cols(); i++) {
         if (yValsRow(i) < 0) {
@@ -330,7 +330,7 @@ std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > Zonotope<Number>::compute
     
     std::sort(sortArray.begin(), sortArray.end(), ZUtility::compareColumnVectors<Number>);
     
-    Eigen::Matrix<Number, Eigen::Dynamic,1> pm = mCenter - generators.rowwise().sum();
+    hypro::vector_t<Number> pm = mCenter - generators.rowwise().sum();
     
     verticesArray.push_back(pm);
     
@@ -346,11 +346,11 @@ std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > Zonotope<Number>::compute
 }
 
 template <typename Number>
-Number intersect2d(const Zonotope<Number>& input, const Hyperplane<Number>& hp, int minOrMax) {
+hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperplane<Number>& hp, int minOrMax) {
     assert(input.dimension() == hp.dimension() && input.dimension() == 2 && "zonotope dimension must be of same dimension (only dim 2 accepted) as hyperplane");
     unsigned numGenerators = input.numGenerators();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> g1, g2, generators = input.generators();
-    Eigen::Matrix<Number, 2, 1> s, s1, pmNext, pm = input.center();
+    hypro::matrix_t<Number> g1, g2, generators = input.generators();
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> s, s1, pmNext, pm = input.center();
     
     for (unsigned i=0; i<numGenerators; i++) {
         if ((generators(1,i) > 0 || (generators(1,i) == 0 && generators(0,i) > 0)) && minOrMax == 1) 
@@ -386,11 +386,12 @@ Number intersect2d(const Zonotope<Number>& input, const Hyperplane<Number>& hp, 
     while (generators.cols() > 1) {
         
         // collecting indices to delete
+        // TODO: check if atan is available for FLOAT_T types
         for (unsigned i=0; i<generators.cols(); i++) {
-            Number angle = atan(generators(1,i)/generators(0,i));
-            if (angle - atan(s(1)/s(0)) <= 0) 
+            hypro::scalar_t<Number> angle = std::atan((Number) generators(1,i)/(Number) generators(0,i));
+            if (angle - std::atan((Number) s(1)/(Number) s(0)) <= 0) 
                 idx_a1.push_back(i);
-            else if (angle - atan(s(1)/s(0)) >= 0) 
+            else if (angle - std::atan((Number) s(1)/ (Number) s(0)) >= 0) 
                 idx_a2.push_back(i);
         }
         
@@ -423,7 +424,7 @@ Number intersect2d(const Zonotope<Number>& input, const Hyperplane<Number>& hp, 
         }
     }
     pmNext = pm + s;
-    Number m = pm(1) + (hp.scalar()-pm(0)) * (pmNext(1)-pm(1))/(pmNext(0)-pm(0));
+    hypro::scalar_t<Number> m = pm(1) + (hp.scalar()-pm(0)) * (pmNext(1)-pm(1))/(pmNext(0)-pm(0));
     return m;
     
 }
@@ -435,10 +436,10 @@ void intersectZonogoneHyperplaneDSearch(Zonotope<Number>& inputZonotope,
 {
     assert(inputZonotope.dimension() == hp.dimension() && inputZonotope.dimension() == 2 && 
             "zonotope dimension must be of same dimension (only dim 2 accepted) as hyperplane");
-    Number p1 = intersect2d<Number>(inputZonotope, hp, 1);
-    Eigen::Matrix<Number, 2, 1> p1Vec = {0, p1};
-    Number p2 = intersect2d<Number>(inputZonotope, hp, 0);
-    Eigen::Matrix<Number, 2, 1> p2Vec = {0, p2};
+    hypro::scalar_t<Number> p1 = intersect2d<Number>(inputZonotope, hp, 1);
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p1Vec = {0, p1};
+    hypro::scalar_t<Number> p2 = intersect2d<Number>(inputZonotope, hp, 0);
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p2Vec = {0, p2};
     
     Zonotope<Number> res((p1Vec+p2Vec)/2, (p1Vec-p2Vec)/2);
     result = res;
@@ -448,34 +449,34 @@ template <typename Number>
 void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
                                              const Hyperplane<Number>& hp,
                                              Zonotope<Number>& result,
-                                             Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine) 
+                                             hypro::matrix_t<Number>& minMaxOfLine) 
 {
     assert(inputZonotope.dimension()==hp.dimension() && "Zonotope and Hyperplane have to be of similar dimensions");
-    std::vector< Eigen::Matrix<Number, Eigen::Dynamic ,1> > vertices = inputZonotope.computeZonotopeBoundary();
+    std::vector< hypro::vector_t<Number> > vertices = inputZonotope.computeZonotopeBoundary();
     vertices.pop_back();
     
     unsigned numPts = vertices.size();
-    Eigen::Matrix<Number, 2,2> xhp;
+    Eigen::Matrix<hypro::scalar_t<Number>, 2,2> xhp;
         
     // Compute hyperplane points xhp
     if (hp.vector()(1)==0) {
-        Eigen::Matrix<Number, 2, 1> minVecY, maxVecY;
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> minVecY, maxVecY;
         minVecY = *std::min_element(vertices.begin(), vertices.end(), ZUtility::compareYVal<Number>);
         maxVecY = *std::max_element(vertices.begin(), vertices.end(), ZUtility::compareYVal<Number>);
 
-        xhp.row(1) << (minVecY(1) - std::abs(maxVecY(1)-minVecY(1))/10), 
-                      (maxVecY(1) + std::abs(maxVecY(1)-minVecY(1))/10);
-        Eigen::Matrix<Number, 1, 2> eVec = {hp.scalar(), hp.scalar()};
+        xhp.row(1) << (minVecY(1) - carl::abs(maxVecY(1)-minVecY(1))/10), 
+                      (maxVecY(1) + carl::abs(maxVecY(1)-minVecY(1))/10);
+        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.scalar(), hp.scalar()};
         xhp.row(0) = (eVec - hp.vector()(1)*xhp.row(1))/hp.vector()(0);
     }
     else {
-        Eigen::Matrix<Number, 2, 1> minVecX, maxVecX;
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> minVecX, maxVecX;
         minVecX = *std::min_element(vertices.begin(), vertices.end(), ZUtility::compareXVal<Number>);
         maxVecX = *std::max_element(vertices.begin(), vertices.end(), ZUtility::compareXVal<Number>);
         
-        xhp.row(0) << (minVecX(0) - std::abs(maxVecX(0)-minVecX(0))/10), 
-                      (maxVecX(0) + std::abs(maxVecX(0)-minVecX(0))/10);
-        Eigen::Matrix<Number, 1, 2> eVec = {hp.scalar(), hp.scalar()};
+        xhp.row(0) << (minVecX(0) - carl::abs(maxVecX(0)-minVecX(0))/10), 
+                      (maxVecX(0) + carl::abs(maxVecX(0)-minVecX(0))/10);
+        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.scalar(), hp.scalar()};
         xhp.row(1) = (eVec - hp.vector()(0)*xhp.row(0))/hp.vector()(1);
     }
     // Real algorithm starts here
@@ -484,7 +485,7 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     
     // Naming variables: dzbme is used for sorting vertices nearest to the line
     //                   dzb is used to keep track of d'*zb values
-    std::valarray<Number> dzbme(vertices.size()), dzb(vertices.size());
+    std::valarray<hypro::scalar_t<Number> > dzbme(vertices.size()), dzb(vertices.size());
     unsigned minIdx = 0, i;
     for (i=0; i<vertices.size(); i++) {
         dzbme[i] = (hp.vector().transpose()*vertices[i] - hp.scalar());
@@ -494,7 +495,7 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     
     std::vector<int> ltZeroIdxArray, mtZeroIdxArray;
     for (i=0; i<dzbme.size(); i++) {
-        if (std::abs(dzbme[i]) < std::abs(dzbme[minIdx])) {
+        if (carl::abs(dzbme[i]) < carl::abs(dzbme[minIdx])) {
             minIdx = i;
         }
         if (dzbme[i] < 0) ltZeroIdxArray.push_back(i);
@@ -509,7 +510,7 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     
     // Essentially create a temporary val array to do cshift operation 
     // and copy back value into vertices std::vector
-    std::valarray< Eigen::Matrix<Number, Eigen::Dynamic ,1> > verticesValArray(vertices.data(), vertices.size());
+    std::valarray< hypro::vector_t<Number> > verticesValArray(vertices.data(), vertices.size());
     verticesValArray = verticesValArray.cshift(minIdx);
     vertices.assign(std::begin(verticesValArray), std::end(verticesValArray));
     
@@ -542,12 +543,12 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     
     ZUtility::Line_t<Number> ln(vertices[0], vertices[il1p2-1]-vertices[0]);
     // TODO: compute line intersection
-    Eigen::Matrix<Number, 2, 1> p1 = computeLineIntersection(ln, lnhp);
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p1 = computeLineIntersection(ln, lnhp);
     
     ln.point = vertices[il2p1-1];
     ln.direction = vertices[il2p2-1] - vertices[il2p1-1];
     // TODO: compute line intersection
-    Eigen::Matrix<Number, 2, 1> p2 = computeLineIntersection(ln, lnhp);
+    Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p2 = computeLineIntersection(ln, lnhp);
     
     Zonotope<Number> resZonotope((p1+p2)/2, (p1-p2)/2);
     
@@ -565,13 +566,13 @@ void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Numb
     
     assert(inputZonotope.dimension()==hp.dimension());
      // Determine intersect as Zonotope, according to Tabatabaeipour et al., 2013 
-    Number sgm = 0; // could be redundant
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> H = inputZonotope.generators();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> HHT = H*H.transpose();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> center = inputZonotope.center();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = (HHT*hp.vector())/(hp.vector().transpose()*HHT*hp.vector()+sgm*sgm);
+    hypro::scalar_t<Number> sgm = 0; // could be redundant
+    hypro::matrix_t<Number> H = inputZonotope.generators();
+    hypro::matrix_t<Number> HHT = H*H.transpose();
+    hypro::vector_t<Number> center = inputZonotope.center();
+    hypro::vector_t<Number> lambda = (HHT*hp.vector())/(hp.vector().transpose()*HHT*hp.vector()+sgm*sgm);
 
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> new_gen, identity;
+    hypro::matrix_t<Number> new_gen, identity;
     Zonotope<Number> zg(inputZonotope.dimension());
 
     zg.setCenter(center+lambda*(hp.scalar()-hp.vector().transpose()*center));  
@@ -590,13 +591,13 @@ void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Numb
 
 template<typename Number>
 void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
-                            Zonotope<Number>& resultZonotope, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine)
+                            Zonotope<Number>& resultZonotope, hypro::matrix_t<Number>& minMaxOfLine)
 {
     assert(hp.dimension()==inputZonotope.dimension() && "Intersect ND: input zonotope and input hyperplane must have same dimensionality");
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> dVec;
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel;
+    hypro::vector_t<Number> dVec;
+    hypro::matrix_t<Number> kernel;
     dVec = hp.vector();
-    Eigen::JacobiSVD<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > svd(dVec.transpose(), 
+    Eigen::JacobiSVD<hypro::matrix_t<Number> > svd(dVec.transpose(), 
                                                                                 Eigen::ComputeFullU | Eigen::ComputeFullV);
     // Using SVD to calculate nullspace (kernel)
     kernel = svd.matrixV().block(0,1,svd.matrixV().rows(), svd.matrixV().cols()-1);
@@ -605,8 +606,8 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
     nd = kernel.cols();
     dim = inputZonotope.dimension();
     
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> dpQg, resultGenerators;
-    Number dpQc;
+    hypro::matrix_t<Number> dpQg, resultGenerators;
+    hypro::scalar_t<Number> dpQc;
     minMaxOfLine.resize(2,nd);
     resultGenerators.resize(dim, nd);
     dpQc = dVec.dot(inputZonotope.center());
@@ -614,8 +615,8 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
 
     for (unsigned i=0; i<nd; i++) {
         // construct 2 dimensional Zonotope
-        Eigen::Matrix<Number, 2, 1> projCenter;
-        Eigen::Matrix<Number, 2, Eigen::Dynamic> projGenerators;
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> projCenter;
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, Eigen::Dynamic> projGenerators;
         
         projCenter << dpQc, kernel.col(i).dot(inputZonotope.center());
         projGenerators.resize(2,dpQg.cols());
@@ -624,13 +625,13 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
         Zonotope<Number> projZonotope(projCenter, projGenerators), tempResZonotope;
         
         // Upon projection, the hyperplane now has a d vector of [1;0] but retains its e scalar
-        Eigen::Matrix<Number, 2, 1> lgDVector(1,0);
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> lgDVector(1,0);
         Hyperplane<Number> lg(lgDVector, hp.scalar());
                 
-//        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> dummyMinMax;
+//        hypro::matrix_t<Number> dummyMinMax;
         intersectZonogoneHyperplaneDSearch(projZonotope, lg, tempResZonotope);
         
-        Eigen::Matrix<Number, 2, 1> p1, p2;
+        Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p1, p2;
         p1 = tempResZonotope.center() + tempResZonotope.generators();
         p2 = tempResZonotope.center() - tempResZonotope.generators();
         
@@ -656,21 +657,21 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
                                  const Hyperplane<Number>& hp,
                                  int method) 
 {
-    Eigen::Matrix<Number , Eigen::Dynamic, Eigen::Dynamic> EMPTY_MATRIX(0,0);
+    hypro::matrix_t<Number> EMPTY_MATRIX(0,0);
     return this->intersect(result, hp, EMPTY_MATRIX, method);
 }
 
 template <typename Number>
 bool Zonotope<Number>::intersect(Zonotope<Number>& result, 
                                 const Hyperplane<Number>& hp, 
-                                Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                                hypro::matrix_t<Number>& minMaxOfLine,
                                 int method) 
 {
     assert(hp.dimension()==mDimension && "Zonotope's dimensionality must be same as Hyperplane's dimensionality.");
     
     // Determine if intersection is found, according to Girard, Guernic, 2008
-    Number emdc = hp.scalar()-hp.vector().transpose()*mCenter;
-    Number zs = (hp.vector().transpose()*mGenerators).array().abs().sum();
+    hypro::scalar_t<Number> emdc = hp.scalar()-hp.vector().transpose()*mCenter;
+    hypro::scalar_t<Number> zs = (hp.vector().transpose()*mGenerators).array().abs().sum();
     
     bool hasIntersect = (emdc > -zs && zs > emdc);
     if (hasIntersect) {
@@ -708,8 +709,8 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
 template<typename Number>
 bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& halfspace) {
     assert(halfspace.space_dimension() == this->mDimension);
-    Number e = halfspace.inhomogeneous_term().get_d();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> dVec;
+    hypro::scalar_t<Number> e = halfspace.inhomogeneous_term().get_d();
+    hypro::vector_t<Number> dVec;
     
     dVec.resize(halfspace.space_dimension(), Eigen::NoChange);
     
@@ -722,32 +723,33 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& hal
 
 template<typename Number>
 bool Zonotope<Number>::intersectWithHalfspace(Zonotope<Number>& result, 
-                                            const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, 
-                                            Number e_scalar) 
+                                            const hypro::vector_t<Number>& d_vec, 
+                                            hypro::scalar_t<Number> e_scalar) 
 {
-    Number zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
-    Number dc = d_vec.dot(this->mCenter);
-    Number qu = dc + zs,
+    hypro::scalar_t<Number> zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
+    hypro::scalar_t<Number> dc = d_vec.dot(this->mCenter);
+    hypro::scalar_t<Number> qu = dc + zs,
            qd = dc -zs;
-    
     if (qd <= e_scalar) {
         if (qu <= e_scalar) {
             result = *this;
         }
         else {
-            Number sigma = (e_scalar-qd)/2,
+            hypro::scalar_t<Number> sigma = (e_scalar-qd)/2,
                     d = (qd+e_scalar)/2;
-            Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> HHT = this->mGenerators*this->mGenerators.transpose();
-            Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
+            hypro::matrix_t<Number> HHT = this->mGenerators*this->mGenerators.transpose();
+            hypro::vector_t<Number> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
             result.setCenter(this->mCenter + lambda*(d - dc));
-            Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> identity;
+            hypro::matrix_t<Number> identity;
             identity.resize(mDimension, mDimension);
             identity.setIdentity();
             result.setGenerators((identity - lambda * d_vec.transpose())*this->mGenerators);
             result.addGenerators(sigma*lambda);
         }
     }
-    else return false;
+    else{ 
+        return false;
+    }
     
     return true;
 }
@@ -762,7 +764,7 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& r
     // Iterate through all constraints of the polyhedron
     for (Constraint constr : cs) {
         Zonotope<Number> intermediateResult;
-//        Eigen::Matrix<Number, Eigen::Dynamic, 1> d_vector;
+//        hypro::vector_t<Number> d_vector;
 //        Number e;
 //        d_vector.resize(dim,1);
 //        
@@ -785,13 +787,13 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& r
 //            }
 //            else {
 //                Number sgm = (e-qd)/2, d = (qd+e)/2;
-//                Eigen::Matrix<Number, Eigen::Dynamic, 1> lambda = ((cur_zonotope.generators()*cur_zonotope.generators().transpose())*d_vector)/
+//                hypro::vector_t<Number> lambda = ((cur_zonotope.generators()*cur_zonotope.generators().transpose())*d_vector)/
 //                                (d_vector.transpose()*(cur_zonotope.generators()*cur_zonotope.generators().transpose())*d_vector+sgm*sgm);
 //                
 //                Zonotope<Number> new_zonotope;
 //                new_zonotope.setCenter(cur_zonotope.center()+lambda*(d-dc));
 //                
-//                Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> new_gen1, new_gen2, identity;
+//                hypro::matrix_t<Number> new_gen1, new_gen2, identity;
 //                identity.resize(dim, dim);
 //                identity.setIdentity();
 //                new_gen1 = (identity-lambda*d_vector.transpose())*cur_zonotope.generators();
@@ -821,8 +823,8 @@ bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Numbe
     Zonotope<Number> temp;
     numGenCurrent = this->numGenerators();
     numGenOther = other.numGenerators();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> R1, R2;
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> c1, c2;
+    hypro::matrix_t<Number> R1, R2;
+    hypro::vector_t<Number> c1, c2;
     R1 = this->mGenerators;
     R2 = other.mGenerators;
     c1 = this->mCenter;
@@ -832,7 +834,7 @@ bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Numbe
     temp.setCenter((c1+c2)*0.5);
 
     if (numGenCurrent > numGenOther) {
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> R11, R12;        
+        hypro::matrix_t<Number> R11, R12;        
         R11 = R1.block(0, 0, mDimension, numGenOther);
         R12 = R1.block(0, numGenOther, mDimension, numGenCurrent-numGenOther);
         
@@ -842,7 +844,7 @@ bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Numbe
         temp.addGenerators(R12);   
     }
     else if (numGenCurrent < numGenOther) {
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> R21, R22;
+        hypro::matrix_t<Number> R21, R22;
         
         R21 = R2.block(0, 0, mDimension, numGenCurrent);
         R22 = R2.block(0, numGenCurrent, mDimension, numGenOther-numGenCurrent);
@@ -866,8 +868,8 @@ bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Numbe
 template<typename Number>
 bool Zonotope<Number>::intervalHull(Zonotope<Number>& result) 
 {
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> imax, imin, sumOfGenerators, center = this->mCenter;
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generators = this->mGenerators;
+    hypro::vector_t<Number> imax, imin, sumOfGenerators, center = this->mCenter;
+    hypro::matrix_t<Number> generators = this->mGenerators;
     Zonotope<Number> temp;
     
     sumOfGenerators = generators.cwiseAbs().rowwise().sum();

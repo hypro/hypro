@@ -15,7 +15,7 @@ Hyperplane<Number>::Hyperplane(unsigned int dimension) {
 }
 
 template<typename Number>
-Hyperplane<Number>::Hyperplane(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vector, Number e_scalar) {
+Hyperplane<Number>::Hyperplane(const hypro::vector_t<Number>& d_vector, hypro::scalar_t<Number> e_scalar) {
     mDimension = d_vector.rows();
     d_ = d_vector;
     e_ = e_scalar;
@@ -40,17 +40,17 @@ unsigned int Hyperplane<Number>::dimension() const {
     return mDimension;
 }
 template<typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, 1> Hyperplane<Number>::vector() const {
+hypro::vector_t<Number> Hyperplane<Number>::vector() const {
     return d_;
 }
 
 template<typename Number>
-Number Hyperplane<Number>::scalar() const {
+hypro::scalar_t<Number> Hyperplane<Number>::scalar() const {
     return e_;
 }
 
 template<typename Number>
-void Hyperplane<Number>::setVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector) {
+void Hyperplane<Number>::setVector(const hypro::vector_t<Number>& d_vector) {
     if(mDimension==0) {
         mDimension = d_vector.rows();
     }
@@ -59,7 +59,7 @@ void Hyperplane<Number>::setVector(const Eigen::Matrix<Number, Eigen::Dynamic, E
 }
 
 template<typename Number>
-void Hyperplane<Number>::setScalar(const Number e_scalar){
+void Hyperplane<Number>::setScalar(const hypro::scalar_t<Number> e_scalar){
 	e_ = e_scalar;
 }
 

@@ -32,6 +32,7 @@ namespace hypro
     			locationSet locs;
     			transitionSet trans;
     			Representation valuation;
+                        Representation extInputValuation;
     		};
 
         private:
@@ -58,20 +59,22 @@ namespace hypro
     		locationSet locations();
     		transitionSet transitions();
     		Representation valuation();
-			unsigned dimension() const;
+                Representation extInputValuation();
+                unsigned dimension() const;
     		hybridAutomaton hybridAutomaton();
 
     		void setInitialLocations(locationSet _initLocs);
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
     		void setValuation(Representation _val);
+                void setExtInputValuation(Representation _extInputVal);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
 			
 			void addLocation(location* _location);
 			void addTransition(transition* _transition);
 			
 			// move operator
-			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>&& _rhs) {
+			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>& _rhs) {
 				mHybridAutomaton = std::move(_rhs.mHybridAutomaton);
 				return *this;
 			}

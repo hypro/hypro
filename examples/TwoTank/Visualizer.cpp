@@ -85,15 +85,15 @@ template<> void Visualizer::matrix2mxArray<double>(const Eigen::Matrix<double, E
 template<> void Visualizer::draw2DZonotope<double>(mxArray * res, const Zonotope<double>& zonotope, unsigned d1, unsigned d2) {
     Zonotope<double> z2(zonotope, d1, d2);
     
-    std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1> >  boundaries = z2.computeZonotopeBoundary();
+    std::vector<hypro::vector_t<double> >  boundaries = z2.computeZonotopeBoundary();
     res = mxCreateDoubleMatrix(2, boundaries.size(), mxREAL);
     if (res==NULL) 
         std::cout << "Problem with allocating double matrix..." << std::endl;
     double * ptr = mxGetPr(res);
     
     for (unsigned i=0; i<boundaries.size(); i++) {
-        ptr[2*i] = boundaries[i](0);
-        ptr[2*i+1] = boundaries[i](1);
+        ptr[2*i] = (double) boundaries[i](0);
+        ptr[2*i+1] = (double) boundaries[i](1);
     }
     
     for (unsigned i=0; i<boundaries.size()*2; i++) {

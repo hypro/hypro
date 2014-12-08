@@ -33,6 +33,11 @@ namespace hypro {
 	Representation HybridAutomaton<Number, Representation>::valuation() {
 		return mHybridAutomaton.valuation;
 	}
+        
+        template<typename Number, typename Representation>
+	Representation HybridAutomaton<Number, Representation>::extInputValuation() {
+		return mHybridAutomaton.extInputValuation;
+	}
 	
 	template<typename Number, typename Representation>
 	unsigned HybridAutomaton<Number,Representation>::dimension() const {
@@ -63,6 +68,11 @@ namespace hypro {
 	void HybridAutomaton<Number, Representation>::setValuation(Representation _val) {
 		mHybridAutomaton.valuation = _val;
 	}
+        
+        template<typename Number, typename Representation>
+        void HybridAutomaton<Number, Representation>::setExtInputValuation(Representation _extInputVal) {
+                mHybridAutomaton.extInputValuation = _extInputVal;
+        }
 
 	template<typename Number, typename Representation>
 	void HybridAutomaton<Number, Representation>::setHybridAutomaton(struct hybridAutomaton _hybrid) {

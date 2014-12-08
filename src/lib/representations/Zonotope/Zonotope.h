@@ -29,8 +29,8 @@ class Zonotope
 {
     private:
         unsigned int mDimension;
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> mCenter;
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> mGenerators;
+        hypro::vector_t<Number> mCenter;
+        hypro::matrix_t<Number> mGenerators;
         
         void removeGenerator(unsigned int colToRemove);
         
@@ -51,8 +51,8 @@ class Zonotope
          * @param center A (nx1) vector
          * @param generators A (nxm) vector
          */
-        Zonotope(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& center, 
-				const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generators);
+        Zonotope(const hypro::vector_t<Number>& center, 
+				const hypro::matrix_t<Number>& generators);
         
         /**
          * Copy Constructor - constructs a zonotope from an existing one.
@@ -88,24 +88,24 @@ class Zonotope
          * Replaces the current center with the parameter center
          * @param center a nx1 matrix
          */
-        void setCenter(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& center);
+        void setCenter(const hypro::vector_t<Number>& center);
         
         /**
          * Replaces the current matrix of generators with the parameter generators
          * @param new_generators a nxm matrix
          */
-        void setGenerators(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& new_generators);
+        void setGenerators(const hypro::matrix_t<Number>& generators_);
                 
         /**
          * Add generators to Zonotope. Simply performs setGenerators if generators was previously not initialized.
          * @param generators
          * @return true if able to add generators
          */
-        bool addGenerators(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& generators);
+        bool addGenerators(const hypro::matrix_t<Number>& generators);
         
         // Getters and Setters for center and generators
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> center() const;
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generators() const;
+        hypro::vector_t<Number> center() const;
+        hypro::matrix_t<Number> generators() const;
         
         /**
          * Number of generators
@@ -151,12 +151,12 @@ class Zonotope
          * @param result The resulting stateset.
          * @return True if the operation has been successfully applied.
          */
-        bool linearTransformation(Zonotope<Number>& result, const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A);
+        bool linearTransformation(Zonotope<Number>& result, const hypro::matrix_t<Number>& A);
         
         
-        std::vector< Eigen::Matrix<Number, Eigen::Dynamic,1> > computeZonotopeBoundary();
+        std::vector< hypro::vector_t<Number> > computeZonotopeBoundary();
         
-        bool intersectWithHalfspace(Zonotope<Number>& result, const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, Number e_scalar);
+        bool intersectWithHalfspace(Zonotope<Number>& result, const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar);
         
         bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::Constraint& halfspace);
         
@@ -179,7 +179,7 @@ class Zonotope
          */
         bool intersect(Zonotope<Number>& result, 
                         const Hyperplane<Number>& rhs, 
-                        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                        hypro::matrix_t<Number>& minMaxOfLine,
                         int method);
         
         // Intersection between Zonotope and Polyhedron 

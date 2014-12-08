@@ -11,14 +11,15 @@
 #ifndef HYPERPLANE_H
 #define	HYPERPLANE_H
 #include <Eigen/Dense>
+#include "../../config.h"
 
 template<typename Number>
 class Hyperplane
 {
     private:
         unsigned int mDimension;
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> d_;
-        Number e_;
+        hypro::vector_t<Number> d_;
+        hypro::scalar_t<Number> e_;
     
     public:
         /***************************************************************************
@@ -40,7 +41,7 @@ class Hyperplane
          * Creates a hyperplane
          * @param e_scalar
          */
-        Hyperplane(const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vector, Number e_scalar);
+        Hyperplane(const hypro::vector_t<Number>& d_vector, hypro::scalar_t<Number> e_scalar);
 
         /*
          * Creates a hyperplane
@@ -62,22 +63,22 @@ class Hyperplane
         /*
          * @return
          */
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> vector() const;
+        hypro::vector_t<Number> vector() const;
 
         /*
          * @return
          */
-        Number scalar() const;
+        hypro::scalar_t<Number> scalar() const;
 
         /*
          * @param d_vector
          */
-        void setVector(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& d_vector);
+        void setVector(const hypro::vector_t<Number>& d_vector);
 
         /*
          * @param e_scalar
          */
-        void setScalar(const Number e_scalar);
+        void setScalar(const hypro::scalar_t<Number> e_scalar);
         
         /*
          * Changes the dimension of this hyperplane to a new one

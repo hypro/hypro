@@ -1,4 +1,5 @@
 #include "RAHS.h"
+#include "util.h"
 
 /*****************************************************************************
  *                                                                           *
@@ -8,7 +9,7 @@
 
 
 template<typename Number>
-RAHS<Number>::RAHS(unsigned int dimension) : mInitialized(), mCurrentLoc(), mDimension(dimension), mReadjusted()
+RAHS<Number>::RAHS(unsigned int dimension) : mInitialized(), mDimension(dimension), mReadjusted()
 {}
 
 template<typename Number>
@@ -61,16 +62,16 @@ Zonotope<Number> RAHS<Number>::initialInput() const {
 
 
 template<typename Number>
-void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number>* hybridAutomaton_) {
+void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number, Zonotope<Number> >* hybridAutomaton_) {
     mHybridAutomaton = *hybridAutomaton_;
     // pick first init state
-    hypro::Location<Number> * loc =  *(hybridAutomaton_->initialLocations().begin());
+    hypro::Location<Number> * loc =  *(mHybridAutomaton.initialLocations().begin());
     mCurrentLoc = *loc;
     A_ = loc->activityMat();
-    bigB_ = loc->activityInputMat();
+    bigB_ = loc->extInputMat();
     smallb_ = loc->activityVec();
-    Q_ = hybridAutomaton_->valuation();
-    U_ = hybridAutomaton_->inputValuation();
+    Q_ = mHybridAutomaton.valuation();
+    U_ = mHybridAutomaton.extInputValuation();
     mInitialized = true;
 }
 
@@ -83,7 +84,7 @@ void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number>* hybridAut
 template<typename Number>
 bool RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset, 
-                                            Number r_scalar, 
+                                            hypro::scalar_t<Number> r_scalar, 
                                             unsigned int order_reduction_threshold,
                                             const ZUtility::Options& option)
 {
@@ -95,14 +96,14 @@ bool RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations,
 template<typename Number>
 bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset,
-                                            Number r_scalar, 
+                                            hypro::scalar_t<Number> r_scalar, 
                                             unsigned int order_reduction_threshold,
                                             Zonotope<Number>& res_V, Zonotope<Number>& res_S,
                                             const ZUtility::Options& option) 
 {
     assert(mInitialized);
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> null_vector;
-    null_vector.resize(mDimension, 1);
+    hypro::vector_t<Number> null_vector;
+    null_vector.resize(mDimension, Eigen::NoChange);
     null_vector.setZero();
 
     r_ = r_scalar;
@@ -114,7 +115,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
     hypro::Transition<Number> transition_taken;
     
     
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> minMaxOfLine;
+    hypro::matrix_t<Number> minMaxOfLine;
     while (offset<=numIterations) {
         switch(cur_state) {
             case START: // Initializes the zonotope; is called everytime a zonotope is rebuilt after an intersection with another structure
@@ -137,9 +138,9 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                     temp_Q = Q_;
                     temp_V = res_V;
                     temp_S = res_S;
-                    
-                    Eigen::Matrix<Number, Eigen::Dynamic, 1> d_vec = transition_taken.guard().mat.row(0).transpose();
-                    Number e_scalar = transition_taken.guard().vec(0);
+                   
+                    hypro::vector_t<Number> d_vec = transition_taken.guard().mat.row(0).transpose();
+                    hypro::scalar_t<Number> e_scalar = transition_taken.guard().vec(0);
                     if (mReadjusted) {
                         d_vec.conservativeResize(d_vec.rows()+1, Eigen::NoChange);
                         d_vec(d_vec.rows()-1) = 0;
@@ -174,10 +175,12 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                     intersectCount++;
                 }
                 else {
+                    Zonotope<Number> result;
                     // No intersection found with any guard, check if invariant is fulfilled...
-                    if (fulfillsInvariant(Q_)) {
+                    if (fulfillsInvariant(Q_, result)) {
                         offset++;
-                        sequence_zonQ_.push_back(Q_);
+                        sequence_zonQ_.push_back(result);
+                        Q_ = result;
                     }
                     else return false;
                 }
@@ -230,7 +233,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                             // Construct a global min max matrix 
                             // Note to self: globalMinMaxMatrix is similar to mlMl in MATLAB implementation
 
-                            Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel, finalGenerators, globalMinMaxMatrix;
+                            hypro::matrix_t<Number> kernel, finalGenerators, globalMinMaxMatrix;
                             globalMinMaxMatrix.resize(2,min_intersect_[offset].rows());
                             finalGenerators.resize(temp_Q.dimension(),temp_Q.dimension()-1);
 
@@ -241,7 +244,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
 
                             std::cout << "Global min max intersect: \n " << globalMinMaxMatrix << std::endl;
                             if (mDimension!=2) {
-                                Eigen::JacobiSVD<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > svd(hp.vector().transpose(), 
+                                Eigen::JacobiSVD< hypro::matrix_t<Number> > svd(hp.vector().transpose(), 
                                                                                     Eigen::ComputeFullU | Eigen::ComputeFullV);
                                 // Using SVD to calculate nullspace (kernel)
                                 kernel = svd.matrixV().block(0,1,svd.matrixV().rows(), svd.matrixV().cols()-1);
@@ -263,15 +266,15 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
 //                                twoDGenerators.row(2).setZero();
 //                                finalIntersect.setCenter(twoDCenter);
 //                                finalIntersect.setGenerators(twoDGenerators);
-                                Eigen::Matrix<Number, 2, 1> p1,p2,q1,q2;
+                                Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p1,p2,q1,q2;
                                 p1 = min_intersect_[offset].col(0);
                                 p2 = max_intersect_[offset].col(0);
                                 if (min_intersect_[offset].cols() > 1) {
                                     for (unsigned i=1; i<min_intersect_[offset].cols(); i++) {
                                         q1 = min_intersect_[offset].col(i);
                                         q2 = max_intersect_[offset].col(i);
-                                        Eigen::Matrix<Number, 2, 6> pmp;
-                                        Eigen::Matrix<Number, 1, 6> n1pmp;
+                                        Eigen::Matrix<hypro::scalar_t<Number>, 2, 6> pmp;
+                                        Eigen::Matrix<hypro::scalar_t<Number>, 1, 6> n1pmp;
                                         pmp << p1-p2, p1-q1, p1-q2, p2-q1, p2-q2, q1-q2;
                                         n1pmp = pmp.array().abs().colwise().sum();
                                         int idx;
@@ -297,7 +300,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                                             default: break;
                                         }
                                     }
-                                    Eigen::Matrix<Number, Eigen::Dynamic, 1> center_new = (q1+q2)/2;
+                                    hypro::matrix_t<Number> center_new = (q1+q2)/2;
                                     finalIntersect.setCenter((q1+q2)/2);
                                     finalIntersect.setGenerators((q1-q2)/2);
                                     center_new.conservativeResize(3,Eigen::NoChange);
@@ -403,8 +406,7 @@ void RAHS<Number>::postclustering(const std::vector< Zonotope<Number> >& resulti
 
 template<typename Number>
 void RAHS<Number>::readjustMatrices() {
-   unsigned int origAdim = A_.rows(), origBdim = bigB_.rows();
-    
+    unsigned int origAdim = A_.rows(), origBdim = bigB_.rows();
     // Append b into new A matrix and hereby changing dimension of A matrix
     A_.conservativeResize(Eigen::NoChange,origAdim+1);
     A_.col(origAdim) = smallb_;
@@ -424,7 +426,7 @@ void RAHS<Number>::readjust() {
     // Change dimension of Q Zonotope
     if (!mReadjusted) {
         Q_.changeDimension(origQdim+1);
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> temp_center = Q_.center();
+        hypro::vector_t<Number> temp_center = Q_.center();
         temp_center(Q_.dimension()-1) = 1;
         Q_.setCenter(temp_center);
         mReadjusted = true;
@@ -435,9 +437,10 @@ template<typename Number>
 void RAHS<Number>::initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<Number>& res_S) {
     // Variable declaration
     unsigned int dimA = A_.rows(), dimB = bigB_.cols();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> I_center = Q_.center();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> I_generators = Q_.generators();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> C_matrix, C_null, exp_rC, phiU, identity;
+    hypro::vector_t<Number> I_center = Q_.center();
+    hypro::matrix_t<Number> I_generators = Q_.generators();
+    hypro::matrix_t<Number> C_matrix, C_null, phiU, identity;
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> exp_rC, exp_rC_A, exp_rC_phiU;
     
     // Reset V_ and S_
     res_V.clear();
@@ -455,12 +458,14 @@ void RAHS<Number>::initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<N
     C_matrix << A_, bigB_,
                 C_null;
     
-    exp_rC = (r_* C_matrix).exp();
+    C_matrix = C_matrix * r_;
     
+    exp_rC = hypro::convertMatToDouble(C_matrix).exp();
+    exp_rC_A = exp_rC.block(0, 0, dimA, dimA);
+    exp_rC_phiU = exp_rC.block(0, dimA, dimA, dimB);
     
-    exp_rA_ = exp_rC.block(0, 0, dimA, dimA);
-    phiU = exp_rC.block(0, dimA, dimA, dimB);
-    
+    exp_rA_ = hypro::convertMatToFloatT(exp_rC_A);
+    phiU = hypro::convertMatToFloatT(exp_rC_phiU);
 
     // Start RA algorithm: Omega0
 
@@ -470,37 +475,35 @@ void RAHS<Number>::initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<N
 //    res_V.addGenerators(phiU*U_.generators());
     U_.linearTransformation(res_V , phiU);
     
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> c;
-    c.resize(dimA,1);
+    hypro::vector_t<Number> c;
+    c.resize(dimA,Eigen::NoChange);
     c.setZero();
     
     res_S.setCenter(c);
-             
 }
 
 template<typename Number>
 void RAHS<Number>::overapproximatedConvexHull(Zonotope<Number>& Q, 
-                                             const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& expMatrix)
+                                             const hypro::matrix_t<Number>& expMatrix)
 {
     assert(Q.dimension() == expMatrix.cols());
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> I_center = Q.center();
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> identity, 
-                                                          I_generators = Q.generators();
+    hypro::vector_t<Number> I_center = Q.center();
+    hypro::matrix_t<Number> identity, 
+                            I_generators = Q.generators();
     
     std::cout << "\tNum generators: " << Q.numGenerators() << std::endl;
-    Number mxx, rnA, alphaR;
+    carl::FLOAT_T<Number> mxx, rnA, alphaR;
     if(Q.numGenerators()==0) 
         mxx = I_center.norm();
     else {
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> result;
+        hypro::vector_t<Number> result;
         result.resize(Q.dimension(), 1);
         result = I_center + I_generators.array().abs().matrix().rowwise().sum();
         mxx = result.norm();
     }
-        
     // Compute alpha_r
     rnA = r_*A_.norm();
-    alphaR = (exp(rnA)-1-rnA)*mxx;
+    alphaR = (std::exp((Number) rnA)-1-rnA)*mxx;
     
     identity.resize(Q.dimension(), Q.dimension());
     identity.setIdentity();
@@ -547,9 +550,9 @@ void RAHS<Number>::computeNextZonotope(unsigned int order_reduction_threshold,
 
 template<typename Number>
 void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generators = z.generators();
+    hypro::matrix_t<Number> generators = z.generators();
     unsigned int z_rows = z.dimension();
-    std::vector<Eigen::Matrix<Number, Eigen::Dynamic, 1> > vectOfGenerators;
+    std::vector< hypro::vector_t<Number> > vectOfGenerators;
 
     for (unsigned int i=0; i<generators.cols(); i++) {
         vectOfGenerators.push_back(generators.col(i));
@@ -559,7 +562,7 @@ void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
     std::sort(vectOfGenerators.begin(), vectOfGenerators.end(), ZUtility::compareVectors<Number>);
     
     // Rowwise sum of all generators (absolute value)
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> sumVector;
+    hypro::vector_t<Number> sumVector;
     for (unsigned int i=0; i<2*(z_rows); i++) {
         if (i==0) {
             sumVector.resize(z_rows, 1);
@@ -570,7 +573,7 @@ void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
         }
     }
 
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> remaining_vectors;
+    hypro::matrix_t<Number> remaining_vectors;
     unsigned int numRemainingVectors = vectOfGenerators.size()-(2*z_rows+1);
     remaining_vectors.resize(z_rows, numRemainingVectors);
     
@@ -579,9 +582,9 @@ void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
     }
     
     // calculate interval hull of first 2n generators
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> interval_hull = sumVector.asDiagonal();
+    hypro::matrix_t<Number> interval_hull = sumVector.asDiagonal();
 
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> generators_new;
+    hypro::matrix_t<Number> generators_new;
     generators_new.resize(z_rows, remaining_vectors.cols()+z_rows);
 
     generators_new << interval_hull, remaining_vectors;
@@ -591,7 +594,7 @@ void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
 template<typename Number>
 bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
                                             const Zonotope<Number>& Q,
-                                            Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                                            hypro::matrix_t<Number>& minMaxOfLine,
                                             const ZUtility::Options& option) {
     std::set< hypro::Transition<Number>* > possibleTransitions = mCurrentLoc.transitions();
     Zonotope<Number> intersect_zonotope, tempQ(Q);
@@ -599,8 +602,8 @@ bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition
     
     for (hypro::Transition<Number>* trans : possibleTransitions) 
     {   
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> d_vec;
-        Number e_scalar = trans->guard().vec(0);
+        hypro::vector_t<Number> d_vec;
+        carl::FLOAT_T<Number> e_scalar = trans->guard().vec(0);
         d_vec = trans->guard().mat.row(0).transpose();
         if(mReadjusted) {
             d_vec.conservativeResize(d_vec.rows()+1, Eigen::NoChange);
@@ -619,13 +622,12 @@ bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition
 }
 
 template<typename Number>
-bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope)
+bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zonotope<Number>& result)
 {
-    Zonotope<Number> resultZonotope, 
-                     tempZonotope = inputZonotope;
+    Zonotope<Number> tempZonotope = inputZonotope;
     struct hypro::Location<Number>::invariant inv = mCurrentLoc.invariant();
-    Eigen::Matrix<Number, Eigen::Dynamic, 1> dVec;
-    Number e;
+    hypro::vector_t<Number> dVec;
+    carl::FLOAT_T<Number> e;
     
     if (mReadjusted) {
         tempZonotope.changeDimension(tempZonotope.dimension()-1);
@@ -639,20 +641,29 @@ bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope)
         e = inv.vec(0);
     }
     
-    return (tempZonotope.intersectWithHalfspace(resultZonotope, dVec, e));   
+    bool res = tempZonotope.intersectWithHalfspace(result, dVec, e);
+    if (mReadjusted) {
+        hypro::matrix_t<Number> hold_center;
+        result.changeDimension(result.dimension()+1);
+        hold_center = result.center();
+        hold_center(hold_center.rows()-1) = 1;
+        result.setCenter(hold_center);
+    }
+        
+    return res;   
 }
 
 
 template<typename Number>
 void RAHS<Number>::loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope) {
     smallb_ = transition.targetLoc()->activityVec();
-    bigB_ = transition.targetLoc()->activityInputMat();
+    bigB_ = transition.targetLoc()->extInputMat();
     A_ = transition.targetLoc()->activityMat();
     mCurrentLoc = *transition.targetLoc();
     
     Zonotope<Number> temp = intersect_zonotope;
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> new_transformedMat, 
-                                                          transformMat = transition.assignment().transformMat;
+    hypro::matrix_t<Number> new_transformedMat, 
+                            transformMat = transition.assignment().transformMat;
     if (mReadjusted) {
         new_transformedMat.conservativeResize(transformMat.rows()+1, transformMat.rows()+1);
         new_transformedMat.setIdentity();
@@ -671,7 +682,7 @@ bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, c
                                     Zonotope<Number>& result,
                                     const ZUtility::IntersectionMethod_t& method)
 {
-    Eigen::Matrix<Number , Eigen::Dynamic, Eigen::Dynamic> EMPTY_MATRIX(0,0);
+    hypro::matrix_t<Number> EMPTY_MATRIX(0,0);
     return (checkForIntersection(inputZonotope, hp, result, method, EMPTY_MATRIX));
 }
 
@@ -679,7 +690,7 @@ template<typename Number>
 bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                         Zonotope<Number>& result, 
                                         const ZUtility::IntersectionMethod_t& method,
-                                        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine)
+                                        hypro::matrix_t<Number>& minMaxOfLine)
 
 {
     assert(inputZonotope.dimension()==hp.dimension() && "input zonotope and hyperplane must have same dimensions");
@@ -698,7 +709,7 @@ bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, c
     res = tempZonotope.intersect(result, tempHp, minMaxOfLine, method);
     // Enlarge result zonotope if readjust was applied
     if (mReadjusted) {
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> hold_center;
+        hypro::matrix_t<Number> hold_center;
         result.changeDimension(result.dimension()+1);
         hold_center = result.center();
         hold_center(hold_center.rows()-1) = 1;

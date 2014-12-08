@@ -16,7 +16,7 @@
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
 #include <algorithm>
-#include "../../../../examples/TwoTank/hybridAutomaton/HybridAutomaton.h" // a temporary hack
+#include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include <map>
 #include "../../representations/Zonotope/ZUtility.h"
 
@@ -26,25 +26,30 @@ class RAHS {
     private: // private attributes
         unsigned int mDimension;
         
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> exp_rA_;
+        hypro::matrix_t<Number> exp_rA_;
         std::vector< Zonotope<Number> > sequence_zonQ_;
         std::map <unsigned int, std::vector< Zonotope<Number> > > intersect_zonotopes_;
         std::map <unsigned int, std::vector< Zonotope<Number> > > resulting_intersect_;
-        std::map <unsigned int, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > min_intersect_;
-        std::map <unsigned int, Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> > max_intersect_;
+        std::map <unsigned int, hypro::matrix_t<Number> > min_intersect_;
+        std::map <unsigned int, hypro::matrix_t<Number> > max_intersect_;
         
         std::map <unsigned int, Zonotope<Number> > pivotal_zonotopes_;
         bool mInitialized, mReadjusted;
         
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A_;
-        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> bigB_;
-        Eigen::Matrix<Number, Eigen::Dynamic, 1> smallb_;
-        Number r_;
+//        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A_;
+//        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> bigB_;
+//        Eigen::Matrix<Number, Eigen::Dynamic, 1> smallb_;
+        
+        hypro::matrix_t<Number> A_;
+        hypro::matrix_t<Number> bigB_;
+        hypro::vector_t<Number> smallb_;
+        
+        hypro::scalar_t<Number> r_;
         
         Zonotope<Number> U_;
         Zonotope<Number> Q_;
         
-        hypro::HybridAutomaton<Number> mHybridAutomaton;
+        hypro::HybridAutomaton<Number, Zonotope<Number> > mHybridAutomaton;
         hypro::Location<Number> mCurrentLoc;
         
         enum state_t {
@@ -70,12 +75,12 @@ class RAHS {
                                         Zonotope<Number>& S);
         bool checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
                                     const Zonotope<Number>& Q,
-                                    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine,
+                                    hypro::matrix_t<Number>& minMaxOfLine,
                                     const ZUtility::Options& option);
         
         void loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope);
         void overapproximatedConvexHull(Zonotope<Number>& Q, 
-                                        const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& expMatrix);
+                                        const hypro::matrix_t<Number>& expMatrix);
         
          bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
@@ -84,15 +89,15 @@ class RAHS {
         bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
                                     const ZUtility::IntersectionMethod_t& method,
-                                    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine);
+                                    hypro::matrix_t<Number>& minMaxOfLine);
         
         
-        bool fulfillsInvariant(const Zonotope<Number>& inputZonotope);
+        bool fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zonotope<Number>& result);
         
         
         bool runReachabilityAnalysis(unsigned int numIterations, 
                                        unsigned int offset,
-                                       Number r_scalar, 
+                                       hypro::scalar_t<Number> r_scalar, 
                                        unsigned int order_reduction_threshold,
                                        Zonotope<Number>& res_V, Zonotope<Number>& res_S,
                                        const ZUtility::Options& option);
@@ -146,7 +151,7 @@ class RAHS {
          * dynamics matrix A, input matrix B and constant vector b
          * @param hybridAutomaton_ A hybrid automaton as defined in hypro library
          */
-        void loadHybridAutomaton(hypro::HybridAutomaton<Number>* hybridAutomaton_);
+        void loadHybridAutomaton(hypro::HybridAutomaton<Number, Zonotope<Number> >* hybridAutomaton_);
         
         /**
          * Runs the algorithm
@@ -157,7 +162,7 @@ class RAHS {
          */
         bool startReachabilityAnalysis(unsigned int numIterations, 
                                        unsigned int offset,
-                                       Number r_scalar, 
+                                       hypro::scalar_t<Number> r_scalar, 
                                        unsigned int order_reduction_threshold,
                                        const ZUtility::Options& option);
         

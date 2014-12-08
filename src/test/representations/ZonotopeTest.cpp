@@ -31,8 +31,8 @@ TEST(ZonotopeTest, DimConstructor) {
 }
 
 TEST(ZonotopeTest, FullConstructor) {
-    Eigen::Matrix<double, 2,3> gen;
-    Eigen::Matrix<double, 2,1> center;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,3> gen;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,1> center;
 
     gen << 2,3,6,
            4,1,5;
@@ -46,8 +46,8 @@ TEST(ZonotopeTest, FullConstructor) {
 }
 
 TEST(ZonotopeTest, CopyConstructor) {
-    Eigen::Matrix<double, 3,2> gen;
-    Eigen::Matrix<double, 3,1> center;
+    Eigen::Matrix<hypro::scalar_t<double>, 3,2> gen;
+    Eigen::Matrix<hypro::scalar_t<double>, 3,1> center;
     center << 1,5,2;
     gen << 1,2,
             2,8,
@@ -62,34 +62,34 @@ TEST(ZonotopeTest, CopyConstructor) {
 
 TEST(ZonotopeAlgorithmTest, ComputeZonotopeBoundary) {
     Zonotope<double> z1(2);
-    Eigen::Matrix<double,2,1> center = {1.1941, 0.1068};
-    Eigen::Matrix<double, 2,6> generators;
+    Eigen::Matrix<hypro::scalar_t<double>,2,1> center = {1.1941, 0.1068};
+    Eigen::Matrix<hypro::scalar_t<double>, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
     
     z1.setCenter(center);
     z1.setGenerators(generators);
     
-    std::vector< Eigen::Matrix<double, Eigen::Dynamic, 1> > results = z1.computeZonotopeBoundary();
+    std::vector< hypro::vector_t<double> > results = z1.computeZonotopeBoundary();
 }
 
 TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
-    Eigen::Matrix<double, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
-    Eigen::Matrix<double, 2,6> generators;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
+    Eigen::Matrix<hypro::scalar_t<double>, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
     
     Hyperplane<double> hp(dVec, 0);
     Zonotope<double> z(center, generators), res;
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dummy;
+    hypro::matrix_t<double> dummy;
     intersectZonogoneHyperplane(z, hp, res, dummy);
 }
 
 TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
     Zonotope<double> z1(2), z2(2), z3(2);
 
-    Eigen::Matrix<double,2,1> cen1, cen2, cen_res, gen_sum;
-    Eigen::Matrix<double,2,2> gen1, gen2;
+    Eigen::Matrix<hypro::scalar_t<double>,2,1> cen1, cen2, cen_res, gen_sum;
+    Eigen::Matrix<hypro::scalar_t<double>,2,2> gen1, gen2;
 
     cen1 << 1,
             2;
@@ -131,8 +131,8 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
 }
 
 //TEST(ZonotopeOperationTest, Intersection1) {
-//    Eigen::Matrix<double, 3,3> gen, exp_gen, delta_gen;
-//    Eigen::Matrix<double, 3,1> cen, d_vector, exp_center, delta_center;
+//    Eigen::Matrix<hypro::scalar_t<double>, 3,3> gen, exp_gen, delta_gen;
+//    Eigen::Matrix<hypro::scalar_t<double>, 3,1> cen, d_vector, exp_center, delta_center;
 //    gen << 2,0,0,
 //            0,1,0,
 //            0,0,3;
@@ -179,8 +179,8 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
 TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
     Variable x(0), y(1);
     Constraint hspace(y<=x-1);
-    Eigen::Matrix<double, 2,1> z_center(3,-10);
-    Eigen::Matrix<double, 2,2> z_gen;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,1> z_center(3,-10);
+    Eigen::Matrix<hypro::scalar_t<double>, 2,2> z_gen;
     z_gen << 0,1,
              1,0;
     Zonotope<double> z1(z_center, z_gen), result(2);
@@ -223,8 +223,8 @@ TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
 
 TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
     
-    Eigen::Matrix<double, 2,1> z_center;
-    Eigen::Matrix<double, 2,2> z_gen;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,1> z_center;
+    Eigen::Matrix<hypro::scalar_t<double>, 2,2> z_gen;
     z_center << 0,-1;
     z_gen << 0,1,
              1,0;
@@ -247,13 +247,13 @@ TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
 }
 
 TEST(ZonotopeOperationTest, RemoveEmptyGen) {
-    Eigen::Matrix<double, 3, 1> center;
+    Eigen::Matrix<hypro::scalar_t<double>, 3, 1> center;
     center << 2,
               3,
               6;
     
-    Eigen::Matrix<double, 3, 4> gen;
-    Eigen::Matrix<double, 3, 3> gen2;
+    Eigen::Matrix<hypro::scalar_t<double>, 3, 4> gen;
+    Eigen::Matrix<hypro::scalar_t<double>, 3, 3> gen2;
     
     gen << 2,3,0,2,
            3,6,0,3,
@@ -274,8 +274,8 @@ TEST(ZonotopeOperationTest, RemoveEmptyGen) {
 
 TEST(ZonotopeOperationTest, AddGenerators) {
     Zonotope<double> z(2);
-    Eigen::Matrix<double,2,3> generators, generators2;
-    Eigen::Matrix<double, 2, 6> concat_gens;
+    Eigen::Matrix<hypro::scalar_t<double>,2,3> generators, generators2;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 6> concat_gens;
     generators << 1,2,5,
                   3,1,6;
     
@@ -293,8 +293,8 @@ TEST(ZonotopeOperationTest, AddGenerators) {
 
 TEST(ZonotopeAlgorithmTest, Intersection2) {
     Zonotope<double> z1(3);
-    Eigen::Matrix<double, 3,1> z_center, d, exp_center, delta;
-    Eigen::Matrix<double, 3,7> generators;
+    Eigen::Matrix<hypro::scalar_t<double>, 3,1> z_center, d, exp_center, delta;
+    Eigen::Matrix<hypro::scalar_t<double>, 3,7> generators;
     z_center << -0.0407,
                 -6.3274,
                 1;
@@ -329,10 +329,10 @@ TEST(ZonotopeAlgorithmTest, Intersection2) {
 
 TEST(ZonotopeAlgorithmTest, ConvexHull) {
     Zonotope<double> z1(2), z2(2), result;
-    Eigen::Matrix<double, 2, 1> c1, c2, expected_center;
-    Eigen::Matrix<double, 2, 2> g1;
-    Eigen::Matrix<double, 2, 3> g2;
-    Eigen::Matrix<double, 2, 4> expected_generators;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 1> c1, c2, expected_center;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 2> g1;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 3> g2;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 4> expected_generators;
     
     c1 << 2,1;
     c2 << 1,1;
@@ -360,9 +360,9 @@ TEST(ZonotopeAlgorithmTest, ConvexHull) {
 
 
 TEST(ZonotopeAlgorithmTest, IntervalHull) {
-    Eigen::Matrix<double, 2, 1> center = {2.0,1.0};
-    Eigen::Matrix<double, 2, 3> generators;
-    Eigen::Matrix<double, 2, 2> expected_generators;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 1> center = {2.0,1.0};
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 3> generators;
+    Eigen::Matrix<hypro::scalar_t<double>, 2, 2> expected_generators;
     generators << 1, 4, 3,
                   6, 2, 1;
     expected_generators << 8, 0,
