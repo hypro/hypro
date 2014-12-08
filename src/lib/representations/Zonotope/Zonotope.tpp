@@ -722,8 +722,8 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& hal
 
 template<typename Number>
 bool Zonotope<Number>::intersectWithHalfspace(Zonotope<Number>& result, 
-                                const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, 
-                                Number e_scalar) 
+                                            const Eigen::Matrix<Number, Eigen::Dynamic, 1>& d_vec, 
+                                            Number e_scalar) 
 {
     Number zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
     Number dc = d_vec.dot(this->mCenter);

@@ -35,6 +35,7 @@ std::set< hypro::Transition<double>* > transSet;
 std::set< hypro::Location<double>* > locSet, initialLocSet;
 
 struct hypro::Transition<double>::guard g15,g23,g46,g7 ;
+struct hypro::Location<double>::invariant inv1, inv2, inv3, inv4;
 
 
 std::set< hypro::Transition<double>* > temp_locations;
@@ -101,6 +102,32 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double> * ha) {
     g46.mat = g;
     g46.op = hypro::EQ;
 
+    
+    inv1.mat.resize(2, 2);
+    inv2.mat.resize(2, 2);
+    inv3.mat.resize(2, 2);
+    inv4.mat.resize(0, 0);
+    
+    inv1.vec.resize(2, Eigen::NoChange);
+    inv2.vec.resize(2, Eigen::NoChange);
+    inv3.vec.resize(2, Eigen::NoChange);
+    inv4.vec.resize(0, Eigen::NoChange);
+    
+    inv3.mat << -1, -1,
+                 0, 0;
+    inv3.vec << -1, 0;
+    inv3.op = hypro::LEQ;
+    
+    inv1.mat << 0, 1,
+                0, 0;
+    inv1.vec << 0.3, 0;
+    inv1.op = hypro::LEQ;
+    
+    inv2.mat << 0, -1,
+                0, 0;
+    inv2.vec << 0.12, 0;
+    inv2.op = hypro::LEQ;
+    
 
 
 

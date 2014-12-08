@@ -81,19 +81,19 @@ void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number>* hybridAut
  *****************************************************************************/
 
 template<typename Number>
-void RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations, 
+bool RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset, 
                                             Number r_scalar, 
                                             unsigned int order_reduction_threshold,
                                             const ZUtility::Options& option)
 {
     Zonotope<Number> res_V, res_S;
-    runReachabilityAnalysis(numIterations,offset, r_scalar, order_reduction_threshold, res_V, res_S, option);
+    return runReachabilityAnalysis(numIterations,offset, r_scalar, order_reduction_threshold, res_V, res_S, option);
 }
 
 
 template<typename Number>
-void RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations, 
+bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset,
                                             Number r_scalar, 
                                             unsigned int order_reduction_threshold,
@@ -131,7 +131,6 @@ void RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                 
             case NORMAL: // executes the reachability analysis algorithm with given dynamics and checks at each step if a guard is intersected
                 computeNextZonotope(order_reduction_threshold, Q_, res_V, res_S);   
-                
                 if (this->checkGuardJumpCondition(transition_taken, Q_, minMaxOfLine, option)) {             
                     cur_state = JUMP;
                     std::cout << "JUMP AT " << offset << std::endl;
@@ -175,9 +174,12 @@ void RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                     intersectCount++;
                 }
                 else {
-                    // No intersection found with any guard, carry on...
-                    offset++;
-                    sequence_zonQ_.push_back(Q_);
+                    // No intersection found with any guard, check if invariant is fulfilled...
+                    if (fulfillsInvariant(Q_)) {
+                        offset++;
+                        sequence_zonQ_.push_back(Q_);
+                    }
+                    else return false;
                 }
                 break;
                 
@@ -356,6 +358,7 @@ void RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
         
     }
     std::cout << "Completed reachability analysis..." << std::endl;
+    return true;
 
 }
 
@@ -613,6 +616,30 @@ bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition
     }
 
     return res;
+}
+
+template<typename Number>
+bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope)
+{
+    Zonotope<Number> resultZonotope, 
+                     tempZonotope = inputZonotope;
+    struct hypro::Location<Number>::invariant inv = mCurrentLoc.invariant();
+    Eigen::Matrix<Number, Eigen::Dynamic, 1> dVec;
+    Number e;
+    
+    if (mReadjusted) {
+        tempZonotope.changeDimension(tempZonotope.dimension()-1);
+    }
+    
+    dVec.resize(this->mDimension, Eigen::NoChange);
+    if (inv.mat.rows() == 0 || inv.vec.rows() == 0) return true;
+    else {
+        // Specific case for invariant, assume second row is not used.
+        dVec = inv.mat.row(0).transpose();
+        e = inv.vec(0);
+    }
+    
+    return (tempZonotope.intersectWithHalfspace(resultZonotope, dVec, e));   
 }
 
 

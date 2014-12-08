@@ -61,6 +61,8 @@ class RAHS {
         void overapproximateZonotope(Zonotope<Number>& z);
         void readjustMatrices();
         void readjust();
+        
+        
         void initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<Number>& res_S);
         void computeNextZonotope(  unsigned int order_reduction_threshold,
                                         Zonotope<Number>& Q, 
@@ -85,8 +87,10 @@ class RAHS {
                                     Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& minMaxOfLine);
         
         
+        bool fulfillsInvariant(const Zonotope<Number>& inputZonotope);
         
-        void runReachabilityAnalysis(unsigned int numIterations, 
+        
+        bool runReachabilityAnalysis(unsigned int numIterations, 
                                        unsigned int offset,
                                        Number r_scalar, 
                                        unsigned int order_reduction_threshold,
@@ -149,8 +153,9 @@ class RAHS {
          * @param numIterations Number of iterations that the algorithm should run
          * @param r_scalar Time division e.g. 0.01
          * @param order_reduction_threshold The threshold number of generators, from which we will overapproximate the generators
+         * @return true if reachability analysis was completed, false if reachability analysis was terminated prematurely due to unfulfilled conditions
          */
-        void startReachabilityAnalysis(unsigned int numIterations, 
+        bool startReachabilityAnalysis(unsigned int numIterations, 
                                        unsigned int offset,
                                        Number r_scalar, 
                                        unsigned int order_reduction_threshold,
