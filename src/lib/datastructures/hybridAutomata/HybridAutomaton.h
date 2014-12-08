@@ -71,7 +71,10 @@ namespace hypro
 			void addTransition(transition* _transition);
 			
 			// move operator
-			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>&& _rhs);
+			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>&& _rhs) {
+				mHybridAutomaton = std::move(_rhs.mHybridAutomaton);
+				return *this;
+			}
 			
 			friend std::ostream & operator<< (std::ostream& _ostr, const HybridAutomaton<Number,Representation>& _a) {
 				_ostr << "initial: " << std::endl;

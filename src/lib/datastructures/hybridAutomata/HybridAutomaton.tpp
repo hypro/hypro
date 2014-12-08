@@ -78,10 +78,4 @@ namespace hypro {
 	void HybridAutomaton<Number, Representation>::addTransition(transition* _transition) {
 		mHybridAutomaton.trans.insert(_transition);
 	}
-	
-	template<typename Number, typename Representation>
-	HybridAutomaton<Number, Representation>& HybridAutomaton<Number, Representation>::operator= (HybridAutomaton<Number, Representation>&& _rhs) {
-		mHybridAutomaton = std::move(_rhs.mHybridAutomaton);
-		return *this;
-	}
 }
