@@ -188,10 +188,10 @@ TEST_F(PointTest, OperationTest)
  */
 TEST_F(PointTest, BinaryOperatorTest)
 {
-    EXPECT_TRUE(p4 < p3);
-    EXPECT_TRUE(p3 > p4);
-    EXPECT_FALSE(p4 > p3);
-    EXPECT_FALSE(p3 < p4);
+    EXPECT_TRUE(p4 > p3);
+    EXPECT_TRUE(p3 < p4);
+    EXPECT_FALSE(p4 < p3);
+    EXPECT_FALSE(p3 > p4);
     EXPECT_FALSE(p4 < p4);
     EXPECT_FALSE(p4 > p4);
     EXPECT_EQ(p4, p4);

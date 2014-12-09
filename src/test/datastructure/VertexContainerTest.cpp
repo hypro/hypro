@@ -91,9 +91,12 @@ TEST_F(VertexContainerTest, Deletion)
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
 	EXPECT_EQ(test1.size(), (unsigned) 3);
-	test1.erase(p2);
+	test1.erase(Vertex<number_t>(p2, true));
 	EXPECT_EQ(test1.size(), (unsigned) 2);
 	EXPECT_EQ(test1.find(p2) != test1.end(), false);
+	test1.erase(p3);
+	EXPECT_EQ(test1.size(), (unsigned) 1);
+	EXPECT_EQ(test1.find(p3) != test1.end(), false);
 }
 
 TEST_F(VertexContainerTest, Destructor)
