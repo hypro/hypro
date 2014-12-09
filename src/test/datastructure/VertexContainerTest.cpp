@@ -112,7 +112,7 @@ TEST_F(VertexContainerTest, Assignment)
 	test1.insert(Vertex<number_t>(p2, true));
 	test1.insert(Vertex<number_t>(p3, false));
 	VertexContainer<number_t> test2 = test1;
-	EXPECT_EQ(test2.size(), 3);
+	EXPECT_EQ(test2.size(), (unsigned) 3);
 	EXPECT_EQ(test2.find(p1) != test2.end(), false);
 	EXPECT_EQ(test2.find(p2) != test2.end(), false);
 	EXPECT_EQ(test2.find(p3) != test2.end(), true);

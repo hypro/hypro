@@ -53,4 +53,4 @@ foreach( example ${EXAMPLES} )
             set_target_properties( ${example} PROPERTIES LINK_SEARCH_END_STATIC TRUE )
     endif()
         
-    endforeach( example )
+endforeach( example )

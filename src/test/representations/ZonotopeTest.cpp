@@ -17,7 +17,7 @@
 
 TEST(ZonotopeTest, PlainConstructor) {
     Zonotope<double> z1;
-    EXPECT_EQ(z1.dimension(), 0);
+    EXPECT_EQ(z1.dimension(), (unsigned) 0);
     EXPECT_EQ(z1.center().rows(), 0);
     EXPECT_EQ(z1.center().cols(), 1);
     EXPECT_EQ(z1.generators().rows(), 0);
@@ -27,7 +27,7 @@ TEST(ZonotopeTest, PlainConstructor) {
 TEST(ZonotopeTest, DimConstructor) {
     unsigned int dim = 4;
     Zonotope<double> z1(dim);
-    EXPECT_EQ(z1.dimension(), 4);
+    EXPECT_EQ(z1.dimension(), (unsigned) 4);
 }
 
 TEST(ZonotopeTest, FullConstructor) {
@@ -40,7 +40,7 @@ TEST(ZonotopeTest, FullConstructor) {
               2;
 
     Zonotope<double> z2(center, gen);
-    EXPECT_EQ(z2.dimension(),2);
+    EXPECT_EQ(z2.dimension(), (unsigned) 2);
     EXPECT_EQ(z2.center(), center);
     EXPECT_EQ(z2.generators(), gen);
 }
@@ -118,11 +118,11 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
     
 
     EXPECT_EQ(z1.center(), cen_res);
-    EXPECT_EQ(z1.numGenerators(), 4);
+    EXPECT_EQ(z1.numGenerators(), (unsigned) 4);
     EXPECT_EQ(z1.generators().rowwise().sum(), gen_sum); 
     
     z2.minkowskiSum(z1,z3);
-    EXPECT_EQ(z1.numGenerators(), 2);
+    EXPECT_EQ(z1.numGenerators(), (unsigned) 2);
     EXPECT_EQ(z1.generators(), gen2);
 
     // z1.minkowskiSum(*this, z2);

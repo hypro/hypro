@@ -111,7 +111,7 @@ TEST_F(PolytopeUtilTest, HyperplaneAccess)
     
     EXPECT_EQ(norm, access1.normal());
     EXPECT_EQ(4.3, access1.offset());
-    EXPECT_EQ(2, access1.dimension());
+    EXPECT_EQ((unsigned) 2, access1.dimension());
 }
 
 TEST_F(PolytopeUtilTest, HyperplaneIntersection)
