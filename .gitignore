@@ -1,5 +1,6 @@
 *.Po
 *.Plo
+*.log
 CMakeCache.txt
 CMakeFiles
 nbproject
