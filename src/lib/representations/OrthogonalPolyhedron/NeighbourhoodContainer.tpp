@@ -19,7 +19,7 @@ namespace hypro
             tmpSet.clear();
             for(vSetIt<Number> vit = it->second.begin(); vit != it->second.end(); ++vit) {
                 Vertex<Number> v = Vertex<Number>(*vit);
-                v.move(p);
+                v.rPoint().move(p);
                 tmpSet.insert(v);
             } 
             Point<Number> pt = Point<Number>(it->first);

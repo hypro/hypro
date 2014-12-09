@@ -36,19 +36,20 @@ namespace hypro {
 	using vSetIt = typename std::set<Vertex<Number>>::iterator;
     
     template<class Number>
-    class Vertex : public Point<Number> 
+    class Vertex
     {
         private:
+            Point<Number> mPoint;
             bool mColor;
 
         public:
+
             /**
              *
              * @param dimension
              * @param color
-             * @return
              */
-            Vertex(bool color = false) : Point<Number>()
+            Vertex(bool color = false) : mPoint()
             {
                 mColor = color;
             }
@@ -57,9 +58,8 @@ namespace hypro {
              *
              * @param coordinates
              * @param color
-             * @return
              */
-            Vertex(const typename Point<Number>::coordinateMap& coordinates, bool color = false) : Point<Number>(coordinates)
+            Vertex(const typename Point<Number>::coordinateMap& coordinates, bool color = false) : mPoint(coordinates)
             {
                 mColor = color;
             }
@@ -68,11 +68,18 @@ namespace hypro {
              *
              * @param p
              * @param color
-             * @return
              */
-            Vertex(const Point<Number>& p, bool color = false) : Point<Number>(p)
+            Vertex(const Point<Number>& p, bool color = false) : mPoint(p)
             {
                 mColor = color;
+            }
+            
+            /**
+             * 
+             * @param v
+             */
+            Vertex(const Vertex<Number>& v) : mPoint(v.mPoint), mColor(v.mColor)
+            {
             }
 
             /**
@@ -94,12 +101,87 @@ namespace hypro {
             }
 
             /**
+             * 
+             * @return the point of the vertex
+             */
+            const Point<Number>& point() const
+            {
+                return mPoint;
+            }
+
+            /**
+             * 
+             * @return the point of the vertex
+             */
+            Point<Number>& rPoint()
+            {
+                return mPoint;
+            }
+
+            /**
+             * 
+             * @param p the new value for this vertex' point
+             */
+            void setPoint(const Point<Number>& p)
+            {
+                mPoint = p;
+            }
+
+            /**
              * Inverts the color.
              */
             void invertColor() 
             {
                 mColor = !mColor;
             }
+            
+            /*******************************************************************
+             * Point shortcuts
+             *******************************************************************/
+            
+            /**
+             * @see Point::coordinate
+             */
+            carl::FLOAT_T<Number> coordinate(const carl::Variable& _var) const
+            {
+                return mPoint.coordinate(_var);
+            }
+
+            /**
+             * @see Point::dimension
+             */
+            unsigned dimension() const 
+            {
+                return mPoint.dimension();
+            }
+            
+            /**
+             * @see Point::variables
+             */
+            std::vector<carl::Variable> variables() const
+            {
+                return mPoint.variables();
+            }
+            
+            /**
+             * @see Point::hasDimension
+             */
+            bool hasDimension(const carl::Variable& _i) const
+            {
+                return mPoint.hasDimension(_i);
+            }
+            
+            /**
+             * @see Point::hasDimensions
+             */
+            bool hasDimensions(const std::vector<carl::Variable>& _variables) const
+            {
+                return mPoint.hasDimensions(_variables);
+            }
+            
+            /*******************************************************************
+             * Operators
+             *******************************************************************/
 
             /**
              *
@@ -109,12 +191,8 @@ namespace hypro {
              */
             friend bool operator==(const Vertex<Number> & _v1, const Vertex<Number> & _v2)
             {
-                if(_v1.dimension() != _v2.dimension()) return false;
-                if(_v1.color() != _v2.color()) return false;
-                for (auto vertexIt : _v1.mCoordinates)
-                {
-                    if ( !_v2.hasDimension(vertexIt.first) || vertexIt.second != _v2.mCoordinates.at(vertexIt.first)) return false;
-                }
+                if(_v1.mColor != _v2.mColor) return false;
+                if(_v1.mPoint != _v2.mPoint) return false;
                 return true;
             }
 
@@ -129,23 +207,57 @@ namespace hypro {
                 return !(_v1 == _v2);
             }
 
+            /**
+             * Comparison operator for the map.
+             * Compares the points of both vertices. If both are equal,
+             * the color is compared while true is greater than false
+             *
+             * @param v1
+             * @param v2
+             * @return
+             */
+            friend bool operator<(const Vertex<Number> & _v1, const Vertex<Number> & _v2)
+            {
+                if (_v1.mPoint < _v2.mPoint) return true;
+                if (_v1.mPoint > _v2.mPoint) return false;
+                if (!_v1.mColor && _v2.mColor) return true;
+                return false;
+            }
+
+            /**
+             * Comparison operator for the map.
+             * Compares the points of both vertices. If both are equal,
+             * the color is compared while true is greater than false
+             *
+             * @param v1
+             * @param v2
+             * @return
+             */
+            friend bool operator>(const Vertex<Number> & _v1, const Vertex<Number> & _v2)
+            {
+                return _v2 < _v1;
+            }
+
+            /**
+             *
+             * @param i
+             * @return
+             */
+            carl::FLOAT_T<Number>& operator[] (const carl::Variable& _i)
+            {
+                return mPoint[_i];
+            }
+
+            carl::FLOAT_T<Number> at(const carl::Variable& _i) const
+            {
+                return mPoint.at(_i);
+            }
+
             friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
             {
-                ostr << "( ";		
-                for (auto pointIt : v.mCoordinates) {
-                    ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
-                }		
-                ostr << ") [" << v.mColor << "]";
+                ostr << v.mPoint << " [" << v.mColor << "]";
                 return ostr;
             }
 
-            friend std::istream& operator>>(std::istream& istr, Vertex& v) 
-            {
-                for (unsigned d = 0; d < v.dimension(); d++) {
-                    istr >> v.mCoordinates.at(d);
-                }
-                istr >> v.mColor; 
-                return istr;
-            }
     };
 }

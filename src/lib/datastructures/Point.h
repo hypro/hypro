@@ -943,7 +943,7 @@ namespace hypro {
             }
 
             explicit operator vector() const
-        	{
+            {
             	vector result = vector(mCoordinates.size());
             	unsigned index = 0;
             	for (auto& pointIt : mCoordinates) {
@@ -951,7 +951,7 @@ namespace hypro {
             		++index;
             	}
             	return result;
-        	}
+            }
     };
     
     template<typename Number>

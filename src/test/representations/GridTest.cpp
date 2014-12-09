@@ -130,7 +130,7 @@ TEST_F(GridTest, ColourAt)
 TEST_F(GridTest, InsertVerticesInMap)
 {
     vSet<number_t> vertices;
-    Vertex<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::rawCoordinateMap coordinates;
     Vertex<number_t> v1, v2, v3;
     
     coordinates[x] = 1; coordinates[y] = 5;
@@ -146,9 +146,9 @@ TEST_F(GridTest, InsertVerticesInMap)
     
     grid1.insertVerticesInMap(vertices);
     
-    EXPECT_FALSE(grid1.colourAt(v1));
-    EXPECT_TRUE(grid1.colourAt(v2));
-    EXPECT_TRUE(grid1.colourAt(v3));
+    EXPECT_FALSE(grid1.colourAt(v1.point()));
+    EXPECT_TRUE(grid1.colourAt(v2.point()));
+    EXPECT_TRUE(grid1.colourAt(v3.point()));
 }
 
 TEST_F(GridTest, InduceGrid)

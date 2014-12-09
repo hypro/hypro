@@ -25,7 +25,7 @@ namespace hypro
     void Grid<Number>::insertVerticesInMap(const vSet<Number>& vertices)
     {
         for (auto it : vertices) {
-            this->insert(it, it.color());
+            this->insert(it.rPoint(), it.color());
         }
     }
     
@@ -134,7 +134,7 @@ namespace hypro
     {
         vSet<Number> induced;
         for (auto it : vertices) {
-            Vertex<Number> v = calculateInduced(it);
+            Vertex<Number> v = calculateInduced(it.point());
             v.setColor(it.color());
             induced.insert(v);
         }
@@ -146,7 +146,7 @@ namespace hypro
     {
         vSet<Number> original;
         for (auto it : inducedVertices) {
-            Vertex<Number> v = calculateOriginal(it);
+            Vertex<Number> v = calculateOriginal(it.point());
             v.setColor(it.color());
             original.insert(v);
         }
