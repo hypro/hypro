@@ -120,14 +120,24 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     inv3.vec.resize(2, Eigen::NoChange);
     inv4.vec.resize(0, Eigen::NoChange);
     
-    inv3.mat << -1, 0,
+//    inv3.mat << -1, 0,
+//                 0, 0;
+//    inv3.vec << -1.5, 0;
+//    inv3.op = hypro::LEQ;
+//    
+//    inv1.mat << 0, 1,
+//                0, 0;
+//    inv1.vec << 0.2, 0;
+//    inv1.op = hypro::LEQ;
+    
+    inv3.mat << -1, -1,
                  0, 0;
-    inv3.vec << -1.5, 0;
+    inv3.vec << -1, 0;
     inv3.op = hypro::LEQ;
     
     inv1.mat << 0, 1,
                 0, 0;
-    inv1.vec << 0.2, 0;
+    inv1.vec << 0.3, 0;
     inv1.op = hypro::LEQ;
     
     inv2.mat << 0, -1,

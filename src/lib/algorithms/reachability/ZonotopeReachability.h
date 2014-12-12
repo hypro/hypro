@@ -68,10 +68,15 @@ class ZonotopeReachability {
         
         
         void initialize(Zonotope<Number>& res_V, Zonotope<Number>& res_S);
+        
         void computeNextZonotope(  unsigned int order_reduction_threshold,
                                         Zonotope<Number>& Q, 
                                         Zonotope<Number>& V,
                                         Zonotope<Number>& S);
+        
+        void guardToHyperplane(const hypro::Transition<Number>& transitionTaken, Hyperplane<Number>& hp);
+        
+        void constructIntersectZonotopeFromMinMax(unsigned iteration, const Zonotope<Number>& Q, Zonotope<Number>& result, const Hyperplane<Number>& hp);
         
         bool checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
                                     const Zonotope<Number>& Q,
