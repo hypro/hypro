@@ -1,4 +1,4 @@
-#include "RAHS.h"
+#include "ZonotopeReachability.h"
 #include "util.h"
 
 /*****************************************************************************
@@ -9,11 +9,11 @@
 
 
 template<typename Number>
-RAHS<Number>::RAHS(unsigned int dimension) : mInitialized(), mDimension(dimension), mReadjusted()
+ZonotopeReachability<Number>::ZonotopeReachability(unsigned int dimension) : mDimension(dimension), mInitialized(), mReadjusted()
 {}
 
 template<typename Number>
-RAHS<Number>::~RAHS() {
+ZonotopeReachability<Number>::~ZonotopeReachability() {
 }
 
 
@@ -26,43 +26,43 @@ RAHS<Number>::~RAHS() {
 
 
 template<typename Number>
-unsigned int RAHS<Number>::dimension() const {
+unsigned int ZonotopeReachability<Number>::dimension() const {
     return mDimension;
 }
 
 template<typename Number>
-std::vector< Zonotope<Number> > RAHS<Number>::flowpipe() {
+std::vector< Zonotope<Number> > ZonotopeReachability<Number>::flowpipe() {
     return sequence_zonQ_;
 }
 
 template<typename Number>
-std::map <unsigned int, std::vector< Zonotope<Number> > > RAHS<Number>::intersections() {
+std::map <unsigned int, std::vector< Zonotope<Number> > > ZonotopeReachability<Number>::intersections() {
     return intersect_zonotopes_;
 }
 
 template<typename Number>
-std::map <unsigned int, std::vector< Zonotope<Number> > > RAHS<Number>::resultingIntersections() {
+std::map <unsigned int, std::vector< Zonotope<Number> > > ZonotopeReachability<Number>::resultingIntersections() {
     return resulting_intersect_;
 }
 
 template<typename Number>
-std::map <unsigned int, Zonotope<Number> > RAHS<Number>::pivotalZonotopes() {
+std::map <unsigned int, Zonotope<Number> > ZonotopeReachability<Number>::pivotalZonotopes() {
     return pivotal_zonotopes_;
 }
 
 template<typename Number>
-Zonotope<Number> RAHS<Number>::currentSet() const {
+Zonotope<Number> ZonotopeReachability<Number>::currentSet() const {
     return Q_;
 }
 
 template<typename Number>
-Zonotope<Number> RAHS<Number>::initialInput() const {
+Zonotope<Number> ZonotopeReachability<Number>::initialInput() const {
     return U_;
 }
 
 
 template<typename Number>
-void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number, Zonotope<Number> >* hybridAutomaton_) {
+void ZonotopeReachability<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number, Zonotope<Number> >* hybridAutomaton_) {
     mHybridAutomaton = *hybridAutomaton_;
     // pick first init state
     hypro::Location<Number> * loc =  *(mHybridAutomaton.initialLocations().begin());
@@ -82,7 +82,7 @@ void RAHS<Number>::loadHybridAutomaton(hypro::HybridAutomaton<Number, Zonotope<N
  *****************************************************************************/
 
 template<typename Number>
-bool RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations, 
+bool ZonotopeReachability<Number>::startReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset, 
                                             hypro::scalar_t<Number> r_scalar, 
                                             unsigned int order_reduction_threshold,
@@ -94,7 +94,7 @@ bool RAHS<Number>::startReachabilityAnalysis(unsigned int numIterations,
 
 
 template<typename Number>
-bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations, 
+bool ZonotopeReachability<Number>::runReachabilityAnalysis(unsigned int numIterations, 
                                             unsigned int offset,
                                             hypro::scalar_t<Number> r_scalar, 
                                             unsigned int order_reduction_threshold,
@@ -124,7 +124,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
                 }
                 
                 sequence_zonQ_.push_back(Q_); // Pushing back initial set of new state
-                initializeRAHSComputation(res_V, res_S);
+                initialize(res_V, res_S);
                 sequence_zonQ_.push_back(Q_); // push back second set of new state
                 cur_state = NORMAL;
                 offset++;
@@ -374,7 +374,7 @@ bool RAHS<Number>::runReachabilityAnalysis(unsigned int numIterations,
  *****************************************************************************/
 
 template<typename Number>
-void RAHS<Number>::preclustering(const std::vector< Zonotope<Number> >& intersects, 
+void ZonotopeReachability<Number>::preclustering(const std::vector< Zonotope<Number> >& intersects, 
                                 const Hyperplane<Number>& hp, 
                                 Zonotope<Number>& finalIntersect, 
                                 const ZUtility::Options& option) 
@@ -390,7 +390,7 @@ void RAHS<Number>::preclustering(const std::vector< Zonotope<Number> >& intersec
 }
 
 template<typename Number>
-void RAHS<Number>::postclustering(const std::vector< Zonotope<Number> >& resultingIntersects, 
+void ZonotopeReachability<Number>::postclustering(const std::vector< Zonotope<Number> >& resultingIntersects, 
                                 Zonotope<Number>& finalIntersect) 
 {
     Zonotope<Number> currentConvexHull, result;
@@ -405,7 +405,7 @@ void RAHS<Number>::postclustering(const std::vector< Zonotope<Number> >& resulti
 
 
 template<typename Number>
-void RAHS<Number>::readjustMatrices() {
+void ZonotopeReachability<Number>::readjustMatrices() {
     unsigned int origAdim = A_.rows(), origBdim = bigB_.rows();
     // Append b into new A matrix and hereby changing dimension of A matrix
     A_.conservativeResize(Eigen::NoChange,origAdim+1);
@@ -420,7 +420,7 @@ void RAHS<Number>::readjustMatrices() {
 }
 
 template<typename Number>
-void RAHS<Number>::readjust() {
+void ZonotopeReachability<Number>::readjust() {
     unsigned int origQdim = Q_.dimension();
     readjustMatrices();
     // Change dimension of Q Zonotope
@@ -434,7 +434,7 @@ void RAHS<Number>::readjust() {
 }
 
 template<typename Number>
-void RAHS<Number>::initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<Number>& res_S) {
+void ZonotopeReachability<Number>::initialize(Zonotope<Number>& res_V, Zonotope<Number>& res_S) {
     // Variable declaration
     unsigned int dimA = A_.rows(), dimB = bigB_.cols();
     hypro::vector_t<Number> I_center = Q_.center();
@@ -483,7 +483,7 @@ void RAHS<Number>::initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<N
 }
 
 template<typename Number>
-void RAHS<Number>::overapproximatedConvexHull(Zonotope<Number>& Q, 
+void ZonotopeReachability<Number>::overapproximatedConvexHull(Zonotope<Number>& Q, 
                                              const hypro::matrix_t<Number>& expMatrix)
 {
     assert(Q.dimension() == expMatrix.cols());
@@ -528,7 +528,7 @@ void RAHS<Number>::overapproximatedConvexHull(Zonotope<Number>& Q,
 }
 
 template<typename Number>
-void RAHS<Number>::computeNextZonotope(unsigned int order_reduction_threshold,
+void ZonotopeReachability<Number>::computeNextZonotope(unsigned int order_reduction_threshold,
                                             Zonotope<Number>& Q, 
                                             Zonotope<Number>& V,
                                             Zonotope<Number>& S) {
@@ -549,7 +549,7 @@ void RAHS<Number>::computeNextZonotope(unsigned int order_reduction_threshold,
 }
 
 template<typename Number>
-void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
+void ZonotopeReachability<Number>::overapproximateZonotope(Zonotope<Number>& z) {
     hypro::matrix_t<Number> generators = z.generators();
     unsigned int z_rows = z.dimension();
     std::vector< hypro::vector_t<Number> > vectOfGenerators;
@@ -592,7 +592,7 @@ void RAHS<Number>::overapproximateZonotope(Zonotope<Number>& z) {
 }
 
 template<typename Number>
-bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
+bool ZonotopeReachability<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
                                             const Zonotope<Number>& Q,
                                             hypro::matrix_t<Number>& minMaxOfLine,
                                             const ZUtility::Options& option) {
@@ -622,7 +622,7 @@ bool RAHS<Number>::checkGuardJumpCondition(hypro::Transition<Number>& transition
 }
 
 template<typename Number>
-bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zonotope<Number>& result)
+bool ZonotopeReachability<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zonotope<Number>& result)
 {
     Zonotope<Number> tempZonotope = inputZonotope;
     struct hypro::Location<Number>::invariant inv = mCurrentLoc.invariant();
@@ -655,7 +655,7 @@ bool RAHS<Number>::fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zono
 
 
 template<typename Number>
-void RAHS<Number>::loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope) {
+void ZonotopeReachability<Number>::loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope) {
     smallb_ = transition.targetLoc()->activityVec();
     bigB_ = transition.targetLoc()->extInputMat();
     A_ = transition.targetLoc()->activityMat();
@@ -678,7 +678,7 @@ void RAHS<Number>::loadNewState(hypro::Transition<Number>& transition, const Zon
 }
 
 template<typename Number>
-bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
+bool ZonotopeReachability<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
                                     const ZUtility::IntersectionMethod_t& method)
 {
@@ -687,7 +687,7 @@ bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, c
 }
 
 template<typename Number>
-bool RAHS<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
+bool ZonotopeReachability<Number>::checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                         Zonotope<Number>& result, 
                                         const ZUtility::IntersectionMethod_t& method,
                                         hypro::matrix_t<Number>& minMaxOfLine)

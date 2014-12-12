@@ -1,29 +1,32 @@
-/* 
+/* *
+ * ZonotopeReachability class using the Zonotope representation for the reachability analysis algorithm
+ * 
  * File:   RAHS.h
- * Author: Jonathan Gan
- *
- * Created on June 22, 2014, 19:15 PM
+ * @author Jonathan Gan, Ibtissem Ben Makhlouf {gan, makhlouf} @ embedded.rwth-aachen.de
+ * @version 1.0 on June 22, 2014, 19:15 PM
  */
 
 
-#ifndef RAHS_H
-#define RAHS_H
+#ifndef ZONOTOPE_REACHABILITY_H
+#define ZONOTOPE_REACHABILITY_H
 
 #include <iostream>
 #include <cmath>
-#include "../../representations/Zonotope/Zonotope.h"
+#include <algorithm>
+#include <map>
+
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/MatrixFunctions>
-#include <algorithm>
+
+#include "../../representations/Zonotope/Zonotope.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
-#include <map>
 #include "../../representations/Zonotope/ZUtility.h"
 
 template<typename Number> 
-class RAHS {
+class ZonotopeReachability {
 
-    private: // private attributes
+    private: // private member attributes
         unsigned int mDimension;
         
         hypro::matrix_t<Number> exp_rA_;
@@ -35,10 +38,6 @@ class RAHS {
         
         std::map <unsigned int, Zonotope<Number> > pivotal_zonotopes_;
         bool mInitialized, mReadjusted;
-        
-//        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A_;
-//        Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> bigB_;
-//        Eigen::Matrix<Number, Eigen::Dynamic, 1> smallb_;
         
         hypro::matrix_t<Number> A_;
         hypro::matrix_t<Number> bigB_;
@@ -68,21 +67,23 @@ class RAHS {
         void readjust();
         
         
-        void initializeRAHSComputation(Zonotope<Number>& res_V, Zonotope<Number>& res_S);
+        void initialize(Zonotope<Number>& res_V, Zonotope<Number>& res_S);
         void computeNextZonotope(  unsigned int order_reduction_threshold,
                                         Zonotope<Number>& Q, 
                                         Zonotope<Number>& V,
                                         Zonotope<Number>& S);
+        
         bool checkGuardJumpCondition(hypro::Transition<Number>& transition_taken,
                                     const Zonotope<Number>& Q,
                                     hypro::matrix_t<Number>& minMaxOfLine,
                                     const ZUtility::Options& option);
         
         void loadNewState(hypro::Transition<Number>& transition, const Zonotope<Number>& intersect_zonotope);
+        
         void overapproximatedConvexHull(Zonotope<Number>& Q, 
                                         const hypro::matrix_t<Number>& expMatrix);
         
-         bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
+        bool checkForIntersection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
                                     Zonotope<Number>& result,
                                     const ZUtility::IntersectionMethod_t& method);
          
@@ -94,7 +95,6 @@ class RAHS {
         
         bool fulfillsInvariant(const Zonotope<Number>& inputZonotope, Zonotope<Number>& result);
         
-        
         bool runReachabilityAnalysis(unsigned int numIterations, 
                                        unsigned int offset,
                                        hypro::scalar_t<Number> r_scalar, 
@@ -103,9 +103,9 @@ class RAHS {
                                        const ZUtility::Options& option);
         
     public: // public functions
-        RAHS(unsigned int dimension);
+        ZonotopeReachability(unsigned int dimension);
         
-        virtual ~RAHS();
+        virtual ~ZonotopeReachability();
         
         
         /**
@@ -173,7 +173,7 @@ class RAHS {
         
 };
 
-#include "RAHS.tpp"
+#include "ZonotopeReachability.tpp"
 
-#endif /* RAHS.h */
+#endif /* ZonotopeReachability.h */
 

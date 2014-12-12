@@ -1,8 +1,9 @@
-/* 
+/* *
+ * Zonotope class representation for use in reachability analysis
+ * 
  * File:   Zonotope.h
- * Author: jongan
- *
- * Created on June 19, 2014, 10:25 PM
+ * @author Jonathan Gan, Ibtissem Ben Makhlouf {gan, makhlouf} @ embedded.rwth-aachen.de
+ * @version 1.0 on June 19, 2014, 10:25 PM
  */
 
 #ifndef ZONOTOPE_H
@@ -153,11 +154,27 @@ class Zonotope
          */
         bool linearTransformation(Zonotope<Number>& result, const hypro::matrix_t<Number>& A);
         
-        
+        /**
+         * Compute boundaries of zonotope
+         * @return array of points represented as vectors
+         */
         std::vector< hypro::vector_t<Number> > computeZonotopeBoundary();
         
+        /**
+         * Calculates zonotope intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n and e a scalar)
+         * @param result : The resulting intersect 
+         * @param d_vec : Vector representing the halfspace
+         * @param e_scalar : Scalar representing the halfspace
+         * @return true if intersect is found, false otherwise (result parameter is not modified if false)
+         */
         bool intersectWithHalfspace(Zonotope<Number>& result, const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar);
         
+        /**
+         * Calculates zonotope intersect with halfspace represented as PPL constraint
+         * @param result : The resulting stateset of the intersection
+         * @param halfspace : Halfspace as represented in PPL (see PPL documentation for more information)
+         * @return true if intersect is found, false otherwise (result parameter is not modified if false)
+         */
         bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::Constraint& halfspace);
         
         /**
@@ -172,17 +189,23 @@ class Zonotope
         
         /**
          * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
-         * @param result The resulting stateset of the intersection.
-         * @param minMaxOfLine the resulting min-max matrix
-         * @param rhs The right-hand-side stateset. Is not modified.
-         * @return True if intersect is found
+         * @param result : The resulting stateset of the intersection as zonotope.
+         * @param minMaxOfLine : The resulting min-max matrix.
+         * @param rhs : The right-hand-side stateset. Is not modified.
+         * @return True if intersect is found.
          */
         bool intersect(Zonotope<Number>& result, 
                         const Hyperplane<Number>& rhs, 
                         hypro::matrix_t<Number>& minMaxOfLine,
                         int method);
         
-        // Intersection between Zonotope and Polyhedron 
+        
+        /**
+         * Calculates zonotope intersect with a closed polyhedron as represented in PPL.
+         * @param result : The resulting stateset of the intersection as zonotope.
+         * @param rhs : The closed polyhedron as represented in PPL (see PPL documentation for more information).
+         * @return true if intersect is found, false otherwise (result parameter is not modified if false)
+         */
         bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::C_Polyhedron& rhs);
         
         /**
