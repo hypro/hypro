@@ -33,24 +33,31 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
+
+#ifdef USE_MPFR_FLOAT
+#include <mpfr.h>
+typedef mpfr_t number_t;
+#else
 typedef double number_t;
+#endif
+
 typedef carl::FLOAT_T<number_t> number;
 typedef carl::MultivariatePolynomial<number> Polynomial;
 typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
-typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, Eigen::Dynamic> matrix;
-typedef Eigen::Matrix<carl::FLOAT_T<number_t>, Eigen::Dynamic, 1> vector;
+typedef Eigen::Matrix<number, Eigen::Dynamic, Eigen::Dynamic> matrix;
+typedef Eigen::Matrix<number, Eigen::Dynamic, 1> vector;
 
 namespace hypro
 {
 template<typename Number>
-using vector_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1>;
+using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
 template<typename Number>
-using matrix_t = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
+using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
 template<typename Number>
-using scalar_t = carl::FLOAT_T<Number>;
+using scalar_t = Number;
 }
 /**
  * author: ckugler

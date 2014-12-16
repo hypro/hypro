@@ -74,18 +74,18 @@ protected:
 		locations[0] = loc1;
 		locations[1] = loc2;
 
-		locSet = std::set<hypro::Location<double>*>(locations, locations+2);
+		locSet = std::set<hypro::Location<number>*>(locations, locations+2);
 
 		init[0] = loc1;
 
-		initLocSet = std::set<hypro::Location<double>*>(init, init+1);
+		initLocSet = std::set<hypro::Location<number>*>(init, init+1);
 
 		hybrid.setLocations(locSet);
 		hybrid.setInitialLocations(initLocSet);
 
 		transition[0] = trans;
 
-		transSet = std::set<hypro::Transition<double>*>(transition, transition+1);
+		transSet = std::set<hypro::Transition<number>*>(transition, transition+1);
 
 		hybrid.setTransitions(transSet);
 		loc1->setTransitions(transSet);
@@ -94,10 +94,10 @@ protected:
 		coordinates(0) = 2;
 		coordinates(1) = 3;
 
-    	std::vector< vector_t <double> > vecSet;
+    	std::vector< vector_t <number> > vecSet;
     	vecSet.push_back(coordinates);
 
-    	poly = Polytope<double>(vecSet);
+    	poly = Polytope<number>(vecSet);
 
 		hybrid.setValuation(poly);
     }
@@ -108,33 +108,33 @@ protected:
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-    Location<double>* loc1 = new Location<double>();
-    Location<double>* loc2 = new Location<double>();
-    hypro::Transition<double>* trans = new hypro::Transition<double>();
-    HybridAutomaton<double, valuation> hybrid;
+    Location<number>* loc1 = new Location<number>();
+    Location<number>* loc2 = new Location<number>();
+    hypro::Transition<number>* trans = new hypro::Transition<number>();
+    HybridAutomaton<number, valuation> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...
-    vector_t<double> invariantVec = vector_t<double>(2,1);
+    vector_t<number> invariantVec = vector_t<number>(2,1);
     operator_e invariantOp;
-    matrix_t<double> invariantMat = matrix_t<double>(2,2);
-	struct Location<double>::invariant inv;
-	matrix_t<double> locationMat = matrix_t<double>(2,2);
+    matrix_t<number> invariantMat = matrix_t<number>(2,2);
+	struct Location<number>::invariant inv;
+	matrix_t<number> locationMat = matrix_t<number>(2,2);
 
-    struct hypro::Transition<double>::guard guard;
+    struct hypro::Transition<number>::guard guard;
 
-    struct hypro::Transition<double>::assignment assign;
+    struct hypro::Transition<number>::assignment assign;
 
-    hypro::Location<double>* locations[2];
-    std::set<hypro::Location<double>*> locSet;
+    hypro::Location<number>* locations[2];
+    std::set<hypro::Location<number>*> locSet;
 
-    hypro::Location<double>* init[1];
-    std::set<hypro::Location<double>*> initLocSet;
+    hypro::Location<number>* init[1];
+    std::set<hypro::Location<number>*> initLocSet;
 
-    hypro::Transition<double>* transition[1];
-	std::set<hypro::Transition<double>*> transSet;
+    hypro::Transition<number>* transition[1];
+	std::set<hypro::Transition<number>*> transSet;
 
-	vector_t<double> coordinates = vector_t<double>(2,1);
-    hypro::Polytope<double> poly;
+	vector_t<number> coordinates = vector_t<number>(2,1);
+    hypro::Polytope<number> poly;
 
 };
 
@@ -154,7 +154,7 @@ TEST_F(HybridAutomataTest, LocationTest)
     EXPECT_EQ(loc1->location().inv.vec, invariantVec);
     EXPECT_EQ(loc2->location().inv.vec, invariantVec);
 
-	vector_t<double> invariantVec2(2,1);
+	vector_t<number> invariantVec2(2,1);
 	invariantVec2(0) = 10;
 	invariantVec2(1) = 10;
 	EXPECT_NE(loc1->invariant().vec, invariantVec2);
@@ -164,7 +164,7 @@ TEST_F(HybridAutomataTest, LocationTest)
 	EXPECT_EQ(loc2->invariant().mat, invariantMat);
 	EXPECT_EQ(loc1->location().inv.mat, invariantMat);
 
-	matrix_t<double> invariantMat2(2,2);
+	matrix_t<number> invariantMat2(2,2);
 	invariantMat2(0,0) = 1;
 	invariantMat2(0,1) = 0;
 	invariantMat2(1,0) = 0;
@@ -175,7 +175,7 @@ TEST_F(HybridAutomataTest, LocationTest)
 	EXPECT_EQ(loc1->activityMat(), locationMat);
 	EXPECT_EQ(loc1->location().mat, locationMat);
 
-	matrix_t<double> locationMat2(2,2);
+	matrix_t<number> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;

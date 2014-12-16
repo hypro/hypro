@@ -21,28 +21,28 @@ protected:
     virtual void SetUp()
     {
         // p1
-        Point<number_t>::coordinateMap coordinates1;
+        Point<number>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
         coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p1 = Point<number_t>(coordinates1);
+        p1 = Point<number>(coordinates1);
 
         // p2
-        Point<number_t>::coordinateMap coordinates2;
+        Point<number>::coordinateMap coordinates2;
         coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
         coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
-        p2 = Point<number_t>(coordinates2);
+        p2 = Point<number>(coordinates2);
 
         // p3
-        Point<number_t>::coordinateMap coordinates3;
+        Point<number>::coordinateMap coordinates3;
         coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
         coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
-        p3 = Point<number_t>(coordinates3);
+        p3 = Point<number>(coordinates3);
         
         // p4
-        Point<number_t>::coordinateMap coordinates4;
+        Point<number>::coordinateMap coordinates4;
         coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
         coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
-        p4 = Point<number_t>(coordinates4);
+        p4 = Point<number>(coordinates4);
     }
 
     virtual void TearDown()
@@ -57,18 +57,18 @@ protected:
     Variable c = pool.getFreshVariable("c");
     Variable d = pool.getFreshVariable("d");
 	
-    Point<number_t> p1;
-    Point<number_t> p2;
-    Point<number_t> p3;
-    Point<number_t> p4;
+    Point<number> p1;
+    Point<number> p2;
+    Point<number> p3;
+    Point<number> p4;
 };
 
 TEST_F(PointTest, Constructor)
 { 
-    Point<number_t> p;
+    Point<number> p;
     EXPECT_EQ(p.dimension(), (unsigned) 0);
     
-    p = Point<number_t>(y, 5);
+    p = Point<number>(y, 5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
     
     p[pool.getFreshVariable()] = 2;
@@ -81,18 +81,18 @@ TEST_F(PointTest, Constructor)
     EXPECT_EQ(p.dimension(), (unsigned) 7);
     EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
     
-    Point<number_t> pCopy = Point<number_t>(p);
+    Point<number> pCopy = Point<number>(p);
     EXPECT_EQ(p, pCopy);
     
-    Point<number_t> empty = p1.newEmpty();
+    Point<number> empty = p1.newEmpty();
     EXPECT_EQ(p1.dimension(), empty.dimension());
     EXPECT_TRUE(p1.haveSameDimensions(empty));
     EXPECT_EQ(0, empty[x]);
 
-    Point<number_t>::rawCoordinateMap map;
-    map.insert(std::make_pair(a, 123));
-    map.insert(std::make_pair(b, 456));
-    Point<number_t> p1(map);
+    Point<number>::coordinateMap map;
+    map.insert(std::make_pair(a, FLOAT_T<number_t>(123)));
+    map.insert(std::make_pair(b, FLOAT_T<number_t>(456)));
+    Point<number> p1(map);
     EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
     EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
     
@@ -107,7 +107,7 @@ TEST_F(PointTest, Constructor)
     
 #ifdef USE_MPFR_FLOAT
     // convert to mpfr
-    Point<mpfr_t> local2 = alien;
+    Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
 #endif
 
 }
@@ -246,7 +246,7 @@ TEST_F(PointTest, BooleanTest)
 
 TEST_F(PointTest, Neighbours)
 {
-    std::vector<Point<number_t> > neighbours = p1.getAllNeighborsForAFixedDimension(y);
+    std::vector<Point<number> > neighbours = p1.getAllNeighborsForAFixedDimension(y);
     std::cout << "neighbours: ";
     for (auto n : neighbours) {
         std::cout << n << ", ";
@@ -294,39 +294,39 @@ TEST_F(PointTest, Neighbours)
 }
 
 TEST_F(PointTest, LinearTransformation) {
-	matrix A = createMatrix(std::vector<std::vector<double> >({
-			std::vector<double>({4, 5}),
-			std::vector<double>({-2, 3})
+	matrix A = createMatrix(std::vector<std::vector<number> >({
+			std::vector<number>({4, 5}),
+			std::vector<number>({-2, 3})
 	}));
 
-	vector v = createVector(std::vector<double>({6, 1}));
+	vector v = createVector(std::vector<number>({6, 1}));
 
-    Point<number_t>::coordinateMap coordinates;
+    Point<number>::coordinateMap coordinates;
 
 	p1.linearTransformation(A, v); // (2; 5)
 
 	coordinates.clear();
 	coordinates[x] = -3; coordinates[y] = 36;
-	EXPECT_EQ(Point<number_t>(coordinates), p1);
+	EXPECT_EQ(Point<number>(coordinates), p1);
 
 
 	p2.linearTransformation(A, v); // (7; 8)
 
 	coordinates.clear();
 	coordinates[a] = 6; coordinates[b] = 73;
-	EXPECT_EQ(Point<number_t>(coordinates), p2);
+	EXPECT_EQ(Point<number>(coordinates), p2);
 
 
 	p3.linearTransformation(A, v); // (9; -13)
 
 	coordinates.clear();
 	coordinates[c] = 54; coordinates[d] = -1;
-	EXPECT_EQ(Point<number_t>(coordinates), p3);
+	EXPECT_EQ(Point<number>(coordinates), p3);
 
 
 	p4.linearTransformation(A, v); // (5; 8)
 
 	coordinates.clear();
 	coordinates[c] = 0; coordinates[d] = 63;
-	EXPECT_EQ(Point<number_t>(coordinates), p4);
+	EXPECT_EQ(Point<number>(coordinates), p4);
 }

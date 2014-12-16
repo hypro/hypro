@@ -15,8 +15,27 @@
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/support_line_pos_iterator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
-#include "boost/variant.hpp"
+#include <boost/spirit/include/phoenix_object.hpp>
+#include <boost/spirit/include/qi_real.hpp>
 #include <string>
+#include <carl/numbers/FLOAT_T.h>
+
+namespace boost { namespace spirit { namespace traits { 
+template<>
+inline void scale(int exp, carl::FLOAT_T<mpfr_t>& r) {
+	std::cout << __func__ << " exp: " << exp << " r: " << r << std::endl;
+	if (exp >= 0)
+		r *= carl::pow(carl::FLOAT_T<mpfr_t>(10), (unsigned)exp);
+	else
+		r /= carl::pow(carl::FLOAT_T<mpfr_t>(10), (unsigned)(-exp));
+	std::cout << __func__ << " r: " << r << std::endl;
+}
+template<>
+inline bool is_equal_to_one(const carl::FLOAT_T<mpfr_t>& value) {
+	return value == 1;
+}
+}}}
+
 
 namespace hypro{
 namespace parser{
@@ -25,24 +44,31 @@ namespace parser{
 	namespace qi = boost::spirit::qi;
 	namespace ascii = boost::spirit::ascii;
 	namespace phoenix = boost::phoenix;
+	namespace fusion = boost::fusion;
 
 	typedef spirit::istream_iterator BaseIteratorType;
 	typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
 	typedef PositionIteratorType Iterator;
 	typedef qi::space_type Skipper;
 	
-	template<typename Iterator>
-	struct NumberParser : public qi::grammar<Iterator, parser::Number(), Skipper>
-	{
-		NumberParser() : NumberParser::base_type(start)
-		{
-			start = integralPart > qi::lit(".") > rationalPart;
-		}
-		
-		qi::rule<Iterator, parser::Number(), Skipper> start;
-		qi::int_parser<long long,10,1,-1> integralPart;
-		qi::int_parser<unsigned long long,10,1,-1> rationalPart;
+	template<typename Number>
+	struct FloatPolicies : qi::real_policies< Number > {
+//		template <typename It, typename Attr>
+//		static bool parse_nan(It&, It const&, Attr&) { return false; }
+//		
+//		template <typename It, typename Attr>
+//		static bool parse_inf(It&, It const&, Attr&) { return false; }
+//		template <typename Iterator, typename Attribute>
+//        static bool parse_frac_n(Iterator& first, Iterator const& last, Attribute& attr)
+//        {
+//			carl::FLOAT_T<Number> tmp = qi::extract_uint<carl::FLOAT_T<Number>, 10, 1, -1, true>::call(first, last, attr);
+//			std::cout << __func__ << " parsed: " << tmp << std::endl;
+//            return qi::extract_uint<carl::FLOAT_T<Number>, 10, 1, -1, true>::call(first, last, attr);
+//        }
 	};
+	
+	template<typename Number>
+	struct FloatParser : qi::real_parser<Number, FloatPolicies<Number> > {};
 	
 	template<typename Iterator, typename Number>
 	struct MatrixParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper>
@@ -131,5 +157,3 @@ namespace parser{
 	
 }
 }
-
-

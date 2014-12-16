@@ -22,7 +22,7 @@ namespace polytope
     {
         private:
         vector		        mNormal;
-        carl::FLOAT_T<Number>   mScalar;
+        Number   mScalar;
         unsigned                mDimension;
         
         public:
@@ -41,12 +41,7 @@ namespace polytope
         mDimension(_orig.mDimension)
         {}
         
-        /**
-         * Constructor from a Point - shpuld not be used.
-         * @param vector
-         * @param _off
-         */
-        Hyperplane(const Point<Number>& _vector, const carl::FLOAT_T<Number>& _off)
+        Hyperplane(const Point<Number>& _vector, const Number& _off)
         {
             mNormal = vector(_vector.dimension());
             unsigned pos = 0;
@@ -59,33 +54,7 @@ namespace polytope
             mDimension = pos;
         }
         
-        Hyperplane(const Point<Number>& _vector, const Number& _off)
-        {
-            mNormal = vector(_vector.dimension());
-            unsigned pos = 0;
-            for(auto& coordinate : _vector)
-            {
-                mNormal(pos) = coordinate.second;
-                ++pos;
-            }
-            mScalar = carl::FLOAT_T<Number>(_off);
-            mDimension = pos;
-        }
-        
         Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off)
-        {
-            mNormal = vector(_coordinates.size());
-            unsigned pos = 0;
-            for(auto& coordinate : _coordinates)
-            {
-                mNormal(pos) = coordinate;
-                ++pos;
-            }
-            mScalar = carl::FLOAT_T<Number>(_off);
-            mDimension = pos;
-        }
-        
-        Hyperplane(std::initializer_list<Number> _coordinates, const carl::FLOAT_T<Number>& _off)
         {
             mNormal = vector(_coordinates.size());
             unsigned pos = 0;
@@ -99,12 +68,6 @@ namespace polytope
         }
         
         Hyperplane(const vector& _vector, const Number& _off) :
-        mNormal(_vector),
-        mScalar(carl::FLOAT_T<Number>(_off)),
-        mDimension(_vector.rows())
-        {}
-        
-        Hyperplane(const vector& _vector, const carl::FLOAT_T<Number>& _off) :
         mNormal(_vector),
         mScalar(_off),
         mDimension(_vector.rows())
@@ -151,22 +114,17 @@ namespace polytope
         
         void setOffset(Number _offset)
         {
-            mScalar = carl::FLOAT_T<Number>(_offset);
-        }
-        
-        void setOffset(const carl::FLOAT_T<Number>& _offset)
-        {
             mScalar = _offset;
         }
         
-        bool intersection(carl::FLOAT_T<Number>& _result, const vector& _vector) const
+        bool intersection(Number& _result, const vector& _vector) const
         {
         	bool intersect = false;
-        	carl::FLOAT_T<Number> factor;
+        	Number factor;
 #ifdef fukuda_DEBUG
         	std::cout << "mNormal: " << mNormal << std::endl;
 #endif
-            carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
+            Number dotProduct = (mNormal.dot(_vector));
 #ifdef fukuda_DEBUG
         	std::cout << "dotProduct: " << dotProduct << std::endl;
 #endif
@@ -179,28 +137,14 @@ namespace polytope
             return intersect;
         }
         
-        bool intersection(Number _result, const vector& _vector) const
-        {
-        	bool intersect = false;
-        	carl::FLOAT_T<Number> factor;
-            carl::FLOAT_T<Number> dotProduct = (mNormal.dot(_vector));
-            if (dotProduct != 0) {
-            	intersect = true;
-            	factor = mScalar / dotProduct;
-            }
-            _result = factor.value();
-            //note: to get the intersection point -> _vector *= factor;
-            return intersect;
-        }
-        
-        bool intersection(carl::FLOAT_T<Number>& _result, const Point<Number>& _vector) const
+        bool intersection(Number& _result, const Point<Number>& _vector) const
         {
             // TODO
         	return false;
         }
         
         private:
-            const carl::FLOAT_T<Number>& internalOffset() const
+            const Number& internalOffset() const
             {
                 return mScalar;
             }
@@ -259,7 +203,7 @@ namespace polytope
         				ia[pos] = i;
         				ja[pos] = j;
         				vector tmpVec = _edgeSet.at(i-1);
-        				ar[pos] = tmpVec(j-1).toDouble();
+        				ar[pos] = tmpVec(j-1);
 #ifdef fukuda_DEBUG
         				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
 #endif
@@ -287,7 +231,7 @@ namespace polytope
     template<typename Number>
     std::ostream& operator<<(std::ostream& _lhs, const hypro::polytope::Hyperplane<Number>& _rhs)
     {
-        _lhs << "( " << _rhs.normal() << ", " << carl::FLOAT_T<Number>(_rhs.offset()) << " )";
+        _lhs << "( " << _rhs.normal() << ", " << Number(_rhs.offset()) << " )";
         return _lhs;
     }
 

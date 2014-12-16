@@ -400,7 +400,7 @@ void ZonotopeReachability<Number>::overapproximatedConvexHull(Zonotope<Number>& 
                             I_generators = Q.generators();
     
     std::cout << "\tNum generators: " << Q.numGenerators() << std::endl;
-    carl::FLOAT_T<Number> mxx, rnA, alphaR;
+    Number mxx, rnA, alphaR;
     if(Q.numGenerators()==0) 
         mxx = I_center.norm();
     else {
@@ -615,7 +615,7 @@ bool ZonotopeReachability<Number>::checkGuardJumpCondition(hypro::Transition<Num
     for (hypro::Transition<Number>* trans : possibleTransitions) 
     {   
         hypro::vector_t<Number> d_vec;
-        carl::FLOAT_T<Number> e_scalar = trans->guard().vec(0);
+        Number e_scalar = trans->guard().vec(0);
         d_vec = trans->guard().mat.row(0).transpose();
         if(mReadjusted) {
             d_vec.conservativeResize(d_vec.rows()+1, Eigen::NoChange);
@@ -639,7 +639,7 @@ bool ZonotopeReachability<Number>::fulfillsInvariant(const Zonotope<Number>& inp
     Zonotope<Number> tempZonotope = inputZonotope;
     struct hypro::Location<Number>::invariant inv = mCurrentLoc.invariant();
     hypro::vector_t<Number> dVec;
-    carl::FLOAT_T<Number> e;
+    Number e;
     
     if (mReadjusted) {
         tempZonotope.changeDimension(tempZonotope.dimension()-1);

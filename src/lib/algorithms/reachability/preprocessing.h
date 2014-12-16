@@ -59,15 +59,15 @@
                           {
                                // compute normed and rounded direction
                                matrix_t<double> normedDirection = constraints.row(i).transpose();
-                               norm = normedDirection.norm().toDouble();
+                               norm = normedDirection.norm();
                                normedDirection = normedDirection/norm;
                                normedDirection = round(normedDirection, precision);
                   
                                // add results for iteration i to the correspondent lists
                                //directions->push_back(normedDirection);
                                directions->at(i) = normedDirection;
-                               //scaledConstraintValues->push_back( (constraintValues(i,0)).toDouble()/norm );
-                               scaledConstraintValues->at(i) = (constraintValues(i,0)).toDouble()/norm;
+                               //scaledConstraintValues->push_back( (constraintValues(i,0))/norm );
+                               scaledConstraintValues->at(i) = (constraintValues(i,0))/norm;
                            }
                     }
                     
@@ -624,13 +624,13 @@
                 // intersect with guards
                 for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
                 {
-                    temp(iterator->second->mirrored_guard_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_guard_constraints_in_L[i],0).toDouble(),iterator->second->scaledGuardValues->at(i));
+                    temp(iterator->second->mirrored_guard_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_guard_constraints_in_L[i],0),iterator->second->scaledGuardValues->at(i));
                 }
                 
                 // intersect with istar
                 for(unsigned int i=0; i<iterator->second->IstarAsDirections->size(); i++)
                 {
-                    temp(iterator->second->mirrored_I_star_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_I_star_constraints_in_L[i],0).toDouble(),iterator->second->scaledIstarValues->at(i));
+                    temp(iterator->second->mirrored_I_star_constraints_in_L[i],0) = MIN(temp(iterator->second->mirrored_I_star_constraints_in_L[i],0),iterator->second->scaledIstarValues->at(i));
                 }
                 #ifdef TRANSITIONINFO_VERBOSE
                     std::cout << "preprocess(...): G* temp intersected " << BL;
@@ -660,7 +660,7 @@
                 // intersect with guards
                 for(unsigned int i=0; i<iterator->second->guardsAsDirections->size(); i++)
                 {
-                    temp(iterator->second->guard_constraints_in_L[i],0) = MIN(temp(iterator->second->guard_constraints_in_L[i],0).toDouble(),iterator->second->scaledGuardValues->at(i));
+                    temp(iterator->second->guard_constraints_in_L[i],0) = MIN(temp(iterator->second->guard_constraints_in_L[i],0),iterator->second->scaledGuardValues->at(i));
                 }
                 iterator->second->sortedValues = temp;
                 #ifdef TRANSITIONINFO_VERBOSE

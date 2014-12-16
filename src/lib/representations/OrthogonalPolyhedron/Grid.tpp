@@ -14,7 +14,7 @@ namespace hypro
     template<typename Number>
     void Grid<Number>::reserveInducedGrid(const std::vector<carl::Variable>& variables)
     {
-        std::vector<carl::FLOAT_T<Number> > v;
+        std::vector<Number > v;
         for (auto it : variables) {
             mVariables.push_back(it);
             mInducedGridPoints.insert(std::make_pair(it, v));
@@ -100,7 +100,7 @@ namespace hypro
                     point.coordinate(fixed));
 
             // insert the index of the element one before the element found above
-            coordinates.insert(std::make_pair(fixed, carl::FLOAT_T<Number>( Number(it - 1 - inducedGridPoints.begin()) )));
+            coordinates.insert(std::make_pair(fixed, Number( Number(it - 1 - inducedGridPoints.begin()) )));
         }
         
         Point<Number> induced(coordinates);

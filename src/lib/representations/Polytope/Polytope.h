@@ -46,7 +46,7 @@ namespace hypro
         Polytope(unsigned dimension);
         Polytope(const Point<Number>& point);
         Polytope(const typename std::vector<Point<Number>>& points);
-        Polytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
+        Polytope(const typename std::vector<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points);
         Polytope(const matrix& A, const vector& b);
         Polytope(const matrix& A);
         Polytope(const C_Polyhedron& _rawPoly);
@@ -158,7 +158,7 @@ namespace hypro
         /**
          * Polytope related
          */
-        Number hausdorffError(const Number& delta, const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& matrix);
+        Number hausdorffError(const Number& delta, const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& matrix);
         
         
         //Polytope<Number>& operator= (const Polytope<Number>& rhs);

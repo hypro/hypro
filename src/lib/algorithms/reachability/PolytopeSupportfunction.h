@@ -95,7 +95,7 @@ namespace hypro
         
         		for (int i = 0; i < numberOfConstraints; i++)
         		{
-        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, constraintConstants(i).toDouble());
+        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, double(constraintConstants(i)));
         		}
 
         		// add cols here
@@ -126,7 +126,7 @@ namespace hypro
         				    std::cout << method << " index j: " << ja[i+1] << '\n';
         				#endif
         			#endif
-        			ar[i+1] = constraints((int)(i / dimensionality), (int)(i%dimensionality)).toDouble();
+        			ar[i+1] = constraints((int)(i / dimensionality), (int)(i%dimensionality));
         
         			#ifdef SUPPORTFUNCTION_VERBOSE
         			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -170,7 +170,7 @@ namespace hypro
         		for (int i = 0; i < dimensions; i++)
         		{
         			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
-        			glp_set_obj_coef(lp, i+1, l(i,0).toDouble());
+        			glp_set_obj_coef(lp, i+1, double(l(i,0)));
         		}
         
         		/* solve problem */
@@ -319,10 +319,10 @@ namespace hypro
 
         		for (int i = 0; i < numberOfConstraints; i++)
         		{
-        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, constraintConstants(i).toDouble());
+        			glp_set_row_bnds(lp, i + 1, GLP_UP, 0.0, double(constraintConstants(i)));
         			#ifdef SUPPORTFUNCTION_VERBOSE
         		        #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-        			        std::cout << constraintConstants(i) << "->" << constraintConstants(i).toDouble() << ", ";
+        			        std::cout << constraintConstants(i) << "->" << double(constraintConstants(i)) << ", ";
         			    #endif
         		    #endif
         		}
@@ -359,7 +359,7 @@ namespace hypro
             				#endif
             			#endif
             			temp = constraints->at(i);
-            			ar[counter] = temp(j,0).toDouble();
+            			ar[counter] = double(temp(j,0));
         
             			#ifdef SUPPORTFUNCTION_VERBOSE
             			    #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE

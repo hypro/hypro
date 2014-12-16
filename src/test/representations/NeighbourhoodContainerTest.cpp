@@ -24,7 +24,7 @@ class NeighbourhoodContainerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        container = NeighbourhoodContainer<number_t>();
+        container = NeighbourhoodContainer<number>();
     }
 	
     virtual void TearDown()
@@ -35,27 +35,27 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
 
-    NeighbourhoodContainer<number_t> container;
+    NeighbourhoodContainer<number> container;
 };
 
 TEST_F(NeighbourhoodContainerTest, Constructor)
 {
-    NeighbourhoodContainer<number_t> nc1;
-    NeighbourhoodContainer<number_t> copy(nc1);
+    NeighbourhoodContainer<number> nc1;
+    NeighbourhoodContainer<number> copy(nc1);
     SUCCEED();
 }
 
 TEST_F(NeighbourhoodContainerTest, InsertVertexAndNeighbours)
 {
-    Point<number_t>::rawCoordinateMap coordinates;
-    vSet<number_t> neighbourhood;
+    Point<number>::coordinateMap coordinates;
+    vSet<number> neighbourhood;
     
     
     coordinates[x] = 3; coordinates[y] = 5;
-    neighbourhood.insert(Vertex<number_t>(coordinates, true));
+    neighbourhood.insert(Vertex<number>(coordinates, true));
     
     coordinates[x] = 0; coordinates[y] = 0;
-    Point<number_t> p1(coordinates);
+    Point<number> p1(coordinates);
     
     EXPECT_FALSE(container.hasNeighbourhood(p1));
     container.insertVertexAndNeighbours(p1, neighbourhood.begin(), neighbourhood.end());
@@ -65,10 +65,10 @@ TEST_F(NeighbourhoodContainerTest, InsertVertexAndNeighbours)
     
     
     coordinates[x] = 5; coordinates[y] = 4;
-    neighbourhood.insert(Vertex<number_t>(coordinates, true));
+    neighbourhood.insert(Vertex<number>(coordinates, true));
     
     coordinates[x] = 2; coordinates[y] = 1;
-    Point<number_t> p2(coordinates);
+    Point<number> p2(coordinates);
     
     EXPECT_FALSE(container.hasNeighbourhood(p2));
     container.insertVertexAndNeighbours(p2, neighbourhood);
@@ -82,9 +82,9 @@ TEST_F(NeighbourhoodContainerTest, InsertVertexAndNeighbours)
 
 TEST_F(NeighbourhoodContainerTest, MoveVertices)
 {
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number>::coordinateMap coordinates;
     coordinates[x] = 3; coordinates[y] = 4;
-    Point<number_t> p(coordinates);
+    Point<number> p(coordinates);
     
     container.moveVertices(p);
 }
