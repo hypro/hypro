@@ -1,9 +1,9 @@
 #pragma once
 
-#include <mpfr.h>
 #include <set>
 #include <map>
 
+#include "types.h"
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
 #include <carl/core/Variable.h>
@@ -34,7 +34,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 
-#ifdef USE_MPFR_FLOAT
+#ifdef SUPPORT_MPFR
 #include <mpfr.h>
 typedef mpfr_t number_t;
 #else
