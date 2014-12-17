@@ -58,11 +58,6 @@ HybridAutomaton<double>* createBB()
 
 HybridAutomaton<double, valuation>* createBB()
 {
-    //Variable Objects
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
-
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
     Location<double>* loc1 = new Location<double>();
     Transition<double>* trans = new Transition<double>();
