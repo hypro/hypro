@@ -110,7 +110,6 @@ set(libraries ${libraries} ${PPL_LIBRARIES})
 #set(libraries ${libraries} ${NLOPT_LIBRARIES})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
-#find_package(Log4cplus)
 find_package(Eigen3)
 find_package(GTest)
 find_package(NLOPT)
