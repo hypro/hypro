@@ -119,7 +119,7 @@ namespace hypro
             auto fixed = coordinateIt.first;
             auto inducedGridPoints = mInducedGridPoints.at(fixed);
             // get the value of the element at the specified position
-            auto it = inducedGridPoints.at(coordinateIt.second.value());
+            auto it = inducedGridPoints.at(int(coordinateIt.second));
             
             // insert the value
             coordinates.insert(std::make_pair(fixed, it));

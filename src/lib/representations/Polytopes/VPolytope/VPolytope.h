@@ -74,7 +74,7 @@ class VPolytope : hypro::GeometricObject<Number>
             mDimension = dimension;
         }
       
-        VPolytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
+        VPolytope(const typename std::vector<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points);
         
         VPolytope(const matrix& A, const vector& b);
         

@@ -109,7 +109,7 @@ namespace polytope
         
         Number offset() const
         {
-            return mScalar.value();
+            return mScalar;
         }
         
         void setOffset(Number _offset)

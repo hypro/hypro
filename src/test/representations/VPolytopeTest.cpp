@@ -13,19 +13,19 @@ class VPolytopeTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::coordinateMap coordinates;
+        Point<number>::coordinateMap coordinates;
         coordinates.insert(std::make_pair(x, 1));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 0));
-        Point<number_t> p1 = Point<number_t>(coordinates);
+        Point<number> p1 = Point<number>(coordinates);
         coordinates.insert(std::make_pair(x, 4));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 0));
-        Point<number_t> p2 = Point<number_t>(coordinates);
+        Point<number> p2 = Point<number>(coordinates);
         coordinates.insert(std::make_pair(x, 4));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 4));
-        Point<number_t> p3 = Point<number_t>(coordinates);
+        Point<number> p3 = Point<number>(coordinates);
         
         points.insert(p1);
         points.insert(p2);
@@ -41,11 +41,11 @@ protected:
     Variable y = pool.getFreshVariable("y");
     Variable z = pool.getFreshVariable("z");
 
-    VPolytope<number_t>::verticeSet points;
+    VPolytope<number>::verticeSet points;
     
-    VPolytope<number_t> vpt1;
-    VPolytope<number_t> vpt2;
-    VPolytope<number_t> vpt3;
+    VPolytope<number> vpt1;
+    VPolytope<number> vpt2;
+    VPolytope<number> vpt3;
 };
 
 TEST_F(VPolytopeTest, Constructor)
