@@ -568,7 +568,7 @@
 		/**
 		* Initiates the preprocessing for all locations, connected through paths beginning at an initial location
 		*/
-	    void preprocess(HybridAutomaton<double, valuation>* automaton,std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* additionalDirections)
+	    void preprocess(HybridAutomaton<double, valuation_t<double>>* automaton,std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U, artificialDirections* additionalDirections)
 	    {
 	    	std::set<location*> locations = (*automaton).initialLocations();
 

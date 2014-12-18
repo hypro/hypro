@@ -90,14 +90,14 @@ namespace polytope
      * Creates a generator from a point, which is a colum-vector (mx1)
      */
     template<typename Number>
-    static inline Parma_Polyhedra_Library::Generator pointToGenerator(Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1> point)
+    static inline Parma_Polyhedra_Library::Generator pointToGenerator(Eigen::Matrix<Number, Eigen::Dynamic, 1> point)
     {
         using namespace Parma_Polyhedra_Library;
         double tmpValue;
         Linear_Expression ls;
         for(unsigned i = 0; i < point.rows(); ++i)
         {
-            tmpValue = point(i,0).toDouble() * fReach_DENOMINATOR;
+            tmpValue = double(point(i,0)) * fReach_DENOMINATOR;
             Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex(i);
             ls += tmp;
         }

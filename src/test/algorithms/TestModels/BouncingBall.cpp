@@ -56,12 +56,12 @@ HybridAutomaton<double>* createBB()
 // provide method to free memory?
 */
 
-HybridAutomaton<double, valuation>* createBB()
+HybridAutomaton<double, valuation_t<double>>* createBB()
 {
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
     Location<double>* loc1 = new Location<double>();
     Transition<double>* trans = new Transition<double>();
-    HybridAutomaton<double, valuation>* hybrid = new HybridAutomaton<double, valuation>();
+    HybridAutomaton<double, valuation_t<double>>* hybrid = new HybridAutomaton<double, valuation_t<double>>();
 
     //Other Objects: Vectors, Matrices, Guards...
     //vector_t<double> invariantVec = vector_t<double>(2,1);

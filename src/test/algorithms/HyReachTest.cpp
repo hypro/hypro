@@ -261,7 +261,7 @@ TEST_F(HyReachTest, BouncingBallTest)
         
     // construct necessary analysis obejcts
     HyReach reachabilityAnalysis;
-    HybridAutomaton<double, valuation>* model = createBB(); // model (hard coded and provided by included BouncingBall.cpp)
+    HybridAutomaton<double, valuation_t<double>>* model = createBB(); // model (hard coded and provided by included BouncingBall.cpp)
     
     // construct initial values
     std::vector<matrix_t<double>> directionsalongdimensions = vectorgenerator(2);

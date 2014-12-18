@@ -17,3 +17,5 @@ typedef ::testing::Types<double, carl::FLOAT_T<double>, number > floatTypes;
 // List tests which should be typed.
 TYPED_TEST_CASE(BoxTest, types);
 TYPED_TEST_CASE(PointTest, floatTypes);
+TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
+TYPED_TEST_CASE(VertexContainerTest, floatTypes);

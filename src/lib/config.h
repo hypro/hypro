@@ -58,6 +58,12 @@ using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
 template<typename Number>
 using scalar_t = Number;
+
+template<typename Number>
+class Polytope;
+
+template<typename Number>
+using valuation_t = hypro::Polytope<Number>;
 }
 /**
  * author: ckugler

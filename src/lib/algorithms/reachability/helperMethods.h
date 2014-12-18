@@ -302,7 +302,7 @@ namespace hypro{
 	/*
 	 *  returns the dimensionality (number of rows) of the matrix from the first initial location
 	 */
-	double getDimensionality(HybridAutomaton<double, valuation>* model)
+	double getDimensionality(HybridAutomaton<double, valuation_t<double>>* model)
 	{
            return model->dimension();
     }

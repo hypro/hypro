@@ -14,8 +14,6 @@
 
 namespace hypro
 {
-	typedef hypro::Polytope<number> valuation;
-	
     template<typename Number, typename Representation>
     class HybridAutomaton
     {
@@ -32,7 +30,7 @@ namespace hypro
     			locationSet locs;
     			transitionSet trans;
     			Representation valuation;
-                        Representation extInputValuation;
+                Representation extInputValuation;
     		};
 
         private:

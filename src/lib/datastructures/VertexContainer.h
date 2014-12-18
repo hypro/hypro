@@ -31,8 +31,8 @@ namespace hypro {
 		/***********************************************************************
 		 * Constructors & Destructors
 		 **********************************************************************/
-                VertexContainer(){}
-                VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
+		VertexContainer(){}
+		VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
 		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
