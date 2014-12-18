@@ -11,6 +11,9 @@
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 
+
+#include "componentParser.h"
+#include "utils.h"
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
@@ -24,8 +27,7 @@
 #include <string>
 #include <cassert>
 #include "../datastructures/hybridAutomata/HybridAutomaton.h"
-#include "utils.h"
-#include "componentParser.h"
+
 #include "../util/types.h"
 #include "helper.h"
 
