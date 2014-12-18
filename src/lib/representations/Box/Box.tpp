@@ -100,7 +100,7 @@ bool Box<Number>::contains(const Point<Number>& point) const
     
     for(auto interval : mBoundaries)
     {
-        if( !interval.second.contains(point.at(interval.first).value()))
+        if( !interval.second.contains(point.at(interval.first)))
             return false;
     }
     return true;

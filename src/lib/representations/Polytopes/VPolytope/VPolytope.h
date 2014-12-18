@@ -76,9 +76,9 @@ class VPolytope : hypro::GeometricObject<Number>
       
         VPolytope(const typename std::vector<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points);
         
-        VPolytope(const matrix& A, const vector& b);
+        VPolytope(const matrix_t<Number>& A, const vector_t<Number>& b);
         
-        VPolytope(const matrix& A);
+        VPolytope(const matrix_t<Number>& A);
         
         VPolytope(const VPolytope& orig)
         {

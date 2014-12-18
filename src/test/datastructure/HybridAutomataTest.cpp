@@ -94,7 +94,7 @@ protected:
 		coordinates(0) = 2;
 		coordinates(1) = 3;
 
-    	std::vector< vector_t <number> > vecSet;
+    	std::vector< vector_t<number> > vecSet;
     	vecSet.push_back(coordinates);
 
     	poly = Polytope<number>(vecSet);

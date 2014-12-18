@@ -60,7 +60,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const typename std::vector<Eigen::Matrix<Number,Eigen::Dynamic,1>>& points)
+    Polytope<Number>::Polytope(const typename std::vector<vector_t<Number>>& points)
     {
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
         for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)
@@ -74,7 +74,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const matrix& A, const vector& b)
+    Polytope<Number>::Polytope(const matrix_t<Number>& A, const vector_t<Number>& b)
     {
         assert(A.rows() == b.rows());
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(A.cols(), Parma_Polyhedra_Library::UNIVERSE);
@@ -102,7 +102,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Polytope<Number>::Polytope(const matrix& A)
+    Polytope<Number>::Polytope(const matrix_t<Number>& A)
     {
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(A.rows(), Parma_Polyhedra_Library::UNIVERSE);
         for(unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex)
@@ -261,7 +261,7 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b)
+    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b)
     {
         using namespace Parma_Polyhedra_Library;
         
@@ -326,11 +326,11 @@ namespace hypro
         
         
         // clear actual generators and add new ones
-        std::vector<vector> ps;
+        std::vector<vector_t<Number>> ps;
         for(unsigned i = 0; i < res.cols(); ++i)
         {
             //std::cout << res.col(i) << std::endl;
-            vector t = vector(res.rows());
+            vector_t<Number> t = vector_t<Number>(res.rows());
             for(unsigned j = 0; j < res.rows(); ++j)
                 t(j) = res.col(i)(j);
             ps.push_back(t);
@@ -465,7 +465,7 @@ namespace hypro
 
     	//compute the maximizer vector (& its target) for the initial extreme point -> necessary for localSearch()
     	Point<Number> sinkMaximizerTarget;
-    	vector sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
+    	vector_t<Number> sinkMaximizerVector = polytope::computeMaximizerVector(sinkMaximizerTarget, initVertex);
 
     	//compute the normal cone of the initial extreme point
     	polytope::Cone<Number>* cone = polytope::computeCone(initVertex, sinkMaximizerVector);
@@ -660,7 +660,7 @@ namespace hypro
     }
     
     template<typename Number>
-    Number Polytope<Number>::hausdorffError(const Number& delta, const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& matrix)
+    Number Polytope<Number>::hausdorffError(const Number& delta, const matrix_t<Number>& matrix)
     {
         using namespace Eigen;
         // TODO: Can we omit conversion to Number and use Number instead?
@@ -805,10 +805,10 @@ namespace hypro
 
     	//compute the maximizer vector of the currently considered vertex
     	Point<Number> maximizerTarget;
-    	vector maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
+    	vector_t<Number> maximizerVector = polytope::computeMaximizerVector(maximizerTarget, _vertex);
 
     	//compute the ray direction (a vector)
-    	vector ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
+    	vector_t<Number> ray = polytope::computeEdge(maximizerTarget, _sinkMaximizerTarget);
 
 #ifdef fukuda_DEBUG
     	std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
@@ -849,7 +849,7 @@ namespace hypro
 		std::cout << "-----------------" << std::endl;
 #endif
 
-		std::vector<vector> decompositionEdges = polytope::computeEdgeSet(_vertex);
+		std::vector<vector_t<Number>> decompositionEdges = polytope::computeEdgeSet(_vertex);
 
 		for (unsigned i=0; i < decompositionEdges.size(); i++) {
 			Number dotProduct = intersectedPlane.normal().dot(decompositionEdges.at(i));

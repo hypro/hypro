@@ -175,13 +175,6 @@ namespace polytope
     }
     
     template<typename Number>
-    static inline unsigned pplDimension(const typename std::vector<vector>& points)
-    {
-        assert(!points.empty());
-        return VariablePool::getInstance().pplVarByIndex(points.at(0).rows()).id();
-    }
-    
-    template<typename Number>
     static inline unsigned pplDimension(const typename std::vector<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
     {
         unsigned result = 0;
@@ -228,8 +221,8 @@ namespace polytope
      * computes the edge between two input points
      */
     template<typename Number>
-    vector computeEdge(Point<Number>& _point1, Point<Number>& _point2) {
-    	vector edge = vector(_point1.dimension(),1);
+    vector_t<Number> computeEdge(Point<Number>& _point1, Point<Number>& _point2) {
+    	vector_t<Number> edge = vector_t<Number>(_point1.dimension(),1);
     	std::vector<carl::Variable> variables = _point1.variables();
     	int i = 0;
 
@@ -244,7 +237,7 @@ namespace polytope
      * computes the target point given a starting point and an edge
      */
     template<typename Number>
-    Point<Number> computePoint(Point<Number>& _point, vector& _edge, bool ofPolyFlag) {
+    Point<Number> computePoint(Point<Number>& _point, vector_t<Number>& _edge, bool ofPolyFlag) {
     	Point<Number> result = Point<Number>(_point);
     	std::vector<carl::Variable> variables = _point.variables();
 
@@ -306,14 +299,14 @@ namespace polytope
     	}
 
     	//the edge is represented by a vector
-    	vector edge = computeEdge(sourceVertex,targetVertex);
+    	vector_t<Number> edge = computeEdge(sourceVertex,targetVertex);
 
     	//check if there is a parallel edge in the other polytope that points in the same direction (not the origin of the sourceVertex)
     	//add all non-parallel edges to a set (needed for constraints in LP)
-    	vector parallelEdge;
+    	vector_t<Number> parallelEdge;
     	//indicates whether a parallel edge has been identified
     	bool parallelFlag = false;
-    	std::vector<vector> nonParallelEdges;
+    	std::vector<vector_t<Number>> nonParallelEdges;
     	Point<Number> otherSource;
 
     	if (_counter.first == 1) {
@@ -324,7 +317,7 @@ namespace polytope
 
     	std::vector<Point<Number>> otherNeighbors = otherSource.neighbors();
 
-    	vector tempEdge;
+    	vector_t<Number> tempEdge;
 		carl::FLOAT_T<Number> dotProduct;
 		carl::FLOAT_T<Number> normFactor;
 		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
@@ -364,7 +357,7 @@ namespace polytope
 		for (typename std::vector<Point<Number>>::iterator it=neighbors.begin(); it!= neighbors.end(); ++it) {
 			//dont add the original edge to the set
 			if (*it != neighbors[_counter.second-1]) {
-				vector tempEdge2 = computeEdge(sourceVertex, *it);
+				vector_t<Number> tempEdge2 = computeEdge(sourceVertex, *it);
 				nonParallelEdges.push_back(tempEdge2);
 			}
 		}
@@ -440,7 +433,7 @@ namespace polytope
               {
                   ia[pos] = i;
                   ja[pos] = j;
-                  vector tmpVec = nonParallelEdges.at(i-2);
+                  vector_t<Number> tmpVec = nonParallelEdges.at(i-2);
                   ar[pos] = tmpVec(j-1).toDouble();
 #ifdef fukuda_DEBUG
                   std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
@@ -505,7 +498,7 @@ namespace polytope
      * computes the unique maximizer vector for a given vertex (and also the target point of this vector)
      */
     template<typename Number>
-    vector computeMaximizerVector(Point<Number>& _targetVertex, Point<Number>& _vertex) {
+    vector_t<Number> computeMaximizerVector(Point<Number>& _targetVertex, Point<Number>& _vertex) {
 
     	//to prepare the LP, compute all incident edges of v1 & v2 for v=v1+v2
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
@@ -519,8 +512,8 @@ namespace polytope
     	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
     	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
 
-    	std::vector<vector> edges;
-    	vector tmpEdge;
+    	std::vector<vector_t<Number>> edges;
+    	vector_t<Number> tmpEdge;
 
     	//traverse neighbors of v1
     	for (auto neighbor : neighbors1) {
@@ -596,7 +589,7 @@ namespace polytope
         	for (unsigned j=1; j <= tmpEdge.rows(); ++j) {
 				ia[pos] = i;
 				ja[pos] = j;
-				vector tmpVec = edges.at(i-1);
+				vector_t<Number> tmpVec = edges.at(i-1);
 				ar[pos] = tmpVec(j-1).toDouble();
 #ifdef fukuda_DEBUG
 				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
@@ -619,7 +612,7 @@ namespace polytope
         glp_load_matrix(maximizer, elements, ia, ja, ar);
         glp_simplex(maximizer, NULL);
 
-        vector result = vector(tmpEdge.rows(),1);
+        vector_t<Number> result = vector_t<Number>(tmpEdge.rows(),1);
 
         //fill the result vector based on the optimal solution returned by the LP
         for (unsigned i=1; i <= tmpEdge.rows(); ++i) {
@@ -645,7 +638,7 @@ namespace polytope
      * computes one of dimension-1 vectors that contribute to the normal cone of a vertex
      */
     template<typename Number>
-    vector computeNormalConeVector(std::vector<vector>& _edgeSet, vector& _maximizerVector) {
+    vector_t<Number> computeNormalConeVector(std::vector<vector_t<Number>>& _edgeSet, vector_t<Number>& _maximizerVector) {
 
     	/*
 		 * Setup LP with GLPK
@@ -694,7 +687,7 @@ namespace polytope
 			for (unsigned j=1; j <= _edgeSet.at(0).rows(); ++j) {
 				ia[pos] = i;
 				ja[pos] = j;
-				vector tmpVec = _edgeSet.at(i-1);
+				vector_t<Number> tmpVec = _edgeSet.at(i-1);
 				ar[pos] = tmpVec(j-1).toDouble();
 #ifdef fukuda_DEBUG
 				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
@@ -707,7 +700,7 @@ namespace polytope
 		glp_load_matrix(coneVector, elements, ia, ja, ar);
 		glp_simplex(coneVector, NULL);
 
-		vector result = vector(_edgeSet.at(0).rows(),1);
+		vector_t<Number> result = vector_t<Number>(_edgeSet.at(0).rows(),1);
 
 		//fill the result vector based on the optimal solution returned by the LP
 		for (unsigned i=1; i <= _edgeSet.at(0).rows(); ++i) {
@@ -724,7 +717,7 @@ namespace polytope
      * i.e. consider all incident edges at the vertex decomposition
      */
     template<typename Number>
-    std::vector<vector> computeEdgeSet(Point<Number>& _vertex) {
+    std::vector<vector_t<Number>> computeEdgeSet(Point<Number>& _vertex) {
     	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
 		Point<Number> sourceVertex1 = vertexComposition[0];
 		Point<Number> sourceVertex2 = vertexComposition[1];
@@ -732,8 +725,8 @@ namespace polytope
 		std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
 		std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
 
-		std::vector<vector> edges;
-		vector tmpEdge;
+		std::vector<vector_t<Number>> edges;
+		vector_t<Number> tmpEdge;
 
 		//traverse neighbors of v1
 		for (auto neighbor : neighbors1) {
@@ -754,13 +747,13 @@ namespace polytope
      * computes the normal cone for a given vertex
      */
     template<typename Number>
-    polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector& _maximizerVector) {
-    	std::vector<vector> edges = computeEdgeSet(_vertex);
+    polytope::Cone<Number>* computeCone(Point<Number>& _vertex, vector_t<Number>& _maximizerVector) {
+    	std::vector<vector_t<Number>> edges = computeEdgeSet(_vertex);
 
-    	std::vector<vector> tmpEdges;
+    	std::vector<vector_t<Number>> tmpEdges;
     	unsigned dimension = edges.at(0).rows();
-    	vector tmpVector;
-    	std::vector<vector> resultVectorSet;
+    	vector_t<Number> tmpVector;
+    	std::vector<vector_t<Number>> resultVectorSet;
 
 #ifdef fukuda_DEBUG
         std::cout<< "Edges: " << edges << std::endl;
@@ -785,7 +778,7 @@ namespace polytope
     	polytope::Cone<Number>* cone = new polytope::Cone<Number>();
     	//set the origin of the cone
     	cone->setOrigin(_vertex);
-    	std::vector<vector> vectorTuple;
+    	std::vector<vector_t<Number>> vectorTuple;
 
     	//fill cone
     	for (unsigned i = 0; i <= resultVectorSet.size()-dimension+1; ++i) {
@@ -794,7 +787,7 @@ namespace polytope
     		}
 
     		//convert Point<Number> to Vector by explicit cast
-    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector(_vertex), vectorTuple);
+    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector_t<Number>(_vertex), vectorTuple);
     		cone->add(plane);
 #ifdef fukuda_DEBUG
     		std::cout << "Plane added to the cone" << std::endl;

@@ -90,7 +90,7 @@ TEST_F(PolytopeUtilTest, HyperplaneConstructor)
 {
     Hyperplane<number> constructor1;
     
-    vector norm = vector(2);
+    vector_t<number> norm = vector_t<number>(2);
     norm(0) = 1;
     norm(1) = 3;
     
@@ -104,7 +104,7 @@ TEST_F(PolytopeUtilTest, HyperplaneConstructor)
 
 TEST_F(PolytopeUtilTest, HyperplaneAccess)
 {
-    vector norm = vector(2);
+    vector_t<number> norm = vector_t<number>(2);
     norm(0) = 1;
     norm(1) = 3;
     Hyperplane<number> access1(norm, 4.3);
@@ -120,7 +120,7 @@ TEST_F(PolytopeUtilTest, HyperplaneIntersection)
     norm.setCoordinate(y,3);
     Hyperplane<number> intersection1(norm, 4.3);
     
-    vector vec = vector(2);
+    vector_t<number> vec = vector_t<number>(2);
     vec(0) = 2;
     vec(1) = 2;
     
