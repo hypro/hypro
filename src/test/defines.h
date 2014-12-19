@@ -1,19 +1,22 @@
 /**
  * Defines the datatypes for the tests.
  * @author Benedikt Seidl
- * @version September 2013
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * @version 2014-12-18
+ * @since	2013-09-01
  */
 
 #pragma once
 
-//#include "numbers/float/double_wrapper_t.h"
-//#include "numbers/float/mpfr_wrapper_t.h"
-//#include "numbers/int/int_wrapper_t.h"
-//#include "numbers/HYPRO_FLOAT_T.h"
-//#include "numbers/HYPRO_INT_T.h"
-//#include "../lib/numbers/FLOAT_T.h"
 #include "../lib/config.h"
 #include "carl/numbers/FLOAT_T.h"
 
+typedef ::testing::Types<int, double, carl::FLOAT_T<double>, number > types;
+typedef ::testing::Types<double, carl::FLOAT_T<double>, number > floatTypes;
 
-//typedef hypro::HYPRO_INT_T<hypro::int_wrapper_t> hypro_int_t;
+// List tests which should be typed.
+TYPED_TEST_CASE(BoxTest, types);
+TYPED_TEST_CASE(PointTest, floatTypes);
+TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
+TYPED_TEST_CASE(VertexContainerTest, floatTypes);
+TYPED_TEST_CASE(VertexTest, floatTypes);

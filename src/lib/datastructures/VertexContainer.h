@@ -31,8 +31,8 @@ namespace hypro {
 		/***********************************************************************
 		 * Constructors & Destructors
 		 **********************************************************************/
-                VertexContainer(){}
-                VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
+		VertexContainer(){}
+		VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
 		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
@@ -131,7 +131,7 @@ namespace hypro {
 			mVertices = tmp;
 		}
 		
-		inline void linearTransformation(const matrix& A, const vector& b) {
+		inline void linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) {
 			vSet<Number> tmp;
 			vSetIt<Number> tmpIt = tmp.begin();
 			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {

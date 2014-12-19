@@ -9,7 +9,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_executable(runDatastructureTests
             PointTest.cpp
             VertexTest.cpp
-            VertexContainerTest.cpp
+            #VertexContainerTest.cpp
             HybridAutomataTest.cpp
     )
 

@@ -14,8 +14,6 @@
 
 namespace hypro
 {
-	typedef hypro::Polytope<number_t> valuation;
-	
     template<typename Number, typename Representation>
     class HybridAutomaton
     {
@@ -32,7 +30,7 @@ namespace hypro
     			locationSet locs;
     			transitionSet trans;
     			Representation valuation;
-                        Representation extInputValuation;
+                Representation extInputValuation;
     		};
 
         private:
@@ -74,8 +72,8 @@ namespace hypro
 			void addTransition(transition* _transition);
 			
 			// move operator
-			inline HybridAutomaton<Number,Representation>& operator= (HybridAutomaton<Number,Representation>& _rhs) {
-				mHybridAutomaton = std::move(_rhs.mHybridAutomaton);
+			inline HybridAutomaton<Number,Representation>& operator= (const HybridAutomaton<Number,Representation>& _rhs) {
+				mHybridAutomaton = _rhs.mHybridAutomaton;
 				return *this;
 			}
 			

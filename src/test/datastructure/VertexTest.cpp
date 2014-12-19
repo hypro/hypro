@@ -7,71 +7,72 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class VertexTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
 		// p1
-        Point<number_t>::coordinateMap coordinates1;
+        typename Point<Number>::coordinateMap coordinates1;
 		carl::VariablePool& pool = carl::VariablePool::getInstance();
 		Variable x = pool.getFreshVariable(carl::VariableType::VT_INT);
 		Variable y = pool.getFreshVariable(carl::VariableType::VT_INT);
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p1 = Point<number_t>(coordinates1);
+        coordinates1.insert( std::make_pair(x, Number(2)) );
+        coordinates1.insert( std::make_pair(y, Number(5)) );
+        p1 = Point<Number>(coordinates1);
 		
         // p2
-        Point<number_t>::coordinateMap coordinates2;
+        typename Point<Number>::coordinateMap coordinates2;
 		Variable a = pool.getFreshVariable(carl::VariableType::VT_INT);
 		Variable b = pool.getFreshVariable(carl::VariableType::VT_INT);
-        coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
-        coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
-        p2 = Point<number_t>(coordinates2);
+        coordinates2.insert( std::make_pair(a, Number(7)) );
+        coordinates2.insert( std::make_pair(b, Number(8)) );
+        p2 = Point<Number>(coordinates2);
 		
         // p3
-        Point<number_t>::coordinateMap coordinates3;
+        typename Point<Number>::coordinateMap coordinates3;
 		Variable c = pool.getFreshVariable(carl::VariableType::VT_INT);
 		Variable d = pool.getFreshVariable(carl::VariableType::VT_INT);
-        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(-9)) );
-		coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(13)) );
-        p3 = Point<number_t>(coordinates3);
+        coordinates3.insert( std::make_pair(c, Number(-9)) );
+		coordinates3.insert( std::make_pair(d, Number(13)) );
+        p3 = Point<Number>(coordinates3);
     }
 	
     virtual void TearDown()
     {
     }
 	
-    Point<number_t> p1;
-    Point<number_t> p2;
-    Point<number_t> p3;
+    Point<Number> p1;
+    Point<Number> p2;
+    Point<Number> p3;
 };
 
 
-TEST_F(VertexTest, ColorTest)
+TYPED_TEST(VertexTest, ColorTest)
 {
-    Vertex<number_t> v;
+    Vertex<TypeParam> v;
     v.setColor(true);
     ASSERT_TRUE(v.color());
     v.invertColor();
     ASSERT_FALSE(v.color());
 }
 
-TEST_F(VertexTest, Constructor)
+TYPED_TEST(VertexTest, Constructor)
 { 
-    Vertex<number_t> vertex1;
+    Vertex<TypeParam> vertex1;
     ASSERT_FALSE(vertex1.color());
     
-    Vertex<number_t> vertex2(p1, true);
+    Vertex<TypeParam> vertex2(this->p1, true);
     ASSERT_EQ(vertex2.dimension(), (unsigned) 2);
     ASSERT_TRUE(vertex2.color());
 }
 
-TEST_F(VertexTest, Comparison)
+TYPED_TEST(VertexTest, Comparison)
 {
-    Vertex<number_t> v1(p1, true);
-    Vertex<number_t> v2(p1, false);
-    Vertex<number_t> v3(p1, true);
+    Vertex<TypeParam> v1(this->p1, true);
+    Vertex<TypeParam> v2(this->p1, false);
+    Vertex<TypeParam> v3(this->p1, true);
     
     EXPECT_NE(v1, v2);
     EXPECT_EQ(v1, v3);

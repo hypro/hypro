@@ -68,17 +68,6 @@ TEST_F(NeighborhoodContainerTest, Constructor)
     SUCCEED();
 }
 
-/*
-TEST_F(NeighborhoodContainerTest, MoveNeighbors)
-{
-    Point<number_t>::rawCoordinateMap coordinates;
-    coordinates[x] = 3; coordinates[y] = 4;
-    Point<number_t> p(coordinates);
-    
-    container.moveNeighbors(p);
-}
-*/
-
 TEST_F(NeighborhoodContainerTest, Clear)
 {
     NeighborhoodContainer<number_t> container;

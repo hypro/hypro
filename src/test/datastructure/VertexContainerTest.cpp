@@ -17,6 +17,7 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class VertexContainerTest : public ::testing::Test
 {
 protected:
@@ -24,22 +25,22 @@ protected:
     {
         
         // p1
-        Point<number_t>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p1 = Point<number_t>(coordinates1);
+        typename Point<Number>::coordinateMap coordinates1;
+        coordinates1.insert( std::make_pair(x, Number(2)) );
+        coordinates1.insert( std::make_pair(y, Number(5)) );
+        p1 = Point<Number>(coordinates1);
 		
         // p2
-        Point<number_t>::coordinateMap coordinates2;
-        coordinates2.insert( std::make_pair(x, FLOAT_T<number_t>(7)) );
-        coordinates2.insert( std::make_pair(y, FLOAT_T<number_t>(8)) );
-        p2 = Point<number_t>(coordinates2);
+        typename Point<Number>::coordinateMap coordinates2;
+        coordinates2.insert( std::make_pair(x, Number(7)) );
+        coordinates2.insert( std::make_pair(y, Number(8)) );
+        p2 = Point<Number>(coordinates2);
 		
         // p3
-        Point<number_t>::coordinateMap coordinates3;
-        coordinates3.insert( std::make_pair(x, FLOAT_T<number_t>(-9)) );
-        coordinates3.insert( std::make_pair(y, FLOAT_T<number_t>(13)) );
-        p3 = Point<number_t>(coordinates3);
+        typename Point<Number>::coordinateMap coordinates3;
+        coordinates3.insert( std::make_pair(x, Number(-9)) );
+        coordinates3.insert( std::make_pair(y, Number(13)) );
+        p3 = Point<Number>(coordinates3);
     }
 	
     virtual void TearDown()
@@ -50,124 +51,124 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
 	
-    Point<number_t> p1;
-    Point<number_t> p2;
-    Point<number_t> p3;
+    Point<number> p1;
+    Point<number> p2;
+    Point<number> p3;
 };
 
-TEST_F(VertexContainerTest, Constructor)
+TYPED_TEST(VertexContainerTest, Constructor)
 {
-	VertexContainer<number_t> test1;
+	VertexContainer<TypeParam> test1;
 	SUCCEED();
 }
 
-TEST_F(VertexContainerTest, Insertion)
+TYPED_TEST(VertexContainerTest, Insertion)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>();
-	std::cout << (test1.insert(Vertex<number_t>(p1, true))).second << std::endl;
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	std::cout << (test1.insert(Vertex<TypeParam>(this->p1, true))).second << std::endl;
         std::cout << test1.size() << std::endl; 
-        std::cout << (test1.insert(Vertex<number_t>(p2, true))).second << std::endl;
+        std::cout << (test1.insert(Vertex<TypeParam>(this->p2, true))).second << std::endl;
         std::cout << test1.size() << std::endl; 
-	std::cout << (test1.insert(Vertex<number_t>(p3, false))).second << std::endl;
+	std::cout << (test1.insert(Vertex<TypeParam>(this->p3, false))).second << std::endl;
         std::cout << test1.size() << std::endl; 
         std::cout << test1 << std::endl;
         
-        std::cout << "ITEM: " << *test1.find(p3) << std::endl;
+        std::cout << "ITEM: " << *test1.find(this->p3) << std::endl;
         
-        std::cout << "Manual comparison: p1 < p3: " << ( Vertex<number_t>(p1, true) < Vertex<number_t>(p3, false) ) << ", p1 > p3: " << ( Vertex<number_t>(p3, false) < Vertex<number_t>(p1, true) ) << std::endl;
-        std::cout << "Manual comparison: p1 == p3: " << ( Vertex<number_t>(p1, true) == Vertex<number_t>(p3, false) ) << std::endl;
+        std::cout << "Manual comparison: p1 < p3: " << ( Vertex<TypeParam>(this->p1, true) < Vertex<TypeParam>(this->p3, false) ) << ", p1 > p3: " << ( Vertex<TypeParam>(this->p3, false) < Vertex<TypeParam>(this->p1, true) ) << std::endl;
+        std::cout << "Manual comparison: p1 == p3: " << ( Vertex<TypeParam>(this->p1, true) == Vertex<TypeParam>(this->p3, false) ) << std::endl;
         
 	EXPECT_EQ((unsigned) 3, test1.size());
         EXPECT_EQ((unsigned) 2, test1.dimension());
-	EXPECT_FALSE(test1.find(p1) != test1.end());
-	EXPECT_FALSE(test1.find(p2) != test1.end());
-	EXPECT_TRUE(test1.find(p3) != test1.end());
+	EXPECT_FALSE(test1.find(this->p1) != test1.end());
+	EXPECT_FALSE(test1.find(this->p2) != test1.end());
+	EXPECT_TRUE(test1.find(this->p3) != test1.end());
 }
 
-TEST_F(VertexContainerTest, Deletion)
+TYPED_TEST(VertexContainerTest, Deletion)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>();
-	test1.insert(Vertex<number_t>(p1, true));
-	test1.insert(Vertex<number_t>(p2, true));
-	test1.insert(Vertex<number_t>(p3, false));
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
 	EXPECT_EQ(test1.size(), (unsigned) 3);
-	test1.erase(Vertex<number_t>(p2, true));
+	test1.erase(Vertex<TypeParam>(this->p2, true));
 	EXPECT_EQ(test1.size(), (unsigned) 2);
-	EXPECT_EQ(test1.find(p2) != test1.end(), false);
-	test1.erase(p3);
+	EXPECT_EQ(test1.find(this->p2) != test1.end(), false);
+	test1.erase(this->p3);
 	EXPECT_EQ(test1.size(), (unsigned) 1);
-	EXPECT_EQ(test1.find(p3) != test1.end(), false);
+	EXPECT_EQ(test1.find(this->p3) != test1.end(), false);
 }
 
-TEST_F(VertexContainerTest, Destructor)
+TYPED_TEST(VertexContainerTest, Destructor)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>();
-	test1.insert(Vertex<number_t>(p1, true));
-	test1.insert(Vertex<number_t>(p2, true));
-	test1.insert(Vertex<number_t>(p3, false));
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
 	SUCCEED();
 }
 
-TEST_F(VertexContainerTest, Assignment)
+TYPED_TEST(VertexContainerTest, Assignment)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>();
-	test1.insert(Vertex<number_t>(p1, true));
-	test1.insert(Vertex<number_t>(p2, true));
-	test1.insert(Vertex<number_t>(p3, false));
-	VertexContainer<number_t> test2 = test1;
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
+	VertexContainer<TypeParam> test2 = test1;
 	EXPECT_EQ(test2.size(), (unsigned) 3);
-	EXPECT_EQ(test2.find(p1) != test2.end(), false);
-	EXPECT_EQ(test2.find(p2) != test2.end(), false);
-	EXPECT_EQ(test2.find(p3) != test2.end(), true);
+	EXPECT_EQ(test2.find(this->p1) != test2.end(), false);
+	EXPECT_EQ(test2.find(this->p2) != test2.end(), false);
+	EXPECT_EQ(test2.find(this->p3) != test2.end(), true);
 }
 
-TEST_F(VertexContainerTest, Access)
+TYPED_TEST(VertexContainerTest, Access)
 {
-	VertexContainer<number_t> test1 = VertexContainer<number_t>();
-	test1.insert(Vertex<number_t>(p1, true));
-	test1.insert(Vertex<number_t>(p2, true));
-	test1.insert(Vertex<number_t>(p3, false));
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
         
-	EXPECT_EQ(test1.end(), test1.find(p1));
-	EXPECT_EQ(test1.end(), test1.find(p2));
-	EXPECT_NE(test1.end(), test1.find(p3));
+	EXPECT_EQ(test1.end(), test1.find(this->p1));
+	EXPECT_EQ(test1.end(), test1.find(this->p2));
+	EXPECT_NE(test1.end(), test1.find(this->p3));
 
-	EXPECT_EQ(test1.end(), test1.find(p1, false));
-	EXPECT_EQ(test1.end(), test1.find(p2, false));
-	EXPECT_EQ(test1.end(), test1.find(p3, true));
+	EXPECT_EQ(test1.end(), test1.find(this->p1, false));
+	EXPECT_EQ(test1.end(), test1.find(this->p2, false));
+	EXPECT_EQ(test1.end(), test1.find(this->p3, true));
 
-	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p1, true)));
-	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p2, true)));
-	EXPECT_NE(test1.end(), test1.find(Vertex<number_t>(p3, false)));
+	EXPECT_NE(test1.end(), test1.find(Vertex<TypeParam>(this->p1, true)));
+	EXPECT_NE(test1.end(), test1.find(Vertex<TypeParam>(this->p2, true)));
+	EXPECT_NE(test1.end(), test1.find(Vertex<TypeParam>(this->p3, false)));
 
-	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p1, false)));
-	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p2, false)));
-	EXPECT_EQ(test1.end(), test1.find(Vertex<number_t>(p3, true)));
+	EXPECT_EQ(test1.end(), test1.find(Vertex<TypeParam>(this->p1, false)));
+	EXPECT_EQ(test1.end(), test1.find(Vertex<TypeParam>(this->p2, false)));
+	EXPECT_EQ(test1.end(), test1.find(Vertex<TypeParam>(this->p3, true)));
 
-	EXPECT_TRUE(test1.find(p1, true)->color());
-	EXPECT_TRUE(test1.find(p2, true)->color());
-	EXPECT_FALSE(test1.find(p3, false)->color());
+	EXPECT_TRUE(test1.find(this->p1, true)->color());
+	EXPECT_TRUE(test1.find(this->p2, true)->color());
+	EXPECT_FALSE(test1.find(this->p3, false)->color());
 
-	EXPECT_TRUE(test1.find(Vertex<number_t>(p1, true))->color());
-	EXPECT_TRUE(test1.find(Vertex<number_t>(p2, true))->color());
-	EXPECT_FALSE(test1.find(Vertex<number_t>(p3, false))->color());
+	EXPECT_TRUE(test1.find(Vertex<TypeParam>(this->p1, true))->color());
+	EXPECT_TRUE(test1.find(Vertex<TypeParam>(this->p2, true))->color());
+	EXPECT_FALSE(test1.find(Vertex<TypeParam>(this->p3, false))->color());
 }
 
-TEST_F(VertexContainerTest, OriginIsVertex)
+TYPED_TEST(VertexContainerTest, OriginIsVertex)
 {
-    VertexContainer<number_t> test1 = VertexContainer<number_t>();
-    test1.insert(Vertex<number_t>(p1, true));
-    test1.insert(Vertex<number_t>(p2, true));
-    test1.insert(Vertex<number_t>(p3, false));
+    VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+    test1.insert(Vertex<TypeParam>(this->p1, true));
+    test1.insert(Vertex<TypeParam>(this->p2, true));
+    test1.insert(Vertex<TypeParam>(this->p3, false));
     
     EXPECT_FALSE(test1.originIsVertex());
     
-    p1[x] = 0; p1[y] = 0;
-    test1.insert(Vertex<number_t>(p1, true));
+    this->p1[this->x] = 0; this->p1[this->y] = 0;
+    test1.insert(Vertex<TypeParam>(this->p1, true));
     
     EXPECT_TRUE(test1.originIsVertex());
     
-    test1.erase(p1);
-    test1.insert(Vertex<number_t>(p1, false));
+    test1.erase(this->p1);
+    test1.insert(Vertex<TypeParam>(this->p1, false));
     EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
 }

@@ -19,19 +19,20 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class BoxTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        std::map<const carl::Variable, carl::Interval<number_t> > boundaries1;
-        boundaries1.insert(std::make_pair(x, Interval<number_t>(2,6)));
-        boundaries1.insert(std::make_pair(y, Interval<number_t>(1,3)));
+        std::map<const carl::Variable, carl::Interval<Number> > boundaries1;
+        boundaries1.insert(std::make_pair(x, Interval<Number>(2,6)));
+        boundaries1.insert(std::make_pair(y, Interval<Number>(1,3)));
         box1.insert(boundaries1);
         
-        std::map<const carl::Variable, carl::Interval<number_t> > boundaries2;
-        boundaries2.insert(std::make_pair(x, Interval<number_t>(-1,6)));
-        boundaries2.insert(std::make_pair(y, Interval<number_t>(4,7)));
+        std::map<const carl::Variable, carl::Interval<Number> > boundaries2;
+        boundaries2.insert(std::make_pair(x, Interval<Number>(-1,6)));
+        boundaries2.insert(std::make_pair(y, Interval<Number>(4,7)));
         box2.insert(boundaries2);
     }
 	
@@ -43,111 +44,111 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
 
-    Box<number_t> box1;
-    Box<number_t> box2;
-    Box<number_t> box3;
+    Box<Number> box1;
+    Box<Number> box2;
+    Box<Number> box3;
 };
 
-TEST_F(BoxTest, Constructor)
+TYPED_TEST(BoxTest, Constructor)
 {
-    Box<number_t> aBox = Box<number_t>();
+    Box<TypeParam> aBox = Box<TypeParam>();
     SUCCEED();
 }
 
-TEST_F(BoxTest, Access)
+TYPED_TEST(BoxTest, Access)
 {
-    Box<number_t>::intervalMap tmp = box1.boundaries();
-    EXPECT_EQ(2, tmp[x].lower());
-    EXPECT_EQ(6, tmp[x].upper());
-    EXPECT_EQ(1, tmp[y].lower());
-    EXPECT_EQ(3, tmp[y].upper());
+    typename Box<TypeParam>::intervalMap tmp = this->box1.boundaries();
+    EXPECT_EQ(2, tmp[this->x].lower());
+    EXPECT_EQ(6, tmp[this->x].upper());
+    EXPECT_EQ(1, tmp[this->y].lower());
+    EXPECT_EQ(3, tmp[this->y].upper());
     
-    EXPECT_EQ((unsigned) 2, box1.dimension());
-    EXPECT_EQ((unsigned) 2, box2.dimension());
-    EXPECT_EQ((unsigned) 0, box3.dimension());
+    EXPECT_EQ((unsigned) 2, this->box1.dimension());
+    EXPECT_EQ((unsigned) 2, this->box2.dimension());
+    EXPECT_EQ((unsigned) 0, this->box3.dimension());
     
-    EXPECT_TRUE(box1.haveSameDimensions(box2));
-    EXPECT_FALSE(box1.haveSameDimensions(box3));
+    EXPECT_TRUE(this->box1.haveSameDimensions(this->box2));
+    EXPECT_FALSE(this->box1.haveSameDimensions(this->box3));
     
-    Point<number_t>::coordinateMap coMax1;
-    coMax1.insert(std::make_pair(x, 6));
-    coMax1.insert(std::make_pair(y, 3));
-    EXPECT_EQ(Point<number_t>(coMax1), box1.max());
-    Point<number_t>::coordinateMap coMin1;
-    coMin1.insert(std::make_pair(x, 2));
-    coMin1.insert(std::make_pair(y, 1));
-    EXPECT_EQ(Point<number_t>(coMin1), box1.min());
+    typename Point<TypeParam>::coordinateMap coMax1;
+    coMax1.insert(std::make_pair(this->x, 6));
+    coMax1.insert(std::make_pair(this->y, 3));
+    EXPECT_EQ(Point<TypeParam>(coMax1), this->box1.max());
+    typename Point<TypeParam>::coordinateMap coMin1;
+    coMin1.insert(std::make_pair(this->x, 2));
+    coMin1.insert(std::make_pair(this->y, 1));
+    EXPECT_EQ(Point<TypeParam>(coMin1), this->box1.min());
     
-    EXPECT_EQ(box1, box1);
-    EXPECT_EQ(box2, box2);
-    EXPECT_EQ(box3, box3);
-    EXPECT_NE(box1, box2);
-    EXPECT_NE(box2, box3);
-    EXPECT_NE(box3, box1);
+    EXPECT_EQ(this->box1, this->box1);
+    EXPECT_EQ(this->box2, this->box2);
+    EXPECT_EQ(this->box3, this->box3);
+    EXPECT_NE(this->box1, this->box2);
+    EXPECT_NE(this->box2, this->box3);
+    EXPECT_NE(this->box3, this->box1);
     
-    Box<number_t> emptyBox;
-    EXPECT_FALSE(box1.isEmpty());
+    Box<TypeParam> emptyBox;
+    EXPECT_FALSE(this->box1.isEmpty());
     EXPECT_TRUE(emptyBox.isEmpty());
 }
 
-TEST_F(BoxTest, Insertion)
+TYPED_TEST(BoxTest, Insertion)
 {
-    Box<number_t>::rawIntervalMap tmp;
-    Variable z = pool.getFreshVariable("z");
-    tmp.insert(std::make_pair(z, Interval<number_t>(3,9)));
-    box1.insert(tmp);
-    EXPECT_EQ(true, box1.hasDimension(z));
+    typename Box<TypeParam>::intervalMap tmp;
+    Variable z = this->pool.getFreshVariable("z");
+    tmp.insert(std::make_pair(z, Interval<TypeParam>(3,9)));
+    this->box1.insert(tmp);
+    EXPECT_EQ(true, this->box1.hasDimension(z));
     
-    EXPECT_EQ(3, box1.interval(z).lower());
-    EXPECT_EQ(9, box1.interval(z).upper());
+    EXPECT_EQ(3, this->box1.interval(z).lower());
+    EXPECT_EQ(9, this->box1.interval(z).upper());
     
-    Variable w = pool.getFreshVariable("w");
-    box1.insert(std::make_pair(w, Interval<number_t>(4,5)));
-    EXPECT_EQ(true, box1.hasDimension(w));
+    Variable w = this->pool.getFreshVariable("w");
+    this->box1.insert(std::make_pair(w, Interval<TypeParam>(4,5)));
+    EXPECT_EQ(true, this->box1.hasDimension(w));
     
-    EXPECT_EQ(4, box1.interval(w).lower());
-    EXPECT_EQ(5, box1.interval(w).upper());
+    EXPECT_EQ(4, this->box1.interval(w).lower());
+    EXPECT_EQ(5, this->box1.interval(w).upper());
 }
 
-TEST_F(BoxTest, Union)
+TYPED_TEST(BoxTest, Union)
 {
     cln::cl_RA tmp;
 }
 
-TEST_F(BoxTest, LinearTransformation)
+TYPED_TEST(BoxTest, LinearTransformation)
 {
 
 }
 
-TEST_F(BoxTest, MinkowskiSum)
+TYPED_TEST(BoxTest, MinkowskiSum)
 {
-    Box<number_t> result;
-    box1.minkowskiSum(result, box2);
-    EXPECT_EQ(1 , result.interval(x).lower());
-    EXPECT_EQ(12 , result.interval(x).upper());
-    EXPECT_EQ(5 , result.interval(y).lower());
-    EXPECT_EQ(10 , result.interval(y).upper());
+    Box<TypeParam> result;
+    this->box1.minkowskiSum(result, this->box2);
+    EXPECT_EQ(1 , result.interval(this->x).lower());
+    EXPECT_EQ(12 , result.interval(this->x).upper());
+    EXPECT_EQ(5 , result.interval(this->y).lower());
+    EXPECT_EQ(10 , result.interval(this->y).upper());
 }
 
-TEST_F(BoxTest, Intersection)
+TYPED_TEST(BoxTest, Intersection)
 {
-    Box<number_t> result;
-    box1.intersect(result, box2);
+    Box<TypeParam> result;
+    this->box1.intersect(result, this->box2);
     EXPECT_TRUE(result.isEmpty());
 }
 
-TEST_F(BoxTest, ConvexHull)
+TYPED_TEST(BoxTest, ConvexHull)
 {
     // stupid for Boxes, only required for orthogonal polyhedra
-    Box<number_t> result;
-    EXPECT_TRUE(box1.hull(result));
-    EXPECT_EQ(box1, result);
+    Box<TypeParam> result;
+    EXPECT_TRUE(this->box1.hull(result));
+    EXPECT_EQ(this->box1, result);
 }
 
-TEST_F(BoxTest, Membership)
+TYPED_TEST(BoxTest, Membership)
 {
-    Point<number_t> p;
-    p.setCoordinate(x, 4);
-    p.setCoordinate(y, 2);
-    EXPECT_TRUE(box1.contains(p));
+    Point<TypeParam> p;
+    p.setCoordinate(this->x, 4);
+    p.setCoordinate(this->y, 2);
+    EXPECT_TRUE(this->box1.contains(p));
 }

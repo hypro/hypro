@@ -42,9 +42,8 @@ namespace hypro {
     {
         public:
             typedef std::set<Point<Number> > pointSet;
-            typedef std::map<carl::Variable, carl::FLOAT_T<Number> > coordinateMap;
-            typedef std::map<carl::Variable, Number> rawCoordinateMap;
-
+            typedef std::map<carl::Variable, Number > coordinateMap;
+			
         private:
             coordinateMap mCoordinates;
 
@@ -70,19 +69,9 @@ namespace hypro {
              * @param dim
              * @param initialValue
              */
-            Point(const carl::Variable& _var, const carl::FLOAT_T<Number>& _value = carl::FLOAT_T<Number>())
+            Point(const carl::Variable& _var, const Number& _value = Number(0))
             {
                 mCoordinates[_var] = _value;
-            }
-		
-            /**
-             * Constructs a point with the passed dimension and sets the coordinates to the initial value.
-             * @param dim
-             * @param initialValue
-             */
-            Point(const carl::Variable& _var, const Number& _value = Number())
-            {
-                mCoordinates[_var] = carl::FLOAT_T<Number>(_value);
             }
             
             Point(std::initializer_list<Number> _coordinates)
@@ -90,7 +79,7 @@ namespace hypro {
                 unsigned count = 0;
                 for(auto& coordinate : _coordinates)
                 {
-                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), carl::FLOAT_T<Number>(coordinate)) );
+                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), Number(coordinate)) );
                     ++count;
                 }
 
@@ -102,7 +91,7 @@ namespace hypro {
                 unsigned count = 0;
                 for(unsigned j = 0; j < _coordinates.size(); ++j)
                 {
-                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), carl::FLOAT_T<Number>(_coordinates.at(j))) );
+                    mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), Number(_coordinates.at(j))) );
                     ++count;
                 }
             }
@@ -115,19 +104,8 @@ namespace hypro {
             {
                 mCoordinates.insert(_coordinates.begin(), _coordinates.end());
             }
-
-            /**
-             * Constructs a point with the passed coordinates
-             * @param coordinates
-             */
-            Point(const rawCoordinateMap& _coordinates) 
-            {
-                for (auto it : _coordinates) {
-                    mCoordinates.insert(std::make_pair(it.first, carl::FLOAT_T<Number>(it.second)));
-                }
-            }
             
-            Point(const vector& _vector)
+            Point(const vector_t<Number>& _vector)
             {
                 for (unsigned rowIndex = 0; rowIndex < _vector.rows(); ++rowIndex)
                 {
@@ -152,21 +130,13 @@ namespace hypro {
                 	mComposedOf.push_back(composite);
                 }
             }
-            
-            /*
-            template<typename F = FloatType, DisableIf< std::is_same<F, double> > = dummy>
-            FLOAT_T<FloatType>(const FloatType& val, const CARL_RND=CARL_RND::N)
-            {
-                mValue = val;
-            }
-            */
              
             template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
             Point(const Point<F>& _p)
             {
                 for(auto& coordinate : _p.coordinates())
                 {
-                    carl::FLOAT_T<Number> tmp = coordinate.second;
+                    Number tmp = coordinate.second;
                     mCoordinates.insert(std::make_pair(coordinate.first, tmp));
                 }
             }
@@ -225,15 +195,10 @@ namespace hypro {
              * @param  dim the dimension we want to get the value from.
              * @return 
              */
-            carl::FLOAT_T<Number> coordinate(const carl::Variable& _var) const
+            Number coordinate(const carl::Variable& _var) const
             {
                 assert(mCoordinates.count(_var) > 0);
                 return mCoordinates.at(_var);
-            }
-            
-            const Number& rawCoordinate(const carl::Variable& _var) const
-            {
-                return this->coordinate(_var).value();
             }
 
             coordinateMap coordinates() const 
@@ -251,14 +216,9 @@ namespace hypro {
              * @param dim    the dimension that is changed
              * @param value  the new value
              */
-            void setCoordinate(const carl::Variable& _dim, carl::FLOAT_T<Number> _value)
-            {
-                mCoordinates[_dim] = _value;
-            }
-            
             void setCoordinate(const carl::Variable& _dim, Number _value)
             {
-                mCoordinates[_dim] = carl::FLOAT_T<Number>(_value);
+                mCoordinates[_dim] = _value;
             }
             
             /**
@@ -271,18 +231,10 @@ namespace hypro {
                 mCoordinates.insert(_coordinates.begin(), _coordinates.end());
             }
             
-            void insertCoordinates(const rawCoordinateMap& _coordinates)
-            {
-                for(auto& valuePair : _coordinates)
-                {
-                    mCoordinates.insert(std::make_pair(valuePair.first, carl::FLOAT_T<Number>(valuePair.second)));
-                }
-            }
-            
             /**
              * Sets the coordinates from the given vector
              */
-            void coordinatesFromVector(const vector& vector)
+            void coordinatesFromVector(const vector_t<Number>& vector)
             {
             	assert( (unsigned) vector.size() == mCoordinates.size() );
             	unsigned index = 0;
@@ -351,56 +303,57 @@ namespace hypro {
                 return result;
             }
             
-            std::vector<carl::FLOAT_T<Number> > polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const
+            std::vector<Number> polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const
             {
                 Point<Number> base = *this - _origin;
-                std::cout << "Point: " << base << std::endl;
+                //std::cout << "Point: " << base << std::endl;
                 
                 
-                std::vector<carl::FLOAT_T<Number> > result;
+                std::vector<Number> result;
                 
                 // 1st component of the result is the radial part, the following components are the angles.
-                carl::FLOAT_T<Number> radialCoordinate;
-                for(auto dimension : base.mCoordinates)
+                Number radialCoordinate;
+                for(auto& dimension : base.mCoordinates)
                 {
-                    carl::FLOAT_T<Number> square;
-                    dimension.second.pow(square, 2);
+                    Number square;
+                    square = pow(dimension.second, 2);
                     radialCoordinate += square;
                 }
-                radialCoordinate.sqrt_assign();
+                radialCoordinate = sqrt(radialCoordinate);
                 result.insert(result.begin(), radialCoordinate);
                 
-                std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
+                //std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
                 
                 // compute polar angles
-                carl::FLOAT_T<Number> angle;
+                Number angle;
                 for(auto dimension = base.mCoordinates.begin(); dimension != --base.mCoordinates.end(); ++dimension)
                 {
-                    std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
+                    //std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
                     angle = 0;
                     for(auto dimension2 = dimension; dimension2 != base.mCoordinates.end(); ++dimension2)
                     {
-                        carl::FLOAT_T<Number> square;
-                        angle += (*dimension2).second.pow(square, 2);
+                        Number square;
+						square = pow((*dimension2).second, 2); // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
+                        angle += square;
                     }
-                    std::cout << "Summed squares: " << angle << std::endl;
-                    angle.sqrt_assign();
+                    //std::cout << "Summed squares: " << angle << std::endl;
+                    angle = sqrt(angle);
                     angle = (*dimension).second / angle;
-                    std::cout << "After division: " << angle << std::endl;
-                    angle.acos_assign();
-                    std::cout << "After acos: " << angle << std::endl;
+                    //std::cout << "After division: " << angle << std::endl;
+                    angle = acos(angle);
+                    //std::cout << "After acos: " << angle << std::endl;
                     if(!_radians)
                     {
                         angle /= 2*PI_DN ;
                         angle *= 360;
                     }
                     result.insert(result.end(), angle);
-                    std::cout << "Angle: " << angle << std::endl;
+                    //std::cout << "Angle: " << angle << std::endl;
                 }
-                if((*base.mCoordinates.rbegin()).second < carl::FLOAT_T<Number>(0))
+                if((*base.mCoordinates.rbegin()).second < Number(0))
                 {
-                    std::cout << "Correct last angle: ";
-                    carl::FLOAT_T<Number> tmp = result.back();
+                    //std::cout << "Correct last angle: ";
+                    Number tmp = result.back();
                     result.pop_back();
                     if(!_radians)
                     {
@@ -410,7 +363,7 @@ namespace hypro {
                     {
                         tmp = -tmp;
                     }
-                    std::cout << tmp << std::endl;
+                    //std::cout << tmp << std::endl;
                     result.push_back(tmp);
                 }
                 
@@ -434,7 +387,7 @@ namespace hypro {
                 coordinateMap coordinates;
                 for (auto pointIt : mCoordinates)
                 {
-                    coordinates.insert(std::make_pair(pointIt.first, carl::FLOAT_T<Number>(0)));
+                    coordinates.insert(std::make_pair(pointIt.first, Number(0)));
                 }
                 return Point<Number>(coordinates);
             }
@@ -457,7 +410,7 @@ namespace hypro {
                     {
                         mCoordinates[(*pointIt).first] = (*pointIt).second;
                     }
-                    if (mCoordinates.at((*pointIt).first) < carl::FLOAT_T<Number>(0)) negative = true;
+                    if (mCoordinates.at((*pointIt).first) < Number(0)) negative = true;
                 }
                 return negative;
             }
@@ -465,18 +418,18 @@ namespace hypro {
             /**
              * Makes a linear transformation, ie A * p + b
              */
-            void linearTransformation(const matrix& A, const vector& b = vector())
+            void linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>())
             {
-            	coordinatesFromVector(A * vector(*this) + b);
+            	coordinatesFromVector(A * vector_t<Number>(*this) + b);
             }
 
             /**
              * 
              * @return the sum of all coordinates
              */
-            carl::FLOAT_T<Number> sum() const
+            Number sum() const
             {
-                carl::FLOAT_T<Number> sum = 0;
+                Number sum = 0;
                 for (auto pointIt : mCoordinates)
                 {
                     sum += (pointIt).second;
@@ -506,10 +459,10 @@ namespace hypro {
             
             static const Number& inftyNorm(const Point<Number> _p)
             {
-                carl::FLOAT_T<Number> res = 0;
+                Number res = 0;
                 for(auto coordinateIt = _p.mCoordinates.begin(); coordinateIt != _p.mCoordinates.end(); ++coordinateIt)
                 {
-                    carl::FLOAT_T<Number> abs;
+                    Number abs;
                     coordinateIt->second.abs(abs);
                     res = res > abs ? res : abs;
                 }
@@ -529,7 +482,7 @@ namespace hypro {
              * 
              * @param val The value to be added to each coordinate
              */
-            void incrementInAllDim(const carl::FLOAT_T<Number>& _val = 1)
+            void incrementInAllDim(const Number& _val = 1)
             {
                 for (auto pointIt : mCoordinates)
                 {
@@ -611,7 +564,7 @@ namespace hypro {
             
             /**
              * Checks if the point has the same dimensions as this point.
-             * The carl::FLOAT_T<Number> of dimensions has to be equal as well as the actual
+             * The Number of dimensions has to be equal as well as the actual
              * variables used for those dimensions.
              * 
              * @param p
@@ -729,7 +682,7 @@ namespace hypro {
                 return *this;
             }
             
-            Point<Number>& operator*=(const carl::FLOAT_T<Number> _factor)
+            Point<Number>& operator*=(const Number _factor)
             {
                 for( auto lCoordinate : mCoordinates)
                 {
@@ -743,12 +696,12 @@ namespace hypro {
              * @param i
              * @return
              */
-            carl::FLOAT_T<Number>& operator[] (const carl::Variable& _i)
+            Number& operator[] (const carl::Variable& _i)
             {
                 return mCoordinates[_i];
             }
 
-            carl::FLOAT_T<Number> at(const carl::Variable& _i) const
+            Number at(const carl::Variable& _i) const
             {
                 return mCoordinates.at(_i);
             }
@@ -763,15 +716,15 @@ namespace hypro {
             {
                 _ostr << "( ";		
                 for (auto pointIt : _p.mCoordinates) {
-                    _ostr << pointIt.second.toString() << "[" << pointIt.first << "] ";
+                    _ostr << pointIt.second << "[" << pointIt.first << "] ";
                 } 
                 _ostr << ")";
                 return _ostr;
             }
 
-            explicit operator vector() const
+            explicit operator vector_t<Number>() const
             {
-            	vector result = vector(mCoordinates.size());
+            	vector_t<Number> result = vector_t<Number>(mCoordinates.size());
             	unsigned index = 0;
             	for (auto& pointIt : mCoordinates) {
             		result(index) = pointIt.second;
@@ -819,10 +772,10 @@ namespace hypro {
     }
     
     template<typename Number>
-    carl::FLOAT_T<Number> operator*( const Point<Number>& _lhs, const Point<Number>& _rhs )
+    Number operator*( const Point<Number>& _lhs, const Point<Number>& _rhs )
     {
         assert(_lhs.dimension() == _rhs.dimension());
-        carl::FLOAT_T<Number> result = 0;
+        Number result = 0;
         for(auto lCoordinate : _lhs)
         {
             assert(_rhs.hasDimension(lCoordinate.first));
@@ -832,7 +785,7 @@ namespace hypro {
     }
     
     template<typename Number>
-    const Point<Number> operator*( const Point<Number>& _lhs, const carl::FLOAT_T<Number>& _factor)
+    const Point<Number> operator*( const Point<Number>& _lhs, const Number& _factor)
     {
         Point<Number> result = _lhs;
         for(auto& coordinate : result)

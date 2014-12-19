@@ -513,7 +513,7 @@ namespace hypro
         /*
          *   Initiates the start of the hybrid analysis
          */
-        void start(HybridAutomaton<double, valuation>* model, parameters params, options opt, matrix_t<double> X0constraints,operator_e op, vector_t<double> X0constraintValues, SupportFunction* U_param)
+        void start(HybridAutomaton<double, valuation_t<double>>* model, parameters params, options opt, matrix_t<double> X0constraints,operator_e op, vector_t<double> X0constraintValues, SupportFunction* U_param)
         {
              CleanupOnExit::removeFlowpipeSegments(&results); // remove potential previously computed results
              results.clear();

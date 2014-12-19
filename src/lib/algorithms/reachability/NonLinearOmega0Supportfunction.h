@@ -304,7 +304,7 @@ namespace hypro
                double epsilonintersection =0;
                for (int i=0;i<(*self).absl.rows(); i++)
                {
-                   epsilonintersection = epsilonintersection+ MIN(x[0]*((*self).e_p(i,0).toDouble()), (1-x[0])*((*self).e_n(i,0).toDouble())*((*self).absl(i,0).toDouble()));
+                   epsilonintersection = epsilonintersection+ MIN(x[0]*((*self).e_p(i,0)), (1-x[0])*((*self).e_n(i,0))*((*self).absl(i,0)));
                }
                //std::cout << "epsilonintersection:" << epsilonintersection << '\n';
                

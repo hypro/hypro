@@ -142,7 +142,7 @@ namespace hypro {
             /**
              * @see Point::coordinate
              */
-            carl::FLOAT_T<Number> coordinate(const carl::Variable& _var) const
+            Number coordinate(const carl::Variable& _var) const
             {
                 return mPoint.coordinate(_var);
             }
@@ -243,12 +243,12 @@ namespace hypro {
              * @param i
              * @return
              */
-            carl::FLOAT_T<Number>& operator[] (const carl::Variable& _i)
+            Number& operator[] (const carl::Variable& _i)
             {
                 return mPoint[_i];
             }
 
-            carl::FLOAT_T<Number> at(const carl::Variable& _i) const
+            Number at(const carl::Variable& _i) const
             {
                 return mPoint.at(_i);
             }

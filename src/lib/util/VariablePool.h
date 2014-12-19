@@ -118,6 +118,7 @@ namespace hypro
                 return varIt->first;
             else
             {
+				std::cout << __func__ << " _index: " << _index << " mPplId: " << mPplId << std::endl;
                 assert(_index == mPplId);
                 Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
                 carl::Variable newCarlVar = mPool.getFreshVariable();

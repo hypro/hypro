@@ -13,7 +13,7 @@ namespace hypro
 		 * General purpose functionality
 		 */
 		template<typename Number>
-		bool compare(carl::FLOAT_T<Number> _lhs, carl::FLOAT_T<Number> _rhs, hypro::operator_e _op) {
+		bool compare(Number _lhs, Number _rhs, hypro::operator_e _op) {
 			bool result = false;
 
 			switch (_op) {
@@ -83,7 +83,7 @@ namespace hypro
 		}
 
 		/**
-		 * conversion of a matrix of type 'carl::FLOAT_T<Number>' to 'double'
+		 * conversion of a matrix of type 'Number' to 'double'
 		 */
 		template<typename Number>
 		Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble(hypro::matrix_t<Number>& _mat) {
@@ -91,14 +91,14 @@ namespace hypro
 
 			for (int i=0; i<_mat.rows(); ++i) {
 				for (int j=0; j<_mat.cols(); ++j) {
-					resultMat(i,j) = _mat(i,j).toDouble();
+					resultMat(i,j) = _mat(i,j);
 				}
 			}
 			return resultMat;
 		}
                 
                 /**
-		 * conversion of a vector of type 'carl::FLOAT_T<Number>' to 'double'
+		 * conversion of a vector of type 'Number' to 'double'
 		 */
                 template<typename Number>
 		Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble(hypro::vector_t<Number>& _vec) {
@@ -111,7 +111,7 @@ namespace hypro
 		}
 
 		/**
-		 * conversion of a matrix of (templated) type 'Number' to 'carl::FLOAT_T<Number>'
+		 * conversion of a matrix of (templated) type 'Number' to 'Number'
 		 */
 		template<typename Number>
 		hypro::matrix_t<Number> convertMatToFloatT(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& _mat) {
@@ -119,7 +119,7 @@ namespace hypro
 
 			for (int i=0; i<_mat.rows(); ++i) {
 				for (int j=0; j<_mat.cols(); ++j) {
-					resultMat(i,j) = carl::FLOAT_T<Number>(_mat(i,j));
+					resultMat(i,j) = Number(_mat(i,j));
 				}
 			}
 			return resultMat;
