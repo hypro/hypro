@@ -51,9 +51,9 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
 	
-    Point<number> p1;
-    Point<number> p2;
-    Point<number> p3;
+    Point<Number> p1;
+    Point<Number> p2;
+    Point<Number> p3;
 };
 
 TYPED_TEST(VertexContainerTest, Constructor)

@@ -212,7 +212,7 @@ namespace hypro {
 		 * @return
 		 */
 		template <typename BiIterator>
-		inline vSetIt<Number> insert(const Point<Number> p, bool c, const BiIterator pos) {
+		inline vSetIt<Number> insert(const Point<Number>& p, bool c, const BiIterator pos) {
 			return insert(Vertex<Number>(p,c),pos);
 		}
 		
