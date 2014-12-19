@@ -61,7 +61,7 @@ namespace hypro
         // if not induced, calculate the integer part of each coordinate
         if (!mInduced) {
             for (auto coordinateIt : x.coordinates()) {
-                coordinateIt.second.floor(coordinates[coordinateIt.first]);
+                coordinates[coordinateIt.first] = floor(coordinateIt.second);
             }
         } else {
             for (auto inducedGridPointsIt : mInducedGridPoints) {

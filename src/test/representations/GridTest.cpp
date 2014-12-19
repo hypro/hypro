@@ -19,14 +19,15 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class GridTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
 
-        Grid<number>::gridMap map1;
-        Grid<number>::gridMap map2;
+        typename Grid<Number>::gridMap map1;
+        typename Grid<Number>::gridMap map2;
         
         std::vector<carl::Variable> variables;
         variables.push_back(x);
@@ -36,37 +37,37 @@ protected:
         grid2.reserveInducedGrid(variables);
         
         // grid1
-        Point<number>::coordinateMap coordinates;
-        coordinates[x] = FLOAT_T<number_t>(1);
-        coordinates[y] = FLOAT_T<number_t>(1);
-        p1 = Point<number>(coordinates);
+        typename Point<Number>::coordinateMap coordinates;
+        coordinates[x] = Number(1);
+        coordinates[y] = Number(1);
+        p1 = Point<Number>(coordinates);
         grid1.insert(p1, true);
         
-        coordinates[x] = FLOAT_T<number_t>(1);
-        coordinates[y] = FLOAT_T<number_t>(2);
-        p2 = Point<number>(coordinates);
+        coordinates[x] = Number(1);
+        coordinates[y] = Number(2);
+        p2 = Point<Number>(coordinates);
         grid1.insert(p2, false);
         
         // grid2
-        coordinates[x] = FLOAT_T<number_t>(2);
-        coordinates[y] = FLOAT_T<number_t>(5);
-        p3 = Point<number>(coordinates);
+        coordinates[x] = Number(2);
+        coordinates[y] = Number(5);
+        p3 = Point<Number>(coordinates);
         grid1.insert(p3, true);
         
-        coordinates[x] = FLOAT_T<number_t>(2);
-        coordinates[y] = FLOAT_T<number_t>(5);
-        p4 = Point<number>(coordinates);
+        coordinates[x] = Number(2);
+        coordinates[y] = Number(5);
+        p4 = Point<Number>(coordinates);
         grid1.insert(p4, true);
         
         // vertices
         coordinates[x] = 1; coordinates[y] = 5;
-        vertices.insert(Vertex<number>(coordinates, false));
+        vertices.insert(Vertex<Number>(coordinates, false));
 
         coordinates[x] = 4; coordinates[y] = 6;
-        vertices.insert(Vertex<number>(coordinates, true));
+        vertices.insert(Vertex<Number>(coordinates, true));
 
         coordinates[x] = 6; coordinates[y] = 8;
-        vertices.insert(Vertex<number>(coordinates, true));
+        vertices.insert(Vertex<Number>(coordinates, true));
     }
 	
     virtual void TearDown()
@@ -77,207 +78,207 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
     
-    Point<number> p1, p2, p3, p4;
+    Point<Number> p1, p2, p3, p4;
     
-    vSet<number> vertices;
+    vSet<Number> vertices;
 
-    Grid<number> grid1;
-    Grid<number> grid2;
+    Grid<Number> grid1;
+    Grid<Number> grid2;
 };
 
-TEST_F(GridTest, Constructor)
+TYPED_TEST(GridTest, Constructor)
 {
-    Grid<number> grid;
+    Grid<TypeParam> grid;
     EXPECT_TRUE(grid.empty());
-    Grid<number> copy(grid);
+    Grid<TypeParam> copy(grid);
     EXPECT_TRUE(copy.empty());
 }
 
-TEST_F(GridTest, Access)
+TYPED_TEST(GridTest, Access)
 {
-    EXPECT_TRUE(grid1.find(p1) != grid1.end());
-    ++p1[x];
-    EXPECT_TRUE(grid1.find(p1) == grid1.end());
+    EXPECT_TRUE(this->grid1.find(this->p1) != this->grid1.end());
+    ++this->p1[this->x];
+    EXPECT_TRUE(this->grid1.find(this->p1) == this->grid1.end());
 }
 
-TEST_F(GridTest, Insert)
+TYPED_TEST(GridTest, Insert)
 {
-    Point<number> p = Point<number>(p4);
-    p[x] += FLOAT_T<number_t>(0.5);
+    Point<TypeParam> p = Point<TypeParam>(this->p4);
+    p[this->x] += TypeParam(0.5);
     
-    grid1.insert(p4, true);
-    EXPECT_TRUE(grid1.colourAt(p4));
-    EXPECT_TRUE(grid1.colourAt(p));
+    this->grid1.insert(this->p4, true);
+    EXPECT_TRUE(this->grid1.colourAt(this->p4));
+    EXPECT_TRUE(this->grid1.colourAt(p));
     
-    p[x] += FLOAT_T<number_t>(5);
-    p4[x] += FLOAT_T<number_t>(5);
+    p[this->x] += TypeParam(5);
+    this->p4[this->x] += TypeParam(5);
     
-    grid1.insert(p, false);
-    EXPECT_FALSE(grid1.colourAt(p4));
-    EXPECT_FALSE(grid1.colourAt(p));
+    this->grid1.insert(p, false);
+    EXPECT_FALSE(this->grid1.colourAt(this->p4));
+    EXPECT_FALSE(this->grid1.colourAt(p));
 }
 
-TEST_F(GridTest, ColourAt)
+TYPED_TEST(GridTest, ColourAt)
 {
-    EXPECT_TRUE(grid1.colourAt(p1));
-    EXPECT_FALSE(grid1.colourAt(p2));
-    p1[x] = FLOAT_T<number_t>(1.5);
-    EXPECT_TRUE(grid1.colourAt(p1));
-    p1[x] = FLOAT_T<number_t>(2);
-    EXPECT_FALSE(grid1.colourAt(p1));
+    EXPECT_TRUE(this->grid1.colourAt(this->p1));
+    EXPECT_FALSE(this->grid1.colourAt(this->p2));
+    this->p1[this->x] = TypeParam(1.5);
+    EXPECT_TRUE(this->grid1.colourAt(this->p1));
+    this->p1[this->x] = TypeParam(2);
+    EXPECT_FALSE(this->grid1.colourAt(this->p1));
 }
 
-TEST_F(GridTest, InsertVerticesInMap)
+TYPED_TEST(GridTest, InsertVerticesInMap)
 {
-    vSet<number> vertices;
-    Point<number>::coordinateMap coordinates;
-    Vertex<number> v1, v2, v3;
+    vSet<TypeParam> vertices;
+    typename Point<TypeParam>::coordinateMap coordinates;
+    Vertex<TypeParam> v1, v2, v3;
     
-    coordinates[x] = 1; coordinates[y] = 5;
-    v1 = Vertex<number>(coordinates, false);
-    coordinates[x] = 4; coordinates[y] = 7;
-    v2 = Vertex<number>(coordinates, true);
-    coordinates[x] = 6; coordinates[y] = 8;
-    v3 = Vertex<number>(coordinates, true);
+    coordinates[this->x] = 1; coordinates[this->y] = 5;
+    v1 = Vertex<TypeParam>(coordinates, false);
+    coordinates[this->x] = 4; coordinates[this->y] = 7;
+    v2 = Vertex<TypeParam>(coordinates, true);
+    coordinates[this->x] = 6; coordinates[this->y] = 8;
+    v3 = Vertex<TypeParam>(coordinates, true);
     
-    vertices.insert(v1);
-    vertices.insert(v2);
-    vertices.insert(v3);
+    this->vertices.insert(v1);
+    this->vertices.insert(v2);
+    this->vertices.insert(v3);
     
-    grid1.insertVerticesInMap(vertices);
+    this->grid1.insertVerticesInMap(this->vertices);
     
-    EXPECT_FALSE(grid1.colourAt(v1.point()));
-    EXPECT_TRUE(grid1.colourAt(v2.point()));
-    EXPECT_TRUE(grid1.colourAt(v3.point()));
+    EXPECT_FALSE(this->grid1.colourAt(v1.point()));
+    EXPECT_TRUE(this->grid1.colourAt(v2.point()));
+    EXPECT_TRUE(this->grid1.colourAt(v3.point()));
 }
 
-TEST_F(GridTest, InduceGrid)
+TYPED_TEST(GridTest, InduceGrid)
 {
-    EXPECT_FALSE(grid1.induced());
+    EXPECT_FALSE(this->grid1.induced());
     
-    grid1.induceGrid(vertices);
+    this->grid1.induceGrid(this->vertices);
     
-    EXPECT_TRUE(grid1.induced());
+    EXPECT_TRUE(this->grid1.induced());
     
-    p4[x] = 10; p4[y] = 9;
+    this->p4[this->x] = 10; this->p4[this->y] = 9;
     
-    Point<number> _p1 = Point<number>(p1); // (1;1)
-    Point<number> _p2 = Point<number>(p2); // (1;2)
-    Point<number> _p3 = Point<number>(p3); // (2;5)
-    Point<number> _p4 = Point<number>(p4); // (10;9)
+    Point<TypeParam> _p1 = Point<TypeParam>(this->p1); // (1;1)
+    Point<TypeParam> _p2 = Point<TypeParam>(this->p2); // (1;2)
+    Point<TypeParam> _p3 = Point<TypeParam>(this->p3); // (2;5)
+    Point<TypeParam> _p4 = Point<TypeParam>(this->p4); // (10;9)
     
-    _p1[x] = 1; _p1[y] = 0;
-    _p2[x] = 1; _p2[y] = 0;
-    _p3[x] = 1; _p3[y] = 5;
-    _p4[x] = 6; _p4[y] = 8;
+    _p1[this->x] = 1; _p1[this->y] = 0;
+    _p2[this->x] = 1; _p2[this->y] = 0;
+    _p3[this->x] = 1; _p3[this->y] = 5;
+    _p4[this->x] = 6; _p4[this->y] = 8;
     
-    EXPECT_EQ(_p1, grid1.nextPointOnGrid(p1));
-    EXPECT_EQ(_p2, grid1.nextPointOnGrid(p2));
-    EXPECT_EQ(_p3, grid1.nextPointOnGrid(p3));
-    EXPECT_EQ(_p4, grid1.nextPointOnGrid(p4));
+    EXPECT_EQ(_p1, this->grid1.nextPointOnGrid(this->p1));
+    EXPECT_EQ(_p2, this->grid1.nextPointOnGrid(this->p2));
+    EXPECT_EQ(_p3, this->grid1.nextPointOnGrid(this->p3));
+    EXPECT_EQ(_p4, this->grid1.nextPointOnGrid(this->p4));
 }
 
-TEST_F(GridTest, NextPointOnGrid)
+TYPED_TEST(GridTest, NextPointOnGrid)
 {
     // check for original grid
-    EXPECT_EQ(p1, grid1.nextPointOnGrid(p1));
-    Point<number> p = Point<number>(p1);
-    p[x] += FLOAT_T<number_t>(0.5);
-    EXPECT_EQ(p1, grid1.nextPointOnGrid(p));
+    EXPECT_EQ(this->p1, this->grid1.nextPointOnGrid(this->p1));
+    Point<TypeParam> p = Point<TypeParam>(this->p1);
+    p[this->x] += TypeParam(0.5);
+    EXPECT_EQ(this->p1, this->grid1.nextPointOnGrid(p));
     
     
     // check for induced grid
-    grid1.induceGrid(vertices);
+    this->grid1.induceGrid(this->vertices);
     
-    Point<number>::coordinateMap c;
+    typename Point<TypeParam>::coordinateMap c;
     
-    c[x] = 1; c[y] = 5;
-    Point<number> p1(c);
-    c[x] = 1; c[y] = 5;
-    Point<number> np1(c);
+    c[this->x] = 1; c[this->y] = 5;
+    Point<TypeParam> p1(c);
+    c[this->x] = 1; c[this->y] = 5;
+    Point<TypeParam> np1(c);
     
-    c[x] = 2; c[y] = 6;
-    Point<number> p2(c);
-    c[x] = 1; c[y] = 6;
-    Point<number> np2(c);
+    c[this->x] = 2; c[this->y] = 6;
+    Point<TypeParam> p2(c);
+    c[this->x] = 1; c[this->y] = 6;
+    Point<TypeParam> np2(c);
     
-    c[x] = 5; c[y] = 7;
-    Point<number> p3(c);
-    c[x] = 4; c[y] = 6;
-    Point<number> np3(c);
+    c[this->x] = 5; c[this->y] = 7;
+    Point<TypeParam> p3(c);
+    c[this->x] = 4; c[this->y] = 6;
+    Point<TypeParam> np3(c);
     
-    EXPECT_EQ(np1, grid1.nextPointOnGrid(p1));
-    EXPECT_EQ(np2, grid1.nextPointOnGrid(p2));
-    EXPECT_EQ(np3, grid1.nextPointOnGrid(p3));
+    EXPECT_EQ(np1, this->grid1.nextPointOnGrid(p1));
+    EXPECT_EQ(np2, this->grid1.nextPointOnGrid(p2));
+    EXPECT_EQ(np3, this->grid1.nextPointOnGrid(p3));
 }
 
-TEST_F(GridTest, CalculateInduced)
+TYPED_TEST(GridTest, CalculateInduced)
 {
-    grid1.induceGrid(vertices);
+    this->grid1.induceGrid(this->vertices);
     
-    Point<number>::coordinateMap c;
+    typename Point<TypeParam>::coordinateMap c;
     
-    c[x] = 1; c[y] = 5;
-    Point<number> p1(c);
-    c[x] = 1; c[y] = 1;
-    Point<number> ip1(c);
+    c[this->x] = 1; c[this->y] = 5;
+    Point<TypeParam> p1(c);
+    c[this->x] = 1; c[this->y] = 1;
+    Point<TypeParam> ip1(c);
     
-    c[x] = 2; c[y] = 6;
-    Point<number> p2(c);
-    c[x] = 1; c[y] = 2;
-    Point<number> ip2(c);
+    c[this->x] = 2; c[this->y] = 6;
+    Point<TypeParam> p2(c);
+    c[this->x] = 1; c[this->y] = 2;
+    Point<TypeParam> ip2(c);
     
-    c[x] = 5; c[y] = 7;
-    Point<number> p3(c);
-    c[x] = 2; c[y] = 2;
-    Point<number> ip3(c);
+    c[this->x] = 5; c[this->y] = 7;
+    Point<TypeParam> p3(c);
+    c[this->x] = 2; c[this->y] = 2;
+    Point<TypeParam> ip3(c);
     
-    EXPECT_EQ(ip1, grid1.calculateInduced(p1));
-    EXPECT_EQ(ip2, grid1.calculateInduced(p2));
-    EXPECT_EQ(ip3, grid1.calculateInduced(p3));
+    EXPECT_EQ(ip1, this->grid1.calculateInduced(p1));
+    EXPECT_EQ(ip2, this->grid1.calculateInduced(p2));
+    EXPECT_EQ(ip3, this->grid1.calculateInduced(p3));
 }
 
-TEST_F(GridTest, CalculateOriginal)
+TYPED_TEST(GridTest, CalculateOriginal)
 {
-    grid1.induceGrid(vertices);
+    this->grid1.induceGrid(this->vertices);
     
-    Point<number>::coordinateMap c;
+    typename Point<TypeParam>::coordinateMap c;
     
-    c[x] = 1; c[y] = 1;
-    Point<number> ip1(c);
-    c[x] = 1; c[y] = 5;
-    Point<number> op1(c);
+    c[this->x] = 1; c[this->y] = 1;
+    Point<TypeParam> ip1(c);
+    c[this->x] = 1; c[this->y] = 5;
+    Point<TypeParam> op1(c);
     
-    c[x] = 1; c[y] = 2;
-    Point<number> ip2(c);
-    c[x] = 1; c[y] = 6;
-    Point<number> op2(c);
+    c[this->x] = 1; c[this->y] = 2;
+    Point<TypeParam> ip2(c);
+    c[this->x] = 1; c[this->y] = 6;
+    Point<TypeParam> op2(c);
     
-    c[x] = 2; c[y] = 2;
-    Point<number> ip3(c);
-    c[x] = 4; c[y] = 6;
-    Point<number> op3(c);
+    c[this->x] = 2; c[this->y] = 2;
+    Point<TypeParam> ip3(c);
+    c[this->x] = 4; c[this->y] = 6;
+    Point<TypeParam> op3(c);
     
-    EXPECT_EQ(op1, grid1.calculateOriginal(ip1));
-    EXPECT_EQ(op2, grid1.calculateOriginal(ip2));
-    EXPECT_EQ(op3, grid1.calculateOriginal(ip3));
+    EXPECT_EQ(op1, this->grid1.calculateOriginal(ip1));
+    EXPECT_EQ(op2, this->grid1.calculateOriginal(ip2));
+    EXPECT_EQ(op3, this->grid1.calculateOriginal(ip3));
 }
 
-TEST_F(GridTest, Translate)
+TYPED_TEST(GridTest, Translate)
 {
-    grid1.induceGrid(vertices);
-    vSet<number> induced;
-    Point<number>::coordinateMap coordinates;
+    this->grid1.induceGrid(this->vertices);
+    vSet<TypeParam> induced;
+    typename Point<TypeParam>::coordinateMap coordinates;
 
-    coordinates[x] = 1; coordinates[y] = 1;
-    induced.insert(Vertex<number>(coordinates, false));
+    coordinates[this->x] = 1; coordinates[this->y] = 1;
+    induced.insert(Vertex<TypeParam>(coordinates, false));
 
-    coordinates[x] = 2; coordinates[y] = 2;
-    induced.insert(Vertex<number>(coordinates, true));
+    coordinates[this->x] = 2; coordinates[this->y] = 2;
+    induced.insert(Vertex<TypeParam>(coordinates, true));
 
-    coordinates[x] = 3; coordinates[y] = 3;
-    induced.insert(Vertex<number>(coordinates, true));
+    coordinates[this->x] = 3; coordinates[this->y] = 3;
+    induced.insert(Vertex<TypeParam>(coordinates, true));
     
-    EXPECT_EQ(induced, grid1.translateToInduced(vertices));
-    EXPECT_EQ(vertices, grid1.translateToOriginal(induced));
+    EXPECT_EQ(induced, this->grid1.translateToInduced(this->vertices));
+    EXPECT_EQ(this->vertices, this->grid1.translateToOriginal(induced));
 }

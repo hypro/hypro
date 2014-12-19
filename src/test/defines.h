@@ -14,9 +14,14 @@
 typedef ::testing::Types<int, double, carl::FLOAT_T<double>, number > types;
 typedef ::testing::Types<double, carl::FLOAT_T<double>, number > floatTypes;
 
-// List tests which should be typed.
-TYPED_TEST_CASE(BoxTest, types);
+// List tests which should be typed
+// Datastructure
 TYPED_TEST_CASE(PointTest, floatTypes);
 TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
 TYPED_TEST_CASE(VertexContainerTest, floatTypes);
 TYPED_TEST_CASE(VertexTest, floatTypes);
+
+// Representations
+TYPED_TEST_CASE(GridTest, floatTypes);
+TYPED_TEST_CASE(BoxTest, types);
+TYPED_TEST_CASE(PolytopeTest, types);
