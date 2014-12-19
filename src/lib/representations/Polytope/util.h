@@ -77,7 +77,7 @@ namespace polytope
         for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
         {
             //std::cout << "Var: " << (*pointIt).first << " found as: " << VariablePool::getInstance().variable((*pointIt).first) << std::endl;
-            tmpValue = (*pointIt).second.toDouble() * fReach_DENOMINATOR;
+            tmpValue = double((*pointIt).second) * fReach_DENOMINATOR;
             //std::cout << "tmpValue: " << tmpValue << std::endl;
             Linear_Expression tmp = tmpValue * VariablePool::getInstance().variable((*pointIt).first);
             ls += tmp;
@@ -90,7 +90,7 @@ namespace polytope
      * Creates a generator from a point, which is a colum-vector (mx1)
      */
     template<typename Number>
-    static inline Parma_Polyhedra_Library::Generator pointToGenerator(Eigen::Matrix<Number, Eigen::Dynamic, 1> point)
+    static inline Parma_Polyhedra_Library::Generator pointToGenerator(vector_t<Number> point)
     {
         using namespace Parma_Polyhedra_Library;
         double tmpValue;
@@ -109,9 +109,9 @@ namespace polytope
     static inline Point<Number> generatorToPoint(const Parma_Polyhedra_Library::Generator& gen, const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables)
     {
         Point<Number> result;
-        carl::FLOAT_T<Number> coefficient;
-        carl::FLOAT_T<Number> divisor;
-        carl::FLOAT_T<Number> value;
+        Number coefficient;
+        Number divisor;
+        Number value;
         for(auto varIt = variables.begin(); varIt != variables.end(); ++varIt)
         {
             if( gen.space_dimension() >= (*varIt).space_dimension() )
@@ -126,7 +126,7 @@ namespace polytope
             else
             {
                 // TODO: What about variables that have a greater space dimension? I guess this does not matter, as they do not seem to be part of the generator
-                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), carl::FLOAT_T<Number>(0));
+                result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), Number(0));
             }
         }
         return result;
@@ -136,6 +136,9 @@ namespace polytope
     {
         Parma_Polyhedra_Library::Generator_System gs = poly.generators();
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
+		if(gs.empty())
+			return poly.space_dimension();
+		
         for(auto& generator : gs)
         {
             Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
@@ -163,7 +166,7 @@ namespace polytope
     }
     
     template<typename Number>
-    static inline unsigned pplDimension(const typename std::set<Point<Number> >& points)
+    static inline unsigned pplDimension(const typename std::vector<Point<Number> >& points)
     {
         unsigned result = 0;
         for(auto& point : points)
@@ -175,7 +178,7 @@ namespace polytope
     }
     
     template<typename Number>
-    static inline unsigned pplDimension(const typename std::vector<Eigen::Matrix<Number, Eigen::Dynamic, 1>>& points)
+    static inline unsigned pplDimension(const typename std::vector<vector_t<Number>>& points)
     {
         unsigned result = 0;
         for(auto& point : points)
@@ -186,7 +189,7 @@ namespace polytope
     }
     
     template<typename Number>
-    static inline Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> polytopeToMatrix(const Parma_Polyhedra_Library::C_Polyhedron& poly)
+    static inline matrix_t<Number> polytopeToMatrix(const Parma_Polyhedra_Library::C_Polyhedron& poly)
     {
         // TODO: What about the constant factor?
         unsigned rowCount = 0;
@@ -194,7 +197,7 @@ namespace polytope
         //poly.print();
         Parma_Polyhedra_Library::Constraint_System cs = poly.constraints();
         std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables(poly);
-        Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> result = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>(hypro::polytope::csSize(cs), pplDimension(poly));
+        matrix_t<Number> result = matrix_t<Number>(hypro::polytope::csSize(cs), pplDimension(poly));
         //std::cout << "CSSize: " << hypro::polytope::csSize(cs) << ", Dimension: " << pplDimension(poly) << std::endl;
         for(auto constraintIt = cs.begin(); constraintIt != cs.end(); ++constraintIt)
         {
@@ -202,7 +205,7 @@ namespace polytope
             Parma_Polyhedra_Library::Constraint::expr_type t = (*constraintIt).expression();
             for(auto variableIt = vars.begin(); variableIt != vars.end(); ++variableIt)
             {
-                carl::FLOAT_T<Number> val = (int)Parma_Polyhedra_Library::raw_value(t.get(*variableIt)).get_si();
+                Number val = (int)Parma_Polyhedra_Library::raw_value(t.get(*variableIt)).get_si();
                 std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl; 
                 result(rowCount, columCount) = val;
                 ++columCount;
@@ -318,8 +321,8 @@ namespace polytope
     	std::vector<Point<Number>> otherNeighbors = otherSource.neighbors();
 
     	vector_t<Number> tempEdge;
-		carl::FLOAT_T<Number> dotProduct;
-		carl::FLOAT_T<Number> normFactor;
+		Number dotProduct;
+		Number normFactor;
 		for (typename std::vector<Point<Number>>::iterator it=otherNeighbors.begin(); it != otherNeighbors.end(); ++it) {
 			tempEdge = computeEdge(otherSource, *it);
 

@@ -85,12 +85,12 @@ namespace hypro
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
             	//std::cout << "Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble() << std::endl;
-            	polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble());
+            	polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), double(A(rowIndex,columIndex)*fReach_DENOMINATOR));
                 //polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
                 //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
             }
             //std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR).toDouble() << std::endl;
-            polynom.set_inhomogeneous_term(-(b(rowIndex,0)*fReach_DENOMINATOR).toDouble());
+            polynom.set_inhomogeneous_term(-double(b(rowIndex,0)*fReach_DENOMINATOR));
             //polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
@@ -112,7 +112,7 @@ namespace hypro
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
                 //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
-                polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
+                polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), double(A(rowIndex,columIndex)));
             }
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;

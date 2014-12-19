@@ -24,4 +24,4 @@ TYPED_TEST_CASE(VertexTest, floatTypes);
 // Representations
 TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(BoxTest, types);
-TYPED_TEST_CASE(PolytopeTest, types);
+TYPED_TEST_CASE(PolytopeTest, floatTypes);
