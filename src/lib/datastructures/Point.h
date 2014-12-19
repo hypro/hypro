@@ -45,7 +45,7 @@ namespace hypro {
             typedef std::map<carl::Variable, carl::FLOAT_T<Number> > coordinateMap;
             typedef std::map<carl::Variable, Number> rawCoordinateMap;
 
-        protected:
+        private:
             coordinateMap mCoordinates;
 
             //Adjacency List of this Point (if applicable)
@@ -471,57 +471,6 @@ namespace hypro {
             }
 
             /**
-             * @brief gives the next point according to some (hardcoded) ordering.
-             * @param bounds The grid lies between the origin and this point.
-             *
-             */
-            void nextPointOnGrid(const Point<Number>& _bounds) 
-            {
-                for(auto pointIt : mCoordinates)
-                {
-                    if ((*pointIt).second < _bounds.coordinate((*pointIt).first))
-                    {
-                        ++mCoordinates[(*pointIt).first];
-                        return;
-                    }
-                    else 
-                    {
-                        mCoordinates[(*pointIt).first] = carl::FLOAT_T<Number>(0); //TODO: sure to set it to zero instead of setting it to bounds[i-1] ?
-                    }
-                }
-            }
-    	
-            carl::FLOAT_T<Number> getGaussianProbability(Point<Number> & _mean) const{
-                return 0;
-            }
-
-            carl::FLOAT_T<Number> getDistanceDependentProbabiltity(Point<Number> & _mean, unsigned _intlength, carl::FLOAT_T<Number> _rate) const
-            {
-                carl::FLOAT_T<Number> dist;
-                for (auto pointIt : mCoordinates)
-                {
-                    dist += ( (*pointIt).second - _mean.coordinate((*pointIt).first) ).pow(carl::FLOAT_T<Number>(2));
-                }
-                dist /= _rate; //TODO: use proper rounding?
-                if (dist < 1) return 1;
-                return (((carl::FLOAT_T<Number>) _intlength * (carl::FLOAT_T<Number>) dimension()*(carl::FLOAT_T<Number>) dimension() / dist));
-            }
-        
-            /**
-            * @brief random move in one direction.
-            */
-			/*
-            void moveRandom()
-            {
-                unsigned dim = dimension();
-                unsigned value = rand();
-                unsigned dir = value%dim;
-                bool neg = (rand() & 1);
-                if (neg) mCoordinates[dir]--;
-                else mCoordinates[dir]++;
-            }
-			*/
-            /**
              * 
              * @return the sum of all coordinates
              */
@@ -533,103 +482,6 @@ namespace hypro {
                     sum += (pointIt).second;
                 }
                 return sum;
-            }
-
-            /**
-             * @brief: function to calculate points in the neighborhood, with one fixed dimension.
-             * @param fixedDi
-             * @paran pointself
-             * @return std::vector with all points in the neighborhood, with a fixed dimension, and optional the point itself.
-             */
-            std::vector<Point<Number> > getAllNeighborsForAFixedDimension(const carl::Variable& _fixedDim, const bool _pointself = false) const
-            {
-                std::vector<Point<Number> > neighbors;
-                unsigned dim = dimension();
-
-                // the number of neighbours is 2^(dimension - 1) - 1
-                int nrofNeighbors = (pow(2, (dim - 1)) - 1);
-
-                coordinateMap coordinates;
-                
-                // iterate through all neighbors
-                for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
-                    // then iterate through all dimensions
-                    int i = 0;
-                    for (auto& pointIt : mCoordinates) {
-                        // look if the bit of the current coordinate is set
-                        // thus the first point will have 1 less in every second dimension,
-                        // the second point will have 1 less in every fourth dimension etc.
-                        if (pointIt.first == _fixedDim) {
-                            coordinates[pointIt.first] = pointIt.second;
-                        }    
-                        else if ((neighborNr >> i++) & 1) {
-                            // @todo to neighbors with negative coordinates
-                            /*if (pointIt.second < 1) {
-                                neighborOk = false;
-                                break;
-                            }*/
-                            coordinates[pointIt.first] = pointIt.second - 1;
-                        }
-                        else {
-                            coordinates[pointIt.first] = pointIt.second;
-                        }
-                    }
-                    Point<Number> neighbor = Point<Number>(coordinates);
-                    neighbors.push_back(neighbor);
-                }
-                
-                if (_pointself) {
-                    neighbors.push_back(*this);
-                }
-                
-                return neighbors;
-            }
-
-            /**
-             *
-             * @param pointself
-             * @return Vector filled with neighbours in all dimensions.
-             *  point is optionally an element of the returned vector.
-             */
-            std::vector<Point<Number> > getAllNeighbours(const bool _pointself=false) const
-            {
-                std::vector<Point<Number> > neighbors;
-                unsigned dim = dimension();
-
-                // the number of neighbours is 2^(dimension) - 1
-                int nrofNeighbors = (pow(2, dim) - 1);
-
-                coordinateMap coordinates;
-                
-                // iterate through all neighbors
-                for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
-                    // then iterate through all dimensions
-                    int i = 0;
-                    for (auto& pointIt : mCoordinates) {
-                        // look if the bit of the current coordinate is set
-                        // thus the first point will have 1 less in every second dimension,
-                        // the second point will have 1 less in every fourth dimension etc.
-                        if ((neighborNr >> i++) & 1) {
-                            // @todo to neighbors with negative coordinates
-                            /*if (pointIt.second < 1) {
-                                neighborOk = false;
-                                break;
-                            }*/
-                            coordinates[pointIt.first] = pointIt.second - 1;
-                        }
-                        else {
-                            coordinates[pointIt.first] = pointIt.second;
-                        }
-                    }
-                    Point<Number> neighbor = Point<Number>(coordinates);
-                    neighbors.push_back(neighbor);
-                }
-                
-                if (_pointself) {
-                    neighbors.push_back(*this);
-                }
-                
-                return neighbors;
             }
 
             /**
@@ -705,18 +557,6 @@ namespace hypro {
                 pred.decrementInFixedDim(_d);
                 return pred;
             }
-
-			/*
-            static Point Random(const Point& boundary)
-            {
-                Point p = Point(boundary.dimension());
-                for (unsigned d = 0; d < boundary.dimension(); d++) 
-                {
-                    p[d].from_double(boundary[d] * (rand() / (RAND_MAX + 1.0)) + 0.5);
-                }
-                return p;
-            }
-			*/
 			 
             /**
              * @brief Check if in range.
@@ -735,19 +575,6 @@ namespace hypro {
                 }
                 return true;
             }
-
-			/*
-            static Point moveRandomInBoundary(const Point<Number>& boundary)
-            {
-                Point q = Point(boundary.dimension());
-                do 
-                {
-//                    q = Point(*this);
-                    q.moveRandom();
-                }while (!q.isInBoundary(boundary));
-                return q;
-            }
-			 */
 
             /**
              * Operators & Comparison functions

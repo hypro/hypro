@@ -44,11 +44,11 @@ namespace hypro
         // the grid the polyhedron is defined on
         Grid<Number> mGrid;
         
-        // the colour of the origin
-        //bool mOriginColour = false;
+        // the color of the origin
+        //bool mOriginColor = false;
         
-        // the neighbourhood container which maps points to a set of vertices
-        //NeighbourhoodContainer<Number> mNeighbourhood;
+        // the neighborhood container which maps points to a set of vertices
+        mutable NeighborhoodContainer<Number> mNeighborhood;
         
         // the cached boundary box (mutable to allow performance optimization)
         mutable Box<Number> mBoundaryBox;
@@ -78,16 +78,16 @@ namespace hypro
          * @param induceGrid true by default
          */
         OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true) : mVertices(vertices) {
-			//mOriginColour = vertices.originIsVertex();
-			mVariables = vertices.variables();
-			mGrid.reserveInducedGrid(mVariables);
-			if (induceGrid)
-			{
-				mGrid.induceGrid(vertices.vertices());
-				mGrid.insertVerticesInMap(vertices.vertices());
-				//vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-				//mInducedVertices = VertexContainer<Number>(inducedVertices);
-			}
+            //mOriginColor = vertices.originIsVertex();
+            mVariables = vertices.variables();
+            mGrid.reserveInducedGrid(mVariables);
+            if (induceGrid)
+            {
+                    mGrid.induceGrid(vertices.vertices());
+                    mGrid.insertVerticesInMap(vertices.vertices());
+                    //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+                    //mInducedVertices = VertexContainer<Number>(inducedVertices);
+            }
         }
 
         /**
@@ -96,7 +96,7 @@ namespace hypro
          * @param points
          */
         OrthogonalPolyhedron(const std::set<Point<Number> >& points) {
-        	// TODO compute the orthogonal polyhedron around the convex hull of all points
+            // TODO compute the orthogonal polyhedron around the convex hull of all points
         }
         
         /**
@@ -104,14 +104,14 @@ namespace hypro
          * @param copy
          */
         OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy) :
-        	mVertices(copy.mVertices),
-        	//mInducedVertices(copy.mInducedVertices),
-        	mGrid(copy.mGrid),
-        	//mOriginColour(copy.mOriginColour),
-        	//mNeighbourhood(copy.mNeighbourhood),
-        	mBoundaryBox(copy.mBoundaryBox),
-        	mBoxUpToDate(copy.mBoxUpToDate),
-        	mVariables(copy.mVariables)
+            mVertices(copy.mVertices),
+            //mInducedVertices(copy.mInducedVertices),
+            mGrid(copy.mGrid),
+            //mOriginColor(copy.mOriginColor),
+            mNeighborhood(copy.mNeighborhood),
+            mBoundaryBox(copy.mBoundaryBox),
+            mBoxUpToDate(copy.mBoxUpToDate),
+            mVariables(copy.mVariables)
         {}
         
         /***********************************************************************
@@ -155,7 +155,7 @@ namespace hypro
         void updateBoundaryBox() const;
         bool containsInduced(const Point<Number>& inducedPoint) const;
         void calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const;
-        bool checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool>& colouring) const;
+        bool checkVertexCondition(const Vertex<Number>& vertex, const std::map<Point<Number>, bool>& coloring) const;
         
     };
     

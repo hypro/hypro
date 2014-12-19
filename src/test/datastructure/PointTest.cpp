@@ -244,55 +244,6 @@ TEST_F(PointTest, BooleanTest)
     EXPECT_TRUE(p4.hasDimensions(p3.variables()));
 }
 
-TEST_F(PointTest, Neighbours)
-{
-    std::vector<Point<number_t> > neighbours = p1.getAllNeighborsForAFixedDimension(y);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p1.decrementInFixedDim(x);
-    EXPECT_EQ(p1, neighbours[0]);
-    
-    p2[c] = FLOAT_T<number_t>(3);
-    neighbours = p2.getAllNeighborsForAFixedDimension(a);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p2.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    p2.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    p2.incrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    
-    p3[a] = FLOAT_T<number_t>(2);
-    p3[b] = FLOAT_T<number_t>(7);
-    neighbours = p3.getAllNeighborsForAFixedDimension(a);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p3.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.incrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(d);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.incrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-}
-
 TEST_F(PointTest, LinearTransformation) {
 	matrix A = createMatrix(std::vector<std::vector<double> >({
 			std::vector<double>({4, 5}),

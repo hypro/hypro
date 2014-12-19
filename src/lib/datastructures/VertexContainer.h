@@ -124,7 +124,7 @@ namespace hypro {
 			vSetIt<Number> tmpIt = tmp.begin();
 			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
 				Vertex<Number> v = Vertex<Number>(*it);
-				v.move(p);
+				v.rPoint().move(p);
 				tmp.insert(tmpIt, v);
 				tmpIt++;
 			}
@@ -136,7 +136,7 @@ namespace hypro {
 			vSetIt<Number> tmpIt = tmp.begin();
 			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
 				Vertex<Number> v = Vertex<Number>(*it);
-				v.linearTransformation(A, b);
+				v.rPoint().linearTransformation(A, b);
 				tmp.insert(tmpIt, v);
 				tmpIt++;
 			}

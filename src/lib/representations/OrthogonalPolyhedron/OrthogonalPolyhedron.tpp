@@ -33,7 +33,7 @@ namespace hypro
     	VertexContainer<Number> newVertices(mVertices);
     	newVertices.linearTransformation(A, b);
     	result = OrthogonalPolyhedron<Number>(newVertices);
-    	// TODO: undefined behaviour, does not update colours of vertices nor fix the non-parallel edges
+    	// TODO: undefined behavior, does not update colors of vertices nor fix the non-parallel edges
     	return false;
     }
 
@@ -43,8 +43,8 @@ namespace hypro
     	// Definition: A+B = { a + b | a ∈ A, b ∈ B}
     	// Idea: put one polyhedron on all the vertices of the other one
     	// Problem: Which vertices to connect, which to remove?
-    	// Thoughts: do two vertices belong to former neighbours?
-    	//           store the "colour" of a moved polyhedron
+    	// Thoughts: do two vertices belong to former neighbors?
+    	//           store the "color" of a moved polyhedron
         return false;
     }
         
@@ -64,22 +64,25 @@ namespace hypro
         
         // the container to store the actual vertices
         VertexContainer<Number> vertices;
+        typename NeighborhoodContainer<Number>::neighborhood neighbors;
+        std::map<Point<Number>, bool> coloringIntersection;
         
         // check all potential vertices if they are in fact vertices
         for (auto vertexIt : potentialVertices) {
-            // calculate the neighbour colouring intersection
-            auto neighbours = vertexIt.getAllNeighbours(true); // include the point itself
-            std::map<Point<Number>, bool> colouringIntersection;
-            for (auto neighbourIt : neighbours) {
-                Point<Number> original = tmpGrid.calculateOriginal(neighbourIt);
-                bool colour1 = this->contains(original);
-                bool colour2 = rhs.contains(original);
-                colouringIntersection.insert(std::make_pair(neighbourIt, colour1 && colour2));
+            // calculate the neighbor coloring intersection
+            neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
+            coloringIntersection.clear();
+
+            for (auto neighborIt : neighbors) {
+                Point<Number> original = tmpGrid.calculateOriginal(neighborIt);
+                bool color1 = this->contains(original);
+                bool color2 = rhs.contains(original);
+                coloringIntersection.insert(std::make_pair(neighborIt, color1 && color2));
             }
             
-            // if the point is a vertex, add it with its calculated colour
-            if (checkVertexCondition(vertexIt, colouringIntersection)) {
-                vertices.insert(tmpGrid.calculateOriginal(vertexIt), colouringIntersection.at(vertexIt));
+            // if the point is a vertex, add it with its calculated color
+            if (checkVertexCondition(vertexIt, coloringIntersection)) {
+                vertices.insert(tmpGrid.calculateOriginal(vertexIt.point()), coloringIntersection.at(vertexIt.point()));
             }
         }
 
@@ -129,13 +132,13 @@ namespace hypro
         vSet<Number> potentialVertices;
         calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
         for (auto vertexIt : this->mVertices.vertices()) {
-            if ( !rhs.contains(vertexIt) ) {
-                potentialVertices.insert(vertexIt);
+            if ( !rhs.contains(vertexIt.point()) ) {
+                potentialVertices.insert(vertexIt.point());
             }
         }
         for (auto vertexIt : rhs.mVertices.vertices()) {
-            if ( !this->contains(vertexIt) ) {
-                potentialVertices.insert(vertexIt);
+            if ( !this->contains(vertexIt.point()) ) {
+                potentialVertices.insert(vertexIt.point());
             }
         }
         
@@ -147,22 +150,25 @@ namespace hypro
         
         // the container to store the actual vertices
         VertexContainer<Number> vertices;
+        typename NeighborhoodContainer<Number>::neighborhood neighbors;
+        std::map<Point<Number>, bool> coloringUnion;
         
         // check all potential vertices if they are in fact vertices
         for (auto vertexIt : potentialVertices) {
-            // calculate the neighbour colouring intersection
-            auto neighbours = vertexIt.getAllNeighbours(true); // include the point itself
-            std::map<Point<Number>, bool> colouringUnion;
-            for (auto neighbourIt : neighbours) {
-                Point<Number> original = tmpGrid.calculateOriginal(neighbourIt);
-                bool colour1 = this->contains(original);
-                bool colour2 = rhs.contains(original);
-                colouringUnion.insert(std::make_pair(neighbourIt, colour1 || colour2));
+            // calculate the neighbor coloring intersection
+            neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
+            coloringUnion.clear();
+
+            for (auto neighborIt : neighbors) {
+                Point<Number> original = tmpGrid.calculateOriginal(neighborIt);
+                bool color1 = this->contains(original);
+                bool color2 = rhs.contains(original);
+                coloringUnion.insert(std::make_pair(neighborIt, color1 || color2));
             }
             
-            // if the point is a vertex, add it with its calculated colour
-            if (checkVertexCondition(vertexIt, colouringUnion)) {
-                vertices.insert(tmpGrid.calculateOriginal(vertexIt), colouringUnion.at(vertexIt));
+            // if the point is a vertex, add it with its calculated color
+            if (checkVertexCondition(vertexIt, coloringUnion)) {
+                vertices.insert(tmpGrid.calculateOriginal(vertexIt.point()), coloringUnion.at(vertexIt.point()));
             }
         }
 
@@ -245,49 +251,49 @@ namespace hypro
         
     /**
      * Checks if the orthogonal polyhedron contains the given induced point.
-     * Using only the induced point makes calculating neighbourship and predecessors much easier.
+     * Using only the induced point makes calculating neighborship and predecessors much easier.
      * 
      * @param inducedPoint
      * @return 
      */
     template<typename Number>
     bool OrthogonalPolyhedron<Number>::containsInduced(const Point<Number>& inducedPoint) const {
-        // check if we already know the colour of this point
+        // check if we already know the color of this point
         auto it = mGrid.findInduced(inducedPoint);
         if (it != mGrid.end()) {
             return it->second;
         }
         
-        bool colour = false;
+        bool color = false;
 
         // check if the point is in our boundary box
         if (boundaryBox().contains(mGrid.calculateOriginal(inducedPoint))) {
             // there exists a dimension
             for (auto dimensionIt : mVariables) {
-                auto neighboursInFixed = inducedPoint.getAllNeighborsForAFixedDimension(dimensionIt);
+                auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(inducedPoint, dimensionIt);
                 bool dimensionOk = true;
                 
-                // for all neighbours we must ensure
-                for (auto neighbourIt : neighboursInFixed) {
-                    Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
-                    if (containsInduced(neighbourIt) != containsInduced(predecessor)) {
+                // for all neighbors we must ensure
+                for (auto neighborIt : neighborsInFixed) {
+                    Point<Number> predecessor = neighborIt.getPredecessorInDimension(dimensionIt);
+                    if (containsInduced(neighborIt) != containsInduced(predecessor)) {
                         dimensionOk = false;
                         break;
                     }
                 }
                 
-                // if the dimension is ok the point's colour is the same as its predecessor
+                // if the dimension is ok the point's color is the same as its predecessor
                 if (dimensionOk) {
                     Point<Number> predecessor = inducedPoint.getPredecessorInDimension(dimensionIt);
-                    colour = containsInduced(predecessor);
+                    color = containsInduced(predecessor);
                     break;
                 }
             }
         }
         
-        // save calculated colour for later use
-        mGrid.insertInduced(inducedPoint, colour);
-        return colour;
+        // save calculated color for later use
+        mGrid.insertInduced(inducedPoint, color);
+        return color;
     }
 
     /**
@@ -304,7 +310,7 @@ namespace hypro
     void OrthogonalPolyhedron<Number>::calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const {
         for (auto vertexIt1 : vertices1) {
             for (auto vertexIt2 : vertices2) {
-                Point<Number> max = Point<Number>::coordinateMax(vertexIt1, vertexIt2);
+                Point<Number> max = Point<Number>::coordinateMax(vertexIt1.point(), vertexIt2.point());
                 potentialVertices.insert(max);
             }
         }   
@@ -315,19 +321,19 @@ namespace hypro
      * ∀i ∈ {1, . . . , d}. ∃x' ∈ N i(x). c(x'i−) 6= c(x').
      * 
      * @param vertex
-     * @param colouring
+     * @param coloring
      * @return bool
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool>& colouring) const {
+    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Vertex<Number>& vertex, const std::map<Point<Number>, bool>& coloring) const {
         bool pointExists;
         
-        for (auto dimensionIt : point.variables()) {
-            auto neighboursInFixed = point.getAllNeighborsForAFixedDimension(dimensionIt, true); // include the point itself
+        for (auto dimensionIt : vertex.variables()) {
+            auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(vertex.point(), dimensionIt, true); // include the point itself
             pointExists = false;
-            for (auto neighbourIt : neighboursInFixed) {
-                Point<Number> predecessor = neighbourIt.getPredecessorInDimension(dimensionIt);
-                if (colouring.at(neighbourIt) != colouring.at(predecessor)) {
+            for (auto neighborIt : neighborsInFixed) {
+                Point<Number> predecessor = neighborIt.getPredecessorInDimension(dimensionIt);
+                if (coloring.at(neighborIt) != coloring.at(predecessor)) {
                     pointExists = true;
                     break;
                 }

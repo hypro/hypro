@@ -312,7 +312,7 @@ TEST_F(OrthogonalPolyhedronTest, Contains)
     
     // also check all vertices
     for (auto vertexIt : container1.vertices()) {
-        EXPECT_EQ(vertexIt.color(), p1.contains(vertexIt));
+        EXPECT_EQ(vertexIt.color(), p1.contains(vertexIt.point()));
     }
 }
 
