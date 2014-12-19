@@ -1,23 +1,23 @@
 /** 
  * @file    NeighborhoodContainer.tpp
- * @author  Sebastian Junges
  * @author  Benedikt Seidl
  *
  * @since   2014-03-17
  * @version 2014-03-17
  */
 
+#include "NeighborhoodContainer.h"
+
 namespace hypro
 {
     
-    template<typename Number>
-    typename NeighborhoodContainer<Number>::neighborhood NeighborhoodContainer<Number>::getNeighborhood(const Point<Number>& p, bool pointself)
+    NeighborhoodContainer::neighborhood NeighborhoodContainer::getNeighborhood(const Point<int>& p, bool pointself)
     {
         if (!hasNeighborhood(p)) {
             calculateNeighborhood(p);
         }
 
-        auto neighbors = mNeighborhoods.at(p);
+        NeighborhoodContainer::neighborhood neighbors = mNeighborhoods.at(p);
 
         if (pointself) {
             neighbors.push_back(p);
@@ -26,15 +26,14 @@ namespace hypro
         return neighbors;
     }
 
-    template<typename Number>
-    typename NeighborhoodContainer<Number>::neighborhood NeighborhoodContainer<Number>::getNeighborhoodForDimension(const Point<Number>& p, const carl::Variable& dimension, bool pointself)
+    NeighborhoodContainer::neighborhood NeighborhoodContainer::getNeighborhoodForDimension(const Point<int>& p, const carl::Variable& dimension, bool pointself)
     {
         if (!hasNeighborhood(p)) {
             calculateNeighborhood(p);
         }
 
-        auto neighbors = mNeighborhoods.at(p);
-        Number coordinate = p.coordinate(dimension);
+        NeighborhoodContainer::neighborhood neighbors = mNeighborhoods.at(p);
+        int coordinate = p.coordinate(dimension);
 
         // remove all neighbors which do not have the same value in that dimension as the original point
         for (auto it = neighbors.begin(); it != neighbors.end(); ) {
@@ -52,16 +51,15 @@ namespace hypro
         return neighbors;
     }
 
-    template<typename Number>
-    void NeighborhoodContainer<Number>::calculateNeighborhood(const Point<Number>& p)
+    void NeighborhoodContainer::calculateNeighborhood(const Point<int>& p)
     {
-        std::vector<Point<Number> > neighbors;
+        std::vector<Point<int> > neighbors;
         unsigned dim = p.dimension();
 
         // the number of neighbors is 2^(dimension) - 1
         int nrofNeighbors = (pow(2, dim) - 1);
 
-        typename Point<Number>::coordinateMap coordinates, pointCoordinates = p.coordinates();
+        Point<int>::coordinateMap coordinates, pointCoordinates = p.coordinates();
 
         // iterate through all neighbors
         for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
@@ -78,7 +76,7 @@ namespace hypro
                     coordinates[pointIt.first] = pointIt.second;
                 }
             }
-            Point<Number> neighbor = Point<Number>(coordinates);
+            Point<int> neighbor = Point<int>(coordinates);
             neighbors.push_back(neighbor);
         }
 

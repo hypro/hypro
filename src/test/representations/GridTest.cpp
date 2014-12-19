@@ -107,25 +107,25 @@ TYPED_TEST(GridTest, Insert)
     p[this->x] += TypeParam(0.5);
     
     this->grid1.insert(this->p4, true);
-    EXPECT_TRUE(this->grid1.colourAt(this->p4));
-    EXPECT_TRUE(this->grid1.colourAt(p));
+    EXPECT_TRUE(this->grid1.colorAt(this->p4));
+    EXPECT_TRUE(this->grid1.colorAt(p));
     
     p[this->x] += TypeParam(5);
     this->p4[this->x] += TypeParam(5);
     
     this->grid1.insert(p, false);
-    EXPECT_FALSE(this->grid1.colourAt(this->p4));
-    EXPECT_FALSE(this->grid1.colourAt(p));
+    EXPECT_FALSE(this->grid1.colorAt(this->p4));
+    EXPECT_FALSE(this->grid1.colorAt(p));
 }
 
 TYPED_TEST(GridTest, ColourAt)
 {
-    EXPECT_TRUE(this->grid1.colourAt(this->p1));
-    EXPECT_FALSE(this->grid1.colourAt(this->p2));
+    EXPECT_TRUE(this->grid1.colorAt(this->p1));
+    EXPECT_FALSE(this->grid1.colorAt(this->p2));
     this->p1[this->x] = TypeParam(1.5);
-    EXPECT_TRUE(this->grid1.colourAt(this->p1));
+    EXPECT_TRUE(this->grid1.colorAt(this->p1));
     this->p1[this->x] = TypeParam(2);
-    EXPECT_FALSE(this->grid1.colourAt(this->p1));
+    EXPECT_FALSE(this->grid1.colorAt(this->p1));
 }
 
 TYPED_TEST(GridTest, InsertVerticesInMap)
@@ -147,18 +147,14 @@ TYPED_TEST(GridTest, InsertVerticesInMap)
     
     this->grid1.insertVerticesInMap(this->vertices);
     
-    EXPECT_FALSE(this->grid1.colourAt(v1.point()));
-    EXPECT_TRUE(this->grid1.colourAt(v2.point()));
-    EXPECT_TRUE(this->grid1.colourAt(v3.point()));
+    EXPECT_FALSE(this->grid1.colorAt(v1.point()));
+    EXPECT_TRUE(this->grid1.colorAt(v2.point()));
+    EXPECT_TRUE(this->grid1.colorAt(v3.point()));
 }
 
 TYPED_TEST(GridTest, InduceGrid)
 {
-    EXPECT_FALSE(this->grid1.induced());
-    
     this->grid1.induceGrid(this->vertices);
-    
-    EXPECT_TRUE(this->grid1.induced());
     
     this->p4[this->x] = 10; this->p4[this->y] = 9;
     
@@ -216,22 +212,23 @@ TYPED_TEST(GridTest, CalculateInduced)
 {
     this->grid1.induceGrid(this->vertices);
     
+    Point<int>::coordinateMap i;
     typename Point<TypeParam>::coordinateMap c;
     
     c[this->x] = 1; c[this->y] = 5;
     Point<TypeParam> p1(c);
-    c[this->x] = 1; c[this->y] = 1;
-    Point<TypeParam> ip1(c);
+    i[this->x] = 1; i[this->y] = 1;
+    Point<int> ip1(i);
     
     c[this->x] = 2; c[this->y] = 6;
     Point<TypeParam> p2(c);
-    c[this->x] = 1; c[this->y] = 2;
-    Point<TypeParam> ip2(c);
+    i[this->x] = 1; i[this->y] = 2;
+    Point<int> ip2(i);
     
     c[this->x] = 5; c[this->y] = 7;
     Point<TypeParam> p3(c);
-    c[this->x] = 2; c[this->y] = 2;
-    Point<TypeParam> ip3(c);
+    i[this->x] = 2; i[this->y] = 2;
+    Point<int> ip3(i);
     
     EXPECT_EQ(ip1, this->grid1.calculateInduced(p1));
     EXPECT_EQ(ip2, this->grid1.calculateInduced(p2));
@@ -242,20 +239,21 @@ TYPED_TEST(GridTest, CalculateOriginal)
 {
     this->grid1.induceGrid(this->vertices);
     
+    Point<int>::coordinateMap i;
     typename Point<TypeParam>::coordinateMap c;
     
-    c[this->x] = 1; c[this->y] = 1;
-    Point<TypeParam> ip1(c);
+    i[this->x] = 1; i[this->y] = 1;
+    Point<int> ip1(i);
     c[this->x] = 1; c[this->y] = 5;
     Point<TypeParam> op1(c);
     
-    c[this->x] = 1; c[this->y] = 2;
-    Point<TypeParam> ip2(c);
+    i[this->x] = 1; i[this->y] = 2;
+    Point<int> ip2(i);
     c[this->x] = 1; c[this->y] = 6;
     Point<TypeParam> op2(c);
     
-    c[this->x] = 2; c[this->y] = 2;
-    Point<TypeParam> ip3(c);
+    i[this->x] = 2; i[this->y] = 2;
+    Point<int> ip3(i);
     c[this->x] = 4; c[this->y] = 6;
     Point<TypeParam> op3(c);
     
@@ -267,17 +265,17 @@ TYPED_TEST(GridTest, CalculateOriginal)
 TYPED_TEST(GridTest, Translate)
 {
     this->grid1.induceGrid(this->vertices);
-    vSet<TypeParam> induced;
-    typename Point<TypeParam>::coordinateMap coordinates;
+    vSet<int> induced;
+    typename Point<int>::coordinateMap coordinates;
 
     coordinates[this->x] = 1; coordinates[this->y] = 1;
-    induced.insert(Vertex<TypeParam>(coordinates, false));
+    induced.insert(Vertex<int>(coordinates, false));
 
     coordinates[this->x] = 2; coordinates[this->y] = 2;
-    induced.insert(Vertex<TypeParam>(coordinates, true));
+    induced.insert(Vertex<int>(coordinates, true));
 
     coordinates[this->x] = 3; coordinates[this->y] = 3;
-    induced.insert(Vertex<TypeParam>(coordinates, true));
+    induced.insert(Vertex<int>(coordinates, true));
     
     EXPECT_EQ(induced, this->grid1.translateToInduced(this->vertices));
     EXPECT_EQ(this->vertices, this->grid1.translateToOriginal(induced));

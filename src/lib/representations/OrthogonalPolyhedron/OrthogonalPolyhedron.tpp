@@ -7,8 +7,6 @@
  * @version 2014-05-28
  */
 
-#include "OrthogonalPolyhedron.h"
-
 
 namespace hypro
 {
@@ -60,15 +58,15 @@ namespace hypro
         Grid<Number> tmpGrid;
         tmpGrid.reserveInducedGrid(mVariables);
         tmpGrid.induceGrid(potentialVertices);
-        potentialVertices = tmpGrid.translateToInduced(potentialVertices);
+        vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
         
         // the container to store the actual vertices
         VertexContainer<Number> vertices;
-        typename NeighborhoodContainer<Number>::neighborhood neighbors;
-        std::map<Point<Number>, bool> coloringIntersection;
+        typename NeighborhoodContainer::neighborhood neighbors;
+        std::map<Point<int>, bool> coloringIntersection;
         
         // check all potential vertices if they are in fact vertices
-        for (auto vertexIt : potentialVertices) {
+        for (auto vertexIt : inducedPotentialVertices) {
             // calculate the neighbor coloring intersection
             neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
             coloringIntersection.clear();
@@ -146,15 +144,15 @@ namespace hypro
         Grid<Number> tmpGrid;
         tmpGrid.reserveInducedGrid(mVariables);
         tmpGrid.induceGrid(potentialVertices);
-        potentialVertices = tmpGrid.translateToInduced(potentialVertices);
+        vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
         
         // the container to store the actual vertices
         VertexContainer<Number> vertices;
-        typename NeighborhoodContainer<Number>::neighborhood neighbors;
-        std::map<Point<Number>, bool> coloringUnion;
+        typename NeighborhoodContainer::neighborhood neighbors;
+        std::map<Point<int>, bool> coloringUnion;
         
         // check all potential vertices if they are in fact vertices
-        for (auto vertexIt : potentialVertices) {
+        for (auto vertexIt : inducedPotentialVertices) {
             // calculate the neighbor coloring intersection
             neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
             coloringUnion.clear();
@@ -257,7 +255,7 @@ namespace hypro
      * @return 
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::containsInduced(const Point<Number>& inducedPoint) const {
+    bool OrthogonalPolyhedron<Number>::containsInduced(const Point<int>& inducedPoint) const {
         // check if we already know the color of this point
         auto it = mGrid.findInduced(inducedPoint);
         if (it != mGrid.end()) {
@@ -325,7 +323,7 @@ namespace hypro
      * @return bool
      */
     template<typename Number>
-    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Vertex<Number>& vertex, const std::map<Point<Number>, bool>& coloring) const {
+    bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const {
         bool pointExists;
         
         for (auto dimensionIt : vertex.variables()) {

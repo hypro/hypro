@@ -1,6 +1,5 @@
 /* 
  * @file    NeighborhoodContainer.h
- * @author  Sebastian Junges
  * @author  Benedikt Seidl
  *
  * @since   2014-03-17
@@ -20,19 +19,18 @@ namespace hypro
      * A neighborhood container which maps points
      * to their set of neighbor points.
      */
-    template<typename Number>
     class NeighborhoodContainer {
         
     public:
-        typedef std::vector<Point<Number> > neighborhood;
+        typedef std::vector<Point<int> > neighborhood;
         
     private:
-        std::map<Point<Number>, neighborhood> mNeighborhoods;
+        std::map<Point<int>, neighborhood> mNeighborhoods;
         
     public:
         NeighborhoodContainer() {}
         
-        NeighborhoodContainer(const NeighborhoodContainer<Number>& copy)
+        NeighborhoodContainer(const NeighborhoodContainer& copy)
         {
             mNeighborhoods.insert(copy.mNeighborhoods.begin(), copy.mNeighborhoods.end());
         }
@@ -54,7 +52,7 @@ namespace hypro
          * @param pointself point is optionally an element of the returned vector
          * @return Vector filled with neighbors in all dimensions
          */
-        neighborhood getNeighborhood(const Point<Number>& p, bool pointself = false);
+        neighborhood getNeighborhood(const Point<int>& p, bool pointself = false);
         
         /**
          * Returns the points in the neighborhood, with one fixed dimension.
@@ -64,27 +62,25 @@ namespace hypro
          * @param pointself point is optionally an element of the returned vector
          * @return 
          */
-        neighborhood getNeighborhoodForDimension(const Point<Number>& p, const carl::Variable& dimension, bool pointself = false);
+        neighborhood getNeighborhoodForDimension(const Point<int>& p, const carl::Variable& dimension, bool pointself = false);
 
         /**
          * Moves all neighbors.
          *
          * @param p the point by which the neighbors should be moved
          */
-        //void moveNeighbors(const Point<Number>& p);
+        //void moveNeighbors(const Point<int>& p);
         
     private:
 
-        bool hasNeighborhood(const Point<Number>& p) const
+        bool hasNeighborhood(const Point<int>& p) const
         {
             return mNeighborhoods.find(p) != mNeighborhoods.end();
         }
 
-        void calculateNeighborhood(const Point<Number>& p);
+        void calculateNeighborhood(const Point<int>& p);
         
     };
     
 }//namespace
-
-#include "NeighborhoodContainer.tpp"
 

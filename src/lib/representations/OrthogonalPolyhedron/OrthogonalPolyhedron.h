@@ -48,7 +48,7 @@ namespace hypro
         //bool mOriginColor = false;
         
         // the neighborhood container which maps points to a set of vertices
-        mutable NeighborhoodContainer<Number> mNeighborhood;
+        mutable NeighborhoodContainer mNeighborhood;
         
         // the cached boundary box (mutable to allow performance optimization)
         mutable Box<Number> mBoundaryBox;
@@ -153,9 +153,9 @@ namespace hypro
     private:
         
         void updateBoundaryBox() const;
-        bool containsInduced(const Point<Number>& inducedPoint) const;
+        bool containsInduced(const Point<int>& inducedPoint) const;
         void calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const;
-        bool checkVertexCondition(const Vertex<Number>& vertex, const std::map<Point<Number>, bool>& coloring) const;
+        bool checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const;
         
     };
     

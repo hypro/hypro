@@ -50,7 +50,6 @@ namespace hypro
         }
 
         clear();
-        mInduced = true;
     }
     
     template<typename Number>
@@ -58,25 +57,18 @@ namespace hypro
     {
         typename Point<Number>::coordinateMap coordinates;
         
-        // if not induced, calculate the integer part of each coordinate
-        if (!mInduced) {
-            for (auto coordinateIt : x.coordinates()) {
-                coordinates[coordinateIt.first] = floor(coordinateIt.second);
-            }
-        } else {
-            for (auto inducedGridPointsIt : mInducedGridPoints) {
-        
-                auto fixed = inducedGridPointsIt.first;
-                auto inducedGridPoints = inducedGridPointsIt.second;
-                
-                // get the position of the first element greater then the coordinate + 1
-                auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
-                        x.coordinate(fixed));
-                
-                // insert the element one before the element found above
-                coordinates.insert(std::make_pair(fixed,
-                        inducedGridPoints.at(it - inducedGridPoints.begin() - 1)));
-            }
+        for (auto inducedGridPointsIt : mInducedGridPoints) {
+
+            auto fixed = inducedGridPointsIt.first;
+            auto inducedGridPoints = inducedGridPointsIt.second;
+
+            // get the position of the first element greater then the coordinate + 1
+            auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
+                    x.coordinate(fixed));
+
+            // insert the element one before the element found above
+            coordinates.insert(std::make_pair(fixed,
+                    inducedGridPoints.at(it - inducedGridPoints.begin() - 1)));
         }
         
         Point<Number> induced(coordinates);
@@ -84,13 +76,9 @@ namespace hypro
     }
     
     template<typename Number>
-    Point<Number> Grid<Number>::calculateInduced(const Point<Number>& point) const
+    Point<int> Grid<Number>::calculateInduced(const Point<Number>& point) const
     {
-        if (!mInduced) {
-            return nextPointOnGrid(point);
-        }
-        
-        typename Point<Number>::coordinateMap coordinates;
+        Point<int>::coordinateMap coordinates;
         for (auto inducedGridPointsIt : mInducedGridPoints) {
             auto fixed = inducedGridPointsIt.first;
             auto inducedGridPoints = inducedGridPointsIt.second;
@@ -100,26 +88,22 @@ namespace hypro
                     point.coordinate(fixed));
 
             // insert the index of the element one before the element found above
-            coordinates.insert(std::make_pair(fixed, Number( Number(it - 1 - inducedGridPoints.begin()) )));
+            coordinates.insert(std::make_pair(fixed, it - 1 - inducedGridPoints.begin()) );
         }
         
-        Point<Number> induced(coordinates);
+        Point<int> induced(coordinates);
         return induced;
     }
     
     template<typename Number>
-    Point<Number> Grid<Number>::calculateOriginal(const Point<Number>& inducedPoint) const
+    Point<Number> Grid<Number>::calculateOriginal(const Point<int>& inducedPoint) const
     {
-        if (!mInduced) {
-            return inducedPoint;
-        }
-        
         typename Point<Number>::coordinateMap coordinates;
         for (auto coordinateIt : inducedPoint.coordinates()) {
             auto fixed = coordinateIt.first;
             auto inducedGridPoints = mInducedGridPoints.at(fixed);
             // get the value of the element at the specified position
-            auto it = inducedGridPoints.at(int(coordinateIt.second));
+            auto it = inducedGridPoints.at(coordinateIt.second);
             
             // insert the value
             coordinates.insert(std::make_pair(fixed, it));
@@ -130,11 +114,11 @@ namespace hypro
     }
     
     template<typename Number>
-    vSet<Number> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
+    vSet<int> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
     {
-        vSet<Number> induced;
+        vSet<int> induced;
         for (auto it : vertices) {
-            Vertex<Number> v = calculateInduced(it.point());
+            Vertex<int> v = calculateInduced(it.point());
             v.setColor(it.color());
             induced.insert(v);
         }
@@ -142,7 +126,7 @@ namespace hypro
     }
     
     template<typename Number>
-    vSet<Number> Grid<Number>::translateToOriginal(const vSet<Number>& inducedVertices) const
+    vSet<Number> Grid<Number>::translateToOriginal(const vSet<int>& inducedVertices) const
     {
         vSet<Number> original;
         for (auto it : inducedVertices) {
