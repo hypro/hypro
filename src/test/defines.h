@@ -25,3 +25,4 @@ TYPED_TEST_CASE(VertexTest, floatTypes);
 TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(BoxTest, types);
 TYPED_TEST_CASE(PolytopeTest, floatTypes);
+TYPED_TEST_CASE(PolytopeUtilTest, floatTypes);
