@@ -17,7 +17,7 @@
 #include "../../lib/datastructures/VertexContainer.h"
 #include "../../lib/representations/Box/Box.h"
 #include "../../lib/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
-#include "../../lib/representations/OrthogonalPolyhedron/NeighbourhoodContainer.h"
+#include "../../lib/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 
 #include <map>
 #include <carl/core/VariablePool.h>

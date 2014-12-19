@@ -14,7 +14,7 @@
 #include "../../datastructures/VertexContainer.h"
 #include "../Box/Box.h"
 #include "../GeometricObject.h"
-#include "NeighbourhoodContainer.h"
+#include "NeighborhoodContainer.h"
 #include "Grid.h"
 
 #include <iostream>
