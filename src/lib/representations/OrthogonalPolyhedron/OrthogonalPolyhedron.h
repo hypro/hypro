@@ -119,7 +119,7 @@ namespace hypro
          ***********************************************************************/
         
         unsigned int dimension() const;
-        bool linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix& A, const vector& b = vector()) const;
+        bool linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix_t& A, const vector_t& b = vector()) const;
         bool minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
         bool intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
         bool hull(OrthogonalPolyhedron<Number>& result) const;

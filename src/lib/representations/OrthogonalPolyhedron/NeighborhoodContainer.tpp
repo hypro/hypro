@@ -34,7 +34,7 @@ namespace hypro
         }
 
         auto neighbors = mNeighborhoods.at(p);
-        carl::FLOAT_T<Number> coordinate = p.coordinate(dimension);
+        Number coordinate = p.coordinate(dimension);
 
         // remove all neighbors which do not have the same value in that dimension as the original point
         for (auto it = neighbors.begin(); it != neighbors.end(); ) {

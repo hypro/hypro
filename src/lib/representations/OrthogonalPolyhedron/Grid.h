@@ -11,7 +11,6 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
 #include <carl/core/Variable.h>
-#include <carl/numbers/FLOAT_T.h>
 #include <vector>
 #include <map>
 

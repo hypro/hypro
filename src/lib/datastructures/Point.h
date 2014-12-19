@@ -216,7 +216,7 @@ namespace hypro {
              * @param dim    the dimension that is changed
              * @param value  the new value
              */
-            void setCoordinate(const carl::Variable& _dim, Number _value)
+            void setCoordinate(const carl::Variable& _dim, const Number& _value)
             {
                 mCoordinates[_dim] = _value;
             }

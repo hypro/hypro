@@ -32,7 +32,7 @@ class OrthogonalPolyhedronTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::rawCoordinateMap coordinates;
+        Point<number_t>::coordinateMap coordinates;
         
         coordinates[x] = 3; coordinates[y] = 3;
         container1.insert(Point<number_t>(coordinates), true);
@@ -128,16 +128,16 @@ TEST_F(OrthogonalPolyhedronTest, BoundaryBox)
 
 TEST_F(OrthogonalPolyhedronTest, LinearTransformation)
 {
-	matrix A = createMatrix(std::vector<std::vector<double> >({
-			std::vector<double>({5, -2}),
-			std::vector<double>({9, 3})
-	}));
+    matrix_t A = createMatrix(std::vector<std::vector<double> >({
+		    std::vector<double>({5, -2}),
+		    std::vector<double>({9, 3})
+    }));
 
-	vector v = createVector(std::vector<double>({7, 2}));
+    vector_t v = createVector(std::vector<double>({7, 2}));
 
 
     VertexContainer<number_t> container1;
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::coordinateMap coordinates;
 
     coordinates[x] = 38; coordinates[y] = 16;
     container1.insert(Point<number_t>(coordinates), true);
@@ -184,17 +184,16 @@ TEST_F(OrthogonalPolyhedronTest, LinearTransformation)
     container2.insert(Point<number_t>(coordinates), true);
 
 
+    OrthogonalPolyhedron<number_t> expected1(container1);
+    OrthogonalPolyhedron<number_t> expected2(container2);
 
-	OrthogonalPolyhedron<number_t> expected1(container1);
-	OrthogonalPolyhedron<number_t> expected2(container2);
+    OrthogonalPolyhedron<number_t> result1, result2;
 
-	OrthogonalPolyhedron<number_t> result1, result2;
+    p1.linearTransformation(result1, A, v);
+    p2.linearTransformation(result2, A, v);
 
-	p1.linearTransformation(result1, A, v);
-	p2.linearTransformation(result2, A, v);
-
-	EXPECT_EQ(expected1, result1);
-	EXPECT_EQ(expected2, result2);
+    EXPECT_EQ(expected1, result1);
+    EXPECT_EQ(expected2, result2);
 }
 
 TEST_F(OrthogonalPolyhedronTest, Intersect)
@@ -202,7 +201,7 @@ TEST_F(OrthogonalPolyhedronTest, Intersect)
     OrthogonalPolyhedron<number_t> result;
     
     VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::coordinateMap coordinates;
         
     coordinates[x] = 3; coordinates[y] = 3;
     container.insert(Point<number_t>(coordinates), true);
@@ -228,7 +227,7 @@ TEST_F(OrthogonalPolyhedronTest, Intersect)
 TEST_F(OrthogonalPolyhedronTest, Hull)
 {
     VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::coordinateMap coordinates;
 
     coordinates[x] = 3; coordinates[y] = 3;
     container.insert(Point<number_t>(coordinates), true);
@@ -251,7 +250,7 @@ TEST_F(OrthogonalPolyhedronTest, Hull)
 
 TEST_F(OrthogonalPolyhedronTest, Contains)
 {
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::coordinateMap coordinates;
     
     coordinates[x] = 4; coordinates[y] = 5;
     Point<number_t> pt1(coordinates); // true
@@ -320,7 +319,7 @@ TEST_F(OrthogonalPolyhedronTest, Unite) {
     OrthogonalPolyhedron<number_t> result;
     
     VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    Point<number_t>::coordinateMap coordinates;
         
     coordinates[x] = 1; coordinates[y] = 3;
     container.insert(Point<number_t>(coordinates), true);
