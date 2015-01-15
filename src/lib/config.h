@@ -2,6 +2,7 @@
 
 #include <set>
 #include <map>
+#include <cassert>
 
 #include "types.h"
 #include <carl/core/MultivariatePolynomial.h>

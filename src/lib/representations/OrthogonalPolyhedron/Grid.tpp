@@ -56,19 +56,21 @@ namespace hypro
     Point<Number> Grid<Number>::nextPointOnGrid(const Point<Number>& x) const
     {
         typename Point<Number>::coordinateMap coordinates;
-        
+        		
         for (auto inducedGridPointsIt : mInducedGridPoints) {
 
-            auto fixed = inducedGridPointsIt.first;
-            auto inducedGridPoints = inducedGridPointsIt.second;
+            carl::Variable fixed = inducedGridPointsIt.first;
+            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
-            // get the position of the first element greater then the coordinate + 1
+            // get the position of the first element greater than the coordinate + 1
             auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
                     x.coordinate(fixed));
-
+			
             // insert the element one before the element found above
-            coordinates.insert(std::make_pair(fixed,
-                    inducedGridPoints.at(it - inducedGridPoints.begin() - 1)));
+			if(it != inducedGridPoints.begin())
+				coordinates.insert(std::make_pair(fixed, *(--it)));
+			else
+				coordinates.insert(std::make_pair(fixed, Number(0)));
         }
         
         Point<Number> induced(coordinates);

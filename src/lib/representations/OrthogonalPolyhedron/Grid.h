@@ -61,7 +61,7 @@ namespace hypro
              * Returns the dimension of this grid.
              * @return dimension
              */
-            int dimension() const
+            unsigned int dimension() const
             {
                 return mVariables.size();
             }

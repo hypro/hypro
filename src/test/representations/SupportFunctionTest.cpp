@@ -1,0 +1,45 @@
+/**
+ * Tests for SupportFunctions.
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ */
+
+#include "gtest/gtest.h"
+#include "../defines.h"
+#include "../../lib/representations/SupportFunction/SupportFunction.h"
+
+
+using namespace hypro;
+using namespace carl;
+
+template<typename Number>
+class SupportFunctionTest : public ::testing::Test
+{
+protected:
+    virtual void SetUp()
+    {
+        
+    }
+	
+    virtual void TearDown()
+    {
+    }
+	
+};
+
+TYPED_TEST(SupportFunctionTest, Constructor)
+{
+	SupportFunction<TypeParam> defConstr = SupportFunction<TypeParam>();
+	SupportFunction<TypeParam> cpConstr = SupportFunction<TypeParam>(defConstr);
+	SupportFunction<TypeParam> cpAssign = defConstr;
+	
+	SupportFunction<TypeParam> moveSource = SupportFunction<TypeParam>();
+	SupportFunction<TypeParam> moveTarget(moveSource);
+	
+	moveSource = SupportFunction<TypeParam>();
+	moveTarget = std::move(moveSource);
+}
+
+TYPED_TEST(SupportFunctionTest, Access)
+{
+	SupportFunction<TypeParam> base = SupportFunction<TypeParam>();
+}

@@ -96,8 +96,10 @@ TYPED_TEST(GridTest, Constructor)
 
 TYPED_TEST(GridTest, Access)
 {
+	std::cout << "P1 before " << this->p1 << std::endl;
     EXPECT_TRUE(this->grid1.find(this->p1) != this->grid1.end());
     ++this->p1[this->x];
+	std::cout << "P1 after " << this->p1 << std::endl;
     EXPECT_TRUE(this->grid1.find(this->p1) == this->grid1.end());
 }
 
