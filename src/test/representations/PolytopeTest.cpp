@@ -98,12 +98,12 @@ TYPED_TEST(PolytopeTest, Constructor)
     Polytope<TypeParam> p1 = Polytope<TypeParam>(ps);
     std::cout << "P1" << std::endl;
     p1.print();
-    EXPECT_EQ(p1.dimension(), 2);
+    EXPECT_EQ(p1.dimension(), unsigned(2));
     EXPECT_FALSE(p1.rawPolyhedron().is_empty());
     Polytope<TypeParam> p3 = Polytope<TypeParam>(ps);
     
     Polytope<TypeParam> p2 = Polytope<TypeParam>(2);
-    EXPECT_EQ(p2.dimension(), 2);
+    EXPECT_EQ(p2.dimension(), unsigned(2));
     
     Eigen::Matrix<TypeParam, Eigen::Dynamic, Eigen::Dynamic> A = Eigen::Matrix<TypeParam, Eigen::Dynamic, Eigen::Dynamic>(2,2);
     A(0,0) = 1;
@@ -121,7 +121,7 @@ TYPED_TEST(PolytopeTest, Constructor)
     
     p4.print();
     
-    EXPECT_EQ(p4.dimension(), 2);
+    EXPECT_EQ(p4.dimension(), unsigned(2));
     
     SUCCEED();
 }
@@ -134,7 +134,7 @@ TYPED_TEST(PolytopeTest, Access)
     ps1.push_back(this->p3);
     ps1.push_back(this->p4);
     hypro::Polytope<TypeParam> p1 = Polytope<TypeParam>(ps1);
-    EXPECT_EQ(p1.dimension(), 2);
+    EXPECT_EQ(p1.dimension(), unsigned(2));
     
     carl::Variable a = this->pool.getFreshVariable("a");
     carl::Variable b = this->pool.getFreshVariable("b");
@@ -163,7 +163,7 @@ TYPED_TEST(PolytopeTest, Access)
     std::cout << "---" << std::endl;
     hypro::VariablePool::getInstance().print();
 
-    EXPECT_EQ(p2.dimension(), 2);
+    EXPECT_EQ(p2.dimension(), unsigned(2));
     
     std::vector<Point<TypeParam>> points = p2.points();
 }
