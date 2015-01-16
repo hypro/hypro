@@ -27,9 +27,8 @@ namespace hypro
             typedef std::map<const carl::Variable, std::vector<Number> > gridPoints;
         
         private:
-            mutable gridMap mGridMap; // mutable to allow performance optimization
+            gridMap mGridMap; // mutable to allow performance optimization
             gridPoints mInducedGridPoints;
-            std::vector<carl::Variable> mVariables;
             
         public:
             
@@ -37,15 +36,31 @@ namespace hypro
              * Constructor
              */
             Grid() {}
+
+            /**
+             * Constructor
+             *
+             * @param vertices
+             */
+            Grid(const vSet<Number>& vertices)
+            {
+                induceGrid(vertices);
+            }
             
             /**
              * Copy constructor
              */
             Grid(const Grid<Number>& copy) :
             	mGridMap(copy.mGridMap),
-            	mInducedGridPoints(copy.mInducedGridPoints),
-            	mVariables(copy.mVariables)
+            	mInducedGridPoints(copy.mInducedGridPoints)
             {}
+
+            /**
+             * Clears the grid, induces it and sets up the vertices.
+             *
+             * @param vertices
+             */
+            void induceGrid(const vSet<Number>& vertices);
             
             /**
              * Returns the size ie. the number of points saved in this grid.
@@ -58,15 +73,6 @@ namespace hypro
             }
             
             /**
-             * Returns the dimension of this grid.
-             * @return dimension
-             */
-            unsigned int dimension() const
-            {
-                return mVariables.size();
-            }
-            
-            /**
              * Returns if this grid is empty.
              * @return 
              */
@@ -76,39 +82,13 @@ namespace hypro
             }
             
             /**
-             * Returns the variables used in this grid. Only points with exactly
-             * this variables are allowed to be inserted into the grid.
-             * 
-             * @return 
-             */
-            std::vector<carl::Variable> variables() const
-            {
-                return mVariables;
-            }
-
-            /**
-             * Reserves the induced grid for all dimensions.
-             * 
-             * @param variables
-             */
-            void reserveInducedGrid(const std::vector<carl::Variable>& variables);
-            
-            /**
-             * Method to copy from a VertexContainer to a grid.
-             * 
-             * @param vertexContainer
-             */
-            void insertVerticesInMap(const vSet<Number>& vertices);
-            
-            /**
              * Inserts the value for the point.
              * 
              * @param point
              * @param color
              */
-            void insert(const Point<Number>& point, bool color) const
+            void insert(const Point<Number>& point, bool color)
             {
-                assert( point.hasDimensions(mVariables) );
                 mGridMap.insert(std::make_pair(calculateInduced(point), color));
             }
             
@@ -118,9 +98,8 @@ namespace hypro
              * @param inducedPoint
              * @param color
              */
-            void insertInduced(const Point<int>& inducedPoint, bool color) const
+            void insertInduced(const Point<int>& inducedPoint, bool color)
             {
-                assert( inducedPoint.hasDimensions(mVariables) );
                 mGridMap.insert(std::make_pair(inducedPoint, color));
             }
             
@@ -132,7 +111,7 @@ namespace hypro
              */
             bool colorAt(const Point<Number>& point) const
             {
-                return mGridMap[calculateInduced(point)];
+                return mGridMap.at(calculateInduced(point));
             }
             
             /**
@@ -143,7 +122,7 @@ namespace hypro
              */
             bool colorAtInduced(const Point<int>& inducedPoint) const
             {
-                return mGridMap[inducedPoint];
+                return mGridMap.at(inducedPoint);
             }
             
             /**
@@ -174,21 +153,6 @@ namespace hypro
             {
                 return mGridMap.end();
             }
-            
-            /**
-             * Calculates the coordinates of the induced grid.
-             * 
-             * @param vertices
-             */
-            void induceGrid(const vSet<Number>& vertices);
-            
-            /**
-             * Gets the next point on the gird.
-             * 
-             * @param point
-             * @return next point on grid
-             */
-            Point<Number> nextPointOnGrid(const Point<Number>& point) const;
             
             /**
              * Calculates the coordinates of this point on the induced grid.
@@ -228,6 +192,7 @@ namespace hypro
             {
                 mGridMap.clear();
             }
+
     };
 }
 

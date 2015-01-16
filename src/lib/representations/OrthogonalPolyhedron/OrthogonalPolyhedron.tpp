@@ -55,9 +55,7 @@ namespace hypro
         calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
         
         // create a temporary grid including all potential vertices
-        Grid<Number> tmpGrid;
-        tmpGrid.reserveInducedGrid(mVariables);
-        tmpGrid.induceGrid(potentialVertices);
+        Grid<Number> tmpGrid(potentialVertices);
         vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
         
         // the container to store the actual vertices
@@ -141,9 +139,7 @@ namespace hypro
         }
         
         // create a temporary grid including all potential vertices
-        Grid<Number> tmpGrid;
-        tmpGrid.reserveInducedGrid(mVariables);
-        tmpGrid.induceGrid(potentialVertices);
+        Grid<Number> tmpGrid(potentialVertices);
         vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
         
         // the container to store the actual vertices
