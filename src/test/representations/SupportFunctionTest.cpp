@@ -42,4 +42,8 @@ TYPED_TEST(SupportFunctionTest, Constructor)
 TYPED_TEST(SupportFunctionTest, Access)
 {
 	SupportFunction<TypeParam> base = SupportFunction<TypeParam>();
+	base.addDirection(createVector<TypeParam>({2,3,1}), TypeParam(4));
+	base.addDirection(createVector<TypeParam>(hypro::Point<TypeParam>{1,2,3}), TypeParam(5));
+	
+	std::cout << base << std::endl;
 }

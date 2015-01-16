@@ -30,15 +30,12 @@ struct vecLess {
 	typedef bool result_type;
 };
 
-
-
-	
-	
 template<typename Number>
 class SupportFunction {
-	typedef vector_t<Number> direction;
-	typedef std::map<direction, Number, vecLess<Number>> directionValueMapping;
-	typedef std::set<direction, vecLess<Number>> directionSet;
+	public:
+		typedef vector_t<Number> direction;
+		typedef std::map<direction, Number, vecLess<Number>> directionValueMapping;
+		typedef std::set<direction, vecLess<Number>> directionSet;
 	private:
 		directionValueMapping mDirections;
 
@@ -62,4 +59,19 @@ class SupportFunction {
 		void addDirection(const Point<Number>& _direction, const Number& _distance);
 };
 } // namespace
+
+template<typename Number>
+std::ostream& operator<<(std::ostream& _out, const hypro::SupportFunction<Number>& _in){
+	_out << "( ";
+	typename hypro::SupportFunction<Number>::directionValueMapping tmp = _in.content();
+	if(!tmp.empty()) {
+		for(auto tmpIt = tmp.begin(); tmpIt != --tmp.end(); ++tmpIt) {
+			_out << tmpIt->first << ", " << tmpIt->second << "; " << std::endl;
+		}
+		_out << (--tmp.end())->first << ", " << (--tmp.end())->second;
+	}
+	_out << " )";
+	return _out;
+}
+
 #include "SupportFunction.tpp"

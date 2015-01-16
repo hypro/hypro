@@ -9,6 +9,7 @@
 #pragma once
 
 #include "../lib/config.h"
+#include "../lib/util/types.h"
 #include "carl/numbers/FLOAT_T.h"
 
 typedef ::testing::Types<int, double, carl::FLOAT_T<double>, number > types;

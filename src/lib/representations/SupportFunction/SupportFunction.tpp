@@ -52,11 +52,11 @@ namespace hypro {
 		
 	template<typename Number>
 	void SupportFunction<Number>::addDirection(const direction& _direction, const Number& _distance) {
-		
+		mDirections.insert(std::make_pair(_direction, _distance));
 	}
 	
 	template<typename Number>
 	void SupportFunction<Number>::addDirection(const Point<Number>& _direction, const Number& _distance) {
-		
+		mDirections.insert(std::make_pair(createVector<Number>(_direction), _distance));
 	}
 } // namespace
