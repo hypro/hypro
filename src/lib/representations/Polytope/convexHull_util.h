@@ -4,7 +4,7 @@
  * @author tayfun
  *
  * @since       2014-12-10
- * @version     2014-12-10
+ * @version     2015-01-21
  */
 
 #include "../Hyperplane/Hyperplane.h"
@@ -23,26 +23,26 @@ namespace polytope
  */
 template<typename Number>
 std::vector<Facet> initConvexHull(std::vector<Point<Number>> points) {
-	Dimension d = points.front.dimension();
-	std::vector<Point<Number>> initialPoints;
-	for(int i = 0; i < d+1; i++) {
-		initialPoints.push_back(points[i]);
-	}
-	std::vector<Facet> facets;
-	for(int i = 0; i < d+1; i++) {
-		facets.push_back(new Facet());
-	}
-	for(int i = 0; i < d+1; i++) {
-		std::vector<Point<Number>> points_for_facet;
-		for(int j = 0; j < d+1; i++) {
-			if(i!=j) {
-				points_for_facet.push_back(initialPoints[j]);
-				facets[i].addNeighbor(facets[j]);
-			}
-		}
-		facets[i].setPoints(initialPoints);
-	}
-	return facets;
+    Dimension d = points.front.dimension();
+    std::vector<Point<Number>> initialPoints;
+    for(int i = 0; i < d+1; i++) {
+        initialPoints.push_back(points[i]);
+    }
+    std::vector<Facet> facets;
+    for(int i = 0; i < d+1; i++) {
+        facets.push_back(new Facet());
+    }
+    for(int i = 0; i < d+1; i++) {
+        std::vector<Point<Number>> points_for_facet;
+        for(int j = 0; j < d+1; i++) {
+            if(i!=j) {
+                points_for_facet.push_back(initialPoints[j]);
+                facets[i].addNeighbor(facets[j]);
+            }
+        }
+        facets[i].setPoints(initialPoints);
+    }
+    return facets;
 }
 
 /*
@@ -50,22 +50,22 @@ std::vector<Facet> initConvexHull(std::vector<Point<Number>> points) {
  */
 template<typename Number>
 std::vector<Point<Number>> points_not_in_facets(std::vector<Point<Number>> points, std::vector<Facet> facets) {
-	std::vector<Points<Number>> pointsInFacets;
-	for(Facet facet : facets) {
-		std::vector<Points<Number>> pointsInFacet = facet.getPoints();//right call? Look Facet.h !!!
-		for(Point<Number> p : pointsInFacet) {
-			pointsInFacets.push_back(p);
-		}
-	}
+    std::vector<Points<Number>> pointsInFacets;
+    for(Facet facet : facets) {
+        std::vector<Points<Number>> pointsInFacet = facet.vertices();
+        for(Point<Number> p : pointsInFacet) {
+            pointsInFacets.push_back(p);
+        }
+    }
 
-	for (Point<Number> point : points) {
-		for (Point<Number> p : pointsInFacets) {
-			if(p == point) {
-				//delete aus points !!!
-			}
-		}
-	}
-	return points;
+    for (int i = 0; i<points.size(); i++) {
+        for (int j = 0; j<pointsInFacets.size(); j++) {
+            if(points[i] == pointsInFacets[j]) {
+                points.erase(i);
+            }
+        }
+    }
+    return points;
 }
 
 /*
@@ -74,7 +74,47 @@ std::vector<Point<Number>> points_not_in_facets(std::vector<Point<Number>> point
  */
 template<typename Number>
 std::vector<Facet> getFacetsNeighbors(std::vector<Facet> facets) {
-	return null;
+    if(facets.isEmpty()) {
+        return null;
+    }
+    else {
+        std::vector<Facet> result;
+        std::vector<Facet> temp;
+        std::vector<Facet> temp2;
+        std::set<Facet> neighbors;
+        for(int i = 0; i<facets.size(); i++) {
+            neighbors = facet.neighbors();
+            for(int j = 0; j<neighbors.size(); j++) {
+                temp.push_back(neighbors[j]);
+            }
+        }
+        bool found = false;
+        for(int i = 0; i<temp.size(); i++) {
+            for(int j = 0; j<temp2.size(); j++) {
+                if(temp[i].isEqual(temp2[j])) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                temp2.push_back(temp[i]);
+            }
+            found = false;
+        }
+
+        found = false;
+        for(int i = 0; i<temp2.size(); i++) {
+            for(int j = 0; j<facets.size(); j++) {
+                if(temp2[i].isEqual(facets[j])) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                result.push_back(temp2[i]);
+            }
+            found = false;
+        }
+        return result;
+    }
 }
 
 /*
@@ -83,7 +123,21 @@ std::vector<Facet> getFacetsNeighbors(std::vector<Facet> facets) {
  */
 template<typename Number>
 std::vector<Ridge> getRidges(std::vector<Facet> facets) {
-	return null;
+    if(facets.isEmpty()) {
+        return null;
+    }
+    else {
+        std::vector<Ridge> result;
+        std::vector<Facet> neighbors = getFacetsNeighbors(facets);
+        for(int i = 0; i<facets.size(); i++) {
+            for(int j = 0; j<neighbors.size(); j++) {
+                if(facets[i].isNeighbor(neighbors[j])) {
+                    result.push_back(new Ridge(facets[i], neighbors[j]));
+                }
+            }
+        }
+        return result;
+    }
 }
 
 
@@ -93,7 +147,28 @@ std::vector<Ridge> getRidges(std::vector<Facet> facets) {
  */
 template<typename Number>
 std::vector<Point<Number>> points_outside_of_visible_facets(std::vector<Facet> visible_facets) {
-	return null;
+    std::vector<Point<Number>> temp;
+    std::vector<Point<Number>> result;
+    std::vector<Point<Number>> outsideset;
+    for(int i = 0; i < visible_facets.size(); i++) {
+        outsideset = visible_facets[i].outsideset();
+        for(int j = 0; i<outsideset.size(); j++) {
+            temp.push_back(outsideset[j]);
+        }
+    }
+    bool found = false;
+    for(int i = 0; i < temp.size(); i++) {
+        for(int j = 0; i<result.size(); j++) {
+            if(temp[i].isEqual(result[j])) {
+                found = true;
+            }
+        }
+        if(!found) {
+            result.push_back(temp[i]);
+        }
+        found = false;
+    }
+    return result;
 }
 
 /*
@@ -102,15 +177,15 @@ std::vector<Point<Number>> points_outside_of_visible_facets(std::vector<Facet> v
  */
 template<typename Number>
 std::vector<Facet> not_outside_facet(std::vector<Facet> facets) {
-	return null;
+    std::vector<Facet> result;
+    for(int i = 0; i < facets.size(); i++) {
+        if(!facets[i].outsideset().isEmpty()) {
+            result.push_back(facets[i]);
+        }
+    }
+    return result;
 }
 
-/*
- * checks if the new facets are outside or not. If not, then these facets will be inserted in notOutsideFacets
- */
-template<typename Number>
-void updateNotOutsideFacets(std::vector<Facet> newFacets) {
-}
 
 
 }

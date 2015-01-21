@@ -3,7 +3,7 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-12-10
+ * @version     2015-01-21
  */
 
 #include "Polytope.h"
@@ -791,7 +791,7 @@ namespace hypro
     }
     
 //    template<typename Number>
-//    void Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
+//     void Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
 //		//initialization
 //		std::vector<Facet> facets = initConvexHull(points); //util?
 //		for(Facet facet : facets){
@@ -810,18 +810,26 @@ namespace hypro
 //			visible_facets.push_back(facet);
 //			std::vector<Facet> neighbor_facets = getFacetsNeighbors(visible_facets);//util?
 //			for (Facet neighbor : neighbor_facets) {
-//				if(check_if_above(point,neighbor)) {
+//				if(neighbor.check_if_above(point)) {
 //					visible_facets.push_back(neighbor);
 //				}
 //			}
 //			for (Facet facet : visible_facets) {
-//				//facets.remove(facet); suche passende delete function !!!
-//				//notOutsideFacets.remove(facet);
+//				for(int i = 0; i<facets.size() ; i++) {
+//					if(facet == facets[i]) {
+//						facets.erase(i);
+//					}
+//				}
+//				for(int j = 0; j<notOutsideFacets.size() ; j++) {
+//					if(facet == notOutsideFacets[j]) {
+//						notOutsideFacets.erase(j);
+//					}
+//				}
 //			}
 //			std::vector<Ridge> ridges = getRidges(visible_facets);
 //			std::vector<Facet> newFacets;
 //			for (Ridge ridge : ridges) {
-//				Facet newFacet = createHyperplane(ridge, point); //constructor for Facet.h?
+//				Facet newFacet = new Facet(ridge, point); 
 //				newFacets.push_back(newFacet);
 //				facets.push_back(newFacet);
 //			}
@@ -833,7 +841,10 @@ namespace hypro
 //					}
 //				}
 //			}
-//			updateNotOutsideFacets(newFacets); //util?
+//			std::vector<Facet> notOutsideNewFacets = not_outside_facet(newFacets); //util?
+//			for(Facet facet : notOutsideNewFacets) {
+//				notOutsideFacets.push_back(facet);
+//			}
 //		}
 //	} 
     

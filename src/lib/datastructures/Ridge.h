@@ -50,11 +50,22 @@ namespace hypro
                     mHyperplane(f.hyperplane())
             {}
 
-            Ridge( std::vector<Facet> facets)
+            Ridge( Facet facet1, Facet facet2)
             {
-            	mNeighbors = facets;
-            	mVertices = new std::set<Point<Number>>();//save mVertices as Points in mHyperplane
-            	mHyperplane = new Hyperplane();//save mHyperplane as intersect of the facets
+                std::vector<Facet> facets;
+                facets.push_back(facet1);
+                facets.push_back(facet2);
+                mNeighbors = facets;
+                mVertices = new std::set<Point<Number>>();
+                for(int i = 0; i<facet1.vertices().size();i++) {
+                    for(int j = 0; j<facet2.vertices().size();j++) {
+                        if(facet1.vertices()[i] == facet2.vertices(j)) {
+                            mVertices.push_back(facet1.vertices()[i]);
+                        }
+                    }
+                }
+                mHyperplane = new Hyperplane(getNormalVector(),getScalar());
+                //save mHyperplane as intersect of the facets
 
             }
 
@@ -87,29 +98,46 @@ namespace hypro
 
             void addNeighbors(std::vector<Facet> facets)
             {
-            	if(mNeighbors.empty())
-            	{
-            	   for(int i = 0; i < facets.size(); i++)
-            	   {
-            		   mNeighbors.push_back(facets[i]);
-            	   }
-               	}
+                if(mNeighbors.empty())
+                {
+                   for(int i = 0; i < facets.size(); i++)
+                   {
+                       mNeighbors.push_back(facets[i]);
+                   }
+                   mVertices = new std::set<Point<Number>>();
+                    for(int i = 0; i<facet1.vertices().size();i++) {
+                        for(int j = 0; j<facet2.vertices().size();j++) {
+                            if(facet1.vertices()[i] == facet2.vertices(j)) {
+                                mVertices.push_back(facet1.vertices()[i]);
+                            }
+                        }
+                    }
+                    mHyperplane = new Hyperplane(getNormalVector(),getScalar());
+                }
             }
 
-            void setPoints(std::vector<Point<Number>> points)
+       /**     void setPoints(std::vector<Point<Number>> points)
             {
-            	if(mVertices.empty())
-            	{
-            		for(int i = 0; i < points.size(); i++)
-            		{
-            			mVertices.insert(points[i]);
-            		}
-               	}
+                if(mVertices.empty())
+                {
+                for(int i = 0; i < points.size(); i++)
+                    {
+                        mVertices.insert(points[i]);
+                    }
+                }
             }
-
+*/
             Polynomial hyperplane() const
             {
                 return mHyperplane;
+            }
+
+            hypro::vector_t<Number> getNormalVector () {
+                return null;
+            }
+
+            hypro::scalar_t<Number> getScalar () {
+                return null;
             }
 
     };
