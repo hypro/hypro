@@ -11,70 +11,33 @@
 
 namespace hypro
 {
-    template<typename Number>
-    void Grid<Number>::reserveInducedGrid(const std::vector<carl::Variable>& variables)
-    {
-        std::vector<Number > v;
-        for (auto it : variables) {
-            mVariables.push_back(it);
-            mInducedGridPoints.insert(std::make_pair(it, v));
-        }
-    }
-    
-    template<typename Number>
-    void Grid<Number>::insertVerticesInMap(const vSet<Number>& vertices)
-    {
-        for (auto it : vertices) {
-            this->insert(it.rPoint(), it.color());
-        }
-    }
-    
+
     template<typename Number>
     void Grid<Number>::induceGrid(const vSet<Number>& vertices)
     {
-        for (auto it : mInducedGridPoints) {
+        clear();
+
+        std::vector<Number> v;
+        for (auto it : vertices.begin()->variables()) {
             // insert origin as vertex
-            it.second.push_back(Number(0));
+            v = std::vector<Number>({Number(0)});
             
             // Projection of all points to the axes.
             for (auto vertex : vertices) {
-                assert( vertex.hasDimensions(mVariables));
-                it.second.push_back(vertex.coordinate(it.first));
+                v.push_back(vertex.coordinate(it));
             }
             
             // Sort every dimension, erase duplicate entries.
-            std::sort(it.second.begin(), it.second.end());
-            auto itr = std::unique(it.second.begin(), it.second.end());
-            it.second.resize(itr - it.second.begin());
-            mInducedGridPoints[it.first] = it.second;
+            std::sort(v.begin(), v.end());
+            auto itr = std::unique(v.begin(), v.end());
+            v.resize(itr - v.begin());
+
+            mInducedGridPoints[it] = v;
         }
 
-        clear();
-    }
-    
-    template<typename Number>
-    Point<Number> Grid<Number>::nextPointOnGrid(const Point<Number>& x) const
-    {
-        typename Point<Number>::coordinateMap coordinates;
-        		
-        for (auto inducedGridPointsIt : mInducedGridPoints) {
-
-            carl::Variable fixed = inducedGridPointsIt.first;
-            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
-
-            // get the position of the first element greater than the coordinate + 1
-            auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
-                    x.coordinate(fixed));
-			
-            // insert the element one before the element found above
-			if(it != inducedGridPoints.begin())
-				coordinates.insert(std::make_pair(fixed, *(--it)));
-			else
-				coordinates.insert(std::make_pair(fixed, Number(0)));
+        for (auto it : vertices) {
+            this->insert(it.rPoint(), it.color());
         }
-        
-        Point<Number> induced(coordinates);
-        return induced;
     }
     
     template<typename Number>
@@ -93,8 +56,7 @@ namespace hypro
             coordinates.insert(std::make_pair(fixed, it - 1 - inducedGridPoints.begin()) );
         }
         
-        Point<int> induced(coordinates);
-        return induced;
+        return Point<int>(coordinates); // return induced point
     }
     
     template<typename Number>
@@ -111,8 +73,7 @@ namespace hypro
             coordinates.insert(std::make_pair(fixed, it));
         }
         
-        Point<Number> induced(coordinates);
-        return induced;
+        return Point<Number> (coordinates); // return original point
     }
     
     template<typename Number>

@@ -13,35 +13,32 @@ class VertexTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-		// p1
+	// p1
         typename Point<Number>::coordinateMap coordinates1;
-		carl::VariablePool& pool = carl::VariablePool::getInstance();
-		Variable x = pool.getFreshVariable(carl::VariableType::VT_INT);
-		Variable y = pool.getFreshVariable(carl::VariableType::VT_INT);
         coordinates1.insert( std::make_pair(x, Number(2)) );
         coordinates1.insert( std::make_pair(y, Number(5)) );
         p1 = Point<Number>(coordinates1);
 		
         // p2
         typename Point<Number>::coordinateMap coordinates2;
-		Variable a = pool.getFreshVariable(carl::VariableType::VT_INT);
-		Variable b = pool.getFreshVariable(carl::VariableType::VT_INT);
-        coordinates2.insert( std::make_pair(a, Number(7)) );
-        coordinates2.insert( std::make_pair(b, Number(8)) );
+        coordinates2.insert( std::make_pair(x, Number(7)) );
+        coordinates2.insert( std::make_pair(y, Number(8)) );
         p2 = Point<Number>(coordinates2);
 		
         // p3
         typename Point<Number>::coordinateMap coordinates3;
-		Variable c = pool.getFreshVariable(carl::VariableType::VT_INT);
-		Variable d = pool.getFreshVariable(carl::VariableType::VT_INT);
-        coordinates3.insert( std::make_pair(c, Number(-9)) );
-		coordinates3.insert( std::make_pair(d, Number(13)) );
+        coordinates3.insert( std::make_pair(x, Number(-9)) );
+	coordinates3.insert( std::make_pair(y, Number(13)) );
         p3 = Point<Number>(coordinates3);
     }
 	
     virtual void TearDown()
     {
     }
+
+    carl::VariablePool& pool = carl::VariablePool::getInstance();
+    Variable x = pool.getFreshVariable("x");
+    Variable y = pool.getFreshVariable("y");
 	
     Point<Number> p1;
     Point<Number> p2;
@@ -68,12 +65,28 @@ TYPED_TEST(VertexTest, Constructor)
     ASSERT_TRUE(vertex2.color());
 }
 
-TYPED_TEST(VertexTest, Comparison)
+TYPED_TEST(VertexTest, Equality)
 {
     Vertex<TypeParam> v1(this->p1, true);
     Vertex<TypeParam> v2(this->p1, false);
     Vertex<TypeParam> v3(this->p1, true);
     
-    EXPECT_NE(v1, v2);
-    EXPECT_EQ(v1, v3);
+    EXPECT_TRUE(v1 != v2);
+    EXPECT_TRUE(v1 == v3);
+}
+
+TYPED_TEST(VertexTest, Order)
+{
+    Vertex<TypeParam> v1(this->p1, false);
+    Vertex<TypeParam> v2(this->p1, true);
+    Vertex<TypeParam> v3(this->p2, true);
+    Vertex<TypeParam> v4(this->p3, false);
+    
+    EXPECT_TRUE(v1 < v2);
+    EXPECT_TRUE(v2 < v3);
+    EXPECT_TRUE(v3 < v4);
+
+    EXPECT_TRUE(v4 > v3);
+    EXPECT_TRUE(v3 > v2);
+    EXPECT_TRUE(v2 > v1);
 }

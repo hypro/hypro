@@ -42,7 +42,7 @@ namespace hypro
         //VertexContainer<Number> mInducedVertices;
         
         // the grid the polyhedron is defined on
-        Grid<Number> mGrid;
+        mutable Grid<Number> mGrid;
         
         // the color of the origin
         //bool mOriginColor = false;
@@ -71,23 +71,16 @@ namespace hypro
         /**
          * Constructor getting a list of vertices which represent an orthogonal polyhedron.
          * 
-         * @todo does it really make sense to make induceGrid optional?
          * @todo actually validate the vertices
          * 
          * @param vertices a non-empty VertexContainer
-         * @param induceGrid true by default
          */
-        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true) : mVertices(vertices) {
+        OrthogonalPolyhedron(const VertexContainer<Number>& vertices) : mVertices(vertices) {
             //mOriginColor = vertices.originIsVertex();
             mVariables = vertices.variables();
-            mGrid.reserveInducedGrid(mVariables);
-            if (induceGrid)
-            {
-                    mGrid.induceGrid(vertices.vertices());
-                    mGrid.insertVerticesInMap(vertices.vertices());
-                    //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-                    //mInducedVertices = VertexContainer<Number>(inducedVertices);
-            }
+            mGrid.induceGrid(vertices.vertices());
+            //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+            //mInducedVertices = VertexContainer<Number>(inducedVertices);
         }
 
         /**

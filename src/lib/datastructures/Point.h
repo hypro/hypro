@@ -95,16 +95,16 @@ namespace hypro {
                     ++count;
                 }
             }
-			
-			Point(unsigned int dimension)
-			{
-				unsigned count = 0;
+
+            Point(unsigned int dimension)
+            {
+                unsigned count = 0;
                 for(unsigned j = 0; j < dimension; ++j)
                 {
                     mCoordinates.insert( std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(count), Number(0)) );
                     ++count;
                 }
-			}
+            }
 
             /**
              * Constructs a point with the passed coordinates
