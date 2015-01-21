@@ -21,7 +21,7 @@
 #include "util.h"
 #include "../GeometricObject.h"
 #include "../../datastructures/Point.h"
-//#include "convexHull_util.h"
+
 
 #include "../Polytopes/util.h"
 
@@ -155,7 +155,7 @@ namespace hypro
         bool contains(const Point<Number>& point);
         bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
-        //void convexHull(std::vector<Point<Number>> points);
+        void convexHull(std::vector<Point<Number>> points);
         
         /**
          * Polytope related

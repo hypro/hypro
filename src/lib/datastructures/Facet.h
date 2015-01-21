@@ -24,16 +24,16 @@ namespace hypro
         /**
          * Typedefs
          */
-            typedef std::set<Point<Number>> vertices;
-            typedef std::set<Facet> neighbors;
+            typedef std::set<Point<Number>> vertexSet;
+            typedef std::set<Facet<Number>> neighborsSet;
             typedef std::vector<Point<Number>> outsideSet;
 
         /**
          * Members
          */
         private:
-            vertices            mVertices;
-            neighbors           mNeighbors;
+            vertexSet            mVertices;
+            neighborsSet           mNeighbors;
             Polynomial          mHyperplane;
             outsideSet          mOutsideSet;
 
@@ -41,19 +41,17 @@ namespace hypro
          * Constructors & Destructor
          */
         public:
-            Facet() : 
-                    mVertices(),
-                    mNeighbors(),
-                    mHyperplane(),
-                    mOutsideSet()
+            Facet()
             {}
 
-            Facet( const Facet<Number>& f) :
-                    mVertices(f.vertices()),
-                    mNeighbors(f.neighbors()),
-                    mHyperplane(f.hyperplane()),
-                    mOutsideSet(f.outsideSet())
-            {}
+            Facet( const Facet<Number>& f)
+            {
+                                mVertices = f.vertices();
+                                mNeighbors = f.neighbors();
+                                mHyperplane = f.hyperplane();
+                                mOutsideSet = f.outsideSet();
+                        }
+
 
             Facet( Ridge<Number> r, Point<Number> p)
             {
@@ -63,11 +61,11 @@ namespace hypro
                 {
                     mVertices.insert(r.vertices[i]);
                 }
-                mHyperplane = new Hyperplane(getNormalVector(),getScalar());
-                mNeighbors = new std::set<Facet>();
+                mHyperplane = new Hyperplane<Number>(getNormalVector(),getScalar());
+                mNeighbors = new std::set<Facet<Number>>();
                 mOutsideSet = new std::vector<Point<Number>>();
 
-            }
+          }
 
             ~Facet()
             {}
@@ -76,27 +74,27 @@ namespace hypro
              * Getters and Setters
              */
 
-            vertices& rVertices()
+            vertexSet& rVertices()
             {
                 return mVertices;
             }
 
-            vertices vertices() const
+            vertexSet vertices() const
             {
                 return mVertices;
             }
 
-            neighbors& rNeighbors()
+            neighborsSet& rNeighbors()
             {
                 return mNeighbors;
             }
 
-            neighbors neighbors() const
+            neighborsSet neighbors() const
             {
                 return mNeighbors;
             }
 
-            void addNeighbor(Facet facet)
+            void addNeighbor(Facet<Number> facet)
             {
                 mNeighbors.insert(facet);
             }
@@ -107,16 +105,16 @@ namespace hypro
                     for(int i = 0; i < points.size(); i++) {
                         mVertices.insert(points[i]);
                     }
-                    mHyperplane = new Hyperplane(getNormalVector(),getScalar());
+                    mHyperplane = new Hyperplane<Number>(getNormalVector(),getScalar());
                 }
             }
 
-            hypro::vector_t<Number> getNormalVector () {
-                return null;
+            vector_t<Number> getNormalVector () {
+                return vector_t<Number>();
             }
 
-            hypro::scalar_t<Number> getScalar () {
-                return null;
+            scalar_t<Number> getScalar () {
+                return scalar_t<Number>();
             }
 
             Polynomial hyperplane() const
@@ -132,6 +130,7 @@ namespace hypro
             {
                 //if ((multiplicate p with hyperplane.normalVector and subtract?/add? hyperplane.offset)>0)
                 //true : return true else: false
+            	return false;
             }
 
             void addPointToOutsideSet(Point<Number> point)
@@ -139,7 +138,7 @@ namespace hypro
                 mOutsideSet.push_back(point);
             }
 
-            std::vector<Point<Number>> outsideSet()
+            std::vector<Point<Number>> getOutsideSet()
             {
                 return mOutsideSet;
             }
@@ -153,10 +152,10 @@ namespace hypro
                 return mOutsideSet[0]; // default return
             }
 
-            bool isNeighbor(Facet facet)
+            bool isNeighbor(Facet<Number> facet)
             {
-                for(int i = 0; i < neighbors.size(); i++) {
-                    if(neighbors[i].isEqual(facet)) {
+                for(int i = 0; i < mNeighbors.size(); i++) {
+                    if(mNeighbors[i].isEqual(facet)) {
                         return true;
                     }
                 }
