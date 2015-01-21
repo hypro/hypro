@@ -210,6 +210,12 @@ namespace hypro {
                 assert(mCoordinates.count(_var) > 0);
                 return mCoordinates.at(_var);
             }
+			
+			Number coordinate(unsigned _dimension) const
+			{
+				assert(mCoordinates.size() <= (long unsigned)_dimension);
+				return mCoordinates.at(hypro::VariablePool::getInstance().carlVarByIndex(_dimension));
+			}
 
             coordinateMap coordinates() const 
             {
