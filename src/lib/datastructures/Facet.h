@@ -4,11 +4,16 @@
  * Author: stefan
  *
  * Created on March 19, 2014, 4:08 PM
+ * @version 2014-12-10
  */
 
 #pragma once
 
 #include "../config.h"
+#include "../representations/Hyperplane/Hyperplane.h"
+#include "Ridge.h"
+#include "Point.h"
+
 
 namespace hypro
 {
@@ -20,7 +25,8 @@ namespace hypro
          * Typedefs
          */
             typedef std::set<Point<Number>> vertices;
-            typedef std::set<Point<Number>> neighbors;
+            typedef std::set<Facet> neighbors;
+            typedef std::vector<Point<Number>> outsideSet;
         
         /**
          * Members
@@ -29,6 +35,7 @@ namespace hypro
             vertices            mVertices;
             neighbors           mNeighbors;
             Polynomial          mHyperplane;
+            outsideSet			mOutsideSet;
             
         /**
          * Constructors & Destructor
@@ -37,14 +44,30 @@ namespace hypro
             Facet() : 
                     mVertices(),
                     mNeighbors(),
-                    mHyperplane()
+                    mHyperplane(),
+                    mOutsideSet()
             {}
                 
             Facet( const Facet<Number>& f) :
                     mVertices(f.vertices()),
                     mNeighbors(f.neighbors()),
-                    mHyperplane(f.hyperplane())
+                    mHyperplane(f.hyperplane()),
+            		mOutsideSet(f.outsideSet())
             {}
+
+            Facet( Ridge<Number> r, Point<Number> p)
+            {
+            	mVertices = new std::set<Point<Number>>();
+            	mVertices.insert(p);
+            	for(int i = 0; i < r.vertices().size; i++)
+            	{
+            		mVertices.insert(r.vertices[i]);
+            	}
+            	mHyperplane = new Hyperplane(mVertices);
+            	mNeighbors = new std::set<Facet>();
+            	mOutsideSet = new std::vector<Point<Number>>();
+
+            }
                 
             ~Facet()
             {}
@@ -73,9 +96,52 @@ namespace hypro
                 return mNeighbors;
             }
             
+            void addNeighbor(Facet facet)
+            {
+            	mNeighbors.insert(facet);
+            }
+
+            void setPoints(std::vector<Point<Number>> points)
+            {
+            	if(mVertices.empty()) {
+            		for(int i = 0; i < points.size(); i++) {
+            			mVertices.insert(points[i]);
+            		}
+            	}
+            }
+
             Polynomial hyperplane() const
             {
                 return mHyperplane;
+            }
+
+            /*
+             * Checks if a point is above, i.e. a positive distance to the Hyperplane.
+             * @return true, if the point is above.
+             */
+            bool check_if_above(Point<Number> p)
+            {
+            	//if ((multiplicate p with hyperplane.normalVector and add hyperplane.offset)>0)
+            	//true : return true else: false
+            }
+
+            void addPointToOutsideSet(Point<Number> point)
+            {
+            	mOutsideSet.push_back(point);
+            }
+
+            std::vector<Point<Number>> outsideSet()
+			{
+            	return mOutsideSet;
+			}
+
+            /*
+             * Determines the point furthest away from the Hyperplane. The points to be considered are saved in hashlist.
+             * @return The Point which has the highest distance to the Hyperplane.
+             */
+            Point<Number> furthest_Point()
+            {
+            	return mOutsideSet[0];
             }
     };
 }

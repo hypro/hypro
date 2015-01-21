@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-04
+ * @version     2014-12-10
  */
 
 #pragma once
@@ -21,6 +21,7 @@
 #include "util.h"
 #include "../GeometricObject.h"
 #include "../../datastructures/Point.h"
+#include "convexHull_util.h"
 
 #include "../Polytopes/util.h"
 
@@ -154,6 +155,7 @@ namespace hypro
         bool contains(const Point<Number>& point);
         bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
+        void convexHull(std::vector<Point<Number>> points);
         
         /**
          * Polytope related

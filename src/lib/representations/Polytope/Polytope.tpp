@@ -3,11 +3,12 @@
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since       2014-03-20
- * @version     2014-04-04
+ * @version     2014-12-10
  */
 
 #include "Polytope.h"
 #include "util.h"
+#include "convexHull_util.h"
 
 namespace hypro
 {
@@ -560,7 +561,7 @@ namespace hypro
     					alreadyExploredVertices.push_back(currentVertex);
     					//store the current counter value - needed if DFS comes back this vertex
     					counterMemory.push_back(counter);
-#ifdef fukuda_DEBUG
+#ifdef fukuda#include "Facet.h"_DEBUG
     					std::cout << "---------------" << std::endl;
     					std::cout << "Counter Memory Stack - add Counter: (" << counter.first << "," << counter.second << ")"  << std::endl;
     					std::cout << "Already explored Vertices: " << alreadyExploredVertices << std::endl;
@@ -788,6 +789,54 @@ namespace hypro
     	res.addToComposition(p2);
     	return res;
     }
+    
+    template<typename Number>
+    void Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
+		//initialization
+		std::vector<Facet> facets = initConvexHull(points); //util?
+		for(Facet facet : facets){
+			std::vector<Point<Nuber>> unassignedPoints = points_not_in_facets(points,facets); //util?
+			for (Point<Number> point : unassignedPoints) {
+				if(facet.check_if_above(point)) { 
+					facet.addPointToOutsideSet(point); 
+				}
+			}
+		}
+		//main body
+		std::vector<Facet> notOutsideFacets = not_outside_facet(facets); //util?
+		for (Facet facet : notOutsideFacets) {
+			Point<Number> point = facet.furthest_Point;
+			std::vector<Facet> visible_facets;
+			visible_facets.push_back(facet);
+			std::vector<Facet> neighbor_facets = getFacetsNeighbors(visible_facets);//util?
+			for (Facet neighbor : neighbor_facets) {
+				if(check_if_above(point,neighbor)) {
+					visible_facets.push_back(neighbor);
+				}
+			}
+			for (Facet facet : visible_facets) {
+				//facets.remove(facet); suche passende delete function !!!
+				//notOutsideFacets.remove(facet);
+			}
+			std::vector<Ridge> ridges = getRidges(visible_facets);
+			std::vector<Facet> newFacets;
+			for (Ridge ridge : ridges) {
+				Facet newFacet = createHyperplane(ridge, point); //constructor for Facet.h?
+				newFacets.push_back(newFacet);
+				facets.push_back(newFacet);
+			}
+			std::vector<Point<Number>> outsidePoints = points_outside_of_visible_facets(visible_facets); 
+			for (Facet newFacet : newFacets) {
+				for (Point<Number> p : outsidePoints) {
+					if(check_if_above(p,newFacet)) {
+						newFacet.addPointToOutsideSet(p); 
+					}
+				}
+			}
+			updateNotOutsideFacets(newFacets); //util?
+		}
+	} 
+    
 
 
     /**
