@@ -10,6 +10,7 @@
 #include <vector>
 #include <cassert>
 #include "../config.h"
+#include "../datastructures/Point.h"
 
 namespace hypro{
 
@@ -17,7 +18,7 @@ template<typename Number>
 static hypro::matrix_t<Number> createMatrix(const std::vector<std::vector<Number> >& _in)
 {
 	assert(!_in.empty());
-	hypro::matrix_t<Number> result(_in.size(), (*_in.begin()).size());
+	matrix_t<Number> result(_in.size(), (*_in.begin()).size());
 	for(unsigned lineId = 0; lineId != _in.size(); ++lineId)
 	{
 		for(unsigned rowId = 0; rowId != _in[lineId].size(); ++rowId)
@@ -32,12 +33,34 @@ template<typename Number>
 static hypro::vector_t<Number> createVector(const std::vector<Number>& _in)
 {
 	assert(!_in.empty());
-	hypro::vector_t<Number> result(_in.size());
+	vector_t<Number> result(_in.size());
 	for(unsigned rowId = 0; rowId != _in.size(); ++rowId)
 	{
 		result(rowId) = Number(_in[rowId]);
 	}
 	return result;
+}
+
+template<typename Number>
+static hypro::vector_t<Number> createVector(const hypro::Point<Number>& _in)
+{
+	vector_t<Number> result(_in.dimension());
+	for(unsigned rowId = 0; rowId != _in.dimension(); ++rowId)
+	{
+		result(rowId) = Number(_in.at(VariablePool::getInstance().carlVarByIndex(rowId)));
+	}
+	return result;
+}
+
+template<typename Number>
+static hypro::vector_t<Number> createVector(std::initializer_list<Number> _coordinates) {
+	vector_t<Number> res = vector_t<Number>(_coordinates.size());
+	unsigned count = 0;
+	for(auto& coordinate : _coordinates) {
+		res(count) = Number(coordinate);
+		++count;
+	}
+	return res;
 }
 
 } // namespace

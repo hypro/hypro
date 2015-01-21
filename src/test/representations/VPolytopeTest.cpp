@@ -8,24 +8,25 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class VPolytopeTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::coordinateMap coordinates;
+        typename Point<Number>::coordinateMap coordinates;
         coordinates.insert(std::make_pair(x, 1));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 0));
-        Point<number_t> p1 = Point<number_t>(coordinates);
+        Point<Number> p1 = Point<Number>(coordinates);
         coordinates.insert(std::make_pair(x, 4));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 0));
-        Point<number_t> p2 = Point<number_t>(coordinates);
+        Point<Number> p2 = Point<Number>(coordinates);
         coordinates.insert(std::make_pair(x, 4));
         coordinates.insert(std::make_pair(y, 1));
         coordinates.insert(std::make_pair(z, 4));
-        Point<number_t> p3 = Point<number_t>(coordinates);
+        Point<Number> p3 = Point<Number>(coordinates);
         
         points.insert(p1);
         points.insert(p2);
@@ -41,54 +42,54 @@ protected:
     Variable y = pool.getFreshVariable("y");
     Variable z = pool.getFreshVariable("z");
 
-    VPolytope<number_t>::verticeSet points;
+    typename VPolytope<Number>::verticeSet points;
     
-    VPolytope<number_t> vpt1;
-    VPolytope<number_t> vpt2;
-    VPolytope<number_t> vpt3;
+    VPolytope<Number> vpt1;
+    VPolytope<Number> vpt2;
+    VPolytope<Number> vpt3;
 };
 
-TEST_F(VPolytopeTest, Constructor)
+TYPED_TEST(VPolytopeTest, Constructor)
 {
     //VPolytope<number_t> aVPolytope = VPolytope<number_t>();
     //VPolytope<number_t> anotherVPolytope = VPolytope<number_t>(points);
     SUCCEED();
 }
 
-TEST_F(VPolytopeTest, Access)
+TYPED_TEST(VPolytopeTest, Access)
 {
 }
 
-TEST_F(VPolytopeTest, Insertion)
+TYPED_TEST(VPolytopeTest, Insertion)
 {
 }
 
-TEST_F(VPolytopeTest, Union)
+TYPED_TEST(VPolytopeTest, Union)
 {
 }
 
-TEST_F(VPolytopeTest, LinearTransformation)
+TYPED_TEST(VPolytopeTest, LinearTransformation)
 {
 
 }
 
-TEST_F(VPolytopeTest, MinkowskiSum)
+TYPED_TEST(VPolytopeTest, MinkowskiSum)
 {
     //VPolytope<number_t> result;
 }
 
-TEST_F(VPolytopeTest, Intersection)
+TYPED_TEST(VPolytopeTest, Intersection)
 {
     //VPolytope<number_t> result;
     //vpt1.intersect(result, vpt2);
 }
 
-TEST_F(VPolytopeTest, ConvexHull)
+TYPED_TEST(VPolytopeTest, ConvexHull)
 {
     //stupid for VPolytopes, only required for orthogonal polyhedra
 }
 
-TEST_F(VPolytopeTest, Membership)
+TYPED_TEST(VPolytopeTest, Membership)
 {
     //Point<number_t> p;
     //p.setCoordinate(x, 4);

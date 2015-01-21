@@ -42,6 +42,7 @@ set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION} )
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
+option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Requires carl to use mpfr as well." ON)
 
 # general compiler and linker settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -fPIC")
@@ -89,9 +90,11 @@ find_package(CLN REQUIRED)
 include_directories(${CLN_INCLUDE_DIRS})
 set(libraries ${libraries} ${CLN_LIBRARY})
 
-find_package(MPFR REQUIRED)
-include_directories(${MPFR_INCLUDE_DIRS})
-set(libraries ${libraries} ${MPFR_LIBRARY})
+if(SUPPORT_MPFR)
+	find_package(MPFR REQUIRED)
+	include_directories(${MPFR_INCLUDE_DIRS})
+	set(libraries ${libraries} ${MPFR_LIBRARY})
+endif()
 
 find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIRS})
@@ -110,7 +113,6 @@ set(libraries ${libraries} ${PPL_LIBRARIES})
 #set(libraries ${libraries} ${NLOPT_LIBRARIES})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
-#find_package(Log4cplus)
 find_package(Eigen3)
 find_package(GTest)
 find_package(NLOPT)

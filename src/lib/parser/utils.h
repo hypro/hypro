@@ -30,12 +30,7 @@ namespace parser
     using namespace boost::fusion;
     typedef unsigned locationId;
 	
-	struct Number
-	{
-		long long integerPart;
-		unsigned long long rationalPart;
-	};
-	
+	template<typename Number>
     struct Initial
     {
         unsigned mLocations;
@@ -85,11 +80,13 @@ namespace parser
         return lhs;
     }
 	
-	std::ostream& operator<<(std::ostream& lhs, const Initial& rhs)
+	template<typename Number>
+	std::ostream& operator<<(std::ostream& lhs, const Initial<Number>& rhs)
     {
 		lhs << "initial( ";
 		lhs << rhs.mLocations;
-		lhs << " Number: " << rhs.mNumber.integerPart << "." << rhs.mNumber.rationalPart;
+		lhs << " Number: " << rhs.mNumber;
+		//lhs << " Type: " << typeid(rhs.mNumber).name();
 		lhs << ")";
 		return lhs;
 	}
@@ -120,16 +117,11 @@ namespace parser
 }
 }
 
-BOOST_FUSION_ADAPT_STRUCT(
-	hypro::parser::Number,
-	(long long, integerPart)
-	(unsigned long long, rationalPart)
-	)
-
-BOOST_FUSION_ADAPT_STRUCT(
-    hypro::parser::Initial,
+BOOST_FUSION_ADAPT_TPL_STRUCT(
+	(Number),
+    (hypro::parser::Initial) (Number),
     (unsigned, mLocations)
-	(hypro::parser::Number, mNumber)
+	(Number, mNumber)
     )
 
 BOOST_FUSION_ADAPT_TPL_STRUCT(

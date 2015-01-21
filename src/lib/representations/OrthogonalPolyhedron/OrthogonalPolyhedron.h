@@ -14,7 +14,7 @@
 #include "../../datastructures/VertexContainer.h"
 #include "../Box/Box.h"
 #include "../GeometricObject.h"
-#include "NeighbourhoodContainer.h"
+#include "NeighborhoodContainer.h"
 #include "Grid.h"
 
 #include <iostream>
@@ -42,13 +42,13 @@ namespace hypro
         //VertexContainer<Number> mInducedVertices;
         
         // the grid the polyhedron is defined on
-        Grid<Number> mGrid;
+        mutable Grid<Number> mGrid;
         
-        // the colour of the origin
-        //bool mOriginColour = false;
+        // the color of the origin
+        //bool mOriginColor = false;
         
-        // the neighbourhood container which maps points to a set of vertices
-        //NeighbourhoodContainer<Number> mNeighbourhood;
+        // the neighborhood container which maps points to a set of vertices
+        mutable NeighborhoodContainer mNeighborhood;
         
         // the cached boundary box (mutable to allow performance optimization)
         mutable Box<Number> mBoundaryBox;
@@ -71,23 +71,16 @@ namespace hypro
         /**
          * Constructor getting a list of vertices which represent an orthogonal polyhedron.
          * 
-         * @todo does it really make sense to make induceGrid optional?
          * @todo actually validate the vertices
          * 
          * @param vertices a non-empty VertexContainer
-         * @param induceGrid true by default
          */
-        OrthogonalPolyhedron(const VertexContainer<Number>& vertices, const bool induceGrid = true) : mVertices(vertices) {
-			//mOriginColour = vertices.originIsVertex();
-			mVariables = vertices.variables();
-			mGrid.reserveInducedGrid(mVariables);
-			if (induceGrid)
-			{
-				mGrid.induceGrid(vertices.vertices());
-				mGrid.insertVerticesInMap(vertices.vertices());
-				//vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-				//mInducedVertices = VertexContainer<Number>(inducedVertices);
-			}
+        OrthogonalPolyhedron(const VertexContainer<Number>& vertices) : mVertices(vertices) {
+            //mOriginColor = vertices.originIsVertex();
+            mVariables = vertices.variables();
+            mGrid.induceGrid(vertices.vertices());
+            //vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
+            //mInducedVertices = VertexContainer<Number>(inducedVertices);
         }
 
         /**
@@ -96,7 +89,7 @@ namespace hypro
          * @param points
          */
         OrthogonalPolyhedron(const std::set<Point<Number> >& points) {
-        	// TODO compute the orthogonal polyhedron around the convex hull of all points
+            // TODO compute the orthogonal polyhedron around the convex hull of all points
         }
         
         /**
@@ -104,14 +97,14 @@ namespace hypro
          * @param copy
          */
         OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy) :
-        	mVertices(copy.mVertices),
-        	//mInducedVertices(copy.mInducedVertices),
-        	mGrid(copy.mGrid),
-        	//mOriginColour(copy.mOriginColour),
-        	//mNeighbourhood(copy.mNeighbourhood),
-        	mBoundaryBox(copy.mBoundaryBox),
-        	mBoxUpToDate(copy.mBoxUpToDate),
-        	mVariables(copy.mVariables)
+            mVertices(copy.mVertices),
+            //mInducedVertices(copy.mInducedVertices),
+            mGrid(copy.mGrid),
+            //mOriginColor(copy.mOriginColor),
+            mNeighborhood(copy.mNeighborhood),
+            mBoundaryBox(copy.mBoundaryBox),
+            mBoxUpToDate(copy.mBoxUpToDate),
+            mVariables(copy.mVariables)
         {}
         
         /***********************************************************************
@@ -119,7 +112,7 @@ namespace hypro
          ***********************************************************************/
         
         unsigned int dimension() const;
-        bool linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix& A, const vector& b = vector()) const;
+        bool linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
         bool minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
         bool intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const;
         bool hull(OrthogonalPolyhedron<Number>& result) const;
@@ -153,9 +146,9 @@ namespace hypro
     private:
         
         void updateBoundaryBox() const;
-        bool containsInduced(const Point<Number>& inducedPoint) const;
+        bool containsInduced(const Point<int>& inducedPoint) const;
         void calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const;
-        bool checkVertexCondition(const Point<Number>& point, const std::map<Point<Number>, bool>& colouring) const;
+        bool checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const;
         
     };
     

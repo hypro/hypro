@@ -31,8 +31,8 @@ namespace hypro {
 		/***********************************************************************
 		 * Constructors & Destructors
 		 **********************************************************************/
-                VertexContainer(){}
-                VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
+		VertexContainer(){}
+		VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
 		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
@@ -124,19 +124,19 @@ namespace hypro {
 			vSetIt<Number> tmpIt = tmp.begin();
 			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
 				Vertex<Number> v = Vertex<Number>(*it);
-				v.move(p);
+				v.rPoint().move(p);
 				tmp.insert(tmpIt, v);
 				tmpIt++;
 			}
 			mVertices = tmp;
 		}
 		
-		inline void linearTransformation(const matrix& A, const vector& b) {
+		inline void linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) {
 			vSet<Number> tmp;
 			vSetIt<Number> tmpIt = tmp.begin();
 			for(vSetIt<Number> it = mVertices.begin(); it != mVertices.end(); ++it) {
 				Vertex<Number> v = Vertex<Number>(*it);
-				v.linearTransformation(A, b);
+				v.rPoint().linearTransformation(A, b);
 				tmp.insert(tmpIt, v);
 				tmpIt++;
 			}
@@ -212,7 +212,7 @@ namespace hypro {
 		 * @return
 		 */
 		template <typename BiIterator>
-		inline vSetIt<Number> insert(const Point<Number> p, bool c, const BiIterator pos) {
+		inline vSetIt<Number> insert(const Point<Number>& p, bool c, const BiIterator pos) {
 			return insert(Vertex<Number>(p,c),pos);
 		}
 		

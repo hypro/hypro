@@ -39,7 +39,7 @@ namespace hypro
                  
                  matrix_t<double> temp = e_t * (l.array().abs()).matrix();   
                              
-                 result.supportValue =  temp(0).toDouble();
+                 result.supportValue =  temp(0);
                  result.optimumValue = l*temp;
                  
                  #ifdef SUPPORTFUNCTION_VERBOSE

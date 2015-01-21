@@ -15,34 +15,35 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class PointTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
         // p1
-        Point<number_t>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(x, FLOAT_T<number_t>(2)) );
-        coordinates1.insert( std::make_pair(y, FLOAT_T<number_t>(5)) );
-        p1 = Point<number_t>(coordinates1);
+        typename Point<Number>::coordinateMap coordinates1;
+        coordinates1.insert( std::make_pair(x, Number(2)) );
+        coordinates1.insert( std::make_pair(y, Number(5)) );
+        p1 = Point<Number>(coordinates1);
 
         // p2
-        Point<number_t>::coordinateMap coordinates2;
-        coordinates2.insert( std::make_pair(a, FLOAT_T<number_t>(7)) );
-        coordinates2.insert( std::make_pair(b, FLOAT_T<number_t>(8)) );
-        p2 = Point<number_t>(coordinates2);
+        typename Point<Number>::coordinateMap coordinates2;
+        coordinates2.insert( std::make_pair(a, Number(7)) );
+        coordinates2.insert( std::make_pair(b, Number(8)) );
+        p2 = Point<Number>(coordinates2);
 
         // p3
-        Point<number_t>::coordinateMap coordinates3;
-        coordinates3.insert( std::make_pair(c, FLOAT_T<number_t>(9)) );
-        coordinates3.insert( std::make_pair(d, FLOAT_T<number_t>(-13)) );
-        p3 = Point<number_t>(coordinates3);
+        typename Point<Number>::coordinateMap coordinates3;
+        coordinates3.insert( std::make_pair(c, Number(9)) );
+        coordinates3.insert( std::make_pair(d, Number(-13)) );
+        p3 = Point<Number>(coordinates3);
         
         // p4
-        Point<number_t>::coordinateMap coordinates4;
-        coordinates4.insert( std::make_pair(c, FLOAT_T<number_t>(5)) );
-        coordinates4.insert( std::make_pair(d, FLOAT_T<number_t>(8)) );
-        p4 = Point<number_t>(coordinates4);
+        typename Point<Number>::coordinateMap coordinates4;
+        coordinates4.insert( std::make_pair(c, Number(5)) );
+        coordinates4.insert( std::make_pair(d, Number(8)) );
+        p4 = Point<Number>(coordinates4);
     }
 
     virtual void TearDown()
@@ -57,80 +58,77 @@ protected:
     Variable c = pool.getFreshVariable("c");
     Variable d = pool.getFreshVariable("d");
 	
-    Point<number_t> p1;
-    Point<number_t> p2;
-    Point<number_t> p3;
-    Point<number_t> p4;
+    Point<Number> p1;
+    Point<Number> p2;
+    Point<Number> p3;
+    Point<Number> p4;
 };
 
-TEST_F(PointTest, Constructor)
+TYPED_TEST(PointTest, Constructor)
 { 
-    Point<number_t> p;
+    Point<TypeParam> p;
     EXPECT_EQ(p.dimension(), (unsigned) 0);
     
-    p = Point<number_t>(y, 5);
+    p = Point<TypeParam>(this->y, 5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
     
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
-    p[pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
+    p[this->pool.getFreshVariable()] = 2;
 
     EXPECT_EQ(p.dimension(), (unsigned) 7);
-    EXPECT_EQ(p[y], FLOAT_T<number_t>(5));
+    EXPECT_EQ(p[this->y], TypeParam(5));
     
-    Point<number_t> pCopy = Point<number_t>(p);
+    Point<TypeParam> pCopy = Point<TypeParam>(p);
     EXPECT_EQ(p, pCopy);
     
-    Point<number_t> empty = p1.newEmpty();
-    EXPECT_EQ(p1.dimension(), empty.dimension());
-    EXPECT_TRUE(p1.haveSameDimensions(empty));
-    EXPECT_EQ(0, empty[x]);
+    Point<TypeParam> empty = this->p1.newEmpty();
+    EXPECT_EQ(this->p1.dimension(), empty.dimension());
+    EXPECT_TRUE(this->p1.haveSameDimensions(empty));
+    EXPECT_EQ(0, empty[this->x]);
 
-    Point<number_t>::rawCoordinateMap map;
-    map.insert(std::make_pair(a, 123));
-    map.insert(std::make_pair(b, 456));
-    Point<number_t> p1(map);
-    EXPECT_EQ(p1[a], FLOAT_T<number_t>(123));
-    EXPECT_EQ(p1[b], FLOAT_T<number_t>(456));
+    typename Point<TypeParam>::coordinateMap map;
+    map.insert(std::make_pair(this->a, TypeParam(123)));
+    map.insert(std::make_pair(this->b, TypeParam(456)));
+    Point<TypeParam> tmp(map);
+    EXPECT_EQ(tmp[this->a], TypeParam(123));
+    EXPECT_EQ(tmp[this->b], TypeParam(456));
     
     // Test copy constructor and typecast constructor
     Point<double> alien;
-    alien[pool.getFreshVariable()] = 1;
-    alien[pool.getFreshVariable()] = 3;
+    alien[this->pool.getFreshVariable()] = 1;
+    alien[this->pool.getFreshVariable()] = 3;
     
     Point<double> alien2 = alien;
     Point<float> local = alien;
 
     
-#ifdef USE_MPFR_FLOAT
+#ifdef SUPPORT_MPFR
     // convert to mpfr
-    Point<mpfr_t> local2 = alien;
+    Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
 #endif
 
 }
 
-TEST_F(PointTest, PolarCoordinates)
+TYPED_TEST(PointTest, PolarCoordinates)
 {
-    std::vector<carl::FLOAT_T<number_t> > pc = p1.polarCoordinates(p1.origin(), false);
-    FLOAT_T<number_t> expectedRes;
-    expectedRes = 29;
-    expectedRes.sqrt_assign();
+    std::vector<TypeParam> pc = this->p1.polarCoordinates(this->p1.origin(), false);
+    TypeParam expectedRes;
+    expectedRes = sqrt(TypeParam(29));
     EXPECT_EQ(pc.at(0), expectedRes);
     
-    pc = p2.polarCoordinates(p2.origin(), false);
-    expectedRes = 113;
-    expectedRes.sqrt_assign();
+    pc = this->p2.polarCoordinates(this->p2.origin(), false);
+    expectedRes = sqrt(TypeParam(113));
     EXPECT_EQ(pc.at(0), expectedRes);
     
-    pc = p3.polarCoordinates(p3.origin(), false);
-    expectedRes = 250;
-    expectedRes.sqrt_assign();
+    pc = this->p3.polarCoordinates(this->p3.origin(), false);
+    expectedRes = sqrt(TypeParam(250));
     EXPECT_EQ(pc.at(0), expectedRes);
     
-    pc = p4.polarCoordinates(p3, false);
+    pc = this->p4.polarCoordinates(this->p3, false);
 }
 
 /**
@@ -141,61 +139,61 @@ TEST_F(PointTest, PolarCoordinates)
  * @covers Point::DecrementInFixedDim
  * @covers Point::setCoordinate
  */
-TEST_F(PointTest, CoordinateDimensionTest)
+TYPED_TEST(PointTest, CoordinateDimensionTest)
 {
-    EXPECT_EQ(p1[x], FLOAT_T<number_t>(2));
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(5));
-    EXPECT_EQ(p1.coordinate(x), FLOAT_T<number_t>(2));
-    EXPECT_EQ(p1.coordinate(y), FLOAT_T<number_t>(5));
-    EXPECT_EQ(p1.dimension(), (unsigned) 2);
+    EXPECT_EQ(this->p1[this->x], TypeParam(2));
+    EXPECT_EQ(this->p1[this->y], TypeParam(5));
+    EXPECT_EQ(this->p1.coordinate(this->x), TypeParam(2));
+    EXPECT_EQ(this->p1.coordinate(this->y), TypeParam(5));
+    EXPECT_EQ(this->p1.dimension(), (unsigned) 2);
     
-    p1.incrementInFixedDim(y);
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(6));
-    p1.incrementInAllDim(FLOAT_T<number_t>(3));
-    EXPECT_EQ(p1[x], FLOAT_T<number_t>(5));
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(9));
-    p1.decrementInFixedDim(y);
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(8));
+    this->p1.incrementInFixedDim(this->y);
+    EXPECT_EQ(this->p1[this->y], TypeParam(6));
+    this->p1.incrementInAllDim(TypeParam(3));
+    EXPECT_EQ(this->p1[this->x], TypeParam(5));
+    EXPECT_EQ(this->p1[this->y], TypeParam(9));
+    this->p1.decrementInFixedDim(this->y);
+    EXPECT_EQ(this->p1[this->y], TypeParam(8));
     
-    p1[x] = FLOAT_T<number_t>(3);
-    p1[y] = FLOAT_T<number_t>(-1);
-    EXPECT_EQ(p1[x], FLOAT_T<number_t>(3));
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(-1));
-    p1.setCoordinate(x, 4);
-    p1.setCoordinate(y, 7);
-    EXPECT_EQ(p1[x], FLOAT_T<number_t>(4));
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(7));
+    this->p1[this->x] = TypeParam(3);
+    this->p1[this->y] = TypeParam(-1);
+    EXPECT_EQ(this->p1[this->x], TypeParam(3));
+    EXPECT_EQ(this->p1[this->y], TypeParam(-1));
+    this->p1.setCoordinate(this->x, 4);
+    this->p1.setCoordinate(this->y, 7);
+    EXPECT_EQ(this->p1[this->x], TypeParam(4));
+    EXPECT_EQ(this->p1[this->y], TypeParam(7));
 }
 
 /**
  * @covers Point::move
  */
-TEST_F(PointTest, OperationTest)
+TYPED_TEST(PointTest, OperationTest)
 {
-    EXPECT_FALSE(p1.move(p1));
-    EXPECT_EQ(p1[x], FLOAT_T<number_t>(4));
-    EXPECT_EQ(p1[y], FLOAT_T<number_t>(10));
+    EXPECT_FALSE(this->p1.move(this->p1));
+    EXPECT_EQ(this->p1[this->x], TypeParam(4));
+    EXPECT_EQ(this->p1[this->y], TypeParam(10));
 
-    EXPECT_TRUE(p2.move(p3));
-    EXPECT_EQ(p2[a], FLOAT_T<number_t>(7));
-    EXPECT_EQ(p2[b], FLOAT_T<number_t>(8));
-    EXPECT_EQ(p2[c], FLOAT_T<number_t>(9));
-    EXPECT_EQ(p2[d], FLOAT_T<number_t>(-13));
+    EXPECT_TRUE(this->p2.move(this->p3));
+    EXPECT_EQ(this->p2[this->a], TypeParam(7));
+    EXPECT_EQ(this->p2[this->b], TypeParam(8));
+    EXPECT_EQ(this->p2[this->c], TypeParam(9));
+    EXPECT_EQ(this->p2[this->d], TypeParam(-13));
 }
 
 /**
  * @covers <>
  */
-TEST_F(PointTest, BinaryOperatorTest)
+TYPED_TEST(PointTest, BinaryOperatorTest)
 {
-    EXPECT_TRUE(p4 > p3);
-    EXPECT_TRUE(p3 < p4);
-    EXPECT_FALSE(p4 < p3);
-    EXPECT_FALSE(p3 > p4);
-    EXPECT_FALSE(p4 < p4);
-    EXPECT_FALSE(p4 > p4);
-    EXPECT_EQ(p4, p4);
-    EXPECT_NE(p3, p4);
+    EXPECT_TRUE(this->p4 > this->p3);
+    EXPECT_TRUE(this->p3 < this->p4);
+    EXPECT_FALSE(this->p4 < this->p3);
+    EXPECT_FALSE(this->p3 > this->p4);
+    EXPECT_FALSE(this->p4 < this->p4);
+    EXPECT_FALSE(this->p4 > this->p4);
+    EXPECT_EQ(this->p4, this->p4);
+    EXPECT_NE(this->p3, this->p4);
 }
 
 /**
@@ -203,130 +201,81 @@ TEST_F(PointTest, BinaryOperatorTest)
  * @covers Point::compareReducedDimension
  * @covers Point::haveEqualCoordinate
  */
-TEST_F(PointTest, BooleanTest)
+TYPED_TEST(PointTest, BooleanTest)
 {
-    EXPECT_TRUE(p1.isInBoundary(p2));
-    EXPECT_TRUE(p2.isInBoundary(p1));
-    EXPECT_TRUE(p1.isInBoundary(p1));
+    EXPECT_TRUE(this->p1.isInBoundary(this->p2));
+    EXPECT_TRUE(this->p2.isInBoundary(this->p1));
+    EXPECT_TRUE(this->p1.isInBoundary(this->p1));
 	
-    p1[x] = FLOAT_T<number_t>(3);
+    this->p1[this->x] = TypeParam(3);
     
-    EXPECT_TRUE(p1.hasDimension(x));
-    EXPECT_FALSE(p1.hasDimension(a));
-    EXPECT_FALSE(p2.hasDimension(x));
-    EXPECT_TRUE(p2.hasDimension(a));
+    EXPECT_TRUE(this->p1.hasDimension(this->x));
+    EXPECT_FALSE(this->p1.hasDimension(this->a));
+    EXPECT_FALSE(this->p2.hasDimension(this->x));
+    EXPECT_TRUE(this->p2.hasDimension(this->a));
 
-    p2[x] = FLOAT_T<number_t>(4);
-    p2[y] = FLOAT_T<number_t>(5);
+    this->p2[this->x] = TypeParam(4);
+    this->p2[this->y] = TypeParam(5);
 	
-    EXPECT_TRUE(p1.haveEqualCoordinate(p1));
-    EXPECT_FALSE(p1.haveEqualCoordinate(p3));
-    p2.removeDimension(a);
-    p2.removeDimension(b);
-    EXPECT_LT(p1, p2);
+    EXPECT_TRUE(this->p1.haveEqualCoordinate(this->p1));
+    EXPECT_FALSE(this->p1.haveEqualCoordinate(this->p3));
+    this->p2.removeDimension(this->a);
+    this->p2.removeDimension(this->b);
+    EXPECT_LT(this->p1, this->p2);
 	
-    p2[x] = FLOAT_T<number_t>(3);
-    p2.removeDimension(a);
+    this->p2[this->x] = TypeParam(3);
+    this->p2.removeDimension(this->a);
 	
-    EXPECT_EQ(p1, p2);
-    EXPECT_NE(p1, p3);
+    EXPECT_EQ(this->p1, this->p2);
+    EXPECT_NE(this->p1, this->p3);
     
-    EXPECT_TRUE(p3.haveSameDimensions(p4));
-    EXPECT_FALSE(p2.haveSameDimensions(p4));
+    EXPECT_TRUE(this->p3.haveSameDimensions(this->p4));
+    EXPECT_FALSE(this->p2.haveSameDimensions(this->p4));
     
-    EXPECT_TRUE(p1.hasDimensions(p1.variables()));
-    EXPECT_TRUE(p2.hasDimensions(p2.variables()));
-    EXPECT_TRUE(p3.hasDimensions(p3.variables()));
-    EXPECT_TRUE(p4.hasDimensions(p4.variables()));
-    EXPECT_FALSE(p1.hasDimensions(p4.variables()));
-    EXPECT_FALSE(p4.hasDimensions(p1.variables()));
-    EXPECT_TRUE(p3.hasDimensions(p4.variables()));
-    EXPECT_TRUE(p4.hasDimensions(p3.variables()));
+    EXPECT_TRUE(this->p1.hasDimensions(this->p1.variables()));
+    EXPECT_TRUE(this->p2.hasDimensions(this->p2.variables()));
+    EXPECT_TRUE(this->p3.hasDimensions(this->p3.variables()));
+    EXPECT_TRUE(this->p4.hasDimensions(this->p4.variables()));
+    EXPECT_FALSE(this->p1.hasDimensions(this->p4.variables()));
+    EXPECT_FALSE(this->p4.hasDimensions(this->p1.variables()));
+    EXPECT_TRUE(this->p3.hasDimensions(this->p4.variables()));
+    EXPECT_TRUE(this->p4.hasDimensions(this->p3.variables()));
 }
 
-TEST_F(PointTest, Neighbours)
-{
-    std::vector<Point<number_t> > neighbours = p1.getAllNeighborsForAFixedDimension(y);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p1.decrementInFixedDim(x);
-    EXPECT_EQ(p1, neighbours[0]);
-    
-    p2[c] = FLOAT_T<number_t>(3);
-    neighbours = p2.getAllNeighborsForAFixedDimension(a);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p2.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    p2.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    p2.incrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p2) != neighbours.end());
-    
-    p3[a] = FLOAT_T<number_t>(2);
-    p3[b] = FLOAT_T<number_t>(7);
-    neighbours = p3.getAllNeighborsForAFixedDimension(a);
-    std::cout << "neighbours: ";
-    for (auto n : neighbours) {
-        std::cout << n << ", ";
-    }
-    std::cout << std::endl;
-    p3.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.incrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(d);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.incrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(b);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-    p3.decrementInFixedDim(c);
-    EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), p3) != neighbours.end());
-}
-
-TEST_F(PointTest, LinearTransformation) {
-	matrix A = createMatrix(std::vector<std::vector<double> >({
-			std::vector<double>({4, 5}),
-			std::vector<double>({-2, 3})
+TYPED_TEST(PointTest, LinearTransformation) {
+	typename hypro::matrix_t<TypeParam> A = createMatrix(std::vector<std::vector<TypeParam> >({
+			std::vector<TypeParam>({4, 5}),
+			std::vector<TypeParam>({-2, 3})
 	}));
 
-	vector v = createVector(std::vector<double>({6, 1}));
+	typename hypro::vector_t<TypeParam> v = createVector(std::vector<TypeParam>({6, 1}));
 
-    Point<number_t>::coordinateMap coordinates;
+	typename Point<TypeParam>::coordinateMap coordinates;
 
-	p1.linearTransformation(A, v); // (2; 5)
-
-	coordinates.clear();
-	coordinates[x] = -3; coordinates[y] = 36;
-	EXPECT_EQ(Point<number_t>(coordinates), p1);
-
-
-	p2.linearTransformation(A, v); // (7; 8)
+	this->p1.linearTransformation(A, v); // (2; 5)
 
 	coordinates.clear();
-	coordinates[a] = 6; coordinates[b] = 73;
-	EXPECT_EQ(Point<number_t>(coordinates), p2);
+	coordinates[this->x] = -3; coordinates[this->y] = 36;
+	EXPECT_EQ(Point<TypeParam>(coordinates), this->p1);
 
 
-	p3.linearTransformation(A, v); // (9; -13)
-
-	coordinates.clear();
-	coordinates[c] = 54; coordinates[d] = -1;
-	EXPECT_EQ(Point<number_t>(coordinates), p3);
-
-
-	p4.linearTransformation(A, v); // (5; 8)
+	this->p2.linearTransformation(A, v); // (7; 8)
 
 	coordinates.clear();
-	coordinates[c] = 0; coordinates[d] = 63;
-	EXPECT_EQ(Point<number_t>(coordinates), p4);
+	coordinates[this->a] = 6; coordinates[this->b] = 73;
+	EXPECT_EQ(Point<TypeParam>(coordinates), this->p2);
+
+
+	this->p3.linearTransformation(A, v); // (9; -13)
+
+	coordinates.clear();
+	coordinates[this->c] = 54; coordinates[this->d] = -1;
+	EXPECT_EQ(Point<TypeParam>(coordinates), this->p3);
+
+
+	this->p4.linearTransformation(A, v); // (5; 8)
+
+	coordinates.clear();
+	coordinates[this->c] = 0; coordinates[this->d] = 63;
+	EXPECT_EQ(Point<TypeParam>(coordinates), this->p4);
 }

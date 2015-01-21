@@ -24,7 +24,7 @@
                   // loop over all L
                   for(unsigned int i= skipFirst2? 2:0 ; i<valuesToTest; i++)   // consider skipping the first values
                   {
-                       if( -set( minus_invariants_in_L[i],0 ).toDouble() > d->at(i) )    // intersection condition
+                       if( -set( minus_invariants_in_L[i],0 ) > d->at(i) )    // intersection condition
                        {
                            #ifdef INTERSECTION_VERBOSE
                                   std::cout << "returns false" << BL;
@@ -51,7 +51,7 @@
                
                for( int i=0; i<length; i++)
                {
-                   result( constraints_in_L_A[i],0 ) = MIN(result( constraints_in_L_A[i],0 ).toDouble(), inv_values->at(i) ); 
+                   result( constraints_in_L_A[i],0 ) = MIN(result( constraints_in_L_A[i],0 ), inv_values->at(i) ); 
                }
                
                return result;

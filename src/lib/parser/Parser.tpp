@@ -44,7 +44,8 @@ namespace parser{
         std::cout << "To parse: " << std::string(begin, end) << std::endl;
         
 		// create automaton from parsed result.
-		_result = std::move(createAutomaton());
+		//_result = std::move(createAutomaton());
+		_result = createAutomaton();
 		
         return result;
     }
@@ -139,7 +140,8 @@ namespace parser{
 		assert(incompleteTransitions.empty());
 		assert(secondIncompleteTransitions.empty());
 		
-		return std::move(result);
+		//return std::move(result);
+		return result;
 	}
 	
 }

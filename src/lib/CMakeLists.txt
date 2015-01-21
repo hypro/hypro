@@ -2,6 +2,9 @@ add_subdirectory(datastructures)
 add_subdirectory(representations)
 add_subdirectory(parser)
 
+# Create config.h by adding cmake defines dependend on option switches
+configure_file( ${CMAKE_SOURCE_DIR}/src/lib/types.h.in ${CMAKE_SOURCE_DIR}/src/lib/types.h )
+
 set(lib_hypro_headers
 	config.h
     util/VariablePool.h

@@ -9,10 +9,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_executable(runRepresentationTests
         BoxTest.cpp
         VPolytopeTest.cpp
-        #OrthogonalPolyhedronTest.cpp
-        #PolytopeTest.cpp
+        OrthogonalPolyhedronTest.cpp
+        PolytopeTest.cpp
         PolytopeUtilTest.cpp
-        NeighbourhoodContainerTest.cpp
+        NeighborhoodContainerTest.cpp
+	SupportFunctionTest.cpp
         ZonotopeTest.cpp
         GridTest.cpp
     )

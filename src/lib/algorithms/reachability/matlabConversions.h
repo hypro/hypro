@@ -23,7 +23,7 @@ namespace hypro
                {
                     for( int j=0; j<m.cols(); j++)
                     {
-                        outfile << m(i,j).toDouble() << " ";
+                        outfile << m(i,j) << " ";
                     }
                     
                     if( i<m.rows()-1)

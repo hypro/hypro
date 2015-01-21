@@ -11,6 +11,9 @@
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 
+
+#include "componentParser.h"
+#include "utils.h"
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
@@ -18,54 +21,45 @@
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/spirit/include/phoenix_bind.hpp>
 #include <boost/phoenix/stl/container.hpp>
-#include "boost/variant.hpp"
+#include <boost/variant.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cassert>
 #include "../datastructures/hybridAutomata/HybridAutomaton.h"
-#include "utils.h"
-#include "componentParser.h"
+
 #include "../util/types.h"
 #include "helper.h"
 
 namespace hypro{
 namespace parser{
     
-namespace spirit = boost::spirit;    
-namespace qi = boost::spirit::qi;
-namespace ascii = boost::spirit::ascii;
-namespace phoenix = boost::phoenix;
-namespace fusion = boost::fusion;
-
-typedef spirit::istream_iterator BaseIteratorType;
-typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
-typedef PositionIteratorType Iterator;
-typedef qi::space_type Skipper;
+template<typename Number>
+using Automaton = std::vector<boost::variant<Initial<Number>, State<Number>, Transition<Number> > >;
 
 template<typename Number>
-using Automaton = std::vector<boost::variant<Initial, State<Number>, Transition<Number> > >;
-
-template<typename Number>
-using matrix = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>;
+using matrix = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
 
-template<typename Iterator>
-struct InitialParser : public qi::grammar<Iterator, Initial(), Skipper>
+template<typename Iterator, typename Number>
+struct InitialParser : public qi::grammar<Iterator, Initial<Number>(), Skipper>
 {
 	shortLocationParser<Iterator> mLocationParser;
-	NumberParser<Iterator> mNumberParser;
+	//NumberParser<Iterator> mNumberParser;
+	FloatParser<Number> mFloatParser;
 	
     InitialParser() : InitialParser::base_type(start)
     {
         start = qi::lit("initial") > 
 				qi::lit("(") >
 				mLocationParser >
-				-mNumberParser >
+				qi::lit(",") >
+				//mNumberParser >
+				mFloatParser >
 				qi::lit(")");
     }
     
-    qi::rule<Iterator, Initial(), Skipper> start;
+    qi::rule<Iterator, Initial<Number>(), Skipper> start;
 };
 
 template<typename Iterator, typename Number>
@@ -121,11 +115,11 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
 	qi::rule<Iterator, Skipper> main;
     StateParser<Iterator, Number> mStateParser;
     TransitionParser<Iterator, Number> mTransitionParser;
-	InitialParser<Iterator> mInitialParser;
+	InitialParser<Iterator, Number> mInitialParser;
 	
 	std::vector<State<Number>> mStates;
 	std::vector<Transition<Number>> mTransitions;
-	Initial mInitial;
+	Initial<Number> mInitial;
     
     MainParser() : MainParser::base_type(main)
     {
@@ -160,7 +154,7 @@ struct MainParser : public qi::grammar<Iterator, Skipper>
 		mTransitions.push_back(_in);
 	}
 	
-	void setInitial(const Initial& _in)
+	void setInitial(const Initial<Number>& _in)
 	{
 		mInitial = _in;
 	}

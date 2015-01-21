@@ -1,5 +1,5 @@
-initial( location = 2 3 . 14159265436998215 )
+initial( location = 2, 3.141592654 )
 location( name = 1, flow = matrix flowA )
-location( name = 2, flow = matrix flowA [1, 2 ; 3, 4 ] )
+location( name = 2, flow = matrix flowA [1, 2.343245765433456423 ; 3, 4 ] )
 location( name = 3, flow = matrix [4, 3 ; 2, 1 ], invariant = matrix [5,6;7,8] )
 transition(312 name = 4, source = 2, target = 1, guard = matrix A [1,2], reset = matrix B [3,4])

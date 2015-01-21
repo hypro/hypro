@@ -17,7 +17,7 @@
 #include "../../lib/datastructures/VertexContainer.h"
 #include "../../lib/representations/Box/Box.h"
 #include "../../lib/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
-#include "../../lib/representations/OrthogonalPolyhedron/NeighbourhoodContainer.h"
+#include "../../lib/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 
 #include <map>
 #include <carl/core/VariablePool.h>
@@ -27,58 +27,59 @@
 using namespace hypro;
 using namespace carl;
 
+template<typename Number>
 class OrthogonalPolyhedronTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-        Point<number_t>::rawCoordinateMap coordinates;
+        typename Point<Number>::coordinateMap coordinates;
         
         coordinates[x] = 3; coordinates[y] = 3;
-        container1.insert(Point<number_t>(coordinates), true);
+        container1.insert(Point<Number>(coordinates), true);
         
         coordinates[x] = 3; coordinates[y] = 6;
-        container1.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 5; coordinates[y] = 3;
-        container1.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 5; coordinates[y] = 5;
-        container1.insert(Point<number_t>(coordinates), true);
+        container1.insert(Point<Number>(coordinates), true);
         
         coordinates[x] = 7; coordinates[y] = 5;
-        container1.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 7; coordinates[y] = 6;
-        container1.insert(Point<number_t>(coordinates), false);
+        container1.insert(Point<Number>(coordinates), false);
 
-        p1 = OrthogonalPolyhedron<number_t>(container1);
+        p1 = OrthogonalPolyhedron<Number>(container1);
 
         coordinates[x] = 1; coordinates[y] = 3;
-        container2.insert(Point<number_t>(coordinates), true);
+        container2.insert(Point<Number>(coordinates), true);
         
         coordinates[x] = 1; coordinates[y] = 4;
-        container2.insert(Point<number_t>(coordinates), false);
+        container2.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 2; coordinates[y] = 4;
-        container2.insert(Point<number_t>(coordinates), true);
+        container2.insert(Point<Number>(coordinates), true);
         
         coordinates[x] = 2; coordinates[y] = 5;
-        container2.insert(Point<number_t>(coordinates), false);
+        container2.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 4; coordinates[y] = 5;
-        container2.insert(Point<number_t>(coordinates), false);
+        container2.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 4; coordinates[y] = 2;
-        container2.insert(Point<number_t>(coordinates), false);
+        container2.insert(Point<Number>(coordinates), false);
         
         coordinates[x] = 2; coordinates[y] = 2;
-        container2.insert(Point<number_t>(coordinates), true);
+        container2.insert(Point<Number>(coordinates), true);
         
         coordinates[x] = 2; coordinates[y] = 3;
-        container2.insert(Point<number_t>(coordinates), true);
+        container2.insert(Point<Number>(coordinates), true);
         
-        p2 = OrthogonalPolyhedron<number_t>(container2);
+        p2 = OrthogonalPolyhedron<Number>(container2);
     }
 	
     virtual void TearDown()
@@ -89,286 +90,284 @@ protected:
     Variable x = pool.getFreshVariable("x");
     Variable y = pool.getFreshVariable("y");
     
-    VertexContainer<number_t> container1;
-    VertexContainer<number_t> container2;
+    VertexContainer<Number> container1;
+    VertexContainer<Number> container2;
 
-    OrthogonalPolyhedron<number_t> p1;
-    OrthogonalPolyhedron<number_t> p2;
+    OrthogonalPolyhedron<Number> p1;
+    OrthogonalPolyhedron<Number> p2;
 };
 
-TEST_F(OrthogonalPolyhedronTest, Constructor)
+TYPED_TEST(OrthogonalPolyhedronTest, Constructor)
 {
-    OrthogonalPolyhedron<number_t> p;
-    OrthogonalPolyhedron<number_t> copy(p);
+    OrthogonalPolyhedron<TypeParam> p;
+    OrthogonalPolyhedron<TypeParam> copy(p);
     SUCCEED();
 }
 
-TEST_F(OrthogonalPolyhedronTest, Properties)
+TYPED_TEST(OrthogonalPolyhedronTest, Properties)
 {
-    EXPECT_FALSE(p1.empty());
-    OrthogonalPolyhedron<number_t> empty;
+    EXPECT_FALSE(this->p1.empty());
+    OrthogonalPolyhedron<TypeParam> empty;
     EXPECT_TRUE(empty.empty());
 
     std::vector<carl::Variable> variables;
-    variables.push_back(y);
-    variables.push_back(x);
-    EXPECT_EQ((unsigned)2, p1.dimension());
-    EXPECT_EQ(variables, p1.variables());
+    variables.push_back(this->y);
+    variables.push_back(this->x);
+    EXPECT_EQ((unsigned)2, this->p1.dimension());
+    EXPECT_EQ(variables, this->p1.variables());
 }
 
-TEST_F(OrthogonalPolyhedronTest, BoundaryBox)
+TYPED_TEST(OrthogonalPolyhedronTest, BoundaryBox)
 {
-    Box<number_t> boundaryBox;
-    boundaryBox.insert(x, carl::Interval<number_t>(3, 7));
-    boundaryBox.insert(y, carl::Interval<number_t>(3, 6));
+    Box<TypeParam> boundaryBox;
+    boundaryBox.insert(this->x, carl::Interval<TypeParam>(3, 7));
+    boundaryBox.insert(this->y, carl::Interval<TypeParam>(3, 6));
 
-    EXPECT_EQ(boundaryBox, p1.boundaryBox());
+    EXPECT_EQ(boundaryBox, this->p1.boundaryBox());
 }
 
+/*
 
-TEST_F(OrthogonalPolyhedronTest, LinearTransformation)
+TYPED_TEST(OrthogonalPolyhedronTest, LinearTransformation)
 {
-	matrix A = createMatrix(std::vector<std::vector<double> >({
-			std::vector<double>({5, -2}),
-			std::vector<double>({9, 3})
-	}));
+    matrix_t<TypeParam> A = createMatrix(std::vector<std::vector<TypeParam> >({
+		    std::vector<TypeParam>({5, -2}),
+		    std::vector<TypeParam>({9, 3})
+    }));
 
-	vector v = createVector(std::vector<double>({7, 2}));
-
-
-    VertexContainer<number_t> container1;
-    Point<number_t>::rawCoordinateMap coordinates;
-
-    coordinates[x] = 38; coordinates[y] = 16;
-    container1.insert(Point<number_t>(coordinates), true);
-
-    coordinates[x] = 65; coordinates[y] = 31;
-    container1.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 44; coordinates[y] = 12;
-    container1.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 62; coordinates[y] = 22;
-    container1.insert(Point<number_t>(coordinates), true);
-
-    coordinates[x] = 68; coordinates[y] = 18;
-    container1.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 77; coordinates[y] = 23;
-    container1.insert(Point<number_t>(coordinates), false);
-
-    VertexContainer<number_t> container2;
-
-    coordinates[x] = 32; coordinates[y] = 20;
-    container2.insert(Point<number_t>(coordinates), true);
-
-    coordinates[x] = 41; coordinates[y] = 25;
-    container2.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 44; coordinates[y] = 23;
-    container2.insert(Point<number_t>(coordinates), true);
-
-    coordinates[x] = 53; coordinates[y] = 28;
-    container2.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 59; coordinates[y] = 24;
-    container2.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 32; coordinates[y] = 9;
-    container2.insert(Point<number_t>(coordinates), false);
-
-    coordinates[x] = 26; coordinates[y] = 13;
-    container2.insert(Point<number_t>(coordinates), true);
-
-    coordinates[x] = 35; coordinates[y] = 18;
-    container2.insert(Point<number_t>(coordinates), true);
+    vector_t<TypeParam> v = createVector(std::vector<TypeParam>({7, 2}));
 
 
+    VertexContainer<TypeParam> container1;
+    typename Point<TypeParam>::coordinateMap coordinates;
 
-	OrthogonalPolyhedron<number_t> expected1(container1);
-	OrthogonalPolyhedron<number_t> expected2(container2);
+    coordinates[this->x] = 38; coordinates[this->y] = 16;
+    container1.insert(Point<TypeParam>(coordinates), true);
 
-	OrthogonalPolyhedron<number_t> result1, result2;
+    coordinates[this->x] = 65; coordinates[this->y] = 31;
+    container1.insert(Point<TypeParam>(coordinates), false);
 
-	p1.linearTransformation(result1, A, v);
-	p2.linearTransformation(result2, A, v);
+    coordinates[this->x] = 44; coordinates[this->y] = 12;
+    container1.insert(Point<TypeParam>(coordinates), false);
 
-	EXPECT_EQ(expected1, result1);
-	EXPECT_EQ(expected2, result2);
+    coordinates[this->x] = 62; coordinates[this->y] = 22;
+    container1.insert(Point<TypeParam>(coordinates), true);
+
+    coordinates[this->x] = 68; coordinates[this->y] = 18;
+    container1.insert(Point<TypeParam>(coordinates), false);
+
+    coordinates[this->x] = 77; coordinates[this->y] = 23;
+    container1.insert(Point<TypeParam>(coordinates), false);
+
+    VertexContainer<TypeParam> container2;
+
+    coordinates[this->x] = 32; coordinates[this->y] = 20;
+    container2.insert(Point<TypeParam>(coordinates), true);
+
+    coordinates[this->x] = 41; coordinates[this->y] = 25;
+    container2.insert(Point<TypeParam>(coordinates), false);
+
+    coordinates[this->x] = 44; coordinates[this->y] = 23;
+    container2.insert(Point<TypeParam>(coordinates), true);
+
+    coordinates[this->x] = 53; coordinates[this->y] = 28;
+    container2.insert(Point<TypeParam>(coordinates), false);
+
+    coordinates[this->x] = 59; coordinates[this->y] = 24;
+    container2.insert(Point<TypeParam>(coordinates), false);
+
+    coordinates[this->x] = 32; coordinates[this->y] = 9;
+    container2.insert(Point<TypeParam>(coordinates), false);
+
+    coordinates[this->x] = 26; coordinates[this->y] = 13;
+    container2.insert(Point<TypeParam>(coordinates), true);
+
+    coordinates[this->x] = 35; coordinates[this->y] = 18;
+    container2.insert(Point<TypeParam>(coordinates), true);
+
+
+    OrthogonalPolyhedron<TypeParam> expected1(container1);
+    OrthogonalPolyhedron<TypeParam> expected2(container2);
+
+    OrthogonalPolyhedron<TypeParam> result1, result2;
+
+    EXPECT_TRUE(this->p1.linearTransformation(result1, A, v));
+    EXPECT_TRUE(this->p2.linearTransformation(result2, A, v));
+
+    EXPECT_EQ(expected1, result1);
+    EXPECT_EQ(expected2, result2);
 }
 
-TEST_F(OrthogonalPolyhedronTest, Intersect)
+*/
+
+TYPED_TEST(OrthogonalPolyhedronTest, Intersect)
 {
-    OrthogonalPolyhedron<number_t> result;
+    OrthogonalPolyhedron<TypeParam> result;
     
-    VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    VertexContainer<TypeParam> container;
+    typename Point<TypeParam>::coordinateMap coordinates;
         
-    coordinates[x] = 3; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 3; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 3; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 3; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 4; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 4; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 4; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 4; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), false);
     
-    OrthogonalPolyhedron<number_t> expected(container);
+    OrthogonalPolyhedron<TypeParam> expected(container);
 
-    std::cout << "p1:" << p1 << std::endl;
-    std::cout << "p2:" << p2 << std::endl;
-    p1.intersect(result, p2);
+    EXPECT_TRUE(this->p1.intersect(result, this->p2));
     
     EXPECT_EQ(expected, result);
 }
 
-TEST_F(OrthogonalPolyhedronTest, Hull)
+TYPED_TEST(OrthogonalPolyhedronTest, Hull)
 {
-    VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    VertexContainer<TypeParam> container;
+    typename Point<TypeParam>::coordinateMap coordinates;
 
-    coordinates[x] = 3; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 3; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), true);
 
-    coordinates[x] = 3; coordinates[y] = 6;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 3; coordinates[this->y] = 6;
+    container.insert(Point<TypeParam>(coordinates), false);
 
-    coordinates[x] = 7; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 7; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), false);
 
-    coordinates[x] = 7; coordinates[y] = 6;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 7; coordinates[this->y] = 6;
+    container.insert(Point<TypeParam>(coordinates), false);
 
-    OrthogonalPolyhedron<number_t> hull(container);
-    OrthogonalPolyhedron<number_t> result;
+    OrthogonalPolyhedron<TypeParam> hull(container);
+    OrthogonalPolyhedron<TypeParam> result;
     
-    EXPECT_TRUE(p1.hull(result));
+    EXPECT_TRUE(this->p1.hull(result));
     EXPECT_EQ(hull, result);
 }
 
-TEST_F(OrthogonalPolyhedronTest, Contains)
+TYPED_TEST(OrthogonalPolyhedronTest, Contains)
 {
-    Point<number_t>::rawCoordinateMap coordinates;
+    typename Point<TypeParam>::coordinateMap coordinates;
     
-    coordinates[x] = 4; coordinates[y] = 5;
-    Point<number_t> pt1(coordinates); // true
+    coordinates[this->x] = 4; coordinates[this->y] = 5;
+    Point<TypeParam> pt1(coordinates); // true
     
-    coordinates[x] = 4; coordinates[y] = 6;
-    Point<number_t> pt2(coordinates); // false
+    coordinates[this->x] = 4; coordinates[this->y] = 6;
+    Point<TypeParam> pt2(coordinates); // false
     
-    coordinates[x] = 5; coordinates[y] = 5;
-    Point<number_t> pt3(coordinates); // true
+    coordinates[this->x] = 5; coordinates[this->y] = 5;
+    Point<TypeParam> pt3(coordinates); // true
     
-    coordinates[x] = 1; coordinates[y] = 5;
-    Point<number_t> pt4(coordinates); // false
+    coordinates[this->x] = 1; coordinates[this->y] = 5;
+    Point<TypeParam> pt4(coordinates); // false
     
-    coordinates[x] = 6; coordinates[y] = 4;
-    Point<number_t> pt5(coordinates); // false
+    coordinates[this->x] = 6; coordinates[this->y] = 4;
+    Point<TypeParam> pt5(coordinates); // false
     
-    coordinates[x] = 5; coordinates[y] = 6.5;
-    Point<number_t> pt6(coordinates); // false
+    coordinates[this->x] = 5; coordinates[this->y] = 6.5;
+    Point<TypeParam> pt6(coordinates); // false
     
-    coordinates[x] = 4; coordinates[y] = 3;
-    Point<number_t> pt7(coordinates); // true
+    coordinates[this->x] = 4; coordinates[this->y] = 3;
+    Point<TypeParam> pt7(coordinates); // true
     
-    coordinates[x] = 3; coordinates[y] = 5;
-    Point<number_t> pt8(coordinates); // true
+    coordinates[this->x] = 3; coordinates[this->y] = 5;
+    Point<TypeParam> pt8(coordinates); // true
     
-    coordinates[x] = 5; coordinates[y] = 4;
-    Point<number_t> pt9(coordinates); // false
+    coordinates[this->x] = 5; coordinates[this->y] = 4;
+    Point<TypeParam> pt9(coordinates); // false
     
-    coordinates[x] = 6; coordinates[y] = 5;
-    Point<number_t> pt10(coordinates); // true
+    coordinates[this->x] = 6; coordinates[this->y] = 5;
+    Point<TypeParam> pt10(coordinates); // true
     
-    coordinates[x] = 7; coordinates[y] = 6;
-    Point<number_t> pt11(coordinates); // false
+    coordinates[this->x] = 7; coordinates[this->y] = 6;
+    Point<TypeParam> pt11(coordinates); // false
     
-    coordinates[x] = 0; coordinates[y] = 0;
-    Point<number_t> pt12(coordinates); // false
+    coordinates[this->x] = 0; coordinates[this->y] = 0;
+    Point<TypeParam> pt12(coordinates); // false
     
-    coordinates[x] = 1; coordinates[y] = 1;
-    Point<number_t> pt13(coordinates); // false
+    coordinates[this->x] = 1; coordinates[this->y] = 1;
+    Point<TypeParam> pt13(coordinates); // false
     
-    coordinates[x] = 100; coordinates[y] = 100;
-    Point<number_t> pt14(coordinates); // false
+    coordinates[this->x] = 100; coordinates[this->y] = 100;
+    Point<TypeParam> pt14(coordinates); // false
     
-    EXPECT_TRUE(p1.contains(pt1));
-    EXPECT_FALSE(p1.contains(pt2));
-    EXPECT_TRUE(p1.contains(pt3));
-    EXPECT_FALSE(p1.contains(pt4));
-    EXPECT_FALSE(p1.contains(pt5));
-    EXPECT_FALSE(p1.contains(pt6));
-    EXPECT_TRUE(p1.contains(pt7));
-    EXPECT_TRUE(p1.contains(pt8));
-    EXPECT_FALSE(p1.contains(pt9));
-    EXPECT_TRUE(p1.contains(pt10));
-    EXPECT_FALSE(p1.contains(pt11));
-    EXPECT_FALSE(p1.contains(pt12));
-    EXPECT_FALSE(p1.contains(pt13));
-    EXPECT_FALSE(p1.contains(pt14));
+    EXPECT_TRUE(this->p1.contains(pt1));
+    EXPECT_FALSE(this->p1.contains(pt2));
+    EXPECT_TRUE(this->p1.contains(pt3));
+    EXPECT_FALSE(this->p1.contains(pt4));
+    EXPECT_FALSE(this->p1.contains(pt5));
+    EXPECT_FALSE(this->p1.contains(pt6));
+    EXPECT_TRUE(this->p1.contains(pt7));
+    EXPECT_TRUE(this->p1.contains(pt8));
+    EXPECT_FALSE(this->p1.contains(pt9));
+    EXPECT_TRUE(this->p1.contains(pt10));
+    EXPECT_FALSE(this->p1.contains(pt11));
+    EXPECT_FALSE(this->p1.contains(pt12));
+    EXPECT_FALSE(this->p1.contains(pt13));
+    EXPECT_FALSE(this->p1.contains(pt14));
     
     // also check all vertices
-    for (auto vertexIt : container1.vertices()) {
-        EXPECT_EQ(vertexIt.color(), p1.contains(vertexIt));
+    for (auto vertexIt : this->container1.vertices()) {
+        EXPECT_EQ(vertexIt.color(), this->p1.contains(vertexIt.point()));
     }
 }
 
-TEST_F(OrthogonalPolyhedronTest, Unite) {
-    OrthogonalPolyhedron<number_t> result;
+TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
+    OrthogonalPolyhedron<TypeParam> result;
     
-    VertexContainer<number_t> container;
-    Point<number_t>::rawCoordinateMap coordinates;
+    VertexContainer<TypeParam> container;
+    typename Point<TypeParam>::coordinateMap coordinates;
         
-    coordinates[x] = 1; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 1; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 1; coordinates[y] = 4;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 1; coordinates[this->y] = 4;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 2; coordinates[y] = 2;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 2; coordinates[this->y] = 2;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 2; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 2; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 2; coordinates[y] = 4;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 2; coordinates[this->y] = 4;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 2; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 2; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 3; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 3; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 3; coordinates[y] = 6;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 3; coordinates[this->y] = 6;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 4; coordinates[y] = 2;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 4; coordinates[this->y] = 2;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 4; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 4; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 5; coordinates[y] = 3;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 5; coordinates[this->y] = 3;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 5; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), true);
+    coordinates[this->x] = 5; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), true);
         
-    coordinates[x] = 7; coordinates[y] = 5;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 7; coordinates[this->y] = 5;
+    container.insert(Point<TypeParam>(coordinates), false);
         
-    coordinates[x] = 7; coordinates[y] = 6;
-    container.insert(Point<number_t>(coordinates), false);
+    coordinates[this->x] = 7; coordinates[this->y] = 6;
+    container.insert(Point<TypeParam>(coordinates), false);
     
-    OrthogonalPolyhedron<number_t> expected(container);
+    OrthogonalPolyhedron<TypeParam> expected(container);
 
-    std::cout << "p1:" << p1 << std::endl;
-    std::cout << "p2:" << p2 << std::endl;
-    p1.unite(result, p2);
+    EXPECT_TRUE(this->p1.unite(result, this->p2));
     
     EXPECT_EQ(expected, result);
 }

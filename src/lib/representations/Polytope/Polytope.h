@@ -47,9 +47,9 @@ namespace hypro
         Polytope(unsigned dimension);
         Polytope(const Point<Number>& point);
         Polytope(const typename std::vector<Point<Number>>& points);
-        Polytope(const typename std::vector<Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic,1>>& points);
-        Polytope(const matrix& A, const vector& b);
-        Polytope(const matrix& A);
+        Polytope(const typename std::vector<vector_t<Number>>& points);
+        Polytope(const matrix_t<Number>& A, const vector_t<Number>& b);
+        Polytope(const matrix_t<Number>& A);
         Polytope(const C_Polyhedron& _rawPoly);
         
         virtual ~Polytope();
@@ -145,7 +145,7 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        bool linearTransformation(Polytope<Number>& result, const matrix& A, const vector& b = vector());
+        bool linearTransformation(Polytope<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
         
         bool minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs);
         // implemented according to Komei Fukuda 2004
@@ -160,7 +160,7 @@ namespace hypro
         /**
          * Polytope related
          */
-        Number hausdorffError(const Number& delta, const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>& matrix);
+        Number hausdorffError(const Number& delta, const matrix_t<Number>& matrix);
         
         
         //Polytope<Number>& operator= (const Polytope<Number>& rhs);
