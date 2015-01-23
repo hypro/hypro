@@ -99,6 +99,7 @@ namespace hypro {
 		for(auto& directionPair : mDirections) {
 			_result.addDirection(transposed*directionPair.first, directionPair.second);
 		}
+		return true;
 	}
 	
 	template<typename Number>
@@ -117,27 +118,34 @@ namespace hypro {
 	
 	template<typename Number>
 	bool SupportFunction<Number>::intersect(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const {
-		
+		return true;
 	}
 	
 	template<typename Number>
 	bool SupportFunction<Number>::hull(SupportFunction<Number>& _result) const {
-		
+		_result = *this;
+		return true;
 	}
 	
 	template<typename Number>
 	bool SupportFunction<Number>::contains(const Point<Number>& _point) const {
+		vector_t<Number> point = createVector(_point);
 		
+		for(auto& distancePair : mDirections) {
+			if( distancePair.first.dot(point) > distancePair.second )
+				return false;
+		}
+		return true;
 	}
 	
 	template<typename Number>
-	bool SupportFunction<Number>::contains(const SupportFunction<Number>& _poly) const {
-		
+	bool SupportFunction<Number>::contains(const SupportFunction<Number>& _sf) const {
+		return false;
 	}
 	
 	template<typename Number>
 	bool SupportFunction<Number>::unite(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const {
-		
+		return true;
 	}
 	
 	template<typename Number>

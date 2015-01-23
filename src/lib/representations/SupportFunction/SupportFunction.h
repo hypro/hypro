@@ -72,7 +72,7 @@ class SupportFunction : hypro::GeometricObject<Number> {
         bool intersect(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const;
         bool hull(SupportFunction<Number>& _result) const;
         bool contains(const Point<Number>& _point) const;
-        bool contains(const SupportFunction<Number>& _poly) const;
+        bool contains(const SupportFunction<Number>& _sf) const;
         bool unite(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const;
         void convexHull(std::vector<Point<Number>> _points);
 };

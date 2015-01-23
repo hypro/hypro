@@ -13,7 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
         PolytopeTest.cpp
         PolytopeUtilTest.cpp
         NeighborhoodContainerTest.cpp
-	SupportFunctionTest.cpp
+		SupportFunctionTest.cpp
         ZonotopeTest.cpp
         GridTest.cpp
     )
