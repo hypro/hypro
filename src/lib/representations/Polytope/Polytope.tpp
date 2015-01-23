@@ -563,7 +563,7 @@ namespace hypro
     					alreadyExploredVertices.push_back(currentVertex);
     					//store the current counter value - needed if DFS comes back this vertex
     					counterMemory.push_back(counter);
-#ifdef fukuda#include "Facet.h"_DEBUG
+#ifdef fukuda_DEBUG
     					std::cout << "---------------" << std::endl;
     					std::cout << "Counter Memory Stack - add Counter: (" << counter.first << "," << counter.second << ")"  << std::endl;
     					std::cout << "Already explored Vertices: " << alreadyExploredVertices << std::endl;

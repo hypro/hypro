@@ -146,7 +146,7 @@ namespace hypro {
             {
                 for(auto& coordinate : _p.coordinates())
                 {
-                    Number tmp = coordinate.second;
+                    Number tmp = Number(coordinate.second);
                     mCoordinates.insert(std::make_pair(coordinate.first, tmp));
                 }
             }
@@ -328,7 +328,7 @@ namespace hypro {
                 std::vector<Number> result;
                 
                 // 1st component of the result is the radial part, the following components are the angles.
-                Number radialCoordinate;
+                Number radialCoordinate = Number(0);
                 for(auto& dimension : base.mCoordinates)
                 {
                     Number square;
