@@ -120,7 +120,7 @@ namespace polytope
         bool intersection(Number& _result, const vector_t<Number>& _vector) const
         {
         	bool intersect = false;
-        	Number factor;
+        	Number factor = 0;
 #ifdef fukuda_DEBUG
         	std::cout << "mNormal: " << mNormal << std::endl;
 #endif
