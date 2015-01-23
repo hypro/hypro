@@ -26,7 +26,7 @@ protected:
 	
 };
 
-TYPED_TEST(SupportFunctionTest, Constructor) {
+TYPED_TEST(SupportFunctionTest, constructor) {
 	SupportFunction<TypeParam> defConstr = SupportFunction<TypeParam>();
 	SupportFunction<TypeParam> cpConstr = SupportFunction<TypeParam>(defConstr);
 	SupportFunction<TypeParam> cpAssign = defConstr;
@@ -38,7 +38,7 @@ TYPED_TEST(SupportFunctionTest, Constructor) {
 	moveTarget = std::move(moveSource);
 }
 
-TYPED_TEST(SupportFunctionTest, Access) {
+TYPED_TEST(SupportFunctionTest, access) {
 	SupportFunction<TypeParam> base = SupportFunction<TypeParam>();
 	base.addDirection(createVector<TypeParam>({2,3,1}), TypeParam(4));
 	base.addDirection(createVector<TypeParam>(hypro::Point<TypeParam>{1,2,3}), TypeParam(5));
@@ -115,4 +115,25 @@ TYPED_TEST(SupportFunctionTest, MinkowskiSum) {
 	
 	lhs.minkowskiSum(result2, rhs);
 	EXPECT_EQ(result, result2);
+}
+
+TYPED_TEST(SupportFunctionTest, contains) {
+	vector_t<TypeParam> dir1 = createVector<TypeParam>({2,4});
+	vector_t<TypeParam> dir2 = createVector<TypeParam>({-4,1});
+	vector_t<TypeParam> dir3 = createVector<TypeParam>({1,-6});
+	
+	SupportFunction<TypeParam> set;
+	
+	set.addDirection(dir1, 20);
+	set.addDirection(dir2, 17);
+	set.addDirection(dir3, 37);
+	
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({2,4})));
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({-4,1})));
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({1,-6})));
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({0,0})));
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({0,4})));
+	EXPECT_TRUE(set.contains(hypro::Point<TypeParam>({0,-2})));
+	
+	EXPECT_FALSE(set.contains(hypro::Point<TypeParam>({2,4.1})));
 }
