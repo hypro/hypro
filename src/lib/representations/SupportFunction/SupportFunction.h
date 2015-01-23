@@ -9,7 +9,9 @@
 #pragma once
 
 #include "../../config.h"
+#include "../../util/types.h"
 #include "../../datastructures/Point.h"
+#include "../GeometricObject.h"
 
 namespace hypro {
 
@@ -31,7 +33,7 @@ struct vecLess {
 };
 
 template<typename Number>
-class SupportFunction {
+class SupportFunction : hypro::GeometricObject<Number> {
 	public:
 		typedef vector_t<Number> direction;
 		typedef std::map<direction, Number, vecLess<Number>> directionValueMapping;
@@ -54,11 +56,43 @@ class SupportFunction {
 		
 		directionSet directions() const;
 		std::pair<const Number&,bool> distance(const direction& _direction) const;
+		bool hasDirection(const std::pair<direction,Number>& _directionPair) const;
+		bool isEmpty() const;
+		unsigned size() const;
 		
-		void addDirection(const direction& _direction, const Number& _distance);
-		void addDirection(const Point<Number>& _direction, const Number& _distance);
+		bool addDirection(const direction& _direction, const Number& _distance);
+		bool addDirection(const Point<Number>& _direction, const Number& _distance);
+		bool addDirection(const std::pair<direction,Number>& _directionPair);
+		
+		void clear();
+		
+		unsigned int dimension() const;
+        bool linearTransformation(SupportFunction<Number>& _result, const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
+		bool minkowskiSum(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const;
+        bool intersect(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const;
+        bool hull(SupportFunction<Number>& _result) const;
+        bool contains(const Point<Number>& _point) const;
+        bool contains(const SupportFunction<Number>& _poly) const;
+        bool unite(SupportFunction<Number>& _result, const SupportFunction<Number>& _rhs) const;
+        void convexHull(std::vector<Point<Number>> _points);
 };
-} // namespace
+
+template<typename Number>
+inline bool operator==(const hypro::SupportFunction<Number>& _lhs, const hypro::SupportFunction<Number>& _rhs) {
+	if(_lhs.size() != _rhs.size())
+		return false;
+	
+	for(auto& directionPair : _lhs.content()) {
+		if(!_rhs.hasDirection(directionPair))
+			return false;
+	}
+	return true;
+}
+
+template<typename Number>
+inline bool operator!=(const hypro::SupportFunction<Number>& _lhs, const hypro::SupportFunction<Number>& _rhs) {
+	return !(_lhs == _rhs);
+}
 
 template<typename Number>
 std::ostream& operator<<(std::ostream& _out, const hypro::SupportFunction<Number>& _in){
@@ -74,4 +108,5 @@ std::ostream& operator<<(std::ostream& _out, const hypro::SupportFunction<Number
 	return _out;
 }
 
+} // namespace
 #include "SupportFunction.tpp"

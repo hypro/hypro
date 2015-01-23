@@ -44,6 +44,10 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Requires carl to use mpfr as well." ON)
 
+if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+endif()
+
 # general compiler and linker settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -fPIC")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
