@@ -18,12 +18,12 @@ namespace hypro
         clear();
 
         std::vector<Number> v;
-        for (auto it : vertices.begin()->variables()) {
+        for (auto& it : vertices.begin()->variables()) {
             // insert origin as vertex
             v = std::vector<Number>({Number(0)});
             
             // Projection of all points to the axes.
-            for (auto vertex : vertices) {
+            for (auto& vertex : vertices) {
                 v.push_back(vertex.coordinate(it));
             }
             

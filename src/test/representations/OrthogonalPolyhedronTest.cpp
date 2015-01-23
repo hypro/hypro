@@ -33,51 +33,51 @@ class OrthogonalPolyhedronTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        typename Point<Number>::coordinateMap coordinates;
+//        typename Point<Number>::coordinateMap coordinates;
+	
+//        coordinates[x] = 3; coordinates[y] = 3;
+        container1.insert(Point<Number>({3,3}), true);
         
-        coordinates[x] = 3; coordinates[y] = 3;
-        container1.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 3; coordinates[y] = 6;
+        container1.insert(Point<Number>({3,6}), false);
         
-        coordinates[x] = 3; coordinates[y] = 6;
-        container1.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 5; coordinates[y] = 3;
+        container1.insert(Point<Number>({5,3}), false);
         
-        coordinates[x] = 5; coordinates[y] = 3;
-        container1.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 5; coordinates[y] = 5;
+        container1.insert(Point<Number>({5,5}), true);
         
-        coordinates[x] = 5; coordinates[y] = 5;
-        container1.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 7; coordinates[y] = 5;
+        container1.insert(Point<Number>({7,5}), false);
         
-        coordinates[x] = 7; coordinates[y] = 5;
-        container1.insert(Point<Number>(coordinates), false);
-        
-        coordinates[x] = 7; coordinates[y] = 6;
-        container1.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 7; coordinates[y] = 6;
+        container1.insert(Point<Number>({7,6}), false);
 
-        p1 = OrthogonalPolyhedron<Number>(container1);
+	p1 = OrthogonalPolyhedron<Number>(container1);
 
-        coordinates[x] = 1; coordinates[y] = 3;
-        container2.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 1; coordinates[y] = 3;
+        container2.insert(Point<Number>({1,3}), true);
         
-        coordinates[x] = 1; coordinates[y] = 4;
-        container2.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 1; coordinates[y] = 4;
+        container2.insert(Point<Number>({1,4}), false);
         
-        coordinates[x] = 2; coordinates[y] = 4;
-        container2.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 2; coordinates[y] = 4;
+        container2.insert(Point<Number>({2,4}), true);
         
-        coordinates[x] = 2; coordinates[y] = 5;
-        container2.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 2; coordinates[y] = 5;
+        container2.insert(Point<Number>({2,5}), false);
         
-        coordinates[x] = 4; coordinates[y] = 5;
-        container2.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 4; coordinates[y] = 5;
+        container2.insert(Point<Number>({4,5}), false);
         
-        coordinates[x] = 4; coordinates[y] = 2;
-        container2.insert(Point<Number>(coordinates), false);
+//        coordinates[x] = 4; coordinates[y] = 2;
+        container2.insert(Point<Number>({4,2}), false);
         
-        coordinates[x] = 2; coordinates[y] = 2;
-        container2.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 2; coordinates[y] = 2;
+        container2.insert(Point<Number>({2,2}), true);
         
-        coordinates[x] = 2; coordinates[y] = 3;
-        container2.insert(Point<Number>(coordinates), true);
+//        coordinates[x] = 2; coordinates[y] = 3;
+        container2.insert(Point<Number>({2,3}), true);
         
         p2 = OrthogonalPolyhedron<Number>(container2);
     }
@@ -371,4 +371,3 @@ TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
     
     EXPECT_EQ(expected, result);
 }
-

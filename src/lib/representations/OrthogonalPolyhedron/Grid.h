@@ -55,6 +55,9 @@ namespace hypro
             	mInducedGridPoints(copy.mInducedGridPoints)
             {}
 
+	    Grid<Number>& operator= ( const Grid<Number>& ) = default;
+	    Grid<Number>& operator= ( Grid<Number>&& ) = default;
+	    
             /**
              * Clears the grid, induces it and sets up the vertices.
              *
