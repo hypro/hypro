@@ -123,6 +123,7 @@ namespace hypro {
 	
 	template<typename Number>
 	bool SupportFunction<Number>::hull(SupportFunction<Number>& _result) const {
+		_result = *this;
 		return true;
 	}
 	
@@ -139,7 +140,7 @@ namespace hypro {
 	
 	template<typename Number>
 	bool SupportFunction<Number>::contains(const SupportFunction<Number>& _sf) const {
-		
+		return false;
 	}
 	
 	template<typename Number>
