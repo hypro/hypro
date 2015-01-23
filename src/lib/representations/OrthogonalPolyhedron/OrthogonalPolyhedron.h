@@ -86,6 +86,8 @@ namespace hypro
         /**
          * Constructor getting a list of points which should be contained in the orthogonal polyhedron.
          *
+         * @todo implement
+         *
          * @param points
          */
         OrthogonalPolyhedron(const std::set<Point<Number> >& points) {

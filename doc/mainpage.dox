@@ -1,0 +1,32 @@
+/**
+\mainpage The Project of HyPro
+
+The project mainly focus on the geometric representations for the reachable sets
+of linear hybrid system. A group of high-level reachability analysis techniques
+such as flowpipe and invariant construction will be investigated along with the
+representations. A toolbox will be provided afterwards such that users may
+easily implement their techniques based on it.
+
+\section sec2 Reachable set representations
+
+Since the reachability problem on general hybrid systems is undecidable, we
+consider to use over-approximation representations for the reachable set in
+safety checking tasks. The two popular ways to do that are
+
+- flowpipe construction: we split the time horizon into small intervals and
+over-approximate the reachable set in each of them;
+- invariant construction: we try to find one over-approximation for the
+reachable set in a bounded or unbounded time horizon.
+
+In order to generate over-approximations which are easy to manipulate, several
+geometric objects are proposed as the representations, such as convex polyhedra,
+rectangles, ellipsoids and zonotopes. There are also symbolic representations
+such as support functions. In the project, we will propose and implement several
+heuristics to (exactly or approximately) transform one representation to another
+such that users may apply combinations of them in their analysis work.
+
+\section sec3 Support
+
+- http://ths.rwth-aachen.de/research/hypro/
+- http://ths.informatik.rwth-aachen.de/trac/hypro/wiki
+*/
