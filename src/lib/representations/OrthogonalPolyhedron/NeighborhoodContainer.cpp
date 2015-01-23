@@ -1,5 +1,5 @@
 /** 
- * @file    NeighborhoodContainer.tpp
+ * @file    NeighborhoodContainer.cpp
  * @author  Benedikt Seidl
  *
  * @since   2014-03-17
