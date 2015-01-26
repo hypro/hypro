@@ -25,43 +25,43 @@ protected:
         typename Point<Number>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, Number(4)) );
         coordinates1.insert( std::make_pair(y, Number(4)) );
-        p1 = Point<Number>(coordinates1);
+        p1 = Point<Number>({4,4});
 
         // p2
         typename Point<Number>::coordinateMap coordinates2;
         coordinates2.insert( std::make_pair(x, Number(5)) );
         coordinates2.insert( std::make_pair(y, Number(7)) );
-        p2 = Point<Number>(coordinates2);
+        p2 = Point<Number>({5,7});
 
         // p3
         typename Point<Number>::coordinateMap coordinates3;
         coordinates3.insert( std::make_pair(x, Number(7)) );
         coordinates3.insert( std::make_pair(y, Number(7)) );
-        p3 = Point<Number>(coordinates3);
+        p3 = Point<Number>({7,7});
         
         // p4
         typename Point<Number>::coordinateMap coordinates4;
         coordinates4.insert( std::make_pair(x, Number(8)) );
         coordinates4.insert( std::make_pair(y, Number(4)) );
-        p4 = Point<Number>(coordinates4);
+        p4 = Point<Number>({8,4});
         
         // p5
         typename Point<Number>::coordinateMap coordinates5;
         coordinates5.insert( std::make_pair(x, Number(3)) );
         coordinates5.insert( std::make_pair(y, Number(3)) );
-        p5 = Point<Number>(coordinates5);
+        p5 = Point<Number>({3,3});
         
         // p6
         typename Point<Number>::coordinateMap coordinates6;
         coordinates6.insert( std::make_pair(x, Number(4)) );
         coordinates6.insert( std::make_pair(y, Number(5)) );
-        p6 = Point<Number>(coordinates6);
+        p6 = Point<Number>({4,5});
         
         // p7
         typename Point<Number>::coordinateMap coordinates7;
         coordinates7.insert( std::make_pair(x, Number(5)) );
         coordinates7.insert( std::make_pair(y, Number(3)) );
-        p7 = Point<Number>(coordinates7);
+        p7 = Point<Number>({5,3});
     }
 
     virtual void TearDown()
@@ -69,9 +69,9 @@ protected:
         hypro::VariablePool::getInstance().clear();
     }
 	
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    carl::Variable x = pool.carlVarByIndex(0);
+    carl::Variable y = pool.carlVarByIndex(1);
 	
     Point<Number> p1;
     Point<Number> p2;
@@ -136,8 +136,8 @@ TYPED_TEST(PolytopeTest, Access)
     hypro::Polytope<TypeParam> p1 = Polytope<TypeParam>(ps1);
     EXPECT_EQ(p1.dimension(), unsigned(2));
     
-    carl::Variable a = this->pool.getFreshVariable("a");
-    carl::Variable b = this->pool.getFreshVariable("b");
+    carl::Variable a = this->pool.carlVarByIndex(3);
+    carl::Variable b = this->pool.carlVarByIndex(4);
     std::vector<Point<TypeParam>> ps2;
     typename Point<TypeParam>::coordinateMap coordinates;
     coordinates.insert( std::make_pair(a, TypeParam(7)) );

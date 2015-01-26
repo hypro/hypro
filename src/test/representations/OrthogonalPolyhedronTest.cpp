@@ -12,6 +12,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/util/types.h"
+#include "../../lib/util/VariablePool.h"
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
 #include "../../lib/datastructures/VertexContainer.h"
@@ -86,9 +87,9 @@ protected:
     {
     }
 
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable x = pool.carlVarByIndex(0);
+    Variable y = pool.carlVarByIndex(1);
     
     VertexContainer<Number> container1;
     VertexContainer<Number> container2;
