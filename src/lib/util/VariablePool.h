@@ -46,7 +46,9 @@ namespace hypro
         VariablePool() : 
                 mPplId(0),
                 mPool(carl::VariablePool::getInstance())
-        {}
+        {
+			mPool.clear();
+		}
     public:
         
         ~VariablePool()
@@ -68,8 +70,8 @@ namespace hypro
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
                 mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
-                assert(mCarlToPpl.size() == mPplToCarl.size());
             }
+			assert(mCarlToPpl.size() == mPplToCarl.size());
             return (*target).second;
         }
         
@@ -131,6 +133,7 @@ namespace hypro
         
         const carl::Variable& carlVarByIndex(unsigned _index)
         {
+			//std::cout << __func__ << " search variable with Id: " << _index << std::endl;
             assert(mCarlToPpl.size() == mPplToCarl.size());
             pplCarlMap::const_iterator varIt = mPplToCarl.begin();
             for(;varIt != mPplToCarl.end(); ++varIt)
@@ -142,6 +145,7 @@ namespace hypro
                return varIt->second;
             else
             {
+				//std::cout << __func__ << " create variable with Id: " << _index << std::endl;
                 Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(_index);
                 carl::Variable newCarlVar = mPool.getFreshVariable();
                 pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;

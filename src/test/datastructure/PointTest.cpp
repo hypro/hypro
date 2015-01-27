@@ -118,7 +118,13 @@ TYPED_TEST(PointTest, PolarCoordinates)
     std::vector<TypeParam> pc = this->p1.polarCoordinates(this->p1.origin(), false);
     TypeParam expectedRes;
     expectedRes = sqrt(TypeParam(29));
-    EXPECT_EQ(pc.at(0), expectedRes);
+	// special case: Use double comparison
+	if( hypro::eqTypes<double,TypeParam>() ) {
+		EXPECT_TRUE(carl::AlmostEqual2sComplement(pc.at(0), expectedRes, 1));
+	} else {
+		EXPECT_EQ(pc.at(0), expectedRes);
+	}
+    
     
     pc = this->p2.polarCoordinates(this->p2.origin(), false);
     expectedRes = sqrt(TypeParam(113));
@@ -126,7 +132,11 @@ TYPED_TEST(PointTest, PolarCoordinates)
     
     pc = this->p3.polarCoordinates(this->p3.origin(), false);
     expectedRes = sqrt(TypeParam(250));
-    EXPECT_EQ(pc.at(0), expectedRes);
+    if( hypro::eqTypes<double,TypeParam>() ) {
+		EXPECT_TRUE(carl::AlmostEqual2sComplement(pc.at(0), expectedRes, 1));
+	} else {
+		EXPECT_EQ(pc.at(0), expectedRes);
+	}
     
     pc = this->p4.polarCoordinates(this->p3, false);
 }
