@@ -80,6 +80,8 @@ protected:
         container2.insert(Point<Number>({2,3}), true);
         
         p2 = OrthogonalPolyhedron<Number>(container2);
+	
+	pool.print();
     }
 	
     virtual void TearDown()
