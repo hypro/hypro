@@ -36,7 +36,7 @@ namespace hypro {
 	* returns a dimensionsx1 vector of zeros
 	*/
 	template<typename Number>
-	matrix_t<Number> getZeroVector(unsigned int dimensions)
+	static matrix_t<Number> getZeroVector(unsigned int dimensions)
 	{
 		std::string method = "getZeroVector: ";
 
