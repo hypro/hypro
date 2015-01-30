@@ -28,5 +28,5 @@ TYPED_TEST_CASE(BoxTest, types);
 TYPED_TEST_CASE(OrthogonalPolyhedronTest, types);
 TYPED_TEST_CASE(PolytopeTest, floatTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, floatTypes);
-TYPED_TEST_CASE(SupportFunctionTest, floatTypes);
+TYPED_TEST_CASE(PolytopeSupportFunctionTest, floatTypes);
 TYPED_TEST_CASE(VPolytopeTest, floatTypes);

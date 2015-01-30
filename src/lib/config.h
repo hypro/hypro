@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "types.h"
+#include <carl/core/logging.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
 #include <carl/core/Variable.h>
