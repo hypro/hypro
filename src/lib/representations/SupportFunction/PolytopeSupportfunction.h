@@ -5,8 +5,8 @@
  
 #pragma once 
  
-//#define SUPPORTFUNCTION_VERBOSE 
-//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+#define SUPPORTFUNCTION_VERBOSE 
+#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 //#include "hyreach_utils.h" 
 #include "SupportFunction.h"
@@ -39,7 +39,7 @@ namespace hypro
             /*
         	* This method computes the evaluation result for a specified direction l
         	*/
-        	evaluationResult<Number> specificEvaluation(matrix_t<Number> l);
+        	evaluationResult<Number> specificEvaluation(const matrix_t<Number>& l) const;
             
         public:
 			

@@ -129,7 +129,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	evaluationResult<Number> PolytopeSupportFunction<Number>::specificEvaluation(matrix_t<Number> l) {
+	evaluationResult<Number> PolytopeSupportFunction<Number>::specificEvaluation(const matrix_t<Number>& l) const {
 		#ifdef SUPPORTFUNCTION_VERBOSE
 			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 				std::cout << "PolytopeSupportFunction: evaluate" << '\n';
@@ -150,6 +150,8 @@ namespace hypro {
 
 		/* recover and display results */
 		result.supportValue = glp_get_obj_val(lp);
+		
+		std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
 
 		matrix_t<Number> x(dimensions, 1);
 		for (int i = 0; i < dimensions; i++)
@@ -174,7 +176,7 @@ namespace hypro {
 
 		#ifdef SUPPORTFUNCTION_VERBOSE
 			   #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				   printf("fx = %g; x = ", result.supportValue);
+				   printf("fx = %g; x = ", double(result.supportValue));
 				   std::cout << x;
 				   std::cout << '\n' << "size x: " << x.size() << '\n';
 			   #endif
@@ -198,9 +200,9 @@ namespace hypro {
 
 		#ifdef SUPPORTFUNCTION_VERBOSE
 			 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				 std::cout << "PolytopeSupportFunction()_1: new constraint/value pairs: " << BL;
-				 std::cout << extendedConstraints << BL;
-				 std::cout << extendedConstraintConstants << BL;
+				 std::cout << "PolytopeSupportFunction()_1: new constraint/value pairs: " << std::endl;
+				 std::cout << extendedConstraints << std::endl;
+				 std::cout << extendedConstraintConstants << std::endl;
 			 #endif
 		#endif
 
@@ -222,9 +224,9 @@ namespace hypro {
 
 		 #ifdef SUPPORTFUNCTION_VERBOSE
 			 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				 std::cout << "PolytopeSupportFunction()_2: new constraint/value pairs: " << BL;
-				 std::cout << extendedConstraints << BL;
-				 std::cout << extendedConstraintConstants << BL;
+				 std::cout << "PolytopeSupportFunction()_2: new constraint/value pairs: " << std::endl;
+				 std::cout << extendedConstraints << std::endl;
+				 std::cout << extendedConstraintConstants << std::endl;
 			 #endif
 		 #endif
 
@@ -234,17 +236,17 @@ namespace hypro {
 	
 	template<typename Number>
 	PolytopeSupportFunction<Number>::PolytopeSupportFunction(std::vector<matrix_t<Number>>* constraints, matrix_t<Number> constraintConstants, unsigned int dimensionality, artificialDirections<Number>* aD) : SupportFunction<Number>(SupportFunctionType::Polytope_Type, aD) {   
-		//std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << BL;
+		//std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from 'constraints' correspond to the two aritifcial directions" << std::endl;
 
-		//std::cout << "C:" << BL;
+		//std::cout << "C:" << std::endl;
 		//printDirectionList(*constraints);
-		//std::cout << BL << "d:" << constraintConstants;
+		//std::cout << std::endl << "d:" << constraintConstants;
 
 		// reset artificial directions
 		constraintConstants(0,0) = 1; //artificialDirections<Number>::dir1_eval;
 		constraintConstants(1,0) = -1; //artificialDirections<Number>::dir2_eval;
 
-		//std::cout << BL << "resetted d:" << constraintConstants << BL;
+		//std::cout << std::endl << "resetted d:" << constraintConstants << std::endl;
 
 		matrix_t<double> temp;
 

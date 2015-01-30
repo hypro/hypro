@@ -92,7 +92,7 @@ namespace hypro
             /*
         	* This method should compute the evaluation result for a specified direction l
         	*/
-            virtual evaluationResult<Number> specificEvaluation(matrix_t<Number> l)
+            virtual evaluationResult<Number> specificEvaluation(const matrix_t<Number>& l) const
             { 
 				CARL_LOG_NOTIMPLEMENTED();	
 				#ifdef  SUPPORTFUNCTION_VERBOSE
@@ -117,7 +117,7 @@ namespace hypro
         /*
         * Evaluates the support funciton and catches first efficiently the additional dimension cases
         */
-        evaluationResult<Number> evaluate(matrix_t<Number>* l)
+        evaluationResult<Number> evaluate(const matrix_t<Number>& l) const
         { 
                          /*
                 bool artificialDirection = (*l)(l->rows()-1,0) != 0;
@@ -141,7 +141,7 @@ namespace hypro
                 }
                 else
                 { */
-                    return this->specificEvaluation(*l);
+                    return this->specificEvaluation(l);
                 //}
         };
           
@@ -167,7 +167,7 @@ namespace hypro
         {
             #ifdef  SUPPORTFUNCTION_VERBOSE
                    std::cout << "SupportFunction:multiEvaluate2: evaluation of the support function in all directions L" << '\n';
-                   std::cout << "L: " << BL;
+                   std::cout << "L: " << std::endl;
                    printDirectionList(*L);
             #endif
             for(unsigned int i=0; i<L->size(); i++)
