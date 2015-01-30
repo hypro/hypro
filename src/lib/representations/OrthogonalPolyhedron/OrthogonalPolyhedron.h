@@ -109,15 +109,7 @@ namespace hypro
             mVariables(copy.mVariables)
         {}
 	
-	OrthogonalPolyhedron<Number>& operator= ( const OrthogonalPolyhedron<Number>& _in )
-	{
-	    mVertices = _in.mVertices;
-	    mGrid = _in.mGrid;
-	    mNeighborhood = _in.mNeighborhood;
-	    mBoundaryBox = _in.mBoundaryBox;
-	    mBoxUpToDate = _in.mBoxUpToDate;
-	    mVariables = _in.mVariables;
-	}
+	OrthogonalPolyhedron<Number>& operator= ( const OrthogonalPolyhedron<Number>& _in ) = default;
 	
 	OrthogonalPolyhedron<Number>& operator= ( OrthogonalPolyhedron<Number>&& ) = default;
         
