@@ -272,7 +272,7 @@ TYPED_TEST(OrthogonalPolyhedronTest, Contains)
     coordinates[this->x] = 6; coordinates[this->y] = 4;
     Point<TypeParam> pt5(coordinates); // false
     
-    coordinates[this->x] = 5; coordinates[this->y] = 6.5;
+    coordinates[this->x] = 5; coordinates[this->y] = TypeParam(6.5);
     Point<TypeParam> pt6(coordinates); // false
     
     coordinates[this->x] = 4; coordinates[this->y] = 3;
