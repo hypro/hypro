@@ -140,11 +140,7 @@ add_subdirectory(src/test)
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-find_package(Doxygen)
-
-if(DOXYGEN)
-    add_subdirectory(doc)
-endif()
+add_subdirectory(doc EXCLUDE_FROM_ALL)
 
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
