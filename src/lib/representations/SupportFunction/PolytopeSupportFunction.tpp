@@ -142,6 +142,8 @@ namespace hypro {
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(l(i,0)));
 		}
+		
+		std::cout << " Direction: " << l << std::endl; 
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -207,12 +209,14 @@ namespace hypro {
 		#endif
 
 		// call constructor functionality                                      
-		initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
+		//initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
+		initialize(constraints, constraintConstants, operation, dimensionality);
 	}
 	
 	template<typename Number>
 	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD) : SupportFunction<Number>(SupportFunctionType::Polytope_Type, aD) {   
-		 matrix_t<Number> extendedConstraints(constraints.rows()+2, constraints.cols());
+		std::cout << "ping" << std::endl; 
+		matrix_t<Number> extendedConstraints(constraints.rows()+2, constraints.cols());
 		 extendedConstraints.block(0,0,constraints.rows(),constraints.cols()) = constraints;
 		 extendedConstraints.block(extendedConstraints.rows()-2,0,1,constraints.cols()) = aD->dir1.transpose();
 		 extendedConstraints.block(extendedConstraints.rows()-1,0,1,constraints.cols()) = aD->dir2.transpose();
@@ -245,7 +249,7 @@ namespace hypro {
 		// reset artificial directions
 		constraintConstants(0,0) = 1; //artificialDirections<Number>::dir1_eval;
 		constraintConstants(1,0) = -1; //artificialDirections<Number>::dir2_eval;
-
+		std::cout << "ping" << std::endl;
 		//std::cout << std::endl << "resetted d:" << constraintConstants << std::endl;
 
 		matrix_t<double> temp;
