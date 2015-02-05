@@ -209,8 +209,8 @@ namespace hypro {
 		#endif
 
 		// call constructor functionality                                      
-		//initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
-		initialize(constraints, constraintConstants, operation, dimensionality);
+		initialize(extendedConstraints, extendedConstraintConstants, operation, dimensionality);
+//		initialize(constraints, constraintConstants, operation, dimensionality);
 	}
 	
 	template<typename Number>
