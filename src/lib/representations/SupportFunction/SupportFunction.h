@@ -44,17 +44,6 @@ namespace hypro
          *  GLP_UNDEF
          
          * For NonLinear:  // TODO: add error status
-               
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-               
          */
     };
     
