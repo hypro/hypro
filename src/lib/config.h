@@ -47,8 +47,6 @@ typedef carl::FLOAT_T<number_t> number;
 typedef carl::MultivariatePolynomial<number> Polynomial;
 typedef std::map<carl::Variable, unsigned> varIdMap;
 typedef std::set<carl::Variable> variableSet;
-//typedef Eigen::Matrix<number, Eigen::Dynamic, Eigen::Dynamic> matrix;
-//typedef Eigen::Matrix<number, Eigen::Dynamic, 1> vector;
 
 namespace hypro
 {
@@ -114,4 +112,18 @@ namespace Eigen
         //static inline number highest() { return number::maxVal(); }
         //static inline number lowest()  { return number::minVal(); }
     };
+	
+	template<typename Number>
+	bool operator<(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
+		if(lhs.rows() != rhs.rows())
+			return false;
+			
+		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
+			if(lhs(dim) > rhs(dim)) {
+				return false;
+			} else if( lhs(dim) < rhs(dim) ) 
+				return true;
+		}
+		return false;
+	}
 }

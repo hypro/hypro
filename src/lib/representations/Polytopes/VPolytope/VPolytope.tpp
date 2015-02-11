@@ -11,16 +11,55 @@
 
 namespace hypro
 {
+	template<typename Number>
+	VPolytope<Number>::VPolytope() : 
+		mVertices(),
+		mFan(),
+		mFanSet(false),
+		mReduced(true)
+	{}
+
+	template<typename Number>
+	VPolytope<Number>::VPolytope(const Point<Number>& point)
+	{
+		mVertices.insert(point);
+		mFan = polytope::Fan<Number>();
+		mFanSet = false;
+		mReduced = true;
+	}
+
+	template<typename Number>
+	VPolytope<Number>::VPolytope(const vertexSet& points)
+	{
+		mVertices.insert(points.begin(), points.end());
+		mFan = polytope::Fan<Number>();
+		mFanSet = false;
+		mReduced = true;
+	}
+
+	template<typename Number>
+	VPolytope<Number>::VPolytope(const VPolytope& orig)
+	{
+		mVertices.insert(orig.begin(), orig.end());
+		mFan = polytope::Fan<Number>();
+		mFanSet = false; // TODO: Include getter fpr this
+		mReduced = true; // TODO: Include getter fpr this
+	}
+	
     template<typename Number>
-    bool VPolytope<Number>::linearTransformation(VPolytope<Number>& result /*, ... */) const
+    VPolytope<Number> VPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
     {
-        return true;
+		VPolytope<Number> result;
+		for(const auto& vertex : mVertices) {
+			result.insert(vertex*A + b);
+		}
+        return result;
     }
     
     template<typename Number>
-    bool VPolytope<Number>::minkowskiSum(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
+    VPolytope<Number> VPolytope<Number>::minkowskiSum(const VPolytope<Number>& rhs) const
     {
-        result.clear();
+        VPolytope<Number> result;
         // add each rhs-vertex to each vertex of this polytope.
         for(auto lhsVertex : mVertices)
         {
@@ -33,48 +72,46 @@ namespace hypro
     }
     
     template<typename Number>
-    bool VPolytope<Number>::intersect(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
-    {
-        result.clear();
-        for(auto lhsVertex : mVertices)
-        {
-            for(auto rhsVertex : rhs.mVertices)
-            {
-                // first add the contained points, as they are always part of the intersection
-                if(rhs.contains(lhsVertex))
-                {
-                    result.insert(lhsVertex);
-                }
-                if(this->contains(rhsVertex))
-                {
-                    result.insert(rhsVertex);
-                }
-                // add the points resulting from the intersection of facets
-                // Todo
-            }
+    VPolytope<Number> VPolytope<Number>::intersect(const VPolytope<Number>& rhs) const {
+		// create a set of possible points via combination of all coordinates
+		vertexSet possibleVertices;
+        for(const auto& lhsVertex : mVertices) {
+			possibleVertices.insert(lhsVertex);
+			std::cout << __func__ << ": possible Vertex: " << lhsVertex << std::endl;
+			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rows(); ++coordIndex) {
+				for(const auto& rhsVertex : rhs.mVertices) {
+					vector_t<Number> newVertex = rhsVertex;
+					newVertex(coordIndex) = lhsVertex(coordIndex);
+					possibleVertices.insert(vector_t<Number>(newVertex));
+					std::cout << __func__ << ": possible Vertex: " << newVertex << std::endl;
+					possibleVertices.insert(vector_t<Number>(rhsVertex));
+					std::cout << __func__ << ": possible Vertex: " << rhsVertex << std::endl;
+				}
+			}
         } 
-        return true;
-    }
-    
-    template<typename Number>
-    bool VPolytope<Number>::hull(VPolytope<Number>& result) const
-    {
-        return true;
+        
+		for(auto& vertex : possibleVertices) {
+			if( !(this->contains(vertex) && rhs.contains(vertex)) ) {
+				possibleVertices.erase(vertex);
+				std::cout << __func__ << ": vertex not in intersection: " << vertex << std::endl;
+			}
+		}
+		return VPolytope<Number>(possibleVertices);
     }
     
     template<typename Number>
     bool VPolytope<Number>::contains(const Point<Number>& point) const
     {
-        return true;
+        
     }
     
     template<typename Number>
-    bool VPolytope<Number>::unite(VPolytope<Number>& result, const VPolytope<Number>& rhs) const
+    VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
     {
-        result.clear();
+        VPolytope<Number> result;
         result.insert(this->mVertices.begin(), this->mVertices.end());
         result.insert(rhs.mVertices.begin(),rhs.mVertices.end());
-        return true;
+        return result;
     }
 
     template<typename Number>
@@ -108,17 +145,17 @@ namespace hypro
             vectors.insert(vectors.end(), cone.begin(), cone.end());
         }             
         unsigned numVectors = vectors.size();
-        unsigned elements = this->mDimension * numVectors;
+        unsigned elements = this->dimension() * numVectors;
 
         glp_add_cols(cone, numVectors);
-        glp_add_rows(cone, this->mDimension);
+        glp_add_rows(cone, this->dimension());
 
         int ia[elements];
         int ja[elements];
         double ar[elements];
         unsigned pos = 1;
 
-        for(unsigned i = 1; i <= this->mDimension; ++i)
+        for(unsigned i = 1; i <= this->dimension(); ++i)
         {
             for(unsigned j = 1; j <= numVectors; ++j)
             {

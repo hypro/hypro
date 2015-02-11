@@ -16,30 +16,36 @@ namespace hypro
     {}
     
     template<typename Number>
-    HPolytope<Number>::HPolytope(const polytope::Hyperplane<Number>& plane)
-    {
+    HPolytope<Number>::HPolytope(const polytope::Hyperplane<Number>& plane) {
         mHPlanes.push_back(plane);
         mFanSet = false;
         mDimension = plane.dimension();
     }
     
     template<typename Number>
-    HPolytope<Number>::HPolytope(unsigned dimension)
-    {
+    HPolytope<Number>::HPolytope(unsigned dimension) {
         mDimension = dimension;
     }
     
     template<typename Number>
-    HPolytope<Number>::HPolytope(const matrix& A, const vector& b)
-    {
+    HPolytope<Number>::HPolytope(const matrix& A, const vector& b) {
         
     }
     
     template<typename Number>
-    HPolytope<Number>::HPolytope(const matrix& A)
-    {
+    HPolytope<Number>::HPolytope(const matrix& A) {
         
     }
+	
+	template<typename Number>
+	HPolytope<Number>::HPolytope(const VPoltope<Number>& alien) {
+		assert(alien.size() > 2);
+		if(alien.reduced()) {
+			
+		} else {
+			
+		}
+	}
     
     template<typename Number>
     HPolytope<Number>::~HPolytope()

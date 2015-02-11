@@ -16,7 +16,7 @@
  */
 
 TEST(ZonotopeTest, PlainConstructor) {
-    Zonotope<double> z1;
+    hypro::Zonotope<double> z1;
     EXPECT_EQ(z1.dimension(), (unsigned) 0);
     EXPECT_EQ(z1.center().rows(), 0);
     EXPECT_EQ(z1.center().cols(), 1);
@@ -26,7 +26,7 @@ TEST(ZonotopeTest, PlainConstructor) {
 
 TEST(ZonotopeTest, DimConstructor) {
     unsigned int dim = 4;
-    Zonotope<double> z1(dim);
+    hypro::Zonotope<double> z1(dim);
     EXPECT_EQ(z1.dimension(), (unsigned) 4);
 }
 
@@ -39,7 +39,7 @@ TEST(ZonotopeTest, FullConstructor) {
     center << 1,
               2;
 
-    Zonotope<double> z2(center, gen);
+    hypro::Zonotope<double> z2(center, gen);
     EXPECT_EQ(z2.dimension(), (unsigned) 2);
     EXPECT_EQ(z2.center(), center);
     EXPECT_EQ(z2.generators(), gen);
@@ -52,8 +52,8 @@ TEST(ZonotopeTest, CopyConstructor) {
     gen << 1,2,
             2,8,
             9,1;
-    Zonotope<double> z1(center, gen);
-    Zonotope<double> z_copy(z1);
+    hypro::Zonotope<double> z1(center, gen);
+    hypro::Zonotope<double> z_copy(z1);
     
     EXPECT_EQ(z_copy.dimension(),z1.dimension());
     EXPECT_EQ(z_copy.center(),z1.center());
@@ -61,7 +61,7 @@ TEST(ZonotopeTest, CopyConstructor) {
 }
 
 TEST(ZonotopeAlgorithmTest, ComputeZonotopeBoundary) {
-    Zonotope<double> z1(2);
+    hypro::Zonotope<double> z1(2);
     Eigen::Matrix<hypro::scalar_t<double>,2,1> center = {1.1941, 0.1068};
     Eigen::Matrix<hypro::scalar_t<double>, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
@@ -79,14 +79,14 @@ TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
     
-    Hyperplane<double> hp(dVec, 0);
-    Zonotope<double> z(center, generators), res;
+    hypro::Hyperplane<double> hp(dVec, 0);
+    hypro::Zonotope<double> z(center, generators), res;
     hypro::matrix_t<double> dummy;
     intersectZonogoneHyperplane(z, hp, res, dummy);
 }
 
 TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
-    Zonotope<double> z1(2), z2(2), z3(2);
+    hypro::Zonotope<double> z1(2), z2(2), z3(2);
 
     Eigen::Matrix<hypro::scalar_t<double>,2,1> cen1, cen2, cen_res, gen_sum;
     Eigen::Matrix<hypro::scalar_t<double>,2,2> gen1, gen2;
@@ -183,7 +183,7 @@ TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
     Eigen::Matrix<hypro::scalar_t<double>, 2,2> z_gen;
     z_gen << 0,1,
              1,0;
-    Zonotope<double> z1(z_center, z_gen), result(2);
+    hypro::Zonotope<double> z1(z_center, z_gen), result(2);
      
     // Case 1: Zonotope is wholly inside the halfspace
     bool foundIntersect = z1.intersect(result, hspace);
@@ -228,7 +228,7 @@ TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
     z_center << 0,-1;
     z_gen << 0,1,
              1,0;
-    Zonotope<double> z1(z_center, z_gen), result_zonotope(2);
+    hypro::Zonotope<double> z1(z_center, z_gen), result_zonotope(2);
     
     C_Polyhedron poly1(2, UNIVERSE);
     Variable x(0),y(1);
@@ -263,7 +263,7 @@ TEST(ZonotopeOperationTest, RemoveEmptyGen) {
             3,6,3,
             1,5,7;
     
-    Zonotope<double> z1;
+    hypro::Zonotope<double> z1;
     z1.setCenter(center);
     z1.setGenerators(gen);
     z1.removeEmptyGenerators();
@@ -273,7 +273,7 @@ TEST(ZonotopeOperationTest, RemoveEmptyGen) {
 }
 
 TEST(ZonotopeOperationTest, AddGenerators) {
-    Zonotope<double> z(2);
+    hypro::Zonotope<double> z(2);
     Eigen::Matrix<hypro::scalar_t<double>,2,3> generators, generators2;
     Eigen::Matrix<hypro::scalar_t<double>, 2, 6> concat_gens;
     generators << 1,2,5,
@@ -292,7 +292,7 @@ TEST(ZonotopeOperationTest, AddGenerators) {
 }
 
 TEST(ZonotopeAlgorithmTest, Intersection2) {
-    Zonotope<double> z1(3);
+    hypro::Zonotope<double> z1(3);
     Eigen::Matrix<hypro::scalar_t<double>, 3,1> z_center, d, exp_center, delta;
     Eigen::Matrix<hypro::scalar_t<double>, 3,7> generators;
     z_center << -0.0407,
@@ -317,18 +317,18 @@ TEST(ZonotopeAlgorithmTest, Intersection2) {
     z1.setCenter(z_center);
     z1.setGenerators(generators);
     
-    Hyperplane<double> h1(3);
-    h1.setVector(d);
-    h1.setScalar(0);
+    hypro::Hyperplane<double> h1 = hypro::Hyperplane<double>();
+    h1.setNormal(d);
+    h1.setOffset(0);
     
-    Zonotope<double> result;
+    hypro::Zonotope<double> result;
     z1.intersect(result, h1, ZUtility::ALAMO);
     
    EXPECT_LT((result.center()-exp_center).array().abs().matrix().sum(), delta.sum());
 }
 
 TEST(ZonotopeAlgorithmTest, ConvexHull) {
-    Zonotope<double> z1(2), z2(2), result;
+    hypro::Zonotope<double> z1(2), z2(2), result;
     Eigen::Matrix<hypro::scalar_t<double>, 2, 1> c1, c2, expected_center;
     Eigen::Matrix<hypro::scalar_t<double>, 2, 2> g1;
     Eigen::Matrix<hypro::scalar_t<double>, 2, 3> g2;
@@ -367,7 +367,7 @@ TEST(ZonotopeAlgorithmTest, IntervalHull) {
                   6, 2, 1;
     expected_generators << 8, 0,
                            0, 9;
-    Zonotope<double> result, zIH(center, generators);
+    hypro::Zonotope<double> result, zIH(center, generators);
     
     zIH.intervalHull(result);
         

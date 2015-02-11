@@ -8,6 +8,7 @@
 
 using namespace Parma_Polyhedra_Library;
 
+namespace hypro {
 
 /*****************************************************************************
  *                                                                           *
@@ -362,7 +363,7 @@ hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperpl
     }
     
     std::vector<unsigned> indexToRemove;
-    if (pm(0) <= hp.scalar()) {
+    if (pm(0) <= hp.offset()) {
         for (unsigned i=0; i<generators.cols(); i++) {
             if (generators.col(i)(0) <= 0) 
                 indexToRemove.push_back(i);
@@ -406,14 +407,14 @@ hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperpl
         }
         
         
-        if (pm(0) < hp.scalar()) 
+        if (pm(0) < hp.offset()) 
             s1 = (minOrMax==1) ? 2*g1.rowwise().sum() : 2*g2.rowwise().sum();
            
         else
             s1 = (minOrMax==1) ? 2*g2.rowwise().sum() : 2*g1.rowwise().sum();
         
         pmNext = pm + s1;
-        if ((pm(0) <= hp.scalar() &&  pmNext(0) >= hp.scalar()) || (pm(0) >= hp.scalar() && pmNext(0) <= hp.scalar())) {
+        if ((pm(0) <= hp.offset() &&  pmNext(0) >= hp.offset()) || (pm(0) >= hp.offset() && pmNext(0) <= hp.offset())) {
             generators = (minOrMax==1) ? g2 : g1;
             s = s1;
         }
@@ -424,7 +425,7 @@ hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperpl
         }
     }
     pmNext = pm + s;
-    hypro::scalar_t<Number> m = pm(1) + (hp.scalar()-pm(0)) * (pmNext(1)-pm(1))/(pmNext(0)-pm(0));
+    hypro::scalar_t<Number> m = pm(1) + (hp.offset()-pm(0)) * (pmNext(1)-pm(1))/(pmNext(0)-pm(0));
     return m;
     
 }
@@ -459,15 +460,15 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     Eigen::Matrix<hypro::scalar_t<Number>, 2,2> xhp;
         
     // Compute hyperplane points xhp
-    if (hp.vector()(1)==0) {
+    if (hp.normal()(1)==0) {
         Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> minVecY, maxVecY;
         minVecY = *std::min_element(vertices.begin(), vertices.end(), ZUtility::compareYVal<Number>);
         maxVecY = *std::max_element(vertices.begin(), vertices.end(), ZUtility::compareYVal<Number>);
 
         xhp.row(1) << (minVecY(1) - carl::abs(maxVecY(1)-minVecY(1))/10), 
                       (maxVecY(1) + carl::abs(maxVecY(1)-minVecY(1))/10);
-        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.scalar(), hp.scalar()};
-        xhp.row(0) = (eVec - hp.vector()(1)*xhp.row(1))/hp.vector()(0);
+        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.offset(), hp.offset()};
+        xhp.row(0) = (eVec - hp.normal()(1)*xhp.row(1))/hp.normal()(0);
     }
     else {
         Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> minVecX, maxVecX;
@@ -476,8 +477,8 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
         
         xhp.row(0) << (minVecX(0) - carl::abs(maxVecX(0)-minVecX(0))/10), 
                       (maxVecX(0) + carl::abs(maxVecX(0)-minVecX(0))/10);
-        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.scalar(), hp.scalar()};
-        xhp.row(1) = (eVec - hp.vector()(0)*xhp.row(0))/hp.vector()(1);
+        Eigen::Matrix<hypro::scalar_t<Number>, 1, 2> eVec = {hp.offset(), hp.offset()};
+        xhp.row(1) = (eVec - hp.normal()(0)*xhp.row(0))/hp.normal()(1);
     }
     // Real algorithm starts here
         
@@ -488,8 +489,8 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     std::valarray<hypro::scalar_t<Number> > dzbme(vertices.size()), dzb(vertices.size());
     unsigned minIdx = 0, i;
     for (i=0; i<vertices.size(); i++) {
-        dzbme[i] = (hp.vector().transpose()*vertices[i] - hp.scalar());
-        dzb[i] = (hp.vector().transpose()*vertices[i]);
+        dzbme[i] = (hp.normal().transpose()*vertices[i] - hp.offset());
+        dzb[i] = (hp.normal().transpose()*vertices[i]);
     }
     
     
@@ -570,12 +571,12 @@ void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Numb
     hypro::matrix_t<Number> H = inputZonotope.generators();
     hypro::matrix_t<Number> HHT = H*H.transpose();
     hypro::vector_t<Number> center = inputZonotope.center();
-    hypro::vector_t<Number> lambda = (HHT*hp.vector())/(hp.vector().transpose()*HHT*hp.vector()+sgm*sgm);
+    hypro::vector_t<Number> lambda = (HHT*hp.normal())/(hp.normal().transpose()*HHT*hp.normal()+sgm*sgm);
 
     hypro::matrix_t<Number> new_gen, identity;
     Zonotope<Number> zg(inputZonotope.dimension());
 
-    zg.setCenter(center+lambda*(hp.scalar()-hp.vector().transpose()*center));  
+    zg.setCenter(center+lambda*(hp.offset()-hp.normal().transpose()*center));  
 
 
     identity.resize(inputZonotope.dimension(), inputZonotope.dimension());
@@ -583,7 +584,7 @@ void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Numb
     identity.setIdentity();
 
 
-    new_gen =(identity - lambda*(hp.vector().transpose()))*H;    
+    new_gen =(identity - lambda*(hp.normal().transpose()))*H;    
     zg.setGenerators(new_gen);
 
     resultZonotope = zg;
@@ -596,7 +597,7 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
     assert(hp.dimension()==inputZonotope.dimension() && "Intersect ND: input zonotope and input hyperplane must have same dimensionality");
     hypro::vector_t<Number> dVec;
     hypro::matrix_t<Number> kernel;
-    dVec = hp.vector();
+    dVec = hp.normal();
     Eigen::JacobiSVD<hypro::matrix_t<Number> > svd(dVec.transpose(), 
                                                                                 Eigen::ComputeFullU | Eigen::ComputeFullV);
     // Using SVD to calculate nullspace (kernel)
@@ -626,7 +627,7 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
         
         // Upon projection, the hyperplane now has a d vector of [1;0] but retains its e scalar
         Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> lgDVector(1,0);
-        Hyperplane<Number> lg(lgDVector, hp.scalar());
+        Hyperplane<Number> lg(lgDVector, hp.offset());
                 
 //        hypro::matrix_t<Number> dummyMinMax;
         intersectZonogoneHyperplaneDSearch(projZonotope, lg, tempResZonotope);
@@ -646,7 +647,7 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
         resultGenerators.col(i) << ((minMaxOfLine(1,i) - minMaxOfLine(0,i))/2) * kernel.col(i); 
     }
     
-    resultZonotope.setCenter(kernel * ((minMaxOfLine.row(1)+minMaxOfLine.row(0))/2).transpose() + hp.scalar()*dVec);
+    resultZonotope.setCenter(kernel * ((minMaxOfLine.row(1)+minMaxOfLine.row(0))/2).transpose() + hp.offset()*dVec);
     resultZonotope.setGenerators(resultGenerators);
     
     
@@ -670,8 +671,8 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
     assert(hp.dimension()==mDimension && "Zonotope's dimensionality must be same as Hyperplane's dimensionality.");
     
     // Determine if intersection is found, according to Girard, Guernic, 2008
-    hypro::scalar_t<Number> emdc = hp.scalar()-hp.vector().transpose()*mCenter;
-    hypro::scalar_t<Number> zs = (hp.vector().transpose()*mGenerators).array().abs().sum();
+    hypro::scalar_t<Number> emdc = hp.offset()-hp.normal().transpose()*mCenter;
+    hypro::scalar_t<Number> zs = (hp.normal().transpose()*mGenerators).array().abs().sum();
     
     bool hasIntersect = (emdc > -zs && zs > emdc);
     if (hasIntersect) {
@@ -884,3 +885,5 @@ bool Zonotope<Number>::intervalHull(Zonotope<Number>& result)
     result = temp;
     return true;
 }
+
+} // namespace

@@ -8,7 +8,9 @@
 #pragma once
 
 #include "../util.h"
+#include <cassert>
 #include "simplex.h"
+#include "../VPolytope/VPolytope.h"
 
 namespace hypro
 {
@@ -31,6 +33,10 @@ namespace hypro
         HPolytope(unsigned dimension);
         HPolytope(const matrix& A, const vector& b);
         HPolytope(const matrix& A);
+		
+		// conversion constructors
+		HPolytope(const VPoltope<Number>& alien);
+		
         ~HPolytope();
         
         /*

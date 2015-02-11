@@ -116,6 +116,10 @@ namespace polytope
         {
             mScalar = _offset;
         }
+		
+		Number signedDistance(const vector_t<Number>& _point) const {
+			return (_point.dot(mNormal) - mScalar);
+		}
         
         bool intersection(Number& _result, const vector_t<Number>& _vector) const
         {
@@ -477,6 +481,6 @@ namespace polytope
             }
     };
     
+	}
 }
-}
-
+					

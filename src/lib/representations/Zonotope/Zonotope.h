@@ -6,8 +6,7 @@
  * @version 1.0 on June 19, 2014, 10:25 PM
  */
 
-#ifndef ZONOTOPE_H
-#define	ZONOTOPE_H
+#pragma once
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
@@ -23,7 +22,7 @@
 //using namespace Parma_Polyhedra_Library;
 
 
-
+namespace hypro {
 
 template <typename Number>
 class Zonotope 
@@ -226,7 +225,7 @@ class Zonotope
         
         
 };
+
+} // namespace
+
 #include "Zonotope.tpp"
-
-#endif	/* ZONOTOPE_H */
-

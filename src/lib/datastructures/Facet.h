@@ -34,7 +34,7 @@ namespace hypro
         private:
             vertexSet            mVertices;
             neighborsSet           mNeighbors;
-            Polynomial          mHyperplane;
+            Hyperplane<Number>          mHyperplane;
             outsideSet          mOutsideSet;
 
         /**
@@ -44,28 +44,52 @@ namespace hypro
             Facet()
             {}
 
-            Facet( const Facet<Number>& f)
-            {
-                                mVertices = f.vertices();
-                                mNeighbors = f.neighbors();
-                                mHyperplane = f.hyperplane();
-                                mOutsideSet = f.outsideSet();
-                        }
-
+            Facet( const Facet<Number>& f) :
+				mVertices(f.vertices()),
+				mNeighbors(f.neighbors()),
+				mHyperplane(f.hyperplane()),
+				mOutsideSet(f.outsideSet)
+            {}
 
             Facet( Ridge<Number> r, Point<Number> p)
             {
-                mVertices = new std::set<Point<Number>>();
+                mVertices = std::set<Point<Number>>();
                 mVertices.insert(p);
                 for(int i = 0; i < r.vertices().size; i++)
                 {
                     mVertices.insert(r.vertices[i]);
                 }
-                mHyperplane = new Hyperplane<Number>(getNormalVector(),getScalar());
-                mNeighbors = new std::set<Facet<Number>>();
-                mOutsideSet = new std::vector<Point<Number>>();
+                mHyperplane = Hyperplane<Number>(getNormalVector(),getScalar());
+                mNeighbors = std::set<Facet<Number>>();
+                mOutsideSet = std::vector<Point<Number>>();
 
-          }
+			}
+			
+			Facet(const std::set<vector_t<Number>>& _vertices) :
+					mNeighbors()
+			{
+				if(!_vertices.empty()) {
+					mVertices.insert(_vertices.begin(), _vertices.end());
+					unsigned dimension = _vertices.begin()->rows();
+					if(_vertices.size() < dimension) {
+						mHyperplane = Hyperplane<Number>();
+					} else if (_vertices.size() > dimension) {
+						// TODO: Introduce check for degeneracy -> if not degenerate, reduce and initialize plane
+						mHyperplane = Hyperplane<Number>(); // TODO: temporary!
+					} else {
+						// proper amount of vertices for initialization of hyperplane
+						std::vector<vector_t<Number>> edges;
+						for(unsigned i = 0; i < _vertices.size()-1; ++i) {
+							for(unsigned j = i+1; j < _vertices.size(); ++j) {
+								edges.insert(vector_t<Number>(_vertices(j) - _vertices(i)));
+							}
+						}
+
+						assert(edges.size() == dimension-1);
+						mHyperplane = Hyperplane<Number>( *(_vertices.begin()), edges );
+					}
+				}
+			}
 
             ~Facet()
             {}
@@ -105,7 +129,7 @@ namespace hypro
                     for(int i = 0; i < points.size(); i++) {
                         mVertices.insert(points[i]);
                     }
-                    mHyperplane = new Hyperplane<Number>(getNormalVector(),getScalar());
+                    mHyperplane = Hyperplane<Number>(getNormalVector(),getScalar());
                 }
             }
 
@@ -117,7 +141,7 @@ namespace hypro
                 return scalar_t<Number>();
             }
 
-            Polynomial hyperplane() const
+            Hyperplane<Number> hyperplane() const
             {
                 return mHyperplane;
             }
@@ -128,9 +152,7 @@ namespace hypro
              */
             bool check_if_above(Point<Number> p)
             {
-                //if ((multiplicate p with hyperplane.normalVector and subtract?/add? hyperplane.offset)>0)
-                //true : return true else: false
-            	return false;
+                return (mHyperplane.signedDistance(p) > 0);
             }
 
             void addPointToOutsideSet(Point<Number> point)

@@ -15,11 +15,11 @@ namespace hypro
     class GeometricObject
     {
     public:
-                /**
-                 * Returns the dimension of this object.
-                 * 
-                 * @return  the dimension
-                 */
+		/**
+		 * Returns the dimension of this object.
+		 * 
+		 * @return  the dimension
+		 */
         unsigned int dimension();		
         
 		/**
@@ -27,7 +27,7 @@ namespace hypro
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool linearTransformation(GeometricObject<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
+        GeometricObject<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.
@@ -35,7 +35,7 @@ namespace hypro
 		 * @param rhs The other righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool minkowskiSum(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
+        GeometricObject<Number> minkowskiSum(const GeometricObject<Number>& rhs);
 		
 		/**
 		 * Intersects the given stateset with a second one.
@@ -43,14 +43,7 @@ namespace hypro
 		 * @param rhs The righthand-side stateset.
 		 * @return ç
 		 */
-        bool intersect(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
-		
-		/**
-		 * Computes the convex hull of the stateset.
-		 * @param result The resulting stateset.
-		 * @return True if the operation has been successfully applied.
-		 */
-        bool hull(GeometricObject<Number>& result);
+        GeometricObject<Number> intersect(const GeometricObject<Number>& rhs);
 		
 		/**
 		 * Checks the membership of a point.
@@ -67,7 +60,7 @@ namespace hypro
 		 * @param rhs The righthand-side stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        bool unite(GeometricObject<Number>& result, const GeometricObject<Number>& rhs);
+        GeometricObject<Number> unite(const GeometricObject<Number>& rhs);
         
         // virtual bool empty() const = 0;
     };

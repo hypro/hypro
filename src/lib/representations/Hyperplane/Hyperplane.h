@@ -8,87 +8,70 @@
  * @version
  */
 
-#ifndef HYPERPLANE_H
-#define	HYPERPLANE_H
+#pragma once
 #include <Eigen/Dense>
+#include <glpk.h>
 #include "../../config.h"
+#include "../../datastructures/Point.h"
+
+namespace hypro {
 
 template<typename Number>
 class Hyperplane
 {
     private:
-        unsigned int mDimension;
-        hypro::vector_t<Number> d_;
-        hypro::scalar_t<Number> e_;
-    
-    public:
-        /***************************************************************************
-         * Constructors
-       	 **************************************************************************/
-
-        /*
-         * Creates a hyperplane in dimension 0
-         */
-        Hyperplane();
-
-        /*
-         * Creates a hyperplane with a specified dimension
-         * @param dimension Represents the dimension the hyperplane's gonna be
-         */
-        Hyperplane(unsigned int dimension);
-
-        /*
-         * Creates a hyperplane
-         * @param e_scalar
-         */
-        Hyperplane(const hypro::vector_t<Number>& d_vector, hypro::scalar_t<Number> e_scalar);
-
-        /*
-         * Creates a hyperplane
-         * @param other
-         */
-        Hyperplane(const Hyperplane<Number>& other);
+        vector_t<Number>        mNormal;
+        Number   mScalar;
+        unsigned                mDimension;
         
-        virtual ~Hyperplane();
+        public:
+			Hyperplane() :
+			mNormal(),
+			mScalar(),
+			mDimension()
+			{}
+			~Hyperplane()
+			{}
+			Hyperplane(const Hyperplane<Number>& _orig) :
+			mNormal(_orig.mNormal),
+			mScalar(_orig.mScalar),
+			mDimension(_orig.mDimension)
+			{}
+			Hyperplane(const Point<Number>& _vector, const Number& _off);
+			Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off);
+			Hyperplane(const vector_t<Number>& _vector, const Number& _off) :
+			mNormal(_vector),
+			mScalar(_off),
+			mDimension(_vector.rows())
+			{}
+			Hyperplane(const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet);
+
+			unsigned dimension() const;
+			vector_t<Number> normal() const;
+			void setNormal(const vector_t<Number>& _normal);
+			Number offset() const;
+			void setOffset(Number _offset);
+			Number signedDistance(const vector_t<Number>& _point) const;
+			bool intersection(Number& _result, const vector_t<Number>& _vector) const;
+			bool intersection(Number& _result, const Point<Number>& _vector) const;
+        private:
+            const Number& internalOffset() const;
+
+           /**
+            * @author: Chris K
+            * Method to compute the normal of a plane based on two direction vectors
+            * simply computing the cross product does not work since the dimension is not necessarily 3
+            */
+            vector_t<Number> computePlaneNormal(const std::vector<vector_t<Number>>& _edgeSet);
         
-        /***************************************************************************
-       	 * Getters & setters
-         **************************************************************************/
-
-        /*
-         * @return the dimension of this hyperplane
-         */
-        unsigned int dimension() const;
-
-        /*
-         * @return
-         */
-        hypro::vector_t<Number> vector() const;
-
-        /*
-         * @return
-         */
-        hypro::scalar_t<Number> scalar() const;
-
-        /*
-         * @param d_vector
-         */
-        void setVector(const hypro::vector_t<Number>& d_vector);
-
-        /*
-         * @param e_scalar
-         */
-        void setScalar(const hypro::scalar_t<Number> e_scalar);
-        
-        /*
-         * Changes the dimension of this hyperplane to a new one
-         * @param newDimension The new dimension the hyperplane's gonna get
-         */
-        bool changeDimension(unsigned int newDimension);
-        
-
+			/*
+			 * Changes the dimension of this hyperplane to a new one
+			 * @param newDimension The new dimension the hyperplane's gonna get
+			 */
+			bool changeDimension(unsigned int newDimension);
 };
+}
 
 #include "Hyperplane.tpp"
-#endif	/* HYPERPLANE_H */
+
 

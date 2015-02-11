@@ -14,45 +14,58 @@ class VPolytopeTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        typename Point<Number>::coordinateMap coordinates;
-        coordinates.insert(std::make_pair(x, 1));
-        coordinates.insert(std::make_pair(y, 1));
-        coordinates.insert(std::make_pair(z, 0));
-        Point<Number> p1 = Point<Number>(coordinates);
-        coordinates.insert(std::make_pair(x, 4));
-        coordinates.insert(std::make_pair(y, 1));
-        coordinates.insert(std::make_pair(z, 0));
-        Point<Number> p2 = Point<Number>(coordinates);
-        coordinates.insert(std::make_pair(x, 4));
-        coordinates.insert(std::make_pair(y, 1));
-        coordinates.insert(std::make_pair(z, 4));
-        Point<Number> p3 = Point<Number>(coordinates);
-        
-        points.insert(p1);
-        points.insert(p2);
-        points.insert(p3);
+		vector_t<Number> p1 = vector_t<Number>(2);
+        p1(0) = 1;
+		p1(1) = 2;
+		vector_t<Number> p2 = vector_t<Number>(2);
+        p2(0) = 3;
+		p2(1) = 2;
+		vector_t<Number> p3 = vector_t<Number>(2);
+        p3(0) = 3;
+		p3(1) = 4;
+		vector_t<Number> p4 = vector_t<Number>(2);
+        p4(0) = 1;
+		p4(1) = 4;
+		vector_t<Number> p5 = vector_t<Number>(2);
+        p5(0) = 2;
+		p5(1) = 1;
+		vector_t<Number> p6 = vector_t<Number>(2);
+        p6(0) = 4;
+		p6(1) = 1;
+		vector_t<Number> p7 = vector_t<Number>(2);
+        p7(0) = 4;
+		p7(1) = 3;
+		vector_t<Number> p8 = vector_t<Number>(2);
+        p8(0) = 2;
+		p8(1) = 3;
+
+        points1.insert(p1);
+        points1.insert(p2);
+        points1.insert(p3);
+        points1.insert(p4);
+		
+        points2.insert(p5);
+        points2.insert(p6);
+        points2.insert(p7);
+        points2.insert(p8);
     }
 	
     virtual void TearDown()
     {
     }
-	
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
-    Variable z = pool.getFreshVariable("z");
 
-    typename VPolytope<Number>::verticeSet points;
-    
-    VPolytope<Number> vpt1;
-    VPolytope<Number> vpt2;
-    VPolytope<Number> vpt3;
+    typename VPolytope<Number>::vertexSet points1;
+    typename VPolytope<Number>::vertexSet points2;
 };
 
 TYPED_TEST(VPolytopeTest, Constructor)
 {
-    //VPolytope<number_t> aVPolytope = VPolytope<number_t>();
-    //VPolytope<number_t> anotherVPolytope = VPolytope<number_t>(points);
+    VPolytope<TypeParam> aVPolytope = VPolytope<TypeParam>();
+    VPolytope<TypeParam> anotherVPolytope = VPolytope<TypeParam>(this->points1);
+    VPolytope<TypeParam> vpt2 = VPolytope<TypeParam>(this->points2);
+	
+	VPolytope<TypeParam> copyAssignment = VPolytope<TypeParam>(anotherVPolytope);
+	
     SUCCEED();
 }
 
@@ -79,14 +92,15 @@ TYPED_TEST(VPolytopeTest, MinkowskiSum)
 }
 
 TYPED_TEST(VPolytopeTest, Intersection)
-{
-    //VPolytope<number_t> result;
-    //vpt1.intersect(result, vpt2);
-}
-
-TYPED_TEST(VPolytopeTest, ConvexHull)
-{
-    //stupid for VPolytopes, only required for orthogonal polyhedra
+{	
+    VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
+    VPolytope<TypeParam> vpt2 = VPolytope<TypeParam>(this->points2);
+	
+	std::cout << "vpt1: " << std::endl << vpt1 << std::endl << "vpt2: " << std::endl << vpt2 << std::endl;
+	
+	VPolytope<TypeParam> result = vpt1.intersect(vpt2);
+	
+	std::cout << "result: " << std::endl << result << std::endl;
 }
 
 TYPED_TEST(VPolytopeTest, Membership)
