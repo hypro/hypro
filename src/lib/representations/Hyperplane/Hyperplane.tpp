@@ -6,14 +6,12 @@ namespace hypro {
 	Hyperplane<Number>::Hyperplane(const Point<Number>& _vector, const Number& _off)
 	{
 		mNormal = vector_t<Number>(_vector.dimension());
-		unsigned pos = 0;
-		for(auto& coordinate : _vector)
+		for(unsigned i = 0; i != _vector.dimension(); ++i)
 		{
-			mNormal(pos) = coordinate.second;
-			++pos;
+			mNormal(i) = _vector.at(i);
 		}
 		mScalar = _off;
-		mDimension = pos;
+		mDimension = _vector.dimension();
 	}
         
 	template<typename Number>
@@ -47,6 +45,18 @@ namespace hypro {
 #endif
 
 		mDimension = _vec.rows();
+	}
+	
+	template<typename Number>
+	Hyperplane<Number>::Hyperplane(const std::vector<vector_t<Number>>& _points) {
+		// TODO: introduce consistency check to avoid degeneracy.
+		vector_t<Number> origin = *_points.begin();
+		std::vector<vector_t<Number>> directions;
+		assert(_points.size() > 1);
+		for(unsigned i = 1; i < _points.size(); ++i) {
+			directions.push_back(_points(i) - origin);
+		}
+		*this = Hyperplane<Number>(origin, directions);
 	}
 
 	template<typename Number>

@@ -161,6 +161,20 @@ namespace hypro
             assert(mPplToCarl.find(_var) != mPplToCarl.end());
             return (_var.space_dimension());
         }
+		
+		unsigned inline dimension(const carl::Variable& _var) const
+        {
+            assert(mCarlToPpl.size() == mPplToCarl.size());
+            assert(mCarlToPpl.find(_var) != mCarlToPpl.end());
+			unsigned pos = 0;
+			for(auto it = mCarlToPpl.begin(); it != mCarlToPpl.end(); ++it) {
+				if( (*it).first == _var ) {
+					break;
+				}
+				++pos;
+			}
+            return (pos);
+        }
         
         std::set<carl::Variable> carlVariables() const
         {

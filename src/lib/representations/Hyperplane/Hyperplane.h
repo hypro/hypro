@@ -45,6 +45,7 @@ class Hyperplane
 			mDimension(_vector.rows())
 			{}
 			Hyperplane(const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet);
+			Hyperplane(const std::vector<vector_t<Number>>& _points);
 
 			unsigned dimension() const;
 			vector_t<Number> normal() const;
@@ -70,7 +71,14 @@ class Hyperplane
 			 */
 			bool changeDimension(unsigned int newDimension);
 };
+
+template<typename Number>
+bool operator==(const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs) {
+	std::cout << "Ping. " << std::endl;
+	return (lhs.normal() == rhs.normal() && lhs.offset() == rhs.offset());
 }
+
+} // namespace
 
 #include "Hyperplane.tpp"
 

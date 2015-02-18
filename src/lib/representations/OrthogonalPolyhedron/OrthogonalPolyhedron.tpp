@@ -322,11 +322,13 @@ namespace hypro
     bool OrthogonalPolyhedron<Number>::checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const {
         bool pointExists;
         
-        for (auto dimensionIt : vertex.variables()) {
-            auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(vertex.point(), dimensionIt, true); // include the point itself
+//        for (auto dimensionIt : vertex.variables()) {
+        for (unsigned i = 0; i != vertex.dimension(); ++i) {
+			carl::Variable var = hypro::VariablePool::getInstance().carlVarByIndex(i);
+            auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(vertex.point(), var, true); // include the point itself
             pointExists = false;
             for (auto neighborIt : neighborsInFixed) {
-                Point<Number> predecessor = neighborIt.getPredecessorInDimension(dimensionIt);
+                Point<Number> predecessor = neighborIt.getPredecessorInDimension(var);
                 if (coloring.at(neighborIt) != coloring.at(predecessor)) {
                     pointExists = true;
                     break;

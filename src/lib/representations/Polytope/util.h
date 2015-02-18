@@ -74,12 +74,13 @@ namespace polytope
         using namespace Parma_Polyhedra_Library;
         double tmpValue;
         Linear_Expression ls;
-        for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
+//        for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
+        for(unsigned i = 0; i != point.dimension(); ++i)
         {
             //std::cout << "Var: " << (*pointIt).first << " found as: " << VariablePool::getInstance().variable((*pointIt).first) << std::endl;
-            tmpValue = double((*pointIt).second) * fReach_DENOMINATOR;
+            tmpValue = double(point.at(i)) * fReach_DENOMINATOR;
             //std::cout << "tmpValue: " << tmpValue << std::endl;
-            Linear_Expression tmp = tmpValue * VariablePool::getInstance().variable((*pointIt).first);
+            Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex(i);
             ls += tmp;
         }
         Generator result = Generator::point(ls, fReach_DENOMINATOR);
@@ -158,9 +159,10 @@ namespace polytope
     static inline unsigned pplDimension(const Point<Number>& point)
     {
         unsigned result = 0;
-        for(auto& coordinate : point)
+//        for(auto& coordinate : point)
+        for(unsigned i = 0; i != point.dimension(); ++i)
         {
-            result = result > VariablePool::getInstance().variable(coordinate.first).id() ? result : VariablePool::getInstance().variable(coordinate.first).id();
+            result = result > VariablePool::getInstance().pplVarByIndex(i).id() ? result : VariablePool::getInstance().pplVarByIndex(i).id();
         }
         return result;
     }

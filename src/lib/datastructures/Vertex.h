@@ -146,6 +146,10 @@ namespace hypro {
             {
                 return mPoint.coordinate(_var);
             }
+			
+			Number coordinate(unsigned _dim) const {
+				return mPoint.coordinate(_dim);
+			}
 
             /**
              * @see Point::dimension

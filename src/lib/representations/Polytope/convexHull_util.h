@@ -27,6 +27,7 @@ std::vector<Facet<Number>> initConvexHull(std::vector<Point<Number>> points) {
     std::vector<Point<Number>> initialPoints;
     for(int i = 0; i < d+1; i++) {
         initialPoints.push_back(points[i]);
+		// TODO: Introduce a consistency check here to ensure that this is not degenerate.
     }
     std::vector<Facet<Number>> facets;
     for(int i = 0; i < d+1; i++) {

@@ -126,4 +126,19 @@ namespace Eigen
 		}
 		return false;
 	}
+	
+	template<typename Number>
+	bool operator==(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
+		std::cout << "Compare: " << lhs << " and " << rhs << std::endl;
+		if(lhs.rows() != rhs.rows())
+			return false;
+		
+		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
+			if(lhs(dim) != rhs(dim)) {
+				return false;
+			}
+		}
+		return true;
+		std::cout << "Equal" << std::endl;
+	}
 }

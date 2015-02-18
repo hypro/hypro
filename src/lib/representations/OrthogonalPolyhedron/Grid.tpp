@@ -18,13 +18,13 @@ namespace hypro
         clear();
 
         std::vector<Number> v;
-        for (auto& it : vertices.begin()->variables()) {
+        for (unsigned i = 0; i != vertices.begin()->dimension(); ++i) {
             // insert origin as vertex
             v = std::vector<Number>({Number(0)});
             
             // Projection of all points to the axes.
             for (auto& vertex : vertices) {
-                v.push_back(vertex.coordinate(it));
+                v.push_back(vertex.coordinate(i));
             }
             
             // Sort every dimension, erase duplicate entries.
@@ -32,7 +32,7 @@ namespace hypro
             auto itr = std::unique(v.begin(), v.end());
             v.resize(itr - v.begin());
 
-            mInducedGridPoints[it] = v;
+            mInducedGridPoints[hypro::VariablePool::getInstance().carlVarByIndex(i)] = v;
         }
 
         for (auto it : vertices) {

@@ -8,14 +8,16 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runRepresentationTests
         BoxTest.cpp
-        VPolytopeTest.cpp
+		GridTest.cpp
+		HyperplaneTest.cpp
+        NeighborhoodContainerTest.cpp
         OrthogonalPolyhedronTest.cpp
         PolytopeTest.cpp
-        PolytopeUtilTest.cpp
-        NeighborhoodContainerTest.cpp
-		PolytopeSupportFunctionTest.cpp
+		PolytopeSupportFunctionTest.cpp        
+		PolytopeUtilTest.cpp
+		VPolytopeTest.cpp
         ZonotopeTest.cpp
-        GridTest.cpp
+        
     )
 
     add_dependencies(runRepresentationTests googletest)

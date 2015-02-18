@@ -117,8 +117,7 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneAccess)
 
 TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
 {
-    Point<TypeParam> norm(this->x,1);
-    norm.setCoordinate(this->y,3);
+    Point<TypeParam> norm({1,3});
     Hyperplane<TypeParam> intersection1(norm, 4.3);
     
     vector_t<TypeParam> vec = vector_t<TypeParam>(2);

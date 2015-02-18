@@ -24,9 +24,9 @@ namespace hypro
         /**
          * Typedefs
          */
-            typedef std::set<Point<Number>> vertexSet;
+            typedef std::set<vector_t<Number>> vertexSet;
             typedef std::set<Facet<Number>> neighborsSet;
-            typedef std::vector<Point<Number>> outsideSet;
+            typedef std::vector<vector_t<Number>> outsideSet;
 
         /**
          * Members
@@ -51,17 +51,17 @@ namespace hypro
 				mOutsideSet(f.outsideSet)
             {}
 
-            Facet( Ridge<Number> r, Point<Number> p)
+            Facet( Ridge<Number> r, vector_t<Number> p)
             {
-                mVertices = std::set<Point<Number>>();
+                mVertices = std::set<vector_t<Number>>();
                 mVertices.insert(p);
                 for(int i = 0; i < r.vertices().size; i++)
                 {
                     mVertices.insert(r.vertices[i]);
                 }
-                mHyperplane = Hyperplane<Number>(getNormalVector(),getScalar());
+                mHyperplane = Hyperplane<Number>(mVertices);
                 mNeighbors = std::set<Facet<Number>>();
-                mOutsideSet = std::vector<Point<Number>>();
+                mOutsideSet = std::vector<vector_t<Number>>();
 
 			}
 			
@@ -123,7 +123,7 @@ namespace hypro
                 mNeighbors.insert(facet);
             }
 
-            void setPoints(std::vector<Point<Number>> points)
+            void setPoints(std::vector<vector_t<Number>> points)
             {
                 if(mVertices.empty()) {
                     for(int i = 0; i < points.size(); i++) {

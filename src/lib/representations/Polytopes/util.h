@@ -44,14 +44,12 @@ namespace polytope
         Hyperplane(const Point<Number>& _vector, const Number& _off)
         {
             mNormal = vector_t<Number>(_vector.dimension());
-            unsigned pos = 0;
-            for(auto& coordinate : _vector)
+            for(unsigned i = 0; i != _vector.dimension(); ++i)
             {
-                mNormal(pos) = coordinate.second;
-                ++pos;
+                mNormal(i) = _vector.at(i);
             }
             mScalar = _off;
-            mDimension = pos;
+            mDimension = _vector.dimension();
         }
         
         Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off)
