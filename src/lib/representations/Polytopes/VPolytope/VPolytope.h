@@ -12,6 +12,7 @@
 #include "../../GeometricObject.h"
 #include <carl/core/Variable.h>
 #include <eigen3/Eigen/Geometry>
+#include <glpk.h>
 #include <set>
 #include <cassert>
 
@@ -33,7 +34,7 @@ class VPolytope : hypro::GeometricObject<Number>
         mutable Fan                    mFan;
         bool                           mFanSet;
         bool                           mReduced;
-        
+		
     public:
 	/***************************************************************************
 	 * Constructors
@@ -58,6 +59,7 @@ class VPolytope : hypro::GeometricObject<Number>
 		VPolytope minkowskiSum(const VPolytope& rhs) const;
 		VPolytope intersect(const VPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;
+		bool contains(const vector_t<Number>& vec) const;
 		VPolytope unite(const VPolytope& rhs) const;
 
 		void clear();

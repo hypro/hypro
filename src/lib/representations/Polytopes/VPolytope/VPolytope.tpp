@@ -89,11 +89,14 @@ namespace hypro
 				}
 			}
         } 
-        
+		
 		for(auto& vertex : possibleVertices) {
+			std::cout << __func__ << " : " << __LINE__ << std::endl;
 			if( !(this->contains(vertex) && rhs.contains(vertex)) ) {
-				possibleVertices.erase(vertex);
+				std::cout << __func__ << " : " << __LINE__ << std::endl;
 				std::cout << __func__ << ": vertex not in intersection: " << vertex << std::endl;
+				possibleVertices.erase(vertex);
+				std::cout << __func__ << " : " << __LINE__ << std::endl;
 			}
 		}
 		return VPolytope<Number>(possibleVertices);
@@ -102,8 +105,70 @@ namespace hypro
     template<typename Number>
     bool VPolytope<Number>::contains(const Point<Number>& point) const
     {
-        
+        return this->contains(point.rawCoordinates());
     }
+	
+	template<typename Number>
+	bool VPolytope<Number>::contains(const vector_t<Number>& vec) const {
+		
+		std::cout << __func__ << " : " << vec << std::endl;
+		
+		glp_prob* lp;
+		lp = glp_create_prob();
+		glp_set_obj_dir(lp,GLP_MAX);
+		glp_add_rows(lp, this->dimension()+1);
+		glp_add_cols(lp, mVertices.size());
+		glp_smcp* options = new glp_smcp;
+		glp_init_smcp(options);
+		//options->msg_lev = GLP_MSG_ALL;
+		
+		for(unsigned i = 1; i <= vec.rows(); ++i)
+			glp_set_row_bnds(lp, i, GLP_FX,double(vec(i-1)),0); // as the variable is fixed, the last parameter (upper row bound) is ignored
+		glp_set_row_bnds(lp, vec.rows()+1, GLP_FX,1.0,0); // the sum of the vectors equals exactly one.
+		
+		for(unsigned i = 1; i <= mVertices.size(); ++i){
+			glp_set_col_bnds(lp,i, GLP_DB, 0.0, 1.0);
+			glp_set_obj_coef(lp,i,1.0); // the objective function is max: v1 + v2 + v3 + ... + vn
+		}
+		
+		// prepare matrix
+		unsigned size = mVertices.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
+		int* ia = new int[size];
+		int* ja = new int[size];
+		double* ar = new double[size];
+		unsigned pos = 1;
+		typename vertexSet::iterator vertex = mVertices.begin();
+		for(unsigned i = 1; i <= vec.rows()+1; ++i) {
+			for(unsigned j = 1; j <= mVertices.size(); ++j) {
+				ia[pos] = i; ja[pos] = j;
+				if(i == vec.rows()+1) {
+					ar[pos] = 1.0;
+				}else{
+					ar[pos] = double((*vertex)(i-1));
+				}
+//				std::cout << "Setting: ia[" << pos << "]=" << i << ", ja[" << pos << "]=" << j << ", ar[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
+				++pos;
+				++vertex;
+			}
+			vertex = mVertices.begin();
+		}
+		
+		// solve
+		glp_load_matrix(lp,size, ia, ja, ar);
+		int result = glp_simplex(lp,options);
+		std::cout << "GLP_RESULT: " << result << std::endl;
+		std::cout << "Problem state: " << glp_get_prim_stat(lp) << std::endl;
+		bool interiorPoint = (glp_get_prim_stat(lp) == GLP_FEAS);
+		
+		// cleanup
+		glp_delete_prob(lp);
+		delete ia;
+		delete ja;
+		delete ar;
+		delete options;
+		
+		return interiorPoint;
+	}
     
     template<typename Number>
     VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const

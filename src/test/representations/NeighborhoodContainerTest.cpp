@@ -24,6 +24,11 @@ class NeighborhoodContainerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		a = pool.newCarlVariable();
+		b = pool.newCarlVariable();
+		c = pool.newCarlVariable();
+		d = pool.newCarlVariable();
         // p1
         typename Point<int>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(a, 2) );
@@ -50,11 +55,11 @@ protected:
     {
     }
 
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable a = pool.getFreshVariable("a");
-    Variable b = pool.getFreshVariable("b");
-    Variable c = pool.getFreshVariable("c");
-    Variable d = pool.getFreshVariable("d");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable a;
+    Variable b;
+    Variable c;
+    Variable d;
 
     Point<int> p1;
     Point<int> p2;

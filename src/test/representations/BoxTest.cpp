@@ -25,6 +25,9 @@ class BoxTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
         std::map<const carl::Variable, carl::Interval<Number> > boundaries1;
         boundaries1.insert(std::make_pair(x, Interval<Number>(2,6)));
         boundaries1.insert(std::make_pair(y, Interval<Number>(1,3)));
@@ -40,9 +43,9 @@ protected:
     {
     }
 	
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable x;
+    Variable y;
 
     Box<Number> box1;
     Box<Number> box2;
@@ -94,7 +97,7 @@ TYPED_TEST(BoxTest, Access)
 TYPED_TEST(BoxTest, Insertion)
 {
     typename Box<TypeParam>::intervalMap tmp;
-    Variable z = this->pool.getFreshVariable("z");
+    Variable z = this->pool.newCarlVariable();
     tmp.insert(std::make_pair(z, Interval<TypeParam>(3,9)));
     this->box1.insert(tmp);
     EXPECT_EQ(true, this->box1.hasDimension(z));
@@ -102,7 +105,7 @@ TYPED_TEST(BoxTest, Insertion)
     EXPECT_EQ(3, this->box1.interval(z).lower());
     EXPECT_EQ(9, this->box1.interval(z).upper());
     
-    Variable w = this->pool.getFreshVariable("w");
+    Variable w = this->pool.newCarlVariable();
     this->box1.insert(std::make_pair(w, Interval<TypeParam>(4,5)));
     EXPECT_EQ(true, this->box1.hasDimension(w));
     

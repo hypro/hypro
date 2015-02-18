@@ -25,6 +25,9 @@ class GridTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
         typename Point<Number>::coordinateMap coordinates;
 
         // vertices
@@ -47,9 +50,9 @@ protected:
 
     vSet<Number> vertices;
 
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable x;
+    Variable y;
 
     Grid<Number> grid1;
 };

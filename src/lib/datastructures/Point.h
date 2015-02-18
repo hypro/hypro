@@ -232,7 +232,14 @@ namespace hypro {
              */
             void setCoordinate(const carl::Variable& _dim, const Number& _value)
             {
-                mCoordinates(hypro::VariablePool::getInstance().dimension(_dim)) = _value;
+				unsigned dim = hypro::VariablePool::getInstance().dimension(_dim);
+				assert(dim >= 0);
+				if(dim >= mCoordinates.rows()) {
+					vector_t<Number> old = mCoordinates;
+					mCoordinates.resize(dim+1);
+					mCoordinates.topLeftCorner(old.rows(),1) = old;
+				}
+                mCoordinates(dim) = _value;
             }
             
             /**
@@ -640,7 +647,13 @@ namespace hypro {
              */
             Number& operator[] (const carl::Variable& _i)
             {
-                return mCoordinates(hypro::VariablePool::getInstance().dimension(_i));
+				unsigned dim = hypro::VariablePool::getInstance().dimension(_i);
+				if(dim >= mCoordinates.rows()) {
+					vector_t<Number> old = mCoordinates;
+					mCoordinates.resize(dim+1);
+					mCoordinates.topLeftCorner(old.rows(),1) = old;
+				}
+                return mCoordinates(dim);
             }
 			
 			Number& operator[] (unsigned _i)
