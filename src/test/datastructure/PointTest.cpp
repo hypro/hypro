@@ -151,27 +151,19 @@ TYPED_TEST(PointTest, PolarCoordinates)
  */
 TYPED_TEST(PointTest, CoordinateDimensionTest)
 {
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1[0], TypeParam(2));
     EXPECT_EQ(this->p1[1], TypeParam(5));
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1.coordinate(0), TypeParam(2));
     EXPECT_EQ(this->p1.coordinate(1), TypeParam(5));
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1.dimension(), (unsigned) 2);
     
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
     this->p1.incrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(6));
     this->p1.incrementInAllDim(TypeParam(3));
-    EXPECT_EQ(this->p1[1], TypeParam(5));
+    EXPECT_EQ(this->p1[0], TypeParam(5));
     EXPECT_EQ(this->p1[1], TypeParam(9));
     this->p1.decrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(8));
-    
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
-	
-	std::cout << this->pool.dimension(this->x) << " , "  << this->pool.dimension(this->x) << std::endl;
 	
     this->p1[this->x] = TypeParam(3);
     this->p1[this->y] = TypeParam(-1);
@@ -181,7 +173,6 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     this->p1.setCoordinate(this->y, 7);
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
 }
 
 /**
@@ -190,12 +181,12 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
 TYPED_TEST(PointTest, OperationTest)
 {
     EXPECT_FALSE(this->p1.move(this->p1));
-    EXPECT_EQ(this->p1[1], TypeParam(4));
+    EXPECT_EQ(this->p1[0], TypeParam(4));
     EXPECT_EQ(this->p1[1], TypeParam(10));
 
     EXPECT_TRUE(this->p2.move(this->p3));
     EXPECT_EQ(this->p2[0], TypeParam(16));
-    EXPECT_EQ(this->p2[1], TypeParam(5));
+    EXPECT_EQ(this->p2[1], TypeParam(-5));
 }
 
 /**
@@ -203,10 +194,10 @@ TYPED_TEST(PointTest, OperationTest)
  */
 TYPED_TEST(PointTest, BinaryOperatorTest)
 {
-    EXPECT_TRUE(this->p4 > this->p3);
-    EXPECT_TRUE(this->p3 < this->p4);
-    EXPECT_FALSE(this->p4 < this->p3);
-    EXPECT_FALSE(this->p3 > this->p4);
+    EXPECT_FALSE(this->p4 > this->p3);
+    EXPECT_FALSE(this->p3 < this->p4);
+    EXPECT_TRUE(this->p4 < this->p3);
+    EXPECT_TRUE(this->p3 > this->p4);
     EXPECT_FALSE(this->p4 < this->p4);
     EXPECT_FALSE(this->p4 > this->p4);
     EXPECT_EQ(this->p4, this->p4);
@@ -221,17 +212,17 @@ TYPED_TEST(PointTest, BinaryOperatorTest)
 TYPED_TEST(PointTest, BooleanTest)
 {
     EXPECT_TRUE(this->p1.isInBoundary(this->p2));
-    EXPECT_TRUE(this->p2.isInBoundary(this->p1));
-    EXPECT_TRUE(this->p1.isInBoundary(this->p1));
+    EXPECT_FALSE(this->p2.isInBoundary(this->p1));
+    EXPECT_FALSE(this->p1.isInBoundary(this->p1));
 	
     this->p1[1] = TypeParam(3);
     
     EXPECT_TRUE(this->p1.hasDimension(this->x));
     EXPECT_FALSE(this->p1.hasDimension(this->a));
-    EXPECT_FALSE(this->p2.hasDimension(this->x));
-    EXPECT_TRUE(this->p2.hasDimension(this->a));
+    EXPECT_TRUE(this->p2.hasDimension(this->x));
+    EXPECT_FALSE(this->p2.hasDimension(this->a));
 
-    this->p2[1] = TypeParam(4);
+    this->p2[0] = TypeParam(2);
     this->p2[1] = TypeParam(5);
 	
     EXPECT_TRUE(this->p1.haveEqualCoordinate(this->p1));
@@ -247,7 +238,7 @@ TYPED_TEST(PointTest, BooleanTest)
     EXPECT_NE(this->p1, this->p3);
     
     EXPECT_TRUE(this->p3.haveSameDimensions(this->p4));
-    EXPECT_FALSE(this->p2.haveSameDimensions(this->p4));
+    EXPECT_TRUE(this->p2.haveSameDimensions(this->p4));
     
 //    EXPECT_TRUE(this->p1.hasDimensions(this->p1.variables()));
 //    EXPECT_TRUE(this->p2.hasDimensions(this->p2.variables()));
@@ -271,30 +262,20 @@ TYPED_TEST(PointTest, LinearTransformation) {
 
 	this->p1.linearTransformation(A, v); // (2; 5)
 
-	coordinates.clear();
-	coordinates[this->x] = -3; coordinates[this->y] = 36;
-	EXPECT_EQ(Point<TypeParam>(coordinates), this->p1);
+	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1);
 
 
 	this->p2.linearTransformation(A, v); // (7; 8)
 
-	coordinates.clear();
-	coordinates[this->a] = 6; coordinates[this->b] = 73;
-	EXPECT_EQ(Point<TypeParam>(coordinates), this->p2);
+	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2);
 
 
 	this->p3.linearTransformation(A, v); // (9; -13)
 
-	coordinates.clear();
-	coordinates[this->x] = 54; 
-	coordinates[this->y] = -1;
-	EXPECT_EQ(Point<TypeParam>(coordinates), this->p3);
+	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3);
 
 
 	this->p4.linearTransformation(A, v); // (5; 8)
 
-	coordinates.clear();
-	coordinates[this->x] = 0;
-	coordinates[this->y] = 63;
-	EXPECT_EQ(Point<TypeParam>(coordinates), this->p4);
+	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4);
 }

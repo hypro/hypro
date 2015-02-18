@@ -453,6 +453,7 @@ namespace hypro {
             void incrementInAllDim(const Number& _val = 1)
             {
 				vector_t<Number> one = vector_t<Number>::Ones(mCoordinates.rows());
+				one *= _val;
                 mCoordinates += one;
             }
 
