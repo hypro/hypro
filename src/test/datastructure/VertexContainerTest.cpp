@@ -23,7 +23,9 @@ class VertexContainerTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        
+        pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
         // p1
         typename Point<Number>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, Number(2)) );
@@ -47,9 +49,9 @@ protected:
     {
     }
     
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable x;
+    Variable y;
 	
     Point<Number> p1;
     Point<Number> p2;

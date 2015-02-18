@@ -21,6 +21,11 @@ class PointTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
+		a = pool.newCarlVariable();
+		b = pool.newCarlVariable();
         // p1
 //        typename Point<Number>::coordinateMap coordinates1;
 //        coordinates1.insert( std::make_pair(x, Number(2)) );
@@ -50,11 +55,11 @@ protected:
     {
     }
 	
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    Variable x = pool.getFreshVariable("x");
-    Variable y = pool.getFreshVariable("y");
-    Variable a = pool.getFreshVariable("a");
-    Variable b = pool.getFreshVariable("b");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    Variable x;
+    Variable y;
+    Variable a;
+    Variable b;
 //    Variable c = pool.getFreshVariable("c");
 //    Variable d = pool.getFreshVariable("d");
 	
@@ -66,28 +71,23 @@ protected:
 
 TYPED_TEST(PointTest, Constructor)
 { 
-		std::cout << __func__ << ":" << __LINE__ << std::endl;
-
     Point<TypeParam> p;
     EXPECT_EQ(p.dimension(), (unsigned) 0);
     
     p = Point<TypeParam>(5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
 
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
     
-    p[2] = 2;
+    p[2] = 5;
     p[3] = 2;
     p[4] = 2;
     p[5] = 2;
     p[6] = 2;
     p[7] = 2;
 
-		std::cout << __func__ << ":" << __LINE__ << std::endl;
-
-    EXPECT_EQ(p.dimension(), (unsigned) 7);
+    EXPECT_EQ(p.dimension(), (unsigned) 8);
     EXPECT_EQ(p[2], TypeParam(5));
-    
+    	
     Point<TypeParam> pCopy = Point<TypeParam>(p);
     EXPECT_EQ(p, pCopy);
     
@@ -111,7 +111,6 @@ TYPED_TEST(PointTest, Constructor)
     // convert to mpfr
     Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
 #endif
-	std::cout << __func__ << ":" << __LINE__ << std::endl;
 }
 
 TYPED_TEST(PointTest, PolarCoordinates)
@@ -152,12 +151,16 @@ TYPED_TEST(PointTest, PolarCoordinates)
  */
 TYPED_TEST(PointTest, CoordinateDimensionTest)
 {
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1[0], TypeParam(2));
     EXPECT_EQ(this->p1[1], TypeParam(5));
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1.coordinate(0), TypeParam(2));
     EXPECT_EQ(this->p1.coordinate(1), TypeParam(5));
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
     EXPECT_EQ(this->p1.dimension(), (unsigned) 2);
     
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
     this->p1.incrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(6));
     this->p1.incrementInAllDim(TypeParam(3));
@@ -166,6 +169,10 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     this->p1.decrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(8));
     
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
+	
+	std::cout << this->pool.dimension(this->x) << " , "  << this->pool.dimension(this->x) << std::endl;
+	
     this->p1[this->x] = TypeParam(3);
     this->p1[this->y] = TypeParam(-1);
     EXPECT_EQ(this->p1[this->x], TypeParam(3));
@@ -174,6 +181,7 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     this->p1.setCoordinate(this->y, 7);
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
+	std::cout << __func__ << ":" << __LINE__ << std::endl;
 }
 
 /**

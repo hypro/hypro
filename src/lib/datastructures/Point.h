@@ -207,7 +207,7 @@ namespace hypro {
 			
 			Number coordinate(unsigned _dimension) const
 			{
-				assert(mCoordinates.size() <= (long unsigned)_dimension);
+				assert(mCoordinates.size() > (long unsigned)_dimension);
 				return mCoordinates(_dimension);
 			}
 
@@ -300,17 +300,20 @@ namespace hypro {
                 }
                 radialCoordinate = sqrt(radialCoordinate);
                 result.insert(result.begin(), radialCoordinate);
-                
+                std::cout << __func__ << ":" << __LINE__ << std::endl;
+				
                 //std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
                 
                 // compute polar angles
                 Number angle;
-                for(unsigned dimension = 0; dimension != base.dimension()-1; ++dimension)
+                for(unsigned dimension = 0; dimension < base.dimension()-1; ++dimension)
                 {
+					std::cout << __func__ << ":" << __LINE__ << std::endl;
                     //std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
                     angle = 0;
-                    for(auto dimension2 = dimension; dimension2 != base.dimension(); ++dimension2)
+                    for(auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2)
                     {
+						std::cout << __func__ << ":" << __LINE__ << std::endl;
                         Number square;
 						square = pow(base.rawCoordinates()(dimension2), 2); // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
                         angle += square;
@@ -329,7 +332,8 @@ namespace hypro {
                     result.insert(result.end(), angle);
                     //std::cout << "Angle: " << angle << std::endl;
                 }
-                if((base.mCoordinates(base.dimension())) < Number(0))
+				std::cout << __func__ << ":" << __LINE__ << std::endl;
+                if((base.mCoordinates(base.dimension()-1)) < Number(0))
                 {
                     //std::cout << "Correct last angle: ";
                     Number tmp = result.back();
@@ -345,7 +349,7 @@ namespace hypro {
                     //std::cout << tmp << std::endl;
                     result.push_back(tmp);
                 }
-                
+                std::cout << __func__ << ":" << __LINE__ << std::endl;
                 assert(result.size() == this->dimension());
                 return result;
             }
@@ -363,7 +367,8 @@ namespace hypro {
              */
             Point<Number> newEmpty() const
             {
-                return Point<Number>(this->dimension());
+				vector_t<Number> origin = vector_t<Number>::Zero(this->dimension());
+                return Point<Number>(origin);
             }
             
             /**
@@ -639,16 +644,22 @@ namespace hypro {
 			
 			Number& operator[] (unsigned _i)
             {
-				// TODO: Extend, if required
+				if(_i >= mCoordinates.rows()) {
+					vector_t<Number> old = mCoordinates;
+					mCoordinates.resize(_i+1);
+					mCoordinates.topLeftCorner(old.rows(),1) = old;
+				}
                 return mCoordinates(_i);
             }
 
             Number at(const carl::Variable& _i) const
             {
+				assert(hypro::VariablePool::getInstance().dimension(_i) < mCoordinates.rows());
                 return mCoordinates(hypro::VariablePool::getInstance().dimension(_i));
             }
 			
 			Number at(unsigned _index) const {
+				assert(_index < mCoordinates.rows());
 				return mCoordinates(_index);
 			}
 		
