@@ -33,6 +33,8 @@ namespace hypro
             vertexSet            mVertices;
            // neighborFacets           mNeighbors;
             Polynomial          mHyperplane;
+            vector_t<Number>			mNormal;
+            scalar_t<Number>			mScalar;
 
         /**
          * Constructors & Destructor
@@ -46,6 +48,8 @@ namespace hypro
                     mVertices = f.vertices();
               //      mNeighbors = f.neighbors();
                     mHyperplane = f.hyperplane();
+                   	mNormal = f.getNormal();
+                   	mScalar = f.getScalar();
             }
 
             Ridge( std::set<Point<Number>> facet1, std::set<Point<Number>> facet2)
@@ -63,7 +67,9 @@ namespace hypro
                         }
                     }
                 }
-                mHyperplane = new Hyperplane<Number>(getNormalVector(),getScalar());
+                mNormal = getNormalVector();
+                mScalar = getScalarVector();
+                mHyperplane = Hyperplane<Number>(mNormal,mScalar);
                 //save mHyperplane as intersect of the facets
 
             }
@@ -83,6 +89,16 @@ namespace hypro
             vertexSet vertices() const
             {
                 return mVertices;
+            }
+
+            vector_t<Number> getNormal ()
+            {
+            	return mNormal;
+            }
+
+            scalar_t<Number> getScalar ()
+            {
+              	return mScalar;
             }
 
           //  neighborFacets& rNeighbors()
@@ -105,7 +121,34 @@ namespace hypro
                    }
                    mVertices = new std::set<Point<Number>>();
                     for(int i = 0; i<facet1.vertices().size();i++) {
-                        for(int j = 0; j<facet2.vertices().size();j++) {
+                        for(int j = 0; j<fvector_t<Number> getNormalVector () {
+            	std::vector<vector_t<Number>> vectors = new std::vector<vector_t<Number>>(mVertices.size());
+            	vectors[0] = mVertices[0].rawCoordinates();
+               	for(int i = 1; i < mVertices.size(); i++) {
+                     vectors[i] = ( vectors[0]) - (mVertices[i].rawCoordinates());
+                }
+                matrix_t<Number> matrix = new matrix_t<Number,vectors.size(),vectors[0].size()> ();
+            	for(int i = 0; i < vectors.size(); i++) {
+            		for(int j = 0; j < vectors[0].size(); j++) {
+            			matrix(i,j) = vectors[i](j);
+            		}
+            	}
+                vector_t<Number> b = new vector_t<Number,vectors.size(),1> ();
+            	for(int i = 0; i < vectors.size(); i++) {
+            		b(i) = 0;
+            	}
+            	vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
+            	return result;
+            }
+
+            scalar_t<Number> getScalarVector () {
+               	return new scalar_t<Number> (mNormal.dot(mVertices[0].rawCoordinates()));
+            }
+
+            Hyperplane<Number> hyperplane() const
+            {
+                return mHyperplane;
+            }acet2.vertices().size();j++) {
                             if(facet1.vertices()[i] == facet2.vertices(j)) {
                                 mVertices.push_back(facet1.vertices()[i]);
                             }
@@ -132,11 +175,27 @@ namespace hypro
             }
 
             vector_t<Number> getNormalVector () {
-                return new vector_t<Number>();
+            	std::vector<vector_t<Number>> vectors = new std::vector<vector_t<Number>>(mVertices.size());
+                vectors[0] = mVertices[0].rawCoordinates();
+                for(int i = 1; i < mVertices.size(); i++) {
+                	vectors[i] = ( vectors[0]) - (mVertices[i].rawCoordinates());
+                }
+                matrix_t<Number> matrix = matrix_t<Number> (vectors.size(),vectors[0].size());
+                for(int i = 0; i < vectors.size(); i++) {
+                	for(int j = 0; j < vectors[0].size(); j++) {
+                		matrix(i,j) = vectors[i](j);
+                	}
+                }
+                vector_t<Number> b = vector_t<Number> (vectors.size());
+                for(int i = 0; i < vectors.size(); i++) {
+                	b(i) = 0;
+                }
+                vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
+                return result;
             }
 
-            scalar_t<Number> getScalar () {
-                return new scalar_t<Number>();
+            scalar_t<Number> getScalarVector () {
+              	return scalar_t<Number> (mNormal.dot(mVertices[0].rawCoordinates()));
             }
 
     };

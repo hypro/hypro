@@ -36,6 +36,8 @@ namespace hypro
             neighborsSet           mNeighbors;
             Hyperplane<Number>          mHyperplane;
             outsideSet          mOutsideSet;
+            vector_t<Number>			mNormal;
+            scalar_t<Number>			mScalar;
 
         /**
          * Constructors & Destructor
@@ -48,7 +50,9 @@ namespace hypro
 				mVertices(f.vertices()),
 				mNeighbors(f.neighbors()),
 				mHyperplane(f.hyperplane()),
-				mOutsideSet(f.outsideSet)
+				mOutsideSet(f.outsideSet),
+            	mNormal(f.getNormal()),
+            	mScalar(f.getScalar())
             {}
 
             Facet( Ridge<Number> r, vector_t<Number> p)
@@ -59,7 +63,10 @@ namespace hypro
                 {
                     mVertices.insert(r.vertices[i]);
                 }
-                mHyperplane = Hyperplane<Number>(mVertices);
+                mNormal = getNormalVector();
+                mScalar = getScalarVector();
+                mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+                //mHyperplane = Hyperplane<Number>(mVertices);
                 mNeighbors = std::set<Facet<Number>>();
                 mOutsideSet = std::vector<vector_t<Number>>();
 
@@ -123,22 +130,50 @@ namespace hypro
                 mNeighbors.insert(facet);
             }
 
+            vector_t<Number> getNormal ()
+        	{
+               	return mNormal;
+            }
+
+            scalar_t<Number> getScalar ()
+            {
+               	return mScalar;
+            }
+
             void setPoints(std::vector<vector_t<Number>> points)
             {
                 if(mVertices.empty()) {
                     for(int i = 0; i < points.size(); i++) {
                         mVertices.insert(points[i]);
                     }
-                    mHyperplane = Hyperplane<Number>(getNormalVector(),getScalar());
+                    mNormal = getNormalVector();
+                    mScalar = getScalarVector();
+                    mHyperplane = Hyperplane<Number>(mNormal,mScalar);
                 }
             }
 
             vector_t<Number> getNormalVector () {
-                return vector_t<Number>();
+            	std::vector<vector_t<Number>> vectors = new std::vector<vector_t<Number>>(mVertices.size());
+            	vectors[0] = mVertices[0].rawCoordinates();
+               	for(int i = 1; i < mVertices.size(); i++) {
+                     vectors[i] = ( vectors[0]) - (mVertices[i].rawCoordinates());
+                }
+                matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),vectors[0].size());
+            	for(int i = 0; i < vectors.size(); i++) {
+            		for(int j = 0; j < vectors[0].size(); j++) {
+            			matrix(i,j) = vectors[i](j);
+            		}
+            	}
+                vector_t<Number> b = vector_t<Number>(vectors.size());
+            	for(int i = 0; i < vectors.size(); i++) {
+            		b(i) = 0;
+            	}
+            	vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
+            	return result;
             }
 
-            scalar_t<Number> getScalar () {
-                return scalar_t<Number>();
+            scalar_t<Number> getScalarVector () {
+               	return scalar_t<Number> (mNormal.dot(mVertices[0].rawCoordinates()));
             }
 
             Hyperplane<Number> hyperplane() const
@@ -170,9 +205,23 @@ namespace hypro
              * @return The Point which has the highest distance to the Hyperplane.
              */
             Point<Number> furthest_Point()
-            {
-                return mOutsideSet[0]; // default return
-            }
+        	{
+            	if(mOutsideSet.empty()) {
+               		return new Point<Number>();
+            	}
+                else {
+                	Point<Number> result = mOutsideSet[0];
+                	scalar_t<Number> max = mHyperplane.signedDistance(result);
+                	for(int i = 1; i<mOutsideSet.size(); i++){
+                    	scalar_t<Number> temp = mHyperplane.signedDistance(mOutsideSet[i]);
+                     	if(temp>max){
+                     		max=temp;
+                     		result=mOutsideSet[i];
+                     	}
+                	}
+                	return result;
+                }
+        	}
 
             bool isNeighbor(Facet<Number> facet)
             {

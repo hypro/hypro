@@ -207,7 +207,7 @@ namespace hypro {
 			
 			Number coordinate(unsigned _dimension) const
 			{
-				assert(mCoordinates.size() > (long unsigned)_dimension);
+				assert(mCoordinates.size() > _dimension);
 				return mCoordinates(_dimension);
 			}
 
