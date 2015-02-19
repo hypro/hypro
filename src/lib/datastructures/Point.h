@@ -686,9 +686,10 @@ namespace hypro {
             friend std::ostream & operator<< (std::ostream& _ostr, const Point<Number>& _p)
             {
                 _ostr << "( ";		
-                for (unsigned i = 0 ; i < _p.dimension(); ++i) {
-                    _ostr << _p.at(i);
+                for (unsigned i = 0 ; i < _p.dimension()-1; ++i) {
+                    _ostr << _p.at(i) << ", ";
                 } 
+                _ostr << _p.at(_p.dimension()-1);
                 _ostr << ")";
                 return _ostr;
             }

@@ -27,6 +27,7 @@ set( EXAMPLES
     example_test
     example_vertexEnumeration
     example_twotankreachability
+    example_convexHull
 )
 
 foreach( example ${EXAMPLES} )

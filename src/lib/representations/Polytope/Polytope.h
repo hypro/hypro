@@ -21,9 +21,10 @@
 #include "util.h"
 #include "../GeometricObject.h"
 #include "../../datastructures/Point.h"
-
-
+#include "../../datastructures/Facet.h"
+#include "../../datastructures/Ridge.h"
 #include "../Polytopes/util.h"
+#include "convexHull_util.h"
 
 
 using namespace Parma_Polyhedra_Library;
@@ -83,7 +84,7 @@ namespace hypro
         	mPointsUpToDate = _val;
         }
 
-        /**
+        /**initConvexHull
          * Returns the set of points which form the polytope.
          * @return Pointset.
          */
@@ -155,7 +156,7 @@ namespace hypro
         bool contains(const Point<Number>& point);
         bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
-        void convexHull(std::vector<Point<Number>> points);
+        static std::vector<Facet<Number>> convexHull(std::vector<Point<Number>> points);
         
         /**
          * Polytope related

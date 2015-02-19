@@ -7,10 +7,7 @@
  */
 
 #include "Polytope.h"
-#include "util.h"
-#include "convexHull_util.h"
-#include "../../datastructures/Facet.h"
-#include "../../datastructures/Ridge.h"
+
 
 namespace hypro
 {
@@ -66,8 +63,7 @@ namespace hypro
     Polytope<Number>::Polytope(const typename std::vector<vector_t<Number>>& points)
     {
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(polytope::pplDimension(points), Parma_Polyhedra_Library::EMPTY);
-        for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt)
-        {
+        for(auto pointIt = points.begin(); pointIt != points.end(); ++pointIt) {
             Generator tmp = polytope::pointToGenerator(*pointIt);
             mPolyhedron.add_generator(tmp);
             Point<Number> tmpPoint = Point<Number>(*pointIt);
@@ -793,11 +789,11 @@ namespace hypro
     }
     
     template<typename Number>
-     void Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
+     std::vector<Facet<Number>> Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
 		//initialization
-		std::vector<Facet<Number>> facets = initConvexHull(points); //util?
+		std::vector<Facet<Number>> facets = polytope::initConvexHull(points); //util?
 		for(Facet<Number> facet : facets){
-			std::vector<Point<Number>> unassignedPoints = points_not_in_facets(points,facets); //util?
+			std::vector<Point<Number>> unassignedPoints = polytope::points_not_in_facets(points,facets); //util?
 			for (Point<Number> point : unassignedPoints) {
 				if(facet.check_if_above(point)) { 
 					facet.addPointToOutsideSet(point); 
@@ -805,49 +801,50 @@ namespace hypro
 			}
 		}
 		//main body
-		std::vector<Facet<Number>> notOutsideFacets = not_outside_facet(facets); //util?
+		std::vector<Facet<Number>> notOutsideFacets = polytope::not_outside_facet(facets); //util?
 		for (Facet<Number> facet : notOutsideFacets) {
 			Point<Number> point = facet.furthest_Point();
 			std::vector<Facet<Number>> visible_facets;
 			visible_facets.push_back(facet);
-			std::vector<Facet<Number>> neighbor_facets = getFacetsNeighbors(visible_facets);//util?
+			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(visible_facets);//util?
 			for (Facet<Number> neighbor : neighbor_facets) {
 				if(neighbor.check_if_above(point)) {
 					visible_facets.push_back(neighbor);
 				}
 			}
 			for (Facet<Number> facet : visible_facets) {
-				for(int i = 0; i<facets.size() ; i++) {
+				for(unsigned i = 0; i<facets.size() ; i++) {
 					if(facet == facets[i]) {
-						facets.erase(i);
+						facets.erase(facets.begin() + i);
 					}
 				}
-				for(int j = 0; j<notOutsideFacets.size() ; j++) {
+				for(unsigned j = 0; j<notOutsideFacets.size() ; j++) {
 					if(facet == notOutsideFacets[j]) {
- 						notOutsideFacets.erase(j);
+ 						notOutsideFacets.erase(notOutsideFacets.begin() + j);
 					}
 				}
 			}
-			std::vector<Ridge<Number>> ridges = getRidges(visible_facets);
+			std::vector<Ridge<Number>> ridges = polytope::getRidges(visible_facets);
 			std::vector<Facet<Number>> newFacets;
 			for (Ridge<Number> ridge : ridges) {
-				Facet<Number> newFacet = new Facet<Number>(ridge, point); 
+				Facet<Number> newFacet = Facet<Number>(ridge, point); 
 				newFacets.push_back(newFacet);
 				facets.push_back(newFacet);
 			}
-			std::vector<Point<Number>> outsidePoints = points_outside_of_visible_facets(visible_facets); 
+			std::vector<Point<Number>> outsidePoints = polytope::points_outside_of_visible_facets(visible_facets); 
 			for (Facet<Number> newFacet : newFacets) {
 				for (Point<Number> p : outsidePoints) {
-					if(check_if_above(p,newFacet)) {
+					if(newFacet.check_if_above(p)) {
 						newFacet.addPointToOutsideSet(p); 
 					}
 				}
 			}
-			std::vector<Facet<Number>> notOutsideNewFacets = not_outside_facet(newFacets); //util?
+			std::vector<Facet<Number>> notOutsideNewFacets = polytope::not_outside_facet(newFacets); //util?
 			for(Facet<Number> facet : notOutsideNewFacets) {
 				notOutsideFacets.push_back(facet);
 			}
 		}
+		return facets;
 	} 
     
 
