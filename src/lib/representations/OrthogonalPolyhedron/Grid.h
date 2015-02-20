@@ -24,7 +24,7 @@ namespace hypro
     {
         public:
             typedef std::map<Point<int>, bool> gridMap;
-            typedef std::map<const carl::Variable, std::vector<Number> > gridPoints;
+            typedef std::map<unsigned, std::vector<Number> > gridPoints;
         
         private:
             gridMap mGridMap; // mutable to allow performance optimization

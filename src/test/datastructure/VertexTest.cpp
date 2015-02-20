@@ -66,6 +66,11 @@ TYPED_TEST(VertexTest, Constructor)
     Vertex<TypeParam> vertex2(this->p1, true);
     ASSERT_EQ(vertex2.dimension(), (unsigned) 2);
     ASSERT_TRUE(vertex2.color());
+
+    Vertex<TypeParam> vertex3({1, 2, 3}, true);
+    vertex1.setPoint(Point<TypeParam>({1, 2, 3}));
+    vertex1.setColor(true);
+    ASSERT_EQ(vertex1, vertex3);
 }
 
 TYPED_TEST(VertexTest, Equality)

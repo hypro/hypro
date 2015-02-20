@@ -32,7 +32,7 @@ namespace hypro
             auto itr = std::unique(v.begin(), v.end());
             v.resize(itr - v.begin());
 
-            mInducedGridPoints[hypro::VariablePool::getInstance().carlVarByIndex(i)] = v;
+            mInducedGridPoints[i] = v;
         }
 
         for (auto it : vertices) {
@@ -43,17 +43,17 @@ namespace hypro
     template<typename Number>
     Point<int> Grid<Number>::calculateInduced(const Point<Number>& point) const
     {
-        Point<int>::coordinateMap coordinates;
+        vector_t<int> coordinates(mInducedGridPoints.size());
         for (auto inducedGridPointsIt : mInducedGridPoints) {
-            auto fixed = inducedGridPointsIt.first;
-            auto inducedGridPoints = inducedGridPointsIt.second;
+            unsigned fixed = inducedGridPointsIt.first;
+            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
             // get the position of the first element greater then the coordinate + 1
-            auto it = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
+            auto pos = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
                     point.coordinate(fixed));
 
             // insert the index of the element one before the element found above
-            coordinates.insert(std::make_pair(fixed, it - 1 - inducedGridPoints.begin()) );
+            coordinates[fixed] = pos - 1 - inducedGridPoints.begin();
         }
         
         return Point<int>(coordinates); // return induced point
@@ -62,15 +62,14 @@ namespace hypro
     template<typename Number>
     Point<Number> Grid<Number>::calculateOriginal(const Point<int>& inducedPoint) const
     {
-        typename Point<Number>::coordinateMap coordinates;
-        for (auto coordinateIt : inducedPoint.coordinates()) {
-            auto fixed = coordinateIt.first;
-            auto inducedGridPoints = mInducedGridPoints.at(fixed);
+        vector_t<Number> coordinates(mInducedGridPoints.size());
+        for (auto inducedGridPointsIt : mInducedGridPoints) {
+            unsigned fixed = inducedGridPointsIt.first;
+            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
+
             // get the value of the element at the specified position
-            auto it = inducedGridPoints.at(coordinateIt.second);
-            
-            // insert the value
-            coordinates.insert(std::make_pair(fixed, it));
+            int induced = inducedPoint.at(fixed);
+            coordinates[fixed] = inducedGridPoints.at(induced);
         }
         
         return Point<Number> (coordinates); // return original point

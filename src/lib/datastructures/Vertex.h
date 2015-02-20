@@ -73,6 +73,16 @@ namespace hypro {
             {
                 mColor = color;
             }
+
+            /**
+             * 
+             * @param coordinates
+             * @param color
+             */
+            Vertex(std::initializer_list<Number> coordinates, bool color = false) : mPoint(coordinates)
+            {
+                mColor = color;
+            }
             
             /**
              * 
