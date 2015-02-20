@@ -1,4 +1,4 @@
-#include "PolytopeSupportfunction.h"
+#include "PolytopeSupportFunction.h"
 
 namespace hypro {
 	
@@ -130,7 +130,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	evaluationResult<Number> PolytopeSupportFunction<Number>::specificEvaluation(const matrix_t<Number>& l) const {
+	evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate(const vector_t<Number>& l) const {
 		#ifdef SUPPORTFUNCTION_VERBOSE
 			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 				std::cout << "PolytopeSupportFunction: evaluate" << '\n';
@@ -189,7 +189,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, matrix_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD) : SupportFunction<Number>(SupportFunctionType::Polytope_Type, aD) {                        
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, matrix_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD){                        
 		vector_t<Number> constants = vector_t<Number>(dimensionality, 1);
 		constants.block(0,0,dimensionality, 1) = constraintConstants.block(0,0,dimensionality, 1);
 		
@@ -197,7 +197,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD) : SupportFunction<Number>(SupportFunctionType::Polytope_Type, aD) {
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD){
 		initialize(constraints, constraintConstants, operation, dimensionality);
 	}	
 	
@@ -225,36 +225,5 @@ namespace hypro {
 	template<typename Number>
 	unsigned int PolytopeSupportFunction<Number>::dimension() {
 		return mDimension;
-	}	
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::linearTransformation(PolytopeSupportFunction<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b) {
-		
 	}
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::minkowskiSum(PolytopeSupportFunction<Number>& result, const PolytopeSupportFunction<Number>& rhs) {
-		
-	}
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::intersect(PolytopeSupportFunction<Number>& result, const PolytopeSupportFunction<Number>& rhs) {
-		
-	}
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::hull(PolytopeSupportFunction<Number>& result) {
-		
-	}
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::contains(const Point<Number>& point) {
-		
-	}
-
-	template<typename Number>
-	bool PolytopeSupportFunction<Number>::unite(PolytopeSupportFunction<Number>& result, const PolytopeSupportFunction<Number>& rhs) {
-		
-	}
-	
 } // namespace
