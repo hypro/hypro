@@ -92,12 +92,14 @@ namespace hypro
 //					std::cout << __func__ << ": possible Vertex: " << rhsVertex << std::endl;
 				}
 			}
-        } 
-		
-		for(auto& vertex : possibleVertices) {
-			if( !(this->contains(vertex) && rhs.contains(vertex)) ) {
-//				std::cout << __func__ << ": vertex not in intersection: " << vertex << std::endl;
-				possibleVertices.erase(vertex);
+        }
+		for(auto vertexIt = possibleVertices.begin(); vertexIt != possibleVertices.end(); ) {
+			if( !(this->contains(*vertexIt) && rhs.contains(*vertexIt)) ) {
+//				std::cout << __func__ << ": vertex not in intersection: " << *vertexIt << std::endl;
+			    vertexIt = possibleVertices.erase(vertexIt);
+			}
+			else {
+			    ++vertexIt;
 			}
 		}
 		return VPolytope<Number>(possibleVertices);

@@ -5,8 +5,8 @@
  
 #pragma once 
  
-#define SUPPORTFUNCTION_VERBOSE 
-#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+//#define SUPPORTFUNCTION_VERBOSE 
+//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 #include "../../config.h"
 #include "SupportFunction.h"

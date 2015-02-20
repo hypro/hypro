@@ -129,7 +129,6 @@ namespace Eigen
 	
 	template<typename Number>
 	bool operator==(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
-		std::cout << "Compare: " << lhs << " and " << rhs << std::endl;
 		if(lhs.rows() != rhs.rows())
 			return false;
 		
@@ -139,6 +138,5 @@ namespace Eigen
 			}
 		}
 		return true;
-		std::cout << "Equal" << std::endl;
 	}
 }
