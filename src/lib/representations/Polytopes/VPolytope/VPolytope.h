@@ -35,6 +35,14 @@ class VPolytope : hypro::GeometricObject<Number>
         bool                           mFanSet;
         bool                           mReduced;
 		
+		// GLPK members
+		mutable bool							mInitialized;
+		mutable glp_prob*						mLp;
+		mutable glp_smcp						mOptions;
+		mutable int*							mIa;
+		mutable int*							mJa;
+		mutable double*							mAr;
+		
     public:
 	/***************************************************************************
 	 * Constructors
@@ -48,8 +56,16 @@ class VPolytope : hypro::GeometricObject<Number>
         VPolytope(const VPolytope& orig);
 		VPolytope(VPolytope&& _orig) = default;
 
-        virtual ~VPolytope()
-        {}
+        ~VPolytope()
+        {
+			if(mInitialized){
+				// cleanup
+				glp_delete_prob(mLp);
+				delete mIa;
+				delete mJa;
+				delete mAr;
+			}
+		}
         
 	/***************************************************************************
 	* General interface
@@ -68,6 +84,8 @@ class VPolytope : hypro::GeometricObject<Number>
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
         
+		void initGLPK() const;
+		
 		unsigned int dimension() const
 		{
 			if(mVertices.empty())

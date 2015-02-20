@@ -16,7 +16,8 @@ namespace hypro
 		mVertices(),
 		mFan(),
 		mFanSet(false),
-		mReduced(true)
+		mReduced(true),
+		mInitialized(false)
 	{}
 
 	template<typename Number>
@@ -26,6 +27,7 @@ namespace hypro
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = true;
+		mInitialized = false;
 	}
 
 	template<typename Number>
@@ -35,6 +37,7 @@ namespace hypro
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = true;
+		mInitialized = false;
 	}
 
 	template<typename Number>
@@ -44,6 +47,7 @@ namespace hypro
 		mFan = polytope::Fan<Number>();
 		mFanSet = false; // TODO: Include getter fpr this
 		mReduced = true; // TODO: Include getter fpr this
+		mInitialized = false;
 	}
 	
     template<typename Number>
@@ -77,26 +81,23 @@ namespace hypro
 		vertexSet possibleVertices;
         for(const auto& lhsVertex : mVertices) {
 			possibleVertices.insert(lhsVertex);
-			std::cout << __func__ << ": possible Vertex: " << lhsVertex << std::endl;
+//			std::cout << __func__ << ": possible Vertex: " << lhsVertex << std::endl;
 			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rows(); ++coordIndex) {
 				for(const auto& rhsVertex : rhs.mVertices) {
 					vector_t<Number> newVertex = rhsVertex;
 					newVertex(coordIndex) = lhsVertex(coordIndex);
 					possibleVertices.insert(vector_t<Number>(newVertex));
-					std::cout << __func__ << ": possible Vertex: " << newVertex << std::endl;
+//					std::cout << __func__ << ": possible Vertex: " << newVertex << std::endl;
 					possibleVertices.insert(vector_t<Number>(rhsVertex));
-					std::cout << __func__ << ": possible Vertex: " << rhsVertex << std::endl;
+//					std::cout << __func__ << ": possible Vertex: " << rhsVertex << std::endl;
 				}
 			}
         } 
 		
 		for(auto& vertex : possibleVertices) {
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
 			if( !(this->contains(vertex) && rhs.contains(vertex)) ) {
-				std::cout << __func__ << " : " << __LINE__ << std::endl;
-				std::cout << __func__ << ": vertex not in intersection: " << vertex << std::endl;
+//				std::cout << __func__ << ": vertex not in intersection: " << vertex << std::endl;
 				possibleVertices.erase(vertex);
-				std::cout << __func__ << " : " << __LINE__ << std::endl;
 			}
 		}
 		return VPolytope<Number>(possibleVertices);
@@ -110,62 +111,24 @@ namespace hypro
 	
 	template<typename Number>
 	bool VPolytope<Number>::contains(const vector_t<Number>& vec) const {
+		// initialize tableau if necessary
+		if(!mInitialized)
+			initGLPK();
 		
-		std::cout << __func__ << " : " << vec << std::endl;
-		
-		glp_prob* lp;
-		lp = glp_create_prob();
-		glp_set_obj_dir(lp,GLP_MAX);
-		glp_add_rows(lp, this->dimension()+1);
-		glp_add_cols(lp, mVertices.size());
-		glp_smcp* options = new glp_smcp;
-		glp_init_smcp(options);
-		//options->msg_lev = GLP_MSG_ALL;
-		
+		glp_set_obj_dir(mLp,GLP_MAX);
 		for(unsigned i = 1; i <= vec.rows(); ++i)
-			glp_set_row_bnds(lp, i, GLP_FX,double(vec(i-1)),0); // as the variable is fixed, the last parameter (upper row bound) is ignored
-		glp_set_row_bnds(lp, vec.rows()+1, GLP_FX,1.0,0); // the sum of the vectors equals exactly one.
+			glp_set_row_bnds(mLp, i, GLP_FX,double(vec(i-1)),0); // as the variable is fixed, the last parameter (upper row bound) is ignored
+		
+		glp_set_row_bnds(mLp, vec.rows()+1, GLP_FX,1.0,0); // the sum of the vectors equals exactly one.
 		
 		for(unsigned i = 1; i <= mVertices.size(); ++i){
-			glp_set_col_bnds(lp,i, GLP_DB, 0.0, 1.0);
-			glp_set_obj_coef(lp,i,1.0); // the objective function is max: v1 + v2 + v3 + ... + vn
-		}
-		
-		// prepare matrix
-		unsigned size = mVertices.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
-		int* ia = new int[size];
-		int* ja = new int[size];
-		double* ar = new double[size];
-		unsigned pos = 1;
-		typename vertexSet::iterator vertex = mVertices.begin();
-		for(unsigned i = 1; i <= vec.rows()+1; ++i) {
-			for(unsigned j = 1; j <= mVertices.size(); ++j) {
-				ia[pos] = i; ja[pos] = j;
-				if(i == vec.rows()+1) {
-					ar[pos] = 1.0;
-				}else{
-					ar[pos] = double((*vertex)(i-1));
-				}
-//				std::cout << "Setting: ia[" << pos << "]=" << i << ", ja[" << pos << "]=" << j << ", ar[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
-				++pos;
-				++vertex;
-			}
-			vertex = mVertices.begin();
+			glp_set_col_bnds(mLp,i, GLP_DB, 0.0, 1.0);
+			glp_set_obj_coef(mLp,i,1.0); // the objective function is max: v1 + v2 + v3 + ... + vn
 		}
 		
 		// solve
-		glp_load_matrix(lp,size, ia, ja, ar);
-		int result = glp_simplex(lp,options);
-		std::cout << "GLP_RESULT: " << result << std::endl;
-		std::cout << "Problem state: " << glp_get_prim_stat(lp) << std::endl;
-		bool interiorPoint = (glp_get_prim_stat(lp) == GLP_FEAS);
-		
-		// cleanup
-		glp_delete_prob(lp);
-		delete ia;
-		delete ja;
-		delete ar;
-		delete options;
+		glp_simplex(mLp, &mOptions);
+		bool interiorPoint = (glp_get_prim_stat(mLp) == GLP_FEAS);
 		
 		return interiorPoint;
 	}
@@ -189,6 +152,41 @@ namespace hypro
      * Auxiliary functions
      **************************************************************************/
     
+	template<typename Number>
+	void VPolytope<Number>::initGLPK() const {
+		if(!mInitialized) {
+			mLp = glp_create_prob();
+			glp_init_smcp(&mOptions);
+			mOptions.msg_lev = GLP_MSG_OFF;
+			glp_add_rows(mLp, this->dimension()+1);
+			glp_add_cols(mLp, mVertices.size());
+
+			// prepare matrix
+			unsigned size = mVertices.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
+			mIa = new int[size];
+			mJa = new int[size];
+			mAr = new double[size];
+			unsigned pos = 1;
+			typename vertexSet::iterator vertex = mVertices.begin();
+			for(unsigned i = 1; i <= this->dimension()+1; ++i) {
+				for(unsigned j = 1; j <= mVertices.size(); ++j) {
+					mIa[pos] = i; mJa[pos] = j;
+					if(i == this->dimension()+1) {
+						mAr[pos] = 1.0;
+					}else{
+						mAr[pos] = double((*vertex)(i-1));
+					}
+	//				std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
+					++pos;
+					++vertex;
+				}
+				vertex = mVertices.begin();
+			}
+			glp_load_matrix(mLp,size, mIa, mJa, mAr);
+			mInitialized = true;
+		}
+	}
+	
     template<typename Number>
     const typename VPolytope<Number>::Fan& VPolytope<Number>::calculateFan() const
     {

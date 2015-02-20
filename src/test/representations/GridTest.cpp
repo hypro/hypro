@@ -68,8 +68,10 @@ TYPED_TEST(GridTest, Constructor)
 TYPED_TEST(GridTest, Properties)
 {
     Point<TypeParam> p1;
-    p1[this->x] = 2;
-    p1[this->y] = 5;
+//    p1[this->x] = 2;
+//    p1[this->y] = 5;
+    p1[this->x] = 4;
+    p1[this->y] = 6;
     
     EXPECT_FALSE(this->grid1.empty());
     EXPECT_EQ(3, this->grid1.size());
