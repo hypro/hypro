@@ -92,9 +92,9 @@ TYPED_TEST(VertexTest, Order)
     
     EXPECT_TRUE(v1 < v2);
     EXPECT_TRUE(v2 < v3);
-    EXPECT_TRUE(v3 < v4);
+    EXPECT_TRUE(v3 > v4);
 
-    EXPECT_TRUE(v4 > v3);
+    EXPECT_TRUE(v4 < v3);
     EXPECT_TRUE(v3 > v2);
     EXPECT_TRUE(v2 > v1);
 }

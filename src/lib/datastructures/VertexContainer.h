@@ -93,9 +93,9 @@ namespace hypro {
 		 * @return
 		 */
 		inline bool originIsVertex() const {
-                    assert(mVertices.size() > 0);
-                    Vertex<Number> origin = Vertex<Number>(mVertices.begin()->point().newEmpty(), true);
-                    return (*(mVertices.begin()) == origin);
+			assert(mVertices.size() > 0);
+			Vertex<Number> origin = Vertex<Number>(mVertices.begin()->point().newEmpty(), true);
+			return (mVertices.find(origin) != mVertices.end());
 		}
 		
 		/***********************************************************************
@@ -229,9 +229,8 @@ namespace hypro {
 		 *
 		 * @param p Vertex that is erased.
 		 */
-		inline void erase(const Point<Number>& p) {
-			Vertex<Number> v = Vertex<Number>(p,false);
-			mVertices.erase(v);
+		inline void erase(const Vertex<Number>& p) {
+			mVertices.erase(p);
 			
 		}
 		

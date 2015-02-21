@@ -104,12 +104,9 @@ namespace hypro {
              */
             Point(const coordinateMap& _coordinates) 
             {
-                unsigned count = 0;
 				mCoordinates = vector_t<Number>(_coordinates.size());
-                for(auto& coordinatepair : _coordinates)
-                {
-                    mCoordinates(count) = coordinatepair.second;
-                    ++count;
+                for(auto& coordinatepair : _coordinates) {
+                    mCoordinates(hypro::VariablePool::getInstance().dimension(coordinatepair.first)) = coordinatepair.second;
                 }
             }
             

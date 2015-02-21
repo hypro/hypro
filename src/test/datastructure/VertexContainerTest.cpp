@@ -170,7 +170,7 @@ TYPED_TEST(VertexContainerTest, OriginIsVertex)
     
     EXPECT_TRUE(test1.originIsVertex());
     
-    test1.erase(this->p1);
+    test1.erase(Vertex<TypeParam>(this->p1, true));
     test1.insert(Vertex<TypeParam>(this->p1, false));
     EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
 }
