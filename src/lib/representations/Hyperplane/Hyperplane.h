@@ -74,7 +74,6 @@ class Hyperplane
 
 template<typename Number>
 bool operator==(const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs) {
-	std::cout << "Ping. " << std::endl;
 	return (lhs.normal() == rhs.normal() && lhs.offset() == rhs.offset());
 }
 

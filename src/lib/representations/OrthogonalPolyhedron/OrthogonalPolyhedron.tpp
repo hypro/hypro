@@ -325,23 +325,15 @@ namespace hypro
 //        for (auto dimensionIt : vertex.variables()) {
         for (unsigned i = 0; i != vertex.dimension(); ++i) {
 			carl::Variable var = hypro::VariablePool::getInstance().carlVarByIndex(i);
-                        std::cout << __func__ << " : " << __LINE__ << std::endl;
             auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(vertex.point(), var, true); // include the point itself
-            std::cout << __func__ << " : " << __LINE__ << std::endl;
             pointExists = false;
-            std::cout << __func__ << " : " << __LINE__ << std::endl;
             for (auto neighborIt : neighborsInFixed) {
-                std::cout << __func__ << " : " << __LINE__ << std::endl;
                 Point<Number> predecessor = neighborIt.getPredecessorInDimension(var);
-                std::cout << __func__ << " : " << __LINE__ << std::endl;
                 if (coloring.at(neighborIt) != coloring.at(predecessor)) {
-                    std::cout << __func__ << " : " << __LINE__ << std::endl;
                     pointExists = true;
                     break;
                 }
-                std::cout << __func__ << " : " << __LINE__ << std::endl;
             }
-            std::cout << __func__ << " : " << __LINE__ << std::endl;
 
             if (!pointExists) {
                 return false;

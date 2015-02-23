@@ -130,7 +130,7 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
     TypeParam result = 0.0;
     intersection1.intersection(result, vec);
     
-    std::cout << "Result: " << result << std::endl;
+    //std::cout << "Result: " << result << std::endl;
     
     EXPECT_EQ(1.075, vec(0)*result);
     EXPECT_EQ(1.075, vec(1)*result);

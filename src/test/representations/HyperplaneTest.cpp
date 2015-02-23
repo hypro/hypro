@@ -43,7 +43,7 @@ TYPED_TEST(HyperplaneTest, Constructor)
 	Hyperplane<TypeParam>(normal, TypeParam(3));
 	//Hyperplane(const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet);
 	
-	std::cout << __func__ << ": vec " << vec << ", normal: " << normal << std::endl;
+	//std::cout << __func__ << ": vec " << vec << ", normal: " << normal << std::endl;
 	
 	
 	Hyperplane<TypeParam> copy = Hyperplane<TypeParam>(normals);

@@ -100,8 +100,8 @@ TYPED_TEST(PolytopeTest, Constructor)
     ps.push_back(this->p3);
     ps.push_back(this->p4);
     Polytope<TypeParam> p1 = Polytope<TypeParam>(ps);
-    std::cout << "P1" << std::endl;
-    p1.print();
+//    std::cout << "P1" << std::endl;
+//    p1.print();
     EXPECT_EQ(p1.dimension(), unsigned(2));
     EXPECT_FALSE(p1.rawPolyhedron().is_empty());
     Polytope<TypeParam> p3 = Polytope<TypeParam>(ps);
@@ -119,11 +119,11 @@ TYPED_TEST(PolytopeTest, Constructor)
     b(0,0) = 4;
     b(1,0) = 5;
     
-    hypro::VariablePool::getInstance().print();
+//    hypro::VariablePool::getInstance().print();
     
     Polytope<TypeParam> p4 = Polytope<TypeParam>(A,b);
     
-    p4.print();
+//    p4.print();
     
     EXPECT_EQ(p4.dimension(), unsigned(2));
     
@@ -157,13 +157,13 @@ TYPED_TEST(PolytopeTest, Access)
     ps2.push_back(p6);
     ps2.push_back(p7);
     
-    std::cout << "---" << std::endl;
-    hypro::VariablePool::getInstance().print();
+//    std::cout << "---" << std::endl;
+//    hypro::VariablePool::getInstance().print();
     
     Polytope<TypeParam> p2 = Polytope<TypeParam>(ps2);
     
-    std::cout << "---" << std::endl;
-    hypro::VariablePool::getInstance().print();
+//    std::cout << "---" << std::endl;
+//    hypro::VariablePool::getInstance().print();
 
     EXPECT_EQ(p2.dimension(), unsigned(2));
     
@@ -173,21 +173,21 @@ TYPED_TEST(PolytopeTest, Access)
 TYPED_TEST(PolytopeTest, PointToGenerator)
 {
     Generator gs = polytope::pointToGenerator(this->p1);
-    std::cout << "Generator: ";
-    gs.print();
-    std::cout << std::endl;
+//    std::cout << "Generator: ";
+//    gs.print();
+//    std::cout << std::endl;
     gs = polytope::pointToGenerator(this->p2);
-    std::cout << "Generator: ";
-    gs.print();
-    std::cout << std::endl;
+//    std::cout << "Generator: ";
+//    gs.print();
+//    std::cout << std::endl;
     gs = polytope::pointToGenerator(this->p3);
-    std::cout << "Generator: ";
-    gs.print();
-    std::cout << std::endl;
+//    std::cout << "Generator: ";
+//    gs.print();
+//    std::cout << std::endl;
     gs = polytope::pointToGenerator(this->p4);
-    std::cout << "Generator: ";
-    gs.print();
-    std::cout << std::endl;
+//    std::cout << "Generator: ";
+//    gs.print();
+//    std::cout << std::endl;
     
     SUCCEED();
 }
@@ -200,9 +200,9 @@ TYPED_TEST(PolytopeTest, Intersection)
     ps1.push_back(this->p3);
     ps1.push_back(this->p4);
     hypro::Polytope<TypeParam> pt1;
-    pt1.print();
+//    pt1.print();
     pt1 = Polytope<TypeParam>(ps1);
-    pt1.print();
+//    pt1.print();
     EXPECT_FALSE(pt1.rawPolyhedron().is_universe());
     EXPECT_TRUE(pt1.rawPolyhedron().is_topologically_closed());
     
@@ -211,13 +211,13 @@ TYPED_TEST(PolytopeTest, Intersection)
     ps2.push_back(this->p6);
     ps2.push_back(this->p7);
     hypro::Polytope<TypeParam> pt2 = Polytope<TypeParam>(ps2);
-    pt2.print();
+//    pt2.print();
     
     hypro::Polytope<TypeParam> res;
     pt1.intersect(res, pt2);
-    res.print();
+//    res.print();
     res.hull(res);
-    res.print();
+//    res.print();
 }
 
 TYPED_TEST(PolytopeTest, Union)
@@ -289,7 +289,7 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     
     hypro::Polytope<TypeParam> result;
     poly1.linearTransformation(result,A);
-    result.print();
+//    result.print();
 }
 
 TYPED_TEST(PolytopeTest, MinkowskiSum)
@@ -310,7 +310,7 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
     hypro::Polytope<TypeParam> result;
     ptpe1.minkowskiSum(result,ptpe2);
     
-    result.print();
+//    result.print();
     
     typename Point<TypeParam>::coordinateMap c1;
     c1.insert( std::make_pair(this->x, TypeParam(9)) );

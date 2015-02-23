@@ -144,7 +144,7 @@ namespace hypro {
 			glp_set_obj_coef(lp, i+1, double(l(i,0)));
 		}
 		
-		std::cout << " Direction: " << l << std::endl; 
+		//std::cout << " Direction: " << l << std::endl; 
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -154,7 +154,7 @@ namespace hypro {
 		/* recover and display results */
 		result.supportValue = glp_get_obj_val(lp);
 		
-		std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
+		//std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
 
 		matrix_t<Number> x(dimensions, 1);
 		for (int i = 0; i < dimensions; i++)
