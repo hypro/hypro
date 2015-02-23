@@ -114,8 +114,8 @@ TYPED_TEST(OrthogonalPolyhedronTest, Properties)
     EXPECT_TRUE(empty.empty());
 
     std::vector<carl::Variable> variables;
-    variables.push_back(this->y);
     variables.push_back(this->x);
+	variables.push_back(this->y);
     EXPECT_EQ((unsigned)2, this->p1.dimension());
     EXPECT_EQ(variables, this->p1.variables());
 }
