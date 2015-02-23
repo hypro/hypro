@@ -165,9 +165,9 @@ namespace hypro
 
 			// prepare matrix
 			unsigned size = mVertices.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
-			mIa = new int[size];
-			mJa = new int[size];
-			mAr = new double[size];
+			mIa = new int[size+1];
+			mJa = new int[size+1];
+			mAr = new double[size+1];
 			unsigned pos = 1;
 			typename vertexSet::iterator vertex = mVertices.begin();
 			for(unsigned i = 1; i <= this->dimension()+1; ++i) {
@@ -175,10 +175,11 @@ namespace hypro
 					mIa[pos] = i; mJa[pos] = j;
 					if(i == this->dimension()+1) {
 						mAr[pos] = 1.0;
+//						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]= 1.0" << std::endl;
 					}else{
 						mAr[pos] = double((*vertex)(i-1));
+//						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
 					}
-	//				std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
 					++pos;
 					++vertex;
 				}
@@ -237,7 +238,7 @@ namespace hypro
 
         // TODO output & result interpretation
 
-        glp_delete_prob(cone);
+        //glp_delete_prob(cone);
     }
     
     template<typename Number>

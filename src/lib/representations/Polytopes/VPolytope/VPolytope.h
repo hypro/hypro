@@ -60,10 +60,10 @@ class VPolytope : hypro::GeometricObject<Number>
         {
 			if(mInitialized){
 				// cleanup
-				glp_delete_prob(mLp);
-				delete[] mIa;
-				delete[] mJa;
-				delete[] mAr;
+				//glp_delete_prob(mLp);
+				//delete[] mIa;
+				//delete[] mJa;
+				//delete[] mAr;
 			}
 		}
         

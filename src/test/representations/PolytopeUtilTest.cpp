@@ -22,6 +22,9 @@ class PolytopeUtilTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
         // p1
         typename Point<Number>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, Number(4.34)) );
@@ -70,9 +73,9 @@ protected:
         hypro::VariablePool::getInstance().clear();
     }
 	
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
+    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+    carl::Variable x;
+    carl::Variable y;
 	
     Point<Number> p1;
     Point<Number> p2;

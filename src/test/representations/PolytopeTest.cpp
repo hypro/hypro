@@ -21,6 +21,10 @@ class PolytopeTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+		pool.clear();
+		x = pool.newCarlVariable();
+		y = pool.newCarlVariable();
+		
         // p1
         typename Point<Number>::coordinateMap coordinates1;
         coordinates1.insert( std::make_pair(x, Number(4)) );
@@ -70,8 +74,8 @@ protected:
     }
 	
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    carl::Variable x = pool.carlVarByIndex(0);
-    carl::Variable y = pool.carlVarByIndex(1);
+    carl::Variable x;
+    carl::Variable y;
 	
     Point<Number> p1;
     Point<Number> p2;
@@ -136,20 +140,18 @@ TYPED_TEST(PolytopeTest, Access)
     hypro::Polytope<TypeParam> p1 = Polytope<TypeParam>(ps1);
     EXPECT_EQ(p1.dimension(), unsigned(2));
     
-    carl::Variable a = this->pool.carlVarByIndex(3);
-    carl::Variable b = this->pool.carlVarByIndex(4);
     std::vector<Point<TypeParam>> ps2;
     typename Point<TypeParam>::coordinateMap coordinates;
-    coordinates.insert( std::make_pair(a, TypeParam(7)) );
-    coordinates.insert( std::make_pair(b, TypeParam(8)) );
+    coordinates.insert( std::make_pair(this->x, TypeParam(7)) );
+    coordinates.insert( std::make_pair(this->y, TypeParam(8)) );
     Point<TypeParam> p5 = Point<TypeParam>(coordinates);
     coordinates.clear();
-    coordinates.insert( std::make_pair(a, TypeParam(1)) );
-    coordinates.insert( std::make_pair(b, TypeParam(2)) );
+    coordinates.insert( std::make_pair(this->x, TypeParam(1)) );
+    coordinates.insert( std::make_pair(this->y, TypeParam(2)) );
     Point<TypeParam> p6 = Point<TypeParam>(coordinates);
     coordinates.clear();
-    coordinates.insert( std::make_pair(a, TypeParam(4)) );
-    coordinates.insert( std::make_pair(b, TypeParam(3)) );
+    coordinates.insert( std::make_pair(this->x, TypeParam(4)) );
+    coordinates.insert( std::make_pair(this->y, TypeParam(3)) );
     Point<TypeParam> p7 = Point<TypeParam>(coordinates);
     ps2.push_back(p5);
     ps2.push_back(p6);
