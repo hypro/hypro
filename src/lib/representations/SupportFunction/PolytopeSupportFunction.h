@@ -1,17 +1,23 @@
 /*
- *  This file contains everything related directly to support functions of polyhedra and their evaluation
- *  Author: Norman Hansen
+ * This file contains the basic implementation of support functions of polyhedra (template polyhedra) and their evaluation.
+ * @file PolytopeSupportFunction.h
+ * 
+ * @author Norman Hansen
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * 
+ * @version	2015-02-24
  */
  
 #pragma once 
- 
-//#define SUPPORTFUNCTION_VERBOSE 
-//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 #include "../../config.h"
-#include "SupportFunction.h"
+#include "util.h"
 #include <glpk.h>
-    
+
+#ifdef SUPPORTFUNCTION_VERBOSE
+	//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+#endif
+
 namespace hypro
 {
 	
@@ -29,37 +35,35 @@ namespace hypro
             int* ja;
     		double* ar;
     		
-    		void createArrays(unsigned int size);
+    		void createArrays(unsigned size);
     		void deleteArrays();
 			
-			unsigned int mDimension;
+			unsigned mDimension;
     		
     		/**
-            * Implements the functionality of the constructor. Used by both "real" constructors of this class
-            */
-            void initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality);
+			 * Initializes the class by setting up the glpk problem with the given parameters.
+             * @param constraints
+             * @param constraintConstants
+             */
+            void initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants);
             
        public:
-		/*
-		* This method computes the evaluation result for a specified direction l
-		*/
-		evaluationResult<Number> evaluate(const vector_t<Number>& l) const;
-            
-    	/*
-    	* Creates a new supportFunction for the closed convex set described by constraints * x operation(>= or <=) constraintConstants
-    	*/
-    	PolytopeSupportFunction(matrix_t<Number> constraints, matrix_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD);
-    	PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD);
-   
-        // destructor
+		
+    	PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants);
     	~PolytopeSupportFunction();
 		
 		/**
-		* Returns the dimension of this object.
-		* 
-		* @return  the dimension
-		*/
-        unsigned int dimension();
+		 * Returns the dimension of the object.
+         * @return 
+         */
+        unsigned dimension() const;
+		
+		/**
+		 * Evaluates the support function in the given direction.
+		 * @param l
+		 * @return
+		 */
+		evaluationResult<Number> evaluate(const vector_t<Number>& l) const;
     };
 } // namespace
 #include "PolytopeSupportFunction.tpp"

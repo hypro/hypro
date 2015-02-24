@@ -15,6 +15,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
         PolytopeTest.cpp
 		PolytopeSupportFunctionTest.cpp        
 		PolytopeUtilTest.cpp
+		SupportFunctionTest.cpp
 		VPolytopeTest.cpp
         ZonotopeTest.cpp
         

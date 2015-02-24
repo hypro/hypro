@@ -1,16 +1,21 @@
 /*
- *  This file contains the abstract super class for support function representations
- *  Author: Norman Hansen
+ * This file containts the implementation of support functions. It requires the concrete
+ * implementation of set representations as support functions for a successful evaluation
+ * as it implements the chain of operations created during reachability analysis.
+ * @file SupportFunction.h
+ * 
+ * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * 
+ * @version	2015-02-24
  */
 
 #pragma once 
 
-//#include "hyreach_utils.h" 
 #include "../../config.h"
+#include "util.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
-#include "vectorgenerator.h"
-#include "helperMethods.h"
+#include "PolytopeSupportFunction.h"
 #include <glpk.h>
 #include <vector>
 
@@ -20,64 +25,45 @@
 namespace hypro
 {
     // This enum represents the support function type and is used to identify support function without instanceof operations
-    enum SF_TYPE{SUM, LINTRAFO, SCALE, UNION, POLY};
-	
-	template<typename Number>
-	class PolytopeSupportFunction;
-	
-    /*
-    * This structure describes the result of a support function evaluation
-    */
-	template<typename Number>
-    struct evaluationResult {
-    	Number supportValue;	// the value returned by the support function evaluation
-    	vector_t<Number> optimumValue;	// the point leading to the support function value (extremum in direction)
-    	int errorCode; 	// potential error code indicating success or failure of the evaluation
-    
-        /*  Potential error codes are:
-            
-         *  General:
-         *  -1000  in case the support function object does not implement a proper evaluate function   
-            
-         *  For polytopes:
-                
-         *  GLP_OPT
-         *  GLP_FEAS
-         *  GLP_INFEAS
-         *  GLP_NOFEAS
-         *  GLP_UNBND
-         *  GLP_UNDEF
-         
-         * For NonLinear:  // TODO: add error status
-         */
-    };
+    enum SF_TYPE{SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY};
 	
 	template<typename Number>
 	class SupportFunction;
 	
 	template<typename Number>
 	struct sumContent{
-		SupportFunction<Number>* lhs;
-		SupportFunction<Number>* rhs;
+		const SupportFunction<Number>& lhs;
+		const SupportFunction<Number>& rhs;
+		sumContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
 	};
 	
 	template<typename Number>
 	struct trafoContent{
-		SupportFunction<Number>* origin;
+		const SupportFunction<Number>& origin;
 		matrix_t<Number> a;
 		vector_t<Number> b;
+		trafoContent(const SupportFunction<Number>& _origin, matrix_t<Number> _a, vector_t<Number> _b) : origin(_origin), a(_a), b(_b) {}
 	};
 	
 	template<typename Number>
 	struct scaleContent{
-		SupportFunction<Number>* origin;
+		const SupportFunction<Number>& origin;
 		Number factor;
+		scaleContent(const SupportFunction<Number>& _origin, Number _factor) : origin(_origin), factor(_factor) {}
 	};
 	
 	template<typename Number>
 	struct unionContent{
-		SupportFunction<Number>* lhs;
-		SupportFunction<Number>* rhs;
+		const SupportFunction<Number>& lhs;
+		const SupportFunction<Number>& rhs;
+		unionContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
+	};
+	
+	template<typename Number>
+	struct intersectionContent{
+		const SupportFunction<Number>& lhs;
+		const SupportFunction<Number>& rhs;
+		intersectionContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
 	};
     
     /*
@@ -94,28 +80,42 @@ namespace hypro
 				trafoContent<Number>* mLinearTrafoParameters;
 				scaleContent<Number>* mScaleParameters;
 				unionContent<Number>* mUnionParameters;
+				intersectionContent<Number>* mIntersectionParameters;
 				PolytopeSupportFunction<Number>* mPolytope;
 			};
 
 		public:
            
+			SupportFunction(const SupportFunction<Number>& _orig);
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
-			SupportFunction(SF_TYPE _type, SupportFunction<Number>* _lhs, SupportFunction<Number>* _rhs);
-			SupportFunction(SF_TYPE _type, SupportFunction<Number>* _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
-			SupportFunction(SF_TYPE _type, SupportFunction<Number>* _origin, const Number& _factor);
+			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
+			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
+			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const Number& _factor);
 			
 			virtual ~SupportFunction();
+			
+			void operator=(const SupportFunction& _orig);
 			
 			evaluationResult<Number> evaluate(const vector_t<Number>& _direction) const;
 			vector_t<Number> multiEvaluate(const std::vector<vector_t<Number>>& _directions) const;
 			
 			unsigned dimension() const;
 			SF_TYPE type() const;
+			
+			// getter for the union types
+			sumContent<Number>* summands() const;
+			trafoContent<Number>* linearTrafoParameters() const;
+			scaleContent<Number>* scaleParameters() const;
+			unionContent<Number>* unionParameters() const;
+			intersectionContent<Number>* intersectionParameters() const;
+			PolytopeSupportFunction<Number>* polytope() const;
 		
-			SupportFunction<Number>* linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
-			SupportFunction<Number>* minkowskiSum(SupportFunction<Number>* rhs) const;
-			SupportFunction<Number>* intersect(SupportFunction<Number>* rhs) const;
-			bool contains(const Point<Number>& point) const;
-			SupportFunction<Number>* unite(SupportFunction<Number>* rhs) const;
+			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
+			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;
+			SupportFunction<Number> intersect(const SupportFunction<Number>& _rhs) const;
+			bool contains(const Point<Number>& _point) const;
+			SupportFunction<Number> unite(const SupportFunction<Number>& _rhs) const;
     };
 } // namespace
+
+#include "SupportFunction.tpp"

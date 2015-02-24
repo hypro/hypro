@@ -1,9 +1,19 @@
+/*
+ * This file contains the basic implementation of support functions of polyhedra (template polyhedra) and their evaluation.
+ * @file PolytopeSupportFunction.tpp
+ * 
+ * @author Norman Hansen
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * 
+ * @version	2015-02-24
+ */
+
 #include "PolytopeSupportFunction.h"
 
 namespace hypro {
 	
 	template<typename Number>
-	void PolytopeSupportFunction<Number>::createArrays(unsigned int size) {
+	void PolytopeSupportFunction<Number>::createArrays(unsigned size) {
 		ia = new int[size+1];
 		ja = new int[size+1];
 		ar = new double[size+1];
@@ -17,20 +27,12 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	void PolytopeSupportFunction<Number>::initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality) {
-		mDimension = dimensionality;
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-			  std::string method = "PolytopeSupportFunction:";
-			#endif
-		#endif
+	void PolytopeSupportFunction<Number>::initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants) {
+		assert(constraints.rows() == constraintConstants.rows());
+		mDimension = constraints.cols();
 
-		// TODO: depending on the operator, invert constraints
-
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << method << " copied constraint pointers" << '\n';
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << " copied constraint pointers" << std::endl;
 		#endif
 
 		/* create glpk problem */
@@ -43,29 +45,20 @@ namespace hypro {
 		#endif
 
 		int numberOfConstraints = constraints.rows();
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				// check dimensionalities
-				int numberOfConstraintConstant = constraintConstants.size();
-				if (numberOfConstraints != numberOfConstraintConstant)
-				{
-					std::cout << method << " incompatible number of constraints and correspondent values";
-				}
-
-				if (constraints.cols() != dimensionality)
-				{
-					std::cout << method << " constraints are of invalid dimensionality";
-				}
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			// check dimensionalities
+			int numberOfConstraintConstant = constraintConstants.size();
+			if (numberOfConstraints != numberOfConstraintConstant)
+			{
+				std::cout << __func__ << " incompatible number of constraints and correspondent values";
+			}
 		#endif
 
 		// convert constraint constants
 		glp_add_rows(lp, numberOfConstraints);
 
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << method << " Constructed GLPK problem" << '\n' << "dimensionality: " << dimensionality << '\n';
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << " Constructed GLPK problem" << std::endl << "mDimension: " << mDimension << std::endl;
 		#endif
 
 		for (int i = 0; i < numberOfConstraints; i++)
@@ -74,12 +67,10 @@ namespace hypro {
 		}
 
 		// add cols here
-		glp_add_cols(lp, dimensionality);
+		glp_add_cols(lp, mDimension);
 
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << method << " added constraints (values)" << '\n';
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << " added constraints (values)" << std::endl;
 		#endif
 
 		createArrays(constraints.size());
@@ -87,55 +78,62 @@ namespace hypro {
 		// convert constraint matrix
 		for (int i = 0; i < constraints.size(); i++)
 		{
-			ia[i+1] = ((int)(i / dimensionality))+1;
+			ia[i+1] = ((int)(i / mDimension))+1;
+			ja[i+1] = ((int)(i%mDimension))+1;
+			ar[i+1] = double(constraints((int)(i / mDimension), (int)(i%mDimension)));
 
-			#ifdef SUPPORTFUNCTION_VERBOSE
-				#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-					std::cout << method << " index i: " << ia[i+1]  << '\n';
-				#endif
-			#endif
-			ja[i+1] = ((int)(i%dimensionality))+1;
-
-			#ifdef SUPPORTFUNCTION_VERBOSE
-				#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-					std::cout << method << " index j: " << ja[i+1] << '\n';
-				#endif
-			#endif
-			ar[i+1] = double(constraints((int)(i / dimensionality), (int)(i%dimensionality)));
-
-			#ifdef SUPPORTFUNCTION_VERBOSE
-				#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-					std::cout << method << " value: " << ar[i+1] << '\n';
-				#endif
+			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+				std::cout << __func__ << " set: ar[" << i+1 << "]=" << ar[i+1] << ", ja[" << i+1 << "]=" << ja[i+1] << ", ia[" << i+1 << "]=" << ia[i+1] << std::endl;
 			#endif
 		}
 
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << method << " terminated matrix construction" << '\n';
-				std::cout << method << " number of matrix elements: " << constraints.size() << '\n';
-				std::cout << "ia: " << ia << '\n';
-				std::cout << "ja: " << ja << '\n';
-				std::cout << "ar: " << ar << '\n';
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << " terminated matrix construction" << std::endl;
+			std::cout << __func__ << " number of matrix elements: " << constraints.size() << std::endl;
+			std::cout << "ia: " << ia << std::endl;
+			std::cout << "ja: " << ja << std::endl;
+			std::cout << "ar: " << ar << std::endl;
 		#endif
 
 		glp_load_matrix(lp, constraints.size(), ia, ja, ar);
 
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << method << " added constraints (matrix)" << '\n';
-			#endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << " added constraints (matrix)" << std::endl;
 		#endif
 	}
 	
 	template<typename Number>
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants){
+		initialize(constraints, constraintConstants);
+	}	
+	
+	template<typename Number>
+	PolytopeSupportFunction<Number>::~PolytopeSupportFunction()
+	{
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << "PolytopeSupportFunction: destructor" << std::endl;
+		#endif
+
+		deleteArrays();
+
+		// free glpk resources
+		glp_delete_prob(lp);
+
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << "PolytopeSupportFunction: destructor - complete" << std::endl;
+		#endif
+	}
+	
+	template<typename Number>
+	unsigned PolytopeSupportFunction<Number>::dimension() const {
+		return mDimension;
+	}
+	
+	template<typename Number>
 	evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate(const vector_t<Number>& l) const {
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << "PolytopeSupportFunction: evaluate" << '\n';
-			#endif
-		#endif             
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
+		#endif   
 		int dimensions = l.size();
 
 		for (int i = 0; i < dimensions; i++)
@@ -143,8 +141,6 @@ namespace hypro {
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(l(i,0)));
 		}
-		
-		//std::cout << " Direction: " << l << std::endl; 
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -174,56 +170,15 @@ namespace hypro {
 				 result.supportValue = INFINITY;
 				 break;
 			default: 
-				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << result.errorCode << '\n';             
+				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << result.errorCode << std::endl;             
 		}
 
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			   #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				   printf("fx = %g; x = ", double(result.supportValue));
-				   std::cout << x;
-				   std::cout << '\n' << "size x: " << x.size() << '\n';
-			   #endif
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			printf("fx = %g; x = ", double(result.supportValue));
+			std::cout << x;
+			std::cout << std::endl << "size x: " << x.size() << std::endl;
 		#endif
 
 		return result;
-	}
-	
-	template<typename Number>
-	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, matrix_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD){                        
-		vector_t<Number> constants = vector_t<Number>(dimensionality, 1);
-		constants.block(0,0,dimensionality, 1) = constraintConstants.block(0,0,dimensionality, 1);
-		
-		initialize(constraints, constraintConstants, operation, dimensionality);
-	}
-	
-	template<typename Number>
-	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants, operator_e operation, unsigned int dimensionality, artificialDirections<Number>* aD){
-		initialize(constraints, constraintConstants, operation, dimensionality);
-	}	
-	
-	template<typename Number>
-	PolytopeSupportFunction<Number>::~PolytopeSupportFunction()
-	{
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << "PolytopeSupportFunction: destructor" << '\n';
-			#endif
-		#endif
-
-		deleteArrays();
-
-		// free glpk resources
-		glp_delete_prob(lp);
-
-		#ifdef SUPPORTFUNCTION_VERBOSE
-			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << "PolytopeSupportFunction: destructor - complete" << '\n';
-			#endif
-		#endif 
-	}
-	
-	template<typename Number>
-	unsigned int PolytopeSupportFunction<Number>::dimension() {
-		return mDimension;
 	}
 } // namespace
