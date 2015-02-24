@@ -146,11 +146,9 @@ namespace hypro {
 		switch (mType) {
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-				std::cout << __func__ << ": direction= " << _direction << std::endl << " a: " << mLinearTrafoParameters->a << std::endl;
 				return mLinearTrafoParameters->origin.evaluate(tmp*_direction);
 				}
 			case SF_TYPE::POLY: {
-				std::cout << __func__ << " PolyEval" << std::endl;
 				return mPolytope->evaluate(_direction);
 				}
 			case SF_TYPE::SCALE: {
@@ -286,6 +284,7 @@ namespace hypro {
 	
 	template<typename Number>
 	bool SupportFunction<Number>::contains(const Point<Number>& _point) const {
+		assert(false); // Todo: Not implemented yet.
 		return true;
 	}
 	
