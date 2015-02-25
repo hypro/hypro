@@ -4,7 +4,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since	2015-02-20
- * @version	2015-02-24
+ * @version	2015-02-25
  */
 
 #include "SupportFunction.h"
@@ -164,6 +164,15 @@ namespace hypro {
 				resA.supportValue += resB.supportValue;
 				return resA;
 				}
+			case SF_TYPE::UNION: {
+				evaluationResult<Number> resA = mSummands->lhs.evaluate(_direction);
+				evaluationResult<Number> resB = mSummands->rhs.evaluate(_direction);
+				return (resA.supportValue >= resB.supportValue ? resA : resB);
+				}
+			case SF_TYPE::INTERSECT: {
+				// Todo: Not implemented yet.
+				assert(false);
+				}
 			default:
 				assert(false);
 		}
@@ -291,6 +300,11 @@ namespace hypro {
 	template<typename Number>
 	SupportFunction<Number> SupportFunction<Number>::unite(const SupportFunction<Number>& _rhs) const {
 		return SupportFunction<Number>(SF_TYPE::UNION, *this, _rhs);
+	}
+	
+	template<typename Number>
+	SupportFunction<Number> SupportFunction<Number>::scale(const Number& _factor) const {
+		return SupportFunction<Number>(SF_TYPE::SCALE, *this, _factor);
 	}
 
 } // namespace

@@ -7,7 +7,7 @@
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
- * @version	2015-02-24
+ * @version	2015-02-25
  */
 
 #pragma once 
@@ -115,6 +115,8 @@ namespace hypro
 			SupportFunction<Number> intersect(const SupportFunction<Number>& _rhs) const;
 			bool contains(const Point<Number>& _point) const;
 			SupportFunction<Number> unite(const SupportFunction<Number>& _rhs) const;
+			
+			SupportFunction<Number> scale(const Number& _factor = 1) const;
     };
 } // namespace
 
