@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since   2014-01-16
- * @version 2014-05-27
+ * @version 2015-02-27
  */
 
 #pragma once
@@ -24,12 +24,11 @@ private:
     
 public:
 	typedef std::map<const carl::Variable, carl::Interval<Number> > intervalMap;
-    typedef carl::Interval<Number> floatInterval;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 protected:
-	intervalMap mBoundaries;
+	std::vector<carl::Interval<Number>> mBoundaries;
 	
 public:
 	/***************************************************************************
@@ -53,9 +52,13 @@ public:
          * @param var
          * @param val
          */
-        Box(const carl::Variable& var, const floatInterval& val)
+        Box(const carl::Variable& var, const carl::Interval<Number>& val)
         {
-            mBoundaries.insert(std::make_pair(var, val));
+			unsigned pos = hypro::VariablePool::getInstance().dimension(var);
+			while(mBoundaries.size() <= pos) {
+				mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
+			}
+            mBoundaries[pos] = val;
         }
         
         /*
@@ -64,11 +67,25 @@ public:
          */
         Box(const intervalMap& intervals)
         {
-            mBoundaries.insert(intervals.begin(), intervals.end());
+			for(auto& pair : intervals) {
+				unsigned pos = hypro::VariablePool::getInstance().dimension(pair.first);
+				while(mBoundaries.size() <= pos) {
+					mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
+				}
+				mBoundaries[pos] = pair.second;
+			}
         }
+		
+		Box(const std::vector<carl::Interval<Number>>& _intervals) {
+			mBoundaries = _intervals;
+		}
+		
+		Box(const std::set<Point<Number>>& _points);
         
         ~Box()
-        {}
+        {
+			mBoundaries.clear();
+		}
 	
 	/***************************************************************************
 	 * Getters & setters
@@ -77,7 +94,7 @@ public:
     /*
      * @return
      */
-	intervalMap& rBoundaries()
+	std::vector<carl::Interval<Number>>& rBoundaries()
 	{
         return mBoundaries;
 	}
@@ -85,7 +102,7 @@ public:
 	/*
 	 * @return
 	 */
-	intervalMap boundaries() const
+	std::vector<carl::Interval<Number>> boundaries() const
 	{
         return mBoundaries;
 	}
@@ -95,15 +112,15 @@ public:
 	 * @param val Pair of Variable and Interval.
 	 * @return True, if a new insertion has happened, else only update of an existing interval.
 	 */
-	bool insert(const std::pair<const carl::Variable, floatInterval >& val)
+	bool insert(const std::pair<const carl::Variable, carl::Interval<Number> >& val)
 	{
-		if(mBoundaries.find(val.first) == mBoundaries.end())
-		{
-			mBoundaries[val.first] = val.second;
-			return true;
+		unsigned pos = hypro::VariablePool::getInstance().dimension(val.first);
+		bool newElement = (mBoundaries.size() <= pos);
+		while(mBoundaries.size() <= pos) {
+			mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
 		}
-		mBoundaries.at(val.first) = val.second;
-		return false;
+		mBoundaries[pos] = val.second;
+		return newElement;
 	}
 	
 	
@@ -112,15 +129,25 @@ public:
      *@param val
      *@return
      */
-	bool insert(const carl::Variable& var, const floatInterval& val)
+	bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
 	{
-		if(mBoundaries.find(var) == mBoundaries.end())
-		{
-			mBoundaries[var] = val;
-			return true;
+		unsigned pos = hypro::VariablePool::getInstance().dimension(var);
+		bool newElement = (mBoundaries.size() <= pos);
+		while(mBoundaries.size() <= pos) {
+			mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
 		}
-		mBoundaries.at(var) = val;
-		return false;
+		mBoundaries[pos] = val;
+		return newElement;
+	}
+	
+	bool insert(unsigned pos, const carl::Interval<Number>& val)
+	{
+		bool newElement = (mBoundaries.size() <= pos);
+		while(mBoundaries.size() <= pos) {
+			mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
+		}
+		mBoundaries[pos] = val;
+		return newElement;
 	}
         
 
@@ -128,9 +155,9 @@ public:
 	 * Setter method for box boundaries
 	 * @param boundaries Defines the new boundaries for the box
 	 */
-	void insert(const intervalMap& boundaries)
+	void insert(const std::vector<carl::Interval<Number>>& boundaries)
 	{
-            mBoundaries.insert(boundaries.begin(), boundaries.end());
+		mBoundaries = boundaries;
 	}
 	
     /*
@@ -140,7 +167,7 @@ public:
      */
 	bool hasDimension(const carl::Variable& var) const
 	{
-		return mBoundaries.find(var) != mBoundaries.end();
+		return hypro::VariablePool::getInstance().hasDimension(var) && hypro::VariablePool::getInstance().dimension(var) < mBoundaries.size();
 	}
             
 	/**
@@ -157,18 +184,18 @@ public:
 		{
 			return false;
 		}
-		for (auto pointIt : mBoundaries)
-		{
-			if ( !b.hasDimension(pointIt.first))
-			{
-				return false;
-			}
-		}
 		return true;
 	}
 	
-	floatInterval* pInterval(const carl::Variable& var);
-	floatInterval interval(const carl::Variable& var) const;
+	carl::Interval<Number> interval(const carl::Variable& var) const;
+	carl::Interval<Number>& rInterval(const carl::Variable& var);
+	
+	carl::Interval<Number> at (unsigned _index) const {
+		if(_index > mBoundaries.size())
+			return carl::Interval<Number>::emptyInterval();
+		
+		return mBoundaries[_index];
+	}
 	
 	/*
 	 * @return
@@ -179,7 +206,7 @@ public:
 			return true;
 		for(auto interval : mBoundaries)
 		{
-			if(interval.second.isEmpty())
+			if(interval.isEmpty())
 			{
 				return true;
 			}
@@ -192,10 +219,10 @@ public:
 	 */
 	Point<Number> max() const
 	{
-		typename Point<Number>::coordinateMap coordinates;
-		for(auto interval : mBoundaries)
+		vector_t<Number> coordinates = vector_t<Number>(mBoundaries.size());
+		for(unsigned i = 0; i < mBoundaries.size(); ++i)
 		{
-			coordinates.insert(std::make_pair(interval.first, interval.second.upper()));
+			coordinates(i) = mBoundaries[i].upper();
 		}
 		return Point<Number>(coordinates);
 	}
@@ -205,13 +232,15 @@ public:
 	 */
 	Point<Number> min() const
 	{
-		typename Point<Number>::coordinateMap coordinates;
-		for(auto interval : mBoundaries)
+		vector_t<Number> coordinates = vector_t<Number>(mBoundaries.size());
+		for(unsigned i = 0; i < mBoundaries.size(); ++i)
 		{
-			coordinates.insert(std::make_pair(interval.first, interval.second.lower()));
+			coordinates(i) = mBoundaries[i].lower();
 		}
 		return Point<Number>(coordinates);
 	}
+	
+	std::set<Point<Number>> corners() const;
 
 	/**
 	 * Checks if two boxes are equal
@@ -222,9 +251,9 @@ public:
 	friend bool operator==(const Box<Number> & b1, const Box<Number> & b2)
 	{
 		if(b1.dimension() != b2.dimension()) return false;
-		for (auto intervalIt : b1.mBoundaries)
+		for (unsigned i = 0; i < b1.boundaries().size(); ++i)
 		{
-			if (!b2.hasDimension(intervalIt.first) || intervalIt.second != b2.mBoundaries.at(intervalIt.first)) return false;
+			if (b1.at(i) != b2.at(i)) return false;
 		}
 		return true;
 	}
@@ -248,8 +277,7 @@ public:
 		if (*this != rhs)
 		{
 			this->mBoundaries.clear();
-			intervalMap tmp = rhs.boundaries();
-			this->mBoundaries.insert(tmp.begin(), tmp.end());
+			mBoundaries = rhs.boundaries();
 		} 
 		return *this;
 	}
@@ -263,14 +291,22 @@ public:
 	friend std::ostream & operator<< (std::ostream& ostr, const Box<Number>& b)
 	{
 		ostr << "{";		
-		for (auto intervalIt : b.mBoundaries) {
-			if (intervalIt != *(b.mBoundaries.begin())) {
+		for (unsigned i = 0; i < b.dimension(); ++i) {
+			if (i != 0) {
 				ostr << ";";
 			}
-			ostr << " " << intervalIt.first << " " << intervalIt.second;
+			ostr << " " << b.at(i);
 		}		
 		ostr << " }";
 		return ostr;
+	}
+	
+	const carl::Interval<Number>& operator[](unsigned i) const{
+		return mBoundaries[i];
+	}
+	
+	carl::Interval<Number>& operator[](unsigned i) {
+		return mBoundaries[i];
 	}
         
         
@@ -280,15 +316,14 @@ public:
 	
 	unsigned int dimension() const
 	{
-            return mBoundaries.size();
+		return mBoundaries.size();
 	}
 	
-	bool linearTransformation(Box& result /*, ... */) const;
-	bool minkowskiSum(Box& result, const Box& rhs) const;
-	bool intersect(Box& result, const Box& rhs) const;
-	bool hull(Box& result) const;
+	Box<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+	Box<Number> minkowskiSum(const Box<Number>& rhs) const;
+	Box<Number> intersect(const Box<Number>& rhs) const;
 	bool contains(const Point<Number>& point) const;
-	bool unite(Box& result, const Box& rhs) const;
+	Box<Number> unite(const Box<Number>& rhs) const;
 	
 	void clear();
 };

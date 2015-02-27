@@ -5,91 +5,99 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since   2014-01-16
- * @version 2014-02-11
+ * @version 2015-02-27
  */
 
-namespace hypro {
-	
-template<typename Number>
-carl::Interval<Number>* Box<Number>::pInterval(const carl::Variable& var)
-{
-    auto intervalIt = mBoundaries.find(var);
-    if( intervalIt == mBoundaries.end() )
-    {
-        assert(false);
-        return NULL;
-    }
-    else
-    {
-        return &(*intervalIt).second;
-    }
-}
+#include "Box.h"
 
+
+namespace hypro {
+
+template<typename Number>
+Box<Number>::Box(const std::set<Point<Number>>& _points) {
+	unsigned cnt = 0;
+	while (cnt < _points.begin()->dimension()) {
+		mBoundaries.push_back(carl::Interval<Number>::zeroInterval());
+	}
+	for(auto& point : _points) {
+		for(unsigned d = 0; d < point.dimension(); ++d) {
+			if(mBoundaries[d].lower() > point.at(d)) 
+				mBoundaries[d].setLower(point.at(d));
+			
+			if(mBoundaries[d].upper() < point.at(d)) 
+				mBoundaries[d].setUpper(point.at(d));
+		}
+	}
+}
+	
+	
 template<typename Number>
 carl::Interval<Number> Box<Number>::interval(const carl::Variable& var) const
 {
-    auto intervalIt = mBoundaries.find(var);
-    if( intervalIt == mBoundaries.end() )
-    {
-        assert(false);
-        return carl::Interval<Number >();
-    }
-    else
-    {
-        return (*intervalIt).second;
-    }
+    int pos = hypro::VariablePool::getInstance().dimension(var);
+	if( pos < 0)
+		return carl::Interval<Number>::emptyInterval();
+	
+    return mBoundaries.at(pos);
 }
 
 template<typename Number>
-bool Box<Number>::linearTransformation(Box<Number>& result /*, ... */) const
-{
-    return false; // @todo
+carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var) {
+	int pos = hypro::VariablePool::getInstance().dimension(var);
+	assert(pos >= 0);
+    return mBoundaries.at(pos);
 }
 
 template<typename Number>
-bool Box<Number>::minkowskiSum(Box<Number>& result, const Box<Number>& rhs) const
+std::set<Point<Number>> Box<Number>::corners() const {
+	std::set<Point<Number>> result;
+	Number limit = pow(2,dimension());
+	
+	for(unsigned bitCount = 0; bitCount < limit ; ++bitCount) {
+		vector_t<Number> coord = vector_t<Number>(dimension());
+		for(unsigned dimension = 0; dimension < this->dimension(); ++dimension) {
+			unsigned pos = (1 << dimension);
+			if(bitCount & pos)
+				coord(dimension) = mBoundaries[dimension].upper();
+			else
+				coord(dimension) = mBoundaries[dimension].lower();
+		}
+		result.insert(Point<Number>(coord));
+	}
+	return result;
+}
+
+template<typename Number>
+Box<Number> Box<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
 {
-    result.clear();
-    for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
+    std::set<Point<Number>> corners = this->corners();
+	return Box<Number>(corners);
+}
+
+template<typename Number>
+Box<Number> Box<Number>::minkowskiSum(const Box<Number>& rhs) const
+{
+	assert(dimension() == rhs.dimension());
+	Box<Number> result;
+    for (unsigned i = 0; i < dimension(); ++i)
     {
-        if (!rhs.hasDimension((*intervalIt).first))
-        {
-            result.clear();
-            return false;
-        }
-        result.insert( std::make_pair((*intervalIt).first, (*intervalIt).second.add(rhs.interval((*intervalIt).first)) ));
+        result.insert(i, mBoundaries[i].add(rhs[i]));
     }
-    return true;
+    return result;
 }
 
 template<typename Number>
-bool Box<Number>::intersect(Box<Number>& result, const Box<Number>& rhs) const
+Box<Number> Box<Number>::intersect(const Box<Number>& rhs) const
 {
-    result.clear();
-    for (auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
+	assert(dimension() == rhs.dimension());
+    Box<Number> result;
+    for (unsigned i = 0; i < dimension(); ++i)
     {
-        if (!rhs.hasDimension((*intervalIt).first))
-        {
-            result.clear();
-            return false;
-        }
-        std::cout << rhs.interval((*intervalIt).first) << std::endl;
-        carl::Interval<Number > res = (*intervalIt).second.intersect(rhs.interval((*intervalIt).first));
-        if( res.isEmpty() )
-        {
-            result.clear();
-            return false;
-        }
-        result.insert( std::make_pair((*intervalIt).first, res ) );
+//        std::cout << rhs.at(i) << std::endl;
+        carl::Interval<Number > res = mBoundaries[i].intersect(rhs[i]);
+        result.insert(i, res );
     }
-    return true;
-}
-
-template<typename Number>
-bool Box<Number>::hull(Box<Number>& result) const
-{
-    result = *this;
-    return true;
+    return result;
 }
 
 template<typename Number>
@@ -98,31 +106,28 @@ bool Box<Number>::contains(const Point<Number>& point) const
     if( this->dimension() > point.dimension() )
         return false;
     
-    for(auto interval : mBoundaries)
+    for(unsigned i = 0; i < dimension(); ++i)
     {
-        if( !interval.second.contains(point.at(interval.first)))
+        if( !mBoundaries[i].contains(point.at(i)))
             return false;
     }
     return true;
 }
 
 template<typename Number>
-bool Box<Number>::unite(Box<Number>& result, const Box<Number>& rhs) const
+Box<Number> Box<Number>::unite(const Box<Number>& rhs) const
 {
-    for(auto intervalIt = mBoundaries.begin(); intervalIt != mBoundaries.end(); ++intervalIt)
+	assert(dimension() == rhs.dimension());
+	Box<Number> result;
+    for(unsigned i = 0; i < dimension(); ++i)
     {
-        if(!rhs.hasDimension((*intervalIt).first))
-        {
-            result.clear();
-            return false;
-        }
-        Number lowerMin = (*intervalIt).second.lower() < rhs.interval((*intervalIt).first).lower() ? (*intervalIt).second.lower() : rhs.interval((*intervalIt).first).lower();
-        Number upperMax = (*intervalIt).second.upper() > rhs.interval((*intervalIt).first).upper() ? (*intervalIt).second.upper() : rhs.interval((*intervalIt).first).upper();
-        carl::BoundType lowerType = carl::getWeakestBoundType((*intervalIt).second.lowerBoundType(), rhs.interval((*intervalIt).first).lowerBoundType());
-        carl::BoundType upperType = carl::getWeakestBoundType((*intervalIt).second.upperBoundType(), rhs.interval((*intervalIt).first).upperBoundType());
+        Number lowerMin = mBoundaries[i].lower() < rhs.at(i).lower() ? mBoundaries[i].lower() : rhs.at(i).lower();
+        Number upperMax = mBoundaries[i].upper() > rhs.at(i).upper() ? mBoundaries[i].upper() : rhs.at(i).upper();
+        carl::BoundType lowerType = carl::getWeakestBoundType(mBoundaries[i].lowerBoundType(), rhs.at(i).lowerBoundType());
+        carl::BoundType upperType = carl::getWeakestBoundType(mBoundaries[i].upperBoundType(), rhs.at(i).upperBoundType());
         result.insert( std::make_pair(lowerMin, carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
     }
-    return true;
+    return result;
 }
 
 template<typename Number>
@@ -131,4 +136,4 @@ void Box<Number>::clear()
     mBoundaries.erase(mBoundaries.begin(), mBoundaries.end());
 }
 	
-}
+} // namespace
