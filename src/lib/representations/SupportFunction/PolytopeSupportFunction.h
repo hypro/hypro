@@ -5,7 +5,7 @@
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
- * @version	2015-02-24
+ * @version	2015-02-27
  */
  
 #pragma once 
@@ -64,6 +64,8 @@ namespace hypro
 		 * @return
 		 */
 		evaluationResult<Number> evaluate(const vector_t<Number>& l) const;
+		
+		bool empty() const;
     };
 } // namespace
 #include "PolytopeSupportFunction.tpp"

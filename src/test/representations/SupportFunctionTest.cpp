@@ -204,7 +204,68 @@ TYPED_TEST(SupportFunctionTest, intersect) {
 }
 
 TYPED_TEST(SupportFunctionTest, unite) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>(3,2);
+	matrix_t<TypeParam> constraints2 = matrix_t<TypeParam>(3,2);
+	vector_t<TypeParam> constants1 = vector_t<TypeParam>(3);
+	vector_t<TypeParam> constants2 = vector_t<TypeParam>(3);
+	
+	// Triangle (-1,0) - (1,0) - (0,2)
+	constraints1(0,0) = TypeParam(2);
+	constraints1(0,1) = TypeParam(1);
+	constraints1(1,0) = TypeParam(-2);
+	constraints1(1,1) = TypeParam(1);
+	constraints1(2,0) = TypeParam(0);
+	constraints1(2,1) = TypeParam(-1);
+
+	constants1(0) = TypeParam(2);
+	constants1(1) = TypeParam(2);
+	constants1(2) = TypeParam(0);
+	
+	// Triangle (0,2) - (-1,4) - (1,4)
+	constraints2(0,0) = TypeParam(-2);
+	constraints2(0,1) = TypeParam(-1);
+	constraints2(1,0) = TypeParam(2);
+	constraints2(1,1) = TypeParam(-1);
+	constraints2(2,0) = TypeParam(0);
+	constraints2(2,1) = TypeParam(1);
+	
+	constants2(0) = TypeParam(-2);
+	constants2(1) = TypeParam(-2);
+	constants2(2) = TypeParam(4);
+	
+	SupportFunction<TypeParam> tri1 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints1, constants1);
+	SupportFunction<TypeParam> tri2 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints2, constants2);
+	
+	SupportFunction<TypeParam> res = tri1.unite(tri2);
+	
+	// Result directions
+	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2);
+	vec1(0) = TypeParam(1);
+	vec1(1) = TypeParam(0);
+	
+	vector_t<TypeParam> vec2 = vector_t<TypeParam>(2);
+	vec2(0) = TypeParam(0);
+	vec2(1) = TypeParam(1);
+	
+	vector_t<TypeParam> vec3 = vector_t<TypeParam>(2);
+	vec3(0) = TypeParam(-1);
+	vec3(1) = TypeParam(0);
+	
+	vector_t<TypeParam> vec4 = vector_t<TypeParam>(2);
+	vec4(0) = TypeParam(0);
+	vec4(1) = TypeParam(-1);
+	
+	if(typeid(TypeParam) == typeid(double)) {
+		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(1), res.evaluate(vec1).supportValue,4));
+		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(4), res.evaluate(vec2).supportValue,4));
+		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(1), res.evaluate(vec3).supportValue,4));
+		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(0), res.evaluate(vec4).supportValue,4));
+	} else {
+		EXPECT_EQ(TypeParam(1), res.evaluate(vec1).supportValue);
+		EXPECT_EQ(TypeParam(4), res.evaluate(vec2).supportValue);
+		EXPECT_EQ(TypeParam(1), res.evaluate(vec3).supportValue);
+		EXPECT_EQ(TypeParam(0), res.evaluate(vec4).supportValue);
+	}
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {

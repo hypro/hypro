@@ -220,6 +220,16 @@ namespace hypro
 			return mPplVariables.back();
 		}
 		
+		bool hasDimension(const carl::Variable& _var) const {
+			assert(mCarlVariables.size() == mPplId);
+			assert(mPplVariables.size() == mPplId);
+            for(unsigned pos = 0; pos < mCarlVariables.size(); ++pos) {
+				if(_var == mCarlVariables[pos])
+					return true;
+			}
+			return false;
+		}
+		
         int inline dimension(const Parma_Polyhedra_Library::Variable& _var) const
         {
 			assert(mCarlVariables.size() == mPplId);
@@ -228,7 +238,6 @@ namespace hypro
 				if(_var.id() == mPplVariables[pos].id())
 					return pos;
 			}
-			assert(false);
 			return -1;
         }
 		
@@ -240,7 +249,6 @@ namespace hypro
 				if(_var == mCarlVariables[pos])
 					return pos;
 			}
-			assert(false);
 			return -1;
         }
         

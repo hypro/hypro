@@ -5,7 +5,7 @@
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
- * @version	2015-02-24
+ * @version	2015-02-27
  */
 
 #include "PolytopeSupportFunction.h"
@@ -134,9 +134,9 @@ namespace hypro {
 		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 			std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
 		#endif   
-		int dimensions = l.size();
+		assert(l.rows() == mDimension);
 
-		for (int i = 0; i < dimensions; i++)
+		for (int i = 0; i < mDimension; i++)
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(l(i,0)));
@@ -152,8 +152,8 @@ namespace hypro {
 		
 		//std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
 
-		matrix_t<Number> x(dimensions, 1);
-		for (int i = 0; i < dimensions; i++)
+		vector_t<Number> x = vector_t<Number>(mDimension);
+		for (int i = 0; i < mDimension; i++)
 		{
 			x(i) = Number(glp_get_col_prim(lp, i+1));
 		}
@@ -180,5 +180,23 @@ namespace hypro {
 		#endif
 
 		return result;
+	}
+	
+	template<typename Number>
+	bool PolytopeSupportFunction<Number>::empty() const {
+		for (int i = 0; i < mDimension; i++)
+		{
+			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0); // unbounded
+			glp_set_obj_coef(lp, i+1, 1.0); 
+		}
+		
+		glp_simplex(lp, NULL);
+		
+		int errorCode = glp_get_status(lp);
+		
+		if(errorCode == GLP_INFEAS || errorCode == GLP_NOFEAS)
+			return false;
+		
+		return true;
 	}
 } // namespace

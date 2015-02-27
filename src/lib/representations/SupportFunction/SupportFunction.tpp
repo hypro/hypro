@@ -4,7 +4,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since	2015-02-20
- * @version	2015-02-25
+ * @version	2015-02-27
  */
 
 #include "SupportFunction.h"
@@ -305,6 +305,38 @@ namespace hypro {
 	template<typename Number>
 	SupportFunction<Number> SupportFunction<Number>::scale(const Number& _factor) const {
 		return SupportFunction<Number>(SF_TYPE::SCALE, *this, _factor);
+	}
+	
+	template<typename Number>
+	bool SupportFunction<Number>::isEmpty() const {
+		switch (mType) {
+			case SF_TYPE::LINTRAFO: {
+				assert(false); // Todo: Not implemented yet.
+				return false;
+				}
+			case SF_TYPE::POLY: {
+				return mPolytope->empty();
+				}
+			case SF_TYPE::SCALE: {
+				if(mScaleParameters->factor == 0)
+					return true;
+				else 
+					return mScaleParameters->origin.empty(); // Todo: What if factor is negative?
+				}
+			case SF_TYPE::SUM: {
+				return (mSummands->lhs.empty() && mSummands->rhs.empty());
+				}
+			case SF_TYPE::UNION: {
+				return (mUnionParameters->lhs.empty() && mUnionParameters->rhs.empty());
+				}
+			case SF_TYPE::INTERSECT: {
+				assert(false); // Todo: Not implemented yet.
+				return false;
+				}
+			default:
+				assert(false);
+				return false;
+		}
 	}
 
 } // namespace
