@@ -224,18 +224,18 @@ namespace hypro
         // Set the box to include the first vertex, so nothing goes wrong.
         // (Before, we should make sure there is a first one)
         for (auto dimensionIt : mVariables) {
-            mBoundaryBox.insert(dimensionIt, typename Box<Number>::floatInterval(it->at(dimensionIt), it->at(dimensionIt)));
+            mBoundaryBox.insert(dimensionIt, carl::Interval<Number>(it->at(dimensionIt), it->at(dimensionIt)));
         }
         
         // Extend the box
         for (auto dimensionIt : mVariables) {
             for (it = mVertices.begin()++; it != mVertices.end(); ++it) {
-                auto interval = mBoundaryBox.pInterval(dimensionIt);
+                carl::Interval<Number> interval = mBoundaryBox.rInterval(dimensionIt);
                 auto val = it->at(dimensionIt);
-                if (val > interval->upper()) {
-                    interval->setUpper(val);
-                } else if (val < interval->lower()) {
-                    interval->setLower(val);
+                if (interval.isEmpty() || val > interval.upper()) {
+                    interval.setUpper(val);
+                } else if (interval.isEmpty() || val < interval.lower()) {
+                    interval.setLower(val);
                 }
             }
         }
