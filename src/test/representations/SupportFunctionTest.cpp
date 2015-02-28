@@ -63,7 +63,7 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 //	std::cout << this->constraints << std::endl;
 //	std::cout << this->constants << std::endl;
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
-	EXPECT_DEATH(SupportFunction<TypeParam>(SF_TYPE::SUM, this->constraints, this->constants), "Assertion `false' failed.");
+	EXPECT_DEATH(SupportFunction<TypeParam>(SF_TYPE::SUM, this->constraints, this->constants), "c*");
 	
 	SUCCEED();
 }

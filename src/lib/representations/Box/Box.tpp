@@ -15,17 +15,23 @@ namespace hypro {
 
 template<typename Number>
 Box<Number>::Box(const std::set<Point<Number>>& _points) {
-	unsigned cnt = 0;
-	while (cnt < _points.begin()->dimension()) {
-		mBoundaries.push_back(carl::Interval<Number>::zeroInterval());
-	}
-	for(auto& point : _points) {
-		for(unsigned d = 0; d < point.dimension(); ++d) {
-			if(mBoundaries[d].lower() > point.at(d)) 
-				mBoundaries[d].setLower(point.at(d));
-			
-			if(mBoundaries[d].upper() < point.at(d)) 
-				mBoundaries[d].setUpper(point.at(d));
+	if(_points.size() > 0) {
+		unsigned dim = _points.begin()->dimension();
+		for(unsigned d = 0; d < dim; ++d) {
+			mBoundaries.push_back(carl::Interval<Number>(_points.begin()->at(d)));
+		}
+ 		if(_points.size() > 1) {
+			auto pointIt = _points.begin();
+			++pointIt;
+			for(; pointIt != _points.end(); ++pointIt ) {
+				for(unsigned d = 0; d < pointIt->dimension(); ++d) {
+					if(mBoundaries[d].lower() > pointIt->at(d)) 
+						mBoundaries[d].setLower(pointIt->at(d));
+
+					if(mBoundaries[d].upper() < pointIt->at(d)) 
+						mBoundaries[d].setUpper(pointIt->at(d));
+				}
+			}
 		}
 	}
 }
@@ -51,7 +57,7 @@ carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var) {
 template<typename Number>
 std::set<Point<Number>> Box<Number>::corners() const {
 	std::set<Point<Number>> result;
-	Number limit = pow(2,dimension());
+	int limit = int(pow(mBoundaries.size(),2));
 	
 	for(unsigned bitCount = 0; bitCount < limit ; ++bitCount) {
 		vector_t<Number> coord = vector_t<Number>(dimension());
@@ -125,7 +131,7 @@ Box<Number> Box<Number>::unite(const Box<Number>& rhs) const
         Number upperMax = mBoundaries[i].upper() > rhs.at(i).upper() ? mBoundaries[i].upper() : rhs.at(i).upper();
         carl::BoundType lowerType = carl::getWeakestBoundType(mBoundaries[i].lowerBoundType(), rhs.at(i).lowerBoundType());
         carl::BoundType upperType = carl::getWeakestBoundType(mBoundaries[i].upperBoundType(), rhs.at(i).upperBoundType());
-        result.insert( std::make_pair(lowerMin, carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType )) );
+        result.insert( i, carl::Interval<Number>(lowerMin, lowerType, upperMax, upperType) );
     }
     return result;
 }

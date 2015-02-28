@@ -75,8 +75,7 @@ TYPED_TEST(BoxTest, Constructor)
 	EXPECT_EQ(TypeParam(2), dBox.min().at(1));
 	EXPECT_EQ(TypeParam(1), dBox.max().at(0));
 	EXPECT_EQ(TypeParam(4), dBox.max().at(1));
-	EXPECT_EQ(true, dBox.contains(Point<TypeParam>({0,0})));
-	
+	EXPECT_EQ(true, dBox.contains(Point<TypeParam>({0,3})));
     SUCCEED();
 }
 
@@ -134,9 +133,60 @@ TYPED_TEST(BoxTest, Insertion)
     EXPECT_EQ(5, this->box1.interval(w).upper());
 }
 
+TYPED_TEST(BoxTest, Corners) {
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(3,5);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(1,3);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(2,5);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
+	
+	Box<TypeParam> b1(intervals1);
+	
+	std::set<Point<TypeParam>> corners = b1.corners();
+	EXPECT_EQ(8, corners.size());
+	
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,2})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,5})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,3,2})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,3,5})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,1,2})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,1,5})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,3,2})) != corners.end());
+	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,3,5})) != corners.end());
+}
+
 TYPED_TEST(BoxTest, Union)
 {
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(3,5);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(1,3);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(2,5);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
 	
+	Box<TypeParam> b1(intervals1);
+	
+	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(-1,3);
+	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-3,6);
+	std::vector<carl::Interval<TypeParam>> intervals2;
+	intervals2.push_back(a);
+	intervals2.push_back(b);
+	intervals2.push_back(c);
+	
+	Box<TypeParam> b2(intervals2);
+	
+	Box<TypeParam> result = b1.unite(b2);
+	
+	EXPECT_EQ(TypeParam(-1), result.min().at(0));
+	EXPECT_EQ(TypeParam(1), result.min().at(1));
+	EXPECT_EQ(TypeParam(-3), result.min().at(2));
+	EXPECT_EQ(TypeParam(5), result.max().at(0));
+	EXPECT_EQ(TypeParam(4), result.max().at(1));
+	EXPECT_EQ(TypeParam(6), result.max().at(2));
 }
 
 TYPED_TEST(BoxTest, LinearTransformation)
