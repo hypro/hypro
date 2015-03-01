@@ -77,7 +77,17 @@ template<typename Number>
 Box<Number> Box<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
 {
     std::set<Point<Number>> corners = this->corners();
-	return Box<Number>(corners);
+	std::set<Point<Number>> transformedCorners;
+	if(b != vector_t<Number>()) {
+		for(auto& point : corners) {
+			transformedCorners.insert(Point<Number>(A*point.rawCoordinates() + b));
+		}
+	} else {
+		for(auto& point : corners) {
+			transformedCorners.insert(Point<Number>(A*point.rawCoordinates()));
+		}
+	}
+	return Box<Number>(transformedCorners);
 }
 
 template<typename Number>

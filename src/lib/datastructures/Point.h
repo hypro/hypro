@@ -83,7 +83,18 @@ namespace hypro {
                     mCoordinates(count) = coordinate;
                     ++count;
                 }
-
+            }
+			
+			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
+			Point(std::initializer_list<F> _coordinates)
+            {
+                unsigned count = 0;
+				mCoordinates = vector_t<Number>(_coordinates.size());
+                for(auto& coordinate : _coordinates)
+                {
+                    mCoordinates(count) = Number(coordinate);
+                    ++count;
+                }
             }
 
             //@author Chris K. (for Minkowski Sum Test)

@@ -191,7 +191,67 @@ TYPED_TEST(BoxTest, Union)
 
 TYPED_TEST(BoxTest, LinearTransformation)
 {
-
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
+	
+	Box<TypeParam> b1(intervals1);
+	
+	// rotation
+	TypeParam angle = 90;
+	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
+	rotX(0,0) = 1;
+	rotX(1,1) = cos(angle);
+	rotX(1,2) = -sin(angle);
+	rotX(2,1) = sin(angle);
+	rotX(2,2) = cos(angle);
+	
+	matrix_t<TypeParam> rotY = matrix_t<TypeParam>::Zero(3,3);
+	rotY(0,0) = cos(angle);
+	rotY(0,2) = sin(angle);
+	rotY(1,1) = 1;
+	rotY(2,0) = -sin(angle);
+	rotY(2,2) = cos(angle);
+	
+	matrix_t<TypeParam> rotZ = matrix_t<TypeParam>::Zero(3,3);
+	rotZ(0,0) = cos(angle);
+	rotZ(0,1) = -sin(angle);
+	rotZ(1,0) = sin(angle);
+	rotZ(1,1) = cos(angle);
+	rotZ(2,2) = 1;
+	
+	// result
+	Box<TypeParam> resX = b1.linearTransformation(rotX);
+	Box<TypeParam> resY = b1.linearTransformation(rotY);
+	Box<TypeParam> resZ = b1.linearTransformation(rotZ);
+	
+	
+	std::set<Point<TypeParam>> cornersX = resX.corners();
+	std::set<Point<TypeParam>> originalCorners = b1.corners();
+	std::set<Point<TypeParam>> newCorners;
+	for(auto& point : originalCorners) {
+		newCorners.insert(Point<TypeParam>(rotX*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resX, Box<TypeParam>(newCorners));
+	
+	newCorners.clear();
+	std::set<Point<TypeParam>> cornersY = resY.corners();
+	for(auto& point : originalCorners) {
+		newCorners.insert(Point<TypeParam>(rotY*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resY, Box<TypeParam>(newCorners));
+	
+	newCorners.clear();
+	std::set<Point<TypeParam>> cornersZ = resZ.corners();
+	for(auto& point : originalCorners) {
+		newCorners.insert(Point<TypeParam>(rotZ*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resZ, Box<TypeParam>(newCorners));
+	
 }
 
 TYPED_TEST(BoxTest, MinkowskiSum)
