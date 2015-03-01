@@ -262,6 +262,39 @@ TYPED_TEST(BoxTest, MinkowskiSum)
     EXPECT_EQ(12 , result.interval(this->x).upper());
     EXPECT_EQ(5 , result.interval(this->y).lower());
     EXPECT_EQ(10 , result.interval(this->y).upper());
+	
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
+	
+	Box<TypeParam> b1(intervals1);
+	
+	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(1);
+	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
+	std::vector<carl::Interval<TypeParam>> intervals2;
+	intervals2.push_back(a);
+	intervals2.push_back(b);
+	intervals2.push_back(c);
+	
+	Box<TypeParam> b2(intervals2);
+	
+	Box<TypeParam> res = b1.minkowskiSum(b2);
+	std::set<Point<TypeParam>> corners = res.corners();
+	
+	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,4,-6}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,4,1}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,8,-6}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,8,1}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({3,4,-6}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({3,4,1}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({3,8,-6}) ) != corners.end());
+	EXPECT_TRUE(corners.find( Point<TypeParam>({3,8,1}) ) != corners.end());
+	
 }
 
 TYPED_TEST(BoxTest, Intersection)
@@ -269,6 +302,38 @@ TYPED_TEST(BoxTest, Intersection)
     Box<TypeParam> result;
     result = this->box1.intersect(this->box2);
     EXPECT_TRUE(result.isEmpty());
+	
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
+	
+	Box<TypeParam> b1(intervals1);
+	
+	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(1);
+	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
+	std::vector<carl::Interval<TypeParam>> intervals2;
+	intervals2.push_back(a);
+	intervals2.push_back(b);
+	intervals2.push_back(c);
+	
+	Box<TypeParam> b2(intervals2);
+	
+	Box<TypeParam> res = b1.intersect(b2);
+	carl::Interval<TypeParam> i = x.intersect(a);
+	carl::Interval<TypeParam> j = y.intersect(b);
+	carl::Interval<TypeParam> k = z.intersect(c);
+	std::vector<carl::Interval<TypeParam>> intervals;
+	intervals.push_back(i);
+	intervals.push_back(j);
+	intervals.push_back(k);
+	
+	EXPECT_EQ(Box<TypeParam>(intervals), res);
+	
 }
 
 TYPED_TEST(BoxTest, Membership)
