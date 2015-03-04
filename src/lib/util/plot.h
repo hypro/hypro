@@ -9,12 +9,13 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include "../lib/datastructures/Point.h"
 
 namespace hypro {
 	
 	struct gnuplotSettings {
-		
+		std::string color = "#18571C"; // default green
 	};
 	
 	/**
@@ -28,23 +29,44 @@ namespace hypro {
 		// open file
 		std::ofstream out;
 		out.open (_outfile);
-		out << "set object 1 polygon from \\ \n";
+		
+		// set object
+		vector_t<Number> min = _points[0].rawCoordinates();
+		vector_t<Number> max = _points[0].rawCoordinates();
+		
+		out << "set object 1 polygon from \\\n";
 		for(unsigned pointIndex = 0; pointIndex < _points.size()-1; ++pointIndex) {
 			assert(_points[pointIndex].dimension() <= 2); // TODO: Project to 2d
 			if(_points[pointIndex].dimension() == 0) {
 				continue;
 			}
-			out << "\t " << double(_points[pointIndex].at(0));
+			out << "  " << double(_points[pointIndex].at(0));
+			
+			// update min and max
+			min(0) = min(0) < _points[pointIndex].at(0) ? min(0) : _points[pointIndex].at(0);
+			max(0) = max(0) > _points[pointIndex].at(0) ? max(0) : _points[pointIndex].at(0);
+			
 			for(unsigned d = 1; d < _points[pointIndex].dimension(); ++d) {
 				out << ", " << double(_points[pointIndex].at(d));
+				// update min and max
+				min(d) = min(d) < _points[pointIndex].at(d) ? min(d) : _points[pointIndex].at(d);
+				max(d) = max(d) > _points[pointIndex].at(d) ? max(d) : _points[pointIndex].at(d);
 			}
-			out << " to \\ \n";
+			out << " to \\\n";
 		}
 		assert(_points[_points.size()-1].dimension() <= 2); // TODO: Project to 2d	
-		out << "\t " << double(_points[_points.size()-1].at(0));
+		out << "  " << double(_points[_points.size()-1].at(0));
 		for(unsigned d = 1; d < _points[_points.size()-1].dimension(); ++d) {
 			out << ", " << double(_points[_points.size()-1].at(d));
 		}
+		out << " fs empty border lc rgb '" << _settings.color << "'\n";
+		out << "set term post eps\n";
+		out << "set output \"" << _outfile << ".eps \"\n";
+		out << "plot ";
+		for(unsigned d = 0; d < min.rows(); ++d) {
+			out << "[" << min(d)*1.1 << ":" << max(d)*1.1 << "] ";
+		}
+		out << "NaN notitle";
 		
 		// close file after writing
 		out.close();
