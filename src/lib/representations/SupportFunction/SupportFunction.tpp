@@ -305,13 +305,11 @@ namespace hypro {
 				if(mScaleParameters->factor == 0)
 					return false;
 				else 
-					return mScaleParameters->origin.contains(mScaleParameters->factor*_point); 
+					return mScaleParameters->origin.contains(_point/mScaleParameters->factor); 
 				}
 			case SF_TYPE::SUM: {
-				evaluationResult<Number> resA = mSummands->lhs.evaluate(_direction);
-				evaluationResult<Number> resB = mSummands->rhs.evaluate(_direction);
-				resA.optimumValue += resB.optimumValue;
-				resA.supportValue += resB.supportValue;
+				assert(false); // Todo: Not implemented yet.
+				return false;
 				}
 			case SF_TYPE::UNION: {
 				return (mUnionParameters->lhs.contains(_point) || mUnionParameters->rhs.contains(_point));
@@ -323,7 +321,7 @@ namespace hypro {
 			default:
 				assert(false);
 				return false;
-		}.
+		}
 		return true;
 	}
 	
