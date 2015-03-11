@@ -144,8 +144,13 @@ Zonotope<Number>::~Zonotope() {
 
 
 template <typename Number>
-unsigned int Zonotope<Number>::dimension() const {
+unsigned Zonotope<Number>::dimension() const {
 	return mDimension;
+}
+
+template<typename Number>
+bool Zonotope<Number>::isEmpty() const {
+	return (mGenerators.cols() == 0);
 }
 
 template <typename Number>
@@ -276,28 +281,28 @@ void Zonotope<Number>::clear() {
 
 
 template <typename Number>
-bool Zonotope<Number>::minkowskiSum(Zonotope<Number>& result, const Zonotope<Number>& rhs) {
+Zonotope<Number> Zonotope<Number>::minkowskiSum(const Zonotope<Number>& rhs)  const{
     assert(mDimension==rhs.dimension() && "Zonotope on RHS must have same dimensionality as current.");
-    
+    Zonotope<Number> result;
     result.setCenter(this->mCenter + rhs.mCenter);
     hypro::matrix_t<Number> tmp;
     tmp.resize(mDimension, rhs.numGenerators()+numGenerators());
     tmp << mGenerators, rhs.generators();
     result.setGenerators(tmp);
     result.removeEmptyGenerators();
-    return true;
+    return result;
     
 }
 
 template <typename Number>
-bool Zonotope<Number>::linearTransformation(Zonotope<Number>& result, const hypro::matrix_t<Number>& A) {
+Zonotope<Number> Zonotope<Number>::linearTransformation(const hypro::matrix_t<Number>& A)  const {
     assert(A.cols()==mCenter.rows() && "Matrix's dimensionality is different from zonotope's center's dimensionality.");
     assert(A.cols()==mGenerators.rows() && "Matrix's dimensionality is different from zonotope's generators' dimensionality.");
-    
+    Zonotope<Number> result;
     result.setCenter(A*this->mCenter);
     result.setGenerators(A*this->mGenerators);
     
-    return true;
+    return result;
     
 }
 
@@ -431,9 +436,7 @@ hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperpl
 }
 
 template<typename Number> 
-void intersectZonogoneHyperplaneDSearch(Zonotope<Number>& inputZonotope,
-                                             const Hyperplane<Number>& hp,
-                                             Zonotope<Number>& result)
+Zonotope<Number> intersectZonotopeHyperplaneDSearch(Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp)
 {
     assert(inputZonotope.dimension() == hp.dimension() && inputZonotope.dimension() == 2 && 
             "zonotope dimension must be of same dimension (only dim 2 accepted) as hyperplane");
@@ -443,14 +446,11 @@ void intersectZonogoneHyperplaneDSearch(Zonotope<Number>& inputZonotope,
     Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p2Vec = {0, p2};
     
     Zonotope<Number> res((p1Vec+p2Vec)/2, (p1Vec-p2Vec)/2);
-    result = res;
+    return res;
 }
 
 template <typename Number>
-void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
-                                             const Hyperplane<Number>& hp,
-                                             Zonotope<Number>& result,
-                                             hypro::matrix_t<Number>& minMaxOfLine) 
+static Zonotope<Number> intersectZonotopeHyperplane(Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, hypro::matrix_t<Number>& minMaxOfLine)
 {
     assert(inputZonotope.dimension()==hp.dimension() && "Zonotope and Hyperplane have to be of similar dimensions");
     std::vector< hypro::vector_t<Number> > vertices = inputZonotope.computeZonotopeBoundary();
@@ -557,12 +557,11 @@ void intersectZonogoneHyperplane(Zonotope<Number>& inputZonotope,
     minMaxOfLine.row(0) = (comparePoint(p1, p2)) ? p1.transpose() : p2.transpose(); // min [x,y] here
     minMaxOfLine.row(1) = (comparePoint(p1, p2)) ? p2.transpose() : p1.transpose(); // max [x,y] here
     
-    result = resZonotope;
+    return resZonotope;
 }
 
 template<typename Number>
-void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
-            Zonotope<Number>& resultZonotope)
+Zonotope<Number> intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp)
 {
     
     assert(inputZonotope.dimension()==hp.dimension());
@@ -587,14 +586,14 @@ void intersectAlamo(const Zonotope<Number>& inputZonotope, const Hyperplane<Numb
     new_gen =(identity - lambda*(hp.normal().transpose()))*H;    
     zg.setGenerators(new_gen);
 
-    resultZonotope = zg;
+    return zg;
 }
 
 template<typename Number>
-void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, 
-                            Zonotope<Number>& resultZonotope, hypro::matrix_t<Number>& minMaxOfLine)
+Zonotope<Number> intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp, hypro::matrix_t<Number>& minMaxOfLine)
 {
     assert(hp.dimension()==inputZonotope.dimension() && "Intersect ND: input zonotope and input hyperplane must have same dimensionality");
+    Zonotope<Number> resultZonotope;
     hypro::vector_t<Number> dVec;
     hypro::matrix_t<Number> kernel;
     dVec = hp.normal();
@@ -630,7 +629,7 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
         Hyperplane<Number> lg(lgDVector, hp.offset());
                 
 //        hypro::matrix_t<Number> dummyMinMax;
-        intersectZonogoneHyperplaneDSearch(projZonotope, lg, tempResZonotope);
+        tempResZonotope = intersectZonotopeHyperplaneDSearch(projZonotope, lg);
         
         Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> p1, p2;
         p1 = tempResZonotope.center() + tempResZonotope.generators();
@@ -650,26 +649,22 @@ void intersectNDProjection(const Zonotope<Number>& inputZonotope, const Hyperpla
     resultZonotope.setCenter(kernel * ((minMaxOfLine.row(1)+minMaxOfLine.row(0))/2).transpose() + hp.offset()*dVec);
     resultZonotope.setGenerators(resultGenerators);
     
-    
+    return resultZonotope;
 }
 
 template<typename Number> 
-bool Zonotope<Number>::intersect(Zonotope<Number>& result,
-                                 const Hyperplane<Number>& hp,
-                                 int method) 
-{
+Zonotope<Number> Zonotope<Number>::intersect(const Hyperplane<Number>& hp, int method) {
     hypro::matrix_t<Number> EMPTY_MATRIX(0,0);
-    return this->intersect(result, hp, EMPTY_MATRIX, method);
+    return this->intersect(hp, EMPTY_MATRIX, method);
 }
 
 template <typename Number>
-bool Zonotope<Number>::intersect(Zonotope<Number>& result, 
-                                const Hyperplane<Number>& hp, 
-                                hypro::matrix_t<Number>& minMaxOfLine,
-                                int method) 
+Zonotope<Number> Zonotope<Number>::intersect( const Hyperplane<Number>& hp, hypro::matrix_t<Number>& minMaxOfLine, int method) 
 {
     assert(hp.dimension()==mDimension && "Zonotope's dimensionality must be same as Hyperplane's dimensionality.");
     
+    Zonotope<Number> result;
+
     // Determine if intersection is found, according to Girard, Guernic, 2008
     hypro::scalar_t<Number> emdc = hp.offset()-hp.normal().transpose()*mCenter;
     hypro::scalar_t<Number> zs = (hp.normal().transpose()*mGenerators).array().abs().sum();
@@ -680,35 +675,34 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result,
         switch (method) {
             case ZUtility::ALAMO:
 //                std::cout << "Using Alamo's method with dimension " << mDimension << std::endl;
-                intersectAlamo(*this, hp, result);
+                result = intersectAlamo(*this, hp);
                 break;
             case ZUtility::NDPROJECTION:
             {
                 if (mDimension==2) {
 //                    std::cout << "Using Girard's method with dimension 2 " << std::endl;
-                    intersectZonogoneHyperplane(*this, hp, result, minMaxOfLine);
+                    result = intersectZonotopeHyperplane(*this, hp, minMaxOfLine);
                     
                 }
                 else {
 //                    std::cout << "Using Girard's method with dimension " << mDimension << std::endl;
-                    intersectNDProjection<Number>(*this, hp, result, minMaxOfLine);
+                    result = intersectNDProjection<Number>(*this, hp, minMaxOfLine);
                 }
                 break;
             }
 //            case DICHOTOMIC2D:
 //                assert(mDimension==2);
-//                intersectZonogoneHyperplaneDSearch(*this, hp, result);
+//                result = intersectZonotopeHyperplaneDSearch(*this, hp);
 //                break;
             default: break;
-        }   
-        return true;
+        }
     }
-    else
-        return false;
+    
+    return result;
 }
 
 template<typename Number>
-bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& halfspace) {
+Zonotope<Number> Zonotope<Number>::intersect(const Constraint& halfspace) const {
     assert(halfspace.space_dimension() == this->mDimension);
     hypro::scalar_t<Number> e = halfspace.inhomogeneous_term().get_d();
     hypro::vector_t<Number> dVec;
@@ -719,52 +713,49 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const Constraint& hal
         dVec(i) = -1*halfspace.coefficient(Variable(i)).get_d();
     }
     
-    return this->intersectWithHalfspace(result, dVec, e);    
+    return this->intersectWithHalfspace(dVec, e);    
 }
 
 template<typename Number>
-bool Zonotope<Number>::intersectWithHalfspace(Zonotope<Number>& result, 
-                                            const hypro::vector_t<Number>& d_vec, 
-                                            hypro::scalar_t<Number> e_scalar) 
+Zonotope<Number> Zonotope<Number>::intersectWithHalfspace(const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar)  const
 {
-    hypro::scalar_t<Number> zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
-    hypro::scalar_t<Number> dc = d_vec.dot(this->mCenter);
-    hypro::scalar_t<Number> qu = dc + zs,
-           qd = dc -zs;
-    if (qd <= e_scalar) {
-        if (qu <= e_scalar) {
-            result = *this;
-        }
-        else {
-            hypro::scalar_t<Number> sigma = (e_scalar-qd)/2,
-                    d = (qd+e_scalar)/2;
-            hypro::matrix_t<Number> HHT = this->mGenerators*this->mGenerators.transpose();
-            hypro::vector_t<Number> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
-            result.setCenter(this->mCenter + lambda*(d - dc));
-            hypro::matrix_t<Number> identity;
-            identity.resize(mDimension, mDimension);
-            identity.setIdentity();
-            result.setGenerators((identity - lambda * d_vec.transpose())*this->mGenerators);
-            result.addGenerators(sigma*lambda);
-        }
-    }
-    else{ 
-        return false;
-    }
-    
-    return true;
+	Zonotope<Number> result;
+
+	std::cout << __func__ << ": vector: " << d_vec << std::endl << " scalar: " << e_scalar << std::endl;
+	// zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the generators
+	hypro::scalar_t<Number> zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
+	// projection of d_vec on center 
+	hypro::scalar_t<Number> dc = d_vec.dot(this->mCenter);
+	hypro::scalar_t<Number> qu = dc + zs,
+	qd = dc -zs;
+	if (qd <= e_scalar) { // qd holds the evaluation of the distance -> in this case there is an intersection
+		if (qu <= e_scalar) { // if there is an intersection and also the evaluation ??? -> Seems to be fully contained
+			result = *this;
+		}
+		else { // partly contained
+			hypro::scalar_t<Number> sigma = (e_scalar-qd)/2,
+			d = (qd+e_scalar)/2;
+			hypro::matrix_t<Number> HHT = this->mGenerators*this->mGenerators.transpose();
+			hypro::vector_t<Number> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
+			result.setCenter(this->mCenter + lambda*(d - dc));
+			hypro::matrix_t<Number> identity;
+			identity.resize(mDimension, mDimension);
+			identity.setIdentity();
+			result.setGenerators((identity - lambda * d_vec.transpose())*this->mGenerators);
+			result.addGenerators(sigma*lambda);
+		}
+	}
+	return result;
 }
 
 template<typename Number>
-bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& rhs) {
+Zonotope<Number> Zonotope<Number>::intersect(const C_Polyhedron& rhs) const {
     // Get set of half spaces
     const Constraint_System& cs = rhs.constraints();
-//    unsigned int dim = rhs.space_dimension();
     Zonotope<Number> curZonotope(*this);
     
     // Iterate through all constraints of the polyhedron
     for (Constraint constr : cs) {
-        Zonotope<Number> intermediateResult;
 //        hypro::vector_t<Number> d_vector;
 //        Number e;
 //        d_vector.resize(dim,1);
@@ -807,17 +798,18 @@ bool Zonotope<Number>::intersect(Zonotope<Number>& result, const C_Polyhedron& r
 //        else {
 //            return false;
 //        }
-        bool intersectFound = curZonotope.intersect(intermediateResult, constr);
-        curZonotope = intermediateResult;
-        if (!intersectFound) return false;
-        
+    	std::cout << __func__ << ": Constraint: " << constr << std::endl;
+        curZonotope = curZonotope.intersect(constr);
+
+        bool intersectFound = curZonotope.isEmpty();
+        if (!intersectFound) return curZonotope;
     }
-    return true;
+    return curZonotope;
     // TODO: QUESTION! If one iteration yields empty set, should we break out of loop?
 }
 
 template<typename Number>
-bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Number>& other) 
+Zonotope<Number> Zonotope<Number>::unite(const Zonotope<Number>& other) const
 {
     assert(mDimension == other.mDimension && "Zonotopes must be of same dimension in order to carry out convex hull operations.");
     unsigned numGenCurrent, numGenOther;
@@ -860,15 +852,15 @@ bool Zonotope<Number>::convexHull(Zonotope<Number>& result, const Zonotope<Numbe
         temp.setGenerators((R1 + R2)*0.5);
         temp.addGenerators((c1-c2)*0.5);
         temp.addGenerators((R1 - R2)*0.5);
-    }
-    result = temp;
-    return true;
+    };
+    return temp;
 }
 
 
 template<typename Number>
-bool Zonotope<Number>::intervalHull(Zonotope<Number>& result) 
+Zonotope<Number> Zonotope<Number>::intervalHull() const
 {
+	Zonotope<Number> result;
     hypro::vector_t<Number> imax, imin, sumOfGenerators, center = this->mCenter;
     hypro::matrix_t<Number> generators = this->mGenerators;
     Zonotope<Number> temp;
@@ -883,7 +875,7 @@ bool Zonotope<Number>::intervalHull(Zonotope<Number>& result)
     temp.setGenerators( ((imax-imin)*0.5).cwiseAbs().asDiagonal() );
     
     result = temp;
-    return true;
+    return result;
 }
 
 } // namespace

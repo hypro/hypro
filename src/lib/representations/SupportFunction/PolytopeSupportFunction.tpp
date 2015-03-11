@@ -136,7 +136,7 @@ namespace hypro {
 		#endif   
 		assert(l.rows() == mDimension);
 
-		for (int i = 0; i < mDimension; i++)
+		for (unsigned i = 0; i < mDimension; i++)
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(l(i,0)));
@@ -153,7 +153,7 @@ namespace hypro {
 		//std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
 
 		vector_t<Number> x = vector_t<Number>(mDimension);
-		for (int i = 0; i < mDimension; i++)
+		for (unsigned i = 0; i < mDimension; i++)
 		{
 			x(i) = Number(glp_get_col_prim(lp, i+1));
 		}

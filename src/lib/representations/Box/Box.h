@@ -167,7 +167,7 @@ public:
      */
 	bool hasDimension(const carl::Variable& var) const
 	{
-		return hypro::VariablePool::getInstance().hasDimension(var) && hypro::VariablePool::getInstance().dimension(var) < mBoundaries.size();
+		return hypro::VariablePool::getInstance().hasDimension(var) && unsigned(hypro::VariablePool::getInstance().dimension(var)) < mBoundaries.size();
 	}
             
 	/**

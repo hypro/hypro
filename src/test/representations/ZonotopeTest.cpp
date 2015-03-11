@@ -15,6 +15,9 @@
  * Google Test for Zonotope Implementation
  */
 
+using namespace hypro;
+
+
 TEST(ZonotopeTest, PlainConstructor) {
     hypro::Zonotope<double> z1;
     EXPECT_EQ(z1.dimension(), (unsigned) 0);
@@ -82,7 +85,7 @@ TEST(ZonotopeAlgorithmTest, ZonogoneHPIntersect) {
     hypro::Hyperplane<double> hp(dVec, 0);
     hypro::Zonotope<double> z(center, generators), res;
     hypro::matrix_t<double> dummy;
-    intersectZonogoneHyperplane(z, hp, res, dummy);
+    res = intersectZonotopeHyperplane(z, hp, dummy);
 }
 
 TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
@@ -107,7 +110,7 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
     z2.setCenter(cen2);
     z2.setGenerators(gen2);
 
-    z1.minkowskiSum(z1, z2);
+    z1 = z1.minkowskiSum(z2);
 
     cen_res << 5,
                9;
@@ -121,7 +124,7 @@ TEST(ZonotopeAlgorithmTest, MinkowskiSum) {
     EXPECT_EQ(z1.numGenerators(), (unsigned) 4);
     EXPECT_EQ(z1.generators().rowwise().sum(), gen_sum); 
     
-    z2.minkowskiSum(z1,z3);
+    z1 = z2.minkowskiSum(z3);
     EXPECT_EQ(z1.numGenerators(), (unsigned) 2);
     EXPECT_EQ(z1.generators(), gen2);
 
@@ -186,7 +189,8 @@ TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
     hypro::Zonotope<double> z1(z_center, z_gen), result(2);
      
     // Case 1: Zonotope is wholly inside the halfspace
-    bool foundIntersect = z1.intersect(result, hspace);
+    result = z1.intersect(hspace);
+    bool foundIntersect = !result.isEmpty();
     // Expect: result zonotope is the original zonotope, nothing is changed 
     // Intersection trivially present
     EXPECT_TRUE(foundIntersect);
@@ -199,7 +203,8 @@ TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
              1,0;
     z1.setCenter(z_center);
     z1.setGenerators(z_gen);
-    foundIntersect = z1.intersect(result, hspace);
+    result = z1.intersect(hspace);
+    foundIntersect = result.isEmpty();
     // Expect: No intersect was found
     EXPECT_FALSE(foundIntersect);
     
@@ -210,15 +215,15 @@ TEST(ZonotopeAlgorithmTest, IntersectionHalfspace) {
     
     z1.setCenter(z_center);
     z1.setGenerators(z_gen);
-    
-    foundIntersect = z1.intersect(result, hspace);
+   
+
+    result = z1.intersect(hspace);
+    foundIntersect = !result.isEmpty();
     // Expect: Intersect to be found, resulting zonotope is a different zonotope
     // TODO: verify that the resulting zonotope is correct
     EXPECT_TRUE(foundIntersect);
     EXPECT_TRUE(result.center()!= z_center);
 //    EXPECT_TRUE(result.generators()!=z_gen);
-    
-    
 }
 
 TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
@@ -238,8 +243,16 @@ TEST(ZonotopeAlgorithmTest, IntersectionPolytope) {
     cs.insert(y>=x-2);
     cs.insert(y<=2*x-1);
     poly1.add_constraints(cs);
+
+    //std::cout << "Polytope: " << poly1 << std::endl;
     
-    bool res = z1.intersect(result_zonotope, poly1);
+	std::cout << "Z1: center:" << z1.center() << std::endl << "Z1: generators: " << z1.generators() << std::endl;
+
+    result_zonotope = z1.intersect(poly1);
+
+    std::cout << "Result: center:" << result_zonotope.center() << std::endl << "Result: generators: " << result_zonotope.generators() << std::endl;
+
+    bool res = result_zonotope.isEmpty();
     
     EXPECT_EQ(res, false);
     
@@ -321,8 +334,7 @@ TEST(ZonotopeAlgorithmTest, Intersection2) {
     h1.setNormal(d);
     h1.setOffset(0);
     
-    hypro::Zonotope<double> result;
-    z1.intersect(result, h1, ZUtility::ALAMO);
+    hypro::Zonotope<double> result = z1.intersect(h1, ZUtility::ALAMO);
     
    EXPECT_LT((result.center()-exp_center).array().abs().matrix().sum(), delta.sum());
 }
@@ -352,7 +364,7 @@ TEST(ZonotopeAlgorithmTest, ConvexHull) {
     z2.setCenter(c2);
     z2.setGenerators(g2);
     
-    z1.convexHull(result, z2);
+    result = z1.unite(z2);
    
     EXPECT_EQ(result.center(), expected_center);
     EXPECT_EQ(result.generators(), expected_generators);
@@ -369,7 +381,7 @@ TEST(ZonotopeAlgorithmTest, IntervalHull) {
                            0, 9;
     hypro::Zonotope<double> result, zIH(center, generators);
     
-    zIH.intervalHull(result);
+    result = zIH.intervalHull();
         
     EXPECT_EQ(result.generators(), expected_generators);
     EXPECT_EQ(result.center(), center);

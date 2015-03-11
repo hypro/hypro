@@ -57,7 +57,7 @@ carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var) {
 template<typename Number>
 std::set<Point<Number>> Box<Number>::corners() const {
 	std::set<Point<Number>> result;
-	int limit = int(pow(mBoundaries.size(),2));
+	unsigned limit = int(pow(mBoundaries.size(),2));
 	
 	for(unsigned bitCount = 0; bitCount < limit ; ++bitCount) {
 		vector_t<Number> coord = vector_t<Number>(dimension());

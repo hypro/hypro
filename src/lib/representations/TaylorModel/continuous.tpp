@@ -193,7 +193,7 @@ int Flowpipe<Number>::next_picard(Flowpipe<Number> & result, const PolynomialODE
 	// apply Picard iterations to obtain the Taylor expansion
 	TaylorModelVec<Number> x = x0;
 
-	for(int i=1; i<order; ++i)
+	for(unsigned i=1; i<order; ++i)
 	{
 		x.Picard_assign(x0, ode, localInitial, t, intStep, i);
 	}

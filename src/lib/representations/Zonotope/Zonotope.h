@@ -82,7 +82,13 @@ class Zonotope
          * Dimensionality of Zonotope
          * @return the dimension
          */
-        unsigned int dimension() const;
+        unsigned dimension() const;
+
+        /**
+        * Returns, whether the zonotope is empty.
+        * @return 
+        */
+        bool isEmpty() const;
         
         /**
          * Replaces the current center with the parameter center
@@ -144,14 +150,14 @@ class Zonotope
          * @param rhs The other right-hand-side stateset. Is not modified.
          * @return True if the operation has been successfully applied.
          */
-        bool minkowskiSum(Zonotope<Number>& result, const Zonotope<Number>& rhs);
+        Zonotope<Number> minkowskiSum(const Zonotope<Number>& rhs) const;
         
         /** 
          * Applies a linear transformation on the given stateset.
          * @param result The resulting stateset.
          * @return True if the operation has been successfully applied.
          */
-        bool linearTransformation(Zonotope<Number>& result, const hypro::matrix_t<Number>& A);
+        Zonotope<Number> linearTransformation(const hypro::matrix_t<Number>& A) const;
         
         /**
          * Compute boundaries of zonotope
@@ -166,7 +172,7 @@ class Zonotope
          * @param e_scalar : Scalar representing the halfspace
          * @return true if intersect is found, false otherwise (result parameter is not modified if false)
          */
-        bool intersectWithHalfspace(Zonotope<Number>& result, const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar);
+        Zonotope<Number> intersectWithHalfspace(const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar) const;
         
         /**
          * Calculates zonotope intersect with halfspace represented as PPL constraint
@@ -174,7 +180,7 @@ class Zonotope
          * @param halfspace : Halfspace as represented in PPL (see PPL documentation for more information)
          * @return true if intersect is found, false otherwise (result parameter is not modified if false)
          */
-        bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::Constraint& halfspace);
+        Zonotope<Number> intersect(const Parma_Polyhedra_Library::Constraint& halfspace) const;
         
         /**
          * Intersects the given stateset with a second one.
@@ -182,9 +188,7 @@ class Zonotope
          * @param rhs The right-hand-side stateset. Is not modified.
          * @return True if intersect is found
          */
-        bool intersect(Zonotope<Number>& result, 
-                        const Hyperplane<Number>& rhs,
-                        int method);
+        Zonotope<Number> intersect(const Hyperplane<Number>& rhs, int method);
         
         /**
          * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
@@ -193,10 +197,7 @@ class Zonotope
          * @param rhs : The right-hand-side stateset. Is not modified.
          * @return True if intersect is found.
          */
-        bool intersect(Zonotope<Number>& result, 
-                        const Hyperplane<Number>& rhs, 
-                        hypro::matrix_t<Number>& minMaxOfLine,
-                        int method);
+        Zonotope<Number> intersect(const Hyperplane<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method);
         
         
         /**
@@ -205,7 +206,7 @@ class Zonotope
          * @param rhs : The closed polyhedron as represented in PPL (see PPL documentation for more information).
          * @return true if intersect is found, false otherwise (result parameter is not modified if false)
          */
-        bool intersect(Zonotope<Number>& result, const Parma_Polyhedra_Library::C_Polyhedron& rhs);
+        Zonotope<Number> intersect(const Parma_Polyhedra_Library::C_Polyhedron& rhs) const;
         
         /**
          * Computes the convex hull of the member zonotope and another given zonotope
@@ -213,17 +214,14 @@ class Zonotope
          * @param other: the other zonotope
          * @return true for all cases. 
          */
-        bool convexHull(Zonotope<Number>& result, const Zonotope<Number>& other);
+        Zonotope<Number> unite(const Zonotope<Number>& other) const;
         
         /**
          * Computes the interval hull of the member zonotope
          * @param result: the resulting interval hull (also a zonotope)
          * @return true for all cases
          */
-        bool intervalHull(Zonotope<Number>& result);
-        
-        
-        
+        Zonotope<Number> intervalHull() const;
 };
 
 } // namespace
