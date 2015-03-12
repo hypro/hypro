@@ -22,18 +22,18 @@ namespace hypro
 template<typename Number>
 class VPolytope : hypro::GeometricObject<Number>
 {
-    public: 
-        typedef typename std::set<vector_t<Number>> vertexSet;
-        typedef typename polytope::Cone<Number> Cone;
-        typedef typename polytope::Fan<Number> Fan;
-        /***************************************************************************
+	public: 
+		typedef typename std::set<vector_t<Number>> vertexSet;
+		typedef typename polytope::Cone<Number> Cone;
+		typedef typename polytope::Fan<Number> Fan;
+		/***************************************************************************
 	 * Members
 	 **************************************************************************/
-    protected:
+	protected:
 		vertexSet                      mVertices;
-        mutable Fan                    mFan;
-        bool                           mFanSet;
-        bool                           mReduced;
+		mutable Fan                    mFan;
+		bool                           mFanSet;
+		bool                           mReduced;
 		
 		// GLPK members
 		mutable bool							mInitialized;
@@ -43,21 +43,21 @@ class VPolytope : hypro::GeometricObject<Number>
 		mutable int*							mJa;
 		mutable double*							mAr;
 		
-    public:
+	public:
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
 
-        VPolytope();
-        VPolytope(const Point<Number>& point);
-        VPolytope(const vertexSet& points);
-        VPolytope(const typename std::vector<vector_t<Number>>& points);
-        VPolytope(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
-        VPolytope(const VPolytope& orig);
+		VPolytope();
+		VPolytope(const Point<Number>& point);
+		VPolytope(const vertexSet& points);
+		VPolytope(const typename std::vector<vector_t<Number>>& points);
+		VPolytope(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
+		VPolytope(const VPolytope& orig);
 		VPolytope(VPolytope&& _orig) = default;
 
-        ~VPolytope()
-        {
+		~VPolytope()
+		{
 			if(mInitialized){
 				// cleanup
 				//glp_delete_prob(mLp);
@@ -66,12 +66,12 @@ class VPolytope : hypro::GeometricObject<Number>
 				//delete[] mAr;
 			}
 		}
-        
+		
 	/***************************************************************************
 	* General interface
 	**************************************************************************/
 
-		VPolytope linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+		VPolytope linearTransformation(const matrix_t<Number>& A) const;
 		VPolytope minkowskiSum(const VPolytope& rhs) const;
 		VPolytope intersect(const VPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;
@@ -79,12 +79,10 @@ class VPolytope : hypro::GeometricObject<Number>
 		VPolytope unite(const VPolytope& rhs) const;
 
 		void clear();
-        
+		
 	/***************************************************************************
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
-        
-		void initGLPK() const;
 		
 		unsigned int dimension() const
 		{
@@ -92,7 +90,7 @@ class VPolytope : hypro::GeometricObject<Number>
 				return 0;
 			return mVertices.begin()->rows();
 		}
-        
+		
 		unsigned size() const {
 			return mVertices.size();
 		}
@@ -101,72 +99,85 @@ class VPolytope : hypro::GeometricObject<Number>
 			return mReduced;
 		}
 		
-        const typename polytope::Fan<Number>& fan() const
-        {
-            if(!mFanSet)
-            {
-                calculateFan();
-            }
-            return mFan;
-        }
-        
-        std::pair<typename vertexSet::iterator, bool> insert(const Point<Number>& i)
-        {
-            assert(dimension() == 0 || dimension() == i.dimension());
-			std::cout << __func__ << ": " << i << std::endl;
-            return mVertices.insert(i);
-        }
-        
-        void insert(const typename vertexSet::iterator begin, const typename vertexSet::iterator end)
-        {
-            assert(dimension() == 0 || dimension() == begin->dimension());
-            mVertices.insert(begin,end);
-        }
-        
-        const vertexSet& vertices() const
-        {
-            return mVertices;
-        }
-        
-        bool hasVertex(const Point<Number>& vertex) const
-        {
-            return (mVertices.find(vertex) != mVertices.end());
-        }
-        
-        typename vertexSet::iterator begin()
-        {
-            return mVertices.begin();
-        }
+		const typename polytope::Fan<Number>& fan() const
+		{
+			if(!mFanSet)
+			{
+				calculateFan();
+			}
+			return mFan;
+		}
+		
+		std::pair<typename vertexSet::iterator, bool> insert(const Point<Number>& i)
+		{
+			assert(dimension() == 0 || dimension() == i.dimension());
+			mReduced = false;
+			return mVertices.insert(i.rawCoordinates());
+		}
 
-        typename vertexSet::const_iterator begin() const
-        {
-            return mVertices.begin();
-        }
-        
-        typename vertexSet::iterator end()
-        {
-            return mVertices.end();
-        }
+		std::pair<typename vertexSet::iterator, bool> insert(const vector_t<Number>& _coord) {
+			assert(dimension() == 0 || dimension() == _coord.rows());
+			mReduced = false;
+			return mVertices.insert(_coord);
+		}
+		
+		void insert(const typename vertexSet::iterator begin, const typename vertexSet::iterator end)
+		{
+			assert(dimension() == 0 || dimension() == begin->rows());
+			mVertices.insert(begin,end);
+			mReduced = false;
+		}
+		
+		const vertexSet& vertices() const
+		{
+			return mVertices;
+		}
+		
+		bool hasVertex(const Point<Number>& vertex) const
+		{
+			return (mVertices.find(vertex.rawCoordinates()) != mVertices.end());
+		}
 
-        typename vertexSet::const_iterator end() const
-        {
-            return mVertices.end();
-        }
-        
-        private:
+		bool hasVertex(const vector_t<Number>& vertex) const
+		{
+			return (mVertices.find(vertex) != mVertices.end());
+		}
+		
+		typename vertexSet::iterator begin()
+		{
+			return mVertices.begin();
+		}
+
+		typename vertexSet::const_iterator begin() const
+		{
+			return mVertices.begin();
+		}
+		
+		typename vertexSet::iterator end()
+		{
+			return mVertices.end();
+		}
+
+		typename vertexSet::const_iterator end() const
+		{
+			return mVertices.end();
+		}
+		
+		private:
 	/***************************************************************************
 	 * Auxiliary functions
 	 **************************************************************************/
-        const Fan& calculateFan() const;
-        const Cone& calculateCone(const Point<Number>& vertex);
-        
+	 	void initGLPK() const;
+		const Fan& calculateFan() const;
+		const Cone& calculateCone(const Point<Number>& vertex);
+		
 	/***************************************************************************
 	 * Operators
 	 **************************************************************************/
-        public:
-        VPolytope<Number>& operator=(const VPolytope<Number>& rhs);
-        VPolytope<Number>& operator=(VPolytope<Number>&& rhs) = default;
-        bool operator==(const VPolytope<Number>& rhs);
+		public:
+		VPolytope<Number>& operator=(const VPolytope<Number>& rhs);
+		VPolytope<Number>& operator=(VPolytope<Number>&& rhs) = default;
+		bool operator==(const VPolytope<Number>& rhs);
 };
 
 }//namespace
