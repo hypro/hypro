@@ -196,10 +196,10 @@ namespace hypro
 //            }
         }
         
-		const carl::Variable& newCarlVariable() {
+		const carl::Variable& newCarlVariable(std::string _name = "") {
 			assert(mCarlVariables.size() == mPplId);
 			assert(mPplVariables.size() == mPplId);
-			carl::Variable cVar = mPool.getFreshVariable();
+			carl::Variable cVar = mPool.getFreshVariable(_name);
 			Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable(mPplId++);
 			mCarlVariables.push_back(cVar);
 			mPplVariables.push_back(pVar);
@@ -287,7 +287,7 @@ namespace hypro
 			assert(mPplVariables.size() == mPplId);
             for(unsigned pos = 0; pos < mCarlVariables.size(); ++pos)
             {
-                std::cout << mCarlVariables[pos] << " -> " << mPplVariables[pos] << std::endl;
+                std::cout << mCarlVariables[pos] << " -> " << std::endl; //mPplVariables[pos] << std::endl; //TODO: fix
             }
         }
     };

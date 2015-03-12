@@ -32,3 +32,5 @@ TYPED_TEST_CASE(PolytopeUtilTest, floatTypes);
 TYPED_TEST_CASE(PolytopeSupportFunctionTest, floatTypes);
 TYPED_TEST_CASE(SupportFunctionTest, floatTypes);
 TYPED_TEST_CASE(VPolytopeTest, floatTypes);
+TYPED_TEST_CASE(TaylorModelTest, floatTypes);
+TYPED_TEST_CASE(ZonotopeTest, floatTypes);

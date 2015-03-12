@@ -25,19 +25,17 @@ bool comparePoint(Eigen::Matrix<hypro::scalar_t<Number>, 2, 1>& p1, Eigen::Matri
 }
 
 template <typename Number>
-void removeGenerator(unsigned int colToRemove, 
+void removeGenerator(unsigned colToRemove, 
                     hypro::matrix_t<Number>& matrix) 
 {
-    unsigned int numRows = matrix.rows();
-    unsigned int numCols = matrix.cols()-1;
+    unsigned numRows = matrix.rows();
+    unsigned numCols = matrix.cols()-1;
     assert(matrix.cols()>1 && "cannot remove a generator from a one-generator generator");
     if( colToRemove < numCols ) {
-        assert(numCols-colToRemove > 0);
         assert(numCols-colToRemove > 0);
         assert(colToRemove+1 <= matrix.cols() - 1);
         matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.block(0,colToRemove+1,numRows,numCols-colToRemove);
     }
-
     matrix.conservativeResize(Eigen::NoChange, numCols);
 }
 
@@ -48,14 +46,14 @@ void removeEmptyGenerators(hypro::matrix_t<Number>& generatorMatrix)  {
     zero_vector.resize(dim,1);
     zero_vector.setZero();
     
-    std::vector<unsigned int> zeroIndex;
-    for (unsigned int i=0; i<generatorMatrix.cols(); i++) {
+    std::vector<unsigned> zeroIndex;
+    for (unsigned i=0; i<generatorMatrix.cols(); i++) {
         if(generatorMatrix.col(i)==zero_vector) {
             zeroIndex.push_back(i);
         }
     }
 
-    for (std::vector<unsigned int>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
+    for (std::vector<unsigned>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
         removeGenerator<Number>(*rit, generatorMatrix);
     }
 }
@@ -81,35 +79,33 @@ Eigen::Matrix<hypro::scalar_t<Number>, 2, 1> computeLineIntersection(const ZUtil
 
 template <typename Number>
 Zonotope<Number>::Zonotope() : mDimension(0), mCenter(0,1), mGenerators(0,0)
-{
-}
+{}
 
 template <typename Number>
-Zonotope<Number>::Zonotope(unsigned int dimension) {
+Zonotope<Number>::Zonotope(unsigned dimension) : 
+	mDimension(dimension), 
+	mCenter(hypro::vector_t<Number>::Zero(dimension)), 
+	mGenerators(hypro::matrix_t<Number>::Zero(dimension,1)) 
+{
     assert(dimension!=0 && "Zonotope cannot have dimension 0.");
-    mDimension = dimension;
-    mCenter.resize(mDimension,1);
-    mCenter.setZero();
-    mGenerators.resize(mDimension,1);
-    mGenerators.setZero();
 }
 
 template <typename Number>
 Zonotope<Number>::Zonotope(const hypro::vector_t<Number>& center, 
-                            const hypro::matrix_t<Number>& generators) {
+                            const hypro::matrix_t<Number>& generators)  :
+	mDimension(center.rows()),
+	mCenter(center),
+	mGenerators(generators)
+{
     assert(center.rows()==generators.rows() && "Center and generators have to have same dimensionality.");
-    mDimension = center.rows();
-    mCenter = center;
-    mGenerators = generators;
 }
 
 template <typename Number>
-Zonotope<Number>::Zonotope(const Zonotope<Number>& other) {
-    assert(other.mDimension!=0 && "Cannot copy an empty zonotope (dimension=0).");
-    mDimension = other.mDimension;
-    mCenter = other.mCenter;
-    mGenerators = other.mGenerators;
-}
+Zonotope<Number>::Zonotope(const Zonotope<Number>& other) :
+	mDimension(other.mDimension),
+	mCenter(other.mCenter),
+	mGenerators(other.mGenerators)
+{}
 
 
 template <typename Number>
@@ -131,9 +127,7 @@ Zonotope<Number>::Zonotope(const Zonotope<Number>& other, unsigned d1, unsigned 
 }
 
 template <typename Number>
-Zonotope<Number>::~Zonotope() {
-
-}
+Zonotope<Number>::~Zonotope() {}
 
 
 /*****************************************************************************
@@ -169,8 +163,7 @@ template <typename Number>
 void Zonotope<Number>::setCenter(const hypro::vector_t<Number>& center) {
     if (mDimension==0) {
         mDimension = center.rows();
-        mGenerators.resize(mDimension,1);
-        mGenerators.setZero();
+        mGenerators = hypro::matrix_t<Number>::Zero(mDimension,1);
     }
     assert(center.rows()==mDimension && "Center has to have same dimensionality as zonotope.");
     mCenter = center;
@@ -180,8 +173,7 @@ template <typename Number>
 void Zonotope<Number>::setGenerators(const hypro::matrix_t<Number>& new_generators) {
     if (mDimension==0) {
         mDimension = new_generators.rows();
-        mCenter.resize(mDimension,1);
-        mCenter.setZero();
+        mCenter = hypro::vector_t<Number>::Zero(mDimension);
     }
     assert(new_generators.rows()==mDimension && "Generators have to have same dimensionality as zonotope");
     mGenerators = new_generators;
@@ -207,17 +199,14 @@ bool Zonotope<Number>::addGenerators(const hypro::matrix_t<Number>& generators) 
 }
 
 template <typename Number>
-unsigned int Zonotope<Number>::numGenerators() const {
+unsigned Zonotope<Number>::numGenerators() const {
     return mGenerators.cols();
 }
 
-
-
-
 template <typename Number>
-void Zonotope<Number>::removeGenerator(unsigned int colToRemove) {
-    unsigned int numRows = mGenerators.rows();
-    unsigned int numCols = mGenerators.cols()-1;
+void Zonotope<Number>::removeGenerator(unsigned colToRemove) {
+    unsigned numRows = mGenerators.rows();
+    unsigned numCols = mGenerators.cols()-1;
 
     if( colToRemove < numCols )
         mGenerators.block(0,colToRemove,numRows,numCols-colToRemove) = mGenerators.block(0,colToRemove+1,numRows,numCols-colToRemove);
@@ -228,24 +217,22 @@ void Zonotope<Number>::removeGenerator(unsigned int colToRemove) {
 template <typename Number>
 void Zonotope<Number>::removeEmptyGenerators() {
 // TODO
-    hypro::vector_t<Number> zero_vector; 
-    zero_vector.resize(mDimension,1);
-    zero_vector.setZero();
+    hypro::vector_t<Number> zero_vector = hypro::vector_t<Number>::Zero(mDimension);
     
-    std::vector<unsigned int> zeroIndex;
-    for (unsigned int i=0; i<mGenerators.cols(); i++) {
+    std::vector<unsigned> zeroIndex;
+    for (unsigned i=0; i<mGenerators.cols(); i++) {
         if(mGenerators.col(i)==zero_vector) {
             zeroIndex.push_back(i);
         }
     }
 
-    for (std::vector<unsigned int>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
+    for (std::vector<unsigned>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
         removeGenerator(*rit);
     }
 }
 
 template <typename Number>
-bool Zonotope<Number>::changeDimension(unsigned int new_dim) {
+bool Zonotope<Number>::changeDimension(unsigned new_dim) {
     assert(new_dim!=0 && "Cannot change dimensionality of zonotope to zero") ;
     if(new_dim==mDimension) {
         return false;
@@ -255,7 +242,7 @@ bool Zonotope<Number>::changeDimension(unsigned int new_dim) {
         mGenerators.conservativeResize(new_dim, Eigen::NoChange);
         
         // If new dim > old dim, initialize all new rows to zero
-        for (unsigned int i=mDimension; i<new_dim; i++) {
+        for (unsigned i=mDimension; i<new_dim; i++) {
             mCenter.row(i).setZero();
             mGenerators.row(i).setZero();
         }
@@ -394,10 +381,10 @@ hypro::scalar_t<Number> intersect2d(const Zonotope<Number>& input, const Hyperpl
         // collecting indices to delete
         // TODO: check if atan is available for FLOAT_T types
         for (unsigned i=0; i<generators.cols(); i++) {
-            hypro::scalar_t<Number> angle = std::atan((Number) generators(1,i)/(Number) generators(0,i));
-            if (angle - std::atan((Number) s(1)/(Number) s(0)) <= 0) 
+            hypro::scalar_t<Number> angle = atan((Number) generators(1,i)/(Number) generators(0,i));
+            if (angle - atan((Number) s(1)/(Number) s(0)) <= 0) 
                 idx_a1.push_back(i);
-            else if (angle - std::atan((Number) s(1)/ (Number) s(0)) >= 0) 
+            else if (angle - atan((Number) s(1)/ (Number) s(0)) >= 0) 
                 idx_a2.push_back(i);
         }
         
@@ -720,21 +707,24 @@ template<typename Number>
 Zonotope<Number> Zonotope<Number>::intersectWithHalfspace(const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar)  const
 {
 	Zonotope<Number> result;
-
-	std::cout << __func__ << ": vector: " << d_vec << std::endl << " scalar: " << e_scalar << std::endl;
-	// zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the generators
+	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the generators 
+	 *  -> we sum the projections of the direction onto the generators (take only positive ones to prevent from canceling)
+	 * -> this holds the farest we can go without leaving the zonotope
+	 */
 	hypro::scalar_t<Number> zs = (d_vec.transpose()*this->mGenerators).array().abs().sum();
-	// projection of d_vec on center 
+	// projection of d_vec on center
 	hypro::scalar_t<Number> dc = d_vec.dot(this->mCenter);
-	hypro::scalar_t<Number> qu = dc + zs,
-	qd = dc -zs;
-	if (qd <= e_scalar) { // qd holds the evaluation of the distance -> in this case there is an intersection
-		if (qu <= e_scalar) { // if there is an intersection and also the evaluation ??? -> Seems to be fully contained
+	// qu holds the maximal value one can go into direction of the hyperplane -> if this is less than the scalar, the zonotope is fully contained
+	hypro::scalar_t<Number> qu = dc + zs, 
+	qd = dc -zs; // qd holds the minimal value of the zonotope generators evaluated into the direction of the hyperplane (with respect to the center)
+	if (qd <= e_scalar) { // the zonotope is below the hyperplane -> there is an intersection
+		if (qu <= e_scalar) { // the zonotopes maximal evaluation is also below the hyperplane -> it is fully contained
 			result = *this;
 		}
 		else { // partly contained
+			// sigma is half the distance between the hyperplane and the "lowest" point of the zonotope.
 			hypro::scalar_t<Number> sigma = (e_scalar-qd)/2,
-			d = (qd+e_scalar)/2;
+			d = (qd+e_scalar)/2; // d holds ?
 			hypro::matrix_t<Number> HHT = this->mGenerators*this->mGenerators.transpose();
 			hypro::vector_t<Number> lambda = HHT * d_vec / ((d_vec.transpose() * HHT * d_vec) + sigma*sigma);
 			result.setCenter(this->mCenter + lambda*(d - dc));
@@ -798,7 +788,6 @@ Zonotope<Number> Zonotope<Number>::intersect(const C_Polyhedron& rhs) const {
 //        else {
 //            return false;
 //        }
-    	std::cout << __func__ << ": Constraint: " << constr << std::endl;
         curZonotope = curZonotope.intersect(constr);
 
         bool intersectFound = curZonotope.isEmpty();

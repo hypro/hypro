@@ -257,7 +257,7 @@ int Flowpipe<Number>::next_picard(Flowpipe<Number> & result, const PolynomialODE
 			Number w1 = iter_x->second.remainder.diameter();
 			Number w2 = iter_xp->second.remainder.diameter();
 
-			if(bfinish && w2/w1 < STOP_RATIO)
+			if(bfinish && w2/w1 < Number(STOP_RATIO))
 			{
 				bfinish = false;
 			}

@@ -789,6 +789,7 @@ TaylorModel<Number> TaylorModel<Number>::integration(Variable::Arg v, const Inte
 
 		result.remainder = remainder * range_of_v;
 	}
+	return result; // Todo: Inserted by Stefan, Xin - please check if okay!
 }
 
 template<typename Number>

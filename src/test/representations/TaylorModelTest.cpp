@@ -6,34 +6,55 @@
  */
 
 #include "../../lib/representations/TaylorModel/continuous.h"
+ #include "../../lib/util/VariablePool.h"
+#include "gtest/gtest.h"
+#include "../defines.h"
 
 using namespace hypro;
 
-void TEST_Addition()
+template<typename Number>
+class TaylorModelTest : public ::testing::Test
 {
-	VariablePool & vpool = VariablePool::getInstance();
-	Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
-	Variable z = vpool.getFreshVariable("z");
-	Variable x0 = vpool.getFreshVariable("x0");
-	Variable y0 = vpool.getFreshVariable("y0");
+protected:
+    virtual void SetUp()
+    {
+    	vpool.clear();
+    }
+	
+    virtual void TearDown()
+    {
+    }
 
-	TaylorModel<double> tmv_1_x({Term<Interval<double>>(1)});
-	TaylorModel<double> tmv_1_y({Term<Interval<double>>(2), (Interval<double>)1*x0*x0});
-	TaylorModel<double> tmv_1_z({(Interval<double>)1*y0, (Interval<double>)1*x0*y0});
+    hypro::VariablePool& vpool = hypro::VariablePool::getInstance();
 
-	TaylorModelVec<double> tmv_1;
+};
+
+TYPED_TEST(TaylorModelTest, Addition)
+{
+	carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
+	carl::Variable z = this->vpool.newCarlVariable("z");
+	carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable y0 = this->vpool.newCarlVariable("y0");
+
+	TaylorModel<TypeParam> tmv_1_x({Term<Interval<TypeParam>>(1)});
+
+	TaylorModel<TypeParam> tmv_1_y({Term<Interval<TypeParam>>(2), (Interval<TypeParam>)1*x0*x0});
+
+	TaylorModel<TypeParam> tmv_1_z({(Interval<TypeParam>)1*y0, (Interval<TypeParam>)1*x0*y0});
+
+	TaylorModelVec<TypeParam> tmv_1;
 	tmv_1.assign(x, tmv_1_x);
 	tmv_1.assign(y, tmv_1_y);
 	tmv_1.assign(z, tmv_1_z);
 
 	std::cout << tmv_1 << std::endl;
 
-	TaylorModel<double> tmv_2_x({Term<Interval<double>>(3)});
-	TaylorModel<double> tmv_2_y({Term<Interval<double>>(5), (Interval<double>)3*x0*x0});
-	TaylorModel<double> tmv_2_z({(Interval<double>)1*x0, (Interval<double>)1*x0*y0});
+	TaylorModel<TypeParam> tmv_2_x({Term<Interval<TypeParam>>(3)});
+	TaylorModel<TypeParam> tmv_2_y({Term<Interval<TypeParam>>(5), (Interval<TypeParam>)3*x0*x0});
+	TaylorModel<TypeParam> tmv_2_z({(Interval<TypeParam>)1*x0, (Interval<TypeParam>)1*x0*y0});
 
-	TaylorModelVec<double> tmv_2;
+	TaylorModelVec<TypeParam> tmv_2;
 	tmv_2.assign(y, tmv_2_y);
 	tmv_2.assign(z, tmv_2_z);
 	tmv_2.assign(x, tmv_2_x);
@@ -48,26 +69,25 @@ void TEST_Addition()
 	std::cout << tmv_1 << std::endl;
 }
 
-void TEST_Subtraction()
+TYPED_TEST(TaylorModelTest, Subtraction)
 {
 
 }
 
-void TEST_Multiplication()
+TYPED_TEST(TaylorModelTest, Multiplication)
 {
-	VariablePool & vpool = VariablePool::getInstance();
-	Variable x = vpool.getFreshVariable("x");
+	Variable x = this->vpool.newCarlVariable("x");
 
-	Interval<double> remainder1(-0.1,0.1), remainder2(-0.1,0.1);
+	Interval<TypeParam> remainder1(-0.1,0.1), remainder2(-0.1,0.1);
 
-	TaylorModel<double> tm1({(Interval<double>)-1*x, (Interval<double>)1*x*x}, remainder1);
-	TaylorModel<double> tm2({Term<Interval<double>>(1), (Interval<double>)2*x, (Interval<double>)-1*x*x}, remainder2);
+	TaylorModel<TypeParam> tm1({(Interval<TypeParam>)-1*x, (Interval<TypeParam>)1*x*x}, remainder1);
+	TaylorModel<TypeParam> tm2({Term<Interval<TypeParam>>(1), (Interval<TypeParam>)2*x, (Interval<TypeParam>)-1*x*x}, remainder2);
 
-	Interval<double> range_of_x(2,4);
-	Domain<double> domain;
+	Interval<TypeParam> range_of_x(2,4);
+	Domain<TypeParam> domain;
 	domain.assign(x, range_of_x);
 
-	TaylorModel<double> tmResult;
+	TaylorModel<TypeParam> tmResult;
 	tmResult = tm1.multiply(tm2, domain, 2);
 
 	std::cout << "We compute the product of the Taylor models" << std::endl;
@@ -83,12 +103,12 @@ void TEST_Multiplication()
 
 
 
-	Variable y = vpool.getFreshVariable("y");
+	Variable y = this->vpool.newCarlVariable("y");
 
-	TaylorModel<double> tm3({Term<Interval<double>>(6), (Interval<double>)5*y, (Interval<double>)1*y*y}, remainder1);
-	TaylorModel<double> tm4({Term<Interval<double>>(-2), (Interval<double>)-4*y, (Interval<double>)-1*y*y}, remainder2);
+	TaylorModel<TypeParam> tm3({Term<Interval<TypeParam>>(6), (Interval<TypeParam>)5*y, (Interval<TypeParam>)1*y*y}, remainder1);
+	TaylorModel<TypeParam> tm4({Term<Interval<TypeParam>>(-2), (Interval<TypeParam>)-4*y, (Interval<TypeParam>)-1*y*y}, remainder2);
 
-	Interval<double> range_of_y(-1,1);
+	Interval<TypeParam> range_of_y(-1,1);
 	domain.clear();
 	domain.assign(y, range_of_y);
 
@@ -104,11 +124,10 @@ void TEST_Multiplication()
 	std::cout << tmResult << std::endl;
 }
 
-void TEST_Polynomial_Substitution()
+TYPED_TEST(TaylorModelTest, Polynomial_Substitution)
 {
-	VariablePool & vpool = VariablePool::getInstance();
-	Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
+	Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
 
 	MultivariatePolynomial<Interval<double>> poly({Term<Interval<double>>(Interval<double>(1)), Interval<double>(-2)*x*x });
 
@@ -133,12 +152,11 @@ void TEST_Polynomial_Substitution()
 	std::cout << result << std::endl;
 }
 
-void TEST_Substitution()
+TYPED_TEST(TaylorModelTest, Substitution)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-    Variable x = vpool.getFreshVariable("x");
-	Variable x0 = vpool.getFreshVariable("x0");
-	Variable t = vpool.getFreshVariable("t");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable x0 = this->vpool.newCarlVariable("x0");
+	Variable t = this->vpool.newCarlVariable("t");
 
 	Interval<double> remainder1(-0.1,0.1), remainder2(-0.5,0.5), T(0.2,0.2), remainder_zero(0);
 
@@ -181,11 +199,10 @@ void TEST_Substitution()
 	std::cout << result << std::endl;
 }
 
-void TEST_Integration()
+TYPED_TEST(TaylorModelTest, Integration)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
 
 	Interval<double> remainder(1,2);
 	TaylorModel<double> tm({Term<Interval<double>>(x), (Interval<double>)-2*x*y, Term<Interval<double>>(5)}, remainder);
@@ -200,11 +217,10 @@ void TEST_Integration()
 	std::cout << tm << std::endl;
 }
 
-void TEST_ODE()
+TYPED_TEST(TaylorModelTest, ODE)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
 
 	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
 	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
@@ -216,11 +232,10 @@ void TEST_ODE()
 	std::cout << ode;
 }
 
-void TEST_Lie_Derivation()
+TYPED_TEST(TaylorModelTest, Lie_Derivation)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
 
 	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
 	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
@@ -270,10 +285,9 @@ void TEST_Lie_Derivation()
 	std::cout << tm_v[1] << std::endl;
 }
 
-void TEST_normalize()
+TYPED_TEST(TaylorModelTest, normalize)
 {
-	VariablePool & vpool = VariablePool::getInstance();
-	Variable x = vpool.getFreshVariable("x");
+	Variable x = this->vpool.newCarlVariable("x");
 
 	TaylorModel<double> tm({(Term<Interval<double>>)(1), (Interval<double>)2*x, (Interval<double>)-1*x*x});
 
@@ -291,15 +305,13 @@ void TEST_normalize()
 	std::cout << tm << std::endl;
 }
 
-void TEST_Picard_Operation()
+TYPED_TEST(TaylorModelTest, Picard_Operation)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
-    Variable x0 = vpool.getFreshVariable("x0");
-	Variable y0 = vpool.getFreshVariable("y0");
-	Variable t = vpool.getFreshVariable("t");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
+    Variable x0 = this->vpool.newCarlVariable("x0");
+	Variable y0 = this->vpool.newCarlVariable("y0");
+	Variable t = this->vpool.newCarlVariable("t");
 
 	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
 	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
@@ -350,15 +362,14 @@ void TEST_Picard_Operation()
 	std::cout << tmvResult << std::endl;
 }
 
-void TEST_Brusselator()
+/*
+TYPED_TEST(TaylorModelTest, Brusselator)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
-    Variable x0 = vpool.getFreshVariable("x0");
-	Variable y0 = vpool.getFreshVariable("y0");
-	Variable t = vpool.getFreshVariable("t");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
+    Variable x0 = this->vpool.newCarlVariable("x0");
+	Variable y0 = this->vpool.newCarlVariable("y0");
+	Variable t = this->vpool.newCarlVariable("t");
 
 	MultivariatePolynomial<Interval<FLOAT_T<mpfr_t> >> deriv_x({(Term<Interval<FLOAT_T<mpfr_t> >>)(Interval<FLOAT_T<mpfr_t> >(1)), (Interval<FLOAT_T<mpfr_t>>)1*x*x*y, (Interval<FLOAT_T<mpfr_t>>)-2.5*x});
 	MultivariatePolynomial<Interval<FLOAT_T<mpfr_t>>> deriv_y({(Interval<FLOAT_T<mpfr_t>>)1.5*x, (Interval<FLOAT_T<mpfr_t>>)-1*x*x*y});
@@ -408,15 +419,13 @@ void TEST_Brusselator()
 	os.close();
 }
 
-void TEST_VanDerPol()
+TYPED_TEST(TaylorModelTest, VanDerPol)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
-    Variable x0 = vpool.getFreshVariable("x0");
-	Variable y0 = vpool.getFreshVariable("y0");
-	Variable t = vpool.getFreshVariable("t");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
+    Variable x0 = this->vpool.newCarlVariable("x0");
+	Variable y0 = this->vpool.newCarlVariable("y0");
+	Variable t = this->vpool.newCarlVariable("t");
 
 	MultivariatePolynomial<Interval<double>> deriv_x({(Interval<double>)1*y});
 	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)1*y, (Interval<double>)-1*x, (Interval<double>)-1*x*x*y});
@@ -463,17 +472,15 @@ void TEST_VanDerPol()
 	os.close();
 }
 
-void TEST_Roessler()
+TYPED_TEST(TaylorModelTest, Roessler)
 {
-    VariablePool & vpool = VariablePool::getInstance();
-
-    Variable x = vpool.getFreshVariable("x");
-	Variable y = vpool.getFreshVariable("y");
-	Variable z = vpool.getFreshVariable("z");
-    Variable x0 = vpool.getFreshVariable("x0");
-	Variable y0 = vpool.getFreshVariable("y0");
-	Variable z0 = vpool.getFreshVariable("z0");
-	Variable t = vpool.getFreshVariable("t");
+    Variable x = this->vpool.newCarlVariable("x");
+	Variable y = this->vpool.newCarlVariable("y");
+	Variable z = this->vpool.newCarlVariable("z");
+    Variable x0 = this->vpool.newCarlVariable("x0");
+	Variable y0 = this->vpool.newCarlVariable("y0");
+	Variable z0 = this->vpool.newCarlVariable("z0");
+	Variable t = this->vpool.newCarlVariable("t");
 
 	MultivariatePolynomial<Interval<double>> deriv_x({(Interval<double>)-1*y, (Interval<double>)-1*z});
 	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)0.2*y, (Interval<double>)1*x});
@@ -524,24 +531,4 @@ void TEST_Roessler()
 	output_2D_interval_gnuplot(result, os, std::string("Roessler"), y, z);
 
 	os.close();
-}
-
-
-int main()
-{
-//	TEST_Multiplication();
-//	TEST_Integration();
-//	TEST_Lie_Derivation();
-//	TEST_Picard_Operation();
-//	TEST_Substitution();
-//	TEST_Polynomial_Substitution();
-//	TEST_normalize();
-//	TEST_Addition();
-
-	TEST_Brusselator();
-//	TEST_VanDerPol();
-//	TEST_Roessler();
-	return 0;
-}
-
-
+}*/

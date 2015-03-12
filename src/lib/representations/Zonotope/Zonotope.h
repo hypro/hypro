@@ -33,8 +33,7 @@ class Zonotope
         hypro::matrix_t<Number> mGenerators;
         
         void removeGenerator(unsigned int colToRemove);
-        
-        
+
     public:
         
         // Constructors and Destructors
