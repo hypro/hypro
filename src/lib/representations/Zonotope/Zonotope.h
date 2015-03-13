@@ -171,7 +171,7 @@ class Zonotope
          * @param e_scalar : Scalar representing the halfspace
          * @return true if intersect is found, false otherwise (result parameter is not modified if false)
          */
-        Zonotope<Number> intersectWithHalfspace(const hypro::vector_t<Number>& d_vec, hypro::scalar_t<Number> e_scalar) const;
+        Zonotope<Number> intersectWithHalfspace(const hypro::vector_t<Number>& d_vec, Number e_scalar) const;
         
         /**
          * Calculates zonotope intersect with halfspace represented as PPL constraint

@@ -49,8 +49,8 @@ TYPED_TEST(ZonotopeTest, DimConstructor) {
 }
 
 TYPED_TEST(ZonotopeTest, FullConstructor) {
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,3> gen;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,1> center;
+    Eigen::Matrix<TypeParam, 2,3> gen;
+    Eigen::Matrix<TypeParam, 2,1> center;
 
     gen << 2,3,6,
            4,1,5;
@@ -64,8 +64,8 @@ TYPED_TEST(ZonotopeTest, FullConstructor) {
 }
 
 TYPED_TEST(ZonotopeTest, CopyConstructor) {
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,2> gen;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,1> center;
+    Eigen::Matrix<TypeParam, 3,2> gen;
+    Eigen::Matrix<TypeParam, 3,1> center;
     center << 1,5,2;
     gen << 1,2,
             2,8,
@@ -80,8 +80,8 @@ TYPED_TEST(ZonotopeTest, CopyConstructor) {
 
 TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
     hypro::Zonotope<TypeParam> z1(2);
-    Eigen::Matrix<hypro::scalar_t<TypeParam>,2,1> center = {1.1941, 0.1068};
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,6> generators;
+    Eigen::Matrix<TypeParam,2,1> center = {1.1941, 0.1068};
+    Eigen::Matrix<TypeParam, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
     
@@ -92,8 +92,8 @@ TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
 }
 
 TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,6> generators;
+    Eigen::Matrix<TypeParam, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
+    Eigen::Matrix<TypeParam, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
     
@@ -106,8 +106,8 @@ TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
 TYPED_TEST(ZonotopeTest, MinkowskiSum) {
     hypro::Zonotope<TypeParam> z1(2), z2(2), z3(2);
 
-    Eigen::Matrix<hypro::scalar_t<TypeParam>,2,1> cen1, cen2, cen_res, gen_sum;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>,2,2> gen1, gen2;
+    Eigen::Matrix<TypeParam,2,1> cen1, cen2, cen_res, gen_sum;
+    Eigen::Matrix<TypeParam,2,2> gen1, gen2;
 
     cen1 << 1,
             2;
@@ -149,8 +149,8 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 }
 
 //TYPED_TEST(ZonotopeTest, Intersection1) {
-//    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,3> gen, exp_gen, delta_gen;
-//    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,1> cen, d_vector, exp_center, delta_center;
+//    Eigen::Matrix<TypeParam, 3,3> gen, exp_gen, delta_gen;
+//    Eigen::Matrix<TypeParam, 3,1> cen, d_vector, exp_center, delta_center;
 //    gen << 2,0,0,
 //            0,1,0,
 //            0,0,3;
@@ -197,8 +197,8 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
     Variable x(0), y(1);
     Constraint hspace(y<=x-1);
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,1> z_center(3,-10);
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,2> z_gen;
+    Eigen::Matrix<TypeParam, 2,1> z_center(3,-10);
+    Eigen::Matrix<TypeParam, 2,2> z_gen;
     z_gen << 0,1,
              1,0;
     hypro::Zonotope<TypeParam> z1(z_center, z_gen), result(2);
@@ -243,8 +243,8 @@ TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
 
 TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
     
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,1> z_center;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2,2> z_gen;
+    Eigen::Matrix<TypeParam, 2,1> z_center;
+    Eigen::Matrix<TypeParam, 2,2> z_gen;
     z_center << 0,-1;
     z_gen << 0,1,
              1,0;
@@ -269,13 +269,13 @@ TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
 }
 
 TYPED_TEST(ZonotopeTest, RemoveEmptyGen) {
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3, 1> center;
+    Eigen::Matrix<TypeParam, 3, 1> center;
     center << 2,
               3,
               6;
     
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3, 4> gen;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3, 3> gen2;
+    Eigen::Matrix<TypeParam, 3, 4> gen;
+    Eigen::Matrix<TypeParam, 3, 3> gen2;
     
     gen << 2,3,0,2,
            3,6,0,3,
@@ -296,8 +296,8 @@ TYPED_TEST(ZonotopeTest, RemoveEmptyGen) {
 
 TYPED_TEST(ZonotopeTest, AddGenerators) {
     hypro::Zonotope<TypeParam> z(2);
-    Eigen::Matrix<hypro::scalar_t<TypeParam>,2,3> generators, generators2;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 6> concat_gens;
+    Eigen::Matrix<TypeParam,2,3> generators, generators2;
+    Eigen::Matrix<TypeParam, 2, 6> concat_gens;
     generators << 1,2,5,
                   3,1,6;
     
@@ -315,8 +315,8 @@ TYPED_TEST(ZonotopeTest, AddGenerators) {
 
 TYPED_TEST(ZonotopeTest, Intersection2) {
     hypro::Zonotope<TypeParam> z1(3);
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,1> z_center, d, exp_center, delta;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 3,7> generators;
+    Eigen::Matrix<TypeParam, 3,1> z_center, d, exp_center, delta;
+    Eigen::Matrix<TypeParam, 3,7> generators;
     z_center << -0.0407,
                 -6.3274,
                 1;
@@ -350,10 +350,10 @@ TYPED_TEST(ZonotopeTest, Intersection2) {
 
 TYPED_TEST(ZonotopeTest, ConvexHull) {
     hypro::Zonotope<TypeParam> z1(2), z2(2), result;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 1> c1, c2, expected_center;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 2> g1;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 3> g2;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 4> expected_generators;
+    Eigen::Matrix<TypeParam, 2, 1> c1, c2, expected_center;
+    Eigen::Matrix<TypeParam, 2, 2> g1;
+    Eigen::Matrix<TypeParam, 2, 3> g2;
+    Eigen::Matrix<TypeParam, 2, 4> expected_generators;
     
     c1 << 2,1;
     c2 << 1,1;
@@ -381,9 +381,9 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
 
 
 TYPED_TEST(ZonotopeTest, IntervalHull) {
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 1> center = {2.0,1.0};
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 3> generators;
-    Eigen::Matrix<hypro::scalar_t<TypeParam>, 2, 2> expected_generators;
+    Eigen::Matrix<TypeParam, 2, 1> center = {2.0,1.0};
+    Eigen::Matrix<TypeParam, 2, 3> generators;
+    Eigen::Matrix<TypeParam, 2, 2> expected_generators;
     generators << 1, 4, 3,
                   6, 2, 1;
     expected_generators << 8, 0,

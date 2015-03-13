@@ -11,7 +11,6 @@
 #include <carl/core/Variable.h>
 #include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
-//#include "util/eigenTypetraits.h"
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 #include "util/VariablePool.h"
@@ -35,19 +34,6 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-
-#ifdef SUPPORT_MPFR
-#include <mpfr.h>
-typedef mpfr_t number_t;
-#else
-typedef double number_t;
-#endif
-
-typedef carl::FLOAT_T<number_t> number;
-typedef carl::MultivariatePolynomial<number> Polynomial;
-typedef std::map<carl::Variable, unsigned> varIdMap;
-typedef std::set<carl::Variable> variableSet;
-
 namespace hypro
 {
 template<typename Number>
@@ -55,9 +41,6 @@ using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
 template<typename Number>
 using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
-
-template<typename Number>
-using scalar_t = Number;
 
 template<typename Number>
 class Polytope;
@@ -86,32 +69,33 @@ using valuation_t = hypro::Polytope<Number>;
 
 namespace Eigen
 {
-    template<> struct NumTraits<number>
-    {
-        enum
-        {
-            IsComplex = 0,
-            IsInteger = 0,
-            ReadCost = 1,
-            AddCost = 1,
-            MulCost = 1, 
-            IsSigned = 1,
-            RequireInitialization = 1
-        };
+	template<typename Number> 
+	struct NumTraits<carl::FLOAT_T<Number>>
+	{
+		enum
+		{
+			IsComplex = 0,
+			IsInteger = 0,
+			ReadCost = 1,
+			AddCost = 1,
+			MulCost = 1, 
+			IsSigned = 1,
+			RequireInitialization = 1
+		};
 
-        typedef number Real;
-        typedef number NonInteger;
-        typedef number Nested;
+		typedef carl::FLOAT_T<Number> Real;
+		typedef carl::FLOAT_T<Number> NonInteger;
+		typedef carl::FLOAT_T<Number> Nested;
 
-        static inline Real epsilon() { return Real(0); }
-        static inline Real dummy_precision()
-        {
-            // make sure to override this for floating-point types
-            return Real(0);
-        }
-        //static inline number highest() { return number::maxVal(); }
-        //static inline number lowest()  { return number::minVal(); }
-    };
+		static inline Real epsilon() { return Real(0); }
+		static inline Real dummy_precision()
+		{
+			// make sure to override this for floating-point types
+			return Real(0);
+		}
+		//static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
+		//static inline carl::FLOAT_T<Number> lowest()  { return carl::FLOAT_T<Number>::minVal(); }
+	};
 	
 	template<typename Number>
 	bool operator<(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
@@ -126,7 +110,7 @@ namespace Eigen
 		}
 		return false;
 	}
-	
+
 	template<typename Number>
 	bool operator==(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
 		if(lhs.rows() != rhs.rows())

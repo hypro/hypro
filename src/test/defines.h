@@ -12,8 +12,15 @@
 #include "../lib/util/types.h"
 #include "carl/numbers/FLOAT_T.h"
 
-typedef ::testing::Types<int, double, carl::FLOAT_T<double>, number > types;
-typedef ::testing::Types<double, carl::FLOAT_T<double>, number > floatTypes;
+#ifdef SUPPORT_MPFR
+#include <mpfr.h>
+ typedef ::testing::Types<int, double, carl::FLOAT_T<double>, carl::FLOAT_T<mpfr_t> > types;
+typedef ::testing::Types<double, carl::FLOAT_T<double>, carl::FLOAT_T<mpfr_t> > floatTypes;
+#else
+typedef ::testing::Types<int, double, carl::FLOAT_T<double>> types;
+typedef ::testing::Types<double, carl::FLOAT_T<double>> floatTypes;
+
+ #endif
 
 // List tests which should be typed
 // Datastructure

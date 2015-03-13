@@ -37,7 +37,7 @@ namespace hypro
             Hyperplane<Number>          mHyperplane;
             outsideSet          mOutsideSet;
             vector_t<Number>			mNormal;
-            scalar_t<Number>			mScalar;
+            Number			mScalar;
 
         /**
          * Constructors & Destructor
@@ -135,7 +135,7 @@ namespace hypro
                	return mNormal;
             }
 
-            scalar_t<Number> getScalar () const
+            Number getScalar () const
             {
                	return mScalar;
             }
@@ -188,14 +188,14 @@ namespace hypro
             	return result;
             }
 
-            scalar_t<Number> getScalarVector () {
+            Number getScalarVector () {
             	std::vector<Point<Number>> vertex = std::vector<Point<Number>>(mVertices.size());
             	for(Point<Number> p: mVertices){
             	   vertex.push_back(p);
             	}
             	std::cout << __func__ << " : " << __LINE__ << std::endl;
             	std::cout << mNormal << " ** " << std::endl << vertex[0].rawCoordinates()<< std::endl;
-               	return scalar_t<Number> (mNormal.dot(vertex[0].rawCoordinates()));
+               	return Number (mNormal.dot(vertex[0].rawCoordinates()));
             }
 
             Hyperplane<Number> hyperplane() const
@@ -210,7 +210,7 @@ namespace hypro
             bool check_if_above(Point<Number> p)
             {
                 //return (mHyperplane.signedDistance(p) > 0);
-            	scalar_t<Number> temp = scalar_t<Number> (mNormal.dot(p.rawCoordinates()));
+            	Number temp = Number (mNormal.dot(p.rawCoordinates()));
             	return temp-mScalar>0 ;
             }
 
@@ -235,9 +235,9 @@ namespace hypro
             	}
                 else {
                 	Point<Number> result = mOutsideSet[0];
-                	scalar_t<Number> max = scalar_t<Number> (mNormal.dot(mOutsideSet[0].rawCoordinates()));//mHyperplane.signedDistance(result);
+                	Number max = Number (mNormal.dot(mOutsideSet[0].rawCoordinates()));//mHyperplane.signedDistance(result);
                 	for(unsigned i = 1; i<mOutsideSet.size(); i++){
-                    	scalar_t<Number> temp = scalar_t<Number> (mNormal.dot(mOutsideSet[i].rawCoordinates()));
+                    	Number temp = Number (mNormal.dot(mOutsideSet[i].rawCoordinates()));
                      	if(temp>max){
                      		max=temp;
                      		result=mOutsideSet[i];
