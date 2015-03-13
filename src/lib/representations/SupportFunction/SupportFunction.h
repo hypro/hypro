@@ -24,8 +24,8 @@
 
 namespace hypro
 {
-    // This enum represents the support function type and is used to identify support function without instanceof operations
-    enum SF_TYPE{SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY};
+	// This enum represents the support function type and is used to identify support function without instanceof operations
+	enum SF_TYPE{SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY};
 	
 	template<typename Number>
 	class SupportFunction;
@@ -65,13 +65,13 @@ namespace hypro
 		const SupportFunction<Number>& rhs;
 		intersectionContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
 	};
-    
-    /*
-    * This is the super class for all support function objects.
-    */
+	
+	/*
+	* This is the super class for all support function objects.
+	*/
 	template<typename Number>
-    class SupportFunction
-    {
+	class SupportFunction
+	{
 		private:
 			SF_TYPE mType;
 			unsigned mDimension;
@@ -85,7 +85,7 @@ namespace hypro
 			};
 
 		public:
-           
+		   
 			SupportFunction(const SupportFunction<Number>& _orig);
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
@@ -97,7 +97,7 @@ namespace hypro
 			void operator=(const SupportFunction& _orig);
 			
 			evaluationResult<Number> evaluate(const vector_t<Number>& _direction) const;
-			vector_t<Number> multiEvaluate(const std::vector<vector_t<Number>>& _directions) const;
+			vector_t<Number> multiEvaluate(const matrix_t<Number>& _directions) const;
 			
 			unsigned dimension() const;
 			SF_TYPE type() const;
@@ -118,7 +118,7 @@ namespace hypro
 			
 			SupportFunction<Number> scale(const Number& _factor = 1) const;
 			bool isEmpty() const;
-    };
+	};
 } // namespace
 
 #include "SupportFunction.tpp"

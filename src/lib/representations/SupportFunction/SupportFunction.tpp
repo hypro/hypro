@@ -179,16 +179,30 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	vector_t<Number> SupportFunction<Number>::multiEvaluate(const std::vector<vector_t<Number>>& _directions) const {
+	vector_t<Number> SupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _directions) const {
 		switch (mType) {
-			case SF_TYPE::LINTRAFO:
-				break;
-			case SF_TYPE::POLY:
-				break;
-			case SF_TYPE::SCALE:
-				break;
-			case SF_TYPE::SUM:
-				break;
+			case SF_TYPE::LINTRAFO: {
+				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
+				return mLinearTrafoParameters->origin.multiEvaluate(tmp*_directions);
+				}
+			case SF_TYPE::POLY: {
+				return mPolytope->multiEvaluate(_directions);
+				}
+			case SF_TYPE::SCALE: {
+				return mScaleParameters->origin.multiEvaluate(_directions)*(mScaleParameters->factor);
+				}
+			case SF_TYPE::SUM: {
+				// Todo: Not implemented yet.
+				assert(false);
+				}
+			case SF_TYPE::UNION: {
+				// Todo: Not implemented yet.
+				assert(false);
+				}
+			case SF_TYPE::INTERSECT: {
+				// Todo: Not implemented yet.
+				assert(false);
+				}
 			default:
 				assert(false);
 		}

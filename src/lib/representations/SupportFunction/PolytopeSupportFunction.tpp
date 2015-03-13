@@ -177,7 +177,7 @@ namespace hypro {
 	template<typename Number>
 	vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _A) const {
 		assert(_A.rows() == mDimension);
-		vector_t<Number> res(mDimension);
+		vector_t<Number> res(_A.cols());
 
 		for(unsigned index = 0; index < _A.cols(); ++index) {
 			res(index) = this->evaluate(_A.col(index)).supportValue;

@@ -49,10 +49,10 @@ TYPED_TEST(PolytopeSupportFunctionTest, constructor) {
 
 TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
-	matrix_t<TypeParam> vec1 = matrix_t<TypeParam>(2,1);
-	matrix_t<TypeParam> vec2 = matrix_t<TypeParam>(2,1);
-	matrix_t<TypeParam> vec3 = matrix_t<TypeParam>(2,1);
-	matrix_t<TypeParam> vec4 = matrix_t<TypeParam>(2,1);
+	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2,1);
+	vector_t<TypeParam> vec2 = vector_t<TypeParam>(2,1);
+	vector_t<TypeParam> vec3 = vector_t<TypeParam>(2,1);
+	vector_t<TypeParam> vec4 = vector_t<TypeParam>(2,1);
 	
 	vec1(0,0) = TypeParam(2);
 	vec1(1,0) = TypeParam(4);
@@ -69,6 +69,22 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 	EXPECT_EQ(TypeParam(20),psf1.evaluate(vec1).supportValue);
 	EXPECT_EQ(TypeParam(5),psf1.evaluate(vec2).supportValue);
 	EXPECT_EQ(TypeParam(17),psf1.evaluate(vec3).supportValue);
+}
+
+TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
+	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>(2,3);
+	directions(0,0) = TypeParam(2);
+	directions(1,0) = TypeParam(4);
+	directions(0,1) = TypeParam(1);
+	directions(1,1) = TypeParam(-2);
+	directions(0,2) = TypeParam(-4);
+	directions(1,2) = TypeParam(1);
+
+	vector_t<TypeParam> res = psf1.multiEvaluate(directions);
+	EXPECT_EQ(TypeParam(20), res(0));
+	EXPECT_EQ(TypeParam(5), res(1));
+	EXPECT_EQ(TypeParam(17), res(2));
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {
