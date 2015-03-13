@@ -45,14 +45,6 @@ namespace hypro {
 		#endif
 
 		int numberOfConstraints = constraints.rows();
-		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-			// check dimensionalities
-			int numberOfConstraintConstant = constraintConstants.size();
-			if (numberOfConstraints != numberOfConstraintConstant)
-			{
-				std::cout << __func__ << " incompatible number of constraints and correspondent values";
-			}
-		#endif
 
 		// convert constraint constants
 		glp_add_rows(lp, numberOfConstraints);
@@ -180,6 +172,57 @@ namespace hypro {
 		#endif
 
 		return result;
+	}
+
+	template<typename Number>
+	vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _A) const {
+		assert(_A.rows() == mDimension);
+		vector_t<Number> res(mDimension);
+
+		for(unsigned index = 0; index < _A.cols(); ++index) {
+			res(index) = this->evaluate(_A.col(index)).supportValue;
+		}
+
+		return res;
+	}
+
+	template<typename Number>
+	bool PolytopeSupportFunction<Number>::contains(const Point<Number>& _point) const {
+		vector_t<Number> constraint(glp_get_num_cols(lp));
+		vector_t<Number> coordinates(_point.rawCoordinates());
+		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+			std::cout << __func__ << ": " << _point << std::endl;
+		#endif
+
+		for(unsigned i = 0; i < glp_get_num_rows(lp); ++i) {
+			// prepare arrays
+			int indices[constraint.rows()+1];
+			double values[constraint.rows()+1];
+			//for(unsigned pos = 0; pos < constraint.rows(); ++pos) {
+			//	indices[pos] = 0;
+			//	values[pos] = 0.0;
+			//}
+			
+			glp_get_mat_row(lp,i+1,indices, values);
+			unsigned pos = 1;
+			while(pos <= constraint.rows() && indices[pos] != 0) {
+				constraint(indices[pos]-1) = values[pos];
+				++pos;
+			}
+			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+				std::cout << __func__ << ": Set constraint to " << constraint << std::endl;
+			#endif
+
+			double scalar = glp_get_row_ub(lp,i+1);
+
+			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
+				std::cout << __func__ << ": Verify " << constraint << "*" << coordinates << " = " << constraint.dot(coordinates) << " (<= "<<  scalar << ")" << std::endl;
+			#endif
+
+			if(constraint.dot(coordinates) > Number(scalar))
+				return false;
+		}
+		return true;
 	}
 	
 	template<typename Number>
