@@ -162,7 +162,17 @@ TYPED_TEST(VPolytopeTest, Intersection)
 
 TYPED_TEST(VPolytopeTest, Membership)
 {
-	//Point<number_t> p;
-	//p.setCoordinate(x, 4);
-	//p.setCoordinate(y, 2);
+	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
+	
+	Point<TypeParam> p1({0, 0});
+	EXPECT_FALSE(vpt1.contains(p1));
+
+	Point<TypeParam> p2({2.5, 3});
+	EXPECT_TRUE(vpt1.contains(p2));
+
+	Point<TypeParam> p3({3, 3});
+	EXPECT_TRUE(vpt1.contains(p3));
+
+	Point<TypeParam> p4({2, 2});
+	EXPECT_TRUE(vpt1.contains(p4));
 }
