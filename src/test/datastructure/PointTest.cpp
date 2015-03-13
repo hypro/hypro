@@ -56,10 +56,10 @@ protected:
     }
 	
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    Variable x;
-    Variable y;
-    Variable a;
-    Variable b;
+    carl::Variable x;
+    carl::Variable y;
+    carl::Variable a;
+    carl::Variable b;
 //    Variable c = pool.getFreshVariable("c");
 //    Variable d = pool.getFreshVariable("d");
 	

@@ -40,8 +40,8 @@ protected:
     }
 
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    Variable x;
-    Variable y;
+    carl::Variable x;
+    carl::Variable y;
 	
     Point<Number> p1;
     Point<Number> p2;

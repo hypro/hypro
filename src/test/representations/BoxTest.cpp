@@ -44,8 +44,8 @@ protected:
     }
 	
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    Variable x;
-    Variable y;
+    carl::Variable x;
+    carl::Variable y;
 
     Box<Number> box1;
     Box<Number> box2;
