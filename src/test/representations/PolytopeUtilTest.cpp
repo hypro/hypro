@@ -135,7 +135,7 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
     EXPECT_EQ(1.075, vec(0)*result);
     EXPECT_EQ(1.075, vec(1)*result);
 }
-
+/*
 TYPED_TEST(PolytopeUtilTest, ConeConstructor)
 {
     SUCCEED();
@@ -165,3 +165,4 @@ TYPED_TEST(PolytopeUtilTest, FanContainingCone)
 {
     
 }
+*/

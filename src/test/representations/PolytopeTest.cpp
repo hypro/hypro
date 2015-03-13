@@ -358,6 +358,7 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
     //EXPECT_FALSE(result.contains(p8));
 }
 
+/*
 TYPED_TEST(PolytopeTest, ConvexHull)
 {
     
@@ -367,3 +368,4 @@ TYPED_TEST(PolytopeTest, Membership)
 {
     
 }
+*/

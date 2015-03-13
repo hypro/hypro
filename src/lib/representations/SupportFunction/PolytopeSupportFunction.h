@@ -82,6 +82,15 @@ namespace hypro
 		 */
 		bool contains(const Point<Number>& _point) const;
 
+		/**
+		 * @brief Check if point is contained in the support function.
+		 * @details To check if the given point is contained in the support function we evaluate it in all its directions (uses multiEvaluate).
+		 * 
+		 * @param _point The point to check.
+		 * @return True, if the point is inside the support function.
+		 */
+		bool contains(const vector_t<Number>& _point) const;
+
 		bool empty() const;
 	};
 } // namespace

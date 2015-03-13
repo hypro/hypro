@@ -188,8 +188,12 @@ namespace hypro {
 
 	template<typename Number>
 	bool PolytopeSupportFunction<Number>::contains(const Point<Number>& _point) const {
+		return this->contains(_point.rawCoordinates());
+	}
+
+	template<typename Number>
+	bool PolytopeSupportFunction<Number>::contains(const vector_t<Number>& _point) const {
 		vector_t<Number> constraint(glp_get_num_cols(lp));
-		vector_t<Number> coordinates(_point.rawCoordinates());
 		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 			std::cout << __func__ << ": " << _point << std::endl;
 		#endif
@@ -216,10 +220,10 @@ namespace hypro {
 			double scalar = glp_get_row_ub(lp,i+1);
 
 			#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-				std::cout << __func__ << ": Verify " << constraint << "*" << coordinates << " = " << constraint.dot(coordinates) << " (<= "<<  scalar << ")" << std::endl;
+				std::cout << __func__ << ": Verify " << constraint << "*" << _point << " = " << constraint.dot(_point) << " (<= "<<  scalar << ")" << std::endl;
 			#endif
 
-			if(constraint.dot(coordinates) > Number(scalar))
+			if(constraint.dot(_point) > Number(scalar))
 				return false;
 		}
 		return true;

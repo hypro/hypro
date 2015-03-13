@@ -307,6 +307,11 @@ namespace hypro {
 	
 	template<typename Number>
 	bool SupportFunction<Number>::contains(const Point<Number>& _point) const {
+		return this->contains(_point.rawCoordinates());
+	}
+
+	template<typename Number>
+	bool SupportFunction<Number>::contains(const vector_t<Number>& _point) const {
 		switch (mType) {
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();

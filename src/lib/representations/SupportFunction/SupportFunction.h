@@ -114,6 +114,7 @@ namespace hypro
 			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;
 			SupportFunction<Number> intersect(const SupportFunction<Number>& _rhs) const;
 			bool contains(const Point<Number>& _point) const;
+			bool contains(const vector_t<Number>& _point) const; 
 			SupportFunction<Number> unite(const SupportFunction<Number>& _rhs) const;
 			
 			SupportFunction<Number> scale(const Number& _factor = 1) const;

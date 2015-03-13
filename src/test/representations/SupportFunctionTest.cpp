@@ -269,5 +269,14 @@ TYPED_TEST(SupportFunctionTest, unite) {
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	EXPECT_TRUE(psf1.contains(Point<TypeParam>({0,0})));
+	EXPECT_TRUE(psf1.contains(Point<TypeParam>({-2,-2})));
+	EXPECT_TRUE(psf1.contains(Point<TypeParam>({3,3})));
 
+	TypeParam xCoord = TypeParam(-12)/TypeParam(4.5)-0.0001;
+	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-0.0001;
+
+	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
+	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+0.001,yCoord+0.001})));
 }
