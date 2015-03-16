@@ -24,6 +24,7 @@ typedef ::testing::Types<double, carl::FLOAT_T<double>> floatTypes;
 
 // List tests which should be typed
 // Datastructure
+TYPED_TEST_CASE(HyperplaneTest, floatTypes);
 TYPED_TEST_CASE(PointTest, floatTypes);
 TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
 TYPED_TEST_CASE(VertexContainerTest, floatTypes);
@@ -32,7 +33,7 @@ TYPED_TEST_CASE(VertexTest, floatTypes);
 // Representations
 TYPED_TEST_CASE(BoxTest, types);
 TYPED_TEST_CASE(GridTest, floatTypes);
-TYPED_TEST_CASE(HyperplaneTest, floatTypes);
+TYPED_TEST_CASE(HPolytopeTest, floatTypes);
 TYPED_TEST_CASE(OrthogonalPolyhedronTest, types);
 TYPED_TEST_CASE(PolytopeTest, floatTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, floatTypes);

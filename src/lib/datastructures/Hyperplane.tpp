@@ -102,7 +102,7 @@
 	}
 	
 	template<typename Number>
-	vector_t<Number> Hyperplane<Number>::normal() const
+	const vector_t<Number>& Hyperplane<Number>::normal() const
 	{
 		return mNormal;
 	}
@@ -155,6 +155,11 @@
 	bool Hyperplane<Number>::intersection(Number& _result, const Point<Number>& _vector) const
 	{
 		return intersection(_result, _vector.rawCoordinates());
+	}
+
+	template<typename Number>
+	Hyperplane<Number> Hyperplane<Number>::linearTransformation(const matrix_t<Number>& A) const {
+		return Hyperplane<Number>(A*mNormal, mScalar);
 	}
 	
 	template<typename Number>

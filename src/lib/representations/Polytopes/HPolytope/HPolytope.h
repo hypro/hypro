@@ -1,14 +1,15 @@
 /* 
- * File:   HPolytope.h
- * Author: stefan
+ * @file   HPolytope.h
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
- * Created on July 16, 2014, 4:23 PM
+ * @since 	2014-07-16
+ * @version 	2015-03-16
  */
 
 #pragma once
 
 #include "../util.h"
-#include "../../datastructures/Hyperplane.h"
+#include "../../../datastructures/Hyperplane.h"
 #include <cassert>
 #include "simplex.h"
 #include "../VPolytope/VPolytope.h"
@@ -31,12 +32,13 @@ namespace hypro
 		HPolytope();
 		HPolytope(const HPolytope& orig);
 		HPolytope(const Hyperplane<Number>& plane);
+		HPolytope(const HyperplaneVector& planes);
 		HPolytope(unsigned dimension);
-		HPolytope(const matrix& A, const vector& b);
-		HPolytope(const matrix& A);
+		HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b);
+		HPolytope(const matrix_t<Number>& A);
 		
 		// conversion constructors
-		HPolytope(const VPoltope<Number>& alien);
+		//HPolytope(const VPolytope<Number>& alien);
 		
 		~HPolytope();
 		
@@ -45,11 +47,12 @@ namespace hypro
 		 */
 		
 		unsigned dimension() const;
+		unsigned size() const;
 		
 		const typename polytope::Fan<Number>& fan() const;
 		
-		void addConstraint(const Hyperplane<Number>& plane);
-		void addConstraints(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
+		void insert(const Hyperplane<Number>& plane);
+		void insert(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
 		
 		const HyperplaneVector& constraints() const;
 		bool hasConstraint(const Hyperplane<Number>& hplane) const;

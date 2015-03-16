@@ -21,6 +21,15 @@ namespace hypro
 		mFanSet = false;
 		mDimension = plane.dimension();
 	}
+
+	template<typename Number>
+	HPolytope<Number>::HPolytope(const HyperplaneVector& planes) {
+		mDimension = planes.begin()->dimension();
+		for(const auto& plane : planes) {
+			mHPlanes.push_back(plane);
+		}
+		mFanSet = false;
+	}
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(unsigned dimension) {
@@ -28,15 +37,21 @@ namespace hypro
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const matrix& A, const vector& b) {
-		
+	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) {
+		assert(A.rows() == b.rows());
+		for(unsigned i = 0; i < A.rows(); ++i) {
+			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
+		}
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const matrix& A) {
-		
+	HPolytope<Number>::HPolytope(const matrix_t<Number>& A) {
+		for(unsigned i = 0; i < A.rows(); ++i) {
+			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
+		}
 	}
 	
+	/*
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const VPoltope<Number>& alien) {
 		assert(alien.size() > 2);
@@ -46,7 +61,8 @@ namespace hypro
 			
 		}
 	}
-	
+	*/
+
 	template<typename Number>
 	HPolytope<Number>::~HPolytope()
 	{}
@@ -63,6 +79,11 @@ namespace hypro
 	}
 
 	template<typename Number>
+	unsigned HPolytope<Number>::size() const {
+		return mHPlanes.size();
+	}
+
+	template<typename Number>
 	const typename polytope::Fan<Number>& HPolytope<Number>::fan() const
 	{
 		if(!mFanSet)
@@ -73,29 +94,33 @@ namespace hypro
 	}
 
 	template<typename Number>
-	void HPolytope<Number>::addConstraint(const Hyperplane<Number>& plane)
+	void HPolytope<Number>::insert(const Hyperplane<Number>& plane)
 	{
 		assert(mDimension == 0 || mDimension == plane.dimension());
 		if(mDimension == 0)
 		{
 			mDimension = plane.dimension();
 		}
-		return mHPlanes.push_back(plane);
+		mHPlanes.push_back(plane);
 	}
 
 	template<typename Number>
-	void HPolytope<Number>::addConstraints(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end)
+	void HPolytope<Number>::insert(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end)
 	{
 		assert(mDimension == 0 || mDimension == begin->dimension());
 		if(mDimension == 0)
 		{
 			mDimension = begin->dimension();
 		}
-		mHPlanes.insert(begin,end);
+		auto it = begin;
+		while(it != end) {
+			mHPlanes.push_back(*it);
+			++it;
+		}
 	}
 
 	template<typename Number>
-	const HyperplaneVector& HPolytope<Number>::constraints() const
+	const typename HPolytope<Number>::HyperplaneVector& HPolytope<Number>::constraints() const
 	{
 		return mHPlanes;
 	}
@@ -103,29 +128,33 @@ namespace hypro
 	template<typename Number>
 	bool HPolytope<Number>::hasConstraint(const Hyperplane<Number>& hplane) const
 	{
-		return (mHPlanes.find(hplane) != mHPlanes.end());
+		for(const auto& plane : mHPlanes) {
+			if(hplane == plane)
+				return true;
+		}
+		return false;
 	}
 
 	template<typename Number>
-	typename HyperplaneVector::iterator HPolytope<Number>::begin()
+	typename HPolytope<Number>::HyperplaneVector::iterator HPolytope<Number>::begin()
 	{
 		return mHPlanes.begin();
 	}
 
 	template<typename Number>
-	typename HyperplaneVector::const_iterator HPolytope<Number>::begin() const
+	typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::begin() const
 	{
 		return mHPlanes.begin();
 	}
 
 	template<typename Number>
-	typename HyperplaneVector::iterator HPolytope<Number>::end()
+	typename HPolytope<Number>::HyperplaneVector::iterator HPolytope<Number>::end()
 	{
 		return mHPlanes.end();
 	}
 
 	template<typename Number>
-	typename HyperplaneVector::const_iterator HPolytope<Number>::end() const
+	typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::end() const
 	{
 		return mHPlanes.end();
 	}
@@ -136,36 +165,60 @@ namespace hypro
 
 	
 	template<typename Number>
-	HPolytope linearTransformation(const matrix_t<Number>& A) const {
-
-	 }
+	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const {
+		HPolytope<Number> res;
+		for(const auto& plane : mHPlanes) {
+			res.insert(plane.linearTransformation(A));
+		}
+		return res;
+	}
 
 	template<typename Number>
-	HPolytope minkowskiSum(const HPolytope& rhs) const {
+	HPolytope<Number> HPolytope<Number>::minkowskiSum(const HPolytope& rhs) const {
 
 	}
 
 	template<typename Number>
-	HPolytope intersect(const HPolytope& rhs) const {
-
+	HPolytope<Number> HPolytope<Number>::intersect(const HPolytope& rhs) const {
+		// Todo: Improve.
+		HPolytope<Number> res;
+		for(const auto& plane : mHPlanes) {
+			res.insert(plane);
+		}
+		for(const auto& plane : rhs.constraints()) {
+			res.insert(plane);
+		}
+		//res.insert(mHPlanes.begin(), mHPlanes.end());
+		//res.insert(rhs.begin(), rhs.end());
+		return res;
 	}
 
 	template<typename Number>
-	bool contains(const Point<Number>& point) const {
-
+	bool HPolytope<Number>::contains(const Point<Number>& point) const {
+		return this->contains(point.rawCoordinates());
 	}
 
 	template<typename Number>
-	bool contains(const vector_t<Number>& vec) const {
-
+	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
+		for(const auto& plane : mHPlanes) {
+			if(plane.normal().dot(vec) > plane.offset()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	template<typename Number>
-	HPolytope unite(const HPolytope& rhs) const {
-
+	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& rhs) const {
+		
 	}
 
-	void clear();
+	template<typename Number>
+	void HPolytope<Number>::clear() {
+		mHPlanes.clear();
+		mFanSet = false;
+		mDimension = 0;
+	}
 
 	/*
 	 * Operators
@@ -282,7 +335,7 @@ namespace hypro
 		{
 			columCount = 0;
 			poly(rowCount, columCount) = carl::FLOAT_T<double>(hplane.offset());
-			vector normal = hplane.normal();
+			vector_t<Number> normal = hplane.normal();
 			for(unsigned index = 0; index < normal.rows(); ++index)
 			{
 				++columCount;

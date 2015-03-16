@@ -41,7 +41,7 @@ template<typename Number>
 
 		unsigned dimension() const;
 		
-		vector_t<Number> normal() const;
+		const vector_t<Number>& normal() const;
 		void setNormal(const vector_t<Number>& _normal);
 		
 		Number offset() const;
@@ -51,6 +51,8 @@ template<typename Number>
 		
 		bool intersection(Number& _result, const vector_t<Number>& _vector) const;
 		bool intersection(Number& _result, const Point<Number>& _vector) const;
+
+		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A) const;
 		
 	private:
 		const Number& internalOffset() const;
