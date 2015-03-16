@@ -880,16 +880,16 @@ namespace hypro
     	//iterate through all planes and check which one intersects with the ray
     	Number factor;
     	Point<Number> origin = cone->origin();
-    	polytope::Hyperplane<Number> intersectedPlane;
+    	Hyperplane<Number> intersectedPlane;
 
-    	std::vector<polytope::Hyperplane<Number>*> planes = cone->get();
+    	std::vector<Hyperplane<Number>*> planes = cone->get();
 
 #ifdef fukuda_DEBUG
     	std::cout << "-----------------" << std::endl;
     	std::cout << "Ray: " << ray << std::endl;
 #endif
 
-    	for (typename std::vector<polytope::Hyperplane<Number>*>::iterator it=planes.begin(); it!=planes.end(); ++it) {
+    	for (typename std::vector<Hyperplane<Number>*>::iterator it=planes.begin(); it!=planes.end(); ++it) {
     		if ((*it)->intersection(factor,ray)) {
 #ifdef fukuda_DEBUG
     			std::cout << "Intersection found " << std::endl;

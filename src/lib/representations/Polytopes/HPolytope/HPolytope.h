@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../util.h"
+#include "../../datastructures/Hyperplane.h"
 #include <cassert>
 #include "simplex.h"
 #include "../VPolytope/VPolytope.h"
@@ -18,7 +19,7 @@ namespace hypro
 	class HPolytope
 	{
 		public:
-			typedef std::vector<polytope::Hyperplane<Number> > HyperplaneVector;
+			typedef std::vector<Hyperplane<Number> > HyperplaneVector;
 		
 		private:
 			HyperplaneVector mHPlanes;
@@ -29,7 +30,7 @@ namespace hypro
 	public:
 		HPolytope();
 		HPolytope(const HPolytope& orig);
-		HPolytope(const polytope::Hyperplane<Number>& plane);
+		HPolytope(const Hyperplane<Number>& plane);
 		HPolytope(unsigned dimension);
 		HPolytope(const matrix& A, const vector& b);
 		HPolytope(const matrix& A);
@@ -47,11 +48,11 @@ namespace hypro
 		
 		const typename polytope::Fan<Number>& fan() const;
 		
-		void addConstraint(const polytope::Hyperplane<Number>& plane);
+		void addConstraint(const Hyperplane<Number>& plane);
 		void addConstraints(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
 		
 		const HyperplaneVector& constraints() const;
-		bool hasConstraint(const polytope::Hyperplane<Number>& hplane) const;
+		bool hasConstraint(const Hyperplane<Number>& hplane) const;
 		
 		typename HyperplaneVector::iterator begin();
 		typename HyperplaneVector::const_iterator begin() const;
@@ -77,7 +78,7 @@ namespace hypro
 		 * Operators
 		 */
 		
-		polytope::Hyperplane<Number> operator[](unsigned i) const;
+		Hyperplane<Number> operator[](unsigned i) const;
 		HPolytope<Number>& operator= (const HPolytope<Number>& rhs);
 		std::ostream& operator<<(std::ostream& lhs);
 		

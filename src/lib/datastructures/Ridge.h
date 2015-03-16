@@ -10,7 +10,7 @@
 #pragma once
 
 #include "../config.h"
-#include "../representations/Hyperplane/Hyperplane.h"
+#include "Hyperplane.h"
 
 #include "Point.h"
 

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../Hyperplane/Hyperplane.h"
+#include "../../datastructures/Hyperplane.h"
 #include "../../datastructures/Facet.h"
 #include "../../datastructures/Ridge.h"
 #include "../../datastructures/Point.h"

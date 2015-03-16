@@ -15,6 +15,7 @@
 #include "../../util/VariablePool.h"
 
 #include "../Polytopes/util.h"
+ #include "../../datastructures/Hyperplane.h"
 
 namespace hypro
 {
@@ -792,7 +793,7 @@ namespace polytope
     		}
 
     		//convert Point<Number> to Vector by explicit cast
-    		polytope::Hyperplane<Number>* plane = new polytope::Hyperplane<Number>(vector_t<Number>(_vertex), vectorTuple);
+    		Hyperplane<Number>* plane = new Hyperplane<Number>(vector_t<Number>(_vertex), vectorTuple);
     		cone->add(plane);
 #ifdef fukuda_DEBUG
     		std::cout << "Plane added to the cone" << std::endl;

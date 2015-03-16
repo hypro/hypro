@@ -15,7 +15,7 @@
 #include <algorithm>
 #include <valarray>
 
-#include "../Hyperplane/Hyperplane.h"
+#include "../../datastructures/Hyperplane.h"
 #include "ZUtility.h"
 
 

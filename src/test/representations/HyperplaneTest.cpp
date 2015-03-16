@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 
-#include "../../lib/representations/Hyperplane/Hyperplane.h"
+#include "../../lib/datastructures/Hyperplane.h"
 
 using namespace hypro;
 using namespace carl;

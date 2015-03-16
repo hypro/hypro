@@ -16,7 +16,7 @@ namespace hypro
 	{}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const polytope::Hyperplane<Number>& plane) {
+	HPolytope<Number>::HPolytope(const Hyperplane<Number>& plane) {
 		mHPlanes.push_back(plane);
 		mFanSet = false;
 		mDimension = plane.dimension();
@@ -73,7 +73,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	void HPolytope<Number>::addConstraint(const polytope::Hyperplane<Number>& plane)
+	void HPolytope<Number>::addConstraint(const Hyperplane<Number>& plane)
 	{
 		assert(mDimension == 0 || mDimension == plane.dimension());
 		if(mDimension == 0)
@@ -101,7 +101,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool HPolytope<Number>::hasConstraint(const polytope::Hyperplane<Number>& hplane) const
+	bool HPolytope<Number>::hasConstraint(const Hyperplane<Number>& hplane) const
 	{
 		return (mHPlanes.find(hplane) != mHPlanes.end());
 	}
@@ -172,7 +172,7 @@ namespace hypro
 	 */
 	
 	template<typename Number>
-	polytope::Hyperplane<Number> HPolytope<Number>::operator[](unsigned i) const
+	Hyperplane<Number> HPolytope<Number>::operator[](unsigned i) const
 	{
 		return mHPlanes.at(i);
 	}

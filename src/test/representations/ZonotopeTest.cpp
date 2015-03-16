@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
  #include "../defines.h"
 #include "../../lib/representations/Zonotope/Zonotope.h"
-#include "../../lib/representations/Hyperplane/Hyperplane.h"
+#include "../../lib/datastructures/Hyperplane.h"
 
 /*
  * Google TYPED_TEST for Zonotope Implementation

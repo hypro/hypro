@@ -23,7 +23,7 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Facet.h"
 #include "../../datastructures/Ridge.h"
-#include "../Polytopes/util.h"
+#include "../../datastructures/Hyperplane.h"
 #include "convexHull_util.h"
 
 
