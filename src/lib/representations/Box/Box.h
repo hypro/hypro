@@ -21,7 +21,7 @@ template<typename Number>
 class Box : hypro::GeometricObject<Number>
 {
 private:
-    
+	
 public:
 	typedef std::map<const carl::Variable, carl::Interval<Number> > intervalMap;
 	/***************************************************************************
@@ -40,63 +40,64 @@ public:
 	 */
 	Box() : mBoundaries()
 	{}
-        /*
-         * Creates a copy of a box?
-         * @param orig The box that's gonna be copied
-         */
-        Box(const Box& orig) : mBoundaries(orig.boundaries())
-        {}
-        
-        /*
-         * Creates a box by
-         * @param var
-         * @param val
-         */
-        Box(const carl::Variable& var, const carl::Interval<Number>& val)
-        {
-			unsigned pos = hypro::VariablePool::getInstance().dimension(var);
+	
+	/*
+	 * Creates a copy of a box?
+	 * @param orig The box that's gonna be copied
+	 */
+	Box(const Box& orig) : mBoundaries(orig.boundaries())
+	{}
+	
+	/*
+	 * Creates a box by
+	 * @param var
+	 * @param val
+	 */
+	Box(const carl::Variable& var, const carl::Interval<Number>& val)
+	{
+		unsigned pos = hypro::VariablePool::getInstance().dimension(var);
+		while(mBoundaries.size() <= pos) {
+			mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
+		}
+		mBoundaries[pos] = val;
+	}
+	
+	/*
+	 * Creates a box by
+	 * @param intervals
+	 */
+	Box(const intervalMap& intervals)
+	{
+		for(auto& pair : intervals) {
+			unsigned pos = hypro::VariablePool::getInstance().dimension(pair.first);
 			while(mBoundaries.size() <= pos) {
 				mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
 			}
-            mBoundaries[pos] = val;
-        }
-        
-        /*
-         * Creates a box by
-         * @param intervals
-         */
-        Box(const intervalMap& intervals)
-        {
-			for(auto& pair : intervals) {
-				unsigned pos = hypro::VariablePool::getInstance().dimension(pair.first);
-				while(mBoundaries.size() <= pos) {
-					mBoundaries.push_back(carl::Interval<Number>::emptyInterval());
-				}
-				mBoundaries[pos] = pair.second;
-			}
-        }
-		
-		Box(const std::vector<carl::Interval<Number>>& _intervals) {
-			mBoundaries = _intervals;
+			mBoundaries[pos] = pair.second;
 		}
-		
-		Box(const std::set<Point<Number>>& _points);
-        
-        ~Box()
-        {
-			mBoundaries.clear();
-		}
+	}
+	
+	Box(const std::vector<carl::Interval<Number>>& _intervals) {
+		mBoundaries = _intervals;
+	}
+	
+	Box(const std::set<Point<Number>>& _points);
+	
+	~Box()
+	{
+		mBoundaries.clear();
+	}
 	
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 	
-    /*
-     * @return
-     */
+	/*
+	 * @return
+	 */
 	std::vector<carl::Interval<Number>>& rBoundaries()
 	{
-        return mBoundaries;
+		return mBoundaries;
 	}
 	
 	/*
@@ -104,7 +105,7 @@ public:
 	 */
 	std::vector<carl::Interval<Number>> boundaries() const
 	{
-        return mBoundaries;
+		return mBoundaries;
 	}
 	
 	/**
@@ -124,11 +125,11 @@ public:
 	}
 	
 	
-    /*
-     *@param var
-     *@param val
-     *@return
-     */
+	/*
+	 *@param var
+	 *@param val
+	 *@return
+	 */
 	bool insert(const carl::Variable& var, const carl::Interval<Number>& val)
 	{
 		unsigned pos = hypro::VariablePool::getInstance().dimension(var);
@@ -149,7 +150,7 @@ public:
 		mBoundaries[pos] = val;
 		return newElement;
 	}
-        
+		
 
 	/*
 	 * Setter method for box boundaries
@@ -160,16 +161,16 @@ public:
 		mBoundaries = boundaries;
 	}
 	
-    /*
-     * Checks if the box has the same dimension as the variable.
-     * @param var
-     * @return
-     */
+	/*
+	 * Checks if the box has the same dimension as the variable.
+	 * @param var
+	 * @return
+	 */
 	bool hasDimension(const carl::Variable& var) const
 	{
 		return hypro::VariablePool::getInstance().hasDimension(var) && unsigned(hypro::VariablePool::getInstance().dimension(var)) < mBoundaries.size();
 	}
-            
+			
 	/**
 	 * Checks if the box has the same dimensions as this box.
 	 * The number of dimensions has to be equal as well as the actual
@@ -226,7 +227,7 @@ public:
 		}
 		return Point<Number>(coordinates);
 	}
-        
+		
 	/*
 	 * @return
 	 */
@@ -308,8 +309,8 @@ public:
 	carl::Interval<Number>& operator[](unsigned i) {
 		return mBoundaries[i];
 	}
-        
-        
+		
+		
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/

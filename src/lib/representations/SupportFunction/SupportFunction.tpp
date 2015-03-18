@@ -331,7 +331,8 @@ namespace hypro {
 				return false;
 				}
 			case SF_TYPE::UNION: {
-				return (mUnionParameters->lhs.contains(_point) || mUnionParameters->rhs.contains(_point));
+				assert(false); // Todo: Not implemented yet.
+				return false;
 				}
 			case SF_TYPE::INTERSECT: {
 				assert(false); // Todo: Not implemented yet.
