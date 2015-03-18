@@ -41,8 +41,6 @@ protected:
 };
 
 TYPED_TEST(PolytopeSupportFunctionTest, constructor) {
-	std::cout << this->constraints << std::endl;
-	std::cout << this->constants << std::endl;
 	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
 	SUCCEED();
 }

@@ -48,6 +48,7 @@ template<typename Number>
 		void setOffset(Number _offset);
 		
 		Number signedDistance(const vector_t<Number>& _point) const;
+		Number evaluate(const vector_t<Number>& _direction) const;
 		
 		bool intersection(Number& _result, const vector_t<Number>& _vector) const;
 		bool intersection(Number& _result, const Point<Number>& _vector) const;
@@ -68,7 +69,7 @@ template<typename Number>
 	template<typename Number>
 	std::ostream& operator<<(std::ostream& _lhs, const hypro::Hyperplane<Number>& _rhs)
 	{
-		_lhs << "( " << _rhs.normal() << ", " << Number(_rhs.offset()) << " )";
+		_lhs << "( " << _rhs.normal() << "; " << Number(_rhs.offset()) << " )";
 		return _lhs;
 	}
 

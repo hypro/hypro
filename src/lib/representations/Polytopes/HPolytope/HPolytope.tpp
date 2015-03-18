@@ -4,7 +4,8 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number>::HPolytope() :
 	mFanSet(false),
-	mDimension(0)
+	mDimension(0),
+	mInitialized(false)
 	{}
 	
 	template<typename Number>
@@ -12,7 +13,8 @@ namespace hypro
 	mHPlanes(orig.mHPlanes),
 	mFanSet(orig.mFanSet),
 	mFan(orig.mFan),
-	mDimension(orig.mDimension)
+	mDimension(orig.mDimension),
+	mInitialized(false)
 	{}
 	
 	template<typename Number>
@@ -20,6 +22,7 @@ namespace hypro
 		mHPlanes.push_back(plane);
 		mFanSet = false;
 		mDimension = plane.dimension();
+		mInitialized = false;
 	}
 
 	template<typename Number>
@@ -29,11 +32,13 @@ namespace hypro
 			mHPlanes.push_back(plane);
 		}
 		mFanSet = false;
+		mInitialized = false;
 	}
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(unsigned dimension) {
 		mDimension = dimension;
+		mInitialized = false;
 	}
 	
 	template<typename Number>
@@ -42,6 +47,7 @@ namespace hypro
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
 		}
+		mInitialized = false;
 	}
 	
 	template<typename Number>
@@ -49,6 +55,7 @@ namespace hypro
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
 		}
+		mInitialized = false;
 	}
 	
 	/*
@@ -65,7 +72,10 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number>::~HPolytope()
-	{}
+	{
+		if(mInitialized)
+			deleteArrays();
+	}
 	
 	/*
 	 * Getters and setters
@@ -91,6 +101,43 @@ namespace hypro
 			calculateFan();
 		}
 		return mFan;
+	}
+
+	template<typename Number>
+	typename VPolytope<Number>::vertexSet HPolytope<Number>::vertices() const {
+		typename VPolytope<Number>::vertexSet vertices;
+		for(unsigned planeA = 0; planeA < mHPlanes.size()-1; ++planeA) {
+			for(unsigned planeB = planeA+1; planeB < mHPlanes.size(); ++planeB) {
+				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
+				vector_t<Number> b(2);
+
+				// initialize
+				A.row(0) = mHPlanes.at(planeA).normal().transpose();
+				A.row(1) = mHPlanes.at(planeB).normal().transpose();
+
+				// check if rank is full
+				Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
+				if(lu_decomp.rank() < A.rows()) {
+					continue;
+				}
+
+				b(0) = mHPlanes.at(planeA).offset();
+				b(1) = mHPlanes.at(planeB).offset();
+
+				vector_t<Number> res = A.colPivHouseholderQr().solve(b);
+				Number relative_error = (A*res - b).norm() / b.norm();
+
+				vertices.insert(res);
+			}
+		}
+		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
+			if(!this->contains(*vertexIt)) {
+				vertexIt = vertices.erase(vertexIt);
+			} else {
+				++vertexIt;
+			}
+		}
+		return vertices;
 	}
 
 	template<typename Number>
@@ -136,6 +183,55 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool HPolytope<Number>::isExtremePoint(vector_t<Number> point, const Number& tolerance) const {
+		unsigned cnt = 0;
+		for(const auto& plane : mHPlanes) {
+			Number val = plane.evaluate(point);
+			//std::cout << "Eval: " << plane.normal() << " in direction " << point << " = " << val << ", offset is " << plane.offset() << ", with tolerance: " << abs(plane.offset() - val) << std::endl;
+			if(abs(plane.offset() - val) <= tolerance )
+				++cnt;
+			else if (val > plane.evaluate(point))
+				return false;
+		}
+		return cnt >= mDimension;
+	}
+
+	template<typename Number>
+	Number HPolytope<Number>::evaluate(const vector_t<Number>& _direction) const{
+		if(!mInitialized) {
+			initialize();
+		}
+
+		assert(_direction.rows() == mDimension);
+
+		for (unsigned i = 0; i < mDimension; i++)
+		{
+			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
+			glp_set_obj_coef(lp, i+1, double(_direction(i)));
+		}
+
+		/* solve problem */
+		glp_simplex(lp, NULL);
+
+		Number result = glp_get_obj_val(lp);
+
+		// display potential problems
+		switch(glp_get_status(lp))
+		{
+			case GLP_OPT:
+			case GLP_FEAS:
+				 break;
+			case GLP_UNBND:
+				 result = INFINITY;
+				 break;
+			default: 
+				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;             
+		}
+
+		return result;
+	}
+
+	template<typename Number>
 	typename HPolytope<Number>::HyperplaneVector::iterator HPolytope<Number>::begin()
 	{
 		return mHPlanes.begin();
@@ -162,7 +258,6 @@ namespace hypro
 	/*
 	 * General interface
 	 */
-
 	
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const {
@@ -175,7 +270,22 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::minkowskiSum(const HPolytope& rhs) const {
+		HPolytope<Number> res;
+		vector_t<Number> results(mHPlanes.size());
+		
+		// evaluation of rhs in directions of lhs
+		for(unsigned i = 0; i < mHPlanes.size(); ++i) {
+			results(i) = mHPlanes.at(i).offset() + rhs.evaluate(mHPlanes.at(i).normal());
+			res.insert(Hyperplane<Number>( mHPlanes.at(i).normal(), results(i) ));
+		}
 
+		// evaluation of lhs in directions of rhs
+		for(unsigned i = 0; i < rhs.constraints().size(); ++i) {
+			results(i) = rhs.constraints().at(i).offset()+ this->evaluate(rhs.constraints().at(i).normal());
+			res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), results(i) ));
+		}
+
+		return res;
 	}
 
 	template<typename Number>
@@ -200,7 +310,9 @@ namespace hypro
 
 	template<typename Number>
 	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
+		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
+			//std::cout << plane << ": " << (plane.normal().dot(vec) > plane.offset()) << std::endl;
 			if(plane.normal().dot(vec) > plane.offset()) {
 				return false;
 			}
@@ -210,7 +322,12 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& rhs) const {
-		
+		HPolytope<Number> res;
+
+		// get all intersection points of the hyperplane
+		// compute VPolytope as convex hull and generate HPolytope from the result
+
+		return res;
 	}
 
 	template<typename Number>
@@ -244,6 +361,60 @@ namespace hypro
 	/*
 	 * Auxiliary functions
 	 */
+
+	template<typename Number>
+	void HPolytope<Number>::createArrays(unsigned size) const{
+		ia = new int[size+1];
+		ja = new int[size+1];
+		ar = new double[size+1];
+	}
+
+	template<typename Number>
+	void HPolytope<Number>::deleteArrays() {
+		delete[] ia;
+		delete[] ja;
+		delete[] ar;
+	}
+
+	template<typename Number>
+	void HPolytope<Number>::initialize() const{
+		if(!mInitialized) {
+			/* create glpk problem */
+			lp = glp_create_prob();
+			glp_set_prob_name(lp, "hpoly");
+			glp_set_obj_dir(lp, GLP_MAX);
+
+			unsigned numberOfConstraints = mHPlanes.size();
+
+			// convert constraint constants
+			glp_add_rows(lp, numberOfConstraints);
+			for (unsigned i = 0; i < numberOfConstraints; i++)
+			{
+				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double(mHPlanes[i].offset()) );
+			}
+
+			// add cols here
+			glp_add_cols(lp, mDimension);
+			createArrays(numberOfConstraints*mDimension);
+
+			// convert constraint matrix
+			ia[0] = 0;
+			ja[0] = 0;
+			ar[0] = 0;
+			for (unsigned i = 0; i < numberOfConstraints*mDimension; ++i)
+			{
+				ia[i+1] = ((int)(i / mDimension))+1;
+				std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+				ja[i+1] = ((int)(i%mDimension))+1;
+				std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+				ar[i+1] = double(mHPlanes[ia[i+1]-1].normal()(ja[i+1]-1));
+				std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+			}
+
+			glp_load_matrix(lp, numberOfConstraints*mDimension, ia, ja, ar);
+			mInitialized = true;
+		}
+	}
 	
 	template<typename Number>
 	Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> HPolytope<Number>::getOptimalDictionary(

@@ -11,6 +11,7 @@
 #include "../util.h"
 #include "../../../datastructures/Hyperplane.h"
 #include <cassert>
+#include <glpk.h>
 #include "simplex.h"
 #include "../VPolytope/VPolytope.h"
 
@@ -28,6 +29,13 @@ namespace hypro
 			mutable polytope::Fan<Number> mFan;
 			unsigned mDimension;
 
+			// glpk members
+			mutable glp_prob *lp;
+			mutable int* ia;
+			mutable int* ja;
+			mutable double* ar;
+			mutable bool mInitialized;
+
 	public:
 		HPolytope();
 		HPolytope(const HPolytope& orig);
@@ -38,7 +46,7 @@ namespace hypro
 		HPolytope(const matrix_t<Number>& A);
 		
 		// conversion constructors
-		//HPolytope(const VPolytope<Number>& alien);
+		// HPolytope(const VPolytope<Number>& alien);
 		
 		~HPolytope();
 		
@@ -50,12 +58,15 @@ namespace hypro
 		unsigned size() const;
 		
 		const typename polytope::Fan<Number>& fan() const;
+		typename VPolytope<Number>::vertexSet vertices() const;
 		
 		void insert(const Hyperplane<Number>& plane);
 		void insert(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
 		
 		const HyperplaneVector& constraints() const;
 		bool hasConstraint(const Hyperplane<Number>& hplane) const;
+		bool isExtremePoint(vector_t<Number> point, const Number& tolerance = 0) const;
+		Number evaluate(const vector_t<Number>& _direction) const;
 		
 		typename HyperplaneVector::iterator begin();
 		typename HyperplaneVector::const_iterator begin() const;
@@ -89,6 +100,11 @@ namespace hypro
 		/*
 		 * Auxiliary functions
 		 */
+
+		void createArrays(unsigned size) const;
+		void deleteArrays();
+		void initialize() const;
+
 		void calculateFan() const;
 		Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> getOptimalDictionary(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A, unsigned dimension, std::vector<unsigned>& B, std::vector<unsigned>& N) const;
 		

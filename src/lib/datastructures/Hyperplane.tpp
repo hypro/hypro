@@ -131,6 +131,11 @@
 	}
 	
 	template<typename Number>
+	Number Hyperplane<Number>::evaluate(const vector_t<Number>& _direction) const {
+		return (_direction.dot(mNormal));
+	}
+
+	template<typename Number>
 	bool Hyperplane<Number>::intersection(Number& _result, const vector_t<Number>& _vector) const
 	{
 		bool intersect = false;

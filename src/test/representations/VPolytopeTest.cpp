@@ -139,7 +139,7 @@ TYPED_TEST(VPolytopeTest, MinkowskiSum)
 
 	VPolytope<TypeParam> res = vpt1.minkowskiSum(vpt2);
 
-	std::cout << "Result: " << std::endl << res << std::endl;
+	//std::cout << "Result: " << std::endl << res << std::endl;
 
 	for(auto& lhs : vpt1.vertices()) {
 		for(auto& rhs : vpt2.vertices()) {
