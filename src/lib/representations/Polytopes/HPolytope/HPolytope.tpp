@@ -149,6 +149,7 @@ namespace hypro
 			mDimension = plane.dimension();
 		}
 		mHPlanes.push_back(plane);
+		mInitialized = false;
 	}
 
 	template<typename Number>
@@ -164,6 +165,7 @@ namespace hypro
 			mHPlanes.push_back(*it);
 			++it;
 		}
+		mInitialized = false;
 	}
 
 	template<typename Number>
@@ -324,8 +326,7 @@ namespace hypro
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& rhs) const {
 		HPolytope<Number> res;
 
-		// get all intersection points of the hyperplane
-		// compute VPolytope as convex hull and generate HPolytope from the result
+		// create convex hull of vertices.
 
 		return res;
 	}
@@ -335,6 +336,8 @@ namespace hypro
 		mHPlanes.clear();
 		mFanSet = false;
 		mDimension = 0;
+		deleteArrays();
+		mInitialized = false;
 	}
 
 	/*
@@ -543,7 +546,7 @@ namespace hypro
 		
 		return solution;
 	}
-}
+} // namespace
 
 	template<typename Number>
 	std::ostream& operator<<(std::ostream& lhs, const hypro::HPolytope<Number>& rhs)
