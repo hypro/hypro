@@ -50,3 +50,46 @@ TYPED_TEST(HyperplaneTest, Constructor)
 	//EXPECT_EQ(copy, normals);
 	SUCCEED();
 }
+
+TYPED_TEST(HyperplaneTest, Access)
+{
+
+}
+
+TYPED_TEST(HyperplaneTest, Evaluation)
+{
+	vector_t<TypeParam> vec(2);
+	vec(0) = 2;
+	vec(1) = 4;
+	Hyperplane<TypeParam> hp1 = Hyperplane<TypeParam>(vec, TypeParam(3));
+
+	vector_t<TypeParam> test(2);
+	test(0) = 5;
+	test(1) = 1;
+
+	EXPECT_EQ(TypeParam(vec.dot(test)), hp1.evaluate(test) );
+}
+
+TYPED_TEST(HyperplaneTest, SignedDistance)
+{
+	vector_t<TypeParam> vec(2);
+	vec(0) = 2;
+	vec(1) = 4;
+	Hyperplane<TypeParam> hp1 = Hyperplane<TypeParam>(vec, TypeParam(3));
+
+	vector_t<TypeParam> test(2);
+	test(0) = 5;
+	test(1) = 1;
+
+	EXPECT_EQ(TypeParam(vec.dot(test)) - hp1.offset(), hp1.signedDistance(test) );
+}
+
+TYPED_TEST(HyperplaneTest, Intersection)
+{
+
+}
+
+TYPED_TEST(HyperplaneTest, LinearTransformation)
+{
+
+}
