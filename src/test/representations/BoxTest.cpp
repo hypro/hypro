@@ -145,7 +145,7 @@ TYPED_TEST(BoxTest, Corners) {
 	Box<TypeParam> b1(intervals1);
 	
 	std::set<Point<TypeParam>> corners = b1.corners();
-	EXPECT_EQ(8, corners.size());
+	EXPECT_EQ((unsigned) 8, corners.size());
 	
 	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,2})) != corners.end());
 	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,5})) != corners.end());

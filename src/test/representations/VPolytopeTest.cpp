@@ -72,8 +72,8 @@ TYPED_TEST(VPolytopeTest, Constructor)
 TYPED_TEST(VPolytopeTest, Access)
 {
 	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
-	EXPECT_EQ(2, vpt1.dimension());
-	EXPECT_EQ(4, vpt1.size());
+	EXPECT_EQ((unsigned) 2, vpt1.dimension());
+	EXPECT_EQ((unsigned) 4, vpt1.size());
 	EXPECT_FALSE(vpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = vpt1.fan();
 		

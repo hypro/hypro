@@ -54,8 +54,8 @@ TYPED_TEST(HPolytopeTest, Constructor)
 TYPED_TEST(HPolytopeTest, Access)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
-	EXPECT_EQ(2, hpt1.dimension());
-	EXPECT_EQ(4, hpt1.size());
+	EXPECT_EQ((unsigned) 2, hpt1.dimension());
+	EXPECT_EQ((unsigned) 4, hpt1.size());
 	//EXPECT_FALSE(hpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = hpt1.fan();
 		

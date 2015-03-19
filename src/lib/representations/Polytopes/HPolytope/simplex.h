@@ -107,7 +107,7 @@ namespace hpolytope
     template<typename Number>
     static bool isPrimalFeasible(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> A)
     {
-        
+        return false;
     }
     
     /**

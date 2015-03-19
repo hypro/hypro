@@ -198,7 +198,7 @@ namespace hypro {
 			std::cout << __func__ << ": " << _point << std::endl;
 		#endif
 
-		for(unsigned i = 0; i < glp_get_num_rows(lp); ++i) {
+		for(int i = 0; i < glp_get_num_rows(lp); ++i) {
 			// prepare arrays
 			int indices[constraint.rows()+1];
 			double values[constraint.rows()+1];

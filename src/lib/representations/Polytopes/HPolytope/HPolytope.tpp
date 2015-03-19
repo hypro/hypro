@@ -125,7 +125,8 @@ namespace hypro
 				b(1) = mHPlanes.at(planeB).offset();
 
 				vector_t<Number> res = A.colPivHouseholderQr().solve(b);
-				Number relative_error = (A*res - b).norm() / b.norm();
+				
+				//	Number relative_error = (A*res - b).norm() / b.norm(); 
 
 				vertices.insert(res);
 			}
