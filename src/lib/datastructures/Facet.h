@@ -169,19 +169,25 @@ namespace hypro
             	std::cout << __func__ << " : " << __LINE__ << std::endl;
                	for(unsigned i = 1; i < vertex.size(); i++) {
                		std::cout << __func__ << " : " << __LINE__ << std::endl;
-                     vectors.push_back(( vectors[0]) - (vertex[i].rawCoordinates()));
+                     vectors.push_back(( vectors[0] ) - (vertex[i].rawCoordinates()));
                      std::cout << __func__ << " : " << __LINE__ << std::endl;
                 }
 
                	std::cout << __func__ << " : " << __LINE__ << std::endl;
 
-                matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),vectors[0].size());
-            	for(unsigned i = 0; i < vectors.size(); i++) {
+                matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),vertex[0].rawCoordinates().size());
+            	for(unsigned i = 1; i < vectors.size(); i++) {
             		for(unsigned j = 0; j < vectors[i].size(); j++) {
             			matrix(i,j) = vectors[i](j);
             		}
             	}
+
+            	for(unsigned j = 0; j < vectors[0].size(); j++) {
+            		matrix(0,j) = 1;
+            	}
                 vector_t<Number> b = vector_t<Number>::Zero(vectors.size());
+                b(0) = 1;
+
                 std::cout << __func__ << " : " << __LINE__ << std::endl;
             	vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
             	std::cout << __func__ << " : " << __LINE__ << std::endl;
@@ -189,12 +195,14 @@ namespace hypro
             }
 
             Number getScalarVector () {
-            	std::vector<Point<Number>> vertex = std::vector<Point<Number>>(mVertices.size());
+            	std::vector<Point<Number>> vertex;
             	for(Point<Number> p: mVertices){
             	   vertex.push_back(p);
             	}
             	std::cout << __func__ << " : " << __LINE__ << std::endl;
-            	std::cout << mNormal << " ** " << std::endl << vertex[0].rawCoordinates()<< std::endl;
+
+            	std::cout << vertex[0]<< std::endl;
+            	std::cout << mNormal << " ** " << std::endl;
                	return Number (mNormal.dot(vertex[0].rawCoordinates()));
             }
 
@@ -217,10 +225,12 @@ namespace hypro
             void addPointToOutsideSet(Point<Number> point)
             {
                 mOutsideSet.push_back(point);
+                std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
             }
 
             std::vector<Point<Number>> getOutsideSet() const
             {
+            	//std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
                 return mOutsideSet;
             }
 

@@ -103,42 +103,48 @@ int main(int argc, char** argv) {
 	points.push_back(p09);
 	points.push_back(p10);
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << v08 << p08 << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << " : " << v08 << p08 << std::endl;
 
-	vector_t<double> b = vector_t<double>::Zero(3);
+	//vector_t<double> b = vector_t<double>(3);
+	//b(0) = 0;
+	//b(1) = 0;
+	//b(2) = 1;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << b <<std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << " : " << b <<std::endl;
 
-	matrix_t<double> matrix = matrix_t<double>(3,3);
-		for(unsigned i = 0; i < 3; i++) {
-	    	for(unsigned j = 0; j < 3; j++) {
-	    		matrix(i,j) = i+j;
-	    	}
-		}
+	//matrix_t<double> matrix = matrix_t<double>(3,3);
+	//	for(unsigned i = 0; i < 2; i++) {
+	//    	for(unsigned j = 0; j < 3; j++) {
+	//    		matrix(i,j) = i+j;
+	//    	}
+	//	}
+	//for(int i =0; i<3;i++){
+	//	matrix(2,i) = 1;
+	//}
+	//std::cout << __func__ << " : " << __LINE__ << " : " << matrix << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << matrix << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << " : " << v09*3 << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << matrix.fullPivHouseholderQr().solve(b) << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << " : " << v09.dot(v10) << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << v09*v10 << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << " : " << matrix.fullPivLu().solve(b) << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << v09.dot(v10) << std::endl;
+	//std::vector<double> zahlen;
 
-	std::vector<double> zahlen;
+	//for(double i = 0; i<10; i++){
+	//	zahlen.push_back(i);
+	//}
 
-	for(double i = 0; i<10; i++){
-		zahlen.push_back(i);
-	}
+	//std::cout << __func__ << " : " << __LINE__ << " : " << zahlen << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << zahlen << std::endl;
+	//for(unsigned i = 0; i < zahlen.size(); i++){
+	//	std::cout << __func__ << " : " << __LINE__ << zahlen[i] << std::endl;
+	//	zahlen.erase(zahlen.begin()+i+1);
+	//}
 
-	for(double z:zahlen){
-		zahlen.erase(z);
-	}
+	//std::cout << __func__ << " : " << __LINE__ << " : " << zahlen << std::endl;
 
-	std::cout << __func__ << " : " << __LINE__ << " : " << zahlen << std::endl;
-
-	//std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
+	std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
 
 	std::cout << __func__ << " : " << __LINE__ << std::endl;
 

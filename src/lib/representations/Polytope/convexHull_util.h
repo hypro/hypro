@@ -27,6 +27,7 @@ template<typename Number>
 static std::vector<Facet<Number>> initConvexHull(std::vector<Point<Number>> points) {
 	// TODO: check if points is empty or contains less than d+1 elements!
     int d = points[0].dimension();
+    std::cout << __func__ << " : " << __LINE__ << " : " << d << std::endl;
     std::vector<Point<Number>> initialPoints;
     Facet<Number> f = Facet<Number>();
     std::cout << __func__ << " : " << __LINE__ << std::endl;
@@ -62,20 +63,40 @@ static std::vector<Facet<Number>> initConvexHull(std::vector<Point<Number>> poin
 template<typename Number>
 static std::vector<Point<Number>> points_not_in_facets(std::vector<Point<Number>> points, std::vector<Facet<Number>> facets) {
     std::vector<Point<Number>> pointsInFacets;
+    std::cout << __func__ << " : " << __LINE__ << std::endl;
     for(Facet<Number> facet : facets) {
         std::set<Point<Number>> pointsInFacet = facet.rVertices();
         for(Point<Number> p : pointsInFacet) {
             pointsInFacets.push_back(p);
         }
     }
-
+    std::cout << __func__ << " : " << __LINE__ << pointsInFacets << std::endl;
+    std::vector<int> removeables;
     for (unsigned i = 0; i<points.size(); i++) {
         for (unsigned j = 0; j<pointsInFacets.size(); j++) {
             if(points[i] == pointsInFacets[j]) {
-                points.erase(points.begin() + i);
+                removeables.push_back(i);
             }
         }
     }
+    std::cout << __func__ << " : " << __LINE__ << removeables << std::endl;
+    std::vector<int> remove;
+    for(unsigned i = 0; i<removeables.size(); i++){
+    	bool found = false;
+        for(unsigned j = 0; j<remove.size(); j++){
+        	if(remove[j] == removeables[i]){
+        		found = true;
+        	}
+       	}
+        if(!found){
+        	remove.push_back(removeables[i]);
+        }
+    }
+    for(unsigned i = 0; i<remove.size(); i++){
+    	points.erase(points.begin() + remove[i]-i);
+    }
+
+    std::cout << __func__ << " : " << __LINE__ << points << std::endl;
     return points;
 }
 
@@ -85,20 +106,25 @@ static std::vector<Point<Number>> points_not_in_facets(std::vector<Point<Number>
  */
 template<typename Number>
 static std::vector<Facet<Number>> getFacetsNeighbors(std::vector<Facet<Number>> facets) {
+	std::cout << __func__ << " : " << __LINE__ << std::endl;
     if(facets.empty()) {
+    	std::cout << __func__ << " : " << __LINE__ << std::endl;
         return std::vector<Facet<Number>>();
     }
     else {
+    	std::cout << __func__ << " : " << __LINE__ << std::endl;
         std::vector<Facet<Number>> result;
         std::vector<Facet<Number>> temp;
         std::vector<Facet<Number>> temp2;
         std::vector<Facet<Number>> neighbors;
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         for(unsigned i = 0; i<facets.size(); i++) {
             neighbors = facets[i].neighbors();
             for(unsigned j = 0; j<neighbors.size(); j++) {
                 temp.push_back(neighbors[j]);
             }
         }
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         bool found = false;
         for(unsigned i = 0; i<temp.size(); i++) {
             for(unsigned j = 0; j<temp2.size(); j++) {
@@ -111,7 +137,7 @@ static std::vector<Facet<Number>> getFacetsNeighbors(std::vector<Facet<Number>> 
             }
             found = false;
         }
-
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         found = false;
         for(unsigned i = 0; i<temp2.size(); i++) {
             for(unsigned j = 0; j<facets.size(); j++) {
@@ -124,6 +150,7 @@ static std::vector<Facet<Number>> getFacetsNeighbors(std::vector<Facet<Number>> 
             }
             found = false;
         }
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         return result;
     }
 }
@@ -134,12 +161,16 @@ static std::vector<Facet<Number>> getFacetsNeighbors(std::vector<Facet<Number>> 
  */
 template<typename Number>
 static std::vector<Ridge<Number>> getRidges(std::vector<Facet<Number>> facets) {
+	std::cout << __func__ << " : " << __LINE__ << std::endl;
     if(facets.empty()) {
+    	std::cout << __func__ << " : " << __LINE__ << std::endl;
         return std::vector<Ridge<Number>>();
     }
     else {
+    	std::cout << __func__ << " : " << __LINE__ << std::endl;
         std::vector<Ridge<Number>> result;
         std::vector<Facet<Number>> neighbors = getFacetsNeighbors(facets);
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         for(unsigned i = 0; i<facets.size(); i++) {
             for(unsigned j = 0; j<neighbors.size(); j++) {
                 if(facets[i].isNeighbor(neighbors[j])) {
@@ -147,6 +178,7 @@ static std::vector<Ridge<Number>> getRidges(std::vector<Facet<Number>> facets) {
                 }
             }
         }
+        std::cout << __func__ << " : " << __LINE__ << std::endl;
         return result;
     }
 }
@@ -158,15 +190,18 @@ static std::vector<Ridge<Number>> getRidges(std::vector<Facet<Number>> facets) {
  */
 template<typename Number>
 static std::vector<Point<Number>> points_outside_of_visible_facets(std::vector<Facet<Number>> visible_facets) {
+	std::cout << __func__ << " : " << __LINE__ << std::endl;
     std::vector<Point<Number>> temp;
     std::vector<Point<Number>> result;
     std::vector<Point<Number>> outsideset;
+    std::cout << __func__ << " : " << __LINE__ << std::endl;
     for(unsigned i = 0; i < visible_facets.size(); i++) {
         outsideset = visible_facets[i].getOutsideSet();
         for(unsigned j = 0; i<outsideset.size(); j++) {
             temp.push_back(outsideset[j]);
         }
     }
+    std::cout << __func__ << " : " << __LINE__ << std::endl;
     bool found = false;
     for(unsigned i = 0; i < temp.size(); i++) {
         for(unsigned j = 0; i<result.size(); j++) {
@@ -179,6 +214,7 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(std::vector<F
         }
         found = false;
     }
+    std::cout << __func__ << " : " << __LINE__ << std::endl;
     return result;
 }
 
@@ -188,12 +224,16 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(std::vector<F
  */
 template<typename Number>
 static std::vector<Facet<Number>> not_outside_facet(std::vector<Facet<Number>> facets) {
+	std::cout << __func__ << " : " << __LINE__ << facets << std::endl;
+	std::cout << __func__ << " : " << __LINE__ << facets[1].getOutsideSet() << std::endl;
     std::vector<Facet<Number>> result;
     for(unsigned i = 0; i < facets.size(); i++) {
+    	std::cout << __func__ << " : " << __LINE__ << facets[i].getOutsideSet() << std::endl;
         if(!facets[i].getOutsideSet().empty()) {
             result.push_back(facets[i]);
         }
     }
+    std::cout << __func__ << " : " << __LINE__ << result << std::endl;
     return result;
 }
 

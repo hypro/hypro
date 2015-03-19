@@ -792,15 +792,16 @@ namespace hypro
      std::vector<Facet<Number>> Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
 		//initialization
 		std::vector<Facet<Number>> facets = polytope::initConvexHull(points); //util?
-		for(Facet<Number> facet : facets){
-			std::vector<Point<Number>> unassignedPoints = polytope::points_not_in_facets(points,facets); //util?
-			for (Point<Number> point : unassignedPoints) {
-				if(facet.check_if_above(point)) { 
-					facet.addPointToOutsideSet(point); 
+		std::vector<Point<Number>> unassignedPoints = polytope::points_not_in_facets(points,facets); //util?
+		for(unsigned i = 0; i<facets.size(); i++){
+			for (unsigned j = 0; j<unassignedPoints.size(); j++) {
+				if(facets[i].check_if_above(unassignedPoints[j])) { 
+					facets[i].addPointToOutsideSet(unassignedPoints[j]); 
 				}
 			}
 		}
 		//main body
+		std::cout << __func__ << " : " << __LINE__ << facets[1].getOutsideSet() << std::endl;
 		std::vector<Facet<Number>> notOutsideFacets = polytope::not_outside_facet(facets); //util?
 		for (Facet<Number> facet : notOutsideFacets) {
 			Point<Number> point = facet.furthest_Point();
