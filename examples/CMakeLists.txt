@@ -11,6 +11,7 @@ set( EXAMPLES
     # insert examples in this list #
     ################################
     example_addition
+    example_benchmarks
     example_subtraction
     example_multiplication
     example_division
@@ -48,7 +49,7 @@ foreach( example ${EXAMPLES} )
     else()
 
         add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
-        target_link_libraries( ${example} ${PROJECT_NAME} )
+        target_link_libraries( ${example} ${PROJECT_NAME} ${libraries} )
 
     endif()
     if(${STATICLIB_SWITCH} STREQUAL "ON")
