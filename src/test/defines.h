@@ -23,6 +23,10 @@ typedef ::testing::Types<double, carl::FLOAT_T<double>> floatTypes;
  #endif
 
 // List tests which should be typed
+
+// Benchmark
+TYPED_TEST_CASE(Benchmark, floatTypes);
+
 // Datastructure
 TYPED_TEST_CASE(HyperplaneTest, floatTypes);
 TYPED_TEST_CASE(PointTest, floatTypes);

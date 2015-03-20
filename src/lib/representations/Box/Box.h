@@ -18,7 +18,7 @@
 namespace hypro {
 
 template<typename Number>
-class Box : hypro::GeometricObject<Number>
+class Box : public hypro::GeometricObject<Number>
 {
 private:
 	
@@ -82,6 +82,7 @@ public:
 	}
 	
 	Box(const std::set<Point<Number>>& _points);
+	Box(const std::vector<Point<Number>>& _points);
 	
 	~Box()
 	{

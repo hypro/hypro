@@ -35,6 +35,29 @@ Box<Number>::Box(const std::set<Point<Number>>& _points) {
 		}
 	}
 }
+
+template<typename Number>
+Box<Number>::Box(const std::vector<Point<Number>>& _points) {
+	if(_points.size() > 0) {
+		unsigned dim = _points.begin()->dimension();
+		for(unsigned d = 0; d < dim; ++d) {
+			mBoundaries.push_back(carl::Interval<Number>(_points.begin()->at(d)));
+		}
+		if(_points.size() > 1) {
+			auto pointIt = _points.begin();
+			++pointIt;
+			for(; pointIt != _points.end(); ++pointIt ) {
+				for(unsigned d = 0; d < pointIt->dimension(); ++d) {
+					if(mBoundaries[d].lower() > pointIt->at(d)) 
+						mBoundaries[d].setLower(pointIt->at(d));
+
+					if(mBoundaries[d].upper() < pointIt->at(d)) 
+						mBoundaries[d].setUpper(pointIt->at(d));
+				}
+			}
+		}
+	}
+}
 	
 	
 template<typename Number>

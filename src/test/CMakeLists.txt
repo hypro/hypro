@@ -1,3 +1,4 @@
 add_subdirectory(algorithms)
+add_subdirectory(benchmark)
 add_subdirectory(datastructure)
 add_subdirectory(representations)
