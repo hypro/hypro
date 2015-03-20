@@ -14,9 +14,6 @@
 
 namespace hypro {
 
-enum timeUnit : unsigned {SECONDS = 1, MILLISECONDS = 1000, MICROSECONDS = 1000000, NANOSECONDS = 1000000000};
-
-template<typename Precision>
 class Timer {
 private:
 	std::chrono::high_resolution_clock::time_point mStart;
@@ -27,7 +24,7 @@ public:
 
 	double elapsed() {
 		std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
-		return std::chrono::duration_cast<std::chrono::duration<double>>(now - mStart).count();
+		return std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1,1000>> >(now - mStart).count();
 	}
 };
 }

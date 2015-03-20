@@ -297,6 +297,10 @@ namespace hypro {
                 Point<Number> result = Point<Number>(mCoordinates + _rhs.rawCoordinates());
                 return result;
             }
+
+            Number distance(const Point<Number>& _rhs) const {
+            		return ( (mCoordinates - _rhs.rawCoordinates()).norm() );
+            }
             
             std::vector<Number> polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const
             {

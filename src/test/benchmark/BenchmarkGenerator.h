@@ -10,27 +10,33 @@
 
 #pragma once
 
+#include "Timer.h"
+ #include "Generators.h"
  #include <vector>
 
 namespace hypro {
-	template<typename Generator, typename Number>
+	template<typename Representation, int operation>
 	class BenchmarkGenerator {
 	private:
+		typedef typename Representation::type Number;
+
 		BenchmarkSetup<Number> mSetup;
-		std::vector<typename Generator::type> mBenchmarks;
+		std::vector<typename Generator<Representation, operation>::type> mBenchmarks;
 	public:
 		BenchmarkGenerator(BenchmarkSetup<Number> _setup) : 
 			mSetup(_setup)
 		{}
 
-		void generateBenchmark() {
-			Generator g(mSetup);
+		double generateBenchmark() {
+			Generator<Representation, operation> g(mSetup);
+			Timer t;
 			for(unsigned i = 0; i < mSetup.size; ++i) {
 				mBenchmarks.emplace_back(g());
 			}
+			return t.elapsed();
 		}
 
-		typename Generator::type at(unsigned _pos) {
+		typename Generator<Representation, operation>::type at(unsigned _pos) {
 			return mBenchmarks.at(_pos);
 		}
 

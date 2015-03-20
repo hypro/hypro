@@ -4,11 +4,15 @@
 
 int main(int argc, char** argv) {
 	hypro::BenchmarkSetup<double> setup;
-	setup.size = 3;
+	setup.size = 1000;
 	setup.vertices = 3;
-	setup.dimension = 2;
+	setup.dimension = 8;
 	setup.minValue = 0;
 	setup.maxValue = 10;
 
-	hypro::Benchmark<hypro::ContainsGenerator<hypro::VPolytope<double>,double>, hypro::ContainsExecutor<hypro::VPolytope<double>,double>, double> b(setup);
+	hypro::Benchmark<hypro::VPolytope<double>, hypro::operation::LINEARTRAFO> linearTrafo(setup);
+	hypro::Benchmark<hypro::VPolytope<double>, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
+	hypro::Benchmark<hypro::VPolytope<double>, hypro::operation::INTERSECTION> intersection(setup);
+	hypro::Benchmark<hypro::VPolytope<double>, hypro::operation::CONTAINS> contains(setup);
+	hypro::Benchmark<hypro::VPolytope<double>, hypro::operation::UNION> unite(setup);
 }

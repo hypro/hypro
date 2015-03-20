@@ -15,6 +15,7 @@ namespace hypro
     class GeometricObject
     {
     public:
+    	typedef Number type;
 		/**
 		 * Returns the dimension of this object.
 		 * 

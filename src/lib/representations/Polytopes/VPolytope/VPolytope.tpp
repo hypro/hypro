@@ -41,6 +41,16 @@ namespace hypro
 	}
 
 	template<typename Number>
+	VPolytope<Number>::VPolytope(const std::vector<Point<Number>> points) {
+		for(const auto& point : points) {
+			mVertices.insert(point.rawCoordinates());
+		}
+		mFanSet = false;
+		mReduced = false;
+		mInitialized = false;
+	}
+
+	template<typename Number>
 	VPolytope<Number>::VPolytope(const VPolytope& orig)
 	{
 		mVertices.insert(orig.begin(), orig.end());

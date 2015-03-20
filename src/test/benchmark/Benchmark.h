@@ -22,12 +22,14 @@
 
 namespace hypro {
 
-	template<typename Generator, typename Executor, typename Number>
+	template<typename Representation, int operation>
 	class Benchmark {
 	private:
-		BenchmarkGenerator<Generator, Number> mGenerator;
+		typedef typename Representation::type Number;
+
+		BenchmarkGenerator<Representation,operation> mGenerator;
 		std::vector<Result> mResults;
-		Executor mExecutor;
+		Executor<Representation, operation> mExecutor;
 		BenchmarkSetup<Number> mSetup;
 	public:
 		Benchmark(BenchmarkSetup<Number> _setup) : 
@@ -37,14 +39,17 @@ namespace hypro {
 			mSetup(_setup)
 		{
 			mResults.reserve(mGenerator.size());
-			mGenerator.generateBenchmark();
-			double duration = runBenchmarks();
-			std::cout << "It took " << duration << std::endl;
+			std::cout << "Generate " << _setup.size << " benchmarks for operation " << Generator<Representation,operation>(_setup).name << " ... ";
+			double duration = mGenerator.generateBenchmark();
+			std::cout << "done (" << duration << " ms)" << std::endl;
+			std::cout << "Run benchmarks ... ";
+			duration = runBenchmarks();
+			std::cout << "done (" << duration << " ms)" << std::endl;
 		}
 
 	private:
 		double runBenchmarks() {
-			Timer<unsigned> clock;
+			Timer clock;
 			// execute all benchmarks
 			for(unsigned i = 0; i < mSetup.size; ++i) {
 				mResults.push_back(mExecutor.run(mGenerator.at(i)));

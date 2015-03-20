@@ -20,16 +20,16 @@ namespace hypro
 {
 
 template<typename Number>
-class VPolytope : hypro::GeometricObject<Number>
+class VPolytope : public hypro::GeometricObject<Number>
 {
-	public: 
+	public:
 		typedef typename std::set<vector_t<Number>> vertexSet;
 		typedef typename polytope::Cone<Number> Cone;
 		typedef typename polytope::Fan<Number> Fan;
 		/***************************************************************************
 	 * Members
 	 **************************************************************************/
-	protected:
+	private:
 		vertexSet                      mVertices;
 		mutable Fan                    mFan;
 		bool                           mFanSet;
@@ -51,6 +51,7 @@ class VPolytope : hypro::GeometricObject<Number>
 		VPolytope();
 		VPolytope(const Point<Number>& point);
 		VPolytope(const vertexSet& points);
+		VPolytope(const std::vector<Point<Number>> points);
 		VPolytope(const typename std::vector<vector_t<Number>>& points);
 		VPolytope(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
 		VPolytope(const VPolytope& orig);
@@ -180,10 +181,8 @@ class VPolytope : hypro::GeometricObject<Number>
 		bool operator==(const VPolytope<Number>& rhs);
 };
 
-}//namespace
-
 template<typename Number>
-std::ostream& operator<<(std::ostream& out, const hypro::VPolytope<Number> lhs) {
+std::ostream& operator<<(std::ostream& out, const hypro::VPolytope<Number>& lhs) {
 	out << "{ ";
 	for(const auto& vector : lhs) {
 		out << vector << " ";
@@ -191,5 +190,7 @@ std::ostream& operator<<(std::ostream& out, const hypro::VPolytope<Number> lhs) 
 	out << "}";
 	return out;
 }
+
+}//namespace
 
 #include "VPolytope.tpp"
