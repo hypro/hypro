@@ -71,7 +71,27 @@ class Ridge
 			mScalar = getScalarVector();
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//save mHyperplane as intersect of the facets
+		}
 
+		Ridge( std::vector<Point<Number>> facet1, std::vector<Point<Number>> facet2)
+		{
+			 //   std::vector<Facet<Number>> facets;
+			 //   facets.push_back(facet1);
+			 //   facets.push_back(facet2);
+			 //   mNeighbors = facets;
+
+			mVertices = std::set<Point<Number>>();
+			for(Point<Number> facet_1: facet1) {
+				for(Point<Number> facet_2: facet2) {
+					if(facet_1 == facet_2) {
+						mVertices.insert(facet_1);
+					}
+				}
+			}
+			mNormal = getNormalVector();
+			mScalar = getScalarVector();
+			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			//save mHyperplane as intersect of the facets
 		}
 
 		~Ridge()

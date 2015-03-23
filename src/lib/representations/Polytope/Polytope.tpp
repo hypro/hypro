@@ -792,6 +792,8 @@ namespace hypro
      std::vector<Facet<Number>> Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
 		//initialization
 		std::vector<Facet<Number>> facets = polytope::initConvexHull(points); //util?
+		std::cout << __func__ << " initialized." << std::endl;
+
 		std::vector<Point<Number>> unassignedPoints = polytope::points_not_in_facets(points,facets); //util?
 		for(unsigned i = 0; i<facets.size(); i++){
 			for (unsigned j = 0; j<unassignedPoints.size(); j++) {
@@ -804,27 +806,39 @@ namespace hypro
 		std::cout << __func__ << " : " << __LINE__ << facets[1].getOutsideSet() << std::endl;
 		std::vector<Facet<Number>> notOutsideFacets = polytope::not_outside_facet(facets); //util?
 		for (Facet<Number> facet : notOutsideFacets) {
+			std::cout << __func__ << " consider facet: " << facet << std::endl;
 			Point<Number> point = facet.furthest_Point();
+			std::cout << __func__ << " furthest_Point " << point << std::endl;
 			std::vector<Facet<Number>> visible_facets;
 			visible_facets.push_back(facet);
-			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(visible_facets);//util?
+			std::cout << "#### " << visible_facets << std::endl;
+			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(visible_facets); // GetFacetsNeighbors returns all neighbors, which are not in the input set.
+
 			for (Facet<Number> neighbor : neighbor_facets) {
 				if(neighbor.check_if_above(point)) {
 					visible_facets.push_back(neighbor);
 				}
 			}
+
+			std::cout << __func__ << " visible facets: " << visible_facets << std::endl;
+
 			for (Facet<Number> facet : visible_facets) {
 				for(unsigned i = 0; i<facets.size() ; i++) {
 					if(facet == facets[i]) {
 						facets.erase(facets.begin() + i);
 					}
-				}
+				} 
+				// Stefan: Removes all facets, which are original.
 				for(unsigned j = 0; j<notOutsideFacets.size() ; j++) {
 					if(facet == notOutsideFacets[j]) {
  						notOutsideFacets.erase(notOutsideFacets.begin() + j);
 					}
 				}
+				// Stefan: Removes all visible facets from the inside.
 			}
+			// Stefan: Here visible_facets should only contain non-original (non-processed), outside lying facets.
+
+
 			std::vector<Ridge<Number>> ridges = polytope::getRidges(visible_facets);
 			std::vector<Facet<Number>> newFacets;
 			for (Ridge<Number> ridge : ridges) {
