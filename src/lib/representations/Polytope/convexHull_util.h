@@ -51,7 +51,7 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 			}
 		}
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
-		facets[i].setPoints(points_for_facet);
+		facets[i].setPoints(points_for_facet, initialPoints[i]);
 	}
 
 	for(int i = 0; i < d+1; ++i) {
@@ -190,15 +190,18 @@ static std::vector<Ridge<Number>> getRidges(const std::vector<Facet<Number>>& fa
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
 		std::vector<Ridge<Number>> result;
 		std::vector<Facet<Number>> neighbors = getFacetsNeighbors(facets);
-		std::cout << __func__ << " : " << __LINE__ << std::endl;
-		for(unsigned i = 0; i<facets.size(); i++) {
-			for(unsigned j = 0; j<neighbors.size(); j++) {
+		std::cout << __func__ << " : " << __LINE__ << "neighbors: " << neighbors << std::endl;
+		for(unsigned i = 0; i<facets.size(); ++i) {
+			for(unsigned j = 0; j<neighbors.size(); ++j) {
 				if(facets[i].isNeighbor(neighbors[j])) {
-					result.push_back(Ridge<Number>(facets[i].vertices(), neighbors[j].vertices()));
+					std::cout << "facets[i].isNeighbor(neighbors[j]): " << facets[i] << " is neighbor of " << facets[j]  << std::endl;
+					Ridge<Number> newRidge(facets[i].vertices(), neighbors[j].vertices());
+					std::cout << "Ping" << std::endl;
+					result.push_back(newRidge);
 				}
 			}
 		}
-		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		std::cout << __func__ << " :  result " << result << std::endl;
 		return result;
 	}
 }

@@ -812,6 +812,36 @@ namespace hypro
 			std::vector<Facet<Number>> visible_facets;
 			visible_facets.push_back(facet);
 			std::cout << "#### " << visible_facets << std::endl;
+			std::queue<Facet<Number>> toInsert;
+			bool changed = false;
+			do {
+				changed = false;
+				for(const auto& facet : visible_facets) {
+					std::vector<Facet<Number>> neighbors = facet.neighbors();
+					for(const auto& neighbor : neighbors) {
+						if(neighbor.check_if_above(point)) {
+							toInsert.push(neighbor);
+						}
+					}
+				}
+				while(!toInsert.empty()) {
+					bool duplicate = false;
+					for(const auto& candidate : visible_facets) {
+						if(toInsert.front() == candidate) {
+							duplicate = true;
+							toInsert.pop();
+						}
+					}
+					if(!duplicate){
+						visible_facets.push_back(toInsert.front());
+						toInsert.pop();
+						changed = true;
+					}
+				}
+				std::cout << "#### NEW RUN ####" << std::endl;
+			} while (changed);
+
+			/*
 			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(visible_facets); // GetFacetsNeighbors returns all neighbors, which are not in the input set.
 
 			for (Facet<Number> neighbor : neighbor_facets) {
@@ -819,6 +849,7 @@ namespace hypro
 					visible_facets.push_back(neighbor);
 				}
 			}
+			*/
 
 			std::cout << __func__ << " visible facets: " << visible_facets << std::endl;
 

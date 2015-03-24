@@ -52,21 +52,23 @@ class Ridge
 			mScalar(f.getScalar())
 		{}
 
-		Ridge( std::set<Point<Number>> facet1, std::set<Point<Number>> facet2)
+		Ridge(const std::set<Point<Number>>& facet1, const std::set<Point<Number>>& facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
 			 //   facets.push_back(facet1);
 			 //   facets.push_back(facet2);
 			 //   mNeighbors = facets;
-
 			mVertices = std::set<Point<Number>>();
-			for(Point<Number> facet_1: facet1) {
-				for(Point<Number> facet_2: facet2) {
+			for(Point<Number> facet_1 : facet1) {
+				for(Point<Number> facet_2 : facet2) {
 					if(facet_1 == facet_2) {
 						mVertices.insert(facet_1);
 					}
 				}
 			}
+
+			std::cout << __func__ << " : " << __LINE__ << std::endl;
+
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
@@ -79,7 +81,7 @@ class Ridge
 			 //   facets.push_back(facet1);
 			 //   facets.push_back(facet2);
 			 //   mNeighbors = facets;
-
+			std::cout << __func__ << " : " << __LINE__ << std::endl;
 			mVertices = std::set<Point<Number>>();
 			for(Point<Number> facet_1: facet1) {
 				for(Point<Number> facet_2: facet2) {
@@ -88,6 +90,8 @@ class Ridge
 					}
 				}
 			}
+			std::cout << __func__ << " : " << __LINE__ << std::endl;
+
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
@@ -227,4 +231,13 @@ class Ridge
 		}
 
 };
+
+template<typename Number>
+std::ostream & operator<< (std::ostream& _ostr, const Ridge<Number>& _f)
+{
+	_ostr << "Ridge: " << std::endl;
+	_ostr << _f.hyperplane() << std::endl;
+	return _ostr;
 }
+
+} // namespace

@@ -139,7 +139,7 @@ class Facet
 			return mScalar;
 		}
 
-		void setPoints(std::vector<Point<Number>> points)
+		void setPoints(std::vector<Point<Number>> points, Point<Number> _insidePoint)
 		{
 			if(mVertices.empty()) {
 				for(unsigned i = 0; i < points.size(); i++) {
@@ -147,6 +147,8 @@ class Facet
 				}
 				mNormal = getNormalVector();
 				mScalar = getScalarVector();
+				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
+					mNormal *= -1;
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 				std::cout << "mHyperplane: "<< mHyperplane << std::endl;
 			}
@@ -192,14 +194,38 @@ class Facet
 		}
 
 		/*
+		 * Iterators
+		 */
+
+		 typename pointVector::iterator begin() {
+		 	return mVertices.begin();
+		 }
+
+		 typename pointVector::const_iterator begin() const{
+		 	return mVertices.begin();
+		 }
+
+		 typename pointVector::iterator end() {
+		 	return mVertices.end();
+		 }
+
+		 typename pointVector::const_iterator end() const{
+		 	return mVertices.end();
+		 }
+
+		/*
+		 * Functions 
+		 */
+
+		/*
 		 * Checks if a point is above, i.e. a positive distance to the Hyperplane.
 		 * @return true, if the point is above.vertices()
 		 */
 		bool check_if_above(const Point<Number>& p) const {
 			// return (mHyperplane.signedDistance(p) > 0);
-			// std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  std::endl; //" = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
-			return temp-mScalar>0 ;
+			std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
+			return (temp-mScalar>0);
 		}
 
 		void addPointToOutsideSet(const Point<Number>& point)
@@ -251,7 +277,10 @@ class Facet
 			return (_f1.vertices() == _f2.vertices());
 		}
 
-
+		friend bool operator!=(const Facet<Number>& _f1, const Facet<Number>& _f2)
+		{
+			return !(_f1 == _f2);
+		}
 };
 
 	template<typename Number>

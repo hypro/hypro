@@ -54,6 +54,7 @@ template<typename Number>
 		bool intersection(Number& _result, const Point<Number>& _vector) const;
 
 		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A) const;
+		Hyperplane<Number> intersection(const Hyperplane<Number>& _rhs) const;
 		
 	private:
 		const Number& internalOffset() const;

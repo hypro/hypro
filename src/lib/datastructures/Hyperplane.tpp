@@ -166,6 +166,12 @@
 	Hyperplane<Number> Hyperplane<Number>::linearTransformation(const matrix_t<Number>& A) const {
 		return Hyperplane<Number>(A*mNormal, mScalar);
 	}
+
+	template<typename Number>
+	Hyperplane<Number> Hyperplane<Number>::intersection(const Hyperplane<Number>& _rhs) const {
+		Hyperplane<Number> result;
+		return result;
+	}
 	
 	template<typename Number>
 	const Number& Hyperplane<Number>::internalOffset() const
