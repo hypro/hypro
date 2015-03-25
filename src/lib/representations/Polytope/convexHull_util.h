@@ -119,7 +119,76 @@ static std::vector<Point<Number>> points_not_in_facets(std::vector<Point<Number>
  * @return The list of neighbors from the Hyperplanes.
  */
 template<typename Number>
-static std::vector<Facet<Number>> getFacetsNeighbors(const std::vector<Facet<Number>>& facets){
+static std::vector<Facet<Number>> getFacetsNeighbors(const std::vector<Facet<Number>>& facets, std::vector<Facet<Number>> allowed){
+	std::cout << __func__ << " : " << __LINE__ << std::endl;
+	if(facets.empty()) {
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		return std::vector<Facet<Number>>();
+	}
+	else {
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		std::vector<Facet<Number>> result;
+		std::vector<Facet<Number>> temp;
+		std::vector<Facet<Number>> temp2;
+		std::vector<Facet<Number>> neighbors;
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		for(unsigned i = 0; i<facets.size(); i++) {
+			neighbors = facets[i].neighbors();
+			for(unsigned j = 0; j<neighbors.size(); j++) {
+				temp.push_back(neighbors[j]);
+			}
+		}
+		// Stefan: After this, temp contains all collected neighbors of all input facets.
+
+		std::cout << __func__ << " : " << __LINE__  << temp << std::endl;
+		bool found = false;
+		for(unsigned i = 0; i<temp.size(); i++) {
+			for(unsigned j = 0; j<temp2.size(); j++) {
+				if(temp[i] == temp2[j]) {
+					found = true;
+				}
+			}
+			if(!found) {
+				temp2.push_back(temp[i]);
+			}
+			found = false;
+		}
+		// Stefan: Here temp2 is a copy of temp, where the duplicates are removed.
+
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		found = false;
+		for(unsigned i = 0; i<temp2.size(); i++) {
+			for(unsigned j = 0; j<facets.size(); j++) {
+				if(temp2[i] == facets[j]) {
+					found = true;
+				}
+			}
+			if(!found) {
+				result.push_back(temp2[i]);
+			}
+			found = false;
+		}
+		// Stefan: result contains all facets, that are neighbors of the input facets (without duplicates and without the facets themselves).
+		std::vector<int> remove;
+		for(unsigned j = 0; j<allowed.size(); j++){
+			for(unsigned i = 0; i < result.size(); i++){
+				//if(result[i]==allowed[j]) {
+				//	remove.push_back(i);
+				//}
+				result.erase(result.begin() + i);
+			}
+		}
+
+		//for(unsigned i = 0; i < remove.size(); i++){
+		//	result.erase(result.begin() + remove[i] - i);
+		//}
+
+		std::cout << __func__ << " : result: " << result << std::endl;
+		return result;
+	}
+}
+template<typename Number>
+static std::vector<Facet<Number>> getFacetsNeighbors2(const std::vector<Facet<Number>>& facets){
 	std::cout << __func__ << " : " << __LINE__ << std::endl;
 	if(facets.empty()) {
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
@@ -174,7 +243,6 @@ static std::vector<Facet<Number>> getFacetsNeighbors(const std::vector<Facet<Num
 		return result;
 	}
 }
-
 /*
  * Determines the ridges between the facets and their neighbors.
  * @return The list of ridges, i.e. Hyperplanes with dimension d-2 who are the intersection of two facets.
@@ -189,13 +257,13 @@ static std::vector<Ridge<Number>> getRidges(const std::vector<Facet<Number>>& fa
 	else {
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
 		std::vector<Ridge<Number>> result;
-		std::vector<Facet<Number>> neighbors = getFacetsNeighbors(facets);
+		std::vector<Facet<Number>> neighbors = getFacetsNeighbors2(facets);
 		std::cout << __func__ << " : " << __LINE__ << "neighbors: " << neighbors << std::endl;
 		for(unsigned i = 0; i<facets.size(); ++i) {
 			for(unsigned j = 0; j<neighbors.size(); ++j) {
 				if(facets[i].isNeighbor(neighbors[j])) {
-					std::cout << "facets[i].isNeighbor(neighbors[j]): " << facets[i] << " is neighbor of " << facets[j]  << std::endl;
-					Ridge<Number> newRidge(facets[i].vertices(), neighbors[j].vertices());
+					std::cout << "facets[i].isNeighbor(neighbors[j]): " << neighbors[j] << " is neighbor of " << facets[i]  << std::endl;
+					Ridge<Number> newRidge(facets[i], neighbors[j]);
 					std::cout << "Ping" << std::endl;
 					result.push_back(newRidge);
 				}
@@ -205,6 +273,8 @@ static std::vector<Ridge<Number>> getRidges(const std::vector<Facet<Number>>& fa
 		return result;
 	}
 }
+
+
 
 
 /*
@@ -220,7 +290,7 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(const std::ve
 	std::cout << __func__ << " : " << __LINE__ << std::endl;
 	for(unsigned i = 0; i < visible_facets.size(); i++) {
 		outsideset = visible_facets[i].getOutsideSet();
-		for(unsigned j = 0; i<outsideset.size(); j++) {
+		for(unsigned j = 0; j<outsideset.size(); j++) {
 			temp.push_back(outsideset[j]);
 		}
 	}
@@ -246,21 +316,74 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(const std::ve
  * @return The list of facets that have at least one point above.
  */
 template<typename Number>
-static std::vector<Facet<Number>> not_outside_facet(const std::vector<Facet<Number>>& facets) {
+static std::queue<Facet<Number>> not_outside_facet(const std::vector<Facet<Number>>& facets) {
 	std::cout << __func__ << " : " << __LINE__ << facets << std::endl;
-	std::cout << __func__ << " : " << __LINE__ << facets[1].getOutsideSet() << std::endl;
-	std::vector<Facet<Number>> result;
+	std::cout << __func__ << " : " << __LINE__ << facets[0].getOutsideSet() << std::endl;
+	std::queue<Facet<Number>> result;
 	for(unsigned i = 0; i < facets.size(); i++) {
 		std::cout << __func__ << " : " << __LINE__ << facets[i].getOutsideSet() << std::endl;
 		if(!facets[i].getOutsideSet().empty()) {
-			result.push_back(facets[i]);
+			result.push(facets[i]);
 		}
 	}
-	std::cout << __func__ << " : " << __LINE__ << result << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << result << std::endl;
 	return result;
 }
 
+template<typename Number>
+static bool neighborCheck(const Facet<Number> facet1, const Facet<Number> facet2) {
+	if(facet1 == facet2){
+		return false;
+	}
+	else {
+		int checkValue = facet1.vertices().size() - 1;
+		int currentValue = 0;
+		for(unsigned i = 0; i < facet1.vertices().size(); i++) {
+			for(unsigned j = 0; j < facet2.vertices().size(); j++){
+				if(facet1.vertices().at(i) == facet2.vertices().at(j)){
+					currentValue++;
+				}
+			}
+		}
+		return checkValue == currentValue;
+	}
+}
 
+template<typename Number>
+static void determineNeighbors(std::vector<Facet<Number>>& newFacets){
+	for(unsigned i = 0; i < newFacets.size(); i++) {
+		for(unsigned j = 0; j < newFacets.size(); j++){
+			if(neighborCheck(newFacets[i],newFacets[j])){
+				newFacets[i].addNeighbor(newFacets[j]);
+			}
+		}
+	}
+}
+
+template<typename Number>
+static Point<Number> findInsidePoint(const Ridge<Number>& ridge, const std::vector<Facet<Number>>& visible_facets){
+	for(Facet<Number> facet : visible_facets){
+		for(Point<Number> point1 : facet.vertices()){
+			Point<Number> result;
+			bool once = false;
+			bool twice = false;
+			for(Point<Number> point2: ridge.vertices()){
+				if(point1 != point2 && !once){
+					result = point1;
+					once = true;
+				}
+				if(point1 != point2 && !twice){
+					result = point1;
+					twice = true;
+				}
+			}
+			if(!twice && once){
+				return result;
+			}
+		}
+	}
+	return Point<Number>();
+}
 
 }
 

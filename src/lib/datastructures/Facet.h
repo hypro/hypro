@@ -11,7 +11,7 @@
 
 #include "../config.h"
 #include "Hyperplane.h"
-#include "Ridge.h"
+//#include "Ridge.h"
 #include "Point.h"
 
 
@@ -54,17 +54,11 @@ class Facet
 			mScalar(f.getScalar())
 		{}
 
-		Facet( const Ridge<Number>& r, const Point<Number>& p)
+		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number>& insidePoint)
 		{
-			mVertices = std::vector<Point<Number>>();
-			mVertices.push_back(p);
-			for(Point<Number> pt: r.vertices())
-			{
-				mVertices.push_back(pt);
-			}
-			mNormal = getNormalVector();
-			mScalar = getScalarVector();
-			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			r.push_back(p);
+			setPoints(r, insidePoint);
+			//mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//mHyperplane = Hyperplane<Number>(mVertices);
 			mNeighbors = std::vector<Facet<Number>>();
 			mOutsideSet = std::vector<Point<Number>>();
@@ -139,6 +133,15 @@ class Facet
 			return mScalar;
 		}
 
+		void removeNeighbor(Facet<Number> facet)
+		{
+			for(unsigned i = 0; i<mNeighbors.size(); i++){
+				if(facet == mNeighbors[i]){
+					mNeighbors.erase(mNeighbors.begin() + i);
+				}
+			}
+		}
+
 		void setPoints(std::vector<Point<Number>> points, Point<Number> _insidePoint)
 		{
 			if(mVertices.empty()) {
@@ -147,6 +150,9 @@ class Facet
 				}
 				mNormal = getNormalVector();
 				mScalar = getScalarVector();
+
+				std::cout << "Ping" << std::endl;
+
 				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
 					mNormal *= -1;
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
@@ -184,7 +190,7 @@ class Facet
 
 		Number getScalarVector () const{
 			// std::cout << mVertices[0]<< std::endl;
-			// std::cout << mNormal << " ** " << std::endl;
+			 std::cout << mNormal << " ** " << std::endl;
 			return Number (mNormal.dot(mVertices[0].rawCoordinates()));
 		}
 
