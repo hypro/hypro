@@ -24,8 +24,8 @@ class VPolytope : public hypro::GeometricObject<Number>
 {
 	public:
 		typedef typename std::set<vector_t<Number>> vertexSet;
-		typedef typename polytope::Cone<Number> Cone;
-		typedef typename polytope::Fan<Number> Fan;
+		typedef typename hypro::polytope::Cone<Number> Cone;
+		typedef typename hypro::polytope::Fan<Number> Fan;
 		/***************************************************************************
 	 * Members
 	 **************************************************************************/

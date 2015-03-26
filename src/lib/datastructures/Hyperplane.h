@@ -19,8 +19,11 @@
 
 namespace hypro {
 
-template<typename Number>
+	template<typename Number>
 	using polynomial_t = carl::MultivariatePolynomial<Number>;
+
+	template<typename Number>
+	class HPolytope;
 
 	template<typename Number>
 	class Hyperplane {
@@ -54,7 +57,7 @@ template<typename Number>
 		bool intersection(Number& _result, const Point<Number>& _vector) const;
 
 		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A) const;
-		Hyperplane<Number> intersection(const Hyperplane<Number>& _rhs) const;
+		HPolytope<Number> intersection(const Hyperplane<Number>& _rhs) const;
 		
 	private:
 		const Number& internalOffset() const;

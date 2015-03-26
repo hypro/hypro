@@ -324,10 +324,11 @@ namespace hypro
 	}
 
 	template<typename Number>
-	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& rhs) const {
+	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& _rhs) const {
 		HPolytope<Number> res;
-
-		// create convex hull of vertices.
+		VPolytope<Number> lhs(this->vertices());
+		VPolytope<Number> tmpRes = lhs.union(VPolytope<Number> rhs(_rhs.vertices()));
+		// Todo: Convert VPolytope to HPolytope
 
 		return res;
 	}

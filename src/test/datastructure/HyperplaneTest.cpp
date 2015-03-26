@@ -11,6 +11,7 @@
 #include "../defines.h"
 
 #include "../../lib/datastructures/Hyperplane.h"
+#include "../../lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
 using namespace carl;
@@ -86,7 +87,22 @@ TYPED_TEST(HyperplaneTest, SignedDistance)
 
 TYPED_TEST(HyperplaneTest, Intersection)
 {
+	vector_t<TypeParam> normal1(4);
+	normal1(0) = 1;
+	normal1(1) = 1;
+	normal1(2) = 1;
+	normal1(3) = 1;
+	Hyperplane<TypeParam> hp1 = Hyperplane<TypeParam>(normal1, TypeParam(3));
 
+	vector_t<TypeParam> normal2(4);
+	normal2(0) = 2;
+	normal2(1) = 1;	
+	normal1(2) = 3;
+	normal1(3) = 4;
+	Hyperplane<TypeParam> hp2 = Hyperplane<TypeParam>(normal2, TypeParam(4));	
+
+	HPolytope<TypeParam> res = hp1.intersection(hp2);
+	std::cout << res << std::endl;
 }
 
 TYPED_TEST(HyperplaneTest, LinearTransformation)

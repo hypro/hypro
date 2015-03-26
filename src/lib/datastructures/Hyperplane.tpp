@@ -98,7 +98,7 @@
 	template<typename Number>
 	unsigned Hyperplane<Number>::dimension() const
 	{
-		return mNormal.rows();
+		return mNormal.nonZeros();
 	}
 	
 	template<typename Number>
@@ -168,9 +168,11 @@
 	}
 
 	template<typename Number>
-	Hyperplane<Number> Hyperplane<Number>::intersection(const Hyperplane<Number>& _rhs) const {
-		Hyperplane<Number> result;
-		return result;
+	HPolytope<Number> Hyperplane<Number>::intersection(const Hyperplane<Number>& _rhs) const {
+		std::vector<Hyperplane<Number>> planes;
+		planes.push_back(*this);
+		planes.push_back(_rhs);
+		return HPolytope<Number>(planes);
 	}
 	
 	template<typename Number>
