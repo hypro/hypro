@@ -11,7 +11,7 @@
 
 #include "../config.h"
 #include "Hyperplane.h"
-
+#include "Facet.h"
 #include "Point.h"
 
 namespace hypro
@@ -23,7 +23,7 @@ class Ridge
 	/**
 	 * Typedefs
 	 */
-		typedef std::set<Point<Number>> vertexSet;
+		typedef std::vector<Point<Number>> vertexSet;
 		// typedef std::vector<Facet<Number>> neighborFacets;
 
 	/**
@@ -31,7 +31,7 @@ class Ridge
 	 */
 	private:
 		vertexSet            mVertices;
-		// neighborFacets           mNeighbors;
+		std::vector<Facet<Number>>           mNeighbors;
 		Hyperplane<Number>          mHyperplane;
 		vector_t<Number>			mNormal;
 		Number			mScalar;
@@ -44,25 +44,25 @@ class Ridge
 
 		}
 
-		Ridge( const Ridge<Number>& f) :
-			mVertices(f.vertices()),
-			// mNeighbors = f.neighbors();
-			mHyperplane(f.hyperplane()),
-			mNormal(f.getNormal()),
-			mScalar(f.getScalar())
-		{}
+		Ridge( const Ridge<Number>& f) {
+			mVertices = f.vertices();
+			mNeighbors = f.neighbors();
+			mHyperplane = f.hyperplane();
+			//mNormal = f.getNormal();
+			//mScalar = f.getScalar();
+		}
 
-		Ridge(const std::set<Point<Number>>& facet1, const std::set<Point<Number>>& facet2)
+		/*Ridge(const std::set<Point<Number>>& facet1, const std::set<Point<Number>>& facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
 			 //   facets.push_back(facet1);
 			 //   facets.push_back(facet2);
 			 //   mNeighbors = facets;
-			mVertices = std::set<Point<Number>>();
+			mVertices = std::vector<Point<Number>>();
 			for(Point<Number> facet_1 : facet1) {
 				for(Point<Number> facet_2 : facet2) {
 					if(facet_1 == facet_2) {
-						mVertices.insert(facet_1);
+						mVertices.push_back(facet_1);
 					}
 				}
 			}
@@ -73,28 +73,30 @@ class Ridge
 			mScalar = getScalarVector();
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//save mHyperplane as intersect of the facets
-		}
+		}*/
 
-		Ridge( std::vector<Point<Number>> facet1, std::vector<Point<Number>> facet2)
+		Ridge( Facet<Number> facet1, Facet<Number> facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
 			 //   facets.push_back(facet1);
 			 //   facets.push_back(facet2);
 			 //   mNeighbors = facets;
 			std::cout << __func__ << " : " << __LINE__ << std::endl;
-			mVertices = std::set<Point<Number>>();
-			for(Point<Number> facet_1: facet1) {
-				for(Point<Number> facet_2: facet2) {
-					if(facet_1 == facet_2) {
-						mVertices.insert(facet_1);
+			mNeighbors.push_back(facet1);
+			mNeighbors.push_back(facet2);
+			mVertices = std::vector<Point<Number>>();
+			for(unsigned i = 0; i < facet1.vertices().size(); i++) {
+				for(unsigned j = 0; j < facet2.vertices().size(); j++) {
+					if(facet1.vertices()[i] == facet2.vertices()[j]) {
+						mVertices.push_back(facet1.vertices()[i]);
 					}
 				}
 			}
 			std::cout << __func__ << " : " << __LINE__ << std::endl;
 
-			mNormal = getNormalVector();
-			mScalar = getScalarVector();
-			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			//mNormal = getNormalVector();
+			//mScalar = getScalarVector();
+			mHyperplane = Hyperplane<Number>();//mNormal,mScalar);
 			//save mHyperplane as intersect of the facets
 		}
 
@@ -125,15 +127,15 @@ class Ridge
 			return mScalar;
 		}
 
-	  //  neighborFacets& rNeighbors()
-	  //
-	  //      return mNeighbors;
-	  //  }
+		//std::vector<Facet<Number>>& rNeighbors()
 
-	  //  neighborFacets neighbors() const
-	  //  {
-	  //      return mNeighbors;
-	  //  }
+	    //    return mNeighbors;
+	    //}
+
+		std::vector<Facet<Number>> neighbors() const
+	    {
+	        return mNeighbors;
+	    }
 
 	  /*  void addNeighbors(std::vector<Facet<Number>> facets)
 		{
@@ -198,7 +200,7 @@ class Ridge
 			return mHyperplane;
 		}
 
-		vector_t<Number> getNormalVector () {
+	/*	vector_t<Number> getNormalVector () {
 			std::vector<vector_t<Number>> vectors = std::vector<vector_t<Number>>();
 			std::vector<Point<Number>> vertex = std::vector<Point<Number>>();
 			for(Point<Number> p: mVertices){
@@ -228,7 +230,41 @@ class Ridge
 				vertex.push_back(p);
 			}
 			return Number (mNormal.dot(vertex[0].rawCoordinates()));
-		}
+		}  */
+
+		/* vector_t<Number> getNormalVector () const {
+			std::vector<vector_t<Number>> vectors;
+
+			//std::cout << mVertices[0].rawCoordinates() << std::endl;
+			//vectors.push_back(vector_t<Number>::Zero(mVertices[0].rawCoordinates().rows()));
+			vectors.push_back(mVertices[0].rawCoordinates());
+			for(unsigned i = 1; i < mVertices.size(); i++) {
+				vectors.push_back(mVertices[i].rawCoordinates() - vectors[0]);
+			}
+
+			matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),mVertices[0].rawCoordinates().size());
+			for(unsigned i = 1; i < vectors.size(); i++) {
+				for(unsigned j = 0; j < vectors[i].size(); j++) {
+					matrix(i,j) = vectors[i](j);
+				}
+			}
+
+			for(unsigned j = 0; j < vectors[0].size(); j++) {
+				matrix(0,j) = 1;
+			}
+			vector_t<Number> b = vector_t<Number>::Zero(vectors.size());
+			b(0) = 1;
+
+			// std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
+			vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
+			return result;
+		} */
+
+		//Number getScalarVector () const{
+			// std::cout << mVertices[0]<< std::endl;
+			// std::cout << mNormal << " ** " << std::endl;
+		//	return Number (mNormal.dot(mVertices[0].rawCoordinates()));
+		//}
 
 };
 
@@ -236,7 +272,7 @@ template<typename Number>
 std::ostream & operator<< (std::ostream& _ostr, const Ridge<Number>& _f)
 {
 	_ostr << "Ridge: " << std::endl;
-	_ostr << _f.hyperplane() << std::endl;
+	_ostr << _f.vertices() << std::endl;
 	return _ostr;
 }
 
