@@ -151,7 +151,7 @@ class Facet
 				mNormal = getNormalVector();
 				mScalar = getScalarVector();
 
-				std::cout << "Ping" << std::endl;
+				std::cout << "mNormal: " << mNormal << ", insidePoint: " << _insidePoint << std::endl;
 
 				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
 					mNormal *= -1;
@@ -227,7 +227,7 @@ class Facet
 		 * Checks if a point is above, i.e. a positive distance to the Hyperplane.
 		 * @return true, if the point is above.vertices()
 		 */
-		bool check_if_above(const Point<Number>& p) const {
+		bool isBelow(const Point<Number>& p) const {
 			// return (mHyperplane.signedDistance(p) > 0);
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
 			std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;

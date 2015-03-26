@@ -327,7 +327,7 @@ namespace hypro
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& _rhs) const {
 		HPolytope<Number> res;
 		VPolytope<Number> lhs(this->vertices());
-		VPolytope<Number> tmpRes = lhs.union(VPolytope<Number> rhs(_rhs.vertices()));
+		VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 		// Todo: Convert VPolytope to HPolytope
 
 		return res;

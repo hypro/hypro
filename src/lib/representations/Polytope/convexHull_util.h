@@ -361,27 +361,19 @@ static void determineNeighbors(std::vector<Facet<Number>>& newFacets){
 }
 
 template<typename Number>
-static Point<Number> findInsidePoint(const Ridge<Number>& ridge, const std::vector<Facet<Number>>& visible_facets){
-	for(Facet<Number> facet : visible_facets){
-		for(Point<Number> point1 : facet.vertices()){
-			Point<Number> result;
-			bool once = false;
-			bool twice = false;
-			for(Point<Number> point2: ridge.vertices()){
-				if(point1 != point2 && !once){
-					result = point1;
-					once = true;
-				}
-				if(point1 != point2 && !twice){
-					result = point1;
-					twice = true;
-				}
-			}
-			if(!twice && once){
-				return result;
+static Point<Number> findInsidePoint(const Ridge<Number>& ridge, const Facet<Number>& _facet){
+	for(Point<Number> point1 : _facet.vertices()){
+		bool found = true;
+		for(Point<Number> point2: ridge.vertices()){
+			if(point1 == point2) {
+				found = false;
+				break;
 			}
 		}
+		if(found)
+			return point1;
 	}
+	assert(false);
 	return Point<Number>();
 }
 
