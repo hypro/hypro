@@ -845,7 +845,7 @@ namespace hypro
 			} while (changed);
 			
 			/* DAS IST UNFUG - DIE OBERE SCHLEIFE IST EINE FIXPUNKTITERATION, DIE ALLE SICHTBAREN FACETS HOLEN SOLLTE.
-			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(currentVisibleFacets, facets); // GetFacetsNeighbors returns all neighbors, which are not in the input set.
+			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(currentVisibleFacets); // GetFacetsNeighbors returns all neighbors, which are not in the input set.
 			for (Facet<Number> neighbor : neighbor_facets) {
 				if(neighbor.isBelow(currentPoint)) {
 					currentVisibleFacets.push_back(neighbor);

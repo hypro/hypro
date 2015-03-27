@@ -58,7 +58,7 @@ class Facet
 		{
 			r.push_back(p);
 			setPoints(r, insidePoint);
-			//mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//mHyperplane = Hyperplane<Number>(mVertices);
 			mNeighbors = std::vector<Facet<Number>>();
 			mOutsideSet = std::vector<Point<Number>>();
@@ -120,7 +120,7 @@ class Facet
 
 		void addNeighbor(const Facet<Number>& facet)
 		{
-			mNeighbors.push_back(facet);
+			mNeighbors.push_back(facet); //check if already in the neighborset?
 		}
 
 		vector_t<Number> getNormal () const
@@ -133,11 +133,14 @@ class Facet
 			return mScalar;
 		}
 
+		/*
+		 * removes a given facet from the neighborset if it is inside the list
+		 */
 		void removeNeighbor(Facet<Number> facet)
 		{
 			for(unsigned i = 0; i<mNeighbors.size(); i++){
 				if(facet == mNeighbors[i]){
-					mNeighbors.erase(mNeighbors.begin() + i);
+					mNeighbors.erase(mNeighbors.begin() + i); //check for multiple entries?
 				}
 			}
 		}
@@ -236,7 +239,7 @@ class Facet
 
 		void addPointToOutsideSet(const Point<Number>& point)
 		{
-			mOutsideSet.push_back(point);
+			mOutsideSet.push_back(point); //check double entries?
 			std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
 		}
 

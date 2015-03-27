@@ -52,29 +52,6 @@ class Ridge
 			//mScalar = f.getScalar();
 		}
 
-		/*Ridge(const std::set<Point<Number>>& facet1, const std::set<Point<Number>>& facet2)
-		{
-			 //   std::vector<Facet<Number>> facets;
-			 //   facets.push_back(facet1);
-			 //   facets.push_back(facet2);
-			 //   mNeighbors = facets;
-			mVertices = std::vector<Point<Number>>();
-			for(Point<Number> facet_1 : facet1) {
-				for(Point<Number> facet_2 : facet2) {
-					if(facet_1 == facet_2) {
-						mVertices.push_back(facet_1);
-					}
-				}
-			}
-
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
-
-			mNormal = getNormalVector();
-			mScalar = getScalarVector();
-			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
-			//save mHyperplane as intersect of the facets
-		}*/
-
 		Ridge( Facet<Number> facet1, Facet<Number> facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
@@ -137,135 +114,10 @@ class Ridge
 	        return mNeighbors;
 	    }
 
-	  /*  void addNeighbors(std::vector<Facet<Number>> facets)
-		{
-			if(mNeighbors.empty())
-			{
-			   for(int i = 0; i < facets.size(); i++)
-			   {
-				   mNeighbors.push_back(facets[i]);
-			   }
-			   mVertices = new std::set<Point<Number>>();
-				for(int i = 0; i<facet1.vertices().size();i++) {
-					for(int j = 0; j<fvector_t<Number> getNormalVector () {
-			std::vector<vector_t<Number>> vectors = new std::vector<vector_t<Number>>(mVertices.size());
-			vectors[0] = mVertices[0].rawCoordinates();
-			for(int i = 1; i < mVertices.size(); i++) {
-				 vectors[i] = ( vectors[0]) - (mVertices[i].rawCoordinates());
-			}
-			matrix_t<Number> matrix = new matrix_t<Number,vectors.size(),vectors[0].size()> ();
-			for(int i = 0; i < vectors.size(); i++) {
-				for(int j = 0; j < vectors[0].size(); j++) {
-					matrix(i,j) = vectors[i](j);
-				}
-			}
-			vector_t<Number> b = new vector_t<Number,vectors.size(),1> ();
-			for(int i = 0; i < vectors.size(); i++) {
-				b(i) = 0;
-			}
-			vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
-			return result;
-		}
-
-		Number getScalarVector () {
-			return new Number (mNormal.dot(mVertices[0].rawCoordinates()));
-		}
-
-		Hyperplane<Number> hyperplane() const
-		{
-			return mHyperplane;
-		}acet2.vertices().size();j++) {
-						if(facet1.vertices()[i] == facet2.vertices(j)) {
-							mVertices.push_back(facet1.vertices()[i]);
-						}
-					}
-				}
-				mHyperplane = new Hyperplane(getNormalVector(),getScalar());
-			}
-		}
-*/
-   /**     void setPoints(std::vector<Point<Number>> points)
-		{
-			if(mVertices.empty())
-			{
-			for(int i = 0; i < points.size(); i++)
-				{
-					mVertices.insert(points[i]);
-				}
-			}
-		}
-*/
 		Hyperplane<Number> hyperplane() const
 		{
 			return mHyperplane;
 		}
-
-	/*	vector_t<Number> getNormalVector () {
-			std::vector<vector_t<Number>> vectors = std::vector<vector_t<Number>>();
-			std::vector<Point<Number>> vertex = std::vector<Point<Number>>();
-			for(Point<Number> p: mVertices){
-				vertex.push_back(p);
-			}
-			vectors[0] = vertex[0].rawCoordinates();
-			for(unsigned i = 1; i < vertex.size(); i++) {
-				vectors[i] = ( vectors[0]) - (vertex[i].rawCoordinates());
-			}
-			matrix_t<Number> matrix = matrix_t<Number> (vectors.size(),vectors[0].size());
-			for(unsigned i = 0; i < vectors.size(); i++) {
-				for(unsigned j = 0; j < vectors[0].size(); j++) {
-					matrix(i,j) = vectors[i](j);
-				}
-			}
-			vector_t<Number> b = vector_t<Number> (vectors.size());
-			for(unsigned i = 0; i < vectors.size(); i++) {
-				b(i) = 0;
-			}
-			vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
-			return result;
-		}
-
-		Number getScalarVector () {
-			std::vector<Point<Number>> vertex = std::vector<Point<Number>>();
-			for(Point<Number> p: mVertices){
-				vertex.push_back(p);
-			}
-			return Number (mNormal.dot(vertex[0].rawCoordinates()));
-		}  */
-
-		/* vector_t<Number> getNormalVector () const {
-			std::vector<vector_t<Number>> vectors;
-
-			//std::cout << mVertices[0].rawCoordinates() << std::endl;
-			//vectors.push_back(vector_t<Number>::Zero(mVertices[0].rawCoordinates().rows()));
-			vectors.push_back(mVertices[0].rawCoordinates());
-			for(unsigned i = 1; i < mVertices.size(); i++) {
-				vectors.push_back(mVertices[i].rawCoordinates() - vectors[0]);
-			}
-
-			matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),mVertices[0].rawCoordinates().size());
-			for(unsigned i = 1; i < vectors.size(); i++) {
-				for(unsigned j = 0; j < vectors[i].size(); j++) {
-					matrix(i,j) = vectors[i](j);
-				}
-			}
-
-			for(unsigned j = 0; j < vectors[0].size(); j++) {
-				matrix(0,j) = 1;
-			}
-			vector_t<Number> b = vector_t<Number>::Zero(vectors.size());
-			b(0) = 1;
-
-			// std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
-			vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
-			return result;
-		} */
-
-		//Number getScalarVector () const{
-			// std::cout << mVertices[0]<< std::endl;
-			// std::cout << mNormal << " ** " << std::endl;
-		//	return Number (mNormal.dot(mVertices[0].rawCoordinates()));
-		//}
-
 };
 
 template<typename Number>
