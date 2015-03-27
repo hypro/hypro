@@ -11,7 +11,6 @@
 
 #include "../config.h"
 #include "Hyperplane.h"
-//#include "Ridge.h"
 #include "Point.h"
 
 
@@ -98,6 +97,10 @@ class Facet
 		 * Getters and Setters
 		 */
 
+		 bool empty() const {
+		 	return (mVertices.size() == 0);
+		 }
+
 		pointVector& rVertices()
 		{
 			return mVertices;
@@ -154,12 +157,9 @@ class Facet
 				mNormal = getNormalVector();
 				mScalar = getScalarVector();
 
-				std::cout << "mNormal: " << mNormal << ", insidePoint: " << _insidePoint << std::endl;
-
 				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
 					mNormal *= -1;
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
-				std::cout << "mHyperplane: "<< mHyperplane << std::endl;
 			}
 		}
 
@@ -192,8 +192,6 @@ class Facet
 		}
 
 		Number getScalarVector () const{
-			// std::cout << mVertices[0]<< std::endl;
-			 std::cout << mNormal << " ** " << std::endl;
 			return Number (mNormal.dot(mVertices[0].rawCoordinates()));
 		}
 
@@ -233,20 +231,29 @@ class Facet
 		bool isBelow(const Point<Number>& p) const {
 			// return (mHyperplane.signedDistance(p) > 0);
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
-			std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
+			//std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
 			return (temp-mScalar>0);
 		}
 
 		void addPointToOutsideSet(const Point<Number>& point)
 		{
 			mOutsideSet.push_back(point); //check double entries?
-			std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
 		}
 
 		std::vector<Point<Number>> getOutsideSet() const
 		{
 			//std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
 			return mOutsideSet;
+		}
+
+		void removePointFromOutsideSet(const Point<Number>& _point) {
+			for(auto pointIt = mOutsideSet.begin(); pointIt != mOutsideSet.end(); ) {
+				if(*pointIt == _point) {
+					pointIt = mOutsideSet.erase(pointIt);
+				} else {
+					++pointIt;
+				}
+			}
 		}
 
 		/*

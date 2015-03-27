@@ -805,16 +805,14 @@ namespace hypro
 		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 
 		//main body
-		std::cout << __func__ << " : " << __LINE__ << facets[0].getOutsideSet() << std::endl;
 		std::queue<Facet<Number>> workingSet = polytope::not_outside_facet(facets); //util?
 		while(!workingSet.empty()) {
 			Facet<Number> currentFacet = workingSet.front();
-			std::cout << __func__ << " consider currentFacet: " << currentFacet << std::endl;
+			std::cout << __func__ << " Current Facet: " << currentFacet << std::endl;
 			Point<Number> currentPoint = currentFacet.furthest_Point();
-			std::cout << __func__ << " furthest_Point " << currentPoint << std::endl;
+			std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
 			std::vector<Facet<Number>> currentVisibleFacets;
 			currentVisibleFacets.push_back(currentFacet);
-			std::cout << "#### " << currentVisibleFacets << std::endl;
 			std::queue<Facet<Number>> newVisibleFacets;
 			bool changed = false;
 			do {
@@ -841,62 +839,56 @@ namespace hypro
 						changed = true;
 					}
 				}
-				std::cout << "#### NEW RUN ####" << std::endl;
 			} while (changed);
 			
-			/* DAS IST UNFUG - DIE OBERE SCHLEIFE IST EINE FIXPUNKTITERATION, DIE ALLE SICHTBAREN FACETS HOLEN SOLLTE.
-			std::vector<Facet<Number>> neighbor_facets = polytope::getFacetsNeighbors(currentVisibleFacets); // GetFacetsNeighbors returns all neighbors, which are not in the input set.
-			for (Facet<Number> neighbor : neighbor_facets) {
-				if(neighbor.isBelow(currentPoint)) {
-					currentVisibleFacets.push_back(neighbor);
-				}
-			}*/
-			
-			std::cout << __func__ << " visible facets: " << currentVisibleFacets << std::endl;
+			std::cout << __func__ << " Visible facets: " << currentVisibleFacets << std::endl;
 
 			/* Stefan: Note that here, we have a set of visible facets - we need to get the ridges, which are between a visible facet and the next invisible
-			 * facet. This means, that we have to take into account all ridges, which are built of one facet out of the visible facet set and one facet out of
+			 * facet (Horizon ridges). This means, that we have to take into account all ridges, which are built of one facet out of the visible facet set and one facet out of
 			 * the neighbors set.
 			 */
 
-			 // TODO: Until here the code seems to make sense - check all code below!
-			std::vector<Ridge<Number>> ridges = polytope::getRidges(currentVisibleFacets);
-			std::vector<Facet<Number>> newFacets;
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
-			for (Ridge<Number> ridge : ridges) {
-				Point<Number> insidePoint = polytope::findInsidePoint(ridge, currentVisibleFacets);
-				std::cout << __func__ << " : " << __LINE__ << std::endl;
-				Facet<Number> newFacet = Facet<Number>(ridge.vertices(), currentPoint, insidePoint); 
-				
-				for(unsigned i = 0; i<ridge.neighbors().size(); i++){
-					for(unsigned j = 0; j<currentVisibleFacets.size(); j++) {
-						if(ridge.neighbors().at(i) == currentVisibleFacets[j]) {
-							if(i == 1) {
-								newFacet.addNeighbor(ridge.neighbors().at(0));
-							}
-							else {
-								newFacet.addNeighbor(ridge.neighbors().at(1));
-							}
-						}
-					}
-				}
-				
-				newFacets.push_back(newFacet);
-				facets.push_back(newFacet);
-			}
-			
+			 std::vector<Facet<Number>> newFacets;
+			 for(const auto& facet : currentVisibleFacets) {
+			 	// collect horizon ridges
+			 	std::vector<Ridge<Number>> ridges = polytope::getRidges(facet);
+			 	for(const auto& ridge : ridges) {
+			 		// actual check for horizon property
+			 		for(const auto& neighbor : ridge.neighbors()) {
+			 			bool isVisible = false;
+			 			for(const auto& f : currentVisibleFacets) {
+			 				if(neighbor == f){
+			 					isVisible = true;
+			 					break;
+			 				}
+			 			}
+			 			if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
+			 				Point<Number> insidePoint = polytope::findInsidePoint(ridge, facet);
+			 				Facet<Number> newFacet(ridge.vertices(), currentPoint, insidePoint);
+			 				newFacet.addNeighbor(neighbor);
+			 				newFacets.push_back(newFacet);
+			 			}
+			 		}
+			 	}
+			 }
+			 // at this point we created all new facets from any horizon ridge to the current considered point (currentPoint). We need to set up the neighborhood
+			 // relations in between the new facets.
 			polytope::determineNeighbors(newFacets);
 			
-			std::cout << __func__ << " newFacets: " << newFacets << std::endl;
+			std::cout << __func__ << " New Facets: " << newFacets << std::endl;
 			//std::vector<Point<Number>> outsidePoints = polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets); 	
 			unsigned del;
 			for(unsigned i = 0; i<unassignedPoints.size(); i++){
 				if(unassignedPoints[i] == currentPoint){
 					del = i;
+					break;
 				}
 			}		
 			unassignedPoints.erase(unassignedPoints.begin() + del);
-			//std::cout << __func__ << " unassignedPoints: " << unassignedPoints << std::endl;
+
+			std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
+			
+			// update outside sets of the new facets.
 			for(unsigned i = 0; i<newFacets.size(); i++){
 				for (unsigned j = 0; j<unassignedPoints.size(); j++) {
 					if(newFacets[i].isBelow(unassignedPoints[j])) { 
@@ -904,31 +896,40 @@ namespace hypro
 					}
 				}
 			}
-			std::queue<Facet<Number>> notOutsideNewFacets = polytope::not_outside_facet(newFacets); //util?
-			//std::cout << __func__ << " notOutsideNewFacets: " << notOutsideNewFacets << std::endl;
-			//std::cout << __func__ << " workingSet: " << workingSet << std::endl;
-			
+
+			std::queue<Facet<Number>> notOutsideNewFacets = polytope::not_outside_facet(newFacets);
+			for(const auto& facet : newFacets) {
+				facets.push_back(facet);
+			}
+
+			// update working set with relevant new facets
 			while(!notOutsideNewFacets.empty()) {
 				workingSet.push(notOutsideNewFacets.front());
 				notOutsideNewFacets.pop();
 			}
 			
-			std::cout << __func__ << " : "  << __LINE__  << std::endl;
-			
 			std::queue<Facet<Number>> temp;
 			while(!workingSet.empty()){
+				bool isVisible = false;
 				for(unsigned i = 0; i<currentVisibleFacets.size(); i++){
-				//std::cout << __func__ << " : "  << __LINE__  << std::endl;
 					workingSet.front().removeNeighbor(currentVisibleFacets[i]);
+					if(workingSet.front() == currentVisibleFacets.at(i)) 
+						isVisible = true;
 				}
-				temp.push(workingSet.front());
+				if(!isVisible)
+					temp.push(workingSet.front());
+
 				workingSet.pop();
 			}
-			std::cout << __func__ << " : "  << __LINE__  << std::endl;
 			workingSet = temp;
 			
-			//std::cout << __func__ << " facets: " << facets << std::endl;
-			
+			/*
+			// Choose next facet with non-empty outside set.
+			while(workingSet.front().getOutsideSet().empty()) {
+				facets.push_back(workingSet.front());
+				workingSet.pop();
+			}
+			*/
 			std::cout << __func__ << " facets: " << facets << std::endl;
 		}
 		return facets;

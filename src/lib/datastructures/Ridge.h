@@ -58,7 +58,6 @@ class Ridge
 			 //   facets.push_back(facet1);
 			 //   facets.push_back(facet2);
 			 //   mNeighbors = facets;
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
 			mNeighbors.push_back(facet1);
 			mNeighbors.push_back(facet2);
 			mVertices = std::vector<Point<Number>>();
@@ -69,7 +68,6 @@ class Ridge
 					}
 				}
 			}
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
 
 			//mNormal = getNormalVector();
 			//mScalar = getScalarVector();
