@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 # # # # # # # # # # # # # # # # # # # # # #
 # A. Project properties
 # # # # # # # # # # # # # # # # # # # # # #
-project(hypro CXX)
+project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
@@ -106,8 +106,8 @@ if(COMPARE_CDD)
 endif()
 
 find_package(GMP REQUIRED)
-include_directories(${GMP_INCLUDE_DIRS})
-set(libraries ${libraries} ${GMP_LIBRARY})
+include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS})
+set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES})
 
 find_package(PPL REQUIRED)
 include_directories(${PPL_INCLUDES})

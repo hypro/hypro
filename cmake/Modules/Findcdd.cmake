@@ -10,7 +10,7 @@ find_package(PkgConfig)
 pkg_check_modules(PC_LIBCDD QUIET libcdd)
 
 # find_path searches header PATHS
-find_path(LIBCDD_INCLUDE_DIR NAMES cdd_f.h  cdd.h  cddmp_f.h  cddmp.h  cddtypes_f.h  cddtypes.h
+find_path(LIBCDD_INCLUDE_DIR NAMES cdd_f.h  cdd.h  cddmp_f.h  cddmp.h  cddtypes_f.h  cddtypes.h setoper.h
 	HINTS ${PC_LIBCDD_INCLUDEDIR} ${PC_LIBCDD_INCLUDE_DIRS})
 
 # find_library searches for library files

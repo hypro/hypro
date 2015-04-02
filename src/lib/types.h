@@ -1,1 +1,2 @@
 #define SUPPORT_MPFR
+#define COMPARE_CDD

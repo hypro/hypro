@@ -13,6 +13,18 @@
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+
+#ifdef COMPARE_CDD
+#ifdef __cplusplus
+extern "C" {
+#endif
+	#include <setoper.h>
+	#include <cdd.h>
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 #include "util/VariablePool.h"
 
 // needed for vector outstream operator:
