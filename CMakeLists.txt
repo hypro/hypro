@@ -43,6 +43,7 @@ set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION} )
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Requires carl to use mpfr as well." ON)
+option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -98,6 +99,10 @@ if(SUPPORT_MPFR)
 	find_package(MPFR REQUIRED)
 	include_directories(${MPFR_INCLUDE_DIRS})
 	set(libraries ${libraries} ${MPFR_LIBRARY})
+endif()
+
+if(COMPARE_CDD)
+	find_package(cdd REQUIRED)
 endif()
 
 find_package(GMP REQUIRED)
