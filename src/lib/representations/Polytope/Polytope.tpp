@@ -932,6 +932,9 @@ namespace hypro
 			*/
 			std::cout << __func__ << " facets: " << facets << std::endl;
 		}
+		
+		facets = polytope::maximizeFacets(facets);
+		
 		return facets;
 	} 
     

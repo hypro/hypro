@@ -302,6 +302,115 @@ static Point<Number> findInsidePoint(const Ridge<Number>& ridge, const Facet<Num
 	return Point<Number>();
 }
 
+template<typename Number>
+static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& facets) {
+	std::vector<Facet<Number>> result;
+	//unsigned dimension = facets.front().vertices().front().dimension();
+	std::cout << __func__ << " : " << __LINE__ << std::endl;
+	/*	while(!facets.empty()){
+			Facet<Number> newFacet = facets.front();
+			facets.erase(facets.begin());
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			for(unsigned l = 0; l<facets.size(); l++){
+				Facet<Number> neighbor = facets.at(l);
+				if(neighborCheck(newFacet, neighbor)){
+					std::cout << __func__ << " : " << __LINE__ << " neighbor : " << neighbor << std::endl;
+					Point<Number> point1, point2;
+					for(unsigned i = 0; i<neighbor.vertices().size(); i++) {
+						bool found = false;
+						for(unsigned j = 0; j<newFacet.vertices().size(); j++) {
+							if(neighbor.vertices().at(i) == newFacet.vertices().at(j)){
+								found = true;
+							}
+						}
+						if(!found) {
+							point1 = neighbor.vertices().at(i);
+						}
+
+					}
+
+					for(unsigned i = 0; i<newFacet.vertices().size(); i++) {
+						bool found = false;
+						for(unsigned j = 0; j<neighbor.vertices().size(); j++) {
+							if(neighbor.vertices().at(j) == newFacet.vertices().at(i)){
+								found = true;
+							}
+						}
+						if(!found) {
+							point2 = newFacet.vertices().at(i);
+						}
+					}
+
+					std::cout << __func__ << " : " << __LINE__ << " Dist 1 : " << newFacet.getDist(point1) << std::endl;
+					std::cout << __func__ << " : " << __LINE__ << " Dist 2 : " << neighbor.getDist(point2) << std::endl;
+					if ((newFacet.getDist(point1) == 0) || (neighbor.getDist(point2) == 0)){
+						std::cout << __func__ << " : " << __LINE__ << " Same level neighbor : " << neighbor << std::endl;
+						newFacet.addPoint(point1);
+						//for(unsigned k = 0; k<neighbor.neighbors().size(); k++){
+						//	newFacet.addNeighbor(neighbor.neighbors().at(k));
+						//}
+						facets.erase(facets.begin()+l);
+						l--;
+					}
+				}
+			}
+			result.push_back(newFacet);
+		}
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+
+	*/
+		for(unsigned a = 0; a<facets.size(); a++ ){
+			Facet<Number> newFacet = facets.at(a);
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			for(unsigned l = 0; l<facets.size(); l++){
+				Facet<Number> neighbor = facets.at(l);
+				if(neighborCheck(newFacet, neighbor)){
+					std::cout << __func__ << " : " << __LINE__ << " neighbor : " << neighbor << std::endl;
+					Point<Number> point1, point2;
+					for(unsigned i = 0; i<neighbor.vertices().size(); i++) {
+						bool found = false;
+						for(unsigned j = 0; j<newFacet.vertices().size(); j++) {
+							if(neighbor.vertices().at(i) == newFacet.vertices().at(j)){
+								found = true;
+							}
+						}
+						if(!found) {
+							point1 = neighbor.vertices().at(i);
+						}
+
+					}
+
+					for(unsigned i = 0; i<newFacet.vertices().size(); i++) {
+						bool found = false;
+						for(unsigned j = 0; j<neighbor.vertices().size(); j++) {
+							if(neighbor.vertices().at(j) == newFacet.vertices().at(i)){
+								found = true;
+							}
+						}
+						if(!found) {
+							point2 = newFacet.vertices().at(i);
+						}
+					}
+
+					std::cout << __func__ << " : " << __LINE__ << " Dist 1 : " << newFacet.getDist(point1) << std::endl;
+					std::cout << __func__ << " : " << __LINE__ << " Dist 2 : " << neighbor.getDist(point2) << std::endl;
+					if ((newFacet.getDist(point1) == 0) || (neighbor.getDist(point2) == 0)){
+						std::cout << __func__ << " : " << __LINE__ << " Same level neighbor : " << neighbor << std::endl;
+						newFacet.addPoint(point1);
+						//for(unsigned k = 0; k<neighbor.neighbors().size(); k++){
+						//	newFacet.addNeighbor(neighbor.neighbors().at(k));
+						//}
+						//facets.erase(facets.begin()+l);
+						//l--;
+					}
+				}
+			}
+			result.push_back(newFacet);
+		}
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
+	return result;
+}
+
 }
 
 }

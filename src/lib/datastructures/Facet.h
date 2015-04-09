@@ -160,7 +160,13 @@ class Facet
 				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
 					mNormal *= -1;
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+				//define neighbor relation for initial facet (every point to everyone else)
 			}
+		}
+
+		void addPoint(Point<Number> p) {
+			//redefine neighbor relation in facet after adding the new point (how? mention neighbor facet?)
+			mVertices.push_back(p);
 		}
 
 		vector_t<Number> getNormalVector () const {
@@ -233,6 +239,11 @@ class Facet
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
 			//std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
 			return (temp-mScalar>0);
+		}
+
+		Number getDist(const Point<Number>& p) const {
+			Number temp = Number (mNormal.dot(p.rawCoordinates()));
+			return Number (temp-mScalar);
 		}
 
 		void addPointToOutsideSet(const Point<Number>& point)
