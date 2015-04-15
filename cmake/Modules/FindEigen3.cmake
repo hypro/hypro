@@ -65,6 +65,7 @@ else (EIGEN3_INCLUDE_DIR)
       PATHS
       ${CMAKE_INSTALL_PREFIX}/include
       ${KDE4_INCLUDE_DIR}
+      ${CMAKE_SOURCE_DIR}/src/resources/eigen-3.2.0/include
       PATH_SUFFIXES eigen3 eigen
     )
 
