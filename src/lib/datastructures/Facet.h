@@ -121,9 +121,12 @@ class Facet
 			return mNeighbors;
 		}
 
-		void addNeighbor(const Facet<Number>& facet)
+		void addNeighbor(Facet<Number>& facet)
 		{
-			mNeighbors.push_back(facet); //check if already in the neighborset?
+			if(!isNeighbor(facet)){
+				mNeighbors.push_back(facet);
+				facet.addNeighbor(*this);
+			}
 		}
 
 		vector_t<Number> getNormal () const
@@ -139,13 +142,15 @@ class Facet
 		/*
 		 * removes a given facet from the neighborset if it is inside the list
 		 */
-		void removeNeighbor(Facet<Number> facet)
+		bool removeNeighbor(Facet<Number> facet)
 		{
 			for(unsigned i = 0; i<mNeighbors.size(); i++){
 				if(facet == mNeighbors[i]){
-					mNeighbors.erase(mNeighbors.begin() + i); //check for multiple entries?
+					mNeighbors.erase(mNeighbors.begin() + i);
+					return true;//check for multiple entries?
 				}
 			}
+			return false;
 		}
 
 		void setPoints(std::vector<Point<Number>> points, Point<Number> _insidePoint)
@@ -237,7 +242,12 @@ class Facet
 		bool isBelow(const Point<Number>& p) const {
 			// return (mHyperplane.signedDistance(p) > 0);
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
-			//std::cout << __func__ << " : " << p.rawCoordinates() << " * " << mNormal <<  " = ("<< temp << " - " << mScalar <<") = " << temp-mScalar << std::endl;
+			std::cout << __func__ << " : " << __LINE__ << std::endl;
+		/*	if(carl::AlmostEqual2sComplement(temp, mScalar, 4)){
+				return false;
+			} */
+			std::cout << __func__ << " : " << __LINE__ << " value " <<temp-mScalar << std::endl;
+
 			return (temp-mScalar>0);
 		}
 
@@ -301,7 +311,22 @@ class Facet
 
 		friend bool operator==(const Facet<Number>& _f1, const Facet<Number>& _f2)
 		{
-			return (_f1.vertices() == _f2.vertices());
+			//std::cout << "compare " << _f1 << "and" << _f2 << ":" ;
+			for(unsigned i = 0; i<_f1.vertices().size(); i++ ) {
+				bool found = false;
+				for(unsigned j = 0; j<_f2.vertices().size(); j++ ) {
+					if(_f1.vertices().at(i) == _f2.vertices().at(j)){
+						found = true;
+					}
+				}
+				if(!found) {
+				//	std::cout << "0"<< std::endl;
+					return false;
+				}
+			}
+			//std::cout << "1" << std::endl;
+			return true;
+			//return (_f1.vertices() == _f2.vertices());
 		}
 
 		friend bool operator!=(const Facet<Number>& _f1, const Facet<Number>& _f2)
