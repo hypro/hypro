@@ -156,7 +156,8 @@ namespace hypro
         bool contains(const Point<Number>& point);
         bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
-        static std::vector<Facet<Number>> convexHull(std::vector<Point<Number>> points);
+        static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
+
         
         /**
          * Polytope related

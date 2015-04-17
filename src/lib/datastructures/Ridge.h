@@ -102,10 +102,10 @@ class Ridge
 			return mScalar;
 		}
 
-		//std::vector<Facet<Number>>& rNeighbors()
+		std::vector<Facet<Number>>& rNeighbors() {
 
-	    //    return mNeighbors;
-	    //}
+	        return mNeighbors;
+	    }
 
 		std::vector<Facet<Number>> neighbors() const
 	    {

@@ -789,7 +789,7 @@ namespace hypro
     }
     
     template<typename Number>
-     std::vector<Facet<Number>> Polytope<Number>::convexHull(std::vector<Point<Number>> points) {
+     std::vector<Facet<Number>> Polytope<Number>::convexHull(const std::vector<Point<Number>> points) {
 		//initialization
 		std::vector<Facet<Number>> facets = polytope::initConvexHull(points); //util?
 		std::cout << __func__ << " initialized." << std::endl;
@@ -805,10 +805,12 @@ namespace hypro
 		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 
 		//main body
-		std::queue<Facet<Number>> workingSet = polytope::not_outside_facet(facets); //util?
+		std::queue<Facet<Number>> workingSet;
+		polytope::not_outside_facet(facets, workingSet); //util?
 		while(!workingSet.empty()) {
-			Facet<Number> currentFacet = workingSet.front();
+			Facet<Number>& currentFacet = workingSet.front();
 			std::cout << __func__ << " Current Facet: " << currentFacet << std::endl;
+			std::cout << __func__ << " Current Facet Neighbors: " << currentFacet.neighbors() << std::endl;
 			Point<Number> currentPoint = currentFacet.furthest_Point();
 			std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
 			std::vector<Facet<Number>> currentVisibleFacets;
@@ -820,25 +822,30 @@ namespace hypro
 				for(const auto& facet : currentVisibleFacets) {
 					std::vector<Facet<Number>> neighbors = facet.neighbors();
 					for(const auto& neighbor : neighbors) {
+					std::cout<< "Neighbor : " << neighbor << "currentPoint : " << currentPoint << std::endl;
 						if(neighbor.isBelow(currentPoint)) {
 							newVisibleFacets.push(neighbor);
 						}
 					}
 				}
+				std::cout << __func__ << " : " << __LINE__ << std::endl;
 				while(!newVisibleFacets.empty()) {
 					bool duplicate = false;
 					for(const auto& candidate : currentVisibleFacets) {
+					std::cout << "compare" << newVisibleFacets.front() << " and " << candidate << "operator " << (newVisibleFacets.front() == candidate) << std::endl;
 						if(newVisibleFacets.front() == candidate) {
 							duplicate = true;
 							newVisibleFacets.pop();
 						}
 					}
+					std::cout << __func__ << " : " << __LINE__ << std::endl;
 					if(!duplicate){
 						currentVisibleFacets.push_back(newVisibleFacets.front());
 						newVisibleFacets.pop();
 						changed = true;
 					}
 				}
+				std::cout << __func__ << " : " << __LINE__ << std::endl;
 			} while (changed);
 			
 			std::cout << __func__ << " Visible facets: " << currentVisibleFacets << std::endl;
@@ -849,30 +856,37 @@ namespace hypro
 			 */
 
 			 std::vector<Facet<Number>> newFacets;
-			 for(const auto& facet : currentVisibleFacets) {
+			 for(auto& facet : currentVisibleFacets) {
 			 	// collect horizon ridges
 			 	std::vector<Ridge<Number>> ridges = polytope::getRidges(facet);
-			 	for(const auto& ridge : ridges) {
+			 	//std::cout << __func__ << " Current Ridges: " << ridges << std::endl;
+			 	for(unsigned j = 0; j<ridges.size(); j++) {
 			 		// actual check for horizon property
-			 		for(const auto& neighbor : ridge.neighbors()) {
-			 			bool isVisible = false;
-			 			for(const auto& f : currentVisibleFacets) {
-			 				if(neighbor == f){
-			 					isVisible = true;
-			 					break;
+			 		//std::cout << __func__ << " Current Ridge: " << ridge << std::endl;
+			 		for(unsigned i = 0; i<ridges.at(j).rNeighbors().size(); i++) {
+			 			if(ridges.at(j).neighbors().at(i) != facet){
+			 				bool isVisible = false;
+			 				for(const auto& f : currentVisibleFacets) {
+			 					if(ridges.at(j).rNeighbors().at(i) == f){
+			 						isVisible = true;
+			 						break;
+			 					}
 			 				}
-			 			}
-			 			if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
-			 				Point<Number> insidePoint = polytope::findInsidePoint(ridge, facet);
-			 				Facet<Number> newFacet(ridge.vertices(), currentPoint, insidePoint);
-			 				newFacet.addNeighbor(neighbor);
-			 				newFacets.push_back(newFacet);
+			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
+			 					Point<Number> insidePoint = polytope::findInsidePoint(ridges.at(j), facet);
+			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, insidePoint);
+			 					newFacet.addNeighbor(ridges.at(j).rNeighbors().at(i));
+			 					ridges.at(j).rNeighbors().at(i).addNeighbor(newFacet);
+			 					newFacets.push_back(newFacet);
+			 				}
 			 			}
 			 		}
 			 	}
 			 }
 			 // at this point we created all new facets from any horizon ridge to the current considered point (currentPoint). We need to set up the neighborhood
 			 // relations in between the new facets.
+			 //std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
+			 
 			polytope::determineNeighbors(newFacets);
 			
 			std::cout << __func__ << " New Facets: " << newFacets << std::endl;
@@ -897,7 +911,9 @@ namespace hypro
 				}
 			}
 
-			std::queue<Facet<Number>> notOutsideNewFacets = polytope::not_outside_facet(newFacets);
+			std::queue<Facet<Number>> notOutsideNewFacets;
+			std::vector<Facet<Number>> newNeighOpt = newFacets;
+			polytope::not_outside_facet(newFacets, notOutsideNewFacets);
 			for(const auto& facet : newFacets) {
 				facets.push_back(facet);
 			}
@@ -912,7 +928,14 @@ namespace hypro
 			while(!workingSet.empty()){
 				bool isVisible = false;
 				for(unsigned i = 0; i<currentVisibleFacets.size(); i++){
-					workingSet.front().removeNeighbor(currentVisibleFacets[i]);
+					bool done = workingSet.front().removeNeighbor(currentVisibleFacets[i]);
+					if(done){
+						Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
+						//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+						//std::cout << "Current Facet: " << workingSet.front() << std::endl;
+						//std::cout << "NewNeighbor: " << newNeigh << std::endl;
+						workingSet.front().addNeighbor(newNeigh);
+					}
 					if(workingSet.front() == currentVisibleFacets.at(i)) 
 						isVisible = true;
 				}

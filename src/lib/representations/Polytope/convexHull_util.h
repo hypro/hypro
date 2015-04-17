@@ -51,6 +51,7 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 		for(int j = 0; j < d+1; ++j) {
 			if(i!=j) {
 				facets[i].addNeighbor(facets[j]);
+				facets[j].addNeighbor(facets[i]);
 			}
 		}
 	}
@@ -179,10 +180,11 @@ static std::vector<Ridge<Number>> getRidges(const std::vector<Facet<Number>>& fa
 
 
 template<typename Number>
-static std::vector<Ridge<Number>> getRidges(const Facet<Number>& facet) {
+static std::vector<Ridge<Number>> getRidges(Facet<Number>& facet) {
 	std::vector<Ridge<Number>> result;
 	if(!facet.empty()) {
-		std::vector<Facet<Number>> neighbors = facet.neighbors();
+		std::vector<Facet<Number>> neighbors = facet.rNeighbors();
+		//std::cout << __func__ << " Current Neighbors of Ridges: " << neighbors << std::endl;
 		for(unsigned j = 0; j<neighbors.size(); ++j) {
 			Ridge<Number> newRidge(facet, neighbors[j]);
 			result.push_back(newRidge);
@@ -228,8 +230,7 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(const std::ve
  * @return The list of facets that have at least one point above.
  */
 template<typename Number>
-static std::queue<Facet<Number>> not_outside_facet(std::vector<Facet<Number>>& facets) {
-	std::queue<Facet<Number>> result;
+static void not_outside_facet(std::vector<Facet<Number>>& facets, std::queue<Facet<Number>>& result ) {
 	std::stack<unsigned> toDelete;
 	for(unsigned i = 0; i < facets.size(); i++) {
 		if(!facets[i].getOutsideSet().empty()) {
@@ -238,10 +239,9 @@ static std::queue<Facet<Number>> not_outside_facet(std::vector<Facet<Number>>& f
 		}
 	}
 	while(!toDelete.empty()) {
-		facets.erase(facets.begin() + toDelete.top());
+		facets.erase(facets.begin() + toDelete.top()); //index fehler?
 		toDelete.pop();
 	}
-	return result;
 }
 
 
@@ -254,7 +254,8 @@ static bool neighborCheck(const Facet<Number> facet1, const Facet<Number> facet2
 		return false;
 	}
 	else {
-		int checkValue = facet1.vertices().size() - 1; //number of points they have to share to be neighbors
+		int checkValue = facet1.vertices().at(0).dimension() - 1; //number of points they have to share to be neighbors
+		//std::cout << "checkValue: " << checkValue << std::endl;
 		int currentValue = 0; //number of points that are confirmed to be shared
 		for(unsigned i = 0; i < facet1.vertices().size(); i++) {
 			for(unsigned j = 0; j < facet2.vertices().size(); j++){
@@ -263,6 +264,7 @@ static bool neighborCheck(const Facet<Number> facet1, const Facet<Number> facet2
 				}
 			}
 		}
+		//std::cout << "currentValue: " << currentValue << std::endl;
 		return checkValue == currentValue;
 	}
 }
@@ -275,9 +277,12 @@ static void determineNeighbors(std::vector<Facet<Number>>& newFacets){
 	for(unsigned i = 0; i < newFacets.size(); i++) {
 		for(unsigned j = 0; j < newFacets.size(); j++){
 			if(neighborCheck(newFacets[i],newFacets[j])){
-				newFacets[i].addNeighbor(newFacets[j]); // if neighbor check true add to the neighborset of the facet
+				newFacets[i].addNeighbor(newFacets[j]);
+				newFacets[j].addNeighbor(newFacets[i]);// if neighbor check true add to the neighborset of the facet
 			}
 		}
+		//std::cout << __func__ << " NewFacet: " << newFacets[i] << std::endl;
+		//std::cout << __func__ << " Neighbors of NewFacet: " << newFacets[i].neighbors() << std::endl;
 	}
 }
 
@@ -307,7 +312,7 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 	std::vector<Facet<Number>> result;
 	//unsigned dimension = facets.front().vertices().front().dimension();
 	std::cout << __func__ << " : " << __LINE__ << std::endl;
-	/*	while(!facets.empty()){
+		while(!facets.empty()){
 			Facet<Number> newFacet = facets.front();
 			facets.erase(facets.begin());
 			//std::cout << __func__ << " : " << __LINE__ << std::endl;
@@ -358,8 +363,8 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 		}
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
 
-	*/
-		for(unsigned a = 0; a<facets.size(); a++ ){
+
+	/*	for(unsigned a = 0; a<facets.size(); a++ ){
 			Facet<Number> newFacet = facets.at(a);
 			//std::cout << __func__ << " : " << __LINE__ << std::endl;
 			for(unsigned l = 0; l<facets.size(); l++){
@@ -408,8 +413,20 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 			result.push_back(newFacet);
 		}
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
+	 	 */
 	return result;
 }
+
+template<typename Number>
+static Facet<Number> newNeighbor(Facet<Number> oldNeighbor, std::vector<Facet<Number>> newFacets){
+	for(unsigned i = 0; i<newFacets.size(); i++) {
+		if(neighborCheck(oldNeighbor, newFacets[i])){
+			return newFacets[i];
+		}
+	}
+	return oldNeighbor;
+}
+
 
 }
 
