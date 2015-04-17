@@ -17,6 +17,11 @@ namespace hypro {
 		mDimension(_orig.dimension())
 	{
 		switch(mType){
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				mBall = new BallSupportFunction<Number>(*_orig.ball());
+				break;
+			}
 			case SF_TYPE::INTERSECT: {
 				mIntersectionParameters = _orig.intersectionParameters();
 				break;
@@ -47,6 +52,21 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius) {
+		switch (_type) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL:{
+				mBall = new BallSupportFunction<Number>(_radius, _type);
+				mType = _type;
+				mDimension = 0;
+				break;
+				}
+			default:
+				assert(false);
+		}
+	}
+
+	template<typename Number>
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) {
 		switch (_type) {
 			case SF_TYPE::POLY: {
@@ -62,7 +82,7 @@ namespace hypro {
 	
 	template<typename Number>
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) {
-		assert(_lhs.dimension() == _rhs.dimension());
+		//assert(_lhs.dimension() == _rhs.dimension());
 		switch(_type) {
 			case SF_TYPE::SUM: {
 				mSummands = new sumContent<Number>(_lhs, _rhs);
@@ -118,6 +138,10 @@ namespace hypro {
 	template<typename Number>
 	SupportFunction<Number>::~SupportFunction() {
 		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL:
+				delete mBall;
+				break;
 			case SF_TYPE::LINTRAFO:
 				delete mLinearTrafoParameters;
 				break;
@@ -144,6 +168,10 @@ namespace hypro {
 	template<typename Number>
 	evaluationResult<Number> SupportFunction<Number>::evaluate(const vector_t<Number>& _direction) const {
 		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				return mBall->evaluate(_direction);
+				}	
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
 				return mLinearTrafoParameters->origin.evaluate(tmp*_direction);
@@ -181,6 +209,10 @@ namespace hypro {
 	template<typename Number>
 	vector_t<Number> SupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _directions) const {
 		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				return mBall->multiEvaluate(_directions);
+				}
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
 				return mLinearTrafoParameters->origin.multiEvaluate(tmp*_directions);
@@ -192,8 +224,10 @@ namespace hypro {
 				return mScaleParameters->origin.multiEvaluate(_directions)*(mScaleParameters->factor);
 				}
 			case SF_TYPE::SUM: {
-				// Todo: Not implemented yet.
-				assert(false);
+				vector_t<Number> resA = mSummands->lhs.multiEvaluate(_directions);
+				vector_t<Number> resB = mSummands->rhs.multiEvaluate(_directions);
+				std::cout << resA.cols() << "," << resA.rows() << " added to " << resB.cols() << "," << resB.rows() <<std::endl;
+				return (resA + resB);
 				}
 			case SF_TYPE::UNION: {
 				// Todo: Not implemented yet.
@@ -291,6 +325,19 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	BallSupportFunction<Number>* SupportFunction<Number>::ball() const {
+		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				return mBall;
+				break;
+			}
+			default:
+				assert(false);
+		}
+	}
+
+	template<typename Number>
 	SupportFunction<Number> SupportFunction<Number>::linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b) const {
 		return SupportFunction<Number>(SF_TYPE::LINTRAFO, *this, _A, _b);
 	}
@@ -313,6 +360,10 @@ namespace hypro {
 	template<typename Number>
 	bool SupportFunction<Number>::contains(const vector_t<Number>& _point) const {
 		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				return mBall->contains(_point);
+				}
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
 				return mLinearTrafoParameters->origin.contains(tmp*_point);
@@ -358,6 +409,10 @@ namespace hypro {
 	template<typename Number>
 	bool SupportFunction<Number>::isEmpty() const {
 		switch (mType) {
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL: {
+				return mBall->empty();
+				}
 			case SF_TYPE::LINTRAFO: {
 				assert(false); // Todo: Not implemented yet.
 				return false;

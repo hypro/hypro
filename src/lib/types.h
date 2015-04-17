@@ -1,2 +1,3 @@
 #define SUPPORT_MPFR
-#define COMPARE_CDD
+/* #undef COMPARE_CDD */
+/* #undef COMPARE_POLYMAKE */

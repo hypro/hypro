@@ -125,7 +125,8 @@ namespace hypro {
 	evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate(const vector_t<Number>& l) const {
 		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 			std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
-		#endif   
+		#endif
+
 		assert(l.rows() == mDimension);
 
 		for (unsigned i = 0; i < mDimension; i++)
@@ -176,11 +177,11 @@ namespace hypro {
 
 	template<typename Number>
 	vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _A) const {
-		assert(_A.rows() == mDimension);
-		vector_t<Number> res(_A.cols());
+		assert(_A.cols() == mDimension);
+		vector_t<Number> res(_A.rows());
 
-		for(unsigned index = 0; index < _A.cols(); ++index) {
-			res(index) = this->evaluate(_A.col(index)).supportValue;
+		for(unsigned index = 0; index < _A.rows(); ++index) {
+			res(index) = evaluate(_A.row(index).transpose()).supportValue;
 		}
 
 		return res;

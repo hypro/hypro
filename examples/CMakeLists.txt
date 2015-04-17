@@ -25,6 +25,7 @@ set( EXAMPLES
     example_power
     example_ppl_nncPolyhedra
     example_squareroot
+    example_supportFunction
     example_cubicroot
     example_test
     example_vertexEnumeration

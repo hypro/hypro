@@ -1,2 +1,3 @@
 #cmakedefine SUPPORT_MPFR
 #cmakedefine COMPARE_CDD
+#cmakedefine COMPARE_POLYMAKE

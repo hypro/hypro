@@ -16,6 +16,7 @@
 #include "util.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "PolytopeSupportFunction.h"
+#include "BallSupportFunction.h"
 #include <glpk.h>
 #include <vector>
 
@@ -24,9 +25,6 @@
 
 namespace hypro
 {
-	// This enum represents the support function type and is used to identify support function without instanceof operations
-	enum SF_TYPE{SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY};
-	
 	template<typename Number>
 	class SupportFunction;
 	
@@ -82,11 +80,13 @@ namespace hypro
 				unionContent<Number>* mUnionParameters;
 				intersectionContent<Number>* mIntersectionParameters;
 				PolytopeSupportFunction<Number>* mPolytope;
+				BallSupportFunction<Number>* mBall;
 			};
 
 		public:
 		   
 			SupportFunction(const SupportFunction<Number>& _orig);
+			SupportFunction(SF_TYPE _type, Number _radius);
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
@@ -109,6 +109,7 @@ namespace hypro
 			unionContent<Number>* unionParameters() const;
 			intersectionContent<Number>* intersectionParameters() const;
 			PolytopeSupportFunction<Number>* polytope() const;
+			BallSupportFunction<Number>* ball() const;
 		
 			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
 			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;

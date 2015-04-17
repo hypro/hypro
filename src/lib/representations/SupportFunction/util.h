@@ -35,4 +35,7 @@ namespace hypro {
          * For NonLinear:  // TODO: add error status
          */
     };
+    
+	// This enum represents the support function type and is used to identify support function without instanceof operations
+	enum SF_TYPE{SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BALL, ELLIPSOID, BOX, ZONOTOPE};
 }

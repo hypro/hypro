@@ -17,6 +17,10 @@
  #include "Generators.h"
  #include "Executors.h"
  #include "Result.h"
+ #ifdef COMPARE_POLYMAKE
+ 	#include "polymake_util/converter.h"
+ #endif
+
  #include <vector>
  #include <iostream>
 
@@ -31,6 +35,9 @@ namespace hypro {
 		std::vector<Result> mResults;
 		Executor<Representation, operation> mExecutor;
 		BenchmarkSetup<Number> mSetup;
+		#ifdef COMPARE_POLYMAKE
+		polymake::Main mPolyMain;
+		#endif
 	public:
 		Benchmark(BenchmarkSetup<Number> _setup) : 
 			mGenerator(_setup),
@@ -38,6 +45,9 @@ namespace hypro {
 			mExecutor(),
 			mSetup(_setup)
 		{
+			#ifdef COMPARE_POLYMAKE
+				mPolyMain();
+			#endif
 			mResults.reserve(mGenerator.size());
 			std::cout << "Generate " << _setup.size << " benchmarks for operation " << Generator<Representation,operation>(_setup).name << " ... ";
 			double duration = mGenerator.generateBenchmark();

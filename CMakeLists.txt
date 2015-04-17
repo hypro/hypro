@@ -44,6 +44,7 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Requires carl to use mpfr as well." ON)
 option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
+option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -103,6 +104,10 @@ endif()
 
 if(COMPARE_CDD)
 	find_package(cdd REQUIRED)
+endif()
+
+if(COMPARE_POLYMAKE)
+	find_package(Polymake REQUIRED)
 endif()
 
 find_package(GMP REQUIRED)
