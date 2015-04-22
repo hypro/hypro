@@ -172,12 +172,31 @@ namespace hypro {
             	return res;
             }
 
+          /*  std::vector<Point<Number> >& rNeighbors() {
+            	//return mNeighbors;
+            	//TODO fix (does this have bad side effects?)
+            	std::vector<Point<Number>> res;
+            	for (unsigned i =0; i<mNeighbors.size(); ++i) {
+            		res.push_back( *(mNeighbors.at(i)) );
+            	}
+            	return res;
+            }*/
+
             void setNeighbors(const std::vector<Point<Number>* >& _neighbors) {
             	mNeighbors = _neighbors;
             }
 
             void addNeighbor(Point<Number>* _neighbor) {
             	mNeighbors.push_back(_neighbor);
+            }
+
+            void removeNeighbor(Point<Number>* _neighbor) {
+            	for(unsigned i = 0; i < mNeighbors.size(); i++){
+            		if(*(mNeighbors.at(i)) == *(_neighbor)) {
+            			mNeighbors.erase(mNeighbors.begin() + i);
+            			break;
+            		}
+            	}
             }
 
             std::vector<Point<Number> > composedOf() const {

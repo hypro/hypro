@@ -10,6 +10,7 @@
 using namespace hypro;
 
 int main(int argc, char** argv) {
+
 /*	vector_t<double> v01 = vector_t<double>(3);
 	v01(0) = 0;
 	v01(1) = 0;
@@ -80,7 +81,7 @@ int main(int argc, char** argv) {
 	points.push_back(p07);
 	points.push_back(p08);
 	points.push_back(p09);
-	points.push_back(p10);
+	points.push_back(p10);*/
 
 	//std::cout << __func__ << " : " << __LINE__ << " : " << v08 << p08 << std::endl;
 
@@ -123,12 +124,6 @@ int main(int argc, char** argv) {
 
 	//std::cout << __func__ << " : " << __LINE__ << " : " << zahlen << std::endl;
 
-	std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
-
-	for(unsigned i = 0; i<facets.size(); i++){
-		std::cout << facets.at(i) << std::endl;
-	}
-	*/
 
 
  /*	vector_t<double> v01 = vector_t<double>(3);
@@ -187,14 +182,8 @@ int main(int argc, char** argv) {
 	points.push_back(p04);
 	points.push_back(p05);
 	points.push_back(p06);
-	points.push_back(p07);
+	points.push_back(p07); */
 
-	std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
-
-	for(unsigned i = 0; i<facets.size(); i++){
-		std::cout << facets.at(i) << std::endl;
-	}
-	*/
 
 	vector_t<double> v01 = vector_t<double>(3);
 		v01(0) = 0;
@@ -276,6 +265,8 @@ int main(int argc, char** argv) {
 		points.push_back(p11);
 
 		std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
+
+		std::cout << __func__ << " : " << __LINE__ << std::endl;
 
 		for(unsigned i = 0; i<facets.size(); i++){
 			std::cout << facets.at(i) << std::endl;

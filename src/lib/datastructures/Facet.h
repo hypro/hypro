@@ -64,6 +64,17 @@ class Facet
 
 		}
 		
+		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& insidePoints)
+		{
+			r.push_back(p);
+			setPoints(r, insidePoints);
+			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			//mHyperplane = Hyperplane<Number>(mVertices);
+			mNeighbors = std::vector<Facet<Number>>();
+			mOutsideSet = std::vector<Point<Number>>();
+
+		}
+
 		Facet(const std::set<vector_t<Number>>& _vertices) :
 				mNeighbors()
 		{
@@ -159,19 +170,71 @@ class Facet
 				for(unsigned i = 0; i < points.size(); i++) {
 					mVertices.push_back(points[i]);
 				}
+
+				//for(unsigned i = 0; i<mVertices.size(); i++){
+				//	for(unsigned j = 0; j<mVertices.size(); j++){
+				//		if(mVertices[i]!=mVertices[j]){
+				//			mVertices[i].addNeighbor(mVertices[j]);
+				//		}
+				//	}
+				//}
+
 				mNormal = getNormalVector();
 				mScalar = getScalarVector();
 
-				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar)
+				//std::cout << __func__ << " : " << __LINE__ << std::endl;
+				//std::cout << mNormal << std::endl;
+				//std::cout << _insidePoint << "  " << mScalar << std::endl;
+				if(mNormal.dot(_insidePoint.rawCoordinates()) > mScalar){
 					mNormal *= -1;
+					mScalar *= -1;
+				}
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
-				//define neighbor relation for initial facet (every point to everyone else)
+			}
+		}
+
+		void setPoints(std::vector<Point<Number>> points, std::vector<Point<Number>> insidePoints)
+		{
+			if(mVertices.empty()) {
+				for(unsigned i = 0; i < points.size(); i++) {
+					mVertices.push_back(points[i]);
+				}
+
+				mNormal = getNormalVector();
+				mScalar = getScalarVector();
+
+				//std::cout << __func__ << " : " << __LINE__ << std::endl;
+				//std::cout << mNormal << std::endl;
+				//std::cout << _insidePoint << "  " << mScalar << std::endl;
+				//bool changed = false;
+				while(!insidePoints.empty()) {
+					if(mNormal.dot(insidePoints.front().rawCoordinates()) > mScalar){
+						mNormal *= -1;
+						mScalar *= -1;
+						break;
+						//if(changed) {
+							 //if multiple times in here error?
+						//}
+						//changed = true;
+					}
+					insidePoints.erase(insidePoints.begin());
+				}
+				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			}
 		}
 
 		void addPoint(Point<Number> p) {
-			//redefine neighbor relation in facet after adding the new point (how? mention neighbor facet?)
 			mVertices.push_back(p);
+			std::vector<Point<Number>> neighbors1 = p.neighbors();
+			for(unsigned i = 0; i<neighbors1.size(); i++) {
+				std::vector<Point<Number>> neighbors2 = neighbors1.at(i).neighbors();
+				for(unsigned j = 0; j<neighbors2.size(); j++) {
+					if(neighbors1.at(i) == neighbors2.at(j)){
+						neighbors1.at(i).removeNeighbor(&neighbors2.at(j));
+						neighbors2.at(j).removeNeighbor(&neighbors1.at(i));
+					}
+				}
+			}
 		}
 
 		vector_t<Number> getNormalVector () const {
@@ -183,7 +246,6 @@ class Facet
 			for(unsigned i = 1; i < mVertices.size(); i++) {
 				vectors.push_back(mVertices[i].rawCoordinates() - vectors[0]);
 			}
-
 			matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),mVertices[0].rawCoordinates().size());
 			for(unsigned i = 1; i < vectors.size(); i++) {
 				for(unsigned j = 0; j < vectors[i].size(); j++) {
@@ -191,8 +253,15 @@ class Facet
 				}
 			}
 
-			for(unsigned j = 0; j < vectors[0].size(); j++) {
+			matrix(0,vectors[0].size()-1) = 1;
+			for(unsigned j = 0; j < vectors[0].size()-1; j++) {
 				matrix(0,j) = 1;
+
+				if(matrix.fullPivLu().rank()==vectors[0].size()){
+					break;
+				} else {
+					matrix(0,j) = 0;
+				}
 			}
 			vector_t<Number> b = vector_t<Number>::Zero(vectors.size());
 			b(0) = 1;
@@ -242,11 +311,11 @@ class Facet
 		bool isBelow(const Point<Number>& p) const {
 			// return (mHyperplane.signedDistance(p) > 0);
 			Number temp = Number (mNormal.dot(p.rawCoordinates()));
-			std::cout << __func__ << " : " << __LINE__ << std::endl;
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;
 		/*	if(carl::AlmostEqual2sComplement(temp, mScalar, 4)){
 				return false;
 			} */
-			std::cout << __func__ << " : " << __LINE__ << " value " <<temp-mScalar << std::endl;
+			//std::cout << __func__ << " : " << __LINE__ << " value " <<temp-mScalar << std::endl;
 
 			return (temp-mScalar>0);
 		}
