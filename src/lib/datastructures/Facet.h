@@ -193,7 +193,7 @@ class Facet
 			}
 		}
 
-		void setPoints(std::vector<Point<Number>> points, std::vector<Point<Number>> insidePoints)
+		void setPoints(std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints)
 		{
 			if(mVertices.empty()) {
 				for(unsigned i = 0; i < points.size(); i++) {
@@ -207,8 +207,8 @@ class Facet
 				//std::cout << mNormal << std::endl;
 				//std::cout << _insidePoint << "  " << mScalar << std::endl;
 				//bool changed = false;
-				while(!insidePoints.empty()) {
-					if(mNormal.dot(insidePoints.front().rawCoordinates()) > mScalar){
+				for(unsigned i = 0; i < insidePoints.size() ; i++) {
+					if(mNormal.dot(insidePoints.at(i).rawCoordinates()) > mScalar){
 						mNormal *= -1;
 						mScalar *= -1;
 						break;
@@ -217,7 +217,6 @@ class Facet
 						//}
 						//changed = true;
 					}
-					insidePoints.erase(insidePoints.begin());
 				}
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			}

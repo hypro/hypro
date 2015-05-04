@@ -19,6 +19,33 @@ namespace hypro
 namespace polytope
 {
 
+template<typename Number>
+static int dimensionCheck(const std::vector<Point<Number>>& points) {
+	matrix_t<Number> matrix = matrix_t<Number>(points.at(0).rawCoordinates().size(), points.size());
+	for(unsigned i = 0; i < points.at(0).rawCoordinates().size(); i++){
+		for(unsigned j = 0; j < points.size(); j++){
+			matrix(i,j) = points.at(j).rawCoordinates()(i);
+		}
+	}
+	return matrix.fullPivLu().rank();
+}
+
+template<typename Number>
+static bool maxRank(const std::vector<Point<Number>>& points, const Point<Number> point) {
+	matrix_t<Number> matrix = matrix_t<Number>(point.rawCoordinates().size(), points.size() + 1);
+	for(unsigned i = 0; i < point.rawCoordinates().size(); i++){
+		for(unsigned j = 0; j < points.size(); j++){
+			matrix(i,j) = points.at(j).rawCoordinates()(i);
+		}
+	}
+	for(unsigned j = 0; j < point.rawCoordinates().size(); j++){
+		matrix(j,points.size()) = point.rawCoordinates()(j);
+	}
+
+	return matrix.fullPivLu().rank() == (unsigned)(points.size() + 1);
+}
+
+
 /*
  * Creates initial Convex Hull in dimension d with d+1 Points out of all the points given. Neighbor relationship of the facets are saved in neighbors.
  * @return The list of facets, i.e. Hyperplanes with dimension d-1 who form the Convex Hull.
@@ -26,12 +53,29 @@ namespace polytope
 template<typename Number>
 static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>>& points){
 	// TODO: check if points is empty or contains less than d+1 elements!
+	int dimCheck = dimensionCheck(points);
 	int d = points[0].dimension();
+	if(dimCheck == d){
 	std::vector<Point<Number>> initialPoints;
 	Facet<Number> f = Facet<Number>();
-	for(int i = 0; i < d+1; ++i) {
-		initialPoints.push_back(points[i]);
-		// TODO: Introduce a consistency check here to ensure that this is not degenerate.
+	for(int i = 0; i < d; ++i) {
+		for(unsigned j = 0; j < points.size(); j++) {
+			if(maxRank(initialPoints, points[j])){
+				initialPoints.push_back(points[j]);
+				break;
+			}
+		}
+	}
+	for(unsigned i = 0; i< points.size(); i++) {
+		bool found = false;
+		for(unsigned j = 0; j < initialPoints.size(); j++) {
+			if(points[i] == initialPoints[j]){
+				found = true;
+			}
+		}
+		if(!found){
+			initialPoints.push_back(points[i]);
+		}
 	}
 	std::vector<Facet<Number>> facets;
 	for(int i = 0; i < d+1; i++) {
@@ -56,6 +100,11 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 		}
 	}
 	return facets;
+	}
+	else {
+		std::cout << __func__ << __LINE__ << "Inconsistent point set " << std::endl;
+		return std::vector<Facet<Number>>();
+	}
 }
 
 /*

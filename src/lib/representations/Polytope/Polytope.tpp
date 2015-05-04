@@ -791,6 +791,7 @@ namespace hypro
     template<typename Number>
      std::vector<Facet<Number>> Polytope<Number>::convexHull(const std::vector<Point<Number>> points) {
 		//initialization
+		if(points.size() >= points.at(0).dimension() + 1){
 		std::vector<Facet<Number>> facets = polytope::initConvexHull(points);
 		std::cout << __func__ << " initialized." << std::endl;
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
@@ -878,8 +879,8 @@ namespace hypro
 			 					}
 			 				}
 			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
-			 					Point<Number> insidePoint = polytope::findInsidePoint(ridges.at(j), facet);
-			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, insidePoint); //assignedPoints
+			 					//Point<Number> insidePoint = polytope::findInsidePoint(ridges.at(j), facet);
+			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, assignedPoints); //assignedPoints
 			 					newFacet.addNeighbor(ridges.at(j).rNeighbors().at(i));
 			 					ridges.at(j).rNeighbors().at(i).addNeighbor(newFacet);
 			 					newFacets.push_back(newFacet);
@@ -985,7 +986,12 @@ namespace hypro
 		
 		return facets;
 	} 
-    
+    else {
+    //error: not enough points
+    std::cout << __func__ << __LINE__ << "Not enough points to determine convex hull in dimension " << points.at(0).dimension() << std::endl;
+   	return std::vector<Facet<Number>>();
+    }
+    }
 
 
     /**
