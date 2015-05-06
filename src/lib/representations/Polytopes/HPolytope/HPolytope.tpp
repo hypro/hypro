@@ -328,7 +328,15 @@ namespace hypro
 		VPolytope<Number> lhs(this->vertices());
 		VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 		// Todo: Convert VPolytope to HPolytope
-
+		
+		/*
+			std::vector<Hyperplane<Number>> hyperplanes;
+			std::vector<Facet<Number>> facets = convexHull(tmpRes.vertices());
+			for(unsigned i = 0; i<facets.size(); i++) {
+				hyperplanes.push_back(facets[i].hyperplane());
+			}
+			return HPolytope<Number>(hyperplanes);
+		*/
 		return HPolytope<Number>(tmpRes);
 	}
 

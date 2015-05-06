@@ -15,6 +15,8 @@
 #include <glpk.h>
 #include <set>
 #include <cassert>
+#include "../../../util/convexHull.h"
+#include "../../../datastructures/Facet.h"
 
 namespace hypro
 {

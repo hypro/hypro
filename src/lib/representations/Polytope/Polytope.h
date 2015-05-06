@@ -24,7 +24,7 @@
 #include "../../datastructures/Facet.h"
 #include "../../datastructures/Ridge.h"
 #include "../../datastructures/Hyperplane.h"
-#include "convexHull_util.h"
+#include "../../util/convexHull.h"
 
 
 using namespace Parma_Polyhedra_Library;
@@ -156,7 +156,7 @@ namespace hypro
         bool contains(const Point<Number>& point);
         bool contains(const Polytope<Number>& poly);
         bool unite(Polytope<Number>& result, const Polytope<Number>& rhs);
-        static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
+      //  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
         
         /**

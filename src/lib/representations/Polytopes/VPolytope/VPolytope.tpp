@@ -149,6 +149,17 @@ namespace hypro
 		VPolytope<Number> result;
 		result.insert(this->mVertices.begin(), this->mVertices.end());
 		result.insert(rhs.mVertices.begin(),rhs.mVertices.end());
+		/*
+			std::vector<Facet<Number>> facets = convexHull(result.mVertices);
+			std::set<Point<Number>> preresult;
+			for(unsigned i = 0; i<facets.size(); i++) {
+				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
+					preresult.insert(facets[i].vertices().at(j));			
+				}			
+			}
+			
+			return VPolytope<Number>(preresult);
+		*/
 		return result;
 	}
 

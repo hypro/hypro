@@ -14,6 +14,8 @@
 #include <glpk.h>
 #include "simplex.h"
 #include "../VPolytope/VPolytope.h"
+#include "../../../util/convexHull.h"
+#include "../../../datastructures/Facet.h"
 
 namespace hypro
 {

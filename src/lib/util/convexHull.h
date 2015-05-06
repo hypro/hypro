@@ -1,22 +1,20 @@
 /*
  * Contains utilities to create the convex hull.
- * @file   convexHull_util.h
+ * @file   convexHull.h
  * @author tayfun
  *
  * @since       2014-12-10
- * @version     2015-01-21
+ * @version     2015-05-06
  */
 
 #pragma once
 
-#include "../../datastructures/Hyperplane.h"
-#include "../../datastructures/Facet.h"
-#include "../../datastructures/Ridge.h"
-#include "../../datastructures/Point.h"
+#include "../datastructures/Hyperplane.h"
+#include "../datastructures/Facet.h"
+#include "../datastructures/Ridge.h"
+#include "../datastructures/Point.h"
 
 namespace hypro
-{
-namespace polytope
 {
 
 template<typename Number>
@@ -151,7 +149,7 @@ static void points_not_in_facets(const std::vector<Point<Number>>& points, const
 		unassignedPoints.erase(unassignedPoints.begin() + remove[i]-i);
 	}
 
-	std::cout << __func__ << " : " << __LINE__ << unassignedPoints << "  " << assignedPoints << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << unassignedPoints << "  " << assignedPoints << std::endl;
 }
 
 /*
@@ -207,7 +205,7 @@ static std::vector<Facet<Number>> getFacetsNeighbors(const std::vector<Facet<Num
 	}
 }
 /*
- * Determines the ridges between the facets and their neighbors.
+ * Determines the ridges between the facets and their neighbors.polytope::
  * @return The list of ridges, i.e. Hyperplanes with dimension d-2 who are the intersection of two facets.
  */
 template<typename Number>
@@ -277,7 +275,7 @@ static std::vector<Point<Number>> points_outside_of_visible_facets(const std::ve
 }
 
 /*
- * Checks for each facet if it has at least one point above. If it has it is not outside and will be returned. Note that the input facets is modified to 
+ * Checks for each facet if it has at least one point above. If it has it is not outside and will be returned. Note that the input facets is modified to
  * contain only facets with an empty outside set.
  * @return The list of facets that have at least one point above.
  */
@@ -386,7 +384,7 @@ template<typename Number>
 static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& facets) {
 	std::vector<Facet<Number>> result;
 	//unsigned dimension = facets.front().vertices().front().dimension();
-	std::cout << __func__ << " : " << __LINE__ << std::endl;
+	//std::cout << __func__ << " : " << __LINE__ << std::endl;
 		while(!facets.empty()){
 			Facet<Number> newFacet = facets.front();
 			facets.erase(facets.begin());
@@ -395,7 +393,7 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 				Facet<Number> neighbor = facets.at(l);
 				//std::cout << __func__ << " : " << __LINE__ << " Neighbors : " << newFacet.neighbors() << std::endl;
 				if(neighborCheck(newFacet, neighbor)){
-					std::cout << __func__ << " : " << __LINE__ << " neighbor : " << neighbor << std::endl;
+					//std::cout << __func__ << " : " << __LINE__ << " neighbor : " << neighbor << std::endl;
 					Point<Number> point1, point2;
 					for(unsigned i = 0; i<neighbor.vertices().size(); i++) {
 						bool found = false;
@@ -422,10 +420,10 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 						}
 					}
 					//std::cout << __func__ << " : " << __LINE__ << " normalsize : " << point1.dimension() << std::endl;
-					std::cout << __func__ << " : " << __LINE__ << " Dist 1 : " << newFacet.getDist(point1) << std::endl;
-					std::cout << __func__ << " : " << __LINE__ << " Dist 2 : " << neighbor.getDist(point2) << std::endl;
+					//std::cout << __func__ << " : " << __LINE__ << " Dist 1 : " << newFacet.getDist(point1) << std::endl;
+					//std::cout << __func__ << " : " << __LINE__ << " Dist 2 : " << neighbor.getDist(point2) << std::endl;
 					if ((newFacet.getDist(point1) == 0) && (neighbor.getDist(point2) == 0)){
-						std::cout << __func__ << " : " << __LINE__ << " Same level neighbor : " << neighbor << std::endl;
+						//std::cout << __func__ << " : " << __LINE__ << " Same level neighbor : " << neighbor << std::endl;
 						newFacet.addPoint(point1);
 						for(unsigned i = 0; i<neighbor.rNeighbors().size(); i++) {
 							if(!newFacet.isNeighbor(neighbor.rNeighbors().at(i))){
@@ -445,7 +443,7 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 			}
 			result.push_back(newFacet);
 		}
-		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		//std::cout << __func__ << " : " << __LINE__ << std::endl;
 
 		for(unsigned i = 0; i<result.size();){
 			bool del = false;
@@ -513,7 +511,7 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 		}
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
 	 	 */
-		std::cout << __func__ << " : " << __LINE__ << std::endl;
+		//std::cout << __func__ << " : " << __LINE__ << std::endl;
 	return result;
 }
 
@@ -540,6 +538,208 @@ static void setNeighborhoodOfPoints(std::vector<Facet<Number>>& facets) {
 	}
 }
 
-}
+template<typename Number>
+static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points) {
+		//initialization
+		if(points.size() >= points.at(0).dimension() + 1){
+		std::vector<Facet<Number>> facets = initConvexHull(points);
+		//std::cout << __func__ << " initialized." << std::endl;
+		std::vector<Point<Number>> unassignedPoints, assignedPoints;
+		points_not_in_facets(points,facets,unassignedPoints, assignedPoints);
+		for(unsigned i = 0; i<facets.size(); i++){
+			for (unsigned j = 0; j<unassignedPoints.size(); j++) {
+				if(facets[i].isBelow(unassignedPoints[j])) {
+					facets[i].addPointToOutsideSet(unassignedPoints[j]);
+				}
+			}
+		}
+		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 
+		//main body
+		std::queue<Facet<Number>> workingSet;
+		not_outside_facet(facets, workingSet);
+		while(!workingSet.empty()) {
+			Facet<Number>& currentFacet = workingSet.front();
+			//std::cout << __func__ << " Current Facet: " << currentFacet << std::endl;
+			//std::cout << __func__ << " Current Neighbors: " << currentFacet.neighbors() << std::endl;
+			Point<Number> currentPoint = currentFacet.furthest_Point();
+			//std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
+			std::vector<Facet<Number>> currentVisibleFacets;
+			currentVisibleFacets.push_back(currentFacet);
+			std::queue<Facet<Number>> newVisibleFacets;
+			bool changed = false;
+			do {
+				changed = false;
+				for(const auto& facet : currentVisibleFacets) {
+					std::vector<Facet<Number>> neighbors = facet.neighbors();
+					for(const auto& neighbor : neighbors) {
+					//std::cout<< "Neighbor : " << neighbor << "currentPoint : " << currentPoint << std::endl;
+						if(neighbor.isBelow(currentPoint)) {
+							newVisibleFacets.push(neighbor);
+						}
+					}
+				}
+				//std::cout << __func__ << " : " << __LINE__ << std::endl;
+				while(!newVisibleFacets.empty()) {
+					bool duplicate = false;
+					//std::cout << __func__ << " : " << __LINE__ << std::endl;
+					for(const auto& candidate : currentVisibleFacets) {
+					//std::cout << "compare" << newVisibleFacets.front() << " and " << candidate << "operator " << (newVisibleFacets.front() == candidate) << std::endl;
+						if(!newVisibleFacets.empty() && newVisibleFacets.front() == candidate) {
+							duplicate = true;
+							newVisibleFacets.pop(); //restart of loop needed
+						}
+					}
+					//std::cout << __func__ << " : " << __LINE__ << std::endl;
+					if(!duplicate){
+					//std::cout << __func__ << " : " << __LINE__ << std::endl;
+						currentVisibleFacets.push_back(newVisibleFacets.front());
+						//std::cout << __func__ << " : " << __LINE__ << std::endl;
+						newVisibleFacets.pop();
+						//std::cout << __func__ << " : " << __LINE__ << std::endl;
+						changed = true;
+					}
+					//std::cout << __func__ << " : " << __LINE__ << std::endl;
+				}
+				//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			} while (changed);
+
+			//std::cout << __func__ << " Visible facets: " << currentVisibleFacets << std::endl;
+
+			/* Stefan: Note that here, we have a set of visible facets - we need to get the ridges, which are between a visible facet and the next invisible
+			 * facet (Horizon ridges). This means, that we have to take into account all ridges, which are built of one facet out of the visible facet set and one facet out of
+			 * the neighbors set.
+			 */
+
+			 std::vector<Facet<Number>> newFacets;
+			 for(auto& facet : currentVisibleFacets) {
+			 	// collect horizon ridges
+			 	std::vector<Ridge<Number>> ridges = getRidges(facet);
+			 	//std::cout << __func__ << " Current Ridges: " << ridges << std::endl;
+			 	for(unsigned j = 0; j<ridges.size(); j++) {
+			 		// actual check for horizon property
+			 		//std::cout << __func__ << " Current Ridge: " << ridge << std::endl;
+			 		for(unsigned i = 0; i<ridges.at(j).rNeighbors().size(); i++) {
+			 			if(ridges.at(j).neighbors().at(i) != facet){
+			 				bool isVisible = false;
+			 				for(const auto& f : currentVisibleFacets) {
+			 					if(ridges.at(j).rNeighbors().at(i) == f){
+			 						isVisible = true;
+			 						break;
+			 					}
+			 				}
+			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
+			 					//Point<Number> insidePoint = polytope::findInsidePoint(ridges.at(j), facet);
+			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, assignedPoints); //assignedPoints
+			 					newFacet.addNeighbor(ridges.at(j).rNeighbors().at(i));
+			 					ridges.at(j).rNeighbors().at(i).addNeighbor(newFacet);
+			 					newFacets.push_back(newFacet);
+			 				}
+			 			}
+			 		}
+			 	}
+			 }
+			 // at this point we created all new facets from any horizon ridge to the current considered point (currentPoint). We need to set up the neighborhood
+			 // relations in between the new facets.
+			 //std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
+
+			determineNeighbors(newFacets);
+
+			std::cout << __func__ << " New Facets: " << newFacets << std::endl;
+			//std::vector<Point<Number>> outsidePoints = polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
+			unsigned del;
+			bool ok = false;
+			for(unsigned i = 0; i<unassignedPoints.size(); i++){
+				if(unassignedPoints[i] == currentPoint){
+					del = i;
+					ok = true;
+					break;
+				}
+			}
+
+			if(ok) {
+				assignedPoints.push_back(unassignedPoints.at(del));
+				unassignedPoints.erase(unassignedPoints.begin() + del);
+			}
+
+			//std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
+
+			// update outside sets of the new facets.
+			for(unsigned i = 0; i<newFacets.size(); i++){
+				for (unsigned j = 0; j<unassignedPoints.size(); j++) { //unassignedPoints?
+					if(newFacets[i].isBelow(unassignedPoints[j])) {
+						newFacets[i].addPointToOutsideSet(unassignedPoints[j]);
+					}
+				}
+			}
+
+			std::queue<Facet<Number>> notOutsideNewFacets;
+			std::vector<Facet<Number>> newNeighOpt = newFacets;
+			not_outside_facet(newFacets, notOutsideNewFacets);
+			for(const auto& facet : newFacets) {
+				facets.push_back(facet);
+			}
+
+			// update working set with relevant new facets
+			while(!notOutsideNewFacets.empty()) {
+				workingSet.push(notOutsideNewFacets.front());
+				notOutsideNewFacets.pop();
+			}
+
+			std::queue<Facet<Number>> temp;
+			while(!workingSet.empty()){
+				bool isVisible = false;
+				for(unsigned i = 0; i<currentVisibleFacets.size(); i++){
+					bool done = workingSet.front().removeNeighbor(currentVisibleFacets[i]);
+					if(done){
+						Facet<Number> newNeigh = newNeighbor(workingSet.front(), newNeighOpt);
+						//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+						//std::cout << "Current Facet: " << workingSet.front() << std::endl;
+						//std::cout << "NewNeighbor: " << newNeigh << std::endl;
+						workingSet.front().addNeighbor(newNeigh);
+					}
+
+					/*for(unsigned j = 0; j<facets.size(); j++){
+						bool done2 = facets.at(j).removeNeighbor(currentVisibleFacets[i]);
+						if(done2){
+							Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
+							//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+							//std::cout << "Current Facet: " << workingSet.front() << std::endl;
+							//std::cout << "NewNeighbor: " << newNeigh << std::endl;
+							facets.at(j).addNeighbor(newNeigh);
+						}
+					}*/
+
+					if(workingSet.front() == currentVisibleFacets.at(i))
+						isVisible = true;
+				}
+				if(!isVisible)
+					temp.push(workingSet.front());
+
+				workingSet.pop();
+			}
+			workingSet = temp;
+
+			/*
+			// Choose next facet with non-empty outside set.
+			while(workingSet.front().getOutsideSet().empty()) {
+				facets.push_back(workingSet.front());
+				workingSet.pop();
+			}
+			*/
+			//std::cout << __func__ << " facets: " << facets << std::endl;
+		}
+
+		//polytope::setNeighborhoodOfPoints(facets);
+
+		facets = maximizeFacets(facets);
+
+		return facets;
+	}
+    else {
+    //error: not enough points
+    std::cout << __func__ << __LINE__ << "Not enough points to determine convex hull in dimension " << points.at(0).dimension() << std::endl;
+   	return std::vector<Facet<Number>>();
+    }
+    }
 }

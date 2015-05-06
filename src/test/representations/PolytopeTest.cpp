@@ -361,11 +361,83 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
 /*
 TYPED_TEST(PolytopeTest, ConvexHull)
 {
-    
+    vector_t<double> v01 = vector_t<double>(3);
+	v01(0) = 0;
+	v01(1) = 0;
+	v01(2) = 0;
+	this->p1 = Point<double>(v01);
+
+	vector_t<double> v02 = vector_t<double>(3);
+	v02(0) = 0;
+	v02(1) = 2;
+	v02(2) = 0;
+	this->p2 = Point<double>(v02);
+
+	vector_t<double> v03 = vector_t<double>(3);
+	v03(0) = 2;
+	v03(1) = 0;
+	v03(2) = 0;
+	this->p3 = Point<double>(v03);
+
+	vector_t<double> v04 = vector_t<double>(3);
+	v04(0) = 0;
+	v04(1) = 0;
+	v04(2) = 2;
+	this->p4= Point<double>(v04);
+
+	vector_t<double> v05 = vector_t<double>(3);
+	v04(0) = 0.5;
+	v04(1) = 0.5;
+	v04(2) = 0.5;
+	this->p5= Point<double>(v05);
+
+	hypro::Polytope<TypeParam> result;
+	ptpe1.hull(result)
+
+	EXPECT_TRUE(result.contains(this->p1));
+    EXPECT_TRUE(result.contains(this->p2));
+    EXPECT_TRUE(result.contains(this->p3));
+    EXPECT_TRUE(result.contains(this->p4));
+	EXPECT_FALSE(result.contains(this->p5));
+
+	//neighborhood.....
 }
 
 TYPED_TEST(PolytopeTest, Membership)
 {
-    
+    vector_t<double> v01 = vector_t<double>(3);
+	v01(0) = 4;
+	v01(1) = 4;
+	Point<Number> p01 = Point<double>(v01);
+
+	vector_t<double> v02 = vector_t<double>(3);
+	v02(0) = 5;
+	v02(1) = 6;
+	Point<Number> p02 = Point<double>(v02);
+
+	vector_t<double> v03 = vector_t<double>(3);
+	v03(0) = 6;
+	v03(1) = 4;
+	Point<Number> p03 = Point<double>(v03);
+
+	vector_t<double> v04 = vector_t<double>(3);
+	v04(0) = 10;
+	v04(1) = 0;
+	Point<Number> p04= Point<double>(v04);
+
+	std::vector<Point<Number>> v1;
+	v1.push_back(p01);
+	v1.push_back(p02);
+	v1.push_back(p03);
+
+	Polytope<Number> pt2 = Polytope<Number>(v1);
+
+	EXPECT_TRUE(ptpe1.contains(pt2));
+
+	v1.push_back(p04);
+
+	Polytope<Number> pt3 = Polytope<Number>(v1);
+
+	EXPECT_FALSE(ptpe1.contains(pt3));
 }
 */
