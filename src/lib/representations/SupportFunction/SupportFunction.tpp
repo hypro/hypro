@@ -442,4 +442,18 @@ namespace hypro {
 		}
 	}
 
+	template<typename Number>
+	Box<Number> SupportFunction<Number>::toBox() const {
+		intervalMap intervals;
+		matrix_t<Number> directions = matrix_t<Number>::Zero(2*mDimension, mDimension);
+
+		// set up evaluation directions
+		for(unsigned i = 0; i < mDimension; ++i){
+			directions(i*2,i) = 1;
+			directions(i*2+1,i) = -1;
+		}
+
+		std::cout << directions << std::endl;
+	}
+
 } // namespace
