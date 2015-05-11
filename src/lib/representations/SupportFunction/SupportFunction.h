@@ -13,7 +13,6 @@
 #pragma once 
 
 #include "../../config.h"
-#include "../forwardDeclarations.h"
 #include "util.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "PolytopeSupportFunction.h"

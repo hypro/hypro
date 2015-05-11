@@ -13,13 +13,13 @@
 
 namespace hypro {
 
-	template<typename Target>
+	template<typename Target, typename Source>
 	class Converter {
 	public:
 		Converter();
 		~Converter();
 
-		Target operator(öasofdjaöklsfdj);
+		Target operator(const Source& _source);
 
 	private:
 	};
