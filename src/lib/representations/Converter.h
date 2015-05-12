@@ -15,9 +15,11 @@
 #include "../config.h"
 
 // include representations for conversion
-#include "Box.h"
-#include "../SupportFunction/SupportFunction.h"
-#include "../Polytopes/VPolytope/VPolytope.h"
+#include "Box/Box.h"
+#include "SupportFunction/SupportFunction.h"
+#include "Polytopes/VPolytope/VPolytope.h"
+#include "Polytopes/HPolytope/HPolytope.h"
+#include "Zonotope/Zonotope.h"
 
 namespace hypro {
 
