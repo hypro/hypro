@@ -12,7 +12,12 @@
 #pragma once
 
 #include "../util/VariablePool.h"
- #include "../config.h"
+#include "../config.h"
+
+// include representations for conversion
+#include "Box.h"
+#include "../SupportFunction/SupportFunction.h"
+#include "../Polytopes/VPolytope/VPolytope.h"
 
 namespace hypro {
 

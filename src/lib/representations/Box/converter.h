@@ -9,9 +9,6 @@
 
 #pragma once
 
-#include "Box.h"
-#include "../SupportFunction/SupportFunction.h"
-
 namespace hypro {
 
 	template<typename Number>
@@ -45,8 +42,34 @@ namespace hypro {
 
 			return Box<Number>(intervals);
 		}
-
-	private:
 	};
+	template<typename Number>
+	class Converter <hypro::Box<Number>, hypro::VPolytope<Number> > {
+		private:
+			VariablePool& mPool;
 
+		public:
+		Converter() : mPool(hypro::VariablePool::getInstance()){
+		}
+		~Converter(){}
+
+		hypro::Box<Number> convert(const hypro::VPolytope<Number>& _source) const {
+			typename VPolytope<Number>::vertexSet vertices = _source.vertices();
+			vector_t<Number> minima = *vertices.begin();
+			vector_t<Number> maxima = *vertices.begin();
+
+			for(unsigned i=0; i<vertices.size(); ++i) {
+				for(unsigned d=0; d<_source.dimension(); ++d) {
+					
+				}
+			}
+
+			typename Box<Number>::intervalMap intervals;
+			for(unsigned i=0; i<dim; ++i) {
+				intervals.insert(std::make_pair(mPool.carlVarByIndex(i), carl::Interval<Number>(distances(2*i), distances(2*i+1))));
+			}
+
+			return Box<Number>(intervals);
+		}
+	};
 } //namespace

@@ -23,8 +23,8 @@ int main(int argc, char** argv) {
 	SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
 	SupportFunction<double> ball(SF_TYPE::INFTY_BALL, .5);
 
-	// SupportFunction<double> rounded = poly2.minkowskiSum(ball);
-	SupportFunction<double> rounded = ball;
+	SupportFunction<double> rounded = poly2.minkowskiSum(ball);
+	//SupportFunction<double> rounded = ball;
 
 	// create array holding equaly distributed directions
 	int resolution = 360;
