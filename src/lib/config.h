@@ -58,7 +58,7 @@ template<typename Number>
 class Polytope;
 
 template<typename Number>
-using valuation_t = hypro::Polytope<Number>;
+using valuation_t = Polytope<Number>;
 }
 /**
  * author: ckugler

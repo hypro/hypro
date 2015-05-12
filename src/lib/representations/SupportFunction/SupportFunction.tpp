@@ -72,7 +72,7 @@ namespace hypro {
 			case SF_TYPE::POLY: {
 				mPolytope = new PolytopeSupportFunction<Number>(_directions, _distances);
 				mType = SF_TYPE::POLY;
-				mDimension = _distances.rows();
+				mDimension = _directions.cols();
 				break;
 				}
 			default:

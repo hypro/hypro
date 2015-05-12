@@ -12,6 +12,7 @@ set( EXAMPLES
     ################################
     example_addition
     example_benchmarks
+    example_converter
     example_subtraction
     example_multiplication
     example_division

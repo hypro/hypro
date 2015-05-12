@@ -11,16 +11,25 @@
  
 #pragma once
 
+#include "../util/VariablePool.h"
+ #include "../config.h"
+
 namespace hypro {
 
 	template<typename Target, typename Source>
 	class Converter {
-	public:
-		Converter();
-		~Converter();
+	private:
+		VariablePool& mPool;
 
-		Target operator(const Source& _source);
+	public:
+		Converter() : mPool(hypro::VariablePool::getInstance()){
+		}
+		~Converter(){}
+
+		Target convert(const Source& _source) const;
 
 	private:
 	};
+
 } //namespace
+#include "Box/converter.h"

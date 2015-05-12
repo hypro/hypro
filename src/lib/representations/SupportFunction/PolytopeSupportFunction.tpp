@@ -29,6 +29,9 @@ namespace hypro {
 	template<typename Number>
 	void PolytopeSupportFunction<Number>::initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants) {
 		assert(constraints.rows() == constraintConstants.rows());
+
+		std::cout << "cosnstraints: " << constraints << std::endl;
+
 		mDimension = constraints.cols();
 
 		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
