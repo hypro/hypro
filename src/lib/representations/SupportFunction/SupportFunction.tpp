@@ -79,6 +79,20 @@ namespace hypro {
 				assert(false);
 		}
 	}
+
+	template<typename Number>
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) {
+		switch (_type) {
+			case SF_TYPE::POLY: {
+				mPolytope = new PolytopeSupportFunction<Number>(_planes);
+				mType = SF_TYPE::POLY;
+				mDimension = mPolytope.dimension();
+				break;
+				}
+			default:
+				assert(false);
+		}	
+	}
 	
 	template<typename Number>
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) {
@@ -226,7 +240,7 @@ namespace hypro {
 			case SF_TYPE::SUM: {
 				vector_t<Number> resA = mSummands->lhs.multiEvaluate(_directions);
 				vector_t<Number> resB = mSummands->rhs.multiEvaluate(_directions);
-				std::cout << resA.cols() << "," << resA.rows() << " added to " << resB.cols() << "," << resB.rows() <<std::endl;
+				//std::cout << resA.cols() << "," << resA.rows() << " added to " << resB.cols() << "," << resB.rows() <<std::endl;
 				return (resA + resB);
 				}
 			case SF_TYPE::UNION: {

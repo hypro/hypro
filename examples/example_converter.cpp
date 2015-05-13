@@ -12,14 +12,8 @@ int main(int argc, char** argv) {
 	distances2 << 1,1,0;
 
 	SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
-	SupportFunction<double> ball(SF_TYPE::INFTY_BALL, .5);
-
-	// SupportFunction<double> rounded = poly2.minkowskiSum(ball);
-	SupportFunction<double> rounded = ball;
-
-	Converter<hypro::Box<double>,SupportFunction<double> > converter2;
-
-	hypro::Box<double> res = converter2.convert(poly2);
+	
+	hypro::Box<double> res = convert(poly2);
 
 	std::cout << res << std::endl;
 
@@ -42,8 +36,7 @@ int main(int argc, char** argv) {
 	points.insert(p4);
 
 	VPolytope<double> poly1 = VPolytope<double>(points);
-	Converter<hypro::Box<double>,VPolytope<double> > converter1;
-	res = converter1.convert(poly1);
+	res = convert(poly1);
 
 	std::cout << res << std::endl;
 
@@ -55,8 +48,19 @@ int main(int argc, char** argv) {
 
 	Zonotope<double> zono1 = Zonotope<double>(center, generators);
 
-	Converter<hypro::Box<double>,Zonotope<double> > converter3;
-	res = converter3.convert(zono1);
+	res = convert(zono1);
+
+	std::cout << res << std::endl;
+
+	std::vector<vector_t<double>> coordinates;
+	coordinates.push_back(p1);
+	coordinates.push_back(p2);
+	coordinates.push_back(p3);
+	coordinates.push_back(p4);
+
+	hypro::Polytope<double> poly3(coordinates);
+
+	res = convert(poly3);
 
 	std::cout << res << std::endl;	
 }

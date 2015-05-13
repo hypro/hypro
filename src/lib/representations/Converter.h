@@ -16,27 +16,11 @@
 
 // include representations for conversion
 #include "Box/Box.h"
-#include "SupportFunction/SupportFunction.h"
+#include "Polytope/Polytope.h"
 #include "Polytopes/VPolytope/VPolytope.h"
 #include "Polytopes/HPolytope/HPolytope.h"
+#include "SupportFunction/SupportFunction.h"
 #include "Zonotope/Zonotope.h"
 
-namespace hypro {
-
-	template<typename Target, typename Source>
-	class Converter {
-	private:
-		VariablePool& mPool;
-
-	public:
-		Converter() : mPool(hypro::VariablePool::getInstance()){
-		}
-		~Converter(){}
-
-		Target convert(const Source& _source) const;
-
-	private:
-	};
-
-} //namespace
 #include "Box/converter.h"
+#include "SupportFunction/converter.h"

@@ -11,7 +11,8 @@
 #pragma once 
 
 #include "../../config.h"
- #include "../../datastructures/Point.h"
+#include "../../datastructures/Point.h"
+#include "../../datastructures/Hyperplane.h"
 #include "util.h"
 #include <glpk.h>
 
@@ -49,6 +50,7 @@ namespace hypro
 	   public:
 		
 		PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants);
+		PolytopeSupportFunction(const std::vector<Hyperplane<Number>>& _planes);
 		~PolytopeSupportFunction();
 		
 		/**

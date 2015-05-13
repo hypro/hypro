@@ -29,9 +29,6 @@ namespace hypro {
 	template<typename Number>
 	void PolytopeSupportFunction<Number>::initialize(matrix_t<Number> constraints, vector_t<Number> constraintConstants) {
 		assert(constraints.rows() == constraintConstants.rows());
-
-		std::cout << "cosnstraints: " << constraints << std::endl;
-
 		mDimension = constraints.cols();
 
 		#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -100,7 +97,22 @@ namespace hypro {
 	template<typename Number>
 	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants){
 		initialize(constraints, constraintConstants);
-	}	
+	}
+
+	template<typename Number>
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(const std::vector<Hyperplane<Number>>& _planes) {
+		assert(!_planes.empty());
+		matrix_t<Number> constraints = matrix_t<Number>(_planes.size(), _planes[0].dimension());
+		vector_t<Number> constraintConstants = vector_t<Number>(_planes.size());
+
+		unsigned pos = 0;
+		for(const auto& plane : _planes) {
+			constraints.row(pos) = plane.normal().transpose();
+			constraintConstants(pos) = plane.offset();
+			++pos;
+		}
+		initialize(constraints, constraintConstants);
+	}
 	
 	template<typename Number>
 	PolytopeSupportFunction<Number>::~PolytopeSupportFunction()

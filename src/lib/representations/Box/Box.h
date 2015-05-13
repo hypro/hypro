@@ -104,7 +104,7 @@ public:
 	/*
 	 * @return
 	 */
-	std::vector<carl::Interval<Number>> boundaries() const
+	const std::vector<carl::Interval<Number>>& boundaries() const
 	{
 		return mBoundaries;
 	}
