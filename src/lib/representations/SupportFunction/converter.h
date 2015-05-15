@@ -52,9 +52,9 @@ namespace hypro {
 		return true;
 	}
 
-	/*
+	
 	template<typename Number>
-	hypro::SupportFunction<Number> convert(const hypro::Zonotope<Number>& _source) {
+	bool convert(const hypro::Zonotope<Number>& _source, SupportFunction<Number>& _target) {
 		Zonotope<Number> tmp = _source.intervalHull();
 		std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
 		assert(!vertices.empty());
@@ -74,9 +74,10 @@ namespace hypro {
 			intervals.insert(std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(i), carl::Interval<Number>(minima(i), maxima(i))));
 		}
 
-		return Box<Number>(intervals);
+		return true;
 	}
 
+	/*
 	template<typename Number>
 	hypro::SupportFunction<Number> convert(const hypro::Polytope<Number>& _source) {
 		hypro::Polytope<Number> tmp = _source;

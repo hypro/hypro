@@ -338,6 +338,17 @@ std::vector< hypro::vector_t<Number> > Zonotope<Number>::computeZonotopeBoundary
 	return verticesArray;
 }
 
+template<typename Number>
+std::vector<hypro::vector_t<Number>> Zonotope<Number>::corners() {
+	removeEmptyGenerators();
+	hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero(this->dimension());
+	std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive(mGenerators, init);
+
+	for(const auto& vector : possibleCorners) {
+		std::cout << vector << ",";
+	}
+}
+
 template <typename Number>
 Number intersect2d(const Zonotope<Number>& input, const Hyperplane<Number>& hp, int minOrMax) {
 	assert(input.dimension() == hp.dimension() && input.dimension() == 2 && "zonotope dimension must be of same dimension (only dim 2 accepted) as hyperplane");

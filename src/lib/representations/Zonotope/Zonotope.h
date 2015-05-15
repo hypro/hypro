@@ -163,6 +163,15 @@ class Zonotope
 		 * @return array of points represented as vectors
 		 */
 		std::vector< hypro::vector_t<Number> > computeZonotopeBoundary();
+
+		/**
+		 * @brief Compute a set of points containing the extreme points of a zonotope.
+		 * @details Compute all possible extreme points of a zonotope by considering all combinations of
+		 * generators. This gives a set of points, which contains also the real extreme points but also some
+		 * internal points.
+		 * @return vector of points.
+		 */
+		std::vector<hypro::vector_t<Number>> corners();
 		
 		/**
 		 * Calculates zonotope intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n and e a scalar)
