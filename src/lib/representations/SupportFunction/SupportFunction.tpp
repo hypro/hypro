@@ -86,7 +86,7 @@ namespace hypro {
 			case SF_TYPE::POLY: {
 				mPolytope = new PolytopeSupportFunction<Number>(_planes);
 				mType = SF_TYPE::POLY;
-				mDimension = mPolytope.dimension();
+				mDimension = mPolytope->dimension();
 				break;
 				}
 			default:

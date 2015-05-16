@@ -1,13 +1,14 @@
 /* 
- * @file   plot.h
+ * @file   Plotter.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-03-01
- * @version	2015-03-01
+ * @version	2015-05-16
  */
 
 #pragma once
 
+#include <carl/util/Singleton.h>
 #include <vector>
 #include <string>
 #include "../lib/datastructures/Point.h"
@@ -18,6 +19,41 @@ namespace hypro {
 		std::string color = "#18571C"; // default green
 	};
 	
+	template<typename Number>
+	class Plotter : public carl::Singleton<Plotter<Number>>
+    {
+        friend carl::Singleton<Plotter<Number>>;
+	private:
+		std::string mFilename;
+		mutable std::ofstream mOutfile;
+		std::vector<std::vector<Point<Number>>> mObjects;
+		gnuplotSettings mSettings;
+
+	protected:
+		Plotter()
+        {}
+	public:
+		~Plotter();
+
+		void setFilename(const std::string& _filename);
+		void updateSettings(gnuplotSettings _settings);
+
+		// plotting functions
+		
+		/**
+		 * @brief Writes the actual plot to the output file.
+		 * @details 
+		 */
+		void plot2d() const;
+
+		void addObject(const std::vector<Point<Number>>& _points);
+
+	private:
+		// auxiliary functions
+		void init(const std::string& _filename);
+	};
+
+
 	/**
 	 * Plots a 2D plot. Note that the function assumes the points passed to be ordered.
 	 * @param _points A ordered vector of points (2D).
@@ -61,7 +97,7 @@ namespace hypro {
 		}
 		out << " fs empty border lc rgb '" << _settings.color << "'\n";
 		out << "set term post eps\n";
-		out << "set output \"" << _outfile << ".eps \"\n";
+		out << "set output \"" << _outfile << ".eps\"\n";
 		out << "plot ";
 
 		for(unsigned d = 0; d < min.rows(); ++d) {
@@ -75,3 +111,4 @@ namespace hypro {
 	
 }
 
+#include "Plotter.tpp"
