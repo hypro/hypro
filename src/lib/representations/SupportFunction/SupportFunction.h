@@ -104,13 +104,13 @@ namespace hypro
 			SF_TYPE type() const;
 			
 			// getter for the union types
-			std::shared_ptr<sumContent<Number>>& summands() const;
-			std::shared_ptr<trafoContent<Number>>& linearTrafoParameters() const;
-			std::shared_ptr<scaleContent<Number>>& scaleParameters() const;
-			std::shared_ptr<unionContent<Number>>& unionParameters() const;
-			std::shared_ptr<intersectionContent<Number>>& intersectionParameters() const;
-			std::shared_ptr<PolytopeSupportFunction<Number>>& polytope() const;
-			std::shared_ptr<BallSupportFunction<Number>>& ball() const;
+			std::shared_ptr<sumContent<Number>> summands() const;
+			std::shared_ptr<trafoContent<Number>> linearTrafoParameters() const;
+			std::shared_ptr<scaleContent<Number>> scaleParameters() const;
+			std::shared_ptr<unionContent<Number>> unionParameters() const;
+			std::shared_ptr<intersectionContent<Number>> intersectionParameters() const;
+			std::shared_ptr<PolytopeSupportFunction<Number>> polytope() const;
+			std::shared_ptr<BallSupportFunction<Number>> ball() const;
 		
 			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
 			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;

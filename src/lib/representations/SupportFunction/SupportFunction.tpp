@@ -53,7 +53,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius) {
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius) : mBall() {
 		switch (_type) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL:{
@@ -69,10 +69,11 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) {
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : mPolytope() {
 		switch (_type) {
 			case SF_TYPE::POLY: {
-				mPolytope = std::shared_ptr<PolytopeSupportFunction<Number>>(new PolytopeSupportFunction<Number>(_directions, _distances));
+				PolytopeSupportFunction<Number>* tmp = new PolytopeSupportFunction<Number>(_directions, _distances);
+				mPolytope = std::shared_ptr<PolytopeSupportFunction<Number>>(tmp);
 				mType = SF_TYPE::POLY;
 				mDimension = _directions.cols();
 				break;
@@ -83,7 +84,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) {
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) : mPolytope() {
 		switch (_type) {
 			case SF_TYPE::POLY: {
 				mPolytope = std::shared_ptr<PolytopeSupportFunction<Number>>(new PolytopeSupportFunction<Number>(_planes));
@@ -97,7 +98,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) {
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) :mSummands() {
 		//assert(_lhs.dimension() == _rhs.dimension());
 		switch(_type) {
 			case SF_TYPE::SUM: {
@@ -124,10 +125,10 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b) {
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b) : mLinearTrafoParameters(){
 		switch (_type) {
 			case SF_TYPE::LINTRAFO: {
-				mLinearTrafoParameters = std::make_shared<trafoContent<Number>>(trafoContent<Number>(_origin, _a, _b));
+				mLinearTrafoParameters = std::make_shared<trafoContent<Number>>(_origin, _a, _b);
 				mType = SF_TYPE::LINTRAFO;
 				mDimension = _origin.dimension();
 				break;
@@ -275,7 +276,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<sumContent<Number>>& SupportFunction<Number>::summands() const {
+	std::shared_ptr<sumContent<Number>> SupportFunction<Number>::summands() const {
 		switch (mType) {
 			case SF_TYPE::SUM: {
 				return mSummands;
@@ -287,7 +288,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<trafoContent<Number>>& SupportFunction<Number>::linearTrafoParameters() const {
+	std::shared_ptr<trafoContent<Number>> SupportFunction<Number>::linearTrafoParameters() const {
 		switch (mType) {
 			case SF_TYPE::LINTRAFO: {
 				return mLinearTrafoParameters;
@@ -299,7 +300,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<scaleContent<Number>>& SupportFunction<Number>::scaleParameters() const {
+	std::shared_ptr<scaleContent<Number>> SupportFunction<Number>::scaleParameters() const {
 		switch (mType) {
 			case SF_TYPE::SCALE: {
 				return mScaleParameters;
@@ -311,7 +312,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<unionContent<Number>>& SupportFunction<Number>::unionParameters() const {
+	std::shared_ptr<unionContent<Number>> SupportFunction<Number>::unionParameters() const {
 		switch (mType) {
 			case SF_TYPE::UNION: {
 				return mUnionParameters;
@@ -323,7 +324,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<intersectionContent<Number>>& SupportFunction<Number>::intersectionParameters() const {
+	std::shared_ptr<intersectionContent<Number>> SupportFunction<Number>::intersectionParameters() const {
 		switch (mType) {
 			case SF_TYPE::INTERSECT: {
 				return mIntersectionParameters;
@@ -335,7 +336,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<PolytopeSupportFunction<Number>>& SupportFunction<Number>::polytope() const {
+	std::shared_ptr<PolytopeSupportFunction<Number>> SupportFunction<Number>::polytope() const {
 		switch (mType) {
 			case SF_TYPE::POLY: {
 				return mPolytope;
@@ -347,7 +348,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::shared_ptr<BallSupportFunction<Number>>& SupportFunction<Number>::ball() const {
+	std::shared_ptr<BallSupportFunction<Number>> SupportFunction<Number>::ball() const {
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL: {

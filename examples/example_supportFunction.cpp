@@ -26,9 +26,11 @@ int main(int argc, char** argv) {
 	SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
 	SupportFunction<double> ball(SF_TYPE::INFTY_BALL, .5);
 	
+	
 	SupportFunction<double> rounded1 = poly1.minkowskiSum(ball);
 	SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
 	//SupportFunction<double> rounded = ball;
+
 
 	// create array holding equaly distributed directions
 	int resolution = 360;
@@ -49,14 +51,14 @@ int main(int argc, char** argv) {
 	vector_t<double> sf2 = poly2.multiEvaluate(evaldirections);
 	vector_t<double> sf3 = ball.multiEvaluate(evaldirections);
 	//std::cout << result << std::endl;
-
+	
 	
 	// plotting 
 	hypro::Plotter<double>& plotter = hypro::Plotter<double>::getInstance();
 	plotter.setFilename("out");
 	std::vector<Point<double>> points;
 
-	/*
+	
 	for(int i = 0; i < resolution; ++i) {
 		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
@@ -85,8 +87,8 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	//plotter.addObject(points);
-	*/
-	/*
+	
+	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -116,7 +118,7 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-	*/
+	
 	
 	SupportFunction<double> res = rounded1.linearTransformation(linearMap);
 	for(unsigned iteration = 0; iteration < 20; ++iteration) {
