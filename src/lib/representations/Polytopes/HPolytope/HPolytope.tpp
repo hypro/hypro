@@ -545,11 +545,11 @@ namespace hypro
 		std::cout << std::endl;
 		
 		// Note: f and g mark the indices, not the enumeration as stored in B and N
-		unsigned f = dictionary.rows();
-		unsigned g = 0;
+		//unsigned f = dictionary.rows();
+		//unsigned g = 0;
 
-		unsigned m = mHPlanes.size() - dimension() +1;
-		unsigned n = mHPlanes.size() +2;
+		//unsigned m = mHPlanes.size() - dimension() +1;
+		//unsigned n = mHPlanes.size() +2;
 		
 		hpolytope::search(basis, coBasis, dictionary);
 		

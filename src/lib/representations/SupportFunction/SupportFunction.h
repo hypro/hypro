@@ -74,13 +74,13 @@ namespace hypro
 			SF_TYPE mType;
 			unsigned mDimension;
 			union {
-				sumContent<Number>* mSummands;
-				trafoContent<Number>* mLinearTrafoParameters;
-				scaleContent<Number>* mScaleParameters;
-				unionContent<Number>* mUnionParameters;
-				intersectionContent<Number>* mIntersectionParameters;
-				PolytopeSupportFunction<Number>* mPolytope;
-				BallSupportFunction<Number>* mBall;
+				std::shared_ptr<sumContent<Number>> mSummands;
+				std::shared_ptr<trafoContent<Number>> mLinearTrafoParameters;
+				std::shared_ptr<scaleContent<Number>> mScaleParameters;
+				std::shared_ptr<unionContent<Number>> mUnionParameters;
+				std::shared_ptr<intersectionContent<Number>> mIntersectionParameters;
+				std::shared_ptr<PolytopeSupportFunction<Number>> mPolytope;
+				std::shared_ptr<BallSupportFunction<Number>> mBall;
 			};
 
 		public:
@@ -95,7 +95,7 @@ namespace hypro
 			
 			virtual ~SupportFunction();
 			
-			void operator=(const SupportFunction& _orig);
+			SupportFunction& operator=(const SupportFunction& _orig);
 			
 			evaluationResult<Number> evaluate(const vector_t<Number>& _direction) const;
 			vector_t<Number> multiEvaluate(const matrix_t<Number>& _directions) const;
@@ -104,13 +104,13 @@ namespace hypro
 			SF_TYPE type() const;
 			
 			// getter for the union types
-			sumContent<Number>* summands() const;
-			trafoContent<Number>* linearTrafoParameters() const;
-			scaleContent<Number>* scaleParameters() const;
-			unionContent<Number>* unionParameters() const;
-			intersectionContent<Number>* intersectionParameters() const;
-			PolytopeSupportFunction<Number>* polytope() const;
-			BallSupportFunction<Number>* ball() const;
+			std::shared_ptr<sumContent<Number>>& summands() const;
+			std::shared_ptr<trafoContent<Number>>& linearTrafoParameters() const;
+			std::shared_ptr<scaleContent<Number>>& scaleParameters() const;
+			std::shared_ptr<unionContent<Number>>& unionParameters() const;
+			std::shared_ptr<intersectionContent<Number>>& intersectionParameters() const;
+			std::shared_ptr<PolytopeSupportFunction<Number>>& polytope() const;
+			std::shared_ptr<BallSupportFunction<Number>>& ball() const;
 		
 			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
 			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;
