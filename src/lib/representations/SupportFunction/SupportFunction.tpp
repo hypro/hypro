@@ -169,21 +169,21 @@ namespace hypro {
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL:
-				mBall = _other.ball();
+				mBall = std::make_shared<BallSupportFunction<Number>>(BallSupportFunction(_other.ball()));
 				std::cout << "Ball use count: " << mBall.use_count() << std::endl;
 				break;
 			case SF_TYPE::LINTRAFO:
 				std::cout << "Assign lintrafo" << std::endl;
-				mLinearTrafoParameters = _other.linearTrafoParameters();
+				mLinearTrafoParameters = linearTrafoParameters(_other.linearTrafoParameters());
 				break;
 			case SF_TYPE::POLY:
-				mPolytope = _other.polytope();
+				mPolytope = std::make_shared<PolytopeSupportFunction<Number>>(PolytopeSupportFunction(_other.polytope()));
 				break;
 			case SF_TYPE::SCALE:
 				mScaleParameters = _other.scaleParameters();
 				break;
 			case SF_TYPE::SUM:
-				mSummands = _other.summands();
+				mSummands = sumContent(_other.summands());
 				break;
 			case SF_TYPE::UNION:
 				mUnionParameters = _other.unionParameters();
