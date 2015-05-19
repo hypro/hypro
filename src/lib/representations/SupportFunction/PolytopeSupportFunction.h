@@ -58,6 +58,8 @@ namespace hypro
 		 * @return 
 		 */
 		unsigned dimension() const;
+
+		SF_TYPE type() const;
 		
 		/**
 		 * Evaluates the support function in the given direction.

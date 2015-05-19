@@ -135,6 +135,11 @@ namespace hypro {
 	unsigned PolytopeSupportFunction<Number>::dimension() const {
 		return mDimension;
 	}
+
+	template<typename Number>
+	SF_TYPE PolytopeSupportFunction<Number>::type() const {
+		return SF_TYPE::POLY;
+	}
 	
 	template<typename Number>
 	evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate(const vector_t<Number>& l) const {

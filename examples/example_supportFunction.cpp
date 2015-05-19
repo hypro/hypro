@@ -123,7 +123,14 @@ int main(int argc, char** argv) {
 	std::cout << "Pre-Loop" << std::endl;
 
 	SupportFunction<double> res = rounded1.linearTransformation(linearMap);
+	res.print();
+
+	std::cout << "----------" << std::endl;
+	SupportFunction<double> test = res;
+	std::cout << "----------" << std::endl;
+
 	for(unsigned iteration = 0; iteration < 2; ++iteration) {
+		std::cout << "Example: res.multiEvaluate(evaldirections)" << std::endl;
 		vector_t<double> tmp = res.multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
 		for(int i = 0; i < resolution; ++i) {
@@ -139,7 +146,8 @@ int main(int argc, char** argv) {
 			points.push_back(res);
 		}
 		std::cout << "iteration: " << iteration << std::endl;
-		res = SupportFunction<double>(res.linearTransformation(linearMap));
+		res = res.linearTransformation(linearMap);
+		res.print();
 		plotter.addObject(points);
 	}
 	plotter.plot2d();

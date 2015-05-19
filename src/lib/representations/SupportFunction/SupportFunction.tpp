@@ -20,8 +20,7 @@ namespace hypro {
 		switch(mType){
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL: {
-				mBall = _orig.ball();
-				std::cout << "Ball use count: " << mBall.use_count() << std::endl;
+				mBall = new BallSupportFunction<Number>(*_orig.ball());
 				break;
 			}
 			case SF_TYPE::INTERSECT: {
@@ -29,13 +28,11 @@ namespace hypro {
 				break;
 			}
 			case SF_TYPE::LINTRAFO: {
-				std::cout << "Lintrafo Copy construct." << std::endl;
-				mLinearTrafoParameters = _orig.linearTrafoParameters();
+				mLinearTrafoParameters = new trafoContent<Number>(*_orig.linearTrafoParameters());
 				break;
 			}
 			case SF_TYPE::POLY: {
-				std::cout << "poly Copy construct." << std::endl;
-				mPolytope = _orig.polytope();
+				mPolytope = new PolytopeSupportFunction<Number>(*_orig.polytope());
 				break;
 			}
 			case SF_TYPE::SCALE: {
@@ -43,7 +40,7 @@ namespace hypro {
 				break;
 			}
 			case SF_TYPE::SUM: {
-				mSummands = _orig.summands();
+				mSummands = new sumContent<Number>(*_orig.summands());
 				break;
 			}
 			case SF_TYPE::UNION: {
@@ -60,8 +57,7 @@ namespace hypro {
 		switch (_type) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL:{
-				mBall = std::shared_ptr<BallSupportFunction<Number>>(new BallSupportFunction<Number>(_radius, _type));
-				std::cout << "Ball use count: " << mBall.use_count() << std::endl;
+				mBall = new BallSupportFunction<Number>(_radius, _type);
 				mType = _type;
 				mDimension = 0;
 				break;
@@ -76,8 +72,7 @@ namespace hypro {
 		switch (_type) {
 			case SF_TYPE::POLY: {
 				std::cout << "Construct poly" << std::endl;
-				PolytopeSupportFunction<Number>* tmp = new PolytopeSupportFunction<Number>(_directions, _distances);
-				mPolytope = std::shared_ptr<PolytopeSupportFunction<Number>>(tmp);
+				mPolytope = new PolytopeSupportFunction<Number>(_directions, _distances);
 				mType = SF_TYPE::POLY;
 				mDimension = _directions.cols();
 				break;
@@ -92,7 +87,7 @@ namespace hypro {
 		switch (_type) {
 			case SF_TYPE::POLY: {
 				std::cout << "Construct poly" << std::endl;
-				mPolytope = std::shared_ptr<PolytopeSupportFunction<Number>>(new PolytopeSupportFunction<Number>(_planes));
+				mPolytope = new PolytopeSupportFunction<Number>(_planes);
 				mType = SF_TYPE::POLY;
 				mDimension = mPolytope->dimension();
 				break;
@@ -111,6 +106,7 @@ namespace hypro {
 				mSummands = new sumContent<Number>(_lhs, _rhs);
 				mType = SF_TYPE::SUM;
 				mDimension = _lhs.dimension();
+				assert(_lhs.type() == mSummands->lhs.type() && _rhs.type() == mSummands->rhs.type());
 				break;
 				}
 			case SF_TYPE::UNION: {
@@ -164,26 +160,24 @@ namespace hypro {
 
 	template<typename Number>
 	SupportFunction<Number>& SupportFunction<Number>::operator=(const SupportFunction& _other) {
-		SF_TYPE tmpType = mType;
+		std::cout << "Assignment, this->type:" << _other.type() << std::endl;
 		mType = _other.type();
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL:
-				mBall = std::make_shared<BallSupportFunction<Number>>(BallSupportFunction(_other.ball()));
-				std::cout << "Ball use count: " << mBall.use_count() << std::endl;
+				mBall = new BallSupportFunction<Number>(*_other.ball());
 				break;
 			case SF_TYPE::LINTRAFO:
-				std::cout << "Assign lintrafo" << std::endl;
-				mLinearTrafoParameters = linearTrafoParameters(_other.linearTrafoParameters());
+				mLinearTrafoParameters = new trafoContent<Number>(*_other.linearTrafoParameters());
 				break;
 			case SF_TYPE::POLY:
-				mPolytope = std::make_shared<PolytopeSupportFunction<Number>>(PolytopeSupportFunction(_other.polytope()));
+				mPolytope = new PolytopeSupportFunction<Number>(*_other.polytope());
 				break;
 			case SF_TYPE::SCALE:
 				mScaleParameters = _other.scaleParameters();
 				break;
 			case SF_TYPE::SUM:
-				mSummands = sumContent(_other.summands());
+				mSummands = new sumContent<Number>(*_other.summands());
 				break;
 			case SF_TYPE::UNION:
 				mUnionParameters = _other.unionParameters();
@@ -347,7 +341,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	std::shared_ptr<PolytopeSupportFunction<Number>> SupportFunction<Number>::polytope() const {
+	PolytopeSupportFunction<Number>* SupportFunction<Number>::polytope() const {
 		switch (mType) {
 			case SF_TYPE::POLY: {
 				return mPolytope;
@@ -359,7 +353,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::shared_ptr<BallSupportFunction<Number>> SupportFunction<Number>::ball() const {
+	BallSupportFunction<Number>* SupportFunction<Number>::ball() const {
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL: {
@@ -474,6 +468,52 @@ namespace hypro {
 				assert(false);
 				return false;
 		}
+	}
+
+	template<typename Number>
+	void SupportFunction<Number>::print() const {
+		switch (mType) {
+			case SF_TYPE::INFTY_BALL:{
+				std::cout << "INFTY-BALL" << std::endl;
+				}
+				break;
+			case SF_TYPE::TWO_BALL: {
+				std::cout << "2-BALL" << std::endl;
+				}
+				break;
+			case SF_TYPE::LINTRAFO: {
+				std::cout << "LINTRAFO" << std::endl;
+				std::cout << "of" << std::endl;
+				mLinearTrafoParameters->origin.print();
+				}
+				break;
+			case SF_TYPE::POLY: {
+				std::cout << "POLY" << std::endl;
+				}
+				break;
+			case SF_TYPE::SCALE: {
+				std::cout << "SCALE" << std::endl;
+				}
+				break;
+			case SF_TYPE::SUM: {
+				std::cout << "SUM" << std::endl;
+				std::cout << "of: " << std::endl;
+				mSummands->rhs.print();
+				std::cout << "and" << std::endl;
+				mSummands->lhs.print();
+				}
+				break;
+			case SF_TYPE::UNION: {
+				std::cout << "UNION" << std::endl;
+				}
+				break;
+			case SF_TYPE::INTERSECT: {
+				std::cout << "INTERSECT" << std::endl;
+				}
+				break;
+			default:
+				std::cout << "NONE" << std::endl;
+		}	
 	}
 	
 } // namespace

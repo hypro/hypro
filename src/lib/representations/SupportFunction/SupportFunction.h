@@ -33,6 +33,11 @@ namespace hypro
 		const SupportFunction<Number>& lhs;
 		const SupportFunction<Number>& rhs;
 		sumContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
+		sumContent(const sumContent<Number>& _origin) : lhs(SupportFunction<Number>(_origin.lhs)), rhs(SupportFunction<Number>(_origin.rhs)) {
+			assert(lhs.type() < 11);
+			assert(rhs.type() < 11);
+			std::cout << "Sumcontent copy construct" << std::endl;
+		}
 	};
 	
 	template<typename Number>
@@ -41,6 +46,10 @@ namespace hypro
 		matrix_t<Number> a;
 		vector_t<Number> b;
 		trafoContent(const SupportFunction<Number>& _origin, matrix_t<Number> _a, vector_t<Number> _b) : origin(_origin), a(_a), b(_b) {}
+		trafoContent(const trafoContent<Number>& _origin) : origin(SupportFunction<Number>(_origin.origin)), a(_origin.a), b(_origin.b) {
+			assert(origin.type() < 11);
+			std::cout << "LintrafoContent copy construct" << std::endl;
+		}
 	};
 	
 	template<typename Number>
@@ -79,8 +88,8 @@ namespace hypro
 				scaleContent<Number>* mScaleParameters;
 				unionContent<Number>* mUnionParameters;
 				intersectionContent<Number>* mIntersectionParameters;
-				std::shared_ptr<PolytopeSupportFunction<Number>> mPolytope;
-				std::shared_ptr<BallSupportFunction<Number>> mBall;
+				PolytopeSupportFunction<Number>* mPolytope;
+				BallSupportFunction<Number>* mBall;
 			};
 
 		public:
@@ -109,8 +118,8 @@ namespace hypro
 			trafoContent<Number>* linearTrafoParameters() const;
 			unionContent<Number>* unionParameters() const;
 			intersectionContent<Number>* intersectionParameters() const;
-			std::shared_ptr<PolytopeSupportFunction<Number>> polytope() const;
-			std::shared_ptr<BallSupportFunction<Number>> ball() const;
+			PolytopeSupportFunction<Number>* polytope() const;
+			BallSupportFunction<Number>* ball() const;
 		
 			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
 			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;
@@ -121,6 +130,8 @@ namespace hypro
 			
 			SupportFunction<Number> scale(const Number& _factor = 1) const;
 			bool isEmpty() const;
+
+			void print() const;
 	};
 } // namespace
 
