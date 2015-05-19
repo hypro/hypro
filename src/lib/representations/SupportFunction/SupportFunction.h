@@ -74,11 +74,11 @@ namespace hypro
 			SF_TYPE mType;
 			unsigned mDimension;
 			union {
-				std::shared_ptr<sumContent<Number>> mSummands;
-				std::shared_ptr<trafoContent<Number>> mLinearTrafoParameters;
-				std::shared_ptr<scaleContent<Number>> mScaleParameters;
-				std::shared_ptr<unionContent<Number>> mUnionParameters;
-				std::shared_ptr<intersectionContent<Number>> mIntersectionParameters;
+				sumContent<Number>* mSummands;
+				trafoContent<Number>* mLinearTrafoParameters;
+				scaleContent<Number>* mScaleParameters;
+				unionContent<Number>* mUnionParameters;
+				intersectionContent<Number>* mIntersectionParameters;
 				std::shared_ptr<PolytopeSupportFunction<Number>> mPolytope;
 				std::shared_ptr<BallSupportFunction<Number>> mBall;
 			};
@@ -90,7 +90,7 @@ namespace hypro
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 			SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
-			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
+			SupportFunction(SF_TYPE _type, const SupportFunction<Number> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const Number& _factor);
 			
 			virtual ~SupportFunction();
@@ -104,11 +104,11 @@ namespace hypro
 			SF_TYPE type() const;
 			
 			// getter for the union types
-			std::shared_ptr<sumContent<Number>> summands() const;
-			std::shared_ptr<trafoContent<Number>> linearTrafoParameters() const;
-			std::shared_ptr<scaleContent<Number>> scaleParameters() const;
-			std::shared_ptr<unionContent<Number>> unionParameters() const;
-			std::shared_ptr<intersectionContent<Number>> intersectionParameters() const;
+			sumContent<Number>* summands() const;
+			scaleContent<Number>* scaleParameters() const;
+			trafoContent<Number>* linearTrafoParameters() const;
+			unionContent<Number>* unionParameters() const;
+			intersectionContent<Number>* intersectionParameters() const;
 			std::shared_ptr<PolytopeSupportFunction<Number>> polytope() const;
 			std::shared_ptr<BallSupportFunction<Number>> ball() const;
 		
@@ -121,6 +121,9 @@ namespace hypro
 			
 			SupportFunction<Number> scale(const Number& _factor = 1) const;
 			bool isEmpty() const;
+
+		//private:
+		//	void clear();
 	};
 } // namespace
 

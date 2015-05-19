@@ -39,10 +39,10 @@ int main(int argc, char** argv) {
 		double angle = pos*(360/resolution);
 		evaldirections(pos,0) = cos(angle*3.141592654/180);
 		evaldirections(pos,1) = sin(angle*3.141592654/180);
-		std::cout << "angle: " << angle <<  " -> " << evaldirections(pos,0) << ", " << evaldirections(pos,1) << std::endl;
+		//std::cout << "angle: " << angle <<  " -> " << evaldirections(pos,0) << ", " << evaldirections(pos,1) << std::endl;
 	}
 
-	std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
+	//std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
 	
 	vector_t<double> result1 = rounded1.multiEvaluate(evaldirections);
 	vector_t<double> result2 = rounded2.multiEvaluate(evaldirections);
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 
 	
 	for(int i = 0; i < resolution; ++i) {
-		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
 		matr.row(0) = evaldirections.row(i);
 		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
@@ -68,14 +68,14 @@ int main(int argc, char** argv) {
 		vec(0) = result1(i);
 		vec(1) = result1(((i-1+resolution)%resolution));
 		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
-		std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
 		points.push_back(res);
 	}
 	plotter.addObject(points);
 	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
-		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
 		matr.row(0) = evaldirections.row(i);
 		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
 		vec(0) = result2(i);
 		vec(1) = result2(((i-1+resolution)%resolution));
 		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
-		std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
 		points.push_back(res);
 	}
 	//plotter.addObject(points);
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
-		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
 		matr.row(0) = evaldirections.row(i);
 		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
@@ -99,14 +99,14 @@ int main(int argc, char** argv) {
 		vec(0) = sf1(i);
 		vec(1) = sf1(((i-1+resolution)%resolution));
 		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
-		std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
 		points.push_back(res);
 	}
 	plotter.addObject(points);
 	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
-		std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
 		matr.row(0) = evaldirections.row(i);
 		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
@@ -114,14 +114,14 @@ int main(int argc, char** argv) {
 		vec(0) = sf3(i);
 		vec(1) = sf3(((i-1+resolution)%resolution));
 		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
-		std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
 		points.push_back(res);
 	}
 	plotter.addObject(points);
 	
 	
 	SupportFunction<double> res = rounded1.linearTransformation(linearMap);
-	for(unsigned iteration = 0; iteration < 20; ++iteration) {
+	for(unsigned iteration = 0; iteration < 2; ++iteration) {
 		vector_t<double> tmp = res.multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
 		for(int i = 0; i < resolution; ++i) {
@@ -136,10 +136,10 @@ int main(int argc, char** argv) {
 			//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
 			points.push_back(res);
 		}
+		std::cout << "iteration: " << iteration << std::endl;
 		res = SupportFunction<double>(res.linearTransformation(linearMap));
 		plotter.addObject(points);
 	}
-	
 	plotter.plot2d();
 	
 }
