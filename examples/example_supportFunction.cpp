@@ -23,12 +23,12 @@ int main(int argc, char** argv) {
 	linearMap << -1,-4,4,-1;
 
 	SupportFunction<double> poly1(SF_TYPE::POLY, matrix, distances);
-	SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
+	//SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
 	SupportFunction<double> ball(SF_TYPE::INFTY_BALL, .5);
 	
 	
 	SupportFunction<double> rounded1 = poly1.minkowskiSum(ball);
-	SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
+	//SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
 	//SupportFunction<double> rounded = ball;
 
 
@@ -44,12 +44,12 @@ int main(int argc, char** argv) {
 
 	//std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
 	
-	vector_t<double> result1 = rounded1.multiEvaluate(evaldirections);
-	vector_t<double> result2 = rounded2.multiEvaluate(evaldirections);
+	//vector_t<double> result1 = rounded1.multiEvaluate(evaldirections);
+	//vector_t<double> result2 = rounded2.multiEvaluate(evaldirections);
 
-	vector_t<double> sf1 = poly1.multiEvaluate(evaldirections);
-	vector_t<double> sf2 = poly2.multiEvaluate(evaldirections);
-	vector_t<double> sf3 = ball.multiEvaluate(evaldirections);
+	//vector_t<double> sf1 = poly1.multiEvaluate(evaldirections);
+	//vector_t<double> sf2 = poly2.multiEvaluate(evaldirections);
+	//vector_t<double> sf3 = ball.multiEvaluate(evaldirections);
 	//std::cout << result << std::endl;
 	
 	
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 	plotter.setFilename("out");
 	std::vector<Point<double>> points;
 
-	
+	/*
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
@@ -118,8 +118,10 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
+	*/
 	
-	
+	std::cout << "Pre-Loop" << std::endl;
+
 	SupportFunction<double> res = rounded1.linearTransformation(linearMap);
 	for(unsigned iteration = 0; iteration < 2; ++iteration) {
 		vector_t<double> tmp = res.multiEvaluate(evaldirections);

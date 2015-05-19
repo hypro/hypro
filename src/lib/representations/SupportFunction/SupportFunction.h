@@ -90,7 +90,7 @@ namespace hypro
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 			SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
-			SupportFunction(SF_TYPE _type, const SupportFunction<Number> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
+			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
 			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const Number& _factor);
 			
 			virtual ~SupportFunction();
@@ -121,9 +121,6 @@ namespace hypro
 			
 			SupportFunction<Number> scale(const Number& _factor = 1) const;
 			bool isEmpty() const;
-
-		//private:
-		//	void clear();
 	};
 } // namespace
 

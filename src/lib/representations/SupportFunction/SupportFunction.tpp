@@ -131,7 +131,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	SupportFunction<Number>::SupportFunction(SF_TYPE _type, SupportFunction<Number> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b) : mLinearTrafoParameters(){
+	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b) : mLinearTrafoParameters(){
 		switch (_type) {
 			case SF_TYPE::LINTRAFO: {
 				std::cout << "Construct lintrafo" << std::endl;
@@ -164,7 +164,7 @@ namespace hypro {
 
 	template<typename Number>
 	SupportFunction<Number>& SupportFunction<Number>::operator=(const SupportFunction& _other) {
-		//this->clear();
+		SF_TYPE tmpType = mType;
 		mType = _other.type();
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
@@ -475,37 +475,5 @@ namespace hypro {
 				return false;
 		}
 	}
-
-	/*
-	template<typename Number>
-	void SupportFunction<Number>::clear() {
-		switch (mType) {
-			case SF_TYPE::INFTY_BALL:
-			case SF_TYPE::TWO_BALL: {
-				delete mBall;
-				}
-			case SF_TYPE::LINTRAFO: {
-				delete mLinearTrafoParameters;
-				}
-			case SF_TYPE::POLY: {
-				delete mPolytope;
-				}
-			case SF_TYPE::SCALE: {
-				delete mScaleParameters;
-			case SF_TYPE::SUM: {
-				delete mSummands;
-				}
-			case SF_TYPE::UNION: {
-				delete mUnionParameters;
-				}
-			case SF_TYPE::INTERSECT: {
-				delete mIntersectionParameters;
-				}
-			default:
-				assert(false);
-		}
-		mType = SF_TYPE::NONE;
-		mDimension = 0;
-	}
-	*/
+	
 } // namespace
