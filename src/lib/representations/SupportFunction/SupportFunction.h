@@ -30,25 +30,25 @@ namespace hypro
 	
 	template<typename Number>
 	struct sumContent{
-		const SupportFunction<Number>& lhs;
-		const SupportFunction<Number>& rhs;
+		SupportFunction<Number> lhs;
+		SupportFunction<Number> rhs;
 		sumContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
-		sumContent(const sumContent<Number>& _origin) : lhs(SupportFunction<Number>(_origin.lhs)), rhs(SupportFunction<Number>(_origin.rhs)) {
+		sumContent(const sumContent<Number>& _origin) : lhs(_origin.lhs), rhs(_origin.rhs) {
 			assert(lhs.type() < 11);
 			assert(rhs.type() < 11);
-			std::cout << "Sumcontent copy construct" << std::endl;
+			std::cout << "Sumcontent copy construct (type " << lhs.type() << " and type " << rhs.type() << ")" << std::endl;
 		}
 	};
 	
 	template<typename Number>
 	struct trafoContent{
-		const SupportFunction<Number>& origin;
+		SupportFunction<Number> origin;
 		matrix_t<Number> a;
 		vector_t<Number> b;
 		trafoContent(const SupportFunction<Number>& _origin, matrix_t<Number> _a, vector_t<Number> _b) : origin(_origin), a(_a), b(_b) {}
-		trafoContent(const trafoContent<Number>& _origin) : origin(SupportFunction<Number>(_origin.origin)), a(_origin.a), b(_origin.b) {
+		trafoContent(const trafoContent<Number>& _origin) : origin(_origin.origin), a(_origin.a), b(_origin.b) {
 			assert(origin.type() < 11);
-			std::cout << "LintrafoContent copy construct" << std::endl;
+			std::cout << "LintrafoContent copy construct (type " << origin.type() << ")" << std::endl;
 		}
 	};
 	

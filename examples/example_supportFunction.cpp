@@ -21,6 +21,10 @@ int main(int argc, char** argv) {
 
 	matrix_t<double> linearMap = matrix_t<double>(2,2);
 	linearMap << -1,-4,4,-1;
+	double timestep = 0.01;
+
+	linearMap = linearMap*timestep;
+	matrix_t<double> exponential = linearMap.exp();
 
 	SupportFunction<double> poly1(SF_TYPE::POLY, matrix, distances);
 	//SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
@@ -122,14 +126,14 @@ int main(int argc, char** argv) {
 	
 	std::cout << "Pre-Loop" << std::endl;
 
-	SupportFunction<double> res = rounded1.linearTransformation(linearMap);
+	SupportFunction<double> res = rounded1.linearTransformation(exponential);
 	res.print();
 
 	std::cout << "----------" << std::endl;
 	SupportFunction<double> test = res;
 	std::cout << "----------" << std::endl;
 
-	for(unsigned iteration = 0; iteration < 2; ++iteration) {
+	for(unsigned iteration = 0; iteration < 100; ++iteration) {
 		std::cout << "Example: res.multiEvaluate(evaldirections)" << std::endl;
 		vector_t<double> tmp = res.multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
@@ -146,7 +150,7 @@ int main(int argc, char** argv) {
 			points.push_back(res);
 		}
 		std::cout << "iteration: " << iteration << std::endl;
-		res = res.linearTransformation(linearMap);
+		res = res.linearTransformation(exponential);
 		res.print();
 		plotter.addObject(points);
 	}
