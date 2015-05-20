@@ -26,12 +26,12 @@ int main(int argc, char** argv) {
 	linearMap = linearMap*timestep;
 	matrix_t<double> exponential = linearMap.exp();
 
-	SupportFunction<double> poly1(SF_TYPE::POLY, matrix, distances);
+	std::shared_ptr<SupportFunction<double>> poly1 = SupportFunction<double>::create(SF_TYPE::POLY, matrix, distances);
 	//SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
-	SupportFunction<double> ball(SF_TYPE::INFTY_BALL, .5);
+	std::shared_ptr<SupportFunction<double>> ball = SupportFunction<double>::create(SF_TYPE::INFTY_BALL, .5);
 	
 	
-	SupportFunction<double> rounded1 = poly1.minkowskiSum(ball);
+	std::shared_ptr<SupportFunction<double>> rounded1 = poly1->minkowskiSum(ball);
 	//SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
 	//SupportFunction<double> rounded = ball;
 
@@ -126,16 +126,17 @@ int main(int argc, char** argv) {
 	
 	std::cout << "Pre-Loop" << std::endl;
 
-	SupportFunction<double> res = rounded1.linearTransformation(exponential);
-	res.print();
+	std::shared_ptr<SupportFunction<double>> res = rounded1->linearTransformation(exponential);
+	res->print();
 
 	std::cout << "----------" << std::endl;
-	SupportFunction<double> test = res;
+	std::shared_ptr<SupportFunction<double>> test = res;
+	test->print();
 	std::cout << "----------" << std::endl;
 
-	for(unsigned iteration = 0; iteration < 100; ++iteration) {
+	for(unsigned iteration = 0; iteration < 4; ++iteration) {
 		std::cout << "Example: res.multiEvaluate(evaldirections)" << std::endl;
-		vector_t<double> tmp = res.multiEvaluate(evaldirections);
+		vector_t<double> tmp = res->multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
 		for(int i = 0; i < resolution; ++i) {
 			//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -150,8 +151,8 @@ int main(int argc, char** argv) {
 			points.push_back(res);
 		}
 		std::cout << "iteration: " << iteration << std::endl;
-		res = res.linearTransformation(exponential);
-		res.print();
+		res = res->linearTransformation(exponential);
+		res->print();
 		plotter.addObject(points);
 	}
 	plotter.plot2d();

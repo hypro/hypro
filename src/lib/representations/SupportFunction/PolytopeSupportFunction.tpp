@@ -21,6 +21,7 @@ namespace hypro {
 	
 	template<typename Number>
 	void PolytopeSupportFunction<Number>::deleteArrays() {
+		std::cout << __func__ << std::endl;
 		 delete[] ia;
 		 delete[] ja;
 		 delete[] ar;
@@ -95,23 +96,34 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants){
-		initialize(constraints, constraintConstants);
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants) :
+	 	mConstraints(constraints),
+		mConstraintConstants(constraintConstants)
+	{
+		initialize(mConstraints, mConstraintConstants);
 	}
 
 	template<typename Number>
 	PolytopeSupportFunction<Number>::PolytopeSupportFunction(const std::vector<Hyperplane<Number>>& _planes) {
 		assert(!_planes.empty());
-		matrix_t<Number> constraints = matrix_t<Number>(_planes.size(), _planes[0].dimension());
-		vector_t<Number> constraintConstants = vector_t<Number>(_planes.size());
+		mConstraints = matrix_t<Number>(_planes.size(), _planes[0].dimension());
+		mConstraintConstants = vector_t<Number>(_planes.size());
 
 		unsigned pos = 0;
 		for(const auto& plane : _planes) {
-			constraints.row(pos) = plane.normal().transpose();
-			constraintConstants(pos) = plane.offset();
+			mConstraints.row(pos) = plane.normal().transpose();
+			mConstraintConstants(pos) = plane.offset();
 			++pos;
 		}
-		initialize(constraints, constraintConstants);
+		initialize(mConstraints, mConstraintConstants);
+	}
+
+	template<typename Number>
+	PolytopeSupportFunction<Number>::PolytopeSupportFunction(const PolytopeSupportFunction<Number>& _origin) :
+		mConstraints(_origin.constraints()),
+		mConstraintConstants(_origin.constants())
+	{
+		initialize(mConstraints,mConstraintConstants);
 	}
 	
 	template<typename Number>
@@ -139,6 +151,16 @@ namespace hypro {
 	template<typename Number>
 	SF_TYPE PolytopeSupportFunction<Number>::type() const {
 		return SF_TYPE::POLY;
+	}
+
+	template<typename Number>
+	matrix_t<Number> PolytopeSupportFunction<Number>::constraints() const {
+		return mConstraints;
+	}
+
+	template<typename Number>
+	vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
+		return mConstraintConstants;
 	}
 	
 	template<typename Number>

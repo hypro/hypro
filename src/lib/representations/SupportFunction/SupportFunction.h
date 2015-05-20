@@ -30,47 +30,43 @@ namespace hypro
 	
 	template<typename Number>
 	struct sumContent{
-		SupportFunction<Number> lhs;
-		SupportFunction<Number> rhs;
-		sumContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
-		sumContent(const sumContent<Number>& _origin) : lhs(_origin.lhs), rhs(_origin.rhs) {
-			assert(lhs.type() < 11);
-			assert(rhs.type() < 11);
-			std::cout << "Sumcontent copy construct (type " << lhs.type() << " and type " << rhs.type() << ")" << std::endl;
-		}
+		std::shared_ptr<SupportFunction<Number>> lhs;
+		std::shared_ptr<SupportFunction<Number>> rhs;
+		sumContent(std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs) : lhs(_lhs), rhs(_rhs) {}
+		sumContent(const sumContent<Number>& _origin) : lhs(_origin.lhs), rhs(_origin.rhs) {}
 	};
 	
 	template<typename Number>
 	struct trafoContent{
-		SupportFunction<Number> origin;
+		std::shared_ptr<SupportFunction<Number>> origin;
 		matrix_t<Number> a;
 		vector_t<Number> b;
-		trafoContent(const SupportFunction<Number>& _origin, matrix_t<Number> _a, vector_t<Number> _b) : origin(_origin), a(_a), b(_b) {}
-		trafoContent(const trafoContent<Number>& _origin) : origin(_origin.origin), a(_origin.a), b(_origin.b) {
-			assert(origin.type() < 11);
-			std::cout << "LintrafoContent copy construct (type " << origin.type() << ")" << std::endl;
-		}
+		trafoContent(std::shared_ptr<SupportFunction<Number>> _origin, matrix_t<Number> _a, vector_t<Number> _b) : origin(_origin), a(_a), b(_b) {}
+		trafoContent(const trafoContent<Number>& _origin) : origin(_origin.origin), a(_origin.a), b(_origin.b) {}
 	};
 	
 	template<typename Number>
 	struct scaleContent{
-		const SupportFunction<Number>& origin;
+		std::shared_ptr<SupportFunction<Number>> origin;
 		Number factor;
-		scaleContent(const SupportFunction<Number>& _origin, Number _factor) : origin(_origin), factor(_factor) {}
+		scaleContent(std::shared_ptr<SupportFunction<Number>> _origin, Number _factor) : origin(_origin), factor(_factor) {}
+		scaleContent(const scaleContent<Number>& _origin) : origin(_origin.origin), factor(_origin.factor) {}
 	};
 	
 	template<typename Number>
 	struct unionContent{
-		const SupportFunction<Number>& lhs;
-		const SupportFunction<Number>& rhs;
-		unionContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
+		std::shared_ptr<SupportFunction<Number>> lhs;
+		std::shared_ptr<SupportFunction<Number>> rhs;
+		unionContent(std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs) : lhs(_lhs), rhs(_rhs) {}
+		unionContent(const unionContent<Number>& _origin) : lhs(_origin.lhs), rhs(_origin.rhs) {}
 	};
 	
 	template<typename Number>
 	struct intersectionContent{
-		const SupportFunction<Number>& lhs;
-		const SupportFunction<Number>& rhs;
-		intersectionContent(const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs) : lhs(_lhs), rhs(_rhs) {}
+		std::shared_ptr<SupportFunction<Number>> lhs;
+		std::shared_ptr<SupportFunction<Number>> rhs;
+		intersectionContent(std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs) : lhs(_lhs), rhs(_rhs) {}
+		intersectionContent(const intersectionContent<Number>& _origin) : lhs(_origin.lhs), rhs(_origin.rhs) {}
 	};
 	
 	/*
@@ -92,19 +88,40 @@ namespace hypro
 				BallSupportFunction<Number>* mBall;
 			};
 
-		public:
+			std::weak_ptr<SupportFunction<Number>> pThis;
 		   
-			SupportFunction(const SupportFunction<Number>& _orig);
+			
 			SupportFunction(SF_TYPE _type, Number _radius);
 			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 			SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
-			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _lhs, const SupportFunction<Number>& _rhs);
-			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
-			SupportFunction(SF_TYPE _type, const SupportFunction<Number>& _origin, const Number& _factor);
-			
+			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs);
+			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
+			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _origin, const Number& _factor);
+		
+		public:
+			SupportFunction(const SupportFunction<Number>& _orig);
+
+			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, Number _radius){
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_radius));
+				obj->pThis = obj;
+				return obj;
+			}
+
+			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) {
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_directions,_distances));
+				obj->pThis = obj;
+				return obj;
+			}
+
+			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) {
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_planes));
+				obj->pThis = obj;
+				return obj;
+			}
+
 			virtual ~SupportFunction();
 			
-			SupportFunction& operator=(const SupportFunction& _orig);
+			std::shared_ptr<SupportFunction<Number>> operator=(std::shared_ptr<SupportFunction<Number>> _orig);
 			
 			evaluationResult<Number> evaluate(const vector_t<Number>& _direction) const;
 			vector_t<Number> multiEvaluate(const matrix_t<Number>& _directions) const;
@@ -121,14 +138,14 @@ namespace hypro
 			PolytopeSupportFunction<Number>* polytope() const;
 			BallSupportFunction<Number>* ball() const;
 		
-			SupportFunction<Number> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
-			SupportFunction<Number> minkowskiSum(const SupportFunction<Number>& _rhs) const;
-			SupportFunction<Number> intersect(const SupportFunction<Number>& _rhs) const;
+			std::shared_ptr<SupportFunction<Number>> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
+			std::shared_ptr<SupportFunction<Number>> minkowskiSum(std::shared_ptr<SupportFunction<Number>> _rhs) const;
+			std::shared_ptr<SupportFunction<Number>> intersect(std::shared_ptr<SupportFunction<Number>> _rhs) const;
 			bool contains(const Point<Number>& _point) const;
 			bool contains(const vector_t<Number>& _point) const; 
-			SupportFunction<Number> unite(const SupportFunction<Number>& _rhs) const;
+			std::shared_ptr<SupportFunction<Number>> unite(std::shared_ptr<SupportFunction<Number>> _rhs) const;
 			
-			SupportFunction<Number> scale(const Number& _factor = 1) const;
+			std::shared_ptr<SupportFunction<Number>> scale(const Number& _factor = 1) const;
 			bool isEmpty() const;
 
 			void print() const;

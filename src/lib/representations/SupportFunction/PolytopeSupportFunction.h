@@ -34,6 +34,9 @@ namespace hypro
 		int* ia;
 		int* ja;
 		double* ar;
+
+		matrix_t<Number> mConstraints;
+		vector_t<Number> mConstraintConstants;
 		
 		void createArrays(unsigned size);
 		void deleteArrays();
@@ -51,6 +54,7 @@ namespace hypro
 		
 		PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants);
 		PolytopeSupportFunction(const std::vector<Hyperplane<Number>>& _planes);
+		PolytopeSupportFunction(const PolytopeSupportFunction<Number>& _origin);
 		~PolytopeSupportFunction();
 		
 		/**
@@ -60,6 +64,9 @@ namespace hypro
 		unsigned dimension() const;
 
 		SF_TYPE type() const;
+
+		matrix_t<Number> constraints() const;
+		vector_t<Number> constants() const;
 		
 		/**
 		 * Evaluates the support function in the given direction.
