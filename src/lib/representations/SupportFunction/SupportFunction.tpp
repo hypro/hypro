@@ -252,8 +252,9 @@ namespace hypro {
 				return (resA.supportValue >= resB.supportValue ? resA : resB);
 				}
 			case SF_TYPE::INTERSECT: {
-				// Todo: Not implemented yet.
-				assert(false);
+				evaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate(_direction);
+				evaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate(_direction);
+				return (resA.supportValue <= resB.supportValue ? resA : resB);
 				}
 			default:
 				assert(false);
@@ -286,12 +287,24 @@ namespace hypro {
 				return (resA + resB);
 				}
 			case SF_TYPE::UNION: {
-				// Todo: Not implemented yet.
-				assert(false);
+				vector_t<Number> resA = mUnionParameters->lhs->multiEvaluate(_directions);
+				vector_t<Number> resB = mUnionParameters->rhs->multiEvaluate(_directions);
+				assert(resA.rows() == resB.rows());
+				vector_t<Number> result = vector_t<Number>(resA.rows());
+				for(unsigned i=0; i<result.rows(); ++i) {
+					result(i) = resA(i) > resB(i) ? resA(i) : resB(i);
+				}
+				return result;
 				}
 			case SF_TYPE::INTERSECT: {
-				// Todo: Not implemented yet.
-				assert(false);
+				vector_t<Number> resA = mIntersectionParameters->lhs->multiEvaluate(_directions);
+				vector_t<Number> resB = mIntersectionParameters->rhs->multiEvaluate(_directions);
+				assert(resA.rows() == resB.rows());
+				vector_t<Number> result = vector_t<Number>(resA.rows());
+				for(unsigned i=0; i<result.rows(); ++i) {
+					result(i) = resA(i) < resB(i) ? resA(i) : resB(i);
+				}
+				return result;
 				}
 			default:
 				assert(false);

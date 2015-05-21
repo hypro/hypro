@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
 		-1,1,
 		0,-1,
 	distances2 << 1,1,0;
+	vector_t<double> distances3 = vector_t<double>(4);
+	distances3 << 1.5,1.5,-0.5,-0.5;
 
 	matrix_t<double> linearMap = matrix_t<double>(2,2);
 	linearMap << -1,-4,4,-1;
@@ -28,12 +30,15 @@ int main(int argc, char** argv) {
 
 	std::shared_ptr<SupportFunction<double>> poly1 = SupportFunction<double>::create(SF_TYPE::POLY, matrix, distances);
 	//SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
+	std::shared_ptr<SupportFunction<double>> poly3 = SupportFunction<double>::create(SF_TYPE::POLY, matrix, distances3);
 	std::shared_ptr<SupportFunction<double>> ball = SupportFunction<double>::create(SF_TYPE::INFTY_BALL, .5);
 	
 	
 	std::shared_ptr<SupportFunction<double>> rounded1 = poly1->minkowskiSum(ball);
 	//SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
 	//SupportFunction<double> rounded = ball;
+	std::shared_ptr<SupportFunction<double>> unionRes = poly1->unite(poly3);
+	std::shared_ptr<SupportFunction<double>> intersectionRes = poly1->intersect(poly3);
 
 
 	// create array holding equaly distributed directions
@@ -51,9 +56,12 @@ int main(int argc, char** argv) {
 	//vector_t<double> result1 = rounded1.multiEvaluate(evaldirections);
 	//vector_t<double> result2 = rounded2.multiEvaluate(evaldirections);
 
-	//vector_t<double> sf1 = poly1.multiEvaluate(evaldirections);
-	//vector_t<double> sf2 = poly2.multiEvaluate(evaldirections);
-	//vector_t<double> sf3 = ball.multiEvaluate(evaldirections);
+	vector_t<double> sf1 = poly1->multiEvaluate(evaldirections);
+	//vector_t<double> sf2 = poly2->multiEvaluate(evaldirections);
+	//vector_t<double> sf3 = ball->multiEvaluate(evaldirections);
+	vector_t<double> sf4 = unionRes->multiEvaluate(evaldirections);
+	vector_t<double> sf5 = poly3->multiEvaluate(evaldirections);
+	vector_t<double> sf6 = intersectionRes->multiEvaluate(evaldirections);
 	//std::cout << result << std::endl;
 	
 	
@@ -91,8 +99,8 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	//plotter.addObject(points);
-	
-	
+	*/
+	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -107,7 +115,8 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-	
+	*/
+	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -124,17 +133,12 @@ int main(int argc, char** argv) {
 	plotter.addObject(points);
 	*/
 	
-	std::cout << "Pre-Loop" << std::endl;
-
+	/*
 	std::shared_ptr<SupportFunction<double>> res = rounded1->linearTransformation(exponential);
+	//std::shared_ptr<SupportFunction<double>> res = rounded1->minkowskiSum(ball);
 	res->print();
 
-	std::cout << "----------" << std::endl;
-	std::shared_ptr<SupportFunction<double>> test = res;
-	test->print();
-	std::cout << "----------" << std::endl;
-
-	for(unsigned iteration = 0; iteration < 4; ++iteration) {
+	for(unsigned iteration = 0; iteration < 100; ++iteration) {
 		std::cout << "Example: res.multiEvaluate(evaldirections)" << std::endl;
 		vector_t<double> tmp = res->multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
@@ -152,9 +156,59 @@ int main(int argc, char** argv) {
 		}
 		std::cout << "iteration: " << iteration << std::endl;
 		res = res->linearTransformation(exponential);
+		//res = res->minkowskiSum(ball);
 		res->print();
 		plotter.addObject(points);
 	}
+	*/
+	/*
+	points.erase(points.begin(), points.end());
+	for(int i = 0; i < resolution; ++i) {
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		matrix_t<double> matr = matrix_t<double>(2,2);
+		matr.row(0) = evaldirections.row(i);
+		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
+		vector_t<double> vec = vector_t<double>(2);
+		vec(0) = sf4(i);
+		vec(1) = sf4(((i-1+resolution)%resolution));
+		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		points.push_back(res);
+	}
+	plotter.addObject(points);
+	*/
+	/*
+	points.erase(points.begin(), points.end());
+	for(int i = 0; i < resolution; ++i) {
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		matrix_t<double> matr = matrix_t<double>(2,2);
+		matr.row(0) = evaldirections.row(i);
+		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
+		vector_t<double> vec = vector_t<double>(2);
+		vec(0) = sf5(i);
+		vec(1) = sf5(((i-1+resolution)%resolution));
+		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		points.push_back(res);
+	}
+	plotter.addObject(points);
+	*/
+
+	points.erase(points.begin(), points.end());
+	for(int i = 0; i < resolution; ++i) {
+		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
+		matrix_t<double> matr = matrix_t<double>(2,2);
+		matr.row(0) = evaldirections.row(i);
+		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
+		vector_t<double> vec = vector_t<double>(2);
+		vec(0) = sf6(i);
+		vec(1) = sf6(((i-1+resolution)%resolution));
+		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
+		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
+		points.push_back(res);
+	}
+	plotter.addObject(points);
+
 	plotter.plot2d();
 	
 }
