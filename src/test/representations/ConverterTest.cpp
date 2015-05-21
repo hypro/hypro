@@ -90,7 +90,7 @@ protected:
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	hypro::SupportFunction<TypeParam> supportFunction(SF_TYPE::POLY, this->matrix, this->distances);
+	std::shared_ptr<hypro::SupportFunction<TypeParam>> supportFunction = hypro::SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->matrix, this->distances);
 	hypro::Box<TypeParam> result;
 	convert(this->box, result);
 	convert(this->polytope, result);

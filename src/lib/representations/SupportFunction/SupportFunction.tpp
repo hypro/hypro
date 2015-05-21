@@ -450,7 +450,7 @@ namespace hypro {
 				if(mScaleParameters->factor == 0)
 					return false;
 				else 
-					return mScaleParameters->origin.contains(_point/mScaleParameters->factor); 
+					return mScaleParameters->origin->contains(_point/mScaleParameters->factor); 
 				}
 			case SF_TYPE::SUM: {
 				assert(false); // Todo: Not implemented yet.

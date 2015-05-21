@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runRepresentationTests
 	BoxTest.cpp
-	#ConverterTest.cpp
+	ConverterTest.cpp
 	GridTest.cpp
 	HPolytopeTest.cpp
 	NeighborhoodContainerTest.cpp
@@ -16,7 +16,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	PolytopeTest.cpp
 	PolytopeSupportFunctionTest.cpp        
 	PolytopeUtilTest.cpp
-	#SupportFunctionTest.cpp
+	SupportFunctionTest.cpp
 	TaylorModelTest.cpp
 	VPolytopeTest.cpp
 	ZonotopeTest.cpp  

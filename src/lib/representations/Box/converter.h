@@ -18,8 +18,8 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	bool convert(const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target){
-		unsigned dim = _source.dimension();
+	bool convert(std::shared_ptr<hypro::SupportFunction<Number>> _source, hypro::Box<Number>& _target){
+		unsigned dim = _source->dimension();
 
 		matrix_t<Number> directions = matrix_t<Number>::Zero(2*dim,dim);
 		for(unsigned i=0; i<dim; ++i) {
@@ -27,7 +27,7 @@ namespace hypro {
 			directions(2*i+1, i) = 1;
 		}
 
-		vector_t<Number> distances = _source.multiEvaluate(directions);
+		vector_t<Number> distances = _source->multiEvaluate(directions);
 
 		typename Box<Number>::intervalMap intervals;
 		for(unsigned i=0; i<dim; ++i) {
