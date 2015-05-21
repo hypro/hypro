@@ -24,103 +24,90 @@ namespace polytope
 	class Cone 
 	{
 		public:
-			typedef std::vector<Hyperplane<Number>* > planes;
+			typedef std::vector<Hyperplane<Number>* > planeVector;
 		private:
-			planes     mPlanes;
-			unsigned    mDimension;
-			Point<Number> mOrigin;
+			planeVector     mPlanes;
+
 		public:
 			Cone() :
-			mPlanes(),
-			mDimension(),
-			mOrigin()
+			mPlanes()
+			{}
+
+			Cone(const Cone& _orig) :
+			mPlanes(_orig.planes())
+			{}
+
+			Cone(const planeVector& _planes) :
+			mPlanes(_planes)
 			{}
 			
 			~Cone()
 			{
 				mPlanes.clear();
 			}
-			
-			Cone(const Cone& _orig) :
-			mPlanes(_orig.get()),
-			mDimension(_orig.dimension()),
-			mOrigin(_orig.mOrigin)
-			{}
-			
-			Cone(unsigned _dimension) :
-			mPlanes(_dimension),
-			mDimension(),
-			mOrigin()
-			{
-				assert(mPlanes.size() == _dimension);
-			}
-			
+
 			/*
 			 * Getters & setters
 			 */
 			
-			const planes& get() const
-			{
+			const planeVector& planes() const {
 				return mPlanes;
 			}
 
-			planes& rGet()
-			{
+			planeVector& rPlanes() {
 				return mPlanes;
 			}
 
+			unsigned dimension() const {
+				if(!mPlanes.empty())
+					return mPlanes[0].dimension();
 
-			unsigned dimension() const
-			{
-				return mDimension;
+				return 0;
 			}
 			
-			unsigned size() const
-			{
+			unsigned size() const {
 				return mPlanes.size();
 			}
-			
-			const Point<Number>& origin() const
-			{
-				return mOrigin;
-			}
 
-			void setOrigin(const Point<Number>& _origin)
-			{
-				mOrigin = _origin;
-				mDimension = _origin.dimension();
-			}
-
-			const Hyperplane<Number>* get(unsigned _index) const
-			{
+			const Hyperplane<Number>* planes(unsigned _index) const {
 				assert(_index < mPlanes.size());
 				return mPlanes.at(_index);
 			}
 			
-			const Hyperplane<Number>* get(typename planes::const_iterator _pos) const
-			{
+			const Hyperplane<Number>* planes(typename planeVector::const_iterator _pos) const {
 				return *_pos;
 			}
 			
-			typename planes::const_iterator begin()
-			{
+			typename planeVector::const_iterator begin() {
 				return mPlanes.begin();
 			}
 			
-			typename planes::const_iterator end()
-			{
+			typename planeVector::const_iterator end() {
 				return mPlanes.end();
 			}
 			
-			void add(Hyperplane<Number>* _plane)
-
-			{
+			void add(Hyperplane<Number>* _plane) {
 				mPlanes.push_back(_plane);
-				mDimension = mDimension < _plane->dimension() ? _plane->dimension() : mDimension;
+			}
+
+			void add(vector_t<Number> _vector) {
+
+			}
+
+			Cone<Number> linearTransformation(const matrix_t<Number> A) const {
+				Cone<Number> result;
+				for(const auto& plane : mPlanes) {
+					result.add(new Hyperplane<Number>(plane->linearTransformation(A)));
+				}
+				return result;
+			}
+
+			Cone<Number> minkowskiSum(const Cone& _rhs) const {
+				Cone<Number> result;
+				return result;
 			}
 			
-			Point<Number> getUnitAverageVector() const
-			{
+			Point<Number> getUnitAverageVector() const {
 				assert(!mPlanes.empty());
 				Point<Number> result;
 				unsigned numberPlanes = mPlanes.size();
@@ -131,19 +118,27 @@ namespace polytope
 				return result;
 			}
 			
-			bool contains(const Point<Number>* _vector) const
-			{
-				// Todo
-				return false;
+			bool contains(const vector_t<Number>& _vector) const {
+				for(const auto& plane : mPlanes) {
+					if(_vector.dot(plane->normal()) > 0)
+						return false;
+				}
+				return true;
+			}
+
+			bool contains(const Point<Number>* _vector) const {
+				return this->contains(_vector->rawCoordinates());
 			}
 			
-			Cone<Number> operator=(const Cone<Number>& _rhs)
-			{
+			Cone<Number> operator=(const Cone<Number>& _rhs) {
+				/*
 				if( this != &_rhs )
 				{
 					Cone<Number> tmp(_rhs);
 					std::swap(*this,tmp);
-				}
+				}*/
+				mPlanes.clear();
+				mPlanes = _rhs.planes();
 				return *this;
 			}
 	};

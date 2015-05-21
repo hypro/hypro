@@ -58,6 +58,7 @@ namespace hypro {
 
 		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A) const;
 		HPolytope<Number> intersection(const Hyperplane<Number>& _rhs) const;
+		vector_t<Number> intersectionVector(const Hyperplane<Number>& _rhs) const;
 		
 	private:
 		const Number& internalOffset() const;

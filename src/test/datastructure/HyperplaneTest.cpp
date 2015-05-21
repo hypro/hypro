@@ -103,6 +103,9 @@ TYPED_TEST(HyperplaneTest, Intersection)
 
 	HPolytope<TypeParam> res = hp1.intersection(hp2);
 	std::cout << res << std::endl;
+
+	std::cout << "Intersection Vector calculation result: " << std::endl;
+	std::cout << hp1.intersectionVector(hp2);
 }
 
 TYPED_TEST(HyperplaneTest, LinearTransformation)

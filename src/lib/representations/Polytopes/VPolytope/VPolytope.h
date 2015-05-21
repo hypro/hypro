@@ -33,6 +33,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 **************************************************************************/
 	private:
 		vertexSet                      mVertices;
+		Cone 						mCone;
 		mutable Fan                    mFan;
 		bool                           mFanSet;
 		bool                           mReduced;
@@ -50,12 +51,12 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 * Constructors
 	 **************************************************************************/
 
+	 	// constructors for bounded v-polyhedra -> v-polytopes
 		VPolytope();
 		VPolytope(const Point<Number>& point);
 		VPolytope(const vertexSet& points);
 		VPolytope(const std::vector<Point<Number>> points);
-		VPolytope(const typename std::vector<vector_t<Number>>& points);
-		VPolytope(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
+
 		VPolytope(const VPolytope& orig);
 		VPolytope(VPolytope&& _orig) = default;
 
@@ -102,13 +103,20 @@ class VPolytope : public hypro::GeometricObject<Number>
 			return mReduced;
 		}
 		
-		const typename polytope::Fan<Number>& fan() const
-		{
+		const typename polytope::Fan<Number>& fan() const {
 			if(!mFanSet)
 			{
 				calculateFan();
 			}
 			return mFan;
+		}
+
+		const Cone& cone() const {
+			return mCone;
+		}
+
+		void setCone(const Cone& _cone) {
+			mCone = _cone;
 		}
 		
 		std::pair<typename vertexSet::iterator, bool> insert(const Point<Number>& i)

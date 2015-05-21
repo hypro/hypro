@@ -579,10 +579,8 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 						}
 					}
 				}
-				//std::cout << __func__ << " : " << __LINE__ << std::endl;
 				while(!newVisibleFacets.empty()) {
 					bool duplicate = false;
-					//std::cout << __func__ << " : " << __LINE__ << std::endl;
 					for(const auto& candidate : currentVisibleFacets) {
 					//std::cout << "compare" << newVisibleFacets.front() << " and " << candidate << "operator " << (newVisibleFacets.front() == candidate) << std::endl;
 						if(!newVisibleFacets.empty() && newVisibleFacets.front() == candidate) {
@@ -590,18 +588,12 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 							newVisibleFacets.pop(); //restart of loop needed
 						}
 					}
-					//std::cout << __func__ << " : " << __LINE__ << std::endl;
 					if(!duplicate){
-					//std::cout << __func__ << " : " << __LINE__ << std::endl;
 						currentVisibleFacets.push_back(newVisibleFacets.front());
-						//std::cout << __func__ << " : " << __LINE__ << std::endl;
 						newVisibleFacets.pop();
-						//std::cout << __func__ << " : " << __LINE__ << std::endl;
 						changed = true;
 					}
-					//std::cout << __func__ << " : " << __LINE__ << std::endl;
 				}
-				//std::cout << __func__ << " : " << __LINE__ << std::endl;
 			} while (changed);
 
 			//std::cout << __func__ << " Visible facets: " << currentVisibleFacets << std::endl;

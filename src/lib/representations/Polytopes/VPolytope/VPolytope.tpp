@@ -58,6 +58,7 @@ namespace hypro
 		mFanSet = false; // TODO: Include getter fpr this
 		mReduced = orig.reduced(); // TODO: Include getter fpr this
 		mInitialized = false;
+		mCone = orig.cone();
 	}
 	
 	template<typename Number>
@@ -67,6 +68,7 @@ namespace hypro
 		for(const auto& vertex : mVertices) {
 			result.insert(A*vertex);
 		}
+		result.setCone(mCone.linearTransformation(A));
 		return result;
 	}
 	
@@ -82,6 +84,7 @@ namespace hypro
 				result.insert(lhsVertex+rhsVertex);
 			}
 		}
+		result.setCone(mCone.minkowskiSum(rhs.cone()));
 		return result;
 	}
 	
