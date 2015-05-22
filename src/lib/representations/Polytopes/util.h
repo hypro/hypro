@@ -12,137 +12,15 @@
 #include <glpk.h>
 
 #include "../../datastructures/Point.h"
- #include "../../datastructures/Hyperplane.h"
- #include "../../util/VariablePool.h"
- #include <carl/formula/Constraint.h>
+#include "../../datastructures/Hyperplane.h"
+#include "../../util/VariablePool.h"
+#include <carl/formula/Constraint.h>
+#include "Cone.h"
 
 namespace hypro
 {
 namespace polytope
 {
-	template<typename Number>
-	class Cone 
-	{
-		public:
-			typedef std::vector<Hyperplane<Number>* > planeVector;
-		private:
-			planeVector     mPlanes;
-
-		public:
-			Cone() :
-			mPlanes()
-			{}
-
-			Cone(const Cone& _orig) :
-			mPlanes(_orig.planes())
-			{}
-
-			Cone(const planeVector& _planes) :
-			mPlanes(_planes)
-			{}
-			
-			~Cone()
-			{
-				mPlanes.clear();
-			}
-
-			/*
-			 * Getters & setters
-			 */
-			
-			const planeVector& planes() const {
-				return mPlanes;
-			}
-
-			planeVector& rPlanes() {
-				return mPlanes;
-			}
-
-			unsigned dimension() const {
-				if(!mPlanes.empty())
-					return mPlanes[0].dimension();
-
-				return 0;
-			}
-			
-			unsigned size() const {
-				return mPlanes.size();
-			}
-
-			const Hyperplane<Number>* planes(unsigned _index) const {
-				assert(_index < mPlanes.size());
-				return mPlanes.at(_index);
-			}
-			
-			const Hyperplane<Number>* planes(typename planeVector::const_iterator _pos) const {
-				return *_pos;
-			}
-			
-			typename planeVector::const_iterator begin() {
-				return mPlanes.begin();
-			}
-			
-			typename planeVector::const_iterator end() {
-				return mPlanes.end();
-			}
-			
-			void add(Hyperplane<Number>* _plane) {
-				mPlanes.push_back(_plane);
-			}
-
-			void add(vector_t<Number> _vector) {
-
-			}
-
-			Cone<Number> linearTransformation(const matrix_t<Number> A) const {
-				Cone<Number> result;
-				for(const auto& plane : mPlanes) {
-					result.add(new Hyperplane<Number>(plane->linearTransformation(A)));
-				}
-				return result;
-			}
-
-			Cone<Number> minkowskiSum(const Cone& _rhs) const {
-				Cone<Number> result;
-				return result;
-			}
-			
-			Point<Number> getUnitAverageVector() const {
-				assert(!mPlanes.empty());
-				Point<Number> result;
-				unsigned numberPlanes = mPlanes.size();
-				for(auto& plane : mPlanes)
-				{
-					result += (plane->normal()/numberPlanes);
-				}
-				return result;
-			}
-			
-			bool contains(const vector_t<Number>& _vector) const {
-				for(const auto& plane : mPlanes) {
-					if(_vector.dot(plane->normal()) > 0)
-						return false;
-				}
-				return true;
-			}
-
-			bool contains(const Point<Number>* _vector) const {
-				return this->contains(_vector->rawCoordinates());
-			}
-			
-			Cone<Number> operator=(const Cone<Number>& _rhs) {
-				/*
-				if( this != &_rhs )
-				{
-					Cone<Number> tmp(_rhs);
-					std::swap(*this,tmp);
-				}*/
-				mPlanes.clear();
-				mPlanes = _rhs.planes();
-				return *this;
-			}
-	};
-	
 	template<typename Number>
 	class Fan 
 	{

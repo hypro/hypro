@@ -135,17 +135,64 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
     EXPECT_EQ(1.075, vec(0)*result);
     EXPECT_EQ(1.075, vec(1)*result);
 }
-/*
+
 TYPED_TEST(PolytopeUtilTest, ConeConstructor)
 {
+	Cone<TypeParam> cone1;
+	
+	vector_t<TypeParam> normal1 = vector_t<TypeParam>(3);
+	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
+	std::shared_ptr<Hyperplane<TypeParam>> hp1 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal1,TypeParam(0)));
+	
+	vector_t<TypeParam> normal2 = vector_t<TypeParam>(3);
+	normal2 << TypeParam(1), TypeParam(0), TypeParam(0);
+	std::shared_ptr<Hyperplane<TypeParam>> hp2 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal2,TypeParam(0)));
+
+	vector_t<TypeParam> normal3 = vector_t<TypeParam>(3);
+	normal3 << TypeParam(1), TypeParam(0), TypeParam(0);
+	std::shared_ptr<Hyperplane<TypeParam>> hp3 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal3,TypeParam(0)));
+
+	typename Cone<TypeParam>::planeVector planes;
+	planes.push_back(hp1);
+	planes.push_back(hp2);
+	planes.push_back(hp3);
+
+	Cone<TypeParam> cone2(planes);
+	
     SUCCEED();
 }
 
 TYPED_TEST(PolytopeUtilTest, ConeAccess)
 {
-    
-}
+	vector_t<TypeParam> normal1 = vector_t<TypeParam>(3);
+	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
+	std::shared_ptr<Hyperplane<TypeParam>> hp1 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal1,TypeParam(0)));
 
+	vector_t<TypeParam> normal2 = vector_t<TypeParam>(3);
+	normal2 << TypeParam(0), TypeParam(1), TypeParam(0);
+	std::shared_ptr<Hyperplane<TypeParam>> hp2 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal2,TypeParam(0)));
+
+	vector_t<TypeParam> normal3 = vector_t<TypeParam>(3);
+	normal3 << TypeParam(0), TypeParam(0), TypeParam(1);
+	std::shared_ptr<Hyperplane<TypeParam>> hp3 = std::shared_ptr<Hyperplane<TypeParam>>(new Hyperplane<TypeParam>(normal3,TypeParam(0)));
+
+	typename Cone<TypeParam>::planeVector planes;
+	planes.push_back(hp1);
+	planes.push_back(hp2);
+	planes.push_back(hp3);
+
+	Cone<TypeParam> cone(planes);
+
+	vector_t<TypeParam> v1 = vector_t<TypeParam>(3);
+	v1 << TypeParam(1), TypeParam(1), TypeParam(1);
+	vector_t<TypeParam> v2 = vector_t<TypeParam>(3);
+	v2 << TypeParam(1), TypeParam(1), TypeParam(0);
+	vector_t<TypeParam> v3 = vector_t<TypeParam>(3);
+	v3 << TypeParam(0), TypeParam(0), TypeParam(1);
+
+    SUCCEED();
+}
+/*
 TYPED_TEST(PolytopeUtilTest, ConeContains)
 {
     

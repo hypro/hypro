@@ -1,4 +1,4 @@
 add_subdirectory(algorithms)
-add_subdirectory(benchmark)
+add_subdirectory(benchmark EXCLUDE_FROM_ALL)
 add_subdirectory(datastructure)
 add_subdirectory(representations)

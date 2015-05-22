@@ -15,5 +15,5 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_link_libraries(runBenchmark
 							${PROJECT_NAME}
 							${libraries})
-	add_test( NAME benchmark COMMAND runBenchmark )
+	#add_test( NAME benchmark COMMAND runBenchmark )
 endif()

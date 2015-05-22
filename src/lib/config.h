@@ -59,6 +59,9 @@ class Polytope;
 
 template<typename Number>
 using valuation_t = Polytope<Number>;
+
+template<typename Number>
+using vectorSet = std::set<vector_t<Number>>;
 }
 /**
  * author: ckugler

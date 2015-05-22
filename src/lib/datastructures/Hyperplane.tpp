@@ -189,6 +189,11 @@
 	}
 
 	template<typename Number>
+	bool Hyperplane<Number>::contains(const vector_t<Number> _vector) const {
+		return (_vector.dot(mNormal) == mScalar);
+	}
+
+	template<typename Number>
 	const Number& Hyperplane<Number>::internalOffset() const
 	{
 		return mScalar;
@@ -249,7 +254,7 @@
 				ia[pos] = i;
 				ja[pos] = j;
 				vector_t<Number> tmpVec = _edgeSet.at(i-1);
-				ar[pos] = tmpVec(j-1);
+				ar[pos] = carl::toDouble(tmpVec(j-1));
 #ifdef fukuda_DEBUG
 				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
 #endif
