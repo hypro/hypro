@@ -44,6 +44,10 @@ add_library(${PROJECT_NAME} ${STATICLIB}
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
+if(USE_COTIRE)
+	cotire(${PROJECT_NAME})
+endif()
+
 install(FILES ${headers} DESTINATION include)
 
 #get_cmake_property(_variableNames VARIABLES)

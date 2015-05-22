@@ -45,6 +45,7 @@ option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF
 option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Requires carl to use mpfr as well." ON)
 option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
 option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
+option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -61,7 +62,6 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -78,6 +78,10 @@ endif()
 # # # # # # # # # # # # # # # # # # # # # #
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+if(USE_COTIRE)
+	include(cotire)
+endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.
