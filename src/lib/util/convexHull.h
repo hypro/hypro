@@ -50,13 +50,31 @@ static bool maxRank(const std::vector<Point<Number>>& points, const Point<Number
  */
 template<typename Number>
 static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>>& points){
-	// TODO: check if points is empty or contains less than d+1 elements!
 	int dimCheck = dimensionCheck(points);
 	int d = points[0].dimension();
 	if(dimCheck == d){
 	std::vector<Point<Number>> initialPoints;
 	Facet<Number> f = Facet<Number>();
-	for(int i = 0; i < d; ++i) {
+	//determine min and max of first value
+	unsigned minIndex = 0;
+	for(unsigned j = 0; j < points.size(); j++) {
+		if(points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)){
+			minIndex = j;
+		}
+	}
+
+	unsigned maxIndex = 0;
+	for(unsigned j = 0; j < points.size(); j++) {
+		if(points.at(maxIndex).rawCoordinates()(0) < points.at(j).rawCoordinates()(0)){
+			maxIndex = j;
+		}
+	}
+
+	initialPoints.push_back(points[minIndex]);
+	initialPoints.push_back(points[maxIndex]);
+
+	//search rest for rank d accordingly
+	for(int i = 2; i < d; ++i) {
 		for(unsigned j = 0; j < points.size(); j++) {
 			if(maxRank(initialPoints, points[j])){
 				initialPoints.push_back(points[j]);
@@ -64,6 +82,8 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 			}
 		}
 	}
+
+	//search for unused point as last member for initConvexhull
 	for(unsigned i = 0; i< points.size(); i++) {
 		bool found = false;
 		for(unsigned j = 0; j < initialPoints.size(); j++) {
@@ -75,6 +95,7 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 			initialPoints.push_back(points[i]);
 		}
 	}
+
 	std::vector<Facet<Number>> facets;
 	for(int i = 0; i < d+1; i++) {
 		facets.push_back(f);
@@ -100,7 +121,7 @@ static std::vector<Facet<Number>> initConvexHull(const std::vector<Point<Number>
 	return facets;
 	}
 	else {
-		std::cout << __func__ << __LINE__ << "Inconsistent point set " << std::endl;
+		std::cout << __func__ << __LINE__ << "Error: Inconsistent point set " << std::endl;
 		return std::vector<Facet<Number>>();
 	}
 }
@@ -527,12 +548,40 @@ static Facet<Number> newNeighbor(Facet<Number> oldNeighbor, std::vector<Facet<Nu
 
 template<typename Number>
 static void setNeighborhoodOfPoints(std::vector<Facet<Number>>& facets) {
+
 	for(unsigned i = 0; i<facets.size(); i++) {
-		for(unsigned j = 0; j<facets[i].vertices().size(); j++){
-			for(unsigned k = 0; k<facets[i].vertices().size(); k++){
-				if(facets[i].vertices().at(j) == facets[i].vertices().at(k)){
-					facets[i].vertices().at(j).addNeighbor(&(facets[i].vertices().at(k)));
+		for(unsigned j = 0; j<facets.size(); j++){
+			if(neighborCheck(facets[i], facets[j])){
+				std::vector<unsigned> facet1;
+				std::vector<unsigned> facet2;
+
+				for(unsigned k = 0; k<facets[i].vertices().size(); k++){
+					for(unsigned l = 0; l<facets[j].vertices().size(); l++){
+						if(facets[i].vertices().at(k) == facets[j].vertices().at(l)) {
+							facet1.push_back(k);
+							facet2.push_back(l);
+						}
+					}
 				}
+
+				for(unsigned k = 0; k<facet1.size(); k++){
+					for(unsigned l = 0; l<facet1.size(); l++){
+						if(k!=l) {
+							facets[i].vertices().at(facet1[k]).addNeighbor(&(facets[i].vertices().at(facet1[l])));
+							facets[i].vertices().at(facet1[l]).addNeighbor(&(facets[i].vertices().at(facet1[k])));
+						}
+					}
+				}
+
+				for(unsigned k = 0; k<facet2.size(); k++){
+					for(unsigned l = 0; l<facet2.size(); l++){
+						if(k!=l) {
+							facets[j].vertices().at(facet2[k]).addNeighbor(&(facets[j].vertices().at(facet2[l])));
+							facets[j].vertices().at(facet2[l]).addNeighbor(&(facets[j].vertices().at(facet2[k])));
+						}
+					}
+				}
+
 			}
 		}
 	}
@@ -637,7 +686,7 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 
 			determineNeighbors(newFacets);
 
-			std::cout << __func__ << " New Facets: " << newFacets << std::endl;
+			//std::cout << __func__ << " New Facets: " << newFacets << std::endl;
 			//std::vector<Point<Number>> outsidePoints = polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
 			unsigned del;
 			bool ok = false;
@@ -722,16 +771,15 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 			//std::cout << __func__ << " facets: " << facets << std::endl;
 		}
 
-		//polytope::setNeighborhoodOfPoints(facets);
-
 		facets = maximizeFacets(facets);
+
+		setNeighborhoodOfPoints(facets);
 
 		return facets;
 	}
     else {
-    //error: not enough points
-    std::cout << __func__ << __LINE__ << "Not enough points to determine convex hull in dimension " << points.at(0).dimension() << std::endl;
-   	return std::vector<Facet<Number>>();
+    	std::cout << "Error: not enough points to determine convex hull in dimension " << points.at(0).dimension() << std::endl;
+    	return std::vector<Facet<Number>>();
     }
     }
 }
