@@ -16,7 +16,7 @@ namespace hypro {
 		mType(_orig.type()),
 		mDimension(_orig.dimension())
 	{
-		std::cout << "Copy constructor, this->type:" << mType << std::endl;
+		//std::cout << "Copy constructor, this->type:" << mType << std::endl;
 		switch(mType){
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL: {
@@ -71,7 +71,6 @@ namespace hypro {
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) {
 		switch (_type) {
 			case SF_TYPE::POLY: {
-				std::cout << "Construct poly" << std::endl;
 				mPolytope = new PolytopeSupportFunction<Number>(_directions, _distances);
 				mType = SF_TYPE::POLY;
 				mDimension = _directions.cols();
@@ -86,7 +85,6 @@ namespace hypro {
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) {
 		switch (_type) {
 			case SF_TYPE::POLY: {
-				std::cout << "Construct poly" << std::endl;
 				mPolytope = new PolytopeSupportFunction<Number>(_planes);
 				mType = SF_TYPE::POLY;
 				mDimension = mPolytope->dimension();
@@ -102,7 +100,6 @@ namespace hypro {
 		//assert(_lhs.dimension() == _rhs.dimension());
 		switch(_type) {
 			case SF_TYPE::SUM: {
-				std::cout << "Construct sum" << std::endl;
 				mSummands = new sumContent<Number>(_lhs, _rhs);
 				mType = SF_TYPE::SUM;
 				mDimension = _lhs->dimension();
@@ -130,7 +127,6 @@ namespace hypro {
 	SupportFunction<Number>::SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b) {
 		switch (_type) {
 			case SF_TYPE::LINTRAFO: {
-				std::cout << "Construct lintrafo" << std::endl;
 				mLinearTrafoParameters = new trafoContent<Number>(_origin, _a, _b);
 				mType = SF_TYPE::LINTRAFO;
 				mDimension = _origin->dimension();
@@ -157,7 +153,7 @@ namespace hypro {
 
 	template<typename Number>
 	SupportFunction<Number>::~SupportFunction() {
-		std::cout << "Destructor of type " << mType << std::endl;
+		//std::cout << "Destructor of type " << mType << std::endl;
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL:
@@ -188,7 +184,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::shared_ptr<SupportFunction<Number>> SupportFunction<Number>::operator=(std::shared_ptr<SupportFunction<Number>> _other) {
-		std::cout << "Assignment, this->type:" << _other->type() << std::endl;
+		//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 		mType = _other->type();
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
@@ -263,7 +259,7 @@ namespace hypro {
 	
 	template<typename Number>
 	vector_t<Number> SupportFunction<Number>::multiEvaluate(const matrix_t<Number>& _directions) const {
-		std::cout << "Multi-evaluate, type: " << mType << std::endl;
+		//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 		switch (mType) {
 			case SF_TYPE::INFTY_BALL:
 			case SF_TYPE::TWO_BALL: {
@@ -271,7 +267,6 @@ namespace hypro {
 				}
 			case SF_TYPE::LINTRAFO: {
 				matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-				std::cout << "Evaluate lintrafo" << std::endl;
 				return mLinearTrafoParameters->origin->multiEvaluate(_directions*tmp);
 				}
 			case SF_TYPE::POLY: {

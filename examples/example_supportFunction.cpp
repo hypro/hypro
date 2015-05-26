@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 
 	vector_t<double> sf1 = poly1->multiEvaluate(evaldirections);
 	//vector_t<double> sf2 = poly2->multiEvaluate(evaldirections);
-	//vector_t<double> sf3 = ball->multiEvaluate(evaldirections);
+	vector_t<double> sf3 = ball->multiEvaluate(evaldirections);
 	vector_t<double> sf4 = unionRes->multiEvaluate(evaldirections);
 	vector_t<double> sf5 = poly3->multiEvaluate(evaldirections);
 	vector_t<double> sf6 = intersectionRes->multiEvaluate(evaldirections);
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	}
 	//plotter.addObject(points);
 	*/
-	/*
+	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -115,8 +115,8 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-	*/
-	/*
+	
+	
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -131,14 +131,14 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-	*/
 	
-	/*
+	
+	
 	std::shared_ptr<SupportFunction<double>> res = rounded1->linearTransformation(exponential);
 	//std::shared_ptr<SupportFunction<double>> res = rounded1->minkowskiSum(ball);
 	res->print();
 
-	for(unsigned iteration = 0; iteration < 100; ++iteration) {
+	for(unsigned iteration = 0; iteration < 20; ++iteration) {
 		std::cout << "Example: res.multiEvaluate(evaldirections)" << std::endl;
 		vector_t<double> tmp = res->multiEvaluate(evaldirections);
 		points.erase(points.begin(), points.end());
@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 		res->print();
 		plotter.addObject(points);
 	}
-	*/
+	
 	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
 	}
 	plotter.addObject(points);
 	*/
-
+	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-
+	*/
 	plotter.plot2d();
 	
 }

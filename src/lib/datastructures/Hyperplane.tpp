@@ -177,20 +177,27 @@
 
 	template<typename Number>
 	vector_t<Number> Hyperplane<Number>::intersectionVector(const Hyperplane<Number>& _rhs) const {
-		matrix_t<Number> A = matrix_t<Number>(2, mNormal.rows());
+		matrix_t<Number> A = matrix_t<Number>(3, mNormal.rows());
 		A.row(0) = mNormal.transpose();
 		A.row(1) = _rhs.normal().transpose();
+		A.row(2) = vector_t<Number>::Ones(A.cols()).transpose();
 
-		vector_t<Number> b = vector_t<Number>(2);
-		b << mScalar,_rhs.offset();
+		vector_t<Number> b = vector_t<Number>(3);
+		b << mScalar,_rhs.offset(),Number(1);
 
 		vector_t<Number> result = A.colPivHouseholderQr().solve(b);
+
 		return result;
 	}
 
 	template<typename Number>
 	bool Hyperplane<Number>::contains(const vector_t<Number> _vector) const {
 		return (_vector.dot(mNormal) == mScalar);
+	}
+
+	template<typename Number>
+	bool Hyperplane<Number>::holds(const vector_t<Number> _vector) const {
+		return (_vector.dot(mNormal) <= mScalar);
 	}
 
 	template<typename Number>

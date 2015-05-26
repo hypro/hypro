@@ -21,10 +21,9 @@ namespace hypro {
 	
 	template<typename Number>
 	void PolytopeSupportFunction<Number>::deleteArrays() {
-		std::cout << __func__ << std::endl;
-		 delete[] ia;
-		 delete[] ja;
-		 delete[] ar;
+		delete[] ia;
+		delete[] ja;
+		delete[] ar;
 	}
 	
 	template<typename Number>

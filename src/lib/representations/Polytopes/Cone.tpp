@@ -40,6 +40,26 @@ namespace polytope {
 				}
 			}
 		}
+		// adjust vectors to the right direction
+		for(const auto& plane : mPlanes) {
+			for(auto& vector : intersectionVectors) {
+				if(!plane->holds(vector)) {
+					vector_t<Number> tmp = vector*-1;
+					intersectionVectors.erase(vector);
+					intersectionVectors.insert(tmp);
+
+					std::cout << tmp << " is contained in " << *plane << " : " << plane->holds(tmp) << std::endl;
+					assert(plane->holds(tmp));
+				}
+			}
+		}
+
+		std::cout << "Collected vectors: " << std::endl;
+		for(const auto& vec : intersectionVectors) {
+			std::cout << vec << ", " << std::endl;
+		}
+		std::cout << "######" << std::endl;
+
 		// for each vector, determine, if it is inside the original cone
 		for(const auto& vector : intersectionVectors) {
 			if(!this->contains(vector))
@@ -68,14 +88,18 @@ namespace polytope {
 
 	template<typename Number>
 	void Cone<Number>::add(vector_t<Number> _vector) {
-		
-		// collect all vectors (v_l, v_r) from both cones (cone_l, cone_r)
+		// collect all vectors
 		vectorSet<Number> lhsVectors = this->vectors();
+
+		for(const auto& vector : lhsVectors){
+			std::cout << "lhsVector: " << vector << std::endl;
+		}
 
 		// check if vector is already inside cone_l -> drop
 		planeVector insidePlanes;
-		planeVector outsidePlanes;
+		std::set<std::shared_ptr<Hyperplane<Number>>> outsidePlanes;
 		if(!this->contains(_vector,insidePlanes, outsidePlanes)) { // not inside
+			std::cout << "vector is not inside." << std::endl;
 			assert(!insidePlanes.empty());
 
 			// get horizon vectors, create new hyperplanes, delete inside planes.
@@ -83,11 +107,15 @@ namespace polytope {
 			for(const auto& horizonCandidate : lhsVectors) {
 				bool found = false;
 				for(const auto& insidePlane : insidePlanes) {
+					std::cout << "Inside plane: " << *insidePlane.get() << std::endl;
 					if(insidePlane->contains(horizonCandidate)) {
+						std::cout << "is contained (normal*horizonCandidate=" << insidePlane.get()->normal().dot(horizonCandidate) << ")" << std::endl;
 						// check all other planes, which are not inside, if the candidate is part of one -> horizon vector
 						for(const auto& outsidePlane : outsidePlanes) {
+							std::cout << "Consider vector " << horizonCandidate << " to be inside " << *insidePlane.get() << " and " << *outsidePlane.get() << std::endl;
 							if(outsidePlane->contains(horizonCandidate)) {
 								horizonVectors.push_back(horizonCandidate);
+								std::cout << "horizon vector: " << horizonCandidate << std::endl;
 								found = true;
 								break;
 							}
@@ -99,6 +127,7 @@ namespace polytope {
 				found = false;
 			}
 
+			std::cout << "Create new hyperplanes." << std::endl;
 			// create new hyperplanes
 			std::vector<vector_t<Number>> hyperplaneBasis;
 			hyperplaneBasis.push_back(_vector);
@@ -106,13 +135,20 @@ namespace polytope {
 				// Todo: check if origin zero is okay.
 				vector_t<Number> origin = vector_t<Number>::Zero(_vector.rows());
 				
+				std::cout << "Create hyperplane from " << _vector << " and " << horizonVector << std::endl;
+
 				hyperplaneBasis.push_back(horizonVector);
-				outsidePlanes.push_back(std::shared_ptr<Hyperplane<Number>>(new Hyperplane<Number>(origin, hyperplaneBasis)));
+				outsidePlanes.insert(std::shared_ptr<Hyperplane<Number>>(new Hyperplane<Number>(origin, hyperplaneBasis)));
+				//std::cout << "new plane: " << *outsidePlanes.back().get() << std::endl;
 				hyperplaneBasis.pop_back();
 			}
 
+			for(const auto& plane : outsidePlanes)
+				std::cout << "Outside Plane: " << *plane.get() << std::endl;
+
 			// assign new planes
 			mPlanes.clear();
+			std::cout << "Set up new object." << std::endl;
 			for(const auto& plane : outsidePlanes)
 				mPlanes.push_back(plane);
 		}
@@ -152,21 +188,21 @@ namespace polytope {
 	template<typename Number>
 	bool Cone<Number>::contains(const vector_t<Number>& _vector) const {
 		for(const auto& plane : mPlanes) {
-			if(_vector.dot(plane->normal()) > 0)
+			if(!plane->holds(_vector))
 				return false;
 		}
 		return true;
 	}
 
 	template<typename Number>
-	bool Cone<Number>::contains(const vector_t<Number>& _vector, planeVector& _insidePlanes, planeVector& _outsidePlanes) const {
+	bool Cone<Number>::contains(const vector_t<Number>& _vector, planeVector& _insidePlanes, std::set<std::shared_ptr<Hyperplane<Number>>>& _outsidePlanes) const {
 		bool contains = true;
 		for(const auto& plane : mPlanes) {
-			if(_vector.dot(plane->normal()) > 0) {
+			if(!plane->holds(_vector)) {
 				_insidePlanes.push_back(plane);
 				contains = false;
 			} else {
-				_outsidePlanes.push_back(plane);
+				_outsidePlanes.insert(plane);
 			}
 		}
 		return contains;
@@ -189,6 +225,5 @@ namespace polytope {
 		mPlanes = _rhs.planes();
 		return *this;
 	}
-	
 } // namespace polytope
 } // namespace hypro

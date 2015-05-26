@@ -91,6 +91,7 @@ TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
     std::vector< hypro::vector_t<TypeParam> > results = z1.computeZonotopeBoundary();
 }
 
+/*
 TYPED_TEST(ZonotopeTest, Corners) {
     Eigen::Matrix<TypeParam, 2,3> gen;
     Eigen::Matrix<TypeParam, 2,1> center;
@@ -103,6 +104,7 @@ TYPED_TEST(ZonotopeTest, Corners) {
     hypro::Zonotope<TypeParam> z2(center, gen);
     z2.corners();
 }
+*/
 
 TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
     Eigen::Matrix<TypeParam, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};

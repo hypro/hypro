@@ -183,12 +183,23 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 
 	Cone<TypeParam> cone(planes);
 
-	vector_t<TypeParam> v1 = vector_t<TypeParam>(3);
-	v1 << TypeParam(1), TypeParam(1), TypeParam(1);
+	std::cout << cone << std::endl;
+
+	//vector_t<TypeParam> v1 = vector_t<TypeParam>(3);
+	//v1 << TypeParam(1), TypeParam(1), TypeParam(1);
 	vector_t<TypeParam> v2 = vector_t<TypeParam>(3);
-	v2 << TypeParam(1), TypeParam(1), TypeParam(0);
-	vector_t<TypeParam> v3 = vector_t<TypeParam>(3);
-	v3 << TypeParam(0), TypeParam(0), TypeParam(1);
+	v2 << TypeParam(1), TypeParam(1), TypeParam(-1);
+	//vector_t<TypeParam> v3 = vector_t<TypeParam>(3);
+	//v3 << TypeParam(0), TypeParam(0), TypeParam(-1);
+
+	//cone.add(v1);
+
+	std::cout << "Add v2." << std::endl;
+
+	cone.add(v2);
+	//cone.add(v3);
+
+	std::cout << "Result: " << cone << std::endl;
 
     SUCCEED();
 }

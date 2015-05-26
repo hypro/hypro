@@ -61,6 +61,7 @@ namespace hypro {
 		vector_t<Number> intersectionVector(const Hyperplane<Number>& _rhs) const;
 
 		bool contains(const vector_t<Number> _vector) const;
+		bool holds(const vector_t<Number> _vector) const;
 		
 	private:
 		const Number& internalOffset() const;
@@ -83,6 +84,11 @@ namespace hypro {
 	template<typename Number>
 	bool operator==(const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs) {
 		return (lhs.normal() == rhs.normal() && lhs.offset() == rhs.offset());
+	}
+
+	template<typename Number>
+	bool operator<(const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs) {
+		return (lhs.normal() < rhs.normal() || (lhs.normal() == rhs.normal() && lhs.offset() < rhs.offset()));
 	}
 
 } // namespace

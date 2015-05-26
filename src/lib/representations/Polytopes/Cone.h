@@ -6,6 +6,11 @@
 
 namespace hypro {
 namespace polytope {
+
+	template<typename Number>
+	bool operator<(std::shared_ptr<Hyperplane<Number>> _lhs, std::shared_ptr<Hyperplane<Number>> _rhs) {
+		return (*_lhs.get() < *_rhs.get());
+	}
 	
 	template<typename Number>
 	class Cone 
@@ -38,11 +43,22 @@ namespace polytope {
 			Point<Number> getUnitAverageVector() const;
 			
 			bool contains(const vector_t<Number>& _vector) const;
-			bool contains(const vector_t<Number>& _vector, planeVector& _insidePlanes, planeVector& _outsidePlanes) const;
+			bool contains(const vector_t<Number>& _vector, planeVector& _insidePlanes, std::set<std::shared_ptr<Hyperplane<Number>>>& _outsidePlanes) const;
 			bool contains(const Point<Number>* _vector) const;
 			
 			Cone<Number> operator=(const Cone<Number>& _rhs);
 	};
+
+	template<typename Number>
+	std::ostream& operator<<(std::ostream& _out, Cone<Number>& _cone) {
+		_out << "Cone [ " << std::endl;
+		for(const auto& plane : _cone.planes()) {
+			_out << *plane << ", " << std::endl;
+		}
+		_out << " ]" << std::endl; 
+		return _out;
+	}
+
 } // namespace polytope
 } // namespace hypro
 
