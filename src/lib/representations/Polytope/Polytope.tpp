@@ -288,11 +288,10 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::linearTransformation(Polytope<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b)
+    Polytope<Number> Polytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b)
     {
         using namespace Parma_Polyhedra_Library;
-        
-        //result = *this;
+        Polytope<Number> result;
         
         std::vector<Parma_Polyhedra_Library::Variable> variables;
         for(unsigned i = 0; i < A.rows(); ++i)
@@ -394,15 +393,15 @@ namespace hypro
             }
         }
         mPoints = newPoints;
-        
         mPointsUpToDate = true;
 
-        return true;
+        return result;
     }
     
     template<typename Number>
-    bool Polytope<Number>::minkowskiSum(Polytope<Number>& result, const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::minkowskiSum(const Polytope<Number>& rhs)
     {
+    	Polytope<Number> result;
         /*
         typedef Point<Number> point;
         // initialize algorithm
@@ -432,6 +431,8 @@ namespace hypro
         result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
         //result.print();
         
+        assert(this->dimension() == rhs.dimension());
+
         for( auto& genA : mPolyhedron.generators() )
         {
             Point<Number> tmpA = polytope::generatorToPoint<Number>(genA, polytope::variables(mPolyhedron));
@@ -447,19 +448,21 @@ namespace hypro
 
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                //std::cout << "Add point: " << res << std::endl;
+                std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
-                //std::cout << "Intermediate result:" << std::endl;
-                //result.print();
+                std::cout << "Intermediate result:" << std::endl;
+                result.print();
             }
         }
-        //std::cout << "Result:" result.print() << std::endl;
-        result.hull(result);
+        std::cout << "Result:";
+        result.print();
+        std::cout << std::endl;
+        result = result.hull();
 
         mPointsUpToDate = false;
         //TODO remove
         std::cout.clear();
-        return true;
+        return result;
     }
     
     /**
@@ -467,7 +470,8 @@ namespace hypro
      * Minkowski Sum computation based on Fukuda
      */
     template<typename Number>
-        bool Polytope<Number>::altMinkowskiSum(Polytope<Number>& result, Polytope<Number>& rhs) {
+        Polytope<Number> Polytope<Number>::altMinkowskiSum(Polytope<Number>& rhs) {
+        Polytope<Number> result;
     	//TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
     	result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
     	std::vector<Point<Number>> alreadyExploredVertices;
@@ -635,27 +639,27 @@ namespace hypro
 
     	mPointsUpToDate = false;
 
-    	return true;
+    	return result;
 
     }
 
     template<typename Number>
-    bool Polytope<Number>::intersect(Polytope<Number>& result, const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::intersect(const Polytope<Number>& rhs)
     {
         C_Polyhedron res = mPolyhedron;
         res.intersection_assign(rhs.rawPolyhedron());
-        result = Polytope<Number>(res);
+        Polytope<Number> result = Polytope<Number>(res);
 
         mPointsUpToDate = false;
 
-        return true;
+        return result;
     }
     
     template<typename Number>
-    bool Polytope<Number>::hull(Polytope<Number>& result)
+    Polytope<Number> Polytope<Number>::hull()
     {
         Generator_System gs = mPolyhedron.minimized_generators();
-        result = Polytope<Number>(C_Polyhedron(gs));
+        Polytope<Number> result = Polytope<Number>(C_Polyhedron(gs));
 		
 		/*
 			std::vector<Facet<Number>> facets = convexHull(mPoints);
@@ -675,7 +679,7 @@ namespace hypro
 				
         mPointsUpToDate = false;
 
-        return true;
+        return result;
     }
     
     template<typename Number>
@@ -691,15 +695,15 @@ namespace hypro
     }
     
     template<typename Number>
-    bool Polytope<Number>::unite(Polytope<Number>& result, const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::unite(const Polytope<Number>& rhs)
     {
         C_Polyhedron res = mPolyhedron;
         res.poly_hull_assign(rhs.rawPolyhedron());
-        result = Polytope<Number>(res);
+        Polytope<Number> result = Polytope<Number>(res);
 
         //mPointsUpToDate = false;
 
-        return true;
+        return result;
     }
     
     template<typename Number>

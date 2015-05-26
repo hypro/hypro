@@ -313,6 +313,8 @@ namespace hypro {
             
             Point<Number> extAdd(const Point<Number>& _rhs) const
             {
+            	assert(mCoordinates.rows() == _rhs.rawCoordinates().rows());
+
                 Point<Number> result = Point<Number>(mCoordinates + _rhs.rawCoordinates());
                 return result;
             }
@@ -461,13 +463,13 @@ namespace hypro {
                 return Point<Number>(coordinates);
             }
             
-            static const Number& inftyNorm(const Point<Number> _p)
+            static Number inftyNorm(const Point<Number> _p)
             {
                 Number res = 0;
 				vector_t<Number> coord = _p.rawCoordinates();
                 for (unsigned i = 0; i < _p.dimension(); ++i) {
-                    Number abs = abs(coord(i));
-                    res = res > abs ? res : abs;
+                    Number absolute = abs(coord(i));
+                    res = res > absolute ? res : absolute;
                 }
                 return res;
             }

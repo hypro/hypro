@@ -225,16 +225,16 @@ namespace hypro
 			} 
 			polytope::Fan<Number> fan;
 			for(auto& point : preresult) {
-				polytope::Cone<Number> cone;
+				polytope::Cone<Number>* cone = new polytope::Cone<Number>();
 				for(unsigned i = 0; i<facets.size(); i++) {
 					for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 						if(point == facets[i].vertices().at(j))	{
-							//cone.add(std::shared_ptr(){facet[i].hyperplane()}); //works?
+							cone->add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));
 							break;
 						}					
 					}			
 				}
-				fan.add(*(cone));	
+				fan.add(cone);	
 			}
 			mFanSet = true;
 			mFan = fan;

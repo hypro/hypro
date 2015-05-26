@@ -71,7 +71,7 @@ using vectorSet = std::set<vector_t<Number>>;
 #define fReach_TIMEDISCRETIZATION 10
 #define fReach_DENOMINATOR 1000000
 //define for debugging: triggers console output
-//#define fReach_DEBUG
+#define fReach_DEBUG
 
 /**
  * author: ckugler

@@ -54,19 +54,19 @@ namespace hypro
 			//no bloating in that dimension
 			unsigned int correctedDim = _dim-1;
 
-			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*correctedDim,correctedDim);
-			hypro::vector_t<Number> vec(2*correctedDim,1);
+			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
+			hypro::vector_t<Number> vec(2*_dim,1);
 
 			//initialize matrix entries with 0
-			for (int k=0; k<2*correctedDim; ++k) {
-				for (int l=0; l<correctedDim; ++l) {
+			for (unsigned k=0; k<2*correctedDim; ++k) {
+				for (unsigned l=0; l<correctedDim; ++l) {
 					mat(k,l) = 0;
 				}
 			}
 
 			int i = 0;
 
-			for (int z=0; z<correctedDim; ++z) {
+			for (unsigned z=0; z<correctedDim; ++z) {
 
 				vec(i) = _radius;
 				vec(i+1) = _radius;
@@ -77,6 +77,12 @@ namespace hypro
 				i = i+2;
 
 			}
+			mat(2*_dim-2,_dim-1) = 1;
+			mat(2*_dim-1,_dim-1) = -1;
+			vec(2*_dim-2) = 0;
+			vec(2*_dim-1) = 0;
+
+			std::cout << "Hausdorff matrix: " << mat << ", Hausdorff vector " << vec << std::endl;
 
 			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);
 			return poly;
@@ -86,12 +92,12 @@ namespace hypro
 		 * conversion of a matrix of type 'Number' to 'double'
 		 */
 		template<typename Number>
-		Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble(hypro::matrix_t<Number>& _mat) {
-			Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> resultMat(_mat.rows(),_mat.cols());
+		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble(hypro::matrix_t<Number>& _mat) {
+			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> resultMat(_mat.rows(),_mat.cols());
 
 			for (int i=0; i<_mat.rows(); ++i) {
 				for (int j=0; j<_mat.cols(); ++j) {
-					resultMat(i,j) = _mat(i,j);
+					resultMat(i,j) = _mat(i,j).toDouble();
 				}
 			}
 			return resultMat;
@@ -114,7 +120,7 @@ namespace hypro
 		 * conversion of a matrix of (templated) type 'Number' to 'Number'
 		 */
 		template<typename Number>
-		hypro::matrix_t<Number> convertMatToFloatT(Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& _mat) {
+		hypro::matrix_t<Number> convertMatToFloatT(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& _mat) {
 			hypro::matrix_t<Number> resultMat(_mat.rows(),_mat.cols());
 
 			for (int i=0; i<_mat.rows(); ++i) {

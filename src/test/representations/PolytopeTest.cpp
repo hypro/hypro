@@ -214,9 +214,9 @@ TYPED_TEST(PolytopeTest, Intersection)
 //    pt2.print();
     
     hypro::Polytope<TypeParam> res;
-    pt1.intersect(res, pt2);
+    res = pt1.intersect(pt2);
 //    res.print();
-    res.hull(res);
+    res = res.hull();
 //    res.print();
 }
 
@@ -239,8 +239,8 @@ TYPED_TEST(PolytopeTest, Union)
     hypro::Polytope<TypeParam> pt2 = Polytope<TypeParam>(ps2);
     
     hypro::Polytope<TypeParam> res;
-    pt1.unite(res, pt2);
-    res.hull(res);
+    res = pt1.unite(pt2);
+    res = res.hull();
 }
 
 TYPED_TEST(PolytopeTest, LinearTransformation)
@@ -288,7 +288,7 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     //b(1,0) = TypeParam(0);
     
     hypro::Polytope<TypeParam> result;
-    poly1.linearTransformation(result,A);
+    result = poly1.linearTransformation(A);
 //    result.print();
 }
 
@@ -308,7 +308,7 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
     hypro::Polytope<TypeParam> ptpe2 = Polytope<TypeParam>(ps2);
     
     hypro::Polytope<TypeParam> result;
-    ptpe1.minkowskiSum(result,ptpe2);
+    result = ptpe1.minkowskiSum(ptpe2);
     
 //    result.print();
     

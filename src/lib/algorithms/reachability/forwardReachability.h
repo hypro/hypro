@@ -70,11 +70,11 @@ namespace hypro
 					//Workaround for:
 					//resultMatrix = deltaMatrix.exp();
 					//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
-					Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix(deltaMatrix.rows(),deltaMatrix.cols());
-					Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> expMatrix(deltaMatrix.rows(),deltaMatrix.cols());
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix(deltaMatrix.rows(),deltaMatrix.cols());
+					Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix(deltaMatrix.rows(),deltaMatrix.cols());
 					doubleMatrix = hypro::convertMatToDouble(deltaMatrix);
 					expMatrix = doubleMatrix.exp();
-					resultMatrix = hypro::convertMatToFloatT(expMatrix);
+					resultMatrix = hypro::convertMatToFloatT<Number>(expMatrix);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "e^(deltaMatrix): " << std::endl;
@@ -85,8 +85,7 @@ namespace hypro
 					//---
 
 					//e^(At)*X0 = polytope at t=delta
-					hypro::valuation_t<Number> deltaValuation;
-					_val.linearTransformation(deltaValuation, resultMatrix);
+					hypro::valuation_t<Number> deltaValuation = _val.linearTransformation(resultMatrix);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope at t=delta: ";
@@ -94,8 +93,7 @@ namespace hypro
 #endif
 
 					// R_0(X0) U R_delta(X0)
-					hypro::valuation_t<Number> unitePolytope;
-					_val.unite(unitePolytope, deltaValuation);
+					hypro::valuation_t<Number> unitePolytope = _val.unite(deltaValuation);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope after unite with R0: ";
@@ -104,7 +102,7 @@ namespace hypro
 
 					// CH( R_0(X0) U R_delta(X0) )
 					hypro::valuation_t<Number> hullPolytope;
-					unitePolytope.hull(hullPolytope);
+					hullPolytope = unitePolytope.hull();
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Convex Hull (Polytope): ";
@@ -128,12 +126,14 @@ namespace hypro
 					hypro::valuation_t<Number> hausPoly = hypro::computePolytope(dim, radius);
 
 #ifdef fReach_DEBUG
+					std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
+					std::cout << "hullPolytope dimension: " << hullPolytope.dimension() << std::endl;
 				   	std::cout << "Hausdorff Polytope (Box): ";
 				    hausPoly.print();
 #endif
 
 					//hullPolytope +_minkowski hausPoly
-					hullPolytope.minkowskiSum(firstSegment, hausPoly);
+					firstSegment = hullPolytope.minkowskiSum(hausPoly);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";
@@ -163,7 +163,7 @@ namespace hypro
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
-						lastSegment.linearTransformation(resultPolytope, resultMatrix);
+						resultPolytope = lastSegment.linearTransformation(resultMatrix);
 
 #ifdef fReach_DEBUG
 					   	std::cout << "Next Flowpipe Segment: ";
@@ -207,9 +207,7 @@ namespace hypro
 				hypro::Polytope<Number> guardPoly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
 
 				//intersection between valuation polytope and guard polytope
-				hypro::Polytope<Number> intersectionPoly;
-                                
-				_val.intersect(intersectionPoly, guardPoly);
+				hypro::Polytope<Number> intersectionPoly = _val.intersect(guardPoly);
 
 				//check if the intersection is empty
 				if (!intersectionPoly.isEmpty()) {
@@ -217,7 +215,7 @@ namespace hypro
 					hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
 
 					//perform translation + transformation on intersection polytope
-					intersectionPoly.linearTransformation(result, transformMat, translateVec);
+					result = intersectionPoly.linearTransformation(transformMat, translateVec);
 					return true;
 				} else {
 					return false;
@@ -229,7 +227,7 @@ namespace hypro
     		 * to do so, each flowpipe segment of all flowpipes is checked individually for each outgoing transition
     		 */
     		template<typename Number>
-			static std::vector<flowpipe_t<Number>> computeReach(std::vector<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number> _hybrid,
+			static std::vector<flowpipe_t<Number>> computeReach(std::vector<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number, flowpipe_t<Number>> _hybrid,
 					std::map<flowpipe_t<Number>, hypro::Location<Number>>& _map) {
 
 				std::vector<flowpipe_t<Number>> reach;
@@ -256,7 +254,7 @@ namespace hypro
 
 								//targetValuation = targetValuation U postAssign
 								if (!targetValuation.isEmpty()) {
-									targetValuation.unite(targetValuation, postAssign);
+									targetValuation = targetValuation.unite(postAssign);
 								} else {
 									targetValuation = postAssign;
 								}
@@ -291,7 +289,7 @@ namespace hypro
     		 * TODO: add time/step boundaries to guarantee termination (might be necessary for some automata)
     		 */
     		template<typename Number>
-			static std::vector<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number> _hybrid) {
+			static std::vector<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number, flowpipe_t<Number>> _hybrid) {
 
 					std::vector<flowpipe_t<Number>> R_new;
 					std::vector<flowpipe_t<Number>> R;

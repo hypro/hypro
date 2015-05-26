@@ -25,6 +25,7 @@ set( EXAMPLES
     example_polytopeFileWriter
     example_power
     example_ppl_nncPolyhedra
+    example_reachability
     example_squareroot
     example_supportFunction
     example_cubicroot

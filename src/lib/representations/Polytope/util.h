@@ -119,10 +119,13 @@ namespace polytope
             if( gen.space_dimension() >= (*varIt).space_dimension() )
             {
                 coefficient = (int)Parma_Polyhedra_Library::raw_value(gen.coefficient(*varIt)).get_si();
-                divisor = (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
+                if(gen.is_point() || gen.is_closure_point())
+                	divisor = (int)Parma_Polyhedra_Library::raw_value(gen.divisor()).get_si();
+                else
+                	divisor = 1;
                 value = coefficient/divisor;
-                //std::cout << "Coordinates: " << value << std::endl;
-                //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+                std::cout << "Coordinates: " << value << std::endl;
+                std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }
             else

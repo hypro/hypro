@@ -229,7 +229,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	//equivalence has to be confirmed through console output
 #ifdef fReach_DEBUG
 	this->hybrid.valuation().print();
-	poly.print();
+	this->poly.print();
 #endif
 
 }
