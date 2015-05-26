@@ -110,6 +110,8 @@ namespace hypro
          */
         void setFan(const polytope::Fan<Number>& _fan);
 
+        void calculateFan();
+
         /**
          * Prints the polytopes' generators obtained from the PPL to stdout.
          */

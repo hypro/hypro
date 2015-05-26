@@ -142,6 +142,33 @@ namespace hypro
 	}
 
 	template<typename Number>
+    void HPolytope<Number>::calculateFan() const{
+    
+    	std::vector<Facet<Number>> facets = convexHull(vertices());
+		std::set<Point<Number>> preresult;
+		for(unsigned i = 0; i<facets.size(); i++) {
+			for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
+				preresult.insert(facets[i].vertices().at(j));							
+			}			
+		} 
+		polytope::Fan<Number> fan;
+		for(auto& point : preresult) {
+			polytope::Cone<Number> cone;
+			for(unsigned i = 0; i<facets.size(); i++) {
+				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
+					if(point == facets[i].vertices().at(j))	{
+						//cone.add(std::shared_ptr(){facet[i].hyperplane()}); //works?
+						break;
+					}					
+				}			
+			}
+			fan.add(*(cone));	
+		}
+		mFanSet = true;
+		mFan = fan;
+    }
+
+	template<typename Number>
 	void HPolytope<Number>::insert(const Hyperplane<Number>& plane)
 	{
 		assert(mDimension == 0 || mDimension == plane.dimension());

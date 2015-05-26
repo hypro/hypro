@@ -10,6 +10,7 @@ set(lib_hypro_headers
     util/VariablePool.h
     util/eigenTypetraits.h
 	util/types.h
+	util/convexHull.h
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
     ${lib_hypro_parser_headers}

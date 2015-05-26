@@ -6,6 +6,5 @@ set(hypro_polytope_headers
 	Polytope/Polytope.h
 	Polytope/Polytope.tpp
     Polytope/util.h
-    convexHull_util.h
 	PARENT_SCOPE
 )

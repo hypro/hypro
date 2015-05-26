@@ -215,9 +215,29 @@ namespace hypro
 	template<typename Number>
 	const typename VPolytope<Number>::Fan& VPolytope<Number>::calculateFan() const
 	{
-		// Todo: ensure ordering of the points -> requires convex hull algorithm
-		if(mFanSet) {
-			// Todo: Do stuff.
+		if(!mFanSet) {
+			std::vector<Facet<Number>> facets = convexHull(mVertices);
+			std::set<Point<Number>> preresult;
+			for(unsigned i = 0; i<facets.size(); i++) {
+				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
+					preresult.insert(facets[i].vertices().at(j));							
+				}			
+			} 
+			polytope::Fan<Number> fan;
+			for(auto& point : preresult) {
+				polytope::Cone<Number> cone;
+				for(unsigned i = 0; i<facets.size(); i++) {
+					for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
+						if(point == facets[i].vertices().at(j))	{
+							//cone.add(std::shared_ptr(){facet[i].hyperplane()}); //works?
+							break;
+						}					
+					}			
+				}
+				fan.add(*(cone));	
+			}
+			mFanSet = true;
+			mFan = fan;
 		}
 		return mFan;
 	}

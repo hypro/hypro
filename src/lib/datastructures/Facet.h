@@ -206,16 +206,15 @@ class Facet
 				//std::cout << __func__ << " : " << __LINE__ << std::endl;
 				//std::cout << mNormal << std::endl;
 				//std::cout << _insidePoint << "  " << mScalar << std::endl;
-				//bool changed = false;
+				bool changed = false;
 				for(unsigned i = 0; i < insidePoints.size() ; i++) {
-					if(mNormal.dot(insidePoints.at(i).rawCoordinates()) > mScalar){
+					if(isBelow(insidePoints.at(i))){
 						mNormal *= -1;
-						mScalar *= -1;
-						break;
-						//if(changed) {
-							 //if multiple times in here error?
-						//}
-						//changed = true;
+						mScalar = getScalarVector();
+						if(changed) {
+							 std::cout << "Error: facet has points below and above it." << std::endl;
+						}
+						changed = true;
 					}
 				}
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
@@ -224,7 +223,7 @@ class Facet
 
 		void addPoint(Point<Number> p) {
 			mVertices.push_back(p);
-			std::vector<Point<Number>> neighbors1 = p.neighbors();
+			/*std::vector<Point<Number>> neighbors1 = p.neighbors();
 			for(unsigned i = 0; i<neighbors1.size(); i++) {
 				std::vector<Point<Number>> neighbors2 = neighbors1.at(i).neighbors();
 				for(unsigned j = 0; j<neighbors2.size(); j++) {
@@ -233,7 +232,7 @@ class Facet
 						neighbors2.at(j).removeNeighbor(&neighbors1.at(i));
 					}
 				}
-			}
+			}*/
 		}
 
 		vector_t<Number> getNormalVector () const {

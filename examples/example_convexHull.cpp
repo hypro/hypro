@@ -3,7 +3,7 @@
 #include "../src/lib/datastructures/Point.h"
 #include "../src/lib/datastructures/Facet.h"
 #include "../src/lib/datastructures/Ridge.h"
-#include "../src/lib/representations/Polytope/convexHull_util.h"
+#include "../src/lib/util/convexHull.h"
 
 
 
@@ -264,7 +264,7 @@ int main(int argc, char** argv) {
 		points.push_back(p10);
 		points.push_back(p11);
 
-		std::vector<Facet<double>> facets = Polytope<double>::convexHull(points);
+		std::vector<Facet<double>> facets = convexHull(points);
 
 		std::cout << __func__ << " : " << __LINE__ << std::endl;
 
