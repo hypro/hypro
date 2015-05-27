@@ -174,8 +174,14 @@ int main(int argc, char const *argv[])
    	hypro::Plotter<FLOAT_T<double>>& plotter = hypro::Plotter<FLOAT_T<double>>::getInstance();
 	plotter.setFilename("out");
 
-   	for(auto& poly : flowpipe)
-   		plotter.addObject(poly.points());
+   	for(auto& poly : flowpipe) {
+   		std::vector<Point<FLOAT_T<double>>> points = poly.points();
+   		for(auto& point : points) {
+   			point.reduceDimension(2);
+   		}
+   		plotter.addObject(points);
+   		points.clear();
+   	}
 
    	plotter.plot2d();
 

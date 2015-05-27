@@ -46,7 +46,7 @@ namespace hypro {
 		 */
 		void plot2d() const;
 
-		void addObject(const std::vector<Point<Number>>& _points);
+		void addObject(std::vector<Point<Number>> _points);
 
 	private:
 		// auxiliary functions

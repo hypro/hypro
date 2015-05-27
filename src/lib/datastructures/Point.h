@@ -300,6 +300,16 @@ namespace hypro {
 //            {
 //                mCoordinates.erase(_i);
 //            }
+
+            void reduceDimension(unsigned _dimension) {
+            	if(_dimension < mCoordinates.rows()){
+	            	vector_t<Number> newCoordinates = vector_t<Number>(_dimension);
+	            	newCoordinates.block(0,0,_dimension,1) = mCoordinates.block(0,0,_dimension,1);
+					mCoordinates = newCoordinates;
+					std::cout << "Reduced dimension: " << mCoordinates.transpose() << std::endl;
+	            }
+	            assert(mCoordinates.rows() <= _dimension);
+            }
             
             std::vector<carl::Variable> variables() const
             {

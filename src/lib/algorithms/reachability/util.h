@@ -78,7 +78,8 @@ namespace hypro
 
 			}
 			mat(2*_dim-2,_dim-1) = 1;
-			mat(2*_dim-1,_dim-1) = -1;
+			mat(2*_dim-1,_dim-1) = 1;
+			//mat(2*_dim-1,_dim-1) = -1; -> this does not work, as the dimension of the result is too low.
 			vec(2*_dim-2) = 0;
 			vec(2*_dim-1) = 0;
 

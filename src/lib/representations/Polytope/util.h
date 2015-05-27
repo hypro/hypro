@@ -134,6 +134,7 @@ namespace polytope
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), Number(0));
             }
         }
+
         return result;
     }
     
