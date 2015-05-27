@@ -164,6 +164,7 @@ namespace hypro
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
 						resultPolytope = lastSegment.linearTransformation(resultMatrix);
+						resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
 					   	std::cout << "Next Flowpipe Segment: ";

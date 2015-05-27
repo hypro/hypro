@@ -124,8 +124,8 @@ namespace polytope
                 else
                 	divisor = 1;
                 value = coefficient/divisor;
-                std::cout << "Coordinates: " << value << std::endl;
-                std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+                //std::cout << "Coordinates: " << value << std::endl;
+                //std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
                 result.setCoordinate(hypro::VariablePool::getInstance().variable(*varIt), value );
             }
             else

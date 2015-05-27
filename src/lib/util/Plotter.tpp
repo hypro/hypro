@@ -52,6 +52,7 @@ namespace hypro {
 					mOutfile << " to \\\n";
 				}
 				//assert(object[object.size()-1].dimension() <= 2); // TODO: Project to 2d	TODO: REINSERT ASSERTION
+				std::cout << double(object[0].at(0)) << std::endl;
 				mOutfile << "  " << double(object[0].at(0));
 				for(unsigned d = 1; d < object[0].dimension(); ++d) {
 					mOutfile << ", " << double(object[0].at(d));
@@ -78,11 +79,40 @@ namespace hypro {
 		std::vector<Point<Number>> copyPoints;
 		for(const auto& point : _points)
 			copyPoints.push_back(Point<Number>(point));
+
+		convexHull(copyPoints);
+
 		mObjects.push_back(copyPoints);
 	}
 
 	template<typename Number>
 	void Plotter<Number>::init(const std::string& _filename) {
 		mOutfile.open(_filename);
+	}
+
+	template<typename Number>
+	void Plotter<Number>::convexHull(std::vector<Point<Number>>& _points) {
+		if(!_points.empty()) {
+			// find minimum Point
+			Point<Number> min = _points[0];
+			std::map<Number, Point<Number>> sortedPoints;
+			for(const auto& point : _points) {
+				assert(point.dimension() == 2);
+				if(point < min) {
+					min = point;
+				}
+			}
+			// sort Points according to polar angle
+			for(const auto& point : _points) {
+				if(point != min) {
+					sortedPoints.insert(std::make_pair(point.polarCoordinates(min)[0], point));
+				}
+			}
+
+			for(const auto& pointPair : sortedPoints) {
+				std::cout << pointPair.first << ": " << pointPair.second << std::endl;
+			}
+			
+		}
 	}
 }

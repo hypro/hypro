@@ -350,7 +350,7 @@ namespace hypro {
                 }
                 radialCoordinate = sqrt(radialCoordinate);
                 result.insert(result.begin(), radialCoordinate);
-                std::cout << __func__ << ":" << __LINE__ << std::endl;
+                //std::cout << __func__ << ":" << __LINE__ << std::endl;
 				
                 //std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
                 
@@ -363,7 +363,7 @@ namespace hypro {
                     angle = 0;
                     for(auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2)
                     {
-						std::cout << __func__ << ":" << __LINE__ << std::endl;
+						//std::cout << __func__ << ":" << __LINE__ << std::endl;
                         Number square;
 						square = pow(base.rawCoordinates()(dimension2), 2); // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
                         angle += square;
@@ -382,7 +382,7 @@ namespace hypro {
                     result.insert(result.end(), angle);
                     //std::cout << "Angle: " << angle << std::endl;
                 }
-				std::cout << __func__ << ":" << __LINE__ << std::endl;
+				//std::cout << __func__ << ":" << __LINE__ << std::endl;
                 if((base.mCoordinates(base.dimension()-1)) < Number(0))
                 {
                     //std::cout << "Correct last angle: ";
@@ -399,7 +399,7 @@ namespace hypro {
                     //std::cout << tmp << std::endl;
                     result.push_back(tmp);
                 }
-                std::cout << __func__ << ":" << __LINE__ << std::endl;
+                //std::cout << __func__ << ":" << __LINE__ << std::endl;
                 assert(result.size() == this->dimension());
                 return result;
             }

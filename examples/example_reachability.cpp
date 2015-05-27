@@ -174,13 +174,22 @@ int main(int argc, char const *argv[])
    	hypro::Plotter<FLOAT_T<double>>& plotter = hypro::Plotter<FLOAT_T<double>>::getInstance();
 	plotter.setFilename("out");
 
+	unsigned count = 1;
    	for(auto& poly : flowpipe) {
+   		std::cout << "Flowpipe segment to be converted: " << std::endl;
+   		poly.print();
+   		std::cout << std::endl;
    		std::vector<Point<FLOAT_T<double>>> points = poly.points();
-   		for(auto& point : points) {
-   			point.reduceDimension(2);
+   		if(!points.empty()) {
+   			std::cout << "Polycount: " << count << std::endl;
+   			for(auto& point : points) {
+	   			point.reduceDimension(2);
+	   			std::cout << point << std::endl;
+	   		}
+	   		plotter.addObject(points);
+	   		points.clear();
+	   		++count;
    		}
-   		plotter.addObject(points);
-   		points.clear();
    	}
 
    	plotter.plot2d();

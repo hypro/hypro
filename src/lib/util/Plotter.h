@@ -51,6 +51,7 @@ namespace hypro {
 	private:
 		// auxiliary functions
 		void init(const std::string& _filename);
+		void convexHull(std::vector<Point<Number>>& _points);
 	};
 
 
