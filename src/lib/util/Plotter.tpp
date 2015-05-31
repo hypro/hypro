@@ -102,6 +102,9 @@ namespace hypro {
 					min = point;
 				}
 			}
+
+			std::cout << "Min: " << min.rawCoordinates().transpose() << std::endl;
+
 			// sort Points according to polar angle
 			for(const auto& point : _points) {
 				if(point != min) {
