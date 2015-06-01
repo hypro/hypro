@@ -80,7 +80,7 @@ namespace hypro {
 		for(const auto& point : _points)
 			copyPoints.push_back(Point<Number>(point));
 
-		convexHull(copyPoints);
+		grahamScan(copyPoints);
 
 		mObjects.push_back(copyPoints);
 	}
@@ -91,7 +91,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Plotter<Number>::convexHull(std::vector<Point<Number>>& _points) {
+	void Plotter<Number>::grahamScan(std::vector<Point<Number>>& _points) {
 		if(!_points.empty()) {
 			// find minimum Point
 			Point<Number> min = _points[0];
@@ -105,10 +105,42 @@ namespace hypro {
 
 			std::cout << "Min: " << min.rawCoordinates().transpose() << std::endl;
 
-			// sort Points according to polar angle
+			// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
 			for(const auto& point : _points) {
 				if(point != min) {
-					sortedPoints.insert(std::make_pair(point.polarCoordinates(min)[0], point));
+					Number angle = point.polarCoordinates(min)[1];
+					Number radial = point.polarCoordinates(min)[0];
+					std::cout << "Try to insert angle " << angle << std::endl;
+					if(sortedPoints.empty())
+						sortedPoints.insert(std::make_pair(angle, point));
+					else {
+						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
+							// if equal, take the one with bigger radial component
+							Number newAngle = pos->second.polarCoordinates(min)[1];
+							std::cout << "Angle: " << angle << ", newAngle: " << newAngle << std::endl;
+							if(AlmostEqual2sComplement(angle, newAngle)) {
+								if(pos->second.polarCoordinates(min)[0]<radial) {
+									pos = sortedPoints.erase(pos);
+									sortedPoints.insert(std::make_pair(angle, point));
+								}
+								else {
+									std::cout << "Dropped angle" << std::endl;
+								}
+								break;
+							}
+							else if(angle < newAngle) {
+								++pos;
+								if(pos == sortedPoints.end()) {
+									sortedPoints.insert(std::make_pair(angle, point));
+									break;
+								}
+							}
+							else {
+								sortedPoints.insert(std::make_pair(angle, point));
+								break;
+							}
+						}
+					}
 				}
 			}
 
@@ -117,5 +149,21 @@ namespace hypro {
 			}
 			
 		}
+	}
+
+	template<typename Number>
+	bool Plotter<Number>::isLeftTurn(const Point<Number>& a, const Point<Number>& b, const Point<Number>& c) {
+		assert(a.dimension() == 2);
+		assert(b.dimension() == 2);
+		assert(c.dimension() == 2);
+
+		vector_t<Number> rA = a.rawCoordinates();
+		vector_t<Number> rB = b.rawCoordinates();
+		vector_t<Number> rC = c.rawCoordinates();
+
+		Number val = (rA(0) - rB(0))*(rC(1) - rA(1)) - (rC(0) - rA(0))*(rB(1) - rA(1));
+		std::cout << "Consider " << rA.transpose() << " - " << rB.transpose() << " - " << rC.transpose() << " val: " << val << std::endl;
+
+		return (val > 0);
 	}
 }
