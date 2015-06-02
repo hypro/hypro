@@ -177,6 +177,11 @@ namespace hypro {
 				}
 				else {
 					stack.push(p2);
+					if(stack.size() < 2) {
+						stack.push(sortedPoints.begin()->second);
+						sortedPoints.erase(sortedPoints.begin());
+						++i;
+					}
 				}
 			}
 
@@ -199,7 +204,11 @@ namespace hypro {
 		vector_t<Number> rB = b.rawCoordinates();
 		vector_t<Number> rC = c.rawCoordinates();
 
-		Number val = (rA(0) - rB(0))*(rC(1) - rA(1)) - (rC(0) - rA(0))*(rB(1) - rA(1));
+		Point<Number> diffA = b-a;
+		Point<Number> diffB = c-b;
+
+		Number val = diffB.polarCoordinates(diffA)[1];
+		//Number val = (rA(0) - rB(0))*(rC(1) - rA(1)) - (rC(0) - rA(0))*(rB(1) - rA(1));
 		std::cout << "Consider " << rA.transpose() << " - " << rB.transpose() << " - " << rC.transpose() << " val: " << val << std::endl;
 
 		return (val > 0);
