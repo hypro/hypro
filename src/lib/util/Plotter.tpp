@@ -109,45 +109,83 @@ namespace hypro {
 			for(const auto& point : _points) {
 				if(point != min) {
 					Number angle = point.polarCoordinates(min)[1];
-					Number radial = point.polarCoordinates(min)[0];
 					std::cout << "Try to insert angle " << angle << std::endl;
-					if(sortedPoints.empty())
+					if(sortedPoints.empty()) {
 						sortedPoints.insert(std::make_pair(angle, point));
+						std::cout << "Inserted angle " << angle << std::endl;
+						std::cout << "Stop." << std::endl;
+					}
 					else {
 						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
 							// if equal, take the one with bigger radial component
 							Number newAngle = pos->second.polarCoordinates(min)[1];
 							std::cout << "Angle: " << angle << ", newAngle: " << newAngle << std::endl;
 							if(AlmostEqual2sComplement(angle, newAngle)) {
-								if(pos->second.polarCoordinates(min)[0]<radial) {
+								// if equal, compare radial coordinate (distance)
+								if(pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {
 									pos = sortedPoints.erase(pos);
 									sortedPoints.insert(std::make_pair(angle, point));
+									std::cout << "Equal, Inserted angle " << angle << std::endl;
 								}
 								else {
-									std::cout << "Dropped angle" << std::endl;
+									std::cout << "Dropped angle " << angle << std::endl;
 								}
 								break;
 							}
-							else if(angle < newAngle) {
+							else if(angle > newAngle) {
 								++pos;
 								if(pos == sortedPoints.end()) {
 									sortedPoints.insert(std::make_pair(angle, point));
+									std::cout << "Inserted angle " << angle << std::endl;
 									break;
 								}
 							}
 							else {
 								sortedPoints.insert(std::make_pair(angle, point));
+								std::cout << "Inserted angle " << angle << std::endl;
 								break;
 							}
 						}
+						std::cout << "Stop." << std::endl;
 					}
 				}
 			}
 
+			// debug
 			for(const auto& pointPair : sortedPoints) {
 				std::cout << pointPair.first << ": " << pointPair.second << std::endl;
 			}
 			
+			std::stack<Point<Number>> stack;
+			stack.push(min);
+			stack.push(sortedPoints.begin()->second);
+			sortedPoints.erase(sortedPoints.begin());
+			unsigned i = 2;
+			unsigned n = sortedPoints.size();
+
+			while(i<n) {
+				Point<Number> p1 = stack.top();
+				stack.pop();
+				Point<Number> p2 = stack.top();
+				stack.pop();
+				if(isLeftTurn(p2,p1,sortedPoints.begin()->second)) {
+					stack.push(p2);
+					stack.push(p1);
+					stack.push(sortedPoints.begin()->second);
+					sortedPoints.erase(sortedPoints.begin());
+					++i;
+				}
+				else {
+					stack.push(p2);
+				}
+			}
+
+			std::cout << "Hull result:" << std::endl;
+			while(!stack.empty()){
+				std::cout << stack.top() << std::endl;
+				stack.pop();
+			}
+
 		}
 	}
 
