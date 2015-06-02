@@ -93,7 +93,7 @@ namespace hypro {
 	template<typename Number>
 	void Plotter<Number>::grahamScan(std::vector<Point<Number>>& _points) {
 		if(!_points.empty()) {
-			// find minimum Point
+			// initialize -> find minimum Point
 			Point<Number> min = _points[0];
 			std::map<Number, Point<Number>> sortedPoints;
 			for(const auto& point : _points) {
@@ -103,72 +103,58 @@ namespace hypro {
 				}
 			}
 
-			std::cout << "Min: " << min.rawCoordinates().transpose() << std::endl;
-
 			// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
 			for(const auto& point : _points) {
 				if(point != min) {
 					Number angle = point.polarCoordinates(min)[1];
-					std::cout << "Try to insert angle " << angle << std::endl;
 					if(sortedPoints.empty()) {
 						sortedPoints.insert(std::make_pair(angle, point));
-						std::cout << "Inserted angle " << angle << std::endl;
-						std::cout << "Stop." << std::endl;
 					}
 					else {
 						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
 							// if equal, take the one with bigger radial component
 							Number newAngle = pos->second.polarCoordinates(min)[1];
-							std::cout << "Angle: " << angle << ", newAngle: " << newAngle << std::endl;
-							if(AlmostEqual2sComplement(angle, newAngle)) {
+							if(AlmostEqual2sComplement<Number>(angle, newAngle)) {
 								// if equal, compare radial coordinate (distance)
 								if(pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {
 									pos = sortedPoints.erase(pos);
 									sortedPoints.insert(std::make_pair(angle, point));
-									std::cout << "Equal, Inserted angle " << angle << std::endl;
-								}
-								else {
-									std::cout << "Dropped angle " << angle << std::endl;
 								}
 								break;
 							}
-							else if(angle > newAngle) {
+							// we assume to be sorted, so check all angles, which are smaller or equal for equality - afterwards simply insert
+							else if(angle > newAngle) { // not equal and smaller -> continue search (at end, simply insert)
 								++pos;
 								if(pos == sortedPoints.end()) {
 									sortedPoints.insert(std::make_pair(angle, point));
-									std::cout << "Inserted angle " << angle << std::endl;
 									break;
 								}
 							}
-							else {
+							else { // larger and not equal until this point -> simply insert
 								sortedPoints.insert(std::make_pair(angle, point));
-								std::cout << "Inserted angle " << angle << std::endl;
 								break;
 							}
 						}
-						std::cout << "Stop." << std::endl;
 					}
 				}
 			}
-
-			// debug
-			for(const auto& pointPair : sortedPoints) {
-				std::cout << pointPair.first << ": " << pointPair.second << std::endl;
-			}
 			
+			// prepare stack -> initialize with 2 points
 			std::stack<Point<Number>> stack;
 			stack.push(min);
 			stack.push(sortedPoints.begin()->second);
 			sortedPoints.erase(sortedPoints.begin());
-			unsigned i = 2;
+			unsigned i = 0;
 			unsigned n = sortedPoints.size();
 
+			// main loop -> check the two topmost elements of the stack and one third, new point 
 			while(i<n) {
 				Point<Number> p1 = stack.top();
 				stack.pop();
 				Point<Number> p2 = stack.top();
 				stack.pop();
 				if(isLeftTurn(p2,p1,sortedPoints.begin()->second)) {
+					// reinsert and add new point
 					stack.push(p2);
 					stack.push(p1);
 					stack.push(sortedPoints.begin()->second);
@@ -176,8 +162,10 @@ namespace hypro {
 					++i;
 				}
 				else {
+					// only reinsert second -> equal to removing the topmost object of the stack
 					stack.push(p2);
 					if(stack.size() < 2) {
+						// in this case simply insert, as the stack has to contain at least 2 points
 						stack.push(sortedPoints.begin()->second);
 						sortedPoints.erase(sortedPoints.begin());
 						++i;
@@ -185,9 +173,10 @@ namespace hypro {
 				}
 			}
 
-			std::cout << "Hull result:" << std::endl;
+			// write result
+			_points.clear();
 			while(!stack.empty()){
-				std::cout << stack.top() << std::endl;
+				_points.push_back(stack.top());
 				stack.pop();
 			}
 
@@ -200,16 +189,7 @@ namespace hypro {
 		assert(b.dimension() == 2);
 		assert(c.dimension() == 2);
 
-		vector_t<Number> rA = a.rawCoordinates();
-		vector_t<Number> rB = b.rawCoordinates();
-		vector_t<Number> rC = c.rawCoordinates();
-
-		Point<Number> diffA = b-a;
-		Point<Number> diffB = c-b;
-
-		Number val = diffB.polarCoordinates(diffA)[1];
-		//Number val = (rA(0) - rB(0))*(rC(1) - rA(1)) - (rC(0) - rA(0))*(rB(1) - rA(1));
-		std::cout << "Consider " << rA.transpose() << " - " << rB.transpose() << " - " << rC.transpose() << " val: " << val << std::endl;
+		Number val = c.polarCoordinates(a,false)[1] - b.polarCoordinates(a,false)[1];
 
 		return (val > 0);
 	}

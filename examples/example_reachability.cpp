@@ -1,3 +1,4 @@
+#include "../lib/config.h"
 #include "../lib/datastructures/hybridAutomata/Location.h"
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "../config.h"
 #include <carl/util/Singleton.h>
 #include <vector>
 #include <string>

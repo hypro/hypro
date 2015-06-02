@@ -1,4 +1,5 @@
 
+#include "../src/lib/config.h"
 #include "../src/lib/representations/SupportFunction/SupportFunction.h"
 #include "../src/lib/util/Plotter.h"
 

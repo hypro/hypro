@@ -8,6 +8,7 @@
 #include <carl/core/logging.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
+#include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
 #include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
