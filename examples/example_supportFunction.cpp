@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
 
 	// create array holding equaly distributed directions
-	int resolution = 360;
+	int resolution = 20;
 	matrix_t<double> evaldirections = matrix_t<double>(resolution, 2);
 	for(int pos = 0; pos < resolution; ++pos) {
 		double angle = pos*(360/resolution);

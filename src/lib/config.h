@@ -68,8 +68,8 @@ using vectorSet = std::set<vector_t<Number>>;
  * author: ckugler
  * Defines for reachability algorithm based on polytopes
  */
-#define fReach_TIMEBOUND 10
-#define fReach_TIMEDISCRETIZATION 10
+#define fReach_TIMEBOUND 2
+#define fReach_TIMEDISCRETIZATION 100
 #define fReach_DENOMINATOR 1000000
 //define for debugging: triggers console output
 #define fReach_DEBUG

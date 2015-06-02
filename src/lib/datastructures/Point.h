@@ -336,8 +336,6 @@ namespace hypro {
             std::vector<Number> polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const
             {
                 Point<Number> base = *this - _origin;
-                //std::cout << "Point: " << base << std::endl;
-                
                 std::vector<Number> result;
                 
                 // 1st component of the result is the radial part, the following components are the angles.
@@ -350,42 +348,30 @@ namespace hypro {
                 }
                 radialCoordinate = sqrt(radialCoordinate);
                 result.insert(result.begin(), radialCoordinate);
-                //std::cout << __func__ << ":" << __LINE__ << std::endl;
-				
-                //std::cout << "Radial coordinate: " << radialCoordinate << std::endl;
                 
                 // compute polar angles
                 Number angle;
                 for(unsigned dimension = 0; dimension < base.dimension()-1; ++dimension)
                 {
-					std::cout << __func__ << ":" << __LINE__ << std::endl;
-                    //std::cout << "Processing: " << (*dimension).first << "->" << (*dimension).second << std::endl;
                     angle = 0;
                     for(auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2)
                     {
-						//std::cout << __func__ << ":" << __LINE__ << std::endl;
                         Number square;
 						square = pow(base.rawCoordinates()(dimension2), 2); // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
                         angle += square;
                     }
-                    //std::cout << "Summed squares: " << angle << std::endl;
                     angle = sqrt(angle);
                     angle = base.mCoordinates(dimension) / angle;
-                    //std::cout << "After division: " << angle << std::endl;
                     angle = acos(angle);
-                    //std::cout << "After acos: " << angle << std::endl;
                     if(!_radians)
                     {
                         angle /= 2*PI_DN ;
                         angle *= 360;
                     }
                     result.insert(result.end(), angle);
-                    //std::cout << "Angle: " << angle << std::endl;
                 }
-				//std::cout << __func__ << ":" << __LINE__ << std::endl;
                 if((base.mCoordinates(base.dimension()-1)) < Number(0))
                 {
-                    //std::cout << "Correct last angle: ";
                     Number tmp = result.back();
                     result.pop_back();
                     if(!_radians)
@@ -396,10 +382,8 @@ namespace hypro {
                     {
                         tmp = -tmp;
                     }
-                    //std::cout << tmp << std::endl;
                     result.push_back(tmp);
                 }
-                //std::cout << __func__ << ":" << __LINE__ << std::endl;
                 assert(result.size() == this->dimension());
                 return result;
             }

@@ -76,15 +76,26 @@ int main(int argc, char const *argv[])
 
 	//note: 3rd variable is for the encoded constant factor
 	//here: x' = 2, y'= 2, z' = 0  (x' := derivative)
-	locationMat(0,0) = 0.69314718056;
-	locationMat(0,1) = 0;
+	// locationMat(0,0) = 0.69314718056;
+	// locationMat(0,1) = 0;
+	// locationMat(0,2) = 0;
+	// locationMat(1,0) = 0;
+	// locationMat(1,1) = 0.69314718056;
+	// locationMat(1,2) = 0;
+	// locationMat(2,0) = 0;
+	// locationMat(2,1) = 0;
+	// locationMat(2,2) = 0;
+
+	locationMat(0,0) = -1;
+	locationMat(0,1) = -4;
 	locationMat(0,2) = 0;
-	locationMat(1,0) = 0;
-	locationMat(1,1) = 0.69314718056;
+	locationMat(1,0) = 4;
+	locationMat(1,1) = -1;
 	locationMat(1,2) = 0;
 	locationMat(2,0) = 0;
 	locationMat(2,1) = 0;
 	locationMat(2,2) = 0;
+
 
 	loc1->setActivityMat(locationMat);
 	loc2->setActivityMat(locationMat);
@@ -129,10 +140,10 @@ int main(int argc, char const *argv[])
 	//Polytope for InitialValuation & Guard Assignment
 
 	//create Box (note: 3rd variable is for the constant factor)
-	boxVec(0) = 1;
-	boxVec(1) = 0;
-	boxVec(2) = 1;
-	boxVec(3) = 0;
+	boxVec(0) = 1.1;
+	boxVec(1) = -0.9;
+	boxVec(2) = 0.1;
+	boxVec(3) = 0.1;
 	boxVec(4) = 1;
 	boxVec(5) = -1;
 

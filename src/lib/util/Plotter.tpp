@@ -114,7 +114,7 @@ namespace hypro {
 						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
 							// if equal, take the one with bigger radial component
 							Number newAngle = pos->second.polarCoordinates(min)[1];
-							if(AlmostEqual2sComplement<Number>(angle, newAngle)) {
+							if(carl::AlmostEqual2sComplement(angle, newAngle)) {
 								// if equal, compare radial coordinate (distance)
 								if(pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {
 									pos = sortedPoints.erase(pos);
