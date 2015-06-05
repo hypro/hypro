@@ -203,6 +203,7 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 
     SUCCEED();
 }
+
 /*
 TYPED_TEST(PolytopeUtilTest, ConeContains)
 {

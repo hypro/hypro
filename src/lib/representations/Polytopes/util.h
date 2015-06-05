@@ -21,6 +21,32 @@ namespace hypro
 {
 namespace polytope
 {
+
+	static std::vector<std::vector<unsigned>> dPermutation(unsigned size, unsigned d) {
+		// get all combinations and filter those of size d
+		std::vector<vector<unsigned>> result;
+		for(unsigned i = 0; i < pow(size,2) ; ++i) {
+			bool largerRep = false;
+			std::vector<unsigned> tmpResult;
+			for(unsigned pos = 0; pos < size ; ++pos) {
+				unsigned currBit = (i & 0x01 << pos);
+				if(currBit == 1) {
+					if(tmpResult.size() < d) ) {
+						tmpResult.push_back(pos);
+					}
+					else {
+						largerRep = true;
+						break;
+					}
+				}
+ 			}
+ 			if(!largerRep)
+ 				result.push_back(tmpResult);
+ 			tmpResult.clear();
+		}
+		return result;
+	}
+
 	template<typename Number>
 	class Fan 
 	{

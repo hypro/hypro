@@ -51,6 +51,13 @@ namespace hypro
 	}
 
 	template<typename Number>
+	Vpolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
+		// calculate all possible hyperplane intersections
+
+		
+	}
+
+	template<typename Number>
 	VPolytope<Number>::VPolytope(const VPolytope& orig)
 	{
 		mVertices.insert(orig.begin(), orig.end());
