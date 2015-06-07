@@ -11,8 +11,8 @@
 
 namespace hypro
 {
-template<typename Number>
-class Transition;
+	template<typename Number>
+	class Transition;
 
     template<typename Number>
     class Location

@@ -10,8 +10,8 @@ namespace hypro
 {
     namespace forwardReachability
     {
-    		template<typename Number>
-    		using flowpipe_t = std::vector<hypro::valuation_t<Number>>;
+    		template<typename Representation>
+    		using flowpipe_t = std::vector<Representation>;
 
     		/**
     		 * computes the reachability (= a flowpipe) for one location, based on an input valuation (a polytope)
@@ -19,8 +19,8 @@ namespace hypro
     		 * @param _val TODO
     		 * @return
     		 */
-    		template<typename Number>
-			static flowpipe_t<Number> computeForwardTimeClosure(hypro::Location<Number> _loc, hypro::valuation_t<Number> _val) {
+    		template<typename Number, typename Representation>
+			static flowpipe_t<Representation> computeForwardTimeClosure(hypro::Location<Number> _loc, Representation _val) {
 
 				//[0,T] = [0,delta1] U [delta1, delta2] ...
 				//note: interval size is constant
@@ -39,7 +39,7 @@ namespace hypro
 #endif
 
 				//new empty Flowpipe
-				flowpipe_t<Number> flowpipe;
+				flowpipe_t<Representation> flowpipe;
 				//add initial valuation
 			    flowpipe.push_back(_val);
 

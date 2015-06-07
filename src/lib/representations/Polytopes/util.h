@@ -29,9 +29,9 @@ namespace polytope
 			bool largerRep = false;
 			std::vector<unsigned> tmpResult;
 			for(unsigned pos = 0; pos < size ; ++pos) {
-				unsigned currBit = (i & 0x01 << pos);
+				unsigned currBit = ((i >> pos) & 1);
 				if(currBit == 1) {
-					if(tmpResult.size() < d) ) {
+					if(tmpResult.size() < d) {
 						tmpResult.push_back(pos);
 					}
 					else {
@@ -40,8 +40,9 @@ namespace polytope
 					}
 				}
  			}
- 			if(!largerRep)
+ 			if(!largerRep && tmpResult.size() == d){
  				result.push_back(tmpResult);
+ 			}
  			tmpResult.clear();
 		}
 		return result;

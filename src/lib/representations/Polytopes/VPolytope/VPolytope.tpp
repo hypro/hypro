@@ -51,10 +51,39 @@ namespace hypro
 	}
 
 	template<typename Number>
-	Vpolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
-		// calculate all possible hyperplane intersections
+	VPolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
+		// calculate all possible hyperplane intersections -> TODO: dPermutation can be improved.
+		std::vector<std::vector<unsigned>> permutationIndices = polytope::dPermutation(_constraints.rows(), _constraints.cols());
 
-		
+		matrix_t<Number> intersection = matrix_t<Number>(_constraints.cols(), _constraints.cols());
+		vector_t<Number> intersectionConstants = vector_t<Number>(_constraints.cols());
+		std::vector<vector_t<Number>> possibleVertices;
+		for(const auto& permutation : permutationIndices) {
+			unsigned rowCount = 0;
+			for(const auto& rowIndex : permutation) {
+				intersection.row(rowCount) = _constraints.row(rowIndex);
+				intersectionConstants(rowCount) = _constants(rowIndex);
+				++rowCount;
+			}
+			vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
+			possibleVertices.push_back(vertex);
+		}
+
+		// check if vertices are true vertices (i.e. they fulfill all constraints)
+		for(auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ++vertex){
+			for(unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
+				Number res = vertex->dot(_constraints.row(rowIndex));
+				if(res > _constants(rowIndex))
+					possibleVertices.erase(vertex);
+			}
+		}
+
+		// finish initialization
+		mVertices.insert(possibleVertices.begin(), possibleVertices.end());
+		mFan = polytope::Fan<Number>();
+		mFanSet = false;
+		mReduced = false;
+		mInitialized = false;
 	}
 
 	template<typename Number>

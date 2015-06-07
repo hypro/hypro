@@ -5,6 +5,7 @@
 #include <carl/core/VariablePool.h>
 #include "../lib/datastructures/Point.h"
 #include "../lib/algorithms/reachability/forwardReachability.h"
+#include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
@@ -16,7 +17,7 @@ int main(int argc, char const *argv[])
 	Location<FLOAT_T<double>>* loc1 = new Location<FLOAT_T<double>>();
 	Location<FLOAT_T<double>>* loc2 = new Location<FLOAT_T<double>>();
 	hypro::Transition<FLOAT_T<double>>* trans = new hypro::Transition<FLOAT_T<double>>();
-	HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>>();
+	HybridAutomaton<FLOAT_T<double>, hypro::VPolytope<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::VPolytope<FLOAT_T<double>>>();
 
 	//Other Objects: Vectors, Matrices, Guards...
 	vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
@@ -40,8 +41,8 @@ int main(int argc, char const *argv[])
 
 	vector_t<FLOAT_T<double>> coordinates = vector_t<FLOAT_T<double>>(2,1);
 	Point<FLOAT_T<double>> p1;
-	hypro::Polytope<FLOAT_T<double>> poly;
-	hypro::Polytope<FLOAT_T<double>> pPoly;
+	hypro::VPolytope<FLOAT_T<double>> poly;
+	hypro::VPolytope<FLOAT_T<double>> pPoly;
 
 	//Box
 	vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
@@ -166,11 +167,11 @@ int main(int argc, char const *argv[])
 	boxMat(5,1) = 0;
 	boxMat(5,2) = -1;
 
-	poly = Polytope<FLOAT_T<double>>(boxMat,boxVec);
+	poly = VPolytope<FLOAT_T<double>>(boxMat,boxVec);
 
 	hybrid.setValuation(poly);
 
-	std::vector<hypro::valuation_t<FLOAT_T<double>>> flowpipe;
+	std::vector<VPolytope<FLOAT_T<double>>> flowpipe;
 
    	std::cout << "original Polytope (Box): ";
     poly.print();

@@ -174,6 +174,10 @@ class VPolytope : public hypro::GeometricObject<Number>
 		{
 			return mVertices.end();
 		}
+
+		void print() const {
+			std::cout << *this << std::endl;
+		}
 		
 		private:
 	/***************************************************************************
