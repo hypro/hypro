@@ -23,7 +23,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const Point<Number>& point)
 	{
-		mVertices.insert(point);
+		mVertices.push_back(point);
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = true;
@@ -31,9 +31,11 @@ namespace hypro
 	}
 
 	template<typename Number>
-	VPolytope<Number>::VPolytope(const vertexSet& points)
+	VPolytope<Number>::VPolytope(const pointVector& points)
 	{
-		mVertices.insert(points.begin(), points.end());
+		for(const auto point : points) {
+			mVertices.push_back(point);
+		}
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = false;
@@ -41,9 +43,9 @@ namespace hypro
 	}
 
 	template<typename Number>
-	VPolytope<Number>::VPolytope(const std::vector<Point<Number>> points) {
+	VPolytope<Number>::VPolytope(const std::set<vector_t<Number>> points) {
 		for(const auto& point : points) {
-			mVertices.insert(point.rawCoordinates());
+			mVertices.push_back<(Point<Number>(point));
 		}
 		mFanSet = false;
 		mReduced = false;
@@ -79,7 +81,9 @@ namespace hypro
 		}
 
 		// finish initialization
-		mVertices.insert(possibleVertices.begin(), possibleVertices.end());
+		for(const auto& point : possibleVertices) {
+			mVertices.push_back<(Point<Number>(point));
+		}
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = false;
@@ -89,7 +93,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const VPolytope& orig)
 	{
-		mVertices.insert(orig.begin(), orig.end());
+		mVertices.insert(mVertices.end(), orig.begin(), orig.end());
 		mFan = polytope::Fan<Number>();
 		mFanSet = false; // TODO: Include getter fpr this
 		mReduced = orig.reduced(); // TODO: Include getter fpr this
@@ -102,7 +106,7 @@ namespace hypro
 	{
 		VPolytope<Number> result;
 		for(const auto& vertex : mVertices) {
-			result.insert(A*vertex);
+			result.insert(vertex.linearTransformation(A));
 		}
 		result.setCone(mCone.linearTransformation(A));
 		return result;
@@ -127,7 +131,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::intersect(const VPolytope<Number>& rhs) const {
 		// create a set of possible points via combination of all coordinates
-		vertexSet possibleVertices;
+		pointVector possibleVertices;
 		for(const auto& lhsVertex : mVertices) {
 			possibleVertices.insert(lhsVertex);
 			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rows(); ++coordIndex) {
@@ -227,7 +231,7 @@ namespace hypro
 			mJa = new int[size+1];
 			mAr = new double[size+1];
 			unsigned pos = 1;
-			typename vertexSet::iterator vertex = mVertices.begin();
+			typename pointVector::iterator vertex = mVertices.begin();
 			for(unsigned i = 1; i <= this->dimension()+1; ++i) {
 				for(unsigned j = 1; j <= mVertices.size(); ++j) {
 					mIa[pos] = i; mJa[pos] = j;

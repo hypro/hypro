@@ -192,7 +192,7 @@ int main(int argc, char const *argv[])
    		std::cout << "Flowpipe segment to be converted: " << std::endl;
    		poly.print();
    		std::cout << std::endl;
-   		std::vector<Point<FLOAT_T<double>>> points = poly.points();
+   		std::set<vector_t<FLOAT_T<double>>> points = poly.vertices();
    		if(!points.empty()) {
    			std::cout << "Polycount: " << count << std::endl;
    			for(auto& point : points) {

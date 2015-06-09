@@ -25,14 +25,14 @@ template<typename Number>
 class VPolytope : public hypro::GeometricObject<Number>
 {
 	public:
-		typedef typename std::set<vector_t<Number>> vertexSet;
+		typedef typename std::vector<Point<Number>> pointVector;
 		typedef typename hypro::polytope::Cone<Number> Cone;
 		typedef typename hypro::polytope::Fan<Number> Fan;
 		/***************************************************************************
 	 * Members
 	 **************************************************************************/
 	private:
-		vertexSet                      mVertices;
+		pointVector                      mPoints;
 		Cone 						mCone;
 		mutable Fan                    mFan;
 		bool                           mFanSet;
@@ -54,7 +54,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 	// constructors for bounded v-polyhedra -> v-polytopes
 		VPolytope();
 		VPolytope(const Point<Number>& point);
-		VPolytope(const vertexSet& points);
+		VPolytope(const pointVector& points);
 		VPolytope(const std::vector<Point<Number>> points);
 		VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants);
 
@@ -91,13 +91,13 @@ class VPolytope : public hypro::GeometricObject<Number>
 		
 		unsigned int dimension() const
 		{
-			if(mVertices.empty())
+			if(mPoints.empty())
 				return 0;
-			return mVertices.begin()->rows();
+			return mPoints.begin()->rows();
 		}
 		
 		unsigned size() const {
-			return mVertices.size();
+			return mPoints.size();
 		}
 		
 		bool reduced() const {
@@ -120,59 +120,59 @@ class VPolytope : public hypro::GeometricObject<Number>
 			mCone = _cone;
 		}
 		
-		std::pair<typename vertexSet::iterator, bool> insert(const Point<Number>& i)
+		std::pair<typename pointVector::iterator, bool> insert(const Point<Number>& i)
 		{
 			assert(dimension() == 0 || dimension() == i.dimension());
 			mReduced = false;
-			return mVertices.insert(i.rawCoordinates());
+			return mPoints.insert(i.rawCoordinates());
 		}
 
-		std::pair<typename vertexSet::iterator, bool> insert(const vector_t<Number>& _coord) {
+		std::pair<typename pointVector::iterator, bool> insert(const vector_t<Number>& _coord) {
 			assert(dimension() == 0 || dimension() == _coord.rows());
 			mReduced = false;
-			return mVertices.insert(_coord);
+			return mPoints.insert(_coord);
 		}
 		
-		void insert(const typename vertexSet::iterator begin, const typename vertexSet::iterator end)
+		void insert(const typename pointVector::iterator begin, const typename pointVector::iterator end)
 		{
 			assert(dimension() == 0 || dimension() == begin->rows());
-			mVertices.insert(begin,end);
+			mPoints.insert(begin,end);
 			mReduced = false;
 		}
 		
-		const vertexSet& vertices() const
+		const pointVector& points() const
 		{
-			return mVertices;
+			return mPoints;
 		}
 		
 		bool hasVertex(const Point<Number>& vertex) const
 		{
-			return (mVertices.find(vertex.rawCoordinates()) != mVertices.end());
+			return (mPoints.find(vertex.rawCoordinates()) != mPoints.end());
 		}
 
 		bool hasVertex(const vector_t<Number>& vertex) const
 		{
-			return (mVertices.find(vertex) != mVertices.end());
+			return (mPoints.find(vertex) != mPoints.end());
 		}
 		
-		typename vertexSet::iterator begin()
+		typename pointVector::iterator begin()
 		{
-			return mVertices.begin();
+			return mPoints.begin();
 		}
 
-		typename vertexSet::const_iterator begin() const
+		typename pointVector::const_iterator begin() const
 		{
-			return mVertices.begin();
+			return mPoints.begin();
 		}
 		
-		typename vertexSet::iterator end()
+		typename pointVector::iterator end()
 		{
-			return mVertices.end();
+			return mPoints.end();
 		}
 
-		typename vertexSet::const_iterator end() const
+		typename pointVector::const_iterator end() const
 		{
-			return mVertices.end();
+			return mPoints.end();
 		}
 
 		void print() const {
