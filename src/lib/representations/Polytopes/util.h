@@ -22,7 +22,7 @@ namespace hypro
 namespace polytope
 {
 
-	static std::vector<std::vector<unsigned>> dPermutation(unsigned size, unsigned d) {
+	static inline std::vector<std::vector<unsigned>> dPermutation(unsigned size, unsigned d) {
 		// get all combinations and filter those of size d
 		std::vector<vector<unsigned>> result;
 		for(unsigned i = 0; i < pow(size,2) ; ++i) {
