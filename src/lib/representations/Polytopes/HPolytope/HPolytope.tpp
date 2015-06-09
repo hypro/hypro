@@ -104,8 +104,8 @@ namespace hypro
 	}
 
 	template<typename Number>
-	typename VPolytope<Number>::vertexSet HPolytope<Number>::vertices() const {
-		typename VPolytope<Number>::vertexSet vertices;
+	typename VPolytope<Number>::pointVector HPolytope<Number>::vertices() const {
+		typename VPolytope<Number>::pointVector vertices;
 		for(unsigned planeA = 0; planeA < mHPlanes.size()-1; ++planeA) {
 			for(unsigned planeB = planeA+1; planeB < mHPlanes.size(); ++planeB) {
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
@@ -128,7 +128,7 @@ namespace hypro
 				
 				//	Number relative_error = (A*res - b).norm() / b.norm(); 
 
-				vertices.insert(res);
+				vertices.insert(Point<Number>(res));
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
@@ -224,6 +224,11 @@ namespace hypro
 				return false;
 		}
 		return cnt >= mDimension;
+	}
+
+	template<typename Number>
+	bool HPolytope<Number>::isExtremePoint(const Point<Number>& point, const Number& tolerance) const {
+		return isExtremePoint(point.rawCoordinates(), tolerance);
 	}
 
 	template<typename Number>

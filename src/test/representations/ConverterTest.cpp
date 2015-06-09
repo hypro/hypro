@@ -55,11 +55,11 @@ protected:
 		vector_t<Number> p4 = vector_t<Number>(2);
 		p4(0) = 1;
 		p4(1) = 4;
-		typename VPolytope<Number>::vertexSet points;
-		points.insert(p1);
-		points.insert(p2);
-		points.insert(p3);
-		points.insert(p4);
+		typename VPolytope<Number>::pointVector points;
+		points.push_back(Point<Number>(p1));
+		points.push_back(Point<Number>(p2));
+		points.push_back(Point<Number>(p3));
+		points.push_back(Point<Number>(p4));
 		vpolytope = VPolytope<Number>(points);
 
 		std::vector<vector_t<Number>> coordinates;

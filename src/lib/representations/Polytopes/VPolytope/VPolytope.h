@@ -55,7 +55,6 @@ class VPolytope : public hypro::GeometricObject<Number>
 		VPolytope();
 		VPolytope(const Point<Number>& point);
 		VPolytope(const pointVector& points);
-		VPolytope(const std::vector<Point<Number>> points);
 		VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants);
 
 		VPolytope(const VPolytope& orig);
@@ -93,7 +92,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 		{
 			if(mPoints.empty())
 				return 0;
-			return mPoints.begin()->rows();
+			return mPoints[0].dimension();
 		}
 		
 		unsigned size() const {
@@ -140,7 +139,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 			mReduced = false;
 		}
 		
-		const pointVector& points() const
+		const pointVector& vertices() const
 		{
 			return mPoints;
 		}

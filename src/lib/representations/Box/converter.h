@@ -41,15 +41,15 @@ namespace hypro {
 
 	template<typename Number>
 	bool convert(const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target) {
-		typename VPolytope<Number>::vertexSet vertices = _source.vertices();
+		typename VPolytope<Number>::pointVector vertices = _source.vertices();
 		assert(!vertices.empty());
-		vector_t<Number> minima = *vertices.begin();
-		vector_t<Number> maxima = *vertices.begin();
+		vector_t<Number> minima = vertices[0].rawCoordinates();
+		vector_t<Number> maxima = vertices[0].rawCoordinates();
 
 		for(const auto& vertex : vertices) {
 			for(unsigned d=0; d<_source.dimension(); ++d) {
-				minima(d) = vertex(d) < minima(d) ? vertex(d) : minima(d);
-				maxima(d) = vertex(d) > maxima(d) ? vertex(d) : maxima(d);
+				minima(d) = vertex.at(d) < minima(d) ? vertex.at(d) : minima(d);
+				maxima(d) = vertex.at(d) > maxima(d) ? vertex.at(d) : maxima(d);
 				assert(minima(d) <= maxima(d));
 			}
 		}
@@ -65,15 +65,15 @@ namespace hypro {
 
 	template<typename Number>
 	bool convert(const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target) {
-		typename VPolytope<Number>::vertexSet vertices = _source.vertices();
+		typename VPolytope<Number>::pointVector vertices = _source.vertices();
 		assert(!vertices.empty());
-		vector_t<Number> minima = *vertices.begin();
-		vector_t<Number> maxima = *vertices.begin();
+		vector_t<Number> minima = vertices->begin().rawCoordinates();
+		vector_t<Number> maxima = vertices->begin().rawCoordinates();
 
 		for(const auto& vertex : vertices) {
 			for(unsigned d=0; d<_source.dimension(); ++d) {
-				minima(d) = vertex(d) < minima(d) ? vertex(d) : minima(d);
-				maxima(d) = vertex(d) > maxima(d) ? vertex(d) : maxima(d);
+				minima(d) = vertex.at(d) < minima(d) ? vertex.at(d) : minima(d);
+				maxima(d) = vertex.at(d) > maxima(d) ? vertex.at(d) : maxima(d);
 				assert(minima(d) <= maxima(d));
 			}
 		}

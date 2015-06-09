@@ -13,7 +13,7 @@ namespace hypro
 {
 	template<typename Number>
 	VPolytope<Number>::VPolytope() : 
-		mVertices(),
+		mPoints(),
 		mFan(),
 		mFanSet(false),
 		mReduced(true),
@@ -23,7 +23,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const Point<Number>& point)
 	{
-		mVertices.push_back(point);
+		mPoints.push_back(point);
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = true;
@@ -34,19 +34,9 @@ namespace hypro
 	VPolytope<Number>::VPolytope(const pointVector& points)
 	{
 		for(const auto point : points) {
-			mVertices.push_back(point);
+			mPoints.push_back(point);
 		}
 		mFan = polytope::Fan<Number>();
-		mFanSet = false;
-		mReduced = false;
-		mInitialized = false;
-	}
-
-	template<typename Number>
-	VPolytope<Number>::VPolytope(const std::set<vector_t<Number>> points) {
-		for(const auto& point : points) {
-			mVertices.push_back<(Point<Number>(point));
-		}
 		mFanSet = false;
 		mReduced = false;
 		mInitialized = false;
@@ -82,7 +72,7 @@ namespace hypro
 
 		// finish initialization
 		for(const auto& point : possibleVertices) {
-			mVertices.push_back<(Point<Number>(point));
+			mPoints.push_back(Point<Number>(point));
 		}
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
@@ -93,7 +83,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const VPolytope& orig)
 	{
-		mVertices.insert(mVertices.end(), orig.begin(), orig.end());
+		mPoints.insert(mPoints.end(), orig.begin(), orig.end());
 		mFan = polytope::Fan<Number>();
 		mFanSet = false; // TODO: Include getter fpr this
 		mReduced = orig.reduced(); // TODO: Include getter fpr this
@@ -105,7 +95,7 @@ namespace hypro
 	VPolytope<Number> VPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const
 	{
 		VPolytope<Number> result;
-		for(const auto& vertex : mVertices) {
+		for(const auto& vertex : mPoints) {
 			result.insert(vertex.linearTransformation(A));
 		}
 		result.setCone(mCone.linearTransformation(A));
@@ -117,9 +107,9 @@ namespace hypro
 	{
 		VPolytope<Number> result;
 		// add each rhs-vertex to each vertex of this polytope.
-		for(auto lhsVertex : mVertices)
+		for(auto lhsVertex : mPoints)
 		{
-			for(auto rhsVertex : rhs.mVertices)
+			for(auto rhsVertex : rhs.mPoints)
 			{
 				result.insert(lhsVertex+rhsVertex);
 			}
@@ -132,12 +122,12 @@ namespace hypro
 	VPolytope<Number> VPolytope<Number>::intersect(const VPolytope<Number>& rhs) const {
 		// create a set of possible points via combination of all coordinates
 		pointVector possibleVertices;
-		for(const auto& lhsVertex : mVertices) {
-			possibleVertices.insert(lhsVertex);
-			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rows(); ++coordIndex) {
-				for(const auto& rhsVertex : rhs.mVertices) {
-					vector_t<Number> newVertex = rhsVertex;
-					newVertex(coordIndex) = lhsVertex(coordIndex);
+		for(const auto& lhsVertex : mPoints) {
+			possibleVertices.push_back(lhsVertex);
+			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rawCoordinates().rows(); ++coordIndex) {
+				for(const auto& rhsVertex : rhs.mPoints) {
+					vector_t<Number> newVertex = rhsVertex.rawCoordinates();
+					newVertex(coordIndex) = lhsVertex.at(coordIndex);
 					possibleVertices.insert(vector_t<Number>(newVertex));
 					possibleVertices.insert(vector_t<Number>(rhsVertex));
 				}
@@ -173,7 +163,7 @@ namespace hypro
 		
 		glp_set_row_bnds(mLp, vec.rows()+1, GLP_FX,1.0,0); // the sum of the vectors equals exactly one.
 		
-		for(unsigned i = 1; i <= mVertices.size(); ++i){
+		for(unsigned i = 1; i <= mPoints.size(); ++i){
 			glp_set_col_bnds(mLp,i, GLP_DB, 0.0, 1.0);
 			glp_set_obj_coef(mLp,i,1.0); // the objective function is max: v1 + v2 + v3 + ... + vn
 		}
@@ -190,10 +180,10 @@ namespace hypro
 	{
 		// Todo: Insert more sophisticated convex hull algorithm here.
 		VPolytope<Number> result;
-		result.insert(this->mVertices.begin(), this->mVertices.end());
-		result.insert(rhs.mVertices.begin(),rhs.mVertices.end());
+		result.insert(this->mPoints.begin(), this->mPoints.end());
+		result.insert(rhs.mPoints.begin(),rhs.mPoints.end());
 		/*
-			std::vector<Facet<Number>> facets = convexHull(result.mVertices);
+			std::vector<Facet<Number>> facets = convexHull(result.mPoints);
 			std::set<Point<Number>> preresult;
 			for(unsigned i = 0; i<facets.size(); i++) {
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
@@ -209,7 +199,7 @@ namespace hypro
 	template<typename Number>
 	void VPolytope<Number>::clear()
 	{
-		mVertices.clear();
+		mPoints.clear();
 	}
 	
 	/***************************************************************************
@@ -223,17 +213,17 @@ namespace hypro
 			glp_init_smcp(&mOptions);
 			mOptions.msg_lev = GLP_MSG_OFF;
 			glp_add_rows(mLp, this->dimension()+1);
-			glp_add_cols(mLp, mVertices.size());
+			glp_add_cols(mLp, mPoints.size());
 
 			// prepare matrix
-			unsigned size = mVertices.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
+			unsigned size = mPoints.size()*(this->dimension()+1); // add one row to hold the constraint that all add up to one.
 			mIa = new int[size+1];
 			mJa = new int[size+1];
 			mAr = new double[size+1];
 			unsigned pos = 1;
-			typename pointVector::iterator vertex = mVertices.begin();
+			typename pointVector::iterator vertex = mPoints.begin();
 			for(unsigned i = 1; i <= this->dimension()+1; ++i) {
-				for(unsigned j = 1; j <= mVertices.size(); ++j) {
+				for(unsigned j = 1; j <= mPoints.size(); ++j) {
 					mIa[pos] = i; mJa[pos] = j;
 					if(i == this->dimension()+1) {
 						mAr[pos] = 1.0;
@@ -245,7 +235,7 @@ namespace hypro
 					++pos;
 					++vertex;
 				}
-				vertex = mVertices.begin();
+				vertex = mPoints.begin();
 			}
 			glp_load_matrix(mLp,size, mIa, mJa, mAr);
 			mInitialized = true;
@@ -256,7 +246,7 @@ namespace hypro
 	const typename VPolytope<Number>::Fan& VPolytope<Number>::calculateFan() const
 	{
 		if(!mFanSet) {
-			std::vector<Facet<Number>> facets = convexHull(mVertices);
+			std::vector<Facet<Number>> facets = convexHull(mPoints);
 			std::set<Point<Number>> preresult;
 			for(unsigned i = 0; i<facets.size(); i++) {
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
