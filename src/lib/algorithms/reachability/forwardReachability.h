@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../config.h"
 #include "util.h"
@@ -31,7 +29,7 @@ namespace hypro
 #endif
 
 				//Polytope that is defined by the invariant
-				hypro::Polytope<Number> poly = hypro::Polytope<Number>(_loc.invariant().mat, _loc.invariant().vec);
+				Representation poly = Representation(_loc.invariant().mat, _loc.invariant().vec);
 
 #ifdef fReach_DEBUG
 			   	std::cout << "invariant Polytope: ";
@@ -85,7 +83,7 @@ namespace hypro
 					//---
 
 					//e^(At)*X0 = polytope at t=delta
-					hypro::valuation_t<Number> deltaValuation = _val.linearTransformation(resultMatrix);
+					Representation deltaValuation = _val.linearTransformation(resultMatrix);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope at t=delta: ";
@@ -93,24 +91,15 @@ namespace hypro
 #endif
 
 					// R_0(X0) U R_delta(X0)
-					hypro::valuation_t<Number> unitePolytope = _val.unite(deltaValuation);
+					Representation unitePolytope = _val.unite(deltaValuation);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope after unite with R0: ";
 				    unitePolytope.print();
 #endif
 
-					// CH( R_0(X0) U R_delta(X0) )
-					hypro::valuation_t<Number> hullPolytope;
-					hullPolytope = unitePolytope.hull();
-
-#ifdef fReach_DEBUG
-				   	std::cout << "Convex Hull (Polytope): ";
-				    hullPolytope.print();
-#endif
-
 					//bloat hullPolytope (Hausdorff distance)
-					hypro::valuation_t<Number> firstSegment;
+					Representation firstSegment;
 					Number radius;
 					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
@@ -121,19 +110,19 @@ namespace hypro
 #endif
 
 					unsigned int dim;
-					dim = hullPolytope.dimension();
+					dim = unitePolytope.dimension();
 
-					hypro::valuation_t<Number> hausPoly = hypro::computePolytope(dim, radius);
+					Representation hausPoly = hypro::computePolytope(dim, radius);
 
 #ifdef fReach_DEBUG
 					std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
-					std::cout << "hullPolytope dimension: " << hullPolytope.dimension() << std::endl;
+					std::cout << "hullPolytope dimension: " << unitePolytope.dimension() << std::endl;
 				   	std::cout << "Hausdorff Polytope (Box): ";
 				    hausPoly.print();
 #endif
 
 					//hullPolytope +_minkowski hausPoly
-					firstSegment = hullPolytope.minkowskiSum(hausPoly);
+					firstSegment = unitePolytope.minkowskiSum(hausPoly);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";
@@ -144,11 +133,11 @@ namespace hypro
 					flowpipe.push_back(firstSegment);
 
 					//set the last segment of the flowpipe
-					hypro::valuation_t<Number> lastSegment;
+					Representation lastSegment;
 					lastSegment = firstSegment;
 
 					//Polytope after linear transformation
-					hypro::valuation_t<Number> resultPolytope;
+					Representation resultPolytope;
 
 #ifdef fReach_DEBUG
 					std::cout << "--- Loop entered ---" << std::endl;
@@ -164,7 +153,7 @@ namespace hypro
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
 						resultPolytope = lastSegment.linearTransformation(resultMatrix);
-						resultPolytope = resultPolytope.hull();
+						//resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
 					   	std::cout << "Next Flowpipe Segment: ";

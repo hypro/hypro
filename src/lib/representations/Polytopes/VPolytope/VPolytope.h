@@ -80,6 +80,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 		VPolytope intersect(const VPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const vector_t<Number>& vec) const;
+		bool contains(const VPolytope<Number>& _other) const;
 		VPolytope unite(const VPolytope& rhs) const;
 
 		void clear();

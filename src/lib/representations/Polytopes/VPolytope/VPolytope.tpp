@@ -174,6 +174,15 @@ namespace hypro
 		
 		return interiorPoint;
 	}
+
+	template<typename Number>
+	bool VPolytope<Number>::contains(const VPolytope<Number>& _other) const {
+		for(const auto& vertex : _other.vertices()) {
+			if(!this->contains(vertex))
+				return false;
+		}
+		return true;
+	}
 	
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
