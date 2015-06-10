@@ -426,9 +426,9 @@ namespace hypro {
             /**
              * Makes a linear transformation, ie A * p + b
              */
-            void linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>())
+            Point<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const
             {
-            	mCoordinates = A*mCoordinates + b;
+            	return Point<Number>(A*mCoordinates + b);
             }
 
             /**

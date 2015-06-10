@@ -128,8 +128,8 @@ namespace hypro
 				for(const auto& rhsVertex : rhs.mPoints) {
 					vector_t<Number> newVertex = rhsVertex.rawCoordinates();
 					newVertex(coordIndex) = lhsVertex.at(coordIndex);
-					possibleVertices.insert(vector_t<Number>(newVertex));
-					possibleVertices.insert(vector_t<Number>(rhsVertex));
+					possibleVertices.push_back(vector_t<Number>(newVertex));
+					possibleVertices.push_back(vector_t<Number>(rhsVertex));
 				}
 			}
 		}
@@ -221,7 +221,7 @@ namespace hypro
 			mJa = new int[size+1];
 			mAr = new double[size+1];
 			unsigned pos = 1;
-			typename pointVector::iterator vertex = mPoints.begin();
+			typename pointVector::const_iterator vertex = mPoints.begin();
 			for(unsigned i = 1; i <= this->dimension()+1; ++i) {
 				for(unsigned j = 1; j <= mPoints.size(); ++j) {
 					mIa[pos] = i; mJa[pos] = j;
@@ -229,7 +229,7 @@ namespace hypro
 						mAr[pos] = 1.0;
 //						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]= 1.0" << std::endl;
 					}else{
-						mAr[pos] = double((*vertex)(i-1));
+						mAr[pos] = double((*vertex).at(i-1));
 //						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
 					}
 					++pos;

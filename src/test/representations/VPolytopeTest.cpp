@@ -39,23 +39,23 @@ protected:
 		p8(0) = 2;
 		p8(1) = 3;
 
-		points1.insert(p1);
-		points1.insert(p2);
-		points1.insert(p3);
-		points1.insert(p4);
+		points1.push_back(Point<Number>(p1));
+		points1.push_back(Point<Number>(p2));
+		points1.push_back(Point<Number>(p3));
+		points1.push_back(Point<Number>(p4));
 		
-		points2.insert(p5);
-		points2.insert(p6);
-		points2.insert(p7);
-		points2.insert(p8);
+		points2.push_back(Point<Number>(p5));
+		points2.push_back(Point<Number>(p6));
+		points2.push_back(Point<Number>(p7));
+		points2.push_back(Point<Number>(p8));
 	}
 	
 	virtual void TearDown()
 	{
 	}
 
-	typename VPolytope<Number>::vertexSet points1;
-	typename VPolytope<Number>::vertexSet points2;
+	typename VPolytope<Number>::pointVector points1;
+	typename VPolytope<Number>::pointVector points2;
 };
 
 TYPED_TEST(VPolytopeTest, Constructor)
@@ -77,7 +77,7 @@ TYPED_TEST(VPolytopeTest, Access)
 	EXPECT_FALSE(vpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = vpt1.fan();
 		
-	typename VPolytope<TypeParam>::vertexSet vertices =  vpt1.vertices();
+	typename VPolytope<TypeParam>::pointVector vertices =  vpt1.vertices();
 	for(auto& vertex : vertices) {
 		EXPECT_TRUE(vpt1.hasVertex(vertex));
 	}
@@ -128,7 +128,7 @@ TYPED_TEST(VPolytopeTest, LinearTransformation)
 	VPolytope<TypeParam> res = vpt1.linearTransformation(A);
 
 	for(auto& vertex : vpt1.vertices()) {
-		EXPECT_TRUE(res.hasVertex(Point<TypeParam>(vector_t<TypeParam>(A*vertex))));
+		EXPECT_TRUE(res.hasVertex(Point<TypeParam>(vector_t<TypeParam>(A*vertex.rawCoordinates()))));
 	}
 }
 

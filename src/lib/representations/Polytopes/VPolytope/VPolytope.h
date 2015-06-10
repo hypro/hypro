@@ -119,24 +119,24 @@ class VPolytope : public hypro::GeometricObject<Number>
 			mCone = _cone;
 		}
 		
-		std::pair<typename pointVector::iterator, bool> insert(const Point<Number>& i)
+		typename pointVector::iterator insert(const Point<Number>& i)
 		{
 			assert(dimension() == 0 || dimension() == i.dimension());
 			mReduced = false;
-			return mPoints.insert(i.rawCoordinates());
+			return mPoints.insert(mPoints.end(), i);
 		}
 
-		std::pair<typename pointVector::iterator, bool> insert(const vector_t<Number>& _coord) {
+		typename pointVector::iterator insert(const vector_t<Number>& _coord) {
 			assert(dimension() == 0 || dimension() == _coord.rows());
 			mReduced = false;
-			return mPoints.insert(_coord);
+			return mPoints.insert(mPoints.end(), Point<Number>(_coord));
 		}
 		
-		void insert(const typename pointVector::iterator begin, const typename pointVector::iterator end)
+		typename pointVector::iterator insert(const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)
 		{
-			assert(dimension() == 0 || dimension() == begin->rows());
-			mPoints.insert(begin,end);
+			assert(dimension() == 0 || dimension() == begin->dimension());
 			mReduced = false;
+			return mPoints.insert(mPoints.end(),begin,end);
 		}
 		
 		const pointVector& vertices() const
@@ -146,7 +146,11 @@ class VPolytope : public hypro::GeometricObject<Number>
 		
 		bool hasVertex(const Point<Number>& vertex) const
 		{
-			return (mPoints.find(vertex.rawCoordinates()) != mPoints.end());
+			for(const auto point : mPoints) {
+				if(point == vertex)
+					return true;
+			}
+			return false;
 		}
 
 		bool hasVertex(const vector_t<Number>& vertex) const

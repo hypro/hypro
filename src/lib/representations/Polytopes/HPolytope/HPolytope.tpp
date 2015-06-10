@@ -128,7 +128,7 @@ namespace hypro
 				
 				//	Number relative_error = (A*res - b).norm() / b.norm(); 
 
-				vertices.insert(Point<Number>(res));
+				vertices.push_back(Point<Number>(res));
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
