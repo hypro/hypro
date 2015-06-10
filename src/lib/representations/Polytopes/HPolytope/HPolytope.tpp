@@ -158,7 +158,7 @@ namespace hypro
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 					if(point == facets[i].vertices().at(j))	{
 						//cone->add(std::shared_ptr<Hyperplane<Number>>(facet[i].hyperplane())); //works?
-						cone->add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));	
+						cone.add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));	
 						break;
 					}					
 				}			
