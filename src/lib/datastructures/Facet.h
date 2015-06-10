@@ -64,6 +64,17 @@ class Facet
 
 		}
 		
+		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& outsidePoints, const std::vector<Point<Number>>& currentOutside, const Point<Number>& insidePoint)
+		{
+			r.push_back(p);
+			setPoints(r, outsidePoints, currentOutside, insidePoint);
+			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			//mHyperplane = Hyperplane<Number>(mVertices);
+			mNeighbors = std::vector<Facet<Number>>();
+			mOutsideSet = std::vector<Point<Number>>();
+
+		}
+
 		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& insidePoints)
 		{
 			r.push_back(p);
@@ -220,6 +231,59 @@ class Facet
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			}
 		}
+
+		void setPoints(std::vector<Point<Number>> points, const std::vector<Point<Number>>& outsidePoints, const std::vector<Point<Number>>& currentOutside, Point<Number> _insidePoint)
+		{
+			if(mVertices.empty()) {
+				for(unsigned i = 0; i < points.size(); i++) {
+					mVertices.push_back(points[i]);
+				}
+
+				mNormal = getNormalVector();
+				mScalar = getScalarVector();
+
+				//std::cout << __func__ << " : " << __LINE__ << std::endl;
+				//std::cout << mNormal << std::endl;
+				//std::cout << _insidePoint << "  " << mScalar << std::endl;
+				bool inside = false;
+				bool outside = false;
+				bool change = true;
+				for(unsigned i = 0; i < outsidePoints.size() ; i++) {
+					change = true;
+					Number temp = Number (mNormal.dot(outsidePoints.at(i).rawCoordinates()));
+					if(temp-mScalar>0){
+						outside = true;
+						for(unsigned j = 0; j < currentOutside.size() ; j++) {
+							if(outsidePoints.at(i) == currentOutside.at(j)){
+								change = false;
+							}
+						}
+						if(change) {
+							mNormal *= -1;
+							mScalar = getScalarVector();
+							outside = inside;
+							inside = true;
+							break;
+						}
+					}
+					else{
+						if(temp-mScalar<0){
+							inside = true;
+						}
+					}
+				}
+
+				if(!change && (!inside || !outside)){
+					if(isBelow(_insidePoint)){
+						mNormal *= -1;
+						mScalar = getScalarVector();
+					}
+				}
+
+				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			}
+		}
+
 
 		void addPoint(Point<Number> p) {
 			mVertices.push_back(p);

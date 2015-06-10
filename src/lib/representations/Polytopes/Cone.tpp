@@ -84,6 +84,7 @@ namespace polytope {
 	template<typename Number>
 	void Cone<Number>::add(std::shared_ptr<Hyperplane<Number>> _plane) {
 		// TODO
+		mPlanes.push_back(_plane);
 	}
 
 	template<typename Number>

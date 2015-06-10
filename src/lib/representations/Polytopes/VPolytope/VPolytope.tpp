@@ -229,7 +229,7 @@ namespace hypro
 				for(unsigned i = 0; i<facets.size(); i++) {
 					for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 						if(point == facets[i].vertices().at(j))	{
-							cone->add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));
+							cone->add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));						
 							break;
 						}					
 					}			

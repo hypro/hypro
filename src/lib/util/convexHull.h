@@ -670,8 +670,8 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 			 					}
 			 				}
 			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
-			 					//Point<Number> insidePoint = polytope::findInsidePoint(ridges.at(j), facet);
-			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, assignedPoints); //assignedPoints
+			 					Point<Number> insidePoint = findInsidePoint(ridges.at(j), facet);
+			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, unassignedPoints, facet.getOutsideSet(), insidePoint); //assignedPoints
 			 					newFacet.addNeighbor(ridges.at(j).rNeighbors().at(i));
 			 					ridges.at(j).rNeighbors().at(i).addNeighbor(newFacet);
 			 					newFacets.push_back(newFacet);
