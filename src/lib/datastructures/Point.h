@@ -428,7 +428,10 @@ namespace hypro {
              */
             Point<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const
             {
-            	return Point<Number>(A*mCoordinates + b);
+            	if(A.cols() == b.rows())
+            		return Point<Number>(A*mCoordinates + b);
+            	else
+            		return Point<Number>(A*mCoordinates);
             }
 
             /**

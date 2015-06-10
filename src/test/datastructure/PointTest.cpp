@@ -257,25 +257,10 @@ TYPED_TEST(PointTest, LinearTransformation) {
 	}));
 
 	typename hypro::vector_t<TypeParam> v = createVector(std::vector<TypeParam>({6, 1}));
-
 	typename Point<TypeParam>::coordinateMap coordinates;
 
-	this->p1.linearTransformation(A, v); // (2; 5)
-
-	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1);
-
-
-	this->p2.linearTransformation(A, v); // (7; 8)
-
-	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2);
-
-
-	this->p3.linearTransformation(A, v); // (9; -13)
-
-	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3);
-
-
-	this->p4.linearTransformation(A, v); // (5; 8)
-
-	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4);
+	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1.linearTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2.linearTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3.linearTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4.linearTransformation(A, v));
 }

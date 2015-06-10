@@ -79,21 +79,23 @@ namespace hypro
         mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron(A.cols(), Parma_Polyhedra_Library::UNIVERSE);
         for(unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex)
         {
+        	//std::cout << "Process row " << rowIndex << std::endl;
             Parma_Polyhedra_Library::Linear_Expression polynom;
             polynom.set_space_dimension(A.cols());
             for(unsigned columIndex = 0; columIndex < A.cols(); ++columIndex)
             {
-            	//std::cout << "Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR).toDouble() << std::endl;
+            	//std::cout <<"(" << columIndex << ") Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR) << std::endl;
             	polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), double(A(rowIndex,columIndex)*fReach_DENOMINATOR));
                 //polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex), A(rowIndex,columIndex).toDouble());
                 //std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " << A(rowIndex,columIndex).toDouble() << std::endl;
             }
-            //std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR).toDouble() << std::endl;
+            //std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR) << std::endl;
             polynom.set_inhomogeneous_term(-double(b(rowIndex,0)*fReach_DENOMINATOR));
             //polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
             
+            //std::cout << "Add Polynom." << std::endl;
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);
         }
