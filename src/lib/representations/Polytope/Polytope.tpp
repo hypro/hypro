@@ -200,7 +200,6 @@ namespace hypro
     	}*/
     	return mPoints;
     }
-    
 
     //returns the fan of the Polytope
     template<typename Number>

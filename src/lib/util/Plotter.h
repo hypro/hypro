@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "../config.h"
 #include <carl/util/Singleton.h>
 #include <vector>
 #include <string>
@@ -51,7 +52,8 @@ namespace hypro {
 	private:
 		// auxiliary functions
 		void init(const std::string& _filename);
-		void convexHull(std::vector<Point<Number>>& _points);
+		void grahamScan(std::vector<Point<Number>>& _points);
+		bool isLeftTurn(const Point<Number>& a, const Point<Number>& b, const Point<Number>& c);
 	};
 
 

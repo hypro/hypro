@@ -203,6 +203,19 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 
     SUCCEED();
 }
+
+TYPED_TEST(PolytopeUtilTest, dPermutation) {
+	std::vector<std::vector<unsigned>> dperm = dPermutation(4,2);
+
+	for(auto perm : dperm) {
+		std::cout << "permutation (";
+		for(auto item : perm) {
+			std::cout << item << ", ";
+		}
+		std::cout << ")" << std::endl;
+	}
+}
+
 /*
 TYPED_TEST(PolytopeUtilTest, ConeContains)
 {

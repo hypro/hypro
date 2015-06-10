@@ -8,6 +8,7 @@
 #include <carl/core/logging.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
+#include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
 #include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
@@ -67,9 +68,9 @@ using vectorSet = std::set<vector_t<Number>>;
  * author: ckugler
  * Defines for reachability algorithm based on polytopes
  */
-#define fReach_TIMEBOUND 10
-#define fReach_TIMEDISCRETIZATION 10
-#define fReach_DENOMINATOR 1000000
+#define fReach_TIMEBOUND 2
+#define fReach_TIMEDISCRETIZATION 100
+#define fReach_DENOMINATOR 1000000000
 //define for debugging: triggers console output
 #define fReach_DEBUG
 

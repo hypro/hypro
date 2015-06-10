@@ -60,7 +60,7 @@ namespace hypro
 		unsigned size() const;
 		
 		const typename polytope::Fan<Number>& fan() const;
-		typename VPolytope<Number>::vertexSet vertices() const;
+		typename VPolytope<Number>::pointVector vertices() const;
 		
 		void insert(const Hyperplane<Number>& plane);
 		void insert(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
@@ -68,6 +68,7 @@ namespace hypro
 		const HyperplaneVector& constraints() const;
 		bool hasConstraint(const Hyperplane<Number>& hplane) const;
 		bool isExtremePoint(vector_t<Number> point, const Number& tolerance = 0) const;
+		bool isExtremePoint(const Point<Number>& point, const Number& tolerance = 0) const;
 		Number evaluate(const vector_t<Number>& _direction) const;
 		
 		typename HyperplaneVector::iterator begin();
