@@ -88,12 +88,12 @@ namespace hypro
          * Returns the set of points which form the polytope.
          * @return Pointset.
          */
-        const std::vector<Point<Number>>& points();
+        const std::vector<Point<Number>>& vertices();
         
         /*
          *
          */
-        std::vector<Point<Number>>& rPoints();
+        std::vector<Point<Number>>& rVertices();
 
         /*
          * returns the fan of the Polytope

@@ -13,11 +13,13 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
+	typedef hypro::Polytope<FLOAT_T<double>> Representation;
+
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 	Location<FLOAT_T<double>>* loc1 = new Location<FLOAT_T<double>>();
 	Location<FLOAT_T<double>>* loc2 = new Location<FLOAT_T<double>>();
 	hypro::Transition<FLOAT_T<double>>* trans = new hypro::Transition<FLOAT_T<double>>();
-	HybridAutomaton<FLOAT_T<double>, hypro::VPolytope<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::VPolytope<FLOAT_T<double>>>();
+	HybridAutomaton<FLOAT_T<double>, Representation> hybrid = HybridAutomaton<FLOAT_T<double>, Representation>();
 
 	//Other Objects: Vectors, Matrices, Guards...
 	vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
@@ -41,8 +43,8 @@ int main(int argc, char const *argv[])
 
 	vector_t<FLOAT_T<double>> coordinates = vector_t<FLOAT_T<double>>(2,1);
 	Point<FLOAT_T<double>> p1;
-	hypro::VPolytope<FLOAT_T<double>> poly;
-	hypro::VPolytope<FLOAT_T<double>> pPoly;
+	Representation poly;
+	Representation pPoly;
 
 	//Box
 	vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
@@ -167,11 +169,11 @@ int main(int argc, char const *argv[])
 	boxMat(5,1) = 0;
 	boxMat(5,2) = -1;
 
-	poly = VPolytope<FLOAT_T<double>>(boxMat,boxVec);
+	poly = Representation(boxMat,boxVec);
 
 	hybrid.setValuation(poly);
 
-	std::vector<VPolytope<FLOAT_T<double>>> flowpipe;
+	std::vector<Representation> flowpipe;
 
    	std::cout << "original Polytope (Box): ";
     poly.print();
@@ -197,11 +199,13 @@ int main(int argc, char const *argv[])
    			std::cout << "Polycount: " << count << std::endl;
    			for(auto& point : points) {
 	   			point.reduceDimension(2);
-	   			std::cout << point << std::endl;
 	   		}
 	   		plotter.addObject(points);
 	   		points.clear();
 	   		++count;
+   		}
+   		else {
+   			std::cout << "Points empty!" << std::endl;
    		}
    	}
 
