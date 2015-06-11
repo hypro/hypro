@@ -238,6 +238,31 @@ namespace hypro
 		}
 		return false;
 	}
+	
+	
+	template<typename Number>
+	matrix_t<Number> HPolytope<Number>::peter() const{
+		matrix_t<Number> result = matrix_t<Number>(mHPlanes.size(), mHPlanes[0].normal().size());
+		
+		for(unsigned i = 0; i<mHPlanes.size(); i++){
+			for(unsigned j = 0; j< mHPlanes[i].normal().size(); j++){
+				result(i,j) = mHPlanes[i].normal()(j);
+			}
+		} 
+		
+		return result;
+	}
+
+	template<typename Number>
+	vector_t<Number> HPolytope<Number>::getConstraintsOffsetVector() const{
+		vector_t<Number> result = vector_t<Number>(mHPlanes.size());
+		
+		for(unsigned i = 0; i < mHPlanes.size(); i++){
+			result(i) = mHPlanes[i].offset();
+		}
+		
+		return result;
+	}
 
 	template<typename Number>
 	bool HPolytope<Number>::isExtremePoint(vector_t<Number> point, const Number& tolerance) const {

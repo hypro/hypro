@@ -33,6 +33,7 @@ set( EXAMPLES
     example_vertexEnumeration
     example_twotankreachability
     example_convexHull
+    example_HVPolytope
 )
 
 foreach( example ${EXAMPLES} )

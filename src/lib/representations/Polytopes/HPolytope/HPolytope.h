@@ -67,6 +67,10 @@ namespace hypro
 		
 		const HyperplaneVector& constraints() const;
 		bool hasConstraint(const Hyperplane<Number>& hplane) const;
+		
+		matrix_t<Number> peter() const;
+		vector_t<Number> getConstraintsOffsetVector() const;
+		
 		bool isExtremePoint(vector_t<Number> point, const Number& tolerance = 0) const;
 		bool isExtremePoint(const Point<Number>& point, const Number& tolerance = 0) const;
 		Number evaluate(const vector_t<Number>& _direction) const;
@@ -88,6 +92,8 @@ namespace hypro
 		bool contains(const Point<Number>& point) const;
 		bool contains(const vector_t<Number>& vec) const;
 		HPolytope unite(const HPolytope& rhs) const;
+
+		matrix_t<Number> getConstaintsMatrix() const;
 
 		void clear();
 		

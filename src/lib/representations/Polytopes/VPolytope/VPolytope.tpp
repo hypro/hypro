@@ -45,11 +45,15 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
 		// calculate all possible hyperplane intersections -> TODO: dPermutation can be improved.
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		std::vector<std::vector<unsigned>> permutationIndices = polytope::dPermutation(_constraints.rows(), _constraints.cols());
-
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		matrix_t<Number> intersection = matrix_t<Number>(_constraints.cols(), _constraints.cols());
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		vector_t<Number> intersectionConstants = vector_t<Number>(_constraints.cols());
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		std::vector<vector_t<Number>> possibleVertices;
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		for(const auto& permutation : permutationIndices) {
 			unsigned rowCount = 0;
 			for(const auto& rowIndex : permutation) {
@@ -59,21 +63,25 @@ namespace hypro
 			}
 			vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
 			possibleVertices.push_back(vertex);
+			//std::cout<<__func__ << " : " <<__LINE__ << " vertex choices: " << vertex << std::endl;
 		}
-
+		
 		// check if vertices are true vertices (i.e. they fulfill all constraints)
 		for(auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ++vertex){
+		//std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i << std::endl;
+		//std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " << possibleVertices.size() << std::endl;
 			for(unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
 				Number res = vertex->dot(_constraints.row(rowIndex));
-				if(res > _constants(rowIndex))
-					possibleVertices.erase(vertex);
+				if(res > _constants(rowIndex)) 
+					vertex = possibleVertices.erase(vertex) - 1;
 			}
 		}
-
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		// finish initialization
 		for(const auto& point : possibleVertices) {
 			mPoints.push_back(Point<Number>(point));
 		}
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
 		mReduced = false;
