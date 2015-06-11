@@ -170,11 +170,10 @@ namespace hypro
 			}
 			mPointsUpToDate = true;
     	}
-
     }
 
     template<typename Number>
-    const std::vector<Point<Number>>& Polytope<Number>::points()
+    const std::vector<Point<Number>>& Polytope<Number>::vertices()
     {
     	/*
         typename Point<Number>::pointSet result;
@@ -188,13 +187,15 @@ namespace hypro
         return result;
         */
     	if (!mPointsUpToDate) {
+    		std::cout << "update Points" << std::endl;
     		updatePoints();
     	}
+    	assert(!mPoints.empty());
     	return mPoints;
     }
 
     template<typename Number>
-    std::vector<Point<Number>>& Polytope<Number>::rPoints()
+    std::vector<Point<Number>>& Polytope<Number>::rVertices()
     {
     	/*
     	if (!mPointsUpToDate) {
@@ -418,7 +419,6 @@ namespace hypro
         }
         mPoints = newPoints;
         mPointsUpToDate = true;
-
         return result;
     }
     
@@ -765,7 +765,7 @@ namespace hypro
         
         // compute RX_0
         Number max = 0;
-        for(auto& point : points())
+        for(auto& point : this->vertices())
         {
             Number inftyNorm = hypro::Point<Number>::inftyNorm(point);
             max = max > inftyNorm ? max : inftyNorm;

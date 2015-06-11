@@ -117,7 +117,7 @@ namespace hypro {
 	template<typename Number>
 	bool convert(const hypro::Polytope<Number>& _source, hypro::Box<Number>& _target) {
 		hypro::Polytope<Number> tmp = _source;
-		std::vector<Point<Number>> points = tmp.points();
+		std::vector<Point<Number>> points = tmp.vertices();
 		assert(!points.empty());
 
 		vector_t<Number> minima = points[0].rawCoordinates();

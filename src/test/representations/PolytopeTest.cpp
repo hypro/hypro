@@ -167,7 +167,7 @@ TYPED_TEST(PolytopeTest, Access)
 
     EXPECT_EQ(p2.dimension(), unsigned(2));
     
-    std::vector<Point<TypeParam>> points = p2.points();
+    std::vector<Point<TypeParam>> points = p2.vertices();
 }
 
 TYPED_TEST(PolytopeTest, PointToGenerator)
