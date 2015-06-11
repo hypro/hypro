@@ -264,6 +264,38 @@ static std::vector<Ridge<Number>> getRidges(Facet<Number>& facet) {
 	return result;
 }
 
+template<typename Number>
+static bool checkInsideRidge(const Ridge<Number> ridge, const Point<Number> point) {
+	for(unsigned i = 0; i < ridge.vertices(); i++) {
+		if(point == ridge.vertices().at(i)){
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+template<typename Number>
+static std::vector<Facet<Number>> shareRidge(std::vector<Facet<Number>> facets, const Ridge<Number> ridge) {
+	std::vector<Facet<Number>> result;
+	std::vector<Point<Number>> ridgepoints = ridge.vertices();
+	for(auto& facet : facets){
+		std::vector<Point<Number>> points = facet.vertices();
+		unsigned checkvalue = 0;
+		for(auto point : points) {
+			for(auto ridgepoint : ridgepoints) {
+				if(point == ridgepoint) {
+					checkvalue++;
+				}
+			}
+		}
+		if(checkvalue == ridgepoints.size()){
+			result.push_back(facet);
+		}
+	}
+	return result;
+}
+
 
 /*
  * Determines the list of points which were outside of the visible_facets. The points are taken from hashlist.
@@ -484,7 +516,11 @@ static std::vector<Facet<Number>> maximizeFacets (std::vector<Facet<Number>>& fa
 
 	/*	for(unsigned a = 0; a<facets.size(); a++ ){
 			Facet<Number> newFacet = facets.at(a);
-			//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;if(mNormal.dot(insidePoint1.rawCoordinates()) > mScalar){
+					mNormal *= -1;
+					mScalar *= -1;
+					changed = true;
+				}
 			for(unsigned l = 0; l<facets.size(); l++){
 				Facet<Number> neighbor = facets.at(l);
 				if(neighborCheck(newFacet, neighbor)){
@@ -670,8 +706,10 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 			 					}
 			 				}
 			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
-			 					Point<Number> insidePoint = findInsidePoint(ridges.at(j), facet);
-			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, unassignedPoints, facet.getOutsideSet(), insidePoint); //assignedPoints
+			 					Point<Number> insidePoint1 = findInsidePoint(ridges.at(j), facet);
+			 					Point<Number> insidePoint2 = findInsidePoint(ridges.at(j), ridges.at(j).rNeighbors().at(i));
+			 					Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, insidePoint1, insidePoint2);
+			 					//Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, unassignedPoints, facet.getOutsideSet(), insidePoint); //assignedPoints
 			 					newFacet.addNeighbor(ridges.at(j).rNeighbors().at(i));
 			 					ridges.at(j).rNeighbors().at(i).addNeighbor(newFacet);
 			 					newFacets.push_back(newFacet);

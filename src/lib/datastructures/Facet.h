@@ -85,7 +85,19 @@ class Facet
 			mOutsideSet = std::vector<Point<Number>>();
 
 		}
+	
+	
+		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1, const Point<Number> insidePoint2)
+		{
+			r.push_back(p);
+			setPoints(r, insidePoint1, insidePoint2);
+			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			//mHyperplane = Hyperplane<Number>(mVertices);
+			mNeighbors = std::vector<Facet<Number>>();
+			mOutsideSet = std::vector<Point<Number>>();
 
+		}
+	
 		Facet(const std::set<vector_t<Number>>& _vertices) :
 				mNeighbors()
 		{
@@ -203,7 +215,33 @@ class Facet
 				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			}
 		}
+	
+		void setPoints(std::vector<Point<Number>> points, Point<Number> insidePoint1, Point<Number> insidePoint2)
+		{
+			if(mVertices.empty()) {
+				for(unsigned i = 0; i < points.size(); i++) {
+					mVertices.push_back(points[i]);
+				}
 
+				mNormal = getNormalVector();
+				mScalar = getScalarVector();
+
+				bool changed = false;
+				if(mNormal.dot(insidePoint1.rawCoordinates()) > mScalar){
+					mNormal *= -1;
+					mScalar *= -1;
+					changed = true;
+				}
+				
+				if((mNormal.dot(insidePoint2.rawCoordinates()) > mScalar) && (!changed)){
+					mNormal *= -1;
+					mScalar *= -1;
+				}
+				
+				mHyperplane = Hyperplane<Number>(mNormal,mScalar);
+			}
+		}
+		
 		void setPoints(std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints)
 		{
 			if(mVertices.empty()) {
@@ -308,6 +346,7 @@ class Facet
 			for(unsigned i = 1; i < mVertices.size(); i++) {
 				vectors.push_back(mVertices[i].rawCoordinates() - vectors[0]);
 			}
+			
 			matrix_t<Number> matrix = matrix_t<Number>(vectors.size(),mVertices[0].rawCoordinates().size());
 			for(unsigned i = 1; i < vectors.size(); i++) {
 				for(unsigned j = 0; j < vectors[i].size(); j++) {
@@ -315,8 +354,8 @@ class Facet
 				}
 			}
 
-			matrix(0,vectors[0].size()-1) = 1;
-			for(unsigned j = 0; j < vectors[0].size()-1; j++) {
+			//matrix(0,vectors[0].size()-1) = 1;
+			for(unsigned j = 0; j < vectors[0].size(); j++) {
 				matrix(0,j) = 1;
 
 				if(matrix.fullPivLu().rank()==vectors[0].size()){

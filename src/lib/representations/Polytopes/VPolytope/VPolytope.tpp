@@ -260,7 +260,7 @@ namespace hypro
 			for(unsigned i = 0; i<facets.size(); i++) {
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 					preresult.insert(facets[i].vertices().at(j));							
-				}			
+				}				
 			} 
 			polytope::Fan<Number> fan;
 			for(auto& point : preresult) {
@@ -268,19 +268,45 @@ namespace hypro
 				for(unsigned i = 0; i<facets.size(); i++) {
 					for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 						if(point == facets[i].vertices().at(j))	{
-							cone->add(std::make_shared<Hyperplane<Number>>(facets[i].hyperplane()));						
-							break;
+						std::vector<Ridge<Number>> ridges = getRidges(facets[i]);
+							for(unsigned m = 0; m<ridges.size(); m++) { 
+								if(checkInsideRidge(ridges[m], point)) {						
+									std::vector<Facet<Number>> conefacets = shareRidge(facets, ridges[m]);
+							
+									matrix_t<Number> matrix = matrix_t<Number>(conefacets.size(),point.size());
+									for(unsigned k = 1; k < conefacets.size(); k++) {
+										for(unsigned l = 0; l < conefacets[k].getNormal().size(); l++) {
+											matrix(k,l) = conefacets[k].getNormal()(l);
+										}
+									}
+							
+									for(unsigned j = 0; j < point.size(); j++) {
+										matrix(0,j) = 1;
+	
+										if(matrix.fullPivLu().rank()==point.size()){
+											break;
+										} else {
+											matrix(0,j) = 0;
+										}
+									}
+									vector_t<Number> b = vector_t<Number>::Zero(conefacets.size());
+									b(0) = 1;
+									vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
+								
+									cone->add(std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));
+									//cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));	
+								}	
+							}	
 						}					
 					}			
 				}
-				fan.add(cone);	
+			fan.add(cone);	
 			}
-			mFanSet = true;
-			mFan = fan;
-		}
-		return mFan;
+		mFanSet = true;
+		mFan = fan;
 	}
-	
+}
+
 	template<typename Number>
 	const typename VPolytope<Number>::Cone& VPolytope<Number>::calculateCone(const Point<Number>& vertex)
 	{
