@@ -119,6 +119,7 @@ namespace hypro
 					std::cout << "hullPolytope dimension: " << unitePolytope.dimension() << std::endl;
 				   	std::cout << "Hausdorff Polytope (Box): ";
 				    hausPoly.print();
+				    std::cout << std::endl;
 #endif
 
 					//hullPolytope +_minkowski hausPoly

@@ -77,10 +77,15 @@ namespace hypro {
 	template<typename Number>
 	void Plotter<Number>::addObject(std::vector<Point<Number>> _points) {
 		std::vector<Point<Number>> copyPoints;
-		for(const auto& point : _points)
+		for(const auto& point : _points) {
+			std::cout << __func__ << ": point " << point.rawCoordinates().transpose() << std::endl;
 			copyPoints.push_back(Point<Number>(point));
-
+		}
+		assert(copyPoints.size() == _points.size());
 		grahamScan(copyPoints);
+		for(const auto& point : copyPoints) {
+			std::cout << __func__ << ": corrected point " << point.rawCoordinates().transpose() << std::endl;
+		}
 
 		mObjects.push_back(copyPoints);
 	}
@@ -102,6 +107,8 @@ namespace hypro {
 					min = point;
 				}
 			}
+
+			std::cout << "Minimum: " << min.rawCoordinates().transpose() << std::endl;
 
 			// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
 			for(const auto& point : _points) {
@@ -138,6 +145,9 @@ namespace hypro {
 					}
 				}
 			}
+
+			for(const auto& pair : sortedPoints)
+				std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
 			
 			// prepare stack -> initialize with 2 points
 			std::stack<Point<Number>> stack;
@@ -153,6 +163,7 @@ namespace hypro {
 				stack.pop();
 				Point<Number> p2 = stack.top();
 				stack.pop();
+				std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << " -- " << p1.rawCoordinates().transpose() << " -- " << sortedPoints.begin()->second.rawCoordinates().transpose() << std::endl;
 				if(isLeftTurn(p2,p1,sortedPoints.begin()->second)) {
 					// reinsert and add new point
 					stack.push(p2);
@@ -163,6 +174,7 @@ namespace hypro {
 				}
 				else {
 					// only reinsert second -> equal to removing the topmost object of the stack
+					std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
 					stack.push(p2);
 					if(stack.size() < 2) {
 						// in this case simply insert, as the stack has to contain at least 2 points
@@ -189,7 +201,8 @@ namespace hypro {
 		assert(b.dimension() == 2);
 		assert(c.dimension() == 2);
 
-		Number val = c.polarCoordinates(a,false)[1] - b.polarCoordinates(a,false)[1];
+		Number val = ((b.rawCoordinates()(0) - a.rawCoordinates()(0))*(c.rawCoordinates()(1) - a.rawCoordinates()(1))) - ((c.rawCoordinates()(0)-a.rawCoordinates()(0))*(b.rawCoordinates()(1)-a.rawCoordinates()(1)));
+		//Number val = c.polarCoordinates(a,false)[1] - b.polarCoordinates(a,false)[1];
 
 		return (val > 0);
 	}

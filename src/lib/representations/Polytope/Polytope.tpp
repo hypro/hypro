@@ -149,7 +149,7 @@ namespace hypro
     }
     
     template<typename Number>
-    void Polytope<Number>::updatePoints()
+    void Polytope<Number>::updatePoints() const
     {
     	if (!mPointsUpToDate) {
 			std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables = hypro::polytope::variables(mPolyhedron);
@@ -170,10 +170,11 @@ namespace hypro
 			}
 			mPointsUpToDate = true;
     	}
+
     }
 
     template<typename Number>
-    const std::vector<Point<Number>>& Polytope<Number>::vertices()
+    const std::vector<Point<Number>>& Polytope<Number>::vertices() const
     {
     	/*
         typename Point<Number>::pointSet result;
@@ -187,10 +188,8 @@ namespace hypro
         return result;
         */
     	if (!mPointsUpToDate) {
-    		std::cout << "update Points" << std::endl;
     		updatePoints();
     	}
-    	assert(!mPoints.empty());
     	return mPoints;
     }
 
@@ -417,8 +416,9 @@ namespace hypro
                 }
             }
         }
-        mPoints = newPoints;
-        mPointsUpToDate = true;
+        
+        result.setPointsUpToDate(false);
+
         return result;
     }
     
@@ -472,15 +472,15 @@ namespace hypro
 
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                std::cout << "Add point: " << res << std::endl;
+                //std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
-                std::cout << "Intermediate result:" << std::endl;
-                result.print();
+                //std::cout << "Intermediate result:" << std::endl;
+                //result.print();
             }
         }
-        std::cout << "Result:";
-        result.print();
-        std::cout << std::endl;
+        //std::cout << "Result:";
+        //result.print();
+        //std::cout << std::endl;
         result = result.hull();
 
         mPointsUpToDate = false;
@@ -721,12 +721,36 @@ namespace hypro
     template<typename Number>
     Polytope<Number> Polytope<Number>::unite(const Polytope<Number>& rhs)
     {
+    	if(!mPointsUpToDate) {
+    		updatePoints();
+    	}
+    	std::vector<Point<Number>> unitedVertices = rhs.vertices();
+    	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
+    	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
+
+    	std::cout << "Ping" << std::endl;
+    	std::vector<Facet<Number>> hull = convexHull(unitedVertices);
+    	std::cout << "Ping" << std::endl;
+
+    	/*
         C_Polyhedron res = mPolyhedron;
         res.poly_hull_assign(rhs.rawPolyhedron());
         Polytope<Number> result = Polytope<Number>(res);
+		*/
 
-        //mPointsUpToDate = false;
+        Polytope<Number> result;
 
+		std::set<Point<Number>> preresult;
+		for(unsigned i = 0; i<hull.size(); i++) {
+			for(unsigned j = 0; j<hull[i].vertices().size(); j++) {
+				preresult.insert(hull[i].vertices().at(j));			
+			}			
+		}
+		std::vector<Point<Number>> points;
+		for(auto& point : preresult) {
+			points.push_back(point);		
+		}
+		result = Polytope<Number>(points);
         return result;
     }
     

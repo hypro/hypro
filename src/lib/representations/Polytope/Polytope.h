@@ -38,8 +38,8 @@ namespace hypro
     {
     private:
         C_Polyhedron mPolyhedron;
-        std::vector<Point<Number>> mPoints;
-        bool mPointsUpToDate;
+        mutable std::vector<Point<Number>> mPoints;
+        mutable bool mPointsUpToDate;
         polytope::Fan<Number> mFan;
 
     public:
@@ -72,15 +72,9 @@ namespace hypro
          */
         void addPoint(const Point<Number>& point);
         
-        /*
-         *
-         */
-        void updatePoints();
-
-        /*
-         *
-         */
-        void setPointsUpToDate(bool _val){
+        
+        void updatePoints() const;
+        void setPointsUpToDate(bool _val = true){
         	mPointsUpToDate = _val;
         }
 
@@ -88,7 +82,7 @@ namespace hypro
          * Returns the set of points which form the polytope.
          * @return Pointset.
          */
-        const std::vector<Point<Number>>& vertices();
+        const std::vector<Point<Number>>& vertices() const;
         
         /*
          *

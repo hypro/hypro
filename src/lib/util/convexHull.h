@@ -695,7 +695,7 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 			 	//std::cout << __func__ << " Current Ridges: " << ridges << std::endl;
 			 	for(unsigned j = 0; j<ridges.size(); j++) {
 			 		// actual check for horizon property
-			 		//std::cout << __func__ << " Current Ridge: " << ridge << std::endl;
+			 		//std::cout << __func__ << " Current Ridge: " << ridges.at(j) << std::endl;
 			 		for(unsigned i = 0; i<ridges.at(j).rNeighbors().size(); i++) {
 			 			if(ridges.at(j).neighbors().at(i) != facet){
 			 				bool isVisible = false;
@@ -720,11 +720,11 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 			 }
 			 // at this point we created all new facets from any horizon ridge to the current considered point (currentPoint). We need to set up the neighborhood
 			 // relations in between the new facets.
-			 //std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
+			 // std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
 
 			determineNeighbors(newFacets);
 
-			//std::cout << __func__ << " New Facets: " << newFacets << std::endl;
+			// std::cout << __func__ << " New Facets: " << newFacets << std::endl;
 			//std::vector<Point<Number>> outsidePoints = polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
 			unsigned del;
 			bool ok = false;
@@ -741,7 +741,7 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 				unassignedPoints.erase(unassignedPoints.begin() + del);
 			}
 
-			//std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
+			// std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
 
 			// update outside sets of the new facets.
 			for(unsigned i = 0; i<newFacets.size(); i++){
@@ -812,6 +812,8 @@ static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> po
 		facets = maximizeFacets(facets);
 
 		setNeighborhoodOfPoints(facets);
+
+		//std::cout << __func__ << " facets: " << facets << std::endl;
 
 		return facets;
 	}

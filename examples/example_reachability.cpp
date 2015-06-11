@@ -22,11 +22,11 @@ int main(int argc, char const *argv[])
 	HybridAutomaton<FLOAT_T<double>, Representation> hybrid = HybridAutomaton<FLOAT_T<double>, Representation>();
 
 	//Other Objects: Vectors, Matrices, Guards...
-	vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
+	vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(2,1);
 	operator_e invariantOp;
-	matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(3,3);
+	matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(2,2);
 	struct Location<FLOAT_T<double>>::invariant inv;
-	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(3,3);
+	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(2,2);
 
 	struct hypro::Transition<FLOAT_T<double>>::guard guard;
 
@@ -47,27 +47,29 @@ int main(int argc, char const *argv[])
 	Representation pPoly;
 
 	//Box
-	vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
-	matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(6,3);
+	//vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
+	vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(4,1);
+	//matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(6,3);
+	matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(4,2);
 
 	/*
 	 * Location
 	 */
 	invariantVec(0) = 16;
 	invariantVec(1) = 16;
-	invariantVec(2) = 1;
+	//invariantVec(2) = 1;
 
 	invariantOp = LEQ;
 
 	invariantMat(0,0) = 1;
 	invariantMat(0,1) = 0;
-	invariantMat(0,2) = 0;
+	//invariantMat(0,2) = 0;
 	invariantMat(1,0) = 0;
 	invariantMat(1,1) = 1;
-	invariantMat(1,2) = 0;
-	invariantMat(2,0) = 0;
-	invariantMat(2,1) = 0;
-	invariantMat(2,2) = 1;
+	//invariantMat(1,2) = 0;
+	//invariantMat(2,0) = 0;
+	//invariantMat(2,1) = 0;
+	//invariantMat(2,2) = 1;
 
 	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -91,13 +93,13 @@ int main(int argc, char const *argv[])
 
 	locationMat(0,0) = -1;
 	locationMat(0,1) = -4;
-	locationMat(0,2) = 0;
+	//locationMat(0,2) = 0;
 	locationMat(1,0) = 4;
 	locationMat(1,1) = -1;
-	locationMat(1,2) = 0;
-	locationMat(2,0) = 0;
-	locationMat(2,1) = 0;
-	locationMat(2,2) = 0;
+	//locationMat(1,2) = 0;
+	//locationMat(2,0) = 0;
+	//locationMat(2,1) = 0;
+	//locationMat(2,2) = 0;
 
 
 	loc1->setActivityMat(locationMat);
@@ -147,27 +149,27 @@ int main(int argc, char const *argv[])
 	boxVec(1) = -0.9;
 	boxVec(2) = 0.1;
 	boxVec(3) = 0.1;
-	boxVec(4) = 1;
-	boxVec(5) = -1;
+	//boxVec(4) = 1;
+	//boxVec(5) = -1;
 
 	boxMat(0,0) = 1;
 	boxMat(0,1) = 0;
-	boxMat(0,2) = 0;
+	//boxMat(0,2) = 0;
 	boxMat(1,0) = -1;
 	boxMat(1,1) = 0;
-	boxMat(1,2) = 0;
+	//boxMat(1,2) = 0;
 	boxMat(2,0) = 0;
 	boxMat(2,1) = 1;
-	boxMat(2,2) = 0;
+	//boxMat(2,2) = 0;
 	boxMat(3,0) = 0;
 	boxMat(3,1) = -1;
-	boxMat(3,2) = 0;
-	boxMat(4,0) = 0;
-	boxMat(4,1) = 0;
-	boxMat(4,2) = 1;
-	boxMat(5,0) = 0;
-	boxMat(5,1) = 0;
-	boxMat(5,2) = -1;
+	//boxMat(3,2) = 0;
+	//boxMat(4,0) = 0;
+	//boxMat(4,1) = 0;
+	//boxMat(4,2) = 1;
+	//boxMat(5,0) = 0;
+	//boxMat(5,1) = 0;
+	//boxMat(5,2) = -1;
 
 	poly = Representation(boxMat,boxVec);
 
