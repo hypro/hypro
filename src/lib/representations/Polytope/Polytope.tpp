@@ -388,13 +388,13 @@ namespace hypro
         C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(res.rows(), Parma_Polyhedra_Library::EMPTY);
         
         std::vector<Point<Number>> newPoints;
-        std::vector<Point<Number>*> tmpPoints;
+        std::vector<Point<Number>> tmpPoints;
         
         for(auto& pointSetIt : ps)
         {
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));
-            Point<Number>* tmpPoint = new Point<Number>(pointSetIt);
-            newPoints.push_back(*tmpPoint);  // for mPoints
+            Point<Number> tmpPoint = Point<Number>(pointSetIt);
+            newPoints.push_back(tmpPoint);  // for mPoints
             tmpPoints.push_back(tmpPoint);  // for mNeighbors for each point
         }
         result.mPolyhedron = tmp;
@@ -448,7 +448,7 @@ namespace hypro
         */
         
         //TODO remove
-        std::cout.setstate(std::ios::failbit);
+        //std::cout.setstate(std::ios::failbit);
         
         // unelegant version creating the powerset of all points and reducing it afterwards
         //std::cout << "Result before: " << std::endl;
@@ -467,25 +467,26 @@ namespace hypro
                 
                 //std::cout << __func__ << " Point: " << tmpB << std::endl;
                 
-                //std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
-                //std::cout << "tmpA: " << tmpA << std::endl;
+                std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
+                std::cout << "tmpA: " << tmpA << std::endl;
 
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                //std::cout << "Add point: " << res << std::endl;
+                std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
-                //std::cout << "Intermediate result:" << std::endl;
-                //result.print();
+                std::cout << "Intermediate result:" << std::endl;
+                result.print();
+                std::cout << std::endl;
             }
         }
-        //std::cout << "Result:";
-        //result.print();
-        //std::cout << std::endl;
-        result = result.hull();
+        std::cout << "Result:";
+        result.print();
+        std::cout << std::endl;
+        //result = result.hull();
 
         mPointsUpToDate = false;
         //TODO remove
-        std::cout.clear();
+        //std::cout.clear();
         return result;
     }
     
@@ -724,33 +725,43 @@ namespace hypro
     	if(!mPointsUpToDate) {
     		updatePoints();
     	}
+
+    	/*
+    	C_Polyhedron res = mPolyhedron;
+        res.poly_hull_assign(rhs.rawPolyhedron());
+        Polytope<Number> result = Polytope<Number>(res);
+		*/
+        
     	std::vector<Point<Number>> unitedVertices = rhs.vertices();
     	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
     	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
 
-    	std::cout << "Ping" << std::endl;
-    	std::vector<Facet<Number>> hull = convexHull(unitedVertices);
-    	std::cout << "Ping" << std::endl;
+    	std::cout << "United vertices: " << std::endl;
+    	for(const auto& vertex : unitedVertices)
+    		std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
-    	/*
-        C_Polyhedron res = mPolyhedron;
-        res.poly_hull_assign(rhs.rawPolyhedron());
-        Polytope<Number> result = Polytope<Number>(res);
-		*/
-
-        Polytope<Number> result;
+		std::cout << "Ping" << std::endl;
+    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
+    	std::cout << "Ping" << std::endl;
 
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<hull.size(); i++) {
-			for(unsigned j = 0; j<hull[i].vertices().size(); j++) {
-				preresult.insert(hull[i].vertices().at(j));			
+			for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
+				std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
+				preresult.insert(hull[i]->vertices().at(j)).second;
+				std::cout << "Set after insert: ";
+				for(const auto& point : preresult) {
+					std::cout << point.rawCoordinates().transpose() << ", ";
+				}
+				std::cout << std::endl;
 			}			
 		}
 		std::vector<Point<Number>> points;
 		for(auto& point : preresult) {
 			points.push_back(point);		
 		}
-		result = Polytope<Number>(points);
+		Polytope<Number> result = Polytope<Number>(points);
+		
         return result;
     }
     

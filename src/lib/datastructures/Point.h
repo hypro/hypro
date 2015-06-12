@@ -46,7 +46,7 @@ namespace hypro {
 			vector_t<Number> mCoordinates;
 
 			//Adjacency List of this Point (if applicable)
-			std::vector<Point<Number>* > mNeighbors;
+			std::vector<Point<Number> > mNeighbors;
 			//Minkowsi Decompositon of this point (if applicable)
 			std::vector<Point<Number> > mComposedOf;
 
@@ -117,9 +117,9 @@ namespace hypro {
 			
 			std::vector<Point<Number> > neighbors() const;
 
-			void setNeighbors(const std::vector<Point<Number>* >& _neighbors);
-			void addNeighbor(Point<Number>* _neighbor);
-			void removeNeighbor(Point<Number>* _neighbor);
+			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
+			void addNeighbor(const Point<Number>& _neighbor);
+			void removeNeighbor(const Point<Number>& _neighbor);
 
 			std::vector<Point<Number> > composedOf() const;
 			void setComposition(const std::vector<Point<Number> >& _elements);

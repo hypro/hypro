@@ -70,23 +70,23 @@ namespace hypro {
 		//TODO fix (does this have bad side effects?)
 		std::vector<Point<Number>> res;
 		for (unsigned i =0; i<mNeighbors.size(); ++i) {
-			res.push_back( *(mNeighbors.at(i)) );
+			res.push_back( (mNeighbors.at(i)) );
 		}
 		return res;
 	}
 
 	template<typename Number>
-	void Point<Number>::setNeighbors(const std::vector<Point<Number>* >& _neighbors) {
+	void Point<Number>::setNeighbors(const std::vector<Point<Number> >& _neighbors) {
 		mNeighbors = _neighbors;
 	}
 
 	template<typename Number>
-	void Point<Number>::addNeighbor(Point<Number>* _neighbor) {
+	void Point<Number>::addNeighbor(const Point<Number>& _neighbor) {
 		mNeighbors.push_back(_neighbor);
 	}
 
 	template<typename Number>
-	void Point<Number>::removeNeighbor(Point<Number>* _neighbor) {
+	void Point<Number>::removeNeighbor(const Point<Number>& _neighbor) {
 		for(unsigned i = 0; i < mNeighbors.size(); i++){
 			if(*(mNeighbors.at(i)) == *(_neighbor)) {
 				mNeighbors.erase(mNeighbors.begin() + i);

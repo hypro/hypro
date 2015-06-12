@@ -31,7 +31,7 @@ class Ridge
 	 */
 	private:
 		vertexSet            mVertices;
-		std::vector<Facet<Number>>           mNeighbors;
+		std::vector<Facet<Number>*>           mNeighbors;
 		Hyperplane<Number>          mHyperplane;
 		vector_t<Number>			mNormal;
 		Number			mScalar;
@@ -52,7 +52,7 @@ class Ridge
 			//mScalar = f.getScalar();
 		}
 
-		Ridge( Facet<Number> facet1, Facet<Number> facet2)
+		Ridge( Facet<Number>* facet1, Facet<Number>* facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
 			 //   facets.push_back(facet1);
@@ -61,10 +61,10 @@ class Ridge
 			mNeighbors.push_back(facet1);
 			mNeighbors.push_back(facet2);
 			mVertices = std::vector<Point<Number>>();
-			for(unsigned i = 0; i < facet1.vertices().size(); i++) {
-				for(unsigned j = 0; j < facet2.vertices().size(); j++) {
-					if(facet1.vertices()[i] == facet2.vertices()[j]) {
-						mVertices.push_back(facet1.vertices()[i]);
+			for(unsigned i = 0; i < facet1->vertices().size(); i++) {
+				for(unsigned j = 0; j < facet2->vertices().size(); j++) {
+					if(facet1->vertices()[i] == facet2->vertices()[j]) {
+						mVertices.push_back(facet1->vertices()[i]);
 					}
 				}
 			}
@@ -102,12 +102,12 @@ class Ridge
 			return mScalar;
 		}
 
-		std::vector<Facet<Number>>& rNeighbors() {
+		std::vector<Facet<Number>*>& rNeighbors() {
 
 	        return mNeighbors;
 	    }
 
-		std::vector<Facet<Number>> neighbors() const
+		std::vector<Facet<Number>*> neighbors() const
 	    {
 	        return mNeighbors;
 	    }

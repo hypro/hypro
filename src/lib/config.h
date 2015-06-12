@@ -118,12 +118,18 @@ namespace Eigen
 		if(lhs.rows() != rhs.rows())
 			return false;
 			
+		std::cout << lhs.transpose() << " < " << rhs.transpose() << " : ";
+
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
 			if(lhs(dim) > rhs(dim)) {
+				std::cout << "0" << std::endl;
 				return false;
-			} else if( lhs(dim) < rhs(dim) ) 
+			} else if( lhs(dim) < rhs(dim) ) {
+				std::cout << "1" << std::endl;
 				return true;
+			}
 		}
+		std::cout << "0" << std::endl;
 		return false;
 	}
 

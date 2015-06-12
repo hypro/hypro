@@ -24,7 +24,7 @@ class Facet
 	 * Typedefs
 	 */
 		typedef std::vector<Point<Number>> pointVector;
-		typedef std::vector<Facet<Number>> neighborsSet;
+		typedef std::vector<Facet<Number>*> neighborsSet;
 
 	/**
 	 * Members
@@ -93,7 +93,7 @@ class Facet
 			setPoints(r, insidePoint1, insidePoint2);
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//mHyperplane = Hyperplane<Number>(mVertices);
-			mNeighbors = std::vector<Facet<Number>>();
+			mNeighbors = std::vector<Facet<Number>*>();
 			mOutsideSet = std::vector<Point<Number>>();
 
 		}
@@ -140,7 +140,7 @@ class Facet
 			return mVertices;
 		}
 
-		pointVector vertices() const
+		const pointVector& vertices() const
 		{
 			return mVertices;
 		}
@@ -150,20 +150,20 @@ class Facet
 			return mNeighbors;
 		}
 
-		neighborsSet neighbors() const
+		const neighborsSet& neighbors() const
 		{
 			return mNeighbors;
 		}
 
-		void addNeighbor(Facet<Number>& facet)
+		void addNeighbor(Facet<Number>* facet)
 		{
 			if(!isNeighbor(facet)){
 				mNeighbors.push_back(facet);
-				facet.addNeighbor(*this);
+				facet->addNeighbor(this);
 			}
 		}
 
-		vector_t<Number> getNormal () const
+		const vector_t<Number>& getNormal () const
 		{
 			return mNormal;
 		}
@@ -176,10 +176,10 @@ class Facet
 		/*
 		 * removes a given facet from the neighborset if it is inside the list
 		 */
-		bool removeNeighbor(Facet<Number> facet)
+		bool removeNeighbor(Facet<Number>* facet)
 		{
 			for(unsigned i = 0; i<mNeighbors.size(); i++){
-				if(facet == mNeighbors[i]){
+				if(*facet == *mNeighbors[i]){
 					mNeighbors.erase(mNeighbors.begin() + i);
 					return true;//check for multiple entries?
 				}
@@ -470,9 +470,9 @@ class Facet
 			}
 		}
 
-		bool isNeighbor(const Facet<Number>& facet) const {
+		bool isNeighbor(Facet<Number>* facet) const {
 			for(unsigned i = 0; i < mNeighbors.size(); i++) {
-				if(mNeighbors[i] == facet) {
+				if(*mNeighbors[i] == *facet) {
 					return true;
 				}
 			}
