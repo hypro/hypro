@@ -13,44 +13,46 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
-	typedef hypro::Polytope<FLOAT_T<double>> Representation;
+	typedef FLOAT_T<mpfr_t> Number;
+	typedef hypro::Polytope<Number> Representation;
+
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-	Location<FLOAT_T<double>>* loc1 = new Location<FLOAT_T<double>>();
-	Location<FLOAT_T<double>>* loc2 = new Location<FLOAT_T<double>>();
-	hypro::Transition<FLOAT_T<double>>* trans = new hypro::Transition<FLOAT_T<double>>();
-	HybridAutomaton<FLOAT_T<double>, Representation> hybrid = HybridAutomaton<FLOAT_T<double>, Representation>();
+	Location<Number>* loc1 = new Location<Number>();
+	Location<Number>* loc2 = new Location<Number>();
+	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
+	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 
 	//Other Objects: Vectors, Matrices, Guards...
-	vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(2,1);
+	vector_t<Number> invariantVec = vector_t<Number>(2,1);
 	operator_e invariantOp;
-	matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(2,2);
-	struct Location<FLOAT_T<double>>::invariant inv;
-	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(2,2);
+	matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
+	struct Location<Number>::invariant inv;
+	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
-	struct hypro::Transition<FLOAT_T<double>>::guard guard;
+	struct hypro::Transition<Number>::guard guard;
 
-	struct hypro::Transition<FLOAT_T<double>>::assignment assign;
+	struct hypro::Transition<Number>::assignment assign;
 
-	hypro::Location<FLOAT_T<double>>* locations[2];
-	std::set<hypro::Location<FLOAT_T<double>>*> locSet;
+	hypro::Location<Number>* locations[2];
+	std::set<hypro::Location<Number>*> locSet;
 
-	hypro::Location<FLOAT_T<double>>* init[1];
-	std::set<hypro::Location<FLOAT_T<double>>*> initLocSet;
+	hypro::Location<Number>* init[1];
+	std::set<hypro::Location<Number>*> initLocSet;
 
-	hypro::Transition<FLOAT_T<double>>* transition[1];
-	std::set<hypro::Transition<FLOAT_T<double>>*> transSet;
+	hypro::Transition<Number>* transition[1];
+	std::set<hypro::Transition<Number>*> transSet;
 
-	vector_t<FLOAT_T<double>> coordinates = vector_t<FLOAT_T<double>>(2,1);
-	Point<FLOAT_T<double>> p1;
+	vector_t<Number> coordinates = vector_t<Number>(2,1);
+	Point<Number> p1;
 	Representation poly;
 	Representation pPoly;
 
 	//Box
-	//vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
-	vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(4,1);
-	//matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(6,3);
-	matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(4,2);
+	//vector_t<Number> boxVec = vector_t<Number>(6,1);
+	vector_t<Number> boxVec = vector_t<Number>(4,1);
+	//matrix_t<Number> boxMat = matrix_t<Number>(6,3);
+	matrix_t<Number> boxMat = matrix_t<Number>(4,2);
 
 	/*
 	 * Location
@@ -126,18 +128,18 @@ int main(int argc, char const *argv[])
 	locations[0] = loc1;
 	locations[1] = loc2;
 
-	locSet = std::set<hypro::Location<FLOAT_T<double>>*>(locations, locations+2);
+	locSet = std::set<hypro::Location<Number>*>(locations, locations+2);
 
 	init[0] = loc1;
 
-	initLocSet = std::set<hypro::Location<FLOAT_T<double>>*>(init, init+1);
+	initLocSet = std::set<hypro::Location<Number>*>(init, init+1);
 
 	hybrid.setLocations(locSet);
 	hybrid.setInitialLocations(initLocSet);
 
 	transition[0] = trans;
 
-	transSet = std::set<hypro::Transition<FLOAT_T<double>>*>(transition, transition+1);
+	transSet = std::set<hypro::Transition<Number>*>(transition, transition+1);
 
 	hybrid.setTransitions(transSet);
 	loc1->setTransitions(transSet);
@@ -188,7 +190,7 @@ int main(int argc, char const *argv[])
    	std::cout <<  "Flowpipe size: ";
    	std::cout << size << std::endl;
 
-   	hypro::Plotter<FLOAT_T<double>>& plotter = hypro::Plotter<FLOAT_T<double>>::getInstance();
+   	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
 	unsigned count = 1;
@@ -196,7 +198,7 @@ int main(int argc, char const *argv[])
    		std::cout << "Flowpipe segment to be converted: " << std::endl;
    		poly.print();
    		std::cout << std::endl;
-   		std::vector<Point<FLOAT_T<double>>> points = poly.vertices();
+   		std::vector<Point<Number>> points = poly.vertices();
    		if(!points.empty()) {
    			std::cout << "Polycount: " << count << std::endl;
    			for(auto& point : points) {

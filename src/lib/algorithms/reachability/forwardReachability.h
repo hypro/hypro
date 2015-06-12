@@ -124,6 +124,7 @@ namespace hypro
 
 					//hullPolytope +_minkowski hausPoly
 					firstSegment = unitePolytope.minkowskiSum(hausPoly);
+					firstSegment = firstSegment.unite(firstSegment);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";

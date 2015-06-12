@@ -732,6 +732,7 @@ namespace hypro
         Polytope<Number> result = Polytope<Number>(res);
 		*/
         
+        
     	std::vector<Point<Number>> unitedVertices = rhs.vertices();
     	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
     	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
@@ -747,13 +748,15 @@ namespace hypro
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<hull.size(); i++) {
 			for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
-				std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
+				//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
 				preresult.insert(hull[i]->vertices().at(j)).second;
+				/*		
 				std::cout << "Set after insert: ";
 				for(const auto& point : preresult) {
 					std::cout << point.rawCoordinates().transpose() << ", ";
 				}
 				std::cout << std::endl;
+				*/
 			}			
 		}
 		std::vector<Point<Number>> points;
@@ -807,7 +810,7 @@ namespace hypro
         }
         result *= Number(max);
         
-        return result.value();
+        return result;
     }
     
     /*

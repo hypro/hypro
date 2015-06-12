@@ -254,7 +254,7 @@ static std::vector<Ridge<Number>> getRidges(Facet<Number>* facet) {
 	std::vector<Ridge<Number>> result;
 	if(!facet->empty()) {
 		std::vector<Facet<Number>*> neighbors = facet->neighbors();
-		std::cout << __func__ << " Current Neighbors of Ridges: " << neighbors << std::endl;
+		//std::cout << __func__ << " Current Neighbors of Ridges: " << neighbors << std::endl;
 		for(unsigned j = 0; j<neighbors.size(); ++j) {
 			Ridge<Number> newRidge(facet, neighbors[j]);
 			result.push_back(newRidge);
@@ -644,7 +644,10 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 		while(!workingSet.empty()) {
 			Facet<Number>* currentFacet = workingSet.front();
 			std::cout << __func__ << " Current Facet: " << *currentFacet << std::endl;
-			std::cout << __func__ << " Current Neighbors: " << currentFacet->neighbors() << std::endl;
+			std::cout << __func__ << " Current Neighbors: ";
+			for(const auto neig : currentFacet->neighbors())
+				std::cout << *neig << ", ";
+			std::cout << std::endl;
 			Point<Number> currentPoint = currentFacet->furthest_Point();
 			std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
 			std::vector<Facet<Number>*> currentVisibleFacets;
@@ -684,7 +687,10 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 				}
 			} while (changed);
 
-			std::cout << __func__ << "From current point visible facets: " << currentVisibleFacets << std::endl;
+			std::cout << "From current point visible facets: ";
+			for(const auto item : currentVisibleFacets)
+				std::cout << *item << ", ";
+			std::cout << std::endl;
 
 			/* Stefan: Note that here, we have a set of visible facets - we need to get the ridges, which are between a visible facet and the next invisible
 			 * facet (Horizon ridges). This means, that we have to take into account all ridges, which are built of one facet out of the visible facet set and one facet out of
@@ -697,23 +703,23 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 			 	assert(!facet->neighbors().empty());
 			 	std::vector<Ridge<Number>> ridges = getRidges(facet);
 			 	std::cout << "Process visible facet " << *facet << std::endl; 
-			 	std::cout << "Current Ridges: " << ridges << std::endl;
+			 	//std::cout << "Current Ridges: " << ridges << std::endl;
 			 	for(unsigned j = 0; j<ridges.size(); j++) {
 			 		// actual check for horizon property
 			 		//std::cout << __func__ << " Current Ridge: " << ridges.at(j) << std::endl;
 			 		for(unsigned i = 0; i<ridges.at(j).neighbors().size(); i++) {
 			 			if(*ridges.at(j).neighbors().at(i) != *facet){
-			 				std::cout << "Check neighbor: " << ridges.at(j).neighbors().at(i);
+			 				//std::cout << "Check neighbor: " << ridges.at(j).neighbors().at(i);
 			 				bool isVisible = false;
 			 				for(const auto& f : currentVisibleFacets) {
 			 					if(*ridges.at(j).neighbors().at(i) == *f){
 			 						isVisible = true;
-			 						std::cout << " visible." << std::endl;
+			 						//std::cout << " visible." << std::endl;
 			 						break;
 			 					}
 			 				}
 			 				if(!isVisible) { // we have a neighbor of this ridge, which is not visible -> horizon ridge, create new facet
-			 					std::cout << "invisible." << std::endl;
+			 					//std::cout << "invisible." << std::endl;
 			 					Point<Number> insidePoint1 = findInsidePoint(ridges.at(j), facet);
 			 					Point<Number> insidePoint2 = findInsidePoint(ridges.at(j), ridges.at(j).neighbors().at(i));
 			 					Facet<Number>* newFacet = new Facet<Number>(ridges.at(j).vertices(), currentPoint, insidePoint1, insidePoint2);
@@ -729,11 +735,16 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 			 }
 			 // at this point we created all new facets from any horizon ridge to the current considered point (currentPoint). We need to set up the neighborhood
 			 // relations in between the new facets.
-			std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
+			//std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
 
 			determineNeighbors(newFacets);
 
-			std::cout << __func__ << " New Facets: " << newFacets << std::endl;
+			//std::cout << __func__ << " New Facets: " << newFacets << std::endl;
+			std::cout << __func__ << " New Facets: ";
+			for(const auto item : newFacets)
+				std::cout << *item << ", ";
+			std::cout << std::endl;
+
 			//std::vector<Point<Number>> outsidePoints = polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
 			unsigned del;
 			bool ok = false;
@@ -822,7 +833,7 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 
 		setNeighborhoodOfPoints(facets);
 
-		std::cout << __func__ << " facets: " << facets << std::endl;
+		//std::cout << __func__ << " facets: " << facets << std::endl;
 
 		return facets;
 	}
