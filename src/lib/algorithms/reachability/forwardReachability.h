@@ -112,7 +112,7 @@ namespace hypro
 					unsigned int dim;
 					dim = unitePolytope.dimension();
 
-					Representation hausPoly = hypro::computePolytope(dim, radius);
+					Representation hausPoly = hypro::computePolytope<Number,Representation>(dim, radius);
 
 #ifdef fReach_DEBUG
 					std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;

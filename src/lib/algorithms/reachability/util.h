@@ -4,6 +4,7 @@
 //#include "../../util/eigenTypetraits.h"
 #include "../../datastructures/hybridAutomata/util.h"
 #include "../../representations/Box/Box.h"
+#include "../../representations/SupportFunction/SupportFunction.h"
 #include "carl/core/VariablePool.h"
 
 namespace hypro
@@ -48,8 +49,8 @@ namespace hypro
 		/**
 		 * based on the Hausdorff distance, constructs the box (also a polytope) that is used for bloating the initial approximation
 		 */
-		template<typename Number>
-		hypro::valuation_t<Number> computePolytope(unsigned int _dim, Number _radius) {
+		template<typename Number, typename Representation>
+		Representation computePolytope(unsigned int _dim, Number _radius) {
 			//the last variable is always a placeholder for a constant translation factor
 			//no bloating in that dimension
 			//unsigned int correctedDim = _dim-1;
@@ -86,8 +87,13 @@ namespace hypro
 
 			std::cout << "Hausdorff matrix: " << mat << ", Hausdorff vector " << vec << std::endl;
 
-			hypro::valuation_t<Number> poly = hypro::Polytope<Number>(mat,vec);
+			Representation poly = Representation(mat,vec);
 			return poly;
+		}
+
+		template<typename Number>
+		SupportFunction<Number> computePolytope(unsigned int _dim, Number _radius) {
+			return SupportFunction<Number>(SF_TYPE::INFTY_BALL, _radius );
 		}
 
 		/**

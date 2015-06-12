@@ -6,6 +6,7 @@
 #include "../lib/datastructures/Point.h"
 #include "../lib/algorithms/reachability/forwardReachability.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../lib/representations/SupportFunction/SupportFunction.h"
 #include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
