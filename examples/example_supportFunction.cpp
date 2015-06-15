@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 
 	//std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
 	
-	//vector_t<double> result1 = rounded1.multiEvaluate(evaldirections);
+	vector_t<double> result1 = rounded1->multiEvaluate(evaldirections);
 	//vector_t<double> result2 = rounded2.multiEvaluate(evaldirections);
 
 	vector_t<double> sf1 = poly1->multiEvaluate(evaldirections);
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 	plotter.setFilename("out");
 	std::vector<Point<double>> points;
 
-	/*
+	
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 		points.push_back(res);
 	}
 	plotter.addObject(points);
-	
+	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
 	plotter.addObject(points);
 	
 	
-	
+	/*
 	std::shared_ptr<SupportFunction<double>> res = rounded1->linearTransformation(exponential);
 	//std::shared_ptr<SupportFunction<double>> res = rounded1->minkowskiSum(ball);
 	res->print();
@@ -161,7 +161,7 @@ int main(int argc, char** argv) {
 		res->print();
 		plotter.addObject(points);
 	}
-	
+	*/
 	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {
@@ -194,22 +194,7 @@ int main(int argc, char** argv) {
 	}
 	plotter.addObject(points);
 	*/
-	/*
-	points.erase(points.begin(), points.end());
-	for(int i = 0; i < resolution; ++i) {
-		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
-		matrix_t<double> matr = matrix_t<double>(2,2);
-		matr.row(0) = evaldirections.row(i);
-		matr.row(1) = evaldirections.row(((i-1+resolution)%resolution));
-		vector_t<double> vec = vector_t<double>(2);
-		vec(0) = sf6(i);
-		vec(1) = sf6(((i-1+resolution)%resolution));
-		Point<double> res = Point<double>(matr.colPivHouseholderQr().solve(vec));
-		//std::cout << "solve " << matr << " = " << vec << std::endl << " => " << res << std::endl << std::endl;
-		points.push_back(res);
-	}
-	plotter.addObject(points);
-	*/
+	
 	plotter.plot2d();
 	
 }

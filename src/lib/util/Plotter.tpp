@@ -52,7 +52,7 @@ namespace hypro {
 					mOutfile << " to \\\n";
 				}
 				//assert(object[object.size()-1].dimension() <= 2); // TODO: Project to 2d	TODO: REINSERT ASSERTION
-				std::cout << double(object[0].at(0)) << std::endl;
+				//std::cout << double(object[0].at(0)) << std::endl;
 				mOutfile << "  " << double(object[0].at(0));
 				for(unsigned d = 1; d < object[0].dimension(); ++d) {
 					mOutfile << ", " << double(object[0].at(d));
@@ -78,14 +78,14 @@ namespace hypro {
 	void Plotter<Number>::addObject(std::vector<Point<Number>> _points) {
 		std::vector<Point<Number>> copyPoints;
 		for(const auto& point : _points) {
-			std::cout << __func__ << ": point " << point.rawCoordinates().transpose() << std::endl;
+			//std::cout << __func__ << ": point " << point.rawCoordinates().transpose() << std::endl;
 			copyPoints.push_back(Point<Number>(point));
 		}
 		assert(copyPoints.size() == _points.size());
 		grahamScan(copyPoints);
-		for(const auto& point : copyPoints) {
-			std::cout << __func__ << ": corrected point " << point.rawCoordinates().transpose() << std::endl;
-		}
+		//for(const auto& point : copyPoints) {
+		//	std::cout << __func__ << ": corrected point " << point.rawCoordinates().transpose() << std::endl;
+		//}
 
 		mObjects.push_back(copyPoints);
 	}
@@ -108,7 +108,7 @@ namespace hypro {
 				}
 			}
 
-			std::cout << "Minimum: " << min.rawCoordinates().transpose() << std::endl;
+			//std::cout << "Minimum: " << min.rawCoordinates().transpose() << std::endl;
 
 			// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
 			for(const auto& point : _points) {
@@ -146,8 +146,8 @@ namespace hypro {
 				}
 			}
 
-			for(const auto& pair : sortedPoints)
-				std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
+			//for(const auto& pair : sortedPoints)
+			//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
 			
 			// prepare stack -> initialize with 2 points
 			std::stack<Point<Number>> stack;
@@ -163,7 +163,7 @@ namespace hypro {
 				stack.pop();
 				Point<Number> p2 = stack.top();
 				stack.pop();
-				std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << " -- " << p1.rawCoordinates().transpose() << " -- " << sortedPoints.begin()->second.rawCoordinates().transpose() << std::endl;
+				//std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << " -- " << p1.rawCoordinates().transpose() << " -- " << sortedPoints.begin()->second.rawCoordinates().transpose() << std::endl;
 				if(isLeftTurn(p2,p1,sortedPoints.begin()->second)) {
 					// reinsert and add new point
 					stack.push(p2);
@@ -174,7 +174,7 @@ namespace hypro {
 				}
 				else {
 					// only reinsert second -> equal to removing the topmost object of the stack
-					std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
+					//std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
 					stack.push(p2);
 					if(stack.size() < 2) {
 						// in this case simply insert, as the stack has to contain at least 2 points

@@ -467,21 +467,21 @@ namespace hypro
                 
                 //std::cout << __func__ << " Point: " << tmpB << std::endl;
                 
-                std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
-                std::cout << "tmpA: " << tmpA << std::endl;
+                //std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
+                //std::cout << "tmpA: " << tmpA << std::endl;
 
                 Point<Number> res = tmpA.extAdd(tmpB);
                 
-                std::cout << "Add point: " << res << std::endl;
+                //std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
-                std::cout << "Intermediate result:" << std::endl;
-                result.print();
-                std::cout << std::endl;
+                //std::cout << "Intermediate result:" << std::endl;
+                //result.print();
+                //std::cout << std::endl;
             }
         }
-        std::cout << "Result:";
-        result.print();
-        std::cout << std::endl;
+        //std::cout << "Result:";
+        //result.print();
+        //std::cout << std::endl;
         //result = result.hull();
 
         mPointsUpToDate = false;
@@ -737,13 +737,13 @@ namespace hypro
     	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
     	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
 
-    	std::cout << "United vertices: " << std::endl;
-    	for(const auto& vertex : unitedVertices)
-    		std::cout << vertex.rawCoordinates().transpose() << std::endl;
+    	//std::cout << "United vertices: " << std::endl;
+    	//for(const auto& vertex : unitedVertices)
+    	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
-		std::cout << "Ping" << std::endl;
+		//std::cout << "Ping" << std::endl;
     	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
-    	std::cout << "Ping" << std::endl;
+    	//std::cout << "Ping" << std::endl;
 
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<hull.size(); i++) {
