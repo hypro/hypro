@@ -91,11 +91,12 @@ namespace hypro
 			return poly;
 		}
 
+		/*
 		template<typename Number>
 		SupportFunction<Number> computePolytope(unsigned int _dim, Number _radius) {
 			return SupportFunction<Number>(SF_TYPE::INFTY_BALL, _radius );
 		}
-
+		*/
 		/**
 		 * conversion of a matrix of type 'Number' to 'double'
 		 */

@@ -323,7 +323,7 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	hypro::Polytope<FLOAT_T<double>> testBoxPoly;
 	int dimension = 4;
 	FLOAT_T<double> radius = 5;
-	testBoxPoly = hypro::computePolytope(dimension,radius);
+	testBoxPoly = hypro::computePolytope<FLOAT_T<double>,hypro::Polytope<FLOAT_T<double>>>(dimension,radius);
 
 	hypro::vector_t<FLOAT_T<double>> pointVec = hypro::vector_t<FLOAT_T<double>>(6,1);
 

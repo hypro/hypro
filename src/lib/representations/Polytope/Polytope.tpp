@@ -749,7 +749,7 @@ namespace hypro
 		for(unsigned i = 0; i<hull.size(); i++) {
 			for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
 				//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-				preresult.insert(hull[i]->vertices().at(j)).second;
+				preresult.insert(hull[i]->vertices().at(j));
 				/*		
 				std::cout << "Set after insert: ";
 				for(const auto& point : preresult) {
