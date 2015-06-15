@@ -101,7 +101,8 @@ namespace hypro
 					//bloat hullPolytope (Hausdorff distance)
 					Representation firstSegment;
 					Number radius;
-					radius = _val.hausdorffError(timeInterval, _loc.activityMat());
+					radius = hausdorffError(Number(timeInterval), _loc.activityMat(), _val.supremum());
+					//radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 #ifdef fReach_DEBUG
 					std::cout << "\n";

@@ -218,6 +218,17 @@ namespace hypro
 	{
 		mPoints.clear();
 	}
+
+	template<typename Number>
+    Number VPolytope<Number>::supremum () const {
+    	Number max = 0;
+        for(auto& point : mPoints)
+        {
+            Number inftyNorm = hypro::Point<Number>::inftyNorm(point);
+            max = max > inftyNorm ? max : inftyNorm;
+        }
+        return max;
+    }
 	
 	/***************************************************************************
 	 * Auxiliary functions

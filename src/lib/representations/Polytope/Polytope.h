@@ -158,7 +158,7 @@ namespace hypro
         /**
          * Polytope related
          */
-        Number hausdorffError(const Number& delta, const matrix_t<Number>& matrix);
+        Number supremum () const;
         
         
         //Polytope<Number>& operator= (const Polytope<Number>& rhs);

@@ -103,6 +103,8 @@ class VPolytope : public hypro::GeometricObject<Number>
 		bool reduced() const {
 			return mReduced;
 		}
+
+		Number supremum() const;
 		
 		const typename polytope::Fan<Number>& fan() const {
 			if(!mFanSet)
