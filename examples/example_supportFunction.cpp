@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
 
 	// create array holding equaly distributed directions
-	int resolution = 20;
+	int resolution = 5;
 	matrix_t<double> evaldirections = matrix_t<double>(resolution, 2);
 	for(int pos = 0; pos < resolution; ++pos) {
 		double angle = pos*(360/resolution);
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 	plotter.setFilename("out");
 	std::vector<Point<double>> points;
 
-	
+	/*
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
