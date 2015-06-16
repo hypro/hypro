@@ -31,8 +31,6 @@ using namespace Parma_Polyhedra_Library;
 
 namespace hypro
 {
-	using carl::operator <<;
-
     template<typename Number>
     class Polytope : hypro::GeometricObject<Number>
     {

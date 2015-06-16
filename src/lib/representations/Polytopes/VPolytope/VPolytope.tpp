@@ -44,16 +44,14 @@ namespace hypro
 
 	template<typename Number>
 	VPolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
+
+		std::cout << _constraints << std::endl << _constants << std::endl;
+
 		// calculate all possible hyperplane intersections -> TODO: dPermutation can be improved.
-		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		std::vector<std::vector<unsigned>> permutationIndices = polytope::dPermutation(_constraints.rows(), _constraints.cols());
-		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		matrix_t<Number> intersection = matrix_t<Number>(_constraints.cols(), _constraints.cols());
-		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		vector_t<Number> intersectionConstants = vector_t<Number>(_constraints.cols());
-		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		std::vector<vector_t<Number>> possibleVertices;
-		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		for(const auto& permutation : permutationIndices) {
 			unsigned rowCount = 0;
 			for(const auto& rowIndex : permutation) {
@@ -61,9 +59,12 @@ namespace hypro
 				intersectionConstants(rowCount) = _constants(rowIndex);
 				++rowCount;
 			}
-			vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
-			possibleVertices.push_back(vertex);
-			//std::cout<<__func__ << " : " <<__LINE__ << " vertex choices: " << vertex << std::endl;
+			// check if rank is full
+			if(intersection.colPivHouseholderQr().rank() == intersection.cols()) {
+				vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
+				possibleVertices.push_back(vertex);
+				std::cout<< "Vertex choices: (" << permutation << ") " << vertex.transpose() << std::endl;
+			}
 		}
 		
 		// check if vertices are true vertices (i.e. they fulfill all constraints)
@@ -80,6 +81,7 @@ namespace hypro
 		// finish initialization
 		for(const auto& point : possibleVertices) {
 			mPoints.push_back(Point<Number>(point));
+			std::cout << "Real vertex " << point.transpose() << std::endl;
 		}
 		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		mFan = polytope::Fan<Number>();
@@ -195,7 +197,6 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
 	{
-		// Todo: Insert more sophisticated convex hull algorithm here.
 		VPolytope<Number> result;
 		result.insert(this->mPoints.begin(), this->mPoints.end());
 		result.insert(rhs.mPoints.begin(),rhs.mPoints.end());
@@ -237,6 +238,7 @@ namespace hypro
 	template<typename Number>
 	void VPolytope<Number>::initGLPK() const {
 		if(!mInitialized) {
+			// create lp problem (basic options etc.) of size dimension+1 x #Points
 			mLp = glp_create_prob();
 			glp_init_smcp(&mOptions);
 			mOptions.msg_lev = GLP_MSG_OFF;
@@ -255,10 +257,10 @@ namespace hypro
 					mIa[pos] = i; mJa[pos] = j;
 					if(i == this->dimension()+1) {
 						mAr[pos] = 1.0;
-//						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]= 1.0" << std::endl;
+						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]= 1.0" << std::endl;
 					}else{
 						mAr[pos] = double((*vertex).at(i-1));
-//						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex)(i-1)) << std::endl;
+						std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos << "]=" << j << ", mAr[" << pos << "]=" << double((*vertex).at(i-1)) << std::endl;
 					}
 					++pos;
 					++vertex;

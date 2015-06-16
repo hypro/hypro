@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 	using namespace carl;
 
 	typedef FLOAT_T<mpfr_t> Number;
-	typedef hypro::Polytope<Number> Representation;
+	typedef hypro::VPolytope<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
@@ -25,9 +25,9 @@ int main(int argc, char const *argv[])
 	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 
 	//Other Objects: Vectors, Matrices, Guards...
-	vector_t<Number> invariantVec = vector_t<Number>(2,1);
+	vector_t<Number> invariantVec = vector_t<Number>(4,1);
 	operator_e invariantOp;
-	matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
+	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
 	struct Location<Number>::invariant inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
@@ -59,20 +59,20 @@ int main(int argc, char const *argv[])
 	 * Location
 	 */
 	invariantVec(0) = 16;
-	invariantVec(1) = 16;
-	//invariantVec(2) = 1;
+	invariantVec(1) = 1;
+	invariantVec(2) = 16;
+	invariantVec(3) = 1;
 
 	invariantOp = LEQ;
 
 	invariantMat(0,0) = 1;
 	invariantMat(0,1) = 0;
-	//invariantMat(0,2) = 0;
-	invariantMat(1,0) = 0;
-	invariantMat(1,1) = 1;
-	//invariantMat(1,2) = 0;
-	//invariantMat(2,0) = 0;
-	//invariantMat(2,1) = 0;
-	//invariantMat(2,2) = 1;
+	invariantMat(1,0) = -1;
+	invariantMat(1,1) = 0;
+	invariantMat(2,0) = 0;
+	invariantMat(2,1) = 1;
+	invariantMat(3,0) = 0;
+	invariantMat(3,1) = -1;
 
 	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -96,14 +96,8 @@ int main(int argc, char const *argv[])
 
 	locationMat(0,0) = -1;
 	locationMat(0,1) = -4;
-	//locationMat(0,2) = 0;
 	locationMat(1,0) = 4;
 	locationMat(1,1) = -1;
-	//locationMat(1,2) = 0;
-	//locationMat(2,0) = 0;
-	//locationMat(2,1) = 0;
-	//locationMat(2,2) = 0;
-
 
 	loc1->setActivityMat(locationMat);
 	loc2->setActivityMat(locationMat);
