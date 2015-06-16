@@ -124,4 +124,17 @@ namespace hypro
 
 } //namespace
 
+namespace std {
+
+	template<typename Number>
+	void swap(hypro::HPolytope<Number> lhs, hypro::HPolytope<Number> rhs) {
+		typename hypro::HPolytope<Number>::HyperplaneVector tmpPlanes = lhs.constraints();
+		lhs.clear();
+		lhs.insert(rhs.begin(), rhs.end());
+		rhs.clear();
+		rhs.insert(tmpPlanes.begin(), tmpPlanes.end());
+	}
+
+}
+
 #include "HPolytope.tpp"
