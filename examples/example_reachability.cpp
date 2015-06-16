@@ -5,6 +5,7 @@
 #include <carl/core/VariablePool.h>
 #include "../lib/datastructures/Point.h"
 #include "../lib/algorithms/reachability/forwardReachability.h"
+#include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/representations/SupportFunction/SupportFunction.h"
 #include "../lib/util/Plotter.h"
@@ -15,7 +16,7 @@ int main(int argc, char const *argv[])
 	using namespace carl;
 
 	typedef FLOAT_T<mpfr_t> Number;
-	typedef hypro::VPolytope<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself

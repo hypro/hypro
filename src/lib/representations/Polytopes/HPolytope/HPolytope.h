@@ -48,7 +48,7 @@ namespace hypro
 		HPolytope(const matrix_t<Number>& A);
 		
 		// conversion constructors
-		// HPolytope(const VPolytope<Number>& alien);
+		HPolytope(const VPolytope<Number>& alien);
 		
 		~HPolytope();
 		
@@ -61,6 +61,7 @@ namespace hypro
 		
 		const typename polytope::Fan<Number>& fan() const;
 		typename VPolytope<Number>::pointVector vertices() const;
+		Number supremum() const;
 		
 		void insert(const Hyperplane<Number>& plane);
 		void insert(const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end);
@@ -91,11 +92,13 @@ namespace hypro
 		HPolytope intersect(const HPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const vector_t<Number>& vec) const;
+		bool contains(const HPolytope<Number>& rhs) const;
 		HPolytope unite(const HPolytope& rhs) const;
 
 		matrix_t<Number> getConstaintsMatrix() const;
 
 		void clear();
+		void print() const;
 		
 		/*
 		 * Operators

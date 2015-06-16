@@ -197,21 +197,24 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
 	{
-		VPolytope<Number> result;
-		result.insert(this->mPoints.begin(), this->mPoints.end());
-		result.insert(rhs.mPoints.begin(),rhs.mPoints.end());
-		/*
-			std::vector<Facet<Number>> facets = convexHull(result.mPoints);
-			std::set<Point<Number>> preresult;
-			for(unsigned i = 0; i<facets.size(); i++) {
-				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-					preresult.insert(facets[i].vertices().at(j));			
-				}			
-			}
-			
-			return VPolytope<Number>(preresult);
-		*/
-		return result;
+		VPolytope<Number>::pointVector points;
+		points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
+		points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
+		
+		std::vector<Facet<Number>*> facets = convexHull(points);
+		std::set<Point<Number>> preresult;
+		for(unsigned i = 0; i<facets.size(); i++) {
+			for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
+				preresult.insert(facets[i]->vertices().at(j));			
+			}			
+		}
+		VPolytope<Number>::pointVector res;
+		for(const auto& point : preresult)
+			res.push_back(point);
+
+		return VPolytope<Number>(res);
+		
+		//return result;
 	}
 
 	template<typename Number>

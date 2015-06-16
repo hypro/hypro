@@ -58,17 +58,18 @@ namespace hypro
 		mInitialized = false;
 	}
 	
-	/*
+	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const VPoltope<Number>& alien) {
+	HPolytope<Number>::HPolytope(const VPolytope<Number>& alien) {
 		assert(alien.size() > 2);
-		if(alien.reduced()) {
-			
-		} else {
-			
+		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
+		std::vector<Facet<Number>*> facets = convexHull(points);
+		for(const auto& facet : facets) {
+			mHPlanes.push_back(facet->hyperplane());
 		}
+		mInitialized = false;
 	}
-	*/
+	
 
 	template<typename Number>
 	HPolytope<Number>::~HPolytope()
@@ -139,6 +140,17 @@ namespace hypro
 			}
 		}
 		return vertices;
+	}
+
+	template<typename Number>
+	Number HPolytope<Number>::supremum() const {
+		Number max = 0;
+        for(auto& point : this->vertices())
+        {
+            Number inftyNorm = hypro::Point<Number>::inftyNorm(point);
+            max = max > inftyNorm ? max : inftyNorm;
+        }
+        return max;
 	}
 
 	template<typename Number>
@@ -408,6 +420,15 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool HPolytope<Number>::contains(const HPolytope<Number>& rhs) const {
+		for(const auto& plane : rhs) {
+			if(this->evaluate(plane.normal()) > plane.offset())
+				return false;
+		}
+		return true;
+	}
+
+	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& _rhs) const {
 		VPolytope<Number> lhs(this->vertices());
 		VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
@@ -431,6 +452,11 @@ namespace hypro
 		mDimension = 0;
 		deleteArrays();
 		mInitialized = false;
+	}
+
+	template<typename Number>
+	void HPolytope<Number>::print() const {
+		std::cout << *this << std::endl;
 	}
 
 	/*
