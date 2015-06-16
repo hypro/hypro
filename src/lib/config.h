@@ -5,15 +5,16 @@
 #include <cassert>
 
 #include "types.h"
-#include <carl/core/logging.h>
+//#include <carl/core/logging.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
-#include <carl/core/carlLoggingHelper.h>
+//#include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+#include "util/operators.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
