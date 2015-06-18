@@ -1,8 +1,8 @@
 #include "../src/lib/util/convexHull.h"
 #include "../src/lib/config.h"
 //#include "../src/lib/datastructures/Point.h"
-#include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
-
+#include "../src/lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../src/lib/representations/Polytope/Polytope.h"
 
 
 using namespace hypro;
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 /*	v08(3) = 0;
 	v08(4) = 0; */
 	Point<double> p08 = Point<double>(v08);
-	
+
 /*	vector_t<double> v09 = vector_t<double>(5);
 	v09(0) = 3;
 	v09(1) = 0;
@@ -267,13 +267,17 @@ int main(int argc, char** argv) {
 	
 	std::vector<Point<double>> points;
 	points.push_back(p01);
-	points.push_back(p02);
-	points.push_back(p03);
-	points.push_back(p04);
-	points.push_back(p05);
-	points.push_back(p06);
-	points.push_back(p07);
-	points.push_back(p08);
+		points.push_back(p02);
+		points.push_back(p03);
+		points.push_back(p04);
+	//points.push_back(p09);
+	
+	std::vector<Point<double>> points2;
+	points2.push_back(p05);
+	points2.push_back(p06);
+	points2.push_back(p07);
+	points2.push_back(p08);
+	
 /*	points.push_back(p09);
 	points.push_back(p10);
 	points.push_back(p11);
@@ -300,22 +304,128 @@ int main(int argc, char** argv) {
 	points.push_back(p32); */
 	
 	
-	VPolytope<double> vpolytope = VPolytope<double>(points);
+//	Polytope<double> polytope = Polytope<double>(points);
+//	Polytope<double> polytope2 = Polytope<double>(points2);
 	
-	std::cout<< vpolytope <<std::endl;
+	//std::cout<< polytope <<std::endl;
+	//std::cout<< polytope2 <<std::endl;
 	
-	std::vector<Hyperplane<double>> hyperplanes;
-	std::vector<Facet<double>> facets = convexHull(vpolytope.vertices());
-	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	for(unsigned i = 0; i<facets.size(); i++) {
-		hyperplanes.push_back(facets[i].hyperplane());
+	//std::vector<Hyperplane<double>> hyperplanes;
+	//std::vector<Facet<double>> facets = convexHull(vpolytope.vertices());
+	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+	//for(unsigned i = 0; i<facets.size(); i++) {
+	//	hyperplanes.push_back(facets[i].hyperplane());
+	//}
+	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+	//HPolytope<double> hpolytope = HPolytope<double>(hyperplanes);
+	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+	
+	//std::cout<<__func__ << " : " <<__LINE__ << " matrix: " << hpolytope.peter() << std::endl;
+	//Polytope<double> polytope3 = polytope.unite(polytope2);
+	
+	points.push_back(p05);
+		points.push_back(p06);
+		points.push_back(p07);
+		points.push_back(p08);
+	
+	//std::cout<< "Polytope 3 is Empty : " << polytope3.isEmpty() <<std::endl;
+
+/*	while(!points.empty()){
+		for(unsigned i = 0; i<polytope3.vertices().size(); i++){
+			if(points.front() == polytope3.vertices().at(i)) {
+				points.erase(points.begin());
+				std::cout<< "Found Point at " << i <<std::endl;
+			}
+		}
+	}*/
+
+/*	for(auto& vertex : polytope.vertices()) {
+		if(!polytope3.hasVertex(vertex)){
+			std::cout<< "has Vertex " << vertex << " is false" <<std::endl;
+		}
+		if(!polytope3.contains(vertex)){
+			std::cout<< "contains " << vertex << " is false" <<std::endl;
+		}
 	}
-	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	HPolytope<double> hpolytope = HPolytope<double>(hyperplanes);
-	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+	for(auto& vertex : polytope2.vertices()) {
+		if(!polytope3.hasVertex(vertex)){
+			std::cout<< "has Vertex " << vertex << " is false" <<std::endl;
+		}
+		if(!polytope3.contains(vertex)){
+			std::cout<< "contains " << vertex << " is false" <<std::endl;
+		}
+	} */
+
+	/*std::vector<Facet<double>*> facets = convexHull(polytope3.vertices());
+	std::set<Point<double>> preresult;
+	for(unsigned i = 0; i<facets.size(); i++) {
+		for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
+			preresult.insert(facets[i]->vertices().at(j));
+		}
+	}
+	std::vector<Point<double>> points5;
+	for(auto& point : preresult) {
+		points5.push_back(point);
+	}
+	Polytope<double> result = Polytope<double>(points5);*/
+
+
+		Polytope<double> polytope3 = Polytope<double>(points);
+	//	polytope3 = polytope3.hull();
+
+/*	points.push_back(p01);
+		points.push_back(p02);
+		points.push_back(p03);
+		points.push_back(p04);
+		points.push_back(p05);
+			points.push_back(p06);
+			points.push_back(p07);
+			points.push_back(p08);*/
+/*	while(!points.empty()){
+			for(unsigned i = 0; i<polytope3.vertices().size(); i++){
+				if(points.front() == polytope3.vertices().at(i)) {
+					points.erase(points.begin());
+					std::cout<< "Found Point at " << i <<std::endl;
+				}
+			}
+		}*/
+
+
+		Point<double> p1 = Point<double>({4,4});
+
+		Point<double> p2 = Point<double>({5,7});
+
+		Point<double> p3 = Point<double>({7,7});
+
+		Point<double> p4 = Point<double>({8,4});
+
+		Point<double> p5 = Point<double>({3,3});
+
+		Point<double> p6 = Point<double>({4,5});
+
+		Point<double> p7 = Point<double>({5,3});
+
+		 std::vector<Point<double>> ps1;
+		 ps1.push_back(p1);
+		 ps1.push_back(p2);
+		 ps1.push_back(p3);
+		 ps1.push_back(p4);
+		 Polytope<double> pt1;
+		 pt1 = Polytope<double>(ps1);
+		 //EXPECT_FALSE(pt1.rawPolyhedron().is_universe());
+		 //EXPECT_TRUE(pt1.rawPolyhedron().is_topologically_closed());
+
+		 std::vector<Point<double>> ps2;
+		 ps2.push_back(p5);
+		 ps2.push_back(p6);
+		 ps2.push_back(p7);
+		 Polytope<double> pt2 = Polytope<double>(ps2);
+
+		 Polytope<double> res;
+		 res = pt1.unite(pt2);
+		 res = res.hull();
 	
-	std::cout<<__func__ << " : " <<__LINE__ << " matrix: " << hpolytope.peter() << std::endl;
-	VPolytope<double> vpolytope2 = VPolytope<double>(hpolytope.peter(), hpolytope.getConstraintsOffsetVector());
-	
-	std::cout<< vpolytope2 <<std::endl;
+		 //polytope3 = polytope3.hull();
+
+	//std::cout<< polytope3 <<std::endl;
 }

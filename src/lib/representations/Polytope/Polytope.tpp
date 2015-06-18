@@ -683,26 +683,41 @@ namespace hypro
     template<typename Number>
     Polytope<Number> Polytope<Number>::hull()
     {
-        Generator_System gs = mPolyhedron.minimized_generators();
-        Polytope<Number> result = Polytope<Number>(C_Polyhedron(gs));
-		
-		/*
-			std::vector<Facet<Number>> facets = convexHull(mPoints);
-			std::set<Point<Number>> preresult;
-			for(unsigned i = 0; i<facets.size(); i++) {
-				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-					preresult.insert(facets[i].vertices().at(j));			
-				}			
-			}
-			std::vector<Point<Number>> points;
-			for(auto& point : preresult) {
-				points.push_back(point);		
-			}
-			result = Polytope<Number>(points);
-		*/
-		
-				
-        mPointsUpToDate = false;
+        //Generator_System gs = mPolyhedron.minimized_generators();
+        //Polytope<Number> result = Polytope<Number>(C_Polyhedron(gs));
+
+    	if(!mPointsUpToDate) {
+    		std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    		updatePoints();
+    	}
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	std::vector<Facet<Number>*> hull = convexHull(mPoints);
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	std::set<Point<Number>> preresult;
+
+    	for(unsigned i = 0; i<hull.size(); i++) {
+    		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
+    			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
+    			preresult.insert(hull[i]->vertices().at(j));
+    			/*
+    				std::cout << "Set after insert: ";
+    				for(const auto& point : preresult) {
+    				std::cout << point.rawCoordinates().transpose() << ", ";
+    				}
+    				std::cout << std::endl;
+    			*/
+    		}
+    	}
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	std::vector<Point<Number>> points;
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	for(auto& point : preresult) {
+    		points.push_back(point);
+    	}
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	Polytope<Number> result = Polytope<Number>(points);
+    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	mPointsUpToDate = false;
 
         return result;
     }
@@ -742,30 +757,31 @@ namespace hypro
     	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
 		//std::cout << "Ping" << std::endl;
-    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
+/*    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
     	//std::cout << "Ping" << std::endl;
 
-		std::set<Point<Number>> preresult;
-		for(unsigned i = 0; i<hull.size(); i++) {
-			for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
-				//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-				preresult.insert(hull[i]->vertices().at(j));
-				/*		
-				std::cout << "Set after insert: ";
-				for(const auto& point : preresult) {
-					std::cout << point.rawCoordinates().transpose() << ", ";
-				}
-				std::cout << std::endl;
-				*/
-			}			
-		}
-		std::vector<Point<Number>> points;
-		for(auto& point : preresult) {
-			points.push_back(point);		
-		}
-		Polytope<Number> result = Polytope<Number>(points);
-		
-        return result;
+    	std::set<Point<Number>> preresult;
+    	for(unsigned i = 0; i<hull.size(); i++) {
+    		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
+    			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
+    			preresult.insert(hull[i]->vertices().at(j));
+
+    			//	std::cout << "Set after insert: ";
+    			//	for(const auto& point : preresult) {
+    			//	std::cout << point.rawCoordinates().transpose() << ", ";
+    			//	}
+    			//	std::cout << std::endl;
+
+    		}
+    	}
+    	std::vector<Point<Number>> points;
+    	for(auto& point : preresult) {
+    		points.push_back(point);
+    	}
+
+    	Polytope<Number> result = Polytope<Number>(points);
+    	return result;*/
+    	return this->hull();
     }
     
     template<typename Number>

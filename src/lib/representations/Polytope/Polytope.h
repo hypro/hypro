@@ -28,7 +28,8 @@
 
 
 using namespace Parma_Polyhedra_Library;
-
+using namespace Parma_Polyhedra_Library::IO_Operators;
+ 
 namespace hypro
 {
     template<typename Number>
@@ -120,7 +121,6 @@ namespace hypro
          */
         friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
         {
-            using namespace Parma_Polyhedra_Library::IO_Operators;
             lhs << "[";
             for(auto& generator : rhs.rawPolyhedron().generators())
             {

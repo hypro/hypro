@@ -41,18 +41,33 @@ namespace polytope {
 			}
 		}
 		// adjust vectors to the right direction
-		for(const auto& plane : mPlanes) {
-			for(auto& vector : intersectionVectors) {
-				if(!plane->holds(vector)) {
-					vector_t<Number> tmp = vector*-1;
-					intersectionVectors.erase(vector);
-					intersectionVectors.insert(tmp);
 
+		std::cout<<__func__ << " : " <<__LINE__ << " : "<<mPlanes.size() << std::endl;
+		vectorSet<Number> correctIntersectionVectors;
+		while(!intersectionVectors.empty()) {
+			bool changed = false;
+			std::cout<<__func__ << " : " <<__LINE__ << *intersectionVectors.begin() << std::endl;
+			for(const auto& plane : mPlanes) {
+				std::cout<<__func__ << " : " <<__LINE__ << " plane : " << plane << std::endl;
+				if(!plane->holds(*intersectionVectors.begin())) {
+					std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+					vector_t<Number> tmp = (*intersectionVectors.begin())*-1;
+					intersectionVectors.erase(intersectionVectors.begin());
+					correctIntersectionVectors.insert(tmp);
+					changed = true;
 					std::cout << tmp << " is contained in " << *plane << " : " << plane->holds(tmp) << std::endl;
 					assert(plane->holds(tmp));
+					break;
 				}
 			}
+			if(!changed){
+				vector_t<Number> tmp = (*intersectionVectors.begin());
+				intersectionVectors.erase(intersectionVectors.begin());
+				correctIntersectionVectors.insert(tmp);
+			}
 		}
+
+		intersectionVectors = correctIntersectionVectors;
 
 		std::cout << "Collected vectors: " << std::endl;
 		for(const auto& vec : intersectionVectors) {

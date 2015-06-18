@@ -130,6 +130,7 @@ static std::vector<Facet<Number>*> initConvexHull(const std::vector<Point<Number
  */
 template<typename Number>
 static void points_not_in_facets(const std::vector<Point<Number>>& points, const std::vector<Facet<Number>*>& facets, std::vector<Point<Number>>& unassignedPoints, std::vector<Point<Number>>& assignedPoints){
+
 	unassignedPoints = points;
 	std::vector<Point<Number>> pointsInFacets;
 	for(Facet<Number>* facet : facets) {
@@ -140,6 +141,7 @@ static void points_not_in_facets(const std::vector<Point<Number>>& points, const
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
+
 	std::vector<int> removeables;
 	for (unsigned i = 0; i<unassignedPoints.size(); i++) {
 		for (unsigned j = 0; j<pointsInFacets.size(); j++) {
@@ -149,6 +151,7 @@ static void points_not_in_facets(const std::vector<Point<Number>>& points, const
 		}
 	}
 	// Stefan: removables holds the indices of the points in points, which are contained in one of the facets.
+	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 
 	std::vector<int> remove;
 	for(unsigned i = 0; i<removeables.size(); i++){
@@ -165,8 +168,9 @@ static void points_not_in_facets(const std::vector<Point<Number>>& points, const
 	// Clear removables of duplicates (-> remove)
 
 	for(unsigned i = 0; i<remove.size(); i++){
-		assignedPoints.push_back(unassignedPoints.at(remove[i]));
-		unassignedPoints.erase(unassignedPoints.begin() + remove[i]-i);
+		assignedPoints.push_back(unassignedPoints.at(remove[i]-i));
+
+		unassignedPoints.erase(unassignedPoints.begin() + (remove[i]-i));
 	}
 
 	//std::cout << __func__ << " : " << __LINE__ << unassignedPoints << "  " << assignedPoints << std::endl;
@@ -584,39 +588,50 @@ static Facet<Number>* newNeighbor(Facet<Number>* oldNeighbor, const std::vector<
 template<typename Number>
 static void setNeighborhoodOfPoints(std::vector<Facet<Number>*>& facets) {
 
-	for(unsigned i = 0; i<facets.size(); i++) {
-		for(unsigned j = 0; j<facets.size(); j++){
-			if(neighborCheck(facets[i], facets[j])){
-				std::vector<unsigned> facet1;
-				std::vector<unsigned> facet2;
+	if(facets[0]->vertices().at(0).dimension() <= 1){
 
-				for(unsigned k = 0; k<facets[i]->vertices().size(); k++){
-					for(unsigned l = 0; l<facets[j]->vertices().size(); l++){
-						if(facets[i]->vertices().at(k) == facets[j]->vertices().at(l)) {
-							facet1.push_back(k);
-							facet2.push_back(l);
+	} else if(facets[0]->vertices().at(0).dimension() == 2){
+		for(unsigned i = 0; i<facets.size(); i++) {
+			facets[i]->rVertices().at(0).addNeighbor(facets[i]->rVertices().at(1));
+			facets[i]->rVertices().at(1).addNeighbor(facets[i]->rVertices().at(0));
+		}
+	}
+	else{
+		for(unsigned i = 0; i<facets.size(); i++) {
+			for(unsigned j = 0; j<facets.size(); j++){
+				if(neighborCheck(facets[i], facets[j])){
+					std::vector<unsigned> facet1;
+					std::vector<unsigned> facet2;
+
+
+					for(unsigned k = 0; k<facets[i]->vertices().size(); k++){
+						for(unsigned l = 0; l<facets[j]->vertices().size(); l++){
+							if(facets[i]->vertices().at(k) == facets[j]->vertices().at(l)) {
+								facet1.push_back(k);
+								facet2.push_back(l);
+							}
 						}
 					}
-				}
 
-				for(unsigned k = 0; k<facet1.size(); k++){
-					for(unsigned l = 0; l<facet1.size(); l++){
-						if(k!=l) {
-							facets[i]->rVertices().at(facet1[k]).addNeighbor((facets[i]->vertices().at(facet1[l])));
-							facets[i]->rVertices().at(facet1[l]).addNeighbor((facets[i]->vertices().at(facet1[k])));
+					for(unsigned k = 0; k<facet1.size(); k++){
+						for(unsigned l = 0; l<facet1.size(); l++){
+							if(k!=l) {
+								facets[i]->rVertices().at(facet1[k]).addNeighbor((facets[i]->vertices().at(facet1[l])));
+								facets[i]->rVertices().at(facet1[l]).addNeighbor((facets[i]->vertices().at(facet1[k])));
+							}
 						}
 					}
-				}
 
-				for(unsigned k = 0; k<facet2.size(); k++){
-					for(unsigned l = 0; l<facet2.size(); l++){
-						if(k!=l) {
-							facets[j]->rVertices().at(facet2[k]).addNeighbor((facets[j]->vertices().at(facet2[l])));
-							facets[j]->rVertices().at(facet2[l]).addNeighbor((facets[j]->vertices().at(facet2[k])));
+					for(unsigned k = 0; k<facet2.size(); k++){
+						for(unsigned l = 0; l<facet2.size(); l++){
+							if(k!=l) {
+								facets[j]->rVertices().at(facet2[k]).addNeighbor((facets[j]->vertices().at(facet2[l])));
+								facets[j]->rVertices().at(facet2[l]).addNeighbor((facets[j]->vertices().at(facet2[k])));
+							}
 						}
 					}
-				}
 
+				}
 			}
 		}
 	}
@@ -629,6 +644,7 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 		std::vector<Facet<Number>*> facets = initConvexHull(points);
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
 		points_not_in_facets(points,facets,unassignedPoints, assignedPoints);
+
 		for(unsigned i = 0; i<facets.size(); i++){
 			for (unsigned j = 0; j<unassignedPoints.size(); j++) {
 				if(facets[i]->isBelow(unassignedPoints[j])) {
@@ -639,9 +655,11 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 
 		//main body
+
 		std::queue<Facet<Number>*> workingSet;
 		not_outside_facet(facets, workingSet);
 		while(!workingSet.empty()) {
+			std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			Facet<Number>* currentFacet = workingSet.front();
 			//std::cout << __func__ << " Current Facet: " << *currentFacet << std::endl;
 			//std::cout << __func__ << " Current Neighbors: ";
@@ -696,7 +714,6 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 			 * facet (Horizon ridges). This means, that we have to take into account all ridges, which are built of one facet out of the visible facet set and one facet out of
 			 * the neighbors set.
 			 */
-
 			 std::vector<Facet<Number>*> newFacets;
 			 for(const auto& facet : currentVisibleFacets) {
 			 	// collect horizon ridges
@@ -833,7 +850,7 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 
 		setNeighborhoodOfPoints(facets);
 
-		//std::cout << __func__ << " facets: " << facets << std::endl;
+
 
 		return facets;
 	}
