@@ -97,23 +97,79 @@ TYPED_TEST(HPolytopeTest, Insertion)
 	EXPECT_TRUE(hpt1.hasConstraint(p1));
 }
 
-/*
+
 TYPED_TEST(HPolytopeTest, Union)
 {
-	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->points1);
-	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->points2);
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
+	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 	HPolytope<TypeParam> res = hpt1.unite(hpt2);
 
 	for(auto& vertex : hpt1.vertices()) {
-		EXPECT_TRUE(res.hasVertex(vertex));
+		//EXPECT_TRUE(res.hasVertex(vertex));
 		EXPECT_TRUE(res.contains(vertex));
 	}
 	for(auto& vertex : hpt2.vertices()) {
-		EXPECT_TRUE(res.hasVertex(vertex));
+		//EXPECT_TRUE(res.hasVertex(vertex));
 		EXPECT_TRUE(res.contains(vertex));
 	}
+
+	/* std::cout<< "Part 2 starting: "	<< std::endl;
+	          std::vector<Hyperplane<TypeParam>> ps3;
+	          Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
+	          Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},-3);
+	          Hyperplane<TypeParam> p03 = Hyperplane<TypeParam>({-1,0,0},1);
+	          Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},-3);
+	          Hyperplane<TypeParam> p05 = Hyperplane<TypeParam>({0,0,-1},1);
+	          Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},-3);
+
+	          ps3.push_back(p01);
+	          ps3.push_back(p02);
+	          ps3.push_back(p03);
+	          ps3.push_back(p04);
+	          ps3.push_back(p05);
+	          ps3.push_back(p06);
+
+	          HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
+
+	          std::vector<Hyperplane<TypeParam>> ps4;
+	          Hyperplane<TypeParam> p07 = Hyperplane<TypeParam>({0,-1,0},3);
+	          Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},-5);
+	          Hyperplane<TypeParam> p09 = Hyperplane<TypeParam>({-1,0,0},3);
+	          Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},-5);
+
+
+	          ps4.push_back(p05);
+	          ps4.push_back(p06);
+	          ps4.push_back(p07);
+	          ps4.push_back(p08);
+	          ps4.push_back(p09);
+	          ps4.push_back(p10);
+
+
+	          HPolytope<TypeParam> pt4 = HPolytope<TypeParam>(ps4);
+
+	          HPolytope<TypeParam> res2 = pt3.unite(pt4);
+
+	          for(auto& vertex : pt3.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+	          for(auto& vertex : pt4.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+
+	          HPolytope<TypeParam> res3 = res2.unite(HPolytope<TypeParam>());
+
+	          for(auto& vertex : res3.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+	          for(auto& vertex : res2.vertices()) {
+	        	  EXPECT_TRUE(res3.contains(vertex));
+	          } */
 }
-*/
+
 TYPED_TEST(HPolytopeTest, LinearTransformation)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
@@ -171,6 +227,52 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	for(auto& plane : result.constraints()) {
 		EXPECT_TRUE(hpt1.hasConstraint(plane) || hpt2.hasConstraint(plane));
 	}
+
+	/*std::cout<< "Part 2 starting: "	<< std::endl;
+		          std::vector<Hyperplane<TypeParam>> ps3;
+		          Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
+		          Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},-3);
+		          Hyperplane<TypeParam> p03 = Hyperplane<TypeParam>({-1,0,0},1);
+		          Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},-3);
+		          Hyperplane<TypeParam> p05 = Hyperplane<TypeParam>({0,0,-1},1);
+		          Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},-3);
+
+		          ps3.push_back(p01);
+		          ps3.push_back(p02);
+		          ps3.push_back(p03);
+		          ps3.push_back(p04);
+		          ps3.push_back(p05);
+		          ps3.push_back(p06);
+
+		          HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
+
+		          std::vector<Hyperplane<TypeParam>> ps4;
+		          Hyperplane<TypeParam> p07 = Hyperplane<TypeParam>({0,-1,0},3);
+		          Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},-5);
+		          Hyperplane<TypeParam> p09 = Hyperplane<TypeParam>({-1,0,0},3);
+		          Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},-5);
+
+
+		          ps4.push_back(p05);
+		          ps4.push_back(p06);
+		          ps4.push_back(p07);
+		          ps4.push_back(p08);
+		          ps4.push_back(p09);
+		          ps4.push_back(p10);
+
+
+		          HPolytope<TypeParam> pt4 = HPolytope<TypeParam>(ps4);
+
+		          HPolytope<TypeParam> res2 = pt3.intersect(pt4);
+
+		          for(auto& vertex : res2.vertices()) {
+		        	  EXPECT_TRUE(pt3.contains(vertex));
+		        	  EXPECT_TRUE(pt4.contains(vertex));
+		          }
+
+		          HPolytope<TypeParam> res3 = res2.intersect(HPolytope<TypeParam>());
+
+		          EXPECT_TRUE(res3.size() == 0); */
 }
 
 

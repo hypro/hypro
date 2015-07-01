@@ -114,6 +114,68 @@ TYPED_TEST(VPolytopeTest, Union)
 		//EXPECT_TRUE(res.hasVertex(vertex));
 		EXPECT_TRUE(res.contains(vertex));
 	}
+
+	/*std::cout<< "Part 2 starting: "	<< std::endl;
+	          std::vector<Point<TypeParam>> ps3;
+	          Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
+	          Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
+	          Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
+	          Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
+	          Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
+	          Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
+	          Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
+	          Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+
+	          ps3.push_back(p01);
+	          ps3.push_back(p02);
+	          ps3.push_back(p03);
+	          ps3.push_back(p04);
+	          ps3.push_back(p05);
+	          ps3.push_back(p06);
+	          ps3.push_back(p07);
+	          ps3.push_back(p08);
+
+	          VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(ps3);
+
+	          std::vector<Point<TypeParam>> ps4;
+	          Point<TypeParam> p09 = Point<TypeParam>({3,5,1});
+	          Point<TypeParam> p10 = Point<TypeParam>({5,3,1});
+	          Point<TypeParam> p11 = Point<TypeParam>({5,5,1});
+	          Point<TypeParam> p12 = Point<TypeParam>({3,5,3});
+	          Point<TypeParam> p13 = Point<TypeParam>({5,3,3});
+	          Point<TypeParam> p14 = Point<TypeParam>({5,5,3});
+
+	          ps4.push_back(p04);
+	          ps4.push_back(p08);
+	          ps4.push_back(p09);
+	          ps4.push_back(p10);
+	          ps4.push_back(p11);
+	          ps4.push_back(p12);
+	          ps4.push_back(p13);
+	          ps4.push_back(p14);
+
+	          VPolytope<TypeParam> pt4 = VPolytope<TypeParam>(ps4);
+
+	          VPolytope<TypeParam> res2 = pt3.unite(pt4);
+
+	          for(auto& vertex : pt3.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+	          for(auto& vertex : pt4.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+
+	          VPolytope<TypeParam> res3 = res2.unite(VPolytope<TypeParam>());
+
+	          for(auto& vertex : res3.vertices()) {
+	        	  EXPECT_TRUE(res2.contains(vertex));
+	          }
+
+	          for(auto& vertex : res2.vertices()) {
+	        	  EXPECT_TRUE(res3.contains(vertex));
+	          } */
 }
 
 TYPED_TEST(VPolytopeTest, LinearTransformation)
@@ -158,6 +220,61 @@ TYPED_TEST(VPolytopeTest, Intersection)
 		EXPECT_TRUE(vpt1.contains(vertex));
 		EXPECT_TRUE(vpt2.contains(vertex));
 	}
+
+	/*std::cout<< "Part 2 starting: "	<< std::endl;
+
+	      std::vector<Point<TypeParam>> ps3;
+	      Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
+	      Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
+	      Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
+	      Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
+	      Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
+	      Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
+	      Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
+	      Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+
+	      ps3.push_back(p01);
+	      ps3.push_back(p02);
+	      ps3.push_back(p03);
+	      ps3.push_back(p04);
+	      ps3.push_back(p05);
+	      ps3.push_back(p06);
+	      ps3.push_back(p07);
+	      ps3.push_back(p08);
+
+	      VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(ps3);
+
+	      std::vector<Point<TypeParam>> ps4;
+	      Point<TypeParam> p09 = Point<TypeParam>({2,2,1});
+	      Point<TypeParam> p10 = Point<TypeParam>({2,4,1});
+	      Point<TypeParam> p11 = Point<TypeParam>({4,2,1});
+	      Point<TypeParam> p12 = Point<TypeParam>({4,4,1});
+	      Point<TypeParam> p13 = Point<TypeParam>({2,2,3});
+	      Point<TypeParam> p14 = Point<TypeParam>({2,4,3});
+	      Point<TypeParam> p15 = Point<TypeParam>({4,2,3});
+	      Point<TypeParam> p16 = Point<TypeParam>({4,4,3});
+
+	      ps4.push_back(p09);
+	      ps4.push_back(p10);
+	      ps4.push_back(p11);
+	      ps4.push_back(p12);
+	      ps4.push_back(p13);
+	      ps4.push_back(p14);
+	      ps4.push_back(p15);
+	      ps4.push_back(p16);
+
+	      VPolytope<TypeParam> pt4 = VPolytope<TypeParam>(ps4);
+
+	      VPolytope<TypeParam> res2 = pt3.intersect(pt4);
+
+	      for(auto& vertex : res2.vertices()) {
+	    	  EXPECT_TRUE(pt3.contains(vertex));
+	    	  EXPECT_TRUE(pt4.contains(vertex));
+	      }
+
+	      VPolytope<TypeParam> res3 = res2.intersect(VPolytope<TypeParam>());
+
+	      EXPECT_TRUE(res3.size() == 0); */
 }
 
 TYPED_TEST(VPolytopeTest, Membership)

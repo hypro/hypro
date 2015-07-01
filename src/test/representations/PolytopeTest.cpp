@@ -218,6 +218,63 @@ TYPED_TEST(PolytopeTest, Intersection)
 //    res.print();
     res = res.hull();
 //    res.print();
+
+   /* std::cout<< "Part 2 starting: "	<< std::endl;
+      std::vector<Point<TypeParam>> ps3;
+      Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
+      Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
+      Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
+      Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
+      Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
+      Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
+      Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
+      Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+
+      ps3.push_back(p01);
+      ps3.push_back(p02);
+      ps3.push_back(p03);
+      ps3.push_back(p04);
+      ps3.push_back(p05);
+      ps3.push_back(p06);
+      ps3.push_back(p07);
+      ps3.push_back(p08);
+
+      hypro::Polytope<TypeParam> pt3 = Polytope<TypeParam>(ps3);
+
+      std::vector<Point<TypeParam>> ps4;
+      Point<TypeParam> p09 = Point<TypeParam>({2,2,1});
+      Point<TypeParam> p10 = Point<TypeParam>({2,4,1});
+      Point<TypeParam> p11 = Point<TypeParam>({4,2,1});
+      Point<TypeParam> p12 = Point<TypeParam>({4,4,1});
+      Point<TypeParam> p13 = Point<TypeParam>({2,2,3});
+      Point<TypeParam> p14 = Point<TypeParam>({2,4,3});
+      Point<TypeParam> p15 = Point<TypeParam>({4,2,3});
+      Point<TypeParam> p16 = Point<TypeParam>({4,4,3});
+
+      ps4.push_back(p09);
+      ps4.push_back(p10);
+      ps4.push_back(p11);
+      ps4.push_back(p12);
+      ps4.push_back(p13);
+      ps4.push_back(p14);
+      ps4.push_back(p15);
+      ps4.push_back(p16);
+
+      hypro::Polytope<TypeParam> pt4 = Polytope<TypeParam>(ps4);
+
+      hypro::Polytope<TypeParam> res2 = pt3.intersect(pt4);
+
+      res2 = res2.hull();
+
+      for(auto& vertex : res2.vertices()) {
+    	  EXPECT_TRUE(pt3.contains(vertex));
+    	  EXPECT_TRUE(pt4.contains(vertex));
+      }
+
+      hypro::Polytope<TypeParam> res3 = res2.intersect(Polytope<TypeParam>());
+
+      EXPECT_TRUE(res3.isEmpty()); */
+
 }
 
 TYPED_TEST(PolytopeTest, Union)
@@ -241,6 +298,71 @@ TYPED_TEST(PolytopeTest, Union)
     hypro::Polytope<TypeParam> res;
     res = pt1.unite(pt2);
     res = res.hull();
+
+ /*   std::cout<< "Part 2 starting: "	<< std::endl;
+          std::vector<Point<TypeParam>> ps3;
+          Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
+          Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
+          Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
+          Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
+          Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
+          Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
+          Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
+          Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+
+          ps3.push_back(p01);
+          ps3.push_back(p02);
+          ps3.push_back(p03);
+          ps3.push_back(p04);
+          ps3.push_back(p05);
+          ps3.push_back(p06);
+          ps3.push_back(p07);
+          ps3.push_back(p08);
+
+          hypro::Polytope<TypeParam> pt3 = Polytope<TypeParam>(ps3);
+
+          std::vector<Point<TypeParam>> ps4;
+          Point<TypeParam> p09 = Point<TypeParam>({3,5,1});
+          Point<TypeParam> p10 = Point<TypeParam>({5,3,1});
+          Point<TypeParam> p11 = Point<TypeParam>({5,5,1});
+          Point<TypeParam> p12 = Point<TypeParam>({3,5,3});
+          Point<TypeParam> p13 = Point<TypeParam>({5,3,3});
+          Point<TypeParam> p14 = Point<TypeParam>({5,5,3});
+
+          ps4.push_back(p04);
+          ps4.push_back(p08);
+          ps4.push_back(p09);
+          ps4.push_back(p10);
+          ps4.push_back(p11);
+          ps4.push_back(p12);
+          ps4.push_back(p13);
+          ps4.push_back(p14);
+
+          hypro::Polytope<TypeParam> pt4 = Polytope<TypeParam>(ps4);
+
+          hypro::Polytope<TypeParam> res2 = pt3.unite(pt4);
+
+          res2 = res2.hull();
+
+          for(auto& vertex : pt3.vertices()) {
+        	  EXPECT_TRUE(res2.contains(vertex));
+          }
+
+          for(auto& vertex : pt4.vertices()) {
+        	  EXPECT_TRUE(res2.contains(vertex));
+          }
+
+
+          hypro::Polytope<TypeParam> res3 = res2.unite(Polytope<TypeParam>());
+          res3 = res3.hull();
+
+          for(auto& vertex : res3.vertices()) {
+        	  EXPECT_TRUE(res2.contains(vertex));
+          }
+
+          for(auto& vertex : res2.vertices()) {
+        	  EXPECT_TRUE(res3.contains(vertex));
+          } */
 }
 
 TYPED_TEST(PolytopeTest, LinearTransformation)
@@ -288,7 +410,7 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     //b(1,0) = TypeParam(0);
     
     hypro::Polytope<TypeParam> result;
-    result = poly1.linearTransformation(A);
+    result = poly1.linearTransformation(A); //what kind of result is expected?
 //    result.print();
 }
 
@@ -402,41 +524,45 @@ TYPED_TEST(PolytopeTest, ConvexHull)
 
 	//neighborhood.....
 }
+*/
 
+/*
 TYPED_TEST(PolytopeTest, Membership)
 {
-    vector_t<double> v01 = vector_t<double>(3);
+    vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
 	v01(0) = 4;
 	v01(1) = 4;
-	Point<Number> p01 = Point<double>(v01);
+	Point<TypeParam> p01 = Point<TypeParam>(v01);
 
-	vector_t<double> v02 = vector_t<double>(3);
+	vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
 	v02(0) = 5;
 	v02(1) = 6;
-	Point<Number> p02 = Point<double>(v02);
+	Point<TypeParam> p02 = Point<TypeParam>(v02);
 
-	vector_t<double> v03 = vector_t<double>(3);
+	vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
 	v03(0) = 6;
 	v03(1) = 4;
-	Point<Number> p03 = Point<double>(v03);
+	Point<TypeParam> p03 = Point<TypeParam>(v03);
 
-	vector_t<double> v04 = vector_t<double>(3);
+	vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
 	v04(0) = 10;
 	v04(1) = 0;
-	Point<Number> p04= Point<double>(v04);
+	Point<TypeParam> p04= Point<TypeParam>(v04);
 
-	std::vector<Point<Number>> v1;
+	std::vector<Point<TypeParam>> v1;
 	v1.push_back(p01);
 	v1.push_back(p02);
 	v1.push_back(p03);
 
-	Polytope<Number> pt2 = Polytope<Number>(v1);
+	Polytope<TypeParam> ptpe1 = Polytope<TypeParam>(v1);
+
+	Polytope<TypeParam> pt2 = Polytope<TypeParam>(v1);
 
 	EXPECT_TRUE(ptpe1.contains(pt2));
 
 	v1.push_back(p04);
 
-	Polytope<Number> pt3 = Polytope<Number>(v1);
+	Polytope<TypeParam> pt3 = Polytope<TypeParam>(v1);
 
 	EXPECT_FALSE(ptpe1.contains(pt3));
 }
