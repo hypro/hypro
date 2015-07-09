@@ -20,7 +20,7 @@ namespace hypro {
 	
 	template<typename Number>
 	class VertexContainer {
-            
+			
 	private:
 		/***********************************************************************
 		 * Member
@@ -40,42 +40,42 @@ namespace hypro {
 		 * Getters & Setters
 		 **********************************************************************/
 		
-                unsigned dimension() const
-                {
-                    assert( mVertices.size() > 0 );
-                    return (*mVertices.begin()).dimension();
-                }
-                
-                std::vector<carl::Variable> variables() const
-                {
-                    assert( mVertices.size() > 0 );
-                    return (*mVertices.begin()).variables();
-                }
-                
+		unsigned dimension() const
+		{
+			assert( mVertices.size() > 0 );
+			return (*mVertices.begin()).dimension();
+		}
+		
+		std::vector<carl::Variable> variables() const
+		{
+			assert( mVertices.size() > 0 );
+			return (*mVertices.begin()).variables();
+		}
+				
 		unsigned size() const
 		{
-                    return mVertices.size();
+					return mVertices.size();
 		}
-                
-                bool empty() const
-                {
-                    return mVertices.empty();
-                }
-                
-                vSet<Number> vertices() const
-                {
-                    return mVertices;
-                }
+				
+		bool empty() const
+		{
+			return mVertices.empty();
+		}
+		
+		vSet<Number> vertices() const
+		{
+			return mVertices;
+		}
 		
 		vList<Number> getSmallerVertices(const Point<Number>& p)
-                {
-                        vList<Number> verticesInBoundary;
-                        for(auto vertexIt = mVertices.begin(); vertexIt != mVertices.end(); ++vertexIt)
-                        {
-                                if((*vertexIt).isInBoundary(p)) verticesInBoundary.push_back(*vertexIt);
-                        }
-                        return verticesInBoundary;
-                }
+		{
+			vList<Number> verticesInBoundary;
+			for(auto vertexIt = mVertices.begin(); vertexIt != mVertices.end(); ++vertexIt)
+			{
+					if((*vertexIt).isInBoundary(p)) verticesInBoundary.push_back(*vertexIt);
+			}
+			return verticesInBoundary;
+		}
 		
 		/**
 		 *
@@ -106,7 +106,7 @@ namespace hypro {
 			if(this == &rhs) return (*this);
 			mVertices.clear();
 			mVertices = rhs.mVertices;
-                        return *this;
+						return *this;
 		}
 		
 		inline vSetIt<Number> find(const Point<Number>& p, bool colour = false) const {
@@ -166,7 +166,7 @@ namespace hypro {
 		 * Not safe.
 		 */
 		inline std::pair<vSetIt<Number>, bool> insert(const Vertex<Number>& v) {
-                    return mVertices.insert(v);
+			return mVertices.insert(v);
 		}
 		
 		/**
