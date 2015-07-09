@@ -176,6 +176,7 @@ int main(int argc, char** argv) {
 	v21(3) = 0;
 	v21(4) = 3;
 	Point<double> p21 = Point<double>(v21);
+	ardReachabilityTest.cpp.o
 	
 	vector_t<double> v22 = vector_t<double>(5);
 	v22(0) = 3;
@@ -237,7 +238,8 @@ int main(int argc, char** argv) {
 	v29(0) = 3;
 	v29(1) = 3;
 	v29(2) = 0;
-	v29(3) = 3;
+	v29(3) = 3;ardReachabilityTest.cpp.o
+
 	v29(4) = 3;
 	Point<double> p29 = Point<double>(v29);
 	

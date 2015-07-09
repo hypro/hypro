@@ -437,6 +437,20 @@ static bool includeFacet(Facet<Number>* facet1, Facet<Number>* facet2) {
 }
 
 template<typename Number>
+static void setNeighborhoodOfPointsBeforehand(std::vector<Facet<Number>*>& facets) {
+
+	for(auto& facet:facets) {
+		for(unsigned j = 0; j<facet->rVertices().size(); j++){
+			for(unsigned k = 0; k<facet->vertices().size(); k++){
+				if(j!=k){
+					facet->rVertices().at(j).addNeighbor(facet->vertices().at(k));
+				}
+			}
+		}
+	}
+}
+
+template<typename Number>
 static std::vector<Facet<Number>*> maximizeFacets (std::vector<Facet<Number>*>& facets) {
 	std::vector<Facet<Number>*> result;
 	//unsigned dimension = facets.front().vertices().front().dimension();
@@ -585,6 +599,8 @@ static Facet<Number>* newNeighbor(Facet<Number>* oldNeighbor, const std::vector<
 	return oldNeighbor;
 }
 
+
+
 template<typename Number>
 static void setNeighborhoodOfPoints(std::vector<Facet<Number>*>& facets) {
 
@@ -637,9 +653,24 @@ static void setNeighborhoodOfPoints(std::vector<Facet<Number>*>& facets) {
 	}
 }
 
+
+
+
+
+
+
 template<typename Number>
-static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& points) {
+static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& pts) {
 		//initialization
+		std::set<Point<Number>> pt;
+		for(auto& p:pts){
+			pt.insert(p);
+		}
+		std::vector<Point<Number> > points;
+		for(auto& p:pt){
+			points.push_back(p);
+		}
+
 		if(points.size() >= points.at(0).dimension() + 1){
 		std::vector<Facet<Number>*> facets = initConvexHull(points);
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
@@ -846,9 +877,11 @@ static std::vector<Facet<Number>*> convexHull(const std::vector<Point<Number>>& 
 			//std::cout << __func__ << " facets: " << facets << std::endl;
 		}
 
+		setNeighborhoodOfPointsBeforehand(facets);
+
 		facets = maximizeFacets(facets);
 
-		setNeighborhoodOfPoints(facets);
+		//setNeighborhoodOfPoints(facets);
 
 
 

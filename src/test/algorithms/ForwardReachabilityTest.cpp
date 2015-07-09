@@ -321,7 +321,7 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	 * computePolytope() Test
 	 */
 	hypro::Polytope<FLOAT_T<double>> testBoxPoly;
-	int dimension = 4;
+	int dimension = 3;
 	FLOAT_T<double> radius = 5;
 	testBoxPoly = hypro::computePolytope<FLOAT_T<double>,hypro::Polytope<FLOAT_T<double>>>(dimension,radius);
 

@@ -56,6 +56,8 @@ namespace hypro
 		 * Getters and setters
 		 */
 		
+		bool empty() const;
+
 		unsigned dimension() const;
 		unsigned size() const;
 		

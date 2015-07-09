@@ -671,13 +671,17 @@ namespace hypro
     template<typename Number>
     Polytope<Number> Polytope<Number>::intersect(const Polytope<Number>& rhs)
     {
-        C_Polyhedron res = mPolyhedron;
-        res.intersection_assign(rhs.rawPolyhedron());
-        Polytope<Number> result = Polytope<Number>(res);
+    	if(rhs.dimension() == 0){
+    		return Polytope<Number>();
+    	}
+    	else{
+        	C_Polyhedron res = mPolyhedron;
+        	res.intersection_assign(rhs.rawPolyhedron());
+        	Polytope<Number> result = Polytope<Number>(res);
 
-        mPointsUpToDate = false;
+        	mPointsUpToDate = false;
 
-        return result;
+        	return result; }
     }
     
     template<typename Number>
@@ -696,11 +700,18 @@ namespace hypro
     	std::set<Point<Number>> preresult;
 
     	for(unsigned i = 0; i<hull.size(); i++) {
-    		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
+    		for(unsigned j = 0; j<hull[i]->rVertices().size(); j++) {
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-    			preresult.insert(hull[i]->vertices().at(j));
+
+
+    			 	typename std::set<Point<Number>>::iterator it = preresult.insert(hull[i]->rVertices().at(j)).first;
+
+    			 	//it->joinNeighbors(hull[i]->rVertices().at(j).neighbors());
+
+    				//std::cout<<((Point<Number>)*(preresult.find(hull[i]->rVertices().at(j)))).neighbors().size()<<std::endl;
+
     			/*
-    				std::cout << "Set after insert: ";
+    			 	std::cout << "Set after insert: ";
     				for(const auto& point : preresult) {
     				std::cout << point.rawCoordinates().transpose() << ", ";
     				}
@@ -746,8 +757,10 @@ namespace hypro
         res.poly_hull_assign(rhs.rawPolyhedron());
         Polytope<Number> result = Polytope<Number>(res);
 		*/
-        
-        
+        if(rhs.dimension() == 0){
+        	return Polytope<Number>(this->vertices());
+        }
+    	else {
     	std::vector<Point<Number>> unitedVertices = rhs.vertices();
     	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
     	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
@@ -757,14 +770,23 @@ namespace hypro
     	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
 		//std::cout << "Ping" << std::endl;
-/*    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
+    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
     	//std::cout << "Ping" << std::endl;
 
     	std::set<Point<Number>> preresult;
     	for(unsigned i = 0; i<hull.size(); i++) {
     		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-    			preresult.insert(hull[i]->vertices().at(j));
+    			if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
+    				Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));
+    				std::vector<Point<Number>> neighbors = hull[i]->vertices().at(j).neighbors();
+    				for(auto& neigh:neighbors){
+    					pt.addNeighbor(neigh);
+    				}
+    			}
+    			else {
+    				preresult.insert(hull[i]->vertices().at(j));
+    			}
 
     			//	std::cout << "Set after insert: ";
     			//	for(const auto& point : preresult) {
@@ -780,8 +802,8 @@ namespace hypro
     	}
 
     	Polytope<Number> result = Polytope<Number>(points);
-    	return result;*/
-    	return this->hull();
+    	return result; }
+//    	return this->hull();
     }
     
     template<typename Number>

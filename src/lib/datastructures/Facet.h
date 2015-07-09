@@ -325,16 +325,16 @@ class Facet
 
 		void addPoint(Point<Number> p) {
 			mVertices.push_back(p);
-			/*std::vector<Point<Number>> neighbors1 = p.neighbors();
+			std::vector<Point<Number>> neighbors1 = p.neighbors();
 			for(unsigned i = 0; i<neighbors1.size(); i++) {
 				std::vector<Point<Number>> neighbors2 = neighbors1.at(i).neighbors();
 				for(unsigned j = 0; j<neighbors2.size(); j++) {
-					if(neighbors1.at(i) == neighbors2.at(j)){
-						neighbors1.at(i).removeNeighbor(&neighbors2.at(j));
-						neighbors2.at(j).removeNeighbor(&neighbors1.at(i));
+					if(neighbors2.at(j) != p){
+						neighbors1.at(i).removeNeighbor(neighbors2.at(j));
+						//neighbors2.at(j).removeNeighbor(neighbors1.at(i));
 					}
 				}
-			}*/
+			}
 		}
 
 		vector_t<Number> getNormalVector () const {

@@ -81,14 +81,41 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	void Point<Number>::joinNeighbors(const std::vector<Point<Number> >& _neighbors) {
+		for(unsigned i = 0; i<_neighbors.size(); i++){
+			if(!isNeighbor(_neighbors.at(i))){
+				addNeighbor(_neighbors.at(i));
+			}
+		}
+	}
+
+	template<typename Number>
 	void Point<Number>::addNeighbor(const Point<Number>& _neighbor) {
-		mNeighbors.push_back(_neighbor);
+		bool alreadyNeighbor = false;
+		for(unsigned i = 0; i< mNeighbors.size(); i++) {
+			if(mNeighbors.at(i) == _neighbor){
+				alreadyNeighbor = true;
+			}
+		}
+		if(!alreadyNeighbor) {
+			mNeighbors.push_back(_neighbor);
+		}
+	}
+
+	template<typename Number>
+	bool Point<Number>::isNeighbor(const Point<Number>& _neighbor) {
+		for(unsigned i = 0; i< mNeighbors.size(); i++) {
+			if(mNeighbors.at(i) == _neighbor){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	template<typename Number>
 	void Point<Number>::removeNeighbor(const Point<Number>& _neighbor) {
 		for(unsigned i = 0; i < mNeighbors.size(); i++){
-			if(*(mNeighbors.at(i)) == *(_neighbor)) {
+			if((mNeighbors.at(i)) == (_neighbor)) {
 				mNeighbors.erase(mNeighbors.begin() + i);
 				break;
 			}

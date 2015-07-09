@@ -131,7 +131,11 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::intersect(const VPolytope<Number>& rhs) const {
 		// create a set of possible points via combination of all coordinates
-		pointVector possibleVertices;
+		if(rhs.size() == 0){
+			return VPolytope<Number>();
+		}
+		else {
+			pointVector possibleVertices;
 		for(const auto& lhsVertex : mPoints) {
 			possibleVertices.push_back(lhsVertex);
 			for(unsigned coordIndex = 0; coordIndex < lhsVertex.rawCoordinates().rows(); ++coordIndex) {
@@ -152,7 +156,7 @@ namespace hypro
 				++vertexIt;
 			}
 		}
-		return VPolytope<Number>(possibleVertices);
+		return VPolytope<Number>(possibleVertices); }
 	}
 	
 	template<typename Number>
@@ -197,7 +201,11 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
 	{
-		VPolytope<Number>::pointVector points;
+		if(rhs.dimension() == 0){
+			return VPolytope<Number>(mPoints);
+		}
+		else{
+			VPolytope<Number>::pointVector points;
 		points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
 		points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
 		
@@ -205,14 +213,32 @@ namespace hypro
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
-				preresult.insert(facets[i]->vertices().at(j));			
+				//preresult.insert(facets[i]->vertices().at(j));
+				/*if((preresult.find(facets[i]->vertices().at(j))) != preresult.end()){
+					Point<Number> pt = *(preresult.find(facets[i]->vertices().at(j)));
+					std::vector<Point<Number>> neighbors = facets[i]->vertices().at(j).neighbors();
+					for(auto& neigh:neighbors){
+						pt.addNeighbor(neigh);
+					}
+				}
+				else {
+					preresult.insert(facets[i]->vertices().at(j));
+				}*/
+
+				preresult.insert(facets[i]->vertices().at(j));
+
+				/*Point<Number> pt = *(preresult.find(facets[i]->vertices().at(j)));
+				std::vector<Point<Number>> neighbors = facets[i]->vertices().at(j).neighbors();
+				for(auto& neigh:neighbors){
+					pt.addNeighbor(neigh);
+				}*/
 			}			
 		}
 		VPolytope<Number>::pointVector res;
 		for(const auto& point : preresult)
 			res.push_back(point);
 
-		return VPolytope<Number>(res);
+		return VPolytope<Number>(res); }
 		
 		//return result;
 	}
