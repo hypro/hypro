@@ -219,16 +219,48 @@ TYPED_TEST(PolytopeTest, Intersection)
     res = res.hull();
 //    res.print();
 
-   /* std::cout<< "Part 2 starting: "	<< std::endl;
+    std::cout<< "Part 2 starting: "	<< std::endl;
       std::vector<Point<TypeParam>> ps3;
-      Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
-      Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
-      Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
-      Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
-      Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
-      Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
-      Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
-      Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+      vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
+      v01(0) = 1;
+      v01(1) = 1;
+      v01(2) = 1;
+      Point<TypeParam> p01 = Point<TypeParam>(v01);
+      vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
+      v02(0) = 1;
+      v02(1) = 3;
+      v02(2) = 1;
+      Point<TypeParam> p02 = Point<TypeParam>(v02);
+      vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
+      v03(0) = 3;
+      v03(1) = 1;
+      v03(2) = 1;
+      Point<TypeParam> p03 = Point<TypeParam>(v03);
+      vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
+      v04(0) = 3;
+      v04(1) = 3;
+      v04(2) = 1;
+      Point<TypeParam> p04 = Point<TypeParam>(v04);
+      vector_t<TypeParam> v05 = vector_t<TypeParam>(3);
+      v05(0) = 1;
+      v05(1) = 1;
+      v05(2) = 3;
+      Point<TypeParam> p05 = Point<TypeParam>(v05);
+      vector_t<TypeParam> v06 = vector_t<TypeParam>(3);
+      v06(0) = 1;
+      v06(1) = 3;
+      v06(2) = 3;
+      Point<TypeParam> p06 = Point<TypeParam>(v06);
+      vector_t<TypeParam> v07 = vector_t<TypeParam>(3);
+      v07(0) = 3;
+      v07(1) = 1;
+      v07(2) = 3;
+      Point<TypeParam> p07 = Point<TypeParam>(v07);
+      vector_t<TypeParam> v08 = vector_t<TypeParam>(3);
+      v08(0) = 3;
+      v08(1) = 3;
+      v08(2) = 3;
+      Point<TypeParam> p08 = Point<TypeParam>(v08);
 
       ps3.push_back(p01);
       ps3.push_back(p02);
@@ -242,14 +274,46 @@ TYPED_TEST(PolytopeTest, Intersection)
       hypro::Polytope<TypeParam> pt3 = Polytope<TypeParam>(ps3);
 
       std::vector<Point<TypeParam>> ps4;
-      Point<TypeParam> p09 = Point<TypeParam>({2,2,1});
-      Point<TypeParam> p10 = Point<TypeParam>({2,4,1});
+      vector_t<TypeParam> v09 = vector_t<TypeParam>(3);
+            v09(0) = 2;
+            v09(1) = 2;
+            v09(2) = 1;
+      Point<TypeParam> p09 = Point<TypeParam>(v09);
+      vector_t<TypeParam> v10 = vector_t<TypeParam>(3);
+            v10(0) = 2;
+            v10(1) = 4;
+            v10(2) = 1;
+      Point<TypeParam> p10 = Point<TypeParam>(v10);
+      vector_t<TypeParam> v11 = vector_t<TypeParam>(3);
+            v11(0) = 4;
+            v11(1) = 2;
+            v11(2) = 1;
       Point<TypeParam> p11 = Point<TypeParam>({4,2,1});
-      Point<TypeParam> p12 = Point<TypeParam>({4,4,1});
-      Point<TypeParam> p13 = Point<TypeParam>({2,2,3});
-      Point<TypeParam> p14 = Point<TypeParam>({2,4,3});
-      Point<TypeParam> p15 = Point<TypeParam>({4,2,3});
-      Point<TypeParam> p16 = Point<TypeParam>({4,4,3});
+      vector_t<TypeParam> v12 = vector_t<TypeParam>(3);
+            v12(0) = 4;
+            v12(1) = 4;
+            v12(2) = 1;
+      Point<TypeParam> p12 = Point<TypeParam>(v12);
+      vector_t<TypeParam> v13 = vector_t<TypeParam>(3);
+            v13(0) = 2;
+            v13(1) = 2;
+            v13(2) = 3;
+      Point<TypeParam> p13 = Point<TypeParam>(v13);
+      vector_t<TypeParam> v14 = vector_t<TypeParam>(3);
+            v14(0) = 2;
+            v14(1) = 4;
+            v14(2) = 3;
+      Point<TypeParam> p14 = Point<TypeParam>(v14);
+      vector_t<TypeParam> v15 = vector_t<TypeParam>(3);
+            v15(0) = 4;
+            v15(1) = 2;
+            v15(2) = 3;
+      Point<TypeParam> p15 = Point<TypeParam>(v15);
+      vector_t<TypeParam> v16 = vector_t<TypeParam>(3);
+            v16(0) = 4;
+            v16(1) = 4;
+            v16(2) = 3;
+      Point<TypeParam> p16 = Point<TypeParam>(v16);
 
       ps4.push_back(p09);
       ps4.push_back(p10);
@@ -262,6 +326,8 @@ TYPED_TEST(PolytopeTest, Intersection)
 
       hypro::Polytope<TypeParam> pt4 = Polytope<TypeParam>(ps4);
 
+      std::cout<< __func__<< ":" << __LINE__ << " dimensions : " << pt3.dimension() << " and " << pt4.dimension() <<std::endl;
+
       hypro::Polytope<TypeParam> res2 = pt3.intersect(pt4);
 
       res2 = res2.hull();
@@ -273,7 +339,7 @@ TYPED_TEST(PolytopeTest, Intersection)
 
       hypro::Polytope<TypeParam> res3 = res2.intersect(Polytope<TypeParam>());
 
-      EXPECT_TRUE(res3.isEmpty()); */
+      EXPECT_TRUE(res3.dimension() == 0);
 
 }
 
@@ -299,16 +365,48 @@ TYPED_TEST(PolytopeTest, Union)
     res = pt1.unite(pt2);
     res = res.hull();
 
- /*   std::cout<< "Part 2 starting: "	<< std::endl;
+    std::cout<< "Part 2 starting: "	<< std::endl;
           std::vector<Point<TypeParam>> ps3;
-          Point<TypeParam> p01 = Point<TypeParam>({1,1,1});
-          Point<TypeParam> p02 = Point<TypeParam>({1,3,1});
-          Point<TypeParam> p03 = Point<TypeParam>({3,1,1});
-          Point<TypeParam> p04 = Point<TypeParam>({3,3,1});
-          Point<TypeParam> p05 = Point<TypeParam>({1,1,3});
-          Point<TypeParam> p06 = Point<TypeParam>({1,3,3});
-          Point<TypeParam> p07 = Point<TypeParam>({3,1,3});
-          Point<TypeParam> p08 = Point<TypeParam>({3,3,3});
+          vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
+          v01(0) = 1;
+          v01(1) = 1;
+          v01(2) = 1;
+          Point<TypeParam> p01 = Point<TypeParam>(v01);
+          vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
+          	v02(0) = 1;
+          	v02(1) = 3;
+          	v02(2) = 1;
+          Point<TypeParam> p02 = Point<TypeParam>(v02);
+          vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
+          	v03(0) = 3;
+          	v03(1) = 1;
+          	v03(2) = 1;
+          Point<TypeParam> p03 = Point<TypeParam>(v03);
+          vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
+          	v04(0) = 3;
+          	v04(1) = 3;
+          	v04(2) = 1;
+          Point<TypeParam> p04 = Point<TypeParam>(v04);
+          vector_t<TypeParam> v05 = vector_t<TypeParam>(3);
+          	v05(0) = 1;
+          	v05(1) = 1;
+          	v05(2) = 3;
+          Point<TypeParam> p05 = Point<TypeParam>(v05);
+          vector_t<TypeParam> v06 = vector_t<TypeParam>(3);
+          	v06(0) = 1;
+          	v06(1) = 3;
+          	v06(2) = 3;
+          Point<TypeParam> p06 = Point<TypeParam>(v06);
+          vector_t<TypeParam> v07 = vector_t<TypeParam>(3);
+          	v07(0) = 3;
+          	v07(1) = 1;
+          	v07(2) = 3;
+          Point<TypeParam> p07 = Point<TypeParam>(v07);
+          vector_t<TypeParam> v08 = vector_t<TypeParam>(3);
+          	v08(0) = 3;
+          	v08(1) = 3;
+          	v08(2) = 3;
+          Point<TypeParam> p08 = Point<TypeParam>(v08);
 
           ps3.push_back(p01);
           ps3.push_back(p02);
@@ -322,12 +420,37 @@ TYPED_TEST(PolytopeTest, Union)
           hypro::Polytope<TypeParam> pt3 = Polytope<TypeParam>(ps3);
 
           std::vector<Point<TypeParam>> ps4;
-          Point<TypeParam> p09 = Point<TypeParam>({3,5,1});
-          Point<TypeParam> p10 = Point<TypeParam>({5,3,1});
-          Point<TypeParam> p11 = Point<TypeParam>({5,5,1});
-          Point<TypeParam> p12 = Point<TypeParam>({3,5,3});
-          Point<TypeParam> p13 = Point<TypeParam>({5,3,3});
-          Point<TypeParam> p14 = Point<TypeParam>({5,5,3});
+
+          vector_t<TypeParam> v09 = vector_t<TypeParam>(3);
+          	v09(0) = 3;
+          	v09(1) = 5;
+          	v09(2) = 1;
+          Point<TypeParam> p09 = Point<TypeParam>(v09);
+          vector_t<TypeParam> v10 = vector_t<TypeParam>(3);
+          	v10(0) = 5;
+          	v10(1) = 3;
+          	v10(2) = 1;
+          Point<TypeParam> p10 = Point<TypeParam>(v10);
+          vector_t<TypeParam> v11 = vector_t<TypeParam>(3);
+          	v11(0) = 5;
+          	v11(1) = 5;
+          	v11(2) = 1;
+          Point<TypeParam> p11 = Point<TypeParam>(v11);
+          vector_t<TypeParam> v12 = vector_t<TypeParam>(3);
+          	v12(0) = 3;
+          	v12(1) = 5;
+          	v12(2) = 3;
+          Point<TypeParam> p12 = Point<TypeParam>(v12);
+          vector_t<TypeParam> v13 = vector_t<TypeParam>(3);
+          	v13(0) = 5;
+          	v13(1) = 3;
+          	v13(2) = 3;
+          Point<TypeParam> p13 = Point<TypeParam>(v13);
+          vector_t<TypeParam> v14 = vector_t<TypeParam>(3);
+          	v14(0) = 5;
+          	v14(1) = 5;
+          	v14(2) = 3;
+          Point<TypeParam> p14 = Point<TypeParam>(v14);
 
           ps4.push_back(p04);
           ps4.push_back(p08);
@@ -342,19 +465,21 @@ TYPED_TEST(PolytopeTest, Union)
 
           hypro::Polytope<TypeParam> res2 = pt3.unite(pt4);
 
-          res2 = res2.hull();
+          //res2 = res2.hull();
 
-          for(auto& vertex : pt3.vertices()) {
+         /* for(auto& vertex : pt3.vertices()) {
         	  EXPECT_TRUE(res2.contains(vertex));
           }
 
           for(auto& vertex : pt4.vertices()) {
         	  EXPECT_TRUE(res2.contains(vertex));
-          }
+          }*/
 
+          //EXPECT_TRUE(res2.contains(pt3));
+          //EXPECT_TRUE(res2.contains(pt4));
 
           hypro::Polytope<TypeParam> res3 = res2.unite(Polytope<TypeParam>());
-          res3 = res3.hull();
+          //res3 = res3.hull();
 
           for(auto& vertex : res3.vertices()) {
         	  EXPECT_TRUE(res2.contains(vertex));
@@ -362,7 +487,7 @@ TYPED_TEST(PolytopeTest, Union)
 
           for(auto& vertex : res2.vertices()) {
         	  EXPECT_TRUE(res3.contains(vertex));
-          } */
+          }
 }
 
 TYPED_TEST(PolytopeTest, LinearTransformation)
@@ -481,52 +606,82 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
 }
 
 /*
-TYPED_TEST(PolytopeTest, ConvexHull)
+TYPED_TEST(PolytopeTest, Neighborhood)
 {
-    vector_t<double> v01 = vector_t<double>(3);
+    vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
 	v01(0) = 0;
 	v01(1) = 0;
 	v01(2) = 0;
-	this->p1 = Point<double>(v01);
+	Point<TypeParam> p01 = Point<TypeParam>(v01);
 
-	vector_t<double> v02 = vector_t<double>(3);
+	vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
 	v02(0) = 0;
 	v02(1) = 2;
 	v02(2) = 0;
-	this->p2 = Point<double>(v02);
+	Point<TypeParam> p02 = Point<TypeParam>(v02);
 
-	vector_t<double> v03 = vector_t<double>(3);
+	vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
 	v03(0) = 2;
 	v03(1) = 0;
 	v03(2) = 0;
-	this->p3 = Point<double>(v03);
+	Point<TypeParam> p03 = Point<TypeParam>(v03);
 
-	vector_t<double> v04 = vector_t<double>(3);
+	vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
 	v04(0) = 0;
 	v04(1) = 0;
 	v04(2) = 2;
-	this->p4= Point<double>(v04);
+	Point<TypeParam> p04= Point<TypeParam>(v04);
 
-	vector_t<double> v05 = vector_t<double>(3);
+	vector_t<TypeParam> v05 = vector_t<TypeParam>(3);
 	v04(0) = 0.5;
 	v04(1) = 0.5;
 	v04(2) = 0.5;
-	this->p5= Point<double>(v05);
+	Point<TypeParam> p05= Point<TypeParam>(v05);
+
+	std::vector<Point<TypeParam>> ps3;
+	ps3.push_back(p01);
+	ps3.push_back(p02);
+	ps3.push_back(p03);
+	ps3.push_back(p04);
+	ps3.push_back(p05);
+
+	hypro::Polytope<TypeParam> pt3 = Polytope<TypeParam>(ps3);
 
 	hypro::Polytope<TypeParam> result;
-	ptpe1.hull(result)
+	result = pt3.hull();
 
-	EXPECT_TRUE(result.contains(this->p1));
-    EXPECT_TRUE(result.contains(this->p2));
-    EXPECT_TRUE(result.contains(this->p3));
-    EXPECT_TRUE(result.contains(this->p4));
-	EXPECT_FALSE(result.contains(this->p5));
+	std::vector<Point<TypeParam>> ps = result.vertices();
 
-	//neighborhood.....
-}
-*/
+	for(unsigned i = 0; i<ps.size(); i++) {
+		if(ps.at(i) == p01){
+			EXPECT_TRUE(ps.at(i).isNeighbor(p02));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p03));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p04));
+			EXPECT_FALSE(ps.at(i).isNeighbor(p05));
+		}
+		else if(ps.at(i) == p02){
+			EXPECT_TRUE(ps.at(i).isNeighbor(p01));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p03));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p04));
+			EXPECT_FALSE(ps.at(i).isNeighbor(p05));
+		}
+		else if(ps.at(i) == p03){
+			EXPECT_TRUE(ps.at(i).isNeighbor(p01));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p02));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p04));
+			EXPECT_FALSE(ps.at(i).isNeighbor(p05));
+				}
+		else if(ps.at(i) == p04){
+			EXPECT_TRUE(ps.at(i).isNeighbor(p01));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p02));
+			EXPECT_TRUE(ps.at(i).isNeighbor(p03));
+			EXPECT_FALSE(ps.at(i).isNeighbor(p05));
+		}
+	}
+}*/
 
-/*
+
+
 TYPED_TEST(PolytopeTest, Membership)
 {
     vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
@@ -566,4 +721,4 @@ TYPED_TEST(PolytopeTest, Membership)
 
 	EXPECT_FALSE(ptpe1.contains(pt3));
 }
-*/
+

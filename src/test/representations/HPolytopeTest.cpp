@@ -148,26 +148,28 @@ TYPED_TEST(HPolytopeTest, Union)
 
 	          HPolytope<TypeParam> pt4 = HPolytope<TypeParam>(ps4);
 
-	          HPolytope<TypeParam> res2 = pt3.unite(pt4);
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 
+	          HPolytope<TypeParam> res2 = pt3.unite(pt4);
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	          for(auto& vertex : pt3.vertices()) {
 	        	  EXPECT_TRUE(res2.contains(vertex));
 	          }
-
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	          for(auto& vertex : pt4.vertices()) {
 	        	  EXPECT_TRUE(res2.contains(vertex));
 	          }
 
-
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	          HPolytope<TypeParam> res3 = res2.unite(HPolytope<TypeParam>());
-
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	          for(auto& vertex : res3.vertices()) {
 	        	  EXPECT_TRUE(res2.contains(vertex));
 	          }
-
+	          std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	          for(auto& vertex : res2.vertices()) {
 	        	  EXPECT_TRUE(res3.contains(vertex));
-	          } */
+	          } */ //still needs HPolytope to VPolytope conversion for higher dimensions !!!!
 }
 
 TYPED_TEST(HPolytopeTest, LinearTransformation)
@@ -228,7 +230,7 @@ TYPED_TEST(HPolytopeTest, Intersection)
 		EXPECT_TRUE(hpt1.hasConstraint(plane) || hpt2.hasConstraint(plane));
 	}
 
-	/*std::cout<< "Part 2 starting: "	<< std::endl;
+	std::cout<< "Part 2 starting: "	<< std::endl;
 		          std::vector<Hyperplane<TypeParam>> ps3;
 		          Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
 		          Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},-3);
@@ -272,7 +274,8 @@ TYPED_TEST(HPolytopeTest, Intersection)
 
 		          HPolytope<TypeParam> res3 = res2.intersect(HPolytope<TypeParam>());
 
-		          EXPECT_TRUE(res3.size() == 0); */
+
+		          EXPECT_TRUE(res3.empty());
 }
 
 

@@ -118,8 +118,11 @@ namespace hypro {
 			std::vector<Point<Number> > neighbors() const;
 
 			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
+			void joinNeighbors(const std::vector<Point<Number> >& _neighbors);
 			void addNeighbor(const Point<Number>& _neighbor);
 			void removeNeighbor(const Point<Number>& _neighbor);
+			bool isNeighbor(const Point<Number>& _neighbor);
+
 
 			std::vector<Point<Number> > composedOf() const;
 			void setComposition(const std::vector<Point<Number> >& _elements);

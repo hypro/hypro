@@ -82,6 +82,12 @@ namespace hypro
 	 * Getters and setters
 	 */
 
+	template<typename Number>
+	bool HPolytope<Number>::empty() const
+	{
+		return mHPlanes.empty();
+	}
+
 	 template<typename Number>
 	 unsigned HPolytope<Number>::dimension() const
 	{
@@ -390,6 +396,10 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::intersect(const HPolytope& rhs) const {
 		// Todo: Improve.
+		if(rhs.empty()){
+			return HPolytope<Number>();
+		}
+		else {
 		HPolytope<Number> res;
 		for(const auto& plane : mHPlanes) {
 			res.insert(plane);
@@ -399,7 +409,7 @@ namespace hypro
 		}
 		//res.insert(mHPlanes.begin(), mHPlanes.end());
 		//res.insert(rhs.begin(), rhs.end());
-		return res;
+		return res; }
 	}
 
 	template<typename Number>
@@ -430,19 +440,23 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& _rhs) const {
+		if(_rhs.empty()){
+			return HPolytope<Number>(mHPlanes);
+		}
+		else {
 		VPolytope<Number> lhs(this->vertices());
 		VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 		// Todo: Convert VPolytope to HPolytope
 		
-		/*
-			std::vector<Hyperplane<Number>> hyperplanes;
-			std::vector<Facet<Number>> facets = convexHull(tmpRes.vertices());
+
+		/*std::vector<Hyperplane<Number>> hyperplanes;
+			std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());
 			for(unsigned i = 0; i<facets.size(); i++) {
-				hyperplanes.push_back(facets[i].hyperplane());
+				hyperplanes.push_back(facets[i]->hyperplane());
 			}
-			return HPolytope<Number>(hyperplanes);
-		*/
-		return HPolytope<Number>(tmpRes);
+			return HPolytope<Number>(hyperplanes); } */
+
+		return HPolytope<Number>(tmpRes); }
 	}
 
 	template<typename Number>
