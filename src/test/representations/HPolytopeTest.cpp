@@ -65,6 +65,20 @@ TYPED_TEST(HPolytopeTest, Access)
 	}
 }
 
+TYPED_TEST(HPolytopeTest, Swap)
+{
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
+	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
+
+	typename HPolytope<TypeParam>::HyperplaneVector planes =  hpt1.constraints();
+
+	swap(hpt1,hpt2);
+		
+	for(auto& constraint : planes) {
+		EXPECT_TRUE(hpt2.hasConstraint(constraint));
+	}
+}
+
 TYPED_TEST(HPolytopeTest, Corners)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);

@@ -63,6 +63,11 @@ namespace hypro {
 		bool contains(const vector_t<Number> _vector) const;
 		bool holds(const vector_t<Number> _vector) const;
 		
+		friend void swap(Hyperplane<Number>& a, Hyperplane<Number>& b) {
+			swap(a.mNormal, b.mNormal);
+			swap(a.mScalar, b.mScalar);
+		}
+
 	private:
 		const Number& internalOffset() const;
 

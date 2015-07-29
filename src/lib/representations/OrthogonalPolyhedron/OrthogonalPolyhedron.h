@@ -144,7 +144,11 @@ namespace hypro
 		}
 		
 		friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number>& p) {
-			return ostr << p.mVertices;
+			ostr << "(";
+			for(const auto& vertex : p.mVertices)
+				ostr << vertex << ", ";
+			ostr << ")";
+			return ostr;
 		}
 
 	private:

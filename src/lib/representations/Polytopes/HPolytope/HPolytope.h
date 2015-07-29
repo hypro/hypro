@@ -108,8 +108,87 @@ namespace hypro
 		
 		Hyperplane<Number> operator[](unsigned i) const;
 		HPolytope<Number>& operator= (const HPolytope<Number>& rhs);
-		std::ostream& operator<<(std::ostream& lhs);
-		
+
+		friend std::ostream& operator<<(std::ostream& lhs, const HPolytope<Number>& rhs){
+			if(rhs.constraints().size() > 0) {
+				lhs << "[ ";
+				for(unsigned i = 0; i < rhs.constraints().size()-1; ++i)
+				{
+					lhs << rhs[i] << "," << std::endl;
+				}
+				lhs << rhs[rhs.constraints().size()-1] << " ]";
+			}
+			return lhs;
+		}
+
+		friend void swap(HPolytope<Number>& a, HPolytope<Number>& b) {
+			a.printArrays();
+			b.printArrays();
+			std::cout << "a: " << a << std::endl;
+			std::cout << "b: " << b << std::endl;
+			if(a.mInitialized){
+				int* tmpIa = a.ia;
+				int* tmpJa= a.ia;
+				double* tmpAr = a.ar;
+				glp_prob* tmpLp = a.lp;
+				if(b.mInitialized){
+					a.ia = b.ia;
+					a.ja = b.ja;
+					a.ar=b.ar;
+					a.lp = b.lp;
+				} else {
+					a.ia = nullptr;
+					a.ja = nullptr;
+					a.ar = nullptr;
+					a.lp = nullptr;
+					a.mInitialized = false;
+					b.mInitialized = true;
+				}
+				b.ia = tmpIa;
+				b.ja = tmpJa;
+				b.ar=tmpAr;
+				b.lp= tmpLp;
+			} else {
+				if(b.mInitialized) {
+					a.ia = b.ia;
+					a.ja = b.ja;
+					a.ar=b.ar;
+					a.lp = b.lp;
+					a.mInitialized = true;
+					b.mInitialized = false;
+					b.ia = nullptr;
+					b.ja = nullptr;
+					b.ar = nullptr;
+					b.lp = nullptr;
+				}
+			}
+			if(a.mFanSet) {
+				polytope::Fan<Number> tmp = a.mFan;
+				if(b.mFanSet) {
+					a.mFan = b.mFan;
+				} else {
+					a.mFanSet = false;
+				}
+				b.mFan = tmp;
+			} else {
+				if(b.mFanSet) {
+					a.mFan = b.mFan;
+					a.mFanSet = true;
+					b.mFanSet = false;
+				}
+			}
+			unsigned tmpDimension = a.mDimension;
+			a.mDimension = b.mDimension;
+			b.mDimension = tmpDimension;
+			swap(a.mHPlanes, b.mHPlanes);
+
+			std::cout << " HPOLY SWAP " << std::endl;
+			a.printArrays();
+			b.printArrays();
+			std::cout << "a: " << a << std::endl;
+			std::cout << "b: " << b << std::endl;
+		}
+
 	private:
 		/*
 		 * Auxiliary functions
@@ -117,6 +196,7 @@ namespace hypro
 
 		void createArrays(unsigned size) const;
 		void deleteArrays();
+		void printArrays();
 		void initialize() const;
 
 		void calculateFan() const;
@@ -125,18 +205,14 @@ namespace hypro
 	};
 
 } //namespace
-
+/*
 namespace std {
 
 	template<typename Number>
 	void swap(hypro::HPolytope<Number> lhs, hypro::HPolytope<Number> rhs) {
-		typename hypro::HPolytope<Number>::HyperplaneVector tmpPlanes = lhs.constraints();
-		lhs.clear();
-		lhs.insert(rhs.begin(), rhs.end());
-		rhs.clear();
-		rhs.insert(tmpPlanes.begin(), tmpPlanes.end());
+		hypro::HPolytope<Number>::swap(lhs,rhs);
 	}
 
 }
-
+*/
 #include "HPolytope.tpp"

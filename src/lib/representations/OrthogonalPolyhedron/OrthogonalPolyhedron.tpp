@@ -25,27 +25,28 @@ namespace hypro
 	}	
 		
 	template<typename Number>
-	bool OrthogonalPolyhedron<Number>::linearTransformation(OrthogonalPolyhedron<Number>& result, const matrix_t<Number>& A, const vector_t<Number>& b) const {
+	OrthogonalPolyhedron<Number> OrthogonalPolyhedron<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		VertexContainer<Number> newVertices(mVertices);
 		newVertices.linearTransformation(A, b);
-		result = OrthogonalPolyhedron<Number>(newVertices);
+		OrthogonalPolyhedron<Number> result = OrthogonalPolyhedron<Number>(newVertices);
 		// TODO: undefined behavior, does not update colors of vertices nor fix the non-parallel edges
-		return false;
+		return result;
 	}
 
 	template<typename Number>
-	bool OrthogonalPolyhedron<Number>::minkowskiSum(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
+	OrthogonalPolyhedron<Number> OrthogonalPolyhedron<Number>::minkowskiSum(const OrthogonalPolyhedron<Number>& rhs) const {
 		// TODO
 		// Definition: A+B = { a + b | a ∈ A, b ∈ B}
 		// Idea: put one polyhedron on all the vertices of the other one
 		// Problem: Which vertices to connect, which to remove?
 		// Thoughts: do two vertices belong to former neighbors?
 		//           store the "color" of a moved polyhedron
-		return false;
+		OrthogonalPolyhedron<Number> result;
+		return result;
 	}
 		
 	template<typename Number>
-	bool OrthogonalPolyhedron<Number>::intersect(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
+	OrthogonalPolyhedron<Number> OrthogonalPolyhedron<Number>::intersect(const OrthogonalPolyhedron<Number>& rhs) const {
 		assert(mVariables == rhs.mVariables);
 		
 		// first initialize the set of potential vertices
@@ -80,13 +81,13 @@ namespace hypro
 			}
 		}
 
-		result = OrthogonalPolyhedron<Number>(vertices);
+		OrthogonalPolyhedron<Number> result = OrthogonalPolyhedron<Number>(vertices);
 		
-		return true;
+		return result;
 	}
 		
 	template<typename Number>
-	bool OrthogonalPolyhedron<Number>::hull(OrthogonalPolyhedron<Number>& result) const {
+	OrthogonalPolyhedron<Number> OrthogonalPolyhedron<Number>::hull() const {
 		if (!mBoxUpToDate) {
 			updateBoundaryBox();
 		}
@@ -108,9 +109,9 @@ namespace hypro
 			vertex.setColor(vertexNr == 0);
 			container.insert(vertex);
 		}
-		result = OrthogonalPolyhedron<Number>(container);
+		OrthogonalPolyhedron<Number> result = OrthogonalPolyhedron<Number>(container);
 		
-		return true;
+		return result;
 	}
 		
 	template<typename Number>
@@ -119,7 +120,7 @@ namespace hypro
 	}
 		
 	template<typename Number>
-	bool OrthogonalPolyhedron<Number>::unite(OrthogonalPolyhedron<Number>& result, const OrthogonalPolyhedron<Number>& rhs) const {
+	OrthogonalPolyhedron<Number> OrthogonalPolyhedron<Number>::unite(const OrthogonalPolyhedron<Number>& rhs) const {
 		assert(mVariables == rhs.mVariables);
 		
 		// first initialize the set of potential vertices
@@ -164,9 +165,9 @@ namespace hypro
 			}
 		}
 
-		result = OrthogonalPolyhedron<Number>(vertices);
+		OrthogonalPolyhedron<Number> result = OrthogonalPolyhedron<Number>(vertices);
 		
-		return true;
+		return result;
 	}
 		
 	/**********************************

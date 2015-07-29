@@ -489,11 +489,11 @@ namespace hypro
 		if(this != &rhs)
 		{
 			HPolytope<Number> tmp(rhs);
-			std::swap(*this, tmp);
+			swap(*this, tmp);
 		}
 		return *this;
 	}
-	
+
 	/*
 	 * Auxiliary functions
 	 */
@@ -510,6 +510,20 @@ namespace hypro
 		delete[] ia;
 		delete[] ja;
 		delete[] ar;
+	}
+
+	template<typename Number>
+	void HPolytope<Number>::printArrays() {
+		if (mInitialized) {
+			unsigned size = mHPlanes.size()*mDimension;
+			std::cout << "IA: ";
+			for(auto pos = 0; pos < size; ++pos) {
+				std::cout << ia[pos] << ", ";
+			}
+			std::cout << std::endl;
+		} else {
+			std::cout << "Not initialized." << std::endl;
+		}
 	}
 
 	template<typename Number>
@@ -680,15 +694,3 @@ namespace hypro
 		return solution;
 	}
 } // namespace
-
-	template<typename Number>
-	std::ostream& operator<<(std::ostream& lhs, const hypro::HPolytope<Number>& rhs)
-	{
-		lhs << "[ ";
-		for(unsigned i = 0; i < rhs.constraints().size()-1; ++i)
-		{
-			lhs << rhs[i] << "," << std::endl;
-		}
-		lhs << rhs[rhs.constraints().size()-1] << " ]";
-		return lhs;
-	}
