@@ -44,6 +44,7 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) {
 		assert(A.rows() == b.rows());
+		mDimension = A.cols();
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
 		}
@@ -52,6 +53,7 @@ namespace hypro
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const matrix_t<Number>& A) {
+		mDimension = A.cols();
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
 		}
@@ -63,6 +65,7 @@ namespace hypro
 	HPolytope<Number>::HPolytope(const VPolytope<Number>& alien) {
 		assert(alien.size() > 2);
 		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
+		mDimension = points.begin()->dimension();
 		std::vector<Facet<Number>*> facets = convexHull(points);
 		for(const auto& facet : facets) {
 			mHPlanes.push_back(facet->hyperplane());
@@ -517,7 +520,7 @@ namespace hypro
 		if (mInitialized) {
 			unsigned size = mHPlanes.size()*mDimension;
 			std::cout << "IA: ";
-			for(auto pos = 0; pos < size; ++pos) {
+			for(unsigned pos = 0; pos < size; ++pos) {
 				std::cout << ia[pos] << ", ";
 			}
 			std::cout << std::endl;
@@ -533,6 +536,7 @@ namespace hypro
 			lp = glp_create_prob();
 			glp_set_prob_name(lp, "hpoly");
 			glp_set_obj_dir(lp, GLP_MAX);
+			glp_term_out(GLP_OFF);
 
 			unsigned numberOfConstraints = mHPlanes.size();
 
@@ -554,11 +558,11 @@ namespace hypro
 			for (unsigned i = 0; i < numberOfConstraints*mDimension; ++i)
 			{
 				ia[i+1] = ((int)(i / mDimension))+1;
-				std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+				//std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
 				ja[i+1] = ((int)(i%mDimension))+1;
-				std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+				//std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 				ar[i+1] = double(mHPlanes[ia[i+1]-1].normal()(ja[i+1]-1));
-				std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+				//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 			}
 
 			glp_load_matrix(lp, numberOfConstraints*mDimension, ia, ja, ar);
