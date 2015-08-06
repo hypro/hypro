@@ -46,9 +46,9 @@ namespace hypro {
 			vector_t<Number> mCoordinates;
 
 			//Adjacency List of this Point (if applicable)
-			std::vector<Point<Number> > mNeighbors;
+			std::vector<Point<Number>> mNeighbors;
 			//Minkowsi Decompositon of this point (if applicable)
-			std::vector<Point<Number> > mComposedOf;
+			std::vector<Point<Number>> mComposedOf;
 
 		
 		public:
@@ -115,7 +115,7 @@ namespace hypro {
 			 * Getter & Setter
 			 */
 			
-			std::vector<Point<Number> > neighbors() const;
+			const std::vector<Point<Number>>& neighbors() const;
 
 			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
 			void joinNeighbors(const std::vector<Point<Number> >& _neighbors);
@@ -124,7 +124,7 @@ namespace hypro {
 			bool isNeighbor(const Point<Number>& _neighbor);
 
 
-			std::vector<Point<Number> > composedOf() const;
+			const std::vector<Point<Number>>& composedOf() const;
 			void setComposition(const std::vector<Point<Number> >& _elements);
 			void addToComposition(const Point<Number>& _element);
 
@@ -322,8 +322,9 @@ namespace hypro {
 			 * @return
 			 */
 			friend std::ostream & operator<< (std::ostream& _ostr, const Point<Number>& _p) {
+				assert(_p.dimension() == _p.rawCoordinates().rows());
 				_ostr << "( ";		
-				for (unsigned i = 0 ; i < _p.dimension()-1; ++i) {
+				for (unsigned i = 0 ; i < _p.rawCoordinates().rows()-1; ++i) {
 					_ostr << _p.at(i) << ", ";
 				} 
 				_ostr << _p.at(_p.dimension()-1);
@@ -382,6 +383,12 @@ namespace hypro {
 		vector_t<Number> p1Coord = _lhs.rawCoordinates();
 		resCoord = p1Coord * _factor;
 		return Point<Number>(resCoord);
+	}
+
+	template<typename Number>
+	const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs)
+	{
+		return (_rhs*_factor);
 	}
 
 } // namespace

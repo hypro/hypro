@@ -53,26 +53,35 @@ namespace hypro {
 	Point<Number>::Point(const Point<Number>& _p) 
 	{
 		mCoordinates = _p.rawCoordinates();
-		for(auto& neighbor : _p.mNeighbors)
-		{
-			mNeighbors.push_back(neighbor);
+
+		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
+
+		if(!_p.neighbors().empty()) {
+			for(auto& neighbor : _p.neighbors())
+			{
+				mNeighbors.push_back(neighbor);
+			}
 		}
 
-		for(auto& composite : _p.mComposedOf)
-		{
-			mComposedOf.push_back(composite);
+		if(!_p.composedOf().empty()){
+			for(auto& composite : _p.composedOf())
+			{
+				mComposedOf.push_back(composite);
+			}
 		}
 	}
 	
 	template<typename Number>
-	std::vector<Point<Number> > Point<Number>::neighbors() const {
-		//return mNeighbors;
+	const std::vector<Point<Number>>& Point<Number>::neighbors() const {
+		return mNeighbors;
+		/*
 		//TODO fix (does this have bad side effects?)
 		std::vector<Point<Number>> res;
 		for (unsigned i =0; i<mNeighbors.size(); ++i) {
 			res.push_back( (mNeighbors.at(i)) );
 		}
 		return res;
+		*/
 	}
 
 	template<typename Number>
@@ -123,7 +132,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<Point<Number> > Point<Number>::composedOf() const {
+	const std::vector<Point<Number>>& Point<Number>::composedOf() const {
 		return mComposedOf;
 	}
 
@@ -202,9 +211,9 @@ namespace hypro {
 	void Point<Number>::reduceDimension(unsigned _dimension) {
 		if(_dimension < mCoordinates.rows()){
 			vector_t<Number> newCoordinates = vector_t<Number>(_dimension);
-			newCoordinates.block(0,0,_dimension,1) = mCoordinates.block(0,0,_dimension,1);
+			for(unsigned pos = 0; pos < _dimension; ++pos)
+				newCoordinates(pos) = mCoordinates(pos);
 			mCoordinates = newCoordinates;
-			std::cout << "Reduced dimension: " << mCoordinates.transpose() << std::endl;
 		}
 		assert(mCoordinates.rows() <= _dimension);
 	}
@@ -487,6 +496,7 @@ namespace hypro {
 	template<typename Number>
 	Number Point<Number>::at(unsigned _index) const {
 		assert(_index < mCoordinates.rows());
+		//std::cout << "----------------------- AT: " << mCoordinates(_index) << std::endl;
 		return mCoordinates(_index);
 	}
 } // namespace

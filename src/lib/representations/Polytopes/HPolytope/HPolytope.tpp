@@ -10,12 +10,15 @@ namespace hypro
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const HPolytope& orig) :
-	mHPlanes(orig.mHPlanes),
 	mFanSet(orig.mFanSet),
 	mFan(orig.mFan),
 	mDimension(orig.mDimension),
 	mInitialized(false)
-	{}
+	{
+		for(const auto& plane : orig.constraints()) {
+			mHPlanes.push_back(plane);
+		}
+	}
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const Hyperplane<Number>& plane) {
@@ -121,6 +124,8 @@ namespace hypro
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
 				vector_t<Number> b(2);
 
+				//std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
+
 				// initialize
 				A.row(0) = mHPlanes.at(planeA).normal().transpose();
 				A.row(1) = mHPlanes.at(planeB).normal().transpose();
@@ -138,11 +143,27 @@ namespace hypro
 				
 				//	Number relative_error = (A*res - b).norm() / b.norm(); 
 
-				vertices.push_back(Point<Number>(res));
+				// check for infinity
+				bool infty = false;
+				for(unsigned i = 0; i < res.rows(); ++i){
+					if(std::numeric_limits<Number>::infinity() == (Number(res(i)))){
+						infty = true;
+						break;
+					}
+				}
+
+				if(!infty) {
+					vertices.push_back(Point<Number>(res));
+					//std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
+				}
+				//else
+					//std::cout << "Intersection at infinity." << std::endl;
+				
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
 			if(!this->contains(*vertexIt)) {
+				//std::cout << "Removed vertex: " << *vertexIt << std::endl;
 				vertexIt = vertices.erase(vertexIt);
 			} else {
 				++vertexIt;
@@ -259,6 +280,36 @@ namespace hypro
 		}
 		return false;
 	}
+
+	template<typename Number>
+	void HPolytope<Number>::reduce() {
+		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
+			Number res = this->evaluate(planeIt->normal());
+			if(res < planeIt->offset()) {
+				//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+				planeIt = mHPlanes.erase(planeIt);
+				mInitialized = false;
+			}
+			else{
+				Hyperplane<Number> tmp = Hyperplane<Number>(*planeIt);
+				auto pos = mHPlanes.erase(planeIt);
+				mInitialized = false;
+				Number tmpres = this->evaluate(tmp.normal());
+				//std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
+				if( tmpres > tmp.offset()) {
+					planeIt = mHPlanes.insert(pos, tmp);
+					mInitialized = false;
+					++planeIt;
+					//std::cout << "keep "  << tmp << std::endl;
+				}
+				else {
+					//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+					planeIt = pos;
+				}
+			}
+		}
+		//std::cout << __func__ << ": Result: " << *this << std::endl;
+	}
 	
 	
 	template<typename Number>
@@ -310,13 +361,18 @@ namespace hypro
 			initialize();
 		}
 
+		//std::cout << __func__ << ": " << _direction.transpose() << std::endl;
+
 		assert(_direction.rows() == mDimension);
 
+		//std::cout << "Set target: ";
 		for (unsigned i = 0; i < mDimension; i++)
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(_direction(i)));
+			std::cout << double(_direction(i)) << ", ";
 		}
+		std::cout << std::endl;
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -335,6 +391,7 @@ namespace hypro
 			default: 
 				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;             
 		}
+		//std::cout << "Result: " << result << std::endl;
 
 		return result;
 	}
@@ -379,20 +436,22 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::minkowskiSum(const HPolytope& rhs) const {
 		HPolytope<Number> res;
-		vector_t<Number> results(mHPlanes.size());
+		Number result;
 		
 		// evaluation of rhs in directions of lhs
 		for(unsigned i = 0; i < mHPlanes.size(); ++i) {
-			results(i) = mHPlanes.at(i).offset() + rhs.evaluate(mHPlanes.at(i).normal());
-			res.insert(Hyperplane<Number>( mHPlanes.at(i).normal(), results(i) ));
+			result = mHPlanes.at(i).offset() + rhs.evaluate(mHPlanes.at(i).normal());
+			res.insert(Hyperplane<Number>( mHPlanes.at(i).normal(), result ));
+			//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
 		}
 
 		// evaluation of lhs in directions of rhs
 		for(unsigned i = 0; i < rhs.constraints().size(); ++i) {
-			results(i) = rhs.constraints().at(i).offset()+ this->evaluate(rhs.constraints().at(i).normal());
-			res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), results(i) ));
+			result = rhs.constraints().at(i).offset()+ this->evaluate(rhs.constraints().at(i).normal());
+			res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), result ));
+			//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
 		}
-
+		res.reduce();
 		return res;
 	}
 
@@ -403,16 +462,16 @@ namespace hypro
 			return HPolytope<Number>();
 		}
 		else {
-		HPolytope<Number> res;
-		for(const auto& plane : mHPlanes) {
-			res.insert(plane);
+			HPolytope<Number> res;
+			for(const auto& plane : mHPlanes) {
+				res.insert(plane);
+			}
+			for(const auto& plane : rhs.constraints()) {
+				res.insert(plane);
+			}
+			res.reduce();
+			return res; 
 		}
-		for(const auto& plane : rhs.constraints()) {
-			res.insert(plane);
-		}
-		//res.insert(mHPlanes.begin(), mHPlanes.end());
-		//res.insert(rhs.begin(), rhs.end());
-		return res; }
 	}
 
 	template<typename Number>
@@ -435,7 +494,7 @@ namespace hypro
 	template<typename Number>
 	bool HPolytope<Number>::contains(const HPolytope<Number>& rhs) const {
 		for(const auto& plane : rhs) {
-			if(this->evaluate(plane.normal()) > plane.offset())
+			if(this->evaluate(plane.normal()) < plane.offset())
 				return false;
 		}
 		return true;
@@ -447,19 +506,20 @@ namespace hypro
 			return HPolytope<Number>(mHPlanes);
 		}
 		else {
-		VPolytope<Number> lhs(this->vertices());
-		VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
-		// Todo: Convert VPolytope to HPolytope
-		
+			VPolytope<Number> lhs(this->vertices());
+			VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
+			// Todo: Convert VPolytope to HPolytope
+			
 
-		/*std::vector<Hyperplane<Number>> hyperplanes;
-			std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());
-			for(unsigned i = 0; i<facets.size(); i++) {
-				hyperplanes.push_back(facets[i]->hyperplane());
-			}
-			return HPolytope<Number>(hyperplanes); } */
+			/*std::vector<Hyperplane<Number>> hyperplanes;
+				std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());
+				for(unsigned i = 0; i<facets.size(); i++) {
+					hyperplanes.push_back(facets[i]->hyperplane());
+				}
+				return HPolytope<Number>(hyperplanes); } */
 
-		return HPolytope<Number>(tmpRes); }
+			return HPolytope<Number>(tmpRes); 
+		}
 	}
 
 	template<typename Number>

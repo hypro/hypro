@@ -75,19 +75,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Plotter<Number>::addObject(std::vector<Point<Number>> _points) {
-		std::vector<Point<Number>> copyPoints;
-		for(const auto& point : _points) {
-			//std::cout << __func__ << ": point " << point.rawCoordinates().transpose() << std::endl;
-			copyPoints.push_back(Point<Number>(point));
-		}
-		assert(copyPoints.size() == _points.size());
-		grahamScan(copyPoints);
-		//for(const auto& point : copyPoints) {
-		//	std::cout << __func__ << ": corrected point " << point.rawCoordinates().transpose() << std::endl;
-		//}
-
-		mObjects.push_back(copyPoints);
+	void Plotter<Number>::addObject(const std::vector<Point<Number>>& _points) {
+		std::vector<Point<Number>> sortedPoints = grahamScan(_points);
+		mObjects.push_back(sortedPoints);
 	}
 
 	template<typename Number>
@@ -96,7 +86,8 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Plotter<Number>::grahamScan(std::vector<Point<Number>>& _points) {
+	std::vector<Point<Number>> Plotter<Number>::grahamScan(const std::vector<Point<Number>>& _points) {
+		std::vector<Point<Number>> res;
 		if(!_points.empty()) {
 			// initialize -> find minimum Point
 			Point<Number> min = _points[0];
@@ -146,8 +137,8 @@ namespace hypro {
 				}
 			}
 
-			//for(const auto& pair : sortedPoints)
-			//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
+			for(const auto& pair : sortedPoints)
+				std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
 			
 			// prepare stack -> initialize with 2 points
 			std::stack<Point<Number>> stack;
@@ -186,13 +177,13 @@ namespace hypro {
 			}
 
 			// write result
-			_points.clear();
 			while(!stack.empty()){
-				_points.push_back(stack.top());
+				res.push_back(stack.top());
 				stack.pop();
 			}
 
 		}
+		return res;
 	}
 
 	template<typename Number>

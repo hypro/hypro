@@ -70,6 +70,7 @@ namespace hypro
 		
 		const HyperplaneVector& constraints() const;
 		bool hasConstraint(const Hyperplane<Number>& hplane) const;
+		void reduce();
 		
 		matrix_t<Number> peter() const;
 		vector_t<Number> getConstraintsOffsetVector() const;
@@ -122,10 +123,12 @@ namespace hypro
 		}
 
 		friend void swap(HPolytope<Number>& a, HPolytope<Number>& b) {
+			/*
 			a.printArrays();
 			b.printArrays();
 			std::cout << "a: " << a << std::endl;
 			std::cout << "b: " << b << std::endl;
+			*/
 			if(a.mInitialized){
 				int* tmpIa = a.ia;
 				int* tmpJa= a.ia;
@@ -182,11 +185,13 @@ namespace hypro
 			b.mDimension = tmpDimension;
 			swap(a.mHPlanes, b.mHPlanes);
 
+			/*
 			std::cout << " HPOLY SWAP " << std::endl;
 			a.printArrays();
 			b.printArrays();
 			std::cout << "a: " << a << std::endl;
 			std::cout << "b: " << b << std::endl;
+			*/
 		}
 
 	private:

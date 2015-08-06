@@ -47,12 +47,12 @@ namespace hypro {
 		 */
 		void plot2d() const;
 
-		void addObject(std::vector<Point<Number>> _points);
+		void addObject(const std::vector<Point<Number>>& _points);
 
 	private:
 		// auxiliary functions
 		void init(const std::string& _filename);
-		void grahamScan(std::vector<Point<Number>>& _points);
+		std::vector<Point<Number>> grahamScan(const std::vector<Point<Number>>& _points);
 		bool isLeftTurn(const Point<Number>& a, const Point<Number>& b, const Point<Number>& c);
 	};
 }

@@ -193,12 +193,14 @@ int main(int argc, char const *argv[])
    	for(auto& poly : flowpipe) {
    		std::cout << "Flowpipe segment to be converted: " << std::endl;
    		poly.print();
-   		std::cout << std::endl;
    		std::vector<Point<Number>> points = poly.vertices();
    		if(!points.empty()) {
    			std::cout << "Polycount: " << count << std::endl;
+   			std::cout << "points.size() = " << points.size() << std::endl;
    			for(auto& point : points) {
+   				std::cout << "reduce " << point << " to ";
 	   			point.reduceDimension(2);
+	   			std::cout << "Ping. " << point << std::endl;
 	   		}
 	   		plotter.addObject(points);
 	   		points.clear();
@@ -207,6 +209,8 @@ int main(int argc, char const *argv[])
    		else {
    			std::cout << "Points empty!" << std::endl;
    		}
+
+   		std::cout << "########" << std::endl;
    	}
 
    	plotter.plot2d();

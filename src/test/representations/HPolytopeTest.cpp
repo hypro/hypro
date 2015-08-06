@@ -217,12 +217,25 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 		std::cout << vertex.rawCoordinates().transpose() << std::endl;
 	}
 
+	std::cout << "######" << std::endl;
+
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
 			std::cout << "Test: " << vector_t<TypeParam>(lhs+rhs).transpose() << std::endl;
 			EXPECT_TRUE(res.contains(lhs+rhs)); // Todo: Make this more restrictive
 		}
 	}
+
+	std::cout << "######" << std::endl;
+
+	for(auto& lhs : hpt1.vertices()) {
+		for(auto& rhs : hpt2.vertices()) {
+			std::cout << "Test: " << vector_t<TypeParam>(TypeParam(0.99)*lhs+rhs).transpose() << std::endl;
+			EXPECT_TRUE(res.contains(TypeParam(0.99)*lhs+rhs));
+		}
+	}
+
+	std::cout << "######" << std::endl;
 
 	vector_t<TypeParam> p1(2);
 	p1(0) = 3;
