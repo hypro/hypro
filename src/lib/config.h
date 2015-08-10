@@ -48,6 +48,8 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
+#define FLOAT_PRECISION 100
+
 namespace hypro
 {
 template<typename Number>

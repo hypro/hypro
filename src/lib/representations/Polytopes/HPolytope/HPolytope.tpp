@@ -124,7 +124,7 @@ namespace hypro
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
 				vector_t<Number> b(2);
 
-				//std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
+				std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
 
 				// initialize
 				A.row(0) = mHPlanes.at(planeA).normal().transpose();
@@ -154,16 +154,17 @@ namespace hypro
 
 				if(!infty) {
 					vertices.push_back(Point<Number>(res));
-					//std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
+					std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
 				}
-				//else
-					//std::cout << "Intersection at infinity." << std::endl;
+				else
+					std::cout << "Intersection at infinity." << std::endl;
 				
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
+			std::cout << "Check contains." << std::endl;
 			if(!this->contains(*vertexIt)) {
-				//std::cout << "Removed vertex: " << *vertexIt << std::endl;
+				std::cout << "Removed vertex: " << *vertexIt << std::endl;
 				vertexIt = vertices.erase(vertexIt);
 			} else {
 				++vertexIt;
@@ -483,7 +484,7 @@ namespace hypro
 	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
 		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
-			//std::cout << plane << ": " << (plane.normal().dot(vec) > plane.offset()) << std::endl;
+			std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (plane.normal().dot(vec) > plane.offset()) << std::endl;
 			if(plane.normal().dot(vec) > plane.offset()) {
 				return false;
 			}
@@ -510,6 +511,15 @@ namespace hypro
 			VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 			// Todo: Convert VPolytope to HPolytope
 			
+
+			std::cout << "Union vertices lhs: " << std::endl;
+			for(const auto& vertex : this->vertices()) 
+				std::cout << vertex.rawCoordinates().transpose() << std::endl;
+
+			std::cout << "Union vertices rhs: " << std::endl;
+			for(const auto& vertex : _rhs.vertices()) 
+				std::cout << vertex.rawCoordinates().transpose() << std::endl;			
+
 
 			/*std::vector<Hyperplane<Number>> hyperplanes;
 				std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());

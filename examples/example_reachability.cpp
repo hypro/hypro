@@ -16,6 +16,7 @@ int main(int argc, char const *argv[])
 	using namespace carl;
 
 	typedef FLOAT_T<mpfr_t> Number;
+	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(100);
 	typedef hypro::HPolytope<Number> Representation;
 
 
