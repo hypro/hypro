@@ -61,9 +61,9 @@ int main(int argc, char const *argv[])
 	 * Location
 	 */
 	invariantVec(0) = 16;
-	invariantVec(1) = 1;
+	invariantVec(1) = 16;
 	invariantVec(2) = 16;
-	invariantVec(3) = 1;
+	invariantVec(3) = 16;
 
 	invariantOp = LEQ;
 

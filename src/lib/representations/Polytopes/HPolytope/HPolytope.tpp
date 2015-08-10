@@ -427,10 +427,9 @@ namespace hypro
 	
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const {
-		HPolytope<Number> res;
-		for(const auto& plane : mHPlanes) {
-			res.insert(plane.linearTransformation(A));
-		}
+		VPolytope<Number> intermediate(this->vertices());
+		intermediate = intermediate.linearTransformation(A);
+		HPolytope<Number> res(intermediate);
 		return res;
 	}
 
@@ -485,7 +484,8 @@ namespace hypro
 		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
 			std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (plane.normal().dot(vec) > plane.offset()) << std::endl;
-			if(plane.normal().dot(vec) > plane.offset()) {
+			carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
+			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),32) && plane.normal().dot(vec) > plane.offset()) {
 				return false;
 			}
 		}
