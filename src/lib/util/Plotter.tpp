@@ -105,7 +105,7 @@ namespace hypro {
 			for(const auto& point : _points) {
 				if(point != min) {
 					//std::cout << "Try to insert " << point << std::endl;
-					Number angle = point.polarCoordinates(min)[1];
+					Number angle = point.polarCoordinates(min).at(1);
 					//std::cout << "Computed polar angle: " << angle << std::endl;
 					if(sortedPoints.empty()) {
 						//std::cout << "points empty, simply insert." << std::endl;
@@ -116,9 +116,9 @@ namespace hypro {
 						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
 							// if equal, take the one with bigger radial component
 							//std::cout << "Consider " << pos->second << ", angle: ";
-							Number newAngle = pos->second.polarCoordinates(min)[1];
-							std::cout << newAngle << std::endl;
-							if(carl::AlmostEqual2sComplement(angle, newAngle), TOLLERANCE_ULPS) {
+							Number newAngle = pos->second.polarCoordinates(min).at(1);
+							//std::cout << newAngle << std::endl;
+							if(carl::AlmostEqual2sComplement(angle, newAngle, TOLLERANCE_ULPS) ) {
 								// if equal, compare radial coordinate (distance)
 								//std::cout << "AlmostEqual2sComplement" << std::endl;
 								if(pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {

@@ -49,7 +49,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 #define FLOAT_PRECISION 100
-#define TOLLERANCE_ULPS 2048
+static const unsigned TOLLERANCE_ULPS=2048;
 
 namespace hypro
 {
