@@ -39,10 +39,12 @@ namespace hypro
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(unsigned dimension) {
-		mDimension = dimension;
-		mInitialized = false;
-	}
+	HPolytope<Number>::HPolytope(unsigned dimension) :
+		mHPlanes(),
+		mFanSet(false),
+		mDimension(0),
+		mInitialized(false)
+	 {}
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) {
@@ -52,6 +54,7 @@ namespace hypro
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
 		}
 		mInitialized = false;
+		mFanSet = false;
 	}
 	
 	template<typename Number>
@@ -61,6 +64,7 @@ namespace hypro
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
 		}
 		mInitialized = false;
+		mFanSet = false;
 	}
 	
 	
@@ -69,11 +73,13 @@ namespace hypro
 		assert(alien.size() > 2);
 		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
 		mDimension = points.begin()->dimension();
-		std::vector<Facet<Number>*> facets = convexHull(points);
-		for(const auto& facet : facets) {
+		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points);
+		for(auto& facet : facets) {
 			mHPlanes.push_back(facet->hyperplane());
 		}
+		facets.clear();
 		mInitialized = false;
+		mFanSet = false;
 	}
 	
 
@@ -124,7 +130,7 @@ namespace hypro
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
 				vector_t<Number> b(2);
 
-				std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
+				//std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
 
 				// initialize
 				A.row(0) = mHPlanes.at(planeA).normal().transpose();
@@ -154,17 +160,17 @@ namespace hypro
 
 				if(!infty) {
 					vertices.push_back(Point<Number>(res));
-					std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
-				}
+					//std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
+				}/*
 				else
 					std::cout << "Intersection at infinity." << std::endl;
-				
+				*/
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-			std::cout << "Check contains." << std::endl;
+			//std::cout << "Check contains." << std::endl;
 			if(!this->contains(*vertexIt)) {
-				std::cout << "Removed vertex: " << *vertexIt << std::endl;
+				//std::cout << "Removed vertex: " << *vertexIt << std::endl;
 				vertexIt = vertices.erase(vertexIt);
 			} else {
 				++vertexIt;
@@ -187,20 +193,20 @@ namespace hypro
 	template<typename Number>
     void HPolytope<Number>::calculateFan() const{
     
-    	std::vector<Facet<Number>> facets = convexHull(vertices());
+    	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(vertices());
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-				preresult.insert(facets[i].vertices().at(j));							
+				preresult.insert(facets[i]->vertices().at(j));							
 			}			
 		} 
 		polytope::Fan<Number> fan;
 		for(auto& point : preresult) {
 			polytope::Cone<Number>* cone = new polytope::Cone<Number>();
 			for(unsigned i = 0; i<facets.size(); i++) {
-				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-					if(point == facets[i].vertices().at(j))	{
-					std::vector<Ridge<Number>> ridges = getRidges(facets[i]);
+				for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
+					if(point == facets[i]->vertices().at(j))	{
+					std::vector<Ridge<Number>> ridges = getRidges(*facets[i]);
 						for(unsigned m = 0; m<ridges.size(); m++) { 
 							if(checkInsideRidge(ridges[m], point)) {						
 								std::vector<Facet<Number>> conefacets = shareRidge(facets, ridges[m]);
@@ -483,10 +489,10 @@ namespace hypro
 	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
 		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
-			std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (plane.normal().dot(vec) > plane.offset()) << std::endl;
+			//std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
 			carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
-			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),32) && plane.normal().dot(vec) > plane.offset()) {
-				return false;
+			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) {
+					return false;
 			}
 		}
 		return true;
@@ -511,7 +517,7 @@ namespace hypro
 			VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 			// Todo: Convert VPolytope to HPolytope
 			
-
+			/*
 			std::cout << "Union vertices lhs: " << std::endl;
 			for(const auto& vertex : this->vertices()) 
 				std::cout << vertex.rawCoordinates().transpose() << std::endl;
@@ -519,7 +525,7 @@ namespace hypro
 			std::cout << "Union vertices rhs: " << std::endl;
 			for(const auto& vertex : _rhs.vertices()) 
 				std::cout << vertex.rawCoordinates().transpose() << std::endl;			
-
+			*/
 
 			/*std::vector<Hyperplane<Number>> hyperplanes;
 				std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());

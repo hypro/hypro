@@ -24,7 +24,7 @@ class Facet
 	 * Typedefs
 	 */
 		typedef std::vector<Point<Number>> pointVector;
-		typedef std::vector<Facet<Number>*> neighborsSet;
+		typedef std::vector<std::shared_ptr<Facet<Number>>> neighborsSet;
 
 	/**
 	 * Members
@@ -51,6 +51,15 @@ class Facet
 			mOutsideSet(f.getOutsideSet()),
 			mNormal(f.getNormal()),
 			mScalar(f.getScalar())
+		{}
+
+		Facet(const std::shared_ptr<Facet<Number>>& f) :
+			mVertices(f->vertices()),
+			mNeighbors(f->neighbors()),
+			mHyperplane(f->hyperplane()),
+			mOutsideSet(f->getOutsideSet()),
+			mNormal(f->getNormal()),
+			mScalar(f->getScalar())
 		{}
 
 		Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number>& insidePoint)
@@ -93,7 +102,7 @@ class Facet
 			setPoints(r, insidePoint1, insidePoint2);
 			mHyperplane = Hyperplane<Number>(mNormal,mScalar);
 			//mHyperplane = Hyperplane<Number>(mVertices);
-			mNeighbors = std::vector<Facet<Number>*>();
+			mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
 			mOutsideSet = std::vector<Point<Number>>();
 
 		}
@@ -131,9 +140,9 @@ class Facet
 		 * Getters and Setters
 		 */
 
-		 bool empty() const {
-		 	return (mVertices.size() == 0);
-		 }
+		bool empty() const {
+			return (mVertices.size() == 0);
+		}
 
 		pointVector& rVertices()
 		{
@@ -155,11 +164,13 @@ class Facet
 			return mNeighbors;
 		}
 
-		void addNeighbor(Facet<Number>* facet)
+		void addNeighbor(std::shared_ptr<Facet<Number>> facet)
 		{
+			//std::cout << "Adding " << *facet << " to " << *this << std::endl;
 			if(!isNeighbor(facet)){
 				mNeighbors.push_back(facet);
-				facet->addNeighbor(this);
+				assert(isNeighbor(facet));
+				facet->addNeighbor(std::make_shared<Facet<Number>>(*this));
 			}
 		}
 
@@ -176,7 +187,7 @@ class Facet
 		/*
 		 * removes a given facet from the neighborset if it is inside the list
 		 */
-		bool removeNeighbor(Facet<Number>* facet)
+		bool removeNeighbor(std::shared_ptr<Facet<Number>> facet)
 		{
 			for(unsigned i = 0; i<mNeighbors.size(); i++){
 				if(*facet == *mNeighbors[i]){
@@ -376,7 +387,7 @@ class Facet
 			return Number (mNormal.dot(mVertices[0].rawCoordinates()));
 		}
 
-		const Hyperplane<Number>& hyperplane() const
+		Hyperplane<Number> hyperplane() const
 		{
 			return mHyperplane;
 		}
@@ -470,8 +481,9 @@ class Facet
 			}
 		}
 
-		bool isNeighbor(Facet<Number>* facet) const {
+		bool isNeighbor(std::shared_ptr<Facet<Number>> facet) const {
 			for(unsigned i = 0; i < mNeighbors.size(); i++) {
+				//std::cout << "Compare " << *mNeighbors[i] << " and " << *facet << ": " << (*mNeighbors[i] == *facet) << std::endl;
 				if(*mNeighbors[i] == *facet) {
 					return true;
 				}
@@ -485,6 +497,7 @@ class Facet
 			for(unsigned i = 0; i<_f1.vertices().size(); i++ ) {
 				bool found = false;
 				for(unsigned j = 0; j<_f2.vertices().size(); j++ ) {
+					//std::cout << "\t Point compare: " << _f1.vertices().at(i) << " and " << _f2.vertices().at(j) << ": " << (_f1.vertices().at(i) == _f2.vertices().at(j)) << std::endl;
 					if(_f1.vertices().at(i) == _f2.vertices().at(j)){
 						found = true;
 					}

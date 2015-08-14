@@ -209,7 +209,7 @@ namespace hypro
 		points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
 		points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
 		
-		std::vector<Facet<Number>*> facets = convexHull(points);
+		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points);
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {

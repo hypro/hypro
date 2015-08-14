@@ -695,7 +695,7 @@ namespace hypro
     		updatePoints();
     	}
     	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-    	std::vector<Facet<Number>*> hull = convexHull(mPoints);
+    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(mPoints);
     	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	std::set<Point<Number>> preresult;
 
@@ -770,7 +770,7 @@ namespace hypro
     	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
 		//std::cout << "Ping" << std::endl;
-    	std::vector<Facet<Number>*> hull = convexHull(unitedVertices);
+    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(unitedVertices);
     	//std::cout << "Ping" << std::endl;
 
     	std::set<Point<Number>> preresult;

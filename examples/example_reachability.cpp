@@ -16,7 +16,8 @@ int main(int argc, char const *argv[])
 	using namespace carl;
 
 	typedef FLOAT_T<mpfr_t> Number;
-	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(100);
+	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
+	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
 
 
@@ -176,42 +177,37 @@ int main(int argc, char const *argv[])
 
 	std::vector<Representation> flowpipe;
 
-   	std::cout << "original Polytope (Box): ";
-    poly.print();
+   	//std::cout << "original Polytope (Box): ";
+    //poly.print();
 
 	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
 
    	//check size of flowpipe
-   	int size = flowpipe.size();
+   	//int size = flowpipe.size();
 
-   	std::cout <<  "Flowpipe size: ";
-   	std::cout << size << std::endl;
+   	//std::cout <<  "Flowpipe size: ";
+   	//std::cout << size << std::endl;
 
    	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
 	unsigned count = 1;
    	for(auto& poly : flowpipe) {
-   		std::cout << "Flowpipe segment to be converted: " << std::endl;
-   		poly.print();
+   		//std::cout << "Flowpipe segment to be converted: " << std::endl;
+   		//poly.print();
    		std::vector<Point<Number>> points = poly.vertices();
    		if(!points.empty()) {
-   			std::cout << "Polycount: " << count << std::endl;
-   			std::cout << "points.size() = " << points.size() << std::endl;
+   			//std::cout << "Polycount: " << count << std::endl;
+   			//std::cout << "points.size() = " << points.size() << std::endl;
    			for(auto& point : points) {
-   				std::cout << "reduce " << point << " to ";
+   				//std::cout << "reduce " << point << " to ";
 	   			point.reduceDimension(2);
-	   			std::cout << "Ping. " << point << std::endl;
+	   			//std::cout << point << std::endl;
 	   		}
 	   		plotter.addObject(points);
 	   		points.clear();
 	   		++count;
    		}
-   		else {
-   			std::cout << "Points empty!" << std::endl;
-   		}
-
-   		std::cout << "########" << std::endl;
    	}
 
    	plotter.plot2d();

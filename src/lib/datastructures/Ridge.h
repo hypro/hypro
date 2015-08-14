@@ -31,7 +31,7 @@ class Ridge
 	 */
 	private:
 		vertexSet            mVertices;
-		std::vector<Facet<Number>*>           mNeighbors;
+		std::vector<std::shared_ptr<Facet<Number>>>           mNeighbors;
 		Hyperplane<Number>          mHyperplane;
 		vector_t<Number>			mNormal;
 		Number			mScalar;
@@ -52,7 +52,7 @@ class Ridge
 			//mScalar = f.getScalar();
 		}
 
-		Ridge( Facet<Number>* facet1, Facet<Number>* facet2)
+		Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2)
 		{
 			 //   std::vector<Facet<Number>> facets;
 			 //   facets.push_back(facet1);
@@ -102,12 +102,12 @@ class Ridge
 			return mScalar;
 		}
 
-		std::vector<Facet<Number>*>& rNeighbors() {
+		std::vector<std::shared_ptr<Facet<Number>>>& rNeighbors() {
 
 	        return mNeighbors;
 	    }
 
-		std::vector<Facet<Number>*> neighbors() const
+		std::vector<std::shared_ptr<Facet<Number>>> neighbors() const
 	    {
 	        return mNeighbors;
 	    }

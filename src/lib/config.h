@@ -49,6 +49,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 #define FLOAT_PRECISION 100
+#define TOLLERANCE_ULPS 2048
 
 namespace hypro
 {
@@ -71,11 +72,11 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-#define fReach_TIMEBOUND 2
-#define fReach_TIMEDISCRETIZATION 100
+#define fReach_TIMEBOUND 1
+#define fReach_TIMEDISCRETIZATION 50
 #define fReach_DENOMINATOR 1000000000
 //define for debugging: triggers console output
-#define fReach_DEBUG
+//#define fReach_DEBUG
 
 /**
  * author: ckugler
@@ -137,7 +138,7 @@ namespace Eigen
 			return false;
 		
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
-			if(lhs(dim) != rhs(dim)) {
+			if(!carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS)) {
 				return false;
 			}
 		}

@@ -104,17 +104,25 @@ namespace hypro {
 			// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
 			for(const auto& point : _points) {
 				if(point != min) {
+					//std::cout << "Try to insert " << point << std::endl;
 					Number angle = point.polarCoordinates(min)[1];
+					//std::cout << "Computed polar angle: " << angle << std::endl;
 					if(sortedPoints.empty()) {
+						//std::cout << "points empty, simply insert." << std::endl;
 						sortedPoints.insert(std::make_pair(angle, point));
 					}
 					else {
+						//std::cout << "Compare." << std::endl;
 						for(auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
 							// if equal, take the one with bigger radial component
+							//std::cout << "Consider " << pos->second << ", angle: ";
 							Number newAngle = pos->second.polarCoordinates(min)[1];
-							if(carl::AlmostEqual2sComplement(angle, newAngle)) {
+							std::cout << newAngle << std::endl;
+							if(carl::AlmostEqual2sComplement(angle, newAngle), TOLLERANCE_ULPS) {
 								// if equal, compare radial coordinate (distance)
+								//std::cout << "AlmostEqual2sComplement" << std::endl;
 								if(pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {
+									//std::cout << "sortedPoints erase " << pos->second << std::endl;
 									pos = sortedPoints.erase(pos);
 									sortedPoints.insert(std::make_pair(angle, point));
 								}
@@ -133,12 +141,13 @@ namespace hypro {
 								break;
 							}
 						}
+						//std::cout << "End Compare." << std::endl;
 					}
 				}
 			}
 
-			for(const auto& pair : sortedPoints)
-				std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
+			//for(const auto& pair : sortedPoints)
+			//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
 			
 			// prepare stack -> initialize with 2 points
 			std::stack<Point<Number>> stack;
