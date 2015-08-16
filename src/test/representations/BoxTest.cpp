@@ -144,17 +144,19 @@ TYPED_TEST(BoxTest, Corners) {
 	
 	Box<TypeParam> b1(intervals1);
 	
-	std::set<Point<TypeParam>> corners = b1.corners();
+	std::vector<Point<TypeParam>> corners = b1.vertices();
 	EXPECT_EQ((unsigned) 8, corners.size());
 	
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,2})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,1,5})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,3,2})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({3,3,5})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,1,2})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,1,5})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,3,2})) != corners.end());
-	EXPECT_EQ(true, corners.find(Point<TypeParam>({5,3,5})) != corners.end());
+
+
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,3,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,3,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,1,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,1,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,3,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,3,5})) != corners.end());
 }
 
 TYPED_TEST(BoxTest, Union)
@@ -230,25 +232,25 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	Box<TypeParam> resZ = b1.linearTransformation(rotZ);
 	
 	
-	std::set<Point<TypeParam>> cornersX = resX.corners();
-	std::set<Point<TypeParam>> originalCorners = b1.corners();
-	std::set<Point<TypeParam>> newCorners;
+	std::vector<Point<TypeParam>> cornersX = resX.vertices();
+	std::vector<Point<TypeParam>> originalCorners = b1.vertices();
+	std::vector<Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {
-		newCorners.insert(Point<TypeParam>(rotX*point.rawCoordinates()));
+		newCorners.push_back(Point<TypeParam>(rotX*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resX, Box<TypeParam>(newCorners));
 	
 	newCorners.clear();
-	std::set<Point<TypeParam>> cornersY = resY.corners();
+	std::vector<Point<TypeParam>> cornersY = resY.vertices();
 	for(auto& point : originalCorners) {
-		newCorners.insert(Point<TypeParam>(rotY*point.rawCoordinates()));
+		newCorners.push_back(Point<TypeParam>(rotY*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resY, Box<TypeParam>(newCorners));
 	
 	newCorners.clear();
-	std::set<Point<TypeParam>> cornersZ = resZ.corners();
+	std::vector<Point<TypeParam>> cornersZ = resZ.vertices();
 	for(auto& point : originalCorners) {
-		newCorners.insert(Point<TypeParam>(rotZ*point.rawCoordinates()));
+		newCorners.push_back(Point<TypeParam>(rotZ*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resZ, Box<TypeParam>(newCorners));
 	
@@ -284,16 +286,16 @@ TYPED_TEST(BoxTest, MinkowskiSum)
 	Box<TypeParam> b2(intervals2);
 	
 	Box<TypeParam> res = b1.minkowskiSum(b2);
-	std::set<Point<TypeParam>> corners = res.corners();
+	std::vector<Point<TypeParam>> corners = res.vertices();
 	
-	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,4,-6}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,4,1}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,8,-6}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({-1,8,1}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({3,4,-6}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({3,4,1}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({3,8,-6}) ) != corners.end());
-	EXPECT_TRUE(corners.find( Point<TypeParam>({3,8,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,4,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,4,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,8,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,8,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,4,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,4,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,8,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,8,1}) ) != corners.end());
 	
 }
 

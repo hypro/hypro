@@ -10,9 +10,7 @@
 #pragma once
 
 #include "../config.h"
-#include "Hyperplane.h"
 #include "Facet.h"
-#include "Point.h"
 
 namespace hypro
 {
@@ -33,8 +31,6 @@ class Ridge
 		vertexSet            mVertices;
 		std::vector<std::shared_ptr<Facet<Number>>>           mNeighbors;
 		Hyperplane<Number>          mHyperplane;
-		vector_t<Number>			mNormal;
-		Number			mScalar;
 
 	/**
 	 * Constructors & Destructor
@@ -48,8 +44,6 @@ class Ridge
 			mVertices = f.vertices();
 			mNeighbors = f.neighbors();
 			mHyperplane = f.hyperplane();
-			//mNormal = f.getNormal();
-			//mScalar = f.getScalar();
 		}
 
 		Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2)
@@ -69,8 +63,6 @@ class Ridge
 				}
 			}
 
-			//mNormal = getNormalVector();
-			//mScalar = getScalarVector();
 			mHyperplane = Hyperplane<Number>();//mNormal,mScalar);
 			//save mHyperplane as intersect of the facets
 		}
@@ -90,16 +82,6 @@ class Ridge
 		vertexSet vertices() const
 		{
 			return mVertices;
-		}
-
-		vector_t<Number> getNormal () const
-		{
-			return mNormal;
-		}
-
-		Number getScalar () const
-		{
-			return mScalar;
 		}
 
 		std::vector<std::shared_ptr<Facet<Number>>>& rNeighbors() {

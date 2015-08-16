@@ -8,6 +8,7 @@
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/representations/SupportFunction/SupportFunction.h"
+#include "../lib/representations/Box/Box.h"
 #include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
@@ -18,7 +19,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<mpfr_t> Number;
 	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
-	typedef hypro::HPolytope<Number> Representation;
+	typedef hypro::Box<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself

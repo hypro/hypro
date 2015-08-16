@@ -10,8 +10,7 @@
 
 #include "../util.h"
 #include "../../GeometricObject.h"
-#include <carl/core/Variable.h>
-#include <eigen3/Eigen/Geometry>
+//#include <eigen3/Eigen/Geometry>
 #include <glpk.h>
 #include <set>
 #include <cassert>
