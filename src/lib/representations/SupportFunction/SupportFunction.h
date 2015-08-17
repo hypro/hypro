@@ -91,30 +91,30 @@ namespace hypro
 			std::weak_ptr<SupportFunction<Number>> pThis;
 		   
 			
-			SupportFunction(SF_TYPE _type, Number _radius);
-			SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
-			SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
-			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs);
-			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b = vector_t<Number>());
-			SupportFunction(SF_TYPE _type, std::shared_ptr<SupportFunction<Number>> _origin, const Number& _factor);
+			SupportFunction( Number _radius, SF_TYPE _type=SF_TYPE::INFTY_BALL);
+			SupportFunction( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type=SF_TYPE::POLY);
+			SupportFunction( const std::vector<Hyperplane<Number>>& _planes, SF_TYPE _type=SF_TYPE::POLY);
+			SupportFunction( std::shared_ptr<SupportFunction<Number>> _lhs, std::shared_ptr<SupportFunction<Number>> _rhs, SF_TYPE _type);
+			SupportFunction( std::shared_ptr<SupportFunction<Number>> _origin, const matrix_t<Number>& _a, const vector_t<Number>& _b, SF_TYPE _type);
+			SupportFunction( std::shared_ptr<SupportFunction<Number>> _origin, const Number& _factor, SF_TYPE _type=SF_TYPE::SCALE);
 		
 		public:
 			SupportFunction(const SupportFunction<Number>& _orig);
 
 			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, Number _radius){
-				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_radius));
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_radius,_type));
 				obj->pThis = obj;
 				return obj;
 			}
 
 			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) {
-				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_directions,_distances));
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_directions,_distances,_type));
 				obj->pThis = obj;
 				return obj;
 			}
 
 			static std::shared_ptr<SupportFunction<Number>> create(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) {
-				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_type,_planes));
+				auto obj = std::shared_ptr<SupportFunction<Number>>(new SupportFunction<Number>(_planes,_type));
 				obj->pThis = obj;
 				return obj;
 			}

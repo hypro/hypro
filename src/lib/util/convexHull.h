@@ -629,7 +629,6 @@ static std::vector<std::shared_ptr<Facet<Number>>> convexHull(const std::vector<
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet);
 		while(!workingSet.empty()) {
-			std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front();
 			//std::cout << __func__ << " Current Facet: " << *currentFacet << std::endl;
 			//std::cout << __func__ << " Current Neighbors: ";

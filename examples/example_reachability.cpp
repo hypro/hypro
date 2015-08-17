@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<mpfr_t> Number;
 	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
-	typedef hypro::Box<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
@@ -50,8 +50,6 @@ int main(int argc, char const *argv[])
 
 	vector_t<Number> coordinates = vector_t<Number>(2,1);
 	Point<Number> p1;
-	Representation poly;
-	Representation pPoly;
 
 	//Box
 	//vector_t<Number> boxVec = vector_t<Number>(6,1);
@@ -172,7 +170,9 @@ int main(int argc, char const *argv[])
 	//boxMat(5,1) = 0;
 	//boxMat(5,2) = -1;
 
-	poly = Representation(boxMat,boxVec);
+	
+
+	Representation poly(boxMat,boxVec);
 
 	hybrid.setValuation(poly);
 
@@ -188,6 +188,8 @@ int main(int argc, char const *argv[])
 
    	//std::cout <<  "Flowpipe size: ";
    	//std::cout << size << std::endl;
+
+   	std::cout << "Generated flowpipe, start plotting." << std::endl;
 
    	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");

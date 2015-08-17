@@ -148,10 +148,7 @@ namespace hypro
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
-
-#ifdef fReach_DEBUG
-						std::cout << "i in Loop: " << i << std::endl;
-#endif
+						std::cout << "Time: \t" << i << std::endl;
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
