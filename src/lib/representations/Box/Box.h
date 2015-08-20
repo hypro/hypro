@@ -13,7 +13,6 @@
 #include <map>
 #include <cassert>
 #include <carl/interval/Interval.h>
-#include "../GeometricObject.h"
 
 namespace hypro {
 
@@ -21,8 +20,10 @@ template<typename Number>
 class Vertex;
 
 template<typename Number>
-class Box : public hypro::GeometricObject<Number>
-{
+class VPolytope;
+
+template<typename Number>
+class Box {
 private:
 	
 public:
@@ -83,7 +84,8 @@ public:
 	Box(const std::vector<carl::Interval<Number>>& _intervals) {
 		mBoundaries = _intervals;
 	}
-	
+
+	Box(const matrix_t<Number>& _matrix, const vector_t<Number>& _constants) : Box(VPolytope<Number>(_matrix,_constants).vertices()) {}
 	Box(const std::set<Point<Number>>& _points);
 	Box(const std::vector<Point<Number>>& _points);
 	Box(const std::set<Vertex<Number>>& _points);
@@ -248,7 +250,9 @@ public:
 		return Point<Number>(coordinates);
 	}
 	
-	std::set<Point<Number>> corners() const;
+	Number supremum() const;
+
+	std::vector<Point<Number>> vertices() const;
 
 	/**
 	 * Checks if two boxes are equal
@@ -331,6 +335,7 @@ public:
 	Box<Number> minkowskiSum(const Box<Number>& rhs) const;
 	Box<Number> intersect(const Box<Number>& rhs) const;
 	bool contains(const Point<Number>& point) const;
+	bool contains(const Box<Number>& box) const;
 	Box<Number> unite(const Box<Number>& rhs) const;
 	
 	void clear();

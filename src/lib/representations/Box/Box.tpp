@@ -123,8 +123,19 @@ carl::Interval<Number>& Box<Number>::rInterval(const carl::Variable& var) {
 }
 
 template<typename Number>
-std::set<Point<Number>> Box<Number>::corners() const {
-	std::set<Point<Number>> result;
+Number Box<Number>::supremum() const {
+	Number max = 0;
+    for(auto& point : this->vertices())
+    {
+        Number inftyNorm = hypro::Point<Number>::inftyNorm(point);
+        max = max > inftyNorm ? max : inftyNorm;
+    }
+    return max;
+}
+
+template<typename Number>
+std::vector<Point<Number>> Box<Number>::vertices() const {
+	std::vector<Point<Number>> result;
 	unsigned limit = int(pow(mBoundaries.size(),2));
 	
 	for(unsigned bitCount = 0; bitCount < limit ; ++bitCount) {
@@ -136,7 +147,7 @@ std::set<Point<Number>> Box<Number>::corners() const {
 			else
 				coord(dimension) = mBoundaries[dimension].lower();
 		}
-		result.insert(Point<Number>(coord));
+		result.push_back(Point<Number>(coord));
 	}
 	return result;
 }
@@ -144,7 +155,7 @@ std::set<Point<Number>> Box<Number>::corners() const {
 template<typename Number>
 Box<Number> Box<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
 {
-	std::set<Point<Number>> corners = this->corners();
+	std::vector<Point<Number>> corners = this->vertices();
 	std::set<Point<Number>> transformedCorners;
 	if(b != vector_t<Number>()) {
 		for(auto& point : corners) {
@@ -193,6 +204,18 @@ bool Box<Number>::contains(const Point<Number>& point) const
 	for(unsigned i = 0; i < dimension(); ++i)
 	{
 		if( !mBoundaries[i].contains(point.at(i)))
+			return false;
+	}
+	return true;
+}
+
+template<typename Number>
+bool Box<Number>::contains(const Box<Number>& box) const {
+	if( this->dimension() != box.dimension() )
+		return false;
+
+	for(unsigned pos = 0; pos < mBoundaries.size(); ++pos) {
+		if(!mBoundaries.at(pos).contains(box.at(pos)))
 			return false;
 	}
 	return true;

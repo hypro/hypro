@@ -15,6 +15,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 #include "util/operators.h"
+#include "util/VariablePool.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
@@ -26,8 +27,6 @@ extern "C" {
 }
 #endif
 #endif
-
-#include "util/VariablePool.h"
 
 // needed for vector outstream operator:
 using carl::operator<<;
@@ -48,9 +47,10 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-#define FLOAT_PRECISION 100
-static const unsigned TOLLERANCE_ULPS=2048;
+static const unsigned FLOAT_PRECISION=100;
+static const unsigned TOLLERANCE_ULPS=8192;
 
+// global typedefs
 namespace hypro
 {
 template<typename Number>
@@ -72,9 +72,9 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-#define fReach_TIMEBOUND 1
-#define fReach_TIMEDISCRETIZATION 50
-#define fReach_DENOMINATOR 1000000000
+static const float fReach_TIMEBOUND= 4;
+static const unsigned fReach_TIMEDISCRETIZATION= 1000;
+static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 //#define fReach_DEBUG
 

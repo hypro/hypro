@@ -123,7 +123,7 @@ namespace hypro
 			//vec(2*_dim-2) = 0;
 			//vec(2*_dim-1) = 0;
 
-			std::cout << "Hausdorff matrix: " << mat << ", Hausdorff vector " << vec << std::endl;
+			//std::cout << "Hausdorff matrix: " << mat << ", Hausdorff vector " << vec << std::endl;
 
 			Representation poly = Representation(mat,vec);
 			return poly;

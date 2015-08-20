@@ -377,9 +377,9 @@ namespace hypro
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(_direction(i)));
-			std::cout << double(_direction(i)) << ", ";
+			//std::cout << double(_direction(i)) << ", ";
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
