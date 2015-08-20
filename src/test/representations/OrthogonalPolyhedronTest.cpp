@@ -84,9 +84,21 @@ protected:
 
 TYPED_TEST(OrthogonalPolyhedronTest, Constructor)
 {
-	OrthogonalPolyhedron<TypeParam> p;
-	OrthogonalPolyhedron<TypeParam> copy(p);
-	std::cout << p << std::endl;
+	// empty constructor
+	OrthogonalPolyhedron<TypeParam> p1;
+
+	// constructor from vertex
+	Vertex<TypeParam> v1(Point<TypeParam>({1,2}), false);
+	OrthogonalPolyhedron<TypeParam> p2(v1);
+
+	// constructor from vertexContainer
+	OrthogonalPolyhedron<TypeParam> p3(this->container1);
+
+	// constructor from set of vertices
+	OrthogonalPolyhedron<TypeParam> p4(this->container1.vertices());
+
+	// copy constructor
+	OrthogonalPolyhedron<TypeParam> copy(p4);
 	SUCCEED();
 }
 

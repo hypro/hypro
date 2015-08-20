@@ -29,32 +29,17 @@
 
 namespace hypro
 {
-	template<typename Number>
+	enum ORTHO_TYPE { VERTEX, NEIGHBORHOOD, EXTREME_VERTEX };
+
+	template<typename Number, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX>
 	class OrthogonalPolyhedron
 	{
 	private:
-		
-		// the container of all vertices
-		VertexContainer<Number> mVertices;
-		
-		// the induced vertices connected to the grid
-		//VertexContainer<Number> mInducedVertices;
-		
-		// the grid the polyhedron is defined on
-		mutable Grid<Number> mGrid;
-		
-		// the color of the origin
-		//bool mOriginColor = false;
-		
-		// the neighborhood container which maps points to a set of vertices
-		mutable NeighborhoodContainer mNeighborhood;
-		
-		// the cached boundary box (mutable to allow performance optimization)
-		mutable Box<Number> mBoundaryBox;
+		//VertexContainer<Number> mVertices; // the container of all vertices
+		Grid<Number> mGrid; // the grid the polyhedron is defined on
+		mutable Box<Number> mBoundaryBox; // the cached boundary box (mutable to allow performance optimization)
 		mutable bool mBoxUpToDate = false;
-		
-		// the variables
-		std::vector<carl::Variable> mVariables;
+		std::vector<carl::Variable> mVariables; // the variables
 		
 	public:
 		
@@ -62,90 +47,59 @@ namespace hypro
 		 * Constructors
 		 ***********************************************************************/
 		
-		/**
-		 * @brief Default constructor.
-		 */
-		OrthogonalPolyhedron() {}
+		OrthogonalPolyhedron();
+		OrthogonalPolyhedron(const Vertex<Number>& _vertex);
+		OrthogonalPolyhedron(const VertexContainer<Number>& vertices);
+		OrthogonalPolyhedron(const std::set<Vertex<Number> >& points);
+		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy);
 		
-		/**
-		 * @brief Constructor for a list of vertices.
-		 * @details The vertices represent an orthogonal polyhedron. The constructor extracts the variables and induces a grid according to
-		 * the vertices given.
-		 * 
-		 * @param vertices A non-empty VertexContainer
-		 */
-		OrthogonalPolyhedron(const VertexContainer<Number>& vertices) : mVertices(vertices) {
-			//mOriginColor = vertices.originIsVertex();
-			mVariables = vertices.variables();
-			mGrid.induceGrid(vertices.vertices());
-			//vSet<Number> inducedVertices = mGrid.translateToInduced(vertices.vertices());
-			//mInducedVertices = VertexContainer<Number>(inducedVertices);
-		}
+		/***********************************************************************
+		 * Getter, Setter
+		 ***********************************************************************/
 
-		/**
-		 * Constructor getting a list of points which should be contained in the orthogonal polyhedron.
-		 * @todo implement
-		 * @param points
-		 */
-		OrthogonalPolyhedron(const std::set<Point<Number> >& points) {
-			// TODO compute the orthogonal polyhedron around the convex hull of all points
-		}
-		
-		/**
-		 * @brief Copy constructor.
-		 * @details Copy constructor which (should) makes a deep copy of the passed original.
-		 * 
-		 * @param copy The original orthogonal polyhedron to be copied.
-		 */
-		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number>& copy) :
-			mVertices(copy.mVertices),
-			//mInducedVertices(copy.mInducedVertices),
-			mGrid(copy.mGrid),
-			//mOriginColor(copy.mOriginColor),
-			mNeighborhood(copy.mNeighborhood),
-			mBoundaryBox(copy.mBoundaryBox),
-			mBoxUpToDate(copy.mBoxUpToDate),
-			mVariables(copy.mVariables)
-		{}
-		
+		std::vector<carl::Variable> variables() const;
+		std::vector<Vertex<Number>> vertices() const;
+		Box<Number> boundaryBox() const;
+		void addVertex(const Vertex<Number>& _vertex);
+		void addVertices(const std::vector<Vertex<Number>>& _vertices);
+		unsigned int dimension() const;
+
 		/***********************************************************************
 		 * Geometric Object functions
 		 ***********************************************************************/
 		
-		unsigned int dimension() const;
-		OrthogonalPolyhedron<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
-		OrthogonalPolyhedron<Number> minkowskiSum(const OrthogonalPolyhedron<Number>& rhs) const;
-		OrthogonalPolyhedron<Number> intersect(const OrthogonalPolyhedron<Number>& rhs) const;
-		OrthogonalPolyhedron<Number> hull() const;
+		OrthogonalPolyhedron<Number, Type> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+		OrthogonalPolyhedron<Number, Type> minkowskiSum(const OrthogonalPolyhedron<Number, Type>& rhs) const;
+		OrthogonalPolyhedron<Number, Type> intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const;
+		OrthogonalPolyhedron<Number, Type> hull() const;
 		bool contains(const Point<Number>& point) const;
-		OrthogonalPolyhedron<Number> unite(const OrthogonalPolyhedron<Number>& rhs) const;
+		OrthogonalPolyhedron<Number, Type> unite(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		
 		/***********************************************************************
 		 * Other functions
 		 ***********************************************************************/
 		
 		bool empty() const;
-		std::vector<carl::Variable> variables() const;
-		Box<Number> boundaryBox() const;
+		
 		
 		/***********************************************************************
 		 * Operators
 		 ***********************************************************************/
 
-		OrthogonalPolyhedron<Number>& operator= ( const OrthogonalPolyhedron<Number>& _in ) = default;
-		OrthogonalPolyhedron<Number>& operator= ( OrthogonalPolyhedron<Number>&& ) = default;
+		OrthogonalPolyhedron<Number, Type>& operator= ( const OrthogonalPolyhedron<Number, Type>& _in ) = default;
+		OrthogonalPolyhedron<Number, Type>& operator= ( OrthogonalPolyhedron<Number, Type>&& ) = default;
 
-		friend bool operator==(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2) {
-			return op1.mVertices == op2.mVertices;
+		friend bool operator==(const OrthogonalPolyhedron<Number, Type>& op1, const OrthogonalPolyhedron<Number, Type>& op2) {
+			return op1.mGrid == op2.mGrid;
 		}
 
-		friend bool operator!=(const OrthogonalPolyhedron<Number>& op1, const OrthogonalPolyhedron<Number>& op2) {
-			return op1.mVertices != op2.mVertices;
+		friend bool operator!=(const OrthogonalPolyhedron<Number, Type>& op1, const OrthogonalPolyhedron<Number, Type>& op2) {
+			return op1.mGrid != op2.mGrid;
 		}
 		
-		friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number>& p) {
+		friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number, Type>& p) {
 			ostr << "(";
-			for(const auto& vertex : p.mVertices)
+			for(const auto& vertex : p.mGrid.vertices())
 				ostr << vertex << ", ";
 			ostr << ")";
 			return ostr;

@@ -32,7 +32,9 @@ namespace hypro {
 		 * Constructors & Destructors
 		 **********************************************************************/
 		VertexContainer(){}
+		VertexContainer(const Vertex<Number>& _vertex) : mVertices() { mVertices.insert(_vertex); }
 		VertexContainer(const vSet<Number>& vertices) : mVertices(vertices) {}
+		VertexContainer(const std::vector<Vertex<Number>>& _vertices) : mVertices() { mVertices.insert(_vertices.begin(), _vertices.end()); }
 		VertexContainer(const VertexContainer& orig) { mVertices = orig.mVertices; }
 		~VertexContainer(){}
 		
@@ -42,19 +44,19 @@ namespace hypro {
 		
 		unsigned dimension() const
 		{
-			assert( mVertices.size() > 0 );
+			if(mVertices.size() == 0) return 0;
 			return (*mVertices.begin()).dimension();
 		}
 		
 		std::vector<carl::Variable> variables() const
 		{
-			assert( mVertices.size() > 0 );
+			if(mVertices.size() == 0) return 0;
 			return (*mVertices.begin()).variables();
 		}
 				
 		unsigned size() const
 		{
-					return mVertices.size();
+			return mVertices.size();
 		}
 				
 		bool empty() const
@@ -62,6 +64,10 @@ namespace hypro {
 			return mVertices.empty();
 		}
 		
+		vSet<Number>& rVertices() {
+			return mVertices;
+		}
+
 		vSet<Number> vertices() const
 		{
 			return mVertices;
@@ -93,7 +99,7 @@ namespace hypro {
 		 * @return
 		 */
 		inline bool originIsVertex() const {
-			assert(mVertices.size() > 0);
+			if(mVertices.size() == 0) return false;
 			Vertex<Number> origin = Vertex<Number>(mVertices.begin()->point().newEmpty(), true);
 			return (mVertices.find(origin) != mVertices.end());
 		}

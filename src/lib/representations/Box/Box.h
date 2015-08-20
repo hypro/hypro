@@ -18,6 +18,9 @@
 namespace hypro {
 
 template<typename Number>
+class Vertex;
+
+template<typename Number>
 class Box : public hypro::GeometricObject<Number>
 {
 private:
@@ -83,7 +86,10 @@ public:
 	
 	Box(const std::set<Point<Number>>& _points);
 	Box(const std::vector<Point<Number>>& _points);
-	
+	Box(const std::set<Vertex<Number>>& _points);
+	Box(const std::vector<Vertex<Number>>& _points);
+
+
 	~Box()
 	{
 		mBoundaries.clear();

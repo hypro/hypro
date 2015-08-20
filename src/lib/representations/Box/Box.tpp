@@ -58,7 +58,52 @@ Box<Number>::Box(const std::vector<Point<Number>>& _points) {
 		}
 	}
 }
-	
+
+template<typename Number>
+Box<Number>::Box(const std::set<Vertex<Number>>& _vertices) {
+	if(_vertices.size() > 0) {
+		unsigned dim = _vertices.begin()->dimension();
+		for(unsigned d = 0; d < dim; ++d) {
+			mBoundaries.push_back(carl::Interval<Number>(_vertices.begin()->at(d)));
+		}
+		if(_vertices.size() > 1) {
+			auto pointIt = _vertices.begin();
+			++pointIt;
+			for(; pointIt != _vertices.end(); ++pointIt ) {
+				for(unsigned d = 0; d < pointIt->dimension(); ++d) {
+					if(mBoundaries[d].lower() > pointIt->at(d)) 
+						mBoundaries[d].setLower(pointIt->at(d));
+
+					if(mBoundaries[d].upper() < pointIt->at(d)) 
+						mBoundaries[d].setUpper(pointIt->at(d));
+				}
+			}
+		}
+	}
+}
+
+template<typename Number>
+Box<Number>::Box(const std::vector<Vertex<Number>>& _vertices) {
+	if(_vertices.size() > 0) {
+		unsigned dim = _vertices.begin()->dimension();
+		for(unsigned d = 0; d < dim; ++d) {
+			mBoundaries.push_back(carl::Interval<Number>(_vertices.begin()->at(d)));
+		}
+		if(_vertices.size() > 1) {
+			auto pointIt = _vertices.begin();
+			++pointIt;
+			for(; pointIt != _vertices.end(); ++pointIt ) {
+				for(unsigned d = 0; d < pointIt->dimension(); ++d) {
+					if(mBoundaries[d].lower() > pointIt->at(d)) 
+						mBoundaries[d].setLower(pointIt->at(d));
+
+					if(mBoundaries[d].upper() < pointIt->at(d)) 
+						mBoundaries[d].setUpper(pointIt->at(d));
+				}
+			}
+		}
+	}
+}	
 	
 template<typename Number>
 carl::Interval<Number> Box<Number>::interval(const carl::Variable& var) const

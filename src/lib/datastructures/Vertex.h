@@ -267,6 +267,11 @@ namespace hypro {
                 return mPoint.at(_i);
             }
 
+            Number at(unsigned _i) const
+            {
+                return mPoint.at(_i);
+            }
+
             friend std::ostream& operator<<(std::ostream& ostr, const Vertex& v) 
             {
                 ostr << v.mPoint << " [" << v.mColor << "]";

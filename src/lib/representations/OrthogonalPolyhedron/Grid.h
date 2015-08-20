@@ -42,9 +42,12 @@ namespace hypro
 			 *
 			 * @param vertices
 			 */
-			Grid(const vSet<Number>& vertices)
-			{
+			Grid(const vSet<Number>& vertices){
 				induceGrid(vertices);
+			}
+
+			Grid(const std::vector<Vertex<Number>>& _vertices){
+				induceGrid(vSet<Number>(_vertices.begin(), _vertices.end()));
 			}
 			
 			/**
@@ -70,17 +73,27 @@ namespace hypro
 			 * 
 			 * @return 
 			 */
-			int size() const
-			{
+			int size() const {
 				return mGridMap.size();
+			}
+
+			unsigned dimension() const {
+				return mInducedGridPoints.size();
+			}
+
+			std::vector<Vertex<Number>> vertices() const {
+				std::vector<Vertex<Number>> res;
+				for(const auto& point : mGridMap) {
+					res.emplace_back(calculateOriginal(point.first), point.second);
+				}
+				return res;
 			}
 			
 			/**
 			 * Returns if this grid is empty.
 			 * @return 
 			 */
-			bool empty() const
-			{
+			bool empty() const {
 				return mGridMap.empty();
 			}
 			
@@ -90,8 +103,7 @@ namespace hypro
 			 * @param point
 			 * @param color
 			 */
-			void insert(const Point<Number>& point, bool color)
-			{
+			void insert(const Point<Number>& point, bool color) {
 				mGridMap.insert(std::make_pair(calculateInduced(point), color));
 			}
 			
@@ -101,8 +113,7 @@ namespace hypro
 			 * @param inducedPoint
 			 * @param color
 			 */
-			void insertInduced(const Point<int>& inducedPoint, bool color)
-			{
+			void insertInduced(const Point<int>& inducedPoint, bool color) {
 				mGridMap.insert(std::make_pair(inducedPoint, color));
 			}
 			
@@ -112,8 +123,7 @@ namespace hypro
 			 * @param point
 			 * @return the color of the point
 			 */
-			bool colorAt(const Point<Number>& point) const
-			{
+			bool colorAt(const Point<Number>& point) const {
 				return mGridMap.at(calculateInduced(point));
 			}
 			
@@ -123,8 +133,7 @@ namespace hypro
 			 * @param point
 			 * @return the color of the induced point
 			 */
-			bool colorAtInduced(const Point<int>& inducedPoint) const
-			{
+			bool colorAtInduced(const Point<int>& inducedPoint) const {
 				return mGridMap.at(inducedPoint);
 			}
 			
@@ -133,8 +142,7 @@ namespace hypro
 			 * @param point
 			 * @return 
 			 */
-			typename gridMap::const_iterator find(const Point<Number>& point) const
-			{
+			typename gridMap::const_iterator find(const Point<Number>& point) const {
 				return mGridMap.find(calculateInduced(point));
 			}
 			
@@ -143,8 +151,7 @@ namespace hypro
 			 * @param inducedPoint
 			 * @return 
 			 */
-			typename gridMap::const_iterator findInduced(const Point<int>& inducedPoint) const
-			{
+			typename gridMap::const_iterator findInduced(const Point<int>& inducedPoint) const {
 				return mGridMap.find(inducedPoint);
 			}
 			
@@ -152,8 +159,7 @@ namespace hypro
 			 *
 			 * @return 
 			 */
-			typename gridMap::const_iterator end() const
-			{
+			typename gridMap::const_iterator end() const {
 				return mGridMap.end();
 			}
 			
@@ -191,9 +197,16 @@ namespace hypro
 			/**
 			 * Clears the grid.
 			 */
-			void clear()
-			{
+			void clear() {
 				mGridMap.clear();
+			}
+
+			friend bool operator==(const Grid<Number>& op1, const Grid<Number>& op2) {
+				return op1.mInducedGridPoints == op2.mInducedGridPoints;
+			}
+
+			friend bool operator!=(const Grid<Number>& op1, const Grid<Number>& op2) {
+				return op1.mInducedGridPoints != op2.mInducedGridPoints;
 			}
 	};
 }
