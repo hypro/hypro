@@ -156,6 +156,8 @@ namespace hypro {
 			unsigned dimension() const;
 
 			void reduceDimension(unsigned _dimension);
+
+			void reduceToDimensions(const std::vector<unsigned>& _dimensions);
 			
 			std::vector<carl::Variable> variables() const;
 			

@@ -28,7 +28,8 @@ namespace hypro
 		mBoxUpToDate(false),
 		mVariables()
 	{
-		mGrid.insert(_vertex.point(), _vertex.color());	
+		if(_vertex.color())
+			mGrid.insert(_vertex.point(), _vertex.color());	
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -76,6 +77,8 @@ namespace hypro
 		// TODO: undefined behavior, does not update colors of vertices nor fix the non-parallel edges
 		return result;
 		*/
+		OrthogonalPolyhedron<Number, Type> result;
+		return result;
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -158,12 +161,14 @@ namespace hypro
 		
 		return result;
 	}
-		
+	
+	/*	
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::contains(const Point<Number>& point) const {
 		return containsInduced(mGrid.calculateInduced(point));
 	}
-		
+	*/
+
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(const OrthogonalPolyhedron<Number, Type>& rhs) const {
 		/*
@@ -230,6 +235,33 @@ namespace hypro
 	bool OrthogonalPolyhedron<Number, Type>::empty() const {
 		return mGrid.empty();
 	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<std::vector<Point<Number>>> OrthogonalPolyhedron<Number, Type>::preparePlot(unsigned _xDim, unsigned _yDim) const {
+		std::vector<std::vector<Point<Number>>> result;
+		std::vector<Vertex<Number>> vertices = mGrid.vertices();
+
+		// reduce dimensions of vertices
+		std::vector<Point<Number>> reduced;
+		for(auto& vertex : vertices){
+			Point<Number> reduction = vertex.point();
+			reduction.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
+			reduced.push_back(std::move(reduction));
+		}
+
+		// add points
+		for(const auto& vertex : reduced){
+			Point<Number> lowerRight = vertex;
+			lowerRight.incrementInFixedDim(0);
+			Point<Number> upperRight = vertex;
+			upperRight.incrementInAllDim(0);
+			Point<Number> upperLeft = vertex;
+			upperRight.incrementInFixedDim(1);
+			result.emplace_back(std::vector<Point<Number>>({vertex, lowerRight, upperRight, upperLeft }));
+		}
+
+		return result;
+	}
 	
 	/**
 	 * Returns the list of variables of this polyhedron
@@ -283,9 +315,9 @@ namespace hypro
 	 * @param inducedPoint
 	 * @return 
 	 */
+	/*
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::containsInduced(const Point<int>& inducedPoint) const {
-		/*
 		// check if we already know the color of this point
 		auto it = mGrid.findInduced(inducedPoint);
 		if (it != mGrid.end()) {
@@ -322,8 +354,8 @@ namespace hypro
 		// save calculated color for later use
 		mGrid.insertInduced(inducedPoint, color);
 		return color;
-		*/
 	}
+	*/
 
 	/**
 	 * Calculate all potential vertices by combining two sets of vertices.

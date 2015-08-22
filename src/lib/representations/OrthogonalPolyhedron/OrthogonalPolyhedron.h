@@ -80,7 +80,7 @@ namespace hypro
 		 ***********************************************************************/
 		
 		bool empty() const;
-		
+		std::vector<std::vector<Point<Number>>> preparePlot(unsigned _xDim=0, unsigned _yDim=1) const;
 		
 		/***********************************************************************
 		 * Operators

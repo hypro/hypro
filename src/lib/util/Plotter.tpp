@@ -75,9 +75,19 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Plotter<Number>::addObject(const std::vector<Point<Number>>& _points) {
-		std::vector<Point<Number>> sortedPoints = grahamScan(_points);
-		mObjects.push_back(sortedPoints);
+	void Plotter<Number>::addObject(const std::vector<Point<Number>>& _points, bool sorted) {
+		if(!sorted){
+			std::vector<Point<Number>> sortedPoints = grahamScan(_points);
+			mObjects.push_back(sortedPoints);
+		} else {
+			mObjects.push_back(_points);
+		}
+	}
+
+	template<typename Number>
+	void Plotter<Number>::addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted) {
+		for(const auto& part : _points)
+			addObject(part,sorted);
 	}
 
 	template<typename Number>

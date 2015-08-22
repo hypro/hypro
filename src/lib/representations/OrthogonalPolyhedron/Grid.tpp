@@ -18,6 +18,7 @@ namespace hypro
         clear();
 
         std::vector<Number> v;
+        v.resize(vertices.size()+1); // we add the origin
         for (unsigned i = 0; i != vertices.begin()->dimension(); ++i) {
             // insert origin as vertex
             v = std::vector<Number>({Number(0)});

@@ -136,7 +136,23 @@ namespace hypro
 			bool colorAtInduced(const Point<int>& inducedPoint) const {
 				return mGridMap.at(inducedPoint);
 			}
-			
+
+			Point<Number> iNeighborInduced(const Point<Number>& _inducedPoint, unsigned _dimension) {
+				assert(_dimension < mInducedGridPoints.size());
+				Point<Number> result = _inducedPoint;
+				unsigned pos = 0;
+				while(mInducedGridPoints.at(_dimension).at(pos) < _inducedPoint.at(_dimension) ) ++pos;
+				result[_dimension] = mInducedGridPoints.at(_dimension).at(pos);
+				return result;
+			}
+
+			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) {
+				std::vector<Point<Number>> result;
+				result.emplace_back(iNeighborInduced(_inducedPoint,_dimension));
+				result.emplace_back(_inducedPoint);
+				return result;
+			}
+
 			/**
 			 * 
 			 * @param point

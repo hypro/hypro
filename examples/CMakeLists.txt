@@ -19,6 +19,7 @@ set( EXAMPLES
     example_eigen_float_t
     example_hausdorffApprox
     example_matrixPolyhedra
+    example_orthogonalPolyhedron
     example_parser
 	example_plot
     example_polytope

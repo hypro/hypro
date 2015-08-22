@@ -219,6 +219,18 @@ namespace hypro {
 	}
 	
 	template<typename Number>
+	void Point<Number>::reduceToDimensions(std::vector<unsigned> _dimensions) {
+		std::vector<unsigned> dimensions = std::unique(_dimensions.begin(), _dimensions.end());
+		dimensions = std::sort(dimensions.begin(),dimensions.end());
+		vector_t<Number> newCoordinates = vector_t<Number>(dimensions.size());
+		unsigned tPos = 0;
+		for(const auto sPos : dimensions)
+			newCoordinates(tPos) = mCoordinates(sPos);
+
+		mCoordinates = std::move(newCoordinates);
+ 	}
+
+	template<typename Number>
 	std::vector<carl::Variable> Point<Number>::variables() const
 	{
 		std::vector<carl::Variable> variables;

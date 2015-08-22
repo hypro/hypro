@@ -111,7 +111,7 @@ namespace hypro {
              * 
              * @return the point of the vertex
              */
-            const Point<Number>& point() const
+            Point<Number> point() const
             {
                 return mPoint;
             }
