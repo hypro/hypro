@@ -96,6 +96,7 @@ namespace hypro {
 			 * @param p
 			 */
 			Point(const Point<Number>& _p);
+			Point(Point<Number>&& _p);
 			 
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
 			Point(const Point<F>& _p) {
@@ -115,7 +116,7 @@ namespace hypro {
 			 * Getter & Setter
 			 */
 			
-			const std::vector<Point<Number>>& neighbors() const;
+			std::vector<Point<Number>> neighbors() const;
 
 			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
 			void joinNeighbors(const std::vector<Point<Number> >& _neighbors);
@@ -124,7 +125,7 @@ namespace hypro {
 			bool isNeighbor(const Point<Number>& _neighbor);
 
 
-			const std::vector<Point<Number>>& composedOf() const;
+			std::vector<Point<Number>> composedOf() const;
 			void setComposition(const std::vector<Point<Number> >& _elements);
 			void addToComposition(const Point<Number>& _element);
 
@@ -157,7 +158,7 @@ namespace hypro {
 
 			void reduceDimension(unsigned _dimension);
 
-			void reduceToDimensions(const std::vector<unsigned>& _dimensions);
+			void reduceToDimensions(std::vector<unsigned> _dimensions);
 			
 			std::vector<carl::Variable> variables() const;
 			
@@ -305,6 +306,8 @@ namespace hypro {
 			Point<Number>& operator-=(const Point<Number>& _rhs);
 			Point<Number>& operator/=(unsigned _quotient);
 			Point<Number>& operator*=(const Number _factor);
+			Point<Number>& operator= ( const Point<Number>& _in );
+			Point<Number>& operator= ( Point<Number>&& _in);
 
 			/**
 			 *
@@ -325,11 +328,12 @@ namespace hypro {
 			 */
 			friend std::ostream & operator<< (std::ostream& _ostr, const Point<Number>& _p) {
 				assert(_p.dimension() == _p.rawCoordinates().rows());
+				std::cout << "######### Test: " << _p.rawCoordinates().transpose() << std::endl;
 				_ostr << "( ";		
 				for (unsigned i = 0 ; i < _p.rawCoordinates().rows()-1; ++i) {
 					_ostr << _p.at(i) << ", ";
-				} 
-				_ostr << _p.at(_p.dimension()-1);
+				}
+				_ostr << _p.at(_p.rawCoordinates().rows()-1);
 				_ostr << ")";
 				return _ostr;
 			}

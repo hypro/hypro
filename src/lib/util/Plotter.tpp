@@ -57,17 +57,23 @@ namespace hypro {
 				for(unsigned d = 1; d < object[0].dimension(); ++d) {
 					mOutfile << ", " << double(object[0].at(d));
 				}
-				mOutfile << " fs empty border lc rgb '" << mSettings.color << "'\n";
+				if(mSettings.fill)
+					mOutfile << " fs transparent solid 0.7 fc rgb '" << mSettings.color << "'\n";
+				else
+					mOutfile << " fs empty border lc rgb '" << mSettings.color << "'\n";
+
 				++objectCount;
 			}
 			
+			mOutfile << "set size ratio 1\n";
 			mOutfile << "set term post eps\n";
 			mOutfile << "set output \"" << mFilename << ".eps\"";
 			mOutfile << "\n";
 			mOutfile << "plot ";
 
 			for(unsigned d = 0; d < min.rows(); ++d) {
-				mOutfile << "[" << min(d)*1.1 << ":" << max(d)*1.1 << "] ";
+				double rangeExt = double((max(d) - min(d))*0.1);
+				mOutfile << "[" << min(d)-rangeExt << ":" << max(d)+rangeExt << "] ";
 			}
 			mOutfile << "NaN notitle";
 		}
@@ -97,6 +103,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::vector<Point<Number>> Plotter<Number>::grahamScan(const std::vector<Point<Number>>& _points) {
+		assert(_points.size() >= 3);
 		std::vector<Point<Number>> res;
 		if(!_points.empty()) {
 			// initialize -> find minimum Point
@@ -160,6 +167,7 @@ namespace hypro {
 			//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
 			
 			// prepare stack -> initialize with 2 points
+			assert(sortedPoints.size() >= 1);
 			std::stack<Point<Number>> stack;
 			stack.push(min);
 			stack.push(sortedPoints.begin()->second);

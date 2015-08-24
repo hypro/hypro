@@ -48,7 +48,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 static const unsigned FLOAT_PRECISION=100;
-static const unsigned TOLLERANCE_ULPS=8192;
+static const unsigned TOLLERANCE_ULPS=128;
 
 // global typedefs
 namespace hypro
@@ -137,7 +137,9 @@ namespace Eigen
 		if(lhs.rows() != rhs.rows())
 			return false;
 		
+
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
+			//std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
 			if(!carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS)) {
 				return false;
 			}

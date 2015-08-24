@@ -60,13 +60,112 @@ namespace hypro
 	{}
 
 	/**********************************
+	 * Getter & setter
+	 **********************************/
+	
+	/**
+	 * Returns the list of variables of this polyhedron
+	 */
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<carl::Variable> OrthogonalPolyhedron<Number, Type>::variables() const {
+		return mVariables;
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<Vertex<Number>> OrthogonalPolyhedron<Number, Type>::vertices() const {
+		return mGrid.vertices();
+	}
+	
+	/**
+	 * Returns and if necessary calculates the boundary box.
+	 */
+	template<typename Number, ORTHO_TYPE Type>
+	Box<Number> OrthogonalPolyhedron<Number, Type>::boundaryBox() const {
+		if (!mBoxUpToDate) {
+			updateBoundaryBox();
+		}
+		return mBoundaryBox;
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	void addVertex(const Vertex<Number>& _vertex){
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	void addVertices(const std::vector<Vertex<Number>>& _vertices){
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool OrthogonalPolyhedron<Number, Type>::empty() const {
+		return mGrid.empty();
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool isVertex(const Point<Number>& _point) const {
+		for(unsigned dimension : this->dimension()) {
+			if(!isOnIEdge(_point, dimension))
+				return false;
+		}
+		return true;
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool isOnIEdge(const Point<Number>& _point, unsigned i) const {
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool isInternal(const Point<Number>& _point) const {
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool isExternal(const Point<Number>& _point) const {
+		return !isInternal(_point);
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned i) const {
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<Point<Number>> iNNeighborhood(const Point<Number>& _point, unsigned i) const {
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<Point<Number>> neighborhood(const Point<Number>& _point) const {
+		std::vector<Point<Number>> res;
+		for(unsigned dimension : this->dimension()) {
+			std::vector<Point<Number>> neighbors = iNeighborhood(_point, dimension);
+			res.insert(res.end(), neighbors.begin(), neighbors.end());
+		}
+		std::unique(res.begin(), res.end());
+		return res;
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	std::vector<Point<Number>> iSlice(Number pos, unsigned i) const {
+
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
+	OrthogonalPolyhedron<Number,Type> iProjection(unsigned i) const {
+
+	}
+
+
+	/**********************************
 	 * Geometric Object functions
 	 **********************************/
 	
 	template<typename Number, ORTHO_TYPE Type>
 	unsigned int OrthogonalPolyhedron<Number, Type>::dimension() const {
 		return mGrid.dimension();
-	}	
+	}
 		
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
@@ -225,16 +324,6 @@ namespace hypro
 	/**********************************
 	 * Other functions
 	 **********************************/
-	
-	/**
-	 * Returns it the polyhedron is empty.
-	 * 
-	 * @return true if number of vertices equals 0.
-	 */
-	template<typename Number, ORTHO_TYPE Type>
-	bool OrthogonalPolyhedron<Number, Type>::empty() const {
-		return mGrid.empty();
-	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<std::vector<Point<Number>>> OrthogonalPolyhedron<Number, Type>::preparePlot(unsigned _xDim, unsigned _yDim) const {
@@ -254,39 +343,16 @@ namespace hypro
 			Point<Number> lowerRight = vertex;
 			lowerRight.incrementInFixedDim(0);
 			Point<Number> upperRight = vertex;
-			upperRight.incrementInAllDim(0);
+			upperRight.incrementInAllDim(1);
 			Point<Number> upperLeft = vertex;
-			upperRight.incrementInFixedDim(1);
+			upperLeft.incrementInFixedDim(1);
+
+			//std::cout << "Vertex " << vertex << " corresponds to box " << vertex << " , " << lowerRight << " , " << upperRight << " , " << upperLeft << std::endl;
 			result.emplace_back(std::vector<Point<Number>>({vertex, lowerRight, upperRight, upperLeft }));
 		}
 
 		return result;
 	}
-	
-	/**
-	 * Returns the list of variables of this polyhedron
-	 */
-	template<typename Number, ORTHO_TYPE Type>
-	std::vector<carl::Variable> OrthogonalPolyhedron<Number, Type>::variables() const {
-		return mVariables;
-	}
-
-	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Vertex<Number>> OrthogonalPolyhedron<Number, Type>::vertices() const {
-		return mGrid.vertices();
-	}
-	
-	/**
-	 * Returns and if necessary calculates the boundary box.
-	 */
-	template<typename Number, ORTHO_TYPE Type>
-	Box<Number> OrthogonalPolyhedron<Number, Type>::boundaryBox() const {
-		if (!mBoxUpToDate) {
-			updateBoundaryBox();
-		}
-		return mBoundaryBox;
-	}
-		
 
 	/***************************************************************************
 	 * Private methods

@@ -57,14 +57,37 @@ namespace hypro {
 		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
 
 		if(!_p.neighbors().empty()) {
-			for(auto& neighbor : _p.neighbors())
+			for(const auto& neighbor : _p.neighbors())
+			{
+				mNeighbors.push_back(neighbor);
+			}
+		}
+
+		assert(_p.composedOf().empty());
+		if(!_p.composedOf().empty()){
+			for(const auto& composite : _p.composedOf())
+			{
+				mComposedOf.push_back(composite);
+			}
+		}
+	}
+
+	template<typename Number>
+	Point<Number>::Point(Point<Number>&& _p) 
+	{
+		mCoordinates = _p.rawCoordinates();
+
+		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
+
+		if(!_p.neighbors().empty()) {
+			for(const auto& neighbor : _p.neighbors())
 			{
 				mNeighbors.push_back(neighbor);
 			}
 		}
 
 		if(!_p.composedOf().empty()){
-			for(auto& composite : _p.composedOf())
+			for(const auto& composite : _p.composedOf())
 			{
 				mComposedOf.push_back(composite);
 			}
@@ -72,7 +95,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	const std::vector<Point<Number>>& Point<Number>::neighbors() const {
+	std::vector<Point<Number>> Point<Number>::neighbors() const {
 		return mNeighbors;
 		/*
 		//TODO fix (does this have bad side effects?)
@@ -132,7 +155,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	const std::vector<Point<Number>>& Point<Number>::composedOf() const {
+	std::vector<Point<Number>> Point<Number>::composedOf() const {
 		return mComposedOf;
 	}
 
@@ -220,12 +243,15 @@ namespace hypro {
 	
 	template<typename Number>
 	void Point<Number>::reduceToDimensions(std::vector<unsigned> _dimensions) {
-		std::vector<unsigned> dimensions = std::unique(_dimensions.begin(), _dimensions.end());
-		dimensions = std::sort(dimensions.begin(),dimensions.end());
-		vector_t<Number> newCoordinates = vector_t<Number>(dimensions.size());
+		std::unique(_dimensions.begin(), _dimensions.end());
+		std::sort(_dimensions.begin(),_dimensions.end());
+		vector_t<Number> newCoordinates = vector_t<Number>(_dimensions.size());
 		unsigned tPos = 0;
-		for(const auto sPos : dimensions)
+		for(const auto sPos : _dimensions){
+			//std::cout << "get dim " << sPos << " put at " << tPos << std::endl;
 			newCoordinates(tPos) = mCoordinates(sPos);
+			++tPos;
+		}
 
 		mCoordinates = std::move(newCoordinates);
  	}
@@ -472,6 +498,22 @@ namespace hypro {
 		{
 			mCoordinates(i) = mCoordinates(i)*_factor;
 		}
+		return *this;
+	}
+
+	template<typename Number>
+	Point<Number>& Point<Number>::operator= ( const Point<Number>& _in ){
+		this->mCoordinates = _in.rawCoordinates();
+		this->mNeighbors = _in.neighbors();
+		this->mComposedOf = _in.composedOf();
+		return *this;
+	}
+
+	template<typename Number>
+	Point<Number>& Point<Number>::operator= ( Point<Number>&& _in){
+		this->mCoordinates = _in.rawCoordinates();
+		this->mNeighbors = _in.neighbors();
+		this->mComposedOf = _in.composedOf();
 		return *this;
 	}
 

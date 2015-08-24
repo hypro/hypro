@@ -18,6 +18,7 @@ namespace hypro {
 	
 	struct gnuplotSettings {
 		std::string color = "#18571C"; // default green
+		bool fill = false; // do not fill
 	};
 	
 	template<typename Number>
@@ -36,7 +37,7 @@ namespace hypro {
 	public:
 		~Plotter();
 
-		void setFilename(const std::string& _filename);
+		void setFilename(const std::string& _filename="out");
 		void updateSettings(gnuplotSettings _settings);
 
 		// plotting functions

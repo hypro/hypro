@@ -62,24 +62,35 @@ namespace hypro
 		Box<Number> boundaryBox() const;
 		void addVertex(const Vertex<Number>& _vertex);
 		void addVertices(const std::vector<Vertex<Number>>& _vertices);
-		unsigned int dimension() const;
+
+		bool empty() const;
+		bool isVertex(const Point<Number>& _point) const;
+		bool isOnIEdge(const Point<Number>& _point, unsigned i) const;
+		bool isInternal(const Point<Number>& _point) const;
+		bool isExternal(const Point<Number>& _point) const;
+
+		std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned i) const;
+		std::vector<Point<Number>> iNNeighborhood(const Point<Number>& _point, unsigned i) const;
+		std::vector<Point<Number>> neighborhood(const Point<Number>& _point) const;
+
+		std::vector<Point<Number>> iSlice(Number pos, unsigned i) const;
+		OrthogonalPolyhedron<Number,Type> iProjection(unsigned i) const;
 
 		/***********************************************************************
 		 * Geometric Object functions
 		 ***********************************************************************/
-		
+		unsigned int dimension() const;
 		OrthogonalPolyhedron<Number, Type> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
 		OrthogonalPolyhedron<Number, Type> minkowskiSum(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		OrthogonalPolyhedron<Number, Type> intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		OrthogonalPolyhedron<Number, Type> hull() const;
 		bool contains(const Point<Number>& point) const;
+		bool contains(const OrthogonalPolyhedron<Number,Type>& _other) const;
 		OrthogonalPolyhedron<Number, Type> unite(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		
 		/***********************************************************************
-		 * Other functions
+		 * Auxiliary functions
 		 ***********************************************************************/
-		
-		bool empty() const;
 		std::vector<std::vector<Point<Number>>> preparePlot(unsigned _xDim=0, unsigned _yDim=1) const;
 		
 		/***********************************************************************

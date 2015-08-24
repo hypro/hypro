@@ -248,6 +248,7 @@ TYPED_TEST(OrthogonalPolyhedronTest, Hull)
 	EXPECT_EQ(hull, result);
 }
 
+/*
 TYPED_TEST(OrthogonalPolyhedronTest, Contains)
 {
 	typename Point<TypeParam>::coordinateMap coordinates;
@@ -314,6 +315,7 @@ TYPED_TEST(OrthogonalPolyhedronTest, Contains)
 		EXPECT_EQ(vertexIt.color(), this->p1.contains(vertexIt.point()));
 	}
 }
+*/
 
 TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
 	OrthogonalPolyhedron<TypeParam> result;
