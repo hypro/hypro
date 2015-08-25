@@ -50,7 +50,7 @@ namespace hypro {
 		
 		std::vector<carl::Variable> variables() const
 		{
-			if(mVertices.size() == 0) return 0;
+			if(mVertices.size() == 0) return std::move(std::vector<carl::Variable>());
 			return (*mVertices.begin()).variables();
 		}
 				

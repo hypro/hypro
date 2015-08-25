@@ -88,12 +88,12 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	void addVertex(const Vertex<Number>& _vertex){
+	void OrthogonalPolyhedron<Number, Type>::addVertex(const Vertex<Number>& _vertex){
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	void addVertices(const std::vector<Vertex<Number>>& _vertices){
+	void OrthogonalPolyhedron<Number, Type>::addVertices(const std::vector<Vertex<Number>>& _vertices){
 
 	}
 
@@ -103,7 +103,7 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	bool isVertex(const Point<Number>& _point) const {
+	bool OrthogonalPolyhedron<Number, Type>::isVertex(const Point<Number>& _point) const {
 		for(unsigned dimension : this->dimension()) {
 			if(!isOnIEdge(_point, dimension))
 				return false;
@@ -112,32 +112,32 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	bool isOnIEdge(const Point<Number>& _point, unsigned i) const {
+	bool OrthogonalPolyhedron<Number, Type>::isOnIEdge(const Point<Number>& _point, unsigned i) const {
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	bool isInternal(const Point<Number>& _point) const {
+	bool OrthogonalPolyhedron<Number, Type>::isInternal(const Point<Number>& _point) const {
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	bool isExternal(const Point<Number>& _point) const {
+	bool OrthogonalPolyhedron<Number, Type>::isExternal(const Point<Number>& _point) const {
 		return !isInternal(_point);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned i) const {
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNeighborhood(const Point<Number>& _point, unsigned i) const {
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> iNNeighborhood(const Point<Number>& _point, unsigned i) const {
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNNeighborhood(const Point<Number>& _point, unsigned i) const {
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> neighborhood(const Point<Number>& _point) const {
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::neighborhood(const Point<Number>& _point) const {
 		std::vector<Point<Number>> res;
 		for(unsigned dimension : this->dimension()) {
 			std::vector<Point<Number>> neighbors = iNeighborhood(_point, dimension);
@@ -148,12 +148,12 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> iSlice(Number pos, unsigned i) const {
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice(Number pos, unsigned i) const {
 
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number,Type> iProjection(unsigned i) const {
+	OrthogonalPolyhedron<Number,Type> OrthogonalPolyhedron<Number, Type>::iProjection(unsigned i) const {
 
 	}
 
