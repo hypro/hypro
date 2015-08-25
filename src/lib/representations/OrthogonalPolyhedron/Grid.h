@@ -157,7 +157,19 @@ namespace hypro
 			}
 
 			std::vector<Point> iSliceInduced(unsigned i, unsigned pos) const {
-				
+				std::vector<Point> result;
+				// get all points with common i-Component
+				for(unsigned i = 0; i < std::pow(2,d-1); ++i) {
+					std::bitset<MAX_DIMENSION_LIMIT> map(i);
+					unsigned pos = 0;
+					Point<Number> neighbor(directPredecessor);
+					while(pos < d) {
+						if(map.test(pos))
+							neighbor[pos] = _inducedPoint.at(pos);
+						++pos;
+					}
+					result.emplace_back(std::move(neighbor));
+				}
 			}
 
 			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const {
@@ -183,7 +195,7 @@ namespace hypro
 
 				// get all 2^d i-neighbors by combination of the point and its direct predecessor
 				for(unsigned i = 0; i < std::pow(2,d); ++i) {
-					std::bitset<sizeof(long long)> map(i);
+					std::bitset<MAX_DIMENSION_LIMIT> map(i);
 					unsigned pos = 0;
 					Point<Number> neighbor(directPredecessor);
 					while(pos < d) {

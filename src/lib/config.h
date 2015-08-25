@@ -49,6 +49,7 @@ using carl::operator<<;
 
 static const unsigned FLOAT_PRECISION=100;
 static const unsigned TOLLERANCE_ULPS=128;
+static const unsigned MAX_DIMENSION_LIMIT=128;
 
 // global typedefs
 namespace hypro
