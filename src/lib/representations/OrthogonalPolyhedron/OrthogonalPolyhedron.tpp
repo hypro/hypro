@@ -128,7 +128,7 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNeighborhood(const Point<Number>& _point, unsigned i) const {
-
+		return mGrid.iNeighborhood(_point,i);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -138,18 +138,12 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::neighborhood(const Point<Number>& _point) const {
-		std::vector<Point<Number>> res;
-		for(unsigned dimension : this->dimension()) {
-			std::vector<Point<Number>> neighbors = iNeighborhood(_point, dimension);
-			res.insert(res.end(), neighbors.begin(), neighbors.end());
-		}
-		std::unique(res.begin(), res.end());
-		return res;
+		return std::move(mGrid.neighborhoodInduced(_point));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice(Number pos, unsigned i) const {
-
+		return std::move();
 	}
 
 	template<typename Number, ORTHO_TYPE Type>

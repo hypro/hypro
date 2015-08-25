@@ -13,6 +13,7 @@
 #include <carl/core/Variable.h>
 #include <vector>
 #include <map>
+#include <bitset>
 
 namespace hypro
 {
@@ -27,7 +28,7 @@ namespace hypro
 			typedef std::map<unsigned, std::vector<Number> > gridPoints;
 		
 		private:
-			gridMap mGridMap; // mutable to allow performance optimization
+			gridMap mGridMap;
 			gridPoints mInducedGridPoints;
 			
 		public:
@@ -137,19 +138,62 @@ namespace hypro
 				return mGridMap.at(inducedPoint);
 			}
 
-			Point<Number> iNeighborInduced(const Point<Number>& _inducedPoint, unsigned _dimension) {
+			Point<Number> iNeighborInduced(const Point<Number>& _inducedPoint, unsigned _dimension) const {
 				assert(_dimension < mInducedGridPoints.size());
 				Point<Number> result = _inducedPoint;
 				unsigned pos = 0;
-				while(mInducedGridPoints.at(_dimension).at(pos) < _inducedPoint.at(_dimension) ) ++pos;
-				result[_dimension] = mInducedGridPoints.at(_dimension).at(pos);
+				Number last = _inducedPoint.at(_dimension);
+				while(mInducedGridPoints.at(_dimension).at(pos) < _inducedPoint.at(_dimension) ){
+					last = mInducedGridPoints.at(_dimension).at(pos);
+					++pos;
+				} 
+				result[_dimension] = last;
+				std::cout << result << std::endl;
 				return result;
 			}
 
-			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) {
+			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const {
+				return iNeighborInduced(_point,_dimension);
+			}
+
+			std::vector<Point> iSliceInduced(unsigned i, unsigned pos) const {
+				
+			}
+
+			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const {
 				std::vector<Point<Number>> result;
 				result.emplace_back(iNeighborInduced(_inducedPoint,_dimension));
 				result.emplace_back(_inducedPoint);
+				return result;
+			}
+
+			std::vector<Point<Number>> neighborhoodInduced(const Point<Number>& _inducedPoint) const {
+				std::vector<Point<Number>> result;
+				unsigned d = this->dimension();
+
+				// calculate direct predecessor point in all dimensions
+				Point<Number> directPredecessor = std::move(Point<Number>::zero(d));
+				for(unsigned dim = 0; dim < d; ++dim) {
+					unsigned p = 0;
+					while(mInducedGridPoints.at(dim).at(p) < _inducedPoint.at(dim)) ++p;
+					
+					if (p > 0)
+						directPredecessor[dim] = mInducedGridPoints.at(dim).at(p-1);
+				}
+
+				// get all 2^d i-neighbors by combination of the point and its direct predecessor
+				for(unsigned i = 0; i < std::pow(2,d); ++i) {
+					std::bitset<sizeof(long long)> map(i);
+					unsigned pos = 0;
+					Point<Number> neighbor(directPredecessor);
+					while(pos < d) {
+						if(map.test(pos))
+							neighbor[pos] = _inducedPoint.at(pos);
+						++pos;
+					}
+					result.emplace_back(std::move(neighbor));
+				}
+
 				return result;
 			}
 
@@ -223,6 +267,17 @@ namespace hypro
 
 			friend bool operator!=(const Grid<Number>& op1, const Grid<Number>& op2) {
 				return op1.mInducedGridPoints != op2.mInducedGridPoints;
+			}
+
+			friend std::ostream& operator<<(std::ostream& out, const Grid<Number>& grid) {
+				out << "[";
+				for(unsigned d = 0; d < grid.mInducedGridPoints.size(); ++d){
+					out << std::endl <<  d << ": ";
+					for(unsigned p = 0; p < grid.mInducedGridPoints.at(d).size(); ++p)
+						out << grid.mInducedGridPoints.at(d).at(p) << " ";
+				}
+				out << std::endl << "]" << std::endl;
+				return out;
 			}
 	};
 }

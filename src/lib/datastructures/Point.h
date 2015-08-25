@@ -328,7 +328,6 @@ namespace hypro {
 			 */
 			friend std::ostream & operator<< (std::ostream& _ostr, const Point<Number>& _p) {
 				assert(_p.dimension() == _p.rawCoordinates().rows());
-				std::cout << "######### Test: " << _p.rawCoordinates().transpose() << std::endl;
 				_ostr << "( ";		
 				for (unsigned i = 0 ; i < _p.rawCoordinates().rows()-1; ++i) {
 					_ostr << _p.at(i) << ", ";

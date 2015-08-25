@@ -30,6 +30,12 @@ int main(int argc, char** argv) {
 
 	OrthogonalPolyhedron<FLOAT_T<mpfr_t>> test(container);
 
+	std::vector<Point<FLOAT_T<mpfr_t>>> neighborhood = test.neighborhood(Point<FLOAT_T<mpfr_t>>({2,4}));
+	std::cout << "neighborhood: " << std::endl;
+	for(const auto& point : neighborhood) {
+		std::cout << point << std::endl;
+	}
+
 	// plot
 	hypro::Plotter<FLOAT_T<mpfr_t>>& plotter = hypro::Plotter<FLOAT_T<mpfr_t>>::getInstance();
 	plotter.setFilename("ortho");
