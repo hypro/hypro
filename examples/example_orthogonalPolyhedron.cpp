@@ -36,7 +36,14 @@ int main(int argc, char** argv) {
 		std::cout << point << std::endl;
 	}
 
+	std::vector<Point<FLOAT_T<mpfr_t>>> islice = test.iSlice(0,2);
+	std::cout << "0-3-slice: " << std::endl;
+	for(const auto& point : islice) {
+		std::cout << point << std::endl;
+	}
+
 	// plot
+	std::cout << "Plotting." << std::endl;
 	hypro::Plotter<FLOAT_T<mpfr_t>>& plotter = hypro::Plotter<FLOAT_T<mpfr_t>>::getInstance();
 	plotter.setFilename("ortho");
 	gnuplotSettings settings;

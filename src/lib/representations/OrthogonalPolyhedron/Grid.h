@@ -1,9 +1,10 @@
 /*
  * @file    Grid.h
+ * @author 	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author  Benedikt Seidl
  *
  * @since   2014-04-14
- * @version 2014-04-14
+ * @version 2015-08-26
  */
 
 #pragma once
@@ -17,6 +18,48 @@
 
 namespace hypro
 {
+	template<typename Number>
+	struct pointIt{
+		typename std::vector<std::vector<Number>> v;
+		std::vector<typename std::vector<Number>::const_iterator> it;
+		bool end=false;
+
+		pointIt(const std::vector<std::vector<Number>>& _v) : v(_v) {
+			for(unsigned i = 0; i < v.size(); ++i)
+				it.push_back(v.at(i).begin());
+
+			end=false;
+		}
+
+		// prefix
+		Point<Number> operator++ () {
+			if (end) return std::move(current());
+			++it.back();
+			unsigned i = it.size()-1;
+			while(it.at(i) == v.at(i).end()) {
+				it[i] = v.at(i).begin();
+				if(i==0) {end=true; return std::move(current());}
+				--i;
+				it[i]++;
+			}
+			return std::move(current());
+		}
+
+		// postfix
+		Point<Number>  operator++ (int) {
+			return ++(*this);
+		}
+
+		Point<Number> current() {
+			assert(v.size() == it.size());
+			Point<Number> res;
+			for(unsigned i = 0; i < v.size(); ++i)
+				res[i] = *it.at(i);
+
+    		return std::move(res);
+    	}
+	};
+
 	/**
 	 * Represents a grid which maps points to its color.
 	 */
@@ -36,87 +79,23 @@ namespace hypro
 			/**
 			 * Constructor
 			 */
-			Grid() {}
-
-			/**
-			 * Constructor
-			 *
-			 * @param vertices
-			 */
-			Grid(const vSet<Number>& vertices){
-				induceGrid(vertices);
-			}
-
-			Grid(const std::vector<Vertex<Number>>& _vertices){
-				induceGrid(vSet<Number>(_vertices.begin(), _vertices.end()));
-			}
-
-			/**
-			 * Copy constructor
-			 */
-			Grid(const Grid<Number>& copy) :
-				mGridMap(copy.mGridMap),
-				mInducedGridPoints(copy.mInducedGridPoints)
-			{}
+			Grid();
+			Grid(const vSet<Number>& vertices);
+			Grid(const std::vector<Vertex<Number>>& _vertices);
+			Grid(const Grid<Number>& copy);
 
 			Grid<Number>& operator= ( const Grid<Number>& ) = default;
 			Grid<Number>& operator= ( Grid<Number>&& ) = default;
-
-			/**
-			 * Clears the grid, induces it and sets up the vertices.
-			 *
-			 * @param vertices
-			 */
-			void induceGrid(const vSet<Number>& vertices);
 
 			/**
 			 * Returns the size ie. the number of points saved in this grid.
 			 *
 			 * @return
 			 */
-			int size() const {
-				return mGridMap.size();
-			}
-
-			unsigned dimension() const {
-				return mInducedGridPoints.size();
-			}
-
-			std::vector<Vertex<Number>> vertices() const {
-				std::vector<Vertex<Number>> res;
-				for(const auto& point : mGridMap) {
-					res.emplace_back(calculateOriginal(point.first), point.second);
-				}
-				return res;
-			}
-
-			/**
-			 * Returns if this grid is empty.
-			 * @return
-			 */
-			bool empty() const {
-				return mGridMap.empty();
-			}
-
-			/**
-			 * Inserts the value for the point.
-			 *
-			 * @param point
-			 * @param color
-			 */
-			void insert(const Point<Number>& point, bool color) {
-				mGridMap.insert(std::make_pair(calculateInduced(point), color));
-			}
-
-			/**
-			 * Inserts the value for the induced point.
-			 *
-			 * @param inducedPoint
-			 * @param color
-			 */
-			void insertInduced(const Point<int>& inducedPoint, bool color) {
-				mGridMap.insert(std::make_pair(inducedPoint, color));
-			}
+			unsigned size() const;
+			unsigned dimension() const;
+			std::vector<Vertex<Number>> vertices() const;
+			bool empty() const;
 
 			/**
 			 * Returns the color of the given point.
@@ -124,106 +103,37 @@ namespace hypro
 			 * @param point
 			 * @return the color of the point
 			 */
-			bool colorAt(const Point<Number>& point) const {
-				return mGridMap.at(calculateInduced(point));
-			}
+			bool colorAt(const Point<Number>& point) const;
+			bool colorAtInduced(const Point<int>& inducedPoint) const;
+
+			std::vector<Point<Number>> iNeighborhoodInduced(const Point<Number>& _inducedPoint, unsigned _dimension) const;
+			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const;
+			std::vector<Point<Number>> iSliceInduced(unsigned i, Number pos) const;
+			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const;
+			std::vector<Point<Number>> neighborhoodInduced(const Point<Number>& _inducedPoint) const;
 
 			/**
-			 * Returns the color of the given induced point.
+			 * Inserts the value for the point.
 			 *
 			 * @param point
-			 * @return the color of the induced point
+			 * @param color
 			 */
-			bool colorAtInduced(const Point<int>& inducedPoint) const {
-				return mGridMap.at(inducedPoint);
-			}
+			void insert(const Point<Number>& point, bool color);
+			void insertInduced(const Point<int>& inducedPoint, bool color);
 
-			Point<Number> iNeighborInduced(const Point<Number>& _inducedPoint, unsigned _dimension) const {
-				assert(_dimension < mInducedGridPoints.size());
-				Point<Number> result = _inducedPoint;
-				unsigned pos = 0;
-				Number last = _inducedPoint.at(_dimension);
-				while(mInducedGridPoints.at(_dimension).at(pos) < _inducedPoint.at(_dimension) ){
-					last = mInducedGridPoints.at(_dimension).at(pos);
-					++pos;
-				}
-				result[_dimension] = last;
-				std::cout << result << std::endl;
-				return result;
-			}
+			void clear();
 
-			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const {
-				return iNeighborInduced(_point,_dimension);
-			}
+			typename gridMap::const_iterator find(const Point<Number>& point) const;
+			typename gridMap::const_iterator findInduced(const Point<int>& inducedPoint) const;
+			typename gridMap::const_iterator end() const;
 
-			std::vector<Point> iSliceInduced(unsigned i, unsigned pos) const {
-				std::vector<Point> result;
-				// get all points with common i-Component
-				
-			}
-
-			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const {
-				std::vector<Point<Number>> result;
-				result.emplace_back(iNeighborInduced(_inducedPoint,_dimension));
-				result.emplace_back(_inducedPoint);
-				return result;
-			}
-
-			std::vector<Point<Number>> neighborhoodInduced(const Point<Number>& _inducedPoint) const {
-				std::vector<Point<Number>> result;
-				unsigned d = this->dimension();
-
-				// calculate direct predecessor point in all dimensions
-				Point<Number> directPredecessor = std::move(Point<Number>::zero(d));
-				for(unsigned dim = 0; dim < d; ++dim) {
-					unsigned p = 0;
-					while(mInducedGridPoints.at(dim).at(p) < _inducedPoint.at(dim)) ++p;
-
-					if (p > 0)
-						directPredecessor[dim] = mInducedGridPoints.at(dim).at(p-1);
-				}
-
-				// get all 2^d i-neighbors by combination of the point and its direct predecessor
-				for(unsigned i = 0; i < std::pow(2,d); ++i) {
-					std::bitset<MAX_DIMENSION_LIMIT> map(i);
-					unsigned pos = 0;
-					Point<Number> neighbor(directPredecessor);
-					while(pos < d) {
-						if(map.test(pos))
-							neighbor[pos] = _inducedPoint.at(pos);
-						++pos;
-					}
-					result.emplace_back(std::move(neighbor));
-				}
-
-				return result;
-			}
 
 			/**
+			 * Clears the grid, induces it and sets up the vertices.
 			 *
-			 * @param point
-			 * @return
+			 * @param vertices
 			 */
-			typename gridMap::const_iterator find(const Point<Number>& point) const {
-				return mGridMap.find(calculateInduced(point));
-			}
-
-			/**
-			 *
-			 * @param inducedPoint
-			 * @return
-			 */
-			typename gridMap::const_iterator findInduced(const Point<int>& inducedPoint) const {
-				return mGridMap.find(inducedPoint);
-			}
-
-			/**
-			 *
-			 * @return
-			 */
-			typename gridMap::const_iterator end() const {
-				return mGridMap.end();
-			}
+			void induceGrid(const vSet<Number>& vertices);
 
 			/**
 			 * Calculates the coordinates of this point on the induced grid.
@@ -255,13 +165,6 @@ namespace hypro
 			 * @return original vertices
 			 */
 			vSet<Number> translateToOriginal(const vSet<int>& inducedVertices) const;
-
-			/**
-			 * Clears the grid.
-			 */
-			void clear() {
-				mGridMap.clear();
-			}
 
 			friend bool operator==(const Grid<Number>& op1, const Grid<Number>& op2) {
 				return op1.mInducedGridPoints == op2.mInducedGridPoints;

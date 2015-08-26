@@ -42,7 +42,16 @@ namespace hypro
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::set<Vertex<Number> >& _vertices) : 
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::set<Vertex<Number>>& _vertices) : 
+		//mVertices(_vertices),
+		mGrid(_vertices),
+		mBoundaryBox(),
+		mBoxUpToDate(false),
+		mVariables()
+	{}
+
+	template<typename Number, ORTHO_TYPE Type>
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::vector<Vertex<Number>>& _vertices) : 
 		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
@@ -103,6 +112,11 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
+	unsigned OrthogonalPolyhedron<Number, Type>::size() const {
+		return mGrid.size();
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::isVertex(const Point<Number>& _point) const {
 		for(unsigned dimension : this->dimension()) {
 			if(!isOnIEdge(_point, dimension))
@@ -113,12 +127,16 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::isOnIEdge(const Point<Number>& _point, unsigned i) const {
-
+		std::vector<Point<Number>> iNeighbors = mGrid.iNeighborhood(_point,i);
+		for(const auto& neighbor : iNeighbors) {
+			if(mGrid.colorAt(neighbor) != mGrid.colorAt(mGrid.iPredecessor(neighbor,i))) return true;
+		}
+		return false;
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::isInternal(const Point<Number>& _point) const {
-
+		return (mGrid.colorAt(_point) == true);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -132,8 +150,8 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNNeighborhood(const Point<Number>& _point, unsigned i) const {
-
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNegNeighborhood(const Point<Number>& _point, unsigned i) const {
+		return mGrid.iNeighborhood(mGrid.iPredecessor(_point,i),i);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -142,8 +160,9 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice(Number pos, unsigned i) const {
-		return std::move();
+	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice(unsigned i, Number pos) const {
+		// TODO: ATTENTION, this is the induced version, transform!
+		return std::move(mGrid.iSliceInduced(i,pos));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -264,6 +283,13 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(const OrthogonalPolyhedron<Number, Type>& rhs) const {
+		std::vector<Vertex<Number>> vertices;
+		vertices.resize(this->size() + rhs.size());
+
+		vertices.insert(vertices.begin(), this->vertices().begin(), this->vertices().end());
+		vertices.insert(vertices.begin(), rhs.vertices().begin(), rhs.vertices().end());
+
+		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
 		/*
 		assert(mVariables == rhs.mVariables);
 		
@@ -367,105 +393,4 @@ namespace hypro
 		
 		mBoxUpToDate = true;
 	}
-		
-	/**
-	 * Checks if the orthogonal polyhedron contains the given induced point.
-	 * Using only the induced point makes calculating neighborship and predecessors much easier.
-	 * 
-	 * @param inducedPoint
-	 * @return 
-	 */
-	/*
-	template<typename Number, ORTHO_TYPE Type>
-	bool OrthogonalPolyhedron<Number, Type>::containsInduced(const Point<int>& inducedPoint) const {
-		// check if we already know the color of this point
-		auto it = mGrid.findInduced(inducedPoint);
-		if (it != mGrid.end()) {
-			return it->second;
-		}
-		
-		bool color = false;
-
-		// check if the point is in our boundary box
-		if (boundaryBox().contains(mGrid.calculateOriginal(inducedPoint))) {
-			// there exists a dimension
-			for (auto dimensionIt : mVariables) {
-				auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(inducedPoint, dimensionIt);
-				bool dimensionOk = true;
-				
-				// for all neighbors we must ensure
-				for (auto neighborIt : neighborsInFixed) {
-					Point<Number> predecessor = neighborIt.getPredecessorInDimension(dimensionIt);
-					if (containsInduced(neighborIt) != containsInduced(predecessor)) {
-						dimensionOk = false;
-						break;
-					}
-				}
-				
-				// if the dimension is ok the point's color is the same as its predecessor
-				if (dimensionOk) {
-					Point<Number> predecessor = inducedPoint.getPredecessorInDimension(dimensionIt);
-					color = containsInduced(predecessor);
-					break;
-				}
-			}
-		}
-		
-		// save calculated color for later use
-		mGrid.insertInduced(inducedPoint, color);
-		return color;
-	}
-	*/
-
-	/**
-	 * Calculate all potential vertices by combining two sets of vertices.
-	 * 
-	 * @see intersect
-	 * @see unite
-	 * 
-	 * @param potentialVertices
-	 * @param vertices1
-	 * @param vertices2
-	 */
-	template<typename Number, ORTHO_TYPE Type>
-	void OrthogonalPolyhedron<Number, Type>::calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const {
-		for (auto vertexIt1 : vertices1) {
-			for (auto vertexIt2 : vertices2) {
-				Point<Number> max = Point<Number>::coordinateMax(vertexIt1.point(), vertexIt2.point());
-				potentialVertices.insert(max);
-			}
-		}   
-	}
-	
-	/**
-	 * Checks if the given point is a vertex based on the vertex condition.
-	 * ∀i ∈ {1, . . . , d}. ∃x' ∈ N i(x). c(x'i−) 6= c(x').
-	 * 
-	 * @param vertex
-	 * @param coloring
-	 * @return bool
-	 */
-	template<typename Number, ORTHO_TYPE Type>
-	bool OrthogonalPolyhedron<Number, Type>::checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const {
-		/*
-		bool pointExists;
-		for (unsigned i = 0; i != vertex.dimension(); ++i) {
-			carl::Variable var = hypro::VariablePool::getInstance().carlVarByIndex(i);
-			auto neighborsInFixed = mNeighborhood.getNeighborhoodForDimension(vertex.point(), var, true); // include the point itself
-			pointExists = false;
-			for (auto neighborIt : neighborsInFixed) {
-				Point<Number> predecessor = neighborIt.getPredecessorInDimension(var);
-				if (coloring.at(neighborIt) != coloring.at(predecessor)) {
-					pointExists = true;
-					break;
-				}
-			}
-			if (!pointExists) {
-				return false;
-			}
-		}
-		return true;
-		*/
-	}
-	
 }

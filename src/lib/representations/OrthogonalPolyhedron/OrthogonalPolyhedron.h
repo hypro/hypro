@@ -51,6 +51,7 @@ namespace hypro
 		OrthogonalPolyhedron(const Vertex<Number>& _vertex);
 		OrthogonalPolyhedron(const VertexContainer<Number>& vertices);
 		OrthogonalPolyhedron(const std::set<Vertex<Number> >& points);
+		OrthogonalPolyhedron(const std::vector<Vertex<Number> >& points);
 		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy);
 		
 		/***********************************************************************
@@ -64,16 +65,17 @@ namespace hypro
 		void addVertices(const std::vector<Vertex<Number>>& _vertices);
 
 		bool empty() const;
+		unsigned size() const;
 		bool isVertex(const Point<Number>& _point) const;
 		bool isOnIEdge(const Point<Number>& _point, unsigned i) const;
 		bool isInternal(const Point<Number>& _point) const;
 		bool isExternal(const Point<Number>& _point) const;
 
 		std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned i) const;
-		std::vector<Point<Number>> iNNeighborhood(const Point<Number>& _point, unsigned i) const;
+		std::vector<Point<Number>> iNegNeighborhood(const Point<Number>& _point, unsigned i) const;
 		std::vector<Point<Number>> neighborhood(const Point<Number>& _point) const;
 
-		std::vector<Point<Number>> iSlice(Number pos, unsigned i) const;
+		std::vector<Point<Number>> iSlice(unsigned i, Number pos) const;
 		OrthogonalPolyhedron<Number,Type> iProjection(unsigned i) const;
 
 		/***********************************************************************
@@ -118,9 +120,6 @@ namespace hypro
 
 	private:
 		void updateBoundaryBox() const;
-		bool containsInduced(const Point<int>& inducedPoint) const;
-		void calculatePotentialVertices(vSet<Number>& potentialVertices, const vSet<Number>& vertices1, const vSet<Number>& vertices2) const;
-		bool checkVertexCondition(const Vertex<int>& vertex, const std::map<Point<int>, bool>& coloring) const;
 		
 	};
 	
