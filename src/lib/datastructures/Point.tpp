@@ -1,16 +1,16 @@
 namespace hypro {
-	
+
 	template<typename Number>
 	Point<Number>::Point() : mCoordinates()
 	{}
-	
+
 	template<typename Number>
 	Point<Number>::Point(const Number& _value)
 	{
 		mCoordinates = vector_t<Number>(1);
 		mCoordinates(0) = _value;
 	}
-	
+
 	template<typename Number>
 	Point<Number>::Point(std::initializer_list<Number> _coordinates)
 	{
@@ -36,22 +36,23 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number>::Point(const coordinateMap& _coordinates) 
+	Point<Number>::Point(const coordinateMap& _coordinates)
 	{
 		mCoordinates = vector_t<Number>(_coordinates.size());
 		for(auto& coordinatepair : _coordinates) {
 			mCoordinates(hypro::VariablePool::getInstance().dimension(coordinatepair.first)) = coordinatepair.second;
 		}
 	}
-	
+
 	template<typename Number>
 	Point<Number>::Point(const vector_t<Number>& _vector) :
 		mCoordinates(_vector)
 	{}
 
 	template<typename Number>
-	Point<Number>::Point(const Point<Number>& _p) 
+	Point<Number>::Point(const Point<Number>& _p)
 	{
+		std::cout << "Point copy" << std::endl;
 		mCoordinates = _p.rawCoordinates();
 
 		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
@@ -73,8 +74,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number>::Point(Point<Number>&& _p) 
+	Point<Number>::Point(Point<Number>&& _p)
 	{
+		std::cout << "Point move" << std::endl;
 		mCoordinates = _p.rawCoordinates();
 
 		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
@@ -93,7 +95,7 @@ namespace hypro {
 			}
 		}
 	}
-	
+
 	template<typename Number>
 	std::vector<Point<Number>> Point<Number>::neighbors() const {
 		return mNeighbors;
@@ -168,7 +170,7 @@ namespace hypro {
 	void Point<Number>::addToComposition(const Point<Number>& _element) {
 		mComposedOf.push_back(_element);
 	}
-	
+
 	template<typename Number>
 	Point<Number> Point<Number>::origin() const
 	{
@@ -176,13 +178,13 @@ namespace hypro {
 		Point<Number> result = Point<Number>(coordinates);
 		return result;
 	}
-	
+
 	template<typename Number>
 	Number Point<Number>::coordinate(const carl::Variable& _var) const
 	{
 		return mCoordinates(hypro::VariablePool::getInstance().dimension(_var));
 	}
-	
+
 	template<typename Number>
 	Number Point<Number>::coordinate(unsigned _dimension) const
 	{
@@ -191,7 +193,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	typename Point<Number>::coordinateMap Point<Number>::coordinates() const 
+	typename Point<Number>::coordinateMap Point<Number>::coordinates() const
 	{
 		coordinateMap res;
 		for(unsigned i = 0 ; i < mCoordinates.rows(); ++i) {
@@ -217,7 +219,7 @@ namespace hypro {
 		}
 		mCoordinates(dim) = _value;
 	}
-	
+
 	template<typename Number>
 	void Point<Number>::coordinatesFromVector(const vector_t<Number>& vector)
 	{
@@ -225,7 +227,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	unsigned Point<Number>::dimension() const 
+	unsigned Point<Number>::dimension() const
 	{
 		return mCoordinates.rows();
 	}
@@ -240,7 +242,7 @@ namespace hypro {
 		}
 		assert(mCoordinates.rows() <= _dimension);
 	}
-	
+
 	template<typename Number>
 	void Point<Number>::reduceToDimensions(std::vector<unsigned> _dimensions) {
 		std::unique(_dimensions.begin(), _dimensions.end());
@@ -266,7 +268,7 @@ namespace hypro {
 		}
 		return variables;
 	}
-	
+
 	template<typename Number>
 	Point<Number> Point<Number>::extAdd(const Point<Number>& _rhs) const
 	{
@@ -280,13 +282,13 @@ namespace hypro {
 	Number Point<Number>::distance(const Point<Number>& _rhs) const {
 			return ( (mCoordinates - _rhs.rawCoordinates()).norm() );
 	}
-	
+
 	template<typename Number>
 	std::vector<Number> Point<Number>::polarCoordinates( const Point<Number>& _origin,  bool _radians) const
 	{
 		Point<Number> base = *this - _origin;
 		std::vector<Number> result;
-		
+
 		// 1st component of the result is the radial part, the following components are the angles.
 		Number radialCoordinate = Number(0);
 		for(unsigned i = 0; i < base.dimension(); ++i)
@@ -297,7 +299,7 @@ namespace hypro {
 		}
 		radialCoordinate = sqrt(radialCoordinate);
 		result.insert(result.begin(), radialCoordinate);
-		
+
 		// compute polar angles
 		Number angle;
 		for(unsigned dimension = 0; dimension < base.dimension()-1; ++dimension)
@@ -336,16 +338,16 @@ namespace hypro {
 		assert(result.size() == this->dimension());
 		return result;
 	}
-	
+
 	template<typename Number>
 	Point<Number> Point<Number>::newEmpty() const
 	{
 		vector_t<Number> origin = vector_t<Number>::Zero(this->dimension());
 		return Point<Number>(origin);
 	}
-	
+
 	template<typename Number>
-	bool Point<Number>::move(const Point<Number>& _p) 
+	bool Point<Number>::move(const Point<Number>& _p)
 	{
 		mCoordinates = mCoordinates + _p.rawCoordinates();
 		bool negative = false;
@@ -377,7 +379,7 @@ namespace hypro {
 	void Point<Number>::incrementInFixedDim(const carl::Variable& _d) {
 		mCoordinates(hypro::VariablePool::getInstance().dimension(_d)) += 1;
 	}
-	
+
 	template<typename Number>
 	void Point<Number>::incrementInFixedDim(unsigned _d) {
 		mCoordinates(_d) += 1;
@@ -396,7 +398,7 @@ namespace hypro {
 	{
 		mCoordinates(hypro::VariablePool::getInstance().dimension(_d)) -= 1;
 	}
-	
+
 	template<typename Number>
 	void Point<Number>::decrementInFixedDim(unsigned _d)
 	{
@@ -410,7 +412,7 @@ namespace hypro {
 		pred.decrementInFixedDim(_d);
 		return pred;
 	}
-	
+
 	template<typename Number>
 	Point<Number> Point<Number>::getPredecessorInDimension(unsigned _d) const
 	{
@@ -418,9 +420,9 @@ namespace hypro {
 		pred.decrementInFixedDim(_d);
 		return pred;
 	}
-	 
+
 	template<typename Number>
-	bool Point<Number>::isInBoundary(const Point<Number>& _boundary) const 
+	bool Point<Number>::isInBoundary(const Point<Number>& _boundary) const
 	{
 		return (mCoordinates < _boundary.rawCoordinates());
 	}
@@ -430,7 +432,7 @@ namespace hypro {
 	{
 		return (mCoordinates.rows() > hypro::VariablePool::getInstance().dimension(_i));
 	}
-	
+
 	template<typename Number>
 	bool Point<Number>::hasDimensions(const std::vector<carl::Variable>& _variables) const
 	{
@@ -441,7 +443,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Point<Number>::haveEqualCoordinate(const Point<Number>& _p2) const 
+	bool Point<Number>::haveEqualCoordinate(const Point<Number>& _p2) const
 	{
 		if( dimension() == _p2.dimension() )
 		{
@@ -452,24 +454,24 @@ namespace hypro {
 		}
 		return false;
 	}
-	
+
 	template<typename Number>
 	bool Point<Number>::haveSameDimensions(const Point<Number>& _p) const
 	{
 		return (dimension() == _p.dimension());
 	}
-	
+
 	template<typename Number>
 	Point<Number>& Point<Number>::operator+=(const Point<Number>& _rhs)
 	{
 		assert(this->dimension() == _rhs.dimension());
 		for(unsigned i = 0 ; i < mCoordinates.rows(); ++i)
 		{
-			mCoordinates(i) += _rhs.at(i); 
+			mCoordinates(i) += _rhs.at(i);
 		}
 		return *this;
 	}
-	
+
 	template<typename Number>
 	Point<Number>& Point<Number>::operator-=(const Point<Number>& _rhs)
 	{
@@ -480,7 +482,7 @@ namespace hypro {
 		}
 		return *this;
 	}
-	
+
 	template<typename Number>
 	Point<Number>& Point<Number>::operator/=(unsigned _quotient)
 	{
@@ -490,7 +492,7 @@ namespace hypro {
 		}
 		return *this;
 	}
-	
+
 	template<typename Number>
 	Point<Number>& Point<Number>::operator*=(const Number _factor)
 	{
@@ -528,7 +530,7 @@ namespace hypro {
 		}
 		return mCoordinates(dim);
 	}
-	
+
 	template<typename Number>
 	Number& Point<Number>::operator[] (unsigned _i)
 	{
@@ -546,7 +548,7 @@ namespace hypro {
 		assert(hypro::VariablePool::getInstance().dimension(_i) < mCoordinates.rows());
 		return mCoordinates(hypro::VariablePool::getInstance().dimension(_i));
 	}
-	
+
 	template<typename Number>
 	Number Point<Number>::at(unsigned _index) const {
 		assert(_index < mCoordinates.rows());

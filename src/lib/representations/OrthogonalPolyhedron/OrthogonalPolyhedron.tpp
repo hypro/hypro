@@ -1,4 +1,4 @@
-/** 
+/**
  * @file    OrthogonalPolyhedron.tpp
  * @author  Sebastian Junges
  * @author	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
@@ -12,7 +12,7 @@
 namespace hypro
 {
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron() : 
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron() :
 		//mVertices(),
 		mGrid(),
 		mBoundaryBox(),
@@ -29,11 +29,11 @@ namespace hypro
 		mVariables()
 	{
 		if(_vertex.color())
-			mGrid.insert(_vertex.point(), _vertex.color());	
+			mGrid.insert(_vertex.point(), _vertex.color());
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const VertexContainer<Number>& _vertices) : 
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const VertexContainer<Number>& _vertices) :
 		//mVertices(_vertices),
 		mGrid(_vertices.vertices()),
 		mBoundaryBox(),
@@ -42,7 +42,7 @@ namespace hypro
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::set<Vertex<Number>>& _vertices) : 
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::set<Vertex<Number>>& _vertices) :
 		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
@@ -51,7 +51,7 @@ namespace hypro
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
-	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::vector<Vertex<Number>>& _vertices) : 
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::vector<Vertex<Number>>& _vertices) :
 		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
@@ -71,7 +71,7 @@ namespace hypro
 	/**********************************
 	 * Getter & setter
 	 **********************************/
-	
+
 	/**
 	 * Returns the list of variables of this polyhedron
 	 */
@@ -84,7 +84,7 @@ namespace hypro
 	std::vector<Vertex<Number>> OrthogonalPolyhedron<Number, Type>::vertices() const {
 		return mGrid.vertices();
 	}
-	
+
 	/**
 	 * Returns and if necessary calculates the boundary box.
 	 */
@@ -174,12 +174,12 @@ namespace hypro
 	/**********************************
 	 * Geometric Object functions
 	 **********************************/
-	
+
 	template<typename Number, ORTHO_TYPE Type>
 	unsigned int OrthogonalPolyhedron<Number, Type>::dimension() const {
 		return mGrid.dimension();
 	}
-		
+
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		/*
@@ -204,58 +204,38 @@ namespace hypro
 		OrthogonalPolyhedron<Number, Type> result;
 		return result;
 	}
-		
+
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const {
-		/*assert(mVariables == rhs.mVariables);
-		
-		// first initialize the set of potential vertices
-		vSet<Number> potentialVertices;
-		calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
-		
-		// create a temporary grid including all potential vertices
-		Grid<Number> tmpGrid(potentialVertices);
-		vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
-		
-		// the container to store the actual vertices
-		VertexContainer<Number> vertices;
-		typename NeighborhoodContainer::neighborhood neighbors;
-		std::map<Point<int>, bool> coloringIntersection;
-		
-		// check all potential vertices if they are in fact vertices
-		for (auto vertexIt : inducedPotentialVertices) {
-			// calculate the neighbor coloring intersection
-			neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
-			coloringIntersection.clear();
+		std::vector<Vertex<Number>> vertices;
+		vertices.resize(this->size() + rhs.size());
 
-			for (auto neighborIt : neighbors) {
-				Point<Number> original = tmpGrid.calculateOriginal(neighborIt);
-				bool color1 = this->contains(original);
-				bool color2 = rhs.contains(original);
-				coloringIntersection.insert(std::make_pair(neighborIt, color1 && color2));
-			}
-			
-			// if the point is a vertex, add it with its calculated color
-			if (checkVertexCondition(vertexIt, coloringIntersection)) {
-				vertices.insert(tmpGrid.calculateOriginal(vertexIt.point()), coloringIntersection.at(vertexIt.point()));
+		std::vector<Vertex<Number>> v1 = this->vertices();
+		std::vector<Vertex<Number>> v2 = rhs.vertices();
+
+		bool unionVertex = false;
+		for(const auto& vertex1 : v1) {
+			for(const auto& vertex2 : v2) {
+				if(vertex1 == vertex2) {
+					vertices.push_back(vertex1);
+					break;
+				}
 			}
 		}
 
-		OrthogonalPolyhedron<Number, Type> result = OrthogonalPolyhedron<Number, Type>(vertices);
-		
-		return result;*/
+		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
 	}
-		
+
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::hull() const {
 		if (!mBoxUpToDate) {
 			updateBoundaryBox();
 		}
-		
+
 		int nrofVertices = pow(2, dimension());
 		VertexContainer<Number> container;
 		Vertex<Number> vertex;
-		
+
 		for (int vertexNr = 0; vertexNr < nrofVertices; vertexNr++) {
 			int i = 0;
 			for (auto variableIt : mVariables) {
@@ -270,11 +250,11 @@ namespace hypro
 			container.insert(vertex);
 		}
 		OrthogonalPolyhedron<Number, Type> result = OrthogonalPolyhedron<Number, Type>(container);
-		
+
 		return result;
 	}
-	
-	/*	
+
+	/*
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::contains(const Point<Number>& point) const {
 		return containsInduced(mGrid.calculateInduced(point));
@@ -286,61 +266,27 @@ namespace hypro
 		std::vector<Vertex<Number>> vertices;
 		vertices.resize(this->size() + rhs.size());
 
-		vertices.insert(vertices.begin(), this->vertices().begin(), this->vertices().end());
-		vertices.insert(vertices.begin(), rhs.vertices().begin(), rhs.vertices().end());
+		std::vector<Vertex<Number>> v1 = this->vertices();
+		std::vector<Vertex<Number>> v2 = rhs.vertices();
 
-		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
-		/*
-		assert(mVariables == rhs.mVariables);
-		
-		// first initialize the set of potential vertices
-		vSet<Number> potentialVertices;
-		calculatePotentialVertices(potentialVertices, mVertices.vertices(), rhs.mVertices.vertices());
-		for (auto vertexIt : this->mVertices.vertices()) {
-			if ( !rhs.contains(vertexIt.point()) ) {
-				potentialVertices.insert(vertexIt.point());
-			}
-		}
-		for (auto vertexIt : rhs.mVertices.vertices()) {
-			if ( !this->contains(vertexIt.point()) ) {
-				potentialVertices.insert(vertexIt.point());
-			}
-		}
-		
-		// create a temporary grid including all potential vertices
-		Grid<Number> tmpGrid(potentialVertices);
-		vSet<int> inducedPotentialVertices = tmpGrid.translateToInduced(potentialVertices);
-		
-		// the container to store the actual vertices
-		VertexContainer<Number> vertices;
-		typename NeighborhoodContainer::neighborhood neighbors;
-		std::map<Point<int>, bool> coloringUnion;
-		
-		// check all potential vertices if they are in fact vertices
-		for (auto vertexIt : inducedPotentialVertices) {
-			// calculate the neighbor coloring intersection
-			neighbors = mNeighborhood.getNeighborhood(vertexIt.point(), true); // include the point itself
-			coloringUnion.clear();
+		vertices.insert(vertices.end(), v1.begin(), v1.end());
 
-			for (auto neighborIt : neighbors) {
-				Point<Number> original = tmpGrid.calculateOriginal(neighborIt);
-				bool color1 = this->contains(original);
-				bool color2 = rhs.contains(original);
-				coloringUnion.insert(std::make_pair(neighborIt, color1 || color2));
-			}
-			
-			// if the point is a vertex, add it with its calculated color
-			if (checkVertexCondition(vertexIt, coloringUnion)) {
-				vertices.insert(tmpGrid.calculateOriginal(vertexIt.point()), coloringUnion.at(vertexIt.point()));
-			}
+
+		std::cout << "##### Vertices #####" << std::endl;
+		for(const auto& vertex : vertices) {
+			std::cout << vertex  << std::endl;
 		}
 
-		OrthogonalPolyhedron<Number, Type> result = OrthogonalPolyhedron<Number, Type>(vertices);
-		
-		return result;
-		*/
+		vertices.insert(vertices.end(), v2.begin(), v2.end());
+
+		for(const auto& vertex : vertices) {
+			std::cout << vertex  << std::endl;
+		}
+		std::cout << "##### Vertices #####" << std::endl;
+
+		return OrthogonalPolyhedron<Number, Type>(vertices);
 	}
-		
+
 	/**********************************
 	 * Other functions
 	 **********************************/
@@ -377,7 +323,7 @@ namespace hypro
 	/***************************************************************************
 	 * Private methods
 	 ***************************************************************************/
-	
+
 	/**
 	 * Updates the boundary box
 	 */
@@ -387,10 +333,10 @@ namespace hypro
 		if (mGrid.empty()) {
 			mBoundaryBox.clear();
 		}
-		
+
 		std::vector<Vertex<Number>> vertices = mGrid.vertices();
 		mBoundaryBox = Box<Number>(vertices);
-		
+
 		mBoxUpToDate = true;
 	}
 }

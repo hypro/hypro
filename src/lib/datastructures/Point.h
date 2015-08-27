@@ -1,12 +1,12 @@
-/** 
+/**
  * The point class is the basis for all implementation. It consists of a vector
  * of coordinates which forms a point in a n-dimensional space.
  * @file   Point.h
- * 
+ *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * @author Benedikt Seidl
- * 
+ *
  * @since	2011-01-17
  * @version     2014-04-03
  */
@@ -22,7 +22,7 @@
 
 
 namespace hypro {
-	
+
 	/**
 	 * @class Point
 	 */
@@ -32,7 +32,7 @@ namespace hypro {
 	typedef std::vector<Point>::iterator pVecIt;
 	*/
 
-	
+
 	/*
 	 *  Class to store points in a MAXIMAL_DIMENSION space.
 	 */
@@ -41,7 +41,7 @@ namespace hypro {
 		public:
 			typedef std::set<Point<Number> > pointSet;
 			typedef std::map<carl::Variable, Number > coordinateMap;
-			
+
 		private:
 			vector_t<Number> mCoordinates;
 
@@ -50,17 +50,17 @@ namespace hypro {
 			//Minkowsi Decompositon of this point (if applicable)
 			std::vector<Point<Number>> mComposedOf;
 
-		
+
 		public:
-		
+
 			static const int POINT_RAND_MAX = 100;
-			
+
 			/**
 			 * Constructors & Destructor
 			 */
-		
+
 			Point();
-		
+
 			/**
 			 * Constructs a point with the passed dimension and sets the coordinates to the initial value.
 			 * @param dim
@@ -68,7 +68,7 @@ namespace hypro {
 			 */
 			Point(const Number& _value);
 			Point(std::initializer_list<Number> _coordinates);
-			
+
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
 			Point(std::initializer_list<F> _coordinates)
 			{
@@ -97,7 +97,7 @@ namespace hypro {
 			 */
 			Point(const Point<Number>& _p);
 			Point(Point<Number>&& _p);
-			 
+
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
 			Point(const Point<F>& _p) {
 				mCoordinates = vector_t<Number>(_p.coordinates().size());
@@ -111,11 +111,11 @@ namespace hypro {
 
 			virtual ~Point()
 			{}
-			
+
 			/**
 			 * Getter & Setter
 			 */
-			
+
 			std::vector<Point<Number>> neighbors() const;
 
 			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
@@ -132,21 +132,21 @@ namespace hypro {
 			static Point<Number> zero(unsigned _dim = 0) {
 				return Point<Number>(vector_t<Number>::Zero(_dim));
 			}
-			
+
 			Point<Number> origin() const;
-			
+
 			/**
 			 * Returns the value of mCoordinates[dim].
 			 * @param  dim the dimension we want to get the value from.
-			 * @return 
+			 * @return
 			 */
 			Number coordinate(const carl::Variable& _var) const;
 			Number coordinate(unsigned _dimension) const;
 
 			coordinateMap coordinates() const;
-		
+
 			vector_t<Number> rawCoordinates() const;
-		
+
 			void setCoordinate(const carl::Variable& _dim, const Number& _value);
 
 			/**
@@ -159,23 +159,23 @@ namespace hypro {
 			void reduceDimension(unsigned _dimension);
 
 			void reduceToDimensions(std::vector<unsigned> _dimensions);
-			
+
 			std::vector<carl::Variable> variables() const;
-			
+
 			Point<Number> extAdd(const Point<Number>& _rhs) const;
 
 			Number distance(const Point<Number>& _rhs) const;
-			
+
 			std::vector<Number> polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const;
-			
+
 			/**
 			 * Creates a new empty point (origin) with the same dimensions
 			 * as this point.
-			 * 
+			 *
 			 * @return new empty point
 			 */
 			Point<Number> newEmpty() const;
-			
+
 			/**
 			 * Method to move the point
 			 * @param p Point with coordinates describing the move.
@@ -194,7 +194,7 @@ namespace hypro {
 			Number sum() const;
 
 			/**
-			 * 
+			 *
 			 * @param p1 One point
 			 * @param p2 Other point
 			 * @return A point with the coordinate-wise maximum of p1 and p2.
@@ -210,7 +210,7 @@ namespace hypro {
 				}
 				return Point<Number>(coordinates);
 			}
-			
+
 			static Number inftyNorm(const Point<Number> _p)
 			{
 				Number res = 0;
@@ -230,7 +230,7 @@ namespace hypro {
 			void incrementInFixedDim(unsigned _d);
 
 			/**
-			 * 
+			 *
 			 * @param val The value to be added to each coordinate
 			 */
 			void incrementInAllDim(const Number& _val = 1);
@@ -249,28 +249,28 @@ namespace hypro {
 			 */
 			Point getPredecessorInDimension(const carl::Variable& _d) const;
 			Point getPredecessorInDimension(unsigned _d) const;
-			 
+
 			/**
 			 * @brief Check if in range.
 			 * @param boundary Point with coordinates that may not be exceeded in positive direction.
-			 * @return true, if every coordinate is within boundary[i] and 0. 
+			 * @return true, if every coordinate is within boundary[i] and 0.
 			 */
 			bool isInBoundary(const Point<Number>& _boundary) const;
 
 			/**
 			 * Operators & Comparison functions
 			 */
-		
+
 			bool hasDimension(const carl::Variable& _i) const;
 			bool hasDimensions(const std::vector<carl::Variable>& _variables) const;
 
 			bool haveEqualCoordinate(const Point<Number>& _p2) const;
-			
+
 			/**
 			 * Checks if the point has the same dimensions as this point.
 			 * The Number of dimensions has to be equal as well as the actual
 			 * variables used for those dimensions.
-			 * 
+			 *
 			 * @param p
 			 * @return True, if all dimension variables are equal
 			 */
@@ -301,7 +301,7 @@ namespace hypro {
 			bool operator!=(const Point<Number> & _p2) const{
 				return !(*this == _p2);
 			}
-			
+
 			Point<Number>& operator+=(const Point<Number>& _rhs);
 			Point<Number>& operator-=(const Point<Number>& _rhs);
 			Point<Number>& operator/=(unsigned _quotient);
@@ -319,7 +319,7 @@ namespace hypro {
 
 			Number at(const carl::Variable& _i) const;
 			Number at(unsigned _index) const;
-		
+
 			/**
 			 *
 			 * @param ostr
@@ -327,8 +327,7 @@ namespace hypro {
 			 * @return
 			 */
 			friend std::ostream & operator<< (std::ostream& _ostr, const Point<Number>& _p) {
-				assert(_p.dimension() == _p.rawCoordinates().rows());
-				_ostr << "( ";		
+				_ostr << "( ";
 				for (unsigned i = 0 ; i < _p.rawCoordinates().rows()-1; ++i) {
 					_ostr << _p.at(i) << ", ";
 				}
@@ -341,7 +340,7 @@ namespace hypro {
 				return mCoordinates;
 			}
 	};
-	
+
 	template<typename Number>
 	const Point<Number> operator+( const Point<Number>& _lhs, const Point<Number>& _rhs )
 	{
@@ -352,7 +351,7 @@ namespace hypro {
 		resCoord = p1Coord + p2Coord;
 		return Point<Number>(resCoord);
 	}
-	
+
 	template<typename Number>
 	const Point<Number> operator-( const Point<Number>& _lhs, const Point<Number>& _rhs )
 	{
@@ -363,7 +362,7 @@ namespace hypro {
 		resCoord = p1Coord - p2Coord;
 		return Point<Number>(resCoord);
 	}
-	
+
 	template<typename Number>
 	const Point<Number> operator/( const Point<Number>& _lhs, unsigned _quotient )
 	{
@@ -372,7 +371,7 @@ namespace hypro {
 		resCoord = p1Coord / _quotient;
 		return Point<Number>(resCoord);
 	}
-	
+
 	template<typename Number>
 	Number operator*( const Point<Number>& _lhs, const Point<Number>& _rhs )
 	{
@@ -380,7 +379,7 @@ namespace hypro {
 		vector_t<Number> p2Coord = _rhs.rawCoordinates();;
 		return p1Coord.dot(p2Coord);
 	}
-	
+
 	template<typename Number>
 	const Point<Number> operator*( const Point<Number>& _lhs, const Number& _factor)
 	{

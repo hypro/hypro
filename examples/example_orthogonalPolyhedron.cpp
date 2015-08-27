@@ -1,9 +1,9 @@
 /**
  * This file shows how to use the plotter.
  * @file example_plot.cpp
- * 
+ *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since	2015-03-01
  * @version	2015-03-01
  */
@@ -24,11 +24,17 @@ int main(int argc, char** argv) {
 	container.insert(Point<FLOAT_T<mpfr_t>>({1,3}), true);
 	container.insert(Point<FLOAT_T<mpfr_t>>({4,5}), false);
 	container.insert(Point<FLOAT_T<mpfr_t>>({4,2}), false);
-	container.insert(Point<FLOAT_T<mpfr_t>>({2,2}), true);	
+	container.insert(Point<FLOAT_T<mpfr_t>>({2,2}), true);
 	container.insert(Point<FLOAT_T<mpfr_t>>({2,3}), true);
-	
+
+	VertexContainer<FLOAT_T<mpfr_t>> container2;
+	container2.insert(Point<FLOAT_T<mpfr_t>>({1,1}), true);
+	container2.insert(Point<FLOAT_T<mpfr_t>>({1,2}), true);
+	container2.insert(Point<FLOAT_T<mpfr_t>>({2,1}), true);
+	container2.insert(Point<FLOAT_T<mpfr_t>>({2,2}), true);
 
 	OrthogonalPolyhedron<FLOAT_T<mpfr_t>> test(container);
+	OrthogonalPolyhedron<FLOAT_T<mpfr_t>> test2(container2);
 
 	std::vector<Point<FLOAT_T<mpfr_t>>> neighborhood = test.neighborhood(Point<FLOAT_T<mpfr_t>>({2,4}));
 	std::cout << "neighborhood: " << std::endl;
@@ -50,7 +56,20 @@ int main(int argc, char** argv) {
 	settings.fill = true;
 	plotter.updateSettings(settings);
 
-	plotter.addObject(test.preparePlot(0,1), false);
+	//plotter.addObject(test.preparePlot(0,1), false);
+	//plotter.addObject(test2.preparePlot(0,1), false);
+
+	OrthogonalPolyhedron<FLOAT_T<mpfr_t>> united = test.unite(test2);
+	for(const auto& vertex : united.vertices()) {
+		std::cout << vertex << std::endl;
+	}
+
+	//OrthogonalPolyhedron<FLOAT_T<mpfr_t>> intersection = test.intersect(test2);
+	//for(const auto& vertex : united.vertices()) {
+	//	std::cout << vertex << std::endl;
+	//}
+
+	plotter.addObject(united.preparePlot(0,1), false);
 	plotter.plot2d();
 
 	return 0;
