@@ -171,10 +171,10 @@ namespace polytope {
 	}
 
 	template<typename Number>
-	Cone<Number> Cone<Number>::linearTransformation(const matrix_t<Number> A) const {
+	Cone<Number> Cone<Number>::linearTransformation(const matrix_t<Number> A, const vector_t<Number>& b) const {
 		Cone<Number> result;
 		for(const auto& plane : mPlanes) {
-			result.add(std::shared_ptr<Hyperplane<Number>>(new Hyperplane<Number>(plane->linearTransformation(A))));
+			result.add(std::shared_ptr<Hyperplane<Number>>(new Hyperplane<Number>(plane->linearTransformation(A,b))));
 		}
 		return result;
 	}

@@ -227,9 +227,9 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	rotZ(2,2) = 1;
 	
 	// result
-	Box<TypeParam> resX = b1.linearTransformation(rotX);
-	Box<TypeParam> resY = b1.linearTransformation(rotY);
-	Box<TypeParam> resZ = b1.linearTransformation(rotZ);
+	Box<TypeParam> resX = b1.linearTransformation(rotX, vector_t<TypeParam>::Zero(rotX.rows()));
+	Box<TypeParam> resY = b1.linearTransformation(rotY, vector_t<TypeParam>::Zero(rotY.rows()));
+	Box<TypeParam> resZ = b1.linearTransformation(rotZ, vector_t<TypeParam>::Zero(rotZ.rows()));
 	
 	
 	std::vector<Point<TypeParam>> cornersX = resX.vertices();

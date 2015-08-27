@@ -8,7 +8,7 @@
  * @author Benedikt Seidl
  *
  * @since	2011-01-17
- * @version     2014-04-03
+ * @version	2015-08-27
  */
 #pragma once
 
@@ -70,12 +70,10 @@ namespace hypro {
 			Point(std::initializer_list<Number> _coordinates);
 
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
-			Point(std::initializer_list<F> _coordinates)
-			{
+			Point(std::initializer_list<F> _coordinates) {
 				unsigned count = 0;
 				mCoordinates = vector_t<Number>(_coordinates.size());
-				for(auto& coordinate : _coordinates)
-				{
+				for(auto& coordinate : _coordinates) {
 					mCoordinates(count) = Number(coordinate);
 					++count;
 				}
@@ -144,28 +142,23 @@ namespace hypro {
 			Number coordinate(unsigned _dimension) const;
 
 			coordinateMap coordinates() const;
-
-			vector_t<Number> rawCoordinates() const;
-
+			const vector_t<Number>& rawCoordinates() const;
 			void setCoordinate(const carl::Variable& _dim, const Number& _value);
+
+			void swap(Point<Number>& _rhs);
 
 			/**
 			 * Sets the coordinates from the given vector
 			 */
 			void coordinatesFromVector(const vector_t<Number>& vector);
-
 			unsigned dimension() const;
-
 			void reduceDimension(unsigned _dimension);
-
 			void reduceToDimensions(std::vector<unsigned> _dimensions);
 
 			std::vector<carl::Variable> variables() const;
 
 			Point<Number> extAdd(const Point<Number>& _rhs) const;
-
 			Number distance(const Point<Number>& _rhs) const;
-
 			std::vector<Number> polarCoordinates( const Point<Number>& _origin,  bool _radians = true ) const;
 
 			/**
@@ -186,7 +179,7 @@ namespace hypro {
 			/**
 			 * Makes a linear transformation, ie A * p + b
 			 */
-			Point<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+			Point<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
 			/**
 			 * @return the sum of all coordinates (solved via dot product)
@@ -199,8 +192,7 @@ namespace hypro {
 			 * @param p2 Other point
 			 * @return A point with the coordinate-wise maximum of p1 and p2.
 			 */
-			static Point<Number> coordinateMax(const Point<Number>& _p1, const Point<Number>& _p2)
-			{
+			static Point<Number> coordinateMax(const Point<Number>& _p1, const Point<Number>& _p2) {
 				assert(_p1.dimension() == _p2.dimension());
 				vector_t<Number> coordinates = vector_t<Number>(_p1.dimension());
 				vector_t<Number> p1Coord = _p1.rawCoordinates();
@@ -211,8 +203,7 @@ namespace hypro {
 				return Point<Number>(coordinates);
 			}
 
-			static Number inftyNorm(const Point<Number> _p)
-			{
+			static Number inftyNorm(const Point<Number> _p) {
 				Number res = 0;
 				vector_t<Number> coord = _p.rawCoordinates();
 				for (unsigned i = 0; i < _p.dimension(); ++i) {
@@ -295,6 +286,8 @@ namespace hypro {
 			}
 
 			bool operator==(const Point<Number> & _p2) const{
+				std::cout << mCoordinates << std::endl;
+				std::cout << _p2.rawCoordinates() << std::endl;
 				return (mCoordinates == _p2.rawCoordinates());
 			}
 
@@ -340,6 +333,11 @@ namespace hypro {
 				return mCoordinates;
 			}
 	};
+
+	template<typename Number>
+	void swap(Point<Number>& _lhs, Point<Number>& _rhs) {
+		_lhs.swap(_rhs);
+	}
 
 	template<typename Number>
 	const Point<Number> operator+( const Point<Number>& _lhs, const Point<Number>& _rhs )

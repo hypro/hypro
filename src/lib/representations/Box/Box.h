@@ -331,7 +331,7 @@ public:
 		return mBoundaries.size();
 	}
 	
-	Box<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+	Box<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 	Box<Number> minkowskiSum(const Box<Number>& rhs) const;
 	Box<Number> intersect(const Box<Number>& rhs) const;
 	bool contains(const Point<Number>& point) const;

@@ -56,12 +56,12 @@ TYPED_TEST(GridTest, Properties)
     Point<TypeParam> p1({2, 5});
     
     EXPECT_FALSE(this->grid1.empty());
-    EXPECT_EQ(3, this->grid1.size());
+    EXPECT_EQ(this->grid1.size(),3);
     EXPECT_TRUE(this->grid1.find(p1) != this->grid1.end());
     
     this->grid1.clear();
     EXPECT_TRUE(this->grid1.empty());
-    EXPECT_EQ(0, this->grid1.size());
+    EXPECT_EQ(this->grid1.size(),0);
     EXPECT_FALSE(this->grid1.find(p1) != this->grid1.end());
 }
 

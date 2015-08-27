@@ -92,7 +92,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
 	vector_t<TypeParam> v3Rot = rotation*(this->vec3);
 	
-	std::shared_ptr<SupportFunction<TypeParam>> res = psf1->linearTransformation(rotation);
+	std::shared_ptr<SupportFunction<TypeParam>> res = psf1->linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
 	
 	if(typeid(TypeParam) == typeid(double)) {
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(20), res->evaluate(v1Rot).supportValue,4));

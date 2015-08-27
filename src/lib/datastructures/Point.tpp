@@ -1,18 +1,25 @@
 namespace hypro {
 
 	template<typename Number>
-	Point<Number>::Point() : mCoordinates()
+	Point<Number>::Point() : 
+		mCoordinates(vector_t<Number>::Zero(0)),
+		mNeighbors(),
+		mComposedOf()
 	{}
 
 	template<typename Number>
-	Point<Number>::Point(const Number& _value)
+	Point<Number>::Point(const Number& _value) :
+		mNeighbors(),
+		mComposedOf()
 	{
 		mCoordinates = vector_t<Number>(1);
 		mCoordinates(0) = _value;
 	}
 
 	template<typename Number>
-	Point<Number>::Point(std::initializer_list<Number> _coordinates)
+	Point<Number>::Point(std::initializer_list<Number> _coordinates) :
+		mNeighbors(),
+		mComposedOf()
 	{
 		unsigned count = 0;
 		mCoordinates = vector_t<Number>(_coordinates.size());
@@ -24,7 +31,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number>::Point(std::vector<Number> _coordinates)
+	Point<Number>::Point(std::vector<Number> _coordinates) :
+		mNeighbors(),
+		mComposedOf()
 	{
 		unsigned count = 0;
 		mCoordinates = vector_t<Number>(_coordinates.size());
@@ -36,7 +45,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number>::Point(const coordinateMap& _coordinates)
+	Point<Number>::Point(const coordinateMap& _coordinates) : 
+		mNeighbors(),
+		mComposedOf()
 	{
 		mCoordinates = vector_t<Number>(_coordinates.size());
 		for(auto& coordinatepair : _coordinates) {
@@ -46,54 +57,28 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number>::Point(const vector_t<Number>& _vector) :
-		mCoordinates(_vector)
+		mCoordinates(_vector),
+		mNeighbors(),
+		mComposedOf()
 	{}
 
 	template<typename Number>
-	Point<Number>::Point(const Point<Number>& _p)
+	Point<Number>::Point(const Point<Number>& _p) : 
+		mCoordinates(_p.rawCoordinates()),
+		mNeighbors(_p.neighbors()),
+		mComposedOf(_p.composedOf())
 	{
-		std::cout << "Point copy" << std::endl;
-		mCoordinates = _p.rawCoordinates();
-
-		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
-
-		if(!_p.neighbors().empty()) {
-			for(const auto& neighbor : _p.neighbors())
-			{
-				mNeighbors.push_back(neighbor);
-			}
-		}
-
-		assert(_p.composedOf().empty());
-		if(!_p.composedOf().empty()){
-			for(const auto& composite : _p.composedOf())
-			{
-				mComposedOf.push_back(composite);
-			}
-		}
+		std::cout << "Point copy: " << _p << " to ";
+		std::cout << *this << std::endl;
 	}
 
 	template<typename Number>
-	Point<Number>::Point(Point<Number>&& _p)
+	Point<Number>::Point(Point<Number>&& _p) :
+		mCoordinates(_p.rawCoordinates()),
+		mNeighbors(std::move(_p.neighbors())),
+		mComposedOf(std::move(_p.composedOf()))
 	{
 		std::cout << "Point move" << std::endl;
-		mCoordinates = _p.rawCoordinates();
-
-		//std::cout << "mCoordinates = " << mCoordinates.transpose() << ", p.Coordinates: " << _p.rawCoordinates().transpose() << std::endl;
-
-		if(!_p.neighbors().empty()) {
-			for(const auto& neighbor : _p.neighbors())
-			{
-				mNeighbors.push_back(neighbor);
-			}
-		}
-
-		if(!_p.composedOf().empty()){
-			for(const auto& composite : _p.composedOf())
-			{
-				mComposedOf.push_back(composite);
-			}
-		}
 	}
 
 	template<typename Number>
@@ -203,7 +188,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	vector_t<Number> Point<Number>::rawCoordinates() const {
+	const vector_t<Number>& Point<Number>::rawCoordinates() const {
 		return mCoordinates;
 	}
 
@@ -218,6 +203,13 @@ namespace hypro {
 			mCoordinates.topLeftCorner(old.rows(),1) = old;
 		}
 		mCoordinates(dim) = _value;
+	}
+
+	template<typename Number>
+	void Point<Number>::swap(Point<Number>& _rhs) {
+		this->mCoordinates = _rhs.mCoordinates; // we cannot swap FLOAT_T yet, at least not with mpfr_t instantiation
+		std::swap(this->mNeighbors, _rhs.mNeighbors);
+		std::swap(this->mComposedOf, _rhs.mComposedOf);
 	}
 
 	template<typename Number>
@@ -536,7 +528,7 @@ namespace hypro {
 	{
 		if(_i >= mCoordinates.rows()) {
 			vector_t<Number> old = mCoordinates;
-			mCoordinates.resize(_i+1);
+			mCoordinates = vector_t<Number>::Zero(_i+1);
 			mCoordinates.topLeftCorner(old.rows(),1) = old;
 		}
 		return mCoordinates(_i);

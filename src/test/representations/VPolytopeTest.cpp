@@ -245,7 +245,7 @@ TYPED_TEST(VPolytopeTest, LinearTransformation)
 	A(1,0) = 3;
 	A(1,1) = 4;
 
-	VPolytope<TypeParam> res = vpt1.linearTransformation(A);
+	VPolytope<TypeParam> res = vpt1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()));
 
 	for(auto& vertex : vpt1.vertices()) {
 		EXPECT_TRUE(res.hasVertex(Point<TypeParam>(vector_t<TypeParam>(A*vertex.rawCoordinates()))));

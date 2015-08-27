@@ -195,10 +195,10 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	A(1,0) = 3;
 	A(1,1) = 4;
 
-	HPolytope<TypeParam> res = hpt1.linearTransformation(A);
+	HPolytope<TypeParam> res = hpt1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()));
 
 	for(auto& plane : hpt1.constraints()) {
-		EXPECT_TRUE(res.hasConstraint(plane.linearTransformation(A)));
+		EXPECT_TRUE(res.hasConstraint(plane.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()))));
 	}
 }
 

@@ -38,7 +38,7 @@ namespace polytope {
 			void add(std::shared_ptr<Hyperplane<Number>> _plane);
 			void add(vector_t<Number> _vector);
 
-			Cone<Number> linearTransformation(const matrix_t<Number> A) const;
+			Cone<Number> linearTransformation(const matrix_t<Number> A, const vector_t<Number>& b) const;
 			Cone<Number> minkowskiSum(const Cone& _rhs) const;			
 			Point<Number> getUnitAverageVector() const;
 			

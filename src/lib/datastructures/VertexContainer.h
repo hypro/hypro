@@ -121,7 +121,7 @@ namespace hypro {
 		
 		inline vSetIt<Number> find(const Vertex<Number>& v) const {
 			vSetIt<Number> it = mVertices.find(v);
-			if (it->color() != v.color()) it = mVertices.end();
+			if (it != mVertices.end() && it->color() != v.color()) it = mVertices.end();
 			return it;
 		}
 		

@@ -74,7 +74,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 	* General interface
 	**************************************************************************/
 
-		VPolytope linearTransformation(const matrix_t<Number>& A) const;
+		VPolytope linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 		VPolytope minkowskiSum(const VPolytope& rhs) const;
 		VPolytope intersect(const VPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;

@@ -63,9 +63,17 @@ namespace hypro
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy) :
 		//mVertices(copy.vertices()),
 		mGrid(copy.vertices()),
-		mBoundaryBox(copy.boundaryBox()),
-		mBoxUpToDate(true),
+		mBoundaryBox(),
+		mBoxUpToDate(false),
 		mVariables(copy.variables())
+	{}
+
+	template<typename Number, ORTHO_TYPE Type>
+	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>&& move) :
+		mGrid(std::move(move.vertices())),
+		mBoundaryBox(),
+		mBoxUpToDate(false),
+		mVariables(std::move(move.variables()))
 	{}
 
 	/**********************************
@@ -213,17 +221,16 @@ namespace hypro
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
 
-		bool unionVertex = false;
 		for(const auto& vertex1 : v1) {
 			for(const auto& vertex2 : v2) {
 				if(vertex1 == vertex2) {
-					vertices.push_back(vertex1);
+					vertices.emplace_back(std::move(vertex1));
 					break;
 				}
 			}
 		}
 
-		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
+		return std::move(OrthogonalPolyhedron<Number, Type>(std::move(vertices)));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -264,27 +271,14 @@ namespace hypro
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(const OrthogonalPolyhedron<Number, Type>& rhs) const {
 		std::vector<Vertex<Number>> vertices;
-		vertices.resize(this->size() + rhs.size());
 
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
 
 		vertices.insert(vertices.end(), v1.begin(), v1.end());
-
-
-		std::cout << "##### Vertices #####" << std::endl;
-		for(const auto& vertex : vertices) {
-			std::cout << vertex  << std::endl;
-		}
-
 		vertices.insert(vertices.end(), v2.begin(), v2.end());
 
-		for(const auto& vertex : vertices) {
-			std::cout << vertex  << std::endl;
-		}
-		std::cout << "##### Vertices #####" << std::endl;
-
-		return OrthogonalPolyhedron<Number, Type>(vertices);
+		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
 	}
 
 	/**********************************

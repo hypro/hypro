@@ -535,7 +535,7 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     //b(1,0) = TypeParam(0);
     
     hypro::Polytope<TypeParam> result;
-    result = poly1.linearTransformation(A); //what kind of result is expected?
+    result = poly1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows())); //what kind of result is expected?
 //    result.print();
 }
 

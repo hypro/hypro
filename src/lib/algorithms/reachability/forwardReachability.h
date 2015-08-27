@@ -83,7 +83,7 @@ namespace hypro
 					//---
 
 					//e^(At)*X0 = polytope at t=delta
-					Representation deltaValuation = _val.linearTransformation(resultMatrix);
+					Representation deltaValuation = _val.linearTransformation(resultMatrix, vector_t<Number>::Zero(resultMatrix.rows()));
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope at t=delta: ";
@@ -152,7 +152,7 @@ namespace hypro
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
-						resultPolytope = lastSegment.linearTransformation(resultMatrix);
+						resultPolytope = lastSegment.linearTransformation(resultMatrix, vector_t<Number>::Zero(resultMatrix.rows()));
 						//resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG

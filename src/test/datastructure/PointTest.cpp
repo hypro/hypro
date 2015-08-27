@@ -87,6 +87,8 @@ TYPED_TEST(PointTest, Constructor)
 
     EXPECT_EQ(p.dimension(), (unsigned) 8);
     EXPECT_EQ(p[2], TypeParam(5));
+    EXPECT_EQ(p[1], TypeParam(0));
+    EXPECT_EQ(p[0], TypeParam(5));
     	
     Point<TypeParam> pCopy = Point<TypeParam>(p);
     EXPECT_EQ(p, pCopy);

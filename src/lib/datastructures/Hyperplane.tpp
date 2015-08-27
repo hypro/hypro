@@ -13,14 +13,14 @@
  namespace hypro {
  	template<typename Number>
  	Hyperplane<Number>::Hyperplane() :
-		mNormal(),
-		mScalar()
+		mNormal(vector_t<Number>::Zero(1)),
+		mScalar(Number(0))
 	{}
 		
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const Hyperplane<Number>& _orig) :
-	mNormal(_orig.mNormal),
-	mScalar(_orig.mScalar)
+		mNormal(_orig.mNormal),
+		mScalar(_orig.mScalar)
 	{}
 	
 	template<typename Number>
@@ -45,32 +45,27 @@
 	
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const vector_t<Number>& _vector, const Number& _off) :
-	mNormal(_vector),
-	mScalar(_off)
+		mNormal(_vector),
+		mScalar(_off)
 	{}
 
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const carl::Constraint<polynomial_t<Number>>& _constraint) {
 		assert(_constraint.lhs().isLinear());
 		carl::Variables vars = _constraint.variables();
-		vector_t<Number> tmp(vars.size());
+		vector_t<Number> tmp = vector_t<Number>::Zero(vars.size());
 		for(auto variable : vars) {
 			assert(hypro::VariablePool::getInstance().hasDimension(variable));
 			tmp(hypro::VariablePool::getInstance().dimension(variable)) = _constraint.coefficient(variable, 1);
 		}
+		mScalar = -_constraint.constantPart();
 		switch(_constraint.relation()) {
-			case carl::Relation::LESS:
-			case carl::Relation::LEQ: {
-				mScalar = -_constraint.constantPart();
-				break;}
 			case carl::Relation::GREATER:
 			case carl::Relation::GEQ: {
-				mScalar = -_constraint.constantPart();
 				tmp = -1*tmp;
 				break;}
 			default:
-				assert(false);
-				// Todo: create exception?
+				break;
 		}
 		mNormal = tmp;
 	}
@@ -163,8 +158,8 @@
 	}
 
 	template<typename Number>
-	Hyperplane<Number> Hyperplane<Number>::linearTransformation(const matrix_t<Number>& A) const {
-		return Hyperplane<Number>(A*mNormal, mScalar);
+	Hyperplane<Number> Hyperplane<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
+		return Hyperplane<Number>(A*mNormal + b, mScalar);
 	}
 
 	template<typename Number>
@@ -185,6 +180,13 @@
 		vector_t<Number> b = vector_t<Number>(3);
 		b << mScalar,_rhs.offset(),Number(1);
 
+
+		std::cout << mNormal << std::endl;
+		std::cout << _rhs.normal() << std::endl;
+		std::cout << _rhs.normal().transpose() << std::endl;
+		std::cout << vector_t<Number>::Ones(A.cols()).transpose() << std::endl;
+		std::cout << A << std::endl;
+		std::cout << b << std::endl;
 		vector_t<Number> result = A.colPivHouseholderQr().solve(b);
 
 		return result;

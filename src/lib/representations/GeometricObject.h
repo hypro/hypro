@@ -28,7 +28,7 @@ namespace hypro
 		 * @param result The resulting stateset.
 		 * @return True if the operation has been successfully applied.
 		 */
-        GeometricObject<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>());
+        GeometricObject<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b);
 		
 		/**
 		 * Applies the Minkowskisum of the given stateset and a second stateset.

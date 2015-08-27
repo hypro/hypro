@@ -138,7 +138,7 @@ namespace hypro
 			PolytopeSupportFunction<Number>* polytope() const;
 			BallSupportFunction<Number>* ball() const;
 		
-			std::shared_ptr<SupportFunction<Number>> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b = vector_t<Number>()) const;
+			std::shared_ptr<SupportFunction<Number>> linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b) const;
 			std::shared_ptr<SupportFunction<Number>> minkowskiSum(std::shared_ptr<SupportFunction<Number>> _rhs) const;
 			std::shared_ptr<SupportFunction<Number>> intersect(std::shared_ptr<SupportFunction<Number>> _rhs) const;
 			bool contains(const Point<Number>& _point) const;

@@ -56,7 +56,7 @@ namespace hypro {
 		bool intersection(Number& _result, const vector_t<Number>& _vector) const;
 		bool intersection(Number& _result, const Point<Number>& _vector) const;
 
-		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A) const;
+		Hyperplane<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 		HPolytope<Number> intersection(const Hyperplane<Number>& _rhs) const;
 		vector_t<Number> intersectionVector(const Hyperplane<Number>& _rhs) const;
 

@@ -32,7 +32,7 @@ protected:
 
 TYPED_TEST(HyperplaneTest, Constructor)
 {
-	Hyperplane<TypeParam> empty = Hyperplane<TypeParam>();
+	//Hyperplane<TypeParam> empty = Hyperplane<TypeParam>();
 	Point<TypeParam> vec = Point<TypeParam>({2,4});
 	Hyperplane<TypeParam> normals = Hyperplane<TypeParam>(vec, TypeParam(3));
 	Hyperplane<TypeParam> initializer = Hyperplane<TypeParam>({TypeParam(2), TypeParam(4)}, TypeParam(3));
@@ -97,15 +97,15 @@ TYPED_TEST(HyperplaneTest, Intersection)
 	vector_t<TypeParam> normal2(4);
 	normal2(0) = 2;
 	normal2(1) = 1;	
-	normal1(2) = 3;
-	normal1(3) = 4;
+	normal2(2) = 3;
+	normal2(3) = 4;
 	Hyperplane<TypeParam> hp2 = Hyperplane<TypeParam>(normal2, TypeParam(4));	
 
 	HPolytope<TypeParam> res = hp1.intersection(hp2);
-	std::cout << res << std::endl;
+	//std::cout << res << std::endl;
 
-	std::cout << "Intersection Vector calculation result: " << std::endl;
-	std::cout << hp1.intersectionVector(hp2);
+	//std::cout << "Intersection Vector calculation result: " << std::endl;
+	hp1.intersectionVector(hp2);
 }
 
 TYPED_TEST(HyperplaneTest, LinearTransformation)

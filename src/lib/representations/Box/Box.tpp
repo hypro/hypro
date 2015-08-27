@@ -157,15 +157,10 @@ Box<Number> Box<Number>::linearTransformation(const matrix_t<Number>& A, const v
 {
 	std::vector<Point<Number>> corners = this->vertices();
 	std::set<Point<Number>> transformedCorners;
-	if(b != vector_t<Number>()) {
-		for(auto& point : corners) {
-			transformedCorners.insert(Point<Number>(A*point.rawCoordinates() + b));
-		}
-	} else {
-		for(auto& point : corners) {
-			transformedCorners.insert(Point<Number>(A*point.rawCoordinates()));
-		}
+	for(auto& point : corners) {
+		transformedCorners.insert(Point<Number>(A*point.rawCoordinates() + b));
 	}
+	
 	return Box<Number>(transformedCorners);
 }
 

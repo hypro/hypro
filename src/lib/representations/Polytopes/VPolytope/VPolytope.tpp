@@ -102,13 +102,13 @@ namespace hypro
 	}
 	
 	template<typename Number>
-	VPolytope<Number> VPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const
+	VPolytope<Number> VPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
 	{
 		VPolytope<Number> result;
 		for(const auto& vertex : mPoints) {
-			result.insert(vertex.linearTransformation(A));
+			result.insert(vertex.linearTransformation(A,b));
 		}
-		result.setCone(mCone.linearTransformation(A));
+		result.setCone(mCone.linearTransformation(A,b));
 		return result;
 	}
 	

@@ -53,6 +53,7 @@ namespace hypro
 		OrthogonalPolyhedron(const std::set<Vertex<Number> >& points);
 		OrthogonalPolyhedron(const std::vector<Vertex<Number> >& points);
 		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy);
+		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>&& move);
 		
 		/***********************************************************************
 		 * Getter, Setter
@@ -82,7 +83,7 @@ namespace hypro
 		 * Geometric Object functions
 		 ***********************************************************************/
 		unsigned int dimension() const;
-		OrthogonalPolyhedron<Number, Type> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b = vector_t<Number>()) const;
+		OrthogonalPolyhedron<Number, Type> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 		OrthogonalPolyhedron<Number, Type> minkowskiSum(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		OrthogonalPolyhedron<Number, Type> intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const;
 		OrthogonalPolyhedron<Number, Type> hull() const;

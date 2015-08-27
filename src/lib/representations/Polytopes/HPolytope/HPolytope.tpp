@@ -3,13 +3,16 @@ namespace hypro
 {
 	template<typename Number>
 	HPolytope<Number>::HPolytope() :
+	mHPlanes(),
 	mFanSet(false),
+	mFan(),
 	mDimension(0),
 	mInitialized(false)
 	{}
 	
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const HPolytope& orig) :
+	mHPlanes(),
 	mFanSet(orig.mFanSet),
 	mFan(orig.mFan),
 	mDimension(orig.mDimension),
@@ -21,55 +24,66 @@ namespace hypro
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const Hyperplane<Number>& plane) {
-		mHPlanes.push_back(plane);
-		mFanSet = false;
-		mDimension = plane.dimension();
-		mInitialized = false;
-	}
+	HPolytope<Number>::HPolytope(const Hyperplane<Number>& plane) :
+		mHPlanes({plane}),
+		mFanSet(false),
+		mFan(),
+		mDimension(plane.dimension()),
+		mInitialized(false)
+	{}
 
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const HyperplaneVector& planes) {
-		mDimension = planes.begin()->dimension();
-		for(const auto& plane : planes) {
-			mHPlanes.push_back(plane);
+	HPolytope<Number>::HPolytope(const HyperplaneVector& planes) :
+		mHPlanes(),
+		mFanSet(false),
+		mFan(),
+		mDimension(0),
+		mInitialized(false)
+	{
+		if(!planes.empty()) {
+			mDimension = planes.begin()->dimension();
+			for(const auto& plane : planes) {
+				mHPlanes.push_back(plane);
+			}
 		}
-		mFanSet = false;
-		mInitialized = false;
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(unsigned dimension) :
+	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) :
 		mHPlanes(),
 		mFanSet(false),
-		mDimension(0),
+		mFan(),
+		mDimension(A.cols()),
 		mInitialized(false)
-	 {}
-	
-	template<typename Number>
-	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) {
+	{
 		assert(A.rows() == b.rows());
-		mDimension = A.cols();
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
 		}
-		mInitialized = false;
-		mFanSet = false;
 	}
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const matrix_t<Number>& A) {
-		mDimension = A.cols();
+	HPolytope<Number>::HPolytope(const matrix_t<Number>& A) :
+		mHPlanes(),
+		mFanSet(false),
+		mFan(),
+		mDimension(A.cols()),
+		mInitialized(false)
+	{
 		for(unsigned i = 0; i < A.rows(); ++i) {
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
 		}
-		mInitialized = false;
-		mFanSet = false;
 	}
 	
 	
 	template<typename Number>
-	HPolytope<Number>::HPolytope(const VPolytope<Number>& alien) {
+	HPolytope<Number>::HPolytope(const VPolytope<Number>& alien) :
+		mHPlanes(),
+		mFanSet(false),
+		mFan(),
+		mDimension(0),
+		mInitialized(false)
+	{
 		assert(alien.size() > 2);
 		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
 		mDimension = points.begin()->dimension();
@@ -78,8 +92,6 @@ namespace hypro
 			mHPlanes.push_back(facet->hyperplane());
 		}
 		facets.clear();
-		mInitialized = false;
-		mFanSet = false;
 	}
 	
 
@@ -432,9 +444,9 @@ namespace hypro
 	 */
 	
 	template<typename Number>
-	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A) const {
+	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		VPolytope<Number> intermediate(this->vertices());
-		intermediate = intermediate.linearTransformation(A);
+		intermediate = intermediate.linearTransformation(A, b);
 		HPolytope<Number> res(intermediate);
 		return res;
 	}

@@ -43,7 +43,6 @@ namespace hypro
 		HPolytope(const HPolytope& orig);
 		HPolytope(const Hyperplane<Number>& plane);
 		HPolytope(const HyperplaneVector& planes);
-		HPolytope(unsigned dimension);
 		HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b);
 		HPolytope(const matrix_t<Number>& A);
 		
@@ -90,7 +89,7 @@ namespace hypro
 		 * General interface
 		 */
 
-		HPolytope linearTransformation(const matrix_t<Number>& A) const;
+		HPolytope linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 		HPolytope minkowskiSum(const HPolytope& rhs) const;
 		HPolytope intersect(const HPolytope& rhs) const;
 		bool contains(const Point<Number>& point) const;

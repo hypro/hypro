@@ -140,7 +140,10 @@ namespace Eigen
 		
 
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
-			//std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
+			std::cout << lhs(dim) << std::endl;
+			std::cout << rhs(dim) << std::endl;
+
+			std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
 			if(!carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS)) {
 				return false;
 			}
