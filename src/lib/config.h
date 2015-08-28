@@ -48,7 +48,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 static const unsigned FLOAT_PRECISION=100;
-static const unsigned TOLLERANCE_ULPS=128;
+static const unsigned TOLLERANCE_ULPS=1024;
 static const unsigned MAX_DIMENSION_LIMIT=128;
 
 // global typedefs
@@ -73,8 +73,8 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 4;
-static const unsigned fReach_TIMEDISCRETIZATION= 1000;
+static const float fReach_TIMEBOUND= 2;
+static const unsigned fReach_TIMEDISCRETIZATION= 200;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 //#define fReach_DEBUG
@@ -140,10 +140,10 @@ namespace Eigen
 		
 
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
-			std::cout << lhs(dim) << std::endl;
-			std::cout << rhs(dim) << std::endl;
+			//std::cout << lhs(dim) << std::endl;
+			//std::cout << rhs(dim) << std::endl;
 
-			std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
+			//std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
 			if(!carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS)) {
 				return false;
 			}

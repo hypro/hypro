@@ -286,8 +286,6 @@ namespace hypro {
 			}
 
 			bool operator==(const Point<Number> & _p2) const{
-				std::cout << mCoordinates << std::endl;
-				std::cout << _p2.rawCoordinates() << std::endl;
 				return (mCoordinates == _p2.rawCoordinates());
 			}
 

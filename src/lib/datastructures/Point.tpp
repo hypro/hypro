@@ -67,31 +67,18 @@ namespace hypro {
 		mCoordinates(_p.rawCoordinates()),
 		mNeighbors(_p.neighbors()),
 		mComposedOf(_p.composedOf())
-	{
-		std::cout << "Point copy: " << _p << " to ";
-		std::cout << *this << std::endl;
-	}
+	{}
 
 	template<typename Number>
 	Point<Number>::Point(Point<Number>&& _p) :
 		mCoordinates(_p.rawCoordinates()),
 		mNeighbors(std::move(_p.neighbors())),
 		mComposedOf(std::move(_p.composedOf()))
-	{
-		std::cout << "Point move" << std::endl;
-	}
+	{}
 
 	template<typename Number>
 	std::vector<Point<Number>> Point<Number>::neighbors() const {
 		return mNeighbors;
-		/*
-		//TODO fix (does this have bad side effects?)
-		std::vector<Point<Number>> res;
-		for (unsigned i =0; i<mNeighbors.size(); ++i) {
-			res.push_back( (mNeighbors.at(i)) );
-		}
-		return res;
-		*/
 	}
 
 	template<typename Number>
@@ -293,10 +280,9 @@ namespace hypro {
 		result.insert(result.begin(), radialCoordinate);
 
 		// compute polar angles
-		Number angle;
 		for(unsigned dimension = 0; dimension < base.dimension()-1; ++dimension)
 		{
-			angle = 0;
+			Number angle(0);
 			for(auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2)
 			{
 				Number square;
@@ -304,14 +290,15 @@ namespace hypro {
 				angle += square;
 			}
 			angle = sqrt(angle);
-			angle = base.mCoordinates(dimension) / angle;
+			angle = (base.mCoordinates(dimension) / angle);
 			angle = acos(angle);
+
 			if(!_radians)
 			{
 				angle /= 2*PI_DN ;
 				angle *= 360;
 			}
-			result.insert(result.end(), angle);
+			result.emplace_back(std::move(angle));
 		}
 		if((base.mCoordinates(base.dimension()-1)) < Number(0))
 		{

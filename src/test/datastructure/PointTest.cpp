@@ -77,7 +77,7 @@ TYPED_TEST(PointTest, Constructor)
     p = Point<TypeParam>(5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
 
-    
+
     p[2] = 5;
     p[3] = 2;
     p[4] = 2;
@@ -90,7 +90,7 @@ TYPED_TEST(PointTest, Constructor)
     EXPECT_EQ(p[1], TypeParam(0));
     EXPECT_EQ(p[0], TypeParam(5));
     	
-    Point<TypeParam> pCopy = Point<TypeParam>(p);
+    Point<TypeParam> pCopy(p);
     EXPECT_EQ(p, pCopy);
     
     Point<TypeParam> empty = this->p1.newEmpty();

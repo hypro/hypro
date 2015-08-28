@@ -10,6 +10,7 @@ set( EXAMPLES
     ################################
     # insert examples in this list #
     ################################
+    example_acos
     example_addition
     example_benchmarks
     example_converter

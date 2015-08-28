@@ -24,11 +24,10 @@
 	{}
 	
 	template<typename Number>
-	Hyperplane<Number>::Hyperplane(const Point<Number>& _vector, const Number& _off)
-	{
-		mNormal = _vector.rawCoordinates();
-		mScalar = _off;
-	}
+	Hyperplane<Number>::Hyperplane(const Point<Number>& _vector, const Number& _off) :
+		mNormal(_vector.rawCoordinates()),
+		mScalar(_off)
+	{}
 	
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off)
@@ -180,13 +179,6 @@
 		vector_t<Number> b = vector_t<Number>(3);
 		b << mScalar,_rhs.offset(),Number(1);
 
-
-		std::cout << mNormal << std::endl;
-		std::cout << _rhs.normal() << std::endl;
-		std::cout << _rhs.normal().transpose() << std::endl;
-		std::cout << vector_t<Number>::Ones(A.cols()).transpose() << std::endl;
-		std::cout << A << std::endl;
-		std::cout << b << std::endl;
 		vector_t<Number> result = A.colPivHouseholderQr().solve(b);
 
 		return result;

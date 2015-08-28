@@ -28,6 +28,11 @@ protected:
       	/*
 		 * Location Setup
 		 */
+
+		loc1 = new Location<Number>();
+    	loc2 = new Location<Number>();
+    	trans = new hypro::Transition<Number>();
+
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
 
@@ -105,13 +110,15 @@ protected:
 
     virtual void TearDown()
     {
-    	//TODO TearDown
+    	delete loc1;
+    	delete loc2;
+    	delete trans;
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-    Location<Number>* loc1 = new Location<Number>();
-    Location<Number>* loc2 = new Location<Number>();
-    hypro::Transition<Number>* trans = new hypro::Transition<Number>();
+    Location<Number>* loc1;
+    Location<Number>* loc2;
+    hypro::Transition<Number>* trans;
     HybridAutomaton<Number, valuation_t<Number>> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...

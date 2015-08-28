@@ -136,7 +136,7 @@ Number Box<Number>::supremum() const {
 template<typename Number>
 std::vector<Point<Number>> Box<Number>::vertices() const {
 	std::vector<Point<Number>> result;
-	unsigned limit = int(pow(mBoundaries.size(),2));
+	unsigned limit = int(pow(2,mBoundaries.size()));
 	
 	for(unsigned bitCount = 0; bitCount < limit ; ++bitCount) {
 		vector_t<Number> coord = vector_t<Number>(dimension());

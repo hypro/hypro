@@ -305,7 +305,7 @@ namespace hypro
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
 			Number res = this->evaluate(planeIt->normal());
 			if(res < planeIt->offset()) {
-				//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+				std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
 				planeIt = mHPlanes.erase(planeIt);
 				mInitialized = false;
 			}
@@ -314,20 +314,20 @@ namespace hypro
 				auto pos = mHPlanes.erase(planeIt);
 				mInitialized = false;
 				Number tmpres = this->evaluate(tmp.normal());
-				//std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
+				std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
 				if( tmpres > tmp.offset()) {
 					planeIt = mHPlanes.insert(pos, tmp);
 					mInitialized = false;
 					++planeIt;
-					//std::cout << "keep "  << tmp << std::endl;
+					std::cout << "keep "  << tmp << std::endl;
 				}
 				else {
-					//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+					std::cout << "erase " << tmp << " which is equal to something." << std::endl;
 					planeIt = pos;
 				}
 			}
 		}
-		//std::cout << __func__ << ": Result: " << *this << std::endl;
+		std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
 	
 	
@@ -380,18 +380,18 @@ namespace hypro
 			initialize();
 		}
 
-		//std::cout << __func__ << ": " << _direction.transpose() << std::endl;
+		std::cout << __func__ << ": " << _direction.transpose() << std::endl;
 
 		assert(_direction.rows() == mDimension);
 
-		//std::cout << "Set target: ";
+		std::cout << "Set target: ";
 		for (unsigned i = 0; i < mDimension; i++)
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(_direction(i)));
-			//std::cout << double(_direction(i)) << ", ";
+			std::cout << double(_direction(i)) << ", ";
 		}
-		//std::cout << std::endl;
+		std::cout << std::endl;
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -402,15 +402,15 @@ namespace hypro
 		switch(glp_get_status(lp))
 		{
 			case GLP_OPT:
-			case GLP_FEAS:
-				 break;
-			case GLP_UNBND:
+			case GLP_FEAS:{
+				 break;}
+			case GLP_UNBND:{
 				 result = INFINITY;
-				 break;
-			default: 
+				 break;}
+			default:
 				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;             
 		}
-		//std::cout << "Result: " << result << std::endl;
+		std::cout << "Result: " << result << std::endl;
 
 		return result;
 	}

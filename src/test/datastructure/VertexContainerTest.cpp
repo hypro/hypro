@@ -21,41 +21,41 @@ template<typename Number>
 class VertexContainerTest : public ::testing::Test
 {
 protected:
-    virtual void SetUp()
-    {
-        pool.clear();
+	virtual void SetUp()
+	{
+		pool.clear();
 		x = pool.newCarlVariable();
 		y = pool.newCarlVariable();
-        // p1
-        typename Point<Number>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(x, Number(2)) );
-        coordinates1.insert( std::make_pair(y, Number(5)) );
-        p1 = Point<Number>(coordinates1);
+		// p1
+		typename Point<Number>::coordinateMap coordinates1;
+		coordinates1.insert( std::make_pair(x, Number(2)) );
+		coordinates1.insert( std::make_pair(y, Number(5)) );
+		p1 = Point<Number>(coordinates1);
 		
-        // p2
-        typename Point<Number>::coordinateMap coordinates2;
-        coordinates2.insert( std::make_pair(x, Number(7)) );
-        coordinates2.insert( std::make_pair(y, Number(8)) );
-        p2 = Point<Number>(coordinates2);
+		// p2
+		typename Point<Number>::coordinateMap coordinates2;
+		coordinates2.insert( std::make_pair(x, Number(7)) );
+		coordinates2.insert( std::make_pair(y, Number(8)) );
+		p2 = Point<Number>(coordinates2);
 		
-        // p3
-        typename Point<Number>::coordinateMap coordinates3;
-        coordinates3.insert( std::make_pair(x, Number(-9)) );
-        coordinates3.insert( std::make_pair(y, Number(13)) );
-        p3 = Point<Number>(coordinates3);
-    }
+		// p3
+		typename Point<Number>::coordinateMap coordinates3;
+		coordinates3.insert( std::make_pair(x, Number(-9)) );
+		coordinates3.insert( std::make_pair(y, Number(13)) );
+		p3 = Point<Number>(coordinates3);
+	}
 	
-    virtual void TearDown()
-    {
-    }
-    
-    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    carl::Variable x;
-    carl::Variable y;
+	virtual void TearDown()
+	{
+	}
 	
-    Point<Number> p1;
-    Point<Number> p2;
-    Point<Number> p3;
+	hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+	carl::Variable x;
+	carl::Variable y;
+	
+	Point<Number> p1;
+	Point<Number> p2;
+	Point<Number> p3;
 };
 
 TYPED_TEST(VertexContainerTest, Constructor)
@@ -67,21 +67,12 @@ TYPED_TEST(VertexContainerTest, Constructor)
 TYPED_TEST(VertexContainerTest, Insertion)
 {
 	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
-	std::cout << (test1.insert(Vertex<TypeParam>(this->p1, true))).second << std::endl;
-        std::cout << test1.size() << std::endl; 
-        std::cout << (test1.insert(Vertex<TypeParam>(this->p2, true))).second << std::endl;
-        std::cout << test1.size() << std::endl; 
-	std::cout << (test1.insert(Vertex<TypeParam>(this->p3, false))).second << std::endl;
-        std::cout << test1.size() << std::endl; 
-        std::cout << test1 << std::endl;
-        
-        std::cout << "ITEM: " << *test1.find(this->p3) << std::endl;
-        
-        std::cout << "Manual comparison: p1 < p3: " << ( Vertex<TypeParam>(this->p1, true) < Vertex<TypeParam>(this->p3, false) ) << ", p1 > p3: " << ( Vertex<TypeParam>(this->p3, false) < Vertex<TypeParam>(this->p1, true) ) << std::endl;
-        std::cout << "Manual comparison: p1 == p3: " << ( Vertex<TypeParam>(this->p1, true) == Vertex<TypeParam>(this->p3, false) ) << std::endl;
-        
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
+		
 	EXPECT_EQ((unsigned) 3, test1.size());
-        EXPECT_EQ((unsigned) 2, test1.dimension());
+	EXPECT_EQ((unsigned) 2, test1.dimension());
 	EXPECT_FALSE(test1.find(this->p1) != test1.end());
 	EXPECT_FALSE(test1.find(this->p2) != test1.end());
 	EXPECT_TRUE(test1.find(this->p3) != test1.end());
@@ -130,7 +121,7 @@ TYPED_TEST(VertexContainerTest, Access)
 	test1.insert(Vertex<TypeParam>(this->p1, true));
 	test1.insert(Vertex<TypeParam>(this->p2, true));
 	test1.insert(Vertex<TypeParam>(this->p3, false));
-        
+		
 	EXPECT_EQ(test1.end(), test1.find(this->p1));
 	EXPECT_EQ(test1.end(), test1.find(this->p2));
 	EXPECT_NE(test1.end(), test1.find(this->p3));
@@ -158,19 +149,19 @@ TYPED_TEST(VertexContainerTest, Access)
 
 TYPED_TEST(VertexContainerTest, OriginIsVertex)
 {
-    VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
-    test1.insert(Vertex<TypeParam>(this->p1, true));
-    test1.insert(Vertex<TypeParam>(this->p2, true));
-    test1.insert(Vertex<TypeParam>(this->p3, false));
-    
-    EXPECT_FALSE(test1.originIsVertex());
-    
-    this->p1[this->x] = 0; this->p1[this->y] = 0;
-    test1.insert(Vertex<TypeParam>(this->p1, true));
-    
-    EXPECT_TRUE(test1.originIsVertex());
-    
-    test1.erase(Vertex<TypeParam>(this->p1, true));
-    test1.insert(Vertex<TypeParam>(this->p1, false));
-    EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
+	
+	EXPECT_FALSE(test1.originIsVertex());
+	
+	this->p1[this->x] = 0; this->p1[this->y] = 0;
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	
+	EXPECT_TRUE(test1.originIsVertex());
+	
+	test1.erase(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p1, false));
+	EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
 }
