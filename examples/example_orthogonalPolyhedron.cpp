@@ -56,20 +56,23 @@ int main(int argc, char** argv) {
 	settings.fill = true;
 	plotter.updateSettings(settings);
 
-	//plotter.addObject(test.preparePlot(0,1), false);
-	//plotter.addObject(test2.preparePlot(0,1), false);
+	//unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
+	unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
 
 	OrthogonalPolyhedron<FLOAT_T<mpfr_t>> united = test.unite(test2);
-	for(const auto& vertex : united.vertices()) {
-		std::cout << vertex << std::endl;
-	}
+	//for(const auto& vertex : united.vertices()) {
+	//	std::cout << vertex << std::endl;
+	//}
 
 	//OrthogonalPolyhedron<FLOAT_T<mpfr_t>> intersection = test.intersect(test2);
 	//for(const auto& vertex : united.vertices()) {
 	//	std::cout << vertex << std::endl;
 	//}
 
-	plotter.addObject(united.preparePlot(0,1), false);
+	unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
+
+	plotter.setObjectColor(unionObject, "#F6A800");
+
 	plotter.plot2d();
 
 	return 0;

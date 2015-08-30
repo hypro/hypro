@@ -98,12 +98,13 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	void OrthogonalPolyhedron<Number, Type>::addVertex(const Vertex<Number>& _vertex){
-
+		mGrid.insert(_vertex);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	void OrthogonalPolyhedron<Number, Type>::addVertices(const std::vector<Vertex<Number>>& _vertices){
-
+		for(const auto& vertex : _vertices)
+			mGrid.insert(vertex);
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -167,7 +168,7 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number,Type> OrthogonalPolyhedron<Number, Type>::iProjection(unsigned i) const {
-
+		// TODO: Required for dimension reduction and more sophisticated containment methods.
 	}
 
 
@@ -253,12 +254,19 @@ namespace hypro
 		return result;
 	}
 
-	/*
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::contains(const Point<Number>& point) const {
-		return containsInduced(mGrid.calculateInduced(point));
+		return mGrid.colorAt(point);
 	}
-	*/
+
+	template<typename Number, ORTHO_TYPE Type>
+	bool OrthogonalPolyhedron<Number, Type>::contains(const OrthogonalPolyhedron<Number,Type>& _other) const {
+		for(const auto& vertex : _other.vertices()) {
+			if(!contains(vertex.point()))
+				return false;
+		}
+		return true;
+	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(const OrthogonalPolyhedron<Number, Type>& rhs) const {

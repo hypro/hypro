@@ -73,8 +73,8 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 2;
-static const unsigned fReach_TIMEDISCRETIZATION= 200;
+static const float fReach_TIMEBOUND= 20;
+static const unsigned fReach_TIMEDISCRETIZATION= 20000;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 //#define fReach_DEBUG
@@ -90,7 +90,7 @@ static const unsigned fReach_DENOMINATOR= 1000000000;
 
 namespace Eigen
 {
-	template<typename Number> 
+	template<typename Number>
 	struct NumTraits<carl::FLOAT_T<Number>>
 	{
 		enum
@@ -99,7 +99,7 @@ namespace Eigen
 			IsInteger = 0,
 			ReadCost = 1,
 			AddCost = 1,
-			MulCost = 1, 
+			MulCost = 1,
 			IsSigned = 1,
 			RequireInitialization = 1
 		};
@@ -117,12 +117,12 @@ namespace Eigen
 		//static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
 		//static inline carl::FLOAT_T<Number> lowest()  { return carl::FLOAT_T<Number>::minVal(); }
 	};
-	
+
 	template<typename Number>
 	bool operator<(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
 		if(lhs.rows() != rhs.rows())
 			return false;
-			
+
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
 			if(lhs(dim) > rhs(dim)) {
 				return false;
@@ -137,7 +137,7 @@ namespace Eigen
 	bool operator==(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
 		if(lhs.rows() != rhs.rows())
 			return false;
-		
+
 
 		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
 			//std::cout << lhs(dim) << std::endl;

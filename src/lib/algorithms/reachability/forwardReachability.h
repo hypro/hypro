@@ -148,7 +148,7 @@ namespace hypro
 
 					//for each time interval perform linear Transformation
 					for (double i=2*timeInterval; i<=fReach_TIMEBOUND; i+=timeInterval) {
-						std::cout << "Time: \t" << i << std::endl;
+						std::cout << "\rTime: \t" << i << std::flush;
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
@@ -173,6 +173,7 @@ namespace hypro
 							break;
 						}
 					}
+                    std::cout << std::endl;
 
 #ifdef fReach_DEBUG
 					std::cout << "--- Loop left ---" << std::endl;
@@ -192,7 +193,7 @@ namespace hypro
     		 */
     		template<typename Number>
 			static bool computePostCondition(const hypro::Transition<Number>& _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
-                    
+
 				//Polytope that is defined by the guard
 				hypro::Polytope<Number> guardPoly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
 
@@ -322,4 +323,3 @@ namespace hypro
 
     };
 }
-

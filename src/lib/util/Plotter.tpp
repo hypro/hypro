@@ -23,48 +23,63 @@ namespace hypro {
 
 		if(!mObjects.empty()) {
 			// set object
-			vector_t<Number> min = mObjects[0][0].rawCoordinates();
-			vector_t<Number> max = mObjects[0][0].rawCoordinates();
+			vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
+			vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
 
 			unsigned objectCount = 1;
-			for(const auto& object : mObjects) {
-				std::cout << "Create object " << objectCount << std::endl;
+			unsigned currId = 0;
+			unsigned tmpId  = 0;
+			unsigned maxObj = mObjects.rbegin()->first;
+			for(auto objectIt = mObjects.rbegin(); objectIt != mObjects.rend(); ++objectIt) {
+				if(currId != objectIt->first) {
+					currId = objectIt->first;
+					tmpId++;
+					std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
+				}
+
 				mOutfile << "\n";
 				mOutfile << "set object "<< objectCount <<" polygon from \\\n";
 
-				for(unsigned pointIndex = 0; pointIndex < object.size(); ++pointIndex) {
-					assert(object[pointIndex].dimension() <= 2); // TODO: Project to 2d
-					if(object[pointIndex].dimension() == 0) {
+				for(unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex) {
+					assert(objectIt->second[pointIndex].dimension() <= 2); // TODO: Project to 2d
+					if(objectIt->second[pointIndex].dimension() == 0) {
 						continue;
 					}
-					mOutfile << "  " << double(object[pointIndex].at(0));
-					
+					mOutfile << "  " << double(objectIt->second[pointIndex].at(0));
+
 					// update min and max
-					min(0) = min(0) < object[pointIndex].at(0) ? min(0) : object[pointIndex].at(0);
-					max(0) = max(0) > object[pointIndex].at(0) ? max(0) : object[pointIndex].at(0);
-					
-					for(unsigned d = 1; d < object[pointIndex].dimension(); ++d) {
-						mOutfile << ", " << double(object[pointIndex].at(d));
+					min(0) = min(0) < objectIt->second[pointIndex].at(0) ? min(0) : objectIt->second[pointIndex].at(0);
+					max(0) = max(0) > objectIt->second[pointIndex].at(0) ? max(0) : objectIt->second[pointIndex].at(0);
+
+					for(unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d) {
+						mOutfile << ", " << double(objectIt->second[pointIndex].at(d));
 						// update min and max
-						min(d) = min(d) < object[pointIndex].at(d) ? min(d) : object[pointIndex].at(d);
-						max(d) = max(d) > object[pointIndex].at(d) ? max(d) : object[pointIndex].at(d);
+						min(d) = min(d) < objectIt->second[pointIndex].at(d) ? min(d) : objectIt->second[pointIndex].at(d);
+						max(d) = max(d) > objectIt->second[pointIndex].at(d) ? max(d) : objectIt->second[pointIndex].at(d);
 					}
 					mOutfile << " to \\\n";
 				}
-				//assert(object[object.size()-1].dimension() <= 2); // TODO: Project to 2d	TODO: REINSERT ASSERTION
-				//std::cout << double(object[0].at(0)) << std::endl;
-				mOutfile << "  " << double(object[0].at(0));
-				for(unsigned d = 1; d < object[0].dimension(); ++d) {
-					mOutfile << ", " << double(object[0].at(d));
+				//assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO: Project to 2d	TODO: REINSERT ASSERTION
+				//std::cout << double(objectIt->0].at(0)) << std::endl;
+				mOutfile << "  " << double(objectIt->second[0].at(0));
+				for(unsigned d = 1; d < objectIt->second[0].dimension(); ++d) {
+					mOutfile << ", " << double(objectIt->second[0].at(d));
 				}
+
+				// color lookup
+				std::string color = mSettings.color;
+				if(mObjectColors.find(objectIt->first) != mObjectColors.end()){
+					color = mObjectColors.at(objectIt->first);
+				}
+
 				if(mSettings.fill)
-					mOutfile << " fs transparent solid 0.7 fc rgb '" << mSettings.color << "'\n";
+					mOutfile << " fs transparent solid 0.7 fc rgb '" << color << "'\n";
 				else
-					mOutfile << " fs empty border lc rgb '" << mSettings.color << "'\n";
+					mOutfile << " fs empty border lc rgb '" << color << "'\n";
 
 				++objectCount;
 			}
-			
+
 			mOutfile << "set size ratio 1\n";
 			mOutfile << "set term post eps\n";
 			mOutfile << "set output \"" << mFilename << ".eps\"";
@@ -78,22 +93,38 @@ namespace hypro {
 			mOutfile << "NaN notitle";
 		}
 		mOutfile.close();
+		std::cout << std::endl << "Plotted to " << mFilename << ".eps" << std::endl;
 	}
 
 	template<typename Number>
-	void Plotter<Number>::addObject(const std::vector<Point<Number>>& _points, bool sorted) {
+	unsigned Plotter<Number>::addObject(const std::vector<Point<Number>>& _points, bool sorted) {
 		if(!sorted){
 			std::vector<Point<Number>> sortedPoints = grahamScan(_points);
-			mObjects.push_back(sortedPoints);
+			mObjects.insert(std::make_pair(mId, sortedPoints));
 		} else {
-			mObjects.push_back(_points);
+			mObjects.insert(std::make_pair(mId, _points));
 		}
+		return mId++;
 	}
 
 	template<typename Number>
-	void Plotter<Number>::addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted) {
-		for(const auto& part : _points)
-			addObject(part,sorted);
+	unsigned Plotter<Number>::addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted) {
+		for(const auto& part : _points){
+			if(!sorted){
+				std::vector<Point<Number>> sortedPoints = grahamScan(part);
+				mObjects.insert(std::make_pair(mId, sortedPoints));
+			} else {
+				mObjects.insert(std::make_pair(mId, part));
+			}
+		}
+		return mId++;
+	}
+
+	template<typename Number>
+	void Plotter<Number>::setObjectColor(unsigned _id, const std::string _color) {
+		if(_color != "" && mObjects.find(_id) != mObjects.end()) {
+			mObjectColors[_id] = _color;
+		}
 	}
 
 	template<typename Number>
@@ -165,7 +196,7 @@ namespace hypro {
 
 			//for(const auto& pair : sortedPoints)
 			//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
-			
+
 			// prepare stack -> initialize with 2 points
 			assert(sortedPoints.size() >= 1);
 			std::stack<Point<Number>> stack;
@@ -175,7 +206,7 @@ namespace hypro {
 			unsigned i = 0;
 			unsigned n = sortedPoints.size();
 
-			// main loop -> check the two topmost elements of the stack and one third, new point 
+			// main loop -> check the two topmost elements of the stack and one third, new point
 			while(i<n) {
 				Point<Number> p1 = stack.top();
 				stack.pop();

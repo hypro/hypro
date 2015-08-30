@@ -245,7 +245,7 @@ namespace hypro
             unsigned fixed = inducedGridPointsIt.first;
             std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
-            // get the position of the first element greater then the coordinate + 1
+            // get the position of the first element greater than the coordinate + 1
             auto pos = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
                     point.coordinate(fixed));
 

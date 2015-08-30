@@ -1,4 +1,4 @@
-/* 
+/*
  * @file   Plotter.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
@@ -28,11 +28,14 @@ namespace hypro {
 	private:
 		std::string mFilename;
 		mutable std::ofstream mOutfile;
-		std::vector<std::vector<Point<Number>>> mObjects;
+		std::multimap<unsigned,std::vector<Point<Number>>> mObjects;
+		std::map<unsigned,std::string> mObjectColors;
 		gnuplotSettings mSettings;
+		unsigned mId;
 
 	protected:
-		Plotter()
+		Plotter() :
+			mId(1)
 		{}
 	public:
 		~Plotter();
@@ -48,8 +51,10 @@ namespace hypro {
 		 */
 		void plot2d() const;
 
-		void addObject(const std::vector<Point<Number>>& _points, bool sorted=false);
-		void addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted=false);
+		unsigned addObject(const std::vector<Point<Number>>& _points, bool sorted=false);
+		unsigned addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted=false);
+
+		void setObjectColor(unsigned _id, const std::string _color);
 
 	private:
 		// auxiliary functions

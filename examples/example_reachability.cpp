@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<mpfr_t> Number;
 	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
-	typedef hypro::HPolytope<Number> Representation;
+	typedef hypro::VPolytope<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
@@ -170,7 +170,7 @@ int main(int argc, char const *argv[])
 	//boxMat(5,1) = 0;
 	//boxMat(5,2) = -1;
 
-	
+
 
 	Representation poly(boxMat,boxVec);
 
@@ -195,6 +195,7 @@ int main(int argc, char const *argv[])
 	plotter.setFilename("out");
 
 	unsigned count = 1;
+	unsigned maxCount = flowpipe.size();
    	for(auto& poly : flowpipe) {
    		//std::cout << "Flowpipe segment to be converted: " << std::endl;
    		//poly.print();
@@ -208,10 +209,12 @@ int main(int argc, char const *argv[])
 	   			//std::cout << point << std::endl;
 	   		}
 	   		plotter.addObject(points);
+			std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
 	   		points.clear();
 	   		++count;
    		}
    	}
+	std::cout << endl;
 
    	plotter.plot2d();
 
