@@ -15,16 +15,16 @@
 #include "../lib/datastructures/Point.h"
 
 namespace hypro {
-	
+
 	struct gnuplotSettings {
 		std::string color = "#18571C"; // default green
 		bool fill = false; // do not fill
 	};
-	
+
 	template<typename Number>
 	class Plotter : public carl::Singleton<Plotter<Number>>
-    {
-        friend carl::Singleton<Plotter<Number>>;
+	{
+		friend carl::Singleton<Plotter<Number>>;
 	private:
 		std::string mFilename;
 		mutable std::ofstream mOutfile;
@@ -33,7 +33,7 @@ namespace hypro {
 
 	protected:
 		Plotter()
-        {}
+		{}
 	public:
 		~Plotter();
 
@@ -41,10 +41,10 @@ namespace hypro {
 		void updateSettings(gnuplotSettings _settings);
 
 		// plotting functions
-		
+
 		/**
 		 * @brief Writes the actual plot to the output file.
-		 * @details 
+		 * @details
 		 */
 		void plot2d() const;
 

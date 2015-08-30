@@ -1,4 +1,4 @@
-/** 
+/**
  * @file    Grid.tpp
  * @author 	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author  Benedikt Seidl
@@ -17,7 +17,7 @@ namespace hypro
 	*	Constructors
 	*/
 
-	template<typename Number>	
+	template<typename Number>
 	Grid<Number>::Grid() {}
 
 	template<typename Number>
@@ -48,6 +48,16 @@ namespace hypro
 	template<typename Number>
 	unsigned Grid<Number>::dimension() const {
 		return mInducedGridPoints.size();
+	}
+
+	template<typename Number>
+	std::vector<carl::Variable> Grid<Number>::variables() const {
+		std::vector<carl::Variable> res;
+		if(mGridMap.empty())
+			return res;
+
+		res = mGridMap.begin()->first.variables();
+		return std::move(res);
 	}
 
 	template<typename Number>
@@ -208,12 +218,12 @@ namespace hypro
         for (unsigned i = 0; i != vertices.begin()->dimension(); ++i) {
             // insert origin as vertex
             v = std::vector<Number>({Number(0)});
-            
+
             // Projection of all points to the axes.
             for (auto& vertex : vertices) {
                 v.push_back(vertex.coordinate(i));
             }
-            
+
             // Sort every dimension, erase duplicate entries.
             std::sort(v.begin(), v.end());
             auto itr = std::unique(v.begin(), v.end());
@@ -226,7 +236,7 @@ namespace hypro
             this->insert(it.rPoint(), it.color());
         }
     }
-    
+
     template<typename Number>
     Point<int> Grid<Number>::calculateInduced(const Point<Number>& point) const
     {
@@ -242,10 +252,10 @@ namespace hypro
             // insert the index of the element one before the element found above
             coordinates[fixed] = pos - 1 - inducedGridPoints.begin();
         }
-        
+
         return Point<int>(coordinates); // return induced point
     }
-    
+
     template<typename Number>
     Point<Number> Grid<Number>::calculateOriginal(const Point<int>& inducedPoint) const
     {
@@ -258,10 +268,10 @@ namespace hypro
             int induced = inducedPoint.at(fixed);
             coordinates[fixed] = inducedGridPoints.at(induced);
         }
-        
+
         return Point<Number> (coordinates); // return original point
     }
-    
+
     template<typename Number>
     vSet<int> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
     {
@@ -273,7 +283,7 @@ namespace hypro
         }
         return induced;
     }
-    
+
     template<typename Number>
     vSet<Number> Grid<Number>::translateToOriginal(const vSet<int>& inducedVertices) const
     {

@@ -1,4 +1,4 @@
-/* 
+/*
  * @file    OrthogonalPolyhedron.h
  * @author  Sebastian Junges
  * @author	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
@@ -39,14 +39,13 @@ namespace hypro
 		Grid<Number> mGrid; // the grid the polyhedron is defined on
 		mutable Box<Number> mBoundaryBox; // the cached boundary box (mutable to allow performance optimization)
 		mutable bool mBoxUpToDate = false;
-		std::vector<carl::Variable> mVariables; // the variables
-		
+
 	public:
-		
+
 		/***********************************************************************
 		 * Constructors
 		 ***********************************************************************/
-		
+
 		OrthogonalPolyhedron();
 		OrthogonalPolyhedron(const Vertex<Number>& _vertex);
 		OrthogonalPolyhedron(const VertexContainer<Number>& vertices);
@@ -54,7 +53,7 @@ namespace hypro
 		OrthogonalPolyhedron(const std::vector<Vertex<Number> >& points);
 		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy);
 		OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>&& move);
-		
+
 		/***********************************************************************
 		 * Getter, Setter
 		 ***********************************************************************/
@@ -90,12 +89,12 @@ namespace hypro
 		bool contains(const Point<Number>& point) const;
 		bool contains(const OrthogonalPolyhedron<Number,Type>& _other) const;
 		OrthogonalPolyhedron<Number, Type> unite(const OrthogonalPolyhedron<Number, Type>& rhs) const;
-		
+
 		/***********************************************************************
 		 * Auxiliary functions
 		 ***********************************************************************/
 		std::vector<std::vector<Point<Number>>> preparePlot(unsigned _xDim=0, unsigned _yDim=1) const;
-		
+
 		/***********************************************************************
 		 * Operators
 		 ***********************************************************************/
@@ -110,7 +109,7 @@ namespace hypro
 		friend bool operator!=(const OrthogonalPolyhedron<Number, Type>& op1, const OrthogonalPolyhedron<Number, Type>& op2) {
 			return op1.mGrid != op2.mGrid;
 		}
-		
+
 		friend std::ostream& operator<<(std::ostream& ostr, const OrthogonalPolyhedron<Number, Type>& p) {
 			ostr << "(";
 			for(const auto& vertex : p.mGrid.vertices())
@@ -121,10 +120,9 @@ namespace hypro
 
 	private:
 		void updateBoundaryBox() const;
-		
+
 	};
-	
+
 }//namespace
 
 #include "OrthogonalPolyhedron.tpp"
-

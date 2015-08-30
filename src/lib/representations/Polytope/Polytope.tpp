@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   Polytope.tpp
  * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since       2014-03-20
  * @version     2015-01-21
  */
@@ -44,7 +44,7 @@ namespace hypro
         mPoints.push_back(_point);
         mPointsUpToDate = true;
     }
-    
+
     template<typename Number>
     Polytope<Number>::Polytope(const typename std::vector<Point<Number>>& points)
     {
@@ -58,7 +58,7 @@ namespace hypro
         }
         mPointsUpToDate = true;
     }
-    
+
     template<typename Number>
     Polytope<Number>::Polytope(const typename std::vector<vector_t<Number>>& points)
     {
@@ -71,7 +71,7 @@ namespace hypro
         }
         mPointsUpToDate = true;
     }
-    
+
     template<typename Number>
     Polytope<Number>::Polytope(const matrix_t<Number>& A, const vector_t<Number>& b)
     {
@@ -94,14 +94,14 @@ namespace hypro
             //polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
-            
+
             //std::cout << "Add Polynom." << std::endl;
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);
         }
         mPointsUpToDate = false;
     }
-    
+
     template<typename Number>
     Polytope<Number>::Polytope(const matrix_t<Number>& A)
     {
@@ -117,26 +117,26 @@ namespace hypro
             }
             Parma_Polyhedra_Library::Constraint constraint;
             constraint = polynom <= 0;
-            
+
             mPolyhedron.add_constraint(constraint);
             //mPolyhedron.add_generator(gen);
         }
         mPointsUpToDate = false;
     }
-    
+
     template<typename Number>
     Polytope<Number>::Polytope(const C_Polyhedron& _rawPoly) :
     mPolyhedron(_rawPoly),
     mPoints(),
     mPointsUpToDate(false)
     {}
-    
+
     template<typename Number>
     bool Polytope<Number>::isEmpty() const
     {
         return mPolyhedron.is_empty();
     }
-    
+
     template<typename Number>
     void Polytope<Number>::addPoint(const Point<Number>& point)
     {
@@ -147,7 +147,7 @@ namespace hypro
         mPolyhedron.add_generator(tmp);
         mPoints.push_back(point);
     }
-    
+
     template<typename Number>
     void Polytope<Number>::updatePoints() const
     {
@@ -219,16 +219,16 @@ namespace hypro
     void Polytope<Number>::setFan(const polytope::Fan<Number>& _fan){
     	mFan = _fan;
     }
-	
+
 	template<typename Number>
     void Polytope<Number>::calculateFan(){
     	std::vector<Facet<Number>> facets = convexHull(mPoints);
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-				preresult.insert(facets[i].vertices().at(j));							
-			}				
-		} 
+				preresult.insert(facets[i].vertices().at(j));
+			}
+		}
 		polytope::Fan<Number> fan;
 		for(auto& point : preresult) {
 			polytope::Cone<Number>* cone = new polytope::Cone<Number>();
@@ -236,17 +236,17 @@ namespace hypro
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
 					if(point == facets[i].vertices().at(j))	{
 					std::vector<Ridge<Number>> ridges = getRidges(facets[i]);
-						for(unsigned m = 0; m<ridges.size(); m++) { 
-							if(checkInsideRidge(ridges[m], point)) {						
+						for(unsigned m = 0; m<ridges.size(); m++) {
+							if(checkInsideRidge(ridges[m], point)) {
 								std::vector<Facet<Number>> conefacets = shareRidge(facets, ridges[m]);
-						
+
 								matrix_t<Number> matrix = matrix_t<Number>(conefacets.size(),point.size());
 								for(unsigned k = 1; k < conefacets.size(); k++) {
 									for(unsigned l = 0; l < conefacets[k].getNormal().size(); l++) {
 										matrix(k,l) = conefacets[k].getNormal()(l);
 									}
 								}
-						
+
 								for(unsigned j = 0; j < point.size(); j++) {
 									matrix(0,j) = 1;
 									if(matrix.fullPivLu().rank()==point.size()){
@@ -258,19 +258,19 @@ namespace hypro
 								vector_t<Number> b = vector_t<Number>::Zero(conefacets.size());
 								b(0) = 1;
 								vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
-							
+
 								cone->add(std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));
-								//cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));	
-							}	
-						}	
-					}					
-				}			
+								//cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));
+							}
+						}
+					}
+				}
 			}
-		fan.add(cone);	
+		fan.add(cone);
 		}
 	mFan = fan;
 	}
-	
+
     template<typename Number>
     void Polytope<Number>::print() const
     {
@@ -281,7 +281,7 @@ namespace hypro
         }
         std::cout << "]" << std::endl;
     }
-    
+
     template<typename Number>
     void Polytope<Number>::writeToFile(std::string _filename) const
     {
@@ -292,7 +292,7 @@ namespace hypro
         outputFile.close();
         */
     }
-    
+
     template<typename Number>
     const C_Polyhedron& Polytope<Number>::rawPolyhedron() const
     {
@@ -310,27 +310,27 @@ namespace hypro
     {
         return hypro::polytope::pplDimension(mPolyhedron);
     }
-    
+
     template<typename Number>
     Polytope<Number> Polytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b)
     {
         using namespace Parma_Polyhedra_Library;
         Polytope<Number> result;
-        
+
         std::vector<Parma_Polyhedra_Library::Variable> variables;
         for(unsigned i = 0; i < A.rows(); ++i)
             variables.push_back(VariablePool::getInstance().pplVarByIndex(i));
-        
+
         const Generator_System generators = this->mPolyhedron.generators();
-        
+
         // Create Eigen::Matrix from Polytope
         Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix(variables.size(), polytope::gsSize(generators));
         unsigned gCount = 0;
-        
+
         Number coefficient;
         Number divisor;
         Number value;
-        
+
         for(Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end(); ++generatorIt)
         {
             unsigned vCount = 0;
@@ -340,20 +340,20 @@ namespace hypro
             {
                 coefficient = (int)raw_value(generatorIt->coefficient(var)).get_si();
                 value = coefficient/divisor;
-                
+
                 polytopeMatrix(vCount, gCount) = value;
                 ++vCount;
             }
             ++gCount;
         }
-        
-        //std::cout << __func__ << ": PolytopeMatrix: " << std::endl << polytopeMatrix << std::endl; 
-        
+
+        //std::cout << __func__ << ": PolytopeMatrix: " << std::endl << polytopeMatrix << std::endl;
+
         // apply lineartransformation
         Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> res(variables.size(), polytope::gsSize(generators));
-        
+
         //std::cout << __func__ << ": ARows: " << A.rows() << ", ACols: " << A.cols() << ", polyRows: " << polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ", bRows: " << b.rows() << ", bCols: " << b.cols() << std::endl;
-        
+
         //std::cout << __func__ << ": b:" << std::endl << b << std::endl;
         if(b.rows() != 0)
         {
@@ -370,11 +370,11 @@ namespace hypro
         {
             res = (A*polytopeMatrix);
         }
-            
+
         //std::cout << "[EIGEN] linear transformation result: " << std::endl;
         //std::cout << res << std::endl;
-        
-        
+
+
         // clear actual generators and add new ones
         std::vector<vector_t<Number>> ps;
         for(unsigned i = 0; i < res.cols(); ++i)
@@ -386,10 +386,10 @@ namespace hypro
             ps.push_back(t);
         }
         C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron(res.rows(), Parma_Polyhedra_Library::EMPTY);
-        
+
         std::vector<Point<Number>> newPoints;
         std::vector<Point<Number>> tmpPoints;
-        
+
         for(auto& pointSetIt : ps)
         {
             tmp.add_generator(polytope::pointToGenerator(pointSetIt));
@@ -398,7 +398,7 @@ namespace hypro
             tmpPoints.push_back(tmpPoint);  // for mNeighbors for each point
         }
         result.mPolyhedron = tmp;
-        
+
         // update neighbor relations
         for(unsigned pointIndex = 0; pointIndex < mPoints.size(); ++pointIndex)
         {
@@ -416,12 +416,12 @@ namespace hypro
                 }
             }
         }
-        
+
         result.setPointsUpToDate(false);
 
         return result;
     }
-    
+
     template<typename Number>
     Polytope<Number> Polytope<Number>::minkowskiSum(const Polytope<Number>& rhs)
     {
@@ -430,31 +430,31 @@ namespace hypro
         typedef Point<Number> point;
         // initialize algorithm
         point::pointSet resultSet;
-        
+
         // initialize sink node
         point sink = *this->points().begin() + *rhs.points().begin();
         point current = sink;
-        
+
         // determine deltaK
         int deltaK = 0; // TODO
-        
+
         std::pair<int, int> neighborCounter = std::make_pair(1,0);
         std::pair<int, int> maxCounter = std::make_pair(2, deltaK);
-        
+
         do
         {
-            while( neighborCounter < maxCounter ) 
+            while( neighborCounter < maxCounter )
         } while ( current != sink || neighborCounter != (2, deltaK));
         */
-        
+
         //TODO remove
         //std::cout.setstate(std::ios::failbit);
-        
+
         // unelegant version creating the powerset of all points and reducing it afterwards
         //std::cout << "Result before: " << std::endl;
         result = Parma_Polyhedra_Library::C_Polyhedron(0,EMPTY);
         //result.print();
-        
+
         assert(this->dimension() == rhs.dimension());
 
         for( auto& genA : mPolyhedron.generators() )
@@ -464,14 +464,14 @@ namespace hypro
             {
                 //std::cout << __func__ << " Generator: " << genB << std::endl;
                 Point<Number> tmpB = polytope::generatorToPoint<Number>(genB, polytope::variables(rhs.rawPolyhedron()));
-                
+
                 //std::cout << __func__ << " Point: " << tmpB << std::endl;
-                
+
                 //std::cout << "Points in Hausdorff Poly: " << tmpB << std::endl;
                 //std::cout << "tmpA: " << tmpA << std::endl;
 
                 Point<Number> res = tmpA.extAdd(tmpB);
-                
+
                 //std::cout << "Add point: " << res << std::endl;
                 result.addPoint(res);
                 //std::cout << "Intermediate result:" << std::endl;
@@ -489,7 +489,7 @@ namespace hypro
         //std::cout.clear();
         return result;
     }
-    
+
     /**
      * @author: Chris K.
      * Minkowski Sum computation based on Fukuda
@@ -683,7 +683,7 @@ namespace hypro
 
         	return result; }
     }
-    
+
     template<typename Number>
     Polytope<Number> Polytope<Number>::hull()
     {
@@ -691,12 +691,12 @@ namespace hypro
         //Polytope<Number> result = Polytope<Number>(C_Polyhedron(gs));
 
     	if(!mPointsUpToDate) {
-    		std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     		updatePoints();
     	}
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(mPoints);
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	std::set<Point<Number>> preresult;
 
     	for(unsigned i = 0; i<hull.size(); i++) {
@@ -704,7 +704,7 @@ namespace hypro
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
 
 
-    			 	typename std::set<Point<Number>>::iterator it = preresult.insert(hull[i]->rVertices().at(j)).first;
+    			 	preresult.insert(hull[i]->rVertices().at(j));
 
     			 	//it->joinNeighbors(hull[i]->rVertices().at(j).neighbors());
 
@@ -719,32 +719,32 @@ namespace hypro
     			*/
     		}
     	}
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	std::vector<Point<Number>> points;
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	for(auto& point : preresult) {
     		points.push_back(point);
     	}
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	Polytope<Number> result = Polytope<Number>(points);
-    	std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+    	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	mPointsUpToDate = false;
 
         return result;
     }
-    
+
     template<typename Number>
     bool Polytope<Number>::contains(const Point<Number>& point)
     {
         return mPolyhedron.contains(Polytope<Number>(point).rawPolyhedron());
     }
-    
+
     template<typename Number>
     bool Polytope<Number>::contains(const Polytope<Number>& poly)
     {
         return mPolyhedron.contains(poly.rawPolyhedron());
     }
-    
+
     template<typename Number>
     Polytope<Number> Polytope<Number>::unite(const Polytope<Number>& rhs)
     {
@@ -805,7 +805,7 @@ namespace hypro
     	return result; }
 //    	return this->hull();
     }
-    
+
     template<typename Number>
     Number Polytope<Number>::supremum () const {
     	Number max = 0;
@@ -819,25 +819,25 @@ namespace hypro
 
     /*
     template<typename Number>
-    Polytope<Number>& Polytope<Number>::operator= (const Polytope<Number>& rhs) 
-    { 
+    Polytope<Number>& Polytope<Number>::operator= (const Polytope<Number>& rhs)
+    {
       if (this != &rhs)
-      { 
+      {
         Polytope<Number> tmp(rhs);
         std::swap(*this, tmp);
-      } 
+      }
       return *this;
     }
     */
-    
+
     template<typename Number>
-    bool operator== (const Polytope<Number>& rhs, const Polytope<Number>& lhs) 
-    { 
+    bool operator== (const Polytope<Number>& rhs, const Polytope<Number>& lhs)
+    {
         return (rhs.rawPolyhedron() == lhs.rawPolyhedron());
     }
     template<typename Number>
-    bool operator!= (const Polytope<Number>& rhs, const Polytope<Number>& lhs) 
-    { 
+    bool operator!= (const Polytope<Number>& rhs, const Polytope<Number>& lhs)
+    {
         return (rhs.rawPolyhedron() != lhs.rawPolyhedron());
     }
 

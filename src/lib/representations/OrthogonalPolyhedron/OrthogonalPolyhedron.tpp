@@ -16,8 +16,7 @@ namespace hypro
 		//mVertices(),
 		mGrid(),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables()
+		mBoxUpToDate(false)
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -25,8 +24,7 @@ namespace hypro
 		//mVertices(_vertex),
 		mGrid(),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables()
+		mBoxUpToDate(false)
 	{
 		if(_vertex.color())
 			mGrid.insert(_vertex.point(), _vertex.color());
@@ -37,8 +35,7 @@ namespace hypro
 		//mVertices(_vertices),
 		mGrid(_vertices.vertices()),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables()
+		mBoxUpToDate(false)
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -46,17 +43,14 @@ namespace hypro
 		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables()
+		mBoxUpToDate(false)
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::vector<Vertex<Number>>& _vertices) :
-		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables()
+		mBoxUpToDate(false)
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -64,16 +58,14 @@ namespace hypro
 		//mVertices(copy.vertices()),
 		mGrid(copy.vertices()),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables(copy.variables())
+		mBoxUpToDate(false)
 	{}
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>&& move) :
-		mGrid(std::move(move.vertices())),
+		mGrid(std::move(move.mGrid)),
 		mBoundaryBox(),
-		mBoxUpToDate(false),
-		mVariables(std::move(move.variables()))
+		mBoxUpToDate(false)
 	{}
 
 	/**********************************
@@ -85,7 +77,7 @@ namespace hypro
 	 */
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<carl::Variable> OrthogonalPolyhedron<Number, Type>::variables() const {
-		return mVariables;
+		return mGrid.variables();
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -216,21 +208,21 @@ namespace hypro
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const {
 		std::vector<Vertex<Number>> vertices;
-		vertices.resize(this->size() + rhs.size());
 
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
 
 		for(const auto& vertex1 : v1) {
 			for(const auto& vertex2 : v2) {
+				//std::cout << __func__ << " Compare: " << vertex1 << " and " << vertex2 << std::endl;
 				if(vertex1 == vertex2) {
+					//std::cout << "Point in intersection: " << vertex1 << std::endl;
 					vertices.emplace_back(std::move(vertex1));
 					break;
 				}
 			}
 		}
-
-		return std::move(OrthogonalPolyhedron<Number, Type>(std::move(vertices)));
+		return (OrthogonalPolyhedron<Number, Type>(std::move(vertices)));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -245,7 +237,7 @@ namespace hypro
 
 		for (int vertexNr = 0; vertexNr < nrofVertices; vertexNr++) {
 			int i = 0;
-			for (auto variableIt : mVariables) {
+			for (auto variableIt : mGrid.variables()) {
 				// look if the bit of the current dimension is set
 				if ((vertexNr >> i++) & 1) {
 					vertex[variableIt] = mBoundaryBox.interval(variableIt).upper();

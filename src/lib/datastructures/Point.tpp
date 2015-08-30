@@ -1,7 +1,7 @@
 namespace hypro {
 
 	template<typename Number>
-	Point<Number>::Point() : 
+	Point<Number>::Point() :
 		mCoordinates(vector_t<Number>::Zero(0)),
 		mNeighbors(),
 		mComposedOf()
@@ -45,7 +45,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number>::Point(const coordinateMap& _coordinates) : 
+	Point<Number>::Point(const coordinateMap& _coordinates) :
 		mNeighbors(),
 		mComposedOf()
 	{
@@ -63,7 +63,7 @@ namespace hypro {
 	{}
 
 	template<typename Number>
-	Point<Number>::Point(const Point<Number>& _p) : 
+	Point<Number>::Point(const Point<Number>& _p) :
 		mCoordinates(_p.rawCoordinates()),
 		mNeighbors(_p.neighbors()),
 		mComposedOf(_p.composedOf())
@@ -259,7 +259,7 @@ namespace hypro {
 
 	template<typename Number>
 	Number Point<Number>::distance(const Point<Number>& _rhs) const {
-			return ( (mCoordinates - _rhs.rawCoordinates()).norm() );
+		return ( (mCoordinates - _rhs.rawCoordinates()).norm() );
 	}
 
 	template<typename Number>
@@ -530,6 +530,7 @@ namespace hypro {
 
 	template<typename Number>
 	Number Point<Number>::at(unsigned _index) const {
+		//std::cout << _index << ", " << mCoordinates.rows() << std::endl;
 		assert(_index < mCoordinates.rows());
 		//std::cout << "----------------------- AT: " << mCoordinates(_index) << std::endl;
 		return mCoordinates(_index);

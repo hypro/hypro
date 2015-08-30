@@ -94,6 +94,7 @@ namespace hypro
 			 */
 			unsigned size() const;
 			unsigned dimension() const;
+			std::vector<carl::Variable> variables() const;
 			std::vector<Vertex<Number>> vertices() const;
 			bool empty() const;
 

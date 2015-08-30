@@ -688,7 +688,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> convexHull(const std::vector<
 			 	// collect horizon ridges
 			 	assert(!facet->neighbors().empty());
 			 	std::vector<Ridge<Number>> ridges = getRidges(facet);
-			 	//std::cout << "Process visible facet " << *facet << std::endl; 
+			 	//std::cout << "Process visible facet " << *facet << std::endl;
 			 	//std::cout << "Current Ridges: " << ridges << std::endl;
 			 	for(unsigned j = 0; j<ridges.size(); j++) {
 			 		// actual check for horizon property

@@ -14,12 +14,12 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	NeighborhoodContainerTest.cpp
 	OrthogonalPolyhedronTest.cpp
 	PolytopeTest.cpp
-	PolytopeSupportFunctionTest.cpp        
+	PolytopeSupportFunctionTest.cpp
 	PolytopeUtilTest.cpp
 	SupportFunctionTest.cpp
 	TaylorModelTest.cpp
 	VPolytopeTest.cpp
-	ZonotopeTest.cpp  
+	ZonotopeTest.cpp
 	)
 
 	add_dependencies(runRepresentationTests googletest)

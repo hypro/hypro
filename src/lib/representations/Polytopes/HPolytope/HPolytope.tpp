@@ -9,7 +9,7 @@ namespace hypro
 	mDimension(0),
 	mInitialized(false)
 	{}
-	
+
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const HPolytope& orig) :
 	mHPlanes(),
@@ -22,7 +22,7 @@ namespace hypro
 			mHPlanes.push_back(plane);
 		}
 	}
-	
+
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const Hyperplane<Number>& plane) :
 		mHPlanes({plane}),
@@ -47,7 +47,7 @@ namespace hypro
 			}
 		}
 	}
-	
+
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const matrix_t<Number>& A, const vector_t<Number>& b) :
 		mHPlanes(),
@@ -61,7 +61,7 @@ namespace hypro
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), b(i)));
 		}
 	}
-	
+
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const matrix_t<Number>& A) :
 		mHPlanes(),
@@ -74,8 +74,8 @@ namespace hypro
 			mHPlanes.push_back(Hyperplane<Number>(A.row(i), Number(0)));
 		}
 	}
-	
-	
+
+
 	template<typename Number>
 	HPolytope<Number>::HPolytope(const VPolytope<Number>& alien) :
 		mHPlanes(),
@@ -93,7 +93,7 @@ namespace hypro
 		}
 		facets.clear();
 	}
-	
+
 
 	template<typename Number>
 	HPolytope<Number>::~HPolytope()
@@ -101,7 +101,7 @@ namespace hypro
 		if(mInitialized)
 			deleteArrays();
 	}
-	
+
 	/*
 	 * Getters and setters
 	 */
@@ -158,8 +158,8 @@ namespace hypro
 				b(1) = mHPlanes.at(planeB).offset();
 
 				vector_t<Number> res = A.colPivHouseholderQr().solve(b);
-				
-				//	Number relative_error = (A*res - b).norm() / b.norm(); 
+
+				//	Number relative_error = (A*res - b).norm() / b.norm();
 
 				// check for infinity
 				bool infty = false;
@@ -204,14 +204,14 @@ namespace hypro
 
 	template<typename Number>
     void HPolytope<Number>::calculateFan() const{
-    
+
     	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(vertices());
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
-				preresult.insert(facets[i]->vertices().at(j));							
-			}			
-		} 
+				preresult.insert(facets[i]->vertices().at(j));
+			}
+		}
 		polytope::Fan<Number> fan;
 		for(auto& point : preresult) {
 			polytope::Cone<Number>* cone = new polytope::Cone<Number>();
@@ -219,20 +219,20 @@ namespace hypro
 				for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
 					if(point == facets[i]->vertices().at(j))	{
 					std::vector<Ridge<Number>> ridges = getRidges(*facets[i]);
-						for(unsigned m = 0; m<ridges.size(); m++) { 
-							if(checkInsideRidge(ridges[m], point)) {						
+						for(unsigned m = 0; m<ridges.size(); m++) {
+							if(checkInsideRidge(ridges[m], point)) {
 								std::vector<Facet<Number>> conefacets = shareRidge(facets, ridges[m]);
-							
+
 								matrix_t<Number> matrix = matrix_t<Number>(conefacets.size(),point.size());
 								for(unsigned k = 1; k < conefacets.size(); k++) {
 									for(unsigned l = 0; l < conefacets[k].getNormal().size(); l++) {
 										matrix(k,l) = conefacets[k].getNormal()(l);
 									}
 								}
-							
+
 								for(unsigned j = 0; j < point.size(); j++) {
 									matrix(0,j) = 1;
-	
+
 									if(matrix.fullPivLu().rank()==point.size()){
 										break;
 									} else {
@@ -242,15 +242,15 @@ namespace hypro
 								vector_t<Number> b = vector_t<Number>::Zero(conefacets.size());
 								b(0) = 1;
 								vector_t<Number> result = matrix.fullPivHouseholderQr().solve(b);
-								
+
 								cone->add(std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));
-								//cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));	
+								//cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result, result.dot(point.rawCoordinates()))));
 							}
-						}	
-					}					
-				}			
+						}
+					}
+				}
 			}
-			fan.add(cone);	
+			fan.add(cone);
 		}
 		mFanSet = true;
 		mFan = fan;
@@ -305,7 +305,7 @@ namespace hypro
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
 			Number res = this->evaluate(planeIt->normal());
 			if(res < planeIt->offset()) {
-				std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+				//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
 				planeIt = mHPlanes.erase(planeIt);
 				mInitialized = false;
 			}
@@ -314,44 +314,44 @@ namespace hypro
 				auto pos = mHPlanes.erase(planeIt);
 				mInitialized = false;
 				Number tmpres = this->evaluate(tmp.normal());
-				std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
+				//std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
 				if( tmpres > tmp.offset()) {
 					planeIt = mHPlanes.insert(pos, tmp);
 					mInitialized = false;
 					++planeIt;
-					std::cout << "keep "  << tmp << std::endl;
+					//std::cout << "keep "  << tmp << std::endl;
 				}
 				else {
-					std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+					//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
 					planeIt = pos;
 				}
 			}
 		}
-		std::cout << __func__ << ": Result: " << *this << std::endl;
+		//std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
-	
-	
+
+
 	template<typename Number>
 	matrix_t<Number> HPolytope<Number>::peter() const{
 		matrix_t<Number> result = matrix_t<Number>(mHPlanes.size(), mHPlanes[0].normal().size());
-		
+
 		for(unsigned i = 0; i<mHPlanes.size(); i++){
 			for(unsigned j = 0; j< mHPlanes[i].normal().size(); j++){
 				result(i,j) = mHPlanes[i].normal()(j);
 			}
-		} 
-		
+		}
+
 		return result;
 	}
 
 	template<typename Number>
 	vector_t<Number> HPolytope<Number>::getConstraintsOffsetVector() const{
 		vector_t<Number> result = vector_t<Number>(mHPlanes.size());
-		
+
 		for(unsigned i = 0; i < mHPlanes.size(); i++){
 			result(i) = mHPlanes[i].offset();
 		}
-		
+
 		return result;
 	}
 
@@ -380,18 +380,18 @@ namespace hypro
 			initialize();
 		}
 
-		std::cout << __func__ << ": " << _direction.transpose() << std::endl;
+		//std::cout << __func__ << ": " << _direction.transpose() << std::endl;
 
 		assert(_direction.rows() == mDimension);
 
-		std::cout << "Set target: ";
+		//std::cout << "Set target: ";
 		for (unsigned i = 0; i < mDimension; i++)
 		{
 			glp_set_col_bnds(lp, i+1, GLP_FR, 0.0, 0.0);
 			glp_set_obj_coef(lp, i+1, double(_direction(i)));
-			std::cout << double(_direction(i)) << ", ";
+			//std::cout << double(_direction(i)) << ", ";
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 		/* solve problem */
 		glp_simplex(lp, NULL);
@@ -408,9 +408,9 @@ namespace hypro
 				 result = INFINITY;
 				 break;}
 			default:
-				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;             
+				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;
 		}
-		std::cout << "Result: " << result << std::endl;
+		//std::cout << "Result: " << result << std::endl;
 
 		return result;
 	}
@@ -438,11 +438,11 @@ namespace hypro
 	{
 		return mHPlanes.end();
 	}
- 
+
 	/*
 	 * General interface
 	 */
-	
+
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		VPolytope<Number> intermediate(this->vertices());
@@ -455,7 +455,7 @@ namespace hypro
 	HPolytope<Number> HPolytope<Number>::minkowskiSum(const HPolytope& rhs) const {
 		HPolytope<Number> res;
 		Number result;
-		
+
 		// evaluation of rhs in directions of lhs
 		for(unsigned i = 0; i < mHPlanes.size(); ++i) {
 			result = mHPlanes.at(i).offset() + rhs.evaluate(mHPlanes.at(i).normal());
@@ -488,7 +488,7 @@ namespace hypro
 				res.insert(plane);
 			}
 			res.reduce();
-			return res; 
+			return res;
 		}
 	}
 
@@ -528,15 +528,15 @@ namespace hypro
 			VPolytope<Number> lhs(this->vertices());
 			VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
 			// Todo: Convert VPolytope to HPolytope
-			
+
 			/*
 			std::cout << "Union vertices lhs: " << std::endl;
-			for(const auto& vertex : this->vertices()) 
+			for(const auto& vertex : this->vertices())
 				std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
 			std::cout << "Union vertices rhs: " << std::endl;
-			for(const auto& vertex : _rhs.vertices()) 
-				std::cout << vertex.rawCoordinates().transpose() << std::endl;			
+			for(const auto& vertex : _rhs.vertices())
+				std::cout << vertex.rawCoordinates().transpose() << std::endl;
 			*/
 
 			/*std::vector<Hyperplane<Number>> hyperplanes;
@@ -546,7 +546,7 @@ namespace hypro
 				}
 				return HPolytope<Number>(hyperplanes); } */
 
-			return HPolytope<Number>(tmpRes); 
+			return HPolytope<Number>(tmpRes);
 		}
 	}
 
@@ -567,13 +567,13 @@ namespace hypro
 	/*
 	 * Operators
 	 */
-	
+
 	template<typename Number>
 	Hyperplane<Number> HPolytope<Number>::operator[](unsigned i) const
 	{
 		return mHPlanes.at(i);
 	}
-	
+
 	template<typename Number>
 	HPolytope<Number>& HPolytope<Number>::operator= (const HPolytope<Number>& rhs)
 	{
@@ -657,12 +657,12 @@ namespace hypro
 			mInitialized = true;
 		}
 	}
-	
+
 	template<typename Number>
 	Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> HPolytope<Number>::getOptimalDictionary(
-		const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A, 
-		unsigned dimension, 
-		std::vector<unsigned>& B, 
+		const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A,
+		unsigned dimension,
+		std::vector<unsigned>& B,
 		std::vector<unsigned>& N) const
 	{
 		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
@@ -672,26 +672,26 @@ namespace hypro
 		const unsigned numRows = mHPlanes.size() - mHPlanes.begin()->dimension();
 		const unsigned numCols = mHPlanes.begin()->dimension() + 1;
 		matrix_t dictionary = matrix_t(numRows, numCols);
-		
+
 		// Assumption: The last d equations of A are linear independent
 		auto bottom = A.bottomRows(dimension);
 		auto top = A.topRows(A.rows()-dimension);
 		auto varBlock = bottom.rightCols(dimension);
 		auto constPart = bottom.leftCols(1);
-		
+
 		matrix_t tmp = matrix_t(varBlock);
 		vector_t b = vector_t(constPart);
-		
+
 		matrix_t a(tmp.rows(), 2*dimension+1);
 		a << tmp, -b, matrix_t::Identity(dimension,dimension);
-		
+
 		//normalize rows for each variable and forward insertion
 		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
 		{
 			a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
 			a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
 		}
-		
+
 		// backward insertion
 		for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
 		{
@@ -701,49 +701,49 @@ namespace hypro
 			}
 			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
 		}
-		
+
 		auto substitutionBlock = a.rightCols(dimension+1);
-		
+
 		for(unsigned rI = 0; rI < top.rows(); ++rI)
 		{
 			dictionary(rI,0) = top(rI,0);
-			
+
 			for(unsigned dI = 1; dI < top.cols(); ++dI)
 			{
 				dictionary.row(rI) = dictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
 			}
 		}
-		
+
 		// Augment dictionary by a row of -1s
 		dictionary.conservativeResize(numRows+1,Eigen::NoChange_t());
-		
+
 		row_t allOnes = matrix_t::Constant(1,numCols, carl::FLOAT_T<Number>(-1));
 		allOnes(0) = carl::FLOAT_T<Number>(0);
 		dictionary.row(numRows) = allOnes;
-		
+
 		//std::cout << "Optimal dictionary: " << dictionary << std::endl;
 		for(unsigned index = 0; index < mHPlanes.size() - dimension; ++index)
 			B.push_back(index);
 		//B.push_back(mHPlanes.size()+1);
-		
+
 		for(unsigned index = 1 ; index < dictionary.cols() ; ++index)
 			N.push_back(index);
-		
+
 		return dictionary;
 	}
-	
+
 	template<typename Number>
 	std::vector<Point<Number> > HPolytope<Number>::vertexEnumeration() const
 	{
 		std::vector<Point<Number> > solution;
-		
+
 		// create Matrix from hPlanes TODO: Recheck with page 299 of the paper
 		const unsigned rows = mHPlanes.size();
 		const unsigned colums = this->dimension()+1;
 		Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic, Eigen::Dynamic> poly = Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>(rows,colums);
 		unsigned rowCount = 0;
 		unsigned columCount = 0;
-		
+
 		for(auto& hplane : mHPlanes)
 		{
 			columCount = 0;
@@ -756,33 +756,23 @@ namespace hypro
 			}
 			++rowCount;
 		}
-		
+
 		// get unique optimal first Dictionary
 		std::vector<unsigned> basis;
 		std::vector<unsigned> coBasis;
 		Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> dictionary = getOptimalDictionary(poly,this->dimension(), basis, coBasis);
-		
-		std::cout << "Optimal dictionary:" << std::endl << dictionary << std::endl;
-		
-		std::cout << "Basis: ";
-		for(auto& val : basis)
-			std::cout << val;
-		std::cout << std::endl;
-		
-		std::cout << "CoBasis: ";
-		for(auto& val : coBasis)
-			std::cout << val;
-		std::cout << std::endl;
-		
+
+		//std::cout << "Optimal dictionary:" << std::endl << dictionary << std::endl;
+
 		// Note: f and g mark the indices, not the enumeration as stored in B and N
 		//unsigned f = dictionary.rows();
 		//unsigned g = 0;
 
 		//unsigned m = mHPlanes.size() - dimension() +1;
 		//unsigned n = mHPlanes.size() +2;
-		
+
 		hpolytope::search(basis, coBasis, dictionary);
-		
+
 		return solution;
 	}
 } // namespace
