@@ -342,6 +342,10 @@ namespace hypro
 			mInducedGridPoints[i] = v;
 		}
 
+		// set color of origin manually (always white)
+		this->insertInduced(Point<unsigned>::zero(mInducedGridPoints.size()), false);
+
+		// set up datastructures for colors of vertices and vertices
 		for (auto it : vertices) {
 			this->insert(it.rPoint(), it.color());
 			mVertices.insert(Vertex<int>(calculateInduced(it.point()),it.color()));
