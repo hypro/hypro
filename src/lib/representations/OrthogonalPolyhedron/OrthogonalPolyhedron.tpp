@@ -13,7 +13,6 @@ namespace hypro
 {
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron() :
-		//mVertices(),
 		mGrid(),
 		mBoundaryBox(),
 		mBoxUpToDate(false)
@@ -21,18 +20,15 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const Vertex<Number>& _vertex) :
-		//mVertices(_vertex),
 		mGrid(),
 		mBoundaryBox(),
 		mBoxUpToDate(false)
 	{
-		if(_vertex.color())
-			mGrid.insert(_vertex.point(), _vertex.color());
+		mGrid.insert(_vertex.point(), _vertex.color());
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const VertexContainer<Number>& _vertices) :
-		//mVertices(_vertices),
 		mGrid(_vertices.vertices()),
 		mBoundaryBox(),
 		mBoxUpToDate(false)
@@ -40,7 +36,6 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const std::set<Vertex<Number>>& _vertices) :
-		//mVertices(_vertices),
 		mGrid(_vertices),
 		mBoundaryBox(),
 		mBoxUpToDate(false)
@@ -55,7 +50,6 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron(const OrthogonalPolyhedron<Number, Type>& copy) :
-		//mVertices(copy.vertices()),
 		mGrid(copy.vertices()),
 		mBoundaryBox(),
 		mBoxUpToDate(false)

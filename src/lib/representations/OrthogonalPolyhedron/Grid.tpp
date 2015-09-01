@@ -21,17 +21,22 @@ namespace hypro
 	Grid<Number>::Grid() {}
 
 	template<typename Number>
-	Grid<Number>::Grid(const vSet<Number>& vertices) {
+	Grid<Number>::Grid(const vSet<Number>& vertices) :
+		mVertices(vertices)
+	{
 		induceGrid(vertices);
 	}
 
 	template<typename Number>
-	Grid<Number>::Grid(const std::vector<Vertex<Number>>& _vertices){
+	Grid<Number>::Grid(const std::vector<Vertex<Number>>& _vertices) :
+		mVertices(vSet<Number>(_vertices.begin(), _vertices.end()))
+	{
 		induceGrid(vSet<Number>(_vertices.begin(), _vertices.end()));
 	}
 
 	template<typename Number>
 	Grid<Number>::Grid(const Grid<Number>& copy) :
+		mVertices(copy.mVertices),
 		mGridMap(copy.mGridMap),
 		mInducedGridPoints(copy.mInducedGridPoints)
 	{}
@@ -76,12 +81,22 @@ namespace hypro
 
 	template<typename Number>
 	bool Grid<Number>::colorAt(const Point<Number>& point) const {
-		return mGridMap.at(calculateInduced(point));
+		Point Number> inducedPoint = calculateInduced(point);
+		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
+		if(mGridMap.find(inducedPoint) != mGridMap.end())
+			return mGridMap.at(inducedPoint);
+
+		return colorAtInduced(inducedPoint);
 	}
 
 	template<typename Number>
 	bool Grid<Number>::colorAtInduced(const Point<int>& inducedPoint) const {
-		return mGridMap.at(inducedPoint);
+		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
+		if(mGridMap.find(inducedPoint) != mGridMap.end())
+			return mGridMap.at(inducedPoint);
+
+		// calculate color recursively
+
 	}
 
 	template<typename Number>
@@ -176,6 +191,16 @@ namespace hypro
 		}
 
 		return std::move(result);
+	}
+
+	template<typename Number>
+	bool Grid<Number>::isVertex(const Point<Number>& _point) const {
+
+	}
+
+	template<typename Number>
+	bool Grid<Number>::isOnIEdge(const Point<Number>& _point, unsigned i) const {
+
 	}
 
 	template<typename Number>

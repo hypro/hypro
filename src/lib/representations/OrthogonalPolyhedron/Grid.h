@@ -67,10 +67,11 @@ namespace hypro
 	class Grid
 	{
 		public:
-			typedef std::map<Point<int>, bool> gridMap;
+			typedef std::map<Point<int>, bool> gridMap;  // store calculated colors
 			typedef std::map<unsigned, std::vector<Number> > gridPoints;
 
 		private:
+			std::set<Vertex<Number>> mVertices;
 			gridMap mGridMap;
 			gridPoints mInducedGridPoints;
 
@@ -112,6 +113,9 @@ namespace hypro
 			std::vector<Point<Number>> iSliceInduced(unsigned i, Number pos) const;
 			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const;
 			std::vector<Point<Number>> neighborhoodInduced(const Point<Number>& _inducedPoint) const;
+
+			bool isVertex(const Point<Number>& _point) const;
+			bool isOnIEdge(const Point<Number>& _point, unsigned i) const;
 
 			/**
 			 * Inserts the value for the point.
