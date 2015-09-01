@@ -189,11 +189,11 @@ TYPED_TEST(GridTest, CalculateOriginal)
 
 TYPED_TEST(GridTest, Translate)
 {
-    vSet<int> induced;
+    vSet<unsigned> induced;
 
-    induced.insert(Vertex<int>({1, 1}, false));
-    induced.insert(Vertex<int>({2, 2}, true));
-    induced.insert(Vertex<int>({3, 3}, true));
+    induced.insert(Vertex<unsigned>({1, 1}, false));
+    induced.insert(Vertex<unsigned>({2, 2}, true));
+    induced.insert(Vertex<unsigned>({3, 3}, true));
     
     EXPECT_EQ(induced, this->grid1.translateToInduced(this->vertices));
     EXPECT_EQ(this->vertices, this->grid1.translateToOriginal(induced));

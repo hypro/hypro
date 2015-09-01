@@ -22,14 +22,14 @@ namespace hypro
 
 	template<typename Number>
 	Grid<Number>::Grid(const vSet<Number>& vertices) :
-		mVertices(vertices)
+		mVertices()
 	{
 		induceGrid(vertices);
 	}
 
 	template<typename Number>
 	Grid<Number>::Grid(const std::vector<Vertex<Number>>& _vertices) :
-		mVertices(vSet<Number>(_vertices.begin(), _vertices.end()))
+		mVertices()
 	{
 		induceGrid(vSet<Number>(_vertices.begin(), _vertices.end()));
 	}
@@ -68,8 +68,12 @@ namespace hypro
 	template<typename Number>
 	std::vector<Vertex<Number>> Grid<Number>::vertices() const {
 		std::vector<Vertex<Number>> res;
-		for(const auto& point : mGridMap) {
-			res.emplace_back(calculateOriginal(point.first), point.second);
+		for(const auto& point : mVertices) {
+			std::cout << "Calculated vertex " << calculateOriginal(point.point()) << " from " << point.point() << std::endl;
+			if(point.point() != Point<int>::zero(point.point().dimension())) { // do not add origin 
+				res.emplace_back(calculateOriginal(point.point()), point.color());
+
+			}
 		}
 		return std::move(res);
 	}
@@ -81,7 +85,7 @@ namespace hypro
 
 	template<typename Number>
 	bool Grid<Number>::colorAt(const Point<Number>& point) const {
-		Point Number> inducedPoint = calculateInduced(point);
+		Point<int> inducedPoint = calculateInduced(point);
 		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
 		if(mGridMap.find(inducedPoint) != mGridMap.end())
 			return mGridMap.at(inducedPoint);
@@ -90,64 +94,109 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool Grid<Number>::colorAtInduced(const Point<int>& inducedPoint) const {
+	bool Grid<Number>::colorAtInduced(const Point<unsigned>& inducedPoint) const {
+		std::cout << __func__ << " " << inducedPoint << std::endl;
 		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
 		if(mGridMap.find(inducedPoint) != mGridMap.end())
 			return mGridMap.at(inducedPoint);
 
-		// calculate color recursively
+		/* calculate color recursively:
+		 * - go through all directions j: There exists j such that for all j-neighbors(x) (except x itself) it holds: 
+		 * 		color(j-pred(jneigh)) == color(j-neigh)
+		 * 		-> color(x) = color(j-pred(j-neigh))
+		 */
 
+		unsigned dim = dimension();
+		bool colorDirection = true;
+		bool color = false;
+		for(unsigned j = 0; j < dim; ++j) {
+			std::cout << "Evaluate "<< inducedPoint <<" in direction " << j << std::endl;
+			colorDirection = true;
+			std::vector<Point<unsigned>> jneighs = iNeighborhoodInduced(inducedPoint,j);
+			for(const auto& p : jneighs) {
+				std::cout << j << "-Neighbor: " << p << std::endl; 
+			}
+			for(const auto& x : jneighs) {
+				if(x != inducedPoint) {
+					std::cout << "Get color at " << x << std::endl;
+					color = colorAtInduced(x);
+					if(colorAtInduced(x) != colorAtInduced(iPredecessorInduced(x,j))) {
+						colorDirection = false;
+						break;
+					}
+				}
+			}
+			if(colorDirection){
+				mGridMap[inducedPoint] = color;
+				break;
+			}
+		}
+		return color;
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> Grid<Number>::iNeighborhoodInduced(const Point<Number>& _inducedPoint, unsigned _dimension) const {
+	std::vector<Point<unsigned>> Grid<Number>::iNeighborhoodInduced(const Point<unsigned>& _inducedPoint, unsigned _dimension) const {
+		std::cout << __func__ << " " << _inducedPoint << " " << _dimension << std::endl;
 		assert(_dimension < mInducedGridPoints.size());
-		std::vector<Point<Number>> result;
+		std::vector<Point<unsigned>> result;
 
 		unsigned d = this->dimension();
-		Point<Number> directPredecessor = std::move(Point<Number>::zero(d));
+		Point<unsigned> directPredecessor(_inducedPoint);
+		std::cout << "Direct predecessor before: " << directPredecessor << std::endl;
 		for(unsigned dim = 0; dim < d; ++dim) {
-			unsigned p = 0;
-			while(mInducedGridPoints.at(dim).at(p) < _inducedPoint.at(dim)) ++p;
-
-			if (p > 0)
-				directPredecessor[dim] = mInducedGridPoints.at(dim).at(p-1);
+			if(_inducedPoint.at(dim) > 0)
+				directPredecessor[dim] = (_inducedPoint.at(dim))-1;
 		}
+		std::cout << "Direct predecessor: " << directPredecessor << std::endl;
 
-		std::vector<std::vector<Number>> possibleCoords;
+		std::vector<std::vector<unsigned>> possibleCoords;
 		for(unsigned j = 0; j < d; ++j) {
 			if(_dimension != j) {
-				possibleCoords.insert(possibleCoords.back(), std::move(std::vector<Number>({directPredecessor.at(j), _inducedPoint.at(j)})));
+				std::vector<unsigned> tmp({directPredecessor.at(j), _inducedPoint.at(j)});
+				possibleCoords.emplace_back(std::move(tmp));
 			} else {
-				possibleCoords.emplace_back(std::move(std::vector<Number>({_inducedPoint.at(j)})));
+				std::vector<unsigned> tmp({_inducedPoint.at(j)});
+				possibleCoords.emplace_back(std::move(tmp));
 			}
 		}
-		pointIt<Number> pIt(possibleCoords);
+		pointIt<unsigned> pIt(possibleCoords);
 
 		while(!pIt.end){
 			result.emplace_back(std::move(++pIt));
 		}
 		return std::move(result);
+	}
+
+	template<typename Number>
+	Point<unsigned> Grid<Number>::iPredecessorInduced(const Point<unsigned>& _point, unsigned _dimension) const {
+		Point<unsigned> res(_point);
+		res[_dimension] = res[_dimension] > 0 ? res[_dimension] - 1 : 0;
+		return std::move(res);
 	}
 
 	template<typename Number>
 	Point<Number> Grid<Number>::iPredecessor(const Point<Number>& _point, unsigned _dimension) const {
-		return std::move(iNeighborInduced(_point,_dimension));
+		return calculateOriginal(iPredecessorInduced(_point,_dimension));
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> Grid<Number>::iSliceInduced(unsigned i, Number pos) const {
-		std::vector<Point<Number>> result;
+	std::vector<Point<unsigned>> Grid<Number>::iSliceInduced(unsigned i, int pos) const {
+		std::vector<Point<unsigned>> result;
 
-		std::vector<std::vector<Number>> tmp;
+		std::vector<std::vector<unsigned>> tmp;
 		for(unsigned j = 0; j < mInducedGridPoints.size(); ++j) {
 			if(i != j) {
-				tmp.emplace_back(mInducedGridPoints.at(j));
+				tmp.emplace_back(std::vector<unsigned>({i}));
 			} else {
-				tmp.emplace_back(std::move(std::vector<Number>({pos})));
+				std::vector<unsigned> positions;
+				positions.resize(mInducedGridPoints.at(j).size());
+				for(unsigned k = 0; k < mInducedGridPoints.at(j).size(); ++k)
+					positions.emplace_back(k);
+
+				tmp.emplace_back(std::move(positions));
 			}
 		}
-		pointIt<Number> pIt(tmp);
+		pointIt<unsigned> pIt(tmp);
 
 		while(!pIt.end){
 			result.emplace_back(std::move(++pIt));
@@ -156,32 +205,47 @@ namespace hypro
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> Grid<Number>::iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const {
-		std::vector<Point<Number>> result;
-		result.emplace_back(iNeighborhoodInduced(_inducedPoint,_dimension));
-		return std::move(result);
+	std::vector<Point<Number>> Grid<Number>::iSlice(unsigned i, Number pos) const {
+		unsigned inducedPos = 0;
+		while (mInducedGridPoints.at(i)[inducedPos] < pos) ++inducedPos;
+
+		if(inducedPos > 0)
+			--inducedPos;
+
+		std::vector<Point<unsigned>> tmp = iSliceInduced(i,inducedPos);
+		std::vector<Point<Number>> res;
+		for(const auto& p : tmp)
+			res.emplace_back(calculateOriginal(p));
+
+		return std::move(res);
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> Grid<Number>::neighborhoodInduced(const Point<Number>& _inducedPoint) const {
-		std::vector<Point<Number>> result;
+	std::vector<Point<Number>> Grid<Number>::iNeighborhood(const Point<Number>& _point, unsigned _dimension) const {
+		std::vector<Point<unsigned>> neighborhood = iNeighborhoodInduced(calculateInduced(_point),_dimension);
+		std::vector<Point<Number>> res;
+		for(const auto& n : neighborhood)
+			res.emplace_back(calculateOriginal(n));
+
+		return std::move(res);
+	}
+
+	template<typename Number>
+	std::vector<Point<unsigned>> Grid<Number>::neighborhoodInduced(const Point<unsigned>& _inducedPoint) const {
+		std::vector<Point<unsigned>> result;
 		unsigned d = this->dimension();
 
 		// calculate direct predecessor point in all dimensions
-		Point<Number> directPredecessor = std::move(Point<Number>::zero(d));
+		Point<unsigned> directPredecessor(_inducedPoint);
 		for(unsigned dim = 0; dim < d; ++dim) {
-			unsigned p = 0;
-			while(mInducedGridPoints.at(dim).at(p) < _inducedPoint.at(dim)) ++p;
-
-			if (p > 0)
-				directPredecessor[dim] = mInducedGridPoints.at(dim).at(p-1);
+			directPredecessor[dim] = _inducedPoint.at(dim) > 0 ? _inducedPoint.at(dim)-1 : 0;
 		}
 
 		// get all 2^d i-neighbors by combination of the point and its direct predecessor
 		for(unsigned i = 0; i < std::pow(2,d); ++i) {
 			std::bitset<MAX_DIMENSION_LIMIT> map(i);
 			unsigned pos = 0;
-			Point<Number> neighbor(directPredecessor);
+			Point<unsigned> neighbor(directPredecessor);
 			while(pos < d) {
 				if(map.test(pos))
 					neighbor[pos] = _inducedPoint.at(pos);
@@ -194,13 +258,34 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool Grid<Number>::isVertex(const Point<Number>& _point) const {
+	std::vector<Point<Number>> Grid<Number>::neighborhood(const Point<Number>& _point) const {
+		std::vector<Point<unsigned>> tmp = neighborhoodInduced(calculateInduced(_point));
+		std::vector<Point<Number>> res;
+		for(const auto& p : tmp)
+			res.emplace_back(calculateOriginal(p));
 
+		return std::move(res);
 	}
 
 	template<typename Number>
-	bool Grid<Number>::isOnIEdge(const Point<Number>& _point, unsigned i) const {
+	bool Grid<Number>::isVertex(const Point<Number>& _point) const {
+		for(const auto& vertex : mVertices) {
+			if(calculateOriginal(vertex.point()) == _point)
+				return true;
+		}
+		return false;
+	}
 
+	template<typename Number>
+	bool Grid<Number>::isOnIFacet(const Point<Number>& _point, unsigned i) const {
+		// either the point is a vertex or there is a color change in its i-neighborhood -> color change is easier to check
+		Point<unsigned> inducedPoint = calculateInduced(_point);
+		std::vector<Point<unsigned>> iNeighborhood = iNeighborhoodInduced(_point,i);
+		for(const auto& x : iNeighborhood){
+			if(colorAtInduced(x) != colorAtInduced(iPredecessorInduced(x,i)))
+				return true;
+		}
+		return false;
 	}
 
 	template<typename Number>
@@ -209,7 +294,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	void Grid<Number>::insertInduced(const Point<int>& inducedPoint, bool color) {
+	void Grid<Number>::insertInduced(const Point<unsigned>& inducedPoint, bool color) {
 		mGridMap.insert(std::make_pair(inducedPoint, color));
 	}
 
@@ -224,7 +309,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	typename Grid<Number>::gridMap::const_iterator Grid<Number>::findInduced(const Point<int>& inducedPoint) const {
+	typename Grid<Number>::gridMap::const_iterator Grid<Number>::findInduced(const Point<unsigned>& inducedPoint) const {
 		return mGridMap.find(inducedPoint);
 	}
 
@@ -233,92 +318,99 @@ namespace hypro
 		return mGridMap.end();
 	}
 
-    template<typename Number>
-    void Grid<Number>::induceGrid(const vSet<Number>& vertices)
-    {
-        clear();
+	template<typename Number>
+	void Grid<Number>::induceGrid(const vSet<Number>& vertices)
+	{
+		clear();
 
-        std::vector<Number> v;
-        v.resize(vertices.size()+1); // we add the origin
-        for (unsigned i = 0; i != vertices.begin()->dimension(); ++i) {
-            // insert origin as vertex
-            v = std::vector<Number>({Number(0)});
+		std::vector<Number> v;
+		v.resize(vertices.size()+1); // we add the origin
+		for (unsigned i = 0; i != vertices.begin()->dimension(); ++i) {
+			// insert origin as vertex
+			v = std::vector<Number>({Number(0)});
 
-            // Projection of all points to the axes.
-            for (auto& vertex : vertices) {
-                v.push_back(vertex.coordinate(i));
-            }
+			// Projection of all points to the axes.
+			for (auto& vertex : vertices) {
+				v.push_back(vertex.coordinate(i));
+			}
 
-            // Sort every dimension, erase duplicate entries.
-            std::sort(v.begin(), v.end());
-            auto itr = std::unique(v.begin(), v.end());
-            v.resize(itr - v.begin());
+			// Sort every dimension, erase duplicate entries.
+			std::sort(v.begin(), v.end());
+			auto itr = std::unique(v.begin(), v.end());
+			v.resize(itr - v.begin());
 
-            mInducedGridPoints[i] = v;
-        }
+			mInducedGridPoints[i] = v;
+		}
 
-        for (auto it : vertices) {
-            this->insert(it.rPoint(), it.color());
-        }
-    }
+		for (auto it : vertices) {
+			this->insert(it.rPoint(), it.color());
+			mVertices.insert(Vertex<int>(calculateInduced(it.point()),it.color()));
+			std::cout << "Added induced Vertex " <<  Vertex<int>(calculateInduced(it.point()),it.color()) << std::endl;
+		}
 
-    template<typename Number>
-    Point<int> Grid<Number>::calculateInduced(const Point<Number>& point) const
-    {
-        vector_t<int> coordinates(mInducedGridPoints.size());
-        for (auto inducedGridPointsIt : mInducedGridPoints) {
-            unsigned fixed = inducedGridPointsIt.first;
-            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
+		std::cout << "Grid " << *this << std::endl;
+	}
 
-            // get the position of the first element greater than the coordinate + 1
-            auto pos = std::upper_bound(inducedGridPoints.begin(), inducedGridPoints.end(),
-                    point.coordinate(fixed));
+	template<typename Number>
+	Point<unsigned> Grid<Number>::calculateInduced(const Point<Number>& point) const
+	{
+		vector_t<unsigned> coordinates(mInducedGridPoints.size());
+		for (auto inducedGridPointsIt : mInducedGridPoints) {
+			unsigned fixedDimension = inducedGridPointsIt.first;
+			std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
-            // insert the index of the element one before the element found above
-            coordinates[fixed] = pos - 1 - inducedGridPoints.begin();
-        }
+			// get the position of the first element greater than the coordinate + 1
+			unsigned pos = 0;
+			while(pos < inducedGridPoints.size() && inducedGridPoints[pos] <= point.at(fixedDimension)) ++pos;
 
-        return Point<int>(coordinates); // return induced point
-    }
+			// insert the index of the element one before the element found above
+			coordinates[fixedDimension] = pos - 1;
+		}
 
-    template<typename Number>
-    Point<Number> Grid<Number>::calculateOriginal(const Point<int>& inducedPoint) const
-    {
-        vector_t<Number> coordinates(mInducedGridPoints.size());
-        for (auto inducedGridPointsIt : mInducedGridPoints) {
-            unsigned fixed = inducedGridPointsIt.first;
-            std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
+		std::cout << "Point " << point << " induces " << Point<unsigned>(coordinates) << std::endl;
 
-            // get the value of the element at the specified position
-            int induced = inducedPoint.at(fixed);
-            coordinates[fixed] = inducedGridPoints.at(induced);
-        }
+		return std::move(Point<unsigned>(coordinates)); // return induced point
+	}
 
-        return Point<Number> (coordinates); // return original point
-    }
+	template<typename Number>
+	Point<Number> Grid<Number>::calculateOriginal(const Point<unsigned>& inducedPoint) const
+	{
+		vector_t<Number> coordinates(mInducedGridPoints.size());
+		for (auto inducedGridPointsIt : mInducedGridPoints) {
+			unsigned fixed = inducedGridPointsIt.first;
+			std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
-    template<typename Number>
-    vSet<int> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
-    {
-        vSet<int> induced;
-        for (auto it : vertices) {
-            Vertex<int> v = calculateInduced(it.point());
-            v.setColor(it.color());
-            induced.insert(v);
-        }
-        return induced;
-    }
+			// get the value of the element at the specified position
+			int induced = inducedPoint.at(fixed);
 
-    template<typename Number>
-    vSet<Number> Grid<Number>::translateToOriginal(const vSet<int>& inducedVertices) const
-    {
-        vSet<Number> original;
-        for (auto it : inducedVertices) {
-            Vertex<Number> v = calculateOriginal(it.point());
-            v.setColor(it.color());
-            original.insert(v);
-        }
-        return original;
-    }
+			coordinates[fixed] = inducedGridPoints.at(induced);
+		}
+
+		return Point<Number> (coordinates); // return original point
+	}
+
+	template<typename Number>
+	vSet<unsigned> Grid<Number>::translateToInduced(const vSet<Number>& vertices) const
+	{
+		vSet<unsigned> induced;
+		for (auto it : vertices) {
+			Vertex<unsigned> v = calculateInduced(it.point());
+			v.setColor(it.color());
+			induced.insert(v);
+		}
+		return induced;
+	}
+
+	template<typename Number>
+	vSet<Number> Grid<Number>::translateToOriginal(const vSet<unsigned>& inducedVertices) const
+	{
+		vSet<Number> original;
+		for (auto it : inducedVertices) {
+			Vertex<Number> v = calculateOriginal(it.point());
+			v.setColor(it.color());
+			original.insert(v);
+		}
+		return original;
+	}
 
 }

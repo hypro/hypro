@@ -67,13 +67,13 @@ namespace hypro
 	class Grid
 	{
 		public:
-			typedef std::map<Point<int>, bool> gridMap;  // store calculated colors
+			typedef std::map<Point<unsigned>, bool> gridMap;  // store calculated colors
 			typedef std::map<unsigned, std::vector<Number> > gridPoints;
 
 		private:
-			std::set<Vertex<Number>> mVertices;
-			gridMap mGridMap;
-			gridPoints mInducedGridPoints;
+			std::set<Vertex<int>> mVertices;
+			mutable gridMap mGridMap; // is mutable to allow storing of intermediate results
+			mutable gridPoints mInducedGridPoints;
 
 		public:
 
@@ -106,16 +106,20 @@ namespace hypro
 			 * @return the color of the point
 			 */
 			bool colorAt(const Point<Number>& point) const;
-			bool colorAtInduced(const Point<int>& inducedPoint) const;
+			bool colorAtInduced(const Point<unsigned>& inducedPoint) const;
 
-			std::vector<Point<Number>> iNeighborhoodInduced(const Point<Number>& _inducedPoint, unsigned _dimension) const;
+			
+			Point<unsigned> iPredecessorInduced(const Point<unsigned>& _point, unsigned _dimension) const;
 			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const;
-			std::vector<Point<Number>> iSliceInduced(unsigned i, Number pos) const;
-			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _inducedPoint, unsigned _dimension) const;
-			std::vector<Point<Number>> neighborhoodInduced(const Point<Number>& _inducedPoint) const;
+			std::vector<Point<unsigned>> iSliceInduced(unsigned i, int pos) const;
+			std::vector<Point<Number>> iSlice(unsigned i, Number pos) const;
+			std::vector<Point<unsigned>> iNeighborhoodInduced(const Point<unsigned>& _inducedPoint, unsigned _dimension) const;
+			std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned _dimension) const;
+			std::vector<Point<unsigned>> neighborhoodInduced(const Point<unsigned>& _inducedPoint) const;
+			std::vector<Point<Number>> neighborhood(const Point<Number>& _point) const;
 
 			bool isVertex(const Point<Number>& _point) const;
-			bool isOnIEdge(const Point<Number>& _point, unsigned i) const;
+			bool isOnIFacet(const Point<Number>& _point, unsigned i) const;
 
 			/**
 			 * Inserts the value for the point.
@@ -124,12 +128,12 @@ namespace hypro
 			 * @param color
 			 */
 			void insert(const Point<Number>& point, bool color);
-			void insertInduced(const Point<int>& inducedPoint, bool color);
+			void insertInduced(const Point<unsigned>& inducedPoint, bool color);
 
 			void clear();
 
 			typename gridMap::const_iterator find(const Point<Number>& point) const;
-			typename gridMap::const_iterator findInduced(const Point<int>& inducedPoint) const;
+			typename gridMap::const_iterator findInduced(const Point<unsigned>& inducedPoint) const;
 			typename gridMap::const_iterator end() const;
 
 
@@ -146,14 +150,14 @@ namespace hypro
 			 * @param point
 			 * @return induced point
 			 */
-			Point<int> calculateInduced(const Point<Number>& point) const;
+			Point<unsigned> calculateInduced(const Point<Number>& point) const;
 
 			/**
 			 * Calculates the original coordinates of this induced point.
 			 * @param inducedPoint
 			 * @return original point
 			 */
-			Point<Number> calculateOriginal(const Point<int>& inducedPoint) const;
+			Point<Number> calculateOriginal(const Point<unsigned>& inducedPoint) const;
 
 			/**
 			 * Translates the points to induced points.
@@ -161,7 +165,7 @@ namespace hypro
 			 * @param vertices
 			 * @return induced vertices
 			 */
-			vSet<int> translateToInduced(const vSet<Number>& vertices) const;
+			vSet<unsigned> translateToInduced(const vSet<Number>& vertices) const;
 
 			/**
 			 * Translates the induced points to original points.
@@ -169,7 +173,7 @@ namespace hypro
 			 * @param inducedVertices
 			 * @return original vertices
 			 */
-			vSet<Number> translateToOriginal(const vSet<int>& inducedVertices) const;
+			vSet<Number> translateToOriginal(const vSet<unsigned>& inducedVertices) const;
 
 			friend bool operator==(const Grid<Number>& op1, const Grid<Number>& op2) {
 				return op1.mInducedGridPoints == op2.mInducedGridPoints;

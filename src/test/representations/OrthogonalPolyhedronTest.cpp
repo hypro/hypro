@@ -60,10 +60,6 @@ protected:
 
 		container2.insert(Point<Number>({4,2}), false);
 
-		container2.insert(Point<Number>({2,2}), true);
-
-		container2.insert(Point<Number>({2,3}), true);
-
 		p2 = OrthogonalPolyhedron<Number>(container2);
 	}
 
@@ -108,10 +104,11 @@ TYPED_TEST(OrthogonalPolyhedronTest, Properties)
 	OrthogonalPolyhedron<TypeParam> empty;
 	EXPECT_TRUE(empty.empty());
 
+	EXPECT_EQ((unsigned)2, this->p1.dimension());
+
 	std::vector<carl::Variable> variables;
 	variables.push_back(this->x);
 	variables.push_back(this->y);
-	EXPECT_EQ((unsigned)2, this->p1.dimension());
 	EXPECT_EQ(variables, this->p1.variables());
 }
 
@@ -205,26 +202,19 @@ TYPED_TEST(OrthogonalPolyhedronTest, Intersect)
 	VertexContainer<TypeParam> container;
 	typename Point<TypeParam>::coordinateMap coordinates;
 
-	coordinates[this->x] = 1; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-	coordinates[this->x] = 2; coordinates[this->y] = 4;
-	container.insert(Point<TypeParam>(coordinates), true);
-	coordinates[this->x] = 4; coordinates[this->y] = 5;
+	coordinates[this->x] = 3; coordinates[this->y] = 3;
 	container.insert(Point<TypeParam>(coordinates), true);
 	coordinates[this->x] = 4; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
+	container.insert(Point<TypeParam>(coordinates), false);
+	coordinates[this->x] = 3; coordinates[this->y] = 5;
+	container.insert(Point<TypeParam>(coordinates), false);
+	coordinates[this->x] = 4; coordinates[this->y] = 5;
+	container.insert(Point<TypeParam>(coordinates), false);
 	OrthogonalPolyhedron<TypeParam> p3(container);
 
-	VertexContainer<TypeParam> container2;
-	typename Point<TypeParam>::coordinateMap coordinates2;
+	OrthogonalPolyhedron<TypeParam> expected(container);
 
-	coordinates2[this->x] = 1; coordinates2[this->y] = 3;
-	container2.insert(Point<TypeParam>(coordinates2), true);
-	coordinates2[this->x] = 2; coordinates2[this->y] = 4;
-	container2.insert(Point<TypeParam>(coordinates2), true);
-	OrthogonalPolyhedron<TypeParam> expected(container2);
-
-	result = this->p2.intersect(p3);
+	result = this->p2.intersect(this->p1);
 
 	EXPECT_EQ(expected, result);
 }

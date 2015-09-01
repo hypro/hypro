@@ -151,13 +151,13 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::neighborhood(const Point<Number>& _point) const {
-		return std::move(mGrid.neighborhoodInduced(_point));
+		return std::move(mGrid.neighborhood(_point));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice(unsigned i, Number pos) const {
 		// TODO: ATTENTION, this is the induced version, transform!
-		return std::move(mGrid.iSliceInduced(i,pos));
+		return std::move(mGrid.iSlice(i,pos));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -288,21 +288,36 @@ namespace hypro
 		std::vector<Point<Number>> reduced;
 		for(auto& vertex : vertices){
 			Point<Number> reduction = vertex.point();
+			std::cout << "Before reduction: " << reduction << std::endl;
 			reduction.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
+			std::cout << "Added to reduced: " << reduction << std::endl;
 			reduced.push_back(std::move(reduction));
 		}
 
+		Box<Number> reducedBoundaryBox = Box<Number>(reduced);
+		std::cout << "Box " << reducedBoundaryBox << std::endl;
+		std::vector<Point<Number>> points;
+
+		for(Number x = reducedBoundaryBox.at(0).lower(); x <= reducedBoundaryBox.at(0).upper(); ++x) {
+			for(Number y = reducedBoundaryBox.at(1).lower(); y <= reducedBoundaryBox.at(1).upper(); ++y) {
+				Point<Number> tmpPoint({x,y});
+				std::cout << "Check point " << tmpPoint << std::endl;
+				if(mGrid.colorAt(tmpPoint))
+					points.push_back(tmpPoint);
+			}
+		}
+
 		// add points
-		for(const auto& vertex : reduced){
-			Point<Number> lowerRight = vertex;
+		for(const auto& point : points){
+			Point<Number> lowerRight = point;
 			lowerRight.incrementInFixedDim(0);
-			Point<Number> upperRight = vertex;
+			Point<Number> upperRight = point;
 			upperRight.incrementInAllDim(1);
-			Point<Number> upperLeft = vertex;
+			Point<Number> upperLeft = point;
 			upperLeft.incrementInFixedDim(1);
 
-			//std::cout << "Vertex " << vertex << " corresponds to box " << vertex << " , " << lowerRight << " , " << upperRight << " , " << upperLeft << std::endl;
-			result.emplace_back(std::vector<Point<Number>>({vertex, lowerRight, upperRight, upperLeft }));
+			//std::cout << "point " << point << " corresponds to box " << point << " , " << lowerRight << " , " << upperRight << " , " << upperLeft << std::endl;
+			result.emplace_back(std::vector<Point<Number>>({point, lowerRight, upperRight, upperLeft }));
 		}
 
 		return result;
