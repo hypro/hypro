@@ -104,7 +104,7 @@ namespace hypro
 			return mGridMap.at(inducedPoint);
 		}
 
-		// if one coordinate is zero just go along the axes and count vertices (origin is always white)
+		// if one coordinate is zero just go along the axes towards origin and count vertices (origin is always white)
 		bool containsZero = false;
 		std::vector<unsigned> nonZero;
 		for(unsigned d = 0; d < inducedPoint.dimension(); ++d){
@@ -386,14 +386,28 @@ namespace hypro
 			if(calculateOriginal(vertex.point()) == _point)
 				return true;
 		}
-		return false;
+
+		for(unsigned dim = 0; dim < this->dimension(); ++dim) {
+			if(!isOnIFacet(_point,dim))
+				return false;
+		}
+
+		return true;
 	}
 
 	template<typename Number>
 	bool Grid<Number>::isOnIFacet(const Point<Number>& _point, unsigned i) const {
-		// either the point is a vertex or there is a color change in its i-neighborhood -> color change is easier to check
+		// either the point is a vertex or there is a color change in its i-neighborhood
 		Point<unsigned> inducedPoint = calculateInduced(_point);
-		std::vector<Point<unsigned>> iNeighborhood = iNeighborhoodInduced(_point,i);
+
+		// check vertex
+		for(const auto& vertex : mVertices) {
+			if(vertex.point() == inducedPoint)
+				return true;
+		}
+
+		// check color change
+		std::vector<Point<unsigned>> iNeighborhood = iNeighborhoodInduced(inducedPoint,i);
 		for(const auto& x : iNeighborhood){
 			if(colorAtInduced(x) != colorAtInduced(iPredecessorInduced(x,i)))
 				return true;
@@ -483,8 +497,6 @@ namespace hypro
 			// insert the index of the element one before the element found above
 			coordinates[fixedDimension] = pos - 1;
 		}
-
-		std::cout << "Point " << point << " induces " << Point<unsigned>(coordinates) << std::endl;
 
 		return std::move(Point<unsigned>(coordinates)); // return induced point
 	}

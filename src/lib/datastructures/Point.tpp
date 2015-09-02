@@ -422,6 +422,17 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	std::vector<bool> Point<Number>::lesserDimensionPattern(const Point<Number>& _p1, const Point<Number>& _p2) {
+		assert(_p1.dimension() == _p2.dimension());
+		std::vector<bool> res;
+		res.resize(_p1.dimension());
+		for(unsigned pos = 0; pos < res.size(); ++pos) {
+			res[pos] = _p1.at(pos) < _p2.at(pos) ? true : false;
+		}
+		return std::move(res);
+	}
+
+	template<typename Number>
 	bool Point<Number>::haveEqualCoordinate(const Point<Number>& _p2) const
 	{
 		if( dimension() == _p2.dimension() )

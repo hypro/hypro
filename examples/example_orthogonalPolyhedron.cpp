@@ -18,28 +18,33 @@ using namespace carl;
 int main(int argc, char** argv) {
 
 	VertexContainer<FLOAT_T<double>> container;
-	container.insert(Point<FLOAT_T<double>>({3,0}), true);
-	container.insert(Point<FLOAT_T<double>>({5,0}), false);
-	container.insert(Point<FLOAT_T<double>>({5,2}), true);
-	container.insert(Point<FLOAT_T<double>>({7,2}), true);
-	container.insert(Point<FLOAT_T<double>>({7,0}), true);
-	container.insert(Point<FLOAT_T<double>>({9,0}), false);
-	container.insert(Point<FLOAT_T<double>>({9,2}), true);
-	container.insert(Point<FLOAT_T<double>>({11,2}), false);
-	container.insert(Point<FLOAT_T<double>>({11,4}), false);
-	container.insert(Point<FLOAT_T<double>>({9,4}), false);
-	container.insert(Point<FLOAT_T<double>>({9,7}), false);
-	container.insert(Point<FLOAT_T<double>>({7,6}), true);
-	container.insert(Point<FLOAT_T<double>>({7,4}), true);
-	container.insert(Point<FLOAT_T<double>>({5,4}), false);
-	container.insert(Point<FLOAT_T<double>>({5,6}), true);
-	container.insert(Point<FLOAT_T<double>>({3,7}), false);
+	// container.insert(Point<FLOAT_T<double>>({3,0}), true);
+	// container.insert(Point<FLOAT_T<double>>({5,0}), false);
+	// container.insert(Point<FLOAT_T<double>>({5,2}), true);
+	// container.insert(Point<FLOAT_T<double>>({7,2}), true);
+	// container.insert(Point<FLOAT_T<double>>({7,0}), true);
+	// container.insert(Point<FLOAT_T<double>>({9,0}), false);
+	// container.insert(Point<FLOAT_T<double>>({9,2}), true);
+	// container.insert(Point<FLOAT_T<double>>({11,2}), false);
+	// container.insert(Point<FLOAT_T<double>>({11,4}), false);
+	// container.insert(Point<FLOAT_T<double>>({9,4}), false);
+	// container.insert(Point<FLOAT_T<double>>({9,7}), false);
+	// container.insert(Point<FLOAT_T<double>>({7,6}), true);
+	// container.insert(Point<FLOAT_T<double>>({7,4}), true);
+	// container.insert(Point<FLOAT_T<double>>({5,4}), false);
+	// container.insert(Point<FLOAT_T<double>>({5,6}), true);
+	// container.insert(Point<FLOAT_T<double>>({3,7}), false);
+
+	container.insert(Point<FLOAT_T<double>>({2,2}), true);
+	container.insert(Point<FLOAT_T<double>>({6,2}), false);
+	container.insert(Point<FLOAT_T<double>>({2,6}), false);
+	container.insert(Point<FLOAT_T<double>>({6,6}), false);
 
 	VertexContainer<FLOAT_T<double>> container2;
-	container2.insert(Point<FLOAT_T<double>>({1,1}), true);
-	container2.insert(Point<FLOAT_T<double>>({1,2}), false);
-	container2.insert(Point<FLOAT_T<double>>({2,1}), false);
-	container2.insert(Point<FLOAT_T<double>>({2,2}), false);
+	container2.insert(Point<FLOAT_T<double>>({4,4}), true);
+	container2.insert(Point<FLOAT_T<double>>({4,8}), false);
+	container2.insert(Point<FLOAT_T<double>>({8,4}), false);
+	container2.insert(Point<FLOAT_T<double>>({8,8}), false);
 
 	OrthogonalPolyhedron<FLOAT_T<double>> test(container);
 	OrthogonalPolyhedron<FLOAT_T<double>> test2(container2);
@@ -63,24 +68,24 @@ int main(int argc, char** argv) {
 	gnuplotSettings settings;
 	settings.fill = true;
 	plotter.updateSettings(settings);
-
 	
 	//unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
 
-	OrthogonalPolyhedron<FLOAT_T<double>> united = test.unite(test2);
-	for(const auto& vertex : united.vertices()) {
-		std::cout << vertex << std::endl;
-	}
-
-	//OrthogonalPolyhedron<FLOAT_T<double>> intersection = test.intersect(test2);
+	//OrthogonalPolyhedron<FLOAT_T<double>> united = test.unite(test2);
 	//for(const auto& vertex : united.vertices()) {
 	//	std::cout << vertex << std::endl;
 	//}
 
-	unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
+	OrthogonalPolyhedron<FLOAT_T<double>> intersection = test.intersect(test2);
+	for(const auto& vertex : intersection.vertices()) {
+		std::cout << vertex << std::endl;
+	}
+
+	//unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
+	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
 	unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
 
-	plotter.setObjectColor(unionObject, "#F6A800");
+	plotter.setObjectColor(intersectionObject, "#F6A800");
 
 	plotter.plot2d();
 

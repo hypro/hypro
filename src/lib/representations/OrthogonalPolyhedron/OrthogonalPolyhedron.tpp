@@ -140,6 +140,11 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
+	bool OrthogonalPolyhedron<Number, Type>::color(const Point<Number>& _point) const {
+		return mGrid.colorAt(_point);
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
 	std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNeighborhood(const Point<Number>& _point, unsigned i) const {
 		return mGrid.iNeighborhood(_point,i);
 	}
@@ -202,21 +207,50 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect(const OrthogonalPolyhedron<Number, Type>& rhs) const {
-		std::vector<Vertex<Number>> vertices;
-
+		std::vector<Vertex<Number>> potentialVertices;
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
+		std::vector<Vertex<Number>> vertices;
 
-		for(const auto& vertex1 : v1) {
-			for(const auto& vertex2 : v2) {
-				//std::cout << __func__ << " Compare: " << vertex1 << " and " << vertex2 << std::endl;
-				if(vertex1 == vertex2) {
-					//std::cout << "Point in intersection: " << vertex1 << std::endl;
-					vertices.emplace_back(std::move(vertex1));
-					break;
-				}
+		// potential vertices are all original vertices and their pairwise componentwise-max.
+		potentialVertices.insert(potentialVertices.end(), v1.begin(), v1.end());
+		potentialVertices.insert(potentialVertices.end(), v2.begin(), v2.end());
+		for(const auto& vA : v1) {
+			for(const auto& vB : v2) {
+				potentialVertices.emplace_back(Point<Number>::coordinateMax(vA.point(),vB.point()));
 			}
 		}
+
+		// determine 'real' vertices out of candidates
+		for(auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt) {
+			std::vector<Point<Number>> aNeighbors = this->neighborhood(pIt->point());
+			std::vector<Point<Number>> bNeighbors = rhs.neighborhood(pIt->point());
+
+			Vertex<Number> newVertex(*pIt);
+			unsigned parity = 0;
+			for(const auto& nA : aNeighbors) {
+				// skip this point, if the color is white -> white is dominating
+				if(mGrid.colorAt(nA)){
+					for(const auto& nB : bNeighbors) {
+						// map the vertices onto each other by comparing their offset pattern ( which is 1 on every dimension the neighbor varies from the point)
+						if( Point<Number>::lesserDimensionPattern(nA, (*pIt).point()) == Point<Number>::lesserDimensionPattern(nB, (*pIt).point()) ) {
+							// if both are black, the neighbor would be black too -> increase parity
+							if(rhs.color(nB))
+								++parity;
+							break;
+						}
+					}
+				}
+			}
+
+			// the potential vertex is a real vertex, if the parity is odd.
+			if(parity % 2 != 0) {
+				// determine color by determining color in both polytopes, white dominates
+				newVertex.setColor(this->color(pIt->point()) && rhs.color(pIt->point()));
+				vertices.push_back(newVertex);
+			}
+		}
+		
 		return (OrthogonalPolyhedron<Number, Type>(std::move(vertices)));
 	}
 
@@ -269,8 +303,7 @@ namespace hypro
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
 
-		vertices.insert(vertices.end(), v1.begin(), v1.end());
-		vertices.insert(vertices.end(), v2.begin(), v2.end());
+		// create union by determining color in both polyhedra. TODO
 
 		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
 	}

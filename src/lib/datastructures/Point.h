@@ -255,6 +255,8 @@ namespace hypro {
 			bool hasDimension(const carl::Variable& _i) const;
 			bool hasDimensions(const std::vector<carl::Variable>& _variables) const;
 
+			static std::vector<bool> lesserDimensionPattern(const Point<Number>& _p1, const Point<Number>& _p2);
+
 			bool haveEqualCoordinate(const Point<Number>& _p2) const;
 
 			/**

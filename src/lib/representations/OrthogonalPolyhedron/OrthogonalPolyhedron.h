@@ -70,6 +70,7 @@ namespace hypro
 		bool isOnIEdge(const Point<Number>& _point, unsigned i) const;
 		bool isInternal(const Point<Number>& _point) const;
 		bool isExternal(const Point<Number>& _point) const;
+		bool color(const Point<Number>& _point) const;
 
 		std::vector<Point<Number>> iNeighborhood(const Point<Number>& _point, unsigned i) const;
 		std::vector<Point<Number>> iNegNeighborhood(const Point<Number>& _point, unsigned i) const;
