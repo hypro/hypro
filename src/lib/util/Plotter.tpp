@@ -30,7 +30,7 @@ namespace hypro {
 			unsigned currId = 0;
 			unsigned tmpId  = 0;
 			unsigned maxObj = mObjects.rbegin()->first;
-			for(auto objectIt = mObjects.rbegin(); objectIt != mObjects.rend(); ++objectIt) {
+			for(auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt) {
 				if(currId != objectIt->first) {
 					currId = objectIt->first;
 					tmpId++;
@@ -73,9 +73,9 @@ namespace hypro {
 				}
 
 				if(mSettings.fill)
-					mOutfile << " fs transparent solid 0.7 fc rgb '" << color << "'\n";
+					mOutfile << " front fs transparent solid 0.7 fc rgb '" << color << "'\n";
 				else
-					mOutfile << " fs empty border lc rgb '" << color << "'\n";
+					mOutfile << " front fs empty border lc rgb '" << color << "'\n";
 
 				++objectCount;
 			}

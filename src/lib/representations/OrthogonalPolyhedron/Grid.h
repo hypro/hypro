@@ -107,10 +107,19 @@ namespace hypro
 			 */
 			bool colorAt(const Point<Number>& point) const;
 			bool colorAtInduced(const Point<unsigned>& inducedPoint) const;
+			std::vector<Point<Number>> allBlack() const;
+			void colorAll() const;
 
 			
 			Point<unsigned> iPredecessorInduced(const Point<unsigned>& _point, unsigned _dimension) const;
 			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const;
+			Point<unsigned> iSuccessorInduced(const Point<unsigned>& _point, unsigned _dimension) const;
+			Point<Number> iSuccessor(const Point<Number>& _point, unsigned _dimension) const;
+			Point<unsigned> directPredecessorInduced(const Point<unsigned>& _point) const;
+			Point<Number> directPredecessor(const Point<Number>& _point) const;
+			Point<unsigned> directSuccessorInduced(const Point<unsigned>& _point) const;
+			Point<Number> directSuccessor(const Point<Number>& _point) const;
+
 			std::vector<Point<unsigned>> iSliceInduced(unsigned i, int pos) const;
 			std::vector<Point<Number>> iSlice(unsigned i, Number pos) const;
 			std::vector<Point<unsigned>> iNeighborhoodInduced(const Point<unsigned>& _inducedPoint, unsigned _dimension) const;

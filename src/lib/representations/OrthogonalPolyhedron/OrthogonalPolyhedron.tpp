@@ -282,39 +282,18 @@ namespace hypro
 	template<typename Number, ORTHO_TYPE Type>
 	std::vector<std::vector<Point<Number>>> OrthogonalPolyhedron<Number, Type>::preparePlot(unsigned _xDim, unsigned _yDim) const {
 		std::vector<std::vector<Point<Number>>> result;
-		std::vector<Vertex<Number>> vertices = mGrid.vertices();
 
-		// reduce dimensions of vertices
-		std::vector<Point<Number>> reduced;
-		for(auto& vertex : vertices){
-			Point<Number> reduction = vertex.point();
-			std::cout << "Before reduction: " << reduction << std::endl;
-			reduction.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
-			std::cout << "Added to reduced: " << reduction << std::endl;
-			reduced.push_back(std::move(reduction));
-		}
-
-		Box<Number> reducedBoundaryBox = Box<Number>(reduced);
-		std::cout << "Box " << reducedBoundaryBox << std::endl;
-		std::vector<Point<Number>> points;
-
-		for(Number x = reducedBoundaryBox.at(0).lower(); x <= reducedBoundaryBox.at(0).upper(); ++x) {
-			for(Number y = reducedBoundaryBox.at(1).lower(); y <= reducedBoundaryBox.at(1).upper(); ++y) {
-				Point<Number> tmpPoint({x,y});
-				std::cout << "Check point " << tmpPoint << std::endl;
-				if(mGrid.colorAt(tmpPoint))
-					points.push_back(tmpPoint);
-			}
-		}
+		std::vector<Point<Number>> points = mGrid.allBlack();
 
 		// add points
-		for(const auto& point : points){
-			Point<Number> lowerRight = point;
-			lowerRight.incrementInFixedDim(0);
-			Point<Number> upperRight = point;
-			upperRight.incrementInAllDim(1);
-			Point<Number> upperLeft = point;
-			upperLeft.incrementInFixedDim(1);
+		for(auto point : points){
+			point.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
+			Point<Number> lowerRight = mGrid.iSuccessor(point,0);
+			lowerRight.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
+			Point<Number> upperRight = mGrid.directSuccessor(point);
+			upperRight.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
+			Point<Number> upperLeft = mGrid.iSuccessor(point,1);
+			upperLeft.reduceToDimensions(std::vector<unsigned>({_xDim,_yDim}));
 
 			//std::cout << "point " << point << " corresponds to box " << point << " , " << lowerRight << " , " << upperRight << " , " << upperLeft << std::endl;
 			result.emplace_back(std::vector<Point<Number>>({point, lowerRight, upperRight, upperLeft }));

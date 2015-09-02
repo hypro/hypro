@@ -87,8 +87,10 @@ namespace hypro
 	bool Grid<Number>::colorAt(const Point<Number>& point) const {
 		Point<int> inducedPoint = calculateInduced(point);
 		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
-		if(mGridMap.find(inducedPoint) != mGridMap.end())
+		if(mGridMap.find(inducedPoint) != mGridMap.end()){
+			std::cout << "known: " << mGridMap.at(inducedPoint) << std::endl;
 			return mGridMap.at(inducedPoint);
+		}
 
 		return colorAtInduced(inducedPoint);
 	}
@@ -97,8 +99,47 @@ namespace hypro
 	bool Grid<Number>::colorAtInduced(const Point<unsigned>& inducedPoint) const {
 		std::cout << __func__ << " " << inducedPoint << std::endl;
 		// the point is not a vertex (vertices are inserted at the beginning) and not yet calculated.
-		if(mGridMap.find(inducedPoint) != mGridMap.end())
+		if(mGridMap.find(inducedPoint) != mGridMap.end()) {
+			std::cout << "known: " << mGridMap.at(inducedPoint) << std::endl;
 			return mGridMap.at(inducedPoint);
+		}
+
+		// if one coordinate is zero just go along the axes and count vertices (origin is always white)
+		bool containsZero = false;
+		std::vector<unsigned> nonZero;
+		for(unsigned d = 0; d < inducedPoint.dimension(); ++d){
+			if(inducedPoint.at(d) == 0) {
+				std::cout << "Zero at dimension " << d << std::endl;
+				containsZero = true;
+			}
+			else {
+				nonZero.push_back(d);
+			}
+		}
+		if(containsZero) { // move along axes to origin, collect predecessors
+			Point<unsigned> predecessor(iPredecessorInduced(inducedPoint,nonZero.back()));
+			std::vector<Point<unsigned>> predecessors;
+			while(!nonZero.empty()) {
+				unsigned dir = nonZero.back();
+				std::cout << "Chosen predecessor direction: " << dir << std::endl;
+				while(mGridMap.find(predecessor) == mGridMap.end() && (iPredecessorInduced(predecessor,dir) != predecessor)) {
+					std::cout << "Added predecessor " << predecessor << std::endl;
+					predecessors.push_back(predecessor);
+					predecessor = iPredecessorInduced(predecessor,dir);
+				}
+				nonZero.pop_back();
+			}
+			std::cout << "Found vertex: " << predecessor << ", set color to " << mGridMap.at(predecessor) <<  std::endl;
+			bool color = mGridMap.at(predecessor);
+			mGridMap[inducedPoint] = color;
+			while(!predecessors.empty()) {
+				mGridMap[predecessors.back()] = color;
+				predecessors.pop_back();
+			}
+			std::cout << "Color " << inducedPoint << ": " << color << std::endl;
+			return color;
+		}
+
 
 		/* calculate color recursively:
 		 * - go through all directions j: There exists j such that for all j-neighbors(x) (except x itself) it holds: 
@@ -107,11 +148,11 @@ namespace hypro
 		 */
 
 		unsigned dim = dimension();
-		bool colorDirection = true;
+		bool setColor = true; // remarks if we found the correct direction
 		bool color = false;
 		for(unsigned j = 0; j < dim; ++j) {
 			std::cout << "Evaluate "<< inducedPoint <<" in direction " << j << std::endl;
-			colorDirection = true;
+			setColor = true;
 			std::vector<Point<unsigned>> jneighs = iNeighborhoodInduced(inducedPoint,j);
 			for(const auto& p : jneighs) {
 				std::cout << j << "-Neighbor: " << p << std::endl; 
@@ -120,18 +161,52 @@ namespace hypro
 				if(x != inducedPoint) {
 					std::cout << "Get color at " << x << std::endl;
 					color = colorAtInduced(x);
-					if(colorAtInduced(x) != colorAtInduced(iPredecessorInduced(x,j))) {
-						colorDirection = false;
+
+					if(color == colorAtInduced(iPredecessorInduced(x,j)) ) {
+						color = colorAtInduced(iPredecessorInduced(inducedPoint,j));
+						break;
+					}
+					else {
+						setColor = false;
 						break;
 					}
 				}
 			}
-			if(colorDirection){
+			if(setColor){
 				mGridMap[inducedPoint] = color;
 				break;
 			}
 		}
+		std::cout << "Color " << inducedPoint << ": " << color << std::endl; 
 		return color;
+	}
+
+	template<typename Number>
+	std::vector<Point<Number>> Grid<Number>::allBlack() const {
+		colorAll();
+		std::vector<Point<Number>> res;
+		for(const auto& pPair : mGridMap){
+			if(pPair.second)
+				res.emplace_back(calculateOriginal(pPair.first));
+		}
+		return std::move(res);
+	}
+
+	template<typename Number>
+	void Grid<Number>::colorAll() const {
+		std::vector<std::vector<unsigned>> points;
+		for(const auto& vecPair : mInducedGridPoints) {
+			std::vector<unsigned> positions;
+			for(unsigned i = 0; i < vecPair.second.size(); ++i)
+				positions.emplace_back(i);
+			points.emplace_back(positions);
+		}
+
+		pointIt<unsigned> iter(points);
+		while(!iter.end){
+			colorAtInduced(++iter);
+		}
+
 	}
 
 	template<typename Number>
@@ -142,12 +217,10 @@ namespace hypro
 
 		unsigned d = this->dimension();
 		Point<unsigned> directPredecessor(_inducedPoint);
-		std::cout << "Direct predecessor before: " << directPredecessor << std::endl;
 		for(unsigned dim = 0; dim < d; ++dim) {
 			if(_inducedPoint.at(dim) > 0)
 				directPredecessor[dim] = (_inducedPoint.at(dim))-1;
 		}
-		std::cout << "Direct predecessor: " << directPredecessor << std::endl;
 
 		std::vector<std::vector<unsigned>> possibleCoords;
 		for(unsigned j = 0; j < d; ++j) {
@@ -176,7 +249,47 @@ namespace hypro
 
 	template<typename Number>
 	Point<Number> Grid<Number>::iPredecessor(const Point<Number>& _point, unsigned _dimension) const {
-		return calculateOriginal(iPredecessorInduced(_point,_dimension));
+		return calculateOriginal(iPredecessorInduced(calculateInduced(_point),_dimension));
+	}
+
+	template<typename Number>
+	Point<unsigned> Grid<Number>::iSuccessorInduced(const Point<unsigned>& _point, unsigned _dimension) const {
+		Point<unsigned> res(_point);
+		res[_dimension] = res[_dimension] < mInducedGridPoints[_dimension].size() ? res[_dimension] + 1 : res[_dimension];
+		return std::move(res);
+	}
+
+	template<typename Number>
+	Point<Number> Grid<Number>::iSuccessor(const Point<Number>& _point, unsigned _dimension) const {
+		return calculateOriginal(iSuccessorInduced(calculateInduced(_point),_dimension));	
+	}
+
+	template<typename Number>
+	Point<unsigned> Grid<Number>::directPredecessorInduced(const Point<unsigned>& _point) const {
+		Point<unsigned> directPredecessor(_point);
+		for(unsigned dim = 0; dim < this->dimension(); ++dim) {
+			directPredecessor[dim] = _point.at(dim) > 0 ? _point.at(dim)-1 : 0;
+		}
+		return std::move(directPredecessor);
+	}
+
+	template<typename Number>
+	Point<Number> Grid<Number>::directPredecessor(const Point<Number>& _point) const {
+		return calculateOriginal(directPredecessorInduced(calculateInduced(_point)));
+	}
+
+	template<typename Number>
+	Point<unsigned> Grid<Number>::directSuccessorInduced(const Point<unsigned>& _point) const {
+		Point<unsigned> directSuccessor(_point);
+		for(unsigned dim = 0; dim < this->dimension(); ++dim) {
+			directSuccessor[dim] = _point.at(dim) < mInducedGridPoints[dim].size() ? _point.at(dim)+1 : _point.at(dim);
+		}
+		return std::move(directSuccessor);
+	}
+
+	template<typename Number>
+	Point<Number> Grid<Number>::directSuccessor(const Point<Number>& _point) const {
+		return calculateOriginal(directSuccessorInduced(calculateInduced(_point)));	
 	}
 
 	template<typename Number>
