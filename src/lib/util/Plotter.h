@@ -17,7 +17,7 @@
 namespace hypro {
 
 	struct gnuplotSettings {
-		std::string color = "#18571C"; // default green
+		std::string color = "#006165"; // default petrol
 		bool fill = false; // do not fill
 	};
 

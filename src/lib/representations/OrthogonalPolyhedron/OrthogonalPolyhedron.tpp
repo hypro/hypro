@@ -91,6 +91,11 @@ namespace hypro
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
+	const Grid<Number>& OrthogonalPolyhedron<Number, Type>::grid() const {
+		return mGrid;
+	}
+
+	template<typename Number, ORTHO_TYPE Type>
 	void OrthogonalPolyhedron<Number, Type>::addVertex(const Vertex<Number>& _vertex){
 		mGrid.insert(_vertex);
 	}
@@ -210,7 +215,7 @@ namespace hypro
 		std::vector<Vertex<Number>> potentialVertices;
 		std::vector<Vertex<Number>> v1 = this->vertices();
 		std::vector<Vertex<Number>> v2 = rhs.vertices();
-		std::vector<Vertex<Number>> vertices;
+		std::vector<Vertex<Number>> resVertices;
 
 		// potential vertices are all original vertices and their pairwise componentwise-max.
 		potentialVertices.insert(potentialVertices.end(), v1.begin(), v1.end());
@@ -220,38 +225,58 @@ namespace hypro
 				potentialVertices.emplace_back(Point<Number>::coordinateMax(vA.point(),vB.point()));
 			}
 		}
+		std::unique(potentialVertices.begin(), potentialVertices.end());
 
-		// determine 'real' vertices out of candidates
+		Grid<Number> aCombination = Grid<Number>::combine(this->mGrid, rhs.grid());
+		Grid<Number> bCombination = Grid<Number>::combine(this->mGrid, rhs.grid());
+
+		for(const auto& vertex : v1){
+			aCombination.insert(vertex.point(), vertex.color());
+		}
+
+		for(const auto& vertex : v2)
+			bCombination.insert(vertex.point(), vertex.color());
+
+
 		for(auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt) {
-			std::vector<Point<Number>> aNeighbors = this->neighborhood(pIt->point());
-			std::vector<Point<Number>> bNeighbors = rhs.neighborhood(pIt->point());
 
-			Vertex<Number> newVertex(*pIt);
-			unsigned parity = 0;
-			for(const auto& nA : aNeighbors) {
-				// skip this point, if the color is white -> white is dominating
-				if(mGrid.colorAt(nA)){
-					for(const auto& nB : bNeighbors) {
-						// map the vertices onto each other by comparing their offset pattern ( which is 1 on every dimension the neighbor varies from the point)
-						if( Point<Number>::lesserDimensionPattern(nA, (*pIt).point()) == Point<Number>::lesserDimensionPattern(nB, (*pIt).point()) ) {
-							// if both are black, the neighbor would be black too -> increase parity
-							if(rhs.color(nB))
-								++parity;
-							break;
-						}
-					}
+			//std::cout << "Consider potential vertex " << *pIt << std::endl;
+
+			std::vector<Point<Number>> neighborsA = aCombination.neighborhood(pIt->point());
+			std::vector<Point<Number>> neighborsB = bCombination.neighborhood(pIt->point());
+
+			// ATTENTION: As both combination-grids should be identical, the neighbor order should be too - we assume that here!
+			assert(neighborsA.size() == neighborsB.size());
+			std::vector<Vertex<Number>> vertices;
+			for(unsigned id = 0; id < neighborsA.size(); ++id) {
+				// white dominates
+				if(aCombination.colorAt(neighborsA[id]) == true && bCombination.colorAt(neighborsB[id]) == true){
+					vertices.emplace_back(neighborsA[id], true);
+				} else {
+					vertices.emplace_back(neighborsA[id], false);
 				}
 			}
 
-			// the potential vertex is a real vertex, if the parity is odd.
-			if(parity % 2 != 0) {
-				// determine color by determining color in both polytopes, white dominates
-				newVertex.setColor(this->color(pIt->point()) && rhs.color(pIt->point()));
-				vertices.push_back(newVertex);
+			//std::cout << "Unified neighborhood: ";
+			//for(const auto& v : vertices)
+			//	std::cout << v << " ";
+
+			//std::cout << std::endl;
+
+			Grid<Number> tmp(vertices);
+			if(tmp.isVertex(pIt->point())){
+				bool color = tmp.colorAt(pIt->point());
+				//std::cout << "Is vertex " << pIt->point() << " " << color << std::endl;
+				resVertices.emplace_back(pIt->point(), color);
 			}
 		}
+
+		//std::cout << "Computed vertices: " << std::endl;
+		//for(const auto& v : resVertices ) {
+		//	std::cout << v << std::endl;
+		//}
 		
-		return (OrthogonalPolyhedron<Number, Type>(std::move(vertices)));
+		return (OrthogonalPolyhedron<Number, Type>(std::move(resVertices)));
 	}
 
 	template<typename Number, ORTHO_TYPE Type>

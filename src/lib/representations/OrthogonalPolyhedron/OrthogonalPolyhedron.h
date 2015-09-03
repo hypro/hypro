@@ -61,6 +61,7 @@ namespace hypro
 		std::vector<carl::Variable> variables() const;
 		std::vector<Vertex<Number>> vertices() const;
 		Box<Number> boundaryBox() const;
+		const Grid<Number>& grid() const;
 		void addVertex(const Vertex<Number>& _vertex);
 		void addVertices(const std::vector<Vertex<Number>>& _vertices);
 

@@ -71,7 +71,7 @@ namespace hypro
 			typedef std::map<unsigned, std::vector<Number> > gridPoints;
 
 		private:
-			std::set<Vertex<int>> mVertices;
+			std::set<Vertex<unsigned>> mVertices;
 			mutable gridMap mGridMap; // is mutable to allow storing of intermediate results
 			mutable gridPoints mInducedGridPoints;
 
@@ -97,6 +97,7 @@ namespace hypro
 			unsigned dimension() const;
 			std::vector<carl::Variable> variables() const;
 			std::vector<Vertex<Number>> vertices() const;
+			std::vector<Number> inducedDimensionAt(unsigned dimension) const;
 			bool empty() const;
 
 			/**
@@ -138,6 +139,9 @@ namespace hypro
 			 */
 			void insert(const Point<Number>& point, bool color);
 			void insertInduced(const Point<unsigned>& inducedPoint, bool color);
+
+			void addCoordinate(Number value, unsigned dimension);
+			static Grid<Number> combine(const Grid<Number>& a, const Grid<Number>& b);
 
 			void clear();
 
