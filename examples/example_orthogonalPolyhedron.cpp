@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
 	
 
-	plotter.setObjectColor(intersectionObject, "#F6A800");
+	plotter.setObjectColor(intersectionObject, colors[orange]);
 
 	plotter.plot2d();
 

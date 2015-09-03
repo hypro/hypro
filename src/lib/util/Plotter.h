@@ -16,8 +16,11 @@
 
 namespace hypro {
 
+	enum {petrol = 0, turquoise, green, maygreen, orange, red, bordeaux, violett, lila,};
+	const char *colors[] = {"#006165", "#0098A1", "#57AB27", "#BDCD00", "#F6A800", "#CC071E", "#A11035", "#612158", "#7A6FAC" };
+
 	struct gnuplotSettings {
-		std::string color = "#006165"; // default petrol
+		std::string color = colors[petrol]; // default petrol
 		bool fill = false; // do not fill
 	};
 
