@@ -48,7 +48,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 static const unsigned FLOAT_PRECISION=100;
-static const unsigned TOLLERANCE_ULPS=1024;
+static const unsigned TOLLERANCE_ULPS=4096;
 static const unsigned MAX_DIMENSION_LIMIT=128;
 
 // global typedefs
@@ -73,8 +73,8 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 20;
-static const unsigned fReach_TIMEDISCRETIZATION= 20000;
+static const float fReach_TIMEBOUND= 2;
+static const unsigned fReach_TIMEDISCRETIZATION= 250;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 //#define fReach_DEBUG

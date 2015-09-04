@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<mpfr_t> Number;
 	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
-	typedef hypro::VPolytope<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself

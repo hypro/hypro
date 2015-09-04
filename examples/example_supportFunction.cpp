@@ -41,9 +41,11 @@ int main(int argc, char** argv) {
 	std::shared_ptr<SupportFunction<double>> unionRes = poly1->unite(poly3);
 	std::shared_ptr<SupportFunction<double>> intersectionRes = poly1->intersect(poly3);
 
+	rounded1->print();
+
 
 	// create array holding equaly distributed directions
-	int resolution = 5;
+	int resolution = 10;
 	matrix_t<double> evaldirections = matrix_t<double>(resolution, 2);
 	for(int pos = 0; pos < resolution; ++pos) {
 		double angle = pos*(360/resolution);
@@ -71,7 +73,7 @@ int main(int argc, char** argv) {
 	plotter.setFilename("out");
 	std::vector<Point<double>> points;
 
-	/*
+	
 	for(int i = 0; i < resolution; ++i) {
 		//std::cout << "Calculate intersection between " << i << " and " << ((i-1+resolution)%resolution) << std::endl;
 		matrix_t<double> matr = matrix_t<double>(2,2);
