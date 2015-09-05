@@ -5,16 +5,13 @@
 #include <cassert>
 
 #include "types.h"
-//#include <carl/core/logging.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
-//#include <carl/core/carlLoggingHelper.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-#include "util/operators.h"
 #include "util/VariablePool.h"
 
 #ifdef COMPARE_CDD
@@ -47,8 +44,8 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-static const unsigned FLOAT_PRECISION=100;
-static const unsigned TOLLERANCE_ULPS=4096;
+static const unsigned FLOAT_PRECISION=128;
+static const unsigned TOLLERANCE_ULPS=1024;
 static const unsigned MAX_DIMENSION_LIMIT=128;
 
 // global typedefs
@@ -73,8 +70,8 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 2;
-static const unsigned fReach_TIMEDISCRETIZATION= 250;
+static const float fReach_TIMEBOUND= 5;
+static const unsigned fReach_TIMEDISCRETIZATION= 5000;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 //#define fReach_DEBUG

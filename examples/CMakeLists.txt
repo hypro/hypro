@@ -6,7 +6,7 @@ link_directories( ${PROJECT_BINARY_DIR}/src/lib
 
 add_subdirectory(TwoTank)
 
-set( EXAMPLES 
+set( EXAMPLES
     ################################
     # insert examples in this list #
     ################################
@@ -22,7 +22,7 @@ set( EXAMPLES
     example_matrixPolyhedra
     example_orthogonalPolyhedron
     example_parser
-	example_plot
+	  example_plot
     example_polytope
     example_polytopeFileWriter
     example_power
@@ -51,7 +51,7 @@ foreach( example ${EXAMPLES} )
 	    add_executable(${example} EXCLUDE_FROM_ALL ${example}.cpp)
 	    target_link_libraries( ${example} ${PROJECT_NAME})
 	endif()
-        
+
     else()
 
         add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
@@ -61,5 +61,5 @@ foreach( example ${EXAMPLES} )
     if(${STATICLIB_SWITCH} STREQUAL "ON")
             set_target_properties( ${example} PROPERTIES LINK_SEARCH_END_STATIC TRUE )
     endif()
-        
+
 endforeach( example )

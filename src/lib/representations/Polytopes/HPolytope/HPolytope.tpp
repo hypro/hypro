@@ -136,6 +136,7 @@ namespace hypro
 
 	template<typename Number>
 	typename VPolytope<Number>::pointVector HPolytope<Number>::vertices() const {
+		//std::cout << "Compute vertices of " << *this << std::endl;
 		typename VPolytope<Number>::pointVector vertices;
 		for(unsigned planeA = 0; planeA < mHPlanes.size()-1; ++planeA) {
 			for(unsigned planeB = planeA+1; planeB < mHPlanes.size(); ++planeB) {
@@ -304,7 +305,7 @@ namespace hypro
 	void HPolytope<Number>::reduce() {
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
 			Number res = this->evaluate(planeIt->normal());
-			if(res < planeIt->offset()) {
+			if(res < planeIt->offset() && !(res == planeIt->offset())) {
 				//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
 				planeIt = mHPlanes.erase(planeIt);
 				mInitialized = false;
@@ -446,6 +447,7 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		VPolytope<Number> intermediate(this->vertices());
+		//std::cout << "Vertices : " << this->vertices() << std::endl;
 		intermediate = intermediate.linearTransformation(A, b);
 		HPolytope<Number> res(intermediate);
 		return res;
@@ -469,7 +471,7 @@ namespace hypro
 			res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), result ));
 			//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
 		}
-		res.reduce();
+		//res.reduce();
 		return res;
 	}
 
