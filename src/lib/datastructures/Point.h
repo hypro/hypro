@@ -99,11 +99,9 @@ namespace hypro {
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
 			Point(const Point<F>& _p) {
 				mCoordinates = vector_t<Number>(_p.coordinates().size());
-				unsigned count = 0;
-				for(auto& coordinate : _p.coordinates())
+				for(unsigned pos = 0; pos < _p.dimension(); ++pos)
 				{
-					mCoordinates(count) = Number(coordinate.second);
-					++count;
+					mCoordinates(pos) = Number(_p.at(pos));
 				}
 			}
 
