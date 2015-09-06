@@ -275,7 +275,7 @@ namespace hypro
 		//for(const auto& v : resVertices ) {
 		//	std::cout << v << std::endl;
 		//}
-		
+
 		return (OrthogonalPolyhedron<Number, Type>(std::move(resVertices)));
 	}
 
@@ -309,7 +309,9 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::contains(const Point<Number>& point) const {
-		return mGrid.colorAt(point);
+		bool color = mGrid.colorAt(point);
+		std::cout << __func__ << " Point " << point << ": color " << color << std::endl;
+		return ( color || (!color && mGrid.isOnFacet(point)) );
 	}
 
 	template<typename Number, ORTHO_TYPE Type>
@@ -323,14 +325,71 @@ namespace hypro
 
 	template<typename Number, ORTHO_TYPE Type>
 	OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(const OrthogonalPolyhedron<Number, Type>& rhs) const {
-		std::vector<Vertex<Number>> vertices;
+		/* Algorithm: create combined grids each, for each potential vertex determine vertex condition, black dominates,
+		 * same as for intersection, just inverted:
+		 * If vertex condition holds, color = color in originals, black dominates.
+		 */
 
-		std::vector<Vertex<Number>> v1 = this->vertices();
-		std::vector<Vertex<Number>> v2 = rhs.vertices();
+		std::vector<Vertex<Number>> potentialVertices;
+ 		std::vector<Vertex<Number>> v1 = this->vertices();
+ 		std::vector<Vertex<Number>> v2 = rhs.vertices();
+ 		std::vector<Vertex<Number>> resVertices;
 
-		// create union by determining color in both polyhedra. TODO
+ 		// potential vertices are all original vertices and their pairwise componentwise-max.
+ 		potentialVertices.insert(potentialVertices.end(), v1.begin(), v1.end());
+ 		potentialVertices.insert(potentialVertices.end(), v2.begin(), v2.end());
+ 		for(const auto& vA : v1) {
+ 			for(const auto& vB : v2) {
+ 				potentialVertices.emplace_back(Point<Number>::coordinateMax(vA.point(),vB.point()));
+ 			}
+ 		}
+ 		std::unique(potentialVertices.begin(), potentialVertices.end());
 
-		return std::move(OrthogonalPolyhedron<Number, Type>(vertices));
+ 		Grid<Number> aCombination = Grid<Number>::combine(this->mGrid, rhs.grid());
+ 		Grid<Number> bCombination = Grid<Number>::combine(this->mGrid, rhs.grid());
+
+ 		for(const auto& vertex : v1){
+ 			aCombination.insert(vertex.point(), vertex.color());
+ 		}
+
+ 		for(const auto& vertex : v2)
+ 			bCombination.insert(vertex.point(), vertex.color());
+
+
+ 		for(auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt) {
+
+ 			std::cout << "Consider potential vertex " << *pIt << std::endl;
+
+ 			std::vector<Point<Number>> neighborsA = aCombination.neighborhood(pIt->point());
+ 			std::vector<Point<Number>> neighborsB = bCombination.neighborhood(pIt->point());
+
+ 			// ATTENTION: As both combination-grids should be identical, the neighbor order should be too - we assume that here!
+ 			assert(neighborsA.size() == neighborsB.size());
+ 			std::vector<Vertex<Number>> vertices;
+ 			for(unsigned id = 0; id < neighborsA.size(); ++id) {
+ 				// black dominates
+ 				if(aCombination.colorAt(neighborsA[id]) == false && bCombination.colorAt(neighborsB[id]) == false){
+ 					vertices.emplace_back(neighborsA[id], false);
+ 				} else {
+ 					vertices.emplace_back(neighborsA[id], true);
+ 				}
+ 			}
+
+ 			std::cout << "Unified neighborhood: ";
+ 			for(const auto& v : vertices)
+ 				std::cout << v << " ";
+
+ 			std::cout << std::endl;
+
+ 			Grid<Number> tmp(vertices);
+ 			if(tmp.isVertex(pIt->point())){
+ 				bool color = tmp.colorAt(pIt->point());
+ 				std::cout << "Is vertex " << pIt->point() << " " << color << std::endl;
+ 				resVertices.emplace_back(pIt->point(), color);
+ 			}
+ 		}
+
+ 		return (OrthogonalPolyhedron<Number, Type>(std::move(resVertices)));
 	}
 
 	/**********************************

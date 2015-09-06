@@ -99,8 +99,7 @@ namespace hypro {
 			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
 			Point(const Point<F>& _p) {
 				mCoordinates = vector_t<Number>(_p.coordinates().size());
-				for(unsigned pos = 0; pos < _p.dimension(); ++pos)
-				{
+				for(unsigned pos = 0; pos < _p.dimension(); ++pos) {
 					mCoordinates(pos) = Number(_p.at(pos));
 				}
 			}
@@ -287,6 +286,16 @@ namespace hypro {
 
 			bool operator==(const Point<Number> & _p2) const{
 				return (mCoordinates == _p2.rawCoordinates());
+			}
+
+			template<typename F, carl::DisableIf< std::is_same<F, Number> > = carl::dummy>
+			bool operator==(const Point<F> & _p2) const{
+				assert(dimension() == _p2.dimension());
+				for(unsigned d = 0; d < this->dimension(); ++d) {
+					if(this->at(d) != _p2.at(d))
+						return false;
+				}
+				return true;
 			}
 
 			bool operator!=(const Point<Number> & _p2) const{

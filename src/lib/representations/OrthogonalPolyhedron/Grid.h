@@ -111,7 +111,7 @@ namespace hypro
 			std::vector<Point<Number>> allBlack() const;
 			void colorAll() const;
 
-			
+
 			Point<unsigned> iPredecessorInduced(const Point<unsigned>& _point, unsigned _dimension) const;
 			Point<Number> iPredecessor(const Point<Number>& _point, unsigned _dimension) const;
 			Point<unsigned> iSuccessorInduced(const Point<unsigned>& _point, unsigned _dimension) const;
@@ -130,6 +130,8 @@ namespace hypro
 
 			bool isVertex(const Point<Number>& _point) const;
 			bool isOnIFacet(const Point<Number>& _point, unsigned i) const;
+			bool isOnFacet(const Point<Number>& _point) const;
+			bool isOutside(const Point<Number>& _point) const;
 
 			/**
 			 * Inserts the value for the point.
@@ -163,7 +165,7 @@ namespace hypro
 			 * @param point
 			 * @return induced point
 			 */
-			Point<unsigned> calculateInduced(const Point<Number>& point) const;
+			std::pair<Point<unsigned>, bool> calculateInduced(const Point<Number>& point) const;
 
 			/**
 			 * Calculates the original coordinates of this induced point.
