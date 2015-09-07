@@ -163,9 +163,9 @@ TYPED_TEST(GridTest, CalculateInduced)
     Point<TypeParam> p3({5, 7});
     Point<int> ip3({2, 2});
     
-    EXPECT_EQ(ip1, this->grid1.calculateInduced(p1));
-    EXPECT_EQ(ip2, this->grid1.calculateInduced(p2));
-    EXPECT_EQ(ip3, this->grid1.calculateInduced(p3));
+    EXPECT_EQ(ip1, this->grid1.calculateInduced(p1).first);
+    EXPECT_EQ(ip2, this->grid1.calculateInduced(p2).first);
+    EXPECT_EQ(ip3, this->grid1.calculateInduced(p3).first);
 }
 
 TYPED_TEST(GridTest, CalculateOriginal)

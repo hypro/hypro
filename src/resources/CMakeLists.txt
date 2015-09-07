@@ -91,26 +91,26 @@ else()
 	add_dependencies(resources eigen)
 endif()
 
-if(NLOPT_FOUND)
-	message("-- Use system version of NLOPT")
-else()
-	message("-- Use shipped version of NLOPT")
-	ExternalProject_Add(
-		nlopt
-		DOWNLOAD_COMMAND ""
-		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2"
-                CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2/configure --prefix=${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/
-		#PREFIX ${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2/build
-                BUILD_COMMAND make
-                BUILD_IN_SOURCE 1
-		LOG_CONFIGURE ON
-		LOG_BUILD ON)
+#if(NLOPT_FOUND)
+#	message("-- Use system version of NLOPT")
+#else()
+#	message("-- Use shipped version of NLOPT")
+#	ExternalProject_Add(
+#		nlopt
+#		DOWNLOAD_COMMAND ""
+#		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2"
+#               CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2/configure --prefix=${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/
+#		#PREFIX ${CMAKE_SOURCE_DIR}/src/resources/nlopt-2.4.2/build
+#                BUILD_COMMAND make
+#                BUILD_IN_SOURCE 1
+#		LOG_CONFIGURE ON
+#		LOG_BUILD ON)
 
 
-	set( NLOPT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/include/" PARENT_SCOPE )
-	set( NLOPT_LIBRARIES "${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/lib/libnlopt.a" PARENT_SCOPE )
-	add_dependencies(resources nlopt)
-endif()
+#	set( NLOPT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/include/" PARENT_SCOPE )
+#	set( NLOPT_LIBRARIES "${CMAKE_SOURCE_DIR}/build/resources/nlopt-2.4.2/lib/libnlopt.a" PARENT_SCOPE )
+#	add_dependencies(resources nlopt)
+#endif()
 
 if(GLPK_FOUND)
 	message("-- Use system version of GLPK")

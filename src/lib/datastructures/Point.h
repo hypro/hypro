@@ -46,7 +46,7 @@ namespace hypro {
 			vector_t<Number> mCoordinates;
 
 			//Adjacency List of this Point (if applicable)
-			std::vector<Point<Number>> mNeighbors;
+			//std::vector<Point<Number>> mNeighbors;
 			//Minkowsi Decompositon of this point (if applicable)
 			std::vector<Point<Number>> mComposedOf;
 
@@ -111,6 +111,7 @@ namespace hypro {
 			 * Getter & Setter
 			 */
 
+			/*
 			std::vector<Point<Number>> neighbors() const;
 
 			void setNeighbors(const std::vector<Point<Number> >& _neighbors);
@@ -118,7 +119,7 @@ namespace hypro {
 			void addNeighbor(const Point<Number>& _neighbor);
 			void removeNeighbor(const Point<Number>& _neighbor);
 			bool isNeighbor(const Point<Number>& _neighbor);
-
+			*/
 
 			std::vector<Point<Number>> composedOf() const;
 			void setComposition(const std::vector<Point<Number> >& _elements);
@@ -292,7 +293,7 @@ namespace hypro {
 			bool operator==(const Point<F> & _p2) const{
 				assert(dimension() == _p2.dimension());
 				for(unsigned d = 0; d < this->dimension(); ++d) {
-					if(this->at(d) != _p2.at(d))
+					if(this->at(d) != Number(_p2.at(d)))
 						return false;
 				}
 				return true;

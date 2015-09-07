@@ -17,6 +17,7 @@ namespace hypro
 		mFan(),
 		mFanSet(false),
 		mReduced(true),
+		mNeighbors(),
 		mInitialized(false)
 	{}
 
@@ -28,6 +29,7 @@ namespace hypro
 		mFanSet = false;
 		mReduced = true;
 		mInitialized = false;
+		mNeighbors.push_back(std::set<unsigned>());
 	}
 
 	template<typename Number>
@@ -35,6 +37,7 @@ namespace hypro
 	{
 		for(const auto point : points) {
 			mPoints.push_back(point);
+			mNeighbors.push_back(std::set<unsigned>());
 		}
 		mFan = polytope::Fan<Number>();
 		mFanSet = false;
@@ -43,7 +46,8 @@ namespace hypro
 	}
 
 	template<typename Number>
-	VPolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants) {
+	VPolytope<Number>::VPolytope(const matrix_t<Number>& _constraints, const vector_t<Number> _constants)
+	{
 		// calculate all possible hyperplane intersections -> TODO: dPermutation can be improved.
 		std::vector<std::vector<unsigned>> permutationIndices = polytope::dPermutation(_constraints.rows(), _constraints.cols());
 		matrix_t<Number> intersection = matrix_t<Number>(_constraints.cols(), _constraints.cols());
@@ -78,6 +82,7 @@ namespace hypro
 		// finish initialization
 		for(const auto& point : possibleVertices) {
 			mPoints.push_back(Point<Number>(point));
+			mNeighbors.push_back(std::set<unsigned>());
 			//std::cout << "Real vertex " << point.transpose() << std::endl;
 		}
 		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
@@ -96,6 +101,7 @@ namespace hypro
 		mReduced = orig.reduced(); // TODO: Include getter fpr this
 		mInitialized = false;
 		mCone = orig.cone();
+		mNeighbors = orig.mNeighbors;
 	}
 
 	template<typename Number>
@@ -106,6 +112,7 @@ namespace hypro
 			result.insert(vertex.linearTransformation(A,b));
 		}
 		result.setCone(mCone.linearTransformation(A,b));
+		result.unsafeSetNeighbors(mNeighbors);
 		return result;
 	}
 
@@ -196,48 +203,26 @@ namespace hypro
 	}
 
 	template<typename Number>
-	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const
-	{
-		if(rhs.dimension() == 0){
+	VPolytope<Number> VPolytope<Number>::unite(const VPolytope<Number>& rhs) const {
+		if(rhs.dimension() == 0) {
 			return VPolytope<Number>(mPoints);
 		}
-		else{
+		else {
 			VPolytope<Number>::pointVector points;
-		points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
-		points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
+			points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
+			points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
 
-		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points);
-		std::set<Point<Number>> preresult;
-		for(unsigned i = 0; i<facets.size(); i++) {
-			for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
-				//preresult.insert(facets[i]->vertices().at(j));
-				/*if((preresult.find(facets[i]->vertices().at(j))) != preresult.end()){
-					Point<Number> pt = *(preresult.find(facets[i]->vertices().at(j)));
-					std::vector<Point<Number>> neighbors = facets[i]->vertices().at(j).neighbors();
-					for(auto& neigh:neighbors){
-						pt.addNeighbor(neigh);
-					}
-				}
-				else {
-					preresult.insert(facets[i]->vertices().at(j));
-				}*/
-
-				preresult.insert(facets[i]->vertices().at(j));
-
-				/*Point<Number> pt = *(preresult.find(facets[i]->vertices().at(j)));
-				std::vector<Point<Number>> neighbors = facets[i]->vertices().at(j).neighbors();
-				for(auto& neigh:neighbors){
-					pt.addNeighbor(neigh);
-				}*/
+			std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull(points).second;
+			VPolytope<Number> result;
+			for(const auto& pointNeighborsPair : neighbors) {
+				result.insert(pointNeighborsPair.first);
 			}
+			// we can only set neighbors after all points have been inserted.
+			for(const auto& pointNeighborsPair : neighbors) {
+				result.setNeighbors(pointNeighborsPair.first, pointNeighborsPair.second);
+			}
+			return result; 
 		}
-		VPolytope<Number>::pointVector res;
-		for(const auto& point : preresult)
-			res.push_back(point);
-
-		return VPolytope<Number>(res); }
-
-		//return result;
 	}
 
 	template<typename Number>
@@ -256,6 +241,27 @@ namespace hypro
         }
         return max;
     }
+
+    template<typename Number>
+    void VPolytope<Number>::reduce() {
+    	if(!mReduced) {
+    		updateNeighbors();
+    	}
+    }
+
+    template<typename Number>
+	void VPolytope<Number>::updateNeighbors() {
+		std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull(mPoints).second;
+		mPoints.clear();
+		for(const auto& pointNeighborsPair : neighbors) {
+			mPoints.push_back(pointNeighborsPair.first);
+		}
+		// we can only set neighbors after all points have been inserted.
+		for(const auto& pointNeighborsPair : neighbors) {
+			this->setNeighbors(pointNeighborsPair.first, pointNeighborsPair.second);
+		}
+		mReduced = true;
+	}
 
 	/***************************************************************************
 	 * Auxiliary functions
@@ -302,7 +308,7 @@ namespace hypro
 	const typename VPolytope<Number>::Fan& VPolytope<Number>::calculateFan() const
 	{
 		if(!mFanSet) {
-			std::vector<Facet<Number>> facets = convexHull(mPoints);
+			std::vector<Facet<Number>> facets = convexHull(mPoints).first;
 			std::set<Point<Number>> preresult;
 			for(unsigned i = 0; i<facets.size(); i++) {
 				for(unsigned j = 0; j<facets[i].vertices().size(); j++) {

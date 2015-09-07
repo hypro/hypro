@@ -3,13 +3,13 @@ namespace hypro {
 	template<typename Number>
 	Point<Number>::Point() :
 		mCoordinates(vector_t<Number>::Zero(0)),
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{}
 
 	template<typename Number>
 	Point<Number>::Point(const Number& _value) :
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{
 		mCoordinates = vector_t<Number>(1);
@@ -18,7 +18,7 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number>::Point(std::initializer_list<Number> _coordinates) :
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{
 		unsigned count = 0;
@@ -32,7 +32,7 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number>::Point(std::vector<Number> _coordinates) :
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{
 		unsigned count = 0;
@@ -46,7 +46,7 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number>::Point(const coordinateMap& _coordinates) :
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{
 		mCoordinates = vector_t<Number>(_coordinates.size());
@@ -58,24 +58,25 @@ namespace hypro {
 	template<typename Number>
 	Point<Number>::Point(const vector_t<Number>& _vector) :
 		mCoordinates(_vector),
-		mNeighbors(),
+		//mNeighbors(),
 		mComposedOf()
 	{}
 
 	template<typename Number>
 	Point<Number>::Point(const Point<Number>& _p) :
 		mCoordinates(_p.rawCoordinates()),
-		mNeighbors(_p.neighbors()),
+		//mNeighbors(_p.neighbors()),
 		mComposedOf(_p.composedOf())
 	{}
 
 	template<typename Number>
 	Point<Number>::Point(Point<Number>&& _p) :
 		mCoordinates(_p.rawCoordinates()),
-		mNeighbors(std::move(_p.neighbors())),
+		//mNeighbors(std::move(_p.neighbors())),
 		mComposedOf(std::move(_p.composedOf()))
 	{}
 
+	/*
 	template<typename Number>
 	std::vector<Point<Number>> Point<Number>::neighbors() const {
 		return mNeighbors;
@@ -127,6 +128,7 @@ namespace hypro {
 			}
 		}
 	}
+	*/
 
 	template<typename Number>
 	std::vector<Point<Number>> Point<Number>::composedOf() const {
@@ -195,7 +197,7 @@ namespace hypro {
 	template<typename Number>
 	void Point<Number>::swap(Point<Number>& _rhs) {
 		this->mCoordinates = _rhs.mCoordinates; // we cannot swap FLOAT_T yet, at least not with mpfr_t instantiation
-		std::swap(this->mNeighbors, _rhs.mNeighbors);
+		//std::swap(this->mNeighbors, _rhs.mNeighbors);
 		std::swap(this->mComposedOf, _rhs.mComposedOf);
 	}
 
@@ -496,7 +498,7 @@ namespace hypro {
 	template<typename Number>
 	Point<Number>& Point<Number>::operator= ( const Point<Number>& _in ){
 		this->mCoordinates = _in.rawCoordinates();
-		this->mNeighbors = _in.neighbors();
+		//this->mNeighbors = _in.neighbors();
 		this->mComposedOf = _in.composedOf();
 		return *this;
 	}
@@ -504,7 +506,7 @@ namespace hypro {
 	template<typename Number>
 	Point<Number>& Point<Number>::operator= ( Point<Number>&& _in){
 		this->mCoordinates = _in.rawCoordinates();
-		this->mNeighbors = _in.neighbors();
+		//this->mNeighbors = _in.neighbors();
 		this->mComposedOf = _in.composedOf();
 		return *this;
 	}

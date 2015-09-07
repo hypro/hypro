@@ -87,7 +87,7 @@ namespace hypro
 		assert(alien.size() > 2);
 		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
 		mDimension = points.begin()->dimension();
-		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points);
+		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
 		for(auto& facet : facets) {
 			mHPlanes.push_back(facet->hyperplane());
 		}
@@ -206,7 +206,7 @@ namespace hypro
 	template<typename Number>
     void HPolytope<Number>::calculateFan() const{
 
-    	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(vertices());
+    	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(vertices()).first;
 		std::set<Point<Number>> preresult;
 		for(unsigned i = 0; i<facets.size(); i++) {
 			for(unsigned j = 0; j<facets[i].vertices().size(); j++) {
@@ -524,29 +524,11 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::unite(const HPolytope& _rhs) const {
 		if(_rhs.empty()){
-			return HPolytope<Number>(mHPlanes);
+			return HPolytope<Number>(*this);
 		}
 		else {
 			VPolytope<Number> lhs(this->vertices());
 			VPolytope<Number> tmpRes = lhs.unite(VPolytope<Number>(_rhs.vertices()));
-			// Todo: Convert VPolytope to HPolytope
-
-			/*
-			std::cout << "Union vertices lhs: " << std::endl;
-			for(const auto& vertex : this->vertices())
-				std::cout << vertex.rawCoordinates().transpose() << std::endl;
-
-			std::cout << "Union vertices rhs: " << std::endl;
-			for(const auto& vertex : _rhs.vertices())
-				std::cout << vertex.rawCoordinates().transpose() << std::endl;
-			*/
-
-			/*std::vector<Hyperplane<Number>> hyperplanes;
-				std::vector<Facet<Number>*> facets = convexHull(tmpRes.vertices());
-				for(unsigned i = 0; i<facets.size(); i++) {
-					hyperplanes.push_back(facets[i]->hyperplane());
-				}
-				return HPolytope<Number>(hyperplanes); } */
 
 			return HPolytope<Number>(tmpRes);
 		}

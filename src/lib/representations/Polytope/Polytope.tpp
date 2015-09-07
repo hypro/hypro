@@ -400,6 +400,7 @@ namespace hypro
         result.mPolyhedron = tmp;
 
         // update neighbor relations
+        /*
         for(unsigned pointIndex = 0; pointIndex < mPoints.size(); ++pointIndex)
         {
             //std::cout << "Create neighbor for original node: " << mPoints.at(pointIndex) << " , which is the new: " << newPoints.at(pointIndex) << std::endl;
@@ -416,6 +417,7 @@ namespace hypro
                 }
             }
         }
+        */
 
         result.setPointsUpToDate(false);
 
@@ -695,7 +697,7 @@ namespace hypro
     		updatePoints();
     	}
     	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(mPoints);
+    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(mPoints).first;
     	//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
     	std::set<Point<Number>> preresult;
 
@@ -770,13 +772,15 @@ namespace hypro
     	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
 
 		//std::cout << "Ping" << std::endl;
-    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(unitedVertices);
+    	std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull(unitedVertices).first;
     	//std::cout << "Ping" << std::endl;
 
     	std::set<Point<Number>> preresult;
     	for(unsigned i = 0; i<hull.size(); i++) {
     		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
+    			
+    			/*
     			if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
     				Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));
     				std::vector<Point<Number>> neighbors = hull[i]->vertices().at(j).neighbors();
@@ -784,9 +788,9 @@ namespace hypro
     					pt.addNeighbor(neigh);
     				}
     			}
-    			else {
+    			else {*/
     				preresult.insert(hull[i]->vertices().at(j));
-    			}
+    			//}
 
     			//	std::cout << "Set after insert: ";
     			//	for(const auto& point : preresult) {

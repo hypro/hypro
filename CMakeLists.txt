@@ -133,7 +133,7 @@ set(libraries ${libraries} ${PPL_LIBRARIES})
 if(NOT FORCE_SHIPPED_RESOURCES)
 find_package(Eigen3)
 find_package(GTest)
-find_package(NLOPT)
+#find_package(NLOPT)
 find_package(GLPK)
 endif()
 
@@ -141,8 +141,8 @@ add_subdirectory(src)
 
 enable_testing()
 
-set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} ${NLOPT_LIBRARIES} ${GLPK_LIBRARIES} pthread)
-include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} ${NLOPT_INCLUDE_DIR} ${GLPK_INCLUDE_DIR} )
+set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} ${GLPK_INCLUDE_DIR} )
 
 add_subdirectory(src/test)
 

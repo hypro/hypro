@@ -5,12 +5,12 @@
 #include <cassert>
 
 #include "types.h"
-#include <carl/core/MultivariatePolynomial.h>
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Sparse>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 #include "util/VariablePool.h"
 
@@ -56,6 +56,9 @@ using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
 template<typename Number>
 using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
+
+template<typename Number>
+using sMatrix_t = Eigen::SparseMatrix<Number>;
 
 template<typename Number>
 class Polytope;

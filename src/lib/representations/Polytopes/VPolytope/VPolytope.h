@@ -31,12 +31,14 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 * Members
 	 **************************************************************************/
 	private:
-		pointVector                      mPoints;
+		pointVector                 mPoints;
 		Cone 						mCone;
-		mutable Fan                    mFan;
-		bool                           mFanSet;
-		bool                           mReduced;
+		mutable Fan                 mFan;
+		bool                        mFanSet;
+		bool                        mReduced;
 		
+		std::vector<std::set<unsigned>> mNeighbors;
+
 		// GLPK members
 		mutable bool							mInitialized;
 		mutable glp_prob*						mLp;
@@ -88,8 +90,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
 		
-		unsigned int dimension() const
-		{
+		unsigned int dimension() const {
 			if(mPoints.empty())
 				return 0;
 			return mPoints[0].dimension();
@@ -120,34 +121,67 @@ class VPolytope : public hypro::GeometricObject<Number>
 		void setCone(const Cone& _cone) {
 			mCone = _cone;
 		}
+
+		void setNeighbors(const Point<Number>& _point, const std::set<Point<Number>>& _neighbors) {
+			unsigned pos = 0;
+			while(pos < mPoints.size() && (mPoints[pos] != _point) ) ++pos;
+
+			if(mPoints[pos] == _point) {
+				for(const auto& neighbor : _neighbors) {
+					unsigned nPos = 0;
+					while(nPos < mPoints.size() && (mPoints[nPos] != neighbor) ) ++nPos;
+
+					if(mPoints[nPos] == neighbor) {
+						mNeighbors[pos].insert(nPos);
+						mNeighbors[nPos].insert(pos);
+					}
+				}
+			}
+		}
+
+		void unsafeSetNeighbors(const std::vector<std::set<unsigned>>& _neighbors) {
+			mNeighbors = _neighbors;
+		}
+
+		std::vector<Point<Number>> neighbors(const Point<Number>& _point) const {
+			std::vector<Point<Number>> result;
+			unsigned pos = 0;
+			while(pos < mPoints.size() && (mPoints[pos] != _point) ) ++pos;
+
+			if(mPoints[pos] == _point) {
+				for(unsigned nPos : mNeighbors[pos])
+					result.emplace_back(mPoints[nPos]);
+			}
+			return std::move(result);
+		}
 		
-		typename pointVector::iterator insert(const Point<Number>& i)
-		{
+		typename pointVector::iterator insert(const Point<Number>& i) {
 			assert(dimension() == 0 || dimension() == i.dimension());
 			mReduced = false;
-			return mPoints.insert(mPoints.end(), i);
+			auto res = mPoints.insert(mPoints.end(), i);
+			mNeighbors.push_back(std::set<unsigned>());
+			return res;
 		}
 
 		typename pointVector::iterator insert(const vector_t<Number>& _coord) {
 			assert(dimension() == 0 || dimension() == _coord.rows());
 			mReduced = false;
+			mNeighbors.push_back(std::set<unsigned>());
 			return mPoints.insert(mPoints.end(), Point<Number>(_coord));
 		}
 		
-		typename pointVector::iterator insert(const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)
-		{
+		typename pointVector::iterator insert(const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end) {
 			assert(dimension() == 0 || dimension() == begin->dimension());
 			mReduced = false;
+			mNeighbors.push_back(std::set<unsigned>());
 			return mPoints.insert(mPoints.end(),begin,end);
 		}
 		
-		const pointVector& vertices() const
-		{
+		const pointVector& vertices() const {
 			return mPoints;
 		}
 		
-		bool hasVertex(const Point<Number>& vertex) const
-		{
+		bool hasVertex(const Point<Number>& vertex) const {
 			for(const auto point : mPoints) {
 				if(point == vertex)
 					return true;
@@ -155,28 +189,23 @@ class VPolytope : public hypro::GeometricObject<Number>
 			return false;
 		}
 
-		bool hasVertex(const vector_t<Number>& vertex) const
-		{
+		bool hasVertex(const vector_t<Number>& vertex) const {
 			return (mPoints.find(vertex) != mPoints.end());
 		}
 		
-		typename pointVector::iterator begin()
-		{
+		typename pointVector::iterator begin() {
 			return mPoints.begin();
 		}
 
-		typename pointVector::const_iterator begin() const
-		{
+		typename pointVector::const_iterator begin() const {
 			return mPoints.begin();
 		}
 		
-		typename pointVector::iterator end()
-		{
+		typename pointVector::iterator end() {
 			return mPoints.end();
 		}
 
-		typename pointVector::const_iterator end() const
-		{
+		typename pointVector::const_iterator end() const {
 			return mPoints.end();
 		}
 
@@ -184,6 +213,9 @@ class VPolytope : public hypro::GeometricObject<Number>
 			std::cout << *this << std::endl;
 		}
 		
+		void reduce();
+		void updateNeighbors();
+
 		private:
 	/***************************************************************************
 	 * Auxiliary functions

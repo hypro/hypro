@@ -437,17 +437,19 @@ static bool includeFacet(std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<
 }
 
 template<typename Number>
-static void setNeighborhoodOfPointsBeforehand(std::vector<std::shared_ptr<Facet<Number>>>& facets) {
-
-	for(auto& facet:facets) {
+static std::map<Point<Number>, std::set<Point<Number>>> setNeighborhoodOfPointsBeforehand(std::vector<std::shared_ptr<Facet<Number>>>& facets) {
+	std::map<Point<Number>, std::set<Point<Number>>> res;
+	for(auto& facet : facets) {
 		for(unsigned j = 0; j<facet->rVertices().size(); j++){
 			for(unsigned k = 0; k<facet->vertices().size(); k++){
 				if(j!=k){
-					facet->rVertices().at(j).addNeighbor(facet->vertices().at(k));
+					res[facet->rVertices().at(j)].insert(facet->vertices().at(k));
+					//facet->rVertices().at(j).addNeighbor(facet->vertices().at(k));
 				}
 			}
 		}
 	}
+	return res;
 }
 
 template<typename Number>
@@ -598,7 +600,7 @@ static void setNeighborhoodOfPoints(std::vector<std::shared_ptr<Facet<Number>>>&
 
 
 template<typename Number>
-static std::vector<std::shared_ptr<Facet<Number>>> convexHull(const std::vector<Point<Number>>& pts) {
+static std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>> convexHull(const std::vector<Point<Number>>& pts) {
 		//initialization
 		std::set<Point<Number>> pt;
 		for(auto& p:pts){
@@ -814,20 +816,17 @@ static std::vector<std::shared_ptr<Facet<Number>>> convexHull(const std::vector<
 			*/
 			//std::cout << __func__ << " facets: " << facets << std::endl;
 		}
-
-		setNeighborhoodOfPointsBeforehand(facets);
+		std::map<Point<Number>, std::set<Point<Number>>> neighborhood = setNeighborhoodOfPointsBeforehand(facets);
 
 		facets = maximizeFacets(facets);
 
 		//setNeighborhoodOfPoints(facets);
 
-
-
-		return facets;
+		return std::make_pair(facets, neighborhood);
 	}
     else {
     	std::cout << "Error: not enough points to determine convex hull in dimension " << points.at(0).dimension() << std::endl;
-    	return std::vector<std::shared_ptr<Facet<Number>>>();
+    	return std::make_pair(std::vector<std::shared_ptr<Facet<Number>>>(), std::map<Point<Number>, std::set<Point<Number>>>());
     }
     }
 }
