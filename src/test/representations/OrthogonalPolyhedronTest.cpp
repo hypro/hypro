@@ -48,7 +48,7 @@ protected:
 
 		p1 = OrthogonalPolyhedron<Number>(container1);
 
-		container2.insert(Point<Number>({1,3}), true);
+		container2.insert(Point<Number>({1,2}), true);
 
 		container2.insert(Point<Number>({1,4}), false);
 

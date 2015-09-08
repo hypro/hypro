@@ -18,7 +18,8 @@ namespace hypro
 	*/
 
 	template<typename Number>
-	Grid<Number>::Grid() {}
+	Grid<Number>::Grid() 
+	{}
 
 	template<typename Number>
 	Grid<Number>::Grid(const vSet<Number>& vertices) :
@@ -47,7 +48,7 @@ namespace hypro
 
 	template<typename Number>
 	unsigned Grid<Number>::size() const {
-		return mGridMap.size();
+		return mVertices.size(); 
 	}
 
 	template<typename Number>
@@ -410,17 +411,17 @@ namespace hypro
 		unsigned pos = 0;
 		while(pos < mInducedGridPoints.at(i).size() && mInducedGridPoints.at(i)[pos] < _point.at(i)) ++pos;
 		if(mInducedGridPoints.at(i)[pos] != _point.at(i)) {
-			std::cout << "Point is not on grid coordinate for dim " << i << std::endl;
+			//std::cout << "Point is not on grid coordinate for dim " << i << std::endl;
 			return false;
 		}
 
 		Point<unsigned> inducedPoint = calculateInduced(_point).first;
 
-		std::cout << "Is on " << i << "-facet " << _point << " (" << inducedPoint << ") : ";
+		//std::cout << "Is on " << i << "-facet " << _point << " (" << inducedPoint << ") : ";
 
 		// special case: origin is never on a facet
 		if(inducedPoint == Point<unsigned>::zero(inducedPoint.dimension())) {
-			std::cout << "false" << std::endl;
+			//std::cout << "false" << std::endl;
 			return false;
 		}
 
@@ -428,7 +429,7 @@ namespace hypro
 		// special case: if the points coordinate in dimension i is zero and it is black, it is always on an i-facet.
 		// also if its induced version is a real vertex, it is on an i-facet.
 		if(inducedPoint.at(i) == 0 && (colorAtInduced(inducedPoint) || (mVertices.find(inducedPoint) != mVertices.end()) ) ) {
-			std::cout << "true" << std::endl;
+			//std::cout << "true" << std::endl;
 			return true;
 		}
 
@@ -437,12 +438,12 @@ namespace hypro
 		std::vector<Point<unsigned>> iNeighborhood = iNeighborhoodInduced(inducedPoint,i);
 		for(const auto& x : iNeighborhood){
 			if(colorAtInduced(x) != colorAtInduced(iPredecessorInduced(x,i))) {
-				std::cout << "true" << std::endl;
+				//std::cout << "true" << std::endl;
 				return true;
 			}
 
 		}
-		std::cout << "false" << std::endl;
+		//std::cout << "false" << std::endl;
 		return false;
 	}
 
@@ -475,7 +476,7 @@ namespace hypro
 
 	template<typename Number>
 	void Grid<Number>::insertInduced(const Point<unsigned>& inducedPoint, bool color) {
-		mGridMap.insert(std::make_pair(inducedPoint, color));
+		mGridMap[inducedPoint] = color;
 		mVertices.emplace(inducedPoint, color);
 	}
 
@@ -516,6 +517,8 @@ namespace hypro
 	template<typename Number>
 	void Grid<Number>::clear() {
 		mGridMap.clear();
+		mVertices.clear();
+		mInducedGridPoints.clear();
 	}
 
 	template<typename Number>
@@ -558,7 +561,8 @@ namespace hypro
 		}
 
 		// set color of origin manually (always white)
-		this->insertInduced(Point<unsigned>::zero(mInducedGridPoints.size()), false);
+		//this->insertInduced(Point<unsigned>::zero(mInducedGridPoints.size()), false);
+		mGridMap.insert(std::make_pair(Point<unsigned>::zero(mInducedGridPoints.size()), false)); // insert only in gridmap to not affect the size
 
 		// set up datastructures for colors of vertices and vertices
 		for (auto it : vertices) {

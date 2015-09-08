@@ -310,7 +310,7 @@ namespace hypro
 	template<typename Number, ORTHO_TYPE Type>
 	bool OrthogonalPolyhedron<Number, Type>::contains(const Point<Number>& point) const {
 		bool color = mGrid.colorAt(point);
-		std::cout << __func__ << " Point " << point << ": color " << color << std::endl;
+		//std::cout << __func__ << " Point " << point << ": color " << color << std::endl;
 		return ( color || (!color && mGrid.isOnFacet(point)) );
 	}
 
@@ -358,7 +358,7 @@ namespace hypro
 
  		for(auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt) {
 
- 			std::cout << "Consider potential vertex " << *pIt << std::endl;
+ 			//std::cout << "Consider potential vertex " << *pIt << std::endl;
 
  			std::vector<Point<Number>> neighborsA = aCombination.neighborhood(pIt->point());
  			std::vector<Point<Number>> neighborsB = bCombination.neighborhood(pIt->point());
@@ -375,16 +375,16 @@ namespace hypro
  				}
  			}
 
- 			std::cout << "Unified neighborhood: ";
- 			for(const auto& v : vertices)
- 				std::cout << v << " ";
+ 			// std::cout << "Unified neighborhood: ";
+ 			// for(const auto& v : vertices)
+ 			// 	std::cout << v << " ";
 
- 			std::cout << std::endl;
+ 			// std::cout << std::endl;
 
  			Grid<Number> tmp(vertices);
  			if(tmp.isVertex(pIt->point())){
  				bool color = tmp.colorAt(pIt->point());
- 				std::cout << "Is vertex " << pIt->point() << " " << color << std::endl;
+ 				//std::cout << "Is vertex " << pIt->point() << " " << color << std::endl;
  				resVertices.emplace_back(pIt->point(), color);
  			}
  		}

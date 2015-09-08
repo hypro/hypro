@@ -27,19 +27,22 @@ protected:
     {
         // vertices
 
-        vertices.insert(Vertex<Number>({1, 5}, false));
-        vertices.insert(Vertex<Number>({4, 6}, true));
-        vertices.insert(Vertex<Number>({6, 8}, true));
+        vertices.insert(Vertex<Number>({2, 2}, true));
+        vertices.insert(Vertex<Number>({6, 2}, false));
+        vertices.insert(Vertex<Number>({6, 6}, false));
+        vertices.insert(Vertex<Number>({4, 6}, false));
+        vertices.insert(Vertex<Number>({4, 4}, true));
+        vertices.insert(Vertex<Number>({2, 4}, false));
 
-	grid1.induceGrid(vertices);
+		grid1.induceGrid(vertices);
     }
 	
     virtual void TearDown()
     {
+    	grid1.clear();
     }
 
     vSet<Number> vertices;
-
     Grid<Number> grid1;
 };
 
@@ -53,10 +56,10 @@ TYPED_TEST(GridTest, Constructor)
 
 TYPED_TEST(GridTest, Properties)
 {
-    Point<TypeParam> p1({2, 5});
+    Point<TypeParam> p1({3, 3});
     
     EXPECT_FALSE(this->grid1.empty());
-    EXPECT_EQ(this->grid1.size(),3);
+    EXPECT_EQ(this->grid1.size(),6);
     EXPECT_TRUE(this->grid1.find(p1) != this->grid1.end());
     
     this->grid1.clear();
@@ -87,7 +90,7 @@ TYPED_TEST(GridTest, Insert)
     
     p = Point<TypeParam>({10, 10});
     this->grid1.insert(p, false);
-    EXPECT_EQ(true, this->grid1.colorAt(p));
+    EXPECT_EQ(false, this->grid1.colorAt(p));
 }
 
 TYPED_TEST(GridTest, InsertInduced)
@@ -112,7 +115,7 @@ TYPED_TEST(GridTest, InsertInduced)
     
     p = Point<TypeParam>({3, 3});
     this->grid1.insertInduced(p, false);
-    EXPECT_EQ(true, this->grid1.colorAtInduced(p));
+    EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 }
 
 TYPED_TEST(GridTest, ColorAt)
@@ -122,14 +125,14 @@ TYPED_TEST(GridTest, ColorAt)
     p = Point<TypeParam>({1, 5});
     EXPECT_EQ(false, this->grid1.colorAt(p));
 
-    p = Point<TypeParam>({4, 6});
+    p = Point<TypeParam>({4, 5});
     EXPECT_EQ(true, this->grid1.colorAt(p));
 
-    p = Point<TypeParam>({6, 8});
-    EXPECT_EQ(true, this->grid1.colorAt(p));
+    p = Point<TypeParam>({6, 3});
+    EXPECT_EQ(false, this->grid1.colorAt(p));
 
-    p = Point<TypeParam>({0, 0});
-    EXPECT_THROW(this->grid1.colorAt(p), std::out_of_range);
+    p = Point<TypeParam>({10, 10});
+    EXPECT_EQ(false, this->grid1.colorAt(p));
 }
 
 TYPED_TEST(GridTest, ColorAtInduced)
@@ -137,31 +140,31 @@ TYPED_TEST(GridTest, ColorAtInduced)
     Point<int> p;
 
     p = Point<TypeParam>({1, 1});
-    EXPECT_EQ(false, this->grid1.colorAtInduced(p));
+    EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
     p = Point<TypeParam>({2, 2});
     EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
     p = Point<TypeParam>({3, 3});
-    EXPECT_EQ(true, this->grid1.colorAtInduced(p));
+    EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 
-    p = Point<TypeParam>({0, 0});
-    EXPECT_THROW(this->grid1.colorAtInduced(p), std::out_of_range);
+    p = Point<TypeParam>({5, 5});
+    EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 }
 
 TYPED_TEST(GridTest, CalculateInduced)
 {
-    Point<int>::coordinateMap i;
+    Point<unsigned>::coordinateMap i;
     typename Point<TypeParam>::coordinateMap c;
     
-    Point<TypeParam> p1({1, 5});
-    Point<int> ip1({1, 1});
+    Point<TypeParam> p1({3, 2});
+    Point<unsigned> ip1({1, 1});
     
-    Point<TypeParam> p2({2, 6});
-    Point<int> ip2({1, 2});
+    Point<TypeParam> p2({2, 5});
+    Point<unsigned> ip2({1, 2});
     
-    Point<TypeParam> p3({5, 7});
-    Point<int> ip3({2, 2});
+    Point<TypeParam> p3({5, 5});
+    Point<unsigned> ip3({2, 2});
     
     EXPECT_EQ(ip1, this->grid1.calculateInduced(p1).first);
     EXPECT_EQ(ip2, this->grid1.calculateInduced(p2).first);
@@ -170,17 +173,17 @@ TYPED_TEST(GridTest, CalculateInduced)
 
 TYPED_TEST(GridTest, CalculateOriginal)
 {
-    Point<int>::coordinateMap i;
+    Point<unsigned>::coordinateMap i;
     typename Point<TypeParam>::coordinateMap c;
     
-    Point<int> ip1({1, 1});
-    Point<TypeParam> op1({1, 5});
+    Point<unsigned> ip1({1, 1});
+    Point<TypeParam> op1({2, 2});
     
-    Point<int> ip2({1, 2});
-    Point<TypeParam> op2({1, 6});
+    Point<unsigned> ip2({1, 2});
+    Point<TypeParam> op2({2, 4});
     
-    Point<int> ip3({2, 2});
-    Point<TypeParam> op3({4, 6});
+    Point<unsigned> ip3({2, 2});
+    Point<TypeParam> op3({4, 4});
     
     EXPECT_EQ(op1, this->grid1.calculateOriginal(ip1));
     EXPECT_EQ(op2, this->grid1.calculateOriginal(ip2));
@@ -191,9 +194,12 @@ TYPED_TEST(GridTest, Translate)
 {
     vSet<unsigned> induced;
 
-    induced.insert(Vertex<unsigned>({1, 1}, false));
+    induced.insert(Vertex<unsigned>({1, 1}, true));
     induced.insert(Vertex<unsigned>({2, 2}, true));
-    induced.insert(Vertex<unsigned>({3, 3}, true));
+    induced.insert(Vertex<unsigned>({3, 3}, false));
+    induced.insert(Vertex<unsigned>({1, 2}, false));
+    induced.insert(Vertex<unsigned>({3, 1}, false));
+    induced.insert(Vertex<unsigned>({2, 3}, false));
     
     EXPECT_EQ(induced, this->grid1.translateToInduced(this->vertices));
     EXPECT_EQ(this->vertices, this->grid1.translateToOriginal(induced));
