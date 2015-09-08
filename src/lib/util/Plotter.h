@@ -12,6 +12,7 @@
 #include <carl/util/Singleton.h>
 #include <vector>
 #include <string>
+#include <stack>
 #include "../lib/datastructures/Point.h"
 
 namespace hypro {
