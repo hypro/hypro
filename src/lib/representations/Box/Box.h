@@ -339,6 +339,8 @@ public:
 	Box<Number> unite(const Box<Number>& rhs) const;
 	
 	void clear();
+
+	void print() const;
 };
 
 }

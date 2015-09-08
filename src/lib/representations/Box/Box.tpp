@@ -210,6 +210,7 @@ bool Box<Number>::contains(const Box<Number>& box) const {
 		return false;
 
 	for(unsigned pos = 0; pos < mBoundaries.size(); ++pos) {
+		std::cout << "TEst Contains: " << mBoundaries.at(pos) << " contains " << box.at(pos) << ": " << mBoundaries.at(pos).contains(box.at(pos)) << std::endl;
 		if(!mBoundaries.at(pos).contains(box.at(pos)))
 			return false;
 	}
@@ -238,4 +239,9 @@ void Box<Number>::clear()
 	mBoundaries.erase(mBoundaries.begin(), mBoundaries.end());
 }
 	
+template<typename Number>
+void Box<Number>::print() const {
+	std::cout << *this << std::endl;
+}
+
 } // namespace

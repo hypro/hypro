@@ -73,7 +73,7 @@ namespace hypro {
 				}
 
 				if(mSettings.fill)
-					mOutfile << " front fs transparent solid 0.7 fc rgb '" << color << "'\n";
+					mOutfile << " front fs transparent solid 0.75 fc rgb '" << color << "'\n";
 				else
 					mOutfile << " front fs empty border lc rgb '" << color << "'\n";
 

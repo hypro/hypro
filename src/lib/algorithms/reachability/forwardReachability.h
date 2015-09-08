@@ -26,6 +26,9 @@ namespace hypro
 
 #ifdef fReach_DEBUG
 			   	std::cout <<  "Time Interval: " << timeInterval << std::endl;
+
+			   	std::cout << "Initial valuation: " << std::endl;
+			   	_val.print();
 #endif
 
 				//Polytope that is defined by the invariant

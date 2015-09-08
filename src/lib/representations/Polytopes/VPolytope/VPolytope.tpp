@@ -55,7 +55,9 @@ namespace hypro
 		std::vector<vector_t<Number>> possibleVertices;
 		for(const auto& permutation : permutationIndices) {
 			unsigned rowCount = 0;
+			//std::cout << "Intersect :" << std::endl;
 			for(const auto& rowIndex : permutation) {
+				//std::cout << _constraints.row(rowIndex) << " <= " << _constants(rowIndex) << std::endl;
 				intersection.row(rowCount) = _constraints.row(rowIndex);
 				intersectionConstants(rowCount) = _constants(rowIndex);
 				++rowCount;
@@ -64,7 +66,7 @@ namespace hypro
 			if(intersection.colPivHouseholderQr().rank() == intersection.cols()) {
 				vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
 				possibleVertices.push_back(vertex);
-				//std::cout<< "Vertex choices: (" << permutation << ") " << vertex.transpose() << std::endl;
+				//std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
 			}
 		}
 
@@ -195,9 +197,13 @@ namespace hypro
 
 	template<typename Number>
 	bool VPolytope<Number>::contains(const VPolytope<Number>& _other) const {
+		//std::cout << *this<< " " << __func__ << " " << _other << std::endl;
 		for(const auto& vertex : _other.vertices()) {
-			if(!this->contains(vertex))
+			//std::cout << __func__ << " check vertex " << vertex << std::endl;
+			if(!this->contains(vertex)){
+				//std::cout << "false" << std::endl;
 				return false;
+			}
 		}
 		return true;
 	}
@@ -212,9 +218,31 @@ namespace hypro
 			points.insert(points.end(), this->mPoints.begin(), this->mPoints.end());
 			points.insert(points.end(), rhs.mPoints.begin(),rhs.mPoints.end());
 
+			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
+			std::set<Point<Number>> preresult;
+			for(unsigned i = 0; i<facets.size(); i++) {
+				for(unsigned j = 0; j<facets[i]->vertices().size(); j++) {
+					preresult.insert(facets[i]->vertices().at(j));
+				}
+	 		}
+
+			VPolytope<Number>::pointVector res;
+			for(const auto& point : preresult)
+				res.push_back(point);
+	
+			return VPolytope<Number>(res);
+
+			/*
+			std::cout << "Compute convex hull of " << std::endl;
+			for(const auto& vertex : points)
+				std::cout << vertex << std::endl;
+
+
+
 			std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull(points).second;
 			VPolytope<Number> result;
 			for(const auto& pointNeighborsPair : neighbors) {
+				std::cout << "Union result insert " << pointNeighborsPair.first << std::endl;
 				result.insert(pointNeighborsPair.first);
 			}
 			// we can only set neighbors after all points have been inserted.
@@ -222,6 +250,7 @@ namespace hypro
 				result.setNeighbors(pointNeighborsPair.first, pointNeighborsPair.second);
 			}
 			return result; 
+			*/
 		}
 	}
 
