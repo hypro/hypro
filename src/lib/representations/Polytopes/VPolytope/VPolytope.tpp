@@ -109,6 +109,7 @@ namespace hypro
 	template<typename Number>
 	VPolytope<Number> VPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
 	{
+		//std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 		VPolytope<Number> result;
 		for(const auto& vertex : mPoints) {
 			result.insert(vertex.linearTransformation(A,b));
@@ -229,7 +230,7 @@ namespace hypro
 			VPolytope<Number>::pointVector res;
 			for(const auto& point : preresult)
 				res.push_back(point);
-	
+
 			return VPolytope<Number>(res);
 
 			/*
@@ -249,7 +250,7 @@ namespace hypro
 			for(const auto& pointNeighborsPair : neighbors) {
 				result.setNeighbors(pointNeighborsPair.first, pointNeighborsPair.second);
 			}
-			return result; 
+			return result;
 			*/
 		}
 	}

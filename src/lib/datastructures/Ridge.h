@@ -104,7 +104,8 @@ template<typename Number>
 std::ostream & operator<< (std::ostream& _ostr, const Ridge<Number>& _f)
 {
 	_ostr << "Ridge: " << std::endl;
-	_ostr << _f.vertices() << std::endl;
+	for(const auto& vertex : _f.vertices())
+		_ostr << vertex << ", ";
 	return _ostr;
 }
 

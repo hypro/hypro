@@ -8,6 +8,7 @@
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
+#include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
@@ -73,8 +74,8 @@ using vectorSet = std::set<vector_t<Number>>;
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 1;
-static const unsigned fReach_TIMEDISCRETIZATION= 10;
+static const float fReach_TIMEBOUND= 5;
+static const unsigned fReach_TIMEDISCRETIZATION= 500;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
 #define fReach_DEBUG

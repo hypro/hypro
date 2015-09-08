@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
 	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 
 	//Other Objects: Vectors, Matrices, Guards...
-	
+
 	matrix_t<Number> locationMat = matrix_t<Number>(3,3);
 
 	struct hypro::Transition<Number>::guard guard;
@@ -46,47 +46,49 @@ int main(int argc, char const *argv[])
 	Point<Number> p1;
 
 	//Box
-	vector_t<Number> boxVec = vector_t<Number>(6,1);
-	//vector_t<Number> boxVec = vector_t<Number>(4,1);
-	matrix_t<Number> boxMat = matrix_t<Number>(6,3);
-	//matrix_t<Number> boxMat = matrix_t<Number>(4,2);
+	//vector_t<Number> boxVec = vector_t<Number>(6,1);
+	vector_t<Number> boxVec = vector_t<Number>(4,1);
+	//matrix_t<Number> boxMat = matrix_t<Number>(6,3);
+	matrix_t<Number> boxMat = matrix_t<Number>(4,2);
 
 	/*
 	 * Location
 	 */
 
-	vector_t<Number> invariantVec = vector_t<Number>(6,1);
+	//vector_t<Number> invariantVec = vector_t<Number>(6,1);
+	vector_t<Number> invariantVec = vector_t<Number>(4,1);
 	operator_e invariantOp;
-	matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
+	//matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
+	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
 	struct Location<Number>::invariant inv;
 
 	invariantVec(0) = 20;
 	invariantVec(1) = 0;
 	invariantVec(2) = 20;
 	invariantVec(3) = 20;
-	invariantVec(4) = 1;
-	invariantVec(5) = 1;
+	//invariantVec(4) = 1;
+	//invariantVec(5) = 1;
 
 	invariantOp = LEQ;
 
 	invariantMat(0,0) = 1;
 	invariantMat(0,1) = 0;
-	invariantMat(0,2) = 0;
+	//invariantMat(0,2) = 0;
 	invariantMat(1,0) = -1;
 	invariantMat(1,1) = 0;
-	invariantMat(1,2) = 0;
+	//invariantMat(1,2) = 0;
 	invariantMat(2,0) = 0;
 	invariantMat(2,1) = 1;
-	invariantMat(2,2) = 0;
+	//invariantMat(2,2) = 0;
 	invariantMat(3,0) = 0;
 	invariantMat(3,1) = -1;
-	invariantMat(3,2) = 0;
-	invariantMat(4,0) = 0;
-	invariantMat(4,1) = 0;
-	invariantMat(4,2) = 1;
-	invariantMat(5,0) = 0;
-	invariantMat(5,1) = 0;
-	invariantMat(5,2) = -1;
+	//invariantMat(3,2) = 0;
+	// invariantMat(4,0) = 0;
+	// invariantMat(4,1) = 0;
+	// invariantMat(4,2) = 1;
+	// invariantMat(5,0) = 0;
+	// invariantMat(5,1) = 0;
+	// invariantMat(5,2) = -1;
 
 	std::cout << invariantMat << std::endl;
 
@@ -98,7 +100,7 @@ int main(int argc, char const *argv[])
 
 
 	locationMat(0,0) = 0;
-	locationMat(0,1) = -1;
+	locationMat(0,1) = 1;
 	locationMat(0,2) = 0;
 	locationMat(1,0) = 0;
 	locationMat(1,1) = 0;
@@ -140,7 +142,7 @@ int main(int argc, char const *argv[])
 	guard.vec = guardVec;
 
 	vector_t<Number> assignVec = vector_t<Number>(3,1);
-	matrix_t<Number> assignMat = matrix_t<Number>(3,3);	
+	matrix_t<Number> assignMat = matrix_t<Number>(3,3);
 
 	assignVec(0) = 0;
 	assignVec(1) = 0;
@@ -190,29 +192,29 @@ int main(int argc, char const *argv[])
 	//create Box (note: 3rd variable is for the constant factor)
 	boxVec(0) = 10.2;
 	boxVec(1) = -10;
-	boxVec(2) = 0.1;
-	boxVec(3) = -0.05;
-	boxVec(4) = 1;
-	boxVec(5) = -1;
+	boxVec(2) = -0.009;
+	boxVec(3) = 0.01;
+	//boxVec(4) = 1;
+	//boxVec(5) = -1;
 
 	boxMat(0,0) = 1;
 	boxMat(0,1) = 0;
-	boxMat(0,2) = 0;
+	//boxMat(0,2) = 0;
 	boxMat(1,0) = -1;
 	boxMat(1,1) = 0;
-	boxMat(1,2) = 0;
+	//boxMat(1,2) = 0;
 	boxMat(2,0) = 0;
 	boxMat(2,1) = 1;
-	boxMat(2,2) = 0;
+	//boxMat(2,2) = 0;
 	boxMat(3,0) = 0;
 	boxMat(3,1) = -1;
-	boxMat(3,2) = 0;
-	boxMat(4,0) = 0;
-	boxMat(4,1) = 0;
-	boxMat(4,2) = 1;
-	boxMat(5,0) = 0;
-	boxMat(5,1) = 0;
-	boxMat(5,2) = -1;
+	//boxMat(3,2) = 0;
+	// boxMat(4,0) = 0;
+	// boxMat(4,1) = 0;
+	// boxMat(4,2) = 1;
+	// boxMat(5,0) = 0;
+	// boxMat(5,1) = 0;
+	// boxMat(5,2) = -1;
 
 	Representation poly(boxMat,boxVec);
 
@@ -240,9 +242,9 @@ int main(int argc, char const *argv[])
    			std::cout << "Polycount: " << count << std::endl;
    			std::cout << "points.size() = " << points.size() << std::endl;
    			for(auto& point : points) {
-   				std::cout << "reduce " << point << " to ";
+   	// 			std::cout << "reduce " << point << " to ";
 	   			point.reduceDimension(2);
-	   			std::cout << point << std::endl;
+				// 			std::cout << point << std::endl;
 	   		}
 	   		plotter.addObject(points);
 			std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;

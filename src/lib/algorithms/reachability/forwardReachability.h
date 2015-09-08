@@ -86,7 +86,12 @@ namespace hypro
 					//---
 
 					//e^(At)*X0 = polytope at t=delta
-					Representation deltaValuation = _val.linearTransformation(resultMatrix, vector_t<Number>::Zero(resultMatrix.rows()));
+                    unsigned rows = resultMatrix.rows();
+                    unsigned cols = resultMatrix.cols();
+                    vector_t<Number> translation = resultMatrix.col(cols-1);
+                    translation.conservativeResize(rows-1);
+                    resultMatrix.conservativeResize(rows-1, cols-1);
+					Representation deltaValuation = _val.linearTransformation(resultMatrix, translation);
 
 #ifdef fReach_DEBUG
 				   	std::cout << "Polytope at t=delta: ";
@@ -104,6 +109,10 @@ namespace hypro
 					//bloat hullPolytope (Hausdorff distance)
 					Representation firstSegment;
 					Number radius;
+                    //TODO: This is a temporary fix!
+                    //matrix_t<Number> updatedActivityMatrix = _loc.activityMat();
+                    //updatedActivityMatrix.conservativeResize(rows-1, cols-1);
+                    //radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
 					radius = hausdorffError(Number(timeInterval), _loc.activityMat(), _val.supremum());
 					//radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
@@ -155,7 +164,7 @@ namespace hypro
 
 						//perform linear transformation on the last segment of the flowpipe
 						//lastSegment.linearTransformation(resultPolytope, tempResult);
-						resultPolytope = lastSegment.linearTransformation(resultMatrix, vector_t<Number>::Zero(resultMatrix.rows()));
+						resultPolytope = lastSegment.linearTransformation(resultMatrix, translation);
 						//resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
