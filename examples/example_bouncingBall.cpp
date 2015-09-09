@@ -220,41 +220,44 @@ int main(int argc, char const *argv[])
 
 	hybrid.setValuation(poly);
 
-	std::vector<Representation> flowpipe;
+	std::vector<std::vector<Representation>> flowpipes;
 
-   	//std::cout << "original Polytope (Box): ";
-    //poly.print();
+	//std::cout << "original Polytope (Box): ";
+	//poly.print();
 
-	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+	// flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+	flowpipes = forwardReachability::computeForwardsReachability(hybrid);
 
-   	std::cout << "Generated flowpipe, start plotting." << std::endl;
+	std::cout << "Generated flowpipe, start plotting." << std::endl;
 
-   	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
-	unsigned count = 1;
-	unsigned maxCount = flowpipe.size();
-   	for(auto& poly : flowpipe) {
-   		std::cout << "Flowpipe segment to be converted: " << std::endl;
-   		poly.print();
-   		std::vector<Point<Number>> points = poly.vertices();
-   		if(!points.empty() && points.size() > 2) {
-   			std::cout << "Polycount: " << count << std::endl;
-   			std::cout << "points.size() = " << points.size() << std::endl;
-   			for(auto& point : points) {
-   	// 			std::cout << "reduce " << point << " to ";
-	   			point.reduceDimension(2);
-				// 			std::cout << point << std::endl;
-	   		}
-	   		plotter.addObject(points);
-			std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
-	   		points.clear();
-	   		++count;
-   		}
-   	}
+	for(auto& flowpipe : flowpipes) {
+		unsigned count = 1;
+		unsigned maxCount = flowpipe.size();
+		for(auto& poly : flowpipe) {
+			std::cout << "Flowpipe segment to be converted: " << std::endl;
+			poly.print();
+			std::vector<Point<Number>> points = poly.vertices();
+			if(!points.empty() && points.size() > 2) {
+				std::cout << "Polycount: " << count << std::endl;
+				std::cout << "points.size() = " << points.size() << std::endl;
+				for(auto& point : points) {
+		// 			std::cout << "reduce " << point << " to ";
+					point.reduceDimension(2);
+					// 			std::cout << point << std::endl;
+				}
+				plotter.addObject(points);
+				std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
+				points.clear();
+				++count;
+			}
+		}
+	}
 	std::cout << endl;
 
-   	plotter.plot2d();
+	plotter.plot2d();
 
 	return 0;
 }

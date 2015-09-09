@@ -203,17 +203,17 @@ namespace hypro
     		/**
     		 * checks if the given valuation fulfills the guard of the given transition, if yes, executes the reset (that belongs to the transition)
     		 */
-    		template<typename Number>
-			static bool computePostCondition(const hypro::Transition<Number>& _trans, hypro::valuation_t<Number> _val, hypro::valuation_t<Number>& result) {
+    		template<typename Number, typename Representation>
+			static bool computePostCondition(const hypro::Transition<Number>& _trans, Representation _val, Representation& result) {
 
 				//Polytope that is defined by the guard
-				hypro::Polytope<Number> guardPoly = hypro::Polytope<Number>(_trans.guard().mat, _trans.guard().vec);
+				Representation guardPoly = Representation(_trans.guard().mat, _trans.guard().vec);
 
 				//intersection between valuation polytope and guard polytope
-				hypro::Polytope<Number> intersectionPoly = _val.intersect(guardPoly);
+				Representation intersectionPoly = _val.intersect(guardPoly);
 
 				//check if the intersection is empty
-				if (!intersectionPoly.isEmpty()) {
+				if (!intersectionPoly.empty()) {
 					hypro::vector_t<Number> translateVec = _trans.assignment().translationVec;
 					hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
 
@@ -229,34 +229,37 @@ namespace hypro
     		 * given a set of flowpipes, computes the reachability from this set (considering available transitions)
     		 * to do so, each flowpipe segment of all flowpipes is checked individually for each outgoing transition
     		 */
-    		template<typename Number>
-			static std::vector<flowpipe_t<Number>> computeReach(std::vector<flowpipe_t<Number>> _init, hypro::HybridAutomaton<Number, flowpipe_t<Number>> _hybrid,
-					std::map<flowpipe_t<Number>, hypro::Location<Number>>& _map) {
+    		template<typename Number, typename Representation>
+			static std::vector<flowpipe_t<Representation>> computeReach(std::vector<flowpipe_t<Representation>> _init, hypro::HybridAutomaton<Number, Representation> _hybrid,
+					std::vector<std::pair<std::vector<flowpipe_t<Representation>>, hypro::Location<Number>>>& _map) {
 
-				std::vector<flowpipe_t<Number>> reach;
+				std::vector<flowpipe_t<Representation>> reach;
 
 				//for each flowpipe in _init
-				for (typename std::vector<flowpipe_t<Number>>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+				for (typename std::vector<flowpipe_t<Representation>>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
 
 					//get the location that belongs to the flowpipe
-					hypro::Location<Number> loc = _map[*it_pipe];
+					//hypro::Location<Number> loc = _map[*it_pipe];
+					auto posIt = _map.begin();
+					while(posIt != _map.end() && (*posIt).first != *it_pipe) ++posIt;
+					hypro::Location<Number> loc = (*posIt).second;
 
 					//for each outgoing transition of the location
-					std::vector<Transition<Number>*> loc_transSet = loc.transitions();
-					for (typename std::vector<Transition<Number*>>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
+					std::set<Transition<Number>*> loc_transSet = loc.transitions();
+					for (typename std::set<Transition<Number>*>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
 						hypro::Transition<Number> trans = *(*it_trans);
 
 						//resulting Polytope in new location
-						hypro::valuation_t<Number> targetValuation;
+						Representation targetValuation;
 
 						//for each polytope that is part of the flowpipe
-						for (typename hypro::valuation_t<Number>::iterator it_val = *it_pipe.begin(); it_val != *it_pipe.end(); ++it_val) {
-							hypro::valuation_t<Number> postAssign;
+						for (typename flowpipe_t<Representation>::iterator it_val = it_pipe->begin(); it_val != it_pipe->end(); ++it_val) {
+							Representation postAssign;
 							//check if guard of transition is enabled (if yes compute Post Assignment Valuation)
 							if (computePostCondition(trans, *it_val, postAssign)) {
 
 								//targetValuation = targetValuation U postAssign
-								if (!targetValuation.isEmpty()) {
+								if (!targetValuation.empty()) {
 									targetValuation = targetValuation.unite(postAssign);
 								} else {
 									targetValuation = postAssign;
@@ -265,12 +268,14 @@ namespace hypro
 						}
 
 						//compute convex hull over all united polytopes
-						hypro::valuation_t<Number> hullPoly;
-						targetValuation.hull(hullPoly);
+						//Representation hullPoly;
+						//targetValuation.hull(hullPoly);
 
 						//compute new Flowpipe
 						hypro::Location<Number> tarLoc = *trans.targetLoc();
-						flowpipe_t<Number> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
+
+						//flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
+						flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, targetValuation);
 
 						//if new Flowpipe is not empty
 						if (!newPipe.empty()) {
@@ -278,7 +283,9 @@ namespace hypro
 							reach.push_back(newPipe);
 
 							//keep map consistent
-							_map.insert( std::make_pair(newPipe, tarLoc) );
+							//_map.insert( std::make_pair(newPipe, tarLoc) );
+
+
 						}
 					}
 				}
@@ -291,19 +298,20 @@ namespace hypro
     		 * computes the reachability on basis of polytopes
     		 * TODO: add time/step boundaries to guarantee termination (might be necessary for some automata)
     		 */
-    		template<typename Number>
-			static std::vector<flowpipe_t<Number>> computeForwardsReachability(hypro::HybridAutomaton<Number, flowpipe_t<Number>> _hybrid) {
-
-					std::vector<flowpipe_t<Number>> R_new;
-					std::vector<flowpipe_t<Number>> R;
+    		template<typename Number, typename Representation>
+			static std::vector<flowpipe_t<Representation>> computeForwardsReachability(hypro::HybridAutomaton<Number, Representation> _hybrid) {
+					unsigned depth = 0;
+					std::vector<flowpipe_t<Representation>> R_new;
+					std::vector<flowpipe_t<Representation>> R;
 
 					//map that stores which flowpipe belongs to which location
-					std::map<flowpipe_t<Number>, hypro::Location<Number>> map;
+					//std::map<flowpipe_t<Representation>, hypro::Location<Number>> map;
+					std::vector<std::pair<std::vector<flowpipe_t<Representation>>, hypro::Location<Number>>> map;
 
 					//R_new := flowpipe for the initial location, computed based on input valuation
-					typename std::vector<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
+					typename std::set<hypro::Location<Number>*>::iterator it = _hybrid.initialLocations().begin();
 					hypro::Location<Number> initLoc = *(*it);
-					flowpipe_t<Number> init = computeForwardTimeClosure(initLoc, _hybrid.valuation());
+					flowpipe_t<Representation> init = computeForwardTimeClosure(initLoc, _hybrid.valuation());
 
 					if (!init.empty()) {
 						R_new.push_back(init);
@@ -312,22 +320,57 @@ namespace hypro
 						//the initial valuation was not valid (with respect to the initial locations invariant)
 					}
 
-					map.insert( std::make_pair(init, initLoc) );
+					map.push_back( std::make_pair(init, initLoc) );
 
-					while (!R_new.empty()) {
+					while (!R_new.empty() && depth < fReach_ITERATIONDEPTH) {
 						//R = R U R_new
 						if (!R.empty()) {
-							std::set_union(R.begin(), R.end(),
-										   R_new.begin(), R_new.end(),
-										   std::inserter(R, R.begin()));
+							std::vector<flowpipe_t<Representation>> tmp;
+							for(const auto& new_fp : R_new) {
+								bool found = false;
+								for(auto posIt = R.begin(); posIt != R.end();){
+									if(new_fp == *posIt) {
+										found = true;
+										break;
+									}
+								}
+								if(!found) {
+									tmp.push_back(new_fp);
+								}
+							}
+							while(!tmp.empty()){ 
+								R.emplace_back(tmp.back()); 
+								tmp.pop_back();
+							}
+
+							//std::set_union(R.begin(), R.end(),
+							//			   R_new.begin(), R_new.end(),
+							//			   std::inserter(R, R.begin()));
 						} else {
 							R = R_new;
 						}
 
 						//R_new = Reach(R_new)\R
-						std::vector<flowpipe_t<Number>> R_temp = computeReach(R_new, _hybrid, map);
-						std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
-											std::inserter(R_new, R_new.begin()));
+						std::vector<flowpipe_t<Representation>> R_temp = computeReach(R_new, _hybrid, map);
+						std::vector<flowpipe_t<Representation>> tmp;
+						for(auto posIt = R_temp.begin(); posIt != R_temp.end();) {
+							bool found = false;
+							for(const auto& fp : R) {
+								if(*posIt == fp) {
+									posIt = R_temp.erase(posIt);
+									found = true;
+									break;
+								}
+							}
+							if(!found)
+								++posIt;
+						}
+						R_new = R_temp;
+
+						//std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
+						//					std::inserter(R_new, R_new.begin()));
+
+						++depth;
 					}
 					return R;
 

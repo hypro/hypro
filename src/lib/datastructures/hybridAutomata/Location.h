@@ -43,6 +43,7 @@ namespace hypro
     		 * Member
     		 */
     		location mLocation;
+    		unsigned id;
         
         public:
     		/**
@@ -66,6 +67,9 @@ namespace hypro
     		location location();
     		transitionSet transitions();
     		hypro::matrix_t<Number> extInputMat();
+    		unsigned id() const {
+    			return id;
+    		}
 
     		void setActivityVec(hypro::vector_t<Number> _vec);
     		void setActivityMat(hypro::matrix_t<Number> _mat);
@@ -74,6 +78,10 @@ namespace hypro
     		void setLocation(struct location _loc);
     		void setTransitions(transitionSet _trans);
     		void setExtInputMat(hypro::matrix_t<Number> _mat);
+
+    		bool operator<(const Location<Number>& _rhs) const {
+    			return (id < _rhs.id());
+    		}
 
 			friend std::ostream & operator<< (std::ostream& _ostr, const Location<Number>& _l)
             {

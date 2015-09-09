@@ -65,7 +65,7 @@ namespace hypro
     		void setLocations(locationSet _locs);
     		void setTransitions(transitionSet _trans);
     		void setValuation(Representation _val);
-                void setExtInputValuation(Representation _extInputVal);
+            void setExtInputValuation(Representation _extInputVal);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
 			
 			void addLocation(location* _location);

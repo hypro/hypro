@@ -446,7 +446,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool VPolytope<Number>::operator==(const VPolytope<Number>& rhs)
+	bool VPolytope<Number>::operator==(const VPolytope<Number>& rhs) const 
 	{
 		if(this->dimension() != rhs.dimension())
 			return false;

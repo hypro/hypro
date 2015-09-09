@@ -90,6 +90,10 @@ class VPolytope : public hypro::GeometricObject<Number>
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
 		
+	 	bool empty() const {
+	 		return mPoints.empty();
+	 	}
+
 		unsigned int dimension() const {
 			if(mPoints.empty())
 				return 0;
@@ -230,7 +234,7 @@ class VPolytope : public hypro::GeometricObject<Number>
 		public:
 		VPolytope<Number>& operator=(const VPolytope<Number>& rhs);
 		VPolytope<Number>& operator=(VPolytope<Number>&& rhs) = default;
-		bool operator==(const VPolytope<Number>& rhs);
+		bool operator==(const VPolytope<Number>& rhs) const;
 };
 
 template<typename Number>

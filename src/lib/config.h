@@ -75,6 +75,7 @@ using vectorSet = std::set<vector_t<Number>>;
  * Defines for reachability algorithm based on polytopes
  */
 static const float fReach_TIMEBOUND= 5;
+static const unsigned fReach_ITERATIONDEPTH= 5;
 static const unsigned fReach_TIMEDISCRETIZATION= 500;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output
