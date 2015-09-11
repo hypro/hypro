@@ -1,5 +1,5 @@
 #include "../lib/config.h"
-#include "../lib/datastructures/hybridAutomata/Location.h"
+#include "../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../lib/datastructures/Point.h"
@@ -15,14 +15,17 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
+	LocationManager<Number>
+
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
-	typedef hypro::VPolytope<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
+	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-	Location<Number>* loc1 = new Location<Number>();
+	Location<Number>* loc1 = lManager.create();
 	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
 	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 

@@ -3,25 +3,29 @@
 namespace hypro {
 
 	template<typename Number>
-	Location<Number>::Location(const Location& _loc) : mLocation(_loc.mLocation){
-	}
+	Location<Number>::Location(unsigned _id, const Location& _loc) :
+		mLocation(_loc.mLocation),
+		mId(_id)
+	{}
 
 	template<typename Number>
-	Location<Number>::Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const struct invariant _inv){
+	Location<Number>::Location(unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const Location<Number>::invariantContent _inv){
 		mLocation.vec = _vec;
 		mLocation.mat = _mat;
 		mLocation.inv = _inv;
 		mLocation.trans = _trans;
+		mId = _id;
 	}
 
 	template<typename Number>
-	Location<Number>::Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
-			const transitionSet _trans, const struct invariant _inv, const hypro::matrix_t<Number> _extInputMat){
+	Location<Number>::Location(unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+			const transitionSet _trans, const Location<Number>::invariantContent _inv, const hypro::matrix_t<Number> _extInputMat){
 		mLocation.vec = _vec;
 		mLocation.mat = _mat;
 		mLocation.inv = _inv;
 		mLocation.trans = _trans;
 		mLocation.extInputMat = _extInputMat;
+		mId = _id;
 	}
 
 	template<typename Number>
@@ -40,12 +44,12 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	struct Location<Number>::invariant Location<Number>::invariant() {
+	typename Location<Number>::invariantContent Location<Number>::invariant() {
 		return mLocation.inv;
 	}
 
 	template<typename Number>
-	struct Location<Number>::location Location<Number>::location() {
+	typename Location<Number>::locationContent Location<Number>::location() {
 		return mLocation;
 	}
 
@@ -70,7 +74,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Location<Number>::setInvariant(struct hypro::Location<Number>::invariant _inv) {
+	void Location<Number>::setInvariant(hypro::Location<Number>::invariantContent _inv) {
 		mLocation.inv = _inv;
 	}
 
@@ -82,7 +86,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Location<Number>::setLocation(struct location _loc) {
+	void Location<Number>::setLocation( Location<Number>::locationContent _loc) {
 		mLocation = _loc;
 	}
 

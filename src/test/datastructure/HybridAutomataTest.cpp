@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/Location.h"
+#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "carl/core/VariablePool.h"
@@ -29,8 +29,8 @@ protected:
 		 * Location Setup
 		 */
 
-		loc1 = new Location<Number>();
-    	loc2 = new Location<Number>();
+		loc1 = locMan.create();
+    	loc2 = locMan.create();
     	trans = new hypro::Transition<Number>();
 
 		invariantVec(0) = 10;
@@ -116,6 +116,9 @@ protected:
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
+
+    LocationManager<Number>& locMan = LocationManager<Number>::getInstance();
+
     Location<Number>* loc1;
     Location<Number>* loc2;
     hypro::Transition<Number>* trans;
@@ -125,7 +128,7 @@ protected:
     vector_t<Number> invariantVec = vector_t<Number>(2,1);
     operator_e invariantOp;
     matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
-	struct Location<Number>::invariant inv;
+	struct Location<Number>::invariantContent inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
     struct hypro::Transition<Number>::guard guard;

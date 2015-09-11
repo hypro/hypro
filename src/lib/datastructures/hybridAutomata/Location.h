@@ -1,4 +1,4 @@
-/* 
+/*
  * Class that describes one location of a hybrid automaton.
  * File:   location.h
  * Author: stefan & ckugler
@@ -14,27 +14,40 @@ namespace hypro
 	template<typename Number>
 	class Transition;
 
+	template<typename Number>
+	class LocationManager;
+
     template<typename Number>
     class Location
     {
-    	private:
+		friend LocationManager<Number>;
 
+		public:
+			struct invariantContent {
+				hypro::vector_t<Number> vec;
+				hypro::matrix_t<Number> mat;
+				hypro::operator_e op;
+			};
+
+		protected:
 			typedef std::set<Transition<Number>*> transitionSet;
 
+			Location(unsigned _id) : mLocation(), mId(_id) {}
+			Location(unsigned _id, const Location& _loc);
+			Location(unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const Location<Number>::invariantContent _inv);
+			Location(unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+					const transitionSet _trans, const Location<Number>::invariantContent _inv, const hypro::matrix_t<Number> _extInputMat);
+
+
         public:
-    		struct invariant {
-    			hypro::vector_t<Number> vec;
-    			hypro::matrix_t<Number> mat;
-    			hypro::operator_e op;
-    		};
 
     		//location: activity (matrix & vector), invariant, a set of outgoing transitions and a matrix for external Input
-    		struct location {
+    		struct locationContent {
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number> mat;
     			hypro::matrix_t<Number> extInputMat;
     			transitionSet trans;
-    			invariant inv;
+    			invariantContent inv;
     		};
 
         private:
@@ -42,45 +55,40 @@ namespace hypro
     		/**
     		 * Member
     		 */
-    		location mLocation;
-    		unsigned id;
-        
+    		locationContent mLocation;
+    		unsigned mId;
+
         public:
     		/**
     		 * Constructors & Destructor
     		 */
-    		Location() : mLocation() {}
-    		Location(const Location& _loc);
-    		Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const transitionSet _trans, const struct invariant _inv);
-    		Location(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
-    				const transitionSet _trans, const struct invariant _inv, const hypro::matrix_t<Number> _extInputMat);
-        
-    		~Location()
-    		{}
+
+			 ~Location()
+ 			{}
 
     		/**
     		 * Getter & Setter
     		 */
     		hypro::vector_t<Number> activityVec();
     		hypro::matrix_t<Number> activityMat();
-    		invariant invariant();
-    		location location();
+    		invariantContent invariant();
+    		locationContent location();
     		transitionSet transitions();
     		hypro::matrix_t<Number> extInputMat();
     		unsigned id() const {
-    			return id;
+    			return mId;
     		}
 
     		void setActivityVec(hypro::vector_t<Number> _vec);
     		void setActivityMat(hypro::matrix_t<Number> _mat);
-    		void setInvariant(struct hypro::Location<Number>::invariant _inv);
+    		void setInvariant(struct hypro::Location<Number>::invariantContent _inv);
     		void setInvariant(hypro::matrix_t<Number> _mat, hypro::vector_t<Number> _vec, hypro::operator_e _op);
-    		void setLocation(struct location _loc);
+    		void setLocation(struct locationContent _loc);
     		void setTransitions(transitionSet _trans);
     		void setExtInputMat(hypro::matrix_t<Number> _mat);
 
     		bool operator<(const Location<Number>& _rhs) const {
-    			return (id < _rhs.id());
+    			return (mId < _rhs.id());
     		}
 
 			friend std::ostream & operator<< (std::ostream& _ostr, const Location<Number>& _l)

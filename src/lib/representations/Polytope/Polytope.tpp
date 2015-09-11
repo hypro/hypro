@@ -132,7 +132,7 @@ namespace hypro
     {}
 
     template<typename Number>
-    bool Polytope<Number>::isEmpty() const
+    bool Polytope<Number>::empty() const
     {
         return mPolyhedron.is_empty();
     }
@@ -779,7 +779,7 @@ namespace hypro
     	for(unsigned i = 0; i<hull.size(); i++) {
     		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-    			
+
     			/*
     			if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
     				Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));

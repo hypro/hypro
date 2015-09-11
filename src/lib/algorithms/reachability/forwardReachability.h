@@ -140,7 +140,7 @@ namespace hypro
 					//firstSegment = firstSegment.unite(firstSegment);
 
 #ifdef fReach_DEBUG
-				   	std::cout << "first Flowpipe Segment (after minkowski Sum): ";
+				   	std::cout << "first Flowpipe Segment (after minkowski Sum, dimension " << firstSegment.dimension() << "): ";
 				    firstSegment.print();
 #endif
 
@@ -168,7 +168,7 @@ namespace hypro
 						//resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
-					   	std::cout << "Next Flowpipe Segment: ";
+					   	std::cout << "Next Flowpipe Segment (dimension " << resultPolytope.dimension() << "): ";
 					    resultPolytope.print();
 
 						std::cout << "still within Invariant?: ";
@@ -338,8 +338,8 @@ namespace hypro
 									tmp.push_back(new_fp);
 								}
 							}
-							while(!tmp.empty()){ 
-								R.emplace_back(tmp.back()); 
+							while(!tmp.empty()){
+								R.emplace_back(tmp.back());
 								tmp.pop_back();
 							}
 

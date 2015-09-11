@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/Location.h"
+#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include <carl/core/VariablePool.h>
@@ -30,19 +30,19 @@ protected:
     	 */
     	invariantVec(0) = 16;
     	invariantVec(1) = 16;
-    	invariantVec(2) = 1;
+    	//invariantVec(2) = 1;
 
     	invariantOp = LEQ;
 
     	invariantMat(0,0) = 1;
     	invariantMat(0,1) = 0;
-    	invariantMat(0,2) = 0;
+    	//invariantMat(0,2) = 0;
     	invariantMat(1,0) = 0;
     	invariantMat(1,1) = 1;
-    	invariantMat(1,2) = 0;
-    	invariantMat(2,0) = 0;
-    	invariantMat(2,1) = 0;
-    	invariantMat(2,2) = 1;
+    	//invariantMat(1,2) = 0;
+    	//invariantMat(2,0) = 0;
+    	//invariantMat(2,1) = 0;
+    	//invariantMat(2,2) = 1;
 
     	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -111,27 +111,27 @@ protected:
     	boxVec(1) = 0;
     	boxVec(2) = 1;
     	boxVec(3) = 0;
-    	boxVec(4) = 1;
-    	boxVec(5) = -1;
+    	//boxVec(4) = 1;
+    	//boxVec(5) = -1;
 
     	boxMat(0,0) = 1;
     	boxMat(0,1) = 0;
-    	boxMat(0,2) = 0;
+    	//boxMat(0,2) = 0;
     	boxMat(1,0) = -1;
     	boxMat(1,1) = 0;
-    	boxMat(1,2) = 0;
+    	//boxMat(1,2) = 0;
     	boxMat(2,0) = 0;
     	boxMat(2,1) = 1;
-    	boxMat(2,2) = 0;
+    	//boxMat(2,2) = 0;
     	boxMat(3,0) = 0;
     	boxMat(3,1) = -1;
-    	boxMat(3,2) = 0;
-    	boxMat(4,0) = 0;
-    	boxMat(4,1) = 0;
-    	boxMat(4,2) = 1;
-    	boxMat(5,0) = 0;
-    	boxMat(5,1) = 0;
-    	boxMat(5,2) = -1;
+    	//boxMat(3,2) = 0;
+    	//boxMat(4,0) = 0;
+    	//boxMat(4,1) = 0;
+    	//boxMat(4,2) = 1;
+    	//boxMat(5,0) = 0;
+    	//boxMat(5,1) = 0;
+    	//boxMat(5,2) = -1;
 
     	poly = Polytope<FLOAT_T<double>>(boxMat,boxVec);
 
@@ -163,16 +163,20 @@ protected:
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-    Location<FLOAT_T<double>>* loc1 = new Location<FLOAT_T<double>>();
-    Location<FLOAT_T<double>>* loc2 = new Location<FLOAT_T<double>>();
+    LocationManager<FLOAT_T<double>>& locManag = hypro::LocationManager<FLOAT_T<double>>::getInstance();
+
+    Location<FLOAT_T<double>>* loc1 = locManag.create();
+    Location<FLOAT_T<double>>* loc2 = locManag.create();
     hypro::Transition<FLOAT_T<double>>* trans = new hypro::Transition<FLOAT_T<double>>();
     HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>>();
 
     //Other Objects: Vectors, Matrices, Guards...
-    vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
+    // vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
+    vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(2,1);
     operator_e invariantOp;
-    matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(3,3);
-	struct Location<FLOAT_T<double>>::invariant inv;
+    // matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(3,3);
+    matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(2,2);
+	struct Location<FLOAT_T<double>>::invariantContent inv;
 	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(3,3);
 
     struct hypro::Transition<FLOAT_T<double>>::guard guard;
@@ -194,8 +198,8 @@ protected:
     hypro::Polytope<FLOAT_T<double>> pPoly;
 
     //Box
-    vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(6,1);
-    matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(6,3);
+    vector_t<FLOAT_T<double>> boxVec = vector_t<FLOAT_T<double>>(4,1);
+    matrix_t<FLOAT_T<double>> boxMat = matrix_t<FLOAT_T<double>>(4,2);
 };
 
 /**
@@ -261,14 +265,14 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	/*
 	 * Tests based on Polytope(Matrix,Vector) constructor
 	 */
-	hypro::vector_t<FLOAT_T<double>> pointVec = hypro::vector_t<FLOAT_T<double>>(6,1);
+	hypro::vector_t<FLOAT_T<double>> pointVec = hypro::vector_t<FLOAT_T<double>>(4,1);
 
 	pointVec(0) = 0;
 	pointVec(1) = 0;
 	pointVec(2) = 0;
 	pointVec(3) = 0;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	//pointVec(4) = 1;
+	//pointVec(5) = -1;
 
 	Polytope<FLOAT_T<double>> pointPoly;
 	pointPoly = Polytope<FLOAT_T<double>>(boxMat,pointVec);
@@ -280,8 +284,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -0.5;
 	pointVec(2) = 0.75;
 	pointVec(3) = -0.75;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	//pointVec(4) = 1;
+	//pointVec(5) = -1;
 
 	pointPoly = Polytope<FLOAT_T<double>>(boxMat,pointVec);
 
@@ -292,8 +296,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 2;
 	pointVec(3) = -2;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	//pointVec(4) = 1;
+	//pointVec(5) = -1;
 
 	pointPoly = Polytope<FLOAT_T<double>>(boxMat,pointVec);
 
@@ -304,8 +308,8 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 0.5;
 	pointVec(3) = -0.5;
-	pointVec(4) = 1;
-	pointVec(5) = -1;
+	//pointVec(4) = 1;
+	//pointVec(5) = -1;
 
 	pointPoly = Polytope<FLOAT_T<double>>(boxMat,pointVec);
 
@@ -321,11 +325,11 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	 * computePolytope() Test
 	 */
 	hypro::Polytope<FLOAT_T<double>> testBoxPoly;
-	int dimension = 3;
+	int dimension = 2;
 	FLOAT_T<double> radius = 5;
 	testBoxPoly = hypro::computePolytope<FLOAT_T<double>,hypro::Polytope<FLOAT_T<double>>>(dimension,radius);
 
-	hypro::vector_t<FLOAT_T<double>> pointVec = hypro::vector_t<FLOAT_T<double>>(6,1);
+	hypro::vector_t<FLOAT_T<double>> pointVec = hypro::vector_t<FLOAT_T<double>>(4,1);
 
 	matrix_t<FLOAT_T<double>> testMat = boxMat;
 
@@ -333,11 +337,13 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = 5;
 	pointVec(2) = 5;
 	pointVec(3) = 5;
-	pointVec(4) = 5;
-	pointVec(5) = 5;
+	//pointVec(4) = 5;
+	//pointVec(5) = 5;
 
 	Polytope<FLOAT_T<double>> pointPoly;
 	pointPoly = Polytope<FLOAT_T<double>>(testMat,pointVec);
+
+    std::cout << pointPoly << " contains " << testBoxPoly << std::endl;
 
 	EXPECT_TRUE(pointPoly.contains(testBoxPoly));
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -346,8 +352,8 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -5;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 5;
-	pointVec(5) = -5;
+	//pointVec(4) = 5;
+	//pointVec(5) = -5;
 
 	pointPoly = Polytope<FLOAT_T<double>>(testMat,pointVec);
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -356,14 +362,14 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -6;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	pointVec(4) = 5;
-	pointVec(5) = -5;
+	//pointVec(4) = 5;
+	//pointVec(5) = -5;
 
 	pointPoly = Polytope<FLOAT_T<double>>(testMat,pointVec);
 	EXPECT_FALSE(testBoxPoly.contains(pointPoly));
 
 
-	
+
 	/**
 	 * convertMatToDouble() Test
 	 */
@@ -383,4 +389,3 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	EXPECT_EQ(carl::FLOAT_T<double>(doubleMat(0,0)), floatTMat(0,0));
 	*/
 }
-
