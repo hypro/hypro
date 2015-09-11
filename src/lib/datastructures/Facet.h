@@ -11,7 +11,6 @@
 
 #include "../config.h"
 #include "Hyperplane.h"
-#include "Point.h"
 
 
 namespace hypro

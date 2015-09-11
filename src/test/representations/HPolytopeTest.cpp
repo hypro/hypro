@@ -84,7 +84,7 @@ TYPED_TEST(HPolytopeTest, Corners)
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 
-	typename VPolytope<TypeParam>::pointVector corners = hpt1.vertices();
+	typename std::vector<Point<TypeParam>> corners = hpt1.vertices();
 	for(auto& corner : corners) {
 		EXPECT_TRUE(hpt1.isExtremePoint(corner, TypeParam(0.0001)));
 	}

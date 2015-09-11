@@ -2,7 +2,10 @@
 
 #include <set>
 #include <map>
-#include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <assert.h>
 
 #include "types.h"
 #include <carl/numbers/numbers.h>
@@ -13,7 +16,6 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-#include "util/VariablePool.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus

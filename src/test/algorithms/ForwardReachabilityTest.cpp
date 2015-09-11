@@ -325,7 +325,7 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	 * computePolytope() Test
 	 */
 	hypro::Polytope<FLOAT_T<double>> testBoxPoly;
-	int dimension = 2;
+	int dimension = 2; // the last component is used for contstants
 	FLOAT_T<double> radius = 5;
 	testBoxPoly = hypro::computePolytope<FLOAT_T<double>,hypro::Polytope<FLOAT_T<double>>>(dimension,radius);
 
@@ -342,8 +342,6 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 
 	Polytope<FLOAT_T<double>> pointPoly;
 	pointPoly = Polytope<FLOAT_T<double>>(testMat,pointVec);
-
-    std::cout << pointPoly << " contains " << testBoxPoly << std::endl;
 
 	EXPECT_TRUE(pointPoly.contains(testBoxPoly));
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));

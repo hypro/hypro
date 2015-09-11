@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include <set>
-#include <list>
 #include "Vertex.h"
 
 
