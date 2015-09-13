@@ -18,10 +18,8 @@ namespace hypro
     class HybridAutomaton
     {
         private:
-			typedef hypro::Location<Number> location;
-			typedef hypro::Transition<Number> transition;
-			typedef std::set<location*> locationSet;
-			typedef std::set<transition*> transitionSet;
+			typedef std::set<Location<Number>*> locationSet;
+			typedef std::set<Transition<Number>*> transitionSet;
 
         public:
 			//hybrid automaton: a set of locations, a set of initial locations, a set of transitions and a valuation (currently a polytope)
@@ -68,8 +66,8 @@ namespace hypro
             void setExtInputValuation(Representation _extInputVal);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
 
-			void addLocation(location* _location);
-			void addTransition(transition* _transition);
+			void addLocation(Location<Number>* _location);
+			void addTransition(Transition<Number>* _transition);
 
 			// move operator
 			inline HybridAutomaton<Number,Representation>& operator= (const HybridAutomaton<Number,Representation>& _rhs) {

@@ -78,9 +78,9 @@ protected:
     	assign.transformMat = inv.mat;
 
     	trans->setGuard(guard);
-    	trans->setStartLoc(loc1);
-    	trans->setTargetLoc(loc2);
-    	trans->setAssignment(assign);
+    	trans->setSource(loc1);
+    	trans->setTarget(loc2);
+    	trans->setReset(assign);
 
     	/*
     	 * Hybrid Automaton
@@ -179,9 +179,9 @@ protected:
 	struct Location<FLOAT_T<double>>::Invariant inv;
 	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(3,3);
 
-    struct hypro::Transition<FLOAT_T<double>>::guard guard;
+    struct hypro::Transition<FLOAT_T<double>>::Guard guard;
 
-    struct hypro::Transition<FLOAT_T<double>>::assignment assign;
+    struct hypro::Transition<FLOAT_T<double>>::Reset assign;
 
     hypro::Location<FLOAT_T<double>>* locations[2];
     std::set<hypro::Location<FLOAT_T<double>>*> locSet;

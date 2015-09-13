@@ -214,8 +214,8 @@ namespace hypro
 
 				//check if the intersection is empty
 				if (!intersectionPoly.empty()) {
-					hypro::vector_t<Number> translateVec = _trans.assignment().translationVec;
-					hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
+					hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
+					hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
 					//perform translation + transformation on intersection polytope
 					result = intersectionPoly.linearTransformation(transformMat, translateVec);

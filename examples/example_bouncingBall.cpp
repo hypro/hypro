@@ -31,8 +31,8 @@ int main(int argc, char const *argv[])
 
 	matrix_t<Number> locationMat = matrix_t<Number>(3,3);
 
-	struct hypro::Transition<Number>::guard guard;
-	struct hypro::Transition<Number>::assignment assign;
+	struct hypro::Transition<Number>::Guard guard;
+	struct hypro::Transition<Number>::Reset reset;
 
 	hypro::Location<Number>* locations[1];
 	std::set<hypro::Location<Number>*> locSet;
@@ -61,7 +61,7 @@ int main(int argc, char const *argv[])
 	operator_e invariantOp;
 	//matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
-	struct Location<Number>::invariantContent inv;
+	struct Location<Number>::Invariant inv;
 
 	invariantVec(0) = 20;
 	invariantVec(1) = 0;
@@ -159,13 +159,13 @@ int main(int argc, char const *argv[])
 	assignMat(2,1) = 0;
 	assignMat(2,2) = 1;
 
-	assign.translationVec = assignVec;
-	assign.transformMat = assignMat;
+	reset.translationVec = assignVec;
+	reset.transformMat = assignMat;
 
 	trans->setGuard(guard);
-	trans->setStartLoc(loc1);
-	trans->setTargetLoc(loc1);
-	trans->setAssignment(assign);
+	trans->setSource(loc1);
+	trans->setTarget(loc1);
+	trans->setReset(reset);
 
 	/*
 	 * Hybrid Automaton

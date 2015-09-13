@@ -26,7 +26,7 @@ namespace reachability {
 			unsigned initId = addFlowpipe(std::move(flowpipe_t<Representation>( {_automaton.valuation()}) ));
 			for(const auto loc : _automaton.initialLocations()) {
 				// use insert here as we assume that every location is only put in once. TODO: Extend for more flexibility.
-				mReach.insert(std::make_pair(loc, initId));
+				mReach.insert(std::make_pair(loc, std::vector<unsigned>({initId})));
 				mFlowToLocation.insert(std::make_pair(initId, loc));
 			}
 			// at this point every initial location is assigned the valuation.
@@ -316,8 +316,8 @@ namespace reachability {
 
 			//check if the intersection is empty
 			if (!intersectionPoly.empty()) {
-				hypro::vector_t<Number> translateVec = _trans.assignment().translationVec;
-				hypro::matrix_t<Number> transformMat = _trans.assignment().transformMat;
+				hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
+				hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
 				//perform translation + transformation on intersection polytope
 				result = intersectionPoly.linearTransformation(transformMat, translateVec);

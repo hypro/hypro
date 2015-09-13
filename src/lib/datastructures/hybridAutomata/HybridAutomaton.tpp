@@ -80,12 +80,12 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::addLocation(location* _location) {
+	void HybridAutomaton<Number, Representation>::addLocation(Location<Number>* _location) {
 		mHybridAutomaton.locs.insert(_location);
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::addTransition(transition* _transition) {
+	void HybridAutomaton<Number, Representation>::addTransition(Transition<Number>* _transition) {
 		mHybridAutomaton.trans.insert(_transition);
 	}
 }

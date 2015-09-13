@@ -66,13 +66,13 @@ protected:
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
-		assign.translationVec = inv.vec;
-		assign.transformMat = inv.mat;
+		reset.translationVec = inv.vec;
+		reset.transformMat = inv.mat;
 
 		trans->setGuard(guard);
-		trans->setStartLoc(loc1);
-		trans->setTargetLoc(loc2);
-		trans->setAssignment(assign);
+		trans->setSource(loc1);
+		trans->setTarget(loc2);
+		trans->setReset(reset);
 
 		/*
 		 * Hybrid Automaton Setup
@@ -131,9 +131,9 @@ protected:
 	struct Location<Number>::Invariant inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
-    struct hypro::Transition<Number>::guard guard;
+    struct hypro::Transition<Number>::Guard guard;
 
-    struct hypro::Transition<Number>::assignment assign;
+    struct hypro::Transition<Number>::Reset reset;
 
     hypro::Location<Number>* locations[2];
     std::set<hypro::Location<Number>*> locSet;
@@ -198,14 +198,14 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 TYPED_TEST(HybridAutomataTest, TransitionTest)
 {
 	//transition: Start Location
-	EXPECT_EQ(this->trans->startLoc(), this->loc1);
+	EXPECT_EQ(this->trans->source(), this->loc1);
 
 	//transition: End Location
-	EXPECT_EQ(this->trans->targetLoc(),this-> loc2);
+	EXPECT_EQ(this->trans->target(),this-> loc2);
 
 	//transition: Assignment
-	EXPECT_EQ(this->trans->assignment().translationVec, this->assign.translationVec);
-	EXPECT_EQ(this->trans->assignment().transformMat, this->assign.transformMat);
+	EXPECT_EQ(this->trans->reset().translationVec, this->reset.translationVec);
+	EXPECT_EQ(this->trans->reset().transformMat, this->reset.transformMat);
 
 	//transition: Guard
 	EXPECT_EQ(this->trans->guard().vec, this->guard.vec);
