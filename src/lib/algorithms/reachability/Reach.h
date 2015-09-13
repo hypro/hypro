@@ -13,7 +13,7 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	struct Reach {
 		HybridAutomaton<Number, Representation> mAutomaton;
-		std::map<unsigned, flowpipe_t> mFlowpipes;
+		std::map<unsigned, flowpipe_t<Representation>> mFlowpipes;
 		std::map<unsigned, Location<Number>*> mFlowToLocation;
 		std::map<Location<Number>*, std::vector<unsigned>> mReach;
 		unsigned id = 0;
@@ -23,7 +23,7 @@ namespace reachability {
 			mFlowpipes(),
 			mReach()
 		{
-			unsigned initId = addFlowpipe(_automaton.valuation());
+			unsigned initId = addFlowpipe(std::move(flowpipe_t<Representation>( {_automaton.valuation()}) ));
 			for(const auto loc : _automaton.initialLocations()) {
 				// use insert here as we assume that every location is only put in once. TODO: Extend for more flexibility.
 				mReach.insert(std::make_pair(loc, initId));
@@ -63,7 +63,7 @@ namespace reachability {
 
 				//R_new = Reach(R_new)\R
 				std::vector<unsigned> R_temp = computeReach(R_new);
-			
+
 				std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 									std::inserter(R_new, R_new.begin()));
 
@@ -71,7 +71,6 @@ namespace reachability {
 			}
 		}
 
-		template<typename Number, typename Representation>
 		unsigned computeForwardTimeClosure(hypro::Location<Number> _loc, Representation _val) {
 
 			//[0,T] = [0,delta1] U [delta1, delta2] ...
@@ -307,7 +306,6 @@ namespace reachability {
 			return reach;
 		}
 
-		template<typename Number, typename Representation>
 		bool computePostCondition(const hypro::Transition<Number>& _trans, Representation _val, Representation& result) {
 
 			//Polytope that is defined by the guard

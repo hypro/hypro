@@ -3,7 +3,7 @@
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../lib/datastructures/Point.h"
-#include "../lib/algorithms/reachability/forwardReachability.h"
+#include "../lib/algorithms/reachability/Reach.h"
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/representations/SupportFunction/SupportFunction.h"
@@ -14,8 +14,6 @@ int main(int argc, char const *argv[])
 {
 	using namespace hypro;
 	using namespace carl;
-
-	LocationManager<Number>
 
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
@@ -63,7 +61,7 @@ int main(int argc, char const *argv[])
 	operator_e invariantOp;
 	//matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
-	struct Location<Number>::invariant inv;
+	struct Location<Number>::invariantContent inv;
 
 	invariantVec(0) = 20;
 	invariantVec(1) = 0;
@@ -229,7 +227,9 @@ int main(int argc, char const *argv[])
 	//poly.print();
 
 	// flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
-	flowpipes = forwardReachability::computeForwardsReachability(hybrid);
+	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
+
+	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
 

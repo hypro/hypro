@@ -1,4 +1,4 @@
-/* 
+/*
  * Class that describes a hybrid automaton.
  * File:   hybridAutomaton.h
  * Author: stefan & ckugler
@@ -53,13 +53,13 @@ namespace hypro
     		/**
     		 * Getter & Setter
     		 */
-    		locationSet initialLocations();
-    		locationSet locations();
-    		transitionSet transitions();
-    		Representation valuation();
-                Representation extInputValuation();
-                unsigned dimension() const;
-    		hybridAutomaton hybridAutomaton();
+    		const locationSet& initialLocations() const;
+    		const locationSet& locations() const;
+    		const transitionSet& transitions() const;
+    		const Representation& valuation() const;
+            const Representation& extInputValuation() const;
+            unsigned dimension() const;
+    		const hybridAutomaton& hybridAutomaton() const;
 
     		void setInitialLocations(locationSet _initLocs);
     		void setLocations(locationSet _locs);
@@ -67,16 +67,16 @@ namespace hypro
     		void setValuation(Representation _val);
             void setExtInputValuation(Representation _extInputVal);
     		void setHybridAutomaton(struct hybridAutomaton _hybrid);
-			
+
 			void addLocation(location* _location);
 			void addTransition(transition* _transition);
-			
+
 			// move operator
 			inline HybridAutomaton<Number,Representation>& operator= (const HybridAutomaton<Number,Representation>& _rhs) {
 				mHybridAutomaton = _rhs.mHybridAutomaton;
 				return *this;
 			}
-			
+
 			friend std::ostream & operator<< (std::ostream& _ostr, const HybridAutomaton<Number,Representation>& _a) {
 				_ostr << "initial: " << std::endl;
 				for(auto initialIT = _a.mHybridAutomaton.init.begin(); initialIT != _a.mHybridAutomaton.init.end(); ++initialIT)
@@ -96,9 +96,9 @@ namespace hypro
 				return _ostr;
 			}
     };
-	
-	
-	
+
+
+
 }
 
 #include "HybridAutomaton.tpp"

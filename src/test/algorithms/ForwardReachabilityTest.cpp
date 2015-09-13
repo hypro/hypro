@@ -176,7 +176,7 @@ protected:
     operator_e invariantOp;
     // matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(3,3);
     matrix_t<FLOAT_T<double>> invariantMat = matrix_t<FLOAT_T<double>>(2,2);
-	struct Location<FLOAT_T<double>>::invariantContent inv;
+	struct Location<FLOAT_T<double>>::Invariant inv;
 	matrix_t<FLOAT_T<double>> locationMat = matrix_t<FLOAT_T<double>>(3,3);
 
     struct hypro::Transition<FLOAT_T<double>>::guard guard;

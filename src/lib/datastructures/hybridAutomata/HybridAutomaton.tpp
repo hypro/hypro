@@ -15,37 +15,37 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Representation>
-	std::set<hypro::Location<Number>*> HybridAutomaton<Number, Representation>::initialLocations() {
+	const std::set<hypro::Location<Number>*>& HybridAutomaton<Number, Representation>::initialLocations() const{
 		return mHybridAutomaton.init;
 	}
 
 	template<typename Number, typename Representation>
-	std::set<hypro::Location<Number>*> HybridAutomaton<Number, Representation>::locations() {
+	const std::set<hypro::Location<Number>*>& HybridAutomaton<Number, Representation>::locations() const{
 		return mHybridAutomaton.locs;
 	}
 
 	template<typename Number, typename Representation>
-	std::set<hypro::Transition<Number>*> HybridAutomaton<Number, Representation>::transitions() {
+	const std::set<hypro::Transition<Number>*>& HybridAutomaton<Number, Representation>::transitions() const{
 		return mHybridAutomaton.trans;
 	}
 
 	template<typename Number, typename Representation>
-	Representation HybridAutomaton<Number, Representation>::valuation() {
+	const Representation& HybridAutomaton<Number, Representation>::valuation() const{
 		return mHybridAutomaton.valuation;
 	}
-        
+
         template<typename Number, typename Representation>
-	Representation HybridAutomaton<Number, Representation>::extInputValuation() {
+	const Representation& HybridAutomaton<Number, Representation>::extInputValuation() const{
 		return mHybridAutomaton.extInputValuation;
 	}
-	
+
 	template<typename Number, typename Representation>
 	unsigned HybridAutomaton<Number,Representation>::dimension() const {
 		return (*mHybridAutomaton.init.begin())->activityMat().rows();
 	}
 
 	template<typename Number, typename Representation>
-	struct HybridAutomaton<Number, Representation>::hybridAutomaton HybridAutomaton<Number, Representation>::hybridAutomaton() {
+	const struct HybridAutomaton<Number, Representation>::hybridAutomaton& HybridAutomaton<Number, Representation>::hybridAutomaton() const {
 		return mHybridAutomaton;
 	}
 
@@ -68,7 +68,7 @@ namespace hypro {
 	void HybridAutomaton<Number, Representation>::setValuation(Representation _val) {
 		mHybridAutomaton.valuation = _val;
 	}
-        
+
         template<typename Number, typename Representation>
         void HybridAutomaton<Number, Representation>::setExtInputValuation(Representation _extInputVal) {
                 mHybridAutomaton.extInputValuation = _extInputVal;
@@ -83,7 +83,7 @@ namespace hypro {
 	void HybridAutomaton<Number, Representation>::addLocation(location* _location) {
 		mHybridAutomaton.locs.insert(_location);
 	}
-	
+
 	template<typename Number, typename Representation>
 	void HybridAutomaton<Number, Representation>::addTransition(transition* _transition) {
 		mHybridAutomaton.trans.insert(_transition);

@@ -128,7 +128,7 @@ protected:
     vector_t<Number> invariantVec = vector_t<Number>(2,1);
     operator_e invariantOp;
     matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
-	struct Location<Number>::invariantContent inv;
+	struct Location<Number>::Invariant inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
     struct hypro::Transition<Number>::guard guard;
@@ -157,13 +157,10 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	//invariant: operator
     EXPECT_EQ(this->loc1->invariant().op,LEQ);
     EXPECT_EQ(this->loc2->invariant().op,LEQ);
-    EXPECT_EQ(this->loc2->location().inv.op,LEQ);
 
     //invariant: vector
     EXPECT_EQ(this->loc1->invariant().vec, this->invariantVec);
     EXPECT_EQ(this->loc2->invariant().vec, this->invariantVec);
-    EXPECT_EQ(this->loc1->location().inv.vec, this->invariantVec);
-    EXPECT_EQ(this->loc2->location().inv.vec, this->invariantVec);
 
 	vector_t<TypeParam> invariantVec2(2,1);
 	invariantVec2(0) = 10;
@@ -173,7 +170,6 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	//invariant: matrix
 	EXPECT_EQ(this->loc1->invariant().mat, this->invariantMat);
 	EXPECT_EQ(this->loc2->invariant().mat, this->invariantMat);
-	EXPECT_EQ(this->loc1->location().inv.mat, this->invariantMat);
 
 	matrix_t<TypeParam> invariantMat2(2,2);
 	invariantMat2(0,0) = 1;
@@ -184,7 +180,6 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 
 	//location: matrix
 	EXPECT_EQ(this->loc1->activityMat(), this->locationMat);
-	EXPECT_EQ(this->loc1->location().mat, this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
