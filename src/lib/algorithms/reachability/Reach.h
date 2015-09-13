@@ -23,7 +23,7 @@ namespace reachability {
 			mFlowpipes(),
 			mReach()
 		{
-			unsigned initId = addFlowpipe(std::move(flowpipe_t<Representation>( {_automaton.valuation()}) ));
+			unsigned initId = addFlowpipe(std::move(flowpipe_t<Representation>( {_automaton.initialValuation()}) ));
 			for(const auto loc : _automaton.initialLocations()) {
 				// use insert here as we assume that every location is only put in once. TODO: Extend for more flexibility.
 				mReach.insert(std::make_pair(loc, std::vector<unsigned>({initId})));

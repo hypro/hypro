@@ -105,7 +105,7 @@ protected:
 
     	poly = Polytope<Number>(vecSet);
 
-		hybrid.setValuation(poly);
+		hybrid.setInitialValuation(poly);
     }
 
     virtual void TearDown()
@@ -233,7 +233,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	//hybrid automaton: initial Valuation
 	//equivalence has to be confirmed through console output
 #ifdef fReach_DEBUG
-	this->hybrid.valuation().print();
+	this->hybrid.initialValuation().print();
 	this->poly.print();
 #endif
 

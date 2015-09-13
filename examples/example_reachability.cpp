@@ -175,7 +175,7 @@ int main(int argc, char const *argv[])
 
 	Representation poly(boxMat,boxVec);
 
-	hybrid.setValuation(poly);
+	hybrid.setInitialValuation(poly);
 
 	std::vector<Representation> flowpipe;
 
