@@ -141,16 +141,16 @@ namespace hypro
          * Geometric Object interface
          */
         unsigned int dimension() const;
-        Polytope<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b);
+        Polytope<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
-        Polytope<Number> minkowskiSum(const Polytope<Number>& rhs);
+        Polytope<Number> minkowskiSum(const Polytope<Number>& rhs) const;
         // implemented according to Komei Fukuda 2004
         Polytope<Number> altMinkowskiSum(Polytope<Number>& rhs);
-        Polytope<Number> intersect(const Polytope<Number>& rhs);
-        Polytope<Number> hull();
-        bool contains(const Point<Number>& point);
-        bool contains(const Polytope<Number>& poly);
-        Polytope<Number> unite(const Polytope<Number>& rhs);
+        Polytope<Number> intersect(const Polytope<Number>& rhs) const;
+        Polytope<Number> hull() const;
+        bool contains(const Point<Number>& point) const;
+        bool contains(const Polytope<Number>& poly) const;
+        Polytope<Number> unite(const Polytope<Number>& rhs) const;
       //  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
 
