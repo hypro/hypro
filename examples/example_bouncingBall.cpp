@@ -230,13 +230,15 @@ int main(int argc, char const *argv[])
 	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
+	std::vector<unsigned> flowpipeIndices = reacher.computeForwardReachability();
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
-	for(auto& flowpipe : flowpipes) {
+	for(auto& index : flowpipeIndices) {
+		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {

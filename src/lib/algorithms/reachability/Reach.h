@@ -37,7 +37,12 @@ namespace reachability {
 			return id-1;
 		}
 
-		void computeForwardReachability() {
+		const flowpipe_t<Representation>& getFlowpipe( unsigned _index ) const {
+			assert( mFlowpipes.find(_index) != mFlowpipes.end() );
+			return mFlowpipes.at(_index);
+		}
+
+		std::vector<unsigned> computeForwardReachability() {
 			unsigned depth = 0;
 			std::vector<unsigned> R_new;
 			std::vector<unsigned> R;
@@ -45,7 +50,8 @@ namespace reachability {
 			//R_new := flowpipe for the initial location, computed based on input valuation
 			for(const auto& locPair : mReach) {
 				// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
-				unsigned init = computeForwardTimeClosure(locPair.first, mFlowpipes.at(*mReach.at(locPair.first).back().begin()));
+				unsigned flowPipeIndex = mReach.at(locPair.first).back();
+				unsigned init = computeForwardTimeClosure(locPair.first, *(mFlowpipes.at(flowPipeIndex).begin()));
 				mReach.at(locPair.first).push_back(init);
 				R_new.push_back(init);
 			}
@@ -69,9 +75,10 @@ namespace reachability {
 
 				++depth;
 			}
+			return R;
 		}
 
-		unsigned computeForwardTimeClosure(hypro::Location<Number> _loc, Representation _val) {
+		unsigned computeForwardTimeClosure(hypro::Location<Number>* _loc, const Representation& _val) {
 
 			//[0,T] = [0,delta1] U [delta1, delta2] ...
 			//note: interval size is constant
@@ -85,7 +92,7 @@ namespace reachability {
 #endif
 
 			//Polytope that is defined by the invariant
-			Representation poly = Representation(_loc.invariant().mat, _loc.invariant().vec);
+			Representation poly = Representation(_loc->invariant().mat, _loc->invariant().vec);
 
 #ifdef fReach_DEBUG
 		   	std::cout << "invariant Polytope: ";
@@ -108,8 +115,8 @@ namespace reachability {
 				//approximate R_[0,delta](X0)
 				//rest is acquired by linear Transformation
 				//R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
-				hypro::matrix_t<Number> deltaMatrix(_loc.activityMat().rows(),_loc.activityMat().cols());
-				deltaMatrix = _loc.activityMat() * timeInterval;
+				hypro::matrix_t<Number> deltaMatrix(_loc->activityMat().rows(),_loc->activityMat().cols());
+				deltaMatrix = _loc->activityMat() * timeInterval;
 
 #ifdef fReach_DEBUG
 			   	std::cout << "delta Matrix: " << std::endl;
@@ -163,11 +170,11 @@ namespace reachability {
 				Representation firstSegment;
 				Number radius;
                 //TODO: This is a temporary fix!
-                //matrix_t<Number> updatedActivityMatrix = _loc.activityMat();
+                //matrix_t<Number> updatedActivityMatrix = _loc->activityMat();
                 //updatedActivityMatrix.conservativeResize(rows-1, cols-1);
                 //radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-				radius = hausdorffError(Number(timeInterval), _loc.activityMat(), _val.supremum());
-				//radius = _val.hausdorffError(timeInterval, _loc.activityMat());
+				radius = hausdorffError(Number(timeInterval), _loc->activityMat(), _val.supremum());
+				//radius = _val.hausdorffError(timeInterval, _loc->activityMat());
 
 #ifdef fReach_DEBUG
 				std::cout << "\n";
@@ -245,30 +252,30 @@ namespace reachability {
 #endif
 
 				unsigned fpIndex = addFlowpipe(flowpipe);
-				mFlowToLocation[_loc] = fpIndex;
+				mFlowToLocation[fpIndex] = _loc;
 				return fpIndex;
 
 			} else {
 				//return an empty flowpipe
 				unsigned fpIndex = addFlowpipe(flowpipe);
-				mFlowToLocation[_loc] = fpIndex;
+				mFlowToLocation[fpIndex] = _loc;
 				return fpIndex;
 			}
 
 		}
 
 
-		std::vector<unsigned> computeReach(std::vector<unsigned>& _init) {
+		std::vector<unsigned> computeReach(const std::vector<unsigned>& _init) {
 			std::vector<unsigned> reach;
 
 			//for each flowpipe in _init
-			for (typename std::vector<unsigned>::iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+			for (typename std::vector<unsigned>::const_iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
 
 				//get the location that belongs to the flowpipe
-				hypro::Location<Number> loc = mFlowToLocation[*it_pipe];
+				hypro::Location<Number>* loc = mFlowToLocation[*it_pipe];
 
 				//for each outgoing transition of the location
-				std::set<Transition<Number>*> loc_transSet = loc.transitions();
+				std::set<Transition<Number>*> loc_transSet = loc->transitions();
 				for (typename std::set<Transition<Number>*>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
 					hypro::Transition<Number> trans = *(*it_trans);
 
@@ -291,7 +298,7 @@ namespace reachability {
 					}
 
 					//compute new Flowpipe
-					hypro::Location<Number> tarLoc = *trans.targetLoc();
+					hypro::Location<Number>* tarLoc = trans.target();
 
 					//flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
 					unsigned newPipe = computeForwardTimeClosure(tarLoc, targetValuation);
@@ -306,7 +313,7 @@ namespace reachability {
 			return reach;
 		}
 
-		bool computePostCondition(const hypro::Transition<Number>& _trans, Representation _val, Representation& result) {
+		bool computePostCondition(const hypro::Transition<Number>& _trans, const Representation& _val, Representation& result) {
 
 			//Polytope that is defined by the guard
 			Representation guardPoly = Representation(_trans.guard().mat, _trans.guard().vec);

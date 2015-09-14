@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
 	operator_e invariantOp;
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
 	struct Location<Number>::Invariant inv;
-	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
+	matrix_t<Number> locationMat = matrix_t<Number>(3,3);
 
 	struct hypro::Transition<Number>::Guard guard;
 
@@ -99,8 +99,13 @@ int main(int argc, char const *argv[])
 
 	locationMat(0,0) = -1;
 	locationMat(0,1) = -4;
+	locationMat(0,2) = 0;
 	locationMat(1,0) = 4;
 	locationMat(1,1) = -1;
+	locationMat(1,2) = 0;
+	locationMat(2,0) = 0;
+	locationMat(2,1) = 0;
+	locationMat(2,2) = 1;
 
 	loc1->setActivityMat(locationMat);
 	loc2->setActivityMat(locationMat);
