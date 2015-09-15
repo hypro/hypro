@@ -23,7 +23,7 @@ set( EXAMPLES
     example_matrixPolyhedra
     example_orthogonalPolyhedron
     example_parser
-	  example_plot
+    example_plot
     example_polytope
     example_polytopeFileWriter
     example_power
@@ -37,6 +37,7 @@ set( EXAMPLES
     example_twotankreachability
     example_convexHull
     example_HVPolytope
+    example_zonotope
 )
 
 foreach( example ${EXAMPLES} )
