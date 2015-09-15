@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/Location.h"
+#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "carl/core/VariablePool.h"
@@ -29,8 +29,8 @@ protected:
 		 * Location Setup
 		 */
 
-		loc1 = new Location<Number>();
-    	loc2 = new Location<Number>();
+		loc1 = locMan.create();
+    	loc2 = locMan.create();
     	trans = new hypro::Transition<Number>();
 
 		invariantVec(0) = 10;
@@ -66,13 +66,13 @@ protected:
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
-		assign.translationVec = inv.vec;
-		assign.transformMat = inv.mat;
+		reset.translationVec = inv.vec;
+		reset.transformMat = inv.mat;
 
 		trans->setGuard(guard);
-		trans->setStartLoc(loc1);
-		trans->setTargetLoc(loc2);
-		trans->setAssignment(assign);
+		trans->setSource(loc1);
+		trans->setTarget(loc2);
+		trans->setReset(reset);
 
 		/*
 		 * Hybrid Automaton Setup
@@ -105,7 +105,7 @@ protected:
 
     	poly = Polytope<Number>(vecSet);
 
-		hybrid.setValuation(poly);
+		hybrid.setInitialValuation(poly);
     }
 
     virtual void TearDown()
@@ -116,6 +116,9 @@ protected:
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
+
+    LocationManager<Number>& locMan = LocationManager<Number>::getInstance();
+
     Location<Number>* loc1;
     Location<Number>* loc2;
     hypro::Transition<Number>* trans;
@@ -125,12 +128,12 @@ protected:
     vector_t<Number> invariantVec = vector_t<Number>(2,1);
     operator_e invariantOp;
     matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
-	struct Location<Number>::invariant inv;
+	struct Location<Number>::Invariant inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
 
-    struct hypro::Transition<Number>::guard guard;
+    struct hypro::Transition<Number>::Guard guard;
 
-    struct hypro::Transition<Number>::assignment assign;
+    struct hypro::Transition<Number>::Reset reset;
 
     hypro::Location<Number>* locations[2];
     std::set<hypro::Location<Number>*> locSet;
@@ -154,13 +157,10 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	//invariant: operator
     EXPECT_EQ(this->loc1->invariant().op,LEQ);
     EXPECT_EQ(this->loc2->invariant().op,LEQ);
-    EXPECT_EQ(this->loc2->location().inv.op,LEQ);
 
     //invariant: vector
     EXPECT_EQ(this->loc1->invariant().vec, this->invariantVec);
     EXPECT_EQ(this->loc2->invariant().vec, this->invariantVec);
-    EXPECT_EQ(this->loc1->location().inv.vec, this->invariantVec);
-    EXPECT_EQ(this->loc2->location().inv.vec, this->invariantVec);
 
 	vector_t<TypeParam> invariantVec2(2,1);
 	invariantVec2(0) = 10;
@@ -170,7 +170,6 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	//invariant: matrix
 	EXPECT_EQ(this->loc1->invariant().mat, this->invariantMat);
 	EXPECT_EQ(this->loc2->invariant().mat, this->invariantMat);
-	EXPECT_EQ(this->loc1->location().inv.mat, this->invariantMat);
 
 	matrix_t<TypeParam> invariantMat2(2,2);
 	invariantMat2(0,0) = 1;
@@ -181,7 +180,6 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 
 	//location: matrix
 	EXPECT_EQ(this->loc1->activityMat(), this->locationMat);
-	EXPECT_EQ(this->loc1->location().mat, this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
@@ -200,14 +198,14 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 TYPED_TEST(HybridAutomataTest, TransitionTest)
 {
 	//transition: Start Location
-	EXPECT_EQ(this->trans->startLoc(), this->loc1);
+	EXPECT_EQ(this->trans->source(), this->loc1);
 
 	//transition: End Location
-	EXPECT_EQ(this->trans->targetLoc(),this-> loc2);
+	EXPECT_EQ(this->trans->target(),this-> loc2);
 
 	//transition: Assignment
-	EXPECT_EQ(this->trans->assignment().translationVec, this->assign.translationVec);
-	EXPECT_EQ(this->trans->assignment().transformMat, this->assign.transformMat);
+	EXPECT_EQ(this->trans->reset().translationVec, this->reset.translationVec);
+	EXPECT_EQ(this->trans->reset().transformMat, this->reset.transformMat);
 
 	//transition: Guard
 	EXPECT_EQ(this->trans->guard().vec, this->guard.vec);
@@ -235,7 +233,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	//hybrid automaton: initial Valuation
 	//equivalence has to be confirmed through console output
 #ifdef fReach_DEBUG
-	this->hybrid.valuation().print();
+	this->hybrid.initialValuation().print();
 	this->poly.print();
 #endif
 

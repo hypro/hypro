@@ -53,71 +53,71 @@ static void initConvexHull(const std::vector<Point<Number>>& points, std::vector
 	int dimCheck = dimensionCheck(points);
 	int d = points[0].dimension();
 	if(dimCheck == d){
-	std::vector<Point<Number>> initialPoints;
-	//determine min and max of first value
-	unsigned minIndex = 0;
-	for(unsigned j = 0; j < points.size(); j++) {
-		if(points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)){
-			minIndex = j;
-		}
-	}
-
-	unsigned maxIndex = 0;
-	for(unsigned j = 0; j < points.size(); j++) {
-		if(points.at(maxIndex).rawCoordinates()(0) < points.at(j).rawCoordinates()(0)){
-			maxIndex = j;
-		}
-	}
-
-	initialPoints.push_back(points[minIndex]);
-	initialPoints.push_back(points[maxIndex]);
-
-	//search rest for rank d accordingly
-	for(int i = 2; i < d; ++i) {
+		std::vector<Point<Number>> initialPoints;
+		//determine min and max of first value
+		unsigned minIndex = 0;
 		for(unsigned j = 0; j < points.size(); j++) {
-			if(maxRank(initialPoints, points[j])){
-				initialPoints.push_back(points[j]);
-				break;
+			if(points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)){
+				minIndex = j;
 			}
 		}
-	}
 
-	//search for unused point as last member for initConvexhull
-	for(unsigned i = 0; i< points.size(); i++) {
-		bool found = false;
-		for(unsigned j = 0; j < initialPoints.size(); j++) {
-			if(points[i] == initialPoints[j]){
-				found = true;
+		unsigned maxIndex = 0;
+		for(unsigned j = 0; j < points.size(); j++) {
+			if(points.at(maxIndex).rawCoordinates()(0) < points.at(j).rawCoordinates()(0)){
+				maxIndex = j;
 			}
 		}
-		if(!found){
-			initialPoints.push_back(points[i]);
-		}
-	}
 
-	//std::vector<std::shared_ptr<Facet<Number>>> facets;
-	for(int i = 0; i < d+1; i++) {
-		facets.push_back(std::shared_ptr<Facet<Number>>(new Facet<Number>()));
-	}
-	for(int i = 0; i < d+1; ++i) {
-		std::vector<Point<Number>> points_for_facet;
-		for(int j = 0; j < d+1; ++j) {
-			if(i!=j) {
-				points_for_facet.push_back(initialPoints[j]);
-			}
-		}
-		facets[i]->setPoints(points_for_facet, initialPoints[i]);
-	}
+		initialPoints.push_back(points[minIndex]);
+		initialPoints.push_back(points[maxIndex]);
 
-	for(int i = 0; i < d+1; ++i) {
-		for(int j = 0; j < d+1; ++j) {
-			if(i!=j) {
-				facets[i]->addNeighbor(facets[j]);
-				facets[j]->addNeighbor(facets[i]);
+		//search rest for rank d accordingly
+		for(int i = 2; i < d; ++i) {
+			for(unsigned j = 0; j < points.size(); j++) {
+				if(maxRank(initialPoints, points[j])){
+					initialPoints.push_back(points[j]);
+					break;
+				}
 			}
 		}
-	}
-	//return facets;
+
+		//search for unused point as last member for initConvexhull
+		for(unsigned i = 0; i< points.size(); i++) {
+			bool found = false;
+			for(unsigned j = 0; j < initialPoints.size(); j++) {
+				if(points[i] == initialPoints[j]){
+					found = true;
+				}
+			}
+			if(!found){
+				initialPoints.push_back(points[i]);
+			}
+		}
+
+		//std::vector<std::shared_ptr<Facet<Number>>> facets;
+		for(int i = 0; i < d+1; i++) {
+			facets.push_back(std::shared_ptr<Facet<Number>>(new Facet<Number>()));
+		}
+		for(int i = 0; i < d+1; ++i) {
+			std::vector<Point<Number>> points_for_facet;
+			for(int j = 0; j < d+1; ++j) {
+				if(i!=j) {
+					points_for_facet.push_back(initialPoints[j]);
+				}
+			}
+			facets[i]->setPoints(points_for_facet, initialPoints[i]);
+		}
+
+		for(int i = 0; i < d+1; ++i) {
+			for(int j = 0; j < d+1; ++j) {
+				if(i!=j) {
+					facets[i]->addNeighbor(facets[j]);
+					facets[j]->addNeighbor(facets[i]);
+				}
+			}
+		}
+		//return facets;
 	}
 	else {
 		std::cout << __func__ << __LINE__ << "Error: Inconsistent point set " << std::endl;

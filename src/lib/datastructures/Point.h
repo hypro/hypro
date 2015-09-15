@@ -12,26 +12,11 @@
  */
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <cmath>
-#include <assert.h>
 #include "../config.h"
+#include "../util/VariablePool.h"
 
 
 namespace hypro {
-
-	/**
-	 * @class Point
-	 */
-	/*
-	class Point;
-	typedef std::vector<Point> pVec;
-	typedef std::vector<Point>::iterator pVecIt;
-	*/
-
 
 	/*
 	 *  Class to store points in a MAXIMAL_DIMENSION space.

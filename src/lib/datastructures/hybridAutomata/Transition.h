@@ -1,4 +1,4 @@
-/* 
+/*
  * Class that describes one transition of a hybrid automaton.
  * File:   transition.h
  * Author: stefan & ckugler
@@ -16,47 +16,38 @@ namespace hypro
     template<typename Number>
     class Transition
     {
-        private:
-
-    		typedef hypro::Location<Number> location;
-
         public:
-    		struct guard {
+    		struct Guard {
     			hypro::vector_t<Number> vec;
     			hypro::matrix_t<Number> mat;
     			hypro::operator_e op;
-				
-				friend std::ostream & operator<< (std::ostream& _ostr, const guard& _g)
+
+				friend std::ostream & operator<< (std::ostream& _ostr, const Guard& _g)
 				{
 					_ostr << _g.mat << " + " << _g.vec << _g.op << "0";
 					return _ostr;
 				}
     		};
 
-    		struct assignment {
+    		struct Reset {
     			hypro::vector_t<Number> translationVec;  //Translation Vector
     			hypro::matrix_t<Number> transformMat;    //Transformation Matrix
-				
-				friend std::ostream & operator<< (std::ostream& _ostr, const assignment& _a)
+
+				friend std::ostream & operator<< (std::ostream& _ostr, const Reset& _a)
 				{
 					_ostr << _a.transformMat << " + " << _a.translationVec;
 					return _ostr;
 				}
     		};
 
-    		//transition: two locations, a guard and an assignment
-    		struct transition {
-    			location* locStart;
-    			location* locTarget;
-    			guard tGuard;
-    			assignment tAssignment;
-    		};
-
         private:
     		/**
     		 * Member
     		 */
-    		transition mTransition;
+             Location<Number>* mSource;
+             Location<Number>* mTarget;
+             Guard mGuard;
+             Reset mReset;
 
         public:
     		/**
@@ -64,14 +55,19 @@ namespace hypro
     		 */
     		Transition() {}
 
-    		Transition(const Transition& _trans) : mTransition(_trans.mTransition) {}
+    		Transition(const Transition& _trans) :
+                mSource(_trans.source()),
+                mTarget(_trans.target()),
+                mGuard(_trans.guard()),
+                mReset(_trans.reset())
+            {}
 
-    		Transition(const location* _start, const location* _end, const struct guard _guard, const assignment _assign){
-    			mTransition.locStart = _start;
-    			mTransition.locTarget = _end;
-    			mTransition.tGuard = _guard;
-    			mTransition.tAssignment = _assign;
-    		}
+    		Transition(const Location<Number>* _source, const Location<Number>* _target, const struct Guard& _guard, const Reset& _reset) :
+                mSource(_source),
+                mTarget(_target),
+                mGuard(_guard),
+                mReset(_reset)
+            {}
 
     		~Transition()
     		{}
@@ -79,53 +75,45 @@ namespace hypro
     		/**
     		 * Getter & Setter
     		 */
-    		location* startLoc() {
-    			return mTransition.locStart;
+    		Location<Number>* source() const {
+    			return mSource;
     		}
 
-    		location* targetLoc() {
-    			return mTransition.locTarget;
+    		Location<Number>* target() const {
+    			return mTarget;
     		}
 
-    		guard guard() const{
-    			return mTransition.tGuard;
+    		const Guard& guard() const {
+    			return mGuard;
     		}
 
-    		assignment assignment() const{
-    			return mTransition.tAssignment;
+    		const Reset& reset() const {
+    			return mReset;
     		}
 
-    		transition transition() {
-    			return mTransition;
+    		void setSource(Location<Number>* _source) {
+    			mSource = _source;
     		}
 
-    		void setStartLoc(location* _start) {
-    			mTransition.locStart = _start;
+    		void setTarget(Location<Number>* _target) {
+    			mTarget = _target;
     		}
 
-    		void setTargetLoc(location* _target) {
-    			mTransition.locTarget = _target;
+    		void setGuard(const struct Guard& _guard) {
+    			mGuard = _guard;
     		}
 
-    		void setGuard(struct guard _guard) {
-    			mTransition.tGuard = _guard;
+    		void setReset(const struct Reset& _val) {
+    			mReset = _val;
     		}
 
-    		void setTransition(struct transition _trans) {
-    			mTransition = _trans;
-    		}
-
-    		void setAssignment(struct assignment _val) {
-    			mTransition.tAssignment = _val;
-    		}
-			
 			friend std::ostream & operator<< (std::ostream& _ostr, const Transition<Number>& _t)
             {
 				_ostr << "transition(" << std::endl <<
-				"\t Source = " << *_t.mTransition.locStart << std::endl <<
-				"\t Target = " << *_t.mTransition.locTarget << std::endl << 
-				"\t Guard = " << _t.mTransition.tGuard << std::endl <<
-				"\t Reset = " << _t.mTransition.tAssignment << std::endl <<
+				"\t Source = " << *_t.source() << std::endl <<
+				"\t Target = " << *_t.target() << std::endl <<
+				"\t Guard = " << _t.guard() << std::endl <<
+				"\t Reset = " << _t.reset() << std::endl <<
 				")";
 				return _ostr;
 			}

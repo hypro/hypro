@@ -8,10 +8,8 @@
 
 #pragma once
 
-#include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
 #include <map>
-#include <utility>
 
 namespace hypro
 {

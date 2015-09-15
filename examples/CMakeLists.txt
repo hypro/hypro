@@ -21,6 +21,7 @@ set( EXAMPLES
     example_eigen_float_t
     example_hausdorffApprox
     example_matrixPolyhedra
+    example_openglPlotting
     example_orthogonalPolyhedron
     example_parser
     example_plot

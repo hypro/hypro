@@ -85,7 +85,7 @@ namespace hypro
 		mInitialized(false)
 	{
 		assert(alien.size() > 2);
-		typename hypro::VPolytope<Number>::pointVector points = alien.vertices();
+		typename std::vector<Point<Number>> points = alien.vertices();
 		mDimension = points.begin()->dimension();
 		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
 		for(auto& facet : facets) {
@@ -135,9 +135,9 @@ namespace hypro
 	}
 
 	template<typename Number>
-	typename VPolytope<Number>::pointVector HPolytope<Number>::vertices() const {
+	typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 		//std::cout << "Compute vertices of " << *this << std::endl;
-		typename VPolytope<Number>::pointVector vertices;
+		typename std::vector<Point<Number>> vertices;
 		for(unsigned planeA = 0; planeA < mHPlanes.size()-1; ++planeA) {
 			for(unsigned planeB = planeA+1; planeB < mHPlanes.size(); ++planeB) {
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
@@ -642,6 +642,7 @@ namespace hypro
 		}
 	}
 
+	/*
 	template<typename Number>
 	Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> HPolytope<Number>::getOptimalDictionary(
 		const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A,
@@ -759,4 +760,6 @@ namespace hypro
 
 		return solution;
 	}
+	*/
+	
 } // namespace

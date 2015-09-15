@@ -3,89 +3,85 @@
 namespace hypro {
 
 	template<typename Number, typename Representation>
-	HybridAutomaton<Number, Representation>::HybridAutomaton(const HybridAutomaton& _hybrid) : mHybridAutomaton(_hybrid.mHybridAutomaton) {
+	HybridAutomaton<Number, Representation>::HybridAutomaton(const HybridAutomaton& _hybrid) :
+		mInitialLocations(_hybrid.initialLocations()),
+		mLocations(_hybrid.locations()),
+		mTransitions(_hybrid.transitions()),
+		mInitialValuation(_hybrid.initialValuation()),
+		mExtInputValuation(_hybrid.extInputValuation())
+	{}
+
+	template<typename Number, typename Representation>
+	HybridAutomaton<Number, Representation>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, Representation _initVal) :
+		mInitialLocations(_initLocs),
+		mLocations(_locs),
+		mTransitions(_trans),
+		mInitialValuation(_initVal),
+		mExtInputValuation()
+	{}
+
+	template<typename Number, typename Representation>
+	const std::set<hypro::Location<Number>*>& HybridAutomaton<Number, Representation>::initialLocations() const{
+		return mInitialLocations;
 	}
 
 	template<typename Number, typename Representation>
-	HybridAutomaton<Number, Representation>::HybridAutomaton(const locationSet _initLocs, const locationSet _locs, const transitionSet _trans, Representation _initVal) {
-		mHybridAutomaton.init = _initLocs;
-		mHybridAutomaton.locs = _locs;
-		mHybridAutomaton.trans = _trans;
-		mHybridAutomaton.valuation = _initVal;
+	const std::set<hypro::Location<Number>*>& HybridAutomaton<Number, Representation>::locations() const{
+		return mLocations;
 	}
 
 	template<typename Number, typename Representation>
-	std::set<hypro::Location<Number>*> HybridAutomaton<Number, Representation>::initialLocations() {
-		return mHybridAutomaton.init;
+	const std::set<hypro::Transition<Number>*>& HybridAutomaton<Number, Representation>::transitions() const{
+		return mTransitions;
 	}
 
 	template<typename Number, typename Representation>
-	std::set<hypro::Location<Number>*> HybridAutomaton<Number, Representation>::locations() {
-		return mHybridAutomaton.locs;
+	const Representation& HybridAutomaton<Number, Representation>::initialValuation() const{
+		return mInitialValuation;
 	}
 
-	template<typename Number, typename Representation>
-	std::set<hypro::Transition<Number>*> HybridAutomaton<Number, Representation>::transitions() {
-		return mHybridAutomaton.trans;
+		template<typename Number, typename Representation>
+	const Representation& HybridAutomaton<Number, Representation>::extInputValuation() const{
+		return mExtInputValuation;
 	}
 
-	template<typename Number, typename Representation>
-	Representation HybridAutomaton<Number, Representation>::valuation() {
-		return mHybridAutomaton.valuation;
-	}
-        
-        template<typename Number, typename Representation>
-	Representation HybridAutomaton<Number, Representation>::extInputValuation() {
-		return mHybridAutomaton.extInputValuation;
-	}
-	
 	template<typename Number, typename Representation>
 	unsigned HybridAutomaton<Number,Representation>::dimension() const {
-		return (*mHybridAutomaton.init.begin())->activityMat().rows();
+		return (*mInitialLocations.begin())->activityMat().rows();
 	}
 
 	template<typename Number, typename Representation>
-	struct HybridAutomaton<Number, Representation>::hybridAutomaton HybridAutomaton<Number, Representation>::hybridAutomaton() {
-		return mHybridAutomaton;
+	void HybridAutomaton<Number, Representation>::setInitialLocations(const locationSet& _initLocs) {
+		mInitialLocations = _initLocs;
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::setInitialLocations(locationSet _initLocs) {
-		mHybridAutomaton.init = _initLocs;
+	void HybridAutomaton<Number, Representation>::setLocations(const locationSet& _locs) {
+		mLocations = _locs;
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::setLocations(locationSet _locs) {
-		mHybridAutomaton.locs = _locs;
+	void HybridAutomaton<Number, Representation>::setTransitions(const transitionSet& _trans) {
+		mTransitions = _trans;
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::setTransitions(transitionSet _trans) {
-		mHybridAutomaton.trans = _trans;
+	void HybridAutomaton<Number, Representation>::setInitialValuation(const Representation& _val) {
+		mInitialValuation = _val;
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::setValuation(Representation _val) {
-		mHybridAutomaton.valuation = _val;
-	}
-        
-        template<typename Number, typename Representation>
-        void HybridAutomaton<Number, Representation>::setExtInputValuation(Representation _extInputVal) {
-                mHybridAutomaton.extInputValuation = _extInputVal;
-        }
-
-	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::setHybridAutomaton(struct hybridAutomaton _hybrid) {
-		mHybridAutomaton = _hybrid;
+	void HybridAutomaton<Number, Representation>::setExtInputValuation(const Representation& _extInputVal) {
+		mExtInputValuation = _extInputVal;
 	}
 
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::addLocation(location* _location) {
-		mHybridAutomaton.locs.insert(_location);
+	void HybridAutomaton<Number, Representation>::addLocation(Location<Number>* _location) {
+		mLocations.insert(_location);
 	}
-	
+
 	template<typename Number, typename Representation>
-	void HybridAutomaton<Number, Representation>::addTransition(transition* _transition) {
-		mHybridAutomaton.trans.insert(_transition);
+	void HybridAutomaton<Number, Representation>::addTransition(Transition<Number>* _transition) {
+		mTransitions.insert(_transition);
 	}
 }

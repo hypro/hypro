@@ -91,22 +91,13 @@ namespace hypro
 		Representation computePolytope(unsigned int _dim, Number _radius) {
 			//the last variable is always a placeholder for a constant translation factor
 			//no bloating in that dimension
-			unsigned int correctedDim = _dim-1;
 			//unsigned int correctedDim = _dim;
 
-			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2*_dim,_dim);
+			hypro::matrix_t<Number> mat = hypro::matrix_t<Number>::Zero(2*_dim,_dim);
 			hypro::vector_t<Number> vec(2*_dim,1);
 
-			//initialize matrix entries with 0
-			for (unsigned k=0; k<2*correctedDim; ++k) {
-				for (unsigned l=0; l<correctedDim; ++l) {
-					mat(k,l) = 0;
-				}
-			}
-
 			int i = 0;
-
-			for (unsigned z=0; z<correctedDim; ++z) {
+			for (unsigned z=0; z<_dim; ++z) {
 
 				vec(i) = _radius;
 				vec(i+1) = _radius;
@@ -117,11 +108,11 @@ namespace hypro
 				i = i+2;
 
 			}
-			mat(2*_dim-2,_dim-1) = 1;
-			mat(2*_dim-1,_dim-1) = 1;
+			//mat(2*_dim-2,_dim-1) = 1;
+			//mat(2*_dim-1,_dim-1) = 1;
 			//mat(2*_dim-1,_dim-1) = -1; -> this does not work, as the dimension of the result is too low.
-			vec(2*_dim-2) = 0;
-			vec(2*_dim-1) = 0;
+			//vec(2*_dim-2) = 0;
+			//vec(2*_dim-1) = 0;
 
 			//std::cout << "Hausdorff matrix: " << mat << ", Hausdorff vector " << vec << std::endl;
 

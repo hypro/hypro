@@ -10,9 +10,15 @@
 #include <vector>
 #include <cassert>
 #include "../config.h"
-#include "../datastructures/Point.h"
+#include "VariablePool.h"
 
 namespace hypro{
+
+template<typename Number>
+class Point;
+
+//template<typename Number>
+//Number Point<Number>::at(const carl::Variable& _i);
 	
 template<typename T, typename U>
 struct is_same

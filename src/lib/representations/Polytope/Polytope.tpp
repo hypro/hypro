@@ -132,7 +132,7 @@ namespace hypro
     {}
 
     template<typename Number>
-    bool Polytope<Number>::isEmpty() const
+    bool Polytope<Number>::empty() const
     {
         return mPolyhedron.is_empty();
     }
@@ -312,7 +312,7 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number> Polytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b)
+    Polytope<Number> Polytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const
     {
         using namespace Parma_Polyhedra_Library;
         Polytope<Number> result;
@@ -425,7 +425,7 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number> Polytope<Number>::minkowskiSum(const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::minkowskiSum(const Polytope<Number>& rhs) const
     {
     	Polytope<Number> result;
         /*
@@ -671,7 +671,7 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number> Polytope<Number>::intersect(const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::intersect(const Polytope<Number>& rhs) const
     {
     	if(rhs.dimension() == 0){
     		return Polytope<Number>();
@@ -687,7 +687,7 @@ namespace hypro
     }
 
     template<typename Number>
-    Polytope<Number> Polytope<Number>::hull()
+    Polytope<Number> Polytope<Number>::hull() const
     {
         //Generator_System gs = mPolyhedron.minimized_generators();
         //Polytope<Number> result = Polytope<Number>(C_Polyhedron(gs));
@@ -736,19 +736,19 @@ namespace hypro
     }
 
     template<typename Number>
-    bool Polytope<Number>::contains(const Point<Number>& point)
+    bool Polytope<Number>::contains(const Point<Number>& point) const
     {
         return mPolyhedron.contains(Polytope<Number>(point).rawPolyhedron());
     }
 
     template<typename Number>
-    bool Polytope<Number>::contains(const Polytope<Number>& poly)
+    bool Polytope<Number>::contains(const Polytope<Number>& poly) const
     {
         return mPolyhedron.contains(poly.rawPolyhedron());
     }
 
     template<typename Number>
-    Polytope<Number> Polytope<Number>::unite(const Polytope<Number>& rhs)
+    Polytope<Number> Polytope<Number>::unite(const Polytope<Number>& rhs) const
     {
     	if(!mPointsUpToDate) {
     		updatePoints();
@@ -764,7 +764,7 @@ namespace hypro
         }
     	else {
     	std::vector<Point<Number>> unitedVertices = rhs.vertices();
-    	unitedVertices.insert(unitedVertices.end(), this->rVertices().begin(), this->rVertices().end());
+    	unitedVertices.insert(unitedVertices.end(), this->vertices().begin(), this->vertices().end());
     	assert(unitedVertices.size() == this->vertices().size() + rhs.vertices().size());
 
     	//std::cout << "United vertices: " << std::endl;
@@ -779,7 +779,7 @@ namespace hypro
     	for(unsigned i = 0; i<hull.size(); i++) {
     		for(unsigned j = 0; j<hull[i]->vertices().size(); j++) {
     			//std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() << std::endl;
-    			
+
     			/*
     			if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
     				Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));

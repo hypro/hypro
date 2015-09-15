@@ -9,13 +9,10 @@
 #pragma once
 
 #include "../util.h"
-#include "../../../datastructures/Hyperplane.h"
 #include <cassert>
 #include <glpk.h>
-#include "simplex.h"
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
-#include "../../../datastructures/Facet.h"
 
 namespace hypro
 {
@@ -61,7 +58,7 @@ namespace hypro
 		unsigned size() const;
 		
 		const typename polytope::Fan<Number>& fan() const;
-		typename VPolytope<Number>::pointVector vertices() const;
+		typename std::vector<Point<Number>> vertices() const;
 		Number supremum() const;
 		
 		void insert(const Hyperplane<Number>& plane);
@@ -204,8 +201,10 @@ namespace hypro
 		void initialize() const;
 
 		void calculateFan() const;
+
+		/*
 		Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> getOptimalDictionary(const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A, unsigned dimension, std::vector<unsigned>& B, std::vector<unsigned>& N) const;
-		
+		*/
 	};
 
 } //namespace

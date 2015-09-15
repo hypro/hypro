@@ -1,9 +1,9 @@
 #include "../lib/config.h"
-#include "../lib/datastructures/hybridAutomata/Location.h"
+#include "../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../lib/datastructures/Point.h"
-#include "../lib/algorithms/reachability/forwardReachability.h"
+#include "../lib/algorithms/reachability/Reach.h"
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/representations/SupportFunction/SupportFunction.h"
@@ -18,11 +18,12 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
-	typedef hypro::VPolytope<Number> Representation;
+	typedef hypro::Polytope<Number> Representation;
 
+	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-	Location<Number>* loc1 = new Location<Number>();
+	Location<Number>* loc1 = lManager.create();
 	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
 	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 
@@ -30,8 +31,8 @@ int main(int argc, char const *argv[])
 
 	matrix_t<Number> locationMat = matrix_t<Number>(3,3);
 
-	struct hypro::Transition<Number>::guard guard;
-	struct hypro::Transition<Number>::assignment assign;
+	struct hypro::Transition<Number>::Guard guard;
+	struct hypro::Transition<Number>::Reset reset;
 
 	hypro::Location<Number>* locations[1];
 	std::set<hypro::Location<Number>*> locSet;
@@ -60,7 +61,7 @@ int main(int argc, char const *argv[])
 	operator_e invariantOp;
 	//matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
-	struct Location<Number>::invariant inv;
+	struct Location<Number>::Invariant inv;
 
 	invariantVec(0) = 20;
 	invariantVec(1) = 0;
@@ -158,13 +159,13 @@ int main(int argc, char const *argv[])
 	assignMat(2,1) = 0;
 	assignMat(2,2) = 1;
 
-	assign.translationVec = assignVec;
-	assign.transformMat = assignMat;
+	reset.translationVec = assignVec;
+	reset.transformMat = assignMat;
 
 	trans->setGuard(guard);
-	trans->setStartLoc(loc1);
-	trans->setTargetLoc(loc1);
-	trans->setAssignment(assign);
+	trans->setSource(loc1);
+	trans->setTarget(loc1);
+	trans->setReset(reset);
 
 	/*
 	 * Hybrid Automaton
@@ -218,43 +219,50 @@ int main(int argc, char const *argv[])
 
 	Representation poly(boxMat,boxVec);
 
-	hybrid.setValuation(poly);
+	hybrid.setInitialValuation(poly);
 
-	std::vector<Representation> flowpipe;
+	std::vector<std::vector<Representation>> flowpipes;
 
-   	//std::cout << "original Polytope (Box): ";
-    //poly.print();
+	//std::cout << "original Polytope (Box): ";
+	//poly.print();
 
-	flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+	// flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
+	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
 
-   	std::cout << "Generated flowpipe, start plotting." << std::endl;
+	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
+	std::vector<unsigned> flowpipeIndices = reacher.computeForwardReachability();
 
-   	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+	std::cout << "Generated flowpipe, start plotting." << std::endl;
+
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
-	unsigned count = 1;
-	unsigned maxCount = flowpipe.size();
-   	for(auto& poly : flowpipe) {
-   		std::cout << "Flowpipe segment to be converted: " << std::endl;
-   		poly.print();
-   		std::vector<Point<Number>> points = poly.vertices();
-   		if(!points.empty() && points.size() > 2) {
-   			std::cout << "Polycount: " << count << std::endl;
-   			std::cout << "points.size() = " << points.size() << std::endl;
-   			for(auto& point : points) {
-   	// 			std::cout << "reduce " << point << " to ";
-	   			point.reduceDimension(2);
-				// 			std::cout << point << std::endl;
-	   		}
-	   		plotter.addObject(points);
-			std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
-	   		points.clear();
-	   		++count;
-   		}
-   	}
+	for(auto& index : flowpipeIndices) {
+		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
+		unsigned count = 1;
+		unsigned maxCount = flowpipe.size();
+		for(auto& poly : flowpipe) {
+			std::cout << "Flowpipe segment to be converted: " << std::endl;
+			poly.print();
+			std::vector<Point<Number>> points = poly.vertices();
+			if(!points.empty() && points.size() > 2) {
+				std::cout << "Polycount: " << count << std::endl;
+				std::cout << "points.size() = " << points.size() << std::endl;
+				for(auto& point : points) {
+		// 			std::cout << "reduce " << point << " to ";
+					point.reduceDimension(2);
+					// 			std::cout << point << std::endl;
+				}
+				plotter.addObject(points);
+				std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
+				points.clear();
+				++count;
+			}
+		}
+	}
 	std::cout << endl;
 
-   	plotter.plot2d();
+	plotter.plot2d();
 
 	return 0;
 }

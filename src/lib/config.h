@@ -2,7 +2,10 @@
 
 #include <set>
 #include <map>
-#include <cassert>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <assert.h>
 
 #include "types.h"
 #include <carl/numbers/numbers.h>
@@ -13,7 +16,6 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-#include "util/VariablePool.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
@@ -75,6 +77,7 @@ using vectorSet = std::set<vector_t<Number>>;
  * Defines for reachability algorithm based on polytopes
  */
 static const float fReach_TIMEBOUND= 5;
+static const unsigned fReach_ITERATIONDEPTH= 5;
 static const unsigned fReach_TIMEDISCRETIZATION= 500;
 static const unsigned fReach_DENOMINATOR= 1000000000;
 //define for debugging: triggers console output

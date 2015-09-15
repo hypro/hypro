@@ -17,7 +17,4 @@ namespace hypro
 			LESS,
 			GREATER
 		};
-
-		template<typename Number>
-		using valuation_t = hypro::Polytope<Number>;
 }

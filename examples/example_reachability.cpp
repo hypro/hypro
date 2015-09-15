@@ -1,5 +1,5 @@
 #include "../lib/config.h"
-#include "../lib/datastructures/hybridAutomata/Location.h"
+#include "../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include <carl/core/VariablePool.h>
@@ -21,10 +21,11 @@ int main(int argc, char const *argv[])
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
 	typedef hypro::Polytope<Number> Representation;
 
+	LocationManager<Number>& locManag = LocationManager<Number>::getInstance();
 
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-	Location<Number>* loc1 = new Location<Number>();
-	Location<Number>* loc2 = new Location<Number>();
+	Location<Number>* loc1 = locManag.create();
+	Location<Number>* loc2 = locManag.create();
 	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
 	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
 
@@ -32,12 +33,12 @@ int main(int argc, char const *argv[])
 	vector_t<Number> invariantVec = vector_t<Number>(4,1);
 	operator_e invariantOp;
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
-	struct Location<Number>::invariant inv;
-	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
+	struct Location<Number>::Invariant inv;
+	matrix_t<Number> locationMat = matrix_t<Number>(3,3);
 
-	struct hypro::Transition<Number>::guard guard;
+	struct hypro::Transition<Number>::Guard guard;
 
-	struct hypro::Transition<Number>::assignment assign;
+	struct hypro::Transition<Number>::Reset reset;
 
 	hypro::Location<Number>* locations[2];
 	std::set<hypro::Location<Number>*> locSet;
@@ -98,8 +99,13 @@ int main(int argc, char const *argv[])
 
 	locationMat(0,0) = -1;
 	locationMat(0,1) = -4;
+	locationMat(0,2) = 0;
 	locationMat(1,0) = 4;
 	locationMat(1,1) = -1;
+	locationMat(1,2) = 0;
+	locationMat(2,0) = 0;
+	locationMat(2,1) = 0;
+	locationMat(2,2) = 1;
 
 	loc1->setActivityMat(locationMat);
 	loc2->setActivityMat(locationMat);
@@ -111,13 +117,13 @@ int main(int argc, char const *argv[])
 	guard.mat = inv.mat;
 	guard.vec = inv.vec;
 
-	assign.translationVec = inv.vec;
-	assign.transformMat = inv.mat;
+	reset.translationVec = inv.vec;
+	reset.transformMat = inv.mat;
 
 	trans->setGuard(guard);
-	trans->setStartLoc(loc1);
-	trans->setTargetLoc(loc2);
-	trans->setAssignment(assign);
+	trans->setSource(loc1);
+	trans->setTarget(loc2);
+	trans->setReset(reset);
 
 	/*
 	 * Hybrid Automaton
@@ -174,7 +180,7 @@ int main(int argc, char const *argv[])
 
 	Representation poly(boxMat,boxVec);
 
-	hybrid.setValuation(poly);
+	hybrid.setInitialValuation(poly);
 
 	std::vector<Representation> flowpipe;
 
