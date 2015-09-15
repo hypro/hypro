@@ -18,27 +18,27 @@ using namespace carl;
 int main(int argc, char** argv) {
 
 	VertexContainer<FLOAT_T<double>> container;
-	// container.insert(Point<FLOAT_T<double>>({3,0}), true);
-	// container.insert(Point<FLOAT_T<double>>({5,0}), false);
-	// container.insert(Point<FLOAT_T<double>>({5,2}), true);
-	// container.insert(Point<FLOAT_T<double>>({7,2}), true);
-	// container.insert(Point<FLOAT_T<double>>({7,0}), true);
-	// container.insert(Point<FLOAT_T<double>>({9,0}), false);
-	// container.insert(Point<FLOAT_T<double>>({9,2}), true);
-	// container.insert(Point<FLOAT_T<double>>({11,2}), false);
-	// container.insert(Point<FLOAT_T<double>>({11,4}), false);
-	// container.insert(Point<FLOAT_T<double>>({9,4}), false);
-	// container.insert(Point<FLOAT_T<double>>({9,7}), false);
-	// container.insert(Point<FLOAT_T<double>>({7,6}), true);
-	// container.insert(Point<FLOAT_T<double>>({7,4}), true);
-	// container.insert(Point<FLOAT_T<double>>({5,4}), false);
-	// container.insert(Point<FLOAT_T<double>>({5,6}), true);
-	// container.insert(Point<FLOAT_T<double>>({3,7}), false);
+	container.insert(Point<FLOAT_T<double>>({3,0}), true);
+	container.insert(Point<FLOAT_T<double>>({5,0}), false);
+	container.insert(Point<FLOAT_T<double>>({5,2}), true);
+	container.insert(Point<FLOAT_T<double>>({7,2}), true);
+	container.insert(Point<FLOAT_T<double>>({7,0}), true);
+	container.insert(Point<FLOAT_T<double>>({9,0}), false);
+	container.insert(Point<FLOAT_T<double>>({9,2}), true);
+	container.insert(Point<FLOAT_T<double>>({11,2}), false);
+	container.insert(Point<FLOAT_T<double>>({11,4}), false);
+	container.insert(Point<FLOAT_T<double>>({9,4}), false);
+	container.insert(Point<FLOAT_T<double>>({9,7}), false);
+	container.insert(Point<FLOAT_T<double>>({7,6}), true);
+	container.insert(Point<FLOAT_T<double>>({7,4}), true);
+	container.insert(Point<FLOAT_T<double>>({5,4}), false);
+	container.insert(Point<FLOAT_T<double>>({5,6}), true);
+	container.insert(Point<FLOAT_T<double>>({3,7}), false);
 
-	container.insert(Point<FLOAT_T<double>>({2,0}), true);
-	container.insert(Point<FLOAT_T<double>>({6,0}), false);
-	container.insert(Point<FLOAT_T<double>>({2,6}), false);
-	container.insert(Point<FLOAT_T<double>>({6,6}), false);
+	// container.insert(Point<FLOAT_T<double>>({2,0}), true);
+	// container.insert(Point<FLOAT_T<double>>({6,0}), false);
+	// container.insert(Point<FLOAT_T<double>>({2,6}), false);
+	// container.insert(Point<FLOAT_T<double>>({6,6}), false);
 
 	VertexContainer<FLOAT_T<double>> container2;
 	container2.insert(Point<FLOAT_T<double>>({4,2}), true);
@@ -82,23 +82,23 @@ int main(int argc, char** argv) {
 	settings.fill = true;
 	plotter.updateSettings(settings);
 
-	OrthogonalPolyhedron<FLOAT_T<double>> united = test.unite(test2);
-	for(const auto& vertex : united.vertices()) {
-		std::cout << vertex << std::endl;
-	}
-
-	// OrthogonalPolyhedron<FLOAT_T<double>> intersection = test.intersect(test2);
-	// for(const auto& vertex : intersection.vertices()) {
+	// OrthogonalPolyhedron<FLOAT_T<double>> united = test.unite(test2);
+	// for(const auto& vertex : united.vertices()) {
 	// 	std::cout << vertex << std::endl;
 	// }
 
-	unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
-	unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
-	// unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
-	unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
+	OrthogonalPolyhedron<FLOAT_T<double>> intersection = test.intersect(test2);
+	for(const auto& vertex : intersection.vertices()) {
+		std::cout << vertex << std::endl;
+	}
 
-	// plotter.setObjectColor(intersectionObject, colors[orange]);
-	plotter.setObjectColor(unionObject, colors[orange]);
+	//unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
+	unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
+	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
+	// unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
+
+	plotter.setObjectColor(intersectionObject, colors[orange]);
+	//plotter.setObjectColor(unionObject, colors[orange]);
 
 	plotter.plot2d();
 

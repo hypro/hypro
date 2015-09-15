@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../util/Plotter.h"
 #include "../../config.h"
 #include "util.h"
 
@@ -42,21 +43,30 @@ namespace reachability {
 			return mFlowpipes.at(_index);
 		}
 
-		std::vector<unsigned> computeForwardReachability() {
+		std::set<unsigned> computeForwardReachability() {
 			unsigned depth = 0;
-			std::vector<unsigned> R_new;
-			std::vector<unsigned> R;
+			std::set<unsigned> R_new;
+			std::set<unsigned> R;
 
 			//R_new := flowpipe for the initial location, computed based on input valuation
 			for(const auto& locPair : mReach) {
+				std::cout << "Compute time-step in initial states." << std::endl;
 				// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
 				unsigned flowPipeIndex = mReach.at(locPair.first).back();
 				unsigned init = computeForwardTimeClosure(locPair.first, *(mFlowpipes.at(flowPipeIndex).begin()));
+				std::cout << "Computed flowpipe: " << std::endl;
+				printFlowpipeReduced(init);
 				mReach.at(locPair.first).push_back(init);
-				R_new.push_back(init);
+				R_new.insert(init);
 			}
 
+			std::cout << "R_new: ";
+			for(const auto& item : R_new)
+				std::cout << item << " ";
+			std::cout << std::endl;
+
 			while (!R_new.empty() && depth < fReach_ITERATIONDEPTH) {
+				std::cout << "Main loop, depth " << depth << std::endl;
 				//R = R U R_new
 				if (!R.empty()) {
 
@@ -66,9 +76,13 @@ namespace reachability {
 				} else {
 					R = R_new;
 				}
+				std::cout << "R_new U R = ";
+				for(const auto& item : R)
+					std::cout << item << " ";
+				std::cout << std::endl;
 
 				//R_new = Reach(R_new)\R
-				std::vector<unsigned> R_temp = computeReach(R_new);
+				std::set<unsigned> R_temp = computeReach(R_new);
 
 				std::set_difference(R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 									std::inserter(R_new, R_new.begin()));
@@ -79,10 +93,12 @@ namespace reachability {
 		}
 
 		unsigned computeForwardTimeClosure(hypro::Location<Number>* _loc, const Representation& _val) {
-
+			//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 			//[0,T] = [0,delta1] U [delta1, delta2] ...
 			//note: interval size is constant
 			double timeInterval = float(fReach_TIMEBOUND)/float(fReach_TIMEDISCRETIZATION);
+
+			//plotter.addObject(_val.vertices());
 
 #ifdef fReach_DEBUG
 		   	std::cout <<  "Time Interval: " << timeInterval << std::endl;
@@ -151,8 +167,11 @@ namespace reachability {
                 vector_t<Number> translation = resultMatrix.col(cols-1);
                 translation.conservativeResize(rows-1);
                 resultMatrix.conservativeResize(rows-1, cols-1);
-				Representation deltaValuation = _val.linearTransformation(resultMatrix, translation);
+                std::cout << "A: " << resultMatrix << ", b: " << translation << std::endl;
+                Representation deltaValuation = _val.linearTransformation(resultMatrix, translation);
 
+                //plotter.addObject(deltaValuation.vertices());
+                //plotter.plot2d();
 #ifdef fReach_DEBUG
 			   	std::cout << "Polytope at t=delta: ";
 			    deltaValuation.print();
@@ -265,14 +284,18 @@ namespace reachability {
 		}
 
 
-		std::vector<unsigned> computeReach(const std::vector<unsigned>& _init) {
-			std::vector<unsigned> reach;
+		std::set<unsigned> computeReach(const std::set<unsigned>& _init) {
+			std::set<unsigned> reach;
+
+			std::cout << __func__ << std::endl;
 
 			//for each flowpipe in _init
-			for (typename std::vector<unsigned>::const_iterator it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
+			for (auto it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe) {
 
 				//get the location that belongs to the flowpipe
 				hypro::Location<Number>* loc = mFlowToLocation[*it_pipe];
+
+				std::cout << "Consider transitions for location " << *loc << std::endl;
 
 				//for each outgoing transition of the location
 				std::set<Transition<Number>*> loc_transSet = loc->transitions();
@@ -281,13 +304,16 @@ namespace reachability {
 
 					//resulting Polytope in new location
 					Representation targetValuation;
+					bool transitionEnabled = false;
 
 					//for each polytope that is part of the flowpipe
 					for (typename flowpipe_t<Representation>::iterator it_val = mFlowpipes.at(*it_pipe).begin(); it_val != mFlowpipes.at(*it_pipe).end(); ++it_val) {
 						Representation postAssign;
 						//check if guard of transition is enabled (if yes compute Post Assignment Valuation)
 						if (computePostCondition(trans, *it_val, postAssign)) {
-
+							transitionEnabled = true;
+							std::cout << "Take transition " << trans << std::endl;
+ 
 							//targetValuation = targetValuation U postAssign
 							if (!targetValuation.empty()) {
 								targetValuation = targetValuation.unite(postAssign);
@@ -296,30 +322,31 @@ namespace reachability {
 							}
 						}
 					}
+					if(transitionEnabled) {
+						//compute new Flowpipe
+						hypro::Location<Number>* tarLoc = trans.target();
 
-					//compute new Flowpipe
-					hypro::Location<Number>* tarLoc = trans.target();
+						std::cout << "Compute time-step in new location " << *tarLoc << " starting with initial valuation " << targetValuation << std::endl;
 
-					//flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
-					unsigned newPipe = computeForwardTimeClosure(tarLoc, targetValuation);
+						//flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
+						unsigned newPipe = computeForwardTimeClosure(tarLoc, targetValuation);
 
-					//if new Flowpipe is not empty
-					if (!mFlowpipes.at(newPipe).empty()) {
-						//expand reach
-						reach.push_back(newPipe);
+						//if new Flowpipe is not empty
+						if (!mFlowpipes.at(newPipe).empty()) {
+							//expand reach
+							reach.insert(newPipe);
+						}
 					}
 				}
 			}
+			std::cout << __func__ << " end." << std::endl;
 			return reach;
 		}
 
 		bool computePostCondition(const hypro::Transition<Number>& _trans, const Representation& _val, Representation& result) {
 
-			//Polytope that is defined by the guard
-			Representation guardPoly = Representation(_trans.guard().mat, _trans.guard().vec);
-
-			//intersection between valuation polytope and guard polytope
-			Representation intersectionPoly = _val.intersect(guardPoly);
+			//intersection between valuation polytope and guard hyperplanes
+			Representation intersectionPoly = _val.intersectHyperplanes(_trans.guard().mat, _trans.guard().vec);
 
 			//check if the intersection is empty
 			if (!intersectionPoly.empty()) {
@@ -332,6 +359,18 @@ namespace reachability {
 			} else {
 				return false;
 			}
+		}
+
+		void printFlowpipe(unsigned _flowpipe) const {
+			for(const auto& segment : mFlowpipes.at(_flowpipe)) {
+				std::cout << segment << ", " << std::endl;
+			}
+		}
+
+		void printFlowpipeReduced(unsigned _flowpipe) const {
+			std::cout << *mFlowpipes.at(_flowpipe).begin() << ", " << std::endl;
+			std::cout << "(...)" << std::endl;
+			std::cout << mFlowpipes.at(_flowpipe).back() << std::endl;
 		}
 
 	};

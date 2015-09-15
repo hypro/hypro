@@ -30,7 +30,7 @@ namespace hypro {
 	{
 		friend carl::Singleton<Plotter<Number>>;
 	private:
-		std::string mFilename;
+		std::string mFilename = "out";
 		mutable std::ofstream mOutfile;
 		std::multimap<unsigned,std::vector<Point<Number>>> mObjects;
 		std::map<unsigned,std::string> mObjectColors;

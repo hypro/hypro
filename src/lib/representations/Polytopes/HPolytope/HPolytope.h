@@ -89,6 +89,8 @@ namespace hypro
 		HPolytope linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 		HPolytope minkowskiSum(const HPolytope& rhs) const;
 		HPolytope intersect(const HPolytope& rhs) const;
+		HPolytope<Number> intersectHyperplane(const Hyperplane<Number>& rhs) const;
+		HPolytope<Number> intersectHyperplanes(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const vector_t<Number>& vec) const;
 		bool contains(const HPolytope<Number>& rhs) const;

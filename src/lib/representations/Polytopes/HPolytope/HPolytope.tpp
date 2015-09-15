@@ -495,6 +495,25 @@ namespace hypro
 	}
 
 	template<typename Number>
+	HPolytope<Number> HPolytope<Number>::intersectHyperplane(const Hyperplane<Number>& rhs) const {
+	}
+
+	template<typename Number>
+	HPolytope<Number> HPolytope<Number>::intersectHyperplanes(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const {
+		assert(_mat.rows() == _vec.rows());
+
+		HPolytope<Number> res(*this);
+
+		for(unsigned i = 0; i < _mat.rows(); ++i) {
+			res.insert(Hyperplane<Number>(_mat.row(i), _vec(i)));
+		}
+
+		res.reduce();
+
+		return res;
+	}
+
+	template<typename Number>
 	bool HPolytope<Number>::contains(const Point<Number>& point) const {
 		return this->contains(point.rawCoordinates());
 	}
