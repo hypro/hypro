@@ -46,6 +46,7 @@ option(SUPPORT_MPFR "Support mpfr_t as a floating point implementation. Note: Re
 option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
 option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
+option(USE_OPENGL_PLOTTING "Use OpenGL plotting." ON)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -114,9 +115,13 @@ if(COMPARE_POLYMAKE)
 	find_package(Polymake REQUIRED)
 endif()
 
+if(USE_OPENGL_PLOTTING)
+	find_package(Glut REQUIRED)
+endif()
+
 find_package(GMP REQUIRED)
-include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS})
-set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES})
+include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS} ${Glut_INCLUDE_DIR})
+set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES} ${Glut_LIBRARY})
 
 find_package(PPL REQUIRED)
 include_directories(${PPL_INCLUDES})
