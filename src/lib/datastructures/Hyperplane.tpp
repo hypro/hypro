@@ -1,9 +1,9 @@
 /**
  *  Class that holds the implementation of a hyperplane.
- *  @file Hyperplane.tpp	
- *  
+ *  @file Hyperplane.tpp
+ *
  *  @author Stefan Schupp 	<stefan.schupp@cs.rwth-aachen.de>
- *  
+ *
  *  @since 	2015-03-16
  *  @version 	2015-03-16
  */
@@ -16,19 +16,19 @@
 		mNormal(vector_t<Number>::Zero(1)),
 		mScalar(Number(0))
 	{}
-		
+
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const Hyperplane<Number>& _orig) :
 		mNormal(_orig.mNormal),
 		mScalar(_orig.mScalar)
 	{}
-	
+
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const Point<Number>& _vector, const Number& _off) :
 		mNormal(_vector.rawCoordinates()),
 		mScalar(_off)
 	{}
-	
+
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(std::initializer_list<Number> _coordinates, const Number& _off)
 	{
@@ -41,7 +41,7 @@
 		}
 		mScalar = _off;
 	}
-	
+
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const vector_t<Number>& _vector, const Number& _off) :
 		mNormal(_vector),
@@ -68,7 +68,7 @@
 		}
 		mNormal = tmp;
 	}
-	
+
 	template<typename Number>
 	Hyperplane<Number>::Hyperplane(const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet)
 	{
@@ -94,36 +94,36 @@
 	{
 		return mNormal.nonZeros();
 	}
-	
+
 	template<typename Number>
 	const vector_t<Number>& Hyperplane<Number>::normal() const
 	{
 		return mNormal;
 	}
-	
+
 	template<typename Number>
 	void Hyperplane<Number>::setNormal(const vector_t<Number>& _normal)
 	{
 		mNormal = _normal;
 	}
-	
+
 	template<typename Number>
 	Number Hyperplane<Number>::offset() const
 	{
 		return mScalar;
 	}
-	
+
 	template<typename Number>
 	void Hyperplane<Number>::setOffset(Number _offset)
 	{
 		mScalar = _offset;
 	}
-	
+
 	template<typename Number>
 	Number Hyperplane<Number>::signedDistance(const vector_t<Number>& _point) const {
 		return (_point.dot(mNormal) - mScalar);
 	}
-	
+
 	template<typename Number>
 	Number Hyperplane<Number>::evaluate(const vector_t<Number>& _direction) const {
 		return (_direction.dot(mNormal));
@@ -149,7 +149,7 @@
 		//note: to get the intersection point -> _vector *= factor;
 		return intersect;
 	}
-	
+
 	template<typename Number>
 	bool Hyperplane<Number>::intersection(Number& _result, const Point<Number>& _vector) const
 	{
@@ -179,7 +179,7 @@
 		vector_t<Number> b = vector_t<Number>(3);
 		b << mScalar,_rhs.offset(),Number(1);
 
-		vector_t<Number> result = A.colPivHouseholderQr().solve(b);
+		vector_t<Number> result = A.fullPivHouseholderQr().solve(b);
 
 		return result;
 	}

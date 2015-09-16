@@ -63,8 +63,8 @@ namespace hypro
 				++rowCount;
 			}
 			// check if rank is full
-			if(intersection.colPivHouseholderQr().rank() == intersection.cols()) {
-				vector_t<Number> vertex = intersection.colPivHouseholderQr().solve(intersectionConstants);
+			if(intersection.fullPivHouseholderQr().rank() == intersection.cols()) {
+				vector_t<Number> vertex = intersection.fullPivHouseholderQr().solve(intersectionConstants);
 				possibleVertices.push_back(vertex);
 				//std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
 			}
@@ -446,7 +446,7 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool VPolytope<Number>::operator==(const VPolytope<Number>& rhs) const 
+	bool VPolytope<Number>::operator==(const VPolytope<Number>& rhs) const
 	{
 		if(this->dimension() != rhs.dimension())
 			return false;
