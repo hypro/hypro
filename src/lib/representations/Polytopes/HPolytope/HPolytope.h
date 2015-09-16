@@ -16,6 +16,9 @@
 
 namespace hypro
 {
+
+	enum SOLUTION {FEAS = 0, INFEAS, INFTY};
+
 	template<typename Number>
 	class HPolytope
 	{
@@ -71,9 +74,9 @@ namespace hypro
 		matrix_t<Number> peter() const;
 		vector_t<Number> getConstraintsOffsetVector() const;
 		
-		bool isExtremePoint(vector_t<Number> point, const Number& tolerance = 0) const;
-		bool isExtremePoint(const Point<Number>& point, const Number& tolerance = 0) const;
-		Number evaluate(const vector_t<Number>& _direction) const;
+		bool isExtremePoint(vector_t<Number> point) const;
+		bool isExtremePoint(const Point<Number>& point) const;
+		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction) const;
 		
 		typename HyperplaneVector::iterator begin();
 		typename HyperplaneVector::const_iterator begin() const;

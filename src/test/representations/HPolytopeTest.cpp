@@ -86,19 +86,21 @@ TYPED_TEST(HPolytopeTest, Corners)
 
 	typename std::vector<Point<TypeParam>> corners = hpt1.vertices();
 	for(auto& corner : corners) {
-		EXPECT_TRUE(hpt1.isExtremePoint(corner, TypeParam(0.0001)));
+		EXPECT_TRUE(hpt1.isExtremePoint(corner));
 	}
 
 	corners = hpt2.vertices();
+	std::cout << "HPT2: " << hpt2 << std::endl;
+
 	for(auto& corner : corners) {
-		EXPECT_TRUE(hpt2.isExtremePoint(corner, TypeParam(0.0001)));
+		EXPECT_TRUE(hpt2.isExtremePoint(corner));
 	}
 
 	// test extremepoints
 	hypro::vector_t<TypeParam> p1(2);
 	p1(0) = 2;
 	p1(1) = 0;
-	EXPECT_FALSE(hpt1.isExtremePoint(p1, TypeParam(0.0001)));
+	EXPECT_FALSE(hpt1.isExtremePoint(p1));
 }
 
 
@@ -263,14 +265,14 @@ TYPED_TEST(HPolytopeTest, Intersection)
 		EXPECT_TRUE(hpt1.hasConstraint(plane) || hpt2.hasConstraint(plane));
 	}
 
-	std::cout<< "Part 2 starting: "	<< std::endl;
+	//std::cout<< "Part 2 starting: "	<< std::endl;
 	std::vector<Hyperplane<TypeParam>> ps3;
 	Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
-	Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},-3);
+	Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},3);
 	Hyperplane<TypeParam> p03 = Hyperplane<TypeParam>({-1,0,0},1);
-	Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},-3);
+	Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},3);
 	Hyperplane<TypeParam> p05 = Hyperplane<TypeParam>({0,0,-1},1);
-	Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},-3);
+	Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},3);
 
 	ps3.push_back(p01);
 	ps3.push_back(p02);
@@ -283,9 +285,9 @@ TYPED_TEST(HPolytopeTest, Intersection)
 
 	std::vector<Hyperplane<TypeParam>> ps4;
 	Hyperplane<TypeParam> p07 = Hyperplane<TypeParam>({0,-1,0},3);
-	Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},-5);
+	Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},5);
 	Hyperplane<TypeParam> p09 = Hyperplane<TypeParam>({-1,0,0},3);
-	Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},-5);
+	Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},5);
 
 
 	ps4.push_back(p05);
@@ -304,8 +306,6 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	  EXPECT_TRUE(pt3.contains(vertex));
 	  EXPECT_TRUE(pt4.contains(vertex));
 	}
-
-	std::cout << "Part 3 starting: " << std::endl;
 
 	HPolytope<TypeParam> res3 = res2.intersect(HPolytope<TypeParam>());
 

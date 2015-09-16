@@ -158,7 +158,7 @@ namespace hypro
 				b(0) = mHPlanes.at(planeA).offset();
 				b(1) = mHPlanes.at(planeB).offset();
 
-				vector_t<Number> res = A.colPivHouseholderQr().solve(b);
+				vector_t<Number> res = A.fullPivHouseholderQr().solve(b);
 
 				//	Number relative_error = (A*res - b).norm() / b.norm();
 
@@ -304,30 +304,35 @@ namespace hypro
 	template<typename Number>
 	void HPolytope<Number>::reduce() {
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			Number res = this->evaluate(planeIt->normal());
-			if(res < planeIt->offset() && !(res == planeIt->offset())) {
-				//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
-				planeIt = mHPlanes.erase(planeIt);
-				mInitialized = false;
-			}
-			else{
-				Hyperplane<Number> tmp = Hyperplane<Number>(*planeIt);
-				auto pos = mHPlanes.erase(planeIt);
-				mInitialized = false;
-				Number tmpres = this->evaluate(tmp.normal());
-				//std::cout << "Eval with: " << res << ", without: " << tmpres << std::endl;
-				if( tmpres > tmp.offset()) {
-					planeIt = mHPlanes.insert(pos, tmp);
+			//std::cout << "Current plane: " << *planeIt << std::endl;
+			std::pair<Number, SOLUTION> evalRes = this->evaluate(planeIt->normal());
+			if(evalRes.second == INFEAS) {
+				// TODO: Set to empty polytope
+			} else if (evalRes.second == FEAS) {
+				if(evalRes.first < planeIt->offset() && !carl::AlmostEqual2sComplement(evalRes.first,planeIt->offset())) {
+					//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+					planeIt = mHPlanes.erase(planeIt);
 					mInitialized = false;
-					++planeIt;
-					//std::cout << "keep "  << tmp << std::endl;
 				}
-				else {
-					//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
-					planeIt = pos;
+				else{
+					Hyperplane<Number> tmp = Hyperplane<Number>(*planeIt);
+					auto pos = mHPlanes.erase(planeIt);
+					mInitialized = false;
+					std::pair<Number,SOLUTION> tmpRes = this->evaluate(tmp.normal());
+					//std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: " << tmpRes.second << std::endl;
+					if( tmpRes.second == INFTY || (tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement(tmpRes.first,tmp.offset())) ) {
+						planeIt = mHPlanes.insert(pos, tmp);
+						mInitialized = false;
+						++planeIt;
+						//std::cout << "keep "  << tmp << std::endl;
+					}
+					else {
+						//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+						planeIt = pos;
+					}
 				}
-			}
-		}
+			} // FEAS	
+		} // loop
 		//std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
 
@@ -357,26 +362,31 @@ namespace hypro
 	}
 
 	template<typename Number>
-	bool HPolytope<Number>::isExtremePoint(vector_t<Number> point, const Number& tolerance) const {
+	bool HPolytope<Number>::isExtremePoint(vector_t<Number> point) const {
 		unsigned cnt = 0;
 		for(const auto& plane : mHPlanes) {
 			Number val = plane.evaluate(point);
 			//std::cout << "Eval: " << plane.normal() << " in direction " << point << " = " << val << ", offset is " << plane.offset() << ", with tolerance: " << abs(plane.offset() - val) << std::endl;
-			if(abs(plane.offset() - val) <= tolerance )
+			if( carl::AlmostEqual2sComplement(plane.offset(),val) ) {
+				//std::cout << "Increase cnt " << std::endl;
 				++cnt;
-			else if (val > plane.evaluate(point))
+			}
+			else if( plane.offset() - val < 0 ) {
+				//std::cout << "######" << val << " != " << plane.offset() << std::endl;
 				return false;
+			}
 		}
+		//std::cout << "CNT: " << cnt << std::endl;
 		return cnt >= mDimension;
 	}
 
 	template<typename Number>
-	bool HPolytope<Number>::isExtremePoint(const Point<Number>& point, const Number& tolerance) const {
-		return isExtremePoint(point.rawCoordinates(), tolerance);
+	bool HPolytope<Number>::isExtremePoint(const Point<Number>& point) const {
+		return isExtremePoint(point.rawCoordinates());
 	}
 
 	template<typename Number>
-	Number HPolytope<Number>::evaluate(const vector_t<Number>& _direction) const{
+	std::pair<Number,SOLUTION> HPolytope<Number>::evaluate(const vector_t<Number>& _direction) const{
 		if(!mInitialized) {
 			initialize();
 		}
@@ -406,14 +416,16 @@ namespace hypro
 			case GLP_FEAS:{
 				 break;}
 			case GLP_UNBND:{
-				 result = INFINITY;
+				 return std::make_pair(1, INFTY);
 				 break;}
 			default:
-				 std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;
+				//std::cout << __func__ << ": " << *this << " in direction " << _direction << std::endl;
+				//std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: " << glp_get_status(lp) << std::endl;
+				return std::make_pair(0,INFEAS);
 		}
 		//std::cout << "Result: " << result << std::endl;
 
-		return result;
+		return std::make_pair(result,FEAS);
 	}
 
 	template<typename Number>
@@ -460,16 +472,30 @@ namespace hypro
 
 		// evaluation of rhs in directions of lhs
 		for(unsigned i = 0; i < mHPlanes.size(); ++i) {
-			result = mHPlanes.at(i).offset() + rhs.evaluate(mHPlanes.at(i).normal());
-			res.insert(Hyperplane<Number>( mHPlanes.at(i).normal(), result ));
-			//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			std::pair<Number,SOLUTION> evalRes = rhs.evaluate(mHPlanes.at(i).normal());
+			if(evalRes.second == INFTY) {
+				// Do nothing - omit inserting plane.
+			} else if (evalRes.second == INFEAS) {
+				// TODO: Return empty polytope.
+			} else {
+				result = mHPlanes.at(i).offset() + evalRes.first;
+				res.insert(Hyperplane<Number>( mHPlanes.at(i).normal(), result ));
+				//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			}
 		}
 
 		// evaluation of lhs in directions of rhs
 		for(unsigned i = 0; i < rhs.constraints().size(); ++i) {
-			result = rhs.constraints().at(i).offset()+ this->evaluate(rhs.constraints().at(i).normal());
-			res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), result ));
-			//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			std::pair<Number,SOLUTION> evalRes = this->evaluate(rhs.constraints().at(i).normal());
+			if(evalRes.second == INFTY) {
+				// Do nothing - omit inserting plane.
+			} else if (evalRes.second == INFEAS) {
+				// TODO: Return empty polytope.
+			} else {
+				result = rhs.constraints().at(i).offset() + evalRes.first;
+				res.insert(Hyperplane<Number>( rhs.constraints().at(i).normal(), result ));
+				//std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			}
 		}
 		//res.reduce();
 		return res;
@@ -477,6 +503,7 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::intersect(const HPolytope& rhs) const {
+		std::cout << __func__ << std::endl;
 		// Todo: Improve.
 		if(rhs.empty()){
 			return HPolytope<Number>();
@@ -534,8 +561,14 @@ namespace hypro
 	template<typename Number>
 	bool HPolytope<Number>::contains(const HPolytope<Number>& rhs) const {
 		for(const auto& plane : rhs) {
-			if(this->evaluate(plane.normal()) < plane.offset())
+			std::pair<Number,SOLUTION> evalRes = this->evaluate(plane.normal());
+			if( evalRes.second == INFEAS ) {
+				return false; // empty!
+			} else if ( evalRes.second == INFTY ) {
+				continue;
+			} else if( evalRes.first < plane.offset() && !carl::AlmostEqual2sComplement(evalRes.first, plane.offset()) ) {
 				return false;
+			}
 		}
 		return true;
 	}

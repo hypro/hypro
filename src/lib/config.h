@@ -47,8 +47,8 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-static const unsigned FLOAT_PRECISION=64;
-static const unsigned TOLLERANCE_ULPS=1024;
+static const unsigned FLOAT_PRECISION=128;
+static const unsigned TOLLERANCE_ULPS=8192;
 static const unsigned MAX_DIMENSION_LIMIT=128;
 
 // global typedefs

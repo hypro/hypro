@@ -22,6 +22,7 @@ namespace hypro
 namespace polytope
 {
 
+	// TODO: Extend to bitvectors, otherwise limited to 64 bits.
 	static inline std::vector<std::vector<unsigned>> dPermutation(unsigned size, unsigned d) {
 		// get all combinations and filter those of size d
 		std::vector<vector<unsigned>> result;
