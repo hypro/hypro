@@ -348,10 +348,16 @@ namespace reachability {
 		bool computePostCondition(const hypro::Transition<Number>& _trans, const Representation& _val, Representation& result) {
 			std::cout << __func__ << std::endl;
 			//intersection between valuation polytope and guard hyperplanes
+
+			//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+			//plotter.addObject(_val.vertices());
+			//plotter.plot2d();
+
 			Representation intersectionPoly = _val.intersectHyperplanes(_trans.guard().mat, _trans.guard().vec);
 
 			//check if the intersection is empty
 			if (!intersectionPoly.empty()) {
+				std::cout << "Transition enabled!" << std::cout;
 				hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 				hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
@@ -359,6 +365,7 @@ namespace reachability {
 				result = intersectionPoly.linearTransformation(transformMat, translateVec);
 				return true;
 			} else {
+				std::cout << "Transition disabled!" << std::cout;
 				return false;
 			}
 		}

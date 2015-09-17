@@ -303,14 +303,17 @@ namespace hypro
 
 	template<typename Number>
 	void HPolytope<Number>::reduce() {
+		std::cout << __func__ << ": " << *this << std::endl;
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			//std::cout << "Current plane: " << *planeIt << std::endl;
+			std::cout << "Current plane: " << *planeIt << std::endl;
 			std::pair<Number, SOLUTION> evalRes = this->evaluate(planeIt->normal());
 			if(evalRes.second == INFEAS) {
-				// TODO: Set to empty polytope
+				// return empty polytope
+				this->clear();
+				break;
 			} else if (evalRes.second == FEAS) {
 				if(evalRes.first < planeIt->offset() && !carl::AlmostEqual2sComplement(evalRes.first,planeIt->offset())) {
-					//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+					std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
 					planeIt = mHPlanes.erase(planeIt);
 					mInitialized = false;
 				}
@@ -319,15 +322,15 @@ namespace hypro
 					auto pos = mHPlanes.erase(planeIt);
 					mInitialized = false;
 					std::pair<Number,SOLUTION> tmpRes = this->evaluate(tmp.normal());
-					//std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: " << tmpRes.second << std::endl;
+					std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: " << tmpRes.second << std::endl;
 					if( tmpRes.second == INFTY || (tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement(tmpRes.first,tmp.offset())) ) {
 						planeIt = mHPlanes.insert(pos, tmp);
 						mInitialized = false;
 						++planeIt;
-						//std::cout << "keep "  << tmp << std::endl;
+						std::cout << "keep "  << tmp << std::endl;
 					}
 					else {
-						//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+						std::cout << "erase " << tmp << " which is equal to something." << std::endl;
 						planeIt = pos;
 					}
 				}
@@ -528,13 +531,12 @@ namespace hypro
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::intersectHyperplanes(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const {
 		assert(_mat.rows() == _vec.rows());
+		std::cout << __func__ << std::endl;
 
 		HPolytope<Number> res(*this);
-
 		for(unsigned i = 0; i < _mat.rows(); ++i) {
 			res.insert(Hyperplane<Number>(_mat.row(i), _vec(i)));
 		}
-
 		res.reduce();
 
 		return res;
