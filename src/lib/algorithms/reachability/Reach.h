@@ -302,6 +302,8 @@ namespace reachability {
 				for (typename std::set<Transition<Number>*>::iterator it_trans = loc_transSet.begin(); it_trans != loc_transSet.end(); ++it_trans) {
 					hypro::Transition<Number> trans = *(*it_trans);
 
+					std::cout << "Consider transition " << trans << std::endl;
+
 					//resulting Polytope in new location
 					Representation targetValuation;
 					bool transitionEnabled = false;
@@ -313,7 +315,7 @@ namespace reachability {
 						if (computePostCondition(trans, *it_val, postAssign)) {
 							transitionEnabled = true;
 							std::cout << "Take transition " << trans << std::endl;
- 
+
 							//targetValuation = targetValuation U postAssign
 							if (!targetValuation.empty()) {
 								targetValuation = targetValuation.unite(postAssign);
@@ -344,7 +346,7 @@ namespace reachability {
 		}
 
 		bool computePostCondition(const hypro::Transition<Number>& _trans, const Representation& _val, Representation& result) {
-
+			std::cout << __func__ << std::endl;
 			//intersection between valuation polytope and guard hyperplanes
 			Representation intersectionPoly = _val.intersectHyperplanes(_trans.guard().mat, _trans.guard().vec);
 
