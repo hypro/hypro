@@ -84,15 +84,30 @@ namespace hypro
 		mDimension(0),
 		mInitialized(false)
 	{
-		std::cout << "alien.size(): " << alien.size() << std::endl;
-		assert(alien.size() > 2);
-		typename std::vector<Point<Number>> points = alien.vertices();
-		mDimension = points.begin()->dimension();
-		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
-		for(auto& facet : facets) {
-			mHPlanes.push_back(facet->hyperplane());
+		// degenerate cases
+		unsigned size = alien.size();
+		mDimension = alien.dimension();
+		if( size < mDimension ){
+			// TODO
+			assert(false);
+		} else if (size == mDimension) {
+			typename std::vector<Point<Number>> points = alien.vertices();
+			std::vector<vector_t<Number>> rawPoints;
+			for(const auto point : points)
+				rawPoints.push_back(point.rawCoordinates());
+
+			vector_t<Number> root = rawPoints.back();
+			rawPoints.pop_back();
+			mHPlanes.push_back(Hyperplane<Number>(root, rawPoints));
+
+		} else {
+			typename std::vector<Point<Number>> points = alien.vertices();
+			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
+			for(auto& facet : facets) {
+				mHPlanes.push_back(facet->hyperplane());
+			}
+			facets.clear();
 		}
-		facets.clear();
 	}
 
 
@@ -182,9 +197,9 @@ namespace hypro
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-			//std::cout << "Check contains." << std::endl;
+			std::cout << "Check contains." << std::endl;
 			if(!this->contains(*vertexIt)) {
-				//std::cout << "Removed vertex: " << *vertexIt << std::endl;
+				std::cout << "Removed vertex: " << *vertexIt << std::endl;
 				vertexIt = vertices.erase(vertexIt);
 			} else {
 				++vertexIt;
@@ -462,6 +477,12 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
+		std::cout << __func__ << " vertices: " << std::endl;
+		for(const auto& vertex : this->vertices())
+			std::cout << vertex << std::endl;
+
+		std::cout << "Create intermediate. " << std::endl;
+
 		VPolytope<Number> intermediate(this->vertices());
 		//std::cout << "Vertices : " << this->vertices() << std::endl;
 		intermediate = intermediate.linearTransformation(A, b);
@@ -552,10 +573,10 @@ namespace hypro
 	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
 		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
-			//std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
-			carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
+			std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
+			//carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) {
-					return false;
+				return false;
 			}
 		}
 		return true;
