@@ -1,0 +1,10 @@
+TODOs:
+
+- Handle degenerated
+    Conversion is a problem - VPolytopes, HPolytopes are okay (re-check solver and check if we compare strictly or weak always).
+- Handle empty
+    Distinguish empty and unbounded: Unbounded is no constraints, empty is either a fixed setup or has to be checked
+    -> VPolytopes is easier ( unbounded = 1 vertex, empty = 0 vertices? )
+
+- Handle unbounded
+    -> Easy for HPolytopes, for conversion/VPolytopes we have to add cone (also be able to compute cone in arbitrary dimensions, there is already a function -> re-check).

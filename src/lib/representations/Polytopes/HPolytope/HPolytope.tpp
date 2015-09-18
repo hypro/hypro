@@ -84,6 +84,7 @@ namespace hypro
 		mDimension(0),
 		mInitialized(false)
 	{
+		std::cout << "alien.size(): " << alien.size() << std::endl;
 		assert(alien.size() > 2);
 		typename std::vector<Point<Number>> points = alien.vertices();
 		mDimension = points.begin()->dimension();
@@ -334,7 +335,7 @@ namespace hypro
 						planeIt = pos;
 					}
 				}
-			} // FEAS	
+			} // FEAS
 		} // loop
 		//std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
@@ -537,7 +538,7 @@ namespace hypro
 		for(unsigned i = 0; i < _mat.rows(); ++i) {
 			res.insert(Hyperplane<Number>(_mat.row(i), _vec(i)));
 		}
-		res.reduce();
+		//res.reduce();
 
 		return res;
 	}
@@ -815,5 +816,5 @@ namespace hypro
 		return solution;
 	}
 	*/
-	
+
 } // namespace

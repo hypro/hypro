@@ -349,23 +349,25 @@ namespace reachability {
 			std::cout << __func__ << std::endl;
 			//intersection between valuation polytope and guard hyperplanes
 
-			//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-			//plotter.addObject(_val.vertices());
-			//plotter.plot2d();
+			hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+			plotter.addObject(_val.vertices());
+			plotter.plot2d();
 
 			Representation intersectionPoly = _val.intersectHyperplanes(_trans.guard().mat, _trans.guard().vec);
 
 			//check if the intersection is empty
 			if (!intersectionPoly.empty()) {
-				std::cout << "Transition enabled!" << std::cout;
+				std::cout << "Transition enabled!" << std::endl;
 				hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 				hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
+
+				std::cout << "Valuation enabling transition: " << std::endl << intersectionPoly << std::endl;
 
 				//perform translation + transformation on intersection polytope
 				result = intersectionPoly.linearTransformation(transformMat, translateVec);
 				return true;
 			} else {
-				std::cout << "Transition disabled!" << std::cout;
+				std::cout << "Transition disabled!" << std::endl;
 				return false;
 			}
 		}
