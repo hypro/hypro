@@ -350,14 +350,18 @@ namespace reachability {
 			//intersection between valuation polytope and guard hyperplanes
 
 			hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-			plotter.addObject(_val.vertices());
-			plotter.plot2d();
+			
 
 			Representation intersectionPoly = _val.intersectHyperplanes(_trans.guard().mat, _trans.guard().vec);
 
 			//check if the intersection is empty
 			if (!intersectionPoly.empty()) {
 				std::cout << "Transition enabled!" << std::endl;
+
+				//plotter.addObject(_val.vertices());
+				//plotter.addObject(intersectionPoly.vertices());
+				//plotter.plot2d();
+
 				hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 				hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 

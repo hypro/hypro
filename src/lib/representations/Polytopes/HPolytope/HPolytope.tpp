@@ -84,29 +84,31 @@ namespace hypro
 		mDimension(0),
 		mInitialized(false)
 	{
-		// degenerate cases
-		unsigned size = alien.size();
-		mDimension = alien.dimension();
-		if( size < mDimension ){
-			// TODO
-			assert(false);
-		} else if (size == mDimension) {
-			typename std::vector<Point<Number>> points = alien.vertices();
-			std::vector<vector_t<Number>> rawPoints;
-			for(const auto point : points)
-				rawPoints.push_back(point.rawCoordinates());
+		if(!alien.empty()){
+			// degenerate cases
+			unsigned size = alien.size();
+			mDimension = alien.dimension();
+			if( size < mDimension ){
+				// TODO
+				assert(false);
+			} else if (size == mDimension) {
+				typename std::vector<Point<Number>> points = alien.vertices();
+				std::vector<vector_t<Number>> rawPoints;
+				for(const auto point : points)
+					rawPoints.push_back(point.rawCoordinates());
 
-			vector_t<Number> root = rawPoints.back();
-			rawPoints.pop_back();
-			mHPlanes.push_back(Hyperplane<Number>(root, rawPoints));
+				vector_t<Number> root = rawPoints.back();
+				rawPoints.pop_back();
+				mHPlanes.push_back(Hyperplane<Number>(root, rawPoints));
 
-		} else {
-			typename std::vector<Point<Number>> points = alien.vertices();
-			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
-			for(auto& facet : facets) {
-				mHPlanes.push_back(facet->hyperplane());
+			} else {
+				typename std::vector<Point<Number>> points = alien.vertices();
+				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(points).first;
+				for(auto& facet : facets) {
+					mHPlanes.push_back(facet->hyperplane());
+				}
+				facets.clear();
 			}
-			facets.clear();
 		}
 	}
 
@@ -159,7 +161,7 @@ namespace hypro
 				matrix_t<Number> A(2, mHPlanes.at(planeA).dimension());
 				vector_t<Number> b(2);
 
-				//std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
+				std::cout << __func__ << ": combine: " << mHPlanes.at(planeA).normal().transpose() << " ("<< planeA <<") and " << mHPlanes.at(planeB).normal().transpose() << " (" << planeB << ")" << std::endl;
 
 				// initialize
 				A.row(0) = mHPlanes.at(planeA).normal().transpose();
@@ -182,6 +184,7 @@ namespace hypro
 				bool infty = false;
 				for(unsigned i = 0; i < res.rows(); ++i){
 					if(std::numeric_limits<Number>::infinity() == (Number(res(i)))){
+						std::cout << (Number(res(i))) << " is infty." << std::endl;
 						infty = true;
 						break;
 					}
@@ -189,11 +192,11 @@ namespace hypro
 
 				if(!infty) {
 					vertices.push_back(Point<Number>(res));
-					//std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
-				}/*
+					std::cout << "Computed vertex: " << Point<Number>(res) << std::endl;
+				}
 				else
 					std::cout << "Intersection at infinity." << std::endl;
-				*/
+				
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
@@ -321,7 +324,7 @@ namespace hypro
 	void HPolytope<Number>::reduce() {
 		std::cout << __func__ << ": " << *this << std::endl;
 		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			std::cout << "Current plane: " << *planeIt << std::endl;
+			//std::cout << "Current plane: " << *planeIt << std::endl;
 			std::pair<Number, SOLUTION> evalRes = this->evaluate(planeIt->normal());
 			if(evalRes.second == INFEAS) {
 				// return empty polytope
@@ -329,7 +332,7 @@ namespace hypro
 				break;
 			} else if (evalRes.second == FEAS) {
 				if(evalRes.first < planeIt->offset() && !carl::AlmostEqual2sComplement(evalRes.first,planeIt->offset())) {
-					std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+					//std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
 					planeIt = mHPlanes.erase(planeIt);
 					mInitialized = false;
 				}
@@ -338,15 +341,15 @@ namespace hypro
 					auto pos = mHPlanes.erase(planeIt);
 					mInitialized = false;
 					std::pair<Number,SOLUTION> tmpRes = this->evaluate(tmp.normal());
-					std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: " << tmpRes.second << std::endl;
+					//std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: " << tmpRes.second << std::endl;
 					if( tmpRes.second == INFTY || (tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement(tmpRes.first,tmp.offset())) ) {
 						planeIt = mHPlanes.insert(pos, tmp);
 						mInitialized = false;
 						++planeIt;
-						std::cout << "keep "  << tmp << std::endl;
+						//std::cout << "keep "  << tmp << std::endl;
 					}
 					else {
-						std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+						//std::cout << "erase " << tmp << " which is equal to something." << std::endl;
 						planeIt = pos;
 					}
 				}
@@ -477,6 +480,7 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
+		std::cout << __func__ << " this: " << *this << std::endl;
 		std::cout << __func__ << " vertices: " << std::endl;
 		for(const auto& vertex : this->vertices())
 			std::cout << vertex << std::endl;
@@ -484,8 +488,13 @@ namespace hypro
 		std::cout << "Create intermediate. " << std::endl;
 
 		VPolytope<Number> intermediate(this->vertices());
-		//std::cout << "Vertices : " << this->vertices() << std::endl;
+		
+		std::cout << "Intermediate : " << intermediate << std::endl;
+
 		intermediate = intermediate.linearTransformation(A, b);
+
+		std::cout << "Intermediate : " << intermediate << std::endl;
+
 		HPolytope<Number> res(intermediate);
 		return res;
 	}
@@ -573,7 +582,7 @@ namespace hypro
 	bool HPolytope<Number>::contains(const vector_t<Number>& vec) const {
 		//std::cout << __func__ << "  " << vec << ": ";
 		for(const auto& plane : mHPlanes) {
-			std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
+			//std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
 			//carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) {
 				return false;
@@ -665,16 +674,15 @@ namespace hypro
 
 	template<typename Number>
 	void HPolytope<Number>::printArrays() {
-		if (mInitialized) {
-			unsigned size = mHPlanes.size()*mDimension;
-			std::cout << "IA: ";
-			for(unsigned pos = 0; pos < size; ++pos) {
-				std::cout << ia[pos] << ", ";
-			}
-			std::cout << std::endl;
-		} else {
-			std::cout << "Not initialized." << std::endl;
+		if (!mInitialized) {
+			initialize();
 		}
+		unsigned size = mHPlanes.size()*mDimension;
+		std::cout << "IA: ";
+		for(unsigned pos = 0; pos < size; ++pos) {
+			std::cout << ia[pos] << ", ";
+		}
+		std::cout << std::endl;
 	}
 
 	template<typename Number>
