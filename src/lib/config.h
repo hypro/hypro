@@ -112,14 +112,14 @@ namespace Eigen
 		typedef carl::FLOAT_T<Number> NonInteger;
 		typedef carl::FLOAT_T<Number> Nested;
 
-		static inline Real epsilon() { return Real(0); }
+		static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
 		static inline Real dummy_precision()
 		{
 			// make sure to override this for floating-point types
 			return Real(0);
 		}
-		//static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
-		//static inline carl::FLOAT_T<Number> lowest()  { return carl::FLOAT_T<Number>::minVal(); }
+		static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
+		static inline carl::FLOAT_T<Number> lowest()  { return carl::FLOAT_T<Number>::minVal(); }
 	};
 
 	template<typename Number>
@@ -153,5 +153,14 @@ namespace Eigen
 			}
 		}
 		return true;
+	}
+
+	// according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:
+	template<typename Number>
+	hypro::matrix_t<Number> pseudoInverse(const hypro::matrix_t<Number> &a, Number epsilon = std::numeric_limits<Number>::epsilon())
+	{
+		Eigen::JacobiSVD< hypro::matrix_t<Number> > svd(a ,Eigen::ComputeThinU | Eigen::ComputeThinV);
+		Number tolerance = epsilon * std::max(a.cols(), a.rows()) *svd.singularValues().array().abs()(0);
+		return svd.matrixV() *  (svd.singularValues().array().abs() > tolerance).select(svd.singularValues().array().inverse(), 0).matrix().asDiagonal() * svd.matrixU().adjoint();
 	}
 }

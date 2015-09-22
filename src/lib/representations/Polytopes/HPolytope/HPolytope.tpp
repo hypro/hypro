@@ -143,6 +143,35 @@ namespace hypro
 	}
 
 	template<typename Number>
+	matrix_t<Number> HPolytope<Number>::matrix() const {
+		matrix_t<Number> res(mHPlanes.size(), dimension());
+		for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+			res(planeIndex) = mHPlanes.at(planeIndex).normal().transpose();
+		}
+		return res;
+	}
+
+	template<typename Number>
+	vector_t<Number> HPolytope<Number>::vector() const {
+		vector_t<Number> res(mHPlanes.size());
+		for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+			res(planeIndex) = mHPlanes.at(planeIndex).offset();
+		}
+		return res;
+	}
+
+	template<typename Number>
+	std::pair<matrix_t<Number>, vector_t<Number>> HPolytope<Number>::inequalities() const {
+		matrix_t<Number> A(mHPlanes.size(), dimension());
+		vector_t<Number> b(mHPlanes.size());
+		for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+			A.row(planeIndex) = mHPlanes.at(planeIndex).normal().transpose();
+			b(planeIndex) = mHPlanes.at(planeIndex).offset();
+		}
+		return std::make_pair(A,b);
+	}
+
+	template<typename Number>
 	const typename polytope::Fan<Number>& HPolytope<Number>::fan() const
 	{
 		if(!mFanSet)
@@ -480,6 +509,7 @@ namespace hypro
 
 	template<typename Number>
 	HPolytope<Number> HPolytope<Number>::linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const {
+		#ifdef USE_DOUBLE_DESCRIPTION
 		std::cout << __func__ << " this: " << *this << std::endl;
 		std::cout << __func__ << " vertices: " << std::endl;
 		for(const auto& vertex : this->vertices())
@@ -497,6 +527,23 @@ namespace hypro
 
 		HPolytope<Number> res(intermediate);
 		return res;
+		#else
+			assert(A.rows() == b.rows());
+			std::cout << __func__ << ": A=" << A << std::endl << "b=" << b << std::endl;
+			// using the method of Ferrante and Rackoff
+			matrix_t<Number> D = A.fullPivLu().inverse();
+
+			std::cout << "D=" << D << std::endl;
+
+			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
+
+			// we need to use SVD to compute the pseudo-inverse of the matrix of the polytope, see config.h and http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 
+			matrix_t<Number> inverse = Eigen::pseudoInverse(inequalities.first);
+
+			vector_t<Number> e = inverse * (inequalities.second) + b;
+
+			return std::move(HPolytope<Number>(D,e));
+		#endif
 	}
 
 	template<typename Number>

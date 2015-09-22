@@ -14,6 +14,8 @@
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
 
+//#define USE_DOUBLE_DESCRIPTION
+
 namespace hypro
 {
 
@@ -59,6 +61,10 @@ namespace hypro
 
 		unsigned dimension() const;
 		unsigned size() const;
+
+		matrix_t<Number> matrix() const;
+		vector_t<Number> vector() const;
+		std::pair<matrix_t<Number>, vector_t<Number>> inequalities() const;
 		
 		const typename polytope::Fan<Number>& fan() const;
 		typename std::vector<Point<Number>> vertices() const;
