@@ -196,7 +196,7 @@ namespace hypro
 				}
 				else
 					std::cout << "Intersection at infinity." << std::endl;
-				
+
 			}
 		}
 		for(auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
@@ -488,7 +488,7 @@ namespace hypro
 		std::cout << "Create intermediate. " << std::endl;
 
 		VPolytope<Number> intermediate(this->vertices());
-		
+
 		std::cout << "Intermediate : " << intermediate << std::endl;
 
 		intermediate = intermediate.linearTransformation(A, b);
@@ -585,6 +585,7 @@ namespace hypro
 			//std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
 			//carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) {
+				std::cout << "Not contained in " << plane.normal().transpose() << " <= " << plane.offset() << "(is: " << plane.normal().dot(vec) << ")" << std::endl;
 				return false;
 			}
 		}
