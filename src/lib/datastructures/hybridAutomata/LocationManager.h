@@ -11,35 +11,34 @@
 
 namespace hypro {
 
-    template<typename Number>
-    class LocationManager : public carl::Singleton<LocationManager<Number>>
-    {
-        friend carl::Singleton<LocationManager>;
-    private:
-        std::map<unsigned, Location<Number>*> mLocations;
-        unsigned mId;
+template <typename Number>
+class LocationManager : public carl::Singleton<LocationManager<Number>> {
+	friend carl::Singleton<LocationManager>;
 
-    protected:
-        /**
-         * Default constructor and destructor
-         */
-        LocationManager() :
-            mId(0)
-        {}
+  private:
+	std::map<unsigned, Location<Number>*> mLocations;
+	unsigned mId;
 
-    public:
+  protected:
+	/**
+	 * Default constructor and destructor
+	 */
+	LocationManager() : mId( 0 ) {}
 
-        ~LocationManager()
-        {}
+  public:
+	~LocationManager() {}
 
-        Location<Number>* create();
-        Location<Number>* create(const Location<Number>* _loc);
-        Location<Number>* create(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec, const typename Location<Number>::transitionSet _trans, const struct Location<Number>::Invariant _inv);
-        Location<Number>* create(const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
-                const typename Location<Number>::transitionSet _trans, const struct Location<Number>::Invariant _inv, const hypro::matrix_t<Number> _extInputMat);
+	Location<Number>* create();
+	Location<Number>* create( const Location<Number>* _loc );
+	Location<Number>* create( const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+							  const typename Location<Number>::transitionSet _trans,
+							  const struct Location<Number>::Invariant _inv );
+	Location<Number>* create( const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+							  const typename Location<Number>::transitionSet _trans,
+							  const struct Location<Number>::Invariant _inv,
+							  const hypro::matrix_t<Number> _extInputMat );
+};
 
-    };
-
-} // namespace
+}  // namespace
 
 #include "LocationManager.tpp"

@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
-	typedef hypro::Polytope<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
 	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 
@@ -91,8 +91,6 @@ int main(int argc, char const *argv[])
 	// invariantMat(5,1) = 0;
 	// invariantMat(5,2) = -1;
 
-	std::cout << invariantMat << std::endl;
-
 	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
 	inv.op = invariantOp;
@@ -119,7 +117,7 @@ int main(int argc, char const *argv[])
 
 	vector_t<Number> guardVec = vector_t<Number>(3,1);
 	operator_e guardOp;
-	matrix_t<Number> guardMat = matrix_t<Number>(3,3);
+	matrix_t<Number> guardMat = matrix_t<Number>(3,2);
 
 	guardVec(0) = 0;
 	guardVec(1) = 0;
@@ -129,35 +127,26 @@ int main(int argc, char const *argv[])
 
 	guardMat(0,0) = 1;
 	guardMat(0,1) = 0;
-	guardMat(0,2) = 0;
 	guardMat(1,0) = -1;
 	guardMat(1,1) = 0;
-	guardMat(1,2) = 0;
 	guardMat(2,0) = 0;
 	guardMat(2,1) = 1;
-	guardMat(2,2) = 0;
 
 
 	guard.op = guardOp;
 	guard.mat = guardMat;
 	guard.vec = guardVec;
 
-	vector_t<Number> assignVec = vector_t<Number>(3,1);
-	matrix_t<Number> assignMat = matrix_t<Number>(3,3);
+	vector_t<Number> assignVec = vector_t<Number>(2,1);
+	matrix_t<Number> assignMat = matrix_t<Number>(2,2);
 
 	assignVec(0) = 0;
 	assignVec(1) = 0;
-	assignVec(2) = 0;
 
 	assignMat(0,0) = 1;
 	assignMat(0,1) = 0;
-	assignMat(0,2) = 0;
 	assignMat(1,0) = 0;
 	assignMat(1,1) = -0.9;
-	assignMat(1,2) = 0;
-	assignMat(2,0) = 0;
-	assignMat(2,1) = 0;
-	assignMat(2,2) = 1;
 
 	reset.translationVec = assignVec;
 	reset.transformMat = assignMat;
@@ -230,9 +219,10 @@ int main(int argc, char const *argv[])
 	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
-	std::vector<unsigned> flowpipeIndices = reacher.computeForwardReachability();
+	std::set<unsigned> flowpipeIndices = reacher.computeForwardReachability();
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
+
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
@@ -242,12 +232,12 @@ int main(int argc, char const *argv[])
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
-			std::cout << "Flowpipe segment to be converted: " << std::endl;
-			poly.print();
+			//std::cout << "Flowpipe segment to be converted: " << std::endl;
+			//poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
 			if(!points.empty() && points.size() > 2) {
-				std::cout << "Polycount: " << count << std::endl;
-				std::cout << "points.size() = " << points.size() << std::endl;
+				//std::cout << "Polycount: " << count << std::endl;
+				//std::cout << "points.size() = " << points.size() << std::endl;
 				for(auto& point : points) {
 		// 			std::cout << "reduce " << point << " to ";
 					point.reduceDimension(2);

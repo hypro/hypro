@@ -67,7 +67,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-	#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--with-gcc-toolchain") 
+	#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--with-gcc-toolchain")
 endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -117,11 +117,13 @@ endif()
 
 if(USE_OPENGL_PLOTTING)
 	find_package(Glut REQUIRED)
+  include_directories(${Glut_INCLUDE_DIR})
+  set(libraries ${libraries} ${Glut_LIBRARY})
 endif()
 
 find_package(GMP REQUIRED)
-include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS} ${Glut_INCLUDE_DIR})
-set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES} ${Glut_LIBRARY})
+include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS})
+set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES})
 
 find_package(PPL REQUIRED)
 include_directories(${PPL_INCLUDES})

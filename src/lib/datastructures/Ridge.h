@@ -12,101 +12,78 @@
 #include "../config.h"
 #include "Facet.h"
 
-namespace hypro
-{
-template<class Number>
-class Ridge
-{
-	public:
+namespace hypro {
+template <class Number>
+class Ridge {
+  public:
 	/**
 	 * Typedefs
 	 */
-		typedef std::vector<Point<Number>> vertexSet;
-		// typedef std::vector<Facet<Number>> neighborFacets;
+	typedef std::vector<Point<Number>> vertexSet;
+	// typedef std::vector<Facet<Number>> neighborFacets;
 
 	/**
 	 * Members
 	 */
-	private:
-		vertexSet            mVertices;
-		std::vector<std::shared_ptr<Facet<Number>>>           mNeighbors;
-		Hyperplane<Number>          mHyperplane;
+  private:
+	vertexSet mVertices;
+	std::vector<std::shared_ptr<Facet<Number>>> mNeighbors;
+	Hyperplane<Number> mHyperplane;
 
 	/**
 	 * Constructors & Destructor
 	 */
-	public:
-		Ridge() {
+  public:
+	Ridge() {}
 
-		}
+	Ridge( const Ridge<Number>& f ) {
+		mVertices = f.vertices();
+		mNeighbors = f.neighbors();
+		mHyperplane = f.hyperplane();
+	}
 
-		Ridge( const Ridge<Number>& f) {
-			mVertices = f.vertices();
-			mNeighbors = f.neighbors();
-			mHyperplane = f.hyperplane();
-		}
-
-		Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2)
-		{
-			 //   std::vector<Facet<Number>> facets;
-			 //   facets.push_back(facet1);
-			 //   facets.push_back(facet2);
-			 //   mNeighbors = facets;
-			mNeighbors.push_back(facet1);
-			mNeighbors.push_back(facet2);
-			mVertices = std::vector<Point<Number>>();
-			for(unsigned i = 0; i < facet1->vertices().size(); i++) {
-				for(unsigned j = 0; j < facet2->vertices().size(); j++) {
-					if(facet1->vertices()[i] == facet2->vertices()[j]) {
-						mVertices.push_back(facet1->vertices()[i]);
-					}
+	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) {
+		//   std::vector<Facet<Number>> facets;
+		//   facets.push_back(facet1);
+		//   facets.push_back(facet2);
+		//   mNeighbors = facets;
+		mNeighbors.push_back( facet1 );
+		mNeighbors.push_back( facet2 );
+		mVertices = std::vector<Point<Number>>();
+		for ( unsigned i = 0; i < facet1->vertices().size(); i++ ) {
+			for ( unsigned j = 0; j < facet2->vertices().size(); j++ ) {
+				if ( facet1->vertices()[i] == facet2->vertices()[j] ) {
+					mVertices.push_back( facet1->vertices()[i] );
 				}
 			}
-
-			mHyperplane = Hyperplane<Number>();//mNormal,mScalar);
-			//save mHyperplane as intersect of the facets
 		}
 
-		~Ridge()
-		{}
+		mHyperplane = Hyperplane<Number>();  // mNormal,mScalar);
+		// save mHyperplane as intersect of the facets
+	}
 
-		/**
-		 * Getters and Setters
-		 */
+	~Ridge() {}
 
-		vertexSet& rVertices()
-		{
-			return mVertices;
-		}
+	/**
+	 * Getters and Setters
+	 */
 
-		vertexSet vertices() const
-		{
-			return mVertices;
-		}
+	vertexSet& rVertices() { return mVertices; }
 
-		std::vector<std::shared_ptr<Facet<Number>>>& rNeighbors() {
+	vertexSet vertices() const { return mVertices; }
 
-	        return mNeighbors;
-	    }
+	std::vector<std::shared_ptr<Facet<Number>>>& rNeighbors() { return mNeighbors; }
 
-		std::vector<std::shared_ptr<Facet<Number>>> neighbors() const
-	    {
-	        return mNeighbors;
-	    }
+	std::vector<std::shared_ptr<Facet<Number>>> neighbors() const { return mNeighbors; }
 
-		Hyperplane<Number> hyperplane() const
-		{
-			return mHyperplane;
-		}
+	Hyperplane<Number> hyperplane() const { return mHyperplane; }
 };
 
-template<typename Number>
-std::ostream & operator<< (std::ostream& _ostr, const Ridge<Number>& _f)
-{
+template <typename Number>
+std::ostream& operator<<( std::ostream& _ostr, const Ridge<Number>& _f ) {
 	_ostr << "Ridge: " << std::endl;
-	for(const auto& vertex : _f.vertices())
-		_ostr << vertex << ", ";
+	for ( const auto& vertex : _f.vertices() ) _ostr << vertex << ", ";
 	return _ostr;
 }
 
-} // namespace
+}  // namespace

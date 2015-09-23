@@ -14,15 +14,14 @@
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Sparse>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
 extern "C" {
 #endif
-	#include <setoper.h>
-	#include <cdd.h>
+#include <setoper.h>
+#include <cdd.h>
 #ifdef __cplusplus
 }
 #endif
@@ -47,40 +46,36 @@ using carl::operator<<;
 #define PI_UP 3.141592655
 #define PI_DN 3.141592654
 
-static const unsigned FLOAT_PRECISION=128;
-static const unsigned TOLLERANCE_ULPS=1024;
-static const unsigned MAX_DIMENSION_LIMIT=128;
+static const unsigned FLOAT_PRECISION = 128;
+static const unsigned TOLLERANCE_ULPS = 8192;
+static const unsigned MAX_DIMENSION_LIMIT = 128;
 
 // global typedefs
-namespace hypro
-{
-template<typename Number>
+namespace hypro {
+template <typename Number>
 using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
-template<typename Number>
+template <typename Number>
 using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
-template<typename Number>
-using sMatrix_t = Eigen::SparseMatrix<Number>;
-
-template<typename Number>
+template <typename Number>
 class Polytope;
 
-template<typename Number>
+template <typename Number>
 using valuation_t = Polytope<Number>;
 
-template<typename Number>
+template <typename Number>
 using vectorSet = std::set<vector_t<Number>>;
 }
 
 /**
  * Defines for reachability algorithm based on polytopes
  */
-static const float fReach_TIMEBOUND= 5;
-static const unsigned fReach_ITERATIONDEPTH= 5;
-static const unsigned fReach_TIMEDISCRETIZATION= 500;
-static const unsigned fReach_DENOMINATOR= 1000000000;
-//define for debugging: triggers console output
+static const float fReach_TIMEBOUND = 2;
+static const unsigned fReach_ITERATIONDEPTH = 1;
+static const unsigned fReach_TIMEDISCRETIZATION = 400;
+static const unsigned fReach_DENOMINATOR = 1000000000;
+// define for debugging: triggers console output
 #define fReach_DEBUG
 
 /**
@@ -89,69 +84,77 @@ static const unsigned fReach_DENOMINATOR= 1000000000;
  */
 #define EPSILON 0.000001
 #define POS_CONSTANT 100
-//define for debugging: triggers console output
+// define for debugging: triggers console output
 //#define fukuda_DEBUG
 
-namespace Eigen
-{
-	template<typename Number>
-	struct NumTraits<carl::FLOAT_T<Number>>
-	{
-		enum
-		{
-			IsComplex = 0,
-			IsInteger = 0,
-			ReadCost = 1,
-			AddCost = 1,
-			MulCost = 1,
-			IsSigned = 1,
-			RequireInitialization = 1
-		};
-
-		typedef carl::FLOAT_T<Number> Real;
-		typedef carl::FLOAT_T<Number> NonInteger;
-		typedef carl::FLOAT_T<Number> Nested;
-
-		static inline Real epsilon() { return Real(0); }
-		static inline Real dummy_precision()
-		{
-			// make sure to override this for floating-point types
-			return Real(0);
-		}
-		//static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
-		//static inline carl::FLOAT_T<Number> lowest()  { return carl::FLOAT_T<Number>::minVal(); }
+namespace Eigen {
+template <typename Number>
+struct NumTraits<carl::FLOAT_T<Number>> {
+	enum {
+		IsComplex = 0,
+		IsInteger = 0,
+		ReadCost = 1,
+		AddCost = 1,
+		MulCost = 1,
+		IsSigned = 1,
+		RequireInitialization = 1
 	};
 
-	template<typename Number>
-	bool operator<(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
-		if(lhs.rows() != rhs.rows())
-			return false;
+	typedef carl::FLOAT_T<Number> Real;
+	typedef carl::FLOAT_T<Number> NonInteger;
+	typedef carl::FLOAT_T<Number> Nested;
 
-		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
-			if(lhs(dim) > rhs(dim)) {
-				return false;
-			} else if( lhs(dim) < rhs(dim) ) {
-				return true;
-			}
-		}
-		return false;
+	static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
+	static inline Real dummy_precision() {
+		// make sure to override this for floating-point types
+		return Real( 0 );
 	}
+	static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
+	static inline carl::FLOAT_T<Number> lowest() { return carl::FLOAT_T<Number>::minVal(); }
+};
 
-	template<typename Number>
-	bool operator==(const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs) {
-		if(lhs.rows() != rhs.rows())
+template <typename Number>
+bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() ) return false;
+
+	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
+		if ( lhs( dim ) > rhs( dim ) ) {
 			return false;
-
-
-		for(unsigned dim = 0; dim < lhs.rows(); ++dim) {
-			//std::cout << lhs(dim) << std::endl;
-			//std::cout << rhs(dim) << std::endl;
-
-			//std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS << "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
-			if(!carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS)) {
-				return false;
-			}
+		} else if ( lhs( dim ) < rhs( dim ) ) {
+			return true;
 		}
-		return true;
 	}
+	return false;
+}
+
+template <typename Number>
+bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() ) return false;
+
+	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
+		// std::cout << lhs(dim) << std::endl;
+		// std::cout << rhs(dim) << std::endl;
+
+		// std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS <<
+		// "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
+		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:
+template <typename Number>
+hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a,
+									   Number epsilon = std::numeric_limits<Number>::epsilon() ) {
+	Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( a, Eigen::ComputeThinU | Eigen::ComputeThinV );
+	Number tolerance = epsilon * std::max( a.cols(), a.rows() ) * svd.singularValues().array().abs()( 0 );
+	return svd.matrixV() *
+		   ( svd.singularValues().array().abs() > tolerance )
+				 .select( svd.singularValues().array().inverse(), 0 )
+				 .matrix()
+				 .asDiagonal() *
+		   svd.matrixU().adjoint();
+}
 }

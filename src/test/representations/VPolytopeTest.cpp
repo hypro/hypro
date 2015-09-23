@@ -279,8 +279,6 @@ TYPED_TEST(VPolytopeTest, Intersection)
 		EXPECT_TRUE(vpt2.contains(vertex));
 	}
 
-	std::cout<< "Part 2 starting: "	<< std::endl;
-
 	      std::vector<Point<TypeParam>> ps3;
 	      vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
       v01(0) = 1;
@@ -393,9 +391,9 @@ TYPED_TEST(VPolytopeTest, Intersection)
 	    	  EXPECT_TRUE(pt4.contains(vertex));
 	      }
 
-	      VPolytope<TypeParam> res3 = res2.intersect(VPolytope<TypeParam>());
+	  VPolytope<TypeParam> res3 = res2.intersect(VPolytope<TypeParam>());
 
-	      EXPECT_TRUE(res3.size() == 0);
+	  EXPECT_TRUE(res3.size() == 0);
 }
 
 TYPED_TEST(VPolytopeTest, Membership)
