@@ -4,21 +4,21 @@ namespace hypro {
 
 template <typename Number, typename Representation>
 HybridAutomaton<Number, Representation>::HybridAutomaton( const HybridAutomaton& _hybrid )
-	: mInitialLocations( _hybrid.initialLocations() ),
-	  mLocations( _hybrid.locations() ),
-	  mTransitions( _hybrid.transitions() ),
-	  mInitialValuation( _hybrid.initialValuation() ),
-	  mExtInputValuation( _hybrid.extInputValuation() ) {
+	: mInitialLocations( _hybrid.initialLocations() )
+	, mLocations( _hybrid.locations() )
+	, mTransitions( _hybrid.transitions() )
+	, mInitialValuation( _hybrid.initialValuation() )
+	, mExtInputValuation( _hybrid.extInputValuation() ) {
 }
 
 template <typename Number, typename Representation>
 HybridAutomaton<Number, Representation>::HybridAutomaton( const locationSet _initLocs, const locationSet _locs,
 														  const transitionSet _trans, Representation _initVal )
-	: mInitialLocations( _initLocs ),
-	  mLocations( _locs ),
-	  mTransitions( _trans ),
-	  mInitialValuation( _initVal ),
-	  mExtInputValuation() {
+	: mInitialLocations( _initLocs )
+	, mLocations( _locs )
+	, mTransitions( _trans )
+	, mInitialValuation( _initVal )
+	, mExtInputValuation() {
 }
 
 template <typename Number, typename Representation>

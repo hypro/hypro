@@ -9,35 +9,35 @@ Location<Number>::Location( unsigned _id )
 
 template <typename Number>
 Location<Number>::Location( unsigned _id, const Location& _loc )
-	: mActivityVec( _loc.activityVec() ),
-	  mActivityMat( _loc.activityMat() ),
-	  mExternalInput( _loc.externalInput() ),
-	  mTransitions( _loc.transitions() ),
-	  mInvariant( _loc.invariant() ),
-	  mId( _id ) {
+	: mActivityVec( _loc.activityVec() )
+	, mActivityMat( _loc.activityMat() )
+	, mExternalInput( _loc.externalInput() )
+	, mTransitions( _loc.transitions() )
+	, mInvariant( _loc.invariant() )
+	, mId( _id ) {
 }
 
 template <typename Number>
 Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
 							const transitionSet _trans, const Location<Number>::Invariant _inv )
-	: mActivityVec( _vec ),
-	  mActivityMat( _mat ),
-	  mExternalInput(),
-	  mTransitions( _trans ),
-	  mInvariant( _inv ),
-	  mId( _id ) {
+	: mActivityVec( _vec )
+	, mActivityMat( _mat )
+	, mExternalInput()
+	, mTransitions( _trans )
+	, mInvariant( _inv )
+	, mId( _id ) {
 }
 
 template <typename Number>
 Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
 							const transitionSet _trans, const Location<Number>::Invariant _inv,
 							const hypro::matrix_t<Number> _extInputMat )
-	: mActivityVec( _vec ),
-	  mActivityMat( _mat ),
-	  mExternalInput( _extInputMat ),
-	  mTransitions( _trans ),
-	  mInvariant( _inv ),
-	  mId( _id ) {
+	: mActivityVec( _vec )
+	, mActivityMat( _mat )
+	, mExternalInput( _extInputMat )
+	, mTransitions( _trans )
+	, mInvariant( _inv )
+	, mId( _id ) {
 }
 
 template <typename Number>

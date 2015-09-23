@@ -81,9 +81,9 @@ Zonotope<Number>::Zonotope()
 
 template <typename Number>
 Zonotope<Number>::Zonotope( unsigned dimension )
-	: mDimension( dimension ),
-	  mCenter( hypro::vector_t<Number>::Zero( dimension ) ),
-	  mGenerators( hypro::matrix_t<Number>::Zero( dimension, 1 ) ) {
+	: mDimension( dimension )
+	, mCenter( hypro::vector_t<Number>::Zero( dimension ) )
+	, mGenerators( hypro::matrix_t<Number>::Zero( dimension, 1 ) ) {
 	assert( dimension != 0 && "Zonotope cannot have dimension 0." );
 }
 

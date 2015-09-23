@@ -2,15 +2,16 @@ namespace hypro {
 
 template <typename Number>
 Point<Number>::Point()
-	: mCoordinates( vector_t<Number>::Zero( 0 ) ),
-	  // mNeighbors(),
-	  mComposedOf() {
+	: mCoordinates( vector_t<Number>::Zero( 0 ) )
+	,
+	// mNeighbors(),
+	mComposedOf() {
 }
 
 template <typename Number>
 Point<Number>::Point( const Number& _value )
 	:  // mNeighbors(),
-	  mComposedOf() {
+	mComposedOf() {
 	mCoordinates = vector_t<Number>( 1 );
 	mCoordinates( 0 ) = _value;
 }
@@ -18,7 +19,7 @@ Point<Number>::Point( const Number& _value )
 template <typename Number>
 Point<Number>::Point( std::initializer_list<Number> _coordinates )
 	:  // mNeighbors(),
-	  mComposedOf() {
+	mComposedOf() {
 	unsigned count = 0;
 	mCoordinates = vector_t<Number>( _coordinates.size() );
 	for ( auto& coordinate : _coordinates ) {
@@ -30,7 +31,7 @@ Point<Number>::Point( std::initializer_list<Number> _coordinates )
 template <typename Number>
 Point<Number>::Point( std::vector<Number> _coordinates )
 	:  // mNeighbors(),
-	  mComposedOf() {
+	mComposedOf() {
 	unsigned count = 0;
 	mCoordinates = vector_t<Number>( _coordinates.size() );
 	for ( unsigned j = 0; j < _coordinates.size(); ++j ) {
@@ -42,7 +43,7 @@ Point<Number>::Point( std::vector<Number> _coordinates )
 template <typename Number>
 Point<Number>::Point( const coordinateMap& _coordinates )
 	:  // mNeighbors(),
-	  mComposedOf() {
+	mComposedOf() {
 	mCoordinates = vector_t<Number>( _coordinates.size() );
 	for ( auto& coordinatepair : _coordinates ) {
 		mCoordinates( hypro::VariablePool::getInstance().dimension( coordinatepair.first ) ) = coordinatepair.second;
@@ -51,23 +52,26 @@ Point<Number>::Point( const coordinateMap& _coordinates )
 
 template <typename Number>
 Point<Number>::Point( const vector_t<Number>& _vector )
-	: mCoordinates( _vector ),
-	  // mNeighbors(),
-	  mComposedOf() {
+	: mCoordinates( _vector )
+	,
+	// mNeighbors(),
+	mComposedOf() {
 }
 
 template <typename Number>
 Point<Number>::Point( const Point<Number>& _p )
-	: mCoordinates( _p.rawCoordinates() ),
-	  // mNeighbors(_p.neighbors()),
-	  mComposedOf( _p.composedOf() ) {
+	: mCoordinates( _p.rawCoordinates() )
+	,
+	// mNeighbors(_p.neighbors()),
+	mComposedOf( _p.composedOf() ) {
 }
 
 template <typename Number>
 Point<Number>::Point( Point<Number>&& _p )
-	: mCoordinates( _p.rawCoordinates() ),
-	  // mNeighbors(std::move(_p.neighbors())),
-	  mComposedOf( std::move( _p.composedOf() ) ) {
+	: mCoordinates( _p.rawCoordinates() )
+	,
+	// mNeighbors(std::move(_p.neighbors())),
+	mComposedOf( std::move( _p.composedOf() ) ) {
 }
 
 /*

@@ -335,7 +335,7 @@ void HPolytope<Number>::reduce() {
 			}
 		}  // FEAS
 	}	  // loop
-	// std::cout << __func__ << ": Result: " << *this << std::endl;
+		   // std::cout << __func__ << ": Result: " << *this << std::endl;
 }
 
 template <typename Number>
