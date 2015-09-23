@@ -85,7 +85,7 @@ struct Reach {
 	}
 
 	unsigned computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
-		 hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		// hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		//[0,T] = [0,delta1] U [delta1, delta2] ...
 		// note: interval size is constant
 		double timeInterval = float( fReach_TIMEBOUND ) / float( fReach_TIMEDISCRETIZATION );
@@ -97,6 +97,7 @@ struct Reach {
 
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
+
 #endif
 
 		// Polytope that is defined by the invariant
@@ -160,12 +161,12 @@ struct Reach {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 			std::cout << "A: " << resultMatrix << ", b: " << translation << std::endl;
-			plotter.addObject(_val.vertices());
-			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
-			plotter.addObject(deltaValuation);
+			//plotter.addObject(_val.vertices());
 
-// plotter.addObject(deltaValuation.vertices());
-// plotter.plot2d();
+			std::cout << "Linear transformation." << std::endl;
+			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
+			//plotter.addObject(deltaValuation.vertices());
+
 #ifdef fReach_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
@@ -215,8 +216,8 @@ struct Reach {
 #ifdef fReach_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
-			plotter.addObject(firstSegment.vertices());
-			plotter.plot2d();
+			//plotter.addObject(firstSegment.vertices());
+			//plotter.plot2d();
 #endif
 
 			// insert first Segment into the empty flowpipe

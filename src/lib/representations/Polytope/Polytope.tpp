@@ -144,6 +144,8 @@ void Polytope<Number>::addPoint( const Point<Number> &point ) {
 template <typename Number>
 void Polytope<Number>::updatePoints() const {
 	if ( !mPointsUpToDate ) {
+		std::cout << __func__ << std::endl;
+		mPoints.clear();
 		std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables =
 			  hypro::polytope::variables( mPolyhedron );
 		for ( auto &generator : mPolyhedron.generators() ) {
@@ -151,6 +153,7 @@ void Polytope<Number>::updatePoints() const {
 			// actual generator (some might be
 			// degenerated)
 			Point<Number> tmp = polytope::generatorToPoint<Number>( generator, variables );
+			/*
 			bool found = false;
 			for ( auto &point : mPoints ) {
 				if ( point == tmp ) {
@@ -161,6 +164,8 @@ void Polytope<Number>::updatePoints() const {
 			if ( !found ) {
 				mPoints.push_back( tmp );
 			}
+			*/
+			mPoints.push_back( tmp );  // we assume that the generators are already reduced.
 		}
 		mPointsUpToDate = true;
 	}
