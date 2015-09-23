@@ -31,7 +31,7 @@ protected:
 		planes2.push_back(hp6);
 		planes2.push_back(hp7);
 	}
-	
+
 	virtual void TearDown()
 	{
 	}
@@ -45,9 +45,9 @@ TYPED_TEST(HPolytopeTest, Constructor)
 	HPolytope<TypeParam> aHPolytope = HPolytope<TypeParam>();
 	HPolytope<TypeParam> anotherHPolytope = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
-	
+
 	HPolytope<TypeParam> copyAssignment = HPolytope<TypeParam>(anotherHPolytope);
-	
+
 	SUCCEED();
 }
 
@@ -58,7 +58,7 @@ TYPED_TEST(HPolytopeTest, Access)
 	EXPECT_EQ((unsigned) 4, hpt1.size());
 	//EXPECT_FALSE(hpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = hpt1.fan();
-		
+
 	typename HPolytope<TypeParam>::HyperplaneVector planes =  hpt1.constraints();
 	for(auto& constraint : planes) {
 		EXPECT_TRUE(hpt1.hasConstraint(constraint));
@@ -73,7 +73,7 @@ TYPED_TEST(HPolytopeTest, Swap)
 	typename HPolytope<TypeParam>::HyperplaneVector planes =  hpt1.constraints();
 
 	swap(hpt1,hpt2);
-		
+
 	for(auto& constraint : planes) {
 		EXPECT_TRUE(hpt2.hasConstraint(constraint));
 	}
@@ -197,16 +197,24 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	A(1,0) = 3;
 	A(1,1) = 4;
 
+	std::cout << "linearTransformation begin." << std::endl;
 	HPolytope<TypeParam> res = hpt1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()));
+	std::cout << "linearTransformation end." << std::endl;
+	std::cout << "Linear Transformation result: " << res << std::endl;
 
+	std::cout << "Compute vertices for VPoly construction." << std::endl;
 	VPolytope<TypeParam> test(hpt1.vertices());
+	std::cout << "Test: " << test << std::endl;
+
+	std::cout << "Test linearTransformation begin." << std::endl;
 	test = test.linearTransformation(A,vector_t<TypeParam>::Zero(A.rows()));
+	std::cout << "Test linearTransformation end." << std::endl;
 
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));
 	}
 	for(const auto& vertex : res.vertices()) {
-		EXPECT_TRUE(test.contains(vertex));	
+		EXPECT_TRUE(test.contains(vertex));
 	}
 }
 
@@ -256,7 +264,7 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 
 
 TYPED_TEST(HPolytopeTest, Intersection)
-{	
+{
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 	HPolytope<TypeParam> result = hpt1.intersect(hpt2);
@@ -317,7 +325,7 @@ TYPED_TEST(HPolytopeTest, Intersection)
 TYPED_TEST(HPolytopeTest, Membership)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
-	
+
 	Point<TypeParam> p1({0, 0});
 	EXPECT_TRUE(hpt1.contains(p1));
 

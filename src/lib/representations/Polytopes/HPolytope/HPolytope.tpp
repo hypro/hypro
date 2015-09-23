@@ -528,6 +528,8 @@ namespace hypro
 		HPolytope<Number> res(intermediate);
 		return res;
 		#else
+			// TODO: Include b!
+
 			assert(A.rows() == b.rows());
 			std::cout << __func__ << ": A=" << A << std::endl << "b=" << b << std::endl;
 			// using the method of Ferrante and Rackoff
@@ -537,10 +539,12 @@ namespace hypro
 
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 
-			// we need to use SVD to compute the pseudo-inverse of the matrix of the polytope, see config.h and http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 
+			std::cout << "Inequalities: " << inequalities.first << std::endl;
+
+			// we need to use SVD to compute the pseudo-inverse of the matrix of the polytope, see config.h and http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257
 			matrix_t<Number> inverse = Eigen::pseudoInverse(inequalities.first);
 
-			vector_t<Number> e = inverse * (inequalities.second) + b;
+			vector_t<Number> e = inverse * (inequalities.second);
 
 			return std::move(HPolytope<Number>(D,e));
 		#endif
@@ -632,7 +636,7 @@ namespace hypro
 			//std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " << (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) << std::endl;
 			//carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 			if(!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) && plane.normal().dot(vec) > plane.offset()) {
-				std::cout << "Not contained in " << plane.normal().transpose() << " <= " << plane.offset() << "(is: " << plane.normal().dot(vec) << ")" << std::endl;
+				std::cout << vec.transpose() << " not contained in " << plane.normal().transpose() << " <= " << plane.offset() << "(is: " << plane.normal().dot(vec) << ")" << std::endl;
 				return false;
 			}
 		}
