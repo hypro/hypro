@@ -8,7 +8,7 @@ Plotter<Number>::~Plotter() {
 }
 
 template <typename Number>
-void Plotter<Number>::setFilename( const std::string& _filename ) {
+void Plotter<Number>::setFilename( const std::string &_filename ) {
 	mFilename = _filename;
 }
 
@@ -63,7 +63,8 @@ void Plotter<Number>::plot2d() const {
 				}
 				mOutfile << " to \\\n";
 			}
-			// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO: Project to 2d	TODO: REINSERT ASSERTION
+			// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
+			// Project to 2d	TODO: REINSERT ASSERTION
 			// std::cout << double(objectIt->0].at(0)) << std::endl;
 			mOutfile << "  " << double( objectIt->second[0].at( 0 ) );
 			for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
@@ -101,7 +102,7 @@ void Plotter<Number>::plot2d() const {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, bool sorted ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
 	if ( !sorted ) {
 		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
 		mObjects.insert( std::make_pair( mId, sortedPoints ) );
@@ -112,8 +113,8 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted ) {
-	for ( const auto& part : _points ) {
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>> &_points, bool sorted ) {
+	for ( const auto &part : _points ) {
 		if ( !sorted ) {
 			std::vector<Point<Number>> sortedPoints = grahamScan( part );
 			mObjects.insert( std::make_pair( mId, sortedPoints ) );
@@ -132,29 +133,31 @@ void Plotter<Number>::setObjectColor( unsigned _id, const std::string _color ) {
 }
 
 template <typename Number>
-void Plotter<Number>::init( const std::string& _filename ) {
+void Plotter<Number>::init( const std::string &_filename ) {
 	mOutfile.open( _filename );
 }
 
 template <typename Number>
-std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<Number>>& _points ) {
+std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<Number>> &_points ) {
 	assert( _points.size() >= 3 );
 	std::vector<Point<Number>> res;
 	if ( !_points.empty() ) {
 		// initialize -> find minimum Point
 		Point<Number> min = _points[0];
 		std::map<Number, Point<Number>> sortedPoints;
-		for ( const auto& point : _points ) {
+		for ( const auto &point : _points ) {
 			assert( point.dimension() == 2 );
 			if ( point < min ) {
 				min = point;
 			}
 		}
 
-		// std::cout << "Minimum: " << min.rawCoordinates().transpose() << std::endl;
+		// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
+		// std::endl;
 
-		// sort Points according to polar angle -> we have to insert manually (because of double imprecision)
-		for ( const auto& point : _points ) {
+		// sort Points according to polar angle -> we have to insert manually
+		// (because of double imprecision)
+		for ( const auto &point : _points ) {
 			if ( point != min ) {
 				// std::cout << "Try to insert " << point << std::endl;
 				Number angle = point.polarCoordinates( min ).at( 1 );
@@ -173,16 +176,18 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 							// if equal, compare radial coordinate (distance)
 							// std::cout << "AlmostEqual2sComplement" << std::endl;
 							if ( pos->second.polarCoordinates( min )[0] < point.polarCoordinates( min )[0] ) {
-								// std::cout << "sortedPoints erase " << pos->second << std::endl;
+								// std::cout << "sortedPoints erase " << pos->second <<
+								// std::endl;
 								pos = sortedPoints.erase( pos );
 								sortedPoints.insert( std::make_pair( angle, point ) );
 							}
 							break;
 						}
-						// we assume to be sorted, so check all angles, which are smaller or equal for equality -
+						// we assume to be sorted, so check all angles, which are smaller or
+						// equal for equality -
 						// afterwards simply insert
-						else if ( angle >
-								  newAngle ) {  // not equal and smaller -> continue search (at end, simply insert)
+						else if ( angle > newAngle ) {  // not equal and smaller -> continue
+														// search (at end, simply insert)
 							++pos;
 							if ( pos == sortedPoints.end() ) {
 								sortedPoints.insert( std::make_pair( angle, point ) );
@@ -199,7 +204,8 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		}
 
 		// for(const auto& pair : sortedPoints)
-		//	std::cout << "sorted: " << pair.first << ", " << pair.second.rawCoordinates().transpose() << std::endl;
+		//	std::cout << "sorted: " << pair.first << ", " <<
+		// pair.second.rawCoordinates().transpose() << std::endl;
 
 		// prepare stack -> initialize with 2 points
 		assert( sortedPoints.size() >= 1 );
@@ -210,14 +216,17 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		unsigned i = 0;
 		unsigned n = sortedPoints.size();
 
-		// main loop -> check the two topmost elements of the stack and one third, new point
+		// main loop -> check the two topmost elements of the stack and one third,
+		// new point
 		while ( i < n ) {
 			Point<Number> p1 = stack.top();
 			stack.pop();
 			Point<Number> p2 = stack.top();
 			stack.pop();
-			// std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << " -- " <<
-			// p1.rawCoordinates().transpose() << " -- " << sortedPoints.begin()->second.rawCoordinates().transpose() <<
+			// std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << "
+			// -- " <<
+			// p1.rawCoordinates().transpose() << " -- " <<
+			// sortedPoints.begin()->second.rawCoordinates().transpose() <<
 			// std::endl;
 			if ( isLeftTurn( p2, p1, sortedPoints.begin()->second ) ) {
 				// reinsert and add new point
@@ -227,11 +236,13 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 				sortedPoints.erase( sortedPoints.begin() );
 				++i;
 			} else {
-				// only reinsert second -> equal to removing the topmost object of the stack
+				// only reinsert second -> equal to removing the topmost object of the
+				// stack
 				// std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
 				stack.push( p2 );
 				if ( stack.size() < 2 ) {
-					// in this case simply insert, as the stack has to contain at least 2 points
+					// in this case simply insert, as the stack has to contain at least 2
+					// points
 					stack.push( sortedPoints.begin()->second );
 					sortedPoints.erase( sortedPoints.begin() );
 					++i;
@@ -249,7 +260,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 }
 
 template <typename Number>
-bool Plotter<Number>::isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c ) {
+bool Plotter<Number>::isLeftTurn( const Point<Number> &a, const Point<Number> &b, const Point<Number> &c ) {
 	assert( a.dimension() == 2 );
 	assert( b.dimension() == 2 );
 	assert( c.dimension() == 2 );
@@ -258,7 +269,8 @@ bool Plotter<Number>::isLeftTurn( const Point<Number>& a, const Point<Number>& b
 				   ( c.rawCoordinates()( 1 ) - a.rawCoordinates()( 1 ) ) ) -
 				 ( ( c.rawCoordinates()( 0 ) - a.rawCoordinates()( 0 ) ) *
 				   ( b.rawCoordinates()( 1 ) - a.rawCoordinates()( 1 ) ) );
-	// Number val = c.polarCoordinates(a,false)[1] - b.polarCoordinates(a,false)[1];
+	// Number val = c.polarCoordinates(a,false)[1] -
+	// b.polarCoordinates(a,false)[1];
 
 	return ( val > 0 );
 }

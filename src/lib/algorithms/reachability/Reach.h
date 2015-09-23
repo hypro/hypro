@@ -85,7 +85,7 @@ struct Reach {
 	}
 
 	unsigned computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
-		// hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		 hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		//[0,T] = [0,delta1] U [delta1, delta2] ...
 		// note: interval size is constant
 		double timeInterval = float( fReach_TIMEBOUND ) / float( fReach_TIMEDISCRETIZATION );
@@ -160,7 +160,9 @@ struct Reach {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 			std::cout << "A: " << resultMatrix << ", b: " << translation << std::endl;
+			plotter.addObject(_val.vertices());
 			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
+			plotter.addObject(deltaValuation);
 
 // plotter.addObject(deltaValuation.vertices());
 // plotter.plot2d();
@@ -213,6 +215,8 @@ struct Reach {
 #ifdef fReach_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
+			plotter.addObject(firstSegment.vertices());
+			plotter.plot2d();
 #endif
 
 			// insert first Segment into the empty flowpipe
@@ -342,7 +346,7 @@ struct Reach {
 		std::cout << __func__ << std::endl;
 		// intersection between valuation polytope and guard hyperplanes
 
-		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 		Representation intersectionPoly = _val.intersectHyperplanes( _trans.guard().mat, _trans.guard().vec );
 

@@ -17,20 +17,20 @@ Hyperplane<Number>::Hyperplane()
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const Hyperplane<Number>& _orig )
+Hyperplane<Number>::Hyperplane( const Hyperplane<Number> &_orig )
 	: mNormal( _orig.mNormal ), mScalar( _orig.mScalar ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const Point<Number>& _vector, const Number& _off )
+Hyperplane<Number>::Hyperplane( const Point<Number> &_vector, const Number &_off )
 	: mNormal( _vector.rawCoordinates() ), mScalar( _off ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, const Number& _off ) {
+Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, const Number &_off ) {
 	mNormal = vector_t<Number>( _coordinates.size() );
 	unsigned pos = 0;
-	for ( auto& coordinate : _coordinates ) {
+	for ( auto &coordinate : _coordinates ) {
 		mNormal( pos ) = coordinate;
 		++pos;
 	}
@@ -38,12 +38,12 @@ Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, cons
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const vector_t<Number>& _vector, const Number& _off )
+Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vector, const Number &_off )
 	: mNormal( _vector ), mScalar( _off ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>>& _constraint ) {
+Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>> &_constraint ) {
 	assert( _constraint.lhs().isLinear() );
 	carl::Variables vars = _constraint.variables();
 	vector_t<Number> tmp = vector_t<Number>::Zero( vars.size() );
@@ -65,15 +65,17 @@ Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>>& _c
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet ) {
+Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
 	// here: hyperplane given in parameterform is converted to normalform
-	// the normal vector of the hyperplane is computed by solving a system of equations
+	// the normal vector of the hyperplane is computed by solving a system of
+	// equations
 	mNormal = computePlaneNormal( _vectorSet );
 #ifdef fukuda_DEBUG
 	std::cout << "computed Plane Normal: " << mNormal << std::endl;
 #endif
 
-	// the scalar is just the scalar product of the normal vector & a point in the hyperplane
+	// the scalar is just the scalar product of the normal vector & a point in the
+	// hyperplane
 	mScalar = mNormal.dot( _vec );
 #ifdef fukuda_DEBUG
 	std::cout << "computed Offset: " << mScalar << std::endl;
@@ -90,12 +92,12 @@ unsigned Hyperplane<Number>::dimension() const {
 }
 
 template <typename Number>
-const vector_t<Number>& Hyperplane<Number>::normal() const {
+const vector_t<Number> &Hyperplane<Number>::normal() const {
 	return mNormal;
 }
 
 template <typename Number>
-void Hyperplane<Number>::setNormal( const vector_t<Number>& _normal ) {
+void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
 }
 
@@ -110,17 +112,17 @@ void Hyperplane<Number>::setOffset( Number _offset ) {
 }
 
 template <typename Number>
-Number Hyperplane<Number>::signedDistance( const vector_t<Number>& _point ) const {
+Number Hyperplane<Number>::signedDistance( const vector_t<Number> &_point ) const {
 	return ( _point.dot( mNormal ) - mScalar );
 }
 
 template <typename Number>
-Number Hyperplane<Number>::evaluate( const vector_t<Number>& _direction ) const {
+Number Hyperplane<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	return ( _direction.dot( mNormal ) );
 }
 
 template <typename Number>
-bool Hyperplane<Number>::intersection( Number& _result, const vector_t<Number>& _vector ) const {
+bool Hyperplane<Number>::intersection( Number &_result, const vector_t<Number> &_vector ) const {
 	bool intersect = false;
 	Number factor = 0;
 #ifdef fukuda_DEBUG
@@ -140,18 +142,18 @@ bool Hyperplane<Number>::intersection( Number& _result, const vector_t<Number>& 
 }
 
 template <typename Number>
-bool Hyperplane<Number>::intersection( Number& _result, const Point<Number>& _vector ) const {
+bool Hyperplane<Number>::intersection( Number &_result, const Point<Number> &_vector ) const {
 	return intersection( _result, _vector.rawCoordinates() );
 }
 
 template <typename Number>
-Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Number>& A,
-															 const vector_t<Number>& b ) const {
+Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Number> &A,
+															 const vector_t<Number> &b ) const {
 	return Hyperplane<Number>( A * mNormal + b, mScalar );
 }
 
 template <typename Number>
-HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number>& _rhs ) const {
+HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number> &_rhs ) const {
 	std::vector<Hyperplane<Number>> planes;
 	planes.push_back( *this );
 	planes.push_back( _rhs );
@@ -159,7 +161,7 @@ HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number>& _r
 }
 
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number>& _rhs ) const {
+vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number> &_rhs ) const {
 	matrix_t<Number> A = matrix_t<Number>( 3, mNormal.rows() );
 	A.row( 0 ) = mNormal.transpose();
 	A.row( 1 ) = _rhs.normal().transpose();
@@ -184,21 +186,22 @@ bool Hyperplane<Number>::holds( const vector_t<Number> _vector ) const {
 }
 
 template <typename Number>
-const Number& Hyperplane<Number>::internalOffset() const {
+const Number &Hyperplane<Number>::internalOffset() const {
 	return mScalar;
 }
 
 /**
  * @author: Chris K
  * Method to compute the normal of a plane based on two direction vectors
- * simply computing the cross product does not work since the dimension is not necessarily 3
+ * simply computing the cross product does not work since the dimension is not
+ * necessarily 3
  */
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet ) {
+vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
 	/*
 	 * Setup LP with GLPK
 	 */
-	glp_prob* normal;
+	glp_prob *normal;
 	normal = glp_create_prob();
 	glp_set_obj_dir( normal, GLP_MAX );
 

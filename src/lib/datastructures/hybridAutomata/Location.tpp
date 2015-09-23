@@ -8,7 +8,7 @@ Location<Number>::Location( unsigned _id )
 }
 
 template <typename Number>
-Location<Number>::Location( unsigned _id, const Location& _loc )
+Location<Number>::Location( unsigned _id, const Location &_loc )
 	: mActivityVec( _loc.activityVec() )
 	, mActivityMat( _loc.activityMat() )
 	, mExternalInput( _loc.externalInput() )
@@ -41,27 +41,27 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, co
 }
 
 template <typename Number>
-const hypro::vector_t<Number>& Location<Number>::activityVec() const {
+const hypro::vector_t<Number> &Location<Number>::activityVec() const {
 	return mActivityVec;
 }
 
 template <typename Number>
-const hypro::matrix_t<Number>& Location<Number>::activityMat() const {
+const hypro::matrix_t<Number> &Location<Number>::activityMat() const {
 	return mActivityMat;
 }
 
 template <typename Number>
-const hypro::matrix_t<Number>& Location<Number>::externalInput() const {
+const hypro::matrix_t<Number> &Location<Number>::externalInput() const {
 	return mExternalInput;
 }
 
 template <typename Number>
-const typename Location<Number>::Invariant& Location<Number>::invariant() const {
+const typename Location<Number>::Invariant &Location<Number>::invariant() const {
 	return mInvariant;
 }
 
 template <typename Number>
-const std::set<Transition<Number>*>& Location<Number>::transitions() const {
+const std::set<Transition<Number> *> &Location<Number>::transitions() const {
 	return mTransitions;
 }
 

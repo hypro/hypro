@@ -9,7 +9,7 @@ Point<Number>::Point()
 }
 
 template <typename Number>
-Point<Number>::Point( const Number& _value )
+Point<Number>::Point( const Number &_value )
 	:  // mNeighbors(),
 	mComposedOf() {
 	mCoordinates = vector_t<Number>( 1 );
@@ -22,7 +22,7 @@ Point<Number>::Point( std::initializer_list<Number> _coordinates )
 	mComposedOf() {
 	unsigned count = 0;
 	mCoordinates = vector_t<Number>( _coordinates.size() );
-	for ( auto& coordinate : _coordinates ) {
+	for ( auto &coordinate : _coordinates ) {
 		mCoordinates( count ) = Number( coordinate );
 		++count;
 	}
@@ -41,17 +41,17 @@ Point<Number>::Point( std::vector<Number> _coordinates )
 }
 
 template <typename Number>
-Point<Number>::Point( const coordinateMap& _coordinates )
+Point<Number>::Point( const coordinateMap &_coordinates )
 	:  // mNeighbors(),
 	mComposedOf() {
 	mCoordinates = vector_t<Number>( _coordinates.size() );
-	for ( auto& coordinatepair : _coordinates ) {
+	for ( auto &coordinatepair : _coordinates ) {
 		mCoordinates( hypro::VariablePool::getInstance().dimension( coordinatepair.first ) ) = coordinatepair.second;
 	}
 }
 
 template <typename Number>
-Point<Number>::Point( const vector_t<Number>& _vector )
+Point<Number>::Point( const vector_t<Number> &_vector )
 	: mCoordinates( _vector )
 	,
 	// mNeighbors(),
@@ -59,7 +59,7 @@ Point<Number>::Point( const vector_t<Number>& _vector )
 }
 
 template <typename Number>
-Point<Number>::Point( const Point<Number>& _p )
+Point<Number>::Point( const Point<Number> &_p )
 	: mCoordinates( _p.rawCoordinates() )
 	,
 	// mNeighbors(_p.neighbors()),
@@ -67,7 +67,7 @@ Point<Number>::Point( const Point<Number>& _p )
 }
 
 template <typename Number>
-Point<Number>::Point( Point<Number>&& _p )
+Point<Number>::Point( Point<Number> &&_p )
 	: mCoordinates( _p.rawCoordinates() )
 	,
 	// mNeighbors(std::move(_p.neighbors())),
@@ -77,54 +77,56 @@ Point<Number>::Point( Point<Number>&& _p )
 /*
 template<typename Number>
 std::vector<Point<Number>> Point<Number>::neighbors() const {
-	return mNeighbors;
+		return mNeighbors;
 }
 
 template<typename Number>
-void Point<Number>::setNeighbors(const std::vector<Point<Number> >& _neighbors) {
-	mNeighbors = _neighbors;
+void Point<Number>::setNeighbors(const std::vector<Point<Number> >& _neighbors)
+{
+		mNeighbors = _neighbors;
 }
 
 template<typename Number>
-void Point<Number>::joinNeighbors(const std::vector<Point<Number> >& _neighbors) {
-	for(unsigned i = 0; i<_neighbors.size(); i++){
-		if(!isNeighbor(_neighbors.at(i))){
-			addNeighbor(_neighbors.at(i));
+void Point<Number>::joinNeighbors(const std::vector<Point<Number> >& _neighbors)
+{
+		for(unsigned i = 0; i<_neighbors.size(); i++){
+				if(!isNeighbor(_neighbors.at(i))){
+						addNeighbor(_neighbors.at(i));
+				}
 		}
-	}
 }
 
 template<typename Number>
 void Point<Number>::addNeighbor(const Point<Number>& _neighbor) {
-	bool alreadyNeighbor = false;
-	for(unsigned i = 0; i< mNeighbors.size(); i++) {
-		if(mNeighbors.at(i) == _neighbor){
-			alreadyNeighbor = true;
+		bool alreadyNeighbor = false;
+		for(unsigned i = 0; i< mNeighbors.size(); i++) {
+				if(mNeighbors.at(i) == _neighbor){
+						alreadyNeighbor = true;
+				}
 		}
-	}
-	if(!alreadyNeighbor) {
-		mNeighbors.push_back(_neighbor);
-	}
+		if(!alreadyNeighbor) {
+				mNeighbors.push_back(_neighbor);
+		}
 }
 
 template<typename Number>
 bool Point<Number>::isNeighbor(const Point<Number>& _neighbor) {
-	for(unsigned i = 0; i< mNeighbors.size(); i++) {
-		if(mNeighbors.at(i) == _neighbor){
-			return true;
+		for(unsigned i = 0; i< mNeighbors.size(); i++) {
+				if(mNeighbors.at(i) == _neighbor){
+						return true;
+				}
 		}
-	}
-	return false;
+		return false;
 }
 
 template<typename Number>
 void Point<Number>::removeNeighbor(const Point<Number>& _neighbor) {
-	for(unsigned i = 0; i < mNeighbors.size(); i++){
-		if((mNeighbors.at(i)) == (_neighbor)) {
-			mNeighbors.erase(mNeighbors.begin() + i);
-			break;
+		for(unsigned i = 0; i < mNeighbors.size(); i++){
+				if((mNeighbors.at(i)) == (_neighbor)) {
+						mNeighbors.erase(mNeighbors.begin() + i);
+						break;
+				}
 		}
-	}
 }
 */
 
@@ -134,12 +136,12 @@ std::vector<Point<Number>> Point<Number>::composedOf() const {
 }
 
 template <typename Number>
-void Point<Number>::setComposition( const std::vector<Point<Number>>& _elements ) {
+void Point<Number>::setComposition( const std::vector<Point<Number>> &_elements ) {
 	mComposedOf = _elements;
 }
 
 template <typename Number>
-void Point<Number>::addToComposition( const Point<Number>& _element ) {
+void Point<Number>::addToComposition( const Point<Number> &_element ) {
 	mComposedOf.push_back( _element );
 }
 
@@ -151,7 +153,7 @@ Point<Number> Point<Number>::origin() const {
 }
 
 template <typename Number>
-Number Point<Number>::coordinate( const carl::Variable& _var ) const {
+Number Point<Number>::coordinate( const carl::Variable &_var ) const {
 	return mCoordinates( hypro::VariablePool::getInstance().dimension( _var ) );
 }
 
@@ -171,12 +173,12 @@ typename Point<Number>::coordinateMap Point<Number>::coordinates() const {
 }
 
 template <typename Number>
-const vector_t<Number>& Point<Number>::rawCoordinates() const {
+const vector_t<Number> &Point<Number>::rawCoordinates() const {
 	return mCoordinates;
 }
 
 template <typename Number>
-void Point<Number>::setCoordinate( const carl::Variable& _dim, const Number& _value ) {
+void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_value ) {
 	unsigned dim = hypro::VariablePool::getInstance().dimension( _dim );
 	assert( dim >= 0 );
 	if ( dim >= mCoordinates.rows() ) {
@@ -188,14 +190,15 @@ void Point<Number>::setCoordinate( const carl::Variable& _dim, const Number& _va
 }
 
 template <typename Number>
-void Point<Number>::swap( Point<Number>& _rhs ) {
-	this->mCoordinates = _rhs.mCoordinates;  // we cannot swap FLOAT_T yet, at least not with mpfr_t instantiation
+void Point<Number>::swap( Point<Number> &_rhs ) {
+	this->mCoordinates = _rhs.mCoordinates;  // we cannot swap FLOAT_T yet, at
+											 // least not with mpfr_t instantiation
 	// std::swap(this->mNeighbors, _rhs.mNeighbors);
 	std::swap( this->mComposedOf, _rhs.mComposedOf );
 }
 
 template <typename Number>
-void Point<Number>::coordinatesFromVector( const vector_t<Number>& vector ) {
+void Point<Number>::coordinatesFromVector( const vector_t<Number> &vector ) {
 	mCoordinates = vector;
 }
 
@@ -239,7 +242,7 @@ std::vector<carl::Variable> Point<Number>::variables() const {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::extAdd( const Point<Number>& _rhs ) const {
+Point<Number> Point<Number>::extAdd( const Point<Number> &_rhs ) const {
 	assert( mCoordinates.rows() == _rhs.rawCoordinates().rows() );
 
 	Point<Number> result = Point<Number>( mCoordinates + _rhs.rawCoordinates() );
@@ -247,16 +250,17 @@ Point<Number> Point<Number>::extAdd( const Point<Number>& _rhs ) const {
 }
 
 template <typename Number>
-Number Point<Number>::distance( const Point<Number>& _rhs ) const {
+Number Point<Number>::distance( const Point<Number> &_rhs ) const {
 	return ( ( mCoordinates - _rhs.rawCoordinates() ).norm() );
 }
 
 template <typename Number>
-std::vector<Number> Point<Number>::polarCoordinates( const Point<Number>& _origin, bool _radians ) const {
+std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origin, bool _radians ) const {
 	Point<Number> base = *this - _origin;
 	std::vector<Number> result;
 
-	// 1st component of the result is the radial part, the following components are the angles.
+	// 1st component of the result is the radial part, the following components
+	// are the angles.
 	Number radialCoordinate = Number( 0 );
 	for ( unsigned i = 0; i < base.dimension(); ++i ) {
 		Number square;
@@ -271,9 +275,9 @@ std::vector<Number> Point<Number>::polarCoordinates( const Point<Number>& _origi
 		Number angle( 0 );
 		for ( auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2 ) {
 			Number square;
-			square =
-				  pow( base.rawCoordinates()( dimension2 ),
-					   2 );  // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
+			square = pow( base.rawCoordinates()( dimension2 ),
+						  2 );  // TODO: Check if this does the right thing and why angle
+								// += (*dimension) ... does not work
 			angle += square;
 		}
 		angle = sqrt( angle );
@@ -307,7 +311,7 @@ Point<Number> Point<Number>::newEmpty() const {
 }
 
 template <typename Number>
-bool Point<Number>::move( const Point<Number>& _p ) {
+bool Point<Number>::move( const Point<Number> &_p ) {
 	mCoordinates = mCoordinates + _p.rawCoordinates();
 	bool negative = false;
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
@@ -320,7 +324,7 @@ bool Point<Number>::move( const Point<Number>& _p ) {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	if ( A.cols() == b.rows() )
 		return Point<Number>( A * mCoordinates + b );
 	else
@@ -334,7 +338,7 @@ Number Point<Number>::sum() const {
 }
 
 template <typename Number>
-void Point<Number>::incrementInFixedDim( const carl::Variable& _d ) {
+void Point<Number>::incrementInFixedDim( const carl::Variable &_d ) {
 	mCoordinates( hypro::VariablePool::getInstance().dimension( _d ) ) += 1;
 }
 
@@ -344,14 +348,14 @@ void Point<Number>::incrementInFixedDim( unsigned _d ) {
 }
 
 template <typename Number>
-void Point<Number>::incrementInAllDim( const Number& _val ) {
+void Point<Number>::incrementInAllDim( const Number &_val ) {
 	vector_t<Number> one = vector_t<Number>::Ones( mCoordinates.rows() );
 	one *= _val;
 	mCoordinates += one;
 }
 
 template <typename Number>
-void Point<Number>::decrementInFixedDim( const carl::Variable& _d ) {
+void Point<Number>::decrementInFixedDim( const carl::Variable &_d ) {
 	mCoordinates( hypro::VariablePool::getInstance().dimension( _d ) ) -= 1;
 }
 
@@ -361,7 +365,7 @@ void Point<Number>::decrementInFixedDim( unsigned _d ) {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::getPredecessorInDimension( const carl::Variable& _d ) const {
+Point<Number> Point<Number>::getPredecessorInDimension( const carl::Variable &_d ) const {
 	Point<Number> pred = Point<Number>( *this );
 	pred.decrementInFixedDim( _d );
 	return pred;
@@ -375,17 +379,17 @@ Point<Number> Point<Number>::getPredecessorInDimension( unsigned _d ) const {
 }
 
 template <typename Number>
-bool Point<Number>::isInBoundary( const Point<Number>& _boundary ) const {
+bool Point<Number>::isInBoundary( const Point<Number> &_boundary ) const {
 	return ( mCoordinates < _boundary.rawCoordinates() );
 }
 
 template <typename Number>
-bool Point<Number>::hasDimension( const carl::Variable& _i ) const {
+bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
 	return ( mCoordinates.rows() > hypro::VariablePool::getInstance().dimension( _i ) );
 }
 
 template <typename Number>
-bool Point<Number>::hasDimensions( const std::vector<carl::Variable>& _variables ) const {
+bool Point<Number>::hasDimensions( const std::vector<carl::Variable> &_variables ) const {
 	for ( auto it : _variables ) {
 		if ( !hasDimension( it ) ) return false;
 	}
@@ -393,7 +397,7 @@ bool Point<Number>::hasDimensions( const std::vector<carl::Variable>& _variables
 }
 
 template <typename Number>
-std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number>& _p1, const Point<Number>& _p2 ) {
+std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p1, const Point<Number> &_p2 ) {
 	assert( _p1.dimension() == _p2.dimension() );
 	std::vector<bool> res;
 	res.resize( _p1.dimension() );
@@ -404,7 +408,7 @@ std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number>& _p
 }
 
 template <typename Number>
-bool Point<Number>::haveEqualCoordinate( const Point<Number>& _p2 ) const {
+bool Point<Number>::haveEqualCoordinate( const Point<Number> &_p2 ) const {
 	if ( dimension() == _p2.dimension() ) {
 		for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 			if ( mCoordinates( i ) == _p2.rawCoordinates()( i ) ) return true;
@@ -414,12 +418,12 @@ bool Point<Number>::haveEqualCoordinate( const Point<Number>& _p2 ) const {
 }
 
 template <typename Number>
-bool Point<Number>::haveSameDimensions( const Point<Number>& _p ) const {
+bool Point<Number>::haveSameDimensions( const Point<Number> &_p ) const {
 	return ( dimension() == _p.dimension() );
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator+=( const Point<Number>& _rhs ) {
+Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) += _rhs.at( i );
@@ -428,7 +432,7 @@ Point<Number>& Point<Number>::operator+=( const Point<Number>& _rhs ) {
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator-=( const Point<Number>& _rhs ) {
+Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs.at( i );
@@ -437,7 +441,7 @@ Point<Number>& Point<Number>::operator-=( const Point<Number>& _rhs ) {
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator/=( unsigned _quotient ) {
+Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) / _quotient;
 	}
@@ -445,7 +449,7 @@ Point<Number>& Point<Number>::operator/=( unsigned _quotient ) {
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator*=( const Number _factor ) {
+Point<Number> &Point<Number>::operator*=( const Number _factor ) {
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) * _factor;
 	}
@@ -453,7 +457,7 @@ Point<Number>& Point<Number>::operator*=( const Number _factor ) {
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator=( const Point<Number>& _in ) {
+Point<Number> &Point<Number>::operator=( const Point<Number> &_in ) {
 	this->mCoordinates = _in.rawCoordinates();
 	// this->mNeighbors = _in.neighbors();
 	this->mComposedOf = _in.composedOf();
@@ -461,7 +465,7 @@ Point<Number>& Point<Number>::operator=( const Point<Number>& _in ) {
 }
 
 template <typename Number>
-Point<Number>& Point<Number>::operator=( Point<Number>&& _in ) {
+Point<Number> &Point<Number>::operator=( Point<Number> &&_in ) {
 	this->mCoordinates = _in.rawCoordinates();
 	// this->mNeighbors = _in.neighbors();
 	this->mComposedOf = _in.composedOf();
@@ -469,7 +473,7 @@ Point<Number>& Point<Number>::operator=( Point<Number>&& _in ) {
 }
 
 template <typename Number>
-Number& Point<Number>::operator[]( const carl::Variable& _i ) {
+Number &Point<Number>::operator[]( const carl::Variable &_i ) {
 	unsigned dim = hypro::VariablePool::getInstance().dimension( _i );
 	if ( dim >= mCoordinates.rows() ) {
 		vector_t<Number> old = mCoordinates;
@@ -480,7 +484,7 @@ Number& Point<Number>::operator[]( const carl::Variable& _i ) {
 }
 
 template <typename Number>
-Number& Point<Number>::operator[]( unsigned _i ) {
+Number &Point<Number>::operator[]( unsigned _i ) {
 	if ( _i >= mCoordinates.rows() ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates = vector_t<Number>::Zero( _i + 1 );
@@ -490,7 +494,7 @@ Number& Point<Number>::operator[]( unsigned _i ) {
 }
 
 template <typename Number>
-Number Point<Number>::at( const carl::Variable& _i ) const {
+Number Point<Number>::at( const carl::Variable &_i ) const {
 	assert( hypro::VariablePool::getInstance().dimension( _i ) < mCoordinates.rows() );
 	return mCoordinates( hypro::VariablePool::getInstance().dimension( _i ) );
 }
@@ -499,7 +503,8 @@ template <typename Number>
 Number Point<Number>::at( unsigned _index ) const {
 	// std::cout << _index << ", " << mCoordinates.rows() << std::endl;
 	assert( _index < mCoordinates.rows() );
-	// std::cout << "----------------------- AT: " << mCoordinates(_index) << std::endl;
+	// std::cout << "----------------------- AT: " << mCoordinates(_index) <<
+	// std::endl;
 	return mCoordinates( _index );
 }
 }  // namespace

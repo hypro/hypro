@@ -15,33 +15,33 @@ OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron()
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const Vertex<Number>& _vertex )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const Vertex<Number> &_vertex )
 	: mGrid(), mBoundaryBox(), mBoxUpToDate( false ) {
 	mGrid.insert( _vertex.point(), _vertex.color() );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const VertexContainer<Number>& _vertices )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const VertexContainer<Number> &_vertices )
 	: mGrid( _vertices.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const std::set<Vertex<Number>>& _vertices )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const std::set<Vertex<Number>> &_vertices )
 	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const std::vector<Vertex<Number>>& _vertices )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const std::vector<Vertex<Number>> &_vertices )
 	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const OrthogonalPolyhedron<Number, Type>& copy )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const OrthogonalPolyhedron<Number, Type> &copy )
 	: mGrid( copy.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const OrthogonalPolyhedron<Number, Type>&& move )
+OrthogonalPolyhedron<Number, Type>::OrthogonalPolyhedron( const OrthogonalPolyhedron<Number, Type> &&move )
 	: mGrid( std::move( move.mGrid ) ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
@@ -74,18 +74,18 @@ Box<Number> OrthogonalPolyhedron<Number, Type>::boundaryBox() const {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-const Grid<Number>& OrthogonalPolyhedron<Number, Type>::grid() const {
+const Grid<Number> &OrthogonalPolyhedron<Number, Type>::grid() const {
 	return mGrid;
 }
 
 template <typename Number, ORTHO_TYPE Type>
-void OrthogonalPolyhedron<Number, Type>::addVertex( const Vertex<Number>& _vertex ) {
+void OrthogonalPolyhedron<Number, Type>::addVertex( const Vertex<Number> &_vertex ) {
 	mGrid.insert( _vertex );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-void OrthogonalPolyhedron<Number, Type>::addVertices( const std::vector<Vertex<Number>>& _vertices ) {
-	for ( const auto& vertex : _vertices ) mGrid.insert( vertex );
+void OrthogonalPolyhedron<Number, Type>::addVertices( const std::vector<Vertex<Number>> &_vertices ) {
+	for ( const auto &vertex : _vertices ) mGrid.insert( vertex );
 }
 
 template <typename Number, ORTHO_TYPE Type>
@@ -99,7 +99,7 @@ unsigned OrthogonalPolyhedron<Number, Type>::size() const {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::isVertex( const Point<Number>& _point ) const {
+bool OrthogonalPolyhedron<Number, Type>::isVertex( const Point<Number> &_point ) const {
 	for ( unsigned dimension : this->dimension() ) {
 		if ( !isOnIEdge( _point, dimension ) ) return false;
 	}
@@ -107,43 +107,43 @@ bool OrthogonalPolyhedron<Number, Type>::isVertex( const Point<Number>& _point )
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::isOnIEdge( const Point<Number>& _point, unsigned i ) const {
+bool OrthogonalPolyhedron<Number, Type>::isOnIEdge( const Point<Number> &_point, unsigned i ) const {
 	std::vector<Point<Number>> iNeighbors = mGrid.iNeighborhood( _point, i );
-	for ( const auto& neighbor : iNeighbors ) {
+	for ( const auto &neighbor : iNeighbors ) {
 		if ( mGrid.colorAt( neighbor ) != mGrid.colorAt( mGrid.iPredecessor( neighbor, i ) ) ) return true;
 	}
 	return false;
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::isInternal( const Point<Number>& _point ) const {
+bool OrthogonalPolyhedron<Number, Type>::isInternal( const Point<Number> &_point ) const {
 	return ( mGrid.colorAt( _point ) == true );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::isExternal( const Point<Number>& _point ) const {
+bool OrthogonalPolyhedron<Number, Type>::isExternal( const Point<Number> &_point ) const {
 	return !isInternal( _point );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::color( const Point<Number>& _point ) const {
+bool OrthogonalPolyhedron<Number, Type>::color( const Point<Number> &_point ) const {
 	return mGrid.colorAt( _point );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNeighborhood( const Point<Number>& _point,
+std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNeighborhood( const Point<Number> &_point,
 																			  unsigned i ) const {
 	return mGrid.iNeighborhood( _point, i );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNegNeighborhood( const Point<Number>& _point,
+std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iNegNeighborhood( const Point<Number> &_point,
 																				 unsigned i ) const {
 	return mGrid.iNeighborhood( mGrid.iPredecessor( _point, i ), i );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::neighborhood( const Point<Number>& _point ) const {
+std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::neighborhood( const Point<Number> &_point ) const {
 	return std::move( mGrid.neighborhood( _point ) );
 }
 
@@ -155,7 +155,8 @@ std::vector<Point<Number>> OrthogonalPolyhedron<Number, Type>::iSlice( unsigned 
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::iProjection( unsigned i ) const {
-	// TODO: Required for dimension reduction and more sophisticated containment methods.
+	// TODO: Required for dimension reduction and more sophisticated containment
+	// methods.
 }
 
 /**********************************
@@ -169,12 +170,14 @@ unsigned int OrthogonalPolyhedron<Number, Type>::dimension() const {
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTransformation(
-	  const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	  const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	/*
 	VertexContainer<Number> newVertices(mVertices);
 	newVertices.linearTransformation(A, b);
-	OrthogonalPolyhedron<Number, Type> result = OrthogonalPolyhedron<Number, Type>(newVertices);
-	// TODO: undefined behavior, does not update colors of vertices nor fix the non-parallel edges
+	OrthogonalPolyhedron<Number, Type> result = OrthogonalPolyhedron<Number,
+	Type>(newVertices);
+	// TODO: undefined behavior, does not update colors of vertices nor fix the
+	non-parallel edges
 	return result;
 	*/
 	OrthogonalPolyhedron<Number, Type> result;
@@ -183,7 +186,7 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTra
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::minkowskiSum(
-	  const OrthogonalPolyhedron<Number, Type>& rhs ) const {
+	  const OrthogonalPolyhedron<Number, Type> &rhs ) const {
 	// TODO
 	// Definition: A+B = { a + b | a ∈ A, b ∈ B}
 	// Idea: put one polyhedron on all the vertices of the other one
@@ -196,17 +199,18 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::minkowski
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect(
-	  const OrthogonalPolyhedron<Number, Type>& rhs ) const {
+	  const OrthogonalPolyhedron<Number, Type> &rhs ) const {
 	std::vector<Vertex<Number>> potentialVertices;
 	std::vector<Vertex<Number>> v1 = this->vertices();
 	std::vector<Vertex<Number>> v2 = rhs.vertices();
 	std::vector<Vertex<Number>> resVertices;
 
-	// potential vertices are all original vertices and their pairwise componentwise-max.
+	// potential vertices are all original vertices and their pairwise
+	// componentwise-max.
 	potentialVertices.insert( potentialVertices.end(), v1.begin(), v1.end() );
 	potentialVertices.insert( potentialVertices.end(), v2.begin(), v2.end() );
-	for ( const auto& vA : v1 ) {
-		for ( const auto& vB : v2 ) {
+	for ( const auto &vA : v1 ) {
+		for ( const auto &vB : v2 ) {
 			potentialVertices.emplace_back( Point<Number>::coordinateMax( vA.point(), vB.point() ) );
 		}
 	}
@@ -215,11 +219,11 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect
 	Grid<Number> aCombination = Grid<Number>::combine( this->mGrid, rhs.grid() );
 	Grid<Number> bCombination = Grid<Number>::combine( this->mGrid, rhs.grid() );
 
-	for ( const auto& vertex : v1 ) {
+	for ( const auto &vertex : v1 ) {
 		aCombination.insert( vertex.point(), vertex.color() );
 	}
 
-	for ( const auto& vertex : v2 ) bCombination.insert( vertex.point(), vertex.color() );
+	for ( const auto &vertex : v2 ) bCombination.insert( vertex.point(), vertex.color() );
 
 	for ( auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt ) {
 		// std::cout << "Consider potential vertex " << *pIt << std::endl;
@@ -227,7 +231,8 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect
 		std::vector<Point<Number>> neighborsA = aCombination.neighborhood( pIt->point() );
 		std::vector<Point<Number>> neighborsB = bCombination.neighborhood( pIt->point() );
 
-		// ATTENTION: As both combination-grids should be identical, the neighbor order should be too - we assume that
+		// ATTENTION: As both combination-grids should be identical, the neighbor
+		// order should be too - we assume that
 		// here!
 		assert( neighborsA.size() == neighborsB.size() );
 		std::vector<Vertex<Number>> vertices;
@@ -291,15 +296,16 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::hull() co
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::contains( const Point<Number>& point ) const {
+bool OrthogonalPolyhedron<Number, Type>::contains( const Point<Number> &point ) const {
 	bool color = mGrid.colorAt( point );
-	// std::cout << __func__ << " Point " << point << ": color " << color << std::endl;
+	// std::cout << __func__ << " Point " << point << ": color " << color <<
+	// std::endl;
 	return ( color || ( !color && mGrid.isOnFacet( point ) ) );
 }
 
 template <typename Number, ORTHO_TYPE Type>
-bool OrthogonalPolyhedron<Number, Type>::contains( const OrthogonalPolyhedron<Number, Type>& _other ) const {
-	for ( const auto& vertex : _other.vertices() ) {
+bool OrthogonalPolyhedron<Number, Type>::contains( const OrthogonalPolyhedron<Number, Type> &_other ) const {
+	for ( const auto &vertex : _other.vertices() ) {
 		if ( !contains( vertex.point() ) ) return false;
 	}
 	return true;
@@ -307,8 +313,9 @@ bool OrthogonalPolyhedron<Number, Type>::contains( const OrthogonalPolyhedron<Nu
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(
-	  const OrthogonalPolyhedron<Number, Type>& rhs ) const {
-	/* Algorithm: create combined grids each, for each potential vertex determine vertex condition, black dominates,
+	  const OrthogonalPolyhedron<Number, Type> &rhs ) const {
+	/* Algorithm: create combined grids each, for each potential vertex determine
+	 * vertex condition, black dominates,
 	 * same as for intersection, just inverted:
 	 * If vertex condition holds, color = color in originals, black dominates.
 	 */
@@ -318,11 +325,12 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(
 	std::vector<Vertex<Number>> v2 = rhs.vertices();
 	std::vector<Vertex<Number>> resVertices;
 
-	// potential vertices are all original vertices and their pairwise componentwise-max.
+	// potential vertices are all original vertices and their pairwise
+	// componentwise-max.
 	potentialVertices.insert( potentialVertices.end(), v1.begin(), v1.end() );
 	potentialVertices.insert( potentialVertices.end(), v2.begin(), v2.end() );
-	for ( const auto& vA : v1 ) {
-		for ( const auto& vB : v2 ) {
+	for ( const auto &vA : v1 ) {
+		for ( const auto &vB : v2 ) {
 			potentialVertices.emplace_back( Point<Number>::coordinateMax( vA.point(), vB.point() ) );
 		}
 	}
@@ -331,11 +339,11 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(
 	Grid<Number> aCombination = Grid<Number>::combine( this->mGrid, rhs.grid() );
 	Grid<Number> bCombination = Grid<Number>::combine( this->mGrid, rhs.grid() );
 
-	for ( const auto& vertex : v1 ) {
+	for ( const auto &vertex : v1 ) {
 		aCombination.insert( vertex.point(), vertex.color() );
 	}
 
-	for ( const auto& vertex : v2 ) bCombination.insert( vertex.point(), vertex.color() );
+	for ( const auto &vertex : v2 ) bCombination.insert( vertex.point(), vertex.color() );
 
 	for ( auto pIt = potentialVertices.begin(); pIt != potentialVertices.end(); ++pIt ) {
 		// std::cout << "Consider potential vertex " << *pIt << std::endl;
@@ -343,7 +351,8 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(
 		std::vector<Point<Number>> neighborsA = aCombination.neighborhood( pIt->point() );
 		std::vector<Point<Number>> neighborsB = bCombination.neighborhood( pIt->point() );
 
-		// ATTENTION: As both combination-grids should be identical, the neighbor order should be too - we assume that
+		// ATTENTION: As both combination-grids should be identical, the neighbor
+		// order should be too - we assume that
 		// here!
 		assert( neighborsA.size() == neighborsB.size() );
 		std::vector<Vertex<Number>> vertices;
@@ -394,7 +403,8 @@ std::vector<std::vector<Point<Number>>> OrthogonalPolyhedron<Number, Type>::prep
 		Point<Number> upperLeft = mGrid.iSuccessor( point, 1 );
 		upperLeft.reduceToDimensions( std::vector<unsigned>( {_xDim, _yDim} ) );
 
-		// std::cout << "point " << point << " corresponds to box " << point << " , " << lowerRight << " , " <<
+		// std::cout << "point " << point << " corresponds to box " << point << " ,
+		// " << lowerRight << " , " <<
 		// upperRight << " , " << upperLeft << std::endl;
 		result.emplace_back( std::vector<Point<Number>>( {point, lowerRight, upperRight, upperLeft} ) );
 	}

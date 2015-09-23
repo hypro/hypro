@@ -13,7 +13,7 @@
 namespace hypro {
 
 template <typename Number>
-Box<Number>::Box( const std::set<Point<Number>>& _points ) {
+Box<Number>::Box( const std::set<Point<Number>> &_points ) {
 	if ( _points.size() > 0 ) {
 		unsigned dim = _points.begin()->dimension();
 		for ( unsigned d = 0; d < dim; ++d ) {
@@ -34,7 +34,7 @@ Box<Number>::Box( const std::set<Point<Number>>& _points ) {
 }
 
 template <typename Number>
-Box<Number>::Box( const std::vector<Point<Number>>& _points ) {
+Box<Number>::Box( const std::vector<Point<Number>> &_points ) {
 	if ( _points.size() > 0 ) {
 		unsigned dim = _points.begin()->dimension();
 		for ( unsigned d = 0; d < dim; ++d ) {
@@ -55,7 +55,7 @@ Box<Number>::Box( const std::vector<Point<Number>>& _points ) {
 }
 
 template <typename Number>
-Box<Number>::Box( const std::set<Vertex<Number>>& _vertices ) {
+Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
 	if ( _vertices.size() > 0 ) {
 		unsigned dim = _vertices.begin()->dimension();
 		for ( unsigned d = 0; d < dim; ++d ) {
@@ -76,7 +76,7 @@ Box<Number>::Box( const std::set<Vertex<Number>>& _vertices ) {
 }
 
 template <typename Number>
-Box<Number>::Box( const std::vector<Vertex<Number>>& _vertices ) {
+Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
 	if ( _vertices.size() > 0 ) {
 		unsigned dim = _vertices.begin()->dimension();
 		for ( unsigned d = 0; d < dim; ++d ) {
@@ -97,7 +97,7 @@ Box<Number>::Box( const std::vector<Vertex<Number>>& _vertices ) {
 }
 
 template <typename Number>
-carl::Interval<Number> Box<Number>::interval( const carl::Variable& var ) const {
+carl::Interval<Number> Box<Number>::interval( const carl::Variable &var ) const {
 	int pos = hypro::VariablePool::getInstance().dimension( var );
 	if ( pos < 0 ) return carl::Interval<Number>::emptyInterval();
 
@@ -105,7 +105,7 @@ carl::Interval<Number> Box<Number>::interval( const carl::Variable& var ) const 
 }
 
 template <typename Number>
-carl::Interval<Number>& Box<Number>::rInterval( const carl::Variable& var ) {
+carl::Interval<Number> &Box<Number>::rInterval( const carl::Variable &var ) {
 	int pos = hypro::VariablePool::getInstance().dimension( var );
 	assert( pos >= 0 );
 	return mBoundaries.at( pos );
@@ -114,7 +114,7 @@ carl::Interval<Number>& Box<Number>::rInterval( const carl::Variable& var ) {
 template <typename Number>
 Number Box<Number>::supremum() const {
 	Number max = 0;
-	for ( auto& point : this->vertices() ) {
+	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -141,10 +141,10 @@ std::vector<Point<Number>> Box<Number>::vertices() const {
 }
 
 template <typename Number>
-Box<Number> Box<Number>::linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	std::vector<Point<Number>> corners = this->vertices();
 	std::set<Point<Number>> transformedCorners;
-	for ( auto& point : corners ) {
+	for ( auto &point : corners ) {
 		transformedCorners.insert( Point<Number>( A * point.rawCoordinates() + b ) );
 	}
 
@@ -152,7 +152,7 @@ Box<Number> Box<Number>::linearTransformation( const matrix_t<Number>& A, const 
 }
 
 template <typename Number>
-Box<Number> Box<Number>::minkowskiSum( const Box<Number>& rhs ) const {
+Box<Number> Box<Number>::minkowskiSum( const Box<Number> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 	Box<Number> result;
 	for ( unsigned i = 0; i < dimension(); ++i ) {
@@ -162,7 +162,7 @@ Box<Number> Box<Number>::minkowskiSum( const Box<Number>& rhs ) const {
 }
 
 template <typename Number>
-Box<Number> Box<Number>::intersect( const Box<Number>& rhs ) const {
+Box<Number> Box<Number>::intersect( const Box<Number> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 	Box<Number> result;
 	for ( unsigned i = 0; i < dimension(); ++i ) {
@@ -174,7 +174,7 @@ Box<Number> Box<Number>::intersect( const Box<Number>& rhs ) const {
 }
 
 template <typename Number>
-bool Box<Number>::contains( const Point<Number>& point ) const {
+bool Box<Number>::contains( const Point<Number> &point ) const {
 	if ( this->dimension() > point.dimension() ) return false;
 
 	for ( unsigned i = 0; i < dimension(); ++i ) {
@@ -184,7 +184,7 @@ bool Box<Number>::contains( const Point<Number>& point ) const {
 }
 
 template <typename Number>
-bool Box<Number>::contains( const Box<Number>& box ) const {
+bool Box<Number>::contains( const Box<Number> &box ) const {
 	if ( this->dimension() != box.dimension() ) return false;
 
 	for ( unsigned pos = 0; pos < mBoundaries.size(); ++pos ) {
@@ -196,7 +196,7 @@ bool Box<Number>::contains( const Box<Number>& box ) const {
 }
 
 template <typename Number>
-Box<Number> Box<Number>::unite( const Box<Number>& rhs ) const {
+Box<Number> Box<Number>::unite( const Box<Number> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 	Box<Number> result;
 	for ( unsigned i = 0; i < dimension(); ++i ) {

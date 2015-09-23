@@ -6,31 +6,31 @@ HPolytope<Number>::HPolytope()
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const HPolytope& orig )
+HPolytope<Number>::HPolytope( const HPolytope &orig )
 	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mInitialized( false ) {
-	for ( const auto& plane : orig.constraints() ) {
+	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const Hyperplane<Number>& plane )
+HPolytope<Number>::HPolytope( const Hyperplane<Number> &plane )
 	: mHPlanes( {plane} ), mFanSet( false ), mFan(), mDimension( plane.dimension() ), mInitialized( false ) {
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const HyperplaneVector& planes )
+HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
-		for ( const auto& plane : planes ) {
+		for ( const auto &plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
 	}
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const matrix_t<Number>& A, const vector_t<Number>& b )
+HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> &b )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mInitialized( false ) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
@@ -39,7 +39,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number>& A, const vector_t<Number>&
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const matrix_t<Number>& A )
+HPolytope<Number>::HPolytope( const matrix_t<Number> &A )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mInitialized( false ) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
@@ -47,7 +47,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number>& A )
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const VPolytope<Number>& alien )
+HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
 	if ( !alien.empty() ) {
 		// degenerate cases
@@ -68,7 +68,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number>& alien )
 		} else {
 			typename std::vector<Point<Number>> points = alien.vertices();
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			for ( auto& facet : facets ) {
+			for ( auto &facet : facets ) {
 				mHPlanes.push_back( facet->hyperplane() );
 			}
 			facets.clear();
@@ -131,7 +131,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytope<Number>::inequalities() 
 }
 
 template <typename Number>
-const typename polytope::Fan<Number>& HPolytope<Number>::fan() const {
+const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
 	if ( !mFanSet ) {
 		calculateFan();
 	}
@@ -199,7 +199,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 template <typename Number>
 Number HPolytope<Number>::supremum() const {
 	Number max = 0;
-	for ( auto& point : this->vertices() ) {
+	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -216,8 +216,8 @@ void HPolytope<Number>::calculateFan() const {
 		}
 	}
 	polytope::Fan<Number> fan;
-	for ( auto& point : preresult ) {
-		polytope::Cone<Number>* cone = new polytope::Cone<Number>();
+	for ( auto &point : preresult ) {
+		polytope::Cone<Number> *cone = new polytope::Cone<Number>();
 		for ( unsigned i = 0; i < facets.size(); i++ ) {
 			for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
 				if ( point == facets[i]->vertices().at( j ) ) {
@@ -262,7 +262,7 @@ void HPolytope<Number>::calculateFan() const {
 }
 
 template <typename Number>
-void HPolytope<Number>::insert( const Hyperplane<Number>& plane ) {
+void HPolytope<Number>::insert( const Hyperplane<Number> &plane ) {
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -287,13 +287,13 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 }
 
 template <typename Number>
-const typename HPolytope<Number>::HyperplaneVector& HPolytope<Number>::constraints() const {
+const typename HPolytope<Number>::HyperplaneVector &HPolytope<Number>::constraints() const {
 	return mHPlanes;
 }
 
 template <typename Number>
-bool HPolytope<Number>::hasConstraint( const Hyperplane<Number>& hplane ) const {
-	for ( const auto& plane : mHPlanes ) {
+bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const {
+	for ( const auto &plane : mHPlanes ) {
 		if ( hplane == plane ) return true;
 	}
 	return false;
@@ -312,7 +312,8 @@ void HPolytope<Number>::reduce() {
 		} else if ( evalRes.second == FEAS ) {
 			if ( evalRes.first < planeIt->offset() &&
 				 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-				// std::cout << "erase " << *planeIt << " which is really redundant." << std::endl;
+				// std::cout << "erase " << *planeIt << " which is really redundant." <<
+				// std::endl;
 				planeIt = mHPlanes.erase( planeIt );
 				mInitialized = false;
 			} else {
@@ -320,7 +321,8 @@ void HPolytope<Number>::reduce() {
 				auto pos = mHPlanes.erase( planeIt );
 				mInitialized = false;
 				std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-				// std::cout << "Eval with: " << evalRes.first << ", without: " << tmpRes.first << ", solution type: "
+				// std::cout << "Eval with: " << evalRes.first << ", without: " <<
+				// tmpRes.first << ", solution type: "
 				// << tmpRes.second << std::endl;
 				if ( tmpRes.second == INFTY ||
 					 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
@@ -329,7 +331,8 @@ void HPolytope<Number>::reduce() {
 					++planeIt;
 					// std::cout << "keep "  << tmp << std::endl;
 				} else {
-					// std::cout << "erase " << tmp << " which is equal to something." << std::endl;
+					// std::cout << "erase " << tmp << " which is equal to something." <<
+					// std::endl;
 					planeIt = pos;
 				}
 			}
@@ -365,10 +368,12 @@ vector_t<Number> HPolytope<Number>::getConstraintsOffsetVector() const {
 template <typename Number>
 bool HPolytope<Number>::isExtremePoint( vector_t<Number> point ) const {
 	unsigned cnt = 0;
-	for ( const auto& plane : mHPlanes ) {
+	for ( const auto &plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
-		// std::cout << "Eval: " << plane.normal() << " in direction " << point << " = " << val << ", offset is " <<
-		// plane.offset() << ", with tolerance: " << abs(plane.offset() - val) << std::endl;
+		// std::cout << "Eval: " << plane.normal() << " in direction " << point << "
+		// = " << val << ", offset is " <<
+		// plane.offset() << ", with tolerance: " << abs(plane.offset() - val) <<
+		// std::endl;
 		if ( carl::AlmostEqual2sComplement( plane.offset(), val ) ) {
 			// std::cout << "Increase cnt " << std::endl;
 			++cnt;
@@ -382,12 +387,12 @@ bool HPolytope<Number>::isExtremePoint( vector_t<Number> point ) const {
 }
 
 template <typename Number>
-bool HPolytope<Number>::isExtremePoint( const Point<Number>& point ) const {
+bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 	return isExtremePoint( point.rawCoordinates() );
 }
 
 template <typename Number>
-std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number>& _direction ) const {
+std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	if ( !mInitialized ) {
 		initialize();
 	}
@@ -420,8 +425,10 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number>&
 			break;
 		}
 		default:
-			// std::cout << __func__ << ": " << *this << " in direction " << _direction << std::endl;
-			// std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: "
+			// std::cout << __func__ << ": " << *this << " in direction " << _direction
+			// << std::endl;
+			// std::cout << "Unable to find a suitable solution for the support function
+			// (linear program). ErrorCode: "
 			// << glp_get_status(lp) << std::endl;
 			return std::make_pair( 0, INFEAS );
 	}
@@ -455,12 +462,12 @@ typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::
  */
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number>& A,
-														   const vector_t<Number>& b ) const {
+HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number> &A,
+														   const vector_t<Number> &b ) const {
 #ifdef USE_DOUBLE_DESCRIPTION
 	std::cout << __func__ << " this: " << *this << std::endl;
 	std::cout << __func__ << " vertices: " << std::endl;
-	for ( const auto& vertex : this->vertices() ) std::cout << vertex << std::endl;
+	for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
 
 	std::cout << "Create intermediate. " << std::endl;
 
@@ -488,7 +495,8 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 
 	std::cout << "Inequalities: " << inequalities.first << std::endl;
 
-	// we need to use SVD to compute the pseudo-inverse of the matrix of the polytope, see config.h and
+	// we need to use SVD to compute the pseudo-inverse of the matrix of the
+	// polytope, see config.h and
 	// http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257
 	matrix_t<Number> inverse = Eigen::pseudoInverse( inequalities.first );
 
@@ -499,7 +507,7 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope& rhs ) const {
+HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const {
 	HPolytope<Number> res;
 	Number result;
 
@@ -513,7 +521,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope& rhs ) const 
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			// std::cout << __func__ << " Evaluated against " <<
+			// mHPlanes.at(i).normal() << std::endl;
 		}
 	}
 
@@ -527,7 +536,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope& rhs ) const 
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " << mHPlanes.at(i).normal() << std::endl;
+			// std::cout << __func__ << " Evaluated against " <<
+			// mHPlanes.at(i).normal() << std::endl;
 		}
 	}
 	// res.reduce();
@@ -535,17 +545,17 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope& rhs ) const 
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersect( const HPolytope& rhs ) const {
+HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 	std::cout << __func__ << std::endl;
 	// Todo: Improve.
 	if ( rhs.empty() ) {
 		return HPolytope<Number>();
 	} else {
 		HPolytope<Number> res;
-		for ( const auto& plane : mHPlanes ) {
+		for ( const auto &plane : mHPlanes ) {
 			res.insert( plane );
 		}
-		for ( const auto& plane : rhs.constraints() ) {
+		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
 		res.reduce();
@@ -554,12 +564,12 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope& rhs ) const {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+HPolytope<Number> HPolytope<Number>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number>& _mat,
-														   const vector_t<Number>& _vec ) const {
+HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
+														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
 	std::cout << __func__ << std::endl;
 
@@ -573,16 +583,17 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 }
 
 template <typename Number>
-bool HPolytope<Number>::contains( const Point<Number>& point ) const {
+bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 	return this->contains( point.rawCoordinates() );
 }
 
 template <typename Number>
-bool HPolytope<Number>::contains( const vector_t<Number>& vec ) const {
+bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 	// std::cout << __func__ << "  " << vec << ": ";
-	for ( const auto& plane : mHPlanes ) {
+	for ( const auto &plane : mHPlanes ) {
 		// std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " <<
-		// (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset(),TOLLERANCE_ULPS) &&
+		// (!carl::AlmostEqual2sComplement(plane.normal().dot(vec),
+		// plane.offset(),TOLLERANCE_ULPS) &&
 		// plane.normal().dot(vec) > plane.offset()) << std::endl;
 		// carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset(), TOLLERANCE_ULPS ) &&
@@ -596,8 +607,8 @@ bool HPolytope<Number>::contains( const vector_t<Number>& vec ) const {
 }
 
 template <typename Number>
-bool HPolytope<Number>::contains( const HPolytope<Number>& rhs ) const {
-	for ( const auto& plane : rhs ) {
+bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
+	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
 		if ( evalRes.second == INFEAS ) {
 			return false;  // empty!
@@ -612,7 +623,7 @@ bool HPolytope<Number>::contains( const HPolytope<Number>& rhs ) const {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::unite( const HPolytope& _rhs ) const {
+HPolytope<Number> HPolytope<Number>::unite( const HPolytope &_rhs ) const {
 	if ( _rhs.empty() ) {
 		return HPolytope<Number>( *this );
 	} else {
@@ -647,7 +658,7 @@ Hyperplane<Number> HPolytope<Number>::operator[]( unsigned i ) const {
 }
 
 template <typename Number>
-HPolytope<Number>& HPolytope<Number>::operator=( const HPolytope<Number>& rhs ) {
+HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) {
 	if ( this != &rhs ) {
 		HPolytope<Number> tmp( rhs );
 		swap( *this, tmp );
@@ -727,123 +738,138 @@ void HPolytope<Number>::initialize() const {
 
 /*
 template<typename Number>
-Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> HPolytope<Number>::getOptimalDictionary(
-	const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> A,
-	unsigned dimension,
-	std::vector<unsigned>& B,
-	std::vector<unsigned>& N) const
+Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>
+HPolytope<Number>::getOptimalDictionary(
+		const Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic,
+Eigen::Dynamic> A,
+		unsigned dimension,
+		std::vector<unsigned>& B,
+		std::vector<unsigned>& N) const
 {
-	typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
-	typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1> vector_t;
-	typedef Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> row_t;
-	// create matrix from HPlanes
-	const unsigned numRows = mHPlanes.size() - mHPlanes.begin()->dimension();
-	const unsigned numCols = mHPlanes.begin()->dimension() + 1;
-	matrix_t dictionary = matrix_t(numRows, numCols);
+		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic,
+Eigen::Dynamic> matrix_t;
+		typedef Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, 1>
+vector_t;
+		typedef Eigen::Matrix<carl::FLOAT_T<Number>, 1, Eigen::Dynamic> row_t;
+		// create matrix from HPlanes
+		const unsigned numRows = mHPlanes.size() -
+mHPlanes.begin()->dimension();
+		const unsigned numCols = mHPlanes.begin()->dimension() + 1;
+		matrix_t dictionary = matrix_t(numRows, numCols);
 
-	// Assumption: The last d equations of A are linear independent
-	auto bottom = A.bottomRows(dimension);
-	auto top = A.topRows(A.rows()-dimension);
-	auto varBlock = bottom.rightCols(dimension);
-	auto constPart = bottom.leftCols(1);
+		// Assumption: The last d equations of A are linear independent
+		auto bottom = A.bottomRows(dimension);
+		auto top = A.topRows(A.rows()-dimension);
+		auto varBlock = bottom.rightCols(dimension);
+		auto constPart = bottom.leftCols(1);
 
-	matrix_t tmp = matrix_t(varBlock);
-	vector_t b = vector_t(constPart);
+		matrix_t tmp = matrix_t(varBlock);
+		vector_t b = vector_t(constPart);
 
-	matrix_t a(tmp.rows(), 2*dimension+1);
-	a << tmp, -b, matrix_t::Identity(dimension,dimension);
+		matrix_t a(tmp.rows(), 2*dimension+1);
+		a << tmp, -b, matrix_t::Identity(dimension,dimension);
 
-	//normalize rows for each variable and forward insertion
-	for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
-	{
-		a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
-		a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
-	}
-
-	// backward insertion
-	for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
-	{
-		if(a(rowIndex,rowIndex) != 1)
+		//normalize rows for each variable and forward insertion
+		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
 		{
-			a.row(rowIndex) = a.row(rowIndex) / a(rowIndex,rowIndex);
+				a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
+				a.row(rowIndex+1) = a.row(rowIndex+1) -
+(a.row(rowIndex)*a(rowIndex+1, rowIndex));
 		}
-		a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
-	}
 
-	auto substitutionBlock = a.rightCols(dimension+1);
-
-	for(unsigned rI = 0; rI < top.rows(); ++rI)
-	{
-		dictionary(rI,0) = top(rI,0);
-
-		for(unsigned dI = 1; dI < top.cols(); ++dI)
+		// backward insertion
+		for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
 		{
-			dictionary.row(rI) = dictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
+				if(a(rowIndex,rowIndex) != 1)
+				{
+						a.row(rowIndex) = a.row(rowIndex) /
+a(rowIndex,rowIndex);
+				}
+				a.row(rowIndex-1) = a.row(rowIndex-1) -
+(a.row(rowIndex)*a(rowIndex-1, rowIndex));
 		}
-	}
 
-	// Augment dictionary by a row of -1s
-	dictionary.conservativeResize(numRows+1,Eigen::NoChange_t());
+		auto substitutionBlock = a.rightCols(dimension+1);
 
-	row_t allOnes = matrix_t::Constant(1,numCols, carl::FLOAT_T<Number>(-1));
-	allOnes(0) = carl::FLOAT_T<Number>(0);
-	dictionary.row(numRows) = allOnes;
+		for(unsigned rI = 0; rI < top.rows(); ++rI)
+		{
+				dictionary(rI,0) = top(rI,0);
 
-	//std::cout << "Optimal dictionary: " << dictionary << std::endl;
-	for(unsigned index = 0; index < mHPlanes.size() - dimension; ++index)
-		B.push_back(index);
-	//B.push_back(mHPlanes.size()+1);
+				for(unsigned dI = 1; dI < top.cols(); ++dI)
+				{
+						dictionary.row(rI) = dictionary.row(rI) + (top(rI,dI) *
+substitutionBlock.row(dI-1));
+				}
+		}
 
-	for(unsigned index = 1 ; index < dictionary.cols() ; ++index)
-		N.push_back(index);
+		// Augment dictionary by a row of -1s
+		dictionary.conservativeResize(numRows+1,Eigen::NoChange_t());
 
-	return dictionary;
+		row_t allOnes = matrix_t::Constant(1,numCols,
+carl::FLOAT_T<Number>(-1));
+		allOnes(0) = carl::FLOAT_T<Number>(0);
+		dictionary.row(numRows) = allOnes;
+
+		//std::cout << "Optimal dictionary: " << dictionary << std::endl;
+		for(unsigned index = 0; index < mHPlanes.size() - dimension; ++index)
+				B.push_back(index);
+		//B.push_back(mHPlanes.size()+1);
+
+		for(unsigned index = 1 ; index < dictionary.cols() ; ++index)
+				N.push_back(index);
+
+		return dictionary;
 }
 
 template<typename Number>
 std::vector<Point<Number> > HPolytope<Number>::vertexEnumeration() const
 {
-	std::vector<Point<Number> > solution;
+		std::vector<Point<Number> > solution;
 
-	// create Matrix from hPlanes TODO: Recheck with page 299 of the paper
-	const unsigned rows = mHPlanes.size();
-	const unsigned colums = this->dimension()+1;
-	Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic, Eigen::Dynamic> poly = Eigen::Matrix<carl::FLOAT_T<Number>,
+		// create Matrix from hPlanes TODO: Recheck with page 299 of the paper
+		const unsigned rows = mHPlanes.size();
+		const unsigned colums = this->dimension()+1;
+		Eigen::Matrix<carl::FLOAT_T<Number>,Eigen::Dynamic, Eigen::Dynamic> poly
+= Eigen::Matrix<carl::FLOAT_T<Number>,
 Eigen::Dynamic, Eigen::Dynamic>(rows,colums);
-	unsigned rowCount = 0;
-	unsigned columCount = 0;
+		unsigned rowCount = 0;
+		unsigned columCount = 0;
 
-	for(auto& hplane : mHPlanes)
-	{
-		columCount = 0;
-		poly(rowCount, columCount) = carl::FLOAT_T<double>(hplane.offset());
-		vector_t<Number> normal = hplane.normal();
-		for(unsigned index = 0; index < normal.rows(); ++index)
+		for(auto& hplane : mHPlanes)
 		{
-			++columCount;
-			poly(rowCount, columCount) = -normal(index);
+				columCount = 0;
+				poly(rowCount, columCount) =
+carl::FLOAT_T<double>(hplane.offset());
+				vector_t<Number> normal = hplane.normal();
+				for(unsigned index = 0; index < normal.rows(); ++index)
+				{
+						++columCount;
+						poly(rowCount, columCount) = -normal(index);
+				}
+				++rowCount;
 		}
-		++rowCount;
-	}
 
-	// get unique optimal first Dictionary
-	std::vector<unsigned> basis;
-	std::vector<unsigned> coBasis;
-	Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic> dictionary =
+		// get unique optimal first Dictionary
+		std::vector<unsigned> basis;
+		std::vector<unsigned> coBasis;
+		Eigen::Matrix<carl::FLOAT_T<Number>, Eigen::Dynamic, Eigen::Dynamic>
+dictionary =
 getOptimalDictionary(poly,this->dimension(), basis, coBasis);
 
-	//std::cout << "Optimal dictionary:" << std::endl << dictionary << std::endl;
+		//std::cout << "Optimal dictionary:" << std::endl << dictionary <<
+std::endl;
 
-	// Note: f and g mark the indices, not the enumeration as stored in B and N
-	//unsigned f = dictionary.rows();
-	//unsigned g = 0;
+		// Note: f and g mark the indices, not the enumeration as stored in B
+and N
+		//unsigned f = dictionary.rows();
+		//unsigned g = 0;
 
-	//unsigned m = mHPlanes.size() - dimension() +1;
-	//unsigned n = mHPlanes.size() +2;
+		//unsigned m = mHPlanes.size() - dimension() +1;
+		//unsigned n = mHPlanes.size() +2;
 
-	hpolytope::search(basis, coBasis, dictionary);
+		hpolytope::search(basis, coBasis, dictionary);
 
-	return solution;
+		return solution;
 }
 */
 
