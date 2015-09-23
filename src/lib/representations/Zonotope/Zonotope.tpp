@@ -216,19 +216,39 @@ void Zonotope<Number>::removeGenerator(unsigned colToRemove) {
 
 template <typename Number>
 void Zonotope<Number>::removeEmptyGenerators() {
-// TODO
 	hypro::vector_t<Number> zero_vector = hypro::vector_t<Number>::Zero(mDimension);
 	
 	std::vector<unsigned> zeroIndex;
-	for (unsigned i=0; i<mGenerators.cols(); i++) {
-		if(mGenerators.col(i)==zero_vector) {
-			zeroIndex.push_back(i);
-		}
+	for (unsigned i = 0; i < mGenerators.cols(); i++) {
+		if(mGenerators.col(i)==zero_vector)
+                        zeroIndex.push_back(i);
 	}
 
 	for (std::vector<unsigned>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
 		removeGenerator(*rit);
 	}
+}
+
+template <typename Number>
+void Zonotope<Number>::uniteEqualVectors()
+{
+    hypro::vector_t<Number> zero_vector = hypro::vector_t<Number>::Zero(mDimension);
+    
+    std::vector<unsigned> zeroIndex;
+        
+    for (unsigned i = 0; i < mGenerators.cols(); i++) {
+        for (unsigned j = (i + 1); j < mGenerators.cols(); j++) {
+            if (mGenerators.col(i) == mGenerators.col(j)) {
+                zeroIndex.push_back(j);
+            }
+        }
+        for (std::vector<unsigned>::reverse_iterator rit = zeroIndex.rbegin(); rit!=zeroIndex.rend(); ++rit) {
+            mGenerators.col(i) += mGenerators.col(*rit);
+            
+            removeGenerator(*rit);
+	}
+        zeroIndex.clear();
+    }
 }
 
 template <typename Number>
@@ -260,7 +280,7 @@ void Zonotope<Number>::clear() {
 }
 
 
-/*****************************************************************************
+/****************************************************************************
 *                                                                           *
 *                           Algorithm Functions                             *                             
 *                                                                           *
@@ -270,15 +290,22 @@ void Zonotope<Number>::clear() {
 template <typename Number>
 Zonotope<Number> Zonotope<Number>::minkowskiSum(const Zonotope<Number>& rhs)  const{
 	assert(mDimension==rhs.dimension() && "Zonotope on RHS must have same dimensionality as current.");
-	Zonotope<Number> result;
-	result.setCenter(this->mCenter + rhs.mCenter);
-	hypro::matrix_t<Number> tmp;
-	tmp.resize(mDimension, rhs.numGenerators()+numGenerators());
-	tmp << mGenerators, rhs.generators();
-	result.setGenerators(tmp);
-	result.removeEmptyGenerators();
-	return result;
 	
+        Zonotope<Number> result;
+	
+        result.setCenter(this->mCenter + rhs.mCenter);
+	
+        hypro::matrix_t<Number> tmp;
+	
+        tmp.resize(mDimension, (rhs.numGenerators() + numGenerators() ) );
+	
+        tmp << mGenerators, rhs.generators();
+	
+        result.setGenerators(tmp);
+	
+        result.removeEmptyGenerators();
+	
+        return result;
 }
 
 template <typename Number>
@@ -339,14 +366,17 @@ std::vector< hypro::vector_t<Number> > Zonotope<Number>::computeZonotopeBoundary
 }
 
 template<typename Number>
-std::vector<hypro::vector_t<Number>> Zonotope<Number>::corners() {
-	removeEmptyGenerators();
-	hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero(this->dimension());
-	std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive(mGenerators, init);
-
-	for(const auto& vector : possibleCorners) {
-		std::cout << vector << ",";
-	}
+std::vector<hypro::vector_t<Number>> Zonotope<Number>::corners()
+{
+    uniteEqualVectors();
+    
+    removeEmptyGenerators();
+    
+    hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero(this->dimension());
+    
+    std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive(mGenerators, init);
+    
+    return possibleCorners;
 }
 
 template <typename Number>
@@ -856,7 +886,6 @@ Zonotope<Number> Zonotope<Number>::unite(const Zonotope<Number>& other) const
 	return temp;
 }
 
-
 template<typename Number>
 Zonotope<Number> Zonotope<Number>::intervalHull() const
 {
@@ -878,4 +907,4 @@ Zonotope<Number> Zonotope<Number>::intervalHull() const
 	return result;
 }
 
-} // namespace
+}

@@ -3,6 +3,10 @@
  * Author: jongan
  *
  * Created on October 27, 2014, 11:53 AM
+ * 
+ * Reviewed by Leonardo Winter Pereira (leonardowinterpereira@gmail.com)
+ * function getCornersRecursive works!! 
+ * version 1.1 on September 15, 2015
  */
 
 #ifndef UTILITY_H
@@ -11,6 +15,7 @@
 #include <eigen3/Eigen/Dense>
 #include <cmath>
 #include "../../config.h"
+//#include "../lib/representations/Polytopes/util.h"
 
 namespace ZUtility {
 // Options for checking for intersect
@@ -82,23 +87,28 @@ namespace ZUtility {
     };
 
     template<typename Number>
-    std::vector<hypro::vector_t<Number>> getCornersRecursive(hypro::matrix_t<Number> _remainingGenerators, hypro::vector_t<Number>& _current) {
+    std::vector<hypro::vector_t<Number>> getCornersRecursive(const hypro::matrix_t<Number> _remainingGenerators, hypro::vector_t<Number>& _current) {
     	std::vector<hypro::vector_t<Number>> res;
-    	if(_remainingGenerators.cols() == 1) {
-    		res.push_back(hypro::vector_t<Number>(_current+_remainingGenerators.col(0)));
-    		res.push_back(hypro::vector_t<Number>(_current-_remainingGenerators.col(0)));
+    	
+        if(_remainingGenerators.cols() == 1) {
+    		res.push_back(hypro::vector_t<Number>(_current + _remainingGenerators.col(0)));
+    		res.push_back(hypro::vector_t<Number>(_current - _remainingGenerators.col(0)));
     	}
     	else {
     		std::vector<hypro::vector_t<Number>> res2;
-    		hypro::vector_t<Number> pos = hypro::vector_t<Number>(_current+_remainingGenerators.col(0));
-    		hypro::vector_t<Number> neg = hypro::vector_t<Number>(_current-_remainingGenerators.col(0));
-    		res = getCornersRecursive(hypro::matrix_t<Number>(_remainingGenerators.block(1,0,_remainingGenerators.rows(), _remainingGenerators.cols()-1)), pos);
-    		res2 = getCornersRecursive(hypro::matrix_t<Number>(_remainingGenerators.block(1,0,_remainingGenerators.rows(), _remainingGenerators.cols()-1)), neg);
-    		res.insert(res.end(), res2.begin(), res2.end());
+    		
+                hypro::vector_t<Number> pos = hypro::vector_t<Number>(_current + _remainingGenerators.col(0));
+    		hypro::vector_t<Number> neg = hypro::vector_t<Number>(_current - _remainingGenerators.col(0));
+                
+                res = getCornersRecursive(hypro::matrix_t<Number>(_remainingGenerators.block(0, 1, _remainingGenerators.rows(), _remainingGenerators.cols() - 1)), pos);
+    	
+                res2 = getCornersRecursive(hypro::matrix_t<Number>(_remainingGenerators.block(0, 1, _remainingGenerators.rows(), _remainingGenerators.cols() - 1)), neg);
+    		
+                res.insert(res.end(), res2.begin(), res2.end());
     	}
+        
     	return res;
     }
-
 }
 
 

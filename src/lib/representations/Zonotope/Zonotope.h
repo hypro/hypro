@@ -4,6 +4,10 @@
  * File:   Zonotope.h
  * @author Jonathan Gan, Ibtissem Ben Makhlouf {gan, makhlouf} @ embedded.rwth-aachen.de
  * @version 1.0 on June 19, 2014, 10:25 PM
+ * 
+ * Reviewed by Leonardo Winter Pereira (leonardowinterpereira@gmail.com)
+ * function corners now totally works! (Complexity now is O(2^n), but n is only the amount of different generators (which isn't too much))
+ * version 1.1 on September 15, 2015
  */
 
 #pragma once
@@ -32,6 +36,10 @@ class Zonotope
 		hypro::vector_t<Number> mCenter;
 		hypro::matrix_t<Number> mGenerators;
 		
+                /*
+                 * The ratio numberGenerators / dimension is called the order of the zenotope
+                 */
+                
 		void removeGenerator(unsigned int colToRemove);
 
 	public:
@@ -122,6 +130,11 @@ class Zonotope
 		 * Removes empty (null) columns in generator matrix
 		 */
 		void removeEmptyGenerators();
+                
+                /*
+                 * It's important to do it, so we can reduce the necessary amount of calls of corners!
+                 */
+                void uniteEqualVectors();
 		
 		/**
 		 * Changes the dimension of a Zonotope. if new_dim > old dim, new rows are initialized with null
@@ -144,7 +157,7 @@ class Zonotope
 		
 		
 		/**
-		 * Applies the Minkowskisum of the given stateset and a second stateset.
+		 * Applies the Minkowski sum of the given stateset and a second stateset.
 		 * @param result The resulting stateset.
 		 * @param rhs The other right-hand-side stateset. Is not modified.
 		 * @return True if the operation has been successfully applied.

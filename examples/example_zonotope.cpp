@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string>
 
+#include <sys/time.h> 
+
 #include "../src/lib/config.h"
 #include "../src/lib/util/Plotter.h"
 #include "../src/lib/representations/Zonotope/Zonotope.h"
@@ -16,43 +18,73 @@
 using namespace hypro;
 using namespace carl;
 
-typedef FLOAT_T<double> Number;
+typedef int Number;
 
 int main(int argc, char** argv)
 {
+    // Just creates an empty Center
     vector_t<Number> vCenter = vector_t<Number>(3);
+    vCenter(0) = 0;
+    vCenter(1) = 0;
+    vCenter(2) = 0;
     
-    vCenter(0) = 0.0d;
-    vCenter(1) = 0.0d;
-    vCenter(2) = 0.0d;
+    // Just creates the Generators (3 for now)
+    matrix_t<Number> vGenerators = matrix_t<Number>(3,4);
     
-    matrix_t<Number> vGenerators = matrix_t<Number>(3,3);
+    vGenerators(0, 0) = 1;
+    vGenerators(1, 0) = 0;
+    vGenerators(2, 0) = 0;
     
-    vGenerators(0, 0) = 1.0d;
-    vGenerators(0, 1) = 0.0d;
-    vGenerators(0, 2) = 0.0d;
+    vGenerators(0, 1) = 0;
+    vGenerators(1, 1) = 1;
+    vGenerators(2, 1) = 0;
     
-    vGenerators(1, 0) = 0.0d;
-    vGenerators(1, 1) = 1.0d;
-    vGenerators(1, 2) = 0.0d;
+    vGenerators(0, 2) = 0;
+    vGenerators(1, 2) = 0;
+    vGenerators(2, 2) = 1;
     
-    vGenerators(2, 0) = 0.0d;
-    vGenerators(2, 1) = 0.0d;
-    vGenerators(2, 2) = 1.0d;
+    vGenerators(0, 3) = 1;
+    vGenerators(1, 3) = 1;
+    vGenerators(2, 3) = 1;
     
-    Zonotope<Number> zonoExample(vCenter, vGenerators);
+    //To test the uniteEqualVectors function!
+    //
+    //for (int i = 3; i < vGenerators.cols(); i++)
+    //{
+    //    vGenerators(0, i) = 1;
+    //   vGenerators(1, i) = 0;
+    //    vGenerators(2, i) = 0;
+    //}
     
-    // Just for test purposes!! Let's see the corner's points       
-    //std::vector<vector_t<Number> > vCorners = zonoExample.corners();
+    Zonotope<Number> zonoExample(vCenter, vGenerators); // Creates an Zonotope
     
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");
  
-    results << zonoExample.dimension() << "\n" << zonoExample.generators() << "\n\n\n";
+    results << "Dimension: " << zonoExample.dimension() << "\n\n\n" << "Center: " << vCenter << "\n\n\n" << "Generators: \n" << zonoExample.generators() << "\n\n\n";
     
-    results << zonoExample.corners();
+    zonoExample.uniteEqualVectors();
     
-    results.close(); // Just close the file 
+    results << "Number of Generators: " << zonoExample.numGenerators() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
+    
+    struct timeval t1, t2;
+    double elapsedTime;
+    
+    // start timer
+    gettimeofday(&t1, NULL);
+    
+    results << "Corners:\n" << zonoExample.corners() << "\n\n\n"; // Here we unite equal vectors (for optimization), and calculate (recursive) the corners!!
+    
+    // stop timer
+    gettimeofday(&t2, NULL);
+    
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+    
+    results << "Time spent: " << elapsedTime << "ms\n";
+    
+    results.close(); // Just closes the file 
     
     return 0;
 }
