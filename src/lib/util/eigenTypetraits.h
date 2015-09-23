@@ -1,4 +1,4 @@
-/* 
+/*
  * This file contains the additions needed for eigen3 to support our own floating
  * type FLOAT_T.
  * @file   eigenTypetraits.h
@@ -11,6 +11,3 @@
 #pragma once
 
 #include "../config.h"
-
-
-

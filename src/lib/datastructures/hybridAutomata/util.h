@@ -7,14 +7,6 @@
 #include "../../representations/Polytope/Polytope.h"
 #include "../../config.h"
 
-namespace hypro
-{
-		enum operator_e {
-			EQ,
-			GEQ,
-			LEQ,
-			NEQ,
-			LESS,
-			GREATER
-		};
+namespace hypro {
+enum operator_e { EQ, GEQ, LEQ, NEQ, LESS, GREATER };
 }

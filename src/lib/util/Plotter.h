@@ -17,55 +17,65 @@
 
 namespace hypro {
 
-	enum {petrol = 0, turquoise, green, maygreen, orange, red, bordeaux, violett, lila,};
-	const char *colors[] = {"#006165", "#0098A1", "#57AB27", "#BDCD00", "#F6A800", "#CC071E", "#A11035", "#612158", "#7A6FAC" };
+enum {
+	petrol = 0,
+	turquoise,
+	green,
+	maygreen,
+	orange,
+	red,
+	bordeaux,
+	violett,
+	lila,
+};
+const char* colors[] = {"#006165", "#0098A1", "#57AB27", "#BDCD00", "#F6A800",
+						"#CC071E", "#A11035", "#612158", "#7A6FAC"};
 
-	struct gnuplotSettings {
-		std::string color = colors[petrol]; // default petrol
-		bool fill = false; // do not fill
-	};
+struct gnuplotSettings {
+	std::string color = colors[petrol];  // default petrol
+	bool fill = false;					 // do not fill
+};
 
-	template<typename Number>
-	class Plotter : public carl::Singleton<Plotter<Number>>
-	{
-		friend carl::Singleton<Plotter<Number>>;
-	private:
-		std::string mFilename = "out";
-		mutable std::ofstream mOutfile;
-		std::multimap<unsigned,std::vector<Point<Number>>> mObjects;
-		std::map<unsigned,std::string> mObjectColors;
-		gnuplotSettings mSettings;
-		unsigned mId;
+template <typename Number>
+class Plotter : public carl::Singleton<Plotter<Number>> {
+	friend carl::Singleton<Plotter<Number>>;
 
-	protected:
-		Plotter() :
-			mId(1)
-		{}
-	public:
-		~Plotter();
+  private:
+	std::string mFilename = "out";
+	mutable std::ofstream mOutfile;
+	std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
+	std::map<unsigned, std::string> mObjectColors;
+	gnuplotSettings mSettings;
+	unsigned mId;
 
-		void setFilename(const std::string& _filename="out");
-		void updateSettings(gnuplotSettings _settings);
+  protected:
+	Plotter() : mId( 1 ) {}
 
-		// plotting functions
+  public:
+	~Plotter();
 
-		/**
-		 * @brief Writes the actual plot to the output file.
-		 * @details
-		 */
-		void plot2d() const;
+	void setFilename( const std::string& _filename = "out" );
+	void updateSettings( gnuplotSettings _settings );
 
-		unsigned addObject(const std::vector<Point<Number>>& _points, bool sorted=false);
-		unsigned addObject(const std::vector<std::vector<Point<Number>>>& _points, bool sorted=false);
+	// plotting functions
 
-		void setObjectColor(unsigned _id, const std::string _color);
+	/**
+	 * @brief Writes the actual plot to the output file.
+	 * @details
+	 */
+	void plot2d() const;
 
-	private:
-		// auxiliary functions
-		void init(const std::string& _filename);
-		std::vector<Point<Number>> grahamScan(const std::vector<Point<Number>>& _points);
-		bool isLeftTurn(const Point<Number>& a, const Point<Number>& b, const Point<Number>& c);
-	};
+	unsigned addObject( const std::vector<Point<Number>>& _points, bool sorted = false );
+	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted = false );
+
+	void setObjectColor( unsigned _id, const std::string _color );
+
+  private:
+	// auxiliary functions
+	void init( const std::string& _filename );
+	std::vector<Point<Number>> grahamScan( const std::vector<Point<Number>>& _points );
+	bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
+};
 }
 
 #include "Plotter.tpp"
