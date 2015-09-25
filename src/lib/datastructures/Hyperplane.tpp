@@ -149,7 +149,16 @@ bool Hyperplane<Number>::intersection( Number &_result, const Point<Number> &_ve
 template <typename Number>
 Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Number> &A,
 															 const vector_t<Number> &b ) const {
-	return Hyperplane<Number>( A * mNormal + b, mScalar );
+	Eigen::FullPivLU<matrix_t<Number>> lu(A);
+	// if A has full rank, we can simply retransform
+	if(lu.rank() == A.rows()) {
+		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), mNormal.transpose()*A.inverse()*b + mScalar);	
+	} else {
+		// we cannot invert A - chose points on the plane surface and create new plane
+
+		//TODO
+		return Hyperplane<Number>();
+	}
 }
 
 template <typename Number>
@@ -198,73 +207,96 @@ const Number &Hyperplane<Number>::internalOffset() const {
  */
 template <typename Number>
 vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
-	/*
-	 * Setup LP with GLPK
-	 */
-	glp_prob *normal;
-	normal = glp_create_prob();
-	glp_set_obj_dir( normal, GLP_MAX );
-
-	// we have one row for each edge in our set
-	glp_add_rows( normal, _edgeSet.size() );
-
-	// constraints of auxiliary variables (bounds for rows)
-	for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
-		glp_set_row_bnds( normal, i, GLP_FX, 0.0, 0.0 );
-	}
-
-	// each column corresponds to one dimension of a vector in our edgeSet
-	// TODO consider p1 & p2 of different dimensions? (-> two edge sets)
-	glp_add_cols( normal, _edgeSet.at( 0 ).rows() );
-
-	// coefficients of objective function:
-	for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
-		glp_set_obj_coef( normal, i, 1.0 );
-	}
-
-	// constraints for structural variables
-	for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
-		glp_set_col_bnds( normal, i, GLP_DB, -1.0, 1.0 );
-	}
-
-	// setup matrix coefficients
-	unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
-	int ia[1 + elements];
-	int ja[1 + elements];
-	double ar[1 + elements];
-	unsigned pos = 1;
-
-	// to prevent bugs
-	ia[0] = 0;
-	ja[0] = 0;
-	ar[0] = 0;
-
-	for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
-		for ( unsigned j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
-			ia[pos] = i;
-			ja[pos] = j;
-			vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
-			ar[pos] = carl::toDouble( tmpVec( j - 1 ) );
-#ifdef fukuda_DEBUG
-			std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
-#endif
-			++pos;
+	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
+	if(_edgeSet.size() == (unsigned)_edgeSet.begin()->rows() - 1 ) {
+		// method avoiding glpk and using Eigen instead (higher precision)
+		matrix_t<Number> constraints(_edgeSet.size(), _edgeSet.begin()->rows());
+		for(unsigned pos = 0; pos < _edgeSet.size(); ++pos) {
+			constraints.row(pos) = _edgeSet.at(pos).transpose();
 		}
+		vector_t<Number> normal = constraints.fullPivLu().kernel();
+
+		// post-computation check, if the normal vector is correct
+		for( const auto& vector : _edgeSet)
+			assert(vector.dot(normal) == 0);
+
+		return normal;
+	} else {
+		assert (false);
+		/*
+		 * Setup LP with GLPK
+		 */
+		glp_prob *normal;
+		normal = glp_create_prob();
+		glp_set_obj_dir( normal, GLP_MAX );
+
+		// we have one row for each edge in our set
+		glp_add_rows( normal, _edgeSet.size() );
+
+		// constraints of auxiliary variables (bounds for rows)
+		for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
+			glp_set_row_bnds( normal, i, GLP_FX, 0.0, 0.0 );
+		}
+
+		// each column corresponds to one dimension of a vector in our edgeSet
+		// TODO consider p1 & p2 of different dimensions? (-> two edge sets)
+		glp_add_cols( normal, _edgeSet.at( 0 ).rows() );
+
+		// coefficients of objective function:
+		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+			glp_set_obj_coef( normal, i, 1.0 );
+		}
+
+		// constraints for structural variables
+		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+			glp_set_col_bnds( normal, i, GLP_DB, -1.0, 1.0 );
+		}
+
+		// setup matrix coefficients
+		unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
+		int ia[1 + elements];
+		int ja[1 + elements];
+		double ar[1 + elements];
+		unsigned pos = 1;
+
+		// to prevent bugs
+		ia[0] = 0;
+		ja[0] = 0;
+		ar[0] = 0;
+
+		for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
+			for ( unsigned j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
+				ia[pos] = i;
+				ja[pos] = j;
+				vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
+				ar[pos] = carl::toDouble( tmpVec( j - 1 ) );
+	#ifdef fukuda_DEBUG
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+	#endif
+				++pos;
+			}
+		}
+		assert( pos - 1 <= elements );
+
+		glp_load_matrix( normal, elements, ia, ja, ar );
+		glp_simplex( normal, NULL );
+
+		vector_t<Number> result = vector_t<Number>( _edgeSet.at( 0 ).rows(), 1 );
+
+		// fill the result vector based on the optimal solution returned by the LP
+		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+			result( i - 1 ) = glp_get_col_prim( normal, i );
+		}
+
+		glp_delete_prob( normal );
+
+		// post-computation check, if the normal vector is correct
+		for( const auto& vector : _edgeSet)
+			assert(vector.dot(result) == 0);
+
+		return result;
 	}
-	assert( pos - 1 <= elements );
-
-	glp_load_matrix( normal, elements, ia, ja, ar );
-	glp_simplex( normal, NULL );
-
-	vector_t<Number> result = vector_t<Number>( _edgeSet.at( 0 ).rows(), 1 );
-
-	// fill the result vector based on the optimal solution returned by the LP
-	for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
-		result( i - 1 ) = glp_get_col_prim( normal, i );
-	}
-
-	glp_delete_prob( normal );
-
-	return result;
+	
+	
 }
 }

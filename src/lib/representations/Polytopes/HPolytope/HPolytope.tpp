@@ -178,7 +178,45 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			}
 
 			if ( !infty ) {
+				// ensure over approximation by pushing the vertex towards the plane until it lies on the plane
+				Number distA = mHPlanes.at(planeA).signedDistance(res);
+				Number distB = (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res));
+
+				std::cout << "Res is " << res.transpose() << std::endl;
+
+				std::cout << "Dist A before: " << distA << std::endl;
+				std::cout << "Dist B before: " << distB << std::endl;
+
+				if(distA > 0) {
+					// push in A-normal direction
+					std::cout << "Push in A direction: " << mHPlanes.at(planeA).normal().transpose() << std::endl;
+					vector_t<Number> sol(1);
+					sol(0) = mHPlanes.at(planeA).offset()-distA;
+					vector_t<Number> shift =  mHPlanes.at(planeA).normal().transpose().fullPivLu().solve(sol);
+					res = res + shift;
+				}
+				if(distB > 0) {
+					// push in B-normal direction
+					std::cout << "Push in B direction: " << mHPlanes.at(planeB).normal().transpose() << ", B-offset: " << mHPlanes.at(planeB).offset() << std::endl;
+					Number squaredDist = mHPlanes.at(planeB).normal().dot(mHPlanes.at(planeB).normal());
+					std::cout << "squaredDist:  " << squaredDist << std::endl;
+					Number factor = (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) / squaredDist;
+					std::cout << "Dist manual: " << (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) << std::endl;
+					std::cout << "Factor: " << factor << std::endl;
+					//factor += std::numeric_limits<Number>::epsilon();
+					vector_t<Number> shift =  mHPlanes.at(planeB).normal() * factor;
+					std::cout << "Shift = " << shift.transpose() << std::endl;
+					res = res + shift;
+					std::cout << "New Res " << res.transpose() << std::endl;
+				}
+
+				std::cout << "Dist A: " << mHPlanes.at(planeA).signedDistance(res) << std::endl;
+				std::cout << "Dist B: " << (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) << std::endl;
+
+				assert((mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) <= 0);
+				assert((mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) <= 0);
 				vertices.push_back( Point<Number>( res ) );
+				
 				std::cout << "Computed vertex: " << Point<Number>( res ) << std::endl;
 			} else
 				std::cout << "Intersection at infinity." << std::endl;
@@ -342,30 +380,6 @@ void HPolytope<Number>::reduce() {
 }
 
 template <typename Number>
-matrix_t<Number> HPolytope<Number>::peter() const {
-	matrix_t<Number> result = matrix_t<Number>( mHPlanes.size(), mHPlanes[0].normal().size() );
-
-	for ( unsigned i = 0; i < mHPlanes.size(); i++ ) {
-		for ( unsigned j = 0; j < mHPlanes[i].normal().size(); j++ ) {
-			result( i, j ) = mHPlanes[i].normal()( j );
-		}
-	}
-
-	return result;
-}
-
-template <typename Number>
-vector_t<Number> HPolytope<Number>::getConstraintsOffsetVector() const {
-	vector_t<Number> result = vector_t<Number>( mHPlanes.size() );
-
-	for ( unsigned i = 0; i < mHPlanes.size(); i++ ) {
-		result( i ) = mHPlanes[i].offset();
-	}
-
-	return result;
-}
-
-template <typename Number>
 bool HPolytope<Number>::isExtremePoint( vector_t<Number> point ) const {
 	unsigned cnt = 0;
 	for ( const auto &plane : mHPlanes ) {
@@ -464,46 +478,30 @@ typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-#ifdef USE_DOUBLE_DESCRIPTION
-	std::cout << __func__ << " this: " << *this << std::endl;
+	Eigen::FullPivLU<matrix_t<Number>> lu(A);
+	// if A has full rank, we can simply retransform, otherwise use double description method.
+	if(lu.rank() == A.rows()) {
+		std::cout << "Full rank, retransform!" << std::endl;
+		std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
+		return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
+	} else {
+		std::cout << __func__ << " this: " << *this << std::endl;
 	std::cout << __func__ << " vertices: " << std::endl;
 	for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
 
-	std::cout << "Create intermediate. " << std::endl;
+		std::cout << "Create intermediate. " << std::endl;
 
-	VPolytope<Number> intermediate( this->vertices() );
+		VPolytope<Number> intermediate( this->vertices() );
 
-	std::cout << "Intermediate : " << intermediate << std::endl;
+		std::cout << "Intermediate : " << intermediate << std::endl;
 
-	intermediate = intermediate.linearTransformation( A, b );
+		intermediate = intermediate.linearTransformation( A, b );
 
-	std::cout << "Intermediate : " << intermediate << std::endl;
+		std::cout << "Intermediate : " << intermediate << std::endl;
 
-	HPolytope<Number> res( intermediate );
-	return res;
-#else
-	// TODO: Include b!
-
-	assert( A.rows() == b.rows() );
-	std::cout << __func__ << ": A=" << A << std::endl << "b=" << b << std::endl;
-	// using the method of Ferrante and Rackoff
-	matrix_t<Number> D = A.fullPivLu().inverse();
-
-	std::cout << "D=" << D << std::endl;
-
-	std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-
-	std::cout << "Inequalities: " << inequalities.first << std::endl;
-
-	// we need to use SVD to compute the pseudo-inverse of the matrix of the
-	// polytope, see config.h and
-	// http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257
-	matrix_t<Number> inverse = Eigen::pseudoInverse( inequalities.first );
-
-	vector_t<Number> e = inverse * ( inequalities.second );
-
-	return std::move( HPolytope<Number>( D, e ) );
-#endif
+		HPolytope<Number> res( intermediate );
+		return res;	
+	}
 }
 
 template <typename Number>

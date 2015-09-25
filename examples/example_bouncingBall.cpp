@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
-	typedef hypro::Polytope<Number> Representation;
+	typedef hypro::HPolytope<Number> Representation;
 
 	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 

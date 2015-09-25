@@ -14,7 +14,6 @@
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
 
-//#define USE_DOUBLE_DESCRIPTION
 
 namespace hypro {
 
@@ -74,9 +73,6 @@ class HPolytope {
 	const HyperplaneVector& constraints() const;
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void reduce();
-
-	matrix_t<Number> peter() const;
-	vector_t<Number> getConstraintsOffsetVector() const;
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
