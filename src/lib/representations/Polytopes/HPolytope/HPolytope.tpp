@@ -142,92 +142,102 @@ template <typename Number>
 typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 	// std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
-	for ( unsigned planeA = 0; planeA < mHPlanes.size() - 1; ++planeA ) {
-		for ( unsigned planeB = planeA + 1; planeB < mHPlanes.size(); ++planeB ) {
-			matrix_t<Number> A( 2, mHPlanes.at( planeA ).dimension() );
-			vector_t<Number> b( 2 );
+	unsigned dim = this->dimension();
 
-			std::cout << __func__ << ": combine: " << mHPlanes.at( planeA ).normal().transpose() << " (" << planeA
-					  << ") and " << mHPlanes.at( planeB ).normal().transpose() << " (" << planeB << ")" << std::endl;
+	std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
+	for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
+		//std::cout << "Use planes ";
+		//for(const auto item : *permutationIt)
+		//	std::cout << item << ", ";
+		//std::cout << std::endl;
 
-			// initialize
-			A.row( 0 ) = mHPlanes.at( planeA ).normal().transpose();
-			A.row( 1 ) = mHPlanes.at( planeB ).normal().transpose();
+		matrix_t<Number> A( dim, dim );
+		vector_t<Number> b( dim );
+		unsigned pos = 0;
+		for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+			A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
+			// std::cout << A.row(pos) << std::endl;
+			b(pos) = mHPlanes.at(*planeIt).offset();
+			// std::cout << b(pos) << std::endl;
+			++pos;
+		}
 
-			// check if rank is full
-			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
-			if ( lu_decomp.rank() < A.rows() ) {
-				continue;
+		//std::cout << "Created first matrix" << std::endl;
+
+		Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+		if ( lu_decomp.rank() < A.rows() ) {
+			continue;
+		}
+
+		vector_t<Number> res = lu_decomp.solve( b );
+
+		// check for infinity
+		bool infty = false;
+		for ( unsigned i = 0; i < res.rows(); ++i ) {
+			if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
+				std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+				infty = true;
+				break;
 			}
+		}
 
-			b( 0 ) = mHPlanes.at( planeA ).offset();
-			b( 1 ) = mHPlanes.at( planeB ).offset();
-
-			vector_t<Number> res = A.fullPivHouseholderQr().solve( b );
-
-			//	Number relative_error = (A*res - b).norm() / b.norm();
-
-			// check for infinity
-			bool infty = false;
-			for ( unsigned i = 0; i < res.rows(); ++i ) {
-				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-					std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
-					infty = true;
+		if(!infty) {
+			//std::cout << "Solved to " << res.transpose() << std::endl;
+			// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
+			bool below = false;
+			for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+				Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
+				if(dist > 0) {
+					below = true;
 					break;
 				}
 			}
+			Number eps = 0;
+			while (below){
+				//std::cout << "Is below, iterate " << std::endl;
+				// enlarge as long as point lies below one of the planes.
+				below = false;
+				eps += std::numeric_limits<Number>::epsilon();
 
-			if ( !infty ) {
-				// ensure over approximation by pushing the vertex towards the plane until it lies on the plane
-				Number distA = mHPlanes.at(planeA).signedDistance(res);
-				Number distB = (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res));
-
-				std::cout << "Res is " << res.transpose() << std::endl;
-
-				std::cout << "Dist A before: " << distA << std::endl;
-				std::cout << "Dist B before: " << distB << std::endl;
-
-				if(distA > 0) {
-					// push in A-normal direction
-					std::cout << "Push in A direction: " << mHPlanes.at(planeA).normal().transpose() << std::endl;
-					vector_t<Number> sol(1);
-					sol(0) = mHPlanes.at(planeA).offset()-distA;
-					vector_t<Number> shift =  mHPlanes.at(planeA).normal().transpose().fullPivLu().solve(sol);
-					res = res + shift;
+				pos = 0;
+				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+					A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
+					b(pos) = mHPlanes.at(*planeIt).offset() + eps;
+					++pos;
 				}
-				if(distB > 0) {
-					// push in B-normal direction
-					std::cout << "Push in B direction: " << mHPlanes.at(planeB).normal().transpose() << ", B-offset: " << mHPlanes.at(planeB).offset() << std::endl;
-					Number squaredDist = mHPlanes.at(planeB).normal().dot(mHPlanes.at(planeB).normal());
-					std::cout << "squaredDist:  " << squaredDist << std::endl;
-					Number factor = (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) / squaredDist;
-					std::cout << "Dist manual: " << (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) << std::endl;
-					std::cout << "Factor: " << factor << std::endl;
-					//factor += std::numeric_limits<Number>::epsilon();
-					vector_t<Number> shift =  mHPlanes.at(planeB).normal() * factor;
-					std::cout << "Shift = " << shift.transpose() << std::endl;
-					res = res + shift;
-					std::cout << "New Res " << res.transpose() << std::endl;
+				vector_t<Number> tmp = Eigen::FullPivLU<matrix_t<Number>>(A).solve( b );
+
+				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(tmp);
+					if(dist > 0) {
+						below = true;
+						break;
+					}
 				}
-
-				std::cout << "Dist A: " << mHPlanes.at(planeA).signedDistance(res) << std::endl;
-				std::cout << "Dist B: " << (mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) << std::endl;
-
-				assert((mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) <= 0);
-				assert((mHPlanes.at(planeB).offset() - mHPlanes.at(planeB).normal().dot(res)) <= 0);
-				vertices.push_back( Point<Number>( res ) );
-				
-				std::cout << "Computed vertex: " << Point<Number>( res ) << std::endl;
-			} else
-				std::cout << "Intersection at infinity." << std::endl;
+				if(!below)
+					res = tmp;
+			}
+			vertices.push_back(Point<Number>(res));
+			//std::cout << "Final vertex: " << res.transpose() << std::endl;
 		}
 	}
 	for ( auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-		std::cout << "Check contains." << std::endl;
-		if ( !this->contains( *vertexIt ) ) {
-			std::cout << "Removed vertex: " << *vertexIt << std::endl;
-			vertexIt = vertices.erase( vertexIt );
-		} else {
+		//std::cout << "Check contains." << std::endl;
+		unsigned cnt = dim;
+		bool unsat = false;
+		for(const auto& plane : mHPlanes) {
+			if( plane.offset() - plane.normal().dot(vertexIt->rawCoordinates()) > 0 ){
+				if (cnt > 0) {
+					--cnt;
+				} else {
+					//std::cout << "Removed vertex: " << *vertexIt << std::endl;
+					vertexIt = vertices.erase( vertexIt );
+					unsat = true;
+					break;
+				}
+			}
+		}
+		if(!unsat) {
 			++vertexIt;
 		}
 	}
