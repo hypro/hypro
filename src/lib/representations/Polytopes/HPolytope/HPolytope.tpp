@@ -78,7 +78,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
-	if ( mInitialized ) deleteArrays();
+	if ( mInitialized ) glp_delete_prob(lp);
 }
 
 /*
@@ -93,8 +93,13 @@ bool HPolytope<Number>::empty() const {
 	if(!mInitialized) {
 		initialize();
 	}
-	glp_simplex( lp, NULL );
-	//std::cout << "GLP: Solution: " << glp_get_status(lp) << std::endl;
+	glp_term_out(GLP_OFF);
+	for ( unsigned i = 0; i < mDimension; i++ ) {
+		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+		glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
+	}
+	glp_exact( lp, NULL );
+	std::cout << "GLP: Solution: " << glp_get_status(lp) << std::endl;
 	return (glp_get_status(lp) == GLP_NOFEAS);
 }
 
@@ -510,29 +515,33 @@ typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-	Eigen::FullPivLU<matrix_t<Number>> lu(A);
-	// if A has full rank, we can simply retransform, otherwise use double description method.
-	if(lu.rank() == A.rows()) {
-		std::cout << "Full rank, retransform!" << std::endl;
-		std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-		return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
+	if(!this->empty() && !mHPlanes.empty()) {
+		Eigen::FullPivLU<matrix_t<Number>> lu(A);
+		// if A has full rank, we can simply retransform, otherwise use double description method.
+		if(lu.rank() == A.rows()) {
+			std::cout << "Full rank, retransform!" << std::endl;
+			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
+			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
+		} else {
+			std::cout << __func__ << " this: " << *this << std::endl;
+		std::cout << __func__ << " vertices: " << std::endl;
+		for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
+
+			std::cout << "Create intermediate. " << std::endl;
+
+			VPolytope<Number> intermediate( this->vertices() );
+
+			std::cout << "Intermediate : " << intermediate << std::endl;
+
+			intermediate = intermediate.linearTransformation( A, b );
+
+			std::cout << "Intermediate : " << intermediate << std::endl;
+
+			HPolytope<Number> res( intermediate );
+			return res;	
+		}
 	} else {
-		std::cout << __func__ << " this: " << *this << std::endl;
-	std::cout << __func__ << " vertices: " << std::endl;
-	for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
-
-		std::cout << "Create intermediate. " << std::endl;
-
-		VPolytope<Number> intermediate( this->vertices() );
-
-		std::cout << "Intermediate : " << intermediate << std::endl;
-
-		intermediate = intermediate.linearTransformation( A, b );
-
-		std::cout << "Intermediate : " << intermediate << std::endl;
-
-		HPolytope<Number> res( intermediate );
-		return res;	
+		return *this;
 	}
 }
 
@@ -576,8 +585,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
-	std::cout << __func__ << std::endl;
 	if ( rhs.empty() || this->empty() ) {
+		std::cout << "this->empty(): " << this->empty() << ", rhs.empty(): " << rhs.empty() << std::endl;
 		return HPolytope<Number>::Empty();
 	} else {
 		HPolytope<Number> res;

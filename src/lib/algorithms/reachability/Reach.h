@@ -116,7 +116,8 @@ struct Reach {
 // check if initial Valuation fulfills Invariant
 #ifdef fReach_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << poly.contains( _val ) << std::endl;
+		std::cout << !poly.intersect( _val ).empty() << std::endl;
+		//std::cout << poly.contains( _val ) << std::endl;
 #endif
 
 		if ( poly.contains( _val ) ) {
@@ -241,18 +242,22 @@ struct Reach {
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
+				resultPolytope.reduce();
 // resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
 				resultPolytope.print();
+				std::cout << "Empty: " << resultPolytope.empty() << std::endl;
 
 				std::cout << "still within Invariant?: ";
-				std::cout << poly.contains( resultPolytope ) << std::endl;
+				std::cout << !(poly.intersect( resultPolytope )).empty() << std::endl;
+				std::cout << "Invariant: " << poly << std::endl;
+				std::cout << "Intersection result: " << poly.intersect( resultPolytope ) << std::endl;
 #endif
 
 				// extend flowpipe (only if still within Invariant of location)
-				if ( poly.contains( resultPolytope ) ) {
+				if ( !(poly.intersect( resultPolytope )).empty() ) {
 					flowpipe.push_back( resultPolytope );
 
 					// update lastSegment

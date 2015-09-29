@@ -131,39 +131,26 @@ class HPolytope {
 		std::cout << "b: " << b << std::endl;
 		*/
 		if ( a.mInitialized ) {
-			int* tmpIa = a.ia;
-			int* tmpJa = a.ia;
-			double* tmpAr = a.ar;
-			glp_prob* tmpLp = a.lp;
+			glp_prob* tmpLp = glp_create_prob();
+			glp_copy_prob(tmpLp, a.lp, GLP_OFF);
 			if ( b.mInitialized ) {
-				a.ia = b.ia;
-				a.ja = b.ja;
-				a.ar = b.ar;
-				a.lp = b.lp;
+				glp_copy_prob(a.lp, b.lp, GLP_OFF);
+				glp_copy_prob(b.lp, tmpLp, GLP_OFF);
+				glp_delete_prob(tmpLp);
 			} else {
-				a.ia = nullptr;
-				a.ja = nullptr;
-				a.ar = nullptr;
-				a.lp = nullptr;
+				glp_delete_prob(a.lp);
+				b.lp = glp_create_prob();
+				glp_copy_prob(b.lp, tmpLp, GLP_OFF);
 				a.mInitialized = false;
 				b.mInitialized = true;
 			}
-			b.ia = tmpIa;
-			b.ja = tmpJa;
-			b.ar = tmpAr;
-			b.lp = tmpLp;
 		} else {
 			if ( b.mInitialized ) {
-				a.ia = b.ia;
-				a.ja = b.ja;
-				a.ar = b.ar;
-				a.lp = b.lp;
+				a.lp = glp_create_prob();
+				glp_copy_prob(a.lp, b.lp, GLP_OFF);
+				glp_delete_prob(b.lp);
 				a.mInitialized = true;
 				b.mInitialized = false;
-				b.ia = nullptr;
-				b.ja = nullptr;
-				b.ar = nullptr;
-				b.lp = nullptr;
 			}
 		}
 		if ( a.mFanSet ) {
