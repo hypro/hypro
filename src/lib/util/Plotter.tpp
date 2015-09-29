@@ -85,20 +85,35 @@ void Plotter<Number>::plot2d() const {
 			++objectCount;
 		}
 
+		std::map<unsigned, carl::Interval<double>> ranges;
+		for ( unsigned d = 0; d < min.rows(); ++d ) {
+			double rangeExt = double( ( max( d ) - min( d ) ) * 0.1 );
+			ranges[d] = carl::Interval<double>(min( d ) - rangeExt, max( d ) + rangeExt );
+		}
+
+		if(mSettings.axes) {
+			mOutfile << "set xzeroaxis \n";
+			mOutfile << "set xtics axis \n";
+			mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+			mOutfile << "set yzeroaxis \n";
+			mOutfile << "set ytics axis \n";
+			mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		}
+
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
 		mOutfile << "set output \"" << mFilename << ".eps\"";
 		mOutfile << "\n";
 		mOutfile << "plot ";
 
+		
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = double( ( max( d ) - min( d ) ) * 0.1 );
-			mOutfile << "[" << min( d ) - rangeExt << ":" << max( d ) + rangeExt << "] ";
+			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
 		}
 		mOutfile << "NaN notitle";
 	}
 	mOutfile.close();
-	std::cout << std::endl << "Plotted to " << mFilename << ".eps" << std::endl;
+	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
 }
 
 template <typename Number>
