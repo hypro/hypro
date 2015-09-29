@@ -103,6 +103,10 @@ TYPED_TEST(HPolytopeTest, Corners)
 	p1(0) = 2;
 	p1(1) = 0;
 	EXPECT_FALSE(hpt1.isExtremePoint(p1));
+
+	// test overapproximation
+	HPolytope<TypeParam> reproduction(corners);
+	EXPECT_TRUE(hpt2.contains(reproduction));
 }
 
 
