@@ -232,12 +232,13 @@ int main(int argc, char const *argv[])
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
-			//std::cout << "Flowpipe segment to be converted: " << std::endl;
-			//poly.print();
+			std::cout << "Flowpipe segment to be converted: " << std::endl;
+			poly.reduce();
+			poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
+			std::cout << "points.size() = " << points.size() << std::endl;
 			if(!points.empty() && points.size() > 2) {
 				//std::cout << "Polycount: " << count << std::endl;
-				//std::cout << "points.size() = " << points.size() << std::endl;
 				for(auto& point : points) {
 		// 			std::cout << "reduce " << point << " to ";
 					point.reduceDimension(2);

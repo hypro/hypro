@@ -55,6 +55,7 @@ class HPolytope {
 	 */
 
 	bool empty() const;
+	static HPolytope<Number> Empty();
 
 	unsigned dimension() const;
 	unsigned size() const;

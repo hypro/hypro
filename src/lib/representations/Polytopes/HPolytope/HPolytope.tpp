@@ -87,7 +87,26 @@ HPolytope<Number>::~HPolytope() {
 
 template <typename Number>
 bool HPolytope<Number>::empty() const {
-	return mHPlanes.empty();
+	if(mHPlanes.empty())
+		return false;
+
+	if(!mInitialized) {
+		initialize();
+	}
+	glp_simplex( lp, NULL );
+	//std::cout << "GLP: Solution: " << glp_get_status(lp) << std::endl;
+	return (glp_get_status(lp) == GLP_NOFEAS);
+}
+
+template <typename Number>
+HPolytope<Number> HPolytope<Number>::Empty(){
+	Hyperplane<Number> a({1},-1);
+	Hyperplane<Number> b({-1},-1);
+	HyperplaneVector v;
+	v.emplace_back(a);
+	v.emplace_back(b);
+	HPolytope<Number> res(v);
+	return res;
 }
 
 template <typename Number>
@@ -140,107 +159,110 @@ const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
 
 template <typename Number>
 typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
-	// std::cout << "Compute vertices of " << *this << std::endl;
+	std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
-	unsigned dim = this->dimension();
+	if(!mHPlanes.empty()){
+		unsigned dim = this->dimension();
 
-	std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
-	for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
-		//std::cout << "Use planes ";
-		//for(const auto item : *permutationIt)
-		//	std::cout << item << ", ";
-		//std::cout << std::endl;
+		std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
+		for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
+			std::cout << "Use planes ";
+			for(const auto item : *permutationIt)
+				std::cout << item << ", ";
+			std::cout << std::endl;
 
-		matrix_t<Number> A( dim, dim );
-		vector_t<Number> b( dim );
-		unsigned pos = 0;
-		for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
-			A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
-			// std::cout << A.row(pos) << std::endl;
-			b(pos) = mHPlanes.at(*planeIt).offset();
-			// std::cout << b(pos) << std::endl;
-			++pos;
-		}
-
-		//std::cout << "Created first matrix" << std::endl;
-
-		Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
-		if ( lu_decomp.rank() < A.rows() ) {
-			continue;
-		}
-
-		vector_t<Number> res = lu_decomp.solve( b );
-
-		// check for infinity
-		bool infty = false;
-		for ( unsigned i = 0; i < res.rows(); ++i ) {
-			if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-				std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
-				infty = true;
-				break;
-			}
-		}
-
-		if(!infty) {
-			//std::cout << "Solved to " << res.transpose() << std::endl;
-			// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
-			bool below = false;
+			matrix_t<Number> A( dim, dim );
+			vector_t<Number> b( dim );
+			unsigned pos = 0;
 			for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
-				Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
-				if(dist > 0) {
-					below = true;
+				A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
+				// std::cout << A.row(pos) << std::endl;
+				b(pos) = mHPlanes.at(*planeIt).offset();
+				// std::cout << b(pos) << std::endl;
+				++pos;
+			}
+
+			std::cout << "Created first matrix" << std::endl;
+
+			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+			if ( lu_decomp.rank() < A.rows() ) {
+				continue;
+			}
+
+			vector_t<Number> res = lu_decomp.solve( b );
+
+			// check for infinity
+			bool infty = false;
+			for ( unsigned i = 0; i < res.rows(); ++i ) {
+				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
+					std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+					infty = true;
 					break;
 				}
 			}
-			Number eps = 0;
-			while (below){
-				//std::cout << "Is below, iterate " << std::endl;
-				// enlarge as long as point lies below one of the planes.
-				below = false;
-				eps += std::numeric_limits<Number>::epsilon();
 
-				pos = 0;
+			if(!infty) {
+				std::cout << "Solved to " << res.transpose() << std::endl;
+				// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
+				bool below = false;
 				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
-					A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
-					b(pos) = mHPlanes.at(*planeIt).offset() + eps;
-					++pos;
-				}
-				vector_t<Number> tmp = Eigen::FullPivLU<matrix_t<Number>>(A).solve( b );
-
-				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
-					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(tmp);
+					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
 					if(dist > 0) {
 						below = true;
 						break;
 					}
 				}
-				if(!below)
-					res = tmp;
+				Number eps = 0;
+				while (below){
+					std::cout << "Is below, iterate " << std::endl;
+					// enlarge as long as point lies below one of the planes.
+					below = false;
+					eps += std::numeric_limits<Number>::epsilon();
+
+					pos = 0;
+					for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+						A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
+						b(pos) = mHPlanes.at(*planeIt).offset() + eps;
+						++pos;
+					}
+					vector_t<Number> tmp = Eigen::FullPivLU<matrix_t<Number>>(A).solve( b );
+
+					for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
+						Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(tmp);
+						if(dist > 0) {
+							below = true;
+							break;
+						}
+					}
+					if(!below)
+						res = tmp;
+				}
+				vertices.push_back(Point<Number>(res));
+				std::cout << "Final vertex: " << res.transpose() << std::endl;
 			}
-			vertices.push_back(Point<Number>(res));
-			//std::cout << "Final vertex: " << res.transpose() << std::endl;
 		}
-	}
-	for ( auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-		//std::cout << "Check contains." << std::endl;
-		unsigned cnt = dim;
-		bool unsat = false;
-		for(const auto& plane : mHPlanes) {
-			if( plane.offset() - plane.normal().dot(vertexIt->rawCoordinates()) > 0 ){
-				if (cnt > 0) {
-					--cnt;
-				} else {
-					//std::cout << "Removed vertex: " << *vertexIt << std::endl;
-					vertexIt = vertices.erase( vertexIt );
-					unsat = true;
-					break;
+		for ( auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
+			std::cout << "Check contains." << std::endl;
+			unsigned cnt = dim;
+			bool unsat = false;
+			for(const auto& plane : mHPlanes) {
+				if( plane.offset() - plane.normal().dot(vertexIt->rawCoordinates()) <= 0 ){
+					if (cnt > 0) {
+						--cnt;
+					} else {
+						std::cout << "Removed vertex: " << *vertexIt << std::endl;
+						vertexIt = vertices.erase( vertexIt );
+						unsat = true;
+						break;
+					}
 				}
 			}
-		}
-		if(!unsat) {
-			++vertexIt;
+			if(!unsat) {
+				++vertexIt;
+			}
 		}
 	}
+	
 	return vertices;
 }
 
@@ -555,9 +577,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 	std::cout << __func__ << std::endl;
-	// Todo: Improve.
-	if ( rhs.empty() ) {
-		return HPolytope<Number>();
+	if ( rhs.empty() || this->empty() ) {
+		return HPolytope<Number>::Empty();
 	} else {
 		HPolytope<Number> res;
 		for ( const auto &plane : mHPlanes ) {
@@ -566,7 +587,10 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		res.reduce();
+		if(!res.constraints().empty()) {
+			res.reduce();
+		}
+
 		return res;
 	}
 }
