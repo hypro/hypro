@@ -48,7 +48,7 @@ using carl::operator<<;
 #define PI_DN 3.141592654
 
 static const unsigned FLOAT_PRECISION = 128;
-static const unsigned TOLLERANCE_ULPS = 8192;
+//static const unsigned TOLLERANCE_ULPS = 8192;
 static const unsigned MAX_DIMENSION_LIMIT = 128;
 
 /**
@@ -70,6 +70,7 @@ static const unsigned fReach_DENOMINATOR = 1000000;
 // define for debugging: triggers console output
 //#define fukuda_DEBUG
 
+namespace Eigen {
 template <typename Number>
 bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
@@ -103,8 +104,7 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 
 // according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:
 template <typename Number>
-hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a,
-									   Number epsilon = std::numeric_limits<Number>::epsilon() ) {
+hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a, Number epsilon = std::numeric_limits<Number>::epsilon() ) {
 	Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( a, Eigen::ComputeThinU | Eigen::ComputeThinV );
 	Number tolerance = epsilon * std::max( a.cols(), a.rows() ) * svd.singularValues().array().abs()( 0 );
 	return svd.matrixV() *
