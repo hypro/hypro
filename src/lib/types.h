@@ -5,18 +5,10 @@
 /* #undef COMPARE_POLYMAKE */
 
 #include <set>
-#include <map>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <assert.h>
 
-#include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
-#include <carl/io/streamingOperators.h>
-#include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 
