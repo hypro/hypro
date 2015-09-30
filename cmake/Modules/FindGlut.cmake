@@ -1,9 +1,10 @@
 #  Find module for freeglut.
 #  @author Stefan Schupp
 
-set(Glut_PREFIX "" CACHE PATH "The path to the previx of an MPFR installation")
+set(Glut_PREFIX "" CACHE PATH "The path to the previx of an Glut installation")
 
-find_path(Glut_INCLUDE_DIR glut.h 
+find_path(Glut_INCLUDE_DIR 
+	NAMES glut.h 
 	PATHS ${Glut_PREFIX}/include /usr/include/GL /usr/local/include)
 
 find_library(Glut_LIBRARY NAMES glut 

@@ -45,6 +45,8 @@ TYPED_TEST(HPolytopeTest, Constructor)
 	HPolytope<TypeParam> aHPolytope = HPolytope<TypeParam>();
 	HPolytope<TypeParam> anotherHPolytope = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
+	HPolytope<TypeParam> empt = HPolytope<TypeParam>::Empty();
+	EXPECT_TRUE(empt.empty());
 
 	HPolytope<TypeParam> copyAssignment = HPolytope<TypeParam>(anotherHPolytope);
 
@@ -101,6 +103,10 @@ TYPED_TEST(HPolytopeTest, Corners)
 	p1(0) = 2;
 	p1(1) = 0;
 	EXPECT_FALSE(hpt1.isExtremePoint(p1));
+
+	// test overapproximation
+	HPolytope<TypeParam> reproduction(corners);
+	EXPECT_TRUE(hpt2.contains(reproduction));
 }
 
 
@@ -269,11 +275,16 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 	HPolytope<TypeParam> result = hpt1.intersect(hpt2);
 
+	std::cout << "A: " << hpt1 << std::endl;
+	std::cout << "B: " << hpt2 << std::endl;
+	std::cout << "Res: " << result << std::endl;
+
+
 	for(auto& plane : result.constraints()) {
 		EXPECT_TRUE(hpt1.hasConstraint(plane) || hpt2.hasConstraint(plane));
 	}
 
-	//std::cout<< "Part 2 starting: "	<< std::endl;
+	std::cout<< "Part 2 starting: "	<< std::endl;
 	std::vector<Hyperplane<TypeParam>> ps3;
 	Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
 	Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},3);
@@ -315,8 +326,7 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	  EXPECT_TRUE(pt4.contains(vertex));
 	}
 
-	HPolytope<TypeParam> res3 = res2.intersect(HPolytope<TypeParam>());
-
+	HPolytope<TypeParam> res3 = res2.intersect(HPolytope<TypeParam>::Empty());
 
 	EXPECT_TRUE(res3.empty());
 }

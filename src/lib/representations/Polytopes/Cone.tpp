@@ -11,12 +11,12 @@ Cone<Number>::Cone()
 }
 
 template <typename Number>
-Cone<Number>::Cone( const Cone& _orig )
+Cone<Number>::Cone( const Cone &_orig )
 	: mPlanes( _orig.planes() ) {
 }
 
 template <typename Number>
-Cone<Number>::Cone( const planeVector& _planes )
+Cone<Number>::Cone( const planeVector &_planes )
 	: mPlanes( _planes ) {
 }
 
@@ -25,7 +25,7 @@ Cone<Number>::~Cone() {
 }
 
 template <typename Number>
-const typename Cone<Number>::planeVector& Cone<Number>::planes() const {
+const typename Cone<Number>::planeVector &Cone<Number>::planes() const {
 	return mPlanes;
 }
 
@@ -33,8 +33,8 @@ template <typename Number>
 vectorSet<Number> Cone<Number>::vectors() const {
 	// create all possible vectors
 	vectorSet<Number> intersectionVectors;
-	for ( const auto& lhsPlane : mPlanes ) {
-		for ( const auto& rhsPlane : mPlanes ) {
+	for ( const auto &lhsPlane : mPlanes ) {
+		for ( const auto &rhsPlane : mPlanes ) {
 			if ( lhsPlane != rhsPlane ) {
 				intersectionVectors.insert( lhsPlane.get()->intersectionVector( *rhsPlane.get() ) );
 			}
@@ -42,20 +42,24 @@ vectorSet<Number> Cone<Number>::vectors() const {
 	}
 	// adjust vectors to the right direction
 
-	// std::cout<<__func__ << " : " <<__LINE__ << " : "<<mPlanes.size() << std::endl;
+	// std::cout<<__func__ << " : " <<__LINE__ << " : "<<mPlanes.size() <<
+	// std::endl;
 	vectorSet<Number> correctIntersectionVectors;
 	while ( !intersectionVectors.empty() ) {
 		bool changed = false;
-		// std::cout<<__func__ << " : " <<__LINE__ << *intersectionVectors.begin() << std::endl;
-		for ( const auto& plane : mPlanes ) {
-			// std::cout<<__func__ << " : " <<__LINE__ << " plane : " << plane << std::endl;
+		// std::cout<<__func__ << " : " <<__LINE__ << *intersectionVectors.begin()
+		// << std::endl;
+		for ( const auto &plane : mPlanes ) {
+			// std::cout<<__func__ << " : " <<__LINE__ << " plane : " << plane <<
+			// std::endl;
 			if ( !plane->holds( *intersectionVectors.begin() ) ) {
 				// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 				vector_t<Number> tmp = ( *intersectionVectors.begin() ) * -1;
 				intersectionVectors.erase( intersectionVectors.begin() );
 				correctIntersectionVectors.insert( tmp );
 				changed = true;
-				// std::cout << tmp << " is contained in " << *plane << " : " << plane->holds(tmp) << std::endl;
+				// std::cout << tmp << " is contained in " << *plane << " : " <<
+				// plane->holds(tmp) << std::endl;
 				assert( plane->holds( tmp ) );
 				break;
 			}
@@ -75,7 +79,7 @@ vectorSet<Number> Cone<Number>::vectors() const {
 	//}
 
 	// for each vector, determine, if it is inside the original cone
-	for ( const auto& vector : intersectionVectors ) {
+	for ( const auto &vector : intersectionVectors ) {
 		if ( !this->contains( vector ) ) intersectionVectors.erase( vector );
 	}
 	return intersectionVectors;
@@ -113,20 +117,24 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 
 		// get horizon vectors, create new hyperplanes, delete inside planes.
 		std::vector<vector_t<Number>> horizonVectors;
-		for ( const auto& horizonCandidate : lhsVectors ) {
+		for ( const auto &horizonCandidate : lhsVectors ) {
 			bool found = false;
-			for ( const auto& insidePlane : insidePlanes ) {
+			for ( const auto &insidePlane : insidePlanes ) {
 				// std::cout << "Inside plane: " << *insidePlane.get() << std::endl;
 				if ( insidePlane->contains( horizonCandidate ) ) {
 					// std::cout << "is contained (normal*horizonCandidate=" <<
-					// insidePlane.get()->normal().dot(horizonCandidate) << ")" << std::endl;
-					// check all other planes, which are not inside, if the candidate is part of one -> horizon vector
-					for ( const auto& outsidePlane : outsidePlanes ) {
-						// std::cout << "Consider vector " << horizonCandidate << " to be inside " << *insidePlane.get()
+					// insidePlane.get()->normal().dot(horizonCandidate) << ")" <<
+					// std::endl;
+					// check all other planes, which are not inside, if the candidate is
+					// part of one -> horizon vector
+					for ( const auto &outsidePlane : outsidePlanes ) {
+						// std::cout << "Consider vector " << horizonCandidate << " to be
+						// inside " << *insidePlane.get()
 						// << " and " << *outsidePlane.get() << std::endl;
 						if ( outsidePlane->contains( horizonCandidate ) ) {
 							horizonVectors.push_back( horizonCandidate );
-							// std::cout << "horizon vector: " << horizonCandidate << std::endl;
+							// std::cout << "horizon vector: " << horizonCandidate <<
+							// std::endl;
 							found = true;
 							break;
 						}
@@ -141,11 +149,12 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 		// create new hyperplanes
 		std::vector<vector_t<Number>> hyperplaneBasis;
 		hyperplaneBasis.push_back( _vector );
-		for ( const auto& horizonVector : horizonVectors ) {
+		for ( const auto &horizonVector : horizonVectors ) {
 			// Todo: check if origin zero is okay.
 			vector_t<Number> origin = vector_t<Number>::Zero( _vector.rows() );
 
-			// std::cout << "Create hyperplane from " << _vector << " and " << horizonVector << std::endl;
+			// std::cout << "Create hyperplane from " << _vector << " and " <<
+			// horizonVector << std::endl;
 
 			hyperplaneBasis.push_back( horizonVector );
 			outsidePlanes.insert(
@@ -156,14 +165,14 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 
 		// assign new planes
 		mPlanes.clear();
-		for ( const auto& plane : outsidePlanes ) mPlanes.push_back( plane );
+		for ( const auto &plane : outsidePlanes ) mPlanes.push_back( plane );
 	}
 }
 
 template <typename Number>
-Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A, const vector_t<Number>& b ) const {
+Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A, const vector_t<Number> &b ) const {
 	Cone<Number> result;
-	for ( const auto& plane : mPlanes ) {
+	for ( const auto &plane : mPlanes ) {
 		result.add(
 			  std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>( plane->linearTransformation( A, b ) ) ) );
 	}
@@ -171,10 +180,10 @@ Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A, const
 }
 
 template <typename Number>
-Cone<Number> Cone<Number>::minkowskiSum( const Cone& _rhs ) const {
+Cone<Number> Cone<Number>::minkowskiSum( const Cone &_rhs ) const {
 	Cone<Number> result = Cone<Number>( *this );
 	vectorSet<Number> rhsVectors = _rhs.vectors();
-	for ( const auto& vector : rhsVectors ) result.add( vector );
+	for ( const auto &vector : rhsVectors ) result.add( vector );
 
 	return result;
 }
@@ -184,25 +193,25 @@ Point<Number> Cone<Number>::getUnitAverageVector() const {
 	assert( !mPlanes.empty() );
 	Point<Number> result;
 	unsigned numberPlanes = mPlanes.size();
-	for ( auto& plane : mPlanes ) {
+	for ( auto &plane : mPlanes ) {
 		result += ( plane->normal() / numberPlanes );
 	}
 	return result;
 }
 
 template <typename Number>
-bool Cone<Number>::contains( const vector_t<Number>& _vector ) const {
-	for ( const auto& plane : mPlanes ) {
+bool Cone<Number>::contains( const vector_t<Number> &_vector ) const {
+	for ( const auto &plane : mPlanes ) {
 		if ( !plane->holds( _vector ) ) return false;
 	}
 	return true;
 }
 
 template <typename Number>
-bool Cone<Number>::contains( const vector_t<Number>& _vector, planeVector& _insidePlanes,
-							 std::set<std::shared_ptr<Hyperplane<Number>>>& _outsidePlanes ) const {
+bool Cone<Number>::contains( const vector_t<Number> &_vector, planeVector &_insidePlanes,
+							 std::set<std::shared_ptr<Hyperplane<Number>>> &_outsidePlanes ) const {
 	bool contains = true;
-	for ( const auto& plane : mPlanes ) {
+	for ( const auto &plane : mPlanes ) {
 		if ( !plane->holds( _vector ) ) {
 			_insidePlanes.push_back( plane );
 			contains = false;
@@ -214,17 +223,17 @@ bool Cone<Number>::contains( const vector_t<Number>& _vector, planeVector& _insi
 }
 
 template <typename Number>
-bool Cone<Number>::contains( const Point<Number>* _vector ) const {
+bool Cone<Number>::contains( const Point<Number> *_vector ) const {
 	return this->contains( _vector->rawCoordinates() );
 }
 
 template <typename Number>
-Cone<Number> Cone<Number>::operator=( const Cone<Number>& _rhs ) {
+Cone<Number> Cone<Number>::operator=( const Cone<Number> &_rhs ) {
 	/*
 	if( this != &_rhs )
 	{
-		Cone<Number> tmp(_rhs);
-		std::swap(*this,tmp);
+			Cone<Number> tmp(_rhs);
+			std::swap(*this,tmp);
 	}*/
 	mPlanes.clear();
 	mPlanes = _rhs.planes();

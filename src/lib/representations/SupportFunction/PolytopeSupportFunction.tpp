@@ -1,5 +1,6 @@
 /*
- * This file contains the basic implementation of support functions of polyhedra (template polyhedra) and their
+ * This file contains the basic implementation of support functions of polyhedra
+ *(template polyhedra) and their
  *evaluation.
  * @file PolytopeSupportFunction.tpp
  *
@@ -102,13 +103,13 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> const
 }
 
 template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hyperplane<Number>>& _planes ) {
+PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hyperplane<Number>> &_planes ) {
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
 
 	unsigned pos = 0;
-	for ( const auto& plane : _planes ) {
+	for ( const auto &plane : _planes ) {
 		mConstraints.row( pos ) = plane.normal().transpose();
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
@@ -117,7 +118,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 }
 
 template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin )
+PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants() ) {
 	initialize( mConstraints, mConstraintConstants );
 }
@@ -159,7 +160,7 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 }
 
 template <typename Number>
-evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number>& l ) const {
+evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
 #endif
@@ -179,7 +180,8 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 	/* recover and display results */
 	result.supportValue = glp_get_obj_val( lp );
 
-	// std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " << glp_get_obj_coef(lp,1) << std::endl;
+	// std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " <<
+	// glp_get_obj_coef(lp,1) << std::endl;
 
 	vector_t<Number> x = vector_t<Number>( mDimension );
 	for ( unsigned i = 0; i < mDimension; i++ ) {
@@ -197,8 +199,8 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 			result.supportValue = INFINITY;
 			break;
 		default:
-			std::cout << "Unable to find a suitable solution for the support function (linear program). ErrorCode: "
-					  << result.errorCode << std::endl;
+			std::cout << "Unable to find a suitable solution for the support function "
+						 "(linear program). ErrorCode: " << result.errorCode << std::endl;
 	}
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -211,7 +213,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 }
 
 template <typename Number>
-vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number>& _A ) const {
+vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
 	vector_t<Number> res( _A.rows() );
 
@@ -223,12 +225,12 @@ vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<
 }
 
 template <typename Number>
-bool PolytopeSupportFunction<Number>::contains( const Point<Number>& _point ) const {
+bool PolytopeSupportFunction<Number>::contains( const Point<Number> &_point ) const {
 	return this->contains( _point.rawCoordinates() );
 }
 
 template <typename Number>
-bool PolytopeSupportFunction<Number>::contains( const vector_t<Number>& _point ) const {
+bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
 	vector_t<Number> constraint( glp_get_num_cols( lp ) );
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << _point << std::endl;

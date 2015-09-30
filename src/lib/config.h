@@ -73,8 +73,8 @@ using vectorSet = std::set<vector_t<Number>>;
  */
 static const float fReach_TIMEBOUND = 2;
 static const unsigned fReach_ITERATIONDEPTH = 1;
-static const unsigned fReach_TIMEDISCRETIZATION = 400;
-static const unsigned fReach_DENOMINATOR = 1000000000;
+static const unsigned fReach_TIMEDISCRETIZATION = 100;
+static const unsigned fReach_DENOMINATOR = 1000000;
 // define for debugging: triggers console output
 #define fReach_DEBUG
 

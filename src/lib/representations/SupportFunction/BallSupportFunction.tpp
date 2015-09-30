@@ -1,5 +1,6 @@
 /*
- * This file contains the basic implementation of support functions of polyhedra (template polyhedra) and their
+ * This file contains the basic implementation of support functions of polyhedra
+ *(template polyhedra) and their
  *evaluation.
  * @file BallSupportFunction.tpp
  *
@@ -20,7 +21,7 @@ BallSupportFunction<Number>::BallSupportFunction( Number _radius, SF_TYPE _type 
 }
 
 template <typename Number>
-BallSupportFunction<Number>::BallSupportFunction( const BallSupportFunction<Number>& _orig )
+BallSupportFunction<Number>::BallSupportFunction( const BallSupportFunction<Number> &_orig )
 	: mDimension( 0 ), mRadius( _orig.radius() ), mType( _orig.type() ) {
 }
 
@@ -44,7 +45,7 @@ SF_TYPE BallSupportFunction<Number>::type() const {
 }
 
 template <typename Number>
-evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number>& l ) const {
+evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	evaluationResult<Number> result;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL: {
@@ -68,7 +69,7 @@ evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 }
 
 template <typename Number>
-vector_t<Number> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number>& _A ) const {
+vector_t<Number> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	vector_t<Number> res( _A.rows() );
 
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
@@ -79,12 +80,12 @@ vector_t<Number> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Numb
 }
 
 template <typename Number>
-bool BallSupportFunction<Number>::contains( const Point<Number>& _point ) const {
+bool BallSupportFunction<Number>::contains( const Point<Number> &_point ) const {
 	return this->contains( _point.rawCoordinates() );
 }
 
 template <typename Number>
-bool BallSupportFunction<Number>::contains( const vector_t<Number>& _point ) const {
+bool BallSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL: {
 			return ( abs( _point.maxCoeff() ) <= mRadius );

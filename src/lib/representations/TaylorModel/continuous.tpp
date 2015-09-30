@@ -14,13 +14,13 @@ Flowpipe<Number>::Flowpipe() {
 }
 
 template <typename Number>
-Flowpipe<Number>::Flowpipe( const TaylorModelVec<Number>& tmv_input, const Domain<Number>& domain_input ) {
+Flowpipe<Number>::Flowpipe( const TaylorModelVec<Number> &tmv_input, const Domain<Number> &domain_input ) {
 	tmv = tmv_input;
 	domain = domain_input;
 }
 
 template <typename Number>
-Flowpipe<Number>::Flowpipe( const Flowpipe<Number>& flowpipe ) {
+Flowpipe<Number>::Flowpipe( const Flowpipe<Number> &flowpipe ) {
 	tmvPre = flowpipe.tmvPre;
 	tmv = flowpipe.tmv;
 	domain = flowpipe.domain;
@@ -37,7 +37,7 @@ void Flowpipe<Number>::clear() {
 }
 
 template <typename Number>
-void Flowpipe<Number>::enclosure( Range<Number>& range ) {
+void Flowpipe<Number>::enclosure( Range<Number> &range ) {
 	if ( tmvPre.isEmpty() ) {
 		tmv.enclosure( range, domain );
 	} else {
@@ -57,7 +57,7 @@ void Flowpipe<Number>::enclosure( Range<Number>& range ) {
 }
 
 template <typename Number>
-void Flowpipe<Number>::enclosure( Range<Number>& range, const exponent order ) {
+void Flowpipe<Number>::enclosure( Range<Number> &range, const exponent order ) {
 	if ( tmvPre.isEmpty() ) {
 		tmv.enclosure( range, domain );
 	} else {
@@ -67,7 +67,7 @@ void Flowpipe<Number>::enclosure( Range<Number>& range, const exponent order ) {
 }
 
 template <typename Number>
-void Flowpipe<Number>::composition( TaylorModelVec<Number>& result, Domain<Number>& fp_domain, const exponent order ) {
+void Flowpipe<Number>::composition( TaylorModelVec<Number> &result, Domain<Number> &fp_domain, const exponent order ) {
 	if ( tmvPre.isEmpty() ) {
 		result = tmv;
 		fp_domain = domain;
@@ -78,8 +78,8 @@ void Flowpipe<Number>::composition( TaylorModelVec<Number>& result, Domain<Numbe
 }
 
 template <typename Number>
-int Flowpipe<Number>::next_picard( Flowpipe<Number>& result, const PolynomialODE<Number>& ode, const Variable& t,
-								   const double stepsize, const exponent order, const Range<Number>& estimation ) {
+int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE<Number> &ode, const Variable &t,
+								   const double stepsize, const exponent order, const Range<Number> &estimation ) {
 	// evaluate the the local initial set Xl
 	Interval<Number> intStepEnd( stepsize );
 	TaylorModel<Number> tmStepEnd( intStepEnd );
@@ -91,7 +91,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number>& result, const PolynomialODE
 
 	if ( tmvPre.isEmpty() ) {
 		TaylorModelVec<Number> evaluation;
-		std::map<Variable, Interval<Number>>& domain_assignments = domain.get_assignments();
+		std::map<Variable, Interval<Number>> &domain_assignments = domain.get_assignments();
 
 		for ( auto iter = domain_assignments.begin(); iter != domain_assignments.end(); ++iter ) {
 			TaylorModel<Number> tmTemp( iter->first );
@@ -137,7 +137,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number>& result, const PolynomialODE
 	Domain<Number> localInitial;
 	localInitial.assign( t, intStep );
 
-	std::map<Variable, Interval<Number>>& assignments = range_of_Xl.get_assignments();
+	std::map<Variable, Interval<Number>> &assignments = range_of_Xl.get_assignments();
 
 	auto iter1 = assignments.begin();
 	auto iter2 = Xl.tms.begin();
@@ -236,7 +236,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number>& result, const PolynomialODE
 }
 
 template <typename Number>
-Flowpipe<Number>& Flowpipe<Number>::operator=( const Flowpipe<Number>& flowpipe ) {
+Flowpipe<Number> &Flowpipe<Number>::operator=( const Flowpipe<Number> &flowpipe ) {
 	if ( this == &flowpipe ) return *this;
 
 	tmvPre = flowpipe.tmvPre;
@@ -247,7 +247,7 @@ Flowpipe<Number>& Flowpipe<Number>::operator=( const Flowpipe<Number>& flowpipe 
 }
 
 template <typename Number>
-void Flowpipe<Number>::output( std::ostream& os, const exponent order ) {
+void Flowpipe<Number>::output( std::ostream &os, const exponent order ) {
 	os << "{" << std::endl;
 
 	TaylorModelVec<Number> tmvTemp;
@@ -266,14 +266,14 @@ ContinuousSystem<Number>::ContinuousSystem() {
 }
 
 template <typename Number>
-ContinuousSystem<Number>::ContinuousSystem( const PolynomialODE<Number>& ode_input,
-											const Flowpipe<Number>& initialSet_input ) {
+ContinuousSystem<Number>::ContinuousSystem( const PolynomialODE<Number> &ode_input,
+											const Flowpipe<Number> &initialSet_input ) {
 	ode = ode_input;
 	initialSet = initialSet_input;
 }
 
 template <typename Number>
-ContinuousSystem<Number>::ContinuousSystem( const ContinuousSystem<Number>& system ) {
+ContinuousSystem<Number>::ContinuousSystem( const ContinuousSystem<Number> &system ) {
 	ode = system.ode;
 	initialSet = system.initialSet;
 }
@@ -283,9 +283,9 @@ ContinuousSystem<Number>::~ContinuousSystem() {
 }
 
 template <typename Number>
-int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>>& result, const Variable& t, const double time,
+int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>> &result, const Variable &t, const double time,
 											const double stepsize, const exponent order,
-											const Range<Number>& estimation ) const {
+											const Range<Number> &estimation ) const {
 	result.clear();
 
 	Flowpipe<Number> flowpipe = initialSet;
@@ -314,7 +314,7 @@ int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>>& result,
 }
 
 template <typename Number>
-ContinuousSystem<Number>& ContinuousSystem<Number>::operator=( const ContinuousSystem<Number>& system ) {
+ContinuousSystem<Number> &ContinuousSystem<Number>::operator=( const ContinuousSystem<Number> &system ) {
 	if ( this == &system ) return *this;
 
 	ode = system.ode;
@@ -324,7 +324,7 @@ ContinuousSystem<Number>& ContinuousSystem<Number>::operator=( const ContinuousS
 }
 
 template <typename Number>
-void ContinuousSystem<Number>::output( std::ostream& os, const exponent order ) {
+void ContinuousSystem<Number>::output( std::ostream &os, const exponent order ) {
 	os << "System Dynamics:" << std::endl;
 	os << ode << std::endl << std::endl;
 
@@ -334,8 +334,8 @@ void ContinuousSystem<Number>::output( std::ostream& os, const exponent order ) 
 }
 
 template <typename Number>
-void output_2D_interval_gnuplot( std::list<Flowpipe<Number>>& flowpipes, std::ofstream& os, const std::string& fileName,
-								 const Variable& axis_x, const Variable& axis_y ) {
+void output_2D_interval_gnuplot( std::list<Flowpipe<Number>> &flowpipes, std::ofstream &os, const std::string &fileName,
+								 const Variable &axis_x, const Variable &axis_y ) {
 	os << "set terminal postscript" << std::endl;
 	os << "set output " << '\'' << fileName << ".eps" << '\'' << std::endl;
 	os << "set style line 1 linecolor rgb \"blue\"" << std::endl;

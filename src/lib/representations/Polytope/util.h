@@ -102,17 +102,20 @@ static inline Point<Number> generatorToPoint(
 	Number coefficient;
 	Number divisor;
 	Number value;
+	std::cout << "Generator: ";
+	gen.print();
+	std::cout << endl;
 	for ( auto varIt = variables.begin(); varIt != variables.end(); ++varIt ) {
 		if ( gen.space_dimension() >= ( *varIt ).space_dimension() ) {
-			coefficient = (int)Parma_Polyhedra_Library::raw_value( gen.coefficient( *varIt ) ).get_si();
+			coefficient = (long)Parma_Polyhedra_Library::raw_value( gen.coefficient( *varIt ) ).get_si();
 			if ( gen.is_point() || gen.is_closure_point() )
-				divisor = (int)Parma_Polyhedra_Library::raw_value( gen.divisor() ).get_si();
+				divisor = (long)Parma_Polyhedra_Library::raw_value( gen.divisor() ).get_si();
 			else
 				divisor = 1;
 			value = coefficient / divisor;
-			// std::cout << "Coordinates: " << value << std::endl;
-			// std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " <<
-			// value << std::endl;
+			 //std::cout << "Coordinates: " << value << std::endl;
+			 std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " <<
+			 value << std::endl;
 			result.setCoordinate( hypro::VariablePool::getInstance().variable( *varIt ), value );
 		} else {
 			// TODO: What about variables that have a greater space dimension? I guess this does not matter, as they do

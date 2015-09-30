@@ -34,6 +34,7 @@ const char* colors[] = {"#006165", "#0098A1", "#57AB27", "#BDCD00", "#F6A800",
 struct gnuplotSettings {
 	std::string color = colors[petrol];  // default petrol
 	bool fill = false;					 // do not fill
+	bool axes = true;					 // plot axes
 };
 
 template <typename Number>

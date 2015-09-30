@@ -97,6 +97,7 @@ struct Reach {
 
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
+
 #endif
 
 		// Polytope that is defined by the invariant
@@ -115,7 +116,8 @@ struct Reach {
 // check if initial Valuation fulfills Invariant
 #ifdef fReach_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << poly.contains( _val ) << std::endl;
+		std::cout << !poly.intersect( _val ).empty() << std::endl;
+		//std::cout << poly.contains( _val ) << std::endl;
 #endif
 
 		if ( poly.contains( _val ) ) {
@@ -160,10 +162,12 @@ struct Reach {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 			std::cout << "A: " << resultMatrix << ", b: " << translation << std::endl;
-			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
+			//plotter.addObject(_val.vertices());
 
-// plotter.addObject(deltaValuation.vertices());
-// plotter.plot2d();
+			std::cout << "Linear transformation." << std::endl;
+			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
+			//plotter.addObject(deltaValuation.vertices());
+
 #ifdef fReach_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
@@ -213,6 +217,8 @@ struct Reach {
 #ifdef fReach_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
+			//plotter.addObject(firstSegment.vertices());
+			//plotter.plot2d();
 #endif
 
 			// insert first Segment into the empty flowpipe
@@ -236,18 +242,22 @@ struct Reach {
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
+				resultPolytope.reduce();
 // resultPolytope = resultPolytope.hull();
 
 #ifdef fReach_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
 				resultPolytope.print();
+				std::cout << "Empty: " << resultPolytope.empty() << std::endl;
 
 				std::cout << "still within Invariant?: ";
-				std::cout << poly.contains( resultPolytope ) << std::endl;
+				std::cout << !(poly.intersect( resultPolytope )).empty() << std::endl;
+				std::cout << "Invariant: " << poly << std::endl;
+				std::cout << "Intersection result: " << poly.intersect( resultPolytope ) << std::endl;
 #endif
 
 				// extend flowpipe (only if still within Invariant of location)
-				if ( poly.contains( resultPolytope ) ) {
+				if ( !(poly.intersect( resultPolytope )).empty() ) {
 					flowpipe.push_back( resultPolytope );
 
 					// update lastSegment
@@ -342,7 +352,7 @@ struct Reach {
 		std::cout << __func__ << std::endl;
 		// intersection between valuation polytope and guard hyperplanes
 
-		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 		Representation intersectionPoly = _val.intersectHyperplanes( _trans.guard().mat, _trans.guard().vec );
 

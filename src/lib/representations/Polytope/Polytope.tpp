@@ -15,7 +15,7 @@ Polytope<Number>::Polytope()
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const Polytope& orig )
+Polytope<Number>::Polytope( const Polytope &orig )
 	: mPolyhedron( orig.mPolyhedron ), mPoints( orig.mPoints ), mPointsUpToDate( orig.mPointsUpToDate ) {
 }
 
@@ -29,7 +29,7 @@ Polytope<Number>::Polytope( unsigned dimension )
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const Point<Number>& _point )
+Polytope<Number>::Polytope( const Point<Number> &_point )
 	: mPolyhedron( C_Polyhedron( polytope::pplDimension( _point ) + 1, Parma_Polyhedra_Library::EMPTY ) ) {
 	// std::cout << "Try Ppint: " << _point << std::endl;
 	mPolyhedron.add_generator( polytope::pointToGenerator( _point ) );
@@ -38,12 +38,12 @@ Polytope<Number>::Polytope( const Point<Number>& _point )
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const typename std::vector<Point<Number>>& points ) {
+Polytope<Number>::Polytope( const typename std::vector<Point<Number>> &points ) {
 	// mPolyhedron.initialize();
 	// std::cout << "Try Ppints" << std::endl;
 	mPolyhedron =
 		  Parma_Polyhedra_Library::C_Polyhedron( polytope::pplDimension( points ) + 1, Parma_Polyhedra_Library::EMPTY );
-	for ( auto& pointSetIt : points ) {
+	for ( auto &pointSetIt : points ) {
 		mPolyhedron.add_generator( polytope::pointToGenerator( pointSetIt ) );
 		mPoints.push_back( pointSetIt );
 	}
@@ -51,7 +51,7 @@ Polytope<Number>::Polytope( const typename std::vector<Point<Number>>& points ) 
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const typename std::vector<vector_t<Number>>& points ) {
+Polytope<Number>::Polytope( const typename std::vector<vector_t<Number>> &points ) {
 	mPolyhedron =
 		  Parma_Polyhedra_Library::C_Polyhedron( polytope::pplDimension( points ), Parma_Polyhedra_Library::EMPTY );
 	for ( auto pointIt = points.begin(); pointIt != points.end(); ++pointIt ) {
@@ -64,7 +64,7 @@ Polytope<Number>::Polytope( const typename std::vector<vector_t<Number>>& points
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const matrix_t<Number>& A, const vector_t<Number>& b ) {
+Polytope<Number>::Polytope( const matrix_t<Number> &A, const vector_t<Number> &b ) {
 	assert( A.rows() == b.rows() );
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.cols(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
@@ -72,16 +72,20 @@ Polytope<Number>::Polytope( const matrix_t<Number>& A, const vector_t<Number>& b
 		Parma_Polyhedra_Library::Linear_Expression polynom;
 		polynom.set_space_dimension( A.cols() );
 		for ( unsigned columIndex = 0; columIndex < A.cols(); ++columIndex ) {
-			// std::cout <<"(" << columIndex << ") Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR)
+			// std::cout <<"(" << columIndex << ") Matrix Coefficient: " <<
+			// (A(rowIndex,columIndex)*fReach_DENOMINATOR)
 			// << std::endl;
 			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
 									 double( A( rowIndex, columIndex ) * fReach_DENOMINATOR ) );
 			// polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex),
 			// A(rowIndex,columIndex).toDouble());
-			// std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " <<
+			// std::cout <<
+			// hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = "
+			// <<
 			// A(rowIndex,columIndex).toDouble() << std::endl;
 		}
-		// std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR) << std::endl;
+		// std::cout << "Vector Coefficient: " <<
+		// -(b(rowIndex,0)*fReach_DENOMINATOR) << std::endl;
 		polynom.set_inhomogeneous_term( -double( b( rowIndex, 0 ) * fReach_DENOMINATOR ) );
 		// polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
 		Parma_Polyhedra_Library::Constraint constraint;
@@ -95,13 +99,15 @@ Polytope<Number>::Polytope( const matrix_t<Number>& A, const vector_t<Number>& b
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const matrix_t<Number>& A ) {
+Polytope<Number>::Polytope( const matrix_t<Number> &A ) {
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.rows(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
 		Parma_Polyhedra_Library::Linear_Expression polynom;
 		polynom.set_space_dimension( A.cols() );
 		for ( unsigned columIndex = 0; columIndex < A.cols(); ++columIndex ) {
-			// std::cout << hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = " <<
+			// std::cout <<
+			// hypro::VariablePool::getInstance().pplVarByIndex(columIndex) << " = "
+			// <<
 			// A(rowIndex,columIndex).toDouble() << std::endl;
 			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
 									 double( A( rowIndex, columIndex ) ) );
@@ -116,7 +122,7 @@ Polytope<Number>::Polytope( const matrix_t<Number>& A ) {
 }
 
 template <typename Number>
-Polytope<Number>::Polytope( const C_Polyhedron& _rawPoly )
+Polytope<Number>::Polytope( const C_Polyhedron &_rawPoly )
 	: mPolyhedron( _rawPoly ), mPoints(), mPointsUpToDate( false ) {
 }
 
@@ -126,7 +132,7 @@ bool Polytope<Number>::empty() const {
 }
 
 template <typename Number>
-void Polytope<Number>::addPoint( const Point<Number>& point ) {
+void Polytope<Number>::addPoint( const Point<Number> &point ) {
 	Generator tmp = polytope::pointToGenerator( point );
 	if ( mPolyhedron.space_dimension() != tmp.space_dimension() ) {
 		mPolyhedron.add_space_dimensions_and_embed( tmp.space_dimension() );
@@ -138,14 +144,18 @@ void Polytope<Number>::addPoint( const Point<Number>& point ) {
 template <typename Number>
 void Polytope<Number>::updatePoints() const {
 	if ( !mPointsUpToDate ) {
+		std::cout << __func__ << std::endl;
+		mPoints.clear();
 		std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables =
 			  hypro::polytope::variables( mPolyhedron );
-		for ( auto& generator : mPolyhedron.generators() ) {
-			// TODO: Call generatorToPoint only with the variables occuring in the actual generator (some might be
+		for ( auto &generator : mPolyhedron.generators() ) {
+			// TODO: Call generatorToPoint only with the variables occuring in the
+			// actual generator (some might be
 			// degenerated)
 			Point<Number> tmp = polytope::generatorToPoint<Number>( generator, variables );
+			/*
 			bool found = false;
-			for ( auto& point : mPoints ) {
+			for ( auto &point : mPoints ) {
 				if ( point == tmp ) {
 					found = true;
 					break;
@@ -154,23 +164,28 @@ void Polytope<Number>::updatePoints() const {
 			if ( !found ) {
 				mPoints.push_back( tmp );
 			}
+			*/
+			mPoints.push_back( tmp );  // we assume that the generators are already reduced.
 		}
 		mPointsUpToDate = true;
 	}
 }
 
 template <typename Number>
-const std::vector<Point<Number>>& Polytope<Number>::vertices() const {
+const std::vector<Point<Number>> &Polytope<Number>::vertices() const {
 	/*
 	typename Point<Number>::pointSet result;
-	std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables =
+	std::set<Parma_Polyhedra_Library::Variable,
+	Parma_Polyhedra_Library::Variable::Compare> variables =
 	hypro::polytope::variables(mPolyhedron);
 	for(auto& generator : mPolyhedron.generators())
 	{
-		// TODO: Call generatorToPoint only with the variables occuring in the actual generator (some might be
+			// TODO: Call generatorToPoint only with the variables occuring in the
+	actual generator (some might be
 	degenerated)
-		Point<Number> tmp = polytope::generatorToPoint<Number>(generator, variables);
-		result.insert(tmp);
+			Point<Number> tmp = polytope::generatorToPoint<Number>(generator,
+	variables);
+			result.insert(tmp);
 	}
 	return result;
 	*/
@@ -181,28 +196,28 @@ const std::vector<Point<Number>>& Polytope<Number>::vertices() const {
 }
 
 template <typename Number>
-std::vector<Point<Number>>& Polytope<Number>::rVertices() {
+std::vector<Point<Number>> &Polytope<Number>::rVertices() {
 	/*
 	if (!mPointsUpToDate) {
-		updatePoints();
+			updatePoints();
 	}*/
 	return mPoints;
 }
 
 // returns the fan of the Polytope
 template <typename Number>
-const polytope::Fan<Number>& Polytope<Number>::fan() {
+const polytope::Fan<Number> &Polytope<Number>::fan() {
 	return mFan;
 }
 
 template <typename Number>
-polytope::Fan<Number>& Polytope<Number>::rFan() {
+polytope::Fan<Number> &Polytope<Number>::rFan() {
 	return mFan;
 }
 
 // sets the fan of the Polytope
 template <typename Number>
-void Polytope<Number>::setFan( const polytope::Fan<Number>& _fan ) {
+void Polytope<Number>::setFan( const polytope::Fan<Number> &_fan ) {
 	mFan = _fan;
 }
 
@@ -216,8 +231,8 @@ void Polytope<Number>::calculateFan() {
 		}
 	}
 	polytope::Fan<Number> fan;
-	for ( auto& point : preresult ) {
-		polytope::Cone<Number>* cone = new polytope::Cone<Number>();
+	for ( auto &point : preresult ) {
+		polytope::Cone<Number> *cone = new polytope::Cone<Number>();
 		for ( unsigned i = 0; i < facets.size(); i++ ) {
 			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
 				if ( point == facets[i].vertices().at( j ) ) {
@@ -262,7 +277,7 @@ void Polytope<Number>::calculateFan() {
 template <typename Number>
 void Polytope<Number>::print() const {
 	std::cout << "[";
-	for ( auto& generator : mPolyhedron.generators() ) {
+	for ( auto &generator : mPolyhedron.generators() ) {
 		generator.print();
 	}
 	std::cout << "]" << std::endl;
@@ -279,12 +294,12 @@ void Polytope<Number>::writeToFile( std::string _filename ) const {
 }
 
 template <typename Number>
-const C_Polyhedron& Polytope<Number>::rawPolyhedron() const {
+const C_Polyhedron &Polytope<Number>::rawPolyhedron() const {
 	return mPolyhedron;
 }
 
 template <typename Number>
-C_Polyhedron& Polytope<Number>::rRawPolyhedron() {
+C_Polyhedron &Polytope<Number>::rRawPolyhedron() {
 	return mPolyhedron;
 }
 
@@ -294,7 +309,7 @@ unsigned int Polytope<Number>::dimension() const {
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	using namespace Parma_Polyhedra_Library;
 	Polytope<Number> result;
 
@@ -317,7 +332,7 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>&
 		unsigned vCount = 0;
 		// Assuming the divisor stays the same in one generator
 		divisor = (int)raw_value( generatorIt->divisor() ).get_si();
-		for ( auto& var : variables ) {
+		for ( auto &var : variables ) {
 			coefficient = (int)raw_value( generatorIt->coefficient( var ) ).get_si();
 			value = coefficient / divisor;
 
@@ -327,13 +342,16 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>&
 		++gCount;
 	}
 
-	// std::cout << __func__ << ": PolytopeMatrix: " << std::endl << polytopeMatrix << std::endl;
+	// std::cout << __func__ << ": PolytopeMatrix: " << std::endl <<
+	// polytopeMatrix << std::endl;
 
 	// apply lineartransformation
 	Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> res( variables.size(), polytope::gsSize( generators ) );
 
-	// std::cout << __func__ << ": ARows: " << A.rows() << ", ACols: " << A.cols() << ", polyRows: " <<
-	// polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ", bRows: " << b.rows() << ", bCols: " <<
+	// std::cout << __func__ << ": ARows: " << A.rows() << ", ACols: " << A.cols()
+	// << ", polyRows: " <<
+	// polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ",
+	// bRows: " << b.rows() << ", bCols: " <<
 	// b.cols() << std::endl;
 
 	// std::cout << __func__ << ": b:" << std::endl << b << std::endl;
@@ -365,7 +383,7 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>&
 	std::vector<Point<Number>> newPoints;
 	std::vector<Point<Number>> tmpPoints;
 
-	for ( auto& pointSetIt : ps ) {
+	for ( auto &pointSetIt : ps ) {
 		tmp.add_generator( polytope::pointToGenerator( pointSetIt ) );
 		Point<Number> tmpPoint = Point<Number>( pointSetIt );
 		newPoints.push_back( tmpPoint );  // for mPoints
@@ -377,21 +395,27 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>&
 	/*
 	for(unsigned pointIndex = 0; pointIndex < mPoints.size(); ++pointIndex)
 	{
-		//std::cout << "Create neighbor for original node: " << mPoints.at(pointIndex) << " , which is the new: " <<
+			//std::cout << "Create neighbor for original node: " <<
+	mPoints.at(pointIndex) << " , which is the new: " <<
 	newPoints.at(pointIndex) << std::endl;
-		std::vector<Point<Number> > tmpNeighbors = mPoints.at(pointIndex).neighbors();
-		for(unsigned neighborIndex = 0 ; neighborIndex <  tmpNeighbors.size(); ++neighborIndex)
-		{
-			for(unsigned refPoint = 0; refPoint < mPoints.size(); ++refPoint)
+			std::vector<Point<Number> > tmpNeighbors =
+	mPoints.at(pointIndex).neighbors();
+			for(unsigned neighborIndex = 0 ; neighborIndex <  tmpNeighbors.size();
+	++neighborIndex)
 			{
-				if( mPoints.at(refPoint) == tmpNeighbors.at(neighborIndex))
-				{
-					//std::cout << "Add neighbor: " << tmpNeighbors.at(neighborIndex) << ", which is new " <<
+					for(unsigned refPoint = 0; refPoint < mPoints.size();
+	++refPoint)
+					{
+							if( mPoints.at(refPoint) ==
+	tmpNeighbors.at(neighborIndex))
+							{
+									//std::cout << "Add neighbor: " <<
+	tmpNeighbors.at(neighborIndex) << ", which is new " <<
 	*tmpPoints.at(refPoint) << std::endl;
-					newPoints.at(pointIndex).addNeighbor(tmpPoints.at(refPoint));
-				}
+									newPoints.at(pointIndex).addNeighbor(tmpPoints.at(refPoint));
+							}
+					}
 			}
-		}
 	}
 	*/
 
@@ -401,7 +425,7 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number>&
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::minkowskiSum( const Polytope<Number>& rhs ) const {
+Polytope<Number> Polytope<Number>::minkowskiSum( const Polytope<Number> &rhs ) const {
 	Polytope<Number> result;
 	/*
 	typedef Point<Number> point;
@@ -420,23 +444,24 @@ Polytope<Number> Polytope<Number>::minkowskiSum( const Polytope<Number>& rhs ) c
 
 	do
 	{
-		while( neighborCounter < maxCounter )
+			while( neighborCounter < maxCounter )
 	} while ( current != sink || neighborCounter != (2, deltaK));
 	*/
 
 	// TODO remove
 	// std::cout.setstate(std::ios::failbit);
 
-	// unelegant version creating the powerset of all points and reducing it afterwards
+	// unelegant version creating the powerset of all points and reducing it
+	// afterwards
 	// std::cout << "Result before: " << std::endl;
 	result = Parma_Polyhedra_Library::C_Polyhedron( 0, EMPTY );
 	// result.print();
 
 	assert( this->dimension() == rhs.dimension() );
 
-	for ( auto& genA : mPolyhedron.generators() ) {
+	for ( auto &genA : mPolyhedron.generators() ) {
 		Point<Number> tmpA = polytope::generatorToPoint<Number>( genA, polytope::variables( mPolyhedron ) );
-		for ( auto& genB : rhs.rawPolyhedron().generators() ) {
+		for ( auto &genB : rhs.rawPolyhedron().generators() ) {
 			// std::cout << __func__ << " Generator: " << genB << std::endl;
 			Point<Number> tmpB = polytope::generatorToPoint<Number>( genB, polytope::variables( rhs.rawPolyhedron() ) );
 
@@ -470,9 +495,10 @@ Polytope<Number> Polytope<Number>::minkowskiSum( const Polytope<Number>& rhs ) c
  * Minkowski Sum computation based on Fukuda
  */
 template <typename Number>
-Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
+Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number> &rhs ) {
 	Polytope<Number> result;
-	// TODO compute adjacency for this & rhs vertices (currently manually defined within the tests)
+	// TODO compute adjacency for this & rhs vertices (currently manually defined
+	// within the tests)
 	result = Parma_Polyhedra_Library::C_Polyhedron( 0, EMPTY );
 	std::vector<Point<Number>> alreadyExploredVertices;
 
@@ -494,12 +520,13 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
 	std::cout << "---------------" << std::endl;
 #endif
 
-	// compute the maximizer vector (& its target) for the initial extreme point -> necessary for localSearch()
+	// compute the maximizer vector (& its target) for the initial extreme point
+	// -> necessary for localSearch()
 	Point<Number> sinkMaximizerTarget;
 	vector_t<Number> sinkMaximizerVector = polytope::computeMaximizerVector( sinkMaximizerTarget, initVertex );
 
 	// compute the normal cone of the initial extreme point
-	polytope::Cone<Number>* cone = polytope::computeCone( initVertex, sinkMaximizerVector );
+	polytope::Cone<Number> *cone = polytope::computeCone( initVertex, sinkMaximizerVector );
 	// add this normal cone to the fan of the polytope
 	result.rFan().add( cone );
 
@@ -550,7 +577,8 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
 
 			// choose next Vertex, only continue if one exists
 			if ( polytope::adjOracle( nextVertex, currentVertex, counter ) ) {
-				// set neighbors of the vertices accordingly - the adjacency oracle confirmed neighborship
+				// set neighbors of the vertices accordingly - the adjacency oracle
+				// confirmed neighborship
 				// TODO problem: addNeighbor requires a pointer
 				// currentVertex.addNeighbor(&nextVertex);
 				// nextVertex.addNeighbor(&currentVertex);
@@ -586,7 +614,8 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
 #endif
 
 					alreadyExploredVertices.push_back( currentVertex );
-					// store the current counter value - needed if DFS comes back this vertex
+					// store the current counter value - needed if DFS comes back this
+					// vertex
 					counterMemory.push_back( counter );
 #ifdef fukuda_DEBUG
 					std::cout << "---------------" << std::endl;
@@ -609,7 +638,8 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
 		if ( currentVertex != initVertex ) {
 			// forward traverse
 			// currentVertex = result.localSearch(currentVertex, sinkMaximizerTarget);
-			// instead of computing the local Search result again, retrieve the parent from the parentMap
+			// instead of computing the local Search result again, retrieve the parent
+			// from the parentMap
 			currentVertex = parentMap.at( currentVertex );
 
 #ifdef fukuda_DEBUG
@@ -642,7 +672,7 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number>& rhs ) {
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::intersect( const Polytope<Number>& rhs ) const {
+Polytope<Number> Polytope<Number>::intersect( const Polytope<Number> &rhs ) const {
 	// std::cout << __func__ << ": " << *this << " and " << rhs << std::endl;
 	if ( rhs.dimension() == 0 ) {
 		return Polytope<Number>();
@@ -656,7 +686,7 @@ Polytope<Number> Polytope<Number>::intersect( const Polytope<Number>& rhs ) cons
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+Polytope<Number> Polytope<Number>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
 		return Polytope<Number>();
 	} else {
@@ -681,8 +711,8 @@ Polytope<Number> Polytope<Number>::intersectHyperplane( const Hyperplane<Number>
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::intersectHyperplanes( const matrix_t<Number>& _mat,
-														 const vector_t<Number>& _vec ) const {
+Polytope<Number> Polytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
+														 const vector_t<Number> &_vec ) const {
 	Polytope<Number> tmp( _mat, _vec );
 	return this->intersect( tmp );
 }
@@ -703,7 +733,8 @@ Polytope<Number> Polytope<Number>::hull() const {
 
 	for ( unsigned i = 0; i < hull.size(); i++ ) {
 		for ( unsigned j = 0; j < hull[i]->rVertices().size(); j++ ) {
-			// std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() <<
+			// std::cout << "Unite created point: " <<
+			// hull[i]->vertices().at(j).rawCoordinates().transpose() <<
 			// std::endl;
 
 			preresult.insert( hull[i]->rVertices().at( j ) );
@@ -713,18 +744,18 @@ Polytope<Number> Polytope<Number>::hull() const {
 			// std::cout<<((Point<Number>)*(preresult.find(hull[i]->rVertices().at(j)))).neighbors().size()<<std::endl;
 
 			/*
-				std::cout << "Set after insert: ";
-				for(const auto& point : preresult) {
-				std::cout << point.rawCoordinates().transpose() << ", ";
-				}
-				std::cout << std::endl;
+					std::cout << "Set after insert: ";
+					for(const auto& point : preresult) {
+					std::cout << point.rawCoordinates().transpose() << ", ";
+					}
+					std::cout << std::endl;
 			*/
 		}
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	std::vector<Point<Number>> points;
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	for ( auto& point : preresult ) {
+	for ( auto &point : preresult ) {
 		points.push_back( point );
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
@@ -736,17 +767,17 @@ Polytope<Number> Polytope<Number>::hull() const {
 }
 
 template <typename Number>
-bool Polytope<Number>::contains( const Point<Number>& point ) const {
+bool Polytope<Number>::contains( const Point<Number> &point ) const {
 	return mPolyhedron.contains( Polytope<Number>( point ).rawPolyhedron() );
 }
 
 template <typename Number>
-bool Polytope<Number>::contains( const Polytope<Number>& poly ) const {
+bool Polytope<Number>::contains( const Polytope<Number> &poly ) const {
 	return mPolyhedron.contains( poly.rawPolyhedron() );
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::unite( const Polytope<Number>& rhs ) const {
+Polytope<Number> Polytope<Number>::unite( const Polytope<Number> &rhs ) const {
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
@@ -774,16 +805,18 @@ Polytope<Number> Polytope<Number>::unite( const Polytope<Number>& rhs ) const {
 		std::set<Point<Number>> preresult;
 		for ( unsigned i = 0; i < hull.size(); i++ ) {
 			for ( unsigned j = 0; j < hull[i]->vertices().size(); j++ ) {
-				// std::cout << "Unite created point: " << hull[i]->vertices().at(j).rawCoordinates().transpose() <<
+				// std::cout << "Unite created point: " <<
+				// hull[i]->vertices().at(j).rawCoordinates().transpose() <<
 				// std::endl;
 
 				/*
 				if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
-					Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));
-					std::vector<Point<Number>> neighbors = hull[i]->vertices().at(j).neighbors();
-					for(auto& neigh:neighbors){
-						pt.addNeighbor(neigh);
-					}
+						Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));
+						std::vector<Point<Number>> neighbors =
+				hull[i]->vertices().at(j).neighbors();
+						for(auto& neigh:neighbors){
+								pt.addNeighbor(neigh);
+						}
 				}
 				else {*/
 				preresult.insert( hull[i]->vertices().at( j ) );
@@ -797,7 +830,7 @@ Polytope<Number> Polytope<Number>::unite( const Polytope<Number>& rhs ) const {
 			}
 		}
 		std::vector<Point<Number>> points;
-		for ( auto& point : preresult ) {
+		for ( auto &point : preresult ) {
 			points.push_back( point );
 		}
 
@@ -810,7 +843,7 @@ Polytope<Number> Polytope<Number>::unite( const Polytope<Number>& rhs ) const {
 template <typename Number>
 Number Polytope<Number>::supremum() const {
 	Number max = 0;
-	for ( auto& point : this->vertices() ) {
+	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -823,19 +856,19 @@ Polytope<Number>& Polytope<Number>::operator= (const Polytope<Number>& rhs)
 {
   if (this != &rhs)
   {
-	Polytope<Number> tmp(rhs);
-	std::swap(*this, tmp);
+		Polytope<Number> tmp(rhs);
+		std::swap(*this, tmp);
   }
   return *this;
 }
 */
 
 template <typename Number>
-bool operator==( const Polytope<Number>& rhs, const Polytope<Number>& lhs ) {
+bool operator==( const Polytope<Number> &rhs, const Polytope<Number> &lhs ) {
 	return ( rhs.rawPolyhedron() == lhs.rawPolyhedron() );
 }
 template <typename Number>
-bool operator!=( const Polytope<Number>& rhs, const Polytope<Number>& lhs ) {
+bool operator!=( const Polytope<Number> &rhs, const Polytope<Number> &lhs ) {
 	return ( rhs.rawPolyhedron() != lhs.rawPolyhedron() );
 }
 
@@ -903,7 +936,7 @@ Point<Number> Polytope<Number>::computeInitVertex( Polytope<Number> _secondPoly 
  * computes the parent of a given vertex w.r.t the sink of the spanning tree
  */
 template <typename Number>
-Point<Number> Polytope<Number>::localSearch( Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget ) {
+Point<Number> Polytope<Number>::localSearch( Point<Number> &_vertex, Point<Number> &_sinkMaximizerTarget ) {
 #ifdef fukuda_DEBUG
 	std::cout << "-------------------------" << std::endl;
 	std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
@@ -923,21 +956,21 @@ Point<Number> Polytope<Number>::localSearch( Point<Number>& _vertex, Point<Numbe
 #endif
 
 	// compute the normal cone of _vertex
-	polytope::Cone<Number>* cone = polytope::computeCone( _vertex, maximizerVector );
+	polytope::Cone<Number> *cone = polytope::computeCone( _vertex, maximizerVector );
 
 	// iterate through all planes and check which one intersects with the ray
 	Number factor;
 	Point<Number> origin = cone->origin();
 	Hyperplane<Number> intersectedPlane;
 
-	std::vector<Hyperplane<Number>*> planes = cone->get();
+	std::vector<Hyperplane<Number> *> planes = cone->get();
 
 #ifdef fukuda_DEBUG
 	std::cout << "-----------------" << std::endl;
 	std::cout << "Ray: " << ray << std::endl;
 #endif
 
-	for ( typename std::vector<Hyperplane<Number>*>::iterator it = planes.begin(); it != planes.end(); ++it ) {
+	for ( typename std::vector<Hyperplane<Number> *>::iterator it = planes.begin(); it != planes.end(); ++it ) {
 		if ( ( *it )->intersection( factor, ray ) ) {
 #ifdef fukuda_DEBUG
 			std::cout << "Intersection found " << std::endl;
@@ -994,7 +1027,8 @@ Point<Number> Polytope<Number>::localSearch( Point<Number>& _vertex, Point<Numbe
 				counter.second = i + 1 - half;
 			}
 
-			// now we have to retrieve the new vertex in this edge direction, using the adjacency oracle
+			// now we have to retrieve the new vertex in this edge direction, using
+			// the adjacency oracle
 			// the result is stored in secondOrigin
 			bool res = polytope::adjOracle( secondOrigin, _vertex, counter );
 			if ( res ) {

@@ -28,22 +28,22 @@ unsigned int ZonotopeReachability<Number>::dimension() const {
 }
 
 template <typename Number>
-std::vector<Zonotope<Number> > ZonotopeReachability<Number>::flowpipe() {
+std::vector<Zonotope<Number>> ZonotopeReachability<Number>::flowpipe() {
 	return sequence_zonQ_;
 }
 
 template <typename Number>
-std::map<unsigned int, std::vector<Zonotope<Number> > > ZonotopeReachability<Number>::intersections() {
+std::map<unsigned int, std::vector<Zonotope<Number>>> ZonotopeReachability<Number>::intersections() {
 	return intersect_zonotopes_;
 }
 
 template <typename Number>
-std::map<unsigned int, std::vector<Zonotope<Number> > > ZonotopeReachability<Number>::resultingIntersections() {
+std::map<unsigned int, std::vector<Zonotope<Number>>> ZonotopeReachability<Number>::resultingIntersections() {
 	return resulting_intersect_;
 }
 
 template <typename Number>
-std::map<unsigned int, Zonotope<Number> > ZonotopeReachability<Number>::pivotalZonotopes() {
+std::map<unsigned int, Zonotope<Number>> ZonotopeReachability<Number>::pivotalZonotopes() {
 	return pivotal_zonotopes_;
 }
 
@@ -59,10 +59,10 @@ Zonotope<Number> ZonotopeReachability<Number>::initialInput() const {
 
 template <typename Number>
 void ZonotopeReachability<Number>::loadHybridAutomaton(
-	  hypro::HybridAutomaton<Number, Zonotope<Number> >* hybridAutomaton_ ) {
+	  hypro::HybridAutomaton<Number, Zonotope<Number>> *hybridAutomaton_ ) {
 	mHybridAutomaton = *hybridAutomaton_;
 	// pick first init state
-	hypro::Location<Number>* loc = *( mHybridAutomaton.initialLocations().begin() );
+	hypro::Location<Number> *loc = *( mHybridAutomaton.initialLocations().begin() );
 	mCurrentLoc = *loc;
 	A_ = loc->activityMat();
 	bigB_ = loc->extInputMat();
@@ -82,7 +82,7 @@ template <typename Number>
 bool ZonotopeReachability<Number>::startReachabilityAnalysis( unsigned int numIterations, unsigned int offset,
 															  hypro::scalar_t<Number> r_scalar,
 															  unsigned int order_reduction_threshold,
-															  const ZUtility::Options& option ) {
+															  const ZUtility::Options &option ) {
 	Zonotope<Number> res_V, res_S;
 	return runReachabilityAnalysis( numIterations, offset, r_scalar, order_reduction_threshold, res_V, res_S, option );
 }
@@ -91,8 +91,8 @@ template <typename Number>
 bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIterations, unsigned int offset,
 															hypro::scalar_t<Number> r_scalar,
 															unsigned int order_reduction_threshold,
-															Zonotope<Number>& res_V, Zonotope<Number>& res_S,
-															const ZUtility::Options& option ) {
+															Zonotope<Number> &res_V, Zonotope<Number> &res_S,
+															const ZUtility::Options &option ) {
 	assert( mInitialized );
 	hypro::vector_t<Number> null_vector;
 	null_vector.resize( mDimension, Eigen::NoChange );
@@ -109,7 +109,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 	hypro::matrix_t<Number> minMaxOfLine;
 	while ( offset <= numIterations ) {
 		switch ( cur_state ) {
-			case START:  // Initializes the zonotope; is called everytime a zonotope is rebuilt after an intersection
+			case START:  // Initializes the zonotope; is called everytime a zonotope is
+						 // rebuilt after an intersection
 						 // with another structure
 				if ( smallb_ != null_vector ) {
 					readjust();
@@ -122,7 +123,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 				offset++;
 				break;
 
-			case NORMAL:  // executes the reachability analysis algorithm with given dynamics and checks at each step if
+			case NORMAL:  // executes the reachability analysis algorithm with given
+						  // dynamics and checks at each step if
 						  // a guard is intersected
 				this->computeNextZonotope( order_reduction_threshold, Q_, res_V, res_S );
 				if ( this->checkGuardJumpCondition( transition_taken, Q_, minMaxOfLine, option ) ) {
@@ -140,7 +142,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 
 					if ( option.intersectMethod == ZUtility::NDPROJECTION ) {
 						if ( mDimension > 2 ) {
-							// Set min_intersect_ and max_intersect_ to minimum size, namely one column
+							// Set min_intersect_ and max_intersect_ to minimum size, namely one
+							// column
 							min_intersect_[offset].resize( temp_Q.dimension() - 1, 1 );
 							max_intersect_[offset].resize( temp_Q.dimension() - 1, 1 );
 
@@ -161,7 +164,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 					intersectCount++;
 				} else {
 					Zonotope<Number> result;
-					// No intersection found with any guard, check if invariant is fulfilled...
+					// No intersection found with any guard, check if invariant is
+					// fulfilled...
 					if ( fulfillsInvariant( Q_, result ) ) {
 						offset++;
 						sequence_zonQ_.push_back( result );
@@ -172,7 +176,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 				break;
 
 			case JUMP:  // Jump occurs when a intersect with a guard is found.
-				// The algorithm enters the jump state and stops iterating through the given number of iterations and
+				// The algorithm enters the jump state and stops iterating through the
+				// given number of iterations and
 				// runs through the algorithm until no more intersections are found
 				this->computeNextZonotope( order_reduction_threshold, temp_Q, temp_V, temp_S );
 				if ( !this->checkForIntersection( temp_Q, hp, guard_intersect, option.intersectMethod,
@@ -184,24 +189,32 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 
 					//                    unsigned k=0;
 					//                     Jump to new state
-					//                    for (Zonotope<Number> z : resulting_intersect_[offset]) {
+					//                    for (Zonotope<Number> z :
+					//                    resulting_intersect_[offset]) {
 					////                        k++;
-					////                        std::cout << "\tChoosing intersection " << k <<std::endl;
-					//                        Zonotope<Number> temp_resV = res_V, temp_resS = res_S;
+					////                        std::cout << "\tChoosing intersection " << k
+					///<<std::endl;
+					//                        Zonotope<Number> temp_resV = res_V, temp_resS
+					//                        = res_S;
 					//                        loadNewState(transition_taken, z);
-					//                        this->approxReachDiscrete(numIterations, offset, r_,
-					//                        order_reduction_threshold, temp_resV, temp_resS);
+					//                        this->approxReachDiscrete(numIterations,
+					//                        offset, r_,
+					//                        order_reduction_threshold, temp_resV,
+					//                        temp_resS);
 					//                    }
 					//                    offset = numIterations+1;
 					////                    k=0;
-					Zonotope<Number> finalIntersect;  // if constant b is added, finalIntersect's dimensionality should
+					Zonotope<Number> finalIntersect;  // if constant b is added,
+													  // finalIntersect's dimensionality
+													  // should
 													  // be dimension+1
 					switch ( option.testCase ) {
-						case 0:  // Take first guard intersect and use that zonotope as starting point
-						{
-							finalIntersect = resulting_intersect_[offset][0];
-							break;
-						}
+						case 0:  // Take first guard intersect and use that zonotope as starting
+								 // point
+							{
+								finalIntersect = resulting_intersect_[offset][0];
+								break;
+							}
 						case 1:  // using Girard's method used for initialization of zonotope
 						{
 							Zonotope<Number> overApproximatedIntersectZonotope = intersect_zonotopes_[offset][0];
@@ -271,9 +284,9 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
  *****************************************************************************/
 
 template <typename Number>
-void ZonotopeReachability<Number>::preclustering( const std::vector<Zonotope<Number> >& intersects,
-												  const Hyperplane<Number>& hp, Zonotope<Number>& finalIntersect,
-												  const ZUtility::Options& option ) {
+void ZonotopeReachability<Number>::preclustering( const std::vector<Zonotope<Number>> &intersects,
+												  const Hyperplane<Number> &hp, Zonotope<Number> &finalIntersect,
+												  const ZUtility::Options &option ) {
 	Zonotope<Number> currentConvexHull, result;
 	currentConvexHull = intersects[0];
 	for ( unsigned i = 1; i < intersects.size(); i++ ) {
@@ -285,8 +298,8 @@ void ZonotopeReachability<Number>::preclustering( const std::vector<Zonotope<Num
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::postclustering( const std::vector<Zonotope<Number> >& resultingIntersects,
-												   Zonotope<Number>& finalIntersect ) {
+void ZonotopeReachability<Number>::postclustering( const std::vector<Zonotope<Number>> &resultingIntersects,
+												   Zonotope<Number> &finalIntersect ) {
 	Zonotope<Number> currentConvexHull, result;
 	currentConvexHull = resultingIntersects[0];
 	for ( unsigned i = 0; i < resultingIntersects.size(); i++ ) {
@@ -327,7 +340,7 @@ void ZonotopeReachability<Number>::readjust() {
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::initialize( Zonotope<Number>& res_V, Zonotope<Number>& res_S ) {
+void ZonotopeReachability<Number>::initialize( Zonotope<Number> &res_V, Zonotope<Number> &res_S ) {
 	// Variable declaration
 	unsigned int dimA = A_.rows(), dimB = bigB_.cols();
 	hypro::vector_t<Number> I_center = Q_.center();
@@ -375,8 +388,8 @@ void ZonotopeReachability<Number>::initialize( Zonotope<Number>& res_V, Zonotope
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::overapproximatedConvexHull( Zonotope<Number>& Q,
-															   const hypro::matrix_t<Number>& expMatrix ) {
+void ZonotopeReachability<Number>::overapproximatedConvexHull( Zonotope<Number> &Q,
+															   const hypro::matrix_t<Number> &expMatrix ) {
 	assert( Q.dimension() == expMatrix.cols() );
 	hypro::vector_t<Number> I_center = Q.center();
 	hypro::matrix_t<Number> identity, I_generators = Q.generators();
@@ -417,8 +430,8 @@ void ZonotopeReachability<Number>::overapproximatedConvexHull( Zonotope<Number>&
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::computeNextZonotope( unsigned int order_reduction_threshold, Zonotope<Number>& Q,
-														Zonotope<Number>& V, Zonotope<Number>& S ) {
+void ZonotopeReachability<Number>::computeNextZonotope( unsigned int order_reduction_threshold, Zonotope<Number> &Q,
+														Zonotope<Number> &V, Zonotope<Number> &S ) {
 	Zonotope<Number> Q_previous = Q;
 
 	assert( Q_previous.dimension() == exp_rA_.rows() );
@@ -435,10 +448,10 @@ void ZonotopeReachability<Number>::computeNextZonotope( unsigned int order_reduc
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::overapproximateZonotope( Zonotope<Number>& z ) {
+void ZonotopeReachability<Number>::overapproximateZonotope( Zonotope<Number> &z ) {
 	hypro::matrix_t<Number> generators = z.generators();
 	unsigned int z_rows = z.dimension();
-	std::vector<hypro::vector_t<Number> > vectOfGenerators;
+	std::vector<hypro::vector_t<Number>> vectOfGenerators;
 
 	for ( unsigned int i = 0; i < generators.cols(); i++ ) {
 		vectOfGenerators.push_back( generators.col( i ) );
@@ -477,8 +490,8 @@ void ZonotopeReachability<Number>::overapproximateZonotope( Zonotope<Number>& z 
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::guardToHyperplane( const hypro::Transition<Number>& transitionTaken,
-													  Hyperplane<Number>& hp ) {
+void ZonotopeReachability<Number>::guardToHyperplane( const hypro::Transition<Number> &transitionTaken,
+													  Hyperplane<Number> &hp ) {
 	hypro::vector_t<Number> d_vec = transitionTaken.guard().mat.row( 0 ).transpose();
 	hypro::scalar_t<Number> e_scalar = transitionTaken.guard().vec( 0 );
 	if ( mReadjusted ) {
@@ -490,14 +503,15 @@ void ZonotopeReachability<Number>::guardToHyperplane( const hypro::Transition<Nu
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::constructIntersectZonotopeFromMinMax( unsigned iteration, const Zonotope<Number>& Q,
-																		 Zonotope<Number>& result,
-																		 const Hyperplane<Number>& hp ) {
+void ZonotopeReachability<Number>::constructIntersectZonotopeFromMinMax( unsigned iteration, const Zonotope<Number> &Q,
+																		 Zonotope<Number> &result,
+																		 const Hyperplane<Number> &hp ) {
 	if ( mDimension != 2 ) {
 		hypro::matrix_t<Number> kernel, finalGenerators, globalMinMaxMatrix;
 
 		// Construct a global min max matrix
-		// Note to self: globalMinMaxMatrix is similar to mlMl in MATLAB implementation
+		// Note to self: globalMinMaxMatrix is similar to mlMl in MATLAB
+		// implementation
 
 		globalMinMaxMatrix.resize( 2, min_intersect_[iteration].rows() );
 		finalGenerators.resize( Q.dimension(), Q.dimension() - 1 );
@@ -509,8 +523,8 @@ void ZonotopeReachability<Number>::constructIntersectZonotopeFromMinMax( unsigne
 
 		std::cout << "Global min max intersect: \n " << globalMinMaxMatrix << std::endl;
 
-		Eigen::JacobiSVD<hypro::matrix_t<Number> > svd( hp.vector().transpose(),
-														Eigen::ComputeFullU | Eigen::ComputeFullV );
+		Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( hp.vector().transpose(),
+													   Eigen::ComputeFullU | Eigen::ComputeFullV );
 		// Using SVD to calculate nullspace (kernel)
 		kernel = svd.matrixV().block( 0, 1, svd.matrixV().rows(), svd.matrixV().cols() - 1 );
 
@@ -575,15 +589,15 @@ void ZonotopeReachability<Number>::constructIntersectZonotopeFromMinMax( unsigne
 }
 
 template <typename Number>
-bool ZonotopeReachability<Number>::checkGuardJumpCondition( hypro::Transition<Number>& transition_taken,
-															const Zonotope<Number>& Q,
-															hypro::matrix_t<Number>& minMaxOfLine,
-															const ZUtility::Options& option ) {
-	std::set<hypro::Transition<Number>*> possibleTransitions = mCurrentLoc.transitions();
+bool ZonotopeReachability<Number>::checkGuardJumpCondition( hypro::Transition<Number> &transition_taken,
+															const Zonotope<Number> &Q,
+															hypro::matrix_t<Number> &minMaxOfLine,
+															const ZUtility::Options &option ) {
+	std::set<hypro::Transition<Number> *> possibleTransitions = mCurrentLoc.transitions();
 	Zonotope<Number> intersect_zonotope, tempQ( Q );
 	bool res = false;
 
-	for ( hypro::Transition<Number>* trans : possibleTransitions ) {
+	for ( hypro::Transition<Number> *trans : possibleTransitions ) {
 		hypro::vector_t<Number> d_vec;
 		Number e_scalar = trans->guard().vec( 0 );
 		d_vec = trans->guard().mat.row( 0 ).transpose();
@@ -604,8 +618,8 @@ bool ZonotopeReachability<Number>::checkGuardJumpCondition( hypro::Transition<Nu
 }
 
 template <typename Number>
-bool ZonotopeReachability<Number>::fulfillsInvariant( const Zonotope<Number>& inputZonotope,
-													  Zonotope<Number>& result ) {
+bool ZonotopeReachability<Number>::fulfillsInvariant( const Zonotope<Number> &inputZonotope,
+													  Zonotope<Number> &result ) {
 	Zonotope<Number> tempZonotope = inputZonotope;
 	struct hypro::Location<Number>::invariant inv = mCurrentLoc.invariant();
 	hypro::vector_t<Number> dVec;
@@ -637,8 +651,8 @@ bool ZonotopeReachability<Number>::fulfillsInvariant( const Zonotope<Number>& in
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::loadNewState( hypro::Transition<Number>& transition,
-												 const Zonotope<Number>& intersect_zonotope ) {
+void ZonotopeReachability<Number>::loadNewState( hypro::Transition<Number> &transition,
+												 const Zonotope<Number> &intersect_zonotope ) {
 	assert( intersect_zonotope.dimension() != 0 );
 	smallb_ = transition.targetLoc()->activityVec();
 	bigB_ = transition.targetLoc()->extInputMat();
@@ -661,18 +675,18 @@ void ZonotopeReachability<Number>::loadNewState( hypro::Transition<Number>& tran
 }
 
 template <typename Number>
-bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number>& inputZonotope,
-														 const Hyperplane<Number>& hp, Zonotope<Number>& result,
-														 const ZUtility::IntersectionMethod_t& method ) {
+bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number> &inputZonotope,
+														 const Hyperplane<Number> &hp, Zonotope<Number> &result,
+														 const ZUtility::IntersectionMethod_t &method ) {
 	hypro::matrix_t<Number> EMPTY_MATRIX( 0, 0 );
 	return ( checkForIntersection( inputZonotope, hp, result, method, EMPTY_MATRIX ) );
 }
 
 template <typename Number>
-bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number>& inputZonotope,
-														 const Hyperplane<Number>& hp, Zonotope<Number>& result,
-														 const ZUtility::IntersectionMethod_t& method,
-														 hypro::matrix_t<Number>& minMaxOfLine )
+bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number> &inputZonotope,
+														 const Hyperplane<Number> &hp, Zonotope<Number> &result,
+														 const ZUtility::IntersectionMethod_t &method,
+														 hypro::matrix_t<Number> &minMaxOfLine )
 
 {
 	assert( inputZonotope.dimension() == hp.dimension() && "input zonotope and hyperplane must have same dimensions" );
