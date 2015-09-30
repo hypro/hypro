@@ -10,6 +10,7 @@
 #include "types.h"
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
+#include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
