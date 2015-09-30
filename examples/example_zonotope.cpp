@@ -6,8 +6,11 @@
  */
 
 #include <iostream>
+#include <unordered_map>
 #include <fstream>
 #include <string>
+
+#include <map>
 
 #include <sys/time.h> 
 
@@ -20,32 +23,18 @@ using namespace carl;
 
 typedef int Number;
 
+/*
 int main(int argc, char** argv)
 {
     // Just creates an empty Center
     vector_t<Number> vCenter = vector_t<Number>(3);
-    vCenter(0) = 0;
-    vCenter(1) = 0;
-    vCenter(2) = 0;
+    vCenter << 0, 0, 0;
     
     // Just creates the Generators (3 for now)
     matrix_t<Number> vGenerators = matrix_t<Number>(3,4);
-    
-    vGenerators(0, 0) = 1;
-    vGenerators(1, 0) = 0;
-    vGenerators(2, 0) = 0;
-    
-    vGenerators(0, 1) = 0;
-    vGenerators(1, 1) = 1;
-    vGenerators(2, 1) = 0;
-    
-    vGenerators(0, 2) = 0;
-    vGenerators(1, 2) = 0;
-    vGenerators(2, 2) = 1;
-    
-    vGenerators(0, 3) = 1;
-    vGenerators(1, 3) = 1;
-    vGenerators(2, 3) = 1;
+    vGenerators << 1, 0, 0, 1,
+                   0, 1, 0, 1,
+                   0, 0, 1, 1;
     
     //To test the uniteEqualVectors function!
     //
@@ -86,5 +75,44 @@ int main(int argc, char** argv)
     
     results.close(); // Just closes the file 
     
+    return 0;
+}
+*/
+
+int main ()
+{
+    vector_t<Number> vCenter = vector_t<Number>(3);
+    vCenter << 0, 0, 0;
+    
+    matrix_t<Number> vGenerators = matrix_t<Number>(3,4);
+    vGenerators << 1, 0, 0, 1,
+                   0, 1, 0, 1,
+                   0, 0, 1, 1;
+    
+    std::unordered_map<vector_t<Number>, matrix_t<Number>, std::hash<vector_t<Number> > > myHash;
+    myHash = {{vCenter, vGenerators}};
+   
+    std::ofstream results("example_zonotope.txt");
+    
+    results << "\n\n\n\n";
+    
+    results << "myHash contains: ";
+  
+    for ( auto it = myHash.begin(); it != myHash.end(); ++it )
+        results << "\n" << it->first << ":\n" << it->second;
+  
+    results << "\n\n\n\n";
+
+    results << "myHash's buckets contain:\n";
+  
+    for ( unsigned i = 0; i < myHash.bucket_count(); ++i) {
+        results << "bucket #" << i << " contains:";
+   
+        for ( auto local_it = myHash.begin(i); local_it!= myHash.end(i); ++local_it )
+            results << " " << local_it->first << ":" << local_it->second;
+   
+        results << "\n\n\n\n";
+    }
+
     return 0;
 }
