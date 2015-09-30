@@ -75,9 +75,7 @@ Eigen::Matrix<Number, 2, 1> computeLineIntersection( const ZUtility::Line_t<Numb
  *****************************************************************************/
 
 template <typename Number>
-Zonotope<Number>::Zonotope()
-	: mDimension( 0 ), mCenter( 0, 1 ), mGenerators( 0, 0 ) {
-}
+Zonotope<Number>::Zonotope() : mDimension( 0 ), mCenter( 0, 1 ), mGenerators( 0, 0 ) { }
 
 template <typename Number>
 Zonotope<Number>::Zonotope( unsigned dimension )
