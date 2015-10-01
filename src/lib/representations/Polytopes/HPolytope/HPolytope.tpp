@@ -99,7 +99,9 @@ bool HPolytope<Number>::empty() const {
 		glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 	}
 	glp_exact( lp, NULL );
-	std::cout << "GLP: Solution: " << glp_get_status(lp) << std::endl;
+	if(glp_get_status(lp) == GLP_NOFEAS)
+		std::cout << "Empty!" << std::endl;
+	
 	return (glp_get_status(lp) == GLP_NOFEAS);
 }
 
@@ -242,28 +244,32 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					if(!below)
 						res = tmp;
 				}
-				vertices.push_back(Point<Number>(res));
-				std::cout << "Final vertex: " << res.transpose() << std::endl;
-			}
-		}
-		for ( auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-			std::cout << "Check contains." << std::endl;
-			unsigned cnt = dim;
-			bool unsat = false;
-			for(const auto& plane : mHPlanes) {
-				if( plane.offset() - plane.normal().dot(vertexIt->rawCoordinates()) <= 0 ){
-					if (cnt > 0) {
-						--cnt;
-					} else {
-						std::cout << "Removed vertex: " << *vertexIt << std::endl;
-						vertexIt = vertices.erase( vertexIt );
-						unsat = true;
-						break;
+
+				// Check containment
+				bool outside = false;
+				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
+					bool skip = false;
+					for(unsigned permPos = 0; permPos < permutationIt->size(); ++permPos){
+						if(planePos == permutationIt->at(permPos)) {
+							std::cout << "Skip plane " << planePos << std::endl;
+							skip = true;
+							break;
+						}
 					}
+
+					if(!skip){
+						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ){
+							std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
+							outside = true;
+							//break;
+						}
+					}
+					
 				}
-			}
-			if(!unsat) {
-				++vertexIt;
+				if(!outside) {
+					vertices.push_back(Point<Number>(res));
+					std::cout << "Final vertex: " << res.transpose() << std::endl;
+				}
 			}
 		}
 	}
@@ -376,44 +382,48 @@ bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const 
 
 template <typename Number>
 void HPolytope<Number>::reduce() {
-	std::cout << __func__ << ": " << *this << std::endl;
-	for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-		// std::cout << "Current plane: " << *planeIt << std::endl;
-		std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
-		if ( evalRes.second == INFEAS ) {
-			// return empty polytope
-			this->clear();
-			break;
-		} else if ( evalRes.second == FEAS ) {
-			if ( evalRes.first < planeIt->offset() &&
-				 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-				// std::cout << "erase " << *planeIt << " which is really redundant." <<
-				// std::endl;
-				planeIt = mHPlanes.erase( planeIt );
-				mInitialized = false;
-			} else {
-				Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
-				auto pos = mHPlanes.erase( planeIt );
-				mInitialized = false;
-				std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-				// std::cout << "Eval with: " << evalRes.first << ", without: " <<
-				// tmpRes.first << ", solution type: "
-				// << tmpRes.second << std::endl;
-				if ( tmpRes.second == INFTY ||
-					 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
-					planeIt = mHPlanes.insert( pos, tmp );
-					mInitialized = false;
-					++planeIt;
-					// std::cout << "keep "  << tmp << std::endl;
-				} else {
-					// std::cout << "erase " << tmp << " which is equal to something." <<
+	if(this->empty()) {
+		*this = HPolytope<Number>::Empty();
+	} else {
+		std::cout << __func__ << ": " << *this << std::endl;
+		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
+			// std::cout << "Current plane: " << *planeIt << std::endl;
+			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
+			if ( evalRes.second == INFEAS ) {
+				// return empty polytope
+				this->clear();
+				break;
+			} else if ( evalRes.second == FEAS ) {
+				if ( evalRes.first < planeIt->offset() &&
+					 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
+					// std::cout << "erase " << *planeIt << " which is really redundant." <<
 					// std::endl;
-					planeIt = pos;
+					planeIt = mHPlanes.erase( planeIt );
+					mInitialized = false;
+				} else {
+					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
+					auto pos = mHPlanes.erase( planeIt );
+					mInitialized = false;
+					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
+					// std::cout << "Eval with: " << evalRes.first << ", without: " <<
+					// tmpRes.first << ", solution type: "
+					// << tmpRes.second << std::endl;
+					if ( tmpRes.second == INFTY ||
+						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
+						planeIt = mHPlanes.insert( pos, tmp );
+						mInitialized = false;
+						++planeIt;
+						// std::cout << "keep "  << tmp << std::endl;
+					} else {
+						// std::cout << "erase " << tmp << " which is equal to something." <<
+						// std::endl;
+						planeIt = pos;
+					}
 				}
-			}
-		}  // FEAS
-	}	  // loop
-		   // std::cout << __func__ << ": Result: " << *this << std::endl;
+			}  // FEAS
+		}	  // loop
+	   // std::cout << __func__ << ": Result: " << *this << std::endl;
+	}
 }
 
 template <typename Number>
@@ -615,10 +625,26 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 	std::cout << __func__ << std::endl;
 
 	HPolytope<Number> res( *this );
+
+	std::cout << "intersection Vertices before intersection: " << std::endl;
+	for(const auto& vertex : this->vertices()) {
+		std::cout << vertex.rawCoordinates().transpose() << std::endl;
+	}
+
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
-	// res.reduce();
+
+	std::cout << "intersection Result before reduction: " << std::endl;
+	std::cout << res << std::endl;
+	if(!res.empty()) {
+		res.reduce();
+	} else {
+		res = HPolytope<Number>::Empty();
+	}
+
+	std::cout << "intersection Result AFTER reduction: " << std::endl;
+	std::cout << res << std::endl;
 
 	return res;
 }

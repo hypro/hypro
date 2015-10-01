@@ -352,7 +352,7 @@ struct Reach {
 		std::cout << __func__ << std::endl;
 		// intersection between valuation polytope and guard hyperplanes
 
-		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 		Representation intersectionPoly = _val.intersectHyperplanes( _trans.guard().mat, _trans.guard().vec );
 
@@ -360,14 +360,20 @@ struct Reach {
 		if ( !intersectionPoly.empty() ) {
 			std::cout << "Transition enabled!" << std::endl;
 
-			// plotter.addObject(_val.vertices());
-			// plotter.addObject(intersectionPoly.vertices());
-			// plotter.plot2d();
+			plotter.addObject(_val.vertices());
+			plotter.addObject(intersectionPoly.vertices());
+			plotter.plot2d();
 
 			hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 			hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
-			std::cout << "Valuation enabling transition: " << std::endl << intersectionPoly << std::endl;
+			std::cout << "Valuation enabling transition: " << std::endl << _val << std::endl;
+			std::cout << "Vertices: " << std::endl;
+			for(const auto& vertex : _val.vertices()) {
+				std::cout << vertex.rawCoordinates().transpose() << std::endl;
+			}
+
+			exit(0);
 
 			// perform translation + transformation on intersection polytope
 			result = intersectionPoly.linearTransformation( transformMat, translateVec );

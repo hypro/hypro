@@ -244,8 +244,8 @@ int main(int argc, char const *argv[])
 					point.reduceDimension(2);
 					// 			std::cout << point << std::endl;
 				}
-				plotter.addObject(points);
-				std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
+				//plotter.addObject(points);
+				//std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
 				points.clear();
 				++count;
 			}
