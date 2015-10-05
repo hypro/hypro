@@ -91,6 +91,16 @@ unsigned Hyperplane<Number>::dimension() const {
 	return mNormal.nonZeros();
 }
 
+template<typename Number>
+void Hyperplane<Number>::reduceDimension( unsigned _dimension ) {
+	// TODO
+}
+
+template<typename Number>
+void Hyperplane<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
+	// TODO
+}
+
 template <typename Number>
 const vector_t<Number> &Hyperplane<Number>::normal() const {
 	return mNormal;

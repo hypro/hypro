@@ -91,6 +91,21 @@ void Plotter<Number>::plot2d() const {
 			ranges[d] = carl::Interval<double>(min( d ) - rangeExt, max( d ) + rangeExt );
 		}
 
+		// create plane functions
+		int index = 0;
+		if(!mPlanes.empty()){
+			mOutfile << "\n";
+			for( const auto& planePair : mPlanes ) {
+				for( const auto& plane : planePair.second ) {
+					assert(plane.dimension() == 2);
+					mOutfile << "f_" << index << "(x) = " << -plane.normal()(0)/plane.normal()(1) << "*x+" << plane.offset()/plane.normal()(1) << "\n";
+					++index;
+				}
+			}
+			mOutfile << "\n";
+		}
+		
+
 		if(mSettings.axes) {
 			mOutfile << "set xzeroaxis \n";
 			mOutfile << "set xtics axis \n";
@@ -104,13 +119,22 @@ void Plotter<Number>::plot2d() const {
 		mOutfile << "set term post eps\n";
 		mOutfile << "set output \"" << mFilename << ".eps\"";
 		mOutfile << "\n";
-		mOutfile << "plot ";
-
+		if(!mPlanes.empty()){
+			mOutfile << "set multiplot \n";
+			//plot all planes
+			while(index > 0) {
+				--index;
+				mOutfile << "plot f_" << index << "(x) \n";
+			}
+		}
 		
+		mOutfile << "plot ";
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
 		}
 		mOutfile << "NaN notitle";
+		if(!mPlanes.empty())
+			mOutfile << "\n unset multiplot";
 	}
 	mOutfile.close();
 	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
@@ -140,9 +164,17 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 	return mId++;
 }
 
+template<typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
+	mPlanes.insert( std::make_pair( mId, _planes ) );
+	return mId++;
+}
+
 template <typename Number>
 void Plotter<Number>::setObjectColor( unsigned _id, const std::string _color ) {
 	if ( _color != "" && mObjects.find( _id ) != mObjects.end() ) {
+		mObjectColors[_id] = _color;
+	} else if ( _color != "" && mPlanes.find( _id ) != mPlanes.end() ) {
 		mObjectColors[_id] = _color;
 	}
 }

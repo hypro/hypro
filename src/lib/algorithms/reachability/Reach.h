@@ -315,7 +315,12 @@ struct Reach {
 					// check if guard of transition is enabled (if yes compute Post Assignment Valuation)
 					if ( computePostCondition( trans, *it_val, postAssign ) ) {
 						transitionEnabled = true;
-						std::cout << "Take transition " << trans << std::endl;
+						//std::cout << "Take transition " << trans << std::endl;
+
+						std::cout << "Vertices: " << std::endl;
+						for(const auto& vertex : postAssign.vertices() ) {
+							std::cout << vertex << std::endl;
+						}
 
 						// targetValuation = targetValuation U postAssign
 						if ( !targetValuation.empty() ) {
@@ -331,6 +336,15 @@ struct Reach {
 
 					std::cout << "Compute time-step in new location " << *tarLoc << " starting with initial valuation "
 							  << targetValuation << std::endl;
+
+					//std::cout << "Vertices: " << std::endl;
+					//for(const auto& vertex : targetValuation.vertices() ) {
+					//	std::cout << vertex << std::endl;
+					//}
+
+					Plotter<Number>::getInstance().plot2d();
+
+					exit(0);
 
 					// flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
 					unsigned newPipe = computeForwardTimeClosure( tarLoc, targetValuation );
@@ -349,7 +363,7 @@ struct Reach {
 
 	bool computePostCondition( const hypro::Transition<Number>& _trans, const Representation& _val,
 							   Representation& result ) {
-		std::cout << __func__ << std::endl;
+		//std::cout << __func__ << std::endl;
 		// intersection between valuation polytope and guard hyperplanes
 
 		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
@@ -361,25 +375,28 @@ struct Reach {
 			std::cout << "Transition enabled!" << std::endl;
 
 			plotter.addObject(_val.vertices());
-			plotter.addObject(intersectionPoly.vertices());
-			plotter.plot2d();
+			//plotter.addObject(intersectionPoly.vertices());
+			//plotter.addObject(_val.constraints());
+			
 
 			hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 			hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
-			std::cout << "Valuation enabling transition: " << std::endl << _val << std::endl;
-			std::cout << "Vertices: " << std::endl;
-			for(const auto& vertex : _val.vertices()) {
-				std::cout << vertex.rawCoordinates().transpose() << std::endl;
-			}
-
-			exit(0);
+			//std::cout << "Valuation enabling transition: " << std::endl << _val << std::endl;
+			//std::cout << "Vertices: " << std::endl;
+			//for(const auto& vertex : _val.vertices()) {
+			//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
+			//}
 
 			// perform translation + transformation on intersection polytope
 			result = intersectionPoly.linearTransformation( transformMat, translateVec );
+			
+			//plotter.addObject(result.vertices());
+			//plotter.plot2d();
+
 			return true;
 		} else {
-			std::cout << "Transition disabled!" << std::endl;
+			//std::cout << "Transition disabled!" << std::endl;
 			return false;
 		}
 	}

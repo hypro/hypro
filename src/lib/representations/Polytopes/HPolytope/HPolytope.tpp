@@ -99,8 +99,8 @@ bool HPolytope<Number>::empty() const {
 		glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 	}
 	glp_exact( lp, NULL );
-	if(glp_get_status(lp) == GLP_NOFEAS)
-		std::cout << "Empty!" << std::endl;
+	//if(glp_get_status(lp) == GLP_NOFEAS)
+		//std::cout << "Empty!" << std::endl;
 	
 	return (glp_get_status(lp) == GLP_NOFEAS);
 }
@@ -166,17 +166,17 @@ const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
 
 template <typename Number>
 typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
-	std::cout << "Compute vertices of " << *this << std::endl;
+	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()){
 		unsigned dim = this->dimension();
 
 		std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
 		for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
-			std::cout << "Use planes ";
-			for(const auto item : *permutationIt)
-				std::cout << item << ", ";
-			std::cout << std::endl;
+			//std::cout << "Use planes ";
+			//for(const auto item : *permutationIt)
+			//	std::cout << item << ", ";
+			//std::cout << std::endl;
 
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
@@ -189,7 +189,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				++pos;
 			}
 
-			std::cout << "Created first matrix" << std::endl;
+			//std::cout << "Created first matrix" << std::endl;
 
 			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
 			if ( lu_decomp.rank() < A.rows() ) {
@@ -202,14 +202,14 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			bool infty = false;
 			for ( unsigned i = 0; i < res.rows(); ++i ) {
 				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-					std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+					//std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
 					infty = true;
 					break;
 				}
 			}
 
 			if(!infty) {
-				std::cout << "Solved to " << res.transpose() << std::endl;
+				//std::cout << "Solved to " << res.transpose() << std::endl;
 				// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
 				bool below = false;
 				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
@@ -221,7 +221,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				}
 				Number eps = 0;
 				while (below){
-					std::cout << "Is below, iterate " << std::endl;
+					//std::cout << "Is below, iterate " << std::endl;
 					// enlarge as long as point lies below one of the planes.
 					below = false;
 					eps += std::numeric_limits<Number>::epsilon();
@@ -251,7 +251,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					bool skip = false;
 					for(unsigned permPos = 0; permPos < permutationIt->size(); ++permPos){
 						if(planePos == permutationIt->at(permPos)) {
-							std::cout << "Skip plane " << planePos << std::endl;
+							//std::cout << "Skip plane " << planePos << std::endl;
 							skip = true;
 							break;
 						}
@@ -259,16 +259,16 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 
 					if(!skip){
 						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ){
-							std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
+							//std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
 							outside = true;
-							//break;
+							break;
 						}
 					}
 					
 				}
 				if(!outside) {
 					vertices.push_back(Point<Number>(res));
-					std::cout << "Final vertex: " << res.transpose() << std::endl;
+					//std::cout << "Final vertex: " << res.transpose() << std::endl;
 				}
 			}
 		}
@@ -385,7 +385,7 @@ void HPolytope<Number>::reduce() {
 	if(this->empty()) {
 		*this = HPolytope<Number>::Empty();
 	} else {
-		std::cout << __func__ << ": " << *this << std::endl;
+		//std::cout << __func__ << ": " << *this << std::endl;
 		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
 			// std::cout << "Current plane: " << *planeIt << std::endl;
 			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
@@ -529,23 +529,23 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply retransform, otherwise use double description method.
 		if(lu.rank() == A.rows()) {
-			std::cout << "Full rank, retransform!" << std::endl;
+			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
 		} else {
-			std::cout << __func__ << " this: " << *this << std::endl;
-		std::cout << __func__ << " vertices: " << std::endl;
+			//std::cout << __func__ << " this: " << *this << std::endl;
+		//std::cout << __func__ << " vertices: " << std::endl;
 		for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
 
-			std::cout << "Create intermediate. " << std::endl;
+			//std::cout << "Create intermediate. " << std::endl;
 
 			VPolytope<Number> intermediate( this->vertices() );
 
-			std::cout << "Intermediate : " << intermediate << std::endl;
+			//std::cout << "Intermediate : " << intermediate << std::endl;
 
 			intermediate = intermediate.linearTransformation( A, b );
 
-			std::cout << "Intermediate : " << intermediate << std::endl;
+			//std::cout << "Intermediate : " << intermediate << std::endl;
 
 			HPolytope<Number> res( intermediate );
 			return res;	
@@ -622,29 +622,29 @@ template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
 
 	HPolytope<Number> res( *this );
 
-	std::cout << "intersection Vertices before intersection: " << std::endl;
-	for(const auto& vertex : this->vertices()) {
-		std::cout << vertex.rawCoordinates().transpose() << std::endl;
-	}
+	//std::cout << "intersection Vertices before intersection: " << std::endl;
+	//for(const auto& vertex : this->vertices()) {
+	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
+	//}
 
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
 
-	std::cout << "intersection Result before reduction: " << std::endl;
-	std::cout << res << std::endl;
+	//std::cout << "intersection Result before reduction: " << std::endl;
+	//std::cout << res << std::endl;
 	if(!res.empty()) {
 		res.reduce();
 	} else {
 		res = HPolytope<Number>::Empty();
 	}
 
-	std::cout << "intersection Result AFTER reduction: " << std::endl;
-	std::cout << res << std::endl;
+	//std::cout << "intersection Result AFTER reduction: " << std::endl;
+	//std::cout << res << std::endl;
 
 	return res;
 }

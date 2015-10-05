@@ -5,29 +5,34 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * 
  * @since	2015-03-01
- * @version	2015-03-01
+ * @version	2015-10-05
  */
 
-#include "../src/lib/util/plot.h"
-#include "../src/lib/representations/Box/Box.h"
+#include "../src/lib/util/Plotter.h"
+#include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
 
 int main(int argc, char** argv) {
 	
-	Box<double> exampleBox1;
-	carl::Interval<double> x(-1,3);
-	carl::Interval<double> y(-1,3);
-	exampleBox1.insert(0,x);
-	exampleBox1.insert(1,y);
+	Plotter<double>& plotter = Plotter<double>::getInstance();
+
+	HPolytope<double> poly;
+	poly.insert(Hyperplane<double>({1,1},1));
+	poly.insert(Hyperplane<double>({-1,1},1));
+	poly.insert(Hyperplane<double>({0,-1},1));
+
+	std::vector<Point<double>> vertices = poly.vertices();
+
+	plotter.addObject(vertices);
+
+	std::cout << "Added points." << std::endl;
+
+	plotter.addObject(poly.constraints());
+
+	std::cout << "Added planes." << std::endl;	
 	
-	std::set<Point<double>> corners = exampleBox1.corners();
-	std::vector<Point<double>> tmp;
-	for(auto& point : corners) {
-		tmp.push_back(point);
-	}
-	
-	plot(tmp);
+	plotter.plot2d();
 	
 	return 0;
 }

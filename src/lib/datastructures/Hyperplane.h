@@ -43,6 +43,8 @@ class Hyperplane {
 	~Hyperplane();
 
 	unsigned dimension() const;
+	void reduceDimension( unsigned _dimension );
+	void reduceToDimensions( std::vector<unsigned> _dimensions );
 
 	const vector_t<Number>& normal() const;
 	void setNormal( const vector_t<Number>& _normal );
