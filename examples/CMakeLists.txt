@@ -30,6 +30,7 @@ set( EXAMPLES
     example_power
     example_ppl_nncPolyhedra
     example_reachability
+    example_reduction
     example_squareroot
     example_supportFunction
     example_cubicroot

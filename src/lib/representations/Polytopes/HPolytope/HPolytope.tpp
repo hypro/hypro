@@ -381,7 +381,7 @@ bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const 
 }
 
 template <typename Number>
-void HPolytope<Number>::reduce() {
+void HPolytope<Number>::removeRedundantPlanes() {
 	if(this->empty()) {
 		*this = HPolytope<Number>::Empty();
 	} else {
@@ -424,6 +424,22 @@ void HPolytope<Number>::reduce() {
 		}	  // loop
 	   // std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
+}
+
+template <typename Number>
+HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
+	HPolytope<Number> res = *this;
+
+	// TODO: Switch strategy, implement each strategy.
+
+	return res;
+}
+
+template <typename Number>
+void HPolytope<Number>::reduceAssign( REDUCTION_STRATEGY strat, unsigned _steps ) {
+
+	// TODO.
+
 }
 
 template <typename Number>
@@ -589,7 +605,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 			// mHPlanes.at(i).normal() << std::endl;
 		}
 	}
-	// res.reduce();
+	// res.removeRedundantPlanes();
 	return res;
 }
 
@@ -607,7 +623,7 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 			res.insert( plane );
 		}
 		if(!res.constraints().empty()) {
-			res.reduce();
+			res.removeRedundantPlanes();
 		}
 
 		return res;
@@ -638,7 +654,7 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 	//std::cout << "intersection Result before reduction: " << std::endl;
 	//std::cout << res << std::endl;
 	if(!res.empty()) {
-		res.reduce();
+		res.removeRedundantPlanes();
 	} else {
 		res = HPolytope<Number>::Empty();
 	}

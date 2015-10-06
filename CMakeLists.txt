@@ -129,13 +129,9 @@ find_package(PPL REQUIRED)
 include_directories(${PPL_INCLUDES})
 set(libraries ${libraries} ${PPL_LIBRARIES})
 
-#find_package(GLPK REQUIRED)
-#include_directories(${GLPK_INCLUDES})
-#set(libraries ${libraries} ${GLPK_LIBRARIES})
-#
-#find_package(NLOPT REQUIRED)
-#include_directories(${NLOPT_INCLUDES})
-#set(libraries ${libraries} ${NLOPT_LIBRARIES})
+find_package(smtrat)
+include_directories(${smtrat_INCLUDE_DIR})
+set(libraries ${libraries} ${smtrat_LIBRARIES})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
 find_package(Eigen3)
