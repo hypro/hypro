@@ -101,7 +101,7 @@ bool HPolytope<Number>::empty() const {
 	glp_exact( lp, NULL );
 	//if(glp_get_status(lp) == GLP_NOFEAS)
 		//std::cout << "Empty!" << std::endl;
-	
+
 	return (glp_get_status(lp) == GLP_NOFEAS);
 }
 
@@ -131,7 +131,7 @@ template <typename Number>
 matrix_t<Number> HPolytope<Number>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		res( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
+		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
 	}
 	return res;
 }
@@ -264,7 +264,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 							break;
 						}
 					}
-					
+
 				}
 				if(!outside) {
 					vertices.push_back(Point<Number>(res));
@@ -273,7 +273,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			}
 		}
 	}
-	
+
 	return vertices;
 }
 
@@ -547,7 +547,7 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		if(lu.rank() == A.rows()) {
 			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
+			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
 			//std::cout << __func__ << " this: " << *this << std::endl;
 		//std::cout << __func__ << " vertices: " << std::endl;
@@ -564,7 +564,7 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 			//std::cout << "Intermediate : " << intermediate << std::endl;
 
 			HPolytope<Number> res( intermediate );
-			return res;	
+			return res;
 		}
 	} else {
 		return *this;

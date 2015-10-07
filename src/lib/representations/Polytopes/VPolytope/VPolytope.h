@@ -10,11 +10,11 @@
 
 #include "../util.h"
 #include "../../GeometricObject.h"
-//#include <eigen3/Eigen/Geometry>
 #include <glpk.h>
 #include <set>
 #include <cassert>
 #include "../../../util/convexHull.h"
+#include "../../../util/smtrat/SimplexSolver.h"
 #include "../../../datastructures/Facet.h"
 
 namespace hypro {
@@ -29,7 +29,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
  * Members
  **************************************************************************/
   private:
-	pointVector mPoints;
+	pointVector mVertices;
 	Cone mCone;
 	mutable Fan mFan;
 	bool mFanSet;
@@ -87,14 +87,14 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
 
-	bool empty() const { return mPoints.empty(); }
+	bool empty() const { return mVertices.empty(); }
 
 	unsigned int dimension() const {
-		if ( mPoints.empty() ) return 0;
-		return mPoints[0].dimension();
+		if ( mVertices.empty() ) return 0;
+		return mVertices[0].dimension();
 	}
 
-	unsigned size() const { return mPoints.size(); }
+	unsigned size() const { return mVertices.size(); }
 
 	bool reduced() const { return mReduced; }
 
@@ -113,14 +113,14 @@ class VPolytope : public hypro::GeometricObject<Number> {
 
 	void setNeighbors( const Point<Number>& _point, const std::set<Point<Number>>& _neighbors ) {
 		unsigned pos = 0;
-		while ( pos < mPoints.size() && ( mPoints[pos] != _point ) ) ++pos;
+		while ( pos < mVertices.size() && ( mVertices[pos] != _point ) ) ++pos;
 
-		if ( mPoints[pos] == _point ) {
+		if ( mVertices[pos] == _point ) {
 			for ( const auto& neighbor : _neighbors ) {
 				unsigned nPos = 0;
-				while ( nPos < mPoints.size() && ( mPoints[nPos] != neighbor ) ) ++nPos;
+				while ( nPos < mVertices.size() && ( mVertices[nPos] != neighbor ) ) ++nPos;
 
-				if ( mPoints[nPos] == neighbor ) {
+				if ( mVertices[nPos] == neighbor ) {
 					mNeighbors[pos].insert( nPos );
 					mNeighbors[nPos].insert( pos );
 				}
@@ -133,10 +133,10 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	std::vector<Point<Number>> neighbors( const Point<Number>& _point ) const {
 		std::vector<Point<Number>> result;
 		unsigned pos = 0;
-		while ( pos < mPoints.size() && ( mPoints[pos] != _point ) ) ++pos;
+		while ( pos < mVertices.size() && ( mVertices[pos] != _point ) ) ++pos;
 
-		if ( mPoints[pos] == _point ) {
-			for ( unsigned nPos : mNeighbors[pos] ) result.emplace_back( mPoints[nPos] );
+		if ( mVertices[pos] == _point ) {
+			for ( unsigned nPos : mNeighbors[pos] ) result.emplace_back( mVertices[nPos] );
 		}
 		return std::move( result );
 	}
@@ -144,7 +144,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	typename pointVector::iterator insert( const Point<Number>& i ) {
 		assert( dimension() == 0 || dimension() == i.dimension() );
 		mReduced = false;
-		auto res = mPoints.insert( mPoints.end(), i );
+		auto res = mVertices.insert( mVertices.end(), i );
 		mNeighbors.push_back( std::set<unsigned>() );
 		return res;
 	}
@@ -153,7 +153,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
 		assert( dimension() == 0 || dimension() == _coord.rows() );
 		mReduced = false;
 		mNeighbors.push_back( std::set<unsigned>() );
-		return mPoints.insert( mPoints.end(), Point<Number>( _coord ) );
+		return mVertices.insert( mVertices.end(), Point<Number>( _coord ) );
 	}
 
 	typename pointVector::iterator insert( const typename pointVector::const_iterator begin,
@@ -161,31 +161,31 @@ class VPolytope : public hypro::GeometricObject<Number> {
 		assert( dimension() == 0 || dimension() == begin->dimension() );
 		mReduced = false;
 		mNeighbors.push_back( std::set<unsigned>() );
-		return mPoints.insert( mPoints.end(), begin, end );
+		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
-	const pointVector& vertices() const { return mPoints; }
+	const pointVector& vertices() const { return mVertices; }
 
 	bool hasVertex( const Point<Number>& vertex ) const {
-		for ( const auto point : mPoints ) {
+		for ( const auto point : mVertices ) {
 			if ( point == vertex ) return true;
 		}
 		return false;
 	}
 
-	bool hasVertex( const vector_t<Number>& vertex ) const { return ( mPoints.find( vertex ) != mPoints.end() ); }
+	bool hasVertex( const vector_t<Number>& vertex ) const { return ( mVertices.find( vertex ) != mVertices.end() ); }
 
-	typename pointVector::iterator begin() { return mPoints.begin(); }
+	typename pointVector::iterator begin() { return mVertices.begin(); }
 
-	typename pointVector::const_iterator begin() const { return mPoints.begin(); }
+	typename pointVector::const_iterator begin() const { return mVertices.begin(); }
 
-	typename pointVector::iterator end() { return mPoints.end(); }
+	typename pointVector::iterator end() { return mVertices.end(); }
 
-	typename pointVector::const_iterator end() const { return mPoints.end(); }
+	typename pointVector::const_iterator end() const { return mVertices.end(); }
 
 	void print() const { std::cout << *this << std::endl; }
 
-	void reduce();
+	void removeRedundancy();
 	void updateNeighbors();
 
   private:

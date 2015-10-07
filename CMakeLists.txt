@@ -130,6 +130,9 @@ include_directories(${PPL_INCLUDES})
 set(libraries ${libraries} ${PPL_LIBRARIES})
 
 find_package(smtrat)
+if(smtrat_FOUND)
+    MESSAGE(STATUS "Found smtrat: ${smtrat_INCLUDE_DIR}")
+endif()
 include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
 
