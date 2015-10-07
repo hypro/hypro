@@ -430,7 +430,31 @@ template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
 	HPolytope<Number> res = *this;
 
-	// TODO: Switch strategy, implement each strategy.
+	// Switch strategy, implement each strategy.
+	switch (strat) {
+		case REDUCTION_STRATEGY::DROP:
+		{
+			unsigned i=0; // decide which hyperplane to drop
+			res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			break;
+		}
+		case REDUCTION_STRATEGY::UNITE:
+		{
+			// assume that the hyperplanes are in correct order TODO sort-fct based on scalarproduct
+			unsigned i=2;
+			unsigned j=i+1;
+			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal();
+			Number uniteOffset = res.mHPlanes[i].offset() + res.mHPlanes[j].offset();
+			std::cout << uniteVector << std::endl;
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
+			break;
+		}
+		default:
+			break;
+	}
 
 	return res;
 }
