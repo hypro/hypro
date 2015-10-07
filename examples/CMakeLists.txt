@@ -15,12 +15,12 @@ set( EXAMPLES
     example_benchmarks
     example_bouncingBall
     example_converter
-    example_subtraction
-    example_multiplication
+    example_convexHull
     example_division
     example_eigen_float_t
     example_hausdorffApprox
     example_matrixPolyhedra
+    example_multiplication
     example_openglPlotting
     example_orthogonalPolyhedron
     example_parser
@@ -31,14 +31,15 @@ set( EXAMPLES
     example_ppl_nncPolyhedra
     example_reachability
     example_reduction
+    example_SFconversion
     example_squareroot
+    example_subtraction
     example_supportFunction
     example_cubicroot
     example_test
+    example_useSMT
     example_vertexEnumeration
     example_twotankreachability
-    example_convexHull
-    example_HVPolytope
     example_zonotope
 )
 

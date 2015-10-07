@@ -11,6 +11,7 @@
 #include <carl/numbers/numbers.h>
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
+#include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
@@ -66,6 +67,9 @@ using valuation_t = Polytope<Number>;
 
 template <typename Number>
 using vectorSet = std::set<vector_t<Number>>;
+
+typedef mpq_class Rational;
+typedef carl::MultivariatePolynomial<Rational> Poly;
 }
 
 /**

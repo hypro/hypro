@@ -78,7 +78,7 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP ,unsigned _steps = 1 ) const;
+	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE ,unsigned _steps = 1 ) const;
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
 	bool isExtremePoint( vector_t<Number> point ) const;

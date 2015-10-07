@@ -17,7 +17,7 @@
 #include <map>
 #include <cassert>
 
-using namespace Parma_Polyhedra_Library::IO_Operators;
+//using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro {
 class VariablePool : public carl::Singleton<VariablePool> {
