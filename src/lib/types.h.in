@@ -1,4 +1,4 @@
 #cmakedefine SUPPORT_MPFR
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
-#cmakedefine smtrat_FOUND
+#cmakedefine USE_SMTRAT

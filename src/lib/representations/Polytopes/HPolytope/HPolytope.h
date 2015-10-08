@@ -13,6 +13,7 @@
 #include <glpk.h>
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
+#include "../../../util/smtrat/SimplexSolver.h"
 
 
 namespace hypro {

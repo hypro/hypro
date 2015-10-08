@@ -90,6 +90,16 @@ bool HPolytope<Number>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
+	#ifdef USE_SMTRAT
+	smtrat::SimplexSolver simplex;
+	smtrat::FormulaT constr = createFormula(this->matrix(), this->vector());
+	simplex.inform(constr);
+	simplex.add(constr);
+
+	std::cout << constr << std::endl;
+
+	return (simplex.check() == smtrat::Answer::False);
+	#else
 	if(!mInitialized) {
 		initialize();
 	}
@@ -103,6 +113,7 @@ bool HPolytope<Number>::empty() const {
 		//std::cout << "Empty!" << std::endl;
 
 	return (glp_get_status(lp) == GLP_NOFEAS);
+	#endif
 }
 
 template <typename Number>

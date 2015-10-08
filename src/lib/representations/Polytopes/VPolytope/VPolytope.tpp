@@ -263,7 +263,7 @@ Number VPolytope<Number>::supremum() const {
 template <typename Number>
 void VPolytope<Number>::removeRedundancy() {
 	if ( !mReduced ) {
-		#if smtrat_FOUND
+		#ifdef USE_SMTRAT
 			std::set<Point<Number>> toDelete;
 			smtrat::SimplexSolver simplex;
 			simplex.push();

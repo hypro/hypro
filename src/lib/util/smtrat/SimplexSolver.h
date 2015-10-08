@@ -1,3 +1,4 @@
+#ifdef USE_SMTRAT
 /**
  * @file SimplexSolver.h
  */
@@ -27,3 +28,4 @@ namespace smtrat
     };
 
 } // namespace smtrat
+#endif

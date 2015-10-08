@@ -2,6 +2,7 @@
  * Holds convenience functions when working with SMTRat.
  */
 
+#ifdef USE_SMTRAT
 namespace hypro {
 
 	template<typename Number>
@@ -27,3 +28,4 @@ namespace hypro {
 	}
 
 } // namespace hypro
+#endif
