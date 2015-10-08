@@ -263,69 +263,73 @@ Number VPolytope<Number>::supremum() const {
 template <typename Number>
 void VPolytope<Number>::removeRedundancy() {
 	if ( !mReduced ) {
-		std::set<Point<Number>> toDelete;
-		smtrat::SimplexSolver simplex;
-		simplex.push();
+		#if smtrat_FOUND
+			std::set<Point<Number>> toDelete;
+			smtrat::SimplexSolver simplex;
+			simplex.push();
 
-		// create mapping of variables (lambdas') to vertices.
-		std::map<Point<Number>, carl::Variable> lambdas;
-		for(const auto& vertex : mVertices) {
-			carl::Variable lambda = carl::freshRealVariable();
-			lambdas.insert(std::make_pair(vertex, lambda));
-			//std::cout << "Assigned " << lambdas.find(vertex)->second << " to " << lambdas.find(vertex)->first << std::endl;
-		}
-
-
-		for(auto currVertex = mVertices.begin(); currVertex != mVertices.end(); ){
-			//std::cout << currVertex << ": " << std::endl;
-			// create constraint for Sum(lambdas) == 1
-			Poly sumBound;
+			// create mapping of variables (lambdas') to vertices.
+			std::map<Point<Number>, carl::Variable> lambdas;
 			for(const auto& vertex : mVertices) {
-				if(vertex != *currVertex) {
-					carl::Variable lambda = lambdas.find(vertex)->second;
-					sumBound += lambda;
-					smtrat::FormulaT constr = smtrat::FormulaT(Poly(lambda), carl::Relation::GEQ);
+				carl::Variable lambda = carl::freshRealVariable();
+				lambdas.insert(std::make_pair(vertex, lambda));
+				//std::cout << "Assigned " << lambdas.find(vertex)->second << " to " << lambdas.find(vertex)->first << std::endl;
+			}
+
+
+			for(auto currVertex = mVertices.begin(); currVertex != mVertices.end(); ){
+				//std::cout << currVertex << ": " << std::endl;
+				// create constraint for Sum(lambdas) == 1
+				Poly sumBound;
+				for(const auto& vertex : mVertices) {
+					if(vertex != *currVertex) {
+						carl::Variable lambda = lambdas.find(vertex)->second;
+						sumBound += lambda;
+						smtrat::FormulaT constr = smtrat::FormulaT(Poly(lambda), carl::Relation::GEQ);
+						simplex.inform(constr);
+						simplex.add(constr);
+					}
+				}
+				sumBound -= Rational(1);
+				smtrat::FormulaT constr = smtrat::FormulaT(sumBound, carl::Relation::EQ);
+				simplex.inform(constr);
+				simplex.add(constr);
+
+				for(unsigned dim = 0; dim < this->dimension(); ++dim) {
+					Poly row;
+					for(const auto& vertex : mVertices ) {
+						if(*currVertex != vertex) {
+							carl::Variable tmp = lambdas.find(vertex)->second;
+							row += tmp*Rational(vertex.at(dim));
+						} else {
+							row -= Rational(vertex.at(dim));
+						}
+					}
+					smtrat::FormulaT constr = smtrat::FormulaT(row, carl::Relation::EQ);
+					//std::cout << constr << std::endl;
 					simplex.inform(constr);
 					simplex.add(constr);
 				}
-			}
-			sumBound -= Rational(1);
-			smtrat::FormulaT constr = smtrat::FormulaT(sumBound, carl::Relation::EQ);
-			simplex.inform(constr);
-			simplex.add(constr);
 
-			for(unsigned dim = 0; dim < this->dimension(); ++dim) {
-				Poly row;
-				for(const auto& vertex : mVertices ) {
-					if(*currVertex != vertex) {
-						carl::Variable tmp = lambdas.find(vertex)->second;
-						row += tmp*Rational(vertex.at(dim));
-					} else {
-						row -= Rational(vertex.at(dim));
-					}
+				std::cout << "Checking: " << std::endl << simplex.formula().toString() << std::endl;
+
+				smtrat::Answer res = simplex.check();
+
+				if(res == smtrat::Answer::True) {
+					currVertex = mVertices.erase(currVertex);
+				} else {
+					++currVertex;
 				}
-				smtrat::FormulaT constr = smtrat::FormulaT(row, carl::Relation::EQ);
-				//std::cout << constr << std::endl;
-				simplex.inform(constr);
-				simplex.add(constr);
+
+				//std::cout << "Is extreme point: " << (res == smtrat::Answer::False) << std::endl << std::endl << std::endl << std::endl;
+				simplex.pop();
+				simplex.push();
 			}
 
-			std::cout << "Checking: " << std::endl << simplex.formula().toString() << std::endl;
-
-			smtrat::Answer res = simplex.check();
-
-			if(res == smtrat::Answer::True) {
-				currVertex = mVertices.erase(currVertex);
-			} else {
-				++currVertex;
-			}
-
-			//std::cout << "Is extreme point: " << (res == smtrat::Answer::False) << std::endl << std::endl << std::endl << std::endl;
-			simplex.pop();
-			simplex.push();
-		}
-
-		mReduced = true;
+			mReduced = true;
+		#else
+			updateNeighbors();
+		#endif
 	}
 }
 
