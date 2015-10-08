@@ -452,14 +452,24 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		case REDUCTION_STRATEGY::UNITE:
 		{
 			// assume that the hyperplanes are in correct order TODO sort-fct based on scalarproduct
-			unsigned i=2;
+			unsigned i=4;
 			unsigned j=i+1;
+
+			if(j>=res.mHPlanes.size()){
+				j=0;
+			}
 			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal();
 			Number uniteOffset = res.mHPlanes[i].offset() + res.mHPlanes[j].offset();
-			std::cout << uniteVector << std::endl;
+			std::cout << "add " << i << " and " << j << std::endl;
+			std::cout << "uniteVector" << uniteVector << std::endl;
+			std::cout << "uniteOffset" << uniteOffset << std::endl;
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
-			res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			if(j==0){
+				res.mHPlanes.erase(res.mHPlanes.begin());
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			}
 			res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
 			break;
 		}
