@@ -23,7 +23,12 @@ enum SOLUTION { FEAS = 0, INFEAS, INFTY };
 template <typename Number>
 class HPolytope {
   private:
-  	enum REDUCTION_STRATEGY { DROP = 0, UNITE };
+  	enum REDUCTION_STRATEGY {
+                              DROP = 0,
+                              DROP_SMOOTH,
+                              UNITE,
+                              UNITE_SMOOTH
+                            };
 
   public:
 	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
@@ -79,7 +84,8 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE ,unsigned _steps = 1 ) const;
+	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_SMOOTH ,unsigned _steps = 1 ) const;
+  vector_t<double> normalize(vector_t<double>);
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
 	bool isExtremePoint( vector_t<Number> point ) const;

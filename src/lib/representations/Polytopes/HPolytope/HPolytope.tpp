@@ -443,29 +443,69 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 
 	// Switch strategy, implement each strategy.
 	switch (strat) {
+
+		// DROP
 		case REDUCTION_STRATEGY::DROP:
 		{
-			unsigned i=0; // decide which hyperplane to drop
+			unsigned i=2; // decide which hyperplane to drop
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
 		}
+
+		// DROP_SMOOTH
+		case REDUCTION_STRATEGY::DROP_SMOOTH:
+		{
+			unsigned size=res.mHPlanes.size()+1;
+			unsigned a=0; // decide which hyperplane to drop
+			unsigned b=a+1;
+			unsigned c=a-1;
+
+			// select b and c propely
+			if(b>=res.mHPlanes.size()){
+				b=0;
+			}
+			else if(a==0){
+				c=res.mHPlanes.size()-1;
+			}
+
+			vector_t<Number> bVector = res.mHPlanes[a].normal() + res.mHPlanes[b].normal();
+			Number bOffset = res.mHPlanes[a].offset() + res.mHPlanes[b].offset();
+			vector_t<Number> cVector = res.mHPlanes[a].normal() + res.mHPlanes[c].normal();
+			Number cOffset = res.mHPlanes[a].offset() + res.mHPlanes[c].offset();
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+a); // erase a
+			if(b==0){ // erase b propely
+				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase c
+				res.mHPlanes.erase(res.mHPlanes.begin()); // erase b first!
+			} else if(a==0){ // erase c propely
+				res.mHPlanes.erase(res.mHPlanes.begin()); // erase b
+				res.mHPlanes.erase(res.mHPlanes.begin()+res.mHPlanes.size()-1); // erase c
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase c
+				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase b
+			}
+
+			res.insert(Hyperplane<Number>(bVector,bOffset));
+			res.insert(Hyperplane<Number>(cVector,cOffset));
+			break;
+		}
+
+		// UNITE
 		case REDUCTION_STRATEGY::UNITE:
 		{
 			// assume that the hyperplanes are in correct order TODO sort-fct based on scalarproduct
 			unsigned i=4;
 			unsigned j=i+1;
 
+			// select j propely
 			if(j>=res.mHPlanes.size()){
 				j=0;
 			}
 			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal();
 			Number uniteOffset = res.mHPlanes[i].offset() + res.mHPlanes[j].offset();
-			std::cout << "add " << i << " and " << j << std::endl;
-			std::cout << "uniteVector" << uniteVector << std::endl;
-			std::cout << "uniteOffset" << uniteOffset << std::endl;
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
-			if(j==0){
+			if(j==0){ // erase j propely
 				res.mHPlanes.erase(res.mHPlanes.begin());
 			} else {
 				res.mHPlanes.erase(res.mHPlanes.begin()+i);
@@ -473,6 +513,76 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
 			break;
 		}
+
+		// UNITE_SMOOTH
+		case REDUCTION_STRATEGY::UNITE_SMOOTH:
+		{
+			unsigned a=0;
+			unsigned b=a+1;
+			unsigned prev_a=a-1;
+			unsigned next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>=res.mHPlanes.size()){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>=res.mHPlanes.size()){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=res.mHPlanes.size()-1;
+			}
+
+			// save aVector and bVector
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			vector_t<Number> bVector = res.mHPlanes[b].normal();
+			Number aOffset = res.mHPlanes[a].offset();
+			Number bOffset = res.mHPlanes[b].offset();
+
+			// calculate next_b+b and prev_a+a -- normalized to keep the proportion
+			vector_t<Number> next_b_bVector = bVector + res.mHPlanes[next_b].normal();
+			next_b_bVector.normalize();
+			vector_t<Number> prev_a_aVector = aVector + res.mHPlanes[prev_a].normal();
+			prev_a_aVector.normalize();
+
+			// calculate uniteVector (next_b+b + prev_a+a)
+			vector_t<Number> uniteVector = next_b_bVector + prev_a_aVector;
+
+			// Helpvalues to calculate the correct uniteOffset
+			double helpx2_top, helpx2_down, x1, x2;
+			if(aVector[0]!=0){
+				helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
+				std::cout << "helpx2_top: " << helpx2_top << std::endl;
+				helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
+				std::cout << "helpx2_down: " << helpx2_down << std::endl;
+				x2 = helpx2_top/helpx2_down;
+				std::cout << "x2: " << x2 << std::endl;
+				x1 = (aOffset - aVector[1]*x2)/aVector[0];
+				std::cout << "x1: " << x1 << std::endl;
+			} else {
+				helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
+				std::cout << "helpx2_top: " << helpx2_top << std::endl;
+				helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
+				std::cout << "helpx2_down: " << helpx2_down << std::endl;
+				x2 = helpx2_top/helpx2_down;
+				std::cout << "x2: " << x2 << std::endl;
+				x1 = (bOffset - bVector[1]*x2)/bVector[0];
+				std::cout << "x1: " << x1 << std::endl;
+			}
+			// calculate the actual uniteOffset
+			Number uniteOffset = uniteVector[0]*x1 + uniteVector[1]*x2;//res.mHPlanes[a].offset() + res.mHPlanes[b].offset();//dOffset + cOffset;
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			if(b==0){ // erase b propely
+				res.mHPlanes.erase(res.mHPlanes.begin());
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			}
+			res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
+			break;
+		}
+
 		default:
 			break;
 	}

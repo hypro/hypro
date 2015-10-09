@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	gnuplotSettings settings;
-	settings.fill = true;
+	//settings.fill = true;
 	plotter.updateSettings(settings);
 
 	/* Do stuff here */
