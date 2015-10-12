@@ -1,5 +1,4 @@
 #include "HPolytope.h"
-#include <Eigen/Dense>
 namespace hypro {
 template <typename Number>
 HPolytope<Number>::HPolytope()
@@ -441,7 +440,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
 	HPolytope<Number> res = *this;
-	unsigned size=res.mHPlanes.size()+1;
+	unsigned size=res.mHPlanes.size()-1;
 
 	// Switch strategy, implement each strategy.
 	switch (strat) {
@@ -462,11 +461,11 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			unsigned c=a-1;
 
 			// select b and c propely
-			if(b>=res.mHPlanes.size()){
+			if(b>size){
 				b=0;
 			}
 			else if(a==0){
-				c=res.mHPlanes.size()-1;
+				c=size;
 			}
 
 			vector_t<Number> bVector = res.mHPlanes[a].normal() + res.mHPlanes[b].normal();
@@ -498,7 +497,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			unsigned j=i+1;
 
 			// select j propely
-			if(j>=res.mHPlanes.size()){
+			if(j>size){
 				j=0;
 			}
 			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal();
@@ -523,15 +522,15 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			unsigned next_b=b+1;
 
 			// select b, prev_a and next_b propely
-			if(b>=res.mHPlanes.size()){
+			if(b>size){
 				b=0;
 				next_b=1;
 			}
-			else if(next_b>=res.mHPlanes.size()){
+			else if(next_b>size){
 				next_b=0;
 			}
 			else if(a==0){
-				prev_a=res.mHPlanes.size()-1;
+				prev_a=size;
 			}
 
 			// save aVector and bVector
