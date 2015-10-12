@@ -84,9 +84,11 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_SMOOTH ,unsigned _steps = 1 ) const;
-  vector_t<double> normalize(vector_t<double>);
+	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP ,unsigned _steps = 1 ) const;
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
+
+  unsigned getIndexForDrop() const;
+  unsigned getIndexForUnite() const;
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
