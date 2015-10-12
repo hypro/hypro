@@ -107,6 +107,11 @@ const vector_t<Number> &Hyperplane<Number>::normal() const {
 }
 
 template <typename Number>
+vector_t<Number> &Hyperplane<Number>::rNormal() {
+	return mNormal;
+}
+
+template <typename Number>
 void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
 }
@@ -162,7 +167,7 @@ Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Numb
 	Eigen::FullPivLU<matrix_t<Number>> lu(A);
 	// if A has full rank, we can simply retransform
 	if(lu.rank() == A.rows()) {
-		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), mNormal.transpose()*A.inverse()*b + mScalar);	
+		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), mNormal.transpose()*A.inverse()*b + mScalar);
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
 
@@ -306,7 +311,7 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 
 		return result;
 	}
-	
-	
+
+
 }
 }

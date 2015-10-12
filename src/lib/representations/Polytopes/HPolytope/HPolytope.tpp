@@ -1,4 +1,5 @@
 #include "HPolytope.h"
+#include <Eigen/Dense>
 namespace hypro {
 template <typename Number>
 HPolytope<Number>::HPolytope()
@@ -440,6 +441,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
 	HPolytope<Number> res = *this;
+	unsigned size=res.mHPlanes.size()+1;
 
 	// Switch strategy, implement each strategy.
 	switch (strat) {
@@ -447,7 +449,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		// DROP
 		case REDUCTION_STRATEGY::DROP:
 		{
-			unsigned i=2; // decide which hyperplane to drop
+			unsigned i=getIndexForDrop();
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
 		}
@@ -455,8 +457,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		// DROP_SMOOTH
 		case REDUCTION_STRATEGY::DROP_SMOOTH:
 		{
-			unsigned size=res.mHPlanes.size()+1;
-			unsigned a=0; // decide which hyperplane to drop
+			unsigned a=getIndexForDrop();
 			unsigned b=a+1;
 			unsigned c=a-1;
 
@@ -493,8 +494,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		// UNITE
 		case REDUCTION_STRATEGY::UNITE:
 		{
-			// assume that the hyperplanes are in correct order TODO sort-fct based on scalarproduct
-			unsigned i=4;
+			unsigned i=getIndexForUnite();
 			unsigned j=i+1;
 
 			// select j propely
@@ -517,7 +517,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		// UNITE_SMOOTH
 		case REDUCTION_STRATEGY::UNITE_SMOOTH:
 		{
-			unsigned a=0;
+			unsigned a=getIndexForUnite();
 			unsigned b=a+1;
 			unsigned prev_a=a-1;
 			unsigned next_b=b+1;
@@ -553,22 +553,14 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			double helpx2_top, helpx2_down, x1, x2;
 			if(aVector[0]!=0){
 				helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
-				std::cout << "helpx2_top: " << helpx2_top << std::endl;
 				helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
-				std::cout << "helpx2_down: " << helpx2_down << std::endl;
 				x2 = helpx2_top/helpx2_down;
-				std::cout << "x2: " << x2 << std::endl;
 				x1 = (aOffset - aVector[1]*x2)/aVector[0];
-				std::cout << "x1: " << x1 << std::endl;
 			} else {
 				helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
-				std::cout << "helpx2_top: " << helpx2_top << std::endl;
 				helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
-				std::cout << "helpx2_down: " << helpx2_down << std::endl;
 				x2 = helpx2_top/helpx2_down;
-				std::cout << "x2: " << x2 << std::endl;
 				x1 = (bOffset - bVector[1]*x2)/bVector[0];
-				std::cout << "x1: " << x1 << std::endl;
 			}
 			// calculate the actual uniteOffset
 			Number uniteOffset = uniteVector[0]*x1 + uniteVector[1]*x2;//res.mHPlanes[a].offset() + res.mHPlanes[b].offset();//dOffset + cOffset;
@@ -595,6 +587,68 @@ void HPolytope<Number>::reduceAssign( REDUCTION_STRATEGY strat, unsigned _steps 
 
 	// TODO.
 
+}
+
+template <typename Number>
+unsigned HPolytope<Number>::getIndexForDrop() const{
+
+	unsigned maxIndex=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors of index
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-2){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index+1;
+			if(maxIndex>=hpolytope.mHPlanes.size()){
+				maxIndex=0;
+			}
+		}
+	}
+
+	return maxIndex;
+}
+
+template <typename Number>
+unsigned HPolytope<Number>::getIndexForUnite() const{
+	unsigned maxIndex=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index;
+		}
+	}
+
+	return maxIndex;
 }
 
 template <typename Number>

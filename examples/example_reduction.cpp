@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 	HPolytope<Number> poly; //NikolausHaus
   poly.insert(Hyperplane<Number>({-1,1},1));
 	poly.insert(Hyperplane<Number>({1,1},1));
-  poly.insert(Hyperplane<Number>({1,0},1));
+  poly.insert(Hyperplane<Number>({1,0.1},1));
 	poly.insert(Hyperplane<Number>({0,-1},1));
   poly.insert(Hyperplane<Number>({-1,0},1));
 
