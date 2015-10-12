@@ -891,7 +891,12 @@ void HPolytope<Number>::print() const {
  */
 
 template <typename Number>
-Hyperplane<Number> HPolytope<Number>::operator[]( unsigned i ) const {
+const Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) const {
+	return mHPlanes.at( i );
+}
+
+template <typename Number>
+Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) {
 	return mHPlanes.at( i );
 }
 

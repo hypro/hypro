@@ -122,7 +122,8 @@ class HPolytope {
 	 * Operators
 	 */
 
-	Hyperplane<Number> operator[]( unsigned i ) const;
+	const Hyperplane<Number>& operator[]( size_t i ) const;
+	Hyperplane<Number>& operator[]( size_t i ) ;
 	HPolytope<Number>& operator=( const HPolytope<Number>& rhs );
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytope<Number>& rhs ) {
