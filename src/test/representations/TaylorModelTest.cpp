@@ -20,7 +20,7 @@ protected:
     {
     	vpool.clear();
     }
-	
+
     virtual void TearDown()
     {
     }
@@ -37,11 +37,11 @@ TYPED_TEST(TaylorModelTest, Addition)
 	carl::Variable x0 = this->vpool.newCarlVariable("x0");
 	carl::Variable y0 = this->vpool.newCarlVariable("y0");
 
-	TaylorModel<TypeParam> tmv_1_x({Term<Interval<TypeParam>>(1)});
+	TaylorModel<TypeParam> tmv_1_x({Term<carl::Interval<TypeParam>>(1)});
 
-	TaylorModel<TypeParam> tmv_1_y({Term<Interval<TypeParam>>(2), (Interval<TypeParam>)1*x0*x0});
+	TaylorModel<TypeParam> tmv_1_y({Term<carl::Interval<TypeParam>>(2), (carl::Interval<TypeParam>)1*x0*x0});
 
-	TaylorModel<TypeParam> tmv_1_z({(Interval<TypeParam>)1*y0, (Interval<TypeParam>)1*x0*y0});
+	TaylorModel<TypeParam> tmv_1_z({(carl::Interval<TypeParam>)1*y0, (carl::Interval<TypeParam>)1*x0*y0});
 
 	TaylorModelVec<TypeParam> tmv_1;
 	tmv_1.assign(x, tmv_1_x);
@@ -50,9 +50,9 @@ TYPED_TEST(TaylorModelTest, Addition)
 
 	std::cout << tmv_1 << std::endl;
 
-	TaylorModel<TypeParam> tmv_2_x({Term<Interval<TypeParam>>(3)});
-	TaylorModel<TypeParam> tmv_2_y({Term<Interval<TypeParam>>(5), (Interval<TypeParam>)3*x0*x0});
-	TaylorModel<TypeParam> tmv_2_z({(Interval<TypeParam>)1*x0, (Interval<TypeParam>)1*x0*y0});
+	TaylorModel<TypeParam> tmv_2_x({Term<carl::Interval<TypeParam>>(3)});
+	TaylorModel<TypeParam> tmv_2_y({Term<carl::Interval<TypeParam>>(5), (carl::Interval<TypeParam>)3*x0*x0});
+	TaylorModel<TypeParam> tmv_2_z({(carl::Interval<TypeParam>)1*x0, (carl::Interval<TypeParam>)1*x0*y0});
 
 	TaylorModelVec<TypeParam> tmv_2;
 	tmv_2.assign(y, tmv_2_y);
@@ -76,14 +76,14 @@ TYPED_TEST(TaylorModelTest, Subtraction)
 
 TYPED_TEST(TaylorModelTest, Multiplication)
 {
-	Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable x = this->vpool.newCarlVariable("x");
 
-	Interval<TypeParam> remainder1(-0.1,0.1), remainder2(-0.1,0.1);
+	carl::Interval<TypeParam> remainder1(-0.1,0.1), remainder2(-0.1,0.1);
 
-	TaylorModel<TypeParam> tm1({(Interval<TypeParam>)-1*x, (Interval<TypeParam>)1*x*x}, remainder1);
-	TaylorModel<TypeParam> tm2({Term<Interval<TypeParam>>(1), (Interval<TypeParam>)2*x, (Interval<TypeParam>)-1*x*x}, remainder2);
+	TaylorModel<TypeParam> tm1({(carl::Interval<TypeParam>)-1*x, (carl::Interval<TypeParam>)1*x*x}, remainder1);
+	TaylorModel<TypeParam> tm2({Term<carl::Interval<TypeParam>>(1), (carl::Interval<TypeParam>)2*x, (carl::Interval<TypeParam>)-1*x*x}, remainder2);
 
-	Interval<TypeParam> range_of_x(2,4);
+	carl::Interval<TypeParam> range_of_x(2,4);
 	Domain<TypeParam> domain;
 	domain.assign(x, range_of_x);
 
@@ -103,12 +103,12 @@ TYPED_TEST(TaylorModelTest, Multiplication)
 
 
 
-	Variable y = this->vpool.newCarlVariable("y");
+	carl::Variable y = this->vpool.newCarlVariable("y");
 
-	TaylorModel<TypeParam> tm3({Term<Interval<TypeParam>>(6), (Interval<TypeParam>)5*y, (Interval<TypeParam>)1*y*y}, remainder1);
-	TaylorModel<TypeParam> tm4({Term<Interval<TypeParam>>(-2), (Interval<TypeParam>)-4*y, (Interval<TypeParam>)-1*y*y}, remainder2);
+	TaylorModel<TypeParam> tm3({Term<carl::Interval<TypeParam>>(6), (carl::Interval<TypeParam>)5*y, (carl::Interval<TypeParam>)1*y*y}, remainder1);
+	TaylorModel<TypeParam> tm4({Term<carl::Interval<TypeParam>>(-2), (carl::Interval<TypeParam>)-4*y, (carl::Interval<TypeParam>)-1*y*y}, remainder2);
 
-	Interval<TypeParam> range_of_y(-1,1);
+	carl::Interval<TypeParam> range_of_y(-1,1);
 	domain.clear();
 	domain.assign(y, range_of_y);
 
@@ -126,25 +126,25 @@ TYPED_TEST(TaylorModelTest, Multiplication)
 
 TYPED_TEST(TaylorModelTest, Polynomial_Substitution)
 {
-	Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
+	carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
 
-	MultivariatePolynomial<Interval<double>> poly({Term<Interval<double>>(Interval<double>(1)), Interval<double>(-2)*x*x });
+	MultivariatePolynomial<carl::Interval<double>> poly({Term<carl::Interval<double>>(carl::Interval<double>(1)), carl::Interval<double>(-2)*x*x });
 
 	std::cout << "We substitute x for y in the following polynomial:" << std::endl;
 
 	std::cout << poly << std::endl;
 
-	MultivariatePolynomial<Interval<double>> poly_y_to_x({(Interval<double>)1*x});
-	MultivariatePolynomial<Interval<double>> poly_x_to_y({(Interval<double>)1*y});
-	std::map<Variable, MultivariatePolynomial<Interval<double>>> substitution;
-	std::pair<const Variable, MultivariatePolynomial<Interval<double>>> y_to_x(y, poly_y_to_x);
-	std::pair<const Variable, MultivariatePolynomial<Interval<double>>> x_to_y(x, poly_x_to_y);
+	MultivariatePolynomial<carl::Interval<double>> poly_y_to_x({(carl::Interval<double>)1*x});
+	MultivariatePolynomial<carl::Interval<double>> poly_x_to_y({(carl::Interval<double>)1*y});
+	std::map<carl::Variable, MultivariatePolynomial<carl::Interval<double>>> substitution;
+	std::pair<const carl::Variable, MultivariatePolynomial<carl::Interval<double>>> y_to_x(y, poly_y_to_x);
+	std::pair<const carl::Variable, MultivariatePolynomial<carl::Interval<double>>> x_to_y(x, poly_x_to_y);
 
 	substitution.insert(x_to_y);
 	substitution.insert(y_to_x);
 
-	MultivariatePolynomial<Interval<double>> result;
+	MultivariatePolynomial<carl::Interval<double>> result;
 	result = poly.substitute(substitution);
 
 	std::cout << "The result is" << std::endl;
@@ -154,15 +154,15 @@ TYPED_TEST(TaylorModelTest, Polynomial_Substitution)
 
 TYPED_TEST(TaylorModelTest, Substitution)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable x0 = this->vpool.newCarlVariable("x0");
-	Variable t = this->vpool.newCarlVariable("t");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable t = this->vpool.newCarlVariable("t");
 
-	Interval<double> remainder1(-0.1,0.1), remainder2(-0.5,0.5), T(0.2,0.2), remainder_zero(0);
+	carl::Interval<double> remainder1(-0.1,0.1), remainder2(-0.5,0.5), T(0.2,0.2), remainder_zero(0);
 
-	TaylorModel<double> tm1({Term<Interval<double>>(1), (Interval<double>)2*x*t*t, (Interval<double>)-0.2*x*x*t}, remainder1);
+	TaylorModel<double> tm1({Term<carl::Interval<double>>(1), (carl::Interval<double>)2*x*t*t, (carl::Interval<double>)-0.2*x*x*t}, remainder1);
 
-	TaylorModel<double> tm2({Term<Interval<double>>(0.1), Interval<double>(-1)*x0*x0}, remainder2);
+	TaylorModel<double> tm2({Term<carl::Interval<double>>(0.1), carl::Interval<double>(-1)*x0*x0}, remainder2);
 	TaylorModel<double> tmT(T);
 
 	std::cout << "We substitute" << std::endl;
@@ -177,16 +177,16 @@ TYPED_TEST(TaylorModelTest, Substitution)
 
 	std::cout << "The ranges of the variables are" << std::endl;
 
-	Interval<double> range_of_x0(-1,1), range_of_t(0.2,0.2);
+	carl::Interval<double> range_of_x0(-1,1), range_of_t(0.2,0.2);
 	Domain<double> domain;
 	domain.assign(x0, range_of_x0);
 	domain.assign(t, range_of_t);
 
 	std::cout << domain << std::endl;
 
-	std::map<Variable, TaylorModel<double>> substitution;
-	std::pair<const Variable, TaylorModel<double>> x_to_tm2(x, tm2);
-	std::pair<const Variable, TaylorModel<double>> t_to_tmT(t, tmT);
+	std::map<carl::Variable, TaylorModel<double>> substitution;
+	std::pair<const carl::Variable, TaylorModel<double>> x_to_tm2(x, tm2);
+	std::pair<const carl::Variable, TaylorModel<double>> t_to_tmT(t, tmT);
 
 	substitution.insert(x_to_tm2);
 	substitution.insert(t_to_tmT);
@@ -201,16 +201,16 @@ TYPED_TEST(TaylorModelTest, Substitution)
 
 TYPED_TEST(TaylorModelTest, Integration)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
 
-	Interval<double> remainder(1,2);
-	TaylorModel<double> tm({Term<Interval<double>>(x), (Interval<double>)-2*x*y, Term<Interval<double>>(5)}, remainder);
+	carl::Interval<double> remainder(1,2);
+	TaylorModel<double> tm({Term<carl::Interval<double>>(x), (carl::Interval<double>)-2*x*y, Term<carl::Interval<double>>(5)}, remainder);
 
 	std::cout << "Before integration on y in [2,3]:" << std::endl;
 	std::cout << tm << std::endl;
 
-	Interval<double> range_of_y(2,3);
+	carl::Interval<double> range_of_y(2,3);
 	tm.integration_assign(y, range_of_y);
 
 	std::cout << "After integration on y in [2,3]:" << std::endl;
@@ -219,11 +219,11 @@ TYPED_TEST(TaylorModelTest, Integration)
 
 TYPED_TEST(TaylorModelTest, ODE)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
 
-	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
-	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
+	MultivariatePolynomial<carl::Interval<double>> deriv_x({(Term<carl::Interval<double>>)(1), (carl::Interval<double>)1*y});
+	MultivariatePolynomial<carl::Interval<double>> deriv_y({(carl::Interval<double>)-1*x*x});
 
 	PolynomialODE<double> ode;
 	ode.assign(y, deriv_y);
@@ -234,19 +234,19 @@ TYPED_TEST(TaylorModelTest, ODE)
 
 TYPED_TEST(TaylorModelTest, Lie_Derivation)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
 
-	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
-	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
+	MultivariatePolynomial<carl::Interval<double>> deriv_x({(Term<carl::Interval<double>>)(1), (carl::Interval<double>)1*y});
+	MultivariatePolynomial<carl::Interval<double>> deriv_y({(carl::Interval<double>)-1*x*x});
 
 	PolynomialODE<double> ode;
 	ode.assign(x, deriv_x);
 	ode.assign(y, deriv_y);
 
-	Interval<double> intZero(0);
-	TaylorModel<double> tm_x({Term<Interval<double>>(x)}, intZero);
-	TaylorModel<double> tm_y({Term<Interval<double>>(y)}, intZero);
+	carl::Interval<double> intZero(0);
+	TaylorModel<double> tm_x({Term<carl::Interval<double>>(x)}, intZero);
+	TaylorModel<double> tm_y({Term<carl::Interval<double>>(y)}, intZero);
 
 	std::vector<TaylorModel<double> > tm_v;
 	tm_v.push_back(tm_x);
@@ -287,11 +287,11 @@ TYPED_TEST(TaylorModelTest, Lie_Derivation)
 
 TYPED_TEST(TaylorModelTest, normalize)
 {
-	Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable x = this->vpool.newCarlVariable("x");
 
-	TaylorModel<double> tm({(Term<Interval<double>>)(1), (Interval<double>)2*x, (Interval<double>)-1*x*x});
+	TaylorModel<double> tm({(Term<carl::Interval<double>>)(1), (carl::Interval<double>)2*x, (carl::Interval<double>)-1*x*x});
 
-	Interval<double> range_of_x(2,4);
+	carl::Interval<double> range_of_x(2,4);
 	Domain<double> domain;
 	domain.assign(x, range_of_x);
 
@@ -307,14 +307,14 @@ TYPED_TEST(TaylorModelTest, normalize)
 
 TYPED_TEST(TaylorModelTest, Picard_Operation)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
-    Variable x0 = this->vpool.newCarlVariable("x0");
-	Variable y0 = this->vpool.newCarlVariable("y0");
-	Variable t = this->vpool.newCarlVariable("t");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable y0 = this->vpool.newCarlVariable("y0");
+	carl::Variable t = this->vpool.newCarlVariable("t");
 
-	MultivariatePolynomial<Interval<double>> deriv_x({(Term<Interval<double>>)(1), (Interval<double>)1*y});
-	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)-1*x*x});
+	MultivariatePolynomial<carl::Interval<double>> deriv_x({(Term<carl::Interval<double>>)(1), (carl::Interval<double>)1*y});
+	MultivariatePolynomial<carl::Interval<double>> deriv_y({(carl::Interval<double>)-1*x*x});
 
 	PolynomialODE<double> ode;
 	ode.assign(x, deriv_x);
@@ -326,9 +326,9 @@ TYPED_TEST(TaylorModelTest, Picard_Operation)
 
 	std::cout << "We compute the Picard operation on the Taylor model" << std::endl;
 
-	Interval<double> remainder_x(-0.1,0.1), remainder_y(-0.1,0.1);
-	TaylorModel<double> tm_x({(Interval<double>)1*x0, (Interval<double>)1*t, (Interval<double>)1*y0*t}, remainder_x);
-	TaylorModel<double> tm_y({(Interval<double>)1*y0, (Interval<double>)-1*x0*x0*t, (Interval<double>)-1*x0*t*t, (Interval<double>)-0.33333333*t*t*t}, remainder_y);
+	carl::Interval<double> remainder_x(-0.1,0.1), remainder_y(-0.1,0.1);
+	TaylorModel<double> tm_x({(carl::Interval<double>)1*x0, (carl::Interval<double>)1*t, (carl::Interval<double>)1*y0*t}, remainder_x);
+	TaylorModel<double> tm_y({(carl::Interval<double>)1*y0, (carl::Interval<double>)-1*x0*x0*t, (carl::Interval<double>)-1*x0*t*t, (carl::Interval<double>)-0.33333333*t*t*t}, remainder_y);
 
 	TaylorModelVec<double> tmv;
 	tmv.assign(x, tm_x);
@@ -338,8 +338,8 @@ TYPED_TEST(TaylorModelTest, Picard_Operation)
 
 	std::cout << "wherein" << std::endl;
 
-	Interval<double> range_of_x0(-1,1), range_of_y0(-0.5,0.5);
-	Interval<double> range_of_t(0.0,0.02);
+	carl::Interval<double> range_of_x0(-1,1), range_of_y0(-0.5,0.5);
+	carl::Interval<double> range_of_t(0.0,0.02);
 	Domain<double> domain;
 	domain.assign(x0, range_of_x0);
 	domain.assign(y0, range_of_y0);
@@ -349,8 +349,8 @@ TYPED_TEST(TaylorModelTest, Picard_Operation)
 
 	std::cout << "Result:" << std::endl;
 
-	TaylorModel<double> tm0_x({(Interval<double>)1*x0});
-	TaylorModel<double> tm0_y({(Interval<double>)1*y0});
+	TaylorModel<double> tm0_x({(carl::Interval<double>)1*x0});
+	TaylorModel<double> tm0_y({(carl::Interval<double>)1*y0});
 	TaylorModelVec<double> tmv0;
 
 	tmv0.assign(x, tm0_x);
@@ -365,32 +365,32 @@ TYPED_TEST(TaylorModelTest, Picard_Operation)
 /*
 TYPED_TEST(TaylorModelTest, Brusselator)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
-    Variable x0 = this->vpool.newCarlVariable("x0");
-	Variable y0 = this->vpool.newCarlVariable("y0");
-	Variable t = this->vpool.newCarlVariable("t");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable y0 = this->vpool.newCarlVariable("y0");
+	carl::Variable t = this->vpool.newCarlVariable("t");
 
-	MultivariatePolynomial<Interval<FLOAT_T<mpfr_t> >> deriv_x({(Term<Interval<FLOAT_T<mpfr_t> >>)(Interval<FLOAT_T<mpfr_t> >(1)), (Interval<FLOAT_T<mpfr_t>>)1*x*x*y, (Interval<FLOAT_T<mpfr_t>>)-2.5*x});
-	MultivariatePolynomial<Interval<FLOAT_T<mpfr_t>>> deriv_y({(Interval<FLOAT_T<mpfr_t>>)1.5*x, (Interval<FLOAT_T<mpfr_t>>)-1*x*x*y});
+	MultivariatePolynomial<carl::Interval<FLOAT_T<mpfr_t> >> deriv_x({(Term<carl::Interval<FLOAT_T<mpfr_t> >>)(carl::Interval<FLOAT_T<mpfr_t> >(1)), (carl::Interval<FLOAT_T<mpfr_t>>)1*x*x*y, (carl::Interval<FLOAT_T<mpfr_t>>)-2.5*x});
+	MultivariatePolynomial<carl::Interval<FLOAT_T<mpfr_t>>> deriv_y({(carl::Interval<FLOAT_T<mpfr_t>>)1.5*x, (carl::Interval<FLOAT_T<mpfr_t>>)-1*x*x*y});
 
 	PolynomialODE<FLOAT_T<mpfr_t>> ode;
 	ode.assign(x, deriv_x);
 	ode.assign(y, deriv_y);
 
 	// define the initial set which is a flowpipe
-	Interval<FLOAT_T<mpfr_t>> range_of_x0(-1,1), range_of_y0(-1,1);
-	Interval<FLOAT_T<mpfr_t>> range_of_t(0.0,0.02);
+	carl::Interval<FLOAT_T<mpfr_t>> range_of_x0(-1,1), range_of_y0(-1,1);
+	carl::Interval<FLOAT_T<mpfr_t>> range_of_t(0.0,0.02);
 	Domain<FLOAT_T<mpfr_t>> domain;
 	domain.assign(x0, range_of_x0);
 	domain.assign(y0, range_of_y0);
 	domain.assign(t, range_of_t);
 
-	TaylorModel<FLOAT_T<mpfr_t>> X0_x({(Term<Interval<FLOAT_T<mpfr_t>>>)(Interval<FLOAT_T<mpfr_t> >(0.9)), (Interval<FLOAT_T<mpfr_t>>)0.01*x0});
-	TaylorModel<FLOAT_T<mpfr_t>> X0_y({(Term<Interval<FLOAT_T<mpfr_t>>>)(Interval<FLOAT_T<mpfr_t> >(0.1)), (Interval<FLOAT_T<mpfr_t>>)0.01*y0});
+	TaylorModel<FLOAT_T<mpfr_t>> X0_x({(Term<carl::Interval<FLOAT_T<mpfr_t>>>)(carl::Interval<FLOAT_T<mpfr_t> >(0.9)), (carl::Interval<FLOAT_T<mpfr_t>>)0.01*x0});
+	TaylorModel<FLOAT_T<mpfr_t>> X0_y({(Term<carl::Interval<FLOAT_T<mpfr_t>>>)(carl::Interval<FLOAT_T<mpfr_t> >(0.1)), (carl::Interval<FLOAT_T<mpfr_t>>)0.01*y0});
 
-//	TaylorModel<double> X0_x({(Term<Interval<double>>)(0.9)});
-//	TaylorModel<double> X0_y({(Term<Interval<double>>)(0.1)});
+//	TaylorModel<double> X0_x({(Term<carl::Interval<double>>)(0.9)});
+//	TaylorModel<double> X0_y({(Term<carl::Interval<double>>)(0.1)});
 
 	TaylorModelVec<FLOAT_T<mpfr_t>> tmvInitial;
 	tmvInitial.assign(x, X0_x);
@@ -405,7 +405,7 @@ TYPED_TEST(TaylorModelTest, Brusselator)
 	std::list<Flowpipe<FLOAT_T<mpfr_t>> > result;
 
 	Range<FLOAT_T<mpfr_t>> estimation;
-	Interval<FLOAT_T<mpfr_t>> intEst(-1e-1,1e-1);
+	carl::Interval<FLOAT_T<mpfr_t>> intEst(-1e-1,1e-1);
 	estimation.assign(x, intEst);
 	estimation.assign(y, intEst);
 
@@ -421,29 +421,29 @@ TYPED_TEST(TaylorModelTest, Brusselator)
 
 TYPED_TEST(TaylorModelTest, VanDerPol)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
-    Variable x0 = this->vpool.newCarlVariable("x0");
-	Variable y0 = this->vpool.newCarlVariable("y0");
-	Variable t = this->vpool.newCarlVariable("t");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
+    carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable y0 = this->vpool.newCarlVariable("y0");
+	carl::Variable t = this->vpool.newCarlVariable("t");
 
-	MultivariatePolynomial<Interval<double>> deriv_x({(Interval<double>)1*y});
-	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)1*y, (Interval<double>)-1*x, (Interval<double>)-1*x*x*y});
+	MultivariatePolynomial<carl::Interval<double>> deriv_x({(carl::Interval<double>)1*y});
+	MultivariatePolynomial<carl::Interval<double>> deriv_y({(carl::Interval<double>)1*y, (carl::Interval<double>)-1*x, (carl::Interval<double>)-1*x*x*y});
 
 	PolynomialODE<double> ode;
 	ode.assign(x, deriv_x);
 	ode.assign(y, deriv_y);
 
 	// define the initial set which is a flowpipe
-	Interval<double> range_of_x0(-1,1), range_of_y0(-1,1);
-	Interval<double> range_of_t(0.0,0.02);
+	carl::Interval<double> range_of_x0(-1,1), range_of_y0(-1,1);
+	carl::Interval<double> range_of_t(0.0,0.02);
 	Domain<double> domain;
 	domain.assign(x0, range_of_x0);
 	domain.assign(y0, range_of_y0);
 	domain.assign(t, range_of_t);
 
-	TaylorModel<double> X0_x({(Term<Interval<double>>)(1.4), (Interval<double>)0.15*x0});
-	TaylorModel<double> X0_y({(Term<Interval<double>>)(2.3), (Interval<double>)0.05*y0});
+	TaylorModel<double> X0_x({(Term<carl::Interval<double>>)(1.4), (carl::Interval<double>)0.15*x0});
+	TaylorModel<double> X0_y({(Term<carl::Interval<double>>)(2.3), (carl::Interval<double>)0.05*y0});
 
 	TaylorModelVec<double> tmvInitial;
 	tmvInitial.assign(x, X0_x);
@@ -458,7 +458,7 @@ TYPED_TEST(TaylorModelTest, VanDerPol)
 	std::list<Flowpipe<double> > result;
 
 	Range<double> estimation;
-	Interval<double> intEst(-1e-2,1e-2);
+	carl::Interval<double> intEst(-1e-2,1e-2);
 	estimation.assign(x, intEst);
 	estimation.assign(y, intEst);
 
@@ -474,17 +474,17 @@ TYPED_TEST(TaylorModelTest, VanDerPol)
 
 TYPED_TEST(TaylorModelTest, Roessler)
 {
-    Variable x = this->vpool.newCarlVariable("x");
-	Variable y = this->vpool.newCarlVariable("y");
-	Variable z = this->vpool.newCarlVariable("z");
-    Variable x0 = this->vpool.newCarlVariable("x0");
-	Variable y0 = this->vpool.newCarlVariable("y0");
-	Variable z0 = this->vpool.newCarlVariable("z0");
-	Variable t = this->vpool.newCarlVariable("t");
+    carl::Variable x = this->vpool.newCarlVariable("x");
+	carl::Variable y = this->vpool.newCarlVariable("y");
+	carl::Variable z = this->vpool.newCarlVariable("z");
+    carl::Variable x0 = this->vpool.newCarlVariable("x0");
+	carl::Variable y0 = this->vpool.newCarlVariable("y0");
+	carl::Variable z0 = this->vpool.newCarlVariable("z0");
+	carl::Variable t = this->vpool.newCarlVariable("t");
 
-	MultivariatePolynomial<Interval<double>> deriv_x({(Interval<double>)-1*y, (Interval<double>)-1*z});
-	MultivariatePolynomial<Interval<double>> deriv_y({(Interval<double>)0.2*y, (Interval<double>)1*x});
-	MultivariatePolynomial<Interval<double>> deriv_z({(Term<Interval<double>>)(0.2), (Interval<double>)-5.7*z, (Interval<double>)1*x*z});
+	MultivariatePolynomial<carl::Interval<double>> deriv_x({(carl::Interval<double>)-1*y, (carl::Interval<double>)-1*z});
+	MultivariatePolynomial<carl::Interval<double>> deriv_y({(carl::Interval<double>)0.2*y, (carl::Interval<double>)1*x});
+	MultivariatePolynomial<carl::Interval<double>> deriv_z({(Term<carl::Interval<double>>)(0.2), (carl::Interval<double>)-5.7*z, (carl::Interval<double>)1*x*z});
 
 	PolynomialODE<double> ode;
 	ode.assign(x, deriv_x);
@@ -492,17 +492,17 @@ TYPED_TEST(TaylorModelTest, Roessler)
 	ode.assign(z, deriv_z);
 
 	// define the initial set which is a flowpipe
-	Interval<double> range_of_x0(-1,1), range_of_y0(-1,1), range_of_z0(-1,1);
-	Interval<double> range_of_t(0.0,0.02);
+	carl::Interval<double> range_of_x0(-1,1), range_of_y0(-1,1), range_of_z0(-1,1);
+	carl::Interval<double> range_of_t(0.0,0.02);
 	Domain<double> domain;
 	domain.assign(x0, range_of_x0);
 	domain.assign(y0, range_of_y0);
 	domain.assign(z0, range_of_z0);
 	domain.assign(t, range_of_t);
 
-	TaylorModel<double> X0_x({(Interval<double>)0.1*x0});
-	TaylorModel<double> X0_y({(Term<Interval<double>>)(-8.4), (Interval<double>)0.1*y0});
-	TaylorModel<double> X0_z({(Interval<double>)0.1*z0});
+	TaylorModel<double> X0_x({(carl::Interval<double>)0.1*x0});
+	TaylorModel<double> X0_y({(Term<carl::Interval<double>>)(-8.4), (carl::Interval<double>)0.1*y0});
+	TaylorModel<double> X0_z({(carl::Interval<double>)0.1*z0});
 
 	TaylorModelVec<double> tmvInitial;
 	tmvInitial.assign(x, X0_x);
@@ -518,7 +518,7 @@ TYPED_TEST(TaylorModelTest, Roessler)
 	std::list<Flowpipe<double> > result;
 
 	Range<double> estimation;
-	Interval<double> intEst(-1e-2,1e-2);
+	carl::Interval<double> intEst(-1e-2,1e-2);
 	estimation.assign(x, intEst);
 	estimation.assign(y, intEst);
 	estimation.assign(z, intEst);

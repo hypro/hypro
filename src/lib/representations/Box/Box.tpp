@@ -174,6 +174,18 @@ Box<Number> Box<Number>::intersect( const Box<Number> &rhs ) const {
 }
 
 template <typename Number>
+Box<Number> Box<Number>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+	if(!this->empty()) {
+		// very overapproximating: As soon as one corner is contained, return the whole box as a result to intersection
+		for(const auto& vertex : this->vertices()) {
+			if(rhs.holds(vertex))
+				return *this;
+		}
+	}
+	return Empty(this->dimension());
+}
+
+template <typename Number>
 bool Box<Number>::contains( const Point<Number> &point ) const {
 	if ( this->dimension() > point.dimension() ) return false;
 
