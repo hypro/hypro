@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
 	poly.insert(Hyperplane<Number>({1,1},1));
   poly.insert(Hyperplane<Number>({1,0.1},1));
 	poly.insert(Hyperplane<Number>({0,-1},1));
-  poly.insert(Hyperplane<Number>({-1,0},1));
+  poly.insert(Hyperplane<Number>({-1,0.5},1));
 
 
 	HPolytope<Number> poly2 = poly.reduce();

@@ -442,66 +442,65 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 	HPolytope<Number> res = *this;
 	unsigned size=res.mHPlanes.size()-1;
 
+	std::pair<unsigned, unsigned> recommended = chooseStrat();
+
 	// Switch strategy, implement each strategy.
-	switch (strat) {
+	switch (recommended.first) { // (strat) {
 
 		// DROP
-		case REDUCTION_STRATEGY::DROP:
+		case 0: //REDUCTION_STRATEGY::DROP:
 		{
-			unsigned i=getIndexForDrop();
+			unsigned i=recommended.second; // getIndexForDrop();
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
 		}
 
 		// DROP_SMOOTH
-		case REDUCTION_STRATEGY::DROP_SMOOTH:
+		case 1: // REDUCTION_STRATEGY::DROP_SMOOTH:
 		{
-			unsigned a=getIndexForDrop();
-			unsigned b=a+1;
-			unsigned c=a-1;
+			unsigned a=recommended.second, next_a=a+1,  prev_a=a-1;
 
-			// select b and c propely
-			if(b>size){
-				b=0;
+			// select prev_a and next_a propely
+			if(next_a>size){
+				next_a=0;
 			}
 			else if(a==0){
-				c=size;
+				prev_a=size;
 			}
 
-			vector_t<Number> bVector = res.mHPlanes[a].normal() + res.mHPlanes[b].normal();
-			Number bOffset = res.mHPlanes[a].offset() + res.mHPlanes[b].offset();
-			vector_t<Number> cVector = res.mHPlanes[a].normal() + res.mHPlanes[c].normal();
-			Number cOffset = res.mHPlanes[a].offset() + res.mHPlanes[c].offset();
+			vector_t<Number> next_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[next_a].normal();
+			Number next_a_aOffset = res.mHPlanes[a].offset() + res.mHPlanes[next_a].offset();
+			vector_t<Number> prev_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[prev_a].normal();
+			Number prev_a_aOffset = res.mHPlanes[a].offset() + res.mHPlanes[prev_a].offset();
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+a); // erase a
-			if(b==0){ // erase b propely
-				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase c
-				res.mHPlanes.erase(res.mHPlanes.begin()); // erase b first!
-			} else if(a==0){ // erase c propely
-				res.mHPlanes.erase(res.mHPlanes.begin()); // erase b
-				res.mHPlanes.erase(res.mHPlanes.begin()+res.mHPlanes.size()-1); // erase c
+			if(next_a==0){ // erase next_a propely
+				res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase prev_a
+				res.mHPlanes.erase(res.mHPlanes.begin()); // erase next_a
+			} else if(a==0){ // erase prev_a propely
+				res.mHPlanes.erase(res.mHPlanes.begin()); // erase next_a
+				res.mHPlanes.erase(res.mHPlanes.begin()+size); // erase prev_a
 			} else {
-				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase c
-				res.mHPlanes.erase(res.mHPlanes.begin()+c); // erase b
+				res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase prev_a
+				res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase next_a
 			}
 
-			res.insert(Hyperplane<Number>(bVector,bOffset));
-			res.insert(Hyperplane<Number>(cVector,cOffset));
+			res.insert(Hyperplane<Number>(next_a_aVector,next_a_aOffset));
+			res.insert(Hyperplane<Number>(prev_a_aVector,prev_a_aOffset));
 			break;
 		}
 
 		// UNITE
-		case REDUCTION_STRATEGY::UNITE:
+		case 2: //REDUCTION_STRATEGY::UNITE:
 		{
-			unsigned i=getIndexForUnite();
-			unsigned j=i+1;
+			unsigned i=recommended.second, j=i+1;
 
 			// select j propely
 			if(j>size){
 				j=0;
 			}
-			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal();
-			Number uniteOffset = res.mHPlanes[i].offset() + res.mHPlanes[j].offset();
+			vector_t<Number> uniteVector = res.mHPlanes[i].normal() + res.mHPlanes[j].normal(); // calculate the uniteVector (i+j)
+			Number uniteOffset = res.mHPlanes[i].offset() + res.mHPlanes[j].offset(); // calculate the uniteOffset (i+j)
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			if(j==0){ // erase j propely
@@ -514,12 +513,9 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_SMOOTH
-		case REDUCTION_STRATEGY::UNITE_SMOOTH:
+		case 3: //REDUCTION_STRATEGY::UNITE_SMOOTH:
 		{
-			unsigned a=getIndexForUnite();
-			unsigned b=a+1;
-			unsigned prev_a=a-1;
-			unsigned next_b=b+1;
+			unsigned a=recommended.second, b=a+1, prev_a=a-1,  next_b=b+1;
 
 			// select b, prev_a and next_b propely
 			if(b>size){
@@ -533,36 +529,17 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 				prev_a=size;
 			}
 
-			// save aVector and bVector
-			vector_t<Number> aVector = res.mHPlanes[a].normal();
-			vector_t<Number> bVector = res.mHPlanes[b].normal();
-			Number aOffset = res.mHPlanes[a].offset();
-			Number bOffset = res.mHPlanes[b].offset();
-
 			// calculate next_b+b and prev_a+a -- normalized to keep the proportion
-			vector_t<Number> next_b_bVector = bVector + res.mHPlanes[next_b].normal();
-			next_b_bVector.normalize();
-			vector_t<Number> prev_a_aVector = aVector + res.mHPlanes[prev_a].normal();
+			vector_t<Number> prev_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[prev_a].normal();
 			prev_a_aVector.normalize();
-
-			// calculate uniteVector (next_b+b + prev_a+a)
-			vector_t<Number> uniteVector = next_b_bVector + prev_a_aVector;
+			vector_t<Number> next_b_bVector = res.mHPlanes[b].normal() + res.mHPlanes[next_b].normal();
+			next_b_bVector.normalize();
 
 			// Helpvalues to calculate the correct uniteOffset
-			double helpx2_top, helpx2_down, x1, x2;
-			if(aVector[0]!=0){
-				helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
-				helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
-				x2 = helpx2_top/helpx2_down;
-				x1 = (aOffset - aVector[1]*x2)/aVector[0];
-			} else {
-				helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
-				helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
-				x2 = helpx2_top/helpx2_down;
-				x1 = (bOffset - bVector[1]*x2)/bVector[0];
-			}
-			// calculate the actual uniteOffset
-			Number uniteOffset = uniteVector[0]*x1 + uniteVector[1]*x2;//res.mHPlanes[a].offset() + res.mHPlanes[b].offset();//dOffset + cOffset;
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
+
+			vector_t<Number> uniteVector = next_b_bVector + prev_a_aVector; // calculate uniteVector (next_b+b + prev_a+a)
+			Number uniteOffset = uniteVector[0]*center.first + uniteVector[1]*center.second; // calculate the actual uniteOffset
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+a);
 			if(b==0){ // erase b propely
@@ -575,12 +552,9 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_CUT
-		case REDUCTION_STRATEGY::UNITE_CUT:
+		case 4: //REDUCTION_STRATEGY::UNITE_CUT:
 		{
-			unsigned a=getIndexForUnite();
-			unsigned b=a+1;
-			unsigned prev_a=a-1;
-			unsigned next_b=b+1;
+			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
 
 			// select b, prev_a and next_b propely
 			if(b>size){
@@ -594,63 +568,10 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 				prev_a=size;
 			}
 
-			// save aVector and bVector
-			vector_t<Number> aVector = res.mHPlanes[a].normal();
-			vector_t<Number> bVector = res.mHPlanes[b].normal();
-			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
-			vector_t<Number> next_bVector = res.mHPlanes[next_b].normal();
-			Number aOffset = res.mHPlanes[a].offset();
-			Number bOffset = res.mHPlanes[b].offset();
-			Number prev_aOffset = res.mHPlanes[prev_a].offset();
-			Number next_bOffset = res.mHPlanes[next_b].offset();
-
-			// Helpvalues to calculate the correct uniteVector P
-			Number helpp2_top, helpp2_down, p1, p2;
-			if(prev_aVector[0]!=0){
-				helpp2_top = aOffset - (aVector[0]*prev_aOffset/prev_aVector[0]);
-				helpp2_down = aVector[1] - (aVector[0]*prev_aVector[1]/prev_aVector[0]);
-				p2 = helpp2_top/helpp2_down;
-				p1 = (prev_aOffset - prev_aVector[1]*p2)/prev_aVector[0];
-			} else {
-				helpp2_top = prev_aOffset - (prev_aVector[0]*aOffset/aVector[0]);
-				helpp2_down = prev_aVector[1] - (prev_aVector[0]*aVector[1]/aVector[0]);
-				p2 = helpp2_top/helpp2_down;
-				p1 = (aOffset - aVector[1]*p2)/aVector[0];
-			}
-
-			// Helpvalues to calculate the correct uniteVector N
-			Number helpn2_top, helpn2_down, n1, n2;
-			if(bVector[0]!=0){
-				helpn2_top = next_bOffset - (next_bVector[0]*bOffset/bVector[0]);
-				helpn2_down = next_bVector[1] - (next_bVector[0]*bVector[1]/bVector[0]);
-				n2 = helpn2_top/helpn2_down;
-				n1 = (bOffset - bVector[1]*n2)/bVector[0];
-			} else {
-				helpn2_top = bOffset - (bVector[0]*next_bOffset/next_bVector[0]);
-				helpn2_down = bVector[1] - (bVector[0]*next_bVector[1]/next_bVector[0]);
-				n2 = helpn2_top/helpn2_down;
-				n1 = (next_bOffset - next_bVector[1]*n2)/next_bVector[0];
-			}
-
-			// calculate uniteVector (next_b+b + prev_a+a)
-			//vector_t<Number> uniteVector = vector_t<Number>(p2-n2, n1-p1);
-
-			// Helpvalues to calculate the correct uniteOffset
-			double helpx2_top, helpx2_down, x1, x2;
-			if(aVector[0]!=0){
-				helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
-				helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
-				x2 = helpx2_top/helpx2_down;
-				x1 = (aOffset - aVector[1]*x2)/aVector[0];
-			} else {
-				helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
-				helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
-				x2 = helpx2_top/helpx2_down;
-				x1 = (bOffset - bVector[1]*x2)/bVector[0];
-			}
-
-			// calculate the actual uniteOffset
-			Number uniteOffset = (p2-n2)*x1 + (n1-p1)*x2;//res.mHPlanes[a].offset() + res.mHPlanes[b].offset();//dOffset + cOffset;
+			// Helpvalues to calculate the correct uniteVector and uniteOffset - prev_Cut, next_Cut and Cut
+			std::pair<Number, Number> prev = cut(res.mHPlanes[prev_a], res.mHPlanes[a]);
+			std::pair<Number, Number> next = cut(res.mHPlanes[b], res.mHPlanes[next_b]);
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
 
 			res.mHPlanes.erase(res.mHPlanes.begin()+a);
 			if(b==0){ // erase b propely
@@ -658,7 +579,8 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			} else {
 				res.mHPlanes.erase(res.mHPlanes.begin()+a);
 			}
-			res.insert(Hyperplane<Number>({p2-n2,n1-p1},uniteOffset));
+			res.insert(Hyperplane<Number>(	{prev.second-next.second,next.first-prev.first}, // UniteVector
+																			(prev.second-next.second)*center.first + (next.first-prev.first)*center.second)); // UniteOffset
 			break;
 		}
 
@@ -673,6 +595,57 @@ template <typename Number>
 void HPolytope<Number>::reduceAssign( REDUCTION_STRATEGY strat, unsigned _steps ) {
 
 	// TODO.
+
+}
+
+template <typename Number>
+std::pair<unsigned, unsigned> HPolytope<Number>::chooseStrat() const{
+	unsigned maxIndex=0, strat=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors of index
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-2){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index+1;
+			if(maxIndex>=hpolytope.mHPlanes.size()){
+				maxIndex=0;
+			}
+			strat=1;
+		}
+	}
+
+	// compare scalarproduct of neighboors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index;
+			strat=4;
+		}
+	}
+
+	return std::pair<unsigned, unsigned>(strat, maxIndex);
+
 
 }
 
@@ -706,7 +679,6 @@ unsigned HPolytope<Number>::getIndexForDrop() const{
 			}
 		}
 	}
-
 	return maxIndex;
 }
 
@@ -736,6 +708,30 @@ unsigned HPolytope<Number>::getIndexForUnite() const{
 	}
 
 	return maxIndex;
+}
+
+template <typename Number>
+std::pair<Number, Number> HPolytope<Number>::cut(Hyperplane<Number> a, Hyperplane<Number> b) const{
+	// save aVector and bVector
+	vector_t<Number> aVector = a.normal();
+	vector_t<Number> bVector = b.normal();
+	Number aOffset = a.offset();
+	Number bOffset = b.offset();
+
+	double helpx2_top, helpx2_down, x1, x2;
+	if(aVector[0]!=0){
+		helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
+		helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
+		x2 = helpx2_top/helpx2_down;
+		x1 = (aOffset - aVector[1]*x2)/aVector[0];
+	} else {
+		helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
+		helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
+		x2 = helpx2_top/helpx2_down;
+		x1 = (bOffset - bVector[1]*x2)/bVector[0];
+	}
+
+	return std::pair<Number, Number>(x1, x2);
 }
 
 template <typename Number>
