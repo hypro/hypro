@@ -8,9 +8,8 @@
 #define BL '\n'
 
 // model includes
-#include "util.h"
-#include "../../datastructures/hybridAutomata/util.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"  // used for datastructures (matrix_t<...> etc.)
+#include "util.h"
 
 // standard includes
 #include <iostream>

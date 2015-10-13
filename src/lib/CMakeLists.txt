@@ -3,7 +3,7 @@ add_subdirectory(representations)
 add_subdirectory(parser)
 
 # Create config.h by adding cmake defines dependend on option switches
-configure_file( ${CMAKE_SOURCE_DIR}/src/lib/types.h.in ${CMAKE_SOURCE_DIR}/src/lib/types.h )
+configure_file( ${CMAKE_SOURCE_DIR}/src/lib/flags.h.in ${CMAKE_SOURCE_DIR}/src/lib/flags.h )
 
 set(lib_hypro_headers
 	config.h
@@ -38,7 +38,7 @@ else()
 	set(STATICLIB "SHARED")
 endif()
 
-add_library(${PROJECT_NAME} ${STATICLIB} 
+add_library(${PROJECT_NAME} ${STATICLIB}
 	${sources}
 )
 

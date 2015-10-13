@@ -7,9 +7,10 @@
 
 #pragma once
 
-#include "util.h"
-
 namespace hypro {
+
+enum operator_e { EQ, GEQ, LEQ, NEQ, LESS, GREATER };
+
 template <typename Number>
 class Transition;
 

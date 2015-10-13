@@ -5,6 +5,7 @@
  *
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * @author Simon Froitzheim
  *
  * @version	2015-02-27
  */
@@ -102,6 +103,8 @@ class PolytopeSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
+        
+        void print() const;
 };
 }  // namespace
 #include "PolytopeSupportFunction.tpp"

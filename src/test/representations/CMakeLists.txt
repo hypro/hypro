@@ -28,5 +28,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${libraries}
 		${PROJECT_NAME}
 	)
+	cotire(runRepresentationTests)
 	add_test( NAME representations COMMAND runRepresentationTests )
 endif()

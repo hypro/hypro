@@ -8,6 +8,7 @@
 #include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../lib/representations/Polytope/Polytope.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/algorithms/reachability/forwardReachability.h"
@@ -168,7 +169,7 @@ protected:
 	Location<FLOAT_T<double>>* loc1 = locManag.create();
 	Location<FLOAT_T<double>>* loc2 = locManag.create();
 	hypro::Transition<FLOAT_T<double>>* trans = new hypro::Transition<FLOAT_T<double>>();
-	HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::valuation_t<FLOAT_T<double>>>();
+	HybridAutomaton<FLOAT_T<double>, hypro::Polytope<FLOAT_T<double>>> hybrid = HybridAutomaton<FLOAT_T<double>, hypro::Polytope<FLOAT_T<double>>>();
 
 	//Other Objects: Vectors, Matrices, Guards...
 	// vector_t<FLOAT_T<double>> invariantVec = vector_t<FLOAT_T<double>>(3,1);
@@ -207,7 +208,7 @@ protected:
  */
 TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 {
-	hypro::valuation_t<FLOAT_T<double>> result;
+	hypro::Polytope<FLOAT_T<double>> result;
 	bool inside = forwardReachability::computePostCondition(*trans, poly, result);
 	EXPECT_TRUE(inside);
 
@@ -230,7 +231,7 @@ TEST_F(ForwardReachabilityTest, ComputePostConditionTest)
 TEST_F(ForwardReachabilityTest, ComputeForwardTimeClosureTest)
 {
 
-	std::vector<hypro::valuation_t<FLOAT_T<double>>> flowpipe;
+	std::vector<hypro::Polytope<FLOAT_T<double>>> flowpipe;
 
 #ifdef fReach_DEBUG
    	std::cout << "original Polytope (Box): ";

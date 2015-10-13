@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "carl/numbers/FLOAT_T.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/representations/Polytopes/VPolytope/VPolytope.h"
@@ -43,13 +42,13 @@ protected:
 		points1.push_back(Point<Number>(p2));
 		points1.push_back(Point<Number>(p3));
 		points1.push_back(Point<Number>(p4));
-		
+
 		points2.push_back(Point<Number>(p5));
 		points2.push_back(Point<Number>(p6));
 		points2.push_back(Point<Number>(p7));
 		points2.push_back(Point<Number>(p8));
 	}
-	
+
 	virtual void TearDown()
 	{
 	}
@@ -63,9 +62,9 @@ TYPED_TEST(VPolytopeTest, Constructor)
 	VPolytope<TypeParam> aVPolytope = VPolytope<TypeParam>();
 	VPolytope<TypeParam> anotherVPolytope = VPolytope<TypeParam>(this->points1);
 	VPolytope<TypeParam> vpt2 = VPolytope<TypeParam>(this->points2);
-	
+
 	VPolytope<TypeParam> copyAssignment = VPolytope<TypeParam>(anotherVPolytope);
-	
+
 	SUCCEED();
 }
 
@@ -76,7 +75,7 @@ TYPED_TEST(VPolytopeTest, Access)
 	EXPECT_EQ((unsigned) 4, vpt1.size());
 	EXPECT_FALSE(vpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = vpt1.fan();
-		
+
 	typename VPolytope<TypeParam>::pointVector vertices =  vpt1.vertices();
 	for(auto& vertex : vertices) {
 		EXPECT_TRUE(vpt1.hasVertex(vertex));
@@ -269,7 +268,7 @@ TYPED_TEST(VPolytopeTest, MinkowskiSum)
 }
 
 TYPED_TEST(VPolytopeTest, Intersection)
-{	
+{
 	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
 	VPolytope<TypeParam> vpt2 = VPolytope<TypeParam>(this->points2);
 	VPolytope<TypeParam> result = vpt1.intersect(vpt2);
@@ -399,7 +398,7 @@ TYPED_TEST(VPolytopeTest, Intersection)
 TYPED_TEST(VPolytopeTest, Membership)
 {
 	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
-	
+
 	Point<TypeParam> p1({0, 0});
 	EXPECT_FALSE(vpt1.contains(p1));
 

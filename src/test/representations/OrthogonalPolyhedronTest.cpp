@@ -68,8 +68,8 @@ protected:
 	}
 
 	hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-	Variable x = pool.carlVarByIndex(0);
-	Variable y = pool.carlVarByIndex(1);
+	carl::Variable x = pool.carlVarByIndex(0);
+	carl::Variable y = pool.carlVarByIndex(1);
 
 	VertexContainer<Number> container1;
 	VertexContainer<Number> container2;
@@ -114,7 +114,7 @@ TYPED_TEST(OrthogonalPolyhedronTest, Properties)
 
 TYPED_TEST(OrthogonalPolyhedronTest, BoundaryBox)
 {
-	Box<TypeParam> boundaryBox;
+	hypro::Box<TypeParam> boundaryBox;
 	boundaryBox.insert(this->x, carl::Interval<TypeParam>(3, 7));
 	boundaryBox.insert(this->y, carl::Interval<TypeParam>(3, 6));
 

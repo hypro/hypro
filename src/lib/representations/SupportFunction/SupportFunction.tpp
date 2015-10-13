@@ -546,6 +546,7 @@ void SupportFunction<Number>::print() const {
 		} break;
 		case SF_TYPE::POLY: {
 			std::cout << "POLY" << std::endl;
+                        mPolytope->print();
 		} break;
 		case SF_TYPE::SCALE: {
 			std::cout << "SCALE" << std::endl;
