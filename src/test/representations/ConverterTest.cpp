@@ -127,7 +127,7 @@ TYPED_TEST(ConverterTest, toSupportFunction)
         std::shared_ptr<hypro::SupportFunction<TypeParam>> result;
         convert(this->hpolytope, result);
         //std::cout << __func__ << " Result: " << *result << std::endl;
-        result->print();
+        //result->print();
 	SUCCEED();
 }
 

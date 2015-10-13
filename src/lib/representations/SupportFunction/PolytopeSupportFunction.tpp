@@ -6,7 +6,8 @@
  *
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
+ * @author Simon Froitzheim
+ * 
  * @version	2015-02-27
  */
 
@@ -281,5 +282,11 @@ bool PolytopeSupportFunction<Number>::empty() const {
 	if ( errorCode == GLP_INFEAS || errorCode == GLP_NOFEAS ) return false;
 
 	return true;
+}
+
+template <typename Number>
+void PolytopeSupportFunction<Number>::print() const{
+    std::cout << mConstraints << std::endl;
+    std::cout << mConstraintConstants << std::endl;
 }
 }  // namespace
