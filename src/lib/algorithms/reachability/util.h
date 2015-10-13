@@ -1,8 +1,6 @@
 
 #pragma once
 
-//#include "../../util/eigenTypetraits.h"
-#include "../../datastructures/hybridAutomata/util.h"
 #include "../../representations/Box/Box.h"
 #include "../../representations/SupportFunction/SupportFunction.h"
 #include "carl/core/VariablePool.h"

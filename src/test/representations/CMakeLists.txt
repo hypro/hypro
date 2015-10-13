@@ -17,7 +17,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	PolytopeSupportFunctionTest.cpp
 	PolytopeUtilTest.cpp
 	SupportFunctionTest.cpp
-	TaylorModelTest.cpp
+	#TaylorModelTest.cpp
 	VPolytopeTest.cpp
 	ZonotopeTest.cpp
 	)
@@ -28,5 +28,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${libraries}
 		${PROJECT_NAME}
 	)
+	cotire(runRepresentationTests)
 	add_test( NAME representations COMMAND runRepresentationTests )
 endif()

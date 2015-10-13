@@ -1,10 +1,10 @@
 /**
  * @file    NeighborhoodContainerTest.cpp
- * 
+ *
  * @covers  NeighborhoodContainer
- * 
+ *
  * @author  Benedikt Seidl
- * 
+ *
  * @since   2014-03-17
  * @version 2014-03-17
  */
@@ -50,20 +50,20 @@ protected:
         coordinates3.insert( std::make_pair(d, -13) );
         p3 = Point<int>(coordinates3);
     }
-	
+
     virtual void TearDown()
     {
     }
 
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    Variable a;
-    Variable b;
-    Variable c;
-    Variable d;
+    carl::Variable a;
+    carl::Variable b;
+    carl::Variable c;
+    carl::Variable d;
 
-    Point<int> p1;
-    Point<int> p2;
-    Point<int> p3;
+    hypro::Point<int> p1;
+    hypro::Point<int> p2;
+    hypro::Point<int> p3;
 };
 
 TEST_F(NeighborhoodContainerTest, Constructor)
@@ -97,7 +97,7 @@ TEST_F(NeighborhoodContainerTest, Neighbours)
     this->p2.incrementInFixedDim(this->b);
     EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), this->p2) != neighbours.end());
     container.clear();
-    
+
     neighbours = container.getNeighborhoodForDimension(this->p3, this->a);
     this->p3.decrementInFixedDim(this->b);
     EXPECT_TRUE(std::find(neighbours.begin(), neighbours.end(), this->p3) != neighbours.end());

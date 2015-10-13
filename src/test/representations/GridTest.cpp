@@ -43,14 +43,14 @@ protected:
     }
 
     vSet<Number> vertices;
-    Grid<Number> grid1;
+    hypro::Grid<Number> grid1;
 };
 
 TYPED_TEST(GridTest, Constructor)
 {
-    Grid<TypeParam> grid;
+    hypro::Grid<TypeParam> grid;
     EXPECT_TRUE(grid.empty());
-    Grid<TypeParam> copy(grid);
+    hypro::Grid<TypeParam> copy(grid);
     EXPECT_TRUE(copy.empty());
 }
 
