@@ -27,7 +27,8 @@ class HPolytope {
                               DROP = 0,
                               DROP_SMOOTH,
                               UNITE,
-                              UNITE_SMOOTH
+                              UNITE_SMOOTH,
+                              UNITE_CUT
                             };
 
   public:
@@ -84,7 +85,7 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP ,unsigned _steps = 1 ) const;
+	HPolytope<Number> reduce( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT ,unsigned _steps = 1 ) const;
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
   unsigned getIndexForDrop() const;

@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
 	//poly2.insert(Hyperplane<Number>({0,-1},1));
 
 	unsigned p2 = plotter.addObject(poly2.vertices());
-	//unsigned p1 = plotter.addObject(poly.vertices());
+	plotter.addObject(poly.vertices());
 
 	plotter.setObjectColor(p2, colors[red]);
 
