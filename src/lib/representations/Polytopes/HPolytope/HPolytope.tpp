@@ -574,6 +574,94 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 			break;
 		}
 
+		// UNITE_CUT
+		case REDUCTION_STRATEGY::UNITE_CUT:
+		{
+			unsigned a=getIndexForUnite();
+			unsigned b=a+1;
+			unsigned prev_a=a-1;
+			unsigned next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// save aVector and bVector
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			vector_t<Number> bVector = res.mHPlanes[b].normal();
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			vector_t<Number> next_bVector = res.mHPlanes[next_b].normal();
+			Number aOffset = res.mHPlanes[a].offset();
+			Number bOffset = res.mHPlanes[b].offset();
+			Number prev_aOffset = res.mHPlanes[prev_a].offset();
+			Number next_bOffset = res.mHPlanes[next_b].offset();
+
+			// Helpvalues to calculate the correct uniteVector P
+			Number helpp2_top, helpp2_down, p1, p2;
+			if(prev_aVector[0]!=0){
+				helpp2_top = aOffset - (aVector[0]*prev_aOffset/prev_aVector[0]);
+				helpp2_down = aVector[1] - (aVector[0]*prev_aVector[1]/prev_aVector[0]);
+				p2 = helpp2_top/helpp2_down;
+				p1 = (prev_aOffset - prev_aVector[1]*p2)/prev_aVector[0];
+			} else {
+				helpp2_top = prev_aOffset - (prev_aVector[0]*aOffset/aVector[0]);
+				helpp2_down = prev_aVector[1] - (prev_aVector[0]*aVector[1]/aVector[0]);
+				p2 = helpp2_top/helpp2_down;
+				p1 = (aOffset - aVector[1]*p2)/aVector[0];
+			}
+
+			// Helpvalues to calculate the correct uniteVector N
+			Number helpn2_top, helpn2_down, n1, n2;
+			if(bVector[0]!=0){
+				helpn2_top = next_bOffset - (next_bVector[0]*bOffset/bVector[0]);
+				helpn2_down = next_bVector[1] - (next_bVector[0]*bVector[1]/bVector[0]);
+				n2 = helpn2_top/helpn2_down;
+				n1 = (bOffset - bVector[1]*n2)/bVector[0];
+			} else {
+				helpn2_top = bOffset - (bVector[0]*next_bOffset/next_bVector[0]);
+				helpn2_down = bVector[1] - (bVector[0]*next_bVector[1]/next_bVector[0]);
+				n2 = helpn2_top/helpn2_down;
+				n1 = (next_bOffset - next_bVector[1]*n2)/next_bVector[0];
+			}
+
+			// calculate uniteVector (next_b+b + prev_a+a)
+			//vector_t<Number> uniteVector = vector_t<Number>(p2-n2, n1-p1);
+
+			// Helpvalues to calculate the correct uniteOffset
+			double helpx2_top, helpx2_down, x1, x2;
+			if(aVector[0]!=0){
+				helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
+				helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
+				x2 = helpx2_top/helpx2_down;
+				x1 = (aOffset - aVector[1]*x2)/aVector[0];
+			} else {
+				helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
+				helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
+				x2 = helpx2_top/helpx2_down;
+				x1 = (bOffset - bVector[1]*x2)/bVector[0];
+			}
+
+			// calculate the actual uniteOffset
+			Number uniteOffset = (p2-n2)*x1 + (n1-p1)*x2;//res.mHPlanes[a].offset() + res.mHPlanes[b].offset();//dOffset + cOffset;
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			if(b==0){ // erase b propely
+				res.mHPlanes.erase(res.mHPlanes.begin());
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			}
+			res.insert(Hyperplane<Number>({p2-n2,n1-p1},uniteOffset));
+			break;
+		}
+
 		default:
 			break;
 	}
