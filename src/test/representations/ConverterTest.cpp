@@ -68,6 +68,19 @@ protected:
 		coordinates.push_back(p3);
 		coordinates.push_back(p4);
 		polytope = hypro::Polytope<Number>(coordinates);
+                
+                // A rectangle (for H-Polytope)
+		Hyperplane<Number> hp1({1,0},2);
+		Hyperplane<Number> hp2({0,1},2);
+		Hyperplane<Number> hp3({-1,0},2);
+		Hyperplane<Number> hp4({0,-1},2);
+                
+                planes.push_back(hp1);
+		planes.push_back(hp2);
+		planes.push_back(hp3);
+		planes.push_back(hp4);
+                
+                hpolytope = HPolytope<Number>(this->planes);
     }
 	
     virtual void TearDown()
@@ -86,6 +99,9 @@ protected:
     VPolytope<Number> vpolytope;
     Zonotope<Number> zonotope;
     
+    typename HPolytope<Number>::HyperplaneVector planes;
+    HPolytope<Number> hpolytope;
+    
 };
 
 TYPED_TEST(ConverterTest, toBox)
@@ -102,11 +118,16 @@ TYPED_TEST(ConverterTest, toBox)
 
 TYPED_TEST(ConverterTest, toPolytope)
 {
+        
 	SUCCEED();
 }
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
+        std::shared_ptr<hypro::SupportFunction<TypeParam>> result;
+        convert(this->hpolytope, result);
+        //std::cout << __func__ << " Result: " << *result << std::endl;
+        result->print();
 	SUCCEED();
 }
 
