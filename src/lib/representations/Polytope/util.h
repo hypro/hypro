@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <ppl.hh>
 #include <carl/core/Variable.h>
 #include "../../util/VariablePool.h"
 

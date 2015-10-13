@@ -33,7 +33,7 @@ class Flowpipe {
 
 	void composition( TaylorModelVec<Number>& result, Domain<Number>& fp_domain, const exponent order );
 
-	int next_picard( Flowpipe<Number>& result, const PolynomialODE<Number>& ode, const Variable& t,
+	int next_picard( Flowpipe<Number>& result, const PolynomialODE<Number>& ode, const carl::Variable& t,
 					 const double stepsize, const exponent order, const Range<Number>& estimation );
 
 	Flowpipe<Number>& operator=( const Flowpipe<Number>& flowpipe );
@@ -53,7 +53,7 @@ class ContinuousSystem {
 	ContinuousSystem( const ContinuousSystem<Number>& system );
 	~ContinuousSystem();
 
-	int reach_picard( std::list<Flowpipe<Number>>& result, const Variable& t, const double time, const double stepsize,
+	int reach_picard( std::list<Flowpipe<Number>>& result, const carl::Variable& t, const double time, const double stepsize,
 					  const exponent order, const Range<Number>& estimation ) const;
 
 	ContinuousSystem<Number>& operator=( const ContinuousSystem<Number>& system );
@@ -63,7 +63,7 @@ class ContinuousSystem {
 
 template <typename Number>
 void output_2D_interval_gnuplot( std::list<Flowpipe<Number>>& flowpipes, std::ofstream& os, const std::string& fileName,
-								 const Variable& axis_x, const Variable& axis_y );
+								 const carl::Variable& axis_x, const carl::Variable& axis_y );
 
 }  // namespace
 

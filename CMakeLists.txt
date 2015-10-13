@@ -45,7 +45,7 @@ option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF
 option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
 option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
-option(USE_OPENGL_PLOTTING "Use OpenGL plotting." ON)
+option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
