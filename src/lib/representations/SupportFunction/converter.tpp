@@ -36,7 +36,7 @@ namespace hypro{
 
 /*
 template<typename Number>
-hypro::SupportFunction<Number> convert(const hypro::VPolytope<Number>& _source, SupportFunction<Number>& _target) {
+static bool convert( const hypro::VPolytope<Number>& _source, SupportFunction<Number>& _target) {
 
 }
 */
@@ -45,8 +45,8 @@ hypro::SupportFunction<Number> convert(const hypro::VPolytope<Number>& _source, 
     
 // conversion from H-polytope to support function
 template <typename Number>
-static bool convert( const hypro::HPolytope<Number>& _source, SupportFunction<Number>& _target ) {
-	typename HPolytope<Number>::HyperplaneVector& planes = _source.constraints();              //gets planes from the source object
+static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+	typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
 	assert( !planes.empty() );                                                                 //ensures that nonempty planes got fetched before continuing
 
 	_target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );                 //constructs a support function with the received planes
