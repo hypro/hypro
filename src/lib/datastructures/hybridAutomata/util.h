@@ -3,7 +3,6 @@
 
 #include "../../util/eigenTypetraits.h"
 #include "carl/interval/Interval.h"
-#include "carl/numbers/FLOAT_T.h"
 #include "../../representations/Polytope/Polytope.h"
 #include "../../config.h"
 

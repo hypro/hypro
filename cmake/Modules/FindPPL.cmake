@@ -81,7 +81,11 @@ if (NOT PPL_FOUND)
   ##_____________________________________________________________________________
   ## Actions taken when all components have been found
 
-  find_package_handle_standard_args (PPL DEFAULT_MSG PPL_LIBRARIES PPL_INCLUDES)
+  if(PPL_PPL_LIBRARY AND PPL_INCLUDES)
+  	SET(PPL_FOUND TRUE)
+  endif()
+
+  #find_package_handle_standard_args (PPL DEFAULT_MSG PPL_LIBRARIES PPL_INCLUDES)
 
   if (PPL_FOUND)
     if (NOT PPL_FIND_QUIETLY)

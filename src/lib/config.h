@@ -7,9 +7,8 @@
 #include <vector>
 #include <assert.h>
 
-#include "types.h"
+#include "flags.h"
 #include <carl/numbers/numbers.h>
-#include <carl/numbers/FLOAT_T.h>
 #include <carl/core/Variable.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>

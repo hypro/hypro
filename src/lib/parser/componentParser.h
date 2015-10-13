@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <carl/numbers/FLOAT_T.h>
+#include <carl/numbers/numbers.h>
 // Specialzation for FLOAT_T
 namespace boost {
 namespace spirit {

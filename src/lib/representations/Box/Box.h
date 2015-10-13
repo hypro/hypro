@@ -13,6 +13,7 @@
 #include <map>
 #include <cassert>
 #include <carl/interval/Interval.h>
+#include "../../datastructures/Hyperplane.h"
 
 namespace hypro {
 
@@ -283,6 +284,7 @@ class Box {
 	Box<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	Box<Number> minkowskiSum( const Box<Number>& rhs ) const;
 	Box<Number> intersect( const Box<Number>& rhs ) const;
+	Box<Number> intersect( const Hyperplane<Number>& rhs) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const Box<Number>& box ) const;
 	Box<Number> unite( const Box<Number>& rhs ) const;
