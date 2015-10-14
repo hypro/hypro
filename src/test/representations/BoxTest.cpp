@@ -110,9 +110,11 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_NE(this->box2, this->box3);
     EXPECT_NE(this->box3, this->box1);
 
-    hypro::Box<TypeParam> emptyBox;
+    hypro::Box<TypeParam> emptyBox = hypro::Box<TypeParam>::Empty();
+    hypro::Box<TypeParam> universalBox;
     EXPECT_FALSE(this->box1.isEmpty());
     EXPECT_TRUE(emptyBox.isEmpty());
+    EXPECT_FALSE(universalBox.isEmpty());
 }
 
 TYPED_TEST(BoxTest, Insertion)
@@ -203,16 +205,14 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 	hypro::Box<TypeParam> b1(intervals1);
 
-	static_assert(carl::is_rational<cln::cl_RA>::value, "Error");
-
 	// rotation
 	TypeParam angle = 90;
 	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
 	rotX(0,0) = 1;
-	rotX(1,1) = testCos(angle);
-	rotX(1,2) = -testSin(angle);
-	rotX(2,1) = testSin(angle);
-	rotX(2,2) = testCos(angle);
+	rotX(1,1) = carl::cos(angle);
+	rotX(1,2) = -carl::sin(angle);
+	rotX(2,1) = carl::sin(angle);
+	rotX(2,2) = carl::cos(angle);
 
 	/*
 	matrix_t<TypeParam> rotY = matrix_t<TypeParam>::Zero(3,3);

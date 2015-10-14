@@ -11,7 +11,6 @@
 #include "../lib/config.h"
 #include "../lib/util/types.h"
 #include "carl/numbers/numbers.h"
-#include "conversionUtil.h"
 
 
 typedef ::testing::Types<
@@ -38,9 +37,9 @@ typedef ::testing::Types<
 	carl::FLOAT_T<mpfr_t>,
 	#endif
 	#ifdef USE_CLN_NUMBERS
-	cln::cl_RA,
+	carl::FLOAT_T<cln::cl_RA>
 	#endif
-	mpq_class
+	//mpq_class
 > allTypes;
 
 // List tests which should be typed
@@ -49,8 +48,8 @@ typedef ::testing::Types<
 TYPED_TEST_CASE(Benchmark, floatTypes);
 
 // Datastructure
-TYPED_TEST_CASE(HyperplaneTest, floatTypes);
-TYPED_TEST_CASE(PointTest, floatTypes);
+TYPED_TEST_CASE(HyperplaneTest, allTypes);
+TYPED_TEST_CASE(PointTest, allTypes);
 TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
 TYPED_TEST_CASE(VertexContainerTest, floatTypes);
 TYPED_TEST_CASE(VertexTest, floatTypes);

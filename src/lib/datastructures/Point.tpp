@@ -257,38 +257,40 @@ Number Point<Number>::distance( const Point<Number> &_rhs ) const {
 template <typename Number>
 std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origin, bool _radians ) const {
 	Point<Number> base = *this - _origin;
+	vector_t<double> transformedCoordinates = vector_t<double>(base.dimension());
+	for( unsigned d = 0; d < base.dimension(); ++d)
+		transformedCoordinates(d) = carl::convert<Number, double>(base.at(d));
+
 	std::vector<Number> result;
 
 	// 1st component of the result is the radial part, the following components
 	// are the angles.
-	Number radialCoordinate = Number( 0 );
+	double radialCoordinate = 0;
 	for ( unsigned i = 0; i < base.dimension(); ++i ) {
-		Number square;
-		square = pow( base.mCoordinates( i ), 2 );
+		double square;
+		square = carl::pow( transformedCoordinates( i ), 2 );
 		radialCoordinate += square;
 	}
-	radialCoordinate = sqrt( radialCoordinate );
-	result.insert( result.begin(), radialCoordinate );
+	radialCoordinate = carl::sqrt( radialCoordinate );
+	result.insert( result.begin(), carl::convert<double, Number>(radialCoordinate) );
 
 	// compute polar angles
 	for ( unsigned dimension = 0; dimension < base.dimension() - 1; ++dimension ) {
-		Number angle( 0 );
+		double angle( 0 );
 		for ( auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2 ) {
-			Number square;
-			square = pow( base.rawCoordinates()( dimension2 ),
-						  2 );  // TODO: Check if this does the right thing and why angle
-								// += (*dimension) ... does not work
+			double square;
+			square = carl::pow( transformedCoordinates( dimension2 ), 2 );  // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
 			angle += square;
 		}
-		angle = sqrt( angle );
-		angle = ( base.mCoordinates( dimension ) / angle );
+		angle = carl::sqrt( angle );
+		angle = ( transformedCoordinates( dimension ) / angle );
 		angle = acos( angle );
 
 		if ( !_radians ) {
 			angle /= 2 * PI_DN;
 			angle *= 360;
 		}
-		result.emplace_back( std::move( angle ) );
+		result.emplace_back( std::move( carl::convert<double,Number>(angle) ) );
 	}
 	if ( ( base.mCoordinates( base.dimension() - 1 ) ) < Number( 0 ) ) {
 		Number tmp = result.back();
@@ -344,7 +346,7 @@ void Point<Number>::incrementInFixedDim( const carl::Variable &_d ) {
 
 template <typename Number>
 void Point<Number>::incrementInFixedDim( unsigned _d ) {
-	mCoordinates( _d ) += 1;
+	mCoordinates( _d ) += Number(1);
 }
 
 template <typename Number>
@@ -361,7 +363,7 @@ void Point<Number>::decrementInFixedDim( const carl::Variable &_d ) {
 
 template <typename Number>
 void Point<Number>::decrementInFixedDim( unsigned _d ) {
-	mCoordinates( _d ) -= 1;
+	mCoordinates( _d ) -= Number(1);
 }
 
 template <typename Number>

@@ -13,7 +13,6 @@
 #include <mpfr.h>
 
 using namespace hypro;
-using namespace carl;
 
 template<typename Number>
 class PointTest : public ::testing::Test
@@ -43,7 +42,7 @@ protected:
 //        coordinates3.insert( std::make_pair(c, Number(9)) );
 //        coordinates3.insert( std::make_pair(d, Number(-13)) );
         p3 = Point<Number>({9,-13});
-        
+
         // p4
 //        typename Point<Number>::coordinateMap coordinates4;
 //        coordinates4.insert( std::make_pair(c, Number(5)) );
@@ -54,7 +53,7 @@ protected:
     virtual void TearDown()
     {
     }
-	
+
     hypro::VariablePool& pool = hypro::VariablePool::getInstance();
     carl::Variable x;
     carl::Variable y;
@@ -62,7 +61,7 @@ protected:
     carl::Variable b;
 //    Variable c = pool.getFreshVariable("c");
 //    Variable d = pool.getFreshVariable("d");
-	
+
     Point<Number> p1;
     Point<Number> p2;
     Point<Number> p3;
@@ -70,10 +69,10 @@ protected:
 };
 
 TYPED_TEST(PointTest, Constructor)
-{ 
+{
     Point<TypeParam> p;
     EXPECT_EQ(p.dimension(), (unsigned) 0);
-    
+
     p = Point<TypeParam>(5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
 
@@ -89,10 +88,10 @@ TYPED_TEST(PointTest, Constructor)
     EXPECT_EQ(p[2], TypeParam(5));
     EXPECT_EQ(p[1], TypeParam(0));
     EXPECT_EQ(p[0], TypeParam(5));
-    	
+
     Point<TypeParam> pCopy(p);
     EXPECT_EQ(p, pCopy);
-    
+
     Point<TypeParam> empty = this->p1.newEmpty();
     EXPECT_EQ(this->p1.dimension(), empty.dimension());
     EXPECT_TRUE(this->p1.haveSameDimensions(empty));
@@ -101,14 +100,14 @@ TYPED_TEST(PointTest, Constructor)
     Point<TypeParam> tmp({123,456});
     EXPECT_EQ(tmp[0], TypeParam(123));
     EXPECT_EQ(tmp[1], TypeParam(456));
-    
+
     // Test copy constructor and typecast constructor
     Point<double> alien = Point<double>({1,3});
-    
+
     Point<double> alien2 = alien;
     Point<float> local = alien;
 
-    
+
 #ifdef SUPPORT_MPFR
     // convert to mpfr
     Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
@@ -118,28 +117,23 @@ TYPED_TEST(PointTest, Constructor)
 TYPED_TEST(PointTest, PolarCoordinates)
 {
     std::vector<TypeParam> pc = this->p1.polarCoordinates(this->p1.origin(), false);
-    TypeParam expectedRes;
-    expectedRes = sqrt(TypeParam(29));
+    double expectedRes;
+
+    expectedRes = carl::sqrt(29.0);
+
 	// special case: Use double comparison
-	if( hypro::eqTypes<double,TypeParam>() ) {
-		EXPECT_TRUE(carl::AlmostEqual2sComplement(pc.at(0), expectedRes, 1));
-	} else {
-		EXPECT_EQ(pc.at(0), expectedRes);
-	}
-    
-    
+	EXPECT_EQ( carl::toDouble(pc.at(0)), expectedRes );
+
     pc = this->p2.polarCoordinates(this->p2.origin(), false);
-    expectedRes = sqrt(TypeParam(113));
-    EXPECT_EQ(pc.at(0), expectedRes);
-    
+    expectedRes = carl::sqrt(113.0);
+
+    EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
+
     pc = this->p3.polarCoordinates(this->p3.origin(), false);
-    expectedRes = sqrt(TypeParam(250));
-    if( hypro::eqTypes<double,TypeParam>() ) {
-		EXPECT_TRUE(carl::AlmostEqual2sComplement(pc.at(0), expectedRes, 1));
-	} else {
-		EXPECT_EQ(pc.at(0), expectedRes);
-	}
-    
+    expectedRes = carl::sqrt(250.0);
+
+	EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
+
     pc = this->p4.polarCoordinates(this->p3, false);
 }
 
@@ -158,7 +152,7 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(this->p1.coordinate(0), TypeParam(2));
     EXPECT_EQ(this->p1.coordinate(1), TypeParam(5));
     EXPECT_EQ(this->p1.dimension(), (unsigned) 2);
-    
+
     this->p1.incrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(6));
     this->p1.incrementInAllDim(TypeParam(3));
@@ -166,7 +160,7 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(this->p1[1], TypeParam(9));
     this->p1.decrementInFixedDim(1);
     EXPECT_EQ(this->p1[1], TypeParam(8));
-	
+
     this->p1[this->x] = TypeParam(3);
     this->p1[this->y] = TypeParam(-1);
     EXPECT_EQ(this->p1[this->x], TypeParam(3));
@@ -216,9 +210,9 @@ TYPED_TEST(PointTest, BooleanTest)
     EXPECT_TRUE(this->p1.isInBoundary(this->p2));
     EXPECT_FALSE(this->p2.isInBoundary(this->p1));
     EXPECT_FALSE(this->p1.isInBoundary(this->p1));
-	
+
     this->p1[1] = TypeParam(3);
-    
+
     EXPECT_TRUE(this->p1.hasDimension(this->x));
     EXPECT_FALSE(this->p1.hasDimension(this->a));
     EXPECT_TRUE(this->p2.hasDimension(this->x));
@@ -226,22 +220,22 @@ TYPED_TEST(PointTest, BooleanTest)
 
     this->p2[0] = TypeParam(2);
     this->p2[1] = TypeParam(5);
-	
+
     EXPECT_TRUE(this->p1.haveEqualCoordinate(this->p1));
     EXPECT_FALSE(this->p1.haveEqualCoordinate(this->p3));
 //    this->p2.removeDimension(this->a);
 //    this->p2.removeDimension(this->b);
 //    EXPECT_LT(this->p1, this->p2);
-	
+
     this->p2[1] = TypeParam(3);
 //    this->p2.removeDimension(this->a);
-	
+
     EXPECT_EQ(this->p1, this->p2);
     EXPECT_NE(this->p1, this->p3);
-    
+
     EXPECT_TRUE(this->p3.haveSameDimensions(this->p4));
     EXPECT_TRUE(this->p2.haveSameDimensions(this->p4));
-    
+
 //    EXPECT_TRUE(this->p1.hasDimensions(this->p1.variables()));
 //    EXPECT_TRUE(this->p2.hasDimensions(this->p2.variables()));
 //    EXPECT_TRUE(this->p3.hasDimensions(this->p3.variables()));

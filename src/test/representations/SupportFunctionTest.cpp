@@ -81,10 +81,10 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 	matrix_t<TypeParam> rotation = matrix_t<TypeParam>(2,2);
 	TypeParam angle = 45;
-	rotation(0,0) = cos(angle);
-	rotation(0,1) = -sin(angle);
-	rotation(1,0) = sin(angle);
-	rotation(1,1) = cos(angle);
+	rotation(0,0) = carl::cos(angle);
+	rotation(0,1) = -carl::sin(angle);
+	rotation(1,0) = carl::sin(angle);
+	rotation(1,1) = carl::cos(angle);
 
 	vector_t<TypeParam> v1Rot = rotation*(this->vec1);
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
