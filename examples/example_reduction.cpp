@@ -41,19 +41,42 @@ int main(int argc, char const *argv[])
   rotated_square.insert(Hyperplane<Number>({1,-1},1));
 	rotated_square.insert(Hyperplane<Number>({-1,-1},1));
 
-  HPolytope<Number> trapez; //trapez
-  trapez.insert(Hyperplane<Number>({-1,9},10));
+  HPolytope<Number> trapez; //trapez for Drop
+  trapez.insert(Hyperplane<Number>({-1,0.5},0.6));
 	trapez.insert(Hyperplane<Number>({0,1},1));
-  trapez.insert(Hyperplane<Number>({1,9},10));
+  trapez.insert(Hyperplane<Number>({1,0.5},0.6));
 	trapez.insert(Hyperplane<Number>({0,-1},1));
 
+  HPolytope<Number> trapez2; //trapez for Unite
+  trapez2.insert(Hyperplane<Number>({-1,0.5},5));
+	trapez2.insert(Hyperplane<Number>({0,1},1));
+  trapez2.insert(Hyperplane<Number>({1,0.5},5));
+	trapez2.insert(Hyperplane<Number>({0,-1},1));
 
-	HPolytope<Number> reduction = trapez.reduce();
+  HPolytope<Number> trapez3; //trapez for Unite
+  trapez3.insert(Hyperplane<Number>({-1,0.5},2));
+	trapez3.insert(Hyperplane<Number>({0,1},1));
+  trapez3.insert(Hyperplane<Number>({1,0.5},2));
+	trapez3.insert(Hyperplane<Number>({0,-1},1));
 
-	unsigned r = plotter.addObject(reduction.vertices());
-	plotter.addObject(trapez.vertices());
+  HPolytope<Number> equal;
+  equal.insert(Hyperplane<Number>({-1,0.5},2));
+  equal.insert(Hyperplane<Number>({-0.5,1},2));
+  equal.insert(Hyperplane<Number>({0.5,1},2));
+  equal.insert(Hyperplane<Number>({1,0.5},2));
+  equal.insert(Hyperplane<Number>({0,-1},0));
 
-	plotter.setObjectColor(r, colors[red]);
+  HPolytope<Number> reduce_from = equal;
+
+	HPolytope<Number> reduction = reduce_from.reduce(0,1);
+  HPolytope<Number> reduction2 = reduce_from.reduce(4,0);
+
+	unsigned r1 = plotter.addObject(reduction.vertices());
+  unsigned r2 = plotter.addObject(reduction2.vertices());
+	plotter.addObject(reduce_from.vertices());
+
+	plotter.setObjectColor(r1, colors[red]);
+  plotter.setObjectColor(r2, colors[green]);
 
 	plotter.plot2d();
 

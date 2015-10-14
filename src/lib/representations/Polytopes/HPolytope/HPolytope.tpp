@@ -438,25 +438,33 @@ void HPolytope<Number>::removeRedundantPlanes() {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
+HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
 	unsigned size=res.mHPlanes.size()-1;
 
 	std::pair<unsigned, unsigned> recommended = chooseStrat();
 
+	if(strat>=0){
+		recommended.first = strat; // fix strategy
+		recommended.second = _steps; // fix facet
+	} else {
+		//recommended = chooseStrat();
+	}
+
 	// Switch strategy, implement each strategy.
 	switch (recommended.first) { // (strat) {
 
 		// DROP
-		case 0: //REDUCTION_STRATEGY::DROP:
+		case REDUCTION_STRATEGY::DROP:
 		{
+			std::cout << "Computing Drop" << std::endl;
 			unsigned i=recommended.second; // getIndexForDrop();
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
 		}
 
 		// DROP_SMOOTH
-		case 1: // REDUCTION_STRATEGY::DROP_SMOOTH:
+		case REDUCTION_STRATEGY::DROP_SMOOTH:
 		{
 			unsigned a=recommended.second, next_a=a+1,  prev_a=a-1;
 
@@ -491,7 +499,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE
-		case 2: //REDUCTION_STRATEGY::UNITE:
+		case REDUCTION_STRATEGY::UNITE:
 		{
 			unsigned i=recommended.second, j=i+1;
 
@@ -513,7 +521,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_SMOOTH
-		case 3: //REDUCTION_STRATEGY::UNITE_SMOOTH:
+		case REDUCTION_STRATEGY::UNITE_SMOOTH:
 		{
 			unsigned a=recommended.second, b=a+1, prev_a=a-1,  next_b=b+1;
 
@@ -552,8 +560,9 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_CUT
-		case 4: //REDUCTION_STRATEGY::UNITE_CUT:
+		case REDUCTION_STRATEGY::UNITE_CUT:
 		{
+			std::cout << "Computing Unite" << std::endl;
 			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
 
 			// select b, prev_a and next_b propely
@@ -629,19 +638,19 @@ std::pair<unsigned, unsigned> HPolytope<Number>::chooseStrat() const{
 			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal()); // Unite
 		}
 
-		if(scalarproduct_drop<scalarproduct_unite){ // decide for Unite
+		if(scalarproduct_drop<scalarproduct_unite && maxScalarproduct<scalarproduct_unite){ // decide for Unite
 			strat=4;
 			maxScalarproduct=scalarproduct_unite;
 			maxIndex=index;
 		}
-		else { // decide for Drop
+		else if(maxScalarproduct<scalarproduct_drop){ // decide for Drop
 			strat=1;
 			maxScalarproduct=scalarproduct_drop;
 			maxIndex=index+1;
 			if(maxIndex>=hpolytope.mHPlanes.size()) maxIndex=0;
 		}
 
-		std::cout << "[Drop] SP between " << index << " and " << index+2 << " is " << scalarproduct_drop << std::endl;
+		//std::cout << "[Drop] SP between " << index << " and " << index+2 << " is " << scalarproduct_drop << std::endl;
 		std::cout << "[Unite] SP between " << index << " and " << index+1 << " is " << scalarproduct_unite << std::endl;
 	}
 
