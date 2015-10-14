@@ -438,25 +438,33 @@ void HPolytope<Number>::removeRedundantPlanes() {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned _steps ) const {
+HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
 	unsigned size=res.mHPlanes.size()-1;
 
 	std::pair<unsigned, unsigned> recommended = chooseStrat();
 
+	if(strat>=0){
+		recommended.first = strat; // fix strategy
+		recommended.second = _steps; // fix facet
+	} else {
+		//recommended = chooseStrat();
+	}
+
 	// Switch strategy, implement each strategy.
 	switch (recommended.first) { // (strat) {
 
 		// DROP
-		case 0: //REDUCTION_STRATEGY::DROP:
+		case REDUCTION_STRATEGY::DROP:
 		{
+			std::cout << "Computing Drop" << std::endl;
 			unsigned i=recommended.second; // getIndexForDrop();
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
 		}
 
 		// DROP_SMOOTH
-		case 1: // REDUCTION_STRATEGY::DROP_SMOOTH:
+		case REDUCTION_STRATEGY::DROP_SMOOTH:
 		{
 			unsigned a=recommended.second, next_a=a+1,  prev_a=a-1;
 
@@ -491,7 +499,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE
-		case 2: //REDUCTION_STRATEGY::UNITE:
+		case REDUCTION_STRATEGY::UNITE:
 		{
 			unsigned i=recommended.second, j=i+1;
 
@@ -513,7 +521,7 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_SMOOTH
-		case 3: //REDUCTION_STRATEGY::UNITE_SMOOTH:
+		case REDUCTION_STRATEGY::UNITE_SMOOTH:
 		{
 			unsigned a=recommended.second, b=a+1, prev_a=a-1,  next_b=b+1;
 
@@ -552,8 +560,9 @@ HPolytope<Number> HPolytope<Number>::reduce( REDUCTION_STRATEGY strat, unsigned 
 		}
 
 		// UNITE_CUT
-		case 4: //REDUCTION_STRATEGY::UNITE_CUT:
+		case REDUCTION_STRATEGY::UNITE_CUT:
 		{
+			std::cout << "Computing Unite" << std::endl;
 			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
 
 			// select b, prev_a and next_b propely
@@ -609,44 +618,43 @@ std::pair<unsigned, unsigned> HPolytope<Number>::chooseStrat() const{
 		hpolytope.mHPlanes[index].rNormal().normalize();
 	}
 
-	// compare scalarproduct of neighboors of index
-	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
-		double scalarproduct=1;
-		if(index==hpolytope.mHPlanes.size()-2){
-			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
-		} else if(index==hpolytope.mHPlanes.size()-1){
-			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal());
-		} else {
-			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal());
-		}
-		if(scalarproduct>maxScalarproduct){
-			maxScalarproduct=scalarproduct;
-			maxIndex=index+1;
-			if(maxIndex>=hpolytope.mHPlanes.size()){
-				maxIndex=0;
-			}
-			strat=1;
-		}
-	}
+	// compare scalarproduct of neighboors of index (Drop)/ neighboors (Unite)
+	// *** If we focus only on the SP unite will always be closer as drop! ***
+	// *** TODO focus on distance also ***
+	// *** TODO decide for which Unite_...  or which Drop_... ***
 
-	// compare scalarproduct of neighboors
 	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
-		double scalarproduct=1;
-		if(index==hpolytope.mHPlanes.size()-1){
-			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
-		} else {
-			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal());
+		double scalarproduct_drop=1, scalarproduct_unite=1;
+		if(index==hpolytope.mHPlanes.size()-2){
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal()); // Unite
 		}
-		if(scalarproduct>maxScalarproduct){
-			maxScalarproduct=scalarproduct;
-			maxIndex=index;
+		else if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal()); // Unite
+		}
+		else {
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal()); // Unite
+		}
+
+		if(scalarproduct_drop<scalarproduct_unite && maxScalarproduct<scalarproduct_unite){ // decide for Unite
 			strat=4;
+			maxScalarproduct=scalarproduct_unite;
+			maxIndex=index;
 		}
+		else if(maxScalarproduct<scalarproduct_drop){ // decide for Drop
+			strat=1;
+			maxScalarproduct=scalarproduct_drop;
+			maxIndex=index+1;
+			if(maxIndex>=hpolytope.mHPlanes.size()) maxIndex=0;
+		}
+
+		//std::cout << "[Drop] SP between " << index << " and " << index+2 << " is " << scalarproduct_drop << std::endl;
+		std::cout << "[Unite] SP between " << index << " and " << index+1 << " is " << scalarproduct_unite << std::endl;
 	}
 
 	return std::pair<unsigned, unsigned>(strat, maxIndex);
-
-
 }
 
 template <typename Number>
