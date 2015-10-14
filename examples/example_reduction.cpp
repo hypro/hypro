@@ -60,10 +60,9 @@ int main(int argc, char const *argv[])
 	trapez3.insert(Hyperplane<Number>({0,-1},1));
 
   HPolytope<Number> equal;
-  equal.insert(Hyperplane<Number>({-1,0.5},2));
-  equal.insert(Hyperplane<Number>({-0.5,1},2));
-  equal.insert(Hyperplane<Number>({0.5,1},2));
-  equal.insert(Hyperplane<Number>({1,0.5},2));
+  equal.insert(Hyperplane<Number>({-1,2},2));
+  equal.insert(Hyperplane<Number>({1,3},2));
+  equal.insert(Hyperplane<Number>({2,1},2));
   equal.insert(Hyperplane<Number>({0,-1},0));
 
   HPolytope<Number> reduce_from = equal;
