@@ -22,23 +22,38 @@ int main(int argc, char const *argv[])
 
 	/* Do stuff here */
 
-	HPolytope<Number> poly; //NikolausHaus
-  poly.insert(Hyperplane<Number>({-1,1},1));
-	poly.insert(Hyperplane<Number>({1,1},1));
-  poly.insert(Hyperplane<Number>({1,0.1},1));
-	poly.insert(Hyperplane<Number>({0,-1},1));
-  poly.insert(Hyperplane<Number>({-1,0.5},1));
+	HPolytope<Number> nico; //NikolausHaus
+  nico.insert(Hyperplane<Number>({-1,1},1));
+	nico.insert(Hyperplane<Number>({1,1},1));
+  nico.insert(Hyperplane<Number>({1,0.1},1));
+	nico.insert(Hyperplane<Number>({0,-1},1));
+  nico.insert(Hyperplane<Number>({-1,0.5},1));
+
+  HPolytope<Number> square; //Square
+  square.insert(Hyperplane<Number>({-1,0},1));
+	square.insert(Hyperplane<Number>({0,1},1));
+  square.insert(Hyperplane<Number>({1,0},1));
+	square.insert(Hyperplane<Number>({0,-1},1));
+
+  HPolytope<Number> rotated_square; //rotated Square
+  rotated_square.insert(Hyperplane<Number>({-1,1},1));
+	rotated_square.insert(Hyperplane<Number>({1,1},1));
+  rotated_square.insert(Hyperplane<Number>({1,-1},1));
+	rotated_square.insert(Hyperplane<Number>({-1,-1},1));
+
+  HPolytope<Number> trapez; //trapez
+  trapez.insert(Hyperplane<Number>({-1,9},10));
+	trapez.insert(Hyperplane<Number>({0,1},1));
+  trapez.insert(Hyperplane<Number>({1,9},10));
+	trapez.insert(Hyperplane<Number>({0,-1},1));
 
 
-	HPolytope<Number> poly2 = poly.reduce();
-	//poly2.insert(Hyperplane<Number>({1,1},1));
-	//poly2.insert(Hyperplane<Number>({-1,1},1));
-	//poly2.insert(Hyperplane<Number>({0,-1},1));
+	HPolytope<Number> reduction = trapez.reduce();
 
-	unsigned p2 = plotter.addObject(poly2.vertices());
-	plotter.addObject(poly.vertices());
+	unsigned r = plotter.addObject(reduction.vertices());
+	plotter.addObject(trapez.vertices());
 
-	plotter.setObjectColor(p2, colors[red]);
+	plotter.setObjectColor(r, colors[red]);
 
 	plotter.plot2d();
 
