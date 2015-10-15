@@ -37,9 +37,9 @@ typedef ::testing::Types<
 	carl::FLOAT_T<mpfr_t>,
 	#endif
 	#ifdef USE_CLN_NUMBERS
-	carl::FLOAT_T<cln::cl_RA>
+	carl::FLOAT_T<cln::cl_RA>,
 	#endif
-	//mpq_class
+	carl::FLOAT_T<mpq_class>
 > allTypes;
 
 // List tests which should be typed

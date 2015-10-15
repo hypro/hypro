@@ -106,7 +106,7 @@ TYPED_TEST(HyperplaneTest, Intersection)
 
 	//std::cout << "Intersection Vector calculation result: " << std::endl;
 	vector_t<TypeParam> v = hp1.intersectionVector(hp2);
-	std::cout << "Intersection Vector: " << v << std::endl;
+	//std::cout << "Intersection Vector: " << v << std::endl;
 }
 
 TYPED_TEST(HyperplaneTest, LinearTransformation)

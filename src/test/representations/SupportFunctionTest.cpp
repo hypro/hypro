@@ -92,7 +92,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	std::shared_ptr<SupportFunction<TypeParam>> res = psf1->linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
 
-	if(typeid(TypeParam) == typeid(double)) {
+	if(typeid(TypeParam) == typeid(double) || typeid(TypeParam) == typeid(carl::FLOAT_T<double>) ) {
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(20), res->evaluate(v1Rot).supportValue,4));
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(5), res->evaluate(v2Rot).supportValue,4));
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(17), res->evaluate(v3Rot).supportValue,4));
