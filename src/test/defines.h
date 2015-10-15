@@ -48,16 +48,16 @@ typedef ::testing::Types<
 TYPED_TEST_CASE(Benchmark, floatTypes);
 
 // Datastructure
-TYPED_TEST_CASE(HyperplaneTest, allTypes);
-TYPED_TEST_CASE(PointTest, allTypes);
+TYPED_TEST_CASE(HyperplaneTest, floatTypes);
+TYPED_TEST_CASE(PointTest, floatTypes);
 TYPED_TEST_CASE(HybridAutomataTest, floatTypes);
 TYPED_TEST_CASE(VertexContainerTest, floatTypes);
 TYPED_TEST_CASE(VertexTest, floatTypes);
 
 // Representations
-TYPED_TEST_CASE(BoxTest, allTypes);
+TYPED_TEST_CASE(BoxTest, floatTypes);
 TYPED_TEST_CASE(ConverterTest, floatTypes);
-TYPED_TEST_CASE(GridTest, allTypes);
+TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(HPolytopeTest, floatTypes);
 TYPED_TEST_CASE(OrthogonalPolyhedronTest, types);
 TYPED_TEST_CASE(PolytopeTest, floatTypes);
