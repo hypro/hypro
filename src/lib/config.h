@@ -52,20 +52,18 @@ static const unsigned TOLLERANCE_ULPS = 8192;
 static const unsigned MAX_DIMENSION_LIMIT = 128;
 
 /**
- * Defines for reachability algorithm based on polytopes
+ * Default values for reachability algorithms
  */
-static const float fReach_TIMEBOUND = 2;
-static const unsigned fReach_ITERATIONDEPTH = 1;
-static const unsigned fReach_TIMEDISCRETIZATION = 100;
-static const unsigned fReach_DENOMINATOR = 1000000;
-// define for debugging: triggers console output
-#define fReach_DEBUG
+static const double fReach_TIMEBOUND = 2;
+static const std::size_t fReach_ITERATIONDEPTH = 1;
+static const std::size_t fReach_TIMEDISCRETIZATION = 100;
+static const unsigned long fReach_DENOMINATOR = 1000000;
 
 /**
  * author: ckugler
  * Defines for implementation of Fukuda's Minkowski Sum algorithm
  */
-static const float EPSILON = 0.000001;
+static const double EPSILON = 0.000001;
 static const long POS_CONSTANT = 100;
 // define for debugging: triggers console output
 //#define fukuda_DEBUG

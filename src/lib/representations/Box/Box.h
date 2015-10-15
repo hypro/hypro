@@ -14,6 +14,7 @@
 #include <cassert>
 #include <carl/interval/Interval.h>
 #include "../../datastructures/Hyperplane.h"
+#include "../Polytopes/VPolytope/VPolytope.h"
 
 namespace hypro {
 

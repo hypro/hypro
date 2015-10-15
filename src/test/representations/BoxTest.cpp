@@ -149,8 +149,6 @@ TYPED_TEST(BoxTest, Corners) {
 	std::vector<Point<TypeParam>> corners = b1.vertices();
 	EXPECT_EQ((unsigned) 8, corners.size());
 
-
-
 	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,2})) != corners.end());
 	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,5})) != corners.end());
 	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,3,2})) != corners.end());

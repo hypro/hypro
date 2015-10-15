@@ -44,6 +44,9 @@ typedef ::testing::Types<
 
 // List tests which should be typed
 
+// Algorithm
+TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
+
 // Benchmark
 TYPED_TEST_CASE(Benchmark, floatTypes);
 
