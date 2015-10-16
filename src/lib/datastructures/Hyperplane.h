@@ -63,6 +63,9 @@ class Hyperplane {
 	HPolytope<Number> intersection( const Hyperplane<Number>& _rhs ) const;
 	vector_t<Number> intersectionVector( const Hyperplane<Number>& _rhs ) const;
 
+	static vector_t<Number> fastIntersect( const std::vector<const Hyperplane<Number>>& _planes );
+	static vector_t<Number> saveIntersect( const std::vector<const Hyperplane<Number>>& _planes );
+
 	bool contains( const vector_t<Number> _vector ) const;
 	bool holds( const vector_t<Number> _vector ) const;
 
