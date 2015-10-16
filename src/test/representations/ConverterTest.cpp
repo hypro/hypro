@@ -120,6 +120,10 @@ TYPED_TEST(ConverterTest, toSupportFunction)
         convert(this->hpolytope, result);
         //std::cout << __func__ << " Result: " << *result << std::endl;
         //result->print();
+        convert(this->box, result);
+        //std::cout << __func__ << " Result: " << *result << std::endl;
+        //esult->print();
+        
 	SUCCEED();
 }
 

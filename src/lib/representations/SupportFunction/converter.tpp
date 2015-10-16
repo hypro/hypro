@@ -1,6 +1,6 @@
 /**
  * Specialization for a converter to a support function.
- * @file converter.h
+ * @file converter.tpp
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
  *
@@ -11,49 +11,51 @@
 #include "converter.h"
 
 namespace hypro{
-    template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, SupportFunction<Number>& _target ) {
-	unsigned dim = _source.dimension();
+        // conversion from Box to support function
+        template <typename Number>
+        static bool convert( const hypro::Box<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+                unsigned dim = _source.dimension();                                                     //gets dimension of box
+                assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
-	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
-	for ( unsigned i = 0; i < dim; ++i ) {
-		directions( 2 * i, i ) = -1;
-		directions( 2 * i + 1, i ) = 1;
-	}
+                matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
+                for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
+                        directions( 2 * i, i ) = -1;                                                    
+                        directions( 2 * i + 1, i ) = 1;                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
+                }
 
-	vector_t<Number> distances = vector_t<Number>( 2 * dim );
+                vector_t<Number> distances = vector_t<Number>( 2 * dim );                               //initialize distance vector with 2*dim rows
 
-	std::vector<carl::Interval<Number>> intervals = _source.boundaries();
-	for ( unsigned i = 0; i < dim; ++i ) {
-		distances( 2 * i ) = intervals[i].lowerBound();
-		distances( 2 * i + 1 ) = intervals[i].upperBound();
-	}
+                std::vector<carl::Interval<Number>> intervals = _source.boundaries();                   //gets intervals of box
+                for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
+                        distances( 2 * i ) = -intervals[i].lower();                                
+                        distances( 2 * i + 1 ) = intervals[i].upper();                             //write inverted lower bound values and upper bound values into the distance vector
+                }
 
-	_target = SupportFunction<Number>( directions, distances );
+                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, directions, distances); //constructs a support function with normal matrix and distance vector
 
-	return true;
+                return true;
 }
 
-/*
-template<typename Number>
-static bool convert( const hypro::VPolytope<Number>& _source, SupportFunction<Number>& _target) {
+                /*
+                template<typename Number>
+                static bool convert( const hypro::VPolytope<Number>& _source, SupportFunction<Number>& _target) {
 
-}
-*/
+                }
+                */
     
 
     
-// conversion from H-polytope to support function
-template <typename Number>
-static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
-	typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
-	assert( !planes.empty() );                                                                 //ensures that nonempty planes got fetched before continuing
+        // conversion from H-polytope to support function
+        template <typename Number>
+        static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+                typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
+                assert( !planes.empty() );                                                                //ensures that nonempty planes got fetched before continuing
 
-	_target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );                 //constructs a support function with the received planes
+                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );                //constructs a support function with the received planes
 
-	return true;
+                return true;
 }
-
+// TODO (Zonotope-conversion doesn't work)
 template <typename Number>
 static bool convert( const hypro::Zonotope<Number>& _source, SupportFunction<Number>& _target ) {
 	Zonotope<Number> tmp = _source.intervalHull();
