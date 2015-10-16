@@ -13,7 +13,7 @@
 #include <cassert>
 #include <glpk.h>
 
-//#include "Point.h"
+#include "Point.h"
 #include "../util/VariablePool.h"
 #include <carl/formula/Constraint.h>
 

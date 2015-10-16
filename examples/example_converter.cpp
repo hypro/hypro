@@ -11,9 +11,10 @@ int main(int argc, char** argv) {
 		0,-1,
 	distances2 << 1,1,0;
 
-	SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
-	
-	hypro::Box<double> res = convert(poly2);
+	std::shared_ptr<SupportFunction<double>> poly2 = SupportFunction<double>::create(SF_TYPE::POLY, matrix2, distances2);
+
+	hypro::Box<double> res;
+	convert(poly2, res);
 
 	std::cout << res << std::endl;
 
@@ -29,14 +30,14 @@ int main(int argc, char** argv) {
 	vector_t<double> p4 = vector_t<double>(2);
 	p4(0) = 1;
 	p4(1) = 4;
-	VPolytope<double>::vertexSet points;
-	points.insert(p1);
-	points.insert(p2);
-	points.insert(p3);
-	points.insert(p4);
+	std::vector<hypro::Point<double>> points;
+	points.push_back(p1);
+	points.push_back(p2);
+	points.push_back(p3);
+	points.push_back(p4);
 
 	VPolytope<double> poly1 = VPolytope<double>(points);
-	res = convert(poly1);
+	convert(poly1,res);
 
 	std::cout << res << std::endl;
 
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
 
 	Zonotope<double> zono1 = Zonotope<double>(center, generators);
 
-	res = convert(zono1);
+	convert(zono1,res);
 
 	std::cout << res << std::endl;
 
@@ -60,7 +61,7 @@ int main(int argc, char** argv) {
 
 	hypro::Polytope<double> poly3(coordinates);
 
-	res = convert(poly3);
+	convert(poly3,res);
 
-	std::cout << res << std::endl;	
+	std::cout << res << std::endl;
 }

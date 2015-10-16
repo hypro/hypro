@@ -127,20 +127,20 @@ static bool createTransition( const hypro::parser::Transition<Number>& _transiti
 	incomplete = incomplete || incompleteGuard || incompleteReset;
 
 	if ( !incomplete ) {
-		_tran->setStartLoc( sourceLocIt->second );
-		_tran->setTargetLoc( targetLocIt->second );
+		_tran->setSource( sourceLocIt->second );
+		_tran->setTarget( targetLocIt->second );
 
-		struct hypro::Transition<Number>::guard tmpGuard;
+		struct hypro::Transition<Number>::Guard tmpGuard;
 		tmpGuard.mat = guard;
 		tmpGuard.op = hypro::operator_e::LEQ;
 		tmpGuard.vec = vecGuard;
 
-		struct hypro::Transition<Number>::assignment tmpReset;
+		struct hypro::Transition<Number>::Reset tmpReset;
 		tmpReset.transformMat = reset;
 		tmpReset.translationVec = vecReset;
 
 		_tran->setGuard( tmpGuard );
-		_tran->setAssignment( tmpReset );
+		_tran->setReset( tmpReset );
 
 		return true;
 	} else {

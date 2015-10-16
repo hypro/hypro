@@ -231,7 +231,7 @@ namespace reachability {
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
-				resultPolytope.reduce();
+				resultPolytope.removeRedundantPlanes();
 // resultPolytope = resultPolytope.hull();
 
 #ifdef REACH_DEBUG

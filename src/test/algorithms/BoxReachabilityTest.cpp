@@ -7,7 +7,7 @@
 #include "../defines.h"
 #include "../../lib/representations/Box/Box.h"
 #include "../../lib/datastructures/Point.h"
- #include "../../lib/datastructures/hybridAutomata/LocationManager.h"
+#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/algorithms/reachability/Reach.h"
 
 template<typename Number>
