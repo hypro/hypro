@@ -457,7 +457,6 @@ HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) 
 		// DROP
 		case REDUCTION_STRATEGY::DROP:
 		{
-			std::cout << "Computing Drop" << std::endl;
 			unsigned i=recommended.second; // getIndexForDrop();
 			res.mHPlanes.erase(res.mHPlanes.begin()+i);
 			break;
@@ -562,7 +561,6 @@ HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) 
 		// UNITE_CUT
 		case REDUCTION_STRATEGY::UNITE_CUT:
 		{
-			std::cout << "Computing Unite" << std::endl;
 			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
 
 			// select b, prev_a and next_b propely
@@ -590,6 +588,44 @@ HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) 
 			}
 			res.insert(Hyperplane<Number>(	{prev.second-next.second,next.first-prev.first}, // UniteVector
 																			(prev.second-next.second)*center.first + (next.first-prev.first)*center.second)); // UniteOffset
+			break;
+		}
+
+		// UNITE_NORM
+		case REDUCTION_STRATEGY::UNITE_NORM:
+		{
+			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// Helpvalues to calculate the correct uniteVector and uniteOffset - prev_Cut, next_Cut and Cut
+			std::pair<Number, Number> prev = cut(res.mHPlanes[prev_a], res.mHPlanes[a]);
+			std::pair<Number, Number> next = cut(res.mHPlanes[b], res.mHPlanes[next_b]);
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
+
+			double prev_center = sqrt(pow(center.first-prev.first,2) + pow(center.second-prev.second,2));
+			double center_next = sqrt(pow(next.first-center.first,2) + pow(next.second-center.second,2));
+
+			vector_t<Number> uniteVector = prev_center*res.mHPlanes[a].normal() + center_next*res.mHPlanes[b].normal(); // calculate uniteVector (next_b+b + prev_a+a)
+			Number uniteOffset = uniteVector[0]*center.first + uniteVector[1]*center.second; // calculate the actual uniteOffset
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			if(b==0){ // erase b propely
+				res.mHPlanes.erase(res.mHPlanes.begin());
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			}
+			res.insert(Hyperplane<Number>(uniteVector, uniteOffset));
 			break;
 		}
 
