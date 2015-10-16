@@ -224,6 +224,7 @@ class Vertex {
 	 * @return
 	 */
 	Number& operator[]( const carl::Variable& _i ) { return mPoint[_i]; }
+	Number& operator[]( std::size_t pos ) { return mPoint[pos]; }
 
 	Number at( const carl::Variable& _i ) const { return mPoint.at( _i ); }
 

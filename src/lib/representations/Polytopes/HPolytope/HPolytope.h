@@ -88,11 +88,11 @@ class HPolytope {
 	HPolytope<Number> reduce( unsigned strat ,unsigned _steps = 1 ) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
-  std::pair<unsigned, unsigned> chooseStrat() const;
-  unsigned getIndexForDrop() const;
-  unsigned getIndexForUnite() const;
+	std::pair<unsigned, unsigned> chooseStrat() const;
+	unsigned getIndexForDrop() const;
+	unsigned getIndexForUnite() const;
 
-  std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
+	std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;

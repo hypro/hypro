@@ -25,27 +25,20 @@ class BoxTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-		pool.clear();
-		x = pool.newCarlVariable();
-		y = pool.newCarlVariable();
-        std::map<const carl::Variable, carl::Interval<Number> > boundaries1;
-        boundaries1.insert(std::make_pair(x, carl::Interval<Number>(2,6)));
-        boundaries1.insert(std::make_pair(y, carl::Interval<Number>(1,3)));
+        std::vector<carl::Interval<Number> > boundaries1;
+        boundaries1.push_back(carl::Interval<Number>(2,6));
+        boundaries1.push_back(carl::Interval<Number>(1,3));
         box1 = hypro::Box<Number>(boundaries1);
 
-        std::map<const carl::Variable, carl::Interval<Number> > boundaries2;
-        boundaries2.insert(std::make_pair(x, carl::Interval<Number>(-1,6)));
-        boundaries2.insert(std::make_pair(y, carl::Interval<Number>(4,7)));
+        std::vector<carl::Interval<Number> > boundaries2;
+        boundaries2.push_back(carl::Interval<Number>(-1,6));
+        boundaries2.push_back(carl::Interval<Number>(4,7));
         box2 = hypro::Box<Number>(boundaries2);
     }
 
     virtual void TearDown()
     {
     }
-
-    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    carl::Variable x;
-    carl::Variable y;
 
     hypro::Box<Number> box1;
     hypro::Box<Number> box2;
@@ -94,14 +87,8 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_TRUE(this->box1.haveSameDimensions(this->box2));
     EXPECT_FALSE(this->box1.haveSameDimensions(this->box3));
 
-    typename Point<TypeParam>::coordinateMap coMax1;
-    coMax1.insert(std::make_pair(this->x, 6));
-    coMax1.insert(std::make_pair(this->y, 3));
-    EXPECT_EQ(Point<TypeParam>(coMax1), this->box1.max());
-    typename Point<TypeParam>::coordinateMap coMin1;
-    coMin1.insert(std::make_pair(this->x, 2));
-    coMin1.insert(std::make_pair(this->y, 1));
-    EXPECT_EQ(Point<TypeParam>(coMin1), this->box1.min());
+    EXPECT_EQ(Point<TypeParam>({6,3}), this->box1.max());
+    EXPECT_EQ(Point<TypeParam>({2,1}), this->box1.min());
 
     EXPECT_EQ(this->box1, this->box1);
     EXPECT_EQ(this->box2, this->box2);
@@ -112,27 +99,25 @@ TYPED_TEST(BoxTest, Access)
 
     hypro::Box<TypeParam> emptyBox = hypro::Box<TypeParam>::Empty();
     hypro::Box<TypeParam> universalBox;
-    EXPECT_FALSE(this->box1.isEmpty());
-    EXPECT_TRUE(emptyBox.isEmpty());
-    EXPECT_FALSE(universalBox.isEmpty());
+    EXPECT_FALSE(this->box1.empty());
+    EXPECT_TRUE(emptyBox.empty());
+    EXPECT_FALSE(universalBox.empty());
 }
 
 TYPED_TEST(BoxTest, Insertion)
 {
     std::vector<carl::Interval<TypeParam>> tmp;
-    carl::Variable z = this->pool.newCarlVariable();
-    this->box1.insert(std::make_pair(z, carl::Interval<TypeParam>(3,9)));
-    EXPECT_EQ(true, this->box1.hasDimension(z));
+    this->box1.insert(carl::Interval<TypeParam>(3,9));
+    EXPECT_EQ(true, this->box1.hasDimension(2));
 
-    EXPECT_EQ(3, this->box1.interval(z).lower());
-    EXPECT_EQ(9, this->box1.interval(z).upper());
+    EXPECT_EQ(3, this->box1.interval(2).lower());
+    EXPECT_EQ(9, this->box1.interval(2).upper());
 
-    carl::Variable w = this->pool.newCarlVariable();
-    this->box1.insert(std::make_pair(w, carl::Interval<TypeParam>(4,5)));
-    EXPECT_EQ(true, this->box1.hasDimension(w));
+    this->box1.insert(carl::Interval<TypeParam>(4,5));
+    EXPECT_EQ(true, this->box1.hasDimension(3));
 
-    EXPECT_EQ(4, this->box1.interval(w).lower());
-    EXPECT_EQ(5, this->box1.interval(w).upper());
+    EXPECT_EQ(4, this->box1.interval(3).lower());
+    EXPECT_EQ(5, this->box1.interval(3).upper());
 }
 
 TYPED_TEST(BoxTest, Corners) {
@@ -204,7 +189,7 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	hypro::Box<TypeParam> b1(intervals1);
 
 	// rotation
-	TypeParam angle = 90;
+	TypeParam angle = 45;
 	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
 	rotX(0,0) = 1;
 	rotX(1,1) = carl::cos(angle);
@@ -212,26 +197,26 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	rotX(2,1) = carl::sin(angle);
 	rotX(2,2) = carl::cos(angle);
 
-	/*
+
 	matrix_t<TypeParam> rotY = matrix_t<TypeParam>::Zero(3,3);
-	rotY(0,0) = TypeParam(cos(angle));
-	rotY(0,2) = TypeParam(sin(angle));
+	rotY(0,0) = carl::cos(angle);
+	rotY(0,2) = carl::sin(angle);
 	rotY(1,1) = 1;
-	rotY(2,0) = TypeParam(-sin(angle));
-	rotY(2,2) = TypeParam(cos(angle));
+	rotY(2,0) = -carl::sin(angle);
+	rotY(2,2) = carl::cos(angle);
 
 	matrix_t<TypeParam> rotZ = matrix_t<TypeParam>::Zero(3,3);
-	rotZ(0,0) = TypeParam(cos(angle));
-	rotZ(0,1) = TypeParam(-sin(angle));
-	rotZ(1,0) = TypeParam(sin(angle));
-	rotZ(1,1) = TypeParam(cos(angle));
+	rotZ(0,0) = carl::cos(angle);
+	rotZ(0,1) = -carl::sin(angle);
+	rotZ(1,0) = carl::sin(angle);
+	rotZ(1,1) = carl::cos(angle);
 	rotZ(2,2) = 1;
-	*/
+
 
 	// result
 	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX, vector_t<TypeParam>::Zero(rotX.rows()));
-	//hypro::Box<TypeParam> resY = b1.linearTransformation(rotY, vector_t<TypeParam>::Zero(rotY.rows()));
-	//hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ, vector_t<TypeParam>::Zero(rotZ.rows()));
+	hypro::Box<TypeParam> resY = b1.linearTransformation(rotY, vector_t<TypeParam>::Zero(rotY.rows()));
+	hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ, vector_t<TypeParam>::Zero(rotZ.rows()));
 
 
 	std::vector<Point<TypeParam>> cornersX = resX.vertices();
@@ -242,7 +227,7 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	}
 	EXPECT_EQ(resX, hypro::Box<TypeParam>(newCorners));
 
-	/*
+
 	newCorners.clear();
 	std::vector<Point<TypeParam>> cornersY = resY.vertices();
 	for(auto& point : originalCorners) {
@@ -256,17 +241,16 @@ TYPED_TEST(BoxTest, LinearTransformation)
 		newCorners.push_back(Point<TypeParam>(rotZ*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resZ, hypro::Box<TypeParam>(newCorners));
-	*/
 }
 
 TYPED_TEST(BoxTest, MinkowskiSum)
 {
     hypro::Box<TypeParam> result;
     result = this->box1.minkowskiSum(this->box2);
-    EXPECT_EQ(1 , result.interval(this->x).lower());
-    EXPECT_EQ(12 , result.interval(this->x).upper());
-    EXPECT_EQ(5 , result.interval(this->y).lower());
-    EXPECT_EQ(10 , result.interval(this->y).upper());
+    EXPECT_EQ(1 , result.interval(0).lower());
+    EXPECT_EQ(12 , result.interval(0).upper());
+    EXPECT_EQ(5 , result.interval(1).lower());
+    EXPECT_EQ(10 , result.interval(1).upper());
 
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
 	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
@@ -306,7 +290,7 @@ TYPED_TEST(BoxTest, Intersection)
 {
     hypro::Box<TypeParam> result;
     result = this->box1.intersect(this->box2);
-    EXPECT_TRUE(result.isEmpty());
+    EXPECT_TRUE(result.empty());
 
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
 	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
@@ -339,12 +323,53 @@ TYPED_TEST(BoxTest, Intersection)
 
 	EXPECT_EQ(hypro::Box<TypeParam>(intervals), res);
 
+	hypro::Box<TypeParam> empt1 = this->box1.intersect(hypro::Box<TypeParam>::Empty());
+	EXPECT_TRUE(empt1.empty());
+
+	hypro::Box<TypeParam> empt2 = this->box1.intersect(hypro::Box<TypeParam>::Empty(this->box1.dimension()));
+	EXPECT_TRUE(empt2.empty());
+
+	hypro::Box<TypeParam> reduced = this->box1.intersect(hypro::Box<TypeParam>(carl::Interval<TypeParam>(3,4)));
+	EXPECT_EQ(reduced, hypro::Box<TypeParam>(carl::Interval<TypeParam>(3,4)));
+}
+
+TYPED_TEST(BoxTest, IntersectionHyperplane)
+{
+	hypro::Box<TypeParam> res1 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},4));
+	hypro::Box<TypeParam> res2 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},5));
+	hypro::Box<TypeParam> res3 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},6));
+	hypro::Box<TypeParam> res4 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},9));
+	hypro::Box<TypeParam> res5 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},10));
+
+	std::vector<carl::Interval<TypeParam>> i1;
+	std::vector<carl::Interval<TypeParam>> i2;
+	std::vector<carl::Interval<TypeParam>> i3;
+	std::vector<carl::Interval<TypeParam>> i4;
+	std::vector<carl::Interval<TypeParam>> i5;
+
+	i1.push_back(carl::Interval<TypeParam>(2,3));
+	i1.push_back(carl::Interval<TypeParam>(1,2));
+	EXPECT_EQ(res1, hypro::Box<TypeParam>(i1));
+
+	i2.push_back(carl::Interval<TypeParam>(2,4));
+	i2.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res2, hypro::Box<TypeParam>(i2));
+
+	i3.push_back(carl::Interval<TypeParam>(2,5));
+	i3.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res3, hypro::Box<TypeParam>(i3));
+
+	i4.push_back(carl::Interval<TypeParam>(2,6));
+	i4.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res4, hypro::Box<TypeParam>(i4));
+
+	i5.push_back(carl::Interval<TypeParam>(2,6));
+	i5.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res5, hypro::Box<TypeParam>(i5));
 }
 
 TYPED_TEST(BoxTest, Membership)
 {
-    Point<TypeParam> p;
-    p.setCoordinate(this->x, 4);
-    p.setCoordinate(this->y, 2);
+    Point<TypeParam> p({4,2});
     EXPECT_TRUE(this->box1.contains(p));
 }

@@ -279,12 +279,12 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::hull() co
 
 	for ( int vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
 		int i = 0;
-		for ( auto variableIt : mGrid.variables() ) {
+		for ( std::size_t p = 0; p < mGrid.dimension(); ++p ) {
 			// look if the bit of the current dimension is set
 			if ( ( vertexNr >> i++ ) & 1 ) {
-				vertex[variableIt] = mBoundaryBox.interval( variableIt ).upper();
+				vertex[p] = mBoundaryBox.interval( p ).upper();
 			} else {
-				vertex[variableIt] = mBoundaryBox.interval( variableIt ).lower();
+				vertex[p] = mBoundaryBox.interval( p ).lower();
 			}
 		}
 		vertex.setColor( vertexNr == 0 );

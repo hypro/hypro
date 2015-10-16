@@ -1,9 +1,9 @@
 /**
  * @file    ConverterTest.cpp
  * @covers  Converter
- * 
+ *
  * @author  Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since	2015-05-13
  * @version 2015-05-13
  */
@@ -21,13 +21,9 @@ class ConverterTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-    	
-		pool.clear();
-		x = pool.newCarlVariable();
-		y = pool.newCarlVariable();
-        std::map<const carl::Variable, carl::Interval<Number> > boundaries;
-        boundaries.insert(std::make_pair(x, carl::Interval<Number>(2,6)));
-        boundaries.insert(std::make_pair(y, carl::Interval<Number>(1,3)));
+        std::vector<carl::Interval<Number>> boundaries;
+        boundaries.push_back(carl::Interval<Number>(2,6));
+        boundaries.push_back(carl::Interval<Number>(1,3));
         box = hypro::Box<Number>(boundaries);
 
         matrix = matrix_t<Number>(3,2);
@@ -68,28 +64,24 @@ protected:
 		coordinates.push_back(p3);
 		coordinates.push_back(p4);
 		polytope = hypro::Polytope<Number>(coordinates);
-                
+
                 // A rectangle (for H-Polytope)
 		Hyperplane<Number> hp1({1,0},2);
 		Hyperplane<Number> hp2({0,1},2);
 		Hyperplane<Number> hp3({-1,0},2);
 		Hyperplane<Number> hp4({0,-1},2);
-                
+
                 planes.push_back(hp1);
 		planes.push_back(hp2);
 		planes.push_back(hp3);
 		planes.push_back(hp4);
-                
+
                 hpolytope = HPolytope<Number>(this->planes);
     }
-	
+
     virtual void TearDown()
     {
     }
-	
-    hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-    carl::Variable x;
-    carl::Variable y;
 
     matrix_t<Number> matrix;
     vector_t<Number> distances;
@@ -98,10 +90,10 @@ protected:
     hypro::Polytope<Number> polytope;
     VPolytope<Number> vpolytope;
     Zonotope<Number> zonotope;
-    
+
     typename HPolytope<Number>::HyperplaneVector planes;
     HPolytope<Number> hpolytope;
-    
+
 };
 
 TYPED_TEST(ConverterTest, toBox)
@@ -118,7 +110,7 @@ TYPED_TEST(ConverterTest, toBox)
 
 TYPED_TEST(ConverterTest, toPolytope)
 {
-        
+
 	SUCCEED();
 }
 

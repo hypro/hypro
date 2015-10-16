@@ -115,8 +115,8 @@ TYPED_TEST(OrthogonalPolyhedronTest, Properties)
 TYPED_TEST(OrthogonalPolyhedronTest, BoundaryBox)
 {
 	hypro::Box<TypeParam> boundaryBox;
-	boundaryBox.insert(this->x, carl::Interval<TypeParam>(3, 7));
-	boundaryBox.insert(this->y, carl::Interval<TypeParam>(3, 6));
+	boundaryBox.insert(carl::Interval<TypeParam>(3, 7));
+	boundaryBox.insert(carl::Interval<TypeParam>(3, 6));
 
 	EXPECT_EQ(boundaryBox, this->p1.boundaryBox());
 }
