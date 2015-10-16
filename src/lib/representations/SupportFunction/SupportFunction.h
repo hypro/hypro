@@ -135,7 +135,7 @@ class SupportFunction {
 	evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
-	unsigned dimension() const;
+	std::size_t dimension() const;
 	SF_TYPE type() const;
 
 	// getter for the union types
@@ -156,7 +156,7 @@ class SupportFunction {
 	std::shared_ptr<SupportFunction<Number>> unite( std::shared_ptr<SupportFunction<Number>> _rhs ) const;
 
 	std::shared_ptr<SupportFunction<Number>> scale( const Number& _factor = 1 ) const;
-	bool isEmpty() const;
+	bool empty() const;
 
 	void print() const;
 };

@@ -128,13 +128,13 @@ HPolytope<Number> HPolytope<Number>::Empty(){
 }
 
 template <typename Number>
-unsigned HPolytope<Number>::dimension() const {
-	assert( !mHPlanes.empty() );
+std::size_t HPolytope<Number>::dimension() const {
+	if(mHPlanes.empty()) return 0;
 	return mDimension;
 }
 
 template <typename Number>
-unsigned HPolytope<Number>::size() const {
+std::size_t HPolytope<Number>::size() const {
 	return mHPlanes.size();
 }
 

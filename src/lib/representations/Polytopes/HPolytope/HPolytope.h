@@ -67,8 +67,8 @@ class HPolytope {
 	bool empty() const;
 	static HPolytope<Number> Empty();
 
-	unsigned dimension() const;
-	unsigned size() const;
+	std::size_t dimension() const;
+	std::size_t size() const;
 
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
