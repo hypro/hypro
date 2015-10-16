@@ -94,8 +94,18 @@ bool OrthogonalPolyhedron<Number, Type>::empty() const {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-unsigned OrthogonalPolyhedron<Number, Type>::size() const {
+std::size_t OrthogonalPolyhedron<Number, Type>::size() const {
 	return mGrid.size();
+}
+
+template <typename Number, ORTHO_TYPE Type>
+std::size_t OrthogonalPolyhedron<Number, Type>::dimension() const {
+	return mGrid.dimension();
+}
+
+template <typename Number, ORTHO_TYPE Type>
+Number OrthogonalPolyhedron<Number, Type>::supremum() const {
+	// TODO
 }
 
 template <typename Number, ORTHO_TYPE Type>
@@ -162,11 +172,6 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::iProjecti
 /**********************************
  * Geometric Object functions
  **********************************/
-
-template <typename Number, ORTHO_TYPE Type>
-unsigned int OrthogonalPolyhedron<Number, Type>::dimension() const {
-	return mGrid.dimension();
-}
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTransformation(

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   ZonotopeTest.cpp
  * Author: jongan
  *
@@ -25,11 +25,11 @@ protected:
     virtual void SetUp()
     {
     }
-	
+
     virtual void TearDown()
     {
     }
-	
+
 };
 
 
@@ -72,7 +72,7 @@ TYPED_TEST(ZonotopeTest, CopyConstructor) {
             9,1;
     hypro::Zonotope<TypeParam> z1(center, gen);
     hypro::Zonotope<TypeParam> z_copy(z1);
-    
+
     EXPECT_EQ(z_copy.dimension(),z1.dimension());
     EXPECT_EQ(z_copy.center(),z1.center());
     EXPECT_EQ(z_copy.generators(),z1.generators());
@@ -84,10 +84,10 @@ TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
     Eigen::Matrix<TypeParam, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
-    
+
     z1.setCenter(center);
     z1.setGenerators(generators);
-    
+
     std::vector< hypro::vector_t<TypeParam> > results = z1.computeZonotopeBoundary();
 }
 
@@ -111,7 +111,7 @@ TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
     Eigen::Matrix<TypeParam, 2,6> generators;
     generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
                     0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
-    
+
     hypro::Hyperplane<TypeParam> hp(dVec, 0);
     hypro::Zonotope<TypeParam> z(center, generators), res;
     hypro::matrix_t<TypeParam> dummy;
@@ -147,13 +147,13 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 
     gen_sum << 10,
                22;
-    
-    
+
+
 
     EXPECT_EQ(z1.center(), cen_res);
     EXPECT_EQ(z1.numGenerators(), (unsigned) 4);
-    EXPECT_EQ(z1.generators().rowwise().sum(), gen_sum); 
-    
+    EXPECT_EQ(z1.generators().rowwise().sum(), gen_sum);
+
     z1 = z2.minkowskiSum(z3);
     EXPECT_EQ(z1.numGenerators(), (unsigned) 2);
     EXPECT_EQ(z1.generators(), gen2);
@@ -217,16 +217,16 @@ TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
     z_gen << 0,1,
              1,0;
     hypro::Zonotope<TypeParam> z1(z_center, z_gen), result(2);
-     
+
     // Case 1: Zonotope is wholly inside the halfspace
     result = z1.intersect(hspace);
-    bool foundIntersect = !result.isEmpty();
-    // Expect: result zonotope is the original zonotope, nothing is changed 
+    bool foundIntersect = !result.empty();
+    // Expect: result zonotope is the original zonotope, nothing is changed
     // Intersection trivially present
     EXPECT_TRUE(foundIntersect);
     EXPECT_EQ(result.center(), z_center);
     EXPECT_EQ(result.generators(), z_gen);
-    
+
     // Case 2: Zonotope is wholly outside of the halfspace
     z_center << -3,3;
     z_gen << 0,1,
@@ -234,21 +234,21 @@ TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
     z1.setCenter(z_center);
     z1.setGenerators(z_gen);
     result = z1.intersect(hspace);
-    foundIntersect = !result.isEmpty();
+    foundIntersect = !result.empty();
     // Expect: No intersect was found
     EXPECT_FALSE(foundIntersect);
-    
+
     // Case 3: Zonotope intersects partially with halfspace
     z_center << 0,0;
     z_gen << 0,2,
              2,0;
-    
+
     z1.setCenter(z_center);
     z1.setGenerators(z_gen);
-   
+
 
     result = z1.intersect(hspace);
-    foundIntersect = !result.isEmpty();
+    foundIntersect = !result.empty();
     // Expect: Intersect to be found, resulting zonotope is a different zonotope
     // TODO: verify that the resulting zonotope is correct
     EXPECT_TRUE(foundIntersect);
@@ -257,14 +257,14 @@ TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
 }
 
 TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
-    
+
     Eigen::Matrix<TypeParam, 2,1> z_center;
     Eigen::Matrix<TypeParam, 2,2> z_gen;
     z_center << 0,-1;
     z_gen << 0,1,
              1,0;
     hypro::Zonotope<TypeParam> z1(z_center, z_gen), result_zonotope(2);
-    
+
     C_Polyhedron poly1(2, UNIVERSE);
     Variable x(0),y(1);
     Constraint_System cs;
@@ -276,11 +276,11 @@ TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
 
     //std::cout << "Polytope: " << poly1 << std::endl;
     result_zonotope = z1.intersect(poly1);
-    bool res = result_zonotope.isEmpty();
-    
+    bool res = result_zonotope.empty();
+
     EXPECT_EQ(res, false);
-    
-    
+
+
 }
 
 TYPED_TEST(ZonotopeTest, RemoveEmptyGen) {
@@ -288,25 +288,25 @@ TYPED_TEST(ZonotopeTest, RemoveEmptyGen) {
     center << 2,
               3,
               6;
-    
+
     Eigen::Matrix<TypeParam, 3, 4> gen;
     Eigen::Matrix<TypeParam, 3, 3> gen2;
-    
+
     gen << 2,3,0,2,
            3,6,0,3,
            1,5,0,7;
-    
+
     gen2 << 2,3,2,
             3,6,3,
             1,5,7;
-    
+
     hypro::Zonotope<TypeParam> z1;
     z1.setCenter(center);
     z1.setGenerators(gen);
     z1.removeEmptyGenerators();
-   
+
     EXPECT_EQ(z1.generators(), gen2);
-    
+
 }
 
 TYPED_TEST(ZonotopeTest, AddGenerators) {
@@ -315,17 +315,17 @@ TYPED_TEST(ZonotopeTest, AddGenerators) {
     Eigen::Matrix<TypeParam, 2, 6> concat_gens;
     generators << 1,2,5,
                   3,1,6;
-    
+
     generators2 << 2,1,6,
                    2,6,8;
-    
+
     z.addGenerators(generators);
     EXPECT_EQ(z.generators(), generators);
-    
+
     z.addGenerators(generators2);
     concat_gens << generators, generators2;
     EXPECT_EQ(z.generators(), concat_gens);
-    
+
 }
 
 TYPED_TEST(ZonotopeTest, Intersection2) {
@@ -338,28 +338,28 @@ TYPED_TEST(ZonotopeTest, Intersection2) {
     d << 1,
          0,
          0;
-    
+
     exp_center << 0,
                   -6.254369393209305,
                   0.994400337321514;
-    
+
     delta << 0.01,
              0.01,
              0.01;
-    
+
     generators <<0.01, 0.00645, 0.03163725, -5e-05, 0.0111647739218983, 0.00714545531001491,-0.0224310133091988,
                 0,0.0100000000000000,0.0490500000000000,0,0,0.0111647739218983,-0.0700969165912463,
                 0,0,0,0,0,0,0.0111647739218983;
-    
+
     z1.setCenter(z_center);
     z1.setGenerators(generators);
-    
+
     hypro::Hyperplane<TypeParam> h1 = hypro::Hyperplane<TypeParam>();
     h1.setNormal(d);
     h1.setOffset(0);
-    
+
     hypro::Zonotope<TypeParam> result = z1.intersect(h1, ZUtility::ALAMO);
-    
+
    EXPECT_LT((result.center()-exp_center).array().abs().matrix().sum(), delta.sum());
 }
 
@@ -369,27 +369,27 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
     Eigen::Matrix<TypeParam, 2, 2> g1;
     Eigen::Matrix<TypeParam, 2, 3> g2;
     Eigen::Matrix<TypeParam, 2, 4> expected_generators;
-    
+
     c1 << 2,1;
     c2 << 1,1;
-    
+
     g1 << 1,1,
           0,1;
-    
+
     g2 << 1,1,-0.5,
           0,1,0.2;
-    
+
     expected_center << 1.5, 1;
     expected_generators << 1, 1, -0.5, -0.5,
                             0, 1, 0, 0.2;
-    
+
     z1.setCenter(c1);
     z1.setGenerators(g1);
     z2.setCenter(c2);
     z2.setGenerators(g2);
-    
+
     result = z1.unite(z2);
-   
+
     EXPECT_EQ(result.center(), expected_center);
     EXPECT_EQ(result.generators(), expected_generators);
 }
@@ -404,9 +404,9 @@ TYPED_TEST(ZonotopeTest, IntervalHull) {
     expected_generators << 8, 0,
                            0, 9;
     hypro::Zonotope<TypeParam> result, zIH(center, generators);
-    
+
     result = zIH.intervalHull();
-        
+
     EXPECT_EQ(result.generators(), expected_generators);
     EXPECT_EQ(result.center(), center);
 }

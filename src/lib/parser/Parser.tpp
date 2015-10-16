@@ -51,6 +51,7 @@ bool MainParser<Number, Representation>::parse( std::istream &in, const std::str
 template <typename Number, typename Representation>
 HybridAutomaton<Number, Representation> MainParser<Number, Representation>::createAutomaton() {
 	HybridAutomaton<Number, Representation> result;
+	LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
 
 	std::map<unsigned, hypro::Location<Number> *> locations;
 	std::map<unsigned, hypro::Transition<Number> *> transitions;
@@ -63,7 +64,7 @@ HybridAutomaton<Number, Representation> MainParser<Number, Representation>::crea
 
 	// get flow, first run
 	for ( const auto &state : mStates ) {
-		Location<Number> *loc = new Location<Number>();
+		Location<Number> *loc = locManag.create();
 		bool success = createLocFromState( state, loc, matrices, incompleteStates );
 		if ( success ) {
 			locations.insert( std::make_pair( state.mName, loc ) );
@@ -88,7 +89,7 @@ HybridAutomaton<Number, Representation> MainParser<Number, Representation>::crea
 	// process incomplete states
 	std::queue<State<Number>> secondIncomplete;
 	while ( !incompleteStates.empty() ) {
-		Location<Number> *loc = new Location<Number>();
+		Location<Number> *loc = locManag.create();
 		State<Number> state = incompleteStates.front();
 		bool success = createLocFromState( state, loc, matrices, secondIncomplete );
 		if ( success ) {

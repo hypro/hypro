@@ -89,12 +89,12 @@ class VPolytope : public hypro::GeometricObject<Number> {
 
 	bool empty() const { return mVertices.empty(); }
 
-	unsigned int dimension() const {
+	std::size_t dimension() const {
 		if ( mVertices.empty() ) return 0;
 		return mVertices[0].dimension();
 	}
 
-	unsigned size() const { return mVertices.size(); }
+	std::size_t size() const { return mVertices.size(); }
 
 	bool reduced() const { return mReduced; }
 

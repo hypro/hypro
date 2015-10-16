@@ -25,6 +25,7 @@
 #include <fstream>
 #include <string>
 #include <cassert>
+#include "../datastructures/hybridAutomata/LocationManager.h"
 #include "../datastructures/hybridAutomata/HybridAutomaton.h"
 
 #include "../util/types.h"

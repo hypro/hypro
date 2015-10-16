@@ -80,7 +80,7 @@ Zonotope<Number>::Zonotope()
 }
 
 template <typename Number>
-Zonotope<Number>::Zonotope( unsigned dimension )
+Zonotope<Number>::Zonotope( std::size_t dimension )
 	: mDimension( dimension )
 	, mCenter( hypro::vector_t<Number>::Zero( dimension ) )
 	, mGenerators( hypro::matrix_t<Number>::Zero( dimension, 1 ) ) {
@@ -126,12 +126,12 @@ Zonotope<Number>::~Zonotope() {
  *****************************************************************************/
 
 template <typename Number>
-unsigned Zonotope<Number>::dimension() const {
+std::size_t Zonotope<Number>::dimension() const {
 	return mDimension;
 }
 
 template <typename Number>
-bool Zonotope<Number>::isEmpty() const {
+bool Zonotope<Number>::empty() const {
 	return ( mGenerators.cols() == 0 );
 }
 
@@ -184,7 +184,7 @@ bool Zonotope<Number>::addGenerators( const hypro::matrix_t<Number> &generators 
 }
 
 template <typename Number>
-unsigned Zonotope<Number>::numGenerators() const {
+std::size_t Zonotope<Number>::numGenerators() const {
 	return mGenerators.cols();
 }
 
@@ -239,7 +239,7 @@ void Zonotope<Number>::uniteEqualVectors() {
 }
 
 template <typename Number>
-bool Zonotope<Number>::changeDimension( unsigned new_dim ) {
+bool Zonotope<Number>::changeDimension( std::size_t new_dim ) {
 	assert( new_dim != 0 && "Cannot change dimensionality of zonotope to zero" );
 	if ( new_dim == mDimension ) {
 		return false;
@@ -344,7 +344,7 @@ std::vector<hypro::vector_t<Number>> Zonotope<Number>::computeZonotopeBoundary()
 }
 
 template <typename Number>
-std::vector<hypro::vector_t<Number>> Zonotope<Number>::corners() {
+std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() {
 	uniteEqualVectors();
 
 	removeEmptyGenerators();
@@ -814,7 +814,7 @@ Zonotope<Number> Zonotope<Number>::intersect( const C_Polyhedron &rhs ) const {
 		//        }
 		curZonotope = curZonotope.intersect( constr );
 
-		bool intersectFound = curZonotope.isEmpty();
+		bool intersectFound = curZonotope.empty();
 		if ( !intersectFound ) return curZonotope;
 	}
 	return curZonotope;

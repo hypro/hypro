@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 
 #pragma once
 
 #include <random>
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/types.h"
+#include "../../lib/util/types.h"
 
 namespace hypro {
 	template<typename Representation>

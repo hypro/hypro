@@ -200,6 +200,105 @@ vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number
 }
 
 template <typename Number>
+vector_t<Number> Hyperplane<Number>::fastIntersect( const std::vector<const Hyperplane<Number>>& _planes ) {
+	assert(_planes.size() == _planes.begin()->dimension()); // TODO: Make function more general to cope with arbitrary input.
+
+	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
+	vector_t<Number> b( _planes.size() );
+	std::size_t pos = 0;
+	for(auto planeIt = _planes->begin(); planeIt != _planes->end(); ++planeIt){
+		A.row(pos) = planeIt->normal().transpose();
+		// std::cout << A.row(pos) << std::endl;
+		b(pos) = planeIt->offset();
+		// std::cout << b(pos) << std::endl;
+		++pos;
+	}
+
+	//std::cout << "Created first matrix" << std::endl;
+
+	Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+	if ( lu_decomp.rank() < A.rows() ) {
+		// TODO: Cope with intersection plane.
+	}
+
+	vector_t<Number> res = lu_decomp.solve( b );
+
+	/*
+	// check for infinity
+	bool infty = false;
+	for ( unsigned i = 0; i < res.rows(); ++i ) {
+		if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
+			//std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+			infty = true;
+			break;
+		}
+	}
+	*/
+	return res;
+}
+
+template <typename Number>
+vector_t<Number> Hyperplane<Number>::saveIntersect( const std::vector<const Hyperplane<Number>>& _planes ) {
+	assert(_planes.size() == _planes.begin()->dimension()); // TODO: Make function more general to cope with arbitrary input.
+
+	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
+	vector_t<Number> b( _planes.size() );
+	std::size_t pos = 0;
+	for(auto planeIt = _planes->begin(); planeIt != _planes->end(); ++planeIt){
+		A.row(pos) = planeIt->normal().transpose();
+		// std::cout << A.row(pos) << std::endl;
+		b(pos) = planeIt->offset();
+		// std::cout << b(pos) << std::endl;
+		++pos;
+	}
+
+	//std::cout << "Created first matrix" << std::endl;
+
+	Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+	if ( lu_decomp.rank() < A.rows() ) {
+		// TODO: Cope with intersection plane.
+	}
+
+	vector_t<Number> res = lu_decomp.solve( b );
+
+	bool below = false;
+	for(auto planeIt = _planes.begin(); planeIt != _planes.end(); ++planeIt){
+		Number dist = planeIt->offset() - planeIt->normal().dot(res);
+		if(dist > 0) {
+			below = true;
+			break;
+		}
+	}
+	Number eps = 0;
+	while (below){
+		//std::cout << "Is below, iterate " << std::endl;
+		// enlarge as long as point lies below one of the planes.
+		below = false;
+		eps += std::numeric_limits<Number>::epsilon();
+
+		pos = 0;
+		for(auto planeIt = _planes.begin(); planeIt != _planes.end(); ++planeIt){
+			A.row(pos) = planeIt->normal().transpose();
+			b(pos) = planeIt->offset() + eps;
+			++pos;
+		}
+		vector_t<Number> tmp = Eigen::FullPivLU<matrix_t<Number>>(A).solve( b );
+
+		for(auto planeIt = _planes.begin(); planeIt != _planes.end(); ++planeIt){
+			Number dist = planeIt->offset() - planeIt->normal().dot(tmp);
+			if(dist > 0) {
+				below = true;
+				break;
+			}
+		}
+		if(!below)
+			res = tmp;
+	}
+	return res;
+}
+
+
+template <typename Number>
 bool Hyperplane<Number>::contains( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
 }

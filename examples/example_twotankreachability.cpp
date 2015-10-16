@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   rahsTwoTankTest.cpp
  * Author: jongan
  *
@@ -10,7 +10,7 @@
 #include <iostream>
 #include "../src/lib/representations/Zonotope/ZUtility.h"
 #include "../src/lib/representations/Zonotope/Zonotope.h"
-#include "../src/lib/representations/Hyperplane/Hyperplane.h"
+#include "../src/lib/datastructures/Hyperplane.h"
 #include "../src/lib/algorithms/reachability/ZonotopeReachability.h"
 #include <fstream>
 
@@ -29,7 +29,7 @@ using namespace Eigen;
 hypro::Transition<double> trans1, trans2, trans3, trans4, trans5, trans6, trans7;
 hypro::Location<double> loc1, loc2, loc3, loc4;
 
-Zonotope<double> I_zonotope, U_zonotope;
+hypro::Zonotope<double> I_zonotope, U_zonotope;
 
 std::set< hypro::Transition<double>* > transSet;
 std::set< hypro::Location<double>* > locSet, initialLocSet;
@@ -40,7 +40,7 @@ struct hypro::Location<double>::invariant inv1, inv2, inv3, inv4;
 
 std::set< hypro::Transition<double>* > temp_locations;
 
-void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double> > * ha) {
+void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, hypro::Zonotope<double> > * ha) {
 
     hypro::matrix_t<double> A,B;
     hypro::vector_t<double> b;
@@ -71,7 +71,7 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     identity.resize(2,2);
     hypro::vector_t<double> zeroVec;
     zeroVec.resize(2,Eigen::NoChange);
-    
+
     zeroVec.setZero();
     identity.setIdentity();
     assign.transformMat = identity;
@@ -98,7 +98,7 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     g7.vec(0) = 1;
     g7.op = hypro::EQ;
 
-    g.block<1,2>(0,0) << 0,1;   
+    g.block<1,2>(0,0) << 0,1;
     g23.mat = g;
     g23.vec = zeroVec;
     g23.vec(0) = 1;
@@ -109,47 +109,47 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     g46.mat = g;
     g46.op = hypro::EQ;
 
-    
+
     inv1.mat.resize(2, 2);
     inv2.mat.resize(2, 2);
     inv3.mat.resize(2, 2);
     inv4.mat.resize(0, 0);
-    
+
     inv1.vec.resize(2, Eigen::NoChange);
     inv2.vec.resize(2, Eigen::NoChange);
     inv3.vec.resize(2, Eigen::NoChange);
     inv4.vec.resize(0, Eigen::NoChange);
-    
+
 //    inv3.mat << -1, 0,
 //                 0, 0;
 //    inv3.vec << -1.5, 0;
 //    inv3.op = hypro::LEQ;
-//    
+//
 //    inv1.mat << 0, 1,
 //                0, 0;
 //    inv1.vec << 0.2, 0;
 //    inv1.op = hypro::LEQ;
-    
+
     inv3.mat << -1, -1,
                  0, 0;
     inv3.vec << -1, 0;
     inv3.op = hypro::LEQ;
-    
+
     inv1.mat << 0, 1,
                 0, 0;
     inv1.vec << 0.3, 0;
     inv1.op = hypro::LEQ;
-    
+
     inv2.mat << 0, -1,
                 0, 0;
     inv2.vec << 0.12, 0;
     inv2.op = hypro::LEQ;
-    
+
     loc4.setInvariant(inv4);
     loc3.setInvariant(inv3);
     loc2.setInvariant(inv2);
     loc1.setInvariant(inv1);
-    
+
 
 
     // Push guards into transitiions
@@ -182,7 +182,7 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     trans7.setTargetLoc(&loc3);
 
     // set locations
-    
+
 
     temp_locations.insert(&trans1);
     temp_locations.insert(&trans2);
@@ -259,7 +259,7 @@ void createTwoTankHybridAutomata(hypro::HybridAutomaton<double, Zonotope<double>
     ha->setTransitions(transSet);
     ha->setLocations(locSet);
     ha->setInitialLocations(initialLocSet);
-        
+
 }
 
 int main() {
@@ -270,45 +270,45 @@ int main() {
     std::cout << "loaded hybrid automaton..." << std::endl;
     ZUtility::Options opt = {ZUtility::NDPROJECTION, 3};
     zreach.startReachabilityAnalysis(100,1,0.01,20, opt);
-    
+
 
 #ifdef HAS_MATLAB
     Visualizer vis;
     const unsigned long dims[2] = {1,zreach.flowpipe().size()};
-    
+
     unsigned i=0;
     mxArray * res;
     mxArray * cell_array = vis.createCellArray(2, dims);
     for (Zonotope<double> zp : zreach.flowpipe()) {
         Zonotope<double> z2(zp,0,1);
         std::vector<hypro::vector_t<double> > boundaries = z2.computeZonotopeBoundary();
-        
+
         MatrixXd temp_matrix = zonotope2Matrix(zp);
-        
-        res = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());        
-        vis.matrix2mxArray<double>(temp_matrix, res);        
+
+        res = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());
+        vis.matrix2mxArray<double>(temp_matrix, res);
         vis.setCellArray(cell_array, i, res);
         i++;
     }
     vis.sendVariable2Matlab("Q", cell_array);
     std::cout << zreach.flowpipe().size() << " number of zonotopes sent to matlab..." << std::endl;
     mxDestroyArray(res);
-    
+
     unsigned int count = 0;
     for (auto key: zreach.intersections()) {
         for (Zonotope<double> z : key.second) {
             count++;
         }
     }
-    
+
     mxArray * res2;
 //    MATFile * matfile = matOpen("convexhull.mat", "w");
 //    MATFile * matfile2 = matOpen("intersect.mat", "w");
 //    if (matfile == NULL || matfile2 == NULL) {
 //        std::cout << "Open failed..." << std::endl;
 //    }
-    
-    
+
+
     mxArray * intersect_array;
     if (count > 0) {
         const unsigned long dims3[2] = {1,count-1};
@@ -317,8 +317,8 @@ int main() {
         for (auto key: zreach.intersections()) {
             for (Zonotope<double> z : key.second) {
                 Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
-                res2 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
-                vis.matrix2mxArray<double>(temp_matrix, res2);        
+                res2 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());
+                vis.matrix2mxArray<double>(temp_matrix, res2);
                 vis.setCellArray(intersect_array, count, res2);
                 count++;
             }
@@ -328,11 +328,11 @@ int main() {
         const unsigned long dims3[2] = {0,0};
         intersect_array = vis.createCellArray(2, dims3);
     }
-    
+
     vis.sendVariable2Matlab("intersect", intersect_array);
     std::cout << count << " number of intersects sent to matlab..." << std::endl;
-    
-    if (count > 0) 
+
+    if (count > 0)
         mxDestroyArray(res2);
 //    mxDestroyArray(intersect_array);
 //    mxArray * res3;
@@ -343,8 +343,8 @@ int main() {
 //    for (auto zt: zreach.pivotalZonotopes()) {
 ////        for (Zonotope<double> z : key.second) {
 ////            Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> temp_matrix = zonotope2Matrix(z);
-////            res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());  
-////            vis.matrix2mxArray<double>(temp_matrix, res3);        
+////            res3 = vis.createMatrix(temp_matrix.rows(), temp_matrix.cols());
+////            vis.matrix2mxArray<double>(temp_matrix, res3);
 ////            vis.setCellArray(intersect_array, count, res3);
 ////            count++;
 ////        }
@@ -354,16 +354,16 @@ int main() {
 //        vis.setCellArray(pivotal_array, count, res3);
 //        count++;
 //    }
-    
-    
-    
-    
+
+
+
+
 //    vis.sendVariable2Matlab("pivotal", pivotal_array);
 //    matPutVariable(matfile, "convexhull", pivotal_array);
 //    matPutVariable(matfile2, "intersect", intersect_array);
 //    matClose(matfile);
 //    matClose(matfile2);
-    vis.executeMatlabScript("plotReachableSets"); 
+    vis.executeMatlabScript("plotReachableSets");
     std::cout << vis.buffer << std::endl;
 //    mxDestroyArray(res2);
     mxDestroyArray(intersect_array);

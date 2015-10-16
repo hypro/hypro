@@ -17,14 +17,14 @@ namespace hypro {
 
 	template<typename Representation>
 	struct Generator<Representation, operation::LINEARTRAFO>: public BaseGenerator<Representation> {
-		typedef std::tuple<Representation, matrix_t<typename Representation::type>> type;
+		typedef std::tuple<Representation, matrix_t<typename Representation::type>, vector_t<typename Representation::type>> type;
 		std::string name;
 
 		Generator(const BenchmarkSetup<typename Representation::type>& _setup) : BaseGenerator<Representation>(_setup), name("linear transformation") {}
 
 		type operator()() const {
-			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createMatrix(this->mSetup));
-		}	
+			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createMatrix(this->mSetup), this->mGenerator.createVector(this->mSetup));
+		}
 	};
 
 	template<typename Representation>
@@ -36,7 +36,7 @@ namespace hypro {
 
 		type operator()() const {
 			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createSet(this->mSetup));
-		}	
+		}
 	};
 
 	template<typename Representation>
@@ -48,7 +48,7 @@ namespace hypro {
 
 		type operator()() const {
 			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createSet(this->mSetup));
-		}	
+		}
 	};
 
 	template<typename Representation>
@@ -60,7 +60,7 @@ namespace hypro {
 
 		type operator()() const {
 			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createPoint(this->mSetup));
-		}	
+		}
 	};
 
 	template<typename Representation>
@@ -72,7 +72,7 @@ namespace hypro {
 
 		type operator()() const {
 			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createSet(this->mSetup));
-		}	
+		}
 	};
 
 } // namespace

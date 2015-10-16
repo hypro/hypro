@@ -219,7 +219,7 @@ int main(int argc, char const *argv[])
 	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
-	std::set<unsigned> flowpipeIndices = reacher.computeForwardReachability();
+	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
 
@@ -233,7 +233,7 @@ int main(int argc, char const *argv[])
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
 			std::cout << "Flowpipe segment to be converted: " << std::endl;
-			poly.reduce();
+			poly.removeRedundantPlanes();
 			poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
 			std::cout << "points.size() = " << points.size() << std::endl;
