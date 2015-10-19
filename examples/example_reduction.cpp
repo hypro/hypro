@@ -65,17 +65,29 @@ int main(int argc, char const *argv[])
   equal.insert(Hyperplane<Number>({2,1},2));
   equal.insert(Hyperplane<Number>({0,-1},0));
 
-  HPolytope<Number> reduce_from = equal;
+  HPolytope<Number> unite_compare;
+  unite_compare.insert(Hyperplane<Number>({-1,0},5));
+  unite_compare.insert(Hyperplane<Number>({0.1,1},1));
+  unite_compare.insert(Hyperplane<Number>({1,1.1},5));
+  unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
-	HPolytope<Number> reduction = reduce_from.reduce(0,1);
-  HPolytope<Number> reduction2 = reduce_from.reduce(4,0);
+  HPolytope<Number> reduce_from = unite_compare;
 
-	unsigned r1 = plotter.addObject(reduction.vertices());
-  unsigned r2 = plotter.addObject(reduction2.vertices());
+	HPolytope<Number> reduction = reduce_from.reduce(2,1);
+  HPolytope<Number> reduction2 = reduce_from.reduce(3,1);
+  HPolytope<Number> reduction3 = reduce_from.reduce(4,1);
+  HPolytope<Number> reduction4 = reduce_from.reduce(5,1);
+
+	//unsigned r1 = plotter.addObject(reduction.vertices());
+  //unsigned r2 = plotter.addObject(reduction2.vertices());
+  unsigned r3 = plotter.addObject(reduction3.vertices());
+  unsigned r4 = plotter.addObject(reduction4.vertices());
 	plotter.addObject(reduce_from.vertices());
 
-	plotter.setObjectColor(r1, colors[red]);
-  plotter.setObjectColor(r2, colors[green]);
+	//plotter.setObjectColor(r1, colors[red]);
+  //plotter.setObjectColor(r2, colors[green]);
+  plotter.setObjectColor(r3, colors[orange]);
+  plotter.setObjectColor(r4, colors[violett]);
 
 	plotter.plot2d();
 

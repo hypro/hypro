@@ -28,7 +28,8 @@ class HPolytope {
                               DROP_SMOOTH,
                               UNITE,
                               UNITE_SMOOTH,
-                              UNITE_CUT
+                              UNITE_CUT,
+                              UNITE_NORM
                             };
 
   public:
