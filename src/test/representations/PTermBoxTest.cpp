@@ -66,10 +66,18 @@ TYPED_TEST(PTermBoxTest, Constructor)
 
 	hypro::PTermBox<TypeParam> dBox(points);
 
-	EXPECT_EQ(TypeParam(-3), dBox.min().at(0));
-	EXPECT_EQ(TypeParam(2), dBox.min().at(1));
-	EXPECT_EQ(TypeParam(1), dBox.max().at(0));
-	EXPECT_EQ(TypeParam(4), dBox.max().at(1));
+
+	if(dBox.min().dimension() > 0) {
+		EXPECT_EQ(TypeParam(-3), dBox.min().at(0));
+		EXPECT_EQ(TypeParam(2), dBox.min().at(1));
+		EXPECT_EQ(TypeParam(1), dBox.max().at(0));
+		EXPECT_EQ(TypeParam(4), dBox.max().at(1));
+	} else {
+		FAIL();
+	}
+
+
+
 	EXPECT_EQ(true, dBox.contains(hypro::Point<TypeParam>({0,3})));
     SUCCEED();
 }
@@ -77,10 +85,15 @@ TYPED_TEST(PTermBoxTest, Constructor)
 TYPED_TEST(PTermBoxTest, Access)
 {
     std::vector<carl::Interval<TypeParam>> tmp = this->box1.boundaries();
-    EXPECT_EQ(2, tmp[0].lower());
-    EXPECT_EQ(6, tmp[0].upper());
-    EXPECT_EQ(1, tmp[1].lower());
-    EXPECT_EQ(3, tmp[1].upper());
+    if(tmp.size() > 0) {
+    	EXPECT_EQ(2, tmp[0].lower());
+	    EXPECT_EQ(6, tmp[0].upper());
+	    EXPECT_EQ(1, tmp[1].lower());
+	    EXPECT_EQ(3, tmp[1].upper());
+    } else {
+    	FAIL();
+    }
+
 
     EXPECT_EQ((unsigned) 2, this->box1.dimension());
     EXPECT_EQ((unsigned) 2, this->box2.dimension());
@@ -105,13 +118,21 @@ TYPED_TEST(PTermBoxTest, Insertion)
     std::vector<carl::Interval<TypeParam>> tmp;
     this->box1.insert(carl::Interval<TypeParam>(3,9));
 
-    EXPECT_EQ(3, this->box1.boundaries().at(2).lower());
-    EXPECT_EQ(9, this->box1.boundaries().at(2).upper());
+    if(this->box1.dimension() > 0) {
+    	EXPECT_EQ(3, this->box1.boundaries().at(2).lower());
+    	EXPECT_EQ(9, this->box1.boundaries().at(2).upper());
+    } else {
+    	FAIL();
+    }
 
     this->box1.insert(carl::Interval<TypeParam>(4,5));
 
-    EXPECT_EQ(4, this->box1.boundaries().at(3).lower());
-    EXPECT_EQ(5, this->box1.boundaries().at(3).upper());
+    if(this->box1.dimension() > 0) {
+    	EXPECT_EQ(4, this->box1.boundaries().at(3).lower());
+    	EXPECT_EQ(5, this->box1.boundaries().at(3).upper());
+    } else {
+    	FAIL();
+    }
 }
 
 TYPED_TEST(PTermBoxTest, Vertices) {
@@ -162,12 +183,16 @@ TYPED_TEST(PTermBoxTest, Union)
 
 	hypro::PTermBox<TypeParam> result = b1.unite(b2);
 
-	EXPECT_EQ(TypeParam(-1), result.min().at(0));
-	EXPECT_EQ(TypeParam(1), result.min().at(1));
-	EXPECT_EQ(TypeParam(-3), result.min().at(2));
-	EXPECT_EQ(TypeParam(5), result.max().at(0));
-	EXPECT_EQ(TypeParam(4), result.max().at(1));
-	EXPECT_EQ(TypeParam(6), result.max().at(2));
+	if(result.min().dimension() > 0) {
+		EXPECT_EQ(TypeParam(-1), result.min().at(0));
+		EXPECT_EQ(TypeParam(1), result.min().at(1));
+		EXPECT_EQ(TypeParam(-3), result.min().at(2));
+		EXPECT_EQ(TypeParam(5), result.max().at(0));
+		EXPECT_EQ(TypeParam(4), result.max().at(1));
+		EXPECT_EQ(TypeParam(6), result.max().at(2));
+	} else {
+		FAIL();
+	}
 }
 
 TYPED_TEST(PTermBoxTest, LinearTransformation)
@@ -221,7 +246,6 @@ TYPED_TEST(PTermBoxTest, LinearTransformation)
 	}
 	EXPECT_EQ(resX, hypro::PTermBox<TypeParam>(newCorners));
 
-
 	newCorners.clear();
 	std::vector<hypro::Point<TypeParam>> cornersY = resY.vertices();
 	for(auto& p : originalCorners) {
@@ -241,10 +265,14 @@ TYPED_TEST(PTermBoxTest, MinkowskiSum)
 {
     hypro::PTermBox<TypeParam> result;
     result = this->box1.minkowskiSum(this->box2);
-    EXPECT_EQ(1 , result.boundaries().at(0).lower());
-    EXPECT_EQ(12 , result.boundaries().at(0).upper());
-    EXPECT_EQ(5 , result.boundaries().at(1).lower());
-    EXPECT_EQ(10 , result.boundaries().at(1).upper());
+    if(result.dimension() > 0) {
+    	EXPECT_EQ(1 , result.boundaries().at(0).lower());
+	    EXPECT_EQ(12 , result.boundaries().at(0).upper());
+	    EXPECT_EQ(5 , result.boundaries().at(1).lower());
+	    EXPECT_EQ(10 , result.boundaries().at(1).upper());
+    } else {
+    	FAIL();
+    }
 
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
 	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);

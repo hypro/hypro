@@ -109,7 +109,26 @@ TYPED_TEST(HyperplaneTest, Intersection)
 	//std::cout << "Intersection Vector: " << v << std::endl;
 }
 
-TYPED_TEST(HyperplaneTest, LinearTransformation)
+TYPED_TEST(HyperplaneTest, saveIntersection)
 {
+	/*
+	vector_t<TypeParam> normal1(2);
+	normal1(0) = 1;
+	normal1(1) = 1;
+	Hyperplane<TypeParam> hp1 = Hyperplane<TypeParam>(normal1, TypeParam(1));
 
+	vector_t<TypeParam> normal2(2);
+	normal2(0) = -1 + 1000000000*std::numeric_limits<TypeParam>::epsilon();
+	normal2(1) = -1 + 1000000000*std::numeric_limits<TypeParam>::epsilon();
+	Hyperplane<TypeParam> hp2 = Hyperplane<TypeParam>(normal2, TypeParam(-1+0.0001));
+
+	std::vector<hypro::Hyperplane<TypeParam>> hpv;
+	hpv.push_back(hp1);
+	hpv.push_back(hp2);
+
+	hypro::vector_t<TypeParam> res = Hyperplane<TypeParam>::saveIntersect(hpv, 1);
+
+	EXPECT_TRUE(hp1.normal().dot(res) >= hp1.offset());
+	EXPECT_TRUE(hp2.normal().dot(res) >= hp2.offset());
+	*/
 }
