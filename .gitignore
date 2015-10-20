@@ -3,7 +3,6 @@
 *.lo
 *.Plo
 *.log
-CMakeCache.txt
 CMakeFiles
 nbproject
 .project
