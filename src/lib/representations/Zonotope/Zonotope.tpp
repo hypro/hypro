@@ -151,7 +151,7 @@ void Zonotope<Number>::setCenter( const hypro::vector_t<Number> &center ) {
 		mDimension = center.rows();
 		mGenerators = hypro::matrix_t<Number>::Zero( mDimension, 1 );
 	}
-	assert( center.rows() == mDimension && "Center has to have same dimensionality as zonotope." );
+	assert( (std::size_t)center.rows() == mDimension && "Center has to have same dimensionality as zonotope." );
 	mCenter = center;
 }
 
@@ -161,7 +161,7 @@ void Zonotope<Number>::setGenerators( const hypro::matrix_t<Number> &new_generat
 		mDimension = new_generators.rows();
 		mCenter = hypro::vector_t<Number>::Zero( mDimension );
 	}
-	assert( new_generators.rows() == mDimension && "Generators have to have same dimensionality as zonotope" );
+	assert( (std::size_t)new_generators.rows() == mDimension && "Generators have to have same dimensionality as zonotope" );
 	mGenerators = new_generators;
 }
 
@@ -171,7 +171,7 @@ bool Zonotope<Number>::addGenerators( const hypro::matrix_t<Number> &generators 
 		mDimension = generators.rows();
 	}
 
-	assert( generators.rows() == mDimension && "Added generators has to have same dimensionality as zonotope" );
+	assert( (std::size_t)generators.rows() == mDimension && "Added generators has to have same dimensionality as zonotope" );
 	if ( mGenerators.rows() != generators.rows() ) {
 		setGenerators( generators );
 	} else {

@@ -487,7 +487,7 @@ Number &Point<Number>::operator[]( const carl::Variable &_i ) {
 
 template <typename Number>
 Number &Point<Number>::operator[]( std::size_t _i ) {
-	if ( _i >= mCoordinates.rows() ) {
+	if ( _i >= (std::size_t)mCoordinates.rows() ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates = vector_t<Number>::Zero( _i + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
