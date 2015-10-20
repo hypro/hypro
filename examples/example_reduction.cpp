@@ -8,6 +8,7 @@
  #include "../src/lib/util/Plotter.h"
  #include "../src/lib/datastructures/Hyperplane.h"
  #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
+ #include "../src/lib/representations/volumeApproximation.h"
 
 using namespace hypro;
 
@@ -71,25 +72,31 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
-  HPolytope<Number> reduce_from = unite_compare;
+  HPolytope<Number> reduce_from = equal;
 
 	HPolytope<Number> reduction = reduce_from.reduce(2,1);
   HPolytope<Number> reduction2 = reduce_from.reduce(3,1);
   HPolytope<Number> reduction3 = reduce_from.reduce(4,1);
   HPolytope<Number> reduction4 = reduce_from.reduce(5,1);
 
-	//unsigned r1 = plotter.addObject(reduction.vertices());
-  //unsigned r2 = plotter.addObject(reduction2.vertices());
+  std::cout << "volume of reduction (normal) red: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction) << std::endl;
+  std::cout << "volume of reduction2 (smooth) green: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction2) << std::endl;
+  std::cout << "volume of reduction3 (cut) orange: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction3) << std::endl;
+  std::cout << "volume of reduction4 (norm) violett: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction4) << std::endl;
+
+	unsigned r1 = plotter.addObject(reduction.vertices());
+  unsigned r2 = plotter.addObject(reduction2.vertices());
   unsigned r3 = plotter.addObject(reduction3.vertices());
   unsigned r4 = plotter.addObject(reduction4.vertices());
 	plotter.addObject(reduce_from.vertices());
 
-	//plotter.setObjectColor(r1, colors[red]);
-  //plotter.setObjectColor(r2, colors[green]);
+	plotter.setObjectColor(r1, colors[red]);
+  plotter.setObjectColor(r2, colors[green]);
   plotter.setObjectColor(r3, colors[orange]);
   plotter.setObjectColor(r4, colors[violett]);
 
 	plotter.plot2d();
+
 
 	return 0;
 }

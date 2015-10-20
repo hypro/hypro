@@ -1017,8 +1017,8 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 		// carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset(), TOLLERANCE_ULPS ) &&
 			 plane.normal().dot( vec ) > plane.offset() ) {
-			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}
