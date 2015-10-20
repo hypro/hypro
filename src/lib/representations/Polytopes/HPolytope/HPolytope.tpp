@@ -438,7 +438,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 }
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce(  unsigned strat, unsigned _steps ) const { // REDUCTION_STRATEGY
+HPolytope<Number> HPolytope<Number>::reduce(  int strat, unsigned _steps ) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
 	unsigned size=res.mHPlanes.size()-1;
 
