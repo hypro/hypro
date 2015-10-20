@@ -1,11 +1,4 @@
-*.Po
-*.o
-*.lo
-*.Plo
-*.log
 CMakeFiles
 nbproject
 .project
 build
-cmake/.swp
-examples/libmx.dylib

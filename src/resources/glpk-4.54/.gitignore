@@ -1,6 +1,8 @@
 Makefile
 config.status
 *.Po
+*.o
+*.lo
 examples/Makefile
 examples/glpsol
 libtool
