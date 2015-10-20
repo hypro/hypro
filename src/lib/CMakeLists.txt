@@ -3,7 +3,7 @@ add_subdirectory(representations)
 add_subdirectory(parser)
 
 # Create config.h by adding cmake defines dependend on option switches
-configure_file( ${CMAKE_SOURCE_DIR}/src/lib/flags.h.in ${CMAKE_SOURCE_DIR}/src/lib/flags.h )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h )
 
 set(lib_hypro_headers
 	config.h
