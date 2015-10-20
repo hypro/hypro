@@ -48,7 +48,7 @@ else()
 		#For downloads (may be useful later!)
 		#SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
 		#TIMEOUT 10
-		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/gtest-1.6.0"
+		SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gtest-1.6.0"
 		# Force separate output paths for debug and release builds to allow easy
 		# identification of correct lib in subsequent TARGET_LINK_LIBRARIES
 		CMAKE_ARGS ${cmake_command}
