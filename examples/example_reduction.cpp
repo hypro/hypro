@@ -72,28 +72,39 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
-  HPolytope<Number> reduce_from = equal;
+  HPolytope<Number> reduce_from = nico;
 
-	HPolytope<Number> reduction = reduce_from.reduce(2,1);
-  HPolytope<Number> reduction2 = reduce_from.reduce(3,1);
-  HPolytope<Number> reduction3 = reduce_from.reduce(4,1);
-  HPolytope<Number> reduction4 = reduce_from.reduce(5,1);
+  unsigned facet=0;
+  HPolytope<Number> reduction = reduce_from.reduce(0,facet);
+  HPolytope<Number> reduction2 = reduce_from.reduce(1,facet);
+	HPolytope<Number> reduction3 = reduce_from.reduce(2,facet);
+  HPolytope<Number> reduction4 = reduce_from.reduce(3,facet);
+  HPolytope<Number> reduction5 = reduce_from.reduce(4,facet);
+  HPolytope<Number> reduction6 = reduce_from.reduce(5,facet);
 
-  std::cout << "volume of reduction (normal) red: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction) << std::endl;
-  std::cout << "volume of reduction2 (smooth) green: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction2) << std::endl;
-  std::cout << "volume of reduction3 (cut) orange: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction3) << std::endl;
-  std::cout << "volume of reduction4 (norm) violett: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction4) << std::endl;
+  std::cout << "volume of reduction (drop_normal) red: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction) << std::endl;
+  std::cout << "volume of reduction2 (drop_smooth) green: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction2) << std::endl;
+  std::cout << "volume of reduction3 (unite_normal) orange: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction3) << std::endl;
+  std::cout << "volume of reduction4 (unite_smooth) violett: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction4) << std::endl;
+  std::cout << "volume of reduction5 (unite_cut) orange: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction5) << std::endl;
+  std::cout << "volume of reduction6 (unite_norm) violett: " << approximateVolume<Number, hypro::HPolytope<Number>>(reduction6) << std::endl;
 
 	unsigned r1 = plotter.addObject(reduction.vertices());
   unsigned r2 = plotter.addObject(reduction2.vertices());
   unsigned r3 = plotter.addObject(reduction3.vertices());
   unsigned r4 = plotter.addObject(reduction4.vertices());
+  unsigned r5 = plotter.addObject(reduction5.vertices());
+  unsigned r6 = plotter.addObject(reduction6.vertices());
 	plotter.addObject(reduce_from.vertices());
 
 	plotter.setObjectColor(r1, colors[red]);
   plotter.setObjectColor(r2, colors[green]);
   plotter.setObjectColor(r3, colors[orange]);
   plotter.setObjectColor(r4, colors[violett]);
+  plotter.setObjectColor(r5, colors[turquoise]);
+  plotter.setObjectColor(r6, colors[bordeaux]);
+
+
 
 	plotter.plot2d();
 

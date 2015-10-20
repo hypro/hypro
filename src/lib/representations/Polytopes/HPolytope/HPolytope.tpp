@@ -687,7 +687,7 @@ std::pair<unsigned, unsigned> HPolytope<Number>::chooseStrat() const{
 		}
 
 		//std::cout << "[Drop] SP between " << index << " and " << index+2 << " is " << scalarproduct_drop << std::endl;
-		std::cout << "[Unite] SP between " << index << " and " << index+1 << " is " << scalarproduct_unite << std::endl;
+		//std::cout << "[Unite] SP between " << index << " and " << index+1 << " is " << scalarproduct_unite << std::endl;
 	}
 
 	return std::pair<unsigned, unsigned>(strat, maxIndex);

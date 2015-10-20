@@ -43,7 +43,7 @@ namespace hypro {
 
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
-			resolution[i]= (bounderies[i].second-bounderies[i].first)/200; // 100 is guessed approximated resolution depending on bounderies TODO in config.h?
+			resolution[i]= (bounderies[i].second-bounderies[i].first)/500; // 100 is guessed approximated resolution depending on bounderies TODO in config.h?
 			volumeUnit*=resolution[i];
 			count_point[i]=bounderies[i].first;
 	}
