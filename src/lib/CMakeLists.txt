@@ -32,7 +32,7 @@ set(headers ${headers} ${template_implementations})
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${test_sources}")
 
-if(${STATICLIB_SWITCH} STREQUAL "ON")
+if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
 else()
 	set(STATICLIB "SHARED")
