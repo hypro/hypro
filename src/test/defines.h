@@ -23,19 +23,19 @@ typedef ::testing::Types<
 > types;
 
 typedef ::testing::Types<
-	double,
 	#ifdef USE_MPFR_FLOAT
 	carl::FLOAT_T<mpfr_t>,
 	#endif
+	double,
 	carl::FLOAT_T<double>
 > floatTypes;
 
 typedef ::testing::Types<
-	double,
-	carl::FLOAT_T<double>,
 	#ifdef USE_MPFR_FLOAT
 	carl::FLOAT_T<mpfr_t>,
 	#endif
+	double,
+	carl::FLOAT_T<double>,
 	#ifdef USE_CLN_NUMBERS
 	carl::FLOAT_T<cln::cl_RA>,
 	#endif
@@ -59,6 +59,7 @@ TYPED_TEST_CASE(VertexTest, floatTypes);
 
 // Representations
 TYPED_TEST_CASE(BoxTest, floatTypes);
+TYPED_TEST_CASE(PTermBoxTest, floatTypes);
 TYPED_TEST_CASE(ConverterTest, floatTypes);
 TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(HPolytopeTest, floatTypes);

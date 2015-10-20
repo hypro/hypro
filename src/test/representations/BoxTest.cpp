@@ -120,7 +120,7 @@ TYPED_TEST(BoxTest, Insertion)
     EXPECT_EQ(5, this->box1.interval(3).upper());
 }
 
-TYPED_TEST(BoxTest, Corners) {
+TYPED_TEST(BoxTest, Vertices) {
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(3,5);
 	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(1,3);
 	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(2,5);
