@@ -138,8 +138,11 @@ include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
 endif()
 
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+set(libraries ${libraries} ${EIGEN3_LIBRARY})
+
 if(NOT FORCE_SHIPPED_RESOURCES)
-find_package(Eigen3)
 find_package(GTest)
 find_package(GLPK)
 endif()
@@ -148,8 +151,8 @@ add_subdirectory(src)
 
 enable_testing()
 
-set(libraries ${libraries} ${EIGEN3_LIBRARY} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
-include_directories( ${include_directories} ${EIGEN3_INCLUDE_DIR} ${GLPK_INCLUDE_DIR} )
+set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+include_directories( ${include_directories} ${GLPK_INCLUDE_DIR} )
 
 add_subdirectory(src/test)
 

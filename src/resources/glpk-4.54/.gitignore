@@ -1,0 +1,11 @@
+Makefile
+config.status
+*.Po
+examples/Makefile
+examples/glpsol
+libtool
+src/Makefile
+autom4te.cache
+examples/.libs
+src/.libs
+src/libglpk.la
