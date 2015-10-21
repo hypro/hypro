@@ -457,8 +457,19 @@ HPolytope<Number> HPolytope<Number>::reduce(  int strat, unsigned _steps ) const
 		// DROP
 		case REDUCTION_STRATEGY::DROP:
 		{
-			unsigned i=recommended.second; // getIndexForDrop();
-			res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			unsigned a=recommended.second, next_a=a+1,  prev_a=a-1;
+
+			// select prev_a and next_a propely
+			if(next_a>size){
+				next_a=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			if(1){	// TODO check possibility of taking away - side planes should not be parallel or "more"
+				res.mHPlanes.erase(res.mHPlanes.begin()+i);
+			}
 			break;
 		}
 
