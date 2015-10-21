@@ -68,6 +68,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 	#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--with-gcc-toolchain")
+  if(${STATICLIB_SWITCH} STREQUAL "OFF")
+    set(CMAKE_MACOSX_RPATH 1)
+  endif()
 endif()
 
 # # # # # # # # # # # # # # # # # # # # # #

@@ -42,7 +42,17 @@ add_library(${PROJECT_NAME} ${STATICLIB}
 	${sources}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+if(STATICLIB_SWITCH)
+	set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+else()
+	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
+	else()
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+	endif()
+endif()
+
+
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
 if(USE_COTIRE)
