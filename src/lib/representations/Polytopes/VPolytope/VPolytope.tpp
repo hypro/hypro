@@ -138,8 +138,8 @@ VPolytope<Number> VPolytope<Number>::intersect( const VPolytope<Number> &rhs ) c
 				for ( const auto &rhsVertex : rhs.mVertices ) {
 					vector_t<Number> newVertex = rhsVertex.rawCoordinates();
 					newVertex( coordIndex ) = lhsVertex.at( coordIndex );
-					possibleVertices.push_back( vector_t<Number>( newVertex ) );
-					possibleVertices.push_back( vector_t<Number>( rhsVertex ) );
+					possibleVertices.push_back( newVertex );
+					possibleVertices.push_back( rhsVertex.rawCoordinates() );
 				}
 			}
 		}
