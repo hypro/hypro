@@ -72,14 +72,25 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
-  HPolytope<Number> tdexample;
-  tdexample.insert(Hyperplane<Number>({0, 0, -1},0)); // a      0
-  tdexample.insert(Hyperplane<Number>({1, 0, 0.1},3)); // b     1
-  tdexample.insert(Hyperplane<Number>({-1, -1, 0.1},3)); // c   2
-  tdexample.insert(Hyperplane<Number>({0, 1, 0.1},3)); // d     3
-  tdexample.insert(Hyperplane<Number>({0, 0, 1},2)); // e       4
+  HPolytope<Number> td_example;
+  td_example.insert(Hyperplane<Number>({0, 0, -1},0)); // a      0
+  td_example.insert(Hyperplane<Number>({1, 0, 0.1},3)); // b     1
+  td_example.insert(Hyperplane<Number>({-1, -1, 0.1},3)); // c   2
+  td_example.insert(Hyperplane<Number>({0, 1, 0.1},3)); // d     3
+  td_example.insert(Hyperplane<Number>({0, 0, 1},2)); // e       4
 
-  HPolytope<Number> reduce_from = unite_compare;
+  HPolytope<Number> td_easy;
+  td_easy.insert(Hyperplane<Number>({0, 0, -1},1));
+  td_easy.insert(Hyperplane<Number>({1, 0, 0},1));
+  td_easy.insert(Hyperplane<Number>({-1, 0, 0},1));
+  td_easy.insert(Hyperplane<Number>({0, 1, 0},1));
+  td_easy.insert(Hyperplane<Number>({0, 0, 1},1));
+  td_easy.insert(Hyperplane<Number>({0, -1, 0},1));
+
+
+
+  HPolytope<Number> reduce_from = td_example;
+  //HPolytope<Number> reduction;
   HPolytope<Number> reduction_drop_normal;
   HPolytope<Number> reduction_drop_smooth;
   HPolytope<Number> reduction_unite_normal;
@@ -87,11 +98,28 @@ int main(int argc, char const *argv[])
   HPolytope<Number> reduction_unite_cut;
   HPolytope<Number> reduction_unite_norm;
 
-  double prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(tdexample);
+  double prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
   std::cout << "previous Volume is " << prevVolume << std::endl << std::endl;
 
-  reduction_drop_normal = tdexample.reduce_nd();
-  std::cout << "volume of drop_normal: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume << std::endl;
+  //reduction = reduce_from.reduce_nd();
+  //std::cout << "volume of drop_normal: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume << std::endl;
+
+  std::vector<Point<Number>> reduce_from_vertices_2d;
+  std::vector<Point<Number>> reduction_vertices_2d;
+
+  for(Point<Number> point: reduce_from.vertices()){
+    point.reduceToDimensions({0,2});
+    reduce_from_vertices_2d.push_back(point);
+  }
+  //for(Point<Number> point: reduction.vertices()){
+  //  point.reduceToDimensions({0,2});
+  //  reduction_vertices_2d.push_back(point);
+  //}
+
+  unsigned rfv = plotter.addObject(reduce_from_vertices_2d);
+  //unsigned rv = plotter.addObject(reduction_vertices_2d);
+
+  //plotter.setObjectColor(rv, colors[red]);
 
   // Reducing
   //for(unsigned facet=0; facet < 4; facet++){
@@ -127,7 +155,7 @@ int main(int argc, char const *argv[])
 
 
 
-	//plotter.plot2d();
+	plotter.plot2d();
 
 
 	return 0;

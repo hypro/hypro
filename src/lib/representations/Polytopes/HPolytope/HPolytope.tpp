@@ -184,10 +184,10 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 
 		std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
 		for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
-			//std::cout << "Use planes ";
-			//for(const auto item : *permutationIt)
-			//	std::cout << item << ", ";
-			//std::cout << std::endl;
+			std::cout << "Use planes ";
+			for(const auto item : *permutationIt)
+				std::cout << item << ", ";
+			std::cout << std::endl;
 
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
@@ -442,17 +442,15 @@ HPolytope<Number> HPolytope<Number>::reduce_nd() const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
 
 	/*
-	std::cout << "Size before: " << res.mHPlanes.size() << std::endl;
-	unsigned i = 4;
-
 	// STRAT: Drop_normal
+	unsigned i = 4;
 	res.mHPlanes.erase(res.mHPlanes.begin()+i);
-	std::cout << "Size after: " << res.mHPlanes.size() << std::endl;
 	*/
 
-	/*
+	///*
 	// STRAT: Drop_smooth
-	vector_t<Number> bVector_smooth = res.mHPlanes[1].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where
+
+	vector_t<Number> bVector_smooth = res.mHPlanes[1].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where TODO find neighboors
 	Number bVector_smooth_offset = res.mHPlanes[1].offset()+res.mHPlanes[4].offset();
 	vector_t<Number> cVector_smooth = res.mHPlanes[2].normal()+res.mHPlanes[4].normal();
 	Number cVector_smooth_offset = res.mHPlanes[2].offset()+res.mHPlanes[4].offset();
@@ -467,11 +465,11 @@ HPolytope<Number> HPolytope<Number>::reduce_nd() const { // REDUCTION_STRATEGY
 	res.insert(Hyperplane<Number>(bVector_smooth,bVector_smooth_offset)); // b_smooth
 	res.insert(Hyperplane<Number>(cVector_smooth,cVector_smooth_offset)); // c_smooth
 	res.insert(Hyperplane<Number>(dVector_smooth,dVector_smooth_offset)); // d_smooth
-	*/
+	//*/
 
 	/*
 	// STRAT: Unite_normal
-	vector_t<Number> uniteVector = res.mHPlanes[2].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where
+	vector_t<Number> uniteVector = res.mHPlanes[2].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where TODO find neighboors
 	Number uniteVector_offset = res.mHPlanes[2].offset()+res.mHPlanes[4].offset();
 
 	res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
@@ -480,7 +478,52 @@ HPolytope<Number> HPolytope<Number>::reduce_nd() const { // REDUCTION_STRATEGY
 	res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset)); // uniteVector
 	*/
 
+	/*
 	// STRAT: Unite_smooth
+	vector_t<Number> e_bVector_normalized = res.mHPlanes[4].normal()+res.mHPlanes[1].normal(); // eVector Part: add e+neighboor(except "partner") and normalize TODO find neighboors
+	e_bVector_normalized.normalize();
+	vector_t<Number> e_dVector_normalized = res.mHPlanes[4].normal()+res.mHPlanes[3].normal();
+	e_dVector_normalized.normalize();
+
+	vector_t<Number> c_aVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[0].normal(); // cVector Part: add c+neighboor(except "partner") and normalize
+	c_aVector_normalized.normalize();
+	vector_t<Number> c_bVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[1].normal();
+	c_bVector_normalized.normalize();
+	vector_t<Number> c_dVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[3].normal();
+	c_dVector_normalized.normalize();
+
+	vector_t<Number> uniteVector = e_bVector_normalized + e_dVector_normalized + c_aVector_normalized + c_bVector_normalized + c_dVector_normalized;
+	Number uniteVector_offset = uniteVector[0]*(-5.6) + uniteVector[1]*2.8 + uniteVector[2]*2; //uniteVector[0]*2.8 + uniteVector[1]*(-5.6) + uniteVector[2]*2; // is the same TODO calculate the cutPoint
+
+	res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
+	res.mHPlanes.erase(res.mHPlanes.begin()+2); // c
+
+	res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset)); // uniteVector
+	*/
+
+	/*
+	// STRAT: Unite_cut
+	// TODO check if calculate facet for uniteVector is correct
+	// TODO calculate the facet
+	Number uniteVector_offset = (-18)*(-5.6) + (-18)*2.8 + (77.4)*2; // TODO calculate cutPoint
+
+	res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
+	res.mHPlanes.erase(res.mHPlanes.begin()+2); // c
+
+	res.insert(Hyperplane<Number>({-18,-18,77.4},uniteVector_offset)); // uniteVector
+	*/
+
+	/*
+	// STRAT: Unite_norm
+	// TODO compute weights
+	vector_t<Number> uniteVector = res.mHPlanes[2].normal()*(2)+res.mHPlanes[4].normal()*(5.9); // weights are calculated by hand
+	Number uniteVector_offset = uniteVector[0]*(-5.6) + uniteVector[1]*2.8 + uniteVector[2]*2;
+
+	res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
+	res.mHPlanes.erase(res.mHPlanes.begin()+2); // c
+
+	res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset)); // uniteVector
+	*/
 
 	return res;
 }
