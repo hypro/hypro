@@ -45,6 +45,52 @@ static inline std::vector<std::vector<unsigned>> dPermutation( unsigned size, un
 	return result;
 }
 
+struct dPermutator {
+	std::vector<unsigned> mCurrent;
+	unsigned max;
+
+	dPermutator(std::size_t totalSize, std::size_t d) : mCurrent(d,0), max(totalSize) {
+		assert(d < totalSize);
+		if(d < totalSize) {
+			for(unsigned i = 0; i < d; ++i)
+				mCurrent[i] = d-i-1;
+		}
+	}
+
+	std::vector<unsigned> operator()() {
+		std::vector<unsigned> tmp = mCurrent;
+		//std::cout << "mCurrent: ";
+		//for( const auto& item : mCurrent)
+		//	std::cout << item << ", ";
+		//std::cout << std::endl;
+
+		// find pos to iterate
+		std::size_t pos = 0;
+		while(pos < mCurrent.size() && mCurrent.at(pos) == max-pos-1) {
+			//std::cout << "Mcurrent at " << pos << ": " << mCurrent.at(pos) << std::endl;
+			++pos;
+		}
+
+		//std::cout << "Pos to iterate: " << std::endl;
+
+		if(pos == mCurrent.size())
+			return tmp;
+
+		mCurrent[pos] += 1;
+		while(pos > 0) {
+			--pos;
+			mCurrent[pos] = mCurrent[pos+1]+1;
+		}
+
+		//std::cout << "New current: ";
+		//for( const auto& item : mCurrent)
+		//	std::cout << item << ", ";
+		//std::cout << std::endl;
+
+		return tmp;
+	}
+};
+
 template <typename Number>
 class Fan {
   public:
