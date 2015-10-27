@@ -205,22 +205,13 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 }
 
 TYPED_TEST(PolytopeUtilTest, dPermutation) {
-	std::vector<std::vector<unsigned>> dperm = dPermutation(4,2);
 	// TODO: introduce test.
 
 	dPermutator dpermutator = dPermutator(5,3);
 	std::vector<unsigned> perm(3,0);
 
-	bool changed = true;
-	while(changed) {
-		std::vector<unsigned> pOld = perm;
+	while(!dpermutator.end()) {
 		perm = dpermutator();
-		changed = false;
-		for(unsigned pos = 0; pos < perm.size(); ++pos)
-			if(perm.at(pos) != pOld.at(pos)) {
-				changed = true;
-				break;
-			}
 		std::cout << perm << std::endl;
 	}
 }

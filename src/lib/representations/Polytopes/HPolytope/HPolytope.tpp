@@ -183,9 +183,9 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 		unsigned dim = this->dimension();
 
 		polytope::dPermutator permutator(mHPlanes.size(), dim);
-		std::vector<unsigned> permutation = permutator();
-		bool newPerm = true;
-		while(newPerm) {
+		std::vector<unsigned> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
 			std::cout << "Use planes ";
 			for(const auto item : permutation)
 				std::cout << item << ", ";
@@ -194,7 +194,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
 			unsigned pos = 0;
-			for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt){
+			for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
 				A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
 				// std::cout << A.row(pos) << std::endl;
 				b(pos) = mHPlanes.at(*planeIt).offset();
@@ -206,7 +206,6 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 
 			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
 			if ( lu_decomp.rank() < A.rows() ) {
-				permutation = permutator();
 				continue;
 			}
 
@@ -216,17 +215,17 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			bool infty = false;
 			for ( unsigned i = 0; i < res.rows(); ++i ) {
 				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-					//std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+					std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
 					infty = true;
 					break;
 				}
 			}
 
 			if(!infty) {
-				//std::cout << "Solved to " << res.transpose() << std::endl;
+				std::cout << "Solved to " << res.transpose() << std::endl;
 				// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
 				bool below = false;
-				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt){
+				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
 					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
 					if(dist > 0) {
 						below = true;
@@ -234,14 +233,14 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					}
 				}
 				Number eps = 0;
-				while (below){
-					//std::cout << "Is below, iterate " << std::endl;
+				while (below) {
+					std::cout << "Is below, iterate " << std::endl;
 					// enlarge as long as point lies below one of the planes.
 					below = false;
 					eps += std::numeric_limits<Number>::epsilon();
 
 					pos = 0;
-					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt){
+					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
 						A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
 						b(pos) = mHPlanes.at(*planeIt).offset() + eps;
 						++pos;
@@ -263,17 +262,17 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				bool outside = false;
 				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
 					bool skip = false;
-					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos){
+					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
 						if(planePos == permutation.at(permPos)) {
-							//std::cout << "Skip plane " << planePos << std::endl;
+							std::cout << "Skip plane " << planePos << std::endl;
 							skip = true;
 							break;
 						}
 					}
 
-					if(!skip){
-						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ){
-							//std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
+					if(!skip) {
+						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+							std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
 							outside = true;
 							break;
 						}
@@ -281,19 +280,10 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				}
 				if(!outside) {
 					vertices.push_back(Point<Number>(res));
-					//std::cout << "Final vertex: " << res.transpose() << std::endl;
-				}
-
-			}
-			std::vector<unsigned> old = permutation;
-			permutation = permutator();
-			newPerm = false;
-			for(unsigned pos = 0; pos < permutation.size(); ++pos){
-				std::cout << "Old: " << old.at(pos) << " New: " << permutation.at(pos) << std::endl;
-				if(permutation.at(pos) != old.at(pos)){
-					newPerm = true;
+					std::cout << "Final vertex: " << res.transpose() << std::endl;
 				}
 			}
+			std::cout << "PING" << std::endl;
 		}
 	}
 	return vertices;

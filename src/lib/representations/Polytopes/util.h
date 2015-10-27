@@ -19,37 +19,15 @@
 namespace hypro {
 namespace polytope {
 
-// TODO: Extend to bitvectors, otherwise limited to 64 bits.
-static inline std::vector<std::vector<unsigned>> dPermutation( unsigned size, unsigned d ) {
-	// get all combinations and filter those of size d
-	std::vector<vector<unsigned>> result;
-	for ( unsigned i = 0; i < pow( size, 2 ); ++i ) {
-		bool largerRep = false;
-		std::vector<unsigned> tmpResult;
-		for ( unsigned pos = 0; pos < size; ++pos ) {
-			unsigned currBit = ( ( i >> pos ) & 1 );
-			if ( currBit == 1 ) {
-				if ( tmpResult.size() < d ) {
-					tmpResult.push_back( pos );
-				} else {
-					largerRep = true;
-					break;
-				}
-			}
-		}
-		if ( !largerRep && tmpResult.size() == d ) {
-			result.push_back( tmpResult );
-		}
-		tmpResult.clear();
-	}
-	return result;
-}
-
-struct dPermutator {
+class dPermutator {
+private:
 	std::vector<unsigned> mCurrent;
 	unsigned max;
+	bool mEnd;
 
-	dPermutator(std::size_t totalSize, std::size_t d) : mCurrent(d,0), max(totalSize) {
+public:
+
+	dPermutator(std::size_t totalSize, std::size_t d) : mCurrent(d,0), max(totalSize), mEnd(false) {
 		assert(d < totalSize);
 		if(d < totalSize) {
 			for(unsigned i = 0; i < d; ++i)
@@ -58,23 +36,22 @@ struct dPermutator {
 	}
 
 	std::vector<unsigned> operator()() {
+		if(mEnd) {
+			return mCurrent;
+		}
+
 		std::vector<unsigned> tmp = mCurrent;
-		//std::cout << "mCurrent: ";
-		//for( const auto& item : mCurrent)
-		//	std::cout << item << ", ";
-		//std::cout << std::endl;
 
 		// find pos to iterate
 		std::size_t pos = 0;
 		while(pos < mCurrent.size() && mCurrent.at(pos) == max-pos-1) {
-			//std::cout << "Mcurrent at " << pos << ": " << mCurrent.at(pos) << std::endl;
 			++pos;
 		}
 
-		//std::cout << "Pos to iterate: " << std::endl;
-
-		if(pos == mCurrent.size())
+		if(pos == mCurrent.size()) {
+			mEnd = true;
 			return tmp;
+		}
 
 		mCurrent[pos] += 1;
 		while(pos > 0) {
@@ -82,12 +59,11 @@ struct dPermutator {
 			mCurrent[pos] = mCurrent[pos+1]+1;
 		}
 
-		//std::cout << "New current: ";
-		//for( const auto& item : mCurrent)
-		//	std::cout << item << ", ";
-		//std::cout << std::endl;
-
 		return tmp;
+	}
+
+	bool end() const {
+		return mEnd;
 	}
 };
 
