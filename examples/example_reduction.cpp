@@ -90,7 +90,6 @@ int main(int argc, char const *argv[])
 
 
   HPolytope<Number> reduce_from = td_example;
-  //HPolytope<Number> reduction;
   HPolytope<Number> reduction_drop_normal;
   HPolytope<Number> reduction_drop_smooth;
   HPolytope<Number> reduction_unite_normal;
@@ -104,54 +103,87 @@ int main(int argc, char const *argv[])
   //reduction = reduce_from.reduce_nd();
   //std::cout << "volume of drop_normal: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume << std::endl;
 
-  std::vector<Point<Number>> reduce_from_vertices_2d;
-  std::vector<Point<Number>> reduction_vertices_2d;
+  //std::vector<Point<Number>> reduce_from_vertices_2d;
+  //std::vector<Point<Number>> reduction_vertices_2d;
 
-  for(Point<Number> point: reduce_from.vertices()){
-    point.reduceToDimensions({0,2});
-    reduce_from_vertices_2d.push_back(point);
-  }
+  //for(Point<Number> point: reduce_from.vertices()){
+  //  point.reduceToDimensions({1,2});
+  //  reduce_from_vertices_2d.push_back(point);
+  //}
   //for(Point<Number> point: reduction.vertices()){
-  //  point.reduceToDimensions({0,2});
+  //  point.reduceToDimensions({1,2});
   //  reduction_vertices_2d.push_back(point);
   //}
 
-  unsigned rfv = plotter.addObject(reduce_from_vertices_2d);
+  //plotter.addObject(reduce_from_vertices_2d);
   //unsigned rv = plotter.addObject(reduction_vertices_2d);
 
   //plotter.setObjectColor(rv, colors[red]);
 
   // Reducing
+  unsigned facet =0;
   //for(unsigned facet=0; facet < 4; facet++){
-  //  reduction_drop_normal = reduce_from.reduce(0,facet);
-  //  std::cout << "facet[" << facet << "] volume of drop_normal red: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume << std::endl;
-  //  reduction_drop_smooth = reduce_from.reduce(1,facet);
-  //  std::cout << "facet[" << facet << "] volume of drop_smooth green: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume << std::endl;
-  //	reduction_unite_normal = reduce_from.reduce(2,facet);
-  //  std::cout << "facet[" << facet << "] volume of unite_normal orange: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume << std::endl;
-  //  reduction_unite_smooth = reduce_from.reduce(3,facet);
-  //  std::cout << "facet[" << facet << "] volume of unite_smooth violett: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume << std::endl;
-  //  reduction_unite_cut = reduce_from.reduce(4,facet);
-  //  std::cout << "facet[" << facet << "] volume of unite_cut turquoise: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume << std::endl;
-  //  reduction_unite_norm = reduce_from.reduce(5,facet);
-  //  std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume << std::endl << std::endl;
+    reduction_drop_normal = reduce_from.reduce_nd(0);
+    std::cout << "facet[" << facet << "] volume of drop_normal red: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    reduction_drop_smooth = reduce_from.reduce_nd(1);
+    std::cout << "facet[" << facet << "] volume of drop_smooth green: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume << std::endl;
+  	reduction_unite_normal = reduce_from.reduce_nd(2);
+    std::cout << "facet[" << facet << "] volume of unite_normal orange: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume << std::endl;
+    reduction_unite_smooth = reduce_from.reduce_nd(3);
+    std::cout << "facet[" << facet << "] volume of unite_smooth violett: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume << std::endl;
+    reduction_unite_cut = reduce_from.reduce_nd(4);
+    std::cout << "facet[" << facet << "] volume of unite_cut turquoise: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume << std::endl;
+    reduction_unite_norm = reduce_from.reduce_nd(5);
+    std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume << std::endl << std::endl;
   //}
 
-  // Plotting
-	//unsigned rdn = plotter.addObject(reduction_drop_normal.vertices());
-  //unsigned rds = plotter.addObject(reduction_drop_smooth.vertices());
-  //unsigned run = plotter.addObject(reduction_unite_normal.vertices());
-  //unsigned rus = plotter.addObject(reduction_unite_smooth.vertices());
-  //unsigned ruc = plotter.addObject(reduction_unite_cut.vertices());
-  //unsigned runo = plotter.addObject(reduction_unite_norm.vertices());
-	//plotter.addObject(reduce_from.vertices());
+  // Reducing to 2d
+  std::vector<Point<Number>> reduce_from_vertices_2d,reduction_drop_normal_vertices_2d, reduction_drop_smooth_vertices_2d, reduction_unite_normal_vertices_2d, reduction_unite_smooth_vertices_2d, reduction_unite_cut_vertices_2d, reduction_unite_norm_vertices_2d;
 
-  //plotter.setObjectColor(rdn, colors[red]);
-  //plotter.setObjectColor(rds, colors[green]);
-  //plotter.setObjectColor(run, colors[orange]);
-  //plotter.setObjectColor(rus, colors[violett]);
-  //plotter.setObjectColor(ruc, colors[turquoise]);
-  //plotter.setObjectColor(runo, colors[bordeaux]);
+  for(Point<Number> point: reduce_from.vertices()){
+    point.reduceToDimensions({0,2});
+    reduce_from_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_drop_normal.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_drop_normal_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_drop_smooth.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_drop_smooth_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_unite_normal.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_unite_normal_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_unite_smooth.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_unite_smooth_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_unite_cut.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_unite_cut_vertices_2d.push_back(point);
+  }
+  for(Point<Number> point: reduction_unite_norm.vertices()){
+    point.reduceToDimensions({0,2});
+    reduction_unite_norm_vertices_2d.push_back(point);
+  }
+
+  // Plotting
+	unsigned rdn = plotter.addObject(reduction_drop_normal_vertices_2d);
+  unsigned rds = plotter.addObject(reduction_drop_smooth_vertices_2d);
+  unsigned run = plotter.addObject(reduction_unite_normal_vertices_2d);
+  unsigned rus = plotter.addObject(reduction_unite_smooth_vertices_2d);
+  unsigned ruc = plotter.addObject(reduction_unite_cut_vertices_2d);
+  unsigned runo = plotter.addObject(reduction_unite_norm_vertices_2d);
+	plotter.addObject(reduce_from_vertices_2d);
+
+  plotter.setObjectColor(rdn, colors[red]);
+  plotter.setObjectColor(rds, colors[green]);
+  plotter.setObjectColor(run, colors[orange]);
+  plotter.setObjectColor(rus, colors[violett]);
+  plotter.setObjectColor(ruc, colors[turquoise]);
+  plotter.setObjectColor(runo, colors[bordeaux]);
 
 
 

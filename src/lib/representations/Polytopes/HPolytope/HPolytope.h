@@ -87,7 +87,7 @@ class HPolytope {
 	void removeRedundantPlanes();
 
 	HPolytope<Number> reduce( int strat = 0 ,unsigned _steps = 1 ) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  HPolytope<Number> reduce_nd() const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_nd(int strat=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
 	std::pair<unsigned, unsigned> chooseStrat() const;

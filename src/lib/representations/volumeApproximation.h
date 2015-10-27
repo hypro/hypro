@@ -30,23 +30,20 @@ namespace hypro {
 			resolution.push_back(0);
 		}
 
-		std::cout << "Vertex" << std::endl;
 		// Compute bounderies
 		for(Point<Number> vertex: vertices) {
 			for(unsigned i = 0; i<dimension; i++){
-				std::cout << vertex.coordinate(i) << " ";
 				if(bounderies[i].first>vertex.coordinate(i)) {
 					bounderies[i].first = vertex.coordinate(i);
 				} else if(bounderies[i].second<vertex.coordinate(i)) {
 					bounderies[i].second = vertex.coordinate(i);
 				}
 			}
-			std::cout << std::endl;
 		}
 
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
-			std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
+			//std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
 			resolution[i]= (bounderies[i].second-bounderies[i].first)/50; // 100 is guessed approximated resolution depending on bounderies TODO in config.h?
 			volumeUnit*=resolution[i];
 			count_point[i]=bounderies[i].first;
