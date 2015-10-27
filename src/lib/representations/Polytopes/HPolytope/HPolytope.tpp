@@ -441,6 +441,9 @@ void HPolytope<Number>::removeRedundantPlanes() {
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
+	
+	std::cout << "vertices: "
+	std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>> neighboorInformation = convexHull(res.vertices());
 
 	switch(strat){
 
@@ -456,6 +459,9 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 			{
 				// STRAT: Drop_smooth
 
+				for(std::shared_ptr<Facet<Number>> facet: neighboorInformation.first){
+					std::cout << "I'm facet: " << *facet << std::endl;
+				}
 				vector_t<Number> bVector_smooth = res.mHPlanes[1].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where TODO find neighboors
 				Number bVector_smooth_offset = res.mHPlanes[1].offset()+res.mHPlanes[4].offset();
 				vector_t<Number> cVector_smooth = res.mHPlanes[2].normal()+res.mHPlanes[4].normal();

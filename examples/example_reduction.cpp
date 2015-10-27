@@ -126,46 +126,46 @@ int main(int argc, char const *argv[])
     reduction_drop_normal = reduce_from.reduce_nd(0);
     std::cout << "facet[" << facet << "] volume of drop_normal red: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
     reduction_drop_smooth = reduce_from.reduce_nd(1);
-    std::cout << "facet[" << facet << "] volume of drop_smooth green: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume << std::endl;
+    std::cout << "facet[" << facet << "] volume of drop_smooth green: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   	reduction_unite_normal = reduce_from.reduce_nd(2);
-    std::cout << "facet[" << facet << "] volume of unite_normal orange: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume << std::endl;
+    std::cout << "facet[" << facet << "] volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
     reduction_unite_smooth = reduce_from.reduce_nd(3);
-    std::cout << "facet[" << facet << "] volume of unite_smooth violett: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume << std::endl;
+    std::cout << "facet[" << facet << "] volume of unite_smooth violett: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
     reduction_unite_cut = reduce_from.reduce_nd(4);
-    std::cout << "facet[" << facet << "] volume of unite_cut turquoise: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume << std::endl;
+    std::cout << "facet[" << facet << "] volume of unite_cut turquoise: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
     reduction_unite_norm = reduce_from.reduce_nd(5);
-    std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume << std::endl << std::endl;
+    std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl << std::endl;
   //}
 
   // Reducing to 2d
   std::vector<Point<Number>> reduce_from_vertices_2d,reduction_drop_normal_vertices_2d, reduction_drop_smooth_vertices_2d, reduction_unite_normal_vertices_2d, reduction_unite_smooth_vertices_2d, reduction_unite_cut_vertices_2d, reduction_unite_norm_vertices_2d;
 
   for(Point<Number> point: reduce_from.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduce_from_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_drop_normal.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_drop_normal_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_drop_smooth.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_drop_smooth_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_normal.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_unite_normal_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_smooth.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_unite_smooth_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_cut.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_unite_cut_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_norm.vertices()){
-    point.reduceToDimensions({0,2});
+    point.reduceToDimensions({0,1});
     reduction_unite_norm_vertices_2d.push_back(point);
   }
 
