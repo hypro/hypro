@@ -15,8 +15,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_link_libraries(runBenchmark
 							${PROJECT_NAME}
 							${libraries})
-	if(USE_COTIRE)
-		cotire(runBenchmark)
-	endif()
+
+	cotire(runBenchmark)
+
 	#add_test( NAME benchmark COMMAND runBenchmark )
 endif()

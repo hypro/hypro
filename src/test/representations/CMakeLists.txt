@@ -29,8 +29,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${libraries}
 		${PROJECT_NAME}
 	)
-	if(USE_COTIRE)
-		cotire(runRepresentationTests)
-	endif()
+
+	cotire(runRepresentationTests)
+	
 	add_test( NAME representations COMMAND runRepresentationTests )
 endif()

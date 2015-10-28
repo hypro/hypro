@@ -55,9 +55,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
-if(USE_COTIRE)
-	cotire(${PROJECT_NAME})
-endif()
+cotire(${PROJECT_NAME})
 
 install(FILES ${headers} DESTINATION include)
 
