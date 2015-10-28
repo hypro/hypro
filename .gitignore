@@ -2,3 +2,6 @@ CMakeFiles
 nbproject
 .project
 build
+*.Po
+*.o
+*.lo
