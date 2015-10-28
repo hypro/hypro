@@ -441,8 +441,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
-	
-	std::cout << "vertices: "
+
 	std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>> neighboorInformation = convexHull(res.vertices());
 
 	switch(strat){
