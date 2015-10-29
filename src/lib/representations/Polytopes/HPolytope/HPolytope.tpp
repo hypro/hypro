@@ -279,7 +279,12 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					}
 				}
 				if(!outside) {
-					vertices.push_back(Point<Number>(res));
+					Point<Number> point = Point<Number>(res);
+					point.setNeighboors(permutation);
+					//for(unsigned neighboor: point.getNeighboors()){
+					//	std::cout << " N " << neighboor;
+					//}
+					vertices.push_back(point);
 					//std::cout << "Final vertex: " << res.transpose() << std::endl;
 				}
 			}
@@ -442,7 +447,14 @@ template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_STRATEGY
 	HPolytope<Number> res = *this;
 
-	std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>> neighboorInformation = convexHull(res.vertices());
+	std::vector<Point<Number>> vertices = res.vertices();
+	for(Point<Number> vertex: vertices) {
+		std::cout << "neighboors of vertex (" << vertex.coordinate(0) << ", "  << vertex.coordinate(1) << ", " << vertex.coordinate(2) << ") are ";
+		for(unsigned neighboor: vertex.getNeighboors()){
+			std::cout << " " << neighboor;
+		}
+		std::cout<<std::endl;
+	}
 
 	switch(strat){
 
@@ -457,10 +469,6 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 		case REDUCTION_STRATEGY::DROP_SMOOTH:
 			{
 				// STRAT: Drop_smooth
-
-				for(std::shared_ptr<Facet<Number>> facet: neighboorInformation.first){
-					std::cout << "I'm facet: " << *facet << std::endl;
-				}
 				vector_t<Number> bVector_smooth = res.mHPlanes[1].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where TODO find neighboors
 				Number bVector_smooth_offset = res.mHPlanes[1].offset()+res.mHPlanes[4].offset();
 				vector_t<Number> cVector_smooth = res.mHPlanes[2].normal()+res.mHPlanes[4].normal();

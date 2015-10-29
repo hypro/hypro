@@ -51,6 +51,9 @@ option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
 option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 
+# Include own macros.
+include( hypromacros )
+
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
 endif()
