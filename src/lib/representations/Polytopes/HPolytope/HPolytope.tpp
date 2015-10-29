@@ -448,13 +448,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 	HPolytope<Number> res = *this;
 
 	std::vector<Point<Number>> vertices = res.vertices();
-	for(Point<Number> vertex: vertices) {
-		std::cout << "neighboors of vertex (" << vertex.coordinate(0) << ", "  << vertex.coordinate(1) << ", " << vertex.coordinate(2) << ") are ";
-		for(unsigned neighboor: vertex.getNeighboors()){
-			std::cout << " " << neighboor;
-		}
-		std::cout<<std::endl;
-	}
+	// TODO get the neighboors for the facet
 
 	switch(strat){
 

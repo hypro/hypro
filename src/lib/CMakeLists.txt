@@ -75,6 +75,7 @@ target_link_libraries(${PROJECT_NAME} ${libraries})
 
 cotire(${PROJECT_NAME})
 
+install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
 ##install(FILES ${headers} DESTINATION include)
 
 #get_cmake_property(_variableNames VARIABLES)

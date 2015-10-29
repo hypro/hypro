@@ -32,9 +32,9 @@ ENDMACRO(LIST_APPEND)
 MACRO(LIST_APPEND_UNIQUE var value)
      SET(LIST_ADD_UNIQUE_FLAG 0)
      FOREACH(i ${${var}})
-         IF ("${i}" MATCHES "${value}")
+         IF ("${i}" EQUAL "${value}")
              SET(LIST_ADD_UNIQUE_FLAG 1)
-         ENDIF("${i}" MATCHES "${value}")
+         ENDIF("${i}" EQUAL "${value}")
      ENDFOREACH(i)
      IF(NOT LIST_ADD_UNIQUE_FLAG)
          SET(${var} ${${var}} ${value})
@@ -56,9 +56,11 @@ function(collect_files prefix name)
     elseif((${subfile} MATCHES ".*([.]h)") OR (${subfile} MATCHES ".*([.]tpp)"))
       get_filename_component(subdir ${subfile} DIRECTORY)
       if(NOT ${subdir} STREQUAL "")
+        message(STATUS "add subfile: ${subdir} to ${${prefix}_${name}_subdir}")
         LIST_APPEND_UNIQUE(${prefix}_${name}_subdir ${subdir})
+        message(STATUS "after adding ${${prefix}_${name}_subdir}")
         list(APPEND ${prefix}_${name}_${subdir}_headers ${name}/${subfile})
-      elseif()
+      else()
         list(APPEND ${prefix}_${name}_headers ${name}/${subfile})
       endif()
 
@@ -67,14 +69,16 @@ function(collect_files prefix name)
     endif()
   endforeach()
 
+  message(STATUS "all subdir: ${${prefix}_${name}_subdir}")
   foreach(subdir ${${prefix}_${name}_subdir})
+    message(STATUS "headers to install: ${${prefix}_${name}_${subdir}_headers}")
     install(FILES			${${prefix}_${name}_${subdir}_headers}
-    DESTINATION		include/${prefix}/${name}/${subdir})
+    DESTINATION		include/${prefix}/lib/${name}/${subdir})
   endforeach()
 
 	#Install
 	install(FILES			${${prefix}_${name}_headers}
-			DESTINATION		include/${prefix}/${name})
+  DESTINATION		include/${prefix}/lib/${name})
 
 	#SET the scope
 	set(${prefix}_${name}_headers ${${prefix}_${name}_headers} PARENT_SCOPE)
