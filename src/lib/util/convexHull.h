@@ -48,35 +48,26 @@ static bool maxRank( const std::vector<Point<Number>>& points, const Point<Numbe
  * @return The list of facets, i.e. Hyperplanes with dimension d-1 who form the Convex Hull.
  */
 template <typename Number>
-static void initConvexHull( const std::vector<Point<Number>>& points,
-							std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
-	int dimCheck = dimensionCheck( points );
+static void initConvexHull( const std::vector<Point<Number>>& points, std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
+	int dimCheck = dimensionCheck(points);
 	int d = points[0].dimension();
-	if ( dimCheck == d ) {
+	if (dimCheck == d) {
 		std::vector<Point<Number>> initialPoints;
-		// determine min and max of first value
-		unsigned minIndex = 0;
-		for ( unsigned j = 0; j < points.size(); j++ ) {
-			if ( points.at( minIndex ).rawCoordinates()( 0 ) > points.at( j ).rawCoordinates()( 0 ) ) {
-				minIndex = j;
-			}
-		}
-
+		unsigned minIndex = 0; // determine min and max of first value
 		unsigned maxIndex = 0;
-		for ( unsigned j = 0; j < points.size(); j++ ) {
-			if ( points.at( maxIndex ).rawCoordinates()( 0 ) < points.at( j ).rawCoordinates()( 0 ) ) {
-				maxIndex = j;
-			}
-		}
 
-		initialPoints.push_back( points[minIndex] );
-		initialPoints.push_back( points[maxIndex] );
+		for (unsigned j=0; j < points.size(); j++) {
+			if (points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)) minIndex = j;
+			if (points.at(maxIndex).rawCoordinates()(0) < points.at(j).rawCoordinates()(0)) maxIndex = j;
+		}
+		initialPoints.push_back(points.at(minIndex));
+		initialPoints.push_back(points.at(maxIndex));
 
 		// search rest for rank d accordingly
-		for ( int i = 2; i < d; ++i ) {
-			for ( unsigned j = 0; j < points.size(); j++ ) {
-				if ( maxRank( initialPoints, points[j] ) ) {
-					initialPoints.push_back( points[j] );
+		for (int i=2; i < d; ++i) {
+			for (unsigned j=0; j < points.size(); j++) {
+				if (maxRank(initialPoints, points[j])) {
+					initialPoints.push_back(points[j]);
 					break;
 				}
 			}
