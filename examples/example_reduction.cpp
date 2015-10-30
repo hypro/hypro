@@ -141,31 +141,31 @@ int main(int argc, char const *argv[])
   std::vector<Point<Number>> reduce_from_vertices_2d,reduction_drop_normal_vertices_2d, reduction_drop_smooth_vertices_2d, reduction_unite_normal_vertices_2d, reduction_unite_smooth_vertices_2d, reduction_unite_cut_vertices_2d, reduction_unite_norm_vertices_2d;
 
   for(Point<Number> point: reduce_from.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduce_from_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_drop_normal.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_drop_normal_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_drop_smooth.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_drop_smooth_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_normal.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_unite_normal_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_smooth.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_unite_smooth_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_cut.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_unite_cut_vertices_2d.push_back(point);
   }
   for(Point<Number> point: reduction_unite_norm.vertices()){
-    point.reduceToDimensions({0,1});
+    point.reduceToDimensions({1,2});
     reduction_unite_norm_vertices_2d.push_back(point);
   }
 

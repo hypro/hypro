@@ -8,7 +8,6 @@ namespace hypro {
 
 	template<typename Number, typename Representation>
 	static double approximateVolume(Representation _in, std::size_t sublevels = 0) {
-
 		double pointCount = 0;
 		std::vector<Point<Number>> vertices = _in.vertices();
 		unsigned dimension = vertices[0].dimension();
