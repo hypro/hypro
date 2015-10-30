@@ -5,3 +5,4 @@ build
 *.Po
 *.o
 *.lo
+src/lib/flags.h
