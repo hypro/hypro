@@ -134,7 +134,7 @@ class Facet {
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
 	void addNeighbor( std::shared_ptr<Facet<Number>> facet ) {
-		// std::cout << "Adding " << *facet << " to " << *this << std::endl;
+		 //std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
 			assert( isNeighbor( facet ) );
@@ -213,7 +213,7 @@ class Facet {
 	}
 
 	void setPoints( std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints ) {
-		if ( mVertices.empty() ) {
+    if ( mVertices.empty() ) {
 			for ( unsigned i = 0; i < points.size(); i++ ) {
 				mVertices.push_back( points[i] );
 			}
@@ -221,12 +221,12 @@ class Facet {
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 
-			// std::cout << __func__ << " : " << __LINE__ << std::endl;
-			// std::cout << mNormal << std::endl;
-			// std::cout << _insidePoint << "  " << mScalar << std::endl;
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			//std::cout << mNormal << std::endl;
+			//std::cout << insidePoints << "  " << mScalar << std::endl;
 			bool changed = false;
 			for ( unsigned i = 0; i < insidePoints.size(); i++ ) {
-				if ( isBelow( insidePoints.at( i ) ) ) {
+				if (!isBelow(insidePoints.at(i))) {
 					mNormal *= -1;
 					mScalar = getScalarVector();
 					if ( changed ) {
@@ -280,7 +280,7 @@ class Facet {
 			}
 
 			if ( !change && ( !inside || !outside ) ) {
-				if ( isBelow( _insidePoint ) ) {
+				if (!isBelow(_insidePoint)) {
 					mNormal *= -1;
 					mScalar = getScalarVector();
 				}
@@ -374,7 +374,7 @@ class Facet {
 			} */
 		// std::cout << __func__ << " : " << __LINE__ << " value " <<temp-mScalar << std::endl;
 
-		return ( temp - mScalar > 0 );
+		return ( temp - mScalar <= 0 );
 	}
 
 	Number getDist( const Point<Number>& p ) const {

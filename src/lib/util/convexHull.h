@@ -17,29 +17,34 @@
 namespace hypro {
 
 template <typename Number>
-static int dimensionCheck( const std::vector<Point<Number>>& points ) {
-	matrix_t<Number> matrix = matrix_t<Number>( points.at( 0 ).rawCoordinates().size(), points.size() );
-	for ( unsigned i = 0; i < points.at( 0 ).rawCoordinates().size(); i++ ) {
-		for ( unsigned j = 0; j < points.size(); j++ ) {
-			matrix( i, j ) = points.at( j ).rawCoordinates()( i );
+static unsigned dimensionCheck( const std::vector<Point<Number>>& points ) {
+	matrix_t<Number> matrix = matrix_t<Number>(points.at(0).rawCoordinates().size(), points.size());
+
+	for (unsigned i=0; i < matrix.rows(); i++) {
+		for (unsigned j=0; j < matrix.cols(); j++) {
+			matrix(i, j) = points.at(j).rawCoordinates()(i);
 		}
 	}
+
 	return matrix.fullPivLu().rank();
 }
 
 template <typename Number>
 static bool maxRank( const std::vector<Point<Number>>& points, const Point<Number>& point ) {
-	matrix_t<Number> matrix = matrix_t<Number>( point.rawCoordinates().size(), points.size() + 1 );
-	for ( unsigned i = 0; i < point.rawCoordinates().size(); i++ ) {
-		for ( unsigned j = 0; j < points.size(); j++ ) {
-			matrix( i, j ) = points.at( j ).rawCoordinates()( i );
+	matrix_t<Number> matrix = matrix_t<Number>(point.rawCoordinates().size(), points.size()+1);
+
+	for (unsigned i=0; i < matrix.rows(); i++) {
+		for (unsigned j=0; j < matrix.cols(); j++) {
+			if(j==matrix.cols()-1) {
+				matrix(i, j) = point.rawCoordinates()(i);
+			}
+			else {
+				matrix(i, j) = points.at(j).rawCoordinates()(i);
+			}
 		}
 	}
-	for ( unsigned j = 0; j < point.rawCoordinates().size(); j++ ) {
-		matrix( j, points.size() ) = point.rawCoordinates()( j );
-	}
 
-	return matrix.fullPivLu().rank() == (unsigned)( points.size() + 1 );
+	return matrix.fullPivLu().rank() == (unsigned)(matrix.cols());
 }
 
 /*
@@ -49,12 +54,11 @@ static bool maxRank( const std::vector<Point<Number>>& points, const Point<Numbe
  */
 template <typename Number>
 static void initConvexHull( const std::vector<Point<Number>>& points, std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
-	int dimCheck = dimensionCheck(points);
-	int d = points[0].dimension();
-	if (dimCheck == d) {
+	unsigned dimCheck = dimensionCheck(points);
+	unsigned dimension = points.at(0).dimension();
+	if (dimCheck == dimension) {
 		std::vector<Point<Number>> initialPoints;
-		unsigned minIndex = 0; // determine min and max of first value
-		unsigned maxIndex = 0;
+		unsigned minIndex = 0, maxIndex = 0; // determine min and max of first value
 
 		for (unsigned j=0; j < points.size(); j++) {
 			if (points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)) minIndex = j;
@@ -63,55 +67,52 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 		initialPoints.push_back(points.at(minIndex));
 		initialPoints.push_back(points.at(maxIndex));
 
-		// search rest for rank d accordingly
-		for (int i=2; i < d; ++i) {
-			for (unsigned j=0; j < points.size(); j++) {
-				if (maxRank(initialPoints, points[j])) {
-					initialPoints.push_back(points[j]);
-					break;
+		// search rest for rank d accordingly for each dimension
+		for (unsigned d=1; d<dimension; d++) {
+			for (unsigned i=0; i < points.size(); i++) {
+				if(std::find(initialPoints.begin(), initialPoints.end(), points.at(i))==initialPoints.end()) {
+					if (maxRank(initialPoints, points.at(i))) {
+						initialPoints.push_back(points.at(i));
+						break;
+					}
 				}
 			}
 		}
 
 		// search for unused point as last member for initConvexhull
-		for ( unsigned i = 0; i < points.size(); i++ ) {
-			bool found = false;
-			for ( unsigned j = 0; j < initialPoints.size(); j++ ) {
-				if ( points[i] == initialPoints[j] ) {
-					found = true;
-				}
+		unsigned index=0;
+		while (initialPoints.size()<dimension+1) {
+			if (std::find(initialPoints.begin(), initialPoints.end(), points.at(index))==initialPoints.end()) {
+				initialPoints.push_back( points[index] );
 			}
-			if ( !found ) {
-				initialPoints.push_back( points[i] );
-			}
+			index++;
 		}
 
-		// std::vector<std::shared_ptr<Facet<Number>>> facets;
-		for ( int i = 0; i < d + 1; i++ ) {
-			facets.push_back( std::shared_ptr<Facet<Number>>( new Facet<Number>() ) );
+		// inti facets
+		for (unsigned i=0; i < dimension+1; i++) {
+			facets.push_back(std::shared_ptr<Facet<Number>>(new Facet<Number>()));
 		}
-		for ( int i = 0; i < d + 1; ++i ) {
+		for (unsigned i=0; i < dimension+1; ++i) {
 			std::vector<Point<Number>> points_for_facet;
-			for ( int j = 0; j < d + 1; ++j ) {
-				if ( i != j ) {
-					points_for_facet.push_back( initialPoints[j] );
+			for (unsigned j=0; j < dimension+1; ++j) {
+				if (i != j) {
+					points_for_facet.push_back(initialPoints[j]);
 				}
 			}
-			facets[i]->setPoints( points_for_facet, initialPoints[i] );
+			facets[i]->setPoints(points_for_facet, initialPoints[i]);
 		}
 
-		for ( int i = 0; i < d + 1; ++i ) {
-			for ( int j = 0; j < d + 1; ++j ) {
-				if ( i != j ) {
-					facets[i]->addNeighbor( facets[j] );
-					facets[j]->addNeighbor( facets[i] );
+		// Add neighbors
+		for (unsigned i=0; i < dimension+1; ++i) {
+			for (unsigned j=0; j < dimension+1; ++j) {
+				if (i != j) {
+					facets[i]->addNeighbor(facets[j]);
 				}
 			}
 		}
-		// return facets;
+
 	} else {
 		std::cout << __func__ << __LINE__ << "Error: Inconsistent point set " << std::endl;
-		// return std::vector<std::shared_ptr<Facet<Number>>>();
 		facets = std::vector<std::shared_ptr<Facet<Number>>>();
 	}
 }
@@ -126,42 +127,28 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 										std::vector<Point<Number>>& assignedPoints ) {
 	unassignedPoints = points;
 	std::vector<Point<Number>> pointsInFacets;
-	for ( std::shared_ptr<Facet<Number>> facet : facets ) {
-		std::vector<Point<Number>> pointsInFacet = facet->vertices();
-		for ( Point<Number> p : pointsInFacet ) {
+	for (std::shared_ptr<Facet<Number>> facet : facets) {
+		for (Point<Number> p : facet->vertices()) {
 			pointsInFacets.push_back( p );
 		}
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
-	std::vector<int> removeables;
-	for ( unsigned i = 0; i < unassignedPoints.size(); i++ ) {
-		for ( unsigned j = 0; j < pointsInFacets.size(); j++ ) {
-			if ( unassignedPoints[i] == pointsInFacets[j] ) {
-				removeables.push_back( i );
+	std::vector<unsigned> removeables;
+	for (unsigned i=0; i < unassignedPoints.size(); i++) {
+		for (unsigned j=0; j < pointsInFacets.size(); j++) {
+			if (unassignedPoints[i] == pointsInFacets[j] && std::find(removeables.begin(), removeables.end(), i)!=removeables.end()) {
+				removeables.push_back(i);
 			}
 		}
 	}
 	// Stefan: removables holds the indices of the points in points, which are contained in one of the facets.
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 
-	std::vector<int> remove;
-	for ( unsigned i = 0; i < removeables.size(); i++ ) {
-		bool found = false;
-		for ( unsigned j = 0; j < remove.size(); j++ ) {
-			if ( remove[j] == removeables[i] ) {
-				found = true;
-			}
-		}
-		if ( !found ) {
-			remove.push_back( removeables[i] );
-		}
-	}
-	// Clear removables of duplicates (-> remove)
 
-	for ( unsigned i = 0; i < remove.size(); i++ ) {
-		assignedPoints.push_back( unassignedPoints.at( remove[i] - i ) );
-		unassignedPoints.erase( unassignedPoints.begin() + ( remove[i] - i ) );
+	for ( unsigned i = 0; i < removeables.size(); i++ ) {
+		assignedPoints.push_back( unassignedPoints.at( removeables[i] - i ) );
+		unassignedPoints.erase( unassignedPoints.begin() + ( removeables[i] - i ) );
 	}
 
 	// std::cout << __func__ << " : " << __LINE__ << unassignedPoints << "  " << assignedPoints << std::endl;
@@ -328,18 +315,13 @@ visible_facets) {
  * @return The list of facets that have at least one point above.
  */
 template <typename Number>
-static void removeBorderFacets( std::vector<std::shared_ptr<Facet<Number>>>& facets,
-								std::queue<std::shared_ptr<Facet<Number>>>& result ) {
-	std::stack<unsigned> toDelete;
-	for ( unsigned i = 0; i < facets.size(); i++ ) {
-		if ( !facets.at( i )->getOutsideSet().empty() ) {
-			result.push( facets[i] );
-			toDelete.push( i );
+static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets,
+								std::queue<std::shared_ptr<Facet<Number>>>& result) {
+	for (unsigned i=facets.size(); i > 0; i--) {
+		if (!facets.at(i-1)->getOutsideSet().empty()) {
+			result.push(facets[i-1]);
+			facets.erase( facets.begin() + i-1 );
 		}
-	}
-	while ( !toDelete.empty() ) {
-		facets.erase( facets.begin() + toDelete.top() );  // index fehler?
-		toDelete.pop();
 	}
 }
 
@@ -598,21 +580,21 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		points.push_back( p );
 	}
 
-	if ( points.size() >= points.at( 0 ).dimension() + 1 ) {
+	if (points.size() >= points.at(0).dimension()+1 ) {
 		std::vector<std::shared_ptr<Facet<Number>>> facets;
 		initConvexHull( points, facets );
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
-		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints );
+		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints ); // Determine points which belong to a facet
 
-		for ( unsigned i = 0; i < facets.size(); i++ ) {
-			for ( unsigned j = 0; j < unassignedPoints.size(); j++ ) {
-				if ( facets[i]->isBelow( unassignedPoints[j] ) ) {
+		for (unsigned i=0; i < facets.size(); i++) {
+			for (unsigned j=0; j < unassignedPoints.size(); j++) {
+				if (!facets[i]->isBelow(unassignedPoints[j])) { // isAbove
 					facets[i]->addPointToOutsideSet( unassignedPoints[j] );
 				}
 			}
 		}
-		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 
+		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 		// main body
 
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
@@ -636,10 +618,10 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 					assert( !facet->neighbors().empty() );
 					std::vector<std::shared_ptr<Facet<Number>>> neighbors = facet->neighbors();
 					for ( const auto& neighbor : neighbors ) {
-						// std::cout<< "Neighbor : " << *neighbor << "currentPoint : " << currentPoint << std::endl;
-						if ( neighbor->isBelow( currentPoint ) ) {
+						 //std::cout<< "Neighbor : " << *neighbor << "currentPoint : " << currentPoint << std::endl;
+						if (!neighbor->isBelow(currentPoint)) {
 							newVisibleFacets.push( neighbor );
-							// std::cout << "Neighbor: " << *neighbor << std::endl;
+							 //std::cout << "Neighbor: " << *neighbor << std::endl;
 							assert( !neighbor->neighbors().empty() );
 						}
 					}
@@ -751,7 +733,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			// update outside sets of the new facets.
 			for ( unsigned i = 0; i < newFacets.size(); i++ ) {
 				for ( unsigned j = 0; j < unassignedPoints.size(); j++ ) {  // unassignedPoints?
-					if ( newFacets[i]->isBelow( unassignedPoints[j] ) ) {
+					if (!newFacets[i]->isBelow(unassignedPoints[j])) {
 						newFacets[i]->addPointToOutsideSet( unassignedPoints[j] );
 					}
 				}
@@ -818,8 +800,10 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		// setNeighborhoodOfPoints(facets);
 
 		return std::make_pair( facets, neighborhood );
-	} else {
-		std::cout << "Error: not enough points to determine convex hull in dimension " << points.at( 0 ).dimension()
+	}
+	else
+	{
+		std::cout << "Error: not enough points to determine convex hull in dimension " << points.at(0).dimension()
 				  << std::endl;
 		return std::make_pair( std::vector<std::shared_ptr<Facet<Number>>>(),
 							   std::map<Point<Number>, std::set<Point<Number>>>() );
