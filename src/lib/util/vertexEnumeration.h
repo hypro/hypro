@@ -20,13 +20,15 @@ struct Dictionary {
 	matrix_t<Number> 	mDictionary;
 	std::size_t			mF;
 	std::size_t			mG;
+	std::size_t			n;
+	std::size_t			m;
 	std::vector<std::size_t> mB;
 	std::vector<std::size_t> mN;
 
 	Dictionary (const matrix_t<Number>& A, const vector_t<Number>& b) :
 		mDictionary(),
 		mF(A.rows()+A.cols()),
-		mG(A.rows()+A.cols()+1)
+		mG(A.rows()+A.cols()+1),
 	{
 		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
 		t << b,-A;
@@ -97,6 +99,9 @@ struct Dictionary {
 		for(std::size_t index = mDictionary.rows() ; index < A.rows() + dimension - 1 ; ++index)
 			mN.push_back(index);
 
+		n = mG;
+		m = mDictionary.rows();
+
 		std::cout << "B: " << mB << std::endl;
 		std::cout << "N: " << mN << std::endl;
 		std::cout << "F: " << mF << std::endl;
@@ -115,12 +120,15 @@ struct Dictionary {
 		std::size_t i,j;
 		i = 2;
 		j = 1;
+
+		do {
+			while(i <= m && !isReverseCrissCrossPivot(i,j)) increment(i,j);
+		} while ( i < m && mB[m] != m);
 	}
 
-	void pivotBland();
-	void pivotBlandReverse();
-	void pivotCrissCross();
-	void pivotCrissCrossReverse();
+	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j) {
+
+	}
 
 	void pivot(std::size_t r, std::size_t s) {
 		assert(r != mF && s != mG);
@@ -163,7 +171,10 @@ private:
 
 	void increment(std::size_t& i, std::size_t& j) {
 		++j;
-
+		if( j == n-m) {
+			j = 1;
+			++i;
+		}
 	}
 };
 
