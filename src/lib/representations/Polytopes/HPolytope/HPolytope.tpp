@@ -684,6 +684,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 		case REDUCTION_STRATEGY::UNITE_NORM:
 			{
 				unsigned a= 4, b=2; // note highest index firts;
+				std::vector<Point<Number>> vertices = res.vertices();
 				Point<Number> point_a_b = getPointOf2Indices(a, b, vertices); // get one CutPoint of facet a and b
 
 				// TODO compute weights
