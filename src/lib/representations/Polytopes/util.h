@@ -13,7 +13,6 @@
 
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Hyperplane.h"
-#include "../../util/VariablePool.h"
 #include <carl/formula/Constraint.h>
 #include "Cone.h"
 

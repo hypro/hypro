@@ -8,12 +8,16 @@
 #include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../lib/representations/Polytope/Polytope.h"
 #include "carl/core/VariablePool.h"
 #include "../../lib/datastructures/Point.h"
 
 
 using namespace hypro;
 using namespace carl;
+
+template <typename Number>
+using valuation_t = Polytope<Number>;
 
 template<typename Number>
 class HybridAutomataTest : public ::testing::Test

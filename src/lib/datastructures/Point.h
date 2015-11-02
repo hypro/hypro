@@ -286,7 +286,7 @@ class Point {
 	 * @return
 	 */
 	Number& operator[]( const carl::Variable& _i );
-	Number& operator[]( unsigned _i );
+	Number& operator[]( std::size_t _i );
 
 	Number at( const carl::Variable& _i ) const;
 	Number at( unsigned _index ) const;

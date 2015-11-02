@@ -10,19 +10,42 @@
 
 #include "../lib/config.h"
 #include "../lib/util/types.h"
-#include "carl/numbers/FLOAT_T.h"
+//#include "carl/numbers/numbers.h"
 
-#ifdef SUPPORT_MPFR
-#include <mpfr.h>
- typedef ::testing::Types<int, double, carl::FLOAT_T<double>, carl::FLOAT_T<mpfr_t> > types;
-typedef ::testing::Types<double, carl::FLOAT_T<double>, carl::FLOAT_T<mpfr_t> > floatTypes;
-#else
-typedef ::testing::Types<int, double, carl::FLOAT_T<double>> types;
-typedef ::testing::Types<double, carl::FLOAT_T<double>> floatTypes;
 
- #endif
+typedef ::testing::Types<
+	int,
+	double,
+	#ifdef USE_MPFR_FLOAT
+	carl::FLOAT_T<mpfr_t>,
+	#endif
+	carl::FLOAT_T<double>
+> types;
+
+typedef ::testing::Types<
+	#ifdef USE_MPFR_FLOAT
+	carl::FLOAT_T<mpfr_t>,
+	#endif
+	double,
+	carl::FLOAT_T<double>
+> floatTypes;
+
+typedef ::testing::Types<
+	#ifdef USE_MPFR_FLOAT
+	carl::FLOAT_T<mpfr_t>,
+	#endif
+	double,
+	carl::FLOAT_T<double>,
+	#ifdef USE_CLN_NUMBERS
+	carl::FLOAT_T<cln::cl_RA>,
+	#endif
+	carl::FLOAT_T<mpq_class>
+> allTypes;
 
 // List tests which should be typed
+
+// Algorithm
+TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, floatTypes);
@@ -35,7 +58,8 @@ TYPED_TEST_CASE(VertexContainerTest, floatTypes);
 TYPED_TEST_CASE(VertexTest, floatTypes);
 
 // Representations
-TYPED_TEST_CASE(BoxTest, types);
+TYPED_TEST_CASE(BoxTest, floatTypes);
+TYPED_TEST_CASE(PTermBoxTest, floatTypes);
 TYPED_TEST_CASE(ConverterTest, floatTypes);
 TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(HPolytopeTest, floatTypes);

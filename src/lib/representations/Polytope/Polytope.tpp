@@ -304,7 +304,7 @@ C_Polyhedron &Polytope<Number>::rRawPolyhedron() {
 }
 
 template <typename Number>
-unsigned int Polytope<Number>::dimension() const {
+std::size_t Polytope<Number>::dimension() const {
 	return hypro::polytope::pplDimension( mPolyhedron );
 }
 

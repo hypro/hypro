@@ -63,7 +63,9 @@ class OrthogonalPolyhedron {
 	void addVertices( const std::vector<Vertex<Number>>& _vertices );
 
 	bool empty() const;
-	unsigned size() const;
+	std::size_t size() const;
+	std::size_t dimension() const;
+	Number supremum() const;
 	bool isVertex( const Point<Number>& _point ) const;
 	bool isOnIEdge( const Point<Number>& _point, unsigned i ) const;
 	bool isInternal( const Point<Number>& _point ) const;
@@ -80,7 +82,6 @@ class OrthogonalPolyhedron {
 	/***********************************************************************
 	 * Geometric Object functions
 	 ***********************************************************************/
-	unsigned int dimension() const;
 	OrthogonalPolyhedron<Number, Type> linearTransformation( const matrix_t<Number>& A,
 															 const vector_t<Number>& b ) const;
 	OrthogonalPolyhedron<Number, Type> minkowskiSum( const OrthogonalPolyhedron<Number, Type>& rhs ) const;

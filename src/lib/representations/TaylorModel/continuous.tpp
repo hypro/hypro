@@ -78,20 +78,20 @@ void Flowpipe<Number>::composition( TaylorModelVec<Number> &result, Domain<Numbe
 }
 
 template <typename Number>
-int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE<Number> &ode, const Variable &t,
+int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE<Number> &ode, const carl::Variable &t,
 								   const double stepsize, const exponent order, const Range<Number> &estimation ) {
 	// evaluate the the local initial set Xl
-	Interval<Number> intStepEnd( stepsize );
+	carl::Interval<Number> intStepEnd( stepsize );
 	TaylorModel<Number> tmStepEnd( intStepEnd );
 
-	Interval<Number> intZero( 0 );
-	Interval<Number> intUnit( -1.0, 1.0 );
+	carl::Interval<Number> intZero( 0 );
+	carl::Interval<Number> intUnit( -1.0, 1.0 );
 
 	TaylorModelVec<Number> Xl;
 
 	if ( tmvPre.isEmpty() ) {
 		TaylorModelVec<Number> evaluation;
-		std::map<Variable, Interval<Number>> &domain_assignments = domain.get_assignments();
+		std::map<carl::Variable, carl::Interval<Number>> &domain_assignments = domain.get_assignments();
 
 		for ( auto iter = domain_assignments.begin(); iter != domain_assignments.end(); ++iter ) {
 			TaylorModel<Number> tmTemp( iter->first );
@@ -132,21 +132,21 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE
 	// compute the preconditioning factors
 	TaylorModelVec<Number> new_tmvPre;
 
-	Interval<Number> intStep( 0.0, stepsize );
+	carl::Interval<Number> intStep( 0.0, stepsize );
 
 	Domain<Number> localInitial;
 	localInitial.assign( t, intStep );
 
-	std::map<Variable, Interval<Number>> &assignments = range_of_Xl.get_assignments();
+	std::map<carl::Variable, carl::Interval<Number>> &assignments = range_of_Xl.get_assignments();
 
 	auto iter1 = assignments.begin();
 	auto iter2 = Xl.tms.begin();
 
 	for ( ; iter1 != assignments.end(); ++iter1, ++iter2 ) {
 		Number magnitude = iter1->second.magnitude();
-		Interval<Number> intMagnitude( magnitude );
+		carl::Interval<Number> intMagnitude( magnitude );
 
-		TaylorModel<Number> tmTemp( {(Interval<Number>)intMagnitude * ( iter1->first )} );
+		TaylorModel<Number> tmTemp( {(carl::Interval<Number>)intMagnitude * ( iter1->first )} );
 
 		new_tmvPre.assign( iter1->first, tmTemp );
 
@@ -170,7 +170,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE
 	}
 
 	for ( auto iter = x.tms.begin(); iter != x.tms.end(); ++iter ) {
-		Interval<Number> intEst;
+		carl::Interval<Number> intEst;
 		estimation.find_assignment( intEst, iter->first );
 		iter->second.remainder = intEst;
 	}
@@ -283,7 +283,7 @@ ContinuousSystem<Number>::~ContinuousSystem() {
 }
 
 template <typename Number>
-int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>> &result, const Variable &t, const double time,
+int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>> &result, const carl::Variable &t, const double time,
 											const double stepsize, const exponent order,
 											const Range<Number> &estimation ) const {
 	result.clear();
@@ -335,7 +335,7 @@ void ContinuousSystem<Number>::output( std::ostream &os, const exponent order ) 
 
 template <typename Number>
 void output_2D_interval_gnuplot( std::list<Flowpipe<Number>> &flowpipes, std::ofstream &os, const std::string &fileName,
-								 const Variable &axis_x, const Variable &axis_y ) {
+								 const carl::Variable &axis_x, const carl::Variable &axis_y ) {
 	os << "set terminal postscript" << std::endl;
 	os << "set output " << '\'' << fileName << ".eps" << '\'' << std::endl;
 	os << "set style line 1 linecolor rgb \"blue\"" << std::endl;
@@ -353,10 +353,10 @@ void output_2D_interval_gnuplot( std::list<Flowpipe<Number>> &flowpipes, std::of
 		Range<Number> range;
 		iter->enclosure( range );
 
-		Interval<Number> X;
+		carl::Interval<Number> X;
 		range.find_assignment( X, axis_x );
 
-		Interval<Number> Y;
+		carl::Interval<Number> Y;
 		range.find_assignment( Y, axis_y );
 
 		os << X.lower() << " " << Y.lower() << std::endl;

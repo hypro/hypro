@@ -11,12 +11,12 @@
 namespace hypro {
 template <typename Number>
 VPolytope<Number>::VPolytope()
-	: mPoints(), mFan(), mFanSet( false ), mReduced( true ), mNeighbors(), mInitialized( false ) {
+	: mVertices(), mFan(), mFanSet( false ), mReduced( true ), mNeighbors(), mInitialized( false ) {
 }
 
 template <typename Number>
 VPolytope<Number>::VPolytope( const Point<Number> &point ) {
-	mPoints.push_back( point );
+	mVertices.push_back( point );
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;
 	mReduced = true;
@@ -27,7 +27,7 @@ VPolytope<Number>::VPolytope( const Point<Number> &point ) {
 template <typename Number>
 VPolytope<Number>::VPolytope( const pointVector &points ) {
 	for ( const auto point : points ) {
-		mPoints.push_back( point );
+		mVertices.push_back( point );
 		mNeighbors.push_back( std::set<unsigned>() );
 	}
 	mFan = polytope::Fan<Number>();
@@ -77,7 +77,7 @@ VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	// finish initialization
 	for ( const auto &point : possibleVertices ) {
-		mPoints.push_back( Point<Number>( point ) );
+		mVertices.push_back( Point<Number>( point ) );
 		mNeighbors.push_back( std::set<unsigned>() );
 		// std::cout << "Real vertex " << point.transpose() << std::endl;
 	}
@@ -90,7 +90,7 @@ VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector
 
 template <typename Number>
 VPolytope<Number>::VPolytope( const VPolytope &orig ) {
-	mPoints.insert( mPoints.end(), orig.begin(), orig.end() );
+	mVertices.insert( mVertices.end(), orig.begin(), orig.end() );
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;			// TODO: Include getter fpr this
 	mReduced = orig.reduced();  // TODO: Include getter fpr this
@@ -104,7 +104,7 @@ VPolytope<Number> VPolytope<Number>::linearTransformation( const matrix_t<Number
 														   const vector_t<Number> &b ) const {
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytope<Number> result;
-	for ( const auto &vertex : mPoints ) {
+	for ( const auto &vertex : mVertices ) {
 		result.insert( vertex.linearTransformation( A, b ) );
 	}
 	result.setCone( mCone.linearTransformation( A, b ) );
@@ -116,8 +116,8 @@ template <typename Number>
 VPolytope<Number> VPolytope<Number>::minkowskiSum( const VPolytope<Number> &rhs ) const {
 	VPolytope<Number> result;
 	// add each rhs-vertex to each vertex of this polytope.
-	for ( auto lhsVertex : mPoints ) {
-		for ( auto rhsVertex : rhs.mPoints ) {
+	for ( auto lhsVertex : mVertices ) {
+		for ( auto rhsVertex : rhs.mVertices ) {
 			result.insert( lhsVertex + rhsVertex );
 		}
 	}
@@ -132,14 +132,14 @@ VPolytope<Number> VPolytope<Number>::intersect( const VPolytope<Number> &rhs ) c
 		return VPolytope<Number>();
 	} else {
 		pointVector possibleVertices;
-		for ( const auto &lhsVertex : mPoints ) {
+		for ( const auto &lhsVertex : mVertices ) {
 			possibleVertices.push_back( lhsVertex );
 			for ( unsigned coordIndex = 0; coordIndex < lhsVertex.rawCoordinates().rows(); ++coordIndex ) {
-				for ( const auto &rhsVertex : rhs.mPoints ) {
+				for ( const auto &rhsVertex : rhs.mVertices ) {
 					vector_t<Number> newVertex = rhsVertex.rawCoordinates();
 					newVertex( coordIndex ) = lhsVertex.at( coordIndex );
-					possibleVertices.push_back( vector_t<Number>( newVertex ) );
-					possibleVertices.push_back( vector_t<Number>( rhsVertex ) );
+					possibleVertices.push_back( newVertex );
+					possibleVertices.push_back( rhsVertex.rawCoordinates() );
 				}
 			}
 		}
@@ -173,7 +173,7 @@ bool VPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 
 	glp_set_row_bnds( mLp, vec.rows() + 1, GLP_FX, 1.0, 0 );  // the sum of the vectors equals exactly one.
 
-	for ( unsigned i = 1; i <= mPoints.size(); ++i ) {
+	for ( unsigned i = 1; i <= mVertices.size(); ++i ) {
 		glp_set_col_bnds( mLp, i, GLP_DB, 0.0, 1.0 );
 		glp_set_obj_coef( mLp, i, 1.0 );  // the objective function is max: v1 + v2 + v3 + ... + vn
 	}
@@ -201,11 +201,11 @@ bool VPolytope<Number>::contains( const VPolytope<Number> &_other ) const {
 template <typename Number>
 VPolytope<Number> VPolytope<Number>::unite( const VPolytope<Number> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
-		return VPolytope<Number>( mPoints );
+		return VPolytope<Number>( mVertices );
 	} else {
 		VPolytope<Number>::pointVector points;
-		points.insert( points.end(), this->mPoints.begin(), this->mPoints.end() );
-		points.insert( points.end(), rhs.mPoints.begin(), rhs.mPoints.end() );
+		points.insert( points.end(), this->mVertices.begin(), this->mVertices.end() );
+		points.insert( points.end(), rhs.mVertices.begin(), rhs.mVertices.end() );
 
 		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 		std::set<Point<Number>> preresult;
@@ -247,13 +247,13 @@ VPolytope<Number> VPolytope<Number>::unite( const VPolytope<Number> &rhs ) const
 
 template <typename Number>
 void VPolytope<Number>::clear() {
-	mPoints.clear();
+	mVertices.clear();
 }
 
 template <typename Number>
 Number VPolytope<Number>::supremum() const {
 	Number max = 0;
-	for ( auto &point : mPoints ) {
+	for ( auto &point : mVertices ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -261,18 +261,84 @@ Number VPolytope<Number>::supremum() const {
 }
 
 template <typename Number>
-void VPolytope<Number>::reduce() {
+void VPolytope<Number>::removeRedundancy() {
 	if ( !mReduced ) {
-		updateNeighbors();
+		#ifdef USE_SMTRAT
+			std::set<Point<Number>> toDelete;
+			smtrat::SimplexSolver simplex;
+			simplex.push();
+
+			// create mapping of variables (lambdas') to vertices.
+			std::map<Point<Number>, carl::Variable> lambdas;
+			for(const auto& vertex : mVertices) {
+				carl::Variable lambda = carl::freshRealVariable();
+				lambdas.insert(std::make_pair(vertex, lambda));
+				//std::cout << "Assigned " << lambdas.find(vertex)->second << " to " << lambdas.find(vertex)->first << std::endl;
+			}
+
+
+			for(auto currVertex = mVertices.begin(); currVertex != mVertices.end(); ){
+				//std::cout << currVertex << ": " << std::endl;
+				// create constraint for Sum(lambdas) == 1
+				Poly sumBound;
+				for(const auto& vertex : mVertices) {
+					if(vertex != *currVertex) {
+						carl::Variable lambda = lambdas.find(vertex)->second;
+						sumBound += lambda;
+						smtrat::FormulaT constr = smtrat::FormulaT(Poly(lambda), carl::Relation::GEQ);
+						simplex.inform(constr);
+						simplex.add(constr);
+					}
+				}
+				sumBound -= Rational(1);
+				smtrat::FormulaT constr = smtrat::FormulaT(sumBound, carl::Relation::EQ);
+				simplex.inform(constr);
+				simplex.add(constr);
+
+				for(unsigned dim = 0; dim < this->dimension(); ++dim) {
+					Poly row;
+					for(const auto& vertex : mVertices ) {
+						if(*currVertex != vertex) {
+							carl::Variable tmp = lambdas.find(vertex)->second;
+							row += tmp*Rational(vertex.at(dim));
+						} else {
+							row -= Rational(vertex.at(dim));
+						}
+					}
+					smtrat::FormulaT constr = smtrat::FormulaT(row, carl::Relation::EQ);
+					//std::cout << constr << std::endl;
+					simplex.inform(constr);
+					simplex.add(constr);
+				}
+
+				std::cout << "Checking: " << std::endl << simplex.formula().toString() << std::endl;
+
+				smtrat::Answer res = simplex.check();
+
+				if(res == smtrat::Answer::True) {
+					currVertex = mVertices.erase(currVertex);
+				} else {
+					++currVertex;
+				}
+
+				//std::cout << "Is extreme point: " << (res == smtrat::Answer::False) << std::endl << std::endl << std::endl << std::endl;
+				simplex.pop();
+				simplex.push();
+			}
+
+			mReduced = true;
+		#else
+			updateNeighbors();
+		#endif
 	}
 }
 
 template <typename Number>
 void VPolytope<Number>::updateNeighbors() {
-	std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mPoints ).second;
-	mPoints.clear();
+	std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mVertices ).second;
+	mVertices.clear();
 	for ( const auto &pointNeighborsPair : neighbors ) {
-		mPoints.push_back( pointNeighborsPair.first );
+		mVertices.push_back( pointNeighborsPair.first );
 	}
 	// we can only set neighbors after all points have been inserted.
 	for ( const auto &pointNeighborsPair : neighbors ) {
@@ -293,18 +359,18 @@ void VPolytope<Number>::initGLPK() const {
 		glp_init_smcp( &mOptions );
 		mOptions.msg_lev = GLP_MSG_OFF;
 		glp_add_rows( mLp, this->dimension() + 1 );
-		glp_add_cols( mLp, mPoints.size() );
+		glp_add_cols( mLp, mVertices.size() );
 
 		// prepare matrix
 		unsigned size =
-			  mPoints.size() * ( this->dimension() + 1 );  // add one row to hold the constraint that all add up to one.
+			  mVertices.size() * ( this->dimension() + 1 );  // add one row to hold the constraint that all add up to one.
 		mIa = new int[size + 1];
 		mJa = new int[size + 1];
 		mAr = new double[size + 1];
 		unsigned pos = 1;
-		typename pointVector::const_iterator vertex = mPoints.begin();
+		typename pointVector::const_iterator vertex = mVertices.begin();
 		for ( unsigned i = 1; i <= this->dimension() + 1; ++i ) {
-			for ( unsigned j = 1; j <= mPoints.size(); ++j ) {
+			for ( unsigned j = 1; j <= mVertices.size(); ++j ) {
 				mIa[pos] = i;
 				mJa[pos] = j;
 				if ( i == this->dimension() + 1 ) {
@@ -321,7 +387,7 @@ void VPolytope<Number>::initGLPK() const {
 				++pos;
 				++vertex;
 			}
-			vertex = mPoints.begin();
+			vertex = mVertices.begin();
 		}
 		glp_load_matrix( mLp, size, mIa, mJa, mAr );
 		mInitialized = true;
@@ -331,7 +397,7 @@ void VPolytope<Number>::initGLPK() const {
 template <typename Number>
 const typename VPolytope<Number>::Fan &VPolytope<Number>::calculateFan() const {
 	if ( !mFanSet ) {
-		std::vector<Facet<Number>> facets = convexHull( mPoints ).first;
+		std::vector<Facet<Number>> facets = convexHull( mVertices ).first;
 		std::set<Point<Number>> preresult;
 		for ( unsigned i = 0; i < facets.size(); i++ ) {
 			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {

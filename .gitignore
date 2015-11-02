@@ -1,11 +1,4 @@
-*.Po
-*.Plo
-*.log
-CMakeCache.txt
 CMakeFiles
 nbproject
 .project
 build
-cmake/.swp
-examples/libmx.dylib
-src/resources/nlopt-2.4.2/

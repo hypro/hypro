@@ -15,12 +15,12 @@ set( EXAMPLES
     example_benchmarks
     example_bouncingBall
     example_converter
-    example_subtraction
-    example_multiplication
+    example_convexHull
     example_division
     example_eigen_float_t
     example_hausdorffApprox
     example_matrixPolyhedra
+    example_multiplication
     example_openglPlotting
     example_orthogonalPolyhedron
     example_parser
@@ -28,16 +28,18 @@ set( EXAMPLES
     example_polytope
     example_polytopeFileWriter
     example_power
-    example_ppl_nncPolyhedra
+    #example_ppl_nncPolyhedra
     example_reachability
+    example_reduction
+    example_SFconversion
     example_squareroot
+    example_subtraction
     example_supportFunction
     example_cubicroot
     example_test
+    example_useSMT
     example_vertexEnumeration
-    example_twotankreachability
-    example_convexHull
-    example_HVPolytope
+    #example_twotankreachability
     example_zonotope
 )
 
@@ -58,6 +60,8 @@ foreach( example ${EXAMPLES} )
         add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
         target_link_libraries( ${example} ${PROJECT_NAME} ${libraries} )
 
+        set( exampleFiles ${exampleFiles} ${example}.cpp )
+
 #    endif()
 
     if(${STATICLIB_SWITCH} STREQUAL "ON")
@@ -65,3 +69,13 @@ foreach( example ${EXAMPLES} )
     endif()
 
 endforeach( example )
+
+
+
+# ATTENTION: This is just used to test if all examples compile.
+#add_executable( allExamples EXCLUDE_FROM_ALL ${exampleFiles} )
+#target_link_libraries( allExamples ${PROJECT_NAME} ${libraries} )
+
+#if(${STATICLIB_SWITCH} STREQUAL "ON")
+#	set_target_properties( allExamples PROPERTIES LINK_SEARCH_END_STATIC TRUE )
+#endif()

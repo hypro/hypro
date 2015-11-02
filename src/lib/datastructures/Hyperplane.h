@@ -13,7 +13,7 @@
 #include <cassert>
 #include <glpk.h>
 
-//#include "Point.h"
+#include "Point.h"
 #include "../util/VariablePool.h"
 #include <carl/formula/Constraint.h>
 
@@ -43,8 +43,11 @@ class Hyperplane {
 	~Hyperplane();
 
 	unsigned dimension() const;
+	void reduceDimension( unsigned _dimension );
+	void reduceToDimensions( std::vector<unsigned> _dimensions );
 
 	const vector_t<Number>& normal() const;
+  vector_t<Number>& rNormal();
 	void setNormal( const vector_t<Number>& _normal );
 
 	Number offset() const;
@@ -59,6 +62,9 @@ class Hyperplane {
 	Hyperplane<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	HPolytope<Number> intersection( const Hyperplane<Number>& _rhs ) const;
 	vector_t<Number> intersectionVector( const Hyperplane<Number>& _rhs ) const;
+
+	static vector_t<Number> fastIntersect( const std::vector<Hyperplane<Number>>& _planes );
+	static vector_t<Number> saveIntersect( const std::vector<Hyperplane<Number>>& _planes, Number threshold = 0);
 
 	bool contains( const vector_t<Number> _vector ) const;
 	bool holds( const vector_t<Number> _vector ) const;

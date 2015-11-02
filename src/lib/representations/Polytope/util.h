@@ -9,9 +9,7 @@
 
 #pragma once
 
-#include <ppl.hh>
 #include <carl/core/Variable.h>
-#include "../../util/eigenTypetraits.h"
 #include "../../util/VariablePool.h"
 
 #include "../Polytopes/util.h"

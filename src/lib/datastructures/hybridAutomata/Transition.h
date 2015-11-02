@@ -9,7 +9,6 @@
 #pragma once
 
 #include "Location.h"
-#include "util.h"
 
 namespace hypro {
 template <typename Number>

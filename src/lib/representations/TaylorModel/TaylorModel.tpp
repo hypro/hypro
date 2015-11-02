@@ -11,7 +11,7 @@ namespace hypro {
 
 template <typename Number>
 TaylorModel<Number>::TaylorModel() {
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
@@ -20,25 +20,25 @@ TaylorModel<Number>::~TaylorModel() {
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const MultivariatePolynomial<Interval<Number>> &p, const Interval<Number> &r ) {
+TaylorModel<Number>::TaylorModel( const MultivariatePolynomial<carl::Interval<Number>> &p, const carl::Interval<Number> &r ) {
 	expansion = p;
 	remainder = r;
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const MultivariatePolynomial<Interval<Number>> &p ) {
+TaylorModel<Number>::TaylorModel( const MultivariatePolynomial<carl::Interval<Number>> &p ) {
 	expansion = p;
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const Interval<Number> &I ) {
-	MultivariatePolynomial<Interval<Number>> p( I );
+TaylorModel<Number>::TaylorModel( const carl::Interval<Number> &I ) {
+	MultivariatePolynomial<carl::Interval<Number>> p( I );
 	expansion = p;
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
@@ -49,38 +49,38 @@ TaylorModel<Number>::TaylorModel( const TaylorModel<Number> &tm ) {
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const std::initializer_list<Term<Interval<Number>>> &terms ) {
-	MultivariatePolynomial<Interval<Number>> p( terms );
+TaylorModel<Number>::TaylorModel( const std::initializer_list<Term<carl::Interval<Number>>> &terms ) {
+	MultivariatePolynomial<carl::Interval<Number>> p( terms );
 	expansion = p;
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const std::initializer_list<Term<Interval<Number>>> &terms,
-								  const Interval<Number> &r ) {
-	MultivariatePolynomial<Interval<Number>> p( terms );
+TaylorModel<Number>::TaylorModel( const std::initializer_list<Term<carl::Interval<Number>>> &terms,
+								  const carl::Interval<Number> &r ) {
+	MultivariatePolynomial<carl::Interval<Number>> p( terms );
 	expansion = p;
 
 	remainder = r;
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( const Term<Interval<Number>> &term ) {
-	MultivariatePolynomial<Interval<Number>> p( term );
+TaylorModel<Number>::TaylorModel( const Term<carl::Interval<Number>> &term ) {
+	MultivariatePolynomial<carl::Interval<Number>> p( term );
 	expansion = p;
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
 template <typename Number>
-TaylorModel<Number>::TaylorModel( Variable::Arg v ) {
-	MultivariatePolynomial<Interval<Number>> p( v );
+TaylorModel<Number>::TaylorModel( carl::Variable::Arg v ) {
+	MultivariatePolynomial<carl::Interval<Number>> p( v );
 	expansion = p;
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
@@ -91,7 +91,7 @@ TaylorModel<Coeff, Number>::TaylorModel(const Monomial & m)
 		MultivariatePolynomial<Coeff> p(m);
 		expansion = p;
 
-		Interval<Number> intZero(0);
+		carl::Interval<Number> intZero(0);
 		remainder = intZero;
 }
 
@@ -103,31 +103,31 @@ TaylorModel<Coeff, Number>::TaylorModel(std::shared_ptr<const Monomial> m)
 }
 
 template<typename Number>
-TaylorModel<Number>::TaylorModel(std::shared_ptr<const Term<Interval<Number>> >
+TaylorModel<Number>::TaylorModel(std::shared_ptr<const Term<carl::Interval<Number>> >
 t)
 {
-		MultivariatePolynomial<Interval<Number>> p(t);
+		MultivariatePolynomial<carl::Interval<Number>> p(t);
 		expansion = p;
 
-		Interval<Number> intZero(0);
+		carl::Interval<Number> intZero(0);
 		remainder = intZero;
 }
 
 template<typename Coeff, typename Number>
-TaylorModel<Coeff, Number>::TaylorModel(const std::initializer_list<Variable> &
+TaylorModel<Coeff, Number>::TaylorModel(const std::initializer_list<carl::Variable> &
 terms)
 {
 		MultivariatePolynomial<Coeff> p(terms);
 		expansion = p;
 
-		Interval<Number> intZero(0);
+		carl::Interval<Number> intZero(0);
 		remainder = intZero;
 }
 */
 
 template <typename Number>
 bool TaylorModel<Number>::isZero() const {
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	return ( expansion.isZero() && remainder == intZero );
 }
 
@@ -142,12 +142,12 @@ bool TaylorModel<Number>::isLinear() const {
 }
 
 template <typename Number>
-Interval<Number> TaylorModel<Number>::rmConstantTerm() {
+carl::Interval<Number> TaylorModel<Number>::rmConstantTerm() {
 	TermsType &vTerms = expansion.getTerms();
 
 	auto iter = vTerms.begin();
 
-	Interval<Number> constant( 0 );
+	carl::Interval<Number> constant( 0 );
 
 	if ( ( *iter ).tdeg() == 0 ) {
 		constant = ( *iter ).coeff();
@@ -164,7 +164,7 @@ exponent TaylorModel<Number>::tmOrder() const {
 
 template <typename Number>
 TaylorModel<Number> TaylorModel<Number>::pow( unsigned exp, Domain<Number> &domain, const exponent order ) const {
-	Interval<Number> intZero( 0 ), intOne( 1 );
+	carl::Interval<Number> intZero( 0 ), intOne( 1 );
 
 	if ( exp == 0 ) return TaylorModel( intOne );
 
@@ -189,16 +189,16 @@ TaylorModel<Number> TaylorModel<Number>::pow( unsigned exp, Domain<Number> &doma
 }
 
 template <typename Number>
-void TaylorModel<Number>::cutoff( const Interval<Number> &threshold, Domain<Number> &domain ) {
+void TaylorModel<Number>::cutoff( const carl::Interval<Number> &threshold, Domain<Number> &domain ) {
 	TermsType &vTerms = expansion.getTerms();
 
 	typename TermsType::iterator term = vTerms.begin();
 
 	for ( ; term != vTerms.end(); ) {
-		MultivariatePolynomial<Interval<Number>> p( *term );
+		MultivariatePolynomial<carl::Interval<Number>> p( *term );
 
-		std::map<Variable, Interval<Number>> &d = domain.get_assignments();
-		Interval<Number> intTemp = p.evaluate( d );
+		std::map<carl::Variable, carl::Interval<Number>> &d = domain.get_assignments();
+		carl::Interval<Number> intTemp = p.evaluate( d );
 
 		if ( threshold.contains( intTemp ) ) {
 			term = vTerms.erase( term );
@@ -210,16 +210,16 @@ void TaylorModel<Number>::cutoff( const Interval<Number> &threshold, Domain<Numb
 }
 
 template <typename Number>
-void TaylorModel<Number>::cutoff_nr( const Interval<Number> &threshold, Domain<Number> &domain ) {
+void TaylorModel<Number>::cutoff_nr( const carl::Interval<Number> &threshold, Domain<Number> &domain ) {
 	TermsType &vTerms = expansion.getTerms();
 
 	typename TermsType::iterator term = vTerms.begin();
 
 	for ( ; term != vTerms.end(); ) {
-		MultivariatePolynomial<Interval<Number>> p( *term );
+		MultivariatePolynomial<carl::Interval<Number>> p( *term );
 
-		std::map<Variable, Interval<Number>> &d = domain.get_assignments();
-		Interval<Number> intTemp = p.evaluate( d );
+		std::map<carl::Variable, carl::Interval<Number>> &d = domain.get_assignments();
+		carl::Interval<Number> intTemp = p.evaluate( d );
 
 		if ( threshold.contains( intTemp ) ) {
 			term = vTerms.erase( term );
@@ -248,13 +248,13 @@ void TaylorModel<Number>::truncation( const exponent order, Domain<Number> &doma
 		}
 	}
 
-	MultivariatePolynomial<Interval<Number>> p;
+	MultivariatePolynomial<carl::Interval<Number>> p;
 	TermsType &vTerms2 = p.getTerms();
 	vTerms2 = truncated_terms;
 
-	Interval<Number> I;
+	carl::Interval<Number> I;
 
-	std::map<Variable, Interval<Number>> &d = domain.get_assignments();
+	std::map<carl::Variable, carl::Interval<Number>> &d = domain.get_assignments();
 	I = p.evaluate( d );
 
 	remainder += I;
@@ -278,43 +278,43 @@ void TaylorModel<Number>::truncation_nr( const exponent order ) {
 }
 
 template <typename Number>
-void TaylorModel<Number>::enclosure( Interval<Number> &I, Domain<Number> &domain ) const {
-	std::map<Variable, Interval<Number>> &d = domain.get_assignments();
+void TaylorModel<Number>::enclosure( carl::Interval<Number> &I, Domain<Number> &domain ) const {
+	std::map<carl::Variable, carl::Interval<Number>> &d = domain.get_assignments();
 
 	I = expansion.evaluate( d );
 	I += remainder;
 }
 
 template <typename Number>
-void TaylorModel<Number>::poly_enclosure( Interval<Number> &I, Domain<Number> &domain ) const {
-	std::map<Variable, Interval<Number>> &d = domain.get_assignments();
+void TaylorModel<Number>::poly_enclosure( carl::Interval<Number> &I, Domain<Number> &domain ) const {
+	std::map<carl::Variable, carl::Interval<Number>> &d = domain.get_assignments();
 
 	I = expansion.evaluate( d );
 }
 
 template <typename Number>
 void TaylorModel<Number>::normalize( Domain<Number> &domain ) {
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 
-	std::map<Variable, TaylorModel<Number>> substitutions;
+	std::map<carl::Variable, TaylorModel<Number>> substitutions;
 
-	std::map<Variable, Interval<Number>> &assignments = domain.get_assignments();
+	std::map<carl::Variable, carl::Interval<Number>> &assignments = domain.get_assignments();
 
 	for ( auto iter = assignments.begin(); iter != assignments.end(); ++iter ) {
 		Number center = iter->second.center();
 
-		Interval<Number> intCenter( center );
+		carl::Interval<Number> intCenter( center );
 		TaylorModel tmCenter( intCenter );
 
-		Interval<Number> intTemp = iter->second - intCenter;
+		carl::Interval<Number> intTemp = iter->second - intCenter;
 		Number magnitude = intTemp.magnitude();
 
-		Interval<Number> intMagnitude( magnitude );
+		carl::Interval<Number> intMagnitude( magnitude );
 
 		TaylorModel<Number> tmReplace(
-			  {(Term<Interval<Number>>)intCenter, (Interval<Number>)intMagnitude * ( iter->first )}, intZero );
+			  {(Term<carl::Interval<Number>>)intCenter, (carl::Interval<Number>)intMagnitude * ( iter->first )}, intZero );
 
-		std::pair<const Variable, TaylorModel<Number>> replacement( iter->first, tmReplace );
+		std::pair<const carl::Variable, TaylorModel<Number>> replacement( iter->first, tmReplace );
 		substitutions.insert( replacement );
 	}
 
@@ -364,7 +364,7 @@ const TaylorModel<Number> TaylorModel<Number>::operator-( const TaylorModel<Numb
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::multiply( const Interval<Number> &I ) const {
+TaylorModel<Number> TaylorModel<Number>::multiply( const carl::Interval<Number> &I ) const {
 	TaylorModel<Number> result;
 
 	result.expansion = expansion * I;
@@ -380,7 +380,7 @@ TaylorModel<Number> TaylorModel<Number>::multiply( const TaylorModel<Number> &tm
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -395,13 +395,13 @@ TaylorModel<Number> TaylorModel<Number>::multiply( const TaylorModel<Number> &tm
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::multiply( const Term<Interval<Number>> &term, Domain<Number> &domain,
+TaylorModel<Number> TaylorModel<Number>::multiply( const Term<carl::Interval<Number>> &term, Domain<Number> &domain,
 												   const exponent order ) const {
 	TaylorModel<Number> result, tm( term );
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -416,13 +416,13 @@ TaylorModel<Number> TaylorModel<Number>::multiply( const Term<Interval<Number>> 
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::multiply( Variable::Arg v, Domain<Number> &domain,
+TaylorModel<Number> TaylorModel<Number>::multiply( carl::Variable::Arg v, Domain<Number> &domain,
 												   const exponent order ) const {
 	TaylorModel<Number> result, tm( v );
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -437,7 +437,7 @@ TaylorModel<Number> TaylorModel<Number>::multiply( Variable::Arg v, Domain<Numbe
 }
 
 template <typename Number>
-void TaylorModel<Number>::multiply_assign( const Interval<Number> &I ) {
+void TaylorModel<Number>::multiply_assign( const carl::Interval<Number> &I ) {
 	expansion *= I;
 	remainder *= I;
 }
@@ -449,7 +449,7 @@ void TaylorModel<Number>::multiply_assign( const TaylorModel<Number> &tm, Domain
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -464,13 +464,13 @@ void TaylorModel<Number>::multiply_assign( const TaylorModel<Number> &tm, Domain
 }
 
 template <typename Number>
-void TaylorModel<Number>::multiply_assign( const Term<Interval<Number>> &term, Domain<Number> &domain,
+void TaylorModel<Number>::multiply_assign( const Term<carl::Interval<Number>> &term, Domain<Number> &domain,
 										   const exponent order ) {
 	TaylorModel<Number> result, tm( term );
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -485,12 +485,12 @@ void TaylorModel<Number>::multiply_assign( const Term<Interval<Number>> &term, D
 }
 
 template <typename Number>
-void TaylorModel<Number>::multiply_assign( Variable::Arg v, Domain<Number> &domain, const exponent order ) {
+void TaylorModel<Number>::multiply_assign( carl::Variable::Arg v, Domain<Number> &domain, const exponent order ) {
 	TaylorModel<Number> result, tm( v );
 
 	result.expansion = expansion * tm.expansion;
 
-	Interval<Number> enclosure_tm1, enclosure_tm2;
+	carl::Interval<Number> enclosure_tm1, enclosure_tm2;
 
 	poly_enclosure( enclosure_tm1, domain );
 	tm.poly_enclosure( enclosure_tm2, domain );
@@ -505,10 +505,10 @@ void TaylorModel<Number>::multiply_assign( Variable::Arg v, Domain<Number> &doma
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::div( const Interval<Number> &I ) const {
+TaylorModel<Number> TaylorModel<Number>::div( const carl::Interval<Number> &I ) const {
 	TaylorModel<Number> result;
 
-	Interval<Number> intTemp( 1.0 );
+	carl::Interval<Number> intTemp( 1.0 );
 	intTemp = intTemp / I;
 
 	result.expansion = expansion * intTemp;
@@ -518,8 +518,8 @@ TaylorModel<Number> TaylorModel<Number>::div( const Interval<Number> &I ) const 
 }
 
 template <typename Number>
-void TaylorModel<Number>::div_assign( const Interval<Number> &I ) {
-	Interval<Number> intTemp( 1.0 );
+void TaylorModel<Number>::div_assign( const carl::Interval<Number> &I ) {
+	carl::Interval<Number> intTemp( 1.0 );
 	intTemp = intTemp / I;
 
 	expansion *= intTemp;
@@ -527,7 +527,7 @@ void TaylorModel<Number>::div_assign( const Interval<Number> &I ) {
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<Variable, TaylorModel<Number>> &substitutions,
+TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<carl::Variable, TaylorModel<Number>> &substitutions,
 													 Domain<Number> &domain, const exponent order ) const {
 	TaylorModel<Number> result( *this );
 
@@ -535,7 +535,7 @@ TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<Variable, Ta
 		return result;
 	}
 
-	MultivariatePolynomial<Interval<Number>> polyZero;
+	MultivariatePolynomial<carl::Interval<Number>> polyZero;
 
 	// Substitute the variables, which have to be replaced by 0, beforehand,
 	// as this could significantly simplify this multivariate polynomial.
@@ -549,12 +549,12 @@ TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<Variable, Ta
 	}
 
 	TermsType &mTerms = result.expansion.getTerms();
-	Interval<Number> intOne( 1 );
+	carl::Interval<Number> intOne( 1 );
 	TaylorModel<Number> tmOne( intOne );
 
 	// Find and sort all exponents occurring for all variables to substitute as
 	// basis.
-	std::map<std::pair<Variable, exponent>, TaylorModel<Number>> expResults;
+	std::map<std::pair<carl::Variable, exponent>, TaylorModel<Number>> expResults;
 	for ( auto term : mTerms ) {
 		if ( term.monomial() ) {
 			const Monomial &m = *( term.monomial() );
@@ -604,7 +604,7 @@ TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<Variable, Ta
 		}
 	}
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	TaylorModel<Number> resultB;
 
 	// Substitute the variable for which all occurring exponentiations are
@@ -627,7 +627,7 @@ TaylorModel<Number> TaylorModel<Number>::substitute( const std::map<Variable, Ta
 					if ( iter != expResults.end() ) {
 						termResult.multiply_assign( iter->second, domain, order );
 					} else {
-						termResult.multiply_assign( Term<Interval<Number>>( intOne, m[i].first, m[i].second ), domain,
+						termResult.multiply_assign( Term<carl::Interval<Number>>( intOne, m[i].first, m[i].second ), domain,
 													order );
 					}
 				}
@@ -649,27 +649,27 @@ TaylorModel<Number> TaylorModel<Number>::substitute( const TaylorModelVec<Number
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::derivative( Variable::Arg v, unsigned nth ) const {
+TaylorModel<Number> TaylorModel<Number>::derivative( carl::Variable::Arg v, unsigned nth ) const {
 	TaylorModel<Number> result;
 
 	result.expansion = this->expansion.derivative( v, nth );
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	result.remainder = intZero;
 
 	return result;
 }
 
 template <typename Number>
-void TaylorModel<Number>::derivative_assign( Variable::Arg v, unsigned nth ) {
+void TaylorModel<Number>::derivative_assign( carl::Variable::Arg v, unsigned nth ) {
 	expansion = expansion.derivative( v, nth );
 
-	Interval<Number> intZero( 0 );
+	carl::Interval<Number> intZero( 0 );
 	remainder = intZero;
 }
 
 template <typename Number>
-TaylorModel<Number> TaylorModel<Number>::integration( Variable::Arg v, const Interval<Number> &range_of_v ) {
+TaylorModel<Number> TaylorModel<Number>::integration( carl::Variable::Arg v, const carl::Interval<Number> &range_of_v ) {
 	TaylorModel<Number> result;
 
 	if ( !expansion.has( v ) ) {
@@ -680,7 +680,7 @@ TaylorModel<Number> TaylorModel<Number>::integration( Variable::Arg v, const Int
 		TermsType &mTerms = expansion.getTerms();
 
 		for ( auto term : mTerms ) {
-			Term<Interval<Number>> newTerm( term );
+			Term<carl::Interval<Number>> newTerm( term );
 
 			MonomialType monomial = newTerm.monomial();
 
@@ -690,7 +690,7 @@ TaylorModel<Number> TaylorModel<Number>::integration( Variable::Arg v, const Int
 				exponent d = monomial->exponentOfVariable( v );
 
 				if ( d > 0 ) {
-					Interval<Number> intTemp( (double)d + 1 ), intOne( 1 );
+					carl::Interval<Number> intTemp( (double)d + 1 ), intOne( 1 );
 					intTemp = intOne / intTemp;
 					newTerm *= intTemp;
 				}
@@ -707,25 +707,25 @@ TaylorModel<Number> TaylorModel<Number>::integration( Variable::Arg v, const Int
 }
 
 template <typename Number>
-void TaylorModel<Number>::integration_assign( Variable::Arg v, const Interval<Number> &range_of_v ) {
+void TaylorModel<Number>::integration_assign( carl::Variable::Arg v, const carl::Interval<Number> &range_of_v ) {
 	*this = integration( v, range_of_v );
 }
 
 template <typename Number>
 TaylorModel<Number> TaylorModel<Number>::LieDerivative( const PolynomialODE<Number> &ode ) const {
-	std::set<Variable> vars;
+	std::set<carl::Variable> vars;
 	expansion.gatherVariables( vars );
 
 	TaylorModel<Number> result;
 
-	std::set<Variable>::iterator iter = vars.begin();
+	std::set<carl::Variable>::iterator iter = vars.begin();
 	for ( ; iter != vars.end(); ++iter ) {
-		MultivariatePolynomial<Interval<Number>> rhs;
+		MultivariatePolynomial<carl::Interval<Number>> rhs;
 
 		bool bFound = ode.find_assignment( rhs, *iter );
 
 		if ( bFound ) {
-			MultivariatePolynomial<Interval<Number>> polyTemp = expansion.derivative( *iter );
+			MultivariatePolynomial<carl::Interval<Number>> polyTemp = expansion.derivative( *iter );
 			polyTemp *= rhs;
 			result.expansion += polyTemp;
 		} else {
@@ -749,7 +749,7 @@ void TaylorModel<Number>::checkConsistency() const {
 }
 
 template <typename Number>
-bool TaylorModel<Number>::has( Variable::Arg v ) const {
+bool TaylorModel<Number>::has( carl::Variable::Arg v ) const {
 	return expansion.has( v );
 }
 
@@ -773,7 +773,7 @@ Domain<Number>::Domain( const Domain<Number> &domain ) {
 }
 
 template <typename Number>
-void Domain<Number>::assign( const Variable &v, const Interval<Number> &I ) {
+void Domain<Number>::assign( const carl::Variable &v, const carl::Interval<Number> &I ) {
 	auto iter = assignments.find( v );
 
 	assignment_type assignment( v, I );
@@ -787,7 +787,7 @@ void Domain<Number>::assign( const Variable &v, const Interval<Number> &I ) {
 }
 
 template <typename Number>
-bool Domain<Number>::find_assignment( Interval<Number> &I, const Variable &v ) const {
+bool Domain<Number>::find_assignment( carl::Interval<Number> &I, const carl::Variable &v ) const {
 	auto iter = assignments.find( v );
 
 	if ( iter == assignments.end() ) {
@@ -799,7 +799,7 @@ bool Domain<Number>::find_assignment( Interval<Number> &I, const Variable &v ) c
 }
 
 template <typename Number>
-std::map<Variable, Interval<Number>> &Domain<Number>::get_assignments() {
+std::map<carl::Variable, carl::Interval<Number>> &Domain<Number>::get_assignments() {
 	return assignments;
 }
 
@@ -840,7 +840,7 @@ PolynomialODE<Number>::~PolynomialODE() {
 }
 
 template <typename Number>
-void PolynomialODE<Number>::assign( const Variable &v, const MultivariatePolynomial<Interval<Number>> &rhs ) {
+void PolynomialODE<Number>::assign( const carl::Variable &v, const MultivariatePolynomial<carl::Interval<Number>> &rhs ) {
 	auto iter = assignments.find( v );
 
 	assignment_type assignment( v, rhs );
@@ -853,7 +853,7 @@ void PolynomialODE<Number>::assign( const Variable &v, const MultivariatePolynom
 }
 
 template <typename Number>
-bool PolynomialODE<Number>::find_assignment( MultivariatePolynomial<Interval<Number>> &rhs, const Variable &v ) const {
+bool PolynomialODE<Number>::find_assignment( MultivariatePolynomial<carl::Interval<Number>> &rhs, const carl::Variable &v ) const {
 	auto iter = assignments.find( v );
 
 	if ( iter == assignments.end() ) {
@@ -865,7 +865,7 @@ bool PolynomialODE<Number>::find_assignment( MultivariatePolynomial<Interval<Num
 }
 
 template <typename Number>
-std::map<Variable, MultivariatePolynomial<Interval<Number>>> &PolynomialODE<Number>::get_assignments() {
+std::map<carl::Variable, MultivariatePolynomial<carl::Interval<Number>>> &PolynomialODE<Number>::get_assignments() {
 	return assignments;
 }
 
@@ -903,7 +903,7 @@ Range<Number>::Range( const Range<Number> &range ) {
 }
 
 template <typename Number>
-void Range<Number>::assign( const Variable &v, const Interval<Number> &I ) {
+void Range<Number>::assign( const carl::Variable &v, const carl::Interval<Number> &I ) {
 	auto iter = assignments.find( v );
 
 	assignment_type assignment( v, I );
@@ -917,7 +917,7 @@ void Range<Number>::assign( const Variable &v, const Interval<Number> &I ) {
 }
 
 template <typename Number>
-bool Range<Number>::find_assignment( Interval<Number> &I, const Variable &v ) const {
+bool Range<Number>::find_assignment( carl::Interval<Number> &I, const carl::Variable &v ) const {
 	auto iter = assignments.find( v );
 
 	if ( iter == assignments.end() ) {
@@ -929,7 +929,7 @@ bool Range<Number>::find_assignment( Interval<Number> &I, const Variable &v ) co
 }
 
 template <typename Number>
-std::map<Variable, Interval<Number>> &Range<Number>::get_assignments() {
+std::map<carl::Variable, carl::Interval<Number>> &Range<Number>::get_assignments() {
 	return assignments;
 }
 
@@ -960,13 +960,13 @@ TaylorModelVec<Number>::TaylorModelVec() {
 }
 
 template <typename Number>
-TaylorModelVec<Number>::TaylorModelVec( const std::map<Variable, TaylorModel<Number>> &assignments ) {
+TaylorModelVec<Number>::TaylorModelVec( const std::map<carl::Variable, TaylorModel<Number>> &assignments ) {
 	tms = assignments;
 }
 
 template <typename Number>
 TaylorModelVec<Number>::TaylorModelVec( Range<Number> &range ) {
-	std::map<Variable, Interval<Number>> &assignments = range.get_assignments();
+	std::map<carl::Variable, carl::Interval<Number>> &assignments = range.get_assignments();
 
 	for ( auto iter = assignments.begin(); iter != assignments.end(); ++iter ) {
 		TaylorModel<Number> tmTemp( iter->second );
@@ -987,7 +987,7 @@ TaylorModelVec<Number>::~TaylorModelVec() {
 }
 
 template <typename Number>
-void TaylorModelVec<Number>::assign( const Variable &v, const TaylorModel<Number> &tm ) {
+void TaylorModelVec<Number>::assign( const carl::Variable &v, const TaylorModel<Number> &tm ) {
 	auto iter = tms.find( v );
 
 	assignment_type assignment( v, tm );
@@ -1000,7 +1000,7 @@ void TaylorModelVec<Number>::assign( const Variable &v, const TaylorModel<Number
 }
 
 template <typename Number>
-bool TaylorModelVec<Number>::find_assignment( TaylorModel<Number> &tm, const Variable &v ) const {
+bool TaylorModelVec<Number>::find_assignment( TaylorModel<Number> &tm, const carl::Variable &v ) const {
 	auto iter = tms.find( v );
 
 	if ( iter == tms.end() ) {
@@ -1030,7 +1030,7 @@ void TaylorModelVec<Number>::rmConstantTerm( Range<Number> &constant ) {
 	constant.clear();
 
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
-		Interval<Number> intTemp;
+		carl::Interval<Number> intTemp;
 
 		intTemp = iter->second.rmConstantTerm();
 
@@ -1039,14 +1039,14 @@ void TaylorModelVec<Number>::rmConstantTerm( Range<Number> &constant ) {
 }
 
 template <typename Number>
-void TaylorModelVec<Number>::cutoff( const Interval<Number> &threshold, Domain<Number> &domain ) {
+void TaylorModelVec<Number>::cutoff( const carl::Interval<Number> &threshold, Domain<Number> &domain ) {
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
 		iter->second.cutoff( threshold, domain );
 	}
 }
 
 template <typename Number>
-void TaylorModelVec<Number>::cutoff_nr( const Interval<Number> &threshold, Domain<Number> &domain ) {
+void TaylorModelVec<Number>::cutoff_nr( const carl::Interval<Number> &threshold, Domain<Number> &domain ) {
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
 		iter->second.cutoff_nr( threshold, domain );
 	}
@@ -1071,7 +1071,7 @@ void TaylorModelVec<Number>::enclosure( Range<Number> &range, Domain<Number> &do
 	range.clear();
 
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
-		Interval<Number> I;
+		carl::Interval<Number> I;
 		iter->second.enclosure( I, domain );
 
 		range.assign( iter->first, I );
@@ -1188,7 +1188,7 @@ const TaylorModelVec<Number> TaylorModelVec<Number>::operator-( const TaylorMode
 }
 
 template <typename Number>
-TaylorModelVec<Number> TaylorModelVec<Number>::substitute( const std::map<Variable, TaylorModel<Number>> &substitutions,
+TaylorModelVec<Number> TaylorModelVec<Number>::substitute( const std::map<carl::Variable, TaylorModel<Number>> &substitutions,
 														   Domain<Number> &domain, const exponent order ) const {
 	TaylorModelVec<Number> result;
 
@@ -1220,7 +1220,7 @@ TaylorModelVec<Number> TaylorModelVec<Number>::substitute( const TaylorModelVec<
 }
 
 template <typename Number>
-TaylorModelVec<Number> TaylorModelVec<Number>::derivative( Variable::Arg v, unsigned nth ) const {
+TaylorModelVec<Number> TaylorModelVec<Number>::derivative( carl::Variable::Arg v, unsigned nth ) const {
 	TaylorModelVec<Number> result;
 
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
@@ -1235,7 +1235,7 @@ TaylorModelVec<Number> TaylorModelVec<Number>::derivative( Variable::Arg v, unsi
 }
 
 template <typename Number>
-void TaylorModelVec<Number>::derivative_assign( Variable::Arg v, unsigned nth ) {
+void TaylorModelVec<Number>::derivative_assign( carl::Variable::Arg v, unsigned nth ) {
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
 		iter->second.derivative_assign( v, nth );
 	}
@@ -1264,7 +1264,7 @@ void TaylorModelVec<Number>::LieDerivative_assign( const PolynomialODE<Number> &
 }
 
 template <typename Number>
-TaylorModelVec<Number> TaylorModelVec<Number>::integration( Variable::Arg v, const Interval<Number> &range_of_v ) {
+TaylorModelVec<Number> TaylorModelVec<Number>::integration( carl::Variable::Arg v, const carl::Interval<Number> &range_of_v ) {
 	TaylorModelVec<Number> result;
 
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
@@ -1279,7 +1279,7 @@ TaylorModelVec<Number> TaylorModelVec<Number>::integration( Variable::Arg v, con
 }
 
 template <typename Number>
-void TaylorModelVec<Number>::integration_assign( Variable::Arg v, const Interval<Number> &range_of_v ) {
+void TaylorModelVec<Number>::integration_assign( carl::Variable::Arg v, const carl::Interval<Number> &range_of_v ) {
 	for ( auto iter = tms.begin(); iter != tms.end(); ++iter ) {
 		iter->second.integration_assign( v, range_of_v );
 	}
@@ -1288,7 +1288,7 @@ void TaylorModelVec<Number>::integration_assign( Variable::Arg v, const Interval
 template <typename Number>
 TaylorModelVec<Number> TaylorModelVec<Number>::Picard( const TaylorModelVec<Number> &x0,
 													   const PolynomialODE<Number> &ode, Domain<Number> &domain,
-													   Variable::Arg t, const Interval<Number> &range_of_t,
+													   carl::Variable::Arg t, const carl::Interval<Number> &range_of_t,
 													   const exponent order ) const {
 	TaylorModelVec<Number> tmvTemp;
 
@@ -1310,7 +1310,7 @@ TaylorModelVec<Number> TaylorModelVec<Number>::Picard( const TaylorModelVec<Numb
 
 template <typename Number>
 void TaylorModelVec<Number>::Picard_assign( const TaylorModelVec<Number> &x0, const PolynomialODE<Number> &ode,
-											Domain<Number> &domain, Variable::Arg t, const Interval<Number> &range_of_t,
+											Domain<Number> &domain, carl::Variable::Arg t, const carl::Interval<Number> &range_of_t,
 											const exponent order ) {
 	TaylorModelVec<Number> tmvTemp;
 

@@ -10,7 +10,6 @@
 
 #include "Location.h"
 #include "Transition.h"
-#include "util.h"
 
 namespace hypro {
 template <typename Number, typename Representation>

@@ -81,6 +81,7 @@ TYPED_TEST(HPolytopeTest, Swap)
 	}
 }
 
+////////////TODO: change this test to work with a 3D HPolytope
 TYPED_TEST(HPolytopeTest, Corners)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);

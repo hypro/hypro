@@ -8,6 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runRepresentationTests
 	BoxTest.cpp
+	PTermBoxTest.cpp
 	ConverterTest.cpp
 	GridTest.cpp
 	HPolytopeTest.cpp
@@ -28,5 +29,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${libraries}
 		${PROJECT_NAME}
 	)
+	if(USE_COTIRE)
+		cotire(runRepresentationTests)
+	endif()
 	add_test( NAME representations COMMAND runRepresentationTests )
 endif()

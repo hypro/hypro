@@ -14,6 +14,7 @@
 #include <string>
 #include <stack>
 #include "../lib/datastructures/Point.h"
+#include "../lib/datastructures/Hyperplane.h"
 
 namespace hypro {
 
@@ -45,6 +46,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
 	std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
+	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
 	std::map<unsigned, std::string> mObjectColors;
 	gnuplotSettings mSettings;
 	unsigned mId;
@@ -68,6 +70,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	unsigned addObject( const std::vector<Point<Number>>& _points, bool sorted = false );
 	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted = false );
+	unsigned addObject( const std::vector<Hyperplane<Number>>& _planes );
 
 	void setObjectColor( unsigned _id, const std::string _color );
 

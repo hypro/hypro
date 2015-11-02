@@ -140,7 +140,7 @@ namespace hypro
 		/**
 		 * Geometric Object interface
 		 */
-		unsigned int dimension() const;
+		std::size_t dimension() const;
 		Polytope<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
 		Polytope<Number> minkowskiSum(const Polytope<Number>& rhs) const;

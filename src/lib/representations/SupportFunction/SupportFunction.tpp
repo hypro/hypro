@@ -312,7 +312,7 @@ vector_t<Number> SupportFunction<Number>::multiEvaluate( const matrix_t<Number> 
 }
 
 template <typename Number>
-unsigned SupportFunction<Number>::dimension() const {
+std::size_t SupportFunction<Number>::dimension() const {
 	return mDimension;
 }
 
@@ -495,7 +495,7 @@ std::shared_ptr<SupportFunction<Number>> SupportFunction<Number>::scale( const N
 }
 
 template <typename Number>
-bool SupportFunction<Number>::isEmpty() const {
+bool SupportFunction<Number>::empty() const {
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
@@ -546,6 +546,7 @@ void SupportFunction<Number>::print() const {
 		} break;
 		case SF_TYPE::POLY: {
 			std::cout << "POLY" << std::endl;
+                        mPolytope->print();
 		} break;
 		case SF_TYPE::SCALE: {
 			std::cout << "SCALE" << std::endl;

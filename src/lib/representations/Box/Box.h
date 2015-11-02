@@ -13,6 +13,9 @@
 #include <map>
 #include <cassert>
 #include <carl/interval/Interval.h>
+#include "../../datastructures/Hyperplane.h"
+#include "../Polytopes/VPolytope/VPolytope.h"
+#include "../Polytopes/HPolytope/HPolytope.h"
 
 namespace hypro {
 
@@ -26,7 +29,6 @@ template <typename Number>
 class Box {
   private:
   public:
-	typedef std::map<const carl::Variable, carl::Interval<Number>> intervalMap;
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
@@ -54,30 +56,12 @@ class Box {
 	 * @param var
 	 * @param val
 	 */
-	Box( const carl::Variable& var, const carl::Interval<Number>& val ) {
-		unsigned pos = hypro::VariablePool::getInstance().dimension( var );
-		while ( mBoundaries.size() <= pos ) {
-			mBoundaries.push_back( carl::Interval<Number>::emptyInterval() );
-		}
-		mBoundaries[pos] = val;
+	Box( const carl::Interval<Number>& val ) {
+		mBoundaries.push_back(val);
 	}
 
-	/*
-	 * Creates a box by
-	 * @param intervals
-	 */
-	Box( const intervalMap& intervals ) {
-		for ( auto& pair : intervals ) {
-			unsigned pos = hypro::VariablePool::getInstance().dimension( pair.first );
-			while ( mBoundaries.size() <= pos ) {
-				mBoundaries.push_back( carl::Interval<Number>::emptyInterval() );
-			}
-			mBoundaries[pos] = pair.second;
-		}
-	}
 
 	Box( const std::vector<carl::Interval<Number>>& _intervals ) { mBoundaries = _intervals; }
-
 	Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
 		: Box( VPolytope<Number>( _matrix, _constants ).vertices() ) {}
 	Box( const std::set<Point<Number>>& _points );
@@ -91,69 +75,25 @@ class Box {
 	 * Getters & setters
 	 **************************************************************************/
 
-	/*
-	 * @return
-	 */
+	static Box<Number> Empty(std::size_t dimension = 1) {
+		std::vector<carl::Interval<Number>> intervals(dimension, carl::Interval<Number>::emptyInterval());
+		return Box<Number>(std::move(intervals));
+	}
+
 	std::vector<carl::Interval<Number>>& rBoundaries() { return mBoundaries; }
-
-	/*
-	 * @return
-	 */
 	const std::vector<carl::Interval<Number>>& boundaries() const { return mBoundaries; }
+	std::vector<hypro::Hyperplane<Number>> constraints() const;
 
-	/**
-	 * Inserts a new boundary for a variable.
-	 * @param val Pair of Variable and Interval.
-	 * @return True, if a new insertion has happened, else only update of an existing interval.
-	 */
-	bool insert( const std::pair<const carl::Variable, carl::Interval<Number>>& val ) {
-		unsigned pos = hypro::VariablePool::getInstance().dimension( val.first );
-		bool newElement = ( mBoundaries.size() <= pos );
-		while ( mBoundaries.size() <= pos ) {
-			mBoundaries.push_back( carl::Interval<Number>::emptyInterval() );
-		}
-		mBoundaries[pos] = val.second;
-		return newElement;
-	}
-
-	/*
-	 *@param var
-	 *@param val
-	 *@return
-	 */
-	bool insert( const carl::Variable& var, const carl::Interval<Number>& val ) {
-		unsigned pos = hypro::VariablePool::getInstance().dimension( var );
-		bool newElement = ( mBoundaries.size() <= pos );
-		while ( mBoundaries.size() <= pos ) {
-			mBoundaries.push_back( carl::Interval<Number>::emptyInterval() );
-		}
-		mBoundaries[pos] = val;
-		return newElement;
-	}
-
-	bool insert( unsigned pos, const carl::Interval<Number>& val ) {
-		bool newElement = ( mBoundaries.size() <= pos );
-		while ( mBoundaries.size() <= pos ) {
-			mBoundaries.push_back( carl::Interval<Number>::emptyInterval() );
-		}
-		mBoundaries[pos] = val;
-		return newElement;
-	}
-
-	/*
-	 * Setter method for box boundaries
-	 * @param boundaries Defines the new boundaries for the box
-	 */
-	void insert( const std::vector<carl::Interval<Number>>& boundaries ) { mBoundaries = boundaries; }
+	void insert( const carl::Interval<Number>& val ) { mBoundaries.push_back(val); }
+	void insert( const std::vector<carl::Interval<Number>>& boundaries ) { mBoundaries.insert(mBoundaries.end(), boundaries.begin(), boundaries.end()); }
 
 	/*
 	 * Checks if the box has the same dimension as the variable.
 	 * @param var
 	 * @return
 	 */
-	bool hasDimension( const carl::Variable& var ) const {
-		return hypro::VariablePool::getInstance().hasDimension( var ) &&
-			   unsigned( hypro::VariablePool::getInstance().dimension( var ) ) < mBoundaries.size();
+	bool hasDimension( std::size_t d ) const {
+		return (mBoundaries.size() >= d);
 	}
 
 	/**
@@ -171,20 +111,19 @@ class Box {
 		return true;
 	}
 
-	carl::Interval<Number> interval( const carl::Variable& var ) const;
-	carl::Interval<Number>& rInterval( const carl::Variable& var );
+	carl::Interval<Number> interval( std::size_t d ) const;
+	carl::Interval<Number>& rInterval( std::size_t d );
 
-	carl::Interval<Number> at( unsigned _index ) const {
+	carl::Interval<Number> at( std::size_t _index ) const {
 		if ( _index > mBoundaries.size() ) return carl::Interval<Number>::emptyInterval();
-
 		return mBoundaries[_index];
 	}
 
 	/*
 	 * @return
 	 */
-	bool isEmpty() const {
-		if ( mBoundaries.size() == 0 ) return true;
+	bool empty() const {
+		if ( mBoundaries.size() == 0 ) return false;
 		for ( auto interval : mBoundaries ) {
 			if ( interval.isEmpty() ) {
 				return true;
@@ -270,25 +209,25 @@ class Box {
 		return ostr;
 	}
 
-	const carl::Interval<Number>& operator[]( unsigned i ) const { return mBoundaries[i]; }
+	const carl::Interval<Number>& operator[]( unsigned i ) const { return mBoundaries.at(i); }
 
-	carl::Interval<Number>& operator[]( unsigned i ) { return mBoundaries[i]; }
+	carl::Interval<Number>& operator[]( unsigned i ) { return mBoundaries.at(i); }
 
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/
 
-	unsigned int dimension() const { return mBoundaries.size(); }
+	std::size_t dimension() const { return mBoundaries.size(); }
 
 	Box<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	Box<Number> minkowskiSum( const Box<Number>& rhs ) const;
 	Box<Number> intersect( const Box<Number>& rhs ) const;
+	Box<Number> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const Box<Number>& box ) const;
 	Box<Number> unite( const Box<Number>& rhs ) const;
 
 	void clear();
-
 	void print() const;
 };
 }

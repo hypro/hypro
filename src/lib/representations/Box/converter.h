@@ -29,10 +29,9 @@ bool convert( std::shared_ptr<hypro::SupportFunction<Number>> _source, hypro::Bo
 
 	vector_t<Number> distances = _source->multiEvaluate( directions );
 
-	typename Box<Number>::intervalMap intervals;
+	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) ) );
+		intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );
 	}
 
 	_target = Box<Number>( intervals );
@@ -55,10 +54,9 @@ bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _targ
 		}
 	}
 
-	typename Box<Number>::intervalMap intervals;
+	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
+		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );
 	}
 
 	_target = Box<Number>( intervals );
@@ -80,10 +78,9 @@ bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _targ
 		}
 	}
 
-	typename Box<Number>::intervalMap intervals;
+	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
+		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );
 	}
 
 	_target = Box<Number>( intervals );
@@ -99,18 +96,17 @@ bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _targe
 	vector_t<Number> minima = vertices[0];
 	vector_t<Number> maxima = vertices[0];
 
-	for ( unsigned i = 0; i < vertices.size(); ++i ) {
-		for ( unsigned d = 0; d < _source.dimension(); ++d ) {
+	for ( std::size_t i = 0; i < vertices.size(); ++i ) {
+		for ( std::size_t d = 0; d < _source.dimension(); ++d ) {
 			minima( d ) = vertices[i]( d ) < minima( d ) ? vertices[i]( d ) : minima( d );
 			maxima( d ) = vertices[i]( d ) > maxima( d ) ? vertices[i]( d ) : maxima( d );
 			assert( minima( d ) <= maxima( d ) );
 		}
 	}
 
-	typename Box<Number>::intervalMap intervals;
-	for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
+	std::vector<carl::Interval<Number>> intervals;
+	for ( std::size_t i = 0; i < _source.dimension(); ++i ) {
+		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );
 	}
 
 	_target = Box<Number>( intervals );
@@ -127,18 +123,17 @@ bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>& _targe
 	vector_t<Number> minima = points[0].rawCoordinates();
 	vector_t<Number> maxima = points[0].rawCoordinates();
 
-	for ( unsigned i = 0; i < points.size(); ++i ) {
-		for ( unsigned d = 0; d < _source.dimension(); ++d ) {
+	for ( std::size_t i = 0; i < points.size(); ++i ) {
+		for ( std::size_t d = 0; d < _source.dimension(); ++d ) {
 			minima( d ) = points[i].rawCoordinates()( d ) < minima( d ) ? points[i].rawCoordinates()( d ) : minima( d );
 			maxima( d ) = points[i].rawCoordinates()( d ) > maxima( d ) ? points[i].rawCoordinates()( d ) : maxima( d );
 			assert( minima( d ) <= maxima( d ) );
 		}
 	}
 
-	typename Box<Number>::intervalMap intervals;
-	for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
+	std::vector<carl::Interval<Number>> intervals;
+	for ( std::size_t i = 0; i < _source.dimension(); ++i ) {
+		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );
 	}
 
 	_target = Box<Number>( intervals );

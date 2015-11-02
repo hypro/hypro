@@ -5,6 +5,7 @@
 #include <carl/core/VariablePool.h>
 #include "../lib/datastructures/Point.h"
 #include "../lib/algorithms/reachability/forwardReachability.h"
+#include "../lib/representations/Polytope/Polytope.h"
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../lib/representations/SupportFunction/SupportFunction.h"

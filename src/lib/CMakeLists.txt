@@ -3,7 +3,7 @@ add_subdirectory(representations)
 add_subdirectory(parser)
 
 # Create config.h by adding cmake defines dependend on option switches
-configure_file( ${CMAKE_SOURCE_DIR}/src/lib/types.h.in ${CMAKE_SOURCE_DIR}/src/lib/types.h )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h )
 
 set(lib_hypro_headers
 	config.h
@@ -32,17 +32,27 @@ set(headers ${headers} ${template_implementations})
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${test_sources}")
 
-if(${STATICLIB_SWITCH} STREQUAL "ON")
+if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
 else()
 	set(STATICLIB "SHARED")
 endif()
 
-add_library(${PROJECT_NAME} ${STATICLIB} 
+add_library(${PROJECT_NAME} ${STATICLIB}
 	${sources}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+if(STATICLIB_SWITCH)
+	set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+else()
+	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
+	else()
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+	endif()
+endif()
+
+
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
 if(USE_COTIRE)

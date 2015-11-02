@@ -94,8 +94,18 @@ bool OrthogonalPolyhedron<Number, Type>::empty() const {
 }
 
 template <typename Number, ORTHO_TYPE Type>
-unsigned OrthogonalPolyhedron<Number, Type>::size() const {
+std::size_t OrthogonalPolyhedron<Number, Type>::size() const {
 	return mGrid.size();
+}
+
+template <typename Number, ORTHO_TYPE Type>
+std::size_t OrthogonalPolyhedron<Number, Type>::dimension() const {
+	return mGrid.dimension();
+}
+
+template <typename Number, ORTHO_TYPE Type>
+Number OrthogonalPolyhedron<Number, Type>::supremum() const {
+	// TODO
 }
 
 template <typename Number, ORTHO_TYPE Type>
@@ -162,11 +172,6 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::iProjecti
 /**********************************
  * Geometric Object functions
  **********************************/
-
-template <typename Number, ORTHO_TYPE Type>
-unsigned int OrthogonalPolyhedron<Number, Type>::dimension() const {
-	return mGrid.dimension();
-}
 
 template <typename Number, ORTHO_TYPE Type>
 OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::linearTransformation(
@@ -279,12 +284,12 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::hull() co
 
 	for ( int vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
 		int i = 0;
-		for ( auto variableIt : mGrid.variables() ) {
+		for ( std::size_t p = 0; p < mGrid.dimension(); ++p ) {
 			// look if the bit of the current dimension is set
 			if ( ( vertexNr >> i++ ) & 1 ) {
-				vertex[variableIt] = mBoundaryBox.interval( variableIt ).upper();
+				vertex[p] = mBoundaryBox.interval( p ).upper();
 			} else {
-				vertex[variableIt] = mBoundaryBox.interval( variableIt ).lower();
+				vertex[p] = mBoundaryBox.interval( p ).lower();
 			}
 		}
 		vertex.setColor( vertexNr == 0 );

@@ -4,7 +4,7 @@
  * File:   Zonotope.h
  * @author Jonathan Gan, Ibtissem Ben Makhlouf {gan, makhlouf} @ embedded.rwth-aachen.de
  * @version 1.0 on June 19, 2014, 10:25 PM
- * 
+ *
  * Reviewed by Leonardo Winter Pereira (leonardowinterpereira@gmail.com)
  * function corners now totally works! (Complexity now is O(2^n), but n is only the amount of different generators (which isn't too much))
  * version 1.1 on September 15, 2015
@@ -29,7 +29,7 @@ namespace hypro {
 template <typename Number>
 class Zonotope {
   private:
-	unsigned int mDimension;
+	std::size_t mDimension;
 	hypro::vector_t<Number> mCenter;
 	hypro::matrix_t<Number> mGenerators;
 
@@ -43,7 +43,7 @@ class Zonotope {
 	 * Constructor with dimension
 	 * @param dimension Dimensionality of Zonotope
 	 */
-	Zonotope( unsigned int dimension );
+	Zonotope( std::size_t dimension );
 
 	/**
 	 * Constructs a Zonotope with center and generators.
@@ -78,13 +78,13 @@ class Zonotope {
 	 * Dimensionality of Zonotope
 	 * @return the dimension
 	 */
-	unsigned dimension() const;
+	std::size_t dimension() const;
 
 	/**
 	* Returns, whether the zonotope is empty.
 	* @return
 	*/
-	bool isEmpty() const;
+	bool empty() const;
 
 	/**
 	 * Replaces the current center with the parameter center
@@ -113,7 +113,7 @@ class Zonotope {
 	 * Number of generators
 	 * @return number of generators
 	 */
-	unsigned int numGenerators() const;
+	std::size_t numGenerators() const;
 
 	/**
 	 * Removes empty (null) columns in generator matrix
@@ -124,13 +124,13 @@ class Zonotope {
          * It's important to do it, so we can reduce the necessary amount of calls of corners!
          */
         void uniteEqualVectors();
-        
+
 	/**
 	 * Changes the dimension of a Zonotope. if new_dim > old dim, new rows are initialized with null
 	 * @param new_dim The new dimension of the Zonotope
 	 * @return True, if change in dimension was successful
 	 */
-	bool changeDimension( unsigned int new_dim );
+	bool changeDimension( std::size_t new_dim );
 
 	/**
 	 * Clears the generators and center of the Zonotope and sets dimensionality to zero
@@ -171,7 +171,7 @@ class Zonotope {
 	 * internal points.
 	 * @return vector of points.
 	 */
-	std::vector<hypro::vector_t<Number>> corners();
+	std::vector<hypro::vector_t<Number>> vertices();
 
 	/**
 	 * Calculates zonotope intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n

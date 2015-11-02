@@ -90,6 +90,16 @@ bool HPolytope<Number>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
+	#ifdef USE_SMTRAT
+	smtrat::SimplexSolver simplex;
+	smtrat::FormulaT constr = createFormula(this->matrix(), this->vector());
+	simplex.inform(constr);
+	simplex.add(constr);
+
+	std::cout << constr << std::endl;
+
+	return (simplex.check() == smtrat::Answer::False);
+	#else
 	if(!mInitialized) {
 		initialize();
 	}
@@ -99,8 +109,11 @@ bool HPolytope<Number>::empty() const {
 		glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 	}
 	glp_exact( lp, NULL );
-	std::cout << "GLP: Solution: " << glp_get_status(lp) << std::endl;
+	//if(glp_get_status(lp) == GLP_NOFEAS)
+		//std::cout << "Empty!" << std::endl;
+
 	return (glp_get_status(lp) == GLP_NOFEAS);
+	#endif
 }
 
 template <typename Number>
@@ -115,13 +128,13 @@ HPolytope<Number> HPolytope<Number>::Empty(){
 }
 
 template <typename Number>
-unsigned HPolytope<Number>::dimension() const {
-	assert( !mHPlanes.empty() );
+std::size_t HPolytope<Number>::dimension() const {
+	if(mHPlanes.empty()) return 0;
 	return mDimension;
 }
 
 template <typename Number>
-unsigned HPolytope<Number>::size() const {
+std::size_t HPolytope<Number>::size() const {
 	return mHPlanes.size();
 }
 
@@ -129,7 +142,7 @@ template <typename Number>
 matrix_t<Number> HPolytope<Number>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		res( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
+		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
 	}
 	return res;
 }
@@ -164,17 +177,17 @@ const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
 
 template <typename Number>
 typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
-	std::cout << "Compute vertices of " << *this << std::endl;
+	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()){
 		unsigned dim = this->dimension();
 
 		std::vector<std::vector<unsigned>> permutation = polytope::dPermutation(mHPlanes.size(), dim);
 		for(auto permutationIt = permutation.begin(); permutationIt != permutation.end(); ++permutationIt) {
-			std::cout << "Use planes ";
-			for(const auto item : *permutationIt)
-				std::cout << item << ", ";
-			std::cout << std::endl;
+			//std::cout << "Use planes ";
+			//for(const auto item : *permutationIt)
+			//	std::cout << item << ", ";
+			//std::cout << std::endl;
 
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
@@ -187,7 +200,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				++pos;
 			}
 
-			std::cout << "Created first matrix" << std::endl;
+			//std::cout << "Created first matrix" << std::endl;
 
 			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
 			if ( lu_decomp.rank() < A.rows() ) {
@@ -200,14 +213,14 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			bool infty = false;
 			for ( unsigned i = 0; i < res.rows(); ++i ) {
 				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-					std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+					//std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
 					infty = true;
 					break;
 				}
 			}
 
 			if(!infty) {
-				std::cout << "Solved to " << res.transpose() << std::endl;
+				//std::cout << "Solved to " << res.transpose() << std::endl;
 				// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
 				bool below = false;
 				for(auto planeIt = permutationIt->begin(); planeIt != permutationIt->end(); ++planeIt){
@@ -219,7 +232,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				}
 				Number eps = 0;
 				while (below){
-					std::cout << "Is below, iterate " << std::endl;
+					//std::cout << "Is below, iterate " << std::endl;
 					// enlarge as long as point lies below one of the planes.
 					below = false;
 					eps += std::numeric_limits<Number>::epsilon();
@@ -242,32 +255,37 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					if(!below)
 						res = tmp;
 				}
-				vertices.push_back(Point<Number>(res));
-				std::cout << "Final vertex: " << res.transpose() << std::endl;
-			}
-		}
-		for ( auto vertexIt = vertices.begin(); vertexIt != vertices.end(); ) {
-			std::cout << "Check contains." << std::endl;
-			unsigned cnt = dim;
-			bool unsat = false;
-			for(const auto& plane : mHPlanes) {
-				if( plane.offset() - plane.normal().dot(vertexIt->rawCoordinates()) <= 0 ){
-					if (cnt > 0) {
-						--cnt;
-					} else {
-						std::cout << "Removed vertex: " << *vertexIt << std::endl;
-						vertexIt = vertices.erase( vertexIt );
-						unsat = true;
-						break;
+ ///////////////TODO: change to almostEqual() function
+                ///// if it's not almost equal, then
+				// Check containment
+				bool outside = false;
+				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
+					bool skip = false;
+					for(unsigned permPos = 0; permPos < permutationIt->size(); ++permPos){
+						if(planePos == permutationIt->at(permPos)) {
+							//std::cout << "Skip plane " << planePos << std::endl;
+							skip = true;
+							break;
+						}
 					}
+
+					if(!skip){
+						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ){
+							//std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
+							outside = true;
+							break;
+						}
+					}
+
 				}
-			}
-			if(!unsat) {
-				++vertexIt;
+				if(!outside) {
+					vertices.push_back(Point<Number>(res));
+					//std::cout << "Final vertex: " << res.transpose() << std::endl;
+				}
 			}
 		}
 	}
-	
+
 	return vertices;
 }
 
@@ -375,45 +393,576 @@ bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const 
 }
 
 template <typename Number>
-void HPolytope<Number>::reduce() {
-	std::cout << __func__ << ": " << *this << std::endl;
-	for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-		// std::cout << "Current plane: " << *planeIt << std::endl;
-		std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
-		if ( evalRes.second == INFEAS ) {
-			// return empty polytope
-			this->clear();
-			break;
-		} else if ( evalRes.second == FEAS ) {
-			if ( evalRes.first < planeIt->offset() &&
-				 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-				// std::cout << "erase " << *planeIt << " which is really redundant." <<
-				// std::endl;
-				planeIt = mHPlanes.erase( planeIt );
-				mInitialized = false;
-			} else {
-				Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
-				auto pos = mHPlanes.erase( planeIt );
-				mInitialized = false;
-				std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-				// std::cout << "Eval with: " << evalRes.first << ", without: " <<
-				// tmpRes.first << ", solution type: "
-				// << tmpRes.second << std::endl;
-				if ( tmpRes.second == INFTY ||
-					 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
-					planeIt = mHPlanes.insert( pos, tmp );
-					mInitialized = false;
-					++planeIt;
-					// std::cout << "keep "  << tmp << std::endl;
-				} else {
-					// std::cout << "erase " << tmp << " which is equal to something." <<
+void HPolytope<Number>::removeRedundantPlanes() {
+	if(this->empty()) {
+		*this = HPolytope<Number>::Empty();
+	} else {
+		//std::cout << __func__ << ": " << *this << std::endl;
+		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
+			// std::cout << "Current plane: " << *planeIt << std::endl;
+			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
+			if ( evalRes.second == INFEAS ) {
+				// return empty polytope
+				this->clear();
+				break;
+			} else if ( evalRes.second == FEAS ) {
+				if ( evalRes.first < planeIt->offset() &&
+					 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
+					// std::cout << "erase " << *planeIt << " which is really redundant." <<
 					// std::endl;
-					planeIt = pos;
+					planeIt = mHPlanes.erase( planeIt );
+					mInitialized = false;
+				} else {
+					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
+					auto pos = mHPlanes.erase( planeIt );
+					mInitialized = false;
+					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
+					// std::cout << "Eval with: " << evalRes.first << ", without: " <<
+					// tmpRes.first << ", solution type: "
+					// << tmpRes.second << std::endl;
+					if ( tmpRes.second == INFTY ||
+						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
+						planeIt = mHPlanes.insert( pos, tmp );
+						mInitialized = false;
+						++planeIt;
+						// std::cout << "keep "  << tmp << std::endl;
+					} else {
+						// std::cout << "erase " << tmp << " which is equal to something." <<
+						// std::endl;
+						planeIt = pos;
+					}
 				}
+			}  // FEAS
+		}	  // loop
+	   // std::cout << __func__ << ": Result: " << *this << std::endl;
+	}
+}
+
+template <typename Number>
+HPolytope<Number> HPolytope<Number>::reduce_nd() const { // REDUCTION_STRATEGY
+	HPolytope<Number> res = *this;
+
+	/*
+	std::cout << "Size before: " << res.mHPlanes.size() << std::endl;
+	unsigned i = 4;
+
+	// STRAT: Drop_normal
+	res.mHPlanes.erase(res.mHPlanes.begin()+i);
+	std::cout << "Size after: " << res.mHPlanes.size() << std::endl;
+	*/
+
+	/*
+	// STRAT: Drop_smooth
+	vector_t<Number> bVector_smooth = res.mHPlanes[1].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where
+	Number bVector_smooth_offset = res.mHPlanes[1].offset()+res.mHPlanes[4].offset();
+	vector_t<Number> cVector_smooth = res.mHPlanes[2].normal()+res.mHPlanes[4].normal();
+	Number cVector_smooth_offset = res.mHPlanes[2].offset()+res.mHPlanes[4].offset();
+	vector_t<Number> dVector_smooth = res.mHPlanes[3].normal()+res.mHPlanes[4].normal();
+	Number dVector_smooth_offset = res.mHPlanes[3].offset()+res.mHPlanes[4].offset();
+
+	res.mHPlanes.erase(res.mHPlanes.begin()+1); // b <- neighboor
+	res.mHPlanes.erase(res.mHPlanes.begin()+1); // c <- neighboor
+	res.mHPlanes.erase(res.mHPlanes.begin()+1); // d <- neighboor
+	res.mHPlanes.erase(res.mHPlanes.begin()+1); // e <- target
+
+	res.insert(Hyperplane<Number>(bVector_smooth,bVector_smooth_offset)); // b_smooth
+	res.insert(Hyperplane<Number>(cVector_smooth,cVector_smooth_offset)); // c_smooth
+	res.insert(Hyperplane<Number>(dVector_smooth,dVector_smooth_offset)); // d_smooth
+	*/
+
+	/*
+	// STRAT: Unite_normal
+	vector_t<Number> uniteVector = res.mHPlanes[2].normal()+res.mHPlanes[4].normal(); // special case: 3 neighboors and we know where
+	Number uniteVector_offset = res.mHPlanes[2].offset()+res.mHPlanes[4].offset();
+
+	res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
+	res.mHPlanes.erase(res.mHPlanes.begin()+2); // c
+
+	res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset)); // uniteVector
+	*/
+
+	// STRAT: Unite_smooth
+
+	return res;
+}
+
+template <typename Number>
+HPolytope<Number> HPolytope<Number>::reduce(  int strat, unsigned _steps ) const { // REDUCTION_STRATEGY
+	HPolytope<Number> res = *this;
+	unsigned size=res.mHPlanes.size()-1;
+
+	// TODO check strat on facet drop_normal, drop_smooth, unite_normal, unite_norm - unite_smooth, unite_cut?
+
+	std::pair<unsigned, unsigned> recommended = chooseStrat();
+
+	if(strat>=0){
+		recommended.first = strat; // fix strategy
+		recommended.second = _steps; // fix facet TODO normally not _steps!
+	} else {
+		//recommended = chooseStrat();
+	}
+
+	// Switch strategy, implement each strategy.
+	switch (recommended.first) { // (strat) {
+
+		// DROP
+		case REDUCTION_STRATEGY::DROP:
+		{
+			unsigned a=recommended.second;
+			unsigned next_a=a+1,  prev_a=a-1;
+
+			// select prev_a and next_a propely
+			if(next_a>size){
+				next_a=0;
 			}
-		}  // FEAS
-	}	  // loop
-		   // std::cout << __func__ << ": Result: " << *this << std::endl;
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// compute scalarproduct
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			aVector.normalize();
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			prev_aVector.normalize();
+			vector_t<Number> next_aVector = res.mHPlanes[next_a].normal();
+			next_aVector.normalize();
+			double scalarproductPrev = aVector.dot(prev_aVector);
+			double scalarproductNext = aVector.dot(next_aVector);
+
+			if(scalarproductPrev+scalarproductNext>0){ // check possibility
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			} else {
+				std::cout << " Drop impossible! " << std::endl;
+			}
+			break;
+		}
+
+		// DROP_SMOOTH
+		case REDUCTION_STRATEGY::DROP_SMOOTH:
+		{
+			unsigned a=recommended.second, next_a=a+1, next2_a=a+2,  prev_a=a-1, prev2_a=a-2;
+
+			// select prev_a and next_a propely
+			if(next_a>size){
+				next_a=0;
+				next2_a=1;
+			}
+			else if(next2_a>size){
+				next2_a=0;
+			}
+			else if(a==0){
+				prev_a=size;
+				prev2_a=size-1;
+			}
+			else if(prev_a==0){
+				prev2_a=size;
+			}
+
+			// compute scalarproduct
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			prev_aVector.normalize();
+			vector_t<Number> prev2_aVector = res.mHPlanes[prev2_a].normal();
+			prev2_aVector.normalize();
+			vector_t<Number> next_aVector = res.mHPlanes[next_a].normal();
+			next_aVector.normalize();
+			vector_t<Number> next2_aVector = res.mHPlanes[next2_a].normal();
+			next2_aVector.normalize();
+
+			vector_t<Number> next_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[next_a].normal();
+			vector_t<Number> nextVector = next_a_aVector;
+			nextVector.normalize();
+			Number next_a_aOffset = res.mHPlanes[a].offset() + res.mHPlanes[next_a].offset();
+			vector_t<Number> prev_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[prev_a].normal();
+			vector_t<Number> prevVector = prev_a_aVector;
+			prevVector.normalize();
+			Number prev_a_aOffset = res.mHPlanes[a].offset() + res.mHPlanes[prev_a].offset();
+
+			double scalarproductPrev = prevVector.dot(prev_aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev << std::endl;
+			double scalarproductPrev2 = prev_aVector.dot(prev2_aVector);
+			//std::cout << "SPPrev2: " << scalarproductPrev2 << std::endl;
+			double scalarproductNext = nextVector.dot(next_aVector);
+			//std::cout << "SPNext: " << scalarproductNext << std::endl;
+			double scalarproductNext2 = next_aVector.dot(next2_aVector);
+			//std::cout << "SPNext2: " << scalarproductNext2 << std::endl;
+
+			if(scalarproductPrev+scalarproductPrev2>0 && scalarproductNext+scalarproductNext2>0 ) {
+				res.mHPlanes.erase(res.mHPlanes.begin()+a); // erase a
+				if(next_a==0){ // erase next_a propely
+					res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase prev_a
+					res.mHPlanes.erase(res.mHPlanes.begin()); // erase next_a
+				} else if(a==0){ // erase prev_a propely
+					res.mHPlanes.erase(res.mHPlanes.begin()); // erase next_a
+					res.mHPlanes.erase(res.mHPlanes.begin()+size); // erase prev_a
+				} else {
+					res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase prev_a
+					res.mHPlanes.erase(res.mHPlanes.begin()+prev_a); // erase next_a
+				}
+
+				res.insert(Hyperplane<Number>(next_a_aVector,next_a_aOffset));
+				res.insert(Hyperplane<Number>(prev_a_aVector,prev_a_aOffset));
+			} else {
+				std::cout << " Drop_smooth impossible! " << std::endl;
+			}
+			break;
+		}
+
+		// UNITE
+		case REDUCTION_STRATEGY::UNITE:
+		{
+			unsigned a=recommended.second, b=a+1, prev_a=a-1,  next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			vector_t<Number> uniteVector = res.mHPlanes[a].normal() + res.mHPlanes[b].normal(); // calculate the uniteVector (i+j)
+			Number uniteOffset = res.mHPlanes[a].offset() + res.mHPlanes[b].offset(); // calculate the uniteOffset (i+j)
+
+			vector_t<Number> bVector = res.mHPlanes[b].normal();
+			bVector.normalize();
+			vector_t<Number> next_bVector = res.mHPlanes[next_b].normal();
+			next_bVector.normalize();
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			aVector.normalize();
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			prev_aVector.normalize();
+			vector_t<Number> uniteVectorNormalized = uniteVector;
+			uniteVectorNormalized.normalize();
+			double scalarproductPrev = uniteVectorNormalized.dot(aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev << " of (c) " << uniteVectorNormalized << " and (p) " << aVector <<  std::endl;
+			double scalarproductPrev2 = aVector.dot(prev_aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev2 << " of (p) " << aVector << " and (p2) " << prev_aVector <<  std::endl;
+			double scalarproductNext = uniteVectorNormalized.dot(bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (c) " << uniteVectorNormalized << " and (n) " << bVector <<std::endl;
+			double scalarproductNext2 = bVector.dot(next_bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (n) " << bVector << " and (n2) " << next_bVector <<std::endl;
+
+			if(scalarproductPrev+scalarproductPrev2>0 && scalarproductNext+scalarproductNext2>0){ // check possibility
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				if(b==0){ // erase b propely
+					res.mHPlanes.erase(res.mHPlanes.begin());
+				} else {
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				}
+				res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
+			} else {
+				std::cout << " Unite_normal impossible! " << std::endl;
+			}
+			break;
+		}
+
+		// UNITE_SMOOTH
+		case REDUCTION_STRATEGY::UNITE_SMOOTH:
+		{
+			unsigned a=recommended.second, b=a+1, prev_a=a-1,  next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// calculate next_b+b and prev_a+a -- normalized to keep the proportion
+			vector_t<Number> prev_a_aVector = res.mHPlanes[a].normal() + res.mHPlanes[prev_a].normal();
+			prev_a_aVector.normalize();
+			vector_t<Number> next_b_bVector = res.mHPlanes[b].normal() + res.mHPlanes[next_b].normal();
+			next_b_bVector.normalize();
+
+			// Helpvalues to calculate the correct uniteOffset
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
+
+			vector_t<Number> uniteVector = next_b_bVector + prev_a_aVector; // calculate uniteVector (next_b+b + prev_a+a)
+			Number uniteOffset = uniteVector[0]*center.first + uniteVector[1]*center.second; // calculate the actual uniteOffset
+
+			vector_t<Number> bVector = res.mHPlanes[b].normal();
+			bVector.normalize();
+			vector_t<Number> next_bVector = res.mHPlanes[next_b].normal();
+			next_bVector.normalize();
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			aVector.normalize();
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			prev_aVector.normalize();
+			vector_t<Number> uniteVectorNormalized = uniteVector;
+			uniteVectorNormalized.normalize();
+			double scalarproductPrev = uniteVectorNormalized.dot(aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev << " of (c) " << uniteVectorNormalized << " and (p) " << aVector <<  std::endl;
+			double scalarproductPrev2 = aVector.dot(prev_aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev2 << " of (p) " << aVector << " and (p2) " << prev_aVector <<  std::endl;
+			double scalarproductNext = uniteVectorNormalized.dot(bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (c) " << uniteVectorNormalized << " and (n) " << bVector <<std::endl;
+			double scalarproductNext2 = bVector.dot(next_bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (n) " << bVector << " and (n2) " << next_bVector <<std::endl;
+
+			if(scalarproductPrev+scalarproductPrev2>0 && scalarproductNext+scalarproductNext2>0){ // check possibility
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				if(b==0){ // erase b propely
+					res.mHPlanes.erase(res.mHPlanes.begin());
+				} else {
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				}
+				res.insert(Hyperplane<Number>(uniteVector,uniteOffset));
+			} else {
+					std::cout << " Unite_smooth impossible! " << std::endl;
+			}
+			break;
+		}
+
+		// UNITE_CUT
+		case REDUCTION_STRATEGY::UNITE_CUT:
+		{
+			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// Helpvalues to calculate the correct uniteVector and uniteOffset - prev_Cut, next_Cut and Cut
+			std::pair<Number, Number> prev = cut(res.mHPlanes[prev_a], res.mHPlanes[a]);
+			std::pair<Number, Number> next = cut(res.mHPlanes[b], res.mHPlanes[next_b]);
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
+
+			res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			if(b==0){ // erase b propely
+				res.mHPlanes.erase(res.mHPlanes.begin());
+			} else {
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+			}
+			res.insert(Hyperplane<Number>(	{prev.second-next.second,next.first-prev.first}, // UniteVector
+																			(prev.second-next.second)*center.first + (next.first-prev.first)*center.second)); // UniteOffset
+			break;
+		}
+
+		// UNITE_NORM
+		case REDUCTION_STRATEGY::UNITE_NORM:
+		{
+			unsigned a=recommended.second, b=a+1, prev_a=a-1, next_b=b+1;
+
+			// select b, prev_a and next_b propely
+			if(b>size){
+				b=0;
+				next_b=1;
+			}
+			else if(next_b>size){
+				next_b=0;
+			}
+			else if(a==0){
+				prev_a=size;
+			}
+
+			// Helpvalues to calculate the correct uniteVector and uniteOffset - prev_Cut, next_Cut and Cut
+			std::pair<Number, Number> prev = cut(res.mHPlanes[prev_a], res.mHPlanes[a]);
+			std::pair<Number, Number> next = cut(res.mHPlanes[b], res.mHPlanes[next_b]);
+			std::pair<Number, Number> center = cut(res.mHPlanes[a], res.mHPlanes[b]);
+
+			double prev_center = sqrt(pow(center.first-prev.first,2) + pow(center.second-prev.second,2));
+			double center_next = sqrt(pow(next.first-center.first,2) + pow(next.second-center.second,2));
+
+			vector_t<Number> uniteVector = prev_center*res.mHPlanes[a].normal() + center_next*res.mHPlanes[b].normal(); // calculate uniteVector (next_b+b + prev_a+a)
+			Number uniteOffset = uniteVector[0]*center.first + uniteVector[1]*center.second; // calculate the actual uniteOffset
+
+			vector_t<Number> bVector = res.mHPlanes[b].normal();
+			bVector.normalize();
+			vector_t<Number> next_bVector = res.mHPlanes[next_b].normal();
+			next_bVector.normalize();
+			vector_t<Number> aVector = res.mHPlanes[a].normal();
+			aVector.normalize();
+			vector_t<Number> prev_aVector = res.mHPlanes[prev_a].normal();
+			prev_aVector.normalize();
+			vector_t<Number> uniteVectorNormalized = uniteVector;
+			uniteVectorNormalized.normalize();
+			double scalarproductPrev = uniteVectorNormalized.dot(aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev << " of (c) " << uniteVectorNormalized << " and (p) " << aVector <<  std::endl;
+			double scalarproductPrev2 = aVector.dot(prev_aVector);
+			//std::cout << "SPPrev: " << scalarproductPrev2 << " of (p) " << aVector << " and (p2) " << prev_aVector <<  std::endl;
+			double scalarproductNext = uniteVectorNormalized.dot(bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (c) " << uniteVectorNormalized << " and (n) " << bVector <<std::endl;
+			double scalarproductNext2 = bVector.dot(next_bVector);
+			//std::cout << "SPNext: " << scalarproductNext << " of (n) " << bVector << " and (n2) " << next_bVector <<std::endl;
+
+			if(scalarproductPrev+scalarproductPrev2>0 && scalarproductNext+scalarproductNext2>0){ // check possibility
+				res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				if(b==0){ // erase b propely
+					res.mHPlanes.erase(res.mHPlanes.begin());
+				} else {
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+				}
+				res.insert(Hyperplane<Number>(uniteVector, uniteOffset));
+			} else {
+				std::cout << " Unite_norm impossible! " << std::endl;
+			}
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	return res;
+}
+
+template <typename Number>
+void HPolytope<Number>::reduceAssign( REDUCTION_STRATEGY strat, unsigned _steps ) {
+
+	// TODO.
+
+}
+
+template <typename Number>
+std::pair<unsigned, unsigned> HPolytope<Number>::chooseStrat() const{
+	unsigned maxIndex=0, strat=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors of index (Drop)/ neighboors (Unite)
+	// *** If we focus only on the SP unite will always be closer as drop! ***
+	// *** TODO focus on distance also ***
+	// *** TODO decide for which Unite_...  or which Drop_... ***
+
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct_drop=1, scalarproduct_unite=1;
+		if(index==hpolytope.mHPlanes.size()-2){
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal()); // Unite
+		}
+		else if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal()); // Unite
+		}
+		else {
+			scalarproduct_drop = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal()); // Drop
+			scalarproduct_unite = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal()); // Unite
+		}
+
+		if(scalarproduct_drop<scalarproduct_unite && maxScalarproduct<scalarproduct_unite){ // decide for Unite
+			strat=4;
+			maxScalarproduct=scalarproduct_unite;
+			maxIndex=index;
+		}
+		else if(maxScalarproduct<scalarproduct_drop){ // decide for Drop
+			strat=1;
+			maxScalarproduct=scalarproduct_drop;
+			maxIndex=index+1;
+			if(maxIndex>=hpolytope.mHPlanes.size()) maxIndex=0;
+		}
+
+		//std::cout << "[Drop] SP between " << index << " and " << index+2 << " is " << scalarproduct_drop << std::endl;
+		//std::cout << "[Unite] SP between " << index << " and " << index+1 << " is " << scalarproduct_unite << std::endl;
+	}
+
+	return std::pair<unsigned, unsigned>(strat, maxIndex);
+}
+
+template <typename Number>
+unsigned HPolytope<Number>::getIndexForDrop() const{
+
+	unsigned maxIndex=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors of index
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-2){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[1].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+2].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index+1;
+			if(maxIndex>=hpolytope.mHPlanes.size()){
+				maxIndex=0;
+			}
+		}
+	}
+	return maxIndex;
+}
+
+template <typename Number>
+unsigned HPolytope<Number>::getIndexForUnite() const{
+	unsigned maxIndex=0;
+	double maxScalarproduct=-1;
+	HPolytope<Number> hpolytope = *this;
+
+	// normalize vectors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		hpolytope.mHPlanes[index].rNormal().normalize();
+	}
+
+	// compare scalarproduct of neighboors
+	for(unsigned index=0; index<hpolytope.mHPlanes.size(); index++){
+		double scalarproduct=1;
+		if(index==hpolytope.mHPlanes.size()-1){
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[0].normal());
+		} else {
+			scalarproduct = hpolytope.mHPlanes[index].normal().dot(hpolytope.mHPlanes[index+1].normal());
+		}
+		if(scalarproduct>maxScalarproduct){
+			maxScalarproduct=scalarproduct;
+			maxIndex=index;
+		}
+	}
+
+	return maxIndex;
+}
+
+template <typename Number>
+std::pair<Number, Number> HPolytope<Number>::cut(Hyperplane<Number> a, Hyperplane<Number> b) const{
+	// save aVector and bVector
+	vector_t<Number> aVector = a.normal();
+	vector_t<Number> bVector = b.normal();
+	Number aOffset = a.offset();
+	Number bOffset = b.offset();
+
+	double helpx2_top, helpx2_down, x1, x2;
+	if(aVector[0]!=0){
+		helpx2_top = bOffset - (bVector[0]*aOffset/aVector[0]);
+		helpx2_down = bVector[1] - (bVector[0]*aVector[1]/aVector[0]);
+		x2 = helpx2_top/helpx2_down;
+		x1 = (aOffset - aVector[1]*x2)/aVector[0];
+	} else {
+		helpx2_top = aOffset - (aVector[0]*bOffset/bVector[0]);
+		helpx2_down = aVector[1] - (aVector[0]*bVector[1]/bVector[0]);
+		x2 = helpx2_top/helpx2_down;
+		x1 = (bOffset - bVector[1]*x2)/bVector[0];
+	}
+
+	return std::pair<Number, Number>(x1, x2);
 }
 
 template <typename Number>
@@ -519,26 +1068,26 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply retransform, otherwise use double description method.
 		if(lu.rank() == A.rows()) {
-			std::cout << "Full rank, retransform!" << std::endl;
+			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);	
+			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
-			std::cout << __func__ << " this: " << *this << std::endl;
-		std::cout << __func__ << " vertices: " << std::endl;
+			//std::cout << __func__ << " this: " << *this << std::endl;
+		//std::cout << __func__ << " vertices: " << std::endl;
 		for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
 
-			std::cout << "Create intermediate. " << std::endl;
+			//std::cout << "Create intermediate. " << std::endl;
 
 			VPolytope<Number> intermediate( this->vertices() );
 
-			std::cout << "Intermediate : " << intermediate << std::endl;
+			//std::cout << "Intermediate : " << intermediate << std::endl;
 
 			intermediate = intermediate.linearTransformation( A, b );
 
-			std::cout << "Intermediate : " << intermediate << std::endl;
+			//std::cout << "Intermediate : " << intermediate << std::endl;
 
 			HPolytope<Number> res( intermediate );
-			return res;	
+			return res;
 		}
 	} else {
 		return *this;
@@ -579,7 +1128,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 			// mHPlanes.at(i).normal() << std::endl;
 		}
 	}
-	// res.reduce();
+	// res.removeRedundantPlanes();
 	return res;
 }
 
@@ -597,7 +1146,7 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 			res.insert( plane );
 		}
 		if(!res.constraints().empty()) {
-			res.reduce();
+			res.removeRedundantPlanes();
 		}
 
 		return res;
@@ -612,13 +1161,29 @@ template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
 
 	HPolytope<Number> res( *this );
+
+	//std::cout << "intersection Vertices before intersection: " << std::endl;
+	//for(const auto& vertex : this->vertices()) {
+	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
+	//}
+
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
-	// res.reduce();
+
+	//std::cout << "intersection Result before reduction: " << std::endl;
+	//std::cout << res << std::endl;
+	if(!res.empty()) {
+		res.removeRedundantPlanes();
+	} else {
+		res = HPolytope<Number>::Empty();
+	}
+
+	//std::cout << "intersection Result AFTER reduction: " << std::endl;
+	//std::cout << res << std::endl;
 
 	return res;
 }
@@ -639,8 +1204,8 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 		// carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset(), TOLLERANCE_ULPS ) &&
 			 plane.normal().dot( vec ) > plane.offset() ) {
-			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}
@@ -694,7 +1259,12 @@ void HPolytope<Number>::print() const {
  */
 
 template <typename Number>
-Hyperplane<Number> HPolytope<Number>::operator[]( unsigned i ) const {
+const Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) const {
+	return mHPlanes.at( i );
+}
+
+template <typename Number>
+Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) {
 	return mHPlanes.at( i );
 }
 

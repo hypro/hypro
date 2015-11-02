@@ -81,14 +81,18 @@ if (NOT PPL_FOUND)
   ##_____________________________________________________________________________
   ## Actions taken when all components have been found
 
-  find_package_handle_standard_args (PPL DEFAULT_MSG PPL_LIBRARIES PPL_INCLUDES)
+  if(PPL_PPL_LIBRARY AND PPL_INCLUDES)
+  	SET(PPL_FOUND TRUE)
+  endif()
+
+  #find_package_handle_standard_args (PPL DEFAULT_MSG PPL_LIBRARIES PPL_INCLUDES)
 
   if (PPL_FOUND)
     if (NOT PPL_FIND_QUIETLY)
-      message (STATUS "Found components for PPL")
-      message (STATUS "PPL_ROOT_DIR  = ${PPL_ROOT_DIR}")
-      message (STATUS "PPL_INCLUDES  = ${PPL_INCLUDES}")
-      message (STATUS "PPL_LIBRARIES = ${PPL_LIBRARIES}")
+      message (STATUS "Found PPL: " ${PPL_LIBRARIES})
+      #message (STATUS "PPL_ROOT_DIR  = ${PPL_ROOT_DIR}")
+      #message (STATUS "PPL_INCLUDES  = ${PPL_INCLUDES}")
+      #message (STATUS "PPL_LIBRARIES = ${PPL_LIBRARIES}")
     endif (NOT PPL_FIND_QUIETLY)
   else (PPL_FOUND)
     if (PPL_FIND_REQUIRED)

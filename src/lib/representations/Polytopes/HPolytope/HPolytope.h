@@ -13,6 +13,7 @@
 #include <glpk.h>
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
+#include "../../../util/smtrat/SimplexSolver.h"
 
 
 namespace hypro {
@@ -21,6 +22,16 @@ enum SOLUTION { FEAS = 0, INFEAS, INFTY };
 
 template <typename Number>
 class HPolytope {
+  private:
+  	enum REDUCTION_STRATEGY {
+                              DROP = 0,
+                              DROP_SMOOTH,
+                              UNITE,
+                              UNITE_SMOOTH,
+                              UNITE_CUT,
+                              UNITE_NORM
+                            };
+
   public:
 	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
 
@@ -57,8 +68,8 @@ class HPolytope {
 	bool empty() const;
 	static HPolytope<Number> Empty();
 
-	unsigned dimension() const;
-	unsigned size() const;
+	std::size_t dimension() const;
+	std::size_t size() const;
 
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
@@ -73,7 +84,17 @@ class HPolytope {
 
 	const HyperplaneVector& constraints() const;
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
-	void reduce();
+	void removeRedundantPlanes();
+
+	HPolytope<Number> reduce( int strat = 0 ,unsigned _steps = 1 ) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_nd() const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
+
+	std::pair<unsigned, unsigned> chooseStrat() const;
+	unsigned getIndexForDrop() const;
+	unsigned getIndexForUnite() const;
+
+	std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
@@ -109,7 +130,8 @@ class HPolytope {
 	 * Operators
 	 */
 
-	Hyperplane<Number> operator[]( unsigned i ) const;
+	const Hyperplane<Number>& operator[]( size_t i ) const;
+	Hyperplane<Number>& operator[]( size_t i ) ;
 	HPolytope<Number>& operator=( const HPolytope<Number>& rhs );
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytope<Number>& rhs ) {

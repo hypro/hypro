@@ -5,17 +5,22 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <assert.h>
+#include <cassert>
 
-#include "types.h"
+#include "flags.h"
 #include <carl/numbers/numbers.h>
+<<<<<<< HEAD
 #include <carl/numbers/FLOAT_T.h>
 #include <carl/interval/Interval.h>
+=======
+>>>>>>> 4f0e6cccca664d2a209de7238d58921fdbd8b6bc
 #include <carl/core/Variable.h>
+#include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
@@ -52,24 +57,23 @@ static const unsigned FLOAT_PRECISION = 128;
 static const unsigned MAX_DIMENSION_LIMIT = 128;
 
 /**
- * Defines for reachability algorithm based on polytopes
+ * Default values for reachability algorithms
  */
-static const float fReach_TIMEBOUND = 2;
-static const unsigned fReach_ITERATIONDEPTH = 1;
-static const unsigned fReach_TIMEDISCRETIZATION = 100;
-static const unsigned fReach_DENOMINATOR = 1000000;
-// define for debugging: triggers console output
-#define fReach_DEBUG
+static const double fReach_TIMEBOUND = 2;
+static const std::size_t fReach_ITERATIONDEPTH = 1;
+static const std::size_t fReach_TIMEDISCRETIZATION = 100;
+static const unsigned long fReach_DENOMINATOR = 1000000;
 
 /**
  * author: ckugler
  * Defines for implementation of Fukuda's Minkowski Sum algorithm
  */
-#define EPSILON 0.000001
-#define POS_CONSTANT 100
+static const double EPSILON = 0.000001;
+static const long POS_CONSTANT = 100;
 // define for debugging: triggers console output
 //#define fukuda_DEBUG
 
+<<<<<<< HEAD
 namespace Eigen {
 template <typename Number>
 bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
@@ -115,3 +119,7 @@ hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a, Number 
 		   svd.matrixU().adjoint();
 }
 }
+=======
+#include "typedefs.h"
+#include "util/adaptions_eigen.h"
+>>>>>>> 4f0e6cccca664d2a209de7238d58921fdbd8b6bc

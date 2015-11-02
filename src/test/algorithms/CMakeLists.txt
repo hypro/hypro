@@ -7,6 +7,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     ################################
 
     add_executable(runAlgorithmTests
+    		#BoxReachabilityTest.cpp
     		ForwardReachabilityTest.cpp
 			#HyReachTest.cpp
             #MinkowskiSumTest.cpp
@@ -19,6 +20,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     target_link_libraries(runAlgorithmTests
 			${PROJECT_NAME}
                         ${libraries})
+    if(USE_COTIRE)
+      cotire(runAlgorithmTests)
+    endif()
     add_test( NAME algorithms COMMAND runAlgorithmTests )
 
 endif()

@@ -4,7 +4,7 @@
 #include "Result.h"
 
 namespace hypro {
-	
+
 	template<typename Representation, int operation>
 	struct Executor {
 		void run(typename Generator<Representation, operation>::type _in) {}
@@ -13,7 +13,7 @@ namespace hypro {
 	template<typename Representation>
 	struct Executor<Representation, operation::LINEARTRAFO> {
 		Result run(typename Generator<Representation, operation::LINEARTRAFO>::type _in) {
-			std::get<0>(_in).linearTransformation(std::get<1>(_in));
+			std::get<0>(_in).linearTransformation(std::get<1>(_in), std::get<2>(_in));
 			return Result();
 		}
 	};

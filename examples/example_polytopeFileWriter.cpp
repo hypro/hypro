@@ -6,51 +6,36 @@
 #include "../src/lib/representations/Polytope/Polytope.h"
 #include "../src/lib/datastructures/Point.h"
 
-using namespace hypro;
 
 int main(int argc, char** argv) {
-    
-    carl::VariablePool& pool = carl::VariablePool::getInstance();
-    carl::Variable x = pool.getFreshVariable("x");
-    carl::Variable y = pool.getFreshVariable("y");
-	
-    Point<number_t> p1;
-    Point<number_t> p2;
-    Point<number_t> p3;
-    Point<number_t> p4;
+
+	typedef carl::FLOAT_T<double> number_t;
+
+    hypro::Point<number_t> p1;
+    hypro::Point<number_t> p2;
+    hypro::Point<number_t> p3;
+    hypro::Point<number_t> p4;
 
     // p1
-    Point<number_t>::coordinateMap coordinates1;
-    coordinates1.insert( std::make_pair(x, carl::FLOAT_T<number_t>(4)) );
-    coordinates1.insert( std::make_pair(y, carl::FLOAT_T<number_t>(4)) );
-    p1 = Point<number_t>(coordinates1);
+    p1 = hypro::Point<number_t>({4,4});
 
     // p2
-    Point<number_t>::coordinateMap coordinates2;
-    coordinates2.insert( std::make_pair(x, carl::FLOAT_T<number_t>(5)) );
-    coordinates2.insert( std::make_pair(y, carl::FLOAT_T<number_t>(7)) );
-    p2 = Point<number_t>(coordinates2);
+    p2 = hypro::Point<number_t>({5,7});
 
     // p3
-    Point<number_t>::coordinateMap coordinates3;
-    coordinates3.insert( std::make_pair(x, carl::FLOAT_T<number_t>(7)) );
-    coordinates3.insert( std::make_pair(y, carl::FLOAT_T<number_t>(7)) );
-    p3 = Point<number_t>(coordinates3);
+    p3 = hypro::Point<number_t>({7,7});
 
     // p4
-    Point<number_t>::coordinateMap coordinates4;
-    coordinates4.insert( std::make_pair(x, carl::FLOAT_T<number_t>(8)) );
-    coordinates4.insert( std::make_pair(y, carl::FLOAT_T<number_t>(4)) );
-    p4 = Point<number_t>(coordinates4);
-    
-    Point<number_t>::pointSet ps;
-    ps.insert(p1);
-    ps.insert(p2);
-    ps.insert(p3);
-    ps.insert(p4);
-    hypro::Polytope<number_t> polytope = Polytope<number_t>(ps);
-    
+    p4 = hypro::Point<number_t>({8,4});
+
+    std::vector<hypro::Point<number_t>> pv;
+    pv.push_back(p1);
+    pv.push_back(p2);
+    pv.push_back(p3);
+    pv.push_back(p4);
+    hypro::Polytope<number_t> polytope = hypro::Polytope<number_t>(pv);
+
     polytope.writeToFile("testPolytope.txt");
-    
+
     return 0;
 }
