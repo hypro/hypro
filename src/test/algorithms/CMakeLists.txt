@@ -20,9 +20,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     target_link_libraries(runAlgorithmTests
 			${PROJECT_NAME}
                         ${libraries})
-    if(USE_COTIRE)
-      cotire(runAlgorithmTests)
-    endif()
+
+    cotire(runAlgorithmTests)
+
     add_test( NAME algorithms COMMAND runAlgorithmTests )
 
 endif()

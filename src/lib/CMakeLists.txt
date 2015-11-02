@@ -23,14 +23,32 @@ set(lib_hypro_sources
     ${lib_hypro_parser_sources}
 )
 
-file(GLOB_RECURSE headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
-file(GLOB_RECURSE template_implementations RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.tpp)
+# Simplified access to *.h and *.cpp
+foreach(name algorithms datastructures parser representations util)
+	collect_files(hypro ${name})
+endforeach()
 
-set(headers ${headers} ${template_implementations})
+##file(GLOB_RECURSE headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
+##file(GLOB_RECURSE template_implementations RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.tpp)
+
+##set(headers ${headers} ${template_implementations})
+set(headers
+	${hypro_algorithms_headers}
+${hypro_datastructures_headers}
+${hypro_parser_headers}
+${hypro_representations_headers}
+${hypro_util_headers})
 #MESSAGE(STATUS "Globbed header files: ${headers}")
 
-file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+##file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${test_sources}")
+
+set(sources
+	${hypro_algorithms_sources}
+${hypro_datastructures_sources}
+${hypro_parser_sources}
+${hypro_representations_sources}
+${hypro_util_sources})
 
 if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
@@ -55,11 +73,10 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} ${libraries})
 
-if(USE_COTIRE)
-	cotire(${PROJECT_NAME})
-endif()
+cotire(${PROJECT_NAME})
 
-install(FILES ${headers} DESTINATION include)
+install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
+##install(FILES ${headers} DESTINATION include)
 
 #get_cmake_property(_variableNames VARIABLES)
 #foreach (_variableName ${_variableNames})

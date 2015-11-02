@@ -37,6 +37,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${libraries}
 		${PROJECT_NAME}
 	)
+
 	target_link_libraries(runPTermTests
 		${libraries}
 		${PROJECT_NAME}

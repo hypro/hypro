@@ -31,9 +31,12 @@ set(hypro_MAJORVERSION 0)
 set(hypro_MINORVERSION 1)
 set(hypro_MAINTENANCEVERSION 0)
 set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}.${hypro_MAINTENANCEVERSION}")
-set(PROJECT_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}.${hypro_MAINTENANCEVERSION}")
+set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro" )
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION} )
+
+# path to find own modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # # # # # # # # # # # # # # # # # # # # # #
 # B. Options
@@ -47,6 +50,9 @@ option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
 option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
+
+# Include own macros.
+include( hypromacros )
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -73,6 +79,17 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   endif()
 endif()
 
+if(USE_COTIRE)
+	# We use cotire, simply include it
+	message(STATUS "using cotire")
+	include(cotire)
+else()
+	# We do not use cotire, create dummy function.
+	message(STATUS "not using cotire")
+	function(cotire)
+	endfunction(cotire)
+endif()
+
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
 #
@@ -80,12 +97,6 @@ endif()
 # 2. Optional libraries for core.
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
-if(USE_COTIRE)
-	include(cotire)
-endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.

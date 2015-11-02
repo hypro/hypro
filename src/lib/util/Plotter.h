@@ -13,8 +13,8 @@
 #include <vector>
 #include <string>
 #include <stack>
-#include "../lib/datastructures/Point.h"
-#include "../lib/datastructures/Hyperplane.h"
+#include "../datastructures/Point.h"
+#include "../datastructures/Hyperplane.h"
 
 namespace hypro {
 
