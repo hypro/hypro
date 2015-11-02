@@ -33,6 +33,7 @@ class Point {
 	// std::vector<Point<Number>> mNeighbors;
 	// Minkowsi Decompositon of this point (if applicable)
 	std::vector<Point<Number>> mComposedOf;
+  std::vector<unsigned> mNeighboors;
 
   public:
 	static const int POINT_RAND_MAX = 100;
@@ -91,6 +92,13 @@ class Point {
 	/**
 	 * Getter & Setter
 	 */
+   void setNeighboors(const std::vector<unsigned> &_neighboors) {
+     mNeighboors = _neighboors;
+   }
+
+   std::vector<unsigned> getNeighboors() const{
+     return mNeighboors;
+   }
 
 	/*
 	std::vector<Point<Number>> neighbors() const;
@@ -257,8 +265,9 @@ class Point {
 	 * @return
 	 */
 	bool operator<( const Point<Number>& _p2 ) const { return ( mCoordinates < _p2.rawCoordinates() ); }
-
+	bool operator<=( const Point<Number>& _p2 ) const { return ( mCoordinates <= _p2.rawCoordinates() ); }
 	bool operator>( const Point<Number>& _p2 ) const { return _p2 < *this; }
+	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
 	bool operator==( const Point<Number>& _p2 ) const { return ( mCoordinates == _p2.rawCoordinates() ); }
 

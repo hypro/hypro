@@ -63,7 +63,9 @@ Point<Number>::Point( const Point<Number> &_p )
 	: mCoordinates( _p.rawCoordinates() )
 	,
 	// mNeighbors(_p.neighbors()),
-	mComposedOf( _p.composedOf() ) {
+	mComposedOf( _p.composedOf() )
+	,
+  mNeighboors(_p.getNeighboors() ){
 }
 
 template <typename Number>

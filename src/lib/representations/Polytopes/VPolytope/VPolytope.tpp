@@ -40,12 +40,13 @@ template <typename Number>
 VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible hyperplane intersections -> TODO: dPermutation can
 	// be improved.
-	std::vector<std::vector<unsigned>> permutationIndices =
-		  polytope::dPermutation( _constraints.rows(), _constraints.cols() );
+	polytope::dPermutator permutator = polytope::dPermutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
 	std::vector<vector_t<Number>> possibleVertices;
-	for ( const auto &permutation : permutationIndices ) {
+	std::vector<unsigned> permutation;
+	while ( !permutator.end()  ) {
+		permutation = permutator();
 		unsigned rowCount = 0;
 		// std::cout << "Intersect :" << std::endl;
 		for ( const auto &rowIndex : permutation ) {

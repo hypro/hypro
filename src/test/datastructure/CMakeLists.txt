@@ -19,8 +19,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_link_libraries(runDatastructureTests
 							${PROJECT_NAME}
 							${libraries})
-	if(USE_COTIRE)
-		cotire(runDatastructureTests)
-	endif()
+
+	cotire(runDatastructureTests)
+
 	add_test( NAME datastructures COMMAND runDatastructureTests )
 endif()

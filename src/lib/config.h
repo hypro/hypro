@@ -8,6 +8,7 @@
 #include <cassert>
 
 #include "flags.h"
+#include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>
 <<<<<<< HEAD
 #include <carl/numbers/FLOAT_T.h>

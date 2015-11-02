@@ -93,6 +93,6 @@ int main(int argc, char** argv) {
 
 
 		for(unsigned i = 0; i<facets.first.size(); i++){
-			std::cout << facets.first.at(i) << std::endl;
+			std::cout << "Result Nr." << i << std::endl << *facets.first.at(i) << std::endl;
 		}
 }
