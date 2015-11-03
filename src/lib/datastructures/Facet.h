@@ -60,7 +60,7 @@ class Facet {
 		setPoints( r, insidePoint );
 		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
 		// mHyperplane = Hyperplane<Number>(mVertices);
-		mNeighbors = std::vector<Facet<Number>>();
+    mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
 
@@ -83,8 +83,7 @@ class Facet {
 		mOutsideSet = std::vector<Point<Number>>();
 	}
 
-	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1,
-		   const Point<Number> insidePoint2 ) {
+	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1, const Point<Number> insidePoint2 ) {
 		r.push_back( p );
 		setPoints( r, insidePoint1, insidePoint2 );
 		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
