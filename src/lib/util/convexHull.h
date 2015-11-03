@@ -276,8 +276,7 @@ visible_facets) {
  * @return The list of facets that have at least one point above.
  */
 template <typename Number>
-static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets,
-								std::queue<std::shared_ptr<Facet<Number>>>& result) {
+static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets, std::queue<std::shared_ptr<Facet<Number>>>& result) {
 	for (unsigned i=facets.size(); i > 0; i--) {
 		if (!facets.at(i-1)->getOutsideSet().empty()) {
 			result.push(facets[i-1]);
@@ -542,22 +541,22 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 	if (points.size() >= points.at(0).dimension()+1 ) {
 		std::vector<std::shared_ptr<Facet<Number>>> facets;
-		initConvexHull( points, facets );
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
-		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints ); // Determine points which belong to a facet
 
-		for (unsigned i=0; i < facets.size(); i++) {
-			for (unsigned j=0; j < unassignedPoints.size(); j++) {
-				if (facets[i]->isAbove(unassignedPoints[j])) { // isAbove
-					facets[i]->addPointToOutsideSet(unassignedPoints[j]);
+		// init facets and points
+		initConvexHull(points, facets);
+		pointsNotContainedInFacets(points, facets, unassignedPoints, assignedPoints); // Determine points which belong to a facet
+		for (auto facet: facets) {
+			for (auto point: unassignedPoints) {
+				if (facet->isAbove(point)) { // isAbove
+					facet->addPointToOutsideSet(point);
 				}
 			}
 		}
 
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
-		removeBorderFacets(facets, workingSet);
+		removeBorderFacets(facets, workingSet); // extract the facets to be examined
 
-		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 		/*
 		* ------------------------------------------------------------------------------
 		* MAIN BODY
@@ -566,39 +565,31 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 		while (!workingSet.empty()) {
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
-			// std::cout << __func__ << " Current Facet: " << *currentFacet << std::endl;
-			// std::cout << __func__ << " Current Neighbors: ";
-			// for(const auto neig : currentFacet->neighbors())
-			//	std::cout << *neig << ", ";
-			// std::cout << std::endl;
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
-			// std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
 
 			std::vector<std::shared_ptr<Facet<Number>>> currentVisibleFacets;
 			currentVisibleFacets.push_back(currentFacet);
 			std::queue<std::shared_ptr<Facet<Number>>> newVisibleFacets;
 			bool changed = true;
 
-			// Determin horizon
+			// determin horizon into currentVisibleFacets
 			while(changed){
 				changed = false;
 				for (const auto& facet : currentVisibleFacets) {
 					assert(!facet->neighbors().empty());
 					for (const auto& neighbor : facet->neighbors()) {
-						 //std::cout<< "Neighbor : " << *neighbor << "currentPoint : " << currentPoint << std::endl;
 						if (neighbor->isAbove(currentPoint)) {
 							newVisibleFacets.push(neighbor); // update new visible facets
-							 //std::cout << "Neighbor: " << *neighbor << std::endl;
 							assert(!neighbor->neighbors().empty());
 						}
 					}
 				}
-				while ( !newVisibleFacets.empty() ) {
+				while (!newVisibleFacets.empty()) {
 					if(std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *newVisibleFacets.front())== currentVisibleFacets.end()){
 						currentVisibleFacets.push_back(newVisibleFacets.front()); // insert the new visible facets into the current visible facets - if they are no duplicates
 						changed = true;
 					}
-					newVisibleFacets.pop();
+					newVisibleFacets.pop(); // remove the new visible facet
 				}
 			}
 
@@ -621,11 +612,11 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 					for (auto neighbor: ridge.neighbors() ) {
 						if (std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor) == currentVisibleFacets.end()) {  // we have a neighbor of this ridge, which is not visible -> horizon
 							// ridge, create new facet
-							Point<Number> insidePoint1 = findInsidePoint( ridge, facet );
-							std::shared_ptr<Facet<Number>> newFacet = std::shared_ptr<Facet<Number>>( new Facet<Number>(ridge.vertices(), currentPoint, insidePoint1 ) );
-							newFacet->addNeighbor( neighbor );
-							neighbor->addNeighbor( newFacet );
-							newFacets.push_back( newFacet );
+							Point<Number> insidePoint = findInsidePoint(ridge, facet);
+							std::shared_ptr<Facet<Number>> newFacet = std::shared_ptr<Facet<Number>>(new Facet<Number>(ridge.vertices(), currentPoint, insidePoint));
+							newFacet->addNeighbor(neighbor);
+							neighbor->addNeighbor(newFacet);
+							newFacets.push_back(newFacet);
 						}
 					}
 				}
@@ -645,37 +636,35 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 			// std::vector<Point<Number>> outsidePoints =
 			// polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
-			unsigned del;
-			bool ok = false;
-			for ( unsigned i = 0; i < unassignedPoints.size(); i++ ) {
-				if ( unassignedPoints[i] == currentPoint ) {
-					del = i;
-					ok = true;
-					break;
-				}
-			}
 
-			if ( ok ) {
-				assignedPoints.push_back( unassignedPoints.at( del ) );
-				unassignedPoints.erase( unassignedPoints.begin() + del );
+			// update unassignedPoints -> assignedPoints
+			if (std::find(unassignedPoints.begin(), unassignedPoints.end(), currentPoint)!=unassignedPoints.end()) {
+				assignedPoints.push_back(currentPoint); // assign currentPoint if not yet
+
+				for (unsigned i = 0; i < unassignedPoints.size(); i++) {
+					if (unassignedPoints.at(i) == currentPoint) {
+						unassignedPoints.erase(unassignedPoints.begin()+i); // erase currentPoint in unassignedPoints
+						break;
+					}
+				}
 			}
 
 			// std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
 
 			// update outside sets of the new facets.
-			for ( unsigned i = 0; i < newFacets.size(); i++ ) {
-				for ( unsigned j = 0; j < unassignedPoints.size(); j++ ) {  // unassignedPoints?
-					if (newFacets[i]->isAbove(unassignedPoints[j])) {
-						newFacets[i]->addPointToOutsideSet( unassignedPoints[j] );
+			for (auto facet: newFacets) {
+				for (auto point: unassignedPoints) {
+					if (facet->isAbove(point)) {
+						facet->addPointToOutsideSet(point);
 					}
 				}
 			}
 
 			std::queue<std::shared_ptr<Facet<Number>>> notOutsideNewFacets;
 			std::vector<std::shared_ptr<Facet<Number>>> newNeighOpt = newFacets;
-			removeBorderFacets( newFacets, notOutsideNewFacets );
+			removeBorderFacets(newFacets, notOutsideNewFacets);
 			for ( const auto& facet : newFacets ) {
-				facets.push_back( facet );
+				facets.push_back( facet ); // update facets with new "final" border facets
 			}
 
 			// update working set with relevant new facets
@@ -684,33 +673,44 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				notOutsideNewFacets.pop();
 			}
 
+			// remove non-relevant facets from workingSet
 			std::queue<std::shared_ptr<Facet<Number>>> temp;
 			while ( !workingSet.empty() ) {
-				bool isVisible = false;
-				for ( unsigned i = 0; i < currentVisibleFacets.size(); i++ ) {
-					bool done = workingSet.front()->removeNeighbor( currentVisibleFacets[i] );
-					if ( done ) {
-						std::shared_ptr<Facet<Number>> newNeigh = newNeighbor( workingSet.front(), newNeighOpt );
-						// std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
-						// std::cout << "Current Facet: " << workingSet.front() << std::endl;
-						// std::cout << "NewNeighbor: " << newNeigh << std::endl;
-						workingSet.front()->addNeighbor( newNeigh );
-					}
-
-					/*for(unsigned j = 0; j<facets.size(); j++){
-						bool done2 = facets.at(j).removeNeighbor(currentVisibleFacets[i]);
-						if(done2){
-							Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
-							//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
-							//std::cout << "Current Facet: " << workingSet.front() << std::endl;
-							//std::cout << "NewNeighbor: " << newNeigh << std::endl;
-							facets.at(j).addNeighbor(newNeigh);
+				if(std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *workingSet.front())==currentVisibleFacets.end()){
+					for(auto facet: currentVisibleFacets){
+						if(workingSet.front()->removeNeighbor(facet)){
+							workingSet.front()->addNeighbor(newNeighbor(workingSet.front(), newNeighOpt));
 						}
-					}*/
-
-					if ( *workingSet.front() == *currentVisibleFacets.at( i ) ) isVisible = true;
+					}
+					temp.push( workingSet.front());
 				}
-				if ( !isVisible ) temp.push( workingSet.front() );
+
+
+				//bool isVisible = false;
+				//for ( unsigned i = 0; i < currentVisibleFacets.size(); i++ ) {
+				//	bool done = workingSet.front()->removeNeighbor( currentVisibleFacets[i] );
+				//	if ( done ) {
+				//		std::shared_ptr<Facet<Number>> newNeigh = newNeighbor( workingSet.front(), newNeighOpt );
+				//		// std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+				//		// std::cout << "Current Facet: " << workingSet.front() << std::endl;
+				//		// std::cout << "NewNeighbor: " << newNeigh << std::endl;
+				//		workingSet.front()->addNeighbor( newNeigh );
+				//	}
+
+				//	/*for(unsigned j = 0; j<facets.size(); j++){
+				//		bool done2 = facets.at(j).removeNeighbor(currentVisibleFacets[i]);
+				//		if(done2){
+				//			Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
+				//			//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+				//			//std::cout << "Current Facet: " << workingSet.front() << std::endl;
+				//			//std::cout << "NewNeighbor: " << newNeigh << std::endl;
+				//			facets.at(j).addNeighbor(newNeigh);
+				//		}
+				//	}*/
+
+				//	if ( *workingSet.front() == *currentVisibleFacets.at( i ) ) isVisible = true;
+				//}
+				//if ( !isVisible ) temp.push( workingSet.front() );
 
 				workingSet.pop();
 			}
