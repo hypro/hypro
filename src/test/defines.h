@@ -59,7 +59,6 @@ TYPED_TEST_CASE(VertexTest, floatTypes);
 
 // Representations
 TYPED_TEST_CASE(BoxTest, floatTypes);
-TYPED_TEST_CASE(PTermBoxTest, floatTypes);
 TYPED_TEST_CASE(ConverterTest, floatTypes);
 TYPED_TEST_CASE(GridTest, floatTypes);
 TYPED_TEST_CASE(HPolytopeTest, floatTypes);
@@ -71,3 +70,7 @@ TYPED_TEST_CASE(SupportFunctionTest, floatTypes);
 TYPED_TEST_CASE(TaylorModelTest, floatTypes);
 TYPED_TEST_CASE(VPolytopeTest, floatTypes);
 TYPED_TEST_CASE(ZonotopeTest, floatTypes);
+
+// Practical term
+TYPED_TEST_CASE(PTermBoxTest, floatTypes);
+TYPED_TEST_CASE(PTermPolytopeTest, floatTypes);
