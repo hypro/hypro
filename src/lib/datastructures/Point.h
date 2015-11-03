@@ -265,8 +265,9 @@ class Point {
 	 * @return
 	 */
 	bool operator<( const Point<Number>& _p2 ) const { return ( mCoordinates < _p2.rawCoordinates() ); }
-
+	bool operator<=( const Point<Number>& _p2 ) const { return ( mCoordinates <= _p2.rawCoordinates() ); }
 	bool operator>( const Point<Number>& _p2 ) const { return _p2 < *this; }
+	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
 	bool operator==( const Point<Number>& _p2 ) const { return ( mCoordinates == _p2.rawCoordinates() ); }
 
