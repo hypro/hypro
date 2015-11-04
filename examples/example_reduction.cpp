@@ -84,7 +84,7 @@ int main(int argc, char const *argv[])
   td_example2.insert(Hyperplane<Number>({1, 0, 0.1},3)); // b     1
   td_example2.insert(Hyperplane<Number>({-1, -1, 0.1},3)); // c   2
   td_example2.insert(Hyperplane<Number>({0, 1, 0.1},3)); // d     3
-  td_example2.insert(Hyperplane<Number>({0.1, 0, 1},2)); // e       4
+  td_example2.insert(Hyperplane<Number>({-0.1, 0, 1},2)); // e       4
 
   HPolytope<Number> td_easy;
   td_easy.insert(Hyperplane<Number>({0, 0, -1},1));
@@ -96,7 +96,7 @@ int main(int argc, char const *argv[])
 
 
 
-  HPolytope<Number> reduce_from = td_example2;
+  HPolytope<Number> reduce_from = td_example;
   HPolytope<Number> reduction_drop_normal;
   HPolytope<Number> reduction_drop_smooth;
   HPolytope<Number> reduction_unite_normal;
@@ -141,8 +141,8 @@ int main(int argc, char const *argv[])
     std::cout << "facet[" << facet << "] volume of unite_smooth violett: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
     reduction_unite_cut = reduce_from.reduce_nd(4);
     std::cout << "facet[" << facet << "] volume of unite_cut turquoise: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-    reduction_unite_norm = reduce_from.reduce_nd(5);
-    std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl << std::endl;
+    //reduction_unite_norm = reduce_from.reduce_nd(5);
+    //std::cout << "facet[" << facet << "] volume of unite_norm bordeaux: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl << std::endl;
     //reduction_unite_smooth_old = reduce_from.reduce_nd(6);
     //std::cout << "facet[" << facet << "] volume of unite_smooth_old bordeaux: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth_old)-prevVolume)/prevVolume)*100 << "%" << std::endl << std::endl;
   //}
@@ -182,10 +182,10 @@ int main(int argc, char const *argv[])
     point.reduceToDimensions({i,j});
     reduction_unite_cut_vertices_2d.push_back(point);
   }
-  for(Point<Number> point: reduction_unite_norm.vertices()){
-    point.reduceToDimensions({i,j});
-    reduction_unite_norm_vertices_2d.push_back(point);
-  }
+  //for(Point<Number> point: reduction_unite_norm.vertices()){
+  //  point.reduceToDimensions({i,j});
+  //  reduction_unite_norm_vertices_2d.push_back(point);
+  //}
   //for(Point<Number> point: reduction_unite_smooth_old.vertices()){
   //  point.reduceToDimensions({1,2});
   //  reduction_unite_smooth_old_vertices_2d.push_back(point);
@@ -197,7 +197,7 @@ int main(int argc, char const *argv[])
   unsigned run = plotter.addObject(reduction_unite_normal_vertices_2d);
   unsigned rus = plotter.addObject(reduction_unite_smooth_vertices_2d);
   unsigned ruc = plotter.addObject(reduction_unite_cut_vertices_2d);
-  unsigned runo = plotter.addObject(reduction_unite_norm_vertices_2d);
+  //unsigned runo = plotter.addObject(reduction_unite_norm_vertices_2d);
   //unsigned ruso = plotter.addObject(reduction_unite_smooth_old_vertices_2d);
 	plotter.addObject(reduce_from_vertices_2d);
 
@@ -206,12 +206,9 @@ int main(int argc, char const *argv[])
   plotter.setObjectColor(run, colors[orange]);
   plotter.setObjectColor(rus, colors[violett]);
   plotter.setObjectColor(ruc, colors[turquoise]);
-  plotter.setObjectColor(runo, colors[bordeaux]);
-
-
+  //plotter.setObjectColor(runo, colors[bordeaux]);
 
 	plotter.plot2d();
-
 
 	return 0;
 }

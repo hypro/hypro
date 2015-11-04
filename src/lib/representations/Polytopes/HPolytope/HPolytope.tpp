@@ -575,27 +575,33 @@ bool HPolytope<Number>::isBounded(vector_t<Number> a, vector_t<Number> b, vector
 	a.normalize();
 	b.normalize();
 	c.normalize();
-	return (c.dot(a)+c.dot(b)>0);
+	double ca = c.dot(a);
+	double cb = c.dot(b);
+	std::cout << "SP: " << ca << " + " << cb << std::endl;
+	return ((ca+cb)>0);
 }
-
-
 
 
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_STRATEGY
+	unsigned a= 1, b=0; // note highest index first;
+	bool reduce=false;
+
 	HPolytope<Number> res = *this;
+	std::vector<Point<Number>> vertices = res.vertices();
+	std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, vertices); // get neighbors
+	std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, vertices); // get neighbors
 
 	switch(strat){
 		case REDUCTION_STRATEGY::DROP:
 			{
-				unsigned a = 0;
-				std::vector<unsigned> neighborsOfIndex = getNeighborsOfIndex(a, res.vertices()); // get neighbors (sorted reverse)
-				bool reduce=false;
-
 				// check further unboundedness
-				for(unsigned i: neighborsOfIndex){
-					for(unsigned j: neighborsOfIndex){
+				for(unsigned i: neighborsOf_a){
+					for(unsigned j: neighborsOf_a){
+						std::cout << "calculate " << i << " and " << j << std::endl;
+
 						if(i<j && isBounded(res.mHPlanes[i].normal(), res.mHPlanes[j].normal(), res.mHPlanes[a].normal())){
+							std::cout << "will be bounded because of " << i << " and " << j << std::endl;
 							reduce=true;
 							break;
 						}
@@ -606,19 +612,16 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				if(reduce){
 					res.mHPlanes.erase(res.mHPlanes.begin()+a); // delete facet
 				}
+
 				break;
 			}
 
 		case REDUCTION_STRATEGY::DROP_SMOOTH:
 			{
-				unsigned a = 0;
-				std::vector<unsigned> neighborsOfIndex = getNeighborsOfIndex(a, res.vertices()); // get neighbors (sorted reverse)
-				bool reduce=false, aNotErased=true;
-
 				std::vector<vector_t<Number>> smoothVectors;
 				std::vector<Number> smoothVectors_offset;
 
-				for(unsigned neighbor: neighborsOfIndex){
+				for(unsigned neighbor: neighborsOf_a){
 					smoothVectors.push_back(res.mHPlanes[neighbor].normal()+res.mHPlanes[a].normal());
 					smoothVectors_offset.push_back(res.mHPlanes[neighbor].offset()+res.mHPlanes[a].offset());
 				}
@@ -639,16 +642,14 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 						res.insert(Hyperplane<Number>(smoothVectors[i], smoothVectors_offset[i])); // update neighbor facets
 					}
 
-					neighborsOfIndex.push_back(a);
-					std::sort(neighborsOfIndex.begin(), neighborsOfIndex.end());
-					std::reverse(neighborsOfIndex.begin(), neighborsOfIndex.end());
+					neighborsOf_a.push_back(a);
+					std::sort(neighborsOf_a.begin(), neighborsOf_a.end());
+					std::reverse(neighborsOf_a.begin(), neighborsOf_a.end());
 
-					for(unsigned neighbor: neighborsOfIndex){
-						std::cout << "erase neighbor [" << neighbor << "]" << std::endl;
+					for(unsigned neighbor: neighborsOf_a){
 						res.mHPlanes.erase(res.mHPlanes.begin()+neighbor); // delete not smoothed facet
 					}
 				}
-
 
 				break;
 			}
@@ -656,21 +657,42 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 
 		case REDUCTION_STRATEGY::UNITE:
 			{
-				unsigned a= 4, b=2; // note highest index firts;
-				res.insert(Hyperplane<Number>(res.mHPlanes[a].normal()+res.mHPlanes[b].normal(), res.mHPlanes[a].offset()+res.mHPlanes[b].offset())); // insert united facet
-				res.mHPlanes.erase(res.mHPlanes.begin()+a);
-				res.mHPlanes.erase(res.mHPlanes.begin()+b);
+				vector_t<Number> uniteVector = (res.mHPlanes[a].normal()+res.mHPlanes[b].normal());
+				Number uniteVector_offset = res.mHPlanes[a].offset()+res.mHPlanes[b].offset();
+
+				// check further unboundedness
+				for(unsigned neighbor: neighborsOf_a){
+					if(neighbor!=b){
+						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+							std::cout << "will be bounded because of " << neighbor << std::endl;
+							reduce=true;
+							break;
+						}
+					}
+				}
+				if(reduce){
+					reduce=false;
+					for(unsigned neighbor: neighborsOf_b){
+						if(neighbor!=a){
+							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+								std::cout << "will be bounded because of " << neighbor << std::endl;
+								reduce=true;
+								break;
+							}
+						}
+					}
+				}
+
+				if(reduce){
+					res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+					res.mHPlanes.erase(res.mHPlanes.begin()+b);
+				}
 				break;
 			}
 
 		case REDUCTION_STRATEGY::UNITE_SMOOTH:
 			{
-				unsigned a=4, b=2; // note highest index firts;
-				std::vector<Point<Number>> vertices = res.vertices();
-
-				std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, vertices); // get neighbors
-				std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, vertices);
-
 				vector_t<Number> uniteVector = vector_t<Number>::Zero(vertices[0].dimension()); // inti smooth united facet
 				Number uniteVector_offset;
 
@@ -692,28 +714,47 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 					}
 				}
 
-				Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
 
-				// smooth united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
-				for(unsigned i=0; i<uniteVector.size(); i++){
-					uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+				// check further unboundedness
+				for(unsigned neighbor: neighborsOf_a){
+					if(neighbor!=b){
+						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+							std::cout << "will be bounded because of " << neighbor << std::endl;
+							reduce=true;
+							break;
+						}
+					}
+				}
+				if(reduce){
+					reduce=false;
+					for(unsigned neighbor: neighborsOf_b){
+						if(neighbor!=a){
+							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+								std::cout << "will be bounded because of " << neighbor << std::endl;
+								reduce=true;
+								break;
+							}
+						}
+					}
 				}
 
-				res.mHPlanes.erase(res.mHPlanes.begin()+a);
-				res.mHPlanes.erase(res.mHPlanes.begin()+b);
-				res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				if(reduce){
+					Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
+
+					// smooth united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
+					for(unsigned i=0; i<uniteVector.size(); i++){
+						uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+					}
+
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+					res.mHPlanes.erase(res.mHPlanes.begin()+b);
+					res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				}
 				break;
 			}
 
 		case REDUCTION_STRATEGY::UNITE_CUT:
 			{
-				unsigned a=4, b=2; // note highest index firts
-				std::vector<Point<Number>> vertices = res.vertices();
-
-				std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, vertices); // get neighbors
-				std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, vertices);
-
-
 				vector_t<Number> uniteVector = vector_t<Number>::Zero(vertices[0].dimension()); // inti cut united facet
 				Number uniteVector_offset;
 
@@ -723,25 +764,46 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 					uniteVector += normal; // add all these candidates
 				}
 
-				Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
-
-				// cut united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
-				for(unsigned i=0; i<uniteVector.size(); i++){
-					uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+				// check further unboundedness
+				for(unsigned neighbor: neighborsOf_a){
+					if(neighbor!=b){
+						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+							std::cout << "will be bounded because of " << neighbor << std::endl;
+							reduce=true;
+							break;
+						}
+					}
+				}
+				if(reduce){
+					reduce=false;
+					for(unsigned neighbor: neighborsOf_b){
+						if(neighbor!=a){
+							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+								std::cout << "will be bounded because of " << neighbor << std::endl;
+								reduce=true;
+								break;
+							}
+						}
+					}
 				}
 
-				res.mHPlanes.erase(res.mHPlanes.begin()+a);
-				res.mHPlanes.erase(res.mHPlanes.begin()+b);
-				res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				if(reduce){
+					Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
+
+					// cut united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
+					for(unsigned i=0; i<uniteVector.size(); i++){
+						uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+					}
+
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+					res.mHPlanes.erase(res.mHPlanes.begin()+b);
+					res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				}
 				break;
 			}
 
 		case REDUCTION_STRATEGY::UNITE_NORM:
 			{
-				unsigned a= 4, b=2; // note highest index firts;
-				std::vector<Point<Number>> vertices = res.vertices();
-
-
 				// TODO compute weights
 				std::pair<double, double> weights = std::pair<double, double>(5.9, 2);
 
@@ -749,16 +811,40 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				vector_t<Number> uniteVector = res.mHPlanes[a].normal()*weights.first + res.mHPlanes[b].normal()*weights.second; // weights are calculated by hand
 				Number uniteVector_offset;
 
-				Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
-
-				// norm united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
-				for(unsigned i=0; i<uniteVector.size(); i++){
-					uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+				// check further unboundedness
+				for(unsigned neighbor: neighborsOf_a){
+					if(neighbor!=b){
+						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+							reduce=true;
+							break;
+						}
+					}
+				}
+				if(reduce){
+					reduce=false;
+					for(unsigned neighbor: neighborsOf_b){
+						if(neighbor!=a){
+							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+								std::cout << "will be bounded because of " << neighbor << std::endl;
+								reduce=true;
+								break;
+							}
+						}
+					}
 				}
 
-				res.mHPlanes.erase(res.mHPlanes.begin()+a);
-				res.mHPlanes.erase(res.mHPlanes.begin()+b);
-				res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				if(reduce){
+					Point<Number> point_a_b = getPointForOffset(uniteVector, getPointOf2Indices(a, b, vertices));
+
+					// norm united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
+					for(unsigned i=0; i<uniteVector.size(); i++){
+						uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
+					}
+
+					res.mHPlanes.erase(res.mHPlanes.begin()+a);
+					res.mHPlanes.erase(res.mHPlanes.begin()+b);
+					res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset));
+				}
 				break;
 			}
 			case REDUCTION_STRATEGY::UNITE_SMOOTH_OLD:
