@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
             #MinkowskiSumTest.cpp
             #SumPerformanceTest.cpp
               # rahsTwoTankTest.cpp
+            VertexEnumerationTest.cpp
     )
 
     add_dependencies(runAlgorithmTests googletest)
