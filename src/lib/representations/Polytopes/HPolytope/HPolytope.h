@@ -96,7 +96,7 @@ class HPolytope {
 
 	std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
 
-  std::vector<unsigned> getNeighboorsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
+  std::vector<unsigned> getNeighborsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
   Point<Number> getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<Point<Number>> getPointOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<std::vector<Point<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;

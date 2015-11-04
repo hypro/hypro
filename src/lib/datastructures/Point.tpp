@@ -65,7 +65,7 @@ Point<Number>::Point( const Point<Number> &_p )
 	// mNeighbors(_p.neighbors()),
 	mComposedOf( _p.composedOf() )
 	,
-  mNeighboors(_p.getNeighboors() ){
+  mNeighbors(_p.getNeighbors() ){
 }
 
 template <typename Number>
