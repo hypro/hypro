@@ -683,7 +683,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 						}
 					}
 					temp.push( workingSet.front());
-				}
+				}   
 
 
 				//bool isVisible = false;
