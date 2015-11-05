@@ -36,8 +36,8 @@ public:
 
 	void search ();
 
-	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j);
-	bool selectCrissCrossPivot(std::size_t& i, std::size_t& j);
+	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j) const;
+	bool selectCrissCrossPivot(std::size_t& i, std::size_t& j) const;
 	void pivot(std::size_t& i, std::size_t& j);
 
 	void insertRowAtPosition(const std::size_t& originalPos, const std::size_t& insertionPos);
@@ -46,6 +46,8 @@ public:
 	inline Dictionary<Number>& operator=(const Dictionary<Number>& rhs);
 	inline bool operator==(const Dictionary<Number>& rhs) const;
 	inline bool operator!=(const Dictionary<Number>& rhs) const { return !(*this == rhs); };
+
+	void print(bool pretty = false) const;
 private:
 
 	void rearrange();
