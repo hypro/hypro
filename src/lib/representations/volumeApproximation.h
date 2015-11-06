@@ -10,6 +10,11 @@ namespace hypro {
 	static double approximateVolume(Representation _in, std::size_t sublevels = 0) {
 		double pointCount = 0;
 		std::vector<Point<Number>> vertices = _in.vertices();
+
+		//for(Point<Number> vertex: vertices) {
+		//	std::cout << "Vertex of new poyltope:\n" << vertex.coordinate(0) << ", " << vertex.coordinate(1) << ", " << vertex.coordinate(2) << std::endl;
+		//}
+
 		unsigned dimension = vertices[0].dimension();
 		std::vector<std::pair<Number,Number>> bounderies;
 		std::vector<bool> count_help;
