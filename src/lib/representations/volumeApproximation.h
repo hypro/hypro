@@ -42,7 +42,7 @@ namespace hypro {
 
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
-			//std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
+		  //std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
 			resolution[i]= (bounderies[i].second-bounderies[i].first)/50; // 100 is guessed approximated resolution depending on bounderies TODO in config.h?
 			volumeUnit*=resolution[i];
 			count_point[i]=bounderies[i].first;

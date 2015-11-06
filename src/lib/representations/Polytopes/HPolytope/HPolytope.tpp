@@ -571,21 +571,28 @@ Point<Number> HPolytope<Number>::getPointForOffset(vector_t<Number> uniteVector,
 }
 
 template <typename Number>
-bool HPolytope<Number>::isBounded(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const{
+bool HPolytope<Number>::isBounded(vector_t<Number> a, vector_t<Number> b) const{
+	a.normalize();
+	b.normalize();
+	double res = a.dot(b);
+	//std::cout << "rEsult: " << res << std::endl;
+	return res>0;
+}
+
+template <typename Number>
+bool HPolytope<Number>::isBounded2(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const{
 	a.normalize();
 	b.normalize();
 	c.normalize();
-	double ca = c.dot(a);
-	double cb = c.dot(b);
-	std::cout << "SP: " << ca << " + " << cb << std::endl;
-	return ((ca+cb)>0);
+	double res = c.dot(a+b);
+	return res>0;
 }
 
 
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_STRATEGY
-	unsigned a= 1, b=0; // note highest index first;
-	bool reduce=false;
+HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet) const { // REDUCTION_STRATEGY
+	unsigned a= facet, b=0; // note highest index first;
+	bool reduce=true;
 
 	HPolytope<Number> res = *this;
 	std::vector<Point<Number>> vertices = res.vertices();
@@ -596,17 +603,40 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 		case REDUCTION_STRATEGY::DROP:
 			{
 				// check further unboundedness
-				for(unsigned i: neighborsOf_a){
-					for(unsigned j: neighborsOf_a){
-						std::cout << "calculate " << i << " and " << j << std::endl;
+				//for(unsigned i: neighborsOf_a){
+				//	for(unsigned j: neighborsOf_a){
+				//		if(i<j && isBounded2(res.mHPlanes[i].normal(), res.mHPlanes[j].normal(), res.mHPlanes[a].normal())){
+				//			reduce=true;
+				//			break;
+				//		}
+				//	}
+				//	if(reduce) break;
+				//}
 
-						if(i<j && isBounded(res.mHPlanes[i].normal(), res.mHPlanes[j].normal(), res.mHPlanes[a].normal())){
-							std::cout << "will be bounded because of " << i << " and " << j << std::endl;
-							reduce=true;
-							break;
-						}
+				//vector_t<Number> dummyVector, compareVector = vector_t<Number>::Zero(vertices[0].dimension());
+				//for(unsigned neighbor: neighborsOf_a){
+				//	dummyVector = res.mHPlanes[neighbor].normal();
+				//	dummyVector.normalize();
+				//	compareVector += dummyVector;
+				//}
+
+				//if(isBounded(compareVector, res.mHPlanes[a].normal())) reduce2 = true;
+
+				// bounded?
+				vector_t<Number> goodVector = vector_t<Number>::Zero(vertices[0].dimension());
+				std::vector<vector_t<Number>> badVectors;
+				for(unsigned neighbor: neighborsOf_a){
+					vector_t<Number> dummyVector = res.mHPlanes[neighbor].normal();
+					dummyVector.normalize();
+					if(isBounded(dummyVector, res.mHPlanes[a].normal())){
+						goodVector += dummyVector;
 					}
-					if(reduce) break;
+					else {
+						badVectors.push_back(dummyVector);
+					}
+				}
+				for(vector_t<Number> badVector: badVectors){
+					if(!isBounded(badVector+goodVector, res.mHPlanes[a].normal())) reduce=false;
 				}
 
 				if(reduce){
@@ -620,21 +650,167 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 			{
 				std::vector<vector_t<Number>> smoothVectors;
 				std::vector<Number> smoothVectors_offset;
+				std::vector<unsigned> smoothVectors_oldIndices;
 
 				for(unsigned neighbor: neighborsOf_a){
 					smoothVectors.push_back(res.mHPlanes[neighbor].normal()+res.mHPlanes[a].normal());
 					smoothVectors_offset.push_back(res.mHPlanes[neighbor].offset()+res.mHPlanes[a].offset());
+					smoothVectors_oldIndices.push_back(neighbor);
 				}
 
 				// check further unboundedness
-				for(unsigned i=0; i<smoothVectors.size()-1; i++){
-					for(unsigned j=i+1; j<smoothVectors.size(); j++){
-						if(isBounded(smoothVectors[i], smoothVectors[j], res.mHPlanes[a].normal())){
-							reduce=true;
-							break;
-						}
+				//for(unsigned i=0; i<smoothVectors.size()-1; i++){
+				//	for(unsigned j=i+1; j<smoothVectors.size(); j++){
+				//		if(isBounded2(smoothVectors[i], smoothVectors[j], res.mHPlanes[a].normal())){
+				//			reduce=true;
+				//			break;
+				//		}
+				//	}
+				//	if(reduce) break;
+				//}
+
+				//vector_t<Number> compareVector_a = vector_t<Number>::Zero(vertices[0].dimension());
+				//for(vector_t<Number> smoothVector: smoothVectors){
+				//	vector_t<Number> dummyVector = smoothVector;
+				//	dummyVector.normalize();
+				//	compareVector_a += dummyVector;
+				//}
+				//if(isBounded(compareVector_a, res.mHPlanes[a].normal())){
+				//	reduce2 = true;
+				//}
+
+				//if(reduce2){ // check neigbors
+
+				//	for(unsigned neighbor: neighborsOf_a){
+				//		vector_t<Number> compareVector_n = vector_t<Number>::Zero(vertices[0].dimension());
+
+				//		for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+				//			if(smoothVectors_oldIndices[i] == neighbor){
+				//				vector_t<Number> dummyVector = smoothVectors[i];
+				//				dummyVector.normalize();
+				//				compareVector_n += dummyVector;
+				//				break;
+				//			}
+				//		}
+
+				//		for(unsigned neighbor2: getNeighborsOfIndex(neighbor, vertices)){
+
+				//			if(neighbor2!=a && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), neighbor2) == neighborsOf_a.end()){
+				//				vector_t<Number> dummyVector = res.mHPlanes[neighbor2].normal();
+				//				dummyVector.normalize();
+				//				compareVector_n += dummyVector;
+				//			}
+				//			else if(neighbor2!=a)
+				//			{
+				//				for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+				//					if(smoothVectors_oldIndices[i] == neighbor2){
+				//						vector_t<Number> dummyVector = smoothVectors[i];
+				//						dummyVector.normalize();
+				//						compareVector_n += dummyVector;
+				//						break;
+				//					}
+				//				}
+				//			}
+				//		}
+
+				//		if(!isBounded(compareVector_n, res.mHPlanes[neighbor].normal())){
+				//			reduce2=false;
+				//			break;
+				//		}
+				//	}
+				//}
+
+				// bounded?
+				// main facet
+				std::cout <<" MAINFACET" << std::endl;
+
+				vector_t<Number> goodVector = vector_t<Number>::Zero(vertices[0].dimension());
+				std::vector<vector_t<Number>> badVectors;
+				for(vector_t<Number> smoothVector: smoothVectors){
+					vector_t<Number> dummyVector = smoothVector;
+					dummyVector.normalize();
+					if(isBounded(dummyVector, res.mHPlanes[a].normal())){
+						goodVector += dummyVector;
 					}
-					if(reduce) break;
+					else {
+						badVectors.push_back(dummyVector);
+					}
+				}
+				goodVector.normalize();
+				for(vector_t<Number> badVector: badVectors){
+					if(!isBounded(badVector+goodVector, res.mHPlanes[a].normal())){
+						reduce=false;
+						std::cout << "GoodVector " << goodVector << " can't handle badvector " << badVector << std::endl;
+					}
+				}
+
+				// other facets
+				if(reduce){
+						for(unsigned neighbor: neighborsOf_a){
+							std::cout <<" NEIGHBOR "<< neighbor << std::endl;
+
+							vector_t<Number> goodVector_n = vector_t<Number>::Zero(vertices[0].dimension());
+							std::vector<vector_t<Number>> badVectors_n;
+
+							// self smoothed
+							for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+								if(smoothVectors_oldIndices[i] == neighbor){
+									vector_t<Number> dummyVector = smoothVectors[i];
+									dummyVector.normalize();
+									if(isBounded(dummyVector, res.mHPlanes[neighbor].normal())){
+										//std::cout << dummyVector << " is part of gV" << std::endl;
+										goodVector_n += dummyVector;
+									}
+									else {
+										//std::cout << dummyVector << " is part of bVs" << std::endl;
+										badVectors_n.push_back(dummyVector);
+									}
+									break;
+								}
+							}
+
+							for(unsigned neighbor2: getNeighborsOfIndex(neighbor, vertices)){
+
+								if(neighbor2!=a && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), neighbor2) == neighborsOf_a.end()){
+									vector_t<Number> dummyVector = res.mHPlanes[neighbor2].normal();
+									dummyVector.normalize();
+									if(isBounded(dummyVector, res.mHPlanes[neighbor].normal())){
+										//std::cout << dummyVector << " is part of gV" << std::endl;
+										goodVector_n += dummyVector;
+									}
+									else {
+										//std::cout << dummyVector << " is part of bVs" << std::endl;
+										badVectors_n.push_back(dummyVector);
+									}
+								}
+								else if(neighbor2!=a)
+								{
+									for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+										if(smoothVectors_oldIndices[i] == neighbor2){
+											vector_t<Number> dummyVector = smoothVectors[i];
+											dummyVector.normalize();
+											if(isBounded(dummyVector, res.mHPlanes[neighbor].normal())){
+												//std::cout << dummyVector << " is part of gV" << std::endl;
+												goodVector_n += dummyVector;
+											}
+											else {
+												//std::cout << dummyVector << " is part of bVs" << std::endl;
+												badVectors_n.push_back(dummyVector);
+											}
+											break;
+										}
+									}
+								}
+							}
+
+							goodVector_n.normalize();
+							for(vector_t<Number> badVector: badVectors_n){
+								if(!isBounded(badVector+goodVector_n, res.mHPlanes[neighbor].normal())){
+									std::cout << "GoodVector_n " << goodVector_n << " can't handle badvector " << badVector << std::endl;
+									reduce=false;
+								}
+							}
+						}
 				}
 
 				if(reduce){
@@ -663,22 +839,22 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				// check further unboundedness
 				for(unsigned neighbor: neighborsOf_a){
 					if(neighbor!=b){
-						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
-							std::cout << "will be bounded because of " << neighbor << std::endl;
-							reduce=true;
-							break;
-						}
+						//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+						//	std::cout << "will be bounded because of " << neighbor << std::endl;
+						//	reduce=true;
+						//	break;
+						//}
 					}
 				}
 				if(reduce){
 					reduce=false;
 					for(unsigned neighbor: neighborsOf_b){
 						if(neighbor!=a){
-							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
-								std::cout << "will be bounded because of " << neighbor << std::endl;
-								reduce=true;
-								break;
-							}
+							//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+							//	std::cout << "will be bounded because of " << neighbor << std::endl;
+							//	reduce=true;
+							//	break;
+							//}
 						}
 					}
 				}
@@ -718,22 +894,22 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				// check further unboundedness
 				for(unsigned neighbor: neighborsOf_a){
 					if(neighbor!=b){
-						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
-							std::cout << "will be bounded because of " << neighbor << std::endl;
-							reduce=true;
-							break;
-						}
+						//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+						//	std::cout << "will be bounded because of " << neighbor << std::endl;
+						//	reduce=true;
+						//	break;
+						//}
 					}
 				}
 				if(reduce){
 					reduce=false;
 					for(unsigned neighbor: neighborsOf_b){
 						if(neighbor!=a){
-							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
-								std::cout << "will be bounded because of " << neighbor << std::endl;
-								reduce=true;
-								break;
-							}
+							//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+							//	std::cout << "will be bounded because of " << neighbor << std::endl;
+							//	reduce=true;
+							//	break;
+							//}
 						}
 					}
 				}
@@ -767,22 +943,22 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				// check further unboundedness
 				for(unsigned neighbor: neighborsOf_a){
 					if(neighbor!=b){
-						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
-							std::cout << "will be bounded because of " << neighbor << std::endl;
-							reduce=true;
-							break;
-						}
+						//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+						//	std::cout << "will be bounded because of " << neighbor << std::endl;
+						//	reduce=true;
+						//	break;
+						//}
 					}
 				}
 				if(reduce){
 					reduce=false;
 					for(unsigned neighbor: neighborsOf_b){
 						if(neighbor!=a){
-							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
-								std::cout << "will be bounded because of " << neighbor << std::endl;
-								reduce=true;
-								break;
-							}
+							//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+							//	std::cout << "will be bounded because of " << neighbor << std::endl;
+							//	reduce=true;
+							//	break;
+							//}
 						}
 					}
 				}
@@ -814,21 +990,21 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat) const { // REDUCTION_S
 				// check further unboundedness
 				for(unsigned neighbor: neighborsOf_a){
 					if(neighbor!=b){
-						if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
-							reduce=true;
-							break;
-						}
+						//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[a].normal())){
+						//	reduce=true;
+						//	break;
+						//}
 					}
 				}
 				if(reduce){
 					reduce=false;
 					for(unsigned neighbor: neighborsOf_b){
 						if(neighbor!=a){
-							if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
-								std::cout << "will be bounded because of " << neighbor << std::endl;
-								reduce=true;
-								break;
-							}
+							//if(isBounded(res.mHPlanes[neighbor].normal(), uniteVector, res.mHPlanes[b].normal())){
+							//	std::cout << "will be bounded because of " << neighbor << std::endl;
+							//	reduce=true;
+							//	break;
+							//}
 						}
 					}
 				}
