@@ -26,7 +26,7 @@ template <typename Number>
 class VPolytope;
 
 template <typename Number>
-class Box {
+class Box : public hypro::GeometricObject<Number>{
   private:
   public:
 	/***************************************************************************

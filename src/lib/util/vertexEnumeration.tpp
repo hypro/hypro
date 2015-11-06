@@ -530,7 +530,7 @@ namespace hypro {
 			std::cout << "\t g \t";
 			for(const auto& pair : NMap)
 				std::cout << pair.second << "\t";
-			std::cout << endl;
+			std::cout << std::endl;
 
 			for(unsigned rowIndex = 0; rowIndex < mDictionary.rows(); ++rowIndex) {
 				if(BMap.find(rowIndex) != BMap.end()){
