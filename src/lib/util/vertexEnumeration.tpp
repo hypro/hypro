@@ -116,28 +116,33 @@ namespace hypro {
 		j = 1;
 
 		std::size_t m = mDictionary.rows()-1;
+		std::size_t depth = 0;
 
-		std::cout << "Initial, optimal dictionary: " << std::endl;
+		std::cout << "Level " << depth << ": Initial, optimal dictionary: " << std::endl;
 		print(true);
 
 		do {
 			while(i <= m && !isReverseCrissCrossPivot(i,j)) increment(i,j);
 			if(i<m) {
 				std::cout << "Found reverse pivot -> step one level down." << std::endl;
+				++depth;
 				pivot(i,j);
-				std::cout << "dictionary after pivot (" << i << ", " << j << "): " << std::endl;
+				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
 				print(true);
+				print();
 				i = 0;
 				j = 1;
 			} else {
 				selectCrissCrossPivot(i,j);
 				pivot(i,j);
 				std::cout << "step one level up, consider next dictionaries." << std::endl;
-				std::cout << "dictionary after pivot (" << i << ", " << j << "): " << std::endl;
+				--depth;
+				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
 				print(true);
 				increment(i,j);
 			}
-		} while ( i < m && mB[m-1] != m-1);
+		} while ( i < m );
+		//} while ( i < m && mB[m-1] != m-1);
 	}
 
 	template<typename Number>
@@ -164,8 +169,7 @@ namespace hypro {
 		while(rIt->second != j) ++rIt;
 		r = rIt->first;
 
-		print(true);
-		print();
+		//print(true);
 
 		Dictionary<Number> tmp(*this);
 		tmp.pivot(i,j);
@@ -523,9 +527,19 @@ namespace hypro {
 			for(const auto& pair : mN)
 				NMap[pair.second] = pair.first;
 
+			assert(NMap.size() == mN.size());
+
 			std::map<std::size_t, std::size_t> BMap;
-			for(const auto& pair : mB)
+			for(const auto& pair : mB) {
 				BMap[pair.second] = pair.first;
+			}
+
+			std::cout << mB << std::endl;
+
+			assert(BMap.size() == mB.size());
+
+			std::cout << "BMap: " << BMap << std::endl;
+			std::cout << "NMap: " << NMap << std::endl;
 
 			std::cout << "\t g \t";
 			for(const auto& pair : NMap)
