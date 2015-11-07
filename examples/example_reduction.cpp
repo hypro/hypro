@@ -148,33 +148,33 @@ int main(int argc, char const *argv[])
   //  std::cout << std::endl;
   //}
 
-  reduction_unite_normal = reduce_from.reduce_nd(2, 1, 0);
-  std::cout << "facet[1] and facet[0]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 2, 0);
-  std::cout << "facet[2] and facet[0]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 3, 0);
-  std::cout << "facet[3] and facet[0]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 2, 1);
-  std::cout << "facet[2] and facet[1]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 3, 1);
-  std::cout << "facet[3] and facet[1]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  //reduction_unite_normal = reduce_from.reduce_nd(2, 1, 0);
+  //std::cout << "facet[1] and facet[0]" << std::endl;
+  //std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  //reduction_unite_normal = reduce_from.reduce_nd(2, 2, 0);
+  //std::cout << "facet[2] and facet[0]" << std::endl;
+  //std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  //reduction_unite_normal = reduce_from.reduce_nd(2, 3, 0);
+  //std::cout << "facet[3] and facet[0]" << std::endl;
+  //std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  ////reduction_unite_normal = reduce_from.reduce_nd(2, 2, 1);
+  ////std::cout << "facet[2] and facet[1]" << std::endl;
+  ////std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  ////reduction_unite_normal = reduce_from.reduce_nd(2, 3, 1);
+  ////std::cout << "facet[3] and facet[1]" << std::endl;
+  ////std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   reduction_unite_normal = reduce_from.reduce_nd(2, 4, 1);
   std::cout << "facet[4] and facet[1]" << std::endl;
   std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 3, 2);
-  std::cout << "facet[3] and facet[2]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 4, 2);
-  std::cout << "facet[4] and facet[2]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  reduction_unite_normal = reduce_from.reduce_nd(2, 4, 3);
-  std::cout << "facet[4] and facet[3]" << std::endl;
-  std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  ////reduction_unite_normal = reduce_from.reduce_nd(2, 3, 2);
+  ////std::cout << "facet[3] and facet[2]" << std::endl;
+  ////std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  //reduction_unite_normal = reduce_from.reduce_nd(2, 4, 2);
+  //std::cout << "facet[4] and facet[2]" << std::endl;
+  //std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  //reduction_unite_normal = reduce_from.reduce_nd(2, 4, 3);
+  //std::cout << "facet[4] and facet[3]" << std::endl;
+  //std::cout << "volume of unite_normal orange: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
 
   // Reducing to 2d
   std::vector<Point<Number>> reduce_from_vertices_2d,

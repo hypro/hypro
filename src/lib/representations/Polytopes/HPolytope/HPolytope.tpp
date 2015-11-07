@@ -462,6 +462,25 @@ std::vector<unsigned> HPolytope<Number>::getNeighborsOfIndex(unsigned i, std::ve
 }
 
 template <typename Number>
+std::vector<std::vector<unsigned>> HPolytope<Number>::getNeighborsPairsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const {
+	std::vector<std::vector<unsigned>> res;
+
+	for(Point<Number> vertex: vertices) {
+		std::vector<unsigned> neighbors = vertex.getNeighbors();
+		if(std::find(neighbors.begin(), neighbors.end(), i)!= neighbors.end()) {
+			std::vector<unsigned> subRes;
+			for(unsigned j: vertex.getNeighbors()) {
+				if(j!=i) {
+					subRes.push_back(j);
+				}
+			}
+			res.push_back(subRes);
+		}
+	}
+	return res;
+}
+
+template <typename Number>
 std::vector<Point<Number>> HPolytope<Number>::getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
 	std::vector<Point<Number>> res;
 	for(Point<Number> vertex: vertices) {
@@ -575,7 +594,7 @@ bool HPolytope<Number>::isGood(vector_t<Number> a, vector_t<Number> b) const{
 	a.normalize();
 	b.normalize();
 	double res = a.dot(b);
-	//std::cout << "\nResult: " << res << std::endl;
+	std::cout << "\nResult: " << res << std::endl;
 	return res>0;
 }
 
@@ -802,74 +821,53 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 * bounded?
 				 * ---------------------------------------------------------------------
 				 */
-				// init goodVectors_a, badVectors_a,  goodVectors_b and badVectors_b
-				std::vector<vector_t<Number>> goodVectors_a, badVectors_a, goodVectors_b, badVectors_b;
-				vector_t<Number> dummyVector = uniteVector;
-				dummyVector.normalize();
-				goodVectors_a.push_back(dummyVector);
-				goodVectors_b.push_back(dummyVector);
 
-				// examine facet A
-				// collect  goodVectors_a and badVectors_a
-				for(unsigned neighbor: neighborsOf_a){
-					if(neighbor!=b){
-						dummyVector = res.mHPlanes[neighbor].normal();
-						dummyVector.normalize();
-						if(isGood(dummyVector, res.mHPlanes[a].normal())){
-							goodVectors_a.push_back(dummyVector);
-						}
-						else {
-							badVectors_a.push_back(dummyVector);
-						}
-					}
-				}
+				 // collect correct neighbor pair TODO check for one plane
+				 vector_t<Number> res_a = vector_t<Number>::Zero(vertices[0].dimension());
+				 std::vector<std::vector<unsigned>> relevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
 
-				// test badVectors_a
-				for(vector_t<Number> badVector: badVectors_a){
-					bool canBadbeHelped=false;
-					for(vector_t<Number> goodVector: goodVectors_a){
-						if(isBounded(badVector, goodVector, res.mHPlanes[a].normal())){
-							canBadbeHelped=true;
-							break;
-						}
-					}
-					if(!canBadbeHelped){
-						reduce=false;
-						break;
-					}
-				}
+				 for(std::vector<unsigned> relevantRidge_a: relevantRidges_a){
 
-				if(reduce){
-					// examine facet B
-					// collect  goodVectors_b and badVectors_b
-					for(unsigned neighbor: neighborsOf_b){
-						if(neighbor!=a){
-							dummyVector = res.mHPlanes[neighbor].normal();
-							dummyVector.normalize();
-							if(isGood(dummyVector, res.mHPlanes[b].normal())){
-								goodVectors_b.push_back(dummyVector);
-							}
-							else {
-								badVectors_b.push_back(dummyVector);
-							}
-						}
-					}
+					 vector_t<Number> subRes_a = vector_t<Number>::Zero(vertices[0].dimension());
 
-					// test badVectors_b
-					for(vector_t<Number> badVector: badVectors_b){
-						bool canBadbeHelped=false;
-						for(vector_t<Number> goodVector: goodVectors_b){
-							if(isBounded(badVector, goodVector, res.mHPlanes[b].normal())){
-								canBadbeHelped=true;
-								break;
-							}
-						}
-						if(!canBadbeHelped){
-							reduce=false;
-							break;
-						}
-					}
-				}
+					 for(unsigned relevantFacet_a: relevantRidge_a){
+						 if(relevantFacet_a==b){
+							 subRes_a += uniteVector;
+						 }
+						 else {
+							 vector_t<Number> dummyFacet = res.mHPlanes[relevantFacet_a].normal();
+							 subRes_a += dummyFacet;
+						 }
+					 }
+					 subRes_a.normalize();
+					 res_a += subRes_a;
+				 }
+
+				 if(!isGood(res_a, res.mHPlanes[a].normal())) reduce=false;
+
+				 if(reduce){
+					 vector_t<Number> res_b = vector_t<Number>::Zero(vertices[0].dimension()); // = uniteVectorNormalized;
+					 std::vector<std::vector<unsigned>> relevantRidges_b = getNeighborsPairsOfIndex(b, vertices);
+
+					 for(std::vector<unsigned> relevantRidge_b: relevantRidges_b){
+
+						 vector_t<Number> subRes_b = vector_t<Number>::Zero(vertices[0].dimension());
+
+					 	for(unsigned relevantFacet_b: relevantRidge_b){
+					 		if(relevantFacet_b==a){
+					 			subRes_b += uniteVector;
+					 		}
+					 		else {
+					 			vector_t<Number> dummyFacet = res.mHPlanes[relevantFacet_b].normal();
+					 			subRes_b += dummyFacet;
+					 		}
+					 	}
+						subRes_b.normalize();
+ 					  res_b += subRes_b;
+					 }
+
+					 if(!isGood(res_b, res.mHPlanes[b].normal())) reduce=false;
+				 }
 
 				/*
 				 * ---------------------------------------------------------------------
