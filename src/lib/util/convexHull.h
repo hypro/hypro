@@ -121,10 +121,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
  * @return The list of points that are not contained by the facets.
  */
 template <typename Number>
-static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points,
-										const std::vector<std::shared_ptr<Facet<Number>>>& facets,
-										std::vector<Point<Number>>& unassignedPoints,
-										std::vector<Point<Number>>& assignedPoints ) {
+static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points, const std::vector<std::shared_ptr<Facet<Number>>>& facets, std::vector<Point<Number>>& unassignedPoints, std::vector<Point<Number>>& assignedPoints ) {
 	unassignedPoints = points;
 	std::vector<Point<Number>> pointsInFacets;
 	for (std::shared_ptr<Facet<Number>> facet : facets) {
@@ -145,12 +142,10 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 	// Stefan: removables holds the indices of the points in points, which are contained in one of the facets.
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 
-
 	for ( unsigned i = 0; i < removeables.size(); i++ ) {
 		assignedPoints.push_back( unassignedPoints.at( removeables[i] - i ) );
 		unassignedPoints.erase( unassignedPoints.begin() + ( removeables[i] - i ) );
 	}
-
 	// std::cout << __func__ << " : " << __LINE__ << unassignedPoints << "  " << assignedPoints << std::endl;
 }
 
@@ -184,11 +179,11 @@ static std::vector<Ridge<Number>> getRidges( const std::vector<std::shared_ptr<F
 
 	if (!facets.empty()) {
 		std::vector<std::shared_ptr<Facet<Number>>> neighbors = getFacetsNeighbors( facets );
-		for (auto facet: facets) { // get 'all' neighbors
+		for (auto facet: facets) {
 			for (auto neighbor: neighbors) {
-				if (facet->isNeighbor(neighbor) ) {
-					result.push_back(newRidge(facet, neighbor));
-				}
+				if (facet->isNeighbor(neighbor)) {
+					Ridge<Number> newRidge(facet, neighbor);
+					result.push_back(newRidge);				}
 			}
 		}
 	}
@@ -202,8 +197,8 @@ static std::vector<Ridge<Number>> getRidges( std::shared_ptr<Facet<Number>> face
 
 	if (!facet->empty()) {
 		for (auto neighbor: facet->neighbors()) {
-			Ridge<Number> newRidge( facet, neighbor );
-			result.push_back( newRidge );
+			Ridge<Number> newRidge(facet, neighbor);
+			result.push_back(newRidge);
 		}
 	}
 
@@ -281,8 +276,7 @@ visible_facets) {
  * @return The list of facets that have at least one point above.
  */
 template <typename Number>
-static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets,
-								std::queue<std::shared_ptr<Facet<Number>>>& result) {
+static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets, std::queue<std::shared_ptr<Facet<Number>>>& result) {
 	for (unsigned i=facets.size(); i > 0; i--) {
 		if (!facets.at(i-1)->getOutsideSet().empty()) {
 			result.push(facets[i-1]);
@@ -296,23 +290,19 @@ static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& face
  */
 template <typename Number>
 static bool neighborCheck( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) {
-	if ( *facet1 == *facet2 ) {
-		return false;
-	} else {
-		int checkValue =
-			  facet1->vertices().at( 0 ).dimension() - 1;  // number of points they have to share to be neighbors
-		// std::cout << "checkValue: " << checkValue << std::endl;
-		int currentValue = 0;  // number of points that are confirmed to be shared
-		for ( unsigned i = 0; i < facet1->vertices().size(); i++ ) {
-			for ( unsigned j = 0; j < facet2->vertices().size(); j++ ) {
-				if ( facet1->vertices().at( i ) == facet2->vertices().at( j ) ) {
-					currentValue++;
-				}
+	int checkValue = facet1->vertices().at( 0 ).dimension() - 1;  // number of points they have to share to be neighbors
+	int currentValue = 0;  // number of points that are confirmed to be shared
+
+	for (auto vertex1: facet1->vertices()) {
+		for (auto vertex2: facet2->vertices()) {
+			if ( vertex1 == vertex2) {
+				currentValue++;
 			}
 		}
-		// std::cout << "currentValue: " << currentValue << std::endl;
-		return checkValue == currentValue;
 	}
+	if(checkValue == currentValue) return true;
+
+	return false;
 }
 
 /*
@@ -320,16 +310,13 @@ static bool neighborCheck( std::shared_ptr<Facet<Number>> facet1, std::shared_pt
  */
 template <typename Number>
 static void determineNeighbors( std::vector<std::shared_ptr<Facet<Number>>>& newFacets ) {
-	for ( unsigned i = 0; i < newFacets.size(); i++ ) {
-		for ( unsigned j = 0; j < newFacets.size(); j++ ) {
-			if ( neighborCheck( newFacets[i], newFacets[j] ) ) {
-				newFacets[i]->addNeighbor( newFacets[j] );
-				newFacets[j]->addNeighbor(
-					  newFacets[i] );  // if neighbor check true add to the neighborset of the facet
+	for (unsigned i = 0; i < newFacets.size(); i++) {
+		for (unsigned j = i+1; j < newFacets.size(); j++) {
+			if (neighborCheck(newFacets[i], newFacets[j])) { // check all pairs of new facets if they are neighbors
+				newFacets[i]->addNeighbor(newFacets[j]);
+				newFacets[j]->addNeighbor(newFacets[i]);
 			}
 		}
-		// std::cout << __func__ << " NewFacet: " << newFacets[i] << std::endl;
-		// std::cout << __func__ << " Neighbors of NewFacet: " << newFacets[i].neighbors() << std::endl;
 	}
 }
 
@@ -554,22 +541,22 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 	if (points.size() >= points.at(0).dimension()+1 ) {
 		std::vector<std::shared_ptr<Facet<Number>>> facets;
-		initConvexHull( points, facets );
 		std::vector<Point<Number>> unassignedPoints, assignedPoints;
-		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints ); // Determine points which belong to a facet
 
-		for (unsigned i=0; i < facets.size(); i++) {
-			for (unsigned j=0; j < unassignedPoints.size(); j++) {
-				if (facets[i]->isAbove(unassignedPoints[j])) { // isAbove
-					facets[i]->addPointToOutsideSet(unassignedPoints[j]);
+		// init facets and points
+		initConvexHull(points, facets);
+		pointsNotContainedInFacets(points, facets, unassignedPoints, assignedPoints); // Determine points which belong to a facet
+		for (auto facet: facets) {
+			for (auto point: unassignedPoints) {
+				if (facet->isAbove(point)) { // isAbove
+					facet->addPointToOutsideSet(point);
 				}
 			}
 		}
 
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
-		removeBorderFacets(facets, workingSet);
+		removeBorderFacets(facets, workingSet); // extract the facets to be examined
 
-		// The algorithm is now initialized with a minimal polytope (facets) with correct outsideSets.
 		/*
 		* ------------------------------------------------------------------------------
 		* MAIN BODY
@@ -578,38 +565,31 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 		while (!workingSet.empty()) {
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
-			// std::cout << __func__ << " Current Facet: " << *currentFacet << std::endl;
-			// std::cout << __func__ << " Current Neighbors: ";
-			// for(const auto neig : currentFacet->neighbors())
-			//	std::cout << *neig << ", ";
-			// std::cout << std::endl;
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
-			// std::cout << __func__ << " Furthest point: " << currentPoint << std::endl;
 
 			std::vector<std::shared_ptr<Facet<Number>>> currentVisibleFacets;
 			currentVisibleFacets.push_back(currentFacet);
 			std::queue<std::shared_ptr<Facet<Number>>> newVisibleFacets;
 			bool changed = true;
 
-			while(changed){ // Determin Horizon
+			// determin horizon into currentVisibleFacets
+			while(changed){
 				changed = false;
 				for (const auto& facet : currentVisibleFacets) {
 					assert(!facet->neighbors().empty());
 					for (const auto& neighbor : facet->neighbors()) {
-						 //std::cout<< "Neighbor : " << *neighbor << "currentPoint : " << currentPoint << std::endl;
 						if (neighbor->isAbove(currentPoint)) {
 							newVisibleFacets.push(neighbor); // update new visible facets
-							 //std::cout << "Neighbor: " << *neighbor << std::endl;
 							assert(!neighbor->neighbors().empty());
 						}
 					}
 				}
-				while ( !newVisibleFacets.empty() ) {
+				while (!newVisibleFacets.empty()) {
 					if(std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *newVisibleFacets.front())== currentVisibleFacets.end()){
 						currentVisibleFacets.push_back(newVisibleFacets.front()); // insert the new visible facets into the current visible facets - if they are no duplicates
 						changed = true;
 					}
-					newVisibleFacets.pop();
+					newVisibleFacets.pop(); // remove the new visible facet
 				}
 			}
 
@@ -625,42 +605,18 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			 * the neighbors set.
 			 */
 			std::vector<std::shared_ptr<Facet<Number>>> newFacets;
-			for ( const auto& facet : currentVisibleFacets ) {
-				// collect horizon ridges
-				assert( !facet->neighbors().empty() );
-				std::vector<Ridge<Number>> ridges = getRidges( facet );
-				// std::cout << "Process visible facet " << *facet << std::endl;
-				// std::cout << "Current Ridges: " << ridges << std::endl;
-				for ( unsigned j = 0; j < ridges.size(); j++ ) {
-					// actual check for horizon property
-					// std::cout << __func__ << " Current Ridge: " << ridges.at(j) << std::endl;
-					for ( unsigned i = 0; i < ridges.at( j ).neighbors().size(); i++ ) {
-						if ( *ridges.at( j ).neighbors().at( i ) != *facet ) {
-							// std::cout << "Check neighbor: " << ridges.at(j).neighbors().at(i);
-							bool isVisible = false;
-							for ( const auto& f : currentVisibleFacets ) {
-								if ( *ridges.at( j ).neighbors().at( i ) == *f ) {
-									isVisible = true;
-									// std::cout << " visible." << std::endl;
-									break;
-								}
-							}
-							if ( !isVisible ) {  // we have a neighbor of this ridge, which is not visible -> horizon
-												 // ridge, create new facet
-								// std::cout << "invisible." << std::endl;
-								Point<Number> insidePoint1 = findInsidePoint( ridges.at( j ), facet );
-								Point<Number> insidePoint2 =
-									  findInsidePoint( ridges.at( j ), ridges.at( j ).neighbors().at( i ) );
-								std::shared_ptr<Facet<Number>> newFacet =
-									  std::shared_ptr<Facet<Number>>( new Facet<Number>(
-											ridges.at( j ).vertices(), currentPoint, insidePoint1, insidePoint2 ) );
-								// Facet<Number> newFacet(ridges.at(j).vertices(), currentPoint, unassignedPoints,
-								// facet.getOutsideSet(), insidePoint); //assignedPoints
-								newFacet->addNeighbor( ridges.at( j ).neighbors().at( i ) );
-								ridges.at( j ).rNeighbors().at( i )->addNeighbor( newFacet );
-								newFacets.push_back( newFacet );
-								// std::cout << "Newly created facet: " << *newFacet << std::endl;
-							}
+
+			// Create new facets
+			for(auto facet: currentVisibleFacets){
+				for (auto ridge: getRidges( facet ) ) {
+					for (auto neighbor: ridge.neighbors() ) {
+						if (std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor) == currentVisibleFacets.end()) {  // we have a neighbor of this ridge, which is not visible -> horizon
+							// ridge, create new facet
+							Point<Number> insidePoint = findInsidePoint(ridge, facet);
+							std::shared_ptr<Facet<Number>> newFacet = std::shared_ptr<Facet<Number>>(new Facet<Number>(ridge.vertices(), currentPoint, insidePoint));
+							newFacet->addNeighbor(neighbor);
+							neighbor->addNeighbor(newFacet);
+							newFacets.push_back(newFacet);
 						}
 					}
 				}
@@ -670,7 +626,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			// relations in between the new facets.
 			// std::cout << __func__ << " New Facets before neighborhood: " << newFacets << std::endl;
 
-			determineNeighbors( newFacets );
+			determineNeighbors(newFacets);
 
 			// std::cout << __func__ << " New Facets: " << newFacets << std::endl;
 			// std::cout << __func__ << " New Facets: ";
@@ -680,37 +636,35 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 			// std::vector<Point<Number>> outsidePoints =
 			// polytope::currentPoints_outside_of_currentVisibleFacets(currentVisibleFacets);
-			unsigned del;
-			bool ok = false;
-			for ( unsigned i = 0; i < unassignedPoints.size(); i++ ) {
-				if ( unassignedPoints[i] == currentPoint ) {
-					del = i;
-					ok = true;
-					break;
-				}
-			}
 
-			if ( ok ) {
-				assignedPoints.push_back( unassignedPoints.at( del ) );
-				unassignedPoints.erase( unassignedPoints.begin() + del );
+			// update unassignedPoints -> assignedPoints
+			if (std::find(unassignedPoints.begin(), unassignedPoints.end(), currentPoint)!=unassignedPoints.end()) {
+				assignedPoints.push_back(currentPoint); // assign currentPoint if not yet
+
+				for (unsigned i = 0; i < unassignedPoints.size(); i++) {
+					if (unassignedPoints.at(i) == currentPoint) {
+						unassignedPoints.erase(unassignedPoints.begin()+i); // erase currentPoint in unassignedPoints
+						break;
+					}
+				}
 			}
 
 			// std::cout << __func__ << " Unassigned Points: " << unassignedPoints << std::endl;
 
 			// update outside sets of the new facets.
-			for ( unsigned i = 0; i < newFacets.size(); i++ ) {
-				for ( unsigned j = 0; j < unassignedPoints.size(); j++ ) {  // unassignedPoints?
-					if (newFacets[i]->isAbove(unassignedPoints[j])) {
-						newFacets[i]->addPointToOutsideSet( unassignedPoints[j] );
+			for (auto facet: newFacets) {
+				for (auto point: unassignedPoints) {
+					if (facet->isAbove(point)) {
+						facet->addPointToOutsideSet(point);
 					}
 				}
 			}
 
 			std::queue<std::shared_ptr<Facet<Number>>> notOutsideNewFacets;
 			std::vector<std::shared_ptr<Facet<Number>>> newNeighOpt = newFacets;
-			removeBorderFacets( newFacets, notOutsideNewFacets );
+			removeBorderFacets(newFacets, notOutsideNewFacets);
 			for ( const auto& facet : newFacets ) {
-				facets.push_back( facet );
+				facets.push_back( facet ); // update facets with new "final" border facets
 			}
 
 			// update working set with relevant new facets
@@ -719,33 +673,44 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				notOutsideNewFacets.pop();
 			}
 
+			// remove non-relevant facets from workingSet
 			std::queue<std::shared_ptr<Facet<Number>>> temp;
 			while ( !workingSet.empty() ) {
-				bool isVisible = false;
-				for ( unsigned i = 0; i < currentVisibleFacets.size(); i++ ) {
-					bool done = workingSet.front()->removeNeighbor( currentVisibleFacets[i] );
-					if ( done ) {
-						std::shared_ptr<Facet<Number>> newNeigh = newNeighbor( workingSet.front(), newNeighOpt );
-						// std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
-						// std::cout << "Current Facet: " << workingSet.front() << std::endl;
-						// std::cout << "NewNeighbor: " << newNeigh << std::endl;
-						workingSet.front()->addNeighbor( newNeigh );
-					}
-
-					/*for(unsigned j = 0; j<facets.size(); j++){
-						bool done2 = facets.at(j).removeNeighbor(currentVisibleFacets[i]);
-						if(done2){
-							Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
-							//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
-							//std::cout << "Current Facet: " << workingSet.front() << std::endl;
-							//std::cout << "NewNeighbor: " << newNeigh << std::endl;
-							facets.at(j).addNeighbor(newNeigh);
+				if(std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *workingSet.front())==currentVisibleFacets.end()){
+					for(auto facet: currentVisibleFacets){
+						if(workingSet.front()->removeNeighbor(facet)){
+							workingSet.front()->addNeighbor(newNeighbor(workingSet.front(), newNeighOpt));
 						}
-					}*/
+					}
+					temp.push( workingSet.front());
+				}   
 
-					if ( *workingSet.front() == *currentVisibleFacets.at( i ) ) isVisible = true;
-				}
-				if ( !isVisible ) temp.push( workingSet.front() );
+
+				//bool isVisible = false;
+				//for ( unsigned i = 0; i < currentVisibleFacets.size(); i++ ) {
+				//	bool done = workingSet.front()->removeNeighbor( currentVisibleFacets[i] );
+				//	if ( done ) {
+				//		std::shared_ptr<Facet<Number>> newNeigh = newNeighbor( workingSet.front(), newNeighOpt );
+				//		// std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+				//		// std::cout << "Current Facet: " << workingSet.front() << std::endl;
+				//		// std::cout << "NewNeighbor: " << newNeigh << std::endl;
+				//		workingSet.front()->addNeighbor( newNeigh );
+				//	}
+
+				//	/*for(unsigned j = 0; j<facets.size(); j++){
+				//		bool done2 = facets.at(j).removeNeighbor(currentVisibleFacets[i]);
+				//		if(done2){
+				//			Facet<Number> newNeigh = polytope::newNeighbor(workingSet.front(), newNeighOpt);
+				//			//std::cout << __func__ << "Old Neighbor: " << currentVisibleFacets[i] << std::endl;
+				//			//std::cout << "Current Facet: " << workingSet.front() << std::endl;
+				//			//std::cout << "NewNeighbor: " << newNeigh << std::endl;
+				//			facets.at(j).addNeighbor(newNeigh);
+				//		}
+				//	}*/
+
+				//	if ( *workingSet.front() == *currentVisibleFacets.at( i ) ) isVisible = true;
+				//}
+				//if ( !isVisible ) temp.push( workingSet.front() );
 
 				workingSet.pop();
 			}

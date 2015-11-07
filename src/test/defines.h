@@ -42,10 +42,18 @@ typedef ::testing::Types<
 	carl::FLOAT_T<mpq_class>
 > allTypes;
 
+typedef ::testing::Types<
+	#ifdef USE_CLN_NUMBERS
+	carl::FLOAT_T<cln::cl_RA>,
+	#endif
+	carl::FLOAT_T<mpq_class>
+> rationalTypes;
+
 // List tests which should be typed
 
 // Algorithm
 TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
+TYPED_TEST_CASE(VertexEnumerationTest, rationalTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, floatTypes);

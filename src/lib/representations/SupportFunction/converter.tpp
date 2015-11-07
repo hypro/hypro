@@ -28,20 +28,25 @@ namespace hypro{
                 std::vector<carl::Interval<Number>> intervals = _source.boundaries();                   //gets intervals of box
                 for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
                         distances( 2 * i ) = -intervals[i].lower();                                
-                        distances( 2 * i + 1 ) = intervals[i].upper();                             //write inverted lower bound values and upper bound values into the distance vector
+                        distances( 2 * i + 1 ) = intervals[i].upper();                                  //write inverted lower bound values and upper bound values into the distance vector
                 }
 
                 _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, directions, distances); //constructs a support function with normal matrix and distance vector
 
                 return true;
-}
+        }
 
-                /*
-                template<typename Number>
-                static bool convert( const hypro::VPolytope<Number>& _source, SupportFunction<Number>& _target) {
-
-                }
-                */
+        // conversion from V-Polytope to support function
+        template <typename Number>
+        static bool convert( const hypro::VPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+                HPolytope<Number> temp = HPolytope<Number>(_source);                                   //converts the source object into a h-polytope
+                typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
+                assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
+                
+                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );             //constructs a support function with the received planes
+               
+                return true;
+        }
     
 
     
@@ -54,34 +59,35 @@ namespace hypro{
                 _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );                //constructs a support function with the received planes
 
                 return true;
-}
-// TODO (Zonotope-conversion doesn't work)
-template <typename Number>
-static bool convert( const hypro::Zonotope<Number>& _source, SupportFunction<Number>& _target ) {
-	Zonotope<Number> tmp = _source.intervalHull();
-	std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
-	assert( !vertices.empty() );
-	vector_t<Number> minima = vertices[0];
-	vector_t<Number> maxima = vertices[0];
+        }
+        // TODO conversion from Zonotope to support function
+        template <typename Number>
+        static bool convert( const hypro::Zonotope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+                
 
-	for ( unsigned i = 0; i < vertices.size(); ++i ) {
-		for ( unsigned d = 0; d < _source.dimension(); ++d ) {
-			minima( d ) = vertices[i]( d ) < minima( d ) ? vertices[i]( d ) : minima( d );
-			maxima( d ) = vertices[i]( d ) > maxima( d ) ? vertices[i]( d ) : maxima( d );
-			assert( minima( d ) <= maxima( d ) );
-		}
-	}
+                return true;
+        }
+        
+/*                     Zonotope<Number> tmp = _source.intervalHull();
+                std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
+                assert( !vertices.empty() );                                                                                    
+                vector_t<Number> minima = vertices[0];
+                vector_t<Number> maxima = vertices[0];
 
-	typename Box<Number>::intervalMap intervals;
-	for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-		intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
+                        for ( unsigned i = 0; i < vertices.size(); ++i ) {
+                                for ( unsigned d = 0; d < _source.dimension(); ++d ) {
+                                        minima( d ) = vertices[i]( d ) < minima( d ) ? vertices[i]( d ) : minima( d );
+                                	maxima( d ) = vertices[i]( d ) > maxima( d ) ? vertices[i]( d ) : maxima( d );
+                                        assert( minima( d ) <= maxima( d ) );
+                                }
+                        }
+
+                typename Box<Number>::intervalMap intervals;
+                for ( unsigned i = 0; i < _source.dimension(); ++i ) {
+                        intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
 										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
-	}
+                }
 
-	return true;
-}
-
-/*
 template<typename Number>
 hypro::SupportFunction<Number> convert(const hypro::Polytope<Number>& _source) {
 	hypro::Polytope<Number> tmp = _source;

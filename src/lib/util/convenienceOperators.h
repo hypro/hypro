@@ -43,4 +43,15 @@ namespace hypro {
 
 		return _out;
 	}
+
+	template<typename Key, typename T>
+	std::ostream& operator <<(std::ostream& _out, const std::map<Key,T>& _map) {
+		if(!_map.empty()) {
+			_out << _map.begin()->first << " -> " << _map.begin()->second;
+			for(auto mapIt = ++_map.begin(); mapIt != _map.end(); ++mapIt)
+				_out << ", " << mapIt->first << " -> " << mapIt->second;
+		}
+
+		return _out;
+	}
 }

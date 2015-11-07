@@ -29,7 +29,8 @@ class HPolytope {
                               UNITE,
                               UNITE_SMOOTH,
                               UNITE_CUT,
-                              UNITE_NORM
+                              UNITE_NORM,
+                              UNITE_SMOOTH_OLD
                             };
 
   public:
@@ -87,20 +88,25 @@ class HPolytope {
 	void removeRedundantPlanes();
 
 	HPolytope<Number> reduce( int strat = 0 ,unsigned _steps = 1 ) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  HPolytope<Number> reduce_nd(int strat=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_nd(int strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
 	std::pair<unsigned, unsigned> chooseStrat() const;
 	unsigned getIndexForDrop() const;
 	unsigned getIndexForUnite() const;
 
+  // Help functions by Igor Bongartz
 	std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
 
-  std::vector<unsigned> getNeighboorsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
-  Point<Number> getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
+  std::vector<unsigned> getNeighborsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
+  std::vector<Point<Number>> getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<Point<Number>> getPointOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<std::vector<Point<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   vector_t<Number> computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> a, vector_t<Number> b) const;
+  Point<Number> getPointForOffset(vector_t<Number> uniteVector, std::vector<Point<Number>> points) const;
+  bool isGood(vector_t<Number> a, vector_t<Number> b) const;
+  bool isBounded(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
+
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;

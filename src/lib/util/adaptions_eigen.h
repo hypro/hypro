@@ -75,13 +75,22 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 	if ( lhs.rows() != rhs.rows() ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		// std::cout << lhs(dim) << std::endl;
-		// std::cout << rhs(dim) << std::endl;
-
-		// std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS <<
-		// "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
 		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
 			return false;
+		}
+	}
+	return true;
+}
+
+template <typename Number>
+bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) return false;
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), TOLLERANCE_ULPS ) ) {
+				return false;
+			}
 		}
 	}
 	return true;
