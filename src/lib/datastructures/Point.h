@@ -98,8 +98,8 @@ class Point {
 		mCoordinates(mCoordinates.rows()-1) = val;
 	}
 
-   void setNeighboors(const std::vector<unsigned> &_neighboors) {
-     mNeighboors = _neighboors;
+   void setNeighbors(const std::vector<unsigned> &_neighbors) {
+     mNeighbors = _neighbors;
    }
 
    std::vector<unsigned> getNeighbors() const{
