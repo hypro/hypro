@@ -127,6 +127,8 @@ class Vertex {
 
 	Number coordinate( unsigned _dim ) const { return mPoint.coordinate( _dim ); }
 
+	vector_t<Number> rawCoordinates() const { return mPoint.rawCoordinates(); }
+
 	/**
 	 * @see Point::dimension
 	 */

@@ -92,6 +92,13 @@ class Point {
 	/**
 	 * Getter & Setter
 	 */
+
+	void extend(const Number& val) {
+		mCoordinates.conservativeResize(mCoordinates.rows() +1);
+		mCoordinates(mCoordinates.rows()-1) = val;
+	}
+
+
    void setNeighboors(const std::vector<unsigned> &_neighboors) {
      mNeighboors = _neighboors;
    }
@@ -309,9 +316,9 @@ class Point {
 	friend std::ostream& operator<<( std::ostream& _ostr, const Point<Number>& _p ) {
 		_ostr << "( ";
 		for ( unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
-			_ostr << _p.at( i ) << ", ";
+			_ostr << _p.at( i ) << "[" << i  << "] , ";
 		}
-		_ostr << _p.at( _p.rawCoordinates().rows() - 1 );
+		_ostr << _p.at( _p.rawCoordinates().rows() - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
 		_ostr << ")";
 		return _ostr;
 	}

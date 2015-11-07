@@ -28,6 +28,7 @@ set( EXAMPLES
     example_polytope
     example_polytopeFileWriter
     example_power
+    example_probabilistic
     #example_ppl_nncPolyhedra
     example_reachability
     example_reduction
