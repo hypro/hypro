@@ -187,14 +187,11 @@ Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const 
 	Point<Number> min;
 	Point<Number> max;
 
-	std::cout << "Matrix: " << A << std::endl;
-
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {
-			Number a = mLimits.first.at(k)*A(k,j);
-			Number b = mLimits.second.at(k)*A(k,j);
-			std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
-
+			Number a = mLimits.first.at(j)*A(k,j);
+			Number b = mLimits.second.at(j)*A(k,j);
+			//std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
 				if(a > b){
 					max[k] += a;
 					min[k] += b;
@@ -203,7 +200,7 @@ Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const 
 					min[k] += a;
 				}
 
-			std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
+			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
 		}
 	}
 
