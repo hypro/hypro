@@ -238,7 +238,7 @@ namespace hypro {
 		bool primalInfeasible = false;
 		bool dualInfeasible = false;
 		std::size_t index = 0;
-		for(; index < mF; ++index) {
+		for(; index <= mDictionary.rows()+mDictionary.cols()-2; ++index) {
 			if(mB.find(index) != mB.end() && mDictionary(mB.at(index), mG) < 0) {
 				primalInfeasible = true;
 				break;
