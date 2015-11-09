@@ -190,7 +190,8 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	hypro::Box<TypeParam> b1(intervals1);
 
 	// rotation
-	TypeParam angle = 45;
+	TypeParam angle = 90;
+
 	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
 	rotX(0,0) = 1;
 	rotX(1,1) = carl::cos(angle);
@@ -221,6 +222,12 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 
 	std::vector<Point<TypeParam>> cornersX = resX.vertices();
+
+	for(const auto& vertex : cornersX) {
+		std::cout << vertex << ", ";
+	}
+	std::cout << std::endl;
+
 	std::vector<Point<TypeParam>> originalCorners = b1.vertices();
 	std::vector<Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {

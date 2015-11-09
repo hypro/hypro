@@ -477,6 +477,19 @@ Point<Number> &Point<Number>::operator=( Point<Number> &&_in ) {
 }
 
 template <typename Number>
+Point<Number>& Point<Number>::operator=( const vector_t<Number>& _in ) {
+	this->mCoordinates = _in;
+	return *this;
+}
+
+template <typename Number>
+Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
+	this->mCoordinates = std::move(_in);
+	return *this;
+}
+
+
+template <typename Number>
 Number &Point<Number>::operator[]( const carl::Variable &_i ) {
 	unsigned dim = hypro::VariablePool::getInstance().dimension( _i );
 	if ( dim >= mCoordinates.rows() ) {

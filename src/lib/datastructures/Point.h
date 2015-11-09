@@ -294,6 +294,8 @@ class Point {
 	Point<Number>& operator*=( const Number _factor );
 	Point<Number>& operator=( const Point<Number>& _in );
 	Point<Number>& operator=( Point<Number>&& _in );
+	Point<Number>& operator=( const vector_t<Number>& _in );
+	Point<Number>& operator=( vector_t<Number>&& _in );
 
 	/**
 	 *
