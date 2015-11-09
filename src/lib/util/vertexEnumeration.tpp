@@ -173,8 +173,8 @@ namespace hypro {
 
 		Dictionary<Number> tmp(*this);
 		tmp.pivot(i,j);
-		//std::cout << "Tmp after proposed pivot:" << std::endl;
-		//tmp.print(true);
+		std::cout << "Tmp after proposed pivot:" << std::endl;
+		tmp.print(true);
 		std::size_t newI,newJ;
 		bool optimal = tmp.selectCrissCrossPivot(newI, newJ);
 
