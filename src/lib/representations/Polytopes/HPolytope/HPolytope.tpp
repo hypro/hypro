@@ -599,16 +599,14 @@ bool HPolytope<Number>::isGood(vector_t<Number> a, vector_t<Number> b) const{
 }
 
 template <typename Number>
-bool HPolytope<Number>::isBounded(vector_t<Number> bad, vector_t<Number> good, vector_t<Number> compare) const{
-	bad.normalize();
-	good.normalize();
-	compare.normalize();
-	vector_t<Number> goodAndBad = bad+good;
-	goodAndBad.normalize();
-	double border = compare.dot(bad);
-	double value = compare.dot(goodAndBad);
-	std::cout << "Value: " << value << " and border("<< border << "): " << 1+border << std::endl;
-	return value>(1+border);
+bool HPolytope<Number>::isBounded(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const{
+	a.normalize();
+	b.normalize();
+	c.normalize();
+	double ca = c.dot(a);
+	double cb = c.dot(b);
+	std::cout << "compare " << ca+cb << std::endl;
+	return (ca+cb)>0;
 }
 
 
@@ -621,6 +619,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 	std::vector<Point<Number>> vertices = res.vertices();
 	std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, vertices); // get neighbors
 	std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, vertices); // get neighbors
+	unsigned dimension = vertices[0].dimension();
 
 	switch(strat){
 		case REDUCTION_STRATEGY::DROP:
@@ -823,51 +822,77 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 */
 
 				 // collect correct neighbor pair TODO check for one plane
-				 vector_t<Number> res_a = vector_t<Number>::Zero(vertices[0].dimension());
-				 std::vector<std::vector<unsigned>> relevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
+				 std::vector<std::vector<unsigned>> memebersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
+				 // membersOfRelevantRidges_a is a vector of members for all relevant ridges
+				 std::vector<vector_t<Number>> ridges_a;
 
-				 for(std::vector<unsigned> relevantRidge_a: relevantRidges_a){
-
-					 vector_t<Number> subRes_a = vector_t<Number>::Zero(vertices[0].dimension());
-
-					 for(unsigned relevantFacet_a: relevantRidge_a){
-						 if(relevantFacet_a==b){
-							 subRes_a += uniteVector;
+				 // get all relevant ridges for facet A - out of all members
+				 for(auto members: memebersOfRelevantRidges_a){
+					 vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
+					 for(unsigned member: members){
+						 if(member==b){
+							 ridge += uniteVector;
 						 }
 						 else {
-							 vector_t<Number> dummyFacet = res.mHPlanes[relevantFacet_a].normal();
-							 subRes_a += dummyFacet;
+							 ridge += res.mHPlanes[member].normal();
 						 }
 					 }
-					 subRes_a.normalize();
-					 res_a += subRes_a;
+					 ridge.normalize(); // relevant ridge
+					 ridges_a.push_back(ridge);
 				 }
 
-				 if(!isGood(res_a, res.mHPlanes[a].normal())) reduce=false;
+				 unsigned goodOpinions_a=0;
+
+				 for(unsigned neighbor: neighborsOf_a){
+					 std::vector<vector_t<Number>> ridgesToCompare;
+					 for(unsigned i=0; i<memebersOfRelevantRidges_a.size(); i++){
+						 // find all ridges which "belong" to a facet
+						 if(std::find(memebersOfRelevantRidges_a[i].begin(), memebersOfRelevantRidges_a[i].end(), neighbor) != memebersOfRelevantRidges_a[i].end()){
+							 ridgesToCompare.push_back(ridges_a[i]);
+						 }
+					 }
+					 if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[a].normal())) goodOpinions_a++;
+				 }
+
+				 std::cout << "goodOpinions_a: " << goodOpinions_a << std::endl;
+				 if(goodOpinions_a<dimension-1) reduce=false;
 
 				 if(reduce){
-					 vector_t<Number> res_b = vector_t<Number>::Zero(vertices[0].dimension()); // = uniteVectorNormalized;
-					 std::vector<std::vector<unsigned>> relevantRidges_b = getNeighborsPairsOfIndex(b, vertices);
+					 std::vector<std::vector<unsigned>> memebersOfRelevantRidges_b = getNeighborsPairsOfIndex(b, vertices); // relevantRidges_a is a vector of membersForrelevantPoints
+					 std::vector<vector_t<Number>> ridges_b;
 
-					 for(std::vector<unsigned> relevantRidge_b: relevantRidges_b){
-
-						 vector_t<Number> subRes_b = vector_t<Number>::Zero(vertices[0].dimension());
-
-					 	for(unsigned relevantFacet_b: relevantRidge_b){
-					 		if(relevantFacet_b==a){
-					 			subRes_b += uniteVector;
-					 		}
-					 		else {
-					 			vector_t<Number> dummyFacet = res.mHPlanes[relevantFacet_b].normal();
-					 			subRes_b += dummyFacet;
-					 		}
-					 	}
-						subRes_b.normalize();
- 					  res_b += subRes_b;
+					 // get relevant ridges for facet B
+					 for(auto members: memebersOfRelevantRidges_b){
+						 vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
+						 for(unsigned member: members){
+							 if(member==a){
+								 ridge += uniteVector;
+							 }
+							 else {
+								 ridge += res.mHPlanes[member].normal();
+							 }
+						 }
+						 ridge.normalize();
+						 ridges_b.push_back(ridge);
 					 }
 
-					 if(!isGood(res_b, res.mHPlanes[b].normal())) reduce=false;
+					 unsigned goodOpinions_b=0;
+
+					 for(unsigned neighbor: neighborsOf_b){
+						 std::vector<vector_t<Number>> ridgesToCompare;
+						 for(unsigned i=0; i<memebersOfRelevantRidges_b.size(); i++){
+							 if(std::find(memebersOfRelevantRidges_b[i].begin(), memebersOfRelevantRidges_b[i].end(), neighbor) != memebersOfRelevantRidges_b[i].end()){
+								 ridgesToCompare.push_back(ridges_b[i]);
+							 }
+						 }
+						 if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[b].normal())) goodOpinions_b++;
+					 }
+
+					 std::cout << "goodOpinions_b: " << goodOpinions_b << std::endl;
+					 if(goodOpinions_b<dimension-1) reduce=false;
 				 }
+
+
 
 				/*
 				 * ---------------------------------------------------------------------
@@ -1040,30 +1065,6 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				}
 				break;
 			}
-			case REDUCTION_STRATEGY::UNITE_SMOOTH_OLD:
-				{
-					 //STRAT: Unite_smooth
-					vector_t<Number> e_bVector_normalized = res.mHPlanes[4].normal()+res.mHPlanes[1].normal(); // eVector Part: add e+neighbor(except "partner") and normalize TODO find neighbors
-					e_bVector_normalized.normalize();
-					vector_t<Number> e_dVector_normalized = res.mHPlanes[4].normal()+res.mHPlanes[3].normal();
-					e_dVector_normalized.normalize();
-
-					vector_t<Number> c_aVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[0].normal(); // cVector Part: add c+neighbor(except "partner") and normalize
-					c_aVector_normalized.normalize();
-					vector_t<Number> c_bVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[1].normal();
-					c_bVector_normalized.normalize();
-					vector_t<Number> c_dVector_normalized = res.mHPlanes[2].normal()+res.mHPlanes[3].normal();
-					c_dVector_normalized.normalize();
-
-					vector_t<Number> uniteVector = e_bVector_normalized + e_dVector_normalized + c_aVector_normalized + c_bVector_normalized + c_dVector_normalized;
-					Number uniteVector_offset = uniteVector[0]*(-5.6) + uniteVector[1]*2.8+ uniteVector[2]*2; //uniteVector[0]*2.8 + uniteVector[1]*(-5.6) + uniteVector[2]*2; // is the same TODO calculate the cutPoint
-
-					res.mHPlanes.erase(res.mHPlanes.begin()+4); // e
-					res.mHPlanes.erase(res.mHPlanes.begin()+2); // c
-
-					res.insert(Hyperplane<Number>(uniteVector,uniteVector_offset)); // uniteVector
-					break;
-				}
 			default:
 				break;
 	}
