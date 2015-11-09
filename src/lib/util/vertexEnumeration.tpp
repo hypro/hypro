@@ -534,12 +534,7 @@ namespace hypro {
 				BMap[pair.second] = pair.first;
 			}
 
-			std::cout << mB << std::endl;
-
 			assert(BMap.size() == mB.size());
-
-			std::cout << "BMap: " << BMap << std::endl;
-			std::cout << "NMap: " << NMap << std::endl;
 
 			std::cout << "\t g \t";
 			for(const auto& pair : NMap)

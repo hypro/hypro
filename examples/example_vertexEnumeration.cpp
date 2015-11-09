@@ -47,6 +47,19 @@ int main(int argc, char** argv) {
     }
 	*/
 
-    std::cout << "#######################" << std::endl;
-    initial.search();
+    //std::cout << "#######################" << std::endl;
+    //initial.search();
+
+    initial.print(true);
+    std::size_t i,j;
+    while(true) {
+    	std::cout << "------------------------------------------------------" << std::endl;
+    	std::cout << "Pivot row ";
+    	std::cin >> i;
+    	std::cout << "Pivot col ";
+    	std::cin >> j;
+    	initial.pivot(i,j);
+    	initial.print(true);
+    }
+
 }
