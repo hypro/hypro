@@ -257,7 +257,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					if(!below)
 						res = tmp;
 				}
- ///////////////TODO: change to almostEqual() function
+////////////////TODO: change to almostEqual() function
                 ///// if it's not almost equal, then
 				// Check containment
 				bool outside = false;
