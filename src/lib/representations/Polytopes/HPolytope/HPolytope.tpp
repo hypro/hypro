@@ -629,33 +629,36 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 * bounded?
 				 * ---------------------------------------------------------------------
 				 */
-				// collect goodVectors and badVectors
-				std::vector<vector_t<Number>> goodVectors, badVectors;
-				for(unsigned neighbor: neighborsOf_a){
-					vector_t<Number> dummyVector = res.mHPlanes[neighbor].normal();
-					dummyVector.normalize();
-					if(isGood(dummyVector, res.mHPlanes[a].normal())){
-						goodVectors.push_back(dummyVector);
-					}
-					else {
-						badVectors.push_back(dummyVector);
-					}
-				}
+				 // collect correct neighbor pair TODO check for one plane
+ 				std::vector<std::vector<unsigned>> memebersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
+ 				// membersOfRelevantRidges_a is a vector of members for all relevant ridges
+ 				std::vector<vector_t<Number>> ridges_a;
 
-				// test badVectors
-				for(vector_t<Number> badVector: badVectors){
-					bool canBadbeHelped=false;
-					for(vector_t<Number> goodVector: goodVectors){
-						if(isBounded(badVector, goodVector, res.mHPlanes[a].normal())){
-							canBadbeHelped=true;
-							break;
-						}
-					}
-					if(!canBadbeHelped){
-						reduce=false;
-						break;
-					}
-				}
+ 				// get all relevant ridges for facet A - out of all members
+ 				for(auto members: memebersOfRelevantRidges_a){
+ 					vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
+ 					for(unsigned member: members){
+ 						ridge += res.mHPlanes[member].normal();
+ 					}
+ 					ridge.normalize(); // relevant ridge
+ 					ridges_a.push_back(ridge);
+ 				}
+
+ 				unsigned goodOpinions_a=0;
+
+ 				for(unsigned neighbor: neighborsOf_a){
+ 					std::vector<vector_t<Number>> ridgesToCompare;
+ 					for(unsigned i=0; i<memebersOfRelevantRidges_a.size(); i++){
+ 						// find all ridges which "belong" to a facet
+ 						if(std::find(memebersOfRelevantRidges_a[i].begin(), memebersOfRelevantRidges_a[i].end(), neighbor) != memebersOfRelevantRidges_a[i].end()){
+ 							ridgesToCompare.push_back(ridges_a[i]);
+ 						}
+ 					}
+ 					if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[a].normal())) goodOpinions_a++;
+ 				}
+
+ 				std::cout << "goodOpinions_a: " << goodOpinions_a << std::endl;
+ 				if(goodOpinions_a<dimension-1) reduce=false;
 
 				/*
 				 * ---------------------------------------------------------------------
@@ -688,103 +691,103 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 * ---------------------------------------------------------------------
 				 */
 
-				// self
-				// collect goodVectors and badVectors
-				std::vector<vector_t<Number>> goodVectors, badVectors;
-				for(vector_t<Number> smoothVector: smoothVectors){
-					vector_t<Number> dummyVector = smoothVector;
-					dummyVector.normalize();
-					if(isGood(dummyVector, res.mHPlanes[a].normal())){
-					 goodVectors.push_back(dummyVector);
-					}
-					else {
-						badVectors.push_back(dummyVector);
-					}
-				}
+				//// self
+				//// collect goodVectors and badVectors
+				//std::vector<vector_t<Number>> goodVectors, badVectors;
+				//for(vector_t<Number> smoothVector: smoothVectors){
+				//	vector_t<Number> dummyVector = smoothVector;
+				//	dummyVector.normalize();
+				//	if(isGood(dummyVector, res.mHPlanes[a].normal())){
+				//	 goodVectors.push_back(dummyVector);
+				//	}
+				//	else {
+				//		badVectors.push_back(dummyVector);
+				//	}
+				//}
 
-				// test badVectors
-				for(vector_t<Number> badVector: badVectors){
-					bool canBadbeHelped=false;
-					for(vector_t<Number> goodVector: goodVectors){
-						if(isBounded(badVector, goodVector, res.mHPlanes[a].normal())){
-							canBadbeHelped=true;
-							break;
-						}
-					}
-					if(!canBadbeHelped){
-						reduce=false;
-						break;
-					}
-				}
+				//// test badVectors
+				//for(vector_t<Number> badVector: badVectors){
+				//	bool canBadbeHelped=false;
+				//	for(vector_t<Number> goodVector: goodVectors){
+				//		if(isBounded(badVector, goodVector, res.mHPlanes[a].normal())){
+				//			canBadbeHelped=true;
+				//			break;
+				//		}
+				//	}
+				//	if(!canBadbeHelped){
+				//		reduce=false;
+				//		break;
+				//	}
+				//}
 
-				// neighbors
-				if(reduce){
-						for(unsigned neighbor: neighborsOf_a){
+				//// neighbors
+				//if(reduce){
+				//		for(unsigned neighbor: neighborsOf_a){
 
-							std::vector<vector_t<Number>> goodVectors_n, badVectors_n;
-							// collect goodVectors_n and badVectors_n - self smoothed
-							for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
-								if(smoothVectors_oldIndices[i] == neighbor){
-									vector_t<Number> dummyVector = smoothVectors[i];
-									dummyVector.normalize();
-									if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
-										goodVectors_n.push_back(dummyVector);
-									}
-									else {
-										badVectors_n.push_back(dummyVector);
-									}
-									break;
-								}
-							}
+				//			std::vector<vector_t<Number>> goodVectors_n, badVectors_n;
+				//			// collect goodVectors_n and badVectors_n - self smoothed
+				//			for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+				//				if(smoothVectors_oldIndices[i] == neighbor){
+				//					vector_t<Number> dummyVector = smoothVectors[i];
+				//					dummyVector.normalize();
+				//					if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
+				//						goodVectors_n.push_back(dummyVector);
+				//					}
+				//					else {
+				//						badVectors_n.push_back(dummyVector);
+				//					}
+				//					break;
+				//				}
+				//			}
 
-							for(unsigned neighbor2: getNeighborsOfIndex(neighbor, vertices)){
-								// collect goodVectors_n and badVectors_n - neighbors not smoothed
-								if(neighbor2!=a && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), neighbor2) == neighborsOf_a.end()){
-									vector_t<Number> dummyVector = res.mHPlanes[neighbor2].normal();
-									dummyVector.normalize();
-									if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
-										goodVectors_n.push_back(dummyVector);
-									}
-									else {
-										badVectors_n.push_back(dummyVector);
-									}
-								}
-								else if(neighbor2!=a) // collect goodVectors_n and badVectors_n - neighbors smoothed
-								{
-									for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
-										if(smoothVectors_oldIndices[i] == neighbor2){
-											vector_t<Number> dummyVector = smoothVectors[i];
-											dummyVector.normalize();
-											if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
-												goodVectors_n.push_back(dummyVector);
-											}
-											else {
-												badVectors_n.push_back(dummyVector);
-											}
-											break;
-										}
-									}
-								}
-							}
+				//			for(unsigned neighbor2: getNeighborsOfIndex(neighbor, vertices)){
+				//				// collect goodVectors_n and badVectors_n - neighbors not smoothed
+				//				if(neighbor2!=a && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), neighbor2) == neighborsOf_a.end()){
+				//					vector_t<Number> dummyVector = res.mHPlanes[neighbor2].normal();
+				//					dummyVector.normalize();
+				//					if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
+				//						goodVectors_n.push_back(dummyVector);
+				//					}
+				//					else {
+				//						badVectors_n.push_back(dummyVector);
+				//					}
+				//				}
+				//				else if(neighbor2!=a) // collect goodVectors_n and badVectors_n - neighbors smoothed
+				//				{
+				//					for(unsigned i=0; i<smoothVectors_oldIndices.size(); i++){
+				//						if(smoothVectors_oldIndices[i] == neighbor2){
+				//							vector_t<Number> dummyVector = smoothVectors[i];
+				//							dummyVector.normalize();
+				//							if(isGood(dummyVector, res.mHPlanes[neighbor].normal())){
+				//								goodVectors_n.push_back(dummyVector);
+				//							}
+				//							else {
+				//								badVectors_n.push_back(dummyVector);
+				//							}
+				//							break;
+				//						}
+				//					}
+				//				}
+				//			}
 
-							// test badVectors_n
-							for(vector_t<Number> badVector: badVectors_n){
-								bool canBadbeHelped=false;
-								for(vector_t<Number> goodVector: goodVectors_n){
-									if(isBounded(badVector, goodVector, res.mHPlanes[neighbor].normal())){
-										//std::cout << "goodVector:\n" << goodVector << " helps badVector:\n" << badVector << std::endl;
-										canBadbeHelped=true;
-										break;
-									}
-								}
-								if(!canBadbeHelped){
-									//std::cout << "badVector:\n" << badVector << " is lost!" <<std::endl;
-									reduce=false;
-									break;
-								}
-							}
-						}
-				}
+				//			// test badVectors_n
+				//			for(vector_t<Number> badVector: badVectors_n){
+				//				bool canBadbeHelped=false;
+				//				for(vector_t<Number> goodVector: goodVectors_n){
+				//					if(isBounded(badVector, goodVector, res.mHPlanes[neighbor].normal())){
+				//						//std::cout << "goodVector:\n" << goodVector << " helps badVector:\n" << badVector << std::endl;
+				//						canBadbeHelped=true;
+				//						break;
+				//					}
+				//				}
+				//				if(!canBadbeHelped){
+				//					//std::cout << "badVector:\n" << badVector << " is lost!" <<std::endl;
+				//					reduce=false;
+				//					break;
+				//				}
+				//			}
+				//		}
+				//}
 
 				/*
 				 * ---------------------------------------------------------------------
@@ -857,6 +860,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 std::cout << "goodOpinions_a: " << goodOpinions_a << std::endl;
 				 if(goodOpinions_a<dimension-1) reduce=false;
 
+				 // B
 				 if(reduce){
 					 std::vector<std::vector<unsigned>> memebersOfRelevantRidges_b = getNeighborsPairsOfIndex(b, vertices); // relevantRidges_a is a vector of membersForrelevantPoints
 					 std::vector<vector_t<Number>> ridges_b;
