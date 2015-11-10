@@ -69,6 +69,9 @@ class Hyperplane {
 	bool contains( const vector_t<Number> _vector ) const;
 	bool holds( const vector_t<Number> _vector ) const;
 
+    vector_t<Number> normal() { return mNormal; };
+    Number scalar() { return mScalar; };
+
 	friend void swap( Hyperplane<Number>& a, Hyperplane<Number>& b ) {
 		swap( a.mNormal, b.mNormal );
 		swap( a.mScalar, b.mScalar );
@@ -102,5 +105,22 @@ bool operator<( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
 }
 
 }  // namespace
+
+namespace std{
+    template<class Number>
+    struct hash<hypro::Hyperplane<Number>> {
+        std::size_t operator()(hypro::Hyperplane<Number> const& hyperplane) const
+        {
+            size_t seed = 0;
+            hypro::vector_t<Number> normal = hyperplane.normal();
+            Number scalar = hyperplane.scalar();
+            std::hash<hypro::vector_t<Number>> vectorHasher;
+            std::hash<Number> numberHasher;
+            seed = vectorHasher(normal);
+            boost::hash_combine(seed, numberHasher(scalar));
+            return seed;
+        }
+    };
+} //namespace
 
 #include "Hyperplane.tpp"

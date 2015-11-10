@@ -97,6 +97,7 @@ class Point {
 		mCoordinates.conservativeResize(mCoordinates.rows() +1);
 		mCoordinates(mCoordinates.rows()-1) = val;
 	}
+    std::vector<Number> getCoordinates() { return mCoordinates; };
 
    void setNeighbors(const std::vector<unsigned> &_neighbors) {
      mNeighbors = _neighbors;
@@ -382,7 +383,21 @@ template <typename Number>
 const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs ) {
 	return ( _rhs * _factor );
 }
-
 }  // namespace
+
+namespace std{
+    template<class Number>
+    struct hash<hypro::Point<Number>> {
+        std::size_t operator()(hypro::Point<Number> const& point) const
+        {
+            size_t seed = 0;
+            std::vector<Number> coordinates = point.getCoordinates();
+            for (int i = 0; coordinates.rows(); ++i) {
+                carl::hash_add(seed, coordinates(i));
+            }
+            return seed;
+        }
+    };
+} //namespace
 
 #include "Point.tpp"

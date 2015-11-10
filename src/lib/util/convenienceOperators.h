@@ -1,5 +1,3 @@
-
-
 namespace hypro {
 
 	template<typename T>
