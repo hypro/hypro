@@ -133,7 +133,8 @@ namespace hypro {
 				i = 0;
 				j = 1;
 			} else {
-				selectCrissCrossPivot(i,j);
+				if (selectCrissCrossPivot(i,j)) // we are at the root of the search tree and finished.
+					break;
 				pivot(i,j);
 				std::cout << "step one level up, consider next dictionaries." << std::endl;
 				--depth;
@@ -141,7 +142,7 @@ namespace hypro {
 				print(true);
 				increment(i,j);
 			}
-		} while ( i < m );
+		} while ( i <= m && (mB.find(m) == mB.end() || mB.at(m) != m) );
 		//} while ( i < m && mB[m-1] != m-1);
 	}
 
@@ -149,7 +150,7 @@ namespace hypro {
 	bool Dictionary<Number>::isReverseCrissCrossPivot(std::size_t i, std::size_t j) const {
 		std::size_t s,r;
 
-		if(i >= mDictionary.rows()-1){
+		if(i >= (std::size_t) mDictionary.rows()-1){
 			std::cout << "Invalid indices." << std::endl;
 			return false;
 		}
@@ -178,8 +179,45 @@ namespace hypro {
 		std::size_t newI,newJ;
 		bool optimal = tmp.selectCrissCrossPivot(newI, newJ);
 
-		if(optimal)
+		bool firstCondition = false;
+		bool secondCondition = false;
+
+		std::cout << "i: " << i << ", j: " << j << std::endl;
+
+		if(tmp.dictionary()(i,mG) > 0 && tmp.dictionary()(i,j) > 0) {
+
+			for(auto basisIt = tmp.basis().begin(); basisIt != tmp.basis().end(); ++basisIt) {
+				if( basisIt->first < r) {
+					if( tmp.dictionary()(i,basisIt->second) >= 0 ) {
+						firstCondition = true;
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+		}
+
+		if(!firstCondition) {
+			if(tmp.dictionary()(mF, j) < 0 && tmp.dictionary()(i,j) < 0) {
+
+				for(auto cobasisIt = tmp.cobasis().begin(); cobasisIt != tmp.cobasis().end(); ++cobasisIt) {
+					if( cobasisIt->first < s) {
+						if( tmp.dictionary()(cobasisIt->second,j) <= 0 ){
+							secondCondition = true;
+							break;
+						}
+					} else {
+						break;
+					}
+				}
+			}
+		}
+
+		if(optimal) {
+			assert(!(firstCondition || secondCondition));
 			return false;
+		}
 
 		std::size_t newS,newR;
 
@@ -191,39 +229,45 @@ namespace hypro {
 		while(nrIt->second != newJ) ++nrIt;
 		newR = nrIt->first;
 
-		std::cout << "Reversed selected pivot: " << newR << ", " << newS << std::endl;
+		//std::cout << "Reversed selected pivot: " << newR << ", " << newS << std::endl;
 
-		if(newS == r && newR == s)
+		if(newS == r && newR == s) {
+			assert((firstCondition || secondCondition));
 			return true;
-		else
+		} else {
+			assert(!(firstCondition || secondCondition));
 			return false;
+		}
 
 		/*
-		// TODO: Not optimal - it is sufficient to check rows f,s and cols g,r -> only compute those.
-		bool firstCondition = true;
-		bool secondCondition = true;
+		bool firstCondition = false;
+		bool secondCondition = false;
 
 		if(mDictionary(i,mG) > 0 && mDictionary(i,j) > 0) {
 
-			for(auto basisIt = mB.begin(); basisIt != mB.end(); ++basisIt) {
+			for(auto basisIt = mN.begin(); basisIt != mN.end(); ++basisIt) {
 				if( basisIt->first < s) {
-					if( mDictionary(i,basisIt->first) < 0 )
-						firstCondition = false;
+					if( mDictionary(i,basisIt->second) >= 0 ) {
+						firstCondition = true;
+						break;
+					}
 				} else {
 					break;
 				}
 			}
-		} else {
-			firstCondition = false;
 		}
 
-		if(firstCondition) {
+		if(!firstCondition) {
 			if(mDictionary(mF, j) < 0 && mDictionary(i,j) < 0) {
 
-				for(auto cobasisIt = mN.begin(); cobasisIt != mN.end(); ++cobasisIt) {
+				for(auto cobasisIt = mB.begin(); cobasisIt != mB.end(); ++cobasisIt) {
 					if( cobasisIt->first < r) {
-						if( mDictionary(cobasisIt->first,j) > 0 )
-							secondCondition = false;
+						if( mDictionary(cobasisIt->second,j) <= 0 ){
+							secondCondition = true;
+							break;
+						}
+					} else {
+						break;
 					}
 				}
 			}
@@ -238,7 +282,7 @@ namespace hypro {
 		bool primalInfeasible = false;
 		bool dualInfeasible = false;
 		std::size_t index = 0;
-		for(; index <= mDictionary.rows()+mDictionary.cols()-2; ++index) {
+		for(; index <= (std::size_t) mDictionary.rows()+mDictionary.cols()-2; ++index) {
 			if(mB.find(index) != mB.end() && mDictionary(mB.at(index), mG) < 0) {
 				primalInfeasible = true;
 				break;
@@ -336,7 +380,7 @@ namespace hypro {
 		std::size_t rowCnt = 0;
 		while(basisIt->first != s) {++basisIt; ++rowCnt;}
 		if(i != rowCnt) {
-			//std::cout << "Move row " << j << " to Position " << rowCnt << std::endl;
+			//std::cout << "Move row " << i << " to Position " << rowCnt << std::endl;
 			insertRowAtPosition(i,rowCnt);
 		}
 
@@ -349,9 +393,8 @@ namespace hypro {
 		}
 
 		// update i and j
-		std::size_t tmp = i;
-		i = j;
-		j = tmp;
+		i = rowCnt;
+		j = colCnt;
 	}
 
 	template<typename Number>
@@ -392,18 +435,16 @@ namespace hypro {
 			mB = newMap;
 		} else {
 			auto tmpRow = newDict.row(originalPos);
-			for(std::size_t rowIndex = newDict.rows(); rowIndex != 0; --rowIndex) {
+			for(std::size_t rowIndex = newDict.rows(); rowIndex > 0; --rowIndex) {
 				if(rowIndex > originalPos || rowIndex < insertionPos) {
 					//std::cout << "Do nothing for index " << rowIndex << std::endl;
 					//mDictionary.row(rowIndex) = newDict.row(rowIndex);
 				} else if (rowIndex <= originalPos && rowIndex > insertionPos) {
 					//std::cout << "Shift at index " << rowIndex << std::endl;
 					mDictionary.row(rowIndex) = newDict.row(rowIndex - 1);
-				} else if (rowIndex == insertionPos) {
-					//std::cout << "Insert original row at index " << rowIndex << std::endl;
-					mDictionary.row(rowIndex) = tmpRow;
 				}
 			}
+			mDictionary.row(insertionPos) = tmpRow;
 			// update mapping
 			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
@@ -464,18 +505,16 @@ namespace hypro {
 			mN = newMap;
 		} else {
 			auto tmpCol = newDict.col(originalPos);
-			for(std::size_t colIndex = newDict.cols(); colIndex != 0; --colIndex) {
+			for(std::size_t colIndex = newDict.cols(); colIndex > 0; --colIndex) {
 				if(colIndex > originalPos || colIndex < insertionPos) {
 					//std::cout << "Do nothing for index " << colIndex << std::endl;
 					//mDictionary.col(colIndex) = newDict.col(colIndex);
 				} else if (colIndex <= originalPos && colIndex > insertionPos) {
 					//std::cout << "Shift at index " << colIndex << std::endl;
 					mDictionary.col(colIndex) = newDict.col(colIndex - 1);
-				} else if (colIndex == insertionPos) {
-					//std::cout << "Insert original row at index " << colIndex << std::endl;
-					mDictionary.col(colIndex) = tmpCol;
 				}
 			}
+			mDictionary.col(insertionPos) = tmpCol;
 			// update mapping
 			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
