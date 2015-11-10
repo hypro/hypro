@@ -213,7 +213,7 @@ class Vertex {
 	 * Comparison operator for the map.
 	 * Compares the points of both vertices. If both are equal,
 	 * the color is compared while true is greater than false
-	 *
+	 *return mPoint
 	 * @param v1
 	 * @param v2
 	 * @return
@@ -238,3 +238,17 @@ class Vertex {
 	}
 };
 }  // namespace
+
+namespace std {
+    template<class Number>
+    struct hash<hypro::Vertex<Number>> {
+        std::size_t operator()(const hypro::Vertex<Number>& vertex) {
+            std::hash<hypro::Point<Number>> pointHasher;
+            std::hash<bool> boolHasher;
+            std::size_t seed;
+            seed = pointHasher(vertex.point());
+            boost::hash_combine(seed, boolHasher(vertex.color()));
+            return seed;
+        }
+    };
+}
