@@ -15,6 +15,10 @@ int main(int argc, char const *argv[])
 
 	hypro::Box<Number> testbox(std::make_pair(hypro::Point<Number>({-2,2,-4}), hypro::Point<Number>({2,4,-2})));
 
+	std::vector<hypro::Point<Number>> tvertices = testbox.vertices();
+	for(const auto& vertex : tvertices)
+		std::cout << vertex << std::endl;
+
 	std::cout << testbox << std::endl;
 
 	hypro::Box<Number> res = testbox.linearTransformation(A,b);

@@ -286,7 +286,7 @@ std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origi
 		}
 		angle = carl::sqrt( angle );
 		angle = ( transformedCoordinates( dimension ) / angle );
-		angle = acos( angle );
+		angle = std::acos( angle );
 
 		if ( !_radians ) {
 			angle /= 2 * PI_DN;

@@ -173,8 +173,8 @@ namespace hypro {
 
 		Dictionary<Number> tmp(*this);
 		tmp.pivot(i,j);
-		//std::cout << "Tmp after proposed pivot:" << std::endl;
-		//tmp.print(true);
+		std::cout << "Tmp after proposed pivot:" << std::endl;
+		tmp.print(true);
 		std::size_t newI,newJ;
 		bool optimal = tmp.selectCrissCrossPivot(newI, newJ);
 
@@ -238,7 +238,7 @@ namespace hypro {
 		bool primalInfeasible = false;
 		bool dualInfeasible = false;
 		std::size_t index = 0;
-		for(; index < mF; ++index) {
+		for(; index <= mDictionary.rows()+mDictionary.cols()-2; ++index) {
 			if(mB.find(index) != mB.end() && mDictionary(mB.at(index), mG) < 0) {
 				primalInfeasible = true;
 				break;
@@ -534,12 +534,7 @@ namespace hypro {
 				BMap[pair.second] = pair.first;
 			}
 
-			std::cout << mB << std::endl;
-
 			assert(BMap.size() == mB.size());
-
-			std::cout << "BMap: " << BMap << std::endl;
-			std::cout << "NMap: " << NMap << std::endl;
 
 			std::cout << "\t g \t";
 			for(const auto& pair : NMap)
