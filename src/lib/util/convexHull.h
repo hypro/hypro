@@ -393,15 +393,23 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets(std::vector<st
 		result.push_back(newFacet);
 	}
 
+	std::vector<unsigned> toErase;
 	// check result - TODO correct?
 	for ( unsigned i = 0; i < result.size()-1; i++) {
 		for ( unsigned j = i+1; j < result.size(); j++) {
 			if (result[i] != result[j] && includeFacet( result[i], result[j] )) {
 				std::cout << "convexHull.h " << __func__ << " : " << __LINE__ << " remove non-relevant facet" << std::endl;
-				result.erase( result.begin() + j );
-				j--;
+				if(std::find(toErase.begin(), toErase.end(), j)==toErase.end()){
+					toErase.push_back(j);
+				}
 			}
 		}
+	}
+	std::reverse(toErase.begin(), toErase.end());
+
+	for(unsigned erase: toErase){
+		std::cout << "Erase: " << erase << std::endl;
+		result.erase( result.begin() + erase );
 	}
 
 	return result;
