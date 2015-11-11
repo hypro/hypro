@@ -8,7 +8,8 @@ namespace hypro {
 		mF(mDictionary.rows()-1),
 		mG(0),
 		mB(rhs.basis()),
-		mN(rhs.cobasis())
+		mN(rhs.cobasis()),
+		mSubstitution()
 	{}
 
 	template<typename Number>
@@ -55,6 +56,9 @@ namespace hypro {
 		}
 
 		auto substitutionBlock = a.rightCols(dimension+1);
+
+		mSubstitution = matrix_t<Number>(a.rows(), dimension+1);
+		mSubstitution << substitutionBlock;
 
 		mDictionary = matrix_t<Number>(A.rows()-dimension + 1, dimension + 1);
 
@@ -106,44 +110,93 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number> Dictionary<Number>::vertex() const {
+		vector_t<Number> valuation = vector_t<Number>(mN.size()+1);
+		valuation(0) = 1;
+		for(unsigned i = 1; i < valuation.rows(); ++i) {
+			unsigned varIndex = mB.size() + i ;
 
+			if(mB.find(varIndex) != mB.end()) {
+				valuation(i) = mDictionary(mB.at(varIndex),mG);
+			} else {
+				valuation(i) = 0;
+			}
+		}
+
+		return Point<Number>(mSubstitution*valuation);
 	}
 
 	template<typename Number>
-	void Dictionary<Number>::search () {
+	std::vector<Point<Number>> Dictionary<Number>::search () {
+		std::vector<Point<Number>> res;
 		std::size_t i,j;
 		i = 0;
 		j = 1;
 
 		std::size_t m = mDictionary.rows()-1;
+
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::size_t depth = 0;
 
 		std::cout << "Level " << depth << ": Initial, optimal dictionary: " << std::endl;
 		print(true);
+		std::cout << "Corresponding computed vertex: " << vertex() << std::endl;
+		std::cout << "Is lexicographic minimum: " << isLexMin() << std::endl;
+#endif
+		if(isLexMin())
+			res.push_back(vertex());
 
 		do {
 			while(i <= m && !isReverseCrissCrossPivot(i,j)) increment(i,j);
 			if(i<m) {
+				pivot(i,j);
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 				std::cout << "Found reverse pivot -> step one level down." << std::endl;
 				++depth;
-				pivot(i,j);
 				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
 				print(true);
-				print();
+				std::cout << "Corresponding computed vertex: " << vertex() << std::endl;
+				std::cout << "Is lexicographic minimum: " << isLexMin() << std::endl;
+#endif
+				if(isLexMin()){
+					res.push_back(vertex());
+				}
 				i = 0;
 				j = 1;
 			} else {
 				if (selectCrissCrossPivot(i,j)) // we are at the root of the search tree and finished.
 					break;
 				pivot(i,j);
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 				std::cout << "step one level up, consider next dictionaries." << std::endl;
 				--depth;
 				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
 				print(true);
+#endif
 				increment(i,j);
 			}
 		} while ( i <= m && (mB.find(m) == mB.end() || mB.at(m) != m) );
-		//} while ( i < m && mB[m-1] != m-1);
+
+		return res;
+	}
+
+	template<typename Number>
+	bool Dictionary<Number>::isLexMin() const {
+		auto basisIt = mB.begin();
+		auto cobasisIt = mN.begin();
+
+		while(cobasisIt != mN.end()){
+			while(basisIt != mB.end()) {
+				if(basisIt->first > cobasisIt->first && mDictionary(basisIt->second, mG) == 0 && mDictionary(basisIt->second, cobasisIt->second) != 0) {
+					return false;
+				} else {
+					++basisIt;
+				}
+			}
+			basisIt = mB.begin();
+			++cobasisIt;
+		}
+
+		return true;
 	}
 
 	template<typename Number>
@@ -151,16 +204,22 @@ namespace hypro {
 		std::size_t s,r;
 
 		if(i >= (std::size_t) mDictionary.rows()-1){
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << "Invalid indices." << std::endl;
+#endif
 			return false;
 		}
 
 		if(mDictionary(i,j) == 0) {
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << "Not usable for pivot (table entry=0)." << std::endl;
+#endif
 			return false;
 		}
 
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << __func__ << " i " << i << ", j " << j << std::endl;
+#endif
 
 		auto sIt = mB.begin();
 		while(sIt->second != i) ++sIt;
@@ -170,32 +229,21 @@ namespace hypro {
 		while(rIt->second != j) ++rIt;
 		r = rIt->first;
 
-		//print(true);
-
 		Dictionary<Number> tmp(*this);
-		tmp.pivot(i,j);
-		std::cout << "Tmp after proposed pivot:" << std::endl;
-		tmp.print(true);
+		std::size_t tmpI = i;
+		std::size_t tmpJ = j;
+		tmp.pivot(tmpI,tmpJ);
+		//std::cout << "Tmp after proposed pivot:" << std::endl;
+		//tmp.print(true);
+
 		std::size_t newI,newJ;
 		bool optimal = tmp.selectCrissCrossPivot(newI, newJ);
 
-		bool primalInfeasible = false;
-		bool dualInfeasible = false;
-
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << "i: " << i << ", j: " << j << std::endl;
-
-		if(mDictionary(i,mG) < 0) {
-			// primal infeasible case
-
-			// check that all i before are primal feasible
-		} else if(mDictionary(mF,j) > 0) {
-			// dual infeasible case
-
-			// check that all j before are dual feasible
-		}
-
+		std::cout << "r: " << r << ", s: " << s << std::endl;
+#endif
 		if(optimal) {
-			assert(!(primalInfeasible || dualInfeasible));
 			return false;
 		}
 
@@ -209,51 +257,11 @@ namespace hypro {
 		while(nrIt->second != newJ) ++nrIt;
 		newR = nrIt->first;
 
-		//std::cout << "Reversed selected pivot: " << newR << ", " << newS << std::endl;
-
 		if(newS == r && newR == s) {
-			assert((primalInfeasible || dualInfeasible));
 			return true;
 		} else {
-			assert(!(primalInfeasible || dualInfeasible));
 			return false;
 		}
-
-		/*
-		bool firstCondition = false;
-		bool secondCondition = false;
-
-		if(mDictionary(i,mG) > 0 && mDictionary(i,j) > 0) {
-
-			for(auto basisIt = mN.begin(); basisIt != mN.end(); ++basisIt) {
-				if( basisIt->first < s) {
-					if( mDictionary(i,basisIt->second) >= 0 ) {
-						firstCondition = true;
-						break;
-					}
-				} else {
-					break;
-				}
-			}
-		}
-
-		if(!firstCondition) {
-			if(mDictionary(mF, j) < 0 && mDictionary(i,j) < 0) {
-
-				for(auto cobasisIt = mB.begin(); cobasisIt != mB.end(); ++cobasisIt) {
-					if( cobasisIt->first < r) {
-						if( mDictionary(cobasisIt->second,j) <= 0 ){
-							secondCondition = true;
-							break;
-						}
-					} else {
-						break;
-					}
-				}
-			}
-		}
-		return (firstCondition || secondCondition);
-		*/
 	}
 
 	template<typename Number>
@@ -284,7 +292,9 @@ namespace hypro {
 					break;
 				}
 			}
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
+#endif
 			return false;
 		} else if (dualInfeasible) {
 			assert(mN.find(index) != mN.end());
@@ -296,22 +306,21 @@ namespace hypro {
 					break;
 				}
 			}
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
+#endif
 			return false;
 		}
 
 		// Dictionary is optimal - no feasible pivot
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << __func__ << ": No feasible pivot." << std::endl;
+#endif
 		return true;
 	}
 
 	template<typename Number>
 	void Dictionary<Number>::pivot(std::size_t& i, std::size_t& j) {
-
-		//std::cout << __func__ << " (" << i << ", " << j << ")" << std::endl;
-		//std::cout << "sPos: " << mN[s] << std::endl;
-		//std::cout << "rPos: " << mB[r] << std::endl;
-
 		// update other cells
 		for(unsigned colIndex = 0; colIndex < mDictionary.cols(); ++colIndex) {
 			for(unsigned rowIndex = 0; rowIndex < mDictionary.rows(); ++rowIndex) {
@@ -383,10 +392,7 @@ namespace hypro {
 		if(originalPos < insertionPos){
 			auto tmpRow = newDict.row(originalPos);
 			for(std::size_t rowIndex = 0; rowIndex < std::size_t(newDict.rows()); ++rowIndex) {
-				if(rowIndex < originalPos || rowIndex > insertionPos) {
-					//std::cout << "Do nothing for index " << rowIndex << std::endl;
-					//mDictionary.row(rowIndex) = newDict.row(rowIndex);
-				} else if (rowIndex >= originalPos && rowIndex < insertionPos) {
+				if (rowIndex >= originalPos && rowIndex < insertionPos) {
 					//std::cout << "Shift at index " << rowIndex << std::endl;
 					mDictionary.row(rowIndex) = newDict.row(rowIndex + 1);
 				} else if (rowIndex == insertionPos) {
@@ -395,7 +401,6 @@ namespace hypro {
 				}
 			}
 			// update mapping
-			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
 			for(auto basisIt = mB.begin(); basisIt != mB.end(); ++basisIt) {
 				if(basisIt->second == originalPos) {
@@ -416,17 +421,13 @@ namespace hypro {
 		} else {
 			auto tmpRow = newDict.row(originalPos);
 			for(std::size_t rowIndex = newDict.rows(); rowIndex > 0; --rowIndex) {
-				if(rowIndex > originalPos || rowIndex < insertionPos) {
-					//std::cout << "Do nothing for index " << rowIndex << std::endl;
-					//mDictionary.row(rowIndex) = newDict.row(rowIndex);
-				} else if (rowIndex <= originalPos && rowIndex > insertionPos) {
+				if (rowIndex <= originalPos && rowIndex > insertionPos) {
 					//std::cout << "Shift at index " << rowIndex << std::endl;
 					mDictionary.row(rowIndex) = newDict.row(rowIndex - 1);
 				}
 			}
 			mDictionary.row(insertionPos) = tmpRow;
 			// update mapping
-			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
 			for(auto basisIt = mB.begin(); basisIt != mB.end(); ++basisIt) {
 				if(basisIt->second == originalPos) {
@@ -453,10 +454,7 @@ namespace hypro {
 		if(originalPos < insertionPos){
 			auto tmpCol = newDict.col(originalPos);
 			for(std::size_t colIndex = 0; colIndex < std::size_t(newDict.cols()); ++colIndex) {
-				if(colIndex < originalPos || colIndex > insertionPos) {
-					//std::cout << "Do nothing for index " << colIndex << std::endl;
-					//mDictionary.col(colIndex) = newDict.col(colIndex);
-				} else if (colIndex >= originalPos && colIndex < insertionPos) {
+				if (colIndex >= originalPos && colIndex < insertionPos) {
 					//std::cout << "Shift at index " << colIndex << std::endl;
 					mDictionary.col(colIndex) = newDict.col(colIndex + 1);
 				} else if (colIndex == insertionPos) {
@@ -465,7 +463,6 @@ namespace hypro {
 				}
 			}
 			// update mapping
-			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
 			for(auto cobasisIt = mN.begin(); cobasisIt != mN.end(); ++cobasisIt) {
 				if(cobasisIt->second == originalPos) {
@@ -486,17 +483,13 @@ namespace hypro {
 		} else {
 			auto tmpCol = newDict.col(originalPos);
 			for(std::size_t colIndex = newDict.cols(); colIndex > 0; --colIndex) {
-				if(colIndex > originalPos || colIndex < insertionPos) {
-					//std::cout << "Do nothing for index " << colIndex << std::endl;
-					//mDictionary.col(colIndex) = newDict.col(colIndex);
-				} else if (colIndex <= originalPos && colIndex > insertionPos) {
+				if (colIndex <= originalPos && colIndex > insertionPos) {
 					//std::cout << "Shift at index " << colIndex << std::endl;
 					mDictionary.col(colIndex) = newDict.col(colIndex - 1);
 				}
 			}
 			mDictionary.col(insertionPos) = tmpCol;
 			// update mapping
-			//std::cout << "Update mapping " << std::endl;
 			std::map<std::size_t, std::size_t> newMap;
 			for(auto cobasisIt = mN.begin(); cobasisIt != mN.end(); ++cobasisIt) {
 				if(cobasisIt->second == originalPos) {
@@ -582,13 +575,17 @@ namespace hypro {
 
 	template<typename Number>
 	void Dictionary<Number>::increment(std::size_t& i, std::size_t& j) const {
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << __func__ << " i=" << i << ", j=" << j;
+#endif
 		++j;
 		if( j == std::size_t(mDictionary.cols())) {
 			j = 1;
 			++i;
 		}
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << " to i'=" << i << ", j'=" << j << std::endl;
+#endif
 	}
 
 } // namespace hypro
