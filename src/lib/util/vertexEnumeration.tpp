@@ -184,10 +184,14 @@ namespace hypro {
 
 		std::cout << "i: " << i << ", j: " << j << std::endl;
 
-		if(mDictionary(i,j) > 0) {
+		if(mDictionary(i,mG) < 0) {
+			// primal infeasible case
 
-		} else if(mDictionary(i,j) < 0) {
-			dualInfeasible = true;
+			// check that all i before are primal feasible
+		} else if(mDictionary(mF,j) > 0) {
+			// dual infeasible case
+
+			// check that all j before are dual feasible
 		}
 
 		if(optimal) {

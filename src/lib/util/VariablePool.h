@@ -13,7 +13,9 @@
 #include <carl/util/Singleton.h>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
+CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
+CLANG_WARNING_RESET
 #include <map>
 #include <cassert>
 

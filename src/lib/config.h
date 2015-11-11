@@ -8,14 +8,17 @@
 #include <cassert>
 
 #include "flags.h"
+#include "util/platform.h"
 #include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>
 #include <carl/core/Variable.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 
 #ifdef COMPARE_CDD

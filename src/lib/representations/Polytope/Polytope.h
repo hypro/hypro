@@ -15,7 +15,9 @@
 #include <string>
 #include <sstream>
 #include <gmp.h>
+CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
+CLANG_WARNING_RESET
 #include <carl/core/Variable.h>
 
 #include "util.h"
