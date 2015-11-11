@@ -179,43 +179,19 @@ namespace hypro {
 		std::size_t newI,newJ;
 		bool optimal = tmp.selectCrissCrossPivot(newI, newJ);
 
-		bool firstCondition = false;
-		bool secondCondition = false;
+		bool primalInfeasible = false;
+		bool dualInfeasible = false;
 
 		std::cout << "i: " << i << ", j: " << j << std::endl;
 
-		if(tmp.dictionary()(i,mG) > 0 && tmp.dictionary()(i,j) > 0) {
+		if(mDictionary(i,j) > 0) {
 
-			for(auto basisIt = tmp.basis().begin(); basisIt != tmp.basis().end(); ++basisIt) {
-				if( basisIt->first < r) {
-					if( tmp.dictionary()(i,basisIt->second) >= 0 ) {
-						firstCondition = true;
-						break;
-					}
-				} else {
-					break;
-				}
-			}
-		}
-
-		if(!firstCondition) {
-			if(tmp.dictionary()(mF, j) < 0 && tmp.dictionary()(i,j) < 0) {
-
-				for(auto cobasisIt = tmp.cobasis().begin(); cobasisIt != tmp.cobasis().end(); ++cobasisIt) {
-					if( cobasisIt->first < s) {
-						if( tmp.dictionary()(cobasisIt->second,j) <= 0 ){
-							secondCondition = true;
-							break;
-						}
-					} else {
-						break;
-					}
-				}
-			}
+		} else if(mDictionary(i,j) < 0) {
+			dualInfeasible = true;
 		}
 
 		if(optimal) {
-			assert(!(firstCondition || secondCondition));
+			assert(!(primalInfeasible || dualInfeasible));
 			return false;
 		}
 
@@ -232,10 +208,10 @@ namespace hypro {
 		//std::cout << "Reversed selected pivot: " << newR << ", " << newS << std::endl;
 
 		if(newS == r && newR == s) {
-			assert((firstCondition || secondCondition));
+			assert((primalInfeasible || dualInfeasible));
 			return true;
 		} else {
-			assert(!(firstCondition || secondCondition));
+			assert(!(primalInfeasible || dualInfeasible));
 			return false;
 		}
 
