@@ -93,7 +93,12 @@ int main(int argc, char** argv) {
     			break;
     		}
     		case 5: {
-    			initial.search();
+    			std::vector<hypro::Point<Number>> res = initial.search();
+    			std::cout << "Result: " << std::endl;
+    			for(const auto& point : res )
+    				std::cout << point << ", ";
+
+    			std::cout << std::endl;
     			exit(0);
     			break;
     		}
