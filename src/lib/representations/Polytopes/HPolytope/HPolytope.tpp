@@ -505,6 +505,37 @@ std::vector<Point<Number>> HPolytope<Number>::getPointOf2IndicesAround(unsigned 
 }
 
 template <typename Number>
+vector_t<Number> HPolytope<Number>::getVectorOfTwoPoints(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
+	vector_t<Number> res = vector_t<Number>(vertices[0].dimension());
+	Point<Number> vertex1, vertex2;
+	bool vertex1found=false, vertex2found=false;
+
+	for(Point<Number> vertex: vertices){
+		std::vector<unsigned> neighbors = vertex.getNeighbors();
+		if(std::find(neighbors.begin(), neighbors.end(), a)!= neighbors.end() && std::find(neighbors.begin(), neighbors.end(), b)!= neighbors.end()){
+
+			if(!vertex1found){
+				vertex1= vertex;
+				vertex1found=true;
+			}
+			else if(vertex1found && !vertex2found){
+				vertex2 = vertex;
+				vertex2found=true;
+			}
+			else {
+				break;
+			}
+		}
+	}
+
+	for(unsigned i=0; i<vertices[0].dimension(); i++){
+		res[i] = vertex1.rawCoordinates()(i)-vertex2.rawCoordinates()(i);
+	}
+
+	return res;
+}
+
+template <typename Number>
 std::vector<std::vector<Point<Number>>> HPolytope<Number>::getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
 	std::vector<std::vector<Point<Number>>> res;
 	std::vector<Point<Number>> cutPointsAround_a_b = getPointOf2IndicesAround(a, b, vertices);
@@ -563,7 +594,50 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> ver
 		}
 	}
 
-	if(a.dot(res)<=0 || b.dot(res)<=0){// check direction
+	if(a.dot(res)<=0 || b.dot(res)<=0){// check direction ...should not be 0?
+		return (-1)*res;
+	}
+
+	return res;
+}
+
+template <typename Number>
+vector_t<Number> HPolytope<Number>::computeNormal(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const{
+	unsigned dimension = a.size();
+	vector_t<Number> res = vector_t<Number>::Zero(dimension);
+	std::vector<Point<Number>> baseVectors;
+
+	baseVectors.push_back(Point<Number>(a));
+	baseVectors.push_back(Point<Number>(b));
+
+	//if(baseVectors.size()!=dimension){ // check if we have the exact number of vertices for the calculation
+	//	std::cout << "Error - the number of vertices does not fit for the calculation.\nActual Number: " << 2 << "\nNeeded Number: " << dimension-1<< std::endl;
+	//	return res;
+	//}
+
+	for(unsigned i=0; i<dimension; i++){ // iterate through each coordinate of the normal vector
+
+		// create the matrix and get determinant for each matrix
+		Eigen::MatrixXd m(dimension-1, dimension-1);
+		for(unsigned r=0; r<dimension; r++) {
+			if(r!=i){
+				unsigned rCorrect = r;
+				if(r>i) rCorrect--;
+				for(unsigned v=0; v<baseVectors.size(); v++){
+					m(rCorrect,v) = baseVectors[v].coordinate(r);
+				}
+			}
+		}
+		double determinant = m.determinant();
+		if ((i % 2) == 0) {
+			res[i] = determinant;
+		}
+		else {
+			res[i] = (-1)*determinant;
+		}
+	}
+
+	if(c.dot(res)<=0){// check direction ...should not be 0?
 		return (-1)*res;
 	}
 
@@ -605,8 +679,10 @@ bool HPolytope<Number>::isBounded(vector_t<Number> a, vector_t<Number> b, vector
 	c.normalize();
 	double ca = c.dot(a);
 	double cb = c.dot(b);
-	std::cout << "compare " << ca+cb << std::endl;
-	return (ca+cb)>0;
+	std::cout << "compare " << ca+cb;
+	if((ca+cb)>0) std::cout << " <- GOOD" << std::endl;
+	else std::cout << " <- BAD" << std::endl;
+	return (ca+cb)>0.001; // examine
 }
 
 
@@ -629,13 +705,12 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 * bounded?
 				 * ---------------------------------------------------------------------
 				 */
-				 // collect correct neighbor pair TODO check for one plane
- 				std::vector<std::vector<unsigned>> memebersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
+ 				std::vector<std::vector<unsigned>> membersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
  				// membersOfRelevantRidges_a is a vector of members for all relevant ridges
  				std::vector<vector_t<Number>> ridges_a;
 
  				// get all relevant ridges for facet A - out of all members
- 				for(auto members: memebersOfRelevantRidges_a){
+ 				for(auto members: membersOfRelevantRidges_a){
  					vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
  					for(unsigned member: members){
  						ridge += res.mHPlanes[member].normal();
@@ -648,13 +723,18 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 
  				for(unsigned neighbor: neighborsOf_a){
  					std::vector<vector_t<Number>> ridgesToCompare;
- 					for(unsigned i=0; i<memebersOfRelevantRidges_a.size(); i++){
+ 					for(unsigned i=0; i<membersOfRelevantRidges_a.size(); i++){ // TODO all pairs of ridges
  						// find all ridges which "belong" to a facet
- 						if(std::find(memebersOfRelevantRidges_a[i].begin(), memebersOfRelevantRidges_a[i].end(), neighbor) != memebersOfRelevantRidges_a[i].end()){
+ 						if(std::find(membersOfRelevantRidges_a[i].begin(), membersOfRelevantRidges_a[i].end(), neighbor) != membersOfRelevantRidges_a[i].end()){
  							ridgesToCompare.push_back(ridges_a[i]);
  						}
  					}
- 					if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[a].normal())) goodOpinions_a++;
+
+					vector_t<Number> normal= computeNormal(getVectorOfTwoPoints(a, neighbor, vertices), res.mHPlanes[neighbor].normal(), res.mHPlanes[a].normal());
+
+ 					if(isBounded(ridgesToCompare[0], ridgesToCompare[1], normal)){
+						goodOpinions_a++;
+					}
  				}
 
  				std::cout << "goodOpinions_a: " << goodOpinions_a << std::endl;
@@ -825,12 +905,12 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 				 */
 
 				 // collect correct neighbor pair TODO check for one plane
-				 std::vector<std::vector<unsigned>> memebersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
+				 std::vector<std::vector<unsigned>> membersOfRelevantRidges_a = getNeighborsPairsOfIndex(a, vertices);
 				 // membersOfRelevantRidges_a is a vector of members for all relevant ridges
 				 std::vector<vector_t<Number>> ridges_a;
 
 				 // get all relevant ridges for facet A - out of all members
-				 for(auto members: memebersOfRelevantRidges_a){
+				 for(auto members: membersOfRelevantRidges_a){
 					 vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
 					 for(unsigned member: members){
 						 if(member==b){
@@ -848,13 +928,20 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 
 				 for(unsigned neighbor: neighborsOf_a){
 					 std::vector<vector_t<Number>> ridgesToCompare;
-					 for(unsigned i=0; i<memebersOfRelevantRidges_a.size(); i++){
+					 for(unsigned i=0; i<membersOfRelevantRidges_a.size(); i++){
 						 // find all ridges which "belong" to a facet
-						 if(std::find(memebersOfRelevantRidges_a[i].begin(), memebersOfRelevantRidges_a[i].end(), neighbor) != memebersOfRelevantRidges_a[i].end()){
+						 if(std::find(membersOfRelevantRidges_a[i].begin(), membersOfRelevantRidges_a[i].end(), neighbor) != membersOfRelevantRidges_a[i].end()){
 							 ridgesToCompare.push_back(ridges_a[i]);
 						 }
 					 }
-					 if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[a].normal())) goodOpinions_a++;
+
+					 vector_t<Number> normal;
+					 if(neighbor!=b)	normal= computeNormal(getVectorOfTwoPoints(a, neighbor, vertices), res.mHPlanes[neighbor].normal(), res.mHPlanes[a].normal());
+					 else 						normal= computeNormal(getVectorOfTwoPoints(a, neighbor, vertices), uniteVector, res.mHPlanes[a].normal());
+
+  					if(isBounded(ridgesToCompare[0], ridgesToCompare[1], normal)){
+ 						goodOpinions_a++;
+ 					}
 				 }
 
 				 std::cout << "goodOpinions_a: " << goodOpinions_a << std::endl;
@@ -862,11 +949,11 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 
 				 // B
 				 if(reduce){
-					 std::vector<std::vector<unsigned>> memebersOfRelevantRidges_b = getNeighborsPairsOfIndex(b, vertices); // relevantRidges_a is a vector of membersForrelevantPoints
+					 std::vector<std::vector<unsigned>> membersOfRelevantRidges_b = getNeighborsPairsOfIndex(b, vertices); // relevantRidges_a is a vector of membersForrelevantPoints
 					 std::vector<vector_t<Number>> ridges_b;
 
 					 // get relevant ridges for facet B
-					 for(auto members: memebersOfRelevantRidges_b){
+					 for(auto members: membersOfRelevantRidges_b){
 						 vector_t<Number> ridge = vector_t<Number>::Zero(vertices[0].dimension());
 						 for(unsigned member: members){
 							 if(member==a){
@@ -884,12 +971,19 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned facet, unsign
 
 					 for(unsigned neighbor: neighborsOf_b){
 						 std::vector<vector_t<Number>> ridgesToCompare;
-						 for(unsigned i=0; i<memebersOfRelevantRidges_b.size(); i++){
-							 if(std::find(memebersOfRelevantRidges_b[i].begin(), memebersOfRelevantRidges_b[i].end(), neighbor) != memebersOfRelevantRidges_b[i].end()){
+						 for(unsigned i=0; i<membersOfRelevantRidges_b.size(); i++){
+							 if(std::find(membersOfRelevantRidges_b[i].begin(), membersOfRelevantRidges_b[i].end(), neighbor) != membersOfRelevantRidges_b[i].end()){
 								 ridgesToCompare.push_back(ridges_b[i]);
 							 }
 						 }
-						 if(isBounded(ridgesToCompare[0], ridgesToCompare[1], res.mHPlanes[b].normal())) goodOpinions_b++;
+
+						 vector_t<Number> normal;
+						 if(neighbor!=a)	normal= computeNormal(getVectorOfTwoPoints(b, neighbor, vertices), res.mHPlanes[neighbor].normal(), res.mHPlanes[b].normal());
+						 else 						normal= computeNormal(getVectorOfTwoPoints(b, neighbor, vertices), uniteVector, res.mHPlanes[b].normal());
+
+	  					if(isBounded(ridgesToCompare[0], ridgesToCompare[1], normal)){
+	 						goodOpinions_b++;
+	 					}
 					 }
 
 					 std::cout << "goodOpinions_b: " << goodOpinions_b << std::endl;

@@ -99,13 +99,18 @@ class HPolytope {
 
   std::vector<unsigned> getNeighborsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
   std::vector<std::vector<unsigned>> getNeighborsPairsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
+  vector_t<Number> getVectorOfTwoPoints(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<Point<Number>> getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<Point<Number>> getPointOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
   std::vector<std::vector<Point<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
+
+  vector_t<Number> computeNormal(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
   vector_t<Number> computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> a, vector_t<Number> b) const;
+
   Point<Number> getPointForOffset(vector_t<Number> uniteVector, std::vector<Point<Number>> points) const;
   bool isGood(vector_t<Number> a, vector_t<Number> b) const;
   bool isBounded(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
+  // End Help funcions
 
 
 	bool isExtremePoint( vector_t<Number> point ) const;
