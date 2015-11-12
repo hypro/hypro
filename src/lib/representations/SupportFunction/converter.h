@@ -25,7 +25,8 @@ namespace hypro {
     /**
      * @brief Converts a polytope in V-representation into a support function.
      * 
-     *   
+     * @detail Converts the source object into an H-Polytope first with the corresponding constructor, then reads out halfplanes and passes them on to the target object.
+     * 
      * @param _source V-polytope that needs to be converted.
      * @param _target An arbitrary support function that gets overwritten with the converted object.
      * @return Return value is true if the conversion process was successful.
