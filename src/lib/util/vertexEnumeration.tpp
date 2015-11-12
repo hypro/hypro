@@ -18,6 +18,8 @@ namespace hypro {
 		mF(A.rows()-A.cols()),
 		mG(0)
 	{
+		// Note: This is the constructor, which should be used, as it creates the optimal dictionary.
+
 		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
 		t << b,-A;
 		// rearrange to make the last d equations linear independent.
@@ -33,12 +35,15 @@ namespace hypro {
 		auto varBlock = bottom.rightCols(dimension);
 		auto constPart = bottom.leftCols(1);
 
+		// holds the variables we use later for the vertex computation.
 		matrix_t<Number> tmp = matrix_t<Number>(varBlock);
 
+		// a is required for solving the last d equations
 		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
 		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
 
-		//normalize rows for each variable and forward insertion
+		// Gauss:
+		// normalize rows for each variable and forward insertion
 		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
 		{
 			a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
@@ -55,31 +60,31 @@ namespace hypro {
 			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
 		}
 
+		// Substitution holds the matrix which contains the solution for the last d equations,
+		// required for the vertex computation.
 		auto substitutionBlock = a.rightCols(dimension+1);
-
 		mSubstitution = matrix_t<Number>(a.rows(), dimension+1);
 		mSubstitution << substitutionBlock;
 
+		// creation of the actual dictionary from the top m-d rows
 		mDictionary = matrix_t<Number>(A.rows()-dimension + 1, dimension + 1);
-
 		for(unsigned rI = 0; rI < top.rows(); ++rI)
 		{
 			mDictionary(rI,0) = top(rI,0);
-
 			for(unsigned dI = 1; dI < top.cols(); ++dI)
 			{
 				mDictionary.row(rI) = mDictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
 			}
 		}
 
-		// Augment dictionary by a row of -1s
-		//mDictionary.conservativeResize(mDictionary.rows()+1,Eigen::NoChange_t());
-
+		// Augment dictionary by a row of -1s -> the f row
 		matrix_t<Number> allOnes = matrix_t<Number>::Constant(1,mDictionary.cols(), Number(-1));
 		allOnes(0) = Number(0);
 		mDictionary.row(mDictionary.rows()-1) = allOnes;
 
 		//std::cout << "Optimal dictionary: " << mDictionary << std::endl;
+
+		// create the mapping for the basic and non-basic variables (variable index maps to row/column index in the matrix).
 		std::size_t colCnt = 0;
 		for(unsigned index = 1; index < mDictionary.rows(); ++index) {
 			mB[index] = colCnt;

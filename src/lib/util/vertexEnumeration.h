@@ -62,6 +62,12 @@ public:
 
 	/**
 	 * @brief Computes the vertex which is represented by the current dictionary.
+	 * @details The computation makes use of the last d equations from the original problem.
+	 * Solving these equations for the last d variables results in the "substitution block".
+	 * The computation of a vertex utilizes this block as well as the current dictionary:
+	 * The variables in the substitution block are set to either 0 (if the variable is a non-basic
+	 * variable in the current dictionary) or to a_ig (if the variable is at row i and thus a basic
+	 * variable).
 	 *
 	 * @return
 	 */
@@ -69,6 +75,13 @@ public:
 
 	/**
 	 * @brief The main loop for the vertex enumeration algorithm, which should be called on the initial, optimal dictionary.
+	 * @details This loop starts at the initial optimal dictionary. It iterates over the rows and columns of the dictionary and
+	 * searches for a valid reverse-pivot. Having found this, it continues the search for this valid reverse-pivot ("step one level down")
+	 * and starts all over for the resulting dictionary. When all possible combinations for one dictionary are searched (thus, the
+	 * algorithm implements a depth-first search), a pivoting step is performed ("step one level up"), which results in a dictionary
+	 * already found (as we only search in valid reverse-pivots) or if we are at the root, there is no possible pivot as the dictionary
+	 * is already optimal (the search is complete). On its way through the search tree all dictionaries, which are lexicographically minimal
+	 * are used to compute a vertex of the hyperplane arrangement.
 	 *
 	 * @return
 	 */
@@ -96,6 +109,8 @@ public:
 
 	/**
 	 * @brief Selects the next possible criss cross pivot taking account of the variable order.
+	 * @details The method currently (as the whole algorithm) uses criss-cross pivoting for its search strategy. Another
+	 * option is to make use of Bland's rule as in the original simplex algorithm.
 	 *
 	 * @param i The reference for the proposed row index.
 	 * @param j The reference for the proposed column index.
@@ -142,7 +157,7 @@ private:
 	void rearrange();
 
 	/**
-	 * @brief Increments the row and column indices according to the current dictionary.
+	 * @brief Increments the row and column indices according to the current dictionary (traverse row-wise).
 	 *
 	 * @param i Row index.
 	 * @param j Column index.
