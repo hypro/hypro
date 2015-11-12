@@ -720,9 +720,15 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 	// init
 	HPolytope<Number> hpolytope = *this;
 	std::vector<Point<Number>> vertices = hpolytope.vertices();
+	//for(Point<Number> vertex: vertices) {
+	//	std::cout << "V: " << vertex.coordinate(0) << ", " << vertex.coordinate(1) << ", " << vertex.coordinate(2) << std::endl;
+	//}
+
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
-	for(auto membersOfVertex: membersOfVertices){
-	}
+	//for(auto membersOfVertex: membersOfVertices){
+	//	std::cout << "membersV: " << membersOfVertex << std::endl;
+	//}
+
 	unsigned dimension = vertices[0].dimension();
 	std::vector<unsigned> neighbors = getNeighborsOfIndex(facet, membersOfVertices); // get neighbors
 
@@ -732,6 +738,7 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 
 	// get all relevant ridges for facet A - out of all members
 	for(auto members: membersOfRelevantRidges){
+		//std::cout << "membersR: " << members << std::endl;
 		vector_t<Number> ridge = vector_t<Number>::Zero(dimension);
 		for(unsigned member: members){
 			ridge += hpolytope.mHPlanes[member].normal();
@@ -754,6 +761,8 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 				ridgesToCompare.push_back(ridges[i]);
 			}
 		}
+
+		if(ridgesToCompare.size()<2) break; // TODO examine
 
 		vector_t<Number> normal= initNormal(ridgesToCompare[0], hpolytope.mHPlanes[neighbor].normal(), hpolytope.mHPlanes[facet].normal());
 		//std::cout << "Test normal: (neighbor) " << normal.dot(res.mHPlanes[neighbor].normal()) << " (vertices) " << normal.dot(ridgesToCompare[0]) << std::endl;
@@ -816,23 +825,34 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned a, unsigned b
 				 * bounded?
 				 * ---------------------------------------------------------------------
 				 */
+				 neighborsOf_a.push_back(a);
+				 std::sort(neighborsOf_a.begin(), neighborsOf_a.end());
+				 std::reverse(neighborsOf_a.begin(), neighborsOf_a.end());
 
 
+				 // create all temps A and neighborsOf_a
+				 for(unsigned neighbor_test: neighborsOf_a){
+				 //unsigned neighbor_test=4;
 
-				/*
-				 * ---------------------------------------------------------------------
-				 * bounded decided!
-				 * ---------------------------------------------------------------------
-				 */
+					 HPolytope<Number> temp = res;
+
+					 for(unsigned i=0; i<smoothVectors.size(); i++){
+					 	temp.insert(Hyperplane<Number>(smoothVectors[i], smoothVectors_offset[i])); // update neighbor facets
+				 	 }
+
+				 	for(unsigned neighbor: neighborsOf_a){
+				 		if(neighbor!=neighbor_test)temp.mHPlanes.erase(temp.mHPlanes.begin()+neighbor); // delete not smoothed facet
+						if(neighbor<neighbor_test) neighbor_test--;
+				 	}
+
+					if(reduce) reduce = temp.isBounded(neighbor_test);
+					else break;
+				 }
 
 				if(reduce){
 					for(unsigned i=0; i<smoothVectors.size(); i++){
 						res.insert(Hyperplane<Number>(smoothVectors[i], smoothVectors_offset[i])); // update neighbor facets
 					}
-
-					neighborsOf_a.push_back(a);
-					std::sort(neighborsOf_a.begin(), neighborsOf_a.end());
-					std::reverse(neighborsOf_a.begin(), neighborsOf_a.end());
 
 					for(unsigned neighbor: neighborsOf_a){
 						res.mHPlanes.erase(res.mHPlanes.begin()+neighbor); // delete not smoothed facet

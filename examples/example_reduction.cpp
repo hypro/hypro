@@ -131,15 +131,15 @@ int main(int argc, char const *argv[])
   // Reducing
   std::cout << "\nDROP\n------------------------------------" << std::endl;
 
-  //unsigned facet =0; // reduce one specific facet
+  //unsigned facet =1; // reduce one specific facet
   for(unsigned facet=0; facet < reduce_from.size(); facet++){ // reduce all facets
     std::cout << "facet[" << facet << "]" << std::endl;
 
     // reduce and display the increase of the volume
     reduction_drop_normal = reduce_from.reduce_nd(0, facet);
     std::cout << "volume of drop_normal (red): +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "% \n" << std::endl;
-  //  reduction_drop_smooth = reduce_from.reduce_nd(1, facet);
-  //  std::cout << "volume of drop_smooth green: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    reduction_drop_smooth = reduce_from.reduce_nd(1, facet);
+    std::cout << "volume of drop_smooth green: +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "% \n" << std::endl;
   }
 
 
