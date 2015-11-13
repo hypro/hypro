@@ -76,7 +76,7 @@ TYPED_TEST(PointTest, Constructor)
     p = Point<TypeParam>(5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
 
-
+    p[1] = 0;
     p[2] = 5;
     p[3] = 2;
     p[4] = 2;
@@ -90,7 +90,7 @@ TYPED_TEST(PointTest, Constructor)
     EXPECT_EQ(p[0], TypeParam(5));
 
     Point<TypeParam> pCopy(p);
-    EXPECT_EQ(p, pCopy);
+    EXPECT_TRUE(p == pCopy);
 
     Point<TypeParam> empty = this->p1.newEmpty();
     EXPECT_EQ(this->p1.dimension(), empty.dimension());
@@ -196,8 +196,8 @@ TYPED_TEST(PointTest, BinaryOperatorTest)
     EXPECT_TRUE(this->p3 > this->p4);
     EXPECT_FALSE(this->p4 < this->p4);
     EXPECT_FALSE(this->p4 > this->p4);
-    EXPECT_EQ(this->p4, this->p4);
-    EXPECT_NE(this->p3, this->p4);
+    EXPECT_TRUE(this->p4 == this->p4);
+    EXPECT_FALSE(this->p3 == this->p4);
 }
 
 /**
