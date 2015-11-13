@@ -28,6 +28,7 @@ class Point {
 
   private:
 	vector_t<Number> mCoordinates;
+	mutable std::size_t mHash;
 
 	// Adjacency List of this Point (if applicable)
 	// std::vector<Point<Number>> mNeighbors;
@@ -60,6 +61,7 @@ class Point {
 			mCoordinates( count ) = Number( coordinate );
 			++count;
 		}
+		mHash = 0;
 	}
 
 	//@author Chris K. (for Minkowski Sum Test)
@@ -85,6 +87,7 @@ class Point {
 		for ( unsigned pos = 0; pos < _p.dimension(); ++pos ) {
 			mCoordinates( pos ) = Number( _p.at( pos ) );
 		}
+		mHash = 0;
 	}
 
 	virtual ~Point() {}
@@ -92,6 +95,13 @@ class Point {
 	/**
 	 * Getter & Setter
 	 */
+
+	std::size_t hash() const {
+		if(mHash == 0)
+			mHash = VectorHashValue(mCoordinates);
+
+		return mHash;
+	}
 
 	void extend(const Number& val) {
 		mCoordinates.conservativeResize(mCoordinates.rows() +1);
@@ -276,7 +286,12 @@ class Point {
 	bool operator>( const Point<Number>& _p2 ) const { return _p2 < *this; }
 	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
-	bool operator==( const Point<Number>& _p2 ) const { return ( mCoordinates == _p2.rawCoordinates() ); }
+	bool operator==( const Point<Number>& _p2 ) const {
+		//std::cout << __func__ << ": " << this->hash() << " VS " << _p2.hash() << std::endl;
+		if(this->hash() != _p2.hash()) return false;
+
+		return ( mCoordinates == _p2.rawCoordinates() );
+	}
 
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
