@@ -147,3 +147,13 @@ hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a,
 		   svd.matrixU().adjoint();
 }
 } // namespace Eigen
+
+namespace std {
+    template<class Number>
+    struct hash<hypro::vector_t<Number>> {
+        std::size_t operator()(hypro::vector_t<Number> const& vector) const
+        {
+            return Eigen::VectorHashValue(vector);
+        }
+    };
+} // namespace std
