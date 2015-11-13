@@ -98,7 +98,7 @@ class Point {
 
 	std::size_t hash() const {
 		if(mHash == 0)
-			mHash = VectorHashValue(mCoordinates);
+			mHash = std::hash<vector_t<Number>>()(mCoordinates);
 
 		return mHash;
 	}
@@ -406,10 +406,7 @@ namespace std{
         std::size_t operator()(hypro::Point<Number> const& point) const
         {
             size_t seed = 0;
-            std::vector<Number> coordinates = point.getCoordinates();
-            for (int i = 0; coordinates.rows(); ++i) {
-                carl::hash_add(seed, coordinates(i));
-            }
+            carl::hash_add(seed, std::hash<hypro::vector_t<Number>>()(point.rawCoordinates()));
             return seed;
         }
     };
