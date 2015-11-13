@@ -8,3 +8,7 @@ TODOs:
 
 - Handle unbounded
     -> Easy for HPolytopes, for conversion/VPolytopes we have to add cone (also be able to compute cone in arbitrary dimensions, there is already a function -> re-check).
+
+
+    @Leonardo Winter Pereira
+ - See if we can achieve some compiling speed up by using extern Templates (beginning with Point Class, perhaps?). The Problem is: We need to verify every class using the Point Base Class
