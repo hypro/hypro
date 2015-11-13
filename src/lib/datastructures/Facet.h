@@ -60,7 +60,7 @@ class Facet {
 		setPoints( r, insidePoint );
 		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
 		// mHyperplane = Hyperplane<Number>(mVertices);
-		mNeighbors = std::vector<Facet<Number>>();
+    mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
 
@@ -83,8 +83,7 @@ class Facet {
 		mOutsideSet = std::vector<Point<Number>>();
 	}
 
-	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1,
-		   const Point<Number> insidePoint2 ) {
+	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1, const Point<Number> insidePoint2 ) {
 		r.push_back( p );
 		setPoints( r, insidePoint1, insidePoint2 );
 		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
@@ -134,7 +133,7 @@ class Facet {
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
 	void addNeighbor( std::shared_ptr<Facet<Number>> facet ) {
-		// std::cout << "Adding " << *facet << " to " << *this << std::endl;
+		 //std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
 			assert( isNeighbor( facet ) );
@@ -213,7 +212,7 @@ class Facet {
 	}
 
 	void setPoints( std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints ) {
-		if ( mVertices.empty() ) {
+    if ( mVertices.empty() ) {
 			for ( unsigned i = 0; i < points.size(); i++ ) {
 				mVertices.push_back( points[i] );
 			}
@@ -221,12 +220,12 @@ class Facet {
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 
-			// std::cout << __func__ << " : " << __LINE__ << std::endl;
-			// std::cout << mNormal << std::endl;
-			// std::cout << _insidePoint << "  " << mScalar << std::endl;
+			//std::cout << __func__ << " : " << __LINE__ << std::endl;
+			//std::cout << mNormal << std::endl;
+			//std::cout << insidePoints << "  " << mScalar << std::endl;
 			bool changed = false;
 			for ( unsigned i = 0; i < insidePoints.size(); i++ ) {
-				if ( isBelow( insidePoints.at( i ) ) ) {
+				if (isAbove(insidePoints.at(i))) {
 					mNormal *= -1;
 					mScalar = getScalarVector();
 					if ( changed ) {
@@ -280,7 +279,7 @@ class Facet {
 			}
 
 			if ( !change && ( !inside || !outside ) ) {
-				if ( isBelow( _insidePoint ) ) {
+				if (isAbove(_insidePoint)) {
 					mNormal *= -1;
 					mScalar = getScalarVector();
 				}
@@ -374,8 +373,13 @@ class Facet {
 			} */
 		// std::cout << __func__ << " : " << __LINE__ << " value " <<temp-mScalar << std::endl;
 
-		return ( temp - mScalar > 0 );
+		return ( temp - mScalar <= 0 );
 	}
+
+  bool isAbove(const Point<Number>& p) const {
+    Number temp = Number( mNormal.dot(p.rawCoordinates()));
+    return (temp-mScalar>0);
+  }
 
 	Number getDist( const Point<Number>& p ) const {
 		Number temp = Number( mNormal.dot( p.rawCoordinates() ) );
@@ -410,8 +414,7 @@ class Facet {
 			return Point<Number>();
 		} else {
 			Point<Number> result = mOutsideSet[0];
-			Number max =
-				  Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );  // mHyperplane.signedDistance(result);
+			Number max = Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );  // mHyperplane.signedDistance(result);
 			for ( unsigned i = 1; i < mOutsideSet.size(); i++ ) {
 				Number temp = Number( mNormal.dot( mOutsideSet[i].rawCoordinates() ) );
 				if ( temp > max ) {

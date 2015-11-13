@@ -13,7 +13,9 @@
 #include <carl/util/Singleton.h>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
+CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
+CLANG_WARNING_RESET
 #include <map>
 #include <cassert>
 
@@ -116,7 +118,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		if ( _index >= mPplId ) {
 			for ( unsigned curr = mPplId; curr <= _index; ++curr ) {
-				carl::Variable cVar = mPool.getFreshVariable();
+				carl::Variable cVar = carl::freshRealVariable();
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mCarlVariables.push_back( cVar );
 				mPplVariables.push_back( pVar );
@@ -153,7 +155,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		if ( _index >= mPplId ) {
 			for ( unsigned curr = mPplId; curr <= _index; ++curr ) {
-				carl::Variable cVar = mPool.getFreshVariable();
+				carl::Variable cVar = carl::freshRealVariable();
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mCarlVariables.push_back( cVar );
 				mPplVariables.push_back( pVar );
@@ -187,7 +189,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	const carl::Variable& newCarlVariable( std::string _name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
-		carl::Variable cVar = mPool.getFreshVariable( _name );
+		carl::Variable cVar = carl::freshRealVariable( _name );
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
 		mPplVariables.push_back( pVar );
@@ -199,7 +201,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	const Parma_Polyhedra_Library::Variable& newPplVariable() {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
-		carl::Variable cVar = mPool.getFreshVariable();
+		carl::Variable cVar = carl::freshRealVariable();
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
 		mPplVariables.push_back( pVar );

@@ -14,6 +14,7 @@ set( EXAMPLES
     example_addition
     example_benchmarks
     example_bouncingBall
+    example_box
     example_converter
     example_convexHull
     example_division
@@ -28,6 +29,7 @@ set( EXAMPLES
     example_polytope
     example_polytopeFileWriter
     example_power
+    #example_probabilistic
     #example_ppl_nncPolyhedra
     example_reachability
     example_reduction

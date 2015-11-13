@@ -1,5 +1,3 @@
-
-
 namespace hypro {
 
 	template<typename T>
@@ -32,6 +30,24 @@ namespace hypro {
 			_out << *_vec.begin();
 			for(auto vecIt = ++_vec.begin(); vecIt != _vec.end(); ++vecIt)
 				_out << ", " << *vecIt;
+		}
+
+		return _out;
+	}
+
+	template<typename T>
+	std::ostream& operator <<(std::ostream& _out, const std::pair<T,T>& _pair) {
+		_out << _pair.first << ", " << _pair.second;
+
+		return _out;
+	}
+
+	template<typename Key, typename T>
+	std::ostream& operator <<(std::ostream& _out, const std::map<Key,T>& _map) {
+		if(!_map.empty()) {
+			_out << _map.begin()->first << " -> " << _map.begin()->second;
+			for(auto mapIt = ++_map.begin(); mapIt != _map.end(); ++mapIt)
+				_out << ", " << mapIt->first << " -> " << mapIt->second;
 		}
 
 		return _out;

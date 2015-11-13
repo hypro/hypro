@@ -66,6 +66,8 @@ class Grid {
   public:
 	typedef std::map<Point<unsigned>, bool> gridMap;  // store calculated colors
 	typedef std::map<unsigned, std::vector<Number>> gridPoints;
+	typedef gridMap::iterator gridMapIterator;
+	typedef typename gridPoints::iterator gridPointsIterator;
 
   private:
 	std::set<Vertex<unsigned>> mVertices;
@@ -205,5 +207,4 @@ class Grid {
 	}
 };
 }
-
 #include "Grid.tpp"

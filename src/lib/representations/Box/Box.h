@@ -26,14 +26,14 @@ template <typename Number>
 class VPolytope;
 
 template <typename Number>
-class Box {
+class Box : public hypro::GeometricObject<Number>{
   private:
   public:
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
   protected:
-	std::vector<carl::Interval<Number>> mBoundaries;
+    std::pair<hypro::Point<Number>, hypro::Point<Number>> mLimits;
 
   public:
 	/***************************************************************************
@@ -43,13 +43,13 @@ class Box {
 	/*
 	 * Creates a box without any specifications
 	 */
-	Box() : mBoundaries() {}
+	Box() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
 
 	/*
 	 * Creates a copy of a box?
 	 * @param orig The box that's gonna be copied
 	 */
-	Box( const Box& orig ) : mBoundaries( orig.boundaries() ) {}
+	Box( const Box& orig ) : mLimits( orig.limits() ) {}
 
 	/*
 	 * Creates a box by
@@ -57,75 +57,54 @@ class Box {
 	 * @param val
 	 */
 	Box( const carl::Interval<Number>& val ) {
-		mBoundaries.push_back(val);
+        mLimits.first = hypro::Point<Number>({val.lower()});
+        mLimits.second = hypro::Point<Number>({val.upper()});
 	}
 
+	Box( const std::pair<Point<Number>, Point<Number>>& limits) :
+			mLimits(limits)
+	{
+		assert(limits.first.dimension() == limits.second.dimension());
+	}
 
-	Box( const std::vector<carl::Interval<Number>>& _intervals ) { mBoundaries = _intervals; }
-	Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
-		: Box( VPolytope<Number>( _matrix, _constants ).vertices() ) {}
+	Box( const std::vector<carl::Interval<Number>>& _intervals );
+	Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants );
 	Box( const std::set<Point<Number>>& _points );
 	Box( const std::vector<Point<Number>>& _points );
 	Box( const std::set<Vertex<Number>>& _points );
 	Box( const std::vector<Vertex<Number>>& _points );
 
-	~Box() { mBoundaries.clear(); }
+	~Box() {}
 
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 
 	static Box<Number> Empty(std::size_t dimension = 1) {
-		std::vector<carl::Interval<Number>> intervals(dimension, carl::Interval<Number>::emptyInterval());
-		return Box<Number>(std::move(intervals));
+		return Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
 	}
 
-	std::vector<carl::Interval<Number>>& rBoundaries() { return mBoundaries; }
-	const std::vector<carl::Interval<Number>>& boundaries() const { return mBoundaries; }
+	std::vector<carl::Interval<Number>> boundaries() const;
+	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
 	std::vector<hypro::Hyperplane<Number>> constraints() const;
 
-	void insert( const carl::Interval<Number>& val ) { mBoundaries.push_back(val); }
-	void insert( const std::vector<carl::Interval<Number>>& boundaries ) { mBoundaries.insert(mBoundaries.end(), boundaries.begin(), boundaries.end()); }
-
-	/*
-	 * Checks if the box has the same dimension as the variable.
-	 * @param var
-	 * @return
-	 */
-	bool hasDimension( std::size_t d ) const {
-		return (mBoundaries.size() >= d);
-	}
-
-	/**
-	 * Checks if the box has the same dimensions as this box.
-	 * The number of dimensions has to be equal as well as the actual
-	 * variables used for those dimensions.
-	 *
-	 * @param p
-	 * @return True, if all dimension variables are equal
-	 */
-	bool haveSameDimensions( const Box<Number>& b ) const {
-		if ( dimension() != b.dimension() ) {
-			return false;
-		}
-		return true;
-	}
+	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
+	void insert( const std::vector<carl::Interval<Number>>& boundaries );
 
 	carl::Interval<Number> interval( std::size_t d ) const;
-	carl::Interval<Number>& rInterval( std::size_t d );
 
 	carl::Interval<Number> at( std::size_t _index ) const {
-		if ( _index > mBoundaries.size() ) return carl::Interval<Number>::emptyInterval();
-		return mBoundaries[_index];
+		if ( _index > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
+		return carl::Interval<Number>(mLimits.first.at(_index), mLimits.second.at(_index));
 	}
 
 	/*
 	 * @return
 	 */
 	bool empty() const {
-		if ( mBoundaries.size() == 0 ) return false;
-		for ( auto interval : mBoundaries ) {
-			if ( interval.isEmpty() ) {
+		if ( mLimits.first.dimension() == 0 ) return false;
+		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
+			if ( mLimits.first.at(d) > mLimits.second.at(d) ) {
 				return true;
 			}
 		}
@@ -136,22 +115,14 @@ class Box {
 	 * @return
 	 */
 	Point<Number> max() const {
-		vector_t<Number> coordinates = vector_t<Number>( mBoundaries.size() );
-		for ( unsigned i = 0; i < mBoundaries.size(); ++i ) {
-			coordinates( i ) = mBoundaries[i].upper();
-		}
-		return Point<Number>( coordinates );
+		return mLimits.second;
 	}
 
 	/*
 	 * @return
 	 */
 	Point<Number> min() const {
-		vector_t<Number> coordinates = vector_t<Number>( mBoundaries.size() );
-		for ( unsigned i = 0; i < mBoundaries.size(); ++i ) {
-			coordinates( i ) = mBoundaries[i].lower();
-		}
-		return Point<Number>( coordinates );
+		return mLimits.first;
 	}
 
 	Number supremum() const;
@@ -166,10 +137,8 @@ class Box {
 	 */
 	friend bool operator==( const Box<Number>& b1, const Box<Number>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) return false;
-		for ( unsigned i = 0; i < b1.boundaries().size(); ++i ) {
-			if ( b1.at( i ) != b2.at( i ) ) return false;
-		}
-		return true;
+
+		return ( b1.limits() == b2.limits());
 	}
 
 	/**
@@ -185,8 +154,7 @@ class Box {
 	 */
 	Box<Number>& operator=( const Box<Number>& rhs ) {
 		if ( *this != rhs ) {
-			this->mBoundaries.clear();
-			mBoundaries = rhs.boundaries();
+			mLimits = rhs.limits();
 		}
 		return *this;
 	}
@@ -198,26 +166,19 @@ class Box {
 	 * @return
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const Box<Number>& b ) {
-		ostr << "{";
-		for ( unsigned i = 0; i < b.dimension(); ++i ) {
-			if ( i != 0 ) {
-				ostr << ";";
-			}
-			ostr << " " << b.at( i );
-		}
+		ostr << "{ ";
+		ostr << b.min() << "; " << b.max() << std::endl;
 		ostr << " }";
 		return ostr;
 	}
 
-	const carl::Interval<Number>& operator[]( unsigned i ) const { return mBoundaries.at(i); }
-
-	carl::Interval<Number>& operator[]( unsigned i ) { return mBoundaries.at(i); }
+	carl::Interval<Number> operator[]( unsigned i ) const { return carl::Interval<Number>(mLimits.first.at(i), mLimits.second.at(i)); }
 
 	/***************************************************************************
 	 * General interface
 	 **************************************************************************/
 
-	std::size_t dimension() const { return mBoundaries.size(); }
+	std::size_t dimension() const { return mLimits.first.dimension(); }
 
 	Box<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	Box<Number> minkowskiSum( const Box<Number>& rhs ) const;

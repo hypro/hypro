@@ -65,7 +65,7 @@ Point<Number>::Point( const Point<Number> &_p )
 	// mNeighbors(_p.neighbors()),
 	mComposedOf( _p.composedOf() )
 	,
-  mNeighboors(_p.getNeighboors() ){
+  mNeighbors(_p.getNeighbors() ){
 }
 
 template <typename Number>
@@ -286,7 +286,7 @@ std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origi
 		}
 		angle = carl::sqrt( angle );
 		angle = ( transformedCoordinates( dimension ) / angle );
-		angle = acos( angle );
+		angle = std::acos( angle );
 
 		if ( !_radians ) {
 			angle /= 2 * PI_DN;
@@ -475,6 +475,19 @@ Point<Number> &Point<Number>::operator=( Point<Number> &&_in ) {
 	this->mComposedOf = _in.composedOf();
 	return *this;
 }
+
+template <typename Number>
+Point<Number>& Point<Number>::operator=( const vector_t<Number>& _in ) {
+	this->mCoordinates = _in;
+	return *this;
+}
+
+template <typename Number>
+Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
+	this->mCoordinates = std::move(_in);
+	return *this;
+}
+
 
 template <typename Number>
 Number &Point<Number>::operator[]( const carl::Variable &_i ) {

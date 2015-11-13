@@ -87,3 +87,18 @@ std::ostream& operator<<( std::ostream& _ostr, const Ridge<Number>& _f ) {
 }
 
 }  // namespace
+
+namespace std {
+    template<class Number>
+    struct hash<hypro::Ridge<Number>>{
+        std::size_t operator() (const hypro::Ridge<Number>& ridge) const {
+            std::size_t seed;
+            std::hash<hypro::Point<Number>> pointHasher;
+            std::vector<hypro::Point<Number>> vertices = ridge.vertices();
+            for (int i = 0; i < vertices.rows(); i++) {
+                boost::hash_combine(seed, pointHasher(vertices(i)));
+            }
+            return seed;
+        }
+    };
+}

@@ -50,18 +50,80 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 	return false;
 }
 
+	template <typename Number>
+	bool operator<=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+		if ( lhs.rows() != rhs.rows() ) return false;
+
+		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
+			if ( lhs( dim ) > rhs( dim ) ) {
+				return false;
+			} else if ( lhs( dim ) <= rhs( dim ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<typename Number>
+	bool operator>( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs < lhs;}
+
+	template<typename Number>
+	bool operator>=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs <= lhs;}
+
+	/*!
+	 * computes a hash chain over a vector nx1 using carl::hash_add and returns it
+	 * @param pVector input vector
+	 * @return size_t hash seed
+	 */
+	template <typename Number>
+	std::size_t VectorHashValue( const hypro::vector_t<Number>& pVector ) {
+		size_t seed = 0;
+		for (int i = 0; i < pVector.rows(); i++) {
+			carl::hash_add(seed, pVector(i));
+		}
+		return seed;
+	}
+
+	/*!
+	 * computes a hash chain over a matrix using carl::hash_add
+	 * @param pMatrix input matrix
+	 * @return size_t
+	 */
+	template <typename Number>
+	std::size_t MatrixHashValue( const hypro::matrix_t<Number>& pMatrix ) {
+		size_t seed = 0;
+		for (int i = 0; i < pMatrix.rows(); i++) {
+			for (int j = 0; j < pMatrix.cols(); j++) {
+				carl::hash_add(seed, pMatrix(i, j));
+			}
+		}
+		return seed;
+	}
+
+
 template <typename Number>
 bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
+	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		// std::cout << lhs(dim) << std::endl;
-		// std::cout << rhs(dim) << std::endl;
-
-		// std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS <<
-		// "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
 		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
 			return false;
+		}
+	}
+	return true;
+}
+
+template <typename Number>
+bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) return false;
+	if ( MatrixHashValue(lhs) != MatrixHashValue(rhs) ) return false;
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), TOLLERANCE_ULPS ) ) {
+				return false;
+			}
 		}
 	}
 	return true;

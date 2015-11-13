@@ -28,6 +28,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runPTermTests
 		PTermBoxTest.cpp
+		PTermPolytopeTest.cpp
 	)
 
 	add_dependencies(runRepresentationTests googletest)

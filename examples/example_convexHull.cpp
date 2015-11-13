@@ -89,7 +89,27 @@ int main(int argc, char** argv) {
 		points.push_back(p10);
 		points.push_back(p11);
 
-		std::pair<std::vector<std::shared_ptr<Facet<double> > >, std::map<Point<double>, std::set<Point<double> > > > facets = convexHull(points);
+		vector_t<double> v1_2 = vector_t<double>(2);
+		v1_2(0) = 4;
+		v1_2(1) = 0;
+		Point<double> p1_2 = Point<double>(v1_2);
+
+		vector_t<double> v2_2 = vector_t<double>(2);
+		v2_2(0) = 0;
+		v2_2(1) = -4;
+		Point<double> p2_2 = Point<double>(v2_2);
+
+		vector_t<double> v3_2 = vector_t<double>(2);
+		v3_2(0) = 0;
+		v3_2(1) = 0;
+		Point<double> p3_2 = Point<double>(v3_2);
+
+		std::vector<Point<double>> points2;
+		points2.push_back(p1_2);
+		points2.push_back(p2_2);
+		points2.push_back(p3_2);
+
+		auto facets = convexHull(points2);//std::pair<std::vector<std::shared_ptr<Facet<double> > >, std::map<Point<double>, std::set<Point<double> > > > facets = convexHull(points);
 
 
 		for(unsigned i = 0; i<facets.first.size(); i++){

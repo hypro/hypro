@@ -12,94 +12,114 @@
 
 namespace hypro {
 
+	template<typename Number>
+	Box<Number>::Box( const std::vector<carl::Interval<Number>>& _intervals )
+	{
+		if(!_intervals.empty()) {
+			vector_t<Number> lower = vector_t<Number>(_intervals.size());
+			vector_t<Number> upper = vector_t<Number>(_intervals.size());
+			for (std::size_t dim = 0; dim < _intervals.size(); ++dim) {
+				lower(dim) = _intervals.at(dim).lower();
+				upper(dim) = _intervals.at(dim).upper();
+			}
+			mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
+		}
+	}
+
+	template<typename Number>
+	Box<Number>::Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
+			: Box( VPolytope<Number>( _matrix, _constants ).vertices() )
+	{}
+
 template <typename Number>
 Box<Number>::Box( const std::set<Point<Number>> &_points ) {
-	if ( _points.size() > 0 ) {
-		std::size_t dim = _points.begin()->dimension();
-		for ( std::size_t d = 0; d < dim; ++d ) {
-			mBoundaries.push_back( carl::Interval<Number>( _points.begin()->at( d ) ) );
-		}
-		if ( _points.size() > 1 ) {
-			auto pointIt = _points.begin();
-			++pointIt;
-			for ( ; pointIt != _points.end(); ++pointIt ) {
-				for ( std::size_t d = 0; d < pointIt->dimension(); ++d ) {
-					if ( mBoundaries[d].lower() > pointIt->at( d ) ) mBoundaries[d].setLower( pointIt->at( d ) );
+	if ( !_points.empty() ) {
+		vector_t<Number> lower = _points.begin()->rawCoordinates();
+		vector_t<Number> upper = _points.begin()->rawCoordinates();
+		for(const auto& point : _points) {
+			for(std::size_t d = 0; d < point.dimension(); ++d){
+				if(point.at(d) < lower(d))
+					lower(d) = point.at(d);
 
-					if ( mBoundaries[d].upper() < pointIt->at( d ) ) mBoundaries[d].setUpper( pointIt->at( d ) );
-				}
+				if(point.at(d) > upper(d))
+					upper(d) = point.at(d);
 			}
 		}
+		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
 }
 
 template <typename Number>
 Box<Number>::Box( const std::vector<Point<Number>> &_points ) {
-	if ( _points.size() > 0 ) {
-		std::size_t dim = _points.begin()->dimension();
-		for ( std::size_t d = 0; d < dim; ++d ) {
-			mBoundaries.push_back( carl::Interval<Number>( _points.begin()->at( d ) ) );
-		}
-		if ( _points.size() > 1 ) {
-			auto pointIt = _points.begin();
-			++pointIt;
-			for ( ; pointIt != _points.end(); ++pointIt ) {
-				for ( std::size_t d = 0; d < pointIt->dimension(); ++d ) {
-					if ( mBoundaries[d].lower() > pointIt->at( d ) ) mBoundaries[d].setLower( pointIt->at( d ) );
+	if ( !_points.empty() ) {
+		vector_t<Number> lower = _points.begin()->rawCoordinates();
+		vector_t<Number> upper = _points.begin()->rawCoordinates();
+		for(const auto& point : _points) {
+			for(std::size_t d = 0; d < point.dimension(); ++d){
+				if(point.at(d) < lower(d))
+					lower(d) = point.at(d);
 
-					if ( mBoundaries[d].upper() < pointIt->at( d ) ) mBoundaries[d].setUpper( pointIt->at( d ) );
-				}
+				if(point.at(d) > upper(d))
+					upper(d) = point.at(d);
 			}
 		}
+		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
 }
 
 template <typename Number>
 Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
-	if ( _vertices.size() > 0 ) {
-		std::size_t dim = _vertices.begin()->dimension();
-		for ( std::size_t d = 0; d < dim; ++d ) {
-			mBoundaries.push_back( carl::Interval<Number>( _vertices.begin()->at( d ) ) );
-		}
-		if ( _vertices.size() > 1 ) {
-			auto pointIt = _vertices.begin();
-			++pointIt;
-			for ( ; pointIt != _vertices.end(); ++pointIt ) {
-				for ( std::size_t d = 0; d < pointIt->dimension(); ++d ) {
-					if ( mBoundaries[d].lower() > pointIt->at( d ) ) mBoundaries[d].setLower( pointIt->at( d ) );
+	if ( !_vertices.empty() ) {
+		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
+		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
+		for(const auto& point : _vertices) {
+			for(std::size_t d = 0; d < point.dimension(); ++d){
+				if(point.at(d) < lower(d))
+					lower(d) = point.at(d);
 
-					if ( mBoundaries[d].upper() < pointIt->at( d ) ) mBoundaries[d].setUpper( pointIt->at( d ) );
-				}
+				if(point.at(d) > upper(d))
+					upper(d) = point.at(d);
 			}
 		}
+		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
 }
 
 template <typename Number>
 Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
-	if ( _vertices.size() > 0 ) {
-		std::size_t dim = _vertices.begin()->dimension();
-		for ( std::size_t d = 0; d < dim; ++d ) {
-			mBoundaries.push_back( carl::Interval<Number>( _vertices.begin()->at( d ) ) );
-		}
-		if ( _vertices.size() > 1 ) {
-			auto pointIt = _vertices.begin();
-			++pointIt;
-			for ( ; pointIt != _vertices.end(); ++pointIt ) {
-				for ( std::size_t d = 0; d < pointIt->dimension(); ++d ) {
-					if ( mBoundaries[d].lower() > pointIt->at( d ) ) mBoundaries[d].setLower( pointIt->at( d ) );
+	if ( !_vertices.empty() ) {
+		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
+		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
+		for(const auto& point : _vertices) {
+			for(std::size_t d = 0; d < point.dimension(); ++d){
+				if(point.at(d) < lower(d))
+					lower(d) = point.at(d);
 
-					if ( mBoundaries[d].upper() < pointIt->at( d ) ) mBoundaries[d].setUpper( pointIt->at( d ) );
-				}
+				if(point.at(d) > upper(d))
+					upper(d) = point.at(d);
 			}
 		}
+		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
+	std::cout << "Constructed box " << *this << std::endl;
+}
+
+template<typename Number>
+std::vector<carl::Interval<Number>> Box<Number>::boundaries() const {
+	std::vector<carl::Interval<Number>> result;
+	result.reserve(this->dimension());
+
+	for(std::size_t d = 0; d < this->dimension(); ++d) {
+		result.push_back(carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d)));
+	}
+
+	return result;
 }
 
 template<typename Number>
 std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
 	std::vector<Hyperplane<Number>> res;
-	if(!mBoundaries.empty()) {
+	if(this->dimension() != 0) {
 		std::size_t dim = this->dimension();
 		res.reserve(2*dim);
 		for( std::size_t d = 0; d < dim; ++d) {
@@ -107,8 +127,8 @@ std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
 			low(d) = -1;
 			vector_t<Number> up = vector_t<Number>::Zero(dim);
 			up(d) = 1;
-			Number lOff = -mBoundaries.at(d).lower();
-			Number uOff = mBoundaries.at(d).upper();
+			Number lOff = -mLimits.first.at(d);
+			Number uOff = mLimits.second.at(d);
 			res.emplace_back(low, lOff);
 			res.emplace_back(up, uOff);
 		}
@@ -116,18 +136,18 @@ std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
 	return res;
 }
 
-template <typename Number>
-carl::Interval<Number> Box<Number>::interval( std::size_t d ) const {
-	if ( d > mBoundaries.size() ) return carl::Interval<Number>::emptyInterval();
-
-	return mBoundaries.at( d );
+template<typename Number>
+void Box<Number>::insert( const std::vector<carl::Interval<Number>>& boundaries ) {
+	for(const auto& interval : boundaries) {
+		mLimits.first.extend(interval.lower());
+		mLimits.second.extend(interval.upper());
+	}
 }
 
 template <typename Number>
-carl::Interval<Number> &Box<Number>::rInterval( std::size_t d ) {
-	if ( d > mBoundaries.size() ) return carl::Interval<Number>::emptyInterval();
-
-	return mBoundaries.at( d );
+carl::Interval<Number> Box<Number>::interval( std::size_t d ) const {
+	if ( d > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
+	return carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d));
 }
 
 template <typename Number>
@@ -143,16 +163,16 @@ Number Box<Number>::supremum() const {
 template <typename Number>
 std::vector<Point<Number>> Box<Number>::vertices() const {
 	std::vector<Point<Number>> result;
-	std::size_t limit = pow( 2, mBoundaries.size() );
+	std::size_t limit = pow( 2, mLimits.first.dimension() );
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		vector_t<Number> coord = vector_t<Number>( dimension() );
 		for ( std::size_t dimension = 0; dimension < this->dimension(); ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
 			if ( bitCount & pos )
-				coord( dimension ) = mBoundaries[dimension].upper();
+				coord( dimension ) = mLimits.second.at(dimension);
 			else
-				coord( dimension ) = mBoundaries[dimension].lower();
+				coord( dimension ) = mLimits.first.at(dimension);
 		}
 		result.push_back( Point<Number>( coord ) );
 	}
@@ -161,34 +181,49 @@ std::vector<Point<Number>> Box<Number>::vertices() const {
 
 template <typename Number>
 Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
-	std::vector<Point<Number>> corners = this->vertices();
-	std::set<Point<Number>> transformedCorners;
-	for ( auto &point : corners ) {
-		transformedCorners.insert( Point<Number>( A * point.rawCoordinates() + b ) );
+	// create both limit matrices
+	matrix_t<Number> ax(A);
+	matrix_t<Number> bx(A);
+	Point<Number> min;
+	Point<Number> max;
+
+	for (int k = 0; k < A.rows(); ++k) {
+		for (int j = 0; j < A.cols(); ++j) {
+			Number a = mLimits.first.at(j)*A(k,j);
+			Number b = mLimits.second.at(j)*A(k,j);
+			//std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
+				if(a > b){
+					max[k] += a;
+					min[k] += b;
+				} else {
+					max[k] += b;
+					min[k] += a;
+				}
+
+			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
+		}
 	}
 
-	return Box<Number>( transformedCorners );
+	return Box<Number>( std::make_pair(min, max) );
 }
 
 template <typename Number>
 Box<Number> Box<Number>::minkowskiSum( const Box<Number> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-	Box<Number> result;
-	for ( std::size_t i = 0; i < dimension(); ++i ) {
-		result.insert( mBoundaries[i].add( rhs[i] ) );
-	}
-	return result;
+
+	return Box<Number>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
 }
 
 template <typename Number>
 Box<Number> Box<Number>::intersect( const Box<Number> &rhs ) const {
-	Box<Number> result;
 	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
+	std::pair<Point<Number>, Point<Number>> limits(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)), Point<Number>(vector_t<Number>::Zero(dim))));
+	std::pair<Point<Number>, Point<Number>> rhsLimits = rhs.limits();
 	for ( std::size_t i = 0; i < dim; ++i ) {
-		carl::Interval<Number> res = mBoundaries[i].intersect( rhs[i] );
-		result.insert( res );
+		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
+		limits.second[i] = mLimits.second.at(i) < rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return result;
+	return Box<Number>(limits);
 }
 
 template <typename Number>
@@ -205,43 +240,33 @@ template <typename Number>
 bool Box<Number>::contains( const Point<Number> &point ) const {
 	if ( this->dimension() > point.dimension() ) return false;
 
-	for ( std::size_t i = 0; i < dimension(); ++i ) {
-		if ( !mBoundaries[i].contains( point.at( i ) ) ) return false;
-	}
-	return true;
+	return (point >= mLimits.first && point <= mLimits.second );
 }
 
 template <typename Number>
 bool Box<Number>::contains( const Box<Number> &box ) const {
 	if ( this->dimension() != box.dimension() ) return false;
 
-	for ( std::size_t pos = 0; pos < mBoundaries.size(); ++pos ) {
-		std::cout << "TEst Contains: " << mBoundaries.at( pos ) << " contains " << box.at( pos ) << ": "
-				  << mBoundaries.at( pos ).contains( box.at( pos ) ) << std::endl;
-		if ( !mBoundaries.at( pos ).contains( box.at( pos ) ) ) return false;
-	}
-	return true;
+	return (box.min() >= mLimits.first && box.max() <= mLimits.second );
 }
 
 template <typename Number>
 Box<Number> Box<Number>::unite( const Box<Number> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-	Box<Number> result;
-	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
-		Number lowerMin = mBoundaries[i].lower() < rhs.at( i ).lower() ? mBoundaries[i].lower() : rhs.at( i ).lower();
-		Number upperMax = mBoundaries[i].upper() > rhs.at( i ).upper() ? mBoundaries[i].upper() : rhs.at( i ).upper();
-		carl::BoundType lowerType =
-			  carl::getWeakestBoundType( mBoundaries[i].lowerBoundType(), rhs.at( i ).lowerBoundType() );
-		carl::BoundType upperType =
-			  carl::getWeakestBoundType( mBoundaries[i].upperBoundType(), rhs.at( i ).upperBoundType() );
-		result.insert( carl::Interval<Number>( lowerMin, lowerType, upperMax, upperType ) );
+	std::size_t dim = this->dimension();
+
+	std::pair<Point<Number>, Point<Number>> limits(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)), Point<Number>(vector_t<Number>::Zero(dim))));
+	std::pair<Point<Number>, Point<Number>> rhsLimits = rhs.limits();
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		limits.first[i] = mLimits.first.at(i) < rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
+		limits.second[i] = mLimits.second.at(i) > rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return result;
+	return Box<Number>(limits);
 }
 
-template <typename Number>
+template<typename Number>
 void Box<Number>::clear() {
-	mBoundaries.erase( mBoundaries.begin(), mBoundaries.end() );
+	*this = Box<Number>::Empty(0);
 }
 
 template <typename Number>

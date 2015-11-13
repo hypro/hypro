@@ -86,21 +86,28 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-	HPolytope<Number> reduce( int strat = 0 ,unsigned _steps = 1 ) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  HPolytope<Number> reduce_nd(int strat=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_nd(int strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
 	void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
-	std::pair<unsigned, unsigned> chooseStrat() const;
-	unsigned getIndexForDrop() const;
-	unsigned getIndexForUnite() const;
+  // Help functions by Igor Bongartz
+  std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
+  std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
+  std::vector<std::vector<unsigned>> getMembersOfVerticesOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
 
-	std::pair<Number, Number> cut(Hyperplane<Number> a, Hyperplane<Number> b) const;
-
-  std::vector<unsigned> getNeighboorsOfIndex(unsigned i, std::vector<Point<Number>> vertices) const;
-  Point<Number> getPointOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
-  std::vector<Point<Number>> getPointOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
+  std::vector<Point<Number>> getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
+  std::vector<Point<Number>> getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
   std::vector<std::vector<Point<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
-  vector_t<Number> computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> a, vector_t<Number> b) const;
+
+  vector_t<Number> computeNormal(std::vector<Point<Number>> baseVectors, unsigned dimension, vector_t<Number> check) const;
+  vector_t<Number> initNormal(vector_t<Number> a, vector_t<Number> b, vector_t<Number> check) const;
+  vector_t<Number> initNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const;
+
+  Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
+
+  bool isBounded(unsigned facet) const;
+  bool isGood(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
+  // End Help funcions
+
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;

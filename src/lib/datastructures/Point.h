@@ -33,7 +33,7 @@ class Point {
 	// std::vector<Point<Number>> mNeighbors;
 	// Minkowsi Decompositon of this point (if applicable)
 	std::vector<Point<Number>> mComposedOf;
-  std::vector<unsigned> mNeighboors;
+  std::vector<unsigned> mNeighbors;
 
   public:
 	static const int POINT_RAND_MAX = 100;
@@ -92,12 +92,19 @@ class Point {
 	/**
 	 * Getter & Setter
 	 */
-   void setNeighboors(const std::vector<unsigned> &_neighboors) {
-     mNeighboors = _neighboors;
+
+	void extend(const Number& val) {
+		mCoordinates.conservativeResize(mCoordinates.rows() +1);
+		mCoordinates(mCoordinates.rows()-1) = val;
+	}
+    std::vector<Number> getCoordinates() { return mCoordinates; };
+
+   void setNeighbors(const std::vector<unsigned> &_neighbors) {
+     mNeighbors = _neighbors;
    }
 
-   std::vector<unsigned> getNeighboors() const{
-     return mNeighboors;
+   std::vector<unsigned> getNeighbors() const{
+     return mNeighbors;
    }
 
 	/*
@@ -288,6 +295,8 @@ class Point {
 	Point<Number>& operator*=( const Number _factor );
 	Point<Number>& operator=( const Point<Number>& _in );
 	Point<Number>& operator=( Point<Number>&& _in );
+	Point<Number>& operator=( const vector_t<Number>& _in );
+	Point<Number>& operator=( vector_t<Number>&& _in );
 
 	/**
 	 *
@@ -309,9 +318,9 @@ class Point {
 	friend std::ostream& operator<<( std::ostream& _ostr, const Point<Number>& _p ) {
 		_ostr << "( ";
 		for ( unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
-			_ostr << _p.at( i ) << ", ";
+			_ostr << _p.at( i ) << "[" << i  << "] , ";
 		}
-		_ostr << _p.at( _p.rawCoordinates().rows() - 1 );
+		_ostr << _p.at( _p.rawCoordinates().rows() - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
 		_ostr << ")";
 		return _ostr;
 	}
@@ -374,7 +383,21 @@ template <typename Number>
 const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs ) {
 	return ( _rhs * _factor );
 }
-
 }  // namespace
+
+namespace std{
+    template<class Number>
+    struct hash<hypro::Point<Number>> {
+        std::size_t operator()(hypro::Point<Number> const& point) const
+        {
+            size_t seed = 0;
+            std::vector<Number> coordinates = point.getCoordinates();
+            for (int i = 0; coordinates.rows(); ++i) {
+                carl::hash_add(seed, coordinates(i));
+            }
+            return seed;
+        }
+    };
+} //namespace
 
 #include "Point.tpp"

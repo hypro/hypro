@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-10-29
- * @version	2015-10-30
+ * @version	2015-11-11
  */
 
 #pragma once
@@ -13,177 +13,166 @@
 #include "../config.h"
 #include "../datastructures/Point.h"
 
+//#define FUKUDA_VERTEX_ENUM_DEBUG
+
 namespace hypro {
 
 template<typename Number>
-struct Dictionary {
+class Dictionary {
+private:
 	matrix_t<Number> 	mDictionary;
 	std::size_t			mF;
 	std::size_t			mG;
-	std::size_t			n;
-	std::size_t			m;
-	std::vector<std::size_t> mB;
-	std::vector<std::size_t> mN;
+	std::map<std::size_t, std::size_t> mB;
+	std::map<std::size_t, std::size_t> mN;
+	matrix_t<Number> 	mSubstitution;
 
-	Dictionary (const matrix_t<Number>& A, const vector_t<Number>& b) :
-		mDictionary(),
-		mF(A.rows()+A.cols()),
-		mG(A.rows()+A.cols()+1),
-	{
-		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
-		t << b,-A;
-		// rearrange to make the last d equations linear independent.
-		rearrange();
+public:
+	Dictionary() = default;
+	Dictionary(const Dictionary& rhs);
 
-		// solve the last d equations
-		std::size_t dimension = A.cols();
-		// Assumption: The last d equations of A are linear independent
+	/**
+	 * @brief Constructs a dictionary from a given halfspace arrangement. Note: The constructor already creates an optimal dictionary.
+	 *
+	 * @param A Matrix holding the constraints.
+	 * @param b Vector holding the constants.
+	 */
+	Dictionary(const matrix_t<Number>& A, const vector_t<Number>& b);
 
-		auto bottom = t.bottomRows(dimension);
-		auto top = t.topRows(A.rows()-dimension);
+	/**
+	 * @brief Getter for the current dictionary.
+	 *
+	 * @return
+	 */
+	inline const matrix_t<Number>& dictionary() const;
 
-		auto varBlock = bottom.rightCols(dimension);
-		auto constPart = bottom.leftCols(1);
+	/**
+	 * @brief Getter for the current basis variable map (variableIndex -> rowIndex)
+	 *
+	 * @return
+	 */
+	inline const std::map<std::size_t, std::size_t>& basis() const;
 
-		matrix_t<Number> tmp = matrix_t<Number>(varBlock);
+	/**
+	 * @brief Getter for the current slack variable map (variableIndex -> columnIndex)
+	 *
+	 * @return
+	 */
+	inline const std::map<std::size_t, std::size_t>& cobasis() const;
 
-		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
-		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
+	/**
+	 * @brief Computes the vertex which is represented by the current dictionary.
+	 * @details The computation makes use of the last d equations from the original problem.
+	 * Solving these equations for the last d variables results in the "substitution block".
+	 * The computation of a vertex utilizes this block as well as the current dictionary:
+	 * The variables in the substitution block are set to either 0 (if the variable is a non-basic
+	 * variable in the current dictionary) or to a_ig (if the variable is at row i and thus a basic
+	 * variable).
+	 *
+	 * @return
+	 */
+	Point<Number> vertex() const;
 
-		//normalize rows for each variable and forward insertion
-		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
-		{
-			a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
-			a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
-		}
+	/**
+	 * @brief The main loop for the vertex enumeration algorithm, which should be called on the initial, optimal dictionary.
+	 * @details This loop starts at the initial optimal dictionary. It iterates over the rows and columns of the dictionary and
+	 * searches for a valid reverse-pivot. Having found this, it continues the search for this valid reverse-pivot ("step one level down")
+	 * and starts all over for the resulting dictionary. When all possible combinations for one dictionary are searched (thus, the
+	 * algorithm implements a depth-first search), a pivoting step is performed ("step one level up"), which results in a dictionary
+	 * already found (as we only search in valid reverse-pivots) or if we are at the root, there is no possible pivot as the dictionary
+	 * is already optimal (the search is complete). On its way through the search tree all dictionaries, which are lexicographically minimal
+	 * are used to compute a vertex of the hyperplane arrangement.
+	 *
+	 * @return
+	 */
+	std::vector<Point<Number>> search ();
 
-		// backward insertion
-		for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
-		{
-			if(a(rowIndex,rowIndex) != 1)
-			{
-				a.row(rowIndex) = a.row(rowIndex) / a(rowIndex,rowIndex);
-			}
-			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
-		}
+	/**
+	 * @brief Determines, whether the current basis variables are the lexicographic minimal basis for the vertex.
+	 * This function can be used to output degenerate vertices only once.
+	 *
+	 * @return
+	 */
+	bool isLexMin() const;
 
-		auto substitutionBlock = a.rightCols(dimension+1);
+	/**
+	 * @brief Checks whether the proposed pivot is a valid reverse-pivot.
+	 * @details Currently this check performs the pivot and checks, whether the result of the function selectCrissCrossPivot results
+	 * in the original dictionary.
+	 *
+	 * @param i Row index.
+	 * @param j Column index.
+	 *
+	 * @return
+	 */
+	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j) const;
 
-		std::cout << substitutionBlock << std::endl;
+	/**
+	 * @brief Selects the next possible criss cross pivot taking account of the variable order.
+	 * @details The method currently (as the whole algorithm) uses criss-cross pivoting for its search strategy. Another
+	 * option is to make use of Bland's rule as in the original simplex algorithm.
+	 *
+	 * @param i The reference for the proposed row index.
+	 * @param j The reference for the proposed column index.
+	 *
+	 * @return True, if the dictionary is optimal, i.e. there is no valid pivot.
+	 */
+	bool selectCrissCrossPivot(std::size_t& i, std::size_t& j) const;
 
-		mDictionary = matrix_t<Number>(A.rows()-dimension + 1, dimension + 1);
+	/**
+	 * @brief Performs a pivoting step with the passed row and column index. Afterwards the dictionary is sorted and the row and column
+	 * index are updated accordingly.
+	 *
+	 * @param i Row index.
+	 * @param j Column index.
+	 */
+	void pivot(std::size_t& i, std::size_t& j);
 
-		for(unsigned rI = 0; rI < top.rows(); ++rI)
-		{
-			mDictionary(rI,0) = top(rI,0);
+	inline Dictionary<Number>& operator=(const Dictionary<Number>& rhs);
+	inline bool operator==(const Dictionary<Number>& rhs) const;
+	inline bool operator!=(const Dictionary<Number>& rhs) const { return !(*this == rhs); };
 
-			for(unsigned dI = 1; dI < top.cols(); ++dI)
-			{
-				mDictionary.row(rI) = mDictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
-			}
-		}
-
-		// Augment dictionary by a row of -1s
-		//mDictionary.conservativeResize(mDictionary.rows()+1,Eigen::NoChange_t());
-
-		matrix_t<Number> allOnes = matrix_t<Number>::Constant(1,mDictionary.cols(), Number(-1));
-		allOnes(0) = Number(0);
-		mDictionary.row(mDictionary.rows()-1) = allOnes;
-
-		//std::cout << "Optimal dictionary: " << mDictionary << std::endl;
-		for(std::size_t index = 1; index < mDictionary.rows(); ++index)
-			mB.push_back(index);
-		mB.push_back(mF);
-
-		mN.push_back(mG);
-		for(std::size_t index = mDictionary.rows() ; index < A.rows() + dimension - 1 ; ++index)
-			mN.push_back(index);
-
-		n = mG;
-		m = mDictionary.rows();
-
-		std::cout << "B: " << mB << std::endl;
-		std::cout << "N: " << mN << std::endl;
-		std::cout << "F: " << mF << std::endl;
-		std::cout << "G: " << mG << std::endl;
-	}
-
-	const matrix_t<Number>& content() const {
-		return mDictionary;
-	}
-
-	Point<Number> vertex() const {
-
-	}
-
-	void search () {
-		std::size_t i,j;
-		i = 2;
-		j = 1;
-
-		do {
-			while(i <= m && !isReverseCrissCrossPivot(i,j)) increment(i,j);
-		} while ( i < m && mB[m] != m);
-	}
-
-	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j) {
-
-	}
-
-	void pivot(std::size_t r, std::size_t s) {
-		assert(r != mF && s != mG);
-
-		unsigned rPos = 0;
-		while(r != mB[rPos]) ++rPos;
-
-		unsigned sPos = 0;
-		while(s != mN[sPos]) ++sPos;
-
-		std::cout << "sPos: " << sPos << std::endl;
-		std::cout << "rPos: " << rPos << std::endl;
-
-		// update other cells
-		for(unsigned colIndex = 0; colIndex < mDictionary.cols(); ++colIndex) {
-			for(unsigned rowIndex = 0; rowIndex < mDictionary.rows(); ++rowIndex) {
-				if(colIndex != sPos && rowIndex != rPos)
-					mDictionary(rowIndex, colIndex) = mDictionary(rowIndex, colIndex) - ( mDictionary(rowIndex, sPos)* mDictionary(rPos, colIndex) ) / mDictionary(rPos, sPos);
-			}
-		}
-
-		// update row
-		for(unsigned colIndex = 0; colIndex < mDictionary.cols(); ++colIndex) {
-			if(colIndex != sPos)
-				mDictionary(rPos, colIndex) = - mDictionary(rPos, colIndex) / mDictionary(rPos, sPos);
-		}
-
-		// update col
-		for(unsigned rowIndex = 0; rowIndex < mDictionary.rows(); ++rowIndex) {
-			if(rowIndex != rPos)
-				mDictionary(rowIndex,sPos) = mDictionary(rowIndex, sPos) / mDictionary(rPos, sPos);
-		}
-
-		mDictionary(rPos, sPos) = Number(1) / mDictionary(rPos, sPos);
-	}
-
+	void print(bool pretty = false) const;
 private:
-	void rearrange() {
-	}
 
-	void increment(std::size_t& i, std::size_t& j) {
-		++j;
-		if( j == n-m) {
-			j = 1;
-			++i;
-		}
-	}
+	/**
+	 * @brief Moves a row from originalPos to insertionPos shifting all intermediate rows accordingly.
+	 *
+	 * @param originalPos
+	 * @param insertionPos
+	 */
+	void insertRowAtPosition(const std::size_t& originalPos, const std::size_t& insertionPos);
+
+	/**
+	 * @brief Moves a column from originalPos to insertionPos shifting all intermediate rows accordingly.
+	 *
+	 * @param originalPos
+	 * @param insertionPos
+	 */
+	void insertColAtPosition(const std::size_t& originalPos, const std::size_t& insertionPos);
+
+	/**
+	 * @brief Rearranges the initial input to ensure that the last d rows are linearly independent.
+	 */
+	void rearrange();
+
+	/**
+	 * @brief Increments the row and column indices according to the current dictionary (traverse row-wise).
+	 *
+	 * @param i Row index.
+	 * @param j Column index.
+	 */
+	void increment(std::size_t& i, std::size_t& j) const;
 };
 
 template<typename Number>
 std::ostream& operator<<(std::ostream& _out, const Dictionary<Number>& _dict) {
-	_out << _dict.content();
+	_out << _dict.dictionary() << std::endl;
+	_out << "Basis:   " <<_dict.basis() << std::endl;
+	_out << "CoBasis: " << _dict.cobasis() << std::endl;
 	return _out;
 }
 
-
-
 } // namespace hypro
+
+#include "vertexEnumeration.tpp"

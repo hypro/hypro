@@ -8,6 +8,7 @@
 #include <cassert>
 
 #include "flags.h"
+#include "util/platform.h"
 #include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>
 <<<<<<< HEAD
@@ -19,8 +20,10 @@
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
 #include <carl/util/SFINAE.h>
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 
 #ifdef COMPARE_CDD
@@ -50,8 +53,8 @@ using carl::operator<<;
 #define reachLin_PRIMITIVES_LOCATION "../polyhedra/"
 #define reachLin_NR_PRIMITIVES 100
 
-#define PI_UP 3.141592655
-#define PI_DN 3.141592654
+#define PI_UP 3.1415926535897932384626433832795028841972
+#define PI_DN 3.1415926535897932384626433832795028841971
 
 static const unsigned FLOAT_PRECISION = 128;
 //static const unsigned TOLLERANCE_ULPS = 8192;

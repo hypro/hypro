@@ -84,9 +84,6 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_EQ((unsigned) 2, this->box2.dimension());
     EXPECT_EQ((unsigned) 0, this->box3.dimension());
 
-    EXPECT_TRUE(this->box1.haveSameDimensions(this->box2));
-    EXPECT_FALSE(this->box1.haveSameDimensions(this->box3));
-
     EXPECT_EQ(Point<TypeParam>({6,3}), this->box1.max());
     EXPECT_EQ(Point<TypeParam>({2,1}), this->box1.min());
 
@@ -108,13 +105,13 @@ TYPED_TEST(BoxTest, Insertion)
 {
     std::vector<carl::Interval<TypeParam>> tmp;
     this->box1.insert(carl::Interval<TypeParam>(3,9));
-    EXPECT_EQ(true, this->box1.hasDimension(2));
+    EXPECT_EQ(true, this->box1.dimension() == 3);
 
     EXPECT_EQ(3, this->box1.interval(2).lower());
     EXPECT_EQ(9, this->box1.interval(2).upper());
 
     this->box1.insert(carl::Interval<TypeParam>(4,5));
-    EXPECT_EQ(true, this->box1.hasDimension(3));
+    EXPECT_EQ(true, this->box1.dimension() == 4);
 
     EXPECT_EQ(4, this->box1.interval(3).lower());
     EXPECT_EQ(5, this->box1.interval(3).upper());
@@ -166,7 +163,11 @@ TYPED_TEST(BoxTest, Union)
 
 	hypro::Box<TypeParam> b2(intervals2);
 
+	//std::cout << "Union of " << b1 << " and " << b2 << std::endl;
+
 	hypro::Box<TypeParam> result = b1.unite(b2);
+
+	//std::cout << "Result: " << result << std::endl;
 
 	EXPECT_EQ(TypeParam(-1), result.min().at(0));
 	EXPECT_EQ(TypeParam(1), result.min().at(1));
@@ -189,7 +190,8 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	hypro::Box<TypeParam> b1(intervals1);
 
 	// rotation
-	TypeParam angle = 45;
+	TypeParam angle = 90;
+
 	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
 	rotX(0,0) = 1;
 	rotX(1,1) = carl::cos(angle);
@@ -220,6 +222,12 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 
 	std::vector<Point<TypeParam>> cornersX = resX.vertices();
+
+	for(const auto& vertex : cornersX) {
+		std::cout << vertex << ", ";
+	}
+	std::cout << std::endl;
+
 	std::vector<Point<TypeParam>> originalCorners = b1.vertices();
 	std::vector<Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {
@@ -290,6 +298,7 @@ TYPED_TEST(BoxTest, Intersection)
 {
     hypro::Box<TypeParam> result;
     result = this->box1.intersect(this->box2);
+
     EXPECT_TRUE(result.empty());
 
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
