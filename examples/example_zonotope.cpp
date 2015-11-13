@@ -9,14 +9,8 @@
 #include <unordered_map>
 #include <fstream>
 #include <string>
-
-<<<<<<< HEAD
 #include <map>
-
 #include <sys/time.h> 
-=======
-#include <sys/time.h>
->>>>>>> 4f0e6cccca664d2a209de7238d58921fdbd8b6bc
 
 #include "../src/lib/config.h"
 #include "../src/lib/util/Plotter.h"
