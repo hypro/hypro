@@ -57,3 +57,19 @@ TYPED_TEST(VertexEnumerationTest, DictionaryPivot)
 {
 
 }
+
+TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
+	// unity box in 3D
+	hypro::matrix_t<TypeParam> boxConstraints = hypro::matrix_t<TypeParam>(6,3);
+	boxConstraints << 1,0,0,-1,0,0,0,1,0,0,-1,0,0,0,1,0,0,-1;
+
+	hypro::vector_t<TypeParam> boxConstants = hypro::vector_t<TypeParam>(6);
+	boxConstants << 1,1,1,1,1,1;
+
+	/*
+	hypro::Dictionary<TypeParam> boxDictionary(boxConstraints, boxConstants);
+	std::vector<hypro::Point<TypeParam>> boxVertices = boxDictionary.search();
+
+	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,0,0})) != boxVertices.end() );
+	*/
+}
