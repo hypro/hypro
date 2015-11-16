@@ -16,6 +16,7 @@
 #include "../util/VariablePool.h"
 
 namespace hypro {
+    
 
 /*
  *  Class to store points in a MAXIMAL_DIMENSION space.
@@ -107,7 +108,7 @@ class Point {
 		mCoordinates.conservativeResize(mCoordinates.rows() +1);
 		mCoordinates(mCoordinates.rows()-1) = val;
 	}
-    std::vector<Number> getCoordinates() { return mCoordinates; };
+    //std::vector<Number> getCoordinates() { return mCoordinates; };
 
    void setNeighbors(const std::vector<unsigned> &_neighbors) {
      mNeighbors = _neighbors;
@@ -398,6 +399,14 @@ template <typename Number>
 const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs ) {
 	return ( _rhs * _factor );
 }
+
+    extern template class Point<double>;
+    
+    #ifdef USE_MPFR_FLOAT
+    extern template class Point<carl::FLOAT_T<mpfr_t>>;
+    #endif
+
+    extern template class Point<carl::FLOAT_T<double>>;
 }  // namespace
 
 namespace std{

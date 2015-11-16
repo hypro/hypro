@@ -353,7 +353,7 @@ Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, co
 
 template <typename Number>
 Number Point<Number>::sum() const {
-	Number sum = mCoordinates.dot( vector_t<Number>::One( mCoordinates.rows() ) );
+	Number sum = mCoordinates.dot( vector_t<Number>::Ones( mCoordinates.rows() ) );
 	return sum;
 }
 
