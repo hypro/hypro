@@ -52,7 +52,7 @@ using carl::operator<<;
 #define PI_DN 3.1415926535897932384626433832795028841971
 
 static const unsigned FLOAT_PRECISION = 128;
-//static const unsigned TOLLERANCE_ULPS = 8192;
+static const unsigned TOLLERANCE_ULPS = 8192;
 static const unsigned MAX_DIMENSION_LIMIT = 128;
 
 /**
@@ -72,53 +72,5 @@ static const long POS_CONSTANT = 100;
 // define for debugging: triggers console output
 //#define fukuda_DEBUG
 
-<<<<<<< HEAD
-namespace Eigen {
-template <typename Number>
-bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() ) return false;
-
-	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if ( lhs( dim ) > rhs( dim ) ) {
-			return false;
-		} else if ( lhs( dim ) < rhs( dim ) ) {
-			return true;
-		}
-	}
-	return false;
-}
-
-template <typename Number>
-bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() ) return false;
-
-	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		// std::cout << lhs(dim) << std::endl;
-		// std::cout << rhs(dim) << std::endl;
-
-		// std::cout << "carl::AlmostEqual2sComplement(" << lhs(dim) << ", " << rhs(dim) << ", " << TOLLERANCE_ULPS <<
-		// "): " <<  carl::AlmostEqual2sComplement(lhs(dim),rhs(dim),TOLLERANCE_ULPS) << std::endl;
-		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
-			return false;
-		}
-	}
-	return true;
-}
-
-// according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:
-template <typename Number>
-hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a, Number epsilon = std::numeric_limits<Number>::epsilon() ) {
-	Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( a, Eigen::ComputeThinU | Eigen::ComputeThinV );
-	Number tolerance = epsilon * std::max( a.cols(), a.rows() ) * svd.singularValues().array().abs()( 0 );
-	return svd.matrixV() *
-		   ( svd.singularValues().array().abs() > tolerance )
-				 .select( svd.singularValues().array().inverse(), 0 )
-				 .matrix()
-				 .asDiagonal() *
-		   svd.matrixU().adjoint();
-}
-}
-=======
 #include "typedefs.h"
 #include "util/adaptions_eigen.h"
->>>>>>> 4f0e6cccca664d2a209de7238d58921fdbd8b6bc
