@@ -11,11 +11,6 @@
 #include "util/platform.h"
 #include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>
-<<<<<<< HEAD
-#include <carl/numbers/FLOAT_T.h>
-#include <carl/interval/Interval.h>
-=======
->>>>>>> 4f0e6cccca664d2a209de7238d58921fdbd8b6bc
 #include <carl/core/Variable.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
