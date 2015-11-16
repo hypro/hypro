@@ -87,7 +87,7 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-  HPolytope<Number> reduce_nd(int strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_nd(unsigned strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
   HPolytope<Number> reduce_directed(vector_t<Number> directed=vector_t<Number>::Zero(1)) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
   void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
