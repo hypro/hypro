@@ -94,11 +94,13 @@ unsigned Hyperplane<Number>::dimension() const {
 template<typename Number>
 void Hyperplane<Number>::reduceDimension( unsigned _dimension ) {
 	// TODO
+	this->mHash = 0;
 }
 
 template<typename Number>
 void Hyperplane<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
 	// TODO
+	this->mHash = 0;
 }
 
 template <typename Number>
@@ -114,6 +116,7 @@ vector_t<Number> &Hyperplane<Number>::rNormal() {
 template <typename Number>
 void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
+	this->mHash = 0;
 }
 
 template <typename Number>
@@ -124,6 +127,7 @@ Number Hyperplane<Number>::offset() const {
 template <typename Number>
 void Hyperplane<Number>::setOffset( Number _offset ) {
 	mScalar = _offset;
+	this->mHash = 0;
 }
 
 template <typename Number>
