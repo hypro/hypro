@@ -26,6 +26,7 @@ set( EXAMPLES
     example_orthogonalPolyhedron
     example_parser
     example_plot
+    example_point
     example_polytope
     example_polytopeFileWriter
     example_power
