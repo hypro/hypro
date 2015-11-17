@@ -16,6 +16,11 @@
 #include "../util/VariablePool.h"
 
 namespace hypro {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2fbf7325e39df0ee2e433d1b987bed601bb73ac0
 /*
  *  Class to store points in a MAXIMAL_DIMENSION space.
  */
@@ -105,6 +110,7 @@ class Point {
 	void extend(const Number& val) {
 		mCoordinates.conservativeResize(mCoordinates.rows() +1);
 		mCoordinates(mCoordinates.rows()-1) = val;
+        mHash = 0;
 	}
     //std::vector<Number> getCoordinates() { return mCoordinates; };
 
@@ -286,7 +292,6 @@ class Point {
 	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
 	bool operator==( const Point<Number>& _p2 ) const {
-		//std::cout << __func__ << ": " << this->hash() << " VS " << _p2.hash() << std::endl;
 		if(this->hash() != _p2.hash()) return false;
 
 		return ( mCoordinates == _p2.rawCoordinates() );
@@ -416,9 +421,7 @@ namespace std{
     struct hash<hypro::Point<Number>> {
         std::size_t operator()(hypro::Point<Number> const& point) const
         {
-            size_t seed = 0;
-            carl::hash_add(seed, std::hash<hypro::vector_t<Number>>()(point.rawCoordinates()));
-            return seed;
+            return std::hash<hypro::vector_t<Number>>()(point.rawCoordinates());
         }
     };
 } //namespace
