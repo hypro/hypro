@@ -23,7 +23,7 @@ namespace hypro {
 		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
 		t << b,-A;
 		// rearrange to make the last d equations linear independent.
-		rearrange();
+		t = rearrange(t);
 
 		// solve the last d equations
 		std::size_t dimension = A.cols();
@@ -92,7 +92,7 @@ namespace hypro {
 		}
 
 		std::size_t rowCnt = 1;
-		for(std::size_t index = mDictionary.rows() ; index < A.rows() + dimension - 1 ; ++index) {
+		for(std::size_t index = mDictionary.rows() ; index < mDictionary.rows() + dimension ; ++index) {
 			mN[index] = rowCnt;
 			++rowCnt;
 		}
@@ -115,7 +115,7 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number> Dictionary<Number>::vertex() const {
-		vector_t<Number> valuation = vector_t<Number>(mN.size()+1);
+		vector_t<Number> valuation = vector_t<Number>(mN.size() + 1);
 		valuation(0) = 1;
 		for(unsigned i = 1; i < valuation.rows(); ++i) {
 			unsigned varIndex = mB.size() + i ;
@@ -126,6 +126,8 @@ namespace hypro {
 				valuation(i) = 0;
 			}
 		}
+
+		std::cout << __func__ << mSubstitution << std::endl << __func__ << valuation << std::endl;
 
 		return Point<Number>(mSubstitution*valuation);
 	}
@@ -575,7 +577,70 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Dictionary<Number>::rearrange() {
+	matrix_t<Number> Dictionary<Number>::rearrange(const matrix_t<Number>& A) {
+		if(A.rows() <= A.cols()) {
+			// This should not happen.
+			return A;
+		}
+
+		matrix_t<Number> copy(A);
+		matrix_t<Number> res(A);
+		std::size_t dimension = copy.cols();
+
+		// perform Gauss on A to get the linear independent rows
+
+		std::set<unsigned> linearIndependent;
+		std::set<unsigned> linearDependent;
+		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
+		{
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
+			unsigned rowIndex = 0;
+			// find first row suitable for elimination
+			std::cout << linearIndependent << std::endl;
+			while(rowIndex < copy.rows() && (linearIndependent.find(rowIndex) != linearIndependent.end() || copy(rowIndex,colIndex) == 0)) {
+				++rowIndex;
+			}
+
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			if(copy(rowIndex,colIndex) != 0){
+				linearIndependent.insert(rowIndex);
+				//normalize
+				copy.row(rowIndex) = copy.row(rowIndex)/copy(rowIndex,colIndex);
+				for(unsigned rIt = 0; rIt < copy.rows(); ++ rIt){
+
+					if(rIt != rowIndex && copy(rIt,colIndex) != 0) {
+						// forward insertion
+						copy.row(rIt) = copy.row(rIt) - (copy.row(rowIndex)*copy(rIt, colIndex));
+					}
+				}
+			}
+		}
+
+		// collect linear dependent rows
+		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
+			if(linearIndependent.find(rIt) == linearIndependent.end()) {
+				linearDependent.insert(rIt);
+			}
+		}
+
+		assert(linearIndependent.size() == dimension);
+		assert(linearDependent.size() == A.rows() - dimension);
+		if(linearIndependent.size() != dimension) {
+			// no proper dimension! WHAT TO DO?
+		} else {
+			// move the linearly independent columns to the bottom of the matrix
+			for(unsigned row = 0; row < res.rows(); ++row){
+				if(row >= A.rows()-dimension) {
+					res.row(row) = A.row(*linearIndependent.begin());
+					linearIndependent.erase(linearIndependent.begin());
+				} else {
+					res.row(row) = A.row(*linearDependent.begin());
+					linearDependent.erase(linearDependent.begin());
+				}
+			}
+		}
+
+		return res;
 	}
 
 	template<typename Number>
