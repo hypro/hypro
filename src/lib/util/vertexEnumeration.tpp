@@ -588,15 +588,12 @@ namespace hypro {
 		std::size_t dimension = copy.cols();
 
 		// perform Gauss on A to get the linear independent rows
-		// normalize rows for each variable and forward insertion
-
-		std::cout << "Original: " << std::endl << A << std::endl << std::endl;
 
 		std::set<unsigned> linearIndependent;
 		std::set<unsigned> linearDependent;
 		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
 		{
-			std::cout << "Eliminate for column " << colIndex << std::endl;
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
 			unsigned rowIndex = 0;
 			// find first row suitable for elimination
 			std::cout << linearIndependent << std::endl;
@@ -604,7 +601,7 @@ namespace hypro {
 				++rowIndex;
 			}
 
-			std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
 			if(copy(rowIndex,colIndex) != 0){
 				linearIndependent.insert(rowIndex);
 				//normalize
@@ -617,11 +614,7 @@ namespace hypro {
 					}
 				}
 			}
-			std::cout << copy << std::endl;
 		}
-
-		std::cout << "Forward insertion result: " << std::endl;
-		std::cout << copy << std::endl;
 
 		// collect linear dependent rows
 		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
