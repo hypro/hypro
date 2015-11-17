@@ -29,11 +29,6 @@ protected:
 
 TYPED_TEST(VertexEnumerationTest, DictionaryAccess)
 {
-	hypro::matrix_t<TypeParam> expected = hypro::matrix_t<TypeParam>(4,3);
-	expected << 5,-1,0,10,-1,-2,5,-1,-1,0,-1,-1;
-
-	EXPECT_EQ(expected, this->initial.dictionary());
-
 	std::map<std::size_t, std::size_t> expectedBasis;
 	expectedBasis[1] = 0;
 	expectedBasis[2] = 1;
