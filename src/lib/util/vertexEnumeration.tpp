@@ -42,7 +42,35 @@ namespace hypro {
 		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
 		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
 
+		std::cout << "a: " << std::endl << a << std::endl;
+
 		// Gauss:
+		std::set<unsigned> usedRows;
+		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
+		{
+			std::cout << "Eliminate for column " << colIndex << std::endl;
+			unsigned rowIndex = 0;
+			// find first row suitable for elimination
+			while(rowIndex < a.rows() && (usedRows.find(rowIndex) != usedRows.end() || a(rowIndex,colIndex) == 0)) {
+				++rowIndex;
+			}
+
+			std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			if(rowIndex < a.rows() && a(rowIndex,colIndex) != 0){
+				usedRows.insert(rowIndex);
+				//normalize
+				a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,colIndex);
+				for(unsigned rIt = 0; rIt < a.rows(); ++ rIt){
+					if(rIt != rowIndex && a(rIt,colIndex) != 0) {
+						// forward insertion
+						a.row(rIt) = a.row(rIt) - (a.row(rowIndex)*a(rIt, colIndex));
+					}
+				}
+			}
+			std::cout << a << std::endl;
+		}
+
+		/*
 		// normalize rows for each variable and forward insertion
 		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
 		{
@@ -59,6 +87,7 @@ namespace hypro {
 			}
 			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
 		}
+		*/
 
 		// Substitution holds the matrix which contains the solution for the last d equations,
 		// required for the vertex computation.
@@ -290,19 +319,21 @@ namespace hypro {
 		}
 
 		// step 2: Select other variable accordingly
+		bool optimal = true;
 		if(primalInfeasible) {
 			assert(mB.find(index) != mB.end());
 			for(auto cobasisIt = mN.begin(); cobasisIt != mN.end(); ++cobasisIt) {
 				if(mDictionary(mB.at(index), cobasisIt->second) > 0) {
 					i = mB.at(index);
 					j = cobasisIt->second;
+					optimal = false;
 					break;
 				}
 			}
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
 #endif
-			return false;
+			return optimal;
 		} else if (dualInfeasible) {
 			assert(mN.find(index) != mN.end());
 
@@ -310,20 +341,21 @@ namespace hypro {
 				if(mDictionary(basisIt->second, mN.at(index)) < 0) {
 					i = basisIt->second;
 					j = mN.at(index);
+					optimal = false;
 					break;
 				}
 			}
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
 #endif
-			return false;
+			return optimal;
 		}
 
 		// Dictionary is optimal - no feasible pivot
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << __func__ << ": No feasible pivot." << std::endl;
 #endif
-		return true;
+		return optimal;
 	}
 
 	template<typename Number>
@@ -602,7 +634,7 @@ namespace hypro {
 			}
 
 			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
-			if(copy(rowIndex,colIndex) != 0){
+			if(rowIndex < copy.rows() && copy(rowIndex,colIndex) != 0){
 				linearIndependent.insert(rowIndex);
 				//normalize
 				copy.row(rowIndex) = copy.row(rowIndex)/copy(rowIndex,colIndex);
@@ -615,6 +647,8 @@ namespace hypro {
 				}
 			}
 		}
+
+		std::cout << "Copy: " << std::endl << copy << std::endl;
 
 		// collect linear dependent rows
 		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
@@ -639,6 +673,8 @@ namespace hypro {
 				}
 			}
 		}
+
+		std::cout << "Res: " << std::endl << res << std::endl;
 
 		return res;
 	}

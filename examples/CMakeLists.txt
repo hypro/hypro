@@ -19,6 +19,7 @@ set( EXAMPLES
     example_convexHull
     example_division
     example_eigen_float_t
+    example_facetEnumeration
     example_hausdorffApprox
     example_matrixPolyhedra
     example_multiplication

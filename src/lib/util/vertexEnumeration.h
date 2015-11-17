@@ -13,7 +13,7 @@
 #include "../config.h"
 #include "../datastructures/Point.h"
 
-//#define FUKUDA_VERTEX_ENUM_DEBUG
+#define FUKUDA_VERTEX_ENUM_DEBUG
 
 namespace hypro {
 
