@@ -127,7 +127,7 @@ int main(int argc, char const *argv[])
 
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = nico;
+  HPolytope<Number> reduce_from = cube;
 
   HPolytope<Number> reduction_drop_normal;
   HPolytope<Number> reduction_drop_smooth;
@@ -174,10 +174,10 @@ int main(int argc, char const *argv[])
   //}
 
   std::cout << "\nDIRECTED\n------------------------------------" << std::endl;
-  vector_t<double> directed = vector_t<double>(2);
-		directed(0) = -1;
-		directed(1) = -1;
-		//directed(2) = 1;
+  vector_t<double> directed = vector_t<double>(3);
+		directed(0) = 0;
+		directed(1) = 1;
+		directed(2) = 2;
   reduction_directed = reduce_from.reduce_directed(directed);
   std::cout << "volume of directed (unknown): +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed)-prevVolume)/prevVolume)*100 << "% \n" << std::endl;
 
@@ -186,7 +186,7 @@ int main(int argc, char const *argv[])
 
 
   // Prepare plotting - Reducing to 2d
-  unsigned i=0,j=1;
+  unsigned i=1,j=2;
   std::vector<Point<Number>> reduce_from_vertices_2d,
                             reduction_drop_normal_vertices_2d,
                             reduction_drop_smooth_vertices_2d,
@@ -196,11 +196,11 @@ int main(int argc, char const *argv[])
                             reduction_unite_norm_vertices_2d,
                             reduction_directed_vertices_2d;
 
-  //for(Point<Number> point: reduce_from.vertices()){
-  //  //std::cout << "Point of reduce_from: " << point << std::endl;
-  //  point.reduceToDimensions({i,j});
-  //  reduce_from_vertices_2d.push_back(point);
-  //}
+  for(Point<Number> point: reduce_from.vertices()){
+    //std::cout << "Point of reduce_from: " << point << std::endl;
+    point.reduceToDimensions({i,j});
+    reduce_from_vertices_2d.push_back(point);
+  }
   //for(Point<Number> point: reduction_drop_normal.vertices()){
   //  point.reduceToDimensions({i,j});
   //  reduction_drop_normal_vertices_2d.push_back(point);
@@ -225,10 +225,10 @@ int main(int argc, char const *argv[])
   //  point.reduceToDimensions({i,j});
   //  reduction_unite_norm_vertices_2d.push_back(point);
   //}
-  //for(Point<Number> point: reduction_directed.vertices()){
-  //  point.reduceToDimensions({i,j});
-  //  reduction_directed_vertices_2d.push_back(point);
-  //}
+  for(Point<Number> point: reduction_directed.vertices()){
+    point.reduceToDimensions({i,j});
+    reduction_directed_vertices_2d.push_back(point);
+  }
 
   // Plotting
   //3D
@@ -239,12 +239,12 @@ int main(int argc, char const *argv[])
   //unsigned ruc = plotter.addObject(reduction_unite_cut_vertices_2d);
   //unsigned runo = plotter.addObject(reduction_unite_norm_vertices_2d);
   //unsigned ruso = plotter.addObject(reduction_unite_smooth_old_vertices_2d);
-  //unsigned rd = plotter.addObject(reduction_directed_vertices_2d);
-	//plotter.addObject(reduce_from_vertices_2d);
+  unsigned rd = plotter.addObject(reduction_directed_vertices_2d);
+	plotter.addObject(reduce_from_vertices_2d);
 
   //2D
-  plotter.addObject(reduce_from.vertices());
-  unsigned rd = plotter.addObject(reduction_directed.vertices());
+  //plotter.addObject(reduce_from.vertices());
+  //unsigned rd = plotter.addObject(reduction_directed.vertices());
 
   plotter.setObjectColor(rd, colors[red]); // TODO color for directed
   //plotter.setObjectColor(rdn, colors[red]);

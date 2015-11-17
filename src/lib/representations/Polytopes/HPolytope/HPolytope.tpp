@@ -736,7 +736,6 @@ bool HPolytope<Number>::isGood(vector_t<Number> a, vector_t<Number> b, vector_t<
  */
 template <typename Number>
 bool HPolytope<Number>::isBounded(unsigned facet) const{
-	bool result=false;
 
 	// init
 	HPolytope<Number> hpolytope = *this;
@@ -771,16 +770,15 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 
 	unsigned goodOpinions=0;
 
+	if(neighbors.empty()) std::cout << __func__ << " : " << __LINE__ << "\n   Error - no neighbors found" << std::endl;
 	// check for each facet the amount of goodOpinions
 	for(unsigned neighbor: neighbors){
-
 		std::vector<vector_t<Number>> ridgesToCompare;
 		vector_t<Number> normal = vector_t<Number>::Zero(dimension);
 
-		//3d ... nd
-		if(dimension>2){
+		if(dimension>2) //3d ... nd
+		{
 			for(unsigned i=0; i<membersOfRelevantRidges.size(); i++){ // TODO all pairs of ridges
-
 				// find all ridges which "belong" to a facet
 				if(std::find(membersOfRelevantRidges[i].begin(), membersOfRelevantRidges[i].end(), neighbor) != membersOfRelevantRidges[i].end()){
 					ridgesToCompare.push_back(ridges[i]);
@@ -789,9 +787,9 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 			if(ridgesToCompare.size()< 2) break; // TODO examine
 
 			normal= initNormal(ridgesToCompare[0], hpolytope.mHPlanes[neighbor].normal(), hpolytope.mHPlanes[facet].normal());
-			//std::cout << "Test normal: (neighbor) " << normal.dot(res.mHPlanes[neighbor].normal()) << " (vertices) " << normal.dot(ridgesToCompare[0]) << std::endl;
 		}
-		else { // 2d
+		else // 2d
+		{
 			ridgesToCompare = ridges;
 			if(ridgesToCompare.size()< 2) break; // TODO examine
 			normal = ridgesToCompare[0]+ridgesToCompare[1];
@@ -800,18 +798,25 @@ bool HPolytope<Number>::isBounded(unsigned facet) const{
 
 		if(isGood(ridgesToCompare[0], ridgesToCompare[1], normal)){
 			goodOpinions++;
+			if(goodOpinions>=dimension-1){
+				std::cout << std::endl;
+				return true;
+			}
 		}
 	}
 
-	std::cout << "goodOpinions: " << goodOpinions << std::endl;
-	if(goodOpinions>=dimension-1) result = true;
-
-	return result;
+	//std::cout << "goodOpinions: " << goodOpinions << std::endl;
+	std::cout << std::endl;
+	return false;
 }
 
-
+/*
+ * Reduction-Function
+ * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
+ * @return the reduced facet or if the result would be unbounded the inital polytope
+ */
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned a, unsigned b) const { // REDUCTION_STRATEGY
+HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned strat, unsigned a, unsigned b) const { // REDUCTION_STRATEGY
 
 	// init
 	HPolytope<Number> res = *this;
@@ -1035,6 +1040,11 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(int strat, unsigned a, unsigned b
 	return res;
 }
 
+/*
+ * Reduction-Function with a special strategy
+ * @Input vector_t<Number> directed is the vector in which direction we would like to reduce
+ * @return the reduced facet or if the result would be unbounded the inital polytope
+ */
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_directed(vector_t<Number> directed) const {
 
@@ -1059,7 +1069,14 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(vector_t<Number> directed) 
 	for(unsigned i=0; i<res.size(); i++){
 		vector_t<Number> temp = res.mHPlanes[i].normal();
 		temp.normalize();
-		scalarproducts.push_back(std::pair<unsigned, double>(i, directed_normalized.dot(temp)));
+		double scalarproduct = directed_normalized.dot(temp);
+
+		if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
+			std::cout << __func__ << " : " << __LINE__ << "\n   Error - wanted direction does already exist" << std::endl;
+			return res;
+		}
+
+		scalarproducts.push_back(std::pair<unsigned, double>(i, scalarproduct));
 	}
 
 	// sort scalarproducts
@@ -1105,6 +1122,7 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(vector_t<Number> directed) 
 		else break;
 	}
 
+	// reduce
 	if(reduce){
 		std::cout << "reduce!" << std::endl;
 		res.insert(Hyperplane<Number>(directed, directed_offset));
