@@ -16,8 +16,6 @@
 #include "../util/VariablePool.h"
 
 namespace hypro {
-    
-
 /*
  *  Class to store points in a MAXIMAL_DIMENSION space.
  */
@@ -400,13 +398,17 @@ const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs 
 	return ( _rhs * _factor );
 }
 
+    #ifdef EXTERNALIZE_CLASSES
     extern template class Point<double>;
-    
+
     #ifdef USE_MPFR_FLOAT
     extern template class Point<carl::FLOAT_T<mpfr_t>>;
     #endif
 
     extern template class Point<carl::FLOAT_T<double>>;
+    #endif
+
+    
 }  // namespace
 
 namespace std{

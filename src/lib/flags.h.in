@@ -2,3 +2,4 @@
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine USE_SMTRAT
+#cmakedefine EXTERNALIZE_CLASSES

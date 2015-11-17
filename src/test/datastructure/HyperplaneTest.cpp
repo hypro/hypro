@@ -101,8 +101,8 @@ TYPED_TEST(HyperplaneTest, Intersection)
 	normal2(3) = 4;
 	Hyperplane<TypeParam> hp2 = Hyperplane<TypeParam>(normal2, TypeParam(4));
 
-	HPolytope<TypeParam> res = hp1.intersection(hp2);
-	std::cout << res << std::endl;
+	//HPolytope<TypeParam> res = hp1.intersection(hp2);
+	//std::cout << res << std::endl;
 
 	//std::cout << "Intersection Vector calculation result: " << std::endl;
 	vector_t<TypeParam> v = hp1.intersectionVector(hp2);

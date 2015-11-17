@@ -42,6 +42,7 @@ Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vector, const Number &_
 	: mNormal( _vector ), mScalar( _off ) {
 }
 
+/*
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>> &_constraint ) {
 	assert( _constraint.lhs().isLinear() );
@@ -63,7 +64,7 @@ Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>> &_c
 	}
 	mNormal = tmp;
 }
-
+*/
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
 	// here: hyperplane given in parameterform is converted to normalform
@@ -176,6 +177,7 @@ Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Numb
 	}
 }
 
+/*
 template <typename Number>
 HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number> &_rhs ) const {
 	std::vector<Hyperplane<Number>> planes;
@@ -183,6 +185,7 @@ HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number> &_r
 	planes.push_back( _rhs );
 	return HPolytope<Number>( planes );
 }
+*/
 
 template <typename Number>
 vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number> &_rhs ) const {
