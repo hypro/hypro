@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-10-29
- * @version	2015-11-11
+ * @version	2015-11-18
  */
 
 #pragma once
@@ -13,7 +13,7 @@
 #include "../config.h"
 #include "../datastructures/Point.h"
 
-#define FUKUDA_VERTEX_ENUM_DEBUG
+//#define FUKUDA_VERTEX_ENUM_DEBUG
 
 namespace hypro {
 

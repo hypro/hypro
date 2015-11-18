@@ -42,20 +42,20 @@ namespace hypro {
 		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
 		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
 
-		std::cout << "a: " << std::endl << a << std::endl;
+		//std::cout << "a: " << std::endl << a << std::endl;
 
 		// Gauss:
 		std::set<unsigned> usedRows;
 		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
 		{
-			std::cout << "Eliminate for column " << colIndex << std::endl;
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
 			unsigned rowIndex = 0;
 			// find first row suitable for elimination
 			while(rowIndex < a.rows() && (usedRows.find(rowIndex) != usedRows.end() || a(rowIndex,colIndex) == 0)) {
 				++rowIndex;
 			}
 
-			std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
 			if(rowIndex < a.rows() && a(rowIndex,colIndex) != 0){
 				usedRows.insert(rowIndex);
 				//normalize
@@ -67,27 +67,8 @@ namespace hypro {
 					}
 				}
 			}
-			std::cout << a << std::endl;
+			//std::cout << a << std::endl;
 		}
-
-		/*
-		// normalize rows for each variable and forward insertion
-		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
-		{
-			a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
-			a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
-		}
-
-		// backward insertion
-		for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
-		{
-			if(a(rowIndex,rowIndex) != 1)
-			{
-				a.row(rowIndex) = a.row(rowIndex) / a(rowIndex,rowIndex);
-			}
-			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
-		}
-		*/
 
 		// Substitution holds the matrix which contains the solution for the last d equations,
 		// required for the vertex computation.
@@ -156,7 +137,7 @@ namespace hypro {
 			}
 		}
 
-		std::cout << __func__ << mSubstitution << std::endl << __func__ << valuation << std::endl;
+		//std::cout << __func__ << mSubstitution << std::endl << __func__ << valuation << std::endl;
 
 		return Point<Number>(mSubstitution*valuation);
 	}
@@ -445,12 +426,12 @@ namespace hypro {
 				if(basisIt->second == originalPos) {
 					//std::cout << "Var " << basisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = basisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(basisIt->second > originalPos && basisIt->second <= insertionPos) {
 					std::size_t var = basisIt->first;
 					std::size_t pos = basisIt->second - 1;
 					//std::cout << "Var " << basisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << basisIt->first << std::endl;
 					newMap.insert(std::make_pair(basisIt->first, basisIt->second));
@@ -472,12 +453,12 @@ namespace hypro {
 				if(basisIt->second == originalPos) {
 					//std::cout << "Var " << basisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = basisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(basisIt->second < originalPos && basisIt->second >= insertionPos) {
 					std::size_t var = basisIt->first;
 					std::size_t pos = basisIt->second + 1;
 					//std::cout << "Var " << basisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << basisIt->first << std::endl;
 					newMap.insert(std::make_pair(basisIt->first, basisIt->second));
@@ -507,12 +488,12 @@ namespace hypro {
 				if(cobasisIt->second == originalPos) {
 					//std::cout << "Var " << cobasisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = cobasisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(cobasisIt->second > originalPos && cobasisIt->second <= insertionPos) {
 					std::size_t var = cobasisIt->first;
 					std::size_t pos = cobasisIt->second - 1;
 					//std::cout << "Var " << cobasisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << cobasisIt->first << std::endl;
 					newMap.insert(std::make_pair(cobasisIt->first, cobasisIt->second));
@@ -534,12 +515,12 @@ namespace hypro {
 				if(cobasisIt->second == originalPos) {
 					//std::cout << "Var " << cobasisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = cobasisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(cobasisIt->second < originalPos && cobasisIt->second >= insertionPos) {
 					std::size_t var = cobasisIt->first;
 					std::size_t pos = cobasisIt->second + 1;
 					//std::cout << "Var " << cobasisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << cobasisIt->first << std::endl;
 					newMap.insert(std::make_pair(cobasisIt->first, cobasisIt->second));
@@ -628,7 +609,7 @@ namespace hypro {
 			//std::cout << "Eliminate for column " << colIndex << std::endl;
 			unsigned rowIndex = 0;
 			// find first row suitable for elimination
-			std::cout << linearIndependent << std::endl;
+			//std::cout << linearIndependent << std::endl;
 			while(rowIndex < copy.rows() && (linearIndependent.find(rowIndex) != linearIndependent.end() || copy(rowIndex,colIndex) == 0)) {
 				++rowIndex;
 			}
@@ -648,7 +629,7 @@ namespace hypro {
 			}
 		}
 
-		std::cout << "Copy: " << std::endl << copy << std::endl;
+		//std::cout << "Copy: " << std::endl << copy << std::endl;
 
 		// collect linear dependent rows
 		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
@@ -673,8 +654,6 @@ namespace hypro {
 				}
 			}
 		}
-
-		std::cout << "Res: " << std::endl << res << std::endl;
 
 		return res;
 	}
