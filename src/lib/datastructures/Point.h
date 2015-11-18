@@ -16,11 +16,6 @@
 #include "../util/VariablePool.h"
 
 namespace hypro {
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 2fbf7325e39df0ee2e433d1b987bed601bb73ac0
 /*
  *  Class to store points in a MAXIMAL_DIMENSION space.
  */
