@@ -30,7 +30,8 @@ class HPolytope {
                               UNITE_SMOOTH,
                               UNITE_CUT,
                               UNITE_NORM,
-                              DIRECTED
+                              DIRECTED_SMALL,
+                              DIRECTED_BIG
                             };
 
   public:
@@ -88,7 +89,7 @@ class HPolytope {
 	void removeRedundantPlanes();
 
   HPolytope<Number> reduce_nd(unsigned strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  HPolytope<Number> reduce_directed(vector_t<Number> directed=vector_t<Number>::Zero(1)) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
+  HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, unsigned strat=6) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
   void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
 
   // Help functions by Igor Bongartz
@@ -107,7 +108,7 @@ class HPolytope {
 
   Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
-  bool isBounded(unsigned facet) const;
+  bool isBounded(std::vector<vector_t<Number>>) const;
   bool isGood(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
   // End Help funcions
 
