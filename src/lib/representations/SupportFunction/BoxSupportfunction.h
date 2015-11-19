@@ -5,7 +5,7 @@
 #pragma once
 
 //#include "hyreach_utils.h"
-#include "SupportFunction.h"
+#include "SupportFunctionContent.h"
 
 //#define BOXSUPPORTFUNCTION_VERBOSE
 
@@ -14,7 +14,7 @@ namespace hypro {
 * This class defines a support Function object representing a polytope (might not be closed)
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
 */
-class SymmetricCenteredBoxSupportFunction : public SupportFunction {
+class SymmetricCenteredBoxSupportFunction : public SupportFunctionContent {
   private:
 	matrix_t<double> e;
 	matrix_t<double> e_t;  // e is stored in transposed format too
@@ -53,13 +53,13 @@ class SymmetricCenteredBoxSupportFunction : public SupportFunction {
 	/*
 	* This methods creates a copy of the instanciated object on the heap.
 	*/
-	SupportFunction* copyToHeap() {
-		SupportFunction* result = new SymmetricCenteredBoxSupportFunction( e, getAD() );
+	SupportFunctionContent* copyToHeap() {
+		SupportFunctionContent* result = new SymmetricCenteredBoxSupportFunction( e, getAD() );
 		return result;
 	}
 
 	SymmetricCenteredBoxSupportFunction( matrix_t<double> e, artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::Box_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::Box_Type, aD ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef BOXSUPPORTFUNCTION_VERBOSE
 		std::cout << "SymmetricCenteredBoxSupportFunction: constructor" << '\n';

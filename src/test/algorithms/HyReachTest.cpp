@@ -3,7 +3,7 @@
 #include "../../lib/algorithms/reachability/HyReach.h"
 #include <string>
 
-//#include "../../lib/algorithms/reachability/SupportFunction.h"
+//#include "../../lib/algorithms/reachability/SupportFunctionContent.h"
 //#include "../../lib/algorithms/reachability/PolytopeSupportfunction.h"
 //#include "../../lib/algorithms/reachability/NonLinearOmega0Supportfunction.h"
 #include "../../lib/algorithms/reachability/hyreach_utils.h"
@@ -92,7 +92,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	operator_e op = LEQ;
 	PolytopeSupportFunction sp(constraints, constants, op, 2);
 
-	cout << "Supportfunction object created" << '\n';
+	cout << "SupportFunctionContent object created" << '\n';
 	bool success = true;
 
     // check evaluation results along constructive directions
@@ -161,7 +161,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
     cout << "B =" << '\n' << B << '\n';
       
     
-    //hypro::SupportFunction Bsp = B * (&sp);
+    //hypro::SupportFunctionContent Bsp = B * (&sp);
     //cout << "Bsp constructed" << '\n';
     MultiplicationSupportfunction* Bsp2 = sp.multiply(B);
     cout << "start evaluation of multiplication" << '\n';
@@ -276,7 +276,7 @@ TEST_F(HyReachTest, BouncingBallTest)
         std::cout << "initialconstraintValues:" << BL;
         std::cout << initialconstraintValues << BL;
     
-    SupportFunction* U = 0;
+    SupportFunctionContent* U = 0;
     
     // configuration
     parameters p;

@@ -18,7 +18,7 @@ bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target ) {
 }
 
 template <typename Number>
-bool convert( std::shared_ptr<hypro::SupportFunction<Number>> _source, hypro::Box<Number>& _target ) {
+bool convert( std::shared_ptr<hypro::SupportFunctionContent<Number>> _source, hypro::Box<Number>& _target ) {
 	unsigned dim = _source->dimension();
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );

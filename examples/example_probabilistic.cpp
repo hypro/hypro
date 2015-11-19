@@ -7,7 +7,7 @@
 #include "../lib/representations/Polytopes/Polytope/Polytope.h"
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../lib/representations/SupportFunction/SupportFunction.h"
+#include "../lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "../lib/representations/Box/Box.h"
 #include "../lib/util/Plotter.h"
 

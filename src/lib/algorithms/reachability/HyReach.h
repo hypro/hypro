@@ -79,8 +79,8 @@ class HyReach {
 	* directly into a flowpipeSegment object.
 	* Returns the index of the last computed entry for the directions in the flowpipe.
 	*/
-	unsigned int parallelizationHelper( FlowpipeSegment* results, LocationInfo* locInfo, SupportFunction* X0,
-										SupportFunction* epsilonpsi, matrix_t<double>* l, unsigned int indexL,
+	unsigned int parallelizationHelper( FlowpipeSegment* results, LocationInfo* locInfo, SupportFunctionContent* X0,
+										SupportFunctionContent* epsilonpsi, matrix_t<double>* l, unsigned int indexL,
 										matrix_t<double>* l_opposite, unsigned int indexL_opposite ) {
 #ifdef PARALLHELPER_VERBOSE
 		std::string method = "parallelizationHelper: ";
@@ -105,7 +105,7 @@ class HyReach {
 		double k_i = INFINITY;
 		double k_i_minus = INFINITY;
 
-		SupportFunction* I = locInfo->invariantSP;
+		SupportFunctionContent* I = locInfo->invariantSP;
 
 		double p_omega = X0->evaluate( l ).supportValue;
 		double p_omega_minus = X0->evaluate( l_opposite ).supportValue;
@@ -212,7 +212,7 @@ class HyReach {
 	* X0: pointer to support function describing the initial set (for this location)
 	* U: pointer to the support function describing the free input
 	*/
-	FlowpipeSegment* constructFlowpipe( location* loc, LocationInfo* locInfo, SupportFunction* X0, SupportFunction* U,
+	FlowpipeSegment* constructFlowpipe( location* loc, LocationInfo* locInfo, SupportFunctionContent* X0, SupportFunctionContent* U,
 										unsigned int timeStep ) {
 #ifdef FLOWPIPE_VERBOSE
 		std::string method = "constructFlowpipe(...): ";
@@ -285,11 +285,11 @@ class HyReach {
 			std::cout << method << "added set0 to flowpipe" << BL;
 #endif
 			// psidelta is needed for the algorithm
-			SupportFunction* multiplicationtemp = locInfo->V->multiply( params.timeStep );
+			SupportFunctionContent* multiplicationtemp = locInfo->V->multiply( params.timeStep );
 #ifdef FLOWPIPE_VERBOSE
 			std::cout << method << "created multiplicationtemp" << BL;
 #endif
-			SupportFunction* psidelta = multiplicationtemp->minowskisum( omega0.getEpsilonpsi() );
+			SupportFunctionContent* psidelta = multiplicationtemp->minowskisum( omega0.getEpsilonpsi() );
 #ifdef FLOWPIPE_VERBOSE
 			std::cout << method << "created psidelta" << BL;
 #endif
@@ -410,7 +410,7 @@ class HyReach {
 	* X0: pointer to support function describing the initial set (for this location)
 	* U: pointer to the support function describing the free input
 	*/
-	void analyze( location* loc, unsigned int recursionNumber, SupportFunction* X0, SupportFunction* U,
+	void analyze( location* loc, unsigned int recursionNumber, SupportFunctionContent* X0, SupportFunctionContent* U,
 				  unsigned int timeStep ) {
 #ifdef HYREACH_VERBOSE
 		std::string method = "analyze(...): ";
@@ -460,7 +460,7 @@ class HyReach {
 				std::cout << method << "valuesForNextSet: " << valuesForNextSet.transpose() << BL;
 #endif
 				// reconstruct and evaluate to create tight bounds
-				SupportFunction* intersectedSet =
+				SupportFunctionContent* intersectedSet =
 					  new PolytopeSupportFunction( &L, valuesForNextSet, X0->getAD()->dir1.size(), X0->getAD() );
 #ifdef HYREACH_VERBOSE
 				matrix_t<double> temp( valuesForNextSet.rows(), 1 );
@@ -469,7 +469,7 @@ class HyReach {
 #endif
 
 				// compute reset
-				SupportFunction* resetTemp = intersectedSet->multiply( transitionInfo->getR() );
+				SupportFunctionContent* resetTemp = intersectedSet->multiply( transitionInfo->getR() );
 #ifdef HYREACH_VERBOSE
 				matrix_t<double> resetTemp_values( L.size(), 1 );
 				resetTemp->multiEvaluate( &L, &resetTemp_values );
@@ -480,11 +480,11 @@ class HyReach {
 				std::cout << method << "w evaluation: " << w.transpose() << BL;
 #endif
 
-				SupportFunction* resetSet = resetTemp->minowskisum( transitionInfo->getWfunction() );
+				SupportFunctionContent* resetSet = resetTemp->minowskisum( transitionInfo->getWfunction() );
 				matrix_t<double> resetSet_values( L.size(), 1 );
 				resetSet->multiEvaluate( &L, &resetSet_values );
 				// explicitely set the values for the artificial directions back to the constants and reconstruct the
-				// SupportFunction
+				// SupportFunctionContent
 				// this is necessary because the evaluation along the additional dimension of W() and resetTemp() is 1
 				// (or -1) and thus the sum is 2 (or -2)
 				// which are no valid values for evaluations along the additional dimensions.
@@ -519,7 +519,7 @@ class HyReach {
 	 */
 	void start( HybridAutomaton<double, valuation_t<double>>* model, parameters params, options opt,
 				matrix_t<double> X0constraints, operator_e op, vector_t<double> X0constraintValues,
-				SupportFunction* U_param ) {
+				SupportFunctionContent* U_param ) {
 		CleanupOnExit::removeFlowpipeSegments( &results );  // remove potential previously computed results
 		results.clear();
 #ifdef HYREACH_VERBOSE
@@ -550,7 +550,7 @@ class HyReach {
 		std::cout << "dir2':" << additionalDirections.dir2.transpose() << BL;
 #endif
 
-		SupportFunction* U = U_param;
+		SupportFunctionContent* U = U_param;
 		if ( U == 0 )  // use zero function if none provided
 		{
 			U = new ZeroSupportFunction( dimensionality, 0 );  // 2nd parameter 0 will disable special handling for
@@ -591,7 +591,7 @@ class HyReach {
 #endif
 		dimensionality = (unsigned int)L[0].size();  // extended with additional dimensionality
 
-// Create X0 SupportFunction (extended by additional dimension)
+// Create X0 SupportFunctionContent (extended by additional dimension)
 #ifdef HYREACH_VERBOSE
 		std::cout << method << "original X0constraints: " << BL;
 		std::cout << X0constraints << BL;
@@ -603,7 +603,7 @@ class HyReach {
 		std::cout << method << "extended X0constraints: " << BL;
 		std::cout << X0constraints << BL;
 #endif
-		SupportFunction* X0 = new PolytopeSupportFunction( X0constraints, X0constraintValues, op, dimensionality,
+		SupportFunctionContent* X0 = new PolytopeSupportFunction( X0constraints, X0constraintValues, op, dimensionality,
 														   &additionalDirections );
 
 		// start analysis (for every initial location)

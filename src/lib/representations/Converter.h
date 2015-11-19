@@ -20,7 +20,7 @@
 #include "Polytope/Polytope.h"
 #include "Polytopes/VPolytope/VPolytope.h"
 #include "Polytopes/HPolytope/HPolytope.h"
-#include "SupportFunction/SupportFunction.h"
+#include "SupportFunction/SupportFunctionContent.h"
 #include "Zonotope/Zonotope.h"
 
 #include "Box/converter.h"

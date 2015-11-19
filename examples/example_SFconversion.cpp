@@ -2,7 +2,7 @@
  * Your story.
  */
 
-#include "../src/lib/representations/SupportFunction/SupportFunction.h"
+#include "../src/lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 //#include "../src/lib/datastructures/Hyperplane.h"
 
@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
 
 	std::cout << poly1 << std::endl;
 
-	std::shared_ptr<SupportFunction<Number>> sf1 = SupportFunction<Number>::create(SF_TYPE::POLY, poly1.matrix(), poly1.vector());
+	std::shared_ptr<SupportFunctionContent<Number>> sf1 = SupportFunctionContent<Number>::create(SF_TYPE::POLY, poly1.matrix(), poly1.vector());
 
 	return 0;
 }
