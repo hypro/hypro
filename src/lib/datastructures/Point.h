@@ -16,7 +16,6 @@
 #include "../util/VariablePool.h"
 
 namespace hypro {
-
 /*
  *  Class to store points in a MAXIMAL_DIMENSION space.
  */
@@ -28,6 +27,7 @@ class Point {
 
   private:
 	vector_t<Number> mCoordinates;
+	mutable std::size_t mHash;
 
 	// Adjacency List of this Point (if applicable)
 	// std::vector<Point<Number>> mNeighbors;
@@ -60,6 +60,7 @@ class Point {
 			mCoordinates( count ) = Number( coordinate );
 			++count;
 		}
+		mHash = 0;
 	}
 
 	//@author Chris K. (for Minkowski Sum Test)
@@ -85,6 +86,7 @@ class Point {
 		for ( unsigned pos = 0; pos < _p.dimension(); ++pos ) {
 			mCoordinates( pos ) = Number( _p.at( pos ) );
 		}
+		mHash = 0;
 	}
 
 	virtual ~Point() {}
@@ -93,11 +95,19 @@ class Point {
 	 * Getter & Setter
 	 */
 
+	std::size_t hash() const {
+		if(mHash == 0)
+			mHash = std::hash<vector_t<Number>>()(mCoordinates);
+
+		return mHash;
+	}
+
 	void extend(const Number& val) {
 		mCoordinates.conservativeResize(mCoordinates.rows() +1);
 		mCoordinates(mCoordinates.rows()-1) = val;
+        mHash = 0;
 	}
-    std::vector<Number> getCoordinates() { return mCoordinates; };
+    //std::vector<Number> getCoordinates() { return mCoordinates; };
 
    void setNeighbors(const std::vector<unsigned> &_neighbors) {
      mNeighbors = _neighbors;
@@ -276,7 +286,11 @@ class Point {
 	bool operator>( const Point<Number>& _p2 ) const { return _p2 < *this; }
 	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
-	bool operator==( const Point<Number>& _p2 ) const { return ( mCoordinates == _p2.rawCoordinates() ); }
+	bool operator==( const Point<Number>& _p2 ) const {
+		if(this->hash() != _p2.hash()) return false;
+
+		return ( mCoordinates == _p2.rawCoordinates() );
+	}
 
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
@@ -383,6 +397,18 @@ template <typename Number>
 const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs ) {
 	return ( _rhs * _factor );
 }
+
+    #ifdef EXTERNALIZE_CLASSES
+    extern template class Point<double>;
+
+    #ifdef USE_MPFR_FLOAT
+    extern template class Point<carl::FLOAT_T<mpfr_t>>;
+    #endif
+
+    extern template class Point<carl::FLOAT_T<double>>;
+    #endif
+
+    
 }  // namespace
 
 namespace std{
@@ -390,12 +416,7 @@ namespace std{
     struct hash<hypro::Point<Number>> {
         std::size_t operator()(hypro::Point<Number> const& point) const
         {
-            size_t seed = 0;
-            std::vector<Number> coordinates = point.getCoordinates();
-            for (int i = 0; coordinates.rows(); ++i) {
-                carl::hash_add(seed, coordinates(i));
-            }
-            return seed;
+            return std::hash<hypro::vector_t<Number>>()(point.rawCoordinates());
         }
     };
 } //namespace

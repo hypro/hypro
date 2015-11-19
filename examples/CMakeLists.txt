@@ -19,6 +19,7 @@ set( EXAMPLES
     example_convexHull
     example_division
     example_eigen_float_t
+    example_facetEnumeration
     example_hausdorffApprox
     example_matrixPolyhedra
     example_multiplication
@@ -26,6 +27,7 @@ set( EXAMPLES
     example_orthogonalPolyhedron
     example_parser
     example_plot
+    example_point
     example_polytope
     example_polytopeFileWriter
     example_power

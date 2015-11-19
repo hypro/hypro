@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-10-29
- * @version	2015-11-11
+ * @version	2015-11-18
  */
 
 #pragma once
@@ -154,7 +154,7 @@ private:
 	/**
 	 * @brief Rearranges the initial input to ensure that the last d rows are linearly independent.
 	 */
-	void rearrange();
+	matrix_t<Number> rearrange(const matrix_t<Number>& A);
 
 	/**
 	 * @brief Increments the row and column indices according to the current dictionary (traverse row-wise).

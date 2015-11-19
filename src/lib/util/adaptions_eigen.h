@@ -77,10 +77,14 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 	 */
 	template <typename Number>
 	std::size_t VectorHashValue( const hypro::vector_t<Number>& pVector ) {
+		//std::cout << "VECTOR_HASH(" << pVector.transpose() << ")" << std::endl;
 		size_t seed = 0;
 		for (int i = 0; i < pVector.rows(); i++) {
-			carl::hash_add(seed, pVector(i));
+			std::size_t tmp = std::hash<Number>()(pVector(i));
+			//std::cout << __func__ << ": " << i << ", "<< pVector(i) << " -> " << tmp << std::endl;
+			carl::hash_add(seed, tmp);
 		}
+		//std::cout << seed << std::endl;
 		return seed;
 	}
 
@@ -104,7 +108,7 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 template <typename Number>
 bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
-	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
+	//if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
@@ -143,3 +147,13 @@ hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a,
 		   svd.matrixU().adjoint();
 }
 } // namespace Eigen
+
+namespace std {
+    template<class Number>
+    struct hash<hypro::vector_t<Number>> {
+        std::size_t operator()(hypro::vector_t<Number> const& vector) const
+        {
+            return Eigen::VectorHashValue(vector);
+        }
+    };
+} // namespace std

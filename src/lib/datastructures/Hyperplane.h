@@ -30,6 +30,7 @@ class Hyperplane {
   private:
 	vector_t<Number> mNormal;
 	Number mScalar;
+    size_t mHash = 0;
 
   public:
 	Hyperplane();
@@ -37,7 +38,7 @@ class Hyperplane {
 	Hyperplane( const Point<Number>& _vector, const Number& _off );
 	Hyperplane( std::initializer_list<Number> _coordinates, const Number& _off );
 	Hyperplane( const vector_t<Number>& _vector, const Number& _off );
-	Hyperplane( const carl::Constraint<polynomial_t<Number>>& _constraint );
+	//Hyperplane( const carl::Constraint<polynomial_t<Number>>& _constraint ); /////////////////////// TRAC
 	Hyperplane( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
 
 	~Hyperplane();
@@ -47,7 +48,7 @@ class Hyperplane {
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
 
 	const vector_t<Number>& normal() const;
-  vector_t<Number>& rNormal();
+        vector_t<Number>& rNormal();
 	void setNormal( const vector_t<Number>& _normal );
 
 	Number offset() const;
@@ -60,7 +61,7 @@ class Hyperplane {
 	bool intersection( Number& _result, const Point<Number>& _vector ) const;
 
 	Hyperplane<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	HPolytope<Number> intersection( const Hyperplane<Number>& _rhs ) const;
+	//HPolytope<Number> intersection( const Hyperplane<Number>& _rhs ) const; /////////// TRAC
 	vector_t<Number> intersectionVector( const Hyperplane<Number>& _rhs ) const;
 
 	static vector_t<Number> fastIntersect( const std::vector<Hyperplane<Number>>& _planes );
@@ -71,6 +72,13 @@ class Hyperplane {
 
     vector_t<Number> normal() { return mNormal; };
     Number scalar() { return mScalar; };
+    size_t hash() {
+        if (this->mHash == 0) {
+            this->mHash = std::hash<hypro::Hyperplane<Number>>(*this);
+        } else {
+            return mHash;
+        }
+    }
 
 	friend void swap( Hyperplane<Number>& a, Hyperplane<Number>& b ) {
 		swap( a.mNormal, b.mNormal );
@@ -103,7 +111,16 @@ template <typename Number>
 bool operator<( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
 	return ( lhs.normal() < rhs.normal() || ( lhs.normal() == rhs.normal() && lhs.offset() < rhs.offset() ) );
 }
+     
+    #ifdef EXTERNALIZE_CLASSES
+    extern template class Hyperplane<double>;
 
+    #ifdef USE_MPFR_FLOAT
+    extern template class Hyperplane<carl::FLOAT_T<mpfr_t>>;
+    #endif
+
+    extern template class Hyperplane<carl::FLOAT_T<double>>;
+    #endif
 }  // namespace
 
 namespace std{

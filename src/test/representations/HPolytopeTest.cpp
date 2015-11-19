@@ -81,20 +81,21 @@ TYPED_TEST(HPolytopeTest, Swap)
 	}
 }
 
+////////////TODO: change this test to work with a 3D HPolytope
 TYPED_TEST(HPolytopeTest, Corners)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 
 	typename std::vector<Point<TypeParam>> corners = hpt1.vertices();
-	for(auto& corner : corners) {
+	for(const auto& corner : corners) {
 		EXPECT_TRUE(hpt1.isExtremePoint(corner));
 	}
 
 	corners = hpt2.vertices();
 	std::cout << "HPT2: " << hpt2 << std::endl;
 
-	for(auto& corner : corners) {
+	for(const auto& corner : corners) {
 		EXPECT_TRUE(hpt2.isExtremePoint(corner));
 	}
 

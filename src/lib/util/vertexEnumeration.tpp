@@ -23,7 +23,7 @@ namespace hypro {
 		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
 		t << b,-A;
 		// rearrange to make the last d equations linear independent.
-		rearrange();
+		t = rearrange(t);
 
 		// solve the last d equations
 		std::size_t dimension = A.cols();
@@ -42,22 +42,32 @@ namespace hypro {
 		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
 		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
 
-		// Gauss:
-		// normalize rows for each variable and forward insertion
-		for(unsigned rowIndex = 0; rowIndex < a.rows()-1; ++rowIndex)
-		{
-			a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,rowIndex);
-			a.row(rowIndex+1) = a.row(rowIndex+1) - (a.row(rowIndex)*a(rowIndex+1, rowIndex));
-		}
+		//std::cout << "a: " << std::endl << a << std::endl;
 
-		// backward insertion
-		for(unsigned rowIndex = a.rows()-1; rowIndex > 0; --rowIndex)
+		// Gauss:
+		std::set<unsigned> usedRows;
+		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
 		{
-			if(a(rowIndex,rowIndex) != 1)
-			{
-				a.row(rowIndex) = a.row(rowIndex) / a(rowIndex,rowIndex);
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
+			unsigned rowIndex = 0;
+			// find first row suitable for elimination
+			while(rowIndex < a.rows() && (usedRows.find(rowIndex) != usedRows.end() || a(rowIndex,colIndex) == 0)) {
+				++rowIndex;
 			}
-			a.row(rowIndex-1) = a.row(rowIndex-1) - (a.row(rowIndex)*a(rowIndex-1, rowIndex));
+
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			if(rowIndex < a.rows() && a(rowIndex,colIndex) != 0){
+				usedRows.insert(rowIndex);
+				//normalize
+				a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,colIndex);
+				for(unsigned rIt = 0; rIt < a.rows(); ++ rIt){
+					if(rIt != rowIndex && a(rIt,colIndex) != 0) {
+						// forward insertion
+						a.row(rIt) = a.row(rIt) - (a.row(rowIndex)*a(rIt, colIndex));
+					}
+				}
+			}
+			//std::cout << a << std::endl;
 		}
 
 		// Substitution holds the matrix which contains the solution for the last d equations,
@@ -92,7 +102,7 @@ namespace hypro {
 		}
 
 		std::size_t rowCnt = 1;
-		for(std::size_t index = mDictionary.rows() ; index < A.rows() + dimension - 1 ; ++index) {
+		for(std::size_t index = mDictionary.rows() ; index < mDictionary.rows() + dimension ; ++index) {
 			mN[index] = rowCnt;
 			++rowCnt;
 		}
@@ -115,7 +125,7 @@ namespace hypro {
 
 	template<typename Number>
 	Point<Number> Dictionary<Number>::vertex() const {
-		vector_t<Number> valuation = vector_t<Number>(mN.size()+1);
+		vector_t<Number> valuation = vector_t<Number>(mN.size() + 1);
 		valuation(0) = 1;
 		for(unsigned i = 1; i < valuation.rows(); ++i) {
 			unsigned varIndex = mB.size() + i ;
@@ -126,6 +136,8 @@ namespace hypro {
 				valuation(i) = 0;
 			}
 		}
+
+		//std::cout << __func__ << mSubstitution << std::endl << __func__ << valuation << std::endl;
 
 		return Point<Number>(mSubstitution*valuation);
 	}
@@ -288,19 +300,21 @@ namespace hypro {
 		}
 
 		// step 2: Select other variable accordingly
+		bool optimal = true;
 		if(primalInfeasible) {
 			assert(mB.find(index) != mB.end());
 			for(auto cobasisIt = mN.begin(); cobasisIt != mN.end(); ++cobasisIt) {
 				if(mDictionary(mB.at(index), cobasisIt->second) > 0) {
 					i = mB.at(index);
 					j = cobasisIt->second;
+					optimal = false;
 					break;
 				}
 			}
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
 #endif
-			return false;
+			return optimal;
 		} else if (dualInfeasible) {
 			assert(mN.find(index) != mN.end());
 
@@ -308,20 +322,21 @@ namespace hypro {
 				if(mDictionary(basisIt->second, mN.at(index)) < 0) {
 					i = basisIt->second;
 					j = mN.at(index);
+					optimal = false;
 					break;
 				}
 			}
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 			std::cout << __func__ << ": " << i << ", " << j << std::endl;
 #endif
-			return false;
+			return optimal;
 		}
 
 		// Dictionary is optimal - no feasible pivot
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
 		std::cout << __func__ << ": No feasible pivot." << std::endl;
 #endif
-		return true;
+		return optimal;
 	}
 
 	template<typename Number>
@@ -411,12 +426,12 @@ namespace hypro {
 				if(basisIt->second == originalPos) {
 					//std::cout << "Var " << basisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = basisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(basisIt->second > originalPos && basisIt->second <= insertionPos) {
 					std::size_t var = basisIt->first;
 					std::size_t pos = basisIt->second - 1;
 					//std::cout << "Var " << basisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << basisIt->first << std::endl;
 					newMap.insert(std::make_pair(basisIt->first, basisIt->second));
@@ -438,12 +453,12 @@ namespace hypro {
 				if(basisIt->second == originalPos) {
 					//std::cout << "Var " << basisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = basisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(basisIt->second < originalPos && basisIt->second >= insertionPos) {
 					std::size_t var = basisIt->first;
 					std::size_t pos = basisIt->second + 1;
 					//std::cout << "Var " << basisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << basisIt->first << std::endl;
 					newMap.insert(std::make_pair(basisIt->first, basisIt->second));
@@ -473,12 +488,12 @@ namespace hypro {
 				if(cobasisIt->second == originalPos) {
 					//std::cout << "Var " << cobasisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = cobasisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(cobasisIt->second > originalPos && cobasisIt->second <= insertionPos) {
 					std::size_t var = cobasisIt->first;
 					std::size_t pos = cobasisIt->second - 1;
 					//std::cout << "Var " << cobasisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << cobasisIt->first << std::endl;
 					newMap.insert(std::make_pair(cobasisIt->first, cobasisIt->second));
@@ -500,12 +515,12 @@ namespace hypro {
 				if(cobasisIt->second == originalPos) {
 					//std::cout << "Var " << cobasisIt->first << " is remapped to pos " << insertionPos << std::endl;
 					std::size_t var = cobasisIt->first;
-					newMap.insert(std::make_pair(var,insertionPos)).first;
+					newMap.insert(std::make_pair(var,insertionPos));
 				} else if(cobasisIt->second < originalPos && cobasisIt->second >= insertionPos) {
 					std::size_t var = cobasisIt->first;
 					std::size_t pos = cobasisIt->second + 1;
 					//std::cout << "Var " << cobasisIt->first << " is shifted to pos " << pos << std::endl;
-					newMap.insert(std::make_pair(var,pos)).first;
+					newMap.insert(std::make_pair(var,pos));
 				} else {
 					//std::cout << "Do nothing for var " << cobasisIt->first << std::endl;
 					newMap.insert(std::make_pair(cobasisIt->first, cobasisIt->second));
@@ -575,7 +590,72 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Dictionary<Number>::rearrange() {
+	matrix_t<Number> Dictionary<Number>::rearrange(const matrix_t<Number>& A) {
+		if(A.rows() <= A.cols()) {
+			// This should not happen.
+			return A;
+		}
+
+		matrix_t<Number> copy(A);
+		matrix_t<Number> res(A);
+		std::size_t dimension = copy.cols();
+
+		// perform Gauss on A to get the linear independent rows
+
+		std::set<unsigned> linearIndependent;
+		std::set<unsigned> linearDependent;
+		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
+		{
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
+			unsigned rowIndex = 0;
+			// find first row suitable for elimination
+			//std::cout << linearIndependent << std::endl;
+			while(rowIndex < copy.rows() && (linearIndependent.find(rowIndex) != linearIndependent.end() || copy(rowIndex,colIndex) == 0)) {
+				++rowIndex;
+			}
+
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			if(rowIndex < copy.rows() && copy(rowIndex,colIndex) != 0){
+				linearIndependent.insert(rowIndex);
+				//normalize
+				copy.row(rowIndex) = copy.row(rowIndex)/copy(rowIndex,colIndex);
+				for(unsigned rIt = 0; rIt < copy.rows(); ++ rIt){
+
+					if(rIt != rowIndex && copy(rIt,colIndex) != 0) {
+						// forward insertion
+						copy.row(rIt) = copy.row(rIt) - (copy.row(rowIndex)*copy(rIt, colIndex));
+					}
+				}
+			}
+		}
+
+		//std::cout << "Copy: " << std::endl << copy << std::endl;
+
+		// collect linear dependent rows
+		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
+			if(linearIndependent.find(rIt) == linearIndependent.end()) {
+				linearDependent.insert(rIt);
+			}
+		}
+
+		assert(linearIndependent.size() == dimension);
+		assert(linearDependent.size() == A.rows() - dimension);
+		if(linearIndependent.size() != dimension) {
+			// no proper dimension! WHAT TO DO?
+		} else {
+			// move the linearly independent columns to the bottom of the matrix
+			for(unsigned row = 0; row < res.rows(); ++row){
+				if(row >= A.rows()-dimension) {
+					res.row(row) = A.row(*linearIndependent.begin());
+					linearIndependent.erase(linearIndependent.begin());
+				} else {
+					res.row(row) = A.row(*linearDependent.begin());
+					linearDependent.erase(linearDependent.begin());
+				}
+			}
+		}
+
+		return res;
 	}
 
 	template<typename Number>
