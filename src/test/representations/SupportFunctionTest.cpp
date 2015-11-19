@@ -6,7 +6,7 @@
  * @version		2015-02-25
  */
 
-#include "../../lib/representations/SupportFunction/SupportFunction.h"
+#include "../../lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 
@@ -60,14 +60,14 @@ protected:
  * Tests only a single constructor which holds a concrete representation. Other constructors are tested by operations.
  */
 TYPED_TEST(SupportFunctionTest, constructor) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
-	EXPECT_DEATH(SupportFunction<TypeParam>::create(SF_TYPE::SUM, this->constraints, this->constants), "c*");
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	EXPECT_DEATH(SupportFunctionContent<TypeParam>::create(SF_TYPE::SUM, this->constraints, this->constants), "c*");
 
 	SUCCEED();
 }
 
 TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 	matrix_t<TypeParam> vec1 = matrix_t<TypeParam>(2,1);
 	matrix_t<TypeParam> vec2 = matrix_t<TypeParam>(2,1);
 	matrix_t<TypeParam> vec3 = matrix_t<TypeParam>(2,1);
@@ -78,7 +78,7 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 }
 
 TYPED_TEST(SupportFunctionTest, linearTransformation) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 	matrix_t<TypeParam> rotation = matrix_t<TypeParam>(2,2);
 	TypeParam angle = 45;
 	rotation(0,0) = carl::cos(angle);
@@ -90,7 +90,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
 	vector_t<TypeParam> v3Rot = rotation*(this->vec3);
 
-	std::shared_ptr<SupportFunction<TypeParam>> res = psf1->linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
+	std::shared_ptr<SupportFunctionContent<TypeParam>> res = psf1->linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
 
 	if(typeid(TypeParam) == typeid(double) || typeid(TypeParam) == typeid(carl::FLOAT_T<double>) ) {
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(20), res->evaluate(v1Rot).supportValue,4));
@@ -104,10 +104,10 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 	TypeParam factor = 2;
 
-	std::shared_ptr<SupportFunction<TypeParam>> res =  psf1->scale(factor);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> res =  psf1->scale(factor);
 
 	if(typeid(TypeParam) == typeid(double)) {
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(factor) * TypeParam(20), res->evaluate(this->vec1).supportValue,4));
@@ -150,8 +150,8 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 	constants2(1) = TypeParam(-2);
 	constants2(2) = TypeParam(4);
 
-	std::shared_ptr<SupportFunction<TypeParam>> tri1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, constraints1, constants1);
-	std::shared_ptr<SupportFunction<TypeParam>> tri2 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, constraints2, constants2);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> tri1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, constraints1, constants1);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> tri2 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, constraints2, constants2);
 
 	// Result directions
 	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2);
@@ -178,7 +178,7 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 	vec6(0) = TypeParam(0);
 	vec6(1) = TypeParam(1);
 
-	std::shared_ptr<SupportFunction<TypeParam>> res = tri1->minkowskiSum(tri2);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> res = tri1->minkowskiSum(tri2);
 
 	if(typeid(TypeParam) == typeid(double)) {
 		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(8), res->evaluate(vec1).supportValue,4));
@@ -198,7 +198,7 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 }
 
 TYPED_TEST(SupportFunctionTest, intersect) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 }
 
 TYPED_TEST(SupportFunctionTest, unite) {
@@ -231,10 +231,10 @@ TYPED_TEST(SupportFunctionTest, unite) {
 	constants2(1) = TypeParam(-2);
 	constants2(2) = TypeParam(4);
 
-	std::shared_ptr<SupportFunction<TypeParam>> tri1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, constraints1, constants1);
-	std::shared_ptr<SupportFunction<TypeParam>> tri2 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, constraints2, constants2);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> tri1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, constraints1, constants1);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> tri2 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, constraints2, constants2);
 
-	std::shared_ptr<SupportFunction<TypeParam>> res = tri1->unite(tri2);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> res = tri1->unite(tri2);
 
 	// Result directions
 	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2);
@@ -267,7 +267,7 @@ TYPED_TEST(SupportFunctionTest, unite) {
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
-	std::shared_ptr<SupportFunction<TypeParam>> psf1 = SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
+	std::shared_ptr<SupportFunctionContent<TypeParam>> psf1 = SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->constraints, this->constants);
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({0,0})));
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({-2,-2})));
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({3,3})));

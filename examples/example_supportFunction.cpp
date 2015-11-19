@@ -1,6 +1,6 @@
 
 #include "../src/lib/config.h"
-#include "../src/lib/representations/SupportFunction/SupportFunction.h"
+#include "../src/lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "../src/lib/util/Plotter.h"
 
 using namespace hypro;
@@ -29,17 +29,17 @@ int main(int argc, char** argv) {
 	linearMap = linearMap*timestep;
 	matrix_t<double> exponential = linearMap.exp();
 
-	std::shared_ptr<SupportFunction<double>> poly1 = SupportFunction<double>::create(SF_TYPE::POLY, matrix, distances);
-	//SupportFunction<double> poly2(SF_TYPE::POLY, matrix2, distances2);
-	std::shared_ptr<SupportFunction<double>> poly3 = SupportFunction<double>::create(SF_TYPE::POLY, matrix, distances3);
-	std::shared_ptr<SupportFunction<double>> ball = SupportFunction<double>::create(SF_TYPE::INFTY_BALL, .5);
+	std::shared_ptr<SupportFunctionContent<double>> poly1 = SupportFunctionContent<double>::create(SF_TYPE::POLY, matrix, distances);
+	//SupportFunctionContent<double> poly2(SF_TYPE::POLY, matrix2, distances2);
+	std::shared_ptr<SupportFunctionContent<double>> poly3 = SupportFunctionContent<double>::create(SF_TYPE::POLY, matrix, distances3);
+	std::shared_ptr<SupportFunctionContent<double>> ball = SupportFunctionContent<double>::create(SF_TYPE::INFTY_BALL, .5);
 	
 	
-	std::shared_ptr<SupportFunction<double>> rounded1 = poly1->minkowskiSum(ball);
-	//SupportFunction<double> rounded2 = poly2.minkowskiSum(ball);
-	//SupportFunction<double> rounded = ball;
-	std::shared_ptr<SupportFunction<double>> unionRes = poly1->unite(poly3);
-	std::shared_ptr<SupportFunction<double>> intersectionRes = poly1->intersect(poly3);
+	std::shared_ptr<SupportFunctionContent<double>> rounded1 = poly1->minkowskiSum(ball);
+	//SupportFunctionContent<double> rounded2 = poly2.minkowskiSum(ball);
+	//SupportFunctionContent<double> rounded = ball;
+	std::shared_ptr<SupportFunctionContent<double>> unionRes = poly1->unite(poly3);
+	std::shared_ptr<SupportFunctionContent<double>> intersectionRes = poly1->intersect(poly3);
 
 	rounded1->print();
 
@@ -137,8 +137,8 @@ int main(int argc, char** argv) {
 	
 	
 	/*
-	std::shared_ptr<SupportFunction<double>> res = rounded1->linearTransformation(exponential);
-	//std::shared_ptr<SupportFunction<double>> res = rounded1->minkowskiSum(ball);
+	std::shared_ptr<SupportFunctionContent<double>> res = rounded1->linearTransformation(exponential);
+	//std::shared_ptr<SupportFunctionContent<double>> res = rounded1->minkowskiSum(ball);
 	res->print();
 
 	for(unsigned iteration = 0; iteration < 20; ++iteration) {

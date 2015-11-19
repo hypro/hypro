@@ -13,7 +13,7 @@
 namespace hypro{
         // conversion from Box to support function
         template <typename Number>
-        static bool convert( const hypro::Box<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+        static bool convert( const hypro::Box<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target ) {
                 unsigned dim = _source.dimension();                                                     //gets dimension of box
                 assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
@@ -31,19 +31,19 @@ namespace hypro{
                         distances( 2 * i + 1 ) = intervals[i].upper();                                  //write inverted lower bound values and upper bound values into the distance vector
                 }
 
-                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, directions, distances); //constructs a support function with normal matrix and distance vector
+                _target = hypro::SupportFunctionContent<Number>::create( SF_TYPE::POLY, directions, distances); //constructs a support function with normal matrix and distance vector
 
                 return true;
         }
 
         // conversion from V-Polytope to support function
         template <typename Number>
-        static bool convert( const hypro::VPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+        static bool convert( const hypro::VPolytope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target ) {
                 HPolytope<Number> temp = HPolytope<Number>(_source);                                   //converts the source object into a h-polytope
                 typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
                 
-                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );             //constructs a support function with the received planes
+                _target = hypro::SupportFunctionContent<Number>::create( SF_TYPE::POLY, planes );             //constructs a support function with the received planes
                
                 return true;
         }
@@ -52,17 +52,17 @@ namespace hypro{
     
         // conversion from H-polytope to support function
         template <typename Number>
-        static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+        static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target ) {
                 typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
                 assert( !planes.empty() );                                                                //ensures that nonempty planes got fetched before continuing
 
-                _target = hypro::SupportFunction<Number>::create( SF_TYPE::POLY, planes );                //constructs a support function with the received planes
+                _target = hypro::SupportFunctionContent<Number>::create( SF_TYPE::POLY, planes );                //constructs a support function with the received planes
 
                 return true;
         }
         // TODO conversion from Zonotope to support function
         template <typename Number>
-        static bool convert( const hypro::Zonotope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target ) {
+        static bool convert( const hypro::Zonotope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target ) {
                 
 
                 return true;
@@ -89,7 +89,7 @@ namespace hypro{
                 }
 
 template<typename Number>
-hypro::SupportFunction<Number> convert(const hypro::Polytope<Number>& _source) {
+hypro::SupportFunctionContent<Number> convert(const hypro::Polytope<Number>& _source) {
 	hypro::Polytope<Number> tmp = _source;
 	std::vector<Point<Number>> points = tmp.points();
 	assert(!points.empty());

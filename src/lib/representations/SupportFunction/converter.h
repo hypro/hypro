@@ -20,7 +20,7 @@ namespace hypro {
      * @return Return value is true if the conversion process was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target );
+    static bool convert( const hypro::Box<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target );
     
     /**
      * @brief Converts a polytope in V-representation into a support function.
@@ -33,7 +33,7 @@ namespace hypro {
      */   
     
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target );
+    static bool convert( const hypro::VPolytope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target );
     
     
     /**
@@ -46,7 +46,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target );
+    static bool convert( const hypro::HPolytope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target );
     
     /**
      * @brief Converts a zonotope into a support function
@@ -58,7 +58,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, std::shared_ptr<SupportFunction<Number>>& _target );
+    static bool convert( const hypro::Zonotope<Number>& _source, std::shared_ptr<SupportFunctionContent<Number>>& _target );
     
         
 }  // namespace
