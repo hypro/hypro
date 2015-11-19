@@ -78,7 +78,7 @@ struct possibleTransition {
 #include "vectorgenerator.h"  // make vectorgenerator functionalities globally available
 
 // Supportfunctions
-#include "SupportFunction.h"
+#include "SupportFunctionContent.h"
 #include "PolytopeSupportfunction.h"
 #include "NonLinearOmega0Supportfunction.h"
 

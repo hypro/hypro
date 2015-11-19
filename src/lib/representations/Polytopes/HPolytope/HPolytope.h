@@ -23,7 +23,7 @@ enum SOLUTION { FEAS = 0, INFEAS, INFTY };
 
 template <typename Number>
 class HPolytope {
-  private:
+public:
   	enum REDUCTION_STRATEGY {
                               DROP = 0,
                               DROP_SMOOTH,
@@ -31,10 +31,10 @@ class HPolytope {
                               UNITE_SMOOTH,
                               UNITE_CUT,
                               UNITE_NORM,
-                              DIRECTED
+                              DIRECTED_SMALL,
+                              DIRECTED_BIG
                             };
 
-  public:
 	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
 
   private:
@@ -88,28 +88,24 @@ class HPolytope {
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-  HPolytope<Number> reduce_nd(unsigned strat=0, unsigned facet=1, unsigned facet2=0) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  HPolytope<Number> reduce_directed(vector_t<Number> directed=vector_t<Number>::Zero(1)) const; // REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::UNITE_CUT
-  void reduceAssign( REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP, unsigned _steps = 1 );
+  HPolytope<Number> reduce_nd(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
+  HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
+  void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
 
   // Help functions by Igor Bongartz
   std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
   std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
-  std::vector<std::vector<unsigned>> getMembersOfVerticesOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
 
   std::vector<Point<Number>> getVerticesOfIndex(unsigned a, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
   std::vector<Point<Number>> getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
   std::vector<Point<Number>> getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
   std::vector<std::vector<Point<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
 
-  vector_t<Number> computeNormal(std::vector<Point<Number>> baseVectors, unsigned dimension, vector_t<Number> check) const;
-  vector_t<Number> initNormal(vector_t<Number> a, vector_t<Number> b, vector_t<Number> check) const;
-  vector_t<Number> initNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const;
+  vector_t<Number> computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const;
 
   Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
-  bool isBounded(unsigned facet) const;
-  bool isGood(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
+  bool isBounded(std::vector<vector_t<Number>>) const;
   // End Help funcions
 
 

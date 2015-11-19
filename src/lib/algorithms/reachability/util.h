@@ -2,7 +2,7 @@
 #pragma once
 
 #include "../../representations/Box/Box.h"
-#include "../../representations/SupportFunction/SupportFunction.h"
+#include "../../representations/SupportFunction/SupportFunctionContent.h"
 #include "carl/core/VariablePool.h"
 
 namespace hypro {
@@ -128,8 +128,8 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 /*
 template<typename Number>
-SupportFunction<Number> computePolytope(unsigned int _dim, Number _radius) {
-	return SupportFunction<Number>(SF_TYPE::INFTY_BALL, _radius );
+SupportFunctionContent<Number> computePolytope(unsigned int _dim, Number _radius) {
+	return SupportFunctionContent<Number>(SF_TYPE::INFTY_BALL, _radius );
 }
 */
 /**

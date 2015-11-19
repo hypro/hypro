@@ -133,20 +133,15 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
-	std::vector<unsigned> removeables;
-	for (unsigned i=0; i < unassignedPoints.size(); i++) {
+	for (unsigned i=unassignedPoints.size(); i > 0; i--) {
 		for (unsigned j=0; j < pointsInFacets.size(); j++) {
-			if (unassignedPoints[i] == pointsInFacets[j] && std::find(removeables.begin(), removeables.end(), i)!=removeables.end()) {
-				removeables.push_back(i);
+			if (unassignedPoints[i-1] == pointsInFacets[j]) {
+				assignedPoints.push_back( unassignedPoints.at( i-1 ) );
+				unassignedPoints.erase( unassignedPoints.begin() + i-1 );
 			}
 		}
 	}
 	// Stefan: removables holds the indices of the points in points, which are contained in one of the facets.
-
-	for ( unsigned i = 0; i < removeables.size(); i++ ) {
-		assignedPoints.push_back( unassignedPoints.at( removeables[i] - i ) );
-		unassignedPoints.erase( unassignedPoints.begin() + ( removeables[i] - i ) );
-	}
 }
 
 /*
@@ -408,7 +403,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets(std::vector<st
 	std::reverse(toErase.begin(), toErase.end());
 
 	for(unsigned erase: toErase){
-		std::cout << "Erase: " << erase << std::endl;
+		//std::cout << "Erase: " << erase << std::endl;
 		result.erase( result.begin() + erase );
 	}
 
@@ -483,6 +478,7 @@ static void setNeighborhoodOfPoints( std::vector<std::shared_ptr<Facet<Number>>>
 template <typename Number>
 static std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>>
 convexHull( const std::vector<Point<Number>>& pts ) {
+
 	// initialization
 	std::set<Point<Number>> pt;
 	for ( auto& p : pts ) {
@@ -518,6 +514,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		*/
 
 		while (!workingSet.empty()) {
+
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
 
@@ -642,7 +639,6 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				workingSet.pop();
 			}
 			workingSet = temp;
-
 
 			//// Choose next facet with non-empty outside set.
 			//while(workingSet.front().getOutsideSet().empty()) {

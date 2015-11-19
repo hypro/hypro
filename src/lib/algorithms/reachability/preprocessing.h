@@ -149,7 +149,7 @@ class LocationInfo : public PreprocessingObject {
 
   public:
 	// additional generated information regarding the invariant
-	SupportFunction* invariantSP;  // support function representation of the invariant  (needed by algoInv)
+	SupportFunctionContent* invariantSP;  // support function representation of the invariant  (needed by algoInv)
 	mapping invariant_constraints_in_L = 0;
 	mapping mirrored_invariant_constraints_in_L = 0;
 	std::vector<double>* complete_invariant_evaluation;
@@ -161,7 +161,7 @@ class LocationInfo : public PreprocessingObject {
 
 	// these values are set by the HyReach object during the analysis
 	matrix_t<double> edA;  // exp(delta*A)
-	SupportFunction* V;	// U(B' * l)
+	SupportFunctionContent* V;	// U(B' * l)
 
 	// getter for preprocessed A (additional dimension)
 	matrix_t<double>* getA() { return &A; }
@@ -169,7 +169,7 @@ class LocationInfo : public PreprocessingObject {
 	/*
 	* Constructor
 	*/
-	LocationInfo( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U,
+	LocationInfo( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunctionContent* U,
 				  artificialDirections* aD ) {
 #ifdef LOCATIONINFO_VERBOSE
 		string method = "LocationInfo(): ";
@@ -293,7 +293,7 @@ class TransitionInfo : public PreprocessingObject {
 	matrix_t<double> R;
 	vector_t<double> w;
 
-	SupportFunction* wfunction;
+	SupportFunctionContent* wfunction;
 
   public:
 	// Minimal values of each guard for every direction (or inf if there is no guard in this direction).
@@ -318,7 +318,7 @@ class TransitionInfo : public PreprocessingObject {
 	/*
 	* Getter for W
 	*/
-	SupportFunction* getWfunction() { return wfunction; }
+	SupportFunctionContent* getWfunction() { return wfunction; }
 
 	/*
 	* Getter for R
@@ -481,7 +481,7 @@ typedef std::set<Transition<double>*> transitionSet;  // type of the transitions
 /*
  *    This method computes additional static information for the specified location
  */
-void preprocess_location( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U,
+void preprocess_location( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunctionContent* U,
 						  artificialDirections* additionalDirections ) {
 	// preprocessing is done by construction of LocInfo object
 	LocationInfo* locInfo = new LocationInfo( loc, L_pt, delta, U, additionalDirections );
@@ -515,7 +515,7 @@ void preprocess_transition( transition* trans, std::vector<matrix_t<double>>* L_
  *    This methods traverses, starting with the location specified by the method's argument,
  *    recursively the model (depth-first search) and preprocesses all connected locations and transitions.
  */
-void preprocessing_recursion( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunction* U,
+void preprocessing_recursion( location* loc, std::vector<matrix_t<double>>* L_pt, double delta, SupportFunctionContent* U,
 							  artificialDirections* additionalDirections ) {
 	if ( locationSet.find( loc ) != locationSet.end() ) {
 #ifdef LOCATIONINFO_VERBOSE
@@ -556,7 +556,7 @@ void preprocessing_recursion( location* loc, std::vector<matrix_t<double>>* L_pt
 * Initiates the preprocessing for all locations, connected through paths beginning at an initial location
 */
 void preprocess( HybridAutomaton<double, valuation_t<double>>* automaton, std::vector<matrix_t<double>>* L_pt,
-				 double delta, SupportFunction* U, artificialDirections* additionalDirections ) {
+				 double delta, SupportFunctionContent* U, artificialDirections* additionalDirections ) {
 	std::set<location*> locations = ( *automaton ).initialLocations();
 
 	for ( auto iterator = locations.begin(); iterator != locations.end(); ++iterator ) {
@@ -622,7 +622,7 @@ void preprocess( HybridAutomaton<double, valuation_t<double>>* automaton, std::v
 		std::cout << "preprocess(...): G* temp intersected " << BL;
 #endif
 
-		SupportFunction* gstar = new PolytopeSupportFunction( L_pt, temp, L_pt->at( 0 ).size(), additionalDirections );
+		SupportFunctionContent* gstar = new PolytopeSupportFunction( L_pt, temp, L_pt->at( 0 ).size(), additionalDirections );
 		gstar->multiEvaluate( L_pt, iterator->second->g_star_values );
 #ifdef TRANSITIONINFO_VERBOSE
 		std::cout << "preprocess(...): "

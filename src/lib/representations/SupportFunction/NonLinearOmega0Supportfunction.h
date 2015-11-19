@@ -23,15 +23,15 @@ namespace hypro {
 * nonlinear optimization
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
 */
-class NonLinearOmega0Supportfunction : public SupportFunction {
+class NonLinearOmega0Supportfunction : public SupportFunctionContent {
   private:
 	// dimensionality of this object
 	unsigned int dimensions;
 
 	// externally provided Data
 	matrix_t<double>* A;
-	SupportFunction* V;
-	SupportFunction* X0;
+	SupportFunctionContent* V;
+	SupportFunctionContent* X0;
 
 	double delta;
 
@@ -39,8 +39,8 @@ class NonLinearOmega0Supportfunction : public SupportFunction {
 	matrix_t<double> absA;
 	matrix_t<double> edA;
 	matrix_t<double> phi2;
-	SupportFunction* epsilonpsi;
-	SupportFunction* edX0;
+	SupportFunctionContent* epsilonpsi;
+	SupportFunctionContent* edX0;
 	matrix_t<double> e_p;
 	matrix_t<double> e_n;
 
@@ -48,9 +48,9 @@ class NonLinearOmega0Supportfunction : public SupportFunction {
 	std::vector<matrix_t<double>> directionsAlongDimensions;  // contains a vector along each dimension
 
 	/*
-	* Computes a supportfunction being a symmetric box (centered at the origin) around the specified support function
+	* Computes a SupportFunctionContent being a symmetric box (centered at the origin) around the specified support function
 	*/
-	SymmetricCenteredBoxSupportFunction* boxoperator( SupportFunction* sf ) {
+	SymmetricCenteredBoxSupportFunction* boxoperator( SupportFunctionContent* sf ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef BOXOPERATOR_VERBOSE
 		std::string method = "boxoperator:";
@@ -398,10 +398,10 @@ class NonLinearOmega0Supportfunction : public SupportFunction {
 
   public:
 	// getter for epsilonpsi
-	SupportFunction* getEpsilonpsi() { return epsilonpsi; }
+	SupportFunctionContent* getEpsilonpsi() { return epsilonpsi; }
 
 	/*
-	 * Creates a new supportFunction describing Omega0
+	 * Creates a new SupportFunctionContent describing Omega0
 	 *
 	 * A: matrix describing the flow
 	 * V: support function describing the input (B' * U)
@@ -409,9 +409,9 @@ class NonLinearOmega0Supportfunction : public SupportFunction {
 	 * delta: sampling time
 	 *
 	 */
-	NonLinearOmega0Supportfunction( matrix_t<double>* A, SupportFunction* V, SupportFunction* X0, double delta,
+	NonLinearOmega0Supportfunction( matrix_t<double>* A, SupportFunctionContent* V, SupportFunctionContent* X0, double delta,
 									artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::NonLinear_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::NonLinear_Type, aD ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 		std::string method = "NonLinearOmega0Supportfunction:";
 #endif
@@ -419,10 +419,10 @@ class NonLinearOmega0Supportfunction : public SupportFunction {
 		// initialize values used by boxoperators
 		dimensions = ( *A ).rows();
 		directionsAlongDimensions = vectorgenerator(
-			  dimensions );  // 2 last directions are equivalent to artificial - caugth by SupportFunction.evaluate
+			  dimensions );  // 2 last directions are equivalent to artificial - caugth by SupportFunctionContent.evaluate
 // TODO: could be more efficient if the directions in the additional dimension are exactly the same (in memory with same
 // pointer) as in aD
-// in this case SUpportFunction.evaluate needs no second nested if branch
+// in this case SupportFunctionContent.evaluate needs no second nested if branch
 
 #ifdef SUPPORTFUNCTION_VERBOSE
 		std::cout << method << " generated Vectors along dimensions:" << BL;

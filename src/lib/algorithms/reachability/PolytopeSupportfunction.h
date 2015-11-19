@@ -15,7 +15,7 @@ namespace hypro {
 * This class defines a support Function object representing a polytope (might not be closed)
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
 */
-class PolytopeSupportFunction : public SupportFunction {
+class PolytopeSupportFunction : public SupportFunctionContent {
   private:
 	glp_prob* lp;
 	int* ia;
@@ -55,7 +55,7 @@ class PolytopeSupportFunction : public SupportFunction {
 
 		/* create glpk problem */
 		lp = glp_create_prob();
-		glp_set_prob_name( lp, "supportfunction" );
+		glp_set_prob_name( lp, "SupportFunctionContent" );
 		glp_set_obj_dir( lp, GLP_MAX );
 
 #ifndef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -203,12 +203,12 @@ class PolytopeSupportFunction : public SupportFunction {
 
   public:
 	/*
-	* Creates a new supportFunction for the closed convex set described by constraints * x operation(>= or <=)
+	* Creates a new SupportFunctionContent for the closed convex set described by constraints * x operation(>= or <=)
 	* constraintConstants
 	*/
 	PolytopeSupportFunction( matrix_t<double> constraints, matrix_t<double> constraintConstants, operator_e operation,
 							 unsigned int dimensionality, artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::Polytope_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::Polytope_Type, aD ) {
 		matrix_t<double> extendedConstraints( constraints.rows() + 2, constraints.cols() );
 		extendedConstraints.block( 0, 0, constraints.rows(), constraints.cols() ) = constraints;
 		extendedConstraints.block( extendedConstraints.rows() - 2, 0, 1, constraints.cols() ) = aD->dir1.transpose();
@@ -234,7 +234,7 @@ class PolytopeSupportFunction : public SupportFunction {
 
 	PolytopeSupportFunction( matrix_t<double> constraints, vector_t<double> constraintConstants, operator_e operation,
 							 unsigned int dimensionality, artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::Polytope_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::Polytope_Type, aD ) {
 		matrix_t<double> extendedConstraints( constraints.rows() + 2, constraints.cols() );
 		extendedConstraints.block( 0, 0, constraints.rows(), constraints.cols() ) = constraints;
 		extendedConstraints.block( extendedConstraints.rows() - 2, 0, 1, constraints.cols() ) = aD->dir1.transpose();
@@ -260,7 +260,7 @@ class PolytopeSupportFunction : public SupportFunction {
 	// supports only <= operator by design -> !!!! See first std::cout !!!!
 	PolytopeSupportFunction( std::vector<matrix_t<double>>* constraints, matrix_t<double> constraintConstants,
 							 unsigned int dimensionality, artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::Polytope_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::Polytope_Type, aD ) {
 		// std::cout << "!!!! PolytopeSupportFunction(): this constructor assumes that the two last entries from
 		// 'constraints' correspond to the two aritifcial directions" << BL;
 
@@ -284,7 +284,7 @@ class PolytopeSupportFunction : public SupportFunction {
 
 		/* create glpk problem */
 		lp = glp_create_prob();
-		glp_set_prob_name( lp, "supportfunction" );
+		glp_set_prob_name( lp, "SupportFunctionContent" );
 		glp_set_obj_dir( lp, GLP_MAX );
 
 		int numberOfConstraints = constraints->size();
