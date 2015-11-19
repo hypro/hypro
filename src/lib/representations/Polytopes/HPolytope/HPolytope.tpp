@@ -495,31 +495,6 @@ std::vector<unsigned> HPolytope<Number>::getNeighborsOfIndex(unsigned facet, std
 }
 
 /*
- * Compute all neighbors of a facet by calculating the participation at the vertices of the facet
- * @input unsigned facet, membersOfvertices
- * @return std::vector<std::vector<unsigned>> res contains a list of vectors which contains all members of a certain vertex which belongs to facet
- */
-template <typename Number>
-std::vector<std::vector<unsigned>> HPolytope<Number>::getMembersOfVerticesOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const {
-	std::vector<std::vector<unsigned>> res;
-
-	for(std::vector<unsigned> membersOfvertex: membersOfvertices) {
-		std::vector<unsigned> subRes;
-		if(std::find(membersOfvertex.begin(), membersOfvertex.end(), facet)!=membersOfvertex.end()){
-			for(unsigned member: membersOfvertex){
-				if(member!=facet){
-					subRes.push_back(member);
-				}
-			}
-		}
-		std::sort(subRes.begin(), subRes.end());
-		if(!subRes.empty()) res.push_back(subRes);
-	}
-
-	return res;
-}
-
-/*
  * Get all vertices which have one facet as member
  * @input unsigned facet a, vertices, membersOfvertices
  * @return std::vector<Point<Number>> res contains all vertices which have a as member
@@ -603,12 +578,23 @@ std::vector<std::vector<Point<Number>>> HPolytope<Number>::getVerticesPermutatio
 }
 
 /*
- * Calculate a normal vector out of base vectors
- * @input baseVectors, dimension
+ * Prepare computeNormal with a set of vertices - compute the base vectors
+ * @input vertices, test vector a, test vector b
  * @return vector_t<Number> normal vector
  */
 template <typename Number>
-vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> baseVectors, unsigned dimension, vector_t<Number> check) const{
+vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const{
+	unsigned dimension = vertices[0].dimension();
+	std::vector<Point<Number>> baseVectors;
+	for(unsigned i=1; i<vertices.size(); i++){
+		baseVectors.push_back(vertices[i]-vertices[0]);
+	}
+
+	if(vertices.size()!=dimension){ // check if we have the exact number of vertices for the calculation
+		std::cout << __func__ << " : " << __LINE__ << "\n   Error - the number of vertices does not fit for the calculation.\nActual Number: " << vertices.size() << "\nNeeded Number: " << dimension-1<< std::endl;
+		return check;
+	}
+
 	vector_t<Number> res = vector_t<Number>::Zero(dimension);
 
 	for(unsigned i=0; i<dimension; i++){ // iterate through each coordinate of the normal vector
@@ -637,49 +623,6 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> bas
 	}
 
 	return res;
-}
-
-/*
- * Prepare computeNormal with a set of vertices - compute the base vectors
- * @input vertices, test vector a, test vector b
- * @return vector_t<Number> normal vector
- */
-template <typename Number>
-vector_t<Number> HPolytope<Number>::initNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const{
-	unsigned dimension = vertices[0].dimension();
-	std::vector<Point<Number>> baseVectors;
-	for(unsigned i=1; i<vertices.size(); i++){
-		baseVectors.push_back(vertices[i]-vertices[0]);
-	}
-
-	if(vertices.size()!=dimension){ // check if we have the exact number of vertices for the calculation
-		std::cout << __func__ << " : " << __LINE__ << "\n   Error - the number of vertices does not fit for the calculation.\nActual Number: " << vertices.size() << "\nNeeded Number: " << dimension-1<< std::endl;
-		return check;
-	}
-
-	return computeNormal(baseVectors, dimension, check);
-}
-
-/*
- * Prepare computeNormal with two base vectors  -  3d
- * @input base vectors a, b , test vector c
- * @return vector_t<Number> normal vector
- */
-template <typename Number>
-vector_t<Number> HPolytope<Number>::initNormal(vector_t<Number> a, vector_t<Number> b, vector_t<Number> check) const{
-	unsigned dimension = a.size();
-	vector_t<Number> res = vector_t<Number>::Zero(dimension);
-	std::vector<Point<Number>> baseVectors;
-
-	baseVectors.push_back(Point<Number>(a));
-	baseVectors.push_back(Point<Number>(b));
-
-	//if(baseVectors.size()!=dimension){ // check if we have the exact number of vertices for the calculation
-	//	std::cout << "Error - the number of vertices does not fit for the calculation.\nActual Number: " << 2 << "\nNeeded Number: " << dimension-1<< std::endl;
-	//	return res;
-	//}
-
-	return computeNormal(baseVectors, dimension, check);
 }
 
 /*
@@ -734,7 +677,7 @@ bool HPolytope<Number>::isBounded(std::vector<vector_t<Number>> evaluations) con
  * @return the reduced facet or if the result would be unbounded the inital polytope
  */
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned strat, unsigned a, unsigned b) const { // REDUCTION_STRATEGY
+HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION_STRATEGY strat) const { // REDUCTION_STRATEGY
 
 	// init
 	HPolytope<Number> res = *this;
@@ -856,7 +799,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned strat, unsigned a, unsig
 
 				// cut united facet is the sum of all possible normals
 				for(std::vector<Point<Number>> setOfPoints: getVerticesPermutationForFacet(a, b, vertices)) { // get all set of points which could determine the new facet
-					vector_t<Number> normal = initNormal(setOfPoints, res.mHPlanes[a].normal()); // TODO use a simple hyperplane for this task
+					vector_t<Number> normal = computeNormal(setOfPoints, res.mHPlanes[a].normal()); // TODO use a simple hyperplane for this task
 					uniteVector += normal; // add all these candidates
 				}
 
@@ -909,7 +852,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned strat, unsigned a, unsig
  * @return the reduced facet or if the result would be unbounded the inital polytope
  */
 template <typename Number>
-HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, unsigned strat) const {
+HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const {
 
 	// init
 	HPolytope<Number> res = *this;
@@ -988,6 +931,8 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 							}
 						}
 						break;
+						default:
+							break;
 					}
 			}
 
@@ -1016,7 +961,7 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 
 
 template <typename Number>
-void HPolytope<Number>::reduceAssign( REDUCTION_STRATEGY strat, unsigned _steps ) {
+void HPolytope<Number>::reduceAssign(unsigned _steps, REDUCTION_STRATEGY strat) {
 
 	// TODO.
 
