@@ -178,12 +178,15 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 
 	// test
 	for(unsigned i = 0; i<facets_box.first.size(); i++){
-		if(facets_box.first.at(i)->getNormal() == test_v01_box && facets_box.first.at(i)->getScalar()==1) f1_box=true;
-		else if(facets_box.first.at(i)->getNormal() == test_v02_box && facets_box.first.at(i)->getScalar()==1) f2_box=true;
-		else if(facets_box.first.at(i)->getNormal() == test_v03_box && facets_box.first.at(i)->getScalar()==1) f3_box=true;
-		else if(facets_box.first.at(i)->getNormal() == test_v04_box && facets_box.first.at(i)->getScalar()==1) f4_box=true;
-		else if(facets_box.first.at(i)->getNormal() == test_v05_box && facets_box.first.at(i)->getScalar()==1) f5_box=true;
-		else if(facets_box.first.at(i)->getNormal() == test_v06_box && facets_box.first.at(i)->getScalar()==1) f6_box=true;
+		vector_t<Number> normal = facets_pyramid.first.at(i)->getNormal();
+		Number offset = facets_pyramid.first.at(i)->getScalar();
+
+		if(    normal == test_v01_box && offset==1)  f1_box=true;
+		else if(normal == test_v02_box && offset==1) f2_box=true;
+		else if(normal == test_v03_box && offset==1) f3_box=true;
+		else if(normal == test_v04_box && offset==1) f4_box=true;
+		else if(normal == test_v05_box && offset==1) f5_box=true;
+		else if(normal == test_v06_box && offset==1) f6_box=true;
 		else fail_box=true;
 	}
 
@@ -207,7 +210,7 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 	//v03_pyramid(0) = -1; v03_pyramid(1) = 0; v03_pyramid(2) = 1;
 
 	//hypro::vector_t<double> v04_pyramid = hypro::vector_t<double>(3);
-	//v04_pyramid(0) = 1; v04_pyramid(1) = 0; v04_pyramid(2) = -1;
+	//v04_pyramid(0) = -1; v04_pyramid(1) = 0; v04_pyramid(2) = -1;
 
 	//hypro::vector_t<double> v05_pyramid = hypro::vector_t<double>(3);
 	//v05_pyramid(0) = 0; v05_pyramid(1) = 1; v05_pyramid(2) = 0;
@@ -226,7 +229,7 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 	//bool f1_pyramid=false, f2_pyramid=false, f3_pyramid=false, f4_pyramid=false, f5_pyramid=false, fail_pyramid=false;
 
 	//hypro::vector_t<double> test_v01_pyramid = hypro::vector_t<double>(3);
-	//test_v01_pyramid(0) = 1; test_v01_pyramid(1) = 1; test_v01_pyramid(2) = -0;
+	//test_v01_pyramid(0) = 1; test_v01_pyramid(1) = 1; test_v01_pyramid(2) = 0;
 
 	//hypro::vector_t<double> test_v02_pyramid = hypro::vector_t<double>(3);
 	//test_v02_pyramid(0) = -1; test_v02_pyramid(1) = 1; test_v02_pyramid(2) = 0;
@@ -242,12 +245,15 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 
 	//// test
 	//for(unsigned i = 0; i<facets_pyramid.first.size(); i++){
-	//	std::cout << "Result Nr." << i << std::endl << "normal: "<< facets_pyramid.first.at(i)->getNormal() <<"\noffset: "<<facets_pyramid.first.at(i)->getScalar() << std::endl;
-	//	if(facets_pyramid.first.at(i)->getNormal() == test_v01_pyramid && facets_pyramid.first.at(i)->getScalar()==1) 			f1_pyramid=true;
-	//	else if(facets_pyramid.first.at(i)->getNormal() == test_v02_pyramid && facets_pyramid.first.at(i)->getScalar()==1) 	f2_pyramid=true;
-	//	else if(facets_pyramid.first.at(i)->getNormal() == test_v03_pyramid && facets_pyramid.first.at(i)->getScalar()==1) 	f3_pyramid=true;
-	//	else if(facets_pyramid.first.at(i)->getNormal() == test_v04_pyramid && facets_pyramid.first.at(i)->getScalar()==1) 	f4_pyramid=true;
-	//	else if(facets_pyramid.first.at(i)->getNormal() == test_v05_pyramid && facets_pyramid.first.at(i)->getScalar()==0) 	f5_pyramid=true;
+	//	vector_t<Number> normal = facets_pyramid.first.at(i)->getNormal();
+	//	Number offset = facets_pyramid.first.at(i)->getScalar();
+
+	//	std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
+	//	if(     normal == test_v01_pyramid && offset==1) 	f1_pyramid=true;
+	//	else if(normal == test_v02_pyramid && offset==1) 	f2_pyramid=true;
+	//	else if(normal == test_v03_pyramid && offset==1) 	f3_pyramid=true;
+	//	else if(normal == test_v04_pyramid && offset==1) 	f4_pyramid=true;
+	//	else if(normal == test_v05_pyramid && offset==0) 	f5_pyramid=true;
 	//	else fail_pyramid=true;
 	//}
 

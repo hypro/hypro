@@ -111,8 +111,14 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 	//if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
-			return false;
+		if(lhs( dim )==0 || rhs( dim )==0){
+			if ( !carl::AlmostEqual2sComplement( lhs( dim )+ (Number) 1, rhs( dim )+ (Number) 1, TOLLERANCE_ULPS ) ) { // Special case of carl::AlmostEqual2sComplement
+				return false;
+			}
+		} else {
+			if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
+				return false;
+			}
 		}
 	}
 	return true;
