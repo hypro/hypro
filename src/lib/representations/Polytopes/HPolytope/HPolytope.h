@@ -109,7 +109,6 @@ class HPolytope {
   Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
   bool isBounded(std::vector<vector_t<Number>>) const;
-  bool isGood(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const;
   // End Help funcions
 
 

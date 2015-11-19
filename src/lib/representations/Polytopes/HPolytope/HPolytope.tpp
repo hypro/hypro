@@ -709,27 +709,6 @@ Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std
 }
 
 /*
- * compare the side of a vertex of two ridges (a and b) compared to a fix direction (c)
- * @input vector_t<Number> a, b ,c
- * @return bool isGood or not
- */
-template <typename Number>
-bool HPolytope<Number>::isGood(vector_t<Number> a, vector_t<Number> b, vector_t<Number> c) const{
-	a.normalize();
-	b.normalize();
-	c.normalize();
-
-	double cab = c.dot(a) + c.dot(b);
-	bool res = !carl::AlmostEqual2sComplement(cab+1, 1.0) && cab>0;
-
-	std::cout << "compare " << cab;
-	if(res) std::cout << " <- GOOD" << std::endl;
-	else std::cout << " <- BAD" << std::endl;
-
-	return res; // examine
-}
-
-/*
  * check if the drop of one facet yields to an unbounded poyltope
  * @input unsigned facet to be droped
  * @return bool isBounded or not
@@ -743,7 +722,6 @@ bool HPolytope<Number>::isBounded(std::vector<vector_t<Number>> evaluations) con
 	for(vector_t<Number> evaluation: evaluations){
 		std::pair<Number, SOLUTION> evaluation_result = res.evaluate(evaluation);
 		if(evaluation_result.second==INFTY){
-			std::cout << "Unbounded!" << std::endl;
 			return false;
 		}
 	}
@@ -769,7 +747,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned strat, unsigned a, unsig
 
 	// neighbor test for unite
 	if(strat>1 && strat<6 && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), b)==neighborsOf_a.end()){
-		std::cout << __func__ << " : " << __LINE__ << "\n   Error - second facet is no neighbor of first facet" << std::endl;
+		std::cout << "Error - second facet is no neighbor of first facet" << std::endl;
 		return res;
 	}
 
@@ -959,7 +937,7 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 			double scalarproduct = directed_normalized.dot(temp);
 
 			if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
-				std::cout << __func__ << " : " << __LINE__ << "\n   Error - wanted direction does already exist" << std::endl;
+				std::cout << "Error - wanted direction does already exist" << std::endl;
 				skip=true;
 			}
 
@@ -1029,15 +1007,9 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 		res.mHPlanes.erase(res.mHPlanes.begin()+facet_erase);
 	}
 
-	for(vector_t<Number> evaluation: evaluations){
-		std::pair<Number, SOLUTION> evaluation_result = res.evaluate(evaluation);
-		if(evaluation_result.second==INFTY){
-			std::cout << "Unbounded!" << std::endl;
-			return *this;
-		}
-	}
+	if(res.isBounded(evaluations)) return res;
 
-	return res;
+	return *this;
 }
 
 
