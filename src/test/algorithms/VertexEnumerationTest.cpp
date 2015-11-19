@@ -178,8 +178,8 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 
 	// test
 	for(unsigned i = 0; i<facets_box.first.size(); i++){
-		vector_t<Number> normal = facets_pyramid.first.at(i)->getNormal();
-		Number offset = facets_pyramid.first.at(i)->getScalar();
+		hypro::vector_t<double> normal = facets_box.first.at(i)->getNormal();
+		double offset = facets_box.first.at(i)->getScalar();
 
 		if(    normal == test_v01_box && offset==1)  f1_box=true;
 		else if(normal == test_v02_box && offset==1) f2_box=true;
@@ -245,8 +245,8 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 
 	//// test
 	//for(unsigned i = 0; i<facets_pyramid.first.size(); i++){
-	//	vector_t<Number> normal = facets_pyramid.first.at(i)->getNormal();
-	//	Number offset = facets_pyramid.first.at(i)->getScalar();
+	//	hypro::vector_t<double> normal = facets_pyramid.first.at(i)->getNormal();
+	//	double offset = facets_pyramid.first.at(i)->getScalar();
 
 	//	std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
 	//	if(     normal == test_v01_pyramid && offset==1) 	f1_pyramid=true;
