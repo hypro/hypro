@@ -33,7 +33,6 @@ class Point {
 	// std::vector<Point<Number>> mNeighbors;
 	// Minkowsi Decompositon of this point (if applicable)
 	std::vector<Point<Number>> mComposedOf;
-  std::vector<unsigned> mNeighbors;
 
   public:
 	static const int POINT_RAND_MAX = 100;
@@ -109,13 +108,6 @@ class Point {
 	}
     //std::vector<Number> getCoordinates() { return mCoordinates; };
 
-   void setNeighbors(const std::vector<unsigned> &_neighbors) {
-     mNeighbors = _neighbors;
-   }
-
-   std::vector<unsigned> getNeighbors() const{
-     return mNeighbors;
-   }
 
 	/*
 	std::vector<Point<Number>> neighbors() const;
@@ -408,7 +400,7 @@ const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs 
     extern template class Point<carl::FLOAT_T<double>>;
     #endif
 
-    
+
 }  // namespace
 
 namespace std{

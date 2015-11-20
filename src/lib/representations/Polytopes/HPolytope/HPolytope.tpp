@@ -281,10 +281,6 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 				}
 				if(!outside) {
 					Point<Number> point = Point<Number>(res);
-					point.setNeighbors(permutation);
-					//for(unsigned neighbor: point.getNeighbors()){
-					//	std::cout << " N " << neighbor;
-					//}
 					vertices.push_back(point);
 					//std::cout << "Final vertex: " << res.transpose() << std::endl;
 				}

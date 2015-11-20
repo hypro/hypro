@@ -68,9 +68,7 @@ Point<Number>::Point( const Point<Number> &_p )
 	: mCoordinates( _p.rawCoordinates() ),
 	mHash(0),
 	// mNeighbors(_p.neighbors()),
-	mComposedOf( _p.composedOf() )
-	,
-  mNeighbors(_p.getNeighbors() ){
+	mComposedOf( _p.composedOf() ){
   	//std::cout << "This hash " << this->hash() << " vs. " << _p.hash() << std::endl;
   	assert(_p.hash() == this->hash());
 }
