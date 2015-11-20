@@ -537,8 +537,9 @@ std::vector<Point<Number>> HPolytope<Number>::getVerticesOf2IndicesAround(unsign
 	std::vector<Point<Number>> res;
 
 	for(unsigned i=0; i<vertices.size(); i++) {
-		if((std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), a)!=membersOfvertices[i].end())
-		^ (std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), b)!=membersOfvertices[i].end())) {
+		if(((std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), a)!=membersOfvertices[i].end()) && (std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), b)==membersOfvertices[i].end()))
+		||
+			((std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), b)!=membersOfvertices[i].end()) && (std::find(membersOfvertices[i].begin(), membersOfvertices[i].end(), a)==membersOfvertices[i].end()))) {
 			res.push_back(vertices[i]);
 		}
 	}
@@ -552,20 +553,25 @@ std::vector<Point<Number>> HPolytope<Number>::getVerticesOf2IndicesAround(unsign
  * @return std::vector<std::vector<Point<Number>>> permutations
  */
 template <typename Number>
-std::vector<std::vector<Point<Number>>> HPolytope<Number>::getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
-	std::vector<std::vector<Point<Number>>> res;
+std::vector<std::vector<vector_t<Number>>> HPolytope<Number>::getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
+	std::vector<std::vector<vector_t<Number>>> res;
 	std::vector<Point<Number>> cutPointsAround_a_b = getVerticesOf2IndicesAround(a, b, vertices, getMembersOfVertices(vertices));
 
 	if(cutPointsAround_a_b.size()==cutPointsAround_a_b[0].dimension()){
-		res.push_back(cutPointsAround_a_b);
+		std::vector<vector_t<Number>> setOfPoints;
+		for(Point<Number> point: cutPointsAround_a_b){
+			setOfPoints.push_back(vector_t<Number>(point.rawCoordinates()));
+		}
+
+		res.push_back(setOfPoints);
 	} else {
 		polytope::dPermutator permutator(cutPointsAround_a_b.size(), cutPointsAround_a_b[0].dimension());
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
-			std::vector<Point<Number>> setOfPoints;
+			std::vector<vector_t<Number>> setOfPoints;
 			for(unsigned index: permutation) {
-				setOfPoints.push_back(cutPointsAround_a_b[index]);
+				setOfPoints.push_back(vector_t<Number>(cutPointsAround_a_b[index].rawCoordinates()));
 			}
 			res.push_back(setOfPoints);
 		}
@@ -579,9 +585,9 @@ std::vector<std::vector<Point<Number>>> HPolytope<Number>::getVerticesPermutatio
  * @return vector_t<Number> normal vector
  */
 template <typename Number>
-vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> vertices, vector_t<Number> check) const{
-	unsigned dimension = vertices[0].dimension();
-	std::vector<Point<Number>> baseVectors;
+vector_t<Number> HPolytope<Number>::computeNormal(std::vector<vector_t<Number>> vertices, vector_t<Number> check) const{
+	unsigned dimension = vertices[0].size();
+	std::vector<vector_t<Number>> baseVectors;
 	for(unsigned i=1; i<vertices.size(); i++){
 		baseVectors.push_back(vertices[i]-vertices[0]);
 	}
@@ -601,7 +607,7 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<Point<Number>> ver
 				unsigned rCorrect = r;
 				if(r>i) rCorrect--;
 				for(unsigned v=0; v<baseVectors.size(); v++){
-					m(rCorrect,v) = baseVectors[v].coordinate(r);
+					m(rCorrect,v) = baseVectors[v][r];
 				}
 			}
 		}
@@ -785,7 +791,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 				break;
 			}
 
-		case REDUCTION_STRATEGY::UNITE_CUT:
+		case REDUCTION_STRATEGY::UNITE_CUT: // TODO fix the '-'Problem
 			{
 				vector_t<Number> uniteVector = vector_t<Number>::Zero(vertices[0].dimension()); // init cut united facet
 				Number uniteVector_offset;
@@ -794,15 +800,22 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 				evaluations.push_back(res.mHPlanes[b].normal());
 
 				// cut united facet is the sum of all possible normals
-				for(std::vector<Point<Number>> setOfPoints: getVerticesPermutationForFacet(a, b, vertices)) { // get all set of points which could determine the new facet
+				for(std::vector<vector_t<Number>> setOfPoints: getVerticesPermutationForFacet(a, b, vertices)) { // get all set of points which could determine the new facet
+					//Hyperplane<Number> normal = Hyperplane<Number>(res.mHPlanes[a].normal(), setOfPoints);
+					//std::cout << "normal of Hyperplane:\n" << normal.normal() << std::endl;
 					vector_t<Number> normal = computeNormal(setOfPoints, res.mHPlanes[a].normal()); // TODO use a simple hyperplane for this task
-					uniteVector += normal; // add all these candidates
+					//std::cout << "normal of Me:\n" << normal << std::endl;
+					if(normal!=vector_t<Number>::Zero(vertices[0].dimension())) normal.normalize();
+					uniteVector += normal;//normal.normal(); // add all these candidates
+					if(uniteVector!=vector_t<Number>::Zero(vertices[0].dimension())) uniteVector.normalize();
 				}
+				//std::cout << "uniteVector of Me:\n" << uniteVector << std::endl;
+
 
 				// uniteVector_offset
 				Point<Number> point_a_b = getVertexForVector(uniteVector, getVerticesOf2Indices(a, b, vertices, membersOfVertices));
 
-				// cut united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
+				// cut united facet offset is computed with the united facet and cutPoint of facet a and b
 				for(unsigned i=0; i<uniteVector.size(); i++){
 					uniteVector_offset+=uniteVector[i]*point_a_b.coordinate(i);
 				}
