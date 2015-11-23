@@ -52,16 +52,44 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 			// Return Box constraints.
 		} else if ( size < mDimension + 1 ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
+			std::size_t minimalRank = vertices.size() - 1;
 
-			matrix_t<Number> constraints(vertices.size(), vertices.begin()->rawCoordinates().rows());
-			for(unsigned pos = 0; pos < vertices.size(); ++pos) {
-				constraints.row(pos) = vertices.at(pos).rawCoordinates().transpose();
+			// find the dimensions in which the object is defined -> determine rank
+			matrix_t<Number> vertexMatrix(vertices.size()-1, vertices.begin()->dimension());
+			assert(vertexMatrix.cols() > vertexMatrix.rows());
+			matrix_t<Number> root = vertices.at(0).rawCoordinates().transpose();
+			for(unsigned rowIndex = vertexMatrix.rows()-1; rowIndex > 0; --rowIndex)
+				vertexMatrix.row(rowIndex) = vertices.at(rowIndex).rawCoordinates().transpose() - root;
+
+			std::cout << vertexMatrix << std::endl;
+
+			assert(false);
+
+			// Gauss:
+			std::set<unsigned> usedRows;
+			for(unsigned colIndex = 0; colIndex < vertexMatrix.rows(); ++colIndex)
+			{
+				//std::cout << "Eliminate for column " << colIndex << std::endl;
+				unsigned rowIndex = 0;
+				// find first row suitable for elimination
+				while(rowIndex < vertexMatrix.rows() && (usedRows.find(rowIndex) != usedRows.end() || vertexMatrix(rowIndex,colIndex) == 0)) {
+					++rowIndex;
+				}
+
+				//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+				if(rowIndex < vertexMatrix.rows() && vertexMatrix(rowIndex,colIndex) != 0){
+					usedRows.insert(rowIndex);
+					//normvertexMatrixlize
+					vertexMatrix.row(rowIndex) = vertexMatrix.row(rowIndex)/vertexMatrix(rowIndex,colIndex);
+					for(unsigned rIt = 0; rIt < vertexMatrix.rows(); ++ rIt){
+						if(rIt != rowIndex && vertexMatrix(rIt,colIndex) != 0) {
+							// forward insertion
+							vertexMatrix.row(rIt) = vertexMatrix.row(rIt) - (vertexMatrix.row(rowIndex)*vertexMatrix(rIt, colIndex));
+						}
+					}
+				}
+				//std::cout << a << std::endl;
 			}
-			vector_t<Number> normal = constraints.fullPivLu().kernel();
-
-			// post-computation check, if the normal vector is correct
-			for( const auto& vector : vertices)
-				assert(vector.rawCoordinates().dot(normal) == 0);
 
 			assert( false );
 		} else {
