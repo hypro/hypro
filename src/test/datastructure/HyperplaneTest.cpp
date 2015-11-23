@@ -46,9 +46,9 @@ TYPED_TEST(HyperplaneTest, Constructor)
 
 	//std::cout << __func__ << ": vec " << vec << ", normal: " << normal << std::endl;
 
-
 	Hyperplane<TypeParam> copy = Hyperplane<TypeParam>(normals);
-	//EXPECT_EQ(copy, normals);
+	EXPECT_EQ(copy, normals);
+
 	SUCCEED();
 }
 

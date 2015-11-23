@@ -19,7 +19,7 @@ template <typename Number, typename Representation>
 static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Number> _loc, Representation _val ) {
 	//[0,T] = [0,delta1] U [delta1, delta2] ...
 	// note: interval size is constant
-	double timeInterval = float( fReach_TIMEBOUND ) / float( fReach_TIMEDISCRETIZATION );
+	Number timeInterval = Number( fReach_TIMEBOUND ) / Number( fReach_TIMEDISCRETIZATION );
 
 #ifdef fReach_DEBUG
 	std::cout << "Time Interval: " << timeInterval << std::endl;
@@ -109,7 +109,7 @@ static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Num
 		// matrix_t<Number> updatedActivityMatrix = _loc.activityMat();
 		// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
 		// radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-		radius = hausdorffError( Number( timeInterval ), _loc.activityMat(), _val.supremum() );
+		radius = hausdorffError( timeInterval, _loc.activityMat(), _val.supremum() );
 // radius = _val.hausdorffError(timeInterval, _loc.activityMat());
 
 #ifdef fReach_DEBUG
@@ -155,7 +155,7 @@ static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Num
 #endif
 
 		// for each time interval perform linear Transformation
-		for ( double i = 2 * timeInterval; i <= fReach_TIMEBOUND; i += timeInterval ) {
+		for ( Number i = 2 * timeInterval; i <= fReach_TIMEBOUND; i += timeInterval ) {
 			std::cout << "\rTime: \t" << i << std::flush;
 
 			// perform linear transformation on the last segment of the flowpipe

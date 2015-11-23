@@ -117,6 +117,8 @@ TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
  * Test convexHull algorithm - vertices->constaints
  */
 TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
+
+	/*
 	// unity box in 3D
 	// init
 	hypro::vector_t<TypeParam> v01_box = hypro::vector_t<TypeParam>(3);
@@ -197,6 +199,8 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 	EXPECT_TRUE( f4_box );
 	EXPECT_TRUE( f5_box );
 	EXPECT_TRUE( f6_box );
+
+	*/
 
 	//// pyramid with quadratic bottom -> test towards degenerated vertices.
 	//// init

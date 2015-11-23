@@ -61,7 +61,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 			// post-computation check, if the normal vector is correct
 			for( const auto& vector : vertices)
-				assert(vector.dot(normal) == 0);
+				assert(vector.rawCoordinates().dot(normal) == 0);
 
 			assert( false );
 		} else {
