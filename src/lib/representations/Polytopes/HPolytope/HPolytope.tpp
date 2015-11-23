@@ -636,23 +636,35 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<vector_t<Number>> 
  */
 template <typename Number>
 Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const{
-	Point<Number> result = vertices[0]; // init for the case that all SP are 0... if
-	vector.normalize();
-	vector_t<Number> tempVertex = vector_t<Number>(vertices[0].rawCoordinates());
-	tempVertex.normalize();
-	double bestSP= vector.dot(tempVertex);
+	Point<Number> fail = vertices[0]; // init for the case that all SP are 0... if
 
 	for(Point<Number> vertex: vertices){
-		tempVertex = vector_t<Number>(vertex.rawCoordinates());
-		tempVertex.normalize();
-		double newSP = vector.dot(tempVertex);
-		if(newSP>bestSP){
-			bestSP = newSP;
-			result = vertex;
+		bool below=true;
+		double vector_offset=0;
+
+		// calculate offset
+		for(unsigned i=0; i<vector.size(); i++){
+			vector_offset+=vector[i]*vertex.coordinate(i);
 		}
+
+		for(Point<Number> vertex_test: vertices){
+			double vector_test_offset=0;
+
+			if(vertex!=vertex_test){
+				for(unsigned i=0; i<vector.size(); i++){
+					vector_test_offset+=vector[i]*vertex_test.coordinate(i);
+				}
+				if(vector_test_offset>vector_offset){
+					below=false;
+				}
+			}
+		}
+
+		if(below) return vertex;
 	}
 
-	return result;
+	std::cout << "Error - No correct offset " << std::endl;
+	return fail;
 }
 
 /*
@@ -809,8 +821,9 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 					//std::cout << "normal of Me:\n" << normal << std::endl;
 					if(normal!=vector_t<Number>::Zero(vertices[0].dimension())) normal.normalize();
 					uniteVector += normal;//normal.normal(); // add all these candidates
-					if(uniteVector!=vector_t<Number>::Zero(vertices[0].dimension())) uniteVector.normalize();
 				}
+
+				if(uniteVector!=vector_t<Number>::Zero(vertices[0].dimension())) uniteVector.normalize();
 				//std::cout << "uniteVector of Me:\n" << uniteVector << std::endl;
 
 
