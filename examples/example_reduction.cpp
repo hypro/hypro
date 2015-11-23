@@ -25,7 +25,6 @@ int main(int argc, char const *argv[])
 
   // HPolytopes Examples
   std::vector<vector_t<Number>> directions;
-  unsigned dimension = 3; // set dimension for test object here
 
   // 2D
 	HPolytope<Number> nico; //NikolausHaus
@@ -160,19 +159,37 @@ int main(int argc, char const *argv[])
 
   HPolytope<Number> confuse_cube;
   confuse_cube.insert(Hyperplane<Number>({ 0,  0,  0, -1}, 1));
-  confuse_cube.insert(Hyperplane<Number>({ 0,  0,  0,  1.1}, 1));
-  confuse_cube.insert(Hyperplane<Number>({ 0,  0, -1.2,  0}, 1));
+  confuse_cube.insert(Hyperplane<Number>({ 0,  0,  0,  1}, 1));
+  confuse_cube.insert(Hyperplane<Number>({ 0,  0, -1,  0}, 1));
   confuse_cube.insert(Hyperplane<Number>({ 0,  0,  1,  0}, 1));
-  confuse_cube.insert(Hyperplane<Number>({-0.9,  0,  0,  0}, 1));
+  confuse_cube.insert(Hyperplane<Number>({-1,  0,  0,  0}, 1));
   confuse_cube.insert(Hyperplane<Number>({ 1,  0,  0,  0}, 1));
-  confuse_cube.insert(Hyperplane<Number>({ 0, -1.2,  0,  0}, 1));
-  confuse_cube.insert(Hyperplane<Number>({ 0,  0.8,  0,  0}, 1));
+  confuse_cube.insert(Hyperplane<Number>({ 0, -1,  0,  0}, 1));
+  confuse_cube.insert(Hyperplane<Number>({ 0,  1,  0,  0}, 1));
 
   vector_t<double> directed4d_1 = vector_t<double>(4);
   directed4d_1(0) = 1; directed4d_1(1) = 1.1; directed4d_1(2) = 0.9; directed4d_1(3) = 1.5;
 
+  // 5D
+
+  HPolytope<Number> confuse_cube5;
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0, -1}, 1));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0,  1}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0, -1,  0}, 1));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  1,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0, -1,  0,  0}, 1));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  1,  0,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({-1,  0,  0,  0,  0}, 1));
+  confuse_cube5.insert(Hyperplane<Number>({ 1,  0,  0,  0,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0, -1,  0,  0,  0}, 1));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  1,  0,  0,  0}, 2));
+
+  vector_t<double> directed5d_1 = vector_t<double>(5);
+  directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
+
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = td_example;
+  HPolytope<Number> reduce_from = confuse_cube5;
+  unsigned dimension = reduce_from.dimension(); // set dimension for test object here
 
   HPolytope<Number> reduction_drop_normal;
   HPolytope<Number> reduction_drop_smooth;
@@ -191,7 +208,7 @@ int main(int argc, char const *argv[])
   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
 
   // Reducing
-  std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (green)" << std::endl << std::endl;
+  std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (red)" << std::endl << std::endl;
 
   //unsigned facet =1; // reduce one specific facet
   for(unsigned facet=0; facet < reduce_from.size(); facet++){ // reduce all facets
@@ -208,11 +225,13 @@ int main(int argc, char const *argv[])
 
 
   // reduce unite - take care of correct neighbor-relation
-  std::cout << "\nUNITE\n------------------------------------\nwith unite_normal (orange), unite_smooth (violett), unite_cut (turquoise)" << std::endl << std::endl;
-  //unsigned facet1 = 5, facet2 =7;
+  std::cout << "\nUNITE\n------------------------------------\nwith unite_normal (green), unite_smooth (maygreen), unite_cut (turquoise)" << std::endl << std::endl;
+  unsigned facet1 = 6, facet2 =8;
 
-  for(unsigned facet1=0; facet1 < reduce_from.size()-1; facet1++){
-    for(unsigned facet2=facet1+1; facet2 < reduce_from.size(); facet2++){
+  //for(unsigned facet1=0; facet1 < reduce_from.size()-1; facet1++){
+  //  for(unsigned facet2=facet1+1; facet2 < reduce_from.size(); facet2++){
+      //if(facet2==7 && facet1==6) break;
+
       std::cout << "(facet" << facet2 << ", facet" << facet1 << ")" << std::endl;
 
       reduction_unite_normal = reduce_from.reduce_nd(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE);
@@ -223,10 +242,10 @@ int main(int argc, char const *argv[])
       std::cout << "volume of unite_cut:    +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
 
       std::cout << std::endl;
-    }
-  }
+  //  }
+  //}
 
-  std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (maygreen), directed_big (lila)" << std::endl << std::endl;
+  std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila)" << std::endl << std::endl;
 
   //2D
   if(dimension==2){
@@ -245,6 +264,11 @@ int main(int argc, char const *argv[])
     directions.push_back(directed4d_1);
   }
 
+  //5D
+  else if(dimension==5){
+    directions.push_back(directed5d_1);
+  }
+
 
   reduction_directed_small = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
   std::cout << "volume of directed_small:   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_small)-prevVolume)/prevVolume)*100 << "%" << std::endl;
@@ -256,10 +280,10 @@ int main(int argc, char const *argv[])
 
   // Plotting
   unsigned rdn, rds, run, rus, ruc, rdis, rdib;
-  //3D
-  if(dimension==3){
+  //3D ... nD
+  if(dimension>2){
     // Prepare plotting - Reducing to 2d
-    unsigned i=0,j=1;
+    unsigned i=1,j=2;
     std::vector<Point<Number>> reduce_from_vertices_2d,
                               reduction_drop_normal_vertices_2d,
                               reduction_drop_smooth_vertices_2d,
@@ -333,12 +357,12 @@ int main(int argc, char const *argv[])
   }
 
   plotter.setObjectColor(rdn, colors[red]);
-  plotter.setObjectColor(rds, colors[green]);
-  plotter.setObjectColor(run, colors[orange]);
-  plotter.setObjectColor(rus, colors[violett]);
+  plotter.setObjectColor(rds, colors[red]);
+  plotter.setObjectColor(run, colors[green]);
+  plotter.setObjectColor(rus, colors[maygreen]);
   plotter.setObjectColor(ruc, colors[turquoise]);
   //plotter.setObjectColor(runo, colors[bordeaux]);
-  plotter.setObjectColor(rdis, colors[maygreen]);
+  plotter.setObjectColor(rdis, colors[violett]);
   plotter.setObjectColor(rdib, colors[lila]);
 
 	plotter.plot2d();
