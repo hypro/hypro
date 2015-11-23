@@ -53,9 +53,9 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 		} else if ( size < mDimension + 1 ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
 
-			matrix_t<Number> constraints(vertices.size(), vertices.begin()->rows());
+			matrix_t<Number> constraints(vertices.size(), vertices.begin()->rawCoordinates().rows());
 			for(unsigned pos = 0; pos < vertices.size(); ++pos) {
-				constraints.row(pos) = vertices.at(pos).transpose();
+				constraints.row(pos) = vertices.at(pos).rawCoordinates().transpose();
 			}
 			vector_t<Number> normal = constraints.fullPivLu().kernel();
 
