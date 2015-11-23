@@ -123,7 +123,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
  */
 template <typename Number>
 static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points, const std::vector<std::shared_ptr<Facet<Number>>>& facets, std::vector<Point<Number>>& unassignedPoints, std::vector<Point<Number>>& assignedPoints ) {
-	unassignedPoints = points;
+	//unassignedPoints = points;
 	std::vector<Point<Number>> pointsInFacets;
 
 	for (std::shared_ptr<Facet<Number>> facet : facets) {
@@ -133,11 +133,13 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
-	for (unsigned i=unassignedPoints.size(); i > 0; i--) {
+	for (unsigned i=0; i<points.size(); ++i) {
 		for (unsigned j=0; j < pointsInFacets.size(); j++) {
-			if (unassignedPoints.at(i-1) == pointsInFacets.at(j)) {
-				assignedPoints.push_back( unassignedPoints.at( i-1 ) );
-				unassignedPoints.erase( unassignedPoints.begin() + i-1 );
+			if(points.at(i) == pointsInFacets.at(j)) {
+				assignedPoints.push_back( points.at( i ) );
+			}
+			else {
+				unassignedPoints.push_back( points.at( i ) );
 			}
 		}
 	}
@@ -479,6 +481,8 @@ template <typename Number>
 static std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>>
 convexHull( const std::vector<Point<Number>>& pts ) {
 
+	std::cout << "Start convex Hull " << std::endl;
+
 	// initialization
 	std::set<Point<Number>> pt;
 	for ( auto& p : pts ) {
@@ -495,7 +499,12 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 		// init facets and points
 		initConvexHull(points, facets);
+		std::cout << "Init finished " << std::endl;
+
 		pointsNotContainedInFacets(points, facets, unassignedPoints, assignedPoints); // Determine points which belong to a facet
+
+		std::cout << "Points assigned " << std::endl;
+
 		for (auto facet: facets) {
 			for (auto point: unassignedPoints) {
 				if (facet->isAbove(point)) { // isAbove
@@ -504,14 +513,19 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			}
 		}
 
+		std::cout << "add Points to Outsideset " << std::endl;
+
+
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet); // extract the facets to be examined
 
+		std::cout << "removed border facets " << std::endl;
+
 		/*
-		* ------------------------------------------------------------------------------
-		* MAIN BODY
-		* ------------------------------------------------------------------------------
-		*/
+		 * ------------------------------------------------------------------------------
+		 * MAIN BODY
+		 * ------------------------------------------------------------------------------
+		 */
 
 		while (!workingSet.empty()) {
 
