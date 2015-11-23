@@ -76,7 +76,7 @@ Polytope<Number>::Polytope( const matrix_t<Number> &A, const vector_t<Number> &b
 			// (A(rowIndex,columIndex)*fReach_DENOMINATOR)
 			// << std::endl;
 			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
-									 double( A( rowIndex, columIndex ) * fReach_DENOMINATOR ) );
+									 double( A( rowIndex, columIndex ) * carl::FLOAT_T<double>(fReach_DENOMINATOR) ) );
 			// polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex),
 			// A(rowIndex,columIndex).toDouble());
 			// std::cout <<
@@ -86,7 +86,7 @@ Polytope<Number>::Polytope( const matrix_t<Number> &A, const vector_t<Number> &b
 		}
 		// std::cout << "Vector Coefficient: " <<
 		// -(b(rowIndex,0)*fReach_DENOMINATOR) << std::endl;
-		polynom.set_inhomogeneous_term( -double( b( rowIndex, 0 ) * fReach_DENOMINATOR ) );
+		polynom.set_inhomogeneous_term( -double( b( rowIndex, 0 ) * carl::FLOAT_T<double>(fReach_DENOMINATOR) ) );
 		// polynom.set_inhomogeneous_term(-b(rowIndex,0).toDouble());
 		Parma_Polyhedra_Library::Constraint constraint;
 		constraint = polynom <= 0;
