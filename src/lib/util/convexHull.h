@@ -26,7 +26,7 @@ static unsigned dimensionCheck( const std::vector<Point<Number>>& points ) {
 		}
 	}
 
-	return matrix.fullPivLu().rank();
+	return points.at(0).dimension(); //matrix.fullPivLu().rank();
 }
 
 template <typename Number>
@@ -371,7 +371,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets(std::vector<st
 				}
 
 				// is neighbor a relevant facet?
-				if (carl::AlmostEqual2sComplement(newFacet->getDist(point1)+1, (Number) 1)) { // TODO compare with 0 and not with +1
+				if (carl::AlmostEqual2sComplement(newFacet->getDist(point1)+(Number) 1, (Number) 1)) { // TODO compare with 0 and not with +1
 					newFacet->addPoint( point1 ); // update newFacet - point1 and neighbors of neighbor
 					for (auto neighborOfneighbor: neighbor->rNeighbors()) {
 						if (!newFacet->isNeighbor(neighborOfneighbor)) newFacet->addNeighbor(neighborOfneighbor);

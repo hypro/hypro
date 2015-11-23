@@ -640,14 +640,13 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<vector_t<Number>> 
 }
 
 /*
- * Get the closest vertex for a given vector
+ * Get the correct vertex to determine a hyperplane which includes all other facets
  * @input vertices, vector
  * @return Point<Number> vertex for the vector
  */
 template <typename Number>
 Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const{
-	Point<Number> fail = vertices[0]; // init for the case that all SP are 0... if
-
+	// try each vertex
 	for(Point<Number> vertex: vertices){
 		bool below=true;
 		double vector_offset=0;
@@ -656,7 +655,7 @@ Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std
 		for(unsigned i=0; i<vector.size(); i++){
 			vector_offset+=vector[i]*vertex.coordinate(i);
 		}
-
+		// check for each vertex if it lies below the hyperplane
 		for(Point<Number> vertex_test: vertices){
 			double vector_test_offset=0;
 
@@ -665,16 +664,19 @@ Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std
 					vector_test_offset+=vector[i]*vertex_test.coordinate(i);
 				}
 				if(vector_test_offset>vector_offset){
-					below=false;
+					below=false; // vertex lies above
+					break;
 				}
 			}
 		}
 
-		if(below) return vertex;
+		if(below){
+			return vertex;
+		}
 	}
 
 	std::cout << "Error - No correct offset " << std::endl;
-	return fail;
+	return vertices[0];
 }
 
 /*
@@ -875,7 +877,24 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 				break;
 	}
 
-	if(res.isBounded(evaluations)) return res;
+	if(res.isBounded(evaluations)){
+
+		//check if all vertices are inside the new polytope
+		for(unsigned i=0; i<res.mHPlanes.size(); ++i) {
+			for(Point<Number> vertex: vertices){
+				double value=0;
+				for(unsigned j=0; j<res.mHPlanes.at(i).normal().size(); j++){
+					value+=res.mHPlanes.at(i).normal()[j]*vertex.coordinate(j);
+				}
+				if(value>res.mHPlanes.at(i).offset()){
+					std::cout << "Vertex found which is not inside the 'overapproximation'" << std::endl;
+					return *this;
+				}
+			}
+		}
+
+		return res;
+	}
 
 	return *this;
 }
