@@ -14,11 +14,6 @@ HPolytope<Number>::HPolytope( const HPolytope &orig )
 }
 
 template <typename Number>
-HPolytope<Number>::HPolytope( const Hyperplane<Number> &plane )
-	: mHPlanes( {plane} ), mFanSet( false ), mFan(), mDimension( plane.dimension() ), mInitialized( false ) {
-}
-
-template <typename Number>
 HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
 	if ( !planes.empty() ) {
@@ -58,20 +53,15 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 		} else if ( size < mDimension + 1 ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
 
-			// Recursive projection:
-			// find planes which define the largest dimension -> solve for d
+			matrix_t<Number> constraints(vertices.size(), vertices.begin()->rows());
+			for(unsigned pos = 0; pos < vertices.size(); ++pos) {
+				constraints.row(pos) = vertices.at(pos).transpose();
+			}
+			vector_t<Number> normal = constraints.fullPivLu().kernel();
 
-			// project to one dimension less (reduce to d-1)
-			// define lambda function reducing a given point by one dimension (the last)
-			//auto reduce = [=](Point<Number> orig){ return Point<Number>(orig.rawCoordinates().conservativeResize(orig.rawCoordinates().rows()-1, Eigen::NoChange_t)); };
-
-			//std::vector<Point<Number>> reducedVertices;
-			//for(const auto& vertex : vertices){
-			//	reducedVertices.push_back(reduce(vertex));
-			//}
-
-			// if proper definition possible, return this
-			// else start over (we can use the constructor)
+			// post-computation check, if the normal vector is correct
+			for( const auto& vector : vertices)
+				assert(vector.dot(normal) == 0);
 
 			assert( false );
 		} else {

@@ -53,7 +53,6 @@ public:
   public:
 	HPolytope();
 	HPolytope( const HPolytope& orig );
-	HPolytope( const Hyperplane<Number>& plane );
 	HPolytope( const HyperplaneVector& planes );
 	HPolytope( const matrix_t<Number>& A, const vector_t<Number>& b );
 	HPolytope( const matrix_t<Number>& A );
