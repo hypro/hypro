@@ -22,7 +22,7 @@ int* createArray(int firstElem, int* arr, size_t size) {
 }
 
 int main(void) {
-
+	/*
     //typedef
     typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::nanoseconds timeunit;
@@ -62,4 +62,14 @@ int main(void) {
         assert(p1 != p2);
     }
     return 0;
+    */
+
+    auto reduce = [=](Point<Number> orig) -> Point<Number> { return Point<Number>(orig.rawCoordinates().conservativeResize(orig.rawCoordinates().rows()-1, Eigen::NoChange_t)) };
+
+	hypro::Point<Number> test({1,2,3,4});
+	std::cout << test << std::endl;
+	test = reduce(test);
+	std::cout << test << std::endl;
+
+	return 0;
 }

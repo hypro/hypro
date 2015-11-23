@@ -112,6 +112,7 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if(lhs( dim )==0 || rhs( dim )==0){
+			std::cout << "ADD ONE." << std::endl;
 			if ( !carl::AlmostEqual2sComplement( lhs( dim )+ (Number) 1, rhs( dim )+ (Number) 1, TOLLERANCE_ULPS ) ) { // Special case of carl::AlmostEqual2sComplement
 				return false;
 			}
