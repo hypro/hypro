@@ -75,9 +75,11 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 			assert( false );
 		} else {
+			std::cout << "Conv Hull" << std::endl;
 			// TODO: Chose suitable convex hull algorithm
 			typename std::vector<Point<Number>> points = alien.vertices();
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+			std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
 				mHPlanes.push_back( facet->hyperplane() );
 			}
