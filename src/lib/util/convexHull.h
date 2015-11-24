@@ -123,7 +123,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
  */
 template <typename Number>
 static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points, const std::vector<std::shared_ptr<Facet<Number>>>& facets, std::vector<Point<Number>>& unassignedPoints, std::vector<Point<Number>>& assignedPoints ) {
-	//unassignedPoints = points;
+	unassignedPoints.clear();
 	std::vector<Point<Number>> pointsInFacets;
 
 	for (std::shared_ptr<Facet<Number>> facet : facets) {
@@ -133,15 +133,13 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
-	for (unsigned i=0; i<points.size(); ++i) {
-		for (unsigned j=0; j < pointsInFacets.size(); j++) {
-			if(points.at(i) == pointsInFacets.at(j)) {
-				assignedPoints.push_back( points.at( i ) );
+	for (Point<Number> point: points) {
+			if(std::find(pointsInFacets.begin(), pointsInFacets.end(), point)!=pointsInFacets.end()) {
+				assignedPoints.push_back( point );
 			}
 			else {
-				unassignedPoints.push_back( points.at( i ) );
+				unassignedPoints.push_back( point );
 			}
-		}
 	}
 	// Stefan: removables holds the indices of the points in points, which are contained in one of the facets.
 }
@@ -481,8 +479,6 @@ template <typename Number>
 static std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>>
 convexHull( const std::vector<Point<Number>>& pts ) {
 
-	std::cout << "Start convex Hull " << std::endl;
-
 	// initialization
 	std::set<Point<Number>> pt;
 	for ( auto& p : pts ) {
@@ -499,11 +495,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 		// init facets and points
 		initConvexHull(points, facets);
-		std::cout << "Init finished " << std::endl;
-
 		pointsNotContainedInFacets(points, facets, unassignedPoints, assignedPoints); // Determine points which belong to a facet
-
-		std::cout << "Points assigned " << std::endl;
 
 		for (auto facet: facets) {
 			for (auto point: unassignedPoints) {
@@ -513,13 +505,8 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			}
 		}
 
-		std::cout << "add Points to Outsideset " << std::endl;
-
-
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet); // extract the facets to be examined
-
-		std::cout << "removed border facets " << std::endl;
 
 		/*
 		 * ------------------------------------------------------------------------------
@@ -528,7 +515,6 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		 */
 
 		while (!workingSet.empty()) {
-
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
 
@@ -576,16 +562,21 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				for (auto ridge: getRidges( facet ) ) {
 					for (auto neighbor: ridge.neighbors() ) {
 						if (std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor) == currentVisibleFacets.end()) {  // we have a neighbor of this ridge, which is not visible -> horizon
+
 							// ridge, create new facet
 							Point<Number> insidePoint = findInsidePoint(ridge, facet);
+
 							std::shared_ptr<Facet<Number>> newFacet = std::shared_ptr<Facet<Number>>(new Facet<Number>(ridge.vertices(), currentPoint, insidePoint));
+
 							newFacet->addNeighbor(neighbor);
 							neighbor->addNeighbor(newFacet);
+
 							newFacets.push_back(newFacet);
 						}
 					}
 				}
 			}
+
 			// at this point we created all new facets from any horizon ridge to the current considered point
 			// (currentPoint). We need to set up the neighborhood
 			// relations in between the new facets.
