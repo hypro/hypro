@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 		0,-1,
 	distances2 << 1,1,0;
 
-	std::shared_ptr<SupportFunction<double>> poly2 = SupportFunction<double>::create(SF_TYPE::POLY, matrix2, distances2);
+	std::shared_ptr<SupportFunctionContent<double>> poly2 = SupportFunctionContent<double>::create(SF_TYPE::POLY, matrix2, distances2);
 
 	hypro::Box<double> res;
 	convert(poly2, res);

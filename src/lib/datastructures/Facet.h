@@ -180,7 +180,7 @@ class Facet {
 			// std::cout << _insidePoint << "  " << mScalar << std::endl;
 			if ( mNormal.dot( _insidePoint.rawCoordinates() ) > mScalar ) {
 				mNormal *= -1;
-				mScalar *= -1;
+				mScalar *= (Number) -1;
 			}
 			mHyperplane = Hyperplane<Number>( mNormal, mScalar );
 		}
@@ -198,13 +198,13 @@ class Facet {
 			bool changed = false;
 			if ( mNormal.dot( insidePoint1.rawCoordinates() ) > mScalar ) {
 				mNormal *= -1;
-				mScalar *= -1;
+				mScalar *= (Number) -1;
 				changed = true;
 			}
 
 			if ( ( mNormal.dot( insidePoint2.rawCoordinates() ) > mScalar ) && ( !changed ) ) {
 				mNormal *= -1;
-				mScalar *= -1;
+				mScalar *= (Number) -1;
 			}
 
 			mHyperplane = Hyperplane<Number>( mNormal, mScalar );

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
+#include "../../lib/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../../lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
@@ -50,6 +51,12 @@ TYPED_TEST(HPolytopeTest, Constructor)
 
 	HPolytope<TypeParam> copyAssignment = HPolytope<TypeParam>(anotherHPolytope);
 
+	//VPolytope<TypeParam> alien;
+	//alien.insert(Point<TypeParam>({5,3,2}));
+	//alien.insert(Point<TypeParam>({7,5,-1}));
+//
+//HPolytope<TypeParam> alienPolytope(alien);
+
 	SUCCEED();
 }
 
@@ -99,14 +106,21 @@ TYPED_TEST(HPolytopeTest, Corners)
 		EXPECT_TRUE(hpt2.isExtremePoint(corner));
 	}
 
+	std::cout << "Ping." << std::endl;
+
 	// test extremepoints
 	hypro::vector_t<TypeParam> p1(2);
 	p1(0) = 2;
 	p1(1) = 0;
 	EXPECT_FALSE(hpt1.isExtremePoint(p1));
 
+	std::cout << "Ping." << std::endl;
+
 	// test overapproximation
 	HPolytope<TypeParam> reproduction(corners);
+
+	std::cout << "Ping." << std::endl;
+
 	EXPECT_TRUE(hpt2.contains(reproduction));
 }
 

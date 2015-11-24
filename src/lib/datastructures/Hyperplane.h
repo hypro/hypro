@@ -73,9 +73,11 @@ class Hyperplane {
     vector_t<Number> normal() { return mNormal; };
     Number scalar() { return mScalar; };
     size_t hash() {
+
         //TODO review line 79
         /*
         if (this->mHash = 0) {
+        if (this->mHash == 0) {
             this->mHash = std::hash<hypro::Hyperplane<Number>>(*this);
         } else {
             return mHash;
@@ -115,7 +117,7 @@ template <typename Number>
 bool operator<( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
 	return ( lhs.normal() < rhs.normal() || ( lhs.normal() == rhs.normal() && lhs.offset() < rhs.offset() ) );
 }
-     
+
     #ifdef EXTERNALIZE_CLASSES
     extern template class Hyperplane<double>;
 

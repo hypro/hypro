@@ -40,7 +40,7 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 
 	/* create glpk problem */
 	lp = glp_create_prob();
-	glp_set_prob_name( lp, "supportfunction" );
+	glp_set_prob_name( lp, "SupportFunctionContent" );
 	glp_set_obj_dir( lp, GLP_MAX );
 
 #ifndef PPOLYTOPESUPPORTFUNCTION_VERBOSE

@@ -51,7 +51,7 @@ struct evaluationResult {
 	 */
 };
 
-// forwardDeclarations for further supportFunction types
+// forwardDeclarations for further SupportFunctionContent types
 class SummationSupportfunction;
 class MultiplicationSupportfunction;
 class ScalarMultiplicationSupportfunction;
@@ -59,7 +59,7 @@ class ScalarMultiplicationSupportfunction;
 /*
 * This is the super class for all support function objects.
 */
-class SupportFunction {
+class SupportFunctionContent {
   private:
 	SupportFunctionType support_function_type;
 
@@ -69,7 +69,7 @@ class SupportFunction {
 	/*
 	* The constructor can only be called from sub-classes (makes the class abstract)
 	*/
-	SupportFunction( SupportFunctionType type, artificialDirections* aD ) {
+	SupportFunctionContent( SupportFunctionType type, artificialDirections* aD ) {
 		this->support_function_type = type;
 		this->aD = aD;
 	}
@@ -79,7 +79,7 @@ class SupportFunction {
 	*/
 	virtual evaluationResult specificEvaluation( matrix_t<double> l ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
-		std::cout << "SupportFunction:evaluate: THIS SHOULD NEVER BE CALLED" << '\n';
+		std::cout << "SupportFunctionContent:evaluate: THIS SHOULD NEVER BE CALLED" << '\n';
 #endif
 		evaluationResult result;
 		result.supportValue = 0;
@@ -102,7 +102,7 @@ bool artificialDirection = (*l)(l->rows()-1,0) != 0;
 
 if( artificialDirection && aD != 0)  // check if l shall be evaluated or is an artificial direction
 {
-   std::cout << "SupportFunction.evaluate(l): l aritifical:"<< BL << *l << BL;
+   std::cout << "SupportFunctionContent.evaluate(l): l aritifical:"<< BL << *l << BL;
    evaluationResult result;
    if((*l)(l->rows()-1,0) > 0 )
    {
@@ -128,7 +128,7 @@ else
 	*/
 	void multiEvaluate( std::vector<matrix_t<double>>* L, matrix_t<double>* result ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
-		std::cout << "SupportFunction:multiEvaluate1: evaluation of the support function in all directions L" << '\n';
+		std::cout << "SupportFunctionContent:multiEvaluate1: evaluation of the support function in all directions L" << '\n';
 #endif
 		for ( unsigned int i = 0; i < L->size(); i++ ) {
 			evaluationResult res = this->evaluate( &L->at( i ) );
@@ -141,7 +141,7 @@ else
 	*/
 	void multiEvaluate( std::vector<matrix_t<double>>* L, std::vector<double>* result ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
-		std::cout << "SupportFunction:multiEvaluate2: evaluation of the support function in all directions L" << '\n';
+		std::cout << "SupportFunctionContent:multiEvaluate2: evaluation of the support function in all directions L" << '\n';
 		std::cout << "L: " << BL;
 		printDirectionList( *L );
 #endif
@@ -156,7 +156,7 @@ else
 	*/
 	void multiEvaluate( std::vector<matrix_t<double>>* L, double* result ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
-		std::cout << "SupportFunction:multiEvaluate3: evaluation of the support function in all directions L" << '\n';
+		std::cout << "SupportFunctionContent:multiEvaluate3: evaluation of the support function in all directions L" << '\n';
 #endif
 
 		for ( unsigned int i = 0; i < L->size(); i++ ) {
@@ -170,10 +170,10 @@ else
 	*/
 	SupportFunctionType getSupportFunctionType() { return support_function_type; }
 
-	virtual ~SupportFunction() {}
+	virtual ~SupportFunctionContent() {}
 
 	//
-	SummationSupportfunction* minowskisum( SupportFunction* lhs );
+	SummationSupportfunction* minowskisum( SupportFunctionContent* lhs );
 	MultiplicationSupportfunction* multiply( matrix_t<double> lhs );
 	ScalarMultiplicationSupportfunction* multiply( double lhs );
 };
@@ -181,25 +181,25 @@ else
 /*
 * Class representing the result of the minowski sum of two support functions
 */
-class SummationSupportfunction : public SupportFunction {
+class SummationSupportfunction : public SupportFunctionContent {
   private:
-	SupportFunction* fctA;
-	SupportFunction* fctB;
+	SupportFunctionContent* fctA;
+	SupportFunctionContent* fctB;
 
   protected:
 	evaluationResult specificEvaluation( matrix_t<double> l );
 
   public:
-	SummationSupportfunction( SupportFunction* fctA, SupportFunction* fctB );
+	SummationSupportfunction( SupportFunctionContent* fctA, SupportFunctionContent* fctB );
 };
 
 /*
 * Class representing the result of a scalar multiplication of a support function
 */
-class ScalarMultiplicationSupportfunction : public SupportFunction {
+class ScalarMultiplicationSupportfunction : public SupportFunctionContent {
   private:
 	double factor;
-	SupportFunction* fct;
+	SupportFunctionContent* fct;
 
   protected:
 	evaluationResult specificEvaluation( matrix_t<double> l ) {
@@ -215,8 +215,8 @@ class ScalarMultiplicationSupportfunction : public SupportFunction {
 	};
 
   public:
-	ScalarMultiplicationSupportfunction( double factor, SupportFunction* fct, SupportFunctionType type )
-		: SupportFunction( type, fct->getAD() ) {
+	ScalarMultiplicationSupportfunction( double factor, SupportFunctionContent* fct, SupportFunctionType type )
+		: SupportFunctionContent( type, fct->getAD() ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 		std::cout << "ScalarMultiplicationSupportfunction: constructor" << '\n';
@@ -228,7 +228,7 @@ class ScalarMultiplicationSupportfunction : public SupportFunction {
 };
 
 // overload the + Operator for two support function pointers
-SummationSupportfunction* SupportFunction::minowskisum( SupportFunction* lhs ) {
+SummationSupportfunction* SupportFunctionContent::minowskisum( SupportFunctionContent* lhs ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 	std::cout << "Minowski Sum +: " << '\n';
@@ -239,7 +239,7 @@ SummationSupportfunction* SupportFunction::minowskisum( SupportFunction* lhs ) {
 }
 
 // overload the * Operator for e.g. delta*U (creates ScalarMultiplicationSupportfunction)
-ScalarMultiplicationSupportfunction* SupportFunction::multiply( double lhs ) {
+ScalarMultiplicationSupportfunction* SupportFunctionContent::multiply( double lhs ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 	std::cout << "Multiplication *: " << lhs << " with support function (pointer)" << '\n';
@@ -255,10 +255,10 @@ ScalarMultiplicationSupportfunction* SupportFunction::multiply( double lhs ) {
 * This class is used to represent the result of the multiplication between a geometric figure represented by a
 * support function and a matrix
 */
-class MultiplicationSupportfunction : public SupportFunction {
+class MultiplicationSupportfunction : public SupportFunctionContent {
   private:
 	matrix_t<double> factor;
-	SupportFunction* fct;
+	SupportFunctionContent* fct;
 
   protected:
 	evaluationResult specificEvaluation( matrix_t<double> l ) {
@@ -281,8 +281,8 @@ class MultiplicationSupportfunction : public SupportFunction {
 	}
 
   public:
-	MultiplicationSupportfunction( matrix_t<double> factor, SupportFunction* fct, SupportFunctionType type )
-		: SupportFunction( type, fct->getAD() ) {
+	MultiplicationSupportfunction( matrix_t<double> factor, SupportFunctionContent* fct, SupportFunctionType type )
+		: SupportFunctionContent( type, fct->getAD() ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 		std::cout << "MultiplicationSupportfunction: constructor" << '\n';
@@ -294,7 +294,7 @@ class MultiplicationSupportfunction : public SupportFunction {
 };
 
 // overload the * Operator for e.g. B*U (creates MultiplicationSupportfunction)
-MultiplicationSupportfunction* SupportFunction::multiply( matrix_t<double> lhs ) {
+MultiplicationSupportfunction* SupportFunctionContent::multiply( matrix_t<double> lhs ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 	std::cout << "Multiplication *: " << lhs << " with support function (pointer)" << '\n';
@@ -306,8 +306,8 @@ MultiplicationSupportfunction* SupportFunction::multiply( matrix_t<double> lhs )
 	return result;
 }
 
-SummationSupportfunction::SummationSupportfunction( SupportFunction* fctA, SupportFunction* fctB )
-	: SupportFunction( SupportFunctionType::MinowskiSum_Type, fctA->getAD() ) {
+SummationSupportfunction::SummationSupportfunction( SupportFunctionContent* fctA, SupportFunctionContent* fctB )
+	: SupportFunctionContent( SupportFunctionType::MinowskiSum_Type, fctA->getAD() ) {
 #ifdef SUPPORTFUNCTION_VERBOSE
 #ifdef MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
 	std::cout << "SummationSupportfunction: constructor" << '\n';
@@ -334,7 +334,7 @@ evaluationResult SummationSupportfunction::specificEvaluation( matrix_t<double> 
 /*
 * Represents a support function without boundaries (evaluationable in constant time)
 */
-class InfinitySupportFunction : public SupportFunction {
+class InfinitySupportFunction : public SupportFunctionContent {
   private:
 	evaluationResult result;
 
@@ -360,7 +360,7 @@ class InfinitySupportFunction : public SupportFunction {
 	};
 
   public:
-	InfinitySupportFunction( artificialDirections* aD ) : SupportFunction( SupportFunctionType::Infinity_Type, aD ) {
+	InfinitySupportFunction( artificialDirections* aD ) : SupportFunctionContent( SupportFunctionType::Infinity_Type, aD ) {
 		result.supportValue = INFINITY;
 		result.errorCode = 0;
 	}
@@ -369,7 +369,7 @@ class InfinitySupportFunction : public SupportFunction {
 /*
 * Represents a support function describing the set zero (arbitrary dimensional)
 */
-class ZeroSupportFunction : public SupportFunction {
+class ZeroSupportFunction : public SupportFunctionContent {
   private:
 	evaluationResult result;
 	unsigned int dimensionality;
@@ -379,7 +379,7 @@ class ZeroSupportFunction : public SupportFunction {
 
   public:
 	ZeroSupportFunction( unsigned int dimensionality, artificialDirections* aD )
-		: SupportFunction( SupportFunctionType::Infinity_Type, aD ) {
+		: SupportFunctionContent( SupportFunctionType::Infinity_Type, aD ) {
 		result.supportValue = 0;
 		result.errorCode = 0;
 		this->dimensionality = dimensionality;

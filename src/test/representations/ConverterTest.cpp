@@ -98,11 +98,11 @@ protected:
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	std::shared_ptr<hypro::SupportFunction<TypeParam>> supportFunction = hypro::SupportFunction<TypeParam>::create(SF_TYPE::POLY, this->matrix, this->distances);
+	std::shared_ptr<hypro::SupportFunctionContent<TypeParam>> SupportFunctionContent = hypro::SupportFunctionContent<TypeParam>::create(SF_TYPE::POLY, this->matrix, this->distances);
 	hypro::Box<TypeParam> result;
 	convert(this->box, result);
 	convert(this->polytope, result);
-	convert(supportFunction, result);
+	convert(SupportFunctionContent, result);
 	convert(this->vpolytope, result);
 	convert(this->zonotope, result);
 	SUCCEED();
@@ -116,7 +116,7 @@ TYPED_TEST(ConverterTest, toPolytope)
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
-        std::shared_ptr<hypro::SupportFunction<TypeParam>> result;
+        std::shared_ptr<hypro::SupportFunctionContent<TypeParam>> result;
         convert(this->hpolytope, result);
         //std::cout << " HPolytope: " << std::endl;
         //result->print();
