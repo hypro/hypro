@@ -55,7 +55,7 @@ TYPED_TEST(HPolytopeTest, Constructor)
 	//alien.insert(Point<TypeParam>({5,3,2}));
 	//alien.insert(Point<TypeParam>({7,5,-1}));
 //
-//HPolytope<TypeParam> alienPolytope(alien);
+	//HPolytope<TypeParam> alienPolytope(alien);
 
 	SUCCEED();
 }
