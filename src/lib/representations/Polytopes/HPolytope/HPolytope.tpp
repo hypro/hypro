@@ -52,7 +52,6 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 			// Return Box constraints.
 		} else if ( size < mDimension + 1 ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
-			std::size_t minimalRank = vertices.size() - 1;
 
 			// find the dimensions in which the object is defined -> determine rank
 			matrix_t<Number> vertexMatrix(vertices.size()-1, vertices.begin()->dimension());
