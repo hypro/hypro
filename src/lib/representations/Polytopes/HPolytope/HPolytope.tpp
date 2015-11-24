@@ -53,41 +53,33 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 		} else if ( size < mDimension + 1 ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
 
-			// find the dimensions in which the object is defined -> determine rank
-			matrix_t<Number> vertexMatrix(vertices.size()-1, vertices.begin()->dimension());
-			assert(vertexMatrix.cols() > vertexMatrix.rows());
-			matrix_t<Number> root = vertices.at(0).rawCoordinates().transpose();
-			for(unsigned rowIndex = vertexMatrix.rows()-1; rowIndex > 0; --rowIndex)
-				vertexMatrix.row(rowIndex) = vertices.at(rowIndex).rawCoordinates().transpose() - root;
+			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
 
-			std::cout << vertexMatrix << std::endl;
+			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
+			std::size_t dim = vertices.size();
+			polytope::dPermutator permutator(mDimension, dim);
 
-			assert(false);
+			std::vector<unsigned> permutation;
+			while(!permutator.end()) {
+				permutation = permutator();
 
-			// Gauss:
-			std::set<unsigned> usedRows;
-			for(unsigned colIndex = 0; colIndex < vertexMatrix.rows(); ++colIndex)
-			{
-				//std::cout << "Eliminate for column " << colIndex << std::endl;
-				unsigned rowIndex = 0;
-				// find first row suitable for elimination
-				while(rowIndex < vertexMatrix.rows() && (usedRows.find(rowIndex) != usedRows.end() || vertexMatrix(rowIndex,colIndex) == 0)) {
-					++rowIndex;
+				// project to chosen dimensions
+				std::vector<Point<Number>> reducedVertices;
+				reducedVertices.reserve(dim);
+				for(const auto& vertex : vertices) {
+					vector_t<Number> reductor = vector_t<Number>(dim);
+					for(unsigned d = 0; d < dim; ++d)
+						reductor(d) = vertex.at(d);
+
+					reducedVertices.push_back(Point<Number>(std::move(reductor)));
 				}
 
-				//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
-				if(rowIndex < vertexMatrix.rows() && vertexMatrix(rowIndex,colIndex) != 0){
-					usedRows.insert(rowIndex);
-					//normvertexMatrixlize
-					vertexMatrix.row(rowIndex) = vertexMatrix.row(rowIndex)/vertexMatrix(rowIndex,colIndex);
-					for(unsigned rIt = 0; rIt < vertexMatrix.rows(); ++ rIt){
-						if(rIt != rowIndex && vertexMatrix(rIt,colIndex) != 0) {
-							// forward insertion
-							vertexMatrix.row(rIt) = vertexMatrix.row(rIt) - (vertexMatrix.row(rowIndex)*vertexMatrix(rIt, colIndex));
-						}
-					}
+				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
+				//std::cout << "Conv Hull end" << std::endl;
+				for ( auto &facet : facets ) {
+					mHPlanes.push_back( facet->hyperplane() );
 				}
-				//std::cout << a << std::endl;
+
 			}
 
 			assert( false );
