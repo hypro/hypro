@@ -134,6 +134,6 @@ int main(int argc, char** argv) {
 
 
 		for(unsigned i = 0; i<facets.first.size(); i++){
-			std::cout << "Result Nr." << i << std::endl << "normal: "<< facets.first.at(i)->getNormal() <<"\noffset: "<<facets.first.at(i)->getScalar() << std::endl;
+			std::cout << "Result Nr." << i << std::endl << "normal:\n"<< facets.first.at(i)->getNormal() <<"\noffset: "<<facets.first.at(i)->getScalar() << std::endl;
 		}
 }

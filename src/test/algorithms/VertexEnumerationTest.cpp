@@ -118,7 +118,7 @@ TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
  */
 TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 
-	/*
+
 	// unity box in 3D
 	// init
 	hypro::vector_t<TypeParam> v01_box = hypro::vector_t<TypeParam>(3);
@@ -200,71 +200,73 @@ TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
 	EXPECT_TRUE( f5_box );
 	EXPECT_TRUE( f6_box );
 
+
+	/*
+	// pyramid with quadratic bottom -> test towards degenerated vertices.
+	// init
+	hypro::vector_t<TypeParam> v01_pyramid = hypro::vector_t<TypeParam>(3);
+	v01_pyramid(0) = 1; v01_pyramid(1) = 0; v01_pyramid(2) = 1;
+
+	hypro::vector_t<TypeParam> v02_pyramid = hypro::vector_t<TypeParam>(3);
+	v02_pyramid(0) = 1; v02_pyramid(1) = 0; v02_pyramid(2) = -1;
+
+	hypro::vector_t<TypeParam> v03_pyramid = hypro::vector_t<TypeParam>(3);
+	v03_pyramid(0) = -1; v03_pyramid(1) = 0; v03_pyramid(2) = 1;
+
+	hypro::vector_t<TypeParam> v04_pyramid = hypro::vector_t<TypeParam>(3);
+	v04_pyramid(0) = -1; v04_pyramid(1) = 0; v04_pyramid(2) = -1;
+
+	hypro::vector_t<TypeParam> v05_pyramid = hypro::vector_t<TypeParam>(3);
+	v05_pyramid(0) = 0; v05_pyramid(1) = 1; v05_pyramid(2) = 0;
+
+	std::vector<hypro::Point<TypeParam>> points_pyramid;
+	points_pyramid.push_back(hypro::Point<TypeParam>(v01_pyramid));
+	points_pyramid.push_back(hypro::Point<TypeParam>(v02_pyramid));
+	points_pyramid.push_back(hypro::Point<TypeParam>(v03_pyramid));
+	points_pyramid.push_back(hypro::Point<TypeParam>(v04_pyramid));
+	points_pyramid.push_back(hypro::Point<TypeParam>(v05_pyramid));
+
+	// compute constraints
+	auto facets_pyramid = convexHull(points_pyramid);
+
+	// init test constraints
+	bool f1_pyramid=false, f2_pyramid=false, f3_pyramid=false, f4_pyramid=false, f5_pyramid=false, fail_pyramid=false;
+
+	hypro::vector_t<TypeParam> test_v01_pyramid = hypro::vector_t<TypeParam>(3);
+	test_v01_pyramid(0) = 1; test_v01_pyramid(1) = 1; test_v01_pyramid(2) = 0;
+
+	hypro::vector_t<TypeParam> test_v02_pyramid = hypro::vector_t<TypeParam>(3);
+	test_v02_pyramid(0) = -1; test_v02_pyramid(1) = 1; test_v02_pyramid(2) = 0;
+
+	hypro::vector_t<TypeParam> test_v03_pyramid = hypro::vector_t<TypeParam>(3);
+	test_v03_pyramid(0) = 0; test_v03_pyramid(1) = 1; test_v03_pyramid(2) = 1;
+
+	hypro::vector_t<TypeParam> test_v04_pyramid = hypro::vector_t<TypeParam>(3);
+	test_v04_pyramid(0) = 0; test_v04_pyramid(1) = 1; test_v04_pyramid(2) = -1;
+
+	hypro::vector_t<TypeParam> test_v05_pyramid = hypro::vector_t<TypeParam>(3);
+	test_v05_pyramid(0) = 0; test_v05_pyramid(1) = -1; test_v05_pyramid(2) = 0;
+
+	// test
+	for(unsigned i = 0; i<facets_pyramid.first.size(); i++){
+		hypro::vector_t<TypeParam> normal = facets_pyramid.first.at(i)->getNormal();
+		TypeParam offset = facets_pyramid.first.at(i)->getScalar();
+
+		std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
+		if(     normal == test_v01_pyramid && offset==1) 	f1_pyramid=true;
+		else if(normal == test_v02_pyramid && offset==1) 	f2_pyramid=true;
+		else if(normal == test_v03_pyramid && offset==1) 	f3_pyramid=true;
+		else if(normal == test_v04_pyramid && offset==1) 	f4_pyramid=true;
+		else if(normal == test_v05_pyramid && offset==0) 	f5_pyramid=true;
+		else fail_pyramid=true;
+	}
+
+	EXPECT_FALSE( fail_pyramid );
+	EXPECT_TRUE( f1_pyramid );
+	EXPECT_TRUE( f2_pyramid );
+	EXPECT_TRUE( f3_pyramid );
+	EXPECT_TRUE( f4_pyramid );
+	EXPECT_TRUE( f5_pyramid );
 	*/
 
-	//// pyramid with quadratic bottom -> test towards degenerated vertices.
-	//// init
-	//hypro::vector_t<TypeParam> v01_pyramid = hypro::vector_t<TypeParam>(3);
-	//v01_pyramid(0) = 1; v01_pyramid(1) = 0; v01_pyramid(2) = 1;
-
-	//hypro::vector_t<TypeParam> v02_pyramid = hypro::vector_t<TypeParam>(3);
-	//v02_pyramid(0) = 1; v02_pyramid(1) = 0; v02_pyramid(2) = -1;
-
-	//hypro::vector_t<TypeParam> v03_pyramid = hypro::vector_t<TypeParam>(3);
-	//v03_pyramid(0) = -1; v03_pyramid(1) = 0; v03_pyramid(2) = 1;
-
-	//hypro::vector_t<TypeParam> v04_pyramid = hypro::vector_t<TypeParam>(3);
-	//v04_pyramid(0) = -1; v04_pyramid(1) = 0; v04_pyramid(2) = -1;
-
-	//hypro::vector_t<TypeParam> v05_pyramid = hypro::vector_t<TypeParam>(3);
-	//v05_pyramid(0) = 0; v05_pyramid(1) = 1; v05_pyramid(2) = 0;
-
-	//std::vector<hypro::Point<TypeParam>> points_pyramid;
-	//points_pyramid.push_back(hypro::Point<TypeParam>(v01_pyramid));
-	//points_pyramid.push_back(hypro::Point<TypeParam>(v02_pyramid));
-	//points_pyramid.push_back(hypro::Point<TypeParam>(v03_pyramid));
-	//points_pyramid.push_back(hypro::Point<TypeParam>(v04_pyramid));
-	//points_pyramid.push_back(hypro::Point<TypeParam>(v05_pyramid));
-
-	//// compute constraints
-	//auto facets_pyramid = convexHull(points_pyramid);
-
-	//// init test constraints
-	//bool f1_pyramid=false, f2_pyramid=false, f3_pyramid=false, f4_pyramid=false, f5_pyramid=false, fail_pyramid=false;
-
-	//hypro::vector_t<TypeParam> test_v01_pyramid = hypro::vector_t<TypeParam>(3);
-	//test_v01_pyramid(0) = 1; test_v01_pyramid(1) = 1; test_v01_pyramid(2) = 0;
-
-	//hypro::vector_t<TypeParam> test_v02_pyramid = hypro::vector_t<TypeParam>(3);
-	//test_v02_pyramid(0) = -1; test_v02_pyramid(1) = 1; test_v02_pyramid(2) = 0;
-
-	//hypro::vector_t<TypeParam> test_v03_pyramid = hypro::vector_t<TypeParam>(3);
-	//test_v03_pyramid(0) = 0; test_v03_pyramid(1) = 1; test_v03_pyramid(2) = 1;
-
-	//hypro::vector_t<TypeParam> test_v04_pyramid = hypro::vector_t<TypeParam>(3);
-	//test_v04_pyramid(0) = 0; test_v04_pyramid(1) = 1; test_v04_pyramid(2) = -1;
-
-	//hypro::vector_t<TypeParam> test_v05_pyramid = hypro::vector_t<TypeParam>(3);
-	//test_v05_pyramid(0) = 0; test_v05_pyramid(1) = -1; test_v05_pyramid(2) = 0;
-
-	//// test
-	//for(unsigned i = 0; i<facets_pyramid.first.size(); i++){
-	//	hypro::vector_t<TypeParam> normal = facets_pyramid.first.at(i)->getNormal();
-	//	TypeParam offset = facets_pyramid.first.at(i)->getScalar();
-
-	//	std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
-	//	if(     normal == test_v01_pyramid && offset==1) 	f1_pyramid=true;
-	//	else if(normal == test_v02_pyramid && offset==1) 	f2_pyramid=true;
-	//	else if(normal == test_v03_pyramid && offset==1) 	f3_pyramid=true;
-	//	else if(normal == test_v04_pyramid && offset==1) 	f4_pyramid=true;
-	//	else if(normal == test_v05_pyramid && offset==0) 	f5_pyramid=true;
-	//	else fail_pyramid=true;
-	//}
-
-	//EXPECT_FALSE( fail_pyramid );
-	//EXPECT_TRUE( f1_pyramid );
-	//EXPECT_TRUE( f2_pyramid );
-	//EXPECT_TRUE( f3_pyramid );
-	//EXPECT_TRUE( f4_pyramid );
-	//EXPECT_TRUE( f5_pyramid );
 }

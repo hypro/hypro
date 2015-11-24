@@ -49,11 +49,14 @@ typedef ::testing::Types<
 	carl::FLOAT_T<mpq_class>
 > rationalTypes;
 
+typedef ::testing::Types<
+	carl::FLOAT_T<mpq_class>
+> rationalTypesMPQ;
 // List tests which should be typed
 
 // Algorithm
 TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
-TYPED_TEST_CASE(VertexEnumerationTest, rationalTypes);
+TYPED_TEST_CASE(VertexEnumerationTest, rationalTypesMPQ);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, floatTypes);
