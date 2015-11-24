@@ -159,7 +159,7 @@ class Facet {
 	}
 
 	void setPoints( std::vector<Point<Number>> points, Point<Number> _insidePoint ) {
-		if ( mVertices.empty() ) {
+    if ( mVertices.empty() ) {
 			for ( unsigned i = 0; i < points.size(); i++ ) {
 				mVertices.push_back( points[i] );
 			}
@@ -179,6 +179,7 @@ class Facet {
 			// std::cout << mNormal << std::endl;
 			// std::cout << _insidePoint << "  " << mScalar << std::endl;
 			if ( mNormal.dot( _insidePoint.rawCoordinates() ) > mScalar ) {
+
 				mNormal *= -1;
 				mScalar *= (Number) -1;
 			}
@@ -307,7 +308,6 @@ class Facet {
 
 	vector_t<Number> getNormalVector() const {
 		std::vector<vector_t<Number>> vectors;
-
 		// std::cout << mVertices[0].rawCoordinates() << std::endl;
 		// vectors.push_back(vector_t<Number>::Zero(mVertices[0].rawCoordinates().rows()));
 		vectors.push_back( mVertices[0].rawCoordinates() );
@@ -315,12 +315,13 @@ class Facet {
 			vectors.push_back( mVertices[i].rawCoordinates() - vectors[0] );
 		}
 
-		matrix_t<Number> matrix = matrix_t<Number>( vectors.size(), mVertices[0].rawCoordinates().size() );
+		matrix_t<Number> matrix = matrix_t<Number>( vectors.size(), mVertices[0].rawCoordinates().size());
 		for ( unsigned i = 1; i < vectors.size(); i++ ) {
 			for ( unsigned j = 0; j < vectors[i].size(); j++ ) {
 				matrix( i, j ) = vectors[i]( j );
 			}
 		}
+
 
 		// matrix(0,vectors[0].size()-1) = 1;
 		for ( unsigned j = 0; j < vectors[0].size(); j++ ) {
@@ -332,11 +333,52 @@ class Facet {
 				matrix( 0, j ) = 0;
 			}
 		}
+
 		vector_t<Number> b = vector_t<Number>::Zero( vectors.size() );
 		b( 0 ) = 1;
 
+
+
 		// std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
 		vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
+
+    /*
+    matrix.col(matrix.cols()-1)=b;
+
+    assert(matrix.rows() == matrix.cols()-1);
+
+    std::cout << "Matrix:\n "<< matrix << std::endl;
+
+
+    // Gauss:
+		std::set<unsigned> usedRows;
+		for(unsigned colIndex = 0; colIndex < matrix.rows(); ++colIndex)
+		{
+			//std::cout << "Eliminate for column " << colIndex << std::endl;
+			unsigned rowIndex = 0;
+			// find first row suitable for elimination
+			while(rowIndex < matrix.rows() && (usedRows.find(rowIndex) != usedRows.end() || matrix(rowIndex,colIndex) == 0)) {
+				++rowIndex;
+			}
+
+			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
+			if(rowIndex < matrix.rows() && matrix(rowIndex,colIndex) != 0){
+				usedRows.insert(rowIndex);
+				//normalize
+				matrix.row(rowIndex) = matrix.row(rowIndex)/matrix(rowIndex,colIndex);
+				for(unsigned rIt = 0; rIt < matrix.rows(); ++ rIt){
+					if(rIt != rowIndex && matrix(rIt,colIndex) != 0) {
+						// forward insertion
+						matrix.row(rIt) = matrix.row(rIt) - (matrix.row(rowIndex)*matrix(rIt, colIndex));
+					}
+				}
+			}
+			std::cout << "Matrix:\n "<< matrix << std::endl;
+		}
+
+    vector_t<Number> result = matrix.col(matrix.cols()-1);
+    */
+
 		return result;
 	}
 
