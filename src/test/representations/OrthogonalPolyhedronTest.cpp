@@ -35,29 +35,19 @@ protected:
 	virtual void SetUp()
 	{
 		container1.insert(Point<Number>({3,3}), true);
-
 		container1.insert(Point<Number>({3,6}), false);
-
 		container1.insert(Point<Number>({5,3}), false);
-
 		container1.insert(Point<Number>({5,5}), true);
-
 		container1.insert(Point<Number>({7,5}), false);
-
 		container1.insert(Point<Number>({7,6}), false);
 
 		p1 = OrthogonalPolyhedron<Number>(container1);
 
 		container2.insert(Point<Number>({1,2}), true);
-
 		container2.insert(Point<Number>({1,4}), false);
-
 		container2.insert(Point<Number>({2,4}), true);
-
 		container2.insert(Point<Number>({2,5}), false);
-
 		container2.insert(Point<Number>({4,5}), false);
-
 		container2.insert(Point<Number>({4,2}), false);
 
 		p2 = OrthogonalPolyhedron<Number>(container2);
