@@ -73,11 +73,17 @@ class Hyperplane {
     vector_t<Number> normal() { return mNormal; };
     Number scalar() { return mScalar; };
     size_t hash() {
+
+        //TODO review line 79
+        /*
+        if (this->mHash = 0) {
         if (this->mHash == 0) {
             this->mHash = std::hash<hypro::Hyperplane<Number>>(*this);
         } else {
             return mHash;
-        }
+        }*/
+        
+        return mHash;
     }
 
 	friend void swap( Hyperplane<Number>& a, Hyperplane<Number>& b ) {

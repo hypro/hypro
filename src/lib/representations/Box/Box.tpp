@@ -67,6 +67,7 @@ Box<Number>::Box( const std::vector<Point<Number>> &_points ) {
 	}
 }
 
+/*
 template <typename Number>
 Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
 	if ( !_vertices.empty() ) {
@@ -84,7 +85,9 @@ Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
 }
+*/
 
+/*
 template <typename Number>
 Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
 	if ( !_vertices.empty() ) {
@@ -103,6 +106,7 @@ Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
 	}
 	std::cout << "Constructed box " << *this << std::endl;
 }
+*/
 
 template<typename Number>
 std::vector<carl::Interval<Number>> Box<Number>::boundaries() const {
@@ -136,6 +140,7 @@ std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
 	return res;
 }
 
+/*
 template<typename Number>
 void Box<Number>::insert( const std::vector<carl::Interval<Number>>& boundaries ) {
 	for(const auto& interval : boundaries) {
@@ -143,7 +148,7 @@ void Box<Number>::insert( const std::vector<carl::Interval<Number>>& boundaries 
 		mLimits.second.extend(interval.upper());
 	}
 }
-
+*/
 template <typename Number>
 carl::Interval<Number> Box<Number>::interval( std::size_t d ) const {
 	if ( d > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
