@@ -50,7 +50,8 @@ option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
 option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
-option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES for test purposes." OFF)
+option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES." OFF)
+option(EXTERNALIZE_CLASSES_ONLY_TO_TEST "An EXTERNALIZE_CLASSES for test purposes." OFF)
 
 # Include own macros.
 include( hypromacros )

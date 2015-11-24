@@ -432,7 +432,7 @@ void OrthogonalPolyhedron<Number, Type>::updateBoundaryBox() const {
 	}
 
 	std::vector<Vertex<Number>> vertices = mGrid.vertices();
-	mBoundaryBox = Box<Number>( vertices );
+	// mBoundaryBox = Box<Number>( vertices );
 
 	mBoxUpToDate = true;
 }

@@ -71,8 +71,8 @@ class Box : public hypro::GeometricObject<Number>{
 	Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants );
 	Box( const std::set<Point<Number>>& _points );
 	Box( const std::vector<Point<Number>>& _points );
-	Box( const std::set<Vertex<Number>>& _points );
-	Box( const std::vector<Vertex<Number>>& _points );
+	//Box( const std::set<Vertex<Number>>& _points );
+	//Box( const std::vector<Vertex<Number>>& _points );
 
 	~Box() {}
 
@@ -89,7 +89,7 @@ class Box : public hypro::GeometricObject<Number>{
 	std::vector<hypro::Hyperplane<Number>> constraints() const;
 
 	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
-	void insert( const std::vector<carl::Interval<Number>>& boundaries );
+	//void insert( const std::vector<carl::Interval<Number>>& boundaries );
 
 	carl::Interval<Number> interval( std::size_t d ) const;
 
@@ -191,5 +191,16 @@ class Box : public hypro::GeometricObject<Number>{
 	void clear();
 	void print() const;
 };
+
+    #ifdef EXTERNALIZE_CLASSES_ONLY_TO_TEST
+    extern template class Box<double>;
+
+    #ifdef USE_MPFR_FLOAT
+    extern template class Box<carl::FLOAT_T<mpfr_t>>;
+    #endif
+
+    extern template class Box<carl::FLOAT_T<double>>;
+    #endif
+
 }
 #include "Box.tpp"
