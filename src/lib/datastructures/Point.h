@@ -67,7 +67,7 @@ class Point {
 
 	/**
 	 * Constructs a point with the passed coordinates
-	 * @param coordinates
+             * @param coordinates
 	 */
 	Point( const coordinateMap& _coordinates );
 	Point( const vector_t<Number>& _vector );
