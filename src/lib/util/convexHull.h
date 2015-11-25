@@ -26,21 +26,19 @@ static unsigned dimensionCheck( const std::vector<Point<Number>>& points ) {
 		}
 	}
 
-	return points.at(0).dimension(); //matrix.fullPivLu().rank();
+	return matrix.fullPivLu().rank();
 }
 
 template <typename Number>
 static bool maxRank( const std::vector<Point<Number>>& points, const Point<Number>& point ) {
-	matrix_t<Number> matrix = matrix_t<Number>(point.rawCoordinates().size(), points.size()+1);
+	matrix_t<Number> matrix = matrix_t<Number>(point.rawCoordinates().size(), points.size());
 
-	for (unsigned i=0; i < matrix.rows(); i++) {
-		for (unsigned j=0; j < matrix.cols(); j++) {
-			if(j==matrix.cols()-1) {
-				matrix(i, j) = point.rawCoordinates()(i);
-			}
-			else {
-				matrix(i, j) = points.at(j).rawCoordinates()(i);
-			}
+	for (unsigned i=0; i < matrix.cols(); i++) {
+		if(i<matrix.cols()-1){
+			matrix.col(i) = points.at(i+1).rawCoordinates() - points.at(0).rawCoordinates();
+		}
+		else {
+			matrix.col(i) = point.rawCoordinates() - points.at(0).rawCoordinates();
 		}
 	}
 
@@ -65,6 +63,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 			if (points.at(minIndex).rawCoordinates()(0) > points.at(j).rawCoordinates()(0)) minIndex = j;
 			if (points.at(maxIndex).rawCoordinates()(0) < points.at(j).rawCoordinates()(0)) maxIndex = j;
 		}
+
 		initialPoints.push_back(points.at(minIndex));
 		initialPoints.push_back(points.at(maxIndex));
 
@@ -82,7 +81,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 
 		// search for unused point as last member for initConvexhull
 		unsigned index=0;
-		while (initialPoints.size()<dimension+1) {
+		while (initialPoints.size()<dimension+1 && index<points.size()) {
 			if (std::find(initialPoints.begin(), initialPoints.end(), points.at(index))==initialPoints.end()) {
 				initialPoints.push_back( points.at(index) );
 			}
@@ -369,7 +368,8 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets(std::vector<st
 				}
 
 				// is neighbor a relevant facet?
-				if (carl::AlmostEqual2sComplement(newFacet->getDist(point1)+(Number) 1, (Number) 1)) { // TODO compare with 0 and not with +1
+				//if (carl::AlmostEqual2sComplement(newFacet->getDist(point1)+(Number) 1, (Number) 1)) { // TODO compare with 0 and not with +1
+				if (newFacet->getDist(point1) == 0 ) {
 					newFacet->addPoint( point1 ); // update newFacet - point1 and neighbors of neighbor
 					for (auto neighborOfneighbor: neighbor->rNeighbors()) {
 						if (!newFacet->isNeighbor(neighborOfneighbor)) newFacet->addNeighbor(neighborOfneighbor);
@@ -478,7 +478,6 @@ static void setNeighborhoodOfPoints( std::vector<std::shared_ptr<Facet<Number>>>
 template <typename Number>
 static std::pair<std::vector<std::shared_ptr<Facet<Number>>>, std::map<Point<Number>, std::set<Point<Number>>>>
 convexHull( const std::vector<Point<Number>>& pts ) {
-
 	// initialization
 	std::set<Point<Number>> pt;
 	for ( auto& p : pts ) {
@@ -505,8 +504,13 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			}
 		}
 
+		//for(unsigned i = 0; i<facets.size(); i++){
+		//	std::cout << "Facet Nr." << i+1 << std::endl << "normal: "<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl;
+		//}
+
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet); // extract the facets to be examined
+
 
 		/*
 		 * ------------------------------------------------------------------------------

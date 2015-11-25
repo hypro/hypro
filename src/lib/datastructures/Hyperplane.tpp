@@ -201,7 +201,8 @@ vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number
 	vector_t<Number> b = vector_t<Number>( 3 );
 	b << mScalar, _rhs.offset(), Number( 1 );
 
-	vector_t<Number> result = A.fullPivHouseholderQr().solve( b );
+	vector_t<Number> result = A.fullPivLu().solve( b );
+	//vector_t<Number> result = gauss( A, b );
 
 	return result;
 }
@@ -412,6 +413,7 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 
 		glp_load_matrix( normal, elements, ia, ja, ar );
 		glp_simplex( normal, NULL );
+		glp_exact(normal, NULL);
 
 		vector_t<Number> result = vector_t<Number>( _edgeSet.at( 0 ).rows(), 1 );
 
