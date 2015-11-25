@@ -201,7 +201,8 @@ vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number
 	vector_t<Number> b = vector_t<Number>( 3 );
 	b << mScalar, _rhs.offset(), Number( 1 );
 
-	vector_t<Number> result = A.fullPivHouseholderQr().solve( b );
+	vector_t<Number> result = A.fullPivLu().solve( b );
+	//vector_t<Number> result = gauss( A, b );
 
 	return result;
 }

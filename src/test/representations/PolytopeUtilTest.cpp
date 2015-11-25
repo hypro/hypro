@@ -68,7 +68,7 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneAccess)
     hypro::Hyperplane<TypeParam> access1(norm, 4.3);
 
     EXPECT_EQ(norm, access1.normal());
-    EXPECT_EQ(4.3, access1.offset());
+    EXPECT_EQ(TypeParam(4.3), access1.offset());
     EXPECT_EQ((unsigned) 2, access1.dimension());
 }
 
@@ -86,8 +86,8 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
 
     //std::cout << "Result: " << result << std::endl;
 
-    EXPECT_EQ(1.075, vec(0)*result);
-    EXPECT_EQ(1.075, vec(1)*result);
+    EXPECT_EQ(TypeParam(1.075), vec(0)*result);
+    EXPECT_EQ(TypeParam(1.075), vec(1)*result);
 }
 
 TYPED_TEST(PolytopeUtilTest, ConeConstructor)

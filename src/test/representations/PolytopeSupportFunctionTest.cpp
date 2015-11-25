@@ -1,7 +1,7 @@
 /**
  * Tests for SupportFunctions.
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since		2015-01-20
  * @version		2015-01-22
  */
@@ -26,16 +26,16 @@ protected:
 		constraints(1,1) = Number(-2);
 		constraints(2,0) = Number(-4);
 		constraints(2,1) = Number(1);
-		
+
 		constants = matrix_t<Number>(3,1);
 		constants(0,0) = Number(20);
 		constants(1,0) = Number(5);
 		constants(2,0) = Number(17);
     }
-	
+
     virtual void TearDown(){
     }
-	
+
 	matrix_t<Number> constraints;
 	matrix_t<Number> constants;
 };
@@ -51,19 +51,19 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 	vector_t<TypeParam> vec2 = vector_t<TypeParam>(2,1);
 	vector_t<TypeParam> vec3 = vector_t<TypeParam>(2,1);
 	vector_t<TypeParam> vec4 = vector_t<TypeParam>(2,1);
-	
+
 	vec1(0,0) = TypeParam(2);
 	vec1(1,0) = TypeParam(4);
 
 	vec2(0,0) = TypeParam(1);
 	vec2(1,0) = TypeParam(-2);
-	
+
 	vec3(0,0) = TypeParam(-4);
 	vec3(1,0) = TypeParam(1);
-	
+
 	vec4(0,0) = TypeParam(2);
 	vec4(1,0) = TypeParam(5);
-	
+
 	EXPECT_EQ(TypeParam(20),psf1.evaluate(vec1).supportValue);
 	EXPECT_EQ(TypeParam(5),psf1.evaluate(vec2).supportValue);
 	EXPECT_EQ(TypeParam(17),psf1.evaluate(vec3).supportValue);
@@ -92,9 +92,9 @@ TYPED_TEST(PolytopeSupportFunctionTest, contains) {
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({-2,-2})));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({3,3})));
 
-	TypeParam xCoord = TypeParam(-12)/TypeParam(4.5)-0.0001;
-	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-0.0001;
+	TypeParam xCoord = TypeParam(-12)/TypeParam(4.5)-TypeParam(0.0001);
+	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-TypeParam(0.0001);
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
-	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+0.001,yCoord+0.001})));
+	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+TypeParam(0.001),yCoord+TypeParam(0.001)})));
 }

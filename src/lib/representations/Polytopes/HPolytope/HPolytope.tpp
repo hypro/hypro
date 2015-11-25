@@ -50,7 +50,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 		mDimension = alien.dimension();
 		if ( size == 1 ) {
 			// Return Box constraints.
-		} else if ( size < mDimension + 1 ) {
+		} else if ( size < mDimension ) {
 			std::vector<Point<Number>> vertices = alien.vertices();
 
 			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.

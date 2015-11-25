@@ -15,6 +15,7 @@
 
 #include "Point.h"
 #include "../util/VariablePool.h"
+ #include "../util/linearSolving.h"
 #include <carl/formula/Constraint.h>
 
 namespace hypro {
@@ -82,7 +83,7 @@ class Hyperplane {
         } else {
             return mHash;
         }*/
-        
+
         return mHash;
     }
 
