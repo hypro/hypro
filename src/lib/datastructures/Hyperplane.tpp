@@ -412,6 +412,7 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 
 		glp_load_matrix( normal, elements, ia, ja, ar );
 		glp_simplex( normal, NULL );
+		glp_exact(normal, NULL);
 
 		vector_t<Number> result = vector_t<Number>( _edgeSet.at( 0 ).rows(), 1 );
 

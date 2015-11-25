@@ -56,7 +56,7 @@ typedef ::testing::Types<
 
 // Algorithm
 TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
-TYPED_TEST_CASE(VertexEnumerationTest, rationalTypesMPQ);
+TYPED_TEST_CASE(VertexEnumerationTest, rationalTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, floatTypes);

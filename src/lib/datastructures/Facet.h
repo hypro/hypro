@@ -11,6 +11,7 @@
 
 #include "../config.h"
 #include "Hyperplane.h"
+#include "../util/linearSolving.h"
 
 namespace hypro {
 template <class Number>
@@ -213,7 +214,7 @@ class Facet {
 	}
 
 	void setPoints( std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints ) {
-    if ( mVertices.empty() ) {
+    	if ( mVertices.empty() ) {
 			for ( unsigned i = 0; i < points.size(); i++ ) {
 				mVertices.push_back( points[i] );
 			}
@@ -337,47 +338,22 @@ class Facet {
 		vector_t<Number> b = vector_t<Number>::Zero( vectors.size() );
 		b( 0 ) = 1;
 
+		std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
+
+		matrix_t<Number> copyMatrix = matrix_t<Number>(matrix.rows(), matrix.cols()+1);
+	    for(unsigned colIt = 0; colIt < copyMatrix.cols()-1; ++colIt) {
+	    	copyMatrix.col(colIt) = matrix.col(colIt);
+	    }
+	    copyMatrix.col(copyMatrix.cols()-1) = b;
 
 
-		// std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
-		vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
+		//vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
 
-    /*
-    matrix.col(matrix.cols()-1)=b;
+		//std::cout << "RESULT EIGEN: " << result << std::endl;
 
-    assert(matrix.rows() == matrix.cols()-1);
+		vector_t<Number> result = gauss(matrix, b);
 
-    std::cout << "Matrix:\n "<< matrix << std::endl;
-
-
-    // Gauss:
-		std::set<unsigned> usedRows;
-		for(unsigned colIndex = 0; colIndex < matrix.rows(); ++colIndex)
-		{
-			//std::cout << "Eliminate for column " << colIndex << std::endl;
-			unsigned rowIndex = 0;
-			// find first row suitable for elimination
-			while(rowIndex < matrix.rows() && (usedRows.find(rowIndex) != usedRows.end() || matrix(rowIndex,colIndex) == 0)) {
-				++rowIndex;
-			}
-
-			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
-			if(rowIndex < matrix.rows() && matrix(rowIndex,colIndex) != 0){
-				usedRows.insert(rowIndex);
-				//normalize
-				matrix.row(rowIndex) = matrix.row(rowIndex)/matrix(rowIndex,colIndex);
-				for(unsigned rIt = 0; rIt < matrix.rows(); ++ rIt){
-					if(rIt != rowIndex && matrix(rIt,colIndex) != 0) {
-						// forward insertion
-						matrix.row(rIt) = matrix.row(rIt) - (matrix.row(rowIndex)*matrix(rIt, colIndex));
-					}
-				}
-			}
-			std::cout << "Matrix:\n "<< matrix << std::endl;
-		}
-
-    vector_t<Number> result = matrix.col(matrix.cols()-1);
-    */
+		std::cout << "RESULT Gauss: " << result << std::endl;
 
 		return result;
 	}
