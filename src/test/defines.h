@@ -55,11 +55,11 @@ typedef ::testing::Types<
 // List tests which should be typed
 
 // Algorithm
-TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
+TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, rationalTypesMPQ);
 
 // Benchmark
-TYPED_TEST_CASE(Benchmark, floatTypes);
+TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Datastructure
 TYPED_TEST_CASE(HyperplaneTest, allTypes);
@@ -78,10 +78,10 @@ TYPED_TEST_CASE(PolytopeTest, allTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, allTypes);
 TYPED_TEST_CASE(PolytopeSupportFunctionTest, allTypes);
 TYPED_TEST_CASE(SupportFunctionTest, allTypes);
-TYPED_TEST_CASE(TaylorModelTest, floatTypes);
-TYPED_TEST_CASE(VPolytopeTest, floatTypes);
-TYPED_TEST_CASE(ZonotopeTest, floatTypes);
+TYPED_TEST_CASE(TaylorModelTest, allTypes); // problem in carl/src/carl/interval/Interval.h:641:19
+TYPED_TEST_CASE(VPolytopeTest, allTypes);
+TYPED_TEST_CASE(ZonotopeTest, floatTypes); // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 
 // Practical term
-TYPED_TEST_CASE(PTermBoxTest, floatTypes);
-TYPED_TEST_CASE(PTermPolytopeTest, floatTypes);
+TYPED_TEST_CASE(PTermBoxTest, allTypes);
+TYPED_TEST_CASE(PTermPolytopeTest, allTypes);
