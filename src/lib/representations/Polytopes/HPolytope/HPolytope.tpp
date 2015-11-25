@@ -84,11 +84,11 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 			assert( false );
 		} else {
-			std::cout << "Conv Hull" << std::endl;
+			//std::cout << "Conv Hull" << std::endl;
 			// TODO: Chose suitable convex hull algorithm
 			typename std::vector<Point<Number>> points = alien.vertices();
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			std::cout << "Conv Hull end" << std::endl;
+			//std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
 				mHPlanes.push_back( facet->hyperplane() );
 			}
@@ -253,12 +253,12 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 						break;
 					}
 				}
-				Number eps = 0;
+				Number eps = std::numeric_limits<Number>::epsilon();
 				while (below) {
 					//std::cout << "Is below, iterate " << std::endl;
 					// enlarge as long as point lies below one of the planes.
 					below = false;
-					eps += std::numeric_limits<Number>::epsilon();
+					eps = eps * 10;
 
 					pos = 0;
 					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
@@ -271,6 +271,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt){
 						Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(tmp);
 						if(dist > 0) {
+							//std::cout << "Dist: " << dist << std::endl;
 							below = true;
 							break;
 						}

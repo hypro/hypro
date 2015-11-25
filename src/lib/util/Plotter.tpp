@@ -87,8 +87,8 @@ void Plotter<Number>::plot2d() const {
 
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = double( ( max( d ) - min( d ) ) * 0.1 );
-			ranges[d] = carl::Interval<double>(min( d ) - rangeExt, max( d ) + rangeExt );
+			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
+			ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
 		}
 
 		// create plane functions
@@ -104,7 +104,7 @@ void Plotter<Number>::plot2d() const {
 			}
 			mOutfile << "\n";
 		}
-		
+
 
 		if(mSettings.axes) {
 			mOutfile << "set xzeroaxis \n";
@@ -127,7 +127,7 @@ void Plotter<Number>::plot2d() const {
 				mOutfile << "plot f_" << index << "(x) \n";
 			}
 		}
-		
+
 		mOutfile << "plot ";
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";

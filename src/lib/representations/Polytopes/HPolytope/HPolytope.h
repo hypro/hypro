@@ -13,6 +13,7 @@
 #include <glpk.h>
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
+#include "../../../util/vertexEnumeration.h"
 #include "../../../util/smtrat/SimplexSolver.h"
 #include "util.h"
 

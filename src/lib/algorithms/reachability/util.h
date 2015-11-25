@@ -83,7 +83,12 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 
 	// Number tmp = d * t;
 	Number tmp = d * norm;
-	tmp.exp( result );
+
+	// TODO: THIS IS UNPRECISE!!
+	double tmpExp = std::exp(carl::toDouble(tmp));
+	result = Number(tmpExp);
+
+	//tmp.exp( result );
 	result = result - 1 - tmp;
 
 	result *= _supremum;
