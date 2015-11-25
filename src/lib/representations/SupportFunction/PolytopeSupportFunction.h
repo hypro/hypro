@@ -19,6 +19,7 @@
 #include <glpk.h>
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+#define PPOLYTOPESUPPORTFUNCTION_VERIFY
 
 namespace hypro {
 
@@ -103,7 +104,7 @@ class PolytopeSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
-        
+
         void print() const;
 };
 }  // namespace

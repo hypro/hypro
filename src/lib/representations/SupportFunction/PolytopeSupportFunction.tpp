@@ -7,7 +7,7 @@
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
- * 
+ *
  * @version	2015-02-27
  */
 
@@ -203,6 +203,30 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 			std::cout << "Unable to find a suitable solution for the support function "
 						 "(linear program). ErrorCode: " << result.errorCode << std::endl;
 	}
+/*
+#ifdef PPOLYTOPESUPPORTFUNCTION_VERIFY
+	if(result.errorCode == GLP_OPT || result.errorCode != GLP_FEAS) {
+		// check value against all hyperplanes
+		vector_t<Number> optPoint = l*result.supportValue;
+		Number tmpSupportValue = result.supportValue;
+
+		std::cout << "START Shifting." << std::endl;
+		std::vector<std::pair<matrix_t<Number>, Number>> invalidPlanes;
+		for(int rowIndex = 0; rowIndex < mConstraints.rows(); ++rowIndex) {
+			if(mConstraints.row(rowIndex).dot(l) > 0 && mConstraints.row(rowIndex).dot(optPoint) < mConstraintConstants(rowIndex)) {
+				while(mConstraints.row(rowIndex).dot(optPoint) < mConstraintConstants(rowIndex)){
+					std::cout << "shift by " << (mConstraintConstants(rowIndex)-mConstraints.row(rowIndex).dot(optPoint)) << std::endl;
+					tmpSupportValue = tmpSupportValue+(mConstraintConstants(rowIndex)-mConstraints.row(rowIndex).dot(optPoint));
+					optPoint = l*tmpSupportValue;
+				}
+				rowIndex = -1;
+			}
+		}
+		std::cout << "END Shifting." << std::endl;
+		result.supportValue = tmpSupportValue;
+	}
+#endif
+*/
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	printf( "fx = %g; x = ", double( result.supportValue ) );

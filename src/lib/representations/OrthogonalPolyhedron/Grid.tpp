@@ -477,14 +477,16 @@ void Grid<Number>::addCoordinate( Number value, unsigned dimension ) {
 		mInducedGridPoints[dimension] = std::vector<Number>();
 		mInducedGridPoints[dimension].push_back( Number( 0 ) );
 	}
+	assert(mInducedGridPoints.find( dimension ) != mInducedGridPoints.end());
+	assert(!mInducedGridPoints[dimension].empty());
 
 	typename std::vector<Number>::iterator pos = mInducedGridPoints[dimension].begin();
 
-	while ( *pos < value && pos != mInducedGridPoints[dimension].end() ) {
+	while ( pos != mInducedGridPoints[dimension].end() && *pos < value  ) {
 		++pos;
 	}
 
-	if ( ( *pos > value ) || ( pos == mInducedGridPoints[dimension].end() ) )  // if equal, do nothing
+	if ( ( pos == mInducedGridPoints[dimension].end() ) || ( *pos > value ) )  // if equal, do nothing
 		mInducedGridPoints[dimension].insert( pos, value );
 }
 
@@ -497,10 +499,12 @@ Grid<Number> Grid<Number>::combine( const Grid<Number> &a, const Grid<Number> &b
 		std::vector<Number> bValues = b.inducedDimensionAt( d );
 
 		while ( !aValues.empty() ) {
+			std::cout << aValues.back() << std::endl;
 			res.addCoordinate( aValues.back(), d );
 			aValues.pop_back();
 		}
 		while ( !bValues.empty() ) {
+			std::cout << bValues.back() << std::endl;
 			res.addCoordinate( bValues.back(), d );
 			bValues.pop_back();
 		}
