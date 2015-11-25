@@ -338,7 +338,7 @@ class Facet {
 		vector_t<Number> b = vector_t<Number>::Zero( vectors.size() );
 		b( 0 ) = 1;
 
-		std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
+		//std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
 
 		matrix_t<Number> copyMatrix = matrix_t<Number>(matrix.rows(), matrix.cols()+1);
 	    for(unsigned colIt = 0; colIt < copyMatrix.cols()-1; ++colIt) {
@@ -353,7 +353,7 @@ class Facet {
 
 		vector_t<Number> result = gauss(matrix, b);
 
-		std::cout << "RESULT Gauss: " << result << std::endl;
+		//std::cout << "RESULT Gauss: " << result << std::endl;
 
 		return result;
 	}
