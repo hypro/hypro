@@ -55,13 +55,8 @@ typedef ::testing::Types<
 // List tests which should be typed
 
 // Algorithm
-<<<<<<< HEAD
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, rationalTypesMPQ);
-=======
-TYPED_TEST_CASE(BoxReachabilityTest, floatTypes);
-TYPED_TEST_CASE(VertexEnumerationTest, rationalTypes);
->>>>>>> b7f1312fcaf30227f29d0595e39307897614c91c
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, allTypes);
@@ -83,7 +78,7 @@ TYPED_TEST_CASE(PolytopeTest, allTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, allTypes);
 TYPED_TEST_CASE(PolytopeSupportFunctionTest, allTypes);
 TYPED_TEST_CASE(SupportFunctionTest, allTypes);
-TYPED_TEST_CASE(TaylorModelTest, allTypes); // problem in carl/src/carl/interval/Interval.h:641:19
+TYPED_TEST_CASE(TaylorModelTest, floatTypes); // problem in carl/src/carl/interval/Interval.h:641:19
 TYPED_TEST_CASE(VPolytopeTest, allTypes);
 TYPED_TEST_CASE(ZonotopeTest, floatTypes); // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 
