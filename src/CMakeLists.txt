@@ -1,4 +1,5 @@
 add_subdirectory(resources EXCLUDE_FROM_ALL)
+
 add_subdirectory(lib)
 
 set(LOG4CPLUS_LIBRARY ${LOG4CPLUS_LIBRARY} PARENT_SCOPE)
@@ -9,3 +10,9 @@ set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} PARENT_SCOPE)
 #set(EIGEN3_LIBRARY ${EIGEN3_LIBRARY} PARENT_SCOPE)
 set(GLPK_LIBRARIES ${GLPK_LIBRARIES} PARENT_SCOPE)
 set(GLPK_INCLUDE_DIR ${GLPK_INCLUDE_DIR} PARENT_SCOPE)
+
+
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
