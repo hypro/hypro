@@ -974,6 +974,10 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
 	std::vector<unsigned> facets_erase;
+	if(strat == REDUCTION_STRATEGY::DIRECTED_TEMPLATE)
+			for(unsigned i=0; i<res.size(); i++){ // erase all facets
+				facets_erase.push_back(i);
+			}
 	std::vector<Hyperplane<Number>> facets_insert;
 
 	// loop through each direction
@@ -999,6 +1003,7 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 
 			scalarproducts.push_back(std::pair<unsigned, double>(i, scalarproduct));
 		}
+
 
 		if(!skip){
 			// sort scalarproducts TODO only max?
@@ -1045,13 +1050,6 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 						}
 						break;
 					}
-					case REDUCTION_STRATEGY::DIRECTED_TEMPLATE:
-						{
-							for(unsigned i=0; i<res.size(); i++){ // erase all facets
-								facets_erase.push_back(i);
-							}
-							break;
-						}
 						default:
 							break;
 
@@ -1073,7 +1071,23 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 		res.mHPlanes.erase(res.mHPlanes.begin()+facet_erase);
 	}
 
-	if(res.isBounded(evaluations)) return res;
+	if(res.isBounded(evaluations)){
+
+		//check if all vertices are inside the new polytope
+		for(unsigned i=0; i<res.mHPlanes.size(); ++i) {
+			for(Point<Number> vertex: vertices){
+				double value=0;
+				for(unsigned j=0; j<res.mHPlanes.at(i).normal().size(); j++){
+					value+=res.mHPlanes.at(i).normal()[j]*vertex.coordinate(j);
+				}
+				if(!carl::AlmostEqual2sComplement(value, res.mHPlanes.at(i).offset()) && value>res.mHPlanes.at(i).offset()){
+					return *this;
+				}
+			}
+		}
+
+		return res;
+	}
 
 	return *this;
 }
