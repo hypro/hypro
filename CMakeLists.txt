@@ -163,6 +163,7 @@ find_package(GTest)
 find_package(GLPK)
 endif()
 
+add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 add_subdirectory(src)
 
 enable_testing()
