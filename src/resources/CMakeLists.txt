@@ -66,6 +66,5 @@ else()
 
 	set( GLPK_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-4.54/include/" PARENT_SCOPE )
 	set( GLPK_LIBRARIES "${CMAKE_BINARY_DIR}/resources/glpk-4.54/lib/libglpk.a" PARENT_SCOPE )
-	set( GLPK_FOUND 1 PARENT_SCOPE)
 	add_dependencies(resources glpk)
 endif()
