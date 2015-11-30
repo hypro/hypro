@@ -170,11 +170,6 @@ enable_testing()
 include_directories( ${GLPK_INCLUDE_DIR} )
 set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
 
-get_cmake_property(_variableNames VARIABLES)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
 add_subdirectory(src/test)
 
 # # # # # # # # # # # # # # # # # # # # # #
