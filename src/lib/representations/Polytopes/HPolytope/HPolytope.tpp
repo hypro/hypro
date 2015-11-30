@@ -710,6 +710,57 @@ bool HPolytope<Number>::isBounded(std::vector<vector_t<Number>> evaluations) con
 }
 
 /*
+ * Compute a |polytope|-(kind of) polytope
+ */
+ #define PI 3.14159265359
+ template <typename Number>
+ std::vector<vector_t<Number>> HPolytope<Number>::computeTemplate(unsigned dimension, unsigned polytope) const{
+	 double degree = (360/ (double) polytope)* PI / 180.0;
+	 std::vector<vector_t<Number>> templatePolytope, templatePolytope2d;
+
+	 //create templatePolytope2d
+	 vector_t<Number> templateVector2d = vector_t<Number>::Zero(2); // init templateVector2d
+	 templateVector2d(0) = 1;
+	 templatePolytope2d.push_back(templateVector2d);
+
+	 Eigen::MatrixXd m(2, 2); //init matrix
+	 m(0,0) = cos(degree);
+	 m(0,1) = (-1)*sin(degree);
+	 m(1,0) = sin(degree);
+	 m(1,1) = cos(degree);
+
+
+	 for(unsigned i=0; i<polytope; ++i) {
+		 //Rotate templateVector
+		 templateVector2d = m * templateVector2d;
+		 templatePolytope2d.push_back(templateVector2d);
+	 }
+
+	 //copy templatePolytope2d into templatePolytope
+	 polytope::dPermutator permutator(dimension, 2);
+	 std::vector<unsigned> permutation;
+	 while(!permutator.end()) {
+		 permutation = permutator();
+		 for(vector_t<Number> vectorOftemplatePolytope2d: templatePolytope2d) {
+			 vector_t<Number> templateVector = vector_t<Number>::Zero(dimension); // init templateVector
+
+			 templateVector(permutation.at(0)) = vectorOftemplatePolytope2d(0);
+			 templateVector(permutation.at(1)) = vectorOftemplatePolytope2d(1);
+
+			 if(std::find(templatePolytope.begin(), templatePolytope.end(), templateVector)== templatePolytope.end()) templatePolytope.push_back(templateVector);
+		 }
+	 }
+
+	 //int index=0;
+	 //for(auto vector: templatePolytope){
+	//	 index++;
+	//	 std::cout << index <<  ". Inside result: " << std::endl << vector << std::endl;
+	 //}
+
+	 return templatePolytope;
+ }
+
+/*
  * Reduction-Function
  * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
  * @return the reduced facet or if the result would be unbounded the inital polytope
@@ -896,8 +947,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 				for(unsigned j=0; j<res.mHPlanes.at(i).normal().size(); j++){
 					value+=res.mHPlanes.at(i).normal()[j]*vertex.coordinate(j);
 				}
-				if(value>res.mHPlanes.at(i).offset()){
-					std::cout << "Vertex found which is not inside the 'overapproximation'" << std::endl;
+				if(!carl::AlmostEqual2sComplement(value, res.mHPlanes.at(i).offset()) && value>res.mHPlanes.at(i).offset()){
 					return *this;
 				}
 			}
@@ -942,10 +992,10 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 			temp.normalize();
 			double scalarproduct = directed_normalized.dot(temp);
 
-			if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
-				std::cout << "Error - wanted direction does already exist" << std::endl;
-				skip=true;
-			}
+			//if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
+			//	std::cout << "Error - wanted direction does already exist" << std::endl;
+			//	skip=true;
+			//}
 
 			scalarproducts.push_back(std::pair<unsigned, double>(i, scalarproduct));
 		}
@@ -994,9 +1044,17 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 							}
 						}
 						break;
+					}
+					case REDUCTION_STRATEGY::DIRECTED_TEMPLATE:
+						{
+							for(unsigned i=0; i<res.size(); i++){ // erase all facets
+								facets_erase.push_back(i);
+							}
+							break;
+						}
 						default:
 							break;
-					}
+
 			}
 
 			std::sort(facets_erase.begin(), facets_erase.end(), [](const unsigned left, const unsigned right) {	return left > right;	});

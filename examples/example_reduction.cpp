@@ -188,18 +188,19 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = confuse_cube;
+  HPolytope<Number> reduce_from = td_example;
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
-  bool volume=false;
+  bool volume=true;
 
-  HPolytope<Number> reduction_drop_normal;
-  HPolytope<Number> reduction_drop_smooth;
-  HPolytope<Number> reduction_unite_normal;
-  HPolytope<Number> reduction_unite_smooth;
-  HPolytope<Number> reduction_unite_cut;
-  HPolytope<Number> reduction_unite_norm;
-  HPolytope<Number> reduction_directed_small;
-  HPolytope<Number> reduction_directed_big;
+  HPolytope<Number> reduction_drop_normal,
+                    reduction_drop_smooth,
+                    reduction_unite_normal,
+                    reduction_unite_smooth,
+                    reduction_unite_cut,
+                    reduction_unite_norm,
+                    reduction_directed_small,
+                    reduction_directed_big,
+                    reduction_directed_template;
 
   // Welcome
   std::cout << "Example_reduction\n-----------------" << std::endl;
@@ -282,6 +283,9 @@ int main(int argc, char const *argv[])
   reduction_directed_big = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
   std::cout << "directed_big"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  reduction_directed_template = reduce_from.reduce_directed(reduce_from.computeTemplate(dimension, 4), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  std::cout << "directed_template"<< std::endl;
+  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
 
   std::cout << std::endl;
   // End Reducing
