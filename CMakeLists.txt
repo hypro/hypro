@@ -163,14 +163,14 @@ find_package(GTest)
 find_package(GLPK)
 endif()
 
+add_subdirectory(src)
+
+enable_testing()
+
 get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
     message(STATUS "${_variableName}=${${_variableName}}")
 endforeach()
-
-add_subdirectory(src)
-
-enable_testing()
 
 set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
 include_directories( ${include_directories} ${GLPK_INCLUDE_DIR} )
