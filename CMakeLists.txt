@@ -168,7 +168,7 @@ add_subdirectory(src)
 enable_testing()
 
 set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
-include_directories( ${include_directories} ${GLPK_INCLUDE_DIR} )
+include_directories( ${GLPK_INCLUDE_DIR} )
 
 get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
