@@ -166,6 +166,11 @@ endif()
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 add_subdirectory(src)
 
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
 enable_testing()
 
 include_directories( ${GLPK_INCLUDE_DIR} )
