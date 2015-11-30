@@ -164,17 +164,18 @@ find_package(GLPK)
 endif()
 
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)
-add_subdirectory(src)
-
-get_cmake_property(_variableNames VARIABLES)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
-enable_testing()
 
 include_directories( ${GLPK_INCLUDE_DIR} )
 set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+
+add_subdirectory(src)
+
+#get_cmake_property(_variableNames VARIABLES)
+#foreach (_variableName ${_variableNames})
+#    message(STATUS "${_variableName}=${${_variableName}}")
+#endforeach()
+
+enable_testing()
 
 add_subdirectory(src/test)
 
