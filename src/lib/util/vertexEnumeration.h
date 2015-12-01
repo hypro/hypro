@@ -13,7 +13,7 @@
 #include "../config.h"
 #include "../datastructures/Point.h"
 
-//#define FUKUDA_VERTEX_ENUM_DEBUG
+#define FUKUDA_VERTEX_ENUM_DEBUG
 
 namespace hypro {
 
@@ -96,7 +96,7 @@ public:
 	bool isLexMin() const;
 
 	/**
-	 * @brief Checks whether the proposed pivot is a valid reverse-pivot.
+	 * @brief Checks whether the proposed pivot is a valid reverse-pivot according to the Criss-Cross method.
 	 * @details Currently this check performs the pivot and checks, whether the result of the function selectCrissCrossPivot results
 	 * in the original dictionary.
 	 *
@@ -106,6 +106,17 @@ public:
 	 * @return
 	 */
 	bool isReverseCrissCrossPivot(std::size_t i, std::size_t j) const;
+
+	/**
+	 * @brief Checks whether the proposed pivot is a valid reverse-pivot according to Bland's rule.
+	 * @details
+	 *
+	 * @param i Row index.
+	 * @param j Column index.
+	 *
+	 * @return
+	 */
+	bool isReverseDualBlandPivot(std::size_t i, std::size_t j) const;
 
 	/**
 	 * @brief Selects the next possible criss cross pivot taking account of the variable order.
@@ -118,6 +129,17 @@ public:
 	 * @return True, if the dictionary is optimal, i.e. there is no valid pivot.
 	 */
 	bool selectCrissCrossPivot(std::size_t& i, std::size_t& j) const;
+
+	/**
+	 * @brief Selects the next pivot according to Bland's rule.
+	 * @details
+	 *
+	 * @param i The reference for the proposed row index.
+	 * @param j The reference for the proposed column index.
+	 *
+	 * @return True, if the dictionary is optimal, i.e. there is no valid pivot.
+	 */
+	bool selectDualBlandPivot(std::size_t& i, std::size_t& j) const;
 
 	/**
 	 * @brief Performs a pivoting step with the passed row and column index. Afterwards the dictionary is sorted and the row and column
