@@ -71,6 +71,7 @@ class Point {
 	 */
 	Point( const coordinateMap& _coordinates );
 	Point( const vector_t<Number>& _vector );
+	Point( vector_t<Number>&& _vector );
 
 	/**
 	 * Copy constructor
