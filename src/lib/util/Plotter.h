@@ -29,13 +29,14 @@ enum {
 	violett,
 	lila,
 };
-const char* colors[] = {"#006165", "#0098A1", "#57AB27", "#BDCD00", "#F6A800",
-						"#CC071E", "#A11035", "#612158", "#7A6FAC"};
+const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
+						0xCC071E, 0xA11035, 0x612158, 0x7A6FAC};
 
 struct gnuplotSettings {
-	std::string color = colors[petrol];  // default petrol
+	std::size_t color = colors[petrol];  // default petrol
 	bool fill = false;					 // do not fill
 	bool axes = true;					 // plot axes
+	double pointSize = 1.0;				 // pointsize
 };
 
 template <typename Number>
@@ -47,7 +48,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::ofstream mOutfile;
 	std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
 	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
-	std::map<unsigned, std::string> mObjectColors;
+	std::multimap<unsigned, Point<Number>> mPoints;
+	std::map<unsigned, std::size_t> mObjectColors;
 	gnuplotSettings mSettings;
 	unsigned mId;
 
@@ -59,6 +61,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	void setFilename( const std::string& _filename = "out" );
 	void updateSettings( gnuplotSettings _settings );
+	gnuplotSettings getSettings() const;
 
 	// plotting functions
 
@@ -71,6 +74,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	unsigned addObject( const std::vector<Point<Number>>& _points, bool sorted = false );
 	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted = false );
 	unsigned addObject( const std::vector<Hyperplane<Number>>& _planes );
+	void addPoint( const Point<Number>& _point );
+	void addPoints( const std::vector<Point<Number>>& _points );
 
 	void setObjectColor( unsigned _id, const std::string _color );
 
