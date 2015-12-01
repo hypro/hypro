@@ -6,7 +6,7 @@
 #include "../lib/algorithms/reachability/Reach.h"
 #include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../lib/representations/SupportFunctionContent/SupportFunctionContent.h"
+#include "../lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "../lib/representations/Box/Box.h"
 #include "../lib/util/Plotter.h"
 
@@ -63,33 +63,24 @@ int main(int argc, char const *argv[])
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
 	struct Location<Number>::Invariant inv;
 
-	invariantVec(0) = 20;
-	invariantVec(1) = 0;
-	invariantVec(2) = 20;
-	invariantVec(3) = 20;
+	invariantVec(0) = Number(20);
+	invariantVec(1) = Number(0.1);
+	invariantVec(2) = Number(20);
+	invariantVec(3) = Number(20);
 	//invariantVec(4) = 1;
 	//invariantVec(5) = 1;
 
 	invariantOp = LEQ;
 
-	invariantMat(0,0) = 1;
-	invariantMat(0,1) = 0;
-	//invariantMat(0,2) = 0;
-	invariantMat(1,0) = -1;
-	invariantMat(1,1) = 0;
-	//invariantMat(1,2) = 0;
-	invariantMat(2,0) = 0;
-	invariantMat(2,1) = 1;
-	//invariantMat(2,2) = 0;
-	invariantMat(3,0) = 0;
-	invariantMat(3,1) = -1;
-	//invariantMat(3,2) = 0;
-	// invariantMat(4,0) = 0;
-	// invariantMat(4,1) = 0;
-	// invariantMat(4,2) = 1;
-	// invariantMat(5,0) = 0;
-	// invariantMat(5,1) = 0;
-	// invariantMat(5,2) = -1;
+	invariantMat(0,0) = Number(1);
+	invariantMat(0,1) = Number(0);
+	invariantMat(1,0) = Number(-1);
+	invariantMat(1,1) = Number(0);
+	invariantMat(2,0) = Number(0);
+	invariantMat(2,1) = Number(1);
+	invariantMat(3,0) = Number(0);
+	invariantMat(3,1) = Number(-1);
+
 
 	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
 
@@ -97,16 +88,15 @@ int main(int argc, char const *argv[])
 	inv.mat = invariantMat;
 	inv.vec = invariantVec;
 
-
-	locationMat(0,0) = 0;
-	locationMat(0,1) = 1;
-	locationMat(0,2) = 0;
-	locationMat(1,0) = 0;
-	locationMat(1,1) = 0;
-	locationMat(1,2) = -9.81;
-	locationMat(2,0) = 0;
-	locationMat(2,1) = 0;
-	locationMat(2,2) = 0;
+	locationMat(0,0) = Number(0);
+	locationMat(0,1) = Number(1);
+	locationMat(0,2) = Number(0);
+	locationMat(1,0) = Number(0);
+	locationMat(1,1) = Number(0);
+	locationMat(1,2) = Number(-9.81);
+	locationMat(2,0) = Number(0);
+	locationMat(2,1) = Number(0);
+	locationMat(2,2) = Number(0);
 
 
 	loc1->setActivityMat(locationMat);
@@ -119,18 +109,18 @@ int main(int argc, char const *argv[])
 	operator_e guardOp;
 	matrix_t<Number> guardMat = matrix_t<Number>(3,2);
 
-	guardVec(0) = 0;
-	guardVec(1) = 0;
-	guardVec(2) = 0;
+	guardVec(0) = Number(0);
+	guardVec(1) = Number(0.1);
+	guardVec(2) = Number(0);
 
 	guardOp = LEQ;
 
-	guardMat(0,0) = 1;
-	guardMat(0,1) = 0;
-	guardMat(1,0) = -1;
-	guardMat(1,1) = 0;
-	guardMat(2,0) = 0;
-	guardMat(2,1) = 1;
+	guardMat(0,0) = Number(1);
+	guardMat(0,1) = Number(0);
+	guardMat(1,0) = Number(-1);
+	guardMat(1,1) = Number(0);
+	guardMat(2,0) = Number(0);
+	guardMat(2,1) = Number(1);
 
 
 	guard.op = guardOp;
@@ -140,13 +130,13 @@ int main(int argc, char const *argv[])
 	vector_t<Number> assignVec = vector_t<Number>(2,1);
 	matrix_t<Number> assignMat = matrix_t<Number>(2,2);
 
-	assignVec(0) = 0;
-	assignVec(1) = 0;
+	assignVec(0) = Number(0);
+	assignVec(1) = Number(0);
 
-	assignMat(0,0) = 1;
-	assignMat(0,1) = 0;
-	assignMat(1,0) = 0;
-	assignMat(1,1) = -0.9;
+	assignMat(0,0) = Number(1);
+	assignMat(0,1) = Number(0);
+	assignMat(1,0) = Number(0);
+	assignMat(1,1) = Number(-0.9);
 
 	reset.translationVec = assignVec;
 	reset.transformMat = assignMat;
@@ -177,34 +167,22 @@ int main(int argc, char const *argv[])
 	hybrid.setTransitions(transSet);
 	loc1->setTransitions(transSet);
 
-	//Polytope for InitialValuation & Guard Assignment
+	// Polytope for InitialValuation & Guard Assignment
 
-	//create Box (note: 3rd variable is for the constant factor)
-	boxVec(0) = 10.2;
-	boxVec(1) = -10;
-	boxVec(2) = -0.009;
-	boxVec(3) = 0.01;
-	//boxVec(4) = 1;
-	//boxVec(5) = -1;
+	// create Box (note: 3rd variable is for the constant factor)
+	boxVec(0) = Number(10.2);
+	boxVec(1) = Number(-10);
+	boxVec(2) = Number(-0.009);
+	boxVec(3) = Number(0.01);
 
-	boxMat(0,0) = 1;
-	boxMat(0,1) = 0;
-	//boxMat(0,2) = 0;
-	boxMat(1,0) = -1;
-	boxMat(1,1) = 0;
-	//boxMat(1,2) = 0;
-	boxMat(2,0) = 0;
-	boxMat(2,1) = 1;
-	//boxMat(2,2) = 0;
-	boxMat(3,0) = 0;
-	boxMat(3,1) = -1;
-	//boxMat(3,2) = 0;
-	// boxMat(4,0) = 0;
-	// boxMat(4,1) = 0;
-	// boxMat(4,2) = 1;
-	// boxMat(5,0) = 0;
-	// boxMat(5,1) = 0;
-	// boxMat(5,2) = -1;
+	boxMat(0,0) = Number(1);
+	boxMat(0,1) = Number(0);
+	boxMat(1,0) = Number(-1);
+	boxMat(1,1) = Number(0);
+	boxMat(2,0) = Number(0);
+	boxMat(2,1) = Number(1);
+	boxMat(3,0) = Number(0);
+	boxMat(3,1) = Number(-1);
 
 	Representation poly(boxMat,boxVec);
 
@@ -212,17 +190,10 @@ int main(int argc, char const *argv[])
 
 	std::vector<std::vector<Representation>> flowpipes;
 
-	//std::cout << "original Polytope (Box): ";
-	//poly.print();
-
-	// flowpipe = forwardReachability::computeForwardTimeClosure(*loc1, poly);
-	// flowpipes = forwardReachability::computeForwardsReachability(hybrid);
-
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
-
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename("out");
@@ -232,11 +203,11 @@ int main(int argc, char const *argv[])
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
-			std::cout << "Flowpipe segment to be converted: " << std::endl;
+			//std::cout << "Flowpipe segment to be converted: " << std::endl;
 			poly.removeRedundantPlanes();
-			poly.print();
+			//poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
-			std::cout << "points.size() = " << points.size() << std::endl;
+			//std::cout << "points.size() = " << points.size() << std::endl;
 			if(!points.empty() && points.size() > 2) {
 				//std::cout << "Polycount: " << count << std::endl;
 				for(auto& point : points) {
@@ -244,15 +215,15 @@ int main(int argc, char const *argv[])
 					point.reduceDimension(2);
 					// 			std::cout << point << std::endl;
 				}
-				//plotter.addObject(points);
-				//std::cout << "\rAdded object " << count << "/" << maxCount << std::flush;
+				plotter.addObject(points);
+				std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
 				points.clear();
 				++count;
 			}
 		}
+		std::cout << std::endl;
 	}
-	std::cout << endl;
-
+	std::cout << std::endl;
 	plotter.plot2d();
 
 	return 0;

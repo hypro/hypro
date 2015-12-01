@@ -13,6 +13,7 @@
 #include <glpk.h>
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
+#include "../../../util/vertexEnumeration.h"
 #include "../../../util/smtrat/SimplexSolver.h"
 #include "util.h"
 
@@ -32,7 +33,8 @@ public:
                               UNITE_CUT,
                               UNITE_NORM,
                               DIRECTED_SMALL,
-                              DIRECTED_BIG
+                              DIRECTED_BIG,
+                              DIRECTED_TEMPLATE
                             };
 
 	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
@@ -105,6 +107,7 @@ public:
   Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
   bool isBounded(std::vector<vector_t<Number>>) const;
+  std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope) const;
   // End Help funcions
 
 

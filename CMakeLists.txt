@@ -163,12 +163,14 @@ find_package(GTest)
 find_package(GLPK)
 endif()
 
+add_subdirectory(src/resources EXCLUDE_FROM_ALL)
+
+include_directories( ${GLPK_INCLUDE_DIR} )
+set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+
 add_subdirectory(src)
 
 enable_testing()
-
-set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
-include_directories( ${include_directories} ${GLPK_INCLUDE_DIR} )
 
 add_subdirectory(src/test)
 
