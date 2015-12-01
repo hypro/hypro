@@ -45,6 +45,7 @@ set( EXAMPLES
     example_vertexEnumeration
     #example_twotankreachability
     example_zonotope
+    example_HPolytope
 )
 
 foreach( example ${EXAMPLES} )
