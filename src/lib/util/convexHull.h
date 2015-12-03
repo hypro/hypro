@@ -88,6 +88,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 			index++;
 		}
 
+
 		// inti facets
 		for (unsigned i=0; i < dimension+1; i++) {
 			facets.push_back(std::shared_ptr<Facet<Number>>(new Facet<Number>()));
@@ -505,7 +506,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		}
 
 		//for(unsigned i = 0; i<facets.size(); i++){
-		//	std::cout << "Facet Nr." << i+1 << std::endl << "normal: "<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl;
+		//	std::cout << "Facet Nr." << i+1 << std::endl << "normal:\n"<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl;
 		//}
 
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
@@ -521,6 +522,9 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		while (!workingSet.empty()) {
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
+
+			//std::cout << "Inside workingSet with currentFacet normal:\n"<< currentFacet->getNormal() <<"\noffset: "<<currentFacet->getScalar() << std::endl;
+			//std::cout << "And size of facets is " << facets.size() << std::endl;
 
 			std::vector<std::shared_ptr<Facet<Number>>> currentVisibleFacets;
 			currentVisibleFacets.push_back(currentFacet);

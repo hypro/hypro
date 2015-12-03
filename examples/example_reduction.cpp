@@ -191,6 +191,7 @@ int main(int argc, char const *argv[])
   HPolytope<Number> reduce_from = nico;
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
   bool volume=false;
+  double prevVolume=0;
 
   HPolytope<Number> reduction_drop_normal,
                     reduction_drop_smooth,
@@ -207,8 +208,8 @@ int main(int argc, char const *argv[])
 
   // calculate volume of HPolytope reduce_from
 if(volume){
-  double prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
-   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
+  prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
+  std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
  }
 
   // Reducing
