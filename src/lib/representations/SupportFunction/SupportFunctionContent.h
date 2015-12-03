@@ -130,7 +130,7 @@ class SupportFunctionContent {
 
 	virtual ~SupportFunctionContent();
 
-	std::shared_ptr<SupportFunctionContent<Number>> operator=( std::shared_ptr<SupportFunctionContent<Number>> _orig );
+	std::shared_ptr<SupportFunctionContent<Number>> operator=( const std::shared_ptr<SupportFunctionContent<Number>> _orig ) ;
 
 	evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;

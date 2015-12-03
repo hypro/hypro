@@ -21,6 +21,7 @@
 #include "Polytopes/VPolytope/VPolytope.h"
 #include "Polytopes/HPolytope/HPolytope.h"
 #include "SupportFunction/SupportFunctionContent.h"
+#include "SupportFunction/SupportFunction.h"
 #include "Zonotope/Zonotope.h"
 
 #include "Box/converter.h"
