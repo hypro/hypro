@@ -13,13 +13,13 @@
 namespace hypro{
         // conversion from Box to support function
         template <typename Number>
-        static bool convert( const hypro::Box<Number>& _source, const hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target ) {
                 unsigned dim = _source.dimension();                                                     //gets dimension of box
                 assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
                 matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
                 for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
-                        directions( 2 * i, i ) = -1;                                                    
+                        directions( 2 * i, i ) = -1;
                         directions( 2 * i + 1, i ) = 1;                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
                 }
 
@@ -27,7 +27,7 @@ namespace hypro{
 
                 std::vector<carl::Interval<Number>> intervals = _source.boundaries();                   //gets intervals of box
                 for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
-                        distances( 2 * i ) = -intervals[i].lower();                                
+                        distances( 2 * i ) = -intervals[i].lower();
                         distances( 2 * i + 1 ) = intervals[i].upper();                                  //write inverted lower bound values and upper bound values into the distance vector
                 }
 
@@ -38,21 +38,21 @@ namespace hypro{
 
         // conversion from V-Polytope to support function
         template <typename Number>
-        static bool convert( const hypro::VPolytope<Number>& _source, const hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
                 HPolytope<Number> temp = HPolytope<Number>(_source);                                   //converts the source object into a h-polytope
                 typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
-                
+
                 _target = SupportFunction<Number>( SF_TYPE::POLY, planes );             //constructs a support function with the received planes
-               
+
                 return true;
         }
-    
 
-    
+
+
         // conversion from H-polytope to support function
         template <typename Number>
-        static bool convert( const hypro::HPolytope<Number>& _source, const hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
                 typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
                 assert( !planes.empty() );                                                                //ensures that nonempty planes got fetched before continuing
 
@@ -62,15 +62,15 @@ namespace hypro{
         }
         // TODO conversion from Zonotope to support function
         template <typename Number>
-        static bool convert( const hypro::Zonotope<Number>& _source, const hypro::SupportFunction<Number>& _target ) {
-                
+        static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
+
 
                 return true;
         }
-        
+
 /*                     Zonotope<Number> tmp = _source.intervalHull();
                 std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
-                assert( !vertices.empty() );                                                                                    
+                assert( !vertices.empty() );
                 vector_t<Number> minima = vertices[0];
                 vector_t<Number> maxima = vertices[0];
 
@@ -114,6 +114,6 @@ carl::Interval<Number>(minima(i), maxima(i))));
 	return Box<Number>(intervals);
 }
 */
-    
-    
+
+
 } //namespace

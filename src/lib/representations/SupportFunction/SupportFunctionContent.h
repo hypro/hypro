@@ -128,6 +128,12 @@ class SupportFunctionContent {
 		return obj;
 	}
 
+	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(*orig) );
+		obj->pThis = obj;
+		return obj;
+	}
+
 	virtual ~SupportFunctionContent();
 
 	std::shared_ptr<SupportFunctionContent<Number>> operator=( const std::shared_ptr<SupportFunctionContent<Number>> _orig ) ;

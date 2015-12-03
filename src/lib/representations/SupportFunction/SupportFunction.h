@@ -1,4 +1,4 @@
-/** 
+/**
  * Wrapper class for SupportFunctionContent for easier use.
  * @file   SupportFunction.h
  * @author Simon Froitzheim
@@ -13,28 +13,28 @@
 #include "SupportFunctionContent.h"
 
 namespace hypro {
- 
-    
+
+
 
 
 template <typename Number>
 class SupportFunction {
-    private: 
+    private:
            std::shared_ptr<SupportFunctionContent<Number>> content;
            SupportFunction<Number> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
-    
+
     public:
         SupportFunction ();
         SupportFunction (const SupportFunction<Number>& _orig);
         SupportFunction (SF_TYPE _type, Number _radius );
         SupportFunction (SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
         SupportFunction (SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
-        
-        
+
+
         virtual ~SupportFunction();
-        
-        SupportFunction<Number> operator=( SupportFunction<Number> _orig ) const;
-        
+
+        SupportFunction<Number> operator=( const SupportFunction<Number>& _orig );
+
         evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
@@ -50,7 +50,7 @@ class SupportFunction {
 	PolytopeSupportFunction<Number>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
 
-	SupportFunction<Number> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;													   
+	SupportFunction<Number> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
 	SupportFunction<Number> minkowskiSum( SupportFunction<Number>& _rhs ) const;
 	SupportFunction<Number> intersect( SupportFunction<Number>& _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
@@ -61,7 +61,7 @@ class SupportFunction {
 	bool empty() const;
 
 	void print() const;
-    
+
 };
 
 
