@@ -404,6 +404,11 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 }
 
 template <typename Number>
+void HPolytope<Number>::erase( const unsigned index ) {
+	mHPlanes.erase(mHPlanes.begin()+index);
+}
+
+template <typename Number>
 const typename HPolytope<Number>::HyperplaneVector &HPolytope<Number>::constraints() const {
 	return mHPlanes;
 }
