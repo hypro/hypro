@@ -200,9 +200,57 @@ int main(int argc, char const *argv[])
 
 	for(auto& index : flowpipeIndices) {
 		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
+		std::vector<Representation> flowpipe_smoothed;
+
+		//// add groups of ...10 Representations in form of it's convexHull
+		//std::vector<Point<Number>> points_convexHull;
+		//unsigned flowpipe_count=0, flowpipe_total=0;
+
+		//for(auto& poly : flowpipe){
+		//	flowpipe_total++;
+		//	if(flowpipe_total==flowpipe.size()-1 || flowpipe_count<2){
+
+		//		// update vertices
+		//		std::vector<Point<Number>> points = poly.vertices();
+		//		for(Point<Number> point: points){
+		//			if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+		//				points_convexHull.push_back(point);
+		//			}
+		//		}
+		//		flowpipe_count++;
+
+		//	}
+		//	else {
+
+		//		// push_back convexHull of 10 Representations
+		//		auto facets = convexHull(points_convexHull);
+		//		std::vector<Hyperplane<Number>> hyperplanes;
+		//		for(unsigned i = 0; i<facets.first.size(); i++){
+		//			hyperplanes.push_back(facets.first.at(i)->hyperplane());
+		//		}
+		//		Representation representation_smoothed(hyperplanes);
+
+		//		// transform facets -> representation
+		//		flowpipe_smoothed.push_back(representation_smoothed);
+
+		//		// reset variables
+		//		flowpipe_count=0;
+		//		points_convexHull.clear();
+		//	}
+		//}
+		//flowpipe.clear();
+
+		//// reduce flowpipe segments to 4 facets!
+		//for(auto& poly : flowpipe) {
+		//	poly.removeRedundantPlanes();
+		//	Representation poly_smoothed = poly.reduce_nd(0, 0,  HPolytope<Number>::REDUCTION_STRATEGY::DROP);
+		//	flowpipe_smoothed.push_back(poly_smoothed);
+		//}
+		//flowpipe.clear();
+
 		unsigned count = 1;
-		unsigned maxCount = flowpipe.size();
-		for(auto& poly : flowpipe) {
+		unsigned maxCount = flowpipe.size();//_smoothed.size();
+		for(auto& poly : flowpipe) {//_smoothed) {
 			//std::cout << "Flowpipe segment to be converted: " << std::endl;
 			poly.removeRedundantPlanes();
 			//poly.print();
