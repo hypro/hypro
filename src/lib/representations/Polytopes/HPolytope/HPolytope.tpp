@@ -404,6 +404,11 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 }
 
 template <typename Number>
+void HPolytope<Number>::erase( const unsigned index ) {
+	mHPlanes.erase(mHPlanes.begin()+index);
+}
+
+template <typename Number>
 const typename HPolytope<Number>::HyperplaneVector &HPolytope<Number>::constraints() const {
 	return mHPlanes;
 }
@@ -966,7 +971,6 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
  */
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const {
-
 	// init
 	HPolytope<Number> res = *this;
 
@@ -974,10 +978,11 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
 	std::vector<unsigned> facets_erase;
-	if(strat == REDUCTION_STRATEGY::DIRECTED_TEMPLATE)
+	if(strat == REDUCTION_STRATEGY::DIRECTED_TEMPLATE){
 			for(unsigned i=0; i<res.size(); i++){ // erase all facets
 				facets_erase.push_back(i);
 			}
+		}
 	std::vector<Hyperplane<Number>> facets_insert;
 
 	// loop through each direction

@@ -186,7 +186,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::operator=(
-	  std::shared_ptr<SupportFunctionContent<Number>> _other ) {
+	  const std::shared_ptr<SupportFunctionContent<Number>> _other ){
 	// std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {

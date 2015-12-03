@@ -190,7 +190,7 @@ int main(int argc, char const *argv[])
   // init reduce_HPolytopes
   HPolytope<Number> reduce_from = nico;
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
-  bool volume=true;
+  bool volume=false;
 
   HPolytope<Number> reduction_drop_normal,
                     reduction_drop_smooth,
@@ -206,8 +206,10 @@ int main(int argc, char const *argv[])
   std::cout << "Example_reduction\n-----------------" << std::endl;
 
   // calculate volume of HPolytope reduce_from
+if(volume){
   double prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
-  if(volume) std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
+   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
+ }
 
   // Reducing
   std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (red)" << std::endl << std::endl;
@@ -255,7 +257,7 @@ int main(int argc, char const *argv[])
     }
   }
 
-  std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila)" << std::endl << std::endl;
+  std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila), directed_template (bordeaux)" << std::endl << std::endl;
 
   //2D
   if(dimension==2){
@@ -290,6 +292,7 @@ int main(int argc, char const *argv[])
   std::cout << std::endl;
   // End Reducing
 
+  /*
   // Plotting
   unsigned rdn, rds, run, rus, ruc, rdis, rdib, rdit;
   //3D ... nD
@@ -387,6 +390,7 @@ int main(int argc, char const *argv[])
 
 	plotter.plot2d();
   // End Plotting
+  */
 
 	return 0;
 }

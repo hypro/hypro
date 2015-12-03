@@ -85,6 +85,8 @@ public:
 	void insert( const Hyperplane<Number>& plane );
 	void insert( const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end );
 
+  void erase( const unsigned index);
+
 	const HyperplaneVector& constraints() const;
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();

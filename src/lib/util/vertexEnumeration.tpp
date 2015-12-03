@@ -143,7 +143,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> Dictionary<Number>::search () {
+	std::vector<Point<Number>> Dictionary<Number>::search() {
 		std::vector<Point<Number>> res;
 		std::size_t i,j;
 		i = 0;
@@ -174,9 +174,9 @@ namespace hypro {
 				std::cout << "Corresponding computed vertex: " << vertex() << std::endl;
 				std::cout << "Is lexicographic minimum: " << isLexMin() << std::endl;
 #endif
-				if(isLexMin()){
+				//if(isLexMin()){
 					res.push_back(vertex());
-				}
+				//}
 				i = 0;
 				j = 1;
 			} else {
@@ -282,6 +282,71 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool Dictionary<Number>::isReverseDualBlandPivot(std::size_t i, std::size_t j) const {
+		std::size_t s,r;
+
+		if(i >= (std::size_t) mDictionary.rows()-1){
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+			std::cout << "Invalid indices." << std::endl;
+#endif
+			return false;
+		}
+
+		if(mDictionary(i,j) == 0) {
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+			std::cout << "Not usable for pivot (table entry=0)." << std::endl;
+#endif
+			return false;
+		}
+
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+		std::cout << __func__ << " i " << i << ", j " << j << std::endl;
+#endif
+
+		auto sIt = mB.begin();
+		while(sIt->second != i) ++sIt;
+		s = sIt->first;
+
+		auto rIt = mN.begin();
+		while(rIt->second != j) ++rIt;
+		r = rIt->first;
+
+		Dictionary<Number> tmp(*this);
+		std::size_t tmpI = i;
+		std::size_t tmpJ = j;
+		tmp.pivot(tmpI,tmpJ);
+		//std::cout << "Tmp after proposed pivot:" << std::endl;
+		//tmp.print(true);
+
+		std::size_t newI,newJ;
+		bool optimal = tmp.selectDualBlandPivot(newI, newJ);
+
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+		std::cout << "i: " << i << ", j: " << j << std::endl;
+		std::cout << "r: " << r << ", s: " << s << std::endl;
+#endif
+		if(optimal) {
+			return false;
+		}
+
+		std::size_t newS,newR;
+
+		auto nsIt = tmp.basis().begin();
+		while(nsIt->second != newI) ++nsIt;
+		newS = nsIt->first;
+
+		auto nrIt = tmp.cobasis().begin();
+		while(nrIt->second != newJ) ++nrIt;
+		newR = nrIt->first;
+
+		if(newS == r && newR == s) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	template<typename Number>
 	bool Dictionary<Number>::selectCrissCrossPivot(std::size_t& i, std::size_t& j) const {
 		// step 1: Find smallest index i s.th. i primal or dual infeasible
 		bool primalInfeasible = false;
@@ -337,6 +402,40 @@ namespace hypro {
 		std::cout << __func__ << ": No feasible pivot." << std::endl;
 #endif
 		return optimal;
+	}
+
+	template<typename Number>
+	bool Dictionary<Number>::selectDualBlandPivot(std::size_t& i, std::size_t& j) const {
+		unsigned rowIndex = 0;
+		for( ; rowIndex < mDictionary.rows(); ++rowIndex){
+			if(mDictionary(rowIndex,mG) < 0)
+				break;
+		}
+		// the dictionary is optimal.
+		if(rowIndex == mDictionary.rows()-1 && mDictionary(rowIndex,mG) >= 0)
+			return true;
+
+		Number minval;
+		unsigned minIndex;
+		bool set = false;
+		unsigned colIndex = 0;
+		for( ; colIndex < mDictionary.cols(); ++colIndex){
+			if(mDictionary(rowIndex,colIndex) > 0){
+				if(!set){
+					minval = - mDictionary(mF,colIndex)/mDictionary(rowIndex,colIndex);
+					minIndex = colIndex;
+					set = true;
+				} else if(- mDictionary(mF,colIndex)/mDictionary(rowIndex,colIndex) < minval) {
+					minval = - mDictionary(mF,colIndex)/mDictionary(rowIndex,colIndex);
+					minIndex = colIndex;
+				}
+			}
+		}
+		assert(set); // not sure if this is okay.
+		i = rowIndex;
+		j = colIndex;
+
+		return false;
 	}
 
 	template<typename Number>

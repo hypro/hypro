@@ -64,6 +64,13 @@ Point<Number>::Point( const vector_t<Number> &_vector )
 }
 
 template <typename Number>
+Point<Number>::Point( vector_t<Number>&& _vector )
+	: mCoordinates( _vector ),
+	mHash(0),
+	mComposedOf() {
+}
+
+template <typename Number>
 Point<Number>::Point( const Point<Number> &_p )
 	: mCoordinates( _p.rawCoordinates() ),
 	mHash(0),

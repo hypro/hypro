@@ -21,6 +21,7 @@ set( EXAMPLES
     example_eigen_float_t
     example_facetEnumeration
     example_hausdorffApprox
+    example_massif
     example_matrixPolyhedra
     example_multiplication
     example_openglPlotting

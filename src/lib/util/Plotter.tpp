@@ -17,11 +17,16 @@ void Plotter<Number>::updateSettings( gnuplotSettings _settings ) {
 	mSettings = _settings;
 }
 
+template<typename Number>
+gnuplotSettings Plotter<Number>::getSettings() const {
+	return mSettings;
+}
+
 template <typename Number>
 void Plotter<Number>::plot2d() const {
 	mOutfile.open( mFilename + ".plt" );
 
-	if ( !mObjects.empty() ) {
+	if ( !mObjects.empty() || !mPoints.empty() ) {
 		// set object
 		vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
 		vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
@@ -29,7 +34,7 @@ void Plotter<Number>::plot2d() const {
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
-		unsigned maxObj = mObjects.rbegin()->first;
+		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
 		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
@@ -72,27 +77,40 @@ void Plotter<Number>::plot2d() const {
 			}
 
 			// color lookup
-			std::string color = mSettings.color;
+			auto color = mSettings.color;
 			if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
 				color = mObjectColors.at( objectIt->first );
 			}
 
 			if ( mSettings.fill )
-				mOutfile << " front fs transparent solid 0.75 fc rgb '" << color << "'\n";
+				mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "'\n";
 			else
-				mOutfile << " front fs empty border lc rgb '" << color << "'\n";
+				mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "'\n";
 
 			++objectCount;
 		}
 
+		// collect ranges
+		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
+			// update min and max
+			min(0) = min(0) > pointIt->second.at(0) ? pointIt->second.at(0) : min(0);
+			min(1) = min(1) > pointIt->second.at(1) ? pointIt->second.at(1) : min(1);
+			max(0) = max(0) < pointIt->second.at(0) ? pointIt->second.at(0) : max(0);
+			max(1) = max(1) < pointIt->second.at(1) ? pointIt->second.at(1) : max(1);
+		}
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
 			ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
 		}
+		mOutfile << "plot ";
+		for ( unsigned d = 0; d < min.rows(); ++d ) {
+			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+		}
+		mOutfile << "NaN notitle";
 
 		// create plane functions
-		int index = 0;
+		int index = 1;
 		if(!mPlanes.empty()){
 			mOutfile << "\n";
 			for( const auto& planePair : mPlanes ) {
@@ -102,9 +120,13 @@ void Plotter<Number>::plot2d() const {
 					++index;
 				}
 			}
-			mOutfile << "\n";
-		}
 
+		}
+		mOutfile << "\n";
+		mOutfile << "set size ratio 1\n";
+		mOutfile << "set term post eps\n";
+		mOutfile << "set output \"" << mFilename << ".eps\"";
+		mOutfile << "\n";
 
 		if(mSettings.axes) {
 			mOutfile << "set xzeroaxis \n";
@@ -115,26 +137,40 @@ void Plotter<Number>::plot2d() const {
 			mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
 		}
 
-		mOutfile << "set size ratio 1\n";
-		mOutfile << "set term post eps\n";
-		mOutfile << "set output \"" << mFilename << ".eps\"";
+		if(!mPoints.empty()){
+			mOutfile << "set multiplot\n";
+			mOutfile << "unset key\n";
+			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
+			mOutfile << "set style line 1 lc rgb '#" << std::hex << mSettings.color << "'\n";
+			mOutfile << "plot ";
+			mOutfile << "'-' w p ls 1";
+			for(unsigned pos = 1; pos < mPoints.size(); ++pos){
+				mOutfile << ", '-' w p ls 1";
+			}
+			mOutfile << "\n";
+		}
+		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
+			mOutfile << double(pointIt->second.at(0)) << " " << double(pointIt->second.at(1)) << "\n";
+			mOutfile << "e\n";
+		}
 		mOutfile << "\n";
+
 		if(!mPlanes.empty()){
-			mOutfile << "set multiplot \n";
+			if(mPoints.empty()){
+				mOutfile << "set multiplot \n";
+				mOutfile << "unset key\n";
+			}
 			//plot all planes
-			while(index > 0) {
+			auto color = mSettings.color;
+			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << "' \n";
+			while(index > 1){
 				--index;
-				mOutfile << "plot f_" << index << "(x) \n";
+				mOutfile << "plot f_" << index << "(x) with lines linestyle 1\n";
 			}
 		}
 
-		mOutfile << "plot ";
-		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
-		}
-		mOutfile << "NaN notitle";
-		if(!mPlanes.empty())
-			mOutfile << "\n unset multiplot";
+		if(!mPlanes.empty() || !mPoints.empty())
+			mOutfile << "\n unset multiplot\n";
 	}
 	mOutfile.close();
 	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
@@ -168,6 +204,20 @@ template<typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
 	mPlanes.insert( std::make_pair( mId, _planes ) );
 	return mId++;
+}
+
+template<typename Number>
+void Plotter<Number>::addPoint( const Point<Number>& _point ) {
+	mPoints.insert( std::make_pair( mId, _point ) );
+	mId++;
+}
+
+template<typename Number>
+void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
+	for(const auto& p : _points){
+		mPoints.insert( std::make_pair( mId, p ) );
+		mId++;
+	}
 }
 
 template <typename Number>

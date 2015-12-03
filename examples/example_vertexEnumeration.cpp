@@ -4,12 +4,14 @@
 
 #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../src/lib/util/vertexEnumeration.h"
+#include "../src/lib/util/Plotter.h"
 
 int main(int argc, char** argv) {
 	typedef carl::FLOAT_T<cln::cl_RA> Number;
 
-    hypro::HPolytope<Number> poly(hypro::Hyperplane<Number>(hypro::Point<Number>({1,3}), 4));
+    hypro::HPolytope<Number> poly;
 
+    poly.insert(hypro::Hyperplane<Number>(hypro::Point<Number>({1,3}), 4));
     poly.insert(hypro::Hyperplane<Number>(hypro::Point<Number>({5,1}), 5));
     poly.insert(hypro::Hyperplane<Number>(hypro::Point<Number>({3,2}), 2));
     poly.insert(hypro::Hyperplane<Number>(hypro::Point<Number>({-1,-3}), 1));
@@ -99,6 +101,10 @@ int main(int argc, char** argv) {
     				std::cout << point << ", ";
 
     			std::cout << std::endl;
+    			hypro::Plotter<Number>& p = hypro::Plotter<Number>::getInstance();
+    			p.addObject(res);
+    			p.addPoints(res);
+    			p.plot2d();
     			exit(0);
     			break;
     		}
