@@ -44,6 +44,10 @@ class Hyperplane {
 
 	~Hyperplane();
 
+  double sizeOfHyperplane(){
+    return sizeof(*this) + this->mNormal.size()* sizeof(Number);
+  }
+
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
 	void reduceToDimensions( std::vector<unsigned> _dimensions );

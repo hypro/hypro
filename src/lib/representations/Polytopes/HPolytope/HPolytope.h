@@ -67,6 +67,9 @@ public:
 	/*
 	 * Getters and setters
 	 */
+   double sizeOfHPolytope(){
+     return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHyperplane();
+   }
 
 	bool empty() const;
 	static HPolytope<Number> Empty();

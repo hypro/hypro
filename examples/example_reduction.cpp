@@ -188,7 +188,9 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = nico;
+  HPolytope<Number> reduce_from = confuse_cube5;
+
+
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
   bool volume=false;
   double prevVolume=0;
@@ -211,6 +213,8 @@ if(volume){
   prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
  }
+ std::cout << "size of reduce_from: " << reduce_from.sizeOfHPolytope() << std::endl;
+
 
   // Reducing
   std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (red)" << std::endl << std::endl;
@@ -223,10 +227,12 @@ if(volume){
     std::cout << "drop_normal"<< std::endl;
     reduction_drop_normal = reduce_from.reduce_nd(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP);
     if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    std::cout << "size of reduction_drop_normal: " << reduction_drop_normal.sizeOfHPolytope() << std::endl;
 
     std::cout << "drop_smooth"<< std::endl;
     reduction_drop_smooth = reduce_from.reduce_nd(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP_SMOOTH);
     if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    std::cout << "size of reduction_drop_smooth: " << reduction_drop_smooth.sizeOfHPolytope() << std::endl;
 
     std::cout << std::endl;
   }
@@ -245,14 +251,17 @@ if(volume){
       std::cout << "unite_normal"<< std::endl;
       reduction_unite_normal = reduce_from.reduce_nd(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE);
       if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_normal: " << reduction_unite_normal.sizeOfHPolytope() << std::endl;
 
       std::cout << "unite_smooth"<< std::endl;
       reduction_unite_smooth = reduce_from.reduce_nd(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_SMOOTH);
       if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_smooth: " << reduction_unite_smooth.sizeOfHPolytope() << std::endl;
 
       std::cout << "unite_cut"<< std::endl;
       reduction_unite_cut = reduce_from.reduce_nd(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_CUT);
       if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytope() << std::endl;
 
       std::cout << std::endl;
     }
@@ -283,12 +292,17 @@ if(volume){
   reduction_directed_small = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
   std::cout << "directed_small"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_small)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_small: " << reduction_directed_small.sizeOfHPolytope() << std::endl;
+
   reduction_directed_big = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
   std::cout << "directed_big"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
+
   reduction_directed_template = reduce_from.reduce_directed(reduce_from.computeTemplate(dimension, 3), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
   std::cout << "directed_template"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
 
   std::cout << std::endl;
   // End Reducing
