@@ -14,7 +14,7 @@ using namespace hypro;
 
 int main(int argc, char const *argv[])
 {
-	typedef double Number;
+	typedef carl::FLOAT_T<double> Number;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	gnuplotSettings settings;
@@ -95,7 +95,7 @@ int main(int argc, char const *argv[])
   diamond.insert(Hyperplane<Number>({-1,-1},1));
   diamond.insert(Hyperplane<Number>({1,-1},1));
 
-  vector_t<double> directed2d_1 = vector_t<double>(2);
+  vector_t<Number> directed2d_1 = vector_t<Number>(2);
   directed2d_1(0) = 1; directed2d_1(1) = 1;
 
   // 3D
@@ -148,11 +148,11 @@ int main(int argc, char const *argv[])
   house.insert(Hyperplane<Number>({-1,  1,  1}, 1)); //front-left 7
   house.insert(Hyperplane<Number>({-1, -1,  1}, 1)); //back-left 8
 
-  vector_t<double> directed3d_1 = vector_t<double>(3);
+  vector_t<Number> directed3d_1 = vector_t<Number>(3);
   directed3d_1(0) = 1; directed3d_1(1) = 1; directed3d_1(2) = 1;
-  vector_t<double> directed3d_2 = vector_t<double>(3);
+  vector_t<Number> directed3d_2 = vector_t<Number>(3);
   directed3d_2(0) = 1.1; directed3d_2(1) = -1; directed3d_2(2) = 1;
-  vector_t<double> directed3d_3 = vector_t<double>(3);
+  vector_t<Number> directed3d_3 = vector_t<Number>(3);
   directed3d_3(0) = 0.1; directed3d_3(1) = -1; directed3d_3(2) = 1;
 
   // 4D
@@ -167,7 +167,7 @@ int main(int argc, char const *argv[])
   confuse_cube.insert(Hyperplane<Number>({ 0, -1,  0,  0}, 1));
   confuse_cube.insert(Hyperplane<Number>({ 0,  1,  0,  0}, 1));
 
-  vector_t<double> directed4d_1 = vector_t<double>(4);
+  vector_t<Number> directed4d_1 = vector_t<Number>(4);
   directed4d_1(0) = 1; directed4d_1(1) = 1.1; directed4d_1(2) = 0.9; directed4d_1(3) = 1.5;
 
   // 5D
@@ -184,16 +184,16 @@ int main(int argc, char const *argv[])
   confuse_cube5.insert(Hyperplane<Number>({ 0, -1,  0,  0,  0}, 1));
   confuse_cube5.insert(Hyperplane<Number>({ 0,  1,  0,  0,  0}, 2));
 
-  vector_t<double> directed5d_1 = vector_t<double>(5);
+  vector_t<Number> directed5d_1 = vector_t<Number>(5);
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = confuse_cube5;
+  HPolytope<Number> reduce_from = td_example;
 
 
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
   bool volume=false;
-  double prevVolume=0;
+  Number prevVolume=0;
 
   HPolytope<Number> reduction_drop_normal,
                     reduction_drop_smooth,

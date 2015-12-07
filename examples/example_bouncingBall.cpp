@@ -240,13 +240,19 @@ int main(int argc, char const *argv[])
 		//}
 		//flowpipe.clear();
 
-		//// reduce flowpipe segments to 4 facets!
-		//for(auto& poly : flowpipe) {
-		//	poly.removeRedundantPlanes();
-		//	Representation poly_smoothed = poly.reduce_nd(0, 0,  HPolytope<Number>::REDUCTION_STRATEGY::DROP);
-		//	flowpipe_smoothed.push_back(poly_smoothed);
-		//}
+		// reduce flowpipe segments to 4 facets!
+		double soFlowpipe=0, soFlowpipeS=0;
+
+		for(auto& poly : flowpipe) {
+			poly.removeRedundantPlanes();
+			Representation poly_smoothed = poly.reduce_directed(poly.computeTemplate(2, 3), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+			flowpipe_smoothed.push_back(poly_smoothed);
+			soFlowpipe += poly.sizeOfHPolytope();
+			soFlowpipeS += poly_smoothed.sizeOfHPolytope();
+		}
 		//flowpipe.clear();
+
+		std::cout << "Size of flowpipe is " << soFlowpipe << " and of flowpipe_smoothed is " << soFlowpipeS << std::endl;
 
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();//_smoothed.size();

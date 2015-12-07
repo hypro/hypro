@@ -628,7 +628,7 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<vector_t<Number>> 
 
 	for(unsigned i=0; i<dimension; i++){ // iterate through each coordinate of the normal vector
 		// create the matrix and get determinant for each matrix
-		Eigen::MatrixXd m(dimension-1, dimension-1);
+		matrix_t<Number> m(dimension-1, dimension-1);
 		for(unsigned r=0; r<dimension; r++) {
 			if(r!=i){
 				unsigned rCorrect = r;
@@ -638,7 +638,7 @@ vector_t<Number> HPolytope<Number>::computeNormal(std::vector<vector_t<Number>> 
 				}
 			}
 		}
-		double determinant = m.determinant();
+		Number determinant = Number(m.determinant());
 		if ((i % 2) == 0) {
 			res[i] = determinant;
 		}
@@ -664,7 +664,7 @@ Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std
 	// try each vertex
 	for(Point<Number> vertex: vertices){
 		bool below=true;
-		double vector_offset=0;
+		Number vector_offset=0;
 
 		// calculate offset
 		for(unsigned i=0; i<vector.size(); i++){
@@ -672,13 +672,13 @@ Point<Number> HPolytope<Number>::getVertexForVector(vector_t<Number> vector, std
 		}
 		// check for each vertex if it lies below the hyperplane
 		for(Point<Number> vertex_test: vertices){
-			double vector_test_offset=0;
+			Number vector_test_offset=0;
 
 			if(vertex!=vertex_test){
 				for(unsigned i=0; i<vector.size(); i++){
 					vector_test_offset+=vector[i]*vertex_test.coordinate(i);
 				}
-				if(vector_test_offset>vector_offset){
+				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset>vector_offset){
 					below=false; // vertex lies above
 					break;
 				}
@@ -728,11 +728,11 @@ bool HPolytope<Number>::isBounded(std::vector<vector_t<Number>> evaluations) con
 	 templateVector2d(0) = 1;
 	 templatePolytope2d.push_back(templateVector2d);
 
-	 Eigen::MatrixXd m(2, 2); //init matrix
-	 m(0,0) = cos(degree);
-	 m(0,1) = (-1)*sin(degree);
-	 m(1,0) = sin(degree);
-	 m(1,1) = cos(degree);
+	 matrix_t<Number> m(2, 2); //init matrix
+	 m(0,0) = Number(cos(degree));
+	 m(0,1) = Number((-1)*sin(degree));
+	 m(1,0) = Number(sin(degree));
+	 m(1,1) = Number(cos(degree));
 
 
 	 for(unsigned i=0; i<polytope; ++i) {
@@ -948,7 +948,7 @@ HPolytope<Number> HPolytope<Number>::reduce_nd(unsigned a, unsigned b, REDUCTION
 		//check if all vertices are inside the new polytope
 		for(unsigned i=0; i<res.mHPlanes.size(); ++i) {
 			for(Point<Number> vertex: vertices){
-				double value=0;
+				Number value=0;
 				for(unsigned j=0; j<res.mHPlanes.at(i).normal().size(); j++){
 					value+=res.mHPlanes.at(i).normal()[j]*vertex.coordinate(j);
 				}
@@ -974,6 +974,11 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 	// init
 	HPolytope<Number> res = *this;
 
+	if(res.size()<directions.size()){
+		std::cout << "Error - Output would be bigger than reduce_from" << std::endl;
+		return *this;
+	}
+
 	std::vector<Point<Number>> vertices = res.vertices();
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
@@ -988,8 +993,8 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 	// loop through each direction
 	for(vector_t<Number> directed: directions){
 		Point<Number> point_directed;
-		std::vector<std::pair<unsigned, double>> scalarproducts;
-		double directed_offset=0;
+		std::vector<std::pair<unsigned, Number>> scalarproducts;
+		Number directed_offset=0;
 		bool skip=false;
 
 		// compute scalarproducts
@@ -999,20 +1004,20 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 		for(unsigned i=0; i<res.size(); i++){
 			vector_t<Number> temp = res.mHPlanes[i].normal();
 			temp.normalize();
-			double scalarproduct = directed_normalized.dot(temp);
+			Number scalarproduct = directed_normalized.dot(temp);
 
 			//if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
 			//	std::cout << "Error - wanted direction does already exist" << std::endl;
 			//	skip=true;
 			//}
 
-			scalarproducts.push_back(std::pair<unsigned, double>(i, scalarproduct));
+			scalarproducts.push_back(std::pair<unsigned, Number>(i, scalarproduct));
 		}
 
 
 		if(!skip){
 			// sort scalarproducts TODO only max?
-			std::sort(scalarproducts.begin(), scalarproducts.end(), [](const std::pair<unsigned,double> &left, const std::pair<unsigned,double> &right) {	return left.second > right.second;	});
+			std::sort(scalarproducts.begin(), scalarproducts.end(), [](const std::pair<unsigned,Number> &left, const std::pair<unsigned,Number> &right) {	return left.second > right.second;	});
 
 			// collect vertex
 			point_directed = getVertexForVector(directed, getVerticesOfIndex(scalarproducts[0].first, vertices, membersOfVertices));
@@ -1032,9 +1037,9 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 								for(unsigned memberOfVertex: membersOfVertices[v]){
 									vector_t<Number> dummy = res.mHPlanes[memberOfVertex].normal();
 									dummy.normalize();
-									double scalarproduct= dummy.dot(directed_normalized);
+									Number scalarproduct= dummy.dot(directed_normalized);
 
-									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, 1.0) && scalarproduct>0){
+									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
 										facets_erase.push_back(memberOfVertex);
 									}
 								}
@@ -1047,9 +1052,9 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 						for(unsigned i=0; i<res.size(); i++){
 							vector_t<Number> dummy = res.mHPlanes[i].normal();
 							dummy.normalize();
-							double scalarproduct= dummy.dot(directed_normalized);
+							Number scalarproduct= dummy.dot(directed_normalized);
 
-							if(std::find(facets_erase.begin(), facets_erase.end(), i)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, 1.0) && scalarproduct>0){
+							if(std::find(facets_erase.begin(), facets_erase.end(), i)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
 								facets_erase.push_back(i);
 							}
 						}
@@ -1081,7 +1086,7 @@ HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number
 		//check if all vertices are inside the new polytope
 		for(unsigned i=0; i<res.mHPlanes.size(); ++i) {
 			for(Point<Number> vertex: vertices){
-				double value=0;
+				Number value=0;
 				for(unsigned j=0; j<res.mHPlanes.at(i).normal().size(); j++){
 					value+=res.mHPlanes.at(i).normal()[j]*vertex.coordinate(j);
 				}
