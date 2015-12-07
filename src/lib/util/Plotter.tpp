@@ -31,6 +31,11 @@ void Plotter<Number>::plot2d() const {
 		vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
 		vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
 
+		mOutfile << "set size ratio 1\n";
+		mOutfile << "set term post eps\n";
+		mOutfile << "set output \"" << mFilename << ".eps\"";
+		mOutfile << "\n";
+
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
@@ -43,7 +48,7 @@ void Plotter<Number>::plot2d() const {
 			}
 
 			mOutfile << "\n";
-			mOutfile << "set object " << objectCount << " polygon from \\\n";
+			mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 
 			for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
 				assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
@@ -107,7 +112,7 @@ void Plotter<Number>::plot2d() const {
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
 		}
-		mOutfile << "NaN notitle";
+		mOutfile << "NaN notitle \n";
 
 		// create plane functions
 		int index = 1;
@@ -116,17 +121,17 @@ void Plotter<Number>::plot2d() const {
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
-					mOutfile << "f_" << index << "(x) = " << -plane.normal()(0)/plane.normal()(1) << "*x+" << plane.offset()/plane.normal()(1) << "\n";
+					mOutfile << "f_" << index << "(x) = " << double(-plane.normal()(0)/plane.normal()(1)) << "*x";
+					double off = double(plane.offset()/plane.normal()(1));
+					if(off > 0)
+						mOutfile << "+";
+
+					mOutfile << off << "\n";
 					++index;
 				}
 			}
 
 		}
-		mOutfile << "\n";
-		mOutfile << "set size ratio 1\n";
-		mOutfile << "set term post eps\n";
-		mOutfile << "set output \"" << mFilename << ".eps\"";
-		mOutfile << "\n";
 
 		if(mSettings.axes) {
 			mOutfile << "set xzeroaxis \n";
@@ -203,6 +208,14 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 template<typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
 	mPlanes.insert( std::make_pair( mId, _planes ) );
+	return mId++;
+}
+
+template<typename Number>
+unsigned Plotter<Number>::addObject( const Hyperplane<Number>& _plane ) {
+	std::vector<Hyperplane<Number>> tmp;
+	tmp.push_back(_plane);
+	mPlanes.insert( std::make_pair( mId, tmp ) );
 	return mId++;
 }
 
