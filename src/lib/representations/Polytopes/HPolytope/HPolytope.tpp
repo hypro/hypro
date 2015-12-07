@@ -1135,6 +1135,30 @@ bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 
 template <typename Number>
 std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
+#ifdef USE_SMTRAT
+	smtrat::SimplexSolver simplex;
+	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
+	simplex.inform(constrPair.first);
+	simplex.add(constrPair.first);
+	simplex.addObjective(-constrPair.second);
+
+	smtrat::Answer res = simplex.check();
+
+	switch(res) {
+		case smtrat::Answer::True:{
+			smtrat::ModelValue valuation = simplex.minimum(constrPair.second);
+			assert(!valuation.isPlusInfinity());
+			if(valuation.isMinusInfinity())
+				return std::make_pair( 1, INFTY );
+			else {
+				assert(valuation.isRational());
+				return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+			}
+		}
+		default:
+			return std::make_pair( 0, INFEAS );
+	}
+#else
 	if ( !mInitialized ) {
 		initialize();
 	}
@@ -1177,6 +1201,7 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	// std::cout << "Result: " << result << std::endl;
 
 	return std::make_pair( result, FEAS );
+#endif
 }
 
 template <typename Number>

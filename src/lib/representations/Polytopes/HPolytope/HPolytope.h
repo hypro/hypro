@@ -88,7 +88,7 @@ public:
 	void insert( const Hyperplane<Number>& plane );
 	void insert( const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end );
 
-  void erase( const unsigned index);
+  	void erase( const unsigned index);
 
 	const HyperplaneVector& constraints() const;
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
@@ -140,8 +140,6 @@ public:
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const HPolytope<Number>& rhs ) const;
 	HPolytope unite( const HPolytope& rhs ) const;
-
-	matrix_t<Number> getConstaintsMatrix() const;
 
 	void clear();
 	void print() const;

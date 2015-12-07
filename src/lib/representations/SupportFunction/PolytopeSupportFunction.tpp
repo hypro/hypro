@@ -15,6 +15,8 @@
 
 namespace hypro {
 
+#ifdef USE_SMTRAT
+#else
 template <typename Number>
 void PolytopeSupportFunction<Number>::createArrays( unsigned size ) {
 	ia = new int[size + 1];
@@ -96,6 +98,8 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 #endif
 }
 
+#endif
+
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
@@ -115,17 +119,25 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
+	#ifdef USE_SMTRAT
+	#else
 	initialize( mConstraints, mConstraintConstants );
+	#endif
 }
 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants() ) {
+	#ifdef USE_SMTRAT
+	#else
 	initialize( mConstraints, mConstraintConstants );
+	#endif
 }
 
 template <typename Number>
 PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
+	#ifdef USE_SMTRAT
+	#else
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << "PolytopeSupportFunction: destructor" << std::endl;
 #endif
@@ -138,6 +150,7 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << "PolytopeSupportFunction: destructor - complete" << std::endl;
 #endif
+	#endif
 }
 
 template <typename Number>
@@ -162,6 +175,35 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 
 template <typename Number>
 evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
+	evaluationResult<Number> result;
+	#ifdef USE_SMTRAT
+		smtrat::SimplexSolver simplex;
+		std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(mConstraints, mConstraintConstants, l);
+		simplex.inform(constrPair.first);
+		simplex.add(constrPair.first);
+		simplex.addObjective(-constrPair.second);
+
+		smtrat::Answer res = simplex.check();
+
+		switch(res) {
+			case smtrat::Answer::True:{
+				smtrat::ModelValue valuation = simplex.minimum(constrPair.second);
+				assert(!valuation.isPlusInfinity());
+				if(valuation.isMinusInfinity())
+					result.errorCode = GLP_UNBND;
+				else {
+					assert(valuation.isRational());
+					result.supportValue = carl::convert<Rational,Number>(valuation.asRational());
+					result.errorCode = GLP_FEAS;
+				}
+			}
+			default:{
+				result.errorCode = GLP_INFEAS;
+				}
+		}
+
+	#else
+
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
 #endif
@@ -175,8 +217,6 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 	/* solve problem */
 	glp_simplex( lp, NULL );
-
-	evaluationResult<Number> result;
 
 	/* recover and display results */
 	result.supportValue = glp_get_obj_val( lp );
@@ -233,7 +273,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 	std::cout << x;
 	std::cout << std::endl << "size x: " << x.size() << std::endl;
 #endif
-
+	#endif
 	return result;
 }
 

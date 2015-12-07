@@ -30,18 +30,23 @@ namespace hypro {
 template <typename Number>
 class PolytopeSupportFunction {
   private:
-	glp_prob* lp;
+#ifdef USE_SMTRAT
+#else
+  	glp_prob* lp;
 	int* ia;
 	int* ja;
 	double* ar;
+#endif
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
 
+	unsigned mDimension;
+
+#ifdef USE_SMTRAT
+#else
 	void createArrays( unsigned size );
 	void deleteArrays();
-
-	unsigned mDimension;
 
 	/**
 	 * Initializes the class by setting up the glpk problem with the given parameters.
@@ -49,6 +54,8 @@ class PolytopeSupportFunction {
 	 * @param constraintConstants
 	 */
 	void initialize( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
+
+#endif
 
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
@@ -105,7 +112,7 @@ class PolytopeSupportFunction {
 
 	bool empty() const;
 
-        void print() const;
+    void print() const;
 };
 }  // namespace
 #include "PolytopeSupportFunction.tpp"
