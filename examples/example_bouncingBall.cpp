@@ -208,7 +208,7 @@ int main(int argc, char const *argv[])
 
 		//for(auto& poly : flowpipe){
 		//	flowpipe_total++;
-		//	if(flowpipe_total==flowpipe.size()-1 || flowpipe_count<2){
+		//	if(flowpipe_total==flowpipe.size()-1 || flowpipe_count<10){
 
 		//		// update vertices
 		//		std::vector<Point<Number>> points = poly.vertices();
@@ -228,29 +228,34 @@ int main(int argc, char const *argv[])
 		//		for(unsigned i = 0; i<facets.first.size(); i++){
 		//			hyperplanes.push_back(facets.first.at(i)->hyperplane());
 		//		}
-		//		Representation representation_smoothed(hyperplanes);
 
 		//		// transform facets -> representation
-		//		flowpipe_smoothed.push_back(representation_smoothed);
+		//		flowpipe_smoothed.push_back(Representation(hyperplanes));
 
 		//		// reset variables
 		//		flowpipe_count=0;
 		//		points_convexHull.clear();
 		//	}
 		//}
+		////flowpipe.clear();
+
+		// reduce flowpipe segments to 4 facets!
+		double soFlowpipe=0, soFlowpipeS=0;
+
+		for(auto& poly : flowpipe) {
+			poly.removeRedundantPlanes();
+			Representation poly_smoothed = poly.reduce_directed(poly.computeTemplate(2, 4), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+			flowpipe_smoothed.push_back(poly_smoothed);
+			soFlowpipe += poly.sizeOfHPolytope();
+			soFlowpipeS += poly_smoothed.sizeOfHPolytope();
+		}
 		//flowpipe.clear();
 
-		//// reduce flowpipe segments to 4 facets!
-		//for(auto& poly : flowpipe) {
-		//	poly.removeRedundantPlanes();
-		//	Representation poly_smoothed = poly.reduce_nd(0, 0,  HPolytope<Number>::REDUCTION_STRATEGY::DROP);
-		//	flowpipe_smoothed.push_back(poly_smoothed);
-		//}
-		//flowpipe.clear();
+		std::cout << "Size of flowpipe is " << soFlowpipe << " and of flowpipe_smoothed is " << soFlowpipeS << std::endl;
 
 		unsigned count = 1;
-		unsigned maxCount = flowpipe.size();//_smoothed.size();
-		for(auto& poly : flowpipe) {//_smoothed) {
+		unsigned maxCount = flowpipe_smoothed.size();//_smoothed.size();
+		for(auto& poly : flowpipe_smoothed) {//_smoothed) {
 			//std::cout << "Flowpipe segment to be converted: " << std::endl;
 			poly.removeRedundantPlanes();
 			//poly.print();

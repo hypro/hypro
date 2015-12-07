@@ -94,27 +94,12 @@ public:
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-  HPolytope<Number> reduce_nd(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
+  HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
   HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
   void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
 
-  // Help functions by Igor Bongartz
-  std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
-  std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
-
-  std::vector<Point<Number>> getVerticesOfIndex(unsigned a, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
-  std::vector<Point<Number>> getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
-  std::vector<Point<Number>> getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
-  std::vector<std::vector<vector_t<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
-
-  vector_t<Number> computeNormal(std::vector<vector_t<Number>> vertices, vector_t<Number> check) const;
-
-  Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
-
   bool isBounded(std::vector<vector_t<Number>>) const;
-  std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope) const;
-  // End Help funcions
-
+  //static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope);
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
@@ -234,6 +219,18 @@ public:
 
 	void calculateFan() const;
 
+  std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
+  std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
+
+  std::vector<Point<Number>> getVerticesOfIndex(unsigned a, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
+  std::vector<Point<Number>> getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
+  std::vector<Point<Number>> getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const;
+  std::vector<std::vector<vector_t<Number>>> getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const;
+
+  vector_t<Number> computeNormal(std::vector<vector_t<Number>> vertices, vector_t<Number> check) const;
+
+  Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
+
 };
 
 }  // namespace
@@ -248,3 +245,4 @@ namespace std {
 }
 */
 #include "HPolytope.tpp"
+#include "reduction.tpp"

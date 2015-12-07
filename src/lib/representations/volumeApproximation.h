@@ -7,8 +7,8 @@
 namespace hypro {
 
 	template<typename Number, typename Representation>
-	static double approximateVolume(Representation _in, std::size_t sublevels = 0) {
-		double pointCount = 0;
+	static Number approximateVolume(Representation _in, std::size_t sublevels = 0) {
+		Number pointCount = 0;
 		std::vector<Point<Number>> vertices = _in.vertices();
 
 		//for(Point<Number> vertex: vertices) {
@@ -19,9 +19,9 @@ namespace hypro {
 		std::vector<std::pair<Number,Number>> bounderies;
 		std::vector<bool> count_help;
 		std::vector<Number> count_point;
-		std::vector<double> resolution;
+		std::vector<Number> resolution;
 		bool running=true;
-		double volumeUnit=1;
+		Number volumeUnit=1;
 
 		// TODO, also figure out, if we need Number as a template parameter (I guess not)
 		// TODO: where do we set the initial resolution? As a parameter with a default value specified as a constant in config.h maybe.
@@ -48,7 +48,7 @@ namespace hypro {
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
 		  //std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
-			resolution[i]= (bounderies[i].second-bounderies[i].first)/10; // 100 for 2D, 50 for 3D, 12 for 4D, 
+			resolution[i]= (bounderies[i].second-bounderies[i].first)/10; // 100 for 2D, 50 for 3D, 12 for 4D,
 			volumeUnit*=resolution[i];
 			count_point[i]=bounderies[i].first;
 	}
