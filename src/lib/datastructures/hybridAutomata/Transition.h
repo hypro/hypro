@@ -20,7 +20,7 @@ class Transition {
 		hypro::operator_e op;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
-			_ostr << _g.mat << " + " << _g.vec << _g.op << "0";
+			_ostr << _g.mat << " + " << std::endl << _g.vec;
 			return _ostr;
 		}
 	};
@@ -30,7 +30,7 @@ class Transition {
 		hypro::matrix_t<Number> transformMat;  // Transformation Matrix
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
-			_ostr << _a.transformMat << " + " << _a.translationVec;
+			_ostr << _a.transformMat << " + " << std::endl << _a.translationVec;
 			return _ostr;
 		}
 	};
