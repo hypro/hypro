@@ -5,7 +5,8 @@
 #pragma once
 
 #include <lib/solver/Manager.h>
-#include "../../config.h"
+#include <lib/modules/LRAModule/LRAModule.h>
+//#include "../../config.h"
 #include "convenience.h"
 
 namespace smtrat
@@ -15,15 +16,18 @@ namespace smtrat
      *
      * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
      * @since		2015-10-06
-     * @version		2015-10-07
+     * @version		2015-12-08
      *
      */
     class SimplexSolver:
         public Manager
     {
         public:
-            SimplexSolver( bool _externalModuleFactoryAdding = false );
-            ~SimplexSolver();
+            SimplexSolver(): Manager() {
+				setStrategy({
+					addBackend<LRAModule<LRASettings1>>()
+				});
+			}
 
     };
 
