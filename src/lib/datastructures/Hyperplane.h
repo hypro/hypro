@@ -53,8 +53,9 @@ class Hyperplane {
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
 
 	const vector_t<Number>& normal() const;
-        vector_t<Number>& rNormal();
+    vector_t<Number>& rNormal();
 	void setNormal( const vector_t<Number>& _normal );
+	void invert();
 
 	Number offset() const;
 	void setOffset( Number _offset );

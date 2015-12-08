@@ -120,6 +120,12 @@ void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
 	this->mHash = 0;
 }
 
+template<typename Number>
+void Hyperplane<Number>::invert() {
+	mNormal = -mNormal;
+	mScalar = -mScalar;
+}
+
 template <typename Number>
 Number Hyperplane<Number>::offset() const {
 	return mScalar;
