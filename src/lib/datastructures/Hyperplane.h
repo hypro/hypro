@@ -126,7 +126,7 @@ bool operator<( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
 
 template <typename Number>
 Hyperplane<Number> operator-( const Hyperplane<Number>& _in ) {
-	return Hyperplane(_in).invert();
+	return Hyperplane<Number>(_in).invert();
 }
 
     #ifdef EXTERNALIZE_CLASSES
