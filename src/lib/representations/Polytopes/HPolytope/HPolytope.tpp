@@ -429,7 +429,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 	} else {
 		//std::cout << __func__ << ": " << *this << std::endl;
 		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			// std::cout << "Current plane: " << *planeIt << std::endl;
+			std::cout << "Current plane: " << *planeIt << std::endl;
 			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
 			if ( evalRes.second == INFEAS ) {
 				// return empty polytope
@@ -438,27 +438,28 @@ void HPolytope<Number>::removeRedundantPlanes() {
 			} else if ( evalRes.second == FEAS ) {
 				if ( evalRes.first < planeIt->offset() &&
 					 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-					// std::cout << "erase " << *planeIt << " which is really redundant." <<
-					// std::endl;
+					std::cout << "erase " << *planeIt << " which is really redundant." <<
+					std::endl;
 					planeIt = mHPlanes.erase( planeIt );
 					mInitialized = false;
 				} else {
 					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
 					auto pos = mHPlanes.erase( planeIt );
 					mInitialized = false;
+					std::cout << "Evaluate without plane." << std::endl;
 					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-					// std::cout << "Eval with: " << evalRes.first << ", without: " <<
-					// tmpRes.first << ", solution type: "
-					// << tmpRes.second << std::endl;
+					std::cout << "Eval with: " << evalRes.first << ", without: " <<
+					tmpRes.first << ", solution type: "
+					<< tmpRes.second << std::endl;
 					if ( tmpRes.second == INFTY ||
 						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
 						planeIt = mHPlanes.insert( pos, tmp );
 						mInitialized = false;
 						++planeIt;
-						// std::cout << "keep "  << tmp << std::endl;
+						std::cout << "keep "  << tmp << std::endl;
 					} else {
-						// std::cout << "erase " << tmp << " which is equal to something." <<
-						// std::endl;
+						std::cout << "erase " << tmp << " which is equal to something." <<
+						std::endl;
 						planeIt = pos;
 					}
 				}
@@ -497,28 +498,40 @@ bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 template <typename Number>
 std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	std::cout << __func__ << std::endl;
+	if(mHPlanes.empty())
+		return std::make_pair( 1, INFTY );
+
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
 	simplex.inform(constrPair.first);
 	simplex.add(constrPair.first);
-	simplex.addObjective(-constrPair.second);
+	Poly objective = constrPair.second;
+	simplex.addObjective(objective, false);
 	std::cout << __func__ << ": " << __LINE__ << std::endl;
 
 	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	std::cout << "with objective function " << std::endl << constrPair.second << std::endl;
+	std::cout << "with objective function " << std::endl << objective << std::endl;
 
 	smtrat::Answer res = simplex.check();
 	std::cout << __func__ << ": " << __LINE__ << std::endl;
 
 	switch(res) {
 		case smtrat::Answer::True:{
-			smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
+			smtrat::ModelValue valuation = simplex.optimum(objective);
 			assert(!valuation.isPlusInfinity());
-			if(valuation.isMinusInfinity())
+			assert(!valuation.isBool());
+			assert(!valuation.isSqrtEx());
+			assert(!valuation.isRAN());
+			assert(!valuation.isBVValue());
+			assert(!valuation.isSortValue());
+			assert(!valuation.isUFModel());
+			if(valuation.isMinusInfinity()){
+				std::cout << __func__ << ": INFINITY" << std::endl;
 				return std::make_pair( 1, INFTY );
-			else {
+			} else {
 				assert(valuation.isRational());
+				std::cout << __func__ << ": " << valuation.asRational() << std::endl;
 				return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
 			}
 		}

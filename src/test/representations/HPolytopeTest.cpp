@@ -293,6 +293,9 @@ TYPED_TEST(HPolytopeTest, Intersection)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
+
+	std::cout << "Set up" << std::endl;
+
 	HPolytope<TypeParam> result = hpt1.intersect(hpt2);
 
 	std::cout << "A: " << hpt1 << std::endl;
@@ -342,7 +345,9 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	HPolytope<TypeParam> res2 = pt3.intersect(pt4);
 
 	for(auto& vertex : res2.vertices()) {
+		std::cout << "EXPECT_TRUE(pt3.contains(" << vertex <<  "))";
 	  EXPECT_TRUE(pt3.contains(vertex));
+	  std::cout << "EXPECT_TRUE(pt4.contains(" << vertex <<  "))";
 	  EXPECT_TRUE(pt4.contains(vertex));
 	}
 
