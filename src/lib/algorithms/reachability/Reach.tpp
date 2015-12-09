@@ -332,9 +332,9 @@ namespace reachability {
 				}
 				if ( transitionEnabled ) {
 					assert(!targetVertices.empty());
-					for(const auto& vertex : targetVertices ) {
-						std::cout << vertex << std::endl;
-					}
+					//for(const auto& vertex : targetVertices ) {
+					//	std::cout << vertex << std::endl;
+					//}
 
 					targetValuation = Representation(targetVertices);
 					// compute new Flowpipe

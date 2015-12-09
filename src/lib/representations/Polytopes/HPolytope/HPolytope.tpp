@@ -496,7 +496,7 @@ bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 
 template <typename Number>
 std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
@@ -729,11 +729,11 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	std::cout << __func__ << "  " << vec << ": ";
+	//std::cout << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if ( plane.normal().dot( vec ) > plane.offset() ) {
-			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}
