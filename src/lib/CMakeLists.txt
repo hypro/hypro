@@ -36,14 +36,11 @@ endforeach()
 
 ##set(headers ${headers} ${template_implementations})
 set(headers
-	util/smtrat/SimplexSolver.h
-	util/smtrat/convenience.h
 	${hypro_algorithms_headers}
 	${hypro_datastructures_headers}
 	${hypro_parser_headers}
 	${hypro_representations_headers}
 	${hypro_util_headers})
-MESSAGE(STATUS "Globbed header files: ${headers}")
 
 ##file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${test_sources}")
@@ -54,8 +51,6 @@ ${hypro_datastructures_sources}
 ${hypro_parser_sources}
 ${hypro_representations_sources}
 ${hypro_util_sources})
-
-message(STATUS "${sources}")
 
 if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
