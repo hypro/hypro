@@ -99,11 +99,11 @@ namespace reachability {
 #endif
 
 		// Polytope that is defined by the invariant
-		Representation poly = Representation( _loc->invariant().mat, _loc->invariant().vec );
+		Representation invariant = Representation( _loc->invariant().mat, _loc->invariant().vec );
 
 #ifdef REACH_DEBUG
 		std::cout << "invariant Polytope: ";
-		poly.print();
+		invariant.print();
 #endif
 
 		// new empty Flowpipe
@@ -114,11 +114,11 @@ namespace reachability {
 // check if initial Valuation fulfills Invariant
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << !poly.intersect( _val ).empty() << std::endl;
-		//std::cout << poly.contains( _val ) << std::endl;
+		std::cout << !invariant.intersect( _val ).empty() << std::endl;
+		//std::cout << invariant.contains( _val ) << std::endl;
 #endif
 
-		if ( poly.contains( _val ) ) {
+		if ( invariant.contains( _val ) ) {
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
@@ -238,19 +238,20 @@ namespace reachability {
 				resultPolytope.removeRedundantPlanes();
 // resultPolytope = resultPolytope.hull();
 
+				// extend flowpipe (only if still within Invariant of location)
+				Representation tmp = invariant.intersect( resultPolytope );
+
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
 				resultPolytope.print();
 				std::cout << "Empty: " << resultPolytope.empty() << std::endl;
 
 				std::cout << "still within Invariant?: ";
-				std::cout << !(poly.intersect( resultPolytope )).empty() << std::endl;
-				std::cout << "Invariant: " << poly << std::endl;
-				std::cout << "Intersection result: " << poly.intersect( resultPolytope ) << std::endl;
+				std::cout << !(tmp.empty()) << std::endl;
+				std::cout << "Invariant: " << invariant << std::endl;
+				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
 
-				// extend flowpipe (only if still within Invariant of location)
-				Representation tmp = poly.intersect( resultPolytope );
 				if ( !tmp.empty() ) {
 					flowpipe.push_back( tmp );
 
@@ -331,9 +332,9 @@ namespace reachability {
 				}
 				if ( transitionEnabled ) {
 					assert(!targetVertices.empty());
-					//for(const auto& vertex : targetVertices ) {
-					//	std::cout << vertex << std::endl;
-					//}
+					for(const auto& vertex : targetVertices ) {
+						std::cout << vertex << std::endl;
+					}
 
 					targetValuation = Representation(targetVertices);
 					// compute new Flowpipe

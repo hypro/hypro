@@ -31,6 +31,7 @@ void PolytopeSupportFunction<Number>::deleteArrays() {
 	delete[] ar;
 }
 
+
 template <typename Number>
 void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, vector_t<Number> constraintConstants ) {
 	assert( constraints.rows() == constraintConstants.rows() );
@@ -104,7 +105,9 @@ template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
 	: mConstraints( constraints ), mConstraintConstants( constraintConstants ) {
+	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
+	#endif
 }
 
 template <typename Number>
@@ -119,8 +122,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
-	#ifdef USE_SMTRAT
-	#else
+	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
 }
@@ -128,8 +130,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants() ) {
-	#ifdef USE_SMTRAT
-	#else
+	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
 }
@@ -187,7 +188,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 		switch(res) {
 			case smtrat::Answer::True:{
-				smtrat::ModelValue valuation = simplex.minimum(constrPair.second);
+				smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
 				assert(!valuation.isPlusInfinity());
 				if(valuation.isMinusInfinity())
 					result.errorCode = GLP_UNBND;
@@ -296,44 +297,26 @@ bool PolytopeSupportFunction<Number>::contains( const Point<Number> &_point ) co
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
-	vector_t<Number> constraint( glp_get_num_cols( lp ) );
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-	std::cout << __func__ << ": " << _point << std::endl;
-#endif
-
-	for ( int i = 0; i < glp_get_num_rows( lp ); ++i ) {
-		// prepare arrays
-		int indices[constraint.rows() + 1];
-		double values[constraint.rows() + 1];
-		// for(unsigned pos = 0; pos < constraint.rows(); ++pos) {
-		//	indices[pos] = 0;
-		//	values[pos] = 0.0;
-		//}
-
-		glp_get_mat_row( lp, i + 1, indices, values );
-		unsigned pos = 1;
-		while ( pos <= constraint.rows() && indices[pos] != 0 ) {
-			constraint( indices[pos] - 1 ) = values[pos];
-			++pos;
-		}
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << __func__ << ": Set constraint to " << constraint << std::endl;
-#endif
-
-		double scalar = glp_get_row_ub( lp, i + 1 );
-
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << __func__ << ": Verify " << constraint << "*" << _point << " = " << constraint.dot( _point )
-				  << " (<= " << scalar << ")" << std::endl;
-#endif
-
-		if ( constraint.dot( _point ) > Number( scalar ) ) return false;
+	assert(mConstraints.rows() == mConstraintConstants.rows());
+	for ( unsigned rowIt = 0; rowIt < mConstraints.rows(); ++rowIt ) {
+		if( mConstraints.row(rowIt).dot(_point) > mConstraintConstants(rowIt) )
+			return false;
 	}
 	return true;
 }
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::empty() const {
+	#ifdef USE_SMTRAT
+	smtrat::SimplexSolver simplex;
+	smtrat::FormulaT constr = createFormula(mConstraints, mConstraintConstants);
+	simplex.inform(constr);
+	simplex.add(constr);
+
+	smtrat::Answer res = simplex.check();
+
+	return (res == smtrat::Answer::False);
+	#else
 	for ( int i = 0; i < mDimension; i++ ) {
 		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );  // unbounded
 		glp_set_obj_coef( lp, i + 1, 1.0 );
@@ -346,6 +329,7 @@ bool PolytopeSupportFunction<Number>::empty() const {
 	if ( errorCode == GLP_INFEAS || errorCode == GLP_NOFEAS ) return false;
 
 	return true;
+	#endif
 }
 
 template <typename Number>

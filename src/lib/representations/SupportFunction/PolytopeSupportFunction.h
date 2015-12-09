@@ -15,6 +15,7 @@
 #include "../../config.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Hyperplane.h"
+#include "../../util/smtrat/SimplexSolver.h"
 #include "util.h"
 #include <glpk.h>
 
@@ -30,8 +31,7 @@ namespace hypro {
 template <typename Number>
 class PolytopeSupportFunction {
   private:
-#ifdef USE_SMTRAT
-#else
+#ifndef USE_SMTRAT
   	glp_prob* lp;
 	int* ia;
 	int* ja;
