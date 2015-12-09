@@ -34,9 +34,9 @@ set( EXAMPLES
     example_power
     #example_probabilistic
     #example_ppl_nncPolyhedra
-    example_reachability
     example_reduction
     example_SFconversion
+    example_spiral
     example_squareroot
     example_subtraction
     example_supportFunction

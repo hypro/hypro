@@ -17,9 +17,13 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
+#ifdef USE_MPFR_FLOAT
 	typedef FLOAT_T<mpfr_t> Number;
 	carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	std::cout << "Set precision to " << carl::FLOAT_T<mpfr_t>::defaultPrecision() << std::endl;
+#else
+	typedef FLOAT_T<cln::cl_RA> Number;
+#endif
 	typedef hypro::Polytope<Number> Representation;
 
 	LocationManager<Number>& locManag = LocationManager<Number>::getInstance();
