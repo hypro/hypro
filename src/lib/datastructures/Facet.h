@@ -316,13 +316,14 @@ class Facet {
 			vectors.push_back( mVertices[i].rawCoordinates() - vectors[0] );
 		}
 
-		matrix_t<Number> matrix = matrix_t<Number>( vectors.size(), mVertices[0].rawCoordinates().size());
+		matrix_t<Number> matrix = matrix_t<Number>::Zero( vectors.size(), mVertices[0].rawCoordinates().size());
 		for ( unsigned i = 1; i < vectors.size(); i++ ) {
 			for ( unsigned j = 0; j < vectors[i].size(); j++ ) {
 				matrix( i, j ) = vectors[i]( j );
 			}
 		}
 
+		std::cout << matrix << std::endl;
 
 		// matrix(0,vectors[0].size()-1) = 1;
 		for ( unsigned j = 0; j < vectors[0].size(); j++ ) {

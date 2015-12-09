@@ -5,7 +5,6 @@
 #pragma once
 
 #include <lib/solver/Manager.h>
-#include <lib/modules/SATModule/SATModule.h>
 #include <lib/modules/LRAModule/LRAModule.h>
 //#include "../../config.h"
 #include "convenience.h"
@@ -25,13 +24,9 @@ namespace smtrat
     {
         public:
             SimplexSolver(): Manager() {
-				setStrategy(
-	            {
-	                addBackend<SATModule<SATSettings1>>(
-	                {
-	                    addBackend<LRAModule<LRASettings1>>()
-	                })
-	            });
+				setStrategy({
+					addBackend<LRAModule<LRASettings1>>()
+				});
 			}
 
     };

@@ -25,13 +25,13 @@ protected:
 		hypro::vector_t<Number> b = hypro::vector_t<Number>(5);
 		b << 4,5,2,1,2;
 
-		initial = hypro::Dictionary<Number>(a,b);
+		initial = hypro::VertexEnumeration<Number>(a,b);
 	}
 
 	virtual void TearDown()
 	{}
 
-	hypro::Dictionary<Number> initial;
+	hypro::VertexEnumeration<Number> initial;
 };
 
 TYPED_TEST(VertexEnumerationTest, DictionaryAccess)
@@ -41,13 +41,13 @@ TYPED_TEST(VertexEnumerationTest, DictionaryAccess)
 	expectedBasis[2] = 1;
 	expectedBasis[3] = 2;
 
-	EXPECT_EQ(expectedBasis, this->initial.basis());
+	EXPECT_EQ(expectedBasis, this->initial.dictionaries().begin()->basis());
 
 	std::map<std::size_t, std::size_t> expectedCoBasis;
 	expectedCoBasis[4] = 1;
 	expectedCoBasis[5] = 2;
 
-	EXPECT_EQ(expectedCoBasis, this->initial.cobasis());
+	EXPECT_EQ(expectedCoBasis, this->initial.dictionaries().begin()->cobasis());
 }
 
 TYPED_TEST(VertexEnumerationTest, DictionaryModification)
@@ -76,9 +76,10 @@ TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
 	hypro::vector_t<TypeParam> boxConstants = hypro::vector_t<TypeParam>(6);
 	boxConstants << 1,1,1,1,1,1;
 
-	hypro::Dictionary<TypeParam> boxDictionary(boxConstraints, boxConstants);
-	std::vector<hypro::Point<TypeParam>> boxVertices = boxDictionary.search();
+	hypro::VertexEnumeration<TypeParam> boxEnumerator(boxConstraints, boxConstants);
+	std::vector<hypro::Point<TypeParam>> boxVertices = boxEnumerator.search();
 
+	EXPECT_TRUE( boxVertices.size() == 8 );
 	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,1,1})) != boxVertices.end() );
 	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,1,-1})) != boxVertices.end() );
 	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,-1,1})) != boxVertices.end() );
@@ -99,13 +100,14 @@ TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
 	hypro::vector_t<TypeParam> pyramidConstants = hypro::vector_t<TypeParam>(5);
 	pyramidConstants << 1,1,1,1,0;
 
-	hypro::Dictionary<TypeParam> pyramidDictionary(pyramidConstraints, pyramidConstants);
-	std::vector<hypro::Point<TypeParam>> pyramidVertices = pyramidDictionary.search();
+	hypro::VertexEnumeration<TypeParam> pyramidEnumerator(pyramidConstraints, pyramidConstants);
+	std::vector<hypro::Point<TypeParam>> pyramidVertices = pyramidEnumerator.search();
 
 	std::cout << "Pyramid vertices: " << std::endl;
 	for(const auto& vertex : pyramidVertices)
 		std::cout << vertex << std::endl;
 
+	EXPECT_TRUE( pyramidVertices.size() == 5 );
 	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({1,0,1})) != pyramidVertices.end() );
 	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({1,0,-1})) != pyramidVertices.end() );
 	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({-1,0,1})) != pyramidVertices.end() );
