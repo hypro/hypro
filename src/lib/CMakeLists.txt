@@ -8,9 +8,11 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 set(lib_hypro_headers
 	config.h
     util/VariablePool.h
-    util/eigenTypetraits.h
+    util/adaptions_eigen.h
 	util/types.h
 	util/convexHull.h
+	util/smtrat/SimplexSolver.h
+	util/smtrat/convenience.h
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
     ${lib_hypro_parser_headers}
@@ -18,6 +20,7 @@ set(lib_hypro_headers
 )
 
 set(lib_hypro_sources
+	util/smtrat/SimplexSolver.cpp
 	${lib_hypro_datastructure_sources}
 	${lib_hypro_representation_sources}
     ${lib_hypro_parser_sources}
@@ -33,12 +36,14 @@ endforeach()
 
 ##set(headers ${headers} ${template_implementations})
 set(headers
+	util/smtrat/SimplexSolver.h
+	util/smtrat/convenience.h
 	${hypro_algorithms_headers}
-${hypro_datastructures_headers}
-${hypro_parser_headers}
-${hypro_representations_headers}
-${hypro_util_headers})
-#MESSAGE(STATUS "Globbed header files: ${headers}")
+	${hypro_datastructures_headers}
+	${hypro_parser_headers}
+	${hypro_representations_headers}
+	${hypro_util_headers})
+MESSAGE(STATUS "Globbed header files: ${headers}")
 
 ##file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${test_sources}")
@@ -49,6 +54,8 @@ ${hypro_datastructures_sources}
 ${hypro_parser_sources}
 ${hypro_representations_sources}
 ${hypro_util_sources})
+
+message(STATUS "${sources}")
 
 if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
@@ -72,6 +79,7 @@ endif()
 
 
 target_link_libraries(${PROJECT_NAME} ${libraries})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 cotire(${PROJECT_NAME})
 

@@ -119,14 +119,17 @@ TYPED_TEST(HPolytopeTest, Corners)
 	// test overapproximation
 	HPolytope<TypeParam> reproduction(corners);
 
-	std::cout << "Ping." << std::endl;
+	std::cout << "Ping LAST." << std::endl;
+
 
 	EXPECT_TRUE(hpt2.contains(reproduction));
+	std::cout << __func__ << std::endl;
 }
 
 
 TYPED_TEST(HPolytopeTest, Insertion)
 {
+	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	Hyperplane<TypeParam> p1({1,1}, 4);
 	hpt1.insert(p1);
@@ -137,6 +140,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 TYPED_TEST(HPolytopeTest, Union)
 {
+	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 	HPolytope<TypeParam> res = hpt1.unite(hpt2);
@@ -211,6 +215,7 @@ TYPED_TEST(HPolytopeTest, Union)
 
 TYPED_TEST(HPolytopeTest, LinearTransformation)
 {
+	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	matrix_t<TypeParam> A(2,2);
 	A(0,0) = 1;

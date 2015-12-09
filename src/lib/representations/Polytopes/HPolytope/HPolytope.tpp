@@ -113,6 +113,7 @@ bool HPolytope<Number>::empty() const {
 
 	#ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
+	simplex.push();
 	smtrat::FormulaT constr = createFormula(this->matrix(), this->vector());
 	simplex.inform(constr);
 	simplex.add(constr);
@@ -495,18 +496,24 @@ bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 
 template <typename Number>
 std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
+	std::cout << __func__ << std::endl;
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
 	simplex.inform(constrPair.first);
 	simplex.add(constrPair.first);
 	simplex.addObjective(-constrPair.second);
+	std::cout << __func__ << ": " << __LINE__ << std::endl;
+
+	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+	std::cout << "with objective function " << std::endl << constrPair.second << std::endl;
 
 	smtrat::Answer res = simplex.check();
+	std::cout << __func__ << ": " << __LINE__ << std::endl;
 
 	switch(res) {
 		case smtrat::Answer::True:{
-			smtrat::ModelValue valuation = simplex.minimum(constrPair.second);
+			smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
 			assert(!valuation.isPlusInfinity());
 			if(valuation.isMinusInfinity())
 				return std::make_pair( 1, INFTY );
@@ -722,17 +729,11 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	// std::cout << __func__ << "  " << vec << ": ";
+	std::cout << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
-		// std::cout << plane << ": " << plane.normal().dot(vec) << ", -> " <<
-		// (!carl::AlmostEqual2sComplement(plane.normal().dot(vec),
-		// plane.offset(),TOLLERANCE_ULPS) &&
-		// plane.normal().dot(vec) > plane.offset()) << std::endl;
-		// carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset());
-		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset(), TOLLERANCE_ULPS ) &&
-			 plane.normal().dot( vec ) > plane.offset() ) {
-			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+		if ( plane.normal().dot( vec ) > plane.offset() ) {
+			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}
