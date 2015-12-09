@@ -104,7 +104,7 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
-	: mConstraints( constraints ), mConstraintConstants( constraintConstants ) {
+	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mDimension(mConstraints.cols()) {
 	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
@@ -115,6 +115,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
+	mDimension = _planes[0].dimension();
 
 	unsigned pos = 0;
 	for ( const auto &plane : _planes ) {
@@ -129,7 +130,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
-	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants() ) {
+	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mDimension(mConstraints.cols() ) {
 	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
@@ -280,6 +281,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 template <typename Number>
 vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+	std::cout << "A.cols: " << _A.cols() << " and dimension: " << mDimension << std::endl;
 	assert( _A.cols() == mDimension );
 	vector_t<Number> res( _A.rows() );
 
