@@ -236,6 +236,7 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	test = test.linearTransformation(A,vector_t<TypeParam>::Zero(A.rows()));
 	std::cout << "Test linearTransformation end." << std::endl;
 
+	std::cout << "Res = " << res << std::endl;
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));
 	}
@@ -252,14 +253,14 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 
 	HPolytope<TypeParam> res = hpt1.minkowskiSum(hpt2);
 
-	//std::cout << "Result: " << std::endl << res << std::endl;
+	std::cout << "Result: " << std::endl << res << std::endl;
 
-	//std::cout << "Result vertices: " << std::endl;
+	std::cout << "Result vertices: " << std::endl;
 	for(auto& vertex : res.vertices()) {
 		std::cout << vertex.rawCoordinates().transpose() << std::endl;
 	}
 
-	//std::cout << "######" << std::endl;
+	std::cout << "######" << std::endl;
 
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
@@ -268,7 +269,7 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 		}
 	}
 
-	//std::cout << "######" << std::endl;
+	std::cout << "######" << std::endl;
 
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
@@ -277,7 +278,7 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 		}
 	}
 
-	//std::cout << "######" << std::endl;
+	std::cout << "######" << std::endl;
 
 	vector_t<TypeParam> p1(2);
 	p1(0) = 3;

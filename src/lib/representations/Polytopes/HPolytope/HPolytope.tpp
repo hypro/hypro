@@ -642,6 +642,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	HPolytope<Number> res;
 	Number result;
 
+	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+
 	// evaluation of rhs in directions of lhs
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
@@ -652,8 +654,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
 
@@ -667,11 +669,11 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
-	// res.removeRedundantPlanes();
+	//res.removeRedundantPlanes();
 	return res;
 }
 
@@ -738,7 +740,7 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	//std::cout << __func__ << "  " << vec << ": ";
+	std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if ( plane.normal().dot( vec ) > plane.offset() ) {
 			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
@@ -751,14 +753,18 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
+	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.second == INFEAS ) {
+			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
+			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < plane.offset() &&
-					!carl::AlmostEqual2sComplement( evalRes.first, plane.offset() ) ) {
+		} else if ( evalRes.first < plane.offset() ) {
+			std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}
