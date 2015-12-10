@@ -45,12 +45,15 @@ public:
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
 
+#ifndef USE_SMTRAT
 	// glpk members
 	mutable glp_prob* lp;
 	mutable int* ia;
 	mutable int* ja;
 	mutable double* ar;
+#endif
 	mutable bool mInitialized;
+
 
   public:
 	HPolytope();
@@ -94,12 +97,12 @@ public:
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-  HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
-  HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
-  void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
+	HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
+	HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
+	void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
 
-  bool isBounded(std::vector<vector_t<Number>>) const;
-  //static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope);
+	bool isBounded(std::vector<vector_t<Number>>) const;
+	//static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope);
 
 	bool isExtremePoint( vector_t<Number> point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
@@ -155,6 +158,7 @@ public:
 		std::cout << "a: " << a << std::endl;
 		std::cout << "b: " << b << std::endl;
 		*/
+#ifndef USE_SMTRAT
 		if ( a.mInitialized ) {
 			glp_prob* tmpLp = glp_create_prob();
 			glp_copy_prob(tmpLp, a.lp, GLP_OFF);
@@ -193,6 +197,7 @@ public:
 				b.mFanSet = false;
 			}
 		}
+#endif
 		unsigned tmpDimension = a.mDimension;
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDimension;
@@ -211,11 +216,12 @@ public:
 	/*
 	 * Auxiliary functions
 	 */
-
+#ifndef USE_SMTRAT
 	void createArrays( unsigned size ) const;
 	void deleteArrays();
 	void printArrays();
 	void initialize() const;
+#endif
 
 	void calculateFan() const;
 

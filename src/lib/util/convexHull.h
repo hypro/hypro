@@ -104,8 +104,8 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 		}
 
 		// Add neighbors
-		for (unsigned i=0; i < dimension+1; ++i) {
-			for (unsigned j=0; j < dimension+1; ++j) {
+		for (unsigned i=0; i < facets.size(); ++i) {
+			for (unsigned j=0; j < facets.size(); ++j) {
 				if (i != j) {
 					facets.at(i)->addNeighbor(facets.at(j));
 				}
@@ -191,7 +191,10 @@ static std::vector<Ridge<Number>> getRidges( std::shared_ptr<Facet<Number>> face
 	std::vector<Ridge<Number>> result;
 
 	if (!facet->empty()) {
+		//std::cout << "_____________insde getRidges - Amount of neighbors is " << facet->neighbors().size() << std::endl;
 		for (auto neighbor: facet->neighbors()) {
+			//std::cout << "_____________insde getRidges - call of neighbor of " << facet->getNormal() << std::endl;
+
 			Ridge<Number> newRidge(facet, neighbor);
 			result.push_back(newRidge);
 		}
@@ -506,11 +509,30 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		}
 
 		//for(unsigned i = 0; i<facets.size(); i++){
-		//	std::cout << "Facet Nr." << i+1 << std::endl << "normal:\n"<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl;
+		//	std::cout << "Facet Nr." << i+1 << std::endl << "normal:\n"<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl<< std::endl;
 		//}
+		//std::cout << "Amount of neighbors of facet 1 is " << facets.at(0)->neighbors().size() << std::endl;
+		//for (const auto neighbor : facets.at(0)->neighbors()) {
+		//	std::cout << "Consider NEIGHBOR \n"<< neighbor->getNormal() <<"\nwith " << neighbor->neighbors().size() << " neighbors itself"<< std::endl;
+		//}
+		//std::cout << std::endl << "Amount of neighbors of facet 2 is " << facets.at(1)->neighbors().size() << std::endl;
+		//for (const auto neighbor : facets.at(1)->neighbors()) {
+		//	std::cout << "Consider NEIGHBOR \n"<< neighbor->getNormal() <<"\nwith " << neighbor->neighbors().size() << " neighbors itself"<< std::endl;
+		//}
+		//std::cout << std::endl <<"Amount of neighbors of facet 3 is " << facets.at(2)->neighbors().size() << std::endl;
+		//for (const auto neighbor : facets.at(2)->neighbors()) {
+		//	std::cout << "Consider NEIGHBOR \n"<< neighbor->getNormal() <<"\nwith " << neighbor->neighbors().size() << " neighbors itself"<< std::endl;
+		//}
+
+
+
 
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet); // extract the facets to be examined
+
+		//for(unsigned i = 0; i<facets.size(); i++){
+		//	std::cout << "Good facets" << std::endl << "normal:\n"<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl<< std::endl;
+		//}
 
 
 		/*
@@ -523,8 +545,9 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			std::shared_ptr<Facet<Number>> currentFacet = workingSet.front(); // next facet
 			Point<Number> currentPoint = currentFacet->furthest_Point(); // next point
 
-			//std::cout << "Inside workingSet with currentFacet normal:\n"<< currentFacet->getNormal() <<"\noffset: "<<currentFacet->getScalar() << std::endl;
+			//std::cout << "Inside workingSet with currentFacet normal:\n"<< currentFacet->getNormal() <<"\noffset: "<<currentFacet->getScalar() << std::endl<< std::endl;
 			//std::cout << "And size of facets is " << facets.size() << std::endl;
+			//std::cout << std::endl << "CurrentPoint is " << currentPoint << std::endl;
 
 			std::vector<std::shared_ptr<Facet<Number>>> currentVisibleFacets;
 			currentVisibleFacets.push_back(currentFacet);
@@ -552,6 +575,10 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				}
 			}
 
+			//for(auto currentVisibleFacet: currentVisibleFacets){
+			//	std::cout << "currentVisibleFacets are normal:\n"<< currentVisibleFacet->getNormal() <<"\noffset: "<<currentVisibleFacet->getScalar() << std::endl<< std::endl;
+			//}
+
 			// std::cout << "From current point visible facets: ";
 			// for(const auto item : currentVisibleFacets)
 			//	std::cout << *item << ", ";
@@ -567,10 +594,12 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 
 			// Create new facets
 			for(auto facet: currentVisibleFacets){
+				//std::cout << "Examine candidate for a newFacet" << std::endl;
 				for (auto ridge: getRidges( facet ) ) {
 					for (auto neighbor: ridge.neighbors() ) {
+						//std::cout << "Consider neighbor" << std::endl;
 						if (std::find(currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor) == currentVisibleFacets.end()) {  // we have a neighbor of this ridge, which is not visible -> horizon
-
+							//std::cout << "Found a candidate for a newFacet" << std::endl;
 							// ridge, create new facet
 							Point<Number> insidePoint = findInsidePoint(ridge, facet);
 
@@ -584,6 +613,10 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 					}
 				}
 			}
+
+			//for(auto newFacet: newFacets){
+			//	std::cout << "newFacets are normal:\n"<< newFacet->getNormal() <<"\noffset: "<<newFacet->getScalar() << std::endl<< std::endl;
+			//}
 
 			// at this point we created all new facets from any horizon ridge to the current considered point
 			// (currentPoint). We need to set up the neighborhood

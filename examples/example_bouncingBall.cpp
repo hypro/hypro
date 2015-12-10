@@ -203,26 +203,33 @@ int main(int argc, char const *argv[])
 	plotter.setFilename("out");
 
 	unsigned flowpipeIndices_count=1;
+	unsigned convexHull_const = 5, reduce_const=5;
+	std::cout << "Plotting computes with convexHull_const " << convexHull_const << " and reduce_const " << reduce_const << std::endl;
 
 	for(auto& index : flowpipeIndices) {
 		std::cout << "Work on flowpipe " << flowpipeIndices_count << std::endl;
 		flowpipeIndices_count++;
 
 		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
-		std::vector<std::vector<Point<Number>>> flowpipe_smoothed;
+		//std::vector<std::vector<Point<Number>>> flowpipe_smoothed;
+		std::vector<Representation>  flowpipe_smoothed;
+
 
 		// add groups of ...10 Representations in form of it's convexHull
 		std::vector<Point<Number>> points_convexHull;
 		unsigned flowpipe_count=0, flowpipe_total=0;
+		double soFlowpipe=0, soFlowpipeS=0;
 
 		for(auto& poly : flowpipe){
+			soFlowpipe += poly.sizeOfHPolytope();
 			flowpipe_total++;
-			if(flowpipe_total==flowpipe.size()-1 || flowpipe_count<20){
+			if(flowpipe_total==flowpipe.size()-1 || flowpipe_count<convexHull_const){
 
 				// update vertices
 				std::vector<Point<Number>> points = poly.vertices();
 				for(Point<Number> point: points){
 					if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+						//std::cout << "Consider point " << point << std::endl;
 						points_convexHull.push_back(point);
 					}
 				}
@@ -232,36 +239,36 @@ int main(int argc, char const *argv[])
 			else {
 
 				//std::cout << "points_convexHull.size()  is  " << points_convexHull.size() << std::endl;
-				//// push_back convexHull of 10 Representations
-				//auto facets = convexHull(points_convexHull);
-				//std::vector<Hyperplane<Number>> hyperplanes;
+				// push_back convexHull of 10 Representations
+				auto facets = convexHull(points_convexHull);
+				std::vector<Hyperplane<Number>> hyperplanes;
 
 				//std::cout << "convexHull.size()  is  " << facets.first.size() << std::endl;
 
-				//for(unsigned i = 0; i<facets.first.size(); i++){
-				//	hyperplanes.push_back(facets.first.at(i)->hyperplane());
-				//}
+				for(unsigned i = 0; i<facets.first.size(); i++){
+					hyperplanes.push_back(facets.first.at(i)->hyperplane());
+				}
 
-				//Representation convexHull = Representation(hyperplanes);
+				Representation convexHull = Representation(hyperplanes);
+				Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, reduce_const), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+				//	flowpipe_smoothed.push_back(poly_smoothed);
 
-				//std::cout << "convexHull Hpolytope size()  is  " << convexHull.size() << std::endl;
-				//std::cout << "convexHull Hpolytope vertices  is  " << convexHull.vertices().size() << std::endl;
+				// transform facets -> representation
+				soFlowpipeS += poly_smoothed.sizeOfHPolytope();
+				flowpipe_smoothed.push_back(poly_smoothed);
 
-
-				//// transform facets -> representation
-				//flowpipe_smoothed.push_back(convexHull);
-
-				flowpipe_smoothed.push_back(points_convexHull);
+				//flowpipe_smoothed.push_back(points_convexHull);
 
 				// reset variables
 				flowpipe_count=0;
 				points_convexHull.clear();
+				//std::cout << std::endl;
 			}
 		}
 		//flowpipe.clear();
 
 		// reduce flowpipe segments to 4 facets!
-		//double soFlowpipe=0, soFlowpipeS=0;
+
 
 		//for(auto& poly : flowpipe) {
 		//	poly.removeRedundantPlanes();
@@ -272,15 +279,16 @@ int main(int argc, char const *argv[])
 		//}
 		////flowpipe.clear();
 
-		//std::cout << "Size of flowpipe is " << soFlowpipe << " and of flowpipe_smoothed is " << soFlowpipeS << std::endl;
+		std::cout << "Size of flowpipe is " << soFlowpipe << " and of flowpipe_smoothed is " << soFlowpipeS << std::endl;
+		std::cout << "Or we reduce the size by the factor " << soFlowpipe/soFlowpipeS << std::endl;
 
-		unsigned count = 1;
-		unsigned maxCount = flowpipe_smoothed.size();//_smoothed.size();
-		for(auto& poly : flowpipe_smoothed) {//_smoothed) {
+		unsigned count_smoothed = 1;
+		unsigned maxCount_smoothed = flowpipe_smoothed.size();//_smoothed.size();
+		for(auto& poly : flowpipe_smoothed) {//_smoothed)
 			//std::cout << "Flowpipe segment to be converted: " << std::endl;
 			//poly.removeRedundantPlanes();
 			//poly.print();
-			std::vector<Point<Number>> points = poly; //poly.vertices();
+			std::vector<Point<Number>> points = poly.vertices();
 			//std::cout << "points.size() = " << points.size() << std::endl;
 			if(!points.empty() && points.size() > 2) {
 				//std::cout << "Polycount: " << count << std::endl;
@@ -290,14 +298,39 @@ int main(int argc, char const *argv[])
 					// 			std::cout << point << std::endl;
 				}
 				plotter.addObject(points);
-				std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
+				std::cout << "\r Flowpipe "<< index <<": Added object " << count_smoothed << "/" << maxCount_smoothed << std::flush;
 				points.clear();
-				++count;
+				++count_smoothed;
 			}
 		}
 		std::cout << std::endl;
+
+
+	unsigned count = 1;
+	unsigned maxCount = flowpipe.size();//_smoothed.size();
+	for(auto& poly : flowpipe) {//_smoothed)
+		//std::cout << "Flowpipe segment to be converted: " << std::endl;
+		//poly.removeRedundantPlanes();
+		//poly.print();
+		std::vector<Point<Number>> points = poly.vertices();
+		//std::cout << "points.size() = " << points.size() << std::endl;
+		if(!points.empty() && points.size() > 2) {
+			//std::cout << "Polycount: " << count << std::endl;
+			for(auto& point : points) {
+	// 			std::cout << "reduce " << point << " to ";
+				point.reduceDimension(2);
+				// 			std::cout << point << std::endl;
+			}
+			unsigned p=plotter.addObject(points);
+			//plotter.setObjectColor(p, colors[red]);
+			std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
+			points.clear();
+			++count;
+		}
 	}
-	std::cout << std::endl;
+}
+
+std::cout << std::endl;
 	plotter.plot2d();
 
 	return 0;
