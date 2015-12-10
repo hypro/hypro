@@ -8,7 +8,6 @@
 #include <cassert>
 
 #include "flags.h"
-#include "util/platform.h"
 #include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>
 #include <carl/core/Variable.h>

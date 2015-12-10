@@ -323,7 +323,7 @@ class Facet {
 			}
 		}
 
-		std::cout << matrix << std::endl;
+		//std::cout << matrix << std::endl;
 
 		// matrix(0,vectors[0].size()-1) = 1;
 		for ( unsigned j = 0; j < vectors[0].size(); j++ ) {
