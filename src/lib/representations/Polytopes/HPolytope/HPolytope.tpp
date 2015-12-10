@@ -99,7 +99,9 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
+#ifndef USE_SMTRAT
 	if ( mInitialized ) glp_delete_prob(lp);
+#endif
 }
 
 /*
@@ -111,17 +113,15 @@ bool HPolytope<Number>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
-	#ifdef USE_SMTRAT
+#ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
 	simplex.push();
 	smtrat::FormulaT constr = createFormula(this->matrix(), this->vector());
 	simplex.inform(constr);
 	simplex.add(constr);
 
-	std::cout << constr << std::endl;
-
 	return (simplex.check() == smtrat::Answer::False);
-	#else
+#else
 	if(!mInitialized) {
 		initialize();
 	}
@@ -135,7 +135,7 @@ bool HPolytope<Number>::empty() const {
 		//std::cout << "Empty!" << std::endl;
 
 	return (glp_get_status(lp) == GLP_NOFEAS);
-	#endif
+#endif
 }
 
 template <typename Number>
@@ -429,7 +429,7 @@ void HPolytope<Number>::removeRedundantPlanes() {
 	} else {
 		//std::cout << __func__ << ": " << *this << std::endl;
 		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			// std::cout << "Current plane: " << *planeIt << std::endl;
+			//std::cout << "Current plane: " << *planeIt << std::endl;
 			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
 			if ( evalRes.second == INFEAS ) {
 				// return empty polytope
@@ -438,27 +438,28 @@ void HPolytope<Number>::removeRedundantPlanes() {
 			} else if ( evalRes.second == FEAS ) {
 				if ( evalRes.first < planeIt->offset() &&
 					 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-					// std::cout << "erase " << *planeIt << " which is really redundant." <<
-					// std::endl;
+					//std::cout << "erase " << *planeIt << " which is really redundant." <<
+					//std::endl;
 					planeIt = mHPlanes.erase( planeIt );
 					mInitialized = false;
 				} else {
 					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
 					auto pos = mHPlanes.erase( planeIt );
 					mInitialized = false;
+					//std::cout << "Evaluate without plane." << std::endl;
 					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-					// std::cout << "Eval with: " << evalRes.first << ", without: " <<
-					// tmpRes.first << ", solution type: "
-					// << tmpRes.second << std::endl;
+					//std::cout << "Eval with: " << evalRes.first << ", without: " <<
+					//tmpRes.first << ", solution type: "
+					//<< tmpRes.second << std::endl;
 					if ( tmpRes.second == INFTY ||
 						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
 						planeIt = mHPlanes.insert( pos, tmp );
 						mInitialized = false;
 						++planeIt;
-						// std::cout << "keep "  << tmp << std::endl;
+						//std::cout << "keep "  << tmp << std::endl;
 					} else {
-						// std::cout << "erase " << tmp << " which is equal to something." <<
-						// std::endl;
+						//std::cout << "erase " << tmp << " which is equal to something." <<
+						//std::endl;
 						planeIt = pos;
 					}
 				}
@@ -496,29 +497,38 @@ bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
 
 template <typename Number>
 std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
-	std::cout << __func__ << std::endl;
+	if(mHPlanes.empty())
+		return std::make_pair( 1, INFTY );
+
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
+	//simplex.reset();
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
 	simplex.inform(constrPair.first);
 	simplex.add(constrPair.first);
-	simplex.addObjective(-constrPair.second);
-	std::cout << __func__ << ": " << __LINE__ << std::endl;
+	Poly objective = constrPair.second;
+	simplex.addObjective(objective, false);
 
 	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	std::cout << "with objective function " << std::endl << constrPair.second << std::endl;
+	std::cout << "with objective function " << std::endl << objective << std::endl;
 
 	smtrat::Answer res = simplex.check();
-	std::cout << __func__ << ": " << __LINE__ << std::endl;
 
 	switch(res) {
 		case smtrat::Answer::True:{
-			smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
-			assert(!valuation.isPlusInfinity());
-			if(valuation.isMinusInfinity())
+			smtrat::ModelValue valuation = simplex.optimum(objective);
+			assert(!valuation.isBool());
+			assert(!valuation.isSqrtEx());
+			assert(!valuation.isRAN());
+			assert(!valuation.isBVValue());
+			assert(!valuation.isSortValue());
+			assert(!valuation.isUFModel());
+			if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+				//std::cout << __func__ << ": INFINITY" << std::endl;
 				return std::make_pair( 1, INFTY );
-			else {
+			} else {
 				assert(valuation.isRational());
+				//std::cout << __func__ << ": " << valuation.asRational() << std::endl;
 				return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
 			}
 		}
@@ -608,20 +618,19 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		} else {
 			//std::cout << __func__ << " this: " << *this << std::endl;
 		//std::cout << __func__ << " vertices: " << std::endl;
-		for ( const auto &vertex : this->vertices() ) std::cout << vertex << std::endl;
 
-			//std::cout << "Create intermediate. " << std::endl;
+		//std::cout << "Create intermediate. " << std::endl;
 
-			VPolytope<Number> intermediate( this->vertices() );
+		VPolytope<Number> intermediate( this->vertices() );
 
-			//std::cout << "Intermediate : " << intermediate << std::endl;
+		//std::cout << "Intermediate : " << intermediate << std::endl;
 
-			intermediate = intermediate.linearTransformation( A, b );
+		intermediate = intermediate.linearTransformation( A, b );
 
-			//std::cout << "Intermediate : " << intermediate << std::endl;
+		//std::cout << "Intermediate : " << intermediate << std::endl;
 
-			HPolytope<Number> res( intermediate );
-			return res;
+		HPolytope<Number> res( intermediate );
+		return res;
 		}
 	} else {
 		return *this;
@@ -729,11 +738,11 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	std::cout << __func__ << "  " << vec << ": ";
+	//std::cout << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if ( plane.normal().dot( vec ) > plane.offset() ) {
-			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}
@@ -773,7 +782,9 @@ void HPolytope<Number>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
+#ifndef USE_SMTRAT
 	deleteArrays();
+#endif
 	mInitialized = false;
 }
 
@@ -808,71 +819,72 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
 /*
  * Auxiliary functions
  */
-
-template <typename Number>
-void HPolytope<Number>::createArrays( unsigned size ) const {
-	ia = new int[size + 1];
-	ja = new int[size + 1];
-	ar = new double[size + 1];
-}
-
-template <typename Number>
-void HPolytope<Number>::deleteArrays() {
-	delete[] ia;
-	delete[] ja;
-	delete[] ar;
-}
-
-template <typename Number>
-void HPolytope<Number>::printArrays() {
-	if ( !mInitialized ) {
-		initialize();
+#ifndef USE_SMTRAT
+	template <typename Number>
+	void HPolytope<Number>::createArrays( unsigned size ) const {
+		ia = new int[size + 1];
+		ja = new int[size + 1];
+		ar = new double[size + 1];
 	}
-	unsigned size = mHPlanes.size() * mDimension;
-	std::cout << "IA: ";
-	for ( unsigned pos = 0; pos < size; ++pos ) {
-		std::cout << ia[pos] << ", ";
+
+	template <typename Number>
+	void HPolytope<Number>::deleteArrays() {
+		delete[] ia;
+		delete[] ja;
+		delete[] ar;
 	}
-	std::cout << std::endl;
-}
 
-template <typename Number>
-void HPolytope<Number>::initialize() const {
-	if ( !mInitialized ) {
-		/* create glpk problem */
-		lp = glp_create_prob();
-		glp_set_prob_name( lp, "hpoly" );
-		glp_set_obj_dir( lp, GLP_MAX );
-		glp_term_out( GLP_OFF );
-
-		unsigned numberOfConstraints = mHPlanes.size();
-
-		// convert constraint constants
-		glp_add_rows( lp, numberOfConstraints );
-		for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-			glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mHPlanes[i].offset() ) );
+	template <typename Number>
+	void HPolytope<Number>::printArrays() {
+		if ( !mInitialized ) {
+			initialize();
 		}
-
-		// add cols here
-		glp_add_cols( lp, mDimension );
-		createArrays( numberOfConstraints * mDimension );
-
-		// convert constraint matrix
-		ia[0] = 0;
-		ja[0] = 0;
-		ar[0] = 0;
-		for ( unsigned i = 0; i < numberOfConstraints * mDimension; ++i ) {
-			ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
-			// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-			ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
-			// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-			ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-			// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+		unsigned size = mHPlanes.size() * mDimension;
+		std::cout << "IA: ";
+		for ( unsigned pos = 0; pos < size; ++pos ) {
+			std::cout << ia[pos] << ", ";
 		}
-
-		glp_load_matrix( lp, numberOfConstraints * mDimension, ia, ja, ar );
-		mInitialized = true;
+		std::cout << std::endl;
 	}
-}
+
+	template <typename Number>
+	void HPolytope<Number>::initialize() const {
+		if ( !mInitialized ) {
+			/* create glpk problem */
+			lp = glp_create_prob();
+			glp_set_prob_name( lp, "hpoly" );
+			glp_set_obj_dir( lp, GLP_MAX );
+			glp_term_out( GLP_OFF );
+
+			unsigned numberOfConstraints = mHPlanes.size();
+
+			// convert constraint constants
+			glp_add_rows( lp, numberOfConstraints );
+			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
+				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mHPlanes[i].offset() ) );
+			}
+
+			// add cols here
+			glp_add_cols( lp, mDimension );
+			createArrays( numberOfConstraints * mDimension );
+
+			// convert constraint matrix
+			ia[0] = 0;
+			ja[0] = 0;
+			ar[0] = 0;
+			for ( unsigned i = 0; i < numberOfConstraints * mDimension; ++i ) {
+				ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
+				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+				ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
+				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+				ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
+				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+			}
+
+			glp_load_matrix( lp, numberOfConstraints * mDimension, ia, ja, ar );
+			mInitialized = true;
+		}
+	}
+#endif
 
 }  // namespace hypro

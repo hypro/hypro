@@ -1,115 +1,18 @@
-#include "vertexEnumeration.h"
+#include "Dictionary.h"
 
 namespace hypro {
 
 	template<typename Number>
 	Dictionary<Number>::Dictionary(const Dictionary& rhs) :
-		mDictionary(rhs.dictionary()),
+		mDictionary(rhs.tableau()),
 		mF(mDictionary.rows()-1),
 		mG(0),
 		mB(rhs.basis()),
-		mN(rhs.cobasis()),
-		mSubstitution()
+		mN(rhs.cobasis())
 	{}
 
 	template<typename Number>
-	Dictionary<Number>::Dictionary (const matrix_t<Number>& A, const vector_t<Number>& b) :
-		mDictionary(),
-		mF(A.rows()-A.cols()),
-		mG(0)
-	{
-		// Note: This is the constructor, which should be used, as it creates the optimal dictionary.
-
-		matrix_t<Number> t = matrix_t<Number>(A.rows(), A.cols() + 1);
-		t << b,-A;
-		// rearrange to make the last d equations linear independent.
-		t = rearrange(t);
-
-		// solve the last d equations
-		std::size_t dimension = A.cols();
-		// Assumption: The last d equations of A are linear independent
-
-		auto bottom = t.bottomRows(dimension);
-		auto top = t.topRows(A.rows()-dimension);
-
-		auto varBlock = bottom.rightCols(dimension);
-		auto constPart = bottom.leftCols(1);
-
-		// holds the variables we use later for the vertex computation.
-		matrix_t<Number> tmp = matrix_t<Number>(varBlock);
-
-		// a is required for solving the last d equations
-		matrix_t<Number> a(tmp.rows(), 2*dimension+1);
-		a << tmp, -constPart, matrix_t<Number>::Identity(dimension,dimension);
-
-		//std::cout << "a: " << std::endl << a << std::endl;
-
-		// Gauss:
-		std::set<unsigned> usedRows;
-		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
-		{
-			//std::cout << "Eliminate for column " << colIndex << std::endl;
-			unsigned rowIndex = 0;
-			// find first row suitable for elimination
-			while(rowIndex < a.rows() && (usedRows.find(rowIndex) != usedRows.end() || a(rowIndex,colIndex) == 0)) {
-				++rowIndex;
-			}
-
-			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
-			if(rowIndex < a.rows() && a(rowIndex,colIndex) != 0){
-				usedRows.insert(rowIndex);
-				//normalize
-				a.row(rowIndex) = a.row(rowIndex)/a(rowIndex,colIndex);
-				for(unsigned rIt = 0; rIt < a.rows(); ++ rIt){
-					if(rIt != rowIndex && a(rIt,colIndex) != 0) {
-						// forward insertion
-						a.row(rIt) = a.row(rIt) - (a.row(rowIndex)*a(rIt, colIndex));
-					}
-				}
-			}
-			//std::cout << a << std::endl;
-		}
-
-		// Substitution holds the matrix which contains the solution for the last d equations,
-		// required for the vertex computation.
-		auto substitutionBlock = a.rightCols(dimension+1);
-		mSubstitution = matrix_t<Number>(a.rows(), dimension+1);
-		mSubstitution << substitutionBlock;
-
-		// creation of the actual dictionary from the top m-d rows
-		mDictionary = matrix_t<Number>(A.rows()-dimension + 1, dimension + 1);
-		for(unsigned rI = 0; rI < top.rows(); ++rI)
-		{
-			mDictionary(rI,0) = top(rI,0);
-			for(unsigned dI = 1; dI < top.cols(); ++dI)
-			{
-				mDictionary.row(rI) = mDictionary.row(rI) + (top(rI,dI) * substitutionBlock.row(dI-1));
-			}
-		}
-
-		// Augment dictionary by a row of -1s -> the f row
-		matrix_t<Number> allOnes = matrix_t<Number>::Constant(1,mDictionary.cols(), Number(-1));
-		allOnes(0) = Number(0);
-		mDictionary.row(mDictionary.rows()-1) = allOnes;
-
-		//std::cout << "Optimal dictionary: " << mDictionary << std::endl;
-
-		// create the mapping for the basic and non-basic variables (variable index maps to row/column index in the matrix).
-		std::size_t colCnt = 0;
-		for(unsigned index = 1; index < mDictionary.rows(); ++index) {
-			mB[index] = colCnt;
-			++colCnt;
-		}
-
-		std::size_t rowCnt = 1;
-		for(std::size_t index = mDictionary.rows() ; index < mDictionary.rows() + dimension ; ++index) {
-			mN[index] = rowCnt;
-			++rowCnt;
-		}
-	}
-
-	template<typename Number>
-	const matrix_t<Number>& Dictionary<Number>::dictionary() const {
+	const matrix_t<Number>& Dictionary<Number>::tableau() const {
 		return mDictionary;
 	}
 
@@ -124,7 +27,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Point<Number> Dictionary<Number>::vertex() const {
+	Point<Number> Dictionary<Number>::vertex(const matrix_t<Number>& substitution) const {
 		vector_t<Number> valuation = vector_t<Number>(mN.size() + 1);
 		valuation(0) = 1;
 		for(unsigned i = 1; i < valuation.rows(); ++i) {
@@ -137,63 +40,9 @@ namespace hypro {
 			}
 		}
 
-		//std::cout << __func__ << mSubstitution << std::endl << __func__ << valuation << std::endl;
+		//std::cout << __func__ << substitution << std::endl << __func__ << valuation << std::endl;
 
-		return Point<Number>(mSubstitution*valuation);
-	}
-
-	template<typename Number>
-	std::vector<Point<Number>> Dictionary<Number>::search() {
-		std::vector<Point<Number>> res;
-		std::size_t i,j;
-		i = 0;
-		j = 1;
-
-		std::size_t m = mDictionary.rows()-1;
-
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-		std::size_t depth = 0;
-
-		std::cout << "Level " << depth << ": Initial, optimal dictionary: " << std::endl;
-		print(true);
-		std::cout << "Corresponding computed vertex: " << vertex() << std::endl;
-		std::cout << "Is lexicographic minimum: " << isLexMin() << std::endl;
-#endif
-		if(isLexMin())
-			res.push_back(vertex());
-
-		do {
-			while(i <= m && !isReverseCrissCrossPivot(i,j)) increment(i,j);
-			if(i<m) {
-				pivot(i,j);
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-				std::cout << "Found reverse pivot -> step one level down." << std::endl;
-				++depth;
-				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
-				print(true);
-				std::cout << "Corresponding computed vertex: " << vertex() << std::endl;
-				std::cout << "Is lexicographic minimum: " << isLexMin() << std::endl;
-#endif
-				//if(isLexMin()){
-					res.push_back(vertex());
-				//}
-				i = 0;
-				j = 1;
-			} else {
-				if (selectCrissCrossPivot(i,j)) // we are at the root of the search tree and finished.
-					break;
-				pivot(i,j);
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-				std::cout << "step one level up, consider next dictionaries." << std::endl;
-				--depth;
-				std::cout << "Level " << depth << ": Vertex dictionary after pivot (" << i << ", " << j << "): " << std::endl;
-				print(true);
-#endif
-				increment(i,j);
-			}
-		} while ( i <= m && (mB.find(m) == mB.end() || mB.at(m) != m) );
-
-		return res;
+		return Point<Number>(substitution*valuation);
 	}
 
 	template<typename Number>
@@ -318,7 +167,7 @@ namespace hypro {
 		//std::cout << "Tmp after proposed pivot:" << std::endl;
 		//tmp.print(true);
 
-		std::size_t newI,newJ;
+		std::size_t newI = 0, newJ = 0;
 		bool optimal = tmp.selectDualBlandPivot(newI, newJ);
 
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
@@ -406,19 +255,20 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::selectDualBlandPivot(std::size_t& i, std::size_t& j) const {
+		print(true);
 		unsigned rowIndex = 0;
-		for( ; rowIndex < mDictionary.rows(); ++rowIndex){
+		for( ; rowIndex < mDictionary.rows()-1; ++rowIndex){
 			if(mDictionary(rowIndex,mG) < 0)
 				break;
 		}
 		// the dictionary is optimal.
-		if(rowIndex == mDictionary.rows()-1 && mDictionary(rowIndex,mG) >= 0)
+		if(rowIndex == mDictionary.rows()-1)
 			return true;
 
 		Number minval;
 		unsigned minIndex;
 		bool set = false;
-		unsigned colIndex = 0;
+		unsigned colIndex = 1;
 		for( ; colIndex < mDictionary.cols(); ++colIndex){
 			if(mDictionary(rowIndex,colIndex) > 0){
 				if(!set){
@@ -433,7 +283,11 @@ namespace hypro {
 		}
 		assert(set); // not sure if this is okay.
 		i = rowIndex;
-		j = colIndex;
+		j = minIndex;
+
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+		std::cout << __func__ << ": " << i << ", " << j << std::endl;
+#endif
 
 		return false;
 	}
@@ -632,7 +486,7 @@ namespace hypro {
 	template<typename Number>
 	Dictionary<Number>& Dictionary<Number>::operator=(const Dictionary<Number>& rhs) {
 		if(rhs != *this) {
-			mDictionary = rhs.dictionary();
+			mDictionary = rhs.tableau();
 			mF = mDictionary.rows()-1;
 			mG = 0;
 			mB = rhs.basis();
@@ -686,90 +540,6 @@ namespace hypro {
 		} else {
 			std::cout << *this << std::endl;
 		}
-	}
-
-	template<typename Number>
-	matrix_t<Number> Dictionary<Number>::rearrange(const matrix_t<Number>& A) {
-		if(A.rows() <= A.cols()) {
-			// This should not happen.
-			return A;
-		}
-
-		matrix_t<Number> copy(A);
-		matrix_t<Number> res(A);
-		std::size_t dimension = copy.cols();
-
-		// perform Gauss on A to get the linear independent rows
-
-		std::set<unsigned> linearIndependent;
-		std::set<unsigned> linearDependent;
-		for(unsigned colIndex = 0; colIndex < dimension; ++colIndex)
-		{
-			//std::cout << "Eliminate for column " << colIndex << std::endl;
-			unsigned rowIndex = 0;
-			// find first row suitable for elimination
-			//std::cout << linearIndependent << std::endl;
-			while(rowIndex < copy.rows() && (linearIndependent.find(rowIndex) != linearIndependent.end() || copy(rowIndex,colIndex) == 0)) {
-				++rowIndex;
-			}
-
-			//std::cout << "Use row " << rowIndex << " for elimination" << std::endl;
-			if(rowIndex < copy.rows() && copy(rowIndex,colIndex) != 0){
-				linearIndependent.insert(rowIndex);
-				//normalize
-				copy.row(rowIndex) = copy.row(rowIndex)/copy(rowIndex,colIndex);
-				for(unsigned rIt = 0; rIt < copy.rows(); ++ rIt){
-
-					if(rIt != rowIndex && copy(rIt,colIndex) != 0) {
-						// forward insertion
-						copy.row(rIt) = copy.row(rIt) - (copy.row(rowIndex)*copy(rIt, colIndex));
-					}
-				}
-			}
-		}
-
-		//std::cout << "Copy: " << std::endl << copy << std::endl;
-
-		// collect linear dependent rows
-		for(unsigned rIt = 0; rIt < copy.rows(); ++rIt){
-			if(linearIndependent.find(rIt) == linearIndependent.end()) {
-				linearDependent.insert(rIt);
-			}
-		}
-
-		assert(linearIndependent.size() == dimension);
-		assert(linearDependent.size() == A.rows() - dimension);
-		if(linearIndependent.size() != dimension) {
-			// no proper dimension! WHAT TO DO?
-		} else {
-			// move the linearly independent columns to the bottom of the matrix
-			for(unsigned row = 0; row < res.rows(); ++row){
-				if(row >= A.rows()-dimension) {
-					res.row(row) = A.row(*linearIndependent.begin());
-					linearIndependent.erase(linearIndependent.begin());
-				} else {
-					res.row(row) = A.row(*linearDependent.begin());
-					linearDependent.erase(linearDependent.begin());
-				}
-			}
-		}
-
-		return res;
-	}
-
-	template<typename Number>
-	void Dictionary<Number>::increment(std::size_t& i, std::size_t& j) const {
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-		std::cout << __func__ << " i=" << i << ", j=" << j;
-#endif
-		++j;
-		if( j == std::size_t(mDictionary.cols())) {
-			j = 1;
-			++i;
-		}
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-		std::cout << " to i'=" << i << ", j'=" << j << std::endl;
-#endif
 	}
 
 } // namespace hypro

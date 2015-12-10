@@ -315,6 +315,18 @@ namespace hypro {
   		std::cout << "Error - second facet is no neighbor of first facet" << std::endl;
   		return res;
   	}
+    else if(strat>1 && strat<6){
+      vector_t<Number> dummy_a = res.constraints().at(a).normal();
+      vector_t<Number> dummy_b = res.constraints().at(b).normal();
+      dummy_a.normalize();
+      dummy_b.normalize();
+      std::cout << "Neighbors have a scalarpoduct of " << dummy_a.dot(dummy_b) << " (normalized)" << std::endl;
+    }
+    if(strat<2){
+      std::vector<Point<Number>> verticesOfIndex = getVerticesOfIndex(a, vertices, membersOfVertices);
+      vector_t<Number> normVector = verticesOfIndex.at(0).rawCoordinates() - verticesOfIndex.at(1).rawCoordinates();
+      std::cout << "Norm for facet " << a << " is " << normVector.norm() << std::endl;
+    }
 
 
   	// (try to) reduce

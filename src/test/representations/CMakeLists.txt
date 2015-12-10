@@ -34,7 +34,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	add_dependencies(runRepresentationTests googletest)
 	add_dependencies(runPTermTests googletest)
 
-	target_link_libraries(runRepresentationTests
+	target_link_libraries(runRepresentationTests LINK_PUBLIC
 		${libraries}
 		${PROJECT_NAME}
 	)

@@ -14,7 +14,7 @@ using namespace hypro;
 
 int main(int argc, char const *argv[])
 {
-	typedef carl::FLOAT_T<double> Number;
+	typedef double Number;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	gnuplotSettings settings;
@@ -75,6 +75,14 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({0.1,1},1));
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
+
+  HPolytope<Number> twoD_template;
+  std::vector<vector_t<Number>> directionsForTemplate = computeTemplate<Number>(2,7);
+
+
+  for(vector_t<Number> direction: directionsForTemplate){
+    twoD_template.insert(Hyperplane<Number>(direction, 1));
+  }
 
   HPolytope<Number> diamond;
   //diamond.insert(Hyperplane<Number>({-1,10},1));
@@ -188,11 +196,11 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = td_example;
+  HPolytope<Number> reduce_from = twoD_template;
 
 
-  unsigned dimension = reduce_from.dimension(); // set dimension for test object here
-  bool volume=false;
+  unsigned dimension = nico.dimension(); // set dimension for test object here
+  bool volume=true;
   Number prevVolume=0;
 
   HPolytope<Number> reduction_drop_normal,

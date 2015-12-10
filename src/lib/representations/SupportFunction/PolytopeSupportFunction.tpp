@@ -104,7 +104,7 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
-	: mConstraints( constraints ), mConstraintConstants( constraintConstants ) {
+	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mDimension(mConstraints.cols()) {
 	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
@@ -115,6 +115,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
+	mDimension = _planes[0].dimension();
 
 	unsigned pos = 0;
 	for ( const auto &plane : _planes ) {
@@ -129,7 +130,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
-	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants() ) {
+	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mDimension(mConstraints.cols() ) {
 	#ifndef USE_SMTRAT
 	initialize( mConstraints, mConstraintConstants );
 	#endif
@@ -182,27 +183,39 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(mConstraints, mConstraintConstants, l);
 		simplex.inform(constrPair.first);
 		simplex.add(constrPair.first);
-		simplex.addObjective(-constrPair.second);
+		Poly objective = constrPair.second;
+		simplex.addObjective(objective, false);
+
+		std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "with objective function " << std::endl << objective << std::endl;
 
 		smtrat::Answer res = simplex.check();
 
 		switch(res) {
 			case smtrat::Answer::True:{
-				smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
-				assert(!valuation.isPlusInfinity());
-				if(valuation.isMinusInfinity())
+				smtrat::ModelValue valuation = simplex.optimum(objective);
+				assert(!valuation.isBool());
+				assert(!valuation.isSqrtEx());
+				assert(!valuation.isRAN());
+				assert(!valuation.isBVValue());
+				assert(!valuation.isSortValue());
+				assert(!valuation.isUFModel());
+				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+					//std::cout << __func__ << ": INFINITY" << std::endl;
+					result.supportValue = 0;
 					result.errorCode = GLP_UNBND;
-				else {
+				} else {
 					assert(valuation.isRational());
+					//std::cout << __func__ << ": " << valuation.asRational() << std::endl;
 					result.supportValue = carl::convert<Rational,Number>(valuation.asRational());
 					result.errorCode = GLP_FEAS;
 				}
+				break;
 			}
-			default:{
+			default:
+				result.supportValue = 0;
 				result.errorCode = GLP_INFEAS;
-				}
 		}
-
 	#else
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
@@ -280,6 +293,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 template <typename Number>
 vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+	std::cout << "A.cols: " << _A.cols() << " and dimension: " << mDimension << std::endl;
 	assert( _A.cols() == mDimension );
 	vector_t<Number> res( _A.rows() );
 
