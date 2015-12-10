@@ -183,27 +183,39 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(mConstraints, mConstraintConstants, l);
 		simplex.inform(constrPair.first);
 		simplex.add(constrPair.first);
-		simplex.addObjective(-constrPair.second);
+		Poly objective = constrPair.second;
+		simplex.addObjective(objective, false);
+
+		std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "with objective function " << std::endl << objective << std::endl;
 
 		smtrat::Answer res = simplex.check();
 
 		switch(res) {
 			case smtrat::Answer::True:{
-				smtrat::ModelValue valuation = simplex.optimum(constrPair.second);
-				assert(!valuation.isPlusInfinity());
-				if(valuation.isMinusInfinity())
+				smtrat::ModelValue valuation = simplex.optimum(objective);
+				assert(!valuation.isBool());
+				assert(!valuation.isSqrtEx());
+				assert(!valuation.isRAN());
+				assert(!valuation.isBVValue());
+				assert(!valuation.isSortValue());
+				assert(!valuation.isUFModel());
+				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+					//std::cout << __func__ << ": INFINITY" << std::endl;
+					result.supportValue = 0;
 					result.errorCode = GLP_UNBND;
-				else {
+				} else {
 					assert(valuation.isRational());
+					//std::cout << __func__ << ": " << valuation.asRational() << std::endl;
 					result.supportValue = carl::convert<Rational,Number>(valuation.asRational());
 					result.errorCode = GLP_FEAS;
 				}
+				break;
 			}
-			default:{
+			default:
+				result.supportValue = 0;
 				result.errorCode = GLP_INFEAS;
-				}
 		}
-
 	#else
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
