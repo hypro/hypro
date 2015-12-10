@@ -133,12 +133,12 @@ class Facet {
 
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
-	void addNeighbor( std::shared_ptr<Facet<Number>> facet ) {
+	void addNeighbor(const std::shared_ptr<Facet<Number>>& facet ) {
 		 //std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
 			assert( isNeighbor( facet ) );
-			facet->addNeighbor( std::make_shared<Facet<Number>>( *this ) );
+			//facet->addNeighbor( std::make_shared<Facet<Number>>( *this ) );
 		}
 	}
 
