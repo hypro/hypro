@@ -684,22 +684,22 @@ TYPED_TEST(PolytopeTest, Neighborhood)
 
 TYPED_TEST(PolytopeTest, Membership)
 {
-    vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
+    vector_t<TypeParam> v01 = vector_t<TypeParam>(2);
 	v01(0) = 4;
 	v01(1) = 4;
 	Point<TypeParam> p01 = Point<TypeParam>(v01);
 
-	vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
+	vector_t<TypeParam> v02 = vector_t<TypeParam>(2);
 	v02(0) = 5;
 	v02(1) = 6;
 	Point<TypeParam> p02 = Point<TypeParam>(v02);
 
-	vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
+	vector_t<TypeParam> v03 = vector_t<TypeParam>(2);
 	v03(0) = 6;
 	v03(1) = 4;
 	Point<TypeParam> p03 = Point<TypeParam>(v03);
 
-	vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
+	vector_t<TypeParam> v04 = vector_t<TypeParam>(2);
 	v04(0) = 10;
 	v04(1) = 0;
 	Point<TypeParam> p04= Point<TypeParam>(v04);

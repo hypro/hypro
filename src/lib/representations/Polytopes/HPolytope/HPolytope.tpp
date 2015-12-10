@@ -500,14 +500,15 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
+	//simplex.reset();
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
 	simplex.inform(constrPair.first);
 	simplex.add(constrPair.first);
 	Poly objective = constrPair.second;
 	simplex.addObjective(objective, false);
 
-	//std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	//std::cout << "with objective function " << std::endl << objective << std::endl;
+	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+	std::cout << "with objective function " << std::endl << objective << std::endl;
 
 	smtrat::Answer res = simplex.check();
 
