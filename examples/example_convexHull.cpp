@@ -57,19 +57,19 @@ int main(int argc, char** argv) {
 		points.push_back(Point<double>(v11_1));
 
 		vector_t<double> v1_2 = vector_t<double>(2);
-		v1_2(0) = 0; v1_2(1) = 0;
+		v1_2(0) = 100; v1_2(1) = 0;
 
 		vector_t<double> v2_2 = vector_t<double>(2);
-		v2_2(0) = 6;	v2_2(1) = 2;
+		v2_2(0) = -50;	v2_2(1) = 0;
 
 		vector_t<double> v3_2 = vector_t<double>(2);
-		v3_2(0) = 2; v3_2(1) = 5;
+		v3_2(0) = 0; v3_2(1) = 50;
 
 		vector_t<double> v4_2 = vector_t<double>(2);
-		v4_2(0) = 5; v4_2(1) = 1;
+		v4_2(0) = 0; v4_2(1) = 25;
 
 		vector_t<double> v5_2 = vector_t<double>(2);
-		v5_2(0) = 5; v5_2(1) = 4;
+		v5_2(0) = 0; v5_2(1) = 15;
 
 		vector_t<double> v6_2 = vector_t<double>(2);
 		v6_2(0) = 1; v6_2(1) = 4;
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 		points2.push_back(Point<double>(v3_2));
 		points2.push_back(Point<double>(v4_2));
 		points2.push_back(Point<double>(v5_2));
-		points2.push_back(Point<double>(v6_2));
+		//points2.push_back(Point<double>(v6_2));
 
 
 		vector_t<double> v1_massif = vector_t<double>(2);
@@ -207,9 +207,9 @@ int main(int argc, char** argv) {
 		points_pyramid.push_back(Point<double>(v04_pyramid));
 		points_pyramid.push_back(Point<double>(v05_pyramid));
 
-		auto facets = convexHull(points_massif);
+		auto facets = convexHull(points2);
 
-		std::cout << "Example_convexHull results: " << std::endl;
+		std::cout << std::endl << "Example_convexHull results: " << std::endl;
 		for(unsigned i = 0; i<facets.first.size(); i++){
 			std::cout << "Result Nr." << i+1 << std::endl << "normal:\n"<< facets.first.at(i)->getNormal() <<"\noffset: "<<facets.first.at(i)->getScalar() << std::endl;
 		}

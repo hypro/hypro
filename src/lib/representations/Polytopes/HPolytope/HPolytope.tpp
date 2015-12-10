@@ -99,7 +99,9 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
+#ifndef USE_SMTRAT
 	if ( mInitialized ) glp_delete_prob(lp);
+#endif
 }
 
 /*
@@ -500,14 +502,15 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 
 #ifdef USE_SMTRAT
 	smtrat::SimplexSolver simplex;
+	//simplex.reset();
 	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
 	simplex.inform(constrPair.first);
 	simplex.add(constrPair.first);
 	Poly objective = constrPair.second;
 	simplex.addObjective(objective, false);
 
-	//std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	//std::cout << "with objective function " << std::endl << objective << std::endl;
+	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+	std::cout << "with objective function " << std::endl << objective << std::endl;
 
 	smtrat::Answer res = simplex.check();
 
@@ -639,6 +642,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	HPolytope<Number> res;
 	Number result;
 
+	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+
 	// evaluation of rhs in directions of lhs
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
@@ -649,8 +654,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
 
@@ -664,11 +669,11 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
-	// res.removeRedundantPlanes();
+	//res.removeRedundantPlanes();
 	return res;
 }
 
@@ -735,7 +740,7 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	//std::cout << __func__ << "  " << vec << ": ";
+	std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if ( plane.normal().dot( vec ) > plane.offset() ) {
 			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
@@ -748,14 +753,18 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
+	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.second == INFEAS ) {
+			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
+			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < plane.offset() &&
-					!carl::AlmostEqual2sComplement( evalRes.first, plane.offset() ) ) {
+		} else if ( evalRes.first < plane.offset() ) {
+			std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}
@@ -779,7 +788,9 @@ void HPolytope<Number>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
+#ifndef USE_SMTRAT
 	deleteArrays();
+#endif
 	mInitialized = false;
 }
 
@@ -814,71 +825,72 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
 /*
  * Auxiliary functions
  */
-
-template <typename Number>
-void HPolytope<Number>::createArrays( unsigned size ) const {
-	ia = new int[size + 1];
-	ja = new int[size + 1];
-	ar = new double[size + 1];
-}
-
-template <typename Number>
-void HPolytope<Number>::deleteArrays() {
-	delete[] ia;
-	delete[] ja;
-	delete[] ar;
-}
-
-template <typename Number>
-void HPolytope<Number>::printArrays() {
-	if ( !mInitialized ) {
-		initialize();
+#ifndef USE_SMTRAT
+	template <typename Number>
+	void HPolytope<Number>::createArrays( unsigned size ) const {
+		ia = new int[size + 1];
+		ja = new int[size + 1];
+		ar = new double[size + 1];
 	}
-	unsigned size = mHPlanes.size() * mDimension;
-	std::cout << "IA: ";
-	for ( unsigned pos = 0; pos < size; ++pos ) {
-		std::cout << ia[pos] << ", ";
+
+	template <typename Number>
+	void HPolytope<Number>::deleteArrays() {
+		delete[] ia;
+		delete[] ja;
+		delete[] ar;
 	}
-	std::cout << std::endl;
-}
 
-template <typename Number>
-void HPolytope<Number>::initialize() const {
-	if ( !mInitialized ) {
-		/* create glpk problem */
-		lp = glp_create_prob();
-		glp_set_prob_name( lp, "hpoly" );
-		glp_set_obj_dir( lp, GLP_MAX );
-		glp_term_out( GLP_OFF );
-
-		unsigned numberOfConstraints = mHPlanes.size();
-
-		// convert constraint constants
-		glp_add_rows( lp, numberOfConstraints );
-		for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-			glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mHPlanes[i].offset() ) );
+	template <typename Number>
+	void HPolytope<Number>::printArrays() {
+		if ( !mInitialized ) {
+			initialize();
 		}
-
-		// add cols here
-		glp_add_cols( lp, mDimension );
-		createArrays( numberOfConstraints * mDimension );
-
-		// convert constraint matrix
-		ia[0] = 0;
-		ja[0] = 0;
-		ar[0] = 0;
-		for ( unsigned i = 0; i < numberOfConstraints * mDimension; ++i ) {
-			ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
-			// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-			ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
-			// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-			ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-			// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+		unsigned size = mHPlanes.size() * mDimension;
+		std::cout << "IA: ";
+		for ( unsigned pos = 0; pos < size; ++pos ) {
+			std::cout << ia[pos] << ", ";
 		}
-
-		glp_load_matrix( lp, numberOfConstraints * mDimension, ia, ja, ar );
-		mInitialized = true;
+		std::cout << std::endl;
 	}
-}
+
+	template <typename Number>
+	void HPolytope<Number>::initialize() const {
+		if ( !mInitialized ) {
+			/* create glpk problem */
+			lp = glp_create_prob();
+			glp_set_prob_name( lp, "hpoly" );
+			glp_set_obj_dir( lp, GLP_MAX );
+			glp_term_out( GLP_OFF );
+
+			unsigned numberOfConstraints = mHPlanes.size();
+
+			// convert constraint constants
+			glp_add_rows( lp, numberOfConstraints );
+			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
+				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mHPlanes[i].offset() ) );
+			}
+
+			// add cols here
+			glp_add_cols( lp, mDimension );
+			createArrays( numberOfConstraints * mDimension );
+
+			// convert constraint matrix
+			ia[0] = 0;
+			ja[0] = 0;
+			ar[0] = 0;
+			for ( unsigned i = 0; i < numberOfConstraints * mDimension; ++i ) {
+				ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
+				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+				ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
+				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+				ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
+				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+			}
+
+			glp_load_matrix( lp, numberOfConstraints * mDimension, ia, ja, ar );
+			mInitialized = true;
+		}
+	}
+#endif
 
 }  // namespace hypro

@@ -167,7 +167,7 @@ namespace hypro {
 		//std::cout << "Tmp after proposed pivot:" << std::endl;
 		//tmp.print(true);
 
-		std::size_t newI,newJ;
+		std::size_t newI = 0, newJ = 0;
 		bool optimal = tmp.selectDualBlandPivot(newI, newJ);
 
 #ifdef FUKUDA_VERTEX_ENUM_DEBUG
@@ -281,12 +281,13 @@ namespace hypro {
 				}
 			}
 		}
-#ifdef FUKUDA_VERTEX_ENUM_DEBUG
-			std::cout << __func__ << ": " << i << ", " << j << std::endl;
-#endif
 		assert(set); // not sure if this is okay.
 		i = rowIndex;
 		j = minIndex;
+
+#ifdef FUKUDA_VERTEX_ENUM_DEBUG
+		std::cout << __func__ << ": " << i << ", " << j << std::endl;
+#endif
 
 		return false;
 	}
