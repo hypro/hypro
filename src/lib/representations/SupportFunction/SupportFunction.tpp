@@ -14,8 +14,8 @@ namespace hypro{
     //CONSTRUCTORS
 
     template <typename Number>
-    SupportFunction<Number>::SupportFunction(const std::shared_ptr<SupportFunctionContent<Number>> _source){
-        content = _source;
+    SupportFunction<Number>::SupportFunction(const std::shared_ptr<SupportFunctionContent<Number>> _source) : content(std::make_shared(*_source)){
+        //content = std::make_shared<SupportFunctionContent<Number>>(_source);
     }
 
     template <typename Number>
@@ -26,23 +26,23 @@ namespace hypro{
 
     //Problem in this function
     template <typename Number>
-    SupportFunction<Number>::SupportFunction( const SupportFunction<Number> &_orig ){
-        content = hypro::SupportFunctionContent<Number>::create(_orig.content);
+    SupportFunction<Number>::SupportFunction( const SupportFunction<Number> &_orig ) : content(std::make_shared(hypro::SupportFunctionContent<Number>::create(_orig.content)){
+        //content = std::make_shared<SupportFunctionContent<Number>>(hypro::SupportFunctionContent<Number>::create(_orig.content));
     }
 
     template <typename Number>
-    SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius ){
-       content = hypro::SupportFunctionContent<Number>::create( _type, _radius );
+    SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius ) : content(std::make_shared(hypro::SupportFunctionContent<Number>::create(_type, _radius)){
+       //content = std::make_shared<SupportFunctionContent<Number>>(hypro::SupportFunctionContent<Number>::create( _type, _radius ));
     }
 
     template <typename Number>
-    SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances){
-        content = hypro::SupportFunctionContent<Number>::create( _type, _directions, _distances);
+    SupportFunction<Number>::SupportFunction(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content(std::make_shared(hypro::SupportFunctionContent<Number>::create(_type, _directions, _distances)){
+        //content = std::make_shared<SupportFunctionContent<Number>>(hypro::SupportFunctionContent<Number>::create( _type, _directions, _distances));
     }
 
     template <typename Number>
-    SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes){
-        content = hypro::SupportFunctionContent<Number>::create( _type, _planes);
+    SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) : content(std::make_shared(hypro::SupportFunctionContent<Number>::create(_type, _planes)){
+        //content = std::make_shared<SupportFunctionContent<Number>>(hypro::SupportFunctionContent<Number>::create( _type, _planes));
     }
 
     template <typename Number>
@@ -51,7 +51,7 @@ namespace hypro{
 
     template <typename Number>
     SupportFunction<Number> SupportFunction<Number>::operator=( const SupportFunction<Number>& _orig) {
-        content = hypro::SupportFunctionContent<Number>::create(_orig.content);
+        content = std::make_shared<SupportFunctionContent<Number>>(hypro::SupportFunctionContent<Number>::create(_orig.content));
         return *this;
     }
 
