@@ -88,6 +88,10 @@ int main(int argc, char const *argv[])
 	inv.mat = invariantMat;
 	inv.vec = invariantVec;
 
+        /*locationMat << Number(0), Number(1), Number(0)
+         *               Number(0), Number(0), Number(-9.81)
+                         Number(0), Number(0), Number(0); */
+        
 	locationMat(0,0) = Number(0);
 	locationMat(0,1) = Number(1);
 	locationMat(0,2) = Number(0);
