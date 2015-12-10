@@ -118,7 +118,7 @@ bool HPolytope<Number>::empty() const {
 	simplex.inform(constr);
 	simplex.add(constr);
 
-	return (simplex.check() == smtrat::Answer::False);
+	return (simplex.check() == smtrat::Answer::UNSAT);
 #else
 	if(!mInitialized) {
 		initialize();
@@ -512,7 +512,7 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	smtrat::Answer res = simplex.check();
 
 	switch(res) {
-		case smtrat::Answer::True:{
+		case smtrat::Answer::SAT:{
 			smtrat::ModelValue valuation = simplex.optimum(objective);
 			assert(!valuation.isBool());
 			assert(!valuation.isSqrtEx());
