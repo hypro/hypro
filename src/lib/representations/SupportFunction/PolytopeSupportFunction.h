@@ -62,6 +62,8 @@ class PolytopeSupportFunction {
 	PolytopeSupportFunction( const std::vector<Hyperplane<Number>>& _planes );
 	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
 	~PolytopeSupportFunction();
+        
+        //PolytopeSupportFunction<Number>& operator= (const PolytopeSupportFunction& _orig) = delete; 
 
 	/**
 	 * Returns the dimension of the object.

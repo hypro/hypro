@@ -144,7 +144,7 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 	std::cout << "PolytopeSupportFunction: destructor" << std::endl;
 #endif
 
-	deleteArrays();
+	//deleteArrays();
 
 	// free glpk resources
 	glp_delete_prob( lp );
