@@ -234,10 +234,10 @@ void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 }
 
 template <typename Number>
-void Plotter<Number>::setObjectColor( unsigned _id, const std::string _color ) {
-	if ( _color != "" && mObjects.find( _id ) != mObjects.end() ) {
+void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
+	if ( _color != 0 && mObjects.find( _id ) != mObjects.end() ) {
 		mObjectColors[_id] = _color;
-	} else if ( _color != "" && mPlanes.find( _id ) != mPlanes.end() ) {
+	} else if ( _color != 0 && mPlanes.find( _id ) != mPlanes.end() ) {
 		mObjectColors[_id] = _color;
 	}
 }

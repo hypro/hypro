@@ -78,7 +78,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	void addPoint( const Point<Number>& _point );
 	void addPoints( const std::vector<Point<Number>>& _points );
 
-	void setObjectColor( unsigned _id, const std::string _color );
+	void setObjectColor( unsigned _id, const std::size_t _color );
 
   private:
 	// auxiliary functions
