@@ -192,7 +192,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		smtrat::Answer res = simplex.check();
 
 		switch(res) {
-			case smtrat::Answer::True:{
+			case smtrat::Answer::SAT:{
 				smtrat::ModelValue valuation = simplex.optimum(objective);
 				assert(!valuation.isBool());
 				assert(!valuation.isSqrtEx());
@@ -329,7 +329,7 @@ bool PolytopeSupportFunction<Number>::empty() const {
 
 	smtrat::Answer res = simplex.check();
 
-	return (res == smtrat::Answer::False);
+	return (res == smtrat::Answer::UNSAT);
 	#else
 	for ( int i = 0; i < mDimension; i++ ) {
 		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );  // unbounded

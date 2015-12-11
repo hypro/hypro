@@ -316,13 +316,13 @@ void VPolytope<Number>::removeRedundancy() {
 
 				smtrat::Answer res = simplex.check();
 
-				if(res == smtrat::Answer::True) {
+				if(res == smtrat::Answer::SAT) {
 					currVertex = mVertices.erase(currVertex);
 				} else {
 					++currVertex;
 				}
 
-				//std::cout << "Is extreme point: " << (res == smtrat::Answer::False) << std::endl << std::endl << std::endl << std::endl;
+				//std::cout << "Is extreme point: " << (res == smtrat::Answer::UNSAT) << std::endl << std::endl << std::endl << std::endl;
 				simplex.pop();
 				simplex.push();
 			}
