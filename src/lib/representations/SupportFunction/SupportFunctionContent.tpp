@@ -185,8 +185,8 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 }
 
 template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::operator=(
-	  const std::shared_ptr<SupportFunctionContent<Number>> _other ){
+std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
+	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
 	// std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
@@ -215,6 +215,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 		default:
 			assert( false );
 	}
+        //std::cout << "SupportFunctionContent Copy\n";
 	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
 }
 

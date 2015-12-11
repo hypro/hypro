@@ -63,7 +63,7 @@ class PolytopeSupportFunction {
 	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
 	~PolytopeSupportFunction();
         
-        //PolytopeSupportFunction<Number>& operator= (const PolytopeSupportFunction& _orig) = delete; 
+        PolytopeSupportFunction<Number>& operator=(const PolytopeSupportFunction& _orig); 
 
 	/**
 	 * Returns the dimension of the object.

@@ -156,6 +156,21 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 }
 
 template <typename Number>
+PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(const PolytopeSupportFunction<Number>& _orig){
+     //std::cout << "PolytopeSupportFunction Copy\n";
+#ifndef USE_SMTRAT
+    this->lp = _orig.lp;
+    this->ia = _orig.ia;
+    this->ja = _orig.ja;
+    this->ar = _orig.ar;
+#endif
+    this->mConstraints = _orig.mConstraints;
+    this->mConstraintConstants = _orig.mConstraintConstants;
+    this->mDimension = _orig.mDimension;
+   
+}
+
+template <typename Number>
 unsigned PolytopeSupportFunction<Number>::dimension() const {
 	return mDimension;
 }

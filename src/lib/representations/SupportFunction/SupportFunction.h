@@ -33,7 +33,7 @@ class SupportFunction {
 
         virtual ~SupportFunction();
 
-        SupportFunction<Number>& operator=( const SupportFunction<Number>& _orig );
+        SupportFunction<Number>& operator=(const SupportFunction<Number>& _orig );
 
         evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;

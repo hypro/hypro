@@ -129,14 +129,14 @@ class SupportFunctionContent {
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(*orig) );
+		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
 		obj->pThis = obj;
 		return obj;
 	}
 
 	virtual ~SupportFunctionContent();
 
-	std::shared_ptr<SupportFunctionContent<Number>> operator=( const std::shared_ptr<SupportFunctionContent<Number>> _orig ) ;
+	std::shared_ptr<SupportFunctionContent<Number>>& operator=( const std::shared_ptr<SupportFunctionContent<Number>>& _orig ) ;
 
 	evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;
