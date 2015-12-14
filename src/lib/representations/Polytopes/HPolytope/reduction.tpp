@@ -505,8 +505,8 @@ namespace hypro {
   	HPolytope<Number> res = *this;
 
   	//if(res.size()<directions.size()){
-  	//	std::cout << "Error - Output would be bigger than reduce_from" << std::endl;
-  	//	return poly;
+  	//	std::cout << "Warning - Output would be bigger than reduce_from, so use old polytope" << std::endl;
+  	//	return res;
   	//}
 
   	std::vector<Point<Number>> vertices = res.vertices();

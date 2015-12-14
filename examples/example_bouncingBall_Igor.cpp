@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "../lib/config.h"
 #include "../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../lib/datastructures/hybridAutomata/Transition.h"
@@ -14,6 +16,9 @@ int main(int argc, char const *argv[])
 {
 	using namespace hypro;
 	using namespace carl;
+
+	typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::microseconds timeunit;
 
 	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
@@ -202,14 +207,18 @@ int main(int argc, char const *argv[])
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
-	//unsigned CONVEXHULL_CONST = 300;
-	//unsigned REDUCE_CONST=3;
+	unsigned CONVEXHULL_CONST = 52;
+	unsigned REDUCE_CONST=100;
 	//std::cout << "Plotting computes with convexHull_const " << CONVEXHULL_CONST << " and reduce_const " << REDUCE_CONST << std::endl;
 
-	for(unsigned REDUCE_CONST=3; REDUCE_CONST<11; REDUCE_CONST++){
-		for(unsigned CONVEXHULL_CONST=3; CONVEXHULL_CONST<201; CONVEXHULL_CONST+=10){
+	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
+		//for(unsigned CONVEXHULL_CONST=50; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
 			std::cout << "CONVEXHULL_CONST:  " << CONVEXHULL_CONST << std::endl << "REDUCE_CONST:      " << REDUCE_CONST << std::endl;
 			double soFlowpipe=0, soFlowpipeS=0; // sizeOf flowpipes
+
+			clock::time_point start = clock::now();
+
+			std::vector<std::vector<Representation>>  flowpipes_smoothed;
 
 			for(auto& index : flowpipeIndices) {
 				std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
@@ -221,43 +230,52 @@ int main(int argc, char const *argv[])
 
 				for(auto& poly : flowpipe){
 					// update points_convexHull
-					std::vector<Point<Number>> points = poly.vertices();
-					for(Point<Number> point: points){
-						if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
-							points_convexHull.push_back(point);
-						}
-					}
-					flowpipe_count++;
-
-					// create convexHull if CONVEXHULL_CONST or end is reached
-					if(flowpipe_count==CONVEXHULL_CONST || flowpipe_total==flowpipe.size()-1) {
-
-						// Create convexHull of CONVEXHULL_CONST representations
-						auto facets = convexHull(points_convexHull);
-						std::vector<Hyperplane<Number>> hyperplanes;
-						for(unsigned i = 0; i<facets.first.size(); i++){
-							hyperplanes.push_back(facets.first.at(i)->hyperplane());
-						}
-						Representation convexHull = Representation(hyperplanes);
-
-						// Reduce to REDUCE_CONST
-						Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-
+					if(CONVEXHULL_CONST==1){
+						Representation poly_smoothed = poly.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						soFlowpipe += poly.sizeOfHPolytope(); // update size of flowpipe
 						soFlowpipeS += poly_smoothed.sizeOfHPolytope(); // update size of smoothed flowpipe
 						flowpipe_smoothed.push_back(poly_smoothed); // update smoothed flowpipe
-
-						// reset variables
-						flowpipe_count=0;
-						points_convexHull.clear();
 					}
+					else{
+						std::vector<Point<Number>> points = poly.vertices();
+						for(Point<Number> point: points){
+							if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+								points_convexHull.push_back(point);
+							}
+						}
+						flowpipe_count++;
 
-					soFlowpipe += poly.sizeOfHPolytope(); // update size of flowpipe
-					flowpipe_total++;
+						// create convexHull if CONVEXHULL_CONST or end is reached
+						if(flowpipe_count==CONVEXHULL_CONST || flowpipe_total==flowpipe.size()-1) {
+
+							// Create convexHull of CONVEXHULL_CONST representations
+							auto facets = convexHull(points_convexHull);
+							std::vector<Hyperplane<Number>> hyperplanes;
+							for(unsigned i = 0; i<facets.first.size(); i++){
+								hyperplanes.push_back(facets.first.at(i)->hyperplane());
+							}
+							Representation convexHull = Representation(hyperplanes);
+
+							// Reduce to REDUCE_CONST
+							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+							soFlowpipeS += poly_smoothed.sizeOfHPolytope(); // update size of smoothed flowpipe
+							flowpipe_smoothed.push_back(poly_smoothed); // update smoothed flowpipe
+
+							// reset variables
+							flowpipe_count=0;
+							points_convexHull.clear();
+						}
+
+						soFlowpipe += poly.sizeOfHPolytope(); // update size of flowpipe
+						flowpipe_total++;
+					}
 				}
+				flowpipes_smoothed.push_back(flowpipe_smoothed);
 
 				//// Plot flowpipe
-				//unsigned count=1, count_smoothed=1;
-				//unsigned maxCount = flowpipe.size(), maxCount_smoothed = flowpipe_smoothed.size();;
+				unsigned count=1, count_smoothed=1;
+				unsigned maxCount = flowpipe.size(), maxCount_smoothed = flowpipe_smoothed.size();;
 				//for(auto& poly : flowpipe) {
 				//	//std::cout << "Flowpipe segment to be converted: " << std::endl;
 				//	poly.removeRedundantPlanes();
@@ -279,32 +297,55 @@ int main(int argc, char const *argv[])
 				//	}
 				//}
 
-				//// Plot flowpipe_smoothed
-				//for(auto& poly : flowpipe_smoothed) {
-				//	//std::cout << "Flowpipe segment to be converted: " << std::endl;
-				//	poly.removeRedundantPlanes();
-				//	//poly.print();
-				//	std::vector<Point<Number>> points = poly.vertices();
-				//	//std::cout << "points.size() = " << points.size() << std::endl;
-				//	if(!points.empty() && points.size() > 2) {
-				//		//std::cout << "Polycount: " << count << std::endl;
-				//		for(auto& point : points) {
-				//// 			std::cout << "reduce " << point << " to ";
-				//			point.reduceDimension(2);
-				//			// 			std::cout << point << std::endl;
-				//		}
-				//		plotter.addObject(points);
-				//		std::cout << "\r Flowpipe "<< index <<": Added object " << count_smoothed << "/" << maxCount_smoothed << std::flush;
-				//		points.clear();
-				//		++count_smoothed;
-				//	}
-				//}
-				//std::cout << std::endl;
+				// Plot flowpipe_smoothed
+				for(auto& poly : flowpipe_smoothed) {
+					//std::cout << "Flowpipe segment to be converted: " << std::endl;
+					poly.removeRedundantPlanes();
+					//poly.print();
+					std::vector<Point<Number>> points = poly.vertices();
+					//std::cout << "points.size() = " << points.size() << std::endl;
+					if(!points.empty() && points.size() > 2) {
+						//std::cout << "Polycount: " << count << std::endl;
+						for(auto& point : points) {
+				// 			std::cout << "reduce " << point << " to ";
+							point.reduceDimension(2);
+							// 			std::cout << point << std::endl;
+						}
+						plotter.addObject(points);
+						std::cout << "\r Flowpipe "<< index <<": Added object " << count_smoothed << "/" << maxCount_smoothed << std::flush;
+						points.clear();
+						++count_smoothed;
+					}
+				}
+				std::cout << std::endl;
 		}
+		std::cout << "Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+
+
+		bool intersect=false;
+		for(unsigned i=0; i<flowpipes_smoothed.size(); i++){
+			if(intersect) break;
+			for(unsigned ii=0; ii<flowpipes_smoothed.at(i).size(); ii++){
+				if(intersect) break;
+				for(unsigned j=i+1; j<flowpipes_smoothed.size(); j++){
+					if(intersect) break;
+					for(unsigned jj=0; jj<flowpipes_smoothed.at(j).size(); jj++){
+						if(!flowpipes_smoothed.at(i).at(ii).intersect(flowpipes_smoothed.at(j).at(jj)).empty()){
+							intersect=true;
+							CONVEXHULL_CONST=0;
+							std::cout << ii << "of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		std::cout << "flowpipe:          " << soFlowpipe << std::endl << "flowpipe_smoothed: " << soFlowpipeS << std::endl;
-		std::cout << "factor:            " << soFlowpipe/soFlowpipeS << std::endl << std::endl;
-	}
-}
+		std::cout << "factor:            " << (soFlowpipeS/soFlowpipe)*100 << "%" << std::endl << std::endl;
+		//if(intersect) break;
+	//}
+//}
 
 std::cout << std::endl;
 	plotter.plot2d();
