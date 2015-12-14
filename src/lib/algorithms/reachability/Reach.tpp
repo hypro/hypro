@@ -29,6 +29,16 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachability() {
+            
+            #ifdef FORWARD_REACHABILITY_METHOD_2
+		return computeForwardReachabilityWithMethod2();
+            #endif
+		
+                return computeForwardReachabilityWithMethod1();
+	}
+        
+        template<typename Number, typename Representation>
+	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod1() {
 		std::size_t depth = 0;
 		std::set<std::size_t> R_new;
 		std::set<std::size_t> R;
@@ -80,6 +90,11 @@ namespace reachability {
 		}
 		return R;
 	}
+        
+        template<typename Number, typename Representation>
+	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod2() {
+            
+        }
 
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {

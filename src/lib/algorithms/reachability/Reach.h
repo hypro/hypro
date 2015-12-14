@@ -70,16 +70,31 @@ public:
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
-	 * @details [long description]
+	 * @details The main computation method is the Method #1.
+         *          To use the Method #2, there's a FLAG that needs to be enabled!
 	 * @return The flowpipe as a result of this computation.
 	 */
 	std::set<std::size_t> computeForwardReachability();
+        
+        /**
+	 * @brief Computes the forward reachability of the given automaton with the #1 Method.
+	 * @details [long description]
+	 * @return The flowpipe as a result of this computation.
+	 */
+	std::set<std::size_t> computeForwardReachabilityWithMethod1();
+        
+        /**
+	 * @brief Computes the forward reachability of the given automaton with the #2 Method.
+	 * @details [long description]
+	 * @return The flowpipe as a result of this computation.
+	 */
+	std::set<std::size_t> computeForwardReachabilityWithMethod2();
 
 	/**
 	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
 	 * @details [long description]
 	 *
-	 * @param _loc The location in which the FTC ist to be computed.
+	 * @param _loc The location in which the FTC is to be computed.
 	 * @param _val The valuation which is initial in the respective location.
 	 *
 	 * @return The id of the computed flowpipe.
