@@ -52,7 +52,7 @@ option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES." OFF)
 option(EXTERNALIZE_CLASSES_ONLY_TO_TEST "An EXTERNALIZE_CLASSES for test purposes." OFF)
-option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" OFF)
+option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" ON)
 
 # Include own macros.
 include( hypromacros )
