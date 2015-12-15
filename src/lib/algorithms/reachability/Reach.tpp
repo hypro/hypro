@@ -29,14 +29,14 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachability() {
-            
+
             #ifdef FORWARD_REACHABILITY_METHOD_2
 		return computeForwardReachabilityWithMethod2();
             #endif
-		
+
                 return computeForwardReachabilityWithMethod1();
 	}
-        
+
         template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod1() {
 		std::size_t depth = 0;
@@ -90,10 +90,10 @@ namespace reachability {
 		}
 		return R;
 	}
-        
+
         template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod2() {
-            
+
         }
 
 	template<typename Number, typename Representation>
@@ -243,6 +243,10 @@ namespace reachability {
 			std::cout << "--- Loop entered ---" << std::endl;
 #endif
 
+			bool use_reduce=false;
+			unsigned CONVEXHULL_CONST = 58, REDUCE_CONST=600, convexHull_count=0;
+			std::vector<Point<Number>> points_convexHull;
+
 			// for each time interval perform linear Transformation
 			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
 				std::cout << "\rTime: \t" << i*timeInterval << std::flush;
@@ -266,9 +270,39 @@ namespace reachability {
 				std::cout << "Invariant: " << invariant << std::endl;
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
+				if(use_reduce){
+					std::vector<Point<Number>> points = tmp.vertices();
+					for(Point<Number> point: points){
+						if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+							points_convexHull.push_back(point);
+						}
+					}
+					convexHull_count++;
+				}
 
 				if ( !tmp.empty() ) {
-					flowpipe.push_back( tmp );
+					if(use_reduce && (convexHull_count==CONVEXHULL_CONST || i>=mSettings.discretization)){
+						// Create convexHull of CONVEXHULL_CONST representations
+						auto facets = convexHull(points_convexHull);
+
+						std::vector<Hyperplane<Number>> hyperplanes;
+						for(unsigned i = 0; i<facets.first.size(); i++){
+							hyperplanes.push_back(facets.first.at(i)->hyperplane());
+						}
+						Representation convexHull = Representation(hyperplanes);
+
+						// Reduce to REDUCE_CONST
+						Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+						flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
+
+						// reset variables
+						convexHull_count=0;
+						points_convexHull.clear();
+					}
+					else if(!use_reduce){
+						flowpipe.push_back( tmp );
+					}
 
 					// update lastSegment
 					lastSegment = tmp;
