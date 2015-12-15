@@ -93,7 +93,9 @@ namespace reachability {
         
         template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod2() {
+            std::set<std::size_t> R;
             
+            return R;
         }
 
 	template<typename Number, typename Representation>
