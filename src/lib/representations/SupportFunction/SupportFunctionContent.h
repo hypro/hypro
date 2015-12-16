@@ -107,7 +107,7 @@ class SupportFunctionContent {
   public:
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
+	static  std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, _type ) );
 		obj->pThis = obj;
 		return obj;
@@ -130,6 +130,11 @@ class SupportFunctionContent {
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
 		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
+                std::cout << "Old adress: " << &*orig << ", new adress: " << &*obj << "\n";
+                std::cout << "Old object:" << "\n";
+                orig->print(); 
+                std::cout << "New object:" << "\n";
+                obj->print();
 		obj->pThis = obj;
 		return obj;
 	}

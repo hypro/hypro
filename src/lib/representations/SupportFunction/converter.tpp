@@ -31,7 +31,7 @@ namespace hypro{
                         distances( 2 * i + 1 ) = intervals[i].upper();                                  //write inverted lower bound values and upper bound values into the distance vector
                 }
 
-                _target = SupportFunction<Number>( SF_TYPE::POLY, directions, distances); //constructs a support function with normal matrix and distance vector
+                _target = SupportFunction<Number>( SF_TYPE::POLY, directions, distances);               //constructs a support function with normal matrix and distance vector
 
                 return true;
         }
@@ -43,7 +43,7 @@ namespace hypro{
                 typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
 
-                _target = SupportFunction<Number>( SF_TYPE::POLY, planes );             //constructs a support function with the received planes
+                _target = SupportFunction<Number>( SF_TYPE::POLY, planes );                            //constructs a support function with the received planes
 
                 return true;
         }
@@ -53,10 +53,10 @@ namespace hypro{
         // conversion from H-polytope to support function
         template <typename Number>
         static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
-                typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();              //gets planes from the source object
-                assert( !planes.empty() );                                                                //ensures that nonempty planes got fetched before continuing
+                typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();            //gets planes from the source object
+                assert( !planes.empty() );                                                              //ensures that nonempty planes got fetched before continuing
 
-                _target = SupportFunction<Number>( SF_TYPE::POLY, planes );                //constructs a support function with the received planes
+                _target = SupportFunction<Number>( SF_TYPE::POLY, planes );                             //constructs a support function with the received planes
 
                 return true;
         }

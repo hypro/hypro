@@ -155,7 +155,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 
 template <typename Number>
 SupportFunctionContent<Number>::~SupportFunctionContent() {
-	// std::cout << "Destructor of type " << mType << std::endl;
+        //std::cout << "Destructor of type " << mType <<  std::endl;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
@@ -187,6 +187,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
 	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
+        // std::cout << "SupportFunctionContent Copy\n";
 	// std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
@@ -214,8 +215,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			break;
 		default:
 			assert( false );
-	}
-        //std::cout << "SupportFunctionContent Copy\n";
+	}  
 	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
 }
 

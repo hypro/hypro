@@ -144,7 +144,7 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 	std::cout << "PolytopeSupportFunction: destructor" << std::endl;
 #endif
 
-	//deleteArrays();
+	deleteArrays();
 
 	// free glpk resources
 	glp_delete_prob( lp );
@@ -157,7 +157,7 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 
 template <typename Number>
 PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(const PolytopeSupportFunction<Number>& _orig){
-     //std::cout << "PolytopeSupportFunction Copy\n";
+     std::cout << "PolytopeSupportFunction Copy\n";
 #ifndef USE_SMTRAT
     this->lp = _orig.lp;
     this->ia = _orig.ia;

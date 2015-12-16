@@ -3,7 +3,8 @@
  * @covers  Converter
  *
  * @author  Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
+ * @author  Simon Froitzheim
+ * 
  * @since	2015-05-13
  * @version 2015-05-13
  */
@@ -116,7 +117,7 @@ TYPED_TEST(ConverterTest, toPolytope)
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
-        SupportFunction<TypeParam> result;
+        SupportFunction<TypeParam> result = hypro::SupportFunction<TypeParam>();
         convert(this->hpolytope, result);
         //std::cout << " HPolytope: " << std::endl;
         //result->print();

@@ -22,6 +22,7 @@ class SupportFunction {
     private:
            std::shared_ptr<SupportFunctionContent<Number>> content;
            SupportFunction<Number> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
+           
 
     public:
         SupportFunction ();
@@ -33,7 +34,7 @@ class SupportFunction {
 
         virtual ~SupportFunction();
 
-        SupportFunction<Number>& operator=(const SupportFunction<Number>& _orig );
+        SupportFunction<Number>& operator=(SupportFunction<Number> _orig );
 
         evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;
@@ -61,6 +62,8 @@ class SupportFunction {
 	bool empty() const;
 
 	void print() const;
+        
+        void swap(SupportFunction<Number>& first, SupportFunction<Number>& second);
 
 };
 

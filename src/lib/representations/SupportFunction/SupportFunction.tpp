@@ -12,19 +12,23 @@
 namespace hypro{
 
     //CONSTRUCTORS
-
+    
+    
+    //-------private---------
     template <typename Number>
     SupportFunction<Number>::SupportFunction(const std::shared_ptr<SupportFunctionContent<Number>> _source) : content(_source){
         //handled by initializer list
     }
 
+    //-------public---------
     template <typename Number>
-    SupportFunction<Number>::SupportFunction(){
-        content = std::shared_ptr<SupportFunctionContent<Number>>();
+    SupportFunction<Number>::SupportFunction() : content(std::shared_ptr<SupportFunctionContent<Number>>()){
+        //handled by initializer list
     }
-
+    
+    //copy constructor
     template <typename Number>
-    SupportFunction<Number>::SupportFunction( const SupportFunction<Number> &_orig ) : content(hypro::SupportFunctionContent<Number>::create(_orig.content)){
+    SupportFunction<Number>::SupportFunction( const SupportFunction<Number> &_orig ) : content(_orig.content){
         //handled by initializer list
     }
 
@@ -42,7 +46,8 @@ namespace hypro{
     SupportFunction<Number>::SupportFunction(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) : content(hypro::SupportFunctionContent<Number>::create(_type, _planes)){
          //handled by initializer list
     }
-
+    
+    //destructor
     template <typename Number>
     SupportFunction<Number>::~SupportFunction() {
     }
@@ -50,9 +55,11 @@ namespace hypro{
     // OPERATOR OVERLOADING
 
     template <typename Number>
-    SupportFunction<Number>& SupportFunction<Number>::operator=(const SupportFunction<Number>& _orig) {
-        this->content = hypro::SupportFunctionContent<Number>::create(_orig.content);
+    SupportFunction<Number>& SupportFunction<Number>::operator=(SupportFunction<Number> _orig) {
         //std::cout << "SupportFunction Copy\n";
+        if (this != &_orig){
+            swap(*this, _orig);
+        }
         return *this;
     }
 
@@ -163,8 +170,11 @@ namespace hypro{
     void SupportFunction<Number>::print() const {
         return content.print();
     }
-
-
+    
+    template <typename Number>
+    void SupportFunction<Number>::swap(SupportFunction<Number>& first, SupportFunction<Number>& second){
+         first.content.swap(second.content);
+     }
 
 
 
