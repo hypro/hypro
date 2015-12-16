@@ -11,16 +11,16 @@
 
 namespace hypro{
 
-    //CONSTRUCTORS
+//CONSTRUCTORS
     
     
-    //-------private---------
+    //-------PRIVATE---------
     template <typename Number>
     SupportFunction<Number>::SupportFunction(const std::shared_ptr<SupportFunctionContent<Number>> _source) : content(_source){
         //handled by initializer list
     }
 
-    //-------public---------
+    //-------PUBLIC---------
     template <typename Number>
     SupportFunction<Number>::SupportFunction() : content(std::shared_ptr<SupportFunctionContent<Number>>()){
         //handled by initializer list
@@ -31,7 +31,14 @@ namespace hypro{
     SupportFunction<Number>::SupportFunction( const SupportFunction<Number> &_orig ) : content(_orig.content){
         //handled by initializer list
     }
+    
+    //move constructor
+    template <typename Number>
+    SupportFunction<Number>::SupportFunction( SupportFunction<Number>&& other) : SupportFunction<Number>(){
+        swap(*this, other);
+    }
 
+    
     template <typename Number>
     SupportFunction<Number>::SupportFunction(SF_TYPE _type, Number _radius ) : content(hypro::SupportFunctionContent<Number>::create(_type, _radius)){
         //handled by initializer list
@@ -52,7 +59,7 @@ namespace hypro{
     SupportFunction<Number>::~SupportFunction() {
     }
     
-    // OPERATOR OVERLOADING
+// OPERATOR OVERLOADING
 
     template <typename Number>
     SupportFunction<Number>& SupportFunction<Number>::operator=(SupportFunction<Number> _orig) {
@@ -64,7 +71,7 @@ namespace hypro{
     }
 
 
-    // FUNCTIONS
+// FUNCTIONS
 
     template <typename Number>
     evaluationResult<Number> SupportFunction<Number>::evaluate( const vector_t<Number> &_direction ) const {

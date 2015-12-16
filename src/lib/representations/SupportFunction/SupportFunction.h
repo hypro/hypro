@@ -30,6 +30,7 @@ class SupportFunction {
         SupportFunction (SF_TYPE _type, Number _radius );
         SupportFunction (SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
         SupportFunction (SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
+        SupportFunction (SupportFunction<Number>&& other);
 
 
         virtual ~SupportFunction();
