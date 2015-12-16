@@ -75,107 +75,107 @@ namespace hypro{
 
     template <typename Number>
     evaluationResult<Number> SupportFunction<Number>::evaluate( const vector_t<Number> &_direction ) const {
-        return content.evaluate(_direction);
+        return content->evaluate(_direction);
     }
 
     template <typename Number>
     vector_t<Number> SupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
-        return content.multiEvaluate(_directions);
+        return content->multiEvaluate(_directions);
     }
 
     template <typename Number>
     std::size_t SupportFunction<Number>::dimension() const {
-        return content.dimension();
+        return content->dimension();
     }
 
     template <typename Number>
     SF_TYPE SupportFunction<Number>::type() const {
-        return content.type();
+        return content->type();
     }
 
     template <typename Number>
     sumContent<Number> *SupportFunction<Number>::summands() const {
-       return content.summands();
+       return content->summands();
     }
 
     template <typename Number>
     trafoContent<Number> *SupportFunction<Number>::linearTrafoParameters() const {
-        return content.linearTrafoParameters();
+        return content->linearTrafoParameters();
     }
 
     template <typename Number>
     scaleContent<Number> *SupportFunction<Number>::scaleParameters() const {
-        return content.scaleParameters();
+        return content->scaleParameters();
     }
 
     template <typename Number>
     unionContent<Number> *SupportFunction<Number>::unionParameters() const {
-        return content.unionParameters();
+        return content->unionParameters();
     }
 
     template <typename Number>
     intersectionContent<Number> *SupportFunction<Number>::intersectionParameters() const {
-        return content.intersectionParameters();
+        return content->intersectionParameters();
     }
 
     template <typename Number>
     PolytopeSupportFunction<Number> *SupportFunction<Number>::polytope() const {
-        return content.polytope();
+        return content->polytope();
     }
 
     template <typename Number>
     BallSupportFunction<Number> *SupportFunction<Number>::ball() const {
-        return content.ball();
+        return content->ball();
     }
 
     template <typename Number>
     SupportFunction<Number> SupportFunction<Number>::linearTransformation(const matrix_t<Number> &_A, const vector_t<Number> &_b ) const {
-        SupportFunction<Number> res = SupportFunction<Number>(content.linearTransformation(_A, _b));
+        SupportFunction<Number> res = SupportFunction<Number>(content->linearTransformation(_A, _b));
         return res;
     }
 
     template <typename Number>
     SupportFunction<Number>  SupportFunction<Number>::minkowskiSum( SupportFunction<Number> &_rhs ) const {
-        SupportFunction<Number> res = SupportFunction<Number>(content.minkowskiSum(_rhs.content));
+        SupportFunction<Number> res = SupportFunction<Number>(content->minkowskiSum(_rhs.content));
         return res;
     }
 
     template <typename Number>
     SupportFunction<Number>  SupportFunction<Number>::intersect(SupportFunction<Number> &_rhs) const {
-        SupportFunction<Number> res = SupportFunction<Number>(content.intersect(_rhs.content));
+        SupportFunction<Number> res = SupportFunction<Number>(content->intersect(_rhs.content));
         return res;
     }
 
     template <typename Number>
     bool SupportFunction<Number>::contains( const Point<Number> &_point ) const {
-        return content.contains(_point);
+        return content->contains(_point);
     }
 
     template <typename Number>
     bool SupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
-        return content.contains(_point);
+        return content->contains(_point);
     }
 
     template <typename Number>
     SupportFunction<Number>  SupportFunction<Number>::unite( SupportFunction<Number> &_rhs ) const {
-        SupportFunction<Number> res = SupportFunction<Number>(content.unite(_rhs.content));
+        SupportFunction<Number> res = SupportFunction<Number>(content->unite(_rhs.content));
         return res;
     }
 
     template <typename Number>
     SupportFunction<Number> SupportFunction<Number>::scale( const Number &_factor ) const {
-        SupportFunction<Number> res = SupportFunction<Number>(content.scale( _factor));
+        SupportFunction<Number> res = SupportFunction<Number>(content->scale( _factor));
         return res;
     }
 
     template <typename Number>
     bool SupportFunction<Number>::empty() const {
-        return content.empty();
+        return content->empty();
     }
 
     template <typename Number>
     void SupportFunction<Number>::print() const {
-        return content.print();
+        return content->print();
     }
     
     template <typename Number>

@@ -1,6 +1,6 @@
 /**
  * Specialization for a converter to a box.
- * @file converterToBox.h
+ * @file converterT.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-05-12
@@ -18,8 +18,8 @@ bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target ) {
 }
 
 template <typename Number>
-bool convert( std::shared_ptr<hypro::SupportFunctionContent<Number>> _source, hypro::Box<Number>& _target ) {
-	unsigned dim = _source->dimension();
+bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target ) {
+	unsigned dim = _source.dimension();
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
 	for ( unsigned i = 0; i < dim; ++i ) {
@@ -27,7 +27,7 @@ bool convert( std::shared_ptr<hypro::SupportFunctionContent<Number>> _source, hy
 		directions( 2 * i + 1, i ) = 1;
 	}
 
-	vector_t<Number> distances = _source->multiEvaluate( directions );
+	vector_t<Number> distances = _source.multiEvaluate( directions );
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {
