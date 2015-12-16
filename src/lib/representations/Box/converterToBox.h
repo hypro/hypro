@@ -1,6 +1,6 @@
 /**
  * Specialization for a converter to a box.
- * @file converter.h
+ * @file converterToBox.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-05-12

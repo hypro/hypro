@@ -1,6 +1,6 @@
 /**
  * Specialization for a converter to a support function.
- * @file converter.h
+ * @file converterToSupportFunction.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
  *
@@ -63,4 +63,4 @@ namespace hypro {
         
 }  // namespace
 
-#include "converter.tpp"
+#include "converterToSupportFunction.tpp"

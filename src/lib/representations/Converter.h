@@ -24,5 +24,5 @@
 #include "SupportFunction/SupportFunction.h"
 #include "Zonotope/Zonotope.h"
 
-#include "Box/converter.h"
-#include "SupportFunction/converter.h"
+#include "Box/converterToBox.h"
+#include "SupportFunction/converterToSupportFunction.h"

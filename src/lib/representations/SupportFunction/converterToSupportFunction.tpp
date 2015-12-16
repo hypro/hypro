@@ -1,6 +1,6 @@
 /**
  * Specialization for a converter to a support function.
- * @file converter.tpp
+ * @file converterToSupportFunction.tpp
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
  *
@@ -8,7 +8,7 @@
  * @version	2015-05-13
  */
 
-#include "converter.h"
+#include "converterToSupportFunction.h"
 
 namespace hypro{
         // conversion from Box to support function
