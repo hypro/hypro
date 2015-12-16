@@ -7,7 +7,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since 	2015-05-08
- * @version	2015-05-08
+ * @version	2015-12-16
  */
 
 #pragma once

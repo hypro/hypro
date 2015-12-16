@@ -6,7 +6,7 @@
  * @author  Simon Froitzheim
  * 
  * @since	2015-05-13
- * @version 2015-05-13
+ * @version     2015-12-16
  */
 
 #include "gtest/gtest.h"

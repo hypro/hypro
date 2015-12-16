@@ -5,13 +5,20 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-13
- * @version	2015-05-13
+ * @version	2015-12-16
  */
 
 #include "converterToSupportFunction.h"
 
 namespace hypro{
-        // conversion from Box to support function
+        // conversion from support function to support function
+        template <typename Number>
+        static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target){
+            _target = _source;
+            return true;
+        }
+    
+        // conversion from box to support function
         template <typename Number>
         static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target ) {
                 unsigned dim = _source.dimension();                                                     //gets dimension of box
@@ -60,7 +67,7 @@ namespace hypro{
 
                 return true;
         }
-        // TODO conversion from Zonotope to support function
+        // TODO conversion from zonotope to support function
         template <typename Number>
         static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
 

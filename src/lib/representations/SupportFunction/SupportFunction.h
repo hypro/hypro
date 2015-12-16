@@ -4,7 +4,7 @@
  * @author Simon Froitzheim
  *
  * @since      2015-11-23
- * @version    2015-11-23
+ * @version    2015-12-16
  */
 
 #pragma once

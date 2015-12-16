@@ -5,12 +5,23 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-13
- * @version	2015-05-13
+ * @version	2015-12-16
  */
 
 #pragma once
 
 namespace hypro {
+    /**
+     * @brief Converts a support function into another support function.
+     * @detail Simply overwrites _target with _source.
+     *   
+     * @param _source Support function that needs to be converted.
+     * @param _target An arbitrary support function that gets overwritten with the converted object.
+     * @return Return value is true if the conversion process was successful.
+     */   
+    template <typename Number>
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target );
+    
     /**
      * @brief Converts a box into a support function.
      * @detail Constructs a fixed normal matrix and reads distances from the box intervals.
@@ -20,7 +31,7 @@ namespace hypro {
      * @return Return value is true if the conversion process was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, const hypro::SupportFunction<Number>& _target );
+    static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target );
     
     /**
      * @brief Converts a polytope in V-representation into a support function.
@@ -33,7 +44,7 @@ namespace hypro {
      */   
     
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, const hypro::SupportFunction<Number>& _target );
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target );
     
     
     /**
@@ -46,7 +57,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, const hypro::SupportFunction<Number>& _target );
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target );
     
     /**
      * @brief Converts a zonotope into a support function
@@ -58,7 +69,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, const hypro::SupportFunction<Number>& _target );
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target );
     
         
 }  // namespace
