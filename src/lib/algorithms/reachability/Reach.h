@@ -75,14 +75,14 @@ public:
 	 * @return The flowpipe as a result of this computation.
 	 */
 	std::set<std::size_t> computeForwardReachability();
-        
+
         /**
 	 * @brief Computes the forward reachability of the given automaton with the #1 Method.
 	 * @details [long description]
 	 * @return The flowpipe as a result of this computation.
 	 */
 	std::set<std::size_t> computeForwardReachabilityWithMethod1();
-        
+
         /**
 	 * @brief Computes the forward reachability of the given automaton with the #2 Method.
 	 * @details [long description]

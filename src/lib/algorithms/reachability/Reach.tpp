@@ -94,7 +94,7 @@ namespace reachability {
         template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod2() {
             std::set<std::size_t> R;
-            
+
             return R;
         }
 
@@ -246,7 +246,8 @@ namespace reachability {
 #endif
 
 			bool use_reduce=false;
-			unsigned CONVEXHULL_CONST = 58, REDUCE_CONST=600, convexHull_count=0;
+			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=20;
+			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
 
 			// for each time interval perform linear Transformation
@@ -273,28 +274,31 @@ namespace reachability {
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
 				if(use_reduce){
-					std::vector<Point<Number>> points = tmp.vertices();
-					for(Point<Number> point: points){
-						if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
-							points_convexHull.push_back(point);
+					if(!tmp.empty()){
+						std::vector<Point<Number>> points = tmp.vertices();
+						for(Point<Number> point: points){
+							if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+								points_convexHull.push_back(point);
+							}
 						}
+						convexHull_count++;
 					}
-					convexHull_count++;
-				}
 
-				if ( !tmp.empty() ) {
-					if(use_reduce && (convexHull_count==CONVEXHULL_CONST || i>=mSettings.discretization)){
+					if(!points_convexHull.empty() && (convexHull_count==CONVEXHULL_CONST || tmp.empty() || i>=mSettings.discretization)){
 						// Create convexHull of CONVEXHULL_CONST representations
 						auto facets = convexHull(points_convexHull);
 
 						std::vector<Hyperplane<Number>> hyperplanes;
-						for(unsigned i = 0; i<facets.first.size(); i++){
-							hyperplanes.push_back(facets.first.at(i)->hyperplane());
+						for(unsigned j = 0; j<facets.first.size(); j++){
+							hyperplanes.push_back(facets.first.at(j)->hyperplane());
 						}
 						Representation convexHull = Representation(hyperplanes);
 
 						// Reduce to REDUCE_CONST
 						Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+						poly_smoothed.removeRedundantPlanes();
+						//std::cout << "Size of poly_smoothed after reduction: " << poly_smoothed.size() << std::endl;
 
 						flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
 
@@ -302,7 +306,11 @@ namespace reachability {
 						convexHull_count=0;
 						points_convexHull.clear();
 					}
-					else if(!use_reduce){
+				}
+
+				if ( !tmp.empty() ) {
+
+					if(!use_reduce){
 						flowpipe.push_back( tmp );
 					}
 

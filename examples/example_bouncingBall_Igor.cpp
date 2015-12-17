@@ -200,9 +200,56 @@ int main(int argc, char const *argv[])
 	std::vector<std::vector<Representation>> flowpipes;
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
+	clock::time_point start = clock::now();
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
+	std::cout << std::endl << "Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+
+	std::cout << std::endl << "Test computed flowpipe ..." << std::endl;
+
+	unsigned soFlowpipe = 0;
+	for(auto& index : flowpipeIndices) {
+		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
+		flowpipes.push_back(flowpipe);
+		for(auto& poly : flowpipe){
+			soFlowpipe += poly.sizeOfHPolytope();
+		}
+	}
+	std::cout << "Reduction of flowpipe: "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
+
+	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1;
+	int flowpipe_count=0, segment_count=0;
+	bool intersect=false;
+
+	for(unsigned i=0; i<flowpipes.size(); i++){
+		if(intersect) break;
+		for(unsigned ii=0; ii<flowpipes.at(i).size(); ii++){
+			if(intersect) break;
+			for(unsigned j=i+1; j<flowpipes.size(); j++){
+				if(intersect) break;
+				for(unsigned jj=0; jj<flowpipes.at(j).size(); jj++){
+					std::cout << "\rTest " << i <<"." << ii <<"/"<< flowpipes.size()-1 <<"." << flowpipes.at(i).size()-1  << " and " << j <<"." << jj  << std::flush;
+					Representation representation_i = flowpipes.at(i).at(ii);
+					Representation representation_j = flowpipes.at(j).at(jj);
+					representation_i.removeRedundantPlanes();
+					representation_j.removeRedundantPlanes();
+					if(!representation_i.intersect(representation_j).empty()){
+						intersect=true;
+						flowpipe_one = i;
+						segment_one = ii;
+						flowpipe_two = j;
+						segment_two = jj;
+
+						std::cout << ii << " of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
+						break;
+					}
+				}
+			}
+		}
+	}
+	if(!intersect) std::cout << std::endl << "No intersection!" << std::endl;
 
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
+	std::cout << "Red: " << flowpipe_one << "."<< segment_one << " and "<< flowpipe_two << "."<< segment_two << std::endl;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("out");
@@ -219,6 +266,7 @@ int main(int argc, char const *argv[])
 			//clock::time_point start = clock::now();
 
 			//std::vector<std::vector<Representation>>  flowpipes_smoothed;
+
 
 			for(auto& index : flowpipeIndices) {
 				std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
@@ -277,8 +325,10 @@ int main(int argc, char const *argv[])
 				unsigned count=1;//, count_smoothed=1;
 				unsigned maxCount = flowpipe.size();//, maxCount_smoothed = flowpipe_smoothed.size();;
 				for(auto& poly : flowpipe) {
+					segment_count++;
+
 					//std::cout << "Flowpipe segment to be converted: " << std::endl;
-					poly.removeRedundantPlanes();
+					//poly.removeRedundantPlanes();
 					//poly.print();
 					std::vector<Point<Number>> points = poly.vertices();
 					//std::cout << "points.size() = " << points.size() << std::endl;
@@ -290,7 +340,10 @@ int main(int argc, char const *argv[])
 							// 			std::cout << point << std::endl;
 						}
 						unsigned p=plotter.addObject(points);
-						plotter.setObjectColor(p, colors[red]);
+						if((flowpipe_count==flowpipe_one && segment_count==segment_one) || (flowpipe_count==flowpipe_two && segment_count==segment_two)){
+							std::cout << "Paint it red!" << std::endl;
+							plotter.setObjectColor(p, colors[red]);
+						}
 						std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
 						points.clear();
 						++count;
@@ -318,6 +371,8 @@ int main(int argc, char const *argv[])
 				//	}
 				//}
 				//std::cout << std::endl;
+				segment_count=0;
+				flowpipe_count++;
 		}
 		//std::cout << "Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
 
@@ -333,7 +388,7 @@ int main(int argc, char const *argv[])
 		//				if(!flowpipes_smoothed.at(i).at(ii).intersect(flowpipes_smoothed.at(j).at(jj)).empty()){
 		//					intersect=true;
 		//					CONVEXHULL_CONST=0;
-		//					std::cout << ii << "of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
+		//					std::cout << ii << " of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
 		//					break;
 		//				}
 		//			}
