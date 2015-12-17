@@ -23,7 +23,7 @@ namespace hypro {
     
     /**
      * @brief Converts a polytope in V-representation into an H-Polytope.
-     * 
+     * @detail Converts the source object into an H-Polytope with the corresponding constructor.
      *   
      * @param _source V-polytope that needs to be converted.
      * @param _target An arbitrary H-Polytope that gets overwritten with the converted object.
@@ -34,7 +34,7 @@ namespace hypro {
     
     /**
      * @brief Converts a box into an H-Polytope.
-     * 
+     * @detail Constructs a fixed normal matrix and reads distances from the box intervals.
      *   
      * @param _source Box that needs to be converted.
      * @param _target An arbitrary H-Polytope that gets overwritten with the converted object.

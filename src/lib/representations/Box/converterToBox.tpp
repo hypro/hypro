@@ -11,7 +11,8 @@
 #include "converterToBox.h"
 
 namespace hypro{
-    
+
+// conversion from box to box    
 template <typename Number>
 static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target ) {
 	_target = _source;
@@ -20,7 +21,7 @@ static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _tar
 //TODO validation
 template <typename Number>
 static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target ) {
-	unsigned dim = _source.dimension();
+	unsigned dim = _source.dimension();                                                                  
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
 	for ( unsigned i = 0; i < dim; ++i ) {
@@ -43,12 +44,12 @@ static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<N
 //TODO validation
 template <typename Number>
 static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target ) {
-	typename VPolytope<Number>::pointVector vertices = _source.vertices();
-	assert( !vertices.empty() );
+	typename VPolytope<Number>::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object
+	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0].rawCoordinates();
 	vector_t<Number> maxima = vertices[0].rawCoordinates();
 
-	for ( const auto& vertex : vertices ) {
+	for ( const auto& vertex : vertices ) {                                                         
 		for ( unsigned d = 0; d < _source.dimension(); ++d ) {
 			minima( d ) = vertex.at( d ) < minima( d ) ? vertex.at( d ) : minima( d );
 			maxima( d ) = vertex.at( d ) > maxima( d ) ? vertex.at( d ) : maxima( d );
