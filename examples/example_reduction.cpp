@@ -315,7 +315,7 @@ if(volume){
   std::cout << std::endl;
   // End Reducing
 
-  
+
   // Plotting
   unsigned rdn, rds, run, rus, ruc, rdis, rdib, rdit;
   //3D ... nD

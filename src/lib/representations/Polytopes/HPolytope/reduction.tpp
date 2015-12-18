@@ -315,18 +315,18 @@ namespace hypro {
   		std::cout << "Error - second facet is no neighbor of first facet" << std::endl;
   		return res;
   	}
-    else if(strat>1 && strat<6){
-      vector_t<Number> dummy_a = res.constraints().at(a).normal();
-      vector_t<Number> dummy_b = res.constraints().at(b).normal();
-      dummy_a.normalize();
-      dummy_b.normalize();
-      std::cout << "Neighbors have a scalarpoduct of " << dummy_a.dot(dummy_b) << " (normalized)" << std::endl;
-    }
-    if(strat<2){
-      std::vector<Point<Number>> verticesOfIndex = getVerticesOfIndex(a, vertices, membersOfVertices);
-      vector_t<Number> normVector = verticesOfIndex.at(0).rawCoordinates() - verticesOfIndex.at(1).rawCoordinates();
-      std::cout << "Norm for facet " << a << " is " << normVector.norm() << std::endl;
-    }
+    //else if(strat>1 && strat<6){
+    //  vector_t<Number> dummy_a = res.constraints().at(a).normal();
+    //  vector_t<Number> dummy_b = res.constraints().at(b).normal();
+    //  dummy_a.normalize();
+    //  dummy_b.normalize();
+    //  std::cout << "Neighbors have a scalarpoduct of " << dummy_a.dot(dummy_b) << " (normalized)" << std::endl;
+    //}
+    //if(strat<2){
+    //  std::vector<Point<Number>> verticesOfIndex = getVerticesOfIndex(a, vertices, membersOfVertices);
+    //  vector_t<Number> normVector = verticesOfIndex.at(0).rawCoordinates() - verticesOfIndex.at(1).rawCoordinates();
+    //  std::cout << "Norm for facet " << a << " is " << normVector.norm() << std::endl;
+    //}
 
 
   	// (try to) reduce
@@ -504,6 +504,7 @@ namespace hypro {
   	// init
   	HPolytope<Number> res = *this;
 
+    // TODO figure out which directions aren't needed to evaluate
   	//if(res.size()<directions.size()){
   	//	//std::cout << "Warning - Output would be bigger than reduce_from, so use old polytope" << std::endl;
   	//	return res;
@@ -525,83 +526,62 @@ namespace hypro {
   		Point<Number> point_directed;
   		std::vector<std::pair<unsigned, Number>> scalarproducts;
   		Number directed_offset=0;
-  		bool skip=false;
+      vector_t<Number> directed_normalized = directed;
+      directed_normalized.normalize();
 
-  		// compute scalarproducts
-  		vector_t<Number> directed_normalized = directed;
-  		directed_normalized.normalize();
+			// collect vertex
+			point_directed = getVertexForVector(directed, vertices);
 
-  		for(unsigned i=0; i<res.size(); i++){
-  			vector_t<Number> temp = res.constraints().at(i).normal();
-  			temp.normalize();
-  			Number scalarproduct = directed_normalized.dot(temp);
+			// determine offset of directed
+			directed_offset = directed.dot(point_directed.rawCoordinates());
 
-  			//if(carl::AlmostEqual2sComplement(scalarproduct, 1.0)){
-  			//	std::cout << "Error - wanted direction does already exist" << std::endl;
-  			//	skip=true;
-  			//}
+			// collect facets to erase
+			switch(strat){
+				case REDUCTION_STRATEGY::DIRECTED_SMALL:
+					{
+						for(unsigned v=0; v<vertices.size(); v++){
+							if(vertices[v] == point_directed){
 
-  			scalarproducts.push_back(std::pair<unsigned, Number>(i, scalarproduct));
-  		}
+								for(unsigned memberOfVertex: membersOfVertices[v]){
+									vector_t<Number> dummy = res.constraints().at(memberOfVertex).normal();
+									dummy.normalize();
+									Number scalarproduct= dummy.dot(directed_normalized);
 
+									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
+										facets_erase.push_back(memberOfVertex);
+									}
+								}
+							}
+						}
+						break;
+					}
+				case REDUCTION_STRATEGY::DIRECTED_BIG:
+					{
+						for(unsigned i=0; i<res.size(); i++){
+							vector_t<Number> dummy = res.constraints().at(i).normal();
+							dummy.normalize();
+							Number scalarproduct= dummy.dot(directed_normalized);
 
-  		if(!skip){
-  			// sort scalarproducts TODO only max?
-  			std::sort(scalarproducts.begin(), scalarproducts.end(), [](const std::pair<unsigned,Number> &left, const std::pair<unsigned,Number> &right) {	return left.second > right.second;	});
+							if(std::find(facets_erase.begin(), facets_erase.end(), i)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
+								facets_erase.push_back(i);
+							}
+						}
+						break;
+					}
+						default:
+							break;
+			}
 
-  			// collect vertex
-  			point_directed = getVertexForVector(directed, vertices);
-
-  			// determine offset of directed
-				directed_offset = directed.dot(point_directed.rawCoordinates());
-
-  			// collect facets to erase
-  			switch(strat){
-  				case REDUCTION_STRATEGY::DIRECTED_SMALL:
-  					{
-  						for(unsigned v=0; v<vertices.size(); v++){
-  							if(vertices[v] == point_directed){
-
-  								for(unsigned memberOfVertex: membersOfVertices[v]){
-  									vector_t<Number> dummy = res.constraints().at(memberOfVertex).normal();
-  									dummy.normalize();
-  									Number scalarproduct= dummy.dot(directed_normalized);
-
-  									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
-  										facets_erase.push_back(memberOfVertex);
-  									}
-  								}
-  							}
-  						}
-  						break;
-  					}
-  				case REDUCTION_STRATEGY::DIRECTED_BIG:
-  					{
-  						for(unsigned i=0; i<res.size(); i++){
-  							vector_t<Number> dummy = res.constraints().at(i).normal();
-  							dummy.normalize();
-  							Number scalarproduct= dummy.dot(directed_normalized);
-
-  							if(std::find(facets_erase.begin(), facets_erase.end(), i)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
-  								facets_erase.push_back(i);
-  							}
-  						}
-  						break;
-  					}
-  						default:
-  							break;
-
-  			}
-
-  			std::sort(facets_erase.begin(), facets_erase.end(), [](const unsigned left, const unsigned right) {	return left > right;	});
-
-  			facets_insert.push_back(Hyperplane<Number>(directed, directed_offset));
-  		}
+			facets_insert.push_back(Hyperplane<Number>(directed, directed_offset));
   	}
 
+    // insert
   	for(Hyperplane<Number> facet_insert: facets_insert){
   		res.insert(facet_insert);
   	}
+
+    // erase
+    std::sort(facets_erase.begin(), facets_erase.end(), [](const unsigned left, const unsigned right) {	return left > right;	});
 
   	std::vector<vector_t<Number>> evaluations;
   	for(unsigned facet_erase: facets_erase){

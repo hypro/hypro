@@ -14,7 +14,8 @@ set( EXAMPLES
     example_addition
     example_benchmarks
     example_bouncingBall
-    example_bouncingBall_Igor
+    example_bouncingBall_Plotter
+    example_bouncingBall_Fly
     example_box
     example_converter
     example_convexHull

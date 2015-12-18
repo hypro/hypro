@@ -245,8 +245,8 @@ namespace reachability {
 			std::cout << "--- Loop entered ---" << std::endl;
 #endif
 
-			bool use_reduce=false;
-			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=20;
+			bool use_reduce_memory=false, use_reduce_time=false;
+			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=15;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
 
@@ -273,7 +273,8 @@ namespace reachability {
 				std::cout << "Invariant: " << invariant << std::endl;
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
-				if(use_reduce){
+				// MEMORY-reduction
+				if(use_reduce_memory){
 					if(!tmp.empty()){
 						std::vector<Point<Number>> points = tmp.vertices();
 						for(Point<Number> point: points){
@@ -308,9 +309,21 @@ namespace reachability {
 					}
 				}
 
+				// TIME-reduction
+				else if(use_reduce_time && !tmp.empty() ){
+					if(tmp.size()>3){
+						// Drop with facet 2 -> 90%
+						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, tmp.size()-1), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						flowpipe.push_back(poly_smoothed);
+					}
+					else {
+						flowpipe.push_back(tmp);
+					}
+				}
+
 				if ( !tmp.empty() ) {
 
-					if(!use_reduce){
+					if(!use_reduce_memory && !use_reduce_time){
 						flowpipe.push_back( tmp );
 					}
 
