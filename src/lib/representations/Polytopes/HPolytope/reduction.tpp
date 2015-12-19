@@ -394,18 +394,18 @@ namespace hypro {
   				// smooth united facet is the sum of all (normalized and smoothed) neighbor facets of a and b
   				// uniteVector
   				for(unsigned neighbor: neighborsOf_a){
-  					if(neighbor!=b){
+  					//if(neighbor!=b){
   						vector_t<Number> vector_normalized = res.constraints().at(a).normal()+res.constraints().at(neighbor).normal();
   						vector_normalized.normalize();
   						uniteVector+=vector_normalized;
-  					}
+  					//}
   				}
   				for(unsigned neighbor: neighborsOf_b){
-  					if(neighbor!=a){
+  					//if(neighbor!=a){
   						vector_t<Number> vector_normalized = res.constraints().at(b).normal()+res.constraints().at(neighbor).normal();
   						vector_normalized.normalize();
   						uniteVector+=vector_normalized;
-  					}
+  					//}
   				}
 
   				// uniteVector_offset
