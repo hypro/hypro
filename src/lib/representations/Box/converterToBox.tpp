@@ -14,13 +14,13 @@ namespace hypro{
 
 // conversion from box to box    
 template <typename Number>
-static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	_target = _source;
 	return true;
 }
 //TODO validation
 template <typename Number>
-static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	unsigned dim = _source.dimension();                                                                  
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
@@ -43,7 +43,7 @@ static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<N
 
 //TODO return value
 template <typename Number>
-static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	typename VPolytope<Number>::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object
 	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
@@ -63,12 +63,17 @@ static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>
 	}
 
 	_target = Box<Number>( intervals );                                                             //creates a box with the computed intervals
-	return false;
+        
+        if(mode == EXACT){
+            
+        } 
+        
+	return true;
 }
 
 //TODO validation
 template <typename Number>
-static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	typename VPolytope<Number>::pointVector vertices = _source.vertices();
 	assert( !vertices.empty() );
 	vector_t<Number> minima = vertices->begin().rawCoordinates();
@@ -94,7 +99,7 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
 
 //TODO validation
 template <typename Number>
-static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	Zonotope<Number> tmp = _source.intervalHull();
 	std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
 	assert( !vertices.empty() );
@@ -121,7 +126,7 @@ static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>&
 
 //TODO validation
 template <typename Number>
-static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>& _target ) {
+static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	hypro::Polytope<Number> tmp = _source;
 	std::vector<Point<Number>> points = tmp.vertices();
 	assert( !points.empty() );

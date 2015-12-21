@@ -13,14 +13,14 @@
 namespace hypro{
         // conversion from support function to support function
         template <typename Number>
-        static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target){
+        static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode){
             _target = _source;
             return true;
         }
     
         // conversion from box to support function
         template <typename Number>
-        static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
                 unsigned dim = _source.dimension();                                                     //gets dimension of box
                 assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
@@ -45,7 +45,7 @@ namespace hypro{
 
         // conversion from V-Polytope to support function
         template <typename Number>
-        static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
                 HPolytope<Number> temp = HPolytope<Number>(_source);                                   //converts the source object into a h-polytope
                 typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
@@ -59,7 +59,7 @@ namespace hypro{
 
         // conversion from H-polytope to support function
         template <typename Number>
-        static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
                 typename HPolytope<Number>::HyperplaneVector planes = _source.constraints();            //gets planes from the source object
                 assert( !planes.empty() );                                                              //ensures that nonempty planes got fetched before continuing
 
@@ -69,7 +69,7 @@ namespace hypro{
         }
         // TODO conversion from zonotope to support function
         template <typename Number>
-        static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target ) {
+        static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
 
 
                 return true;
