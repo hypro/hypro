@@ -742,7 +742,8 @@ template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 	//std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
-		if ( plane.normal().dot( vec ) > plane.offset() ) {
+		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset()) && plane.normal().dot( vec ) > plane.offset() ) {
+			//std::cout << "Difference is " << plane.normal().dot( vec )-plane.offset() << " with " << plane.normal().dot( vec )<< " and "<< plane.offset()<< std::endl;
 			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
 			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
