@@ -740,7 +740,7 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	std::cout << *this << "  " << __func__ << "  " << vec << ": ";
+	//std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if ( plane.normal().dot( vec ) > plane.offset() ) {
 			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
@@ -753,18 +753,18 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
-	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
+	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
-		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
+		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.second == INFEAS ) {
-			std::cout << "INFEAS" << std::endl;
+			//std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
-			std::cout << "INFTY" << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			continue;
 		} else if ( evalRes.first < plane.offset() ) {
-			std::cout << "Too large" << std::endl;
+			//std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}

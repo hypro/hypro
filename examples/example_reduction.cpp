@@ -196,7 +196,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = twoD_template;
+  HPolytope<Number> reduce_from = nico;
 
 
   unsigned dimension = nico.dimension(); // set dimension for test object here
@@ -315,7 +315,7 @@ if(volume){
   std::cout << std::endl;
   // End Reducing
 
-  
+
   // Plotting
   unsigned rdn, rds, run, rus, ruc, rdis, rdib, rdit;
   //3D ... nD

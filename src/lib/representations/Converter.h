@@ -5,9 +5,10 @@
  * @file Converter.h
  *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * @author Simon Froitzheim
  *
  * @since 	2015-05-08
- * @version	2015-12-16
+ * @version	2015-12-17
  */
 
 #pragma once
@@ -26,3 +27,6 @@
 
 #include "Box/converterToBox.h"
 #include "SupportFunction/converterToSupportFunction.h"
+#include "Polytopes/HPolytope/converterToHPolytope.h"
+#include "Polytopes/VPolytope/converterToVPolytope.h"
+#include "Zonotope/converterToZonotope.h"
