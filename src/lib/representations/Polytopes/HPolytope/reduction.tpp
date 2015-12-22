@@ -209,12 +209,13 @@ namespace hypro {
 
       // check for each vertex if it lies below the hyperplane
   		for(Point<Number> vertex_test: vertices){
-  			Number vector_test_offset=0;
+        //std::cout << "compare " << vertex << " to " << vertex_test << std::endl;
 
   			if(vertex!=vertex_test){
-  				vector_test_offset = vector.dot(vertex_test.rawCoordinates());
+  				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
 
-  				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset>vector_offset){
+  				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset-vector_offset>0.000000000001){
+            std::cout << vertex << "is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
   					below=false; // vertex lies above
   					break;
   				}
@@ -222,6 +223,7 @@ namespace hypro {
   		}
 
   		if(below){
+        std::cout << std::endl;
   			return vertex;
   		}
   	}

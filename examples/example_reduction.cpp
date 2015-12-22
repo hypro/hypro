@@ -307,7 +307,7 @@ if(volume){
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
 
-  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 3), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 6), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
   std::cout << "directed_template"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
@@ -390,24 +390,24 @@ if(volume){
   //2D
   if(dimension==2){
     plotter.addObject(reduce_from.vertices());
-    rdn = plotter.addObject(reduction_drop_normal.vertices());
-    rds = plotter.addObject(reduction_drop_smooth.vertices());
-    run = plotter.addObject(reduction_unite_normal.vertices());
-    rus = plotter.addObject(reduction_unite_smooth.vertices());
-    ruc = plotter.addObject(reduction_unite_cut.vertices());
-    rdis = plotter.addObject(reduction_directed_small.vertices());
-    rdib = plotter.addObject(reduction_directed_big.vertices());
+    //rdn = plotter.addObject(reduction_drop_normal.vertices());
+    //rds = plotter.addObject(reduction_drop_smooth.vertices());
+    //run = plotter.addObject(reduction_unite_normal.vertices());
+    //rus = plotter.addObject(reduction_unite_smooth.vertices());
+    //ruc = plotter.addObject(reduction_unite_cut.vertices());
+    //rdis = plotter.addObject(reduction_directed_small.vertices());
+    //rdib = plotter.addObject(reduction_directed_big.vertices());
     rdit = plotter.addObject(reduction_directed_template.vertices());
   }
 
-  plotter.setObjectColor(rdn, colors[red]);
-  plotter.setObjectColor(rds, colors[red]);
-  plotter.setObjectColor(run, colors[green]);
-  plotter.setObjectColor(rus, colors[maygreen]);
-  plotter.setObjectColor(ruc, colors[turquoise]);
-  //plotter.setObjectColor(runo, colors[bordeaux]);
-  plotter.setObjectColor(rdis, colors[violett]);
-  plotter.setObjectColor(rdib, colors[lila]);
+  //plotter.setObjectColor(rdn, colors[red]);
+  //plotter.setObjectColor(rds, colors[red]);
+  //plotter.setObjectColor(run, colors[green]);
+  //plotter.setObjectColor(rus, colors[maygreen]);
+  //plotter.setObjectColor(ruc, colors[turquoise]);
+  ////plotter.setObjectColor(runo, colors[bordeaux]);
+  //plotter.setObjectColor(rdis, colors[violett]);
+  //plotter.setObjectColor(rdib, colors[lila]);
   plotter.setObjectColor(rdit, colors[bordeaux]);
 
 
