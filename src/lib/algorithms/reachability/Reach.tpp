@@ -247,11 +247,13 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop entered ---" << std::endl;
 #endif
-
-			bool use_reduce_memory=false, use_reduce_time=false;
+#ifdef USE_REDUCTION
+			bool use_reduce_memory=false;
+			bool use_reduce_time=false;
 			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=15;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
+#endif
 
 			// for each time interval perform linear Transformation
 			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
@@ -276,6 +278,7 @@ namespace reachability {
 				std::cout << "Invariant: " << invariant << std::endl;
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
+#ifdef USE_REDUCTION
 				// MEMORY-reduction
 				if(use_reduce_memory){
 					if(!tmp.empty()){
@@ -323,12 +326,16 @@ namespace reachability {
 						flowpipe.push_back(tmp);
 					}
 				}
+#endif
 
 				if ( !tmp.empty() ) {
-
+#ifdef USE_REDUCTION
 					if(!use_reduce_memory && !use_reduce_time){
 						flowpipe.push_back( tmp );
 					}
+#else
+					flowpipe.push_back( tmp );
+#endif
 
 					// update lastSegment
 					lastSegment = tmp;
