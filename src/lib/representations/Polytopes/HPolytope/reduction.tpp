@@ -202,10 +202,9 @@ namespace hypro {
   	// try each vertex
   	for(Point<Number> vertex: vertices){
   		bool below=true;
-  		Number vector_offset=0;
 
   		// calculate offset
-  		vector_offset = vector.dot(vertex.rawCoordinates());
+  		Number vector_offset = vector.dot(vertex.rawCoordinates());
 
       // check for each vertex if it lies below the hyperplane
   		for(Point<Number> vertex_test: vertices){
@@ -214,8 +213,8 @@ namespace hypro {
   			if(vertex!=vertex_test){
   				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
 
-  				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset-vector_offset>0.000000000001){
-            std::cout << vertex << "is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
+  				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset-vector_offset>0){
+            std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
   					below=false; // vertex lies above
   					break;
   				}
@@ -223,6 +222,7 @@ namespace hypro {
   		}
 
   		if(below){
+        std::cout << vertex << " is the correct vertex " << std::endl;
         std::cout << std::endl;
   			return vertex;
   		}
@@ -480,11 +480,9 @@ namespace hypro {
   		//check if all vertices are inside the new polytope
   		for(unsigned i=0; i<res.size(); ++i) {
   			for(Point<Number> vertex: vertices){
-  				Number value=0;
-  				for(unsigned j=0; j<res.constraints().at(i).normal().size(); j++){
-  					value+=res.constraints().at(i).normal()[j]*vertex.coordinate(j);
-  				}
+  				Number value=res.constraints().at(i).normal().dot(vertex.rawCoordinates());
   				if(!carl::AlmostEqual2sComplement(value, res.constraints().at(i).offset()) && value>res.constraints().at(i).offset()){
+            std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
   					return *this;
   				}
   			}
@@ -505,8 +503,10 @@ namespace hypro {
   HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const{
   	// init
   	HPolytope<Number> res = *this;
+    std::cout << "res (before) has " << res.size() << " facets" << std::endl;
 
-    // TODO figure out which directions aren't needed to evaluate
+
+    // TODO figure out which directions aren't needed to evaluate TODO remove the 0.000...001 compare
   	//if(res.size()<directions.size()){
   	//	//std::cout << "Warning - Output would be bigger than reduce_from, so use old polytope" << std::endl;
   	//	return res;
@@ -594,20 +594,29 @@ namespace hypro {
   	if(res.isBounded(evaluations)){
 
   		//check if all vertices are inside the new polytope
-  		for(unsigned i=0; i<res.size(); ++i) {
+  		//for(unsigned i=0; i<res.size(); ++i) {
   			for(Point<Number> vertex: vertices){
-  				Number value=0;
-  				for(unsigned j=0; j<res.constraints().at(i).normal().size(); j++){
-  					value+=res.constraints().at(i).normal()[j]*vertex.coordinate(j);
-  				}
-  				if(!carl::AlmostEqual2sComplement(value, res.constraints().at(i).offset()) && value>res.constraints().at(i).offset()){
-  					return *this;
-  				}
+          if(!res.contains(vertex)){
+            std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
+    				return *this;
+          }
+          //
+  				//Number value=0;
+  				//value=res.constraints().at(i).normal().dot(vertex.rawCoordinates());
+          //Number diff = value-res.constraints().at(i).offset();
+          //std::cout << "test facet "<< i << " with "<< vertex << " with diff " << diff  << std::endl;
+  				//if(!carl::AlmostEqual2sComplement(value, res.constraints().at(i).offset()) && diff>0){
+          //  std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
+  				//	return *this;
+  				//}
   			}
-  		}
+  		//}
 
+      std::cout << "res (after) has " << res.size() << " facets" << std::endl;
   		return res;
   	}
+
+    std::cout << "res would be unbounded" << std::endl;
 
   	return *this;
   }
