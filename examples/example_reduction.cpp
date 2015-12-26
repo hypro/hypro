@@ -307,7 +307,7 @@ if(volume){
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
 
-  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 6), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 20), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
   std::cout << "directed_template"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;

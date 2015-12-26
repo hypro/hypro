@@ -250,7 +250,7 @@ namespace reachability {
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false;
 			bool use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=15;
+			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
 #endif
@@ -319,11 +319,13 @@ namespace reachability {
 				else if(use_reduce_time && !tmp.empty() ){
 					if(tmp.size()>3){
 						// Drop with facet 2 -> 90%
-						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, tmp.size()-1), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, 4), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 						flowpipe.push_back(poly_smoothed);
+						lastSegment=poly_smoothed;
 					}
 					else {
 						flowpipe.push_back(tmp);
+						lastSegment = tmp;
 					}
 				}
 #endif
@@ -333,12 +335,17 @@ namespace reachability {
 					if(!use_reduce_memory && !use_reduce_time){
 						flowpipe.push_back( tmp );
 					}
+					if(!use_reduce_time){
+						// update lastSegment
+						lastSegment = tmp;
+					}
 #else
 					flowpipe.push_back( tmp );
-#endif
 
 					// update lastSegment
 					lastSegment = tmp;
+#endif
+
 				} else {
 					break;
 				}

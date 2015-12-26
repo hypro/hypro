@@ -214,7 +214,7 @@ namespace hypro {
   				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
 
   				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset-vector_offset>0){
-            std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
+            //std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
   					below=false; // vertex lies above
   					break;
   				}
@@ -222,8 +222,8 @@ namespace hypro {
   		}
 
   		if(below){
-        std::cout << vertex << " is the correct vertex " << std::endl;
-        std::cout << std::endl;
+        //std::cout << vertex << " is the correct vertex " << std::endl;
+        //std::cout << std::endl;
   			return vertex;
   		}
   	}
@@ -478,15 +478,12 @@ namespace hypro {
   	if(res.isBounded(evaluations)){
 
   		//check if all vertices are inside the new polytope
-  		for(unsigned i=0; i<res.size(); ++i) {
-  			for(Point<Number> vertex: vertices){
-  				Number value=res.constraints().at(i).normal().dot(vertex.rawCoordinates());
-  				if(!carl::AlmostEqual2sComplement(value, res.constraints().at(i).offset()) && value>res.constraints().at(i).offset()){
-            std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
-  					return *this;
-  				}
-  			}
-  		}
+      for(Point<Number> vertex: vertices){
+        if(!res.contains(vertex)){
+          //std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
+          return *this;
+        }
+			}
 
   		return res;
   	}
@@ -503,10 +500,12 @@ namespace hypro {
   HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const{
   	// init
   	HPolytope<Number> res = *this;
-    std::cout << "res (before) has " << res.size() << " facets" << std::endl;
+    //std::cout << "res (before) has " << res.size() << " facets" << std::endl;
 
 
-    // TODO figure out which directions aren't needed to evaluate TODO remove the 0.000...001 compare
+    // TODO figure out which directions aren't needed to evaluate
+
+    // break if the amount of directions is greater than the actual size of the polytope TODO decide if used or not?
   	//if(res.size()<directions.size()){
   	//	//std::cout << "Warning - Output would be bigger than reduce_from, so use old polytope" << std::endl;
   	//	return res;
@@ -516,12 +515,25 @@ namespace hypro {
   	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
   	std::vector<unsigned> facets_erase;
+    std::vector<Hyperplane<Number>> facets_insert;
+
+    /*
+     * idea to prevent adding of redundant planes:
+     *
+     * save for each vertex of vertices if they belong to dimension-directions the cone.
+     * test for each new direction which is added to a vertex if it is outside/inside the cone
+     * (if it already exists, else create the cone if there are enough facets, else save the direction).
+     *
+     * Nedded: map for a vertex->cone TODO create 'test'
+     */
+     std::map<Point<Number>,std::vector<vector_t<Number>>> mapVertices;
+
+    // erase all facets if strat is directed_template
   	if(strat == REDUCTION_STRATEGY::DIRECTED_TEMPLATE){
-  			for(unsigned i=0; i<res.size(); i++){ // erase all facets
+  			for(unsigned i=0; i<res.size(); i++){
   				facets_erase.push_back(i);
   			}
   		}
-  	std::vector<Hyperplane<Number>> facets_insert;
 
   	// loop through each direction
   	for(vector_t<Number> directed: directions){
@@ -533,6 +545,29 @@ namespace hypro {
 
 			// collect vertex
 			point_directed = getVertexForVector(directed, vertices);
+
+      // update the vertex->cone, vertex->directions
+      if(mapVertices.find(point_directed)!=mapVertices.end()){
+        // test consists of
+        //   create cone if possible TODO create cone
+        //   does cone contains directed
+        //    -> true, break
+        //    -> false, update and remove redundant directions TODO find redundant directions, only one?
+        bool test=true;
+
+        // update
+        if(test) mapVertices[point_directed].push_back(directed);
+        else break;
+
+        //std::cout << " Entry in mapVertices updated" << std::endl;
+      }
+      else {
+        // create
+        std::vector<vector_t<Number>> directionsForVertex;
+        directionsForVertex.push_back(directed);
+        mapVertices.insert(std::make_pair(point_directed, directionsForVertex));
+        //std::cout << " Entry in mapVertices created" << std::endl;
+      }
 
 			// determine offset of directed
 			directed_offset = directed.dot(point_directed.rawCoordinates());
@@ -574,6 +609,7 @@ namespace hypro {
 							break;
 			}
 
+      // TODO if test with cone works insert Hyperplane after the directions-loop
 			facets_insert.push_back(Hyperplane<Number>(directed, directed_offset));
   	}
 
@@ -592,31 +628,21 @@ namespace hypro {
   	}
 
   	if(res.isBounded(evaluations)){
+      for(Point<Number> vertex: vertices){
+        if(!res.contains(vertex)){
+          //std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl << std::endl;
+          return *this;
+        }
+			}
 
-  		//check if all vertices are inside the new polytope
-  		//for(unsigned i=0; i<res.size(); ++i) {
-  			for(Point<Number> vertex: vertices){
-          if(!res.contains(vertex)){
-            std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
-    				return *this;
-          }
-          //
-  				//Number value=0;
-  				//value=res.constraints().at(i).normal().dot(vertex.rawCoordinates());
-          //Number diff = value-res.constraints().at(i).offset();
-          //std::cout << "test facet "<< i << " with "<< vertex << " with diff " << diff  << std::endl;
-  				//if(!carl::AlmostEqual2sComplement(value, res.constraints().at(i).offset()) && diff>0){
-          //  std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
-  				//	return *this;
-  				//}
-  			}
-  		//}
+      //std::cout << "res (after) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl;
+      res.removeRedundantPlanes();
+      //std::cout << "res (after remove redundant) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl << std::endl;
 
-      std::cout << "res (after) has " << res.size() << " facets" << std::endl;
   		return res;
   	}
 
-    std::cout << "res would be unbounded" << std::endl;
+    //std::cout << "res would be unbounded -> use this" << std::endl << std::endl;
 
   	return *this;
   }

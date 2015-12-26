@@ -208,8 +208,8 @@ int main(int argc, char const *argv[])
 
 	std::cout << std::endl << "Generated flowpipe, start convexHull - reduce." << std::endl;
 
-	unsigned CONVEXHULL_CONST = 6;
-	unsigned REDUCE_CONST=14;
+	unsigned CONVEXHULL_CONST = 50;
+	unsigned REDUCE_CONST=100;
 
 	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
 		//for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
@@ -219,7 +219,7 @@ int main(int argc, char const *argv[])
 
 			clock::time_point start = clock::now();
 
-			// Reduce (convexHull and directed_template)
+			// Reduce (convexHull and directed_template) ---------------------------------------- START
 			for(auto& index : flowpipeIndices) {
 				std::vector<Representation> flowpipe = reacher.getFlowpipe(index), flowpipe_smoothed;
 				std::vector<Point<Number>> points_convexHull;
@@ -254,8 +254,6 @@ int main(int argc, char const *argv[])
 								hyperplanes.push_back(facets.first.at(i)->hyperplane());
 							}
 							Representation convexHull = Representation(hyperplanes);
-
-
 
 							// Reduce to REDUCE_CONST
 							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
@@ -300,6 +298,7 @@ int main(int argc, char const *argv[])
 				flowpipes.push_back(flowpipe);
 				flowpipes_smoothed.push_back(flowpipe_smoothed);
 			}
+			// Reduce (convexHull and directed_template) ---------------------------------------- END
 
 			std::cout << " Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
 
