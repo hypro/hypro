@@ -47,9 +47,9 @@ int main(int argc, char const *argv[])
 	rotated_square.insert(Hyperplane<Number>({-1,-1},1));
 
   HPolytope<Number> trapez; //trapez for Drop
-  trapez.insert(Hyperplane<Number>({-1,0.5},0.6));
+  trapez.insert(Hyperplane<Number>({-1,0.5},0.53));
 	trapez.insert(Hyperplane<Number>({0,1},1));
-  trapez.insert(Hyperplane<Number>({1,0.5},0.6));
+  trapez.insert(Hyperplane<Number>({1,0.5},0.53));
 	trapez.insert(Hyperplane<Number>({0,-1},1));
 
   HPolytope<Number> trapez2; //trapez for Unite
@@ -77,8 +77,7 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
   HPolytope<Number> twoD_template;
-  std::vector<vector_t<Number>> directionsForTemplate = computeTemplate<Number>(2,7);
-
+  std::vector<vector_t<Number>> directionsForTemplate = computeTemplate<Number>(2,16);
 
   for(vector_t<Number> direction: directionsForTemplate){
     twoD_template.insert(Hyperplane<Number>(direction, 1));
@@ -196,7 +195,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = nico;
+  HPolytope<Number> reduce_from = trapez;
 
 
   unsigned dimension = nico.dimension(); // set dimension for test object here
@@ -248,7 +247,7 @@ if(volume){
 
   // reduce unite - take care of correct neighbor-relation
   std::cout << "\nUNITE\n------------------------------------\nwith unite_normal (green), unite_smooth (maygreen), unite_cut (turquoise)" << std::endl << std::endl;
-  //unsigned facet1 = 2, facet2 =8;
+  //unsigned facet1 = 2, facet2 =3;
 
   for(unsigned facet1=0; facet1 < reduce_from.size()-1; facet1++){
     for(unsigned facet2=facet1+1; facet2 < reduce_from.size(); facet2++){
@@ -392,23 +391,23 @@ if(volume){
     plotter.addObject(reduce_from.vertices());
     //rdn = plotter.addObject(reduction_drop_normal.vertices());
     //rds = plotter.addObject(reduction_drop_smooth.vertices());
-    //run = plotter.addObject(reduction_unite_normal.vertices());
-    //rus = plotter.addObject(reduction_unite_smooth.vertices());
-    //ruc = plotter.addObject(reduction_unite_cut.vertices());
+    run = plotter.addObject(reduction_unite_normal.vertices());
+    rus = plotter.addObject(reduction_unite_smooth.vertices());
+    ruc = plotter.addObject(reduction_unite_cut.vertices());
     //rdis = plotter.addObject(reduction_directed_small.vertices());
     //rdib = plotter.addObject(reduction_directed_big.vertices());
-    rdit = plotter.addObject(reduction_directed_template.vertices());
+    //rdit = plotter.addObject(reduction_directed_template.vertices());
   }
 
   //plotter.setObjectColor(rdn, colors[red]);
   //plotter.setObjectColor(rds, colors[red]);
-  //plotter.setObjectColor(run, colors[green]);
-  //plotter.setObjectColor(rus, colors[maygreen]);
-  //plotter.setObjectColor(ruc, colors[turquoise]);
+  plotter.setObjectColor(run, colors[green]);
+  plotter.setObjectColor(rus, colors[maygreen]);
+  plotter.setObjectColor(ruc, colors[turquoise]);
   ////plotter.setObjectColor(runo, colors[bordeaux]);
   //plotter.setObjectColor(rdis, colors[violett]);
   //plotter.setObjectColor(rdib, colors[lila]);
-  plotter.setObjectColor(rdit, colors[bordeaux]);
+  //plotter.setObjectColor(rdit, colors[bordeaux]);
 
 
 	plotter.plot2d();

@@ -234,6 +234,16 @@ namespace reachability {
 			//plotter.plot2d();
 #endif
 
+#ifdef USE_REDUCTION
+			bool use_reduce_memory=false;
+			bool use_reduce_time=false;
+			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
+			unsigned REDUCE_CONST_time=8;
+			unsigned convexHull_count=0;
+			std::vector<Point<Number>> points_convexHull;
+			if(use_reduce_time) firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+#endif
+
 			// insert first Segment into the empty flowpipe
 			flowpipe.push_back( firstSegment );
 
@@ -246,13 +256,6 @@ namespace reachability {
 
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop entered ---" << std::endl;
-#endif
-#ifdef USE_REDUCTION
-			bool use_reduce_memory=false;
-			bool use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
-			unsigned convexHull_count=0;
-			std::vector<Point<Number>> points_convexHull;
 #endif
 
 			// for each time interval perform linear Transformation
@@ -319,7 +322,23 @@ namespace reachability {
 				else if(use_reduce_time && !tmp.empty() ){
 					if(tmp.size()>3){
 						// Drop with facet 2 -> 90%
-						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, 4), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						//// use guard to fit the segments to their compairsions
+						//std::vector<vector_t<Number>> directions;
+						//for(auto transition: _loc->transitions()){
+						//	auto guard= transition->guard();
+						//	for(unsigned i=0; i<guard.mat.rows(); i++){
+						//		vector_t<Number> guard_vector = vector_t<Number>(2);
+						//		guard_vector(0)=guard.mat(i,0);
+						//		guard_vector(1)=guard.mat(i,1);
+						//		directions.push_back(guard_vector);
+						//	}
+						//}
+						//Representation poly_smoothed;
+						//if(!directions.empty()){
+						//	poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
+						//}
+						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
 						flowpipe.push_back(poly_smoothed);
 						lastSegment=poly_smoothed;
 					}

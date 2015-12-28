@@ -208,10 +208,11 @@ namespace hypro {
 
       // check for each vertex if it lies below the hyperplane
   		for(Point<Number> vertex_test: vertices){
-        //std::cout << "compare " << vertex << " to " << vertex_test << std::endl;
+        //std::cout << "compare vertices " << vertex << " to " << vertex_test << std::endl;
 
   			if(vertex!=vertex_test){
   				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
+          //std::cout << "compare offsets " << vector_offset << " to " << vector_test_offset << std::endl;
 
   				if(!carl::AlmostEqual2sComplement(vector_test_offset+Number(1), vector_offset+Number(1)) && vector_test_offset-vector_offset>0){
             //std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
@@ -636,7 +637,7 @@ namespace hypro {
 			}
 
       //std::cout << "res (after) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl;
-      res.removeRedundantPlanes();
+      //res.removeRedundantPlanes();
       //std::cout << "res (after remove redundant) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl << std::endl;
 
   		return res;
