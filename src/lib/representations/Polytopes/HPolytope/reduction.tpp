@@ -296,6 +296,160 @@ namespace hypro {
   	 return templatePolytope;
    }
 
+   /*
+    * Reduction-Function
+    * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
+    * @return the reduced facet or if the result would be unbounded the inital polytope
+    */
+   template <typename Number>
+   HPolytope<Number> HPolytope<Number>::heuristic() const {
+
+     // Init sizes and scalarproducts
+
+     // 2D
+     std::vector<Point<Number>> vertices = this->vertices();
+   	 std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
+     std::map<unsigned,std::vector<unsigned>> membersOfFacets;
+
+     // init membersOfFacets
+     for(unsigned i=0; i<membersOfVertices.size(); ++i){
+       for(auto memberOfVertex: membersOfVertices.at(i)){
+         //std::cout << "vertex " << i << " belongs to facet " << memberOfVertex << std::endl;
+         if(membersOfFacets.find(memberOfVertex)!=membersOfFacets.end()){
+           membersOfFacets[memberOfVertex].push_back(i);
+         }
+         else {
+           // create
+           std::vector<unsigned> verticesForFacet;
+           verticesForFacet.push_back(i);
+           membersOfFacets.insert(std::make_pair(memberOfVertex, verticesForFacet));
+         }
+       }
+     }
+
+     //std::cout << "print membersOfFacets: " << std::endl << membersOfFacets << std::endl;
+
+     // facets-size - with same indices as mHPlanes -
+     std::vector<double> sizesOfFacets;
+     for(unsigned i=0; i<membersOfFacets.size(); ++i){
+       if(membersOfFacets.find(i)!=membersOfFacets.end()){
+         vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
+         double size = diff.dot(diff);
+         sizesOfFacets.push_back(size);
+         //std::cout << "Size of "<< i << " is " << size << std::endl;
+       }
+     }
+
+     // neighbors-scalarproduct - map from (facet,facet) to double
+     std::map<std::pair<unsigned,unsigned>, double> scalarproductOfFacets;
+     for(auto memberOfVertex: membersOfVertices){
+      polytope::dPermutator permutator(memberOfVertex.size(), 2);
+   	  std::vector<unsigned> permutation;
+   		while(!permutator.end()) {
+   		    permutation = permutator();
+          //std::cout << permutation << std::endl;
+          vector_t<Number> normal0 = this->constraints().at(memberOfVertex.at(permutation.at(0))).normal();
+          vector_t<Number> normal1 = this->constraints().at(memberOfVertex.at(permutation.at(1))).normal();
+          normal0.normalize();
+          normal1.normalize();
+
+          double scalarpoduct = normal0.dot(normal1);
+          scalarproductOfFacets.insert(std::make_pair( std::make_pair(memberOfVertex.at(permutation.at(0)),memberOfVertex.at(permutation.at(1))) , scalarpoduct));
+          //std::cout << "scalarpoduct of " << memberOfVertex.at(permutation.at(0)) << " and " << memberOfVertex.at(permutation.at(1)) << " is " << scalarpoduct << std::endl;
+       }
+     }
+
+     //std::cout << "print scalarproductOfFacets: " << std::endl << scalarproductOfFacets << std::endl;
+
+     // find values for single strats
+
+     // drop
+     double bestDropValue=-1;
+     unsigned bestDropIndex=0;
+
+     for(unsigned i=0; i<this->size(); ++i){
+       double scalarproducts = 1;
+       for(auto scalarproductOfFacet: scalarproductOfFacets){
+         if(scalarproductOfFacet.first.first==i || scalarproductOfFacet.first.second==i){
+           //std::cout << "Facet " << i << " found with "<< scalarproductOfFacet.second << std::endl;
+           scalarproducts*=scalarproductOfFacet.second;
+
+         }
+       }
+       double dropValue= ( scalarproducts /sizesOfFacets.at(i));
+       if(dropValue>bestDropValue){
+         bestDropIndex=i;
+         bestDropValue=dropValue;
+       }
+       //std::cout << "dropValue with" << dropValue << std::endl;
+     }
+
+     // unite
+     double bestUniteValue=-1;
+     std::pair<unsigned, unsigned> bestUniteIndex = std::make_pair(0,0);
+     REDUCTION_STRATEGY bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+
+     for(unsigned a=0; a<this->size(); ++a){
+       for(unsigned b=a+1; b<this->size(); ++b){
+         std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
+         std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
+
+        	// neighbor
+        	if(std::find(neighborsOf_a.begin(), neighborsOf_a.end(), b)!=neighborsOf_a.end()){
+            double scalarproducts = 1;
+            for(auto scalarproductOfFacet: scalarproductOfFacets){
+              //std::cout << "Search for " << a << ", " << b << " in " << scalarproductOfFacet.first << std::endl;
+              if((scalarproductOfFacet.first.first==a && scalarproductOfFacet.first.second!=b) || (scalarproductOfFacet.first.second==a && scalarproductOfFacet.first.first!=b)
+            || (scalarproductOfFacet.first.first==b && scalarproductOfFacet.first.second!=a) || (scalarproductOfFacet.first.second==b && scalarproductOfFacet.first.first!=a)){
+                //std::cout << "Facets " << a << ", " << b << " found with "<< scalarproductOfFacet.second << std::endl;
+                scalarproducts*=(1+scalarproductOfFacet.second);
+              }
+            }
+            //std::cout << std::endl;
+            double uniteValue= ( 1/scalarproducts);
+            if(uniteValue>bestUniteValue){
+              bestUniteIndex=std::make_pair(a,b);
+              bestUniteValue=uniteValue;
+              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
+                //unite_standard
+                bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+              }
+              else {
+                //unite_vertices
+                bestUniteStrat= REDUCTION_STRATEGY::UNITE_CUT;
+              }
+            }
+        	}
+       }
+     }
+
+     // TODO drop_smooth 
+
+     // determine strat and facet/s
+     REDUCTION_STRATEGY strat= REDUCTION_STRATEGY::DROP;
+     unsigned facet1=0, facet2=0;
+
+     if(bestUniteValue>bestDropValue){
+       facet1=std::max(bestUniteIndex.first, bestUniteIndex.second);
+       facet2=std::min(bestUniteIndex.first, bestUniteIndex.second);
+       strat=bestUniteStrat;
+     }
+     else {
+       facet1=bestDropIndex;
+     }
+
+     std::cout << std::endl;
+     std::cout << "[Drop] Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
+     std::cout << "[Unite] Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
+     std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
+     std::cout << std::endl;
+
+
+     // do reduction
+     return reduce(facet1, facet2, strat);
+
+   }
+
   /*
    * Reduction-Function
    * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
@@ -469,6 +623,10 @@ namespace hypro {
 
   				// norm united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
 					uniteVector_offset = uniteVector.dot(point_a_b.rawCoordinates());
+
+          res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+  				res.erase(a);
+  				res.erase(b);
 
   				break;
   			}
