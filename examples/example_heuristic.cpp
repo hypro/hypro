@@ -64,6 +64,12 @@ int main(int argc, char const *argv[])
   trapez3.insert(Hyperplane<Number>({1,0.5},2));
 	trapez3.insert(Hyperplane<Number>({0,-1},1));
 
+  HPolytope<Number> trapez4; //trapez for Unite
+  trapez4.insert(Hyperplane<Number>({-1,0.85},5));
+	trapez4.insert(Hyperplane<Number>({0,1},1));
+  trapez4.insert(Hyperplane<Number>({1,0.85},5));
+	trapez4.insert(Hyperplane<Number>({0,-1},1));
+
   HPolytope<Number> equal;
   equal.insert(Hyperplane<Number>({-1,2},2));
   equal.insert(Hyperplane<Number>({1,3},2));
@@ -195,7 +201,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = trapez;
+  HPolytope<Number> reduce_from = trapez2;
 
 
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here

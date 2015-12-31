@@ -372,7 +372,7 @@ namespace hypro {
        for(auto scalarproductOfFacet: scalarproductOfFacets){
          if(scalarproductOfFacet.first.first==i || scalarproductOfFacet.first.second==i){
            //std::cout << "Facet " << i << " found with "<< scalarproductOfFacet.second << std::endl;
-           scalarproducts*=scalarproductOfFacet.second;
+           scalarproducts*=(1+scalarproductOfFacet.second);
 
          }
        }
@@ -410,7 +410,7 @@ namespace hypro {
             if(uniteValue>bestUniteValue){
               bestUniteIndex=std::make_pair(a,b);
               bestUniteValue=uniteValue;
-              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
+              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO 
                 //unite_standard
                 bestUniteStrat= REDUCTION_STRATEGY::UNITE;
               }
@@ -423,23 +423,61 @@ namespace hypro {
        }
      }
 
-     // TODO drop_smooth 
+     // drop_smooth
+     double bestDropSmoothValue=-1;
+     unsigned bestDropSmoothIndex=0;
+
+     for(unsigned i=0; i<this->size(); ++i){
+       std::vector<unsigned> neighborsOf_i = getNeighborsOfIndex(i, membersOfVertices); // get neighbors
+
+       double scalarproducts = 1;
+       for(auto scalarproductOfFacet: scalarproductOfFacets){
+         if(scalarproductOfFacet.first.first==i || scalarproductOfFacet.first.second==i){
+           //std::cout << "Facet " << i << " found with "<< scalarproductOfFacet.second << std::endl;
+           scalarproducts*=(1+scalarproductOfFacet.second);
+
+         }
+       }
+
+       double sizes = 1;
+       for(unsigned neighborOf_i: neighborsOf_i){
+         sizes*= sizesOfFacets.at(neighborOf_i);
+       }
+
+       double dropSmoothValue= ( (sizesOfFacets.at(i)*scalarproducts)/ sizes );
+       if(dropSmoothValue>bestDropSmoothValue){
+         bestDropSmoothIndex=i;
+         bestDropSmoothValue=dropSmoothValue;
+       }
+       //std::cout << "dropSmoothValue with" << dropSmoothValue << std::endl;
+     }
+     //bestDropSmoothValue+=1; // add offset
+
+     // TODO add offsets
 
      // determine strat and facet/s
      REDUCTION_STRATEGY strat= REDUCTION_STRATEGY::DROP;
      unsigned facet1=0, facet2=0;
 
-     if(bestUniteValue>bestDropValue){
+     if(bestUniteValue>bestDropValue && bestUniteValue>bestDropSmoothValue){
+       //unite is best strat
        facet1=std::max(bestUniteIndex.first, bestUniteIndex.second);
        facet2=std::min(bestUniteIndex.first, bestUniteIndex.second);
        strat=bestUniteStrat;
      }
-     else {
+     else if(bestDropValue>bestUniteValue && bestDropValue>bestDropSmoothValue){
+       //drop is best strat
        facet1=bestDropIndex;
+     }
+     else if(bestDropSmoothValue>bestUniteValue && bestDropSmoothValue>bestDropValue){
+       //drop is best strat
+       facet1=bestDropSmoothIndex;
+       strat=REDUCTION_STRATEGY::DROP_SMOOTH;
      }
 
      std::cout << std::endl;
      std::cout << "[Drop] Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
+     std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
      std::cout << "[Unite] Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
      std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
      std::cout << std::endl;
