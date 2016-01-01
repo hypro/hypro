@@ -341,8 +341,13 @@ namespace hypro {
 
          double size=0;
          if(this->dimension()==2){
-           vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
-           size = diff.dot(diff);
+           if(membersOfFacets[i].size()==2){
+             vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
+             size = (double) diff.dot(diff);
+           }
+           else {
+             size = 1;
+           }
          }
          else {
            unsigned permutation_count=0;
@@ -359,12 +364,11 @@ namespace hypro {
                 }
 
                 vector_t<Number> cross = computeNormal(verticesForCross, this->constraints().at(i).normal());
-                size+=cross.dot(cross);
+                size+= (double) cross.dot(cross);
                 permutation_count++;
             }
             size=size/(double)permutation_count;
          }
-         //std::cout << "Calculated size " << size << " for facet " << i << std::endl << std::endl;
          sizesOfFacets.push_back(size);
          //std::cout << "Size of "<< i << " is " << size << std::endl;
 
@@ -374,6 +378,7 @@ namespace hypro {
      // neighbors-scalarproduct - map from (facet,facet) to double
      std::map<std::pair<unsigned,unsigned>, double> scalarproductOfFacets;
      for(auto memberOfVertex: membersOfVertices){
+       if(memberOfVertex.size()>1){
       polytope::dPermutator permutator(memberOfVertex.size(), 2);
    	  std::vector<unsigned> permutation;
    		while(!permutator.end()) {
@@ -389,6 +394,7 @@ namespace hypro {
           //std::cout << "scalarpoduct of " << memberOfVertex.at(permutation.at(0)) << " and " << memberOfVertex.at(permutation.at(1)) << " is " << scalarpoduct << std::endl;
        }
      }
+     }
 
      //std::cout << "print scalarproductOfFacets: " << std::endl << scalarproductOfFacets << std::endl;
 
@@ -398,7 +404,7 @@ namespace hypro {
      double bestDropValue=-1;
      unsigned bestDropIndex=0;
 
-     for(unsigned i=0; i<this->size(); ++i){
+     for(unsigned i=0; i<sizesOfFacets.size(); i++){
        double scalarproducts = 1;
        for(auto scalarproductOfFacet: scalarproductOfFacets){
          if(scalarproductOfFacet.first.first==i || scalarproductOfFacet.first.second==i){
@@ -415,13 +421,15 @@ namespace hypro {
        //std::cout << "dropValue with" << dropValue << std::endl;
      }
 
+     //std::cout << "Drop finished!" << std::endl;
+
      // unite
      double bestUniteValue=-1;
      std::pair<unsigned, unsigned> bestUniteIndex = std::make_pair(0,0);
      REDUCTION_STRATEGY bestUniteStrat= REDUCTION_STRATEGY::UNITE;
 
-     for(unsigned a=0; a<this->size(); ++a){
-       for(unsigned b=a+1; b<this->size(); ++b){
+     for(unsigned a=0; a<sizesOfFacets.size(); ++a){
+       for(unsigned b=a+1; b<sizesOfFacets.size(); ++b){
          std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
          std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
 
@@ -454,11 +462,13 @@ namespace hypro {
        }
      }
 
+     //std::cout << "Unite finished!" << std::endl;
+
      // drop_smooth
      double bestDropSmoothValue=-1;
      unsigned bestDropSmoothIndex=0;
 
-     for(unsigned i=0; i<this->size(); ++i){
+     for(unsigned i=0; i<sizesOfFacets.size(); ++i){
        std::vector<unsigned> neighborsOf_i = getNeighborsOfIndex(i, membersOfVertices); // get neighbors
 
        double scalarproducts = 1;
@@ -472,7 +482,7 @@ namespace hypro {
 
        double sizes = 1;
        for(unsigned neighborOf_i: neighborsOf_i){
-         sizes*= sizesOfFacets.at(neighborOf_i);
+         if(neighborOf_i<sizesOfFacets.size()) sizes*= sizesOfFacets.at(neighborOf_i);
        }
 
        double dropSmoothValue= ( (sizesOfFacets.at(i)*scalarproducts)/ sizes );
@@ -480,8 +490,10 @@ namespace hypro {
          bestDropSmoothIndex=i;
          bestDropSmoothValue=dropSmoothValue;
        }
-       //std::cout << "dropSmoothValue with" << dropSmoothValue << std::endl;
+       //std::cout << "dropSmoothValue with " << dropSmoothValue << std::endl;
      }
+     //std::cout << "DropSmooth finished!" << std::endl;
+
      //bestDropSmoothValue+=1; // add offset
 
      // TODO add offsets
@@ -507,14 +519,14 @@ namespace hypro {
      }
 
      double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-     std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
+     //std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
 
-     std::cout << std::endl;
-     std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
-     std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
-     std::cout << "[Unite]      Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
-     std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
-     std::cout << std::endl;
+     //std::cout << std::endl;
+     //std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
+     //std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
+     //std::cout << "[Unite]      Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
+     //std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
+     //std::cout << std::endl;
 
 
      // do reduction
