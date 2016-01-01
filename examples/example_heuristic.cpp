@@ -4,6 +4,7 @@
  * @details [long description]
  *
  */
+ #include <chrono>
 
  #include "../src/lib/util/Plotter.h"
  #include "../src/lib/datastructures/Hyperplane.h"
@@ -15,6 +16,9 @@ using namespace hypro;
 int main(int argc, char const *argv[])
 {
 	typedef double Number;
+
+  typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::microseconds timeunit;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	gnuplotSettings settings;
@@ -129,7 +133,7 @@ int main(int argc, char const *argv[])
   HPolytope<Number> cube;
   cube.insert(Hyperplane<Number>({ 0,  0, -1}, 1));
   cube.insert(Hyperplane<Number>({ 0,  0,  1}, 1));
-  cube.insert(Hyperplane<Number>({-1,  0,  -1}, 1));
+  cube.insert(Hyperplane<Number>({-1,  0,  0}, 1));
   cube.insert(Hyperplane<Number>({ 1,  0,  0}, 1));
   cube.insert(Hyperplane<Number>({ 0, -1,  0}, 1));
   cube.insert(Hyperplane<Number>({ 0,  1,  0}, 1));
@@ -201,7 +205,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = trapez2;
+  HPolytope<Number> reduce_from = ship;
 
 
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
@@ -221,7 +225,12 @@ int main(int argc, char const *argv[])
 
   // Reducing
   std::cout << "reduction of heuristic"<< std::endl;
+
+  clock::time_point start = clock::now();
   HPolytope<Number> reduction = reduce_from.heuristic();
+  double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+  std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl << std::endl;
+
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
   // End Reducing

@@ -26,7 +26,7 @@ namespace hypro {
 		// TODO, also figure out, if we need Number as a template parameter (I guess not)
 		// TODO: where do we set the initial resolution? As a parameter with a default value specified as a constant in config.h maybe.
 
-		// Determine the min max in each dimension std::vector<std::pair<int, int>>  and init
+		// init
 		for(unsigned i = 0; i<dimension; i++){
 			bounderies.push_back(std::pair<Number,Number>(0,0));
 			count_help.push_back(false);
@@ -37,10 +37,11 @@ namespace hypro {
 		// Compute bounderies
 		for(Point<Number> vertex: vertices) {
 			for(unsigned i = 0; i<dimension; i++){
-				if(bounderies[i].first>vertex.coordinate(i)) {
-					bounderies[i].first = vertex.coordinate(i);
-				} else if(bounderies[i].second<vertex.coordinate(i)) {
-					bounderies[i].second = vertex.coordinate(i);
+				if(bounderies.at(i).first>vertex.coordinate(i)) { // min
+					bounderies.at(i).first = vertex.coordinate(i);
+				}
+				else if(bounderies.at(i).second<vertex.coordinate(i)) { // max
+					bounderies.at(i).second = vertex.coordinate(i);
 				}
 			}
 		}
@@ -48,8 +49,10 @@ namespace hypro {
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
 		  //std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
-			resolution[i]= (bounderies[i].second-bounderies[i].first)/150; // 100 for 2D, 50 for 3D, 12 for 4D,
-			volumeUnit*=resolution[i];
+			resolution[i]= (bounderies[i].second-bounderies[i].first)/25; // 100 for 2D, 50 for 3D, 12 for 4D - if to high -> might be very slow
+			if(!carl::AlmostEqual2sComplement(resolution[i]+(Number)1,(Number) 1)){
+				volumeUnit*=resolution[i];
+			}
 			count_point[i]=bounderies[i].first;
 	}
 

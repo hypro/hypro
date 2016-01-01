@@ -129,7 +129,7 @@ int main(int argc, char const *argv[])
   HPolytope<Number> cube;
   cube.insert(Hyperplane<Number>({ 0,  0, -1}, 1));
   cube.insert(Hyperplane<Number>({ 0,  0,  1}, 1));
-  cube.insert(Hyperplane<Number>({-1,  0,  -1}, 1));
+  cube.insert(Hyperplane<Number>({-1,  0,  0}, 1));
   cube.insert(Hyperplane<Number>({ 1,  0,  0}, 1));
   cube.insert(Hyperplane<Number>({ 0, -1,  0}, 1));
   cube.insert(Hyperplane<Number>({ 0,  1,  0}, 1));
@@ -160,6 +160,7 @@ int main(int argc, char const *argv[])
   house.insert(Hyperplane<Number>({ 1, -1,  1}, 1)); //back-right 6
   house.insert(Hyperplane<Number>({-1,  1,  1}, 1)); //front-left 7
   house.insert(Hyperplane<Number>({-1, -1,  1}, 1)); //back-left 8
+
 
   vector_t<Number> directed3d_1 = vector_t<Number>(3);
   directed3d_1(0) = 1; directed3d_1(1) = 1; directed3d_1(2) = 1;
@@ -201,10 +202,10 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = trapez2;
+  HPolytope<Number> reduce_from = confuse_cube;
 
 
-  unsigned dimension = nico.dimension(); // set dimension for test object here
+  unsigned dimension = reduce_from.dimension(); // set dimension for test object here
   bool volume=true;
   Number prevVolume=0;
 

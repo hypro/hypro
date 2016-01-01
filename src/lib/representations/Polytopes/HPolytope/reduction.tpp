@@ -2,7 +2,12 @@
  * File holding utility functions to keep the main files clean.
  */
 #include "HPolytope.h"
+#include <chrono>
+
 namespace hypro {
+
+  typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::microseconds timeunit;
 
   /*
    * Compute all neighbors of a facet by calculating the participation at the vertices of the facet
@@ -304,7 +309,7 @@ namespace hypro {
    template <typename Number>
    HPolytope<Number> HPolytope<Number>::heuristic() const {
 
-     // Init sizes and scalarproducts
+     clock::time_point start = clock::now();
 
      // 2D
      std::vector<Point<Number>> vertices = this->vertices();
@@ -332,11 +337,37 @@ namespace hypro {
      // facets-size - with same indices as mHPlanes -
      std::vector<double> sizesOfFacets;
      for(unsigned i=0; i<membersOfFacets.size(); ++i){
-       if(membersOfFacets.find(i)!=membersOfFacets.end()){
-         vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
-         double size = diff.dot(diff);
+       if(membersOfFacets.find(i)!=membersOfFacets.end()){ // memberOfFacets are all vertices which are members to a facet
+
+         double size=0;
+         if(this->dimension()==2){
+           vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
+           size = diff.dot(diff);
+         }
+         else {
+           unsigned permutation_count=0;
+           //std::cout << "Start permutation with " << membersOfFacets[i].size() << "/"<< vertices.size() << " (size) and " <<this->dimension() << std::endl;
+           polytope::dPermutator permutator(membersOfFacets[i].size(), this->dimension());
+        	  std::vector<unsigned> permutation;
+        		while(!permutator.end()) {
+        		    permutation = permutator();
+                //std::cout << "Permutation for size: " << permutation << std::endl;
+
+                std::vector<vector_t<Number>> verticesForCross;
+                for(unsigned p: permutation){
+                  verticesForCross.push_back(vertices.at(membersOfFacets[i].at(p)).rawCoordinates());
+                }
+
+                vector_t<Number> cross = computeNormal(verticesForCross, this->constraints().at(i).normal());
+                size+=cross.dot(cross);
+                permutation_count++;
+            }
+            size=size/(double)permutation_count;
+         }
+         //std::cout << "Calculated size " << size << " for facet " << i << std::endl << std::endl;
          sizesOfFacets.push_back(size);
          //std::cout << "Size of "<< i << " is " << size << std::endl;
+
        }
      }
 
@@ -410,7 +441,7 @@ namespace hypro {
             if(uniteValue>bestUniteValue){
               bestUniteIndex=std::make_pair(a,b);
               bestUniteValue=uniteValue;
-              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO 
+              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO
                 //unite_standard
                 bestUniteStrat= REDUCTION_STRATEGY::UNITE;
               }
@@ -475,10 +506,13 @@ namespace hypro {
        strat=REDUCTION_STRATEGY::DROP_SMOOTH;
      }
 
+     double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+     std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
+
      std::cout << std::endl;
-     std::cout << "[Drop] Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
+     std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
      std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
-     std::cout << "[Unite] Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
+     std::cout << "[Unite]      Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
      std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
      std::cout << std::endl;
 
