@@ -4,6 +4,7 @@
  * @details [long description]
  *
  */
+ #include <chrono>
 
  #include "../src/lib/util/Plotter.h"
  #include "../src/lib/datastructures/Hyperplane.h"
@@ -15,6 +16,9 @@ using namespace hypro;
 int main(int argc, char const *argv[])
 {
 	typedef double Number;
+
+  typedef std::chrono::high_resolution_clock clock;
+  typedef std::chrono::microseconds timeunit;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	gnuplotSettings settings;
@@ -82,6 +86,43 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
+  // POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS ---
+
+  HPolytope<Number> unite;
+  unite.insert(Hyperplane<Number>({-1,0},1));
+	unite.insert(Hyperplane<Number>({-1,1},2));
+  unite.insert(Hyperplane<Number>({1,1},2));
+  unite.insert(Hyperplane<Number>({1,0},1));
+	unite.insert(Hyperplane<Number>({0,-1},1));
+
+  HPolytope<Number> uniteExtended;
+  uniteExtended.insert(Hyperplane<Number>({-1,0},10));
+	uniteExtended.insert(Hyperplane<Number>({0,1},1));
+  uniteExtended.insert(Hyperplane<Number>({1,0},10));
+	uniteExtended.insert(Hyperplane<Number>({0,-1},1));
+
+  HPolytope<Number> multipleEqual;
+  multipleEqual.insert(Hyperplane<Number>({-0.1,9},10));
+	multipleEqual.insert(Hyperplane<Number>({0,1},1));
+  multipleEqual.insert(Hyperplane<Number>({0.1,9},10));
+	multipleEqual.insert(Hyperplane<Number>({0,-1},1));
+
+  HPolytope<Number> directedEqual;
+  directedEqual.insert(Hyperplane<Number>({-1,1},1));
+	directedEqual.insert(Hyperplane<Number>({1,1},1));
+  directedEqual.insert(Hyperplane<Number>({-0.5,-1},1));
+	directedEqual.insert(Hyperplane<Number>({0.5,-1},1));
+
+  HPolytope<Number> dropBest;
+  dropBest.insert(Hyperplane<Number>({-1,0},1));
+	dropBest.insert(Hyperplane<Number>({0,1},1));
+  dropBest.insert(Hyperplane<Number>({1,1},1.9));
+  dropBest.insert(Hyperplane<Number>({1,0},1));
+	dropBest.insert(Hyperplane<Number>({0,-1},1));
+
+  // POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS ---
+
+
   HPolytope<Number> twoD_template;
   std::vector<vector_t<Number>> directionsForTemplate = computeTemplate<Number>(2,16);
 
@@ -109,7 +150,7 @@ int main(int argc, char const *argv[])
   diamond.insert(Hyperplane<Number>({1,-1},1));
 
   vector_t<Number> directed2d_1 = vector_t<Number>(2);
-  directed2d_1(0) = 1; directed2d_1(1) = 1;
+  directed2d_1(0) = 0; directed2d_1(1) = 1;
 
   // 3D
   HPolytope<Number> td_example;
@@ -202,7 +243,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = confuse_cube;
+  HPolytope<Number> reduce_from = multipleEqual;
 
 
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
@@ -277,6 +318,11 @@ if(volume){
       if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
       std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytope() << std::endl;
 
+      std::cout << "unite_norm"<< std::endl;
+      reduction_unite_norm = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_NORM);
+      if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_cut: " << reduction_unite_norm.sizeOfHPolytope() << std::endl;
+
       std::cout << std::endl;
     }
   }
@@ -319,11 +365,21 @@ if(volume){
   std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
 
   std::cout << std::endl;
+
+  std::cout << "reduction of heuristic"<< std::endl;
+
+  clock::time_point start = clock::now();
+  HPolytope<Number> reduction = reduce_from.heuristic();
+  double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+  std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl << std::endl;
+
+  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
   // End Reducing
 
 
   // Plotting
-  unsigned rdn, rds, run, rus, ruc, rdis, rdib, rdit;
+  unsigned rdn, rds, run, rus, ruc, runo, rdis, rdib, rdit;
   //3D ... nD
   if(dimension>2){
     // Prepare plotting - Reducing to 2d
@@ -387,7 +443,7 @@ if(volume){
     run = plotter.addObject(reduction_unite_normal_vertices_2d);
     rus = plotter.addObject(reduction_unite_smooth_vertices_2d);
     ruc = plotter.addObject(reduction_unite_cut_vertices_2d);
-    //runo = plotter.addObject(reduction_unite_norm_vertices_2d);
+    runo = plotter.addObject(reduction_unite_norm_vertices_2d);
     rdis = plotter.addObject(reduction_directed_small_vertices_2d);
     rdib = plotter.addObject(reduction_directed_big_vertices_2d);
     rdit = plotter.addObject(reduction_directed_template_vertices_2d);
@@ -398,9 +454,10 @@ if(volume){
     plotter.addObject(reduce_from.vertices());
     //rdn = plotter.addObject(reduction_drop_normal.vertices());
     //rds = plotter.addObject(reduction_drop_smooth.vertices());
-    run = plotter.addObject(reduction_unite_normal.vertices());
-    rus = plotter.addObject(reduction_unite_smooth.vertices());
-    ruc = plotter.addObject(reduction_unite_cut.vertices());
+    //run = plotter.addObject(reduction_unite_normal.vertices());
+    //rus = plotter.addObject(reduction_unite_smooth.vertices());
+    //ruc = plotter.addObject(reduction_unite_cut.vertices());
+    //runo = plotter.addObject(reduction_unite_norm.vertices());
     //rdis = plotter.addObject(reduction_directed_small.vertices());
     //rdib = plotter.addObject(reduction_directed_big.vertices());
     //rdit = plotter.addObject(reduction_directed_template.vertices());
@@ -408,10 +465,10 @@ if(volume){
 
   //plotter.setObjectColor(rdn, colors[red]);
   //plotter.setObjectColor(rds, colors[red]);
-  plotter.setObjectColor(run, colors[green]);
-  plotter.setObjectColor(rus, colors[maygreen]);
-  plotter.setObjectColor(ruc, colors[turquoise]);
-  ////plotter.setObjectColor(runo, colors[bordeaux]);
+  //plotter.setObjectColor(run, colors[green]);
+  //plotter.setObjectColor(rus, colors[maygreen]);
+  //plotter.setObjectColor(ruc, colors[turquoise]);
+  //plotter.setObjectColor(runo, colors[bordeaux]);
   //plotter.setObjectColor(rdis, colors[violett]);
   //plotter.setObjectColor(rdib, colors[lila]);
   //plotter.setObjectColor(rdit, colors[bordeaux]);

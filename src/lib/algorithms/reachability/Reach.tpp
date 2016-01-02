@@ -241,7 +241,7 @@ namespace reachability {
 			unsigned REDUCE_CONST_time=8;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
-			//if(use_reduce_time) firstSegment = firstSegment.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+			if(use_reduce_time) firstSegment = firstSegment.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 #endif
 
 			// insert first Segment into the empty flowpipe
@@ -335,17 +335,17 @@ namespace reachability {
 						//	}
 						//}
 
-						for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // use invariant
-							directions.push_back(invariant.constraints().at(inv_index).normal());
-						}
+						//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // use invariant
+						//	directions.push_back(invariant.constraints().at(inv_index).normal());
+						//}
 
-						Representation poly_smoothed;
-						if(!directions.empty()){
-							poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
-						}
+						//Representation poly_smoothed;
+						//if(!directions.empty()){
+						//	poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
+						//}
 
 						// use simple reduction/heuristic
-						//Representation poly_smoothed = tmp.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						Representation poly_smoothed = tmp.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
 						flowpipe.push_back(poly_smoothed);
 						lastSegment=poly_smoothed;

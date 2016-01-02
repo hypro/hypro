@@ -9,6 +9,7 @@ namespace hypro {
 	template<typename Number, typename Representation>
 	static Number approximateVolume(Representation _in, std::size_t sublevels = 0) {
 		Number pointCount = 0;
+
 		std::vector<Point<Number>> vertices = _in.vertices();
 
 		//for(Point<Number> vertex: vertices) {
@@ -49,7 +50,7 @@ namespace hypro {
 		// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 		for(unsigned i = 0; i<dimension; i++ ) {
 		  //std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
-			resolution[i]= (bounderies[i].second-bounderies[i].first)/25; // 100 for 2D, 50 for 3D, 12 for 4D - if to high -> might be very slow
+			resolution[i]= (bounderies[i].second-bounderies[i].first)/200; // 100 for 2D, 50 for 3D, 12 for 4D - if to high -> might be very slow
 			if(!carl::AlmostEqual2sComplement(resolution[i]+(Number)1,(Number) 1)){
 				volumeUnit*=resolution[i];
 			}

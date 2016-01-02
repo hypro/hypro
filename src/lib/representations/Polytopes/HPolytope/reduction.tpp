@@ -343,7 +343,7 @@ namespace hypro {
          if(this->dimension()==2){
            if(membersOfFacets[i].size()==2){
              vector_t<Number> diff = vertices.at(membersOfFacets[i].at(0)).rawCoordinates()-vertices.at(membersOfFacets[i].at(1)).rawCoordinates(); // TODO for higher dimension
-             size = (double) diff.dot(diff);
+             size = sqrt((double) diff.dot(diff));
            }
            else {
              size = 1;
@@ -364,7 +364,7 @@ namespace hypro {
                 }
 
                 vector_t<Number> cross = computeNormal(verticesForCross, this->constraints().at(i).normal());
-                size+= (double) cross.dot(cross);
+                size+= sqrt((double) cross.dot(cross));
                 permutation_count++;
             }
             size=size/(double)permutation_count;
@@ -423,47 +423,6 @@ namespace hypro {
 
      //std::cout << "Drop finished!" << std::endl;
 
-     // unite
-     double bestUniteValue=-1;
-     std::pair<unsigned, unsigned> bestUniteIndex = std::make_pair(0,0);
-     REDUCTION_STRATEGY bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-
-     for(unsigned a=0; a<sizesOfFacets.size(); ++a){
-       for(unsigned b=a+1; b<sizesOfFacets.size(); ++b){
-         std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
-         std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
-
-        	// neighbor
-        	if(std::find(neighborsOf_a.begin(), neighborsOf_a.end(), b)!=neighborsOf_a.end()){
-            double scalarproducts = 1;
-            for(auto scalarproductOfFacet: scalarproductOfFacets){
-              //std::cout << "Search for " << a << ", " << b << " in " << scalarproductOfFacet.first << std::endl;
-              if((scalarproductOfFacet.first.first==a && scalarproductOfFacet.first.second!=b) || (scalarproductOfFacet.first.second==a && scalarproductOfFacet.first.first!=b)
-            || (scalarproductOfFacet.first.first==b && scalarproductOfFacet.first.second!=a) || (scalarproductOfFacet.first.second==b && scalarproductOfFacet.first.first!=a)){
-                //std::cout << "Facets " << a << ", " << b << " found with "<< scalarproductOfFacet.second << std::endl;
-                scalarproducts*=(1+scalarproductOfFacet.second);
-              }
-            }
-            //std::cout << std::endl;
-            double uniteValue= ( 1/scalarproducts);
-            if(uniteValue>bestUniteValue){
-              bestUniteIndex=std::make_pair(a,b);
-              bestUniteValue=uniteValue;
-              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO
-                //unite_standard
-                bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-              }
-              else {
-                //unite_vertices
-                bestUniteStrat= REDUCTION_STRATEGY::UNITE_CUT;
-              }
-            }
-        	}
-       }
-     }
-
-     //std::cout << "Unite finished!" << std::endl;
-
      // drop_smooth
      double bestDropSmoothValue=-1;
      unsigned bestDropSmoothIndex=0;
@@ -496,6 +455,51 @@ namespace hypro {
 
      //bestDropSmoothValue+=1; // add offset
 
+     // unite
+     double bestUniteValue=-1;
+     std::pair<unsigned, unsigned> bestUniteIndex = std::make_pair(0,0);
+     REDUCTION_STRATEGY bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+
+     for(unsigned a=0; a<sizesOfFacets.size(); ++a){
+       for(unsigned b=a+1; b<sizesOfFacets.size(); ++b){
+         std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
+         std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
+
+        	// neighbor
+        	if(std::find(neighborsOf_a.begin(), neighborsOf_a.end(), b)!=neighborsOf_a.end()){
+            double scalarproducts = 1, scalarproduct_a_b=1;
+            for(auto scalarproductOfFacet: scalarproductOfFacets){
+              //std::cout << "Search for " << a << ", " << b << " in " << scalarproductOfFacet.first << std::endl;
+              if(scalarproductOfFacet.first.first==a || scalarproductOfFacet.first.first==b || scalarproductOfFacet.first.second==a || scalarproductOfFacet.first.second==b){
+                //std::cout << "Facets " << a << ", " << b << " found with "<< scalarproductOfFacet.second << std::endl;
+                if((scalarproductOfFacet.first.first==a && scalarproductOfFacet.first.second==b) || (scalarproductOfFacet.first.first==b || scalarproductOfFacet.first.second==a) ){
+                  scalarproduct_a_b*=(1+scalarproductOfFacet.second); // TODO more weight?
+                }
+                else {
+                  scalarproducts*=(1+scalarproductOfFacet.second);
+                }
+              }
+            }
+            //std::cout << std::endl;
+            double uniteValue= ( scalarproduct_a_b/scalarproducts);
+            if(uniteValue>bestUniteValue){
+              bestUniteIndex=std::make_pair(a,b);
+              bestUniteValue=uniteValue;
+              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO
+                //unite_standard
+                bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+              }
+              else {
+                //unite_vertices
+                bestUniteStrat= REDUCTION_STRATEGY::UNITE; // TODO or norm?
+              }
+            }
+        	}
+       }
+     }
+
+     //std::cout << "Unite finished!" << std::endl;
+
      // TODO add offsets
 
      // determine strat and facet/s
@@ -519,14 +523,14 @@ namespace hypro {
      }
 
      double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-     //std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
+     std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
 
-     //std::cout << std::endl;
-     //std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
-     //std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
-     //std::cout << "[Unite]      Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
-     //std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
-     //std::cout << std::endl;
+     std::cout << std::endl;
+     std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;
+     std::cout << "[DropSmooth] Chose facet " << bestDropSmoothIndex << " with " << bestDropSmoothValue << std::endl;
+     std::cout << "[Unite]      Chose facets " << bestUniteIndex << " with " << bestUniteValue << " and strat " << bestUniteStrat << std::endl;
+     std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
+     std::cout << std::endl;
 
 
      // do reduction
@@ -678,7 +682,7 @@ namespace hypro {
   				}
 
   				if(uniteVector!=vector_t<Number>::Zero(vertices.at(0).dimension())) uniteVector.normalize();
-
+          //std::cout << "uniteVector Vertices: " << uniteVector << std::endl << std::endl;
 
   				// uniteVector_offset
   				Point<Number> point_a_b = getVertexForVector(uniteVector, getVerticesOf2Indices(a, b, vertices, membersOfVertices));
@@ -695,12 +699,81 @@ namespace hypro {
 
   		case REDUCTION_STRATEGY::UNITE_NORM:
   			{
-  				// TODO compute weights
-  				std::pair<double, double> weights = std::pair<double, double>(5.9, 2);
+          double size_a=0, size_b=0;
+          std::vector<Point<Number>> vertices_a = getVerticesOfIndex(a, vertices, membersOfVertices);
+          std::vector<Point<Number>> vertices_b = getVerticesOfIndex(b, vertices, membersOfVertices);
+
+          if(this->dimension()==2){ // 2D
+            if(vertices_a.size()==2 && vertices_b.size()==2){
+              vector_t<Number> diff_a = vertices_a.at(0).rawCoordinates()-vertices_a.at(1).rawCoordinates();
+              vector_t<Number> diff_b = vertices_b.at(0).rawCoordinates()-vertices_b.at(1).rawCoordinates();
+
+              //std::cout << "Diff_a:\n" << diff_a << std::endl << std::endl;
+              //std::cout << "Diff_b:\n" << diff_b << std::endl << std::endl;
+
+
+              size_a = sqrt((double) diff_a.dot(diff_a));
+              size_b = sqrt((double) diff_b.dot(diff_b));
+            }
+            else {
+              size_a = 1;
+              size_b = 1;
+            }
+          }
+          else if(this->dimension()>2){ // 3D ... nD
+            unsigned permutation_count=0;
+
+            // compute weight a
+            polytope::dPermutator permutator_a(vertices_a.size(), this->dimension());
+         	  std::vector<unsigned> permutation;
+         		while(!permutator_a.end()) {
+         		    permutation = permutator_a();
+                 //std::cout << "Permutation_a for size: " << permutation << std::endl;
+
+                 std::vector<vector_t<Number>> verticesForCross;
+                 for(unsigned p: permutation){
+                   verticesForCross.push_back(vertices_a.at(p).rawCoordinates());
+                 }
+
+                 vector_t<Number> cross = computeNormal(verticesForCross, this->constraints().at(a).normal());
+                 size_a+= sqrt((double) cross.dot(cross));
+                 permutation_count++;
+             }
+             size_a=size_a/(double)permutation_count;
+
+             // compute weight b
+             permutation_count=0;
+             polytope::dPermutator permutator_b(vertices_b.size(), this->dimension());
+          		while(!permutator_b.end()) {
+          		    permutation = permutator_b();
+                  //std::cout << "Permutation_b for size: " << permutation << std::endl;
+
+                  std::vector<vector_t<Number>> verticesForCross;
+                  for(unsigned p: permutation){
+                    verticesForCross.push_back(vertices_b.at(p).rawCoordinates());
+                  }
+
+                  vector_t<Number> cross = computeNormal(verticesForCross, this->constraints().at(b).normal());
+                  size_b+= sqrt((double) cross.dot(cross));
+                  permutation_count++;
+              }
+              size_b=size_b/(double)permutation_count;
+          }
+
+  				std::pair<double, double> weights = std::pair<double, double>(size_a, size_b);
+          //std::cout << "Weights computed and stored: " << weights << std::endl;
 
   				// norm united facet works as unite_normal, but with weights for each component
-  				vector_t<Number> uniteVector = res.constraints().at(a).normal()*weights.first + res.constraints().at(b).normal()*weights.second; // weights are calculated by hand
+          vector_t<Number> vector_withWeight_a = res.constraints().at(a).normal()*weights.first;
+          vector_t<Number> vector_withWeight_b = res.constraints().at(b).normal()*weights.second;
+
+  				vector_t<Number> uniteVector = vector_withWeight_a + vector_withWeight_b;
+          //std::cout << "uniteVector Weight: " << uniteVector << std::endl << std::endl;
+
   				Number uniteVector_offset;
+
+          evaluations.push_back(res.constraints().at(a).normal());
+  				evaluations.push_back(res.constraints().at(b).normal());
 
   				// uniteVector_offset
   				Point<Number> point_a_b = getVertexForVector(uniteVector, getVerticesOf2Indices(a, b, vertices, membersOfVertices));
