@@ -243,7 +243,7 @@ int main(int argc, char const *argv[])
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
 
   // init reduce_HPolytopes
-  HPolytope<Number> reduce_from = multipleEqual;
+  HPolytope<Number> reduce_from = dropBest;
 
 
   unsigned dimension = reduce_from.dimension(); // set dimension for test object here
@@ -359,7 +359,7 @@ if(volume){
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
 
-  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 20), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
   std::cout << "directed_template"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
@@ -460,7 +460,7 @@ if(volume){
     //runo = plotter.addObject(reduction_unite_norm.vertices());
     //rdis = plotter.addObject(reduction_directed_small.vertices());
     //rdib = plotter.addObject(reduction_directed_big.vertices());
-    //rdit = plotter.addObject(reduction_directed_template.vertices());
+    rdit = plotter.addObject(reduction_directed_template.vertices());
   }
 
   //plotter.setObjectColor(rdn, colors[red]);
@@ -471,7 +471,7 @@ if(volume){
   //plotter.setObjectColor(runo, colors[bordeaux]);
   //plotter.setObjectColor(rdis, colors[violett]);
   //plotter.setObjectColor(rdib, colors[lila]);
-  //plotter.setObjectColor(rdit, colors[bordeaux]);
+  plotter.setObjectColor(rdit, colors[bordeaux]);
 
 
 	plotter.plot2d();

@@ -20,8 +20,8 @@ int main(int argc, char const *argv[])
 	typedef std::chrono::high_resolution_clock clock;
 	typedef std::chrono::microseconds timeunit;
 
-	typedef FLOAT_T<double> Number;
-	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
+	typedef FLOAT_T<mpfr_t> Number;
+	//carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
 

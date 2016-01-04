@@ -690,9 +690,9 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		if(!res.constraints().empty()) {
-			res.removeRedundantPlanes();
-		}
+		//if(!res.constraints().empty()) {
+		//	res.removeRedundantPlanes();
+		//}
 
 		return res;
 	}
@@ -757,15 +757,17 @@ bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
 	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
-		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
+		std::pair<Number, SOLUTION> evalRes2 = rhs.evaluate( plane.normal() );
+
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << evalRes2.first << "\t" ;
 		if ( evalRes.second == INFEAS ) {
-			//std::cout << "INFEAS" << std::endl;
+			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
-			//std::cout << "INFTY" << std::endl;
+			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < plane.offset() ) {
-			//std::cout << "Too large" << std::endl;
+		} else if ( evalRes.first < evalRes2.first ) {
+			std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}

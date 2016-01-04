@@ -129,7 +129,6 @@ namespace reachability {
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
 		// add initial valuation
-		flowpipe.push_back( _val );
 
 // check if initial Valuation fulfills Invariant
 #ifdef REACH_DEBUG
@@ -137,8 +136,23 @@ namespace reachability {
 		std::cout << !invariant.intersect( _val ).empty() << std::endl;
 		//std::cout << invariant.contains( _val ) << std::endl;
 #endif
+		Representation initial = invariant.intersect( _val );
 
-		if ( invariant.contains( _val ) ) {
+		// test initial
+		//for(auto vertex: initial.vertices()){
+		//	std::cout << "Test if vertex of initial " << vertex << " is inside _val" << std::endl;
+		//	assert(_val.contains(vertex));
+		//}
+		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+		//plotter.addObject(_val.vertices());
+		//unsigned p=plotter.addObject(initial.vertices());
+		//plotter.setObjectColor(p, colors[red]);
+		//plotter.plot2d();
+
+		if ( !initial.empty() ) {
+			flowpipe.push_back( initial );
+
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
@@ -178,8 +192,7 @@ namespace reachability {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 
-			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
-			//plotter.addObject(deltaValuation.vertices());
+			Representation deltaValuation = initial.linearTransformation( resultMatrix, translation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
@@ -187,7 +200,7 @@ namespace reachability {
 #endif
 
 			// R_0(X0) U R_delta(X0)
-			Representation unitePolytope = _val.unite( deltaValuation );
+			Representation unitePolytope = initial.unite( deltaValuation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
@@ -201,7 +214,7 @@ namespace reachability {
 			// matrix_t<Number> updatedActivityMatrix = _loc->activityMat();
 			// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
 			// radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-			radius = hausdorffError( Number( timeInterval ), _loc->activityMat(), _val.supremum() );
+			radius = hausdorffError( Number( timeInterval ), _loc->activityMat(), initial.supremum() );
 // radius = _val.hausdorffError(timeInterval, _loc->activityMat());
 
 #ifdef REACH_DEBUG
@@ -214,6 +227,7 @@ namespace reachability {
 			dim = unitePolytope.dimension();
 
 			Representation hausPoly = hypro::computePolytope<Number, Representation>( dim, radius );
+
 
 #ifdef REACH_DEBUG
 			std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
@@ -238,10 +252,10 @@ namespace reachability {
 			bool use_reduce_memory=false;
 			bool use_reduce_time=false;
 			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
-			unsigned REDUCE_CONST_time=8;
+			unsigned REDUCE_CONST_time=5;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
-			if(use_reduce_time) firstSegment = firstSegment.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+			if(use_reduce_time) firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 #endif
 
 			// insert first Segment into the empty flowpipe
@@ -324,7 +338,7 @@ namespace reachability {
 						// Drop with facet 2 -> 90%
 
 						// use guard/invariant to fit the segments to their compairsions
-						std::vector<vector_t<Number>> directions;
+						//std::vector<vector_t<Number>> directions;
 						//for(auto transition: _loc->transitions()){	// use guard
 						//	auto guard= transition->guard();
 						//	for(unsigned i=0; i<guard.mat.rows(); i++){
@@ -345,7 +359,8 @@ namespace reachability {
 						//}
 
 						// use simple reduction/heuristic
-						Representation poly_smoothed = tmp.heuristic();//reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						if(REDUCE_CONST_time>4) poly_smoothed.removeRedundantPlanes();
 
 						flowpipe.push_back(poly_smoothed);
 						lastSegment=poly_smoothed;

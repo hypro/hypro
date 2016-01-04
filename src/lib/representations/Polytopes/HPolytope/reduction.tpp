@@ -950,6 +950,7 @@ namespace hypro {
           return *this;
         }
 			}
+      //assert(res.contains(*this));
 
       //std::cout << "res (after) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl;
       //res.removeRedundantPlanes();
