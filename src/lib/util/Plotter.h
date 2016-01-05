@@ -71,6 +71,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 */
 	void plot2d() const;
 
+	void plotTex() const;
+
 	unsigned addObject( const std::vector<Point<Number>>& _points, bool sorted = false );
 	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted = false );
 	unsigned addObject( const std::vector<Hyperplane<Number>>& _planes );
