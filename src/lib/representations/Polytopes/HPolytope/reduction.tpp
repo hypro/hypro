@@ -900,7 +900,7 @@ namespace hypro {
 									dummy.normalize();
 									Number scalarproduct= dummy.dot(directed_normalized);
 
-									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end() && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
+									if(std::find(facets_erase.begin(), facets_erase.end(), memberOfVertex)==facets_erase.end()){//} && !carl::AlmostEqual2sComplement(scalarproduct+1, Number(1.0)) && scalarproduct>0){
 										facets_erase.push_back(memberOfVertex);
 									}
 								}
