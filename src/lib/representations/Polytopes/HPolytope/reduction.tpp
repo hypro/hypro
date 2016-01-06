@@ -481,7 +481,7 @@ namespace hypro {
               }
             }
             //std::cout << std::endl;
-            double uniteValue= ( scalarproduct_a_b/scalarproducts);
+            double uniteValue= ( 2*scalarproduct_a_b+scalarproducts);
             if(uniteValue>bestUniteValue){
               bestUniteIndex=std::make_pair(a,b);
               bestUniteValue=uniteValue;
@@ -548,12 +548,19 @@ namespace hypro {
 
   	// init
   	HPolytope<Number> res = *this;
-  	std::vector<Point<Number>> vertices = res.vertices();
-  	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
-  	std::vector<vector_t<Number>> evaluations;
 
-  	std::vector<unsigned> neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
-  	std::vector<unsigned> neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
+    std::vector<vector_t<Number>> evaluations;
+    std::vector<Point<Number>> vertices;
+    std::vector<std::vector<unsigned>> membersOfVertices;
+    std::vector<unsigned> neighborsOf_a, neighborsOf_b;
+
+    if(strat>0){
+    	vertices = res.vertices();
+    	membersOfVertices = getMembersOfVertices(vertices);
+
+    	neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
+    	neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
+    }
 
   	// neighbor test for unite
   	if(strat>1 && strat<6 && std::find(neighborsOf_a.begin(), neighborsOf_a.end(), b)==neighborsOf_a.end()){
@@ -764,10 +771,13 @@ namespace hypro {
           //std::cout << "Weights computed and stored: " << weights << std::endl;
 
   				// norm united facet works as unite_normal, but with weights for each component
-          vector_t<Number> vector_withWeight_a = res.constraints().at(a).normal()*weights.first;
-          vector_t<Number> vector_withWeight_b = res.constraints().at(b).normal()*weights.second;
+          vector_t<Number> vector_a = res.constraints().at(a).normal();
+          vector_t<Number> vector_b = res.constraints().at(b).normal();
 
-  				vector_t<Number> uniteVector = vector_withWeight_a + vector_withWeight_b;
+          vector_a.normalize();
+          vector_b.normalize();
+
+  				vector_t<Number> uniteVector = vector_a*weights.first + vector_b*weights.second;
           //std::cout << "uniteVector Weight: " << uniteVector << std::endl << std::endl;
 
   				Number uniteVector_offset;
@@ -794,12 +804,12 @@ namespace hypro {
   	if(res.isBounded(evaluations)){
 
   		//check if all vertices are inside the new polytope
-      for(Point<Number> vertex: vertices){
-        if(!res.contains(vertex)){
-          //std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
-          return *this;
-        }
-			}
+      //for(Point<Number> vertex: vertices){
+      //  if(!res.contains(vertex)){
+      //    //std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
+      //    return *this;
+      //  }
+			//}
 
   		return res;
   	}
