@@ -101,7 +101,8 @@ TYPED_TEST(ConverterTest, toBox)
 {
 	SupportFunction<TypeParam> support = hypro::SupportFunction<TypeParam>(SF_TYPE::POLY, this->matrix, this->distances);
 	hypro::Box<TypeParam> result;
-	convert(this->box, result);
+	convert(this->box, result, EXACT);
+        convert(this->box, result, OVER);
 	convert(this->polytope, result);
 	convert(support, result);
 	convert(this->vpolytope, result);
