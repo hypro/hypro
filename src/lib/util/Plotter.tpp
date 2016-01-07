@@ -181,6 +181,145 @@ void Plotter<Number>::plot2d() const {
 	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
 }
 
+template<typename Number>
+void Plotter<Number>::plotTex() const {
+	mOutfile.open( mFilename + ".tex" );
+
+	if ( !mObjects.empty() || !mPoints.empty() ) {
+		// set object
+		vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
+		vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
+
+		mOutfile << "\\begin{tikzpicture}[]\n";
+
+		unsigned objectCount = 1;
+		unsigned currId = 0;
+		unsigned tmpId = 0;
+		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
+		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
+			if ( currId != objectIt->first ) {
+				currId = objectIt->first;
+				tmpId++;
+				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
+			}
+
+			if(mSettings.fill)
+				mOutfile << "\t\\draw[blue, thick, fill=blue, fill opacity=.5]";
+			else
+				mOutfile << "\t\\draw[blue, thick]";
+
+			for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size()-1; ++pointIndex ) {
+				assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
+				if ( objectIt->second[pointIndex].dimension() == 0 ) {
+					continue;
+				}
+				mOutfile << " (" << double( objectIt->second[pointIndex].at( 0 ) );
+
+				// update min and max
+				min( 0 ) =
+					  min( 0 ) < objectIt->second[pointIndex].at( 0 ) ? min( 0 ) : objectIt->second[pointIndex].at( 0 );
+				max( 0 ) =
+					  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
+
+				for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+					mOutfile << ", " << double( objectIt->second[pointIndex].at( d ) );
+					// update min and max
+					min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
+																			   : objectIt->second[pointIndex].at( d );
+					max( d ) = max( d ) > objectIt->second[pointIndex].at( d ) ? max( d )
+																			   : objectIt->second[pointIndex].at( d );
+				}
+				mOutfile << ") -- ";
+			}
+			// last point
+			assert( objectIt->second[objectIt->second.size()-1].dimension() <= 2 );  // TODO: Project to 2d
+			if ( objectIt->second[objectIt->second.size()-1].dimension() == 0 ) {
+				continue;
+			}
+			mOutfile << " (" << double( objectIt->second[objectIt->second.size()-1].at( 0 ) );
+
+			// update min and max
+			min( 0 ) =
+				  min( 0 ) < objectIt->second[objectIt->second.size()-1].at( 0 ) ? min( 0 ) : objectIt->second[objectIt->second.size()-1].at( 0 );
+			max( 0 ) =
+				  max( 0 ) > objectIt->second[objectIt->second.size()-1].at( 0 ) ? max( 0 ) : objectIt->second[objectIt->second.size()-1].at( 0 );
+
+			for ( unsigned d = 1; d < objectIt->second[objectIt->second.size()-1].dimension(); ++d ) {
+				mOutfile << ", " << double( objectIt->second[objectIt->second.size()-1].at( d ) );
+				// update min and max
+				min( d ) = min( d ) < objectIt->second[objectIt->second.size()-1].at( d ) ? min( d )
+																		   : objectIt->second[objectIt->second.size()-1].at( d );
+				max( d ) = max( d ) > objectIt->second[objectIt->second.size()-1].at( d ) ? max( d )
+																		   : objectIt->second[objectIt->second.size()-1].at( d );
+			}
+			mOutfile << ") -- cycle;\n";
+
+			//// color lookup
+			//auto color = mSettings.color;
+			//if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
+			//	color = mObjectColors.at( objectIt->first );
+			//}
+//
+//			//if ( mSettings.fill )
+//			//	mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "'\n";
+//			//else
+			//	mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "'\n";
+
+			++objectCount;
+		}
+
+		mOutfile << "\n";
+
+		// collect ranges
+		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
+			// update min and max
+			min(0) = min(0) > pointIt->second.at(0) ? pointIt->second.at(0) : min(0);
+			min(1) = min(1) > pointIt->second.at(1) ? pointIt->second.at(1) : min(1);
+			max(0) = max(0) < pointIt->second.at(0) ? pointIt->second.at(0) : max(0);
+			max(1) = max(1) < pointIt->second.at(1) ? pointIt->second.at(1) : max(1);
+		}
+		std::map<unsigned, carl::Interval<double>> ranges;
+		for ( unsigned d = 0; d < min.rows(); ++d ) {
+			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
+			ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+		}
+		assert(ranges.size() == 2);
+
+		// create plane functions
+		if(!mPlanes.empty()){
+			mOutfile << "\n";
+			for( const auto& planePair : mPlanes ) {
+				for( const auto& plane : planePair.second ) {
+					assert(plane.dimension() == 2);
+					mOutfile << "\t\\draw[domain="<< ranges[0].lower() << ":" << ranges[0].upper() <<", smooth, variable=\\x] plot ({\\x},";
+					mOutfile << "{" << double(-plane.normal()(0)/plane.normal()(1)) << "*x";
+					double off = double(plane.offset()/plane.normal()(1));
+					if(off > 0)
+						mOutfile << "+" << off << "}";
+					else
+						mOutfile << "}";
+
+					mOutfile << ");\n";
+				}
+			}
+
+		}
+
+		if(mSettings.axes) {
+			mOutfile << "\t\\draw[help lines]";
+			mOutfile << " (" << ranges[0].lower() << "," << ranges[1].lower() << ") grid (" << ranges[0].upper() << "," << ranges[1].upper() << ");\n";
+		}
+
+		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
+			mOutfile << "\t\\fill[fill=blue] (" << double(pointIt->second.at(0)) << "," << double(pointIt->second.at(1)) << ") circle [radius=2pt];\n";
+		}
+
+		mOutfile << "\\end{tikzpicture}\n";
+	}
+	mOutfile.close();
+	std::cout << std::endl << "Plotted to " << mFilename << ".tex" << std::endl;
+}
+
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
 	if ( !sorted ) {

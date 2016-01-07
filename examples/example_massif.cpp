@@ -13,17 +13,17 @@ using namespace hypro;
 int main(int argc, char const *argv[])
 {
 	typedef double Number;
-  unsigned dim = 5;
-  unsigned amountOfFacets = 6;
-  unsigned amountOfReducedFacets = 4;
+  unsigned dim = 4;
+  unsigned amountOfFacets = 500;
+  //unsigned amountOfReducedFacets = 4;
 
-  std::cout << "Example_massif with dimension " << dim << " and facets from " << amountOfFacets << " to " << amountOfReducedFacets << std::endl;
+  std::cout << "Example_massif with dimension " << dim << " and facets from " << amountOfFacets << std::endl; // " to " << amountOfReducedFacets << std::endl;
 
 	/* Do stuff here */
 
   // HPolytopes Examples
   HPolytope<Number> test_massif, test_massif2, test_massif3, test_massif4;
-  std::vector<vector_t<Number>> directions = test_massif.computeTemplate(dim,amountOfFacets);
+  std::vector<vector_t<Number>> directions = computeTemplate<Number>(dim,amountOfFacets);
 
 
   for(vector_t<Number> direction: directions){
@@ -43,16 +43,16 @@ int main(int argc, char const *argv[])
 
   std::cout << "Size of test_massif before reduction is " << sizeOfHPolytopeBefore << " and amount of facets is " << sizeBefore << std::endl;
 
-  test_massif = test_massif.reduce_directed(test_massif.computeTemplate(dim,amountOfReducedFacets), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  //test_massif = test_massif.reduce_directed(computeTemplate<Number>(dim,amountOfReducedFacets), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
-  double sizeOfHPolytopeAfter = test_massif.sizeOfHPolytope();
-  double sizeAfter = test_massif.size();
+  //double sizeOfHPolytopeAfter = test_massif.sizeOfHPolytope();
+  //double sizeAfter = test_massif.size();
 
-  double relationSize = sizeBefore/sizeAfter;
-  double relationSizeOfHPoly = sizeOfHPolytopeBefore/sizeOfHPolytopeAfter;
+  //double relationSize = sizeBefore/sizeAfter;
+  //double relationSizeOfHPoly = sizeOfHPolytopeBefore/sizeOfHPolytopeAfter;
 
-  std::cout << "Size of test_massif after reduction is " << sizeOfHPolytopeAfter << " and amount of facets is " << sizeAfter << std::endl << std::endl;
-  std::cout << "Relation fo size: " << relationSize << ", relation of polySize: " << relationSizeOfHPoly << " and relation of relations: " <<  relationSize/relationSizeOfHPoly << std::endl;
+  //std::cout << "Size of test_massif after reduction is " << sizeOfHPolytopeAfter << " and amount of facets is " << sizeAfter << std::endl << std::endl;
+  //std::cout << "Relation fo size: " << relationSize << ", relation of polySize: " << relationSizeOfHPoly << " and relation of relations: " <<  relationSize/relationSizeOfHPoly << std::endl;
 
   return 0;
 }

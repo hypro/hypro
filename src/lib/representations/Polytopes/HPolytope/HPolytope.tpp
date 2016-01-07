@@ -690,9 +690,9 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		if(!res.constraints().empty()) {
-			res.removeRedundantPlanes();
-		}
+		//if(!res.constraints().empty()) {
+		//	res.removeRedundantPlanes();
+		//}
 
 		return res;
 	}
@@ -742,7 +742,8 @@ template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 	//std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
-		if ( plane.normal().dot( vec ) > plane.offset() ) {
+		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset()) && plane.normal().dot( vec ) > plane.offset() ) {
+			//std::cout << "Difference is " << plane.normal().dot( vec )-plane.offset() << " with " << plane.normal().dot( vec )<< " and "<< plane.offset()<< std::endl;
 			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
 			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
@@ -756,15 +757,17 @@ bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
 	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
-		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
+		std::pair<Number, SOLUTION> evalRes2 = rhs.evaluate( plane.normal() );
+
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << evalRes2.first << "\t" ;
 		if ( evalRes.second == INFEAS ) {
-			//std::cout << "INFEAS" << std::endl;
+			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
-			//std::cout << "INFTY" << std::endl;
+			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < plane.offset() ) {
-			//std::cout << "Too large" << std::endl;
+		} else if ( evalRes.first < evalRes2.first ) {
+			std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}

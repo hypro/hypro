@@ -20,8 +20,8 @@ int main(int argc, char const *argv[])
 	typedef std::chrono::high_resolution_clock clock;
 	typedef std::chrono::microseconds timeunit;
 
-	typedef FLOAT_T<double> Number;
-	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
+	typedef FLOAT_T<mpfr_t> Number;
+	//carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
 
@@ -215,33 +215,37 @@ int main(int argc, char const *argv[])
 			soFlowpipe += poly.sizeOfHPolytope();
 		}
 	}
-	std::cout << "Reduction of flowpipe: "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
-	std::cout << "Time of flowpipe: "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl;
+	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
+	std::cout << "Time of flowpipe with timeOfReachReduction ("<< timeOfReachReduction << "): "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl;
 
+	// 4, 400: 480656, 2619
+	// 5, 1000: 971456, 5463.16
 
 	// test reduction if flowpipes intersect
-	std::cout << " Test (intersection)" << std::endl;
 	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1;
 	bool intersect=false;
 
-	for(unsigned i=0; i<flowpipes.size(); i++){
-		if(intersect) break;
-		for(unsigned ii=0; ii<flowpipes.at(i).size(); ii++){
+	if(false){
+		std::cout << " Test (intersection)" << std::endl;
+		for(unsigned i=0; i<flowpipes.size(); i++){
 			if(intersect) break;
-			for(unsigned j=i+1; j<flowpipes.size(); j++){
+			for(unsigned ii=0; ii<flowpipes.at(i).size(); ii++){
 				if(intersect) break;
-				for(unsigned jj=0; jj<flowpipes.at(j).size(); jj++){
-					std::cout << "\r  " << i <<"." << ii <<"/"<< flowpipes.size()-1 <<"." << flowpipes.at(i).size()-1  << " and " << j <<"." << jj  << std::flush;
+				for(unsigned j=i+1; j<flowpipes.size(); j++){
+					if(intersect) break;
+					for(unsigned jj=0; jj<flowpipes.at(j).size(); jj++){
+						std::cout << "\r  " << i <<"." << ii <<"/"<< flowpipes.size()-1 <<"." << flowpipes.at(i).size()-1  << " and " << j <<"." << jj  << std::flush;
 
-					if(!flowpipes.at(i).at(ii).intersect(flowpipes.at(j).at(jj)).empty()){
-						intersect=true;
-						flowpipe_one = i;
-						segment_one = ii;
-						flowpipe_two = j;
-						segment_two = jj;
+						if(!flowpipes.at(i).at(ii).intersect(flowpipes.at(j).at(jj)).empty()){
+							intersect=true;
+							flowpipe_one = i;
+							segment_one = ii;
+							flowpipe_two = j;
+							segment_two = jj;
 
-						std::cout << "  " << ii << " of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
-						break;
+							std::cout << "  " << ii << " of "<< i << " and "<< jj << " of " << j << " intersects" << std::endl;
+							break;
+						}
 					}
 				}
 			}
@@ -277,8 +281,18 @@ int main(int argc, char const *argv[])
 				}
 				unsigned p=plotter.addObject(points);
 				if((flowpipe_count==flowpipe_one && count==segment_one) || (flowpipe_count==flowpipe_two && count==segment_two)){
+					plotter.setObjectColor(p, colors[orange]);
+				}
+				else if(flowpipe_count==1){
 					plotter.setObjectColor(p, colors[red]);
 				}
+				else if (flowpipe_count==2){
+					plotter.setObjectColor(p, colors[green]);
+				}
+				else if (flowpipe_count==3){
+					plotter.setObjectColor(p, colors[bordeaux]);
+				}
+				//}
 				std::cout << "\r Flowpipe "<< index <<": Added object " << count+1 << "/" << maxCount << std::flush;
 				points.clear();
 				++count;

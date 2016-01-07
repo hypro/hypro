@@ -128,7 +128,6 @@ namespace reachability {
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
 		// add initial valuation
-		flowpipe.push_back( _val );
 
 // check if initial Valuation fulfills Invariant
 #ifdef REACH_DEBUG
@@ -136,8 +135,23 @@ namespace reachability {
 		std::cout << !invariant.intersect( _val ).empty() << std::endl;
 		//std::cout << invariant.contains( _val ) << std::endl;
 #endif
+		Representation initial = invariant.intersect( _val );
 
-		if ( invariant.contains( _val ) ) {
+		// test initial
+		//for(auto vertex: initial.vertices()){
+		//	std::cout << "Test if vertex of initial " << vertex << " is inside _val" << std::endl;
+		//	assert(_val.contains(vertex));
+		//}
+		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+		//plotter.addObject(_val.vertices());
+		//unsigned p=plotter.addObject(initial.vertices());
+		//plotter.setObjectColor(p, colors[red]);
+		//plotter.plot2d();
+
+		if ( !initial.empty() ) {
+			flowpipe.push_back( initial );
+
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
@@ -177,8 +191,7 @@ namespace reachability {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 
-			Representation deltaValuation = _val.linearTransformation( resultMatrix, translation );
-			//plotter.addObject(deltaValuation.vertices());
+			Representation deltaValuation = initial.linearTransformation( resultMatrix, translation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
@@ -186,7 +199,7 @@ namespace reachability {
 #endif
 
 			// R_0(X0) U R_delta(X0)
-			Representation unitePolytope = _val.unite( deltaValuation );
+			Representation unitePolytope = initial.unite( deltaValuation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
@@ -200,7 +213,7 @@ namespace reachability {
 			// matrix_t<Number> updatedActivityMatrix = _loc->activityMat();
 			// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
 			// radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-			radius = hausdorffError( Number( timeInterval ), _loc->activityMat(), _val.supremum() );
+			radius = hausdorffError( Number( timeInterval ), _loc->activityMat(), initial.supremum() );
 // radius = _val.hausdorffError(timeInterval, _loc->activityMat());
 
 #ifdef REACH_DEBUG
@@ -213,6 +226,7 @@ namespace reachability {
 			dim = unitePolytope.dimension();
 
 			Representation hausPoly = hypro::computePolytope<Number, Representation>( dim, radius );
+
 
 #ifdef REACH_DEBUG
 			std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
@@ -233,6 +247,16 @@ namespace reachability {
 			//plotter.plot2d();
 #endif
 
+#ifdef USE_REDUCTION
+			bool use_reduce_memory=false;
+			bool use_reduce_time=false;
+			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
+			unsigned REDUCE_CONST_time=5;
+			unsigned convexHull_count=0;
+			std::vector<Point<Number>> points_convexHull;
+			if(use_reduce_time) firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+#endif
+
 			// insert first Segment into the empty flowpipe
 			flowpipe.push_back( firstSegment );
 
@@ -246,11 +270,6 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop entered ---" << std::endl;
 #endif
-
-			bool use_reduce_memory=false, use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =14, REDUCE_CONST=15;
-			unsigned convexHull_count=0;
-			std::vector<Point<Number>> points_convexHull;
 
 			// for each time interval perform linear Transformation
 			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
@@ -275,6 +294,7 @@ namespace reachability {
 				std::cout << "Invariant: " << invariant << std::endl;
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
+#ifdef USE_REDUCTION
 				// MEMORY-reduction
 				if(use_reduce_memory){
 					if(!tmp.empty()){
@@ -315,22 +335,58 @@ namespace reachability {
 				else if(use_reduce_time && !tmp.empty() ){
 					if(tmp.size()>3){
 						// Drop with facet 2 -> 90%
-						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, tmp.size()-1), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+						// use guard/invariant to fit the segments to their compairsions
+						//std::vector<vector_t<Number>> directions;
+						//for(auto transition: _loc->transitions()){	// use guard
+						//	auto guard= transition->guard();
+						//	for(unsigned i=0; i<guard.mat.rows(); i++){
+						//		vector_t<Number> guard_vector = vector_t<Number>(2);
+						//		guard_vector(0)=guard.mat(i,0);
+						//		guard_vector(1)=guard.mat(i,1);
+						//		directions.push_back(guard_vector);
+						//	}
+						//}
+
+						//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // use invariant
+						//	directions.push_back(invariant.constraints().at(inv_index).normal());
+						//}
+
+						//Representation poly_smoothed;
+						//if(!directions.empty()){
+						//	poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
+						//}
+
+						// use simple reduction/heuristic
+						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						if(REDUCE_CONST_time>4) poly_smoothed.removeRedundantPlanes();
+
 						flowpipe.push_back(poly_smoothed);
+						lastSegment=poly_smoothed;
 					}
 					else {
 						flowpipe.push_back(tmp);
+						lastSegment = tmp;
 					}
 				}
+#endif
 
 				if ( !tmp.empty() ) {
-
+#ifdef USE_REDUCTION
 					if(!use_reduce_memory && !use_reduce_time){
 						flowpipe.push_back( tmp );
 					}
+					if(!use_reduce_time){
+						// update lastSegment
+						lastSegment = tmp;
+					}
+#else
+					flowpipe.push_back( tmp );
 
 					// update lastSegment
 					lastSegment = tmp;
+#endif
+
 				} else {
 					break;
 				}

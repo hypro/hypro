@@ -16,6 +16,8 @@
 #include "../util/VariablePool.h"
 #include "../config.h"
 
+//enum for differentiating between exact conversion and over-/underapproximation.
+enum CONV_MODE {EXACT, OVER, UNDER}; 
 // include representations for conversion
 #include "Box/Box.h"
 #include "Polytope/Polytope.h"
@@ -30,3 +32,4 @@
 #include "Polytopes/HPolytope/converterToHPolytope.h"
 #include "Polytopes/VPolytope/converterToVPolytope.h"
 #include "Zonotope/converterToZonotope.h"
+

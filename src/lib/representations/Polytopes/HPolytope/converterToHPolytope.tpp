@@ -12,21 +12,21 @@
 namespace hypro {
     //conversion from H-Polytope to H-Polytope
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, hypro::HPolytope<Number>& _target ){
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode ){
         _target = _source;
         return true;        
     }
     
     //conversion from V-Polytope to H-Polytope
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, hypro::HPolytope<Number>& _target ){
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode ){
         _target = HPolytope<Number>(_source);                                                    //converts the source object into an H-polytope via constructor
         return true;
     }
     
     //conversion from Box to H-Polytope
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::HPolytope<Number>& _target ){
+    static bool convert( const hypro::Box<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode ){
          unsigned dim = _source.dimension();                                                     //gets dimension of box
          assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
@@ -51,7 +51,7 @@ namespace hypro {
     
     //TODO
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, hypro::HPolytope<Number>& _target ){
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode ){
         return true;
     } 
 

@@ -229,8 +229,9 @@ int main(int argc, char const *argv[])
 		}
 }
 
-std::cout << std::endl;
+	std::cout << std::endl;
 	plotter.plot2d();
+	plotter.plotTex();
 
 	return 0;
 }

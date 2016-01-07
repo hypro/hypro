@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
 	std::cout << "Added point." << std::endl;
 
 	plotter.plot2d();
+	plotter.plotTex();
 
 	return 0;
 }
