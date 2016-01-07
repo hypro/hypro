@@ -203,7 +203,10 @@ void Plotter<Number>::plotTex() const {
 				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
 			}
 
-			mOutfile << "\t\\draw[blue, thick, fill=blue, fill opacity=.5]";
+			if(mSettings.fill)
+				mOutfile << "\t\\draw[blue, thick, fill=blue, fill opacity=.5]";
+			else
+				mOutfile << "\t\\draw[blue, thick]";
 
 			for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size()-1; ++pointIndex ) {
 				assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d

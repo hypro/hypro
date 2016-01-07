@@ -14,25 +14,26 @@ namespace hypro {
     template <typename Number>
     static bool convert( const hypro::VPolytope<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode ){
         _target = _source;
-        return true;        
+        return true;
     }
     //TODO
     template <typename Number>
     static bool convert( const hypro::HPolytope<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode ){
         return true;
     }
-    
+
     //TODO
     template <typename Number>
     static bool convert( const hypro::Box<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode ){
+    	_target = std::move(hypro::VPolytope<Number>(_source.vertices()));
         return true;
     }
-    
+
     //TODO
     template <typename Number>
     static bool convert( const hypro::Zonotope<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode ){
         return true;
-    } 
+    }
 
 }  // namespace
 
