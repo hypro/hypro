@@ -96,7 +96,7 @@ namespace reachability {
             std::size_t depth = 0;
             std::set<std::size_t> R_new;
             std::set<std::size_t> R;
-                
+
             return R;
         }
 
@@ -250,7 +250,7 @@ namespace reachability {
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false;
 			bool use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=50;
+			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=15;
 			unsigned REDUCE_CONST_time=5;
 			unsigned convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;

@@ -953,6 +953,10 @@ namespace hypro {
   		res.erase(facet_erase);
   	}
 
+    if(strat == REDUCTION_STRATEGY::DIRECTED_TEMPLATE){
+      return res;
+    }
+
   	if(res.isBounded(evaluations)){
       for(Point<Number> vertex: vertices){
         if(!res.contains(vertex)){

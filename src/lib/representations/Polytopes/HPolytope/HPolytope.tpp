@@ -642,7 +642,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	HPolytope<Number> res;
 	Number result;
 
-	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+	//std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
 
 	// evaluation of rhs in directions of lhs
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
@@ -654,8 +654,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
-			std::cout << __func__ << " Evaluated against " <<
-			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			//std::cout << __func__ << " Evaluated against " <<
+			//mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
 
@@ -669,8 +669,8 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
-			std::cout << __func__ << " Evaluated against " <<
-			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			//std::cout << __func__ << " Evaluated against " <<
+			//mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
 	//res.removeRedundantPlanes();
@@ -690,9 +690,9 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		//if(!res.constraints().empty()) {
-		//	res.removeRedundantPlanes();
-		//}
+		if(!res.constraints().empty()) {
+			res.removeRedundantPlanes();
+		}
 
 		return res;
 	}

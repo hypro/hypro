@@ -215,17 +215,19 @@ int main(int argc, char const *argv[])
 			soFlowpipe += poly.sizeOfHPolytope();
 		}
 	}
-	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
+	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/1442384.0)*100 << "%" << std::endl;
 	std::cout << "Time of flowpipe with timeOfReachReduction ("<< timeOfReachReduction << "): "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl;
 
 	// 4, 400: 480656, 2619
 	// 5, 1000: 971456, 5463.16
 
+	// for mpfr_t 1442384 2542...
+
 	// test reduction if flowpipes intersect
 	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1;
 	bool intersect=false;
 
-	if(false){
+	if(true){
 		std::cout << " Test (intersection)" << std::endl;
 		for(unsigned i=0; i<flowpipes.size(); i++){
 			if(intersect) break;
@@ -281,16 +283,16 @@ int main(int argc, char const *argv[])
 				}
 				unsigned p=plotter.addObject(points);
 				if((flowpipe_count==flowpipe_one && count==segment_one) || (flowpipe_count==flowpipe_two && count==segment_two)){
-					plotter.setObjectColor(p, colors[orange]);
-				}
-				else if(flowpipe_count==1){
-					plotter.setObjectColor(p, colors[red]);
-				}
-				else if (flowpipe_count==2){
 					plotter.setObjectColor(p, colors[green]);
 				}
-				else if (flowpipe_count==3){
+				else if(flowpipe_count==1){
 					plotter.setObjectColor(p, colors[bordeaux]);
+				}
+				else if (flowpipe_count==2){
+					plotter.setObjectColor(p, colors[red]);
+				}
+				else if (flowpipe_count==3){
+					plotter.setObjectColor(p, colors[orange]);
 				}
 				//}
 				std::cout << "\r Flowpipe "<< index <<": Added object " << count+1 << "/" << maxCount << std::flush;

@@ -208,8 +208,8 @@ int main(int argc, char const *argv[])
 
 	std::cout << std::endl << "Generated flowpipe, start convexHull - reduce." << std::endl;
 
-	unsigned CONVEXHULL_CONST = 50;
-	unsigned REDUCE_CONST=100;
+	unsigned CONVEXHULL_CONST = 59;
+	unsigned REDUCE_CONST=400;
 
 	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
 		//for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
