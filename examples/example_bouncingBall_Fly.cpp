@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
 	typedef std::chrono::high_resolution_clock clock;
 	typedef std::chrono::microseconds timeunit;
 
-	typedef FLOAT_T<mpfr_t> Number;
+	typedef FLOAT_T<double> Number;
 	//carl::FLOAT_T<mpfr_t>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
@@ -215,9 +215,10 @@ int main(int argc, char const *argv[])
 			soFlowpipe += poly.sizeOfHPolytope();
 		}
 	}
-	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/1442384.0)*100 << "%" << std::endl;
+	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
 	std::cout << "Time of flowpipe with timeOfReachReduction ("<< timeOfReachReduction << "): "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl;
 
+	std::cout << std::endl << ((double) soFlowpipe/480656.0)*100 << " " << ((double) timeOfReachReduction/2619)*100  << std::endl;
 	// 4, 400: 480656, 2619
 	// 5, 1000: 971456, 5463.16
 

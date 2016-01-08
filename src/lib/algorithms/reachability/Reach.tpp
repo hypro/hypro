@@ -250,10 +250,15 @@ namespace reachability {
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false;
 			bool use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =10, REDUCE_CONST=15;
+			unsigned CONVEXHULL_CONST =16, REDUCE_CONST=15;
 			unsigned REDUCE_CONST_time=5;
-			unsigned convexHull_count=0;
+			unsigned convexHull_count=1;
 			std::vector<Point<Number>> points_convexHull;
+
+			// operate on first segment
+			for(auto vertex : firstSegment.vertices()){
+				points_convexHull.push_back(vertex);
+			}
 			if(use_reduce_time) firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 #endif
 
@@ -297,37 +302,52 @@ namespace reachability {
 #ifdef USE_REDUCTION
 				// MEMORY-reduction
 				if(use_reduce_memory){
-					if(!tmp.empty()){
-						std::vector<Point<Number>> points = tmp.vertices();
-						for(Point<Number> point: points){
-							if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
-								points_convexHull.push_back(point);
-							}
+					if(CONVEXHULL_CONST==1){
+						if(!tmp.empty()){
+							Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							//poly_smoothed.removeRedundantPlanes();
+
+							flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
 						}
-						convexHull_count++;
+						else flowpipe.push_back(lastSegment);
 					}
-
-					if(!points_convexHull.empty() && (convexHull_count==CONVEXHULL_CONST || tmp.empty() || i>=mSettings.discretization)){
-						// Create convexHull of CONVEXHULL_CONST representations
-						auto facets = convexHull(points_convexHull);
-
-						std::vector<Hyperplane<Number>> hyperplanes;
-						for(unsigned j = 0; j<facets.first.size(); j++){
-							hyperplanes.push_back(facets.first.at(j)->hyperplane());
+					else if (CONVEXHULL_CONST>1){
+						if(!tmp.empty()){
+							for(Point<Number> point: tmp.vertices()){
+								if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
+									points_convexHull.push_back(point);
+								}
+							}
+							convexHull_count++;
 						}
-						Representation convexHull = Representation(hyperplanes);
 
-						// Reduce to REDUCE_CONST
-						Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						if(!points_convexHull.empty() && (convexHull_count==CONVEXHULL_CONST || tmp.empty() || i>=mSettings.discretization)){
+							// Create convexHull of CONVEXHULL_CONST representations
 
-						poly_smoothed.removeRedundantPlanes();
-						//std::cout << "Size of poly_smoothed after reduction: " << poly_smoothed.size() << std::endl;
+							auto facets = convexHull(points_convexHull);
 
-						flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
+							std::vector<Hyperplane<Number>> hyperplanes;
+							for(unsigned j = 0; j<facets.first.size(); j++){
+								hyperplanes.push_back(facets.first.at(j)->hyperplane());
+							}
+							Representation convexHull = Representation(hyperplanes);
 
-						// reset variables
-						convexHull_count=0;
-						points_convexHull.clear();
+							// Reduce to REDUCE_CONST
+							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+							//poly_smoothed.removeRedundantPlanes();
+							//std::cout << "Size of poly_smoothed after reduction: " << poly_smoothed.size() << std::endl;
+
+							//flowpipe.pop_back(); //remove tmp
+							flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
+
+							//flowpipe.push_back(tmp);
+
+							// reset variables
+							convexHull_count=0;
+							points_convexHull.clear();
+						}
+						if(tmp.empty()) flowpipe.push_back(lastSegment);
 					}
 				}
 
@@ -373,10 +393,10 @@ namespace reachability {
 
 				if ( !tmp.empty() ) {
 #ifdef USE_REDUCTION
-					if(!use_reduce_memory && !use_reduce_time){
+					if(!use_reduce_memory && !use_reduce_time){ // no reduction at all
 						flowpipe.push_back( tmp );
 					}
-					if(!use_reduce_time){
+					if(use_reduce_memory && !use_reduce_time){ // we are in reduce_memory mode
 						// update lastSegment
 						lastSegment = tmp;
 					}

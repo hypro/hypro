@@ -202,17 +202,17 @@ int main(int argc, char const *argv[])
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability(); // use_reduce in Reach.tpp must be false
 
-	bool plotting=true;
+	bool plotting=false;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
 	std::cout << std::endl << "Generated flowpipe, start convexHull - reduce." << std::endl;
 
-	unsigned CONVEXHULL_CONST = 59;
-	unsigned REDUCE_CONST=400;
+	//unsigned CONVEXHULL_CONST = 59;
+	unsigned REDUCE_CONST=600;
 
 	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
-		//for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
+		for(unsigned CONVEXHULL_CONST=58; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
 
 			double soFlowpipe=0, soFlowpipeS=0; // sizeOf flowpipes
 			std::vector<std::vector<Representation>>  flowpipes_smoothed;
@@ -257,7 +257,7 @@ int main(int argc, char const *argv[])
 
 							// Reduce to REDUCE_CONST
 							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							//poly_smoothed.removeRedundantPlanes();
+							poly_smoothed.removeRedundantPlanes(); // with removing of redundantPlanes (+size, -speed)
 
 							// test if every used segment is contained in convexHull
 							//for(unsigned i=0; i<=CONVEXHULL_CONST; i++){
@@ -371,10 +371,15 @@ int main(int argc, char const *argv[])
 			if(contained) std::cout << "  Every segment is contained in reduction!" << std::endl;
 
 
-			std::cout << std::endl << std::endl << " Stats:"<< std::endl << "  CONVEXHULL_CONST:  " << CONVEXHULL_CONST << std::endl << "  REDUCE_CONST:      " << REDUCE_CONST << std::endl;
-			std::cout  << "  flowpipe:          " << soFlowpipe << std::endl << "  flowpipe_smoothed: " << soFlowpipeS << std::endl;
-			std::cout << "  reduction of       " << (soFlowpipeS/soFlowpipe)*100 << "%" << std::endl << std::endl;
+			//std::cout << std::endl << std::endl << " Stats:"<< std::endl << "  CONVEXHULL_CONST:  " << CONVEXHULL_CONST << std::endl << "  REDUCE_CONST:      " << REDUCE_CONST << std::endl;
+			//std::cout  << "  flowpipe:          " << soFlowpipe << std::endl << "  flowpipe_smoothed: " << soFlowpipeS << std::endl;
+			//std::cout << "  reduction of       " << (soFlowpipeS/soFlowpipe)*100 << "%" << std::endl << std::endl;
+			//std::cout << std::endl << "("<<CONVEXHULL_CONST<<","<<REDUCE_CONST<<"):" << (soFlowpipeS/soFlowpipe)*100 << "%";
 
+			std::cout << std::endl <<CONVEXHULL_CONST<<" " << (soFlowpipeS/soFlowpipe)*100;
+
+			if(intersect) std::cout << " I" << std::endl<< std::endl;
+			else std::cout << std::endl<< std::endl;
 
 			if(plotting){
 				std::cout << std::endl << "Generated flowpipe, start plotting." << std::endl;
@@ -443,8 +448,8 @@ int main(int argc, char const *argv[])
 					flowpipe_smoothed_count++;
 				}
 			}
-			//if(intersect) break;
-		//}
+			if(intersect) break;
+		}
 	//}
 
 	std::cout << std::endl;
