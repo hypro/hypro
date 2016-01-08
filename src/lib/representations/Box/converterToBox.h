@@ -25,8 +25,9 @@ namespace hypro {
     static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
     /**
-     * @brief Converts a support function into a box.
-     * 
+     * @brief Converts a support function into a box. (overapproximation in the general case)
+     * @detail Creates a normal matrix with 2*d rows (for 2*d faces) and d columns that contains the basic 2 directions for every dimension.
+     * The source object then gets evaluated in these 2*d basic directions which yields the interval end points of the new box.
      *   
      * @param _source Support Function that needs to be converted.
      * @param _target An arbitrary box that gets overwritten with the converted object.

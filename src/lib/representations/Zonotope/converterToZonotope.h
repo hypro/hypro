@@ -57,6 +57,18 @@ namespace hypro {
      */  
     template <typename Number>
     static bool convert( const hypro::VPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );   
+    
+    /**
+     * @brief Converts a support function into a zonotope.
+     * 
+     *   
+     * @param _source Support function that needs to be converted.
+     * @param _target An arbitrary zonotope that gets overwritten with the converted object.
+     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @return Return value is true if the requested conversion was successful.
+     */  
+    template <typename Number>
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );   
 
 }  // namespace
 

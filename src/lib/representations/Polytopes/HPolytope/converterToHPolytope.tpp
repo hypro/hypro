@@ -49,11 +49,17 @@ namespace hypro {
          return true;
     }
     
-    //TODO
+    //TODO conversion from zonotope to H-Polytope
     template <typename Number>
     static bool convert( const hypro::Zonotope<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode ){
         return true;
     } 
+    
+    //TODO conversion from support function to H-Polytope
+    template <typename Number>
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::HPolytope<Number>& _target, const CONV_MODE mode){
+        return true;
+    }
 
 }  // namespace
 

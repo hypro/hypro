@@ -20,27 +20,28 @@ static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _tar
 	_target = _source;
 	return true;
 }
-//TODO validation
+// conversion from support function to box
+//TODO return value (check for exact conversion)
 template <typename Number>
 static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
-	unsigned dim = _source.dimension();                                                                  
+	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object                                                               
 
-	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
-	for ( unsigned i = 0; i < dim; ++i ) {
+	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
+	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
 		directions( 2 * i, i ) = -1;
-		directions( 2 * i + 1, i ) = 1;
+		directions( 2 * i + 1, i ) = 1;                                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
 	}
 
-	vector_t<Number> distances = _source.multiEvaluate( directions );
+	vector_t<Number> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
 
 	std::vector<carl::Interval<Number>> intervals;
-	for ( unsigned i = 0; i < dim; ++i ) {
-		intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );
+	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
+		intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );    //create one interval with the corresponding left and right end points
 	}
 
-	_target = Box<Number>( intervals );
+	_target = Box<Number>( intervals );                                                                     //creates a box with the computed intervals
 
-	return false;  // Todo: if precise, return true
+	return true; 
 }
 
 //conversion from V-Polytope to box

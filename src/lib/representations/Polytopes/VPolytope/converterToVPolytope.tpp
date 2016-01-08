@@ -34,6 +34,12 @@ namespace hypro {
     static bool convert( const hypro::Zonotope<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode ){
         return true;
     }
+    
+    //TODO
+    template <typename Number>
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::VPolytope<Number>& _target, const CONV_MODE mode){
+        return true;
+    }
 
 }  // namespace
 
