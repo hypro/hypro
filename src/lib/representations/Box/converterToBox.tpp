@@ -13,6 +13,7 @@
 namespace hypro{
     
 //TODO testing!!!
+//TODO is check for exactness correct?
 
 // conversion from box to box    
 template <typename Number>
@@ -21,7 +22,6 @@ static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _tar
 	return true;
 }
 // conversion from support function to box
-//TODO return value (check for exact conversion)
 template <typename Number>
 static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object                                                               
@@ -40,6 +40,17 @@ static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<N
 	}
 
 	_target = Box<Number>( intervals );                                                                     //creates a box with the computed intervals
+        
+        if (mode == EXACT){                                                                                     //checks if conversion was exact
+            bool foundEqual;    
+            std::vector<Point<Number>> newVertices = _target.vertices();                                        //computes vertices from the just newly created box
+            for (const auto& newVertex : newVertices){                                                          //for every new vertex (from the box)
+                foundEqual = _source.contains(newVertex);                                                       //checks if source-object contains the new vertex
+                if (foundEqual == false){                                                                        //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation
+                    return false;
+                }
+            }
+        }
 
 	return true; 
 }
@@ -69,7 +80,7 @@ static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>
         
         if(mode == EXACT){                                                                              //checks if conversion was exact
             bool foundEqual;                            
-            std::vector<Point<Number>> newVertices = _target.vertices();                                //gets vertices from the just newly created box
+            std::vector<Point<Number>> newVertices = _target.vertices();                                //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
                 foundEqual = _source.hasVertex(newVertex);                                              //checks if source-object contains the new vertex                                                   
                 if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation
@@ -107,7 +118,7 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
         
         if(mode == EXACT){                                                                              //checks if conversion was exact
             bool foundEqual;                            
-            std::vector<Point<Number>> newVertices = _target.vertices();                                //gets vertices from the just newly created box
+            std::vector<Point<Number>> newVertices = _target.vertices();                                //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
                 foundEqual = _source.hasVertex(newVertex);                                              //checks if source-object contains the new vertex
                 if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation
@@ -172,7 +183,7 @@ static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>&
         
         if(mode == EXACT){                                                                                                              //checks if conversion was exact
             bool foundEqual;                            
-            std::vector<Point<Number>> newVertices = _target.vertices();                                                                //gets vertices from the just newly created box
+            std::vector<Point<Number>> newVertices = _target.vertices();                                                                //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                                                  //for every new vertex (from the box)
                 foundEqual = false;                                                                     
                 for (const auto& oldVertex : points){                                                                                   //checks if source-object contains the new vertex
