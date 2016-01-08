@@ -248,18 +248,40 @@ namespace reachability {
 #endif
 
 #ifdef USE_REDUCTION
-			bool use_reduce_memory=false;
-			bool use_reduce_time=false;
-			unsigned CONVEXHULL_CONST =16, REDUCE_CONST=15;
-			unsigned REDUCE_CONST_time=5;
-			unsigned convexHull_count=1;
+			bool use_reduce_memory=false, use_reduce_time=false;
+			unsigned CONVEXHULL_CONST = 2, REDUCE_CONST=15, REDUCE_CONST_time=7;
+
+			unsigned segment_count=0, convexHull_count=0;
 			std::vector<Point<Number>> points_convexHull;
 
-			// operate on first segment
-			for(auto vertex : firstSegment.vertices()){
-				points_convexHull.push_back(vertex);
+			for(auto vertex: firstSegment.vertices()){
+				if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
+					points_convexHull.push_back(vertex);
+				}
 			}
-			if(use_reduce_time) firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+
+			std::vector<vector_t<Number>> directions;
+
+			directions = computeTemplate<Number>(2, REDUCE_CONST_time); // reduction memory template mode TODO first entry of computeTemplate should be dimension of system
+
+			//for(auto transition: _loc->transitions()){	// reduction memory guard mode
+			//	auto guard= transition->guard();
+			//	for(unsigned i=0; i<guard.mat.rows(); i++){
+			//		vector_t<Number> guard_vector = vector_t<Number>(2);
+			//		guard_vector(0)=guard.mat(i,0);
+			//		guard_vector(1)=guard.mat(i,1);
+			//		directions.push_back(guard_vector);
+			//	}
+			//}
+			//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // reduction memory invariant mode
+			//	directions.push_back(invariant.constraints().at(inv_index).normal());
+			//}
+
+			// operate on first segment
+			if(use_reduce_time){
+				firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
+				firstSegment.removeRedundantPlanes();
+			}
 #endif
 
 			// insert first Segment into the empty flowpipe
@@ -302,110 +324,53 @@ namespace reachability {
 #ifdef USE_REDUCTION
 				// MEMORY-reduction
 				if(use_reduce_memory){
+					// collect points
 					if(CONVEXHULL_CONST==1){
 						if(!tmp.empty()){
-							Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							//poly_smoothed.removeRedundantPlanes();
-
-							flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
+							Representation poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							flowpipe.insert(flowpipe.begin(), poly_smoothed);
 						}
-						else flowpipe.push_back(lastSegment);
 					}
-					else if (CONVEXHULL_CONST>1){
+					else{
 						if(!tmp.empty()){
-							for(Point<Number> point: tmp.vertices()){
-								if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
-									points_convexHull.push_back(point);
+							for(auto vertex: tmp.vertices()){
+								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
+									points_convexHull.push_back(vertex);
 								}
 							}
-							convexHull_count++;
+							segment_count++;
 						}
 
-						if(!points_convexHull.empty() && (convexHull_count==CONVEXHULL_CONST || tmp.empty() || i>=mSettings.discretization)){
-							// Create convexHull of CONVEXHULL_CONST representations
-
+						// compute convexHull
+						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || tmp.empty())){
 							auto facets = convexHull(points_convexHull);
 
 							std::vector<Hyperplane<Number>> hyperplanes;
-							for(unsigned j = 0; j<facets.first.size(); j++){
-								hyperplanes.push_back(facets.first.at(j)->hyperplane());
+							for(unsigned i = 0; i<facets.first.size(); i++){
+								hyperplanes.push_back(facets.first.at(i)->hyperplane());
 							}
 							Representation convexHull = Representation(hyperplanes);
 
-							// Reduce to REDUCE_CONST
-							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							convexHull.removeRedundantPlanes();
+							flowpipe.insert(flowpipe.begin(), convexHull);
 
-							//poly_smoothed.removeRedundantPlanes();
-							//std::cout << "Size of poly_smoothed after reduction: " << poly_smoothed.size() << std::endl;
-
-							//flowpipe.pop_back(); //remove tmp
-							flowpipe.push_back(poly_smoothed); // update smoothed flowpipe
-
-							//flowpipe.push_back(tmp);
-
-							// reset variables
-							convexHull_count=0;
 							points_convexHull.clear();
+							segment_count = 0;
 						}
-						if(tmp.empty()) flowpipe.push_back(lastSegment);
-					}
-				}
-
-				// TIME-reduction
-				else if(use_reduce_time && !tmp.empty() ){
-					if(tmp.size()>3){
-						// Drop with facet 2 -> 90%
-
-						// use guard/invariant to fit the segments to their compairsions
-						//std::vector<vector_t<Number>> directions;
-						//for(auto transition: _loc->transitions()){	// use guard
-						//	auto guard= transition->guard();
-						//	for(unsigned i=0; i<guard.mat.rows(); i++){
-						//		vector_t<Number> guard_vector = vector_t<Number>(2);
-						//		guard_vector(0)=guard.mat(i,0);
-						//		guard_vector(1)=guard.mat(i,1);
-						//		directions.push_back(guard_vector);
-						//	}
-						//}
-
-						//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // use invariant
-						//	directions.push_back(invariant.constraints().at(inv_index).normal());
-						//}
-
-						//Representation poly_smoothed;
-						//if(!directions.empty()){
-						//	poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
-						//}
-
-						// use simple reduction/heuristic
-						Representation poly_smoothed = tmp.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST_time), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-						if(REDUCE_CONST_time>4) poly_smoothed.removeRedundantPlanes();
-
-						flowpipe.push_back(poly_smoothed);
-						lastSegment=poly_smoothed;
-					}
-					else {
-						flowpipe.push_back(tmp);
-						lastSegment = tmp;
 					}
 				}
 #endif
 
 				if ( !tmp.empty() ) {
 #ifdef USE_REDUCTION
-					if(!use_reduce_memory && !use_reduce_time){ // no reduction at all
-						flowpipe.push_back( tmp );
-					}
-					if(use_reduce_memory && !use_reduce_time){ // we are in reduce_memory mode
-						// update lastSegment
-						lastSegment = tmp;
-					}
-#else
+					if(i>3) flowpipe.erase(flowpipe.end()-2);
+#endif
 					flowpipe.push_back( tmp );
 
 					// update lastSegment
 					lastSegment = tmp;
-#endif
+
 
 				} else {
 					break;

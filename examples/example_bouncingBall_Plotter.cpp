@@ -202,7 +202,7 @@ int main(int argc, char const *argv[])
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability(); // use_reduce in Reach.tpp must be false
 
-	bool plotting=false;
+	bool plotting=true;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
@@ -212,7 +212,7 @@ int main(int argc, char const *argv[])
 	unsigned REDUCE_CONST=600;
 
 	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
-		for(unsigned CONVEXHULL_CONST=58; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
+		for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
 
 			double soFlowpipe=0, soFlowpipeS=0; // sizeOf flowpipes
 			std::vector<std::vector<Representation>>  flowpipes_smoothed;
@@ -256,8 +256,8 @@ int main(int argc, char const *argv[])
 							Representation convexHull = Representation(hyperplanes);
 
 							// Reduce to REDUCE_CONST
-							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							poly_smoothed.removeRedundantPlanes(); // with removing of redundantPlanes (+size, -speed)
+							Representation poly_smoothed = convexHull;//.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							//poly_smoothed.removeRedundantPlanes(); // with removing of redundantPlanes (+size, -speed)
 
 							// test if every used segment is contained in convexHull
 							//for(unsigned i=0; i<=CONVEXHULL_CONST; i++){
