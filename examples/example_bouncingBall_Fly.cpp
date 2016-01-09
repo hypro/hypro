@@ -228,7 +228,7 @@ int main(int argc, char const *argv[])
 	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1;
 	bool intersect=false;
 
-	if(true){
+	if(false){
 		std::cout << " Test (intersection)" << std::endl;
 		for(unsigned i=0; i<flowpipes.size(); i++){
 			if(intersect) break;

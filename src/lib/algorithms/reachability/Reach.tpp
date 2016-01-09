@@ -249,9 +249,9 @@ namespace reachability {
 
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false, use_reduce_time=false;
-			unsigned CONVEXHULL_CONST = 2, REDUCE_CONST=15, REDUCE_CONST_time=7;
+			unsigned CONVEXHULL_CONST = 58, REDUCE_CONST=6;
 
-			unsigned segment_count=0, convexHull_count=0;
+			unsigned segment_count=0;
 			std::vector<Point<Number>> points_convexHull;
 
 			for(auto vertex: firstSegment.vertices()){
@@ -262,7 +262,7 @@ namespace reachability {
 
 			std::vector<vector_t<Number>> directions;
 
-			directions = computeTemplate<Number>(2, REDUCE_CONST_time); // reduction memory template mode TODO first entry of computeTemplate should be dimension of system
+			directions = computeTemplate<Number>(2, REDUCE_CONST); // reduction memory template mode TODO first entry of computeTemplate should be dimension of system
 
 			//for(auto transition: _loc->transitions()){	// reduction memory guard mode
 			//	auto guard= transition->guard();
@@ -279,8 +279,11 @@ namespace reachability {
 
 			// operate on first segment
 			if(use_reduce_time){
+				int size1 = firstSegment.size();
 				firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
 				firstSegment.removeRedundantPlanes();
+
+				std::cout << "amount of drop facets: " << size1 << " - " << firstSegment.size() << std::endl;
 			}
 #endif
 
@@ -352,7 +355,7 @@ namespace reachability {
 							Representation convexHull = Representation(hyperplanes);
 
 							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							convexHull.removeRedundantPlanes();
+							//convexHull.removeRedundantPlanes();
 							flowpipe.insert(flowpipe.begin(), convexHull);
 
 							points_convexHull.clear();
@@ -364,7 +367,7 @@ namespace reachability {
 
 				if ( !tmp.empty() ) {
 #ifdef USE_REDUCTION
-					if(i>3) flowpipe.erase(flowpipe.end()-2);
+					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2);
 #endif
 					flowpipe.push_back( tmp );
 

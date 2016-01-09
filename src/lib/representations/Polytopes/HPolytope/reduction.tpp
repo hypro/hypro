@@ -267,7 +267,8 @@ namespace hypro {
 
   	 //create templatePolytope2d
   	 vector_t<Number> templateVector2d = vector_t<Number>::Zero(2); // init templateVector2d
-  	 templateVector2d(0) = 1;
+     templateVector2d(0) = 1;
+     templateVector2d(1) = 1;
   	 templatePolytope2d.push_back(templateVector2d);
 
   	 matrix_t<Number> m(2, 2); //init matrix
