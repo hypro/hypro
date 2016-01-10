@@ -245,15 +245,15 @@ int main(int argc, char const *argv[])
 
   HPolytope<Number> confuse_cube5;
   confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0, -1}, 1));
-  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0,  1}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0,  1}, 1));
   confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0, -1,  0}, 1));
-  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  1,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  1,  0}, 1));
   confuse_cube5.insert(Hyperplane<Number>({ 0,  0, -1,  0,  0}, 1));
-  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  1,  0,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  1,  0,  0}, 1));
   confuse_cube5.insert(Hyperplane<Number>({-1,  0,  0,  0,  0}, 1));
-  confuse_cube5.insert(Hyperplane<Number>({ 1,  0,  0,  0,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 1,  0,  0,  0,  0}, 1));
   confuse_cube5.insert(Hyperplane<Number>({ 0, -1,  0,  0,  0}, 1));
-  confuse_cube5.insert(Hyperplane<Number>({ 0,  1,  0,  0,  0}, 2));
+  confuse_cube5.insert(Hyperplane<Number>({ 0,  1,  0,  0,  0}, 1));
 
   vector_t<Number> directed5d_1 = vector_t<Number>(5);
   directed5d_1(0) = 1; directed5d_1(1) = 1.1; directed5d_1(2) = 0.9; directed5d_1(3) = 1.5; directed5d_1(4) = 1;
@@ -294,82 +294,82 @@ if(volume){
 
 
   // Reducing
-  //std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (red)" << std::endl << std::endl;
+  std::cout << "\nDROP\n------------------------------------\nwith drop_normal (red), drop_smooth (red)" << std::endl << std::endl;
 
-  //unsigned facet =0; // reduce one specific facet
-  ////for(unsigned facet=0; facet < reduce_from.size(); facet++){ // reduce all facets
-  //  std::cout << "(facet" << facet << ")" <<  std::endl;
+  unsigned facet =0; // reduce one specific facet
+  //for(unsigned facet=0; facet < reduce_from.size(); facet++){ // reduce all facets
+    std::cout << "(facet" << facet << ")" <<  std::endl;
 
-  //  // reduce and display the increase of the volume
-  //  std::cout << "drop_normal"<< std::endl;
-  //  start = clock::now();
-  //  reduction_drop_normal = reduce_from.reduce(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP);
-  //  timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //  std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
-  //  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //  std::cout << "size of reduction_drop_normal: " << reduction_drop_normal.sizeOfHPolytope() << std::endl;
+    // reduce and display the increase of the volume
+    std::cout << "drop_normal"<< std::endl;
+    start = clock::now();
+    reduction_drop_normal = reduce_from.reduce(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP);
+    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
+    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    std::cout << "size of reduction_drop_normal: " << reduction_drop_normal.sizeOfHPolytope() << std::endl;
 
-  //  std::cout << "drop_smooth"<< std::endl;
-  //  start = clock::now();
-  //  reduction_drop_smooth = reduce_from.reduce(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP_SMOOTH);
-  //  timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //  std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
-  //  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //  std::cout << "size of reduction_drop_smooth: " << reduction_drop_smooth.sizeOfHPolytope() << std::endl;
+    std::cout << "drop_smooth"<< std::endl;
+    start = clock::now();
+    reduction_drop_smooth = reduce_from.reduce(facet, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP_SMOOTH);
+    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
+    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+    std::cout << "size of reduction_drop_smooth: " << reduction_drop_smooth.sizeOfHPolytope() << std::endl;
 
-  //  std::cout << std::endl;
-  ////}
+    std::cout << std::endl;
+  //}
 
 
-  //// reduce unite - take care of correct neighbor-relation
-  //std::cout << "\nUNITE\n------------------------------------\nwith unite_normal (green), unite_smooth (maygreen), unite_cut (turquoise)" << std::endl << std::endl;
-  //unsigned facet1 = 0, facet2 =1;
+  // reduce unite - take care of correct neighbor-relation
+  std::cout << "\nUNITE\n------------------------------------\nwith unite_normal (green), unite_smooth (maygreen), unite_cut (turquoise)" << std::endl << std::endl;
+  //unsigned facet1 = 0, facet2 =3;
 
-  ////for(unsigned facet1=0; facet1 < reduce_from.size()-1; facet1++){
-  ////  for(unsigned facet2=facet1+1; facet2 < reduce_from.size(); facet2++){
-  //    //if(facet2==7 && facet1==6) break;
+  for(unsigned facet1=0; facet1 < reduce_from.size()-1; facet1++){
+    for(unsigned facet2=facet1+1; facet2 < reduce_from.size(); facet2++){
+      //if(facet2==7 && facet1==6) break;
 
-  //    std::cout << "(facet" << facet2 << ", facet" << facet1 << ")" << std::endl;
+      std::cout << "(facet" << facet2 << ", facet" << facet1 << ")" << std::endl;
 
-  //    std::cout << "unite_normal"<< std::endl;
-  //    start = clock::now();
-  //    reduction_unite_normal = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE);
-  //    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
-  //    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //    std::cout << "size of reduction_unite_normal: " << reduction_unite_normal.sizeOfHPolytope() << std::endl;
+      std::cout << "unite_normal"<< std::endl;
+      start = clock::now();
+      reduction_unite_normal = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE);
+      timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+      std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
+      if(volume && reduction_unite_normal.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_normal: " << reduction_unite_normal.sizeOfHPolytope() << std::endl;
 
-  //    std::cout << "unite_smooth"<< std::endl;
-  //    start = clock::now();
-  //    reduction_unite_smooth = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_SMOOTH);
-  //    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
-  //    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //    std::cout << "size of reduction_unite_smooth: " << reduction_unite_smooth.sizeOfHPolytope() << std::endl;
+      std::cout << "unite_smooth"<< std::endl;
+      start = clock::now();
+      reduction_unite_smooth = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_SMOOTH);
+      timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+      std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
+      if(volume && reduction_unite_smooth.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_smooth: " << reduction_unite_smooth.sizeOfHPolytope() << std::endl;
 
-  //    std::cout << "unite_cut"<< std::endl;
-  //    start = clock::now();
-  //    reduction_unite_cut = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_CUT);
-  //    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
-  //    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //    std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytope() << std::endl;
+      std::cout << "unite_cut"<< std::endl;
+      start = clock::now();
+      reduction_unite_cut = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_CUT);
+      timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+      std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
+      if(volume && reduction_unite_cut.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytope() << std::endl;
 
-  //    std::cout << "unite_norm"<< std::endl;
-  //    start = clock::now();
-  //    reduction_unite_norm = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_NORM);
-  //    timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-  //    std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
-  //    if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //    std::cout << "size of reduction_unite_norm: " << reduction_unite_norm.sizeOfHPolytope() << std::endl;
+      std::cout << "unite_norm"<< std::endl;
+      start = clock::now();
+      reduction_unite_norm = reduce_from.reduce(facet2, facet1,  HPolytope<Number>::REDUCTION_STRATEGY::UNITE_NORM);
+      timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+      std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
+      if(volume && reduction_unite_norm.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+      std::cout << "size of reduction_unite_norm: " << reduction_unite_norm.sizeOfHPolytope() << std::endl;
 
-  //    std::cout << std::endl;
-  ////  }
-  ////}
+      std::cout << std::endl;
+    }
+  }
 
-  //std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila), directed_template (bordeaux)" << std::endl << std::endl;
+  std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila), directed_template (bordeaux)" << std::endl << std::endl;
 
-  ////2D
+  //2D
   //if(dimension==2){
   //  directions.push_back(directed2d_1);
   //}

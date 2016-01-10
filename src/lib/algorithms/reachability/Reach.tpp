@@ -1,7 +1,12 @@
 #include "Reach.h"
+#include <chrono>
+
 
 namespace hypro {
 namespace reachability {
+
+	typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::microseconds timeunit;
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number, Representation>& _automaton, const ReachabilitySettings<Number> _settings)
@@ -247,9 +252,11 @@ namespace reachability {
 			//plotter.plot2d();
 #endif
 
+//clock::time_point start = clock::now();
+
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false, use_reduce_time=false;
-			unsigned CONVEXHULL_CONST = 58, REDUCE_CONST=6;
+			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=6;
 
 			unsigned segment_count=0;
 			std::vector<Point<Number>> points_convexHull;
@@ -264,24 +271,29 @@ namespace reachability {
 
 			directions = computeTemplate<Number>(2, REDUCE_CONST); // reduction memory template mode TODO first entry of computeTemplate should be dimension of system
 
-			//for(auto transition: _loc->transitions()){	// reduction memory guard mode
-			//	auto guard= transition->guard();
-			//	for(unsigned i=0; i<guard.mat.rows(); i++){
-			//		vector_t<Number> guard_vector = vector_t<Number>(2);
-			//		guard_vector(0)=guard.mat(i,0);
-			//		guard_vector(1)=guard.mat(i,1);
-			//		directions.push_back(guard_vector);
-			//	}
-			//}
-			//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // reduction memory invariant mode
-			//	directions.push_back(invariant.constraints().at(inv_index).normal());
-			//}
-
-			// operate on first segment
 			if(use_reduce_time){
+				//for(auto transition: _loc->transitions()){	// reduction memory guard mode
+				//	auto guard= transition->guard();
+				//	for(unsigned i=0; i<guard.mat.rows(); i++){
+				//		vector_t<Number> guard_vector = vector_t<Number>(2);
+				//		guard_vector(0)=guard.mat(i,0);
+				//		guard_vector(1)=guard.mat(i,1);
+				//		directions.push_back(guard_vector);
+				//	}
+				//}
+				//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // reduction memory invariant mode
+				//	directions.push_back(invariant.constraints().at(inv_index).normal());
+				//}
+
 				int size1 = firstSegment.size();
-				firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
-				firstSegment.removeRedundantPlanes();
+				//firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+				//firstSegment.removeRedundantPlanes();
+
+				int reduce_calculated = ceil(size1/2);
+				if(reduce_calculated>2){
+					firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+					firstSegment.removeRedundantPlanes();
+				}
 
 				std::cout << "amount of drop facets: " << size1 << " - " << firstSegment.size() << std::endl;
 			}
@@ -355,7 +367,7 @@ namespace reachability {
 							Representation convexHull = Representation(hyperplanes);
 
 							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							//convexHull.removeRedundantPlanes();
+							convexHull.removeRedundantPlanes();
 							flowpipe.insert(flowpipe.begin(), convexHull);
 
 							points_convexHull.clear();
@@ -379,6 +391,8 @@ namespace reachability {
 					break;
 				}
 			}
+			//double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+			//std::cout << std::endl << "Total time for loop(HYPRO): " << timeOfReachReduction << std::endl;
 			std::cout << std::endl;
 
 #ifdef REACH_DEBUG
