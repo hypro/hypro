@@ -45,7 +45,7 @@ static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<N
             std::vector<Point<Number>> newVertices = _target.vertices();                                        //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                          //for every new vertex (from the box)
                 foundEqual = _source.contains(newVertex);                                                       //checks if source-object contains the new vertex
-                if (foundEqual == false){                                                                       //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation
+                if (foundEqual == false){                                                                       //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
                     return false;
                 }
             }
@@ -82,7 +82,7 @@ static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>
             std::vector<Point<Number>> newVertices = _target.vertices();                                //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
                 foundEqual = _source.hasVertex(newVertex);                                              //checks if source-object contains the new vertex                                                   
-                if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation
+                if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
                     return false;
                 }
             }
@@ -96,8 +96,8 @@ template <typename Number>
 static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	typename VPolytope<Number>::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
 	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
-	vector_t<Number> minima = vertices->begin().rawCoordinates();                                   //creates a vector_t with the first vertex of the source object
-	vector_t<Number> maxima = vertices->begin().rawCoordinates();                                   //creates another vector_t with the first vertex of the source object
+	vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
+	vector_t<Number> maxima = vertices[0].rawCoordinates();                                         //creates another vector_t with the first vertex of the source object
 
 	for ( const auto& vertex : vertices ) {                                                         //for each vertex of the source object
 		for ( unsigned d = 0; d < _source.dimension(); ++d ) {                                  //for every dimension
@@ -119,7 +119,7 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
             std::vector<Point<Number>> newVertices = _target.vertices();                                //computes vertices from the just newly created box
             for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
                 foundEqual = _source.contains(newVertex);                                               //checks if source-object contains the new vertex
-                if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation
+                if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
                     return false;
                 }
             }
@@ -158,7 +158,7 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
                          std::vector<Point<Number>> newVertices = _target.vertices();                                            //computes vertices from the just newly created box
                                  for (const auto& newVertex : newVertices){                                                      //for every new vertex (from the box)
                                            foundEqual = _source.contains(newVertex);                                             //checks if source-object contains the new vertex
-                                           if (foundEqual == false){                                                                       //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation
+                                           if (foundEqual == false){                                                             //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
                                                 return false;
                                            }
                                  }
@@ -201,7 +201,7 @@ static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>&
                         foundEqual = true;
                     }
                 }
-                if (foundEqual == false){                                                                       //if no equal vertex was found, the target object has to be an overapproximation
+                if (foundEqual == false){                                                                       //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
                     return false;
                 }
             }
@@ -244,7 +244,7 @@ static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>&
                         foundEqual = true;
                     }
                 }
-                if (foundEqual == false){                                                                                               //if no equal vertex was found, the target object has to be an overapproximation
+                if (foundEqual == false){                                                                                               //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
                     return false;
                 }
             }

@@ -78,6 +78,8 @@ protected:
 		planes.push_back(hp4);
 
                 hpolytope = HPolytope<Number>(this->planes);
+                
+                support = hypro::SupportFunction<Number>(SF_TYPE::POLY, this->matrix, this->distances);
     }
 
     virtual void TearDown()
@@ -94,19 +96,23 @@ protected:
 
     typename HPolytope<Number>::HyperplaneVector planes;
     HPolytope<Number> hpolytope;
+    SupportFunction<Number> support;
 
 };
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	SupportFunction<TypeParam> support = hypro::SupportFunction<TypeParam>(SF_TYPE::POLY, this->matrix, this->distances);
 	hypro::Box<TypeParam> result;
-	convert(this->box, result, EXACT);
-        convert(this->box, result, OVER);
+	convert(this->box, result);
 	convert(this->polytope, result);
-	convert(support, result);
+	convert(this->support, result);
+        convert(this->support, result, EXACT);
 	convert(this->vpolytope, result);
+        convert(this->vpolytope, result, EXACT);
 	convert(this->zonotope, result);
+        convert(this->zonotope, result, EXACT);
+        convert(this->hpolytope, result);
+        convert(this->hpolytope, result, EXACT);
 	SUCCEED();
 }
 
