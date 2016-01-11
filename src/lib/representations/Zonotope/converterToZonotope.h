@@ -20,7 +20,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER  );
     
     /**
      * @brief Converts a polytope in H-representation into a Zonotope.
@@ -32,7 +32,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER  );
     
     /**
      * @brief Converts a box into a Zonotope.
@@ -44,7 +44,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );
+    static bool convert( const hypro::Box<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER  );
     
     /**
      * @brief Converts a V-Polytope into a zonotope.
@@ -56,7 +56,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );   
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER  );   
     
     /**
      * @brief Converts a support function into a zonotope.
@@ -68,7 +68,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT  );   
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER  );   
 
 }  // namespace
 

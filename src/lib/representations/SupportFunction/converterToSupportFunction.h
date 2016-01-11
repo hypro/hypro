@@ -21,7 +21,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT);
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER);
     
     /**
      * @brief Converts a box into a support function.
@@ -33,7 +33,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a polytope in V-representation into a support function.
@@ -47,7 +47,7 @@ namespace hypro {
      */   
     
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     
     /**
@@ -61,7 +61,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a zonotope into a support function
@@ -74,7 +74,7 @@ namespace hypro {
      */  
     
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
         
 }  // namespace

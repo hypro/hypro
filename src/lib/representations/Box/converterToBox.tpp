@@ -5,7 +5,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-12
- * @version	2015-12-16
+ * @version	2016-01-11
  */
 
 #include "converterToBox.h"

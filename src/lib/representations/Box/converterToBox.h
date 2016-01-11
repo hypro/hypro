@@ -5,7 +5,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-12
- * @version	2015-12-16
+ * @version	2016-01-11
  */
 
 #pragma once
@@ -22,7 +22,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a support function into a box. (overapproximation in the general case)
@@ -35,7 +35,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a polytope in V-representation into a box. (overapproximation in the general case)
@@ -48,7 +48,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a polytope in H-representation into a box.
@@ -62,7 +62,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a zonotope into a box.
@@ -76,7 +76,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
      * @brief Converts a polytope (different data structure) into a box.
@@ -89,7 +89,7 @@ namespace hypro {
      * @return Return value is true if the requested conversion was successful.
      */  
     template <typename Number>
-    static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
+    static bool convert( const hypro::Polytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     
 
