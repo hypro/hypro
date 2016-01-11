@@ -92,7 +92,6 @@ static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>
 }
 
 //conversion from H-Polytope to box
-//TODO alternative approach with evaluating the 2d main directions?
 template <typename Number>
 static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	typename VPolytope<Number>::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
@@ -128,6 +127,46 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
         
         return true;
 }
+
+//alternative approach 
+/*
+        template <typename Number>
+        static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
+                unsigned dim = _source.dimension();                                                                              //gets dimension from the source object                                                               
+
+                matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                            //initialize normal matrix as zero matrix with 2*dim rows and dim columns
+                for ( unsigned i = 0; i < dim; ++i ) {                                                                           //for every dimension
+                        directions( 2 * i, i ) = -1;
+                        directions( 2 * i + 1, i ) = 1;                                                                          //write fixed entries (because of box) into the normal matrix (2 each column)
+                }
+ 
+                vector_t<Number> distances = vector_t<Number>::Zero(2 * dim); 
+                for ( unsigned i = 0; i < dim, ++i ) {                                                                          //evaluate the source support function into these 2*dim directions (to get the interval end points)                                          
+                        distances( 2 * i) = evaluate(directions.row(2*i).transpose() ); 
+                        distances( 2 * i + 1) = evaluate(directions.row(2*i+1).transpose() );
+                }
+
+                std::vector<carl::Interval<Number>> intervals;
+                for ( unsigned i = 0; i < dim; ++i ) {                                                                           //for every dimension
+                        intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );             //create one interval with the corresponding left and right end points
+                }
+
+                _target = Box<Number>( intervals );                                                                              //creates a box with the computed intervals
+        
+                 if (mode == EXACT){                                                                                             //checks if conversion was exact
+                         bool foundEqual;    
+                         std::vector<Point<Number>> newVertices = _target.vertices();                                            //computes vertices from the just newly created box
+                                 for (const auto& newVertex : newVertices){                                                      //for every new vertex (from the box)
+                                           foundEqual = _source.contains(newVertex);                                             //checks if source-object contains the new vertex
+                                           if (foundEqual == false){                                                                       //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation
+                                                return false;
+                                           }
+                                 }
+                 }
+
+                 return true; 
+        }
+ */
 
 //conversion from zonotope to box
 template <typename Number>
