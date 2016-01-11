@@ -171,7 +171,7 @@ class Zonotope {
 	 * internal points.
 	 * @return vector of points.
 	 */
-	std::vector<hypro::vector_t<Number>> vertices();
+	std::vector<hypro::vector_t<Number>> vertices() const;
 
 	/**
 	 * Calculates zonotope intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n

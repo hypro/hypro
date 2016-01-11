@@ -28,6 +28,7 @@ namespace hypro {
      * @brief Converts a support function into a box. (overapproximation in the general case)
      * @detail Creates a normal matrix with 2*d rows (for 2*d faces) and d columns that contains the basic 2 directions for every dimension.
      * The source object then gets evaluated in these 2*d basic directions which yields the interval end points of the new box.
+     * Checks for exact conversion by validating that every vertex of the newly created box was already inside the source object.
      *   
      * @param _source Support Function that needs to be converted.
      * @param _target An arbitrary box that gets overwritten with the converted object.
@@ -65,7 +66,9 @@ namespace hypro {
     
     /**
      * @brief Converts a zonotope into a box.
-     * 
+     * @detail Computes the minimal and maximal point component for every dimension and sets up intervals ranging from the corresponding minimal value to the corresponding maximal value for every dimension.
+     * This is done by computing the vertices of the zonotope first.
+     * Checks for exact conversion by validating that every vertex of the newly created box was already a vertex of the source object.
      *   
      * @param _source Zonotope that needs to be converted.
      * @param _target An arbitrary box that gets overwritten with the converted object.

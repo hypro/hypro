@@ -89,11 +89,15 @@ template <typename Number>
 Zonotope<Number>::Zonotope( const hypro::vector_t<Number> &center, const hypro::matrix_t<Number> &generators )
 	: mDimension( center.rows() ), mCenter( center ), mGenerators( generators ) {
 	assert( center.rows() == generators.rows() && "Center and generators have to have same dimensionality." );
+        uniteEqualVectors();
+        removeEmptyGenerators();
 }
 
 template <typename Number>
 Zonotope<Number>::Zonotope( const Zonotope<Number> &other )
 	: mDimension( other.mDimension ), mCenter( other.mCenter ), mGenerators( other.mGenerators ) {
+        uniteEqualVectors();
+        removeEmptyGenerators();
 }
 
 template <typename Number>
@@ -111,6 +115,8 @@ Zonotope<Number>::Zonotope( const Zonotope<Number> &other, unsigned d1, unsigned
 	mDimension = 2;
 	mCenter = center;
 	mGenerators = generators;
+        uniteEqualVectors();
+        removeEmptyGenerators();
 }
 
 template <typename Number>
@@ -151,6 +157,8 @@ void Zonotope<Number>::setCenter( const hypro::vector_t<Number> &center ) {
 	}
 	assert( (std::size_t)center.rows() == mDimension && "Center has to have same dimensionality as zonotope." );
 	mCenter = center;
+        uniteEqualVectors();
+        removeEmptyGenerators();
 }
 
 template <typename Number>
@@ -161,6 +169,8 @@ void Zonotope<Number>::setGenerators( const hypro::matrix_t<Number> &new_generat
 	}
 	assert( (std::size_t)new_generators.rows() == mDimension && "Generators have to have same dimensionality as zonotope" );
 	mGenerators = new_generators;
+        uniteEqualVectors();
+        removeEmptyGenerators();
 }
 
 template <typename Number>
@@ -177,6 +187,7 @@ bool Zonotope<Number>::addGenerators( const hypro::matrix_t<Number> &generators 
 		mGenerators.resize( tmp.rows(), generators.cols() + tmp.cols() );
 		mGenerators << tmp, generators;
 	}
+        uniteEqualVectors();
 	removeEmptyGenerators();
 	return true;
 }
@@ -278,6 +289,7 @@ Zonotope<Number> Zonotope<Number>::minkowskiSum( const Zonotope<Number> &rhs ) c
 	tmp.resize( mDimension, rhs.numGenerators() + numGenerators() );
 	tmp << mGenerators, rhs.generators();
 	result.setGenerators( tmp );
+        result.uniteEqualVectors();
 	result.removeEmptyGenerators();
 	return result;
 }
@@ -342,10 +354,10 @@ std::vector<hypro::vector_t<Number>> Zonotope<Number>::computeZonotopeBoundary()
 }
 
 template <typename Number>
-std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() {
-	uniteEqualVectors();
+std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() const {
+	//uniteEqualVectors();
 
-	removeEmptyGenerators();
+	//removeEmptyGenerators();
 
 	hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero( this->dimension() );
 
