@@ -359,7 +359,9 @@ std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() const {
 
 	//removeEmptyGenerators();
 
-	hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero( this->dimension() );
+	//hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero( this->dimension() );
+    
+        hypro::vector_t<Number> init = mCenter;
 
 	std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive( mGenerators, init );
 

@@ -21,6 +21,7 @@ static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _tar
 	return true;
 }
 // conversion from support function to box
+//seems to be buggy
 template <typename Number>
 static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object                                                               
