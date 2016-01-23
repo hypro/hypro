@@ -106,7 +106,11 @@ void Plotter<Number>::plot2d() const {
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
-			ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+			if(rangeExt != 0)
+				ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+			else
+				rangeExt = double(double(min( d ))* 0.1);
+				ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
 		}
 		mOutfile << "plot ";
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
@@ -322,6 +326,7 @@ void Plotter<Number>::plotTex() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
+	std::cout << "Added object " << _points << std::endl;
 	if ( !sorted ) {
 		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
 		mObjects.insert( std::make_pair( mId, sortedPoints ) );
@@ -388,123 +393,125 @@ void Plotter<Number>::init( const std::string &_filename ) {
 
 template <typename Number>
 std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<Number>> &_points ) {
-	assert( _points.size() >= 3 );
 	std::vector<Point<Number>> res;
-	if ( !_points.empty() ) {
-		// initialize -> find minimum Point
-		Point<Number> min = _points[0];
-		std::map<Number, Point<Number>> sortedPoints;
-		for ( const auto &point : _points ) {
-			assert( point.dimension() == 2 );
-			if ( point < min ) {
-				min = point;
-			}
+	if(_points.size() < 3){
+		return _points;
+	}
+
+	// initialize -> find minimum Point
+	Point<Number> min = _points[0];
+	std::map<Number, Point<Number>> sortedPoints;
+	for ( const auto &point : _points ) {
+		assert( point.dimension() == 2 );
+		if ( point < min ) {
+			min = point;
 		}
+	}
 
-		// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
-		// std::endl;
+	// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
+	// std::endl;
 
-		// sort Points according to polar angle -> we have to insert manually
-		// (because of double imprecision)
-		for ( const auto &point : _points ) {
-			if ( point != min ) {
-				// std::cout << "Try to insert " << point << std::endl;
-				Number angle = point.polarCoordinates( min ).at( 1 );
-				// std::cout << "Computed polar angle: " << angle << std::endl;
-				if ( sortedPoints.empty() ) {
-					// std::cout << "points empty, simply insert." << std::endl;
-					sortedPoints.insert( std::make_pair( angle, point ) );
-				} else {
-					// std::cout << "Compare." << std::endl;
-					for ( auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
-						// if equal, take the one with bigger radial component
-						// std::cout << "Consider " << pos->second << ", angle: ";
-						Number newAngle = pos->second.polarCoordinates( min ).at( 1 );
-						// std::cout << newAngle << std::endl;
-						if ( carl::AlmostEqual2sComplement( angle, newAngle, TOLLERANCE_ULPS ) ) {
-							// if equal, compare radial coordinate (distance)
-							// std::cout << "AlmostEqual2sComplement" << std::endl;
-							if ( pos->second.polarCoordinates( min )[0] < point.polarCoordinates( min )[0] ) {
-								// std::cout << "sortedPoints erase " << pos->second <<
-								// std::endl;
-								pos = sortedPoints.erase( pos );
-								sortedPoints.insert( std::make_pair( angle, point ) );
-							}
-							break;
+	// sort Points according to polar angle -> we have to insert manually
+	// (because of double imprecision)
+	for ( const auto &point : _points ) {
+		if ( point != min ) {
+			// std::cout << "Try to insert " << point << std::endl;
+			Number angle = point.polarCoordinates( min ).at( 1 );
+			// std::cout << "Computed polar angle: " << angle << std::endl;
+			if ( sortedPoints.empty() ) {
+				// std::cout << "points empty, simply insert." << std::endl;
+				sortedPoints.insert( std::make_pair( angle, point ) );
+			} else {
+				// std::cout << "Compare." << std::endl;
+				for ( auto pos = sortedPoints.begin(); pos != sortedPoints.end(); ) {
+					// if equal, take the one with bigger radial component
+					// std::cout << "Consider " << pos->second << ", angle: ";
+					Number newAngle = pos->second.polarCoordinates( min ).at( 1 );
+					// std::cout << newAngle << std::endl;
+					if ( carl::AlmostEqual2sComplement( angle, newAngle, TOLLERANCE_ULPS ) ) {
+						// if equal, compare radial coordinate (distance)
+						// std::cout << "AlmostEqual2sComplement" << std::endl;
+						if ( pos->second.polarCoordinates( min )[0] < point.polarCoordinates( min )[0] ) {
+							// std::cout << "sortedPoints erase " << pos->second <<
+							// std::endl;
+							pos = sortedPoints.erase( pos );
+							sortedPoints.insert( std::make_pair( angle, point ) );
 						}
-						// we assume to be sorted, so check all angles, which are smaller or
-						// equal for equality -
-						// afterwards simply insert
-						else if ( angle > newAngle ) {  // not equal and smaller -> continue
-														// search (at end, simply insert)
-							++pos;
-							if ( pos == sortedPoints.end() ) {
-								sortedPoints.insert( std::make_pair( angle, point ) );
-								break;
-							}
-						} else {  // larger and not equal until this point -> simply insert
+						break;
+					}
+					// we assume to be sorted, so check all angles, which are smaller or
+					// equal for equality -
+					// afterwards simply insert
+					else if ( angle > newAngle ) {  // not equal and smaller -> continue
+													// search (at end, simply insert)
+						++pos;
+						if ( pos == sortedPoints.end() ) {
 							sortedPoints.insert( std::make_pair( angle, point ) );
 							break;
 						}
+					} else {  // larger and not equal until this point -> simply insert
+						sortedPoints.insert( std::make_pair( angle, point ) );
+						break;
 					}
-					// std::cout << "End Compare." << std::endl;
 				}
+				// std::cout << "End Compare." << std::endl;
 			}
 		}
+	}
 
-		// for(const auto& pair : sortedPoints)
-		//	std::cout << "sorted: " << pair.first << ", " <<
-		// pair.second.rawCoordinates().transpose() << std::endl;
+	// for(const auto& pair : sortedPoints)
+	//	std::cout << "sorted: " << pair.first << ", " <<
+	// pair.second.rawCoordinates().transpose() << std::endl;
 
-		// prepare stack -> initialize with 2 points
-		assert( sortedPoints.size() >= 1 );
-		std::stack<Point<Number>> stack;
-		stack.push( min );
-		stack.push( sortedPoints.begin()->second );
-		sortedPoints.erase( sortedPoints.begin() );
-		unsigned i = 0;
-		unsigned n = sortedPoints.size();
+	// prepare stack -> initialize with 2 points
+	assert( sortedPoints.size() >= 1 );
+	std::stack<Point<Number>> stack;
+	stack.push( min );
+	stack.push( sortedPoints.begin()->second );
+	sortedPoints.erase( sortedPoints.begin() );
+	unsigned i = 0;
+	unsigned n = sortedPoints.size();
 
-		// main loop -> check the two topmost elements of the stack and one third,
-		// new point
-		while ( i < n ) {
-			Point<Number> p1 = stack.top();
-			stack.pop();
-			Point<Number> p2 = stack.top();
-			stack.pop();
-			// std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << "
-			// -- " <<
-			// p1.rawCoordinates().transpose() << " -- " <<
-			// sortedPoints.begin()->second.rawCoordinates().transpose() <<
-			// std::endl;
-			if ( isLeftTurn( p2, p1, sortedPoints.begin()->second ) ) {
-				// reinsert and add new point
-				stack.push( p2 );
-				stack.push( p1 );
+	// main loop -> check the two topmost elements of the stack and one third,
+	// new point
+	while ( i < n ) {
+		Point<Number> p1 = stack.top();
+		stack.pop();
+		Point<Number> p2 = stack.top();
+		stack.pop();
+		// std::cout << __func__ << ": " << p2.rawCoordinates().transpose() << "
+		// -- " <<
+		// p1.rawCoordinates().transpose() << " -- " <<
+		// sortedPoints.begin()->second.rawCoordinates().transpose() <<
+		// std::endl;
+		if ( isLeftTurn( p2, p1, sortedPoints.begin()->second ) ) {
+			// reinsert and add new point
+			stack.push( p2 );
+			stack.push( p1 );
+			stack.push( sortedPoints.begin()->second );
+			sortedPoints.erase( sortedPoints.begin() );
+			++i;
+		} else {
+			// only reinsert second -> equal to removing the topmost object of the
+			// stack
+			// std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
+			stack.push( p2 );
+			if ( stack.size() < 2 ) {
+				// in this case simply insert, as the stack has to contain at least 2
+				// points
 				stack.push( sortedPoints.begin()->second );
 				sortedPoints.erase( sortedPoints.begin() );
 				++i;
-			} else {
-				// only reinsert second -> equal to removing the topmost object of the
-				// stack
-				// std::cout << "Drop " << p1.rawCoordinates().transpose() << std::endl;
-				stack.push( p2 );
-				if ( stack.size() < 2 ) {
-					// in this case simply insert, as the stack has to contain at least 2
-					// points
-					stack.push( sortedPoints.begin()->second );
-					sortedPoints.erase( sortedPoints.begin() );
-					++i;
-				}
 			}
 		}
-
-		// write result
-		while ( !stack.empty() ) {
-			res.push_back( stack.top() );
-			stack.pop();
-		}
 	}
+
+	// write result
+	while ( !stack.empty() ) {
+		res.push_back( stack.top() );
+		stack.pop();
+	}
+
 	return res;
 }
 

@@ -50,5 +50,17 @@ namespace hypro {
 		return std::make_pair(std::move(smtrat::FormulaT(carl::FormulaType::AND, std::move(constraints))), std::move(objective));
 	}
 
+	template<typename Number>
+	static Poly createObjective(const vector_t<Number>& _objective, carl::Relation _rel = carl::Relation::LEQ) {
+		Poly objective;
+		VariablePool& pool = VariablePool::getInstance();
+
+		// get new variables
+		for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
+			objective += carl::convert<Number,Rational>(_objective(colIndex))*pool.carlVarByIndex(colIndex);
+		}
+		return std::move(objective);
+	}
+
 } // namespace hypro
 #endif

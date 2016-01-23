@@ -34,12 +34,11 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachability() {
+        //    #ifdef FORWARD_REACHABILITY_METHOD_2
+		//return computeForwardReachabilityWithMethod2();
+        //    #endif
 
-            #ifdef FORWARD_REACHABILITY_METHOD_2
-		return computeForwardReachabilityWithMethod2();
-            #endif
-
-                return computeForwardReachabilityWithMethod1();
+        return computeForwardReachabilityWithMethod1();
 	}
 
         template<typename Number, typename Representation>
@@ -65,27 +64,28 @@ namespace reachability {
 		//std::cout << std::endl;
 
 		while ( !R_new.empty() && depth < mSettings.iterationDepth ) {
-			std::cout << "Main loop, depth " << depth << std::endl;
+			//std::cout << "Main loop, depth " << depth << std::endl;
 			// R = R U R_new
 			if ( !R.empty() ) {
 				std::set_union( R.begin(), R.end(), R_new.begin(), R_new.end(), std::inserter( R, R.begin() ) );
 			} else {
 				R = R_new;
 			}
-			std::cout << "R_new U R = ";
-			for ( const auto& item : R ) std::cout << item << " ";
-			std::cout << std::endl;
+			//std::cout << "R_new U R = ";
+			//for ( const auto& item : R ) std::cout << item << " ";
+			//std::cout << std::endl;
 
-			std::cout << "R_new = ";
-			for ( const auto& item : R_new ) std::cout << item << " ";
-			std::cout << std::endl;
+			//std::cout << "R_new = ";
+			//for ( const auto& item : R_new ) std::cout << item << " ";
+			//std::cout << std::endl;
 
 			// R_new = Reach(R_new)\R
+
 			std::set<std::size_t> R_temp = computeReach( R_new );
 
-			std::cout << "Newly generated flowpipes = ";
-			for ( const auto& item : R_temp ) std::cout << item << " ";
-			std::cout << std::endl;
+			//std::cout << "Newly generated flowpipes = ";
+			//for ( const auto& item : R_temp ) std::cout << item << " ";
+			//std::cout << std::endl;
 
 			R_new.clear();
 			std::set_difference( R_temp.begin(), R_temp.end(), R.begin(), R.end(),
@@ -107,12 +107,12 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
-		// hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		//[0,T] = [0,delta1] U [delta1, delta2] ...
 		// note: interval size is constant
 		Number timeInterval = mSettings.timebound / mSettings.discretization;
 
-// plotter.addObject(_val.vertices());
+ 		//plotter.addObject(_val.vertices());
 
 #ifdef REACH_DEBUG
 		std::cout << "Time Interval: " << timeInterval << std::endl;
@@ -210,6 +210,8 @@ namespace reachability {
 			std::cout << "Polytope after unite with R0: ";
 			unitePolytope.print();
 #endif
+			//plotter.addObject(unitePolytope.vertices());
+			//plotter.plot2d();
 
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
@@ -248,8 +250,8 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
-			//plotter.addObject(firstSegment.vertices());
-			//plotter.plot2d();
+
+			std::cout << "Vertices: " << firstSegment.vertices() << std::endl;
 #endif
 
 //clock::time_point start = clock::now();
@@ -295,7 +297,7 @@ namespace reachability {
 					firstSegment.removeRedundantPlanes();
 				}
 
-				std::cout << "amount of drop facets: " << size1 << " - " << firstSegment.size() << std::endl;
+				//std::cout << "amount of drop facets: " << size1 << " - " << firstSegment.size() << std::endl;
 			}
 #endif
 
@@ -315,7 +317,8 @@ namespace reachability {
 
 			// for each time interval perform linear Transformation
 			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
-				std::cout << "\rTime: \t" << i*timeInterval << std::flush;
+				//std::cout << "\rTime: \t" << i*timeInterval << std::flush;
+				std::cout << "Time: \t" << double(i*timeInterval) << std::endl;
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
@@ -393,11 +396,12 @@ namespace reachability {
 			}
 			//double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
 			//std::cout << std::endl << "Total time for loop(HYPRO): " << timeOfReachReduction << std::endl;
-			std::cout << std::endl;
+			//std::cout << std::endl;
 
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop left ---" << std::endl;
 #endif
+			//plotter.plot2d();
 
 			std::size_t fpIndex = addFlowpipe( flowpipe );
 			mFlowToLocation[fpIndex] = _loc;

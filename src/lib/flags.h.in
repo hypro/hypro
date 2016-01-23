@@ -2,5 +2,6 @@
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine USE_SMTRAT
+#cmakedefine USE_Z3
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine FORWARD_REACHABILITY_METHOD_2

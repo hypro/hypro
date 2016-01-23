@@ -24,16 +24,16 @@ namespace hypro {
 		return _out;
 	}
 
-	template<typename T>
-	std::ostream& operator <<(std::ostream& _out, const std::vector<T>& _vec) {
-		if(!_vec.empty()) {
-			_out << *_vec.begin();
-			for(auto vecIt = ++_vec.begin(); vecIt != _vec.end(); ++vecIt)
-				_out << ", " << *vecIt;
-		}
-
-		return _out;
-	}
+	//template<typename T>
+	//std::ostream& operator <<(std::ostream& _out, const std::vector<T>& _vec) {
+	//	if(!_vec.empty()) {
+	//		_out << *_vec.begin();
+	//		for(auto vecIt = ++_vec.begin(); vecIt != _vec.end(); ++vecIt)
+	//			_out << ", " << *vecIt;
+	//	}
+//
+//	//	return _out;
+	//}
 
 	template<typename T>
 	std::ostream& operator <<(std::ostream& _out, const std::pair<T,T>& _pair) {

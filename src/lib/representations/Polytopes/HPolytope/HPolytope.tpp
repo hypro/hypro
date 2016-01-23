@@ -121,6 +121,103 @@ bool HPolytope<Number>::empty() const {
 	simplex.add(constr);
 
 	return (simplex.check() == smtrat::Answer::UNSAT);
+#elif defined USE_Z3
+	matrix_t<Number> currMatrix = this->matrix();
+	vector_t<Number> currVector = this->vector();
+
+
+	z3::context c;
+    z3::solver z3solver(c);
+
+	z3::expr_vector constraints(c);
+	z3::expr_vector variables(c);
+	for(unsigned i = 0; i < currMatrix.cols(); ++i){
+		z3::expr var(c);
+		const char* varName = ("x_" + std::to_string(i)).c_str();
+		var=c.real_const(varName);
+		variables.push_back(var);
+	}
+
+	for(unsigned i = 0; i < currMatrix.rows(); ++i){
+		z3::expr polynomial(c);
+		for(unsigned j = 0; j < currMatrix.cols(); ++j){
+			z3::expr coeff(c);
+
+			std::cout << "String: " << currMatrix(i,j).toString() << std::endl;
+			std::string stringRep = currMatrix(i,j).toString();
+			// cover potential brackets
+			if(stringRep.find("(") == std::string::npos){
+				stringRep = stringRep.substr(1,stringRep.length()-1);
+			} else {
+				stringRep = stringRep.substr(2,stringRep.length()-3);
+			}
+			stringRep.erase(std::remove_if(stringRep.begin(), stringRep.end(), [](char c) { return !isalpha(c); }), stringRep.end());
+
+			std::size_t delimiterPos = stringRep.find("/");
+
+			if(delimiterPos == std::string::npos) {
+				coeff = c.real_val(stringRep.data());
+			} else {
+				std::string numerator = stringRep.substr(0,delimiterPos);
+	            std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
+
+	            z3::expr nom = c.real_val(numerator.data());
+				z3::expr den = c.real_val(denominator.data());
+
+				coeff = nom / den;
+			}
+
+			if (currMatrix(i,j) < 0){
+				coeff = -coeff;
+			}
+
+			z3::expr term(c);
+
+			std::cout << "Variable: " << variables[j] << std::endl;
+			std::cout << "J: " << j << ", coeff: " << coeff << std::endl;
+
+			term=variables[j]*coeff;
+			if(j == 0)
+				polynomial = term;
+			else
+				polynomial = polynomial + term ;
+		}
+		const char* constantPart;
+		z3::expr constant(c);
+		if (currVector(i) < 0){
+			std::string tmp = currVector(i).toString();
+
+			// cover potential brackets
+			if(tmp.find("(") == std::string::npos){
+				tmp = tmp.substr(1,tmp.length()-1);
+			} else {
+				tmp = tmp.substr(2,tmp.length()-3);
+			}
+			tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+			constantPart = tmp.c_str();
+			constant = c.real_val(constantPart);
+			constant = -constant;
+		} else {
+			constantPart = currVector(i).toString().c_str();
+			constant = c.real_val(constantPart);
+		}
+
+		z3::expr constraint(polynomial <= constant);
+		constraints.push_back(constraint);
+	}
+
+    for(unsigned i = 0; i < constraints.size(); ++i) {
+    	//std::cout << constraints[i] << std::endl;
+    	z3solver.add(constraints[i]);
+    }
+
+    if (z3::sat == z3solver.check()) {
+    	return false;
+    }
+    else {
+    	return true;
+    }
 #else
 	if(!mInitialized) {
 		initialize();
@@ -464,8 +561,12 @@ void HPolytope<Number>::removeRedundantPlanes() {
 					}
 				}
 			}  // FEAS
+			else {
+				std::cout << "Result unbounded should not happen." << std::endl;
+				assert(false);
+			}
 		}	  // loop
-	   // std::cout << __func__ << ": Result: " << *this << std::endl;
+		//std::cout << __func__ << ": Result: " << *this << std::endl;
 	}
 }
 
@@ -509,14 +610,16 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	Poly objective = constrPair.second;
 	simplex.addObjective(objective, false);
 
-	std::cout << "Checking: " << std::endl << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	std::cout << "with objective function " << std::endl << objective << std::endl;
+	//std::cout << "(push)" << std::endl;
+	//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+	//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
 
 	smtrat::Answer res = simplex.check();
 
 	switch(res) {
 		case smtrat::Answer::SAT:{
 			smtrat::ModelValue valuation = simplex.optimum(objective);
+			simplex.removeObjective(objective);
 			assert(!valuation.isBool());
 			assert(!valuation.isSqrtEx());
 			assert(!valuation.isRAN());
@@ -532,9 +635,202 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 				return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
 			}
 		}
-		default:
+		default:{
+			simplex.removeObjective(objective);
 			return std::make_pair( 0, INFEAS );
+		}
 	}
+#elif defined USE_Z3
+	matrix_t<Number> currMatrix = this->matrix();
+	vector_t<Number> currVector = this->vector();
+
+	z3::context c;
+    z3::optimize opt(c);
+    z3::params p(c);
+    p.set("priority",c.str_symbol("pareto"));
+    opt.set(p);
+    z3::expr_vector constraints(c);
+	z3::expr_vector variables(c);
+	for(unsigned i = 0; i < currMatrix.cols(); ++i){
+		z3::expr var(c);
+		const char* varName = ("x_" + std::to_string(i)).c_str();
+		var=c.real_const(varName);
+		variables.push_back(var);
+	}
+
+	// create optimization function
+	z3::expr direction(c);
+	for(unsigned i = 0; i < currMatrix.cols(); ++i){
+		const char* coefficient(_direction(i).toString().c_str());
+		z3::expr coeff(c);
+
+		std::cout << "coefficient " << coefficient;
+
+		if (_direction(i) < 0){
+			std::string tmp = _direction(i).toString();
+
+			// cover potential brackets
+			if(tmp.find("(") == std::string::npos){
+				tmp = tmp.substr(1,tmp.length()-1);
+			} else {
+				tmp = tmp.substr(2,tmp.length()-3);
+			}
+			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+			//tmp = "(- " + tmp + ")";
+
+			std::cout << " tmp " << tmp;
+
+			coefficient = tmp.data();
+			coeff = c.real_val(coefficient);
+			coeff = -coeff;
+		} else {
+			string tmp = _direction(i).toString();
+			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+			coefficient = tmp.data();
+			coeff = c.real_val(coefficient);
+		}
+
+		std::cout << " vs coeff " << coeff << std::endl;
+
+		z3::expr term(c);
+		term=variables[i]*coeff;
+
+		if(i==0)
+			direction = term;
+		else
+			direction = direction + term;
+	}
+
+	// create constraint system
+	for(unsigned i = 0; i < currMatrix.rows(); ++i){
+		z3::expr polynomial(c);
+		for(unsigned j = 0; j < currMatrix.cols(); ++j){
+			const char* coefficient(currMatrix(i,j).toString().c_str());
+			z3::expr coeff(c);
+
+			if (currMatrix(i,j) < 0){
+				std::string tmp = currMatrix(i,j).toString();
+
+				// cover potential brackets
+				if(tmp.find("(") == std::string::npos){
+					tmp = tmp.substr(1,tmp.length()-1);
+				} else {
+					tmp = tmp.substr(2,tmp.length()-3);
+				}
+				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+				coefficient = tmp.c_str();
+				coeff = c.real_val(coefficient);
+				coeff = -coeff;
+			} else {
+				string tmp = currMatrix(i,j).toString();
+				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+				coefficient = tmp.data();
+
+				coeff = c.real_val(coefficient);
+			}
+
+			z3::expr term(c);
+
+			term=variables[j]*coeff;
+			if(j == 0)
+				polynomial = term;
+			else
+				polynomial = polynomial + term ;
+		}
+		const char* constantPart;
+		z3::expr constant(c);
+
+		std::cout << "Constant part real: " << currVector(i) << std::endl;
+		if (currVector(i) < 0){
+			std::string tmp = currVector(i).toString();
+
+			// cover potential brackets
+			if(tmp.find("(") == std::string::npos){
+				tmp = tmp.substr(1,tmp.length()-1);
+			} else {
+				tmp = tmp.substr(2,tmp.length()-3);
+			}
+			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+			std::cout << "Tmp " << tmp << std::endl;
+
+			constantPart = tmp.c_str();
+			std::cout << "ConstantPart " << constantPart << std::endl;
+			constant = c.real_val(constantPart);
+			constant = -constant;
+		} else {
+			string tmp = currVector(i).toString();
+			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
+
+			constantPart = tmp.data();
+			std::cout << "ConstantPart " << constantPart << "\t " << currVector(i) << std::endl;
+
+			constant = c.real_val(constantPart);
+		}
+
+		//std::cout << "Constant " << constant << std::endl;
+
+		z3::expr constraint(polynomial <= constant);
+		constraints.push_back(constraint);
+	}
+
+    for(unsigned i = 0; i < constraints.size(); ++i) {
+    	std::cout << "Constraints: " << constraints[i] << std::endl;
+    	opt.add(constraints[i]);
+    }
+
+    z3::optimize::handle h1 = opt.maximize(direction);
+
+    std::cout << "Evaluate in direction " << direction << std::endl;
+
+    if (z3::sat == opt.check()) {
+		assert(opt.upper(h1).is_arith());
+		//assert(opt.upper(h1).is_const());
+		std::cout << __func__ << " " <<  opt.upper(h1) << ", " << opt.lower(h1) << std::endl;
+		std::cout << "Satisfied typetraits: " << std::endl;
+		std::cout << "opt.upper(h1).is_real(): " << opt.upper(h1).is_real() << std::endl;
+		std::cout << "opt.upper(h1).is_int(): " << opt.upper(h1).is_int() << std::endl;
+		std::cout << "opt.upper(h1).is_arith(): " << opt.upper(h1).is_arith() << std::endl;
+		std::cout << "opt.upper(h1).is_numeral(): " << opt.upper(h1).is_numeral() << std::endl;
+		std::cout << "opt.upper(h1).is_const(): " << opt.upper(h1).is_const() << std::endl;
+		if(opt.upper(h1).is_numeral() ) {
+			long long num;
+    		long long den;
+    		if (Z3_get_numeral_rational_int64(opt.upper(h1).ctx(), opt.upper(h1), &num, &den)) {
+    			// TODO: TEMPORARY!!!
+    			long tmpNum = (long)num;
+    			long tmpDen = (long)den;
+
+            	return std::make_pair(Number(tmpNum)/Number(tmpDen), FEAS);
+            } else {
+            	std::cout << "Expression is not convertible exactly." << std::endl;
+            	std::cout << Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1)) << std::endl;
+
+            	std::string stringRep = Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1));
+            	std::size_t delimiterPos = stringRep.find("/");
+            	std::string numerator = stringRep.substr(0,delimiterPos);
+            	std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
+
+            	std::cout << numerator << "/" << denominator << std::endl;
+
+            	Number numer(numerator);
+            	Number denom(denominator);
+
+            	std::cout << numer << "/" << denom << std::endl;
+
+            	return std::make_pair(numer/denom, FEAS);
+            }
+		} else {
+			return std::make_pair( 1, INFTY );
+		}
+    }
+    else {
+    	return std::make_pair( 0, INFEAS );
+    }
 #else
 	if ( !mInitialized ) {
 		initialize();
@@ -648,8 +944,12 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
 		if ( evalRes.second == INFTY ) {
+			//std::cout << __func__ << " Evaluated against " <<
+			//mHPlanes.at(i).normal() << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
+			//std::cout << "EMPTY" << std::endl;
 			// TODO: Return empty polytope.
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
@@ -663,14 +963,18 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
 		if ( evalRes.second == INFTY ) {
+			//std::cout << __func__ << " Evaluated against " <<
+			//rhs.constraints().at( i ).normal() << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
+			//std::cout << "EMPTY" << std::endl;
 			// TODO: Return empty polytope.
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
 			//std::cout << __func__ << " Evaluated against " <<
-			//mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			//rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
 	//res.removeRedundantPlanes();
@@ -680,7 +984,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 	if ( rhs.empty() || this->empty() ) {
-		std::cout << "this->empty(): " << this->empty() << ", rhs.empty(): " << rhs.empty() << std::endl;
+		//std::cout << "this->empty(): " << this->empty() << ", rhs.empty(): " << rhs.empty() << std::endl;
 		return HPolytope<Number>::Empty();
 	} else {
 		HPolytope<Number> res;
@@ -690,9 +994,9 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		if(!res.constraints().empty()) {
-			res.removeRedundantPlanes();
-		}
+		//if(!res.constraints().empty()) {
+		//	res.removeRedundantPlanes();
+		//}
 
 		return res;
 	}
@@ -759,15 +1063,15 @@ bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
 		std::pair<Number, SOLUTION> evalRes2 = rhs.evaluate( plane.normal() );
 
-		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << evalRes2.first << "\t" ;
+		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << evalRes2.first << "\t" ;
 		if ( evalRes.second == INFEAS ) {
-			std::cout << "INFEAS" << std::endl;
+			//std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
-			std::cout << "INFTY" << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			continue;
 		} else if ( evalRes.first < evalRes2.first ) {
-			std::cout << "Too large" << std::endl;
+			//std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}

@@ -14,7 +14,7 @@
 #include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/vertexEnumeration.h"
-#include "../../../util/smtrat/SimplexSolver.h"
+#include "../../../util/Optimizer.h"
 #include "util.h"
 
 
@@ -44,6 +44,8 @@ public:
 	bool mFanSet;
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
+
+	Optimizer<Number> mOptimizer;
 
 #ifndef USE_SMTRAT
 	// glpk members
