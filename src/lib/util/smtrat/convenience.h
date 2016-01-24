@@ -56,8 +56,8 @@ namespace hypro {
 		VariablePool& pool = VariablePool::getInstance();
 
 		// get new variables
-		for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
-			objective += carl::convert<Number,Rational>(_objective(colIndex))*pool.carlVarByIndex(colIndex);
+		for(unsigned index = 0; index < _objective.rows(); ++index) {
+			objective += carl::convert<Number,Rational>(_objective(index))*pool.carlVarByIndex(index);
 		}
 		return std::move(objective);
 	}

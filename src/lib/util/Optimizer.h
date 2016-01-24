@@ -18,7 +18,7 @@ namespace hypro {
 
 	public:
 		Optimizer() = default;
-		Optimizer(const matrix_t<Number>& _matrix, const vector_t<Number>& _vector)
+		Optimizer(const matrix_t<Number>& _matrix, const vector_t<Number>& _vector) :
 			mConstraintMatrix(_matrix),
 			mConstraintVector(_vector),
 			mInitialized(false)
