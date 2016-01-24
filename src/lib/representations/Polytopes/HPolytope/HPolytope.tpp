@@ -3,6 +3,7 @@ namespace hypro {
 template <typename Number>
 HPolytope<Number>::HPolytope()
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
+	mOptimizer = new Optimizer<Number>();
 }
 
 template <typename Number>
@@ -11,6 +12,7 @@ HPolytope<Number>::HPolytope( const HPolytope &orig )
 	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
+	mOptimizer = new Optimizer<Number>(orig.matrix(), orig.vector());
 }
 
 template <typename Number>
@@ -22,6 +24,7 @@ HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
 			mHPlanes.push_back( plane );
 		}
 	}
+	mOptimizer = new Optimizer<Number>();
 }
 
 template <typename Number>
@@ -31,6 +34,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> 
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
 	}
+	mOptimizer = new Optimizer<Number>(A, b);
 }
 
 template <typename Number>
@@ -39,6 +43,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A )
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
 	}
+	mOptimizer = new Optimizer<Number>(A, vector_t<Number>::Zero(A.cols()));
 }
 
 template <typename Number>
@@ -94,6 +99,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 			}
 			facets.clear();
 		}
+		mOptimizer = new Optimizer<Number>();
 	}
 }
 

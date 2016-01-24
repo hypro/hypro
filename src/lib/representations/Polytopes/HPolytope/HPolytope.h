@@ -45,7 +45,7 @@ public:
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
 
-	Optimizer<Number> mOptimizer;
+	Optimizer<Number>* mOptimizer;
 
 #ifndef USE_SMTRAT
 	// glpk members
