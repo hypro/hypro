@@ -12,7 +12,7 @@
 
 namespace hypro{
     
-//TODO testing!!!
+//TODO alternative approach for H -> Box (testing which is faster)
 
 // conversion from box to box    
 template <typename Number>
@@ -21,7 +21,6 @@ static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _tar
 	return true;
 }
 // conversion from support function to box
-//seems to be buggy
 template <typename Number>
 static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode ) {
 	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object                                                               
@@ -36,7 +35,7 @@ static bool convert( const hypro::SupportFunction<Number>& _source, hypro::Box<N
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
-		intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );    //create one interval with the corresponding left and right end points
+		intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );    //create one interval with the corresponding left and right end points (inverted lower interval end points)
 	}
 
 	_target = Box<Number>( intervals );                                                                     //creates a box with the computed intervals
