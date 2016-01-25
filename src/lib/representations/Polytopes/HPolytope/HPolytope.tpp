@@ -105,9 +105,7 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
-#ifndef USE_SMTRAT
-	if ( mInitialized ) glp_delete_prob(lp);
-#endif
+	delete mOptimizer;
 }
 
 /*
@@ -119,126 +117,10 @@ bool HPolytope<Number>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
-#ifdef USE_SMTRAT
-	smtrat::SimplexSolver simplex;
-	simplex.push();
-	smtrat::FormulaT constr = createFormula(this->matrix(), this->vector());
-	simplex.inform(constr);
-	simplex.add(constr);
-
-	return (simplex.check() == smtrat::Answer::UNSAT);
-#elif defined USE_Z3
-	matrix_t<Number> currMatrix = this->matrix();
-	vector_t<Number> currVector = this->vector();
-
-
-	z3::context c;
-    z3::solver z3solver(c);
-
-	z3::expr_vector constraints(c);
-	z3::expr_vector variables(c);
-	for(unsigned i = 0; i < currMatrix.cols(); ++i){
-		z3::expr var(c);
-		const char* varName = ("x_" + std::to_string(i)).c_str();
-		var=c.real_const(varName);
-		variables.push_back(var);
-	}
-
-	for(unsigned i = 0; i < currMatrix.rows(); ++i){
-		z3::expr polynomial(c);
-		for(unsigned j = 0; j < currMatrix.cols(); ++j){
-			z3::expr coeff(c);
-
-			std::cout << "String: " << currMatrix(i,j).toString() << std::endl;
-			std::string stringRep = currMatrix(i,j).toString();
-			// cover potential brackets
-			if(stringRep.find("(") == std::string::npos){
-				stringRep = stringRep.substr(1,stringRep.length()-1);
-			} else {
-				stringRep = stringRep.substr(2,stringRep.length()-3);
-			}
-			stringRep.erase(std::remove_if(stringRep.begin(), stringRep.end(), [](char c) { return !isalpha(c); }), stringRep.end());
-
-			std::size_t delimiterPos = stringRep.find("/");
-
-			if(delimiterPos == std::string::npos) {
-				coeff = c.real_val(stringRep.data());
-			} else {
-				std::string numerator = stringRep.substr(0,delimiterPos);
-	            std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
-
-	            z3::expr nom = c.real_val(numerator.data());
-				z3::expr den = c.real_val(denominator.data());
-
-				coeff = nom / den;
-			}
-
-			if (currMatrix(i,j) < 0){
-				coeff = -coeff;
-			}
-
-			z3::expr term(c);
-
-			std::cout << "Variable: " << variables[j] << std::endl;
-			std::cout << "J: " << j << ", coeff: " << coeff << std::endl;
-
-			term=variables[j]*coeff;
-			if(j == 0)
-				polynomial = term;
-			else
-				polynomial = polynomial + term ;
-		}
-		const char* constantPart;
-		z3::expr constant(c);
-		if (currVector(i) < 0){
-			std::string tmp = currVector(i).toString();
-
-			// cover potential brackets
-			if(tmp.find("(") == std::string::npos){
-				tmp = tmp.substr(1,tmp.length()-1);
-			} else {
-				tmp = tmp.substr(2,tmp.length()-3);
-			}
-			tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-			constantPart = tmp.c_str();
-			constant = c.real_val(constantPart);
-			constant = -constant;
-		} else {
-			constantPart = currVector(i).toString().c_str();
-			constant = c.real_val(constantPart);
-		}
-
-		z3::expr constraint(polynomial <= constant);
-		constraints.push_back(constraint);
-	}
-
-    for(unsigned i = 0; i < constraints.size(); ++i) {
-    	//std::cout << constraints[i] << std::endl;
-    	z3solver.add(constraints[i]);
-    }
-
-    if (z3::sat == z3solver.check()) {
-    	return false;
-    }
-    else {
-    	return true;
-    }
-#else
-	if(!mInitialized) {
+	if(!mInitialized)
 		initialize();
-	}
-	glp_term_out(GLP_OFF);
-	for ( unsigned i = 0; i < mDimension; i++ ) {
-		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
-	}
-	glp_exact( lp, NULL );
-	//if(glp_get_status(lp) == GLP_NOFEAS)
-		//std::cout << "Empty!" << std::endl;
 
-	return (glp_get_status(lp) == GLP_NOFEAS);
-#endif
+	return !mOptimizer->checkConsistency();
 }
 
 template <typename Number>
@@ -509,7 +391,9 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 
 template <typename Number>
 void HPolytope<Number>::erase( const unsigned index ) {
+	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
+	mInitialized = false;
 }
 
 template <typename Number>
@@ -607,280 +491,10 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	if(mHPlanes.empty())
 		return std::make_pair( 1, INFTY );
 
-#ifdef USE_SMTRAT
-	smtrat::SimplexSolver simplex;
-	//simplex.reset();
-	std::pair<smtrat::FormulaT, Poly> constrPair = createFormula(this->matrix(), this->vector(), _direction);
-	simplex.inform(constrPair.first);
-	simplex.add(constrPair.first);
-	Poly objective = constrPair.second;
-	simplex.addObjective(objective, false);
-
-	//std::cout << "(push)" << std::endl;
-	//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-	//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
-
-	smtrat::Answer res = simplex.check();
-
-	switch(res) {
-		case smtrat::Answer::SAT:{
-			smtrat::ModelValue valuation = simplex.optimum(objective);
-			simplex.removeObjective(objective);
-			assert(!valuation.isBool());
-			assert(!valuation.isSqrtEx());
-			assert(!valuation.isRAN());
-			assert(!valuation.isBVValue());
-			assert(!valuation.isSortValue());
-			assert(!valuation.isUFModel());
-			if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
-				//std::cout << __func__ << ": INFINITY" << std::endl;
-				return std::make_pair( 1, INFTY );
-			} else {
-				assert(valuation.isRational());
-				//std::cout << __func__ << ": " << valuation.asRational() << std::endl;
-				return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
-			}
-		}
-		default:{
-			simplex.removeObjective(objective);
-			return std::make_pair( 0, INFEAS );
-		}
-	}
-#elif defined USE_Z3
-	matrix_t<Number> currMatrix = this->matrix();
-	vector_t<Number> currVector = this->vector();
-
-	z3::context c;
-    z3::optimize opt(c);
-    z3::params p(c);
-    p.set("priority",c.str_symbol("pareto"));
-    opt.set(p);
-    z3::expr_vector constraints(c);
-	z3::expr_vector variables(c);
-	for(unsigned i = 0; i < currMatrix.cols(); ++i){
-		z3::expr var(c);
-		const char* varName = ("x_" + std::to_string(i)).c_str();
-		var=c.real_const(varName);
-		variables.push_back(var);
-	}
-
-	// create optimization function
-	z3::expr direction(c);
-	for(unsigned i = 0; i < currMatrix.cols(); ++i){
-		const char* coefficient(_direction(i).toString().c_str());
-		z3::expr coeff(c);
-
-		std::cout << "coefficient " << coefficient;
-
-		if (_direction(i) < 0){
-			std::string tmp = _direction(i).toString();
-
-			// cover potential brackets
-			if(tmp.find("(") == std::string::npos){
-				tmp = tmp.substr(1,tmp.length()-1);
-			} else {
-				tmp = tmp.substr(2,tmp.length()-3);
-			}
-			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-			//tmp = "(- " + tmp + ")";
-
-			std::cout << " tmp " << tmp;
-
-			coefficient = tmp.data();
-			coeff = c.real_val(coefficient);
-			coeff = -coeff;
-		} else {
-			string tmp = _direction(i).toString();
-			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-			coefficient = tmp.data();
-			coeff = c.real_val(coefficient);
-		}
-
-		std::cout << " vs coeff " << coeff << std::endl;
-
-		z3::expr term(c);
-		term=variables[i]*coeff;
-
-		if(i==0)
-			direction = term;
-		else
-			direction = direction + term;
-	}
-
-	// create constraint system
-	for(unsigned i = 0; i < currMatrix.rows(); ++i){
-		z3::expr polynomial(c);
-		for(unsigned j = 0; j < currMatrix.cols(); ++j){
-			const char* coefficient(currMatrix(i,j).toString().c_str());
-			z3::expr coeff(c);
-
-			if (currMatrix(i,j) < 0){
-				std::string tmp = currMatrix(i,j).toString();
-
-				// cover potential brackets
-				if(tmp.find("(") == std::string::npos){
-					tmp = tmp.substr(1,tmp.length()-1);
-				} else {
-					tmp = tmp.substr(2,tmp.length()-3);
-				}
-				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-				coefficient = tmp.c_str();
-				coeff = c.real_val(coefficient);
-				coeff = -coeff;
-			} else {
-				string tmp = currMatrix(i,j).toString();
-				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-				coefficient = tmp.data();
-
-				coeff = c.real_val(coefficient);
-			}
-
-			z3::expr term(c);
-
-			term=variables[j]*coeff;
-			if(j == 0)
-				polynomial = term;
-			else
-				polynomial = polynomial + term ;
-		}
-		const char* constantPart;
-		z3::expr constant(c);
-
-		std::cout << "Constant part real: " << currVector(i) << std::endl;
-		if (currVector(i) < 0){
-			std::string tmp = currVector(i).toString();
-
-			// cover potential brackets
-			if(tmp.find("(") == std::string::npos){
-				tmp = tmp.substr(1,tmp.length()-1);
-			} else {
-				tmp = tmp.substr(2,tmp.length()-3);
-			}
-			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-			std::cout << "Tmp " << tmp << std::endl;
-
-			constantPart = tmp.c_str();
-			std::cout << "ConstantPart " << constantPart << std::endl;
-			constant = c.real_val(constantPart);
-			constant = -constant;
-		} else {
-			string tmp = currVector(i).toString();
-			//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-			constantPart = tmp.data();
-			std::cout << "ConstantPart " << constantPart << "\t " << currVector(i) << std::endl;
-
-			constant = c.real_val(constantPart);
-		}
-
-		//std::cout << "Constant " << constant << std::endl;
-
-		z3::expr constraint(polynomial <= constant);
-		constraints.push_back(constraint);
-	}
-
-    for(unsigned i = 0; i < constraints.size(); ++i) {
-    	std::cout << "Constraints: " << constraints[i] << std::endl;
-    	opt.add(constraints[i]);
-    }
-
-    z3::optimize::handle h1 = opt.maximize(direction);
-
-    std::cout << "Evaluate in direction " << direction << std::endl;
-
-    if (z3::sat == opt.check()) {
-		assert(opt.upper(h1).is_arith());
-		//assert(opt.upper(h1).is_const());
-		std::cout << __func__ << " " <<  opt.upper(h1) << ", " << opt.lower(h1) << std::endl;
-		std::cout << "Satisfied typetraits: " << std::endl;
-		std::cout << "opt.upper(h1).is_real(): " << opt.upper(h1).is_real() << std::endl;
-		std::cout << "opt.upper(h1).is_int(): " << opt.upper(h1).is_int() << std::endl;
-		std::cout << "opt.upper(h1).is_arith(): " << opt.upper(h1).is_arith() << std::endl;
-		std::cout << "opt.upper(h1).is_numeral(): " << opt.upper(h1).is_numeral() << std::endl;
-		std::cout << "opt.upper(h1).is_const(): " << opt.upper(h1).is_const() << std::endl;
-		if(opt.upper(h1).is_numeral() ) {
-			long long num;
-    		long long den;
-    		if (Z3_get_numeral_rational_int64(opt.upper(h1).ctx(), opt.upper(h1), &num, &den)) {
-    			// TODO: TEMPORARY!!!
-    			long tmpNum = (long)num;
-    			long tmpDen = (long)den;
-
-            	return std::make_pair(Number(tmpNum)/Number(tmpDen), FEAS);
-            } else {
-            	std::cout << "Expression is not convertible exactly." << std::endl;
-            	std::cout << Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1)) << std::endl;
-
-            	std::string stringRep = Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1));
-            	std::size_t delimiterPos = stringRep.find("/");
-            	std::string numerator = stringRep.substr(0,delimiterPos);
-            	std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
-
-            	std::cout << numerator << "/" << denominator << std::endl;
-
-            	Number numer(numerator);
-            	Number denom(denominator);
-
-            	std::cout << numer << "/" << denom << std::endl;
-
-            	return std::make_pair(numer/denom, FEAS);
-            }
-		} else {
-			return std::make_pair( 1, INFTY );
-		}
-    }
-    else {
-    	return std::make_pair( 0, INFEAS );
-    }
-#else
-	if ( !mInitialized ) {
+	if(!mInitialized)
 		initialize();
-	}
 
-	// std::cout << __func__ << ": " << _direction.transpose() << std::endl;
-
-	assert( _direction.rows() == mDimension );
-
-	// std::cout << "Set target: ";
-	for ( unsigned i = 0; i < mDimension; i++ ) {
-		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( lp, i + 1, double( _direction( i ) ) );
-		// std::cout << double(_direction(i)) << ", ";
-	}
-	// std::cout << std::endl;
-
-	/* solve problem */
-	glp_simplex( lp, NULL );
-
-	Number result = glp_get_obj_val( lp );
-
-	// display potential problems
-	switch ( glp_get_status( lp ) ) {
-		case GLP_OPT:
-		case GLP_FEAS: {
-			break;
-		}
-		case GLP_UNBND: {
-			return std::make_pair( 1, INFTY );
-			break;
-		}
-		default:
-			// std::cout << __func__ << ": " << *this << " in direction " << _direction
-			// << std::endl;
-			// std::cout << "Unable to find a suitable solution for the support function
-			// (linear program). ErrorCode: "
-			// << glp_get_status(lp) << std::endl;
-			return std::make_pair( 0, INFEAS );
-	}
-	// std::cout << "Result: " << result << std::endl;
-
-	return std::make_pair( result, FEAS );
-#endif
+	return mOptimizer->evaluate(_direction);
 }
 
 template <typename Number>
@@ -912,27 +526,17 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 														   const vector_t<Number> &b ) const {
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
-		// if A has full rank, we can simply retransform, otherwise use double description method.
+		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
 			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
-			//std::cout << __func__ << " this: " << *this << std::endl;
-		//std::cout << __func__ << " vertices: " << std::endl;
+			VPolytope<Number> intermediate( this->vertices() );
+			intermediate = intermediate.linearTransformation( A, b );
 
-		//std::cout << "Create intermediate. " << std::endl;
-
-		VPolytope<Number> intermediate( this->vertices() );
-
-		//std::cout << "Intermediate : " << intermediate << std::endl;
-
-		intermediate = intermediate.linearTransformation( A, b );
-
-		//std::cout << "Intermediate : " << intermediate << std::endl;
-
-		HPolytope<Number> res( intermediate );
-		return res;
+			HPolytope<Number> res( intermediate );
+			return res;
 		}
 	} else {
 		return *this;
@@ -990,7 +594,6 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 	if ( rhs.empty() || this->empty() ) {
-		//std::cout << "this->empty(): " << this->empty() << ", rhs.empty(): " << rhs.empty() << std::endl;
 		return HPolytope<Number>::Empty();
 	} else {
 		HPolytope<Number> res;
@@ -1000,9 +603,6 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 		for ( const auto &plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		//if(!res.constraints().empty()) {
-		//	res.removeRedundantPlanes();
-		//}
 
 		return res;
 	}
@@ -1016,29 +616,18 @@ template <typename Number>
 HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
-	//std::cout << __func__ << std::endl;
 
 	HPolytope<Number> res( *this );
-
-	//std::cout << "intersection Vertices before intersection: " << std::endl;
-	//for(const auto& vertex : this->vertices()) {
-	//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
-	//}
 
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
 
-	//std::cout << "intersection Result before reduction: " << std::endl;
-	//std::cout << res << std::endl;
 	if(!res.empty()) {
 		res.removeRedundantPlanes();
 	} else {
 		res = HPolytope<Number>::Empty();
 	}
-
-	//std::cout << "intersection Result AFTER reduction: " << std::endl;
-	//std::cout << res << std::endl;
 
 	return res;
 }
@@ -1101,9 +690,7 @@ void HPolytope<Number>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
-#ifndef USE_SMTRAT
-	deleteArrays();
-#endif
+	mOptimizer->clear();
 	mInitialized = false;
 }
 
@@ -1138,72 +725,14 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
 /*
  * Auxiliary functions
  */
-#ifndef USE_SMTRAT
-	template <typename Number>
-	void HPolytope<Number>::createArrays( unsigned size ) const {
-		ia = new int[size + 1];
-		ja = new int[size + 1];
-		ar = new double[size + 1];
-	}
-
-	template <typename Number>
-	void HPolytope<Number>::deleteArrays() {
-		delete[] ia;
-		delete[] ja;
-		delete[] ar;
-	}
-
-	template <typename Number>
-	void HPolytope<Number>::printArrays() {
-		if ( !mInitialized ) {
-			initialize();
-		}
-		unsigned size = mHPlanes.size() * mDimension;
-		std::cout << "IA: ";
-		for ( unsigned pos = 0; pos < size; ++pos ) {
-			std::cout << ia[pos] << ", ";
-		}
-		std::cout << std::endl;
-	}
 
 	template <typename Number>
 	void HPolytope<Number>::initialize() const {
 		if ( !mInitialized ) {
-			/* create glpk problem */
-			lp = glp_create_prob();
-			glp_set_prob_name( lp, "hpoly" );
-			glp_set_obj_dir( lp, GLP_MAX );
-			glp_term_out( GLP_OFF );
-
-			unsigned numberOfConstraints = mHPlanes.size();
-
-			// convert constraint constants
-			glp_add_rows( lp, numberOfConstraints );
-			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mHPlanes[i].offset() ) );
-			}
-
-			// add cols here
-			glp_add_cols( lp, mDimension );
-			createArrays( numberOfConstraints * mDimension );
-
-			// convert constraint matrix
-			ia[0] = 0;
-			ja[0] = 0;
-			ar[0] = 0;
-			for ( unsigned i = 0; i < numberOfConstraints * mDimension; ++i ) {
-				ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
-				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-				ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
-				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-				ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
-			}
-
-			glp_load_matrix( lp, numberOfConstraints * mDimension, ia, ja, ar );
+			mOptimizer->setMatrix(this->matrix());
+			mOptimizer->setVector(this->vector());
 			mInitialized = true;
 		}
 	}
-#endif
 
 }  // namespace hypro

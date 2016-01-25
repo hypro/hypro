@@ -20,8 +20,6 @@
 
 namespace hypro {
 
-enum SOLUTION { FEAS = 0, INFEAS, INFTY };
-
 template <typename Number>
 class HPolytope {
 public:
@@ -45,15 +43,7 @@ public:
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
 
-	Optimizer<Number>* mOptimizer;
-
-#ifndef USE_SMTRAT
-	// glpk members
-	mutable glp_prob* lp;
-	mutable int* ia;
-	mutable int* ja;
-	mutable double* ar;
-#endif
+	mutable Optimizer<Number>* mOptimizer;
 	mutable bool mInitialized;
 
 
@@ -99,7 +89,7 @@ public:
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundantPlanes();
 
-  HPolytope<Number> heuristic() const;
+	HPolytope<Number> heuristic() const;
 	HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
 	HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
 	void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
@@ -155,77 +145,26 @@ public:
 	}
 
 	friend void swap( HPolytope<Number>& a, HPolytope<Number>& b ) {
-		/*
-		a.printArrays();
-		b.printArrays();
-		std::cout << "a: " << a << std::endl;
-		std::cout << "b: " << b << std::endl;
-		*/
-#ifndef USE_SMTRAT
-		if ( a.mInitialized ) {
-			glp_prob* tmpLp = glp_create_prob();
-			glp_copy_prob(tmpLp, a.lp, GLP_OFF);
-			if ( b.mInitialized ) {
-				glp_copy_prob(a.lp, b.lp, GLP_OFF);
-				glp_copy_prob(b.lp, tmpLp, GLP_OFF);
-				glp_delete_prob(tmpLp);
-			} else {
-				glp_delete_prob(a.lp);
-				b.lp = glp_create_prob();
-				glp_copy_prob(b.lp, tmpLp, GLP_OFF);
-				a.mInitialized = false;
-				b.mInitialized = true;
-			}
-		} else {
-			if ( b.mInitialized ) {
-				a.lp = glp_create_prob();
-				glp_copy_prob(a.lp, b.lp, GLP_OFF);
-				glp_delete_prob(b.lp);
-				a.mInitialized = true;
-				b.mInitialized = false;
-			}
-		}
-		if ( a.mFanSet ) {
-			polytope::Fan<Number> tmp = a.mFan;
-			if ( b.mFanSet ) {
-				a.mFan = b.mFan;
-			} else {
-				a.mFanSet = false;
-			}
-			b.mFan = tmp;
-		} else {
-			if ( b.mFanSet ) {
-				a.mFan = b.mFan;
-				a.mFanSet = true;
-				b.mFanSet = false;
-			}
-		}
-#endif
-		unsigned tmpDimension = a.mDimension;
+		unsigned tmpDim = a.mDimension;
 		a.mDimension = b.mDimension;
-		b.mDimension = tmpDimension;
+		b.mDimension = tmpDim;
 		swap( a.mHPlanes, b.mHPlanes );
 
-		/*
-		std::cout << " HPOLY SWAP " << std::endl;
-		a.printArrays();
-		b.printArrays();
-		std::cout << "a: " << a << std::endl;
-		std::cout << "b: " << b << std::endl;
-		*/
+		Optimizer<Number>* tmpPtr = a.mOptimizer;
+		a.mOptimizer = b.mOptimizer;
+		b.mOptimizer = tmpPtr;
+
+		bool tmpInit = a.mInitialized;
+		a.mInitialized = b.mInitialized;
+		b.mInitialized = tmpInit;
 	}
 
   private:
 	/*
 	 * Auxiliary functions
 	 */
-#ifndef USE_SMTRAT
-	void createArrays( unsigned size ) const;
-	void deleteArrays();
-	void printArrays();
-	void initialize() const;
-#endif
 
+	void initialize() const;
 	void calculateFan() const;
 
   std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
@@ -243,15 +182,6 @@ public:
 };
 
 }  // namespace
-/*
-namespace std {
 
-	template<typename Number>
-	void swap(hypro::HPolytope<Number> lhs, hypro::HPolytope<Number> rhs) {
-		hypro::HPolytope<Number>::swap(lhs,rhs);
-	}
-
-}
-*/
 #include "HPolytope.tpp"
 #include "reduction.tpp"

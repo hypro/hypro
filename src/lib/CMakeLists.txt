@@ -7,6 +7,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 
 set(lib_hypro_headers
 	config.h
+	util/Optimizer.h
     util/VariablePool.h
     util/adaptions_eigen.h
 	util/types.h
