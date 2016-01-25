@@ -2,53 +2,48 @@
 namespace hypro {
 template <typename Number>
 HPolytope<Number>::HPolytope()
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
-	mOptimizer = new Optimizer<Number>();
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 }
 
 template <typename Number>
 HPolytope<Number>::HPolytope( const HPolytope &orig )
-	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mInitialized( false ) {
+	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ) {
 	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
-	mOptimizer = new Optimizer<Number>(orig.matrix(), orig.vector());
 }
 
 template <typename Number>
 HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
 	}
-	mOptimizer = new Optimizer<Number>();
 }
 
 template <typename Number>
 HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> &b )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mInitialized( false ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
 	}
-	mOptimizer = new Optimizer<Number>(A, b);
 }
 
 template <typename Number>
 HPolytope<Number>::HPolytope( const matrix_t<Number> &A )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mInitialized( false ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
 	}
-	mOptimizer = new Optimizer<Number>(A, vector_t<Number>::Zero(A.cols()));
 }
 
 template <typename Number>
 HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mInitialized( false ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 	if ( !alien.empty() ) {
 		// degenerate cases
 		unsigned size = alien.size();
@@ -99,13 +94,11 @@ HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
 			}
 			facets.clear();
 		}
-		mOptimizer = new Optimizer<Number>();
 	}
 }
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
-	delete mOptimizer;
 }
 
 /*
@@ -117,10 +110,11 @@ bool HPolytope<Number>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
-	if(!mInitialized)
-		initialize();
+	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	opt.setMatrix(this->matrix());
+	opt.setVector(this->vector());
 
-	return !mOptimizer->checkConsistency();
+	return !opt.checkConsistency();
 }
 
 template <typename Number>
@@ -151,7 +145,7 @@ matrix_t<Number> HPolytope<Number>::matrix() const {
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
 	}
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>
@@ -160,7 +154,7 @@ vector_t<Number> HPolytope<Number>::vector() const {
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res( planeIndex ) = mHPlanes.at( planeIndex ).offset();
 	}
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>
@@ -179,7 +173,7 @@ const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
 	if ( !mFanSet ) {
 		calculateFan();
 	}
-	return mFan;
+	return std::move(mFan);
 }
 
 template <typename Number>
@@ -296,7 +290,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 			//std::cout << "PING" << std::endl;
 		}
 	}
-	return vertices;
+	return std::move(vertices);
 }
 
 template <typename Number>
@@ -371,7 +365,6 @@ void HPolytope<Number>::insert( const Hyperplane<Number> &plane ) {
 		mDimension = plane.dimension();
 	}
 	mHPlanes.push_back( plane );
-	mInitialized = false;
 }
 
 template <typename Number>
@@ -386,14 +379,12 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 		mHPlanes.push_back( *it );
 		++it;
 	}
-	mInitialized = false;
 }
 
 template <typename Number>
 void HPolytope<Number>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
-	mInitialized = false;
 }
 
 template <typename Number>
@@ -428,11 +419,9 @@ void HPolytope<Number>::removeRedundantPlanes() {
 					//std::cout << "erase " << *planeIt << " which is really redundant." <<
 					//std::endl;
 					planeIt = mHPlanes.erase( planeIt );
-					mInitialized = false;
 				} else {
 					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
 					auto pos = mHPlanes.erase( planeIt );
-					mInitialized = false;
 					//std::cout << "Evaluate without plane." << std::endl;
 					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
 					//std::cout << "Eval with: " << evalRes.first << ", without: " <<
@@ -441,7 +430,6 @@ void HPolytope<Number>::removeRedundantPlanes() {
 					if ( tmpRes.second == INFTY ||
 						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
 						planeIt = mHPlanes.insert( pos, tmp );
-						mInitialized = false;
 						++planeIt;
 						//std::cout << "keep "  << tmp << std::endl;
 					} else {
@@ -491,10 +479,11 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	if(mHPlanes.empty())
 		return std::make_pair( 1, INFTY );
 
-	if(!mInitialized)
-		initialize();
+	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	opt.setMatrix(this->matrix());
+	opt.setVector(this->vector());
 
-	return mOptimizer->evaluate(_direction);
+	return opt.evaluate(_direction);
 }
 
 template <typename Number>
@@ -530,13 +519,13 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		if(lu.rank() == A.rows()) {
 			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			return HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
+			return std::move(HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
 		} else {
 			VPolytope<Number> intermediate( this->vertices() );
 			intermediate = intermediate.linearTransformation( A, b );
 
 			HPolytope<Number> res( intermediate );
-			return res;
+			return std::move(res);
 		}
 	} else {
 		return *this;
@@ -588,7 +577,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 		}
 	}
 	//res.removeRedundantPlanes();
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>
@@ -629,7 +618,7 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 		res = HPolytope<Number>::Empty();
 	}
 
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>
@@ -676,12 +665,12 @@ bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
 template <typename Number>
 HPolytope<Number> HPolytope<Number>::unite( const HPolytope &_rhs ) const {
 	if ( _rhs.empty() ) {
-		return HPolytope<Number>( *this );
+		return std::move(HPolytope<Number>( *this ));
 	} else {
 		VPolytope<Number> lhs( this->vertices() );
 		VPolytope<Number> tmpRes = lhs.unite( VPolytope<Number>( _rhs.vertices() ) );
 
-		return HPolytope<Number>( tmpRes );
+		return std::move(HPolytope<Number>( tmpRes ));
 	}
 }
 
@@ -690,8 +679,6 @@ void HPolytope<Number>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
-	mOptimizer->clear();
-	mInitialized = false;
 }
 
 template <typename Number>
@@ -725,14 +712,5 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
 /*
  * Auxiliary functions
  */
-
-	template <typename Number>
-	void HPolytope<Number>::initialize() const {
-		if ( !mInitialized ) {
-			mOptimizer->setMatrix(this->matrix());
-			mOptimizer->setVector(this->vector());
-			mInitialized = true;
-		}
-	}
 
 }  // namespace hypro

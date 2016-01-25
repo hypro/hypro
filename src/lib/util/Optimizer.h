@@ -1,5 +1,6 @@
 #pragma once
 
+#include <carl/util/Singleton.h>
 #include "../config.h"
 #include "smtrat/SimplexSolver.h"
 #include "z3/util.h"
@@ -10,7 +11,9 @@ namespace hypro {
 	enum SOLUTION { FEAS = 0, INFEAS, INFTY };
 
 	template<typename Number>
-	class Optimizer {
+	class Optimizer : public carl::Singleton<Optimizer<Number>> {
+		friend carl::Singleton<Optimizer<Number>>;
+
 	private:
 		matrix_t<Number>	mConstraintMatrix;
 		vector_t<Number> 	mConstraintVector;
@@ -22,20 +25,28 @@ namespace hypro {
 		#elif defined USE_Z3
 		mutable z3::context c;
 	    mutable z3::solver z3solver(c);
-		#else // Fallback: Glpk
+		#endif
+		// Glpk as a presolver
 		mutable glp_prob* lp;
 		mutable int* ia;
 		mutable int* ja;
 		mutable double* ar;
-		#endif
 
-	public:
-		Optimizer() = default;
+	protected:
+
+		Optimizer() :
+			mConstraintMatrix(),
+			mConstraintVector(),
+			mInitialized(false)
+		{}
+
 		Optimizer(const matrix_t<Number>& _matrix, const vector_t<Number>& _vector) :
 			mConstraintMatrix(_matrix),
 			mConstraintVector(_vector),
 			mInitialized(false)
 		{}
+
+	public:
 
 		const matrix_t<Number>& matrix() const;
 		const vector_t<Number>& vector() const;
@@ -44,18 +55,15 @@ namespace hypro {
 		void setVector(const vector_t<Number> _vector);
 		void clear();
 
-		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction) const;
+		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
 		bool checkConsistency() const;
 
 	private:
 		void initialize() const;
 
-		#ifdef USE_SMTRAT
-		#elif defined USE_Z3
-		#else
+
 		void createArrays( unsigned size ) const;
-		void deleteArrays
-		#endif
+		void deleteArrays();
 
 	};
 } // namespace

@@ -43,10 +43,6 @@ public:
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
 
-	mutable Optimizer<Number>* mOptimizer;
-	mutable bool mInitialized;
-
-
   public:
 	HPolytope();
 	HPolytope( const HPolytope& orig );
@@ -149,14 +145,6 @@ public:
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;
 		swap( a.mHPlanes, b.mHPlanes );
-
-		Optimizer<Number>* tmpPtr = a.mOptimizer;
-		a.mOptimizer = b.mOptimizer;
-		b.mOptimizer = tmpPtr;
-
-		bool tmpInit = a.mInitialized;
-		a.mInitialized = b.mInitialized;
-		b.mInitialized = tmpInit;
 	}
 
   private:
@@ -164,7 +152,6 @@ public:
 	 * Auxiliary functions
 	 */
 
-	void initialize() const;
 	void calculateFan() const;
 
   std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;

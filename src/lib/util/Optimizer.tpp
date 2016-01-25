@@ -30,33 +30,79 @@ namespace hypro {
 		mConstraintVector = vector_t<Number>::Zero(1);
 		#ifdef USE_SMTRAT
 		#elif defined USE_Z3
-		#else
-		deleteArrays();
 		#endif
+		deleteArrays();
 		mInitialized = false;
 	}
 
 	template<typename Number>
-	std::pair<Number, SOLUTION> Optimizer<Number>::evaluate(const vector_t<Number>& _direction) const {
+	std::pair<Number, SOLUTION> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool overapproximate) const {
 		if(!mInitialized)
 			initialize();
 
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
+		std::pair<Number,SOLUTION> res;
+
+		// std::cout << "Set target: ";
+		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
+			glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+			glp_set_obj_coef( lp, i + 1, double( _direction( i ) ) );
+		}
+
+		/* solve problem */
+		glp_simplex( lp, NULL );
+
+		res.first = glp_get_obj_val( lp );
+
+		// display potential problems
+		switch ( glp_get_status( lp ) ) {
+			case GLP_OPT:
+			case GLP_FEAS: {
+				res.second = FEAS;
+				break;
+			}
+			case GLP_UNBND: {
+				res = std::make_pair( 1, INFTY );
+				break;
+			}
+			default:
+				res = std::make_pair( 0, INFEAS );
+		}
+
 		#ifdef USE_SMTRAT
 		Poly objective = createObjective(_direction);
+
+		// add presolution
+		bool addedTmpSolution = false;
+		if(res.second == FEAS) {
+			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first.value());
+			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
+			mSmtratSolver.inform(tmpSolutionConstraint);
+			mSmtratSolver.add(tmpSolutionConstraint);
+			addedTmpSolution = true;
+		} else if( res.second == INFEAS) {
+			if(mSmtratSolver.check() == smtrat::Answer::UNSAT)
+				return res;
+		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
+			return res;
+		}
+
+
 		mSmtratSolver.addObjective(objective, false);
 
 		//std::cout << "(push)" << std::endl;
 		//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
 
-		smtrat::Answer res = mSmtratSolver.check();
+		smtrat::Answer smtratCheck = mSmtratSolver.check();
 
-		switch(res) {
+		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
 				smtrat::ModelValue valuation = mSmtratSolver.optimum(objective);
 				mSmtratSolver.removeObjective(objective);
+				if(addedTmpSolution)
+					mSmtratSolver.pop();
 				assert(!valuation.isBool());
 				assert(!valuation.isSqrtEx());
 				assert(!valuation.isRAN());
@@ -64,15 +110,16 @@ namespace hypro {
 				assert(!valuation.isSortValue());
 				assert(!valuation.isUFModel());
 				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
-					return std::make_pair( 1, INFTY );
+					res = std::make_pair( 1, INFTY );
 				} else {
 					assert(valuation.isRational());
-					return std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+					res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
 				}
 			}
 			default:{
 				mSmtratSolver.removeObjective(objective);
-				return std::make_pair( 0, INFEAS );
+				if(addedTmpSolution)
+					mSmtratSolver.pop();
 			}
 		}
 		#elif defined USE_Z3
@@ -144,7 +191,7 @@ namespace hypro {
 	    			long tmpNum = (long)num;
 	    			long tmpDen = (long)den;
 
-	            	return std::make_pair(Number(tmpNum)/Number(tmpDen), FEAS);
+	            	res = std::make_pair(Number(tmpNum)/Number(tmpDen), FEAS);
 	            } else {
 	            	std::cout << "Expression is not convertible exactly." << std::endl;
 	            	std::cout << Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1)) << std::endl;
@@ -161,46 +208,18 @@ namespace hypro {
 
 	            	std::cout << numer << "/" << denom << std::endl;
 
-	            	return std::make_pair(numer/denom, FEAS);
+	            	res = std::make_pair(numer/denom, FEAS);
 	            }
 			} else {
-				return std::make_pair( 1, INFTY );
+				res = std::make_pair( 1, INFTY );
 			}
 	    }
 	    else {
-	    	return std::make_pair( 0, INFEAS );
+	    	res = std::make_pair( 0, INFEAS );
 	    }
-
-		#else
-
-		// std::cout << "Set target: ";
-		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
-			glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-			glp_set_obj_coef( lp, i + 1, double( _direction( i ) ) );
-		}
-
-		/* solve problem */
-		glp_simplex( lp, NULL );
-
-		Number result = glp_get_obj_val( lp );
-
-		// display potential problems
-		switch ( glp_get_status( lp ) ) {
-			case GLP_OPT:
-			case GLP_FEAS: {
-				break;
-			}
-			case GLP_UNBND: {
-				return std::make_pair( 1, INFTY );
-				break;
-			}
-			default:
-				return std::make_pair( 0, INFEAS );
-		}
-
-		return std::make_pair( result, FEAS );
-
 		#endif
+
+		return std::move(res);
 	}
 
 	template<typename Number>
@@ -209,18 +228,17 @@ namespace hypro {
 			initialize();
 
 		#ifdef USE_SMTRAT
-		return (mSmtratSolver.check() == smtrat::Answer::UNSAT);
+		return (mSmtratSolver.check() != smtrat::Answer::UNSAT);
 
 		#elif defined USE_Z3
 	    if (z3::sat == z3solver.check())
-	    	return false;
-	    else
 	    	return true;
+	    else
+	    	return false;
 
 		#else
 		glp_exact( lp, NULL );
-		return (glp_get_status(lp) == GLP_NOFEAS);
-
+		return (glp_get_status(lp) != GLP_NOFEAS);
 		#endif
 	}
 
@@ -228,6 +246,46 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
 		if(!mInitialized) {
+			/* create glpk problem */
+			lp = glp_create_prob();
+			glp_set_prob_name( lp, "hpoly" );
+			glp_set_obj_dir( lp, GLP_MAX );
+			glp_term_out( GLP_OFF );
+
+			unsigned numberOfConstraints = mConstraintMatrix.rows();
+
+			// convert constraint constants
+			glp_add_rows( lp, numberOfConstraints );
+			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
+				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mConstraintVector(i) ) );
+			}
+
+			// add cols here
+			glp_add_cols( lp, mConstraintMatrix.cols() );
+			createArrays( numberOfConstraints * mConstraintMatrix.cols() );
+
+			// convert constraint matrix
+			ia[0] = 0;
+			ja[0] = 0;
+			ar[0] = 0;
+			for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
+				ia[i + 1] = ( (int)( i / mConstraintMatrix.cols() ) ) + 1;
+				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+				ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
+				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+				ar[i + 1] = double( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
+				//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
+				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+			}
+
+			glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
+
+			glp_term_out(GLP_OFF);
+			for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
+				glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+				glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
+			}
+
 			#ifdef USE_SMTRAT
 			smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
 			mSmtratSolver.push();
@@ -319,54 +377,12 @@ namespace hypro {
 		    	z3solver.add(constraints[i]);
 		    }
 
-			#else // Fallback: Glpk
-
-			/* create glpk problem */
-			lp = glp_create_prob();
-			glp_set_prob_name( lp, "hpoly" );
-			glp_set_obj_dir( lp, GLP_MAX );
-			glp_term_out( GLP_OFF );
-
-			unsigned numberOfConstraints = mConstraintMatrix.rows();
-
-			// convert constraint constants
-			glp_add_rows( lp, numberOfConstraints );
-			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mConstraintVector(i) ) );
-			}
-
-			// add cols here
-			glp_add_cols( lp, mConstraintMatrix.cols() );
-			createArrays( numberOfConstraints * mConstraintMatrix.cols() );
-
-			// convert constraint matrix
-			ia[0] = 0;
-			ja[0] = 0;
-			ar[0] = 0;
-			for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
-				ia[i + 1] = ( (int)( i / mConstraintMatrix.cols() ) ) + 1;
-				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-				ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
-				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-				ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
-			}
-
-			glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
-
-			glp_term_out(GLP_OFF);
-			for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
-				glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-				glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
-			}
-
 			#endif
+
 			mInitialized = true;
 		}
 	}
 
-	#ifdef USE_SMTRAT
-	#else
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {
 		ia = new int[size + 1];
@@ -380,7 +396,4 @@ namespace hypro {
 		delete[] ja;
 		delete[] ar;
 	}
-	#endif
-
-
 } // namespace
