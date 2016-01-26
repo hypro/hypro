@@ -114,6 +114,8 @@ bool HPolytope<Number>::empty() const {
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
+	std::cout << __func__ << ": " << (opt.checkConsistency() == true) << std::endl;
+
 	return !opt.checkConsistency();
 }
 
@@ -525,7 +527,7 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 			intermediate = intermediate.linearTransformation( A, b );
 
 			HPolytope<Number> res( intermediate );
-			return std::move(res);
+			return res;
 		}
 	} else {
 		return *this;
@@ -628,12 +630,12 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	//std::cout << *this << "  " << __func__ << "  " << vec << ": ";
+	std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
 		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset()) && plane.normal().dot( vec ) > plane.offset() ) {
-			//std::cout << "Difference is " << plane.normal().dot( vec )-plane.offset() << " with " << plane.normal().dot( vec )<< " and "<< plane.offset()<< std::endl;
-			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+			std::cout << "Difference is " << plane.normal().dot( vec )-plane.offset() << " with " << plane.normal().dot( vec )<< " and "<< plane.offset()<< std::endl;
+			std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
+					  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
 			return false;
 		}
 	}

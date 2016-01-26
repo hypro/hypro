@@ -228,6 +228,8 @@ namespace hypro {
 			initialize();
 
 		#ifdef USE_SMTRAT
+		std::cout << __func__ << ": " << (mSmtratSolver.check()) << std::endl;
+
 		return (mSmtratSolver.check() != smtrat::Answer::UNSAT);
 
 		#elif defined USE_Z3
@@ -245,6 +247,30 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
+		#ifdef LOGGING
+		if (!carl::logging::logger().has("smtrat")) {
+			carl::logging::logger().configure("smtrat", "smtrat.log");
+		}
+		if (!carl::logging::logger().has("stdout")) {
+			carl::logging::logger().configure("stdout", std::cout);
+		}
+		carl::logging::logger().formatter("stdout")->printInformation = false;
+		carl::logging::logger().filter("smtrat")
+			("smtrat", carl::logging::LogLevel::LVL_INFO)
+			("smtrat.cad", carl::logging::LogLevel::LVL_DEBUG)
+			("smtrat.preprocessing", carl::logging::LogLevel::LVL_DEBUG)
+		;
+		carl::logging::logger().filter("stdout")
+			("smtrat", carl::logging::LogLevel::LVL_DEBUG)
+			("smtrat.module", carl::logging::LogLevel::LVL_INFO)
+			("smtrat.parser", carl::logging::LogLevel::LVL_INFO)
+			("smtrat.cad", carl::logging::LogLevel::LVL_DEBUG)
+			("smtrat.preprocessing", carl::logging::LogLevel::LVL_DEBUG)
+			("smtrat.strategygraph", carl::logging::LogLevel::LVL_DEBUG)
+		;
+		#endif
+
+
 		if(!mInitialized) {
 			/* create glpk problem */
 			lp = glp_create_prob();
@@ -288,6 +314,7 @@ namespace hypro {
 
 			#ifdef USE_SMTRAT
 			smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
+			mSmtratSolver.pop();
 			mSmtratSolver.push();
 			mSmtratSolver.inform(currentSystem);
 			mSmtratSolver.add(currentSystem);
