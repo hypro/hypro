@@ -14,34 +14,43 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::setMatrix(const matrix_t<Number> _matrix) {
-		mInitialized = false;
+
+		mConstraintsSet = false;
+		mConsistencyChecked = false;
 		mConstraintMatrix = _matrix;
 	}
 
 	template<typename Number>
 	void Optimizer<Number>::setVector(const vector_t<Number> _vector) {
-		mInitialized = false;
+
+		mConstraintsSet = false;
+		mConsistencyChecked = false;
 		mConstraintVector = _vector;
 	}
 
 	template<typename Number>
 	void Optimizer<Number>::clear() {
+
 		mConstraintMatrix = matrix_t<Number>::Zero(1,1);
 		mConstraintVector = vector_t<Number>::Zero(1);
 		#ifdef USE_SMTRAT
+		if(lp != nullptr)
+			mSmtratSolver.pop();
 		#elif defined USE_Z3
 		#endif
 		deleteArrays();
+		mConsistencyChecked = false;
+		mConstraintsSet = false;
 		mInitialized = false;
 	}
 
 	template<typename Number>
 	std::pair<Number, SOLUTION> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool overapproximate) const {
-		if(!mInitialized)
-			initialize();
+
+		if(!mConstraintsSet)
+			updateConstraints();
 
 		assert( _direction.rows() == mConstraintMatrix.cols() );
-
 		std::pair<Number,SOLUTION> res;
 
 		// std::cout << "Set target: ";
@@ -74,20 +83,17 @@ namespace hypro {
 		Poly objective = createObjective(_direction);
 
 		// add presolution
-		bool addedTmpSolution = false;
 		if(res.second == FEAS) {
 			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first.value());
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 			mSmtratSolver.inform(tmpSolutionConstraint);
 			mSmtratSolver.add(tmpSolutionConstraint);
-			addedTmpSolution = true;
 		} else if( res.second == INFEAS) {
 			if(mSmtratSolver.check() == smtrat::Answer::UNSAT)
-				return res;
+				return std::move(res);
 		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
-			return res;
+			return std::move(res);
 		}
-
 
 		mSmtratSolver.addObjective(objective, false);
 
@@ -100,9 +106,7 @@ namespace hypro {
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
 				smtrat::ModelValue valuation = mSmtratSolver.optimum(objective);
-				mSmtratSolver.removeObjective(objective);
-				if(addedTmpSolution)
-					mSmtratSolver.pop();
+				mSmtratSolver.pop();
 				assert(!valuation.isBool());
 				assert(!valuation.isSqrtEx());
 				assert(!valuation.isRAN());
@@ -115,108 +119,13 @@ namespace hypro {
 					assert(valuation.isRational());
 					res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
 				}
+				break;
 			}
 			default:{
-				mSmtratSolver.removeObjective(objective);
-				if(addedTmpSolution)
-					mSmtratSolver.pop();
+				mSmtratSolver.pop();
 			}
 		}
-		#elif defined USE_Z3
 
-		// create optimization function
-		z3::expr direction(c);
-		for(unsigned i = 0; i < mConstraintMatrix.cols(); ++i){
-			const char* coefficient(_direction(i).toString().c_str());
-			z3::expr coeff(c);
-
-			std::cout << "coefficient " << coefficient;
-
-			if (_direction(i) < 0){
-				std::string tmp = _direction(i).toString();
-
-				// cover potential brackets
-				if(tmp.find("(") == std::string::npos){
-					tmp = tmp.substr(1,tmp.length()-1);
-				} else {
-					tmp = tmp.substr(2,tmp.length()-3);
-				}
-				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-				//tmp = "(- " + tmp + ")";
-
-				std::cout << " tmp " << tmp;
-
-				coefficient = tmp.data();
-				coeff = c.real_val(coefficient);
-				coeff = -coeff;
-			} else {
-				string tmp = _direction(i).toString();
-				//tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-				coefficient = tmp.data();
-				coeff = c.real_val(coefficient);
-			}
-
-			std::cout << " vs coeff " << coeff << std::endl;
-
-			z3::expr term(c);
-			term=variables[i]*coeff;
-
-			if(i==0)
-				direction = term;
-			else
-				direction = direction + term;
-		}
-
-		z3::optimize::handle h1 = opt.maximize(direction);
-
-	    std::cout << "Evaluate in direction " << direction << std::endl;
-
-	    if (z3::sat == opt.check()) {
-			assert(opt.upper(h1).is_arith());
-			//assert(opt.upper(h1).is_const());
-			std::cout << __func__ << " " <<  opt.upper(h1) << ", " << opt.lower(h1) << std::endl;
-			std::cout << "Satisfied typetraits: " << std::endl;
-			std::cout << "opt.upper(h1).is_real(): " << opt.upper(h1).is_real() << std::endl;
-			std::cout << "opt.upper(h1).is_int(): " << opt.upper(h1).is_int() << std::endl;
-			std::cout << "opt.upper(h1).is_arith(): " << opt.upper(h1).is_arith() << std::endl;
-			std::cout << "opt.upper(h1).is_numeral(): " << opt.upper(h1).is_numeral() << std::endl;
-			std::cout << "opt.upper(h1).is_const(): " << opt.upper(h1).is_const() << std::endl;
-			if(opt.upper(h1).is_numeral() ) {
-				long long num;
-	    		long long den;
-	    		if (Z3_get_numeral_rational_int64(opt.upper(h1).ctx(), opt.upper(h1), &num, &den)) {
-	    			// TODO: TEMPORARY!!!
-	    			long tmpNum = (long)num;
-	    			long tmpDen = (long)den;
-
-	            	res = std::make_pair(Number(tmpNum)/Number(tmpDen), FEAS);
-	            } else {
-	            	std::cout << "Expression is not convertible exactly." << std::endl;
-	            	std::cout << Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1)) << std::endl;
-
-	            	std::string stringRep = Z3_get_numeral_string(opt.upper(h1).ctx(), opt.upper(h1));
-	            	std::size_t delimiterPos = stringRep.find("/");
-	            	std::string numerator = stringRep.substr(0,delimiterPos);
-	            	std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
-
-	            	std::cout << numerator << "/" << denominator << std::endl;
-
-	            	Number numer(numerator);
-	            	Number denom(denominator);
-
-	            	std::cout << numer << "/" << denom << std::endl;
-
-	            	res = std::make_pair(numer/denom, FEAS);
-	            }
-			} else {
-				res = std::make_pair( 1, INFTY );
-			}
-	    }
-	    else {
-	    	res = std::make_pair( 0, INFEAS );
-	    }
 		#endif
 
 		return std::move(res);
@@ -224,13 +133,31 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
-		if(!mInitialized)
-			initialize();
+
+		if(!mConstraintsSet)
+			updateConstraints();
+
+		//std::cout << __func__ << " AlreadyChecked: " << mConsistencyChecked << std::endl;
 
 		#ifdef USE_SMTRAT
-		std::cout << __func__ << ": " << (mSmtratSolver.check()) << std::endl;
 
-		return (mSmtratSolver.check() != smtrat::Answer::UNSAT);
+		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
+			smtrat::Answer tmp = mSmtratSolver.check();
+			switch (tmp) {
+				case smtrat::Answer::UNSAT: {
+					mLastConsistencyAnswer = SOLUTION::INFEAS;
+					break;
+				}
+				case smtrat::Answer::SAT: {
+					mLastConsistencyAnswer = SOLUTION::FEAS;
+					break;
+				}
+				default:
+					mLastConsistencyAnswer = SOLUTION::UNKNOWN;
+			}
+			mConsistencyChecked = true;
+		}
+		return (mLastConsistencyAnswer == SOLUTION::FEAS);
 
 		#elif defined USE_Z3
 	    if (z3::sat == z3solver.check())
@@ -239,6 +166,8 @@ namespace hypro {
 	    	return false;
 
 		#else
+
+		// TODO: Avoid re-call here too!
 		glp_exact( lp, NULL );
 		return (glp_get_status(lp) != GLP_NOFEAS);
 		#endif
@@ -247,6 +176,7 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
+
 		#ifdef LOGGING
 		if (!carl::logging::logger().has("smtrat")) {
 			carl::logging::logger().configure("smtrat", "smtrat.log");
@@ -270,7 +200,6 @@ namespace hypro {
 		;
 		#endif
 
-
 		if(!mInitialized) {
 			/* create glpk problem */
 			lp = glp_create_prob();
@@ -278,8 +207,45 @@ namespace hypro {
 			glp_set_obj_dir( lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
 
-			unsigned numberOfConstraints = mConstraintMatrix.rows();
+			#ifdef USE_SMTRAT
 
+			mSmtratSolver.push();
+
+			#endif
+
+			mInitialized = true;
+		}
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::updateConstraints() const {
+
+		assert(!mConsistencyChecked || mConstraintsSet);
+		bool alreadyInitialized = mInitialized;
+		if(!mInitialized)
+			initialize();
+
+		if(!mConstraintsSet){
+			//std::cout << "!mConstraintsSet" << std::endl;
+
+			if(alreadyInitialized) { // clean up old setup.
+				//std::cout << "alreadyInitialized" << std::endl;
+				glp_delete_prob(lp);
+				deleteArrays();
+
+				// TODO: can we directly reset stuff?
+				lp = glp_create_prob();
+				glp_set_prob_name( lp, "hpoly" );
+				glp_set_obj_dir( lp, GLP_MAX );
+				glp_term_out( GLP_OFF );
+
+				#ifdef USE_SMTRAT
+				mSmtratSolver.clear(); // TODO: Current workaround, because I lost track of push() count.
+				mSmtratSolver.push();
+				#endif
+			}
+
+			unsigned numberOfConstraints = mConstraintMatrix.rows();
 			// convert constraint constants
 			glp_add_rows( lp, numberOfConstraints );
 			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
@@ -313,112 +279,30 @@ namespace hypro {
 			}
 
 			#ifdef USE_SMTRAT
+
 			smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
-			mSmtratSolver.pop();
-			mSmtratSolver.push();
+
 			mSmtratSolver.inform(currentSystem);
 			mSmtratSolver.add(currentSystem);
 			mSmtratSolver.push();
 
-			#elif defined USE_Z3
-			z3::expr_vector constraints(c);
-			z3::expr_vector variables(c);
-			for(unsigned i = 0; i < mConstraintMatrix.cols(); ++i){
-				z3::expr var(c);
-				const char* varName = ("x_" + std::to_string(i)).c_str();
-				var=c.real_const(varName);
-				variables.push_back(var);
-			}
-
-			for(unsigned i = 0; i < mConstraintMatrix.rows(); ++i){
-				z3::expr polynomial(c);
-				for(unsigned j = 0; j < mConstraintMatrix.cols(); ++j){
-					z3::expr coeff(c);
-
-					std::cout << "String: " << mConstraintMatrix(i,j).toString() << std::endl;
-					std::string stringRep = mConstraintMatrix(i,j).toString();
-					// cover potential brackets
-					if(stringRep.find("(") == std::string::npos){
-						stringRep = stringRep.substr(1,stringRep.length()-1);
-					} else {
-						stringRep = stringRep.substr(2,stringRep.length()-3);
-					}
-					stringRep.erase(std::remove_if(stringRep.begin(), stringRep.end(), [](char c) { return !isalpha(c); }), stringRep.end());
-
-					std::size_t delimiterPos = stringRep.find("/");
-
-					if(delimiterPos == std::string::npos) {
-						coeff = c.real_val(stringRep.data());
-					} else {
-						std::string numerator = stringRep.substr(0,delimiterPos);
-			            std::string denominator = stringRep.substr(delimiterPos+1, stringRep.length()-delimiterPos);
-
-			            z3::expr nom = c.real_val(numerator.data());
-						z3::expr den = c.real_val(denominator.data());
-
-						coeff = nom / den;
-					}
-
-					if (mConstraintMatrix(i,j) < 0){
-						coeff = -coeff;
-					}
-
-					z3::expr term(c);
-
-					std::cout << "Variable: " << variables[j] << std::endl;
-					std::cout << "J: " << j << ", coeff: " << coeff << std::endl;
-
-					term=variables[j]*coeff;
-					if(j == 0)
-						polynomial = term;
-					else
-						polynomial = polynomial + term ;
-				}
-				const char* constantPart;
-				z3::expr constant(c);
-				if (mConstraintVector(i) < 0){
-					std::string tmp = mConstraintVector(i).toString();
-
-					// cover potential brackets
-					if(tmp.find("(") == std::string::npos){
-						tmp = tmp.substr(1,tmp.length()-1);
-					} else {
-						tmp = tmp.substr(2,tmp.length()-3);
-					}
-					tmp.erase(std::remove_if(tmp.begin(), tmp.end(), [](char c) { return !isalpha(c); }), tmp.end());
-
-					constantPart = tmp.c_str();
-					constant = c.real_val(constantPart);
-					constant = -constant;
-				} else {
-					constantPart = mConstraintVector(i).toString().c_str();
-					constant = c.real_val(constantPart);
-				}
-
-				z3::expr constraint(polynomial <= constant);
-				constraints.push_back(constraint);
-			}
-
-		    for(unsigned i = 0; i < constraints.size(); ++i) {
-		    	//std::cout << constraints[i] << std::endl;
-		    	z3solver.add(constraints[i]);
-		    }
-
 			#endif
 
-			mInitialized = true;
+			mConstraintsSet = true;
 		}
 	}
 
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {
+
 		ia = new int[size + 1];
 		ja = new int[size + 1];
 		ar = new double[size + 1];
 	}
 
 	template <typename Number>
-	void Optimizer<Number>::deleteArrays() {
+	void Optimizer<Number>::deleteArrays() const {
+
 		delete[] ia;
 		delete[] ja;
 		delete[] ar;

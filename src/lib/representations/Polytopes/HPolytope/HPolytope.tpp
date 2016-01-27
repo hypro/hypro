@@ -114,7 +114,7 @@ bool HPolytope<Number>::empty() const {
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
-	std::cout << __func__ << ": " << (opt.checkConsistency() == true) << std::endl;
+	//std::cout << __func__ << ": " << (opt.checkConsistency() == true) << std::endl;
 
 	return !opt.checkConsistency();
 }
