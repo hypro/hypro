@@ -67,10 +67,30 @@ namespace hypro{
 
                 return true;
         }
-        // TODO conversion from zonotope to support function
+        
+        // TODO more efficient conversion (if possible ; detour via V-Polytope seems inefficient)
+        // conversion from Zonotope to support function
         template <typename Number>
         static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
-
+                typename std::vector<hypro::vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
+                assert (!vertices.empty() );                                                           //checks if any vertices were received
+                unsigned dim = _source.dimension();                                                    //gets dimension from source object
+                
+                typename VPolytope<Number>::pointVector points = typename VPolytope<Number>::pointVector(vertices.size());  
+                unsigned count = 0;
+                for ( const auto& vertex : vertices){                                                  //type conversion stuff (converts std::vector<hypro::vector_t<Number>> to std::vector<Point<Number>>) in order to use constructor of V-Polytope
+                    for ( unsigned d = 0; d < dim; ++d ) { 
+                         points.at(count)[d] = vertex[d];
+                    }
+                    ++count;
+                }
+                
+                VPolytope<Number> temp = VPolytope<Number>(points);                                    //builds a V-Polytope with the received vertices
+                HPolytope<Number> temp2 = HPolytope<Number>(temp);                                     //converts the V-Polytope into its H-representation
+                typename HPolytope<Number>::HyperplaneVector planes = temp2.constraints();             //gets planes from the converted object
+                assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
+                
+                _target = SupportFunction<Number>( SF_TYPE::POLY, planes );                            //constructs a support function with the received planes
 
                 return true;
         }

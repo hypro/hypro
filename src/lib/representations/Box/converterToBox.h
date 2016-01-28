@@ -18,11 +18,11 @@ namespace hypro {
      *   
      * @param _source Box that needs to be converted.
      * @param _target An arbitrary box that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
-     * @return Return value is true if the requested conversion was successful.
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
+     * @return Return value is true if the requested conversion was successful. 
      */  
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
+    static bool convert( const hypro::Box<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
     /**
      * @brief Converts a support function into a box. (overapproximation in the general case)
@@ -51,7 +51,7 @@ namespace hypro {
     static bool convert( const hypro::VPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
-     * @brief Converts a polytope in H-representation into a box.
+     * @brief Converts a polytope in H-representation into a box. (overapproximation in the general case)
      * @detail Computes the minimal and maximal point component for every dimension and sets up intervals ranging from the corresponding minimal value to the corresponding maximal value for every dimension.
      * This is done by converting the H-Polytope into a V-Polytope at first.
      * Checks for exact conversion by validating that every vertex of the newly created box was already a vertex of the source object.
@@ -65,7 +65,7 @@ namespace hypro {
     static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
-     * @brief Converts a zonotope into a box.
+     * @brief Converts a zonotope into a box. (overapproximation in the general case)
      * @detail Computes the minimal and maximal point component for every dimension and sets up intervals ranging from the corresponding minimal value to the corresponding maximal value for every dimension.
      * This is done by computing the vertices of the zonotope first.
      * Checks for exact conversion by validating that every vertex of the newly created box was already a vertex of the source object.
@@ -79,7 +79,7 @@ namespace hypro {
     static bool convert( const hypro::Zonotope<Number>& _source, hypro::Box<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
     
     /**
-     * @brief Converts a polytope (different data structure) into a box.
+     * @brief Converts a polytope (different data structure) into a box. (overapproximation in the general case)
      * @detail Computes the minimal and maximal point component for every dimension and sets up intervals ranging from the corresponding minimal value to the corresponding maximal value for every dimension.
      * Checks for exact conversion by validating that every vertex of the newly created box was already a vertex of the source object.
      *   

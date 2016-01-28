@@ -17,11 +17,11 @@ namespace hypro {
      *   
      * @param _source Support function that needs to be converted.
      * @param _target An arbitrary support function that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
      * @return Return value is true if the requested conversion was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER);
+    static bool convert( const hypro::SupportFunction<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT);
     
     /**
      * @brief Converts a box into a support function.
@@ -29,11 +29,11 @@ namespace hypro {
      *   
      * @param _source Box that needs to be converted.
      * @param _target An arbitrary support function that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
      * @return Return value is true if the requested conversion was successful.
      */   
     template <typename Number>
-    static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
+    static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
     /**
      * @brief Converts a polytope in V-representation into a support function.
@@ -42,39 +42,40 @@ namespace hypro {
      * 
      * @param _source V-polytope that needs to be converted.
      * @param _target An arbitrary support function that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
      * @return Return value is true if the requested conversion was successful.
      */   
     
     template <typename Number>
-    static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
+    static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
     
     /**
-     * @brief Converts a polytope in H-representation into a support function
+     * @brief Converts a polytope in H-representation into a support function.
      * @detail Simply gets halfplanes from source object and passes them on to the target object.
      *
      * @param _source H-polytope that needs to be converted
      * @param _target An arbitrary support function that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
      * @return Return value is true if the requested conversion was successful.
      */  
     
     template <typename Number>
-    static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
+    static bool convert( const hypro::HPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
     /**
-     * @brief Converts a zonotope into a support function
+     * @brief Converts a zonotope into a support function.
+     * @detail Builds the zonotope step by step, then reads out the vertices for a V-representation and converts this
+     * afterwards into an H-Polytope and this finally into a support function. 
      * 
-     *
      * @param _source Zonotope that needs to be converted
      * @param _target An arbitrary support function that gets overwritten with the converted object.
-     * @param mode The requested conversion mode (exact conversion or overapproximation).
+     * @param mode The requested conversion mode (exact conversion or overapproximation). Note that this function will always convert exactly.
      * @return Return value is true if the requested conversion was successful.
      */  
     
     template <typename Number>
-    static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::OVER );
+    static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode = CONV_MODE::EXACT );
     
         
 }  // namespace

@@ -158,44 +158,44 @@ TYPED_TEST(ConverterTest, toBox)
 {
 	hypro::Box<TypeParam> result;
 	EXPECT_TRUE(convert(this->box, result));
-        std::cout << " Box: " << std::endl;
-        result.print();
+        //std::cout << " Box: " << std::endl;
+        //result.print();
 	EXPECT_TRUE(convert(this->support, result));
-        std::cout << " Support:" << std::endl;
-        result.print();
+        //std::cout << " Support:" << std::endl;
+        //result.print();
         EXPECT_FALSE(convert(this->support, result, EXACT));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->support2, result));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->support2, result, EXACT));
-        result.print();
+        //result.print();
 	EXPECT_TRUE(convert(this->vpolytope, result));
-        std::cout << " V:" << std::endl;
-        result.print();
+        //std::cout << " V:" << std::endl;
+        //result.print();
         EXPECT_TRUE(convert(this->vpolytope, result, EXACT));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->vpolytope2, result));
-        result.print();
+        //result.print();
         EXPECT_FALSE(convert(this->vpolytope2, result, EXACT));
-        result.print();
+        //result.print();
 	EXPECT_TRUE(convert(this->zonotope, result));
-        std::cout << " Zonotope:" << std::endl;
-        result.print();
+        //std::cout << " Zonotope:" << std::endl;
+        //result.print();
         EXPECT_FALSE(convert(this->zonotope, result, EXACT));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->zonotope2, result));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->zonotope2, result, EXACT));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->hpolytope, result));
-        std::cout << " H:" << std::endl;
-        result.print();
+        //std::cout << " H:" << std::endl;
+        //result.print();
         EXPECT_TRUE(convert(this->hpolytope, result, EXACT));
-        result.print();
+        //result.print();
         EXPECT_TRUE(convert(this->hpolytope2, result));
-        result.print();
+        //result.print();
         EXPECT_FALSE(convert(this->hpolytope2, result, EXACT));
-        result.print();
+        //result.print();
 }
 
 TYPED_TEST(ConverterTest, toHPolytope)
@@ -207,15 +207,26 @@ TYPED_TEST(ConverterTest, toHPolytope)
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
         SupportFunction<TypeParam> result = hypro::SupportFunction<TypeParam>();
+        convert (this->support, result);
+        //result.print();
         convert(this->hpolytope, result);
         //std::cout << " HPolytope: " << std::endl;
-        //result->print();
+        //result.print();
+        convert(this->hpolytope2, result);
+        //result.print();
         convert(this->box, result);
         //std::cout << " Box: " << std::endl;
-        //result->print();
+        //result.print();
         convert(this->vpolytope, result);
         //std::cout << " VPolytope: " << std::endl;
-        //result->print();
+        //result.print();
+        convert(this->vpolytope2, result);
+        //result.print();
+        convert(this->zonotope, result);
+        //std::cout << " Zonotope: " << std::endl;
+        //result.print();
+        convert(this->zonotope2, result);
+        //result.print();
 	SUCCEED();
 }
 

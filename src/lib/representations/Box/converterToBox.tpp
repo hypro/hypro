@@ -148,7 +148,7 @@ static bool convert( const hypro::HPolytope<Number>& _source, hypro::Box<Number>
 
                 std::vector<carl::Interval<Number>> intervals;
                 for ( unsigned i = 0; i < dim; ++i ) {                                                                           //for every dimension
-                        intervals.push_back( carl::Interval<Number>( distances( 2 * i ), distances( 2 * i + 1 ) ) );             //create one interval with the corresponding left and right end points
+                        intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );             //create one interval with the corresponding left and right end points
                 }
 
                 _target = Box<Number>( intervals );                                                                              //creates a box with the computed intervals
