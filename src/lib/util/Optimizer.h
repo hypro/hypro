@@ -3,7 +3,9 @@
 #include <carl/util/Singleton.h>
 #include "../config.h"
 #include "smtrat/SimplexSolver.h"
-#include "z3/util.h"
+#include "VariablePool.h"
+
+#define USE_PRESOLUTION
 
 namespace hypro {
 
@@ -26,9 +28,6 @@ namespace hypro {
 		// dependent members, all mutable
 		#ifdef USE_SMTRAT
 		mutable smtrat::SimplexSolver mSmtratSolver;
-		#elif defined USE_Z3
-		mutable z3::context c;
-	    mutable z3::solver z3solver(c);
 		#endif
 		// Glpk as a presolver
 		mutable glp_prob* lp;
@@ -41,13 +40,6 @@ namespace hypro {
 		Optimizer() :
 			mConstraintMatrix(),
 			mConstraintVector(),
-			mInitialized(false),
-			mConstraintsSet(false)
-		{}
-
-		Optimizer(const matrix_t<Number>& _matrix, const vector_t<Number>& _vector) :
-			mConstraintMatrix(_matrix),
-			mConstraintVector(_vector),
 			mInitialized(false),
 			mConstraintsSet(false)
 		{}

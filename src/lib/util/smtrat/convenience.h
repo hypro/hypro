@@ -51,7 +51,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static Poly createObjective(const vector_t<Number>& _objective, carl::Relation _rel = carl::Relation::LEQ) {
+	static Poly createObjective(const vector_t<Number>& _objective) {
 		Poly objective;
 		VariablePool& pool = VariablePool::getInstance();
 

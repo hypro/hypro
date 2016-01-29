@@ -108,7 +108,7 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 template <typename Number>
 bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
-	//if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
+	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if(lhs( dim )==0 || rhs( dim )==0){
@@ -124,6 +124,11 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 	return true;
 }
 
+template<typename Number>
+bool operator!=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	return !(lhs == rhs);
+}
+
 template <typename Number>
 bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) return false;
@@ -137,6 +142,11 @@ bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Numbe
 		}
 	}
 	return true;
+}
+
+template <typename Number>
+bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+	return !(lhs == rhs);
 }
 
 // according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:

@@ -14,29 +14,29 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::setMatrix(const matrix_t<Number> _matrix) {
-
-		mConstraintsSet = false;
-		mConsistencyChecked = false;
-		mConstraintMatrix = _matrix;
+		if(mConstraintMatrix != _matrix){
+			mConstraintsSet = false;
+			mConsistencyChecked = false;
+			mConstraintMatrix = _matrix;
+		}
 	}
 
 	template<typename Number>
 	void Optimizer<Number>::setVector(const vector_t<Number> _vector) {
-
-		mConstraintsSet = false;
-		mConsistencyChecked = false;
-		mConstraintVector = _vector;
+		if(mConstraintVector != _vector){
+			mConstraintsSet = false;
+			mConsistencyChecked = false;
+			mConstraintVector = _vector;
+		}
 	}
 
 	template<typename Number>
 	void Optimizer<Number>::clear() {
-
 		mConstraintMatrix = matrix_t<Number>::Zero(1,1);
 		mConstraintVector = vector_t<Number>::Zero(1);
 		#ifdef USE_SMTRAT
 		if(lp != nullptr)
-			mSmtratSolver.pop();
-		#elif defined USE_Z3
+			mSmtratSolver.clear();
 		#endif
 		deleteArrays();
 		mConsistencyChecked = false;
@@ -46,7 +46,6 @@ namespace hypro {
 
 	template<typename Number>
 	std::pair<Number, SOLUTION> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool overapproximate) const {
-
 		if(!mConstraintsSet)
 			updateConstraints();
 
@@ -80,10 +79,37 @@ namespace hypro {
 		}
 
 		#ifdef USE_SMTRAT
+		mSmtratSolver.push();
+
+		// create objective function from _direction.
 		Poly objective = createObjective(_direction);
 
-		// add presolution
+		#ifdef USE_PRESOLUTION
+		// Get glpk model to initialize assignments for SMT-RAT.
+		vector_t<double> glpkModel(mConstraintMatrix.cols());
+		for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
+			glpkModel(i-1) = glp_get_col_prim(lp, i);
+		}
+
+		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
 		if(res.second == FEAS) {
+			// add assignment from glpk
+			VariablePool& varPool = VariablePool::getInstance();
+			for(unsigned i=0; i < mConstraintMatrix.cols(); ++i) {
+				if(_direction(i) != 0) {
+					Poly bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
+					smtrat::FormulaT boundConstraint;
+					if(_direction(i) > 0 ) {
+						boundConstraint = smtrat::FormulaT(bound, carl::Relation::GEQ);
+					} else {
+						boundConstraint = smtrat::FormulaT(bound, carl::Relation::LEQ);
+					}
+					mSmtratSolver.inform(boundConstraint);
+					mSmtratSolver.add(boundConstraint);
+				}
+			}
+
+			// add constraint for improvement of glpk solution.
 			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first.value());
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 			mSmtratSolver.inform(tmpSolutionConstraint);
@@ -94,6 +120,7 @@ namespace hypro {
 		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
 			return std::move(res);
 		}
+		#endif
 
 		mSmtratSolver.addObjective(objective, false);
 
@@ -106,7 +133,6 @@ namespace hypro {
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
 				smtrat::ModelValue valuation = mSmtratSolver.optimum(objective);
-				mSmtratSolver.pop();
 				assert(!valuation.isBool());
 				assert(!valuation.isSqrtEx());
 				assert(!valuation.isRAN());
@@ -122,10 +148,10 @@ namespace hypro {
 				break;
 			}
 			default:{
-				mSmtratSolver.pop();
 			}
 		}
-
+		// cleanup: Remove optimization function and glpk pre-results, if added
+		mSmtratSolver.pop();
 		#endif
 
 		return std::move(res);
@@ -133,14 +159,10 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
-
 		if(!mConstraintsSet)
 			updateConstraints();
 
-		//std::cout << __func__ << " AlreadyChecked: " << mConsistencyChecked << std::endl;
-
 		#ifdef USE_SMTRAT
-
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
 			smtrat::Answer tmp = mSmtratSolver.check();
 			switch (tmp) {
@@ -159,12 +181,6 @@ namespace hypro {
 		}
 		return (mLastConsistencyAnswer == SOLUTION::FEAS);
 
-		#elif defined USE_Z3
-	    if (z3::sat == z3solver.check())
-	    	return true;
-	    else
-	    	return false;
-
 		#else
 
 		// TODO: Avoid re-call here too!
@@ -176,7 +192,6 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
-
 		#ifdef LOGGING
 		if (!carl::logging::logger().has("smtrat")) {
 			carl::logging::logger().configure("smtrat", "smtrat.log");
@@ -219,7 +234,6 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::updateConstraints() const {
-
 		assert(!mConsistencyChecked || mConstraintsSet);
 		bool alreadyInitialized = mInitialized;
 		if(!mInitialized)
@@ -240,7 +254,8 @@ namespace hypro {
 				glp_term_out( GLP_OFF );
 
 				#ifdef USE_SMTRAT
-				mSmtratSolver.clear(); // TODO: Current workaround, because I lost track of push() count.
+				mSmtratSolver.pop();
+				assert(mSmtratSolver.formula().empty());
 				mSmtratSolver.push();
 				#endif
 			}
@@ -284,8 +299,6 @@ namespace hypro {
 
 			mSmtratSolver.inform(currentSystem);
 			mSmtratSolver.add(currentSystem);
-			mSmtratSolver.push();
-
 			#endif
 
 			mConstraintsSet = true;
@@ -294,7 +307,6 @@ namespace hypro {
 
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {
-
 		ia = new int[size + 1];
 		ja = new int[size + 1];
 		ar = new double[size + 1];
@@ -302,7 +314,6 @@ namespace hypro {
 
 	template <typename Number>
 	void Optimizer<Number>::deleteArrays() const {
-
 		delete[] ia;
 		delete[] ja;
 		delete[] ar;
