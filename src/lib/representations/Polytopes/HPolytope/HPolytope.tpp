@@ -481,7 +481,7 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	if(mHPlanes.empty())
 		return std::make_pair( 1, INFTY );
 
-	reduceNumberRepresentation();
+	//reduceNumberRepresentation();
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
