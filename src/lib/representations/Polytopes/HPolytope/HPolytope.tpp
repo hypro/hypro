@@ -481,6 +481,8 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	if(mHPlanes.empty())
 		return std::make_pair( 1, INFTY );
 
+	reduceNumberRepresentation();
+
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
@@ -718,7 +720,41 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
  */
 
 template<typename Number>
-void HPolytope<Number>::reduceNumberRepresentation() {
+void HPolytope<Number>::reduceNumberRepresentation(unsigned limit) const {
+	assert(limit < 64);
+	std::vector<Point<Number>> vertices = this->vertices();
+
+	// proceed plane-wise
+	for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
+		vector_t<Number> newNormal = vector_t<Number>(this->dimension());
+		for(unsigned i=0; i < this->dimension(); ++i) {
+			Number newCoeff = mHPlanes.at(planeIndex).normal()(i);
+			bool changeNum = false;
+			if(mHPlanes.at(planeIndex).normal()(i).value().getNum().bitsize() > limit) {
+				changeNum = true;
+			}
+			if(mHPlanes.at(planeIndex).normal()(i).value().getDenom().bitsize() > limit) {
+				if(changeNum)
+					newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum()/limit)/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom()/limit);
+				else
+					newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum())/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom()/limit);
+			}else if(changeNum) {
+				newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum()/limit)/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom());
+			}
+			newNormal(i) = newCoeff;
+		}
+		mHPlanes[planeIndex].setNormal(newNormal);
+		Number newOff = mHPlanes.at(planeIndex).offset();
+		for(const auto& vertex : vertices) {
+			if(vertex.rawCoordinates().dot(newNormal) > newOff)
+				newOff += vertex.rawCoordinates().dot(newNormal) - newOff;
+
+			assert(vertex.rawCoordinates().dot(newNormal) == newOff);
+		}
+		mHPlanes[planeIndex].setOffset(newOff);
+	}
+
+
 
 }
 

@@ -38,7 +38,7 @@ public:
 	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
 
   private:
-	HyperplaneVector mHPlanes;
+	mutable HyperplaneVector mHPlanes;
 	bool mFanSet;
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
@@ -153,7 +153,7 @@ public:
 	 */
 
 	void calculateFan() const;
-	void reduceNumberRepresentation();
+	void reduceNumberRepresentation(unsigned bitLimit = 32) const;
 
 	std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
 	std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;
