@@ -54,6 +54,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	VPolytope();
 	VPolytope( const Point<Number>& point );
 	VPolytope( const pointVector& points );
+	VPolytope( const std::vector<vector_t<Number>>& rawPoints );
 	VPolytope( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
 
 	VPolytope( const VPolytope& orig );

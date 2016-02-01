@@ -37,6 +37,18 @@ VPolytope<Number>::VPolytope( const pointVector &points ) {
 }
 
 template <typename Number>
+VPolytope<Number>::VPolytope( const std::vector<vector_t<Number>>& rawPoints ) {
+	for ( const auto point : rawPoints ) {
+		mVertices.emplace_back( point );
+		mNeighbors.push_back( std::set<unsigned>() );
+	}
+	mFan = polytope::Fan<Number>();
+	mFanSet = false;
+	mReduced = false;
+	mInitialized = false;
+}
+
+template <typename Number>
 VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible hyperplane intersections -> TODO: dPermutation can
 	// be improved.
