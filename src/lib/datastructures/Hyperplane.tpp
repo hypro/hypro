@@ -178,7 +178,8 @@ Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Numb
 	Eigen::FullPivLU<matrix_t<Number>> lu(A);
 	// if A has full rank, we can simply retransform
 	if(lu.rank() == A.rows()) {
-		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), mNormal.transpose()*A.inverse()*b + mScalar);
+		Number newOffset = mNormal.transpose()*A.inverse()*b;
+		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), newOffset + mScalar);
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
 
@@ -425,7 +426,7 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 
 		// fill the result vector based on the optimal solution returned by the LP
 		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
-			result( i - 1 ) = glp_get_col_prim( normal, i );
+			result( i - 1 ) = carl::rationalize<Number>(glp_get_col_prim( normal, i ));
 		}
 
 		glp_delete_prob( normal );

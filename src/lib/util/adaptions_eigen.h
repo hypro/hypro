@@ -111,14 +111,8 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if(lhs( dim )==0 || rhs( dim )==0){
-			if ( !carl::AlmostEqual2sComplement( lhs( dim )+ (Number) 1, rhs( dim )+ (Number) 1, TOLLERANCE_ULPS ) ) { // Special case of carl::AlmostEqual2sComplement
-				return false;
-			}
-		} else {
-			if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), TOLLERANCE_ULPS ) ) {
-				return false;
-			}
+		if (lhs( dim ) != rhs( dim )) {
+			return false;
 		}
 	}
 	return true;
@@ -136,7 +130,7 @@ bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Numbe
 
 	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
 		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
-			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), TOLLERANCE_ULPS ) ) {
+			if ( lhs( rowIndex, colIndex ) != rhs( rowIndex, colIndex ) ) {
 				return false;
 			}
 		}
@@ -149,19 +143,38 @@ bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Numbe
 	return !(lhs == rhs);
 }
 
-// according to http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 comment 14 we use this:
-template <typename Number>
-hypro::matrix_t<Number> pseudoInverse( const hypro::matrix_t<Number>& a,
-									   Number epsilon = std::numeric_limits<Number>::epsilon() ) {
-	Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( a, Eigen::ComputeThinU | Eigen::ComputeThinV );
-	Number tolerance = epsilon * std::max( a.cols(), a.rows() ) * svd.singularValues().array().abs()( 0 );
-	return svd.matrixV() *
-		   ( svd.singularValues().array().abs() > tolerance )
-				 .select( svd.singularValues().array().inverse(), 0 )
-				 .matrix()
-				 .asDiagonal() *
-		   svd.matrixU().adjoint();
+template<typename Number>
+std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) {
+	for(size_t i = 0, size = in.size(); i < size; ++i)
+		_out << *(in.data()+i) << std::endl;
+	return _out;
 }
+
+template<typename Number>
+std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
+	unsigned cols = in.cols();
+	for(size_t i = 0, size = in.size(); i < size; ++i){
+		if( i > 0 && i % cols == 0)
+			_out << std::endl;
+
+		_out << *(in.data()+i) << " ";
+	}
+	return _out;
+}
+
+template<typename Number>
+Number norm(const hypro::vector_t<Number> in, bool roundUp = true ) {
+	Number squares;
+	for(size_t i = 0, size = in.size(); i < size; ++i)
+		squares = squares + carl::pow(*(in.data()+i), 2);
+
+	std::pair<Number, Number> dist = carl::sqrt_safe(squares);
+	if(roundUp)
+		return dist.second;
+	else
+		return dist.first;
+}
+
 } // namespace Eigen
 
 namespace std {

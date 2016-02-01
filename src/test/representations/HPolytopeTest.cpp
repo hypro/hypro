@@ -259,7 +259,7 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 
 	std::cout << "Result vertices: " << std::endl;
 	for(auto& vertex : res.vertices()) {
-		std::cout << vertex.rawCoordinates().transpose() << std::endl;
+		std::cout << vertex.rawCoordinates() << std::endl;
 	}
 
 	std::cout << "######" << std::endl;
@@ -276,7 +276,7 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
 	//		std::cout << "Test: " << vector_t<TypeParam>(TypeParam(0.99)*lhs+rhs).transpose() << std::endl;
-			EXPECT_TRUE(res.contains(TypeParam(0.99)*lhs+rhs));
+			EXPECT_TRUE(res.contains(TypeParam(carl::rationalize<TypeParam>(0.99))*lhs+rhs));
 		}
 	}
 
@@ -367,7 +367,7 @@ TYPED_TEST(HPolytopeTest, Membership)
 	Point<TypeParam> p1({0, 0});
 	EXPECT_TRUE(hpt1.contains(p1));
 
-	Point<TypeParam> p2({1.5, 1.5});
+	Point<TypeParam> p2({carl::rationalize<TypeParam>(1.5), carl::rationalize<TypeParam>(1.5)});
 	EXPECT_TRUE(hpt1.contains(p2));
 
 	Point<TypeParam> p3({-2,0});
@@ -376,6 +376,6 @@ TYPED_TEST(HPolytopeTest, Membership)
 	Point<TypeParam> p4({2, 2});
 	EXPECT_TRUE(hpt1.contains(p4));
 
-	Point<TypeParam> p5({2.1, 0});
+	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), 0});
 	EXPECT_FALSE(hpt1.contains(p5));
 }

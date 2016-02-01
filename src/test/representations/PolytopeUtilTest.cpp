@@ -18,7 +18,7 @@ class PolytopeUtilTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-        p1 = hypro::Point<Number>({4.34,4});
+        p1 = hypro::Point<Number>({carl::rationalize<Number>(4.34),4});
         p2 = hypro::Point<Number>({5,7});
         p3 = hypro::Point<Number>({7,7});
         p4 = hypro::Point<Number>({8,4});
@@ -52,9 +52,9 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneConstructor)
     norm(0) = 1;
     norm(1) = 3;
 
-    hypro::Hyperplane<TypeParam> constructor2(norm, 4.3);
+    hypro::Hyperplane<TypeParam> constructor2(norm, carl::rationalize<TypeParam>(4.3));
 
-    hypro::Hyperplane<TypeParam> constructor3({1,3}, 4.3);
+    hypro::Hyperplane<TypeParam> constructor3({1,3}, carl::rationalize<TypeParam>(4.3));
 
     hypro::Hyperplane<TypeParam> constructor4(constructor1);
     SUCCEED();
@@ -65,29 +65,29 @@ TYPED_TEST(PolytopeUtilTest, HyperplaneAccess)
     hypro::vector_t<TypeParam> norm = hypro::vector_t<TypeParam>(2);
     norm(0) = 1;
     norm(1) = 3;
-    hypro::Hyperplane<TypeParam> access1(norm, 4.3);
+    hypro::Hyperplane<TypeParam> access1(norm, carl::rationalize<TypeParam>(4.3));
 
     EXPECT_EQ(norm, access1.normal());
-    EXPECT_EQ(TypeParam(4.3), access1.offset());
+    EXPECT_EQ(carl::rationalize<TypeParam>(4.3), access1.offset());
     EXPECT_EQ((unsigned) 2, access1.dimension());
 }
 
 TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
 {
     hypro::Point<TypeParam> norm({1,3});
-    hypro::Hyperplane<TypeParam> intersection1(norm, 4.3);
+    hypro::Hyperplane<TypeParam> intersection1(norm, carl::rationalize<TypeParam>(4.3));
 
     hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);
     vec(0) = 2;
     vec(1) = 2;
 
-    TypeParam result = 0.0;
+    TypeParam result = 0;
     intersection1.intersection(result, vec);
 
     //std::cout << "Result: " << result << std::endl;
 
-    EXPECT_EQ(TypeParam(1.075), vec(0)*result);
-    EXPECT_EQ(TypeParam(1.075), vec(1)*result);
+    EXPECT_EQ(carl::rationalize<TypeParam>(1.075), vec(0)*result);
+    EXPECT_EQ(carl::rationalize<TypeParam>(1.075), vec(1)*result);
 }
 
 TYPED_TEST(PolytopeUtilTest, ConeConstructor)

@@ -66,7 +66,7 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( const Point<N
 	for ( unsigned i = 0; i != point.dimension(); ++i ) {
 		// std::cout << "Var: " << (*pointIt).first << " found as: " <<
 		// VariablePool::getInstance().variable((*pointIt).first) << std::endl;
-		tmpValue = double( point.at( i ) ) * fReach_DENOMINATOR;
+		tmpValue = carl::toDouble( point.at( i ) ) * fReach_DENOMINATOR;
 		// std::cout << "tmpValue: " << tmpValue << std::endl;
 		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
@@ -84,7 +84,7 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( vector_t<Numb
 	double tmpValue;
 	Linear_Expression ls;
 	for ( unsigned i = 0; i < point.rows(); ++i ) {
-		tmpValue = double( point( i, 0 ) ) * fReach_DENOMINATOR;
+		tmpValue = carl::toDouble( point( i, 0 ) ) * fReach_DENOMINATOR;
 		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
 	}

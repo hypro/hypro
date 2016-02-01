@@ -55,13 +55,13 @@ namespace hypro {
 		// std::cout << "Set target: ";
 		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
 			glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-			glp_set_obj_coef( lp, i + 1, double( _direction( i ) ) );
+			glp_set_obj_coef( lp, i + 1, carl::toDouble( _direction( i ) ) );
 		}
 
 		/* solve problem */
 		glp_simplex( lp, NULL );
 
-		res.first = glp_get_obj_val( lp );
+		res.first = carl::rationalize<Number>(glp_get_obj_val( lp ));
 
 		// display potential problems
 		switch ( glp_get_status( lp ) ) {
@@ -110,7 +110,7 @@ namespace hypro {
 			}
 
 			// add constraint for improvement of glpk solution.
-			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first.value());
+			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 			mSmtratSolver.inform(tmpSolutionConstraint);
 			mSmtratSolver.add(tmpSolutionConstraint);
@@ -264,7 +264,7 @@ namespace hypro {
 			// convert constraint constants
 			glp_add_rows( lp, numberOfConstraints );
 			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( mConstraintVector(i) ) );
+				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
 			}
 
 			// add cols here
@@ -280,7 +280,7 @@ namespace hypro {
 				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
 				ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
 				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-				ar[i + 1] = double( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
+				ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
 				//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
 				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 			}

@@ -168,7 +168,7 @@ bool VPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 
 	glp_set_obj_dir( mLp, GLP_MAX );
 	for ( unsigned i = 1; i <= vec.rows(); ++i )
-		glp_set_row_bnds( mLp, i, GLP_FX, double( vec( i - 1 ) ),
+		glp_set_row_bnds( mLp, i, GLP_FX, carl::toDouble( vec( i - 1 ) ),
 						  0 );  // as the variable is fixed, the last parameter (upper
 								// row bound) is ignored
 
@@ -380,7 +380,7 @@ void VPolytope<Number>::initGLPK() const {
 					// << "]=" << j << ", mAr[" <<
 					// pos << "]= 1.0" << std::endl;
 				} else {
-					mAr[pos] = double( ( *vertex ).at( i - 1 ) );
+					mAr[pos] = carl::toDouble( ( *vertex ).at( i - 1 ) );
 					// std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos
 					// << "]=" << j << ", mAr[" <<
 					// pos << "]=" << double((*vertex).at(i-1)) << std::endl;
@@ -478,7 +478,7 @@ const typename VPolytope<Number>::Cone &VPolytope<Number>::calculateCone( const 
 		for ( unsigned j = 1; j <= numVectors; ++j ) {
 			ia[pos] = i;
 			ja[pos] = j;
-			ar[pos] = vectors.at( j ).at( i );
+			ar[pos] = carl::toDouble(vectors.at( j ).at( i ));
 			++pos;
 		}
 	}

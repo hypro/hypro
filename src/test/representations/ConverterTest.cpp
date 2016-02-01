@@ -4,9 +4,9 @@
  *
  * @author  Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author  Simon Froitzheim
- * 
+ *
  * @since	2015-05-13
- * @version     2015-12-16      
+ * @version     2015-12-16
  */
 
 #include "gtest/gtest.h"
@@ -35,29 +35,29 @@ protected:
                         -1,1,
                         0,-1;
 		distances << 1,1,0;
-                
+
                 support = hypro::SupportFunction<Number>(SF_TYPE::POLY, this->matrix, this->distances);
-                
+
                 // second support function (box)
                 matrix2 = matrix_t<Number>(4,2);
                 distances2 = vector_t<Number>(4);
-                matrix2 << 0.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, 0.0;
-                distances2 << 2.0, 2.0, 1.0, 1.0;
-                
+                matrix2 << 0, 1, 0, -1, 1, 0, -1, 0;
+                distances2 << 2, 2, 1, 1;
+
                 support2 = hypro::SupportFunction<Number>(SF_TYPE::POLY, this->matrix2, this->distances2);
-                
+
                 //first zonotope
 		vector_t<Number> center = vector_t<Number>(2);
-		center << 2.0, 2.0;
+		center << 2, 2;
 		matrix_t<Number> generators = matrix_t<Number>(2,2);
-		generators << 0.0, 1.0, 1.0, -1.0;
+		generators << 0, 1, 1, -1;
 		zonotope = Zonotope<Number>(center, generators);
-                
+
                 //second zonotope (box)
                 vector_t<Number> center2 = vector_t<Number>(2);
-                center2 << 1.0, 1.0;
+                center2 << 1, 1;
                 matrix_t<Number> generators2 = matrix_t<Number>(2,2);
-                generators2 << 0.0, 1.0, 1.0, 0.0;
+                generators2 << 0, 1, 1, 0;
                 zonotope2 = Zonotope<Number>(center2, generators2);
 
                 //first v-polytope (box)
@@ -79,7 +79,7 @@ protected:
 		points.push_back(Point<Number>(p3));
 		points.push_back(Point<Number>(p4));
 		vpolytope = VPolytope<Number>(points);
-                
+
                 //second v-polytope
                 vector_t<Number> p5 = vector_t<Number>(2);
                 p5(0) = 0;
@@ -111,18 +111,18 @@ protected:
 		planes.push_back(hp4);
 
                 hpolytope = HPolytope<Number>(this->planes);
-                
+
                 //second H-Polytope
-                Hyperplane<Number> hp5({1,1},1.4);
+                Hyperplane<Number> hp5({1,1},carl::rationalize<Number>(1.4));
                 Hyperplane<Number> hp6({0,-1},1);
                 Hyperplane<Number> hp7({-1,0},1);
-                
+
                 planes2.push_back(hp5);
                 planes2.push_back(hp6);
                 planes2.push_back(hp7);
-                
+
                 hpolytope2 = HPolytope<Number>(this->planes2);
-                                
+
     }
 
     virtual void TearDown()
@@ -135,13 +135,13 @@ protected:
     vector_t<Number> distances2;
     SupportFunction<Number> support;
     SupportFunction<Number> support2;
-    
+
     hypro::Box<Number> box;
-    
+
     hypro::Polytope<Number> polytope;
     VPolytope<Number> vpolytope;
     VPolytope<Number> vpolytope2;
-    
+
     Zonotope<Number> zonotope;
     Zonotope<Number> zonotope2;
 
@@ -149,7 +149,7 @@ protected:
     typename HPolytope<Number>::HyperplaneVector planes2;
     HPolytope<Number> hpolytope;
     HPolytope<Number> hpolytope2;
-    
+
 
 
 };

@@ -2,7 +2,7 @@
  * Defines the datatypes for the tests.
  * @author Benedikt Seidl
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @version 2014-12-18
+ * @version 2015-02-01
  * @since	2013-09-01
  */
 
@@ -10,17 +10,7 @@
 
 #include "../lib/config.h"
 #include "../lib/util/types.h"
-//#include "carl/numbers/numbers.h"
 
-
-typedef ::testing::Types<
-	int,
-	double,
-	#ifdef USE_MPFR_FLOAT
-	carl::FLOAT_T<mpfr_t>,
-	#endif
-	carl::FLOAT_T<double>
-> types;
 
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT
@@ -31,23 +21,11 @@ typedef ::testing::Types<
 > floatTypes;
 
 typedef ::testing::Types<
-	#ifdef USE_MPFR_FLOAT
-	carl::FLOAT_T<mpfr_t>,
-	#endif
-	double,
-	carl::FLOAT_T<double>,
 	#ifdef USE_CLN_NUMBERS
-	carl::FLOAT_T<cln::cl_RA>,
+	cln::cl_RA,
 	#endif
-	carl::FLOAT_T<mpq_class>
+	mpq_class
 > allTypes;
-
-typedef ::testing::Types<
-	#ifdef USE_CLN_NUMBERS
-	carl::FLOAT_T<cln::cl_RA>,
-	#endif
-	carl::FLOAT_T<mpq_class>
-> rationalTypes;
 
 typedef ::testing::Types<
 	carl::FLOAT_T<mpq_class>
@@ -56,7 +34,7 @@ typedef ::testing::Types<
 
 // Algorithm
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
-TYPED_TEST_CASE(VertexEnumerationTest, rationalTypesMPQ);
+TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, allTypes);
@@ -72,7 +50,7 @@ TYPED_TEST_CASE(VertexTest, allTypes);
 TYPED_TEST_CASE(BoxTest, allTypes);
 TYPED_TEST_CASE(ConverterTest, allTypes);
 TYPED_TEST_CASE(GridTest, allTypes);
-TYPED_TEST_CASE(HPolytopeTest, rationalTypes);
+TYPED_TEST_CASE(HPolytopeTest, allTypes);
 TYPED_TEST_CASE(OrthogonalPolyhedronTest, allTypes);
 TYPED_TEST_CASE(PolytopeTest, allTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, allTypes);

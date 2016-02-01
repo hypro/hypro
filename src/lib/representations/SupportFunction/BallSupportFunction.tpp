@@ -57,7 +57,7 @@ evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
-			Number length = l.norm();
+			Number length = norm(l,true);
 			result.supportValue = ( mRadius / length );
 			break;
 		}
@@ -92,7 +92,7 @@ bool BallSupportFunction<Number>::contains( const vector_t<Number> &_point ) con
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
-			return ( _point.norm() <= mRadius );
+			return ( norm(_point,true) <= mRadius );
 			break;
 		}
 		default:

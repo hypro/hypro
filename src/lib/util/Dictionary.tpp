@@ -538,7 +538,8 @@ namespace hypro {
 				std::cout << std::endl;
 			}
 		} else {
-			std::cout << *this << std::endl;
+			//std::cout << *this << std::endl;
+			// TODO: Create ostream Operator overlaoding for eigen.
 		}
 	}
 

@@ -402,7 +402,7 @@ TYPED_TEST(VPolytopeTest, Membership)
 	Point<TypeParam> p1({0, 0});
 	EXPECT_FALSE(vpt1.contains(p1));
 
-	Point<TypeParam> p2({2.5, 3});
+	Point<TypeParam> p2({carl::rationalize<TypeParam>(2.5), 3});
 	EXPECT_TRUE(vpt1.contains(p2));
 
 	Point<TypeParam> p3({3, 3});

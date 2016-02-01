@@ -92,15 +92,9 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	std::shared_ptr<SupportFunctionContent<TypeParam>> res = psf1->linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
 
-	if(typeid(TypeParam) == typeid(double) || typeid(TypeParam) == typeid(carl::FLOAT_T<double>) ) {
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(20), res->evaluate(v1Rot).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(5), res->evaluate(v2Rot).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(17), res->evaluate(v3Rot).supportValue,4));
-	} else {
-		EXPECT_EQ(TypeParam(20), res->evaluate(v1Rot).supportValue);
-		EXPECT_EQ(TypeParam(5), res->evaluate(v2Rot).supportValue);
-		EXPECT_EQ(TypeParam(17), res->evaluate(v3Rot).supportValue);
-	}
+	EXPECT_EQ(TypeParam(20), res->evaluate(v1Rot).supportValue);
+	EXPECT_EQ(TypeParam(5), res->evaluate(v2Rot).supportValue);
+	EXPECT_EQ(TypeParam(17), res->evaluate(v3Rot).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
@@ -109,15 +103,9 @@ TYPED_TEST(SupportFunctionTest, scale) {
 
 	std::shared_ptr<SupportFunctionContent<TypeParam>> res =  psf1->scale(factor);
 
-	if(typeid(TypeParam) == typeid(double)) {
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(factor) * TypeParam(20), res->evaluate(this->vec1).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(factor) * TypeParam(5), res->evaluate(this->vec2).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(factor) * TypeParam(17), res->evaluate(this->vec3).supportValue,4));
-	} else {
-		EXPECT_EQ(TypeParam(factor) * TypeParam(20), res->evaluate(this->vec1).supportValue);
-		EXPECT_EQ(TypeParam(factor) * TypeParam(5), res->evaluate(this->vec2).supportValue);
-		EXPECT_EQ(TypeParam(factor) * TypeParam(17), res->evaluate(this->vec3).supportValue);
-	}
+	EXPECT_EQ(TypeParam(factor) * TypeParam(20), res->evaluate(this->vec1).supportValue);
+	EXPECT_EQ(TypeParam(factor) * TypeParam(5), res->evaluate(this->vec2).supportValue);
+	EXPECT_EQ(TypeParam(factor) * TypeParam(17), res->evaluate(this->vec3).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, minkowskiSum) {
@@ -180,21 +168,12 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 
 	std::shared_ptr<SupportFunctionContent<TypeParam>> res = tri1->minkowskiSum(tri2);
 
-	if(typeid(TypeParam) == typeid(double)) {
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(8), res->evaluate(vec1).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(8), res->evaluate(vec2).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(-2), res->evaluate(vec3).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(0), res->evaluate(vec4).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(0), res->evaluate(vec5).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(6), res->evaluate(vec6).supportValue,4));
-	} else {
-		EXPECT_EQ(TypeParam(8), res->evaluate(vec1).supportValue);
-		EXPECT_EQ(TypeParam(8), res->evaluate(vec2).supportValue);
-		EXPECT_EQ(TypeParam(-2), res->evaluate(vec3).supportValue);
-		EXPECT_EQ(TypeParam(0), res->evaluate(vec4).supportValue);
-		EXPECT_EQ(TypeParam(0), res->evaluate(vec5).supportValue);
-		EXPECT_EQ(TypeParam(6), res->evaluate(vec6).supportValue);
-	}
+	EXPECT_EQ(TypeParam(8), res->evaluate(vec1).supportValue);
+	EXPECT_EQ(TypeParam(8), res->evaluate(vec2).supportValue);
+	EXPECT_EQ(TypeParam(-2), res->evaluate(vec3).supportValue);
+	EXPECT_EQ(TypeParam(0), res->evaluate(vec4).supportValue);
+	EXPECT_EQ(TypeParam(0), res->evaluate(vec5).supportValue);
+	EXPECT_EQ(TypeParam(6), res->evaluate(vec6).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, intersect) {
@@ -253,17 +232,10 @@ TYPED_TEST(SupportFunctionTest, unite) {
 	vec4(0) = TypeParam(0);
 	vec4(1) = TypeParam(-1);
 
-	if(typeid(TypeParam) == typeid(double)) {
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(1), res->evaluate(vec1).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(4), res->evaluate(vec2).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(1), res->evaluate(vec3).supportValue,4));
-		EXPECT_EQ(true, carl::AlmostEqual2sComplement(TypeParam(0), res->evaluate(vec4).supportValue,4));
-	} else {
-		EXPECT_EQ(TypeParam(1), res->evaluate(vec1).supportValue);
-		EXPECT_EQ(TypeParam(4), res->evaluate(vec2).supportValue);
-		EXPECT_EQ(TypeParam(1), res->evaluate(vec3).supportValue);
-		EXPECT_EQ(TypeParam(0), res->evaluate(vec4).supportValue);
-	}
+	EXPECT_EQ(TypeParam(1), res->evaluate(vec1).supportValue);
+	EXPECT_EQ(TypeParam(4), res->evaluate(vec2).supportValue);
+	EXPECT_EQ(TypeParam(1), res->evaluate(vec3).supportValue);
+	EXPECT_EQ(TypeParam(0), res->evaluate(vec4).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
@@ -272,9 +244,9 @@ TYPED_TEST(SupportFunctionTest, contains) {
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({-2,-2})));
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({3,3})));
 
-	TypeParam xCoord = TypeParam(-12)/TypeParam(4.5)-TypeParam(0.0001);
-	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-TypeParam(0.0001);
+	TypeParam xCoord = TypeParam(-12)/carl::rationalize<TypeParam>(4.5)-carl::rationalize<TypeParam>(0.0001);
+	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-carl::rationalize<TypeParam>(0.0001);
 
 	EXPECT_TRUE(psf1->contains(Point<TypeParam>({xCoord,yCoord})));
-	EXPECT_FALSE(psf1->contains(Point<TypeParam>({xCoord+TypeParam(0.001),yCoord+TypeParam(0.001)})));
+	EXPECT_FALSE(psf1->contains(Point<TypeParam>({xCoord+carl::rationalize<TypeParam>(0.001),yCoord+carl::rationalize<TypeParam>(0.001)})));
 }
