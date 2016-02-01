@@ -5,7 +5,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-13
- * @version	2015-12-16
+ * @version	2016-01-28
  */
 
 #include "converterToSupportFunction.h"
@@ -74,18 +74,8 @@ namespace hypro{
         static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
                 typename std::vector<hypro::vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
                 assert (!vertices.empty() );                                                           //checks if any vertices were received
-                unsigned dim = _source.dimension();                                                    //gets dimension from source object
                 
-                typename VPolytope<Number>::pointVector points = typename VPolytope<Number>::pointVector(vertices.size());  
-                unsigned count = 0;
-                for ( const auto& vertex : vertices){                                                  //type conversion stuff (converts std::vector<hypro::vector_t<Number>> to std::vector<Point<Number>>) in order to use constructor of V-Polytope
-                    for ( unsigned d = 0; d < dim; ++d ) { 
-                         points.at(count)[d] = vertex[d];
-                    }
-                    ++count;
-                }
-                
-                VPolytope<Number> temp = VPolytope<Number>(points);                                    //builds a V-Polytope with the received vertices
+                VPolytope<Number> temp = VPolytope<Number>(vertices);                                  //builds a V-Polytope with the received vertices
                 HPolytope<Number> temp2 = HPolytope<Number>(temp);                                     //converts the V-Polytope into its H-representation
                 typename HPolytope<Number>::HyperplaneVector planes = temp2.constraints();             //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
@@ -94,53 +84,5 @@ namespace hypro{
 
                 return true;
         }
-
-/*                     Zonotope<Number> tmp = _source.intervalHull();
-                std::vector<vector_t<Number>> vertices = tmp.computeZonotopeBoundary();
-                assert( !vertices.empty() );
-                vector_t<Number> minima = vertices[0];
-                vector_t<Number> maxima = vertices[0];
-
-                        for ( unsigned i = 0; i < vertices.size(); ++i ) {
-                                for ( unsigned d = 0; d < _source.dimension(); ++d ) {
-                                        minima( d ) = vertices[i]( d ) < minima( d ) ? vertices[i]( d ) : minima( d );
-                                	maxima( d ) = vertices[i]( d ) > maxima( d ) ? vertices[i]( d ) : maxima( d );
-                                        assert( minima( d ) <= maxima( d ) );
-                                }
-                        }
-
-                typename Box<Number>::intervalMap intervals;
-                for ( unsigned i = 0; i < _source.dimension(); ++i ) {
-                        intervals.insert( std::make_pair( hypro::VariablePool::getInstance().carlVarByIndex( i ),
-										  carl::Interval<Number>( minima( i ), maxima( i ) ) ) );
-                }
-
-template<typename Number>
-hypro::SupportFunctionContent<Number> convert(const hypro::Polytope<Number>& _source) {
-	hypro::Polytope<Number> tmp = _source;
-	std::vector<Point<Number>> points = tmp.points();
-	assert(!points.empty());
-
-	vector_t<Number> minima = points[0].rawCoordinates();
-	vector_t<Number> maxima = points[0].rawCoordinates();
-
-	for(unsigned i=0; i<points.size(); ++i) {
-		for(unsigned d=0; d<_source.dimension(); ++d) {
-			minima(d) = points[i].rawCoordinates()(d) < minima(d) ? points[i].rawCoordinates()(d) : minima(d);
-			maxima(d) = points[i].rawCoordinates()(d) > maxima(d) ? points[i].rawCoordinates()(d) : maxima(d);
-			assert(minima(d) <= maxima(d));
-		}
-	}
-
-	typename Box<Number>::intervalMap intervals;
-	for(unsigned i=0; i<_source.dimension(); ++i) {
-		intervals.insert(std::make_pair(hypro::VariablePool::getInstance().carlVarByIndex(i),
-carl::Interval<Number>(minima(i), maxima(i))));
-	}
-
-	return Box<Number>(intervals);
-}
-*/
-
 
 } //namespace

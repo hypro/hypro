@@ -60,7 +60,7 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 #endif
 
 	for ( int i = 0; i < numberOfConstraints; i++ ) {
-		glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, double( constraintConstants( i ) ) );
+		glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( constraintConstants( i ) ) );
 	}
 
 	// add cols here
@@ -76,7 +76,7 @@ void PolytopeSupportFunction<Number>::initialize( matrix_t<Number> constraints, 
 	for ( int i = 0; i < constraints.size(); i++ ) {
 		ia[i + 1] = ( (int)( i / mDimension ) ) + 1;
 		ja[i + 1] = ( (int)( i % mDimension ) ) + 1;
-		ar[i + 1] = double( constraints( (int)( i / mDimension ), (int)( i % mDimension ) ) );
+		ar[i + 1] = carl::toDouble( constraints( (int)( i / mDimension ), (int)( i % mDimension ) ) );
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 		std::cout << __func__ << " set: ar[" << i + 1 << "]=" << ar[i + 1] << ", ja[" << i + 1 << "]=" << ja[i + 1]
@@ -241,21 +241,21 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 	for ( unsigned i = 0; i < mDimension; i++ ) {
 		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( lp, i + 1, double( l( i, 0 ) ) );
+		glp_set_obj_coef( lp, i + 1, carl::toDouble( l( i, 0 ) ) );
 	}
 
 	/* solve problem */
 	glp_simplex( lp, NULL );
 
 	/* recover and display results */
-	result.supportValue = glp_get_obj_val( lp );
+	result.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 
 	// std::cout << " Obj coeff: " << glp_get_obj_coef(lp,0) << " and " <<
 	// glp_get_obj_coef(lp,1) << std::endl;
 
 	vector_t<Number> x = vector_t<Number>( mDimension );
 	for ( unsigned i = 0; i < mDimension; i++ ) {
-		x( i ) = Number( glp_get_col_prim( lp, i + 1 ) );
+		x( i ) = carl::rationalize<Number>(( glp_get_col_prim( lp, i + 1 ) ));
 	}
 	result.optimumValue = x;
 	result.errorCode = glp_get_status( lp );
@@ -266,7 +266,7 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		case GLP_FEAS:
 			break;
 		case GLP_UNBND:
-			result.supportValue = INFINITY;
+			result.supportValue = 0;
 			break;
 		default:
 			std::cout << "Unable to find a suitable solution for the support function "
