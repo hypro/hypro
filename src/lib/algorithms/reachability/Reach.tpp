@@ -256,24 +256,32 @@ namespace reachability {
 
 //clock::time_point start = clock::now();
 
+// (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
+// (use_reduce_time==true) apply reduction on firstSegment for time reduction
 #ifdef USE_REDUCTION
 			bool use_reduce_memory=false, use_reduce_time=false;
 			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=6;
 
+			// obejcts for use_reduce_memory
 			unsigned segment_count=0;
 			std::vector<Point<Number>> points_convexHull;
 
-			for(auto vertex: firstSegment.vertices()){
+			for(auto vertex: firstSegment.vertices()){ // cover firstSegment in clustering
 				if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
 					points_convexHull.push_back(vertex);
 				}
 			}
 
+			// option 1: use uniform distirbution of REDUCE_CONST directions in all dimension-pairs (use_reduce_memory or use_reduce_time)
+			// option 2: use directions of guards and invariants (use_reduce_time)
+			// option 3: use uniform distirbution of firstSegment.size/2 directions in all dimension-pairs (use_reduce_time)
 			std::vector<vector_t<Number>> directions;
 
-			directions = computeTemplate<Number>(2, REDUCE_CONST); // reduction memory template mode TODO first entry of computeTemplate should be dimension of system
+			directions = computeTemplate<Number>(2, REDUCE_CONST); // option 1
 
 			if(use_reduce_time){
+				// option 2
+
 				//for(auto transition: _loc->transitions()){	// reduction memory guard mode
 				//	auto guard= transition->guard();
 				//	for(unsigned i=0; i<guard.mat.rows(); i++){
@@ -287,17 +295,14 @@ namespace reachability {
 				//	directions.push_back(invariant.constraints().at(inv_index).normal());
 				//}
 
-				int size1 = firstSegment.size();
 				//firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-				//firstSegment.removeRedundantPlanes();
 
-				int reduce_calculated = ceil(size1/2);
+				// option 3
+				int reduce_calculated = ceil(firstSegment.size()/2);
 				if(reduce_calculated>2){
 					firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-					firstSegment.removeRedundantPlanes();
 				}
-
-				//std::cout << "amount of drop facets: " << size1 << " - " << firstSegment.size() << std::endl;
+				firstSegment.removeRedundantPlanes();
 			}
 #endif
 
@@ -340,10 +345,9 @@ namespace reachability {
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
 #ifdef USE_REDUCTION
-				// MEMORY-reduction
+				// clustering CONVEXHULL_CONST and reduction with directions generated before
 				if(use_reduce_memory){
-					// collect points
-					if(CONVEXHULL_CONST==1){
+					if(CONVEXHULL_CONST==1){ // if no clustering is required
 						if(!tmp.empty()){
 							Representation poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 							flowpipe.insert(flowpipe.begin(), poly_smoothed);
@@ -351,6 +355,7 @@ namespace reachability {
 					}
 					else{
 						if(!tmp.empty()){
+							// collect points
 							for(auto vertex: tmp.vertices()){
 								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
 									points_convexHull.push_back(vertex);
@@ -359,7 +364,7 @@ namespace reachability {
 							segment_count++;
 						}
 
-						// compute convexHull
+						// compute convexHull and reduction of clustered segments
 						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || tmp.empty())){
 							auto facets = convexHull(points_convexHull);
 
@@ -382,7 +387,7 @@ namespace reachability {
 
 				if ( !tmp.empty() ) {
 #ifdef USE_REDUCTION
-					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2);
+					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
 					flowpipe.push_back( tmp );
 
