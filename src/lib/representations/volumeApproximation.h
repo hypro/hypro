@@ -1,5 +1,5 @@
 /**
- *
+ * Approximate volume by creating a grid of points and update the total volume if the point is inside.
  */
 
 #include "../config.h"
@@ -12,9 +12,6 @@ namespace hypro {
 
 		std::vector<Point<Number>> vertices = _in.vertices();
 
-		//for(Point<Number> vertex: vertices) {
-		//	std::cout << "Vertex of new poyltope:\n" << vertex.coordinate(0) << ", " << vertex.coordinate(1) << ", " << vertex.coordinate(2) << std::endl;
-		//}
 
 		unsigned dimension = vertices[0].dimension();
 		std::vector<std::pair<Number,Number>> bounderies;
@@ -71,17 +68,8 @@ namespace hypro {
 						}
 				}
 			}
-			// Point computed
-			//std::cout << "count_point (";
-			//for(unsigned i = 0; i<dimension; i++ ) {
-			//	std::cout << count_point[i] << " r"<<resolution[i] << " ";
-			//}
-			//std::cout << ") is ";
 			if(_in.contains(count_point)){
 				pointCount+=volumeUnit;
-				//std::cout << " inside!" << std::endl;
-			} else {
-				//std::cout << " NOT inside!" << std::endl;
 			}
 		}
 

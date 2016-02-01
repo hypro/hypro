@@ -1,7 +1,5 @@
 /**
- * Example file for polytope reduction.
- * @brief [brief description]
- * @details [long description]
+ * Example file for polytope heuristic reduction.
  *
  */
  #include <chrono>
@@ -19,13 +17,6 @@ int main(int argc, char const *argv[])
 
   typedef std::chrono::high_resolution_clock clock;
 	typedef std::chrono::microseconds timeunit;
-
-	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	gnuplotSettings settings;
-	//settings.fill = true;
-	plotter.updateSettings(settings);
-
-	/* Do stuff here */
 
   // HPolytopes Examples
   std::vector<vector_t<Number>> directions;
@@ -234,45 +225,6 @@ int main(int argc, char const *argv[])
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
   // End Reducing
-
-
-  // Plotting
-  unsigned r=0;
-
-  // 3D ... nD
-  if(dimension>2){
-    // Prepare plotting - Reducing to 2d
-    unsigned i=1,j=2;
-    std::vector<Point<Number>> reduce_from_vertices_2d, reduction_vertices_2d;
-
-    for(Point<Number> point: reduce_from.vertices()){
-      //std::cout << "Point of reduce_from: " << point << std::endl;
-      point.reduceToDimensions({i,j});
-      reduce_from_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_vertices_2d.push_back(point);
-    }
-
-    plotter.addObject(reduce_from_vertices_2d);
-  	r = plotter.addObject(reduction_vertices_2d);
-  }
-
-  // 2D
-  if(dimension==2){
-    plotter.addObject(reduce_from.vertices());
-    r = plotter.addObject(reduction.vertices());
-
-  }
-
-  plotter.setObjectColor(r, colors[red]);
-
-
-
-	plotter.plot2d();
-  // End Plotting
-
 
 	return 0;
 }

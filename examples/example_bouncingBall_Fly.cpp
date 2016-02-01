@@ -1,3 +1,8 @@
+/*
+ * example_bouncingBall_Fly is similar to example_bouncingBall but expects
+ * the modified version of Reach.tpp in order to compare it to the non-modified version.
+ */
+
 #include <chrono>
 
 #include "../lib/config.h"
@@ -200,13 +205,12 @@ int main(int argc, char const *argv[])
 	std::vector<std::vector<Representation>> flowpipes;
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
-	clock::time_point start = clock::now();
+	clock::time_point start = clock::now(); // measure time - start
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
-	double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+	double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000; // measure time - end
 	std::cout << std::endl << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
 
-	std::cout << std::endl << "Test computed flowpipe ..." << std::endl;
-
+	// compute size of flowpipes
 	unsigned soFlowpipe = 0;
 	for(auto& index : flowpipeIndices) {
 		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
@@ -215,17 +219,11 @@ int main(int argc, char const *argv[])
 			soFlowpipe += poly.sizeOfHPolytope();
 		}
 	}
-	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl;
-	std::cout << "Time of flowpipe with timeOfReachReduction ("<< timeOfReachReduction << "): "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl;
+	std::cout << "Reduction of flowpipe with soFlowpipe ("<< soFlowpipe << "): "<<  ((double) soFlowpipe/480656.0)*100 << "%" << std::endl; // with 480656 Byte size of original flowpipes
+	std::cout << "Time of flowpipe with timeOfReachReduction ("<< timeOfReachReduction << "): "<<  ((double) timeOfReachReduction/2619)*100 << "%" << std::endl; // with 2619 ms time for original reachability analysis
 
-	std::cout << std::endl << ((double) soFlowpipe/480656.0)*100 << " " << ((double) timeOfReachReduction/2619)*100  << std::endl;
-	// 4, 400: 480656, 2619
-	// 5, 1000: 971456, 5463.16
-
-	// for mpfr_t 1442384 2542...
-
-	// test reduction if flowpipes intersect
-	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1;
+	// test intersection of flowpipes
+	int flowpipe_one=-1, segment_one=-1, flowpipe_two=-1, segment_two=-1; // store indices to display intersecting segments on plot
 	bool intersect=false;
 
 	if(true){

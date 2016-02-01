@@ -20,12 +20,6 @@ int main(int argc, char const *argv[])
   typedef std::chrono::high_resolution_clock clock;
   typedef std::chrono::microseconds timeunit;
 
-	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	gnuplotSettings settings;
-	//settings.fill = true;
-	plotter.updateSettings(settings);
-
-	/* Do stuff here */
 
   // HPolytopes Examples
   std::vector<vector_t<Number>> directions;
@@ -86,8 +80,6 @@ int main(int argc, char const *argv[])
   unite_compare.insert(Hyperplane<Number>({1,1.1},5));
   unite_compare.insert(Hyperplane<Number>({0,-1},1));
 
-  // POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS ---
-
   HPolytope<Number> unite;
   unite.insert(Hyperplane<Number>({-1,0},1));
 	unite.insert(Hyperplane<Number>({-1,1},2));
@@ -126,18 +118,11 @@ int main(int argc, char const *argv[])
   dropSmoothBest.insert(Hyperplane<Number>({1,100},100));
 	dropSmoothBest.insert(Hyperplane<Number>({0,-1},1));
 
-  // uniteBest is a square
-
-  //uniteWeightBest is uniteExtended
-
   HPolytope<Number> uniteVerticesBest;
   uniteVerticesBest.insert(Hyperplane<Number>({-1,-1},100));
 	uniteVerticesBest.insert(Hyperplane<Number>({0,1},1));
   uniteVerticesBest.insert(Hyperplane<Number>({1,1},100));
 	uniteVerticesBest.insert(Hyperplane<Number>({0,-1},1));
-
-  // POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS --- POLYTOPES FOR THE BSC-THESIS ---
-
 
   HPolytope<Number> twoD_template;
   std::vector<vector_t<Number>> directionsForTemplate = computeTemplate<Number>(5,6);
@@ -160,8 +145,6 @@ int main(int argc, char const *argv[])
   //diamond.insert(Hyperplane<Number>({1,1.3},2));
   //diamond.insert(Hyperplane<Number>({1,1.5},5));
   //diamond.insert(Hyperplane<Number>({1,10},1));
-
-
   diamond.insert(Hyperplane<Number>({-1,-1},1));
   diamond.insert(Hyperplane<Number>({1,-1},1));
 
@@ -227,7 +210,6 @@ int main(int argc, char const *argv[])
   directed3d_3(0) = 0.1; directed3d_3(1) = -1; directed3d_3(2) = 1;
 
   // 4D
-
   HPolytope<Number> confuse_cube;
   confuse_cube.insert(Hyperplane<Number>({ 0,  0,  0, -1}, 1));
   confuse_cube.insert(Hyperplane<Number>({ 0,  0,  0,  1}, 1));
@@ -242,7 +224,6 @@ int main(int argc, char const *argv[])
   directed4d_1(0) = 1; directed4d_1(1) = 1.1; directed4d_1(2) = 0.9; directed4d_1(3) = 1.5;
 
   // 5D
-
   HPolytope<Number> confuse_cube5;
   confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0, -1}, 1));
   confuse_cube5.insert(Hyperplane<Number>({ 0,  0,  0,  0,  1}, 1));
@@ -284,7 +265,7 @@ int main(int argc, char const *argv[])
   std::cout << "Example_reduction\n-----------------" << std::endl;
 
   // calculate volume of HPolytope reduce_from
-if(volume){
+ if(volume){
   prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
  }
@@ -370,41 +351,41 @@ if(volume){
   std::cout << "\nDIRECTED\n------------------------------------\nwith directed_small (violett), directed_big (lila), directed_template (bordeaux)" << std::endl << std::endl;
 
   //2D
-  //if(dimension==2){
-  //  directions.push_back(directed2d_1);
-  //}
-  ////3D
-  //else if(dimension==3){
-  //  directions.push_back(directed3d_1);
-  //  //directions.push_back(directed3d_2);
-  //  //directions.push_back(directed3d_3);
-  //}
-  ////4D
-  //else if(dimension==4){
-  //  directions.push_back(directed4d_1);
-  //}
-  ////5D
-  //else if(dimension==5){
-  //  directions.push_back(directed5d_1);
-  //}
+  if(dimension==2){
+    directions.push_back(directed2d_1);
+  }
+  //3D
+  else if(dimension==3){
+    directions.push_back(directed3d_1);
+    //directions.push_back(directed3d_2);
+    //directions.push_back(directed3d_3);
+  }
+  //4D
+  else if(dimension==4){
+    directions.push_back(directed4d_1);
+  }
+  //5D
+  else if(dimension==5){
+    directions.push_back(directed5d_1);
+  }
 
 
-  //reduction_directed_small = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
-  //std::cout << "directed_small"<< std::endl;
-  //if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_small)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //std::cout << "size of reduction_directed_small: " << reduction_directed_small.sizeOfHPolytope() << std::endl;
+  reduction_directed_small = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
+  std::cout << "directed_small"<< std::endl;
+  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_small)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_small: " << reduction_directed_small.sizeOfHPolytope() << std::endl;
 
-  //reduction_directed_big = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
-  //std::cout << "directed_big"<< std::endl;
-  //if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
+  reduction_directed_big = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
+  std::cout << "directed_big"<< std::endl;
+  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
 
-  //reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-  //std::cout << "directed_template"<< std::endl;
-  //if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  //std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
+  reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+  std::cout << "directed_template"<< std::endl;
+  if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
+  std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
 
-  //std::cout << std::endl;
+  std::cout << std::endl;
 
   std::cout << "reduction of heuristic"<< std::endl;
 
@@ -416,107 +397,6 @@ if(volume){
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
   std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
   // End Reducing
-
-
-  // Plotting
-  unsigned rdn, rds, run, rus, ruc, runo, rdis, rdib, rdit;
-  //3D ... nD
-  if(dimension>2){
-    // Prepare plotting - Reducing to 2d
-    unsigned i=1,j=2;
-    std::vector<Point<Number>> reduce_from_vertices_2d,
-                              reduction_drop_normal_vertices_2d,
-                              reduction_drop_smooth_vertices_2d,
-                              reduction_unite_normal_vertices_2d,
-                              reduction_unite_smooth_vertices_2d,
-                              reduction_unite_cut_vertices_2d,
-                              reduction_unite_norm_vertices_2d,
-                              reduction_directed_small_vertices_2d,
-                              reduction_directed_big_vertices_2d,
-                              reduction_directed_template_vertices_2d;
-
-    for(Point<Number> point: reduce_from.vertices()){
-      //std::cout << "Point of reduce_from: " << point << std::endl;
-      point.reduceToDimensions({i,j});
-      reduce_from_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_drop_normal.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_drop_normal_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_drop_smooth.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_drop_smooth_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_unite_normal.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_unite_normal_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_unite_smooth.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_unite_smooth_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_unite_cut.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_unite_cut_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_unite_norm.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_unite_norm_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_directed_small.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_directed_small_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_directed_big.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_directed_big_vertices_2d.push_back(point);
-    }
-    for(Point<Number> point: reduction_directed_template.vertices()){
-      point.reduceToDimensions({i,j});
-      reduction_directed_template_vertices_2d.push_back(point);
-    }
-    plotter.addObject(reduce_from_vertices_2d);
-
-  	rdn = plotter.addObject(reduction_drop_normal_vertices_2d);
-    rds = plotter.addObject(reduction_drop_smooth_vertices_2d);
-    run = plotter.addObject(reduction_unite_normal_vertices_2d);
-    rus = plotter.addObject(reduction_unite_smooth_vertices_2d);
-    ruc = plotter.addObject(reduction_unite_cut_vertices_2d);
-    runo = plotter.addObject(reduction_unite_norm_vertices_2d);
-    rdis = plotter.addObject(reduction_directed_small_vertices_2d);
-    rdib = plotter.addObject(reduction_directed_big_vertices_2d);
-    rdit = plotter.addObject(reduction_directed_template_vertices_2d);
-  }
-
-  //2D
-  if(dimension==2){
-    plotter.addObject(reduce_from.vertices());
-    //rdn = plotter.addObject(reduction_drop_normal.vertices());
-    //rds = plotter.addObject(reduction_drop_smooth.vertices());
-    //run = plotter.addObject(reduction_unite_normal.vertices());
-    //rus = plotter.addObject(reduction_unite_smooth.vertices());
-    ruc = plotter.addObject(reduction_unite_cut.vertices());
-    runo = plotter.addObject(reduction_unite_norm.vertices());
-    //rdis = plotter.addObject(reduction_directed_small.vertices());
-    //rdib = plotter.addObject(reduction_directed_big.vertices());
-    //rdit = plotter.addObject(reduction_directed_template.vertices());
-  }
-
-  //plotter.setObjectColor(rdn, colors[red]);
-  //plotter.setObjectColor(rds, colors[red]);
-  //plotter.setObjectColor(run, colors[green]);
-  //plotter.setObjectColor(rus, colors[maygreen]);
-  plotter.setObjectColor(ruc, colors[turquoise]);
-  plotter.setObjectColor(runo, colors[bordeaux]);
-  //plotter.setObjectColor(rdis, colors[violett]);
-  //plotter.setObjectColor(rdib, colors[lila]);
-  //plotter.setObjectColor(rdit, colors[bordeaux]);
-
-
-	plotter.plot2d();
-  // End Plotting
-
 
 	return 0;
 }
