@@ -255,6 +255,8 @@ namespace hypro {
 
 				#ifdef USE_SMTRAT
 				mSmtratSolver.pop();
+				if(!mSmtratSolver.formula().empty())
+					std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 				assert(mSmtratSolver.formula().empty());
 				mSmtratSolver.push();
 				#endif

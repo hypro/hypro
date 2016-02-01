@@ -322,8 +322,7 @@ namespace reachability {
 
 			// for each time interval perform linear Transformation
 			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
-				//std::cout << "\rTime: \t" << i*timeInterval << std::flush;
-				std::cout << "Time: \t" << double(i*timeInterval) << std::endl;
+				std::cout << "\rTime: \t" << double(i*timeInterval) << std::flush;
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
