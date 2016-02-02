@@ -79,6 +79,81 @@ namespace hypro {
 		}
 
 		#ifdef USE_SMTRAT
+		#ifdef RECREATE_SOLVER
+		smtrat::SimplexSolver simplex;
+		smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
+		simplex.inform(currentSystem);
+		simplex.add(currentSystem);
+
+		Poly objective = createObjective(_direction);
+
+		#ifdef USE_PRESOLUTION
+		// Get glpk model to initialize assignments for SMT-RAT.
+		vector_t<double> glpkModel(mConstraintMatrix.cols());
+		for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
+			glpkModel(i-1) = glp_get_col_prim(lp, i);
+		}
+
+		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
+		if(res.second == FEAS) {
+			// add assignment from glpk
+			VariablePool& varPool = VariablePool::getInstance();
+			for(unsigned i=0; i < mConstraintMatrix.cols(); ++i) {
+				if(_direction(i) != 0) {
+					Poly bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
+					smtrat::FormulaT boundConstraint;
+					if(_direction(i) > 0 ) {
+						boundConstraint = smtrat::FormulaT(bound, carl::Relation::GEQ);
+					} else {
+						boundConstraint = smtrat::FormulaT(bound, carl::Relation::LEQ);
+					}
+					simplex.inform(boundConstraint);
+					simplex.add(boundConstraint);
+				}
+			}
+
+			// add constraint for improvement of glpk solution.
+			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
+			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
+			simplex.inform(tmpSolutionConstraint);
+			simplex.add(tmpSolutionConstraint);
+		} else if( res.second == INFEAS) {
+			if(simplex.check() == smtrat::Answer::UNSAT)
+				return std::move(res);
+		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
+			return std::move(res);
+		}
+		#endif
+		simplex.addObjective(objective, false);
+
+		//std::cout << "(push)" << std::endl;
+		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
+
+		smtrat::Answer smtratCheck = simplex.check();
+
+		switch(smtratCheck) {
+			case smtrat::Answer::SAT:{
+				smtrat::ModelValue valuation = simplex.optimum(objective);
+				assert(!valuation.isBool());
+				assert(!valuation.isSqrtEx());
+				assert(!valuation.isRAN());
+				assert(!valuation.isBVValue());
+				assert(!valuation.isSortValue());
+				assert(!valuation.isUFModel());
+				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+					res = std::make_pair( 1, INFTY );
+				} else {
+					assert(valuation.isRational());
+					res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+				}
+				break;
+			}
+			default:{
+			}
+		}
+
+		#else
 		mSmtratSolver.push();
 
 		// create objective function from _direction.
@@ -153,6 +228,7 @@ namespace hypro {
 		// cleanup: Remove optimization function and glpk pre-results, if added
 		mSmtratSolver.pop();
 		#endif
+		#endif
 
 		return std::move(res);
 	}
@@ -163,6 +239,15 @@ namespace hypro {
 			updateConstraints();
 
 		#ifdef USE_SMTRAT
+		#ifdef RECREATE_SOLVER
+		smtrat::SimplexSolver simplex;
+		smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
+		simplex.inform(currentSystem);
+		simplex.add(currentSystem);
+		smtrat::Answer sol = simplex.check();
+		return (sol == smtrat::Answer::SAT);
+
+		#else
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
 			smtrat::Answer tmp = mSmtratSolver.check();
 			switch (tmp) {
@@ -180,7 +265,7 @@ namespace hypro {
 			mConsistencyChecked = true;
 		}
 		return (mLastConsistencyAnswer == SOLUTION::FEAS);
-
+		#endif
 		#else
 
 		// TODO: Avoid re-call here too!
@@ -223,9 +308,9 @@ namespace hypro {
 			glp_term_out( GLP_OFF );
 
 			#ifdef USE_SMTRAT
-
+			#ifndef RECREATE_SOLVER
 			mSmtratSolver.push();
-
+			#endif
 			#endif
 
 			mInitialized = true;
@@ -254,11 +339,15 @@ namespace hypro {
 				glp_term_out( GLP_OFF );
 
 				#ifdef USE_SMTRAT
+				#ifndef RECREATE_SOLVER
 				mSmtratSolver.pop();
-				if(!mSmtratSolver.formula().empty())
+				if(!mSmtratSolver.formula().empty()){
 					std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+					mSmtratSolver.clear();
+				}
 				assert(mSmtratSolver.formula().empty());
 				mSmtratSolver.push();
+				#endif
 				#endif
 			}
 
@@ -296,11 +385,12 @@ namespace hypro {
 			}
 
 			#ifdef USE_SMTRAT
-
+			#ifndef RECREATE_SOLVER
 			smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
 
 			mSmtratSolver.inform(currentSystem);
 			mSmtratSolver.add(currentSystem);
+			#endif
 			#endif
 
 			mConstraintsSet = true;
