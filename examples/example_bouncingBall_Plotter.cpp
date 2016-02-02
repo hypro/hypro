@@ -1,3 +1,9 @@
+/*
+ * example_bouncingBall_Plotter is similar to example_bouncingBall but performs postprocessing of the flowpipes.
+ * Every cluster of CONVEXHULL_CONST segments is reduced by the reduction directedTemplate(2, REDUCE_CONST).
+ * Moreover the smoothed flowpipes are compared with the original flowpipes.
+ */
+
 #include <chrono>
 
 #include "../lib/config.h"
@@ -208,34 +214,38 @@ int main(int argc, char const *argv[])
 
 	std::cout << std::endl << "Generated flowpipe, start convexHull - reduce." << std::endl;
 
-	//unsigned CONVEXHULL_CONST = 59;
+	// use a specific clustering and reduction with CONVEXHULL_CONST and REDUCE_CONST
+	unsigned CONVEXHULL_CONST = 59;
 	unsigned REDUCE_CONST=600;
 
+	// cover a intervall of CONVEXHULL_CONST and REDUCE_CONST
 	//for(unsigned REDUCE_CONST=6; REDUCE_CONST<20; REDUCE_CONST++){
-		for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
+		//for(unsigned CONVEXHULL_CONST=57; CONVEXHULL_CONST<200; CONVEXHULL_CONST++){
 
 			double soFlowpipe=0, soFlowpipeS=0; // sizeOf flowpipes
 			std::vector<std::vector<Representation>>  flowpipes_smoothed;
 
-			clock::time_point start = clock::now();
+			clock::time_point start = clock::now(); // measure time - start
 
-			// Reduce (convexHull and directed_template) ---------------------------------------- START
 			for(auto& index : flowpipeIndices) {
+
+				// Reduce (convexHull of clustering and directed_template)
 				std::vector<Representation> flowpipe = reacher.getFlowpipe(index), flowpipe_smoothed;
 				std::vector<Point<Number>> points_convexHull;
-				unsigned flowpipe_count=0, flowpipe_total=1; // flowpipe_count for convexHull, flowpipe_total to notice the end
-
+				unsigned flowpipe_count=0; // flowpipe_count for convexHull
+				unsigned flowpipe_total=1; // flowpipe_total to notice the end
 
 				for(auto& poly : flowpipe){
-					// update points_convexHull
+					// no clustering
 					if(CONVEXHULL_CONST==1){
 						Representation poly_smoothed = poly.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 						soFlowpipe += poly.sizeOfHPolytope(); // update size of flowpipe
 						soFlowpipeS += poly_smoothed.sizeOfHPolytope(); // update size of smoothed flowpipe
 						flowpipe_smoothed.push_back(poly_smoothed); // update smoothed flowpipe
 					}
+					// clustering
 					else {
-						//std::cout << "update vertices of segment " << flowpipe_total-1 << std::endl;
+						// update points_convexHull
 						std::vector<Point<Number>> points = poly.vertices();
 						for(Point<Number> point: points){
 							if(std::find(points_convexHull.begin(), points_convexHull.end(), point)==points_convexHull.end()){
@@ -243,10 +253,9 @@ int main(int argc, char const *argv[])
 							}
 						}
 
-						// create convexHull if CONVEXHULL_CONST or end is reached
+						// create convexHull
 						if(flowpipe_count==CONVEXHULL_CONST || flowpipe_total==flowpipe.size()-1) {
 
-							// Create convexHull of CONVEXHULL_CONST representations
 							auto facets = convexHull(points_convexHull);
 
 							std::vector<Hyperplane<Number>> hyperplanes;
@@ -255,39 +264,16 @@ int main(int argc, char const *argv[])
 							}
 							Representation convexHull = Representation(hyperplanes);
 
-							// Reduce to REDUCE_CONST
-							Representation poly_smoothed = convexHull;//.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							//poly_smoothed.removeRedundantPlanes(); // with removing of redundantPlanes (+size, -speed)
-
-							// test if every used segment is contained in convexHull
-							//for(unsigned i=0; i<=CONVEXHULL_CONST; i++){
-							//	std::cout << "Test " <<flowpipe_total-i-1  << std::endl;
-							//	if(!convexHull.contains(flowpipe.at( flowpipe_total-i-1 ))){
-							//		std::cout << "Segment " << flowpipe_total-i-1 << " is not contained in convexHull" << std::endl;
-							//	}
-							//	if(!poly_smoothed.contains(flowpipe.at( flowpipe_total-i-1 ))){
-							//		std::cout << "Segment " << flowpipe_total-i-1 << " is not contained in poly_smoothed" << std::endl;
-							//	}
-							//}
-
-							// test if every used point is contained in convexHull
-							//for(auto point: points_convexHull){
-							//	std::cout << "Test " <<point  << std::endl;
-							//	if(!convexHull.contains(point)){
-							//		std::cout << "point " << point << " is not contained in convexHull" << std::endl;
-							//	}
-							//	if(!poly_smoothed.contains(point)){
-							//		std::cout << "point " << point << " is not contained in poly_smoothed" << std::endl;
-							//	}
-							//}
+							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							poly_smoothed.removeRedundantPlanes();
 
 							soFlowpipeS += poly_smoothed.sizeOfHPolytope(); // update size of smoothed flowpipe
 							flowpipe_smoothed.push_back(poly_smoothed); // update smoothed flowpipe
 
-							// reset variables
 							flowpipe_count=0;
 							points_convexHull.clear();
-						} else {
+						}
+						else {
 							flowpipe_count++;
 						}
 
@@ -295,16 +281,15 @@ int main(int argc, char const *argv[])
 						flowpipe_total++;
 					}
 				}
-				flowpipes.push_back(flowpipe);
-				flowpipes_smoothed.push_back(flowpipe_smoothed);
+				flowpipes.push_back(flowpipe); // update flowpipes
+				flowpipes_smoothed.push_back(flowpipe_smoothed); // update smoothed flowpipes
 			}
-			// Reduce (convexHull and directed_template) ---------------------------------------- END
 
-			std::cout << " Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+			std::cout << " Total time for reduction(HYPRO): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl; // measure time - end
 
-			// Test flowpipes_smoothed if one segment of one flowpipe intersects with one segement of another flowpipe
+			// Test intersection of flowpipes_smoothed
 			std::cout << " Test (intersect)" << std::endl;
-			int flowpipe_one=-1, flowpipe_two=-1, segment_one=-1, segment_two=-1;
+			int flowpipe_one=-1, flowpipe_two=-1, segment_one=-1, segment_two=-1; // store indices to display intersecting segments on plot
 			bool intersect=false;
 
 			for(unsigned i=0; i<flowpipes_smoothed.size(); i++){
@@ -329,7 +314,7 @@ int main(int argc, char const *argv[])
 			}
 			if(!intersect) std::cout << "  No intersection!" << std::endl;
 
-			// Test if every segment of the original fowpipe is contained in the reduction
+			// Test "contain" of flowpipes in flowpipes_smoothed
 			std::cout << std::endl << " Test (contains)" << std::endl;
 			int flowpipe_index=-1, segment_index=-1;
 			bool contained=true;
@@ -337,19 +322,14 @@ int main(int argc, char const *argv[])
 
 			for(unsigned i=0; i<flowpipes.size(); i++){
 				for(unsigned ii=0; ii<flowpipes.at(i).size(); ii++){
-					std::vector<Point<Number>> points = flowpipes.at(i).at(ii).vertices();
-					// segment of flowpipe found
-
+					std::vector<Point<Number>> points = flowpipes.at(i).at(ii).vertices(); // segment of flowpipe found
 					for(unsigned j=0; j<flowpipes_smoothed.size(); j++){
 						if(contained) break;
 						for(unsigned jj=0; jj<flowpipes_smoothed.at(j).size(); jj++){
 							// segment of flowpipe:smoothed found
 							if(contained) break;
-
 							contained=true;
-
 							std::cout << "\r  " << i <<"." << ii <<"/"<< flowpipes.size()-1 <<"." << flowpipes.at(i).size()-1  << " and " << j <<"." << jj  << std::flush;
-
 							for(Point<Number> point: points){
 								if(!flowpipes_smoothed.at(j).at(jj).contains(point)){
 									contained=false;
@@ -370,14 +350,8 @@ int main(int argc, char const *argv[])
 			}
 			if(contained) std::cout << "  Every segment is contained in reduction!" << std::endl;
 
-
-			//std::cout << std::endl << std::endl << " Stats:"<< std::endl << "  CONVEXHULL_CONST:  " << CONVEXHULL_CONST << std::endl << "  REDUCE_CONST:      " << REDUCE_CONST << std::endl;
-			//std::cout  << "  flowpipe:          " << soFlowpipe << std::endl << "  flowpipe_smoothed: " << soFlowpipeS << std::endl;
-			//std::cout << "  reduction of       " << (soFlowpipeS/soFlowpipe)*100 << "%" << std::endl << std::endl;
-			//std::cout << std::endl << "("<<CONVEXHULL_CONST<<","<<REDUCE_CONST<<"):" << (soFlowpipeS/soFlowpipe)*100 << "%";
-
-			std::cout << std::endl <<CONVEXHULL_CONST<<" " << (soFlowpipeS/soFlowpipe)*100;
-
+			// output
+			std::cout << std::endl << "R: " <<REDUCE_CONST << ", C: " << CONVEXHULL_CONST<<" " << (soFlowpipeS/soFlowpipe)*100;
 			if(intersect) std::cout << " I" << std::endl<< std::endl;
 			else std::cout << std::endl<< std::endl;
 
@@ -406,7 +380,7 @@ int main(int argc, char const *argv[])
 							if(flowpipe_count==flowpipe_index && count==segment_index){
 								plotter.setObjectColor(p, colors[green]);
 							}
-							std::cout << "\r Flowpipe "<< flowpipe_count+1 <<": Added object " << count+1 << "/" << maxCount << std::flush;
+							//std::cout << "\r Flowpipe "<< flowpipe_count+1 <<": Added object " << count+1 << "/" << maxCount << std::flush;
 							points.clear();
 							++count;
 						}
@@ -439,7 +413,7 @@ int main(int argc, char const *argv[])
 							} else {
 								plotter.setObjectColor(p, colors[orange]);
 							}
-							std::cout << "\r Flowpipe_smoothed "<< flowpipe_smoothed_count+1 <<": Added object " << count_smoothed+1 << "/" << maxCount_smoothed << std::flush;
+							//std::cout << "\r Flowpipe_smoothed "<< flowpipe_smoothed_count+1 <<": Added object " << count_smoothed+1 << "/" << maxCount_smoothed << std::flush;
 							points.clear();
 							++count_smoothed;
 						}
@@ -448,8 +422,8 @@ int main(int argc, char const *argv[])
 					flowpipe_smoothed_count++;
 				}
 			}
-			if(intersect) break;
-		}
+			//if(intersect) break;
+		//}
 	//}
 
 	std::cout << std::endl;

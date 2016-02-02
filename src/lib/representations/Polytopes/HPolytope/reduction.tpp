@@ -257,7 +257,7 @@ namespace hypro {
   }
 
   /*
-   * Compute a |polytope|-(kind of) polytope
+   * Compute a uniform distribution of directions for a dimension-dimensional space template polytope
    */
    #define PI 3.14159265359
    template <typename Number>
@@ -303,9 +303,9 @@ namespace hypro {
    }
 
    /*
-    * Reduction-Function
-    * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
-    * @return the reduced facet or if the result would be unbounded the inital polytope
+    * Heuristic for reduction strategies
+    * @Input a H-polytope
+    * @return the reduced polytope or if the result would be unbounded the inital polytope
     */
    template <typename Number>
    HPolytope<Number> HPolytope<Number>::heuristic() const {
@@ -486,13 +486,13 @@ namespace hypro {
             if(uniteValue>bestUniteValue){
               bestUniteIndex=std::make_pair(a,b);
               bestUniteValue=uniteValue;
-              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){ // TODO
+              if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
                 //unite_standard
                 bestUniteStrat= REDUCTION_STRATEGY::UNITE;
               }
               else {
                 //unite_vertices
-                bestUniteStrat= REDUCTION_STRATEGY::UNITE; // TODO or norm?
+                bestUniteStrat= REDUCTION_STRATEGY::UNITE;
               }
             }
         	}
@@ -501,7 +501,6 @@ namespace hypro {
 
      //std::cout << "Unite finished!" << std::endl;
 
-     // TODO add offsets
 
      // determine strat and facet/s
      REDUCTION_STRATEGY strat= REDUCTION_STRATEGY::DROP;
@@ -533,16 +532,14 @@ namespace hypro {
      std::cout << "   Reduce with " << strat << " and facet1 " << facet1 << ", facet2 " << facet2 << std::endl;
      std::cout << std::endl;
 
-
      // do reduction
      return reduce(facet1, facet2, strat);
-
    }
 
   /*
    * Reduction-Function
    * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
-   * @return the reduced facet or if the result would be unbounded the inital polytope
+   * @return the reduced polytope or if the result would be unbounded the inital polytope
    */
   template <typename Number>
   HPolytope<Number> HPolytope<Number>::reduce( unsigned a, unsigned b, REDUCTION_STRATEGY strat) const { // REDUCTION_STRATEGY
@@ -559,8 +556,8 @@ namespace hypro {
     	vertices = res.vertices();
     	membersOfVertices = getMembersOfVertices(vertices);
 
-    	neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices); // get neighbors
-    	neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices); // get neighbors
+    	neighborsOf_a = getNeighborsOfIndex(a, membersOfVertices);
+    	neighborsOf_b = getNeighborsOfIndex(b, membersOfVertices);
     }
 
   	// neighbor test for unite
@@ -568,18 +565,6 @@ namespace hypro {
   		std::cout << "Error - second facet is no neighbor of first facet" << std::endl;
   		return res;
   	}
-    //else if(strat>1 && strat<6){
-    //  vector_t<Number> dummy_a = res.constraints().at(a).normal();
-    //  vector_t<Number> dummy_b = res.constraints().at(b).normal();
-    //  dummy_a.normalize();
-    //  dummy_b.normalize();
-    //  std::cout << "Neighbors have a scalarpoduct of " << dummy_a.dot(dummy_b) << " (normalized)" << std::endl;
-    //}
-    //if(strat<2){
-    //  std::vector<Point<Number>> verticesOfIndex = getVerticesOfIndex(a, vertices, membersOfVertices);
-    //  vector_t<Number> normVector = verticesOfIndex.at(0).rawCoordinates() - verticesOfIndex.at(1).rawCoordinates();
-    //  std::cout << "Norm for facet " << a << " is " << normVector.norm() << std::endl;
-    //}
 
 
   	// (try to) reduce
@@ -684,7 +669,7 @@ namespace hypro {
 
   				// cut united facet is the sum of all possible normals
   				for(std::vector<vector_t<Number>> setOfPoints: getVerticesPermutationForFacet(a, b, vertices)) { // get all set of points which could determine the new facet
-  					vector_t<Number> normal = computeNormal(setOfPoints, res.constraints().at(a).normal()); // TODO use a simple hyperplane for this task
+  					vector_t<Number> normal = computeNormal(setOfPoints, res.constraints().at(a).normal());
   					if(normal!=vector_t<Number>::Zero(vertices.at(0).dimension())) normal.normalize();
   					uniteVector += normal; // add all these candidates
   				}
@@ -804,7 +789,7 @@ namespace hypro {
 
   	if(res.isBounded(evaluations)){
 
-  		//check if all vertices are inside the new polytope
+  		//check if all vertices are inside the new polytope - optional
       //for(Point<Number> vertex: vertices){
       //  if(!res.contains(vertex)){
       //    //std::cout << "Vertex " << vertex << " is missing inside res -> use this" <<std::endl;
@@ -821,16 +806,12 @@ namespace hypro {
   /*
    * Reduction-Function with a special strategy
    * @Input vector_t<Number> directed is the vector in which direction we would like to reduce
-   * @return the reduced facet or if the result would be unbounded the inital polytope
+   * @return the reduced polytope or if the result would be unbounded the inital polytope
    */
   template <typename Number>
   HPolytope<Number> HPolytope<Number>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const{
   	// init
   	HPolytope<Number> res = *this;
-    //std::cout << "res (before) has " << res.size() << " facets" << std::endl;
-
-
-    // TODO figure out which directions aren't needed to evaluate
 
     // break if the amount of directions is greater than the actual size of the polytope TODO decide if used or not?
   	//if(res.size()<directions.size()){
@@ -965,16 +946,11 @@ namespace hypro {
           return *this;
         }
 			}
-      //assert(res.contains(*this));
 
-      //std::cout << "res (after) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl;
-      //res.removeRedundantPlanes();
-      //std::cout << "res (after remove redundant) is bounded, contains all vertices and has " << res.size() << " facets" << std::endl << std::endl;
+      //res.removeRedundantPlanes(); // remove redundant planes here or in the overall algorithm
 
   		return res;
   	}
-
-    //std::cout << "res would be unbounded -> use this" << std::endl << std::endl;
 
   	return *this;
   }
