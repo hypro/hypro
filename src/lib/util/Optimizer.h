@@ -6,7 +6,7 @@
 #include "VariablePool.h"
 
 #define USE_PRESOLUTION
-#define RECREATE_SOLVER
+//#define RECREATE_SOLVER
 
 namespace hypro {
 
@@ -29,6 +29,7 @@ namespace hypro {
 		// dependent members, all mutable
 		#ifdef USE_SMTRAT
 		mutable smtrat::SimplexSolver mSmtratSolver;
+		mutable smtrat::FormulaT mCurrentFormula;
 		#endif
 		// Glpk as a presolver
 		mutable glp_prob* lp;

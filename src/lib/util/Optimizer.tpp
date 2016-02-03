@@ -346,6 +346,13 @@ namespace hypro {
 					mSmtratSolver.clear();
 				}
 				assert(mSmtratSolver.formula().empty());
+
+				if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT) {
+					mSmtratSolver.deinform(mCurrentFormula);
+				} else {
+					for(const auto& constraint : mCurrentFormula)
+						mSmtratSolver.deinform(constraint);
+				}
 				mSmtratSolver.push();
 				#endif
 				#endif
@@ -386,10 +393,17 @@ namespace hypro {
 
 			#ifdef USE_SMTRAT
 			#ifndef RECREATE_SOLVER
-			smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
+			mCurrentFormula = createFormula(mConstraintMatrix, mConstraintVector);
 
-			mSmtratSolver.inform(currentSystem);
-			mSmtratSolver.add(currentSystem);
+			if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT) {
+				mSmtratSolver.inform(mCurrentFormula);
+			} else {
+				for(const auto& constraint : mCurrentFormula)
+					mSmtratSolver.inform(constraint);
+			}
+
+
+			mSmtratSolver.add(mCurrentFormula, false);
 			#endif
 			#endif
 
