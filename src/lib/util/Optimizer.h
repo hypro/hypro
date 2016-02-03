@@ -30,6 +30,7 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		mutable smtrat::SimplexSolver mSmtratSolver;
 		mutable smtrat::FormulaT mCurrentFormula;
+		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
 		#endif
 		// Glpk as a presolver
 		mutable glp_prob* lp;
@@ -57,6 +58,7 @@ namespace hypro {
 
 		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
 		bool checkConsistency() const;
+		std::vector<std::size_t> redundantConstraints() const;
 
 	private:
 		void initialize() const;

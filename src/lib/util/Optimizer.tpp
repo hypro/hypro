@@ -81,9 +81,12 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
-		smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
-		simplex.inform(currentSystem);
-		simplex.add(currentSystem);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+
+		for(const auto& constraintPair : formulaMapping) {
+			simplex.inform(constraintPair.first);
+			simplex.add(constraintPair.first, false);
+		}
 
 		Poly objective = createObjective(_direction);
 
@@ -241,9 +244,11 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
-		smtrat::FormulaT currentSystem = createFormula(mConstraintMatrix, mConstraintVector);
-		simplex.inform(currentSystem);
-		simplex.add(currentSystem);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+		for(const auto& constraintPair : formulaMapping) {
+			simplex.inform(constraintPair.first);
+			simplex.add(constraintPair.first, false);
+		}
 		smtrat::Answer sol = simplex.check();
 		return (sol == smtrat::Answer::SAT);
 
@@ -274,6 +279,70 @@ namespace hypro {
 		#endif
 	}
 
+	template<typename Number>
+	std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
+		std::vector<std::size_t> res;
+
+		if(!mConstraintsSet)
+			updateConstraints();
+
+		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT)
+			return std::move(res);
+
+		// first call to check satisfiability
+		smtrat::Answer firstCheck;
+		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
+			firstCheck = mSmtratSolver.check();
+			switch (firstCheck) {
+				case smtrat::Answer::UNSAT: {
+					mLastConsistencyAnswer = SOLUTION::INFEAS;
+					// TODO: Return complement of infeasible subset indices.
+					return res;
+					break;
+				}
+				case smtrat::Answer::SAT: {
+					mLastConsistencyAnswer = SOLUTION::FEAS;
+					break;
+				}
+				default: {
+					assert(false);
+					break;
+				}
+			}
+			mConsistencyChecked = true;
+		}
+
+		if(mLastConsistencyAnswer == SOLUTION::INFEAS)
+			return res;
+
+		std::size_t count = 0;
+		std::cout << "Original Formula: " << std::endl;
+		mSmtratSolver.printAssertions();
+		std::size_t formulaSize = mSmtratSolver.formula().size();
+		for(auto formulaIt = mSmtratSolver.formula().begin(); count < formulaSize; ) {
+			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
+			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
+			formulaIt = mSmtratSolver.remove(formulaIt);
+			mSmtratSolver.inform(negatedConstraint);
+			mSmtratSolver.add(negatedConstraint, false);
+
+			std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+
+			smtrat::Answer isRedundant = mSmtratSolver.check();
+			assert(isRedundant != smtrat::Answer::UNKNOWN);
+			if(isRedundant == smtrat::Answer::UNSAT)
+				res.push_back(mFormulaMapping.at(originalConstraint));
+
+			assert(*(--(mSmtratSolver.formula().end())) == negatedConstraint);
+			mSmtratSolver.remove(--(mSmtratSolver.formula().end()));
+			mSmtratSolver.deinform(negatedConstraint);
+			//mSmtratSolver.inform(negatedConstraint.negated(), false);
+			mSmtratSolver.add(originalConstraint, false);
+			++count;
+		}
+
+		return std::move(res);
+	}
 
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
@@ -393,17 +462,14 @@ namespace hypro {
 
 			#ifdef USE_SMTRAT
 			#ifndef RECREATE_SOLVER
-			mCurrentFormula = createFormula(mConstraintMatrix, mConstraintVector);
+			mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
-			if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT) {
-				mSmtratSolver.inform(mCurrentFormula);
-			} else {
-				for(const auto& constraint : mCurrentFormula)
-					mSmtratSolver.inform(constraint);
+			for(const auto& constraintPair : mFormulaMapping) {
+				mSmtratSolver.inform(constraintPair.first);
+				mSmtratSolver.add(constraintPair.first, false);
 			}
 
-
-			mSmtratSolver.add(mCurrentFormula, false);
+			mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
 			#endif
 			#endif
 
