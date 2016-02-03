@@ -77,9 +77,9 @@ int main(int argc, char const *argv[])
 	locOn->setInvariant(invariantMat,invariantVec,invariantOp);
 	locOff->setInvariant(invariantMat,invariantVec,invariantOp);
 
-	onMat(0,0) = Number(-0.01);
+	onMat(0,0) = Number(-0.5);
 	onMat(0,1) = Number(0);
-	onMat(0,2) = Number(0.3);
+	onMat(0,2) = Number(15);
 	onMat(1,0) = Number(0);
 	onMat(1,1) = Number(0);
 	onMat(1,2) = Number(1);
@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
 
 	locOn->setActivityMat(onMat);
 
-	offMat(0,0) = Number(-0.01);
+	offMat(0,0) = Number(-0.5);
 	offMat(0,1) = Number(0);
 	offMat(0,2) = Number(0);
 	offMat(1,0) = Number(0);
@@ -204,6 +204,8 @@ int main(int argc, char const *argv[])
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
 	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
 
+	std::cout << "FP indices: " << flowpipeIndices << std::endl;
+
 	std::cout << "Generated flowpipe, start plotting." << std::endl;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -216,17 +218,17 @@ int main(int argc, char const *argv[])
 		unsigned count = 1;
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
-			std::cout << "Flowpipe segment to be converted: " << std::endl;
-			poly.removeRedundantPlanes();
+			//std::cout << "Flowpipe segment to be converted: " << std::endl;
+			poly.reduceNumberRepresentation();
 			//poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
 			//std::cout << "points.size() = " << points.size() << std::endl;
 			if(!points.empty() && points.size() > 2) {
 				//std::cout << "Polycount: " << count << std::endl;
 				for(auto& point : points) {
-		// 			std::cout << "reduce " << point << " to ";
+		 			//std::cout << "reduce " << point << " to ";
 					point.reduceDimension(2);
-					// 			std::cout << point << std::endl;
+					//std::cout << point << std::endl;
 				}
 				plotter.addObject(points);
 				std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
