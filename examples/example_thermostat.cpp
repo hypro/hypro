@@ -219,7 +219,6 @@ int main(int argc, char const *argv[])
 		unsigned maxCount = flowpipe.size();
 		for(auto& poly : flowpipe) {
 			//std::cout << "Flowpipe segment to be converted: " << std::endl;
-			poly.reduceNumberRepresentation();
 			//poly.print();
 			std::vector<Point<Number>> points = poly.vertices();
 			//std::cout << "points.size() = " << points.size() << std::endl;
