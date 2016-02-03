@@ -289,6 +289,10 @@ namespace hypro {
 		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT)
 			return std::move(res);
 
+		for(const auto& constraintPair : mFormulaMapping) {
+			std::cout << constraintPair.first << " -> " << constraintPair.second << std::endl;
+		}
+
 		// first call to check satisfiability
 		smtrat::Answer firstCheck;
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
