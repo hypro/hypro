@@ -16,7 +16,7 @@
 #include "util.h"
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 
 namespace hypro {
@@ -27,10 +27,17 @@ using flowpipe_t = vector<Representation>;
 
 template<typename Number>
 struct ReachabilitySettings {
-	Number timebound = fReach_TIMEBOUND;
-	std::size_t iterationDepth = fReach_ITERATIONDEPTH;
-	std::size_t discretization = fReach_TIMEDISCRETIZATION;
+	Number timebound = carl::rationalize<Number>(fReach_TIMEBOUND);
+	std::size_t jumpDepth = fReach_JUMPDEPTH;
+	Number timestep = carl::rationalize<Number>(fReach_TIMESTEP);
 	unsigned long pplDenomimator = fReach_DENOMINATOR;
+
+	friend std::ostream& operator<<( std::ostream& lhs, const ReachabilitySettings<Number>& rhs ) {
+		lhs << "Local time-horizon: " << rhs.timebound << std::endl;
+		lhs << "Time-step size: " << rhs.timestep << std::endl;
+		lhs << "Jump-depth: " << rhs.jumpDepth << std::endl;
+		return lhs;
+	}
 };
 
 template <typename Number, typename Representation>

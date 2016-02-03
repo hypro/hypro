@@ -57,9 +57,9 @@ static const unsigned MAX_DIMENSION_LIMIT = 128;
 /**
  * Default values for reachability algorithms
  */
-static const double fReach_TIMEBOUND = 4;
-static const std::size_t fReach_ITERATIONDEPTH = 0;
-static const std::size_t fReach_TIMEDISCRETIZATION = 400;
+static const double fReach_TIMEBOUND = 1;
+static const double fReach_TIMESTEP = 0.01;
+static const std::size_t fReach_JUMPDEPTH = 1;
 static const unsigned long fReach_DENOMINATOR = 1000000;
 
 /**

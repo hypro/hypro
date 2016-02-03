@@ -19,7 +19,7 @@ template <typename Number, typename Representation>
 static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Number> _loc, Representation _val ) {
 	//[0,T] = [0,delta1] U [delta1, delta2] ...
 	// note: interval size is constant
-	Number timeInterval = Number( fReach_TIMEBOUND ) / Number( fReach_TIMEDISCRETIZATION );
+	Number timeInterval = Number( fReach_TIMESTEP );
 
 #ifdef fReach_DEBUG
 	std::cout << "Time Interval: " << timeInterval << std::endl;
@@ -317,7 +317,7 @@ static std::vector<flowpipe_t<Representation>> computeForwardsReachability(
 
 	map.push_back( std::make_pair( init, initLoc ) );
 
-	while ( !R_new.empty() && depth < fReach_ITERATIONDEPTH ) {
+	while ( !R_new.empty() && depth < fReach_JUMPDEPTH ) {
 		// R = R U R_new
 		if ( !R.empty() ) {
 			std::vector<flowpipe_t<Representation>> tmp;

@@ -38,6 +38,8 @@ namespace reachability {
 		//return computeForwardReachabilityWithMethod2();
         //    #endif
 
+		std::cout << mSettings;
+
         return computeForwardReachabilityWithMethod1();
 	}
 
@@ -57,13 +59,14 @@ namespace reachability {
 			//printFlowpipeReduced( init );
 			mReach.at( locPair.first ).push_back( init );
 			R_new.insert( init );
+			R.insert( init );
 		}
 
 		//std::cout << "R_new: ";
 		//for ( const auto& item : R_new ) std::cout << item << " ";
 		//std::cout << std::endl;
 
-		while ( !R_new.empty() && depth < mSettings.iterationDepth ) {
+		while ( !R_new.empty() && depth < mSettings.jumpDepth ) {
 			//std::cout << "Main loop, depth " << depth << std::endl;
 			// R = R U R_new
 			if ( !R.empty() ) {
@@ -110,12 +113,11 @@ namespace reachability {
 		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		//[0,T] = [0,delta1] U [delta1, delta2] ...
 		// note: interval size is constant
-		Number timeInterval = mSettings.timebound / mSettings.discretization;
 
  		//plotter.addObject(_val.vertices());
 
 #ifdef REACH_DEBUG
-		std::cout << "Time Interval: " << timeInterval << std::endl;
+		std::cout << "Time Interval: " << mSettings.timestep << std::endl;
 
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
@@ -137,10 +139,9 @@ namespace reachability {
 // check if initial Valuation fulfills Invariant
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << !invariant.intersect( _val ).empty() << std::endl;
-		//std::cout << invariant.contains( _val ) << std::endl;
+		std::cout << !_val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ).empty() << std::endl;
 #endif
-		Representation initial = invariant.intersect( _val );
+		Representation initial = _val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
 		// test initial
 		//for(auto vertex: initial.vertices()){
@@ -161,7 +162,7 @@ namespace reachability {
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
 			hypro::matrix_t<Number> deltaMatrix( _loc->activityMat().rows(), _loc->activityMat().cols() );
-			deltaMatrix = _loc->activityMat() * timeInterval;
+			deltaMatrix = _loc->activityMat() * mSettings.timestep;
 
 #ifdef REACH_DEBUG
 			std::cout << "delta Matrix: " << std::endl;
@@ -210,8 +211,6 @@ namespace reachability {
 			std::cout << "Polytope after unite with R0: ";
 			unitePolytope.print();
 #endif
-			//plotter.addObject(unitePolytope.vertices());
-			//plotter.plot2d();
 
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
@@ -219,9 +218,9 @@ namespace reachability {
 			// TODO: This is a temporary fix!
 			// matrix_t<Number> updatedActivityMatrix = _loc->activityMat();
 			// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
-			// radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-			radius = hausdorffError( Number( timeInterval ), _loc->activityMat(), initial.supremum() );
-// radius = _val.hausdorffError(timeInterval, _loc->activityMat());
+			// radius = hausdorffError(Number(mSettings.timestep), updatedActivityMatrix, _val.supremum());
+			radius = hausdorffError( Number( mSettings.timestep ), _loc->activityMat(), initial.supremum() );
+// radius = _val.hausdorffError(mSettings.timestep, _loc->activityMat());
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
@@ -245,7 +244,6 @@ namespace reachability {
 
 			// hullPolytope +_minkowski hausPoly
 			firstSegment = unitePolytope.minkowskiSum( hausPoly );
-// firstSegment = firstSegment.unite(firstSegment);
 
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
@@ -302,16 +300,16 @@ namespace reachability {
 				if(reduce_calculated>2){
 					firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 				}
-				firstSegment.removeRedundantPlanes();
 			}
 #endif
+
+			firstSegment.removeRedundantPlanes();
 
 			// insert first Segment into the empty flowpipe
 			flowpipe.push_back( firstSegment );
 
 			// set the last segment of the flowpipe
-			Representation lastSegment;
-			lastSegment = firstSegment;
+			Representation lastSegment = firstSegment;
 
 			// Polytope after linear transformation
 			Representation resultPolytope;
@@ -321,17 +319,17 @@ namespace reachability {
 #endif
 
 			// for each time interval perform linear Transformation
-			for ( std::size_t i = 2; i <= mSettings.discretization; ++i ) {
-				std::cout << "\rTime: \t" << double(i*timeInterval) << std::flush;
+			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(mSettings.timebound / mSettings.timestep));
+			for ( std::size_t i = 2; i <= steps ; ++i ) {
+				std::cout << "\rTime: \t" << double(i*mSettings.timestep) << std::flush;
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
-				resultPolytope.removeRedundantPlanes();
-// resultPolytope = resultPolytope.hull();
+				//resultPolytope.removeRedundantPlanes();
 
 				// extend flowpipe (only if still within Invariant of location)
-				Representation tmp = invariant.intersect( resultPolytope );
+				Representation tmp = resultPolytope.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
@@ -392,8 +390,6 @@ namespace reachability {
 
 					// update lastSegment
 					lastSegment = tmp;
-
-
 				} else {
 					break;
 				}
@@ -404,13 +400,11 @@ namespace reachability {
 
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop left ---" << std::endl;
+			std::cout << flowpipe.size() << " Segments computed." << std::endl;
 #endif
-			//plotter.plot2d();
-
 			std::size_t fpIndex = addFlowpipe( flowpipe );
 			mFlowToLocation[fpIndex] = _loc;
 			return fpIndex;
-
 		} else {
 			// return an empty flowpipe
 			std::size_t fpIndex = addFlowpipe( flowpipe );
