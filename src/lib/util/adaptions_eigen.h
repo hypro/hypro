@@ -145,28 +145,29 @@ bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Numbe
 
 template<typename Number>
 std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) {
-	for(size_t i = 0, size = in.size(); i < size; ++i)
-		_out << *(in.data()+i) << std::endl;
-	return _out;
-}
-
-template<typename Number>
-std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
-	unsigned cols = in.cols();
-	for(size_t i = 0, size = in.size(); i < size; ++i){
-		if( i > 0 && i % cols == 0)
-			_out << std::endl;
-
-		_out << *(in.data()+i) << " ";
+	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+		_out << in(rowIndex) << std::endl;
 	}
 	return _out;
 }
 
 template<typename Number>
-Number norm(const hypro::vector_t<Number> in, bool roundUp = true ) {
+std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
+	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+		for(unsigned colIndex = 0; colIndex < in.cols(); ++colIndex) {
+			_out << in(rowIndex, colIndex) << " ";
+		}
+		_out << std::endl;
+	}
+	return _out;
+}
+
+template<typename Number>
+Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 	Number squares;
-	for(size_t i = 0, size = in.size(); i < size; ++i)
+	for(size_t i = 0, size = in.size(); i < size; ++i){
 		squares = squares + carl::pow(*(in.data()+i), 2);
+	}
 
 	std::pair<Number, Number> dist = carl::sqrt_safe(squares);
 	if(roundUp)
