@@ -53,7 +53,7 @@ option(USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(USE_Z3 "Use Z3 for linear solving." OFF)
 option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES." OFF)
 option(EXTERNALIZE_CLASSES_ONLY_TO_TEST "An EXTERNALIZE_CLASSES for test purposes." OFF)
-option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" ON)
+option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" OFF)
 
 # Include own macros.
 include( hypromacros )
