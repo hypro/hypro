@@ -303,7 +303,6 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT )
 			return std::move(res);
-		#endif
 
 		for(const auto& constraintPair : mFormulaMapping) {
 			std::cout << constraintPair.first << " -> " << constraintPair.second << std::endl;
@@ -360,6 +359,9 @@ namespace hypro {
 			mSmtratSolver.add(originalConstraint, false);
 			++count;
 		}
+		#endif
+
+		//TODO: Currently this test only works while using SMTRAT
 
 		return std::move(res);
 	}
