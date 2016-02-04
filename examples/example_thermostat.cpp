@@ -62,7 +62,7 @@ int main(int argc, char const *argv[])
 	matrix_t<Number> invariantMat = matrix_t<Number>(3,2);
 
 	invariantVec(0) = Number(23);
-	invariantVec(1) = Number(17);
+	invariantVec(1) = Number(-17);
 	invariantVec(2) = Number(0);
 
 	invariantOp = LEQ;
