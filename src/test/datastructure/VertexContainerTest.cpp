@@ -175,14 +175,16 @@ TYPED_TEST(VertexContainerTest, OperatorTest) {
 	test1.insert(Vertex<TypeParam>(this->p2, true));
 	test1.insert(Vertex<TypeParam>(this->p3, false));
 
-	test2.insert(Vertex<TypeParam>(this->p1, false));
+	test2.insert(Vertex<TypeParam>(this->p1, true));
 	test2.insert(Vertex<TypeParam>(this->p2, true));
-	test2.insert(Vertex<TypeParam>(this->p3, false));
 
-	test3.insert(Vertex<TypeParam>(this->p1, false));
+	test3.insert(Vertex<TypeParam>(this->p1, true));
 	test3.insert(Vertex<TypeParam>(this->p2, true));
-	test3.insert(Vertex<TypeParam>(this->p3, false));
+
 	EXPECT_FALSE(test1 == test2);
 	EXPECT_TRUE(test2 == test3);
 	EXPECT_FALSE(test1 == test3);
+
+	test3.insert(Vertex<TypeParam>(this->p3, false));
+	EXPECT_TRUE(test1 == test3);
 }
