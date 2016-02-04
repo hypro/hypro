@@ -52,6 +52,12 @@ namespace hypro {
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 		std::pair<Number,SOLUTION> res;
 
+		if( mConstraintMatrix.rows() == 0 ) {
+			res.first = 0;
+			res.second = SOLUTION::INFTY;
+			return res;
+		}
+
 		// std::cout << "Set target: ";
 		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
 			glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
@@ -241,6 +247,11 @@ namespace hypro {
 		if(!mConstraintsSet)
 			updateConstraints();
 
+		if(mConstraintMatrix.rows() == 0) {
+			mLastConsistencyAnswer = SOLUTION::FEAS;
+			return true;
+		}
+
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
@@ -286,8 +297,13 @@ namespace hypro {
 		if(!mConstraintsSet)
 			updateConstraints();
 
-		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT)
+		if(mConstraintMatrix.rows() == 0)
 			return std::move(res);
+
+		#ifdef USE_SMTRAT
+		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT )
+			return std::move(res);
+		#endif
 
 		for(const auto& constraintPair : mFormulaMapping) {
 			std::cout << constraintPair.first << " -> " << constraintPair.second << std::endl;
@@ -432,50 +448,52 @@ namespace hypro {
 			}
 
 			unsigned numberOfConstraints = mConstraintMatrix.rows();
-			// convert constraint constants
-			glp_add_rows( lp, numberOfConstraints );
-			for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
-				glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+			if(numberOfConstraints > 0) {
+				// convert constraint constants
+				glp_add_rows( lp, numberOfConstraints );
+				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
+					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+				}
+
+				// add cols here
+				glp_add_cols( lp, mConstraintMatrix.cols() );
+				createArrays( numberOfConstraints * mConstraintMatrix.cols() );
+
+				// convert constraint matrix
+				ia[0] = 0;
+				ja[0] = 0;
+				ar[0] = 0;
+				for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
+					ia[i + 1] = ( (int)( i / mConstraintMatrix.cols() ) ) + 1;
+					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+					ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
+					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
+					//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
+					// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+				}
+
+				glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
+
+				glp_term_out(GLP_OFF);
+				for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
+					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
+				}
+
+				#ifdef USE_SMTRAT
+				#ifndef RECREATE_SOLVER
+				mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+
+				for(const auto& constraintPair : mFormulaMapping) {
+					mSmtratSolver.inform(constraintPair.first);
+					mSmtratSolver.add(constraintPair.first, false);
+				}
+
+				mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
+				#endif
+				#endif
 			}
-
-			// add cols here
-			glp_add_cols( lp, mConstraintMatrix.cols() );
-			createArrays( numberOfConstraints * mConstraintMatrix.cols() );
-
-			// convert constraint matrix
-			ia[0] = 0;
-			ja[0] = 0;
-			ar[0] = 0;
-			for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
-				ia[i + 1] = ( (int)( i / mConstraintMatrix.cols() ) ) + 1;
-				// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-				ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
-				// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-				ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
-				//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-				// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
-			}
-
-			glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
-
-			glp_term_out(GLP_OFF);
-			for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
-				glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-				glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
-			}
-
-			#ifdef USE_SMTRAT
-			#ifndef RECREATE_SOLVER
-			mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
-
-			for(const auto& constraintPair : mFormulaMapping) {
-				mSmtratSolver.inform(constraintPair.first);
-				mSmtratSolver.add(constraintPair.first, false);
-			}
-
-			mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
-			#endif
-			#endif
 
 			mConstraintsSet = true;
 		}
