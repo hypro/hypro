@@ -280,14 +280,16 @@ class Point {
 	bool operator>=( const Point<Number>& _p2 ) const { return _p2 <= *this; }
 
 	bool operator==( const Point<Number>& _p2 ) const {
-		if(this->hash() != _p2.hash()) return false;
+		assert( dimension() == _p2.dimension() );
+		if (this->hash() != _p2.hash()) return false;
 
-		return ( mCoordinates == _p2.rawCoordinates() );
+		return ( this->rawCoordinates() == _p2.rawCoordinates() );
 	}
 
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
+		if (this->hash() != _p2.hash()) return false;
 		for ( unsigned d = 0; d < this->dimension(); ++d ) {
 			if ( this->at( d ) != Number( _p2.at( d ) ) ) return false;
 		}

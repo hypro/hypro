@@ -61,7 +61,8 @@ protected:
 TYPED_TEST(VertexContainerTest, Constructor)
 {
 	VertexContainer<TypeParam> test1;
-	SUCCEED();
+	VertexContainer<TypeParam> test2;
+ 	SUCCEED();
 }
 
 TYPED_TEST(VertexContainerTest, Insertion)
@@ -164,4 +165,26 @@ TYPED_TEST(VertexContainerTest, OriginIsVertex)
 	test1.erase(Vertex<TypeParam>(this->p1, true));
 	test1.insert(Vertex<TypeParam>(this->p1, false));
 	EXPECT_FALSE(test1.originIsVertex()); // @todo is this really false?
+}
+
+TYPED_TEST(VertexContainerTest, OperatorTest) {
+	VertexContainer<TypeParam> test1 = VertexContainer<TypeParam>();
+	VertexContainer<TypeParam> test2 = VertexContainer<TypeParam>();
+	VertexContainer<TypeParam> test3 = VertexContainer<TypeParam>();
+	test1.insert(Vertex<TypeParam>(this->p1, true));
+	test1.insert(Vertex<TypeParam>(this->p2, true));
+	test1.insert(Vertex<TypeParam>(this->p3, false));
+
+	test2.insert(Vertex<TypeParam>(this->p1, true));
+	test2.insert(Vertex<TypeParam>(this->p2, true));
+
+	test3.insert(Vertex<TypeParam>(this->p1, true));
+	test3.insert(Vertex<TypeParam>(this->p2, true));
+
+	EXPECT_FALSE(test1 == test2);
+	EXPECT_TRUE(test2 == test3);
+	EXPECT_FALSE(test1 == test3);
+
+	test3.insert(Vertex<TypeParam>(this->p3, false));
+	EXPECT_TRUE(test1 == test3);
 }

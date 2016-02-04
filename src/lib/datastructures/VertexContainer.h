@@ -22,6 +22,7 @@ class VertexContainer {
 	 * Member
 	 **********************************************************************/
 	vSet<Number> mVertices;
+	mutable std::size_t mHash = 0;
 
   public:
 	/***********************************************************************
@@ -97,6 +98,7 @@ class VertexContainer {
 		if ( this == &rhs ) return ( *this );
 		mVertices.clear();
 		mVertices = rhs.mVertices;
+		mHash = 0;
 		return *this;
 	}
 
@@ -119,6 +121,7 @@ class VertexContainer {
 			tmp.insert( tmpIt, v );
 			tmpIt++;
 		}
+		mHash = 0;
 		mVertices = tmp;
 	}
 
@@ -131,6 +134,7 @@ class VertexContainer {
 			tmp.insert( tmpIt, v );
 			tmpIt++;
 		}
+		mHash = 0;
 		mVertices = tmp;
 	}
 
@@ -152,7 +156,10 @@ class VertexContainer {
 	 * @return A bidirectional iterator to the inserted Vertex.
 	 * Not safe.
 	 */
-	inline std::pair<vSetIt<Number>, bool> insert( const Vertex<Number>& v ) { return mVertices.insert( v ); }
+	inline std::pair<vSetIt<Number>, bool> insert( const Vertex<Number>& v ) {
+		mHash = 0;
+		return mVertices.insert( v );
+	}
 
 	/**
 	 *
@@ -161,6 +168,7 @@ class VertexContainer {
 	 */
 	template <typename ForwardIterator>
 	inline void insert( ForwardIterator begin, ForwardIterator end ) {
+		mHash = 0;
 		mVertices.insert( begin, end );
 	}
 
@@ -171,6 +179,7 @@ class VertexContainer {
 	 * @return
 	 */
 	inline std::pair<vSetIt<Number>, bool> insert( const Point<Number>& p, const bool c = false ) {
+		mHash = 0;
 		return insert( Vertex<Number>( p, c ) );
 	}
 
@@ -182,10 +191,14 @@ class VertexContainer {
 	 */
 	template <typename BiIterator>
 	inline vSetIt<Number> insert( const Vertex<Number>& v, const BiIterator pos ) {
+		mHash = 0;
 		return mVertices.insert( pos, v );
 	}
 
-	inline vSetIt<Number> insertAtBack( const Vertex<Number>& v ) { return mVertices.insert( --mVertices.end(), v ); }
+	inline vSetIt<Number> insertAtBack( const Vertex<Number>& v ) {
+		mHash = 0;
+		return mVertices.insert( --mVertices.end(), v );
+	}
 
 	/**
 	 *
@@ -196,6 +209,7 @@ class VertexContainer {
 	 */
 	template <typename BiIterator>
 	inline vSetIt<Number> insert( const Point<Number>& p, bool c, const BiIterator pos ) {
+		mHash = 0;
 		return insert( Vertex<Number>( p, c ), pos );
 	}
 
@@ -205,6 +219,7 @@ class VertexContainer {
 	 */
 	template <typename BiIterator>
 	inline void erase( BiIterator pos ) {
+		mHash = 0;
 		mVertices.erase( pos );
 	}
 
@@ -212,19 +227,37 @@ class VertexContainer {
 	 *
 	 * @param p Vertex that is erased.
 	 */
-	inline void erase( const Vertex<Number>& p ) { mVertices.erase( p ); }
+	inline void erase( const Vertex<Number>& p ) {
+		mHash = 0;
+		mVertices.erase( p );
+	}
 
 	/**
 	 * clears the underlying container.
 	 */
-	inline void clear() { mVertices.clear(); }
+	inline void clear() {
+		mHash = 0;
+		mVertices.clear();
+	}
 
 	inline bool set( const Point<Number>& p, bool c ) {
 		typename std::set<Vertex<Number>>::iterator it = mVertices.find( Vertex<Number>( p, false ) );
 		if ( it == mVertices.end() ) return false;
+		mHash = false;
 		mVertices.erase( it );
 		insert( p, c, it );
 		return true;
+	}
+
+	/**
+	 * @return Hash value
+	 */
+	std::size_t getHash() const {
+		if (this->mHash == 0) {
+			// regenerate hash
+			this->mHash = std::hash<vSet<Number>>()(this->vertices());
+		}
+		return this->mHash;
 	}
 
 	/**
@@ -234,6 +267,10 @@ class VertexContainer {
 	 * @return true, if they are equal.
 	 */
 	friend bool operator==( const VertexContainer<Number>& c1, const VertexContainer<Number>& c2 ) {
+		if (c1.getHash() != c2.getHash()) {
+			return false;
+		}
+
 		return c1.mVertices == c2.mVertices;
 	}
 
@@ -244,7 +281,7 @@ class VertexContainer {
 	 * @return true, if they are not equal.
 	 */
 	friend bool operator!=( const VertexContainer<Number>& c1, const VertexContainer<Number>& c2 ) {
-		return c1.mVertices != c2.mVertices;
+		return !(c1 == c2);
 	}
 
 	/**
@@ -262,3 +299,27 @@ class VertexContainer {
 	}
 };
 }
+
+namespace std {
+	template<class Number>
+	struct hash<hypro::VertexContainer<Number>> {
+		std::size_t operator()(hypro::VertexContainer<Number> const &vertexContainer) const {
+			return std::hash<hypro::vSet<Number>>()(vertexContainer.vertices());
+		}
+	};
+}
+
+namespace std {
+	template<class Number>
+	struct hash<set<hypro::Vertex<Number>>> {
+		std::size_t operator()(hypro::vSet<Number> const& set) const
+		{
+			size_t result = 0;
+			hash<hypro::Vertex<Number>> vertexHasher;
+			for (auto it = set.begin(); it != set.end(); it++) {
+				boost::hash_combine(result, vertexHasher(*it));
+			}
+			return result;
+		}
+	};
+} //namespace
