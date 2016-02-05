@@ -15,7 +15,7 @@
 #include "../../config.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Hyperplane.h"
-#include "../../util/smtrat/SimplexSolver.h"
+#include "../../util/Optimizer.h"
 #include "util.h"
 #include <glpk.h>
 
@@ -31,39 +31,19 @@ namespace hypro {
 template <typename Number>
 class PolytopeSupportFunction {
   private:
-#ifndef USE_SMTRAT
-  	glp_prob* lp;
-	int* ia;
-	int* ja;
-	double* ar;
-#endif
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
 
 	unsigned mDimension;
 
-#ifdef USE_SMTRAT
-#else
-	void createArrays( unsigned size );
-	void deleteArrays();
-
-	/**
-	 * Initializes the class by setting up the glpk problem with the given parameters.
-	 * @param constraints
-	 * @param constraintConstants
-	 */
-	void initialize( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
-
-#endif
-
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
 	PolytopeSupportFunction( const std::vector<Hyperplane<Number>>& _planes );
 	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
 	~PolytopeSupportFunction();
-        
-        PolytopeSupportFunction<Number>& operator=(const PolytopeSupportFunction& _orig); 
+
+        PolytopeSupportFunction<Number>& operator=(const PolytopeSupportFunction& _orig);
 
 	/**
 	 * Returns the dimension of the object.

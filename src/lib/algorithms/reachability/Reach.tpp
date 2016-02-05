@@ -67,22 +67,6 @@ namespace reachability {
 		//std::cout << std::endl;
 
 		while ( !R_new.empty() && depth < mSettings.jumpDepth ) {
-			//std::cout << "Main loop, depth " << depth << std::endl;
-			// R = R U R_new
-			if ( !R.empty() ) {
-				std::set_union( R.begin(), R.end(), R_new.begin(), R_new.end(), std::inserter( R, R.begin() ) );
-			} else {
-				R = R_new;
-			}
-			//std::cout << "R_new U R = ";
-			//for ( const auto& item : R ) std::cout << item << " ";
-			//std::cout << std::endl;
-
-			//std::cout << "R_new = ";
-			//for ( const auto& item : R_new ) std::cout << item << " ";
-			//std::cout << std::endl;
-
-			// R_new = Reach(R_new)\R
 
 			std::set<std::size_t> R_temp = computeReach( R_new );
 
@@ -93,6 +77,13 @@ namespace reachability {
 			R_new.clear();
 			std::set_difference( R_temp.begin(), R_temp.end(), R.begin(), R.end(),
 								 std::inserter( R_new, R_new.begin() ) );
+
+			// R = R U R_new
+			if ( !R.empty() ) {
+				std::set_union( R.begin(), R.end(), R_new.begin(), R_new.end(), std::inserter( R, R.begin() ) );
+			} else {
+				R = R_new;
+			}
 
 			++depth;
 		}
@@ -398,12 +389,14 @@ namespace reachability {
 			//std::cout << std::endl << "Total time for loop(HYPRO): " << timeOfReachReduction << std::endl;
 			//std::cout << std::endl;
 
-#ifdef REACH_DEBUG
-			std::cout << "--- Loop left ---" << std::endl;
-			std::cout << flowpipe.size() << " Segments computed." << std::endl;
-#endif
 			std::size_t fpIndex = addFlowpipe( flowpipe );
 			mFlowToLocation[fpIndex] = _loc;
+
+#ifdef REACH_DEBUG
+			std::cout << "--- Loop left ---" << std::endl;
+			std::cout << "flowpipe " << fpIndex << ", " << flowpipe.size() << " Segments computed." << std::endl;
+#endif
+
 			return fpIndex;
 		} else {
 			// return an empty flowpipe
@@ -446,47 +439,21 @@ namespace reachability {
 					// check if guard of transition is enabled (if yes compute Post Assignment Valuation)
 					if ( computePostCondition( trans, *it_val, postAssign ) ) {
 						transitionEnabled = true;
-						//std::cout << "Take transition " << trans << std::endl;
 
-						//std::cout << "Vertices: " << std::endl;
 						for(const auto& vertex : postAssign.vertices() ) {
-							//std::cout << vertex << std::endl;
 							targetVertices.emplace_back(vertex);
 						}
-
-						/*
-						// targetValuation = targetValuation U postAssign
-						if ( !targetValuation.empty() ) {
-							targetValuation = targetValuation.unite( postAssign );
-						} else {
-							targetValuation = postAssign;
-						}
-						*/
 					}
 				}
 				if ( transitionEnabled ) {
 					assert(!targetVertices.empty());
-					//for(const auto& vertex : targetVertices ) {
-					//	std::cout << vertex << std::endl;
-					//}
 
 					targetValuation = Representation(targetVertices);
 					// compute new Flowpipe
 					hypro::Location<Number>* tarLoc = trans.target();
 
-					//std::cout << "Compute time-step in new location " << *tarLoc << " starting with initial valuation "
-					//		  << targetValuation << std::endl;
-
-					//std::cout << "Vertices Target initial state: " << std::endl;
-					//for(const auto& vertex : targetValuation.vertices() ) {
-					//	std::cout << vertex << std::endl;
-					//}
-
 					// flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
 					std::size_t newPipe = computeForwardTimeClosure( tarLoc, targetValuation );
-
-					//std::cout << "Computed flowpipe:" << std::endl;
-					//printFlowpipeReduced(newPipe);
 
 					// if new Flowpipe is not empty
 					if ( !mFlowpipes.at( newPipe ).empty() ) {
@@ -503,10 +470,6 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	bool Reach<Number,Representation>::computePostCondition( const hypro::Transition<Number>& _trans, const Representation& _val,
 							   Representation& result ) {
-		//std::cout << __func__ << std::endl;
-		// intersection between valuation polytope and guard hyperplanes
-
-		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 		Representation intersectionPoly = _val.intersectHyperplanes( _trans.guard().mat, _trans.guard().vec );
 
@@ -515,29 +478,15 @@ namespace reachability {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
-			//plotter.addObject(_val.vertices());
-			//plotter.addObject(intersectionPoly.vertices());
-			//plotter.addObject(_val.constraints());
-
 
 			hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
 			hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
 
-			//std::cout << "Valuation enabling transition: " << std::endl << _val << std::endl;
-			//std::cout << "Vertices: " << std::endl;
-			//for(const auto& vertex : _val.vertices()) {
-			//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
-			//}
-
 			// perform translation + transformation on intersection polytope
 			result = intersectionPoly.linearTransformation( transformMat, translateVec );
 
-			//plotter.addObject(result.vertices());
-			//plotter.plot2d();
-
 			return true;
 		} else {
-			//std::cout << "Transition disabled!" << std::endl;
 			return false;
 		}
 	}

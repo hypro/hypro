@@ -147,13 +147,14 @@ public:
 		swap( a.mHPlanes, b.mHPlanes );
 	}
 
+	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
   private:
 	/*
 	 * Auxiliary functions
 	 */
 
 	void calculateFan() const;
-	void reduceNumberRepresentation(unsigned bitLimit = 32) const;
+
 
 	std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
 	std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;

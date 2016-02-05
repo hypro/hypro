@@ -27,6 +27,7 @@ set( EXAMPLES
     example_massif
     example_matrixPolyhedra
     example_multiplication
+    example_numberReduction
     example_openglPlotting
     example_orthogonalPolyhedron
     example_parser

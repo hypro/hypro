@@ -6,7 +6,7 @@
 #include "VariablePool.h"
 
 #define USE_PRESOLUTION
-//#define RECREATE_SOLVER
+#define RECREATE_SOLVER
 
 namespace hypro {
 

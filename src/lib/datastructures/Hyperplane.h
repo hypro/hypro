@@ -32,6 +32,7 @@ class Hyperplane {
 	vector_t<Number> mNormal;
 	Number mScalar;
     size_t mHash = 0;
+    bool mIsInteger;
 
   public:
 	Hyperplane();
@@ -39,21 +40,21 @@ class Hyperplane {
 	Hyperplane( const Point<Number>& _vector, const Number& _off );
 	Hyperplane( std::initializer_list<Number> _coordinates, const Number& _off );
 	Hyperplane( const vector_t<Number>& _vector, const Number& _off );
-	//Hyperplane( const carl::Constraint<polynomial_t<Number>>& _constraint ); /////////////////////// TRAC
 	Hyperplane( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
 
 	~Hyperplane();
 
-  double sizeOfHyperplane(){
-    return sizeof(*this) + this->mNormal.size()* sizeof(Number);
-  }
+	double sizeOfHyperplane(){
+	return sizeof(*this) + this->mNormal.size()* sizeof(Number);
+	}
 
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
+	void makeInteger();
+	bool isInteger() const { return mIsInteger; }
 
 	const vector_t<Number>& normal() const;
-    vector_t<Number>& rNormal();
 	void setNormal( const vector_t<Number>& _normal );
 	void invert();
 
@@ -76,8 +77,7 @@ class Hyperplane {
 	bool contains( const vector_t<Number> _vector ) const;
 	bool holds( const vector_t<Number> _vector ) const;
 
-    vector_t<Number> normal() { return mNormal; };
-    Number scalar() { return mScalar; };
+    Number scalar() const { return mScalar; }
     size_t hash() {
 
         //TODO review line 79
@@ -105,7 +105,7 @@ class Hyperplane {
 	 * Method to compute the normal of a plane based on two direction vectors
 	 * simply computing the cross product does not work since the dimension is not necessarily 3
 	 */
-	vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet );
+	vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet ) const;
 };
 
 template <typename Number>

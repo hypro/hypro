@@ -21,6 +21,7 @@ HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
 		for ( const auto &plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
+		reduceNumberRepresentation();
 	}
 }
 
@@ -31,6 +32,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> 
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
 	}
+	reduceNumberRepresentation();
 }
 
 template <typename Number>
@@ -145,7 +147,7 @@ template <typename Number>
 matrix_t<Number> HPolytope<Number>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
+		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
 	return std::move(res);
 }
@@ -366,7 +368,15 @@ void HPolytope<Number>::insert( const Hyperplane<Number> &plane ) {
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
 	}
-	mHPlanes.push_back( plane );
+	bool found = false;
+	for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ++planeIt) {
+		if(*planeIt == plane){
+			found = true;
+			break;
+		}
+	}
+	if(!found)
+		mHPlanes.push_back( plane );
 }
 
 template <typename Number>
@@ -378,7 +388,7 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 	}
 	auto it = begin;
 	while ( it != end ) {
-		mHPlanes.push_back( *it );
+		this->insert( *it );
 		++it;
 	}
 }
@@ -404,49 +414,29 @@ bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const 
 
 template <typename Number>
 void HPolytope<Number>::removeRedundantPlanes() {
-	if(this->empty()) {
-		*this = HPolytope<Number>::Empty();
-	} else {
-		//std::cout << __func__ << ": " << *this << std::endl;
-		for ( auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ) {
-			//std::cout << "Current plane: " << *planeIt << std::endl;
-			std::pair<Number, SOLUTION> evalRes = this->evaluate( planeIt->normal() );
-			if ( evalRes.second == INFEAS ) {
-				// return empty polytope
-				this->clear();
-				break;
-			} else if ( evalRes.second == FEAS ) {
-				if ( evalRes.first < planeIt->offset() &&
-					 !carl::AlmostEqual2sComplement( evalRes.first, planeIt->offset() ) ) {
-					//std::cout << "erase " << *planeIt << " which is really redundant." <<
-					//std::endl;
-					planeIt = mHPlanes.erase( planeIt );
-				} else {
-					Hyperplane<Number> tmp = Hyperplane<Number>( *planeIt );
-					auto pos = mHPlanes.erase( planeIt );
-					//std::cout << "Evaluate without plane." << std::endl;
-					std::pair<Number, SOLUTION> tmpRes = this->evaluate( tmp.normal() );
-					//std::cout << "Eval with: " << evalRes.first << ", without: " <<
-					//tmpRes.first << ", solution type: "
-					//<< tmpRes.second << std::endl;
-					if ( tmpRes.second == INFTY ||
-						 ( tmpRes.first > tmp.offset() && !carl::AlmostEqual2sComplement( tmpRes.first, tmp.offset() ) ) ) {
-						planeIt = mHPlanes.insert( pos, tmp );
-						++planeIt;
-						//std::cout << "keep "  << tmp << std::endl;
-					} else {
-						//std::cout << "erase " << tmp << " which is equal to something." <<
-						//std::endl;
-						planeIt = pos;
-					}
+	if(mHPlanes.size() > 1){
+		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+		opt.setMatrix(this->matrix());
+		opt.setVector(this->vector());
+
+		std::cout << "Set up problem." << std::endl;
+
+		std::vector<std::size_t> redundant = Optimizer<Number>::getInstance().redundantConstraints();
+
+		std::cout << "Computed redundant planes." << std::endl;
+
+		if(!redundant.empty()){
+			std::size_t cnt = mHPlanes.size()-1;
+			for ( auto rIt = mHPlanes.rbegin(); rIt != mHPlanes.rend(); ++rIt ) {
+				if(redundant.back() == cnt){
+					mHPlanes.erase( --(rIt.base()) );
+					redundant.pop_back();
+					std::cout << "Erase plane " << cnt << std::endl;
 				}
-			}  // FEAS
-			else {
-				std::cout << "Result unbounded should not happen." << std::endl;
-				assert(false);
+				--cnt;
 			}
-		}	  // loop
-		//std::cout << __func__ << ": Result: " << *this << std::endl;
+		}
+		assert(redundant.empty());
 	}
 }
 
@@ -521,10 +511,13 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			//std::cout << "Full rank, retransform!" << std::endl;
+			std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
+			//HPolytope<Number> res(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
+			//return res;
 			return std::move(HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
 		} else {
+			std::cout << "Use V-Conversion for linear transformation." << std::endl;
 			VPolytope<Number> intermediate( this->vertices() );
 			intermediate = intermediate.linearTransformation( A, b );
 
@@ -634,12 +627,8 @@ bool HPolytope<Number>::contains( const Point<Number> &point ) const {
 
 template <typename Number>
 bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
-	std::cout << *this << "  " << __func__ << "  " << vec << ": ";
 	for ( const auto &plane : mHPlanes ) {
-		if (plane.normal().dot( vec ) != plane.offset() && plane.normal().dot( vec ) > plane.offset() ) {
-			//std::cout << "Difference is " << plane.normal().dot( vec )-plane.offset() << " with " << plane.normal().dot( vec )<< " and "<< plane.offset()<< std::endl;
-			//std::cout << vec.transpose() << " not contained in " << plane.normal().transpose()
-			//		  << " <= " << plane.offset() << "(is: " << plane.normal().dot( vec ) << ")" << std::endl;
+		if (plane.normal().dot( vec ) > plane.offset()) {
 			return false;
 		}
 	}
@@ -721,41 +710,47 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
 
 template<typename Number>
 void HPolytope<Number>::reduceNumberRepresentation(unsigned limit) const {
-	assert(limit < 64);
 	std::vector<Point<Number>> vertices = this->vertices();
 
-	// proceed plane-wise
+	// normal reduction
 	for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
-		vector_t<Number> newNormal = vector_t<Number>(this->dimension());
-		for(unsigned i=0; i < this->dimension(); ++i) {
-			Number newCoeff = mHPlanes.at(planeIndex).normal()(i);
-			bool changeNum = false;
-			if(mHPlanes.at(planeIndex).normal()(i).value().getNum().bitsize() > limit) {
-				changeNum = true;
+		//std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
+		// find maximal value
+		Number largest = 0;
+		mHPlanes.at(planeIndex).makeInteger();
+		//std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
+		largest = carl::abs(mHPlanes.at(planeIndex).offset());
+		for(unsigned i = 0; i < mDimension; ++i){
+			if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
+				largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
 			}
-			if(mHPlanes.at(planeIndex).normal()(i).value().getDenom().bitsize() > limit) {
-				if(changeNum)
-					newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum()/limit)/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom()/limit);
-				else
-					newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum())/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom()/limit);
-			}else if(changeNum) {
-				newCoeff = (mHPlanes.at(planeIndex).normal()(i).value().getNum()/limit)/(mHPlanes.at(planeIndex).rawCoordinates()(i).value().getDenom());
-			}
-			newNormal(i) = newCoeff;
 		}
-		mHPlanes[planeIndex].setNormal(newNormal);
-		Number newOff = mHPlanes.at(planeIndex).offset();
-		for(const auto& vertex : vertices) {
-			if(vertex.rawCoordinates().dot(newNormal) > newOff)
-				newOff += vertex.rawCoordinates().dot(newNormal) - newOff;
 
-			assert(vertex.rawCoordinates().dot(newNormal) == newOff);
+		// reduce, if reduction is required
+		if(largest > (limit*limit)) {
+			vector_t<Number> newNormal(mDimension);
+			for(unsigned i = 0; i < mDimension; ++i){
+				newNormal(i) = carl::floor((mHPlanes.at(planeIndex).normal()(i)/largest)*limit);
+				assert(carl::abs(mHPlanes.at(planeIndex).normal()(i)/largest) <= 1);
+				assert(carl::isInteger(newNormal(i)));
+				assert(newNormal(i) <= limit);
+			}
+			mHPlanes.at(planeIndex).setNormal(newNormal);
+			Number newOffset = mHPlanes.at(planeIndex).offset();
+			newOffset = carl::ceil((newOffset/largest)*limit);
+
+			for(const auto& vertex : vertices) {
+				Number tmp = newNormal.dot(vertex.rawCoordinates());
+				if(tmp > newOffset){
+					newOffset = newOffset + (tmp-newOffset);
+					assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+				}
+			}
+			newOffset = carl::ceil(newOffset);
+			mHPlanes.at(planeIndex).setOffset(newOffset);
 		}
-		mHPlanes[planeIndex].setOffset(newOff);
+		//std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
 	}
-
-
-
 }
 
 }  // namespace hypro

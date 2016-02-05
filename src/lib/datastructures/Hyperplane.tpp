@@ -13,17 +13,17 @@
 namespace hypro {
 template <typename Number>
 Hyperplane<Number>::Hyperplane()
-	: mNormal( vector_t<Number>::Zero( 1 ) ), mScalar( Number( 0 ) ) {
+	: mNormal( vector_t<Number>::Zero( 1 ) ), mScalar( Number( 0 ) ), mIsInteger( true ) {
 }
 
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const Hyperplane<Number> &_orig )
-	: mNormal( _orig.mNormal ), mScalar( _orig.mScalar ) {
+	: mNormal( _orig.mNormal ), mScalar( _orig.mScalar ), mIsInteger( _orig.isInteger() ) {
 }
 
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const Point<Number> &_vector, const Number &_off )
-	: mNormal( _vector.rawCoordinates() ), mScalar( _off ) {
+	: mNormal( _vector.rawCoordinates() ), mScalar( _off ), mIsInteger( false ) {
 }
 
 template <typename Number>
@@ -35,36 +35,14 @@ Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, cons
 		++pos;
 	}
 	mScalar = _off;
+	mIsInteger = false;
 }
 
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vector, const Number &_off )
-	: mNormal( _vector ), mScalar( _off ) {
+	: mNormal( _vector ), mScalar( _off ), mIsInteger( false ) {
 }
 
-/*
-template <typename Number>
-Hyperplane<Number>::Hyperplane( const carl::Constraint<polynomial_t<Number>> &_constraint ) {
-	assert( _constraint.lhs().isLinear() );
-	carl::Variables vars = _constraint.variables();
-	vector_t<Number> tmp = vector_t<Number>::Zero( vars.size() );
-	for ( auto variable : vars ) {
-		assert( hypro::VariablePool::getInstance().hasDimension( variable ) );
-		tmp( hypro::VariablePool::getInstance().dimension( variable ) ) = _constraint.coefficient( variable, 1 );
-	}
-	mScalar = -_constraint.constantPart();
-	switch ( _constraint.relation() ) {
-		case carl::Relation::GREATER:
-		case carl::Relation::GEQ: {
-			tmp = -1 * tmp;
-			break;
-		}
-		default:
-			break;
-	}
-	mNormal = tmp;
-}
-*/
 template <typename Number>
 Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
 	// here: hyperplane given in parameterform is converted to normalform
@@ -81,6 +59,7 @@ Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<
 #ifdef fukuda_DEBUG
 	std::cout << "computed Offset: " << mScalar << std::endl;
 #endif
+	mIsInteger = false;
 }
 
 template <typename Number>
@@ -104,13 +83,29 @@ void Hyperplane<Number>::reduceToDimensions( std::vector<unsigned> _dimensions )
 	this->mHash = 0;
 }
 
-template <typename Number>
-const vector_t<Number> &Hyperplane<Number>::normal() const {
-	return mNormal;
+template<typename Number>
+void Hyperplane<Number>::makeInteger() {
+	if(!mIsInteger){
+		Number scaling = Number(carl::getDenom(mScalar));
+		for(unsigned i = 0; i < mNormal.rows(); ++i)
+			scaling = scaling * carl::getDenom(mNormal(i));
+
+
+		if(!carl::isInteger(mScalar)){
+			mScalar = mScalar*scaling;
+		}
+		assert(carl::isInteger(mScalar));
+
+		for(unsigned i = 0; i < mNormal.rows(); ++i) {
+			mNormal(i) = mNormal(i)*scaling;
+			assert(carl::isInteger(mNormal(i)));
+		}
+		mIsInteger = true;
+	}
 }
 
 template <typename Number>
-vector_t<Number> &Hyperplane<Number>::rNormal() {
+const vector_t<Number> &Hyperplane<Number>::normal() const {
 	return mNormal;
 }
 
@@ -118,6 +113,7 @@ template <typename Number>
 void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
 	this->mHash = 0;
+	mIsInteger = false;
 }
 
 template<typename Number>
@@ -135,6 +131,7 @@ template <typename Number>
 void Hyperplane<Number>::setOffset( Number _offset ) {
 	mScalar = _offset;
 	this->mHash = 0;
+	mIsInteger = mIsInteger && carl::isInteger(_offset);
 }
 
 template <typename Number>
@@ -187,16 +184,6 @@ Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Numb
 		return Hyperplane<Number>();
 	}
 }
-
-/*
-template <typename Number>
-HPolytope<Number> Hyperplane<Number>::intersection( const Hyperplane<Number> &_rhs ) const {
-	std::vector<Hyperplane<Number>> planes;
-	planes.push_back( *this );
-	planes.push_back( _rhs );
-	return HPolytope<Number>( planes );
-}
-*/
 
 template <typename Number>
 vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number> &_rhs ) const {
@@ -346,7 +333,7 @@ const Number &Hyperplane<Number>::internalOffset() const {
  * necessarily 3
  */
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
+vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) const {
 	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
 	if(_edgeSet.size() == (unsigned)_edgeSet.begin()->rows() - 1 ) {
 		// method avoiding glpk and using Eigen instead (higher precision)

@@ -85,6 +85,9 @@ namespace hypro {
 		}
 
 		#ifdef USE_SMTRAT
+
+		Poly objective = createObjective(_direction);
+
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
@@ -94,7 +97,7 @@ namespace hypro {
 			simplex.add(constraintPair.first, false);
 		}
 
-		Poly objective = createObjective(_direction);
+
 
 		#ifdef USE_PRESOLUTION
 		// Get glpk model to initialize assignments for SMT-RAT.
@@ -164,9 +167,6 @@ namespace hypro {
 
 		#else
 		mSmtratSolver.push();
-
-		// create objective function from _direction.
-		Poly objective = createObjective(_direction);
 
 		#ifdef USE_PRESOLUTION
 		// Get glpk model to initialize assignments for SMT-RAT.
@@ -301,7 +301,61 @@ namespace hypro {
 			return std::move(res);
 
 		#ifdef USE_SMTRAT
-		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT )
+		#ifdef RECREATE_SOLVER
+		smtrat::SimplexSolver simplex;
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+		for(const auto& constraintPair : formulaMapping) {
+			simplex.inform(constraintPair.first);
+			simplex.add(constraintPair.first, false);
+		}
+
+		if(formulaMapping.size() == 1)
+			return std::move(res);
+
+		// first call to check satisfiability
+		smtrat::Answer firstCheck = simplex.check();
+		switch (firstCheck) {
+				case smtrat::Answer::UNSAT: {
+					return res;
+					break;
+				}
+				case smtrat::Answer::SAT: {
+					break;
+				}
+				default: {
+					assert(false);
+					break;
+				}
+		}
+
+		std::size_t count = 0;
+		std::cout << "Original Formula: " << std::endl;
+		simplex.printAssertions();
+		std::size_t formulaSize = simplex.formula().size();
+		for(auto formulaIt = simplex.formula().begin(); count < formulaSize; ) {
+			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
+			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
+			formulaIt = simplex.remove(formulaIt);
+			simplex.inform(negatedConstraint);
+			simplex.add(negatedConstraint, false);
+
+			std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+
+			smtrat::Answer isRedundant = simplex.check();
+			assert(isRedundant != smtrat::Answer::UNKNOWN);
+			if(isRedundant == smtrat::Answer::UNSAT)
+				res.push_back(mFormulaMapping.at(originalConstraint));
+
+			assert(*(--(simplex.formula().end())) == negatedConstraint);
+			simplex.remove(--(simplex.formula().end()));
+			simplex.deinform(negatedConstraint);
+			simplex.add(originalConstraint, false);
+			++count;
+		}
+
+		#else
+
+		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT ) // if there is only one constraint
 			return std::move(res);
 
 		for(const auto& constraintPair : mFormulaMapping) {
@@ -311,6 +365,8 @@ namespace hypro {
 		// first call to check satisfiability
 		smtrat::Answer firstCheck;
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
+			std::cout << "Making first check." << std::endl;
+			std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 			firstCheck = mSmtratSolver.check();
 			switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
@@ -355,13 +411,15 @@ namespace hypro {
 			assert(*(--(mSmtratSolver.formula().end())) == negatedConstraint);
 			mSmtratSolver.remove(--(mSmtratSolver.formula().end()));
 			mSmtratSolver.deinform(negatedConstraint);
-			//mSmtratSolver.inform(negatedConstraint.negated(), false);
 			mSmtratSolver.add(originalConstraint, false);
 			++count;
 		}
 		#endif
+		#endif
 
 		//TODO: Currently this test only works while using SMTRAT
+
+		std::sort(res.begin(), res.end());
 
 		return std::move(res);
 	}
@@ -438,12 +496,10 @@ namespace hypro {
 				}
 				assert(mSmtratSolver.formula().empty());
 
-				if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT) {
-					mSmtratSolver.deinform(mCurrentFormula);
-				} else {
-					for(const auto& constraint : mCurrentFormula)
-						mSmtratSolver.deinform(constraint);
-				}
+
+				for(const auto& constraintPair : mFormulaMapping)
+					mSmtratSolver.deinform(constraintPair.first);
+
 				mSmtratSolver.push();
 				#endif
 				#endif

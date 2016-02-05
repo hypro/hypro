@@ -25,7 +25,7 @@ namespace smtrat
         public:
             SimplexSolver(): Manager() {
 				setStrategy({
-					addBackend<LRAModule<LRASettings1>>()
+					addBackend<LRAModule<LRASettings2>>()
 				});
 			}
 
