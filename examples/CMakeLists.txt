@@ -24,6 +24,7 @@ set( EXAMPLES
     example_facetEnumeration
     example_heuristic
     example_hausdorffApprox
+    example_linearTransformation
     example_massif
     example_matrixPolyhedra
     example_multiplication
@@ -44,6 +45,7 @@ set( EXAMPLES
     example_squareroot
     example_subtraction
     example_supportFunction
+    example_switchingLinearSystem
     example_cubicroot
     example_test
     example_thermostat
