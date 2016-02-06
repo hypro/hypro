@@ -87,13 +87,11 @@ template<typename Number>
 void Hyperplane<Number>::makeInteger() {
 	if(!mIsInteger){
 		Number scaling = Number(carl::getDenom(mScalar));
-		for(unsigned i = 0; i < mNormal.rows(); ++i)
+		for(unsigned i = 0; i < mNormal.rows(); ++i) {
 			scaling = scaling * carl::getDenom(mNormal(i));
-
-
-		if(!carl::isInteger(mScalar)){
-			mScalar = mScalar*scaling;
 		}
+
+		mScalar = mScalar*scaling;
 		assert(carl::isInteger(mScalar));
 
 		for(unsigned i = 0; i < mNormal.rows(); ++i) {

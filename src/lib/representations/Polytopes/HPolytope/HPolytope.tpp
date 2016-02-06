@@ -32,7 +32,9 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> 
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
 	}
+	std::cout << "Before number reduction: " << *this <<std::endl;
 	reduceNumberRepresentation();
+	std::cout << "After number reduction: " << *this <<std::endl;
 }
 
 template <typename Number>
@@ -511,13 +513,12 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			std::cout << "Full rank, retransform!" << std::endl;
+			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			//HPolytope<Number> res(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
-			//return res;
+			//std::cout << "Matrix: " << inequalities.first*A.inverse() << std::endl << "Vector: " << ((inequalities.first*A.inverse()*b) + (inequalities.second)) << std::endl;
 			return std::move(HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
 		} else {
-			std::cout << "Use V-Conversion for linear transformation." << std::endl;
+			//std::cout << "Use V-Conversion for linear transformation." << std::endl;
 			VPolytope<Number> intermediate( this->vertices() );
 			intermediate = intermediate.linearTransformation( A, b );
 
