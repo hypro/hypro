@@ -32,9 +32,7 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> 
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
 	}
-	std::cout << "Before number reduction: " << *this <<std::endl;
 	reduceNumberRepresentation();
-	std::cout << "After number reduction: " << *this <<std::endl;
 }
 
 template <typename Number>
@@ -421,23 +419,23 @@ void HPolytope<Number>::removeRedundantPlanes() {
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
-		std::cout << "Set up problem." << std::endl;
-
 		std::vector<std::size_t> redundant = Optimizer<Number>::getInstance().redundantConstraints();
-
-		std::cout << "Computed redundant planes." << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
 			for ( auto rIt = mHPlanes.rbegin(); rIt != mHPlanes.rend(); ++rIt ) {
+				if(redundant.empty())
+					break;
+
 				if(redundant.back() == cnt){
 					mHPlanes.erase( --(rIt.base()) );
 					redundant.pop_back();
-					std::cout << "Erase plane " << cnt << std::endl;
+					//std::cout << "Erase plane " << cnt << std::endl;
 				}
 				--cnt;
 			}
 		}
+
 		assert(redundant.empty());
 	}
 }

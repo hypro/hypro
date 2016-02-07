@@ -303,14 +303,33 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
-		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+
+		if(formulaMapping.size() == 1)
+			return std::move(res);
+
+		if(formulaMapping.size() != mConstraintMatrix.rows()) {
+			for(unsigned cnt = 0; cnt < mConstraintMatrix.rows(); ++cnt) {
+				bool found = false;
+				for(const auto& constraintPair : formulaMapping) {
+					if(constraintPair.second == cnt){
+						found = true;
+						break;
+					}
+				}
+				if(!found) {
+					res.push_back(cnt);
+				}
+				if(res.size() == (mConstraintMatrix.rows() - formulaMapping.size()) )
+					break;
+			}
+		}
+
+		assert((formulaMapping.size() + res.size()) == mConstraintMatrix.rows());
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
 		}
-
-		if(formulaMapping.size() == 1)
-			return std::move(res);
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
@@ -329,28 +348,31 @@ namespace hypro {
 		}
 
 		std::size_t count = 0;
-		std::cout << "Original Formula: " << std::endl;
-		simplex.printAssertions();
+		//std::cout << "Original Formula: " << std::endl;
+		//simplex.printAssertions();
+
 		std::size_t formulaSize = simplex.formula().size();
-		for(auto formulaIt = simplex.formula().begin(); count < formulaSize; ) {
+		for(auto formulaIt = simplex.formula().begin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
 			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
 			formulaIt = simplex.remove(formulaIt);
 			simplex.inform(negatedConstraint);
 			simplex.add(negatedConstraint, false);
 
-			std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+			//std::cout << "Modified Formula: " << negatedConstraint << std::endl;
 
 			smtrat::Answer isRedundant = simplex.check();
 			assert(isRedundant != smtrat::Answer::UNKNOWN);
-			if(isRedundant == smtrat::Answer::UNSAT)
-				res.push_back(mFormulaMapping.at(originalConstraint));
+			if(isRedundant == smtrat::Answer::UNSAT){
+				assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
+				assert(formulaMapping.at(originalConstraint) < mConstraintMatrix.rows());
+				res.push_back(formulaMapping.at(originalConstraint));
+			}
 
 			assert(*(--(simplex.formula().end())) == negatedConstraint);
 			simplex.remove(--(simplex.formula().end()));
 			simplex.deinform(negatedConstraint);
 			simplex.add(originalConstraint, false);
-			++count;
 		}
 
 		#else
@@ -358,15 +380,11 @@ namespace hypro {
 		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT ) // if there is only one constraint
 			return std::move(res);
 
-		for(const auto& constraintPair : mFormulaMapping) {
-			std::cout << constraintPair.first << " -> " << constraintPair.second << std::endl;
-		}
-
 		// first call to check satisfiability
 		smtrat::Answer firstCheck;
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
-			std::cout << "Making first check." << std::endl;
-			std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+			//std::cout << "Making first check." << std::endl;
+			//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 			firstCheck = mSmtratSolver.check();
 			switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
@@ -391,8 +409,8 @@ namespace hypro {
 			return res;
 
 		std::size_t count = 0;
-		std::cout << "Original Formula: " << std::endl;
-		mSmtratSolver.printAssertions();
+		//std::cout << "Original Formula: " << std::endl;
+		//mSmtratSolver.printAssertions();
 		std::size_t formulaSize = mSmtratSolver.formula().size();
 		for(auto formulaIt = mSmtratSolver.formula().begin(); count < formulaSize; ) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
@@ -401,7 +419,7 @@ namespace hypro {
 			mSmtratSolver.inform(negatedConstraint);
 			mSmtratSolver.add(negatedConstraint, false);
 
-			std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+			//std::cout << "Modified Formula: " << negatedConstraint << std::endl;
 
 			smtrat::Answer isRedundant = mSmtratSolver.check();
 			assert(isRedundant != smtrat::Answer::UNKNOWN);

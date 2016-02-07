@@ -22,6 +22,7 @@ namespace hypro {
 				row += carl::convert<Number,Rational>(_constraints(rowIndex,colIndex)) * pool.carlVarByIndex(colIndex);
 			}
 			row -= carl::convert<Number,Rational>(_constants(rowIndex));
+			//std::cout << "atempt to insert constraint " << rowIndex << " (" << _constraints.row(rowIndex) << ", " << _constants(rowIndex) << ")" << std::endl;
 			constraints.insert(std::make_pair(smtrat::FormulaT(row,_rel), rowIndex));
 		}
 		return std::move(constraints);

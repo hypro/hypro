@@ -326,7 +326,6 @@ void Plotter<Number>::plotTex() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
-	std::cout << "Added object " << _points << std::endl;
 	if ( !sorted ) {
 		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
 		mObjects.insert( std::make_pair( mId, sortedPoints ) );
