@@ -101,12 +101,6 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
-		//hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-		//[0,T] = [0,delta1] U [delta1, delta2] ...
-		// note: interval size is constant
-
- 		//plotter.addObject(_val.vertices());
-
 #ifdef REACH_DEBUG
 		std::cout << "Time Interval: " << mSettings.timestep << std::endl;
 
@@ -134,21 +128,9 @@ namespace reachability {
 #endif
 		Representation initial = _val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
-		// test initial
-		//for(auto vertex: initial.vertices()){
-		//	std::cout << "Test if vertex of initial " << vertex << " is inside _val" << std::endl;
-		//	assert(_val.contains(vertex));
-		//}
 		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
-		//plotter.addObject(_val.vertices());
-		//unsigned p=plotter.addObject(initial.vertices());
-		//plotter.setObjectColor(p, colors[red]);
-		//plotter.plot2d();
-
 		if ( !initial.empty() ) {
-			flowpipe.push_back( initial );
-
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
