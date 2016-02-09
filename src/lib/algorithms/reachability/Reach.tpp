@@ -10,15 +10,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number, Representation>& _automaton, const ReachabilitySettings<Number> _settings)
-		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {
-		std::size_t initId = addFlowpipe( std::move( flowpipe_t<Representation>( {_automaton.initialValuation()} ) ) );
-		for ( const auto loc : _automaton.initialLocations() ) {
-			// use insert here as we assume that every location is only put in once. TODO: Extend for more flexibility.
-			mReach.insert( std::make_pair( loc, std::vector<std::size_t>( {initId} ) ) );
-			mFlowToLocation.insert( std::make_pair( initId, loc ) );
-		}
-		// at this point every initial location is assigned the valuation.
-	}
+		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {}
 
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::addFlowpipe( const flowpipe_t<Representation>& _flowpipe ) {
@@ -50,14 +42,15 @@ namespace reachability {
 		std::set<std::size_t> R;
 
 		// R_new := flowpipe for the initial location, computed based on input valuation
-		for ( const auto& locPair : mReach ) {
+		for ( const auto& locationPtr : mAutomaton.initialLocations() ) {
 			//std::cout << "Compute time-step in initial states." << std::endl;
 			// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
-			std::size_t flowPipeIndex = mReach.at( locPair.first ).back();
-			std::size_t init = computeForwardTimeClosure( locPair.first, *( mFlowpipes.at( flowPipeIndex ).begin() ) );
+			std::size_t init = computeForwardTimeClosure( locationPtr, mAutomaton.initialValuation() );
 			//std::cout << "Computed flowpipe: " << std::endl;
 			//printFlowpipeReduced( init );
-			mReach.at( locPair.first ).push_back( init );
+			std::vector<std::size_t> fp;
+			fp.push_back(init);
+			mReach.insert( std::make_pair(locationPtr, std::move(fp) ));
 			R_new.insert( init );
 			R.insert( init );
 		}
@@ -127,6 +120,8 @@ namespace reachability {
 		std::cout << !_val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ).empty() << std::endl;
 #endif
 		Representation initial = _val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+
+		std::cout << "Initial Valuation intersected with invariant: " << initial << std::endl;
 
 		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
@@ -279,7 +274,7 @@ namespace reachability {
 			firstSegment.removeRedundantPlanes();
 
 			// insert first Segment into the empty flowpipe
-			flowpipe.push_back( firstSegment );
+			flowpipe.push_back( firstSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ) );
 
 			// set the last segment of the flowpipe
 			Representation lastSegment = firstSegment;
