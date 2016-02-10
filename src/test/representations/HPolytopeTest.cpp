@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/Converter.h"
+#include "../../lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
 using namespace carl;

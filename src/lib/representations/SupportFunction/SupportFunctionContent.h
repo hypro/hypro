@@ -14,7 +14,6 @@
 
 #include "../../config.h"
 #include "util.h"
-#include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "PolytopeSupportFunction.h"
 #include "BallSupportFunction.h"
 #include <glpk.h>
@@ -132,7 +131,7 @@ class SupportFunctionContent {
 		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
                 std::cout << "Old adress: " << &*orig << ", new adress: " << &*obj << "\n";
                 std::cout << "Old object:" << "\n";
-                orig->print(); 
+                orig->print();
                 std::cout << "New object:" << "\n";
                 obj->print();
 		obj->pThis = obj;

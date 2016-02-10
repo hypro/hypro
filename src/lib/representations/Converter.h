@@ -17,13 +17,12 @@
 #include "../config.h"
 
 //enum for differentiating between exact conversion and over-/underapproximation.
-enum CONV_MODE {EXACT, OVER, UNDER}; 
+enum CONV_MODE {EXACT, OVER, UNDER};
 // include representations for conversion
 #include "Box/Box.h"
 #include "Polytope/Polytope.h"
 #include "Polytopes/VPolytope/VPolytope.h"
 #include "Polytopes/HPolytope/HPolytope.h"
-#include "SupportFunction/SupportFunctionContent.h"
 #include "SupportFunction/SupportFunction.h"
 #include "Zonotope/Zonotope.h"
 

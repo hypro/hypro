@@ -14,8 +14,6 @@
 #include <cassert>
 #include <carl/interval/Interval.h>
 #include "../../datastructures/Hyperplane.h"
-#include "../Polytopes/VPolytope/VPolytope.h"
-#include "../Polytopes/HPolytope/HPolytope.h"
 
 namespace hypro {
 
@@ -26,7 +24,7 @@ template <typename Number>
 class VPolytope;
 
 template <typename Number>
-class Box : public hypro::GeometricObject<Number>{
+class Box {
   private:
   public:
 	/***************************************************************************
@@ -203,4 +201,7 @@ class Box : public hypro::GeometricObject<Number>{
     #endif
 
 }
+
+#include "../Converter.h"
+
 #include "Box.tpp"

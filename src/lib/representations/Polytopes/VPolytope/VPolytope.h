@@ -9,7 +9,6 @@
 #pragma once
 
 #include "../util.h"
-#include "../../GeometricObject.h"
 #include <glpk.h>
 #include <set>
 #include <cassert>
@@ -20,7 +19,7 @@
 namespace hypro {
 
 template <typename Number>
-class VPolytope : public hypro::GeometricObject<Number> {
+class VPolytope {
   public:
 	typedef typename std::vector<Point<Number>> pointVector;
 	typedef typename hypro::polytope::Cone<Number> Cone;
@@ -220,5 +219,7 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytope<Number>& lhs
 }
 
 }  // namespace
+
+#include "../../Converter.h"
 
 #include "VPolytope.tpp"

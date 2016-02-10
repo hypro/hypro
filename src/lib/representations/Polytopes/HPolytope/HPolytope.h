@@ -19,10 +19,6 @@
 
 namespace hypro {
 
-/* forward declarations */
-template<typename Number>
-class VPolytope;
-
 template <typename Number>
 class HPolytope {
 public:
@@ -172,6 +168,9 @@ public:
 };
 
 }  // namespace
+#include "../../Converter.h"
 
 #include "HPolytope.tpp"
 #include "reduction.tpp"
+
+

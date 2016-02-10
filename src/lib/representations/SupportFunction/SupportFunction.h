@@ -9,20 +9,16 @@
 
 #pragma once
 
-
 #include "SupportFunctionContent.h"
 
 namespace hypro {
-
-
-
 
 template <typename Number>
 class SupportFunction {
     private:
            std::shared_ptr<SupportFunctionContent<Number>> content;
            SupportFunction<Number> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
-           
+
 
     public:
         SupportFunction ();
@@ -63,15 +59,13 @@ class SupportFunction {
 	bool empty() const;
 
 	void print() const;
-        
-        void swap(SupportFunction<Number>& first, SupportFunction<Number>& second);
+
+    void swap(SupportFunction<Number>& first, SupportFunction<Number>& second);
 
 };
 
-
-
-
-
 } //namespace
+
+#include "../Converter.h"
 
 #include "SupportFunction.tpp"
