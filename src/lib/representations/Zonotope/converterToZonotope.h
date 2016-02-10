@@ -36,7 +36,8 @@ namespace hypro {
     
     /**
      * @brief Converts a box into a Zonotope.
-     * 
+     * @detail Computes the corresponding generator for every dimension by simply computing the length of each box interval (divided by 2)
+     * and center of the box by addition of the interval end points (also divided by 2).
      *   
      * @param _source Box that needs to be converted.
      * @param _target An arbitrary Zonotope that gets overwritten with the converted object.
