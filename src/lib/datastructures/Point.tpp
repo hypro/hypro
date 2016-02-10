@@ -254,6 +254,19 @@ void Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
 	this->mHash = 0;
 }
 
+template<typename Number>
+void Point<Number>::makeInteger() {
+	Number scaling = 1;
+	for( unsigned d = 0; d < mCoordinates.rows(); ++d)
+		scaling = scaling*carl::getNum(mCoordinates(d));
+
+	if(scaling != 1) {
+		for( unsigned d = 0; d < mCoordinates.rows(); ++d) {
+			mCoordinates(d) = mCoordinates(d)*scaling;
+		}
+	}
+}
+
 template <typename Number>
 std::vector<carl::Variable> Point<Number>::variables() const {
 	std::vector<carl::Variable> variables;
@@ -547,17 +560,14 @@ Number &Point<Number>::operator[]( std::size_t _i ) {
 }
 
 template <typename Number>
-Number Point<Number>::at( const carl::Variable &_i ) const {
+const Number& Point<Number>::at( const carl::Variable &_i ) const {
 	assert( hypro::VariablePool::getInstance().dimension( _i ) < mCoordinates.rows() );
 	return mCoordinates( hypro::VariablePool::getInstance().dimension( _i ) );
 }
 
 template <typename Number>
-Number Point<Number>::at( unsigned _index ) const {
-	// std::cout << _index << ", " << mCoordinates.rows() << std::endl;
+const Number& Point<Number>::at( unsigned _index ) const {
 	assert( _index < mCoordinates.rows() );
-	// std::cout << "----------------------- AT: " << mCoordinates(_index) <<
-	// std::endl;
 	return mCoordinates( _index );
 }
 }  // namespace

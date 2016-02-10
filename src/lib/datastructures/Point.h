@@ -107,18 +107,6 @@ class Point {
 		mCoordinates(mCoordinates.rows()-1) = val;
         mHash = 0;
 	}
-    //std::vector<Number> getCoordinates() { return mCoordinates; };
-
-
-	/*
-	std::vector<Point<Number>> neighbors() const;
-
-	void setNeighbors(const std::vector<Point<Number> >& _neighbors);
-	void joinNeighbors(const std::vector<Point<Number> >& _neighbors);
-	void addNeighbor(const Point<Number>& _neighbor);
-	void removeNeighbor(const Point<Number>& _neighbor);
-	bool isNeighbor(const Point<Number>& _neighbor);
-	*/
 
 	std::vector<Point<Number>> composedOf() const;
 	void setComposition( const std::vector<Point<Number>>& _elements );
@@ -149,6 +137,8 @@ class Point {
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
+
+	void makeInteger();
 
 	std::vector<carl::Variable> variables() const;
 
@@ -315,8 +305,8 @@ class Point {
 	Number& operator[]( const carl::Variable& _i );
 	Number& operator[]( std::size_t _i );
 
-	Number at( const carl::Variable& _i ) const;
-	Number at( unsigned _index ) const;
+	const Number& at( const carl::Variable& _i ) const;
+	const Number& at( unsigned _index ) const;
 
 	/**
 	 *
