@@ -11,7 +11,6 @@
 #include "../util.h"
 #include <cassert>
 #include <glpk.h>
-#include "../VPolytope/VPolytope.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/vertexEnumeration.h"
 #include "../../../util/Optimizer.h"
@@ -19,6 +18,10 @@
 
 
 namespace hypro {
+
+/* forward declarations */
+template<typename Number>
+class VPolytope;
 
 template <typename Number>
 class HPolytope {
@@ -51,7 +54,7 @@ public:
 	HPolytope( const matrix_t<Number>& A );
 
 	// conversion constructors
-	HPolytope( const VPolytope<Number>& alien );
+	//HPolytope( const VPolytope<Number>& alien );
 
 	~HPolytope();
 
@@ -83,7 +86,7 @@ public:
 
 	const HyperplaneVector& constraints() const;
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
-	void removeRedundantPlanes();
+	void removeRedundancy();
 
 	HPolytope<Number> heuristic() const;
 	HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;

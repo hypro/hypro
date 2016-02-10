@@ -43,61 +43,61 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A )
 	}
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
-	if ( !alien.empty() ) {
-		// degenerate cases
-		unsigned size = alien.size();
-		mDimension = alien.dimension();
-		if ( size == 1 ) {
-			// Return Box constraints.
-		} else if ( size < mDimension ) {
-			std::vector<Point<Number>> vertices = alien.vertices();
-
-			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
-
-			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
-			std::size_t dim = vertices.size();
-			polytope::dPermutator permutator(mDimension, dim);
-
-			std::vector<unsigned> permutation;
-			while(!permutator.end()) {
-				permutation = permutator();
-
-				// project to chosen dimensions
-				std::vector<Point<Number>> reducedVertices;
-				reducedVertices.reserve(dim);
-				for(const auto& vertex : vertices) {
-					vector_t<Number> reductor = vector_t<Number>(dim);
-					for(unsigned d = 0; d < dim; ++d)
-						reductor(d) = vertex.at(d);
-
-					reducedVertices.push_back(Point<Number>(std::move(reductor)));
-				}
-
-				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
-				//std::cout << "Conv Hull end" << std::endl;
-				for ( auto &facet : facets ) {
-					mHPlanes.push_back( facet->hyperplane() );
-				}
-
-			}
-
-			assert( false );
-		} else {
-			//std::cout << "Conv Hull" << std::endl;
-			// TODO: Chose suitable convex hull algorithm
-			typename std::vector<Point<Number>> points = alien.vertices();
-			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			//std::cout << "Conv Hull end" << std::endl;
-			for ( auto &facet : facets ) {
-				mHPlanes.push_back( facet->hyperplane() );
-			}
-			facets.clear();
-		}
-	}
-}
+// template <typename Number>
+// HPolytope<Number>::HPolytope( const VPolytope<Number> &alien )
+// 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
+// 	if ( !alien.empty() ) {
+// 		// degenerate cases
+// 		unsigned size = alien.size();
+// 		mDimension = alien.dimension();
+// 		if ( size == 1 ) {
+// 			// Return Box constraints.
+// 		} else if ( size < mDimension ) {
+// 			std::vector<Point<Number>> vertices = alien.vertices();
+//
+// 			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
+//
+// 			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
+// 			std::size_t dim = vertices.size();
+// 			polytope::dPermutator permutator(mDimension, dim);
+//
+// 			std::vector<unsigned> permutation;
+// 			while(!permutator.end()) {
+// 				permutation = permutator();
+//
+// 				// project to chosen dimensions
+// 				std::vector<Point<Number>> reducedVertices;
+// 				reducedVertices.reserve(dim);
+// 				for(const auto& vertex : vertices) {
+// 					vector_t<Number> reductor = vector_t<Number>(dim);
+// 					for(unsigned d = 0; d < dim; ++d)
+// 						reductor(d) = vertex.at(d);
+//
+// 					reducedVertices.push_back(Point<Number>(std::move(reductor)));
+// 				}
+//
+// 				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
+// 				//std::cout << "Conv Hull end" << std::endl;
+// 				for ( auto &facet : facets ) {
+// 					mHPlanes.push_back( facet->hyperplane() );
+// 				}
+//
+// 			}
+//
+// 			assert( false );
+// 		} else {
+// 			//std::cout << "Conv Hull" << std::endl;
+// 			// TODO: Chose suitable convex hull algorithm
+// 			typename std::vector<Point<Number>> points = alien.vertices();
+// 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+// 			//std::cout << "Conv Hull end" << std::endl;
+// 			for ( auto &facet : facets ) {
+// 				mHPlanes.push_back( facet->hyperplane() );
+// 			}
+// 			facets.clear();
+// 		}
+// 	}
+// }
 
 template <typename Number>
 HPolytope<Number>::~HPolytope() {
@@ -218,21 +218,22 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 
 			// check for infinity
 			bool infty = false;
-			for ( unsigned i = 0; i < res.rows(); ++i ) {
-				if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-					//std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
-					infty = true;
-					break;
-				}
-			}
+			//for ( unsigned i = 0; i < res.rows(); ++i ) {
+			//	if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
+			//		std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
+			//		infty = true;
+			//		break;
+			//	}
+			//}
 
 			if(!infty) {
 				//std::cout << "Solved to " << res.transpose() << std::endl;
-				// check if point lies above all planes -> if not, ensure by enlarging the polytope (very expensive)
+				// check if point lies below all planes -> if not, ensure by enlarging the polytope (very expensive)
 				bool below = false;
 				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
 					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
 					if(dist > 0) {
+						assert(false); // should not happen with exact numbers
 						below = true;
 						break;
 					}
@@ -263,7 +264,6 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					if(!below)
 						res = tmp;
 				}
-////////////////TODO: change to almostEqual() function
                 ///// if it's not almost equal, then
 				// Check containment
 				bool outside = false;
@@ -286,8 +286,7 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 					}
 				}
 				if(!outside) {
-					Point<Number> point = Point<Number>(res);
-					vertices.push_back(point);
+					vertices.emplace_back(res);
 					//std::cout << "Final vertex: " << res.transpose() << std::endl;
 				}
 			}
@@ -413,7 +412,7 @@ bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const 
 }
 
 template <typename Number>
-void HPolytope<Number>::removeRedundantPlanes() {
+void HPolytope<Number>::removeRedundancy() {
 	if(mHPlanes.size() > 1){
 		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 		opt.setMatrix(this->matrix());
@@ -517,7 +516,7 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 			return std::move(HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
 		} else {
 			//std::cout << "Use V-Conversion for linear transformation." << std::endl;
-			VPolytope<Number> intermediate( this->vertices() );
+			hypro::VPolytope<Number> intermediate( this->vertices() );
 			intermediate = intermediate.linearTransformation( A, b );
 
 			HPolytope<Number> res( intermediate );
@@ -574,7 +573,7 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	}
 	//std::cout << "Result: " << res << std::endl;
 
-	//res.removeRedundantPlanes();
+	//res.removeRedundancy();
 	return std::move(res);
 }
 
@@ -611,7 +610,7 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 	}
 
 	if(!res.empty()) {
-		res.removeRedundantPlanes();
+		res.removeRedundancy();
 	} else {
 		res = HPolytope<Number>::Empty();
 	}

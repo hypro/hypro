@@ -29,7 +29,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
  * Members
  **************************************************************************/
   private:
-	pointVector mVertices;
+	mutable pointVector mVertices;
 	Cone mCone;
 	mutable Fan mFan;
 	bool mFanSet;
@@ -77,6 +77,8 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	VPolytope linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytope minkowskiSum( const VPolytope& rhs ) const;
 	VPolytope intersect( const VPolytope& rhs ) const;
+	VPolytope<Number> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
+	VPolytope<Number> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const VPolytope<Number>& _other ) const;
@@ -187,6 +189,7 @@ class VPolytope : public hypro::GeometricObject<Number> {
 	void print() const { std::cout << *this << std::endl; }
 
 	void removeRedundancy();
+	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
 	void updateNeighbors();
 
   private:

@@ -34,6 +34,8 @@ VPolytope<Number>::VPolytope( const pointVector &points ) {
 	mFanSet = false;
 	mReduced = false;
 	mInitialized = false;
+
+	reduceNumberRepresentation();
 }
 
 template <typename Number>
@@ -46,16 +48,19 @@ VPolytope<Number>::VPolytope( const std::vector<vector_t<Number>>& rawPoints ) {
 	mFanSet = false;
 	mReduced = false;
 	mInitialized = false;
+
+	reduceNumberRepresentation();
 }
 
 template <typename Number>
 VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible hyperplane intersections -> TODO: dPermutation can
 	// be improved.
+	assert(_constraints.rows() == _constants.rows());
 	polytope::dPermutator permutator = polytope::dPermutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
-	std::vector<vector_t<Number>> possibleVertices;
+	std::set<vector_t<Number>> possibleVertices;
 	std::vector<unsigned> permutation;
 	while ( !permutator.end()  ) {
 		permutation = permutator();
@@ -64,6 +69,7 @@ VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector
 		for ( const auto &rowIndex : permutation ) {
 			// std::cout << _constraints.row(rowIndex) << " <= " <<
 			// _constants(rowIndex) << std::endl;
+			assert(rowCount < _constraints.cols());
 			intersection.row( rowCount ) = _constraints.row( rowIndex );
 			intersectionConstants( rowCount ) = _constants( rowIndex );
 			++rowCount;
@@ -71,26 +77,34 @@ VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector
 		// check if rank is full
 		if ( intersection.fullPivHouseholderQr().rank() == intersection.cols() ) {
 			vector_t<Number> vertex = intersection.fullPivHouseholderQr().solve( intersectionConstants );
-			possibleVertices.push_back( vertex );
+			assert(vertex.rows() == _constraints.cols());
+			possibleVertices.emplace( std::move(vertex) );
 			// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
 		}
 	}
 
 	// check if vertices are true vertices (i.e. they fulfill all constraints)
-	for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ++vertex ) {
+	for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
 		// std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i <<
 		// std::endl;
 		// std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " <<
 		// possibleVertices.size() << std::endl;
+		bool deleted = false;
 		for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 			Number res = vertex->dot( _constraints.row( rowIndex ) );
-			if ( res > _constants( rowIndex ) ) vertex = possibleVertices.erase( vertex ) - 1;
+			if ( res > _constants( rowIndex ) ){
+				vertex = possibleVertices.erase( vertex );
+				deleted = true;
+				break;
+			}
 		}
+		if(!deleted)
+			++vertex;
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	// finish initialization
 	for ( const auto &point : possibleVertices ) {
-		mVertices.push_back( Point<Number>( point ) );
+		mVertices.emplace_back( point );
 		mNeighbors.push_back( std::set<unsigned>() );
 		// std::cout << "Real vertex " << point.transpose() << std::endl;
 	}
@@ -99,6 +113,8 @@ VPolytope<Number>::VPolytope( const matrix_t<Number> &_constraints, const vector
 	mFanSet = false;
 	mReduced = false;
 	mInitialized = false;
+
+	reduceNumberRepresentation();
 }
 
 template <typename Number>
@@ -168,6 +184,35 @@ VPolytope<Number> VPolytope<Number>::intersect( const VPolytope<Number> &rhs ) c
 	}
 }
 
+template<typename Number>
+VPolytope<Number> VPolytope<Number>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+	std::set<vector_t<Number>> pointsInside;
+	std::set<vector_t<Number>> pointsOutside;
+	std::vector<Point<Number>> newPoints;
+	for(const auto& vertex : mVertices) {
+		if(rhs.holds(vertex.rawCoordinates())) {
+			pointsInside.insert(vertex.rawCoordinates());
+		} else {
+			pointsOutside.insert(vertex.rawCoordinates());
+		}
+	}
+
+	assert(false);
+}
+
+template<typename Number>
+VPolytope<Number> VPolytope<Number>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	std::cout << "This before intersection with hyperplanes: " << *this << std::endl;
+	HPolytope<Number> intermediate;
+	convert(*this, intermediate);
+	std::cout << "this as a H-Polytope: " << intermediate << std::endl;
+	HPolytope<Number> intersection = intermediate.intersectHyperplanes(_mat, _vec);
+	std::cout << "Intersection H-Polytope: " << intersection << std::endl;
+	intersection.removeRedundancy();
+	VPolytope<Number> res(intersection.matrix(), intersection.vector());
+	return std::move(res);
+}
+
 template <typename Number>
 bool VPolytope<Number>::contains( const Point<Number> &point ) const {
 	return this->contains( point.rawCoordinates() );
@@ -232,29 +277,6 @@ VPolytope<Number> VPolytope<Number>::unite( const VPolytope<Number> &rhs ) const
 		for ( const auto &point : preresult ) res.push_back( point );
 
 		return VPolytope<Number>( res );
-
-		/*
-		std::cout << "Compute convex hull of " << std::endl;
-		for(const auto& vertex : points)
-				std::cout << vertex << std::endl;
-
-
-
-		std::map<Point<Number>, std::set<Point<Number>>> neighbors =
-		convexHull(points).second;
-		VPolytope<Number> result;
-		for(const auto& pointNeighborsPair : neighbors) {
-				std::cout << "Union result insert " << pointNeighborsPair.first <<
-		std::endl;
-				result.insert(pointNeighborsPair.first);
-		}
-		// we can only set neighbors after all points have been inserted.
-		for(const auto& pointNeighborsPair : neighbors) {
-				result.setNeighbors(pointNeighborsPair.first,
-		pointNeighborsPair.second);
-		}
-		return result;
-		*/
 	}
 }
 
@@ -313,9 +335,9 @@ void VPolytope<Number>::removeRedundancy() {
 					for(const auto& vertex : mVertices ) {
 						if(*currVertex != vertex) {
 							carl::Variable tmp = lambdas.find(vertex)->second;
-							row += tmp*Rational(vertex.at(dim));
+							row += tmp*carl::convert<Number, smtrat::Rational>(vertex.at(dim));
 						} else {
-							row -= Rational(vertex.at(dim));
+							row -= carl::convert<Number, smtrat::Rational>(vertex.at(dim));
 						}
 					}
 					smtrat::FormulaT constr = smtrat::FormulaT(row, carl::Relation::EQ);
@@ -324,7 +346,7 @@ void VPolytope<Number>::removeRedundancy() {
 					simplex.add(constr);
 				}
 
-				std::cout << "Checking: " << std::endl << simplex.formula().toString() << std::endl;
+				//std::cout << "Checking: " << std::endl << simplex.formula().toString() << std::endl;
 
 				smtrat::Answer res = simplex.check();
 
@@ -343,6 +365,35 @@ void VPolytope<Number>::removeRedundancy() {
 		#else
 			updateNeighbors();
 		#endif
+	}
+}
+
+template<typename Number>
+void VPolytope<Number>::reduceNumberRepresentation(unsigned limit) const {
+	if(!mVertices.empty()) {
+		// determine barycenter to set rounding directions
+		vector_t<Number> barycenter = vector_t<Number>::Zero(mVertices.begin()->rawCoordinates().rows());
+		for(const auto& vertex : mVertices) {
+			barycenter = barycenter + (vertex.rawCoordinates()/mVertices.size());
+		}
+
+		for(auto& vertex : mVertices) {
+			vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
+			vertex.makeInteger();
+			Number largest = vertex.at(0);
+			for(unsigned d = 0; d < roundingDirections.rows(); ++d) {
+				largest = largest > vertex.at(d) ? largest : vertex.at(d);
+			}
+			largest = carl::abs(largest);
+			for(unsigned d = 0; d < roundingDirections.rows(); ++d) {
+				assert(d < vertex.dimension());
+				if(roundingDirections(d) > 0) {
+					vertex[d] = carl::ceil((vertex.at(d)/largest) * limit);
+				} else {
+					vertex[d] = carl::floor((vertex.at(d)/largest) * limit);
+				}
+			}
+		}
 	}
 }
 
