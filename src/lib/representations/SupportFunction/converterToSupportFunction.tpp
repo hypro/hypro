@@ -17,7 +17,7 @@ namespace hypro{
             _target = _source;
             return true;
         }
-    
+
         // conversion from box to support function
         template <typename Number>
         static bool convert( const hypro::Box<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
@@ -46,7 +46,8 @@ namespace hypro{
         // conversion from V-Polytope to support function
         template <typename Number>
         static bool convert( const hypro::VPolytope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
-                HPolytope<Number> temp = HPolytope<Number>(_source);                                   //converts the source object into a h-polytope
+                HPolytope<Number> temp;
+                convert(_source, temp);                                                                //converts the source object into a h-polytope
                 typename HPolytope<Number>::HyperplaneVector planes = temp.constraints();              //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
 
@@ -67,19 +68,20 @@ namespace hypro{
 
                 return true;
         }
-        
+
         // TODO more efficient conversion (if possible ; detour via V-Polytope seems inefficient)
         // conversion from Zonotope to support function
         template <typename Number>
         static bool convert( const hypro::Zonotope<Number>& _source, hypro::SupportFunction<Number>& _target, const CONV_MODE mode) {
                 typename std::vector<hypro::vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
                 assert (!vertices.empty() );                                                           //checks if any vertices were received
-                
+
                 VPolytope<Number> temp = VPolytope<Number>(vertices);                                  //builds a V-Polytope with the received vertices
-                HPolytope<Number> temp2 = HPolytope<Number>(temp);                                     //converts the V-Polytope into its H-representation
+                HPolytope<Number> temp2;
+           		convert(temp, temp2);                                                                  //converts the V-Polytope into its H-representation
                 typename HPolytope<Number>::HyperplaneVector planes = temp2.constraints();             //gets planes from the converted object
                 assert( !planes.empty() );                                                             //ensures that nonempty planes got fetched before continuing
-                
+
                 _target = SupportFunction<Number>( SF_TYPE::POLY, planes );                            //constructs a support function with the received planes
 
                 return true;

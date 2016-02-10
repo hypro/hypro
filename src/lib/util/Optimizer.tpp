@@ -139,8 +139,8 @@ namespace hypro {
 		simplex.addObjective(objective, false);
 
 		//std::cout << "(push)" << std::endl;
-		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl << "(check-sat)" << std::endl << "(pop)" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
@@ -308,7 +308,7 @@ namespace hypro {
 		if(formulaMapping.size() == 1)
 			return std::move(res);
 
-		if(formulaMapping.size() != mConstraintMatrix.rows()) {
+		if(unsigned(formulaMapping.size()) != mConstraintMatrix.rows()) {
 			for(unsigned cnt = 0; cnt < mConstraintMatrix.rows(); ++cnt) {
 				bool found = false;
 				for(const auto& constraintPair : formulaMapping) {
@@ -325,7 +325,7 @@ namespace hypro {
 			}
 		}
 
-		assert((formulaMapping.size() + res.size()) == mConstraintMatrix.rows());
+		assert(unsigned(formulaMapping.size() + res.size()) == mConstraintMatrix.rows());
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
@@ -365,7 +365,7 @@ namespace hypro {
 			assert(isRedundant != smtrat::Answer::UNKNOWN);
 			if(isRedundant == smtrat::Answer::UNSAT){
 				assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
-				assert(formulaMapping.at(originalConstraint) < mConstraintMatrix.rows());
+				assert(unsigned(formulaMapping.at(originalConstraint)) < mConstraintMatrix.rows());
 				res.push_back(formulaMapping.at(originalConstraint));
 			}
 

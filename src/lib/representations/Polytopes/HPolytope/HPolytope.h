@@ -52,9 +52,7 @@ public:
 	HPolytope( const HyperplaneVector& planes );
 	HPolytope( const matrix_t<Number>& A, const vector_t<Number>& b );
 	HPolytope( const matrix_t<Number>& A );
-
-	// conversion constructors
-	//HPolytope( const VPolytope<Number>& alien );
+	HPolytope( const std::vector<Point<Number>>& points );
 
 	~HPolytope();
 
