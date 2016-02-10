@@ -101,15 +101,6 @@ namespace reachability {
 		_val.print();
 
 #endif
-
-		// Polytope that is defined by the invariant
-		Representation invariant = Representation( _loc->invariant().mat, _loc->invariant().vec );
-
-#ifdef REACH_DEBUG
-		std::cout << "invariant Polytope: ";
-		invariant.print();
-#endif
-
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
 		// add initial valuation
@@ -120,8 +111,6 @@ namespace reachability {
 		std::cout << !_val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ).empty() << std::endl;
 #endif
 		Representation initial = _val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
-
-		std::cout << "Initial Valuation intersected with invariant: " << initial << std::endl;
 
 		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
@@ -180,6 +169,12 @@ namespace reachability {
 			unitePolytope.print();
 #endif
 
+#ifdef USE_REDUCTION
+			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
+			std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
+			unitePolytope = unitePolytope.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+#endif
+
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
 			Number radius;
@@ -225,8 +220,7 @@ namespace reachability {
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
 #ifdef USE_REDUCTION
-			bool use_reduce_memory=false, use_reduce_time=false;
-			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=6;
+			bool use_reduce_memory=false, use_reduce_time=true;
 
 			// obejcts for use_reduce_memory
 			unsigned segment_count=0;
@@ -241,9 +235,6 @@ namespace reachability {
 			// option 1: use uniform distirbution of REDUCE_CONST directions in all dimension-pairs (use_reduce_memory or use_reduce_time)
 			// option 2: use directions of guards and invariants (use_reduce_time)
 			// option 3: use uniform distirbution of firstSegment.size/2 directions in all dimension-pairs (use_reduce_time)
-			std::vector<vector_t<Number>> directions;
-
-			directions = computeTemplate<Number>(2, REDUCE_CONST); // option 1
 
 			if(use_reduce_time){
 				// option 2
@@ -261,17 +252,17 @@ namespace reachability {
 				//	directions.push_back(invariant.constraints().at(inv_index).normal());
 				//}
 
-				//firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+				firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
 				// option 3
-				int reduce_calculated = ceil(firstSegment.size()/2);
-				if(reduce_calculated>2){
-					firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-				}
+				//int reduce_calculated = ceil(firstSegment.size()/2);
+				//if(reduce_calculated>2){
+				//	firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+				//}
 			}
 #endif
 
-			firstSegment.removeRedundantPlanes();
+			firstSegment.removeRedundancy();
 
 			// insert first Segment into the empty flowpipe
 			flowpipe.push_back( firstSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ) );
@@ -294,7 +285,7 @@ namespace reachability {
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
-				//resultPolytope.removeRedundantPlanes();
+				//resultPolytope.removeRedundancy();
 
 				// extend flowpipe (only if still within Invariant of location)
 				Representation tmp = resultPolytope.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
@@ -306,7 +297,6 @@ namespace reachability {
 
 				std::cout << "still within Invariant?: ";
 				std::cout << !(tmp.empty()) << std::endl;
-				std::cout << "Invariant: " << invariant << std::endl;
 				std::cout << "Intersection result: " << tmp << std::endl;
 #endif
 #ifdef USE_REDUCTION
@@ -340,7 +330,7 @@ namespace reachability {
 							Representation convexHull = Representation(hyperplanes);
 
 							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							convexHull.removeRedundantPlanes();
+							convexHull.removeRedundancy();
 							flowpipe.insert(flowpipe.begin(), convexHull);
 
 							points_convexHull.clear();
