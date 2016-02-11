@@ -112,7 +112,7 @@ class Point {
 	void setComposition( const std::vector<Point<Number>>& _elements );
 	void addToComposition( const Point<Number>& _element );
 
-	static Point<Number> zero( unsigned _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( _dim ) ); }
+	static Point<Number> zero( unsigned _dim = 0 ) { return std::move(Point<Number>( vector_t<Number>::Zero( _dim )) ); }
 
 	Point<Number> origin() const;
 
