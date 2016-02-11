@@ -371,7 +371,8 @@ template<typename Number, typename Converter>
 void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	if(!mVertices.empty()) {
 		// determine barycenter to set rounding directions
-		vector_t<Number> barycenter = vector_t<Number>::Zero(mVertices.begin()->rawCoordinates().rows());
+		unsigned dimension = mVertices.begin()->rawCoordinates().rows();
+		vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
 		for(const auto& vertex : mVertices) {
 			barycenter = barycenter + (vertex.rawCoordinates()/mVertices.size());
 		}
@@ -380,12 +381,14 @@ void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 			vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
 			vertex.makeInteger();
 			Number largest = vertex.at(0);
-			for(unsigned d = 0; d < roundingDirections.rows(); ++d) {
-				largest = largest > vertex.at(d) ? largest : vertex.at(d);
+			for(unsigned d = 0; d < dimension; ++d) {
+				largest = largest > carl::abs(vertex.at(d)) ? largest : carl::abs(vertex.at(d));
 			}
-			largest = carl::abs(largest);
+			if(largest == 0)
+				continue;
+
 			assert(largest != 0);
-			for(unsigned d = 0; d < roundingDirections.rows(); ++d) {
+			for(unsigned d = 0; d < dimension; ++d) {
 				assert(d < vertex.dimension());
 				if(roundingDirections(d) > 0) {
 					vertex[d] = carl::ceil((vertex.at(d)/largest) * limit);
