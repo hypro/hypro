@@ -22,8 +22,7 @@ namespace hypro {
     static bool convert( const hypro::HPolytope<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode ){
         return true;
     }
-    
-    //TODO
+   
     //conversion from Box to Zonotope
     template <typename Number>
     static bool convert( const hypro::Box<Number>& _source, hypro::Zonotope<Number>& _target, const CONV_MODE mode ){
