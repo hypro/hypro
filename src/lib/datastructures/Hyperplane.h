@@ -21,12 +21,6 @@
 namespace hypro {
 
 template <typename Number>
-using polynomial_t = carl::MultivariatePolynomial<Number>;
-
-template <typename Number>
-class HPolytope;
-
-template <typename Number>
 class Hyperplane {
   private:
 	vector_t<Number> mNormal;

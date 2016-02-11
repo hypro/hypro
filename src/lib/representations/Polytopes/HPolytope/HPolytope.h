@@ -19,8 +19,8 @@
 
 namespace hypro {
 
-template <typename Number>
-class HPolytope {
+template <typename Number, typename Converter>
+class HPolytopeT {
 public:
   	enum REDUCTION_STRATEGY {
                               DROP = 0,
@@ -43,24 +43,24 @@ public:
 	unsigned mDimension;
 
   public:
-	HPolytope();
-	HPolytope( const HPolytope& orig );
-	HPolytope( const HyperplaneVector& planes );
-	HPolytope( const matrix_t<Number>& A, const vector_t<Number>& b );
-	HPolytope( const matrix_t<Number>& A );
-	HPolytope( const std::vector<Point<Number>>& points );
+	HPolytopeT();
+	HPolytopeT( const HPolytopeT& orig );
+	HPolytopeT( const HyperplaneVector& planes );
+	HPolytopeT( const matrix_t<Number>& A, const vector_t<Number>& b );
+	HPolytopeT( const matrix_t<Number>& A );
+	HPolytopeT( const std::vector<Point<Number>>& points );
 
-	~HPolytope();
+	~HPolytopeT();
 
 	/*
 	 * Getters and setters
 	 */
-   double sizeOfHPolytope(){
-     return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHyperplane();
-   }
+	double sizeOfHPolytopeT(){
+		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHyperplane();
+	}
 
 	bool empty() const;
-	static HPolytope<Number> Empty();
+	static HPolytopeT<Number, Converter> Empty();
 
 	std::size_t dimension() const;
 	std::size_t size() const;
@@ -82,9 +82,9 @@ public:
 	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
 	void removeRedundancy();
 
-	HPolytope<Number> heuristic() const;
-	HPolytope<Number> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
-	HPolytope<Number> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
+	HPolytopeT<Number, Converter> heuristic() const;
+	HPolytopeT<Number, Converter> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
+	HPolytopeT<Number, Converter> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
 	void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
 
 	bool isBounded(std::vector<vector_t<Number>>) const;
@@ -105,15 +105,15 @@ public:
 	 * General interface
 	 */
 
-	HPolytope linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	HPolytope minkowskiSum( const HPolytope& rhs ) const;
-	HPolytope intersect( const HPolytope& rhs ) const;
-	HPolytope<Number> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	HPolytope<Number> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	HPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
+	HPolytopeT intersect( const HPolytopeT& rhs ) const;
+	HPolytopeT<Number, Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
+	HPolytopeT<Number, Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
-	bool contains( const HPolytope<Number>& rhs ) const;
-	HPolytope unite( const HPolytope& rhs ) const;
+	bool contains( const HPolytopeT<Number, Converter>& rhs ) const;
+	HPolytopeT unite( const HPolytopeT& rhs ) const;
 
 	void clear();
 	void print() const;
@@ -124,9 +124,9 @@ public:
 
 	const Hyperplane<Number>& operator[]( size_t i ) const;
 	Hyperplane<Number>& operator[]( size_t i ) ;
-	HPolytope<Number>& operator=( const HPolytope<Number>& rhs );
+	HPolytopeT<Number, Converter>& operator=( const HPolytopeT<Number, Converter>& rhs );
 
-	friend std::ostream& operator<<( std::ostream& lhs, const HPolytope<Number>& rhs ) {
+	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
 			for ( unsigned i = 0; i < rhs.constraints().size() - 1; ++i ) {
@@ -137,7 +137,7 @@ public:
 		return lhs;
 	}
 
-	friend void swap( HPolytope<Number>& a, HPolytope<Number>& b ) {
+	friend void swap( HPolytopeT<Number, Converter>& a, HPolytopeT<Number, Converter>& b ) {
 		unsigned tmpDim = a.mDimension;
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;
@@ -168,7 +168,6 @@ public:
 };
 
 }  // namespace
-#include "../../Converter.h"
 
 #include "HPolytope.tpp"
 #include "reduction.tpp"

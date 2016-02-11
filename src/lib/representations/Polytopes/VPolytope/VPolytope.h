@@ -18,8 +18,8 @@
 
 namespace hypro {
 
-template <typename Number>
-class VPolytope {
+template <typename Number, typename Converter>
+class VPolytopeT {
   public:
 	typedef typename std::vector<Point<Number>> pointVector;
 	typedef typename hypro::polytope::Cone<Number> Cone;
@@ -50,16 +50,16 @@ class VPolytope {
 	 **************************************************************************/
 
 	// constructors for bounded v-polyhedra -> v-polytopes
-	VPolytope();
-	VPolytope( const Point<Number>& point );
-	VPolytope( const pointVector& points );
-	VPolytope( const std::vector<vector_t<Number>>& rawPoints );
-	VPolytope( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
+	VPolytopeT();
+	VPolytopeT( const Point<Number>& point );
+	VPolytopeT( const pointVector& points );
+	VPolytopeT( const std::vector<vector_t<Number>>& rawPoints );
+	VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
 
-	VPolytope( const VPolytope& orig );
-	VPolytope( VPolytope&& _orig ) = default;
+	VPolytopeT( const VPolytopeT& orig );
+	VPolytopeT( VPolytopeT&& _orig ) = default;
 
-	~VPolytope() {
+	~VPolytopeT() {
 		if ( mInitialized ) {
 			// cleanup
 			// glp_delete_prob(mLp);
@@ -73,15 +73,15 @@ class VPolytope {
 	* General interface
 	**************************************************************************/
 
-	VPolytope linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	VPolytope minkowskiSum( const VPolytope& rhs ) const;
-	VPolytope intersect( const VPolytope& rhs ) const;
-	VPolytope<Number> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	VPolytope<Number> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	VPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
+	VPolytopeT intersect( const VPolytopeT& rhs ) const;
+	VPolytopeT<Number, Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
+	VPolytopeT<Number, Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
-	bool contains( const VPolytope<Number>& _other ) const;
-	VPolytope unite( const VPolytope& rhs ) const;
+	bool contains( const VPolytopeT<Number, Converter>& _other ) const;
+	VPolytopeT unite( const VPolytopeT& rhs ) const;
 
 	void clear();
 
@@ -203,13 +203,13 @@ class VPolytope {
 	 * Operators
 	 **************************************************************************/
   public:
-	VPolytope<Number>& operator=( const VPolytope<Number>& rhs );
-	VPolytope<Number>& operator=( VPolytope<Number>&& rhs ) = default;
-	bool operator==( const VPolytope<Number>& rhs ) const;
+	VPolytopeT<Number, Converter>& operator=( const VPolytopeT<Number, Converter>& rhs );
+	VPolytopeT<Number, Converter>& operator=( VPolytopeT<Number, Converter>&& rhs ) = default;
+	bool operator==( const VPolytopeT<Number, Converter>& rhs ) const;
 };
 
-template <typename Number>
-std::ostream& operator<<( std::ostream& out, const hypro::VPolytope<Number>& lhs ) {
+template <typename Number, typename Converter>
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter>& lhs ) {
 	out << "{ ";
 	for ( const auto& vector : lhs ) {
 		out << vector << " ";
@@ -219,7 +219,5 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytope<Number>& lhs
 }
 
 }  // namespace
-
-#include "../../Converter.h"
 
 #include "VPolytope.tpp"

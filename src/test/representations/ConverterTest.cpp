@@ -11,7 +11,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/Converter.h"
+#include "../../lib/representations/conversion/Converter.h"
 
 using namespace hypro;
 using namespace carl;
@@ -26,7 +26,7 @@ protected:
                 std::vector<carl::Interval<Number>> boundaries;
                 boundaries.push_back(carl::Interval<Number>(2,6));
                 boundaries.push_back(carl::Interval<Number>(1,3));
-                box = hypro::Box<Number>(boundaries);
+                box = Box(boundaries);
 
                 // first support function
                 matrix = matrix_t<Number>(3,2);
@@ -73,23 +73,23 @@ protected:
 		vector_t<Number> p4 = vector_t<Number>(2);
 		p4(0) = 1;
 		p4(1) = 4;
-		typename VPolytope<Number>::pointVector points;
+		typename VPolytope::pointVector points;
 		points.push_back(Point<Number>(p1));
 		points.push_back(Point<Number>(p2));
 		points.push_back(Point<Number>(p3));
 		points.push_back(Point<Number>(p4));
-		vpolytope = VPolytope<Number>(points);
+		vpolytope = VPolytope(points);
 
                 //second v-polytope
                 vector_t<Number> p5 = vector_t<Number>(2);
                 p5(0) = 0;
                 p5(1) = 2;
-                typename VPolytope<Number>::pointVector points2;
+                typename VPolytope::pointVector points2;
                 points2.push_back(Point<Number>(p5));
                 points2.push_back(Point<Number>(p2));
                 points2.push_back(Point<Number>(p3));
                 points2.push_back(Point<Number>(p4));
-                vpolytope2 = VPolytope<Number>(points2);
+                vpolytope2 = VPolytope(points2);
 
                 //alternative polytope
 		std::vector<vector_t<Number>> coordinates;
@@ -110,7 +110,7 @@ protected:
 		planes.push_back(hp3);
 		planes.push_back(hp4);
 
-                hpolytope = HPolytope<Number>(this->planes);
+                hpolytope = HPolytope(this->planes);
 
                 //second H-Polytope
                 Hyperplane<Number> hp5({1,1},carl::rationalize<Number>(1.4));
@@ -121,7 +121,7 @@ protected:
                 planes2.push_back(hp6);
                 planes2.push_back(hp7);
 
-                hpolytope2 = HPolytope<Number>(this->planes2);
+                hpolytope2 = HPolytope(this->planes2);
 
     }
 
@@ -136,27 +136,24 @@ protected:
     SupportFunction<Number> support;
     SupportFunction<Number> support2;
 
-    hypro::Box<Number> box;
+    Box box;
 
     hypro::Polytope<Number> polytope;
-    VPolytope<Number> vpolytope;
-    VPolytope<Number> vpolytope2;
+    VPolytope vpolytope;
+    VPolytope vpolytope2;
 
     Zonotope<Number> zonotope;
     Zonotope<Number> zonotope2;
 
-    typename HPolytope<Number>::HyperplaneVector planes;
-    typename HPolytope<Number>::HyperplaneVector planes2;
-    HPolytope<Number> hpolytope;
-    HPolytope<Number> hpolytope2;
-
-
-
+    typename HPolytope::HyperplaneVector planes;
+    typename HPolytope::HyperplaneVector planes2;
+    HPolytope hpolytope;
+    HPolytope hpolytope2;
 };
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	hypro::Box<TypeParam> result;
+	hypro::Box result;
 	EXPECT_TRUE(convert(this->box, result));
         //std::cout << " Box: " << std::endl;
         //result.print();

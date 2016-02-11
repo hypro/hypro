@@ -16,7 +16,7 @@
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/datastructures/Vertex.h"
 #include "../../lib/datastructures/VertexContainer.h"
-#include "../../lib/representations/Box/Box.h"
+#include "../../lib/representations/conversion/Converter.h"
 #include "../../lib/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 #include "../../lib/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 

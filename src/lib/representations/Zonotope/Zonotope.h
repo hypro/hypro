@@ -234,6 +234,4 @@ class Zonotope {
 
 }  // namespace
 
-#include "../Converter.h"
-
 #include "Zonotope.tpp"
