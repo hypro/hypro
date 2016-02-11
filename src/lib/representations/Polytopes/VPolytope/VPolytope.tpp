@@ -384,6 +384,7 @@ void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 				largest = largest > vertex.at(d) ? largest : vertex.at(d);
 			}
 			largest = carl::abs(largest);
+			assert(largest != 0);
 			for(unsigned d = 0; d < roundingDirections.rows(); ++d) {
 				assert(d < vertex.dimension());
 				if(roundingDirections(d) > 0) {
