@@ -237,5 +237,11 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
 TYPED_TEST(ConverterTest, toZonotope)
 {
+        Zonotope<TypeParam> result = hypro::Zonotope<TypeParam>();
+        convert (this->zonotope, result);
+        result.print();
+        convert (this->box, result);
+        std::cout << " Box: " << std::endl;
+        result.print();
 	SUCCEED();
 }
