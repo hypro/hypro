@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../../lib/representations/conversion/Converter.h"
 
 using namespace hypro;
 using namespace carl;
@@ -36,8 +36,8 @@ protected:
 	{
 	}
 
-	typename HPolytope<Number>::HyperplaneVector planes1;
-	typename HPolytope<Number>::HyperplaneVector planes2;
+	typename HPolytopeT<Number,Converter<Number>>::HyperplaneVector planes1;
+	typename HPolytopeT<Number,Converter<Number>>::HyperplaneVector planes2;
 };
 
 TYPED_TEST(HPolytopeTest, Constructor)
@@ -87,7 +87,7 @@ TYPED_TEST(HPolytopeTest, Swap)
 	}
 }
 
-////////////TODO: change this test to work with a 3D HPolytope
+////////////TODO: change this test to work with a 3D HPolytope<TypeParam>
 TYPED_TEST(HPolytopeTest, Corners)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
@@ -209,7 +209,7 @@ TYPED_TEST(HPolytopeTest, Union)
 			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			  for(auto& vertex : res2.vertices()) {
 				  EXPECT_TRUE(res3.contains(vertex));
-			  } */ //still needs HPolytope to VPolytope conversion for higher dimensions !!!!
+			  } */ //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
 }
 
 TYPED_TEST(HPolytopeTest, LinearTransformation)

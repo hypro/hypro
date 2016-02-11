@@ -1,20 +1,20 @@
 #include "HPolytope.h"
 namespace hypro {
-template <typename Number>
-HPolytope<Number>::HPolytope()
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT()
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const HPolytope &orig )
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter> &orig )
 	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ) {
 	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
@@ -25,8 +25,8 @@ HPolytope<Number>::HPolytope( const HyperplaneVector &planes )
 	}
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> &b )
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
@@ -35,16 +35,16 @@ HPolytope<Number>::HPolytope( const matrix_t<Number> &A, const vector_t<Number> 
 	reduceNumberRepresentation();
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const matrix_t<Number> &A )
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
 	}
 }
 
-template <typename Number>
-HPolytope<Number>::HPolytope( const std::vector<Point<Number>>& points )
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
 	if ( !points.empty() ) {
 		// degenerate cases
@@ -89,16 +89,16 @@ HPolytope<Number>::HPolytope( const std::vector<Point<Number>>& points )
 	}
 }
 
-template <typename Number>
-HPolytope<Number>::~HPolytope() {
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter>::~HPolytopeT() {
 }
 
 /*
  * Getters and setters
  */
 
-template <typename Number>
-bool HPolytope<Number>::empty() const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::empty() const {
 	if(mHPlanes.empty())
 		return false;
 
@@ -111,30 +111,30 @@ bool HPolytope<Number>::empty() const {
 	return !opt.checkConsistency();
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::Empty(){
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
 	Hyperplane<Number> a({1},-1);
 	Hyperplane<Number> b({-1},-1);
 	HyperplaneVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
-	HPolytope<Number> res(v);
+	HPolytopeT<Number, Converter> res(v);
 	return res;
 }
 
-template <typename Number>
-std::size_t HPolytope<Number>::dimension() const {
+template <typename Number, typename Converter>
+std::size_t HPolytopeT<Number, Converter>::dimension() const {
 	if(mHPlanes.empty()) return 0;
 	return mDimension;
 }
 
-template <typename Number>
-std::size_t HPolytope<Number>::size() const {
+template <typename Number, typename Converter>
+std::size_t HPolytopeT<Number, Converter>::size() const {
 	return mHPlanes.size();
 }
 
-template <typename Number>
-matrix_t<Number> HPolytope<Number>::matrix() const {
+template <typename Number, typename Converter>
+matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
@@ -142,8 +142,8 @@ matrix_t<Number> HPolytope<Number>::matrix() const {
 	return std::move(res);
 }
 
-template <typename Number>
-vector_t<Number> HPolytope<Number>::vector() const {
+template <typename Number, typename Converter>
+vector_t<Number> HPolytopeT<Number, Converter>::vector() const {
 	vector_t<Number> res( mHPlanes.size() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res( planeIndex ) = mHPlanes.at( planeIndex ).offset();
@@ -151,8 +151,8 @@ vector_t<Number> HPolytope<Number>::vector() const {
 	return std::move(res);
 }
 
-template <typename Number>
-std::pair<matrix_t<Number>, vector_t<Number>> HPolytope<Number>::inequalities() const {
+template <typename Number, typename Converter>
+std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::inequalities() const {
 	matrix_t<Number> A( mHPlanes.size(), dimension() );
 	vector_t<Number> b( mHPlanes.size() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
@@ -162,16 +162,16 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytope<Number>::inequalities() 
 	return std::make_pair( A, b );
 }
 
-template <typename Number>
-const typename polytope::Fan<Number> &HPolytope<Number>::fan() const {
+template <typename Number, typename Converter>
+const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const {
 	if ( !mFanSet ) {
 		calculateFan();
 	}
 	return std::move(mFan);
 }
 
-template <typename Number>
-typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
+template <typename Number, typename Converter>
+typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
 	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
@@ -286,8 +286,8 @@ typename std::vector<Point<Number>> HPolytope<Number>::vertices() const {
 	return std::move(vertices);
 }
 
-template <typename Number>
-Number HPolytope<Number>::supremum() const {
+template <typename Number, typename Converter>
+Number HPolytopeT<Number, Converter>::supremum() const {
 	Number max = 0;
 	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
@@ -296,8 +296,8 @@ Number HPolytope<Number>::supremum() const {
 	return max;
 }
 
-template <typename Number>
-void HPolytope<Number>::calculateFan() const {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::calculateFan() const {
 	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( vertices() ).first;
 	std::set<Point<Number>> preresult;
 	for ( unsigned i = 0; i < facets.size(); i++ ) {
@@ -351,8 +351,8 @@ void HPolytope<Number>::calculateFan() const {
 	mFan = fan;
 }
 
-template <typename Number>
-void HPolytope<Number>::insert( const Hyperplane<Number> &plane ) {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -368,8 +368,8 @@ void HPolytope<Number>::insert( const Hyperplane<Number> &plane ) {
 		mHPlanes.push_back( plane );
 }
 
-template <typename Number>
-void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::insert( const typename HyperplaneVector::iterator begin,
 								const typename HyperplaneVector::iterator end ) {
 	assert( mDimension == 0 || mDimension == begin->dimension() );
 	if ( mDimension == 0 ) {
@@ -382,27 +382,27 @@ void HPolytope<Number>::insert( const typename HyperplaneVector::iterator begin,
 	}
 }
 
-template <typename Number>
-void HPolytope<Number>::erase( const unsigned index ) {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
 }
 
-template <typename Number>
-const typename HPolytope<Number>::HyperplaneVector &HPolytope<Number>::constraints() const {
+template <typename Number, typename Converter>
+const typename HPolytopeT<Number, Converter>::HyperplaneVector &HPolytopeT<Number, Converter>::constraints() const {
 	return mHPlanes;
 }
 
-template <typename Number>
-bool HPolytope<Number>::hasConstraint( const Hyperplane<Number> &hplane ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::hasConstraint( const Hyperplane<Number> &hplane ) const {
 	for ( const auto &plane : mHPlanes ) {
 		if ( hplane == plane ) return true;
 	}
 	return false;
 }
 
-template <typename Number>
-void HPolytope<Number>::removeRedundancy() {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::removeRedundancy() {
 	if(mHPlanes.size() > 1){
 		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 		opt.setMatrix(this->matrix());
@@ -429,8 +429,8 @@ void HPolytope<Number>::removeRedundancy() {
 	}
 }
 
-template <typename Number>
-bool HPolytope<Number>::isExtremePoint( vector_t<Number> point ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::isExtremePoint( vector_t<Number> point ) const {
 	unsigned cnt = 0;
 	for ( const auto &plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
@@ -450,13 +450,13 @@ bool HPolytope<Number>::isExtremePoint( vector_t<Number> point ) const {
 	return cnt >= mDimension;
 }
 
-template <typename Number>
-bool HPolytope<Number>::isExtremePoint( const Point<Number> &point ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::isExtremePoint( const Point<Number> &point ) const {
 	return isExtremePoint( point.rawCoordinates() );
 }
 
-template <typename Number>
-std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> &_direction ) const {
+template <typename Number, typename Converter>
+std::pair<Number, SOLUTION> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty())
 		return std::make_pair( 1, INFTY );
 
@@ -469,23 +469,23 @@ std::pair<Number, SOLUTION> HPolytope<Number>::evaluate( const vector_t<Number> 
 	return opt.evaluate(_direction);
 }
 
-template <typename Number>
-typename HPolytope<Number>::HyperplaneVector::iterator HPolytope<Number>::begin() {
+template <typename Number, typename Converter>
+typename HPolytopeT<Number, Converter>::HyperplaneVector::iterator HPolytopeT<Number, Converter>::begin() {
 	return mHPlanes.begin();
 }
 
-template <typename Number>
-typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::begin() const {
+template <typename Number, typename Converter>
+typename HPolytopeT<Number, Converter>::HyperplaneVector::const_iterator HPolytopeT<Number, Converter>::begin() const {
 	return mHPlanes.begin();
 }
 
-template <typename Number>
-typename HPolytope<Number>::HyperplaneVector::iterator HPolytope<Number>::end() {
+template <typename Number, typename Converter>
+typename HPolytopeT<Number, Converter>::HyperplaneVector::iterator HPolytopeT<Number, Converter>::end() {
 	return mHPlanes.end();
 }
 
-template <typename Number>
-typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::end() const {
+template <typename Number, typename Converter>
+typename HPolytopeT<Number, Converter>::HyperplaneVector::const_iterator HPolytopeT<Number, Converter>::end() const {
 	return mHPlanes.end();
 }
 
@@ -493,8 +493,8 @@ typename HPolytope<Number>::HyperplaneVector::const_iterator HPolytope<Number>::
  * General interface
  */
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number> &A,
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
@@ -503,13 +503,12 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			//std::cout << "Matrix: " << inequalities.first*A.inverse() << std::endl << "Vector: " << ((inequalities.first*A.inverse()*b) + (inequalities.second)) << std::endl;
-			return std::move(HPolytope<Number>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
+			return std::move(HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
 		} else {
 			//std::cout << "Use V-Conversion for linear transformation." << std::endl;
-			hypro::VPolytope<Number> intermediate( this->vertices() );
+			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
-
-			HPolytope<Number> res(intermediate.vertices());
+			auto res = Converter::toHPolytope(intermediate);
 			return std::move(res);
 		}
 	} else {
@@ -517,9 +516,9 @@ HPolytope<Number> HPolytope<Number>::linearTransformation( const matrix_t<Number
 	}
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const {
-	HPolytope<Number> res;
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs ) const {
+	HPolytopeT<Number, Converter> res;
 	Number result;
 
 	//std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
@@ -567,12 +566,12 @@ HPolytope<Number> HPolytope<Number>::minkowskiSum( const HPolytope &rhs ) const 
 	return std::move(res);
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HPolytopeT &rhs ) const {
 	if ( rhs.empty() || this->empty() ) {
-		return HPolytope<Number>::Empty();
+		return HPolytopeT<Number, Converter>::Empty();
 	} else {
-		HPolytope<Number> res;
+		HPolytopeT<Number, Converter> res;
 		for ( const auto &plane : mHPlanes ) {
 			res.insert( plane );
 		}
@@ -584,16 +583,16 @@ HPolytope<Number> HPolytope<Number>::intersect( const HPolytope &rhs ) const {
 	}
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplanes( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
 
-	HPolytope<Number> res( *this );
+	HPolytopeT<Number, Converter> res( *this );
 
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
@@ -602,19 +601,19 @@ HPolytope<Number> HPolytope<Number>::intersectHyperplanes( const matrix_t<Number
 	if(!res.empty()) {
 		res.removeRedundancy();
 	} else {
-		res = HPolytope<Number>::Empty();
+		res = HPolytopeT<Number, Converter>::Empty();
 	}
 
 	return std::move(res);
 }
 
-template <typename Number>
-bool HPolytope<Number>::contains( const Point<Number> &point ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
 	return this->contains( point.rawCoordinates() );
 }
 
-template <typename Number>
-bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
 	for ( const auto &plane : mHPlanes ) {
 		if (plane.normal().dot( vec ) > plane.offset()) {
 			return false;
@@ -623,8 +622,8 @@ bool HPolytope<Number>::contains( const vector_t<Number> &vec ) const {
 	return true;
 }
 
-template <typename Number>
-bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
+template <typename Number, typename Converter>
+bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
 	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
@@ -645,27 +644,27 @@ bool HPolytope<Number>::contains( const HPolytope<Number> &rhs ) const {
 	return true;
 }
 
-template <typename Number>
-HPolytope<Number> HPolytope<Number>::unite( const HPolytope &_rhs ) const {
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolytopeT &_rhs ) const {
 	if ( _rhs.empty() ) {
-		return std::move(HPolytope<Number>( *this ));
+		return std::move(HPolytopeT<Number, Converter>( *this ));
 	} else {
-		VPolytope<Number> lhs( this->vertices() );
-		VPolytope<Number> tmpRes = lhs.unite( VPolytope<Number>( _rhs.vertices() ) );
+		auto lhs = Converter::toVPolytope( *this );
+		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 
-		return std::move(HPolytope<Number>( tmpRes.vertices() ));
+		return std::move(Converter::toHPolytope( tmpRes ));
 	}
 }
 
-template <typename Number>
-void HPolytope<Number>::clear() {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
 }
 
-template <typename Number>
-void HPolytope<Number>::print() const {
+template <typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::print() const {
 	std::cout << *this << std::endl;
 }
 
@@ -673,20 +672,20 @@ void HPolytope<Number>::print() const {
  * Operators
  */
 
-template <typename Number>
-const Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) const {
+template <typename Number, typename Converter>
+const Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
 	return mHPlanes.at( i );
 }
 
-template <typename Number>
-Hyperplane<Number>& HPolytope<Number>::operator[]( size_t i ) {
+template <typename Number, typename Converter>
+Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
 	return mHPlanes.at( i );
 }
 
-template <typename Number>
-HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) {
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> &HPolytopeT<Number, Converter>::operator=( const HPolytopeT<Number, Converter> &rhs ) {
 	if ( this != &rhs ) {
-		HPolytope<Number> tmp( rhs );
+		HPolytopeT<Number, Converter> tmp( rhs );
 		swap( *this, tmp );
 	}
 	return *this;
@@ -696,8 +695,8 @@ HPolytope<Number> &HPolytope<Number>::operator=( const HPolytope<Number> &rhs ) 
  * Auxiliary functions
  */
 
-template<typename Number>
-void HPolytope<Number>::reduceNumberRepresentation(unsigned limit) const {
+template<typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	std::vector<Point<Number>> vertices = this->vertices();
 
 	// normal reduction

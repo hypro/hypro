@@ -12,8 +12,8 @@
 
 namespace hypro {
 
-	template<typename Number>
-	Box<Number>::Box( const std::vector<carl::Interval<Number>>& _intervals )
+	template<typename Number, typename Converter>
+	BoxT<Number,Converter>::BoxT( const std::vector<carl::Interval<Number>>& _intervals )
 	{
 		if(!_intervals.empty()) {
 			vector_t<Number> lower = vector_t<Number>(_intervals.size());
@@ -26,13 +26,13 @@ namespace hypro {
 		}
 	}
 
-	template<typename Number>
-	Box<Number>::Box( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
-			: Box( VPolytope<Number>( _matrix, _constants ).vertices() )
+	template<typename Number, typename Converter>
+	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
+			: BoxT( Converter::toVPolytope( _matrix, _constants ).vertices() )
 	{}
 
-template <typename Number>
-Box<Number>::Box( const std::set<Point<Number>> &_points ) {
+template<typename Number, typename Converter>
+BoxT<Number,Converter>::BoxT( const std::set<Point<Number>> &_points ) {
 	if ( !_points.empty() ) {
 		vector_t<Number> lower = _points.begin()->rawCoordinates();
 		vector_t<Number> upper = _points.begin()->rawCoordinates();
@@ -49,8 +49,8 @@ Box<Number>::Box( const std::set<Point<Number>> &_points ) {
 	}
 }
 
-template <typename Number>
-Box<Number>::Box( const std::vector<Point<Number>> &_points ) {
+template<typename Number, typename Converter>
+BoxT<Number,Converter>::BoxT( const std::vector<Point<Number>> &_points ) {
 	if ( !_points.empty() ) {
 		vector_t<Number> lower = _points.begin()->rawCoordinates();
 		vector_t<Number> upper = _points.begin()->rawCoordinates();
@@ -68,8 +68,8 @@ Box<Number>::Box( const std::vector<Point<Number>> &_points ) {
 }
 
 /*
-template <typename Number>
-Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
+template<typename Number, typename Converter>
+BoxT<Number,Converter>::BoxT( const std::set<Vertex<Number>> &_vertices ) {
 	if ( !_vertices.empty() ) {
 		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
 		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
@@ -88,8 +88,8 @@ Box<Number>::Box( const std::set<Vertex<Number>> &_vertices ) {
 */
 
 /*
-template <typename Number>
-Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
+template<typename Number, typename Converter>
+BoxT<Number,Converter>::BoxT( const std::vector<Vertex<Number>> &_vertices ) {
 	if ( !_vertices.empty() ) {
 		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
 		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
@@ -108,8 +108,8 @@ Box<Number>::Box( const std::vector<Vertex<Number>> &_vertices ) {
 }
 */
 
-template<typename Number>
-std::vector<carl::Interval<Number>> Box<Number>::boundaries() const {
+template<typename Number, typename Converter>
+std::vector<carl::Interval<Number>> BoxT<Number,Converter>::boundaries() const {
 	std::vector<carl::Interval<Number>> result;
 	result.reserve(this->dimension());
 
@@ -120,8 +120,8 @@ std::vector<carl::Interval<Number>> Box<Number>::boundaries() const {
 	return result;
 }
 
-template<typename Number>
-std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
+template<typename Number, typename Converter>
+std::vector<Hyperplane<Number>> BoxT<Number,Converter>::constraints() const {
 	std::vector<Hyperplane<Number>> res;
 	if(this->dimension() != 0) {
 		std::size_t dim = this->dimension();
@@ -141,22 +141,22 @@ std::vector<Hyperplane<Number>> Box<Number>::constraints() const {
 }
 
 /*
-template<typename Number>
-void Box<Number>::insert( const std::vector<carl::Interval<Number>>& boundaries ) {
+template<typename Number, typename Converter>
+void BoxT<Number,Converter>::insert( const std::vector<carl::Interval<Number>>& boundaries ) {
 	for(const auto& interval : boundaries) {
 		mLimits.first.extend(interval.lower());
 		mLimits.second.extend(interval.upper());
 	}
 }
 */
-template <typename Number>
-carl::Interval<Number> Box<Number>::interval( std::size_t d ) const {
+template<typename Number, typename Converter>
+carl::Interval<Number> BoxT<Number,Converter>::interval( std::size_t d ) const {
 	if ( d > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
 	return carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d));
 }
 
-template <typename Number>
-Number Box<Number>::supremum() const {
+template<typename Number, typename Converter>
+Number BoxT<Number,Converter>::supremum() const {
 	Number max = 0;
 	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
@@ -165,8 +165,8 @@ Number Box<Number>::supremum() const {
 	return max;
 }
 
-template <typename Number>
-std::vector<Point<Number>> Box<Number>::vertices() const {
+template<typename Number, typename Converter>
+std::vector<Point<Number>> BoxT<Number,Converter>::vertices() const {
 	std::vector<Point<Number>> result;
 	std::size_t limit = pow( 2, mLimits.first.dimension() );
 
@@ -184,8 +184,8 @@ std::vector<Point<Number>> Box<Number>::vertices() const {
 	return result;
 }
 
-template <typename Number>
-Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	// create both limit matrices
 	matrix_t<Number> ax(A);
 	matrix_t<Number> bx(A);
@@ -209,18 +209,18 @@ Box<Number> Box<Number>::linearTransformation( const matrix_t<Number> &A, const 
 		}
 	}
 
-	return Box<Number>( std::make_pair(min, max) );
+	return BoxT<Number,Converter>( std::make_pair(min, max) );
 }
 
-template <typename Number>
-Box<Number> Box<Number>::minkowskiSum( const Box<Number> &rhs ) const {
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiSum( const BoxT<Number,Converter> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 
-	return Box<Number>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
+	return BoxT<Number,Converter>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
 }
 
-template <typename Number>
-Box<Number> Box<Number>::intersect( const Box<Number> &rhs ) const {
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::intersect( const BoxT<Number,Converter> &rhs ) const {
 	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
 	std::pair<Point<Number>, Point<Number>> limits(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)), Point<Number>(vector_t<Number>::Zero(dim))));
 	std::pair<Point<Number>, Point<Number>> rhsLimits = rhs.limits();
@@ -228,35 +228,35 @@ Box<Number> Box<Number>::intersect( const Box<Number> &rhs ) const {
 		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
 		limits.second[i] = mLimits.second.at(i) < rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return Box<Number>(limits);
+	return BoxT<Number,Converter>(limits);
 }
 
-template <typename Number>
-Box<Number> Box<Number>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
 	if(!this->empty()) {
-		HPolytope<Number> intermediate(this->constraints());
+		auto intermediate = Converter::toHPolytope(*this);
 		intermediate.insert(rhs);
-		return Box<Number>(intermediate.vertices());
+		return std::move(Converter::toBox(intermediate));
 	}
 	return Empty(this->dimension());
 }
 
-template <typename Number>
-bool Box<Number>::contains( const Point<Number> &point ) const {
+template<typename Number, typename Converter>
+bool BoxT<Number,Converter>::contains( const Point<Number> &point ) const {
 	if ( this->dimension() > point.dimension() ) return false;
 
 	return (point >= mLimits.first && point <= mLimits.second );
 }
 
-template <typename Number>
-bool Box<Number>::contains( const Box<Number> &box ) const {
+template<typename Number, typename Converter>
+bool BoxT<Number,Converter>::contains( const BoxT<Number,Converter> &box ) const {
 	if ( this->dimension() != box.dimension() ) return false;
 
 	return (box.min() >= mLimits.first && box.max() <= mLimits.second );
 }
 
-template <typename Number>
-Box<Number> Box<Number>::unite( const Box<Number> &rhs ) const {
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::unite( const BoxT<Number,Converter> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 	std::size_t dim = this->dimension();
 
@@ -266,16 +266,16 @@ Box<Number> Box<Number>::unite( const Box<Number> &rhs ) const {
 		limits.first[i] = mLimits.first.at(i) < rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
 		limits.second[i] = mLimits.second.at(i) > rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return Box<Number>(limits);
+	return BoxT<Number,Converter>(limits);
 }
 
-template<typename Number>
-void Box<Number>::clear() {
-	*this = Box<Number>::Empty(0);
+template<typename Number, typename Converter>
+void BoxT<Number,Converter>::clear() {
+	*this = BoxT<Number,Converter>::Empty(0);
 }
 
-template <typename Number>
-void Box<Number>::print() const {
+template<typename Number, typename Converter>
+void BoxT<Number,Converter>::print() const {
 	std::cout << *this << std::endl;
 }
 

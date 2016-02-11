@@ -66,6 +66,4 @@ class SupportFunction {
 
 } //namespace
 
-#include "../Converter.h"
-
 #include "SupportFunction.tpp"

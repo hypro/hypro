@@ -2,7 +2,7 @@
 #include "../defines.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../../lib/representations/conversion/Converter.h"
 
 using namespace hypro;
 using namespace carl;
