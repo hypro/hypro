@@ -370,7 +370,6 @@ void VPolytopeT<Number, Converter>::removeRedundancy() {
 template<typename Number, typename Converter>
 void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	if(!mVertices.empty()) {
-		std::cout << "Reduce Vertex " << *this << " to " << std::endl;
  		// determine barycenter to set rounding directions
 		unsigned dimension = mVertices.begin()->rawCoordinates().rows();
 		vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
@@ -395,7 +394,6 @@ void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 				}
 			}
 		}
-		std::cout << *this << std::endl;
 	}
 }
 
