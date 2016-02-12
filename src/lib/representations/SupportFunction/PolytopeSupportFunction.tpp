@@ -101,7 +101,7 @@ vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<
 	vector_t<Number> res( _A.rows() );
 
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res( index ) = evaluate( _A.row( index ).transpose() ).supportValue;
+		res( index ) = evaluate( _A.row( index ) ).supportValue;
 	}
 
 	return res;
