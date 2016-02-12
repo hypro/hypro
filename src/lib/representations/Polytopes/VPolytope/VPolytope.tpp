@@ -75,8 +75,8 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			++rowCount;
 		}
 		// check if rank is full
-		if ( intersection.fullPivHouseholderQr().rank() == intersection.cols() ) {
-			vector_t<Number> vertex = intersection.fullPivHouseholderQr().solve( intersectionConstants );
+		if ( intersection.fullPivLu().rank() == intersection.cols() ) {
+			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
 			assert(vertex.rows() == _constraints.cols());
 			possibleVertices.emplace( std::move(vertex) );
 			// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
@@ -208,7 +208,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplane
 	auto intersection = intermediate.intersectHyperplanes(_mat, _vec);
 	std::cout << "Intersection H-Polytope: " << intersection << std::endl;
 	intersection.removeRedundancy();
-	VPolytopeT<Number, Converter> res(Converter::toVPolytopeT(intersection));
+	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
 	return std::move(res);
 }
 
@@ -370,7 +370,8 @@ void VPolytopeT<Number, Converter>::removeRedundancy() {
 template<typename Number, typename Converter>
 void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	if(!mVertices.empty()) {
-		// determine barycenter to set rounding directions
+		std::cout << "Reduce Vertex " << *this << " to " << std::endl;
+ 		// determine barycenter to set rounding directions
 		unsigned dimension = mVertices.begin()->rawCoordinates().rows();
 		vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
 		for(const auto& vertex : mVertices) {
@@ -379,24 +380,22 @@ void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 
 		for(auto& vertex : mVertices) {
 			vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
-			vertex.makeInteger();
-			Number largest = vertex.at(0);
-			for(unsigned d = 0; d < dimension; ++d) {
-				largest = largest > carl::abs(vertex.at(d)) ? largest : carl::abs(vertex.at(d));
-			}
-			if(largest == 0)
-				continue;
-
-			assert(largest != 0);
 			for(unsigned d = 0; d < dimension; ++d) {
 				assert(d < vertex.dimension());
-				if(roundingDirections(d) > 0) {
-					vertex[d] = carl::ceil((vertex.at(d)/largest) * limit);
-				} else {
-					vertex[d] = carl::floor((vertex.at(d)/largest) * limit);
+				if(carl::getDenom(vertex.at(d)) > limit) {
+					Number u = carl::getDenom(vertex.at(d))/(carl::getDenom(vertex.at(d)) - Number(limit));
+					Number roundedNumerator;
+					Number oldNumerator = carl::getNum(vertex.at(d));
+					if(roundingDirections(d) > 0) // round towards infinity
+						roundedNumerator = carl::ceil( oldNumerator - (oldNumerator/u) );
+					else // round towards -infinity
+						roundedNumerator = carl::floor( oldNumerator - (oldNumerator/u) );
+
+					vertex[d] = roundedNumerator / Number(limit);
 				}
 			}
 		}
+		std::cout << *this << std::endl;
 	}
 }
 
