@@ -138,8 +138,6 @@ class Point {
 	void reduceDimension( unsigned _dimension );
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
 
-	void makeInteger();
-
 	std::vector<carl::Variable> variables() const;
 
 	Point<Number> extAdd( const Point<Number>& _rhs ) const;

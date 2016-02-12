@@ -255,20 +255,6 @@ void Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
 	mHash = 0;
 }
 
-template<typename Number>
-void Point<Number>::makeInteger() {
-	Number scaling = 1;
-	for( unsigned d = 0; d < mCoordinates.rows(); ++d)
-		scaling = scaling*carl::getNum(mCoordinates(d));
-
-	if(scaling != 1) {
-		for( unsigned d = 0; d < mCoordinates.rows(); ++d) {
-			mCoordinates(d) = mCoordinates(d)*scaling;
-		}
-	}
-	mHash = 0;
-}
-
 template <typename Number>
 std::vector<carl::Variable> Point<Number>::variables() const {
 	std::vector<carl::Variable> variables;
