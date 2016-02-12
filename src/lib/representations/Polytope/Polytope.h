@@ -35,7 +35,7 @@ using namespace Parma_Polyhedra_Library::IO_Operators;
 namespace hypro
 {
 	template<typename Number>
-	class Polytope : hypro::GeometricObject<Number>
+	class Polytope
 	{
 	private:
 		C_Polyhedron mPolyhedron;

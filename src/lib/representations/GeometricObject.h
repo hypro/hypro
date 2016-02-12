@@ -8,11 +8,4 @@
 #pragma once
 #include "../datastructures/Point.h"
 #include "../config.h"
-
-namespace hypro {
-template <class Number>
-class GeometricObject {
-  public:
-	typedef Number type;
-};
-}
+#include "conversion/Converter.h"

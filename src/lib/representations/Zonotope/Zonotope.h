@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
-#include <ppl.hh>
+//#include <ppl.hh>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
@@ -22,12 +22,10 @@
 #include "../../datastructures/Hyperplane.h"
 #include "ZUtility.h"
 
-// using namespace Parma_Polyhedra_Library;
-
 namespace hypro {
 
-template <typename Number>
-class Zonotope {
+template<typename Number, typename Converter>
+class ZonotopeT {
   private:
 	std::size_t mDimension;
 	hypro::vector_t<Number> mCenter;
@@ -38,35 +36,35 @@ class Zonotope {
   public:
 	// Constructors and Destructors
 
-	Zonotope();
+	ZonotopeT();
 	/**
 	 * Constructor with dimension
-	 * @param dimension Dimensionality of Zonotope
+	 * @param dimension Dimensionality of ZonotopeT
 	 */
-	Zonotope( std::size_t dimension );
+	ZonotopeT( std::size_t dimension );
 
 	/**
-	 * Constructs a Zonotope with center and generators.
+	 * Constructs a ZonotopeT with center and generators.
 	 * @param center A (nx1) vector
 	 * @param generators A (nxm) vector
 	 */
-	Zonotope( const hypro::vector_t<Number>& center, const hypro::matrix_t<Number>& generators );
+	ZonotopeT( const hypro::vector_t<Number>& center, const hypro::matrix_t<Number>& generators );
 
 	/**
-	 * Copy Constructor - constructs a zonotope from an existing one.
-	 * @param other Another Zonotope, from which a new zonotope is constructed
+	 * Copy Constructor - constructs a zonotopeT from an existing one.
+	 * @param other Another ZonotopeT, from which a new zonotopeT is constructed
 	 */
-	Zonotope( const Zonotope<Number>& other );
+	ZonotopeT( const ZonotopeT<Number,Converter>& other );
 
 	/**
-	 * Copy Constructor - constructs a 2D-zonotope of from an existing ND one.
-	 * @param other : Another Zonotope, from which a new zonotope is constructed
+	 * Copy Constructor - constructs a 2D-zonotopeT of from an existing ND one.
+	 * @param other : Another ZonotopeT, from which a new zonotopeT is constructed
 	 * @param d1 : 1st dimension (0 <= d1 < other.dimension)
 	 * @param d2 : 2nd dimension (0 <= d2 < other.dimension) d1!=d2
 	 */
-	Zonotope( const Zonotope<Number>& other, unsigned d1, unsigned d2 );
+	ZonotopeT( const ZonotopeT<Number,Converter>& other, unsigned d1, unsigned d2 );
 
-	virtual ~Zonotope();
+	virtual ~ZonotopeT();
 
 	/*****************************************************************************
 	*                                                                           *
@@ -75,13 +73,13 @@ class Zonotope {
 	*****************************************************************************/
 
 	/**
-	 * Dimensionality of Zonotope
+	 * Dimensionality of ZonotopeT
 	 * @return the dimension
 	 */
 	std::size_t dimension() const;
 
 	/**
-	* Returns, whether the zonotope is empty.
+	* Returns, whether the zonotopeT is empty.
 	* @return
 	*/
 	bool empty() const;
@@ -99,7 +97,7 @@ class Zonotope {
 	void setGenerators( const hypro::matrix_t<Number>& generators_ );
 
 	/**
-	 * Add generators to Zonotope. Simply performs setGenerators if generators was previously not initialized.
+	 * Add generators to ZonotopeT. Simply performs setGenerators if generators was previously not initialized.
 	 * @param generators
 	 * @return true if able to add generators
 	 */
@@ -126,14 +124,14 @@ class Zonotope {
         void uniteEqualVectors();
 
 	/**
-	 * Changes the dimension of a Zonotope. if new_dim > old dim, new rows are initialized with null
-	 * @param new_dim The new dimension of the Zonotope
+	 * Changes the dimension of a ZonotopeT. if new_dim > old dim, new rows are initialized with null
+	 * @param new_dim The new dimension of the ZonotopeT
 	 * @return True, if change in dimension was successful
 	 */
 	bool changeDimension( std::size_t new_dim );
 
 	/**
-	 * Clears the generators and center of the Zonotope and sets dimensionality to zero
+	 * Clears the generators and center of the ZonotopeT and sets dimensionality to zero
 	 */
 	void clear();
 
@@ -149,24 +147,24 @@ class Zonotope {
 	 * @param rhs The other right-hand-side stateset. Is not modified.
 	 * @return True if the operation has been successfully applied.
 	 */
-	Zonotope<Number> minkowskiSum( const Zonotope<Number>& rhs ) const;
+	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
 
 	/**
 	 * Applies a linear transformation on the given stateset.
 	 * @param result The resulting stateset.
 	 * @return True if the operation has been successfully applied.
 	 */
-	Zonotope<Number> linearTransformation( const hypro::matrix_t<Number>& A ) const;
+	ZonotopeT<Number,Converter> linearTransformation( const hypro::matrix_t<Number>& A ) const;
 
 	/**
-	 * Compute boundaries of zonotope
+	 * Compute boundaries of zonotopeT
 	 * @return array of points represented as vectors
 	 */
 	std::vector<hypro::vector_t<Number>> computeZonotopeBoundary();
 
 	/**
-	 * @brief Compute a set of points containing the extreme points of a zonotope.
-	 * @details Compute all possible extreme points of a zonotope by considering all combinations of
+	 * @brief Compute a set of points containing the extreme points of a zonotopeT.
+	 * @details Compute all possible extreme points of a zonotopeT by considering all combinations of
 	 * generators. This gives a set of points, which contains also the real extreme points but also some
 	 * internal points.
 	 * @return vector of points.
@@ -174,22 +172,22 @@ class Zonotope {
 	std::vector<hypro::vector_t<Number>> vertices() const;
 
 	/**
-	 * Calculates zonotope intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n
+	 * Calculates zonotopeT intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n
 	 * and e a scalar)
 	 * @param result : The resulting intersect
 	 * @param d_vec : Vector representing the halfspace
 	 * @param e_scalar : Scalar representing the halfspace
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	Zonotope<Number> intersectWithHalfspace( const hypro::vector_t<Number>& d_vec, Number e_scalar ) const;
+	ZonotopeT<Number,Converter> intersectWithHalfspace( const hypro::vector_t<Number>& d_vec, Number e_scalar ) const;
 
 	/**
-	 * Calculates zonotope intersect with halfspace represented as PPL constraint
+	 * Calculates zonotopeT intersect with halfspace represented as PPL constraint
 	 * @param result : The resulting stateset of the intersection
 	 * @param halfspace : Halfspace as represented in PPL (see PPL documentation for more information)
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	Zonotope<Number> intersect( const Parma_Polyhedra_Library::Constraint& halfspace ) const;
+	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::Constraint& halfspace ) const;
 
 	/**
 	 * Intersects the given stateset with a second one.
@@ -197,39 +195,39 @@ class Zonotope {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	Zonotope<Number> intersect( const Hyperplane<Number>& rhs, int method );
+	ZonotopeT<Number,Converter> intersect( const Hyperplane<Number>& rhs, int method );
 
 	/**
 	 * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
-	 * @param result : The resulting stateset of the intersection as zonotope.
+	 * @param result : The resulting stateset of the intersection as zonotopeT.
 	 * @param minMaxOfLine : The resulting min-max matrix.
 	 * @param rhs : The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found.
 	 */
-	Zonotope<Number> intersect( const Hyperplane<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
+	ZonotopeT<Number,Converter> intersect( const Hyperplane<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
 
 	/**
-	 * Calculates zonotope intersect with a closed polyhedron as represented in PPL.
-	 * @param result : The resulting stateset of the intersection as zonotope.
+	 * Calculates zonotopeT intersect with a closed polyhedron as represented in PPL.
+	 * @param result : The resulting stateset of the intersection as zonotopeT.
 	 * @param rhs : The closed polyhedron as represented in PPL (see PPL documentation for more information).
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	Zonotope<Number> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
+	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
 
 	/**
-	 * Computes the convex hull of the member zonotope and another given zonotope
-	 * @param result: resulting convex hull (also itself a zonotope)
-	 * @param other: the other zonotope
+	 * Computes the convex hull of the member zonotopeT and another given zonotopeT
+	 * @param result: resulting convex hull (also itself a zonotopeT)
+	 * @param other: the other zonotopeT
 	 * @return true for all cases.
 	 */
-	Zonotope<Number> unite( const Zonotope<Number>& other ) const;
+	ZonotopeT<Number,Converter> unite( const ZonotopeT<Number,Converter>& other ) const;
 
 	/**
-	 * Computes the interval hull of the member zonotope
-	 * @param result: the resulting interval hull (also a zonotope)
+	 * Computes the interval hull of the member zonotopeT
+	 * @param result: the resulting interval hull (also a zonotopeT)
 	 * @return true for all cases
 	 */
-	Zonotope<Number> intervalHull() const;
+	ZonotopeT<Number,Converter> intervalHull() const;
 };
 
 }  // namespace

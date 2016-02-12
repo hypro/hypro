@@ -5,8 +5,6 @@
 #include <cmath>
 #include <algorithm>
 
-using namespace Parma_Polyhedra_Library;
-
 namespace hypro {
 
 /*****************************************************************************
@@ -15,7 +13,7 @@ namespace hypro {
  *                                                                           *
  *****************************************************************************/
 
-template <typename Number>
+template<typename Number>
 bool comparePoint( Eigen::Matrix<Number, 2, 1> &p1, Eigen::Matrix<Number, 2, 1> &p2 ) {
 	if ( p1( 0 ) != p2( 0 ) )
 		return ( p1( 0 ) < p2( 0 ) );
@@ -23,7 +21,7 @@ bool comparePoint( Eigen::Matrix<Number, 2, 1> &p1, Eigen::Matrix<Number, 2, 1> 
 		return ( p1( 1 ) < p2( 1 ) );
 }
 
-template <typename Number>
+template<typename Number>
 void removeGenerator( unsigned colToRemove, hypro::matrix_t<Number> &matrix ) {
 	unsigned numRows = matrix.rows();
 	unsigned numCols = matrix.cols() - 1;
@@ -37,7 +35,7 @@ void removeGenerator( unsigned colToRemove, hypro::matrix_t<Number> &matrix ) {
 	matrix.conservativeResize( Eigen::NoChange, numCols );
 }
 
-template <typename Number>
+template<typename Number>
 void removeEmptyGenerators( hypro::matrix_t<Number> &generatorMatrix ) {
 	unsigned dim = generatorMatrix.rows();
 	hypro::vector_t<Number> zero_vector;
@@ -56,7 +54,7 @@ void removeEmptyGenerators( hypro::matrix_t<Number> &generatorMatrix ) {
 	}
 }
 
-template <typename Number>
+template<typename Number>
 Eigen::Matrix<Number, 2, 1> computeLineIntersection( const ZUtility::Line_t<Number> &l1,
 													 const ZUtility::Line_t<Number> &l2 ) {
 	Eigen::Matrix<Number, 2, 2> concatDirections;
@@ -74,34 +72,34 @@ Eigen::Matrix<Number, 2, 1> computeLineIntersection( const ZUtility::Line_t<Numb
  *                                                                           *
  *****************************************************************************/
 
-template <typename Number>
-Zonotope<Number>::Zonotope() : mDimension( 0 ), mCenter( 0, 1 ), mGenerators( 0, 0 ) { }
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::ZonotopeT() : mDimension( 0 ), mCenter( 0, 1 ), mGenerators( 0, 0 ) { }
 
-template <typename Number>
-Zonotope<Number>::Zonotope( std::size_t dimension )
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::ZonotopeT( std::size_t dimension )
 	: mDimension( dimension )
 	, mCenter( hypro::vector_t<Number>::Zero( dimension ) )
 	, mGenerators( hypro::matrix_t<Number>::Zero( dimension, 1 ) ) {
 	assert( dimension != 0 && "Zonotope cannot have dimension 0." );
 }
 
-template <typename Number>
-Zonotope<Number>::Zonotope( const hypro::vector_t<Number> &center, const hypro::matrix_t<Number> &generators )
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::ZonotopeT( const hypro::vector_t<Number> &center, const hypro::matrix_t<Number> &generators )
 	: mDimension( center.rows() ), mCenter( center ), mGenerators( generators ) {
 	assert( center.rows() == generators.rows() && "Center and generators have to have same dimensionality." );
         uniteEqualVectors();
         removeEmptyGenerators();
 }
 
-template <typename Number>
-Zonotope<Number>::Zonotope( const Zonotope<Number> &other )
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::ZonotopeT( const ZonotopeT<Number,Converter> &other )
 	: mDimension( other.mDimension ), mCenter( other.mCenter ), mGenerators( other.mGenerators ) {
         uniteEqualVectors();
         removeEmptyGenerators();
 }
 
-template <typename Number>
-Zonotope<Number>::Zonotope( const Zonotope<Number> &other, unsigned d1, unsigned d2 ) {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::ZonotopeT( const ZonotopeT<Number,Converter> &other, unsigned d1, unsigned d2 ) {
 	assert( other.mDimension != 0 && d1 >= 0 && d1 < other.mDimension && d2 >= 0 && d1 < other.mDimension && d1 != d2 &&
 			"d1 and d2 have to be in range of copied zonotope." );
 
@@ -119,8 +117,8 @@ Zonotope<Number>::Zonotope( const Zonotope<Number> &other, unsigned d1, unsigned
         removeEmptyGenerators();
 }
 
-template <typename Number>
-Zonotope<Number>::~Zonotope() {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter>::~ZonotopeT() {
 }
 
 /*****************************************************************************
@@ -129,40 +127,40 @@ Zonotope<Number>::~Zonotope() {
  *                                                                           *
  *****************************************************************************/
 
-template <typename Number>
-std::size_t Zonotope<Number>::dimension() const {
+template<typename Number, typename Converter>
+std::size_t ZonotopeT<Number,Converter>::dimension() const {
 	return mDimension;
 }
 
-template <typename Number>
-bool Zonotope<Number>::empty() const {
+template<typename Number, typename Converter>
+bool ZonotopeT<Number,Converter>::empty() const {
 	return ( mGenerators.cols() == 0 );
 }
 
-template <typename Number>
-hypro::vector_t<Number> Zonotope<Number>::center() const {
+template<typename Number, typename Converter>
+hypro::vector_t<Number> ZonotopeT<Number,Converter>::center() const {
 	return mCenter;
 }
 
-template <typename Number>
-hypro::matrix_t<Number> Zonotope<Number>::generators() const {
+template<typename Number, typename Converter>
+hypro::matrix_t<Number> ZonotopeT<Number,Converter>::generators() const {
 	return mGenerators;
 }
 
-template <typename Number>
-void Zonotope<Number>::setCenter( const hypro::vector_t<Number> &center ) {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::setCenter( const hypro::vector_t<Number> &center ) {
 	if ( mDimension == 0 ) {
 		mDimension = center.rows();
 		mGenerators = hypro::matrix_t<Number>::Zero( mDimension, 1 );
 	}
 	assert( (std::size_t)center.rows() == mDimension && "Center has to have same dimensionality as zonotope." );
 	mCenter = center;
-        uniteEqualVectors();
-        removeEmptyGenerators();
+    uniteEqualVectors();
+    removeEmptyGenerators();
 }
 
-template <typename Number>
-void Zonotope<Number>::setGenerators( const hypro::matrix_t<Number> &new_generators ) {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::setGenerators( const hypro::matrix_t<Number> &new_generators ) {
 	if ( mDimension == 0 ) {
 		mDimension = new_generators.rows();
 		mCenter = hypro::vector_t<Number>::Zero( mDimension );
@@ -173,8 +171,8 @@ void Zonotope<Number>::setGenerators( const hypro::matrix_t<Number> &new_generat
         removeEmptyGenerators();
 }
 
-template <typename Number>
-bool Zonotope<Number>::addGenerators( const hypro::matrix_t<Number> &generators ) {
+template<typename Number, typename Converter>
+bool ZonotopeT<Number,Converter>::addGenerators( const hypro::matrix_t<Number> &generators ) {
 	if ( mDimension == 0 ) {
 		mDimension = generators.rows();
 	}
@@ -192,13 +190,13 @@ bool Zonotope<Number>::addGenerators( const hypro::matrix_t<Number> &generators 
 	return true;
 }
 
-template <typename Number>
-std::size_t Zonotope<Number>::numGenerators() const {
+template<typename Number, typename Converter>
+std::size_t ZonotopeT<Number,Converter>::numGenerators() const {
 	return mGenerators.cols();
 }
 
-template <typename Number>
-void Zonotope<Number>::removeGenerator( unsigned colToRemove ) {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::removeGenerator( unsigned colToRemove ) {
 	unsigned numRows = mGenerators.rows();
 	unsigned numCols = mGenerators.cols() - 1;
 
@@ -209,8 +207,8 @@ void Zonotope<Number>::removeGenerator( unsigned colToRemove ) {
 	mGenerators.conservativeResize( numRows, numCols );
 }
 
-template <typename Number>
-void Zonotope<Number>::removeEmptyGenerators() {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::removeEmptyGenerators() {
 	// TODO
 	hypro::vector_t<Number> zero_vector = hypro::vector_t<Number>::Zero( mDimension );
 
@@ -226,8 +224,8 @@ void Zonotope<Number>::removeEmptyGenerators() {
 	}
 }
 
-template <typename Number>
-void Zonotope<Number>::uniteEqualVectors() {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::uniteEqualVectors() {
 	hypro::vector_t<Number> zero_vector = hypro::vector_t<Number>::Zero( mDimension );
 
 	std::vector<unsigned> zeroIndex;
@@ -247,8 +245,8 @@ void Zonotope<Number>::uniteEqualVectors() {
 	}
 }
 
-template <typename Number>
-bool Zonotope<Number>::changeDimension( std::size_t new_dim ) {
+template<typename Number, typename Converter>
+bool ZonotopeT<Number,Converter>::changeDimension( std::size_t new_dim ) {
 	assert( new_dim != 0 && "Cannot change dimensionality of zonotope to zero" );
 	if ( new_dim == mDimension ) {
 		return false;
@@ -267,8 +265,8 @@ bool Zonotope<Number>::changeDimension( std::size_t new_dim ) {
 	}
 }
 
-template <typename Number>
-void Zonotope<Number>::clear() {
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::clear() {
 	mGenerators.resize( 0, 0 );
 	mCenter.resize( 0, 1 );
 	mDimension = 0;
@@ -280,10 +278,10 @@ void Zonotope<Number>::clear() {
 *                                                                           *
 *****************************************************************************/
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::minkowskiSum( const Zonotope<Number> &rhs ) const {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const ZonotopeT<Number,Converter> &rhs ) const {
 	assert( mDimension == rhs.dimension() && "Zonotope on RHS must have same dimensionality as current." );
-	Zonotope<Number> result;
+	ZonotopeT<Number,Converter> result;
 	result.setCenter( this->mCenter + rhs.mCenter );
 	hypro::matrix_t<Number> tmp;
 	tmp.resize( mDimension, rhs.numGenerators() + numGenerators() );
@@ -294,8 +292,8 @@ Zonotope<Number> Zonotope<Number>::minkowskiSum( const Zonotope<Number> &rhs ) c
 	return result;
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::linearTransformation( const hypro::matrix_t<Number> &A ) const {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const hypro::matrix_t<Number> &A ) const {
 	assert( A.cols() == mCenter.rows() &&
 			"Matrix's dimensionality is different "
 			"from zonotope's center's "
@@ -304,15 +302,15 @@ Zonotope<Number> Zonotope<Number>::linearTransformation( const hypro::matrix_t<N
 			"Matrix's dimensionality is "
 			"different from zonotope's "
 			"generators' dimensionality." );
-	Zonotope<Number> result;
+	ZonotopeT<Number,Converter> result;
 	result.setCenter( A * this->mCenter );
 	result.setGenerators( A * this->mGenerators );
 
 	return result;
 }
 
-template <typename Number>
-std::vector<hypro::vector_t<Number>> Zonotope<Number>::computeZonotopeBoundary() {
+template<typename Number, typename Converter>
+std::vector<hypro::vector_t<Number>> ZonotopeT<Number,Converter>::computeZonotopeBoundary() {
 	assert( mDimension == 2 && "Computing Zonotope boundaries only possible for Dim 2" );
 
 	this->removeEmptyGenerators();
@@ -353,14 +351,14 @@ std::vector<hypro::vector_t<Number>> Zonotope<Number>::computeZonotopeBoundary()
 	return verticesArray;
 }
 
-template <typename Number>
-std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() const {
+template<typename Number, typename Converter>
+std::vector<hypro::vector_t<Number>> ZonotopeT<Number,Converter>::vertices() const {
 	//uniteEqualVectors();
 
 	//removeEmptyGenerators();
 
 	//hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero( this->dimension() );
-    
+
         hypro::vector_t<Number> init = mCenter;
 
 	std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive( mGenerators, init );
@@ -368,8 +366,8 @@ std::vector<hypro::vector_t<Number>> Zonotope<Number>::vertices() const {
 	return possibleCorners;
 }
 
-template <typename Number>
-Number intersect2d( const Zonotope<Number> &input, const Hyperplane<Number> &hp, int minOrMax ) {
+template<typename Number, typename Converter>
+Number intersect2d( const ZonotopeT<Number,Converter> &input, const Hyperplane<Number> &hp, int minOrMax ) {
 	assert( input.dimension() == hp.dimension() && input.dimension() == 2 &&
 			"zonotope dimension must be of same dimension (only dim 2 accepted) "
 			"as hyperplane" );
@@ -447,8 +445,8 @@ Number intersect2d( const Zonotope<Number> &input, const Hyperplane<Number> &hp,
 	return m;
 }
 
-template <typename Number>
-Zonotope<Number> intersectZonotopeHyperplaneDSearch( Zonotope<Number> &inputZonotope, const Hyperplane<Number> &hp ) {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> intersectZonotopeHyperplaneDSearch( ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() && inputZonotope.dimension() == 2 &&
 			"zonotope dimension must be of same "
 			"dimension (only dim 2 accepted) as "
@@ -458,12 +456,12 @@ Zonotope<Number> intersectZonotopeHyperplaneDSearch( Zonotope<Number> &inputZono
 	Number p2 = intersect2d<Number>( inputZonotope, hp, 0 );
 	Eigen::Matrix<Number, 2, 1> p2Vec = {0, p2};
 
-	Zonotope<Number> res( ( p1Vec + p2Vec ) / 2, ( p1Vec - p2Vec ) / 2 );
+	ZonotopeT<Number,Converter> res( ( p1Vec + p2Vec ) / 2, ( p1Vec - p2Vec ) / 2 );
 	return res;
 }
 
-template <typename Number>
-static Zonotope<Number> intersectZonotopeHyperplane( Zonotope<Number> &inputZonotope, const Hyperplane<Number> &hp,
+template<typename Number, typename Converter>
+static ZonotopeT<Number,Converter> intersectZonotopeHyperplane( ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp,
 													 hypro::matrix_t<Number> &minMaxOfLine ) {
 	assert( inputZonotope.dimension() == hp.dimension() && "Zonotope and Hyperplane have to be of similar dimensions" );
 	std::vector<hypro::vector_t<Number>> vertices = inputZonotope.computeZonotopeBoundary();
@@ -559,7 +557,7 @@ static Zonotope<Number> intersectZonotopeHyperplane( Zonotope<Number> &inputZono
 	// TODO: compute line intersection
 	Eigen::Matrix<Number, 2, 1> p2 = computeLineIntersection( ln, lnhp );
 
-	Zonotope<Number> resZonotope( ( p1 + p2 ) / 2, ( p1 - p2 ) / 2 );
+	ZonotopeT<Number,Converter> resZonotope( ( p1 + p2 ) / 2, ( p1 - p2 ) / 2 );
 
 	minMaxOfLine.resize( 2, 2 );
 	minMaxOfLine.row( 0 ) = ( comparePoint( p1, p2 ) ) ? p1.transpose() : p2.transpose();  // min [x,y] here
@@ -568,8 +566,8 @@ static Zonotope<Number> intersectZonotopeHyperplane( Zonotope<Number> &inputZono
 	return resZonotope;
 }
 
-template <typename Number>
-Zonotope<Number> intersectAlamo( const Zonotope<Number> &inputZonotope, const Hyperplane<Number> &hp ) {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() );
 	// Determine intersect as Zonotope, according to Tabatabaeipour et al., 2013
 	Number sgm = 0;  // could be redundant
@@ -580,7 +578,7 @@ Zonotope<Number> intersectAlamo( const Zonotope<Number> &inputZonotope, const Hy
 		  ( HHT * hp.normal() ) / ( hp.normal().transpose() * HHT * hp.normal() + sgm * sgm );
 
 	hypro::matrix_t<Number> new_gen, identity;
-	Zonotope<Number> zg( inputZonotope.dimension() );
+	ZonotopeT<Number,Converter> zg( inputZonotope.dimension() );
 
 	zg.setCenter( center + lambda * ( hp.offset() - hp.normal().transpose() * center ) );
 
@@ -594,13 +592,13 @@ Zonotope<Number> intersectAlamo( const Zonotope<Number> &inputZonotope, const Hy
 	return zg;
 }
 
-template <typename Number>
-Zonotope<Number> intersectNDProjection( const Zonotope<Number> &inputZonotope, const Hyperplane<Number> &hp,
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp,
 										hypro::matrix_t<Number> &minMaxOfLine ) {
 	assert( hp.dimension() == inputZonotope.dimension() &&
 			"Intersect ND: input zonotope and input hyperplane must have same "
 			"dimensionality" );
-	Zonotope<Number> resultZonotope;
+	ZonotopeT<Number,Converter> resultZonotope;
 	hypro::vector_t<Number> dVec;
 	hypro::matrix_t<Number> kernel;
 	dVec = hp.normal();
@@ -628,7 +626,7 @@ Zonotope<Number> intersectNDProjection( const Zonotope<Number> &inputZonotope, c
 		projGenerators.resize( 2, dpQg.cols() );
 		projGenerators << dpQg, kernel.col( i ).transpose() * inputZonotope.generators();
 
-		Zonotope<Number> projZonotope( projCenter, projGenerators ), tempResZonotope;
+		ZonotopeT<Number,Converter> projZonotope( projCenter, projGenerators ), tempResZonotope;
 
 		// Upon projection, the hyperplane now has a d vector of [1;0] but retains
 		// its e scalar
@@ -659,18 +657,18 @@ Zonotope<Number> intersectNDProjection( const Zonotope<Number> &inputZonotope, c
 	return resultZonotope;
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intersect( const Hyperplane<Number> &hp, int method ) {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperplane<Number> &hp, int method ) {
 	hypro::matrix_t<Number> EMPTY_MATRIX( 0, 0 );
 	return this->intersect( hp, EMPTY_MATRIX, method );
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intersect( const Hyperplane<Number> &hp, hypro::matrix_t<Number> &minMaxOfLine,
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperplane<Number> &hp, hypro::matrix_t<Number> &minMaxOfLine,
 											  int method ) {
 	assert( hp.dimension() == mDimension && "Zonotope's dimensionality must be same as Hyperplane's dimensionality." );
 
-	Zonotope<Number> result;
+	ZonotopeT<Number,Converter> result;
 
 	// Determine if intersection is found, according to Girard, Guernic, 2008
 	Number emdc = hp.offset() - hp.normal().transpose() * mCenter;
@@ -710,8 +708,8 @@ Zonotope<Number> Zonotope<Number>::intersect( const Hyperplane<Number> &hp, hypr
 	return result;
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intersect( const Constraint &halfspace ) const {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constraint &halfspace ) const {
 	assert( halfspace.space_dimension() == this->mDimension );
 	Number e = halfspace.inhomogeneous_term().get_d();
 	hypro::vector_t<Number> dVec;
@@ -725,10 +723,10 @@ Zonotope<Number> Zonotope<Number>::intersect( const Constraint &halfspace ) cons
 	return this->intersectWithHalfspace( dVec, e );
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intersectWithHalfspace( const hypro::vector_t<Number> &d_vec,
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace( const hypro::vector_t<Number> &d_vec,
 														   Number e_scalar ) const {
-	Zonotope<Number> result;
+	ZonotopeT<Number,Converter> result;
 	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
 	 * generators
 	 *  -> we sum the projections of the direction onto the generators (take only
@@ -767,11 +765,11 @@ Zonotope<Number> Zonotope<Number>::intersectWithHalfspace( const hypro::vector_t
 	return result;
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intersect( const C_Polyhedron &rhs ) const {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const C_Polyhedron &rhs ) const {
 	// Get set of half spaces
 	const Constraint_System &cs = rhs.constraints();
-	Zonotope<Number> curZonotope( *this );
+	ZonotopeT<Number,Converter> curZonotope( *this );
 
 	// Iterate through all constraints of the polyhedron
 	for ( Constraint constr : cs ) {
@@ -807,7 +805,7 @@ Zonotope<Number> Zonotope<Number>::intersect( const C_Polyhedron &rhs ) const {
 		//                ((cur_zonotope.generators()*cur_zonotope.generators().transpose())*d_vector)/
 		//                                (d_vector.transpose()*(cur_zonotope.generators()*cur_zonotope.generators().transpose())*d_vector+sgm*sgm);
 		//
-		//                Zonotope<Number> new_zonotope;
+		//                ZonotopeT<Number,Converter> new_zonotope;
 		//                new_zonotope.setCenter(cur_zonotope.center()+lambda*(d-dc));
 		//
 		//                hypro::matrix_t<Number> new_gen1, new_gen2, identity;
@@ -834,14 +832,14 @@ Zonotope<Number> Zonotope<Number>::intersect( const C_Polyhedron &rhs ) const {
 	// loop?
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::unite( const Zonotope<Number> &other ) const {
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<Number,Converter> &other ) const {
 	assert( mDimension == other.mDimension &&
 			"Zonotopes must be of same "
 			"dimension in order to carry out "
 			"convex hull operations." );
 	unsigned numGenCurrent, numGenOther;
-	Zonotope<Number> temp;
+	ZonotopeT<Number,Converter> temp;
 	numGenCurrent = this->numGenerators();
 	numGenOther = other.numGenerators();
 	hypro::matrix_t<Number> R1, R2;
@@ -881,12 +879,12 @@ Zonotope<Number> Zonotope<Number>::unite( const Zonotope<Number> &other ) const 
 	return temp;
 }
 
-template <typename Number>
-Zonotope<Number> Zonotope<Number>::intervalHull() const {
-	Zonotope<Number> result;
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intervalHull() const {
+	ZonotopeT<Number,Converter> result;
 	hypro::vector_t<Number> imax, imin, sumOfGenerators, center = this->mCenter;
 	hypro::matrix_t<Number> generators = this->mGenerators;
-	Zonotope<Number> temp;
+	ZonotopeT<Number,Converter> temp;
 
 	sumOfGenerators = generators.cwiseAbs().rowwise().sum();
 
