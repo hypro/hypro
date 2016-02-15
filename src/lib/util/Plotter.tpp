@@ -13,12 +13,12 @@ void Plotter<Number>::setFilename( const std::string &_filename ) {
 }
 
 template <typename Number>
-void Plotter<Number>::updateSettings( gnuplotSettings _settings ) {
+void Plotter<Number>::updateSettings( const gnuplotSettings& _settings ) {
 	mSettings = _settings;
 }
 
 template<typename Number>
-gnuplotSettings Plotter<Number>::getSettings() const {
+const gnuplotSettings& Plotter<Number>::getSettings() const {
 	return mSettings;
 }
 
@@ -55,7 +55,7 @@ void Plotter<Number>::plot2d() const {
 				if ( objectIt->second[pointIndex].dimension() == 0 ) {
 					continue;
 				}
-				mOutfile << "  " << double( objectIt->second[pointIndex].at( 0 ) );
+				mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
 
 				// update min and max
 				min( 0 ) =
@@ -64,7 +64,7 @@ void Plotter<Number>::plot2d() const {
 					  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
 
 				for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-					mOutfile << ", " << double( objectIt->second[pointIndex].at( d ) );
+					mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
 					// update min and max
 					min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
 																			   : objectIt->second[pointIndex].at( d );
@@ -75,10 +75,10 @@ void Plotter<Number>::plot2d() const {
 			}
 			// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
 			// Project to 2d	TODO: REINSERT ASSERTION
-			// std::cout << double(objectIt->0].at(0)) << std::endl;
-			mOutfile << "  " << double( objectIt->second[0].at( 0 ) );
+			// std::cout << carl::toDouble(objectIt->0].at(0)) << std::endl;
+			mOutfile << "  " << carl::toDouble( objectIt->second[0].at( 0 ) );
 			for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
-				mOutfile << ", " << double( objectIt->second[0].at( d ) );
+				mOutfile << ", " << carl::toDouble( objectIt->second[0].at( d ) );
 			}
 
 			// color lookup
@@ -105,12 +105,12 @@ void Plotter<Number>::plot2d() const {
 		}
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
+			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
 			if(rangeExt != 0)
-				ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			else
-				rangeExt = double(double(min( d ))* 0.1);
-				ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
 		mOutfile << "plot ";
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
@@ -125,8 +125,8 @@ void Plotter<Number>::plot2d() const {
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
-					mOutfile << "f_" << index << "(x) = " << double(-plane.normal()(0)/plane.normal()(1)) << "*x";
-					double off = double(plane.offset()/plane.normal()(1));
+					mOutfile << "f_" << index << "(x) = " << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
+					double off = carl::toDouble(plane.offset()/plane.normal()(1));
 					if(off > 0)
 						mOutfile << "+";
 
@@ -159,7 +159,7 @@ void Plotter<Number>::plot2d() const {
 			mOutfile << "\n";
 		}
 		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			mOutfile << double(pointIt->second.at(0)) << " " << double(pointIt->second.at(1)) << "\n";
+			mOutfile << carl::toDouble(pointIt->second.at(0)) << " " << carl::toDouble(pointIt->second.at(1)) << "\n";
 			mOutfile << "e\n";
 		}
 		mOutfile << "\n";
@@ -217,7 +217,7 @@ void Plotter<Number>::plotTex() const {
 				if ( objectIt->second[pointIndex].dimension() == 0 ) {
 					continue;
 				}
-				mOutfile << " (" << double( objectIt->second[pointIndex].at( 0 ) );
+				mOutfile << " (" << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
 
 				// update min and max
 				min( 0 ) =
@@ -226,7 +226,7 @@ void Plotter<Number>::plotTex() const {
 					  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
 
 				for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-					mOutfile << ", " << double( objectIt->second[pointIndex].at( d ) );
+					mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
 					// update min and max
 					min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
 																			   : objectIt->second[pointIndex].at( d );
@@ -240,7 +240,7 @@ void Plotter<Number>::plotTex() const {
 			if ( objectIt->second[objectIt->second.size()-1].dimension() == 0 ) {
 				continue;
 			}
-			mOutfile << " (" << double( objectIt->second[objectIt->second.size()-1].at( 0 ) );
+			mOutfile << " (" << carl::toDouble( objectIt->second[objectIt->second.size()-1].at( 0 ) );
 
 			// update min and max
 			min( 0 ) =
@@ -249,7 +249,7 @@ void Plotter<Number>::plotTex() const {
 				  max( 0 ) > objectIt->second[objectIt->second.size()-1].at( 0 ) ? max( 0 ) : objectIt->second[objectIt->second.size()-1].at( 0 );
 
 			for ( unsigned d = 1; d < objectIt->second[objectIt->second.size()-1].dimension(); ++d ) {
-				mOutfile << ", " << double( objectIt->second[objectIt->second.size()-1].at( d ) );
+				mOutfile << ", " << carl::toDouble( objectIt->second[objectIt->second.size()-1].at( d ) );
 				// update min and max
 				min( d ) = min( d ) < objectIt->second[objectIt->second.size()-1].at( d ) ? min( d )
 																		   : objectIt->second[objectIt->second.size()-1].at( d );
@@ -284,8 +284,8 @@ void Plotter<Number>::plotTex() const {
 		}
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = double( ( double(max( d )) - double(min( d )) ) * 0.1 );
-			ranges[d] = carl::Interval<double>(double(min( d )) - rangeExt, double(max( d )) + rangeExt );
+			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
+			ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
 		assert(ranges.size() == 2);
 
@@ -296,8 +296,8 @@ void Plotter<Number>::plotTex() const {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
 					mOutfile << "\t\\draw[domain="<< ranges[0].lower() << ":" << ranges[0].upper() <<", smooth, variable=\\x] plot ({\\x},";
-					mOutfile << "{" << double(-plane.normal()(0)/plane.normal()(1)) << "*x";
-					double off = double(plane.offset()/plane.normal()(1));
+					mOutfile << "{" << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
+					double off = carl::toDouble(plane.offset()/plane.normal()(1));
 					if(off > 0)
 						mOutfile << "+" << off << "}";
 					else
@@ -315,7 +315,7 @@ void Plotter<Number>::plotTex() const {
 		}
 
 		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			mOutfile << "\t\\fill[fill=blue] (" << double(pointIt->second.at(0)) << "," << double(pointIt->second.at(1)) << ") circle [radius=2pt];\n";
+			mOutfile << "\t\\fill[fill=blue] (" << carl::toDouble(pointIt->second.at(0)) << "," << carl::toDouble(pointIt->second.at(1)) << ") circle [radius=2pt];\n";
 		}
 
 		mOutfile << "\\end{tikzpicture}\n";
@@ -427,7 +427,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 					// std::cout << "Consider " << pos->second << ", angle: ";
 					Number newAngle = pos->second.polarCoordinates( min ).at( 1 );
 					// std::cout << newAngle << std::endl;
-					if ( carl::AlmostEqual2sComplement( angle, newAngle, TOLLERANCE_ULPS ) ) {
+					if ( angle == newAngle ) {
 						// if equal, compare radial coordinate (distance)
 						// std::cout << "AlmostEqual2sComplement" << std::endl;
 						if ( pos->second.polarCoordinates( min )[0] < point.polarCoordinates( min )[0] ) {
@@ -511,7 +511,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		stack.pop();
 	}
 
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>

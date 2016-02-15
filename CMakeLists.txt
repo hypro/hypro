@@ -15,6 +15,7 @@
 # B. Options.
 # C. Find system tools and libraries.
 # D. Invoke subdirectories.
+# E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
 
 
@@ -57,6 +58,16 @@ option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Metho
 
 # Include own macros.
 include( hypromacros )
+
+###########################################################################################
+#### EXPORT SETTINGS
+# Offer the user the choice of overriding the installation directories
+
+set(INCLUDE_INSTALL_DIR include/ CACHE PATH "Installation directory for header files" )
+set(LIB_INSTALL_DIR lib/ CACHE PATH "Installation directory for libraries")
+set(BIN_INSTALL_DIR lib/ CACHE PATH "Installation directory for executables")
+
+###########################################################################################
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
@@ -200,3 +211,42 @@ add_subdirectory(doc EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 
 add_subdirectory(examples EXCLUDE_FROM_ALL)
+
+##############################################################################
+#### EXPORT SETTINGS
+
+# # # # # # # # # # # # # # # # # # # # # #
+# E. Export Compile Information.
+# # # # # # # # # # # # # # # # # # # # # #
+
+# Add all targets to the build-tree export set
+export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
+
+# Export the package for use from the build-tree
+# (this registers the build-tree with a global CMake-registry)
+export(PACKAGE ${PROJECT_NAME})
+
+include(CMakePackageConfigHelpers)
+# Create the hyproConfig.cmake and hyproConfigVersion files
+file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR}")
+# ... for the build tree
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src")
+configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
+							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
+							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
+							 )
+
+# ... for the install tree
+set(CONF_INCLUDE_DIRS "\${hypro_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake
+							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
+							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
+			 )
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
+								 VERSION 0.1.0
+								 COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
+		DESTINATION ${PROJECT_BINARY_DIR} )
+
+# Install the export set for use with the install-tree
+#install(EXPORT ${HYPRO_TARGETS} DESTINATION ${PROJECT_BINARY_DIR}) # COMPONENT dev)

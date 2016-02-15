@@ -13,25 +13,25 @@
 
 namespace hypro {
 
-template <typename Number>
-class SupportFunction {
+template <typename Number, typename Converter>
+class SupportFunctionT {
     private:
            std::shared_ptr<SupportFunctionContent<Number>> content;
-           SupportFunction<Number> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
+           SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
 
 
     public:
-        SupportFunction ();
-        SupportFunction (const SupportFunction<Number>& _orig);
-        SupportFunction (SF_TYPE _type, Number _radius );
-        SupportFunction (SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
-        SupportFunction (SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
-        SupportFunction (SupportFunction<Number>&& other);
+        SupportFunctionT ();
+        SupportFunctionT (const SupportFunctionT<Number,Converter>& _orig);
+        SupportFunctionT (SF_TYPE _type, Number _radius );
+        SupportFunctionT (SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
+        SupportFunctionT (SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes);
+        SupportFunctionT (SupportFunctionT<Number,Converter>&& other);
 
 
-        virtual ~SupportFunction();
+        virtual ~SupportFunctionT();
 
-        SupportFunction<Number>& operator=(SupportFunction<Number> _orig );
+        SupportFunctionT<Number,Converter>& operator=(SupportFunctionT<Number,Converter> _orig );
 
         evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	vector_t<Number> multiEvaluate( const matrix_t<Number>& _directions ) const;
@@ -48,19 +48,19 @@ class SupportFunction {
 	PolytopeSupportFunction<Number>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
 
-	SupportFunction<Number> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
-	SupportFunction<Number> minkowskiSum( SupportFunction<Number>& _rhs ) const;
-	SupportFunction<Number> intersect( SupportFunction<Number>& _rhs ) const;
+	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
+	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;
+	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
-	SupportFunction<Number> unite( SupportFunction<Number>& _rhs ) const;
+	SupportFunctionT<Number,Converter> unite( SupportFunctionT<Number,Converter>& _rhs ) const;
 
-	SupportFunction<Number> scale( const Number& _factor = 1 ) const;
+	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
 	bool empty() const;
 
 	void print() const;
 
-    void swap(SupportFunction<Number>& first, SupportFunction<Number>& second);
+    void swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second);
 
 };
 

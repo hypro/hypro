@@ -237,6 +237,8 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 
 	std::cout << "Res = " << res << std::endl;
 	std::cout << std::endl;
+	std::cout << "Res.vertices(): " << res.vertices() << std::endl;
+
 	std::cout << "Test: " << test << std::endl;
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));

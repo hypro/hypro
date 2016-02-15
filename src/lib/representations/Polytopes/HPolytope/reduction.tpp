@@ -1,12 +1,14 @@
 /**
  * File holding utility functions to keep the main files clean.
  */
+
+#pragma once
 #include "HPolytope.h"
 #include <chrono>
 
 namespace hypro {
 
-  typedef std::chrono::high_resolution_clock clock;
+	typedef std::chrono::high_resolution_clock clock;
 	typedef std::chrono::microseconds timeunit;
 
   /*
@@ -24,7 +26,7 @@ namespace hypro {
 		std::vector<unsigned> subRes;
 
 		for(unsigned i=0; i<hpolytope.size(); i++){
-			if(carl::AlmostEqual2sComplement(vertexVector.dot(hpolytope.constraints().at(i).normal()), hpolytope.constraints().at(i).offset())){
+			if(vertexVector.dot(hpolytope.constraints().at(i).normal()) == hpolytope.constraints().at(i).offset()){
 				if(std::find(subRes.begin(), subRes.end(), i)==subRes.end()) {
 					subRes.push_back(i);
 				}
@@ -213,14 +215,14 @@ namespace hypro {
 
 	  // check for each vertex if it lies below the hyperplane
 		for(Point<Number> vertex_test: vertices){
-		//std::cout << "compare vertices " << vertex << " to " << vertex_test << std::endl;
+		std::cout << "compare vertices " << vertex << " to " << vertex_test << std::endl;
 
 			if(vertex!=vertex_test){
 				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
-		  //std::cout << "compare offsets " << vector_offset << " to " << vector_test_offset << std::endl;
+		  std::cout << "compare offsets " << vector_offset << " to " << vector_test_offset << std::endl;
 
 				if(vector_test_offset-vector_offset>0){
-			//std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
+			std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
 					below=false; // vertex lies above
 					break;
 				}
@@ -228,8 +230,8 @@ namespace hypro {
 		}
 
 		if(below){
-		//std::cout << vertex << " is the correct vertex " << std::endl;
-		//std::cout << std::endl;
+		std::cout << vertex << " is the correct vertex " << std::endl;
+		std::cout << std::endl;
 			return vertex;
 		}
 	}
@@ -260,7 +262,7 @@ namespace hypro {
    * Compute a uniform distribution of directions for a dimension-dimensional space template polytope
    */
    #define PI 3.14159265359
-   template<typename Number, typename Converter>
+   template<typename Number>
    static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope) {
 	 double degree = (360/ (double) polytope)* PI / 180.0;
 	 std::vector<vector_t<Number>> templatePolytope, templatePolytope2d;
@@ -820,6 +822,7 @@ namespace hypro {
 	//}
 
 	std::vector<Point<Number>> vertices = res.vertices();
+	assert(!vertices.empty());
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
 	std::vector<unsigned> facets_erase;

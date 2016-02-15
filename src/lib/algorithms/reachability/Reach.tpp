@@ -280,7 +280,7 @@ namespace reachability {
 			// for each time interval perform linear Transformation
 			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(mSettings.timebound / mSettings.timestep));
 			for ( std::size_t i = 2; i <= steps ; ++i ) {
-				std::cout << "\rTime: \t" << double(i*mSettings.timestep) << std::flush;
+				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timestep) << std::flush;
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);

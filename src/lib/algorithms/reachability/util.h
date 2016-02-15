@@ -76,7 +76,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 	for ( unsigned rowCnt = 0; rowCnt < matrix.rows(); ++rowCnt ) {
 		for ( unsigned colCnt = 0; colCnt < matrix.cols(); ++colCnt ) {
 			Number value = matrix( rowCnt, colCnt );
-			value.abs_assign();
+			value = carl::abs(value);
 			norm = norm < value ? value : norm;
 		}
 	}
@@ -146,7 +146,7 @@ Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble( hypro:
 
 	for ( int i = 0; i < _mat.rows(); ++i ) {
 		for ( int j = 0; j < _mat.cols(); ++j ) {
-			resultMat( i, j ) = _mat( i, j ).toDouble();
+			resultMat( i, j ) = carl::toDouble(_mat( i, j ));
 		}
 	}
 	return resultMat;
@@ -160,7 +160,7 @@ Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble( hypro::vector_t<Num
 	Eigen::Matrix<Number, Eigen::Dynamic, 1> resultMat( _vec.rows(), 1 );
 
 	for ( int i = 0; i < _vec.rows(); ++i ) {
-		resultMat( i ) = _vec( i ).toDouble();
+		resultMat( i ) = carl::toDouble(_vec( i ));
 	}
 	return resultMat;
 }
