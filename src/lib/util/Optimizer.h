@@ -5,7 +5,7 @@
 #include "smtrat/SimplexSolver.h"
 #include "VariablePool.h"
 
-#define USE_PRESOLUTION
+//#define USE_PRESOLUTION
 #define RECREATE_SOLVER
 
 namespace hypro {

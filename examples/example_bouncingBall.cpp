@@ -3,11 +3,8 @@
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../lib/datastructures/Point.h"
+#include "../lib/representations/conversion/Converter.h"
 #include "../lib/algorithms/reachability/Reach.h"
-#include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
-#include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../lib/representations/SupportFunction/SupportFunctionContent.h"
-#include "../lib/representations/Box/Box.h"
 #include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
@@ -15,7 +12,7 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
-	typedef FLOAT_T<mpq_class> Number;
+	typedef cln::cl_RA Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
@@ -64,7 +61,7 @@ int main(int argc, char const *argv[])
 	struct Location<Number>::Invariant inv;
 
 	invariantVec(0) = Number(20);
-	invariantVec(1) = Number(0.1);
+	invariantVec(1) = Number(carl::rationalize<Number>(0.1));
 	invariantVec(2) = Number(20);
 	invariantVec(3) = Number(20);
 	//invariantVec(4) = 1;
@@ -97,7 +94,7 @@ int main(int argc, char const *argv[])
 	locationMat(0,2) = Number(0);
 	locationMat(1,0) = Number(0);
 	locationMat(1,1) = Number(0);
-	locationMat(1,2) = Number(-9.81);
+	locationMat(1,2) = Number(carl::rationalize<Number>(-9.81));
 	locationMat(2,0) = Number(0);
 	locationMat(2,1) = Number(0);
 	locationMat(2,2) = Number(0);
@@ -114,7 +111,7 @@ int main(int argc, char const *argv[])
 	matrix_t<Number> guardMat = matrix_t<Number>(3,2);
 
 	guardVec(0) = Number(0);
-	guardVec(1) = Number(0.1);
+	guardVec(1) = Number(carl::rationalize<Number>(0.1));
 	guardVec(2) = Number(0);
 
 	guardOp = LEQ;
@@ -140,7 +137,7 @@ int main(int argc, char const *argv[])
 	assignMat(0,0) = Number(1);
 	assignMat(0,1) = Number(0);
 	assignMat(1,0) = Number(0);
-	assignMat(1,1) = Number(-0.9);
+	assignMat(1,1) = Number(carl::rationalize<Number>(-0.9));
 
 	reset.translationVec = assignVec;
 	reset.transformMat = assignMat;
@@ -174,10 +171,10 @@ int main(int argc, char const *argv[])
 	// Polytope for InitialValuation & Guard Assignment
 
 	// create Box (note: 3rd variable is for the constant factor)
-	boxVec(0) = Number(10.2);
+	boxVec(0) = Number(carl::rationalize<Number>(10.2));
 	boxVec(1) = Number(-10);
-	boxVec(2) = Number(-0.009);
-	boxVec(3) = Number(0.01);
+	boxVec(2) = Number(carl::rationalize<Number>(-0.009));
+	boxVec(3) = Number(carl::rationalize<Number>(0.01));
 
 	boxMat(0,0) = Number(1);
 	boxMat(0,1) = Number(0);

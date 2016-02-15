@@ -301,6 +301,9 @@ namespace hypro {
 
 		#else
 		if(!mConsistencyChecked) { // If this setup has already been checked, avoid call.
+			//std::cout << "Check: " << std::endl;
+			//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+
 			smtrat::Answer tmp = mSmtratSolver.check();
 			switch (tmp) {
 				case smtrat::Answer::UNSAT: {
@@ -531,7 +534,7 @@ namespace hypro {
 			//std::cout << "!mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
-				//std::cout << "alreadyInitialized" << std::endl;
+				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
 				glp_delete_prob(lp);
 				deleteArrays();
 
@@ -545,16 +548,17 @@ namespace hypro {
 				#ifndef RECREATE_SOLVER
 				mSmtratSolver.pop();
 				if(!mSmtratSolver.formula().empty()){
+					//std::cout << "THIS SHOULD NOT HAPPEN -> INCORRECT TRACKING OF BT-POINTS." << std::endl;
 					std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 					mSmtratSolver.clear();
 				}
 				assert(mSmtratSolver.formula().empty());
 
-
 				for(const auto& constraintPair : mFormulaMapping)
 					mSmtratSolver.deinform(constraintPair.first);
 
 				mSmtratSolver.push();
+				//std::cout << "Cleanup - done." << std::endl;
 				#endif
 				#endif
 			}
@@ -597,10 +601,14 @@ namespace hypro {
 				#ifndef RECREATE_SOLVER
 				mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
+				//std::cout << "Set new constraints." << std::endl;
+
 				for(const auto& constraintPair : mFormulaMapping) {
 					mSmtratSolver.inform(constraintPair.first);
 					mSmtratSolver.add(constraintPair.first, false);
 				}
+
+				//std::cout << "Set new constraints - done." << std::endl;
 
 				mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
 				#endif

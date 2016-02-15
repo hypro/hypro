@@ -3,11 +3,8 @@
 #include "../lib/datastructures/hybridAutomata/Transition.h"
 #include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../lib/datastructures/Point.h"
+#include "../lib/representations/conversion/Converter.h"
 #include "../lib/algorithms/reachability/Reach.h"
-#include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
-#include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../lib/representations/SupportFunction/SupportFunctionContent.h"
-#include "../lib/representations/Box/Box.h"
 #include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
@@ -15,7 +12,7 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
-	typedef FLOAT_T<mpq_class> Number;
+	typedef cln::cl_RA Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
@@ -77,7 +74,7 @@ int main(int argc, char const *argv[])
 	locOn->setInvariant(invariantMat,invariantVec,invariantOp);
 	locOff->setInvariant(invariantMat,invariantVec,invariantOp);
 
-	onMat(0,0) = Number(-0.5);
+	onMat(0,0) = Number(carl::rationalize<Number>(-0.5));
 	onMat(0,1) = Number(0);
 	onMat(0,2) = Number(15);
 	onMat(1,0) = Number(0);
@@ -89,7 +86,7 @@ int main(int argc, char const *argv[])
 
 	locOn->setActivityMat(onMat);
 
-	offMat(0,0) = Number(-0.5);
+	offMat(0,0) = Number(carl::rationalize<Number>(-0.5));
 	offMat(0,1) = Number(0);
 	offMat(0,2) = Number(0);
 	offMat(1,0) = Number(0);
@@ -181,10 +178,10 @@ int main(int argc, char const *argv[])
 	// Polytope for InitialValuation & Guard Assignment
 
 	// create Box (note: 3rd variable is for the constant factor)
-	boxVec(0) = Number(20.01);
-	boxVec(1) = Number(-19.99);
-	boxVec(2) = Number(0.01);
-	boxVec(3) = Number(0.01);
+	boxVec(0) = Number(carl::rationalize<Number>(20.01));
+	boxVec(1) = Number(carl::rationalize<Number>(-19.99));
+	boxVec(2) = Number(carl::rationalize<Number>(0.01));
+	boxVec(3) = Number(carl::rationalize<Number>(0.01));
 
 	boxMat(0,0) = Number(1);
 	boxMat(0,1) = Number(0);
