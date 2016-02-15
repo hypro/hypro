@@ -64,9 +64,9 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 	vec4(0,0) = TypeParam(2);
 	vec4(1,0) = TypeParam(5);
 
-	EXPECT_EQ(TypeParam(20),psf1.evaluate(vec1).supportValue);
-	EXPECT_EQ(TypeParam(5),psf1.evaluate(vec2).supportValue);
-	EXPECT_EQ(TypeParam(17),psf1.evaluate(vec3).supportValue);
+	EXPECT_LE(TypeParam(20),psf1.evaluate(vec1).supportValue);
+	EXPECT_LE(TypeParam(5),psf1.evaluate(vec2).supportValue);
+	EXPECT_LE(TypeParam(17),psf1.evaluate(vec3).supportValue);
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
@@ -80,9 +80,9 @@ TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
 	directions(2,1) = TypeParam(1);
 
 	vector_t<TypeParam> res = psf1.multiEvaluate(directions);
-	EXPECT_EQ(TypeParam(20), res(0));
-	EXPECT_EQ(TypeParam(5), res(1));
-	EXPECT_EQ(TypeParam(17), res(2));
+	EXPECT_LE(TypeParam(20), res(0));
+	EXPECT_LE(TypeParam(5), res(1));
+	EXPECT_LE(TypeParam(17), res(2));
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {

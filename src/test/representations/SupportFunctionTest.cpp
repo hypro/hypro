@@ -72,9 +72,9 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 	matrix_t<TypeParam> vec2 = matrix_t<TypeParam>(2,1);
 	matrix_t<TypeParam> vec3 = matrix_t<TypeParam>(2,1);
 
-	EXPECT_EQ(TypeParam(20), psf1.evaluate(this->vec1).supportValue);
-	EXPECT_EQ(TypeParam(5), psf1.evaluate(this->vec2).supportValue);
-	EXPECT_EQ(TypeParam(17), psf1.evaluate(this->vec3).supportValue);
+	EXPECT_LE(TypeParam(20), psf1.evaluate(this->vec1).supportValue);
+	EXPECT_LE(TypeParam(5), psf1.evaluate(this->vec2).supportValue);
+	EXPECT_LE(TypeParam(17), psf1.evaluate(this->vec3).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, linearTransformation) {
@@ -92,9 +92,9 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	SupportFunction<TypeParam> res = psf1.linearTransformation(rotation, vector_t<TypeParam>::Zero(rotation.rows()));
 
-	EXPECT_EQ(TypeParam(20), res.evaluate(v1Rot).supportValue);
-	EXPECT_EQ(TypeParam(5), res.evaluate(v2Rot).supportValue);
-	EXPECT_EQ(TypeParam(17), res.evaluate(v3Rot).supportValue);
+	EXPECT_LE(TypeParam(20), res.evaluate(v1Rot).supportValue);
+	EXPECT_LE(TypeParam(5), res.evaluate(v2Rot).supportValue);
+	EXPECT_LE(TypeParam(17), res.evaluate(v3Rot).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
@@ -103,9 +103,9 @@ TYPED_TEST(SupportFunctionTest, scale) {
 
 	SupportFunction<TypeParam> res =  psf1.scale(factor);
 
-	EXPECT_EQ(TypeParam(factor) * TypeParam(20), res.evaluate(this->vec1).supportValue);
-	EXPECT_EQ(TypeParam(factor) * TypeParam(5), res.evaluate(this->vec2).supportValue);
-	EXPECT_EQ(TypeParam(factor) * TypeParam(17), res.evaluate(this->vec3).supportValue);
+	EXPECT_LE(TypeParam(factor) * TypeParam(20), res.evaluate(this->vec1).supportValue);
+	EXPECT_LE(TypeParam(factor) * TypeParam(5), res.evaluate(this->vec2).supportValue);
+	EXPECT_LE(TypeParam(factor) * TypeParam(17), res.evaluate(this->vec3).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, minkowskiSum) {
@@ -168,12 +168,12 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 
 	SupportFunction<TypeParam> res = tri1.minkowskiSum(tri2);
 
-	EXPECT_EQ(TypeParam(8), res.evaluate(vec1).supportValue);
-	EXPECT_EQ(TypeParam(8), res.evaluate(vec2).supportValue);
-	EXPECT_EQ(TypeParam(-2), res.evaluate(vec3).supportValue);
-	EXPECT_EQ(TypeParam(0), res.evaluate(vec4).supportValue);
-	EXPECT_EQ(TypeParam(0), res.evaluate(vec5).supportValue);
-	EXPECT_EQ(TypeParam(6), res.evaluate(vec6).supportValue);
+	EXPECT_LE(TypeParam(8), res.evaluate(vec1).supportValue);
+	EXPECT_LE(TypeParam(8), res.evaluate(vec2).supportValue);
+	EXPECT_LE(TypeParam(-2), res.evaluate(vec3).supportValue);
+	EXPECT_LE(TypeParam(0), res.evaluate(vec4).supportValue);
+	EXPECT_LE(TypeParam(0), res.evaluate(vec5).supportValue);
+	EXPECT_LE(TypeParam(6), res.evaluate(vec6).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, intersect) {
@@ -232,10 +232,10 @@ TYPED_TEST(SupportFunctionTest, unite) {
 	vec4(0) = TypeParam(0);
 	vec4(1) = TypeParam(-1);
 
-	EXPECT_EQ(TypeParam(1), res.evaluate(vec1).supportValue);
-	EXPECT_EQ(TypeParam(4), res.evaluate(vec2).supportValue);
-	EXPECT_EQ(TypeParam(1), res.evaluate(vec3).supportValue);
-	EXPECT_EQ(TypeParam(0), res.evaluate(vec4).supportValue);
+	EXPECT_LE(TypeParam(1), res.evaluate(vec1).supportValue);
+	EXPECT_LE(TypeParam(4), res.evaluate(vec2).supportValue);
+	EXPECT_LE(TypeParam(1), res.evaluate(vec3).supportValue);
+	EXPECT_LE(TypeParam(0), res.evaluate(vec4).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
