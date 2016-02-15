@@ -25,7 +25,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
     for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
         directions( 2 * i, i ) = -1;
-        directions( 2 * i + 1, i ) = 1;                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
+        directions( 2 * i + 1, i ) = 1;                                                     //write fixed entries (because of box) into the normal matrix (2 each column)
     }
 
     vector_t<Number> distances = vector_t<Number>( 2 * dim );                               //initialize distance vector with 2*dim rows
@@ -33,7 +33,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     std::vector<carl::Interval<Number>> intervals = _source.boundaries();                   //gets intervals of box
     for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
         distances( 2 * i ) = -intervals[i].lower();
-        distances( 2 * i + 1 ) = intervals[i].upper();                                  //write inverted lower bound values and upper bound values into the distance vector
+        distances( 2 * i + 1 ) = intervals[i].upper();                                      //write inverted lower bound values and upper bound values into the distance vector
     }
 
     return std::move(SupportFunction( SF_TYPE::POLY, directions, distances));
@@ -60,7 +60,12 @@ template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE mode) {
     typename std::vector<hypro::vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
     assert (!vertices.empty() );                                                           //checks if any vertices were received
-    HPolytope temp(vertices);                                          						//ensures that nonempty planes got fetched before continuing
+    std::vector<Point<Number>> points;
+    
+    for(const auto& vertex : vertices){
+        points.emplace_back(vertex);
+    }
+    hypro::HPolytope<Number> temp = hypro::HPolytope<Number>(std::move(points));                                          		           
 
     return std::move(SupportFunction( SF_TYPE::POLY, temp.constraints() ));
 }

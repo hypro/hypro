@@ -32,15 +32,15 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
-		intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );    //create one interval with the corresponding left and right end points (inverted lower interval end points)
+		intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );   //create one interval with the corresponding left and right end points (inverted lower interval end points)
 	}
 
-    // if (mode == EXACT){                                                                                     //checks if conversion was exact
+    // if (mode == EXACT){                                                                                      //checks if conversion was exact
     //     bool foundEqual;
-    //     std::vector<Point<Number>> newVertices = _target.vertices();                                        //computes vertices from the just newly created box
-    //     for (const auto& newVertex : newVertices){                                                          //for every new vertex (from the box)
-    //         foundEqual = _source.contains(newVertex);                                                       //checks if source-object contains the new vertex
-    //         if (foundEqual == false){                                                                       //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
+    //     std::vector<Point<Number>> newVertices = _target.vertices();                                         //computes vertices from the just newly created box
+    //     for (const auto& newVertex : newVertices){                                                           //for every new vertex (from the box)
+    //         foundEqual = _source.contains(newVertex);                                                        //checks if source-object contains the new vertex
+    //         if (foundEqual == false){                                                                        //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
     //             return false;
     //         }
     //     }
@@ -52,7 +52,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 //conversion from V-Polytope to box
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _source, const CONV_MODE mode ) {
-	typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object
+	typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();               //gets vertices as a vector from the source object
 	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
 	vector_t<Number> maxima = vertices[0].rawCoordinates();                                         //creates another vector_t with the first vertex of the source object
@@ -68,26 +68,26 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                           //creates a box with the computed intervals
+	}                                                           
 
-    // if(mode == EXACT){                                                                              //checks if conversion was exact
+    // if(mode == EXACT){                                                                               //checks if conversion was exact
     //     bool foundEqual;
-    //     std::vector<Point<Number>> newVertices = _target.vertices();                                //computes vertices from the just newly created box
-    //     for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
-    //         foundEqual = _source.hasVertex(newVertex);                                              //checks if source-object contains the new vertex
-    //         if (foundEqual == false){                                                               //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
+    //     std::vector<Point<Number>> newVertices = _target.vertices();                                 //computes vertices from the just newly created box
+    //     for (const auto& newVertex : newVertices){                                                   //for every new vertex (from the box)
+    //         foundEqual = _source.hasVertex(newVertex);                                               //checks if source-object contains the new vertex
+    //         if (foundEqual == false){                                                                //if no equal vertex was found, the target object has to be an overapproximation (and thus no exact conversion is possible)
     //             return false;
     //         }
     //     }
     // }
 
-	return std::move(BoxT<Number,Converter>( intervals ));
+	return std::move(BoxT<Number,Converter>( intervals ));                                          //creates a box with the computed intervals
 }
 
 //conversion from H-Polytope to box
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _source, const CONV_MODE mode ) {
-	typename VPolytope::pointVector vertices = _source.vertices();                          //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
+	typename VPolytope::pointVector vertices = _source.vertices();                                  //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
 	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
 	vector_t<Number> maxima = vertices[0].rawCoordinates();                                         //creates another vector_t with the first vertex of the source object
@@ -103,7 +103,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                             //creates a box with the computed intervals
+	}                                                             
 
     // if(mode == EXACT){                                                                              //checks if conversion was exact
     //     bool foundEqual;
@@ -116,7 +116,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     //     }
     // }
 
-    return std::move(BoxT<Number,Converter>( intervals ));
+    return std::move(BoxT<Number,Converter>( intervals ));                                             //creates a box with the computed intervals
 }
 
 //alternative approach
@@ -163,7 +163,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 //conversion from zonotope to box
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE mode ) {
-        typename std::vector<vector_t<Number>> vertices = _source.vertices();                            //computes vertices from source object
+        typename std::vector<vector_t<Number>> vertices = _source.vertices();                                   //computes vertices from source object
 	assert( !vertices.empty() );                                                                            //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0];                                                                  //creates a vector_t with the first vertex of the source object
 	vector_t<Number> maxima = vertices[0];                                                                  //creates another vector_t with the first vertex of the source object
@@ -179,7 +179,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 	std::vector<carl::Interval<Number>> intervals;
 	for ( std::size_t i = 0; i < _source.dimension(); ++i ) {                                               //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );                      //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                                   //creates a box with the computed intervals
+	}                                                                   
 
     // if(mode == EXACT){                                                                                      //checks if conversion was exact
     //     bool foundEqual;
@@ -197,7 +197,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
     //     }
     // }
 
-	return std::move(BoxT<Number,Converter>( intervals ));
+	return std::move(BoxT<Number,Converter>( intervals ));                                                 //creates a box with the computed intervals
 }
 
 //conversion from Polytope to box (different data structure)
