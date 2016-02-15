@@ -176,5 +176,5 @@ namespace hypro
 
 	};
 } // namespace
-
+        
 #include "Polytope.tpp"

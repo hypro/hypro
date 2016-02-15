@@ -26,7 +26,7 @@ protected:
                 std::vector<carl::Interval<Number>> boundaries;
                 boundaries.push_back(carl::Interval<Number>(2,6));
                 boundaries.push_back(carl::Interval<Number>(1,3));
-                box = Box(boundaries);
+                box = hypro::Box<Number>(boundaries);
 
                 // first support function
                 matrix = matrix_t<Number>(3,2);
@@ -51,14 +51,14 @@ protected:
 		center << 2, 2;
 		matrix_t<Number> generators = matrix_t<Number>(2,2);
 		generators << 0, 1, 1, -1;
-		zonotope = Zonotope<Number>(center, generators);
+		zonotope = hypro::Zonotope<Number>(center, generators);
 
                 //second zonotope (box)
                 vector_t<Number> center2 = vector_t<Number>(2);
                 center2 << 1, 1;
                 matrix_t<Number> generators2 = matrix_t<Number>(2,2);
                 generators2 << 0, 1, 1, 0;
-                zonotope2 = Zonotope<Number>(center2, generators2);
+                zonotope2 = hypro::Zonotope<Number>(center2, generators2);
 
                 //first v-polytope (box)
 		vector_t<Number> p1 = vector_t<Number>(2);
@@ -73,31 +73,24 @@ protected:
 		vector_t<Number> p4 = vector_t<Number>(2);
 		p4(0) = 1;
 		p4(1) = 4;
-		typename VPolytope::pointVector points;
+		typename hypro::VPolytope<Number>::pointVector points;
 		points.push_back(Point<Number>(p1));
 		points.push_back(Point<Number>(p2));
 		points.push_back(Point<Number>(p3));
 		points.push_back(Point<Number>(p4));
-		vpolytope = VPolytope(points);
+		vpolytope = hypro::VPolytope<Number>(points);
 
                 //second v-polytope
                 vector_t<Number> p5 = vector_t<Number>(2);
                 p5(0) = 0;
                 p5(1) = 2;
-                typename VPolytope::pointVector points2;
+                typename hypro::VPolytope<Number>::pointVector points2;
                 points2.push_back(Point<Number>(p5));
                 points2.push_back(Point<Number>(p2));
                 points2.push_back(Point<Number>(p3));
                 points2.push_back(Point<Number>(p4));
-                vpolytope2 = VPolytope(points2);
+                vpolytope2 = hypro::VPolytope<Number>(points2);
 
-                //alternative polytope
-		std::vector<vector_t<Number>> coordinates;
-		coordinates.push_back(p1);
-		coordinates.push_back(p2);
-		coordinates.push_back(p3);
-		coordinates.push_back(p4);
-		polytope = hypro::Polytope<Number>(coordinates);
 
                 // A rectangle (for H-Polytope)
 		Hyperplane<Number> hp1({1,0},2);
@@ -110,7 +103,7 @@ protected:
 		planes.push_back(hp3);
 		planes.push_back(hp4);
 
-                hpolytope = HPolytope(this->planes);
+                hpolytope = hypro::HPolytope<Number>(this->planes);
 
                 //second H-Polytope
                 Hyperplane<Number> hp5({1,1},carl::rationalize<Number>(1.4));
@@ -121,7 +114,7 @@ protected:
                 planes2.push_back(hp6);
                 planes2.push_back(hp7);
 
-                hpolytope2 = HPolytope(this->planes2);
+                hpolytope2 = hypro::HPolytope<Number>(this->planes2);
 
     }
 
@@ -133,66 +126,49 @@ protected:
     matrix_t<Number> matrix2;
     vector_t<Number> distances;
     vector_t<Number> distances2;
-    SupportFunction<Number> support;
-    SupportFunction<Number> support2;
+    hypro::SupportFunction<Number> support;
+    hypro::SupportFunction<Number> support2;
 
-    Box box;
+    hypro::Box<Number> box;
 
-    hypro::Polytope<Number> polytope;
-    VPolytope vpolytope;
-    VPolytope vpolytope2;
+    hypro::VPolytope<Number> vpolytope;
+    hypro::VPolytope<Number> vpolytope2;
 
-    Zonotope<Number> zonotope;
-    Zonotope<Number> zonotope2;
+    hypro::Zonotope<Number> zonotope;
+    hypro::Zonotope<Number> zonotope2;
 
-    typename HPolytope::HyperplaneVector planes;
-    typename HPolytope::HyperplaneVector planes2;
-    HPolytope hpolytope;
-    HPolytope hpolytope2;
+    typename hypro::HPolytope<Number>::HyperplaneVector planes;
+    typename hypro::HPolytope<Number>::HyperplaneVector planes2;
+    hypro::HPolytope<Number> hpolytope;
+    hypro::HPolytope<Number> hpolytope2;
 };
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	hypro::Box result;
-	EXPECT_TRUE(convert(this->box, result));
+	Converter<TypeParam>::toBox(this->box);
         //std::cout << " Box: " << std::endl;
         //result.print();
-	EXPECT_TRUE(convert(this->support, result));
+	Converter<TypeParam>::toBox(this->support);
         //std::cout << " Support:" << std::endl;
         //result.print();
-        EXPECT_FALSE(convert(this->support, result, EXACT));
+        Converter<TypeParam>::toBox(this->support2);
         //result.print();
-        EXPECT_TRUE(convert(this->support2, result));
-        //result.print();
-        EXPECT_TRUE(convert(this->support2, result, EXACT));
-        //result.print();
-	EXPECT_TRUE(convert(this->vpolytope, result));
+	Converter<TypeParam>::toBox(this->vpolytope);
         //std::cout << " V:" << std::endl;
         //result.print();
-        EXPECT_TRUE(convert(this->vpolytope, result, EXACT));
+        Converter<TypeParam>::toBox(this->vpolytope2);
         //result.print();
-        EXPECT_TRUE(convert(this->vpolytope2, result));
-        //result.print();
-        EXPECT_FALSE(convert(this->vpolytope2, result, EXACT));
-        //result.print();
-	EXPECT_TRUE(convert(this->zonotope, result));
+	Converter<TypeParam>::toBox(this->zonotope);
         //std::cout << " Zonotope:" << std::endl;
         //result.print();
-        EXPECT_FALSE(convert(this->zonotope, result, EXACT));
+        Converter<TypeParam>::toBox(this->zonotope2);
         //result.print();
-        EXPECT_TRUE(convert(this->zonotope2, result));
-        //result.print();
-        EXPECT_TRUE(convert(this->zonotope2, result, EXACT));
-        //result.print();
-        EXPECT_TRUE(convert(this->hpolytope, result));
+        Converter<TypeParam>::toBox(this->hpolytope);
         //std::cout << " H:" << std::endl;
         //result.print();
-        EXPECT_TRUE(convert(this->hpolytope, result, EXACT));
+        Converter<TypeParam>::toBox(this->hpolytope2);
         //result.print();
-        EXPECT_TRUE(convert(this->hpolytope2, result));
-        //result.print();
-        EXPECT_FALSE(convert(this->hpolytope2, result, EXACT));
-        //result.print();
+        SUCCEED();
 }
 
 TYPED_TEST(ConverterTest, toHPolytope)
@@ -203,26 +179,25 @@ TYPED_TEST(ConverterTest, toHPolytope)
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
-        SupportFunction<TypeParam> result = hypro::SupportFunction<TypeParam>();
-        convert (this->support, result);
+        Converter<TypeParam>::toSupportFunction(this->support);
         //result.print();
-        convert(this->hpolytope, result);
+        Converter<TypeParam>::toSupportFunction(this->hpolytope);
         //std::cout << " HPolytope: " << std::endl;
         //result.print();
-        convert(this->hpolytope2, result);
+        Converter<TypeParam>::toSupportFunction(this->hpolytope2);
         //result.print();
-        convert(this->box, result);
+        Converter<TypeParam>::toSupportFunction(this->box);
         //std::cout << " Box: " << std::endl;
         //result.print();
-        convert(this->vpolytope, result);
+        Converter<TypeParam>::toSupportFunction(this->vpolytope);
         //std::cout << " VPolytope: " << std::endl;
         //result.print();
-        convert(this->vpolytope2, result);
+        Converter<TypeParam>::toSupportFunction(this->vpolytope2);
         //result.print();
-        convert(this->zonotope, result);
+        Converter<TypeParam>::toSupportFunction(this->zonotope);
         //std::cout << " Zonotope: " << std::endl;
         //result.print();
-        convert(this->zonotope2, result);
+        Converter<TypeParam>::toSupportFunction(this->zonotope2);
         //result.print();
 	SUCCEED();
 }
@@ -234,5 +209,10 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
 TYPED_TEST(ConverterTest, toZonotope)
 {
+        Converter<TypeParam>::toZonotope(this->zonotope);
+        //result.print();
+        Converter<TypeParam>::toZonotope(this->box);
+        //std::cout << " Box: " << std::endl;
+        //result.print();
 	SUCCEED();
 }
