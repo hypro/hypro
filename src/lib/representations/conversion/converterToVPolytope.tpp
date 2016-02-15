@@ -13,22 +13,20 @@ template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytope& _source, const CONV_MODE mode ){
     return _source;
 }
-//TODO
+
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE mode ){
-    return std::move(VPolytope());
+    return std::move(VPolytope(_source.matrix(), _source.vector()));
 }
 
-//TODO
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Box& _source, const CONV_MODE mode ){
     return std::move(VPolytope(_source.vertices()));
 }
 
-//TODO
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zonotope& _source, const CONV_MODE mode ){
-    return std::move(VPolytope());
+    return std::move(VPolytope(_source.vertices()));
 }
 
 //TODO
