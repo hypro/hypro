@@ -138,7 +138,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformatio
 	}
 	result.setCone( mCone.linearTransformation( A, b ) );
 	result.unsafeSetNeighbors( mNeighbors );
-	return result;
+	return std::move(result);
 }
 
 template <typename Number, typename Converter>
@@ -151,7 +151,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::minkowskiSum( const
 		}
 	}
 	result.setCone( mCone.minkowskiSum( rhs.cone() ) );
-	return result;
+	return std::move(result);
 }
 
 template <typename Number, typename Converter>
@@ -180,7 +180,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 				++vertexIt;
 			}
 		}
-		return VPolytopeT<Number, Converter>( possibleVertices );
+		return std::move(VPolytopeT<Number, Converter>( std::move(possibleVertices) ));
 	}
 }
 
@@ -202,11 +202,11 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplane
 
 template<typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	std::cout << "This before intersection with hyperplanes: " << *this << std::endl;
+	//std::cout << "This before intersection with hyperplanes: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
-	std::cout << "this as a H-Polytope: " << intermediate << std::endl;
+	//std::cout << "this as a H-Polytope: " << intermediate << std::endl;
 	auto intersection = intermediate.intersectHyperplanes(_mat, _vec);
-	std::cout << "Intersection H-Polytope: " << intersection << std::endl;
+	//std::cout << "Intersection H-Polytope: " << intersection << std::endl;
 	intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
 	return std::move(res);
@@ -258,7 +258,7 @@ bool VPolytopeT<Number, Converter>::contains( const VPolytopeT<Number, Converter
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolytopeT<Number, Converter> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
-		return VPolytopeT<Number, Converter>( mVertices );
+		return std::move(VPolytopeT<Number, Converter>( mVertices ));
 	} else {
 		VPolytopeT<Number, Converter>::pointVector points;
 		points.insert( points.end(), this->mVertices.begin(), this->mVertices.end() );
@@ -275,7 +275,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		VPolytopeT<Number, Converter>::pointVector res;
 		for ( const auto &point : preresult ) res.push_back( point );
 
-		return VPolytopeT<Number, Converter>( res );
+		return std::move(VPolytopeT<Number, Converter>( res ));
 	}
 }
 

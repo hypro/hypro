@@ -52,8 +52,8 @@ namespace hypro {
 		const matrix_t<Number>& matrix() const;
 		const vector_t<Number>& vector() const;
 
-		void setMatrix(const matrix_t<Number> _matrix);
-		void setVector(const vector_t<Number> _vector);
+		void setMatrix(const matrix_t<Number>& _matrix);
+		void setVector(const vector_t<Number>& _vector);
 		void clear();
 
 		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;

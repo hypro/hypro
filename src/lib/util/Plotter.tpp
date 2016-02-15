@@ -13,12 +13,12 @@ void Plotter<Number>::setFilename( const std::string &_filename ) {
 }
 
 template <typename Number>
-void Plotter<Number>::updateSettings( gnuplotSettings _settings ) {
+void Plotter<Number>::updateSettings( const gnuplotSettings& _settings ) {
 	mSettings = _settings;
 }
 
 template<typename Number>
-gnuplotSettings Plotter<Number>::getSettings() const {
+const gnuplotSettings& Plotter<Number>::getSettings() const {
 	return mSettings;
 }
 
@@ -511,7 +511,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		stack.pop();
 	}
 
-	return res;
+	return std::move(res);
 }
 
 template <typename Number>

@@ -13,7 +13,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Optimizer<Number>::setMatrix(const matrix_t<Number> _matrix) {
+	void Optimizer<Number>::setMatrix(const matrix_t<Number>& _matrix) {
 		if(mConstraintMatrix != _matrix){
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
@@ -22,7 +22,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Optimizer<Number>::setVector(const vector_t<Number> _vector) {
+	void Optimizer<Number>::setVector(const vector_t<Number>& _vector) {
 		if(mConstraintVector != _vector){
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
@@ -174,29 +174,29 @@ namespace hypro {
 				break;
 			}
 			default:{
-				#ifdef USE_PRESOLUTION
-				// GLPK Solution was missleading, restart without it
-				simplex.pop();
-				simplex.addObjective(objective, false);
-				//std::cout << "Cleared formula: " << std::endl;
-
-				//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-				//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
-
-				smtratCheck = simplex.check();
-				assert(smtratCheck != smtrat::Answer::UNSAT);
-				assert(smtratCheck != smtrat::Answer::UNKNOWN);
-				smtrat::ModelValue valuation = simplex.optimum(objective);
-				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
-					res = std::make_pair( 1, INFTY );
-				} else {
-					//std::cout << "Maximized to " << valuation << std::endl;
-					assert(valuation.isRational());
-					res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
-				}
-				#endif
-				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=))
-				res.second = INFEAS;
+				//#ifdef USE_PRESOLUTION
+				//// GLPK Solution was missleading, restart without it
+				//simplex.pop();
+				//simplex.addObjective(objective, false);
+				////std::cout << "Cleared formula: " << std::endl;
+//
+//				////std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+//				////std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+//
+//				//smtratCheck = simplex.check();
+//				//assert(smtratCheck != smtrat::Answer::UNSAT);
+//				//assert(smtratCheck != smtrat::Answer::UNKNOWN);
+//				//smtrat::ModelValue valuation = simplex.optimum(objective);
+//				//if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+//				//	res = std::make_pair( 1, INFTY );
+//				//} else {
+//				//	//std::cout << "Maximized to " << valuation << std::endl;
+//				//	assert(valuation.isRational());
+//				//	res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+//				//}
+//				//#endif
+//				//// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=))
+				//res.second = INFEAS;
 				break;
 			}
 		}

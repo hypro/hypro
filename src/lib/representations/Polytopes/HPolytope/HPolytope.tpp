@@ -119,7 +119,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
 	v.emplace_back(a);
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter> res(v);
-	return res;
+	return std::move(res);
 }
 
 template <typename Number, typename Converter>
@@ -172,7 +172,7 @@ const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
-	//std::cout << "Compute vertices of " << *this << std::endl;
+	std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -218,50 +218,15 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 			if(!infty) {
 				//std::cout << "Solved to " << res.transpose() << std::endl;
-				// check if point lies below all planes -> if not, ensure by enlarging the polytope (very expensive)
-				bool below = false;
-				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
-					Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(res);
-					if(dist > 0) {
-						assert(false); // should not happen with exact numbers
-						below = true;
-						break;
-					}
-				}
-				Number eps = std::numeric_limits<Number>::epsilon();
-				while (below) {
-					//std::cout << "Is below, iterate " << std::endl;
-					// enlarge as long as point lies below one of the planes.
-					below = false;
-					eps = eps * 10;
 
-					pos = 0;
-					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
-						A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
-						b(pos) = mHPlanes.at(*planeIt).offset() + eps;
-						++pos;
-					}
-					vector_t<Number> tmp = Eigen::FullPivLU<matrix_t<Number>>(A).solve( b );
-
-					for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt){
-						Number dist = mHPlanes.at(*planeIt).offset() - mHPlanes.at(*planeIt).normal().dot(tmp);
-						if(dist > 0) {
-							//std::cout << "Dist: " << dist << std::endl;
-							below = true;
-							break;
-						}
-					}
-					if(!below)
-						res = tmp;
-				}
                 ///// if it's not almost equal, then
-				// Check containment
+				// Check if the computed vertex is a real vertex
 				bool outside = false;
 				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
 					bool skip = false;
 					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
 						if(planePos == permutation.at(permPos)) {
-							//std::cout << "Skip plane " << planePos << std::endl;
+							std::cout << "Skip plane " << planePos << std::endl;
 							skip = true;
 							break;
 						}
@@ -269,7 +234,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 					if(!skip) {
 						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-							//std::cout << "Drop vertex: " << res.transpose() << " because of plane " << planePos << std::endl;
+							std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
 							outside = true;
 							break;
 						}
@@ -277,10 +242,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 				}
 				if(!outside) {
 					vertices.emplace_back(res);
-					//std::cout << "Final vertex: " << res.transpose() << std::endl;
+					std::cout << "Final vertex: " << res << std::endl;
 				}
 			}
-			//std::cout << "PING" << std::endl;
 		}
 	}
 	return std::move(vertices);
@@ -293,7 +257,7 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
-	return max;
+	return std::move(max);
 }
 
 template <typename Number, typename Converter>
@@ -651,6 +615,8 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	} else {
 		auto lhs = Converter::toVPolytope( *this );
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
+
+		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return std::move(Converter::toHPolytope( tmpRes ));
 	}
