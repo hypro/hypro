@@ -169,12 +169,6 @@ namespace reachability {
 			unitePolytope.print();
 #endif
 
-#ifdef USE_REDUCTION
-			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
-			std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
-			unitePolytope = unitePolytope.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-#endif
-
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
 			Number radius;
@@ -211,8 +205,6 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
-
-			std::cout << "Vertices: " << firstSegment.vertices() << std::endl;
 #endif
 
 //clock::time_point start = clock::now();
@@ -220,6 +212,9 @@ namespace reachability {
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
 #ifdef USE_REDUCTION
+			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
+			std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
+
 			bool use_reduce_memory=false, use_reduce_time=true;
 
 			// obejcts for use_reduce_memory
@@ -284,8 +279,8 @@ namespace reachability {
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);
+				assert(lastSegment.linearTransformation(resultMatrix, translation).size() == lastSegment.size());
 				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
-				//resultPolytope.removeRedundancy();
 
 				// extend flowpipe (only if still within Invariant of location)
 				Representation tmp = resultPolytope.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );

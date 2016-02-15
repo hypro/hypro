@@ -172,7 +172,7 @@ const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
-	std::cout << "Compute vertices of " << *this << std::endl;
+	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -226,7 +226,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 					bool skip = false;
 					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
 						if(planePos == permutation.at(permPos)) {
-							std::cout << "Skip plane " << planePos << std::endl;
+							//std::cout << "Skip plane " << planePos << std::endl;
 							skip = true;
 							break;
 						}
@@ -234,7 +234,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 					if(!skip) {
 						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-							std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
+							//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
 							outside = true;
 							break;
 						}
@@ -242,7 +242,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 				}
 				if(!outside) {
 					vertices.emplace_back(res);
-					std::cout << "Final vertex: " << res << std::endl;
+					//std::cout << "Final vertex: " << res << std::endl;
 				}
 			}
 		}
@@ -555,19 +555,11 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplanes( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
-
 	HPolytopeT<Number, Converter> res( *this );
-
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
-
-	if(!res.empty()) {
-		res.removeRedundancy();
-	} else {
-		res = HPolytopeT<Number, Converter>::Empty();
-	}
-
+	res.removeRedundancy();
 	return std::move(res);
 }
 
@@ -616,7 +608,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		auto lhs = Converter::toVPolytope( *this );
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 
-		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
+		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return std::move(Converter::toHPolytope( tmpRes ));
 	}

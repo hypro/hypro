@@ -86,7 +86,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 
 	// TODO: THIS IS UNPRECISE!!
 	double tmpExp = std::exp(carl::toDouble(tmp));
-	result = Number(tmpExp);
+	result = carl::rationalize<Number>(tmpExp);
 
 	//tmp.exp( result );
 	result = result - 1 - tmp;
@@ -174,7 +174,7 @@ hypro::matrix_t<Number> convertMatToFloatT( Eigen::Matrix<double, Eigen::Dynamic
 
 	for ( int i = 0; i < _mat.rows(); ++i ) {
 		for ( int j = 0; j < _mat.cols(); ++j ) {
-			resultMat( i, j ) = Number( _mat( i, j ) );
+			resultMat( i, j ) = carl::rationalize<Number>( _mat( i, j ) );
 		}
 	}
 	return resultMat;

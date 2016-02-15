@@ -200,44 +200,28 @@ namespace hypro {
   }
 
   /*
-   * Get the correct vertex to determine a hyperplane which includes all other facets
+   * Find the outmost vertex of vertices regarding the passed direction.
    * @input vertices, vector
    * @return Point<Number> vertex for the vector
    */
   template<typename Number, typename Converter>
   Point<Number> HPolytopeT<Number,Converter>::getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const {
-	// try each vertex
-	for(Point<Number> vertex: vertices){
-		bool below=true;
+	assert(!vertices.empty());
+	if(vertices.size() == 1)
+		return *vertices.begin();
 
+	Point<Number>& res = *vertices.begin();
+	Number largestOffset = vector.dot(res.rawCoordinates());
+	for(const Point<Number>& vertex: vertices){
 		// calculate offset
-		Number vector_offset = vector.dot(vertex.rawCoordinates());
-
-	  // check for each vertex if it lies below the hyperplane
-		for(Point<Number> vertex_test: vertices){
-		std::cout << "compare vertices " << vertex << " to " << vertex_test << std::endl;
-
-			if(vertex!=vertex_test){
-				Number vector_test_offset = vector.dot(vertex_test.rawCoordinates());
-		  std::cout << "compare offsets " << vector_offset << " to " << vector_test_offset << std::endl;
-
-				if(vector_test_offset-vector_offset>0){
-			std::cout << vertex << " is not the correct vertex because " << vertex_test << " lies below with " << vector_test_offset-vector_offset << std::endl;
-					below=false; // vertex lies above
-					break;
-				}
-			}
-		}
-
-		if(below){
-		std::cout << vertex << " is the correct vertex " << std::endl;
-		std::cout << std::endl;
-			return vertex;
+		Number currentOffset = vector.dot(vertex.rawCoordinates());
+		if(currentOffset > largestOffset) {
+			largestOffset = currentOffset;
+			res = vertex;
 		}
 	}
 
-	std::cout << "Error - No correct offset " << std::endl;
-	return vertices.at(0);
+	return res;
   }
 
   /*
@@ -274,10 +258,10 @@ namespace hypro {
 	 templatePolytope2d.push_back(templateVector2d);
 
 	 matrix_t<Number> m(2, 2); //init matrix
-	 m(0,0) = Number(cos(degree));
-	 m(0,1) = Number((-1)*sin(degree));
-	 m(1,0) = Number(sin(degree));
-	 m(1,1) = Number(cos(degree));
+	 m(0,0) = carl::rationalize<Number>(cos(degree));
+	 m(0,1) = carl::rationalize<Number>((-1)*sin(degree));
+	 m(1,0) = carl::rationalize<Number>(sin(degree));
+	 m(1,1) = carl::rationalize<Number>(cos(degree));
 
 
 	 for(unsigned i=0; i<polytope; ++i) {
