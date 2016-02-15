@@ -88,9 +88,9 @@ void Plotter<Number>::plot2d() const {
 			}
 
 			if ( mSettings.fill )
-				mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "'\n";
+				mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw 0.2 \n";
 			else
-				mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "'\n";
+				mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw 0.2 \n";
 
 			++objectCount;
 		}
