@@ -22,6 +22,7 @@ set( EXAMPLES
     example_division
     example_eigen_float_t
     example_facetEnumeration
+    example_flowstarParser
     example_heuristic
     example_hausdorffApprox
     example_linearTransformation
