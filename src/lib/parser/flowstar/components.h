@@ -1,17 +1,11 @@
-/*
- * This file holds the utilities for our parser.
- * @file   Utils.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2014-05-14
- * @version 2014-05-14
- */
 
 #pragma once
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 
 #include <boost/spirit/include/qi.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 #include "boost/variant.hpp"
 #include <vector>
@@ -23,13 +17,24 @@ namespace px = boost::phoenix;
 
 namespace hypro {
 namespace parser {
+
 using namespace boost::fusion;
 typedef unsigned locationId;
 
+struct Monomial {
+	std::vector<std::string> mVariables;
+	//std::vector<unsigned> mExponents;
+};
+
 template <typename Number>
-struct Initial {
-	unsigned mLocations;
-	Number mNumber;
+struct Term {
+	Number mCoefficient;
+	Monomial mMonomial;
+};
+
+template <typename Number>
+struct Polynomial {
+	std::vector<Term<Number>> mTerms;
 };
 
 template <typename Number>
@@ -55,6 +60,39 @@ struct Transition {
 	Matrix<Number> mReset;
 };
 
+std::ostream& operator<<( std::ostream& lhs, const Monomial& rhs ) {
+	//assert(rhs.mVariables.size() == rhs.mExponents.size());
+	if(rhs.mVariables.size() >= 1) {
+		for ( std::size_t varId = 0; varId < rhs.mVariables.size()-1; ++varId ) {
+			lhs << rhs.mVariables.at(varId);
+			//if(rhs.mExponents.at(varId) > 1)
+			//	lhs << "^" << rhs.mExponents.at(varId);
+			lhs << " * ";
+		}
+		lhs << rhs.mVariables.at(rhs.mVariables.size()-1);
+		//if(rhs.mExponents.at(rhs.mVariables.size()-1) > 1)
+	//	lhs << "^" << rhs.mExponents.at(rhs.mVariables.size()-1);
+	}
+	return lhs;
+}
+
+template <typename Number>
+std::ostream& operator<<( std::ostream& lhs, const Term<Number>& rhs ) {
+	lhs << rhs.mCoefficient << "*" << rhs.mMonomial;
+	return lhs;
+}
+
+template <typename Number>
+std::ostream& operator<<( std::ostream& lhs, const Polynomial<Number>& rhs ) {
+	if(rhs.mTerms.size() >= 1) {
+		for ( std::size_t termId = 0; termId < rhs.mTerms.size()-1; ++termId ) {
+			lhs << "T" << termId << ": " << rhs.mTerms.at(termId) << " + ";
+		}
+		lhs << "T" << rhs.mTerms.size()-1 << ": " << rhs.mTerms.at(rhs.mTerms.size()-1);
+	}
+	return lhs;
+}
+
 template <typename Number>
 std::ostream& operator<<( std::ostream& lhs, const Matrix<Number>& rhs ) {
 	lhs << rhs.mName << " [";
@@ -65,16 +103,6 @@ std::ostream& operator<<( std::ostream& lhs, const Matrix<Number>& rhs ) {
 		lhs << "; ";
 	}
 	lhs << "]";
-	return lhs;
-}
-
-template <typename Number>
-std::ostream& operator<<( std::ostream& lhs, const Initial<Number>& rhs ) {
-	lhs << "initial( ";
-	lhs << rhs.mLocations;
-	lhs << " Number: " << rhs.mNumber;
-	// lhs << " Type: " << typeid(rhs.mNumber).name();
-	lhs << ")";
 	return lhs;
 }
 
@@ -92,19 +120,8 @@ std::ostream& operator<<( std::ostream& lhs, const Transition<Number>& rhs ) {
 		<< "\t Guard = " << rhs.mGuard << std::endl << "\t Reset = " << rhs.mReset << std::endl << ")";
 	return lhs;
 }
-}
-}
 
-BOOST_FUSION_ADAPT_TPL_STRUCT( ( Number ), ( hypro::parser::Initial )( Number ),
-							   ( unsigned, mLocations )( Number, mNumber ) )
+} // namespace
+} // namespace
 
-BOOST_FUSION_ADAPT_TPL_STRUCT( ( Number ), ( hypro::parser::Matrix )( Number ),
-							   ( std::string, mName )( std::vector<std::vector<Number> >, mMatrix ) )
-
-BOOST_FUSION_ADAPT_TPL_STRUCT( ( Number ), ( hypro::parser::State )( Number ),
-							   ( unsigned, mName )( hypro::parser::Matrix<Number>,
-													mFlow )( hypro::parser::Matrix<Number>, mInvariant ) )
-
-BOOST_FUSION_ADAPT_TPL_STRUCT( ( Number ), ( hypro::parser::Transition )( Number ),
-							   ( int, mId )( unsigned, mName )( unsigned, mSource )( unsigned, mTarget )(
-									 hypro::parser::Matrix<Number>, mGuard )( hypro::parser::Matrix<Number>, mReset ) )
+#include "componentsAdapt.h"
