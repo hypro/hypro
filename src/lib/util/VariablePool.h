@@ -111,6 +111,8 @@ class VariablePool : public carl::Singleton<VariablePool> {
 				#ifdef USE_PPL
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mPplVariables.push_back( pVar );
+				#else
+				++mPplId;
 				#endif
 			}
 		}
@@ -131,6 +133,8 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		#ifdef USE_PPL
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mPplVariables.push_back( pVar );
+		#else
+		++mPplId;
 		#endif
 		assert( mCarlVariables.size() == mPplId );
 		#ifdef USE_PPL
