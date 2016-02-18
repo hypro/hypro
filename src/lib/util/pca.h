@@ -17,14 +17,15 @@ template <typename Number>
 class pca{
     public:
         
-        static HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples);
+        static std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<vector_t<Number>>& samples);
      
 };
     
     
     
     
-#include "pca.tpp"    
+    
     
 } //namespace
 
+#include "pca.tpp"

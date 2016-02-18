@@ -5,6 +5,7 @@
 #include "../Polytopes/VPolytope/VPolytope.h"
 #include "../SupportFunction/SupportFunction.h"
 #include "../Zonotope/Zonotope.h"
+#include "../../util/pca.h"
 
 namespace hypro {
 

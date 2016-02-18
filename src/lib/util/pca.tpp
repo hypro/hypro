@@ -12,11 +12,11 @@
 namespace hypro {
 
 template<typename Number>
-HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples){
+std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<vector_t<Number>>& samples){
     //gets dimension of sample points
     unsigned dim = samples[0].rows();
     //gets number of sample points
-    unsigned sSize = samples.size()
+    unsigned sSize = samples.size();
     
     vector_t<Number> mean = vector_t<Number>::Zero(dim);
     
@@ -45,7 +45,7 @@ HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples
     matrix_t<Number> covMatrix = (1/(sSize-1))*sMatrix*sMatrix.transpose();
     
     //computes the singular value decomposition of the sample covariance matrix (only U component from U*Sigma*V^T needed)
-    Eigen::JacobiSVD<matrix_t<Number>> svd = Eigen::JacobiSVD<matrix_t<Number>>(dim, dim, ComputeThinU);
+    Eigen::JacobiSVD<matrix_t<Number>> svd = Eigen::JacobiSVD<matrix_t<Number>>(dim, dim, 1);
     matrix_t<Number> u = svd.matrixU();
     
     //computes halfspaces with the help of U in two steps
@@ -66,7 +66,7 @@ HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples
     }
     
     //second step: create hyperplanes with the given normals and maximum/minimum products
-    HyperplaneVector res = HyperplaneVector(2*dim);
+    std::vector<Hyperplane<Number>>res = std::vector<Hyperplane<Number>>(2*dim);
     for (unsigned i=0; i < dim; ++i){
         res[2*i] = Hyperplane<Number>(u.col(i), max(i) + u.col(i).dot(mean));
         res[2*i+1] = Hyperplane<Number>(-u.col(i), -min(i) - u.col(i).dot(mean));    
