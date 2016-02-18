@@ -30,7 +30,7 @@ HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples
     std::vector<vector_t<Number>> tSamples = samples;
     
     //computes the set of translated sample points
-    for (unsigned i=0; i< sSize; ++i){
+    for (unsigned i=0; i < sSize; ++i){
         tSamples[i] -= mean;
     } 
     
@@ -44,11 +44,37 @@ HyperplaneVector computeOrientedBox(const std::vector<vector_t<Number>>& samples
     //computes the sample covariance matrix (represents the distribution of the samples)
     matrix_t<Number> covMatrix = (1/(sSize-1))*sMatrix*sMatrix.transpose();
     
-    //TODO computes the singular value decomposition of the sample covariance matrix
+    //computes the singular value decomposition of the sample covariance matrix (only U component from U*Sigma*V^T needed)
+    Eigen::JacobiSVD<matrix_t<Number>> svd = Eigen::JacobiSVD<matrix_t<Number>>(dim, dim, ComputeThinU);
+    matrix_t<Number> u = svd.matrixU();
     
-    //TODO reads out halfspaces
+    //computes halfspaces with the help of U in two steps
     
-    //TODO returns halfspaces
+    //first step: compute the maximum/minimum product of transposed translated samples (tSamples) with the corresponding column of U
+    vector_t<Number> max = vector_t<Number>::Constant(dim, 1, tSamples[0].dot(u.col(0)));
+    vector_t<Number> min = vector_t<Number>::Constant(dim, 1, tSamples[0].dot(u.col(0)));
+    for (unsigned i=0; i < dim; ++i){
+        for (unsigned j=0; j < sSize; ++j){
+            unsigned tmp = tSamples[j].dot(u.col(i));
+            if ( tmp > max[i]){
+                max(i) = tmp;
+            }
+            if ( tmp < min[i]){
+                min(i) = tmp;
+            }
+        }
+    }
+    
+    //second step: create hyperplanes with the given normals and maximum/minimum products
+    HyperplaneVector res = HyperplaneVector(2*dim);
+    for (unsigned i=0; i < dim; ++i){
+        res[2*i] = Hyperplane<Number>(u.col(i), max(i) + u.col(i).dot(mean));
+        res[2*i+1] = Hyperplane<Number>(-u.col(i), -min(i) - u.col(i).dot(mean));    
+    }
+    
+    
+    //returns halfspaces
+    return res;
    
     
 }
