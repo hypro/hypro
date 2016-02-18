@@ -386,9 +386,9 @@ void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 					Number roundedNumerator;
 					Number oldNumerator = carl::getNum(vertex.at(d));
 					if(roundingDirections(d) > 0) // round towards infinity
-						roundedNumerator = carl::ceil( oldNumerator - (oldNumerator/u) );
+						roundedNumerator = carl::ceil( Number(oldNumerator - (oldNumerator/u)) );
 					else // round towards -infinity
-						roundedNumerator = carl::floor( oldNumerator - (oldNumerator/u) );
+						roundedNumerator = carl::floor( Number(oldNumerator - (oldNumerator/u)) );
 
 					vertex[d] = roundedNumerator / Number(limit);
 				}

@@ -273,7 +273,7 @@ namespace reachability {
 #endif
 
 			// for each time interval perform linear Transformation
-			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(mSettings.timebound / mSettings.timestep));
+			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(Number(mSettings.timebound / mSettings.timestep)));
 			for ( std::size_t i = 2; i <= steps ; ++i ) {
 				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timestep) << std::flush;
 

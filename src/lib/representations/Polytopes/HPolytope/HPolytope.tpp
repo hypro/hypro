@@ -675,14 +675,14 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 		if(largest > (limit*limit)) {
 			vector_t<Number> newNormal(mDimension);
 			for(unsigned i = 0; i < mDimension; ++i){
-				newNormal(i) = carl::floor((mHPlanes.at(planeIndex).normal()(i)/largest)*limit);
-				assert(carl::abs(mHPlanes.at(planeIndex).normal()(i)/largest) <= 1);
+				newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*limit));
+				assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= 1);
 				assert(carl::isInteger(newNormal(i)));
 				assert(newNormal(i) <= limit);
 			}
 			mHPlanes.at(planeIndex).setNormal(newNormal);
 			Number newOffset = mHPlanes.at(planeIndex).offset();
-			newOffset = carl::ceil((newOffset/largest)*limit);
+			newOffset = carl::ceil(Number((newOffset/largest)*limit));
 
 			for(const auto& vertex : vertices) {
 				Number tmp = newNormal.dot(vertex.rawCoordinates());
