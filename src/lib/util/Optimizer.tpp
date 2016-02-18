@@ -391,7 +391,7 @@ namespace hypro {
 		//simplex.printAssertions();
 
 		std::size_t formulaSize = simplex.formula().size();
-		for(auto formulaIt = simplex.formula().begin(); count < formulaSize; ++count) {
+		for(auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
 			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
 			formulaIt = simplex.remove(formulaIt);
@@ -409,7 +409,7 @@ namespace hypro {
 			}
 
 			assert(*(--(simplex.formula().end())) == negatedConstraint);
-			simplex.remove(--(simplex.formula().end()));
+			simplex.remove(--(simplex.formulaEnd()));
 			simplex.deinform(negatedConstraint);
 			simplex.add(originalConstraint, false);
 		}
@@ -451,7 +451,7 @@ namespace hypro {
 		//std::cout << "Original Formula: " << std::endl;
 		//mSmtratSolver.printAssertions();
 		std::size_t formulaSize = mSmtratSolver.formula().size();
-		for(auto formulaIt = mSmtratSolver.formula().begin(); count < formulaSize; ) {
+		for(auto formulaIt = mSmtratSolver.formulaBegin(); count < formulaSize; ) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
 			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
 			formulaIt = mSmtratSolver.remove(formulaIt);
@@ -466,7 +466,7 @@ namespace hypro {
 				res.push_back(mFormulaMapping.at(originalConstraint));
 
 			assert(*(--(mSmtratSolver.formula().end())) == negatedConstraint);
-			mSmtratSolver.remove(--(mSmtratSolver.formula().end()));
+			mSmtratSolver.remove(--(mSmtratSolver.formulaEnd()));
 			mSmtratSolver.deinform(negatedConstraint);
 			mSmtratSolver.add(originalConstraint, false);
 			++count;
