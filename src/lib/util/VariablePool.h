@@ -13,9 +13,11 @@
 #include <carl/util/Singleton.h>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
+#ifdef USE_PPL
 CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
 CLANG_WARNING_RESET
+#endif
 #include <map>
 #include <cassert>
 
@@ -29,17 +31,21 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	/**
 	 * Typedefs
 	 */
+	#ifdef USE_PPL
 	typedef std::map<carl::Variable, Parma_Polyhedra_Library::Variable> carlPplMap;
 	typedef std::map<Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare>
 		  pplCarlMap;
+	#endif
 
 	/**
 	 * Members
 	 */
 	std::vector<carl::Variable> mCarlVariables;
+	#ifdef USE_PPL
 	std::vector<Parma_Polyhedra_Library::Variable> mPplVariables;
 	carlPplMap mCarlToPpl;
 	pplCarlMap mPplToCarl;
+	#endif
 	unsigned mPplId;
 	carl::VariablePool& mPool;
 
@@ -55,6 +61,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	/*
 	 * Access
 	 */
+	#ifdef USE_PPL
 	const carl::Variable& variable( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
@@ -63,17 +70,6 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		}
 		assert( false );
 		return carl::Variable::NO_VARIABLE;
-		//            assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            pplCarlMap::iterator target = mPplToCarl.find(_var);
-		//            if(target == mPplToCarl.end())
-		//            {
-		//                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
-		//                carl::Variable newCarlVar = mPool.getFreshVariable();
-		//                target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
-		//                mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
-		//            }
-		//			assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            return (*target).second;
 	}
 
 	const Parma_Polyhedra_Library::Variable& variable( const carl::Variable& _var ) const {
@@ -84,33 +80,6 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		}
 		assert( false );
 		return mPplVariables.back();
-		//            //std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
-		//            //std::cout << "Variable: " << _var << std::endl;
-		//            //this->print();
-		//            assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            carlPplMap::iterator target = mCarlToPpl.find(_var);
-		//            if(target == mCarlToPpl.end())
-		//            {
-		//                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
-		//                //std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;
-		//                //bool test = (mPplToCarl.find(newPplVar) != mPplToCarl.end());
-		//                mPplToCarl.insert(std::make_pair(newPplVar, _var));
-		//                /*
-		//                if (test)
-		//                    std::cout << "In" << std::endl;
-		//                else
-		//                    std::cout << "Not In" << std::endl;
-		//                std::cout << "before:" << std::endl;
-		//                for(auto& pair : mPplToCarl)
-		//                    std::cout << pair.first << " -> " << pair.second << std::endl;*/
-		//                target = mCarlToPpl.insert(std::make_pair(_var, newPplVar)).first;
-		//                /*std::cout << "after" << std::endl;
-		//                for(auto& pair : mPplToCarl)
-		//                    std::cout << pair.first << " -> " << pair.second << std::endl;
-		//                std::cout << "PC: " << mPplToCarl.size() << ", CP: " << mCarlToPpl.size() << std::endl;*/
-		//                assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            }
-		//            return (*target).second;
 	}
 
 	const Parma_Polyhedra_Library::Variable& pplVarByIndex( unsigned _index ) {
@@ -127,98 +96,79 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
 		return mPplVariables.at( _index );
-		//            //std::cout << "BEFORE: " << _index << "CurId: "<< mPplId << std::endl;
-		//            assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            pplCarlMap::const_iterator varIt = mPplToCarl.begin();
-		//            for(;varIt != mPplToCarl.end(); ++varIt)
-		//            {
-		//                if(varIt->first.id() == _index)
-		//                    break;
-		//            }
-		//            if(varIt != mPplToCarl.end())
-		//                return varIt->first;
-		//            else
-		//            {
-		//				std::cout << __func__ << " _index: " << _index << " mPplId: " << mPplId << std::endl;
-		//                assert(_index == mPplId);
-		//                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(mPplId++);
-		//                carl::Variable newCarlVar = mPool.getFreshVariable();
-		//                pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
-		//                mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
-		//                assert(mCarlToPpl.size() == mPplToCarl.size());
-		//                return (*target).first;
-		//            }
 	}
+	#endif
 
 	const carl::Variable& carlVarByIndex( unsigned _index ) {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		if ( _index >= mPplId ) {
 			for ( unsigned curr = mPplId; curr <= _index; ++curr ) {
 				carl::Variable cVar = carl::freshRealVariable();
-				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mCarlVariables.push_back( cVar );
+				#ifdef USE_PPL
+				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mPplVariables.push_back( pVar );
+				#endif
 			}
 		}
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		return mCarlVariables.at( _index );
-		//			//std::cout << __func__ << " search variable with Id: " << _index << std::endl;
-		//            assert(mCarlToPpl.size() == mPplToCarl.size());
-		//            pplCarlMap::const_iterator varIt = mPplToCarl.begin();
-		//            for(;varIt != mPplToCarl.end(); ++varIt)
-		//            {
-		//                if(varIt->first.id() == _index)
-		//                    break;
-		//            }
-		//            if(varIt != mPplToCarl.end())
-		//               return varIt->second;
-		//            else
-		//            {
-		//				//std::cout << __func__ << " create variable with Id: " << _index << std::endl;
-		//                Parma_Polyhedra_Library::Variable newPplVar = Parma_Polyhedra_Library::Variable(_index);
-		//                carl::Variable newCarlVar = mPool.getFreshVariable();
-		//                pplCarlMap::iterator target = mPplToCarl.insert(std::make_pair(newPplVar, newCarlVar)).first;
-		//                mCarlToPpl.insert(std::make_pair(newCarlVar, newPplVar));
-		//                assert(mCarlToPpl.size() == mPplToCarl.size());
-		//                return (*target).second;
-		//            }
 	}
 
 	const carl::Variable& newCarlVariable( std::string _name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		carl::Variable cVar = carl::freshRealVariable( _name );
-		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
+		#ifdef USE_PPL
+		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mPplVariables.push_back( pVar );
+		#endif
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		return mCarlVariables.back();
 	}
 
+	#ifdef USE_PPL
 	const Parma_Polyhedra_Library::Variable& newPplVariable() {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		carl::Variable cVar = carl::freshRealVariable();
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
 		mPplVariables.push_back( pVar );
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		return mPplVariables.back();
 	}
+	#endif
 
 	bool hasDimension( const carl::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		for ( unsigned pos = 0; pos < mCarlVariables.size(); ++pos ) {
 			if ( _var == mCarlVariables[pos] ) return true;
 		}
 		return false;
 	}
 
+	#ifdef USE_PPL
 	int inline dimension( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
@@ -227,10 +177,13 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		}
 		return -1;
 	}
+	#endif
 
 	int inline dimension( const carl::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		for ( unsigned pos = 0; pos < mCarlVariables.size(); ++pos ) {
 			if ( _var == mCarlVariables[pos] ) return pos;
 		}
@@ -239,32 +192,42 @@ class VariablePool : public carl::Singleton<VariablePool> {
 
 	std::vector<carl::Variable> carlVariables() const {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		return mCarlVariables;
 	}
 
+	#ifdef USE_PPL
 	std::vector<Parma_Polyhedra_Library::Variable> pplVariables() const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
 		return mPplVariables;
 	}
+	#endif
 
 	unsigned size() const {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		return mCarlVariables.size();
 	}
 
 	void clear() {
 		mCarlVariables.clear();
-		mPplVariables.clear();
+		#ifdef USE_PPL
+		assert( mPplVariables.size() == mPplId );
+		#endif
 		mPool.clear();
 		mPplId = 0;
 	}
 
 	void print() const {
 		assert( mCarlVariables.size() == mPplId );
+		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		#endif
 		for ( unsigned pos = 0; pos < mCarlVariables.size(); ++pos ) {
 			std::cout << mCarlVariables[pos] << " -> " << std::endl;  // mPplVariables[pos] << std::endl; //TODO: fix
 		}

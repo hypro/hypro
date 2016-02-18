@@ -708,6 +708,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperp
 	return result;
 }
 
+#ifdef USE_PPL
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constraint &halfspace ) const {
 	assert( halfspace.space_dimension() == this->mDimension );
@@ -722,6 +723,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constr
 
 	return this->intersectWithHalfspace( dVec, e );
 }
+#endif
 
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace( const hypro::vector_t<Number> &d_vec,
@@ -765,6 +767,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace(
 	return result;
 }
 
+#ifdef USE_PPL
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const C_Polyhedron &rhs ) const {
 	// Get set of half spaces
@@ -831,6 +834,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const C_Poly
 	// TODO: QUESTION! If one iteration yields empty set, should we break out of
 	// loop?
 }
+#endif
 
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<Number,Converter> &other ) const {

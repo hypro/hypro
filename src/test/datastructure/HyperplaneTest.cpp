@@ -11,7 +11,7 @@
 #include "../defines.h"
 
 #include "../../lib/datastructures/Hyperplane.h"
-#include "../../lib/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../../lib/representations/GeometricObject.h"
 
 using namespace hypro;
 using namespace carl;

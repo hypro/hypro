@@ -14,7 +14,6 @@
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
-//#include <ppl.hh>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
@@ -181,6 +180,7 @@ class ZonotopeT {
 	 */
 	ZonotopeT<Number,Converter> intersectWithHalfspace( const hypro::vector_t<Number>& d_vec, Number e_scalar ) const;
 
+	#ifdef USE_PPL
 	/**
 	 * Calculates zonotopeT intersect with halfspace represented as PPL constraint
 	 * @param result : The resulting stateset of the intersection
@@ -188,6 +188,7 @@ class ZonotopeT {
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
 	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::Constraint& halfspace ) const;
+	#endif
 
 	/**
 	 * Intersects the given stateset with a second one.
@@ -206,6 +207,7 @@ class ZonotopeT {
 	 */
 	ZonotopeT<Number,Converter> intersect( const Hyperplane<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
 
+	#ifdef USE_PPL
 	/**
 	 * Calculates zonotopeT intersect with a closed polyhedron as represented in PPL.
 	 * @param result : The resulting stateset of the intersection as zonotopeT.
@@ -213,6 +215,7 @@ class ZonotopeT {
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
 	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
+	#endif
 
 	/**
 	 * Computes the convex hull of the member zonotopeT and another given zonotopeT

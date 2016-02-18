@@ -209,6 +209,7 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 //    EXPECT_LT((res.generators()-exp_gen).array().abs().matrix().rowwise().sum().sum(), delta_gen.array().abs().matrix().rowwise().sum().sum());
 //}
 
+#ifdef USE_PPL
 TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
     Variable x(0), y(1);
     Constraint hspace(y<=x-1);
@@ -282,6 +283,7 @@ TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
 
 
 }
+#endif
 
 TYPED_TEST(ZonotopeTest, RemoveEmptyGen) {
     Eigen::Matrix<TypeParam, 3, 1> center;

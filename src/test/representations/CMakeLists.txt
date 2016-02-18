@@ -6,21 +6,37 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	# Unit Tests
 	################################
 
-	add_executable(runRepresentationTests
-		BoxTest.cpp
-		ConverterTest.cpp
-		GridTest.cpp
-		HPolytopeTest.cpp
-		NeighborhoodContainerTest.cpp
-		OrthogonalPolyhedronTest.cpp
-		PolytopeTest.cpp
-		PolytopeSupportFunctionTest.cpp
-		PolytopeUtilTest.cpp
-		SupportFunctionTest.cpp
-		TaylorModelTest.cpp
-		VPolytopeTest.cpp
-		ZonotopeTest.cpp
-	)
+	if(USE_PPL)
+		add_executable(runRepresentationTests
+			BoxTest.cpp
+			ConverterTest.cpp
+			GridTest.cpp
+			HPolytopeTest.cpp
+			NeighborhoodContainerTest.cpp
+			OrthogonalPolyhedronTest.cpp
+			PolytopeTest.cpp
+			PolytopeUtilTest.cpp
+			PolytopeSupportFunctionTest.cpp
+			SupportFunctionTest.cpp
+			TaylorModelTest.cpp
+			VPolytopeTest.cpp
+			ZonotopeTest.cpp
+		)
+	else()
+		add_executable(runRepresentationTests
+			BoxTest.cpp
+			ConverterTest.cpp
+			GridTest.cpp
+			HPolytopeTest.cpp
+			NeighborhoodContainerTest.cpp
+			OrthogonalPolyhedronTest.cpp
+			PolytopeSupportFunctionTest.cpp
+			SupportFunctionTest.cpp
+			TaylorModelTest.cpp
+			VPolytopeTest.cpp
+			ZonotopeTest.cpp
+		)
+	endif()
 
 	################################
 	# Tests for the practical term

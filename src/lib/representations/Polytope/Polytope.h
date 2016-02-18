@@ -9,6 +9,7 @@
  */
 
 #pragma once
+#ifdef USE_PPL
 
 #include <map>
 #include <cassert>
@@ -176,5 +177,7 @@ namespace hypro
 
 	};
 } // namespace
-        
+
 #include "Polytope.tpp"
+
+#endif

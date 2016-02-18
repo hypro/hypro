@@ -8,7 +8,7 @@
 #include "../../lib/datastructures/hybridAutomata/LocationManager.h"
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../../lib/representations/Polytope/Polytope.h"
+#include "../../lib/representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
 #include "../../lib/datastructures/Point.h"
 
@@ -17,7 +17,7 @@ using namespace hypro;
 using namespace carl;
 
 template <typename Number>
-using valuation_t = Polytope<Number>;
+using valuation_t = VPolytope<Number>;
 
 template<typename Number>
 class HybridAutomataTest : public ::testing::Test
@@ -107,7 +107,7 @@ protected:
     	std::vector< vector_t<Number> > vecSet;
     	vecSet.push_back(coordinates);
 
-    	poly = Polytope<Number>(vecSet);
+    	poly = valuation_t<Number>(vecSet);
 
 		hybrid.setInitialValuation(poly);
     }
@@ -149,8 +149,7 @@ protected:
 	std::set<hypro::Transition<Number>*> transSet;
 
 	vector_t<Number> coordinates = vector_t<Number>(2,1);
-    hypro::Polytope<Number> poly;
-
+    valuation_t<Number> poly;
 };
 
 /**
