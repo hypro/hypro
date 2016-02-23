@@ -35,7 +35,7 @@ namespace parser {
 
 		std::cout << "To parse: " << std::string( begin, end ) << std::endl;
 		// invoke qi parser
-		bool result = qi::phrase_parse( begin, end, mMain, skipper );
+		bool result = qi::phrase_parse( begin, end, start, skipper );
 
 		std::cout << "Result: Done" << std::endl;
 

@@ -54,26 +54,15 @@ struct NameParser : public qi::grammar<Iterator, unsigned(), Skipper> {
 };
 
 template<typename Iterator>
-struct VariableParser : public qi::grammar<Iterator, Skipper> {
-
-	hypro::parser::variableName_ mNames;
+struct VariableParser : public qi::grammar<Iterator, std::vector<std::string>(), Skipper> {
 
 	VariableParser() : VariableParser::base_type( start ) {
 		varName = ( qi::lexeme[+qi::alnum] );
-		start = qi::lexeme["state var"] >> (varName[phoenix::bind( &hypro::parser::VariableParser<Iterator>::push_variable, phoenix::ref(*this), qi::_1)] % ',') > qi::eps;
+		start = qi::lexeme["state var"] >> (varName % ',') > qi::eps;
 	}
 
-	qi::rule<Iterator,Skipper> start;
+	qi::rule<Iterator, std::vector<std::string>() , Skipper> start;
 	qi::rule<Iterator, std::string(), Skipper> varName;
-
-	void push_variable(const std::string& _in) {
-		std::cout << "Found Var: " << _in << std::endl;
-		mNames.add(_in,0);
-	}
-
-	hypro::parser::variableName_& getTable() {
-		return mNames;
-	}
 };
 
 template <typename Iterator, typename Number>

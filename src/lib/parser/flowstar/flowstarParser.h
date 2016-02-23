@@ -22,9 +22,14 @@
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "helper.h"
 
-
 namespace hypro {
 namespace parser {
+
+	namespace sp = boost::spirit;
+	namespace qi = boost::spirit::qi;
+	namespace ascii = boost::spirit::ascii;
+	namespace px = boost::phoenix;
+	namespace fs = boost::fusion;
 
 	template <typename Number>
 	using Automaton = std::vector<boost::variant<State<Number>, Transition<Number>>>;
@@ -80,25 +85,21 @@ namespace parser {
 		//TransitionParser<Iterator, Number> mTransitionParser;
 		VariableParser<Iterator> mVariableParser;
 		PolynomialParser<Iterator, Number> mPolynomialParser;
+		qi::symbols<char, unsigned> mVariables;
+		unsigned mVariableId;
 
 		std::vector<State<Number>> mStates;
 		std::vector<Transition<Number>> mTransitions;
 
-		MainParser() : MainParser::base_type( mMain ) {
-			// using phoenix::construct;
-			using phoenix::val;
+		MainParser() : MainParser::base_type( start ) {
+			using px::val;
+			mVariableId = 0;
 
-			mMain = mVariableParser >> mPolynomialParser[phoenix::bind( &hypro::parser::MainParser<Number, Representation>::addPolynomial, phoenix::ref(*this), qi::_1)];
-
-			//mMain =
-			//	   *( mModeParser[phoenix::bind( &hypro::parser::MainParser<Number, Representation>::push_back_State,
-			//									  phoenix::ref( *this ), qi::_1 )] |
-			//		  mTransitionParser[phoenix::bind(
-			//				&hypro::parser::MainParser<Number, Representation>::push_back_Transition, phoenix::ref( *this ),
-			//				qi::_1 )] );
+			variables = mVariableParser[px::bind( &hypro::parser::MainParser<Number,Representation>::addVariableTable, px::ref(*this), qi::_1)];
+			start =  variables >> mPolynomialParser(px::ref(mVariables))[phoenix::bind( &hypro::parser::MainParser<Number,Representation>::addPolynomial, px::ref(*this), qi::_1)];
 
 			qi::on_error<qi::fail>(
-				  mMain,
+				  start,
 				  std::cout
 						<< val( "Error! Expecting " ) << qi::_4  // what failed?
 						<< val( " here: \"" )
@@ -106,11 +107,16 @@ namespace parser {
 						<< val( "\"" ) << std::endl );
 		}
 
-		qi::rule<Iterator, Skipper> mMain;
+		qi::rule<Iterator, Skipper> start;
+		qi::rule<Iterator, Skipper> variables;
 
 		void push_back_State( const State<Number>& _in ) { mStates.push_back( _in ); }
 		void push_back_Transition( const Transition<Number>& _in ) { mTransitions.push_back( _in ); }
 		void addPolynomial( const Polynomial<Number>& _in ) { std::cout << "Poly: " << _in  << std::endl; }
+		void addVariableTable( const std::vector<std::string>& _table ) {
+			for(const auto& name : _table)
+				mVariables.add(name,mVariableId++);
+		}
 
 		HybridAutomaton<Number, Representation> parseInput( const std::string& pathToInputFile );
 		bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number, Representation>& _result );
