@@ -145,6 +145,7 @@ protected:
 
 TYPED_TEST(ConverterTest, toBox)
 {
+       
 	Converter<TypeParam>::toBox(this->box);
         //std::cout << " Box: " << std::endl;
         //result.print();

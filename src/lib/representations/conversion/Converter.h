@@ -35,7 +35,7 @@ class Converter {
 		static HPolytope toHPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::OVER);
 
 		static VPolytope toVPolytope(const Box& source, const CONV_MODE = CONV_MODE::OVER);
-		static VPolytope toVPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
+		static VPolytope toVPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
 		static VPolytope toVPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::OVER);
@@ -46,7 +46,7 @@ class Converter {
 		static SupportFunction toSupportFunction(const SupportFunction& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 
-		static Zonotope toZonotope(const Box& source, const CONV_MODE = CONV_MODE::OVER);
+		static Zonotope toZonotope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
