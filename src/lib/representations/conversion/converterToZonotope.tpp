@@ -44,7 +44,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
     //overapproximation
-    if( mode == OVER){
+    //if( mode == OVER){
         //gets dimension from source object
         unsigned dim = _source.dimension();
         
@@ -70,7 +70,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         
         //computes the centroid of the Zonotope (arithmetic mean)
           for (unsigned i=0; i < size; ++i){
-              center += newVertices[i];
+              center += newVertices[i].rawCoordinates();
          }  
          center = center*(1/size);
         
@@ -105,7 +105,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          std::pair<Number, Number> scaling = std::pair<Number, Number>();
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-             scaling = carl::sqrt_safe((distances(i)*distances(i))/(normal.dot(normal))); 
+              scaling = carl::sqrt_safe((distances(i)*distances(i))/(normal.dot(normal))); 
          }
          
          //computes generators
@@ -118,7 +118,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
       
          return std::move(Zonotope(center, generators));
         
-    }
+    //}
 }
 
 //TODO

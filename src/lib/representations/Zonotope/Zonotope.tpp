@@ -903,4 +903,9 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intervalHull() const {
 	return result;
 }
 
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::print() const {
+    std::cout << this->mCenter << std::endl;
+    std::cout << this->mGenerators << std::endl;
+}
 }  // namespace

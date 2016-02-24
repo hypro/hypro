@@ -210,10 +210,16 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
 TYPED_TEST(ConverterTest, toZonotope)
 {
-        Converter<TypeParam>::toZonotope(this->zonotope);
-        //result.print();
-        Converter<TypeParam>::toZonotope(this->box);
-        //std::cout << " Box: " << std::endl;
-        //result.print();
+        
+        auto result = Converter<TypeParam>::toZonotope(this->zonotope);
+        result.print();
+        auto result2 = Converter<TypeParam>::toZonotope(this->box);
+        std::cout << " Box: " << std::endl;
+        result2.print();
+        auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
+        std::cout << "V: " << std::endl;
+        result3.print();
+        auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
+        result4.print();
 	SUCCEED();
 }
