@@ -55,10 +55,6 @@ struct NumTraits<mpq_class> {
 	static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
 };
 
-inline mpq_class abs(const mpq_class& x) {return carl::abs(x);}
-inline mpq_class sqrt(const mpq_class& x) {return carl::sqrt(x);}
-inline mpq_class max(const mpq_class& x, const mpq_class& y) {return ( x > y ? x : y);}
-
 template <typename Number>
 bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
@@ -209,4 +205,9 @@ namespace std {
             return Eigen::VectorHashValue(vector);
         }
     };
+
+    inline mpq_class abs(const mpq_class& x) {return carl::abs(x);}
+	inline mpq_class sqrt(const mpq_class& x) {return carl::sqrt(x);}
+	inline mpq_class max(const mpq_class& x, const mpq_class& y) {return ( x > y ? x : y);}
+
 } // namespace std
