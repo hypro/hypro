@@ -43,7 +43,7 @@ struct NumTraits<mpq_class> {
 		IsInteger = 0,
 		ReadCost = 1,
 		AddCost = 1,
-		MulCost = 1,
+		MulCost = 10,
 		IsSigned = 1,
 		RequireInitialization = 1
 	};
@@ -196,6 +196,51 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 }
 
 } // namespace Eigen
+
+namespace hypro {
+	/**
+	 * conversion of a matrix of type 'Number' to 'double'
+	 */
+	template <typename Number>
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble( hypro::matrix_t<Number>& _mat ) {
+		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> resultMat( _mat.rows(), _mat.cols() );
+
+		for ( int i = 0; i < _mat.rows(); ++i ) {
+			for ( int j = 0; j < _mat.cols(); ++j ) {
+				resultMat( i, j ) = carl::toDouble(_mat( i, j ));
+			}
+		}
+		return resultMat;
+	}
+
+	/**
+	* conversion of a vector of type 'Number' to 'double'
+	*/
+	template <typename Number>
+	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble( hypro::vector_t<Number>& _vec ) {
+		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultMat( _vec.rows(), 1 );
+
+		for ( int i = 0; i < _vec.rows(); ++i ) {
+			resultMat( i ) = carl::toDouble(_vec( i ));
+		}
+		return resultMat;
+	}
+
+	/**
+	 * conversion of a matrix of (templated) type 'Number' to 'Number'
+	 */
+	template <typename Number>
+	hypro::matrix_t<Number> convertMatToFloatT( Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& _mat ) {
+		hypro::matrix_t<Number> resultMat( _mat.rows(), _mat.cols() );
+
+		for ( int i = 0; i < _mat.rows(); ++i ) {
+			for ( int j = 0; j < _mat.cols(); ++j ) {
+				resultMat( i, j ) = carl::rationalize<Number>( _mat( i, j ) );
+			}
+		}
+		return resultMat;
+	}
+} // namespace hypro
 
 namespace std {
     template<class Number>
