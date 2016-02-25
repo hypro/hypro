@@ -10,7 +10,7 @@
 
 #include "Converter.h"
 
-// conversion from support function to support function
+// conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const SupportFunction& _source, const CONV_MODE mode){
     return _source;
@@ -39,7 +39,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     return std::move(SupportFunction( SF_TYPE::POLY, directions, distances));
 }
 
-// conversion from V-Polytope to support function
+// conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const VPolytope& _source, const CONV_MODE mode) {
     auto temp = toHPolytope(_source, mode);
@@ -48,14 +48,13 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
 
 
-// conversion from H-polytope to support function
+// conversion from H-polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const HPolytope& _source, const CONV_MODE mode) {
     return std::move(SupportFunction( SF_TYPE::POLY, _source.constraints() ));
 }
 
-// TODO more efficient conversion (if possible ; detour via V-Polytope seems inefficient)
-// conversion from Zonotope to support function
+// conversion from Zonotope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE mode) {
     typename std::vector<vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope

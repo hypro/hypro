@@ -45,7 +45,7 @@ std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Numbe
     matrix_t<Number> covMatrix = (1/(sSize-1))*sMatrix*sMatrix.transpose();
     
     //computes the singular value decomposition of the sample covariance matrix (only U component from U*Sigma*V^T needed)
-    Eigen::JacobiSVD<matrix_t<Number>> svd = Eigen::JacobiSVD<matrix_t<Number>>(covMatrix, 1);
+    Eigen::JacobiSVD<matrix_t<Number>, Eigen::NoQRPreconditioner> svd = Eigen::JacobiSVD<matrix_t<Number>, Eigen::NoQRPreconditioner>(covMatrix, Eigen::ComputeThinU);
     matrix_t<Number> u = svd.matrixU();
     
     //computes halfspaces with the help of U in two steps

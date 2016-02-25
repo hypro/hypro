@@ -2,6 +2,7 @@
  * Specialization for a conversion to an H-polytope.
  * @file converterToHPolytope.tpp
  * @author Simon Froitzheim
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-12-17
  * @version	2015-12-17
@@ -9,13 +10,13 @@
 
 #include "Converter.h"
 
-//conversion from H-Polytope to H-Polytope
+//conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPolytope& _source, const CONV_MODE mode ){
     return _source;
 }
 
-//conversion from V-Polytope to H-Polytope
+//conversion from V-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
 	HPolytope target;
@@ -73,36 +74,53 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
     return target;
 }
 
-//conversion from Box to H-Polytope
+//conversion from Box to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE mode ){
-     unsigned dim = _source.dimension();                                                     //gets dimension of box
-     assert( dim >= 1);                                                                      //only continue if dimension is at least 1
+     //gets dimension of box
+     unsigned dim = _source.dimension();  
+     //only continue if dimension is at least 1
+     assert( dim >= 1);                                                                      
 
-     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-     for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
+     //initialize normal matrix as zero matrix with 2*dim rows and dim columns
+     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );       
+     //for every dimension:
+     for ( unsigned i = 0; i < dim; ++i ) { 
+         //write fixed entries (because of box) into the normal matrix (2 each column)
            directions( 2 * i, i ) = -1;
-           directions( 2 * i + 1, i ) = 1;                                                   //write fixed entries (because of box) into the normal matrix (2 each column)
+           directions( 2 * i + 1, i ) = 1;                                                   
      }
 
-     vector_t<Number> distances = vector_t<Number>( 2 * dim );                               //initialize distance vector with 2*dim rows
+     //initialize distance vector with 2*dim rows
+     vector_t<Number> distances = vector_t<Number>( 2 * dim );                               
 
-     std::vector<carl::Interval<Number>> intervals = _source.boundaries();                   //gets intervals of box
-     for ( unsigned i = 0; i < dim; ++i ) {                                                  //for every dimension:
+      //gets intervals of box
+     std::vector<carl::Interval<Number>> intervals = _source.boundaries();
+      //for every dimension:
+     for ( unsigned i = 0; i < dim; ++i ) {  
+         //write inverted lower bound values and upper bound values into the distance vector
            distances( 2 * i ) = -intervals[i].lower();
-           distances( 2 * i + 1 ) = intervals[i].upper();                                    //write inverted lower bound values and upper bound values into the distance vector
+           distances( 2 * i + 1 ) = intervals[i].upper();                                    
      }
 
      return std::move(HPolytope(directions, distances));
 }
 
-//TODO conversion from zonotope to H-Polytope
+//conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
-    return std::move(HPolytope());
+    //computes vertices from source object
+    typename std::vector<vector_t<Number>> vertices = _source.vertices();                   
+    //only continue if any actual vertices were received at all
+    assert( !vertices.empty() );                                                                            
+    VPolytope temp = VPolytope(vertices);
+    //convert into an H-Polytope by computing the convex hull
+    auto target = Converter<Number>::toHPolytope(temp);
+    
+    return target;
 }
 
-//TODO conversion from support function to H-Polytope
+//TODO conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode){
     return std::move(HPolytope());

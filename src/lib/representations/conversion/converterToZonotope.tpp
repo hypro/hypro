@@ -9,18 +9,18 @@
 
 #include "Converter.h"
 
-//conversion from Zonotope to Zonotope
+//conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE mode ){
     return _source;
 }
-//TODO
+//TODO conversion from HPolytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
     return std::move(Zonotope());
 }
 
-//conversion from Box to Zonotope
+//conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE mode ){
     unsigned dim = _source.dimension();                                             //gets dimension from source object
@@ -39,8 +39,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
     return std::move(Zonotope(center, generators));
 }
 
-//TODO exact conversion
-//conversion from V-Polytope to Zonotope
+//TODO exact conversion (maybe)
+//conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
     //overapproximation
@@ -56,7 +56,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         HPolytope hpoly = HPolytope(planes);
         
         //converts computed box H -> V
-        VPolytope vpoly = Converter<Number>::toVPolytope(hpoly);
+        auto vpoly = Converter<Number>::toVPolytope(hpoly);
         
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
@@ -121,7 +121,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
     //}
 }
 
-//TODO
+//TODO conversion from Support Function to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode){
     return std::move(Zonotope());

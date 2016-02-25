@@ -12,12 +12,12 @@
 
 //TODO alternative approach for H -> Box (testing which is faster)
 
-// conversion from box to box
+// conversion from box to box (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, const CONV_MODE mode ) {
 	return _source;
 }
-// conversion from support function to box
+// conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE mode ) {
 	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object
@@ -49,7 +49,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 	return std::move(BoxT<Number,Converter>( intervals ));
 }
 
-//conversion from V-Polytope to box
+//conversion from V-Polytope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _source, const CONV_MODE mode ) {
 	typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();               //gets vertices as a vector from the source object
@@ -84,7 +84,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 	return std::move(BoxT<Number,Converter>( intervals ));                                          //creates a box with the computed intervals
 }
 
-//conversion from H-Polytope to box
+//conversion from H-Polytope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _source, const CONV_MODE mode ) {
 	typename VPolytope::pointVector vertices = _source.vertices();                                  //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
@@ -160,7 +160,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
         }
  */
 
-//conversion from zonotope to box
+//conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE mode ) {
         typename std::vector<vector_t<Number>> vertices = _source.vertices();                                   //computes vertices from source object
