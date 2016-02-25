@@ -202,8 +202,8 @@ namespace hypro {
 	 * conversion of a matrix of type 'Number' to 'double'
 	 */
 	template <typename Number>
-	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> convertMatToDouble( hypro::matrix_t<Number>& _mat ) {
-		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> resultMat( _mat.rows(), _mat.cols() );
+	Eigen::MatrixXd convertMatToDouble( hypro::matrix_t<Number>& _mat ) {
+		Eigen::MatrixXd resultMat( _mat.rows(), _mat.cols() );
 
 		for ( int i = 0; i < _mat.rows(); ++i ) {
 			for ( int j = 0; j < _mat.cols(); ++j ) {
@@ -230,7 +230,7 @@ namespace hypro {
 	 * conversion of a matrix of (templated) type 'Number' to 'Number'
 	 */
 	template <typename Number>
-	hypro::matrix_t<Number> convertMatToFloatT( Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& _mat ) {
+	hypro::matrix_t<Number> convertMatToFloatT( Eigen::MatrixXd& _mat ) {
 		hypro::matrix_t<Number> resultMat( _mat.rows(), _mat.cols() );
 
 		for ( int i = 0; i < _mat.rows(); ++i ) {
