@@ -113,10 +113,12 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     typename std::vector<vector_t<Number>> vertices = _source.vertices();                   
     //only continue if any actual vertices were received at all
     assert( !vertices.empty() );                                                                            
-    VPolytope temp = VPolytope(vertices);
-    //convert into an H-Polytope by computing the convex hull
-    auto target = Converter<Number>::toHPolytope(temp);
+    std::vector<Point<Number>> points;
     
+    for(const auto& vertex : vertices){
+        points.emplace_back(vertex);
+    }
+    HPolytope target = HPolytope(std::move(points)); 
     return target;
 }
 
