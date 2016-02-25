@@ -36,6 +36,27 @@ struct NumTraits<carl::FLOAT_T<Number>> {
 	static inline carl::FLOAT_T<Number> lowest() { return carl::FLOAT_T<Number>::minVal(); }
 };
 
+template<>
+struct NumTraits<mpq_class> {
+	enum {
+		IsComplex = 0,
+		IsInteger = 0,
+		ReadCost = 1,
+		AddCost = 1,
+		MulCost = 1,
+		IsSigned = 1,
+		RequireInitialization = 1
+	};
+
+	typedef mpq_class Real;
+	typedef mpq_class NonInteger;
+	typedef mpq_class Nested;
+
+	static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
+};
+
+inline mpq_class abs(const mpq_class& x) {return carl::abs(x);}
+
 template <typename Number>
 bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ) return false;
