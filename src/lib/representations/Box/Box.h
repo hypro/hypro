@@ -41,10 +41,12 @@ class BoxT {
 	BoxT() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
 
 	/*
-	 * Creates a copy of a box?
+	 * Creates a copy of a box
 	 * @param orig The box that's gonna be copied
 	 */
 	BoxT( const BoxT& orig ) : mLimits( orig.limits() ) {}
+
+	BoxT( BoxT&& orig ) : mLimits( std::move(orig.mLimits )) {}
 
 	/*
 	 * Creates a box by
@@ -149,7 +151,15 @@ class BoxT {
 	 */
 	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) {
 		if ( *this != rhs ) {
-			mLimits = rhs.limits();
+			BoxT<Number,Converter> tmp(rhs);
+			std::swap(*this, tmp);
+		}
+		return *this;
+	}
+
+	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) {
+		if ( *this != rhs ) {
+			mLimits = std::move(rhs.limits());
 		}
 		return *this;
 	}
