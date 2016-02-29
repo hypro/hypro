@@ -25,7 +25,7 @@ std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Numbe
          mean += samples[i];
     }  
     //computes the arithmetic mean of the sample points
-    mean = mean.rawCoordinates()*(1/sSize);
+    mean = mean.rawCoordinates()*( ((Number) 1)/sSize);
     
     std::vector<Point<Number>> tSamples = samples;
     
@@ -42,7 +42,7 @@ std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Numbe
     }
     
     //computes the sample covariance matrix (represents the distribution of the samples)
-    matrix_t<Number> covMatrix = (1/(sSize-1))*sMatrix*sMatrix.transpose();
+    matrix_t<Number> covMatrix = ( ((Number) 1)/(sSize-1))*sMatrix*sMatrix.transpose();
     
     //conversion from the covariance matrix to double in order for JacobiSVD to work
     Eigen::MatrixXd doubleCovMatrix = convertMatToDouble(covMatrix);

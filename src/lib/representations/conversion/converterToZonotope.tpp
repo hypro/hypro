@@ -17,7 +17,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonoto
 //TODO conversion from HPolytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
-    return std::move(Zonotope());
+    return Zonotope();
 }
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
@@ -36,10 +36,11 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
         generators(i, i) = (intervals[i].upper() - intervals[i].lower())/ 2;        //compute the corresponding generator for that dimension by computing the length of the interval and dividing it by 2
     }
 
-    return std::move(Zonotope(center, generators));
+    return Zonotope(center, generators);
 }
 
 //TODO exact conversion (maybe)
+//TODO simplify numbers (carl::abs and carl::sqrt_safe compute their asses off)
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
@@ -55,9 +56,11 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
         HPolytope hpoly = HPolytope(planes);
         
+        std::cout << "hpoly:" << std::endl;
+        hpoly.print();
+        
         //converts computed box H -> V
         auto vpoly = Converter<Number>::toVPolytope(hpoly);
-        
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
         
@@ -67,19 +70,21 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         
         //gets number of vertices
         unsigned size = newVertices.size();
+        //only continue if object is really an oriented box (i.e. it has 2^n vertices)
+        assert (size == std::pow(2 , dim));
         
         //computes the centroid of the Zonotope (arithmetic mean)
           for (unsigned i=0; i < size; ++i){
               center += newVertices[i].rawCoordinates();
          }  
-         center = center*(1/size);
+         center = center*( ((Number) 1)/size);
         
         //defines empty distances vector for the generators
          vector_t<Number> distances = vector_t<Number>::Zero(dim);
          
          //defines a matrix with one exemplary point out of each set of halfspaces (on the border) for distance computation
          matrix_t<Number> planePoints = matrix_t<Number>::Zero(dim, dim);
-         //for every dimension
+         //for every dimension       
          for (unsigned i=0; i < dim; ++i){
              //read out normal of current halfspace pair
              vector_t<Number> normal = planes[2*i].normal();
@@ -95,17 +100,25 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              }
              
          }
-         //computes distances from center to each pair of halfspaces
+         //computes distances from center to each pair of halfspaces        
+         
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-             distances(i) = carl::abs(normal.dot(center) - normal.dot(planePoints.row(i)))/norm(normal, false);
+             Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
+             Number euclid = norm(normal, false);
+             distances(i) = carl::abs(carl::ceil(normalDiff))/carl::ceil(euclid);
+             //distances(i) = carl::abs(normal.dot(center) - normal.dot(planePoints.row(i)))/norm(normal, false);
          }
          
          //computes scaling factors for normals in order to compute the generators later on
          std::pair<Number, Number> scaling = std::pair<Number, Number>();
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-              scaling = carl::sqrt_safe((distances(i)*distances(i))/(normal.dot(normal))); 
+             Number distancePow = distances(i)*distances(i);
+             Number normalPow = normal.dot(normal);
+             Number powDiv = distancePow/normalPow;
+             scaling = carl::sqrt_safe(carl::ceil(powDiv));
+             //scaling = carl::sqrt_safe((distances(i)*distances(i))/(normal.dot(normal))); 
          }
          
          //computes generators
@@ -116,7 +129,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         
          
       
-         return std::move(Zonotope(center, generators));
+         return Zonotope(center, generators);
         
     //}
 }
@@ -124,5 +137,5 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 //TODO conversion from Support Function to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode){
-    return std::move(Zonotope());
+    return Zonotope();
 }

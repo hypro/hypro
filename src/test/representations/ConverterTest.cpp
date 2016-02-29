@@ -80,7 +80,7 @@ protected:
 		points.push_back(Point<Number>(p4));
 		vpolytope = hypro::VPolytope<Number>(points);
 
-                //second v-polytope
+                //second v-polytope (slightly deformed box)
                 vector_t<Number> p5 = vector_t<Number>(2);
                 p5(0) = 0;
                 p5(1) = 2;
@@ -90,7 +90,26 @@ protected:
                 points2.push_back(Point<Number>(p3));
                 points2.push_back(Point<Number>(p4));
                 vpolytope2 = hypro::VPolytope<Number>(points2);
-
+                
+                //third v-polytope(tilted stretched box)
+                vector_t<Number> p6 = vector_t<Number>(2);
+                p6(0)= 2;
+                p6(1)= 1;
+                vector_t<Number> p7 = vector_t<Number>(2);
+                p7(0)= 1;
+                p7(1)= 2;
+                vector_t<Number> p8 = vector_t<Number>(2);
+                p8(0)= 5;
+                p8(1)= 4;
+                vector_t<Number> p9 = vector_t<Number>(2);
+                p9(0)= 4;
+                p9(1)= 5;
+                typename hypro::VPolytope<Number>::pointVector points3;
+		points3.push_back(Point<Number>(p6));
+		points3.push_back(Point<Number>(p7));
+		points3.push_back(Point<Number>(p8));
+		points3.push_back(Point<Number>(p9));
+		vpolytope3 = hypro::VPolytope<Number>(points3);
 
                 // A rectangle (for H-Polytope)
 		Hyperplane<Number> hp1({1,0},2);
@@ -133,6 +152,7 @@ protected:
 
     hypro::VPolytope<Number> vpolytope;
     hypro::VPolytope<Number> vpolytope2;
+    hypro::VPolytope<Number> vpolytope3;
 
     hypro::Zonotope<Number> zonotope;
     hypro::Zonotope<Number> zonotope2;
@@ -221,5 +241,7 @@ TYPED_TEST(ConverterTest, toZonotope)
         result3.print();
         auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
         result4.print();
+        auto result5 = Converter<TypeParam>::toZonotope(this->vpolytope3);
+        result5.print();
 	SUCCEED();
 }

@@ -103,7 +103,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
            distances( 2 * i + 1 ) = intervals[i].upper();                                    
      }
 
-     return std::move(HPolytope(directions, distances));
+     return HPolytope(directions, distances);
 }
 
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
@@ -125,5 +125,5 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 //TODO conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode){
-    return std::move(HPolytope());
+    return HPolytope();
 }

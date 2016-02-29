@@ -46,7 +46,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
     //     }
     // }
 
-	return std::move(BoxT<Number,Converter>( intervals ));
+	return BoxT<Number,Converter>( intervals );
 }
 
 //conversion from V-Polytope to box (no differentiation between conversion modes - always OVER)
@@ -81,7 +81,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
     //     }
     // }
 
-	return std::move(BoxT<Number,Converter>( intervals ));                                          //creates a box with the computed intervals
+	return BoxT<Number,Converter>( intervals );                                          //creates a box with the computed intervals
 }
 
 //conversion from H-Polytope to box (no differentiation between conversion modes - always OVER)
@@ -116,7 +116,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     //     }
     // }
 
-    return std::move(BoxT<Number,Converter>( intervals ));                                             //creates a box with the computed intervals
+    return BoxT<Number,Converter>( intervals );                                             //creates a box with the computed intervals
 }
 
 //alternative approach
@@ -197,7 +197,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
     //     }
     // }
 
-	return std::move(BoxT<Number,Converter>( intervals ));                                                 //creates a box with the computed intervals
+	return BoxT<Number,Converter>( intervals );                                                 //creates a box with the computed intervals
 }
 
 //conversion from Polytope to box (different data structure)
