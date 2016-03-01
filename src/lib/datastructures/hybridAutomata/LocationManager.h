@@ -31,10 +31,11 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 
 	Location<Number>* create();
 	Location<Number>* create( const Location<Number>* _loc );
-	Location<Number>* create( const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+	Location<Number>* create( const hypro::matrix_t<Number> _mat );
+	Location<Number>* create( const hypro::matrix_t<Number> _mat,
 							  const typename Location<Number>::transitionSet _trans,
 							  const struct Location<Number>::Invariant _inv );
-	Location<Number>* create( const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+	Location<Number>* create( const hypro::matrix_t<Number> _mat,
 							  const typename Location<Number>::transitionSet _trans,
 							  const struct Location<Number>::Invariant _inv,
 							  const hypro::matrix_t<Number> _extInputMat );

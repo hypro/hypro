@@ -16,6 +16,12 @@ Location<Number>::Location( unsigned _id, const Location &_loc )
 	, mId( _id ) {
 }
 
+template<typename Number>
+Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat )
+	: mFlow(_mat)
+	, mId( _id )
+{}
+
 template <typename Number>
 Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
 							const transitionSet& _trans, const Location<Number>::Invariant& _inv )

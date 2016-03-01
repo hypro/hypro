@@ -33,6 +33,7 @@ class Location {
 
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );
+	Location( unsigned _id, const hypro::matrix_t<Number>& _mat );
 	Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
 			  const transitionSet& _trans, const Location<Number>::Invariant& _inv );
 	Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
