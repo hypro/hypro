@@ -17,6 +17,7 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 
   private:
 	std::map<unsigned, Location<Number>*> mLocations;
+	std::map<Location<Number>*, unsigned> mIds;
 	unsigned mId;
 
   protected:
@@ -37,6 +38,8 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 							  const typename Location<Number>::transitionSet _trans,
 							  const struct Location<Number>::Invariant _inv,
 							  const hypro::matrix_t<Number> _extInputMat );
+
+	unsigned id(const Location<Number>* _loc);
 };
 
 }  // namespace

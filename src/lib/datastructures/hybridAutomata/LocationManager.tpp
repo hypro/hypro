@@ -5,6 +5,7 @@ template <typename Number>
 Location<Number> *LocationManager<Number>::create() {
 	Location<Number> *loc = new Location<Number>( mId++ );
 	mLocations[mId - 1] = loc;
+	mIds[loc] = mId - 1;
 	return loc;
 }
 
@@ -12,6 +13,7 @@ template <typename Number>
 Location<Number> *LocationManager<Number>::create( const Location<Number> *_loc ) {
 	Location<Number> *loc = new Location<Number>( mId++, _loc );
 	mLocations[mId - 1] = loc;
+	mIds[loc] = mId - 1;
 	return loc;
 }
 
@@ -22,6 +24,7 @@ Location<Number> *LocationManager<Number>::create( const hypro::matrix_t<Number>
 												   const struct Location<Number>::Invariant _inv ) {
 	Location<Number> *loc = new Location<Number>( mId++, _mat, _vec, _trans, _inv );
 	mLocations[mId - 1] = loc;
+	mIds[loc] = mId - 1;
 	return loc;
 }
 
@@ -33,6 +36,14 @@ Location<Number> *LocationManager<Number>::create( const hypro::matrix_t<Number>
 												   const hypro::matrix_t<Number> _extInputMat ) {
 	Location<Number> *loc = new Location<Number>( mId++, _mat, _vec, _trans, _inv, _extInputMat );
 	mLocations[mId - 1] = loc;
+	mIds[loc] = mId - 1;
 	return loc;
 }
+
+template <typename Number>
+unsigned LocationManager<Number>::id(const Location<Number>* _loc) {
+	assert(mIds.find(_loc) != mIds.end());
+	return mIds.at(_loc);
+}
+
 }
