@@ -33,9 +33,9 @@ class Location {
 
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );
-	Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+	Location( unsigned _id, const hypro::matrix_t<Number> _mat,
 			  const transitionSet _trans, const Location<Number>::Invariant _inv );
-	Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+	Location( unsigned _id, const hypro::matrix_t<Number> _mat,
 			  const transitionSet _trans, const Location<Number>::Invariant _inv,
 			  const hypro::matrix_t<Number> _extInputMat );
 
@@ -43,8 +43,7 @@ class Location {
 	/**
 	 * Member
 	 */
-	hypro::vector_t<Number> mActivityVec;
-	hypro::matrix_t<Number> mActivityMat;
+	hypro::matrix_t<Number> mFlow;
 	hypro::matrix_t<Number> mExternalInput;
 	transitionSet mTransitions;
 	Invariant mInvariant;
@@ -60,15 +59,13 @@ class Location {
 	/**
 	 * Getter & Setter
 	 */
-	const hypro::vector_t<Number>& activityVec() const;
-	const hypro::matrix_t<Number>& activityMat() const;
+	const hypro::matrix_t<Number>& flow() const;
 	const Invariant& invariant() const;
 	const transitionSet& transitions() const;
 	const hypro::matrix_t<Number>& externalInput() const;
 	unsigned id() const { return mId; }
 
-	void setActivityVec( hypro::vector_t<Number> _vec );
-	void setActivityMat( hypro::matrix_t<Number> _mat );
+	void setFlow( hypro::matrix_t<Number> _mat );
 	void setInvariant( struct hypro::Location<Number>::Invariant _inv );
 	void setInvariant( hypro::matrix_t<Number> _mat, hypro::vector_t<Number> _vec, hypro::operator_e _op );
 	void setLocation( struct locationContent _loc );

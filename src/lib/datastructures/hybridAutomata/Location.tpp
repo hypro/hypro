@@ -4,13 +4,12 @@ namespace hypro {
 
 template <typename Number>
 Location<Number>::Location( unsigned _id )
-	: mActivityVec(), mActivityMat(), mExternalInput(), mTransitions(), mInvariant(), mId( _id ) {
+	: mFlow(), mExternalInput(), mTransitions(), mInvariant(), mId( _id ) {
 }
 
 template <typename Number>
 Location<Number>::Location( unsigned _id, const Location &_loc )
-	: mActivityVec( _loc.activityVec() )
-	, mActivityMat( _loc.activityMat() )
+	: mFlow( _loc.activityMat() )
 	, mExternalInput( _loc.externalInput() )
 	, mTransitions( _loc.transitions() )
 	, mInvariant( _loc.invariant() )
@@ -18,10 +17,9 @@ Location<Number>::Location( unsigned _id, const Location &_loc )
 }
 
 template <typename Number>
-Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat,
 							const transitionSet _trans, const Location<Number>::Invariant _inv )
-	: mActivityVec( _vec )
-	, mActivityMat( _mat )
+	: mFlow( _mat )
 	, mExternalInput()
 	, mTransitions( _trans )
 	, mInvariant( _inv )
@@ -29,11 +27,10 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, co
 }
 
 template <typename Number>
-Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, const hypro::vector_t<Number> _vec,
+Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat,
 							const transitionSet _trans, const Location<Number>::Invariant _inv,
 							const hypro::matrix_t<Number> _extInputMat )
-	: mActivityVec( _vec )
-	, mActivityMat( _mat )
+	: mFlow( _mat )
 	, mExternalInput( _extInputMat )
 	, mTransitions( _trans )
 	, mInvariant( _inv )
@@ -41,13 +38,8 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat, co
 }
 
 template <typename Number>
-const hypro::vector_t<Number> &Location<Number>::activityVec() const {
-	return mActivityVec;
-}
-
-template <typename Number>
-const hypro::matrix_t<Number> &Location<Number>::activityMat() const {
-	return mActivityMat;
+const hypro::matrix_t<Number> &Location<Number>::flow() const {
+	return mFlow;
 }
 
 template <typename Number>
@@ -66,13 +58,8 @@ const std::set<Transition<Number> *> &Location<Number>::transitions() const {
 }
 
 template <typename Number>
-void Location<Number>::setActivityVec( hypro::vector_t<Number> _vec ) {
-	mActivityVec = _vec;
-}
-
-template <typename Number>
-void Location<Number>::setActivityMat( hypro::matrix_t<Number> _mat ) {
-	mActivityMat = _mat;
+void Location<Number>::setFlow( hypro::matrix_t<Number> _mat ) {
+	mFlow = _mat;
 }
 
 template <typename Number>

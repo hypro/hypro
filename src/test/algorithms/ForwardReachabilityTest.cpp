@@ -65,8 +65,8 @@ protected:
 		locationMat(2,1) = 0;
 		locationMat(2,2) = 0;
 
-		loc1->setActivityMat(locationMat);
-		loc2->setActivityMat(locationMat);
+		loc1->setFlow(locationMat);
+		loc2->setFlow(locationMat);
 
 		/*
 		 * Transition

@@ -51,8 +51,8 @@ static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Num
 		// approximate R_[0,delta](X0)
 		// rest is acquired by linear Transformation
 		// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
-		hypro::matrix_t<Number> deltaMatrix( _loc.activityMat().rows(), _loc.activityMat().cols() );
-		deltaMatrix = _loc.activityMat() * timeInterval;
+		hypro::matrix_t<Number> deltaMatrix( _loc.flow().rows(), _loc.flow().cols() );
+		deltaMatrix = _loc.flow() * timeInterval;
 
 #ifdef fReach_DEBUG
 		std::cout << "delta Matrix: " << std::endl;
@@ -106,11 +106,11 @@ static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Num
 		Representation firstSegment;
 		Number radius;
 		// TODO: This is a temporary fix!
-		// matrix_t<Number> updatedActivityMatrix = _loc.activityMat();
-		// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
-		// radius = hausdorffError(Number(timeInterval), updatedActivityMatrix, _val.supremum());
-		radius = hausdorffError( timeInterval, _loc.activityMat(), _val.supremum() );
-// radius = _val.hausdorffError(timeInterval, _loc.activityMat());
+		// matrix_t<Number> updatedflowrix = _loc.flow();
+		// updatedflowrix.conservativeResize(rows-1, cols-1);
+		// radius = hausdorffError(Number(timeInterval), updatedflowrix, _val.supremum());
+		radius = hausdorffError( timeInterval, _loc.flow(), _val.supremum() );
+// radius = _val.hausdorffError(timeInterval, _loc.flow());
 
 #ifdef fReach_DEBUG
 		std::cout << "\n";

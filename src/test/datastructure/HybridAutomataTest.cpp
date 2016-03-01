@@ -60,8 +60,8 @@ protected:
 		locationMat(1,0) = 0;
 		locationMat(1,1) = 1;
 
-		loc1->setActivityMat(locationMat);
-		loc2->setActivityMat(locationMat);
+		loc1->setFlow(locationMat);
+		loc2->setFlow(locationMat);
 
 		/*
 		 * Transition Setup
@@ -182,14 +182,14 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_NE(this->loc1->invariant().mat, invariantMat2);
 
 	//location: matrix
-	EXPECT_EQ(this->loc1->activityMat(), this->locationMat);
+	EXPECT_EQ(this->loc1->flow(), this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;
 	locationMat2(1,1) = 1;
-	EXPECT_NE(this->loc1->activityMat(), locationMat2);
+	EXPECT_NE(this->loc1->flow(), locationMat2);
 
 	//location: set of outgoing transitions
 	EXPECT_EQ(this->loc1->transitions(), this->transSet);

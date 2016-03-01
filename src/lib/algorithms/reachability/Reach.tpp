@@ -118,8 +118,8 @@ namespace reachability {
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
-			hypro::matrix_t<Number> deltaMatrix( _loc->activityMat().rows(), _loc->activityMat().cols() );
-			deltaMatrix = _loc->activityMat() * mSettings.timestep;
+			hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
+			deltaMatrix = _loc->flow() * mSettings.timestep;
 
 #ifdef REACH_DEBUG
 			std::cout << "delta Matrix: " << std::endl;
@@ -173,11 +173,11 @@ namespace reachability {
 			Representation firstSegment;
 			Number radius;
 			// TODO: This is a temporary fix!
-			// matrix_t<Number> updatedActivityMatrix = _loc->activityMat();
-			// updatedActivityMatrix.conservativeResize(rows-1, cols-1);
-			// radius = hausdorffError(Number(mSettings.timestep), updatedActivityMatrix, _val.supremum());
-			radius = hausdorffError( Number( mSettings.timestep ), _loc->activityMat(), initial.supremum() );
-// radius = _val.hausdorffError(mSettings.timestep, _loc->activityMat());
+			// matrix_t<Number> updatedflowrix = _loc->flow();
+			// updatedflowrix.conservativeResize(rows-1, cols-1);
+			// radius = hausdorffError(Number(mSettings.timestep), updatedflowrix, _val.supremum());
+			radius = hausdorffError( Number( mSettings.timestep ), _loc->flow(), initial.supremum() );
+// radius = _val.hausdorffError(mSettings.timestep, _loc->flow());
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
