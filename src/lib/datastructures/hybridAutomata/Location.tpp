@@ -17,8 +17,8 @@ Location<Number>::Location( unsigned _id, const Location &_loc )
 }
 
 template <typename Number>
-Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat,
-							const transitionSet _trans, const Location<Number>::Invariant _inv )
+Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
+							const transitionSet& _trans, const Location<Number>::Invariant& _inv )
 	: mFlow( _mat )
 	, mExternalInput()
 	, mTransitions( _trans )
@@ -27,9 +27,9 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat,
 }
 
 template <typename Number>
-Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number> _mat,
-							const transitionSet _trans, const Location<Number>::Invariant _inv,
-							const hypro::matrix_t<Number> _extInputMat )
+Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
+							const transitionSet& _trans, const Location<Number>::Invariant& _inv,
+							const hypro::matrix_t<Number>& _extInputMat )
 	: mFlow( _mat )
 	, mExternalInput( _extInputMat )
 	, mTransitions( _trans )
@@ -58,22 +58,22 @@ const std::set<Transition<Number> *> &Location<Number>::transitions() const {
 }
 
 template <typename Number>
-void Location<Number>::setFlow( hypro::matrix_t<Number> _mat ) {
+void Location<Number>::setFlow( const hypro::matrix_t<Number>& _mat ) {
 	mFlow = _mat;
 }
 
 template <typename Number>
-void Location<Number>::setExtInputMat( hypro::matrix_t<Number> _mat ) {
+void Location<Number>::setExtInputMat( const hypro::matrix_t<Number>& _mat ) {
 	mExternalInput = _mat;
 }
 
 template <typename Number>
-void Location<Number>::setInvariant( hypro::Location<Number>::Invariant _inv ) {
+void Location<Number>::setInvariant( const hypro::Location<Number>::Invariant& _inv ) {
 	mInvariant = _inv;
 }
 
 template <typename Number>
-void Location<Number>::setInvariant( hypro::matrix_t<Number> _mat, hypro::vector_t<Number> _vec,
+void Location<Number>::setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec,
 									 hypro::operator_e _op ) {
 	mInvariant.op = _op;
 	mInvariant.vec = _vec;
@@ -81,7 +81,7 @@ void Location<Number>::setInvariant( hypro::matrix_t<Number> _mat, hypro::vector
 }
 
 template <typename Number>
-void Location<Number>::setTransitions( transitionSet _trans ) {
+void Location<Number>::setTransitions( const transitionSet& _trans ) {
 	mTransitions = _trans;
 }
 }
