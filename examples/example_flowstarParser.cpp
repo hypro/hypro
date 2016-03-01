@@ -4,15 +4,15 @@
 
 #include <string>
 #include "../src/lib/config.h"
-#include "../src/lib/representations/Polytope/Polytope.h"
+#include "../src/lib/representations/GeometricObject.h"
 #include "../src/lib/parser/flowstar/flowstarParser.h"
 
 int main(int argc, char** argv) {
 	typedef double number;
-	typedef hypro::Polytope<number> valuation;
+	typedef hypro::HPolytope<number> valuation;
 
-    std::string filename = "../examples/input/polynomial";
+    std::string filename = "../examples/input/test.model";
 
-    hypro::parser::MainParser<number,valuation> parser;
+    hypro::parser::flowstarParser<number,valuation> parser;
     parser.parseInput(filename);
 }

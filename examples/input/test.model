@@ -1,0 +1,51 @@
+state var P, h1, h2, t
+
+modes
+ {
+  P_nfull_in
+  {
+   poly ode 1
+   {
+    h1' = -2
+    h2' = 2
+	P' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [1,1]
+    h1 in [0,30]
+    h2 in [0,30]
+    t in [0,1]
+   }
+  }
+
+  P_full_in
+  {
+   poly ode 1
+   {
+    h1' = -2
+    h2' = 0
+	P' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [1,1]
+    h1 in [0,30]
+    h2 in [30,30]
+    t in [0,1]
+   }
+  }
+
+ }
+
+jumps
+{
+  P_nfull_in -> P_full_in
+
+  start P_nfull_in
+  end P_full_in
+}

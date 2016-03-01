@@ -4,7 +4,7 @@ namespace hypro {
 namespace parser {
 
 	template <typename Number, typename Representation>
-	HybridAutomaton<Number, Representation> MainParser<Number, Representation>::parseInput(
+	void flowstarParser<Number, Representation>::parseInput(
 		  const std::string &pathToInputFile ) {
 		HybridAutomaton<Number, Representation> resultAutomaton;
 
@@ -19,13 +19,11 @@ namespace parser {
 			exit( 1 );
 		}
 
-		std::cout << resultAutomaton << std::endl;
-
-		return resultAutomaton;
+		//std::cout << resultAutomaton << std::endl;
 	}
 
 	template <typename Number, typename Representation>
-	bool MainParser<Number, Representation>::parse( std::istream &in, const std::string &filename,
+	bool flowstarParser<Number, Representation>::parse( std::istream &in, const std::string &filename,
 													HybridAutomaton<Number, Representation> &_result ) {
 		in.unsetf( std::ios::skipws );
 		BaseIteratorType basebegin( in );
@@ -43,85 +41,85 @@ namespace parser {
 
 		// create automaton from parsed result.
 		//_result = std::move(createAutomaton());
-		_result = createAutomaton();
+		//_result = createAutomaton();
 
 		return result;
 	}
 
-	template <typename Number, typename Representation>
-	HybridAutomaton<Number, Representation> MainParser<Number, Representation>::createAutomaton() {
-		HybridAutomaton<Number, Representation> result;
-		LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
-
-		std::map<unsigned, hypro::Location<Number> *> locations;
-		std::map<unsigned, hypro::Transition<Number> *> transitions;
-		std::map<std::string, matrix<Number>> matrices;
-		std::queue<State<Number>> incompleteStates;
-		std::queue<Transition<Number>> incompleteTransitions;
-
-		// set initial location - TODO
-
-		// get flow, first run
-		for ( const auto &state : mStates ) {
-			Location<Number> *loc = locManag.create();
-			bool success = createLocFromState( state, loc, matrices, incompleteStates );
-			if ( success ) {
-				locations.insert( std::make_pair( state.mName, loc ) );
-				result.addLocation( loc );
-			} else {
-				delete loc;
-			}
-		}
-
-		// get transitions, first run
-		for ( const auto &transition : mTransitions ) {
-			hypro::Transition<Number> *tran = new hypro::Transition<Number>();
-			bool success = createTransition( transition, tran, locations, matrices, incompleteTransitions );
-			if ( success ) {
-				transitions.insert( std::make_pair( transition.mName, tran ) );
-				result.addTransition( tran );
-			} else {
-				delete tran;
-			}
-		}
-
-		// process incomplete states
-		std::queue<State<Number>> secondIncomplete;
-		while ( !incompleteStates.empty() ) {
-			Location<Number> *loc = locManag.create();
-			State<Number> state = incompleteStates.front();
-			bool success = createLocFromState( state, loc, matrices, secondIncomplete );
-			if ( success ) {
-				locations.insert( std::make_pair( state.mName, loc ) );
-				result.addLocation( loc );
-			} else {
-				delete loc;
-			}
-			incompleteStates.pop();
-		}
-		assert( incompleteStates.empty() );
-		assert( secondIncomplete.empty() );
-
-		// process incomplete transitions
-		std::queue<Transition<Number>> secondIncompleteTransitions;
-		while ( !incompleteTransitions.empty() ) {
-			hypro::Transition<Number> *tran = new hypro::Transition<Number>();
-			Transition<Number> transition = incompleteTransitions.front();
-			bool success = createTransition( transition, tran, locations, matrices, secondIncompleteTransitions );
-			if ( success ) {
-				transitions.insert( std::make_pair( transition.mName, tran ) );
-				result.addTransition( tran );
-			} else {
-				delete tran;
-			}
-			incompleteTransitions.pop();
-		}
-		assert( incompleteTransitions.empty() );
-		assert( secondIncompleteTransitions.empty() );
-
-		// return std::move(result);
-		return result;
-	}
+	//template <typename Number, typename Representation>
+	//HybridAutomaton<Number, Representation> flowstarParser<Number, Representation>::createAutomaton() {
+	//	HybridAutomaton<Number, Representation> result;
+	//	LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
+//
+//	//	std::map<unsigned, hypro::Location<Number> *> locations;
+//	//	std::map<unsigned, hypro::Transition<Number> *> transitions;
+//	//	std::map<std::string, matrix<Number>> matrices;
+//	//	std::queue<State<Number>> incompleteStates;
+//	//	std::queue<Transition<Number>> incompleteTransitions;
+//
+//	//	// set initial location - TODO
+//
+//	//	// get flow, first run
+//	//	for ( const auto &state : mStates ) {
+//	//		Location<Number> *loc = locManag.create();
+//	//		bool success = createLocFromState( state, loc, matrices, incompleteStates );
+//	//		if ( success ) {
+//	//			locations.insert( std::make_pair( state.mName, loc ) );
+//	//			result.addLocation( loc );
+//	//		} else {
+//	//			delete loc;
+//	//		}
+//	//	}
+//
+//	//	// get transitions, first run
+//	//	for ( const auto &transition : mTransitions ) {
+//	//		hypro::Transition<Number> *tran = new hypro::Transition<Number>();
+//	//		bool success = createTransition( transition, tran, locations, matrices, incompleteTransitions );
+//	//		if ( success ) {
+//	//			transitions.insert( std::make_pair( transition.mName, tran ) );
+//	//			result.addTransition( tran );
+//	//		} else {
+//	//			delete tran;
+//	//		}
+//	//	}
+//
+//	//	// process incomplete states
+//	//	std::queue<State<Number>> secondIncomplete;
+//	//	while ( !incompleteStates.empty() ) {
+//	//		Location<Number> *loc = locManag.create();
+//	//		State<Number> state = incompleteStates.front();
+//	//		bool success = createLocFromState( state, loc, matrices, secondIncomplete );
+//	//		if ( success ) {
+//	//			locations.insert( std::make_pair( state.mName, loc ) );
+//	//			result.addLocation( loc );
+//	//		} else {
+//	//			delete loc;
+//	//		}
+//	//		incompleteStates.pop();
+//	//	}
+//	//	assert( incompleteStates.empty() );
+//	//	assert( secondIncomplete.empty() );
+//
+//	//	// process incomplete transitions
+//	//	std::queue<Transition<Number>> secondIncompleteTransitions;
+//	//	while ( !incompleteTransitions.empty() ) {
+//	//		hypro::Transition<Number> *tran = new hypro::Transition<Number>();
+//	//		Transition<Number> transition = incompleteTransitions.front();
+//	//		bool success = createTransition( transition, tran, locations, matrices, secondIncompleteTransitions );
+//	//		if ( success ) {
+//	//			transitions.insert( std::make_pair( transition.mName, tran ) );
+//	//			result.addTransition( tran );
+//	//		} else {
+//	//			delete tran;
+//	//		}
+//	//		incompleteTransitions.pop();
+//	//	}
+//	//	assert( incompleteTransitions.empty() );
+//	//	assert( secondIncompleteTransitions.empty() );
+//
+//	//	// return std::move(result);
+//	//	return result;
+	//}
 
 } // namespace
 } // namespace

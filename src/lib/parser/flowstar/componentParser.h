@@ -1,127 +1,123 @@
-
 #pragma once
 
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 
-#include "components.h"
-#include "polynomialParser.h"
-#include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
-#include <boost/spirit/include/support_line_pos_iterator.hpp>
-#include <boost/spirit/include/phoenix_stl.hpp>
-//#include <boost/spirit/include/phoenix_object.hpp>
-#include <boost/spirit/include/qi_real.hpp>
-#include <string>
-
 namespace hypro {
 namespace parser {
 
-namespace spirit = boost::spirit;
-namespace qi = boost::spirit::qi;
-namespace ascii = boost::spirit::ascii;
-namespace phoenix = boost::phoenix;
-namespace fusion = boost::fusion;
+	template<typename Iterator>
+	struct transitionParser : qi::grammar<Iterator, std::vector<std::pair<unsigned, unsigned>>(symbol_table const&), Skipper>
+	{
+		transitionParser() : transitionParser::base_type( start ) {
+			using qi::on_error;
+	        using qi::fail;
+	        using ascii::char_;
+	        using ascii::string;
+	        using namespace qi::labels;
 
-typedef spirit::istream_iterator BaseIteratorType;
-typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
-typedef PositionIteratorType Iterator;
-typedef qi::space_type Skipper;
+	        using px::construct;
+	        using px::val;
+	        using namespace qi;
 
-template <typename Number>
-struct FloatPolicies : qi::real_policies<Number> {
-	template <typename It, typename Attr>
-	static bool parse_nan( It&, It const&, Attr& ) {
-		return false;
-	}
+			start = qi::lexeme["jumps"] > qi::lit('{') > +(jump(qi::_r1)) >qi::lit('}');
+			jump = edge(qi::_r1);// > *guard > *reset;
+			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
+			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator>::createEdge, px::ref(*this), qi::_1, qi::_2)];
+			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
+							qi::skip(qi::blank)[qi::lexeme["end"] > qi::lazy(qi::_r1)])[ qi::_val = px::bind(&transitionParser<Iterator>::createEdge, px::ref(*this), qi::_1, qi::_2)];
+			guard = qi::lexeme["guard"] > qi::lit('{') > qi::lit('}');
+			reset = qi::lexeme["reset"] > qi::lit('{') > qi::lit('}');
 
-	template <typename It, typename Attr>
-	static bool parse_inf( It&, It const&, Attr& ) {
-		return false;
-	}
-};
+			qi::on_error<qi::fail>
+			(
+			    jump
+			  , std::cout <<
+			  	px::val("TransitionParser: Syntax error. Expecting ")
+	        	<< _4
+		        << px::val(" here: \"")
+		        << construct<std::string>(_3, _2)
+		        << px::val("\"")
+		        << std::endl
+			);
+		}
 
-template <typename Number>
-struct FloatParser : qi::real_parser<Number, FloatPolicies<Number> > {};
+		qi::rule<Iterator, std::vector<std::pair<unsigned, unsigned>>(symbol_table const&), Skipper> start;
+		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> jump;
+		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> edge;
+		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> simpleEdge;
+		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&)> twoLineEdge;
+		qi::rule<Iterator> guard;
+		qi::rule<Iterator> reset;
 
-template <typename Iterator>
-struct NameParser : public qi::grammar<Iterator, unsigned(), Skipper> {
-	NameParser() : NameParser::base_type( start ) {
-		start = qi::lexeme[( qi::lit( "n" ) | qi::lit( "N" ) ) > qi::lit( "ame" )] > qi::lit( "=" ) > qi::uint_;
-	}
+		std::pair<unsigned, unsigned> createEdge(unsigned start, unsigned target) {
+			std::cout << "Found transition from " << start << " to " << target << std::endl;
+			return std::make_pair(start, target);
+		}
+	};
 
-	qi::rule<Iterator, unsigned(), Skipper> start;
-};
+	template <typename Iterator>
+	struct modeParser
+	    : qi::grammar<Iterator, std::string(symbol_table const&, unsigned const&), Skipper>
+	{
+		odeParser<Iterator> mOdeParser;
 
-template<typename Iterator>
-struct VariableParser : public qi::grammar<Iterator, std::vector<std::string>(), Skipper> {
+		modeParser() : modeParser::base_type( start ) {
+			using qi::on_error;
+	        using qi::fail;
+	        using ascii::char_;
+	        using ascii::string;
+	        using namespace qi::labels;
 
-	VariableParser() : VariableParser::base_type( start ) {
-		varName = ( qi::lexeme[+qi::alnum] );
-		start = qi::lexeme["state var"] >> (varName % ',') > qi::eps;
-	}
+	        using px::construct;
+	        using px::val;
+	        using namespace qi;
 
-	qi::rule<Iterator, std::vector<std::string>() , Skipper> start;
-	qi::rule<Iterator, std::string(), Skipper> varName;
-};
+			name = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
+			interval %= qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']');
+			flow = *qi::space > qi::lexeme["poly ode 1"] > *qi::space > qi::lit('{') > *qi::space > qi::skip(qi::blank)[(mOdeParser(qi::_r1, qi::_r2) % qi::eol)][qi::_val = px::bind( &modeParser<Iterator>::createFlow, px::ref(*this), qi::_1 )] > *qi::space > qi::lit('}');
+			singleInvariant = qi::skip(qi::blank)[qi::lazy(qi::_r1) > qi::lexeme["in"] > interval];
+			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > (singleInvariant(qi::_r1, qi::_r2) % qi::eol) > *qi::space > qi::lit('}');
 
-template <typename Iterator, typename Number>
-struct MatrixParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper> {
-	FloatParser<Number> mFloatParser;
+			start = name[qi::_val =  px::bind( &modeParser<Iterator>::printName, px::ref(*this), qi::_1)] > qi::lit('{') > flow(qi::_r1, qi::_r2) > -(invariant(qi::_r1, qi::_r2)) > qi::lit('}');
 
-	MatrixParser() : MatrixParser::base_type( start ) {
-		start = qi::lit( "matrix" ) > *( qi::char_ - ( qi::lit( "[" ) | qi::lit( ")" ) | qi::lit( "," ) ) ) >
-				-( qi::lit( "[" ) > ( ( mFloatParser % qi::no_skip[qi::char_( ' ', ',' )] ) % ';' ) > qi::lit( "]" ) );
-	}
+			qi::on_error<qi::fail>
+			(
+			    start
+			  , std::cout <<
+			  	px::val("ModeParser: Syntax error. Expecting ")
+	        	<< _4
+		        << px::val(" here: \"")
+		        << construct<std::string>(_3, _2)
+		        << px::val("\"")
+		        << std::endl
+			);
+		}
 
-	qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
-};
+		qi::rule<Iterator, std::string(symbol_table const&, unsigned const&), Skipper> start;
+		qi::rule<Iterator, std::string()> name;
+		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> flow;
 
-template <typename Iterator, typename Number>
-struct FlowParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper> {
-	MatrixParser<Iterator, Number> mMatrixParser;
+		qi::rule<Iterator> interval;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> singleInvariant;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> invariant;
 
-	FlowParser() : FlowParser::base_type( start ) {
-		start = *(qi::char_ -(qi::lit("{"))) > qi::lit("{") > mMatrixParser > qi::lit("}");
-	}
+		std::string printName(const std::string& _in) {
+			std::cout << "Name: " << _in << std::endl;
+			return _in;
+		}
 
-	qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
-};
+		matrix_t<double> createFlow( std::vector<std::pair<unsigned, std::vector<double>>> _in ) {
+			assert(!_in.empty());
+			matrix_t<double> res = matrix_t<double>(_in.size(), _in.begin()->second.size());
+			for(const auto& pair : _in) {
+				res.row(pair.first) = createVector(pair.second);
+			}
 
-template <typename Iterator, typename Number>
-struct InvariantParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper> {
-	MatrixParser<Iterator, Number> mMatrixParser;
+			std::cout << "Created flow: " << std::endl;
+			std::cout << res << std::endl;
+			return res;
+		}
+	};
 
-	InvariantParser() : InvariantParser::base_type( start ) {
-		start =
-			  qi::lexeme[( qi::lit( "i" ) | qi::lit( "I" ) ) > qi::lit( "nvariant" )] > qi::lit( "=" ) > mMatrixParser;
-	}
-
-	qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
-};
-
-template <typename Iterator, typename Number>
-struct GuardParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper> {
-	MatrixParser<Iterator, Number> mMatrixParser;
-
-	GuardParser() : GuardParser::base_type( start ) {
-		start = qi::lexeme[( qi::lit( "g" ) | qi::lit( "G" ) ) > qi::lit( "uard" )] > qi::lit( "=" ) > mMatrixParser;
-	}
-
-	qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
-};
-
-template <typename Iterator, typename Number>
-struct ResetParser : public qi::grammar<Iterator, parser::Matrix<Number>(), Skipper> {
-	MatrixParser<Iterator, Number> mMatrixParser;
-
-	ResetParser() : ResetParser::base_type( start ) {
-		start = qi::lexeme[( qi::lit( "r" ) | qi::lit( "R" ) ) > qi::lit( "eset" )] > qi::lit( "=" ) > mMatrixParser;
-	}
-
-	qi::rule<Iterator, parser::Matrix<Number>(), Skipper> start;
-};
-
-} // namespace
-} // namespace
-
+} // namespace parser
+} // namespace hypro
