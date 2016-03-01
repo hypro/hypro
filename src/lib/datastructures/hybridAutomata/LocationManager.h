@@ -40,7 +40,8 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 							  const struct Location<Number>::Invariant _inv,
 							  const hypro::matrix_t<Number> _extInputMat );
 
-	unsigned id(const Location<Number>* _loc);
+	unsigned id(const Location<Number>* _loc) const;
+	Location<Number>* location(unsigned _id) const;
 };
 
 }  // namespace

@@ -48,9 +48,15 @@ Location<Number> *LocationManager<Number>::create( const hypro::matrix_t<Number>
 }
 
 template <typename Number>
-unsigned LocationManager<Number>::id(const Location<Number>* _loc) {
+unsigned LocationManager<Number>::id(const Location<Number>* _loc) const {
 	assert(mIds.find(_loc) != mIds.end());
 	return mIds.at(_loc);
+}
+
+template<typename Number>
+Location<Number>* LocationManager<Number>::location(unsigned _id) const {
+	assert(mLocations.find(_id) != mLocations.end());
+	return mLocations.at(_id);
 }
 
 }
