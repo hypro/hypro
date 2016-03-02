@@ -40,16 +40,13 @@ protected:
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
 
-		invariantOp = LEQ;
-
 		invariantMat(0,0) = 2;
 		invariantMat(0,1) = 0;
 		invariantMat(1,0) = 0;
 		invariantMat(1,1) = 3;
 
-		loc1->setInvariant(invariantMat,invariantVec,invariantOp);
+		loc1->setInvariant(invariantMat,invariantVec);
 
-		inv.op = invariantOp;
 		inv.mat = invariantMat;
 		inv.vec = invariantVec;
 
@@ -66,7 +63,6 @@ protected:
 		/*
 		 * Transition Setup
 		 */
-		guard.op = inv.op;
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
@@ -130,7 +126,6 @@ protected:
 
     //Other Objects: Vectors, Matrices, Guards...
     vector_t<Number> invariantVec = vector_t<Number>(2,1);
-    operator_e invariantOp;
     matrix_t<Number> invariantMat = matrix_t<Number>(2,2);
 	struct Location<Number>::Invariant inv;
 	matrix_t<Number> locationMat = matrix_t<Number>(2,2);
@@ -157,10 +152,6 @@ protected:
  */
 TYPED_TEST(HybridAutomataTest, LocationTest)
 {
-	//invariant: operator
-    EXPECT_EQ(this->loc1->invariant().op,LEQ);
-    EXPECT_EQ(this->loc2->invariant().op,LEQ);
-
     //invariant: vector
     EXPECT_EQ(this->loc1->invariant().vec, this->invariantVec);
     EXPECT_EQ(this->loc2->invariant().vec, this->invariantVec);
@@ -213,7 +204,6 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	//transition: Guard
 	EXPECT_EQ(this->trans->guard().vec, this->guard.vec);
 	EXPECT_EQ(this->trans->guard().mat, this->guard.mat);
-	EXPECT_EQ(this->trans->guard().op, this->guard.op);
 
 }
 

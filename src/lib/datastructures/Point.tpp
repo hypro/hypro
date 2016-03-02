@@ -51,7 +51,7 @@ Point<Number>::Point( const coordinateMap &_coordinates )
 	mComposedOf() {
 	mCoordinates = vector_t<Number>( _coordinates.size() );
 	for ( auto &coordinatepair : _coordinates ) {
-		mCoordinates( hypro::VariablePool::getInstance().dimension( coordinatepair.first ) ) = coordinatepair.second;
+		mCoordinates( hypro::VariablePool::getInstance().id( coordinatepair.first ) ) = coordinatepair.second;
 	}
 }
 
@@ -171,7 +171,7 @@ Point<Number> Point<Number>::origin() const {
 
 template <typename Number>
 Number Point<Number>::coordinate( const carl::Variable &_var ) const {
-	return mCoordinates( hypro::VariablePool::getInstance().dimension( _var ) );
+	return mCoordinates( hypro::VariablePool::getInstance().id( _var ) );
 }
 
 template <typename Number>
@@ -196,7 +196,7 @@ const vector_t<Number> &Point<Number>::rawCoordinates() const {
 
 template <typename Number>
 void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_value ) {
-	unsigned dim = hypro::VariablePool::getInstance().dimension( _dim );
+	unsigned dim = hypro::VariablePool::getInstance().id( _dim );
 	assert( dim >= 0 );
 	if ( dim >= mCoordinates.rows() ) {
 		vector_t<Number> old = mCoordinates;
@@ -365,7 +365,7 @@ Number Point<Number>::sum() const {
 
 template <typename Number>
 void Point<Number>::incrementInFixedDim( const carl::Variable &_d ) {
-	mCoordinates( hypro::VariablePool::getInstance().dimension( _d ) ) += 1;
+	mCoordinates( hypro::VariablePool::getInstance().id( _d ) ) += 1;
 	mHash = 0;
 }
 
@@ -385,7 +385,7 @@ void Point<Number>::incrementInAllDim( const Number &_val ) {
 
 template <typename Number>
 void Point<Number>::decrementInFixedDim( const carl::Variable &_d ) {
-	mCoordinates( hypro::VariablePool::getInstance().dimension( _d ) ) -= 1;
+	mCoordinates( hypro::VariablePool::getInstance().id( _d ) ) -= 1;
 	mHash = 0;
 }
 
@@ -416,7 +416,7 @@ bool Point<Number>::isInBoundary( const Point<Number> &_boundary ) const {
 
 template <typename Number>
 bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
-	return ( mCoordinates.rows() > hypro::VariablePool::getInstance().dimension( _i ) );
+	return ( mCoordinates.rows() > hypro::VariablePool::getInstance().id( _i ) );
 }
 
 template <typename Number>
@@ -526,7 +526,7 @@ Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
 
 template <typename Number>
 Number &Point<Number>::operator[]( const carl::Variable &_i ) {
-	unsigned dim = hypro::VariablePool::getInstance().dimension( _i );
+	unsigned dim = hypro::VariablePool::getInstance().id( _i );
 	if ( dim >= mCoordinates.rows() ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dim + 1 );
@@ -549,8 +549,8 @@ Number &Point<Number>::operator[]( std::size_t _i ) {
 
 template <typename Number>
 const Number& Point<Number>::at( const carl::Variable &_i ) const {
-	assert( hypro::VariablePool::getInstance().dimension( _i ) < mCoordinates.rows() );
-	return mCoordinates( hypro::VariablePool::getInstance().dimension( _i ) );
+	assert( hypro::VariablePool::getInstance().id( _i ) < mCoordinates.rows() );
+	return mCoordinates( hypro::VariablePool::getInstance().id( _i ) );
 }
 
 template <typename Number>

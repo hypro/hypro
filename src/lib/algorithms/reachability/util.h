@@ -8,50 +8,6 @@
 namespace hypro {
 
 /*
- * General purpose functionality
- */
-template <typename Number>
-bool compare( Number _lhs, Number _rhs, hypro::operator_e _op ) {
-	bool result = false;
-
-	switch ( _op ) {
-		case EQ:
-			if ( _lhs == _rhs ) {
-				result = true;
-			}
-			break;
-		case NEQ:
-			if ( _lhs != _rhs ) {
-				result = true;
-			}
-			break;
-		case GEQ:
-			if ( _lhs >= _rhs ) {
-				result = true;
-			}
-			break;
-		case LEQ:
-			if ( _lhs <= _rhs ) {
-				result = true;
-			}
-			break;
-		case LESS:
-			if ( _lhs < _rhs ) {
-				result = true;
-			}
-			break;
-		case GREATER:
-			if ( _lhs > _rhs ) {
-				result = true;
-			}
-			break;
-		default:
-			result = false;
-	}
-	return result;
-}
-
-/*
  * Functionality for the reachability computation
  */
 

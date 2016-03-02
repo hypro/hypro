@@ -33,8 +33,6 @@ protected:
 		invariantVec(1) = 16;
 		//invariantVec(2) = 1;
 
-		invariantOp = LEQ;
-
 		invariantMat(0,0) = 1;
 		invariantMat(0,1) = 0;
 		//invariantMat(0,2) = 0;
@@ -45,9 +43,8 @@ protected:
 		//invariantMat(2,1) = 0;
 		//invariantMat(2,2) = 1;
 
-		loc1->setInvariant(invariantMat,invariantVec,invariantOp);
+		loc1->setInvariant(invariantMat,invariantVec);
 
-		inv.op = invariantOp;
 		inv.mat = invariantMat;
 		inv.vec = invariantVec;
 
@@ -71,7 +68,6 @@ protected:
 		/*
 		 * Transition
 		 */
-		guard.op = inv.op;
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
@@ -174,7 +170,6 @@ protected:
 	//Other Objects: Vectors, Matrices, Guards...
 	// vector_t<mpq_class> invariantVec = vector_t<mpq_class>(3,1);
 	vector_t<mpq_class> invariantVec = vector_t<mpq_class>(2,1);
-	operator_e invariantOp;
 	// matrix_t<mpq_class> invariantMat = matrix_t<mpq_class>(3,3);
 	matrix_t<mpq_class> invariantMat = matrix_t<mpq_class>(2,2);
 	struct Location<mpq_class>::Invariant inv;

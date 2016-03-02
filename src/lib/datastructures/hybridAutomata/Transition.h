@@ -17,7 +17,6 @@ class Transition {
 	struct Guard {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
-		hypro::operator_e op;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
 			_ostr << _g.mat << " + " << std::endl << _g.vec;
@@ -53,7 +52,10 @@ class Transition {
 	Transition( const Transition& _trans )
 		: mSource( _trans.source() ), mTarget( _trans.target() ), mGuard( _trans.guard() ), mReset( _trans.reset() ) {}
 
-	Transition( const Location<Number>* _source, const Location<Number>* _target, const struct Guard& _guard,
+	Transition( Location<Number>* _source, Location<Number>* _target )
+		: mSource( _source ), mTarget( _target ), mGuard(), mReset() {}
+
+	Transition( Location<Number>* _source, Location<Number>* _target, const struct Guard& _guard,
 				const Reset& _reset )
 		: mSource( _source ), mTarget( _target ), mGuard( _guard ), mReset( _reset ) {}
 
