@@ -9,7 +9,7 @@
  */
 
 #include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../src/lib/representations/GeometricObject.h"
 
 using namespace hypro;
 
