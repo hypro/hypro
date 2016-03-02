@@ -44,11 +44,13 @@ struct flowstarParser
 {
 	symbol_table mSymbols;
 	symbol_table mModes;
+	VariablePool& mVariablePool = VariablePool::getInstance();
 	variables<Iterator> mVariables;
-	modeParser<Iterator> mModeParser;
-	transitionParser<Iterator> mTransitionParser;
+	modeParser<Iterator, Number> mModeParser;
+	transitionParser<Iterator, Number> mTransitionParser;
+	std::vector<unsigned> mModeIds;
+	std::vector<unsigned> mVariableIds;
 	unsigned mDimension;
-	unsigned mModeCount;
 
 	flowstarParser() : flowstarParser::base_type( start ) {
 		using qi::lit;
@@ -63,12 +65,12 @@ struct flowstarParser
         using px::val;
         using namespace qi;
 
-		mDimension = 0;
-		mModeCount = 0;
+        mDimension = 0;
+
 		stateVars = qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
 		modes = qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
-		transitions = mTransitionParser(px::ref(mModes));
-		start =  stateVars > modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] > -transitions > qi::eoi;
+		transitions = mTransitionParser(px::ref(mModes))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
+		start =  stateVars > modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] > -transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] > qi::eoi;
 
 		qi::on_error<qi::fail>
 		(
@@ -85,25 +87,35 @@ struct flowstarParser
 
 	qi::rule<Iterator, Skipper> start;
 	qi::rule<Iterator, Skipper> stateVars;
-	qi::rule<Iterator, std::vector<std::string>(), Skipper> modes;
-	qi::rule<Iterator, Skipper> transitions;
+	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
+	qi::rule<Iterator, std::vector<Transition<Number>*>(), Skipper> transitions;
 
 	void insertSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
-			std::cout << "Mapped var " << varName << " to dimension " << mDimension << std::endl;
-			mSymbols.add(varName, mDimension++);
+			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
+			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			mSymbols.add(varName, mVariablePool.id(tmp));
+			mVariableIds.push_back(mVariablePool.id(tmp));
+			++mDimension;
 		}
 	}
 
-	void insertModes(const std::vector<std::string>& _in) {
-		for(const auto& modeName : _in) {
-			std::cout << "Found mode " << modeName << " mapped to " << mModeCount << std::endl;
-			mModes.add(modeName, mModeCount++);
+	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
+		for(const auto& modePair : _in) {
+			std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
+			//std::cout << "Mode: " << *modePair.second << std::endl;
+			mModes.add(modePair.first, modePair.second->id());
+			mModeIds.push_back(modePair.second->id());
 		}
+	}
+
+	void insertTransitions(const std::vector<Transition<Number>*>& _transitions) {
+
 	}
 
 	void parseInput( const std::string& pathToInputFile );
 	bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number, Representation>& _result );
+	void printModes() const;
 	//HybridAutomaton<Number, Representation> createAutomaton();
 };
 

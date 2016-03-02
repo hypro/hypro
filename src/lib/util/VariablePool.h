@@ -173,7 +173,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 
 	#ifdef USE_PPL
-	int inline dimension( const Parma_Polyhedra_Library::Variable& _var ) const {
+	int inline id( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
 		for ( unsigned pos = 0; pos < mPplVariables.size(); ++pos ) {
@@ -183,7 +183,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 	#endif
 
-	int inline dimension( const carl::Variable& _var ) const {
+	int inline id( const carl::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		#ifdef USE_PPL
 		assert( mPplVariables.size() == mPplId );

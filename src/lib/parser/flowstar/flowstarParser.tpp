@@ -121,5 +121,12 @@ namespace parser {
 //	//	return result;
 	//}
 
+	template<typename Number, typename Representation>
+	void flowstarParser<Number,Representation>::printModes() const {
+		for(const auto& id : mModeIds) {
+			std::cout << *LocationManager<Number>::getInstance().location(id) << std::endl;
+		}
+	}
+
 } // namespace
 } // namespace
