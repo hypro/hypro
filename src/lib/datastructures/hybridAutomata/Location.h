@@ -9,8 +9,6 @@
 
 namespace hypro {
 
-enum operator_e { EQ, GEQ, LEQ, NEQ, LESS, GREATER };
-
 template <typename Number>
 class Transition;
 
@@ -25,7 +23,6 @@ class Location {
 	struct Invariant {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
-		hypro::operator_e op;
 	};
 
   protected:
@@ -68,16 +65,22 @@ class Location {
 
 	void setFlow( const hypro::matrix_t<Number>& _mat );
 	void setInvariant( const struct hypro::Location<Number>::Invariant& _inv );
-	void setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec, hypro::operator_e _op );
+	void setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec );
 	void setLocation( const struct locationContent& _loc );
 	void setTransitions( const transitionSet& _trans );
+	void addTransition( Transition<Number>* _trans );
 	void setExtInputMat( const hypro::matrix_t<Number>& _mat );
 
 	bool operator<( const Location<Number>& _rhs ) const { return ( mId < _rhs.id() ); }
 
 	friend std::ostream& operator<<( std::ostream& _ostr, const Location<Number>& _l ) {
-		_ostr << "location(" << std::endl << "\t Flow = " << _l.mActivityMat << std::endl
-			  << "\t Inv = " << _l.mInvariant.mat << std::endl << ")";
+		matrix_t<Number> tmp = matrix_t<Number>(_l.invariant().mat.rows(), _l.invariant().mat.cols()+1);
+		tmp << _l.invariant().mat,_l.invariant().vec;
+		_ostr << "location( id: " << _l.id() << std::endl << "\t Flow: " << std::endl << _l.flow() << std::endl
+			  << "\t Inv: " << std::endl << tmp << std::endl << "Transitions: " << std::endl;
+			  for(auto transitionPtr : _l.transitions())
+				_ostr << transitionPtr->source()->id() << " -> " << transitionPtr->target()->id() << std::endl;
+			  _ostr << std::endl << ")";
 		return _ostr;
 	}
 };

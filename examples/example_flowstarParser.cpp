@@ -15,4 +15,5 @@ int main(int argc, char** argv) {
 
     hypro::parser::flowstarParser<number,valuation> parser;
     parser.parseInput(filename);
+    parser.printModes();
 }

@@ -40,6 +40,63 @@ modes
    }
   }
 
+  P_nfull_nin
+  {
+   poly ode 1
+   {
+    h1' = 0
+    h2' = 0
+	P' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [1,1]
+    h1 in [0,0]
+    h2 in [0,30]
+    t in [0,1]
+   }
+  }
+
+  P_full_nin
+  {
+   poly ode 1
+   {
+    h1' = 0
+    h2' = 0
+	P' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [1,1]
+    h1 in [0,0]
+    h2 in [30,30]
+    t in [0,1]
+   }
+  }
+
+  nP
+  {
+   poly ode 1
+   {
+    h1' = 0
+    h2' = 0
+	P' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [0,0]
+    h1 in [0,30]
+    h2 in [0,30]
+    t in [0,1]
+   }
+  }
+
  }
 
 jumps

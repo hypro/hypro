@@ -79,9 +79,7 @@ void Location<Number>::setInvariant( const hypro::Location<Number>::Invariant& _
 }
 
 template <typename Number>
-void Location<Number>::setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec,
-									 hypro::operator_e _op ) {
-	mInvariant.op = _op;
+void Location<Number>::setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec ) {
 	mInvariant.vec = _vec;
 	mInvariant.mat = _mat;
 }
@@ -90,4 +88,10 @@ template <typename Number>
 void Location<Number>::setTransitions( const transitionSet& _trans ) {
 	mTransitions = _trans;
 }
+
+template<typename Number>
+void Location<Number>::addTransition( Transition<Number>* _trans ) {
+	mTransitions.insert(_trans);
 }
+
+} // namespace hypro
