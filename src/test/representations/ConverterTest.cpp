@@ -243,14 +243,14 @@ TYPED_TEST(ConverterTest, toZonotope)
         auto result2 = Converter<TypeParam>::toZonotope(this->box);
         //std::cout << " Box: " << std::endl;
         //result2.print();
-        auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
+        //auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
         //std::cout << "V: " << std::endl;
         //result3.print();
-        auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
+        //auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
         //result4.print();
-        auto vpoly = VPolytope<TypeParam>(result4.vertices());
-        this->plotter.addObject(vpoly.vertices());
-        this->plotter.addPoints(this->vpolytope2.vertices());
+        //auto vpoly = VPolytope<TypeParam>(result4.vertices());
+        //this->plotter.addObject(vpoly.vertices());
+        //this->plotter.addPoints(this->vpolytope2.vertices());
         
         auto result5 = Converter<TypeParam>::toZonotope(this->vpolytope3);
         auto vpoly2 = VPolytope<TypeParam>(result5.vertices());

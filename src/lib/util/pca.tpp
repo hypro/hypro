@@ -57,15 +57,18 @@ std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Numbe
     //computes halfspaces with the help of U in two steps
     
     //first step: compute the maximum/minimum product of transposed translated samples (tSamples) with the corresponding column of U
-    vector_t<Number> max = vector_t<Number>::Constant(dim, 1, tSamples[0].rawCoordinates().dot(numberU.col(0)));
-    vector_t<Number> min = vector_t<Number>::Constant(dim, 1, tSamples[0].rawCoordinates().dot(numberU.col(0)));
+
+    vector_t<Number> max = vector_t<Number>(dim);
+    vector_t<Number> min = vector_t<Number>(dim);
     for (unsigned i=0; i < dim; ++i){
+        max(i) = tSamples[0].rawCoordinates().dot(numberU.col(i));
+        min(i) = tSamples[0].rawCoordinates().dot(numberU.col(i));
         for (unsigned j=0; j < sSize; ++j){
             Number tmp = tSamples[j].rawCoordinates().dot(numberU.col(i));
-            if ( tmp > max[i]){
+            if ( tmp > max(i)){
                 max(i) = tmp;
             }
-            if ( tmp < min[i]){
+            if ( tmp < min(i)){
                 min(i) = tmp;
             }
         }
