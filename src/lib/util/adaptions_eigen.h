@@ -217,8 +217,8 @@ namespace hypro {
 	* conversion of a vector of type 'Number' to 'double'
 	*/
 	template <typename Number>
-	Eigen::Matrix<Number, Eigen::Dynamic, 1> convertVecToDouble( const hypro::vector_t<Number>& _vec ) {
-		Eigen::Matrix<Number, Eigen::Dynamic, 1> resultMat( _vec.rows(), 1 );
+	Eigen::Matrix<double, Eigen::Dynamic, 1> convertVecToDouble( const hypro::vector_t<Number>& _vec ) {
+		Eigen::Matrix<double, Eigen::Dynamic, 1> resultMat( _vec.rows(), 1 );
 
 		for ( int i = 0; i < _vec.rows(); ++i ) {
 			resultMat( i ) = carl::toDouble(_vec( i ));

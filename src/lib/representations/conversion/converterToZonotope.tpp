@@ -41,6 +41,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
 }
 
 //TODO exact conversion (maybe)
+//TODO doesn't work properly
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
@@ -90,13 +91,17 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          for (unsigned i=0; i < dim; ++i){
              //read out normal of current halfspace pair
              vector_t<Number> normal = planes[2*i].normal();
+             
+             std::cout << "Normal: " << convertVecToDouble(normal) << std::endl;
              //only continue if normal is non-zero
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
              for (unsigned j=0; j < dim; ++j){
-                 //construct point on the hyperplane by taking the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
+                 //construct point on the hyperplane by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
                  if (normal(j) != 0){
-                     planePoints(i, j) = planes[2*i].offset();
+                     vector_t<Number> p = vector_t<Number>::Zero(dim);
+                     p(j) = 1;
+                     planePoints.row(i) = p*(planes[2*i].offset()/normal(j));
                      break;
                  }  
              }
@@ -106,10 +111,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
+             
+             
+             
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time 
              normalDiff = carl::ceil(normalDiff*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              Number euclid = norm(normal, false);
+             
+             std::cout << "NormalLength: " << carl::toDouble(euclid) <<  std::endl;
              //eliminates some fractional digits for improved computation time 
              euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              
@@ -121,6 +131,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              }
          }
          
+         std::cout << "Distances:" << convertVecToDouble(distances) << std::endl;
+         
          //computes scaling factors for normals in order to compute the generators later on
          std::pair<Number, Number> scaling = std::pair<Number, Number>();
          for (unsigned i=0; i < dim; ++i){
@@ -131,14 +143,16 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              //eliminates some fractional digits for improved computation time 
              powDiv = carl::ceil(powDiv*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              scaling = carl::sqrt_safe(powDiv);
+             //computes generators
+             generators.col(i) = scaling.second*normal;
+             
+             std::cout << "ScalingFirst: " << carl::toDouble(scaling.first) << "ScalingSecond:" << carl::toDouble(scaling.second) << std::endl;
          }
          
-         //computes generators
-         for (unsigned i=0; i < dim; ++i){
-             vector_t<Number> normal = planes[2*i].normal();
-             generators.col(i) = scaling.second*normal;
-         }
-        
+         
+         
+     
+
          
       
          return Zonotope(center, generators);
