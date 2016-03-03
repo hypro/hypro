@@ -210,8 +210,8 @@ static bool computePostCondition( const hypro::Transition<Number>& _trans, Repre
 
 	// check if the intersection is empty
 	if ( !intersectionPoly.empty() ) {
-		hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
-		hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
+		hypro::vector_t<Number> translateVec = _trans.reset().vec;
+		hypro::matrix_t<Number> transformMat = _trans.reset().mat;
 
 		// perform translation + transformation on intersection polytope
 		result = intersectionPoly.linearTransformation( transformMat, translateVec );

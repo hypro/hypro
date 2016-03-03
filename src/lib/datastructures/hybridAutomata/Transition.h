@@ -25,11 +25,11 @@ class Transition {
 	};
 
 	struct Reset {
-		hypro::vector_t<Number> translationVec;  // Translation Vector
-		hypro::matrix_t<Number> transformMat;  // Transformation Matrix
+		hypro::vector_t<Number> vec;  // Translation Vector
+		hypro::matrix_t<Number> mat;  // Transformation Matrix
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
-			_ostr << _a.transformMat << " + " << std::endl << _a.translationVec;
+			_ostr << _a.mat << " + " << std::endl << _a.vec;
 			return _ostr;
 		}
 	};

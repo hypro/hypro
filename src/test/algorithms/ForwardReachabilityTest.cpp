@@ -71,8 +71,8 @@ protected:
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
-		assign.translationVec = inv.vec;
-		assign.transformMat = inv.mat;
+		assign.vec = inv.vec;
+		assign.mat = inv.mat;
 
 		trans->setGuard(guard);
 		trans->setSource(loc1);

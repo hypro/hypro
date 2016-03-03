@@ -66,8 +66,8 @@ protected:
 		guard.mat = inv.mat;
 		guard.vec = inv.vec;
 
-		reset.translationVec = inv.vec;
-		reset.transformMat = inv.mat;
+		reset.vec = inv.vec;
+		reset.mat = inv.mat;
 
 		trans->setGuard(guard);
 		trans->setSource(loc1);
@@ -198,8 +198,8 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	EXPECT_EQ(this->trans->target(),this-> loc2);
 
 	//transition: Assignment
-	EXPECT_EQ(this->trans->reset().translationVec, this->reset.translationVec);
-	EXPECT_EQ(this->trans->reset().transformMat, this->reset.transformMat);
+	EXPECT_EQ(this->trans->reset().vec, this->reset.vec);
+	EXPECT_EQ(this->trans->reset().mat, this->reset.mat);
 
 	//transition: Guard
 	EXPECT_EQ(this->trans->guard().vec, this->guard.vec);
