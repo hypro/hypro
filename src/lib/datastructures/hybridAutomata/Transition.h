@@ -11,6 +11,9 @@
 #include "Location.h"
 
 namespace hypro {
+
+enum Aggregation {none,box,parallelotope};
+
 template <typename Number>
 class Transition {
   public:
@@ -42,6 +45,7 @@ class Transition {
 	Location<Number>* mTarget;
 	Guard mGuard;
 	Reset mReset;
+	Aggregation mAggregationSetting;
 
   public:
 	/**
@@ -50,14 +54,14 @@ class Transition {
 	Transition() {}
 
 	Transition( const Transition& _trans )
-		: mSource( _trans.source() ), mTarget( _trans.target() ), mGuard( _trans.guard() ), mReset( _trans.reset() ) {}
+		: mSource( _trans.source() ), mTarget( _trans.target() ), mGuard( _trans.guard() ), mReset( _trans.reset() ), mAggregationSetting( _trans.aggregation() ) {}
 
 	Transition( Location<Number>* _source, Location<Number>* _target )
-		: mSource( _source ), mTarget( _target ), mGuard(), mReset() {}
+		: mSource( _source ), mTarget( _target ), mGuard(), mReset(), mAggregationSetting(Aggregation::none) {}
 
 	Transition( Location<Number>* _source, Location<Number>* _target, const struct Guard& _guard,
 				const Reset& _reset )
-		: mSource( _source ), mTarget( _target ), mGuard( _guard ), mReset( _reset ) {}
+		: mSource( _source ), mTarget( _target ), mGuard( _guard ), mReset( _reset ), mAggregationSetting(Aggregation::none) {}
 
 	~Transition() {}
 
@@ -72,6 +76,8 @@ class Transition {
 
 	const Reset& reset() const { return mReset; }
 
+	const Aggregation& aggregation() const { return mAggregationSetting; }
+
 	void setSource( Location<Number>* _source ) { mSource = _source; }
 
 	void setTarget( Location<Number>* _target ) { mTarget = _target; }
@@ -80,9 +86,11 @@ class Transition {
 
 	void setReset( const struct Reset& _val ) { mReset = _val; }
 
+	void setAggregation( const Aggregation& _aggregation ) { mAggregationSetting = _aggregation; }
+
 	friend std::ostream& operator<<( std::ostream& _ostr, const Transition<Number>& _t ) {
-		_ostr << "transition(" << std::endl << "\t Source = " << *_t.source() << std::endl
-			  << "\t Target = " << *_t.target() << std::endl << "\t Guard = " << _t.guard() << std::endl
+		_ostr << "transition(" << std::endl << "\t Source = " << _t.source()->id() << std::endl
+			  << "\t Target = " << _t.target()->id() << std::endl << "\t Guard = " << _t.guard() << std::endl
 			  << "\t Reset = " << _t.reset() << std::endl << ")";
 		return _ostr;
 	}

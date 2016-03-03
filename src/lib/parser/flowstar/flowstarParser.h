@@ -20,23 +20,18 @@
 #include <boost/spirit/include/phoenix_object.hpp>
 
 #include "../../config.h"
+#include "common.h"
 #include "../../datastructures/hybridAutomata/LocationManager.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/types.h"
+#include "symbols.h"
 #include "polynomialParser.h"
 #include "componentParser.h"
 
 #pragma once
 
-namespace qi = boost::spirit::qi;
-namespace px = boost::phoenix;
-namespace ascii = boost::spirit::ascii;
-
 namespace hypro {
 namespace parser {
-
-using symbol_table = qi::symbols<char, unsigned>;
-typedef qi::space_type Skipper;
 
 template <typename Number, typename Representation>
 struct flowstarParser
@@ -48,6 +43,7 @@ struct flowstarParser
 	variables<Iterator> mVariables;
 	modeParser<Iterator, Number> mModeParser;
 	transitionParser<Iterator, Number> mTransitionParser;
+	constraintParser<Iterator> mConstraintParser;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	unsigned mDimension;
@@ -69,8 +65,11 @@ struct flowstarParser
 
 		stateVars = qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
 		modes = qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
-		transitions = mTransitionParser(px::ref(mModes))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
-		start =  stateVars > modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] > -transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] > qi::eoi;
+		transitions = mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
+		init = qi::lexeme["init"] > qi::lit('{') > mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') > qi::lit('}');
+		badStates = qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
+		settings = qi::lexeme["settings"] > qi::lit('{') > qi::lit('}');
+		start =  stateVars > modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] > -transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] > -init > -badStates > qi::eoi;
 
 		qi::on_error<qi::fail>
 		(
@@ -87,8 +86,11 @@ struct flowstarParser
 
 	qi::rule<Iterator, Skipper> start;
 	qi::rule<Iterator, Skipper> stateVars;
+	qi::rule<Iterator, Skipper> init;
+	qi::rule<Iterator, Skipper> settings;
+	qi::rule<Iterator, Skipper> badStates;
 	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
-	qi::rule<Iterator, std::vector<Transition<Number>*>(), Skipper> transitions;
+	qi::rule<Iterator, std::set<Transition<Number>*>(), Skipper> transitions;
 
 	void insertSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
@@ -109,8 +111,11 @@ struct flowstarParser
 		}
 	}
 
-	void insertTransitions(const std::vector<Transition<Number>*>& _transitions) {
-
+	void insertTransitions(const boost::optional<std::set<Transition<Number>*>>& _transitions) {
+		if(_transitions){
+			for(const auto transition : *_transitions)
+				std::cout << *transition << std::endl;
+		}
 	}
 
 	void parseInput( const std::string& pathToInputFile );
