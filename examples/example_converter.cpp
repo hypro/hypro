@@ -1,4 +1,4 @@
-
+#include "../src/lib/util/Plotter.h"
 #include "../src/lib/representations/Converter.h"
 
 using namespace hypro;

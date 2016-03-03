@@ -12,6 +12,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/representations/conversion/Converter.h"
+#include "../../lib/util/Plotter.h"
 
 using namespace hypro;
 using namespace carl;
@@ -22,6 +23,8 @@ class ConverterTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
+        
+               
                 //box
                 std::vector<carl::Interval<Number>> boundaries;
                 boundaries.push_back(carl::Interval<Number>(2,6));
@@ -91,6 +94,8 @@ protected:
                 points2.push_back(Point<Number>(p4));
                 vpolytope2 = hypro::VPolytope<Number>(points2);
                 
+               
+                
                 //third v-polytope(tilted stretched box)
                 vector_t<Number> p6 = vector_t<Number>(2);
                 p6(0)= 2;
@@ -140,6 +145,8 @@ protected:
     virtual void TearDown()
     {
     }
+    
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
     matrix_t<Number> matrix;
     matrix_t<Number> matrix2;
@@ -230,18 +237,26 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
 TYPED_TEST(ConverterTest, toZonotope)
 {
-        
+       
         auto result = Converter<TypeParam>::toZonotope(this->zonotope);
-        result.print();
+        //result.print();
         auto result2 = Converter<TypeParam>::toZonotope(this->box);
-        std::cout << " Box: " << std::endl;
-        result2.print();
+        //std::cout << " Box: " << std::endl;
+        //result2.print();
         auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
-        std::cout << "V: " << std::endl;
-        result3.print();
+        //std::cout << "V: " << std::endl;
+        //result3.print();
         auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
-        result4.print();
+        //result4.print();
+        auto vpoly = VPolytope<TypeParam>(result4.vertices());
+        this->plotter.addObject(vpoly.vertices());
+        this->plotter.addPoints(this->vpolytope2.vertices());
+        
         auto result5 = Converter<TypeParam>::toZonotope(this->vpolytope3);
-        result5.print();
+        auto vpoly2 = VPolytope<TypeParam>(result5.vertices());
+        this->plotter.setObjectColor(this->plotter.addObject(vpoly2.vertices()), colors[green]);
+        this->plotter.setObjectColor(this->plotter.addObject(this->vpolytope3.vertices()), colors[orange]);
+        //result5.print();
+        this->plotter.plot2d();
 	SUCCEED();
 }

@@ -8,6 +8,7 @@
  */
 
 #include "Converter.h"
+#include "../../util/Plotter.h"
 
 //conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
@@ -40,7 +41,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
 }
 
 //TODO exact conversion (maybe)
-//TODO simplify numbers (carl::abs and carl::sqrt_safe compute their asses off)
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
@@ -56,8 +56,10 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
         HPolytope hpoly = HPolytope(planes);
         
-        std::cout << "hpoly:" << std::endl;
-        hpoly.print();
+        //TODO remove later
+        Plotter<Number>& plotter = Plotter<Number>::getInstance();
+
+        plotter.setObjectColor(plotter.addObject(hpoly.vertices()), colors[red]);
         
         //converts computed box H -> V
         auto vpoly = Converter<Number>::toVPolytope(hpoly);
@@ -105,9 +107,18 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
+             //eliminates some fractional digits for improved computation time 
+             normalDiff = carl::ceil(normalDiff*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              Number euclid = norm(normal, false);
-             distances(i) = carl::abs(carl::ceil(normalDiff))/carl::ceil(euclid);
-             //distances(i) = carl::abs(normal.dot(center) - normal.dot(planePoints.row(i)))/norm(normal, false);
+             //eliminates some fractional digits for improved computation time 
+             euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             
+             assert (euclid > 0);
+             if (normalDiff < 0){
+                 distances(i) = -1*(normalDiff)/euclid;
+             } else {
+                 distances(i) = normalDiff/euclid;
+             }
          }
          
          //computes scaling factors for normals in order to compute the generators later on
@@ -117,8 +128,9 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              Number distancePow = distances(i)*distances(i);
              Number normalPow = normal.dot(normal);
              Number powDiv = distancePow/normalPow;
-             scaling = carl::sqrt_safe(carl::ceil(powDiv));
-             //scaling = carl::sqrt_safe((distances(i)*distances(i))/(normal.dot(normal))); 
+             //eliminates some fractional digits for improved computation time 
+             powDiv = carl::ceil(powDiv*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             scaling = carl::sqrt_safe(powDiv);
          }
          
          //computes generators
