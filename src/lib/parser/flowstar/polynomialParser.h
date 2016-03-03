@@ -5,17 +5,6 @@
 namespace hypro {
 namespace parser {
 
-	namespace spirit = boost::spirit;
-	namespace qi = boost::spirit::qi;
-	namespace ascii = boost::spirit::ascii;
-	namespace px = boost::phoenix;
-
-	using symbol_table = qi::symbols<char, unsigned>;
-	typedef spirit::istream_iterator BaseIteratorType;
-	typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
-	typedef PositionIteratorType Iterator;
-	typedef qi::space_type Skipper;
-
 	template <typename Iterator>
 	struct variables
 	    : qi::grammar<Iterator, std::vector<std::string>(), Skipper>
@@ -134,6 +123,22 @@ namespace parser {
 
 		odeParser() : odeParser::base_type( start ) {
 			start = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lit("=") > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &odeParser<Iterator>::createRow, px::ref(*this), qi::_1, qi::_2 )]];
+		}
+
+		qi::rule<Iterator, std::pair<unsigned, vector_t<double>>(symbol_table const&, unsigned const&)> start;
+
+		std::pair<unsigned, vector_t<double>> createRow( const unsigned& _d, const vector_t<double>& _row ) {
+			return std::make_pair(_d, _row);
+		}
+	};
+
+	template<typename Iterator>
+	struct resetParser : qi::grammar<Iterator, std::pair<unsigned, vector_t<double>>(symbol_table const&, unsigned const&)>
+	{
+		polynomialParser<Iterator> mPolynomial;
+
+		resetParser() : resetParser::base_type( start ) {
+			start = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lit(":=") > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &resetParser<Iterator>::createRow, px::ref(*this), qi::_1, qi::_2 )]];
 		}
 
 		qi::rule<Iterator, std::pair<unsigned, vector_t<double>>(symbol_table const&, unsigned const&)> start;

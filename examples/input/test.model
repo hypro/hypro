@@ -1,6 +1,8 @@
 state var P, h1, h2, t
 
-modes
+# this is a comment
+
+ modes
  {
   P_nfull_in
   {
@@ -40,6 +42,8 @@ modes
    }
   }
 
+
+# another comment
   P_nfull_nin
   {
    poly ode 1
@@ -99,10 +103,49 @@ modes
 
  }
 
-jumps
-{
-  P_nfull_in -> P_full_in
-
+ jumps
+ {
   start P_nfull_in
   end P_full_in
+  guard { h2 >= 30 }
+  reset { }
+  parallelotope aggregation {  }
+
+  start P_nfull_in
+  end P_nfull_nin
+  guard { h1 <= 0 }
+  reset { }
+  parallelotope aggregation {  }
+
+  start P_nfull_in
+  end P_full_nin
+  guard { h1 <= 0 h2 >= 30 }
+  reset { }
+  parallelotope aggregation {  }
+
+  start P_full_in
+  end P_full_nin
+  guard { h1 <= 0 }
+  reset { }
+  parallelotope aggregation {  }
+ }
+
+ init
+ {
+  P_nfull_in
+  {
+   P in [1,1]
+   h1 in [1,1]
+   h2 in [10,20]
+   t in [0,0]
+  }
+ }
+
+ unsafe set
+{
+ P_full_in { }
+ P_nfull_nin { }
+ P_full_nin { }
+ nP { h1 in [0,0] }
+ nP { h2 in [30,30] }
 }
