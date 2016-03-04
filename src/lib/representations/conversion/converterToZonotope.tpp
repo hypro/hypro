@@ -8,17 +8,25 @@
  */
 
 #include "Converter.h"
-#include "../../util/Plotter.h"
 
 //conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE mode ){
     return _source;
 }
-//TODO conversion from HPolytope to Zonotope (no differentiation between conversion modes - always OVER)
+//conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
-    return Zonotope();
+    //converts source object into a v-polytope
+    auto temp = Converter<Number>::toVPolytope(_source, mode);
+    
+    
+    //conversion is from here done just like V -> Zonotope
+    auto res = Converter<Number>::toZonotope(temp, mode);
+    
+    
+    return res;
+
 }
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
@@ -40,7 +48,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
     return Zonotope(center, generators);
 }
 
-//TODO exact conversion (maybe)
+//TODO sqrt_safe is kind of unprecise
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
@@ -56,13 +64,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
         HPolytope hpoly = HPolytope(planes);
         
-        //TODO remove later
-        Plotter<Number>& plotter = Plotter<Number>::getInstance();
-
-        plotter.setObjectColor(plotter.addObject(hpoly.vertices()), colors[red]);
-        
         //converts computed box H -> V
-        auto vpoly = Converter<Number>::toVPolytope(hpoly);
+        auto vpoly = Converter<Number>::toVPolytope(hpoly, mode);
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
         
@@ -90,13 +93,17 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          for (unsigned i=0; i < dim; ++i){
              //read out normal of current halfspace pair
              vector_t<Number> normal = planes[2*i].normal();
+             
+            
              //only continue if normal is non-zero
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
              for (unsigned j=0; j < dim; ++j){
-                 //construct point on the hyperplane by taking the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
+                 //construct point on the hyperplane by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
                  if (normal(j) != 0){
-                     planePoints(i, j) = planes[2*i].offset();
+                     vector_t<Number> p = vector_t<Number>::Zero(dim);
+                     p(j) = 1;
+                     planePoints.row(i) = p*(planes[2*i].offset()/normal(j));
                      break;
                  }  
              }
@@ -106,12 +113,21 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
+             
+             
+             
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time 
-             normalDiff = carl::ceil(normalDiff*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              Number euclid = norm(normal, false);
+            
+             //TODO seems to bug here sometimes
              //eliminates some fractional digits for improved computation time 
-             euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
+             Number euclid2 = (Number) fReach_DENOMINATOR;
+             Number euclid3 = carl::ceil(euclid1);
+             euclid  = euclid3/euclid2;
+             //euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              
              assert (euclid > 0);
              if (normalDiff < 0){
@@ -121,33 +137,59 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              }
          }
          
-         //computes scaling factors for normals in order to compute the generators later on
-         std::pair<Number, Number> scaling = std::pair<Number, Number>();
          for (unsigned i=0; i < dim; ++i){
+             //computes scaling factors for normals in order to compute the generators later on
              vector_t<Number> normal = planes[2*i].normal();
              Number distancePow = distances(i)*distances(i);
              Number normalPow = normal.dot(normal);
              Number powDiv = distancePow/normalPow;
              //eliminates some fractional digits for improved computation time 
-             powDiv = carl::ceil(powDiv*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
-             scaling = carl::sqrt_safe(powDiv);
-         }
-         
-         //computes generators
-         for (unsigned i=0; i < dim; ++i){
-             vector_t<Number> normal = planes[2*i].normal();
+             powDiv = carl::ceil(powDiv* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
+             //computes generators
              generators.col(i) = scaling.second*normal;
          }
-        
-         
       
          return Zonotope(center, generators);
         
     //}
 }
 
-//TODO conversion from Support Function to Zonotope (no differentiation between conversion modes - always OVER)
+//conversion from Support Function to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode){
-    return Zonotope();
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+    //gets dimension of source object
+    unsigned dim = _source.dimension();
+    
+    //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+    std::cout << "Number of directions:" << templateDirections.size() << std::endl;
+    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+    //creates a matrix with one row for each direction and one column for each dimension
+    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+    
+    //fills the matrix with the template directions
+    for (unsigned i=0; i<templateDirections.size();++i){
+        templateDirectionMatrix.row(i) = templateDirections[i];
+    }
+    
+    //lets the support function evaluate the offset of the halfspaces for each direction
+    vector_t<Number> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    
+    std::cout << "Offsets" << std::endl;
+    
+    //constructs a H-Polytope out of the computed halfspaces
+    HPolytope samplePoly = HPolytope(templateDirectionMatrix, offsets);
+    
+    std::cout << "samplePoly" << std::endl;
+    
+    //converts H-Polytope into a V-Polytope
+    auto sampleVPoly = Converter<Number>::toVPolytope(samplePoly, mode);
+    
+    //conversion is from here done just like V -> Zonotope
+    auto res = Converter<Number>::toZonotope(sampleVPoly, mode);
+    
+    return res;
+
 }

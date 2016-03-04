@@ -243,20 +243,39 @@ TYPED_TEST(ConverterTest, toZonotope)
         auto result2 = Converter<TypeParam>::toZonotope(this->box);
         //std::cout << " Box: " << std::endl;
         //result2.print();
-        //auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
+        auto result3 = Converter<TypeParam>::toZonotope(this->vpolytope);
         //std::cout << "V: " << std::endl;
         //result3.print();
-        //auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
-        //result4.print();
+        auto result4 = Converter<TypeParam>::toZonotope(this->vpolytope2);
         //auto vpoly = VPolytope<TypeParam>(result4.vertices());
         //this->plotter.addObject(vpoly.vertices());
         //this->plotter.addPoints(this->vpolytope2.vertices());
         
         auto result5 = Converter<TypeParam>::toZonotope(this->vpolytope3);
-        auto vpoly2 = VPolytope<TypeParam>(result5.vertices());
-        this->plotter.setObjectColor(this->plotter.addObject(vpoly2.vertices()), colors[green]);
-        this->plotter.setObjectColor(this->plotter.addObject(this->vpolytope3.vertices()), colors[orange]);
-        //result5.print();
+        //auto vpoly2 = VPolytope<TypeParam>(result5.vertices());
+        //this->plotter.setObjectColor(this->plotter.addObject(vpoly2.vertices()), colors[green]);
+        //this->plotter.setObjectColor(this->plotter.addObject(this->vpolytope3.vertices()), colors[orange]);
+
+        
+        auto result6 = Converter<TypeParam>::toZonotope(this->hpolytope);
+        auto vpoly3 = VPolytope<TypeParam>(result6.vertices());
+        this->plotter.setObjectColor(this->plotter.addObject(vpoly3.vertices()), colors[turquoise]);
+        //std::cout << "H: " << std::endl;
+        
+        auto result7 = Converter<TypeParam>::toZonotope(this->hpolytope2);
+        auto vpoly4 = VPolytope<TypeParam>(result7.vertices());
+        this->plotter.setObjectColor(this->plotter.addObject(vpoly4.vertices()), colors[maygreen]);
+        this->plotter.addPoints(Converter<TypeParam>::toVPolytope(this->hpolytope2).vertices());
+        
+        //auto result8 = Converter<TypeParam>::toZonotope(this->support);
+        //auto vpoly5 = VPolytope<TypeParam>(result8.vertices());
+        //this->plotter.setObjectColor(this->plotter.addObject(vpoly5.vertices()), colors[petrol]);
+        
+        //auto result9 = Converter<TypeParam>::toZonotope(this->support2);
+        //auto vpoly6 = VPolytope<TypeParam>(result9.vertices());
+        //this->plotter.setObjectColor(this->plotter.addObject(vpoly6.vertices()), colors[bordeaux]);
+        
+        
         this->plotter.plot2d();
 	SUCCEED();
 }

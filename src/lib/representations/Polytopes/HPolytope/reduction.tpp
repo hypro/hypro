@@ -264,7 +264,7 @@ namespace hypro {
 	 m(1,1) = carl::rationalize<Number>(cos(degree));
 
 
-	 for(unsigned i=0; i<polytope; ++i) {
+	 for(unsigned i=0; i<(polytope-1); ++i) {
 		 //Rotate templateVector
 		 templateVector2d = m * templateVector2d;
 		 templatePolytope2d.push_back(templateVector2d);
