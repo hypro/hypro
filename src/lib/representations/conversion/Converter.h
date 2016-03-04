@@ -50,7 +50,7 @@ class Converter {
 		static Zonotope toZonotope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
-		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
+		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = 8 );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 };
 
