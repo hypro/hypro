@@ -21,8 +21,23 @@ namespace parser{
 	    }
 	    qi::rule<Iterator> skip;
 	};
-
 	typedef fsSkipper<Iterator> Skipper;
+
+	struct ErrorHandler {
+		template<typename> struct result { typedef qi::error_handler_result type; };
+		template<typename T1, typename T2, typename T3, typename T4>
+		qi::error_handler_result operator()(T1 b, T2 e, T3 where, T4 const& what) const {
+			auto line_start = spirit::get_line_start(b, where);
+			auto line_end = std::find(where, e, '\n');
+			std::string line(++line_start, line_end);
+
+			std::cout << "Parsing error at " << spirit::get_line(where) << ":" << spirit::get_column(line_start, where);
+			std::cout << " expected" << std::endl << "\t" << what.tag << ": " << what;
+			std::cout << " but got" << std::endl << "\t\"" << std::string(where, line_end) << "\" in line " << spirit::get_line(where) << std::endl;
+			//exit(1);
+			return qi::fail;
+		}
+	};
 
 } // namespace parser
 } // namespace hypro

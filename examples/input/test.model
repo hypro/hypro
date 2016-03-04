@@ -1,6 +1,20 @@
-state var P, h1, h2, t
+# simple tank plant dynamic using delta := 1 full := 30 c := 2
 
-# this is a comment
+hybrid reachability
+{
+ state var P, h1, h2, t
+
+ settings
+ {
+  fixed steps 0.1
+  time 30
+  identity precondition
+  gnuplot octagon t, h1
+  adaptive orders { min 3 , max 5 }
+  output simple_tank_plant_dynamic
+  max jumps 6
+  print on
+ }
 
  modes
  {
@@ -42,8 +56,6 @@ state var P, h1, h2, t
    }
   }
 
-
-# another comment
   P_nfull_nin
   {
    poly ode 1
@@ -140,8 +152,9 @@ state var P, h1, h2, t
    t in [0,0]
   }
  }
+}
 
- unsafe set
+unsafe set
 {
  P_full_in { }
  P_nfull_nin { }

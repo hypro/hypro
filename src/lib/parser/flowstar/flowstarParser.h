@@ -21,6 +21,7 @@
 
 #include "../../config.h"
 #include "common.h"
+#include "../../algorithms/reachability/Settings.h"
 #include "../../datastructures/hybridAutomata/LocationManager.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/types.h"
@@ -37,65 +38,60 @@ template <typename Number, typename Representation>
 struct flowstarParser
     : qi::grammar<Iterator, Skipper>
 {
+	variableParser<Iterator> mVariables;
+	modeParser<Iterator, Number> mModeParser;
+	transitionParser<Iterator, Number> mTransitionParser;
+	settingsParser<Iterator> mSettingsParser;
+	constraintParser<Iterator> mConstraintParser;
+	px::function<ErrorHandler> errorHandler;
+
 	symbol_table mSymbols;
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
-	variables<Iterator> mVariables;
-	modeParser<Iterator, Number> mModeParser;
-	transitionParser<Iterator, Number> mTransitionParser;
-	constraintParser<Iterator> mConstraintParser;
+	std::set<Transition<Number>*> mTransitions;
+	std::vector<std::pair<unsigned, matrix_t<double>>> mInitialStates;
+	std::vector<std::pair<unsigned, matrix_t<double>>> mBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	unsigned mDimension;
 
 	flowstarParser() : flowstarParser::base_type( start ) {
-		using qi::lit;
-        using qi::lexeme;
-        using qi::on_error;
+		using qi::on_error;
         using qi::fail;
-        using ascii::char_;
-        using ascii::string;
-        using namespace qi::labels;
-
-        using px::construct;
-        using px::val;
-        using namespace qi;
 
         mDimension = 0;
 
+		start =  ( qi::lexeme["continuous reachability"] > qi::lit('{') > continuousStart > qi::lit('}') > -badStates > qi::eoi )
+				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number,Representation>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
+
+		continuousStart = stateVars > -mSettingsParser(px::ref(mSymbols));
+		hybridStart = stateVars > settings >
+					modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] >
+					-transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] >
+					(-init)[px::bind( &flowstarParser<Number,Representation>::insertInitialState, px::ref(*this), qi::_1 )];
 		stateVars = qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
+		settings = qi::lexeme["settings"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols)) > qi::lit('}');
 		modes = qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
 		transitions = mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
-		init = qi::lexeme["init"] > qi::lit('{') > mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') > qi::lit('}');
+		init = qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
 		badStates = qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
-		settings = qi::lexeme["settings"] > qi::lit('{') > qi::lit('}');
-		start =  stateVars > modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] > -transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] > -init > -badStates > qi::eoi;
-
-		qi::on_error<qi::fail>
-		(
-		    start
-		  , std::cout <<
-		  	px::val("MainParser: Syntax error. Expecting ")
-        	<< _4
-	        << px::val(" here: \"")
-	        << construct<std::string>(_3, _2)
-	        << px::val("\"")
-	        << std::endl
-		);
+		qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 	}
 
 	qi::rule<Iterator, Skipper> start;
+	qi::rule<Iterator, Skipper> continuousStart;
+	qi::rule<Iterator, Skipper> hybridStart;
 	qi::rule<Iterator, Skipper> stateVars;
-	qi::rule<Iterator, Skipper> init;
 	qi::rule<Iterator, Skipper> settings;
-	qi::rule<Iterator, Skipper> badStates;
+	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>(), Skipper> init;
+	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>(), Skipper> badStates;
 	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
 	qi::rule<Iterator, std::set<Transition<Number>*>(), Skipper> transitions;
 
 	void insertSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
 			mSymbols.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimension;
@@ -104,7 +100,7 @@ struct flowstarParser
 
 	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
 		for(const auto& modePair : _in) {
-			std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
+			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
 			//std::cout << "Mode: " << *modePair.second << std::endl;
 			mModes.add(modePair.first, modePair.second->id());
 			mModeIds.push_back(modePair.second->id());
@@ -113,15 +109,25 @@ struct flowstarParser
 
 	void insertTransitions(const boost::optional<std::set<Transition<Number>*>>& _transitions) {
 		if(_transitions){
-			for(const auto transition : *_transitions)
-				std::cout << *transition << std::endl;
+			mTransitions = *_transitions;
 		}
+	}
+
+	void insertInitialState(boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>> _set) {
+		if(_set){
+			for(const auto& pair : *_set){
+
+			}
+		}
+	}
+
+	void insertBadState(boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>> _set) {
 	}
 
 	void parseInput( const std::string& pathToInputFile );
 	bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number, Representation>& _result );
 	void printModes() const;
-	//HybridAutomaton<Number, Representation> createAutomaton();
+	HybridAutomaton<Number, Representation> createAutomaton();
 };
 
 } // namespace parser

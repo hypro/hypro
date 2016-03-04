@@ -12,17 +12,11 @@ namespace parser {
 		constraintParser<Iterator> constraint;
 		resetParser<Iterator> variableReset;
 		aggregation_ mAggregation;
+		px::function<ErrorHandler> errorHandler;
 
 		transitionParser() : transitionParser::base_type( start ) {
 			using qi::on_error;
 	        using qi::fail;
-	        using ascii::char_;
-	        using ascii::string;
-	        using namespace qi::labels;
-
-	        using px::construct;
-	        using px::val;
-	        using namespace qi;
 
 			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}');
 			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4)];
@@ -34,17 +28,16 @@ namespace parser {
 			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (*variableReset(qi::_r1, qi::_r2))[ qi::_val = px::bind( &transitionParser<Iterator,Number>::createMatrix, px::ref(*this), qi::_1, qi::_r2 )] > *qi::blank > qi::lit('}');
 			agg = qi::skip(qi::blank)[mAggregation > qi::lexeme["aggregation"] > -(qi::lit('{') > qi::lit('}'))];
 
-			qi::on_error<qi::fail>
-			(
-			    jump
-			  , std::cout <<
-			  	px::val("TransitionParser: Syntax error. Expecting ")
-	        	<< _4
-		        << px::val(" here: \"")
-		        << construct<std::string>(_3, _2)
-		        << px::val("\"")
-		        << std::endl
-			);
+			start.name("transitions");
+			jump.name("transition");
+			edge.name("edge");
+			simpleEdge.name("simple edge");
+			twoLineEdge.name("old notation edge");
+			guard.name("guard");
+			reset.name("reset");
+			agg.name("aggregation properties");
+
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, unsigned const&), Skipper> start;
@@ -57,7 +50,7 @@ namespace parser {
 		qi::rule<Iterator, Aggregation()> agg;
 
 		std::pair<unsigned, unsigned> createEdge(unsigned start, unsigned target) {
-			std::cout << "Found transition from " << start << " to " << target << std::endl;
+			//std::cout << "Found transition from " << start << " to " << target << std::endl;
 			return std::make_pair(start, target);
 		}
 
@@ -98,18 +91,16 @@ namespace parser {
 			return res;
 		}
 
-		matrix_t<Number> createGuardMatrix(const std::vector<std::vector<vector_t<double>>>& _constraints, unsigned _dim) {
+		matrix_t<Number> createGuardMatrix(const std::vector<matrix_t<double>>& _constraints, unsigned _dim) {
 			unsigned size = 0;
-			for(const auto constraintVector : _constraints){
-				for(const auto constraint : constraintVector) {
-					++size;
-				}
+			for(const auto constraint : _constraints) {
+				size += constraint.rows();
 			}
 			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraintVector : _constraints){
-				for(const auto constraint : constraintVector) {
-					res.row(rowCnt) = constraint;
+			for(const auto constraint : _constraints){
+				for(unsigned row = 0; row < constraint.rows(); ++row){
+					res.row(rowCnt) = constraint.row(row);
 					++rowCnt;
 				}
 			}
@@ -131,36 +122,25 @@ namespace parser {
 	{
 		LocationManager<Number>& mLocationManager = LocationManager<Number>::getInstance();
 		odeParser<Iterator> mOdeParser;
-		constraintParser<Iterator> mConstraintParser;
+		constraintParser<Iterator> constraint;
+		px::function<ErrorHandler> errorHandler;
 
 		modeParser() : modeParser::base_type( start ) {
 			using qi::on_error;
 	        using qi::fail;
-	        using ascii::char_;
-	        using ascii::string;
-	        using namespace qi::labels;
-
-	        using px::construct;
-	        using px::val;
-	        using namespace qi;
 
 	        start = (name > qi::lit('{') > flow(qi::_r1, qi::_r2) > -(invariant(qi::_r1, qi::_r2)) > qi::lit('}'))[ qi::_val = px::bind( &modeParser<Iterator,Number>::createLocation, px::ref(*this), qi::_1, qi::_2, qi::_3)];
 
 			name = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
 			flow = *qi::space > qi::lexeme["poly ode 1"] > *qi::space > qi::lit('{') > *qi::space > qi::skip(qi::blank)[(mOdeParser(qi::_r1, qi::_r2) % qi::eol)][qi::_val = px::bind( &modeParser<Iterator, Number>::createFlow, px::ref(*this), qi::_1 )] > *qi::space > qi::lit('}');
-			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > (mConstraintParser(qi::_r1, qi::_r2) % qi::eol)[qi::_val = px::bind( &modeParser<Iterator, Number>::createInvariant, px::ref(*this), qi::_1, qi::_r2)] > *qi::space > qi::lit('}');
+			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > (constraint(qi::_r1, qi::_r2) % qi::eol)[qi::_val = px::bind( &modeParser<Iterator, Number>::createInvariant, px::ref(*this), qi::_1, qi::_r2)] > *qi::space > qi::lit('}');
 
-			qi::on_error<qi::fail>
-			(
-			    start
-			  , std::cout <<
-			  	px::val("ModeParser: Syntax error. Expecting ")
-	        	<< _4
-		        << px::val(" here: \"")
-		        << construct<std::string>(_3, _2)
-		        << px::val("\"")
-		        << std::endl
-			);
+			start.name("mode");
+			name.name("location name");
+			flow.name("flow");
+			invariant.name("invariant");
+
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, unsigned const&), Skipper> start;
@@ -171,32 +151,27 @@ namespace parser {
 		matrix_t<Number> createFlow( const std::vector<std::pair<unsigned, vector_t<double>>>& _in ) {
 			assert(!_in.empty());
 			matrix_t<double> res = matrix_t<double>(_in.begin()->second.size()-1, _in.begin()->second.size());
-			std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
+			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
  			for(const auto& pair : _in) {
  				assert(pair.second.rows() == res.cols());
- 				std::cout << "Row " << pair.first << " = " << pair.second.transpose() << std::endl;
+ 				//std::cout << "Row " << pair.first << " = " << pair.second.transpose() << std::endl;
 				res.row(pair.first) << pair.second.transpose();
 			}
-
-			std::cout << "Created flow: " << std::endl;
-			std::cout << res << std::endl;
 
 			// Temporary, until Number template has been propagated fully.
 			return convertMatToFloatT<Number>(res);
 		}
 
-		matrix_t<Number> createInvariant( const std::vector<std::vector<vector_t<double>>>& _constraints, unsigned _dim ) {
+		matrix_t<Number> createInvariant( const std::vector<matrix_t<double>>& _constraints, unsigned _dim ) {
 			unsigned size = 0;
-			for(const auto constraintVector : _constraints){
-				for(const auto constraint : constraintVector) {
-					++size;
-				}
+			for(const auto constraint : _constraints) {
+				size += constraint.rows();
 			}
 			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraintVector : _constraints){
-				for(const auto constraint : constraintVector) {
-					res.row(rowCnt) = constraint;
+			for(const auto constraint : _constraints){
+				for(unsigned row = 0; row < constraint.rows(); ++row){
+					res.row(rowCnt) = constraint.row(row);
 					++rowCnt;
 				}
 			}
@@ -214,6 +189,55 @@ namespace parser {
 			}
 			return std::make_pair(_name, mLocationManager.create(_flow));
 		}
+	};
+
+	template <typename Iterator>
+	struct settingsParser
+	    : qi::grammar<Iterator, ReachabilitySettings<double>(symbol_table const&),Skipper>
+	{
+		ReachabilitySettings<double> mLocalSettings;
+		px::function<ErrorHandler> errorHandler;
+
+		settingsParser() : settingsParser::base_type( start ) {
+			start = *(steps|order|time|jmpLimit|outFile|print|outBackend(qi::_r1)|remainder|cutoff|precision|precondition)[qi::_val = mLocalSettings];
+			steps = ((qi::lexeme["fixed steps"] > qi::double_[px::bind( &settingsParser::setTimeStep, px::ref(*this), qi::_1)]) | (qi::lexeme["adaptive steps"] > qi::lit('{') > qi::lexeme["min"] > qi::int_ > qi::lit(',') > qi::lexeme["max"] > qi::int_ > qi::lit('}')) );
+			order = ((qi::lexeme["fixed orders"] > qi::int_) | (qi::lexeme["adaptive orders"] > qi::lit('{') > qi::lexeme["min"] > qi::int_ > qi::lit(',') > qi::lexeme["max"] > qi::int_ > qi::lit('}')) );
+			time = qi::lexeme["time"] > qi::double_[px::bind( &settingsParser::setTimeBound, px::ref(*this), qi::_1)];
+			jmpLimit = qi::lexeme["max jumps"] > qi::int_[px::bind( &settingsParser::setJumpDepth, px::ref(*this), qi::_1)];
+			outFile = qi::lexeme["output"] > filename [px::bind( &settingsParser::setFileName, px::ref(*this), qi::_1)];
+			print = qi::lexeme["print"] > (qi::lexeme["on"] | qi::lexeme["off"]);
+			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1);
+			shape = (qi::lexeme["octagon"] | qi::lexeme["interval"]);
+			outdimensions = (qi::lazy(qi::_r1) % ',');
+			remainder = qi::lexeme["remainder estimation"];
+			cutoff = qi::lexeme["cutoff"];
+			precision = qi::lexeme["precision"];
+			precondition = (qi::lexeme["QR"] | qi::lexeme["identity"]) > qi::lexeme["precondition"];
+			filename = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
+
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+ 		}
+
+ 		void setTimeStep(double _in){ mLocalSettings.timestep = _in; }
+ 		void setTimeBound(double _in){ mLocalSettings.timebound = _in; }
+ 		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
+ 		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
+
+		qi::rule<Iterator, ReachabilitySettings<double>(symbol_table const&), Skipper> start;
+		qi::rule<Iterator, Skipper> steps;
+		qi::rule<Iterator, Skipper> order;
+		qi::rule<Iterator, Skipper> time;
+		qi::rule<Iterator, Skipper> jmpLimit;
+		qi::rule<Iterator, Skipper> outFile;
+		qi::rule<Iterator, Skipper> print;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&), Skipper> outBackend;
+		qi::rule<Iterator, Skipper> shape;
+		qi::rule<Iterator, std::vector<unsigned>(symbol_table const&), Skipper> outdimensions;
+		qi::rule<Iterator, Skipper> remainder;
+		qi::rule<Iterator, Skipper> cutoff;
+		qi::rule<Iterator, Skipper> precision;
+		qi::rule<Iterator, Skipper> precondition;
+		qi::rule<Iterator, std::string() ,Skipper> filename;
 	};
 
 } // namespace parser

@@ -14,6 +14,7 @@
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/Plotter.h"
 #include "util.h"
+#include "Settings.h"
 
 // Debug Flag, TODO: Add more debug levels.
 //#define REACH_DEBUG
@@ -24,21 +25,6 @@ namespace reachability {
 
 template <typename Representation>
 using flowpipe_t = vector<Representation>;
-
-template<typename Number>
-struct ReachabilitySettings {
-	Number timebound = carl::rationalize<Number>(fReach_TIMEBOUND);
-	std::size_t jumpDepth = fReach_JUMPDEPTH;
-	Number timestep = carl::rationalize<Number>(fReach_TIMESTEP);
-	unsigned long pplDenomimator = fReach_DENOMINATOR;
-
-	friend std::ostream& operator<<( std::ostream& lhs, const ReachabilitySettings<Number>& rhs ) {
-		lhs << "Local time-horizon: " << carl::toDouble(rhs.timebound) << std::endl;
-		lhs << "Time-step size: " << carl::toDouble(rhs.timestep) << std::endl;
-		lhs << "Jump-depth: " << rhs.jumpDepth << std::endl;
-		return lhs;
-	}
-};
 
 template <typename Number, typename Representation>
 class Reach {
