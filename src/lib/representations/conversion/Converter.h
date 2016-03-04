@@ -7,7 +7,7 @@
 #include "../Zonotope/Zonotope.h"
 #include "../../util/pca.h"
 //TODO remove later
-#include "../../util/Plotter.h"
+//#include "../../util/Plotter.h"
 namespace hypro {
 
 //enum for differentiating between exact conversion and over-/underapproximation.
