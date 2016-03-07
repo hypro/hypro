@@ -204,21 +204,28 @@ TYPED_TEST(ConverterTest, toHPolytope)
         auto result =  Converter<TypeParam>::toHPolytope(this->hpolytope);
         
         auto result2 = Converter<TypeParam>::toHPolytope(this->support);
+        //this->plotter.setObjectColor(this->plotter.addObject(result2.vertices()), colors[orange]);
         
         auto result3 = Converter<TypeParam>::toHPolytope(this->support2);
+        //this->plotter.setObjectColor(this->plotter.addObject(result3.vertices()), colors[green]);
         
         auto result4 = Converter<TypeParam>::toHPolytope(this->zonotope);
+        //this->plotter.setObjectColor(this->plotter.addObject(result4.vertices()), colors[petrol]);
         
         auto result5 = Converter<TypeParam>::toHPolytope(this->zonotope2);
+        //this->plotter.setObjectColor(this->plotter.addObject(result5.vertices()), colors[turquoise]);
         
         auto result6 = Converter<TypeParam>::toHPolytope(this->vpolytope, OVER);
+        //this->plotter.setObjectColor(this->plotter.addObject(result6.vertices()), colors[maygreen]);
         
         auto result7 = Converter<TypeParam>::toHPolytope(this->vpolytope2, OVER);
+        //this->plotter.setObjectColor(this->plotter.addObject(result7.vertices()), colors[red]);
         
         auto result8 = Converter<TypeParam>::toHPolytope(this->vpolytope3, OVER);
+        //this->plotter.setObjectColor(this->plotter.addObject(result8.vertices()), colors[bordeaux]);
         
         auto result9 = Converter<TypeParam>::toHPolytope(this->box);
-        
+        //this->plotter.setObjectColor(this->plotter.addObject(result9.vertices()), colors[violett]);
         
 
 	SUCCEED();
