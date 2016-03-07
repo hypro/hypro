@@ -133,8 +133,29 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     return target;
 }
 
-//TODO conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
+//TODO alternative conversion approaches
+// conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode){
-    return HPolytope();
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+    //gets dimension of source object
+    unsigned dim = _source.dimension();
+    
+    //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+    //creates a matrix with one row for each direction and one column for each dimension
+    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+    
+    //fills the matrix with the template directions
+    for (unsigned i=0; i<templateDirections.size();++i){
+        templateDirectionMatrix.row(i) = templateDirections[i];
+    }
+    
+    //lets the support function evaluate the offset of the halfspaces for each direction
+    vector_t<Number> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    
+    //constructs a H-Polytope out of the computed halfspaces
+    HPolytope res = HPolytope(templateDirectionMatrix, offsets);
+    return res;
 }

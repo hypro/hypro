@@ -155,6 +155,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
     //}
 }
 
+//TODO alternative approach with points from boundaries
 //conversion from Support Function to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
@@ -180,7 +181,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
     std::cout << "Offsets" << std::endl;
     
     //constructs a H-Polytope out of the computed halfspaces
-    auto samplePoly = HPolytope(templateDirectionMatrix, offsets);
+    HPolytope samplePoly = HPolytope(templateDirectionMatrix, offsets);
     
     std::cout << "samplePoly" << std::endl;
     
