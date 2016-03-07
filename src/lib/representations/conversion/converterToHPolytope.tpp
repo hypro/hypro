@@ -16,10 +16,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
     return _source;
 }
 
-//conversion from V-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
+//conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
 	HPolytope target;
+    if (mode == EXACT){    
     if ( !_source.empty() ) {
 		// degenerate cases
 		unsigned size = _source.size();
@@ -71,6 +72,16 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 			facets.clear();
 		}
 	}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
+        }
+        //overapproximation
+        if (mode == OVER){
+        //gets vertices from source object
+        typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
+        
+        //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
+        std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
+        target = HPolytope(planes);
+        }
     return target;
 }
 

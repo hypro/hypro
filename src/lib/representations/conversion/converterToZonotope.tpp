@@ -18,11 +18,11 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonoto
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
     //converts source object into a v-polytope
-    auto temp = Converter<Number>::toVPolytope(_source, mode);
+    auto temp = toVPolytope(_source, mode);
     
     
     //conversion is from here done just like V -> Zonotope
-    auto res = Converter<Number>::toZonotope(temp, mode);
+    Zonotope res = toZonotope(temp, mode);
     
     
     return res;
@@ -65,7 +65,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         HPolytope hpoly = HPolytope(planes);
         
         //converts computed box H -> V
-        auto vpoly = Converter<Number>::toVPolytope(hpoly, mode);
+        auto vpoly = toVPolytope(hpoly, mode);
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
         
@@ -121,7 +121,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              Number euclid = norm(normal, false);
             
-             //TODO seems to bug here sometimes
+             //TODO seems to bug here sometimes (probably something with  memory allocation)
              //eliminates some fractional digits for improved computation time 
              Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
              Number euclid2 = (Number) fReach_DENOMINATOR;
@@ -180,15 +180,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
     std::cout << "Offsets" << std::endl;
     
     //constructs a H-Polytope out of the computed halfspaces
-    HPolytope samplePoly = HPolytope(templateDirectionMatrix, offsets);
+    auto samplePoly = HPolytope(templateDirectionMatrix, offsets);
     
     std::cout << "samplePoly" << std::endl;
     
     //converts H-Polytope into a V-Polytope
-    auto sampleVPoly = Converter<Number>::toVPolytope(samplePoly, mode);
+    auto sampleVPoly = toVPolytope(samplePoly, mode);
     
     //conversion is from here done just like V -> Zonotope
-    auto res = Converter<Number>::toZonotope(sampleVPoly, mode);
+    Zonotope res = toZonotope(sampleVPoly, mode);
     
     return res;
 
