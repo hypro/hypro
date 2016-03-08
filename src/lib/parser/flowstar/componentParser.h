@@ -145,19 +145,19 @@ namespace parser {
 
 		qi::rule<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, unsigned const&), Skipper> start;
 		qi::rule<Iterator, std::string()> name;
-		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> flow;
-		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> invariant;
+		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> flow;
+		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> invariant;
 
 		matrix_t<Number> createFlow( const std::vector<std::pair<unsigned, vector_t<double>>>& _in ) {
 			assert(!_in.empty());
-			matrix_t<double> res = matrix_t<double>(_in.begin()->second.size()-1, _in.begin()->second.size());
+			// matrix template with additional row of zeroes for constants
+			matrix_t<double> res = matrix_t<double>::Zero(_in.begin()->second.size(), _in.begin()->second.size());
 			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
  			for(const auto& pair : _in) {
  				assert(pair.second.rows() == res.cols());
  				//std::cout << "Row " << pair.first << " = " << pair.second.transpose() << std::endl;
 				res.row(pair.first) << pair.second.transpose();
 			}
-
 			// Temporary, until Number template has been propagated fully.
 			return convertMatToFloatT<Number>(res);
 		}
@@ -179,6 +179,7 @@ namespace parser {
 		}
 
 		std::pair<std::string, Location<Number>*> createLocation(const std::string& _name, const matrix_t<Number>& _flow, const boost::optional<matrix_t<Number>>& _invariant) {
+			assert(_flow.rows() == _flow.cols());
 			if(_invariant) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
 				matrix_t<Number> invariantMat = matrix_t<Number>(_invariant->rows(), _invariant->cols()-1);
@@ -209,11 +210,30 @@ namespace parser {
 			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1);
 			shape = (qi::lexeme["octagon"] | qi::lexeme["interval"]);
 			outdimensions = (qi::lazy(qi::_r1) % ',');
-			remainder = qi::lexeme["remainder estimation"];
-			cutoff = qi::lexeme["cutoff"];
-			precision = qi::lexeme["precision"];
+			remainder = qi::lexeme["remainder estimation"] > constant;
+			cutoff = qi::lexeme["cutoff"] > constant;
+			precision = qi::lexeme["precision"] > constant;
 			precondition = (qi::lexeme["QR"] | qi::lexeme["identity"]) > qi::lexeme["precondition"];
 			filename = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
+			// placeholder for unused and unreadable numbers (temporary)
+			constant = qi::lexeme[ *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-")) ];
+
+			start.name("settings");
+			steps.name("step-size");
+			order.name("Taylormodel order");
+			time.name("local time horizon");
+			jmpLimit.name("jump depth");
+			outFile.name("output file name");
+			print.name("print-flag");
+			outBackend.name("print backend");
+			shape.name("printed segment shape");
+			outdimensions.name("printed dimensions");
+			remainder.name("remainder estimation");
+			cutoff.name("cutoff");
+			precision.name("precision");
+			precondition.name("precondition");
+			filename.name("filename");
+			constant.name("unreadable constant");
 
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
  		}
@@ -238,6 +258,7 @@ namespace parser {
 		qi::rule<Iterator, Skipper> precision;
 		qi::rule<Iterator, Skipper> precondition;
 		qi::rule<Iterator, std::string() ,Skipper> filename;
+		qi::rule<Iterator, Skipper> constant;
 	};
 
 } // namespace parser

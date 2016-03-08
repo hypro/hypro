@@ -49,8 +49,8 @@ struct flowstarParser
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::vector<std::pair<unsigned, matrix_t<double>>> mInitialStates;
-	std::vector<std::pair<unsigned, matrix_t<double>>> mBadStates;
+	std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mInitialStates;
+	std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	unsigned mDimension;
@@ -64,17 +64,18 @@ struct flowstarParser
 		start =  ( qi::lexeme["continuous reachability"] > qi::lit('{') > continuousStart > qi::lit('}') > -badStates > qi::eoi )
 				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number,Representation>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
 
-		continuousStart = stateVars > -mSettingsParser(px::ref(mSymbols));
-		hybridStart = stateVars > settings >
-					modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] >
-					-transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] >
-					(-init)[px::bind( &flowstarParser<Number,Representation>::insertInitialState, px::ref(*this), qi::_1 )];
-		stateVars = qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
-		settings = qi::lexeme["settings"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols)) > qi::lit('}');
-		modes = qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
-		transitions = mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
-		init = qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
-		badStates = qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
+		continuousStart = 	stateVars > -mSettingsParser(px::ref(mSymbols));
+		hybridStart = 		stateVars > settings >
+							modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] >
+							-transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] >
+							(-init)[px::bind( &flowstarParser<Number,Representation>::insertInitialState, px::ref(*this), qi::_1 )];
+		stateVars = 		qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
+		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols)) > qi::lit('}');
+		modes = 			qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
+		transitions = 		mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
+		init = 				qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
+		badStates = 		qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
+
 		qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 	}
 
@@ -113,21 +114,58 @@ struct flowstarParser
 		}
 	}
 
-	void insertInitialState(boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>> _set) {
+	void insertInitialState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>>& _set) {
 		if(_set){
 			for(const auto& pair : *_set){
+				unsigned rows = 0;
+				for(const auto& matrix : fs::get<1>(pair))
+					rows += matrix.rows();
 
+				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->cols()-1);
+				vector_t<Number> vec = vector_t<Number>(rows);
+				//std::cout << "Target sizes: " << mat.rows() << " rows, " << mat.cols() << " columns." << std::endl;
+				//collect matrix and vector
+				unsigned rowcnt = 0;
+				for(const auto& matrix : fs::get<1>(pair)){
+					matrix_t<Number> tmpMatrix = convertMatToFloatT<Number>(matrix);
+					//std::cout << "tmpMatrix dimensions: " << tmpMatrix.rows() << "x" << tmpMatrix.cols() << std::endl;
+					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
+						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
+						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
+						++rowcnt;
+					}
+				}
+				//std::cout << mat << vec << std::endl;
+				//std::cout << "Location: " << fs::get<0>(pair) << std::endl;
+				mInitialStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
 			}
 		}
 	}
 
-	void insertBadState(boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>> _set) {
+	void insertBadState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>>& _set) {
+		if(_set){
+			for(const auto& pair : *_set){
+				matrix_t<Number> mat = matrix_t<Number>(fs::get<1>(pair).size(), fs::get<1>(pair).begin()->cols()-1);
+				vector_t<Number> vec = vector_t<Number>(fs::get<1>(pair).size());
+				//collect matrix and vector
+				unsigned rowcnt = 0;
+				for(const auto& matrix : fs::get<1>(pair)){
+					matrix_t<Number> tmpMatrix = convertMatToFloatT<Number>(matrix);
+					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
+						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
+						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
+						++rowcnt;
+					}
+				}
+				mBadStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
+				
+			}
+		}
 	}
 
-	void parseInput( const std::string& pathToInputFile );
-	bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number, Representation>& _result );
-	void printModes() const;
-	HybridAutomaton<Number, Representation> createAutomaton();
+	HybridAutomaton<Number> parseInput( const std::string& pathToInputFile );
+	bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number>& _result );
+	HybridAutomaton<Number> createAutomaton();
 };
 
 } // namespace parser

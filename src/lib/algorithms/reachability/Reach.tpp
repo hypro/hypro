@@ -9,8 +9,11 @@ namespace reachability {
 	typedef std::chrono::microseconds timeunit;
 
 	template<typename Number, typename Representation>
-	Reach<Number,Representation>::Reach( const HybridAutomaton<Number, Representation>& _automaton, const ReachabilitySettings<Number> _settings)
-		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {}
+	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number> _settings)
+		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {
+			std::cout << "Automaton: " << std::endl << _automaton << std::endl;
+
+		}
 
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::addFlowpipe( const flowpipe_t<Representation>& _flowpipe ) {
@@ -42,15 +45,16 @@ namespace reachability {
 		std::set<std::size_t> R;
 
 		// R_new := flowpipe for the initial location, computed based on input valuation
-		for ( const auto& locationPtr : mAutomaton.initialLocations() ) {
+		for ( const auto& initialPair : mAutomaton.initialStates() ) {
 			//std::cout << "Compute time-step in initial states." << std::endl;
 			// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
-			std::size_t init = computeForwardTimeClosure( locationPtr, mAutomaton.initialValuation() );
+			std::cout << "Initial Valuation: " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
+			std::size_t init = computeForwardTimeClosure( initialPair.first, Representation(initialPair.second.first, initialPair.second.second) );
 			//std::cout << "Computed flowpipe: " << std::endl;
 			//printFlowpipeReduced( init );
 			std::vector<std::size_t> fp;
 			fp.push_back(init);
-			mReach.insert( std::make_pair(locationPtr, std::move(fp) ));
+			mReach.insert( std::make_pair(initialPair.first, std::move(fp) ));
 			R_new.insert( init );
 			R.insert( init );
 		}
@@ -441,8 +445,8 @@ namespace reachability {
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 
-			hypro::vector_t<Number> translateVec = _trans.reset().translationVec;
-			hypro::matrix_t<Number> transformMat = _trans.reset().transformMat;
+			hypro::vector_t<Number> translateVec = _trans.reset().vec;
+			hypro::matrix_t<Number> transformMat = _trans.reset().mat;
 
 			// perform translation + transformation on intersection polytope
 			result = intersectionPoly.linearTransformation( transformMat, translateVec );

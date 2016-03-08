@@ -1,4 +1,6 @@
 
+#pragma once
+
 namespace hypro{
 
 template<typename Number>

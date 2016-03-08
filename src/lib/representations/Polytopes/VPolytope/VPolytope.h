@@ -25,8 +25,8 @@ class VPolytopeT {
 	typedef typename hypro::polytope::Cone<Number> Cone;
 	typedef typename hypro::polytope::Fan<Number> Fan;
 	/***************************************************************************
- * Members
- **************************************************************************/
+	 * Members
+	 **************************************************************************/
   private:
 	mutable pointVector mVertices;
 	Cone mCone;
@@ -178,11 +178,8 @@ class VPolytopeT {
 	bool hasVertex( const vector_t<Number>& vertex ) const { return ( mVertices.find( vertex ) != mVertices.end() ); }
 
 	typename pointVector::iterator begin() { return mVertices.begin(); }
-
 	typename pointVector::const_iterator begin() const { return mVertices.begin(); }
-
 	typename pointVector::iterator end() { return mVertices.end(); }
-
 	typename pointVector::const_iterator end() const { return mVertices.end(); }
 
 	void print() const { std::cout << *this << std::endl; }

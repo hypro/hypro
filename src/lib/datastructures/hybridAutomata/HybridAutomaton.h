@@ -1,9 +1,10 @@
 /*
  * Class that describes a hybrid automaton.
- * File:   hybridAutomaton.h
- * Author: stefan & ckugler
+ * @file   hybridAutomaton.h
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
- * Created on April 30, 2014, 9:06 AM
+ * @since 	2014-04-30
+ * @version	2015-03-07
  */
 
 #pragma once
@@ -12,21 +13,20 @@
 #include "Transition.h"
 
 namespace hypro {
-template <typename Number, typename Representation>
+template <typename Number>
 class HybridAutomaton {
   private:
 	typedef std::set<Location<Number>*> locationSet;
 	typedef std::set<Transition<Number>*> transitionSet;
+	typedef std::map<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>> initialStateMap;
 
   private:
 	/**
 	 * Member
 	 */
-	locationSet mInitialLocations;
 	locationSet mLocations;
 	transitionSet mTransitions;
-	Representation mInitialValuation;
-	Representation mExtInputValuation;
+	initialStateMap mInitialStates;
 
   public:
 	/**
@@ -34,49 +34,46 @@ class HybridAutomaton {
 	 */
 	HybridAutomaton() {}
 	HybridAutomaton( const HybridAutomaton& _hybrid );
-	HybridAutomaton( const locationSet _initLocs, const locationSet _locs, const transitionSet _trans,
-					 Representation _initVal );
+	HybridAutomaton( const locationSet& _locs, const transitionSet& _trans,
+					 const initialStateMap& _initialStates );
 
 	virtual ~HybridAutomaton() {}
 
 	/**
 	 * Getter & Setter
 	 */
-	const locationSet& initialLocations() const;
 	const locationSet& locations() const;
 	const transitionSet& transitions() const;
-	const Representation& initialValuation() const;
-	const Representation& extInputValuation() const;
+	const initialStateMap& initialStates() const;
 	unsigned dimension() const;
 
-	void setInitialLocations( const locationSet& _initLocs );
 	void setLocations( const locationSet& _locs );
 	void setTransitions( const transitionSet& _trans );
-	void setInitialValuation( const Representation& _val );
-	void setExtInputValuation( const Representation& _extInputVal );
+	void setInitialStates( const initialStateMap& _states );
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );
+	void addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
 
 	// copy assignment operator, TODO: implement via swap
-	inline HybridAutomaton<Number, Representation>& operator=( const HybridAutomaton<Number, Representation>& _rhs ) {
-		mInitialLocations = _rhs.initialLocations();
+	inline HybridAutomaton<Number>& operator=( const HybridAutomaton<Number>& _rhs ) {
 		mLocations = _rhs.locations();
 		mTransitions = _rhs.transitions();
-		mInitialValuation = _rhs.initialValuation();
-		mExtInputValuation = _rhs.extInputValuation();
+		mInitialStates = _rhs.initialStates();
+		std::cout << "after operator=: " << *this << std::endl;
 		return *this;
 	}
 
 	// move assignment operator, TODO: Implement
-	inline HybridAutomaton<Number, Representation>& operator=( HybridAutomaton<Number, Representation>&& _rhs ) {
-		return *this;
-	}
+	//inline HybridAutomaton<Number>& operator=( HybridAutomaton<Number>&& _rhs ) {
+	//	
+	//	return *this;
+	//}
 
-	friend std::ostream& operator<<( std::ostream& _ostr, const HybridAutomaton<Number, Representation>& _a ) {
-		_ostr << "initial: " << std::endl;
-		for ( auto initialIT = _a.initialLocations().begin(); initialIT != _a.initialLocations().end(); ++initialIT ) {
-			_ostr << **initialIT << std::endl;
+	friend std::ostream& operator<<( std::ostream& _ostr, const HybridAutomaton<Number>& _a ) {
+		_ostr << "initial states: " << std::endl;
+		for ( auto initialIT = _a.initialStates().begin(); initialIT != _a.initialStates().end(); ++initialIT ) {
+			_ostr << (*initialIT).first->id() << ": " << (*initialIT).second.first << " <= " << (*initialIT).second.second << std::endl;
 		}
 		_ostr << "locations: " << std::endl;
 		for ( auto locationIT = _a.locations().begin(); locationIT != _a.locations().end(); ++locationIT ) {

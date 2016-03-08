@@ -31,17 +31,11 @@ protected:
 		 */
 		invariantVec(0) = 16;
 		invariantVec(1) = 16;
-		//invariantVec(2) = 1;
 
 		invariantMat(0,0) = 1;
 		invariantMat(0,1) = 0;
-		//invariantMat(0,2) = 0;
 		invariantMat(1,0) = 0;
 		invariantMat(1,1) = 1;
-		//invariantMat(1,2) = 0;
-		//invariantMat(2,0) = 0;
-		//invariantMat(2,1) = 0;
-		//invariantMat(2,2) = 1;
 
 		loc1->setInvariant(invariantMat,invariantVec);
 
@@ -92,7 +86,6 @@ protected:
 		initLocSet = std::set<hypro::Location<mpq_class>*>(init, init+1);
 
 		hybrid.setLocations(locSet);
-		hybrid.setInitialLocations(initLocSet);
 
 		transition[0] = trans;
 
@@ -108,32 +101,19 @@ protected:
 		boxVec(1) = 0;
 		boxVec(2) = 1;
 		boxVec(3) = 0;
-		//boxVec(4) = 1;
-		//boxVec(5) = -1;
 
 		boxMat(0,0) = 1;
 		boxMat(0,1) = 0;
-		//boxMat(0,2) = 0;
 		boxMat(1,0) = -1;
 		boxMat(1,1) = 0;
-		//boxMat(1,2) = 0;
 		boxMat(2,0) = 0;
 		boxMat(2,1) = 1;
-		//boxMat(2,2) = 0;
 		boxMat(3,0) = 0;
 		boxMat(3,1) = -1;
-		//boxMat(3,2) = 0;
-		//boxMat(4,0) = 0;
-		//boxMat(4,1) = 0;
-		//boxMat(4,2) = 1;
-		//boxMat(5,0) = 0;
-		//boxMat(5,1) = 0;
-		//boxMat(5,2) = -1;
 
-		poly = VPolytope<mpq_class>(boxMat,boxVec);
-
-		hybrid.setInitialValuation(poly);
-
+		for(auto location : initLocSet) {
+			hybrid.addInitialState(location, std::make_pair(boxMat, boxVec));
+		}
 
 		/*
 		 * Testing of other ways to construct a Vpolytope
@@ -165,12 +145,10 @@ protected:
 	Location<mpq_class>* loc1 = locManag.create();
 	Location<mpq_class>* loc2 = locManag.create();
 	hypro::Transition<mpq_class>* trans = new hypro::Transition<mpq_class>();
-	HybridAutomaton<mpq_class, hypro::VPolytope<mpq_class>> hybrid = HybridAutomaton<mpq_class, hypro::VPolytope<mpq_class>>();
+	HybridAutomaton<mpq_class> hybrid = HybridAutomaton<mpq_class>();
 
 	//Other Objects: Vectors, Matrices, Guards...
-	// vector_t<mpq_class> invariantVec = vector_t<mpq_class>(3,1);
 	vector_t<mpq_class> invariantVec = vector_t<mpq_class>(2,1);
-	// matrix_t<mpq_class> invariantMat = matrix_t<mpq_class>(3,3);
 	matrix_t<mpq_class> invariantMat = matrix_t<mpq_class>(2,2);
 	struct Location<mpq_class>::Invariant inv;
 	matrix_t<mpq_class> locationMat = matrix_t<mpq_class>(3,3);
@@ -267,8 +245,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = 0;
 	pointVec(2) = 0;
 	pointVec(3) = 0;
-	//pointVec(4) = 1;
-	//pointVec(5) = -1;
 
 	VPolytope<mpq_class> pointPoly;
 	pointPoly = VPolytope<mpq_class>(boxMat,pointVec);
@@ -280,8 +256,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -0.5;
 	pointVec(2) = 0.75;
 	pointVec(3) = -0.75;
-	//pointVec(4) = 1;
-	//pointVec(5) = -1;
 
 	pointPoly = VPolytope<mpq_class>(boxMat,pointVec);
 
@@ -292,8 +266,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 2;
 	pointVec(3) = -2;
-	//pointVec(4) = 1;
-	//pointVec(5) = -1;
 
 	pointPoly = VPolytope<mpq_class>(boxMat,pointVec);
 
@@ -304,8 +276,6 @@ TEST_F(ForwardReachabilityTest, ContainmentTest)
 	pointVec(1) = -2;
 	pointVec(2) = 0.5;
 	pointVec(3) = -0.5;
-	//pointVec(4) = 1;
-	//pointVec(5) = -1;
 
 	pointPoly = VPolytope<mpq_class>(boxMat,pointVec);
 
@@ -333,8 +303,6 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = 5;
 	pointVec(2) = 5;
 	pointVec(3) = 5;
-	//pointVec(4) = 5;
-	//pointVec(5) = 5;
 
 	VPolytope<mpq_class> pointPoly;
 	pointPoly = VPolytope<mpq_class>(testMat,pointVec);
@@ -346,8 +314,6 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -5;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	//pointVec(4) = 5;
-	//pointVec(5) = -5;
 
 	pointPoly = VPolytope<mpq_class>(testMat,pointVec);
 	EXPECT_TRUE(testBoxPoly.contains(pointPoly));
@@ -356,8 +322,6 @@ TEST_F(ForwardReachabilityTest, UtilityTest)
 	pointVec(1) = -6;
 	pointVec(2) = 5;
 	pointVec(3) = -5;
-	//pointVec(4) = 5;
-	//pointVec(5) = -5;
 
 	pointPoly = VPolytope<mpq_class>(testMat,pointVec);
 	EXPECT_FALSE(testBoxPoly.contains(pointPoly));

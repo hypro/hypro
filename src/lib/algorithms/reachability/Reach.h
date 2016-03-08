@@ -29,7 +29,7 @@ using flowpipe_t = vector<Representation>;
 template <typename Number, typename Representation>
 class Reach {
 private:
-	HybridAutomaton<Number, Representation> mAutomaton;
+	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 
 	std::map<std::size_t, flowpipe_t<Representation>> mFlowpipes;
@@ -44,7 +44,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number, Representation>& _automaton, const ReachabilitySettings<Number> _settings = ReachabilitySettings<Number>());
+	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number> _settings = ReachabilitySettings<Number>());
 
 	/**
 	 * @brief Adds a flowpipe to be stored. Flowpipe segments are identified by ids.

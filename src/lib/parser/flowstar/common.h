@@ -7,6 +7,7 @@ namespace parser{
 	namespace qi = boost::spirit::qi;
 	namespace ascii = boost::spirit::ascii;
 	namespace px = boost::phoenix;
+	namespace fs = boost::fusion;
 
 	using symbol_table = qi::symbols<char, unsigned>;
 	typedef spirit::istream_iterator BaseIteratorType;

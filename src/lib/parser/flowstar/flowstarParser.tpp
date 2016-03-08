@@ -4,9 +4,9 @@ namespace hypro {
 namespace parser {
 
 	template <typename Number, typename Representation>
-	void flowstarParser<Number, Representation>::parseInput(
+	HybridAutomaton<Number> flowstarParser<Number, Representation>::parseInput(
 		  const std::string &pathToInputFile ) {
-		HybridAutomaton<Number, Representation> resultAutomaton;
+		HybridAutomaton<Number> resultAutomaton;
 
 		std::fstream infile( pathToInputFile );
 		if ( !infile.good() ) {
@@ -19,12 +19,12 @@ namespace parser {
 			exit( 1 );
 		}
 
-		//std::cout << resultAutomaton << std::endl;
+		return resultAutomaton;
 	}
 
 	template <typename Number, typename Representation>
 	bool flowstarParser<Number, Representation>::parse( std::istream &in, const std::string &filename,
-													HybridAutomaton<Number, Representation> &_result ) {
+													HybridAutomaton<Number> &_result ) {
 		in.unsetf( std::ios::skipws );
 		BaseIteratorType basebegin( in );
 		Iterator begin( basebegin );
@@ -40,15 +40,15 @@ namespace parser {
 		std::cout << "To parse: " << std::string( begin, end ) << std::endl;
 
 		// create automaton from parsed result.
-		//_result = std::move(createAutomaton());
-		//_result = createAutomaton();
+		_result = createAutomaton();
+		std::cout << "Passed automaton: " << _result << std::endl;
 
 		return result;
 	}
 
 	template <typename Number, typename Representation>
-	HybridAutomaton<Number, Representation> flowstarParser<Number, Representation>::createAutomaton() {
-		HybridAutomaton<Number, Representation> result;
+	HybridAutomaton<Number> flowstarParser<Number, Representation>::createAutomaton() {
+		HybridAutomaton<Number> result;
 		LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
 
 		for(const auto index : mModeIds)
@@ -57,15 +57,12 @@ namespace parser {
 		for(const auto transition : mTransitions )
 			result.addTransition(transition);
 
+		for(const auto initPair : mInitialStates )
+			result.addInitialState(locManag.location(initPair.first), initPair.second);
+
+		std::cout << "created automaton: " << result << std::endl;
+ 
 		return result;
 	}
-
-	template<typename Number, typename Representation>
-	void flowstarParser<Number,Representation>::printModes() const {
-		for(const auto& id : mModeIds) {
-			std::cout << *LocationManager<Number>::getInstance().location(id) << std::endl;
-		}
-	}
-
-} // namespace
-} // namespace
+} // namespace parser
+} // namespace hypro

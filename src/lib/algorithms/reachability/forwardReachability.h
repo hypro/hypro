@@ -227,7 +227,7 @@ static bool computePostCondition( const hypro::Transition<Number>& _trans, Repre
  */
 template <typename Number, typename Representation>
 static std::vector<flowpipe_t<Representation>> computeReach(
-	  std::vector<flowpipe_t<Representation>> _init, hypro::HybridAutomaton<Number, Representation> _hybrid,
+	  std::vector<flowpipe_t<Representation>> _init, hypro::HybridAutomaton<Number> _hybrid,
 	  std::vector<std::pair<std::vector<flowpipe_t<Representation>>, hypro::Location<Number>>>& _map ) {
 	std::vector<flowpipe_t<Representation>> reach;
 
@@ -294,7 +294,7 @@ static std::vector<flowpipe_t<Representation>> computeReach(
  */
 template <typename Number, typename Representation>
 static std::vector<flowpipe_t<Representation>> computeForwardsReachability(
-	  hypro::HybridAutomaton<Number, Representation> _hybrid ) {
+	  hypro::HybridAutomaton<Number> _hybrid ) {
 	unsigned depth = 0;
 	std::vector<flowpipe_t<Representation>> R_new;
 	std::vector<flowpipe_t<Representation>> R;
