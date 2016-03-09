@@ -48,7 +48,7 @@ namespace reachability {
 		for ( const auto& initialPair : mAutomaton.initialStates() ) {
 			//std::cout << "Compute time-step in initial states." << std::endl;
 			// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
-			std::cout << "Initial Valuation: " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
+			//std::cout << "Initial Valuation: " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
 			std::size_t init = computeForwardTimeClosure( initialPair.first, Representation(initialPair.second.first, initialPair.second.second) );
 			//std::cout << "Computed flowpipe: " << std::endl;
 			//printFlowpipeReduced( init );

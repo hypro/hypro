@@ -17,7 +17,7 @@
 #include "Settings.h"
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 
 namespace hypro {

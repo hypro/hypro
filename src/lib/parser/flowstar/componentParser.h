@@ -64,7 +64,7 @@ namespace parser {
 				typename Transition<Number>::Guard g;
 				matrix_t<Number> matr = matrix_t<Number>(_guard->rows(), _guard->cols()-1);
 				matr << _guard->block(0,0,_guard->rows(), _guard->cols()-1);
-				vector_t<Number> vec = _guard->col(_guard->cols()-1);
+				vector_t<Number> vec = -_guard->col(_guard->cols()-1);
 				g.mat = matr;
 				g.vec = vec;
 				res->setGuard(g);
@@ -75,7 +75,7 @@ namespace parser {
 				typename Transition<Number>::Reset r;
 				matrix_t<Number> matr = matrix_t<Number>(_reset->rows(), _reset->cols()-1);
 				matr << _reset->block(0,0,_reset->rows(), _reset->cols()-1);
-				vector_t<Number> vec = _reset->col(_reset->cols()-1);
+				vector_t<Number> vec = -_reset->col(_reset->cols()-1);
 				r.mat = matr;
 				r.vec = vec;
 				res->setReset(r);
@@ -184,7 +184,7 @@ namespace parser {
 				Location<Number>* tmp = mLocationManager.create(_flow);
 				matrix_t<Number> invariantMat = matrix_t<Number>(_invariant->rows(), _invariant->cols()-1);
 				invariantMat = _invariant->block(0,0,_invariant->rows(), _invariant->cols()-1);
-				vector_t<Number> constants = _invariant->col(_invariant->cols()-1);
+				vector_t<Number> constants = -_invariant->col(_invariant->cols()-1);
 				tmp->setInvariant(invariantMat, constants);
 				return std::make_pair(_name, tmp );
 			}
