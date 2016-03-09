@@ -41,7 +41,7 @@ struct flowstarParser
 	variableParser<Iterator> mVariables;
 	modeParser<Iterator, Number> mModeParser;
 	transitionParser<Iterator, Number> mTransitionParser;
-	settingsParser<Iterator> mSettingsParser;
+	settingsParser<Iterator, Number> mSettingsParser;
 	constraintParser<Iterator> mConstraintParser;
 	px::function<ErrorHandler> errorHandler;
 
@@ -53,6 +53,7 @@ struct flowstarParser
 	std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
+	ReachabilitySettings<Number> mSettings;
 	unsigned mDimension;
 
 	flowstarParser() : flowstarParser::base_type( start ) {
@@ -70,7 +71,7 @@ struct flowstarParser
 							-transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] >
 							(-init)[px::bind( &flowstarParser<Number,Representation>::insertInitialState, px::ref(*this), qi::_1 )];
 		stateVars = 		qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
-		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols)) > qi::lit('}');
+		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols))[px::bind( &flowstarParser<Number,Representation>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
 		modes = 			qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
 		transitions = 		mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
 		init = 				qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
@@ -97,6 +98,11 @@ struct flowstarParser
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimension;
 		}
+	}
+
+	void insertSettings(const ReachabilitySettings<Number>& _in) {
+		std::cout << "Parsed Settings: " << _in << std::endl;
+		mSettings = _in;
 	}
 
 	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
@@ -158,7 +164,7 @@ struct flowstarParser
 					}
 				}
 				mBadStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
-				
+
 			}
 		}
 	}

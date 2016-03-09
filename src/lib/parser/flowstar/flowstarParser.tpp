@@ -36,12 +36,10 @@ namespace parser {
 		bool result = qi::phrase_parse( begin, end, start, skipper );
 
 		std::cout << "Result: Done" << std::endl;
-
 		std::cout << "To parse: " << std::string( begin, end ) << std::endl;
 
 		// create automaton from parsed result.
 		_result = createAutomaton();
-		std::cout << "Passed automaton: " << _result << std::endl;
 
 		return result;
 	}
@@ -60,8 +58,6 @@ namespace parser {
 		for(const auto initPair : mInitialStates )
 			result.addInitialState(locManag.location(initPair.first), initPair.second);
 
-		std::cout << "created automaton: " << result << std::endl;
- 
 		return result;
 	}
 } // namespace parser

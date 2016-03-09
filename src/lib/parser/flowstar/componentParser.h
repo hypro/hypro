@@ -192,15 +192,15 @@ namespace parser {
 		}
 	};
 
-	template <typename Iterator>
+	template <typename Iterator, typename Number>
 	struct settingsParser
-	    : qi::grammar<Iterator, ReachabilitySettings<double>(symbol_table const&),Skipper>
+	    : qi::grammar<Iterator, ReachabilitySettings<Number>(symbol_table const&),Skipper>
 	{
-		ReachabilitySettings<double> mLocalSettings;
+		ReachabilitySettings<Number> mLocalSettings;
 		px::function<ErrorHandler> errorHandler;
 
-		settingsParser() : settingsParser::base_type( start ) {
-			start = *(steps|order|time|jmpLimit|outFile|print|outBackend(qi::_r1)|remainder|cutoff|precision|precondition)[qi::_val = mLocalSettings];
+		settingsParser() : settingsParser::base_type( start ), mLocalSettings() {
+			start = *(steps|order|time|jmpLimit|outFile|print|outBackend(qi::_r1)|remainder|cutoff|precision|precondition)[qi::_val = px::ref(mLocalSettings)];
 			steps = ((qi::lexeme["fixed steps"] > qi::double_[px::bind( &settingsParser::setTimeStep, px::ref(*this), qi::_1)]) | (qi::lexeme["adaptive steps"] > qi::lit('{') > qi::lexeme["min"] > qi::int_ > qi::lit(',') > qi::lexeme["max"] > qi::int_ > qi::lit('}')) );
 			order = ((qi::lexeme["fixed orders"] > qi::int_) | (qi::lexeme["adaptive orders"] > qi::lit('{') > qi::lexeme["min"] > qi::int_ > qi::lit(',') > qi::lexeme["max"] > qi::int_ > qi::lit('}')) );
 			time = qi::lexeme["time"] > qi::double_[px::bind( &settingsParser::setTimeBound, px::ref(*this), qi::_1)];
@@ -238,12 +238,12 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
  		}
 
- 		void setTimeStep(double _in){ mLocalSettings.timestep = _in; }
- 		void setTimeBound(double _in){ mLocalSettings.timebound = _in; }
+ 		void setTimeStep(double _in){ mLocalSettings.timeStep = carl::rationalize<Number>(_in); }
+ 		void setTimeBound(double _in){ mLocalSettings.timeBound = carl::rationalize<Number>(_in); }
  		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
 
-		qi::rule<Iterator, ReachabilitySettings<double>(symbol_table const&), Skipper> start;
+		qi::rule<Iterator, ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
 		qi::rule<Iterator, Skipper> steps;
 		qi::rule<Iterator, Skipper> order;
 		qi::rule<Iterator, Skipper> time;

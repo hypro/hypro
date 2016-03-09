@@ -19,10 +19,11 @@ int main(int argc, char** argv) {
     hypro::parser::flowstarParser<number,valuation> parser;
     hypro::HybridAutomaton<number> ha = parser.parseInput(filename);
 
-    hypro::reachability::Reach<number,valuation> reacher(ha);
+    hypro::reachability::Reach<number,valuation> reacher(ha, parser.mSettings);
     std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
 
     hypro::Plotter<number>& plotter = hypro::Plotter<number>::getInstance();
+    plotter.setFilename(parser.mSettings.fileName);
     for(const auto& fpI : flowpipeIndices){
     	std::vector<valuation> flowpipe = reacher.getFlowpipe(fpI);
     	for(const auto& segment : flowpipe)

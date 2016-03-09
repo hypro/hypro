@@ -9,10 +9,10 @@ namespace reachability {
 	typedef std::chrono::microseconds timeunit;
 
 	template<typename Number, typename Representation>
-	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number> _settings)
+	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {
 			std::cout << "Automaton: " << std::endl << _automaton << std::endl;
-
+			std::cout << "Settings: " << std::endl << _settings << std::endl;
 		}
 
 	template<typename Number, typename Representation>
@@ -99,7 +99,7 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	std::size_t Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
 #ifdef REACH_DEBUG
-		std::cout << "Time Interval: " << mSettings.timestep << std::endl;
+		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
@@ -123,7 +123,7 @@ namespace reachability {
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
 			hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
-			deltaMatrix = _loc->flow() * mSettings.timestep;
+			deltaMatrix = _loc->flow() * mSettings.timeStep;
 
 #ifdef REACH_DEBUG
 			std::cout << "delta Matrix: " << std::endl;
@@ -180,7 +180,7 @@ namespace reachability {
 			// matrix_t<Number> updatedflowrix = _loc->flow();
 			// updatedflowrix.conservativeResize(rows-1, cols-1);
 			// radius = hausdorffError(Number(mSettings.timestep), updatedflowrix, _val.supremum());
-			radius = hausdorffError( Number( mSettings.timestep ), _loc->flow(), initial.supremum() );
+			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initial.supremum() );
 // radius = _val.hausdorffError(mSettings.timestep, _loc->flow());
 
 #ifdef REACH_DEBUG
@@ -277,9 +277,9 @@ namespace reachability {
 #endif
 
 			// for each time interval perform linear Transformation
-			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(Number(mSettings.timebound / mSettings.timestep)));
+			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(Number(mSettings.timeBound / mSettings.timeStep)));
 			for ( std::size_t i = 2; i <= steps ; ++i ) {
-				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timestep) << std::flush;
+				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timeStep) << std::flush;
 
 				// perform linear transformation on the last segment of the flowpipe
 				// lastSegment.linearTransformation(resultPolytope, tempResult);

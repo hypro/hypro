@@ -138,10 +138,9 @@ void Plotter<Number>::plot2d() const {
 		}
 
 		if(mSettings.axes) {
-			mOutfile << "set xzeroaxis \n";
+			mOutfile << "set zeroaxis \n";
 			mOutfile << "set xtics axis \n";
 			mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-			mOutfile << "set yzeroaxis \n";
 			mOutfile << "set ytics axis \n";
 			mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
 		}
