@@ -185,6 +185,7 @@ template<typename Number>
 Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 	Number squares = 0;
 	for(size_t i = 0, size = in.size(); i < size; ++i){
+            std::cout << "in.data:" << *(in.data()+i) << std::endl;
 		squares = squares + carl::pow(*(in.data()+i), 2);
 	}
 	assert(squares >= 0);

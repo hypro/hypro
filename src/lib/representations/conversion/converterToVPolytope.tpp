@@ -16,28 +16,13 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPol
 }
 
 
-//conversion from H-Polytope to V-Polytope (EXACT or OVER)
+//conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE mode ){
     //exact conversion
     VPolytope target;
-    if (mode == EXACT){
-        target = VPolytope(_source.matrix(), _source.vector());
-    }
-    //overapproximation
-    if (mode == OVER){
-        //converts source object into a v-polytope first
-        VPolytope temp = VPolytope(_source.matrix(), _source.vector());
-        //gets vertices from source object
-        typename VPolytopeT<Number,Converter>::pointVector vertices = temp.vertices();
-        
-        //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
-        std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
-        //saves received hyperplanes as an H-Polytope
-        HPolytope temp2 = HPolytope(planes);
-        //converts back into V-representation
-        target = VPolytope(temp2.matrix(), temp2.vector());
-    }
+    target = VPolytope(_source.matrix(), _source.vector());
+ 
     return target;
 }
 

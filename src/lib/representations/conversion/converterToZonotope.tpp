@@ -113,13 +113,17 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-             
+             std::cout << "Normal:" << convertVecToDouble(normal) << std::endl;
              
              
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time 
+             std::cout << "derp1" << std::endl;
              normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             std::cout << "derp2" << std::endl;
              Number euclid = norm(normal, false);
+             std::cout << "euclid:" << carl::toDouble(euclid) << std::endl;
+             std::cout << "fReach:" << fReach_DENOMINATOR << std::endl;
             
              //TODO seems to bug here sometimes (probably something with  memory allocation)
              //eliminates some fractional digits for improved computation time 
