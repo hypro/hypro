@@ -113,19 +113,13 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
          
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-             std::cout << "Normal:" << convertVecToDouble(normal) << std::endl;
              
              
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time 
-             std::cout << "derp1" << std::endl;
              normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
-             std::cout << "derp2" << std::endl;
              Number euclid = norm(normal, false);
-             std::cout << "euclid:" << carl::toDouble(euclid) << std::endl;
-             std::cout << "fReach:" << fReach_DENOMINATOR << std::endl;
             
-             //TODO seems to bug here sometimes (probably something with  memory allocation)
              //eliminates some fractional digits for improved computation time 
              Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
              Number euclid2 = (Number) fReach_DENOMINATOR;
@@ -169,7 +163,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
     //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
     std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
     //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-    std::cout << "Number of directions:" << templateDirections.size() << std::endl;
     assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
     //creates a matrix with one row for each direction and one column for each dimension
     matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
@@ -182,12 +175,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
     //lets the support function evaluate the offset of the halfspaces for each direction
     vector_t<Number> offsets = _source.multiEvaluate(templateDirectionMatrix);
     
-    std::cout << "Offsets" << std::endl;
-    
     //constructs a H-Polytope out of the computed halfspaces
     HPolytope samplePoly = HPolytope(templateDirectionMatrix, offsets);
-    
-    std::cout << "samplePoly" << std::endl;
     
     //converts H-Polytope into a V-Polytope
     auto sampleVPoly = toVPolytope(samplePoly, mode);
