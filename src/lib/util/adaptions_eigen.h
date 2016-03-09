@@ -183,10 +183,13 @@ std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) 
 
 template<typename Number>
 Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
-	Number squares;
+	Number squares = 0;
 	for(size_t i = 0, size = in.size(); i < size; ++i){
 		squares = squares + carl::pow(*(in.data()+i), 2);
 	}
+	assert(squares >= 0);
+	if(squares == 0)
+		return 0;
 
 	std::pair<Number, Number> dist = carl::sqrt_safe(squares);
 	if(roundUp)
