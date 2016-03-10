@@ -2,12 +2,12 @@
 namespace hypro {
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT()
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
 }
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter> &orig )
-	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ) {
+	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(State::NSET) {
 	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
@@ -15,7 +15,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter> &o
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -27,7 +27,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
@@ -37,7 +37,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
 	}
@@ -45,7 +45,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
 	if ( !points.empty() ) {
 		// degenerate cases
 		unsigned size = points.size();
@@ -99,16 +99,23 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
-	if(mHPlanes.empty())
+	if(mEmpty == State::TRUE)
+		return true;
+	if(mEmpty == State::FALSE)
 		return false;
+
+	if(mHPlanes.empty()){
+		mEmpty = State::FALSE;
+		return false;
+	}
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
-	//std::cout << __func__ << ": " << (opt.checkConsistency() == true) << std::endl;
-
-	return !opt.checkConsistency();
+	bool res = !opt.checkConsistency();
+	mEmpty = (res == true ? State::TRUE : State::FALSE);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -119,7 +126,8 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
 	v.emplace_back(a);
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter> res(v);
-	return std::move(res);
+	res.mEmpty=State::TRUE;
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -398,19 +406,12 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( vector_t<Number> point ) con
 	unsigned cnt = 0;
 	for ( const auto &plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
-		// std::cout << "Eval: " << plane.normal() << " in direction " << point << "
-		// = " << val << ", offset is " <<
-		// plane.offset() << ", with tolerance: " << abs(plane.offset() - val) <<
-		// std::endl;
 		if ( plane.offset() == val  ) {
-			// std::cout << "Increase cnt " << std::endl;
 			++cnt;
 		} else if ( plane.offset() - val < 0 ) {
-			// std::cout << "######" << val << " != " << plane.offset() << std::endl;
 			return false;
 		}
 	}
-	// std::cout << "CNT: " << cnt << std::endl;
 	return cnt >= mDimension;
 }
 

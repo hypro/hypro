@@ -41,6 +41,7 @@ public:
 	bool mFanSet;
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
+	mutable State mEmpty;
 
   public:
 	HPolytopeT();
