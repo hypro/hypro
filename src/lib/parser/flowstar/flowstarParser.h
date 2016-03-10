@@ -101,7 +101,6 @@ struct flowstarParser
 	}
 
 	void insertSettings(const ReachabilitySettings<Number>& _in) {
-		std::cout << "Parsed Settings: " << _in << std::endl;
 		mSettings = _in;
 	}
 
@@ -129,20 +128,16 @@ struct flowstarParser
 
 				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->cols()-1);
 				vector_t<Number> vec = vector_t<Number>(rows);
-				//std::cout << "Target sizes: " << mat.rows() << " rows, " << mat.cols() << " columns." << std::endl;
 				//collect matrix and vector
 				unsigned rowcnt = 0;
 				for(const auto& matrix : fs::get<1>(pair)){
 					matrix_t<Number> tmpMatrix = convertMatToFloatT<Number>(matrix);
-					//std::cout << "tmpMatrix dimensions: " << tmpMatrix.rows() << "x" << tmpMatrix.cols() << std::endl;
 					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
 						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
 						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
 						++rowcnt;
 					}
 				}
-				//std::cout << mat << vec << std::endl;
-				//std::cout << "Location: " << fs::get<0>(pair) << std::endl;
 				mInitialStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
 			}
 		}

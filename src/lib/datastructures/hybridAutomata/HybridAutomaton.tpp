@@ -66,7 +66,6 @@ void HybridAutomaton<Number>::addTransition( Transition<Number> *_transition ) {
 
 template <typename Number>
 void HybridAutomaton<Number>::addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
-	std::cout << "Added initial state." << std::endl;
 	mInitialStates[_location] = _valuation;
 }
 

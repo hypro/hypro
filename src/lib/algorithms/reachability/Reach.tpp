@@ -1,7 +1,6 @@
 #include "Reach.h"
 #include <chrono>
 
-
 namespace hypro {
 namespace reachability {
 
@@ -10,104 +9,54 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
-		: mAutomaton( _automaton ), mSettings(_settings), mFlowpipes(), mReach() {
-			std::cout << "Automaton: " << std::endl << _automaton << std::endl;
-			std::cout << "Settings: " << std::endl << _settings << std::endl;
+		: mAutomaton( _automaton ), mSettings(_settings) {
 		}
 
-	template<typename Number, typename Representation>
-	std::size_t Reach<Number,Representation>::addFlowpipe( const flowpipe_t<Representation>& _flowpipe ) {
-		mFlowpipes.insert( std::make_pair( id++, _flowpipe ) );
-		return id - 1;
-	}
-
-	template<typename Number, typename Representation>
-	const flowpipe_t<Representation>& Reach<Number,Representation>::getFlowpipe( std::size_t _index ) const {
-		assert( mFlowpipes.find( _index ) != mFlowpipes.end() );
-		return mFlowpipes.at( _index );
-	}
-
-	template<typename Number, typename Representation>
-	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachability() {
-        //    #ifdef FORWARD_REACHABILITY_METHOD_2
-		//return computeForwardReachabilityWithMethod2();
-        //    #endif
-
-		std::cout << mSettings;
-
-        return computeForwardReachabilityWithMethod1();
-	}
-
-        template<typename Number, typename Representation>
-	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod1() {
-		std::size_t depth = 0;
-		std::set<std::size_t> R_new;
-		std::set<std::size_t> R;
-
-		// R_new := flowpipe for the initial location, computed based on input valuation
+    template<typename Number, typename Representation>
+	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
+		// set up working queue
 		for ( const auto& initialPair : mAutomaton.initialStates() ) {
-			//std::cout << "Compute time-step in initial states." << std::endl;
-			// TODO: Somehow catch error case where no forwardTimeClosure could be computed.
-			//std::cout << "Initial Valuation: " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
-			std::size_t init = computeForwardTimeClosure( initialPair.first, Representation(initialPair.second.first, initialPair.second.second) );
-			//std::cout << "Computed flowpipe: " << std::endl;
-			//printFlowpipeReduced( init );
-			std::vector<std::size_t> fp;
-			fp.push_back(init);
-			mReach.insert( std::make_pair(initialPair.first, std::move(fp) ));
-			R_new.insert( init );
-			R.insert( init );
+			mWorkingQueue.emplace(initialSet<Number,Representation>(0, initialPair.first, Representation(initialPair.second.first, initialPair.second.second)));
 		}
 
-		//std::cout << "R_new: ";
-		//for ( const auto& item : R_new ) std::cout << item << " ";
-		//std::cout << std::endl;
+		while ( !mWorkingQueue.empty() ) {
+			initialSet<Number,Representation> nextInitialSet = mWorkingQueue.front();
+			mWorkingQueue.pop();
 
-		while ( !R_new.empty() && depth < mSettings.jumpDepth ) {
+			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet), boost::get<2>(nextInitialSet));
 
-			std::set<std::size_t> R_temp = computeReach( R_new );
+			// TODO: Check for fixed point.
+			if(mReachableStates.find(boost::get<1>(nextInitialSet)) == mReachableStates.end())
+				mReachableStates[boost::get<1>(nextInitialSet)] = std::vector<flowpipe_t<Representation>>();
 
-			//std::cout << "Newly generated flowpipes = ";
-			//for ( const auto& item : R_temp ) std::cout << item << " ";
-			//std::cout << std::endl;
+			mReachableStates[boost::get<1>(nextInitialSet)].push_back(newFlowpipe);
 
-			R_new.clear();
-			std::set_difference( R_temp.begin(), R_temp.end(), R.begin(), R.end(),
-								 std::inserter( R_new, R_new.begin() ) );
-
-			// R = R U R_new
-			if ( !R.empty() ) {
-				std::set_union( R.begin(), R.end(), R_new.begin(), R_new.end(), std::inserter( R, R.begin() ) );
-			} else {
-				R = R_new;
+			if(boost::get<0>(nextInitialSet) < mSettings.jumpDepth) {
+				std::vector<initialSet<Number,Representation>> newInitialSets = computeDiscreteJump(boost::get<0>(nextInitialSet), boost::get<1>(nextInitialSet), newFlowpipe);
+				for(const auto& item : newInitialSets)
+					mWorkingQueue.push(item);
 			}
-
-			++depth;
 		}
-		return R;
+
+		// collect all computed reachable states
+		std::vector<flowpipe_t<Representation>> collectedReachableStates;
+		for(const auto& statePair : mReachableStates) {
+			for(const auto& flowpipe : statePair.second){
+				collectedReachableStates.push_back(flowpipe);
+			}
+		}
+		return collectedReachableStates;
 	}
 
-        template<typename Number, typename Representation>
-	std::set<std::size_t> Reach<Number,Representation>::computeForwardReachabilityWithMethod2() {
-            std::size_t depth = 0;
-            std::set<std::size_t> R_new;
-            std::set<std::size_t> R;
-
-            return R;
-        }
-
 	template<typename Number, typename Representation>
-	std::size_t Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
+	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
 #ifdef REACH_DEBUG
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
-
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
-
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
-		// add initial valuation
 
 // check if initial Valuation fulfills Invariant
 #ifdef REACH_DEBUG
@@ -181,7 +130,6 @@ namespace reachability {
 			// updatedflowrix.conservativeResize(rows-1, cols-1);
 			// radius = hausdorffError(Number(mSettings.timestep), updatedflowrix, _val.supremum());
 			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initial.supremum() );
-// radius = _val.hausdorffError(mSettings.timestep, _loc->flow());
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
@@ -189,11 +137,7 @@ namespace reachability {
 			std::cout << radius << std::endl;
 #endif
 
-			unsigned int dim;
-			dim = unitePolytope.dimension();
-
-			Representation hausPoly = hypro::computePolytope<Number, Representation>( dim, radius );
-
+			Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
 
 #ifdef REACH_DEBUG
 			std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
@@ -270,7 +214,7 @@ namespace reachability {
 			Representation lastSegment = firstSegment;
 
 			// Polytope after linear transformation
-			Representation resultPolytope;
+			Representation transformedSegment;
 
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop entered ---" << std::endl;
@@ -282,35 +226,34 @@ namespace reachability {
 				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timeStep) << std::flush;
 
 				// perform linear transformation on the last segment of the flowpipe
-				// lastSegment.linearTransformation(resultPolytope, tempResult);
 				assert(lastSegment.linearTransformation(resultMatrix, translation).size() == lastSegment.size());
-				resultPolytope = lastSegment.linearTransformation( resultMatrix, translation );
+				transformedSegment = lastSegment.linearTransformation( resultMatrix, translation );
 
 				// extend flowpipe (only if still within Invariant of location)
-				Representation tmp = resultPolytope.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+				Representation newSegment = transformedSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
-				resultPolytope.print();
-				std::cout << "Empty: " << resultPolytope.empty() << std::endl;
+				transformedSegment.print();
+				std::cout << "Empty: " << transformedSegment.empty() << std::endl;
 
 				std::cout << "still within Invariant?: ";
-				std::cout << !(tmp.empty()) << std::endl;
-				std::cout << "Intersection result: " << tmp << std::endl;
+				std::cout << !(newSegment.empty()) << std::endl;
+				std::cout << "Intersection result: " << newSegment << std::endl;
 #endif
 #ifdef USE_REDUCTION
 				// clustering CONVEXHULL_CONST and reduction with directions generated before
 				if(use_reduce_memory){
 					if(CONVEXHULL_CONST==1){ // if no clustering is required
-						if(!tmp.empty()){
-							Representation poly_smoothed = tmp.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+						if(!newSegment.empty()){
+							Representation poly_smoothed = newSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 							flowpipe.insert(flowpipe.begin(), poly_smoothed);
 						}
 					}
 					else{
-						if(!tmp.empty()){
+						if(!newSegment.empty()){
 							// collect points
-							for(auto vertex: tmp.vertices()){
+							for(auto vertex: newSegment.vertices()){
 								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
 									points_convexHull.push_back(vertex);
 								}
@@ -319,7 +262,7 @@ namespace reachability {
 						}
 
 						// compute convexHull and reduction of clustered segments
-						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || tmp.empty())){
+						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || newSegment.empty())){
 							auto facets = convexHull(points_convexHull);
 
 							std::vector<Hyperplane<Number>> hyperplanes;
@@ -339,14 +282,14 @@ namespace reachability {
 				}
 #endif
 
-				if ( !tmp.empty() ) {
+				if ( !newSegment.empty() ) {
 #ifdef USE_REDUCTION
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
-					flowpipe.push_back( tmp );
+					flowpipe.push_back( newSegment );
 
 					// update lastSegment
-					lastSegment = tmp;
+					lastSegment = newSegment;
 				} else {
 					break;
 				}
@@ -354,102 +297,76 @@ namespace reachability {
 			//double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
 			//std::cout << std::endl << "Total time for loop(HYPRO): " << timeOfReachReduction << std::endl;
 			//std::cout << std::endl;
-
-			std::size_t fpIndex = addFlowpipe( flowpipe );
-			mFlowToLocation[fpIndex] = _loc;
-
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop left ---" << std::endl;
-			std::cout << "flowpipe " << fpIndex << ", " << flowpipe.size() << " Segments computed." << std::endl;
+			std::cout << "flowpipe " << flowpipe << ", " << flowpipe.size() << " Segments computed." << std::endl;
 #endif
 
-			return fpIndex;
+			return flowpipe;
 		} else {
 			// return an empty flowpipe
-			std::size_t fpIndex = addFlowpipe( flowpipe );
-			mFlowToLocation[fpIndex] = _loc;
-			return fpIndex;
+			return flowpipe;
 		}
 	}
 
 	template<typename Number, typename Representation>
-	std::set<std::size_t> Reach<Number,Representation>::computeReach( const std::set<std::size_t>& _init ) {
-		std::set<std::size_t> reach;
+	std::vector<initialSet<Number,Representation>> Reach<Number,Representation>::computeDiscreteJump( unsigned _currentLevel, Location<Number>* _location, const flowpipe_t<Representation>& _flowpipe ) {
+		std::vector<initialSet<Number,Representation>> newInitialStates;
 
-		// for each flowpipe in _init
-		for ( auto it_pipe = _init.begin(); it_pipe != _init.end(); ++it_pipe ) {
-			// get the location that belongs to the flowpipe
-			hypro::Location<Number>* loc = mFlowToLocation[*it_pipe];
+		// for each outgoing transition of the location
+		std::set<Transition<Number>*> loc_transSet = _location->transitions();
+		for ( typename std::set<Transition<Number>*>::iterator transitionIt = loc_transSet.begin();
+			  transitionIt != loc_transSet.end(); ++transitionIt ) {
+			hypro::Transition<Number>* transition = *transitionIt;
 
-			//std::cout << "Consider transitions for location " << *loc << std::endl;
+			#ifdef REACH_DEBUG
+			std::cout << "Consider transition " << *transition << std::endl;
+			#endif
 
-			// for each outgoing transition of the location
-			std::set<Transition<Number>*> loc_transSet = loc->transitions();
-			for ( typename std::set<Transition<Number>*>::iterator it_trans = loc_transSet.begin();
-				  it_trans != loc_transSet.end(); ++it_trans ) {
-				hypro::Transition<Number> trans = *( *it_trans );
+			// resulting Polytope in new location
+			std::vector<Point<Number>> collectedVertices;
+			bool transitionEnabled = false;
 
-				#ifdef REACH_DEBUG
-				std::cout << "Consider transition " << trans << std::endl;
-				#endif
-
-				// resulting Polytope in new location
-				Representation targetValuation;
-				std::vector<Point<Number>> targetVertices;
-				bool transitionEnabled = false;
-
-				// for each polytope that is part of the flowpipe
-				for ( typename flowpipe_t<Representation>::iterator it_val = mFlowpipes.at( *it_pipe ).begin();
-					  it_val != mFlowpipes.at( *it_pipe ).end(); ++it_val ) {
-					Representation postAssign;
-					// check if guard of transition is enabled (if yes compute Post Assignment Valuation)
-					if ( computePostCondition( trans, *it_val, postAssign ) ) {
-						transitionEnabled = true;
-
-						for(const auto& vertex : postAssign.vertices() ) {
-							targetVertices.emplace_back(vertex);
-						}
-					}
-				}
-				if ( transitionEnabled ) {
-					assert(!targetVertices.empty());
-
-					targetValuation = Representation(targetVertices);
-					// compute new Flowpipe
-					hypro::Location<Number>* tarLoc = trans.target();
-
-					// flowpipe_t<Representation> newPipe = computeForwardTimeClosure(tarLoc, hullPoly);
-					std::size_t newPipe = computeForwardTimeClosure( tarLoc, targetValuation );
-
-					// if new Flowpipe is not empty
-					if ( !mFlowpipes.at( newPipe ).empty() ) {
-						// expand reach
-						reach.insert( newPipe );
+			// for each polytope that is part of the flowpipe
+			for ( auto segmentIt = _flowpipe.begin(); segmentIt != _flowpipe.end(); ++segmentIt ) {
+				// check if guard of transition is enabled (if yes compute Post Assignment Valuation)
+				Representation postAssign;
+				if ( intersectGuard( transition, *segmentIt, postAssign ) ) {
+					transitionEnabled = true;
+					// if no aggregation takes place, insert each new set independently
+					if(transition->aggregation() == Aggregation::none){
+						newInitialStates.emplace_back(_currentLevel+1, transition->target(), postAssign);
+					} else {
+						std::vector<Point<Number>> tmpVertices = postAssign.vertices();
+						collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 					}
 				}
 			}
+			if ( transitionEnabled && transition->aggregation() != Aggregation::none) {
+				assert(!collectedVertices.empty());
+				newInitialStates.emplace_back(_currentLevel+1, transition->target(), Representation(collectedVertices));
+			}
 		}
-		//std::cout << __func__ << " end." << std::endl;
-		return reach;
+		return newInitialStates;
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::computePostCondition( const hypro::Transition<Number>& _trans, const Representation& _val,
+	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
 							   Representation& result ) {
 
-		Representation intersectionPoly = _val.intersectHyperplanes( _trans.guard().mat, _trans.guard().vec );
+		Representation guardSatisfyingSegment = _segment.intersectHyperplanes( _trans->guard().mat, _trans->guard().vec );
 
 		// check if the intersection is empty
-		if ( !intersectionPoly.empty() ) {
+		if ( !guardSatisfyingSegment.empty() ) {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 
-			hypro::vector_t<Number> translateVec = _trans.reset().vec;
-			hypro::matrix_t<Number> transformMat = _trans.reset().mat;
+			hypro::vector_t<Number> translateVec = _trans->reset().vec;
+			hypro::matrix_t<Number> transformMat = _trans->reset().mat;
 
 			// perform translation + transformation on intersection polytope
-			result = intersectionPoly.linearTransformation( transformMat, translateVec );
+			result = guardSatisfyingSegment.linearTransformation( transformMat, translateVec );
 
 			return true;
 		} else {
@@ -458,17 +375,17 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	void Reach<Number,Representation>::printFlowpipe( std::size_t _flowpipe ) const {
-		for ( const auto& segment : mFlowpipes.at( _flowpipe ) ) {
+	void Reach<Number,Representation>::printFlowpipe( const flowpipe_t<Representation>& _flowpipe ) const {
+		for ( const auto& segment : _flowpipe ) {
 			std::cout << segment << ", " << std::endl;
 		}
 	}
 
 	template<typename Number, typename Representation>
-	void Reach<Number,Representation>::printFlowpipeReduced( std::size_t _flowpipe ) const {
-		std::cout << *mFlowpipes.at( _flowpipe ).begin() << ", " << std::endl;
+	void Reach<Number,Representation>::printFlowpipeReduced( const flowpipe_t<Representation>& _flowpipe ) const {
+		std::cout << *_flowpipe.begin() << ", " << std::endl;
 		std::cout << "(...)" << std::endl;
-		std::cout << mFlowpipes.at( _flowpipe ).back() << std::endl;
+		std::cout << *_flowpipe.back() << std::endl;
 	}
 }
 }

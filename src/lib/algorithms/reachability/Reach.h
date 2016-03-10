@@ -10,6 +10,7 @@
  */
 
 #pragma once
+#include "boost/tuple/tuple.hpp"
 #include "../../config.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/Plotter.h"
@@ -17,14 +18,17 @@
 #include "Settings.h"
 
 // Debug Flag, TODO: Add more debug levels.
-#define REACH_DEBUG
+//#define REACH_DEBUG
 //#define USE_REDUCTION
 
 namespace hypro {
 namespace reachability {
 
 template <typename Representation>
-using flowpipe_t = vector<Representation>;
+using flowpipe_t = std::vector<Representation>;
+
+template<typename Number, typename Representation>
+using initialSet = boost::tuple<unsigned, Location<Number>*, Representation>;
 
 template <typename Number, typename Representation>
 class Reach {
@@ -32,10 +36,8 @@ private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 
-	std::map<std::size_t, flowpipe_t<Representation>> mFlowpipes;
-	std::map<std::size_t, Location<Number>*> mFlowToLocation;
-	std::map<Location<Number>*, std::vector<std::size_t>> mReach;
-	std::size_t id = 0;
+	std::map<Location<Number>*, std::vector<flowpipe_t<Representation>>> mReachableStates;
+	std::queue<initialSet<Number,Representation>> mWorkingQueue;
 
 public:
 	/**
@@ -47,42 +49,11 @@ public:
 	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
 
 	/**
-	 * @brief Adds a flowpipe to be stored. Flowpipe segments are identified by ids.
-	 *
-	 * @param _flowpipe The flowpipe to be stored.
-	 * @return The id with which the flowpipe is identified.
-	 */
-	std::size_t addFlowpipe( const flowpipe_t<Representation>& _flowpipe );
-
-	/**
-	 * @brief Returns a concrete flowpipe for a given id.
-	 *
-	 * @param _index The id.
-	 * @return The flowpipe assigned to the id.
-	 */
-	const flowpipe_t<Representation>& getFlowpipe( std::size_t _index ) const;
-
-	/**
 	 * @brief Computes the forward reachability of the given automaton.
-	 * @details The main computation method is the Method #1.
-         *          To use the Method #2, there's a FLAG that needs to be enabled!
+	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	std::set<std::size_t> computeForwardReachability();
-
-        /**
-	 * @brief Computes the forward reachability of the given automaton with the #1 Method.
-	 * @details [long description]
-	 * @return The flowpipe as a result of this computation.
-	 */
-	std::set<std::size_t> computeForwardReachabilityWithMethod1();
-
-        /**
-	 * @brief Computes the forward reachability of the given automaton with the #2 Method.
-	 * @details [long description]
-	 * @return The flowpipe as a result of this computation.
-	 */
-	std::set<std::size_t> computeForwardReachabilityWithMethod2();
+	std::vector<flowpipe_t<Representation>> computeForwardReachability();
 
 	/**
 	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
@@ -93,7 +64,7 @@ public:
 	 *
 	 * @return The id of the computed flowpipe.
 	 */
-	std::size_t computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val );
+	flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val );
 
 	/**
 	 * @brief Computes one time step and one discrete step, i.e. increases the depth of the search by one.
@@ -102,7 +73,7 @@ public:
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	std::set<std::size_t> computeReach( const std::set<std::size_t>& _init );
+	std::vector<initialSet<Number,Representation>> computeDiscreteJump(  unsigned _currentLevel, Location<Number>* _location,  const flowpipe_t<Representation>& _flowpipe );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -113,21 +84,21 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool computePostCondition( const hypro::Transition<Number>& _trans, const Representation& _val, Representation& result );
+	bool intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment, Representation& result );
 
 	/**
 	 * @brief Printing method for a flowpipe. Prints every segment.
 	 *
 	 * @param _flowpipe The flowpipe to be printed.
 	 */
-	void printFlowpipe( std::size_t _flowpipe ) const;
+	void printFlowpipe( const flowpipe_t<Representation>& _flowpipe ) const;
 
 	/**
 	 * @brief Printing method for a flowpipe. Prints only the first and the last segment.
 	 *
 	 * @param _flowpipe The flowpipe to be printed.
 	 */
-	void printFlowpipeReduced( std::size_t _flowpipe ) const;
+	void printFlowpipeReduced( const flowpipe_t<Representation>& _flowpipe ) const;
 };
 
 }  // namespace reachability

@@ -20,12 +20,11 @@ int main(int argc, char** argv) {
     hypro::HybridAutomaton<number> ha = parser.parseInput(filename);
 
     hypro::reachability::Reach<number,valuation> reacher(ha, parser.mSettings);
-    std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
+    std::vector<std::vector<valuation>> flowpipes = reacher.computeForwardReachability();
 
     hypro::Plotter<number>& plotter = hypro::Plotter<number>::getInstance();
     plotter.setFilename(parser.mSettings.fileName);
-    for(const auto& fpI : flowpipeIndices){
-    	std::vector<valuation> flowpipe = reacher.getFlowpipe(fpI);
+    for(const auto& flowpipe : flowpipes){
     	for(const auto& segment : flowpipe)
     		plotter.addObject(segment.vertices());
     }

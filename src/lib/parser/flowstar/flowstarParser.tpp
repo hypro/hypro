@@ -35,11 +35,12 @@ namespace parser {
 		// invoke qi parser
 		bool result = qi::phrase_parse( begin, end, start, skipper );
 
-		std::cout << "Result: Done" << std::endl;
-		std::cout << "To parse: " << std::string( begin, end ) << std::endl;
+		//std::cout << "Result: Done" << std::endl;
+		//std::cout << "To parse: " << std::string( begin, end ) << std::endl;
 
 		// create automaton from parsed result.
-		_result = createAutomaton();
+		if(result)
+			_result = createAutomaton();
 
 		return result;
 	}

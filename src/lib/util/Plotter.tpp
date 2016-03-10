@@ -112,6 +112,10 @@ void Plotter<Number>::plot2d() const {
 				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
+		if(mSettings.axes) {
+			mOutfile << "set zeroaxis \n";
+		}
+
 		mOutfile << "plot ";
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
@@ -135,14 +139,6 @@ void Plotter<Number>::plot2d() const {
 				}
 			}
 
-		}
-
-		if(mSettings.axes) {
-			mOutfile << "set zeroaxis \n";
-			mOutfile << "set xtics axis \n";
-			mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-			mOutfile << "set ytics axis \n";
-			mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
 		}
 
 		if(!mPoints.empty()){

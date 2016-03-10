@@ -60,13 +60,12 @@ class HybridAutomaton {
 		mLocations = _rhs.locations();
 		mTransitions = _rhs.transitions();
 		mInitialStates = _rhs.initialStates();
-		std::cout << "after operator=: " << *this << std::endl;
 		return *this;
 	}
 
 	// move assignment operator, TODO: Implement
 	//inline HybridAutomaton<Number>& operator=( HybridAutomaton<Number>&& _rhs ) {
-	//	
+	//
 	//	return *this;
 	//}
 
