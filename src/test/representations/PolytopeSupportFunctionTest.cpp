@@ -79,10 +79,10 @@ TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
 	directions(2,0) = TypeParam(-4);
 	directions(2,1) = TypeParam(1);
 
-	vector_t<TypeParam> res = psf1.multiEvaluate(directions);
-	EXPECT_LE(TypeParam(20), res(0));
-	EXPECT_LE(TypeParam(5), res(1));
-	EXPECT_LE(TypeParam(17), res(2));
+	std::vector<evaluationResult<TypeParam>> res = psf1.multiEvaluate(directions);
+	EXPECT_LE(TypeParam(20), res[0].supportValue);
+	EXPECT_LE(TypeParam(5), res[1].supportValue);
+	EXPECT_LE(TypeParam(17), res[2].supportValue);
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {

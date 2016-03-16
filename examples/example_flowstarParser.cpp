@@ -12,7 +12,7 @@
 
 int main(int argc, char** argv) {
 	typedef cln::cl_RA number;
-	typedef hypro::HPolytope<number> valuation;
+	typedef hypro::SupportFunction<number> valuation;
 
     std::string filename = "../examples/input/bouncing_ball.model";
 

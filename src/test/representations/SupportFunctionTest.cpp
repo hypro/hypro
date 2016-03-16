@@ -60,14 +60,14 @@ protected:
  * Tests only a single constructor which holds a concrete representation. Other constructors are tested by operations.
  */
 TYPED_TEST(SupportFunctionTest, constructor) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
-	EXPECT_DEATH(SupportFunction<TypeParam>(SF_TYPE::SUM, this->constraints, this->constants), "c*");
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
+	EXPECT_DEATH(SupportFunction<TypeParam>(this->constraints, this->constants), "c*");
 
 	SUCCEED();
 }
 
 TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	matrix_t<TypeParam> vec1 = matrix_t<TypeParam>(2,1);
 	matrix_t<TypeParam> vec2 = matrix_t<TypeParam>(2,1);
 	matrix_t<TypeParam> vec3 = matrix_t<TypeParam>(2,1);
@@ -78,7 +78,7 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 }
 
 TYPED_TEST(SupportFunctionTest, linearTransformation) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	matrix_t<TypeParam> rotation = matrix_t<TypeParam>(2,2);
 	TypeParam angle = 45;
 	rotation(0,0) = carl::cos(angle);
@@ -98,7 +98,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	TypeParam factor = 2;
 
 	SupportFunction<TypeParam> res =  psf1.scale(factor);
@@ -138,8 +138,8 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 	constants2(1) = TypeParam(-2);
 	constants2(2) = TypeParam(4);
 
-	SupportFunction<TypeParam> tri1 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints1, constants1);
-	SupportFunction<TypeParam> tri2 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints2, constants2);
+	SupportFunction<TypeParam> tri1 = SupportFunction<TypeParam>(constraints1, constants1);
+	SupportFunction<TypeParam> tri2 = SupportFunction<TypeParam>(constraints2, constants2);
 
 	// Result directions
 	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2);
@@ -177,7 +177,7 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 }
 
 TYPED_TEST(SupportFunctionTest, intersect) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 }
 
 TYPED_TEST(SupportFunctionTest, unite) {
@@ -210,8 +210,8 @@ TYPED_TEST(SupportFunctionTest, unite) {
 	constants2(1) = TypeParam(-2);
 	constants2(2) = TypeParam(4);
 
-	SupportFunction<TypeParam> tri1 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints1, constants1);
-	SupportFunction<TypeParam> tri2 = SupportFunction<TypeParam>(SF_TYPE::POLY, constraints2, constants2);
+	SupportFunction<TypeParam> tri1 = SupportFunction<TypeParam>(constraints1, constants1);
+	SupportFunction<TypeParam> tri2 = SupportFunction<TypeParam>(constraints2, constants2);
 
 	SupportFunction<TypeParam> res = tri1.unite(tri2);
 
@@ -239,7 +239,7 @@ TYPED_TEST(SupportFunctionTest, unite) {
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(SF_TYPE::POLY, this->constraints, this->constants);
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({0,0})));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({-2,-2})));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({3,3})));

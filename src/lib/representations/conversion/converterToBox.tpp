@@ -28,11 +28,17 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 		directions( 2 * i + 1, i ) = 1;                                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
 	}
 
-	vector_t<Number> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
+	std::vector<evaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
-		intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );   //create one interval with the corresponding left and right end points (inverted lower interval end points)
+        carl::BoundType lowerBound = carl::BoundType::WEAK;
+        carl::BoundType upperBound = carl::BoundType::WEAK;
+        if(distances[2*i].errorCode == SOLUTION::INFTY)
+            lowerBound = carl::BoundType::INFTY;
+        if(distances[2*i+1].errorCode == SOLUTION::INFTY)
+            upperBound = carl::BoundType::INFTY;
+		intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );   //create one interval with the corresponding left and right end points (inverted lower interval end points)
 	}
 
     // if (mode == EXACT){                                                                                      //checks if conversion was exact
@@ -68,7 +74,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                           
+	}
 
     // if(mode == EXACT){                                                                               //checks if conversion was exact
     //     bool foundEqual;
@@ -103,7 +109,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                             
+	}
 
     // if(mode == EXACT){                                                                              //checks if conversion was exact
     //     bool foundEqual;
@@ -179,7 +185,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 	std::vector<carl::Interval<Number>> intervals;
 	for ( std::size_t i = 0; i < _source.dimension(); ++i ) {                                               //for every dimension
 		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );                      //create one interval per dimension with the corresponding minimal and maximal values
-	}                                                                   
+	}
 
     // if(mode == EXACT){                                                                                      //checks if conversion was exact
     //     bool foundEqual;

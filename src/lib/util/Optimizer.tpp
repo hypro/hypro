@@ -77,16 +77,16 @@ namespace hypro {
 				break;
 			}
 			case GLP_UNBND: {
-				res = std::make_pair( 1, INFTY );
+				res = std::make_pair( 1, SOLUTION::INFTY );
 				break;
 			}
 			default:
-				res = std::make_pair( 0, INFEAS );
+				res = std::make_pair( 0, SOLUTION::INFEAS );
 		}
 
 		#ifdef USE_SMTRAT
 
-		Poly objective = createObjective(_direction);
+		carl::MultivariatePolynomial<smtrat::Rational> objective = createObjective(_direction);
 
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
@@ -114,7 +114,7 @@ namespace hypro {
 			VariablePool& varPool = VariablePool::getInstance();
 			for(unsigned i=0; i < mConstraintMatrix.cols(); ++i) {
 				if(_direction(i) != 0) {
-					Poly bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
+					carl::MultivariatePolynomial<smtrat::Rational> bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
 					smtrat::FormulaT boundConstraint;
 					if(_direction(i) > 0 ) {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::GEQ);
@@ -130,7 +130,7 @@ namespace hypro {
 			}
 
 			// add constraint for improvement of glpk solution.
-			Poly tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
+			carl::MultivariatePolynomial<smtrat::Rational> tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 
 			//std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
@@ -139,9 +139,9 @@ namespace hypro {
 			simplex.add(tmpSolutionConstraint);
 		} else if( res.second == INFEAS) {
 			if(simplex.check() == smtrat::Answer::UNSAT)
-				return std::move(res);
+				return res;
 		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
-			return std::move(res);
+			return res;
 		}
 		#endif
 		simplex.addObjective(objective, false);
@@ -169,7 +169,7 @@ namespace hypro {
 					res = std::make_pair( 1, INFTY );
 				} else {
 					assert(valuation.isRational());
-					res = std::make_pair( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+					res = std::make_pair( carl::convert<smtrat::Rational, Number>(valuation.asRational()), FEAS );
 				}
 				break;
 			}
@@ -236,9 +236,9 @@ namespace hypro {
 			mSmtratSolver.add(tmpSolutionConstraint);
 		} else if( res.second == INFEAS) {
 			if(mSmtratSolver.check() == smtrat::Answer::UNSAT)
-				return std::move(res);
+				return res;
 		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
-			return std::move(res);
+			return res;
 		}
 		#endif
 
@@ -275,7 +275,7 @@ namespace hypro {
 		#endif
 		#endif
 
-		return std::move(res);
+		return res;
 	}
 
 	template<typename Number>
@@ -337,7 +337,7 @@ namespace hypro {
 			updateConstraints();
 
 		if(mConstraintMatrix.rows() == 0)
-			return std::move(res);
+			return res;
 
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
@@ -345,7 +345,7 @@ namespace hypro {
 		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
 		if(formulaMapping.size() == 1)
-			return std::move(res);
+			return res;
 
 		if(unsigned(formulaMapping.size()) != mConstraintMatrix.rows()) {
 			for(unsigned cnt = 0; cnt < mConstraintMatrix.rows(); ++cnt) {
@@ -417,7 +417,7 @@ namespace hypro {
 		#else
 
 		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT ) // if there is only one constraint
-			return std::move(res);
+			return res;
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck;
@@ -478,7 +478,7 @@ namespace hypro {
 
 		std::sort(res.begin(), res.end());
 
-		return std::move(res);
+		return res;
 	}
 
 	template<typename Number>

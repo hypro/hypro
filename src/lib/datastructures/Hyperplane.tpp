@@ -341,10 +341,6 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 		}
 		vector_t<Number> normal = constraints.fullPivLu().kernel();
 
-		// post-computation check, if the normal vector is correct
-		for( const auto& vector : _edgeSet)
-			assert(vector.dot(normal) == 0);
-
 		return normal;
 	} else {
 		assert (false);
@@ -415,10 +411,6 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 		}
 
 		glp_delete_prob( normal );
-
-		// post-computation check, if the normal vector is correct
-		for( const auto& vector : _edgeSet)
-			assert(vector.dot(result) == 0);
 
 		return result;
 	}

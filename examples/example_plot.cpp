@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 	std::cout << "Added points." << std::endl;
 
 	plotter.addObject(poly.constraints());
+	plotter.addObject(Hyperplane<double>({1,0},1));
 
 	std::cout << "Added planes." << std::endl;
 

@@ -61,6 +61,7 @@ static const double fReach_TIMEBOUND = 3;
 static const double fReach_TIMESTEP = 0.01;
 static const std::size_t fReach_JUMPDEPTH = 2;
 static const unsigned long fReach_DENOMINATOR = 1000000000;
+static const std::size_t fReach_TEMPLATEDIRECTIONS = 8;
 
 /**
  * author: ckugler

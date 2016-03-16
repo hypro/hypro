@@ -20,7 +20,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
 	HPolytope target;
-    if (mode == EXACT){    
+    if (mode == EXACT){
     if ( !_source.empty() ) {
 		// degenerate cases
 		unsigned size = _source.size();
@@ -77,7 +77,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
         if (mode == OVER){
         //gets vertices from source object
         typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
-        
+
         //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
         std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
         target = HPolytope(planes);
@@ -89,29 +89,29 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE mode ){
      //gets dimension of box
-     unsigned dim = _source.dimension();  
+     unsigned dim = _source.dimension();
      //only continue if dimension is at least 1
-     assert( dim >= 1);                                                                      
+     assert( dim >= 1);
 
      //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );       
+     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
      //for every dimension:
-     for ( unsigned i = 0; i < dim; ++i ) { 
+     for ( unsigned i = 0; i < dim; ++i ) {
          //write fixed entries (because of box) into the normal matrix (2 each column)
            directions( 2 * i, i ) = -1;
-           directions( 2 * i + 1, i ) = 1;                                                   
+           directions( 2 * i + 1, i ) = 1;
      }
 
      //initialize distance vector with 2*dim rows
-     vector_t<Number> distances = vector_t<Number>( 2 * dim );                               
+     vector_t<Number> distances = vector_t<Number>( 2 * dim );
 
       //gets intervals of box
      std::vector<carl::Interval<Number>> intervals = _source.boundaries();
       //for every dimension:
-     for ( unsigned i = 0; i < dim; ++i ) {  
+     for ( unsigned i = 0; i < dim; ++i ) {
          //write inverted lower bound values and upper bound values into the distance vector
            distances( 2 * i ) = -intervals[i].lower();
-           distances( 2 * i + 1 ) = intervals[i].upper();                                    
+           distances( 2 * i + 1 ) = intervals[i].upper();
      }
 
      return HPolytope(directions, distances);
@@ -121,16 +121,16 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
     //computes vertices from source object
-    typename std::vector<vector_t<Number>> vertices = _source.vertices();                   
+    typename std::vector<vector_t<Number>> vertices = _source.vertices();
     //only continue if any actual vertices were received at all
-    assert( !vertices.empty() );                                                                            
+    assert( !vertices.empty() );
     std::vector<Point<Number>> points;
-    
+
     for(const auto& vertex : vertices){
         points.emplace_back(vertex);
     }
-    HPolytope target = HPolytope(std::move(points)); 
-    return target;
+
+    return HPolytope(std::move(points));
 }
 
 //TODO alternative conversion approaches
@@ -139,23 +139,40 @@ template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
     //gets dimension of source object
     unsigned dim = _source.dimension();
-    
+
     //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
     std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
     //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
     assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
     //creates a matrix with one row for each direction and one column for each dimension
     matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
-    
+
     //fills the matrix with the template directions
     for (unsigned i=0; i<templateDirections.size();++i){
         templateDirectionMatrix.row(i) = templateDirections[i];
     }
-    
+
     //lets the support function evaluate the offset of the halfspaces for each direction
-    vector_t<Number> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    
+    std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    assert(offsets.size() == templateDirectionMatrix.rows());
+    std::size_t bounded = 0;
+    std::vector<std::size_t> boundedConstraints;
+    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+            boundedConstraints.push_back(bounded);
+
+        ++bounded;
+    }
+    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+    std::size_t pos = boundedConstraints.size()-1;
+    while(!boundedConstraints.empty()){
+        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+        boundedConstraints.pop_back();
+        --pos;
+    }
+
     //constructs a H-Polytope out of the computed halfspaces
-    HPolytope res = HPolytope(templateDirectionMatrix, offsets);
-    return res;
+    return HPolytope(constraints, constants);
 }

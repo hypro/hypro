@@ -215,7 +215,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			break;
 		default:
 			assert( false );
-	}  
+	}
 	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
 }
 
@@ -228,7 +228,12 @@ evaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::LINTRAFO: {
 			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			return mLinearTrafoParameters->origin->evaluate( tmp * _direction );
+			std::cout << "Tmp rows " << tmp.rows() << " cols " << tmp.cols() << " direction rows: " << _direction.rows() << std::endl;
+			evaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
+			if(res.errorCode != SOLUTION::INFTY){
+				res.supportValue += ((mLinearTrafoParameters->b).dot(_direction))/norm(_direction);
+			}
+			return res;
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->evaluate( _direction );
@@ -249,66 +254,123 @@ evaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		case SF_TYPE::UNION: {
 			evaluationResult<Number> resA = mSummands->lhs->evaluate( _direction );
 			evaluationResult<Number> resB = mSummands->rhs->evaluate( _direction );
+			if(resA.errorCode == SOLUTION::INFTY || resB.errorCode == SOLUTION::INFTY){
+				evaluationResult<Number> res;
+				res.errorCode = SOLUTION::INFTY;
+				res.supportValue = 1;
+				return res;
+			}
 			return ( resA.supportValue >= resB.supportValue ? resA : resB );
 		}
 		case SF_TYPE::INTERSECT: {
 			evaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate( _direction );
 			evaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate( _direction );
+			if(resA.errorCode == SOLUTION::INFTY && resB.errorCode == SOLUTION::INFTY){
+				evaluationResult<Number> res;
+				res.errorCode = SOLUTION::INFTY;
+				res.supportValue = 1;
+				return res;
+			}
 			return ( resA.supportValue <= resB.supportValue ? resA : resB );
 		}
-		default:
-			assert( false );
 	}
 }
 
 template <typename Number>
-vector_t<Number> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
-	// std::cout << "Multi-evaluate, type: " << mType << std::endl;
+std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+	std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->multiEvaluate( _directions );
 		}
 		case SF_TYPE::LINTRAFO: {
-			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			return mLinearTrafoParameters->origin->multiEvaluate( _directions * tmp );
+			//matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
+			matrix_t<Number> tmp = mLinearTrafoParameters->a;
+			std::vector<evaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * tmp );
+			unsigned cnt = 0;
+			for(auto& entry : res){
+				vector_t<Number> dir = _directions.row(cnt);
+				entry.supportValue += ((mLinearTrafoParameters->b).dot(_directions.row(cnt)))/norm(dir);
+				++cnt;
+			}
+			return res;
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->multiEvaluate( _directions );
 		}
 		case SF_TYPE::SCALE: {
-			return mScaleParameters->origin->multiEvaluate( _directions ) * ( mScaleParameters->factor );
+			std::vector<evaluationResult<Number>> res = mScaleParameters->origin->multiEvaluate( _directions );
+			for(auto& singleRes : res)
+				singleRes.supportValue *= mScaleParameters->factor;
+
+			return res;
 		}
 		case SF_TYPE::SUM: {
-			vector_t<Number> resA = mSummands->lhs->multiEvaluate( _directions );
-			vector_t<Number> resB = mSummands->rhs->multiEvaluate( _directions );
-			// std::cout << resA.cols() << "," << resA.rows() << " added to " <<
-			// resB.cols() << "," << resB.rows()
-			// <<std::endl;
-			return ( resA + resB );
+			std::vector<evaluationResult<Number>> resA = mSummands->lhs->multiEvaluate( _directions );
+			std::vector<evaluationResult<Number>> resB = mSummands->rhs->multiEvaluate( _directions );
+			std::vector<evaluationResult<Number>> res;
+			assert( resA.size() == _directions.rows());
+			assert(resA.size() == resB.size());
+			for(unsigned index = 0; index < resA.size(); ++index){
+				evaluationResult<Number> r;
+				if(resA[index].errorCode == SOLUTION::INFTY || resB[index].errorCode == SOLUTION::INFTY){
+					r.errorCode = SOLUTION::INFTY;
+					r.supportValue = 1;
+				} else {
+					r.errorCode = SOLUTION::FEAS;
+					r.supportValue = resA[index].supportValue + resB[index].supportValue;
+				}
+				res.push_back(r);
+			}
+			assert( res.size() == _directions.rows());
+			return ( res );
 		}
 		case SF_TYPE::UNION: {
-			vector_t<Number> resA = mUnionParameters->lhs->multiEvaluate( _directions );
-			vector_t<Number> resB = mUnionParameters->rhs->multiEvaluate( _directions );
-			assert( resA.rows() == resB.rows() );
-			vector_t<Number> result = vector_t<Number>( resA.rows() );
-			for ( unsigned i = 0; i < result.rows(); ++i ) {
-				result( i ) = resA( i ) > resB( i ) ? resA( i ) : resB( i );
+			std::vector<evaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions );
+			std::vector<evaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions );
+			assert( resA.size() == _directions.rows());
+			assert( resA.size() == resB.size() );
+			std::vector<evaluationResult<Number>> result;
+			for ( unsigned i = 0; i < resA.size(); ++i ) {
+				evaluationResult<Number> res;
+				if(resA[i].errorCode == SOLUTION::INFTY || resB[i].errorCode == SOLUTION::INFTY){
+					res.errorCode = SOLUTION::INFTY;
+					res.supportValue = 1;
+				} else {
+					res.errorCode = SOLUTION::FEAS;
+					res.supportValue = resA[i].supportValue > resB[i].supportValue ? resA[i].supportValue : resB[i].supportValue;
+				}
+				result.push_back(res);
 			}
+			assert(result.size() == _directions.rows());
 			return result;
 		}
 		case SF_TYPE::INTERSECT: {
-			vector_t<Number> resA = mIntersectionParameters->lhs->multiEvaluate( _directions );
-			vector_t<Number> resB = mIntersectionParameters->rhs->multiEvaluate( _directions );
-			assert( resA.rows() == resB.rows() );
-			vector_t<Number> result = vector_t<Number>( resA.rows() );
-			for ( unsigned i = 0; i < result.rows(); ++i ) {
-				result( i ) = resA( i ) < resB( i ) ? resA( i ) : resB( i );
+			std::vector<evaluationResult<Number>> resA = mIntersectionParameters->lhs->multiEvaluate( _directions );
+			std::vector<evaluationResult<Number>> resB = mIntersectionParameters->rhs->multiEvaluate( _directions );
+			assert( resA.size() == resB.size() );
+			std::vector<evaluationResult<Number>> result;
+			for ( unsigned i = 0; i < resA.size(); ++i ) {
+				evaluationResult<Number> res;
+				if(resA[i].errorCode == SOLUTION::INFTY && resB[i].errorCode == SOLUTION::INFTY){
+					res.errorCode = SOLUTION::INFTY;
+					res.supportValue = 1;
+				} else if (resA[i].errorCode == SOLUTION::INFTY) {
+					res.errorCode = SOLUTION::FEAS;
+					res.supportValue = resB[i].supportValue;
+				} else if (resB[i].errorCode == SOLUTION::INFTY) {
+					res.errorCode = SOLUTION::FEAS;
+					res.supportValue = resA[i].supportValue;
+				} else {
+					res.errorCode = SOLUTION::FEAS;
+					res.supportValue = resA[i].supportValue < resB[i].supportValue ? resA[i].supportValue : resB[i].supportValue;
+				}
+				result.push_back(res);
 			}
+			assert(result.size() == _directions.rows());
 			return result;
 		}
-		default:
-			assert( false );
 	}
 }
 
@@ -503,8 +565,7 @@ bool SupportFunctionContent<Number>::empty() const {
 			return mBall->empty();
 		}
 		case SF_TYPE::LINTRAFO: {
-			assert( false );  // Todo: Not implemented yet.
-			return false;
+			return mLinearTrafoParameters->origin.empty();
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->empty();
@@ -522,7 +583,16 @@ bool SupportFunctionContent<Number>::empty() const {
 			return ( mUnionParameters->lhs->empty() && mUnionParameters->rhs->empty() );
 		}
 		case SF_TYPE::INTERSECT: {
-			assert( false );  // Todo: Not implemented yet.
+			// TODO: Current implementation uses template evaluation.
+			std::vector<vector_t<Number>> directions = computeTemplate(this->dimension(), fReach_TEMPLATEDIRECTIONS);
+			for(const auto& direction : directions){
+				Number rhsPos = mIntersectionParameters->rhs.evaluate(direction);
+				Number lhsNeg = mIntersectionParameters->lhs.evaluate(-direction);
+				if(rhsPos < -lhsNeg) return true;
+				Number rhsNeg = mIntersectionParameters->rhs.evaluate(-direction);
+				Number lhsPos = mIntersectionParameters->lhs.evaluate(direction);
+				if(-rhsNeg > lhsPos) return true;
+			}
 			return false;
 		}
 		default:
@@ -563,7 +633,11 @@ void SupportFunctionContent<Number>::print() const {
 			std::cout << "UNION" << std::endl;
 		} break;
 		case SF_TYPE::INTERSECT: {
-			std::cout << "INTERSECT" << std::endl;
+			std::cout << "INTERSECTION " << std::endl;
+			std::cout << "of" << std::endl;
+			mIntersectionParameters->lhs->print();
+			std::cout << "and" << std::endl;
+			mIntersectionParameters->rhs->print();
 		} break;
 		default:
 			std::cout << "NONE" << std::endl;

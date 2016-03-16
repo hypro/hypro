@@ -10,11 +10,10 @@
 
 namespace hypro {
 
-	// Solution types
-	enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
-
 	template<typename Number>
 	class Optimizer : public carl::Singleton<Optimizer<Number>> {
+		using Poly = carl::MultivariatePolynomial<Number>;
+
 		friend carl::Singleton<Optimizer<Number>>;
 
 	private:

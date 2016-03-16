@@ -39,7 +39,7 @@ protected:
                         0,-1;
 		distances << 1,1,0;
 
-                support = hypro::SupportFunction<Number>(SF_TYPE::POLY, this->matrix, this->distances);
+                support = hypro::SupportFunction<Number>(this->matrix, this->distances);
 
                 // second support function (box)
                 matrix2 = matrix_t<Number>(4,2);
@@ -47,7 +47,7 @@ protected:
                 matrix2 << 0, 1, 0, -1, 1, 0, -1, 0;
                 distances2 << 2, 2, 1, 1;
 
-                support2 = hypro::SupportFunction<Number>(SF_TYPE::POLY, this->matrix2, this->distances2);
+                support2 = hypro::SupportFunction<Number>(this->matrix2, this->distances2);
 
                 //first zonotope
 		vector_t<Number> center = vector_t<Number>(2);

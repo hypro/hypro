@@ -242,52 +242,6 @@ namespace hypro {
 	return true;
   }
 
-  /*
-   * Compute a uniform distribution of directions for a dimension-dimensional space template polytope
-   */
-   #define PI 3.14159265359
-   template<typename Number>
-   static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope) {
-	 double degree = (360/ (double) polytope)* PI / 180.0;
-	 std::vector<vector_t<Number>> templatePolytope, templatePolytope2d;
-
-	 //create templatePolytope2d
-	 vector_t<Number> templateVector2d = vector_t<Number>::Zero(2); // init templateVector2d
-	 templateVector2d(0) = 1;
-	 templateVector2d(1) = 0;
-	 templatePolytope2d.push_back(templateVector2d);
-
-	 matrix_t<Number> m(2, 2); //init matrix
-	 m(0,0) = carl::rationalize<Number>(cos(degree));
-	 m(0,1) = carl::rationalize<Number>((-1)*sin(degree));
-	 m(1,0) = carl::rationalize<Number>(sin(degree));
-	 m(1,1) = carl::rationalize<Number>(cos(degree));
-
-
-	 for(unsigned i=0; i<(polytope-1); ++i) {
-		 //Rotate templateVector
-		 templateVector2d = m * templateVector2d;
-		 templatePolytope2d.push_back(templateVector2d);
-	 }
-
-	 //copy templatePolytope2d into templatePolytope
-	 polytope::dPermutator permutator(dimension, 2);
-	 std::vector<unsigned> permutation;
-	 while(!permutator.end()) {
-		 permutation = permutator();
-		 for(vector_t<Number> vectorOftemplatePolytope2d: templatePolytope2d) {
-			 vector_t<Number> templateVector = vector_t<Number>::Zero(dimension); // init templateVector
-
-			 templateVector(permutation.at(0)) = vectorOftemplatePolytope2d(0);
-			 templateVector(permutation.at(1)) = vectorOftemplatePolytope2d(1);
-
-			 if(std::find(templatePolytope.begin(), templatePolytope.end(), templateVector)== templatePolytope.end()) templatePolytope.push_back(templateVector);
-		 }
-	 }
-
-	 return templatePolytope;
-   }
-
    /*
 	* Heuristic for reduction strategies
 	* @Input a H-polytope

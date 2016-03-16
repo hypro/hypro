@@ -3,9 +3,7 @@
 namespace hypro {
 
 template <typename Number>
-Plotter<Number>::~Plotter() {
-	mOutfile.close();
-}
+Plotter<Number>::~Plotter() {}
 
 template <typename Number>
 void Plotter<Number>::setFilename( const std::string &_filename ) {
@@ -26,10 +24,17 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	mOutfile.open( mFilename + ".plt" );
 
-	if ( !mObjects.empty() || !mPoints.empty() ) {
+	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
 		// set object
-		vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
-		vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
+		vector_t<Number> min;
+		vector_t<Number> max;
+		if(!mObjects.begin()->second.empty()){
+			min = mObjects.begin()->second[0].rawCoordinates();
+			max = mObjects.begin()->second[0].rawCoordinates();
+		} else {
+			min = mPoints.begin()->second.rawCoordinates();
+			max = mPoints.begin()->second.rawCoordinates();
+		}
 
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
@@ -46,52 +51,51 @@ void Plotter<Number>::plot2d() const {
 				tmpId++;
 				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
 			}
+			if(objectIt->second.size() > 0){
+				mOutfile << "\n";
+				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
+				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
+					assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
+					if ( objectIt->second[pointIndex].dimension() == 0 ) {
+						continue;
+					}
+					mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
 
-			mOutfile << "\n";
-			mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
-
-			for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
-				assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
-				if ( objectIt->second[pointIndex].dimension() == 0 ) {
-					continue;
-				}
-				mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
-
-				// update min and max
-				min( 0 ) =
-					  min( 0 ) < objectIt->second[pointIndex].at( 0 ) ? min( 0 ) : objectIt->second[pointIndex].at( 0 );
-				max( 0 ) =
-					  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
-
-				for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-					mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
 					// update min and max
-					min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
-																			   : objectIt->second[pointIndex].at( d );
-					max( d ) = max( d ) > objectIt->second[pointIndex].at( d ) ? max( d )
-																			   : objectIt->second[pointIndex].at( d );
+					min( 0 ) =
+						  min( 0 ) < objectIt->second[pointIndex].at( 0 ) ? min( 0 ) : objectIt->second[pointIndex].at( 0 );
+					max( 0 ) =
+						  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
+
+					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
+						// update min and max
+						min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
+																				   : objectIt->second[pointIndex].at( d );
+						max( d ) = max( d ) > objectIt->second[pointIndex].at( d ) ? max( d )
+																				   : objectIt->second[pointIndex].at( d );
+					}
+					mOutfile << " to \\\n";
 				}
-				mOutfile << " to \\\n";
-			}
-			// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
-			// Project to 2d	TODO: REINSERT ASSERTION
-			// std::cout << carl::toDouble(objectIt->0].at(0)) << std::endl;
-			mOutfile << "  " << carl::toDouble( objectIt->second[0].at( 0 ) );
-			for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
-				mOutfile << ", " << carl::toDouble( objectIt->second[0].at( d ) );
-			}
+				// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
+				// Project to 2d	TODO: REINSERT ASSERTION
+				// std::cout << carl::toDouble(objectIt->0].at(0)) << std::endl;
+				mOutfile << "  " << carl::toDouble( objectIt->second[0].at( 0 ) );
+				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
+					mOutfile << ", " << carl::toDouble( objectIt->second[0].at( d ) );
+				}
 
-			// color lookup
-			auto color = mSettings.color;
-			if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
-				color = mObjectColors.at( objectIt->first );
+				// color lookup
+				auto color = mSettings.color;
+				if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
+					color = mObjectColors.at( objectIt->first );
+				}
+
+				if ( mSettings.fill )
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw 0.2 \n";
+				else
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw 0.2 \n";
 			}
-
-			if ( mSettings.fill )
-				mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw 0.2 \n";
-			else
-				mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw 0.2 \n";
-
 			++objectCount;
 		}
 
@@ -113,14 +117,23 @@ void Plotter<Number>::plot2d() const {
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
 		if(mSettings.axes) {
+			mOutfile << "set xzeroaxis \n";
 			mOutfile << "set zeroaxis \n";
+            mOutfile << "set xtics axis \n";
+            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+			mOutfile << "set yzeroaxis \n";
+            mOutfile << "set ytics axis \n";
+            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
 		}
 
-		mOutfile << "plot ";
-		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+		if(mPlanes.empty() && mPoints.empty()){
+			mOutfile << "plot ";
+			for ( unsigned d = 0; d < min.rows(); ++d ) {
+				mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+			}
+			mOutfile << "NaN notitle \n";
 		}
-		mOutfile << "NaN notitle \n";
+
 
 		// create plane functions
 		int index = 1;
@@ -129,13 +142,17 @@ void Plotter<Number>::plot2d() const {
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
-					mOutfile << "f_" << index << "(x) = " << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
-					double off = carl::toDouble(plane.offset()/plane.normal()(1));
-					if(off > 0)
-						mOutfile << "+";
+					if(plane.normal()(1) == 0){
+						mOutfile << "set arrow from " << carl::toDouble(plane.offset()/plane.normal()(0)) <<",graph(0,0) to " << carl::toDouble(plane.offset()/plane.normal()(0)) << ",graph(1,1) nohead\n";
+					} else {
+						mOutfile << "f_" << index << "(x) = " << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
+						double off = carl::toDouble(plane.offset()/plane.normal()(1));
+						if(off > 0)
+							mOutfile << "+";
 
-					mOutfile << off << "\n";
-					++index;
+						mOutfile << off << "\n";
+						++index;
+					}
 				}
 			}
 
@@ -178,6 +195,7 @@ void Plotter<Number>::plot2d() const {
 	}
 	mOutfile.close();
 	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
+	mOutfile.close();
 }
 
 template<typename Number>
@@ -315,8 +333,8 @@ void Plotter<Number>::plotTex() const {
 
 		mOutfile << "\\end{tikzpicture}\n";
 	}
-	mOutfile.close();
 	std::cout << std::endl << "Plotted to " << mFilename << ".tex" << std::endl;
+	mOutfile.close();
 }
 
 template <typename Number>

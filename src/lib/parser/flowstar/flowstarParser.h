@@ -131,7 +131,7 @@ struct flowstarParser
 				//collect matrix and vector
 				unsigned rowcnt = 0;
 				for(const auto& matrix : fs::get<1>(pair)){
-					matrix_t<Number> tmpMatrix = convertMatToFloatT<Number>(matrix);
+					matrix_t<Number> tmpMatrix = convert<double,Number>(matrix);
 					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
 						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
 						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
@@ -151,7 +151,7 @@ struct flowstarParser
 				//collect matrix and vector
 				unsigned rowcnt = 0;
 				for(const auto& matrix : fs::get<1>(pair)){
-					matrix_t<Number> tmpMatrix = convertMatToFloatT<Number>(matrix);
+					matrix_t<Number> tmpMatrix = convert<double,Number>(matrix);
 					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
 						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
 						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);

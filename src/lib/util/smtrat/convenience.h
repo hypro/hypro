@@ -17,27 +17,27 @@ namespace hypro {
 
 		std::unordered_map<smtrat::FormulaT, std::size_t> constraints;
 		for(unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
-			Poly row;
+			carl::MultivariatePolynomial<smtrat::Rational> row;
 			for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
-				row += carl::convert<Number,Rational>(_constraints(rowIndex,colIndex)) * pool.carlVarByIndex(colIndex);
+				row += carl::convert<Number,smtrat::Rational>(_constraints(rowIndex,colIndex)) * pool.carlVarByIndex(colIndex);
 			}
-			row -= carl::convert<Number,Rational>(_constants(rowIndex));
+			row -= carl::convert<Number,smtrat::Rational>(_constants(rowIndex));
 			//std::cout << "atempt to insert constraint " << rowIndex << " (" << _constraints.row(rowIndex) << ", " << _constants(rowIndex) << ")" << std::endl;
 			constraints.insert(std::make_pair(smtrat::FormulaT(row,_rel), rowIndex));
 		}
-		return std::move(constraints);
+		return constraints;
 	}
 
-	template<typename Number>
-	static Poly createObjective(const vector_t<Number>& _objective) {
-		Poly objective;
+	template<typename InType>
+	static carl::MultivariatePolynomial<smtrat::Rational> createObjective(const vector_t<InType>& _objective) {
+		carl::MultivariatePolynomial<smtrat::Rational> objective;
 		VariablePool& pool = VariablePool::getInstance();
 
 		// get new variables
 		for(unsigned index = 0; index < _objective.rows(); ++index) {
-			objective += carl::convert<Number,Rational>(_objective(index))*pool.carlVarByIndex(index);
+			objective += carl::convert<InType,smtrat::Rational>(_objective(index))*pool.carlVarByIndex(index);
 		}
-		return std::move(objective);
+		return objective;
 	}
 
 } // namespace hypro

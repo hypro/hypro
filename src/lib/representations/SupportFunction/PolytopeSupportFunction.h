@@ -70,7 +70,7 @@ class PolytopeSupportFunction {
 	 * @param _A Matrix holding the directions in which to evaluate.
 	 * @return Vector of support values.
 	 */
-	vector_t<Number> multiEvaluate( const matrix_t<Number>& _A ) const;
+	std::vector<evaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
 
 	/**
 	 * @brief Check if point is contained in the support function.
