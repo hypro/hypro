@@ -41,7 +41,11 @@ public:
 	bool mFanSet;
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
+
+	// State flags
 	mutable State mEmpty;
+	mutable bool mNonRedundant;
+
 
   public:
 	HPolytopeT();
@@ -91,7 +95,7 @@ public:
 	bool isBounded(std::vector<vector_t<Number>>) const;
 	//static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned polytope);
 
-	bool isExtremePoint( vector_t<Number> point ) const;
+	bool isExtremePoint( const vector_t<Number>& point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
 	std::pair<Number, SOLUTION> evaluate( const vector_t<Number>& _direction ) const;
 
@@ -106,11 +110,13 @@ public:
 	 * General interface
 	 */
 
+	std::pair<bool, HPolytopeT> satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, HPolytopeT> satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
 	HPolytopeT intersect( const HPolytopeT& rhs ) const;
-	HPolytopeT<Number, Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	HPolytopeT<Number, Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	HPolytopeT intersectHyperplane( const Hyperplane<Number>& rhs ) const;
+	HPolytopeT intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const HPolytopeT<Number, Converter>& rhs ) const;
@@ -125,7 +131,7 @@ public:
 
 	const Hyperplane<Number>& operator[]( size_t i ) const;
 	Hyperplane<Number>& operator[]( size_t i ) ;
-	HPolytopeT<Number, Converter>& operator=( const HPolytopeT<Number, Converter>& rhs );
+	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs );
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {

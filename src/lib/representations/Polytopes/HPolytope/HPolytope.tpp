@@ -2,12 +2,12 @@
 namespace hypro {
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT()
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(true) {
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter> &orig )
-	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(State::NSET) {
+HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& orig )
+	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
 	for ( const auto &plane : orig.constraints() ) {
 		mHPlanes.push_back( plane );
 	}
@@ -15,7 +15,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter> &o
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(false) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -27,7 +27,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
@@ -37,7 +37,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
 	}
@@ -45,7 +45,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
 		// degenerate cases
 		unsigned size = points.size();
@@ -127,6 +127,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter> res(v);
 	res.mEmpty=State::TRUE;
+	res.mNonRedundant=true;
 	return res;
 }
 
@@ -147,7 +148,7 @@ matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
-	return std::move(res);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -336,8 +337,10 @@ void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
 			break;
 		}
 	}
-	if(!found)
+	if(!found){
 		mHPlanes.push_back( plane );
+		mNonRedundant = false;
+	}
 }
 
 template <typename Number, typename Converter>
@@ -375,7 +378,7 @@ bool HPolytopeT<Number, Converter>::hasConstraint( const Hyperplane<Number> &hpl
 
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::removeRedundancy() {
-	if(mHPlanes.size() > 1){
+	if(!mNonRedundant && mHPlanes.size() > 1){
 		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
@@ -399,10 +402,11 @@ void HPolytopeT<Number, Converter>::removeRedundancy() {
 
 		assert(redundant.empty());
 	}
+	mNonRedundant=true;
 }
 
 template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::isExtremePoint( vector_t<Number> point ) const {
+bool HPolytopeT<Number, Converter>::isExtremePoint( const vector_t<Number>& point ) const {
 	unsigned cnt = 0;
 	for ( const auto &plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
@@ -458,6 +462,18 @@ typename HPolytopeT<Number, Converter>::HyperplaneVector::const_iterator HPolyto
  * General interface
  */
 
+template<typename Number, typename Converter>
+std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const {
+	HPolytopeT<Number,Converter> tmp = this->intersectHyperplane(Hyperplane<Number>(normal, offset));
+	return std::make_pair(!(tmp).empty(), tmp);
+}
+
+template<typename Number, typename Converter>
+std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	HPolytopeT<Number,Converter> tmp = this->intersectHyperplanes(_mat, _vec);
+	return std::make_pair(!(tmp).empty(),tmp);
+}
+
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
@@ -468,13 +484,13 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			//std::cout << "Matrix: " << inequalities.first*A.inverse() << std::endl << "Vector: " << ((inequalities.first*A.inverse()*b) + (inequalities.second)) << std::endl;
-			return std::move(HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second));
+			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
 			//std::cout << "Use V-Conversion for linear transformation." << std::endl;
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			return std::move(res);
+			return res;
 		}
 	} else {
 		return *this;
@@ -528,7 +544,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	//std::cout << "Result: " << res << std::endl;
 
 	//res.removeRedundancy();
-	return std::move(res);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -550,6 +566,12 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HP
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
+	HPolytopeT<Number, Converter> res( *this );
+	// only insert the new hyperplane, if it is not already redundant.
+	if(res.evaluate(rhs.normal()) > rhs.offset())
+		res.insert( Hyperplane<Number>( rhs ) );
+
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -561,7 +583,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplane
 		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
 	}
 	res.removeRedundancy();
-	return std::move(res);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -611,7 +633,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 
 		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
-		return std::move(Converter::toHPolytope( tmpRes ));
+		return Converter::toHPolytope( tmpRes );
 	}
 }
 
@@ -620,6 +642,8 @@ void HPolytopeT<Number, Converter>::clear() {
 	mHPlanes.clear();
 	mFanSet = false;
 	mDimension = 0;
+	mEmpty = FALSE;
+	mNonRedundant = true;
 }
 
 template <typename Number, typename Converter>

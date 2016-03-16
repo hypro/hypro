@@ -69,9 +69,9 @@ static flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Num
 		//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
 		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
 		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-		doubleMatrix = hypro::convertMatToDouble( deltaMatrix );
+		doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
 		expMatrix = doubleMatrix.exp();
-		resultMatrix = hypro::convertMatToFloatT<Number>( expMatrix );
+		resultMatrix = hypro::convert<double,Number>( expMatrix );
 
 #ifdef fReach_DEBUG
 		std::cout << "e^(deltaMatrix): " << std::endl;

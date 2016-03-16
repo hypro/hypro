@@ -58,16 +58,16 @@ namespace reachability {
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
 
-// check if initial Valuation fulfills Invariant
+		// check if initial Valuation fulfills Invariant
+		std::pair<bool, Representation> initialPair = _val.satisfiesHyperplanes(_loc->invariant().mat, _loc->invariant().vec);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << !_val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ).empty() << std::endl;
+		std::cout << initialPair.first << std::endl;
 #endif
-		Representation initial = _val.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
 		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 
-		if ( !initial.empty() ) {
+		if ( initialPair.first ) {
 			// approximate R_[0,delta](X0)
 			// rest is acquired by linear Transformation
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
@@ -90,9 +90,9 @@ namespace reachability {
 			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(),
 																				deltaMatrix.cols() );
 			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-			doubleMatrix = hypro::convertMatToDouble( deltaMatrix );
+			doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
 			expMatrix = doubleMatrix.exp();
-			resultMatrix = hypro::convertMatToFloatT<Number>( expMatrix );
+			resultMatrix = hypro::convert<double,Number>( expMatrix );
 
 #ifdef REACH_DEBUG
 			std::cout << "e^(deltaMatrix): " << std::endl;
@@ -107,29 +107,29 @@ namespace reachability {
 			translation.conservativeResize( rows - 1 );
 			resultMatrix.conservativeResize( rows - 1, cols - 1 );
 
-			Representation deltaValuation = initial.linearTransformation( resultMatrix, translation );
+			Representation deltaValuation = initialPair.second.linearTransformation( resultMatrix, translation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
+			unsigned delt = hypro::Plotter<Number>::getInstance().addObject(deltaValuation.vertices());
+			hypro::Plotter<Number>::getInstance().setObjectColor(delt, colors[green]);
 #endif
 
 			// R_0(X0) U R_delta(X0)
-			Representation unitePolytope = initial.unite( deltaValuation );
+			Representation unitePolytope = initialPair.second.unite( deltaValuation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
 			unitePolytope.print();
+			unsigned uniOb = hypro::Plotter<Number>::getInstance().addObject(unitePolytope.vertices());
+			hypro::Plotter<Number>::getInstance().setObjectColor(uniOb, colors[red]);
 #endif
 
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
 			Number radius;
-			// TODO: This is a temporary fix!
-			// matrix_t<Number> updatedflowrix = _loc->flow();
-			// updatedflowrix.conservativeResize(rows-1, cols-1);
-			// radius = hausdorffError(Number(mSettings.timestep), updatedflowrix, _val.supremum());
-			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initial.supremum() );
+			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initialPair.second.supremum() );
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
@@ -153,6 +153,7 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
+			//hypro::Plotter<Number>::getInstance().addObject(firstSegment.vertices());
 #endif
 
 //clock::time_point start = clock::now();
@@ -230,28 +231,27 @@ namespace reachability {
 				transformedSegment = lastSegment.linearTransformation( resultMatrix, translation );
 
 				// extend flowpipe (only if still within Invariant of location)
-				Representation newSegment = transformedSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+				std::pair<bool, Representation> newSegment = transformedSegment.satisfiesHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
 
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
 				transformedSegment.print();
-				std::cout << "Empty: " << transformedSegment.empty() << std::endl;
 
 				std::cout << "still within Invariant?: ";
-				std::cout << !(newSegment.empty()) << std::endl;
-				std::cout << "Intersection result: " << newSegment << std::endl;
+				std::cout << newSegment.first << std::endl;
+				//std::cout << "Intersection result: " << newSegment.second << std::endl;
 #endif
 #ifdef USE_REDUCTION
 				// clustering CONVEXHULL_CONST and reduction with directions generated before
 				if(use_reduce_memory){
 					if(CONVEXHULL_CONST==1){ // if no clustering is required
-						if(!newSegment.empty()){
+						if(newSegment.first){
 							Representation poly_smoothed = newSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 							flowpipe.insert(flowpipe.begin(), poly_smoothed);
 						}
 					}
 					else{
-						if(!newSegment.empty()){
+						if(newSegment.first){
 							// collect points
 							for(auto vertex: newSegment.vertices()){
 								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
@@ -262,7 +262,7 @@ namespace reachability {
 						}
 
 						// compute convexHull and reduction of clustered segments
-						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || newSegment.empty())){
+						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || !newSegment.first)){
 							auto facets = convexHull(points_convexHull);
 
 							std::vector<Hyperplane<Number>> hyperplanes;
@@ -282,14 +282,14 @@ namespace reachability {
 				}
 #endif
 
-				if ( !newSegment.empty() ) {
+				if ( newSegment.first ) {
 #ifdef USE_REDUCTION
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
-					flowpipe.push_back( newSegment );
+					flowpipe.push_back( newSegment.second );
 
 					// update lastSegment
-					lastSegment = newSegment;
+					lastSegment = newSegment.second;
 				} else {
 					break;
 				}
@@ -299,7 +299,7 @@ namespace reachability {
 			//std::cout << std::endl;
 #ifdef REACH_DEBUG
 			std::cout << "--- Loop left ---" << std::endl;
-			std::cout << "flowpipe " << flowpipe << ", " << flowpipe.size() << " Segments computed." << std::endl;
+			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
 #endif
 
 			return flowpipe;
@@ -354,10 +354,10 @@ namespace reachability {
 	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
 							   Representation& result ) {
 
-		Representation guardSatisfyingSegment = _segment.intersectHyperplanes( _trans->guard().mat, _trans->guard().vec );
+		std::pair<bool, Representation> guardSatisfyingSegment = _segment.satisfiesHyperplanes( _trans->guard().mat, _trans->guard().vec );
 
 		// check if the intersection is empty
-		if ( !guardSatisfyingSegment.empty() ) {
+		if ( guardSatisfyingSegment.first ) {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
@@ -366,7 +366,7 @@ namespace reachability {
 			hypro::matrix_t<Number> transformMat = _trans->reset().mat;
 
 			// perform translation + transformation on intersection polytope
-			result = guardSatisfyingSegment.linearTransformation( transformMat, translateVec );
+			result = guardSatisfyingSegment.second.linearTransformation( transformMat, translateVec );
 
 			return true;
 		} else {

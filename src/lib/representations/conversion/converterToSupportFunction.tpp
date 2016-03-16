@@ -36,14 +36,14 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
         distances( 2 * i + 1 ) = intervals[i].upper();                                      //write inverted lower bound values and upper bound values into the distance vector
     }
 
-    return SupportFunction( SF_TYPE::POLY, directions, distances);
+    return SupportFunction( directions, distances);
 }
 
 // conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const VPolytope& _source, const CONV_MODE mode) {
     auto temp = toHPolytope(_source, mode);
-    return SupportFunction( SF_TYPE::POLY, temp.constraints() );
+    return SupportFunction( temp.constraints() );
 }
 
 
@@ -51,7 +51,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 // conversion from H-polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const HPolytope& _source, const CONV_MODE mode) {
-    return SupportFunction( SF_TYPE::POLY, _source.constraints() );
+    return SupportFunction( _source.constraints() );
 }
 
 // conversion from Zonotope to support function (no differentiation between conversion modes - always EXACT)
@@ -60,11 +60,11 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     typename std::vector<vector_t<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
     assert (!vertices.empty() );                                                           //checks if any vertices were received
     std::vector<Point<Number>> points;
-    
+
     for(const auto& vertex : vertices){
         points.emplace_back(vertex);
     }
-    HPolytope temp = HPolytope(std::move(points));                                          		           
-    
-    return SupportFunction( SF_TYPE::POLY, temp.constraints() );
+    HPolytope temp = HPolytope(std::move(points));
+
+    return SupportFunction( temp.constraints() );
 }

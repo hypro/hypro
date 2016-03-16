@@ -69,12 +69,11 @@ evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 }
 
 template <typename Number>
-vector_t<Number> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
-	vector_t<Number> res( _A.rows() );
-
-	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res( index ) = mRadius;
-	}
+std::vector<evaluationResult<Number>> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+	evaluationResult<Number> r;
+	r.supportValue = mRadius;
+	r.errorCode = mRadius > 0 ? SOLUTION::FEAS : SOLUTION::INFEAS;
+	std::vector<evaluationResult<Number>> res(_A.rows(), r);
 
 	return res;
 }

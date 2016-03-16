@@ -95,14 +95,14 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 }
 
 template <typename Number>
-vector_t<Number> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
-	std::cout << "A.cols: " << _A.cols() << " and dimension: " << mDimension << std::endl;
+std::vector<evaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
-	vector_t<Number> res( _A.rows() );
+	std::vector<evaluationResult<Number>> res;
 
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res( index ) = evaluate( _A.row( index ) ).supportValue;
+		res.push_back(evaluate( _A.row( index ) ));
 	}
+	assert(res.size() == _A.rows());
 
 	return res;
 }

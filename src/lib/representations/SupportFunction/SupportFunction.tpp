@@ -45,12 +45,18 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content(hypro::SupportFunctionContent<Number>::create(_type, _directions, _distances)){
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Point<Number>>& _vertices)
+        : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, HPolytopeT<Number,Converter>(_vertices).constraints())) {
+        //handled by initializer list
+    }
+
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, _directions, _distances)){
          //handled by initializer list
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, const std::vector<Hyperplane<Number>>& _planes) : content(hypro::SupportFunctionContent<Number>::create(_type, _planes)){
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Hyperplane<Number>>& _planes) : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, _planes)){
          //handled by initializer list
     }
 
@@ -75,12 +81,17 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     evaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction ) const {
-        return content->evaluate(_direction);
+        evaluationResult<Number> tmp = content->evaluate(_direction);
+        std::cout << __func__ << "(" << _direction << ") :" << tmp.supportValue << std::endl;
+        return tmp;
     }
 
     template<typename Number, typename Converter>
-    vector_t<Number> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
-        return content->multiEvaluate(_directions);
+    std::vector<evaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+        std::cout << __func__ << " " << convert<Number,double>(_directions) << std::endl;
+        std::vector<evaluationResult<Number>> res = content->multiEvaluate(_directions);
+        assert(res.size() == _directions.rows());
+        return res;
     }
 
     template<typename Number, typename Converter>
@@ -129,6 +140,28 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
+    void SupportFunctionT<Number,Converter>::removeRedundancy() {
+
+    }
+
+    template<typename Number, typename Converter>
+    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices() const {
+        auto tmp = Converter::toHPolytope(*this);
+        return tmp.vertices();
+    }
+
+    template<typename Number, typename Converter>
+    Number SupportFunctionT<Number,Converter>::supremum() const {
+        std::cout << __func__ << " Convert " << std::endl;
+        this->print();
+
+        auto tmp = Converter::toHPolytope(*this);
+
+        std::cout << __func__ << " " << tmp << " Supremum: " << tmp.supremum() <<  std::endl;
+        return tmp.supremum(); // TODO: Temporary!
+    }
+
+    template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation(const matrix_t<Number> &_A, const vector_t<Number> &_b ) const {
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->linearTransformation(_A, _b));
         return res;
@@ -141,8 +174,16 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::intersect(SupportFunctionT<Number,Converter> &_rhs) const {
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersect(SupportFunctionT<Number,Converter> &_rhs) const {
+        std::cout << __func__ << std::endl;
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(_rhs.content));
+        return res;
+    }
+
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+        std::cout << __func__ << std::endl;
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(_mat,_vec).content));
         return res;
     }
 
@@ -166,6 +207,31 @@ namespace hypro{
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::scale( const Number &_factor ) const {
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->scale( _factor));
         return res;
+    }
+
+    //template<typename Number, typename Converter>
+    //std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset) const {
+    //    if(content->evaluate(normal) <= offset)
+    //        return true;
+//
+//    //    return ( -(content->evaluate(-normal)) <= offset);
+    //}
+
+    template<typename Number, typename Converter>
+    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+        std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
+        assert(_mat.rows() == _vec.rows());
+        bool empty = false;
+        for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
+            assert(content->evaluate(_mat.row(rowI)).errorCode != SOLUTION::INFEAS);
+            std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+            if(content->evaluate(-(_mat.row(rowI))).supportValue <= -(_vec(rowI))){
+                std::cout << "EMPTY" << std::endl;
+                empty = true;
+                break;
+            }
+        }
+        return std::make_pair(!empty, this->intersectHyperplanes(_mat,_vec));
     }
 
     template<typename Number, typename Converter>

@@ -16,24 +16,12 @@ template <typename Number>
 struct evaluationResult {
 	Number supportValue;			// the value returned by the support function evaluation
 	vector_t<Number> optimumValue;  // the point leading to the support function value (extremum in direction)
-	int errorCode;					// potential error code indicating success or failure of the evaluation
+	SOLUTION errorCode;				// potential error code indicating success or failure of the evaluation
 
-	/*  Potential error codes are:
-
-	 *  General:
-	 *  -1000  in case the support function object does not implement a proper evaluate function
-
-	 *  For polytopes:
-
-	 *  GLP_OPT
-	 *  GLP_FEAS
-	 *  GLP_INFEAS
-	 *  GLP_NOFEAS
-	 *  GLP_UNBND
-	 *  GLP_UNDEF
-
-	 * For NonLinear:  // TODO: add error status
-	 */
+	friend std::ostream& operator<<(std::ostream& _out, const evaluationResult<Number>& _in) {
+		_out << _in.supportValue << "(" << _in.errorCode << ")";
+		return _out;
+	}
 };
 
 // This enum represents the support function type and is used to identify support function without instanceof operations

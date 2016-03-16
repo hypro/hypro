@@ -104,7 +104,7 @@ namespace parser {
 					++rowCnt;
 				}
 			}
-			return convertMatToFloatT<Number>(res);
+			return convert<double,Number>(res);
 		}
 
 		matrix_t<Number> createMatrix(const std::vector<std::pair<unsigned, vector_t<double>>>& _assignments, unsigned _dim) {
@@ -112,7 +112,7 @@ namespace parser {
 			for(const auto assignmentPair : _assignments){
 				res.row(assignmentPair.first) = assignmentPair.second;
 			}
-			return convertMatToFloatT<Number>(res);
+			return convert<double,Number>(res);
 		}
 	};
 
@@ -159,7 +159,7 @@ namespace parser {
 				res.row(pair.first) << pair.second.transpose();
 			}
 			// Temporary, until Number template has been propagated fully.
-			return convertMatToFloatT<Number>(res);
+			return convert<double,Number>(res);
 		}
 
 		matrix_t<Number> createInvariant( const std::vector<matrix_t<double>>& _constraints, unsigned _dim ) {
@@ -175,7 +175,7 @@ namespace parser {
 					++rowCnt;
 				}
 			}
-			return convertMatToFloatT<Number>(res);
+			return convert<double,Number>(res);
 		}
 
 		std::pair<std::string, Location<Number>*> createLocation(const std::string& _name, const matrix_t<Number>& _flow, const boost::optional<matrix_t<Number>>& _invariant) {

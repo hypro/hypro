@@ -19,12 +19,12 @@ template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
     //converts source object into a v-polytope
     auto temp = toVPolytope(_source, mode);
-    
-    
+
+
     //conversion is from here done just like V -> Zonotope
     Zonotope res = toZonotope(temp, mode);
-    
-    
+
+
     return res;
 
 }
@@ -56,45 +56,45 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
     //if( mode == OVER){
         //gets dimension from source object
         unsigned dim = _source.dimension();
-        
+
         //gets vertices from source object
         typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
-        
+
         //computes an oriented Box as special Zonotope around the source object (returns hyperplanes)
         std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
         HPolytope hpoly = HPolytope(planes);
-        
+
         //converts computed box H -> V
         auto vpoly = toVPolytope(hpoly, mode);
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
-        
+
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
-        
+
         //gets number of vertices
         unsigned size = newVertices.size();
         //only continue if object is really an oriented box (i.e. it has 2^n vertices)
         assert (size == std::pow(2 , dim));
-        
+
         //computes the centroid of the Zonotope (arithmetic mean)
           for (unsigned i=0; i < size; ++i){
               center += newVertices[i].rawCoordinates();
-         }  
+         }
          center = center*( ((Number) 1)/size);
-        
+
         //defines empty distances vector for the generators
          vector_t<Number> distances = vector_t<Number>::Zero(dim);
-         
+
          //defines a matrix with one exemplary point out of each set of halfspaces (on the border) for distance computation
          matrix_t<Number> planePoints = matrix_t<Number>::Zero(dim, dim);
-         //for every dimension       
+         //for every dimension
          for (unsigned i=0; i < dim; ++i){
              //read out normal of current halfspace pair
              vector_t<Number> normal = planes[2*i].normal();
-             
-            
+
+
              //only continue if normal is non-zero
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
@@ -105,28 +105,28 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
                      p(j) = 1;
                      planePoints.row(i) = p*(planes[2*i].offset()/normal(j));
                      break;
-                 }  
+                 }
              }
-             
+
          }
-         //computes distances from center to each pair of halfspaces        
-         
+         //computes distances from center to each pair of halfspaces
+
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-             
-             
+
+
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
-             //eliminates some fractional digits for improved computation time 
+             //eliminates some fractional digits for improved computation time
              normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              Number euclid = norm(normal, false);
-            
-             //eliminates some fractional digits for improved computation time 
+
+             //eliminates some fractional digits for improved computation time
              Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
              Number euclid2 = (Number) fReach_DENOMINATOR;
              Number euclid3 = carl::ceil(euclid1);
              euclid  = euclid3/euclid2;
              //euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
-             
+
              assert (euclid > 0);
              if (normalDiff < 0){
                  distances(i) = -1*(normalDiff)/euclid;
@@ -134,22 +134,22 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
                  distances(i) = normalDiff/euclid;
              }
          }
-         
+
          for (unsigned i=0; i < dim; ++i){
              //computes scaling factors for normals in order to compute the generators later on
              vector_t<Number> normal = planes[2*i].normal();
              Number distancePow = distances(i)*distances(i);
              Number normalPow = normal.dot(normal);
              Number powDiv = distancePow/normalPow;
-             //eliminates some fractional digits for improved computation time 
+             //eliminates some fractional digits for improved computation time
              powDiv = carl::ceil(powDiv* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
              std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
              //computes generators
              generators.col(i) = scaling.second*normal;
          }
-      
+
          return Zonotope(center, generators);
-        
+
     //}
 }
 
@@ -159,31 +159,47 @@ template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
     //gets dimension of source object
     unsigned dim = _source.dimension();
-    
+
     //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
     std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
     //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
     assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
     //creates a matrix with one row for each direction and one column for each dimension
     matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
-    
+
     //fills the matrix with the template directions
     for (unsigned i=0; i<templateDirections.size();++i){
         templateDirectionMatrix.row(i) = templateDirections[i];
     }
-    
+
     //lets the support function evaluate the offset of the halfspaces for each direction
-    vector_t<Number> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    
+    std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    std::size_t bounded = 0;
+    std::vector<std::size_t> boundedConstraints;
+    for(const auto& offset : offsets){
+        if(offset.errorCode != SOLUTION::INFTY)
+            boundedConstraints.push_back(bounded);
+
+        ++bounded;
+    }
+    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+    std::size_t pos = 0;
+    while(!boundedConstraints.empty()){
+        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+        boundedConstraints.pop_back();
+    }
+
     //constructs a H-Polytope out of the computed halfspaces
-    HPolytope samplePoly = HPolytope(templateDirectionMatrix, offsets);
-    
+    HPolytope samplePoly = HPolytope(constraints, constants);
+
     //converts H-Polytope into a V-Polytope
     auto sampleVPoly = toVPolytope(samplePoly, mode);
-    
+
     //conversion is from here done just like V -> Zonotope
     Zonotope res = toZonotope(sampleVPoly, mode);
-    
+
     return res;
 
 }

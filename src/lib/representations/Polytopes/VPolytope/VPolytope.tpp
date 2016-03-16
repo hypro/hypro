@@ -314,23 +314,23 @@ void VPolytopeT<Number, Converter>::removeRedundancy() {
 			for(auto currVertex = mVertices.begin(); currVertex != mVertices.end(); ){
 				//std::cout << currVertex << ": " << std::endl;
 				// create constraint for Sum(lambdas) == 1
-				Poly sumBound;
+				carl::MultivariatePolynomial<smtrat::Rational> sumBound;
 				for(const auto& vertex : mVertices) {
 					if(vertex != *currVertex) {
 						carl::Variable lambda = lambdas.find(vertex)->second;
 						sumBound += lambda;
-						smtrat::FormulaT constr = smtrat::FormulaT(Poly(lambda), carl::Relation::GEQ);
+						smtrat::FormulaT constr = smtrat::FormulaT(carl::MultivariatePolynomial<smtrat::Rational>(lambda), carl::Relation::GEQ);
 						simplex.inform(constr);
 						simplex.add(constr);
 					}
 				}
-				sumBound -= Rational(1);
+				sumBound -= smtrat::Rational(1);
 				smtrat::FormulaT constr = smtrat::FormulaT(sumBound, carl::Relation::EQ);
 				simplex.inform(constr);
 				simplex.add(constr);
 
 				for(unsigned dim = 0; dim < this->dimension(); ++dim) {
-					Poly row;
+					carl::MultivariatePolynomial<smtrat::Rational> row;
 					for(const auto& vertex : mVertices ) {
 						if(*currVertex != vertex) {
 							carl::Variable tmp = lambdas.find(vertex)->second;
