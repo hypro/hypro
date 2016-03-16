@@ -122,8 +122,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 //alternative approach
 /*
         template<typename Number>
-        boo
-    Box<Number> Converter<Number>::toBox( const HPolytope<Number>& _source, const CONV_MODE mode ) {
+        typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope<Number>& _source, const CONV_MODE mode ) {
                 unsigned dim = _source.dimension();                                                                              //gets dimension from the source object
 
                 matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                            //initialize normal matrix as zero matrix with 2*dim rows and dim columns
@@ -143,20 +142,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
                         intervals.push_back( carl::Interval<Number>( -distances( 2 * i ), distances( 2 * i + 1 ) ) );             //create one interval with the corresponding left and right end points
                 }
 
-                _target = BoxT<Number,Converter>( intervals );                                                                              //creates a box with the computed intervals
-
-                 if (mode == EXACT){                                                                                             //checks if conversion was exact
-                         bool foundEqual;
-                         std::vector<Point<Number>> newVertices = _target.vertices();                                            //computes vertices from the just newly created box
-                                 for (const auto& newVertex : newVertices){                                                      //for every new vertex (from the box)
-                                           foundEqual = _source.contains(newVertex);                                             //checks if source-object contains the new vertex
-                                           if (foundEqual == false){                                                             //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
-                                                return false;
-                                           }
-                                 }
-                 }
-
-                 return true;
+                return BoxT<Number,Converter>( intervals );                                                                              //creates a box with the computed intervals
         }
  */
 
