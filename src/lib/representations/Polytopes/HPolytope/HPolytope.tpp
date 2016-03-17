@@ -7,10 +7,7 @@ HPolytopeT<Number, Converter>::HPolytopeT()
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& orig )
-	: mHPlanes(), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
-	for ( const auto &plane : orig.constraints() ) {
-		mHPlanes.push_back( plane );
-	}
+	: mHPlanes(orig.mHPlanes), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
 }
 
 template <typename Number, typename Converter>
@@ -431,6 +428,8 @@ std::pair<Number, SOLUTION> HPolytopeT<Number, Converter>::evaluate( const vecto
 
 	//reduceNumberRepresentation();
 
+	std::cout << "Constraints: " << this->matrix() << std::endl << "Constants: " << this->vector() << std::endl;
+
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
@@ -502,46 +501,49 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
-	//std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
 
 	// evaluation of rhs in directions of lhs
+	std::cout << "evaluation of rhs in directions of lhs" << std::endl;
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
 		if ( evalRes.second == INFTY ) {
-			//std::cout << __func__ << " Evaluated against " <<
-			//mHPlanes.at(i).normal() << std::endl;
-			//std::cout << "INFTY" << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << std::endl;
+			std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
-			//std::cout << "EMPTY" << std::endl;
+			std::cout << "EMPTY" << std::endl;
 			// TODO: Return empty polytope.
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
-			//std::cout << __func__ << " Evaluated against " <<
-			//mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
 		}
 	}
 
 	// evaluation of lhs in directions of rhs
+	std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
 		if ( evalRes.second == INFTY ) {
-			//std::cout << __func__ << " Evaluated against " <<
-			//rhs.constraints().at( i ).normal() << std::endl;
-			//std::cout << "INFTY" << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			rhs.constraints().at( i ).normal() << std::endl;
+			std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
-			//std::cout << "EMPTY" << std::endl;
+			std::cout << "EMPTY" << std::endl;
 			// TODO: Return empty polytope.
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
-			//std::cout << __func__ << " Evaluated against " <<
-			//rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.first << std::endl;
+			std::cout << __func__ << " Evaluated against " <<
+			rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.first << std::endl;
 		}
 	}
-	//std::cout << "Result: " << res << std::endl;
+	std::cout << "Result: " << res << std::endl;
 
 	//res.removeRedundancy();
 	return res;

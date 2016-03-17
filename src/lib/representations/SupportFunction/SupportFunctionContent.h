@@ -169,6 +169,48 @@ class SupportFunctionContent {
 	bool empty() const;
 
 	void print() const;
+	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {
+		switch ( rhs->mType ) {
+			case SF_TYPE::INFTY_BALL: {
+				lhs << "INFTY-BALL" << std::endl;
+			} break;
+			case SF_TYPE::TWO_BALL: {
+				lhs << "2-BALL" << std::endl;
+			} break;
+			case SF_TYPE::LINTRAFO: {
+				lhs << "LINTRAFO" << std::endl;
+				lhs << "of" << std::endl;
+				rhs->mLinearTrafoParameters->origin->print();
+			} break;
+			case SF_TYPE::POLY: {
+				lhs << "POLY" << std::endl;
+	            rhs->mPolytope->print();
+			} break;
+			case SF_TYPE::SCALE: {
+				lhs << "SCALE" << std::endl;
+			} break;
+			case SF_TYPE::SUM: {
+				lhs << "SUM" << std::endl;
+				lhs << "of: " << std::endl;
+				rhs->mSummands->rhs->print();
+				lhs << "and" << std::endl;
+				rhs->mSummands->lhs->print();
+			} break;
+			case SF_TYPE::UNION: {
+				lhs << "UNION" << std::endl;
+			} break;
+			case SF_TYPE::INTERSECT: {
+				lhs << "INTERSECTION " << std::endl;
+				lhs << "of" << std::endl;
+				rhs->mIntersectionParameters->lhs->print();
+				lhs << "and" << std::endl;
+				rhs->mIntersectionParameters->rhs->print();
+			} break;
+			default:
+				lhs << "NONE" << std::endl;
+		}
+		return lhs;
+	}
 };
 }  // namespace
 

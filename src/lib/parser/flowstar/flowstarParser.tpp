@@ -3,8 +3,8 @@
 namespace hypro {
 namespace parser {
 
-	template <typename Number, typename Representation>
-	HybridAutomaton<Number> flowstarParser<Number, Representation>::parseInput(
+	template <typename Number>
+	HybridAutomaton<Number> flowstarParser<Number>::parseInput(
 		  const std::string &pathToInputFile ) {
 		HybridAutomaton<Number> resultAutomaton;
 
@@ -22,8 +22,8 @@ namespace parser {
 		return resultAutomaton;
 	}
 
-	template <typename Number, typename Representation>
-	bool flowstarParser<Number, Representation>::parse( std::istream &in, const std::string &filename,
+	template <typename Number>
+	bool flowstarParser<Number>::parse( std::istream &in, const std::string &filename,
 													HybridAutomaton<Number> &_result ) {
 		in.unsetf( std::ios::skipws );
 		BaseIteratorType basebegin( in );
@@ -45,8 +45,8 @@ namespace parser {
 		return result;
 	}
 
-	template <typename Number, typename Representation>
-	HybridAutomaton<Number> flowstarParser<Number, Representation>::createAutomaton() {
+	template <typename Number>
+	HybridAutomaton<Number> flowstarParser<Number>::createAutomaton() {
 		HybridAutomaton<Number> result;
 		LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
 

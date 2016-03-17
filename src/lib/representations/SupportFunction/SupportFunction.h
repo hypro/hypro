@@ -66,6 +66,10 @@ class SupportFunctionT {
 	void print() const;
     void swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second);
 
+    friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
+    	lhs << rhs.content << std::endl;
+    	return lhs;
+	}
 };
 
 } //namespace

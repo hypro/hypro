@@ -12,22 +12,35 @@
 
 int main(int argc, char** argv) {
 	typedef cln::cl_RA number;
-	typedef hypro::SupportFunction<number> valuation;
+	typedef hypro::SupportFunction<number> sfValuation;
+	typedef hypro::HPolytope<number> hpValuation;
 
-    std::string filename = "../examples/input/bouncing_ball.model";
+	std::string filename = "../examples/input/bouncing_ball.model";
 
-    hypro::parser::flowstarParser<number,valuation> parser;
-    hypro::HybridAutomaton<number> ha = parser.parseInput(filename);
+	hypro::parser::flowstarParser<number> parser;
+	hypro::HybridAutomaton<number> ha = parser.parseInput(filename);
 
-    hypro::reachability::Reach<number,valuation> reacher(ha, parser.mSettings);
-    std::vector<std::vector<valuation>> flowpipes = reacher.computeForwardReachability();
+	hypro::reachability::Reach<number,sfValuation> sfReach(ha, parser.mSettings);
+	std::vector<std::vector<sfValuation>> sfFlowpipes = sfReach.computeForwardReachability();
 
-    hypro::Plotter<number>& plotter = hypro::Plotter<number>::getInstance();
-    plotter.setFilename(parser.mSettings.fileName);
-    for(const auto& flowpipe : flowpipes){
-    	for(const auto& segment : flowpipe)
-    		plotter.addObject(segment.vertices());
-    }
+	hypro::reachability::Reach<number,hpValuation> hpReach(ha, parser.mSettings);
+	std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
 
-    plotter.plot2d();
+	hypro::Plotter<number>& plotter = hypro::Plotter<number>::getInstance();
+	plotter.setFilename(parser.mSettings.fileName);
+	plotter.rSettings().color = hypro::colors[hypro::green];
+	for(const auto& flowpipe : sfFlowpipes){
+		for(const auto& segment : flowpipe){
+			plotter.addObject(segment.vertices());
+		}
+	}
+
+	plotter.rSettings().color = hypro::colors[hypro::red];
+	for(const auto& flowpipe : hpFlowpipes){
+		for(const auto& segment : flowpipe){
+			plotter.addObject(segment.vertices());
+		}
+	}
+
+	plotter.plot2d();
 }

@@ -34,7 +34,7 @@
 namespace hypro {
 namespace parser {
 
-template <typename Number, typename Representation>
+template <typename Number>
 struct flowstarParser
     : qi::grammar<Iterator, Skipper>
 {
@@ -63,17 +63,17 @@ struct flowstarParser
         mDimension = 0;
 
 		start =  ( qi::lexeme["continuous reachability"] > qi::lit('{') > continuousStart > qi::lit('}') > -badStates > qi::eoi )
-				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number,Representation>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
+				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
 
 		continuousStart = 	stateVars > -mSettingsParser(px::ref(mSymbols));
 		hybridStart = 		stateVars > settings >
-							modes[px::bind( &flowstarParser<Number,Representation>::insertModes, px::ref(*this), qi::_1 )] >
-							-transitions[px::bind( &flowstarParser<Number, Representation>::insertTransitions, px::ref(*this), qi::_1)] >
-							(-init)[px::bind( &flowstarParser<Number,Representation>::insertInitialState, px::ref(*this), qi::_1 )];
-		stateVars = 		qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number,Representation>::insertSymbols, px::ref(*this), qi::_1)];
-		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols))[px::bind( &flowstarParser<Number,Representation>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
+							modes[px::bind( &flowstarParser<Number>::insertModes, px::ref(*this), qi::_1 )] >
+							-transitions[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)] >
+							(-init)[px::bind( &flowstarParser<Number>::insertInitialState, px::ref(*this), qi::_1 )];
+		stateVars = 		qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number>::insertSymbols, px::ref(*this), qi::_1)];
+		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols))[px::bind( &flowstarParser<Number>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
 		modes = 			qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
-		transitions = 		mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number,Representation>::insertTransitions, px::ref(*this), qi::_1)];
+		transitions = 		mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
 		init = 				qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
 		badStates = 		qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
 

@@ -98,7 +98,7 @@ namespace hypro {
 			simplex.add(constraintPair.first, false);
 		}
 
-		//std::cout << "Informed basic constraints defining the object." << std::endl;
+		std::cout << "Informed basic constraints defining the object." << std::endl;
 
 		#ifdef USE_PRESOLUTION
 		simplex.push();
@@ -122,7 +122,7 @@ namespace hypro {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::LEQ);
 					}
 
-					//std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
+					std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
 
 					simplex.inform(boundConstraint);
 					simplex.add(boundConstraint);
@@ -133,7 +133,7 @@ namespace hypro {
 			carl::MultivariatePolynomial<smtrat::Rational> tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 
-			//std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
+			std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
 
 			simplex.inform(tmpSolutionConstraint);
 			simplex.add(tmpSolutionConstraint);
@@ -148,9 +148,9 @@ namespace hypro {
 
 		//std::cout << "(push)" << std::endl;
 
-		//std::cout << "Whole formula: " << std::endl;
-		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		std::cout << "Whole formula: " << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 

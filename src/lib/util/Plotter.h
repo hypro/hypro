@@ -61,7 +61,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	void setFilename( const std::string& _filename = "out" );
 	void updateSettings( const gnuplotSettings& _settings );
-	const gnuplotSettings& getSettings() const;
+	const gnuplotSettings& settings() const;
+	gnuplotSettings& rSettings();
 
 	// plotting functions
 

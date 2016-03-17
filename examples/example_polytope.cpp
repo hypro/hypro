@@ -9,16 +9,45 @@
  */
 
 #include "../src/lib/config.h"
-#include "../src/lib/representations/Polytope/Polytope.h"
+#include "../src/lib/representations/GeometricObject.h"
+#include "../src/lib/util/Plotter.h"
 #include "../src/lib/datastructures/Point.h"
 
 int main(int argc, char** argv) {
 
-	typedef carl::FLOAT_T<double> number_t;
+	typedef mpq_class number_t;
 
-	hypro::Polytope<number_t> polytope1 = hypro::Polytope<number_t>();
-	hypro::Polytope<number_t> polytope2 = hypro::Polytope<number_t>(polytope1);
+	hypro::Plotter<number_t>& plotter = hypro::Plotter<number_t>::getInstance();
 
+	//hypro::Polytope<number_t> polytope1 = hypro::Polytope<number_t>();
+	//hypro::Polytope<number_t> polytope2 = hypro::Polytope<number_t>(polytope1);
+
+	hypro::matrix_t<number_t> matrix = hypro::matrix_t<number_t>(6,2);
+	matrix << -1,number_t(490576)/number_t(99100001),0,-1,0,1,1,0,1,number_t(-10000)/number_t(1000001),1, number_t(-480461)/number_t(97100000);
+	hypro::vector_t<number_t> constants = hypro::vector_t<number_t>(6);
+	constants << number_t(-123874939928)/number_t(12387500125),number_t(98100001)/number_t(1000000000),number_t(1)/number_t(1000),number_t(51)/number_t(5),number_t(10200500738519539)/number_t(1000001000000000),number_t(51)/number_t(5);
+	std::cout << matrix << std::endl;
+
+	hypro::matrix_t<number_t> matrix2 = hypro::matrix_t<number_t>(4,2);
+	matrix2 << 1000000000,0,-1000000000,0,0,1000000000,0,-1000000000;
+	hypro::vector_t<number_t> constants2 = hypro::vector_t<number_t>(4);
+	constants2 << 50725487,50725487,50725487,50725487;
+
+	hypro::HPolytope<number_t> hpoly(matrix, constants);
+	hypro::HPolytope<number_t> hpoly2(matrix2, constants2);
+	hypro::HPolytope<number_t> addition = hpoly.minkowskiSum(hpoly2);
+
+
+	unsigned a = plotter.addObject(hpoly.vertices());
+	unsigned b = plotter.addObject(hpoly2.vertices());
+	unsigned c = plotter.addObject(addition.vertices());
+	plotter.setObjectColor(a, hypro::colors[hypro::green]);
+	plotter.setObjectColor(b, hypro::colors[hypro::red]);
+	plotter.setObjectColor(c, hypro::colors[hypro::orange]);
+
+	plotter.plot2d();
+
+	/*
 	if(polytope1.empty() && polytope2.empty())
 	{
 		hypro::Point<number_t> p1;
@@ -74,6 +103,6 @@ int main(int argc, char** argv) {
 			polytope3.updatePoints();
 			polytope4.updatePoints();
 		}
-	}
+	}*/
 		return 0;
 }

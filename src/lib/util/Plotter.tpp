@@ -16,7 +16,12 @@ void Plotter<Number>::updateSettings( const gnuplotSettings& _settings ) {
 }
 
 template<typename Number>
-const gnuplotSettings& Plotter<Number>::getSettings() const {
+const gnuplotSettings& Plotter<Number>::settings() const {
+	return mSettings;
+}
+
+template<typename Number>
+gnuplotSettings& Plotter<Number>::rSettings() {
 	return mSettings;
 }
 
@@ -339,6 +344,7 @@ void Plotter<Number>::plotTex() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
+	std::cout << __func__ << std::endl;
 	if ( !sorted ) {
 		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
 		mObjects.insert( std::make_pair( mId, sortedPoints ) );

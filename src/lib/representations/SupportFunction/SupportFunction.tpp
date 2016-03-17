@@ -152,12 +152,7 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     Number SupportFunctionT<Number,Converter>::supremum() const {
-        std::cout << __func__ << " Convert " << std::endl;
-        this->print();
-
         auto tmp = Converter::toHPolytope(*this);
-
-        std::cout << __func__ << " " << tmp << " Supremum: " << tmp.supremum() <<  std::endl;
         return tmp.supremum(); // TODO: Temporary!
     }
 

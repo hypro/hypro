@@ -16,6 +16,11 @@ namespace reachability {
 	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
 		// set up working queue
 		for ( const auto& initialPair : mAutomaton.initialStates() ) {
+			std::cout << "INITIAL SET " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
+			std::cout << "INITIAL VERTICES " << std::endl;
+			for(const auto& vertex : Representation(initialPair.second.first, initialPair.second.second).vertices())
+				std::cout << vertex << std::endl;
+
 			mWorkingQueue.emplace(initialSet<Number,Representation>(0, initialPair.first, Representation(initialPair.second.first, initialPair.second.second)));
 		}
 
@@ -51,6 +56,7 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
 #ifdef REACH_DEBUG
+		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
@@ -112,8 +118,6 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
-			unsigned delt = hypro::Plotter<Number>::getInstance().addObject(deltaValuation.vertices());
-			hypro::Plotter<Number>::getInstance().setObjectColor(delt, colors[green]);
 #endif
 
 			// R_0(X0) U R_delta(X0)
@@ -122,14 +126,12 @@ namespace reachability {
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
 			unitePolytope.print();
-			unsigned uniOb = hypro::Plotter<Number>::getInstance().addObject(unitePolytope.vertices());
-			hypro::Plotter<Number>::getInstance().setObjectColor(uniOb, colors[red]);
 #endif
-
 			// bloat hullPolytope (Hausdorff distance)
 			Representation firstSegment;
 			Number radius;
 			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initialPair.second.supremum() );
+			assert(radius > 0);
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
@@ -140,8 +142,6 @@ namespace reachability {
 			Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
 
 #ifdef REACH_DEBUG
-			std::cout << "Hausdorff dimension: " << hausPoly.dimension() << std::endl;
-			std::cout << "hullPolytope dimension: " << unitePolytope.dimension() << std::endl;
 			std::cout << "Hausdorff Polytope (Box): ";
 			hausPoly.print();
 			std::cout << std::endl;
@@ -149,11 +149,13 @@ namespace reachability {
 
 			// hullPolytope +_minkowski hausPoly
 			firstSegment = unitePolytope.minkowskiSum( hausPoly );
+			//assert(firstSegment.contains(unitePolytope));
 
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
-			//hypro::Plotter<Number>::getInstance().addObject(firstSegment.vertices());
+
+
 #endif
 
 //clock::time_point start = clock::now();
@@ -208,11 +210,15 @@ namespace reachability {
 
 			firstSegment.removeRedundancy();
 
-			// insert first Segment into the empty flowpipe
-			flowpipe.push_back( firstSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec ) );
-
 			// set the last segment of the flowpipe
-			Representation lastSegment = firstSegment;
+			Representation lastSegment = firstSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+			// insert first Segment into the empty flowpipe
+			flowpipe.push_back( lastSegment );
+
+			//{
+			//	unsigned t = plotter.addObject(lastSegment.vertices());
+			//	plotter.setObjectColor(t, colors[lila]);
+			//}
 
 			// Polytope after linear transformation
 			Representation transformedSegment;
