@@ -124,29 +124,10 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::empty() const {
-	#ifdef USE_SMTRAT
-	smtrat::SimplexSolver simplex;
-	smtrat::FormulaT constr = createFormula(mConstraints, mConstraintConstants);
-	simplex.inform(constr);
-	simplex.add(constr);
-
-	smtrat::Answer res = simplex.check();
-
-	return (res == smtrat::Answer::UNSAT);
-	#else
-	for ( int i = 0; i < mDimension; i++ ) {
-		glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );  // unbounded
-		glp_set_obj_coef( lp, i + 1, 1.0 );
-	}
-
-	glp_simplex( lp, NULL );
-
-	int errorCode = glp_get_status( lp );
-
-	if ( errorCode == GLP_INFEAS || errorCode == GLP_NOFEAS ) return false;
-
-	return true;
-	#endif
+	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	opt.setMatrix(mConstraints);
+	opt.setVector(mConstraintConstants);
+	return !opt.checkConsistency();
 }
 
 template <typename Number>

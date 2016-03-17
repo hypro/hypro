@@ -8,9 +8,6 @@
 #include "../defines.h"
 #include "../../lib/util/types.h"
 #include "../../lib/datastructures/Point.h"
-#include <carl/core/VariablePool.h>
-#include "carl/numbers/numbers.h"
-#include <mpfr.h>
 
 using namespace hypro;
 
