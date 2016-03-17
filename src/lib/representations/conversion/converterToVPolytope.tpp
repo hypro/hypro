@@ -4,7 +4,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-12-17
- * @version	2015-12-17
+ * @version	2016-03-17
  */
 
 #include "Converter.h"
@@ -59,28 +59,27 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
 
-		//lets the support function evaluate the offset of the halfspaces for each direction
-		std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-		std::size_t bounded = 0;
-		std::vector<std::size_t> boundedConstraints;
-		for(const auto& offset : offsets){
-			if(offset.errorCode != SOLUTION::INFTY)
-				boundedConstraints.push_back(bounded);
+                //lets the support function evaluate the offset of the halfspaces for each direction
+                std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+                assert(offsets.size() == templateDirectionMatrix.rows());
+                std::vector<std::size_t> boundedConstraints;
+                for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+                        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+                                boundedConstraints.push_back(offsetIndex);
+                }
+                matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+                vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+                std::size_t pos = boundedConstraints.size()-1;
+                while(!boundedConstraints.empty()){
+                     constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+                     constants(pos) = offsets[boundedConstraints.back()].supportValue;
+                     boundedConstraints.pop_back();
+                     --pos;
+                }
 
-			++bounded;
-		}
-		matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
-		vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-		std::size_t pos = 0;
-		while(!boundedConstraints.empty()){
-			constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
-			constants(pos) = offsets[boundedConstraints.back()].supportValue;
-			boundedConstraints.pop_back();
-		}
+	        //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
+	        target = VPolytope(constraints, constants);
+	        }
 
-		 //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V
-		 target = VPolytope(constraints, constants);
-		 }
-
-		 return target;
+	        return target;
 }

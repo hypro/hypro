@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "../representations/conversion/Converter.h"
+#include "../datastructures/Point.h"
+#include "../datastructures/Hyperplane.h"
 
 namespace hypro {
 
