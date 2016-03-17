@@ -6,6 +6,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * @author Benedikt Seidl
+ * @author Simon Froitzheim
  *
  * @since	2011-01-17
  * @version	2015-08-27
@@ -195,6 +196,21 @@ class Point {
 		}
 		return res;
 	}
+        
+
+        static void removeDuplicatePoints(std::vector<Point<Number>>& PointVec){
+              std::set<Point<Number>> PointSet = std::set<Point<Number>>(); 
+              //writes all the point entries into a set (set removes duplicates)
+              for (unsigned i; i<PointVec.size(); ++i){
+                  PointSet.insert(PointVec[i]);
+              }
+              //write all the set entries back into the PointVector (clearing it before that)
+              PointVec.clear();
+              for (std::set<Point<Number>>::iterator it=PointSet.begin(); it!=PointSet.end(); ++it){
+                           PointVec.insert(it, *it); 
+              }
+        }
+        
 
 	/**
 	 * Change the coordinates of the point. Moving the point one step in a given dimension.

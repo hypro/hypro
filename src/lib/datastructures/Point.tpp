@@ -349,6 +349,8 @@ bool Point<Number>::move( const Point<Number> &_p ) {
 	return negative;
 }
 
+    
+
 template <typename Number>
 Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	if ( A.cols() == b.rows() )

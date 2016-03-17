@@ -57,7 +57,7 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunction& sf, con
             //TODO implement this method
             matrix_t newDirections = computeOrthogonalDirections(curNormal);
             
-            //recursive call of this function for the face
+            //recursive call of this function for the current face
             recursiveSolutions[i] = computeBoundaryPoints(face, newDirections, curDim-1);
             
             //TODO implement this method
@@ -73,13 +73,7 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunction& sf, con
    }    
 }    
     
-template<typename Number>
-void removeDuplicatePoints( std::vector<Point<Number>>& sourceVec ){
-    for (unsigned i; i<sourceVec.size(); ++i){
-        
-    }
-}
-    
+
     
     
     
