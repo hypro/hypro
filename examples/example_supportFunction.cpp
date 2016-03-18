@@ -30,11 +30,14 @@ int main(int argc, char** argv) {
 	distances3 << carl::rationalize<Number>(1.5),carl::rationalize<Number>(1.5),carl::rationalize<Number>(-0.5),carl::rationalize<Number>(-0.5);
 
 	vector_t<Number> shift = vector_t<Number>(2);
-	shift << -1,-5;
+	shift << 1,0;
 	matrix_t<Number> trafoMatrix = matrix_t<Number>(2,2);
-	trafoMatrix << carl::rationalize<Number>(1), carl::rationalize<Number>(2), carl::rationalize<Number>(3), carl::rationalize<Number>(4);
+	//trafoMatrix << 1,0,0,1;
+	trafoMatrix << carl::rationalize<Number>(0.866), carl::rationalize<Number>(-0.5), carl::rationalize<Number>(0.5), carl::rationalize<Number>(0.866);
 	vector_t<Number> dir = vector_t<Number>(2);
 	dir << 1,0;
+
+	std::cout << "Trafo: " << trafoMatrix << " + " << shift << std::endl;
 
 	//matrix_t<Number> linearMap = matrix_t<Number>(2,2);
 	//linearMap << -1,-4,4,-1;
@@ -58,6 +61,16 @@ int main(int argc, char** argv) {
 	SupportFunction<Number> ball(SF_TYPE::INFTY_BALL, carl::rationalize<Number>(.5));
 	SupportFunction<Number> shifted = poly1.linearTransformation(trafoMatrix, shift);
 
+
+
+	HPolytope<Number> real(matrix, distances);
+	auto trafo = real.linearTransformation(trafoMatrix, shift);
+
+	for(unsigned i = 0; i < 10; ++i){
+		shifted = shifted.linearTransformation(trafoMatrix, shift);
+		trafo = trafo.linearTransformation(trafoMatrix, shift);
+	}
+
 	SupportFunction<Number> rounded1 = poly1.minkowskiSum(ball);
 
 	SupportFunction<Number> intersectedInvariant = poly1.intersectHyperplanes(invariant, invariantConstants);
@@ -72,21 +85,31 @@ int main(int argc, char** argv) {
 	//intersectedInvariant.second.print();
 
 	// create array holding equaly distributed directions
-	int resolution = 360;
+	int resolution = 24;
 	matrix_t<Number> evaldirections = matrix_t<Number>(resolution, 2);
 	for(int pos = 0; pos < resolution; ++pos) {
 		double angle = pos*(360/resolution);
 		evaldirections(pos,0) = carl::rationalize<Number>(cos(angle*3.141592654/180));
 		evaldirections(pos,1) = carl::rationalize<Number>(sin(angle*3.141592654/180));
-		//std::cout << "angle: " << angle <<  " . " << evaldirections(pos,0) << ", " << evaldirections(pos,1) << std::endl;
+		std::cout << "angle: " << angle <<  " . " << carl::toDouble(evaldirections(pos,0)) << ", " << carl::toDouble(evaldirections(pos,1)) << std::endl;
 	}
 
 	//std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
 
 	//vector_t<Number> result1 = rounded1.multiEvaluate(evaldirections);
-	std::vector<evaluationResult<Number>> polyBox = poly1.multiEvaluate(evaldirections);
-	std::vector<evaluationResult<Number>> withInvariant = intersectionPair.second.multiEvaluate(evaldirections);
-	std::vector<evaluationResult<Number>> trafoed = shifted.multiEvaluate(evaldirections);
+	std::vector<evaluationResult<Number>> polyBox;
+	std::vector<evaluationResult<Number>> trafoed;
+	for(unsigned rowIndex = 0; rowIndex < evaldirections.rows(); ++rowIndex){
+		polyBox.push_back(poly1.evaluate(evaldirections.row(rowIndex)));
+	}
+
+	std::cout << "Eval: Trafoed." << std::endl;
+	for(unsigned rowIndex = 0; rowIndex < evaldirections.rows(); ++rowIndex){
+		trafoed.push_back(shifted.evaluate(evaldirections.row(rowIndex)));
+	}
+	std::cout << "Eval: Trafoed END." << std::endl;
+
+	//std::vector<evaluationResult<Number>> withInvariant = intersectionPair.second.multiEvaluate(evaldirections);
 	//vector_t<Number> result2 = rounded2.multiEvaluate(evaldirections);
 
 	//vector_t<Number> sf1 = poly1.multiEvaluate(evaldirections);
@@ -122,13 +145,8 @@ int main(int argc, char** argv) {
 	unsigned original = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(original, colors[green]);
 	}
-	{
-	HPolytope<Number> tmp;
-	for(int i = 0; i < resolution; ++i) {
-		tmp.insert(Hyperplane<Number>(evaldirections.row(i), withInvariant[i].supportValue));
-	}
-	//plotter.addObject(tmp.vertices());
-	}
+	unsigned pTope = plotter.addObject(trafo.vertices());
+	plotter.setObjectColor(pTope, colors[red]);
 	{
 	HPolytope<Number> tmp;
 	for(int i = 0; i < resolution; ++i) {
@@ -137,12 +155,7 @@ int main(int argc, char** argv) {
 	unsigned sf = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(sf, colors[orange]);
 	}
-	{
-		HPolytope<Number> real(matrix, distances);
-		auto trafo = real.linearTransformation(trafoMatrix, shift);
-		unsigned pTope = plotter.addObject(trafo.vertices());
-		plotter.setObjectColor(pTope, colors[red]);
-	}
+
 	/*
 	points.erase(points.begin(), points.end());
 	for(int i = 0; i < resolution; ++i) {

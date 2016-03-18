@@ -80,10 +80,10 @@ TYPED_TEST(ZonotopeTest, CopyConstructor) {
 
 TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
     hypro::Zonotope<TypeParam> z1(2);
-    Eigen::Matrix<TypeParam,2,1> center = {1.1941, 0.1068};
+    Eigen::Matrix<TypeParam,2,1> center = {carl::rationalize<TypeParam>(1.1941), carl::rationalize<TypeParam>(0.1068)};
     Eigen::Matrix<TypeParam, 2,6> generators;
-    generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
-                    0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
+    generators << carl::rationalize<TypeParam>(0.3993), carl::rationalize<TypeParam>(0.0160), carl::rationalize<TypeParam>(0.0020), carl::rationalize<TypeParam>(0.0035), 0, carl::rationalize<TypeParam>(-0.0017),
+                    carl::rationalize<TypeParam>(0.0898),    carl::rationalize<TypeParam>(0.0196),   carl::rationalize<TypeParam>(-0.0015),    carl::rationalize<TypeParam>(0.0008),    carl::rationalize<TypeParam>(0.0035),   carl::rationalize<TypeParam>(-0.0045);
 
     z1.setCenter(center);
     z1.setGenerators(generators);
@@ -107,10 +107,10 @@ TYPED_TEST(ZonotopeTest, Corners) {
 */
 
 TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
-    Eigen::Matrix<TypeParam, 2,1> dVec = {0,1},  center = {1.1941, 0.1068};
+    Eigen::Matrix<TypeParam,2,1> dVec= {0,1}, center = {carl::rationalize<TypeParam>(1.1941), carl::rationalize<TypeParam>(0.1068)};
     Eigen::Matrix<TypeParam, 2,6> generators;
-    generators << 0.3993,   0.0160,    0.0020,    0.0035,         0,   -0.0017,
-                    0.0898,    0.0196,   -0.0015,    0.0008,    0.0035,   -0.0045;
+    generators << carl::rationalize<TypeParam>(0.3993), carl::rationalize<TypeParam>(0.0160), carl::rationalize<TypeParam>(0.0020), carl::rationalize<TypeParam>(0.0035), 0, carl::rationalize<TypeParam>(-0.0017),
+                    carl::rationalize<TypeParam>(0.0898),    carl::rationalize<TypeParam>(0.0196),   carl::rationalize<TypeParam>(-0.0015),    carl::rationalize<TypeParam>(0.0008),    carl::rationalize<TypeParam>(0.0035),   carl::rationalize<TypeParam>(-0.0045);
 
     hypro::Hyperplane<TypeParam> hp(dVec, 0);
     hypro::Zonotope<TypeParam> z(center, generators), res;
@@ -334,24 +334,24 @@ TYPED_TEST(ZonotopeTest, Intersection2) {
     hypro::Zonotope<TypeParam> z1(3);
     Eigen::Matrix<TypeParam, 3,1> z_center, d, exp_center, delta;
     Eigen::Matrix<TypeParam, 3,7> generators;
-    z_center << -0.0407,
-                -6.3274,
+    z_center << carl::rationalize<TypeParam>(-0.0407),
+                carl::rationalize<TypeParam>(-6.3274),
                 1;
     d << 1,
          0,
          0;
 
     exp_center << 0,
-                  -6.254369393209305,
-                  0.994400337321514;
+                  carl::rationalize<TypeParam>(-6.254369393209305),
+                  carl::rationalize<TypeParam>(0.994400337321514);
 
-    delta << 0.01,
-             0.01,
-             0.01;
+    delta << carl::rationalize<TypeParam>(0.01),
+             carl::rationalize<TypeParam>(0.01),
+             carl::rationalize<TypeParam>(0.01);
 
-    generators <<0.01, 0.00645, 0.03163725, -5e-05, 0.0111647739218983, 0.00714545531001491,-0.0224310133091988,
-                0,0.0100000000000000,0.0490500000000000,0,0,0.0111647739218983,-0.0700969165912463,
-                0,0,0,0,0,0,0.0111647739218983;
+    generators <<carl::rationalize<TypeParam>(0.01), carl::rationalize<TypeParam>(0.00645), carl::rationalize<TypeParam>(0.03163725), carl::rationalize<TypeParam>(-5e-05), carl::rationalize<TypeParam>(0.0111647739218983), carl::rationalize<TypeParam>(0.00714545531001491),carl::rationalize<TypeParam>(-0.0224310133091988),
+                0,carl::rationalize<TypeParam>(0.0100000000000000),carl::rationalize<TypeParam>(0.0490500000000000),0,0,carl::rationalize<TypeParam>(0.0111647739218983),carl::rationalize<TypeParam>(-0.0700969165912463),
+                0,0,0,0,0,0,carl::rationalize<TypeParam>(0.0111647739218983);
 
     z1.setCenter(z_center);
     z1.setGenerators(generators);
@@ -378,12 +378,12 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
     g1 << 1,1,
           0,1;
 
-    g2 << 1,1,-0.5,
-          0,1,0.2;
+    g2 << 1,1,carl::rationalize<TypeParam>(-0.5),
+          0,1,carl::rationalize<TypeParam>(0.2);
 
-    expected_center << 1.5, 1;
-    expected_generators << 1, 1, -0.5, -0.5,
-                            0, 1, 0, 0.2;
+    expected_center << carl::rationalize<TypeParam>(1.5), 1;
+    expected_generators << 1, 1, carl::rationalize<TypeParam>(-0.5), carl::rationalize<TypeParam>(-0.5),
+                            0, 1, 0, carl::rationalize<TypeParam>(0.2);
 
     z1.setCenter(c1);
     z1.setGenerators(g1);
@@ -398,7 +398,7 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
 
 
 TYPED_TEST(ZonotopeTest, IntervalHull) {
-    Eigen::Matrix<TypeParam, 2, 1> center = {2.0,1.0};
+    Eigen::Matrix<TypeParam, 2, 1> center = {2,1};
     Eigen::Matrix<TypeParam, 2, 3> generators;
     Eigen::Matrix<TypeParam, 2, 2> expected_generators;
     generators << 1, 4, 3,

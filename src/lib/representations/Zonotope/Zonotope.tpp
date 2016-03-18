@@ -499,7 +499,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHyperplane( ZonotopeT<Number
 	std::valarray<Number> dzbme( vertices.size() ), dzb( vertices.size() );
 	unsigned minIdx = 0, i;
 	for ( i = 0; i < vertices.size(); i++ ) {
-		dzbme[i] = ( hp.normal().transpose() * vertices[i] - hp.offset() );
+		dzbme[i] = ( Number(hp.normal().transpose() * vertices[i]) - hp.offset() );
 		dzb[i] = ( hp.normal().transpose() * vertices[i] );
 	}
 
@@ -575,12 +575,12 @@ ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &i
 	hypro::matrix_t<Number> HHT = H * H.transpose();
 	hypro::vector_t<Number> center = inputZonotope.center();
 	hypro::vector_t<Number> lambda =
-		  ( HHT * hp.normal() ) / ( hp.normal().transpose() * HHT * hp.normal() + sgm * sgm );
+		  ( HHT * hp.normal() ) / ( Number(hp.normal().transpose() * HHT * hp.normal()) + sgm * sgm );
 
 	hypro::matrix_t<Number> new_gen, identity;
 	ZonotopeT<Number,Converter> zg( inputZonotope.dimension() );
 
-	zg.setCenter( center + lambda * ( hp.offset() - hp.normal().transpose() * center ) );
+	zg.setCenter( center + lambda * ( hp.offset() - Number(hp.normal().transpose() * center) ) );
 
 	identity.resize( inputZonotope.dimension(), inputZonotope.dimension() );
 
@@ -599,10 +599,10 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 			"Intersect ND: input zonotope and input hyperplane must have same "
 			"dimensionality" );
 	ZonotopeT<Number,Converter> resultZonotope;
-	hypro::vector_t<Number> dVec;
-	hypro::matrix_t<Number> kernel;
-	dVec = hp.normal();
-	Eigen::JacobiSVD<hypro::matrix_t<Number>> svd( dVec.transpose(), Eigen::ComputeFullU | Eigen::ComputeFullV );
+	hypro::vector_t<double> dVec;
+	hypro::matrix_t<double> kernel;
+	dVec = convert<Number,double>(hp.normal());
+	Eigen::JacobiSVD<hypro::matrix_t<double>> svd( dVec.transpose(), Eigen::ComputeFullU | Eigen::ComputeFullV );
 	// Using SVD to calculate nullspace (kernel)
 	kernel = svd.matrixV().block( 0, 1, svd.matrixV().rows(), svd.matrixV().cols() - 1 );
 
@@ -610,35 +610,37 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 	nd = kernel.cols();
 	dim = inputZonotope.dimension();
 
-	hypro::matrix_t<Number> dpQg, resultGenerators;
-	Number dpQc;
+	hypro::matrix_t<double> dpQg;
+	hypro::matrix_t<Number> resultGenerators;
+	double dpQc;
 	minMaxOfLine.resize( 2, nd );
 	resultGenerators.resize( dim, nd );
-	dpQc = dVec.dot( inputZonotope.center() );
-	dpQg = dVec.transpose() * inputZonotope.generators();
+	vector_t<double> inCenterD = convert<Number,double>(inputZonotope.center());
+	dpQc = dVec.dot( inCenterD );
+	dpQg = dVec.transpose() * convert<Number,double>(inputZonotope.generators());
 
 	for ( unsigned i = 0; i < nd; i++ ) {
 		// construct 2 dimensional Zonotope
-		Eigen::Matrix<Number, 2, 1> projCenter;
-		Eigen::Matrix<Number, 2, Eigen::Dynamic> projGenerators;
+		Eigen::Matrix<double, 2, 1> projCenter;
+		Eigen::Matrix<double, 2, Eigen::Dynamic> projGenerators;
 
-		projCenter << dpQc, kernel.col( i ).dot( inputZonotope.center() );
+		projCenter << dpQc, kernel.col( i ).dot( inCenterD );
 		projGenerators.resize( 2, dpQg.cols() );
-		projGenerators << dpQg, kernel.col( i ).transpose() * inputZonotope.generators();
+		projGenerators << dpQg, kernel.col( i ).transpose() * convert<Number,double>(inputZonotope.generators());
 
-		ZonotopeT<Number,Converter> projZonotope( projCenter, projGenerators ), tempResZonotope;
+		ZonotopeT<double,Converter> projZonotope( projCenter, projGenerators ), tempResZonotope;
 
 		// Upon projection, the hyperplane now has a d vector of [1;0] but retains
 		// its e scalar
-		Eigen::Matrix<Number, 2, 1> lgDVector( 1, 0 );
-		Hyperplane<Number> lg( lgDVector, hp.offset() );
+		Eigen::Matrix<double, 2, 1> lgDVector( 1, 0 );
+		Hyperplane<double> lg( lgDVector, carl::toDouble(hp.offset()) );
 
 		//        hypro::matrix_t<Number> dummyMinMax;
 		tempResZonotope = intersectZonotopeHyperplaneDSearch( projZonotope, lg );
 
 		Eigen::Matrix<Number, 2, 1> p1, p2;
-		p1 = tempResZonotope.center() + tempResZonotope.generators();
-		p2 = tempResZonotope.center() - tempResZonotope.generators();
+		p1 = convert<double,Number>(tempResZonotope.center()) + convert<double,Number>(tempResZonotope.generators());
+		p2 = convert<double,Number>(tempResZonotope.center()) - convert<double,Number>(tempResZonotope.generators());
 
 		// find min and max points of intersect between zonogone and hyperplane
 		// we only consider the y axis owing to the [1;0] property of the projected
@@ -647,11 +649,11 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 		minMaxOfLine( 1, i ) = ( p1( 1 ) > p2( 1 ) ) ? p1( 1 ) : p2( 1 );
 
 		resultGenerators.conservativeResize( dim, i + 1 );
-		resultGenerators.col( i ) << ( ( minMaxOfLine( 1, i ) - minMaxOfLine( 0, i ) ) / 2 ) * kernel.col( i );
+		resultGenerators.col( i ) << Number( ( minMaxOfLine( 1, i ) - minMaxOfLine( 0, i ) ) / 2 ) * convert<double,Number>(kernel.col( i ));
 	}
 
-	resultZonotope.setCenter( kernel * ( ( minMaxOfLine.row( 1 ) + minMaxOfLine.row( 0 ) ) / 2 ).transpose() +
-							  hp.offset() * dVec );
+	resultZonotope.setCenter( convert<double,Number>(kernel) * ( ( minMaxOfLine.row( 1 ) + minMaxOfLine.row( 0 ) ) / 2 ).transpose() +
+							  hp.offset() * hp.normal() );
 	resultZonotope.setGenerators( resultGenerators );
 
 	return resultZonotope;
@@ -671,7 +673,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperp
 	ZonotopeT<Number,Converter> result;
 
 	// Determine if intersection is found, according to Girard, Guernic, 2008
-	Number emdc = hp.offset() - hp.normal().transpose() * mCenter;
+	Number emdc = hp.offset() - Number(hp.normal().transpose() * mCenter);
 	Number zs = ( hp.normal().transpose() * mGenerators ).array().abs().sum();
 
 	bool hasIntersect = ( emdc > -zs && zs > emdc );
@@ -854,16 +856,16 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 	c2 = other.mCenter;
 
 	// common traits of center and generators for all two zonotopes
-	temp.setCenter( ( c1 + c2 ) * 0.5 );
+	temp.setCenter( ( c1 + c2 ) * carl::rationalize<Number>(0.5) );
 
 	if ( numGenCurrent > numGenOther ) {
 		hypro::matrix_t<Number> R11, R12;
 		R11 = R1.block( 0, 0, mDimension, numGenOther );
 		R12 = R1.block( 0, numGenOther, mDimension, numGenCurrent - numGenOther );
 
-		temp.setGenerators( ( R2 + R11 ) * 0.5 );
-		temp.addGenerators( ( c1 - c2 ) * 0.5 );
-		temp.addGenerators( ( R11 - R2 ) * 0.5 );
+		temp.setGenerators( ( R2 + R11 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( c1 - c2 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( R11 - R2 ) * carl::rationalize<Number>(0.5) );
 		temp.addGenerators( R12 );
 	} else if ( numGenCurrent < numGenOther ) {
 		hypro::matrix_t<Number> R21, R22;
@@ -871,14 +873,14 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 		R21 = R2.block( 0, 0, mDimension, numGenCurrent );
 		R22 = R2.block( 0, numGenCurrent, mDimension, numGenOther - numGenCurrent );
 
-		temp.setGenerators( ( R1 + R21 ) * 0.5 );
-		temp.addGenerators( ( c2 - c1 ) * 0.5 );
-		temp.addGenerators( ( R21 - R1 ) * 0.5 );
+		temp.setGenerators( ( R1 + R21 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( c2 - c1 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( R21 - R1 ) * carl::rationalize<Number>(0.5) );
 		temp.addGenerators( R22 );
 	} else {
-		temp.setGenerators( ( R1 + R2 ) * 0.5 );
-		temp.addGenerators( ( c1 - c2 ) * 0.5 );
-		temp.addGenerators( ( R1 - R2 ) * 0.5 );
+		temp.setGenerators( ( R1 + R2 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( c1 - c2 ) * carl::rationalize<Number>(0.5) );
+		temp.addGenerators( ( R1 - R2 ) * carl::rationalize<Number>(0.5) );
 	};
 	return temp;
 }
@@ -895,9 +897,9 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intervalHull() const {
 	imax = center + sumOfGenerators;
 	imin = center - sumOfGenerators;
 
-	temp.setCenter( ( imax + imin ) * 0.5 );
+	temp.setCenter( ( imax + imin ) * carl::rationalize<Number>(0.5) );
 
-	temp.setGenerators( ( ( imax - imin ) * 0.5 ).cwiseAbs().asDiagonal() );
+	temp.setGenerators( ( ( imax - imin ) * carl::rationalize<Number>(0.5) ).cwiseAbs().asDiagonal() );
 
 	result = temp;
 	return result;

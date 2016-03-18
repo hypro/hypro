@@ -49,6 +49,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
 	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
 	std::multimap<unsigned, Point<Number>> mPoints;
+	std::multimap<unsigned, vector_t<Number>> mVectors;
 	std::map<unsigned, std::size_t> mObjectColors;
 	gnuplotSettings mSettings;
 	unsigned mId;
@@ -80,6 +81,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	unsigned addObject( const Hyperplane<Number>& _plane );
 	void addPoint( const Point<Number>& _point );
 	void addPoints( const std::vector<Point<Number>>& _points );
+	void addVector( const vector_t<Number>& _vector );
 
 	void setObjectColor( unsigned _id, const std::size_t _color );
 

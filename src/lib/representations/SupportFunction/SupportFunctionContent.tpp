@@ -228,10 +228,10 @@ evaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::LINTRAFO: {
 			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			std::cout << "Tmp rows " << tmp.rows() << " cols " << tmp.cols() << " direction rows: " << _direction.rows() << std::endl;
+			//std::cout << "Tmp rows " << tmp.rows() << " cols " << tmp.cols() << " direction rows: " << _direction.rows() << std::endl;
 			evaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
 			if(res.errorCode != SOLUTION::INFTY){
-				res.supportValue += ((mLinearTrafoParameters->b).dot(_direction))/norm(_direction);
+				res.supportValue += ((mLinearTrafoParameters->b).dot(_direction))/norm((_direction));
 			}
 			return res;
 		}
@@ -285,13 +285,15 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return mBall->multiEvaluate( _directions );
 		}
 		case SF_TYPE::LINTRAFO: {
-			//matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			matrix_t<Number> tmp = mLinearTrafoParameters->a;
+			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
+			matrix_t<Number> t = _directions * tmp;
+			std::cout << "Evaluate in " << convert<Number,double>(t) << std::endl;
 			std::vector<evaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * tmp );
 			unsigned cnt = 0;
 			for(auto& entry : res){
 				vector_t<Number> dir = _directions.row(cnt);
-				entry.supportValue += ((mLinearTrafoParameters->b).dot(_directions.row(cnt)))/norm(dir);
+				std::cout << "Add translation of " << mLinearTrafoParameters->b << " adds " << carl::toDouble(((mLinearTrafoParameters->b).dot(dir))/norm(dir)) << std::endl;
+				entry.supportValue += ((mLinearTrafoParameters->b).dot(dir))/norm(dir);
 				++cnt;
 			}
 			return res;

@@ -133,7 +133,7 @@ class ZonotopeT {
 	 * Clears the generators and center of the ZonotopeT and sets dimensionality to zero
 	 */
 	void clear();
-        
+
         void print() const;
 
 	/*****************************************************************************
