@@ -57,6 +57,7 @@ namespace hypro {
 
 		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
 		bool checkConsistency() const;
+		std::pair<vector_t<Number>, SOLUTION> getInternalPoint() const;
 		std::vector<std::size_t> redundantConstraints() const;
 
 	private:

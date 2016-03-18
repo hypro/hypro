@@ -98,7 +98,7 @@ namespace hypro {
 			simplex.add(constraintPair.first, false);
 		}
 
-		std::cout << "Informed basic constraints defining the object." << std::endl;
+		// std::cout << "Informed basic constraints defining the object." << std::endl;
 
 		#ifdef USE_PRESOLUTION
 		simplex.push();
@@ -122,7 +122,7 @@ namespace hypro {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::LEQ);
 					}
 
-					std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
+					// std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
 
 					simplex.inform(boundConstraint);
 					simplex.add(boundConstraint);
@@ -133,7 +133,7 @@ namespace hypro {
 			carl::MultivariatePolynomial<smtrat::Rational> tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.first);
 			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
 
-			std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
+			// std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
 
 			simplex.inform(tmpSolutionConstraint);
 			simplex.add(tmpSolutionConstraint);
@@ -146,11 +146,11 @@ namespace hypro {
 		#endif
 		simplex.addObjective(objective, false);
 
-		//std::cout << "(push)" << std::endl;
+		// std::cout << "(push)" << std::endl;
 
-		std::cout << "Whole formula: " << std::endl;
-		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		// std::cout << "Whole formula: " << std::endl;
+		// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
@@ -326,6 +326,86 @@ namespace hypro {
 		// TODO: Avoid re-call here too!
 		glp_exact( lp, NULL );
 		return (glp_get_status(lp) != GLP_NOFEAS);
+		#endif
+	}
+
+	template<typename Number>
+	std::pair<vector_t<Number>, SOLUTION> Optimizer<Number>::getInternalPoint() const {
+		if(!mConstraintsSet)
+			updateConstraints();
+
+		if(mConstraintMatrix.rows() == 0) {
+			mLastConsistencyAnswer = SOLUTION::FEAS;
+			mConsistencyChecked = true;
+			return std::make_pair(vector_t<Number>::Zero(1), SOLUTION::FEAS);
+		}
+
+		std::pair<vector_t<Number>, SOLUTION> res;
+
+		#ifdef USE_SMTRAT
+		#ifdef RECREATE_SOLVER
+		smtrat::SimplexSolver simplex;
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
+		for(const auto& constraintPair : formulaMapping) {
+			simplex.inform(constraintPair.first);
+			simplex.add(constraintPair.first, false);
+		}
+		smtrat::Answer sol = simplex.check();
+		if(sol == smtrat::Answer::UNSAT){
+			res.second = SOLUTION::INFEAS;
+			mLastConsistencyAnswer = SOLUTION::INFEAS;
+			return res;
+		} else {
+			mLastConsistencyAnswer = SOLUTION::FEAS;
+		}
+		mConsistencyChecked = true;
+		smtrat::Model assignment = mSmtratSolver.model();
+		vector_t<Number> point;
+		for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+			assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+			assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+			point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+		}
+		return std::make_pair(point, mLastConsistencyAnswer);
+
+		#else
+
+		smtrat::Answer tmp = mSmtratSolver.check();
+		switch (tmp) {
+			case smtrat::Answer::UNSAT: {
+				mLastConsistencyAnswer = SOLUTION::INFEAS;
+				mConsistencyChecked = true;
+				res.second = SOLUTION::INFEAS;
+				return res;
+			}
+			case smtrat::Answer::SAT: {
+				mLastConsistencyAnswer = SOLUTION::FEAS;
+				mConsistencyChecked = true;
+				smtrat::Model assignment = mSmtratSolver.model();
+				vector_t<Number> point;
+				for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+					assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+					assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+					point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+				}
+				res.first = point;
+				res.second = mLastConsistencyAnswer;
+				break;
+			}
+			default:
+				mLastConsistencyAnswer = SOLUTION::UNKNOWN;
+		}
+		return res;
+
+		#endif
+		#else
+
+		// TODO: Avoid re-call here too!
+		glp_exact( lp, NULL );
+		//return (glp_get_status(lp) != GLP_NOFEAS);
+
+		//TODO: Undone!
+		return res;
 		#endif
 	}
 

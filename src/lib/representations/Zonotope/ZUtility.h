@@ -39,8 +39,8 @@ template <typename Number>
 bool compareColumnVectors( const hypro::vector_t<Number>& colvec1, const hypro::vector_t<Number>& colvec2 ) {
 	Number x1( colvec1( 0 ) ), x2( colvec2( 0 ) ), y1( colvec1( 1 ) ), y2( colvec2( 1 ) );
 
-	Number ang1 = x1 / sqrt( x1 * x1 + y1 * y1 );
-	Number ang2 = x2 / sqrt( x2 * x2 + y2 * y2 );
+	Number ang1 = x1 / carl::sqrt( x1 * x1 + y1 * y1 );
+	Number ang2 = x2 / carl::sqrt( x2 * x2 + y2 * y2 );
 
        	return ( ang1 < ang2 );
 }

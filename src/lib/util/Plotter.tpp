@@ -29,6 +29,17 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	mOutfile.open( mFilename + ".plt" );
 
+	if(!mVectors.empty()){
+		mOutfile << "# plotting vectors normalized to length 1\n";
+		unsigned arrowIndex = 0;
+		for(auto& vector : mVectors) {
+			vector_t<Number> normalized = vector.second/norm(vector.second);
+			mOutfile << "set arrow " << arrowIndex++ << " from 0,0 to " << normalized(0) << "," << normalized(1) << "\n";
+		}
+		mOutfile << "\n";
+	}
+
+
 	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
 		// set object
 		vector_t<Number> min;
@@ -41,15 +52,15 @@ void Plotter<Number>::plot2d() const {
 			max = mPoints.begin()->second.rawCoordinates();
 		}
 
+		mOutfile << "# settings\n";
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
-		mOutfile << "set output \"" << mFilename << ".eps\"";
-		mOutfile << "\n";
-
+		mOutfile << "set output \"" << mFilename << ".eps\n";
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
 		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
+		mOutfile << "\n# plotting sets\n";
 		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
@@ -57,7 +68,6 @@ void Plotter<Number>::plot2d() const {
 				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
 			}
 			if(objectIt->second.size() > 0){
-				mOutfile << "\n";
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
 					assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
@@ -122,6 +132,7 @@ void Plotter<Number>::plot2d() const {
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
 		if(mSettings.axes) {
+			mOutfile << "# axis settings\n";
 			mOutfile << "set xzeroaxis \n";
 			mOutfile << "set zeroaxis \n";
             mOutfile << "set xtics axis \n";
@@ -144,6 +155,7 @@ void Plotter<Number>::plot2d() const {
 		int index = 1;
 		if(!mPlanes.empty()){
 			mOutfile << "\n";
+			mOutfile << "# plotting hyperplanes\n";
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
@@ -164,6 +176,7 @@ void Plotter<Number>::plot2d() const {
 		}
 
 		if(!mPoints.empty()){
+			mOutfile << "# plotting points\n";
 			mOutfile << "set multiplot\n";
 			mOutfile << "unset key\n";
 			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
@@ -344,7 +357,6 @@ void Plotter<Number>::plotTex() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
-	std::cout << __func__ << std::endl;
 	if ( !sorted ) {
 		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
 		mObjects.insert( std::make_pair( mId, sortedPoints ) );
@@ -369,30 +381,33 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 
 template<typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
-	mPlanes.insert( std::make_pair( mId, _planes ) );
-	return mId++;
+	mPlanes.insert( std::make_pair( mId++, _planes ) );
+	return mId;
 }
 
 template<typename Number>
 unsigned Plotter<Number>::addObject( const Hyperplane<Number>& _plane ) {
 	std::vector<Hyperplane<Number>> tmp;
 	tmp.push_back(_plane);
-	mPlanes.insert( std::make_pair( mId, tmp ) );
-	return mId++;
+	mPlanes.insert( std::make_pair( mId++, tmp ) );
+	return mId;
 }
 
 template<typename Number>
 void Plotter<Number>::addPoint( const Point<Number>& _point ) {
-	mPoints.insert( std::make_pair( mId, _point ) );
-	mId++;
+	mPoints.insert( std::make_pair( mId++, _point ) );
 }
 
 template<typename Number>
 void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for(const auto& p : _points){
-		mPoints.insert( std::make_pair( mId, p ) );
-		mId++;
+		mPoints.insert( std::make_pair( mId++, p ) );
 	}
+}
+
+template<typename Number>
+void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
+	mVectors.insert( std::make_pair(mId++, _vector) );
 }
 
 template <typename Number>
