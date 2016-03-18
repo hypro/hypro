@@ -60,7 +60,7 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
             assert(curFace.dimension() == dim);
             
             //TODO implement this method
-            //matrix_t newDirections = computeOrthogonalTemplateDirections(curNormal);
+            //matrix_t newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
             
             //call of the recursive sub-function for the current face
             //recursiveSolutions[i] = computeBoundaryPointsRecursive(face, newDirections, curDim-1);
@@ -117,17 +117,17 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
             assert(curFace.dimension() == dim);
             
             //TODO implement this method
-            //matrix_t newDirections = computeOrthogonalTemplateDirections(curNormal);
+            matrix_t<Number> newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
             
             //recursive call of this function for the current face
-            //recursiveSolutions[i] = computeBoundaryPointsRecursive(face, newDirections, curDim-1);
+            recursiveSolutions[i] = computeBoundaryPointsRecursive(curFace, newDirections, curDim-1);
            
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
-        //recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
+        recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
             
         //computes the arithmetic mean as an approximation of the centroid
-        //res = computeArithmeticMeanPoint(recursiveSolutions);
+        res = computeArithmeticMeanPoint(recursiveSolutions);
         return res;
    } else {
         //TODO implement this method
