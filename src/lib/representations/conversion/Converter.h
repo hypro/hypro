@@ -32,7 +32,7 @@ class Converter {
 		static HPolytope toHPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
-		static HPolytope toHPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = 8 );
+		static HPolytope toHPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = 16 );
 		static HPolytope toHPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		static VPolytope toVPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
