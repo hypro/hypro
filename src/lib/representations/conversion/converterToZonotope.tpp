@@ -79,10 +79,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         assert (size == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
-          for (unsigned i=0; i < size; ++i){
-              center += newVertices[i].rawCoordinates();
-         }
-         center = center*( ((Number) 1)/size);
+        center = computeArithmeticMeanPoint(newVertices);
 
         //defines empty distances vector for the generators
          vector_t<Number> distances = vector_t<Number>::Zero(dim);

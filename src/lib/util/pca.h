@@ -12,6 +12,7 @@
 #include "../datastructures/Point.h"
 #include "../datastructures/Hyperplane.h"
 
+
 namespace hypro {
 
 template <typename Number>

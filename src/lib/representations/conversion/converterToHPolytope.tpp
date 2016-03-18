@@ -133,7 +133,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     return HPolytope(std::move(points));
 }
 
-//TODO alternative conversion approaches
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
