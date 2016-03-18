@@ -197,18 +197,22 @@ class Point {
 		return res;
 	}
         
+        /**
+         * removes any duplicate points in a given PointVector
+         * @param PointVec the point vector which should get checked for duplicates
+         * @return A point vector that is just PointVec without duplicates
+         */
 
-        static void removeDuplicatePoints(std::vector<Point<Number>>& PointVec){
+        static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& PointVec){
               std::set<Point<Number>> PointSet = std::set<Point<Number>>(); 
               //writes all the point entries into a set (set removes duplicates)
               for (unsigned i; i<PointVec.size(); ++i){
                   PointSet.insert(PointVec[i]);
               }
-              //write all the set entries back into the PointVector (clearing it before that)
-              PointVec.clear();
-              for (std::set<Point<Number>>::iterator it=PointSet.begin(); it!=PointSet.end(); ++it){
-                           PointVec.insert(it, *it); 
-              }
+              //write all the set entries into the return vector
+              std::vector<Point<Number>> res = std::vector<Point<Number>>(PointSet.size());
+              std::copy(PointSet.begin(), PointSet.end(), res.begin());
+              return res;
         }
         
 

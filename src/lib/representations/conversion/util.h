@@ -16,9 +16,9 @@
 //TODO implement kickoff-function
 
 namespace hypro{
-    
-template <typename Number>
-std::vector<Point<Number>> computeBoundaryPoints (const SupportFunction& sf, const matrix_t& directions, const unsigned curDim) {
+
+template <typename Number, typename Converter>
+std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
     //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -26,14 +26,14 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunction& sf, con
     //only continue if directions and object match dimensionwise
     assert (dim == sf.dimension());
     //generates an empty PointVector for the return value
-    std::vector<Point<Number>> res = std::vector<Point<Number>>[numberOfDirections];
+    std::vector<Point<Number>> res = std::vector<Point<Number>>(numberOfDirections);
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
     if (curDim > 0){
         //generates an empty vector of a PointVector for the return values of the recursive calls
-        std::vector<std::vector<Point<Number>>> recursiveSolutions = std::vector<std::vector<Point<Number>>>[numberOfDirections][numberOfDirections];
-        for(i=0; i<numberOfDirections; ++i){
+        std::vector<std::vector<Point<Number>>> recursiveSolutions = std::vector<std::vector<Point<Number>>>(numberOfDirections)(numberOfDirections);
+        for(unsigned i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
-            vector_t curNormal = directions.row(i);
+            vector_t<Number> curNormal = directions.row(i);
             
             //lets the support function evaluate the offset of the halfspace for the current direction
             evaluationResult<Number> offset = sf.evaluate(curNormal);
@@ -45,31 +45,31 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunction& sf, con
             //creates the current halfspace
             Hyperplane<Number> curPlane = Hyperplane<Number>(curNormal, constant);
             
-            //creates a hyperlanevector containing only the recently created hyperplane
-            std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>[1];
+            //creates a hyperplanevector containing only the recently created hyperplane
+            std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>(1);
             curPlaneVector[0] = curPlane;
             
             //intersects the current support function with the hyperplane
-            SupportFunction curFace = sf.intersect(SupportFunction(curPlaneVector));
+            SupportFunctionT<Number,Converter> curFace = sf.intersect(SupportFunctionT<Number, Converter>(curPlaneVector));
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
             
             //TODO implement this method
-            matrix_t newDirections = computeOrthogonalDirections(curNormal);
+            //matrix_t newDirections = computeOrthogonalDirections(curNormal);
             
             //recursive call of this function for the current face
-            recursiveSolutions[i] = computeBoundaryPoints(face, newDirections, curDim-1);
+            //recursiveSolutions[i] = computeBoundaryPoints(face, newDirections, curDim-1);
+            
+            //removes duplicate points in order to enable the arithmetic mean to yield best possible results
+            //recursiveSolutions[i] = removeDuplicatePoints(recursiveSolutions[i]);
             
             //TODO implement this method
-            removeDuplicatePoints(recursiveSolutions[i]);
-            
-            //TODO implement this method
-            res(i) = computeArithmeticMean(recursiveSolutions(i));
+            //res(i) = computeArithmeticMean(recursiveSolutions(i));
             }
         return res;
    } else {
         //TODO implement this method
-        return sf.toPoint();
+        //return sf.toPoint();
    }    
 }    
     
