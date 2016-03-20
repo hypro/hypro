@@ -273,6 +273,10 @@ evaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			}
 			return ( resA.supportValue <= resB.supportValue ? resA : resB );
 		}
+		default:{
+			assert(false);
+			return evaluationResult<Number>();
+		}
 	}
 }
 
@@ -372,6 +376,10 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			}
 			assert(result.size() == _directions.rows());
 			return result;
+		}
+		default:{
+			assert(false);
+			return std::vector<evaluationResult<Number>>();
 		}
 	}
 }
