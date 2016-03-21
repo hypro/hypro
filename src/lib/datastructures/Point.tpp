@@ -240,9 +240,10 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 }
 
 template <typename Number>
-void Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
+Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
 	std::unique( _dimensions.begin(), _dimensions.end() );
 	std::sort( _dimensions.begin(), _dimensions.end() );
+	assert(_dimensions.size() > 0);
 	vector_t<Number> newCoordinates = vector_t<Number>( _dimensions.size() );
 	unsigned tPos = 0;
 	for ( const auto sPos : _dimensions ) {
@@ -250,9 +251,7 @@ void Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
 		newCoordinates( tPos ) = mCoordinates( sPos );
 		++tPos;
 	}
-
-	mCoordinates = std::move( newCoordinates );
-	mHash = 0;
+	return Point<Number>(newCoordinates);
 }
 
 template <typename Number>
@@ -349,7 +348,7 @@ bool Point<Number>::move( const Point<Number> &_p ) {
 	return negative;
 }
 
-    
+
 
 template <typename Number>
 Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
