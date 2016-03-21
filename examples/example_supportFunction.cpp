@@ -99,6 +99,7 @@ int main(int argc, char** argv) {
 	//vector_t<Number> result1 = rounded1.multiEvaluate(evaldirections);
 	std::vector<evaluationResult<Number>> polyBox;
 	std::vector<evaluationResult<Number>> trafoed;
+	std::vector<evaluationResult<Number>> multiEvaledVerify;
 	for(unsigned rowIndex = 0; rowIndex < evaldirections.rows(); ++rowIndex){
 		polyBox.push_back(poly1.evaluate(evaldirections.row(rowIndex)));
 	}
@@ -108,6 +109,8 @@ int main(int argc, char** argv) {
 		trafoed.push_back(shifted.evaluate(evaldirections.row(rowIndex)));
 	}
 	std::cout << "Eval: Trafoed END." << std::endl;
+
+	multiEvaledVerify = shifted.multiEvaluate(evaldirections);
 
 	//std::vector<evaluationResult<Number>> withInvariant = intersectionPair.second.multiEvaluate(evaldirections);
 	//vector_t<Number> result2 = rounded2.multiEvaluate(evaldirections);
@@ -154,6 +157,14 @@ int main(int argc, char** argv) {
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(sf, colors[orange]);
+	}
+	{
+	HPolytope<Number> tmp;
+	for(int i = 0; i < resolution; ++i) {
+		tmp.insert(Hyperplane<Number>(evaldirections.row(i), multiEvaledVerify[i].supportValue));
+	}
+	unsigned sf = plotter.addObject(tmp.vertices());
+	plotter.setObjectColor(sf, colors[lila]);
 	}
 
 	/*

@@ -285,14 +285,10 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return mBall->multiEvaluate( _directions );
 		}
 		case SF_TYPE::LINTRAFO: {
-			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			matrix_t<Number> t = _directions * tmp;
-			std::cout << "Evaluate in " << convert<Number,double>(t) << std::endl;
-			std::vector<evaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * tmp );
+			std::vector<evaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * mLinearTrafoParameters->a );
 			unsigned cnt = 0;
 			for(auto& entry : res){
 				vector_t<Number> dir = _directions.row(cnt);
-				std::cout << "Add translation of " << mLinearTrafoParameters->b << " adds " << carl::toDouble(((mLinearTrafoParameters->b).dot(dir))/norm(dir)) << std::endl;
 				entry.supportValue += ((mLinearTrafoParameters->b).dot(dir))/norm(dir);
 				++cnt;
 			}

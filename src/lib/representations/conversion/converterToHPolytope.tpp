@@ -154,6 +154,9 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 
     //lets the support function evaluate the offset of the halfspaces for each direction
     std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    //std::vector<evaluationResult<Number>> offsets;
+    //for(unsigned i = 0; i < templateDirectionMatrix.rows(); ++i)
+    //	offsets.push_back(_source.evaluate(templateDirectionMatrix.row(i)));
     assert(offsets.size() == templateDirectionMatrix.rows());
     std::size_t bounded = 0;
     std::vector<std::size_t> boundedConstraints;
