@@ -357,24 +357,43 @@ void Plotter<Number>::plotTex() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
-	if ( !sorted ) {
-		std::vector<Point<Number>> sortedPoints = grahamScan( _points );
-		mObjects.insert( std::make_pair( mId, sortedPoints ) );
-	} else {
-		mObjects.insert( std::make_pair( mId, _points ) );
+	// reduce dimensions
+	if(!_points.empty()){
+		if ( !sorted ) {
+			std::vector<Point<Number>> sortedPoints = _points;
+			if(_points.begin()->dimension > 2){
+				std::vector<unsigned> dimensions;
+				dimensions.push_back(mSettings.dimensions.first);
+				dimensions.push_back(mSettings.dimensions.second);
+
+				for(unsigned i = 0 ; i<sortedPoints.size(); ++i)
+					sortedPoints[i].reduceToDimensions(mSettings.dimensions.first);
+			}
+
+			sortedPoints = grahamScan( sortedPoints );
+			mObjects.insert( std::make_pair( mId, sortedPoints ) );
+		} else {
+			std::vector<Point<Number>> sortedPoints = _points;
+			if(_points.begin()->dimension > 2){
+				std::vector<unsigned> dimensions;
+				dimensions.push_back(mSettings.dimensions.first);
+				dimensions.push_back(mSettings.dimensions.second);
+
+				for(unsigned i = 0 ; i<sortedPoints.size(); ++i)
+					sortedPoints[i].reduceToDimensions(mSettings.dimensions.first);
+			}
+			mObjects.insert( std::make_pair( mId, sortedPoints ) );
+		}
+		return mId++;
 	}
-	return mId++;
+	return 0;
 }
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>> &_points, bool sorted ) {
 	for ( const auto &part : _points ) {
-		if ( !sorted ) {
-			std::vector<Point<Number>> sortedPoints = grahamScan( part );
-			mObjects.insert( std::make_pair( mId, sortedPoints ) );
-		} else {
-			mObjects.insert( std::make_pair( mId, part ) );
-		}
+		addObject(part, sorted);
+		--mId;
 	}
 	return mId++;
 }
@@ -395,13 +414,22 @@ unsigned Plotter<Number>::addObject( const Hyperplane<Number>& _plane ) {
 
 template<typename Number>
 void Plotter<Number>::addPoint( const Point<Number>& _point ) {
-	mPoints.insert( std::make_pair( mId++, _point ) );
+	if(_point.dimension() > 2) {
+		std::vector<unsigned> dimensions;
+		dimensions.push_back(mSettings.dimensions.first);
+		dimensions.push_back(mSettings.dimensions.second);
+		Point<Number> tmp = _point;
+		tmp.reduceToDimensions(dimensions);
+		mPoints.insert(std::make_pair( mId++, tmp));
+	} else {
+		mPoints.insert( std::make_pair( mId++, _point ) );
+	}
 }
 
 template<typename Number>
 void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for(const auto& p : _points){
-		mPoints.insert( std::make_pair( mId++, p ) );
+		addPoint(p);
 	}
 }
 

@@ -37,6 +37,7 @@ struct gnuplotSettings {
 	bool fill = false;					 // do not fill
 	bool axes = true;					 // plot axes
 	double pointSize = 1.0;				 // pointsize
+	std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
 };
 
 template <typename Number>
