@@ -428,7 +428,7 @@ std::pair<Number, SOLUTION> HPolytopeT<Number, Converter>::evaluate( const vecto
 
 	//reduceNumberRepresentation();
 
-	std::cout << "Constraints: " << this->matrix() << std::endl << "Constants: " << this->vector() << std::endl;
+	std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << convert<Number,double>(this->vector()) << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
@@ -514,7 +514,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
 			std::cout << "EMPTY" << std::endl;
-			// TODO: Return empty polytope.
+			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
@@ -535,7 +535,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.second == INFEAS ) {
 			std::cout << "EMPTY" << std::endl;
-			// TODO: Return empty polytope.
+			return Empty();
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.first;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
@@ -544,8 +544,6 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 		}
 	}
 	std::cout << "Result: " << res << std::endl;
-
-	//res.removeRedundancy();
 	return res;
 }
 
@@ -605,20 +603,19 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
-	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
+	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
 		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
-		std::pair<Number, SOLUTION> evalRes2 = rhs.evaluate( plane.normal() );
 
-		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << evalRes2.first << "\t" ;
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.second == INFEAS ) {
-			//std::cout << "INFEAS" << std::endl;
+			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
 		} else if ( evalRes.second == INFTY ) {
-			//std::cout << "INFTY" << std::endl;
+			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < evalRes2.first ) {
-			//std::cout << "Too large" << std::endl;
+		} else if ( evalRes.first < plane.offset() ) {
+			std::cout << "Too large" << std::endl;
 			return false;
 		}
 	}

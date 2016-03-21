@@ -11,7 +11,7 @@
 namespace hypro {
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT()
-	: mVertices(), mFan(), mFanSet( false ), mReduced( true ), mNeighbors(), mInitialized( false ) {
+	: mVertices(), mFan(), mFanSet( false ), mReduced( true ), mNeighbors() {
 }
 
 template <typename Number, typename Converter>
@@ -20,7 +20,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const Point<Number> &point ) {
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;
 	mReduced = true;
-	mInitialized = false;
 	mNeighbors.push_back( std::set<unsigned>() );
 }
 
@@ -33,7 +32,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const pointVector &points ) {
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;
 	mReduced = false;
-	mInitialized = false;
 
 	reduceNumberRepresentation();
 }
@@ -47,7 +45,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& 
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;
 	mReduced = false;
-	mInitialized = false;
 
 	reduceNumberRepresentation();
 }
@@ -112,7 +109,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;
 	mReduced = false;
-	mInitialized = false;
 
 	reduceNumberRepresentation();
 }
@@ -123,7 +119,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const VPolytopeT &orig ) {
 	mFan = polytope::Fan<Number>();
 	mFanSet = false;			// TODO: Include getter fpr this
 	mReduced = orig.reduced();  // TODO: Include getter fpr this
-	mInitialized = false;
 	mCone = orig.cone();
 	mNeighbors = orig.mNeighbors;
 }
@@ -138,7 +133,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformatio
 	}
 	result.setCone( mCone.linearTransformation( A, b ) );
 	result.unsafeSetNeighbors( mNeighbors );
-	return std::move(result);
+	return result;
 }
 
 template <typename Number, typename Converter>
@@ -151,7 +146,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::minkowskiSum( const
 		}
 	}
 	result.setCone( mCone.minkowskiSum( rhs.cone() ) );
-	return std::move(result);
+	return result;
 }
 
 template <typename Number, typename Converter>
@@ -180,7 +175,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 				++vertexIt;
 			}
 		}
-		return std::move(VPolytopeT<Number, Converter>( std::move(possibleVertices) ));
+		return VPolytopeT<Number, Converter>( std::move(possibleVertices) );
 	}
 }
 
@@ -209,7 +204,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplane
 	//std::cout << "Intersection H-Polytope: " << intersection << std::endl;
 	intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
-	return std::move(res);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -219,27 +214,8 @@ bool VPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const
 
 template <typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
-	// initialize tableau if necessary
-	if ( !mInitialized ) initGLPK();
-
-	glp_set_obj_dir( mLp, GLP_MAX );
-	for ( unsigned i = 1; i <= vec.rows(); ++i )
-		glp_set_row_bnds( mLp, i, GLP_FX, carl::toDouble( vec( i - 1 ) ),
-						  0 );  // as the variable is fixed, the last parameter (upper
-								// row bound) is ignored
-
-	glp_set_row_bnds( mLp, vec.rows() + 1, GLP_FX, 1.0, 0 );  // the sum of the vectors equals exactly one.
-
-	for ( unsigned i = 1; i <= mVertices.size(); ++i ) {
-		glp_set_col_bnds( mLp, i, GLP_DB, 0.0, 1.0 );
-		glp_set_obj_coef( mLp, i, 1.0 );  // the objective function is max: v1 + v2 + v3 + ... + vn
-	}
-
-	// solve
-	glp_simplex( mLp, &mOptions );
-	bool interiorPoint = ( glp_get_prim_stat( mLp ) == GLP_FEAS );
-
-	return interiorPoint;
+	auto tmpHPoly = Converter::toHPolytope(*this);
+	return tmpHPoly.contains(vec);
 }
 
 template <typename Number, typename Converter>
@@ -275,7 +251,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		VPolytopeT<Number, Converter>::pointVector res;
 		for ( const auto &point : preresult ) res.push_back( point );
 
-		return std::move(VPolytopeT<Number, Converter>( res ));
+		return VPolytopeT<Number, Converter>( res );
 	}
 }
 
@@ -416,49 +392,6 @@ void VPolytopeT<Number, Converter>::updateNeighbors() {
  **************************************************************************/
 
 template <typename Number, typename Converter>
-void VPolytopeT<Number, Converter>::initGLPK() const {
-	if ( !mInitialized ) {
-		// create lp problem (basic options etc.) of size dimension+1 x #Points
-		mLp = glp_create_prob();
-		glp_init_smcp( &mOptions );
-		mOptions.msg_lev = GLP_MSG_OFF;
-		glp_add_rows( mLp, this->dimension() + 1 );
-		glp_add_cols( mLp, mVertices.size() );
-
-		// prepare matrix
-		unsigned size =
-			  mVertices.size() * ( this->dimension() + 1 );  // add one row to hold the constraint that all add up to one.
-		mIa = new int[size + 1];
-		mJa = new int[size + 1];
-		mAr = new double[size + 1];
-		unsigned pos = 1;
-		typename pointVector::const_iterator vertex = mVertices.begin();
-		for ( unsigned i = 1; i <= this->dimension() + 1; ++i ) {
-			for ( unsigned j = 1; j <= mVertices.size(); ++j ) {
-				mIa[pos] = i;
-				mJa[pos] = j;
-				if ( i == this->dimension() + 1 ) {
-					mAr[pos] = 1.0;
-					// std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos
-					// << "]=" << j << ", mAr[" <<
-					// pos << "]= 1.0" << std::endl;
-				} else {
-					mAr[pos] = carl::toDouble( ( *vertex ).at( i - 1 ) );
-					// std::cout << "Setting: mIa[" << pos << "]=" << i << ", mJa[" << pos
-					// << "]=" << j << ", mAr[" <<
-					// pos << "]=" << double((*vertex).at(i-1)) << std::endl;
-				}
-				++pos;
-				++vertex;
-			}
-			vertex = mVertices.begin();
-		}
-		glp_load_matrix( mLp, size, mIa, mJa, mAr );
-		mInitialized = true;
-	}
-}
-
-template <typename Number, typename Converter>
 const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>::calculateFan() const {
 	if ( !mFanSet ) {
 		std::vector<Facet<Number>> facets = convexHull( mVertices ).first;
@@ -518,37 +451,37 @@ const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>
 template <typename Number, typename Converter>
 const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter>::calculateCone( const Point<Number> &vertex ) {
 	// set up glpk
-	glp_prob *cone;
-	cone = glp_create_prob();
-	glp_set_obj_dir( cone, GLP_MIN );
-
-	typename polytope::Cone<Number>::vectors vectors;
-	for ( auto &cone : mFan.get() ) {
-		vectors.insert( vectors.end(), cone.begin(), cone.end() );
-	}
-	unsigned numVectors = vectors.size();
-	unsigned elements = this->dimension() * numVectors;
-
-	glp_add_cols( cone, numVectors );
-	glp_add_rows( cone, this->dimension() );
-
-	int ia[elements];
-	int ja[elements];
-	double ar[elements];
-	unsigned pos = 1;
-
-	for ( unsigned i = 1; i <= this->dimension(); ++i ) {
-		for ( unsigned j = 1; j <= numVectors; ++j ) {
-			ia[pos] = i;
-			ja[pos] = j;
-			ar[pos] = carl::toDouble(vectors.at( j ).at( i ));
-			++pos;
-		}
-	}
-	assert( pos <= elements );
-
-	glp_load_matrix( cone, elements, ia, ja, ar );
-	glp_simplex( cone, NULL );
+	//glp_prob *cone;
+	//cone = glp_create_prob();
+	//glp_set_obj_dir( cone, GLP_MIN );
+//
+//	//typename polytope::Cone<Number>::vectors vectors;
+//	//for ( auto &cone : mFan.get() ) {
+//	//	vectors.insert( vectors.end(), cone.begin(), cone.end() );
+//	//}
+//	//unsigned numVectors = vectors.size();
+//	//unsigned elements = this->dimension() * numVectors;
+//
+//	//glp_add_cols( cone, numVectors );
+//	//glp_add_rows( cone, this->dimension() );
+//
+//	//int ia[elements];
+//	//int ja[elements];
+//	//double ar[elements];
+//	//unsigned pos = 1;
+//
+//	//for ( unsigned i = 1; i <= this->dimension(); ++i ) {
+//	//	for ( unsigned j = 1; j <= numVectors; ++j ) {
+//	//		ia[pos] = i;
+//	//		ja[pos] = j;
+//	//		ar[pos] = carl::toDouble(vectors.at( j ).at( i ));
+//	//		++pos;
+//	//	}
+//	//}
+//	//assert( pos <= elements );
+//
+//	//glp_load_matrix( cone, elements, ia, ja, ar );
+	//glp_simplex( cone, NULL );
 
 	// TODO output & result interpretation
 

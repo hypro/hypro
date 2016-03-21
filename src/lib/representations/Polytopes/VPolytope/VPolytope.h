@@ -9,11 +9,11 @@
 #pragma once
 
 #include "../util.h"
-#include <glpk.h>
 #include <set>
 #include <cassert>
 #include "../../../util/convexHull.h"
 #include "../../../util/smtrat/SimplexSolver.h"
+#include "../../../util/Optimizer.h"
 #include "../../../datastructures/Facet.h"
 
 namespace hypro {
@@ -36,14 +36,6 @@ class VPolytopeT {
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
-	// GLPK members
-	mutable bool mInitialized;
-	mutable glp_prob* mLp;
-	mutable glp_smcp mOptions;
-	mutable int* mIa;
-	mutable int* mJa;
-	mutable double* mAr;
-
   public:
 	/***************************************************************************
 	 * Constructors
@@ -60,13 +52,6 @@ class VPolytopeT {
 	VPolytopeT( VPolytopeT&& _orig ) = default;
 
 	~VPolytopeT() {
-		if ( mInitialized ) {
-			// cleanup
-			// glp_delete_prob(mLp);
-			// delete[] mIa;
-			// delete[] mJa;
-			// delete[] mAr;
-		}
 	}
 
 	/***************************************************************************
@@ -192,7 +177,6 @@ class VPolytopeT {
 	/***************************************************************************
 	 * Auxiliary functions
 	 **************************************************************************/
-	void initGLPK() const;
 	const Fan& calculateFan() const;
 	const Cone& calculateCone( const Point<Number>& vertex );
 

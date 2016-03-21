@@ -17,7 +17,6 @@
 #include "../../datastructures/Hyperplane.h"
 #include "../../util/Optimizer.h"
 #include "util.h"
-#include <glpk.h>
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY

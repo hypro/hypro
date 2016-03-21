@@ -58,6 +58,7 @@ class SupportFunctionT {
 	SupportFunctionT<Number,Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
+	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = 8 ) const;
 	SupportFunctionT<Number,Converter> unite( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
 	//std::pair<bool, SupportFunctionT> satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const;

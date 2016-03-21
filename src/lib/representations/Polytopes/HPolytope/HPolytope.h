@@ -10,7 +10,6 @@
 
 #include "../util.h"
 #include <cassert>
-#include <glpk.h>
 #include "../../../util/convexHull.h"
 #include "../../../util/vertexEnumeration.h"
 #include "../../../util/Optimizer.h"

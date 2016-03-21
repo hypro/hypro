@@ -12,12 +12,10 @@
 
 #pragma once
 
-#include "../../config.h"
 #include "util.h"
 #include "PolytopeSupportFunction.h"
 #include "BallSupportFunction.h"
-#include <glpk.h>
-#include <vector>
+#include "../../config.h"
 
 //#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
