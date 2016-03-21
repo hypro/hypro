@@ -4,7 +4,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-12-17
- * @version	2015-12-17
+ * @version	2016-03-17
  */
 
 #include "Converter.h"
@@ -48,7 +48,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
     return Zonotope(center, generators);
 }
 
-//TODO sqrt_safe is kind of unprecise
+
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
@@ -79,10 +79,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         assert (size == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
-          for (unsigned i=0; i < size; ++i){
-              center += newVertices[i].rawCoordinates();
-         }
-         center = center*( ((Number) 1)/size);
+        center = computeArithmeticMeanPoint(newVertices);
 
         //defines empty distances vector for the generators
          vector_t<Number> distances = vector_t<Number>::Zero(dim);
@@ -174,21 +171,20 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
     //lets the support function evaluate the offset of the halfspaces for each direction
     std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    std::size_t bounded = 0;
+    assert(offsets.size() == templateDirectionMatrix.rows());
     std::vector<std::size_t> boundedConstraints;
-    for(const auto& offset : offsets){
-        if(offset.errorCode != SOLUTION::INFTY)
-            boundedConstraints.push_back(bounded);
-
-        ++bounded;
+    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+            boundedConstraints.push_back(offsetIndex);
     }
     matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
     vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-    std::size_t pos = 0;
+    std::size_t pos = boundedConstraints.size()-1;
     while(!boundedConstraints.empty()){
         constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
         constants(pos) = offsets[boundedConstraints.back()].supportValue;
         boundedConstraints.pop_back();
+        --pos;
     }
 
     //constructs a H-Polytope out of the computed halfspaces

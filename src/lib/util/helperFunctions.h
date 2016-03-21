@@ -1,3 +1,17 @@
+/**
+ * Specialization of some helper functions for computing template directions
+ * @file helperFunctions.h
+ * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
+ * @author Simon Froitzheim
+ * 
+ * @version	2016-03-18
+ */
+
+
+
+
+
+
 namespace hypro {
 
 /*
@@ -43,6 +57,16 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 	}
 
 	return directions;
+}
+
+/*
+ * Compute a set of uniformly distributed directions that are orthogonal to a given normal
+ */
+
+template<typename Number>
+static matrix_t<Number> computeOrthogonalTemplateDirections( vector_t<Number> normal, Number offset, unsigned numberOfDirections){
+    matrix_t<Number> res;
+    return res;
 }
 
 } // namespace hypro

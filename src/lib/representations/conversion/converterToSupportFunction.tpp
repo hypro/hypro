@@ -5,7 +5,7 @@
  * @author Simon Froitzheim
  *
  * @since	2015-05-13
- * @version	2016-01-28
+ * @version	2016-03-17
  */
 
 #include "Converter.h"
@@ -16,7 +16,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     return _source;
 }
 
-// conversion from box to support function
+// conversion from box to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Box& _source, const CONV_MODE mode) {
     unsigned dim = _source.dimension();                                                     //gets dimension of box

@@ -221,6 +221,9 @@ namespace parser {
 					res.row(0) = _lhs-_rhs;
 					return res;
 				}
+				default:{
+					assert(false);
+				}
 			}
 			return matrix_t<double>::Zero(1,1);
 		}

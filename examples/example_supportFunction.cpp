@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 		1,0,
 		0,-1,
 		-1,0;
-	distances << 1,1,1,1;
+	distances << 3,3,-2,-2;
 	matrix_t<Number> matrix2 = matrix_t<Number>(3,2);
 	vector_t<Number> distances2 = vector_t<Number>(3);
 	matrix2 << 1,1,

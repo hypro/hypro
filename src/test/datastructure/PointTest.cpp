@@ -105,7 +105,7 @@ TYPED_TEST(PointTest, Constructor)
     Point<float> local = alien;
 
 
-#ifdef SUPPORT_MPFR
+#ifdef USE_MPFR_FLOAT
     // convert to mpfr
     Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
 #endif

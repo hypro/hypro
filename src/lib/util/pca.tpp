@@ -4,7 +4,7 @@
  * @author Simon Froitzheim
  *
  * @since       2015-02-15
- * @version     2015-02-15
+ * @version	2016-03-17
  */
 
 #include "pca.h"

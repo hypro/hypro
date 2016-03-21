@@ -5,7 +5,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since	2015-12-17
- * @version	2015-12-17
+ * @version	2016-03-17
  */
 
 #include "Converter.h"
@@ -133,7 +133,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     return HPolytope(std::move(points));
 }
 
-//TODO alternative conversion approaches
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
@@ -158,13 +157,10 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     //for(unsigned i = 0; i < templateDirectionMatrix.rows(); ++i)
     //	offsets.push_back(_source.evaluate(templateDirectionMatrix.row(i)));
     assert(offsets.size() == templateDirectionMatrix.rows());
-    std::size_t bounded = 0;
     std::vector<std::size_t> boundedConstraints;
     for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
         if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
-            boundedConstraints.push_back(bounded);
-
-        ++bounded;
+            boundedConstraints.push_back(offsetIndex);
     }
     matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
     vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
