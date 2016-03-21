@@ -90,7 +90,7 @@ namespace hypro{
     std::vector<evaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
         std::cout << __func__ << " " << convert<Number,double>(_directions) << std::endl;
         std::vector<evaluationResult<Number>> res = content->multiEvaluate(_directions);
-        assert(res.size() == _directions.rows());
+        assert(res.size() == std::size_t(_directions.rows()));
         return res;
     }
 

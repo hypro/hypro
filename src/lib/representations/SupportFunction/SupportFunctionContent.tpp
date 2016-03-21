@@ -312,7 +312,7 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			std::vector<evaluationResult<Number>> resA = mSummands->lhs->multiEvaluate( _directions );
 			std::vector<evaluationResult<Number>> resB = mSummands->rhs->multiEvaluate( _directions );
 			std::vector<evaluationResult<Number>> res;
-			assert( resA.size() == _directions.rows());
+			assert( resA.size() == std::size_t(_directions.rows()));
 			assert(resA.size() == resB.size());
 			for(unsigned index = 0; index < resA.size(); ++index){
 				evaluationResult<Number> r;
@@ -325,13 +325,13 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				}
 				res.push_back(r);
 			}
-			assert( res.size() == _directions.rows());
+			assert( res.size() == std::size_t(_directions.rows()));
 			return ( res );
 		}
 		case SF_TYPE::UNION: {
 			std::vector<evaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions );
 			std::vector<evaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions );
-			assert( resA.size() == _directions.rows());
+			assert( resA.size() == std::size_t(_directions.rows()));
 			assert( resA.size() == resB.size() );
 			std::vector<evaluationResult<Number>> result;
 			for ( unsigned i = 0; i < resA.size(); ++i ) {
@@ -345,7 +345,7 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				}
 				result.push_back(res);
 			}
-			assert(result.size() == _directions.rows());
+			assert(result.size() == std::size_t(_directions.rows()));
 			return result;
 		}
 		case SF_TYPE::INTERSECT: {
@@ -370,7 +370,7 @@ std::vector<evaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				}
 				result.push_back(res);
 			}
-			assert(result.size() == _directions.rows());
+			assert(result.size() == std::size_t(_directions.rows()));
 			return result;
 		}
 		default:{

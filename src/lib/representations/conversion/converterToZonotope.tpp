@@ -171,7 +171,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
     //lets the support function evaluate the offset of the halfspaces for each direction
     std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    assert(offsets.size() == templateDirectionMatrix.rows());
+    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
     std::vector<std::size_t> boundedConstraints;
     for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
         if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)

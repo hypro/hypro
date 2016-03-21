@@ -102,7 +102,7 @@ std::vector<evaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
 	}
-	assert(res.size() == _A.rows());
+	assert(res.size() == std::size_t(_A.rows()));
 
 	return res;
 }

@@ -156,7 +156,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     //std::vector<evaluationResult<Number>> offsets;
     //for(unsigned i = 0; i < templateDirectionMatrix.rows(); ++i)
     //	offsets.push_back(_source.evaluate(templateDirectionMatrix.row(i)));
-    assert(offsets.size() == templateDirectionMatrix.rows());
+    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
     std::vector<std::size_t> boundedConstraints;
     for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
         if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
