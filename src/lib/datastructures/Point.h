@@ -49,11 +49,11 @@ class Point {
 	 * @param dim
 	 * @param initialValue
 	 */
-	Point( const Number& _value );
-	Point( std::initializer_list<Number> _coordinates );
+	explicit Point( const Number& _value );
+	explicit Point( std::initializer_list<Number> _coordinates );
 
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
-	Point( std::initializer_list<F> _coordinates ) {
+	explicit Point( std::initializer_list<F> _coordinates ) {
 		unsigned count = 0;
 		mCoordinates = vector_t<Number>( _coordinates.size() );
 		for ( auto& coordinate : _coordinates ) {
@@ -64,15 +64,15 @@ class Point {
 	}
 
 	//@author Chris K. (for Minkowski Sum Test)
-	Point( std::vector<Number> _coordinates );
+	explicit Point( std::vector<Number> _coordinates );
 
 	/**
 	 * Constructs a point with the passed coordinates
              * @param coordinates
 	 */
-	Point( const coordinateMap& _coordinates );
-	Point( const vector_t<Number>& _vector );
-	Point( vector_t<Number>&& _vector );
+	explicit Point( const coordinateMap& _coordinates );
+	explicit Point( const vector_t<Number>& _vector );
+	explicit Point( vector_t<Number>&& _vector );
 
 	/**
 	 * Copy constructor
@@ -82,7 +82,7 @@ class Point {
 	Point( Point<Number>&& _p );
 
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
-	Point( const Point<F>& _p ) {
+	explicit Point( const Point<F>& _p ) {
 		mCoordinates = vector_t<Number>( _p.coordinates().size() );
 		for ( unsigned pos = 0; pos < _p.dimension(); ++pos ) {
 			mCoordinates( pos ) = Number( _p.at( pos ) );
@@ -97,8 +97,9 @@ class Point {
 	 */
 
 	std::size_t hash() const {
-		if(mHash == 0)
+		if(mHash == 0) {
 			mHash = std::hash<vector_t<Number>>()(mCoordinates);
+		}
 
 		return mHash;
 	}
@@ -289,7 +290,9 @@ class Point {
 
 	bool operator==( const Point<Number>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
-		if (this->hash() != _p2.hash()) return false;
+		if (this->hash() != _p2.hash()) {
+			return false;
+		}
 
 		return ( this->rawCoordinates() == _p2.rawCoordinates() );
 	}
@@ -297,9 +300,13 @@ class Point {
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
-		if (this->hash() != _p2.hash()) return false;
+		if (this->hash() != _p2.hash()) {
+			return false;
+		}
 		for ( unsigned d = 0; d < this->dimension(); ++d ) {
-			if ( this->at( d ) != Number( _p2.at( d ) ) ) return false;
+			if ( this->at( d ) != Number( _p2.at( d ) ) ) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -307,7 +314,9 @@ class Point {
 	bool operator!=( const Point<Number>& _p2 ) const { return !( *this == _p2 ); }
 
 	Point<Number>& operator+=( const Point<Number>& _rhs );
+	Point<Number>& operator+=( const vector_t<Number>& _rhs );
 	Point<Number>& operator-=( const Point<Number>& _rhs );
+	Point<Number>& operator-=( const vector_t<Number>& _rhs );
 	Point<Number>& operator/=( unsigned _quotient );
 	Point<Number>& operator*=( const Number _factor );
 	Point<Number>& operator=( const Point<Number>& _in );
@@ -412,7 +421,7 @@ const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs 
     #endif
 
 
-}  // namespace
+}  // namespace hypro
 
 namespace std{
     template<class Number>
@@ -422,6 +431,6 @@ namespace std{
             return std::hash<hypro::vector_t<Number>>()(point.rawCoordinates());
         }
     };
-} //namespace
+} //namespace std
 
 #include "Point.tpp"

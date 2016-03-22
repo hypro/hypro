@@ -1,14 +1,25 @@
+#include <iostream>
+#include <map>
+#include <set>
+#include <utility>
+#include <vector>
+
+#pragma once
+
 namespace hypro {
 
 	template<typename T>
 	bool operator ==(const std::vector<T>& lhs, const std::vector<T>& rhs) {
 		std::cout << "Ping." << std::endl;
-		if(lhs.size() != rhs.size())
+		if(lhs.size() != rhs.size()){
 			return false;
+		}
 
-		for(std::size_t i = 0; i < lhs.size(); ++i)
-			if(lhs.at(i) != rhs.at(i))
+		for(std::size_t i = 0; i < lhs.size(); ++i){
+			if(lhs.at(i) != rhs.at(i)){
 				return false;
+			}
+		}
 
 		return true;
 	}
@@ -17,8 +28,9 @@ namespace hypro {
 	std::ostream& operator <<(std::ostream& _out, const std::set<T>& _set) {
 		if(!_set.empty()) {
 			_out << *_set.begin();
-			for(auto setIt = ++_set.begin(); setIt != _set.end(); ++setIt)
+			for(auto setIt = ++_set.begin(); setIt != _set.end(); ++setIt){
 				_out << ", " << *setIt;
+			}
 		}
 
 		return _out;
@@ -46,10 +58,11 @@ namespace hypro {
 	std::ostream& operator <<(std::ostream& _out, const std::map<Key,T>& _map) {
 		if(!_map.empty()) {
 			_out << _map.begin()->first << " -> " << _map.begin()->second;
-			for(auto mapIt = ++_map.begin(); mapIt != _map.end(); ++mapIt)
+			for(auto mapIt = ++_map.begin(); mapIt != _map.end(); ++mapIt){
 				_out << ", " << mapIt->first << " -> " << mapIt->second;
+			}
 		}
 
 		return _out;
 	}
-}
+} // namespace hypro

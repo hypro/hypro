@@ -104,7 +104,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(BUILD_STATIC)
 	message("-- linking BY static")
-	add_library(lib_hypro_static STATIC ${lib_hypro_sources})
+	add_library(lib_hypro_static STATIC ${sources})
 	set_target_properties( lib_hypro_static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
@@ -164,3 +164,12 @@ install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
 ### "${PROJECT_BINARY_DIR}" THE FOLLOWING CMD IS FROM CARL... HERE WE DO HAVE A PROBLEM, BUT I DUNNO WHAT IT IS
 
 ########################################################################################
+
+message(${sources})
+
+if (CLANG_TIDY)
+	add_custom_target(tidy
+		COMMAND clang-tidy -p ../../build/compile_commands.json ${CLANG_TIDY_CHECKS} -header-filter='.*' ${sources}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/lib/
+	)
+endif()

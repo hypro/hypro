@@ -115,8 +115,8 @@ namespace reachability {
 
 			Representation deltaValuation = initialPair.second.linearTransformation( resultMatrix, translation );
 
-			unsigned deltaSet = plotter.addObject(deltaValuation.vertices());
-			plotter.setObjectColor(deltaSet, colors[lila]);
+			//unsigned deltaSet = plotter.addObject(deltaValuation.vertices());
+			//plotter.setObjectColor(deltaSet, colors[lila]);
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
@@ -155,14 +155,14 @@ namespace reachability {
 			// hullPolytope +_minkowski hausPoly
 			firstSegment = unitePolytope.minkowskiSum( hausPoly );
 
-			unsigned delt = plotter.addObject(deltaValuation.vertices());
-			plotter.setObjectColor(delt, colors[red]);
-			unsigned unite = plotter.addObject(unitePolytope.vertices());
-			plotter.setObjectColor(unite, colors[orange]);
-			unsigned hull = plotter.addObject(firstSegment.vertices());
-			plotter.setObjectColor(hull, colors[petrol]);
-
-			plotter.plot2d();
+			//unsigned delt = plotter.addObject(deltaValuation.vertices());
+			//plotter.setObjectColor(delt, colors[red]);
+			//unsigned unite = plotter.addObject(unitePolytope.vertices());
+			//plotter.setObjectColor(unite, colors[orange]);
+			//unsigned hull = plotter.addObject(firstSegment.vertices());
+			//plotter.setObjectColor(hull, colors[petrol]);
+//
+			//plotter.plot2d();
 
 			assert(firstSegment.contains(initialPair.second));
 			assert(firstSegment.contains(deltaValuation));

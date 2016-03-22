@@ -102,7 +102,7 @@ TYPED_TEST(PointTest, Constructor)
     Point<double> alien = Point<double>({1,3});
 
     Point<double> alien2 = alien;
-    Point<float> local = alien;
+    Point<float> local = Point<float>(alien);
 
 
 #ifdef USE_MPFR_FLOAT

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "smtrat/SimplexSolver.h"
 #include "EvaluationResult.h"
 #include "VariablePool.h"
 #include "../config.h"
-#include "smtrat/SimplexSolver.h"
 #include <carl/util/Singleton.h>
 
 #define USE_PRESOLUTION
@@ -70,6 +70,6 @@ namespace hypro {
 		void deleteArrays() const;
 
 	};
-} // namespace
+} // namespace hypro
 
 #include "Optimizer.tpp"

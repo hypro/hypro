@@ -310,6 +310,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	// create both limit matrices
+	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
 	matrix_t<Number> ax(A);
 	matrix_t<Number> bx(A);
 	Point<Number> min;
@@ -331,6 +332,8 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
 		}
 	}
+	min += b;
+	max += b;
 
 	return BoxT<Number,Converter>( std::make_pair(min, max) );
 }

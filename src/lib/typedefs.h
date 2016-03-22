@@ -15,4 +15,4 @@ enum State{TRUE,FALSE,NSET};
 
 // Solution types
 enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
-}
+} // namespace hypro

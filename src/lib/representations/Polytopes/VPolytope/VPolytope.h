@@ -9,13 +9,14 @@
 #pragma once
 
 #include "../util.h"
-#include <set>
-#include <cassert>
 #include "../../../util/convexHull.h"
 #include "../../../util/smtrat/SimplexSolver.h"
 #include "../../../util/Optimizer.h"
 #include "../../../util/Permutator.h"
 #include "../../../datastructures/Facet.h"
+#include <set>
+#include <cassert>
+#include <vector>
 
 namespace hypro {
 

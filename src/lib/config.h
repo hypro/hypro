@@ -1,12 +1,5 @@
 #pragma once
 
-#include <set>
-#include <map>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <cassert>
-
 #include "flags.h"
 #include "util/convenienceOperators.h"
 #include <carl/numbers/numbers.h>

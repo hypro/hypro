@@ -57,7 +57,9 @@ struct NumTraits<mpq_class> {
 
 template <typename Number>
 bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() ) return false;
+	if ( lhs.rows() != rhs.rows() ){
+		return false;
+	}
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if ( lhs( dim ) > rhs( dim ) ) {
@@ -71,7 +73,9 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 
 	template <typename Number>
 	bool operator<=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-		if ( lhs.rows() != rhs.rows() ) return false;
+		if ( lhs.rows() != rhs.rows() ) {
+			return false;
+		}
 
 		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 			if ( lhs( dim ) > rhs( dim ) ) {
@@ -126,8 +130,12 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 
 template <typename Number>
 bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() ) return false;
-	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ) return false;
+	if ( lhs.rows() != rhs.rows() ){
+		return false;
+	}
+	if ( VectorHashValue(lhs) != VectorHashValue(rhs) ){
+		return false;
+	}
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if (lhs( dim ) != rhs( dim )) {
@@ -144,8 +152,12 @@ bool operator!=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 
 template <typename Number>
 bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) return false;
-	if ( MatrixHashValue(lhs) != MatrixHashValue(rhs) ) return false;
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ){
+		return false;
+	}
+	if ( MatrixHashValue(lhs) != MatrixHashValue(rhs) ){
+		return false;
+	}
 
 	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
 		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
@@ -188,14 +200,16 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 		squares = squares + carl::pow(*(in.data()+i), 2);
 	}
 	assert(squares >= 0);
-	if(squares == 0)
+	if(squares == 0){
 		return 0;
+	}
 
 	std::pair<Number, Number> dist = carl::sqrt_safe(squares);
-	if(roundUp)
+	if(roundUp) {
 		return dist.second;
-	else
+	} else {
 		return dist.first;
+	}
 }
 
 } // namespace Eigen

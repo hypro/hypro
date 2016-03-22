@@ -95,25 +95,25 @@ TYPED_TEST(GridTest, Insert)
 
 TYPED_TEST(GridTest, InsertInduced)
 {
-    Point<int> p;
+    Point<unsigned> p;
 
-    p = Point<int>({1, 2});
+    p = Point<unsigned>({1, 2});
     this->grid1.insertInduced(p, true);
     EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({0, 0});
+    p = Point<unsigned>({0, 0});
     this->grid1.insertInduced(p, false);
     EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({1, 0});
+    p = Point<unsigned>({1, 0});
     this->grid1.insertInduced(p, true);
     EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({3, 2});
+    p = Point<unsigned>({3, 2});
     this->grid1.insertInduced(p, false);
     EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({3, 3});
+    p = Point<unsigned>({3, 3});
     this->grid1.insertInduced(p, false);
     EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 }
@@ -137,18 +137,18 @@ TYPED_TEST(GridTest, ColorAt)
 
 TYPED_TEST(GridTest, ColorAtInduced)
 {
-    Point<int> p;
+    Point<unsigned> p;
 
-    p = Point<int>({1, 1});
+    p = Point<unsigned>({1, 1});
     EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({2, 2});
+    p = Point<unsigned>({2, 2});
     EXPECT_EQ(true, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({3, 3});
+    p = Point<unsigned>({3, 3});
     EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 
-    p = Point<int>({5, 5});
+    p = Point<unsigned>({5, 5});
     EXPECT_EQ(false, this->grid1.colorAtInduced(p));
 }
 

@@ -1,4 +1,4 @@
-/** 
+/**
  * @file    NeighborhoodContainer.cpp
  * @author  Benedikt Seidl
  *
@@ -10,7 +10,7 @@
 
 namespace hypro
 {
-    
+
     NeighborhoodContainer::neighborhood NeighborhoodContainer::getNeighborhood(const Point<int>& p, bool pointself)
     {
         if (!hasNeighborhood(p)) {
@@ -82,5 +82,5 @@ namespace hypro
 
         mNeighborhoods.insert(std::make_pair(p, neighbors));
     }
-    
-}//namespace
+
+} // namespace hypro

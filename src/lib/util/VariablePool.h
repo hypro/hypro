@@ -10,16 +10,17 @@
 
 #pragma once
 
-#include <carl/util/Singleton.h>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
+#include <carl/util/Singleton.h>
+#include <cassert>
 #ifdef USE_PPL
 CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
 CLANG_WARNING_RESET
 #endif
 #include <map>
-#include <cassert>
+
 
 //using namespace Parma_Polyhedra_Library::IO_Operators;
 
@@ -167,7 +168,9 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		#endif
 		for ( unsigned pos = 0; pos < mCarlVariables.size(); ++pos ) {
-			if ( _var == mCarlVariables[pos] ) return true;
+			if ( _var == mCarlVariables[pos] ) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -189,7 +192,9 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		#endif
 		for ( unsigned pos = 0; pos < mCarlVariables.size(); ++pos ) {
-			if ( _var == mCarlVariables[pos] ) return pos;
+			if ( _var == mCarlVariables[pos] ){
+				return pos;
+			}
 		}
 		return -1;
 	}
@@ -237,4 +242,5 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		}
 	}
 };
-}
+
+} // namespace hypro

@@ -46,8 +46,9 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool overapproximate) const {
-		if(!mConstraintsSet)
+		if(!mConstraintsSet) {
 			updateConstraints();
+		}
 
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 		EvaluationResult<Number> res;
@@ -304,8 +305,9 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
-		if(!mConstraintsSet)
+		if(!mConstraintsSet) {
 			updateConstraints();
+		}
 
 		if(mConstraintMatrix.rows() == 0) {
 			mLastConsistencyAnswer = SOLUTION::FEAS;
@@ -355,8 +357,9 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkPoint(const Point<Number>& _point) const {
-		if(!mConstraintsSet)
+		if(!mConstraintsSet) {
 			updateConstraints();
+		}
 
 		if(mConstraintMatrix.rows() == 0) {
 			mLastConsistencyAnswer = SOLUTION::FEAS;
@@ -401,8 +404,9 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
-		if(!mConstraintsSet)
+		if(!mConstraintsSet) {
 			updateConstraints();
+		}
 
 		if(mConstraintMatrix.rows() == 0) {
 			mLastConsistencyAnswer = SOLUTION::FEAS;
@@ -483,11 +487,13 @@ namespace hypro {
 	std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 		std::vector<std::size_t> res;
 
-		if(!mConstraintsSet)
+		if(!mConstraintsSet) {
 			updateConstraints();
+		}
 
-		if(mConstraintMatrix.rows() == 0)
+		if(mConstraintMatrix.rows() == 0) {
 			return res;
+		}
 
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
@@ -566,8 +572,9 @@ namespace hypro {
 
 		#else
 
-		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT ) // if there is only one constraint
+		if(mCurrentFormula.getType() == carl::FormulaType::CONSTRAINT ){ // if there is only one constraint
 			return res;
+		}
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck;
@@ -594,8 +601,9 @@ namespace hypro {
 			mConsistencyChecked = true;
 		}
 
-		if(mLastConsistencyAnswer == SOLUTION::INFEAS)
+		if(mLastConsistencyAnswer == SOLUTION::INFEAS){
 			return res;
+		}
 
 		std::size_t count = 0;
 		//std::cout << "Original Formula: " << std::endl;
@@ -677,8 +685,9 @@ namespace hypro {
 	void Optimizer<Number>::updateConstraints() const {
 		assert(!mConsistencyChecked || mConstraintsSet);
 		bool alreadyInitialized = mInitialized;
-		if(!mInitialized)
+		if(!mInitialized){
 			initialize();
+		}
 
 		if(!mConstraintsSet){
 			//std::cout << "!mConstraintsSet" << std::endl;
@@ -730,9 +739,9 @@ namespace hypro {
 				ja[0] = 0;
 				ar[0] = 0;
 				for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
-					ia[i + 1] = ( (int)( i / mConstraintMatrix.cols() ) ) + 1;
+					ia[i + 1] = ( int( i / mConstraintMatrix.cols() ) ) + 1;
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-					ja[i + 1] = ( (int)( i % mConstraintMatrix.cols() ) ) + 1;
+					ja[i + 1] = ( int( i % mConstraintMatrix.cols() ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
 					//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
@@ -782,4 +791,4 @@ namespace hypro {
 		delete[] ja;
 		delete[] ar;
 	}
-} // namespace
+} // namespace hypro

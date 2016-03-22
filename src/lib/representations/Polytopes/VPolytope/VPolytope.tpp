@@ -162,8 +162,8 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 				for ( const auto &rhsVertex : rhs.mVertices ) {
 					vector_t<Number> newVertex = rhsVertex.rawCoordinates();
 					newVertex( coordIndex ) = lhsVertex.at( coordIndex );
-					possibleVertices.push_back( newVertex );
-					possibleVertices.push_back( rhsVertex.rawCoordinates() );
+					possibleVertices.push_back( Point<Number>(newVertex) );
+					possibleVertices.push_back( Point<Number>(rhsVertex.rawCoordinates()) );
 				}
 			}
 		}

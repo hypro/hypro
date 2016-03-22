@@ -11,10 +11,13 @@
 #pragma once
 
 #include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Point.h"
 #include "../../util/Optimizer.h"
 #include "../../util/Permutator.h"
 #include <carl/interval/Interval.h>
 #include <map>
+#include <vector>
+#include <set>
 #include <cassert>
 
 namespace hypro {

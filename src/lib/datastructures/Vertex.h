@@ -44,14 +44,14 @@ class Vertex {
 	 * @param dimension
 	 * @param color
 	 */
-	Vertex( bool color = false ) : mPoint(), mColor( color ) {}
+	explicit Vertex( bool color = false ) : mPoint(), mColor( color ) {}
 
 	/**
 	 *
 	 * @param coordinates
 	 * @param color
 	 */
-	Vertex( const typename Point<Number>::coordinateMap& coordinates, bool color = false )
+	explicit Vertex( const typename Point<Number>::coordinateMap& coordinates, bool color = false )
 		: mPoint( coordinates ), mColor( color ) {}
 
 	/**
@@ -66,7 +66,7 @@ class Vertex {
 	 * @param coordinates
 	 * @param color
 	 */
-	Vertex( std::initializer_list<Number> coordinates, bool color = false ) : mPoint( coordinates ), mColor( color ) {}
+	explicit Vertex( std::initializer_list<Number> coordinates, bool color = false ) : mPoint( coordinates ), mColor( color ) {}
 
 	/**
 	 *
@@ -180,8 +180,12 @@ class Vertex {
 	 * @return true, if they are equal.
 	 */
 	friend bool operator==( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mColor != _v2.mColor ) return false;
-		if ( _v1.mPoint != _v2.mPoint ) return false;
+		if ( _v1.mColor != _v2.mColor ){
+			return false;
+		}
+		if ( _v1.mPoint != _v2.mPoint ){
+			return false;
+		}
 		return true;
 	}
 
@@ -203,9 +207,15 @@ class Vertex {
 	 * @return
 	 */
 	friend bool operator<( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mPoint < _v2.mPoint ) return true;
-		if ( _v1.mPoint > _v2.mPoint ) return false;
-		if ( !_v1.mColor && _v2.mColor ) return true;
+		if ( _v1.mPoint < _v2.mPoint ){
+			return true;
+		}
+		if ( _v1.mPoint > _v2.mPoint ){
+			return false;
+		}
+		if ( !_v1.mColor && _v2.mColor ){
+			return true;
+		}
 		return false;
 	}
 
@@ -237,7 +247,7 @@ class Vertex {
 		return ostr;
 	}
 };
-}  // namespace
+}  // namespace hypro
 
 namespace std {
     template<class Number>
@@ -251,4 +261,4 @@ namespace std {
             return seed;
         }
     };
-}
+} // namespace std

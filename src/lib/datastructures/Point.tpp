@@ -232,7 +232,9 @@ template <typename Number>
 void Point<Number>::reduceDimension( unsigned _dimension ) {
 	if ( _dimension < mCoordinates.rows() ) {
 		vector_t<Number> newCoordinates = vector_t<Number>( _dimension );
-		for ( unsigned pos = 0; pos < _dimension; ++pos ) newCoordinates( pos ) = mCoordinates( pos );
+		for ( unsigned pos = 0; pos < _dimension; ++pos ) {
+			newCoordinates( pos ) = mCoordinates( pos );
+		}
 		mCoordinates = newCoordinates;
 	}
 	assert( mCoordinates.rows() <= _dimension );
@@ -247,7 +249,6 @@ Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensio
 	vector_t<Number> newCoordinates = vector_t<Number>( _dimensions.size() );
 	unsigned tPos = 0;
 	for ( const auto sPos : _dimensions ) {
-		// std::cout << "get dim " << sPos << " put at " << tPos << std::endl;
 		newCoordinates( tPos ) = mCoordinates( sPos );
 		++tPos;
 	}
@@ -280,8 +281,9 @@ template <typename Number>
 std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origin, bool _radians ) const {
 	Point<Number> base = *this - _origin;
 	vector_t<double> transformedCoordinates = vector_t<double>(base.dimension());
-	for( unsigned d = 0; d < base.dimension(); ++d)
+	for( unsigned d = 0; d < base.dimension(); ++d) {
 		transformedCoordinates(d) = carl::convert<Number, double>(base.at(d));
+	}
 
 	std::vector<Number> result;
 
@@ -352,10 +354,11 @@ bool Point<Number>::move( const Point<Number> &_p ) {
 
 template <typename Number>
 Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
-	if ( A.cols() == b.rows() )
+	if ( A.cols() == b.rows() ) {
 		return Point<Number>( A * mCoordinates + b );
-	else
+	} else {
 		return Point<Number>( A * mCoordinates );
+	}
 }
 
 template <typename Number>
@@ -423,7 +426,9 @@ bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
 template <typename Number>
 bool Point<Number>::hasDimensions( const std::vector<carl::Variable> &_variables ) const {
 	for ( auto it : _variables ) {
-		if ( !hasDimension( it ) ) return false;
+		if ( !hasDimension( it ) ) {
+			return false;
+		}
 	}
 	return true;
 }
@@ -443,7 +448,9 @@ template <typename Number>
 bool Point<Number>::haveEqualCoordinate( const Point<Number> &_p2 ) const {
 	if ( dimension() == _p2.dimension() ) {
 		for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
-			if ( mCoordinates( i ) == _p2.rawCoordinates()( i ) ) return true;
+			if ( mCoordinates( i ) == _p2.rawCoordinates()( i ) ) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -465,10 +472,30 @@ Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
 }
 
 template <typename Number>
+Point<Number> &Point<Number>::operator+=( const vector_t<Number> &_rhs ) {
+	assert( this->dimension() == _rhs.rows() );
+	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+		mCoordinates( i ) += _rhs( i );
+	}
+	mHash = 0;
+	return *this;
+}
+
+template <typename Number>
 Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs.at( i );
+	}
+	mHash = 0;
+	return *this;
+}
+
+template <typename Number>
+Point<Number> &Point<Number>::operator-=( const vector_t<Number> &_rhs ) {
+	assert( this->dimension() == _rhs.rows() );
+	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+		mCoordinates( i ) -= _rhs( i );
 	}
 	mHash = 0;
 	return *this;
@@ -539,7 +566,7 @@ Number &Point<Number>::operator[]( const carl::Variable &_i ) {
 
 template <typename Number>
 Number &Point<Number>::operator[]( std::size_t _i ) {
-	if ( _i >= (std::size_t)mCoordinates.rows() ) {
+	if ( _i >= std::size_t(mCoordinates.rows()) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates = vector_t<Number>::Zero( _i + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
@@ -559,4 +586,4 @@ const Number& Point<Number>::at( unsigned _index ) const {
 	assert( _index < mCoordinates.rows() );
 	return mCoordinates( _index );
 }
-}  // namespace
+}  // namespace hypro

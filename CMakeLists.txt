@@ -56,6 +56,7 @@ option(USE_Z3 "Use Z3 for linear solving." OFF)
 option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES." OFF)
 option(EXTERNALIZE_CLASSES_ONLY_TO_TEST "An EXTERNALIZE_CLASSES for test purposes." OFF)
 option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" OFF)
+option( CLANG_TIDY "Enable usage of clang-tidy" OFF )
 
 # Include own macros.
 include( hypromacros )
@@ -192,6 +193,23 @@ add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 
 include_directories( ${GLPK_INCLUDE_DIR} )
 set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+
+if(CLANG_TIDY)
+	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+	set(CLANG_TIDY_CHECKS "*")
+	set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-llvm-header-guard")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-namespace-comments,-llvm-namespace-comment")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-braces-around-statements,-readability-braces-around-statements")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-readability-else-after-return")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-todo")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-runtime-int")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-misc-macro-parentheses")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-clang-analyzer-alpha.core.CastToStruct")
+	set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
+	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
+endif()
+
+
 
 add_subdirectory(src)
 

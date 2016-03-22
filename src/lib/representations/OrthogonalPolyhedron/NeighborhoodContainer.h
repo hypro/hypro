@@ -67,4 +67,4 @@ class NeighborhoodContainer {
 	void calculateNeighborhood( const Point<int>& p );
 };
 
-}  // namespace
+}  // namespace hypro
