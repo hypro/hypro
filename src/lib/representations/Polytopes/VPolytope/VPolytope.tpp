@@ -54,7 +54,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	// calculate all possible hyperplane intersections -> TODO: dPermutation can
 	// be improved.
 	assert(_constraints.rows() == _constants.rows());
-	polytope::dPermutator permutator = polytope::dPermutator( _constraints.rows(), _constraints.cols() );
+	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
 	std::set<vector_t<Number>> possibleVertices;

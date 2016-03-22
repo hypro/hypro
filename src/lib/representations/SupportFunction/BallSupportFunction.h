@@ -41,7 +41,7 @@ class BallSupportFunction {
 	 * @param l
 	 * @return
 	 */
-	evaluationResult<Number> evaluate( const vector_t<Number>& l ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& l ) const;
 
 	/**
 	 * @brief Evaluates the support function in the directions given in the passed matrix.
@@ -50,7 +50,7 @@ class BallSupportFunction {
 	 * @param _A Matrix holding the directions in which to evaluate.
 	 * @return Vector of support values.
 	 */
-	std::vector<evaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
 
 	/**
 	 * @brief Check if point is contained in the support function.

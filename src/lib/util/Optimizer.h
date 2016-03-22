@@ -1,9 +1,10 @@
 #pragma once
 
-#include <carl/util/Singleton.h>
+#include "EvaluationResult.h"
+#include "VariablePool.h"
 #include "../config.h"
 #include "smtrat/SimplexSolver.h"
-#include "VariablePool.h"
+#include <carl/util/Singleton.h>
 
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
@@ -55,9 +56,10 @@ namespace hypro {
 		void setVector(const vector_t<Number>& _vector);
 		void clear();
 
-		std::pair<Number,SOLUTION> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
+		EvaluationResult<Number> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
 		bool checkConsistency() const;
-		std::pair<vector_t<Number>, SOLUTION> getInternalPoint() const;
+		bool checkPoint(const Point<Number>& _point) const;
+		EvaluationResult<Number> getInternalPoint() const;
 		std::vector<std::size_t> redundantConstraints() const;
 
 	private:

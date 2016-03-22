@@ -115,6 +115,9 @@ namespace reachability {
 
 			Representation deltaValuation = initialPair.second.linearTransformation( resultMatrix, translation );
 
+			unsigned deltaSet = plotter.addObject(deltaValuation.vertices());
+			plotter.setObjectColor(deltaSet, colors[lila]);
+
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
@@ -122,6 +125,8 @@ namespace reachability {
 
 			// R_0(X0) U R_delta(X0)
 			Representation unitePolytope = initialPair.second.unite( deltaValuation );
+			assert(unitePolytope.contains(initialPair.second));
+			assert(unitePolytope.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
@@ -149,7 +154,19 @@ namespace reachability {
 
 			// hullPolytope +_minkowski hausPoly
 			firstSegment = unitePolytope.minkowskiSum( hausPoly );
-			//assert(firstSegment.contains(unitePolytope));
+
+			unsigned delt = plotter.addObject(deltaValuation.vertices());
+			plotter.setObjectColor(delt, colors[red]);
+			unsigned unite = plotter.addObject(unitePolytope.vertices());
+			plotter.setObjectColor(unite, colors[orange]);
+			unsigned hull = plotter.addObject(firstSegment.vertices());
+			plotter.setObjectColor(hull, colors[petrol]);
+
+			plotter.plot2d();
+
+			assert(firstSegment.contains(initialPair.second));
+			assert(firstSegment.contains(deltaValuation));
+			assert(firstSegment.contains(unitePolytope));
 
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";

@@ -6,6 +6,8 @@
 
 #pragma once
 #include "../VariablePool.h"
+#include "../../datastructures/Point.h"
+#include <carl/interval/Interval.h>
 
 namespace hypro {
 
@@ -24,6 +26,62 @@ namespace hypro {
 			row -= carl::convert<Number,smtrat::Rational>(_constants(rowIndex));
 			//std::cout << "atempt to insert constraint " << rowIndex << " (" << _constraints.row(rowIndex) << ", " << _constants(rowIndex) << ")" << std::endl;
 			constraints.insert(std::make_pair(smtrat::FormulaT(row,_rel), rowIndex));
+		}
+		return constraints;
+	}
+
+	template<typename Number>
+	static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula(const std::vector<carl::Interval<Number>>& _intervals) {
+		VariablePool& pool = VariablePool::getInstance();
+
+		std::unordered_map<smtrat::FormulaT, std::size_t> constraints;
+		for(unsigned intervalIndex = 0; intervalIndex < _intervals.size(); ++intervalIndex) {
+			carl::MultivariatePolynomial<smtrat::Rational> lower;
+			switch(_intervals[intervalIndex].lowerBoundType()){
+				case carl::BoundType::STRICT:{
+					lower += pool.carlVarByIndex(intervalIndex) - carl::convert<Number,smtrat::Rational>(_intervals[intervalIndex].lower());
+					constraints.insert(std::make_pair(smtrat::FormulaT(lower, carl::Relation::GREATER), intervalIndex));
+					break;
+				}
+				case carl::BoundType::WEAK:{
+					lower += pool.carlVarByIndex(intervalIndex) - carl::convert<Number,smtrat::Rational>(_intervals[intervalIndex].lower());
+					constraints.insert(std::make_pair(smtrat::FormulaT(lower, carl::Relation::GEQ), intervalIndex));
+					break;
+				}
+				case carl::BoundType::INFTY:{
+					break;
+				}
+			}
+			carl::MultivariatePolynomial<smtrat::Rational> upper;
+			switch(_intervals[intervalIndex].upperBoundType()){
+				case carl::BoundType::STRICT:{
+					upper += pool.carlVarByIndex(intervalIndex) - carl::convert<Number,smtrat::Rational>(_intervals[intervalIndex].lower());
+					constraints.insert(std::make_pair(smtrat::FormulaT(upper, carl::Relation::LESS), intervalIndex));
+					break;
+				}
+				case carl::BoundType::WEAK:{
+					upper += pool.carlVarByIndex(intervalIndex) - carl::convert<Number,smtrat::Rational>(_intervals[intervalIndex].lower());
+					constraints.insert(std::make_pair(smtrat::FormulaT(upper, carl::Relation::LEQ), intervalIndex));
+					break;
+				}
+				case carl::BoundType::INFTY:{
+					break;
+				}
+			}
+		}
+		return constraints;
+	}
+
+	template<typename Number>
+	static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula(const Point<Number>& _point) {
+		VariablePool& pool = VariablePool::getInstance();
+
+		std::unordered_map<smtrat::FormulaT, std::size_t> constraints;
+		for(unsigned d = 0; d < _point.dimension(); ++d) {
+			carl::MultivariatePolynomial<smtrat::Rational> row;
+			row += -carl::convert<Number,smtrat::Rational>(_point.at(d)) + pool.carlVarByIndex(d);
+			//std::cout << "atempt to insert constraint " << d << " (" << _constraints.row(d) << ", " << _constants(d) << ")" << std::endl;
+			constraints.insert(std::make_pair(smtrat::FormulaT(row,carl::Relation::EQ), d));
 		}
 		return constraints;
 	}

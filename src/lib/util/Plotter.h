@@ -47,16 +47,21 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
   private:
 	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
-	std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
-	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
-	std::multimap<unsigned, Point<Number>> mPoints;
-	std::multimap<unsigned, vector_t<Number>> mVectors;
+	std::multimap<unsigned, std::vector<Point<Number>>> mOriginalObjects;
+	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mOriginalPlanes;
+	std::multimap<unsigned, Point<Number>> mOriginalPoints;
+	std::multimap<unsigned, vector_t<Number>> mOriginalVectors;
+	mutable std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
+	mutable std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
+	mutable std::multimap<unsigned, Point<Number>> mPoints;
+	mutable std::multimap<unsigned, vector_t<Number>> mVectors;
+	mutable std::pair<int, int> mLastDimensions;
 	std::map<unsigned, std::size_t> mObjectColors;
 	gnuplotSettings mSettings;
 	unsigned mId;
 
   protected:
-	Plotter() : mId( 1 ) {}
+	Plotter() : mLastDimensions(std::make_pair(-1,-1)), mId( 1 ) {}
 
   public:
 	~Plotter();
@@ -73,15 +78,14 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @details
 	 */
 	void plot2d() const;
-
 	void plotTex() const;
 
-	unsigned addObject( const std::vector<Point<Number>>& _points, bool sorted = false );
-	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points, bool sorted = false );
+	unsigned addObject( const std::vector<Point<Number>>& _points );
+	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points );
 	unsigned addObject( const std::vector<Hyperplane<Number>>& _planes );
 	unsigned addObject( const Hyperplane<Number>& _plane );
-	void addPoint( const Point<Number>& _point );
-	void addPoints( const std::vector<Point<Number>>& _points );
+	unsigned addPoint( const Point<Number>& _point );
+	unsigned addPoints( const std::vector<Point<Number>>& _points );
 	void addVector( const vector_t<Number>& _vector );
 
 	void setObjectColor( unsigned _id, const std::size_t _color );
@@ -89,8 +93,9 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
   private:
 	// auxiliary functions
 	void init( const std::string& _filename );
-	std::vector<Point<Number>> grahamScan( const std::vector<Point<Number>>& _points );
-	bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
+	static std::vector<Point<Number>> grahamScan( const std::vector<Point<Number>>& _points );
+	static bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
+	void prepareObjects(unsigned firstDim, unsigned secondDim) const;
 };
 }
 

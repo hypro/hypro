@@ -12,11 +12,12 @@
 
 #pragma once
 
+#include "util.h"
 #include "../../config.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Hyperplane.h"
 #include "../../util/Optimizer.h"
-#include "util.h"
+#include "../../util/convexHull.h"
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
@@ -25,7 +26,7 @@ namespace hypro {
 
 /*
 * This class defines a support Function object representing a polytope (might not be closed)
-* SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
+* SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
 */
 template <typename Number>
 class PolytopeSupportFunction {
@@ -39,6 +40,7 @@ class PolytopeSupportFunction {
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
 	PolytopeSupportFunction( const std::vector<Hyperplane<Number>>& _planes );
+	PolytopeSupportFunction( const std::vector<Point<Number>>& _points );
 	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
 	~PolytopeSupportFunction();
 
@@ -60,7 +62,7 @@ class PolytopeSupportFunction {
 	 * @param l
 	 * @return
 	 */
-	evaluationResult<Number> evaluate( const vector_t<Number>& l ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& l ) const;
 
 	/**
 	 * @brief Evaluates the support function in the directions given in the passed matrix.
@@ -69,7 +71,7 @@ class PolytopeSupportFunction {
 	 * @param _A Matrix holding the directions in which to evaluate.
 	 * @return Vector of support values.
 	 */
-	std::vector<evaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
 
 	/**
 	 * @brief Check if point is contained in the support function.

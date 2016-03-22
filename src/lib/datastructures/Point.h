@@ -137,7 +137,7 @@ class Point {
 	void coordinatesFromVector( const vector_t<Number>& vector );
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
-	void reduceToDimensions( std::vector<unsigned> _dimensions );
+	Point<Number> reduceToDimensions( std::vector<unsigned> _dimensions ) const;
 
 	std::vector<carl::Variable> variables() const;
 
@@ -196,7 +196,7 @@ class Point {
 		}
 		return res;
 	}
-        
+
         /**
          * removes any duplicate points in a given PointVector
          * @param PointVec the point vector which should get checked for duplicates
@@ -204,7 +204,7 @@ class Point {
          */
 
         static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& PointVec){
-              std::set<Point<Number>> PointSet = std::set<Point<Number>>(); 
+              std::set<Point<Number>> PointSet = std::set<Point<Number>>();
               //writes all the point entries into a set (set removes duplicates)
               for (unsigned i; i<PointVec.size(); ++i){
                   PointSet.insert(PointVec[i]);
@@ -214,7 +214,7 @@ class Point {
               std::copy(PointSet.begin(), PointSet.end(), res.begin());
               return res;
         }
-        
+
 
 	/**
 	 * Change the coordinates of the point. Moving the point one step in a given dimension.

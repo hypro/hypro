@@ -28,7 +28,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 		directions( 2 * i + 1, i ) = 1;                                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
 	}
 
-	std::vector<evaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
+	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension

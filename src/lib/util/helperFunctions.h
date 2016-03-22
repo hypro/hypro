@@ -3,14 +3,12 @@
  * @file helperFunctions.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
- * 
+ *
  * @version	2016-03-18
  */
 
-
-
-
-
+#pragma once
+#include "Permutator.h"
 
 namespace hypro {
 
@@ -42,7 +40,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 	}
 
 	//copy directions2d into directions
-	polytope::dPermutator permutator(dimension, 2);
+	Permutator permutator(dimension, 2);
 	std::vector<unsigned> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();

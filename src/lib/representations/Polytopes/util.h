@@ -3,69 +3,20 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
  * @since   2014-08-11
- * @version 2014-08-22
+ * @version 2016-03-22
  */
 
 #pragma once
 
-#include <cassert>
-#include <glpk.h>
-
+#include "Cone.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Hyperplane.h"
 #include <carl/formula/Constraint.h>
-#include "Cone.h"
+#include <cassert>
+#include <glpk.h>
 
 namespace hypro {
 namespace polytope {
-
-class dPermutator {
-private:
-	std::vector<unsigned> mCurrent;
-	unsigned max;
-	bool mEnd;
-
-public:
-
-	dPermutator(std::size_t totalSize, std::size_t d, bool duplicates = false) : mCurrent(d,0), max(totalSize), mEnd(false) {
-		assert(d <= totalSize);
-		if(d <= totalSize) {
-			for(unsigned i = 0; i < d; ++i)
-				mCurrent[i] = d-i-1;
-		}
-	}
-
-	std::vector<unsigned> operator()() {
-		if(mEnd) {
-			return mCurrent;
-		}
-
-		std::vector<unsigned> tmp = mCurrent;
-
-		// find pos to iterate
-		std::size_t pos = 0;
-		while(pos < mCurrent.size() && mCurrent.at(pos) == max-pos-1) {
-			++pos;
-		}
-
-		if(pos == mCurrent.size()) {
-			mEnd = true;
-			return tmp;
-		}
-
-		mCurrent[pos] += 1;
-		while(pos > 0) {
-			--pos;
-			mCurrent[pos] = mCurrent[pos+1]+1;
-		}
-
-		return tmp;
-	}
-
-	bool end() const {
-		return mEnd;
-	}
-};
 
 template <typename Number>
 class Fan {

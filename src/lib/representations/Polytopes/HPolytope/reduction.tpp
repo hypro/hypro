@@ -137,7 +137,7 @@ namespace hypro {
 
 		res.push_back(setOfPoints);
 	} else {
-		polytope::dPermutator permutator(cutPointsAround_a_b.size(), cutPointsAround_a_b.at(0).dimension());
+		Permutator permutator(cutPointsAround_a_b.size(), cutPointsAround_a_b.at(0).dimension());
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
@@ -293,7 +293,7 @@ namespace hypro {
 		 else {
 		   unsigned permutation_count=0;
 		   //std::cout << "Start permutation with " << membersOfFacets[i].size() << "/"<< vertices.size() << " (size) and " <<this->dimension() << std::endl;
-		   polytope::dPermutator permutator(membersOfFacets[i].size(), this->dimension());
+		   Permutator permutator(membersOfFacets[i].size(), this->dimension());
 			  std::vector<unsigned> permutation;
 				while(!permutator.end()) {
 					permutation = permutator();
@@ -320,7 +320,7 @@ namespace hypro {
 	 std::map<std::pair<unsigned,unsigned>, double> scalarproductOfFacets;
 	 for(auto memberOfVertex: membersOfVertices){
 	   if(memberOfVertex.size()>1){
-	  polytope::dPermutator permutator(memberOfVertex.size(), 2);
+	  Permutator permutator(memberOfVertex.size(), 2);
 	  std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
@@ -657,7 +657,7 @@ namespace hypro {
 			unsigned permutation_count=0;
 
 			// compute weight a
-			polytope::dPermutator permutator_a(vertices_a.size(), this->dimension());
+			Permutator permutator_a(vertices_a.size(), this->dimension());
 			  std::vector<unsigned> permutation;
 				while(!permutator_a.end()) {
 					permutation = permutator_a();
@@ -676,7 +676,7 @@ namespace hypro {
 
 			 // compute weight b
 			 permutation_count=0;
-			 polytope::dPermutator permutator_b(vertices_b.size(), this->dimension());
+			 Permutator permutator_b(vertices_b.size(), this->dimension());
 				while(!permutator_b.end()) {
 					permutation = permutator_b();
 				  //std::cout << "Permutation_b for size: " << permutation << std::endl;

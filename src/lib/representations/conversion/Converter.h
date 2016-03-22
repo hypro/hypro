@@ -1,12 +1,12 @@
 #pragma once
 
+#include "util.h"
 #include "../Box/Box.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
 #include "../Polytopes/VPolytope/VPolytope.h"
 #include "../SupportFunction/SupportFunction.h"
 #include "../Zonotope/Zonotope.h"
 #include "../../util/pca.h"
-#include "util.h"
 //#include "../../util/Plotter.h"
 namespace hypro {
 

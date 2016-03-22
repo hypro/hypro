@@ -27,6 +27,8 @@ gnuplotSettings& Plotter<Number>::rSettings() {
 
 template <typename Number>
 void Plotter<Number>::plot2d() const {
+	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+
 	mOutfile.open( mFilename + ".plt" );
 
 	if(!mVectors.empty()){
@@ -218,6 +220,8 @@ void Plotter<Number>::plot2d() const {
 
 template<typename Number>
 void Plotter<Number>::plotTex() const {
+	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+
 	mOutfile.open( mFilename + ".tex" );
 
 	if ( !mObjects.empty() || !mPoints.empty() ) {
@@ -356,43 +360,19 @@ void Plotter<Number>::plotTex() const {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points, bool sorted ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points ) {
 	// reduce dimensions
 	if(!_points.empty()){
-		if ( !sorted ) {
-			std::vector<Point<Number>> sortedPoints = _points;
-			if(_points.begin()->dimension > 2){
-				std::vector<unsigned> dimensions;
-				dimensions.push_back(mSettings.dimensions.first);
-				dimensions.push_back(mSettings.dimensions.second);
-
-				for(unsigned i = 0 ; i<sortedPoints.size(); ++i)
-					sortedPoints[i].reduceToDimensions(mSettings.dimensions.first);
-			}
-
-			sortedPoints = grahamScan( sortedPoints );
-			mObjects.insert( std::make_pair( mId, sortedPoints ) );
-		} else {
-			std::vector<Point<Number>> sortedPoints = _points;
-			if(_points.begin()->dimension > 2){
-				std::vector<unsigned> dimensions;
-				dimensions.push_back(mSettings.dimensions.first);
-				dimensions.push_back(mSettings.dimensions.second);
-
-				for(unsigned i = 0 ; i<sortedPoints.size(); ++i)
-					sortedPoints[i].reduceToDimensions(mSettings.dimensions.first);
-			}
-			mObjects.insert( std::make_pair( mId, sortedPoints ) );
-		}
+		mOriginalObjects.insert( std::make_pair( mId, _points ) );
 		return mId++;
 	}
 	return 0;
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>> &_points, bool sorted ) {
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>> &_points ) {
 	for ( const auto &part : _points ) {
-		addObject(part, sorted);
+		addObject(part);
 		--mId;
 	}
 	return mId++;
@@ -400,7 +380,7 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 
 template<typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
-	mPlanes.insert( std::make_pair( mId++, _planes ) );
+	mOriginalPlanes.insert( std::make_pair( mId++, _planes ) );
 	return mId;
 }
 
@@ -408,34 +388,28 @@ template<typename Number>
 unsigned Plotter<Number>::addObject( const Hyperplane<Number>& _plane ) {
 	std::vector<Hyperplane<Number>> tmp;
 	tmp.push_back(_plane);
-	mPlanes.insert( std::make_pair( mId++, tmp ) );
+	mOriginalPlanes.insert( std::make_pair( mId++, tmp ) );
 	return mId;
 }
 
 template<typename Number>
-void Plotter<Number>::addPoint( const Point<Number>& _point ) {
-	if(_point.dimension() > 2) {
-		std::vector<unsigned> dimensions;
-		dimensions.push_back(mSettings.dimensions.first);
-		dimensions.push_back(mSettings.dimensions.second);
-		Point<Number> tmp = _point;
-		tmp.reduceToDimensions(dimensions);
-		mPoints.insert(std::make_pair( mId++, tmp));
-	} else {
-		mPoints.insert( std::make_pair( mId++, _point ) );
-	}
+unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
+	mOriginalPoints.insert( std::make_pair( mId, _point ) );
+	return mId++;
 }
 
 template<typename Number>
-void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
+unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for(const auto& p : _points){
 		addPoint(p);
+		--mId;
 	}
+	return mId++;
 }
 
 template<typename Number>
 void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
-	mVectors.insert( std::make_pair(mId++, _vector) );
+	mOriginalVectors.insert( std::make_pair(mId++, _vector) );
 }
 
 template <typename Number>
@@ -573,7 +547,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		stack.pop();
 	}
 
-	return std::move(res);
+	return res;
 }
 
 template <typename Number>
@@ -591,4 +565,53 @@ bool Plotter<Number>::isLeftTurn( const Point<Number> &a, const Point<Number> &b
 
 	return ( val > 0 );
 }
+
+template<typename Number>
+void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) const {
+	if(mLastDimensions.first < 0 || (unsigned(mLastDimensions.first) != firstDim && unsigned(mLastDimensions.second) != secondDim)){
+		std::vector<unsigned> targetDimensions;
+		targetDimensions.push_back(firstDim);
+		targetDimensions.push_back(secondDim);
+
+		// reduce and sort objects
+		if(!mOriginalObjects.empty()){
+			for(const auto& objPair : mOriginalObjects){
+				vector<Point<Number>> tmp;
+				for(const auto& point : objPair.second)
+					tmp.push_back(point.reduceToDimensions(targetDimensions));
+
+				// sort
+				tmp = grahamScan(tmp);
+				mObjects.insert(std::make_pair(objPair.first, tmp));
+			}
+		}
+
+		// reduce planes
+		if(!mOriginalPlanes.empty()){
+			for(const auto& planePair : mOriginalPlanes)
+				mPlanes.insert(planePair);
+		}
+
+		// reduce points
+		if(!mOriginalPoints.empty()){
+			for(const auto& pointPair : mOriginalPoints)
+				mPoints.insert(std::make_pair(pointPair.first, pointPair.second.reduceToDimensions(targetDimensions)));
+		}
+
+		// reduce vectors
+		if(!mOriginalVectors.empty()){
+			for(const auto& vectorPair : mOriginalVectors){
+				vector_t<Number> tmp = vector_t<Number>(2);
+				tmp(0) = vectorPair.second(mSettings.dimensions.first);
+				tmp(0) = vectorPair.second(mSettings.dimensions.second);
+				mVectors.insert(std::make_pair(vectorPair.first, tmp));
+			}
+		}
+
+		// update mLastDimensions
+		mLastDimensions.first = firstDim;
+		mLastDimensions.second = secondDim;
+	}
 }
+
+} // namespace hypro
