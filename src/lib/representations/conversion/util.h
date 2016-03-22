@@ -23,7 +23,7 @@ namespace hypro{
  */
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
  //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -59,15 +59,12 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
             
-            //TODO implement this method
-            //matrix_t newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
-            
             //call of the recursive sub-function for the current face
-            //recursiveSolutions[i] = computeBoundaryPointsRecursive(face, newDirections, curDim-1);
+            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
            
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
-        //recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
+        recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
         res = recursiveSolutions;
         return res;
    } else {
@@ -80,7 +77,7 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
 template <typename Number, typename Converter>
-Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
     //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -116,11 +113,8 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
             
-            //TODO implement this method
-            matrix_t<Number> newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
-            
             //recursive call of this function for the current face
-            recursiveSolutions[i] = computeBoundaryPointsRecursive(curFace, newDirections, curDim-1);
+            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
            
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results

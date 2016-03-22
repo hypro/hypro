@@ -12,14 +12,16 @@
 
 #pragma once
 
+
+
+#include "../../datastructures/Hyperplane.h"
+#include "ZUtility.h"
+
 #include <vector>
 #include <eigen3/Eigen/Dense>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
-
-#include "../../datastructures/Hyperplane.h"
-#include "ZUtility.h"
 
 namespace hypro {
 
