@@ -34,7 +34,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 
 			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
 			std::size_t dim = vertices.size();
-			polytope::dPermutator permutator(dimension, dim);
+			Permutator permutator(dimension, dim);
 
 			std::vector<unsigned> permutation;
 			while(!permutator.end()) {
@@ -152,8 +152,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     }
 
     //lets the support function evaluate the offset of the halfspaces for each direction
-    std::vector<evaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    //std::vector<evaluationResult<Number>> offsets;
+    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+    //std::vector<EvaluationResult<Number>> offsets;
     //for(unsigned i = 0; i < templateDirectionMatrix.rows(); ++i)
     //	offsets.push_back(_source.evaluate(templateDirectionMatrix.row(i)));
     assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));

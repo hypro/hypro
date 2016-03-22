@@ -53,7 +53,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
 			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
 			std::size_t size = points.size();
-			polytope::dPermutator permutator(mDimension, size);
+			Permutator permutator(mDimension, size);
 			std::vector<unsigned> permutation;
 			while(!permutator.end()) {
 				permutation = permutator();
@@ -183,7 +183,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
 
-		polytope::dPermutator permutator(mHPlanes.size(), dim);
+		Permutator permutator(mHPlanes.size(), dim);
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
@@ -422,9 +422,9 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( const Point<Number> &point )
 }
 
 template <typename Number, typename Converter>
-std::pair<Number, SOLUTION> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
+EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty())
-		return std::make_pair( 1, INFTY );
+		return EvaluationResult<Number>( 1, INFTY );
 
 	//reduceNumberRepresentation();
 
@@ -506,20 +506,20 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	// evaluation of rhs in directions of lhs
 	std::cout << "evaluation of rhs in directions of lhs" << std::endl;
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
-		std::pair<Number, SOLUTION> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
-		if ( evalRes.second == INFTY ) {
+		EvaluationResult<Number> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
+		if ( evalRes.errorCode == INFTY ) {
 			std::cout << __func__ << " Evaluated against " <<
 			mHPlanes.at(i).normal() << std::endl;
 			std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
-		} else if ( evalRes.second == INFEAS ) {
+		} else if ( evalRes.errorCode == INFEAS ) {
 			std::cout << "EMPTY" << std::endl;
 			return Empty();
 		} else {
-			result = mHPlanes.at( i ).offset() + evalRes.first;
+			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
 			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
 			std::cout << __func__ << " Evaluated against " <<
-			mHPlanes.at(i).normal() << " results in a distance " << evalRes.first << std::endl;
+			mHPlanes.at(i).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 			std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
 		}
 	}
@@ -527,20 +527,20 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	// evaluation of lhs in directions of rhs
 	std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
-		std::pair<Number, SOLUTION> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
-		if ( evalRes.second == INFTY ) {
+		EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
+		if ( evalRes.errorCode == INFTY ) {
 			std::cout << __func__ << " Evaluated against " <<
 			rhs.constraints().at( i ).normal() << std::endl;
 			std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
-		} else if ( evalRes.second == INFEAS ) {
+		} else if ( evalRes.errorCode == INFEAS ) {
 			std::cout << "EMPTY" << std::endl;
 			return Empty();
 		} else {
-			result = rhs.constraints().at( i ).offset() + evalRes.first;
+			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
 			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
 			std::cout << __func__ << " Evaluated against " <<
-			rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.first << std::endl;
+			rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 		}
 	}
 	std::cout << "Result: " << res << std::endl;
@@ -605,16 +605,16 @@ template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
 	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	for ( const auto &plane : rhs ) {
-		std::pair<Number, SOLUTION> evalRes = this->evaluate( plane.normal() );
+		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
 
-		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.first  << " orig offset: " << plane.offset() << "\t" ;
-		if ( evalRes.second == INFEAS ) {
+		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.supportValue  << " orig offset: " << plane.offset() << "\t" ;
+		if ( evalRes.errorCode == INFEAS ) {
 			std::cout << "INFEAS" << std::endl;
 			return false;  // empty!
-		} else if ( evalRes.second == INFTY ) {
+		} else if ( evalRes.errorCode == INFTY ) {
 			std::cout << "INFTY" << std::endl;
 			continue;
-		} else if ( evalRes.first < plane.offset() ) {
+		} else if ( evalRes.supportValue < plane.offset() ) {
 			std::cout << "Too large" << std::endl;
 			return false;
 		}

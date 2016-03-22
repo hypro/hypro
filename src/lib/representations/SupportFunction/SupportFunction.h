@@ -33,8 +33,8 @@ class SupportFunctionT {
 
         SupportFunctionT<Number,Converter>& operator=(SupportFunctionT<Number,Converter> _orig );
 
-        evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-	std::vector<evaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
+        EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?

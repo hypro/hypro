@@ -9,10 +9,9 @@
 #include "../../lib/datastructures/hybridAutomata/Transition.h"
 #include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../lib/representations/GeometricObject.h"
-#include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/algorithms/reachability/forwardReachability.h"
-
+#include <carl/core/VariablePool.h>
 
 using namespace hypro;
 using namespace carl;

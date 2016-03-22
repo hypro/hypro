@@ -46,7 +46,7 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Point<Number>>& _vertices)
-        : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, HPolytopeT<Number,Converter>(_vertices).constraints())) {
+        : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, _vertices)) {
         //handled by initializer list
     }
 
@@ -80,16 +80,16 @@ namespace hypro{
 // FUNCTIONS
 
     template<typename Number, typename Converter>
-    evaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction ) const {
-        evaluationResult<Number> tmp = content->evaluate(_direction);
+    EvaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction ) const {
+        EvaluationResult<Number> tmp = content->evaluate(_direction);
         std::cout << __func__ << "(" << _direction << ") :" << tmp.supportValue << std::endl;
         return tmp;
     }
 
     template<typename Number, typename Converter>
-    std::vector<evaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+    std::vector<EvaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
         std::cout << __func__ << " " << convert<Number,double>(_directions) << std::endl;
-        std::vector<evaluationResult<Number>> res = content->multiEvaluate(_directions);
+        std::vector<EvaluationResult<Number>> res = content->multiEvaluate(_directions);
         assert(res.size() == std::size_t(_directions.rows()));
         return res;
     }
@@ -228,7 +228,10 @@ namespace hypro{
         assert(_mat.rows() == _vec.rows());
         bool empty = false;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
-            assert(content->evaluate(_mat.row(rowI)).errorCode != SOLUTION::INFEAS);
+        	if(content->evaluate(_mat.row(rowI)).errorCode == SOLUTION::INFEAS){
+        		empty = true;
+        		break;
+        	}
             std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
             if(content->evaluate(-(_mat.row(rowI))).supportValue <= -(_vec(rowI))){
                 std::cout << "EMPTY" << std::endl;

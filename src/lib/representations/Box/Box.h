@@ -10,10 +10,12 @@
 
 #pragma once
 
+#include "../../datastructures/Hyperplane.h"
+#include "../../util/Optimizer.h"
+#include "../../util/Permutator.h"
+#include <carl/interval/Interval.h>
 #include <map>
 #include <cassert>
-#include <carl/interval/Interval.h>
-#include "../../datastructures/Hyperplane.h"
 
 namespace hypro {
 
@@ -65,7 +67,7 @@ class BoxT {
 	}
 
 	BoxT( const std::vector<carl::Interval<Number>>& _intervals );
-	BoxT( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants );
+	BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants );
 	BoxT( const std::set<Point<Number>>& _points );
 	BoxT( const std::vector<Point<Number>>& _points );
 	//BoxT( const std::set<Vertex<Number>>& _points );
@@ -184,11 +186,16 @@ class BoxT {
 	 **************************************************************************/
 
 	std::size_t dimension() const { return mLimits.first.dimension(); }
+	void removeRedundancy() {}
+	std::size_t size() const;
 
+	std::pair<bool, BoxT> satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, BoxT> satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
 	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
 	BoxT<Number,Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
+	BoxT<Number,Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const BoxT<Number,Converter>& box ) const;
 	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;

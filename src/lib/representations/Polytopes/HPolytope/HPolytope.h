@@ -8,13 +8,14 @@
 
 #pragma once
 
+#include "util.h"
 #include "../util.h"
-#include <cassert>
 #include "../../../util/convexHull.h"
 #include "../../../util/vertexEnumeration.h"
 #include "../../../util/Optimizer.h"
-#include "util.h"
+#include "../../../util/Permutator.h"
 
+#include <cassert>
 
 namespace hypro {
 
@@ -96,7 +97,7 @@ public:
 
 	bool isExtremePoint( const vector_t<Number>& point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
-	std::pair<Number, SOLUTION> evaluate( const vector_t<Number>& _direction ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 
 	typename HyperplaneVector::iterator begin();
 	typename HyperplaneVector::const_iterator begin() const;

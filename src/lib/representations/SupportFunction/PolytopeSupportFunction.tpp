@@ -36,6 +36,22 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hype
 	}
 }
 
+template<typename Number>
+PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
+	assert( !_points.empty() );
+	mDimension = _points[0].dimension();
+
+	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( _points ).first;
+	mConstraints = matrix_t<Number>( facets.size(), mDimension );
+	mConstraintConstants = vector_t<Number>( facets.size() );
+	unsigned pos = 0;
+	for ( auto &facet : facets ) {
+		mConstraints.row( pos ) = facet->hyperplane().normal().transpose();
+		mConstraintConstants( pos ) = facet->hyperplane().offset();
+		++pos;
+	}
+}
+
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mDimension(mConstraints.cols() ) {
@@ -73,14 +89,14 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 }
 
 template <typename Number>
-evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
-	evaluationResult<Number> result;
+EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
+	EvaluationResult<Number> result;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(mConstraints);
 	opt.setVector(mConstraintConstants);
 
-	std::pair<Number,SOLUTION> res = opt.evaluate(l);
+	EvaluationResult<Number> res = opt.evaluate(l);
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
@@ -88,16 +104,13 @@ evaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 
 	assert( l.rows() == mDimension );
 
-	result.supportValue = res.first;
-	result.errorCode = res.second;
-
-	return result;
+	return res;
 }
 
 template <typename Number>
-std::vector<evaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
-	std::vector<evaluationResult<Number>> res;
+	std::vector<EvaluationResult<Number>> res;
 
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));

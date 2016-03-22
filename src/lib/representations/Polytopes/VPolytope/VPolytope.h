@@ -14,6 +14,7 @@
 #include "../../../util/convexHull.h"
 #include "../../../util/smtrat/SimplexSolver.h"
 #include "../../../util/Optimizer.h"
+#include "../../../util/Permutator.h"
 #include "../../../datastructures/Facet.h"
 
 namespace hypro {

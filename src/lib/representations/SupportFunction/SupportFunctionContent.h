@@ -94,6 +94,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances,
 					 SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Hyperplane<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
+	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& _a,
@@ -125,13 +126,20 @@ class SupportFunctionContent {
 		return obj;
 	}
 
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type,
+															const std::vector<Point<Number>>& _points ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _points, _type ) );
+		obj->pThis = obj;
+		return obj;
+	}
+
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
 		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
-                std::cout << "Old adress: " << &*orig << ", new adress: " << &*obj << "\n";
-                std::cout << "Old object:" << "\n";
-                orig->print();
-                std::cout << "New object:" << "\n";
-                obj->print();
+                //std::cout << "Old adress: " << &*orig << ", new adress: " << &*obj << "\n";
+                //std::cout << "Old object:" << "\n";
+                //orig->print();
+                //std::cout << "New object:" << "\n";
+                //obj->print();
 		obj->pThis = obj;
 		return obj;
 	}
@@ -140,8 +148,8 @@ class SupportFunctionContent {
 
 	std::shared_ptr<SupportFunctionContent<Number>>& operator=( const std::shared_ptr<SupportFunctionContent<Number>>& _orig ) ;
 
-	evaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-	std::vector<evaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
 	std::size_t dimension() const;
 	SF_TYPE type() const;

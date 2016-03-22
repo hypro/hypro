@@ -13,11 +13,9 @@
 #include "../../datastructures/Hyperplane.h"
 #include "../SupportFunction/SupportFunction.h"
 
-
-
 namespace hypro{
-    
-    
+
+
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
@@ -39,9 +37,9 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
         for(unsigned i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
-            
+
             //lets the support function evaluate the offset of the halfspace for the current direction
-            evaluationResult<Number> offset = sf.evaluate(curNormal);
+            EvaluationResult<Number> offset = sf.evaluate(curNormal);
             //if result is infinity, try the next direction
             if(offset.errorCode == SOLUTION::INFTY){
                 continue;
@@ -49,22 +47,22 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
             Number constant = offset.supportValue;
             //creates the current halfspace
             Hyperplane<Number> curPlane = Hyperplane<Number>(curNormal, constant);
-            
+
             //creates a hyperplanevector containing only the recently created hyperplane
             std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>(1);
             curPlaneVector[0] = curPlane;
-            
+
             //intersects the current support function with the hyperplane
             SupportFunctionT<Number,Converter> curFace = sf.intersect(SupportFunctionT<Number, Converter>(curPlaneVector));
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
-            
+
             //TODO implement this method
             //matrix_t newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
-            
+
             //call of the recursive sub-function for the current face
             //recursiveSolutions[i] = computeBoundaryPointsRecursive(face, newDirections, curDim-1);
-           
+
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         //recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
@@ -73,8 +71,8 @@ std::vector<Point<Number>> computeBoundaryPoints (const SupportFunctionT<Number,
    } else {
         //TODO implement this method
         //return sf.toPoint();
-   }    
-}    
+   }
+}
 
     /*
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
@@ -88,7 +86,7 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
     //only continue if directions and object match dimensionwise
     assert (dim == sf.dimension());
     //generates an empty Point for the return value
-    Point<Number> res;    
+    Point<Number> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
     if (curDim > 0){
         //generates an empty PointVector for the return values of the recursive calls
@@ -96,9 +94,9 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
         for(unsigned i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
-            
+
             //lets the support function evaluate the offset of the halfspace for the current direction
-            evaluationResult<Number> offset = sf.evaluate(curNormal);
+            EvaluationResult<Number> offset = sf.evaluate(curNormal);
             //if result is infinity, try the next direction
             if(offset.errorCode == SOLUTION::INFTY){
                 continue;
@@ -106,34 +104,34 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
             Number constant = offset.supportValue;
             //creates the current halfspace
             Hyperplane<Number> curPlane = Hyperplane<Number>(curNormal, constant);
-            
+
             //creates a hyperplanevector containing only the recently created hyperplane
             std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>(1);
             curPlaneVector[0] = curPlane;
-            
+
             //intersects the current support function with the hyperplane
             SupportFunctionT<Number,Converter> curFace = sf.intersect(SupportFunctionT<Number, Converter>(curPlaneVector));
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
-            
+
             //TODO implement this method
             matrix_t<Number> newDirections = computeOrthogonalTemplateDirections(curNormal, constant, numberOfDirections);
-            
+
             //recursive call of this function for the current face
             recursiveSolutions[i] = computeBoundaryPointsRecursive(curFace, newDirections, curDim-1);
-           
+
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
-            
+
         //computes the arithmetic mean as an approximation of the centroid
         res = computeArithmeticMeanPoint(recursiveSolutions);
         return res;
    } else {
         //TODO implement this method
         //return sf.toPoint();
-   }    
-}    
+   }
+}
 
 /*
  *Computes the arithmetic mean for a given Point Vector
@@ -141,9 +139,9 @@ Point<Number> computeBoundaryPointsRecursive (const SupportFunctionT<Number,Conv
 
 template <typename Number>
 vector_t<Number> computeArithmeticMeanPoint(std::vector<Point<Number>>& PointVec){
-    //defines an empty solution vector 
+    //defines an empty solution vector
     vector_t<Number> res = vector_t<Number>::Zero(PointVec[0].dimension());
-    
+
          //computes the arithmetic mean by first building the sum of all points and then dividing it by the number of points
          for (unsigned i=0; i < PointVec.size(); ++i){
               res += PointVec[i].rawCoordinates();
@@ -154,7 +152,7 @@ vector_t<Number> computeArithmeticMeanPoint(std::vector<Point<Number>>& PointVec
 
 
 
-    
+
 } // namespace
 
 

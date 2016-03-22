@@ -27,9 +27,72 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter>
-	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _matrix, const vector_t<Number>& _constants )
-			: BoxT( Converter::toVPolytope( _matrix, _constants ).vertices() )
-	{}
+	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
+	{
+		// calculate all possible hyperplane intersections -> TODO: dPermutation can
+		// be improved.
+		assert(_constraints.rows() == _constants.rows());
+		Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
+		matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
+		vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
+		std::set<vector_t<Number>> possibleVertices;
+		std::vector<unsigned> permutation;
+		while ( !permutator.end()  ) {
+			permutation = permutator();
+			unsigned rowCount = 0;
+			// std::cout << "Intersect :" << std::endl;
+			for ( const auto &rowIndex : permutation ) {
+				// std::cout << _constraints.row(rowIndex) << " <= " <<
+				// _constants(rowIndex) << std::endl;
+				assert(rowCount < _constraints.cols());
+				intersection.row( rowCount ) = _constraints.row( rowIndex );
+				intersectionConstants( rowCount ) = _constants( rowIndex );
+				++rowCount;
+			}
+			// check if rank is full
+			if ( intersection.fullPivLu().rank() == intersection.cols() ) {
+				vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
+				assert(vertex.rows() == _constraints.cols());
+				possibleVertices.emplace( std::move(vertex) );
+				// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
+			}
+		}
+
+		// check if vertices are true vertices (i.e. they fulfill all constraints)
+		for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
+			// std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i <<
+			// std::endl;
+			// std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " <<
+			// possibleVertices.size() << std::endl;
+			bool deleted = false;
+			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
+				Number res = vertex->dot( _constraints.row( rowIndex ) );
+				if ( res > _constants( rowIndex ) ){
+					vertex = possibleVertices.erase( vertex );
+					deleted = true;
+					break;
+				}
+			}
+			if(!deleted)
+				++vertex;
+		}
+		// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+		// finish initialization
+		assert(!possibleVertices.empty());
+		vector_t<Number> min = *possibleVertices.begin();
+		vector_t<Number> max = *possibleVertices.begin();
+		for ( const auto &point : possibleVertices ) {
+			for( unsigned d = 0; d < point.rows(); ++d){
+				if( min(d) > point(d)) {
+					min(d) = point(d);
+				}
+				if( max(d) < point(d)) {
+					max(d) = point(d);
+				}
+			}
+		}
+		mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
+	}
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter>::BoxT( const std::set<Point<Number>> &_points ) {
@@ -185,6 +248,66 @@ std::vector<Point<Number>> BoxT<Number,Converter>::vertices() const {
 }
 
 template<typename Number, typename Converter>
+std::size_t BoxT<Number,Converter>::size() const {
+	if(this->empty())
+		return 0;
+
+	return 2;
+}
+
+template<typename Number, typename Converter>
+std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const {
+	std::vector<Point<Number>> vertices = this->vertices();
+	bool allVerticesContained = true;
+	unsigned outsideVertexCnt = 0;
+	for(const auto& vertex : vertices) {
+		if(vertex.rawCoordinates().dot(normal) > offset){
+			allVerticesContained = false;
+			outsideVertexCnt++;
+		}
+	}
+	if(allVerticesContained)
+		return std::make_pair(true, *this);
+
+	if(outsideVertexCnt == vertices.size_())
+		return std::make_pair(false, Empty());
+
+	return std::make_pair(true, this->intersectHyperplane(Hyperplane<Number>(normal,offset)));
+}
+
+template<typename Number, typename Converter>
+std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension(), this->dimension());
+	vector_t<Number> constants = vector_t<Number>(2*this->dimension());
+	for(unsigned d = 0; d < this->dimension(); ++d){
+		constraints(2*d, d) = 1;
+		constraints(2*d+1, d) = -1;
+		constants(2*d) = mLimits.second.at(d);
+		constants(2*d+1) = -mLimits.first.at(d);
+	}
+	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	opt.setMatrix(constraints);
+	opt.setVector(constants);
+
+	std::vector<Point<Number>> vertices = this->vertices();
+	bool allVerticesContained = true;
+	unsigned outsideVertexCnt = 0;
+	for(const auto& vertex : vertices) {
+		if(!opt.checkPoint(vertex)){
+			allVerticesContained = false;
+			outsideVertexCnt++;
+		}
+	}
+	if(allVerticesContained)
+		return std::make_pair(true, *this);
+
+	if(outsideVertexCnt == vertices.size())
+		return std::make_pair(false, Empty());
+
+	return std::make_pair(true, this->intersectHyperplanes(_mat, _vec));
+}
+
+template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	// create both limit matrices
 	matrix_t<Number> ax(A);
@@ -237,6 +360,16 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHyperplane( const Hyperp
 		auto intermediate = Converter::toHPolytope(*this);
 		intermediate.insert(rhs);
 		return std::move(Converter::toBox(intermediate));
+	}
+	return Empty(this->dimension());
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	if(!this->empty()) {
+		auto intermediate = Converter::toHPolytope(*this);
+		intermediate.intersectHyperplanes(_mat, _vec);
+		return Converter::toBox(intermediate);
 	}
 	return Empty(this->dimension());
 }

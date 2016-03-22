@@ -45,8 +45,8 @@ SF_TYPE BallSupportFunction<Number>::type() const {
 }
 
 template <typename Number>
-evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
-	evaluationResult<Number> result;
+EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
+	EvaluationResult<Number> result;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL: {
 			unsigned max = 0;
@@ -69,11 +69,11 @@ evaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 }
 
 template <typename Number>
-std::vector<evaluationResult<Number>> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
-	evaluationResult<Number> r;
+std::vector<EvaluationResult<Number>> BallSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+	EvaluationResult<Number> r;
 	r.supportValue = mRadius;
 	r.errorCode = mRadius > 0 ? SOLUTION::FEAS : SOLUTION::INFEAS;
-	std::vector<evaluationResult<Number>> res(_A.rows(), r);
+	std::vector<EvaluationResult<Number>> res(_A.rows(), r);
 
 	return res;
 }
