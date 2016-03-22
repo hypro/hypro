@@ -52,7 +52,9 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 			templateVector(permutation.at(0)) = vectorOfdirections2d(0);
 			templateVector(permutation.at(1)) = vectorOfdirections2d(1);
 
-			if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()) directions.push_back(templateVector);
+			if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
+                            directions.push_back(templateVector);
+                        }
 		}
 	}
 
@@ -60,13 +62,54 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 }
 
 /*
- * Compute a set of uniformly distributed directions that are orthogonal to a given normal
+ * Compute a set of uniformly distributed directions that are orthogonal to a given normal and all lie in one hyperplane
  */
 
-template<typename Number>
-static matrix_t<Number> computeOrthogonalTemplateDirections( vector_t<Number> normal, Number offset, unsigned numberOfDirections){
-    matrix_t<Number> res;
-    return res;
-}
+//template<typename Number>
+//static matrix_t<Number> computeOrthogonalTemplateDirections( vector_t<Number> normal, unsigned numberOfDirections){
+//    unsigned dim = normal.rows();
+//    matrix_t<Number> res =matrix_t<Number>(numberOfDirections, dim);
+//    vector_t<Number> firstVec = vector_t<Number>::Zero(dim);
+    //if dimension is at least 2
+//    if (dim > 1){
+//        bool foundOne = false;
+//        unsigned indexOne;
+//        bool foundTwo = false;
+//        unsigned indexTwo;
+        //check every entry of the normal
+//        for (unsigned i=0; i< dim; ++i){
+                //the first non-zero entry gets remembered (if it exists)
+//                 if (normal(i) != 0 && foundOne == false){
+//                         foundOne = true;
+//                         indexOne = i;
+                 //the second non-zero entry gets remembered (if it exists)
+//                 } else if (normal(i) != 0 && foundOne == true && foundTwo == false){
+//                         foundTwo = true;
+//                         indexTwo = i;
+//                 }
+//        }
+        //if 2 non-zero entries were found
+//        if (foundTwo == true && foundOne == true){
+//                firstVec(indexOne) = (Number) 1/normal(indexOne);
+//                firstVec(indexTwo) = (Number) (-1)*1/normal(indexTwo);
+        //if only one non-zero entry was found (is an axis-direction)
+//        } else if (foundTwo == false && foundOne == true){
+                //if the index before the non-zero entry exists
+//                if (indexOne > 0){
+//                    firstVec(indexOne-1) = 1;
+                //if the index before the non-zero entry doesn't exist (but after it)
+//                } else {
+//                    firstVec(indexOne+1) = 1;
+//                }
+        //if the normal is the 0-vector (is not allowed to happen
+//        } else {
+//            assert(false);
+//        }
+        
+        
+        
+//    }
+//    return res;
+//}
 
 } // namespace hypro
