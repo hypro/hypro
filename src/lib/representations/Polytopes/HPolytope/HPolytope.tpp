@@ -262,7 +262,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 template <typename Number, typename Converter>
 Number HPolytopeT<Number, Converter>::supremum() const {
 	Number max = 0;
-	for ( auto &point : this->vertices() ) {
+	for ( const auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -611,6 +611,7 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 			std::cout << "INFTY" << std::endl;
 			continue;
 		} else if ( evalRes.supportValue < plane.offset() ) {
+			assert(evalRes.errorCode == FEAS);
 			std::cout << "Too large" << std::endl;
 			return false;
 		}
