@@ -99,11 +99,6 @@ public:
 	bool isExtremePoint( const Point<Number>& point ) const;
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 
-	typename HyperplaneVector::iterator begin();
-	typename HyperplaneVector::const_iterator begin() const;
-	typename HyperplaneVector::iterator end();
-	typename HyperplaneVector::const_iterator end() const;
-
 	std::vector<Point<Number>> vertexEnumeration() const;
 
 	/*
@@ -129,17 +124,17 @@ public:
 	 * Operators
 	 */
 
-	const Hyperplane<Number>& operator[]( size_t i ) const;
-	Hyperplane<Number>& operator[]( size_t i ) ;
+	//const Hyperplane<Number>& operator[]( size_t i ) const;
+	//Hyperplane<Number>& operator[]( size_t i ) ;
 	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs );
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
 			for ( unsigned i = 0; i < rhs.constraints().size() - 1; ++i ) {
-				lhs << rhs[i] << "," << std::endl;
+				lhs << rhs.constraints()[i] << "," << std::endl;
 			}
-			lhs << rhs[rhs.constraints().size() - 1] << " ]";
+			lhs << rhs.constraints()[rhs.constraints().size() - 1] << " ]";
 		}
 		return lhs;
 	}

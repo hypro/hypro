@@ -543,16 +543,12 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		//	std::cout << "Consider NEIGHBOR \n"<< neighbor->getNormal() <<"\nwith " << neighbor->neighbors().size() << " neighbors itself"<< std::endl;
 		//}
 
-
-
-
 		std::queue<std::shared_ptr<Facet<Number>>> workingSet;
 		removeBorderFacets(facets, workingSet); // extract the facets to be examined
 
 		//for(unsigned i = 0; i<facets.size(); i++){
 		//	std::cout << "Good facets" << std::endl << "normal:\n"<< facets.at(i)->getNormal() <<"\noffset: "<<facets.at(i)->getScalar() << std::endl<< std::endl;
 		//}
-
 
 		/*
 		 * ------------------------------------------------------------------------------

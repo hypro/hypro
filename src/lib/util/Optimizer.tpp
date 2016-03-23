@@ -149,9 +149,9 @@ namespace hypro {
 
 		// std::cout << "(push)" << std::endl;
 
-		// std::cout << "Whole formula: " << std::endl;
-		// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		std::cout << "Whole formula: " << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
@@ -195,9 +195,10 @@ namespace hypro {
 					assert(valuation.isRational());
 					res = EvaluationResult<Number>( carl::convert<smtrat::Rational,Number>(valuation.asRational()), FEAS );
 				}
-				#endif
+				#else
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				res.errorCode = INFEAS;
+				#endif
 				break;
 			}
 		}

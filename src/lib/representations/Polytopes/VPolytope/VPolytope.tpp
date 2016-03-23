@@ -75,6 +75,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 		if ( intersection.fullPivLu().rank() == intersection.cols() ) {
 			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
 			assert(vertex.rows() == _constraints.cols());
+			assert(insidePlanes(vertex, intersection, intersectionConstants));
 			possibleVertices.emplace( std::move(vertex) );
 			// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
 		}
@@ -95,8 +96,9 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 				break;
 			}
 		}
-		if(!deleted)
+		if(!deleted){
 			++vertex;
+		}
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	// finish initialization
@@ -110,7 +112,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	mFanSet = false;
 	mReduced = false;
 
-	reduceNumberRepresentation();
+	//reduceNumberRepresentation();
 }
 
 template <typename Number, typename Converter>
@@ -234,7 +236,7 @@ bool VPolytopeT<Number, Converter>::contains( const VPolytopeT<Number, Converter
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolytopeT<Number, Converter> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
-		return std::move(VPolytopeT<Number, Converter>( mVertices ));
+		return VPolytopeT<Number, Converter>( mVertices );
 	} else {
 		VPolytopeT<Number, Converter>::pointVector points;
 		points.insert( points.end(), this->mVertices.begin(), this->mVertices.end() );
@@ -247,11 +249,15 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 				preresult.insert( facets[i]->vertices().at( j ) );
 			}
 		}
-
 		VPolytopeT<Number, Converter>::pointVector res;
-		for ( const auto &point : preresult ) res.push_back( point );
+		for ( const auto &point : preresult ) {
+			res.push_back( point );
+		}
+		VPolytopeT<Number,Converter> result = VPolytopeT<Number, Converter>( res );
+		assert(result.contains(*this));
+		assert(result.contains(rhs));
 
-		return VPolytopeT<Number, Converter>( res );
+		return result;
 	}
 }
 
@@ -488,6 +494,36 @@ const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter
 	// glp_delete_prob(cone);
 }
 
+template<typename Number, typename Converter>
+bool VPolytopeT<Number, Converter>::belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+		if(vertex.dot(normals.row(rowIndex)) > offsets(rowIndex)){
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number, typename Converter>
+bool VPolytopeT<Number, Converter>::abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+		if(vertex.dot(normals.row(rowIndex)) < offsets(rowIndex)){
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number, typename Converter>
+bool VPolytopeT<Number, Converter>::insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+		if(vertex.dot(normals.row(rowIndex)) != offsets(rowIndex)){
+			return false;
+		}
+	}
+	return true;
+}
+
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter> &VPolytopeT<Number, Converter>::operator=( const VPolytopeT<Number, Converter> &rhs ) {
 	if ( this != &rhs ) {
@@ -511,4 +547,4 @@ bool VPolytopeT<Number, Converter>::operator==( const VPolytopeT<Number, Convert
 	return true;
 }
 
-}  // namespace
+}  // namespace hypro

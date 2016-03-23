@@ -21,67 +21,67 @@ template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
 	HPolytope target;
     if (mode == EXACT){
-    if ( !_source.empty() ) {
-		// degenerate cases
-		unsigned size = _source.size();
-		unsigned dimension = _source.dimension();
-		if ( size == 1 ) {
-			// TODO: Return Box constraints.
-		} else if ( size < dimension ) {
-			std::vector<Point<Number>> vertices = _source.vertices();
+	    if ( !_source.empty() ) {
+			// degenerate cases
+			unsigned size = _source.size();
+			unsigned dimension = _source.dimension();
+			if ( size == 1 ) {
+				// TODO: Return Box constraints.
+			} else if ( size < dimension ) {
+				std::vector<Point<Number>> vertices = _source.vertices();
 
-			// ATTENTION: Assumption here: _source is reduced, such that the d points in _source span a d-1 dimensional object.
+				// ATTENTION: Assumption here: _source is reduced, such that the d points in _source span a d-1 dimensional object.
 
-			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
-			std::size_t dim = vertices.size();
-			Permutator permutator(dimension, dim);
+				// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
+				std::size_t dim = vertices.size();
+				Permutator permutator(dimension, dim);
 
-			std::vector<unsigned> permutation;
-			while(!permutator.end()) {
-				permutation = permutator();
+				std::vector<unsigned> permutation;
+				while(!permutator.end()) {
+					permutation = permutator();
 
-				// project to chosen dimensions
-				std::vector<Point<Number>> reducedVertices;
-				reducedVertices.reserve(dim);
-				for(const auto& vertex : vertices) {
-					vector_t<Number> reductor = vector_t<Number>(dim);
-					for(unsigned d = 0; d < dim; ++d)
-						reductor(d) = vertex.at(d);
+					// project to chosen dimensions
+					std::vector<Point<Number>> reducedVertices;
+					reducedVertices.reserve(dim);
+					for(const auto& vertex : vertices) {
+						vector_t<Number> reductor = vector_t<Number>(dim);
+						for(unsigned d = 0; d < dim; ++d)
+							reductor(d) = vertex.at(d);
 
-					reducedVertices.push_back(Point<Number>(std::move(reductor)));
+						reducedVertices.push_back(Point<Number>(std::move(reductor)));
+					}
+
+					std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
+					//std::cout << "Conv Hull end" << std::endl;
+					for ( auto &facet : facets ) {
+						target.insert( facet->hyperplane() );
+					}
+
 				}
 
-				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
+				assert( false );
+			} else {
+				//std::cout << "Conv Hull" << std::endl;
+				// TODO: Chose suitable convex hull algorithm
+				typename std::vector<Point<Number>> points = _source.vertices();
+				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 				//std::cout << "Conv Hull end" << std::endl;
 				for ( auto &facet : facets ) {
+					for( const auto& point : points ) {
+						assert( facet->hyperplane().normal().dot(point.rawCoordinates()) <= facet->hyperplane().offset() );
+					}
 					target.insert( facet->hyperplane() );
 				}
-
 			}
+		}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
+    } else if (mode == OVER) {
+    //gets vertices from source object
+    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
-			assert( false );
-		} else {
-			//std::cout << "Conv Hull" << std::endl;
-			// TODO: Chose suitable convex hull algorithm
-			typename std::vector<Point<Number>> points = _source.vertices();
-			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			//std::cout << "Conv Hull end" << std::endl;
-			for ( auto &facet : facets ) {
-				target.insert( facet->hyperplane() );
-			}
-			facets.clear();
-		}
-	}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
-        }
-        //overapproximation
-        if (mode == OVER){
-        //gets vertices from source object
-        typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
-
-        //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
-        std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
-        target = HPolytope(planes);
-        }
+    //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
+    std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
+    target = HPolytope(planes);
+    }
     return target;
 }
 

@@ -96,6 +96,7 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
+	std::cout << __func__ << ": State: " << mEmpty << std::endl;
 	if(mEmpty == State::TRUE)
 		return true;
 	if(mEmpty == State::FALSE)
@@ -105,6 +106,8 @@ bool HPolytopeT<Number, Converter>::empty() const {
 		mEmpty = State::FALSE;
 		return false;
 	}
+
+	std::cout << __func__ << ": CALL TO Optimizer" << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
@@ -154,7 +157,7 @@ vector_t<Number> HPolytopeT<Number, Converter>::vector() const {
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res( planeIndex ) = mHPlanes.at( planeIndex ).offset();
 	}
-	return std::move(res);
+	return res;
 }
 
 template <typename Number, typename Converter>
@@ -173,7 +176,7 @@ const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const
 	if ( !mFanSet ) {
 		calculateFan();
 	}
-	return std::move(mFan);
+	return mFan;
 }
 
 template <typename Number, typename Converter>
@@ -253,7 +256,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			}
 		}
 	}
-	return std::move(vertices);
+	return vertices;
 }
 
 template <typename Number, typename Converter>
@@ -263,7 +266,7 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
-	return std::move(max);
+	return max;
 }
 
 template <typename Number, typename Converter>
@@ -323,6 +326,7 @@ void HPolytopeT<Number, Converter>::calculateFan() const {
 
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
+	std::cout << "Dimension: " << mDimension << ", plane dimension: " << plane.dimension() << std::endl;
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -336,6 +340,7 @@ void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
 	}
 	if(!found){
 		mHPlanes.push_back( plane );
+		mEmpty = State::NSET;
 		mNonRedundant = false;
 	}
 }
@@ -358,6 +363,7 @@ template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
+	mEmpty = State::NSET;
 }
 
 template <typename Number, typename Converter>
@@ -428,33 +434,13 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 
 	//reduceNumberRepresentation();
 
-	std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << convert<Number,double>(this->vector()) << std::endl;
+	std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
 	return opt.evaluate(_direction);
-}
-
-template <typename Number, typename Converter>
-typename HPolytopeT<Number, Converter>::HyperplaneVector::iterator HPolytopeT<Number, Converter>::begin() {
-	return mHPlanes.begin();
-}
-
-template <typename Number, typename Converter>
-typename HPolytopeT<Number, Converter>::HyperplaneVector::const_iterator HPolytopeT<Number, Converter>::begin() const {
-	return mHPlanes.begin();
-}
-
-template <typename Number, typename Converter>
-typename HPolytopeT<Number, Converter>::HyperplaneVector::iterator HPolytopeT<Number, Converter>::end() {
-	return mHPlanes.end();
-}
-
-template <typename Number, typename Converter>
-typename HPolytopeT<Number, Converter>::HyperplaneVector::const_iterator HPolytopeT<Number, Converter>::end() const {
-	return mHPlanes.end();
 }
 
 /*
@@ -604,12 +590,22 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
 	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
-	for ( const auto &plane : rhs ) {
+	if(this->empty()){
+		std::cout << __func__ << ": THIS IS EMPTY" << std::endl;
+		return false;
+	}
+
+	if(rhs.empty()) {
+		return true;
+	}
+
+	for ( const auto &plane : rhs.constraints() ) {
 		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
 
 		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.supportValue  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.errorCode == INFEAS ) {
 			std::cout << "INFEAS" << std::endl;
+			assert(false);
 			return false;  // empty!
 		} else if ( evalRes.errorCode == INFTY ) {
 			std::cout << "INFTY" << std::endl;
@@ -624,16 +620,22 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolytopeT &_rhs ) const {
-	if ( _rhs.empty() ) {
-		return std::move(HPolytopeT<Number, Converter>( *this ));
-	} else {
+	if ( _rhs.empty() && !this->empty()) {
+		return *this;
+	} else if (this->empty() && !_rhs.empty()) {
+		return _rhs;
+	} else { // none is empty
 		auto lhs = Converter::toVPolytope( *this );
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
+		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
+		assert(result.contains(*this));
+		assert(result.contains(_rhs));
+		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
-		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-
-		return Converter::toHPolytope( tmpRes );
+		return result;
 	}
+	// if both are empty, return one of them
+	return *this;
 }
 
 template <typename Number, typename Converter>
@@ -654,15 +656,15 @@ void HPolytopeT<Number, Converter>::print() const {
  * Operators
  */
 
-template <typename Number, typename Converter>
-const Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
-	return mHPlanes.at( i );
-}
-
-template <typename Number, typename Converter>
-Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
-	return mHPlanes.at( i );
-}
+//template <typename Number, typename Converter>
+//const Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
+//	return mHPlanes.at( i );
+//}
+//
+//template <typename Number, typename Converter>
+//Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
+//	return mHPlanes.at( i );
+//}
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> &HPolytopeT<Number, Converter>::operator=( const HPolytopeT<Number, Converter> &rhs ) {

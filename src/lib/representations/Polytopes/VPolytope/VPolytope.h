@@ -181,6 +181,9 @@ class VPolytopeT {
 	 **************************************************************************/
 	const Fan& calculateFan() const;
 	const Cone& calculateCone( const Point<Number>& vertex );
+	static bool belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
+	static bool abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
+	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
 
 	/***************************************************************************
 	 * Operators
