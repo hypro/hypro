@@ -1,8 +1,8 @@
 #pragma once
 
-#include "smtrat/SimplexSolver.h"
 #include "EvaluationResult.h"
 #include "VariablePool.h"
+#include "smtrat/SimplexSolver.h"
 #include "../config.h"
 #include <carl/util/Singleton.h>
 

@@ -3,9 +3,16 @@
  */
 
 #pragma once
+#include "../../datastructures/Hyperplane.h"
+
+#include <vector>
+#include <memory>
 
 namespace hypro {
 namespace polytope {
+
+template<typename Number>
+using vectorSet = std::set<vector_t<Number>>;
 
 template <typename Number>
 bool operator<( std::shared_ptr<Hyperplane<Number>> _lhs, std::shared_ptr<Hyperplane<Number>> _rhs ) {
@@ -15,7 +22,7 @@ bool operator<( std::shared_ptr<Hyperplane<Number>> _lhs, std::shared_ptr<Hyperp
 template <typename Number>
 class Cone {
   public:
-	typedef std::vector<std::shared_ptr<Hyperplane<Number>>> planeVector;
+	using planeVector = std::vector<std::shared_ptr<Hyperplane<Number>>>;
 
   private:
 	planeVector mPlanes;

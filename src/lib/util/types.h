@@ -7,10 +7,10 @@
  */
 
 #pragma once
+#include "../typedefs.h"
+#include "VariablePool.h"
 #include <vector>
 #include <cassert>
-#include "../config.h"
-#include "VariablePool.h"
 
 namespace hypro {
 
@@ -77,4 +77,4 @@ static hypro::vector_t<Number> createVector( std::initializer_list<Number> _coor
 	return res;
 }
 
-}  // namespace
+}  // namespace hypro

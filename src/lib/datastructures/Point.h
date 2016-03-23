@@ -13,8 +13,11 @@
  */
 #pragma once
 
+#include "../typedefs.h"
 #include "../config.h"
 #include "../util/VariablePool.h"
+#include <set>
+#include <vector>
 
 namespace hypro {
 /*

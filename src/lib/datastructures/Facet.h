@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../config.h"
+#include "../typedefs.h"
 #include "Hyperplane.h"
 #include "../util/linearSolving.h"
 
@@ -20,8 +20,8 @@ class Facet {
 	/**
 	 * Typedefs
 	 */
-	typedef std::vector<Point<Number>> pointVector;
-	typedef std::vector<std::shared_ptr<Facet<Number>>> neighborsSet;
+	using pointVector = std::vector<Point<Number>>;
+	using neighborsSet = std::vector<std::shared_ptr<Facet<Number>>>;
 
 	/**
 	 * Members

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <carl/util/Singleton.h>
 #include "Location.h"
+#include <carl/util/Singleton.h>
 
 namespace hypro {
 

@@ -302,9 +302,7 @@ std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origi
 	for ( unsigned dimension = 0; dimension < base.dimension() - 1; ++dimension ) {
 		double angle( 0 );
 		for ( auto dimension2 = dimension; dimension2 < base.dimension(); ++dimension2 ) {
-			double square;
-			square = carl::pow( transformedCoordinates( dimension2 ), 2 );  // TODO: Check if this does the right thing and why angle += (*dimension) ... does not work
-			angle += square;
+			angle += carl::pow( transformedCoordinates( dimension2 ), 2 );
 		}
 		angle = carl::sqrt( angle );
 		angle = ( transformedCoordinates( dimension ) / angle );

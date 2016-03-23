@@ -16,6 +16,9 @@
 #include "../../util/Plotter.h"
 #include "util.h"
 #include "Settings.h"
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
+#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
 #define REACH_DEBUG

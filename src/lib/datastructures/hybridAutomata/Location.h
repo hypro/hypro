@@ -6,6 +6,8 @@
  */
 
 #pragma once
+#include "../../typedefs.h"
+#include <iostream>
 
 namespace hypro {
 

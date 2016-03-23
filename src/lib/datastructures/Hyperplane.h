@@ -10,13 +10,14 @@
 
 #pragma once
 
-#include <cassert>
-#include <glpk.h>
+
 
 #include "Point.h"
 #include "../util/VariablePool.h"
- #include "../util/linearSolving.h"
+#include "../util/linearSolving.h"
 #include <carl/formula/Constraint.h>
+#include <cassert>
+#include <glpk.h>
 
 namespace hypro {
 
@@ -73,16 +74,9 @@ class Hyperplane {
 
     Number scalar() const { return mScalar; }
     size_t hash() {
-
-        //TODO review line 79
-        /*
-        if (this->mHash = 0) {
         if (this->mHash == 0) {
             this->mHash = std::hash<hypro::Hyperplane<Number>>(*this);
-        } else {
-            return mHash;
-        }*/
-
+        }
         return mHash;
     }
 
@@ -132,7 +126,7 @@ Hyperplane<Number> operator-( const Hyperplane<Number>& _in ) {
 
     extern template class Hyperplane<carl::FLOAT_T<double>>;
     #endif
-}  // namespace
+}  // namespace hypro
 
 namespace std{
     template<class Number>
@@ -149,6 +143,6 @@ namespace std{
             return seed;
         }
     };
-} //namespace
+} //namespace std
 
 #include "Hyperplane.tpp"

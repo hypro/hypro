@@ -125,8 +125,8 @@ namespace reachability {
 
 			// R_0(X0) U R_delta(X0)
 			Representation unitePolytope = initialPair.second.unite( deltaValuation );
-			assert(unitePolytope.contains(initialPair.second));
-			assert(unitePolytope.contains(deltaValuation));
+			//assert(unitePolytope.contains(initialPair.second));
+			//assert(unitePolytope.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
@@ -164,9 +164,9 @@ namespace reachability {
 //
 			//plotter.plot2d();
 
-			assert(firstSegment.contains(initialPair.second));
-			assert(firstSegment.contains(deltaValuation));
-			assert(firstSegment.contains(unitePolytope));
+			//assert(firstSegment.contains(initialPair.second));
+			//assert(firstSegment.contains(deltaValuation));
+			//assert(firstSegment.contains(unitePolytope));
 
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";

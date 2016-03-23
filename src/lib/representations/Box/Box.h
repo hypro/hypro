@@ -15,10 +15,10 @@
 #include "../../util/Optimizer.h"
 #include "../../util/Permutator.h"
 #include <carl/interval/Interval.h>
-#include <map>
-#include <vector>
-#include <set>
 #include <cassert>
+#include <map>
+#include <set>
+#include <vector>
 
 namespace hypro {
 
@@ -58,21 +58,21 @@ class BoxT {
 	 * @param var
 	 * @param val
 	 */
-	BoxT( const carl::Interval<Number>& val ) {
+	explicit BoxT( const carl::Interval<Number>& val ) {
         mLimits.first = hypro::Point<Number>({val.lower()});
         mLimits.second = hypro::Point<Number>({val.upper()});
 	}
 
-	BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
+	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
 			mLimits(limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
 	}
 
-	BoxT( const std::vector<carl::Interval<Number>>& _intervals );
+	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals );
 	BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants );
-	BoxT( const std::set<Point<Number>>& _points );
-	BoxT( const std::vector<Point<Number>>& _points );
+	explicit BoxT( const std::set<Point<Number>>& _points );
+	explicit BoxT( const std::vector<Point<Number>>& _points );
 	//BoxT( const std::set<Vertex<Number>>& _points );
 	//BoxT( const std::vector<Vertex<Number>>& _points );
 
@@ -96,7 +96,9 @@ class BoxT {
 	carl::Interval<Number> interval( std::size_t d ) const;
 
 	carl::Interval<Number> at( std::size_t _index ) const {
-		if ( _index > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
+		if ( _index > mLimits.first.dimension() ) {
+			return carl::Interval<Number>::emptyInterval();
+		}
 		return carl::Interval<Number>(mLimits.first.at(_index), mLimits.second.at(_index));
 	}
 
@@ -104,7 +106,9 @@ class BoxT {
 	 * @return
 	 */
 	bool empty() const {
-		if ( mLimits.first.dimension() == 0 ) return false;
+		if ( mLimits.first.dimension() == 0 ) {
+			return false;
+		}
 		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
 			if ( mLimits.first.at(d) > mLimits.second.at(d) ) {
 				return true;
@@ -138,8 +142,9 @@ class BoxT {
 	 * @return true, if they are equal.
 	 */
 	friend bool operator==( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) {
-		if ( b1.dimension() != b2.dimension() ) return false;
-
+		if ( b1.dimension() != b2.dimension() ) {
+			return false;
+		}
 		return ( b1.limits() == b2.limits());
 	}
 
@@ -217,6 +222,6 @@ class BoxT {
     extern template class BoxT<carl::FLOAT_T<double>>;
     #endif
 
-}
+} // namespace hypro
 
 #include "Box.tpp"

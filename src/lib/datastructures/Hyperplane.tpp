@@ -302,8 +302,9 @@ vector_t<Number> Hyperplane<Number>::saveIntersect( const std::vector<Hyperplane
 		}
 		std::cout << std::flush;
 		++iterationCount;
-		if(belowIndices.empty())
+		if(belowIndices.empty()) {
 			res = tmp;
+		}
 	}
 	return res;
 }
@@ -333,7 +334,7 @@ const Number &Hyperplane<Number>::internalOffset() const {
 template <typename Number>
 vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) const {
 	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
-	if(_edgeSet.size() == (unsigned)_edgeSet.begin()->rows() - 1 ) {
+	if(_edgeSet.size() == unsigned(_edgeSet.begin()->rows()) - 1 ) {
 		// method avoiding glpk and using Eigen instead (higher precision)
 		matrix_t<Number> constraints(_edgeSet.size(), _edgeSet.begin()->rows());
 		for(unsigned pos = 0; pos < _edgeSet.size(); ++pos) {
@@ -414,7 +415,6 @@ vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vecto
 
 		return result;
 	}
-
-
 }
-}
+
+} // namespace hypro

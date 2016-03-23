@@ -3,6 +3,9 @@
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../config.h"
 #include "util.h"
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
+#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 namespace hypro {
 namespace forwardReachability {

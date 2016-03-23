@@ -9,6 +9,10 @@
  */
 
 #pragma once
+#include <carl/numbers/numbers.h>
+#include <functional>
+#include <iostream>
+#include <limits>
 
 namespace Eigen {
 template <typename Number>

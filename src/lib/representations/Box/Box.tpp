@@ -67,14 +67,15 @@ namespace hypro {
 			bool deleted = false;
 			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 				Number res = vertex->dot( _constraints.row( rowIndex ) );
-				if ( res > _constants( rowIndex ) ){
+				if ( res > _constants( rowIndex ) ) {
 					vertex = possibleVertices.erase( vertex );
 					deleted = true;
 					break;
 				}
 			}
-			if(!deleted)
+			if(!deleted) {
 				++vertex;
+			}
 		}
 		// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		// finish initialization
@@ -101,11 +102,13 @@ BoxT<Number,Converter>::BoxT( const std::set<Point<Number>> &_points ) {
 		vector_t<Number> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
 			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d))
+				if(point.at(d) < lower(d)) {
 					lower(d) = point.at(d);
+				}
 
-				if(point.at(d) > upper(d))
+				if(point.at(d) > upper(d)) {
 					upper(d) = point.at(d);
+				}
 			}
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
@@ -119,11 +122,13 @@ BoxT<Number,Converter>::BoxT( const std::vector<Point<Number>> &_points ) {
 		vector_t<Number> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
 			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d))
+				if(point.at(d) < lower(d)) {
 					lower(d) = point.at(d);
+				}
 
-				if(point.at(d) > upper(d))
+				if(point.at(d) > upper(d)) {
 					upper(d) = point.at(d);
+				}
 			}
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
@@ -214,7 +219,9 @@ void BoxT<Number,Converter>::insert( const std::vector<carl::Interval<Number>>& 
 */
 template<typename Number, typename Converter>
 carl::Interval<Number> BoxT<Number,Converter>::interval( std::size_t d ) const {
-	if ( d > mLimits.first.dimension() ) return carl::Interval<Number>::emptyInterval();
+	if ( d > mLimits.first.dimension() ) {
+		return carl::Interval<Number>::emptyInterval();
+	}
 	return carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d));
 }
 
@@ -237,10 +244,11 @@ std::vector<Point<Number>> BoxT<Number,Converter>::vertices() const {
 		vector_t<Number> coord = vector_t<Number>( dimension() );
 		for ( std::size_t dimension = 0; dimension < this->dimension(); ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
-			if ( bitCount & pos )
+			if ( bitCount & pos ) {
 				coord( dimension ) = mLimits.second.at(dimension);
-			else
+			} else {
 				coord( dimension ) = mLimits.first.at(dimension);
+			}
 		}
 		result.push_back( Point<Number>( coord ) );
 	}
@@ -249,8 +257,9 @@ std::vector<Point<Number>> BoxT<Number,Converter>::vertices() const {
 
 template<typename Number, typename Converter>
 std::size_t BoxT<Number,Converter>::size() const {
-	if(this->empty())
+	if(this->empty()) {
 		return 0;
+	}
 
 	return 2;
 }
@@ -266,11 +275,13 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 			outsideVertexCnt++;
 		}
 	}
-	if(allVerticesContained)
+	if(allVerticesContained) {
 		return std::make_pair(true, *this);
+	}
 
-	if(outsideVertexCnt == vertices.size_())
+	if(outsideVertexCnt == vertices.size_()) {
 		return std::make_pair(false, Empty());
+	}
 
 	return std::make_pair(true, this->intersectHyperplane(Hyperplane<Number>(normal,offset)));
 }
@@ -279,7 +290,7 @@ template<typename Number, typename Converter>
 std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension(), this->dimension());
 	vector_t<Number> constants = vector_t<Number>(2*this->dimension());
-	for(unsigned d = 0; d < this->dimension(); ++d){
+	for(unsigned d = 0; d < this->dimension(); ++d) {
 		constraints(2*d, d) = 1;
 		constraints(2*d+1, d) = -1;
 		constants(2*d) = mLimits.second.at(d);
@@ -293,16 +304,18 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
 	for(const auto& vertex : vertices) {
-		if(!opt.checkPoint(vertex)){
+		if(!opt.checkPoint(vertex)) {
 			allVerticesContained = false;
 			outsideVertexCnt++;
 		}
 	}
-	if(allVerticesContained)
+	if(allVerticesContained) {
 		return std::make_pair(true, *this);
+	}
 
-	if(outsideVertexCnt == vertices.size())
+	if(outsideVertexCnt == vertices.size()) {
 		return std::make_pair(false, Empty());
+	}
 
 	return std::make_pair(true, this->intersectHyperplanes(_mat, _vec));
 }
@@ -379,14 +392,18 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHyperplanes( const matri
 
 template<typename Number, typename Converter>
 bool BoxT<Number,Converter>::contains( const Point<Number> &point ) const {
-	if ( this->dimension() > point.dimension() ) return false;
+	if ( this->dimension() > point.dimension() ) {
+		return false;
+	}
 
 	return (point >= mLimits.first && point <= mLimits.second );
 }
 
 template<typename Number, typename Converter>
 bool BoxT<Number,Converter>::contains( const BoxT<Number,Converter> &box ) const {
-	if ( this->dimension() != box.dimension() ) return false;
+	if ( this->dimension() != box.dimension() ) {
+		return false;
+	}
 
 	return (box.min() >= mLimits.first && box.max() <= mLimits.second );
 }
@@ -415,4 +432,4 @@ void BoxT<Number,Converter>::print() const {
 	std::cout << *this << std::endl;
 }
 
-}  // namespace
+}  // namespace hypro

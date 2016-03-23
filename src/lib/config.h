@@ -2,15 +2,12 @@
 
 #include "flags.h"
 #include "util/convenienceOperators.h"
-#include <carl/numbers/numbers.h>
-#include <carl/core/Variable.h>
-#include <carl/core/MultivariatePolynomial.h>
+//#include <carl/numbers/numbers.h>
+//#include <carl/core/Variable.h>
+//#include <carl/core/MultivariatePolynomial.h>
 #include <carl/io/streamingOperators.h>
-#include <carl/util/SFINAE.h>
-CLANG_WARNING_DISABLE("-Wdeprecated-register")
-#include <eigen3/Eigen/Dense>
-#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-CLANG_WARNING_RESET
+//#include <carl/util/SFINAE.h>
+
 
 
 #ifdef COMPARE_CDD
@@ -64,6 +61,3 @@ static const double EPSILON = 0.000001;
 static const long POS_CONSTANT = 100;
 // define for debugging: triggers console output
 //#define fukuda_DEBUG
-
-#include "typedefs.h"
-#include "util/adaptions_eigen.h"
