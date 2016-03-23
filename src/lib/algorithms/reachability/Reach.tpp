@@ -125,8 +125,7 @@ namespace reachability {
 
 			// R_0(X0) U R_delta(X0)
 			Representation unitePolytope = initialPair.second.unite( deltaValuation );
-			//assert(unitePolytope.contains(initialPair.second));
-			std::cout << "ASSERTION TEST" << std::endl;
+			assert(unitePolytope.contains(initialPair.second));
 			assert(unitePolytope.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
@@ -164,10 +163,9 @@ namespace reachability {
 			//plotter.setObjectColor(hull, colors[petrol]);
 //
 			//plotter.plot2d();
-			//assert(firstSegment.contains(unitePolytope));
-			//assert(firstSegment.contains(initialPair.second));
-			std::cout << "ASSERTION TEST" << std::endl;
-			assert(firstSegment.contains(deltaValuation));
+			assert(firstSegment.contains(unitePolytope));
+			assert(firstSegment.contains(initialPair.second));
+			//assert(firstSegment.contains(deltaValuation));
 
 
 #ifdef REACH_DEBUG
