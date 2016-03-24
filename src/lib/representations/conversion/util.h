@@ -21,7 +21,7 @@ namespace hypro{
  */
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -31,7 +31,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     //generates an empty PointVector for the return value
     std::vector<Point<Number>> res = std::vector<Point<Number>>(numberOfDirections);
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
-    if (curDim > 0){
+    if (dim > 0){
         //generates an empty PointVector for the return values of the recursive calls
         std::vector<Point<Number>> recursiveSolutions = std::vector<Point<Number>>(numberOfDirections);
         for(unsigned i=0; i<numberOfDirections; ++i){
@@ -53,22 +53,30 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             curPlaneVector[0] = curPlane;
 
             //intersects the current support function with the hyperplane
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(SupportFunctionT<Number, Converter>(curPlaneVector));
+            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
 
             
             //call of the recursive sub-function for the current face
-            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
+            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, dim-1);
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
-        recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
+        recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
         res = recursiveSolutions;
-        return res;
+   //kickoff function gets called with a point for some reason
+   } else if (dim == 0){
+        //evaluates the object in the first direction (any direction produces the same result)
+        EvaluationResult<Number> point = sf.evaluate(directions.row(1));
+        //there needs to be a result here, otherwise something went terribly wrong
+        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        res.push_back(Point<Number>(point.optimumValue));
    } else {
-        //TODO implement this method
-        //return sf.toPoint();
+       //dimension should never be smaller than 0
+       assert(false);
    }
+   return res;
 }
 
     /*
@@ -107,7 +115,8 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             curPlaneVector[0] = curPlane;
 
             //intersects the current support function with the hyperplane
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(SupportFunctionT<Number, Converter>(curPlaneVector));
+            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
             
@@ -116,15 +125,22 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
            
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
-        recursiveSolutions = removeDuplicatePoints(recursiveSolutions);
+        recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
 
         //computes the arithmetic mean as an approximation of the centroid
         res = computeArithmeticMeanPoint(recursiveSolutions);
-        return res;
+   //call has only a point as source object (deepest recursion layer)
+   } else if (curDim == 0) {
+        //evaluates the object in the first direction (any direction produces the same result)
+        EvaluationResult<Number> point = sf.evaluate(directions.row(1));
+        //there needs to be a result here, otherwise something went terribly wrong
+        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        res = Point<Number>(point.optimumValue);
    } else {
-        //TODO implement this method
-        //return sf.toPoint();
+       //dimension should never be smaller than 0
+       assert(false);    
    }
+   return res;
 }
 
 /*
