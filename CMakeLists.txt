@@ -122,6 +122,7 @@ endif()
 find_package(carl REQUIRED)
 include_directories(${carl_INCLUDE_DIR})
 set(libraries ${libraries} ${carl_LIBRARIES})
+set(INCLUDES ${INCLUDES} ${carl_INCLUDE_DIR})
 if(carl_FOUND)
     MESSAGE(STATUS "Found carl: ${carl_INCLUDE_DIR}")
 else()
@@ -252,6 +253,7 @@ include(CMakePackageConfigHelpers)
 file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR}")
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src")
+set(CONF_INCLUDES ${INCLUDES})
 configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
 							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
