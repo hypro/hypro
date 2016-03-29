@@ -17,6 +17,8 @@
 
 #include <cassert>
 
+#define REDUCE_NUMBERS
+
 namespace hypro {
 
 template <typename Number, typename Converter>

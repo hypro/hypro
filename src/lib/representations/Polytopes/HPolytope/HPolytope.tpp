@@ -682,6 +682,7 @@ HPolytopeT<Number, Converter> &HPolytopeT<Number, Converter>::operator=( const H
 
 template<typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
+	#ifdef REDUCE_NUMBERS
 	std::vector<Point<Number>> vertices = this->vertices();
 
 	// normal reduction
@@ -723,6 +724,7 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 		}
 		//std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
 	}
+	#endif
 }
 
 }  // namespace hypro
