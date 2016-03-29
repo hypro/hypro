@@ -104,8 +104,10 @@ void Plotter<Number>::plot2d() const {
 
 				// color lookup
 				auto color = mSettings.color;
+				//std::cout << "Lookup color for object " << objectIt->first << std::endl;
 				if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
 					color = mObjectColors.at( objectIt->first );
+					//std::cout << "Found" << std::endl;
 				}
 
 				if ( mSettings.fill )
@@ -160,12 +162,14 @@ void Plotter<Number>::plot2d() const {
 			mOutfile << "# plotting hyperplanes\n";
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
+					std::cout << "Plot plane " << plane << std::endl;
 					assert(plane.dimension() == 2);
-					if(plane.normal()(1) == 0){
-						mOutfile << "set arrow from " << carl::toDouble(plane.offset()/plane.normal()(0)) <<",graph(0,0) to " << carl::toDouble(plane.offset()/plane.normal()(0)) << ",graph(1,1) nohead\n";
+					vector_t<Number> normal = plane.normal();
+					if(normal(1) == 0){
+						mOutfile << "set arrow from " << carl::toDouble(plane.offset()/normal(0)) <<",graph(0,0) to " << carl::toDouble(plane.offset()/normal(0)) << ",graph(1,1) nohead\n";
 					} else {
-						mOutfile << "f_" << index << "(x) = " << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
-						double off = carl::toDouble(plane.offset()/plane.normal()(1));
+						mOutfile << "f_" << index << "(x) = " << carl::toDouble(-normal(0)/normal(1)) << "*x";
+						double off = carl::toDouble(plane.offset()/normal(1));
 						if(off > 0)
 							mOutfile << "+";
 
@@ -364,7 +368,8 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points )
 	// reduce dimensions
 	if(!_points.empty()){
 		mOriginalObjects.insert( std::make_pair( mId, _points ) );
-		return mId++;
+		mId++;
+		return (mId-1);
 	}
 	return 0;
 }
@@ -375,7 +380,8 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 		addObject(part);
 		--mId;
 	}
-	return mId++;
+	mId++;
+	return mId-1;
 }
 
 template<typename Number>
@@ -404,7 +410,8 @@ unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points )
 		addPoint(p);
 		--mId;
 	}
-	return mId++;
+	mId++;
+	return mId-1;
 }
 
 template<typename Number>
@@ -414,9 +421,9 @@ void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
 
 template <typename Number>
 void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
-	if ( _color != 0 && mObjects.find( _id ) != mObjects.end() ) {
+	if ( _color != 0 && mOriginalObjects.find( _id ) != mOriginalObjects.end() ) {
 		mObjectColors[_id] = _color;
-	} else if ( _color != 0 && mPlanes.find( _id ) != mPlanes.end() ) {
+	} else if ( _color != 0 && mOriginalPlanes.find( _id ) != mOriginalPlanes.end() ) {
 		mObjectColors[_id] = _color;
 	}
 }
