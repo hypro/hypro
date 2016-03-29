@@ -1,5 +1,5 @@
 #pragma once
-#include "../config.h"
+#include "../typedefs.h"
 
 namespace hypro {
 
@@ -9,10 +9,10 @@ struct EvaluationResult {
 	vector_t<Number> optimumValue;  // the point leading to the evaluation value (extremum in direction)
 	SOLUTION errorCode;				// potential error code indicating success or failure of the evaluation
 
-	EvaluationResult() : supportValue(Number(0)), optimumValue(), errorCode(SOLUTION::INFEAS)
+	EvaluationResult() : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(SOLUTION::INFEAS)
 		{}
 
-	EvaluationResult(const Number& val, SOLUTION err) : supportValue(val), optimumValue(), errorCode(err)
+	EvaluationResult(const Number& val, SOLUTION err) : supportValue(val), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
 		{}
 
 	EvaluationResult(const vector_t<Number>& val, SOLUTION err) : supportValue(0), optimumValue(val), errorCode(err)

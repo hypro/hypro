@@ -233,6 +233,18 @@ namespace hypro {
 		}
 		return resultMat;
 	}
+
+	template<typename Number>
+	hypro::vector_t<Number> normalize(const hypro::vector_t<Number>& in) {
+		return in/norm(in);
+	}
+
+	template<typename Number>
+	hypro::vector_t<Number> scalarProjection(const vector_t<Number>& source, const vector_t<Number>& target) {
+		Number targetLength = norm(target);
+		vector_t<Number> res = ((source.dot(target))/(targetLength*targetLength))*target;
+		return res;
+	}
 } // namespace hypro
 
 namespace std {

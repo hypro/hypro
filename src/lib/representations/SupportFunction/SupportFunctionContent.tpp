@@ -242,10 +242,16 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::LINTRAFO: {
 			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			//std::cout << "Tmp rows " << tmp.rows() << " cols " << tmp.cols() << " direction rows: " << _direction.rows() << std::endl;
 			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
 			if(res.errorCode != SOLUTION::INFTY){
-				res.supportValue += ((mLinearTrafoParameters->b).dot(_direction))/norm((_direction));
+				std::cout << __func__ << ": Modified result("<< carl::toDouble(res.supportValue) << ") by " << carl::toDouble(norm(scalarProjection(mLinearTrafoParameters->b, _direction))) << " to ";
+				Number component = ((mLinearTrafoParameters->b).dot(_direction))/norm((_direction));
+				if(component > 0){
+					res.supportValue += norm(scalarProjection(mLinearTrafoParameters->b, _direction));
+				} else {
+					res.supportValue -= norm(scalarProjection(mLinearTrafoParameters->b, _direction));
+				}
+				std::cout << carl::toDouble(res.supportValue) << std::endl;
 			}
 			return res;
 		}
@@ -260,6 +266,9 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::SUM: {
 			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction );
+			if(resA.errorCode == SOLUTION::INFEAS){
+				return resA;
+			}
 			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction );
 			resA.optimumValue += resB.optimumValue;
 			resA.supportValue += resB.supportValue;
@@ -274,17 +283,33 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				res.supportValue = 1;
 				return res;
 			}
+			if(resA.errorCode == SOLUTION::INFEAS){
+				return resB;
+			}
+			if(resB.errorCode == SOLUTION::INFEAS){
+				assert(resA.errorCode == SOLUTION::FEAS);
+				return resA;
+			}
+			assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
 			return ( resA.supportValue >= resB.supportValue ? resA : resB );
 		}
 		case SF_TYPE::INTERSECT: {
 			EvaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate( _direction );
-			EvaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate( _direction );
-			if(resA.errorCode == SOLUTION::INFTY && resB.errorCode == SOLUTION::INFTY){
-				EvaluationResult<Number> res;
-				res.errorCode = SOLUTION::INFTY;
-				res.supportValue = 1;
-				return res;
+			if(resA.errorCode == SOLUTION::INFEAS){
+				return resA;
 			}
+			EvaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate( _direction );
+			if(resB.errorCode == SOLUTION::INFEAS){
+				return resB;
+			}
+			assert(resA.errorCode != SOLUTION::INFEAS && resB.errorCode != SOLUTION::INFEAS);
+			if(resA.errorCode == SOLUTION::INFTY){
+				return resB;
+			}
+			if(resB.errorCode == SOLUTION::INFTY){
+				return resA;
+			}
+			assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
 			return ( resA.supportValue <= resB.supportValue ? resA : resB );
 		}
 		default:{
@@ -296,7 +321,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 
 template <typename Number>
 std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
-	std::cout << "Multi-evaluate, type: " << mType << std::endl;
+	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
@@ -317,9 +342,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 		case SF_TYPE::SCALE: {
 			std::vector<EvaluationResult<Number>> res = mScaleParameters->origin->multiEvaluate( _directions );
-			for(auto& singleRes : res)
-				singleRes.supportValue *= mScaleParameters->factor;
-
+			// if one result is infeasible, the others will be too -> do not process.
+			if(res.begin()->errorCode != SOLUTION::INFEAS){
+				for(auto& singleRes : res){
+					assert(singleRes.errorCode != SOLUTION::INFEAS);
+					if(singleRes.errorCode == SOLUTION::FEAS){
+						singleRes.supportValue *= mScaleParameters->factor;
+						singleRes.optimumValue *= mScaleParameters->factor;
+					}
+				}
+			}
 			return res;
 		}
 		case SF_TYPE::SUM: {
@@ -328,16 +360,21 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			std::vector<EvaluationResult<Number>> res;
 			assert( resA.size() == std::size_t(_directions.rows()));
 			assert(resA.size() == resB.size());
-			for(unsigned index = 0; index < resA.size(); ++index){
-				EvaluationResult<Number> r;
-				if(resA[index].errorCode == SOLUTION::INFTY || resB[index].errorCode == SOLUTION::INFTY){
-					r.errorCode = SOLUTION::INFTY;
-					r.supportValue = 1;
-				} else {
-					r.errorCode = SOLUTION::FEAS;
-					r.supportValue = resA[index].supportValue + resB[index].supportValue;
+			// only process if both are feasible. If one result is infeasible, the others will be too, so stop processing.
+			if(resA.begin()->errorCode != SOLUTION::INFEAS && resB.begin()->errorCode != SOLUTION::INFEAS) {
+				for(unsigned index = 0; index < resA.size(); ++index){
+					assert(resA[index].errorCode != SOLUTION::INFEAS && resB[index].errorCode != SOLUTION::INFEAS);
+					EvaluationResult<Number> r;
+					if(resA[index].errorCode == SOLUTION::INFTY || resB[index].errorCode == SOLUTION::INFTY){
+						r.errorCode = SOLUTION::INFTY;
+						r.supportValue = 1;
+					} else {
+						r.errorCode = SOLUTION::FEAS;
+						r.supportValue = resA[index].supportValue + resB[index].supportValue;
+						r.optimumValue = resA[index].optimumValue + resB[index].optimumValue;
+					}
+					res.push_back(r);
 				}
-				res.push_back(r);
 			}
 			assert( res.size() == std::size_t(_directions.rows()));
 			return ( res );
@@ -348,14 +385,29 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			assert( resA.size() == std::size_t(_directions.rows()));
 			assert( resA.size() == resB.size() );
 			std::vector<EvaluationResult<Number>> result;
+			// in case one of the results is empty, return the other result (if both are empty, this is correct as well).
+			if(resA.begin()->errorCode == SOLUTION::INFEAS){
+				return resB;
+			}
+			if(resB.begin()->errorCode == SOLUTION::INFEAS){
+				return resA;
+			}
+
 			for ( unsigned i = 0; i < resA.size(); ++i ) {
+				assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 				EvaluationResult<Number> res;
 				if(resA[i].errorCode == SOLUTION::INFTY || resB[i].errorCode == SOLUTION::INFTY){
 					res.errorCode = SOLUTION::INFTY;
 					res.supportValue = 1;
 				} else {
 					res.errorCode = SOLUTION::FEAS;
-					res.supportValue = resA[i].supportValue > resB[i].supportValue ? resA[i].supportValue : resB[i].supportValue;
+					if(resA[i].supportValue > resB[i].supportValue){
+						res.supportValue = resA[i].supportValue;
+						res.optimumValue = resA[i].optimumValue;
+					} else {
+						res.supportValue = resB[i].supportValue;
+						res.optimumValue = resB[i].optimumValue;
+					}
 				}
 				result.push_back(res);
 			}
@@ -366,21 +418,36 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			std::vector<EvaluationResult<Number>> resA = mIntersectionParameters->lhs->multiEvaluate( _directions );
 			std::vector<EvaluationResult<Number>> resB = mIntersectionParameters->rhs->multiEvaluate( _directions );
 			assert( resA.size() == resB.size() );
+			// in case one of the results is infeasible (the set is empty), return this result.
+			if(resA.begin()->errorCode == SOLUTION::INFEAS){
+				return resA;
+			}
+			if(resB.begin()->errorCode == SOLUTION::INFEAS){
+				return resB;
+			}
 			std::vector<EvaluationResult<Number>> result;
 			for ( unsigned i = 0; i < resA.size(); ++i ) {
+				assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 				EvaluationResult<Number> res;
-				if(resA[i].errorCode == SOLUTION::INFTY && resB[i].errorCode == SOLUTION::INFTY){
-					res.errorCode = SOLUTION::INFTY;
-					res.supportValue = 1;
-				} else if (resA[i].errorCode == SOLUTION::INFTY) {
-					res.errorCode = SOLUTION::FEAS;
+				if (resA[i].errorCode == SOLUTION::INFTY) {
+					res.errorCode = resB[i].errorCode;
 					res.supportValue = resB[i].supportValue;
+					res.optimumValue = resB[i].optimumValue;
 				} else if (resB[i].errorCode == SOLUTION::INFTY) {
-					res.errorCode = SOLUTION::FEAS;
+					assert(resA[i].errorCode = SOLUTION::FEAS);
+					res.errorCode = resA[i].errorCode;
 					res.supportValue = resA[i].supportValue;
+					res.optimumValue = resA[i].optimumValue;
 				} else {
+					assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
 					res.errorCode = SOLUTION::FEAS;
-					res.supportValue = resA[i].supportValue < resB[i].supportValue ? resA[i].supportValue : resB[i].supportValue;
+					if(resA[i].supportValue < resB[i].supportValue){
+						res.supportValue = resA[i].supportValue;
+						res.optimumValue = resA[i].optimumValue;
+					} else {
+						res.supportValue = resB[i].supportValue;
+						res.optimumValue = resB[i].optimumValue;
+					}
 				}
 				result.push_back(res);
 			}

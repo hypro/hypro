@@ -90,6 +90,8 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
+
+
 	EvaluationResult<Number> result;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
@@ -99,7 +101,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 	EvaluationResult<Number> res = opt.evaluate(l);
 
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-	std::cout << "PolytopeSupportFunction: evaluate in " << l << std::endl;
+	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
 
 	assert( l.rows() == mDimension );

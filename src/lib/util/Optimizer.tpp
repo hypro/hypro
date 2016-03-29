@@ -49,17 +49,16 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
-
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 		EvaluationResult<Number> res;
 
 		if( mConstraintMatrix.rows() == 0 ) {
 			res.supportValue = 0;
 			res.errorCode = SOLUTION::INFTY;
+			res.optimumValue = vector_t<Number>::Zero(1);
 			return res;
 		}
 
-		// std::cout << "Set target: ";
 		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
 			glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( lp, i + 1, carl::toDouble( _direction( i ) ) );
@@ -67,7 +66,6 @@ namespace hypro {
 
 		/* solve problem */
 		glp_simplex( lp, NULL );
-
 		res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 
 		// display potential problems
@@ -75,6 +73,11 @@ namespace hypro {
 			case GLP_OPT:
 			case GLP_FEAS: {
 				res.errorCode = FEAS;
+				vector_t<Number> glpkModel(mConstraintMatrix.cols());
+				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
+					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim(lp, i));
+				}
+				res.optimumValue = glpkModel;
 				break;
 			}
 			case GLP_UNBND: {
@@ -86,7 +89,6 @@ namespace hypro {
 		}
 
 		#ifdef USE_SMTRAT
-
 		carl::MultivariatePolynomial<smtrat::Rational> objective = createObjective(_direction);
 
 		#ifdef RECREATE_SOLVER
@@ -103,11 +105,6 @@ namespace hypro {
 
 		#ifdef USE_PRESOLUTION
 		simplex.push();
-		// Get glpk model to initialize assignments for SMT-RAT.
-		vector_t<double> glpkModel(mConstraintMatrix.cols());
-		for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
-			glpkModel(i-1) = glp_get_col_prim(lp, i);
-		}
 
 		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
 		if(res.errorCode == FEAS) {
@@ -115,47 +112,43 @@ namespace hypro {
 			VariablePool& varPool = VariablePool::getInstance();
 			for(unsigned i=0; i < mConstraintMatrix.cols(); ++i) {
 				if(_direction(i) != 0) {
-					carl::MultivariatePolynomial<smtrat::Rational> bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
+					carl::MultivariatePolynomial<smtrat::Rational> bound = varPool.carlVarByIndex(i) - carl::convert<Number,smtrat::Rational>(res.optimumValue(i));
 					smtrat::FormulaT boundConstraint;
 					if(_direction(i) > 0 ) {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::GEQ);
 					} else {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::LEQ);
 					}
-
-					std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
-
+					//std::cout << "Inform and add bound constraint " << boundConstraint << std::endl;
 					simplex.inform(boundConstraint);
 					simplex.add(boundConstraint);
 				}
 			}
 
 			// add constraint for improvement of glpk solution.
-			carl::MultivariatePolynomial<smtrat::Rational> tmpSolution = objective - carl::convert<Number, smtrat::Rational>(res.supportValue);
-			smtrat::FormulaT tmpSolutionConstraint(tmpSolution, carl::Relation::GEQ);
+			carl::MultivariatePolynomial<smtrat::Rational> preSolution = objective - carl::convert<Number, smtrat::Rational>(res.supportValue);
+			smtrat::FormulaT preSolutionConstraint(preSolution, carl::Relation::GEQ);
 
-			std::cout << "Inform and add improvement constraint " << tmpSolutionConstraint << std::endl;
+			//std::cout << "Inform and add improvement constraint " << preSolutionConstraint << std::endl;
 
-			simplex.inform(tmpSolutionConstraint);
-			simplex.add(tmpSolutionConstraint);
+			simplex.inform(preSolutionConstraint);
+			simplex.add(preSolutionConstraint);
 		} else if( res.errorCode == INFEAS) {
-			if(simplex.check() == smtrat::Answer::UNSAT)
-				return res;
-		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
+			if(simplex.check() == smtrat::Answer::UNSAT){
+				return res; // glpk correctly detected infeasibility.
+			} // if glpk falsely detected infeasibility, we cope with this case below.
+		} else { // if glpk already detected unboundedness we return its result.
 			return res;
 		}
-		#endif
+		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
 		// std::cout << "(push)" << std::endl;
-
-		std::cout << "Whole formula: " << std::endl;
-		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		//std::cout << "Whole formula: " << std::endl;
+		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
-
-		//std::cout << "Checked: " << simplex.optimum(objective) << std::endl;
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
@@ -171,12 +164,20 @@ namespace hypro {
 				} else {
 					assert(valuation.isRational());
 					res = EvaluationResult<Number>( carl::convert<smtrat::Rational, Number>(valuation.asRational()), FEAS );
+					smtrat::Model assignment = simplex.model();
+					vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
+					for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+						point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+					}
+					res.optimumValue = point;
 				}
 				break;
 			}
 			default:{
 				#ifdef USE_PRESOLUTION
-				// GLPK Solution was missleading, restart without it
+				// in this case the constraints introduced by the presolution made the problem infeasible
 				simplex.pop();
 				simplex.addObjective(objective, false);
 				//std::cout << "Cleared formula: " << std::endl;
@@ -185,33 +186,40 @@ namespace hypro {
 				//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 				smtratCheck = simplex.check();
-				assert(smtratCheck != smtrat::Answer::UNSAT);
 				assert(smtratCheck != smtrat::Answer::UNKNOWN);
-				smtrat::ModelValue valuation = simplex.optimum(objective);
-				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
-					res = EvaluationResult<Number>( 1, INFTY );
+				if(smtratCheck == smtrat::Answer::SAT) {
+					smtrat::ModelValue valuation = simplex.optimum(objective);
+					if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+						res = EvaluationResult<Number>( 1, INFTY );
+					} else {
+						//std::cout << "Maximized to " << valuation << std::endl;
+						assert(valuation.isRational());
+						res = EvaluationResult<Number>( carl::convert<smtrat::Rational,Number>(valuation.asRational()), FEAS );
+						smtrat::Model assignment = simplex.model();
+						vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
+						for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						}
+						res.optimumValue = point;
+						}
 				} else {
-					//std::cout << "Maximized to " << valuation << std::endl;
-					assert(valuation.isRational());
-					res = EvaluationResult<Number>( carl::convert<smtrat::Rational,Number>(valuation.asRational()), FEAS );
+					res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-				#else
+
+				#else // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
-				res.errorCode = INFEAS;
-				#endif
+				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+				#endif // USE_PRESOLUTION
 				break;
 			}
 		}
 
-		#else
+		#else // RECREATE_SOVER
 		mSmtratSolver.push();
 
 		#ifdef USE_PRESOLUTION
-		// Get glpk model to initialize assignments for SMT-RAT.
-		vector_t<double> glpkModel(mConstraintMatrix.cols());
-		for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
-			glpkModel(i-1) = glp_get_col_prim(lp, i);
-		}
 
 		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
 		if(res.errorCode == FEAS) {
@@ -219,7 +227,7 @@ namespace hypro {
 			VariablePool& varPool = VariablePool::getInstance();
 			for(unsigned i=0; i < mConstraintMatrix.cols(); ++i) {
 				if(_direction(i) != 0) {
-					Poly bound = varPool.carlVarByIndex(i) - carl::convert<double, smtrat::Rational>(glpkModel(i));
+					Poly bound = varPool.carlVarByIndex(i) - carl::convert<Number, smtrat::Rational>(res.optimumValue(i));
 					smtrat::FormulaT boundConstraint;
 					if(_direction(i) > 0 ) {
 						boundConstraint = smtrat::FormulaT(bound, carl::Relation::GEQ);
@@ -239,10 +247,10 @@ namespace hypro {
 		} else if( res.errorCode == INFEAS) {
 			if(mSmtratSolver.check() == smtrat::Answer::UNSAT)
 				return res;
-		} else { // if glpk detected unboundedness we return. TODO: Is this correct?
+		} else { // if glpk detected unboundedness we return.
 			return res;
 		}
-		#endif
+		#endif // USE_PRESOLUTION
 
 		mSmtratSolver.addObjective(objective, false);
 
@@ -266,40 +274,62 @@ namespace hypro {
 				} else {
 					assert(valuation.isRational());
 					res = EvaluationResult<Number>( carl::convert<Rational,Number>(valuation.asRational()), FEAS );
+					smtrat::Model assignment = mSmtratSolver.model();
+					vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
+					for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+						point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+					}
+					res.optimumValue = point;
 				}
 				break;
 			}
 			default:{
 				#ifdef USE_PRESOLUTION
 				// GLPK Solution was missleading, restart without it
-				simplex.pop();
-				simplex.addObjective(objective, false);
-				std::cout << "Cleared formula: " << std::endl;
+				mSmtratSolver.pop();
+				mSmtratSolver.addObjective(objective, false);
+				//std::cout << "Cleared formula: " << std::endl;
 
-				////std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+				////std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 				////std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
-				smtratCheck = simplex.check();
-				assert(smtratCheck != smtrat::Answer::UNSAT);
+				smtratCheck = mSmtratSolver.check();
 				assert(smtratCheck != smtrat::Answer::UNKNOWN);
-				smtrat::ModelValue valuation = simplex.optimum(objective);
-				if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
-					res = EvaluationResult<Number>( 1, INFTY );
+				if(smtratCheck == smtrat::Answer::SAT) {
+					smtrat::ModelValue valuation = mSmtratSolver.optimum(objective);
+					if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+						res = EvaluationResult<Number>( 1, INFTY );
+					} else {
+						//std::cout << "Maximized to " << valuation << std::endl;
+						assert(valuation.isRational());
+						res = EvaluationResult<Number>( carl::convert<smtrat::Rational,Number>(valuation.asRational()), FEAS );
+						smtrat::Model assignment = mSmtratSolver.model();
+						vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
+						for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						}
+						res.optimumValue = point;
+					}
 				} else {
-					//std::cout << "Maximized to " << valuation << std::endl;
-					assert(valuation.isRational());
-					res = EvaluationResult<Number>( carl::convert<smtrat::Rational,Number>(valuation.asRational()), FEAS );
+					res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-				#endif
+				#endif // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
-				res.errorCode = INFEAS;
+				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				break;
 			}
 		}
 		// cleanup: Remove optimization function and glpk pre-results, if added
 		mSmtratSolver.pop();
-		#endif
-		#endif
+		#endif // RECREATE_SOLVER
+		#endif // USE_SMTRAT
+
+		// if there is a valid solution (FEAS), it implies the optimumValue is set.
+		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 
 		return res;
 	}
@@ -709,7 +739,7 @@ namespace hypro {
 				mSmtratSolver.pop();
 				if(!mSmtratSolver.formula().empty()){
 					//std::cout << "THIS SHOULD NOT HAPPEN -> INCORRECT TRACKING OF BT-POINTS." << std::endl;
-					std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+					//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 					mSmtratSolver.clear();
 				}
 				assert(mSmtratSolver.formula().empty());
