@@ -315,6 +315,16 @@ bool Hyperplane<Number>::contains( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
 }
 
+template<typename Number>
+bool Hyperplane<Number>::contains( const std::vector<Point<Number>>& _points) const {
+	for(const auto& point : _points){
+		if(point.rawCoordinates().dot(mNormal) > mScalar){
+			return false;
+		}
+	}
+	return true;
+}
+
 template <typename Number>
 bool Hyperplane<Number>::holds( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) <= mScalar );

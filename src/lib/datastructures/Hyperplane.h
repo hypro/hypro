@@ -10,8 +10,6 @@
 
 #pragma once
 
-
-
 #include "Point.h"
 #include "../util/VariablePool.h"
 #include "../util/linearSolving.h"
@@ -70,6 +68,7 @@ class Hyperplane {
 	static vector_t<Number> saveIntersect( const std::vector<Hyperplane<Number>>& _planes, Number threshold = 0);
 
 	bool contains( const vector_t<Number> _vector ) const;
+	bool contains( const std::vector<Point<Number>>& _points) const;
 	bool holds( const vector_t<Number> _vector ) const;
 
     Number scalar() const { return mScalar; }
