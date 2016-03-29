@@ -600,8 +600,7 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 			return mBall->contains( _point );
 		}
 		case SF_TYPE::LINTRAFO: {
-			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
-			return mLinearTrafoParameters->origin->contains( tmp * _point );
+			return mLinearTrafoParameters->origin->contains( mLinearTrafoParameters->a * _point + mLinearTrafoParameters->b );
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->contains( _point );
@@ -617,12 +616,10 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 			return false;
 		}
 		case SF_TYPE::UNION: {
-			assert( false );  // Todo: Not implemented yet.
-			return false;
+			return (mIntersectionParameters->rhs->contains(_point) || mIntersectionParameters->lhs->contains(_point));
 		}
 		case SF_TYPE::INTERSECT: {
-			assert( false );  // Todo: Not implemented yet.
-			return false;
+			return (mIntersectionParameters->rhs->contains(_point) && mIntersectionParameters->lhs->contains(_point));
 		}
 		default:
 			assert( false );
