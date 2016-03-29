@@ -15,6 +15,7 @@
 #include "../../../util/Optimizer.h"
 #include "../../../util/Permutator.h"
 
+#include <algorithm>
 #include <cassert>
 
 #define REDUCE_NUMBERS

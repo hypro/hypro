@@ -79,6 +79,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 			//std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
+				assert(facet->hyperplane().contains(points));
 				mHPlanes.push_back( facet->hyperplane() );
 			}
 			facets.clear();
@@ -591,10 +592,8 @@ template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
 	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	if(this->empty()){
-		std::cout << __func__ << ": THIS IS EMPTY" << std::endl;
 		return false;
 	}
-
 	if(rhs.empty()) {
 		return true;
 	}
@@ -612,7 +611,7 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 			continue;
 		} else if ( evalRes.supportValue < plane.offset() ) {
 			assert(evalRes.errorCode == FEAS);
-			std::cout << "Too large" << std::endl;
+			std::cout << "Rhs offset is larger than result" << std::endl;
 			return false;
 		}
 	}
@@ -630,7 +629,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		assert(result.contains(*this));
-		//assert(result.contains(_rhs));
+		assert(result.contains(_rhs));
 		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return result;
