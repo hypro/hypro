@@ -243,17 +243,19 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		case SF_TYPE::LINTRAFO: {
 			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
 			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
-			if(res.errorCode != SOLUTION::INFTY){
-				std::cout << __func__ << ": Modified result("<< carl::toDouble(res.supportValue) << ") by " << carl::toDouble(norm(scalarProjection(mLinearTrafoParameters->b, _direction))) << " to ";
-				Number component = ((mLinearTrafoParameters->b).dot(_direction))/norm((_direction));
-				if(component > 0){
-					res.supportValue += norm(scalarProjection(mLinearTrafoParameters->b, _direction));
-				} else {
-					res.supportValue -= norm(scalarProjection(mLinearTrafoParameters->b, _direction));
+			switch(res.errorCode){
+				case SOLUTION::INFTY:
+				case SOLUTION::INFEAS:{
+					return res;
 				}
-				std::cout << carl::toDouble(res.supportValue) << std::endl;
+				default:{
+					assert(res.errorCode == SOLUTION::FEAS);
+					res.optimumValue = mLinearTrafoParameters->a * res.optimumValue + mLinearTrafoParameters->b;
+					// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
+					res.supportValue = res.optimumValue.dot(_direction);
+					return res;
+				}
 			}
-			return res;
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->evaluate( _direction );
@@ -329,11 +331,13 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 		case SF_TYPE::LINTRAFO: {
 			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * mLinearTrafoParameters->a );
-			unsigned cnt = 0;
+			unsigned directionCnt = 0;
 			for(auto& entry : res){
-				vector_t<Number> dir = _directions.row(cnt);
-				entry.supportValue += ((mLinearTrafoParameters->b).dot(dir))/norm(dir);
-				++cnt;
+				vector_t<Number> currentDir = _directions.row(directionCnt);
+				entry.optimumValue = mLinearTrafoParameters->a * entry.optimumValue + mLinearTrafoParameters->b;
+				// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
+				entry.supportValue = entry.optimumValue.dot(currentDir);
+				++directionCnt;
 			}
 			return res;
 		}
@@ -434,7 +438,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					res.supportValue = resB[i].supportValue;
 					res.optimumValue = resB[i].optimumValue;
 				} else if (resB[i].errorCode == SOLUTION::INFTY) {
-					assert(resA[i].errorCode = SOLUTION::FEAS);
+					assert(resA[i].errorCode == SOLUTION::FEAS);
 					res.errorCode = resA[i].errorCode;
 					res.supportValue = resA[i].supportValue;
 					res.optimumValue = resA[i].optimumValue;

@@ -143,10 +143,10 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		// std::cout << "(push)" << std::endl;
-		//std::cout << "Whole formula: " << std::endl;
-		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		std::cout << "(push)" << std::endl;
+		std::cout << "Whole formula: " << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
@@ -167,9 +167,14 @@ namespace hypro {
 					smtrat::Model assignment = simplex.model();
 					vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
 					for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-						point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						// if the variable did not occur in the current call, set to 0.
+						if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+							point(d) = 0;
+						} else {
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						}
 					}
 					res.optimumValue = point;
 				}
@@ -198,9 +203,14 @@ namespace hypro {
 						smtrat::Model assignment = simplex.model();
 						vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
 						for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+							// if the variable did not occur in the current call, set to 0.
+							if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+								point(d) = 0;
+							} else {
+								assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+								assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+								point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+							}
 						}
 						res.optimumValue = point;
 						}
@@ -277,9 +287,14 @@ namespace hypro {
 					smtrat::Model assignment = mSmtratSolver.model();
 					vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
 					for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-						point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						// if the variable did not occur in the current call, set to 0.
+						if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+							point(d) = 0;
+						} else {
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+						}
 					}
 					res.optimumValue = point;
 				}
@@ -308,9 +323,14 @@ namespace hypro {
 						smtrat::Model assignment = mSmtratSolver.model();
 						vector_t<Number> point = vector_t<Number>(mConstraintMatrix.cols());
 						for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-							assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-							point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+							// if the variable did not occur in the current call, set to 0.
+							if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+								point(d) = 0;
+							} else {
+								assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+								assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+								point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+							}
 						}
 						res.optimumValue = point;
 					}
@@ -467,9 +487,14 @@ namespace hypro {
 		smtrat::Model assignment = mSmtratSolver.model();
 		vector_t<Number> point;
 		for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-			assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-			assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-			point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+			// if the variable did not occur in the current call, set to 0.
+			if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+				point(d) = 0;
+			} else {
+				assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+				assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+				point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+			}
 		}
 		return EvaluationResult<Number>(point, mLastConsistencyAnswer);
 
@@ -489,9 +514,14 @@ namespace hypro {
 				smtrat::Model assignment = mSmtratSolver.model();
 				vector_t<Number> point;
 				for(unsigned d = 0; d < mConstraintMatrix.cols(); ++d){
-					assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
-					assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
-					point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+					// if the variable did not occur in the current call, set to 0.
+					if(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) == assignment.end()){
+						point(d) = 0;
+					} else {
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d)) != assignment.end());
+						assert(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.isRational());
+						point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
+					}
 				}
 				res.optimumValue = point;
 				res.errorCode = mLastConsistencyAnswer;

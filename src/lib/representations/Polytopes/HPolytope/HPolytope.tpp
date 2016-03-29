@@ -630,7 +630,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		assert(result.contains(*this));
-		assert(result.contains(_rhs));
+		//assert(result.contains(_rhs));
 		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return result;
