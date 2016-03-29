@@ -6,7 +6,7 @@
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * @author Benedikt Seidl
- * @author Simon Froitzheim
+ * 
  *
  * @since	2011-01-17
  * @version	2015-08-27
@@ -203,10 +203,11 @@ class Point {
 
         /**
          * removes any duplicate points in a given PointVector
+         * @author Simon Froitzheim
          * @param PointVec the point vector which should get checked for duplicates
          * @return A point vector that is just PointVec without duplicates
          */
-
+        
         static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& PointVec){
               std::set<Point<Number>> PointSet = std::set<Point<Number>>();
               //writes all the point entries into a set (set removes duplicates)

@@ -38,7 +38,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zono
 	return VPolytope(_source.vertices());
 }
 
-//TODO underapproximation
+//TODO underapproximation (second simpler approach)
 // conversion from Support Function to V-Polytope (OVER or UNDER)
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
@@ -80,6 +80,27 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 	        //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
 	        target = VPolytope(constraints, constants);
 	        }
+        if (mode == UNDER){
+                //gets dimension of source object
+		unsigned dim = _source.dimension();
 
+		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+		assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+		//creates a matrix with one row for each direction and one column for each dimension
+		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+
+		//fills the matrix with the template directions
+		for (unsigned i=0; i<templateDirections.size();++i){
+			templateDirectionMatrix.row(i) = templateDirections[i];
+		}
+                
+                //computes some central boundary points based on the directions (pretty precise but expensive)
+                std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
+                
+                target = VPolytope(boundaryPoints);
+
+        }
 	        return target;
 }
