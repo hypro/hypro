@@ -10,8 +10,8 @@
 //#include "../../util/Plotter.h"
 namespace hypro {
 
-//enum for differentiating between exact conversion and over-/underapproximation.
-enum CONV_MODE {EXACT, OVER, UNDER};
+//enum for differentiating between exact conversion and over-/underapproximation (some functions support an alternative computation method).
+enum CONV_MODE {EXACT, OVER, UNDER, ALTERNATIVE};
 
 template<typename Number>
 class Converter {
