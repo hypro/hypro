@@ -199,3 +199,32 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
     return res;
 
 }
+
+//template <typename Number>
+//typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+    //gets dimension of source object
+//    unsigned dim = _source.dimension();
+
+    //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+//    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+//    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+    //creates a matrix with one row for each direction and one column for each dimension
+//    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+
+    //fills the matrix with the template directions
+//    for (unsigned i=0; i<templateDirections.size();++i){
+//        templateDirectionMatrix.row(i) = templateDirections[i];
+//    }
+    
+    //TODO alternative boundary point computation 
+    //computes some central boundary points based on the directions (pretty precise but expensive)
+//    std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
+
+    //computes an oriented Box as special Zonotope around the boundary points(returns hyperplanes)
+//    std::vector<Hyperplane<Number>> planes = computeOrientedBox(boundaryPoints);
+//    HPolytope hpoly = HPolytope(planes);
+    
+    
+    
+//}
