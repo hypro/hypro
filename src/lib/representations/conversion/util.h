@@ -119,6 +119,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
+            curFace.print();
             
             //recursive call of this function for the current face
             recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
