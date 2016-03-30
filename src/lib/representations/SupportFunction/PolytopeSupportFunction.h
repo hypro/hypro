@@ -19,7 +19,7 @@
 #include "../../util/Optimizer.h"
 #include "../../util/convexHull.h"
 
-#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
 
 namespace hypro {
