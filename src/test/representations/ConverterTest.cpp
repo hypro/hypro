@@ -336,11 +336,11 @@ TYPED_TEST(ConverterTest, toZonotope)
 
 
         //TODO result is slightly tilted (maybe try with different number of directions)
-        auto result8 = Converter<TypeParam>::toZonotope(this->support);
+        auto result8 = Converter<TypeParam>::toZonotope(this->support, ALTERNATIVE);
         //auto vpoly5 = VPolytope<TypeParam>(result8.vertices());
         //this->plotter.setObjectColor(this->plotter.addObject(vpoly5.vertices()), colors[petrol]);
 
-        auto result9 = Converter<TypeParam>::toZonotope(this->support2);
+        auto result9 = Converter<TypeParam>::toZonotope(this->support2, ALTERNATIVE);
         //auto vpoly6 = VPolytope<TypeParam>(result9.vertices());
         //this->plotter.setObjectColor(this->plotter.addObject(vpoly6.vertices()), colors[bordeaux]);
 
