@@ -308,7 +308,6 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 	opt.setVector(constants);
 
 	if(!opt.checkConsistency()){
-		std::cout << "INCONSISTENT" << std::endl;
 		return std::make_pair(false, Empty());
 	}
 
