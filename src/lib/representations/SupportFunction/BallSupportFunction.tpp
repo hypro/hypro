@@ -49,16 +49,26 @@ EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 	EvaluationResult<Number> result;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL: {
+			if(mRadius < 0){
+				return result;
+			}
 			unsigned max = 0;
 			for ( unsigned i = 1; i < l.rows(); ++i ) {
 				max = abs( l( i ) ) > abs( l( max ) ) ? i : max;
 			}
 			result.supportValue = ( mRadius / abs( l( max ) ) );
+			result.optimumValue = result.supportValue * normalize(l);
+			result.errorCode = SOLUTION::FEAS;
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
+			if(mRadius < 0){
+				return result;
+			}
 			Number length = norm(l,true);
 			result.supportValue = ( mRadius / length );
+			result.optimumValue = result.supportValue * normalize(l);
+			result.errorCode = SOLUTION::FEAS;
 			break;
 		}
 		default:
@@ -74,6 +84,12 @@ std::vector<EvaluationResult<Number>> BallSupportFunction<Number>::multiEvaluate
 	r.supportValue = mRadius;
 	r.errorCode = mRadius > 0 ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	std::vector<EvaluationResult<Number>> res(_A.rows(), r);
+	unsigned cnt = 0;
+	for(auto& singleRes : res ){
+		singleRes.optimumValue = singleRes.supportValue * normalize(vector_t<Number>(_A.row(cnt)));
+		++cnt;
+	}
+	assert(res.size() == unsigned(_A.rows()));
 
 	return res;
 }
