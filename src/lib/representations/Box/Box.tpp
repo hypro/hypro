@@ -288,17 +288,29 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 
 template<typename Number, typename Converter>
 std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension(), this->dimension());
-	vector_t<Number> constants = vector_t<Number>(2*this->dimension());
+	assert(this->dimension() == unsigned(_mat.cols()));
+	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension()+_mat.rows(), this->dimension());
+	vector_t<Number> constants = vector_t<Number>::Zero(2*this->dimension()+_vec.rows());
 	for(unsigned d = 0; d < this->dimension(); ++d) {
 		constraints(2*d, d) = 1;
 		constraints(2*d+1, d) = -1;
 		constants(2*d) = mLimits.second.at(d);
 		constants(2*d+1) = -mLimits.first.at(d);
 	}
+	//std::cout << "So far box constraints:" << std::endl << constraints << std::endl << constants << std::endl << "MAT: " << std::endl << _mat << std::endl << "VEC: " << std::endl << _vec << std::endl;
+
+	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _mat.rows() << "," << _mat.cols() << std::endl;
+	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _vec.rows() << ",1" << std::endl;
+	constraints.block(2*this->dimension(),0,_mat.rows(), _mat.cols()) = _mat;
+	constants.block(2*this->dimension(),0, _vec.rows(),1) = _vec;
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(constraints);
 	opt.setVector(constants);
+
+	if(!opt.checkConsistency()){
+		std::cout << "INCONSISTENT" << std::endl;
+		return std::make_pair(false, Empty());
+	}
 
 	std::vector<Point<Number>> vertices = this->vertices();
 	bool allVerticesContained = true;
@@ -309,14 +321,15 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 			outsideVertexCnt++;
 		}
 	}
+
+	std::cout << __func__ << ": #vertices outside: " << outsideVertexCnt << "/" << vertices.size() << std::endl;
+
 	if(allVerticesContained) {
 		return std::make_pair(true, *this);
 	}
 
-	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(false, Empty());
-	}
-
+	// cannot be empty, otherwise all points would have violated the planes.
+	assert(!this->intersectHyperplanes(_mat,_vec).empty());
 	return std::make_pair(true, this->intersectHyperplanes(_mat, _vec));
 }
 
