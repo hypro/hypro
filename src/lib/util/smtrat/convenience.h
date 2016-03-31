@@ -79,7 +79,7 @@ namespace hypro {
 		std::unordered_map<smtrat::FormulaT, std::size_t> constraints;
 		for(unsigned d = 0; d < _point.dimension(); ++d) {
 			carl::MultivariatePolynomial<smtrat::Rational> row;
-			row += -carl::convert<Number,smtrat::Rational>(_point.at(d)) + pool.carlVarByIndex(d);
+			row += smtrat::Rational(-carl::convert<Number,smtrat::Rational>(_point.at(d))) + pool.carlVarByIndex(d);
 			//std::cout << "atempt to insert constraint " << d << " (" << _constraints.row(d) << ", " << _constants(d) << ")" << std::endl;
 			constraints.insert(std::make_pair(smtrat::FormulaT(row,carl::Relation::EQ), d));
 		}
