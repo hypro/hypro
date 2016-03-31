@@ -58,7 +58,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
 
-            
+
             //call of the recursive sub-function for the current face
             recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, dim-1);
             }
@@ -120,16 +120,17 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
             curFace.print();
-            
+
             //recursive call of this function for the current face
             recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
-           
+
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
+        assert(!recursiveSolutions.empty());
 
         //computes the arithmetic mean as an approximation of the centroid
-        res = computeArithmeticMeanPoint(recursiveSolutions);
+        res = Point<Number>(computeArithmeticMeanPoint(recursiveSolutions));
    //call has only a point as source object (deepest recursion layer)
    } else if (curDim == 0) {
         //evaluates the object in the first direction (any direction produces the same result)
@@ -139,8 +140,9 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         res = Point<Number>(point.optimumValue);
    } else {
        //dimension should never be smaller than 0
-       assert(false);    
+       assert(false);
    }
+   std::cout << "Point dimension: " << res.rawCoordinates().rows() << std::endl;
    return res;
 }
 
@@ -149,16 +151,21 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
  */
 
 template <typename Number>
-vector_t<Number> computeArithmeticMeanPoint(std::vector<Point<Number>>& PointVec){
+vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& pointVec){
     //defines an empty solution vector
-    vector_t<Number> res = vector_t<Number>::Zero(PointVec[0].dimension());
+    if(!pointVec.empty()){
+    	vector_t<Number> res = vector_t<Number>::Zero(pointVec.at(0).rawCoordinates().rows());
 
-         //computes the arithmetic mean by first building the sum of all points and then dividing it by the number of points
-         for (unsigned i=0; i < PointVec.size(); ++i){
-              res += PointVec[i].rawCoordinates();
-         }
-         res = res*( ((Number) 1)/PointVec.size());
-         return res;
+		//computes the arithmetic mean by first building the sum of all points and then dividing it by the number of points
+		for (unsigned i=0; i < pointVec.size(); ++i){
+			std::cout << "add point with dimension " << pointVec.at(i).rawCoordinates().rows() << std::endl;
+			assert(res.rows() == pointVec.at(i).rawCoordinates().rows());
+			res += pointVec.at(i).rawCoordinates();
+		}
+		res = res*( ((Number) 1)/pointVec.size());
+		return res;
+    }
+    return vector_t<Number>::Zero(0);
 }
 
 
