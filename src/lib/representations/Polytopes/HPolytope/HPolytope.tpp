@@ -251,7 +251,10 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 					}
 				}
 				if(!outside) {
-					vertices.emplace_back(res);
+					// insert, if no duplicate
+					Point<Number> tmp(res);
+					if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
+						vertices.push_back(tmp);
 					//std::cout << "Final vertex: " << res << std::endl;
 				}
 			}
@@ -327,22 +330,25 @@ void HPolytopeT<Number, Converter>::calculateFan() const {
 
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
-	std::cout << "Dimension: " << mDimension << ", plane dimension: " << plane.dimension() << std::endl;
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
-	}
-	bool found = false;
-	for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ++planeIt) {
-		if(*planeIt == plane){
-			found = true;
-			break;
-		}
-	}
-	if(!found){
 		mHPlanes.push_back( plane );
-		mEmpty = State::NSET;
-		mNonRedundant = false;
+		mEmpty = State::FALSE;
+		mNonRedundant = true;
+	} else {
+		bool found = false;
+		for(auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ++planeIt) {
+			if(*planeIt == plane){
+				found = true;
+				break;
+			}
+		}
+		if(!found){
+			mHPlanes.push_back( plane );
+			mEmpty = State::NSET;
+			mNonRedundant = false;
+		}
 	}
 }
 
