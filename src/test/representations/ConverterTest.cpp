@@ -198,16 +198,16 @@ TYPED_TEST(ConverterTest, toBox)
         //result.print();
         auto result = Converter<TypeParam>::toBox(this->hpolytope, ALTERNATIVE);
         //this->plotter.setObjectColor(this->plotter.addObject(result.vertices()), colors[orange]);
-        
+
         auto result2 = Converter<TypeParam>::toBox(this->hpolytope2, ALTERNATIVE);
         //this->plotter.setObjectColor(this->plotter.addObject(result2.vertices()), colors[green]);
-        
+
         auto result3 = Converter<TypeParam>::toBox(this->hpolytope);
         //this->plotter.setObjectColor(this->plotter.addObject(result3.vertices()), colors[orange]);
-        
+
         auto result4 = Converter<TypeParam>::toBox(this->hpolytope2);
         //this->plotter.setObjectColor(this->plotter.addObject(result4.vertices()), colors[green]);
-        
+
         SUCCEED();
 }
 
@@ -293,10 +293,10 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
         auto result8 = Converter<TypeParam>::toVPolytope(this->box);
         //this->plotter.setObjectColor(this->plotter.addObject(result8.vertices()), colors[violett]);
-        
+
         auto result9 = Converter<TypeParam>::toVPolytope(this->support, ALTERNATIVE, 4);
         this->plotter.setObjectColor(this->plotter.addObject(result9.vertices()), colors[red]);
-        
+
         auto result10 = Converter<TypeParam>::toVPolytope(this->support2, ALTERNATIVE, 4);
         this->plotter.setObjectColor(this->plotter.addObject(result10.vertices()), colors[lila]);
 	SUCCEED();

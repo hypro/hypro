@@ -29,11 +29,11 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     //only continue if directions and object match dimensionwise
     assert (dim == sf.dimension());
     //generates an empty PointVector for the return value
-    std::vector<Point<Number>> res = std::vector<Point<Number>>(numberOfDirections);
+    std::vector<Point<Number>> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
     if (dim > 0){
         //generates an empty PointVector for the return values of the recursive calls
-        std::vector<Point<Number>> recursiveSolutions = std::vector<Point<Number>>(numberOfDirections);
+        std::vector<Point<Number>> recursiveSolutions;
         for(unsigned i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
@@ -45,12 +45,12 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
                 continue;
             }
             Number constant = offset.supportValue;
-            //creates the current halfspace
-            Hyperplane<Number> curPlane = Hyperplane<Number>(curNormal, constant);
 
             //creates a hyperplanevector containing only the recently created hyperplane
-            std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>(1);
-            curPlaneVector[0] = curPlane;
+            std::vector<Hyperplane<Number>> curPlaneVector;
+            curPlaneVector.emplace_back(curNormal, constant);
+            curPlaneVector.emplace_back(-curNormal, -constant);
+            assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the hyperplane
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
@@ -58,23 +58,19 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
 
-
             //call of the recursive sub-function for the current face
-            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, dim-1);
+            recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, dim-1));
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
         res = recursiveSolutions;
    //kickoff function gets called with a point for some reason
-   } else if (dim == 0){
+   } else { // dim == 0
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
-        res.push_back(Point<Number>(point.optimumValue));
-   } else {
-       //dimension should never be smaller than 0
-       assert(false);
+        res.emplace_back(point.optimumValue);
    }
    return res;
 }
@@ -95,7 +91,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
     if (curDim > 0){
         //generates an empty PointVector for the return values of the recursive calls
-        std::vector<Point<Number>> recursiveSolutions = std::vector<Point<Number>>(numberOfDirections);
+        std::vector<Point<Number>> recursiveSolutions;
         for(unsigned i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
@@ -107,12 +103,12 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
                 continue;
             }
             Number constant = offset.supportValue;
-            //creates the current halfspace
-            Hyperplane<Number> curPlane = Hyperplane<Number>(curNormal, constant);
 
             //creates a hyperplanevector containing only the recently created hyperplane
-            std::vector<Hyperplane<Number>> curPlaneVector = std::vector<Hyperplane<Number>>(1);
-            curPlaneVector[0] = curPlane;
+            std::vector<Hyperplane<Number>> curPlaneVector;
+            curPlaneVector.emplace_back(curNormal, constant);
+            curPlaneVector.emplace_back(-curNormal, -constant);
+            assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the hyperplane
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
@@ -122,9 +118,10 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             curFace.print();
 
             //recursive call of this function for the current face
-            recursiveSolutions[i] = computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1);
+            recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1));
+            assert(recursiveSolutions.back().rawCoordinates().rows() > 0);
 
-            }
+        }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
         assert(!recursiveSolutions.empty());
@@ -132,17 +129,13 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         //computes the arithmetic mean as an approximation of the centroid
         res = Point<Number>(computeArithmeticMeanPoint(recursiveSolutions));
    //call has only a point as source object (deepest recursion layer)
-   } else if (curDim == 0) {
+   } else { // curDim == 0
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
         res = Point<Number>(point.optimumValue);
-   } else {
-       //dimension should never be smaller than 0
-       assert(false);
    }
-   std::cout << "Point dimension: " << res.rawCoordinates().rows() << std::endl;
    return res;
 }
 
@@ -158,7 +151,6 @@ vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& po
 
 		//computes the arithmetic mean by first building the sum of all points and then dividing it by the number of points
 		for (unsigned i=0; i < pointVec.size(); ++i){
-			std::cout << "add point with dimension " << pointVec.at(i).rawCoordinates().rows() << std::endl;
 			assert(res.rows() == pointVec.at(i).rawCoordinates().rows());
 			res += pointVec.at(i).rawCoordinates();
 		}
