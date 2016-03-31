@@ -265,7 +265,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         assert(sourceOffsets.size() == std::size_t(normals.rows()));
         for(unsigned offsetIndex = 0; offsetIndex < sourceOffsets.size(); ++offsetIndex){
               oldOffsets(offsetIndex) = sourceOffsets[offsetIndex].supportValue;
-              if(sourceOffsets[offsetIndex].errorCode != SOLUTION::INFTY)
+              if(sourceOffsets[offsetIndex].errorCode == SOLUTION::INFTY)
                   //source object is unbounded
                   //TODO dealing with the unbounded case (maybe introducing unbounded zonotopes?) 
                   assert(false);
@@ -277,6 +277,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
             planes[i].setOffset(maxValue);
         }
         
+        //overapproximated hpolytope (now for certain)
         HPolytope hpoly = HPolytope(planes);
 
         //converts computed box H -> V
