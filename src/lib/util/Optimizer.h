@@ -66,7 +66,7 @@ namespace hypro {
 		void initialize() const;
 		void updateConstraints() const;
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
-		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
+		EvaluationResult<Number> extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
 
 		void createArrays( unsigned size ) const;
 		void deleteArrays() const;

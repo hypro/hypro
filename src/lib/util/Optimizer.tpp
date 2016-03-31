@@ -719,7 +719,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> Optimizer<Number>::extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
+	EvaluationResult<Number> Optimizer<Number>::extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
 		smtrat::ModelValue valuation = solver.optimum(objective);
 		EvaluationResult<Number> res;
 		assert(!valuation.isBool());
