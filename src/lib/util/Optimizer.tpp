@@ -18,6 +18,7 @@ namespace hypro {
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
 			mConstraintMatrix = _matrix;
+			//std::cout << "Set matrix to " << std::endl << mConstraintMatrix << std::endl;
 		}
 	}
 
@@ -27,6 +28,7 @@ namespace hypro {
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
 			mConstraintVector = _vector;
+			//std::cout << "Set vector to " << std::endl << mConstraintVector << std::endl;
 		}
 	}
 
@@ -285,6 +287,8 @@ namespace hypro {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
 		}
+		//std::cout << "Check: " << std::endl;
+		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 		smtrat::Answer sol = simplex.check();
 		assert(sol != smtrat::Answer::UNKNOWN);
 		return (sol == smtrat::Answer::SAT);
@@ -295,6 +299,8 @@ namespace hypro {
 			mSmtratSolver.inform(constraintPair.first);
 			mSmtratSolver.add(constraintPair.first, false);
 		}
+		//std::cout << "Check: " << std::endl;
+		//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 		smtrat::Answer tmp = mSmtratSolver.check();
 		mSmtratSolver.pop();
 		return (tmp == smtrat::Answer::SAT);
