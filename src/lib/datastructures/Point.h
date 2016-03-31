@@ -208,15 +208,19 @@ class Point {
          * @return A point vector that is just PointVec without duplicates
          */
         
-        static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& PointVec){
-              std::set<Point<Number>> PointSet = std::set<Point<Number>>();
+        static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
+              std::set<Point<Number>> pointSet = std::set<Point<Number>>();
               //writes all the point entries into a set (set removes duplicates)
-              for (unsigned i; i<PointVec.size(); ++i){
-                  PointSet.insert(PointVec[i]);
+              for (unsigned i; i<pointVec.size(); ++i){
+                  pointSet.insert(pointVec[i]);
               }
               //write all the set entries into the return vector
-              std::vector<Point<Number>> res = std::vector<Point<Number>>(PointSet.size());
-              std::copy(PointSet.begin(), PointSet.end(), res.begin());
+              std::vector<Point<Number>> res = std::vector<Point<Number>>(pointSet.size());
+              for (const auto& point : pointSet){
+                  res.push_back(point);
+              }
+              
+              //std::copy(pointSet.begin(), pointSet.end(), res.begin());
               return res;
         }
 
