@@ -1,4 +1,5 @@
 #include "Optimizer.h"
+#include "VariablePool.h"
 
 namespace hypro {
 
@@ -18,7 +19,6 @@ namespace hypro {
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
 			mConstraintMatrix = _matrix;
-			//std::cout << "Set matrix to " << std::endl << mConstraintMatrix << std::endl;
 		}
 	}
 
@@ -28,7 +28,6 @@ namespace hypro {
 			mConstraintsSet = false;
 			mConsistencyChecked = false;
 			mConstraintVector = _vector;
-			//std::cout << "Set vector to " << std::endl << mConstraintVector << std::endl;
 		}
 	}
 
@@ -306,8 +305,14 @@ namespace hypro {
 		return (tmp == smtrat::Answer::SAT);
 		#endif // RECREATE_SOLVER
 		#else // USE_SMTRAT
-		// TODO
-		// TODO: Avoid re-call here too!
+
+		// set point
+		assert(mConstraintMatrix.cols() == _point.rawCoordinates().rows());
+		for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
+			glp_set_col_bnds( lp, i + 1, GLP_FX, carl::toDouble(_point.rawCoordinates()(i)), 0.0 );
+			glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
+		}
+
 		glp_exact( lp, NULL );
 		return (glp_get_status(lp) != GLP_NOFEAS);
 		#endif
@@ -695,6 +700,7 @@ namespace hypro {
 		}
 	}
 
+#ifdef USE_SMTRAT
 	template<typename Number>
 	void Optimizer<Number>::addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const {
 		// add assignment from glpk
@@ -755,6 +761,7 @@ namespace hypro {
 		}
 		return res;
 	}
+#endif
 
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {

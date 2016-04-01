@@ -6,7 +6,6 @@
 
 #include <lib/solver/Manager.h>
 #include <lib/modules/LRAModule/LRAModule.h>
-//#include "../../config.h"
 #include "convenience.h"
 
 namespace smtrat

@@ -1,9 +1,7 @@
 #pragma once
 
 #include "EvaluationResult.h"
-#include "VariablePool.h"
 #include "smtrat/SimplexSolver.h"
-#include "../config.h"
 #include <carl/util/Singleton.h>
 
 #define USE_PRESOLUTION
@@ -65,8 +63,10 @@ namespace hypro {
 	private:
 		void initialize() const;
 		void updateConstraints() const;
+		#ifdef USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
 		EvaluationResult<Number> extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
+		#endif
 
 		void createArrays( unsigned size ) const;
 		void deleteArrays() const;
