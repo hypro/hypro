@@ -321,7 +321,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHyperpl
 		}
 	}
 
-	std::cout << __func__ << ": #vertices outside: " << outsideVertexCnt << "/" << vertices.size() << std::endl;
+	//std::cout << __func__ << ": #vertices outside: " << outsideVertexCnt << "/" << vertices.size() << std::endl;
 
 	if(allVerticesContained) {
 		return std::make_pair(true, *this);
@@ -387,7 +387,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHyperplane( const Hyperp
 	if(!this->empty()) {
 		auto intermediate = Converter::toHPolytope(*this);
 		intermediate.insert(rhs);
-		return std::move(Converter::toBox(intermediate));
+		return Converter::toBox(intermediate);
 	}
 	return Empty(this->dimension());
 }
