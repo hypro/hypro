@@ -227,10 +227,15 @@ namespace hypro{
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
         assert(_mat.rows() == _vec.rows());
         bool empty = false;
+        std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
-        	if(content->evaluate(_mat.row(rowI)).errorCode == SOLUTION::INFEAS){
+        	EvaluationResult<Number> inDirEval = content->evaluate(_mat.row(rowI));
+        	if(inDirEval.errorCode == SOLUTION::INFEAS){
         		empty = true;
         		break;
+        	} else if(inDirEval.supportValue > _vec(rowI)){
+        		// the actual object will be limited by the new plane
+        		limitingPlanes.push_back(rowI);
         	}
             //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
             if(content->evaluate(-(_mat.row(rowI))).supportValue <= -(_vec(rowI))){
@@ -238,6 +243,26 @@ namespace hypro{
                 empty = true;
                 break;
             }
+        }
+        if(!empty){
+        	if(limitingPlanes.size() < unsigned(_mat.rows())){
+        		if(limitingPlanes.size() == 0 ){
+        			return std::make_pair(!empty, *this);
+        		}
+        		// if the result is not empty, only add planes, which affect the object
+	        	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
+	        	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
+	        	for(unsigned i = 0; i < limitingPlanes.size(); ++i){
+	        		planes.row(i) = _mat.row(limitingPlanes.back());
+	        		distances(i) = _vec(limitingPlanes.back());
+	        		limitingPlanes.pop_back();
+	        	}
+	        	return std::make_pair(!empty, this->intersectHyperplanes(planes,distances));
+        	} else {
+        		assert(limitingPlanes.size() == unsigned(_mat.rows()));
+        		return std::make_pair(!empty, this->intersectHyperplanes(_mat,_vec));
+        	}
+
         }
         return std::make_pair(!empty, this->intersectHyperplanes(_mat,_vec));
     }
