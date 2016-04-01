@@ -96,7 +96,7 @@ else()
 endif()
 
 
-target_link_libraries(${PROJECT_NAME} ${libraries})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 ########################################################################################
