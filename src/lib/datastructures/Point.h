@@ -55,17 +55,6 @@ class Point {
 	explicit Point( const Number& _value );
 	explicit Point( std::initializer_list<Number> _coordinates );
 
-	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
-	explicit Point( std::initializer_list<F> _coordinates ) {
-		unsigned count = 0;
-		mCoordinates = vector_t<Number>( _coordinates.size() );
-		for ( auto& coordinate : _coordinates ) {
-			mCoordinates( count ) = Number( coordinate );
-			++count;
-		}
-		mHash = 0;
-	}
-
 	//@author Chris K. (for Minkowski Sum Test)
 	explicit Point( std::vector<Number> _coordinates );
 

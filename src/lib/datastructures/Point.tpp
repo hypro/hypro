@@ -274,7 +274,7 @@ Point<Number> Point<Number>::extAdd( const Point<Number> &_rhs ) const {
 
 template <typename Number>
 Number Point<Number>::distance( const Point<Number> &_rhs ) const {
-	return ( ( mCoordinates - _rhs.rawCoordinates() ).norm() );
+	return ( norm( vector_t<Number>(mCoordinates - _rhs.rawCoordinates()) ) );
 }
 
 template <typename Number>

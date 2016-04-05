@@ -3,12 +3,10 @@
 namespace hypro
 {
     #ifdef EXTERNALIZE_CLASSES
-    template class Halfspace<double>;
+    template class Halfspace<mpq_class>;
 
-    #ifdef USE_MPFR_FLOAT
-    template class Halfspace<carl::FLOAT_T<mpfr_t>>;
+    #ifdef USE_CLN_NUMBERS
+    template class Halfspace<cln::cl_RA>;
     #endif
-
-    template class Halfspace<carl::FLOAT_T<double>>;
     #endif
 }

@@ -74,7 +74,7 @@ class Halfspace {
     Number scalar() const { return mScalar; }
     size_t hash() {
         if (this->mHash == 0) {
-            this->mHash = std::hash<hypro::Halfspace<Number>>(*this);
+            this->mHash = std::hash<hypro::Halfspace<Number>>()(*this);
         }
         return mHash;
     }

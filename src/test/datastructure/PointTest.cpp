@@ -23,27 +23,15 @@ protected:
 		a = pool.newCarlVariable();
 		b = pool.newCarlVariable();
         // p1
-//        typename Point<Number>::coordinateMap coordinates1;
-//        coordinates1.insert( std::make_pair(x, Number(2)) );
-//        coordinates1.insert( std::make_pair(y, Number(5)) );
         p1 = Point<Number>({2,5});
 
         // p2
-//        typename Point<Number>::coordinateMap coordinates2;
-//        coordinates2.insert( std::make_pair(a, Number(7)) );
-//        coordinates2.insert( std::make_pair(b, Number(8)) );
         p2 = Point<Number>({7,8});
 
         // p3
-//        typename Point<Number>::coordinateMap coordinates3;
-//        coordinates3.insert( std::make_pair(c, Number(9)) );
-//        coordinates3.insert( std::make_pair(d, Number(-13)) );
         p3 = Point<Number>({9,-13});
 
         // p4
-//        typename Point<Number>::coordinateMap coordinates4;
-//        coordinates4.insert( std::make_pair(c, Number(5)) );
-//        coordinates4.insert( std::make_pair(d, Number(8)) );
         p4 = Point<Number>({5,8});
     }
 
@@ -56,8 +44,6 @@ protected:
     carl::Variable y;
     carl::Variable a;
     carl::Variable b;
-//    Variable c = pool.getFreshVariable("c");
-//    Variable d = pool.getFreshVariable("d");
 
     Point<Number> p1;
     Point<Number> p2;
@@ -97,18 +83,6 @@ TYPED_TEST(PointTest, Constructor)
     Point<TypeParam> tmp({123,456});
     EXPECT_EQ(tmp[0], TypeParam(123));
     EXPECT_EQ(tmp[1], TypeParam(456));
-
-    // Test copy constructor and typecast constructor
-    Point<double> alien = Point<double>({1,3});
-
-    Point<double> alien2 = alien;
-    Point<float> local = Point<float>(alien);
-
-
-#ifdef USE_MPFR_FLOAT
-    // convert to mpfr
-    Point<carl::FLOAT_T<mpfr_t>> local2 = alien;
-#endif
 }
 
 TYPED_TEST(PointTest, PolarCoordinates)
@@ -116,18 +90,18 @@ TYPED_TEST(PointTest, PolarCoordinates)
     std::vector<TypeParam> pc = this->p1.polarCoordinates(this->p1.origin(), false);
     double expectedRes;
 
-    expectedRes = carl::sqrt(29.0);
+    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(29.0)));
 
 	// special case: Use double comparison
 	EXPECT_EQ( carl::toDouble(pc.at(0)), expectedRes );
 
     pc = this->p2.polarCoordinates(this->p2.origin(), false);
-    expectedRes = carl::sqrt(113.0);
+    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(113.0)));
 
     EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
 
     pc = this->p3.polarCoordinates(this->p3.origin(), false);
-    expectedRes = carl::sqrt(250.0);
+    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(250.0)));
 
 	EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
 

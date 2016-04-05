@@ -7,6 +7,7 @@ set(lib_hypro_datastructure_sources
 set(lib_hypro_datastructure_headers
         datastructures/Point.h
         datastructures/Facet.h
+        datastructures/Halfspace.h
         datastructures/Ridge.h
         datastructures/Vertex.h
         datastructures/VertexContainer.h
