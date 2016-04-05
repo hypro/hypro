@@ -51,10 +51,10 @@ namespace ascii = boost::spirit::ascii;
 namespace phoenix = boost::phoenix;
 namespace fusion = boost::fusion;
 
-typedef spirit::istream_iterator BaseIteratorType;
-typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
-typedef PositionIteratorType Iterator;
-typedef qi::space_type Skipper;
+using BaseIteratorType = spirit::istream_iterator;
+using PositionIteratorType = spirit::line_pos_iterator<BaseIteratorType>;
+using Iterator = PositionIteratorType;
+using Skipper = qi::space_type;
 
 template <typename Number>
 struct FloatPolicies : qi::real_policies<Number> {

@@ -24,7 +24,7 @@ namespace px = boost::phoenix;
 namespace hypro {
 namespace parser {
 using namespace boost::fusion;
-typedef unsigned locationId;
+using locationId = unsigned;
 
 template <typename Number>
 struct Initial {

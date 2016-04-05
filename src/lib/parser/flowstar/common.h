@@ -10,9 +10,9 @@ namespace parser{
 	namespace fs = boost::fusion;
 
 	using symbol_table = qi::symbols<char, unsigned>;
-	typedef spirit::istream_iterator BaseIteratorType;
-	typedef spirit::line_pos_iterator<BaseIteratorType> PositionIteratorType;
-	typedef PositionIteratorType Iterator;
+	using BaseIteratorType = spirit::istream_iterator;
+	using PositionIteratorType = spirit::line_pos_iterator<BaseIteratorType>;
+	using Iterator = PositionIteratorType;
 
 	template<typename Iterator>
 	struct fsSkipper : public qi::grammar<Iterator> {
@@ -22,10 +22,10 @@ namespace parser{
 	    }
 	    qi::rule<Iterator> skip;
 	};
-	typedef fsSkipper<Iterator> Skipper;
+	using Skipper = fsSkipper<Iterator>;
 
 	struct ErrorHandler {
-		template<typename> struct result { typedef qi::error_handler_result type; };
+		template<typename> struct result { using type = qi::error_handler_result; };
 		template<typename T1, typename T2, typename T3, typename T4>
 		qi::error_handler_result operator()(T1 b, T2 e, T3 where, T4 const& what) const {
 			auto line_start = spirit::get_line_start(b, where);
