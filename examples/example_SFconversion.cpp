@@ -4,7 +4,7 @@
 
 #include "../src/lib/representations/SupportFunction/SupportFunctionContent.h"
 #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
-//#include "../src/lib/datastructures/Hyperplane.h"
+//#include "../src/lib/datastructures/Halfspace.h"
 
 using namespace hypro;
 
@@ -12,12 +12,12 @@ int main(int argc, char const *argv[])
 {
 	typedef double Number;
 
-	Hyperplane<Number> hp1({1,0},2);
-	Hyperplane<Number> hp2({0,1},2);
-	Hyperplane<Number> hp3({-1,0},2);
-	Hyperplane<Number> hp4({0,-1},2);
+	Halfspace<Number> hp1({1,0},2);
+	Halfspace<Number> hp2({0,1},2);
+	Halfspace<Number> hp3({-1,0},2);
+	Halfspace<Number> hp4({0,-1},2);
 
-	std::vector<Hyperplane<Number>> planes;
+	std::vector<Halfspace<Number>> planes;
 	planes.push_back(hp1);
 	planes.push_back(hp2);
 	planes.push_back(hp3);

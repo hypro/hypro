@@ -98,7 +98,7 @@ unsigned Cone<Number>::size() const {
 }
 
 template <typename Number>
-void Cone<Number>::add( std::shared_ptr<Hyperplane<Number>> _plane ) {
+void Cone<Number>::add( std::shared_ptr<Halfspace<Number>> _plane ) {
 	// TODO
 	mPlanes.push_back( _plane );
 }
@@ -110,12 +110,12 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 
 	// check if vector is already inside cone_l -> drop
 	planeVector insidePlanes;
-	std::set<std::shared_ptr<Hyperplane<Number>>> outsidePlanes;
+	std::set<std::shared_ptr<Halfspace<Number>>> outsidePlanes;
 	if ( !this->contains( _vector, insidePlanes, outsidePlanes ) ) {  // not inside
 		// std::cout << "vector is not inside." << std::endl;
 		assert( !insidePlanes.empty() );
 
-		// get horizon vectors, create new hyperplanes, delete inside planes.
+		// get horizon vectors, create new Halfspaces, delete inside planes.
 		std::vector<vector_t<Number>> horizonVectors;
 		for ( const auto &horizonCandidate : lhsVectors ) {
 			bool found = false;
@@ -145,22 +145,22 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 			found = false;
 		}
 
-		// std::cout << "Create new hyperplanes." << std::endl;
-		// create new hyperplanes
-		std::vector<vector_t<Number>> hyperplaneBasis;
-		hyperplaneBasis.push_back( _vector );
+		// std::cout << "Create new Halfspaces." << std::endl;
+		// create new Halfspaces
+		std::vector<vector_t<Number>> HalfspaceBasis;
+		HalfspaceBasis.push_back( _vector );
 		for ( const auto &horizonVector : horizonVectors ) {
 			// Todo: check if origin zero is okay.
 			vector_t<Number> origin = vector_t<Number>::Zero( _vector.rows() );
 
-			// std::cout << "Create hyperplane from " << _vector << " and " <<
+			// std::cout << "Create Halfspace from " << _vector << " and " <<
 			// horizonVector << std::endl;
 
-			hyperplaneBasis.push_back( horizonVector );
+			HalfspaceBasis.push_back( horizonVector );
 			outsidePlanes.insert(
-				  std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>( origin, hyperplaneBasis ) ) );
+				  std::shared_ptr<Halfspace<Number>>( new Halfspace<Number>( origin, HalfspaceBasis ) ) );
 			// std::cout << "new plane: " << *outsidePlanes.back().get() << std::endl;
-			hyperplaneBasis.pop_back();
+			HalfspaceBasis.pop_back();
 		}
 
 		// assign new planes
@@ -174,7 +174,7 @@ Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A, const
 	Cone<Number> result;
 	for ( const auto &plane : mPlanes ) {
 		result.add(
-			  std::shared_ptr<Hyperplane<Number>>( new Hyperplane<Number>( plane->linearTransformation( A, b ) ) ) );
+			  std::shared_ptr<Halfspace<Number>>( new Halfspace<Number>( plane->linearTransformation( A, b ) ) ) );
 	}
 	return result;
 }
@@ -209,7 +209,7 @@ bool Cone<Number>::contains( const vector_t<Number> &_vector ) const {
 
 template <typename Number>
 bool Cone<Number>::contains( const vector_t<Number> &_vector, planeVector &_insidePlanes,
-							 std::set<std::shared_ptr<Hyperplane<Number>>> &_outsidePlanes ) const {
+							 std::set<std::shared_ptr<Halfspace<Number>>> &_outsidePlanes ) const {
 	bool contains = true;
 	for ( const auto &plane : mPlanes ) {
 		if ( !plane->holds( _vector ) ) {

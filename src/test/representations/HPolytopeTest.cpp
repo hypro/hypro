@@ -12,15 +12,15 @@ protected:
 	virtual void SetUp()
 	{
 		// A rectangle
-		Hyperplane<Number> hp1({1,0},2);
-		Hyperplane<Number> hp2({0,1},2);
-		Hyperplane<Number> hp3({-1,0},2);
-		Hyperplane<Number> hp4({0,-1},2);
+		Halfspace<Number> hp1({1,0},2);
+		Halfspace<Number> hp2({0,1},2);
+		Halfspace<Number> hp3({-1,0},2);
+		Halfspace<Number> hp4({0,-1},2);
 
 		// A triangle
-		Hyperplane<Number> hp5({1,1},1);
-		Hyperplane<Number> hp6({-1,1},1);
-		Hyperplane<Number> hp7({0,-1},1);
+		Halfspace<Number> hp5({1,1},1);
+		Halfspace<Number> hp6({-1,1},1);
+		Halfspace<Number> hp7({0,-1},1);
 
 		planes1.push_back(hp1);
 		planes1.push_back(hp2);
@@ -36,8 +36,8 @@ protected:
 	{
 	}
 
-	typename HPolytopeT<Number,Converter<Number>>::HyperplaneVector planes1;
-	typename HPolytopeT<Number,Converter<Number>>::HyperplaneVector planes2;
+	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes1;
+	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes2;
 };
 
 TYPED_TEST(HPolytopeTest, Constructor)
@@ -67,7 +67,7 @@ TYPED_TEST(HPolytopeTest, Access)
 	//EXPECT_FALSE(hpt1.reduced());
 	//polytope::Fan<TypeParam> tmpFan = hpt1.fan();
 
-	typename HPolytope<TypeParam>::HyperplaneVector planes =  hpt1.constraints();
+	typename HPolytope<TypeParam>::HalfspaceVector planes =  hpt1.constraints();
 	for(auto& constraint : planes) {
 		EXPECT_TRUE(hpt1.hasConstraint(constraint));
 	}
@@ -78,7 +78,7 @@ TYPED_TEST(HPolytopeTest, Swap)
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 
-	typename HPolytope<TypeParam>::HyperplaneVector planes =  hpt1.constraints();
+	typename HPolytope<TypeParam>::HalfspaceVector planes =  hpt1.constraints();
 
 	swap(hpt1,hpt2);
 
@@ -130,7 +130,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 {
 	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
-	Hyperplane<TypeParam> p1({1,1}, 4);
+	Halfspace<TypeParam> p1({1,1}, 4);
 	hpt1.insert(p1);
 
 	EXPECT_TRUE(hpt1.hasConstraint(p1));
@@ -154,13 +154,13 @@ TYPED_TEST(HPolytopeTest, Union)
 	}
 
 	/* std::cout<< "Part 2 starting: "	<< std::endl;
-			  std::vector<Hyperplane<TypeParam>> ps3;
-			  Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
-			  Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},-3);
-			  Hyperplane<TypeParam> p03 = Hyperplane<TypeParam>({-1,0,0},1);
-			  Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},-3);
-			  Hyperplane<TypeParam> p05 = Hyperplane<TypeParam>({0,0,-1},1);
-			  Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},-3);
+			  std::vector<Halfspace<TypeParam>> ps3;
+			  Halfspace<TypeParam> p01 = Halfspace<TypeParam>({0,-1,0},1);
+			  Halfspace<TypeParam> p02 = Halfspace<TypeParam>({0,1,0},-3);
+			  Halfspace<TypeParam> p03 = Halfspace<TypeParam>({-1,0,0},1);
+			  Halfspace<TypeParam> p04 = Halfspace<TypeParam>({1,0,0},-3);
+			  Halfspace<TypeParam> p05 = Halfspace<TypeParam>({0,0,-1},1);
+			  Halfspace<TypeParam> p06 = Halfspace<TypeParam>({0,0,1},-3);
 
 			  ps3.push_back(p01);
 			  ps3.push_back(p02);
@@ -171,11 +171,11 @@ TYPED_TEST(HPolytopeTest, Union)
 
 			  HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
 
-			  std::vector<Hyperplane<TypeParam>> ps4;
-			  Hyperplane<TypeParam> p07 = Hyperplane<TypeParam>({0,-1,0},3);
-			  Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},-5);
-			  Hyperplane<TypeParam> p09 = Hyperplane<TypeParam>({-1,0,0},3);
-			  Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},-5);
+			  std::vector<Halfspace<TypeParam>> ps4;
+			  Halfspace<TypeParam> p07 = Halfspace<TypeParam>({0,-1,0},3);
+			  Halfspace<TypeParam> p08 = Halfspace<TypeParam>({0,1,0},-5);
+			  Halfspace<TypeParam> p09 = Halfspace<TypeParam>({-1,0,0},3);
+			  Halfspace<TypeParam> p10 = Halfspace<TypeParam>({1,0,0},-5);
 
 
 			  ps4.push_back(p05);
@@ -312,13 +312,13 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	}
 
 	std::cout<< "Part 2 starting: "	<< std::endl;
-	std::vector<Hyperplane<TypeParam>> ps3;
-	Hyperplane<TypeParam> p01 = Hyperplane<TypeParam>({0,-1,0},1);
-	Hyperplane<TypeParam> p02 = Hyperplane<TypeParam>({0,1,0},3);
-	Hyperplane<TypeParam> p03 = Hyperplane<TypeParam>({-1,0,0},1);
-	Hyperplane<TypeParam> p04 = Hyperplane<TypeParam>({1,0,0},3);
-	Hyperplane<TypeParam> p05 = Hyperplane<TypeParam>({0,0,-1},1);
-	Hyperplane<TypeParam> p06 = Hyperplane<TypeParam>({0,0,1},3);
+	std::vector<Halfspace<TypeParam>> ps3;
+	Halfspace<TypeParam> p01 = Halfspace<TypeParam>({0,-1,0},1);
+	Halfspace<TypeParam> p02 = Halfspace<TypeParam>({0,1,0},3);
+	Halfspace<TypeParam> p03 = Halfspace<TypeParam>({-1,0,0},1);
+	Halfspace<TypeParam> p04 = Halfspace<TypeParam>({1,0,0},3);
+	Halfspace<TypeParam> p05 = Halfspace<TypeParam>({0,0,-1},1);
+	Halfspace<TypeParam> p06 = Halfspace<TypeParam>({0,0,1},3);
 
 	ps3.push_back(p01);
 	ps3.push_back(p02);
@@ -329,11 +329,11 @@ TYPED_TEST(HPolytopeTest, Intersection)
 
 	HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
 
-	std::vector<Hyperplane<TypeParam>> ps4;
-	Hyperplane<TypeParam> p07 = Hyperplane<TypeParam>({0,-1,0},3);
-	Hyperplane<TypeParam> p08 = Hyperplane<TypeParam>({0,1,0},5);
-	Hyperplane<TypeParam> p09 = Hyperplane<TypeParam>({-1,0,0},3);
-	Hyperplane<TypeParam> p10 = Hyperplane<TypeParam>({1,0,0},5);
+	std::vector<Halfspace<TypeParam>> ps4;
+	Halfspace<TypeParam> p07 = Halfspace<TypeParam>({0,-1,0},3);
+	Halfspace<TypeParam> p08 = Halfspace<TypeParam>({0,1,0},5);
+	Halfspace<TypeParam> p09 = Halfspace<TypeParam>({-1,0,0},3);
+	Halfspace<TypeParam> p10 = Halfspace<TypeParam>({1,0,0},5);
 
 
 	ps4.push_back(p05);

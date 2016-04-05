@@ -103,7 +103,7 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 	state_t cur_state = START;
 	unsigned intersectCount = 0;
 	Zonotope<Number> guard_intersect, temp_V, temp_Q, temp_S;
-	Hyperplane<Number> hp;
+	Halfspace<Number> hp;
 	hypro::Transition<Number> transition_taken;
 
 	hypro::matrix_t<Number> minMaxOfLine;
@@ -134,8 +134,8 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 					temp_V = res_V;
 					temp_S = res_S;
 
-					// convert guard of transition to hyperplane and save in hp
-					this->guardToHyperplane( transition_taken, hp );
+					// convert guard of transition to Halfspace and save in hp
+					this->guardToHalfspace( transition_taken, hp );
 
 					// Check for first intersect
 					this->checkForIntersection( temp_Q, hp, guard_intersect, option.intersectMethod );
@@ -285,7 +285,7 @@ bool ZonotopeReachability<Number>::runReachabilityAnalysis( unsigned int numIter
 
 template <typename Number>
 void ZonotopeReachability<Number>::preclustering( const std::vector<Zonotope<Number>> &intersects,
-												  const Hyperplane<Number> &hp, Zonotope<Number> &finalIntersect,
+												  const Halfspace<Number> &hp, Zonotope<Number> &finalIntersect,
 												  const ZUtility::Options &option ) {
 	Zonotope<Number> currentConvexHull, result;
 	currentConvexHull = intersects[0];
@@ -490,8 +490,8 @@ void ZonotopeReachability<Number>::overapproximateZonotope( Zonotope<Number> &z 
 }
 
 template <typename Number>
-void ZonotopeReachability<Number>::guardToHyperplane( const hypro::Transition<Number> &transitionTaken,
-													  Hyperplane<Number> &hp ) {
+void ZonotopeReachability<Number>::guardToHalfspace( const hypro::Transition<Number> &transitionTaken,
+													  Halfspace<Number> &hp ) {
 	hypro::vector_t<Number> d_vec = transitionTaken.guard().mat.row( 0 ).transpose();
 	hypro::scalar_t<Number> e_scalar = transitionTaken.guard().vec( 0 );
 	if ( mReadjusted ) {
@@ -505,7 +505,7 @@ void ZonotopeReachability<Number>::guardToHyperplane( const hypro::Transition<Nu
 template <typename Number>
 void ZonotopeReachability<Number>::constructIntersectZonotopeFromMinMax( unsigned iteration, const Zonotope<Number> &Q,
 																		 Zonotope<Number> &result,
-																		 const Hyperplane<Number> &hp ) {
+																		 const Halfspace<Number> &hp ) {
 	if ( mDimension != 2 ) {
 		hypro::matrix_t<Number> kernel, finalGenerators, globalMinMaxMatrix;
 
@@ -606,7 +606,7 @@ bool ZonotopeReachability<Number>::checkGuardJumpCondition( hypro::Transition<Nu
 			d_vec( d_vec.rows() - 1 ) = 0;
 		}
 
-		Hyperplane<Number> hp( d_vec, e_scalar );
+		Halfspace<Number> hp( d_vec, e_scalar );
 		if ( checkForIntersection( tempQ, hp, intersect_zonotope, option.intersectMethod, minMaxOfLine ) ) {
 			res = true;
 			transition_taken = *trans;
@@ -676,7 +676,7 @@ void ZonotopeReachability<Number>::loadNewState( hypro::Transition<Number> &tran
 
 template <typename Number>
 bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number> &inputZonotope,
-														 const Hyperplane<Number> &hp, Zonotope<Number> &result,
+														 const Halfspace<Number> &hp, Zonotope<Number> &result,
 														 const ZUtility::IntersectionMethod_t &method ) {
 	hypro::matrix_t<Number> EMPTY_MATRIX( 0, 0 );
 	return ( checkForIntersection( inputZonotope, hp, result, method, EMPTY_MATRIX ) );
@@ -684,16 +684,16 @@ bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number> 
 
 template <typename Number>
 bool ZonotopeReachability<Number>::checkForIntersection( const Zonotope<Number> &inputZonotope,
-														 const Hyperplane<Number> &hp, Zonotope<Number> &result,
+														 const Halfspace<Number> &hp, Zonotope<Number> &result,
 														 const ZUtility::IntersectionMethod_t &method,
 														 hypro::matrix_t<Number> &minMaxOfLine )
 
 {
-	assert( inputZonotope.dimension() == hp.dimension() && "input zonotope and hyperplane must have same dimensions" );
+	assert( inputZonotope.dimension() == hp.dimension() && "input zonotope and Halfspace must have same dimensions" );
 	assert( ( method == ZUtility::ALAMO || method == ZUtility::NDPROJECTION || method == ZUtility::DICHOTOMIC2D ) &&
 			"Requires valid method (ALAMO or NDPROJECTION)" );
 	Zonotope<Number> tempZonotope( inputZonotope );
-	Hyperplane<Number> tempHp( hp );
+	Halfspace<Number> tempHp( hp );
 
 	bool res;
 	// Reduce order of input zonotope if readjust was applied

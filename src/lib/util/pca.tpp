@@ -12,8 +12,8 @@
 namespace hypro {
 
 template<typename Number>
-std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Number>>& samples){
-	std::vector<Hyperplane<Number>> res;
+std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number>>& samples){
+	std::vector<Halfspace<Number>> res;
 
 	if(!samples.empty()){
 		//gets dimension of sample points
@@ -77,11 +77,11 @@ std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<Point<Numbe
 	        }
 	    }
 
-	    //second step: create hyperplanes with the given normals and maximum/minimum products
-	    res = std::vector<Hyperplane<Number>>(2*dim);
+	    //second step: create Halfspaces with the given normals and maximum/minimum products
+	    res = std::vector<Halfspace<Number>>(2*dim);
 	    for (unsigned i=0; i < dim; ++i){
-	        res[2*i] = Hyperplane<Number>(numberU.col(i), max(i) + numberU.col(i).dot(mean.rawCoordinates()));
-	        res[2*i+1] = Hyperplane<Number>(-numberU.col(i), -min(i) - numberU.col(i).dot(mean.rawCoordinates()));
+	        res[2*i] = Halfspace<Number>(numberU.col(i), max(i) + numberU.col(i).dot(mean.rawCoordinates()));
+	        res[2*i+1] = Halfspace<Number>(-numberU.col(i), -min(i) - numberU.col(i).dot(mean.rawCoordinates()));
 	    }
 	}
     //returns halfspaces

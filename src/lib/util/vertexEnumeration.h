@@ -141,7 +141,7 @@ class VertexEnumeration {
 		 * algorithm implements a depth-first search), a pivoting step is performed ("step one level up"), which results in a dictionary
 		 * already found (as we only search in valid reverse-pivots) or if we are at the root, there is no possible pivot as the dictionary
 		 * is already optimal (the search is complete). On its way through the search tree all dictionaries, which are lexicographically minimal
-		 * are used to compute a vertex of the hyperplane arrangement.
+		 * are used to compute a vertex of the Halfspace arrangement.
 		 *
 		 * @return
 		 */

@@ -260,9 +260,9 @@ void Polytope<Number>::calculateFan() {
 							b( 0 ) = 1;
 							vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
 
-							cone->add( std::shared_ptr<Hyperplane<Number>>(
-								  new Hyperplane<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-							// cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result,
+							cone->add( std::shared_ptr<Halfspace<Number>>(
+								  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
+							// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
 							// result.dot(point.rawCoordinates()))));
 						}
 					}
@@ -686,7 +686,7 @@ Polytope<Number> Polytope<Number>::intersect( const Polytope<Number> &rhs ) cons
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
+Polytope<Number> Polytope<Number>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
 		return Polytope<Number>();
 	} else {
@@ -711,7 +711,7 @@ Polytope<Number> Polytope<Number>::intersectHyperplane( const Hyperplane<Number>
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::intersectHyperplanes( const matrix_t<Number> &_mat,
+Polytope<Number> Polytope<Number>::intersectHalfspaces( const matrix_t<Number> &_mat,
 														 const vector_t<Number> &_vec ) const {
 	Polytope<Number> tmp( _mat, _vec );
 	return this->intersect( tmp );
@@ -961,16 +961,16 @@ Point<Number> Polytope<Number>::localSearch( Point<Number> &_vertex, Point<Numbe
 	// iterate through all planes and check which one intersects with the ray
 	Number factor;
 	Point<Number> origin = cone->origin();
-	Hyperplane<Number> intersectedPlane;
+	Halfspace<Number> intersectedPlane;
 
-	std::vector<Hyperplane<Number> *> planes = cone->get();
+	std::vector<Halfspace<Number> *> planes = cone->get();
 
 #ifdef fukuda_DEBUG
 	std::cout << "-----------------" << std::endl;
 	std::cout << "Ray: " << ray << std::endl;
 #endif
 
-	for ( typename std::vector<Hyperplane<Number> *>::iterator it = planes.begin(); it != planes.end(); ++it ) {
+	for ( typename std::vector<Halfspace<Number> *>::iterator it = planes.begin(); it != planes.end(); ++it ) {
 		if ( ( *it )->intersection( factor, ray ) ) {
 #ifdef fukuda_DEBUG
 			std::cout << "Intersection found " << std::endl;

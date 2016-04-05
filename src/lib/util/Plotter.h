@@ -14,7 +14,7 @@
 #include <string>
 #include <stack>
 #include "../datastructures/Point.h"
-#include "../datastructures/Hyperplane.h"
+#include "../datastructures/Halfspace.h"
 
 namespace hypro {
 
@@ -48,11 +48,11 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
 	std::multimap<unsigned, std::vector<Point<Number>>> mOriginalObjects;
-	std::multimap<unsigned, std::vector<Hyperplane<Number>>> mOriginalPlanes;
+	std::multimap<unsigned, std::vector<Halfspace<Number>>> mOriginalPlanes;
 	std::multimap<unsigned, Point<Number>> mOriginalPoints;
 	std::multimap<unsigned, vector_t<Number>> mOriginalVectors;
 	mutable std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
-	mutable std::multimap<unsigned, std::vector<Hyperplane<Number>>> mPlanes;
+	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
 	mutable std::multimap<unsigned, Point<Number>> mPoints;
 	mutable std::multimap<unsigned, vector_t<Number>> mVectors;
 	mutable std::pair<int, int> mLastDimensions;
@@ -82,8 +82,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	unsigned addObject( const std::vector<Point<Number>>& _points );
 	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points );
-	unsigned addObject( const std::vector<Hyperplane<Number>>& _planes );
-	unsigned addObject( const Hyperplane<Number>& _plane );
+	unsigned addObject( const std::vector<Halfspace<Number>>& _planes );
+	unsigned addObject( const Halfspace<Number>& _plane );
 	unsigned addPoint( const Point<Number>& _point );
 	unsigned addPoints( const std::vector<Point<Number>>& _points );
 	void addVector( const vector_t<Number>& _vector );

@@ -13,7 +13,7 @@
 #include "../../util/VariablePool.h"
 
 #include "../Polytopes/util.h"
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 
 namespace hypro {
 namespace polytope {
@@ -754,7 +754,7 @@ polytope::Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _
 		resultVectorSet.push_back( tmpVector );
 	}
 
-	// dimension-1 (edge) vectors define one hyperplane of our cone
+	// dimension-1 (edge) vectors define one Halfspace of our cone
 	// -> iterate over resultVectorSet & consider every edge with its direct neighbor
 	polytope::Cone<Number>* cone = new polytope::Cone<Number>();
 	// set the origin of the cone
@@ -768,7 +768,7 @@ polytope::Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _
 		}
 
 		// convert Point<Number> to Vector by explicit cast
-		Hyperplane<Number>* plane = new Hyperplane<Number>( vector_t<Number>( _vertex ), vectorTuple );
+		Halfspace<Number>* plane = new Halfspace<Number>( vector_t<Number>( _vertex ), vectorTuple );
 		cone->add( plane );
 #ifdef fukuda_DEBUG
 		std::cout << "Plane added to the cone" << std::endl;

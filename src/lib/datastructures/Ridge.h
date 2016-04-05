@@ -28,7 +28,7 @@ class Ridge {
   private:
 	vertexSet mVertices;
 	std::vector<std::shared_ptr<Facet<Number>>> mNeighbors;
-	Hyperplane<Number> mHyperplane;
+	Halfspace<Number> mHalfspace;
 
 	/**
 	 * Constructors & Destructor
@@ -39,7 +39,7 @@ class Ridge {
 	Ridge( const Ridge<Number>& f ) {
 		mVertices = f.vertices();
 		mNeighbors = f.neighbors();
-		mHyperplane = f.hyperplane();
+		mHalfspace = f.halfspace();
 	}
 
 	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) {
@@ -58,8 +58,8 @@ class Ridge {
 			}
 		}
 
-		mHyperplane = Hyperplane<Number>();  // mNormal,mScalar);
-		// save mHyperplane as intersect of the facets
+		mHalfspace = Halfspace<Number>();  // mNormal,mScalar);
+		// save mHalfspace as intersect of the facets
 	}
 
 	~Ridge() {}
@@ -76,7 +76,7 @@ class Ridge {
 
 	std::vector<std::shared_ptr<Facet<Number>>> neighbors() const { return mNeighbors; }
 
-	Hyperplane<Number> hyperplane() const { return mHyperplane; }
+	Halfspace<Number> halfspace() const { return mHalfspace; }
 };
 
 template <typename Number>

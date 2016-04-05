@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Optimizer.h"
 #include "../../util/Permutator.h"
@@ -88,7 +88,7 @@ class BoxT {
 
 	std::vector<carl::Interval<Number>> boundaries() const;
 	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
-	std::vector<hypro::Hyperplane<Number>> constraints() const;
+	std::vector<hypro::Halfspace<Number>> constraints() const;
 
 	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
 	//void insert( const std::vector<carl::Interval<Number>>& boundaries );
@@ -197,13 +197,13 @@ class BoxT {
 	void removeRedundancy() {}
 	std::size_t size() const;
 
-	std::pair<bool, BoxT> satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const;
-	std::pair<bool, BoxT> satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
 	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
-	BoxT<Number,Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	BoxT<Number,Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const BoxT<Number,Converter>& box ) const;
 	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;

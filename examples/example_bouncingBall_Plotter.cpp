@@ -258,11 +258,11 @@ int main(int argc, char const *argv[])
 
 							auto facets = convexHull(points_convexHull);
 
-							std::vector<Hyperplane<Number>> hyperplanes;
+							std::vector<Halfspace<Number>> Halfspaces;
 							for(unsigned i = 0; i<facets.first.size(); i++){
-								hyperplanes.push_back(facets.first.at(i)->hyperplane());
+								Halfspaces.push_back(facets.first.at(i)->Halfspace());
 							}
-							Representation convexHull = Representation(hyperplanes);
+							Representation convexHull = Representation(Halfspaces);
 
 							Representation poly_smoothed = convexHull.reduce_directed(computeTemplate<Number>(2, REDUCE_CONST), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 							poly_smoothed.removeRedundantPlanes();

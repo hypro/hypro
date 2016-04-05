@@ -11,7 +11,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& o
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const HyperplaneVector &planes )
+HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(false) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
@@ -27,7 +27,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
-		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), b( i ) ) );
+		mHPlanes.push_back( Halfspace<Number>( A.row( i ), b( i ) ) );
 	}
 	reduceNumberRepresentation();
 }
@@ -36,7 +36,7 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
-		mHPlanes.push_back( Hyperplane<Number>( A.row( i ), Number( 0 ) ) );
+		mHPlanes.push_back( Halfspace<Number>( A.row( i ), Number( 0 ) ) );
 	}
 }
 
@@ -69,7 +69,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
 				//std::cout << "Conv Hull end" << std::endl;
 				for ( auto &facet : facets ) {
-					mHPlanes.push_back( facet->hyperplane() );
+					mHPlanes.push_back( facet->halfspace() );
 				}
 			}
 			assert( false );
@@ -79,8 +79,8 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 			//std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
-				assert(facet->hyperplane().contains(points));
-				mHPlanes.push_back( facet->hyperplane() );
+				assert(facet->halfspace().contains(points));
+				mHPlanes.push_back( facet->halfspace() );
 			}
 			facets.clear();
 		}
@@ -121,9 +121,9 @@ bool HPolytopeT<Number, Converter>::empty() const {
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
-	Hyperplane<Number> a({1},-1);
-	Hyperplane<Number> b({-1},-1);
-	HyperplaneVector v;
+	Halfspace<Number> a({1},-1);
+	Halfspace<Number> b({-1},-1);
+	HalfspaceVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter> res(v);
@@ -313,9 +313,9 @@ void HPolytopeT<Number, Converter>::calculateFan() const {
 							b( 0 ) = 1;
 							vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
 
-							cone->add( std::shared_ptr<Hyperplane<Number>>(
-								  new Hyperplane<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-							// cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result,
+							cone->add( std::shared_ptr<Halfspace<Number>>(
+								  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
+							// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
 							// result.dot(point.rawCoordinates()))));
 						}
 					}
@@ -329,7 +329,7 @@ void HPolytopeT<Number, Converter>::calculateFan() const {
 }
 
 template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
+void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -353,8 +353,8 @@ void HPolytopeT<Number, Converter>::insert( const Hyperplane<Number> &plane ) {
 }
 
 template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insert( const typename HyperplaneVector::iterator begin,
-								const typename HyperplaneVector::iterator end ) {
+void HPolytopeT<Number, Converter>::insert( const typename HalfspaceVector::iterator begin,
+								const typename HalfspaceVector::iterator end ) {
 	assert( mDimension == 0 || mDimension == begin->dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = begin->dimension();
@@ -374,12 +374,12 @@ void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 }
 
 template <typename Number, typename Converter>
-const typename HPolytopeT<Number, Converter>::HyperplaneVector &HPolytopeT<Number, Converter>::constraints() const {
+const typename HPolytopeT<Number, Converter>::HalfspaceVector &HPolytopeT<Number, Converter>::constraints() const {
 	return mHPlanes;
 }
 
 template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::hasConstraint( const Hyperplane<Number> &hplane ) const {
+bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hplane ) const {
 	for ( const auto &plane : mHPlanes ) {
 		if ( hplane == plane ) return true;
 	}
@@ -455,14 +455,14 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
  */
 
 template<typename Number, typename Converter>
-std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const {
-	HPolytopeT<Number,Converter> tmp = this->intersectHyperplane(Hyperplane<Number>(normal, offset));
+std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const {
+	HPolytopeT<Number,Converter> tmp = this->intersectHalfspace(Halfspace<Number>(normal, offset));
 	return std::make_pair(!(tmp).empty(), tmp);
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	HPolytopeT<Number,Converter> tmp = this->intersectHyperplanes(_mat, _vec);
+std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
 	return std::make_pair(!(tmp).empty(),tmp);
 }
 
@@ -510,7 +510,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
-			res.insert( Hyperplane<Number>( mHPlanes.at( i ).normal(), result ) );
+			res.insert( Halfspace<Number>( mHPlanes.at( i ).normal(), result ) );
 			std::cout << __func__ << " Evaluated against " <<
 			mHPlanes.at(i).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 			std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
@@ -531,7 +531,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 			return Empty();
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
-			res.insert( Hyperplane<Number>( rhs.constraints().at( i ).normal(), result ) );
+			res.insert( Halfspace<Number>( rhs.constraints().at( i ).normal(), result ) );
 			std::cout << __func__ << " Evaluated against " <<
 			rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 		}
@@ -558,22 +558,22 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HP
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplane( const Hyperplane<Number> &rhs ) const {
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
 	HPolytopeT<Number, Converter> res( *this );
-	// only insert the new hyperplane, if it is not already redundant.
+	// only insert the new Halfspace, if it is not already redundant.
 	if(res.evaluate(rhs.normal()) > rhs.offset())
-		res.insert( Hyperplane<Number>( rhs ) );
+		res.insert( Halfspace<Number>( rhs ) );
 
 	return res;
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHyperplanes( const matrix_t<Number> &_mat,
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	assert( _mat.rows() == _vec.rows() );
 	HPolytopeT<Number, Converter> res( *this );
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
-		res.insert( Hyperplane<Number>( _mat.row( i ), _vec( i ) ) );
+		res.insert( Halfspace<Number>( _mat.row( i ), _vec( i ) ) );
 	}
 	res.removeRedundancy();
 	return res;
@@ -663,12 +663,12 @@ void HPolytopeT<Number, Converter>::print() const {
  */
 
 //template <typename Number, typename Converter>
-//const Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
+//const Halfspace<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
 //	return mHPlanes.at( i );
 //}
 //
 //template <typename Number, typename Converter>
-//Hyperplane<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
+//Halfspace<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
 //	return mHPlanes.at( i );
 //}
 

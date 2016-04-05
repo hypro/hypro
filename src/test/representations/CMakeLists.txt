@@ -42,29 +42,29 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	# Tests for the practical term
 	################################
 
-	add_executable(runPTermTests
-		PTermBoxTest.cpp
-		PTermPolytopeTest.cpp
-	)
+	#add_executable(runPTermTests
+	#	PTermBoxTest.cpp
+	#	PTermPolytopeTest.cpp
+	#)
 
 	add_dependencies(runRepresentationTests googletest)
-	add_dependencies(runPTermTests googletest)
+	#add_dependencies(runPTermTests googletest)
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC
 		${libraries}
 		${PROJECT_NAME}
 	)
 
-	target_link_libraries(runPTermTests
-		${libraries}
-		${PROJECT_NAME}
-	)
+	#target_link_libraries(runPTermTests
+	#	${libraries}
+	#	${PROJECT_NAME}
+	#)
 
 	if(USE_COTIRE)
 		cotire(runRepresentationTests)
-		cotire(runPTermTests)
+	#	cotire(runPTermTests)
 	endif()
 
 	add_test( NAME representations COMMAND runRepresentationTests )
-	add_test( NAME practicalTerm COMMAND runPTermTests )
+	#add_test( NAME practicalTerm COMMAND runPTermTests )
 endif()

@@ -13,7 +13,7 @@
 #include <map>
 #include <cassert>
 #include <carl/interval/Interval.h>
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 
 namespace hypro {
 

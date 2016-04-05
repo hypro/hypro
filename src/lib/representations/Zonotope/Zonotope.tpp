@@ -367,10 +367,10 @@ std::vector<hypro::vector_t<Number>> ZonotopeT<Number,Converter>::vertices() con
 }
 
 template<typename Number, typename Converter>
-Number intersect2d( const ZonotopeT<Number,Converter> &input, const Hyperplane<Number> &hp, int minOrMax ) {
+Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Number> &hp, int minOrMax ) {
 	assert( input.dimension() == hp.dimension() && input.dimension() == 2 &&
 			"zonotope dimension must be of same dimension (only dim 2 accepted) "
-			"as hyperplane" );
+			"as Halfspace" );
 	unsigned numGenerators = input.numGenerators();
 	hypro::matrix_t<Number> g1, g2, generators = input.generators();
 	Eigen::Matrix<Number, 2, 1> s, s1, pmNext, pm = input.center();
@@ -446,11 +446,11 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Hyperplane<N
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> intersectZonotopeHyperplaneDSearch( ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp ) {
+ZonotopeT<Number,Converter> intersectZonotopeHalfspaceDSearch( ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() && inputZonotope.dimension() == 2 &&
 			"zonotope dimension must be of same "
 			"dimension (only dim 2 accepted) as "
-			"hyperplane" );
+			"Halfspace" );
 	Number p1 = intersect2d<Number>( inputZonotope, hp, 1 );
 	Eigen::Matrix<Number, 2, 1> p1Vec = {0, p1};
 	Number p2 = intersect2d<Number>( inputZonotope, hp, 0 );
@@ -461,16 +461,16 @@ ZonotopeT<Number,Converter> intersectZonotopeHyperplaneDSearch( ZonotopeT<Number
 }
 
 template<typename Number, typename Converter>
-static ZonotopeT<Number,Converter> intersectZonotopeHyperplane( ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp,
+static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp,
 													 hypro::matrix_t<Number> &minMaxOfLine ) {
-	assert( inputZonotope.dimension() == hp.dimension() && "Zonotope and Hyperplane have to be of similar dimensions" );
+	assert( inputZonotope.dimension() == hp.dimension() && "Zonotope and Halfspace have to be of similar dimensions" );
 	std::vector<hypro::vector_t<Number>> vertices = inputZonotope.computeZonotopeBoundary();
 	vertices.pop_back();
 
 	unsigned numPts = vertices.size();
 	Eigen::Matrix<Number, 2, 2> xhp;
 
-	// Compute hyperplane points xhp
+	// Compute Halfspace points xhp
 	if ( hp.normal()( 1 ) == 0 ) {
 		Eigen::Matrix<Number, 2, 1> minVecY, maxVecY;
 		minVecY = *std::min_element( vertices.begin(), vertices.end(), ZUtility::compareYVal<Number> );
@@ -567,7 +567,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHyperplane( ZonotopeT<Number
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp ) {
+ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() );
 	// Determine intersect as Zonotope, according to Tabatabaeipour et al., 2013
 	Number sgm = 0;  // could be redundant
@@ -593,10 +593,10 @@ ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &i
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Converter> &inputZonotope, const Hyperplane<Number> &hp,
+ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp,
 										hypro::matrix_t<Number> &minMaxOfLine ) {
 	assert( hp.dimension() == inputZonotope.dimension() &&
-			"Intersect ND: input zonotope and input hyperplane must have same "
+			"Intersect ND: input zonotope and input Halfspace must have same "
 			"dimensionality" );
 	ZonotopeT<Number,Converter> resultZonotope;
 	hypro::vector_t<double> dVec;
@@ -630,19 +630,19 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 
 		ZonotopeT<double,Converter> projZonotope( projCenter, projGenerators ), tempResZonotope;
 
-		// Upon projection, the hyperplane now has a d vector of [1;0] but retains
+		// Upon projection, the Halfspace now has a d vector of [1;0] but retains
 		// its e scalar
 		Eigen::Matrix<double, 2, 1> lgDVector( 1, 0 );
-		Hyperplane<double> lg( lgDVector, carl::toDouble(hp.offset()) );
+		Halfspace<double> lg( lgDVector, carl::toDouble(hp.offset()) );
 
 		//        hypro::matrix_t<Number> dummyMinMax;
-		tempResZonotope = intersectZonotopeHyperplaneDSearch( projZonotope, lg );
+		tempResZonotope = intersectZonotopeHalfspaceDSearch( projZonotope, lg );
 
 		Eigen::Matrix<Number, 2, 1> p1, p2;
 		p1 = convert<double,Number>(tempResZonotope.center()) + convert<double,Number>(tempResZonotope.generators());
 		p2 = convert<double,Number>(tempResZonotope.center()) - convert<double,Number>(tempResZonotope.generators());
 
-		// find min and max points of intersect between zonogone and hyperplane
+		// find min and max points of intersect between zonogone and Halfspace
 		// we only consider the y axis owing to the [1;0] property of the projected
 		// space as mentioned earlier
 		minMaxOfLine( 0, i ) = ( p1( 1 ) < p2( 1 ) ) ? p1( 1 ) : p2( 1 );
@@ -660,15 +660,15 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperplane<Number> &hp, int method ) {
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfspace<Number> &hp, int method ) {
 	hypro::matrix_t<Number> EMPTY_MATRIX( 0, 0 );
 	return this->intersect( hp, EMPTY_MATRIX, method );
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperplane<Number> &hp, hypro::matrix_t<Number> &minMaxOfLine,
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfspace<Number> &hp, hypro::matrix_t<Number> &minMaxOfLine,
 											  int method ) {
-	assert( hp.dimension() == mDimension && "Zonotope's dimensionality must be same as Hyperplane's dimensionality." );
+	assert( hp.dimension() == mDimension && "Zonotope's dimensionality must be same as Halfspace's dimensionality." );
 
 	ZonotopeT<Number,Converter> result;
 
@@ -688,7 +688,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperp
 				if ( mDimension == 2 ) {
 					//                    std::cout << "Using Girard's method with dimension
 					//                    2 " << std::endl;
-					result = intersectZonotopeHyperplane( *this, hp, minMaxOfLine );
+					result = intersectZonotopeHalfspace( *this, hp, minMaxOfLine );
 
 				} else {
 					//                    std::cout << "Using Girard's method with dimension
@@ -700,7 +700,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Hyperp
 			}
 			//            case DICHOTOMIC2D:
 			//                assert(mDimension==2);
-			//                result = intersectZonotopeHyperplaneDSearch(*this, hp);
+			//                result = intersectZonotopeHalfspaceDSearch(*this, hp);
 			//                break;
 			default:
 				break;
@@ -741,19 +741,19 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace(
 	Number zs = ( d_vec.transpose() * this->mGenerators ).array().abs().sum();
 	// projection of d_vec on center
 	Number dc = d_vec.dot( this->mCenter );
-	// qu holds the maximal value one can go into direction of the hyperplane ->
+	// qu holds the maximal value one can go into direction of the Halfspace ->
 	// if this is less than the scalar, the
 	// zonotope is fully contained
 	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
 										// evaluated into the direction of the
-										// hyperplane (with respect to the center)
-	if ( qd <= e_scalar ) {				// the zonotope is below the hyperplane -> there is an
+										// Halfspace (with respect to the center)
+	if ( qd <= e_scalar ) {				// the zonotope is below the Halfspace -> there is an
 										// intersection
 		if ( qu <= e_scalar ) {			// the zonotopes maximal evaluation is also below the
-										// hyperplane -> it is fully contained
+										// Halfspace -> it is fully contained
 			result = *this;
 		} else {  // partly contained
-			// sigma is half the distance between the hyperplane and the "lowest"
+			// sigma is half the distance between the Halfspace and the "lowest"
 			// point of the zonotope.
 			Number sigma = ( e_scalar - qd ) / 2, d = ( qd + e_scalar ) / 2;  // d holds ?
 			hypro::matrix_t<Number> HHT = this->mGenerators * this->mGenerators.transpose();

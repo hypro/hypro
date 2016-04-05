@@ -10,7 +10,7 @@
 #pragma once
 
 #include "../../datastructures/Point.h"
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 #include "../SupportFunction/SupportFunction.h"
 
 namespace hypro{
@@ -46,13 +46,13 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             }
             Number constant = offset.supportValue;
 
-            //creates a hyperplanevector containing only the recently created hyperplane
-            std::vector<Hyperplane<Number>> curPlaneVector;
+            //creates a Halfspacevector containing only the recently created Halfspace
+            std::vector<Halfspace<Number>> curPlaneVector;
             curPlaneVector.emplace_back(curNormal, constant);
             curPlaneVector.emplace_back(-curNormal, -constant);
             assert(curPlaneVector.size() == 2);
 
-            //intersects the current support function with the hyperplane
+            //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
@@ -104,13 +104,13 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             }
             Number constant = offset.supportValue;
 
-            //creates a hyperplanevector containing only the recently created hyperplane
-            std::vector<Hyperplane<Number>> curPlaneVector;
+            //creates a Halfspacevector containing only the recently created Halfspace
+            std::vector<Halfspace<Number>> curPlaneVector;
             curPlaneVector.emplace_back(curNormal, constant);
             curPlaneVector.emplace_back(-curNormal, -constant);
             assert(curPlaneVector.size() == 2);
 
-            //intersects the current support function with the hyperplane
+            //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)

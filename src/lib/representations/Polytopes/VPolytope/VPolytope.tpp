@@ -51,7 +51,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& 
 
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
-	// calculate all possible hyperplane intersections -> TODO: dPermutation can
+	// calculate all possible Halfspace intersections -> TODO: dPermutation can
 	// be improved.
 	assert(_constraints.rows() == _constants.rows());
 	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
@@ -182,7 +182,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 }
 
 template<typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplane( const Hyperplane<Number>& rhs ) const {
+VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
 	std::set<vector_t<Number>> pointsInside;
 	std::set<vector_t<Number>> pointsOutside;
 	std::vector<Point<Number>> newPoints;
@@ -198,11 +198,11 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplane
 }
 
 template<typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	//std::cout << "This before intersection with hyperplanes: " << *this << std::endl;
+VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	//std::cout << "This before intersection with Halfspaces: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
 	//std::cout << "this as a H-Polytope: " << intermediate << std::endl;
-	auto intersection = intermediate.intersectHyperplanes(_mat, _vec);
+	auto intersection = intermediate.intersectHalfspaces(_mat, _vec);
 	//std::cout << "Intersection H-Polytope: " << intersection << std::endl;
 	intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
@@ -438,9 +438,9 @@ const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>
 								b( 0 ) = 1;
 								vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
 
-								cone->add( std::shared_ptr<Hyperplane<Number>>(
-									  new Hyperplane<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-								// cone->add(std::make_shared<Hyperplane<Number>>(Hyperplane<Number>(result,
+								cone->add( std::shared_ptr<Halfspace<Number>>(
+									  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
+								// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
 								// result.dot(point.rawCoordinates()))));
 							}
 						}

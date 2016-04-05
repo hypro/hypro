@@ -40,7 +40,7 @@ TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Datastructure
-TYPED_TEST_CASE(HyperplaneTest, allTypes);
+TYPED_TEST_CASE(HalfspaceTest, allTypes);
 TYPED_TEST_CASE(PointTest, allTypes);
 TYPED_TEST_CASE(HybridAutomataTest, allTypes);
 TYPED_TEST_CASE(VertexContainerTest, allTypes);

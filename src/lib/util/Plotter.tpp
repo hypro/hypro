@@ -159,7 +159,7 @@ void Plotter<Number>::plot2d() const {
 		int index = 1;
 		if(!mPlanes.empty()){
 			mOutfile << "\n";
-			mOutfile << "# plotting hyperplanes\n";
+			mOutfile << "# plotting Halfspaces\n";
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
 					std::cout << "Plot plane " << plane << std::endl;
@@ -385,14 +385,14 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 }
 
 template<typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Hyperplane<Number>>& _planes ) {
+unsigned Plotter<Number>::addObject( const std::vector<Halfspace<Number>>& _planes ) {
 	mOriginalPlanes.insert( std::make_pair( mId++, _planes ) );
 	return mId;
 }
 
 template<typename Number>
-unsigned Plotter<Number>::addObject( const Hyperplane<Number>& _plane ) {
-	std::vector<Hyperplane<Number>> tmp;
+unsigned Plotter<Number>::addObject( const Halfspace<Number>& _plane ) {
+	std::vector<Halfspace<Number>> tmp;
 	tmp.push_back(_plane);
 	mOriginalPlanes.insert( std::make_pair( mId++, tmp ) );
 	return mId;

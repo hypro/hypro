@@ -80,9 +80,9 @@ int main(int argc, char** argv) {
 
 	SupportFunction<Number> rounded1 = poly1.minkowskiSum(ball);
 
-	//SupportFunction<Number> intersectedInvariant = poly1.intersectHyperplanes(invariant, invariantConstants);
-	std::pair<bool, SupportFunction<Number>> intersectionPair = rounded1.satisfiesHyperplanes(invariant, invariantConstants);
-	//SupportFunction<Number> intersection = rounded1.intersectHyperplanes(invariant, invariantConstants);
+	//SupportFunction<Number> intersectedInvariant = poly1.intersectHalfspaces(invariant, invariantConstants);
+	std::pair<bool, SupportFunction<Number>> intersectionPair = rounded1.satisfiesHalfspaces(invariant, invariantConstants);
+	//SupportFunction<Number> intersection = rounded1.intersectHalfspaces(invariant, invariantConstants);
 
 	//SupportFunctionContent<Number> rounded2 = poly2.minkowskiSum(ball);
 	//SupportFunctionContent<Number> rounded = ball;
@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
 	//{
 	//HPolytope<Number> tmp;
 	//for(int i = 0; i < resolution; ++i) {
-	//	tmp.insert(Hyperplane<Number>(evaldirections.row(i), polyBox[i].supportValue));
+	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), polyBox[i].supportValue));
 	//}
 	//unsigned original = plotter.addObject(tmp.vertices());
 	//plotter.setObjectColor(original, colors[green]);
@@ -161,7 +161,7 @@ int main(int argc, char** argv) {
 	//{
 	//HPolytope<Number> tmp;
 	//for(int i = 0; i < resolution; ++i) {
-	//	tmp.insert(Hyperplane<Number>(evaldirections.row(i), trafoed[i].supportValue));
+	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), trafoed[i].supportValue));
 	//}
 	//unsigned sf = plotter.addObject(tmp.vertices());
 	//plotter.setObjectColor(sf, colors[orange]);
@@ -169,7 +169,7 @@ int main(int argc, char** argv) {
 	//{
 	//HPolytope<Number> tmp;
 	//for(int i = 0; i < resolution; ++i) {
-	//	tmp.insert(Hyperplane<Number>(evaldirections.row(i), multiEvaledVerify[i].supportValue));
+	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), multiEvaledVerify[i].supportValue));
 	//}
 	//unsigned sf = plotter.addObject(tmp.vertices());
 	//plotter.setObjectColor(sf, colors[lila]);
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
 	{
 	HPolytope<Number> tmp;
 	for(int i = 0; i < resolution; ++i) {
-		tmp.insert(Hyperplane<Number>(evaldirections.row(i), rounded1Eval[i].supportValue));
+		tmp.insert(Halfspace<Number>(evaldirections.row(i), rounded1Eval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(sf, colors[lila]);
@@ -188,7 +188,7 @@ int main(int argc, char** argv) {
 	{
 	HPolytope<Number> tmp;
 	for(int i = 0; i < resolution; ++i) {
-		tmp.insert(Hyperplane<Number>(evaldirections.row(i), rounded1IntersectEval[i].supportValue));
+		tmp.insert(Halfspace<Number>(evaldirections.row(i), rounded1IntersectEval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(sf, colors[green]);

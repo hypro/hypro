@@ -60,7 +60,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 }
 
 /*
- * Compute a set of uniformly distributed directions that are orthogonal to a given normal and all lie in one hyperplane
+ * Compute a set of uniformly distributed directions that are orthogonal to a given normal and all lie in one Halfspace
  */
 
 //template<typename Number>
@@ -103,9 +103,9 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 //        } else {
 //            assert(false);
 //        }
-        
-        
-        
+
+
+
 //    }
 //    return res;
 //}

@@ -63,8 +63,8 @@ class VPolytopeT {
 	VPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
-	VPolytopeT<Number, Converter> intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	VPolytopeT<Number, Converter> intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	VPolytopeT<Number, Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	VPolytopeT<Number, Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const VPolytopeT<Number, Converter>& _other ) const;

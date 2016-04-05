@@ -54,7 +54,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 					std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
 					//std::cout << "Conv Hull end" << std::endl;
 					for ( auto &facet : facets ) {
-						target.insert( facet->hyperplane() );
+						target.insert( facet->halfspace() );
 					}
 
 				}
@@ -68,9 +68,9 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 				//std::cout << "Conv Hull end" << std::endl;
 				for ( auto &facet : facets ) {
 					for( const auto& point : points ) {
-						assert( facet->hyperplane().normal().dot(point.rawCoordinates()) <= facet->hyperplane().offset() );
+						assert( facet->halfspace().normal().dot(point.rawCoordinates()) <= facet->halfspace().offset() );
 					}
-					target.insert( facet->hyperplane() );
+					target.insert( facet->halfspace() );
 				}
 			}
 		}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
@@ -78,8 +78,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
     //gets vertices from source object
     typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
-    //computes an oriented Box as overapproximation around the source object (returns hyperplanes)
-    std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
+    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
+    std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
     target = HPolytope(planes);
     }
     return target;

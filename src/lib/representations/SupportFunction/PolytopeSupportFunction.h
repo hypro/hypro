@@ -15,7 +15,7 @@
 #include "util.h"
 #include "../../config.h"
 #include "../../datastructures/Point.h"
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 #include "../../util/Optimizer.h"
 #include "../../util/convexHull.h"
 
@@ -39,7 +39,7 @@ class PolytopeSupportFunction {
 
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
-	PolytopeSupportFunction( const std::vector<Hyperplane<Number>>& _planes );
+	PolytopeSupportFunction( const std::vector<Halfspace<Number>>& _planes );
 	PolytopeSupportFunction( const std::vector<Point<Number>>& _points );
 	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
 	~PolytopeSupportFunction();

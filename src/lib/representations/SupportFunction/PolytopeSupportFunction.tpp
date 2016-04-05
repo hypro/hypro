@@ -22,7 +22,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> const
 }
 
 template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Hyperplane<Number>> &_planes ) {
+PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
@@ -46,8 +46,8 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 	mConstraintConstants = vector_t<Number>( facets.size() );
 	unsigned pos = 0;
 	for ( auto &facet : facets ) {
-		mConstraints.row( pos ) = facet->hyperplane().normal().transpose();
-		mConstraintConstants( pos ) = facet->hyperplane().offset();
+		mConstraints.row( pos ) = facet->Halfspace().normal().transpose();
+		mConstraintConstants( pos ) = facet->Halfspace().offset();
 		++pos;
 	}
 }

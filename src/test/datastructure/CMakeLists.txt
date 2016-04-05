@@ -7,7 +7,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	################################
 
 	add_executable(runDatastructureTests
-		HyperplaneTest.cpp
+		HalfspaceTest.cpp
 		PointTest.cpp
 		VertexTest.cpp
 		VertexContainerTest.cpp

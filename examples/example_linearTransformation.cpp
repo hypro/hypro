@@ -6,7 +6,7 @@
  */
 
  #include "../src/lib/util/Plotter.h"
- #include "../src/lib/datastructures/Hyperplane.h"
+ #include "../src/lib/datastructures/Halfspace.h"
  #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
@@ -16,10 +16,10 @@ int main(int argc, char const *argv[])
 	typedef carl::FLOAT_T<mpq_class> Number;
 
 	HPolytope<Number> box;
-	box.insert(Hyperplane<Number>({1,0},1));
-	box.insert(Hyperplane<Number>({0,1},1));
-	box.insert(Hyperplane<Number>({-1,0},1));
-	box.insert(Hyperplane<Number>({0,-1},1));
+	box.insert(Halfspace<Number>({1,0},1));
+	box.insert(Halfspace<Number>({0,1},1));
+	box.insert(Halfspace<Number>({-1,0},1));
+	box.insert(Halfspace<Number>({0,-1},1));
 
 	matrix_t<Number> A = matrix_t<Number>(2,2);
 	A << 2,0,0,2;

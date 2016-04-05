@@ -52,7 +52,7 @@ class ZonotopeReachability {
 	enum state_t { START, NORMAL, JUMP };
 
   private:  // private functions
-	void preclustering( const std::vector<Zonotope<Number> >& intersects, const Hyperplane<Number>& hp,
+	void preclustering( const std::vector<Zonotope<Number> >& intersects, const Halfspace<Number>& hp,
 						Zonotope<Number>& finalIntersect, const ZUtility::Options& option );
 	void postclustering( const std::vector<Zonotope<Number> >& resultingIntersects, Zonotope<Number>& finalIntersect );
 
@@ -65,10 +65,10 @@ class ZonotopeReachability {
 	void computeNextZonotope( unsigned int order_reduction_threshold, Zonotope<Number>& Q, Zonotope<Number>& V,
 							  Zonotope<Number>& S );
 
-	void guardToHyperplane( const hypro::Transition<Number>& transitionTaken, Hyperplane<Number>& hp );
+	void guardToHalfspace( const hypro::Transition<Number>& transitionTaken, Halfspace<Number>& hp );
 
 	void constructIntersectZonotopeFromMinMax( unsigned iteration, const Zonotope<Number>& Q, Zonotope<Number>& result,
-											   const Hyperplane<Number>& hp );
+											   const Halfspace<Number>& hp );
 
 	bool checkGuardJumpCondition( hypro::Transition<Number>& transition_taken, const Zonotope<Number>& Q,
 								  hypro::matrix_t<Number>& minMaxOfLine, const ZUtility::Options& option );
@@ -77,10 +77,10 @@ class ZonotopeReachability {
 
 	void overapproximatedConvexHull( Zonotope<Number>& Q, const hypro::matrix_t<Number>& expMatrix );
 
-	bool checkForIntersection( const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp,
+	bool checkForIntersection( const Zonotope<Number>& inputZonotope, const Halfspace<Number>& hp,
 							   Zonotope<Number>& result, const ZUtility::IntersectionMethod_t& method );
 
-	bool checkForIntersection( const Zonotope<Number>& inputZonotope, const Hyperplane<Number>& hp,
+	bool checkForIntersection( const Zonotope<Number>& inputZonotope, const Halfspace<Number>& hp,
 							   Zonotope<Number>& result, const ZUtility::IntersectionMethod_t& method,
 							   hypro::matrix_t<Number>& minMaxOfLine );
 

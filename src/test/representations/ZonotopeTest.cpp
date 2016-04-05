@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../lib/representations/GeometricObject.h"
-#include "../../lib/datastructures/Hyperplane.h"
+#include "../../lib/datastructures/Halfspace.h"
 
 /*
  * Google TYPED_TEST for Zonotope Implementation
@@ -112,10 +112,10 @@ TYPED_TEST(ZonotopeTest, ZonogoneHPIntersect) {
     generators << carl::rationalize<TypeParam>(0.3993), carl::rationalize<TypeParam>(0.0160), carl::rationalize<TypeParam>(0.0020), carl::rationalize<TypeParam>(0.0035), 0, carl::rationalize<TypeParam>(-0.0017),
                     carl::rationalize<TypeParam>(0.0898),    carl::rationalize<TypeParam>(0.0196),   carl::rationalize<TypeParam>(-0.0015),    carl::rationalize<TypeParam>(0.0008),    carl::rationalize<TypeParam>(0.0035),   carl::rationalize<TypeParam>(-0.0045);
 
-    hypro::Hyperplane<TypeParam> hp(dVec, 0);
+    hypro::Halfspace<TypeParam> hp(dVec, 0);
     hypro::Zonotope<TypeParam> z(center, generators), res;
     hypro::matrix_t<TypeParam> dummy;
-    res = intersectZonotopeHyperplane(z, hp, dummy);
+    res = intersectZonotopeHalfspace(z, hp, dummy);
 }
 
 TYPED_TEST(ZonotopeTest, MinkowskiSum) {
@@ -199,7 +199,7 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 //    z1.setCenter(cen);
 //    z1.setGenerators(gen);
 //
-//    Hyperplane<TypeParam> hp(3);
+//    Halfspace<TypeParam> hp(3);
 //    hp.setVector(d_vector);
 //    hp.setScalar(30);
 //
@@ -356,7 +356,7 @@ TYPED_TEST(ZonotopeTest, Intersection2) {
     z1.setCenter(z_center);
     z1.setGenerators(generators);
 
-    hypro::Hyperplane<TypeParam> h1 = hypro::Hyperplane<TypeParam>();
+    hypro::Halfspace<TypeParam> h1 = hypro::Halfspace<TypeParam>();
     h1.setNormal(d);
     h1.setOffset(0);
 

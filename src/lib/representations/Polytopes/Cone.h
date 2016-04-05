@@ -3,7 +3,7 @@
  */
 
 #pragma once
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 
 #include <vector>
 #include <memory>
@@ -15,14 +15,14 @@ template<typename Number>
 using vectorSet = std::set<vector_t<Number>>;
 
 template <typename Number>
-bool operator<( std::shared_ptr<Hyperplane<Number>> _lhs, std::shared_ptr<Hyperplane<Number>> _rhs ) {
+bool operator<( std::shared_ptr<Halfspace<Number>> _lhs, std::shared_ptr<Halfspace<Number>> _rhs ) {
 	return ( *_lhs.get() < *_rhs.get() );
 }
 
 template <typename Number>
 class Cone {
   public:
-	using planeVector = std::vector<std::shared_ptr<Hyperplane<Number>>>;
+	using planeVector = std::vector<std::shared_ptr<Halfspace<Number>>>;
 
   private:
 	planeVector mPlanes;
@@ -42,7 +42,7 @@ class Cone {
 	unsigned dimension() const;
 	unsigned size() const;
 
-	void add( std::shared_ptr<Hyperplane<Number>> _plane );
+	void add( std::shared_ptr<Halfspace<Number>> _plane );
 	void add( vector_t<Number> _vector );
 
 	Cone<Number> linearTransformation( const matrix_t<Number> A, const vector_t<Number>& b ) const;
@@ -51,7 +51,7 @@ class Cone {
 
 	bool contains( const vector_t<Number>& _vector ) const;
 	bool contains( const vector_t<Number>& _vector, planeVector& _insidePlanes,
-				   std::set<std::shared_ptr<Hyperplane<Number>>>& _outsidePlanes ) const;
+				   std::set<std::shared_ptr<Halfspace<Number>>>& _outsidePlanes ) const;
 	bool contains( const Point<Number>* _vector ) const;
 
 	Cone<Number> operator=( const Cone<Number>& _rhs );

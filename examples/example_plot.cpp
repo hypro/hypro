@@ -18,9 +18,9 @@ int main(int argc, char** argv) {
 	Plotter<double>& plotter = Plotter<double>::getInstance();
 
 	HPolytope<double> poly;
-	poly.insert(Hyperplane<double>({1,1},1));
-	poly.insert(Hyperplane<double>({-1,1},1));
-	poly.insert(Hyperplane<double>({0,-1},1));
+	poly.insert(Halfspace<double>({1,1},1));
+	poly.insert(Halfspace<double>({-1,1},1));
+	poly.insert(Halfspace<double>({0,-1},1));
 
 	std::vector<Point<double>> vertices = poly.vertices();
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 	std::cout << "Added points." << std::endl;
 
 	plotter.addObject(poly.constraints());
-	plotter.addObject(Hyperplane<double>({1,0},1));
+	plotter.addObject(Halfspace<double>({1,0},1));
 
 	std::cout << "Added planes." << std::endl;
 

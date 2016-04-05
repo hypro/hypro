@@ -10,7 +10,7 @@
 #pragma once
 
 #include "../typedefs.h"
-#include "Hyperplane.h"
+#include "Halfspace.h"
 #include "../util/linearSolving.h"
 
 namespace hypro {
@@ -29,7 +29,7 @@ class Facet {
   private:
 	pointVector mVertices;
 	neighborsSet mNeighbors;
-	Hyperplane<Number> mHyperplane;
+	Halfspace<Number> mHalfspace;
 	pointVector mOutsideSet;
 	vector_t<Number> mNormal;
 	Number mScalar;
@@ -43,7 +43,7 @@ class Facet {
 	Facet( const Facet<Number>& f )
 		: mVertices( f.vertices() ),
 		  mNeighbors( f.neighbors() ),
-		  mHyperplane( f.hyperplane() ),
+		  mHalfspace( f.halfspace() ),
 		  mOutsideSet( f.getOutsideSet() ),
 		  mNormal( f.getNormal() ),
 		  mScalar( f.getScalar() ) {}
@@ -51,7 +51,7 @@ class Facet {
 	Facet( const std::shared_ptr<Facet<Number>>& f )
 		: mVertices( f->vertices() ),
 		  mNeighbors( f->neighbors() ),
-		  mHyperplane( f->hyperplane() ),
+		  mHalfspace( f->halfspace() ),
 		  mOutsideSet( f->getOutsideSet() ),
 		  mNormal( f->getNormal() ),
 		  mScalar( f->getScalar() ) {}
@@ -59,8 +59,8 @@ class Facet {
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number>& insidePoint ) {
 		r.push_back( p );
 		setPoints( r, insidePoint );
-		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
-		// mHyperplane = Hyperplane<Number>(mVertices);
+		mHalfspace = Halfspace<Number>( mNormal, mScalar );
+		// mHalfspace = Halfspace<Number>(mVertices);
     mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
@@ -69,8 +69,8 @@ class Facet {
 		   const std::vector<Point<Number>>& currentOutside, const Point<Number>& insidePoint ) {
 		r.push_back( p );
 		setPoints( r, outsidePoints, currentOutside, insidePoint );
-		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
-		// mHyperplane = Hyperplane<Number>(mVertices);
+		mHalfspace = Halfspace<Number>( mNormal, mScalar );
+		// mHalfspace = Halfspace<Number>(mVertices);
 		mNeighbors = std::vector<Facet<Number>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
@@ -78,8 +78,8 @@ class Facet {
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& insidePoints ) {
 		r.push_back( p );
 		setPoints( r, insidePoints );
-		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
-		// mHyperplane = Hyperplane<Number>(mVertices);
+		mHalfspace = Halfspace<Number>( mNormal, mScalar );
+		// mHalfspace = Halfspace<Number>(mVertices);
 		mNeighbors = std::vector<Facet<Number>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
@@ -87,8 +87,8 @@ class Facet {
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1, const Point<Number> insidePoint2 ) {
 		r.push_back( p );
 		setPoints( r, insidePoint1, insidePoint2 );
-		mHyperplane = Hyperplane<Number>( mNormal, mScalar );
-		// mHyperplane = Hyperplane<Number>(mVertices);
+		mHalfspace = Halfspace<Number>( mNormal, mScalar );
+		// mHalfspace = Halfspace<Number>(mVertices);
 		mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
 		mOutsideSet = std::vector<Point<Number>>();
 	}
@@ -98,12 +98,12 @@ class Facet {
 			mVertices.insert( _vertices.begin(), _vertices.end() );
 			unsigned dimension = _vertices.begin()->rows();
 			if ( _vertices.size() < dimension ) {
-				mHyperplane = Hyperplane<Number>();
+				mHalfspace = Halfspace<Number>();
 			} else if ( _vertices.size() > dimension ) {
 				// TODO: Introduce check for degeneracy -> if not degenerate, reduce and initialize plane
-				mHyperplane = Hyperplane<Number>();  // TODO: temporary!
+				mHalfspace = Halfspace<Number>();  // TODO: temporary!
 			} else {
-				// proper amount of vertices for initialization of hyperplane
+				// proper amount of vertices for initialization of Halfspace
 				std::vector<vector_t<Number>> edges;
 				for ( unsigned i = 0; i < _vertices.size() - 1; ++i ) {
 					for ( unsigned j = i + 1; j < _vertices.size(); ++j ) {
@@ -112,7 +112,7 @@ class Facet {
 				}
 
 				assert( edges.size() == dimension - 1 );
-				mHyperplane = Hyperplane<Number>( *( _vertices.begin() ), edges );
+				mHalfspace = Halfspace<Number>( *( _vertices.begin() ), edges );
 			}
 		}
 	}
@@ -184,7 +184,7 @@ class Facet {
 				mNormal *= -1;
 				mScalar *= (Number) -1;
 			}
-			mHyperplane = Hyperplane<Number>( mNormal, mScalar );
+			mHalfspace = Halfspace<Number>( mNormal, mScalar );
 		}
 	}
 
@@ -209,7 +209,7 @@ class Facet {
 				mScalar *= (Number) -1;
 			}
 
-			mHyperplane = Hyperplane<Number>( mNormal, mScalar );
+			mHalfspace = Halfspace<Number>( mNormal, mScalar );
 		}
 	}
 
@@ -236,7 +236,7 @@ class Facet {
 					changed = true;
 				}
 			}
-			mHyperplane = Hyperplane<Number>( mNormal, mScalar );
+			mHalfspace = Halfspace<Number>( mNormal, mScalar );
 		}
 	}
 
@@ -287,7 +287,7 @@ class Facet {
 				}
 			}
 
-			mHyperplane = Hyperplane<Number>( mNormal, mScalar );
+			mHalfspace = Halfspace<Number>( mNormal, mScalar );
 		}
 	}
 
@@ -361,7 +361,7 @@ class Facet {
 
 	Number getScalarVector() const { return Number( mNormal.dot( mVertices[0].rawCoordinates() ) ); }
 
-	Hyperplane<Number> hyperplane() const { return mHyperplane; }
+	Halfspace<Number> halfspace() const { return mHalfspace; }
 
 	/*
 	 * Iterators
@@ -380,11 +380,11 @@ class Facet {
 	 */
 
 	/*
-	 * Checks if a point is above, i.e. a positive distance to the Hyperplane.
+	 * Checks if a point is above, i.e. a positive distance to the Halfspace.
 	 * @return true, if the point is above.vertices()
 	 */
 	bool isBelow( const Point<Number>& p ) const {
-		// return (mHyperplane.signedDistance(p) > 0);
+		// return (mHalfspace.signedDistance(p) > 0);
 		Number temp = Number( mNormal.dot( p.rawCoordinates() ) );
 		// std::cout << __func__ << " : " << __LINE__ << std::endl;
 		/*	if(carl::AlmostEqual2sComplement(temp, mScalar, 4)){
@@ -425,15 +425,15 @@ class Facet {
 	}
 
 	/*
-	 * Determines the point furthest away from the Hyperplane. The points to be considered are saved in hashlist.
-	 * @return The Point which has the highest distance to the Hyperplane.
+	 * Determines the point furthest away from the Halfspace. The points to be considered are saved in hashlist.
+	 * @return The Point which has the highest distance to the Halfspace.
 	 */
 	Point<Number> furthest_Point() const {
 		if ( mOutsideSet.empty() ) {
 			return Point<Number>();
 		} else {
 			Point<Number> result = mOutsideSet[0];
-			Number max = Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );  // mHyperplane.signedDistance(result);
+			Number max = Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );  // mHalfspace.signedDistance(result);
 			for ( unsigned i = 1; i < mOutsideSet.size(); i++ ) {
 				Number temp = Number( mNormal.dot( mOutsideSet[i].rawCoordinates() ) );
 				if ( temp > max ) {

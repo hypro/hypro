@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../datastructures/Hyperplane.h"
+#include "../datastructures/Halfspace.h"
 #include "../datastructures/Facet.h"
 #include "../datastructures/Ridge.h"
 #include "../datastructures/Point.h"
@@ -50,7 +50,7 @@ static bool maxRank( const std::vector<Point<Number>>& points, const Point<Numbe
 /*
  * Creates initial Convex Hull in dimension d with d+1 Points out of all the points given. Neighbor relationship of the
  * facets are saved in neighbors.
- * @return The list of facets, i.e. Hyperplanes with dimension d-1 who form the Convex Hull.
+ * @return The list of facets, i.e. Halfspaces with dimension d-1 who form the Convex Hull.
  */
 template <typename Number>
 static void initConvexHull( const std::vector<Point<Number>>& points, std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
@@ -149,8 +149,8 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 }
 
 /*
- * Determines the neighbors of the Hyperplanes. Neighbors are taken from neighbors.
- * @return The list of neighbors from the Hyperplanes.
+ * Determines the neighbors of the Halfspaces. Neighbors are taken from neighbors.
+ * @return The list of neighbors from the Halfspaces.
  */
 template <typename Number>
 static std::vector<std::shared_ptr<Facet<Number>>> getFacetsNeighbors(const std::vector<std::shared_ptr<Facet<Number>>>& facets) {
@@ -171,7 +171,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> getFacetsNeighbors(const std:
 }
 /*
  * Determines the ridges between the facets and their neighbors.polytope::
- * @return The list of ridges, i.e. Hyperplanes with dimension d-2 who are the intersection of two facets.
+ * @return The list of ridges, i.e. Halfspaces with dimension d-2 who are the intersection of two facets.
  */
 template <typename Number>
 static std::vector<Ridge<Number>> getRidges( const std::vector<std::shared_ptr<Facet<Number>>>& facets ) {

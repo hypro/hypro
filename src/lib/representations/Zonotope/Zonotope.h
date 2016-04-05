@@ -14,7 +14,7 @@
 
 
 
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 #include "ZUtility.h"
 
 #include <vector>
@@ -200,7 +200,7 @@ class ZonotopeT {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	ZonotopeT<Number,Converter> intersect( const Hyperplane<Number>& rhs, int method );
+	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, int method );
 
 	/**
 	 * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
@@ -209,7 +209,7 @@ class ZonotopeT {
 	 * @param rhs : The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found.
 	 */
-	ZonotopeT<Number,Converter> intersect( const Hyperplane<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
+	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
 
 	#ifdef USE_PPL
 	/**

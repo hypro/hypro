@@ -341,13 +341,13 @@ TYPED_TEST(BoxTest, Intersection)
 	EXPECT_EQ(reduced, hypro::Box<TypeParam>(carl::Interval<TypeParam>(3,4)));
 }
 
-TYPED_TEST(BoxTest, IntersectionHyperplane)
+TYPED_TEST(BoxTest, IntersectionHalfspace)
 {
-	hypro::Box<TypeParam> res1 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},4));
-	hypro::Box<TypeParam> res2 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},5));
-	hypro::Box<TypeParam> res3 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},6));
-	hypro::Box<TypeParam> res4 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},9));
-	hypro::Box<TypeParam> res5 = this->box1.intersectHyperplane(hypro::Hyperplane<TypeParam>({1,1},10));
+	hypro::Box<TypeParam> res1 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},4));
+	hypro::Box<TypeParam> res2 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},5));
+	hypro::Box<TypeParam> res3 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},6));
+	hypro::Box<TypeParam> res4 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},9));
+	hypro::Box<TypeParam> res5 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},10));
 
 	std::vector<carl::Interval<TypeParam>> i1;
 	std::vector<carl::Interval<TypeParam>> i2;

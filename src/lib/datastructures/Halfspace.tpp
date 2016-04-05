@@ -1,6 +1,6 @@
 /**
- *  Class that holds the implementation of a hyperplane.
- *  @file Hyperplane.tpp
+ *  Class that holds the implementation of a Halfspace.
+ *  @file Halfspace.tpp
  *
  *  @author Stefan Schupp 	<stefan.schupp@cs.rwth-aachen.de>
  *
@@ -8,26 +8,26 @@
  *  @version 	2015-03-16
  */
 
-#include "Hyperplane.h"
+#include "Halfspace.h"
 
 namespace hypro {
 template <typename Number>
-Hyperplane<Number>::Hyperplane()
+Halfspace<Number>::Halfspace()
 	: mNormal( vector_t<Number>::Zero( 1 ) ), mScalar( Number( 0 ) ), mIsInteger( true ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const Hyperplane<Number> &_orig )
+Halfspace<Number>::Halfspace( const Halfspace<Number> &_orig )
 	: mNormal( _orig.mNormal ), mScalar( _orig.mScalar ), mIsInteger( _orig.isInteger() ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const Point<Number> &_vector, const Number &_off )
+Halfspace<Number>::Halfspace( const Point<Number> &_vector, const Number &_off )
 	: mNormal( _vector.rawCoordinates() ), mScalar( _off ), mIsInteger( false ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, const Number &_off ) {
+Halfspace<Number>::Halfspace( std::initializer_list<Number> _coordinates, const Number &_off ) {
 	mNormal = vector_t<Number>( _coordinates.size() );
 	unsigned pos = 0;
 	for ( auto &coordinate : _coordinates ) {
@@ -39,14 +39,14 @@ Hyperplane<Number>::Hyperplane( std::initializer_list<Number> _coordinates, cons
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vector, const Number &_off )
+Halfspace<Number>::Halfspace( const vector_t<Number> &_vector, const Number &_off )
 	: mNormal( _vector ), mScalar( _off ), mIsInteger( false ) {
 }
 
 template <typename Number>
-Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
-	// here: hyperplane given in parameterform is converted to normalform
-	// the normal vector of the hyperplane is computed by solving a system of
+Halfspace<Number>::Halfspace( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
+	// here: Halfspace given in parameterform is converted to normalform
+	// the normal vector of the Halfspace is computed by solving a system of
 	// equations
 	mNormal = computePlaneNormal( _vectorSet );
 #ifdef fukuda_DEBUG
@@ -54,7 +54,7 @@ Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<
 #endif
 
 	// the scalar is just the scalar product of the normal vector & a point in the
-	// hyperplane
+	// Halfspace
 	mScalar = mNormal.dot( _vec );
 #ifdef fukuda_DEBUG
 	std::cout << "computed Offset: " << mScalar << std::endl;
@@ -63,28 +63,28 @@ Hyperplane<Number>::Hyperplane( const vector_t<Number> &_vec, const std::vector<
 }
 
 template <typename Number>
-Hyperplane<Number>::~Hyperplane() {
+Halfspace<Number>::~Halfspace() {
 }
 
 template <typename Number>
-unsigned Hyperplane<Number>::dimension() const {
+unsigned Halfspace<Number>::dimension() const {
 	return mNormal.nonZeros();
 }
 
 template<typename Number>
-void Hyperplane<Number>::reduceDimension( unsigned _dimension ) {
+void Halfspace<Number>::reduceDimension( unsigned _dimension ) {
 	// TODO
 	this->mHash = 0;
 }
 
 template<typename Number>
-void Hyperplane<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
+void Halfspace<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
 	// TODO
 	this->mHash = 0;
 }
 
 template<typename Number>
-void Hyperplane<Number>::makeInteger() {
+void Halfspace<Number>::makeInteger() {
 	if(!mIsInteger){
 		Number scaling = Number(carl::getDenom(mScalar));
 		for(unsigned i = 0; i < mNormal.rows(); ++i) {
@@ -103,47 +103,47 @@ void Hyperplane<Number>::makeInteger() {
 }
 
 template <typename Number>
-const vector_t<Number> &Hyperplane<Number>::normal() const {
+const vector_t<Number> &Halfspace<Number>::normal() const {
 	return mNormal;
 }
 
 template <typename Number>
-void Hyperplane<Number>::setNormal( const vector_t<Number> &_normal ) {
+void Halfspace<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
 	this->mHash = 0;
 	mIsInteger = false;
 }
 
 template<typename Number>
-void Hyperplane<Number>::invert() {
+void Halfspace<Number>::invert() {
 	mNormal = -mNormal;
 	mScalar = -mScalar;
 }
 
 template <typename Number>
-Number Hyperplane<Number>::offset() const {
+Number Halfspace<Number>::offset() const {
 	return mScalar;
 }
 
 template <typename Number>
-void Hyperplane<Number>::setOffset( Number _offset ) {
+void Halfspace<Number>::setOffset( Number _offset ) {
 	mScalar = _offset;
 	this->mHash = 0;
 	mIsInteger = mIsInteger && carl::isInteger(_offset);
 }
 
 template <typename Number>
-Number Hyperplane<Number>::signedDistance( const vector_t<Number> &_point ) const {
+Number Halfspace<Number>::signedDistance( const vector_t<Number> &_point ) const {
 	return ( _point.dot( mNormal ) - mScalar );
 }
 
 template <typename Number>
-Number Hyperplane<Number>::evaluate( const vector_t<Number> &_direction ) const {
+Number Halfspace<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	return ( _direction.dot( mNormal ) );
 }
 
 template <typename Number>
-bool Hyperplane<Number>::intersection( Number &_result, const vector_t<Number> &_vector ) const {
+bool Halfspace<Number>::intersection( Number &_result, const vector_t<Number> &_vector ) const {
 	bool intersect = false;
 	Number factor = 0;
 #ifdef fukuda_DEBUG
@@ -163,28 +163,28 @@ bool Hyperplane<Number>::intersection( Number &_result, const vector_t<Number> &
 }
 
 template <typename Number>
-bool Hyperplane<Number>::intersection( Number &_result, const Point<Number> &_vector ) const {
+bool Halfspace<Number>::intersection( Number &_result, const Point<Number> &_vector ) const {
 	return intersection( _result, _vector.rawCoordinates() );
 }
 
 template <typename Number>
-Hyperplane<Number> Hyperplane<Number>::linearTransformation( const matrix_t<Number> &A,
+Halfspace<Number> Halfspace<Number>::linearTransformation( const matrix_t<Number> &A,
 															 const vector_t<Number> &b ) const {
 	Eigen::FullPivLU<matrix_t<Number>> lu(A);
 	// if A has full rank, we can simply retransform
 	if(lu.rank() == A.rows()) {
 		Number newOffset = mNormal.transpose()*A.inverse()*b;
-		return Hyperplane<Number>(mNormal.transpose()*A.inverse(), newOffset + mScalar);
+		return Halfspace<Number>(mNormal.transpose()*A.inverse(), newOffset + mScalar);
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
 
 		//TODO
-		return Hyperplane<Number>();
+		return Halfspace<Number>();
 	}
 }
 
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number> &_rhs ) const {
+vector_t<Number> Halfspace<Number>::intersectionVector( const Halfspace<Number> &_rhs ) const {
 	matrix_t<Number> A = matrix_t<Number>( 3, mNormal.rows() );
 	A.row( 0 ) = mNormal.transpose();
 	A.row( 1 ) = _rhs.normal().transpose();
@@ -200,7 +200,7 @@ vector_t<Number> Hyperplane<Number>::intersectionVector( const Hyperplane<Number
 }
 
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::fastIntersect( const std::vector<Hyperplane<Number>>& _planes ) {
+vector_t<Number> Halfspace<Number>::fastIntersect( const std::vector<Halfspace<Number>>& _planes ) {
 	assert(_planes.size() == _planes.begin()->dimension()); // TODO: Make function more general to cope with arbitrary input.
 
 	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
@@ -238,7 +238,7 @@ vector_t<Number> Hyperplane<Number>::fastIntersect( const std::vector<Hyperplane
 }
 
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::saveIntersect( const std::vector<Hyperplane<Number>>& _planes, Number threshold ) {
+vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold ) {
 	assert(_planes.size() == _planes.begin()->dimension()); // TODO: Make function more general to cope with arbitrary input.
 
 	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
@@ -311,12 +311,12 @@ vector_t<Number> Hyperplane<Number>::saveIntersect( const std::vector<Hyperplane
 
 
 template <typename Number>
-bool Hyperplane<Number>::contains( const vector_t<Number> _vector ) const {
+bool Halfspace<Number>::contains( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
 }
 
 template<typename Number>
-bool Hyperplane<Number>::contains( const std::vector<Point<Number>>& _points) const {
+bool Halfspace<Number>::contains( const std::vector<Point<Number>>& _points) const {
 	for(const auto& point : _points){
 		if(point.rawCoordinates().dot(mNormal) > mScalar){
 			return false;
@@ -326,12 +326,12 @@ bool Hyperplane<Number>::contains( const std::vector<Point<Number>>& _points) co
 }
 
 template <typename Number>
-bool Hyperplane<Number>::holds( const vector_t<Number> _vector ) const {
+bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) <= mScalar );
 }
 
 template <typename Number>
-const Number &Hyperplane<Number>::internalOffset() const {
+const Number &Halfspace<Number>::internalOffset() const {
 	return mScalar;
 }
 
@@ -342,7 +342,7 @@ const Number &Hyperplane<Number>::internalOffset() const {
  * necessarily 3
  */
 template <typename Number>
-vector_t<Number> Hyperplane<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) const {
+vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) const {
 	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
 	if(_edgeSet.size() == unsigned(_edgeSet.begin()->rows()) - 1 ) {
 		// method avoiding glpk and using Eigen instead (higher precision)

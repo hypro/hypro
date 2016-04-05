@@ -117,10 +117,10 @@ protected:
 		vpolytope3 = hypro::VPolytope<Number>(points3);
 
                 // A box (for H-Polytope)
-		Hyperplane<Number> hp1({1,0},2);
-		Hyperplane<Number> hp2({0,1},2);
-		Hyperplane<Number> hp3({-1,0},2);
-		Hyperplane<Number> hp4({0,-1},2);
+		Halfspace<Number> hp1({1,0},2);
+		Halfspace<Number> hp2({0,1},2);
+		Halfspace<Number> hp3({-1,0},2);
+		Halfspace<Number> hp4({0,-1},2);
 
                 planes.push_back(hp1);
 		planes.push_back(hp2);
@@ -130,9 +130,9 @@ protected:
                 hpolytope = hypro::HPolytope<Number>(this->planes);
 
                 //second H-Polytope
-                Hyperplane<Number> hp5({1,1},carl::rationalize<Number>(1.4));
-                Hyperplane<Number> hp6({0,-1},1);
-                Hyperplane<Number> hp7({-1,0},1);
+                Halfspace<Number> hp5({1,1},carl::rationalize<Number>(1.4));
+                Halfspace<Number> hp6({0,-1},1);
+                Halfspace<Number> hp7({-1,0},1);
 
                 planes2.push_back(hp5);
                 planes2.push_back(hp6);
@@ -164,8 +164,8 @@ protected:
     hypro::Zonotope<Number> zonotope;
     hypro::Zonotope<Number> zonotope2;
 
-    typename hypro::HPolytope<Number>::HyperplaneVector planes;
-    typename hypro::HPolytope<Number>::HyperplaneVector planes2;
+    typename hypro::HPolytope<Number>::HalfspaceVector planes;
+    typename hypro::HPolytope<Number>::HalfspaceVector planes2;
     hypro::HPolytope<Number> hpolytope;
     hypro::HPolytope<Number> hpolytope2;
 };

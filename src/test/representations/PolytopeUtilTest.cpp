@@ -44,38 +44,38 @@ protected:
  * @covers polytope::constructor
  * @covers polytope::pointToGenerator
  */
-TYPED_TEST(PolytopeUtilTest, HyperplaneConstructor)
+TYPED_TEST(PolytopeUtilTest, HalfspaceConstructor)
 {
-    hypro::Hyperplane<TypeParam> constructor1;
+    hypro::Halfspace<TypeParam> constructor1;
 
     hypro::vector_t<TypeParam> norm = hypro::vector_t<TypeParam>(2);
     norm(0) = 1;
     norm(1) = 3;
 
-    hypro::Hyperplane<TypeParam> constructor2(norm, carl::rationalize<TypeParam>(4.3));
+    hypro::Halfspace<TypeParam> constructor2(norm, carl::rationalize<TypeParam>(4.3));
 
-    hypro::Hyperplane<TypeParam> constructor3({1,3}, carl::rationalize<TypeParam>(4.3));
+    hypro::Halfspace<TypeParam> constructor3({1,3}, carl::rationalize<TypeParam>(4.3));
 
-    hypro::Hyperplane<TypeParam> constructor4(constructor1);
+    hypro::Halfspace<TypeParam> constructor4(constructor1);
     SUCCEED();
 }
 
-TYPED_TEST(PolytopeUtilTest, HyperplaneAccess)
+TYPED_TEST(PolytopeUtilTest, HalfspaceAccess)
 {
     hypro::vector_t<TypeParam> norm = hypro::vector_t<TypeParam>(2);
     norm(0) = 1;
     norm(1) = 3;
-    hypro::Hyperplane<TypeParam> access1(norm, carl::rationalize<TypeParam>(4.3));
+    hypro::Halfspace<TypeParam> access1(norm, carl::rationalize<TypeParam>(4.3));
 
     EXPECT_EQ(norm, access1.normal());
     EXPECT_EQ(carl::rationalize<TypeParam>(4.3), access1.offset());
     EXPECT_EQ((unsigned) 2, access1.dimension());
 }
 
-TYPED_TEST(PolytopeUtilTest, HyperplaneIntersection)
+TYPED_TEST(PolytopeUtilTest, HalfspaceIntersection)
 {
     hypro::Point<TypeParam> norm({1,3});
-    hypro::Hyperplane<TypeParam> intersection1(norm, carl::rationalize<TypeParam>(4.3));
+    hypro::Halfspace<TypeParam> intersection1(norm, carl::rationalize<TypeParam>(4.3));
 
     hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);
     vec(0) = 2;
@@ -98,15 +98,15 @@ TYPED_TEST(PolytopeUtilTest, ConeConstructor)
 
 	hypro::vector_t<TypeParam> normal1 = hypro::vector_t<TypeParam>(3);
 	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp1 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal1,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp1 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal1,TypeParam(0)));
 
 	hypro::vector_t<TypeParam> normal2 = hypro::vector_t<TypeParam>(3);
 	normal2 << TypeParam(1), TypeParam(0), TypeParam(0);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp2 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal2,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp2 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal2,TypeParam(0)));
 
 	hypro::vector_t<TypeParam> normal3 = hypro::vector_t<TypeParam>(3);
 	normal3 << TypeParam(1), TypeParam(0), TypeParam(0);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp3 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal3,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp3 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal3,TypeParam(0)));
 
 	typename ptope::Cone<TypeParam>::planeVector planes;
 	planes.push_back(hp1);
@@ -124,15 +124,15 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 
 	hypro::vector_t<TypeParam> normal1 = hypro::vector_t<TypeParam>(3);
 	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp1 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal1,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp1 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal1,TypeParam(0)));
 
 	hypro::vector_t<TypeParam> normal2 = hypro::vector_t<TypeParam>(3);
 	normal2 << TypeParam(0), TypeParam(1), TypeParam(0);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp2 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal2,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp2 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal2,TypeParam(0)));
 
 	hypro::vector_t<TypeParam> normal3 = hypro::vector_t<TypeParam>(3);
 	normal3 << TypeParam(0), TypeParam(0), TypeParam(1);
-	std::shared_ptr<hypro::Hyperplane<TypeParam>> hp3 = std::shared_ptr<hypro::Hyperplane<TypeParam>>(new hypro::Hyperplane<TypeParam>(normal3,TypeParam(0)));
+	std::shared_ptr<hypro::Halfspace<TypeParam>> hp3 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal3,TypeParam(0)));
 
 	typename ptope::Cone<TypeParam>::planeVector planes;
 	planes.push_back(hp1);

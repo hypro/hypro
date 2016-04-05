@@ -65,7 +65,7 @@ namespace reachability {
 		flowpipe_t<Representation> flowpipe;
 
 		// check if initial Valuation fulfills Invariant
-		std::pair<bool, Representation> initialPair = _val.satisfiesHyperplanes(_loc->invariant().mat, _loc->invariant().vec);
+		std::pair<bool, Representation> initialPair = _val.satisfiesHalfspaces(_loc->invariant().mat, _loc->invariant().vec);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << initialPair.first << std::endl;
@@ -228,7 +228,7 @@ namespace reachability {
 			firstSegment.removeRedundancy();
 
 			// set the last segment of the flowpipe
-			Representation lastSegment = firstSegment.intersectHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+			Representation lastSegment = firstSegment.intersectHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
 			// insert first Segment into the empty flowpipe
 			flowpipe.push_back( lastSegment );
 
@@ -254,7 +254,7 @@ namespace reachability {
 				transformedSegment = lastSegment.linearTransformation( resultMatrix, translation );
 
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, Representation> newSegment = transformedSegment.satisfiesHyperplanes( _loc->invariant().mat, _loc->invariant().vec );
+				std::pair<bool, Representation> newSegment = transformedSegment.satisfiesHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
 
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
@@ -288,11 +288,11 @@ namespace reachability {
 						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || !newSegment.first)){
 							auto facets = convexHull(points_convexHull);
 
-							std::vector<Hyperplane<Number>> hyperplanes;
+							std::vector<Halfspace<Number>> Halfspaces;
 							for(unsigned i = 0; i<facets.first.size(); i++){
-								hyperplanes.push_back(facets.first.at(i)->hyperplane());
+								Halfspaces.push_back(facets.first.at(i)->Halfspace());
 							}
-							Representation convexHull = Representation(hyperplanes);
+							Representation convexHull = Representation(Halfspaces);
 
 							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
 							convexHull.removeRedundancy();
@@ -377,7 +377,7 @@ namespace reachability {
 	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
 							   Representation& result ) {
 
-		std::pair<bool, Representation> guardSatisfyingSegment = _segment.satisfiesHyperplanes( _trans->guard().mat, _trans->guard().vec );
+		std::pair<bool, Representation> guardSatisfyingSegment = _segment.satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSegment.first ) {

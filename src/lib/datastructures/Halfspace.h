@@ -1,6 +1,6 @@
 /**
- *  Class that holds the implementation of a hyperplane.
- *  @file Hyperplane.h
+ *  Class that holds the implementation of a Halfspace.
+ *  @file Halfspace.h
  *
  *  @author Stefan Schupp 	<stefan.schupp@cs.rwth-aachen.de>
  *
@@ -20,7 +20,7 @@
 namespace hypro {
 
 template <typename Number>
-class Hyperplane {
+class Halfspace {
   private:
 	vector_t<Number> mNormal;
 	Number mScalar;
@@ -28,16 +28,16 @@ class Hyperplane {
     bool mIsInteger;
 
   public:
-	Hyperplane();
-	Hyperplane( const Hyperplane<Number>& _orig );
-	Hyperplane( const Point<Number>& _vector, const Number& _off );
-	Hyperplane( std::initializer_list<Number> _coordinates, const Number& _off );
-	Hyperplane( const vector_t<Number>& _vector, const Number& _off );
-	Hyperplane( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
+	Halfspace();
+	Halfspace( const Halfspace<Number>& _orig );
+	Halfspace( const Point<Number>& _vector, const Number& _off );
+	Halfspace( std::initializer_list<Number> _coordinates, const Number& _off );
+	Halfspace( const vector_t<Number>& _vector, const Number& _off );
+	Halfspace( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
 
-	~Hyperplane();
+	~Halfspace();
 
-	double sizeOfHyperplane(){
+	double sizeOfHalfspace(){
 	return sizeof(*this) + this->mNormal.size()* sizeof(Number);
 	}
 
@@ -60,12 +60,12 @@ class Hyperplane {
 	bool intersection( Number& _result, const vector_t<Number>& _vector ) const;
 	bool intersection( Number& _result, const Point<Number>& _vector ) const;
 
-	Hyperplane<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	//HPolytope<Number> intersection( const Hyperplane<Number>& _rhs ) const; /////////// TRAC
-	vector_t<Number> intersectionVector( const Hyperplane<Number>& _rhs ) const;
+	Halfspace<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	//HPolytope<Number> intersection( const Halfspace<Number>& _rhs ) const; /////////// TRAC
+	vector_t<Number> intersectionVector( const Halfspace<Number>& _rhs ) const;
 
-	static vector_t<Number> fastIntersect( const std::vector<Hyperplane<Number>>& _planes );
-	static vector_t<Number> saveIntersect( const std::vector<Hyperplane<Number>>& _planes, Number threshold = 0);
+	static vector_t<Number> fastIntersect( const std::vector<Halfspace<Number>>& _planes );
+	static vector_t<Number> saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold = 0);
 
 	bool contains( const vector_t<Number> _vector ) const;
 	bool contains( const std::vector<Point<Number>>& _points) const;
@@ -74,12 +74,12 @@ class Hyperplane {
     Number scalar() const { return mScalar; }
     size_t hash() {
         if (this->mHash == 0) {
-            this->mHash = std::hash<hypro::Hyperplane<Number>>(*this);
+            this->mHash = std::hash<hypro::Halfspace<Number>>(*this);
         }
         return mHash;
     }
 
-	friend void swap( Hyperplane<Number>& a, Hyperplane<Number>& b ) {
+	friend void swap( Halfspace<Number>& a, Halfspace<Number>& b ) {
 		swap( a.mNormal, b.mNormal );
 		swap( a.mScalar, b.mScalar );
 	}
@@ -96,45 +96,45 @@ class Hyperplane {
 };
 
 template <typename Number>
-std::ostream& operator<<( std::ostream& _lhs, const hypro::Hyperplane<Number>& _rhs ) {
+std::ostream& operator<<( std::ostream& _lhs, const hypro::Halfspace<Number>& _rhs ) {
 	_lhs << "( " << _rhs.normal() << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 
 template <typename Number>
-bool operator==( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
+bool operator==( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
 	return ( lhs.normal() == rhs.normal() && lhs.offset() == rhs.offset() );
 }
 
 template <typename Number>
-bool operator<( const Hyperplane<Number>& lhs, const Hyperplane<Number>& rhs ) {
+bool operator<( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
 	return ( lhs.normal() < rhs.normal() || ( lhs.normal() == rhs.normal() && lhs.offset() < rhs.offset() ) );
 }
 
 template <typename Number>
-Hyperplane<Number> operator-( const Hyperplane<Number>& _in ) {
-	return Hyperplane<Number>(_in).invert();
+Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
+	return Halfspace<Number>(_in).invert();
 }
 
     #ifdef EXTERNALIZE_CLASSES
-    extern template class Hyperplane<double>;
+    extern template class Halfspace<double>;
 
     #ifdef USE_MPFR_FLOAT
-    extern template class Hyperplane<carl::FLOAT_T<mpfr_t>>;
+    extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
     #endif
 
-    extern template class Hyperplane<carl::FLOAT_T<double>>;
+    extern template class Halfspace<carl::FLOAT_T<double>>;
     #endif
 }  // namespace hypro
 
 namespace std{
     template<class Number>
-    struct hash<hypro::Hyperplane<Number>> {
-        std::size_t operator()(hypro::Hyperplane<Number> const& hyperplane) const
+    struct hash<hypro::Halfspace<Number>> {
+        std::size_t operator()(hypro::Halfspace<Number> const& Halfspace) const
         {
             size_t seed = 0;
-            hypro::vector_t<Number> normal = hyperplane.normal();
-            Number scalar = hyperplane.scalar();
+            hypro::vector_t<Number> normal = Halfspace.normal();
+            Number scalar = Halfspace.scalar();
             std::hash<hypro::vector_t<Number>> vectorHasher;
             std::hash<Number> numberHasher;
             seed = vectorHasher(normal);
@@ -144,4 +144,4 @@ namespace std{
     };
 } //namespace std
 
-#include "Hyperplane.tpp"
+#include "Halfspace.tpp"

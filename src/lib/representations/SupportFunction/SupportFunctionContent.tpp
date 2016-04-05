@@ -81,7 +81,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Hyperplane<Number>> &_planes, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfspace<Number>> &_planes, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			mPolytope = new PolytopeSupportFunction<Number>( _planes );
@@ -251,7 +251,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				default:{
 					assert(res.errorCode == SOLUTION::FEAS);
 					res.optimumValue = mLinearTrafoParameters->a * res.optimumValue + mLinearTrafoParameters->b;
-					// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
+					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					res.supportValue = res.optimumValue.dot(_direction);
 					return res;
 				}
@@ -335,7 +335,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			for(auto& entry : res){
 				vector_t<Number> currentDir = _directions.row(directionCnt);
 				entry.optimumValue = mLinearTrafoParameters->a * entry.optimumValue + mLinearTrafoParameters->b;
-				// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
+				// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 				entry.supportValue = entry.optimumValue.dot(currentDir);
 				++directionCnt;
 			}

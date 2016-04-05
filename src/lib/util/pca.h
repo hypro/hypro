@@ -1,5 +1,5 @@
 /**
- * Implementation of principal component analysis for a set of sample points. 
+ * Implementation of principal component analysis for a set of sample points.
  * @file  pca.h
  * @author Simon Froitzheim
  *
@@ -10,7 +10,7 @@
 #pragma once
 
 #include "../datastructures/Point.h"
-#include "../datastructures/Hyperplane.h"
+#include "../datastructures/Halfspace.h"
 
 
 namespace hypro {
@@ -18,16 +18,16 @@ namespace hypro {
 template <typename Number>
 class pca{
     public:
-        
-        static std::vector<Hyperplane<Number>> computeOrientedBox(const std::vector<vector_t<Number>>& samples);
-     
+
+        static std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<vector_t<Number>>& samples);
+
 };
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 } //namespace
 
 #include "pca.tpp"

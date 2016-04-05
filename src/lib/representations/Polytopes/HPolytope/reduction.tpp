@@ -534,7 +534,7 @@ namespace hypro {
 				std::reverse(neighborsOf_a.begin(), neighborsOf_a.end());
 
 				for(unsigned i=0; i<smoothVectors.size(); i++){
-					res.insert(Hyperplane<Number>(smoothVectors[i], smoothVectors_offset[i])); // update neighbor facets
+					res.insert(Halfspace<Number>(smoothVectors[i], smoothVectors_offset[i])); // update neighbor facets
 				}
 
 				for(unsigned neighbor: neighborsOf_a){
@@ -554,7 +554,7 @@ namespace hypro {
 				evaluations.push_back(res.constraints().at(a).normal());
 				evaluations.push_back(res.constraints().at(b).normal());
 
-				res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+				res.insert(Halfspace<Number>(uniteVector, uniteVector_offset)); // insert united facet
 				res.erase(a);
 				res.erase(b);
 
@@ -592,7 +592,7 @@ namespace hypro {
 				// smooth united facet offset is computed with the united facet and cutPoint of facet a and b
 				uniteVector_offset = uniteVector.dot(point_a_b.rawCoordinates());
 
-				res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+				res.insert(Halfspace<Number>(uniteVector, uniteVector_offset)); // insert united facet
 				res.erase(a);
 				res.erase(b);
 
@@ -623,7 +623,7 @@ namespace hypro {
 				// cut united facet offset is computed with the united facet and cutPoint of facet a and b
 				uniteVector_offset = uniteVector.dot(point_a_b.rawCoordinates());
 
-				res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+				res.insert(Halfspace<Number>(uniteVector, uniteVector_offset)); // insert united facet
 				res.erase(a);
 				res.erase(b);
 
@@ -717,7 +717,7 @@ namespace hypro {
 				// norm united facet offset is computed with the united facet and (TODO furthest) cutPoint of facet a and b
 					uniteVector_offset = uniteVector.dot(point_a_b.rawCoordinates());
 
-		  res.insert(Hyperplane<Number>(uniteVector, uniteVector_offset)); // insert united facet
+		  res.insert(Halfspace<Number>(uniteVector, uniteVector_offset)); // insert united facet
 				res.erase(a);
 				res.erase(b);
 
@@ -764,7 +764,7 @@ namespace hypro {
 	std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
 
 	std::vector<unsigned> facets_erase;
-	std::vector<Hyperplane<Number>> facets_insert;
+	std::vector<Halfspace<Number>> facets_insert;
 
 	/*
 	 * idea to prevent adding of redundant planes:
@@ -859,12 +859,12 @@ namespace hypro {
 						break;
 		}
 
-	  // TODO if test with cone works insert Hyperplane after the directions-loop
-		facets_insert.push_back(Hyperplane<Number>(directed, directed_offset));
+	  // TODO if test with cone works insert Halfspace after the directions-loop
+		facets_insert.push_back(Halfspace<Number>(directed, directed_offset));
 	}
 
 	// insert
-	for(Hyperplane<Number> facet_insert: facets_insert){
+	for(Halfspace<Number> facet_insert: facets_insert){
 		res.insert(facet_insert);
 	}
 

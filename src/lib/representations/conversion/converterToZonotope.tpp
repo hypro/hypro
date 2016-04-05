@@ -60,8 +60,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         //gets vertices from source object
         typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
-        //computes an oriented Box as special Zonotope around the source object (returns hyperplanes)
-        std::vector<Hyperplane<Number>> planes = computeOrientedBox(vertices);
+        //computes an oriented Box as special Zonotope around the source object (returns Halfspaces)
+        std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
         HPolytope hpoly = HPolytope(planes);
 
         //converts computed box H -> V
@@ -96,7 +96,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
              for (unsigned j=0; j < dim; ++j){
-                 //construct point on the hyperplane by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
+                 //construct point on the Halfspace by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
                  if (normal(j) != 0){
                      vector_t<Number> p = vector_t<Number>::Zero(dim);
                      p(j) = 1;
@@ -151,7 +151,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 }
 
 
-//TODO alternative approach with points from boundaries 
+//TODO alternative approach with points from boundaries
 //conversion from Support Function to Zonotope (OVER or ALTERNATIVE)
 //ALTERNATIVE computes a set of boundary points which then go to pca for an oriented rectangular hull before checking whether the source object is really in that box and maybe expanding it)
 template <typename Number>
@@ -167,7 +167,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
          assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
          //creates a matrix with one row for each direction and one column for each dimension
         matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
-        
+
          //fills the matrix with the template directions
         for (unsigned i=0; i<templateDirections.size();++i){
             templateDirectionMatrix.row(i) = templateDirections[i];
@@ -200,7 +200,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         //conversion is from here done just like V -> Zonotope
         res = toZonotope(sampleVPoly, mode);
     }
-    
+
     if (mode == ALTERNATIVE){
         //gets dimension of source object
         unsigned dim = _source.dimension();
@@ -216,7 +216,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         for (unsigned i=0; i<templateDirections.size();++i){
                templateDirectionMatrix.row(i) = templateDirections[i];
         }
-        
+
         //lets the support function evaluate the offset of the halfspaces for each direction
         std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
         assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
@@ -225,7 +225,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
               if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
                        boundedConstraints.push_back(offsetIndex);
         }
-                
+
         //builds a pointVector from boundary points with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
         std::vector<Point<Number>> points = std::vector<Point<Number>>(boundedConstraints.size());
         std::size_t pos = boundedConstraints.size()-1;
@@ -235,30 +235,30 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
               --pos;
         }
 
-        //computes an oriented Box as special Zonotope around the boundary points(returns hyperplanes and may not be an overapproximation yet)
-        std::vector<Hyperplane<Number>> planes = computeOrientedBox(points);
-        
+        //computes an oriented Box as special Zonotope around the boundary points(returns Halfspaces and may not be an overapproximation yet)
+        std::vector<Halfspace<Number>> planes = computeOrientedBox(points);
+
         //gets number of planes
         unsigned numberOfPlanes = planes.size();
-        
+
         //the number of planes has to be two times the dimension (it should be an oriented rectangular hull)
         assert(numberOfPlanes == 2*dim);
-        
+
         //defines an empty vector for the oriented box normals
         matrix_t<Number> normals = matrix_t<Number>(numberOfPlanes, dim);
-        
+
         //defines an empty vector for the oriented box offsets
         vector_t<Number> newOffsets = vector_t<Number>(numberOfPlanes);
-        
+
         //reads normals and offsets out
         for (unsigned i=0; i< numberOfPlanes; ++i){
             normals.row(i) = planes[i].normal();
             newOffsets(i) = planes[i].offset();
         }
-        
+
         //defines an empty vector for the source object offsets in ORH normal directions)
         vector_t<Number> oldOffsets = vector_t<Number>(numberOfPlanes);
-        
+
         //evaluates source object in these 2*d directions to secure an overapproximation
         //lets the support function evaluate the offset of the halfspaces for each direction
         std::vector<EvaluationResult<Number>> sourceOffsets = _source.multiEvaluate(normals);
@@ -267,16 +267,16 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
               oldOffsets(offsetIndex) = sourceOffsets[offsetIndex].supportValue;
               if(sourceOffsets[offsetIndex].errorCode == SOLUTION::INFTY)
                   //source object is unbounded
-                  //TODO dealing with the unbounded case (maybe introducing unbounded zonotopes?) 
+                  //TODO dealing with the unbounded case (maybe introducing unbounded zonotopes?)
                   assert(false);
         }
-        
+
         //takes the maximum out of the two computed offsets to ensure an overapproximation
         for (unsigned i=0; i<numberOfPlanes; ++i){
             Number maxValue = newOffsets(i) > oldOffsets(i) ? newOffsets(i) : oldOffsets(i);
             planes[i].setOffset(maxValue);
         }
-        
+
         //overapproximated hpolytope (now for certain)
         HPolytope hpoly = HPolytope(planes);
 
@@ -312,7 +312,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
              for (unsigned j=0; j < dim; ++j){
-                 //construct point on the hyperplane by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
+                 //construct point on the Halfspace by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
                  if (normal(j) != 0){
                      vector_t<Number> p = vector_t<Number>::Zero(dim);
                      p(j) = 1;
@@ -360,9 +360,9 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
              //computes generators
              generators.col(i) = scaling.second*normal;
          }
-         
+
          res = Zonotope(center, generators);
-    } 
+    }
     return res;
 
 }

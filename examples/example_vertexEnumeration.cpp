@@ -11,11 +11,11 @@ int main(int argc, char** argv) {
 
     hypro::HPolytope<Number> poly;
 
-    poly.insert(hypro::Hyperplane<Number>({1,3}, 4));
-    poly.insert(hypro::Hyperplane<Number>({5,1}, 5));
-    poly.insert(hypro::Hyperplane<Number>({3,2}, 2));
-    poly.insert(hypro::Hyperplane<Number>({-1,-3}, 1));
-    poly.insert(hypro::Hyperplane<Number>({-2,1}, 2));
+    poly.insert(hypro::Halfspace<Number>({1,3}, 4));
+    poly.insert(hypro::Halfspace<Number>({5,1}, 5));
+    poly.insert(hypro::Halfspace<Number>({3,2}, 2));
+    poly.insert(hypro::Halfspace<Number>({-1,-3}, 1));
+    poly.insert(hypro::Halfspace<Number>({-2,1}, 2));
 
     //std::cout << "Initial Polytope:" << std::endl;
     //std::cout << poly << std::endl;
@@ -61,11 +61,11 @@ int main(int argc, char** argv) {
 	std::cout << std::endl;
 	hypro::Plotter<Number>& p = hypro::Plotter<Number>::getInstance();
 	p.addObject(res);
-	p.addObject(hypro::Hyperplane<Number>({1,3}, 4));
-    p.addObject(hypro::Hyperplane<Number>({5,1}, 5));
-    p.addObject(hypro::Hyperplane<Number>({3,2}, 2));
-    p.addObject(hypro::Hyperplane<Number>({-1,-3}, 1));
-    p.addObject(hypro::Hyperplane<Number>({-2,1}, 2));
+	p.addObject(hypro::Halfspace<Number>({1,3}, 4));
+    p.addObject(hypro::Halfspace<Number>({5,1}, 5));
+    p.addObject(hypro::Halfspace<Number>({3,2}, 2));
+    p.addObject(hypro::Halfspace<Number>({-1,-3}, 1));
+    p.addObject(hypro::Halfspace<Number>({-2,1}, 2));
 	p.addPoints(res);
 	p.plot2d();
 	exit(0);

@@ -93,7 +93,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( Number _radius, SF_TYPE _type = SF_TYPE::INFTY_BALL );
 	SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances,
 					 SF_TYPE _type = SF_TYPE::POLY );
-	SupportFunctionContent( const std::vector<Hyperplane<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
+	SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
@@ -120,7 +120,7 @@ class SupportFunctionContent {
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type,
-															const std::vector<Hyperplane<Number>>& _planes ) {
+															const std::vector<Halfspace<Number>>& _planes ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _planes, _type ) );
 		obj->pThis = obj;
 		return obj;

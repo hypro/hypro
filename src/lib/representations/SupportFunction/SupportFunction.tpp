@@ -56,7 +56,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Hyperplane<Number>>& _planes) : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, _planes)){
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Halfspace<Number>>& _planes) : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::POLY, _planes)){
          //handled by initializer list
     }
 
@@ -176,7 +176,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
         //std::cout << __func__ << std::endl;
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(_mat,_vec).content));
         return res;
@@ -215,7 +215,7 @@ namespace hypro{
     }
 
     //template<typename Number, typename Converter>
-    //std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset) const {
+    //std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset) const {
     //    if(content->evaluate(normal) <= offset)
     //        return true;
 //
@@ -223,7 +223,7 @@ namespace hypro{
     //}
 
     template<typename Number, typename Converter>
-    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
         assert(_mat.rows() == _vec.rows());
         bool empty = false;
@@ -257,14 +257,14 @@ namespace hypro{
 	        		distances(i) = _vec(limitingPlanes.back());
 	        		limitingPlanes.pop_back();
 	        	}
-	        	return std::make_pair(!empty, this->intersectHyperplanes(planes,distances));
+	        	return std::make_pair(!empty, this->intersectHalfspaces(planes,distances));
         	} else {
         		assert(limitingPlanes.size() == unsigned(_mat.rows()));
-        		return std::make_pair(!empty, this->intersectHyperplanes(_mat,_vec));
+        		return std::make_pair(!empty, this->intersectHalfspaces(_mat,_vec));
         	}
 
         }
-        return std::make_pair(!empty, this->intersectHyperplanes(_mat,_vec));
+        return std::make_pair(!empty, this->intersectHalfspaces(_mat,_vec));
     }
 
     template<typename Number, typename Converter>

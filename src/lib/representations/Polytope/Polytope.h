@@ -26,7 +26,7 @@ CLANG_WARNING_RESET
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Facet.h"
 #include "../../datastructures/Ridge.h"
-#include "../../datastructures/Hyperplane.h"
+#include "../../datastructures/Halfspace.h"
 #include "../../util/convexHull.h"
 
 
@@ -150,8 +150,8 @@ namespace hypro
 		// implemented according to Komei Fukuda 2004
 		Polytope<Number> altMinkowskiSum(Polytope<Number>& rhs);
 		Polytope<Number> intersect(const Polytope<Number>& rhs) const;
-		Polytope<Number> intersectHyperplane(const Hyperplane<Number>& rhs) const;
-		Polytope<Number> intersectHyperplanes(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
+		Polytope<Number> intersectHalfspace(const Halfspace<Number>& rhs) const;
+		Polytope<Number> intersectHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
 		Polytope<Number> hull() const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const Polytope<Number>& poly) const;

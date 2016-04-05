@@ -4,7 +4,7 @@
  *
  */
 
- #include "../src/lib/datastructures/Hyperplane.h"
+ #include "../src/lib/datastructures/Halfspace.h"
  #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
   std::vector<vector_t<Number>> directions = computeTemplate<Number>(dim,amountOfFacets);
 
   for(vector_t<Number> direction: directions){
-    test_massif.insert(Hyperplane<Number>(direction, 1));
+    test_massif.insert(Halfspace<Number>(direction, 1));
   }
 
   double sizeOfHPolytope = test_massif.sizeOfHPolytope();

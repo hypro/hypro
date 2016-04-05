@@ -10,7 +10,6 @@
 
 #include "Cone.h"
 #include "../../datastructures/Point.h"
-#include "../../datastructures/Hyperplane.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>

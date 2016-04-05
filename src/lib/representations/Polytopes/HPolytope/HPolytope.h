@@ -37,10 +37,10 @@ public:
                               DIRECTED_TEMPLATE
                             };
 
-	typedef std::vector<Hyperplane<Number>> HyperplaneVector;
+	typedef std::vector<Halfspace<Number>> HalfspaceVector;
 
   private:
-	mutable HyperplaneVector mHPlanes;
+	mutable HalfspaceVector mHPlanes;
 	bool mFanSet;
 	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
@@ -53,7 +53,7 @@ public:
   public:
 	HPolytopeT();
 	HPolytopeT( const HPolytopeT& orig );
-	HPolytopeT( const HyperplaneVector& planes );
+	HPolytopeT( const HalfspaceVector& planes );
 	HPolytopeT( const matrix_t<Number>& A, const vector_t<Number>& b );
 	HPolytopeT( const matrix_t<Number>& A );
 	HPolytopeT( const std::vector<Point<Number>>& points );
@@ -64,7 +64,7 @@ public:
 	 * Getters and setters
 	 */
 	double sizeOfHPolytopeT(){
-		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHyperplane();
+		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHalfspace();
 	}
 
 	bool empty() const;
@@ -81,13 +81,13 @@ public:
 	typename std::vector<Point<Number>> vertices() const;
 	Number supremum() const;
 
-	void insert( const Hyperplane<Number>& plane );
-	void insert( const typename HyperplaneVector::iterator begin, const typename HyperplaneVector::iterator end );
+	void insert( const Halfspace<Number>& plane );
+	void insert( const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end );
 
   	void erase( const unsigned index);
 
-	const HyperplaneVector& constraints() const;
-	bool hasConstraint( const Hyperplane<Number>& hplane ) const;
+	const HalfspaceVector& constraints() const;
+	bool hasConstraint( const Halfspace<Number>& hplane ) const;
 	void removeRedundancy();
 
 	HPolytopeT<Number, Converter> heuristic() const;
@@ -108,13 +108,13 @@ public:
 	 * General interface
 	 */
 
-	std::pair<bool, HPolytopeT> satisfiesHyperplane( const vector_t<Number>& normal, const Number& offset ) const;
-	std::pair<bool, HPolytopeT> satisfiesHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<bool, HPolytopeT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
 	HPolytopeT intersect( const HPolytopeT& rhs ) const;
-	HPolytopeT intersectHyperplane( const Hyperplane<Number>& rhs ) const;
-	HPolytopeT intersectHyperplanes( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	HPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const HPolytopeT<Number, Converter>& rhs ) const;
@@ -127,8 +127,8 @@ public:
 	 * Operators
 	 */
 
-	//const Hyperplane<Number>& operator[]( size_t i ) const;
-	//Hyperplane<Number>& operator[]( size_t i ) ;
+	//const Halfspace<Number>& operator[]( size_t i ) const;
+	//Halfspace<Number>& operator[]( size_t i ) ;
 	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs );
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
