@@ -23,9 +23,11 @@ namespace hypro {
 template <typename Number, typename Converter>
 class VPolytopeT {
   public:
-	typedef typename std::vector<Point<Number>> pointVector;
-	typedef typename hypro::polytope::Cone<Number> Cone;
-	typedef typename hypro::polytope::Fan<Number> Fan;
+
+	using pointVector = std::vector<Point<Number>>;
+	using Cone = hypro::polytope::Cone<Number>;
+	using Fan = hypro::polytope::Fan<Number>;
+
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/

@@ -37,7 +37,7 @@ public:
                               DIRECTED_TEMPLATE
                             };
 
-	typedef std::vector<Halfspace<Number>> HalfspaceVector;
+	using HalfspaceVector = std::vector<Halfspace<Number>>;
 
   private:
 	mutable HalfspaceVector mHPlanes;

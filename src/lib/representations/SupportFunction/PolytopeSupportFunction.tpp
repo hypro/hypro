@@ -46,8 +46,8 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 	mConstraintConstants = vector_t<Number>( facets.size() );
 	unsigned pos = 0;
 	for ( auto &facet : facets ) {
-		mConstraints.row( pos ) = facet->Halfspace().normal().transpose();
-		mConstraintConstants( pos ) = facet->Halfspace().offset();
+		mConstraints.row( pos ) = facet->halfspace().normal().transpose();
+		mConstraintConstants( pos ) = facet->halfspace().offset();
 		++pos;
 	}
 }

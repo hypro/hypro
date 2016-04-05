@@ -20,7 +20,7 @@ namespace polytope {
 template <typename Number>
 class Fan {
   public:
-	typedef std::vector<const Cone<Number>*> cones;
+	using cones = std::vector<const Cone<Number>*>;
 
   private:
 	cones mCones;

@@ -8,8 +8,8 @@
 
 namespace hypro {
 
-	typedef std::chrono::high_resolution_clock clock;
-	typedef std::chrono::microseconds timeunit;
+	using clock = std::chrono::high_resolution_clock;
+	using timeunit = std::chrono::microseconds;
 
   /*
    * Compute all neighbors of a facet by calculating the participation at the vertices of the facet
