@@ -27,9 +27,9 @@ struct NumTraits<carl::FLOAT_T<Number>> {
 		RequireInitialization = 1
 	};
 
-	typedef carl::FLOAT_T<Number> Real;
-	typedef carl::FLOAT_T<Number> NonInteger;
-	typedef carl::FLOAT_T<Number> Nested;
+	using Real = carl::FLOAT_T<Number>;
+	using NonInteger = carl::FLOAT_T<Number>;
+	using Nested = carl::FLOAT_T<Number>;
 
 	static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
 	static inline Real dummy_precision() {
@@ -52,9 +52,9 @@ struct NumTraits<mpq_class> {
 		RequireInitialization = 1
 	};
 
-	typedef mpq_class Real;
-	typedef mpq_class NonInteger;
-	typedef mpq_class Nested;
+	using Real = mpq_class;
+	using NonInteger = mpq_class;
+	using Nested = mpq_class;
 
 	static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
 };

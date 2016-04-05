@@ -28,7 +28,7 @@ class Location {
 	};
 
   protected:
-	typedef std::set<Transition<Number>*> transitionSet;
+	using transitionSet = std::set<Transition<Number>*>;
 
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );

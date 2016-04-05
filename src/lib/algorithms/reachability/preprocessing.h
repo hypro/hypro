@@ -7,7 +7,7 @@
 //#define TRANSITIONINFO_VERBOSE
 
 // this type is used to define mappings of indices to directions
-typedef unsigned int* mapping;
+using mapping = unsigned int*;
 
 /*
 * (Abstract-) super class for LocationInfo and TransitionInfo
@@ -466,17 +466,17 @@ class TransitionInfo : public PreprocessingObject {
 };
 
 // typedefs for extended location handling
-typedef std::map<Location<double>*, LocationInfo*> LocationMap;
-typedef std::pair<Location<double>*, LocationInfo*> LocationPair;
+using LocationMap = std::map<Location<double>*, LocationInfo*>;
+using LocationPair = std::pair<Location<double>*, LocationInfo*>;
 
-typedef std::map<Transition<double>*, TransitionInfo*> TransitionMap;
-typedef std::pair<Transition<double>*, TransitionInfo*> TransitionPair;
+using TransitionMap = std::map<Transition<double>*, TransitionInfo*>;
+using TransitionPair = std::pair<Transition<double>*, TransitionInfo*>;
 
 LocationMap locationMap;	  // maps each location to a locationInfo object containing additional static information
 TransitionMap transitionMap;  // maps each location to a transitionInfo object containing additional static information
 std::set<location*> locationSet;  // set for loop Detection during preprocessing
 
-typedef std::set<Transition<double>*> transitionSet;  // type of the transitions from a location
+using transitionSet = std::set<Transition<double>*>;  // type of the transitions from a location
 
 /*
  *    This method computes additional static information for the specified location

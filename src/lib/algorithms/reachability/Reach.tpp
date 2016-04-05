@@ -4,8 +4,8 @@
 namespace hypro {
 namespace reachability {
 
-	typedef std::chrono::high_resolution_clock clock;
-	typedef std::chrono::microseconds timeunit;
+	using clock = std::chrono::high_resolution_clock;
+	using timeunit = std::chrono::microseconds;
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)

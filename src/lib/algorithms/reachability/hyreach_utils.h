@@ -31,8 +31,8 @@
 
 namespace hypro {
 // typedefs for types returned by the hybrid automata model
-typedef Location<double> location;
-typedef Transition<double> transition;
+using location =  Location<double>;
+using transition = Transition<double>;
 
 /*
 * Computes the exponential matrix of the parameter

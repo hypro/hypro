@@ -19,8 +19,7 @@ class Ridge {
 	/**
 	 * Typedefs
 	 */
-	typedef std::vector<Point<Number>> vertexSet;
-	// typedef std::vector<Facet<Number>> neighborFacets;
+	using vertexSet = std::vector<Point<Number>>;
 
 	/**
 	 * Members

@@ -64,10 +64,10 @@ struct pointIt {
 template <typename Number>
 class Grid {
   public:
-	typedef std::map<Point<unsigned>, bool> gridMap;  // store calculated colors
-	typedef std::map<unsigned, std::vector<Number>> gridPoints;
-	typedef gridMap::iterator gridMapIterator;
-	typedef typename gridPoints::iterator gridPointsIterator;
+	using gridMap = std::map<Point<unsigned>, bool>;  // store calculated colors
+	using gridPoints = std::map<unsigned, std::vector<Number>>;
+	using gridMapIterator = gridMap::iterator;
+	using gridPointsIterator = typename gridPoints::iterator;
 
   private:
 	std::set<Vertex<unsigned>> mVertices;

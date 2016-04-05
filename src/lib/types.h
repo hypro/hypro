@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #define SUPPORT_MPFR
 /* #undef COMPARE_CDD */
@@ -46,9 +46,9 @@ namespace Eigen {
                 RequireInitialization = 1
         };
 
-        typedef carl::FLOAT_T<Number> Real;
-        typedef carl::FLOAT_T<Number> NonInteger;
-        typedef carl::FLOAT_T<Number> Nested;
+        using Real = carl::FLOAT_T<Number>;
+        using NonInteger = carl::FLOAT_T<Number>;
+		using Nested = carl::FLOAT_T<Number>;
 
         static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
         static inline Real dummy_precision() {
@@ -67,7 +67,7 @@ namespace std {
     template<typename Number>
     struct hash<hypro::matrix_t<Number>> {
         size_t operator()(hypro::matrix_t<Number> const& in) const {
-            
+
             size_t seed = 0;
 
             carl::hash_combine(seed, in.rows());
@@ -81,11 +81,11 @@ namespace std {
             return seed;
         }
     };
-    
+
     template<typename Number>
     struct hash<hypro::vector_t<Number>> {
         size_t operator()(hypro::vector_t<Number> const& in) const {
-            
+
             size_t seed = 0;
 
             carl::hash_combine(seed, in.rows());

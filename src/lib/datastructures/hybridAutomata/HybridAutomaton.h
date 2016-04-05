@@ -16,9 +16,9 @@ namespace hypro {
 template <typename Number>
 class HybridAutomaton {
   private:
-	typedef std::set<Location<Number>*> locationSet;
-	typedef std::set<Transition<Number>*> transitionSet;
-	typedef std::map<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>> initialStateMap;
+	using locationSet = std::set<Location<Number>*>;
+	using transitionSet = std::set<Transition<Number>*>;
+	using initialStateMap = std::map<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>>;
 
   private:
 	/**

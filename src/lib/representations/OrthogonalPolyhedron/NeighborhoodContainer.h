@@ -18,7 +18,7 @@ namespace hypro {
  */
 class NeighborhoodContainer {
   public:
-	typedef std::vector<Point<int> > neighborhood;
+	using neighborhood = std::vector<Point<int> >;
 
   private:
 	std::map<Point<int>, neighborhood> mNeighborhoods;

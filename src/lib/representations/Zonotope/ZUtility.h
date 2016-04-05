@@ -17,7 +17,7 @@
 
 namespace ZUtility {
 // Options for checking for intersect
-typedef enum { ALAMO = 1, NDPROJECTION = 2, DICHOTOMIC2D = 3 } IntersectionMethod_t;
+enum IntersectionMethod_t { ALAMO = 1, NDPROJECTION = 2, DICHOTOMIC2D = 3 };
 
 // Structure for Options used in running reachability analysis
 struct Options {

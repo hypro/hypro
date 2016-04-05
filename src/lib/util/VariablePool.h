@@ -33,9 +33,8 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	 * Typedefs
 	 */
 	#ifdef USE_PPL
-	typedef std::map<carl::Variable, Parma_Polyhedra_Library::Variable> carlPplMap;
-	typedef std::map<Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare>
-		  pplCarlMap;
+	using carlPplMap = std::map<carl::Variable, Parma_Polyhedra_Library::Variable>;
+	using pplCarlMap = std::map<Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare>;
 	#endif
 
 	/**

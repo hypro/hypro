@@ -26,8 +26,8 @@ namespace hypro {
 template <class Number>
 class Point {
   public:
-	typedef std::set<Point<Number>> pointSet;
-	typedef std::map<carl::Variable, Number> coordinateMap;
+	using pointSet = std::set<Point<Number>>;
+	using coordinateMap = std::map<carl::Variable, Number>;
 
   private:
 	vector_t<Number> mCoordinates;

@@ -21,7 +21,7 @@ template <typename Number>
 class Domain {
   protected:
 	std::map<carl::Variable, carl::Interval<Number>> assignments;
-	typedef std::pair<const carl::Variable, carl::Interval<Number>> assignment_type;
+	using assignment_type = std::pair<const carl::Variable, carl::Interval<Number>>;
 
   public:
 	Domain();
@@ -50,7 +50,7 @@ template <typename Number>
 class PolynomialODE {
   protected:
 	std::map<carl::Variable, MultivariatePolynomial<carl::Interval<Number>>> assignments;
-	typedef std::pair<const carl::Variable, MultivariatePolynomial<carl::Interval<Number>>> assignment_type;
+	using assignment_type = std::pair<const carl::Variable, MultivariatePolynomial<carl::Interval<Number>>>;
 
   public:
 	PolynomialODE();
@@ -77,8 +77,8 @@ class TaylorModel {
 	carl::Interval<Number> remainder;
 
   protected:
-	typedef std::vector<Term<carl::Interval<Number>>> TermsType;
-	typedef std::shared_ptr<const Monomial> MonomialType;
+	using TermsType = std::vector<Term<carl::Interval<Number>>>;
+	using MonomialType = std::shared_ptr<const Monomial>;
 
   public:
 	TaylorModel();  // empty Taylor model
@@ -163,7 +163,7 @@ template <typename Number>
 class Range {
   protected:
 	std::map<carl::Variable, carl::Interval<Number>> assignments;
-	typedef std::pair<const carl::Variable, carl::Interval<Number>> assignment_type;
+	using assignment_type = std::pair<const carl::Variable, carl::Interval<Number>>;
 
   public:
 	Range();
@@ -192,7 +192,7 @@ class TaylorModelVec {
 	// protected:
   public:
 	std::map<carl::Variable, TaylorModel<Number>> tms;
-	typedef std::pair<const carl::Variable, TaylorModel<Number>> assignment_type;
+	using assignment_type = std::pair<const carl::Variable, TaylorModel<Number>>;
 
   public:
 	TaylorModelVec();
