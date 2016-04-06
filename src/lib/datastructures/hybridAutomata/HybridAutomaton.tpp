@@ -7,11 +7,12 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton &_hybrid )
 	: mLocations( _hybrid.locations() )
 	, mTransitions( _hybrid.transitions() )
 	, mInitialStates( _hybrid.initialStates() )
+	, mBadStates( _hybrid.badStates() )
 {}
 
 template <typename Number>
 HybridAutomaton<Number>::HybridAutomaton( const locationSet& _locs,
-														  const transitionSet& _trans, const initialStateMap& _initialStates )
+														  const transitionSet& _trans, const locationSetMap& _initialStates )
 	: mLocations( _locs )
 	, mTransitions( _trans )
 	, mInitialStates( _initialStates )
@@ -28,8 +29,13 @@ const std::set<hypro::Transition<Number> *> &HybridAutomaton<Number>::transition
 }
 
 template <typename Number>
-const typename HybridAutomaton<Number>::initialStateMap& HybridAutomaton<Number>::initialStates() const {
+const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::initialStates() const {
 	return mInitialStates;
+}
+
+template <typename Number>
+const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::badStates() const {
+	return mBadStates;
 }
 
 template <typename Number>
@@ -50,8 +56,13 @@ void HybridAutomaton<Number>::setTransitions( const transitionSet &_trans ) {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::setInitialStates( const initialStateMap& _states ) {
+void HybridAutomaton<Number>::setInitialStates( const locationSetMap& _states ) {
 	mInitialStates = _states;
+}
+
+template <typename Number>
+void HybridAutomaton<Number>::setBadStates( const locationSetMap& _states ) {
+	mBadStates = _states;
 }
 
 template <typename Number>
@@ -66,7 +77,12 @@ void HybridAutomaton<Number>::addTransition( Transition<Number> *_transition ) {
 
 template <typename Number>
 void HybridAutomaton<Number>::addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
-	mInitialStates[_location] = _valuation;
+	mInitialStates.insert(std::make_pair(_location, _valuation));
+}
+
+template <typename Number>
+void HybridAutomaton<Number>::addBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
+	mBadStates.insert(std::make_pair(_location, _valuation));
 }
 
 } // namespace hypro

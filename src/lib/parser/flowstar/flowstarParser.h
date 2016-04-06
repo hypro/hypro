@@ -49,8 +49,8 @@ struct flowstarParser
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mInitialStates;
-	std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mBadStates;
+	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mInitialStates;
+	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	ReachabilitySettings<Number> mSettings;
@@ -138,7 +138,7 @@ struct flowstarParser
 						++rowcnt;
 					}
 				}
-				mInitialStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
+				mInitialStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
 			}
 		}
 	}
@@ -158,7 +158,7 @@ struct flowstarParser
 						++rowcnt;
 					}
 				}
-				mBadStates[fs::get<0>(pair)] = std::make_pair(mat, vec);
+				mBadStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
 
 			}
 		}

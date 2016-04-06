@@ -11,6 +11,7 @@
 
 #include "Location.h"
 #include "Transition.h"
+#include <map>
 
 namespace hypro {
 template <typename Number>
@@ -18,7 +19,7 @@ class HybridAutomaton {
   private:
 	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	using initialStateMap = std::map<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>>;
+	using locationSetMap = std::multimap<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>>;
 
   private:
 	/**
@@ -26,7 +27,8 @@ class HybridAutomaton {
 	 */
 	locationSet mLocations;
 	transitionSet mTransitions;
-	initialStateMap mInitialStates;
+	locationSetMap mInitialStates;
+	locationSetMap mBadStates;
 
   public:
 	/**
@@ -35,7 +37,7 @@ class HybridAutomaton {
 	HybridAutomaton() {}
 	HybridAutomaton( const HybridAutomaton& _hybrid );
 	HybridAutomaton( const locationSet& _locs, const transitionSet& _trans,
-					 const initialStateMap& _initialStates );
+					 const locationSetMap& _initialStates );
 
 	virtual ~HybridAutomaton() {}
 
@@ -44,22 +46,26 @@ class HybridAutomaton {
 	 */
 	const locationSet& locations() const;
 	const transitionSet& transitions() const;
-	const initialStateMap& initialStates() const;
+	const locationSetMap& initialStates() const;
+	const locationSetMap& badStates() const;
 	unsigned dimension() const;
 
 	void setLocations( const locationSet& _locs );
 	void setTransitions( const transitionSet& _trans );
-	void setInitialStates( const initialStateMap& _states );
+	void setInitialStates( const locationSetMap& _states );
+	void setBadStates( const locationSetMap& _states );
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );
 	void addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
+	void addBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
 
 	// copy assignment operator, TODO: implement via swap
 	inline HybridAutomaton<Number>& operator=( const HybridAutomaton<Number>& _rhs ) {
 		mLocations = _rhs.locations();
 		mTransitions = _rhs.transitions();
 		mInitialStates = _rhs.initialStates();
+		mBadStates = _rhs.badStates();
 		return *this;
 	}
 
