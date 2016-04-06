@@ -59,6 +59,9 @@ namespace parser {
 		for(const auto initPair : mInitialStates )
 			result.addInitialState(locManag.location(initPair.first), initPair.second);
 
+		for(const auto badPair : mBadStates )
+			result.addBadState(locManag.location(badPair.first), badPair.second);
+
 		return result;
 	}
 } // namespace parser
