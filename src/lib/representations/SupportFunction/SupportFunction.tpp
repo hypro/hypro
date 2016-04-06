@@ -229,16 +229,16 @@ namespace hypro{
         bool empty = false;
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
-        	EvaluationResult<Number> inDirEval = content->evaluate(_mat.row(rowI));
-        	if(inDirEval.errorCode == SOLUTION::INFEAS){
+        	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI));
+        	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
         		empty = true;
         		break;
-        	} else if(inDirEval.supportValue > _vec(rowI)){
+        	} else if(planeEvalRes.supportValue > _vec(rowI)){
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
         	}
             //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-            if(content->evaluate(-(_mat.row(rowI))).supportValue <= -(_vec(rowI))){
+            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
                 //std::cout << "EMPTY" << std::endl;
                 empty = true;
                 break;

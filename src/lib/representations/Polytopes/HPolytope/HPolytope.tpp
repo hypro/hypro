@@ -266,6 +266,8 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 template <typename Number, typename Converter>
 Number HPolytopeT<Number, Converter>::supremum() const {
 	Number max = 0;
+	assert(!this->empty());
+	assert(!this->vertices().empty());
 	for ( const auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
