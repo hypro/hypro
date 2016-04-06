@@ -140,7 +140,7 @@ bool PolytopeSupportFunction<Number>::empty() const {
 
 template <typename Number>
 void PolytopeSupportFunction<Number>::print() const{
-    std::cout << mConstraints << std::endl;
-    std::cout << mConstraintConstants << std::endl;
+    std::cout << convert<Number,double>(mConstraints) << std::endl;
+    std::cout << convert<Number,double>(mConstraintConstants) << std::endl;
 }
 }  // namespace
