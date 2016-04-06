@@ -19,7 +19,7 @@ namespace parser {
 	        using qi::fail;
 
 			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}');
-			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4)];
+			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5)];
 			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
@@ -27,6 +27,7 @@ namespace parser {
 			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*constraint(qi::_r1, qi::_r2))[ qi::_val = px::bind( &transitionParser<Iterator,Number>::createGuardMatrix, px::ref(*this), qi::_1, qi::_r2 )] > *qi::blank > qi::lit('}');
 			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (*variableReset(qi::_r1, qi::_r2))[ qi::_val = px::bind( &transitionParser<Iterator,Number>::createMatrix, px::ref(*this), qi::_1, qi::_r2 )] > *qi::blank > qi::lit('}');
 			agg = qi::skip(qi::blank)[mAggregation > qi::lexeme["aggregation"] > -(qi::lit('{') > qi::lit('}'))];
+			timed = qi::skip(qi::blank)[qi::lexeme["time"] > qi::double_];
 
 			start.name("transitions");
 			jump.name("transition");
@@ -48,13 +49,14 @@ namespace parser {
 		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> guard;
 		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> reset;
 		qi::rule<Iterator, Aggregation()> agg;
+		qi::rule<Iterator, double()> timed;
 
 		std::pair<unsigned, unsigned> createEdge(unsigned start, unsigned target) {
 			//std::cout << "Found transition from " << start << " to " << target << std::endl;
 			return std::make_pair(start, target);
 		}
 
-		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation) {
+		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime) {
 			Transition<Number>* res = new Transition<Number>(
 									mLocationManager.location(_transition.first),
 									mLocationManager.location(_transition.second));
@@ -84,6 +86,10 @@ namespace parser {
 			// set aggregation settings
 			if(_aggregation){
 				res->setAggregation(*_aggregation);
+			}
+
+			if(_triggerTime){
+				res->setTriggerTime(carl::rationalize<Number>(*_triggerTime));
 			}
 
 			// update source location
