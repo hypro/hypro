@@ -54,7 +54,11 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
 
             //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            std::cout << "current supportplane:" << std::endl;
+            curPlaneSup.print();
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            std::cout << "current face:" << std::endl;
+            curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
 
@@ -71,6 +75,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
         //there needs to be a result here, otherwise something went terribly wrong
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
         res.emplace_back(point.optimumValue);
+        assert(sf.contains(Point<Number>(point.optimumValue)));
    }
    return res;
 }
@@ -112,10 +117,13 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
             //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            std::cout << "current supportplane:" << std::endl;
+            curPlaneSup.print();
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            std::cout << "current face:" << std::endl;
+            curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == dim);
-            curFace.print();
 
             //recursive call of this function for the current face
             recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1));
@@ -128,6 +136,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
         //computes the arithmetic mean as an approximation of the centroid
         res = Point<Number>(computeArithmeticMeanPoint(recursiveSolutions));
+        std::cout << "merged point:" << res << std::endl;
    //call has only a point as source object (deepest recursion layer)
    } else { // curDim == 0
         //evaluates the object in the first direction (any direction produces the same result)
@@ -135,6 +144,8 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         //there needs to be a result here, otherwise something went terribly wrong
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
         res = Point<Number>(point.optimumValue);
+        assert(sf.contains(Point<Number>(point.optimumValue)));
+        std::cout << "deepest floor point:" << point.optimumValue << std::endl;
    }
    return res;
 }

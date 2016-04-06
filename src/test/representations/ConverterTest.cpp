@@ -294,8 +294,8 @@ TYPED_TEST(ConverterTest, toVPolytope)
         auto result8 = Converter<TypeParam>::toVPolytope(this->box);
         //this->plotter.setObjectColor(this->plotter.addObject(result8.vertices()), colors[violett]);
 
-        auto result9 = Converter<TypeParam>::toVPolytope(this->support, ALTERNATIVE, 4);
-        this->plotter.setObjectColor(this->plotter.addObject(result9.vertices()), colors[red]);
+        //auto result9 = Converter<TypeParam>::toVPolytope(this->support, ALTERNATIVE, 4);
+        //this->plotter.setObjectColor(this->plotter.addObject(result9.vertices()), colors[red]);
 
         auto result10 = Converter<TypeParam>::toVPolytope(this->support2, ALTERNATIVE, 4);
         this->plotter.setObjectColor(this->plotter.addObject(result10.vertices()), colors[lila]);
