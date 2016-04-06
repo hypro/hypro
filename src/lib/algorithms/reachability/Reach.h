@@ -10,12 +10,13 @@
  */
 
 #pragma once
-#include "boost/tuple/tuple.hpp"
+#include "util.h"
+#include "Settings.h"
 #include "../../config.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/Plotter.h"
-#include "util.h"
-#include "Settings.h"
+#include "boost/tuple/tuple.hpp"
+
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 CLANG_WARNING_RESET
@@ -38,6 +39,7 @@ class Reach {
 private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
+	std::size_t mCurrentLevel;
 
 	std::map<Location<Number>*, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number,Representation>> mWorkingQueue;
@@ -76,7 +78,7 @@ public:
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	std::vector<initialSet<Number,Representation>> computeDiscreteJump(  unsigned _currentLevel, Location<Number>* _location,  const flowpipe_t<Representation>& _flowpipe );
+	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, Representation>>& _newInitialSets );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -102,6 +104,11 @@ public:
 	 * @param _flowpipe The flowpipe to be printed.
 	 */
 	void printFlowpipeReduced( const flowpipe_t<Representation>& _flowpipe ) const;
+private:
+
+	matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
+	boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> computeFirstSegment( hypro::Location<Number>* _loc, const Representation& _val ) const;
+	bool intersectBadStates( const Representation& _segment ) const;
 };
 
 }  // namespace reachability

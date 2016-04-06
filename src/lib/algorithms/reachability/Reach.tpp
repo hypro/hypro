@@ -9,7 +9,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
-		: mAutomaton( _automaton ), mSettings(_settings) {
+		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0) {
 		}
 
     template<typename Number, typename Representation>
@@ -21,13 +21,15 @@ namespace reachability {
 			for(const auto& vertex : Representation(initialPair.second.first, initialPair.second.second).vertices())
 				std::cout << vertex << std::endl;
 
-			mWorkingQueue.emplace(initialSet<Number,Representation>(0, initialPair.first, Representation(initialPair.second.first, initialPair.second.second)));
+			mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, initialPair.first, Representation(initialPair.second.first, initialPair.second.second)));
 		}
 
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number,Representation> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop();
 
+			mCurrentLevel = boost::get<0>(nextInitialSet);
+			assert(mCurrentLevel <= mSettings.jumpDepth);
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet), boost::get<2>(nextInitialSet));
 
 			// TODO: Check for fixed point.
@@ -35,12 +37,6 @@ namespace reachability {
 				mReachableStates[boost::get<1>(nextInitialSet)] = std::vector<flowpipe_t<Representation>>();
 
 			mReachableStates[boost::get<1>(nextInitialSet)].push_back(newFlowpipe);
-
-			if(boost::get<0>(nextInitialSet) < mSettings.jumpDepth) {
-				std::vector<initialSet<Number,Representation>> newInitialSets = computeDiscreteJump(boost::get<0>(nextInitialSet), boost::get<1>(nextInitialSet), newFlowpipe);
-				for(const auto& item : newInitialSets)
-					mWorkingQueue.push(item);
-			}
 		}
 
 		// collect all computed reachable states
@@ -56,67 +52,233 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
 #ifdef REACH_DEBUG
-		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		_val.print();
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
+		boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_loc, _val);
+#ifdef REACH_DEBUG
+		std::cout << "Valuation fulfills Invariant?: ";
+		std::cout << boost::get<0>(initialSetup) << std::endl;
+#endif
+		if ( boost::get<0>(initialSetup) ) {
+			std::vector<boost::tuple<Transition<Number>*, Representation>> nextInitialSets;
+			// insert first Segment into the empty flowpipe
+			Representation currentSegment = boost::get<1>(initialSetup);
+			flowpipe.push_back( currentSegment );
+			// Check for bad states intersection. The first segment is validated against the invariant, already.
+			if(intersectBadStates(currentSegment)){
+				return flowpipe;
+			}
 
+			// Set after linear transformation
+			Representation nextSegment;
+
+#ifdef REACH_DEBUG
+			std::cout << "--- Loop entered ---" << std::endl;
+#endif
+			// for each time interval perform linear Transformation
+			// the first segment covers one time step.
+			Number currentTime = mSettings.timeStep;
+			// intersection of bad states and violation of invariant is handled inside the loop
+			while( currentTime <= mSettings.timeBound ) {
+				std::cout << "\rTime: \t" << carl::toDouble(currentTime) << std::flush;
+
+				// perform linear transformation on the last segment of the flowpipe
+				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
+				nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+
+				// extend flowpipe (only if still within Invariant of location)
+				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
+#ifdef REACH_DEBUG
+				std::cout << "Next Flowpipe Segment: ";
+				nextSegment.print();
+				std::cout << "still within Invariant?: ";
+				std::cout << newSegment.first << std::endl;
+#endif
+#ifdef USE_REDUCTION
+				// clustering CONVEXHULL_CONST and reduction with directions generated before
+				if(use_reduce_memory){
+					if(CONVEXHULL_CONST==1){ // if no clustering is required
+						if(newSegment.first){
+							Representation poly_smoothed = newSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							flowpipe.insert(flowpipe.begin(), poly_smoothed);
+						}
+					}
+					else{
+						if(newSegment.first){
+							// collect points
+							for(auto vertex: newSegment.vertices()){
+								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
+									points_convexHull.push_back(vertex);
+								}
+							}
+							segment_count++;
+						}
+						// compute convexHull and reduction of clustered segments
+						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || !newSegment.first)){
+							auto facets = convexHull(points_convexHull);
+
+							std::vector<Halfspace<Number>> Halfspaces;
+							for(unsigned i = 0; i<facets.first.size(); i++){
+								Halfspaces.push_back(facets.first.at(i)->Halfspace());
+							}
+							Representation convexHull = Representation(Halfspaces);
+
+							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
+							convexHull.removeRedundancy();
+							flowpipe.insert(flowpipe.begin(), convexHull);
+
+							points_convexHull.clear();
+							segment_count = 0;
+						}
+					}
+				}
+#endif
+				if ( newSegment.first ) {
+#ifdef USE_REDUCTION
+					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
+#endif
+					flowpipe.push_back( newSegment.second );
+					if(intersectBadStates(newSegment.second)){
+						return flowpipe;
+					}
+					// Collect potential new initial states from discrete behaviour.
+					if(mCurrentLevel < mSettings.jumpDepth) {
+						Representation guardSatisfyingSet;
+						for( auto transition : _loc->transitions() ){
+							if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
+								nextInitialSets.emplace_back(transition, guardSatisfyingSet);
+							}
+						}
+					}
+					// update currentSegment
+					currentSegment = newSegment.second;
+				} else {
+					// the flowpipe does not longer satisfy the invariant -> quit loop
+					break;
+				}
+				currentTime += mSettings.timeStep;
+			}
+#ifdef REACH_DEBUG
+			std::cout << "--- Loop left ---" << std::endl;
+			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
+#endif
+			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
+			processDiscreteBehaviour(nextInitialSets);
+
+			return flowpipe;
+		} else {
+			// return an empty flowpipe
+			return flowpipe;
+		}
+	}
+
+	template<typename Number, typename Representation>
+	void Reach<Number,Representation>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, Representation>>& _newInitialSets ) {
+		std::map<Transition<Number>*, std::vector<Representation>> toAggregate;
+
+		for(const auto& tuple : _newInitialSets ) {
+			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
+				mWorkingQueue.emplace(mCurrentLevel+1, boost::get<0>(tuple)->target(), boost::get<1>(tuple));
+			} else { // aggregate all
+				if(toAggregate.find(boost::get<0>(tuple)) == toAggregate.end()){
+					toAggregate[boost::get<0>(tuple)] = std::vector<Representation>();
+				}
+				toAggregate[boost::get<0>(tuple)].push_back(boost::get<1>(tuple));
+			}
+		}
+
+		// aggregation - TODO: add options for clustering.
+		for(const auto& aggregationPair : toAggregate){
+			// TODO: Currently aggregation is done by collecting vertices - future: use multi-unite.
+			std::vector<Point<Number>> collectedVertices;
+			for(const auto& segment : aggregationPair.second){
+				std::vector<Point<Number>> tmpVertices = segment.vertices();
+				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
+			}
+			mWorkingQueue.emplace(mCurrentLevel+1, aggregationPair.first->target(), Representation(collectedVertices));
+		}
+	}
+
+	template<typename Number, typename Representation>
+	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
+							   Representation& result ) {
+
+		std::pair<bool, Representation> guardSatisfyingSet = _segment.satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
+		// check if the intersection is empty
+		if ( guardSatisfyingSet.first ) {
+			#ifdef REACH_DEBUG
+			std::cout << "Transition enabled!" << std::endl;
+			#endif
+			// apply reset function to guard-satisfying set.
+			result = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	template<typename Number, typename Representation>
+	matrix_t<Number> Reach<Number,Representation>::computeTrafoMatrix( hypro::Location<Number>* _loc ) const {
+		hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
+		deltaMatrix = _loc->flow() * mSettings.timeStep;
+
+#ifdef REACH_DEBUG
+		std::cout << "delta Matrix: " << std::endl;
+		std::cout << deltaMatrix << std::endl;
+		std::cout << "------" << std::endl;
+#endif
+
+		// e^(At) = resultMatrix
+		hypro::matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
+
+		//---
+		// Workaround for:
+		// resultMatrix = deltaMatrix.exp();
+		//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
+		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(),
+																			deltaMatrix.cols() );
+		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
+		doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
+		expMatrix = doubleMatrix.exp();
+		resultMatrix = hypro::convert<double,Number>( expMatrix );
+		return resultMatrix;
+	}
+
+	template<typename Number, typename Representation>
+	boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( hypro::Location<Number>* _loc, const Representation& _val ) const {
+#ifdef REACH_DEBUG
+		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
+		std::cout << "Initial valuation: " << std::endl;
+		_val.print();
+#endif
 		// check if initial Valuation fulfills Invariant
 		std::pair<bool, Representation> initialPair = _val.satisfiesHalfspaces(_loc->invariant().mat, _loc->invariant().vec);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << initialPair.first << std::endl;
 #endif
-
-		//initial = initial.reduce_directed(computeTemplate<Number>(2, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-
 		if ( initialPair.first ) {
 			// approximate R_[0,delta](X0)
-			// rest is acquired by linear Transformation
-			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is 'Einheitsmatrix'
-			hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
-			deltaMatrix = _loc->flow() * mSettings.timeStep;
-
-#ifdef REACH_DEBUG
-			std::cout << "delta Matrix: " << std::endl;
-			std::cout << deltaMatrix << std::endl;
-			std::cout << "------" << std::endl;
-#endif
-
-			// e^(At) = resultMatrix
-			hypro::matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-
-			//---
-			// Workaround for:
-			// resultMatrix = deltaMatrix.exp();
-			//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
-			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(),
-																				deltaMatrix.cols() );
-			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-			doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
-			expMatrix = doubleMatrix.exp();
-			resultMatrix = hypro::convert<double,Number>( expMatrix );
+			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
+			matrix_t<Number> trafoMatrix = computeTrafoMatrix(_loc);
 
 #ifdef REACH_DEBUG
 			std::cout << "e^(deltaMatrix): " << std::endl;
-			std::cout << resultMatrix << std::endl;
+			std::cout << trafoMatrix << std::endl;
 			std::cout << "------" << std::endl;
 #endif
 
 			// e^(At)*X0 = polytope at t=delta
-			unsigned rows = resultMatrix.rows();
-			unsigned cols = resultMatrix.cols();
-			vector_t<Number> translation = resultMatrix.col( cols - 1 );
+			unsigned rows = trafoMatrix.rows();
+			unsigned cols = trafoMatrix.cols();
+			vector_t<Number> translation = trafoMatrix.col( cols - 1 );
 			translation.conservativeResize( rows - 1 );
-			resultMatrix.conservativeResize( rows - 1, cols - 1 );
-
-			Representation deltaValuation = initialPair.second.linearTransformation( resultMatrix, translation );
-
-			//unsigned deltaSet = plotter.addObject(deltaValuation.vertices());
-			//plotter.setObjectColor(deltaSet, colors[lila]);
+			trafoMatrix.conservativeResize( rows - 1, cols - 1 );
+			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
@@ -133,9 +295,7 @@ namespace reachability {
 			unitePolytope.print();
 #endif
 			// bloat hullPolytope (Hausdorff distance)
-			Representation firstSegment;
-			Number radius;
-			radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initialPair.second.supremum() );
+			Number radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initialPair.second.supremum() );
 			assert(radius > 0);
 
 #ifdef REACH_DEBUG
@@ -151,31 +311,18 @@ namespace reachability {
 			hausPoly.print();
 			std::cout << std::endl;
 #endif
-
 			// hullPolytope +_minkowski hausPoly
-			firstSegment = unitePolytope.minkowskiSum( hausPoly );
+			Representation firstSegment = unitePolytope.minkowskiSum( hausPoly );
 
-			//unsigned delt = plotter.addObject(deltaValuation.vertices());
-			//plotter.setObjectColor(delt, colors[red]);
-			//unsigned unite = plotter.addObject(unitePolytope.vertices());
-			//plotter.setObjectColor(unite, colors[orange]);
-			//unsigned hull = plotter.addObject(firstSegment.vertices());
-			//plotter.setObjectColor(hull, colors[petrol]);
-//
 			//plotter.plot2d();
 			assert(firstSegment.contains(unitePolytope));
 			assert(firstSegment.contains(initialPair.second));
 			assert(firstSegment.contains(deltaValuation));
 
-
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
-
-
 #endif
-
-//clock::time_point start = clock::now();
 
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
@@ -224,177 +371,22 @@ namespace reachability {
 				//}
 			}
 #endif
-
 			firstSegment.removeRedundancy();
 
-			// set the last segment of the flowpipe
+			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 			Representation lastSegment = firstSegment.intersectHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
-			// insert first Segment into the empty flowpipe
-			flowpipe.push_back( lastSegment );
-
-			//{
-			//	unsigned t = plotter.addObject(lastSegment.vertices());
-			//	plotter.setObjectColor(t, colors[lila]);
-			//}
-
-			// Polytope after linear transformation
-			Representation transformedSegment;
-
-#ifdef REACH_DEBUG
-			std::cout << "--- Loop entered ---" << std::endl;
-#endif
-
-			// for each time interval perform linear Transformation
-			std::size_t steps = carl::toInt<std::size_t>(carl::ceil(Number(mSettings.timeBound / mSettings.timeStep)));
-			for ( std::size_t i = 2; i <= steps ; ++i ) {
-				std::cout << "\rTime: \t" << carl::toDouble(i*mSettings.timeStep) << std::flush;
-
-				// perform linear transformation on the last segment of the flowpipe
-				assert(lastSegment.linearTransformation(resultMatrix, translation).size() == lastSegment.size());
-				transformedSegment = lastSegment.linearTransformation( resultMatrix, translation );
-
-				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, Representation> newSegment = transformedSegment.satisfiesHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
-
-#ifdef REACH_DEBUG
-				std::cout << "Next Flowpipe Segment: ";
-				transformedSegment.print();
-
-				std::cout << "still within Invariant?: ";
-				std::cout << newSegment.first << std::endl;
-				//std::cout << "Intersection result: " << newSegment.second << std::endl;
-#endif
-#ifdef USE_REDUCTION
-				// clustering CONVEXHULL_CONST and reduction with directions generated before
-				if(use_reduce_memory){
-					if(CONVEXHULL_CONST==1){ // if no clustering is required
-						if(newSegment.first){
-							Representation poly_smoothed = newSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							flowpipe.insert(flowpipe.begin(), poly_smoothed);
-						}
-					}
-					else{
-						if(newSegment.first){
-							// collect points
-							for(auto vertex: newSegment.vertices()){
-								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
-									points_convexHull.push_back(vertex);
-								}
-							}
-							segment_count++;
-						}
-
-						// compute convexHull and reduction of clustered segments
-						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || !newSegment.first)){
-							auto facets = convexHull(points_convexHull);
-
-							std::vector<Halfspace<Number>> Halfspaces;
-							for(unsigned i = 0; i<facets.first.size(); i++){
-								Halfspaces.push_back(facets.first.at(i)->Halfspace());
-							}
-							Representation convexHull = Representation(Halfspaces);
-
-							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							convexHull.removeRedundancy();
-							flowpipe.insert(flowpipe.begin(), convexHull);
-
-							points_convexHull.clear();
-							segment_count = 0;
-						}
-					}
-				}
-#endif
-
-				if ( newSegment.first ) {
-#ifdef USE_REDUCTION
-					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
-#endif
-					flowpipe.push_back( newSegment.second );
-
-					// update lastSegment
-					lastSegment = newSegment.second;
-				} else {
-					break;
-				}
-			}
-			//double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-			//std::cout << std::endl << "Total time for loop(HYPRO): " << timeOfReachReduction << std::endl;
-			//std::cout << std::endl;
-#ifdef REACH_DEBUG
-			std::cout << "--- Loop left ---" << std::endl;
-			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
-#endif
-
-			return flowpipe;
-		} else {
-			// return an empty flowpipe
-			return flowpipe;
+			assert(firstSegment.satisfiesHalfspaces(_loc->invariant().mat, _loc->invariant().vec).first);
+			return boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>>(initialPair.first, lastSegment, trafoMatrix, translation);
+		} // if satisfies invariant
+		else {
+			return boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>>(initialPair.first, initialPair.second);
 		}
 	}
 
 	template<typename Number, typename Representation>
-	std::vector<initialSet<Number,Representation>> Reach<Number,Representation>::computeDiscreteJump( unsigned _currentLevel, Location<Number>* _location, const flowpipe_t<Representation>& _flowpipe ) {
-		std::vector<initialSet<Number,Representation>> newInitialStates;
-
-		// for each outgoing transition of the location
-		std::set<Transition<Number>*> loc_transSet = _location->transitions();
-		for ( typename std::set<Transition<Number>*>::iterator transitionIt = loc_transSet.begin();
-			  transitionIt != loc_transSet.end(); ++transitionIt ) {
-			hypro::Transition<Number>* transition = *transitionIt;
-
-			#ifdef REACH_DEBUG
-			std::cout << "Consider transition " << *transition << std::endl;
-			#endif
-
-			// resulting Polytope in new location
-			std::vector<Point<Number>> collectedVertices;
-			bool transitionEnabled = false;
-
-			// for each polytope that is part of the flowpipe
-			for ( auto segmentIt = _flowpipe.begin(); segmentIt != _flowpipe.end(); ++segmentIt ) {
-				// check if guard of transition is enabled (if yes compute Post Assignment Valuation)
-				Representation postAssign;
-				if ( intersectGuard( transition, *segmentIt, postAssign ) ) {
-					transitionEnabled = true;
-					// if no aggregation takes place, insert each new set independently
-					if(transition->aggregation() == Aggregation::none){
-						newInitialStates.emplace_back(_currentLevel+1, transition->target(), postAssign);
-					} else {
-						std::vector<Point<Number>> tmpVertices = postAssign.vertices();
-						collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
-					}
-				}
-			}
-			if ( transitionEnabled && transition->aggregation() != Aggregation::none) {
-				assert(!collectedVertices.empty());
-				newInitialStates.emplace_back(_currentLevel+1, transition->target(), Representation(collectedVertices));
-			}
-		}
-		return newInitialStates;
-	}
-
-	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
-							   Representation& result ) {
-
-		std::pair<bool, Representation> guardSatisfyingSegment = _segment.satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
-
-		// check if the intersection is empty
-		if ( guardSatisfyingSegment.first ) {
-			#ifdef REACH_DEBUG
-			std::cout << "Transition enabled!" << std::endl;
-			#endif
-
-			hypro::vector_t<Number> translateVec = _trans->reset().vec;
-			hypro::matrix_t<Number> transformMat = _trans->reset().mat;
-
-			// perform translation + transformation on intersection polytope
-			result = guardSatisfyingSegment.second.linearTransformation( transformMat, translateVec );
-
-			return true;
-		} else {
-			return false;
-		}
+	bool Reach<Number,Representation>::intersectBadStates( const Representation& _segment ) const {
+		// TODO
+		return false;
 	}
 
 	template<typename Number, typename Representation>
