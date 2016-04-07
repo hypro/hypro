@@ -283,6 +283,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				EvaluationResult<Number> res;
 				res.errorCode = SOLUTION::INFTY;
 				res.supportValue = 1;
+				res.optimumValue = resA.errorCode == SOLUTION::INFTY ? resA.optimumValue : resB.optimumValue;
 				return res;
 			}
 			if(resA.errorCode == SOLUTION::INFEAS){
@@ -296,6 +297,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return ( resA.supportValue >= resB.supportValue ? resA : resB );
 		}
 		case SF_TYPE::INTERSECT: {
+			// easy checks for infeasibility and unboundedness first
 			EvaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate( _direction );
 			if(resA.errorCode == SOLUTION::INFEAS){
 				return resA;
@@ -311,6 +313,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			if(resB.errorCode == SOLUTION::INFTY){
 				return resA;
 			}
+			// complete checks -> real containment TODO!!
 			assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
 			return ( resA.supportValue <= resB.supportValue ? resA : resB );
 		}

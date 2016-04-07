@@ -57,6 +57,7 @@ namespace hypro {
 			res.supportValue = 0;
 			res.errorCode = SOLUTION::INFTY;
 			res.optimumValue = vector_t<Number>::Zero(1);
+			// std::cout << "INFTY" << std::endl;
 			return res;
 		}
 
@@ -67,12 +68,12 @@ namespace hypro {
 		}
 		/* solve problem */
 		glp_simplex( lp, NULL );
-		res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 
 		// display potential problems
 		switch ( glp_get_status( lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
+				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 				res.errorCode = FEAS;
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
 				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
@@ -83,11 +84,20 @@ namespace hypro {
 			}
 			case GLP_UNBND: {
 				res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
+				vector_t<Number> glpkModel(mConstraintMatrix.cols());
+				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
+					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim(lp, i));
+				}
+				res.optimumValue = glpkModel;
+				// std::cout << "glpk INFTY " << std::endl;
 				break;
 			}
 			default:
 				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+				// std::cout << "glpk INFEAS " << std::endl;
 		}
+
+		// std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 
 		#ifdef USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -116,15 +126,17 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		//std::cout << "(push)" << std::endl;
-		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		// std::cout << "(push)" << std::endl;
+		// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
+				// std::cout << "smtrat: SAT" << std::endl;
 				res = extractSolution(simplex,objective);
+				assert(checkPoint(Point<Number>(res.optimumValue)));
 				break;
 			}
 			default:{
@@ -132,20 +144,23 @@ namespace hypro {
 				// in this case the constraints introduced by the presolution made the problem infeasible
 				simplex.pop();
 				simplex.addObjective(objective, false);
-				//std::cout << "Cleared formula: " << std::endl;
-				//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-				//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+				// std::cout << "Cleared formula: " << std::endl;
+				// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+				// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 				smtratCheck = simplex.check();
 				assert(smtratCheck != smtrat::Answer::UNKNOWN);
 				if(smtratCheck == smtrat::Answer::SAT) {
 					res = extractSolution(simplex,objective);
+					assert(checkPoint(Point<Number>(res.optimumValue)));
 				} else {
-					res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+					assert(smtratCheck == smtrat::Answer::UNSAT);
+					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
 
 				#else // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
-				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+				assert(smtratCheck == smtrat::Answer::UNSAT);
+				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				#endif // USE_PRESOLUTION
 				break;
 			}
@@ -175,6 +190,7 @@ namespace hypro {
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
 				res = extractSolution(mSmtratSolver,objective);
+				assert(checkPoint(Point<Number>(res.optimumValue)));
 				break;
 			}
 			default:{
@@ -190,12 +206,15 @@ namespace hypro {
 				assert(smtratCheck != smtrat::Answer::UNKNOWN);
 				if(smtratCheck == smtrat::Answer::SAT) {
 					res = extractSolution(mSmtratSolver,objective);
+					assert(checkPoint(Point<Number>(res.optimumValue)));
 				} else {
-					res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+					assert(smtratCheck == smtrat::Answer::UNSAT);
+					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
 				#endif // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
-				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+				assert(smtratCheck == smtrat::Answer::UNSAT);
+				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				break;
 			}
 		}
@@ -206,7 +225,7 @@ namespace hypro {
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
-
+		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		return res;
 	}
 
@@ -361,6 +380,7 @@ namespace hypro {
 				point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
 			}
 		}
+		assert(checkPoint(point));
 		return EvaluationResult<Number>(point, mLastConsistencyAnswer);
 
 		#else
@@ -390,6 +410,7 @@ namespace hypro {
 				}
 				res.optimumValue = point;
 				res.errorCode = mLastConsistencyAnswer;
+				assert(checkPoint(Point<Number>(res.optimumValue)));
 				break;
 			}
 			default:
@@ -741,6 +762,7 @@ namespace hypro {
 		assert(!valuation.isSortValue());
 		assert(!valuation.isUFModel());
 		if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
+			// std::cout << __func__ << ": INFTY" << std::endl;
 			res = EvaluationResult<Number>( 1, INFTY );
 		} else {
 			assert(valuation.isRational());

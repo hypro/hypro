@@ -98,6 +98,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
+	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
 	assert( l.rows() == mDimension );
 	return res;
 }
@@ -106,12 +107,11 @@ template <typename Number>
 std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
-
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
+		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
-
 	return res;
 }
 
@@ -123,9 +123,12 @@ bool PolytopeSupportFunction<Number>::contains( const Point<Number> &_point ) co
 template <typename Number>
 bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
 	assert(mConstraints.rows() == mConstraintConstants.rows());
+	//std::cout << "Matrix " << mConstraints << " contains " << _point << std::endl;
 	for ( unsigned rowIt = 0; rowIt < mConstraints.rows(); ++rowIt ) {
-		if( mConstraints.row(rowIt).dot(_point) > mConstraintConstants(rowIt) )
+		if( mConstraints.row(rowIt).dot(_point) > mConstraintConstants(rowIt) ){
+			//std::cout << __func__ << ": Value is " <<  mConstraints.row(rowIt).dot(_point) << " but has to be <= " << mConstraintConstants(rowIt) << std::endl;
 			return false;
+		}
 	}
 	return true;
 }

@@ -81,9 +81,8 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     EvaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction ) const {
-        EvaluationResult<Number> tmp = content->evaluate(_direction);
         //std::cout << __func__ << "(" << _direction << ") :" << tmp.supportValue << std::endl;
-        return tmp;
+        return content->evaluate(_direction);
     }
 
     template<typename Number, typename Converter>

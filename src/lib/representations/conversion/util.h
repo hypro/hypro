@@ -144,7 +144,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         //there needs to be a result here, otherwise something went terribly wrong
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
         res = Point<Number>(point.optimumValue);
-        assert(sf.contains(Point<Number>(point.optimumValue)));
+        assert(sf.contains(point.optimumValue));
         std::cout << "deepest floor point:" << point.optimumValue << std::endl;
    }
    return res;
