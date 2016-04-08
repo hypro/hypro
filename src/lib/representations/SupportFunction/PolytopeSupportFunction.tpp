@@ -110,6 +110,7 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
+		//assert(this->contains(res.back().optimumValue));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;

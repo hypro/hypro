@@ -689,7 +689,8 @@ namespace hypro {
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
 					//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
-					// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}
 
 				glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
