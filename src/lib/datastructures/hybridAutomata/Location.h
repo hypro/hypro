@@ -73,7 +73,9 @@ class Location {
 	void addTransition( Transition<Number>* _trans );
 	void setExtInputMat( const hypro::matrix_t<Number>& _mat );
 
-	bool operator<( const Location<Number>& _rhs ) const { return ( mId < _rhs.id() ); }
+	inline bool operator<( const Location<Number>& _rhs ) const { return ( mId < _rhs.id() ); }
+	inline bool operator==( const Location<Number>& _rhs ) const { return ( mId == _rhs.id() ); }
+	inline bool operator!=( const Location<Number>& _rhs ) const { return ( mId != _rhs.id() ); }
 
 	friend std::ostream& operator<<( std::ostream& _ostr, const Location<Number>& _l ) {
 		matrix_t<Number> tmp = matrix_t<Number>(_l.invariant().mat.rows(), _l.invariant().mat.cols()+1);
@@ -86,6 +88,15 @@ class Location {
 		return _ostr;
 	}
 };
-}
+
+	template<typename Number>
+	struct locPtrComp{
+		bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const {
+			return (*lhs < *rhs);
+		}
+	};
+
+
+} // namespace hypro
 
 #include "Location.tpp"

@@ -19,7 +19,7 @@ class HybridAutomaton {
   private:
 	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	using locationSetMap = std::multimap<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>>;
+	using locationSetMap = std::multimap<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>, locPtrComp<Number>>;
 
   private:
 	/**
