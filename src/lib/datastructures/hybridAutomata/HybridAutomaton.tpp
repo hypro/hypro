@@ -7,7 +7,8 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton &_hybrid )
 	: mLocations( _hybrid.locations() )
 	, mTransitions( _hybrid.transitions() )
 	, mInitialStates( _hybrid.initialStates() )
-	, mBadStates( _hybrid.badStates() )
+	, mLocalBadStates( _hybrid.localBadStates() )
+	, mGlobalBadStates( _hybrid.globalBadStates() )
 {}
 
 template <typename Number>
@@ -34,8 +35,13 @@ const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>:
 }
 
 template <typename Number>
-const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::badStates() const {
-	return mBadStates;
+const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::localBadStates() const {
+	return mLocalBadStates;
+}
+
+template <typename Number>
+const typename HybridAutomaton<Number>::setVector& HybridAutomaton<Number>::globalBadStates() const {
+	return mGlobalBadStates;
 }
 
 template <typename Number>
@@ -61,8 +67,13 @@ void HybridAutomaton<Number>::setInitialStates( const locationSetMap& _states ) 
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::setBadStates( const locationSetMap& _states ) {
-	mBadStates = _states;
+void HybridAutomaton<Number>::setLocalBadStates( const locationSetMap& _states ) {
+	mLocalBadStates = _states;
+}
+
+template <typename Number>
+void HybridAutomaton<Number>::setGlobalBadStates( const setVector& _states ) {
+	mGlobalBadStates = _states;
 }
 
 template <typename Number>
@@ -81,8 +92,13 @@ void HybridAutomaton<Number>::addInitialState( Location<Number>* _location , con
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
-	mBadStates.insert(std::make_pair(_location, _valuation));
+void HybridAutomaton<Number>::addLocalBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
+	mLocalBadStates.insert(std::make_pair(_location, _valuation));
+}
+
+template <typename Number>
+void HybridAutomaton<Number>::addGlobalBadState( const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
+	mGlobalBadStates.push_back(_valuation);
 }
 
 } // namespace hypro

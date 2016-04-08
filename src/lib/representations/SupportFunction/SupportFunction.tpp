@@ -225,45 +225,43 @@ namespace hypro{
     std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
         assert(_mat.rows() == _vec.rows());
-        bool empty = false;
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI));
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
-        		empty = true;
-        		break;
+        		return std::make_pair(false, *this);
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
+        		//std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+	            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
+	                //std::cout << "fullyOutside" << std::endl;
+	                // the object lies fully outside one of the planes -> return false
+	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+	            }
+        	} else if(planeEvalRes.supportValue <= _vec(rowI)) {
+        		// object lies below this plane.
+        		continue;
         	}
-            //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
-                //std::cout << "EMPTY" << std::endl;
-                empty = true;
-                break;
-            }
         }
-        if(!empty){
-        	if(limitingPlanes.size() < unsigned(_mat.rows())){
-        		if(limitingPlanes.size() == 0 ){
-        			return std::make_pair(!empty, *this);
-        		}
-        		// if the result is not empty, only add planes, which affect the object
-	        	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
-	        	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
-	        	for(unsigned i = 0; i < limitingPlanes.size(); ++i){
-	        		planes.row(i) = _mat.row(limitingPlanes.back());
-	        		distances(i) = _vec(limitingPlanes.back());
-	        		limitingPlanes.pop_back();
-	        	}
-	        	return std::make_pair(!empty, this->intersectHalfspaces(planes,distances));
-        	} else {
-        		assert(limitingPlanes.size() == unsigned(_mat.rows()));
-        		return std::make_pair(!empty, this->intersectHalfspaces(_mat,_vec));
+        //std::cout << __func__ << " Object will be limited but not empty" << std::endl;
+    	if(limitingPlanes.size() < unsigned(_mat.rows())){
+    		if(limitingPlanes.size() == 0 ){
+    			return std::make_pair(true, *this);
+    		}
+    		// if the result is not fullyOutside, only add planes, which affect the object
+        	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
+        	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
+        	for(unsigned i = 0; i < limitingPlanes.size(); ++i){
+        		planes.row(i) = _mat.row(limitingPlanes.back());
+        		distances(i) = _vec(limitingPlanes.back());
+        		limitingPlanes.pop_back();
         	}
-
-        }
-        return std::make_pair(!empty, this->intersectHalfspaces(_mat,_vec));
+        	return std::make_pair(true, this->intersectHalfspaces(planes,distances));
+    	} else {
+    		assert(limitingPlanes.size() == unsigned(_mat.rows()));
+    		return std::make_pair(true, this->intersectHalfspaces(_mat,_vec));
+    	}
     }
 
     template<typename Number, typename Converter>

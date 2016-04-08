@@ -206,13 +206,14 @@ namespace parser {
 					matrix_t<double> res = matrix_t<double>(2, _lhs.rows());
 					assert(_lhs.rows() == res.cols() && _rhs.rows() == res.cols());
 					res.row(0) = (_lhs-_rhs);
-					res.row(1) = -1*(_lhs-_rhs);
+					res.row(1) = -1*(_lhs)+_rhs;
 					return res;
 				}
 				case RELATION::GEQ: {
 					matrix_t<double> res = matrix_t<double>(1, _lhs.rows());
 					assert(_lhs.rows() == res.cols() && _rhs.rows() == res.cols());
-					res.row(0) = -1*(_lhs-_rhs);
+					//std::cout << "GEQ: lhs:" << _lhs << " >= " << _rhs << std::endl;
+					res.row(0) = -1*(_lhs)+_rhs;
 					return res;
 				}
 				case RELATION::LEQ: {

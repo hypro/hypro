@@ -50,17 +50,23 @@ namespace parser {
 		HybridAutomaton<Number> result;
 		LocationManager<Number>& locManag = hypro::LocationManager<Number>::getInstance();
 
-		for(const auto index : mModeIds)
+		for(const auto index : mModeIds){
 			result.addLocation(locManag.location(index));
+			std::cout << "Added location " << *locManag.location(index) << std::endl;
+		}
 
-		for(const auto transition : mTransitions )
+		for(const auto transition : mTransitions ){
 			result.addTransition(transition);
+			std::cout << "Added transition " << *transition << std::endl;
+		}
 
-		for(const auto initPair : mInitialStates )
+		for(const auto initPair : mInitialStates ){
 			result.addInitialState(locManag.location(initPair.first), initPair.second);
+		}
 
-		for(const auto badPair : mBadStates )
-			result.addBadState(locManag.location(badPair.first), badPair.second);
+		for(const auto badPair : mLocalBadStates ){
+			result.addLocalBadState(locManag.location(badPair.first), badPair.second);
+		}
 
 		return result;
 	}

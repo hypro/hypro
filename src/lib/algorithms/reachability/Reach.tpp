@@ -69,7 +69,11 @@ namespace reachability {
 			Representation currentSegment = boost::get<1>(initialSetup);
 			flowpipe.push_back( currentSegment );
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
-			if(intersectBadStates(currentSegment)){
+			if(intersectBadStates(_loc, currentSegment)){
+				// clear queue to stop whole algorithm
+				while(!mWorkingQueue.empty()){
+					mWorkingQueue.pop();
+				}
 				return flowpipe;
 			}
 
@@ -142,7 +146,11 @@ namespace reachability {
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
 					flowpipe.push_back( newSegment.second );
-					if(intersectBadStates(newSegment.second)){
+					if(intersectBadStates(_loc, newSegment.second)){
+						// clear queue to stop whole algorithm
+						while(!mWorkingQueue.empty()){
+							mWorkingQueue.pop();
+						}
 						return flowpipe;
 					}
 					// Collect potential new initial states from discrete behaviour.
@@ -384,8 +392,30 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectBadStates( const Representation& _segment ) const {
-		// TODO
+	bool Reach<Number,Representation>::intersectBadStates( Location<Number>* _loc, const Representation& _segment ) const {
+		// check local bad states
+		if(mAutomaton.localBadStates().find(_loc) != mAutomaton.localBadStates().end()){
+			auto badStateIterator = mAutomaton.localBadStates().find(_loc);
+			if(_segment.satisfiesHalfspaces(badStateIterator->second.first, badStateIterator->second.second).first == true){
+				#ifdef REACH_DEBUG
+				std::cout << "Intersection with local bad states" << std::endl;
+				#endif
+				return true;
+			}
+		}
+
+		// check global bad states
+		if(!mAutomaton.globalBadStates().empty()){
+			for(const auto& set : mAutomaton.globalBadStates() ) {
+				// bad state intersection
+				if(_segment.satisfiesHalfspaces(set.first, set.second).first){
+					#ifdef REACH_DEBUG
+					std::cout << "Intersection with global bad states" << std::endl;
+					#endif
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

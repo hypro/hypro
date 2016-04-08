@@ -50,7 +50,7 @@ struct flowstarParser
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
 	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mInitialStates;
-	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mBadStates;
+	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	ReachabilitySettings<Number> mSettings;
@@ -154,12 +154,12 @@ struct flowstarParser
 					matrix_t<Number> tmpMatrix = convert<double,Number>(matrix);
 					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
 						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
-						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
+						vec(rowcnt) = -tmpMatrix(row,tmpMatrix.cols()-1);
 						++rowcnt;
 					}
 				}
-				mBadStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
-
+				//std::cout << "PARSER: added local bad state: " << mat << " <= " << vec << std::endl;
+				mLocalBadStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
 			}
 		}
 	}

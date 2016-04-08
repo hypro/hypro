@@ -22,7 +22,7 @@ CLANG_WARNING_DISABLE("-Wdeprecated-register")
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-#define REACH_DEBUG
+//#define REACH_DEBUG
 //#define USE_REDUCTION
 
 namespace hypro {
@@ -108,7 +108,7 @@ private:
 
 	matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
 	boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> computeFirstSegment( hypro::Location<Number>* _loc, const Representation& _val ) const;
-	bool intersectBadStates( const Representation& _segment ) const;
+	bool intersectBadStates( hypro::Location<Number>* _loc, const Representation& _segment ) const;
 };
 
 }  // namespace reachability

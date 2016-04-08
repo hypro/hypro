@@ -20,6 +20,7 @@ class HybridAutomaton {
 	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
 	using locationSetMap = std::multimap<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>, locPtrComp<Number>>;
+	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
 
   private:
 	/**
@@ -28,7 +29,8 @@ class HybridAutomaton {
 	locationSet mLocations;
 	transitionSet mTransitions;
 	locationSetMap mInitialStates;
-	locationSetMap mBadStates;
+	locationSetMap mLocalBadStates;
+	setVector mGlobalBadStates;
 
   public:
 	/**
@@ -47,33 +49,31 @@ class HybridAutomaton {
 	const locationSet& locations() const;
 	const transitionSet& transitions() const;
 	const locationSetMap& initialStates() const;
-	const locationSetMap& badStates() const;
+	const locationSetMap& localBadStates() const;
+	const setVector& globalBadStates() const;
 	unsigned dimension() const;
 
 	void setLocations( const locationSet& _locs );
 	void setTransitions( const transitionSet& _trans );
 	void setInitialStates( const locationSetMap& _states );
-	void setBadStates( const locationSetMap& _states );
+	void setLocalBadStates( const locationSetMap& _states );
+	void setGlobalBadStates( const setVector& _states );
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );
 	void addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
-	void addBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
+	void addLocalBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
+	void addGlobalBadState( const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
 
 	// copy assignment operator, TODO: implement via swap
 	inline HybridAutomaton<Number>& operator=( const HybridAutomaton<Number>& _rhs ) {
 		mLocations = _rhs.locations();
 		mTransitions = _rhs.transitions();
 		mInitialStates = _rhs.initialStates();
-		mBadStates = _rhs.badStates();
+		mLocalBadStates = _rhs.localBadStates();
+		mGlobalBadStates = _rhs.globalBadStates();
 		return *this;
 	}
-
-	// move assignment operator, TODO: Implement
-	//inline HybridAutomaton<Number>& operator=( HybridAutomaton<Number>&& _rhs ) {
-	//
-	//	return *this;
-	//}
 
 	friend std::ostream& operator<<( std::ostream& _ostr, const HybridAutomaton<Number>& _a ) {
 		_ostr << "initial states: " << std::endl;
