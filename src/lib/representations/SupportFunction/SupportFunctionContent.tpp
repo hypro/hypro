@@ -333,6 +333,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return mBall->multiEvaluate( _directions );
 		}
 		case SF_TYPE::LINTRAFO: {
+			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(mLinearTrafoParameters->a) << std::endl;
 			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * mLinearTrafoParameters->a );
 			unsigned directionCnt = 0;
 			for(auto& entry : res){
@@ -433,20 +434,24 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				return resB;
 			}
 			std::vector<EvaluationResult<Number>> result;
-			for ( unsigned i = 0; i < resA.size(); ++i ) {
+ 			for ( unsigned i = 0; i < resA.size(); ++i ) {
+ 				std::cout << "Eval in direction " << convert<Number,double>(_directions.row(i)).transpose() << std::endl;
 				assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 				EvaluationResult<Number> res;
 				if (resA[i].errorCode == SOLUTION::INFTY) {
+					std::cout << "resA infinite" << std::endl;
 					res.errorCode = resB[i].errorCode;
 					res.supportValue = resB[i].supportValue;
 					res.optimumValue = resB[i].optimumValue;
 				} else if (resB[i].errorCode == SOLUTION::INFTY) {
+					std::cout << "resB infinite" << std::endl;
 					assert(resA[i].errorCode == SOLUTION::FEAS);
 					res.errorCode = resA[i].errorCode;
 					res.supportValue = resA[i].supportValue;
 					res.optimumValue = resA[i].optimumValue;
 				} else {
 					assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
+					std::cout << "Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue << std::endl;
 					res.errorCode = SOLUTION::FEAS;
 					if(resA[i].supportValue < resB[i].supportValue){
 						res.supportValue = resA[i].supportValue;
