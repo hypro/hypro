@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 	typedef hypro::SupportFunction<number> sfValuation;
 	typedef hypro::HPolytope<number> hpValuation;
 
-	std::string filename = "../examples/input/bouncing_ball.model";
+	std::string filename = "../examples/input/thermostat.model";
 
 	hypro::parser::flowstarParser<number> parser;
 	hypro::HybridAutomaton<number> ha = parser.parseInput(filename);

@@ -19,7 +19,7 @@ namespace parser {
 	        using qi::fail;
 
 			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}');
-			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5)];
+			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5, qi::_r3)];
 			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
@@ -56,7 +56,7 @@ namespace parser {
 			return std::make_pair(start, target);
 		}
 
-		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime) {
+		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim) {
 			Transition<Number>* res = new Transition<Number>(
 									mLocationManager.location(_transition.first),
 									mLocationManager.location(_transition.second));
@@ -73,15 +73,18 @@ namespace parser {
 			}
 
 			// setting reset
+			typename Transition<Number>::Reset r;
 			if(_reset) {
-				typename Transition<Number>::Reset r;
 				matrix_t<Number> matr = matrix_t<Number>(_reset->rows(), _reset->cols()-1);
 				matr << _reset->block(0,0,_reset->rows(), _reset->cols()-1);
 				vector_t<Number> vec = -_reset->col(_reset->cols()-1);
 				r.mat = matr;
 				r.vec = vec;
-				res->setReset(r);
+			} else {
+				r.mat = matrix_t<Number>::Identity(_dim, _dim);
+				r.vec = vector_t<Number>::Zero(_dim);
 			}
+			res->setReset(r);
 
 			// set aggregation settings
 			if(_aggregation){
