@@ -9,7 +9,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
-		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0) {
+		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 		}
 
     template<typename Number, typename Representation>
@@ -404,6 +404,7 @@ namespace reachability {
 				#ifdef REACH_DEBUG
 				std::cout << "Intersection with local bad states" << std::endl;
 				#endif
+				mIntersectedBadStates = true;
 				return true;
 			}
 		}
@@ -416,6 +417,7 @@ namespace reachability {
 					#ifdef REACH_DEBUG
 					std::cout << "Intersection with global bad states" << std::endl;
 					#endif
+					mIntersectedBadStates = true;
 					return true;
 				}
 			}
