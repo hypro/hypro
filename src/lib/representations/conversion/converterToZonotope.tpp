@@ -73,10 +73,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
 
-        //gets number of vertices
-        unsigned size = newVertices.size();
         //only continue if object is really an oriented box (i.e. it has 2^n vertices)
-        assert (size == std::pow(2 , dim));
+        assert (newVertices.size() == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
         center = computeArithmeticMeanPoint(newVertices);
@@ -289,10 +287,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
 
-        //gets number of vertices
-        unsigned size = newVertices.size();
         //only continue if object is really an oriented box (i.e. it has 2^n vertices)
-        assert (size == std::pow(2 , dim));
+        assert (newVertices.size() == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
         center = computeArithmeticMeanPoint(newVertices);

@@ -87,10 +87,8 @@ template <typename Number, typename Converter>
 Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
     //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
-    //gets dimension in which is currently computed
-    unsigned dim = directions.cols();
     //only continue if directions and object match dimensionwise
-    assert (dim == sf.dimension());
+    assert (directions.cols() == sf.dimension());
     //generates an empty Point for the return value
     Point<Number> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
@@ -123,7 +121,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
-            assert(curFace.dimension() == dim);
+            assert(curFace.dimension() == directions.cols());
 
             //recursive call of this function for the current face
             recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1));
