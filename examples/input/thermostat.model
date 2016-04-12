@@ -4,7 +4,7 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.01
+  fixed steps 0.005
   time 10
   remainder estimation 1e-5
   identity precondition
@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output thermostat
-  max jumps 1
+  max jumps 3
   print on
  }
 
@@ -30,7 +30,9 @@ hybrid reachability
    inv
    {
     x <= 23
+    x >= 17
     t >= 0
+    t <= 10
    }
   }
 
@@ -44,8 +46,10 @@ hybrid reachability
 
    inv
    {
+   	x <= 23
     x >= 17
     t >= 0
+    t <= 10
    }
   }
  }
@@ -65,17 +69,24 @@ hybrid reachability
  {
   on
   {
-   x in [20,20.01]
+   x in [20,20.001]
    t in [0,0]
   }
  }
 
 }
 
-#unsafe set
-#{
-#  l
-#  {
-#   x >= 10.7
-#  }
-#}
+unsafe set
+{
+  on
+  {
+   x in [17,18]
+   t in [0,0.3]
+  }
+
+  off
+  {
+   x in [17,18]
+   t in [0,0.3]
+  }
+}
