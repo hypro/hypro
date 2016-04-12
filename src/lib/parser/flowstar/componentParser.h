@@ -100,18 +100,13 @@ namespace parser {
 			return res;
 		}
 
-		matrix_t<Number> createGuardMatrix(const std::vector<matrix_t<double>>& _constraints, unsigned _dim) {
-			unsigned size = 0;
-			for(const auto constraint : _constraints) {
-				size += constraint.rows();
-			}
-			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
+		matrix_t<Number> createGuardMatrix(const std::vector<std::vector<matrix_t<double>>>& _constraints, unsigned _dim) {
+			matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraint : _constraints){
-				for(unsigned row = 0; row < constraint.rows(); ++row){
-					res.row(rowCnt) = constraint.row(row);
-					++rowCnt;
-				}
+			for(const auto constraintVec : _constraints){
+				assert(constraintVec.size() == 1);
+				res.row(rowCnt) = constraintVec.begin()->row(0);
+				++rowCnt;
 			}
 			return convert<double,Number>(res);
 		}
@@ -171,18 +166,13 @@ namespace parser {
 			return convert<double,Number>(res);
 		}
 
-		matrix_t<Number> createInvariant( const std::vector<matrix_t<double>>& _constraints, unsigned _dim ) {
-			unsigned size = 0;
-			for(const auto constraint : _constraints) {
-				size += constraint.rows();
-			}
-			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
+		matrix_t<Number> createInvariant( const std::vector<std::vector<matrix_t<double>>>& _constraints, unsigned _dim ) {
+			matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraint : _constraints){
-				for(unsigned row = 0; row < constraint.rows(); ++row){
-					res.row(rowCnt) = constraint.row(row);
-					++rowCnt;
-				}
+			for(const auto constraintVec : _constraints){
+				assert(constraintVec.size() == 1);
+				res.row(rowCnt) = constraintVec.begin()->row(0);
+				++rowCnt;
 			}
 			return convert<double,Number>(res);
 		}

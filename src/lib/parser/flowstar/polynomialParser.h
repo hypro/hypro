@@ -170,8 +170,12 @@ namespace parser {
 
 	enum RELATION {LESS,LEQ,EQ,GEQ, GREATER};
 
+	/**
+	 * @brief Creates a matrix representing the parsed constraint.
+	 * @details The matrix is augmented by a column (the last one), which represents the constant parts.
+	 */
 	template<typename Iterator>
-	struct constraintParser : qi::grammar<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)>
+	struct constraintParser : qi::grammar<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)>
 	{
 		polynomialParser<Iterator> mPolynomial;
 		px::function<ErrorHandler> errorHandler;
@@ -195,47 +199,60 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> start;
+		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> start;
 		qi::rule<Iterator, RELATION()> relationSymbol;
-		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> inequation;
-		qi::rule<Iterator, matrix_t<double>(symbol_table const&, unsigned const&)> interval;
+		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> inequation;
+		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> interval;
 
-		matrix_t<double> createRow(const vector_t<double>& _lhs, RELATION _rel, const vector_t<double>& _rhs) {
+		std::vector<matrix_t<double>> createRow(const vector_t<double>& _lhs, RELATION _rel, const vector_t<double>& _rhs) {
+			std::vector<matrix_t<double>> res;
 			switch(_rel){
 				case RELATION::EQ: {
-					matrix_t<double> res = matrix_t<double>(2, _lhs.rows());
-					assert(_lhs.rows() == res.cols() && _rhs.rows() == res.cols());
-					res.row(0) = (_lhs-_rhs);
-					res.row(1) = -1*(_lhs)+_rhs;
+					matrix_t<double> resLower = matrix_t<double>(1, _lhs.rows());
+					matrix_t<double> resUpper = matrix_t<double>(1, _lhs.rows());
+					resLower.row(0) = (_lhs-_rhs);
+					resUpper.row(0) = -1*(_lhs)+_rhs;
+					res.emplace_back(resLower);
+					res.emplace_back(resUpper);
+
+					std::cout << "Created row from =: " << resLower << std::endl;
+					std::cout << "Created row from =: " << resUpper << std::endl;
 					return res;
 				}
 				case RELATION::GEQ: {
-					matrix_t<double> res = matrix_t<double>(1, _lhs.rows());
-					assert(_lhs.rows() == res.cols() && _rhs.rows() == res.cols());
+					matrix_t<double> resRow = matrix_t<double>(1, _lhs.rows());
 					//std::cout << "GEQ: lhs:" << _lhs << " >= " << _rhs << std::endl;
-					res.row(0) = -1*(_lhs)+_rhs;
+					resRow.row(0) = -1*(_lhs)+_rhs;
+					res.emplace_back(resRow);
+					std::cout << "Created row from >=: " << resRow << std::endl;
 					return res;
 				}
 				case RELATION::LEQ: {
-					matrix_t<double> res = matrix_t<double>(1, _lhs.rows());
-					assert(_lhs.rows() == res.cols() && _rhs.rows() == res.cols());
-					res.row(0) = _lhs-_rhs;
+					matrix_t<double> resRow= matrix_t<double>(1, _lhs.rows());
+					resRow.row(0) = _lhs-_rhs;
+					res.emplace_back(resRow);
+					std::cout << "Created row from <=: " << resRow << std::endl;
 					return res;
 				}
 				default:{
 					assert(false);
 				}
 			}
-			return matrix_t<double>::Zero(1,1);
+			return res;
 		}
 
-		matrix_t<double> createIntervalConstraints(unsigned _varIndex, double _lower, double _upper, unsigned _dimension) {
-			matrix_t<double> res = matrix_t<double>::Zero(2,_dimension+1);
-
-			res(0,_varIndex) = -1;
-			res(0,_dimension) = -_lower;
-			res(1,_varIndex) = 1;
-			res(1,_dimension) = _upper;
+		std::vector<matrix_t<double>> createIntervalConstraints(unsigned _varIndex, double _lower, double _upper, unsigned _dimension) {
+			std::vector<matrix_t<double>> res;
+			matrix_t<double> resLower = matrix_t<double>::Zero(1,_dimension+1);
+			matrix_t<double> resUpper = matrix_t<double>::Zero(1,_dimension+1);
+			resLower(0,_varIndex) = -1;
+			resLower(0,_dimension) = _lower;
+			resUpper(0,_varIndex) = 1;
+			resUpper(0,_dimension) = -_upper;
+			res.emplace_back(resLower);
+			res.emplace_back(resUpper);
+			std::cout << "Created row from interval: " << resLower << std::endl;
+			std::cout << "Created row from interval: " << resUpper << std::endl;
 			return res;
 		}
 	};

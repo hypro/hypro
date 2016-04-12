@@ -85,8 +85,8 @@ struct flowstarParser
 	qi::rule<Iterator, Skipper> hybridStart;
 	qi::rule<Iterator, Skipper> stateVars;
 	qi::rule<Iterator, Skipper> settings;
-	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>(), Skipper> init;
-	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>(), Skipper> badStates;
+	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> init;
+	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> badStates;
 	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
 	qi::rule<Iterator, std::set<Transition<Number>*>(), Skipper> transitions;
 
@@ -119,22 +119,25 @@ struct flowstarParser
 		}
 	}
 
-	void insertInitialState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>>& _set) {
+	void insertInitialState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>>& _set) {
 		if(_set){
 			for(const auto& pair : *_set){
+				std::cout << "Add initial location " << fs::get<0>(pair) << std::endl;
 				unsigned rows = 0;
-				for(const auto& matrix : fs::get<1>(pair))
-					rows += matrix.rows();
-
-				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->cols()-1);
+				for(const auto& rowVec : fs::get<1>(pair) ){
+					rows += rowVec.size();
+				}
+				std::cout << "Number constraints: " << rows << std::endl;
+				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->begin()->cols()-1);
 				vector_t<Number> vec = vector_t<Number>(rows);
 				//collect matrix and vector
 				unsigned rowcnt = 0;
-				for(const auto& matrix : fs::get<1>(pair)){
-					matrix_t<Number> tmpMatrix = convert<double,Number>(matrix);
-					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
-						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
-						vec(rowcnt) = tmpMatrix(row,tmpMatrix.cols()-1);
+				for(const auto& matrixVec : fs::get<1>(pair)){
+					for(const auto& constraintRow : matrixVec){
+						std::cout << "Row: " << constraintRow << std::endl;
+						matrix_t<Number> tmpMatrix = convert<double,Number>(constraintRow);
+						mat.row(rowcnt) = tmpMatrix.block(0,0,1,tmpMatrix.cols()-1);
+						vec(rowcnt) = -tmpMatrix(0,tmpMatrix.cols()-1);
 						++rowcnt;
 					}
 				}
@@ -143,18 +146,25 @@ struct flowstarParser
 		}
 	}
 
-	void insertBadState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<matrix_t<double>>>>>& _set) {
+	void insertBadState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>>& _set) {
 		if(_set){
 			for(const auto& pair : *_set){
-				matrix_t<Number> mat = matrix_t<Number>(fs::get<1>(pair).size(), fs::get<1>(pair).begin()->cols()-1);
-				vector_t<Number> vec = vector_t<Number>(fs::get<1>(pair).size());
+				std::cout << "Add bad state for location " << fs::get<0>(pair) << std::endl;
+				unsigned rows = 0;
+				for(const auto& rowVec : fs::get<1>(pair) ){
+					rows += rowVec.size();
+				}
+				std::cout << "Number constraints: " << rows << std::endl;
+				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->begin()->cols()-1);
+				vector_t<Number> vec = vector_t<Number>(rows);
 				//collect matrix and vector
 				unsigned rowcnt = 0;
-				for(const auto& matrix : fs::get<1>(pair)){
-					matrix_t<Number> tmpMatrix = convert<double,Number>(matrix);
-					for(unsigned row = 0; row < tmpMatrix.rows(); ++row){
-						mat.row(rowcnt) = tmpMatrix.block(row,0,1,tmpMatrix.cols()-1);
-						vec(rowcnt) = -tmpMatrix(row,tmpMatrix.cols()-1);
+				for(const auto& matrixVec : fs::get<1>(pair)){
+					for(const auto& constraintRow : matrixVec){
+						std::cout << "Row: " << constraintRow << std::endl;
+						matrix_t<Number> tmpMatrix = convert<double,Number>(constraintRow);
+						mat.row(rowcnt) = tmpMatrix.block(0,0,1,tmpMatrix.cols()-1);
+						vec(rowcnt) = -tmpMatrix(0,tmpMatrix.cols()-1);
 						++rowcnt;
 					}
 				}
