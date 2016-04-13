@@ -27,6 +27,9 @@ int main(int argc, char** argv) {
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename(parser.mSettings.fileName);
+	std::vector<unsigned> plottingDimensions = parser.mSettings.plotDimensions;
+	plotter.rSettings().dimensions.first = plottingDimensions.front();
+	plotter.rSettings().dimensions.second = plottingDimensions.back();
 
 	// bad states plotting
 	hypro::HybridAutomaton<Number>::locationSetMap badStateMapping = ha.localBadStates();

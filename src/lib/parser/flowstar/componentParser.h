@@ -206,7 +206,7 @@ namespace parser {
 			jmpLimit = qi::lexeme["max jumps"] > qi::int_[px::bind( &settingsParser::setJumpDepth, px::ref(*this), qi::_1)];
 			outFile = qi::lexeme["output"] > filename [px::bind( &settingsParser::setFileName, px::ref(*this), qi::_1)];
 			print = qi::lexeme["print"] > (qi::lexeme["on"] | qi::lexeme["off"]);
-			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1);
+			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1)[px::bind( &settingsParser::setPlotDimensions, px::ref(*this), qi::_1 )];
 			shape = (qi::lexeme["octagon"] | qi::lexeme["interval"]);
 			outdimensions = (qi::lazy(qi::_r1) % ',');
 			remainder = qi::lexeme["remainder estimation"] > constant;
@@ -241,6 +241,10 @@ namespace parser {
  		void setTimeBound(double _in){ mLocalSettings.timeBound = carl::rationalize<Number>(_in); }
  		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
+ 		void setPlotDimensions(const std::vector<unsigned>& _dimensions){
+ 			assert(_dimensions.size() <= 2);
+ 			mLocalSettings.plotDimensions = _dimensions;
+ 		}
 
 		qi::rule<Iterator, ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
 		qi::rule<Iterator, Skipper> steps;
