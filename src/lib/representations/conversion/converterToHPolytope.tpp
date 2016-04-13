@@ -159,8 +159,9 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
     std::vector<std::size_t> boundedConstraints;
     for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
             boundedConstraints.push_back(offsetIndex);
+        }
     }
     matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
     vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());

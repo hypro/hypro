@@ -243,12 +243,11 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 
 template <typename Number>
 Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
-	std::unique( _dimensions.begin(), _dimensions.end() );
-	std::sort( _dimensions.begin(), _dimensions.end() );
 	assert(_dimensions.size() > 0);
 	vector_t<Number> newCoordinates = vector_t<Number>( _dimensions.size() );
 	unsigned tPos = 0;
 	for ( const auto sPos : _dimensions ) {
+		assert(sPos < mCoordinates.rows());
 		newCoordinates( tPos ) = mCoordinates( sPos );
 		++tPos;
 	}

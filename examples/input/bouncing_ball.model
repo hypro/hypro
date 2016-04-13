@@ -29,7 +29,7 @@ hybrid reachability
 
    inv
    {
-    x >= -0.1
+    x >= -0.001
    }
   }
  }
@@ -53,10 +53,14 @@ hybrid reachability
 
 }
 
-#unsafe set
-#{
-#  l
-#  {
-#   x >= 10.7
-#  }
-#}
+unsafe set
+{
+  l
+  {
+   x >= 4
+   x <= 6
+   v <= 0
+   v >= -2.5
+
+  }
+}

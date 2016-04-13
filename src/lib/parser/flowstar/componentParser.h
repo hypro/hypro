@@ -19,7 +19,7 @@ namespace parser {
 	        using qi::fail;
 
 			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}');
-			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5)];
+			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5, qi::_r3)];
 			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
@@ -56,7 +56,7 @@ namespace parser {
 			return std::make_pair(start, target);
 		}
 
-		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime) {
+		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim) {
 			Transition<Number>* res = new Transition<Number>(
 									mLocationManager.location(_transition.first),
 									mLocationManager.location(_transition.second));
@@ -73,15 +73,18 @@ namespace parser {
 			}
 
 			// setting reset
+			typename Transition<Number>::Reset r;
 			if(_reset) {
-				typename Transition<Number>::Reset r;
 				matrix_t<Number> matr = matrix_t<Number>(_reset->rows(), _reset->cols()-1);
 				matr << _reset->block(0,0,_reset->rows(), _reset->cols()-1);
 				vector_t<Number> vec = -_reset->col(_reset->cols()-1);
 				r.mat = matr;
 				r.vec = vec;
-				res->setReset(r);
+			} else {
+				r.mat = matrix_t<Number>::Identity(_dim, _dim);
+				r.vec = vector_t<Number>::Zero(_dim);
 			}
+			res->setReset(r);
 
 			// set aggregation settings
 			if(_aggregation){
@@ -97,18 +100,13 @@ namespace parser {
 			return res;
 		}
 
-		matrix_t<Number> createGuardMatrix(const std::vector<matrix_t<double>>& _constraints, unsigned _dim) {
-			unsigned size = 0;
-			for(const auto constraint : _constraints) {
-				size += constraint.rows();
-			}
-			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
+		matrix_t<Number> createGuardMatrix(const std::vector<std::vector<matrix_t<double>>>& _constraints, unsigned _dim) {
+			matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraint : _constraints){
-				for(unsigned row = 0; row < constraint.rows(); ++row){
-					res.row(rowCnt) = constraint.row(row);
-					++rowCnt;
-				}
+			for(const auto constraintVec : _constraints){
+				assert(constraintVec.size() == 1);
+				res.row(rowCnt) = constraintVec.begin()->row(0);
+				++rowCnt;
 			}
 			return convert<double,Number>(res);
 		}
@@ -168,18 +166,13 @@ namespace parser {
 			return convert<double,Number>(res);
 		}
 
-		matrix_t<Number> createInvariant( const std::vector<matrix_t<double>>& _constraints, unsigned _dim ) {
-			unsigned size = 0;
-			for(const auto constraint : _constraints) {
-				size += constraint.rows();
-			}
-			matrix_t<double> res = matrix_t<double>(size, _dim+1 );
+		matrix_t<Number> createInvariant( const std::vector<std::vector<matrix_t<double>>>& _constraints, unsigned _dim ) {
+			matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
 			unsigned rowCnt = 0;
-			for(const auto constraint : _constraints){
-				for(unsigned row = 0; row < constraint.rows(); ++row){
-					res.row(rowCnt) = constraint.row(row);
-					++rowCnt;
-				}
+			for(const auto constraintVec : _constraints){
+				assert(constraintVec.size() == 1);
+				res.row(rowCnt) = constraintVec.begin()->row(0);
+				++rowCnt;
 			}
 			return convert<double,Number>(res);
 		}
@@ -213,7 +206,7 @@ namespace parser {
 			jmpLimit = qi::lexeme["max jumps"] > qi::int_[px::bind( &settingsParser::setJumpDepth, px::ref(*this), qi::_1)];
 			outFile = qi::lexeme["output"] > filename [px::bind( &settingsParser::setFileName, px::ref(*this), qi::_1)];
 			print = qi::lexeme["print"] > (qi::lexeme["on"] | qi::lexeme["off"]);
-			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1);
+			outBackend = (qi::lexeme["gnuplot"] | qi::lexeme["matlab"]) > shape > outdimensions(qi::_r1)[px::bind( &settingsParser::setPlotDimensions, px::ref(*this), qi::_1 )];
 			shape = (qi::lexeme["octagon"] | qi::lexeme["interval"]);
 			outdimensions = (qi::lazy(qi::_r1) % ',');
 			remainder = qi::lexeme["remainder estimation"] > constant;
@@ -248,6 +241,10 @@ namespace parser {
  		void setTimeBound(double _in){ mLocalSettings.timeBound = carl::rationalize<Number>(_in); }
  		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
+ 		void setPlotDimensions(const std::vector<unsigned>& _dimensions){
+ 			assert(_dimensions.size() <= 2);
+ 			mLocalSettings.plotDimensions = _dimensions;
+ 		}
 
 		qi::rule<Iterator, ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
 		qi::rule<Iterator, Skipper> steps;

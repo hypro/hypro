@@ -9,7 +9,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
-		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0) {
+		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 		}
 
     template<typename Number, typename Representation>
@@ -104,6 +104,10 @@ namespace reachability {
 #endif
 #ifdef USE_REDUCTION
 				// clustering CONVEXHULL_CONST and reduction with directions generated before
+				unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
+				std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
+
+				bool use_reduce_memory=false, use_reduce_time=true;
 				if(use_reduce_memory){
 					if(CONVEXHULL_CONST==1){ // if no clustering is required
 						if(newSegment.first){
@@ -295,7 +299,7 @@ namespace reachability {
 
 			// R_0(X0) U R_delta(X0)
 			Representation unitePolytope = initialPair.second.unite( deltaValuation );
-			assert(unitePolytope.contains(initialPair.second));
+			//assert(unitePolytope.contains(initialPair.second));
 			assert(unitePolytope.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
@@ -323,9 +327,9 @@ namespace reachability {
 			Representation firstSegment = unitePolytope.minkowskiSum( hausPoly );
 
 			//plotter.plot2d();
-			assert(firstSegment.contains(unitePolytope));
-			assert(firstSegment.contains(initialPair.second));
-			assert(firstSegment.contains(deltaValuation));
+			//assert(firstSegment.contains(unitePolytope));
+			//assert(firstSegment.contains(initialPair.second));
+			//assert(firstSegment.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
@@ -400,6 +404,7 @@ namespace reachability {
 				#ifdef REACH_DEBUG
 				std::cout << "Intersection with local bad states" << std::endl;
 				#endif
+				mIntersectedBadStates = true;
 				return true;
 			}
 		}
@@ -412,6 +417,7 @@ namespace reachability {
 					#ifdef REACH_DEBUG
 					std::cout << "Intersection with global bad states" << std::endl;
 					#endif
+					mIntersectedBadStates = true;
 					return true;
 				}
 			}

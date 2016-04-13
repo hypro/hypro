@@ -10,6 +10,7 @@ struct ReachabilitySettings {
 	Number timeStep;
 	std::string fileName;
 	unsigned long pplDenomimator;
+	std::vector<unsigned> plotDimensions;
 
 	ReachabilitySettings<Number>()
 		: timeBound(carl::rationalize<Number>(fReach_TIMEBOUND))
@@ -25,6 +26,8 @@ struct ReachabilitySettings {
 		timeStep = _rhs.timeStep;
 		fileName = _rhs.fileName;
 		pplDenomimator = _rhs.pplDenomimator;
+		plotDimensions = _rhs.plotDimensions;
+		assert(plotDimensions.size() <= 2);
 		return *this;
 	}
 

@@ -1,0 +1,92 @@
+hybrid reachability
+{
+ state var x,t
+
+ setting
+ {
+  fixed steps 0.005
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,t
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output thermostat
+  max jumps 3
+  print on
+ }
+
+ modes
+ {
+  on
+  {
+   poly ode 1
+   {
+    x' = -0.8*x+24
+    t' = 1
+   }
+
+   inv
+   {
+    x <= 23
+    x >= 17
+    t >= 0
+    t <= 10
+   }
+  }
+
+  off
+  {
+   poly ode 1
+   {
+    x' = -0.8*x
+    t' = 1
+   }
+
+   inv
+   {
+   	x <= 23
+    x >= 17
+    t >= 0
+    t <= 10
+   }
+  }
+ }
+
+ jumps
+ {
+  on -> off
+  guard { x >=22 }
+  parallelotope aggregation {}
+
+  off -> on
+  guard { x <=18 }
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  on
+  {
+   x in [20,20.001]
+   t in [0,0]
+  }
+ }
+
+}
+
+unsafe set
+{
+  on
+  {
+   x in [17,18]
+   t in [0,0.3]
+  }
+
+  off
+  {
+   x in [17,18]
+   t in [0,0.3]
+  }
+}

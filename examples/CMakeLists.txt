@@ -20,6 +20,7 @@ set( EXAMPLES
     example_converter
     example_convexHull
     example_division
+    example_dynamicStrategies
     example_eigen_float_t
     example_facetEnumeration
     example_flowstarParser

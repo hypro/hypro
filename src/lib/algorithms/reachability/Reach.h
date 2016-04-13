@@ -44,6 +44,8 @@ private:
 	std::map<Location<Number>*, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number,Representation>> mWorkingQueue;
 
+	mutable bool mIntersectedBadStates;
+
 public:
 	/**
 	 * @brief Constructor for a basic reachability analysis algorithm for linear hybrid automata.
@@ -70,6 +72,13 @@ public:
 	 * @return The id of the computed flowpipe.
 	 */
 	flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val );
+
+	/**
+	 * @brief Returns whether the bad states were reachable so far.
+	 * @details [long description]
+	 * @return true, if the bad states were reachable.
+	 */
+	bool reachedBadStates() const { return mIntersectedBadStates; }
 
 	/**
 	 * @brief Computes one time step and one discrete step, i.e. increases the depth of the search by one.

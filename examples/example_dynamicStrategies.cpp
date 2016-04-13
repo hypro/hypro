@@ -11,25 +11,26 @@
 
 int main(int argc, char** argv) {
 	typedef cln::cl_RA Number;
+	typedef hypro::Box<Number> boxValuation;
 	typedef hypro::SupportFunction<Number> sfValuation;
 	typedef hypro::HPolytope<Number> hpValuation;
 
-	std::string filename = "../examples/input/bouncing_ball.model";
+	std::string filename = "../examples/input/thermostat.model";
 
 	hypro::parser::flowstarParser<Number> parser;
 	hypro::HybridAutomaton<Number> ha = parser.parseInput(filename);
 
-	hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
-	std::vector<std::vector<sfValuation>> sfFlowpipes = sfReach.computeForwardReachability();
+	hypro::reachability::Reach<Number,boxValuation> boxReach(ha, parser.mSettings);
+	std::vector<std::vector<boxValuation>> boxFlowpipes = boxReach.computeForwardReachability();
+	std::vector<std::vector<sfValuation>> sfFlowpipes;
 
-	//hypro::reachability::Reach<Number,hpValuation> hpReach(ha, parser.mSettings);
-	//std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
+	if(boxReach.reachedBadStates()) {
+		hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
+		sfFlowpipes = sfReach.computeForwardReachability();
+	}
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename(parser.mSettings.fileName);
-	std::vector<unsigned> plottingDimensions = parser.mSettings.plotDimensions;
-	plotter.rSettings().dimensions.first = plottingDimensions.front();
-	plotter.rSettings().dimensions.second = plottingDimensions.back();
 
 	// bad states plotting
 	hypro::HybridAutomaton<Number>::locationSetMap badStateMapping = ha.localBadStates();
@@ -38,19 +39,20 @@ int main(int argc, char** argv) {
 		plotter.setObjectColor(bs, hypro::colors[hypro::red]);
 	}
 
+	// flowpipe plotting
+	for(const auto& flowpipe : boxFlowpipes){
+		for(const auto& segment : flowpipe){
+			unsigned tmp = plotter.addObject(segment.vertices());
+			plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
+		}
+	}
+
 	for(const auto& flowpipe : sfFlowpipes){
 		for(const auto& segment : flowpipe){
 			unsigned tmp = plotter.addObject(segment.vertices());
 			plotter.setObjectColor(tmp, hypro::colors[hypro::green]);
 		}
 	}
-
-	//for(const auto& flowpipe : hpFlowpipes){
-	//	for(const auto& segment : flowpipe){
-	//		unsigned tmp = plotter.addObject(segment.vertices());
-	//		plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
-	//	}
-	//}
 
 	plotter.plot2d();
 }

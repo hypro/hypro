@@ -254,8 +254,8 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 			res.push_back( point );
 		}
 		VPolytopeT<Number,Converter> result = VPolytopeT<Number, Converter>( res );
-		assert(result.contains(*this));
-		assert(result.contains(rhs));
+		//assert(result.contains(*this));
+		//assert(result.contains(rhs));
 
 		return result;
 	}
