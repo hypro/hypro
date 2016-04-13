@@ -88,7 +88,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
     //determines how many directions need to be checked
     unsigned numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
-    assert (directions.cols() == sf.dimension());
+    assert (unsigned(directions.cols()) == sf.dimension());
     //generates an empty Point for the return value
     Point<Number> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
@@ -121,7 +121,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
-            assert(curFace.dimension() == directions.cols());
+            assert(curFace.dimension() == unsigned(directions.cols()));
 
             //recursive call of this function for the current face
             recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, curDim-1));
