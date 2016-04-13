@@ -40,9 +40,9 @@ namespace hypro
     }
     
     template<typename Number, typename Representation>    
-    std::map< unsigned, std::pair< Number, Number > > ReachTreeNode::getGuardSatisfiedFirstLast()
+    std::map< Transition<Number>*, std::vector< unsigned > > ReachTreeNode::getGuardSatisfiedIndices()
     {
-        return mGuardSatisfiedFirstLast;
+        return mGuardSatisfiedIndices;
     }
     
     template<typename Number, typename Representation>    

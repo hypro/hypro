@@ -19,9 +19,9 @@ namespace hypro
             unsigned mDepth;
             Representation mFirst;
             Representation mLast;
-            // Data structure saving for each transition of mLoc the index of the 
-            // first and the last segment that is satisfied
-            std::map< unsigned, std::pair< Number, Number > > mGuardSatisfiedFirstLast;
+            // Data structure saving for each transition of mLoc the indices of the 
+            // segments satisfying the corresponding guard
+            std::map< Transition<Number>*, std::vector< unsigned > > mGuardSatisfiedIndices;
             // Data structure saving a rough overapproximation of the current flowpipe
             // for fixpoint recognition
             flowpipe_t mOverapprox;
@@ -46,7 +46,7 @@ namespace hypro
         
         Representation getLastSegment();
         
-        std::map< unsigned, std::pair< Number, Number > > getGuardSatisfiedFirstLast();
+        std::map< Transition<Number>*, std::vector< unsigned > > getGuardSatisfiedIndices();
         
         flowpipe_t getOverapprox();
         
