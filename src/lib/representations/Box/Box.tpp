@@ -396,7 +396,8 @@ template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	if(!this->empty()) {
 		auto intermediate = Converter::toHPolytope(*this);
-		intermediate.intersectHalfspaces(_mat, _vec);
+		intermediate = intermediate.intersectHalfspaces(_mat, _vec);
+		//std::cout << "Intermediate: " << intermediate << std::endl;
 		return Converter::toBox(intermediate);
 	}
 	return Empty(this->dimension());
