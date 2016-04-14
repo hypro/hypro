@@ -9,3 +9,5 @@
 #include "../datastructures/Point.h"
 #include "../config.h"
 #include "conversion/Converter.h"
+
+enum representation_name { box, zonotope, polytope_h, polytope_v, support_function, taylor_model };
