@@ -3,8 +3,8 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    ReachTreeNode::ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, ReachTreeNode* _parent )
-        : mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mParent( _parent )
+    ReachTreeNode::ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
+        : mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
     {
         mChildren = std::vector< ReachTreeNode* >();    
     }
@@ -26,7 +26,13 @@ namespace hypro
     {
         return mDepth;
     }
-      
+    
+    template<typename Number, typename Representation>
+    representation_name ReachTreeNode::getRep()
+    {   
+        return mRep;  
+    }
+    
     template<typename Number, typename Representation>
     Representation ReachTreeNode::getFirstSegment()
     {
@@ -67,6 +73,12 @@ namespace hypro
     void ReachTreeNode::setTimeStep(Number _time_step)
     {
         mTimeStep = _time_step;
+    }
+    
+    template<typename Number, typename Representation>
+    void ReachTreeNode::setRepresentation( representation_name _rep )
+    {
+        mRep = _rep;
     }
     
     template<typename Number, typename Representation>
