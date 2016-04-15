@@ -352,18 +352,23 @@ std::vector<hypro::vector_t<Number>> ZonotopeT<Number,Converter>::computeZonotop
 }
 
 template<typename Number, typename Converter>
-std::vector<hypro::vector_t<Number>> ZonotopeT<Number,Converter>::vertices() const {
+std::vector<hypro::Point<Number>> ZonotopeT<Number,Converter>::vertices() const {
 	//uniteEqualVectors();
 
 	//removeEmptyGenerators();
 
 	//hypro::vector_t<Number> init = hypro::vector_t<Number>::Zero( this->dimension() );
 
-        hypro::vector_t<Number> init = mCenter;
+    hypro::vector_t<Number> init = mCenter;
 
 	std::vector<hypro::vector_t<Number>> possibleCorners = ZUtility::getCornersRecursive( mGenerators, init );
+	std::vector<hypro::Point<Number>> res;
 
-	return possibleCorners;
+	for(const auto& coord : possibleCorners){
+		res.emplace_back(coord);
+	}
+
+	return res;
 }
 
 template<typename Number, typename Converter>
