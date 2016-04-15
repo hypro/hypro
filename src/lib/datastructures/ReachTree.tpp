@@ -3,9 +3,15 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    ReachTree::ReachTree( ReachTreeNode* _root )
+    ReachTree::ReachTree( ReachTreeNodeSimple* _root )
         : mRoot( _root )
     {
         
+    }
+    
+    template<typename Number, typename Representation>
+    ReachTreeNodeSimple* ReachTree::getRoot()
+    {
+        return mRoot;
     }
 }

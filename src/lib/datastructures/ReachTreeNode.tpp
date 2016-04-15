@@ -3,10 +3,11 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    ReachTreeNode::ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
-        : mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
+    ReachTreeNode::ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
+        : mID( _id ), mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
     {
-        mChildren = std::vector< ReachTreeNode* >();    
+        mChildren = std::vector< ReachTreeNode* >(); 
+        mGuardSatisfiedIndices = guard_map();
     }
     
     template<typename Number, typename Representation>
@@ -19,12 +20,6 @@ namespace hypro
     Number ReachTreeNode::getTimeStep()
     {
         return mTimeStep;
-    }
-       
-    template<typename Number, typename Representation>
-    unsigned ReachTreeNode::getDepth()
-    {
-        return mDepth;
     }
     
     template<typename Number, typename Representation>
@@ -56,12 +51,6 @@ namespace hypro
     {
         return mOverapprox;
     }
-     
-    template<typename Number, typename Representation>
-    std::vector< ReachTreeNode* > ReachTreeNode::getChildren()
-    {
-        return mChildren;
-    }
     
     template<typename Number, typename Representation>    
     ReachTreeNode ReachTreeNode::getParent()
@@ -92,12 +81,6 @@ namespace hypro
     {
         mLast = _last;
     } 
-        
-    template<typename Number, typename Representation>
-    void ReachTreeNode::setGuardSatisfyingSegments( std::map<unsigned,std::pair< Number, Number > > _guard_satisfied_first_last )
-    {
-        mGuardSatisfiedFirstLast = _guard_satisfied_first_last;
-    }
     
     template<typename Number, typename Representation>
     void ReachTreeNode::setOverapproximation( flowpipe_t overapprox )
@@ -106,8 +89,8 @@ namespace hypro
     }
     
     template<typename Number, typename Representation>
-    void ReachTreeNode::addChild( ReachTreeNode* node_appended_on, ReachTreeNode* node_to_be_added )
+    void ReachTreeNode::addGuardSatisfyingSegment( Transition<Number>* _trans, representation_name _rep, unsigned _index )
     {
-        node_appended_on->mChildren.push_back( node_to_be_added );
+        mGuardSatisfiedIndices[ std::pair( _trans, _rep ) ] = _index;       
     }
 }

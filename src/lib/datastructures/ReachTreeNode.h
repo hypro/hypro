@@ -12,38 +12,36 @@ namespace hypro
     template <typename Representation>
     using flowpipe_t = std::vector<Representation>;
     
+    template <typename Number>
+    using guard_map = std::map< std::pair< Transition< Number >*, representation_name >, std::vector< unsigned > >;
+    
     template <typename Number, typename Representation>
-    class ReachTreeNode
+    class ReachTreeNode : ReachTreeNodeSimple
     {
         private:
             Location<Number>* mLoc;
             Number mTimeStep;
-            unsigned mDepth;
             representation_name mRep;
             Representation mFirst;
             Representation mLast;
             // Data structure saving for each transition of mLoc the indices of the 
             // segments satisfying the corresponding guard
-            std::map< Transition<Number>*, std::vector< unsigned > > mGuardSatisfiedIndices;
+            guard_map mGuardSatisfiedIndices;
             // Data structure saving a rough overapproximation of the current flowpipe
             // for fixpoint recognition
             flowpipe_t mOverapprox;
-            std::vector< ReachTreeNode* > mChildren;
             ReachTreeNode* mParent;
-            // TO-DO: add unique ID for each node
         public:
         /**
 	 * @brief Constructor 
 	 *
 	 * @param TO-DO
 	 */
-	ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
+	ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
         
         Location<Number>* getLocation();
         
         Number getTimeStep();
-        
-        unsigned getDepth();
         
         representation_name getRep();
         
@@ -51,11 +49,9 @@ namespace hypro
         
         Representation getLastSegment();
         
-        std::map< Transition<Number>*, std::vector< unsigned > > getGuardSatisfiedIndices();
+        guard_map getGuardSatisfiedIndices();
         
         flowpipe_t getOverapprox();
-        
-        std::vector< ReachTreeNode* > getChildren();
         
         ReachTreeNode getParent();
         
@@ -65,13 +61,11 @@ namespace hypro
         
         void setFirstSegment( Representation _first );
         
-        void setLastSegment( Representation _last );
-        
-        void setGuardSatisfyingSegments( std::map< unsigned, std::pair< Number, Number > > _guard_satisfied_first_last );
+        void setLastSegment( Representation _last );  
         
         void setOverapproximation( flowpipe_t& overapprox );
         
-        void addChild( ReachTreeNode* node_appended_on, ReachTreeNode* node_to_be_added );
+        void addGuardSatisfyingSegment( Transition<Number>* _trans, representation_name _rep, unsigned _index );
             
     };
 }    
