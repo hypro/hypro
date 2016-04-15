@@ -160,10 +160,27 @@ namespace reachability {
 					// Collect potential new initial states from discrete behaviour.
 					if(mCurrentLevel < mSettings.jumpDepth) {
 						Representation guardSatisfyingSet;
+						bool fireTimeTriggeredTransition = false;
 						for( auto transition : _loc->transitions() ){
-							if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
+							// handle time-triggered transitions
+							if(transition->isTimeTriggered()){
+								if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
+									if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
+										nextInitialSets.emplace_back(transition, guardSatisfyingSet);
+										fireTimeTriggeredTransition = true;
+									}
+								}
+							} // handle normal transitions
+							else if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
 								nextInitialSets.emplace_back(transition, guardSatisfyingSet);
 							}
+						}
+						if(fireTimeTriggeredTransition){
+							// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
+							#ifdef REACH_DEBUG
+							std::cout << "Fired time triggered transition." << std::endl;
+							#endif
+							break;
 						}
 					}
 					// update currentSegment

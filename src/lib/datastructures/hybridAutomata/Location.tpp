@@ -4,13 +4,14 @@ namespace hypro {
 
 template <typename Number>
 Location<Number>::Location( unsigned _id )
-	: mFlow(), mExternalInput(), mTransitions(), mInvariant(), mId( _id ) {
+	: mFlow(), mExternalInput(), mDiscreteAssignment(), mTransitions(), mInvariant(), mId( _id ) {
 }
 
 template <typename Number>
 Location<Number>::Location( unsigned _id, const Location &_loc )
 	: mFlow( _loc.activityMat() )
 	, mExternalInput( _loc.externalInput() )
+	, mDiscreteAssignment()
 	, mTransitions( _loc.transitions() )
 	, mInvariant( _loc.invariant() )
 	, mId( _id ) {
@@ -18,7 +19,7 @@ Location<Number>::Location( unsigned _id, const Location &_loc )
 
 template<typename Number>
 Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat )
-	: mFlow(_mat)
+	: mFlow( _mat )
 	, mId( _id )
 {}
 
@@ -27,6 +28,7 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
 							const transitionSet& _trans, const Location<Number>::Invariant& _inv )
 	: mFlow( _mat )
 	, mExternalInput()
+	, mDiscreteAssignment()
 	, mTransitions( _trans )
 	, mInvariant( _inv )
 	, mId( _id ) {
@@ -38,6 +40,7 @@ Location<Number>::Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
 							const hypro::matrix_t<Number>& _extInputMat )
 	: mFlow( _mat )
 	, mExternalInput( _extInputMat )
+	, mDiscreteAssignment()
 	, mTransitions( _trans )
 	, mInvariant( _inv )
 	, mId( _id ) {

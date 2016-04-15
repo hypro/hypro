@@ -335,13 +335,15 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		case SF_TYPE::LINTRAFO: {
 			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(mLinearTrafoParameters->a) << std::endl;
 			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * mLinearTrafoParameters->a );
-			unsigned directionCnt = 0;
-			for(auto& entry : res){
-				vector_t<Number> currentDir = _directions.row(directionCnt);
-				entry.optimumValue = mLinearTrafoParameters->a * entry.optimumValue + mLinearTrafoParameters->b;
-				// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
-				entry.supportValue = entry.optimumValue.dot(currentDir);
-				++directionCnt;
+			if(res.begin()->errorCode != SOLUTION::INFEAS) {
+				unsigned directionCnt = 0;
+				for(auto& entry : res){
+					vector_t<Number> currentDir = _directions.row(directionCnt);
+					entry.optimumValue = mLinearTrafoParameters->a * entry.optimumValue + mLinearTrafoParameters->b;
+					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
+					entry.supportValue = entry.optimumValue.dot(currentDir);
+					++directionCnt;
+				}
 			}
 			return res;
 		}

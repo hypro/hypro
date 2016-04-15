@@ -142,17 +142,13 @@ namespace hypro{
     void SupportFunctionT<Number,Converter>::removeRedundancy() {
     	std::vector<vector_t<Number>> directionVector = computeTemplate<Number>(unsigned(this->dimension()), unsigned(8));
     	matrix_t<Number> directions = matrix_t<Number>(directionVector.size(), this->dimension());
-		unsigned i = 0;
-    	for(const auto& row : directionVector) {
+    	for(unsigned i = 0; i < directionVector.size(); ++i) {
     		directions.row(i) = directionVector.at(i);
-    		++i;
     	}
     	std::vector<EvaluationResult<Number>> res = this->multiEvaluate(directions);
     	vector_t<Number> distances = vector_t<Number>::Zero(directions.rows());
-    	i = 0;
-    	for(const auto& singleResult : res) {
-    		distances(i) = singleResult.supportValue;
-    		++i;
+    	for(unsigned i = 0; i < res.size(); ++i) {
+    		distances(i) = res.at(i).supportValue;
     	}
     	*this = SupportFunctionT<Number,Converter>(directions, distances);
     }

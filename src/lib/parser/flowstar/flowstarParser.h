@@ -38,14 +38,15 @@ template <typename Number>
 struct flowstarParser
     : qi::grammar<Iterator, Skipper>
 {
-	variableParser<Iterator> mVariables;
+	variableParser<Iterator> mVariableParser;
 	modeParser<Iterator, Number> mModeParser;
 	transitionParser<Iterator, Number> mTransitionParser;
 	settingsParser<Iterator, Number> mSettingsParser;
 	constraintParser<Iterator> mConstraintParser;
 	px::function<ErrorHandler> errorHandler;
 
-	symbol_table mSymbols;
+	symbol_table mVariableSymbolTable;
+	symbol_table mDiscreteVariableSymbolTable;
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
@@ -53,6 +54,7 @@ struct flowstarParser
 	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
+	std::vector<unsigned> mDiscreteVariableIds;
 	ReachabilitySettings<Number> mSettings;
 	unsigned mDimension;
 
@@ -65,17 +67,18 @@ struct flowstarParser
 		start =  ( qi::lexeme["continuous reachability"] > qi::lit('{') > continuousStart > qi::lit('}') > -badStates > qi::eoi )
 				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
 
-		continuousStart = 	stateVars > -mSettingsParser(px::ref(mSymbols));
-		hybridStart = 		stateVars > settings >
-							modes[px::bind( &flowstarParser<Number>::insertModes, px::ref(*this), qi::_1 )] >
-							-transitions[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)] >
-							(-init)[px::bind( &flowstarParser<Number>::insertInitialState, px::ref(*this), qi::_1 )];
-		stateVars = 		qi::lexeme["state var"] > mVariables[px::bind( &flowstarParser<Number>::insertSymbols, px::ref(*this), qi::_1)];
-		settings = 			qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mSymbols))[px::bind( &flowstarParser<Number>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
-		modes = 			qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit("}");
-		transitions = 		mTransitionParser(px::ref(mModes), px::ref(mSymbols), px::ref(mDimension))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
-		init = 				qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
-		badStates = 		qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mSymbols), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
+		continuousStart = 		continuousVariables > -discreteVariables > -mSettingsParser(px::ref(mVariableSymbolTable));
+		hybridStart = 			continuousVariables > -discreteVariables > settings >
+								modes[px::bind( &flowstarParser<Number>::insertModes, px::ref(*this), qi::_1 )] >
+								-transitions[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)] >
+								(-init)[px::bind( &flowstarParser<Number>::insertInitialState, px::ref(*this), qi::_1 )];
+		discreteVariables = 	qi::lexeme["discrete var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertDiscreteSymbols, px::ref(*this), qi::_1)];
+		continuousVariables = 	qi::lexeme["state var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertContinuousSymbols, px::ref(*this), qi::_1)];
+		settings = 				qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mVariableSymbolTable))[px::bind( &flowstarParser<Number>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
+		modes = 				qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit("}");
+		transitions = 			mTransitionParser(px::ref(mModes), px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimension))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
+		init = 					qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
+		badStates = 			qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
 
 		qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 	}
@@ -83,20 +86,30 @@ struct flowstarParser
 	qi::rule<Iterator, Skipper> start;
 	qi::rule<Iterator, Skipper> continuousStart;
 	qi::rule<Iterator, Skipper> hybridStart;
-	qi::rule<Iterator, Skipper> stateVars;
+	qi::rule<Iterator, Skipper> continuousVariables;
+	qi::rule<Iterator, Skipper> discreteVariables;
 	qi::rule<Iterator, Skipper> settings;
 	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> init;
 	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> badStates;
 	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
 	qi::rule<Iterator, std::set<Transition<Number>*>(), Skipper> transitions;
 
-	void insertSymbols(const std::vector<std::string>& _in) {
+	void insertContinuousSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
 			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
-			mSymbols.add(varName, mVariablePool.id(tmp));
+			mVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimension;
+		}
+	}
+
+	void insertDiscreteSymbols(const std::vector<std::string>& _in) {
+		for(const auto& varName : _in ) {
+			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
+			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			mDiscreteVariableSymbolTable.add(varName, mVariablePool.id(tmp));
+			mDiscreteVariableIds.push_back(mVariablePool.id(tmp));
 		}
 	}
 

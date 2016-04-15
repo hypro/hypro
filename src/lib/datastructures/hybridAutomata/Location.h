@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../../typedefs.h"
+#include <carl/interval/Interval.h>
 #include <iostream>
 
 namespace hypro {
@@ -43,8 +44,9 @@ class Location {
 	/**
 	 * Member
 	 */
-	hypro::matrix_t<Number> mFlow;
+	mutable hypro::matrix_t<Number> mFlow;
 	hypro::matrix_t<Number> mExternalInput;
+	std::vector<std::pair<unsigned, Number>> mDiscreteAssignment;
 	transitionSet mTransitions;
 	Invariant mInvariant;
 	unsigned mId;
@@ -61,6 +63,7 @@ class Location {
 	 */
 	const hypro::matrix_t<Number>& flow() const;
 	const Invariant& invariant() const;
+	const Invariant& discreteInvariant() const;
 	const transitionSet& transitions() const;
 	const hypro::matrix_t<Number>& externalInput() const;
 	unsigned id() const { return mId; }
