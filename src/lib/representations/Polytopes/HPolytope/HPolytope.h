@@ -46,7 +46,7 @@ public:
 	unsigned mDimension;
 
 	// State flags
-	mutable State mEmpty;
+	mutable TRIBOOL mEmpty;
 	mutable bool mNonRedundant;
 
 

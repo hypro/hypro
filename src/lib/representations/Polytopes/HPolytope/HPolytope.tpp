@@ -2,7 +2,7 @@
 namespace hypro {
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT()
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(true) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 }
 
 template <typename Number, typename Converter>
@@ -12,7 +12,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& o
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(false) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -24,7 +24,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), b( i ) ) );
@@ -34,7 +34,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(State::NSET), mNonRedundant(false) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), Number( 0 ) ) );
 	}
@@ -42,7 +42,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(State::NSET), mNonRedundant(false) {
+	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
 		// degenerate cases
 		unsigned size = points.size();
@@ -98,13 +98,13 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
 	std::cout << __func__ << ": State: " << mEmpty << std::endl;
-	if(mEmpty == State::TRUE)
+	if(mEmpty == TRIBOOL::TRUE)
 		return true;
-	if(mEmpty == State::FALSE)
+	if(mEmpty == TRIBOOL::FALSE)
 		return false;
 
 	if(mHPlanes.empty()){
-		mEmpty = State::FALSE;
+		mEmpty = TRIBOOL::FALSE;
 		return false;
 	}
 
@@ -115,7 +115,7 @@ bool HPolytopeT<Number, Converter>::empty() const {
 	opt.setVector(this->vector());
 
 	bool res = !opt.checkConsistency();
-	mEmpty = (res == true ? State::TRUE : State::FALSE);
+	mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
 	return res;
 }
 
@@ -127,7 +127,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
 	v.emplace_back(a);
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter> res(v);
-	res.mEmpty=State::TRUE;
+	res.mEmpty=TRIBOOL::TRUE;
 	res.mNonRedundant=true;
 	return res;
 }
@@ -336,7 +336,7 @@ void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
 		mHPlanes.push_back( plane );
-		mEmpty = State::FALSE;
+		mEmpty = TRIBOOL::FALSE;
 		mNonRedundant = true;
 	} else {
 		bool found = false;
@@ -348,7 +348,7 @@ void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
 		}
 		if(!found){
 			mHPlanes.push_back( plane );
-			mEmpty = State::NSET;
+			mEmpty = TRIBOOL::NSET;
 			mNonRedundant = false;
 		}
 	}
@@ -372,7 +372,7 @@ template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
-	mEmpty = State::NSET;
+	mEmpty = TRIBOOL::NSET;
 }
 
 template <typename Number, typename Converter>
