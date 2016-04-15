@@ -8,4 +8,10 @@ namespace hypro
     {
         
     }
+    
+    template<typename Number, typename Representation>
+    ReachTreeNodeSimple* ReachTree::getRoot()
+    {
+        return mRoot;
+    }
 }

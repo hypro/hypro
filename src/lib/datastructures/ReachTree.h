@@ -5,7 +5,7 @@
  * Created on April 8, 2016, 12:04 PM
  */
 
-#include "ReachTreeNode.h"
+#include "ReachTreeNodeSimple.h"
 
 namespace hypro
 {    
@@ -17,6 +17,7 @@ namespace hypro
             
         public:
             ReachTree( ReachTreeNodeSimple* _root );
+            ReachTreeNodeSimple* getRoot();
     };
 }    
 
