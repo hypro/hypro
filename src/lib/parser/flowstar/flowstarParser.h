@@ -75,7 +75,7 @@ struct flowstarParser
 		discreteVariables = 	qi::lexeme["discrete var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertDiscreteSymbols, px::ref(*this), qi::_1)];
 		continuousVariables = 	qi::lexeme["state var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertContinuousSymbols, px::ref(*this), qi::_1)];
 		settings = 				qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mVariableSymbolTable))[px::bind( &flowstarParser<Number>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
-		modes = 				qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit("}");
+		modes = 				qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimension))) > qi::lit("}");
 		transitions = 			mTransitionParser(px::ref(mModes), px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimension))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
 		init = 					qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
 		badStates = 			qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');

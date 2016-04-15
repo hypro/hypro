@@ -26,6 +26,7 @@ class Location {
 	struct Invariant {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
+		std::map<carl::Variable, carl::Interval<Number>> discreteInvariant;
 	};
 
   protected:
@@ -46,7 +47,6 @@ class Location {
 	 */
 	mutable hypro::matrix_t<Number> mFlow;
 	hypro::matrix_t<Number> mExternalInput;
-	std::vector<std::pair<unsigned, Number>> mDiscreteAssignment;
 	transitionSet mTransitions;
 	Invariant mInvariant;
 	unsigned mId;
@@ -63,7 +63,6 @@ class Location {
 	 */
 	const hypro::matrix_t<Number>& flow() const;
 	const Invariant& invariant() const;
-	const Invariant& discreteInvariant() const;
 	const transitionSet& transitions() const;
 	const hypro::matrix_t<Number>& externalInput() const;
 	unsigned id() const { return mId; }
