@@ -6,7 +6,6 @@
  */
 
 #include "../representations/GeometricObject.h"
-#include "ReachTreeNodeSimple.h"
 
 namespace hypro
 {
