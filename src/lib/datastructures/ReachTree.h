@@ -13,10 +13,10 @@ namespace hypro
     class ReachTree
     {
         private:
-            ReachTreeNode* mRoot;
+            ReachTreeNodeSimple* mRoot;
             
         public:
-            ReachTree( ReachTreeNode* _root );
+            ReachTree( ReachTreeNodeSimple* _root );
     };
 }    
 

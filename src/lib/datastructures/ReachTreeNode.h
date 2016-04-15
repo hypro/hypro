@@ -6,6 +6,7 @@
  */
 
 #include "../representations/GeometricObject.h"
+#include "ReachTreeNodeSimple.h"
 
 namespace hypro
 {
@@ -13,12 +14,11 @@ namespace hypro
     using flowpipe_t = std::vector<Representation>;
     
     template <typename Number, typename Representation>
-    class ReachTreeNode
+    class ReachTreeNode : ReachTreeNodeSimple
     {
         private:
             Location<Number>* mLoc;
             Number mTimeStep;
-            unsigned mDepth;
             representation_name mRep;
             Representation mFirst;
             Representation mLast;
@@ -28,7 +28,6 @@ namespace hypro
             // Data structure saving a rough overapproximation of the current flowpipe
             // for fixpoint recognition
             flowpipe_t mOverapprox;
-            std::vector< ReachTreeNode* > mChildren;
             ReachTreeNode* mParent;
             // TO-DO: add unique ID for each node
         public:
@@ -37,13 +36,11 @@ namespace hypro
 	 *
 	 * @param TO-DO
 	 */
-	ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
+	ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
         
         Location<Number>* getLocation();
         
         Number getTimeStep();
-        
-        unsigned getDepth();
         
         representation_name getRep();
         
@@ -54,8 +51,6 @@ namespace hypro
         std::map< Transition<Number>*, std::vector< unsigned > > getGuardSatisfiedIndices();
         
         flowpipe_t getOverapprox();
-        
-        std::vector< ReachTreeNode* > getChildren();
         
         ReachTreeNode getParent();
         
@@ -70,8 +65,6 @@ namespace hypro
         void setGuardSatisfyingSegments( std::map< unsigned, std::pair< Number, Number > > _guard_satisfied_first_last );
         
         void setOverapproximation( flowpipe_t& overapprox );
-        
-        void addChild( ReachTreeNode* node_appended_on, ReachTreeNode* node_to_be_added );
             
     };
 }    

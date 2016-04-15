@@ -3,8 +3,8 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    ReachTreeNode::ReachTreeNode( Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
-        : mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
+    ReachTreeNode::ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
+        : mID( _id ), mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
     {
         mChildren = std::vector< ReachTreeNode* >();    
     }
@@ -19,12 +19,6 @@ namespace hypro
     Number ReachTreeNode::getTimeStep()
     {
         return mTimeStep;
-    }
-       
-    template<typename Number, typename Representation>
-    unsigned ReachTreeNode::getDepth()
-    {
-        return mDepth;
     }
     
     template<typename Number, typename Representation>
@@ -55,12 +49,6 @@ namespace hypro
     flowpipe_t ReachTreeNode::getOverapprox()
     {
         return mOverapprox;
-    }
-     
-    template<typename Number, typename Representation>
-    std::vector< ReachTreeNode* > ReachTreeNode::getChildren()
-    {
-        return mChildren;
     }
     
     template<typename Number, typename Representation>    
