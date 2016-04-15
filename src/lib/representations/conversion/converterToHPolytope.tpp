@@ -121,16 +121,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
     //computes vertices from source object
-    typename std::vector<vector_t<Number>> vertices = _source.vertices();
+    typename std::vector<Point<Number>> vertices = _source.vertices();
     //only continue if any actual vertices were received at all
     assert( !vertices.empty() );
-    std::vector<Point<Number>> points;
 
-    for(const auto& vertex : vertices){
-        points.emplace_back(vertex);
-    }
-
-    return HPolytope(std::move(points));
+    return HPolytope(std::move(vertices));
 }
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
