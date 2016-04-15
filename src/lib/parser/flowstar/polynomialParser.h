@@ -146,7 +146,7 @@ namespace parser {
 	};
 
 	template<typename Iterator>
-	struct resetParser : qi::grammar<Iterator, std::pair<unsigned, vector_t<double>>(symbol_table const&, unsigned const&)>
+	struct resetParser : qi::grammar<Iterator, std::pair<unsigned, matrix_t<double>>(symbol_table const&, unsigned const&)>
 	{
 		polynomialParser<Iterator> mPolynomial;
 		px::function<ErrorHandler> errorHandler;
@@ -161,10 +161,38 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::pair<unsigned, vector_t<double>>(symbol_table const&, unsigned const&)> start;
+		qi::rule<Iterator, std::pair<unsigned, matrix_t<double>>(symbol_table const&, unsigned const&)> start;
 
-		std::pair<unsigned, vector_t<double>> createRow( const unsigned& _d, const vector_t<double>& _row ) {
-			return std::make_pair(_d, _row);
+		std::pair<unsigned, matrix_t<double>> createRow( const unsigned& _d, const vector_t<double>& _row ) {
+			return std::make_pair(_d, _row.transpose());
+		}
+	};
+
+	template<typename Iterator, typename Number>
+	struct discreteResetParser : qi::grammar<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)>
+	{
+		px::function<ErrorHandler> errorHandler;
+
+		discreteResetParser() : discreteResetParser::base_type( start, "discreteResetParser" ) {
+			using qi::on_error;
+	        using qi::fail;
+
+			start = ( interval(qi::_r1) | assignment(qi::_r1) );
+			assignment = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lit(":=") > qi::double_)[qi::_val = px::bind( &discreteResetParser<Iterator,Number>::createPair, px::ref(*this), qi::_1, qi::_2, qi::_2 )]];
+			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &discreteResetParser<Iterator,Number>::createPair, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
+			start.name("reset");
+			assignment.name("reset assignment");
+			interval.name("reset interval");
+
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+		}
+
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> start;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> interval;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> assignment;
+
+		std::pair<unsigned, carl::Interval<Number>> createPair( const unsigned& _d, const double& _lower, const double& _upper ) {
+			return std::make_pair(_d, carl::Interval<Number>(carl::convert<double,Number>(_lower), carl::convert<double,Number>(_upper)));
 		}
 	};
 

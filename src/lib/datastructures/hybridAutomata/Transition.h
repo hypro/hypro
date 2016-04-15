@@ -20,6 +20,7 @@ class Transition {
 	struct Guard {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
+		std::map<carl::Variable, carl::Interval<Number>> discreteGuards;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
 			_ostr << _g.mat << " + " << std::endl << _g.vec;
