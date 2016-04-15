@@ -1,4 +1,5 @@
 #include "NodeManager.h"
+#include "ReachTreeNode.h"
 
 namespace hypro
 {   
@@ -24,8 +25,16 @@ namespace hypro
     }
     
     template<typename Number, typename Representation>
-    void NodeManager::modifyNode(std::vector<unsigned> _id)
+    void NodeManager::addGuardIndices( std::vector< unsigned > _id, Transition<Number>* _trans, representation_name _rep, unsigned _index )
     {
-        // TO-DO        
+        ReachTreeNode* aim = getNode( _id );
+        aim->addGuardSatisfyingSegment( _trans, _rep, _index );
+    }
+    
+    template<typename Number, typename Representation>
+    void NodeManager::addOverapprox( std::vector<unsigned> _id, flowpipe_t _overapprox )
+    {
+        ReachTreeNode* aim = getNode( _id );
+        aim->setOverapproximation( _overapprox );
     }
 }    

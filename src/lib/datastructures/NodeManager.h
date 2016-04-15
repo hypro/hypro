@@ -18,7 +18,9 @@ namespace hypro
         public:
             NodeManager( ReachTree _tree );
             ReachTreeNode* getNode( std::vector< unsigned > _id );
-            void modifyNode( std::vector< unsigned > _id );
+            // TO-DO createNode( ... );
+            void addGuardIndices( std::vector< unsigned > _id, Transition<Number>* _trans, representation_name _rep, unsigned _index );
+            void addOverapprox( std::vector< unsigned > _id, flowpipe_t _overapprox  );
     };
 }  
 
