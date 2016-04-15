@@ -6,25 +6,30 @@ namespace hypro {
 namespace parser {
 
 	template<typename Iterator, typename Number>
-	struct transitionParser : qi::grammar<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, unsigned const&), Skipper>
+	struct transitionParser : qi::grammar<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper>
 	{
 		LocationManager<Number>& mLocationManager = LocationManager<Number>::getInstance();
 		constraintParser<Iterator> constraint;
+		discreteConstraintParser<Iterator, Number> discreteConstraint;
 		resetParser<Iterator> variableReset;
 		aggregation_ mAggregation;
 		px::function<ErrorHandler> errorHandler;
+		std::vector<std::pair<unsigned, carl::Interval<Number>>> mDiscreteConstraints;
+		std::vector<matrix_t<Number>> mContinuousConstraints;
 
 		transitionParser() : transitionParser::base_type( start ) {
 			using qi::on_error;
 	        using qi::fail;
 
-			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}');
-			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3) > -reset(qi::_r2, qi::_r3) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_5, qi::_r3)];
+			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3, qi::_r4)) > qi::lit('}');
+			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3, qi::_r4) > -reset(qi::_r2, qi::_r4) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_4, qi::_r4)];
 			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
 							qi::skip(qi::blank)[qi::lexeme["end"] > qi::lazy(qi::_r1)])[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
-			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*constraint(qi::_r1, qi::_r2))[ qi::_val = px::bind( &transitionParser<Iterator,Number>::createGuardMatrix, px::ref(*this), qi::_1, qi::_r2 )] > *qi::blank > qi::lit('}');
+			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*(continuousGuard(qi::_r1, qi::_r3) | discreteGuard(qi::_r2))) > *qi::blank > qi::lit('}');
+			continuousGuard = constraint(qi::_r1,qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addContinuousGuard, px::ref(*this), qi::_1)];
+			discreteGuard = discreteConstraint(qi::_r1)[px::bind(&transitionParser<Iterator,Number>::addDiscreteGuard, px::ref(*this), qi::_1)];
 			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (*variableReset(qi::_r1, qi::_r2))[ qi::_val = px::bind( &transitionParser<Iterator,Number>::createMatrix, px::ref(*this), qi::_1, qi::_r2 )] > *qi::blank > qi::lit('}');
 			agg = qi::skip(qi::blank)[mAggregation > qi::lexeme["aggregation"] > -(qi::lit('{') > qi::lit('}'))];
 			timed = qi::skip(qi::blank)[qi::lexeme["time"] > qi::double_];
@@ -41,12 +46,14 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, unsigned const&), Skipper> start;
-		qi::rule<Iterator, Transition<Number>*(symbol_table const&, symbol_table const&, unsigned const&), Skipper> jump;
+		qi::rule<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper> start;
+		qi::rule<Iterator, Transition<Number>*(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper> jump;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> edge;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> simpleEdge;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&)> twoLineEdge;
-		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> guard;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&)> guard;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> continuousGuard;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&)> discreteGuard;
 		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> reset;
 		qi::rule<Iterator, Aggregation()> agg;
 		qi::rule<Iterator, double()> timed;
@@ -56,17 +63,34 @@ namespace parser {
 			return std::make_pair(start, target);
 		}
 
-		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _guard, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim) {
+		void addContinuousGuard(const std::vector<matrix_t<double>>& _constraints) {
+			for(const auto& matrix : _constraints){
+				mContinuousConstraints.push_back(convert<double,Number>(matrix));
+			}
+		}
+
+		void addDiscreteGuard(const std::pair<unsigned, carl::Interval<Number>>& _intervalPair) {
+			mDiscreteConstraints.push_back(_intervalPair);
+		}
+
+		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<matrix_t<Number>>& _reset, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim) {
 			Transition<Number>* res = new Transition<Number>(
 									mLocationManager.location(_transition.first),
 									mLocationManager.location(_transition.second));
 
 			// setting guard
-			if(_guard) {
+			if(mContinuousConstraints.size() + mDiscreteConstraints.size() > 0) {
 				typename Transition<Number>::Guard g;
-				matrix_t<Number> matr = matrix_t<Number>(_guard->rows(), _guard->cols()-1);
-				matr << _guard->block(0,0,_guard->rows(), _guard->cols()-1);
-				vector_t<Number> vec = -_guard->col(_guard->cols()-1);
+				matrix_t<Number> matr = matrix_t<Number>(mContinuousConstraints.size(), _dim);
+				vector_t<Number> vec = vector_t<Number>(mContinuousConstraints.size());
+				unsigned rowCnt = 0;
+				for(const auto& row : mContinuousConstraints){
+					assert(row.rows() == 1);
+					matr.row(rowCnt) = row.block(0,0,1,row.cols()-1);
+					vec(rowCnt) = -row(0,_dim);
+					++rowCnt;
+				}
+				// TODO: handle discrete guards.
 				g.mat = matr;
 				g.vec = vec;
 				res->setGuard(g);
@@ -97,19 +121,20 @@ namespace parser {
 
 			// update source location
 			mLocationManager.location(_transition.first)->addTransition(res);
+			//std::cout << "Parsed Transition: " << *res << std::endl;
 			return res;
 		}
 
-		matrix_t<Number> createGuardMatrix(const std::vector<std::vector<matrix_t<double>>>& _constraints, unsigned _dim) {
-			matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
-			unsigned rowCnt = 0;
-			for(const auto constraintVec : _constraints){
-				assert(constraintVec.size() == 1);
-				res.row(rowCnt) = constraintVec.begin()->row(0);
-				++rowCnt;
-			}
-			return convert<double,Number>(res);
-		}
+		//matrix_t<Number> createGuardMatrix(const std::vector<boost::variant<std::vector<matrix_t<double>>, std::pair<unsigned, carl::Interval<Number>>>& _constraints, unsigned _dim) {
+		//	matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
+		//	unsigned rowCnt = 0;
+		//	for(const auto constraintVec : _constraints){
+		//		assert(constraintVec.size() == 1);
+		//		res.row(rowCnt) = constraintVec.begin()->row(0);
+		//		++rowCnt;
+		//	}
+		//	return convert<double,Number>(res);
+		//}
 
 		matrix_t<Number> createMatrix(const std::vector<std::pair<unsigned, vector_t<double>>>& _assignments, unsigned _dim) {
 			matrix_t<double> res = matrix_t<double>::Identity(_dim, _dim+1);
@@ -154,11 +179,15 @@ namespace parser {
 
 		matrix_t<Number> createFlow( const std::vector<std::pair<unsigned, vector_t<double>>>& _in ) {
 			assert(!_in.empty());
-			// matrix template with additional row of zeroes for constants
-			matrix_t<double> res = matrix_t<double>::Zero(_in.begin()->second.size(), _in.begin()->second.size());
+			// matrix template with additional row of zeroes for constants, no need for rows for discrete variables, as their flow is 0
+			unsigned rowCnt = _in.begin()->second.rows();
+			std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
+			assert(_in.size() == rowCnt-1);
+			matrix_t<double> res = matrix_t<double>::Zero(rowCnt, rowCnt);
 			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
  			for(const auto& pair : _in) {
  				assert(pair.second.rows() == res.cols());
+ 				assert(pair.first < res.rows());
  				//std::cout << "Row " << pair.first << " = " << pair.second.transpose() << std::endl;
 				res.row(pair.first) << pair.second.transpose();
 			}
@@ -178,7 +207,7 @@ namespace parser {
 		}
 
 		std::pair<std::string, Location<Number>*> createLocation(const std::string& _name, const matrix_t<Number>& _flow, const boost::optional<matrix_t<Number>>& _invariant) {
-			assert(_flow.rows() == _flow.cols());
+			// assert(_flow.rows() == _flow.cols()); // TODO: fix this assertion!
 			if(_invariant) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
 				matrix_t<Number> invariantMat = matrix_t<Number>(_invariant->rows(), _invariant->cols()-1);

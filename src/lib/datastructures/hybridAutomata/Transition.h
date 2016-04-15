@@ -45,6 +45,7 @@ class Transition {
 	Location<Number>* mTarget;
 	Guard mGuard;
 	Reset mReset;
+	std::vector<unsigned> mDiscreteDimensions;
 	Aggregation mAggregationSetting;
 	bool mTimeTriggered;
 	Number mTriggerTime;
@@ -104,7 +105,7 @@ class Transition {
 	const Guard& guard() const { return mGuard; }
 	const Reset& reset() const { return mReset; }
 	const Aggregation& aggregation() const { return mAggregationSetting; }
-	bool timeTriggered() const { return mTimeTriggered; }
+	bool isTimeTriggered() const { return mTimeTriggered; }
 	Number triggerTime() const { return mTriggerTime; }
 
 	void setSource( Location<Number>* _source ) { mSource = _source; }

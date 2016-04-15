@@ -215,8 +215,8 @@ namespace parser {
 					res.emplace_back(resLower);
 					res.emplace_back(resUpper);
 
-					std::cout << "Created row from =: " << resLower << std::endl;
-					std::cout << "Created row from =: " << resUpper << std::endl;
+					//std::cout << "Created row from =: " << resLower << std::endl;
+					//std::cout << "Created row from =: " << resUpper << std::endl;
 					return res;
 				}
 				case RELATION::GEQ: {
@@ -224,14 +224,14 @@ namespace parser {
 					//std::cout << "GEQ: lhs:" << _lhs << " >= " << _rhs << std::endl;
 					resRow.row(0) = -1*(_lhs)+_rhs;
 					res.emplace_back(resRow);
-					std::cout << "Created row from >=: " << resRow << std::endl;
+					//std::cout << "Created row from >=: " << resRow << std::endl;
 					return res;
 				}
 				case RELATION::LEQ: {
 					matrix_t<double> resRow= matrix_t<double>(1, _lhs.rows());
 					resRow.row(0) = _lhs-_rhs;
 					res.emplace_back(resRow);
-					std::cout << "Created row from <=: " << resRow << std::endl;
+					//std::cout << "Created row from <=: " << resRow << std::endl;
 					return res;
 				}
 				default:{
@@ -251,8 +251,85 @@ namespace parser {
 			resUpper(0,_dimension) = -_upper;
 			res.emplace_back(resLower);
 			res.emplace_back(resUpper);
-			std::cout << "Created row from interval: " << resLower << std::endl;
-			std::cout << "Created row from interval: " << resUpper << std::endl;
+			//std::cout << "Created row from interval: " << resLower << std::endl;
+			//std::cout << "Created row from interval: " << resUpper << std::endl;
+			return res;
+		}
+	};
+
+	template<typename Iterator, typename Number>
+	struct discreteConstraintParser : qi::grammar<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)>
+	{
+		polynomialParser<Iterator> mPolynomial;
+		px::function<ErrorHandler> errorHandler;
+
+		discreteConstraintParser() : discreteConstraintParser::base_type( start, "discreteConstraintParser" ) {
+			using qi::on_error;
+	        using qi::fail;
+
+			start = qi::skip(qi::blank)[(interval(qi::_r1) | inequation(qi::_r1))];
+			inequation = qi::skip(qi::blank)[( lhsVar(qi::_r1) | rhsVar(qi::_r1) )];
+			lhsVar = qi::skip(qi::blank)[ ((qi::lazy(qi::_r1)) > relationSymbol > qi::double_) [qi::_val = px::bind( &discreteConstraintParser<Iterator, Number>::createInterval, px::ref(*this), qi::_1, qi::_2, qi::_3, false )]];
+			rhsVar = qi::skip(qi::blank)[ (qi::double_ > relationSymbol > (qi::lazy(qi::_r1))) [qi::_val = px::bind( &discreteConstraintParser<Iterator, Number>::createInterval, px::ref(*this), qi::_3, qi::_2, qi::_1, true )]];
+			relationSymbol = (qi::lexeme["<="][qi::_val = RELATION::LEQ]
+							| qi::lexeme[">="][qi::_val = RELATION::GEQ]
+							| qi::lit('=')[qi::_val = RELATION::EQ]);
+			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) >> qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &discreteConstraintParser<Iterator, Number>::createIntervalConstraints, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
+
+			start.name("constraint");
+			inequation.name("polynomial constraint");
+			lhsVar.name("inequation variable left");
+			rhsVar.name("inequation variable right");
+			relationSymbol.name("relation");
+			interval.name("interval constraint");
+
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+		}
+
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> start;
+		qi::rule<Iterator, RELATION()> relationSymbol;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> inequation;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> lhsVar;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> rhsVar;
+		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> interval;
+
+		std::pair<unsigned, carl::Interval<Number>> createInterval(const unsigned& _lhs, RELATION _rel, double& _rhs, bool _invert) {
+			std::pair<unsigned, carl::Interval<Number>> res;
+			res.first = _lhs;
+			switch(_rel){
+				case RELATION::EQ: {
+					res.second = carl::Interval<Number>(carl::convert<double,Number>(_rhs));
+					return res;
+				}
+				case RELATION::GEQ: {
+					res.second = carl::Interval<Number>(carl::convert<double,Number>(_rhs));
+					if(_invert){
+						res.second.setLowerBoundType(carl::BoundType::INFTY);
+					} else {
+						res.second.setUpperBoundType(carl::BoundType::INFTY);
+					}
+					return res;
+				}
+				case RELATION::LEQ: {
+					res.second = carl::Interval<Number>(carl::convert<double,Number>(_rhs));
+					if(_invert){
+						res.second.setUpperBoundType(carl::BoundType::INFTY);
+					} else {
+						res.second.setLowerBoundType(carl::BoundType::INFTY);
+					}
+					return res;
+				}
+				default:{
+					assert(false);
+				}
+			}
+			return res;
+		}
+
+		std::pair<unsigned, carl::Interval<Number>> createIntervalConstraints(unsigned _varIndex, double _lower, double _upper) {
+			std::pair<unsigned, carl::Interval<Number>> res;
+			res.first = _varIndex;
+			res.second = carl::Interval<Number>(carl::convert<double,Number>(_lower), carl::convert<double,Number>(_upper));
 			return res;
 		}
 	};
