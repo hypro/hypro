@@ -25,7 +25,7 @@ namespace hypro
 	 *
 	 * @param TO-DO
 	 */
-	ReachTreeNodeSimple( unsigned _depth );
+	ReachTreeNodeSimple( );
         
         std::vector< unsigned > getID();
         
@@ -33,7 +33,7 @@ namespace hypro
         
         std::vector< ReachTreeNode* > getChildren();
         
-        void addChild( ReachTreeNode* node_appended_on, ReachTreeNode* node_to_be_added );
+        void addChild( ReachTreeNode* node_to_be_added );
         
     };
 }
