@@ -46,42 +46,153 @@ public:
 	unsigned mDimension;
 
 	// State flags
-	mutable State mEmpty;
+	mutable TRIBOOL mEmpty;
 	mutable bool mNonRedundant;
 
 
   public:
+  	/**
+  	 * @brief Constructor for the universal H-polytope.
+  	 */
 	HPolytopeT();
+
+	/**
+	 * @brief Copy constructor.
+	 *
+	 * @param orig Original H-polytope.
+	 */
 	HPolytopeT( const HPolytopeT& orig );
+
+	/**
+	 * @brief Constructor from a vector of halfspaces.
+	 * @details The resulting object is the intersection of the given halfspaces, i.e. the conjunction of the linear
+	 * constraints representing the halfspaces.
+	 *
+	 * @param planes A vector of halfspaces.
+	 */
 	HPolytopeT( const HalfspaceVector& planes );
+
+	/**
+	 * @brief Constructor from a matrix and a vector.
+	 * @details Each row in the matrix is considered to represent a constraint, i.e. a normal to a bounding hyperplane.
+	 * Each corresponding entry in the passed vector is the offset of that plane, i.e. the constant part of the linear
+	 * constraint.
+	 *
+	 * @param A A matrix.
+	 * @param b A vector.
+	 */
 	HPolytopeT( const matrix_t<Number>& A, const vector_t<Number>& b );
+
+	/**
+	 * @brief Constructor from a matrix.
+	 * @details Each row in the matrix is considered to represent a constraint, i.e. a normal to a bounding hyperplane.
+	 * The offset of each plane is considered to be 0, i.e. if the number of affinely independent constraints
+	 * is larger or equal to d+1, the resulting polytope represents the origin point.
+	 *
+	 * @param A A matrix.
+	 */
 	HPolytopeT( const matrix_t<Number>& A );
+
+	/**
+	 * @brief Constructor from a vector of points.
+	 * @details Converts a vertex-representation into a hyperplanar representation, i.e. solving the plane enumeration
+	 * problem.
+	 *
+	 * @param points A vector of points.
+	 */
 	HPolytopeT( const std::vector<Point<Number>>& points );
 
+	/**
+	 * @brief Destructor.
+	 */
 	~HPolytopeT();
 
 	/*
 	 * Getters and setters
 	 */
+
 	double sizeOfHPolytopeT(){
 		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHalfspace();
 	}
 
+	/**
+	 * @brief Determines, if the polytope is empty.
+	 * @details Checks for satisfiability of the given constraints.
+	 * @return True, if the polytope is empty.
+	 */
 	bool empty() const;
+
+	/**
+	 * @brief Static method for construction of an empty H-polytope.
+	 *
+	 * @return An empty polytope.
+	 */
 	static HPolytopeT<Number, Converter> Empty();
 
+	/**
+	 * @brief Getter for the dimension of the polytope.
+	 * @details Note that this only returns the space dimension and not the effective dimension of the polytope.
+	 * @return The space dimension.
+	 */
 	std::size_t dimension() const;
+
+	/**
+	 * @brief Getter for the number of constraints.
+	 * @return The number of constraints.
+	 */
 	std::size_t size() const;
 
+	/**
+	 * @brief Getter for the matrix representation of the constraints.
+	 * @return A matrix.
+	 */
 	matrix_t<Number> matrix() const;
+
+	/**
+	 * @brief Getter for the vector of offsets of the bounding hyperplanes.
+	 * @return A vector.
+	 */
 	vector_t<Number> vector() const;
+
+	/**
+	 * @brief Getter for the full description of the polytope as a matrix and a vector.
+	 * @return A pair of a matrix and a vector.
+	 */
 	std::pair<matrix_t<Number>, vector_t<Number>> inequalities() const;
 
+	/**
+	 * @brief Getter for the polytopal fan of the current polytope.
+	 * @return A fan.
+	 */
 	const typename polytope::Fan<Number>& fan() const;
+
+	/**
+	 * @brief Getter for the vertices of the current polytope
+	 * @details Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description.
+	 * @return A vector of points.
+	 */
 	typename std::vector<Point<Number>> vertices() const;
+
+	/**
+	 * @brief Getter for a number representing the supremum of the polytope.
+	 * @return A number.
+	 */
 	Number supremum() const;
 
+	/**
+	 * @brief Inserts an additional bounding halfspace into the polytope.
+	 *
+	 * @param plane The plane to add.
+	 */
 	void insert( const Halfspace<Number>& plane );
+
+
+	/**
+	 * @brief Inserts a range of halfspaces into the current polytope.
+	 *
+	 * @param iterator Iterator pointing to the start of the range.
+	 * @param iterator Iterator pointing to the end of the range.
+	 */
 	void insert( const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end );
 
   	void erase( const unsigned index);

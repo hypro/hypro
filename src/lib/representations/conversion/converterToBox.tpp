@@ -117,7 +117,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
                 }
                 target = BoxT<Number,Converter>(intervals);                                                        //creates a box with the computed intervals
          }
-        
+
         if (mode == ALTERNATIVE){
             unsigned dim = _source.dimension();                                                                              //gets dimension from the source object
 
@@ -132,10 +132,10 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
                 distances[2*i] = _source.evaluate(directions.row(2*i));
                 distances[2*i+1] = _source.evaluate(directions.row(2*i+1));
             }
-            
-            
-            
-            
+
+
+
+
 	    std::vector<carl::Interval<Number>> intervals;
 	    for ( unsigned i = 0; i < dim; ++i ) {                                                                                      //for every dimension
                carl::BoundType lowerBound = carl::BoundType::WEAK;
@@ -149,8 +149,8 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 	       intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );   //create one interval with the corresponding left and right end points (inverted lower interval end points)
 	    }
             target = BoxT<Number,Converter>(intervals);
-        }    
-            
+        }
+
 
     // if(mode == EXACT){                                                                              //checks if conversion was exact
     //     bool foundEqual;
@@ -162,31 +162,26 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     //         }
     //     }
     // }
-        
-        
 
-    return target;                                             
+
+
+    return target;
 }
 
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE mode ) {
-        typename std::vector<vector_t<Number>> vertices = _source.vertices();                                   //computes vertices from source object
+        typename std::vector<Point<Number>> vertices = _source.vertices();                                   //computes vertices from source object
 	assert( !vertices.empty() );                                                                            //only continue if any actual vertices were received at all
-	vector_t<Number> minima = vertices[0];                                                                  //creates a vector_t with the first vertex of the source object
-	vector_t<Number> maxima = vertices[0];                                                                  //creates another vector_t with the first vertex of the source object
+	Point<Number> minima = vertices[0];                                                                  //creates a vector_t with the first vertex of the source object
+	Point<Number> maxima = vertices[0];                                                                  //creates another vector_t with the first vertex of the source object
 
 	for ( std::size_t i = 0; i < vertices.size(); ++i ) {                                                   //for each vertex of the source object
 		for ( std::size_t d = 0; d < _source.dimension(); ++d ) {                                       //for every dimension
-			minima( d ) = vertices[i]( d ) < minima( d ) ? vertices[i]( d ) : minima( d );          //if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
-			maxima( d ) = vertices[i]( d ) > maxima( d ) ? vertices[i]( d ) : maxima( d );          //if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
-			assert( minima( d ) <= maxima( d ) );                                                   //only continue if the maximum value is not smaller than the minimum value
+			minima[d] = vertices[i].at( d ) < minima.at( d ) ? vertices[i].at( d ) : minima.at( d );          //if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
+			maxima[d] = vertices[i].at( d ) > maxima.at( d ) ? vertices[i].at( d ) : maxima.at( d );          //if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
+			assert( minima.at( d ) <= maxima.at( d ) );                                                   //only continue if the maximum value is not smaller than the minimum value
 		}
-	}
-
-	std::vector<carl::Interval<Number>> intervals;
-	for ( std::size_t i = 0; i < _source.dimension(); ++i ) {                                               //for every dimension
-		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );                      //create one interval per dimension with the corresponding minimal and maximal values
 	}
 
     // if(mode == EXACT){                                                                                      //checks if conversion was exact
@@ -205,7 +200,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
     //     }
     // }
 
-	return BoxT<Number,Converter>( intervals );                                                 //creates a box with the computed intervals
+	return BoxT<Number,Converter>( std::make_pair(minima, maxima) );                                                 //creates a box with the computed intervals
 }
 
 //conversion from Polytope to box (different data structure)

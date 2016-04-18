@@ -1,5 +1,5 @@
 /**
- * The class which represents a box.
+ * The class which represents a box. A box is represented by two points, its maximal and its minimal vertex.
  *
  * @file Box.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
@@ -41,60 +41,138 @@ class BoxT {
 	 **************************************************************************/
 
 	/*
-	 * Creates a box without any specifications
+	 * Creates an unbounded box.
 	 */
 	BoxT() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
 
 	/*
-	 * Creates a copy of a box
-	 * @param orig The box that's gonna be copied
+	 * Copy constructor.
+	 * @param orig The original box.
 	 */
 	BoxT( const BoxT& orig ) : mLimits( orig.limits() ) {}
 
 	BoxT( BoxT&& orig ) : mLimits( std::move(orig.mLimits )) {}
 
 	/*
-	 * Creates a box by
-	 * @param var
-	 * @param val
+	 * Box constructor from one interval, results in a one-dimensional box.
+	 * @param val Input interval.
 	 */
 	explicit BoxT( const carl::Interval<Number>& val ) {
         mLimits.first = hypro::Point<Number>({val.lower()});
         mLimits.second = hypro::Point<Number>({val.upper()});
 	}
 
+	/**
+	 * @brief Box constructor from a pair of points.
+	 * @details The given parameters are considered as the maximal and minimal point.
+	 * The constructor does not check the order of points.
+	 *
+	 * @param limits Pair of points.
+	 */
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
 			mLimits(limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
 	}
 
+	/**
+	 * @brief Constructor from a vector of intervals.
+	 * @details The vector is required to be sorted, i.e. the first interval maps to the first dimension etc..
+	 *
+	 * @param _intervals Vector of intervals.
+	 */
 	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals );
-	BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants );
-	explicit BoxT( const std::set<Point<Number>>& _points );
-	explicit BoxT( const std::vector<Point<Number>>& _points );
-	//BoxT( const std::set<Vertex<Number>>& _points );
-	//BoxT( const std::vector<Vertex<Number>>& _points );
 
+	/**
+	 * @brief Constructor from a matrix and a vector.
+	 * @details Constructs a box assuming each row of the matrix is the normal to a hyperplane and its corresponding
+	 * entry in the given vector is the offset.
+	 *
+	 * @param _constraints A matrix representing the constraint normals.
+	 * @param _constants A vector representing the offsets of the corresponting hyperplane.
+	 */
+	BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants );
+
+	/**
+	 * @brief Constructor from a set of points.
+	 * @details The constructor does not rely on the operator < of the point class, thus each point is considered
+	 * for the construction of the maximal and minimal point.
+	 *
+	 * @param _points A set of points.
+	 */
+	explicit BoxT( const std::set<Point<Number>>& _points );
+
+	/**
+	 * @brief A constructor from a vector of points.
+	 * @details Creates the maximal and minimal point by collecting all coordinates from all given points.
+	 *
+	 * @param _points A vector of points.
+	 */
+	explicit BoxT( const std::vector<Point<Number>>& _points );
+
+	/**
+	 * @brief Destructor.
+	 */
 	~BoxT() {}
 
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 
+	 /**
+	  * @brief Static method for the construction of an empty box of required dimension.
+	  *
+	  * @param dimension Required dimension.
+	  * @return Empty box.
+	  */
 	static BoxT<Number,Converter> Empty(std::size_t dimension = 1) {
 		return BoxT<Number,Converter>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
 	}
 
+	/**
+	 * @brief Getter for interval representation of the current box.
+	 * @details Converts the two-points representation of the current box into a sorted vector of intervals.
+	 * @return A vector of intervals.
+	 */
 	std::vector<carl::Interval<Number>> boundaries() const;
+
+	/**
+	 * @brief Getter for the limiting points.
+	 * @return A pair of points.
+	 */
 	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
+
+	/**
+	 * @brief Getter for the hyperplanar representation of the current box.
+	 * @details Converts the two-points representation into a hyperplanar representation, i.e. a H-polytope.
+	 * @return A vector of hyperplanes.
+	 */
 	std::vector<hypro::Halfspace<Number>> constraints() const;
 
+	/**
+	 * @brief Extends the dimension of the current box by the given interval.
+	 * @details Effectively extends the dimension of the current box.
+	 *
+	 * @param val An interval.
+	 */
 	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
-	//void insert( const std::vector<carl::Interval<Number>>& boundaries );
 
+	/**
+	 * @brief Getter for an interval representation of one specific dimension.
+	 * @details Converts the d-th entries in the maximal and minimal point to an interval.
+	 *
+	 * @param d The queried dimension.
+	 * @return An interval.
+	 */
 	carl::Interval<Number> interval( std::size_t d ) const;
 
+	/**
+	 * @brief Getter for an interval representation of one specific dimension.
+	 * @details Converts the d-th entries in the maximal and minimal point to an interval.
+	 *
+	 * @param d The queried dimension.
+	 * @return An interval.
+	 */
 	carl::Interval<Number> at( std::size_t _index ) const {
 		if ( _index > mLimits.first.dimension() ) {
 			return carl::Interval<Number>::emptyInterval();
@@ -102,8 +180,10 @@ class BoxT {
 		return carl::Interval<Number>(mLimits.first.at(_index), mLimits.second.at(_index));
 	}
 
-	/*
-	 * @return
+	/**
+	 * @brief Determines if the current box is empty.
+	 * @details The method checks the dimension of the limit points and afterwards each interval for emptiness.
+	 * @return True, if one interval is empty. False if the dimension is 0 or no interval is empty.
 	 */
 	bool empty() const {
 		if ( mLimits.first.dimension() == 0 ) {
@@ -117,29 +197,41 @@ class BoxT {
 		return false;
 	}
 
-	/*
-	 * @return
+	/**
+	 * @brief Getter for the maximal point.
+	 * @return A point.
 	 */
 	Point<Number> max() const {
 		return mLimits.second;
 	}
 
-	/*
-	 * @return
+	/**
+	 * @brief Getter for the maximal point.
+	 * @return A point.
 	 */
 	Point<Number> min() const {
 		return mLimits.first;
 	}
 
+	/**
+	 * @brief Method returning the supremum point of the box, i.e. the maximal point.
+	 * @return A point representing the supremum of the current box.
+	 */
 	Number supremum() const;
 
+	/**
+	 * @brief Getter for a vertex-representation of the current box.
+	 * @details Converts the current box from its two-point representation into a vertex representation, i.e. a V-polytope.
+	 * The representation is generated by creating all possible combinations of upper and lower bounds of the box.
+	 * @return A vector of points.
+	 */
 	std::vector<Point<Number>> vertices() const;
 
 	/**
-	 * Checks if two boxes are equal
-	 * @param b1 Contains the first box
-	 * @param b2 Contains the second box
-	 * @return true, if they are equal.
+	 * @brief Checks if two boxes are equal.
+	 * @param b1 Contains the first box.
+	 * @param b2 Contains the second box.
+	 * @return True, if they are equal.
 	 */
 	friend bool operator==( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
@@ -149,15 +241,18 @@ class BoxT {
 	}
 
 	/**
-	 * @param b1
-	 * @param b2
-	 * @return true. if they are not equal
+	 * @brief Determines inequality of two boxes.
+	 *
+	 * @param b1 A box.
+	 * @param b2 A box.
+	 * @return False, if both boxes are equal.
 	 */
 	friend bool operator!=( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) { return !( b1 == b2 ); }
 
-	/*
-	 *@param rhs
-	 *@return
+	/**
+	 * @brief Assignment operator.
+	 *
+	 * @param rhs A box.
 	 */
 	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) {
 		if ( *this != rhs ) {
@@ -167,6 +262,11 @@ class BoxT {
 		return *this;
 	}
 
+	/**
+	 * @brief Move assignment operator.
+	 *
+	 * @param rhs A box.
+	 */
 	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) {
 		if ( *this != rhs ) {
 			mLimits = std::move(rhs.limits());
@@ -175,10 +275,10 @@ class BoxT {
 	}
 
 	/**
+	 * @brief Outstream operator.
 	 *
-	 * @param ostr
-	 * @param b
-	 * @return
+	 * @param ostr Outstream.
+	 * @param b A box.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& b ) {
 		ostr << "{ ";
@@ -187,6 +287,12 @@ class BoxT {
 		return ostr;
 	}
 
+	/**
+	 * @brief Access operator (const).
+	 *
+	 * @param i Dimension to access.
+	 * @return An interval.
+	 */
 	carl::Interval<Number> operator[]( unsigned i ) const { return carl::Interval<Number>(mLimits.first.at(i), mLimits.second.at(i)); }
 
 	/***************************************************************************
@@ -211,16 +317,6 @@ class BoxT {
 	void clear();
 	void print() const;
 };
-
-    #ifdef EXTERNALIZE_CLASSES_ONLY_TO_TEST
-    extern template class BoxT<double>;
-
-    #ifdef USE_MPFR_FLOAT
-    extern template class BoxT<carl::FLOAT_T<mpfr_t>>;
-    #endif
-
-    extern template class BoxT<carl::FLOAT_T<double>>;
-    #endif
 
 } // namespace hypro
 
