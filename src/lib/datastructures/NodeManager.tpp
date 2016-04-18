@@ -14,8 +14,13 @@ namespace hypro
     ReachTreeNode* NodeManager::getNode( std::vector<unsigned> _id )
     {
         assert( _id.size() > 0 && _id != std::vector<unsigned>( 0 ) );
-        ReachTreeNode* result = mTree->getRoot();
+        ReachTreeNode* result;
+        ReachTreeNodeSimple* temp = mTree->getRoot();
         auto _id_iter = _id.begin();
+        // Do one iteration 'manually' due to the fact that the root is
+        // a supertype of the childrens' nodes
+        result = ( temp->getChildren() ).at( *_id_iter );
+        ++_id_iter;
         while( _id_iter != _id.end() )
         {
             result = ( result->getChildren() ).at( *_id_iter );
