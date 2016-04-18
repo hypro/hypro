@@ -62,6 +62,22 @@ protected:
                 matrix_t<Number> generators2 = matrix_t<Number>(2,2);
                 generators2 << 0, 1, 1, 0;
                 zonotope2 = hypro::Zonotope<Number>(center2, generators2);
+                
+                //third zonotope (chapter 3 example)
+                //vector_t<Number> center3 = vector_t<Number>(2);
+                //center3 << 3, 3;
+                //matrix_t<Number> generators3 = matrix_t<Number>(2,3);
+                //generators3.col(0) << 0, 1;
+                //generators3.col(1) << 1, 1;
+                //generators3.col(2) << 2, -1;
+                //zonotope3 = hypro::Zonotope<Number>(center3, generators3);
+                
+                //fourth zonotope (chapter 3 example)
+                //vector_t<Number> center4 = vector_t<Number>(2);
+                //center4 << 3, 3;
+                //matrix_t<Number> generators4 = matrix_t<Number>(2,2);
+                //generators3 << 0, 1, 1, 1;
+                //zonotope4 = hypro::Zonotope<Number>(center4, generators4);
 
                 //first v-polytope (box)
 		vector_t<Number> p1 = vector_t<Number>(2);
@@ -163,6 +179,9 @@ protected:
 
     hypro::Zonotope<Number> zonotope;
     hypro::Zonotope<Number> zonotope2;
+    hypro::Zonotope<Number> zonotope3;
+    hypro::Zonotope<Number> zonotope4;
+    
 
     typename hypro::HPolytope<Number>::HalfspaceVector planes;
     typename hypro::HPolytope<Number>::HalfspaceVector planes2;
@@ -297,8 +316,8 @@ TYPED_TEST(ConverterTest, toVPolytope)
         //auto result9 = Converter<TypeParam>::toVPolytope(this->support, ALTERNATIVE, 4);
         //this->plotter.setObjectColor(this->plotter.addObject(result9.vertices()), colors[red]);
 
-        auto result10 = Converter<TypeParam>::toVPolytope(this->support2, ALTERNATIVE, 4);
-        this->plotter.setObjectColor(this->plotter.addObject(result10.vertices()), colors[lila]);
+        //auto result10 = Converter<TypeParam>::toVPolytope(this->support2, ALTERNATIVE, 4);
+        //this->plotter.setObjectColor(this->plotter.addObject(result10.vertices()), colors[lila]);
 	SUCCEED();
 }
 
@@ -343,7 +362,11 @@ TYPED_TEST(ConverterTest, toZonotope)
         auto result9 = Converter<TypeParam>::toZonotope(this->support2, ALTERNATIVE);
         //auto vpoly6 = VPolytope<TypeParam>(result9.vertices());
         //this->plotter.setObjectColor(this->plotter.addObject(vpoly6.vertices()), colors[bordeaux]);
+        //auto vpoly7 = VPolytope<TypeParam>(this->zonotope3.vertices());
+        //this->plotter.setObjectColor(this->plotter.addObject(vpoly7.vertices()), colors[petrol]);
 
+        //auto vpoly8 = VPolytope<TypeParam>(this->zonotope4.vertices());
+        //this->plotter.setObjectColor(this->plotter.addObject(vpoly8.vertices()), colors[petrol]);
 
         this->plotter.plot2d();
 	SUCCEED();

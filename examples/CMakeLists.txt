@@ -17,6 +17,7 @@ set( EXAMPLES
     example_bouncingBall_Plotter
     example_bouncingBall_Fly
     example_box
+    example_boxConversion
     example_converter
     example_convexHull
     example_division
