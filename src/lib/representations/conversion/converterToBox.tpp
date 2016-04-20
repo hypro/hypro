@@ -94,6 +94,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 
 //conversion from H-Polytope to box (OVER or ALTERNATIVE)
 //ALTERNATIVE evaluates instead of converting to V-Polytope (may be faster with only 2d directions for complex objects)
+//ALTERNATIVE is nearly always faster with same precision => use it
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _source, const CONV_MODE mode ) {
         BoxT<Number,Converter> target;

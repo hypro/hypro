@@ -1,10 +1,3 @@
-/* 
- * File:   example_boxConversion.cpp
- * Author: Simon Froitzheim
- * 
- * Created on April 18, 2016, 3:39 PM
- */
-
 #include "../src/lib/representations/Box/Box.h"
 #include <cstdlib>
 #include "../src/lib/config.h"
@@ -25,25 +18,43 @@ int main(int argc, char const *argv[])
         typedef std::chrono::microseconds timeunit;
         const int runs = 50;
         
-        typename hypro::HPolytope<Number>::HalfspaceVector planes;
         hypro::HPolytope<Number> hpolytope;
         hypro::HPolytope<Number> hpolytope2;
         hypro::HPolytope<Number> hpolytope3;
+        hypro::VPolytope<Number> vpolytope;
+        hypro::VPolytope<Number> vpolytope2;
+        hypro::VPolytope<Number> vpolytope3;
+        hypro::SupportFunction<Number> support;
+        hypro::SupportFunction<Number> support2;
+        hypro::SupportFunction<Number> support3;
+        hypro::Zonotope<Number> zonotope;
+        hypro::Zonotope<Number> zonotope2;
+        hypro::Zonotope<Number> zonotope3;
+        hypro::Box<Number> box;
+        hypro::Box<Number> box2;
+        hypro::Box<Number> box3;
         
-        //first Hpolytope (simple triangle 2D)
-        Halfspace<Number> hp1({1,1},carl::rationalize<Number>(1.4));
-        Halfspace<Number> hp2({0,-1},1);
-        Halfspace<Number> hp3({-1,0},1);
+        
+        
+        std::vector<vector_t<Number>> directions = computeTemplate<Number>(3, 8);
+        matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(directions.size(), 3);
 
-        planes.push_back(hp1);
-        planes.push_back(hp2);
-        planes.push_back(hp3);
-
-        hpolytope = hypro::HPolytope<Number>(planes);
+        //fills the matrix with the template directions
+        for (unsigned i=0; i<directions2.size();++i){
+                templateDirectionMatrix.row(i) = directions[i];
+        }
+        
+        vector_t<Number> distances = vector_t<Number>(directions.size());
+        
+        //fills the vector with a constant offset
+        for (unsigned i=0; i<directions.size();++i){
+                distances(i) = 5;
+        }
+        hpolytope = hypro::HPolytope<Number>(templateDirectionMatrix, distances);
         
         //second Hpolytope (3d object)
-        std::vector<vector_t<Number>> directions2 = computeTemplate<Number>(4, 12);
-        matrix_t<Number> templateDirectionMatrix2 = matrix_t<Number>(directions2.size(), 4);
+        std::vector<vector_t<Number>> directions2 = computeTemplate<Number>(3, 12);
+        matrix_t<Number> templateDirectionMatrix2 = matrix_t<Number>(directions2.size(), 3);
 
         //fills the matrix with the template directions
         for (unsigned i=0; i<directions2.size();++i){
@@ -60,8 +71,8 @@ int main(int argc, char const *argv[])
         hpolytope2 = hypro::HPolytope<Number>(templateDirectionMatrix2, distances2);
         
         //third Hpolytope (3d object (nearly a ball))
-        std::vector<vector_t<Number>> directions3 = computeTemplate<Number>(4, 16);
-        matrix_t<Number> templateDirectionMatrix3 = matrix_t<Number>(directions3.size(), 4);
+        std::vector<vector_t<Number>> directions3 = computeTemplate<Number>(3, 16);
+        matrix_t<Number> templateDirectionMatrix3 = matrix_t<Number>(directions3.size(), 3);
 
         //fills the matrix with the template directions
         for (unsigned i=0; i<directions3.size();++i){
@@ -76,7 +87,27 @@ int main(int argc, char const *argv[])
         }
         
         hpolytope3 = hypro::HPolytope<Number>(templateDirectionMatrix3, distances3);
- 
+        
+        vpolytope = Converter<Number>::toVPolytope(hpolytope);
+        vpolytope2 = Converter<Number>::toVPolytope(hpolytope2);
+        vpolytope3 = Converter<Number>::toVPolytope(hpolytope3);
+        
+        zonotope = Converter<Number>::toZonotope(hpolytope);
+        zonotope2 = Converter<Number>::toZonotope(hpolytope2);
+        zonotope3 = Converter<Number>::toZonotope(hpolytope3);
+        
+        box = Converter<Number>::toBox(hpolytope);
+        box2 = Converter<Number>::toBox(hpolytope2);
+        box3 = Converter<Number>::toBox(hpolytope3);
+        
+        support = Converter<Number>::toSupportFunction(hpolytope);
+        support2 = Converter<Number>::toSupportFunction(hpolytope2);
+        support3 = Converter<Number>::toSupportFunction(hpolytope3);
+        
+        
+        
+        
+        std::set<std::pair<long int,long int> > results;
         std::set<std::pair<long int,long int> > results2;
         std::set<std::pair<long int,long int> > results3;
         
