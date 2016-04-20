@@ -10,7 +10,7 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    using initialData = boost::tuple< Location<Number>*, Number, representation_name >;
+    using initialData = boost::tuple< Location<Number>*, Representation, Number, representation_name >;
     
     template <typename Number, typename Representation>
     class NodeManager

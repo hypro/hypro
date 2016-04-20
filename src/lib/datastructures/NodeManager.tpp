@@ -56,7 +56,7 @@ namespace hypro
         std::vector< unsigned > id = _parent->getID();
         assert( id.size() > 0 );
         id.push_back( id.size() );
-        *newNode = ReachTreeNode( id, boost::get<0>( _new_node_data ), boost::get<1>( _new_node_data ), 1, boost::get<2>( _new_node_data ), _parent );
+        *newNode = ReachTreeNode( id, boost::get<0>( _new_node_data ), boost::get<1>( _new_node_data ), boost::get<2>( _new_node_data ), 1, boost::get<2>( _new_node_data ), _parent );
         _parent->addChild( newNode );              
     }
     

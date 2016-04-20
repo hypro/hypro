@@ -24,6 +24,7 @@ namespace hypro
             representation_name mRep;
             Representation mFirst;
             Representation mLast;
+            bool mFinished;
             // Data structure saving for each transition of mLoc the indices of the 
             // segments satisfying the corresponding guard
             guard_map mGuardSatisfiedIndices;
@@ -37,7 +38,7 @@ namespace hypro
 	 *
 	 * @param TO-DO
 	 */
-	ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
+	ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Representation _first_segment, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent );
         
         Location<Number>* getLocation();
         
@@ -48,6 +49,8 @@ namespace hypro
         Representation getFirstSegment();
         
         Representation getLastSegment();
+        
+        bool getFinished();
         
         guard_map getGuardSatisfiedIndices();
         
@@ -62,6 +65,8 @@ namespace hypro
         void setFirstSegment( Representation _first );
         
         void setLastSegment( Representation _last );  
+        
+        void setFinished( bool _finished );
         
         void setOverapproximation( flowpipe_t& overapprox );
         
