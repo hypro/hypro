@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
         matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(directions.size(), 3);
 
         //fills the matrix with the template directions
-        for (unsigned i=0; i<directions2.size();++i){
+        for (unsigned i=0; i<directions.size();++i){
                 templateDirectionMatrix.row(i) = directions[i];
         }
         
@@ -107,61 +107,345 @@ int main(int argc, char const *argv[])
         
         
         
-        std::set<std::pair<long int,long int> > results;
-        std::set<std::pair<long int,long int> > results2;
-        std::set<std::pair<long int,long int> > results3;
+        std::set<long int> results;
+        std::set<long int> results2;
+        std::set<long int> results3;
+        std::set<long int> results4;
+        std::set<long int> results5;
+        std::set<long int> results6;
+        std::set<long int> results7;
+        std::set<long int> results8;       
+        std::set<long int> results9;
+        std::set<long int> results10;
+        std::set<long int> results11;       
+        std::set<long int> results12;
+        std::set<long int> results13;
+        std::set<long int> results14;        
+        std::set<long int> results15;
+        std::set<long int> results16;
+        std::set<long int> results17;
+        std::set<long int> results18;
+        std::set<long int> results19;
+        std::set<long int> results20;  
+        std::set<long int> results21;
+        std::set<long int> results22;
+        std::set<long int> results23;
+        std::set<long int> results24;  
+        
+        
+        
         
         for( int index = 0 ; index < runs ; ++index){
-                std::pair<long int,long int> testresult;
+                long int testresult;
 
-                //2nd polytope
+                //tobox
                 clock::time_point start = clock::now();
                 
-                Converter<Number>::toBox(hpolytope2);
+                Converter<Number>::toBox(hpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results.insert(testresult);
                 
-                std::cout << "Total time2(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-
                 start = clock::now();
-                Converter<Number>::toBox(hpolytope2, ALTERNATIVE);
-                std::cout << "Total time2(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                
+                Converter<Number>::toBox(hpolytope, ALTERNATIVE);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results2.insert(testresult);
                 
-                //3rd polytope
                 start = clock::now();
                 
-                Converter<Number>::toBox(hpolytope3);
+                Converter<Number>::toBox(vpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results3.insert(testresult);
                 
-                std::cout << "Total time3(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                start = clock::now();
+                
+                Converter<Number>::toBox(zonotope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results4.insert(testresult);   
+                
+                start = clock::now();
+                
+                Converter<Number>::toBox(support);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results5.insert(testresult);
+                
+                //tohpoly
+                
+                start = clock::now();
+                
+                Converter<Number>::toHPolytope(vpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results6.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toHPolytope(vpolytope, OVER);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results7.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toHPolytope(zonotope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results8.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toHPolytope(support);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results9.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toHPolytope(box);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results10.insert(testresult);
+                
+                //tovpolytope
+                
+                start = clock::now();
+                
+                Converter<Number>::toVPolytope(hpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results11.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toVPolytope(zonotope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results12.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toVPolytope(support, OVER);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results13.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toVPolytope(support, UNDER);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results14.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toVPolytope(box);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results15.insert(testresult);
+                
+                //tozonotope
+                start = clock::now();
+                
+                Converter<Number>::toZonotope(hpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results16.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toZonotope(vpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results17.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toZonotope(support);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results18.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toZonotope(support, ALTERNATIVE);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results19.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toZonotope(box);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results20.insert(testresult);
+                
+                //tosupport
+                start = clock::now();
+                
+                Converter<Number>::toSupportFunction(hpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results21.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toSupportFunction(vpolytope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results22.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toSupportFunction(zonotope);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results23.insert(testresult);
+                
+                start = clock::now();
+                
+                Converter<Number>::toSupportFunction(box);
+                testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+                results24.insert(testresult);
+                
+                
+                
+                
+                
 
-                start = clock::now();
-                Converter<Number>::toBox(hpolytope3, ALTERNATIVE);
-                std::cout << "Total time3(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-                results3.insert(testresult);                
+          
         }
 
-        double avgHull2 = 0;
-        double avgEval2 = 0;        
-        double avgHull3 = 0;
-        double avgEval3 = 0;
+        double avg1 = 0;
+        double avg2 = 0;
+        double avg3 = 0;
+        double avg4 = 0;
+        double avg5 = 0;
+        double avg6 = 0;
+        double avg7 = 0;
+        double avg8 = 0;
+        double avg9 = 0;
+        double avg10 = 0;
+        double avg11 = 0;
+        double avg12 = 0;
+        double avg13 = 0;
+        double avg14 = 0;
+        double avg15 = 0;
+        double avg16 = 0;
+        double avg17 = 0;
+        double avg18 = 0;
+        double avg19 = 0;
+        double avg20 = 0;
+        double avg21 = 0;
+        double avg22 = 0;
+        double avg23 = 0;
+        double avg24 = 0;
+        
+        for(auto resultIt = results.begin(); resultIt != results.end(); ++resultIt )
+        {
+                avg1 += double((*resultIt)/double(runs));
+        }
         
         for(auto resultIt = results2.begin(); resultIt != results2.end(); ++resultIt )
         {
-                avgHull2 += double((*resultIt).first/double(runs));
-                avgEval2 += double((*resultIt).second/double(runs));
+                avg2 += double((*resultIt)/double(runs));
         }
-        
         for(auto resultIt = results3.begin(); resultIt != results3.end(); ++resultIt )
         {
-                avgHull3 += double((*resultIt).first/double(runs));
-                avgEval3 += double((*resultIt).second/double(runs));
+                avg3 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results4.begin(); resultIt != results4.end(); ++resultIt )
+        {
+                avg4 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results5.begin(); resultIt != results5.end(); ++resultIt )
+        {
+                avg5 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results6.begin(); resultIt != results6.end(); ++resultIt )
+        {
+                avg6 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results7.begin(); resultIt != results7.end(); ++resultIt )
+        {
+                avg7 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results8.begin(); resultIt != results8.end(); ++resultIt )
+        {
+                avg8 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results9.begin(); resultIt != results9.end(); ++resultIt )
+        {
+                avg9 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results10.begin(); resultIt != results10.end(); ++resultIt )
+        {
+                avg10 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results11.begin(); resultIt != results11.end(); ++resultIt )
+        {
+                avg11 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results12.begin(); resultIt != results12.end(); ++resultIt )
+        {
+                avg12 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results13.begin(); resultIt != results13.end(); ++resultIt )
+        {
+                avg13 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results14.begin(); resultIt != results14.end(); ++resultIt )
+        {
+                avg14 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results15.begin(); resultIt != results15.end(); ++resultIt )
+        {
+                avg15 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results16.begin(); resultIt != results16.end(); ++resultIt )
+        {
+                avg16 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results17.begin(); resultIt != results17.end(); ++resultIt )
+        {
+                avg17 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results18.begin(); resultIt != results18.end(); ++resultIt )
+        {
+                avg18 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results19.begin(); resultIt != results19.end(); ++resultIt )
+        {
+                avg19 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results20.begin(); resultIt != results20.end(); ++resultIt )
+        {
+                avg20 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results21.begin(); resultIt != results21.end(); ++resultIt )
+        {
+                avg21 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results22.begin(); resultIt != results22.end(); ++resultIt )
+        {
+                avg22 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results23.begin(); resultIt != results23.end(); ++resultIt )
+        {
+                avg23 += double((*resultIt)/double(runs));
+        }
+        for(auto resultIt = results24.begin(); resultIt != results24.end(); ++resultIt )
+        {
+                avg24 += double((*resultIt)/double(runs));
         }
 
-        std::cout << "AVGHull2: " << avgHull2 << ", AVGEval2: " << avgEval2 << std::endl;
-        std::cout << "AVGHull3: " << avgHull3 << ", AVGEval3: " << avgEval3 << std::endl;
+        std::cout << "AVG1: " << avg1 << std::endl;
+        std::cout << "AVG2: " << avg2 << std::endl;
+        std::cout << "AVG3: " << avg3 << std::endl;
+        std::cout << "AVG4: " << avg4 << std::endl;
+        std::cout << "AVG5: " << avg5 << std::endl;
+        std::cout << "AVG6: " << avg6 << std::endl;
+        std::cout << "AVG7: " << avg7 << std::endl;
+        std::cout << "AVG8: " << avg8 << std::endl;
+        std::cout << "AVG9: " << avg9 << std::endl;
+        std::cout << "AVG10: " << avg10 << std::endl;
+        std::cout << "AVG11: " << avg11 << std::endl;
+        std::cout << "AVG12: " << avg12 << std::endl;
+        std::cout << "AVG13: " << avg13 << std::endl;
+        std::cout << "AVG14: " << avg14 << std::endl;
+        std::cout << "AVG15: " << avg15 << std::endl;
+        std::cout << "AVG16: " << avg16 << std::endl;
+        std::cout << "AVG17: " << avg17 << std::endl;
+        std::cout << "AVG18: " << avg18 << std::endl;
+        std::cout << "AVG19: " << avg19 << std::endl;
+        std::cout << "AVG20: " << avg20 << std::endl;
+        std::cout << "AVG21: " << avg21 << std::endl;
+        std::cout << "AVG22: " << avg22 << std::endl;
+        std::cout << "AVG23: " << avg23 << std::endl;
+        std::cout << "AVG24: " << avg24 << std::endl;
+        
+
 
         return 0;
 

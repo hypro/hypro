@@ -52,29 +52,29 @@ int main(int argc, char const *argv[])
 	points.push_back(Point<Number>(p2));
         points.push_back(Point<Number>(p3));
         vpolytope = VPolytope<Number>(points);
-        plotter.setObjectColor(plotter.addObject(vpolytope.vertices()), colors[red])
+        //plotter.setObjectColor(plotter.addObject(vpolytope.vertices()), colors[red]);
         support = Converter<Number>::toSupportFunction(vpolytope);
         
         //second vpolytope (ambiguous box)
         vector_t<Number> p4 = vector_t<Number>(2);
-        p4(0) = 2.5;
-        p4(1) = 1;
+        p4(0) = 1;
+        p4(1) = 3;
         vector_t<Number> p5 = vector_t<Number>(2);
-        p5(0) = 1;
-        p5(1) = 2.5;
+        p5(0) = 3;
+        p5(1) = 1;
         vector_t<Number> p6 = vector_t<Number>(2);
-        p6(0) = 4;
-        p6(1) = 2.5;
+        p6(0) = 5;
+        p6(1) = 3;
         vector_t<Number> p7 = vector_t<Number>(2);
-        p7(0) = 2.5;
-        p7(1) = 4;
+        p7(0) = 3;
+        p7(1) = 5;
         typename hypro::VPolytope<Number>::pointVector points2;
 	points2.push_back(Point<Number>(p4));
 	points2.push_back(Point<Number>(p5));
         points2.push_back(Point<Number>(p6));
         points2.push_back(Point<Number>(p7));
         vpolytope2 = VPolytope<Number>(points2);  
-        //plotter.setObjectColor(plotter.addObject(vpolytope2.vertices()), colors[red])
+        //plotter.setObjectColor(plotter.addObject(vpolytope2.vertices()), colors[red]);
         support2 = Converter<Number>::toSupportFunction(vpolytope2);
         
         //third  vpolytope (point cloud)
@@ -120,7 +120,7 @@ int main(int argc, char const *argv[])
 	points3.push_back(Point<Number>(p16));
 	points3.push_back(Point<Number>(p17));
         vpolytope3 = VPolytope<Number>(points3);
-        //plotter.setObjectColor(plotter.addObject(vpolytope3.vertices()), colors[red])
+        //plotter.setObjectColor(plotter.addObject(vpolytope3.vertices()), colors[red]);
         support3 = Converter<Number>::toSupportFunction(vpolytope3);
         
         //fourth vpolytope (stretched box)
@@ -142,7 +142,7 @@ int main(int argc, char const *argv[])
         points4.push_back(Point<Number>(p20));
         points4.push_back(Point<Number>(p21));
         vpolytope4 = VPolytope<Number>(points4);  
-        //plotter.setObjectColor(plotter.addObject(vpolytope4.vertices()), colors[red])
+        plotter.setObjectColor(plotter.addObject(vpolytope4.vertices()), colors[red]);
         support4 = Converter<Number>::toSupportFunction(vpolytope4);
         
         
@@ -150,18 +150,26 @@ int main(int argc, char const *argv[])
         std::set<std::pair<long int,long int> > results2;
         std::set<std::pair<long int,long int> > results3;
         std::set<std::pair<long int,long int> > results4;
+        Zonotope<Number> result;
+        Zonotope<Number> result2;
+        Zonotope<Number> result3;
+        Zonotope<Number> result4;
+        Zonotope<Number> result5;
+        Zonotope<Number> result6;
+        Zonotope<Number> result7;
+        Zonotope<Number> result8;
         for( int index = 0 ; index < runs ; ++index){
                 std::pair<long int,long int> testresult;
 
                 //1st support function (triangle)
                 clock::time_point start = clock::now();
                 
-                auto result = Converter<Number>::toZonotope(support, OVER);
+                result = Converter<Number>::toZonotope(support, OVER, 7);
                 
                 std::cout << "Total time(H1): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;            
                 
-                auto result2 = Converter<Number>::toZonotope(support, ALTERNATIVE);
+                result2 = Converter<Number>::toZonotope(support, ALTERNATIVE, 7);
                 
                 std::cout << "Total time(B1): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;      
@@ -171,12 +179,12 @@ int main(int argc, char const *argv[])
                 //2nd support function (ambiguous box)
                 start = clock::now();
                 
-                auto result3 = Converter<Number>::toZonotope(support2, OVER);
+                result3 = Converter<Number>::toZonotope(support2, OVER, 7);
                 
                 std::cout << "Total time(H2): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;            
                 
-                auto result4 = Converter<Number>::toZonotope(support2, ALTERNATIVE);
+                result4 = Converter<Number>::toZonotope(support2, ALTERNATIVE, 7);
                 
                 std::cout << "Total time(B2): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;      
@@ -185,12 +193,12 @@ int main(int argc, char const *argv[])
                 //3rd support function (point cloud)
                 start = clock::now();
                 
-                auto result5 = Converter<Number>::toZonotope(support3, OVER);
+                result5 = Converter<Number>::toZonotope(support3, OVER, 7);
                 
                 std::cout << "Total time(H3): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;            
                 
-                auto result6 = Converter<Number>::toZonotope(support3, ALTERNATIVE);
+                result6 = Converter<Number>::toZonotope(support3, ALTERNATIVE, 7);
                 
                 std::cout << "Total time(B3): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;      
@@ -199,12 +207,12 @@ int main(int argc, char const *argv[])
                 //4th polytope (stretched box)
                 start = clock::now();
                 
-                auto result7 = Converter<Number>::toZonotope(support4, OVER);
+                result7 = Converter<Number>::toZonotope(support4, OVER, 8);
                 
                 std::cout << "Total time(H4): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;            
                 
-                auto result8 = Converter<Number>::toZonotope(support4, ALTERNATIVE);
+                result8 = Converter<Number>::toZonotope(support4, ALTERNATIVE, 7);
                 
                 std::cout << "Total time(B4): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
                 testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;      
@@ -259,7 +267,17 @@ int main(int argc, char const *argv[])
         std::cout << "AVGCloud2: " << avgCloud2 << std::endl;
         std::cout << "AVGStretch2: " << avgStretch2 << std::endl;
         
-        plotter.addObject(result.vertices());
+        //plotter.addObject(result.vertices());
+        //plotter.addObject(result2.vertices());
+        //plotter.addObject(result3.vertices());
+        //plotter.addObject(result4.vertices());
+        //plotter.addObject(result5.vertices());
+        //plotter.addObject(result6.vertices());
+        plotter.addObject(result7.vertices());
+        //plotter.addObject(result8.vertices());
+        
+        plotter.plot2d();
+        plotter.plotTex();
 
         return 0;
 
