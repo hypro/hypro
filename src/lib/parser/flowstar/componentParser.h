@@ -6,36 +6,35 @@ namespace hypro {
 namespace parser {
 
 	template<typename Iterator, typename Number>
-	struct transitionParser : qi::grammar<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper>
+	struct transitionParser : qi::grammar<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&, unsigned const&), Skipper>
 	{
 		LocationManager<Number>& mLocationManager = LocationManager<Number>::getInstance();
-		constraintParser<Iterator> constraint;
-		discreteConstraintParser<Iterator, Number> discreteConstraint;
+		constraintParser<Iterator, Number> constraint;
+		singleVariableConstraintParser<Iterator, Number> singleVariableConstraint;
 		resetParser<Iterator> variableReset;
-		discreteResetParser<Iterator,Number> mDiscreteResetParser;
 		aggregation_ mAggregation;
 		px::function<ErrorHandler> errorHandler;
-		std::vector<std::pair<unsigned, carl::Interval<Number>>> mDiscreteConstraints;
-		std::vector<matrix_t<Number>> mContinuousConstraints;
-		std::vector<std::pair<unsigned, carl::Interval<Number>>> mDiscreteResets;
+		std::vector<std::pair<unsigned, matrix_t<Number>>> mDiscreteGuards;
+		std::vector<matrix_t<Number>> mContinuousGuards;
 		std::map<unsigned, matrix_t<Number>> mContinuousResets;
+		std::map<unsigned, matrix_t<Number>> mDiscreteResets;
 
 		transitionParser() : transitionParser::base_type( start ) {
 			using qi::on_error;
 	        using qi::fail;
 
-			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3, qi::_r4)) > qi::lit('}');
-			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3, qi::_r4) > -reset(qi::_r2, qi::_r3, qi::_r4) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_r4)];
+			start = qi::lexeme["jumps"] > qi::lit('{') > (*jump(qi::_r1, qi::_r2, qi::_r3, qi::_r4, qi::_r5)) > qi::lit('}');
+			jump = (edge(qi::_r1) > -guard(qi::_r2, qi::_r3, qi::_r4, qi::_r5) > -reset(qi::_r2, qi::_r3, qi::_r4, qi::_r5) > -agg > -timed)[qi::_val = px::bind( &transitionParser<Iterator, Number>::createTransition, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_r4, qi::_r5)];
 			edge = (simpleEdge(qi::_r1) | twoLineEdge(qi::_r1));
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
 							qi::skip(qi::blank)[qi::lexeme["end"] > qi::lazy(qi::_r1)])[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
-			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*(continuousGuard(qi::_r1, qi::_r3) | discreteGuard(qi::_r2))) > *qi::blank > qi::lit('}');
+			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*(continuousGuard(qi::_r1, qi::_r3) | discreteGuard(qi::_r2,qi::_r4))) > *qi::blank > qi::lit('}');
 			continuousGuard = constraint(qi::_r1,qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addContinuousGuard, px::ref(*this), qi::_1)];
-			discreteGuard = discreteConstraint(qi::_r1)[px::bind(&transitionParser<Iterator,Number>::addDiscreteGuard, px::ref(*this), qi::_1)];
-			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (* ( continuousReset(qi::_r1, qi::_r3) | discreteReset(qi::_r2) )) > *qi::blank > qi::lit('}');
+			discreteGuard = singleVariableConstraint(qi::_r1,qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addDiscreteGuard, px::ref(*this), qi::_1)];
+			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (* ( continuousReset(qi::_r1, qi::_r3) | discreteReset(qi::_r2, qi::_r4) )) > *qi::blank > qi::lit('}');
 			continuousReset = variableReset(qi::_r1, qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addContinuousReset, px::ref(*this), qi::_1)];
-			discreteReset = mDiscreteResetParser(qi::_r1)[px::bind(&transitionParser<Iterator,Number>::addDiscreteReset, px::ref(*this), qi::_1)];
+			discreteReset = variableReset(qi::_r1, qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addDiscreteReset, px::ref(*this), qi::_1)];
 			agg = qi::skip(qi::blank)[mAggregation > qi::lexeme["aggregation"] > -(qi::lit('{') > qi::lit('}'))];
 			timed = qi::skip(qi::blank)[qi::lexeme["time"] > qi::double_];
 
@@ -51,17 +50,17 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper> start;
-		qi::rule<Iterator, Transition<Number>*(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&), Skipper> jump;
+		qi::rule<Iterator, std::set<Transition<Number>*>(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&, unsigned const&), Skipper> start;
+		qi::rule<Iterator, Transition<Number>*(symbol_table const&, symbol_table const&, symbol_table const&, unsigned const&, unsigned const&), Skipper> jump;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> edge;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&), Skipper> simpleEdge;
 		qi::rule<Iterator, std::pair<unsigned, unsigned>(symbol_table const&)> twoLineEdge;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&)> guard;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&, unsigned const&)> guard;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> continuousGuard;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&)> discreteGuard;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&)> reset;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> discreteGuard;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&, unsigned const&)> reset;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> continuousReset;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&)> discreteReset;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> discreteReset;
 		qi::rule<Iterator, Aggregation()> agg;
 		qi::rule<Iterator, double()> timed;
 
@@ -70,14 +69,18 @@ namespace parser {
 			return std::make_pair(start, target);
 		}
 
-		void addContinuousGuard(const std::vector<matrix_t<double>>& _constraints) {
+		void addContinuousGuard(const std::vector<matrix_t<Number>>& _constraints) {
 			for(const auto& matrix : _constraints){
-				mContinuousConstraints.push_back(convert<double,Number>(matrix));
+				assert(matrix.rows() == 1);
+				mContinuousGuards.push_back(matrix);
 			}
 		}
 
-		void addDiscreteGuard(const std::pair<unsigned, carl::Interval<Number>>& _intervalPair) {
-			mDiscreteConstraints.push_back(_intervalPair);
+		void addDiscreteGuard(const std::pair<unsigned, std::vector<matrix_t<Number>>>& _constraints) {
+			for(const auto& matrix : _constraints.second){
+				assert(matrix.rows() == 1);
+				mDiscreteGuards.emplace_back(_constraints.first, matrix);
+			}
 		}
 
 		void addContinuousReset(const std::pair<unsigned, matrix_t<double>>& _constraint) {
@@ -85,22 +88,23 @@ namespace parser {
 			mContinuousResets[_constraint.first] = convert<double,Number>(_constraint.second);
 		}
 
-		void addDiscreteReset(const std::pair<unsigned, carl::Interval<Number>>& _intervalPair) {
-			mDiscreteResets.push_back(_intervalPair);
+		void addDiscreteReset(const std::pair<unsigned, matrix_t<double>>& _constraint) {
+			assert(_constraint.second.rows() == 1);
+			mDiscreteResets[_constraint.first] = convert<double,Number>(_constraint.second);
 		}
 
-		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim) {
+		Transition<Number>* createTransition(const std::pair<unsigned, unsigned>& _transition, const boost::optional<Aggregation>& _aggregation, const boost::optional<double>& _triggerTime, unsigned _dim, unsigned _discreteDim) {
 			Transition<Number>* res = new Transition<Number>(
 									mLocationManager.location(_transition.first),
 									mLocationManager.location(_transition.second));
 
 			// setting guard
-			if(mContinuousConstraints.size() + mDiscreteConstraints.size() > 0) {
+			if(mContinuousGuards.size() + mDiscreteGuards.size() > 0) {
 				typename Transition<Number>::Guard g;
-				matrix_t<Number> matr = matrix_t<Number>(mContinuousConstraints.size(), _dim);
-				vector_t<Number> vec = vector_t<Number>(mContinuousConstraints.size());
+				matrix_t<Number> matr = matrix_t<Number>(mContinuousGuards.size(), _dim);
+				vector_t<Number> vec = vector_t<Number>(mContinuousGuards.size());
 				unsigned rowCnt = 0;
-				for(const auto& row : mContinuousConstraints) {
+				for(const auto& row : mContinuousGuards) {
 					assert(row.rows() == 1);
 					matr.row(rowCnt) = row.block(0,0,1,row.cols()-1);
 					vec(rowCnt) = -row(0,_dim);
@@ -109,8 +113,11 @@ namespace parser {
 				g.mat = matr;
 				g.vec = vec;
 				// handle discrete guards
-				for(const auto& guardPair : mDiscreteConstraints) {
-					g.discreteGuards.emplace(VariablePool::getInstance().carlVarByIndex(guardPair.first), guardPair.second);
+				g.discreteOffset = _dim;
+				for(const auto& guardPair : mDiscreteGuards) {
+					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim);
+					reducedGuard = guardPair.second.block(0,_dim+1,1,_discreteDim);
+					g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
 				}
 
 				res->setGuard(g);
@@ -120,6 +127,9 @@ namespace parser {
 			typename Transition<Number>::Reset r;
 			r.mat = matrix_t<Number>::Identity(_dim, _dim);
 			r.vec = vector_t<Number>::Zero(_dim);
+			r.discreteOffset = _dim;
+			r.discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim, _discreteDim-_dim);
+			r.discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
 			if(mContinuousResets.size() + mDiscreteResets.size() > 0) {
 				matrix_t<Number> matr = matrix_t<Number>::Identity(_dim,_dim);
 				vector_t<Number> vec = vector_t<Number>::Zero(_dim);
@@ -129,6 +139,18 @@ namespace parser {
 				}
 				r.mat = matr;
 				r.vec = vec;
+				matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
+				vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
+				std::cout << "Identity reset: " << discreteMat << std::endl;
+				for(const auto& resetPair : mDiscreteResets){
+					std::cout << resetPair.second << " should fit in " << discreteMat << std::endl;
+					std::cout << "Block start 0," << _dim << ", size: 1," << _discreteDim-_dim << std::endl;
+					std::cout << "RowNum:" << resetPair.first-_dim << std::endl;
+					discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
+					discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
+				}
+				r.discreteMat = discreteMat;
+				r.discreteVec = discreteVec;
 			}
 			res->setReset(r);
 
@@ -147,17 +169,6 @@ namespace parser {
 			return res;
 		}
 
-		//matrix_t<Number> createGuardMatrix(const std::vector<boost::variant<std::vector<matrix_t<double>>, std::pair<unsigned, carl::Interval<Number>>>& _constraints, unsigned _dim) {
-		//	matrix_t<double> res = matrix_t<double>(_constraints.size(), _dim+1 );
-		//	unsigned rowCnt = 0;
-		//	for(const auto constraintVec : _constraints){
-		//		assert(constraintVec.size() == 1);
-		//		res.row(rowCnt) = constraintVec.begin()->row(0);
-		//		++rowCnt;
-		//	}
-		//	return convert<double,Number>(res);
-		//}
-
 		matrix_t<Number> createMatrix(const std::vector<std::pair<unsigned, vector_t<double>>>& _assignments, unsigned _dim) {
 			matrix_t<double> res = matrix_t<double>::Identity(_dim, _dim+1);
 			for(const auto assignmentPair : _assignments){
@@ -169,27 +180,28 @@ namespace parser {
 
 	template <typename Iterator, typename Number>
 	struct modeParser
-	    : qi::grammar<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, symbol_table const&, unsigned const&), Skipper>
+	    : qi::grammar<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, symbol_table const&, unsigned const&, unsigned const&), Skipper>
 	{
 		LocationManager<Number>& mLocationManager = LocationManager<Number>::getInstance();
 		odeParser<Iterator> mOdeParser;
-		constraintParser<Iterator> constraint;
+		constraintParser<Iterator, Number> constraint;
+		singleVariableConstraintParser<Iterator, Number> singleVariableConstraint;
 		discreteConstraintParser<Iterator,Number> discreteConstraint;
 		px::function<ErrorHandler> errorHandler;
 		std::vector<matrix_t<Number>> mContinuousInvariants;
-		std::map<unsigned, carl::Interval<Number>> mDiscreteInvariants;
+		std::vector<std::pair<unsigned, matrix_t<Number>>> mDiscreteInvariants;
 
 		modeParser() : modeParser::base_type( start ) {
 			using qi::on_error;
 	        using qi::fail;
 
-	        start = (name > qi::lit('{') > flow(qi::_r1, qi::_r3) > -(invariant(qi::_r1, qi::_r2, qi::_r3)) > qi::lit('}'))[ qi::_val = px::bind( &modeParser<Iterator,Number>::createLocation, px::ref(*this), qi::_1, qi::_2)];
+	        start = (name > qi::lit('{') > flow(qi::_r1, qi::_r3) > -(invariant(qi::_r1, qi::_r2, qi::_r3, qi::_r4)) > qi::lit('}'))[ qi::_val = px::bind( &modeParser<Iterator,Number>::createLocation, px::ref(*this), qi::_1, qi::_2, qi::_r4)];
 
 			name = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
 			flow = *qi::space > qi::lexeme["poly ode 1"] > *qi::space > qi::lit('{') > *qi::space > qi::skip(qi::blank)[(mOdeParser(qi::_r1, qi::_r2) % qi::eol)][qi::_val = px::bind( &modeParser<Iterator, Number>::createFlow, px::ref(*this), qi::_1 )] > *qi::space > qi::lit('}');
-			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > ((continuousInvariant(qi::_r1, qi::_r3) | discreteInvariant(qi::_r2)) % qi::eol) > *qi::space > qi::lit('}');
+			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > ((continuousInvariant(qi::_r1, qi::_r3) | discreteInvariant(qi::_r2, qi::_r4)) % qi::eol) > *qi::space > qi::lit('}');
 			continuousInvariant = constraint(qi::_r1, qi::_r2)[px::bind( &modeParser<Iterator,Number>::addContinuousInvariant, px::ref(*this), qi::_1)];
-			discreteInvariant = discreteConstraint(qi::_r1)[px::bind( &modeParser<Iterator,Number>::addDiscreteInvariant, px::ref(*this), qi::_1)];
+			discreteInvariant = singleVariableConstraint(qi::_r1, qi::_r2)[px::bind( &modeParser<Iterator,Number>::addDiscreteInvariant, px::ref(*this), qi::_1)];
 
 			start.name("mode");
 			name.name("location name");
@@ -199,22 +211,25 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, symbol_table const&, unsigned const&), Skipper> start;
+		qi::rule<Iterator, std::pair<std::string, Location<Number>*>(symbol_table const&, symbol_table const&, unsigned const&, unsigned const&), Skipper> start;
 		qi::rule<Iterator, std::string()> name;
 		qi::rule<Iterator, matrix_t<Number>(symbol_table const&, unsigned const&)> flow;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&)> invariant;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, symbol_table const&, unsigned const&, unsigned const&)> invariant;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> continuousInvariant;
-		qi::rule<Iterator, qi::unused_type(symbol_table const&)> discreteInvariant;
+		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> discreteInvariant;
 
-		void addContinuousInvariant(const std::vector<matrix_t<double>>& _constraints) {
+		void addContinuousInvariant(const std::vector<matrix_t<Number>>& _constraints) {
 			for(const auto& matrix : _constraints){
 				assert(matrix.rows() == 1);
-				mContinuousInvariants.push_back(convert<double,Number>(matrix));
+				mContinuousInvariants.push_back(matrix);
 			}
 		}
 
-		void addDiscreteInvariant(const std::pair<unsigned, carl::Interval<Number>>& _constraintPair) {
-			mDiscreteInvariants[_constraintPair.first] = _constraintPair.second;
+		void addDiscreteInvariant(const std::pair<unsigned, std::vector<matrix_t<Number>>>& _constraints) {
+			for(const auto& matrix : _constraints.second){
+				assert(matrix.rows() == 1);
+				mDiscreteInvariants.emplace_back(_constraints.first, matrix);
+			}
 		}
 
 		matrix_t<Number> createFlow( const std::vector<std::pair<unsigned, vector_t<double>>>& _in ) {
@@ -235,7 +250,7 @@ namespace parser {
 			return convert<double,Number>(res);
 		}
 
-		std::pair<std::string, Location<Number>*> createLocation(const std::string& _name, const matrix_t<Number>& _flow) {
+		std::pair<std::string, Location<Number>*> createLocation(const std::string& _name, const matrix_t<Number>& _flow, unsigned _discreteDim) {
 			assert(_flow.rows() == _flow.cols());
 			if(mDiscreteInvariants.size() + mContinuousInvariants.size() > 0) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
@@ -251,9 +266,15 @@ namespace parser {
 				}
 				inv.mat = invariantMat;
 				inv.vec = constants;
-				for(const auto& invariantPair : mDiscreteInvariants) {
-					inv.discreteInvariant[VariablePool::getInstance().carlVarByIndex(invariantPair.first)] = invariantPair.second;
+				for(const auto& invariantConstaintPair : mDiscreteInvariants) {
+					assert(invariantConstaintPair.second.rows() == 1);
+					// resize
+					std::cout << "new number of cols: " << _discreteDim-_flow.cols()+2 << std::endl;
+					matrix_t<Number> resizedInvariant = matrix_t<Number>(1, _discreteDim-_flow.cols()+2);
+					resizedInvariant = invariantConstaintPair.second.block(0, _flow.cols()-1, 1, _discreteDim-_flow.cols()+2);
+					inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
 				}
+				inv.discreteOffset = _flow.cols()-1;
 				tmp->setInvariant(inv);
 				return std::make_pair(_name, tmp );
 			}

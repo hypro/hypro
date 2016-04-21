@@ -13,7 +13,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton &_hybrid )
 
 template <typename Number>
 HybridAutomaton<Number>::HybridAutomaton( const locationSet& _locs,
-														  const transitionSet& _trans, const locationSetMap& _initialStates )
+														  const transitionSet& _trans, const locationStateMap& _initialStates )
 	: mLocations( _locs )
 	, mTransitions( _trans )
 	, mInitialStates( _initialStates )
@@ -30,12 +30,12 @@ const std::set<hypro::Transition<Number> *> &HybridAutomaton<Number>::transition
 }
 
 template <typename Number>
-const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::initialStates() const {
+const typename HybridAutomaton<Number>::locationStateMap& HybridAutomaton<Number>::initialStates() const {
 	return mInitialStates;
 }
 
 template <typename Number>
-const typename HybridAutomaton<Number>::locationSetMap& HybridAutomaton<Number>::localBadStates() const {
+const typename HybridAutomaton<Number>::locationStateMap& HybridAutomaton<Number>::localBadStates() const {
 	return mLocalBadStates;
 }
 
@@ -62,12 +62,12 @@ void HybridAutomaton<Number>::setTransitions( const transitionSet &_trans ) {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::setInitialStates( const locationSetMap& _states ) {
+void HybridAutomaton<Number>::setInitialStates( const locationStateMap& _states ) {
 	mInitialStates = _states;
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::setLocalBadStates( const locationSetMap& _states ) {
+void HybridAutomaton<Number>::setLocalBadStates( const locationStateMap& _states ) {
 	mLocalBadStates = _states;
 }
 
@@ -87,13 +87,13 @@ void HybridAutomaton<Number>::addTransition( Transition<Number> *_transition ) {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
-	mInitialStates.insert(std::make_pair(_location, _valuation));
+void HybridAutomaton<Number>::addInitialState( const State<Number>& _state ) {
+	mInitialStates.insert( std::make_pair(_state.location, _state));
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addLocalBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation ) {
-	mLocalBadStates.insert(std::make_pair(_location, _valuation));
+void HybridAutomaton<Number>::addLocalBadState( const State<Number>& _state ) {
+	mLocalBadStates.insert(std::make_pair(_state.location, _state));
 }
 
 template <typename Number>

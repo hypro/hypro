@@ -26,7 +26,9 @@ class Location {
 	struct Invariant {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
-		std::map<carl::Variable, carl::Interval<Number>> discreteInvariant;
+
+		unsigned discreteOffset;
+		std::vector<std::pair<carl::Variable, hypro::matrix_t<Number>>> discreteInvariant;
 	};
 
   protected:
@@ -83,10 +85,15 @@ class Location {
 		matrix_t<Number> tmp = matrix_t<Number>(_l.invariant().mat.rows(), _l.invariant().mat.cols()+1);
 		tmp << _l.invariant().mat,_l.invariant().vec;
 		_ostr << "location( id: " << _l.id() << std::endl << "\t Flow: " << std::endl << _l.flow() << std::endl
-			  << "\t Inv: " << std::endl << tmp << std::endl << "Transitions: " << std::endl;
-			  for(auto transitionPtr : _l.transitions())
-				_ostr << transitionPtr->source()->id() << " -> " << transitionPtr->target()->id() << std::endl;
-			  _ostr << std::endl << ")";
+		<< "\t Inv: " << std::endl << tmp;
+		for(const auto& invPair : _l.invariant().discreteInvariant){
+			_ostr << invPair.first << " in " << invPair.second << std::endl;
+		}
+		_ostr << "Transitions: " << std::endl;
+		for(auto transitionPtr : _l.transitions()){
+			_ostr << transitionPtr->source()->id() << " -> " << transitionPtr->target()->id() << std::endl;
+		}
+		_ostr << std::endl << ")";
 		return _ostr;
 	}
 };

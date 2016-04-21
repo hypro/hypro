@@ -15,13 +15,15 @@ namespace reachability {
     template<typename Number, typename Representation>
 	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
 		// set up working queue
-		for ( const auto& initialPair : mAutomaton.initialStates() ) {
-			std::cout << "INITIAL SET " << Representation(initialPair.second.first, initialPair.second.second) << std::endl;
-			std::cout << "INITIAL VERTICES " << std::endl;
-			for(const auto& vertex : Representation(initialPair.second.first, initialPair.second.second).vertices())
-				std::cout << vertex << std::endl;
-
-			mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, initialPair.first, Representation(initialPair.second.first, initialPair.second.second)));
+		for ( const auto& state : mAutomaton.initialStates() ) {
+			if(mCurrentLevel <= mSettings.jumpDepth){
+				// Convert representation in state from matrix and vector to used representation type.
+				State<Number> s = state.second;
+				cPair<Number> set = boost::get<cPair<Number>>(state.second.set);
+				s.set = Representation(set.first, set.second);
+				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
+				mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, s));
+			}
 		}
 
 		while ( !mWorkingQueue.empty() ) {
@@ -30,13 +32,13 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
-			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet), boost::get<2>(nextInitialSet));
+			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			// TODO: Check for fixed point.
-			if(mReachableStates.find(boost::get<1>(nextInitialSet)) == mReachableStates.end())
-				mReachableStates[boost::get<1>(nextInitialSet)] = std::vector<flowpipe_t<Representation>>();
+			if(mReachableStates.find(boost::get<1>(nextInitialSet).location) == mReachableStates.end())
+				mReachableStates[boost::get<1>(nextInitialSet).location] = std::vector<flowpipe_t<Representation>>();
 
-			mReachableStates[boost::get<1>(nextInitialSet)].push_back(newFlowpipe);
+			mReachableStates[boost::get<1>(nextInitialSet).location].push_back(newFlowpipe);
 		}
 
 		// collect all computed reachable states
@@ -50,26 +52,26 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val ) {
+	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
 #ifdef REACH_DEBUG
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
-		_val.print();
+		boost::get<Representation>(_state.set).print();
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
-		boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_loc, _val);
+		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
 #endif
 		if ( boost::get<0>(initialSetup) ) {
-			std::vector<boost::tuple<Transition<Number>*, Representation>> nextInitialSets;
+			std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 			// insert first Segment into the empty flowpipe
-			Representation currentSegment = boost::get<1>(initialSetup);
+			Representation currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
 			flowpipe.push_back( currentSegment );
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
-			if(intersectBadStates(_loc, currentSegment)){
+			if(intersectBadStates(_state, currentSegment)){
 				// clear queue to stop whole algorithm
 				while(!mWorkingQueue.empty()){
 					mWorkingQueue.pop();
@@ -95,7 +97,7 @@ namespace reachability {
 				nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
 
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
+				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: ";
 				nextSegment.print();
@@ -150,7 +152,7 @@ namespace reachability {
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
 					flowpipe.push_back( newSegment.second );
-					if(intersectBadStates(_loc, newSegment.second)){
+					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
 						while(!mWorkingQueue.empty()){
 							mWorkingQueue.pop();
@@ -159,20 +161,22 @@ namespace reachability {
 					}
 					// Collect potential new initial states from discrete behaviour.
 					if(mCurrentLevel < mSettings.jumpDepth) {
-						Representation guardSatisfyingSet;
+						State<Number> guardSatisfyingState;
+						State<Number> currentState = _state;
+						currentState.set = newSegment.second;
 						bool fireTimeTriggeredTransition = false;
-						for( auto transition : _loc->transitions() ){
+						for( auto transition : _state.location->transitions() ){
 							// handle time-triggered transitions
 							if(transition->isTimeTriggered()){
 								if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
-									if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
-										nextInitialSets.emplace_back(transition, guardSatisfyingSet);
+									if(intersectGuard(transition, currentState, guardSatisfyingState)){
+										nextInitialSets.emplace_back(transition, guardSatisfyingState);
 										fireTimeTriggeredTransition = true;
 									}
 								}
 							} // handle normal transitions
-							else if(intersectGuard(transition, newSegment.second, guardSatisfyingSet)){
-								nextInitialSets.emplace_back(transition, guardSatisfyingSet);
+							else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+								nextInitialSets.emplace_back(transition, guardSatisfyingState);
 							}
 						}
 						if(fireTimeTriggeredTransition){
@@ -206,15 +210,32 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	void Reach<Number,Representation>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, Representation>>& _newInitialSets ) {
-		std::map<Transition<Number>*, std::vector<Representation>> toAggregate;
+	void Reach<Number,Representation>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State<Number>>>& _newInitialSets ) {
+		std::map<Transition<Number>*, std::vector<State<Number>>> toAggregate;
+		VariablePool& vpool = VariablePool::getInstance();
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
-				mWorkingQueue.emplace(mCurrentLevel+1, boost::get<0>(tuple)->target(), boost::get<1>(tuple));
+				State<Number> s = boost::get<1>(tuple);
+				s.location = boost::get<0>(tuple)->target();
+				// handle discrete reset assignment
+				typename Transition<Number>::Reset reset = boost::get<0>(tuple)->reset();
+				assert(reset.discreteMat.rows() == s.discreteAssignment.size());
+				for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
+					carl::Interval<Number> newAssignment(0);
+					for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
+						newAssignment += reset.discreteMat(rowIndex,colIndex) * boost::get<1>(tuple).discreteAssignment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
+					}
+					newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
+					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
+				}
+
+				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
+				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
+				// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
 				if(toAggregate.find(boost::get<0>(tuple)) == toAggregate.end()){
-					toAggregate[boost::get<0>(tuple)] = std::vector<Representation>();
+					toAggregate[boost::get<0>(tuple)] = std::vector<State<Number>>();
 				}
 				toAggregate[boost::get<0>(tuple)].push_back(boost::get<1>(tuple));
 			}
@@ -222,28 +243,78 @@ namespace reachability {
 
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
+			assert(!aggregationPair.second.empty());
 			// TODO: Currently aggregation is done by collecting vertices - future: use multi-unite.
+			// collect vertices.
 			std::vector<Point<Number>> collectedVertices;
-			for(const auto& segment : aggregationPair.second){
-				std::vector<Point<Number>> tmpVertices = segment.vertices();
+			for(const auto& state : aggregationPair.second){
+				std::vector<Point<Number>> tmpVertices = boost::get<Representation>(state.set).vertices();
 				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 			}
-			mWorkingQueue.emplace(mCurrentLevel+1, aggregationPair.first->target(), Representation(collectedVertices));
+			State<Number> s;
+			s.location = aggregationPair.first->target();
+			s.set = Representation(collectedVertices);
+			// handle discrete reset assignment
+			// ASSUMPTION: All discrete assignments are the same for this transition.
+			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
+			std::cout << "Discrete assignment size: " << aggregationPair.second.begin()->discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
+			assert(reset.discreteMat.rows() == aggregationPair.second.begin()->discreteAssignment.size());
+			for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
+				carl::Interval<Number> newAssignment(0);
+				for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
+					// ATTENTION: Here the assumption takes place that every state for that transition has the same discrete assignment.
+					newAssignment += reset.discreteMat(rowIndex,colIndex) * aggregationPair.second.begin()->discreteAssignment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
+				}
+				newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
+				s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
+			}
+			std::cout << "Discrete assignment size: " << s.discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
+			assert(reset.discreteMat.rows() == s.discreteAssignment.size());
+			mWorkingQueue.emplace(mCurrentLevel+1, s);
 		}
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment,
-							   Representation& result ) {
+	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _state,
+							   State<Number>& result ) {
+		result = _state;
+		// check discrete guard intersection.
+		unsigned dOffset = _trans->guard().discreteOffset;
+		for(const auto& guardPair : _trans->guard().discreteGuard){
+			carl::Interval<Number> guardInterval(0);
+			// insert all current discrete assignments except the constrained one.
+			for(unsigned colIndex = 0; colIndex < guardPair.second.cols(); ++colIndex){
+				if(colIndex != VariablePool::getInstance().id(guardPair.first)-dOffset) {
+					if(_state.discreteAssignment.find(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset)) == _state.discreteAssignment.end() ){
+						guardInterval += guardPair.second(0, colIndex) * carl::Interval<Number>::unboundedInterval();
+					} else {
+						guardInterval += guardPair.second(0, colIndex) * _state.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+					}
+				}
+			}
+			if(_state.discreteAssignment.find(guardPair.first) != _state.discreteAssignment.end()) {
+				result.discreteAssignment[guardPair.first] = _state.discreteAssignment.at(guardPair.first).intersect(guardInterval);
+			} else {
+				// set discrete assignment to match invariant.
+				result.discreteAssignment[guardPair.first] = guardInterval;
+			}
+			if(result.discreteAssignment[guardPair.first].isEmpty()){
+				#ifdef REACH_DEBUG
+				std::cout << "Valuation violates discrete guard." << std::endl;
+				#endif
+				return false;
+			}
+		}
 
-		std::pair<bool, Representation> guardSatisfyingSet = _segment.satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
+		// check for continuous set guard intersection
+		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
-			result = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+			result.set = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
 			return true;
 		} else {
 			return false;
@@ -278,14 +349,64 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( hypro::Location<Number>* _loc, const Representation& _val ) const {
+	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
 #ifdef REACH_DEBUG
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
-		_val.print();
+		boost::get<Representation>(_state.set).print();
 #endif
 		// check if initial Valuation fulfills Invariant
-		std::pair<bool, Representation> initialPair = _val.satisfiesHalfspaces(_loc->invariant().mat, _loc->invariant().vec);
+		// check discrete invariant first
+		State<Number> validState = _state;
+		const typename Location<Number>::Invariant& i = _state.location->invariant();
+		for(const auto& invariantPair : i.discreteInvariant) {
+			carl::Interval<Number> invariantInterval(0);
+			//std::cout << "Invariant row: " << invariantPair.second << std::endl;
+			// insert all current discrete assignments except the constrained one.
+			//std::cout << "insert all except col " << VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset << std::endl;
+			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
+				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) {
+					if(invariantPair.second(0, colIndex) != 0){
+						//std::cout << "search for variable in dimension " << colIndex+i.discreteOffset << std::endl;
+						if(validState.discreteAssignment.find(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)) == validState.discreteAssignment.end() ){
+							validState.discreteAssignment[VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)] = carl::Interval<Number>::unboundedInterval();
+							//std::cout << "Not found." << std::endl;
+						}
+						invariantInterval += invariantPair.second(0, colIndex) * validState.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset));
+						//std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+					}
+				}
+			}
+			// add constant term
+			carl::Interval<Number> constPart = carl::Interval<Number>::unboundedInterval();
+			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) > 0){
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == 1);
+				constPart.setUpper(-invariantPair.second(0,invariantPair.second.cols()-1));
+			} else {
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == -1);
+				constPart.setLower(invariantPair.second(0,invariantPair.second.cols()-1));
+			}
+			invariantInterval += constPart;
+
+			//std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+			//std::cout << "Current assignment: " << validState.discreteAssignment[invariantPair.first] << std::endl;
+			//std::cout << "Intersected: " << validState.discreteAssignment[invariantPair.first].intersect(invariantInterval) << std::endl;
+			if(validState.discreteAssignment.find(invariantPair.first) != validState.discreteAssignment.end()) {
+				validState.discreteAssignment[invariantPair.first] = validState.discreteAssignment[invariantPair.first].intersect(invariantInterval);
+			} else {
+				// set discrete assignment to match invariant.
+				validState.discreteAssignment[invariantPair.first] = invariantInterval;
+			}
+			if(validState.discreteAssignment[invariantPair.first].isEmpty()){
+				#ifdef REACH_DEBUG
+				std::cout << "Valuation violates discrete invariant." << std::endl;
+				#endif
+				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
+			}
+		}
+
+		// check continuous set for invariant
+		std::pair<bool, Representation> initialPair = boost::get<Representation>(_state.set).satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << initialPair.first << std::endl;
@@ -293,7 +414,7 @@ namespace reachability {
 		if ( initialPair.first ) {
 			// approximate R_[0,delta](X0)
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
-			matrix_t<Number> trafoMatrix = computeTrafoMatrix(_loc);
+			matrix_t<Number> trafoMatrix = computeTrafoMatrix(_state.location);
 
 #ifdef REACH_DEBUG
 			std::cout << "e^(deltaMatrix): " << std::endl;
@@ -317,14 +438,14 @@ namespace reachability {
 			// R_0(X0) U R_delta(X0)
 			Representation unitePolytope = initialPair.second.unite( deltaValuation );
 			//assert(unitePolytope.contains(initialPair.second));
-			assert(unitePolytope.contains(deltaValuation));
+			//assert(unitePolytope.contains(deltaValuation));
 
 #ifdef REACH_DEBUG
 			std::cout << "Polytope after unite with R0: ";
 			unitePolytope.print();
 #endif
 			// bloat hullPolytope (Hausdorff distance)
-			Number radius = hausdorffError( Number( mSettings.timeStep ), _loc->flow(), initialPair.second.supremum() );
+			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
 			assert(radius > 0);
 
 #ifdef REACH_DEBUG
@@ -378,7 +499,7 @@ namespace reachability {
 			if(use_reduce_time){
 				// option 2
 
-				//for(auto transition: _loc->transitions()){	// reduction memory guard mode
+				//for(auto transition: _state.location->transitions()){	// reduction memory guard mode
 				//	auto guard= transition->guard();
 				//	for(unsigned i=0; i<guard.mat.rows(); i++){
 				//		vector_t<Number> guard_vector = vector_t<Number>(2);
@@ -403,27 +524,47 @@ namespace reachability {
 			firstSegment.removeRedundancy();
 
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
-			Representation lastSegment = firstSegment.intersectHalfspaces( _loc->invariant().mat, _loc->invariant().vec );
-			assert(firstSegment.satisfiesHalfspaces(_loc->invariant().mat, _loc->invariant().vec).first);
-			return boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>>(initialPair.first, lastSegment, trafoMatrix, translation);
+			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
+			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
+			validState.set = fullSegment;
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
 		} // if satisfies invariant
 		else {
-			return boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>>(initialPair.first, initialPair.second);
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
 		}
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectBadStates( Location<Number>* _loc, const Representation& _segment ) const {
-		// check local bad states
-		if(mAutomaton.localBadStates().find(_loc) != mAutomaton.localBadStates().end()){
-			auto badStateIterator = mAutomaton.localBadStates().find(_loc);
-			if(_segment.satisfiesHalfspaces(badStateIterator->second.first, badStateIterator->second.second).first == true){
+	bool Reach<Number,Representation>::intersectBadStates( const State<Number>& _state, const Representation& _segment ) const {
+		// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
+		auto badStateIterator = mAutomaton.localBadStates().find(_state.location);
+		if(badStateIterator != mAutomaton.localBadStates().end()){
+			// check discrete variables first -> faster.
+			for(const auto& assignmentPair : _state.discreteAssignment) {
+				// check if there is a constraint on the variable
+				if(badStateIterator->second.discreteAssignment.find(assignmentPair.first) != badStateIterator->second.discreteAssignment.end() ){
+					std::cout << "Discrete guard: " << assignmentPair.first << " in " << badStateIterator->second.discreteAssignment.at(assignmentPair.first) << " Current assignment: " << assignmentPair.second << std::endl;
+					if(!badStateIterator->second.discreteAssignment.at(assignmentPair.first).intersectsWith(assignmentPair.second)){
+						// If one intersection is empty, the whole set does not intersect -> return false.
+						return false;
+					}
+				}
+				// if there is no constraint on the variable, the bad state is always satisfied for that dimension.
+			}
+			#ifdef REACH_DEBUG
+			std::cout << "Intersection with local, discrete bad states" << std::endl;
+			#endif
+			// at this point all discrete bad states were already satisfied -> check continuous bad states.
+			if(_segment.satisfiesHalfspaces(boost::get<cPair<Number>>(badStateIterator->second.set).first, boost::get<cPair<Number>>(badStateIterator->second.set).second).first == true){
 				#ifdef REACH_DEBUG
-				std::cout << "Intersection with local bad states" << std::endl;
+				std::cout << "Intersection with all local bad states" << std::endl;
 				#endif
 				mIntersectedBadStates = true;
 				return true;
 			}
+			#ifdef REACH_DEBUG
+			std::cout << "No intersection with local, continuous bad states" << std::endl;
+			#endif
 		}
 
 		// check global bad states

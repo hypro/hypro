@@ -14,13 +14,17 @@
 #include <map>
 
 namespace hypro {
+
+template<typename Number>
+class State;
+
 template <typename Number>
 class HybridAutomaton {
   public:
 
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	using locationSetMap = std::multimap<Location<Number>*, std::pair<matrix_t<Number>, vector_t<Number>>, locPtrComp<Number>>;
+	using locationStateMap = std::multimap<Location<Number>*, State<Number>, locPtrComp<Number>>;
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
   private:
 	/**
@@ -28,8 +32,8 @@ class HybridAutomaton {
 	 */
 	locationSet mLocations;
 	transitionSet mTransitions;
-	locationSetMap mInitialStates;
-	locationSetMap mLocalBadStates;
+	locationStateMap mInitialStates;
+	locationStateMap mLocalBadStates;
 	setVector mGlobalBadStates;
 
   public:
@@ -39,7 +43,7 @@ class HybridAutomaton {
 	HybridAutomaton() {}
 	HybridAutomaton( const HybridAutomaton& _hybrid );
 	HybridAutomaton( const locationSet& _locs, const transitionSet& _trans,
-					 const locationSetMap& _initialStates );
+					 const locationStateMap& _initialStates );
 
 	virtual ~HybridAutomaton() {}
 
@@ -48,21 +52,21 @@ class HybridAutomaton {
 	 */
 	const locationSet& locations() const;
 	const transitionSet& transitions() const;
-	const locationSetMap& initialStates() const;
-	const locationSetMap& localBadStates() const;
+	const locationStateMap& initialStates() const;
+	const locationStateMap& localBadStates() const;
 	const setVector& globalBadStates() const;
 	unsigned dimension() const;
 
 	void setLocations( const locationSet& _locs );
 	void setTransitions( const transitionSet& _trans );
-	void setInitialStates( const locationSetMap& _states );
-	void setLocalBadStates( const locationSetMap& _states );
+	void setInitialStates( const locationStateMap& _states );
+	void setLocalBadStates( const locationStateMap& _states );
 	void setGlobalBadStates( const setVector& _states );
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );
-	void addInitialState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
-	void addLocalBadState( Location<Number>* _location , const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
+	void addInitialState( const State<Number>& _state );
+	void addLocalBadState( const State<Number>& _state );
 	void addGlobalBadState( const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
 
 	// copy assignment operator, TODO: implement via swap
