@@ -3,10 +3,10 @@
 namespace hypro
 {   
     template<typename Number, typename Representation>
-    ReachTreeNodeSimple::ReachTreeNodeSimple( unsigned _depth )
-        : mDepth( _depth )
+    ReachTreeNodeSimple::ReachTreeNodeSimple( )
     {
         mChildren = std::vector< ReachTreeNode* >();  
+        mDepth = 0;
         mID = std::vector< unsigned >( 0 );
     }
     
@@ -27,4 +27,12 @@ namespace hypro
     {
         return mChildren;
     }
+    
+    template<typename Number, typename Representation>
+    void ReachTreeNodeSimple::addChild( ReachTreeNode* node_to_be_added )
+    {
+        this->mChildren.push_back( node_to_be_added );        
+    }
+    
+    
 }

@@ -149,7 +149,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 }
 
 
-//TODO alternative approach with points from boundaries
 //conversion from Support Function to Zonotope (OVER or ALTERNATIVE)
 //ALTERNATIVE computes a set of boundary points which then go to pca for an oriented rectangular hull before checking whether the source object is really in that box and maybe expanding it)
 template <typename Number>

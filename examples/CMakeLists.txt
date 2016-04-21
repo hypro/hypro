@@ -17,6 +17,7 @@ set( EXAMPLES
     example_bouncingBall_Plotter
     example_bouncingBall_Fly
     example_box
+    example_boxConversion
     example_converter
     example_convexHull
     example_division
@@ -34,6 +35,7 @@ set( EXAMPLES
     example_openglPlotting
     example_orthogonalPolyhedron
     example_parser
+    example_pca
     example_plot
     example_point
     example_polytope
@@ -43,14 +45,17 @@ set( EXAMPLES
     #example_ppl_nncPolyhedra
     example_reduction
     example_SFconversion
+    example_sfh
     example_spiral
     example_squareroot
     example_subtraction
     example_supportFunction
+    example_supportpca
     example_switchingLinearSystem
     example_cubicroot
     example_test
     example_thermostat
+    example_underapprox
     example_useSMT
     example_vertexEnumeration
     #example_twotankreachability

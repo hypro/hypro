@@ -3,11 +3,12 @@
 namespace hypro
 {
     template<typename Number, typename Representation>
-    ReachTreeNode::ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
-        : mID( _id ), mLoc( _loc ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
+    ReachTreeNode::ReachTreeNode( std::vector< unsigned > _id, Location<Number>* _loc, Representation _first_segment, Number _time_step, unsigned _depth, representation_name _rep, ReachTreeNode* _parent )
+        : mID( _id ), mLoc( _loc ), mFirst( _first_segment ), mTimeStep( _time_step ), mDepth( _depth ), mRep( _rep ), mParent( _parent )
     {
         mChildren = std::vector< ReachTreeNode* >(); 
         mGuardSatisfiedIndices = guard_map();
+        mFinished = false;
     }
     
     template<typename Number, typename Representation>
@@ -38,6 +39,12 @@ namespace hypro
     Representation ReachTreeNode::getLastSegment()
     {
         return mLast;
+    }
+    
+    template<typename Number, typename Representation>    
+    bool ReachTreeNode::getFinished()
+    {
+        return mFinished;
     }
     
     template<typename Number, typename Representation>    
@@ -81,6 +88,12 @@ namespace hypro
     {
         mLast = _last;
     } 
+    
+    template<typename Number, typename Representation>
+    void ReachTreeNode::setFinished( bool _finished )
+    {
+        mFinished = _finished;
+    }
     
     template<typename Number, typename Representation>
     void ReachTreeNode::setOverapproximation( flowpipe_t overapprox )
