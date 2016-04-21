@@ -81,12 +81,12 @@ unsafe set
   on
   {
    x in [17,18]
-   t in [0,0.3]
+   t in [0,0.35]
   }
 
   off
   {
    x in [17,18]
-   t in [0,0.3]
+   t in [0,0.35]
   }
 }

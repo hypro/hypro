@@ -220,7 +220,7 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 
 namespace hypro {
 	/**
-	 * conversion of a matrix
+	 * conversion of a matrix_t
 	 */
 	template <typename From, typename To>
 	hypro::matrix_t<To> convert( const hypro::matrix_t<From>& _mat ) {
@@ -231,6 +231,7 @@ namespace hypro {
 				resultMat( i, j ) = carl::convert<From,To>(_mat( i, j ));
 			}
 		}
+		assert(resultMat.rows() == _mat.rows() && resultMat.cols() == _mat.cols());
 		return resultMat;
 	}
 

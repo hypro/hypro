@@ -9,7 +9,7 @@ namespace parser {
 	struct variableParser
 	    : qi::grammar<Iterator, std::vector<std::string>(), Skipper>
 	{
-		//px::function<ErrorHandler> errorHandler;
+		px::function<ErrorHandler> errorHandler;
 
 		variableParser() : variableParser::base_type( start, "variableParser" ) {
 			varName = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
@@ -18,7 +18,7 @@ namespace parser {
 			start.name("variableVector");
 			varName.name("singleVariable");
 
-			//qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::vector<std::string>(), Skipper> start;
@@ -168,42 +168,105 @@ namespace parser {
 		}
 	};
 
+	enum RELATION {LESS,LEQ,EQ,GEQ, GREATER};
+
 	template<typename Iterator, typename Number>
-	struct discreteResetParser : qi::grammar<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)>
+	struct singleVariableConstraintParser : qi::grammar<Iterator, std::pair<unsigned, std::vector<matrix_t<Number>>>(symbol_table const&, unsigned const&)>
 	{
+		polynomialParser<Iterator> polynomial;
 		px::function<ErrorHandler> errorHandler;
 
-		discreteResetParser() : discreteResetParser::base_type( start, "discreteResetParser" ) {
+		singleVariableConstraintParser() : singleVariableConstraintParser::base_type( start, "singleVariableConstraintParser" ) {
 			using qi::on_error;
 	        using qi::fail;
 
-			start = ( interval(qi::_r1) | assignment(qi::_r1) );
-			assignment = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lit(":=") > qi::double_)[qi::_val = px::bind( &discreteResetParser<Iterator,Number>::createPair, px::ref(*this), qi::_1, qi::_2, qi::_2 )]];
-			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &discreteResetParser<Iterator,Number>::createPair, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
-			start.name("reset");
-			assignment.name("reset assignment");
-			interval.name("reset interval");
+			start = qi::skip(qi::blank)[( interval(qi::_r1, qi::_r2) | assignment(qi::_r1, qi::_r2) )];
+			assignment = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > relationSymbol > polynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &singleVariableConstraintParser<Iterator,Number>::createPairFromPoly, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
+			relationSymbol = (qi::lexeme["<="][qi::_val = RELATION::LEQ]
+							| qi::lexeme[">="][qi::_val = RELATION::GEQ]
+							| qi::lit('=')[qi::_val = RELATION::EQ]);
+			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) >> qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &singleVariableConstraintParser<Iterator,Number>::createPairFromInterval, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_r2 )]];
+			start.name("singleVarConstraint");
+			relationSymbol.name("relationSymbol");
+			assignment.name("singleVarConstraint assignment");
+			interval.name("singleVarConstraint interval");
 
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> start;
-		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> interval;
-		qi::rule<Iterator, std::pair<unsigned, carl::Interval<Number>>(symbol_table const&)> assignment;
+		qi::rule<Iterator, std::pair<unsigned, std::vector<matrix_t<Number>>>(symbol_table const&, unsigned const&)> start;
+		qi::rule<Iterator, RELATION()> relationSymbol;
+		qi::rule<Iterator, std::pair<unsigned, std::vector<matrix_t<Number>>>(symbol_table const&, unsigned const&)> interval;
+		qi::rule<Iterator, std::pair<unsigned, std::vector<matrix_t<Number>>>(symbol_table const&, unsigned const&)> assignment;
 
-		std::pair<unsigned, carl::Interval<Number>> createPair( const unsigned& _d, const double& _lower, const double& _upper ) {
-			return std::make_pair(_d, carl::Interval<Number>(carl::convert<double,Number>(_lower), carl::convert<double,Number>(_upper)));
+		std::pair<unsigned, std::vector<matrix_t<Number>>> createPairFromPoly( const unsigned& _d, const RELATION& _rel, const vector_t<double>& _constraint) {
+			std::vector<matrix_t<Number>> res;
+			// convert to Number and transpose to create a row.
+			matrix_t<Number> newRhs = convert<double,Number>(_constraint.transpose());
+			assert(newRhs.rows() == 1);
+			std::cout << "create constraint for dimension " << _d << std::endl;
+			assert(_d < newRhs.cols()-1);
+			switch(_rel){
+				case RELATION::EQ: {
+					matrix_t<Number> resLower = matrix_t<Number>::Zero(1, newRhs.cols());
+					matrix_t<Number> resUpper = matrix_t<Number>::Zero(1, newRhs.cols());
+					resLower(0,_d) = -1;
+					resLower = resLower + newRhs;
+					resUpper(0,_d) = 1;
+					resUpper = resUpper - newRhs;
+					res.emplace_back(resLower);
+					res.emplace_back(resUpper);
+					//std::cout << "Created row from =: " << resLower << std::endl;
+					//std::cout << "Created row from =: " << resUpper << std::endl;
+					break;
+				}
+				case RELATION::GEQ: {
+					matrix_t<Number> resRow = matrix_t<Number>::Zero(1, newRhs.cols());
+					resRow(0,_d) = -1;
+					resRow = resRow + newRhs;
+					//std::cout << "GEQ: lhs:" << _d << " >= " << newRhs << std::endl;
+					res.emplace_back(resRow);
+					//std::cout << "Created row from >=: " << resRow << std::endl;
+					break;
+				}
+				case RELATION::LEQ: {
+					matrix_t<Number> resRow= matrix_t<Number>::Zero(1, newRhs.cols());
+					resRow(0,_d) = 1;
+					resRow = resRow - newRhs;
+					res.emplace_back(resRow);
+					//std::cout << "Created row from <=: " << resRow << std::endl;
+					break;
+				}
+				default:{
+					assert(false);
+					break;
+				}
+			}
+			return std::make_pair(_d, res);
+		}
+
+		std::pair<unsigned, std::vector<matrix_t<Number>>> createPairFromInterval( const unsigned& _d, const double& _lower, const double& _upper, unsigned _dimension ) {
+			std::vector<matrix_t<Number>> res;
+			std::cout << __func__ << ": passed dimension: " << _dimension << std::endl;
+			matrix_t<Number> lower = matrix_t<Number>::Zero(1,_dimension+1);
+			matrix_t<Number> upper = matrix_t<Number>::Zero(1,_dimension+1);
+			lower(0,_d) = -1;
+			lower(0,_dimension) = carl::convert<double,Number>(_lower);
+			upper(0,_d) = 1;
+			upper(0,_dimension) = -carl::convert<double,Number>(_upper);
+			res.emplace_back(lower);
+			res.emplace_back(upper);
+
+			return std::make_pair(_d, res);
 		}
 	};
-
-	enum RELATION {LESS,LEQ,EQ,GEQ, GREATER};
 
 	/**
 	 * @brief Creates a matrix representing the parsed constraint.
 	 * @details The matrix is augmented by a column (the last one), which represents the constant parts.
 	 */
-	template<typename Iterator>
-	struct constraintParser : qi::grammar<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)>
+	template<typename Iterator, typename Number>
+	struct constraintParser : qi::grammar<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)>
 	{
 		polynomialParser<Iterator> mPolynomial;
 		px::function<ErrorHandler> errorHandler;
@@ -213,11 +276,11 @@ namespace parser {
 	        using qi::fail;
 
 			start = qi::skip(qi::blank)[(interval(qi::_r1, qi::_r2) | inequation(qi::_r1, qi::_r2))];
-			inequation = qi::skip(qi::blank)[(mPolynomial(qi::_r1, qi::_r2) > relationSymbol > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &constraintParser<Iterator>::createRow, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
+			inequation = qi::skip(qi::blank)[(mPolynomial(qi::_r1, qi::_r2) > relationSymbol > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &constraintParser<Iterator,Number>::createRow, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
 			relationSymbol = (qi::lexeme["<="][qi::_val = RELATION::LEQ]
 							| qi::lexeme[">="][qi::_val = RELATION::GEQ]
 							| qi::lit('=')[qi::_val = RELATION::EQ]);
-			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) >> qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &constraintParser<Iterator>::createIntervalConstraints, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_r2 )]];
+			interval = qi::skip(qi::blank)[(qi::lazy(qi::_r1) >> qi::lexeme["in"] > qi::lit('[') > qi::double_ > qi::lit(',') > qi::double_ > qi::lit(']'))[qi::_val = px::bind( &constraintParser<Iterator,Number>::createIntervalConstraints, px::ref(*this), qi::_1, qi::_2, qi::_3, qi::_r2 )]];
 
 			start.name("constraint");
 			inequation.name("polynomial constraint");
@@ -227,19 +290,25 @@ namespace parser {
 			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
-		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> start;
+		qi::rule<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)> start;
 		qi::rule<Iterator, RELATION()> relationSymbol;
-		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> inequation;
-		qi::rule<Iterator, std::vector<matrix_t<double>>(symbol_table const&, unsigned const&)> interval;
+		qi::rule<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)> inequation;
+		qi::rule<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)> interval;
 
-		std::vector<matrix_t<double>> createRow(const vector_t<double>& _lhs, RELATION _rel, const vector_t<double>& _rhs) {
-			std::vector<matrix_t<double>> res;
+		std::vector<matrix_t<Number>> createRow(const vector_t<double>& _lhs, RELATION _rel, const vector_t<double>& _rhs) {
+			std::vector<matrix_t<Number>> res;
+			// convert to Number and transpose to create a row.
+			matrix_t<Number> newLhs = convert<double,Number>(_lhs.transpose());
+			matrix_t<Number> newRhs = convert<double,Number>(_rhs.transpose());
+			assert(newLhs.rows() == 1 && newLhs.cols() == _lhs.rows());
+			assert(newRhs.rows() == 1 && newRhs.cols() == _rhs.rows());
+			assert(newLhs.cols() == newRhs.cols());
 			switch(_rel){
 				case RELATION::EQ: {
-					matrix_t<double> resLower = matrix_t<double>(1, _lhs.rows());
-					matrix_t<double> resUpper = matrix_t<double>(1, _lhs.rows());
-					resLower.row(0) = (_lhs-_rhs);
-					resUpper.row(0) = -1*(_lhs)+_rhs;
+					matrix_t<Number> resLower = matrix_t<Number>(1, newLhs.cols());
+					matrix_t<Number> resUpper = matrix_t<Number>(1, newLhs.cols());
+					resLower.row(0) = (newLhs-newRhs);
+					resUpper.row(0) = -1*(newLhs)+newRhs;
 					res.emplace_back(resLower);
 					res.emplace_back(resUpper);
 
@@ -248,16 +317,16 @@ namespace parser {
 					return res;
 				}
 				case RELATION::GEQ: {
-					matrix_t<double> resRow = matrix_t<double>(1, _lhs.rows());
-					//std::cout << "GEQ: lhs:" << _lhs << " >= " << _rhs << std::endl;
-					resRow.row(0) = -1*(_lhs)+_rhs;
+					matrix_t<Number> resRow = matrix_t<Number>(1, newLhs.cols());
+					//std::cout << "GEQ: lhs:" << newLhs << " >= " << newRhs << std::endl;
+					resRow.row(0) = -1*(newLhs)+newRhs;
 					res.emplace_back(resRow);
 					//std::cout << "Created row from >=: " << resRow << std::endl;
 					return res;
 				}
 				case RELATION::LEQ: {
-					matrix_t<double> resRow= matrix_t<double>(1, _lhs.rows());
-					resRow.row(0) = _lhs-_rhs;
+					matrix_t<Number> resRow= matrix_t<Number>(1, newLhs.cols());
+					resRow.row(0) = newLhs-newRhs;
 					res.emplace_back(resRow);
 					//std::cout << "Created row from <=: " << resRow << std::endl;
 					return res;
@@ -269,14 +338,14 @@ namespace parser {
 			return res;
 		}
 
-		std::vector<matrix_t<double>> createIntervalConstraints(unsigned _varIndex, double _lower, double _upper, unsigned _dimension) {
-			std::vector<matrix_t<double>> res;
-			matrix_t<double> resLower = matrix_t<double>::Zero(1,_dimension+1);
-			matrix_t<double> resUpper = matrix_t<double>::Zero(1,_dimension+1);
+		std::vector<matrix_t<Number>> createIntervalConstraints(unsigned _varIndex, double _lower, double _upper, unsigned _dimension) {
+			std::vector<matrix_t<Number>> res;
+			matrix_t<Number> resLower = matrix_t<Number>::Zero(1,_dimension+1);
+			matrix_t<Number> resUpper = matrix_t<Number>::Zero(1,_dimension+1);
 			resLower(0,_varIndex) = -1;
-			resLower(0,_dimension) = _lower;
+			resLower(0,_dimension) = carl::convert<double,Number>(_lower);
 			resUpper(0,_varIndex) = 1;
-			resUpper(0,_dimension) = -_upper;
+			resUpper(0,_dimension) = -carl::convert<double,Number>(_upper);
 			res.emplace_back(resLower);
 			res.emplace_back(resUpper);
 			//std::cout << "Created row from interval: " << resLower << std::endl;

@@ -60,12 +60,14 @@ namespace parser {
 			std::cout << "Added transition " << *transition << std::endl;
 		}
 
-		for(const auto initPair : mInitialStates ){
-			result.addInitialState(locManag.location(initPair.first), initPair.second);
+		for(const auto state : mInitialStates ){
+			std::cout << "Add initial state for location " << state.location->id() << std::endl;
+			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
+			result.addInitialState(state);
 		}
 
-		for(const auto badPair : mLocalBadStates ){
-			result.addLocalBadState(locManag.location(badPair.first), badPair.second);
+		for(const auto state : mLocalBadStates ){
+			result.addLocalBadState(state);
 		}
 
 		return result;

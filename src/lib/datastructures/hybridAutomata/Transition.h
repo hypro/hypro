@@ -20,7 +20,9 @@ class Transition {
 	struct Guard {
 		hypro::vector_t<Number> vec;
 		hypro::matrix_t<Number> mat;
-		std::map<carl::Variable, carl::Interval<Number>> discreteGuards;
+
+		unsigned discreteOffset;
+		std::vector<std::pair<carl::Variable, hypro::matrix_t<Number>>> discreteGuard;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
 			_ostr << _g.mat << " + " << std::endl << _g.vec;
@@ -31,6 +33,10 @@ class Transition {
 	struct Reset {
 		hypro::vector_t<Number> vec;  // Translation Vector
 		hypro::matrix_t<Number> mat;  // Transformation Matrix
+
+		unsigned discreteOffset;
+		hypro::vector_t<Number> discreteVec;  // Translation Vector
+		hypro::matrix_t<Number> discreteMat;  // Transformation Matrix
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
 			_ostr << _a.mat << " + " << std::endl << _a.vec;

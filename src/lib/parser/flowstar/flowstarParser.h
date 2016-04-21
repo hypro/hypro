@@ -22,6 +22,7 @@
 #include "../../config.h"
 #include "common.h"
 #include "../../algorithms/reachability/Settings.h"
+#include "../../datastructures/hybridAutomata/State.h"
 #include "../../datastructures/hybridAutomata/LocationManager.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/types.h"
@@ -42,43 +43,51 @@ struct flowstarParser
 	modeParser<Iterator, Number> mModeParser;
 	transitionParser<Iterator, Number> mTransitionParser;
 	settingsParser<Iterator, Number> mSettingsParser;
-	constraintParser<Iterator> mConstraintParser;
+	constraintParser<Iterator,Number> mConstraintParser;
+	discreteConstraintParser<Iterator,Number> mDiscreteConstraintParser;
 	px::function<ErrorHandler> errorHandler;
 
+	LocationManager<Number>& mLocationManager = LocationManager<Number>::getInstance();
 	symbol_table mVariableSymbolTable;
 	symbol_table mDiscreteVariableSymbolTable;
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mInitialStates;
-	std::multimap<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> mLocalBadStates;
+	std::vector<State<Number>> mInitialStates;
+	std::vector<State<Number>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	std::vector<unsigned> mDiscreteVariableIds;
 	ReachabilitySettings<Number> mSettings;
-	unsigned mDimension;
+	unsigned mDimensionLimit;
+	unsigned mDiscreteDimensionLimit;
 
 	flowstarParser() : flowstarParser::base_type( start ) {
 		using qi::on_error;
         using qi::fail;
 
-        mDimension = 0;
+        mDimensionLimit = 0;
+        mDiscreteDimensionLimit = 0;
 
 		start =  ( qi::lexeme["continuous reachability"] > qi::lit('{') > continuousStart > qi::lit('}') > -badStates > qi::eoi )
-				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates)[px::bind( &flowstarParser<Number>::insertBadState, px::ref(*this), qi::_1 )] > qi::eoi);
+				|( qi::lexeme["hybrid reachability"] > qi::lit('{') > hybridStart > qi::lit('}') > (-badStates) > qi::eoi);
 
 		continuousStart = 		continuousVariables > -discreteVariables > -mSettingsParser(px::ref(mVariableSymbolTable));
 		hybridStart = 			continuousVariables > -discreteVariables > settings >
 								modes[px::bind( &flowstarParser<Number>::insertModes, px::ref(*this), qi::_1 )] >
 								-transitions[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)] >
-								(-init)[px::bind( &flowstarParser<Number>::insertInitialState, px::ref(*this), qi::_1 )];
+								(-init);
 		discreteVariables = 	qi::lexeme["discrete var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertDiscreteSymbols, px::ref(*this), qi::_1)];
 		continuousVariables = 	qi::lexeme["state var"] > mVariableParser[px::bind( &flowstarParser<Number>::insertContinuousSymbols, px::ref(*this), qi::_1)];
 		settings = 				qi::lexeme["setting"] > qi::lit('{') > mSettingsParser(px::ref(mVariableSymbolTable))[px::bind( &flowstarParser<Number>::insertSettings, px::ref(*this), qi::_1)] > qi::lit('}');
-		modes = 				qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimension))) > qi::lit("}");
-		transitions = 			mTransitionParser(px::ref(mModes), px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimension))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
-		init = 					qi::lexeme["init"] > qi::lit('{') > *(mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}')) > qi::lit('}');
-		badStates = 			qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes > qi::lit('{') > *(mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimension))) > qi::lit('}') ) > qi::lit('}');
+		modes = 				qi::lexeme["modes"] > qi::lit('{') > *(mModeParser(px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimensionLimit), px::ref(mDiscreteDimensionLimit))) > qi::lit("}");
+		transitions = 			mTransitionParser(px::ref(mModes), px::ref(mVariableSymbolTable), px::ref(mDiscreteVariableSymbolTable), px::ref(mDimensionLimit), px::ref(mDiscreteDimensionLimit))[px::bind( &flowstarParser<Number>::insertTransitions, px::ref(*this), qi::_1)];
+		init = 					qi::lexeme["init"] > qi::lit('{') > *(mModes[qi::_a = qi::_1] > qi::lit('{') > *(continuousInit(qi::_a) | discreteInit(qi::_a)) > qi::lit('}')) > qi::lit('}');
+		continuousInit =		mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimensionLimit))[px::bind( &flowstarParser<Number>::addContinuousState, px::ref(*this), qi::_1, qi::_r1, px::ref(mInitialStates))];
+		discreteInit =			mDiscreteConstraintParser(px::ref(mDiscreteVariableSymbolTable))[px::bind( &flowstarParser<Number>::addDiscreteState, px::ref(*this), qi::_1, qi::_r1, px::ref(mInitialStates))];
+		badStates = 			qi::lexeme["unsafe set"] > qi::lit('{') > *( mModes[qi::_a = qi::_1] > qi::lit('{') > *( continuousBad(qi::_a) | discreteBad(qi::_a) ) > qi::lit('}') ) > qi::lit('}');
+		continuousBad = 		mConstraintParser(px::ref(mVariableSymbolTable), px::ref(mDimensionLimit))[px::bind( &flowstarParser<Number>::addContinuousState, px::ref(*this), qi::_1, qi::_r1, px::ref(mLocalBadStates))];
+		discreteBad = 			mDiscreteConstraintParser(px::ref(mDiscreteVariableSymbolTable))[px::bind( &flowstarParser<Number>::addDiscreteState, px::ref(*this), qi::_1, qi::_r1, px::ref(mLocalBadStates))];
 
 		qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 	}
@@ -89,27 +98,116 @@ struct flowstarParser
 	qi::rule<Iterator, Skipper> continuousVariables;
 	qi::rule<Iterator, Skipper> discreteVariables;
 	qi::rule<Iterator, Skipper> settings;
-	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> init;
-	qi::rule<Iterator, std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>(), Skipper> badStates;
+	qi::rule<Iterator, qi::unused_type(), spirit::locals<unsigned>, Skipper> init;
+	qi::rule<Iterator, qi::unused_type(const unsigned&)> continuousInit;
+	qi::rule<Iterator, qi::unused_type(const unsigned&)> discreteInit;
+	qi::rule<Iterator, qi::unused_type(), spirit::locals<unsigned>, Skipper> badStates;
+	qi::rule<Iterator, qi::unused_type(const unsigned&)> continuousBad;
+	qi::rule<Iterator, qi::unused_type(const unsigned&)> discreteBad;
 	qi::rule<Iterator, std::vector<std::pair<std::string, Location<Number>*>>(), Skipper> modes;
 	qi::rule<Iterator, std::set<Transition<Number>*>(), Skipper> transitions;
 
 	void insertContinuousSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
 			mVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
-			++mDimension;
+			++mDimensionLimit;
+			++mDiscreteDimensionLimit;
+			std::cout << "New continuous dimension: " << mDimensionLimit << std::endl;
 		}
 	}
 
 	void insertDiscreteSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
 			mDiscreteVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mDiscreteVariableIds.push_back(mVariablePool.id(tmp));
+			++mDiscreteDimensionLimit;
+			std::cout << "New discrete dimension: " << mDiscreteDimensionLimit << std::endl;
+		}
+	}
+
+	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number>>& _states) {
+		std::cout << "Add continuous state for location " << id << std::endl;
+		bool found = false;
+		for(auto& state : _states) {
+			if(state.location->id() == id){
+				std::cout << "State already exists." << std::endl;
+				found = true;
+				assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
+				unsigned constraintsNum = boost::get<cPair<Number>>(state.set).first.rows();
+				std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+				cPair<Number> set = boost::get<cPair<Number>>(state.set);
+				std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << boost::get<cPair<Number>>(state.set).first.cols() << std::endl;
+				set.first.conservativeResize(constraintsNum+_constraint.size(), boost::get<cPair<Number>>(state.set).first.cols());
+				set.second.conservativeResize(constraintsNum+_constraint.size());
+				std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
+				for(const auto& row : _constraint) {
+					assert(row.rows() == 1);
+					std::cout << "add row " << constraintsNum;
+					set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+					//std::cout << " " << convert<Number,double>(boost::get<cPair<Number>>(state.set).first.row(constraintsNum)) << " <= ";
+					set.second(constraintsNum) = -row(0,row.cols()-1);
+					//std::cout << boost::get<cPair<Number>>(state.set).second(constraintsNum) << std::endl;
+					++constraintsNum;
+				}
+				state.set = set;
+				std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+			}
+		}
+		if(!found){
+			State<Number> s;
+			s.location = mLocationManager.location(id);
+			std::pair<matrix_t<Number>, vector_t<Number>> set;
+			set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
+			set.second = vector_t<Number>(_constraint.size());
+			unsigned constraintsNum = 0;
+			std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
+			for(const auto& row : _constraint) {
+				assert(row.rows() == 1);
+				std::cout << "add row " << constraintsNum;
+				set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+				//std::cout << " " << s.constraints.row(constraintsNum) << " <= ";
+				set.second(constraintsNum) = -row(0,row.cols()-1);
+				//std::cout << s.constants(constraintsNum) << std::endl;
+				++constraintsNum;
+			}
+			s.set = set;
+			// initial setup of the discrete assignment
+			for(const auto& id : mDiscreteVariableIds ){
+				s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
+			}
+			_states.emplace_back(s);
+		}
+	}
+
+	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number>>& _states) {
+		std::cout << "Add discrete state for location " << id << std::endl;
+		bool found = false;
+		for(auto& state : _states) {
+			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
+			if(state.location == mLocationManager.location(id)){
+				found = true;
+				state.discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+			}
+			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
+		}
+		if(!found){
+			State<Number> s;
+			s.location = mLocationManager.location(id);
+			// initialize all discrete assignments to unbounded, when a new state is created
+			for(const auto& id : mDiscreteVariableIds ){
+				if(id == _initPair.first){
+					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				} else {
+					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
+				}
+			}
+			assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+			_states.emplace_back(s);
 		}
 	}
 
@@ -129,61 +227,6 @@ struct flowstarParser
 	void insertTransitions(const boost::optional<std::set<Transition<Number>*>>& _transitions) {
 		if(_transitions){
 			mTransitions = *_transitions;
-		}
-	}
-
-	void insertInitialState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>>& _set) {
-		if(_set){
-			for(const auto& pair : *_set){
-				std::cout << "Add initial location " << fs::get<0>(pair) << std::endl;
-				unsigned rows = 0;
-				for(const auto& rowVec : fs::get<1>(pair) ){
-					rows += rowVec.size();
-				}
-				std::cout << "Number constraints: " << rows << std::endl;
-				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->begin()->cols()-1);
-				vector_t<Number> vec = vector_t<Number>(rows);
-				//collect matrix and vector
-				unsigned rowcnt = 0;
-				for(const auto& matrixVec : fs::get<1>(pair)){
-					for(const auto& constraintRow : matrixVec){
-						std::cout << "Row: " << constraintRow << std::endl;
-						matrix_t<Number> tmpMatrix = convert<double,Number>(constraintRow);
-						mat.row(rowcnt) = tmpMatrix.block(0,0,1,tmpMatrix.cols()-1);
-						vec(rowcnt) = -tmpMatrix(0,tmpMatrix.cols()-1);
-						++rowcnt;
-					}
-				}
-				mInitialStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
-			}
-		}
-	}
-
-	void insertBadState(const boost::optional<std::vector<boost::fusion::tuple<unsigned, std::vector<std::vector<matrix_t<double>>>>>>& _set) {
-		if(_set){
-			for(const auto& pair : *_set){
-				std::cout << "Add bad state for location " << fs::get<0>(pair) << std::endl;
-				unsigned rows = 0;
-				for(const auto& rowVec : fs::get<1>(pair) ){
-					rows += rowVec.size();
-				}
-				std::cout << "Number constraints: " << rows << std::endl;
-				matrix_t<Number> mat = matrix_t<Number>(rows, fs::get<1>(pair).begin()->begin()->cols()-1);
-				vector_t<Number> vec = vector_t<Number>(rows);
-				//collect matrix and vector
-				unsigned rowcnt = 0;
-				for(const auto& matrixVec : fs::get<1>(pair)){
-					for(const auto& constraintRow : matrixVec){
-						std::cout << "Row: " << constraintRow << std::endl;
-						matrix_t<Number> tmpMatrix = convert<double,Number>(constraintRow);
-						mat.row(rowcnt) = tmpMatrix.block(0,0,1,tmpMatrix.cols()-1);
-						vec(rowcnt) = -tmpMatrix(0,tmpMatrix.cols()-1);
-						++rowcnt;
-					}
-				}
-				//std::cout << "PARSER: added local bad state: " << mat << " <= " << vec << std::endl;
-				mLocalBadStates.insert(std::make_pair(fs::get<0>(pair), std::make_pair(mat, vec)));
-			}
 		}
 	}
 

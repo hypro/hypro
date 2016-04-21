@@ -1,0 +1,209 @@
+# even simpler tank plant dynamic
+# a tank that is filled by an unlimited water suply
+# using a plc cycle time delta' = 1
+# using a tank capacity of full' = 30
+# using a water increase of c' = 2 when water is pumped into the tank
+# locations names: P/nP pump is switched on/off; full/nfull tank is full/not full
+# discreteLoc =0: sfc state off; discreteLoc =1: sfc state on
+# unsafe set: full tank
+# WRITE transitions: priority 1
+# USER input: priority 2 (toggle the pump status)
+# READ transitions: priority 3
+# SFC jump: priority 4
+
+
+hybrid reachability
+{
+ state var h, t
+ discrete var P, calP, P+, P-, calP+, calP-, discreteLoc
+
+ setting
+ {
+  fixed steps 0.1
+  time 30
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon t, h
+  adaptive orders { min 3 , max 5 }
+  cutoff 1e-12
+  output simple_tank_plant_dynamic
+  max jumps 1
+  print on
+ }
+
+ modes
+ {
+  P
+  {
+   poly ode 1
+   {
+    h' = 2
+	t' = 1
+   }
+
+   inv
+   {
+    P in [1,1]
+    t in [0,1]
+   }
+  }
+
+  nP
+  {
+   poly ode 1
+   {
+    h' = 0
+	t' = 1
+   }
+
+   inv
+   {
+    P in [0,0]
+    t in [0,1]
+   }
+  }
+
+ }
+
+ jumps
+ {
+
+   start P
+   end P
+   guard {calP >= 1}
+   reset{ P+' = calP+ P-' = calP- P' = calP }
+   parallelotope aggregation {}
+   time 1
+   #priority 1
+
+   start P
+   end nP
+   guard {calP <= 0}
+   reset{ P+' = calP+ P-' = calP- P' = calP }
+   parallelotope aggregation {}
+   time 1
+   #priority 1
+
+   start nP
+   end nP
+   guard {calP <= 0}
+   reset{ P+' = calP+ P-' = calP- P' = calP }
+   parallelotope aggregation {}
+   time 1
+   #priority 1
+
+   start nP
+   end P
+   guard {calP >= 1}
+   reset{ P+' = calP+ P-' = calP- P' = calP }
+   parallelotope aggregation {}
+   time 1
+   #priority 1
+
+
+   start P
+   end P
+   guard {P >= 1}
+   reset{ P+' = 0 P-' = 1 }
+   parallelotope aggregation {}
+   time 1
+   #priority 2
+
+   start P
+   end P
+   guard {P <= 0}
+   reset{ P+' = 1 P-' = 0 }
+   parallelotope aggregation {}
+   time 1
+   #priority 2
+
+   start nP
+   end nP
+   guard {P >= 1}
+   reset{ P+' = 0 P-' = 1 }
+   parallelotope aggregation {}
+   time 1
+   #priority 2
+
+   start nP
+   end nP
+   guard {P <= 0}
+   reset{ P+' = 1 P-' = 0 }
+   parallelotope aggregation {}
+   time 1
+   #priority 2
+
+
+   start P
+   end P
+   guard { }
+   reset{ calP+' = P+ calP-' = P- calP' = P }
+   parallelotope aggregation {}
+   time 1
+   #priority 3
+
+   start nP
+   end nP
+   guard { }
+   reset{ calP+' = P+ calP-' = P- calP' = P }
+   parallelotope aggregation {}
+   time 1
+   #priority 3
+
+
+   start P
+   end P
+   guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
+   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   parallelotope aggregation {}
+   time 1
+   #priority 4
+
+   start P
+   end P
+   guard { discreteLoc >= 1 calP- >= 1 }
+   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
+   parallelotope aggregation {}
+   time 1
+   #priority 4
+
+   start nP
+   end nP
+   guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
+   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   parallelotope aggregation {}
+   time 1
+   #priority 4
+
+   start nP
+   end nP
+   guard { discreteLoc >= 1 calP- >= 1 }
+   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
+   parallelotope aggregation {}
+   time 1
+   #priority 4
+
+ }
+
+ init
+ {
+  P
+  {
+   h in [10,20]
+   t in [0,0]
+   P in [1,1]
+   calP in [1,1]
+   P+ in [1,1]
+   P- in [0,0]
+   calP+ [1,1]
+   calP- [0,0]
+   discreteLoc [1,1]
+  }
+ }
+}
+
+unsafe set
+{
+ P  { h in [40,40] }
+ nP { h in [40,40] }
+}

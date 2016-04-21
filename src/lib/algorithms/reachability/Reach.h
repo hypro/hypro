@@ -14,6 +14,7 @@
 #include "Settings.h"
 #include "../../config.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../datastructures/hybridAutomata/State.h"
 #include "../../util/Plotter.h"
 #include "boost/tuple/tuple.hpp"
 
@@ -32,7 +33,7 @@ template <typename Representation>
 using flowpipe_t = std::vector<Representation>;
 
 template<typename Number, typename Representation>
-using initialSet = boost::tuple<unsigned, Location<Number>*, Representation>;
+using initialSet = boost::tuple<unsigned, State<Number>>;
 
 template <typename Number, typename Representation>
 class Reach {
@@ -71,7 +72,7 @@ public:
 	 *
 	 * @return The id of the computed flowpipe.
 	 */
-	flowpipe_t<Representation> computeForwardTimeClosure( hypro::Location<Number>* _loc, const Representation& _val );
+	flowpipe_t<Representation> computeForwardTimeClosure( const hypro::State<Number>& _state );
 
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
@@ -87,7 +88,7 @@ public:
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, Representation>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State<Number>>>& _newInitialSets );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -98,7 +99,7 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool intersectGuard( hypro::Transition<Number>* _trans, const Representation& _segment, Representation& result );
+	bool intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
 
 	/**
 	 * @brief Printing method for a flowpipe. Prints every segment.
@@ -116,8 +117,8 @@ public:
 private:
 
 	matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
-	boost::tuple<bool, Representation, matrix_t<Number>, vector_t<Number>> computeFirstSegment( hypro::Location<Number>* _loc, const Representation& _val ) const;
-	bool intersectBadStates( hypro::Location<Number>* _loc, const Representation& _segment ) const;
+	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State<Number>& _state ) const;
+	bool intersectBadStates( const State<Number>& _state, const Representation& _segment ) const;
 };
 
 }  // namespace reachability

@@ -97,7 +97,7 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
-	std::cout << __func__ << ": State: " << mEmpty << std::endl;
+	//std::cout << __func__ << ": State: " << mEmpty << std::endl;
 	if(mEmpty == TRIBOOL::TRUE)
 		return true;
 	if(mEmpty == TRIBOOL::FALSE)
@@ -108,7 +108,7 @@ bool HPolytopeT<Number, Converter>::empty() const {
 		return false;
 	}
 
-	std::cout << __func__ << ": CALL TO Optimizer" << std::endl;
+	//std::cout << __func__ << ": CALL TO Optimizer" << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
@@ -464,6 +464,10 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 
 template<typename Number, typename Converter>
 std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	assert(_mat.rows() == _vec.rows());
+	if(_mat.rows() == 0) {
+		return std::make_pair(true, *this);
+	}
 	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
 	return std::make_pair(!(tmp).empty(),tmp);
 }
@@ -496,49 +500,49 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
-	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+	//std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
 
 	// evaluation of rhs in directions of lhs
-	std::cout << "evaluation of rhs in directions of lhs" << std::endl;
+	//std::cout << "evaluation of rhs in directions of lhs" << std::endl;
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		EvaluationResult<Number> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
 		if ( evalRes.errorCode == INFTY ) {
-			std::cout << __func__ << " Evaluated against " <<
-			mHPlanes.at(i).normal() << std::endl;
-			std::cout << "INFTY" << std::endl;
+			//std::cout << __func__ << " Evaluated against " <<
+			// mHPlanes.at(i).normal() << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == INFEAS ) {
-			std::cout << "EMPTY" << std::endl;
+			// std::cout << "EMPTY" << std::endl;
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
 			res.insert( Halfspace<Number>( mHPlanes.at( i ).normal(), result ) );
-			std::cout << __func__ << " Evaluated against " <<
-			mHPlanes.at(i).normal() << " results in a distance " << evalRes.supportValue << std::endl;
-			std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
+			// std::cout << __func__ << " Evaluated against " <<
+			// mHPlanes.at(i).normal() << " results in a distance " << evalRes.supportValue << std::endl;
+			// std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
 		}
 	}
 
 	// evaluation of lhs in directions of rhs
-	std::cout << "evaluation of lhs in directions of rhs" << std::endl;
+	// std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 		EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
 		if ( evalRes.errorCode == INFTY ) {
-			std::cout << __func__ << " Evaluated against " <<
-			rhs.constraints().at( i ).normal() << std::endl;
-			std::cout << "INFTY" << std::endl;
+			// std::cout << __func__ << " Evaluated against " <<
+			// rhs.constraints().at( i ).normal() << std::endl;
+			// std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == INFEAS ) {
-			std::cout << "EMPTY" << std::endl;
+			// std::cout << "EMPTY" << std::endl;
 			return Empty();
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
 			res.insert( Halfspace<Number>( rhs.constraints().at( i ).normal(), result ) );
-			std::cout << __func__ << " Evaluated against " <<
-			rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
+			// std::cout << __func__ << " Evaluated against " <<
+			// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 		}
 	}
-	std::cout << "Result: " << res << std::endl;
+	// std::cout << "Result: " << res << std::endl;
 	return res;
 }
 
@@ -598,7 +602,7 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
-	std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
+	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	if(this->empty()){
 		return false;
 	}
@@ -609,17 +613,17 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 	for ( const auto &plane : rhs.constraints() ) {
 		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
 
-		std::cout << __func__ << ": plane " << plane << " -> " << evalRes.supportValue  << " orig offset: " << plane.offset() << "\t" ;
+		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.supportValue  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.errorCode == INFEAS ) {
-			std::cout << "INFEAS" << std::endl;
+			//std::cout << "INFEAS" << std::endl;
 			assert(false);
 			return false;  // empty!
 		} else if ( evalRes.errorCode == INFTY ) {
-			std::cout << "INFTY" << std::endl;
+			//std::cout << "INFTY" << std::endl;
 			continue;
 		} else if ( evalRes.supportValue < plane.offset() ) {
 			assert(evalRes.errorCode == FEAS);
-			std::cout << "Rhs offset is larger than result" << std::endl;
+			//std::cout << "Rhs offset is larger than result" << std::endl;
 			return false;
 		}
 	}

@@ -8,12 +8,12 @@ hybrid reachability
   time 3
   remainder estimation 1e-5
   identity precondition
-  gnuplot octagon x,v
+  gnuplot octagon v,x
   fixed orders 5
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 1
+  max jumps 10
   print on
  }
 
@@ -37,7 +37,7 @@ hybrid reachability
  jumps
  {
   l -> l
-  guard { x <= 0 x >= -0.01 v <= 0}
+  guard { x <= 0 x >= -0.01 v <= 0 }
   reset { v' := -0.75*v }
   parallelotope aggregation {}
  }
@@ -57,10 +57,7 @@ unsafe set
 {
   l
   {
-   x >= 4
-   x <= 6
-   v <= 0
-   v >= -2.5
-
+   #x in [4,6]
+   #v in [-2.5,0]
   }
 }
