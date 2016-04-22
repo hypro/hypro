@@ -1,8 +1,8 @@
 # even simpler tank plant dynamic
 # a tank that is filled by an unlimited water suply
-# using a plc cycle time delta' = 1
-# using a tank capacity of full' = 30
-# using a water increase of c' = 2 when water is pumped into the tank
+# using a plc cycle time delta' := 1
+# using a tank capacity of full' := 30
+# using a water increase of c' := 2 when water is pumped into the tank
 # locations names: P/nP pump is switched on/off; full/nfull tank is full/not full
 # discreteLoc =0: sfc state off; discreteLoc =1: sfc state on
 # unsafe set: full tank
@@ -71,7 +71,7 @@ hybrid reachability
    start P
    end P
    guard {calP >= 1}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
    #priority 1
@@ -79,7 +79,7 @@ hybrid reachability
    start P
    end nP
    guard {calP <= 0}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
    #priority 1
@@ -87,7 +87,7 @@ hybrid reachability
    start nP
    end nP
    guard {calP <= 0}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
    #priority 1
@@ -95,7 +95,7 @@ hybrid reachability
    start nP
    end P
    guard {calP >= 1}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
    #priority 1
@@ -104,7 +104,7 @@ hybrid reachability
    start P
    end P
    guard {P >= 1}
-   reset{ P+' = 0 P-' = 1 }
+   reset{ P+' := 0 P-' := 1 }
    parallelotope aggregation {}
    time 1
    #priority 2
@@ -112,7 +112,7 @@ hybrid reachability
    start P
    end P
    guard {P <= 0}
-   reset{ P+' = 1 P-' = 0 }
+   reset{ P+' := 1 P-' := 0 }
    parallelotope aggregation {}
    time 1
    #priority 2
@@ -120,7 +120,7 @@ hybrid reachability
    start nP
    end nP
    guard {P >= 1}
-   reset{ P+' = 0 P-' = 1 }
+   reset{ P+' := 0 P-' := 1 }
    parallelotope aggregation {}
    time 1
    #priority 2
@@ -128,7 +128,7 @@ hybrid reachability
    start nP
    end nP
    guard {P <= 0}
-   reset{ P+' = 1 P-' = 0 }
+   reset{ P+' := 1 P-' := 0 }
    parallelotope aggregation {}
    time 1
    #priority 2
@@ -137,7 +137,7 @@ hybrid reachability
    start P
    end P
    guard { }
-   reset{ calP+' = P+ calP-' = P- calP' = P }
+   reset{ calP+' := P+ calP-' := P- calP' := P }
    parallelotope aggregation {}
    time 1
    #priority 3
@@ -145,7 +145,7 @@ hybrid reachability
    start nP
    end nP
    guard { }
-   reset{ calP+' = P+ calP-' = P- calP' = P }
+   reset{ calP+' := P+ calP-' := P- calP' := P }
    parallelotope aggregation {}
    time 1
    #priority 3
@@ -154,7 +154,7 @@ hybrid reachability
    start P
    end P
    guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 1 discreteLoc' := 1 }
    parallelotope aggregation {}
    time 1
    #priority 4
@@ -162,7 +162,7 @@ hybrid reachability
    start P
    end P
    guard { discreteLoc >= 1 calP- >= 1 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 0 discreteLoc' := 0 }
    parallelotope aggregation {}
    time 1
    #priority 4
@@ -170,7 +170,7 @@ hybrid reachability
    start nP
    end nP
    guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 1 discreteLoc' := 1 }
    parallelotope aggregation {}
    time 1
    #priority 4
@@ -178,7 +178,7 @@ hybrid reachability
    start nP
    end nP
    guard { discreteLoc >= 1 calP- >= 1 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 0 discreteLoc' := 0 }
    parallelotope aggregation {}
    time 1
    #priority 4
@@ -195,9 +195,9 @@ hybrid reachability
    calP in [1,1]
    P+ in [1,1]
    P- in [0,0]
-   calP+ [1,1]
-   calP- [0,0]
-   discreteLoc [1,1]
+   calP+ in [1,1]
+   calP- in [0,0]
+   discreteLoc in [1,1]
   }
  }
 }
