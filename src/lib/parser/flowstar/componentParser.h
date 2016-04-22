@@ -116,7 +116,7 @@ namespace parser {
 				g.discreteOffset = _dim;
 				for(const auto& guardPair : mDiscreteGuards) {
 					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim);
-					reducedGuard = guardPair.second.block(0,_dim+1,1,_discreteDim);
+					reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim);
 					g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
 				}
 
@@ -141,11 +141,11 @@ namespace parser {
 				r.vec = vec;
 				matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
 				vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
-				std::cout << "Identity reset: " << discreteMat << std::endl;
+				//std::cout << "Identity reset: " << discreteMat << std::endl;
 				for(const auto& resetPair : mDiscreteResets){
-					std::cout << resetPair.second << " should fit in " << discreteMat << std::endl;
-					std::cout << "Block start 0," << _dim << ", size: 1," << _discreteDim-_dim << std::endl;
-					std::cout << "RowNum:" << resetPair.first-_dim << std::endl;
+					//std::cout << resetPair.second << " should fit in " << discreteMat << std::endl;
+					//std::cout << "Block start 0," << _dim << ", size: 1," << _discreteDim-_dim << std::endl;
+					//std::cout << "RowNum:" << resetPair.first-_dim << std::endl;
 					discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
 					discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
 				}
@@ -218,6 +218,11 @@ namespace parser {
 		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> continuousInvariant;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&, unsigned const&)> discreteInvariant;
 
+		void cleanup() {
+			mContinuousInvariants.clear();
+			mDiscreteInvariants.clear();
+		}
+
 		void addContinuousInvariant(const std::vector<matrix_t<Number>>& _constraints) {
 			for(const auto& matrix : _constraints){
 				assert(matrix.rows() == 1);
@@ -228,6 +233,7 @@ namespace parser {
 		void addDiscreteInvariant(const std::pair<unsigned, std::vector<matrix_t<Number>>>& _constraints) {
 			for(const auto& matrix : _constraints.second){
 				assert(matrix.rows() == 1);
+				std::cout << "Parsed invariant for dimension " << _constraints.first << " = " << matrix << std::endl;
 				mDiscreteInvariants.emplace_back(_constraints.first, matrix);
 			}
 		}
@@ -236,7 +242,7 @@ namespace parser {
 			assert(!_in.empty());
 			// matrix template with additional row of zeroes for constants, no need for rows for discrete variables, as their flow is 0
 			unsigned rowCnt = _in.begin()->second.rows();
-			std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
+			//std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
 			assert(_in.size() == rowCnt-1);
 			matrix_t<double> res = matrix_t<double>::Zero(rowCnt, rowCnt);
 			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
@@ -254,6 +260,8 @@ namespace parser {
 			assert(_flow.rows() == _flow.cols());
 			if(mDiscreteInvariants.size() + mContinuousInvariants.size() > 0) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
+				std::cout << "creating location " << tmp->id() << std::endl;
+				std::cout << "flow: " << tmp->flow() << std::endl;
 				typename Location<Number>::Invariant inv;
 				matrix_t<Number> invariantMat = matrix_t<Number>(mContinuousInvariants.size(), _flow.cols()-1);
 				vector_t<Number> constants = vector_t<Number>(mContinuousInvariants.size());
@@ -266,6 +274,7 @@ namespace parser {
 				}
 				inv.mat = invariantMat;
 				inv.vec = constants;
+				std::cout << "set continuous invariant to " << invariantMat << std::endl;
 				for(const auto& invariantConstaintPair : mDiscreteInvariants) {
 					assert(invariantConstaintPair.second.rows() == 1);
 					// resize
@@ -273,9 +282,13 @@ namespace parser {
 					matrix_t<Number> resizedInvariant = matrix_t<Number>(1, _discreteDim-_flow.cols()+2);
 					resizedInvariant = invariantConstaintPair.second.block(0, _flow.cols()-1, 1, _discreteDim-_flow.cols()+2);
 					inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
+					std::cout << "added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant << std::endl;
 				}
 				inv.discreteOffset = _flow.cols()-1;
 				tmp->setInvariant(inv);
+
+				// clear local storage
+				cleanup();
 				return std::make_pair(_name, tmp );
 			}
 			return std::make_pair(_name, mLocationManager.create(_flow));

@@ -361,36 +361,39 @@ namespace reachability {
 		const typename Location<Number>::Invariant& i = _state.location->invariant();
 		for(const auto& invariantPair : i.discreteInvariant) {
 			carl::Interval<Number> invariantInterval(0);
-			//std::cout << "Invariant row: " << invariantPair.second << std::endl;
+			std::cout << "Invariant row: " << invariantPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
-			//std::cout << "insert all except col " << VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset << std::endl;
+			std::cout << "insert all except col " << VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset << std::endl;
 			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) {
 					if(invariantPair.second(0, colIndex) != 0){
-						//std::cout << "search for variable in dimension " << colIndex+i.discreteOffset << std::endl;
+						std::cout << "search for variable in dimension " << colIndex+i.discreteOffset << std::endl;
 						if(validState.discreteAssignment.find(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)) == validState.discreteAssignment.end() ){
 							validState.discreteAssignment[VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)] = carl::Interval<Number>::unboundedInterval();
-							//std::cout << "Not found." << std::endl;
+							std::cout << "Not found." << std::endl;
 						}
 						invariantInterval += invariantPair.second(0, colIndex) * validState.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset));
-						//std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+						std::cout << "Invariant Interval: " << invariantInterval << std::endl;
 					}
 				}
 			}
 			// add constant term
 			carl::Interval<Number> constPart = carl::Interval<Number>::unboundedInterval();
+			std::cout << "Const part in col " << invariantPair.second.cols()-1 << std::endl;
 			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) > 0){
 				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == 1);
-				constPart.setUpper(-invariantPair.second(0,invariantPair.second.cols()-1));
+				constPart = carl::Interval<Number>(-invariantPair.second(0,invariantPair.second.cols()-1));
+
 			} else {
 				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == -1);
-				constPart.setLower(invariantPair.second(0,invariantPair.second.cols()-1));
+				constPart = carl::Interval<Number>(invariantPair.second(0,invariantPair.second.cols()-1));
 			}
+			std::cout << "const part interval: " << constPart << std::endl;
 			invariantInterval += constPart;
 
-			//std::cout << "Invariant Interval: " << invariantInterval << std::endl;
-			//std::cout << "Current assignment: " << validState.discreteAssignment[invariantPair.first] << std::endl;
-			//std::cout << "Intersected: " << validState.discreteAssignment[invariantPair.first].intersect(invariantInterval) << std::endl;
+			std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+			std::cout << "Current assignment: " << validState.discreteAssignment[invariantPair.first] << std::endl;
+			std::cout << "Intersected: " << validState.discreteAssignment[invariantPair.first].intersect(invariantInterval) << std::endl;
 			if(validState.discreteAssignment.find(invariantPair.first) != validState.discreteAssignment.end()) {
 				validState.discreteAssignment[invariantPair.first] = validState.discreteAssignment[invariantPair.first].intersect(invariantInterval);
 			} else {
