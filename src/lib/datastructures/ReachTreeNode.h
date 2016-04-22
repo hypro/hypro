@@ -4,8 +4,11 @@
  *
  * Created on April 8, 2016, 10:52 AM
  */
+#pragma once
 
 #include "../representations/GeometricObject.h"
+#include "hybridAutomata/Transition.h"
+#include "ReachTreeNodeSimple.h"
 
 namespace hypro
 {
@@ -16,7 +19,7 @@ namespace hypro
     using guard_map = std::map< std::pair< Transition< Number >*, representation_name >, std::vector< unsigned > >;
     
     template <typename Number, typename Representation>
-    class ReachTreeNode : ReachTreeNodeSimple
+    class ReachTreeNode : ReachTreeNodeSimple<Number, Representation>
     {
         private:
             Location<Number>* mLoc;
@@ -27,10 +30,10 @@ namespace hypro
             bool mFinished;
             // Data structure saving for each transition of mLoc the indices of the 
             // segments satisfying the corresponding guard
-            guard_map mGuardSatisfiedIndices;
+            guard_map<Number> mGuardSatisfiedIndices;
             // Data structure saving a rough overapproximation of the current flowpipe
             // for fixpoint recognition
-            flowpipe_t mOverapprox;
+            flowpipe_t<Representation> mOverapprox;
             ReachTreeNode* mParent;
         public:
         /**
@@ -52,9 +55,9 @@ namespace hypro
         
         bool getFinished();
         
-        guard_map getGuardSatisfiedIndices();
+        guard_map<Number> getGuardSatisfiedIndices();
         
-        flowpipe_t getOverapprox();
+        flowpipe_t<Representation> getOverapprox();
         
         ReachTreeNode getParent();
         
@@ -68,7 +71,7 @@ namespace hypro
         
         void setFinished( bool _finished );
         
-        void setOverapproximation( flowpipe_t& overapprox );
+        void setOverapproximation( flowpipe_t<Representation>& overapprox );
         
         void addGuardSatisfyingSegment( Transition<Number>* _trans, representation_name _rep, unsigned _index );
             

@@ -4,21 +4,26 @@
  *
  * Created on April 15, 2016, 10:57 AM
  */
+#pragma once
 
 #include "../representations/GeometricObject.h"
+#include "ReachTreeNode.h"
 
 namespace hypro
 {
+    template <class Number, class Representation>
+    class ReachTreeNode;
+
     template <typename Representation>
     using flowpipe_t = std::vector<Representation>;
-    
+
     template <typename Number, typename Representation>
     class ReachTreeNodeSimple
     {
         protected:
             std::vector< unsigned > mID;
             unsigned mDepth;
-            std::vector< ReachTreeNode* > mChildren;
+            std::vector< ReachTreeNode<Number, Representation>* > mChildren;
         public:
         /**
 	 * @brief Constructor 
@@ -31,9 +36,9 @@ namespace hypro
         
         unsigned getDepth();
         
-        std::vector< ReachTreeNode* > getChildren();
+        std::vector< ReachTreeNode<Number, Representation>* > getChildren();
         
-        void addChild( ReachTreeNode* node_to_be_added );
+        void addChild( ReachTreeNode<Number,Representation>* node_to_be_added );
         
     };
 }
