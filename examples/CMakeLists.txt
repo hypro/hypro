@@ -13,6 +13,7 @@ set( EXAMPLES
     example_acos
     example_addition
     example_benchmarks
+    example_bigConversion
     example_bouncingBall
     example_bouncingBall_Plotter
     example_bouncingBall_Fly
