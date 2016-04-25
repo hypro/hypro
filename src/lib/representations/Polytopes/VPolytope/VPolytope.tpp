@@ -238,22 +238,32 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 	if ( rhs.dimension() == 0 ) {
 		return VPolytopeT<Number, Converter>( mVertices );
 	} else {
+		VPolytopeT<Number,Converter> result;
+		//std::cout << __func__ << " : of " << *this << " and " << rhs << std::endl;
 		VPolytopeT<Number, Converter>::pointVector points;
-		points.insert( points.end(), this->mVertices.begin(), this->mVertices.end() );
-		points.insert( points.end(), rhs.mVertices.begin(), rhs.mVertices.end() );
+		std::set<Point<Number>> pointSet;
+		pointSet.insert( this->mVertices.begin(), this->mVertices.end() );
+		pointSet.insert( rhs.mVertices.begin(), rhs.mVertices.end() );
+		points.insert( points.end(), pointSet.begin(), pointSet.end() );
 
-		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-		std::set<Point<Number>> preresult;
-		for ( unsigned i = 0; i < facets.size(); i++ ) {
-			for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
-				preresult.insert( facets[i]->vertices().at( j ) );
+		// reduce, if there are enough points.
+		if(points.size() > points.begin()->dimension()){
+			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+			std::set<Point<Number>> preresult;
+			for ( unsigned i = 0; i < facets.size(); i++ ) {
+				for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
+					preresult.insert( facets[i]->vertices().at( j ) );
+				}
 			}
+			VPolytopeT<Number, Converter>::pointVector res;
+			for ( const auto &point : preresult ) {
+				res.push_back( point );
+			}
+			result = VPolytopeT<Number, Converter>( res );
+		} else {
+			result = VPolytopeT<Number, Converter>(points);
 		}
-		VPolytopeT<Number, Converter>::pointVector res;
-		for ( const auto &point : preresult ) {
-			res.push_back( point );
-		}
-		VPolytopeT<Number,Converter> result = VPolytopeT<Number, Converter>( res );
+
 		//assert(result.contains(*this));
 		//assert(result.contains(rhs));
 

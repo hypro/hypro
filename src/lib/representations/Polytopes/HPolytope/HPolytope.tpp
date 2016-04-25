@@ -44,40 +44,16 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
-		// degenerate cases
-		unsigned size = points.size();
 		mDimension = points.begin()->dimension();
-		if ( size == 1 ) {
-			// Return Box constraints.
-		} else if ( size < mDimension ) {
-			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
-			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
-			std::size_t size = points.size();
-			Permutator permutator(mDimension, size);
-			std::vector<unsigned> permutation;
-			while(!permutator.end()) {
-				permutation = permutator();
-				// project to chosen dimensions
-				std::vector<Point<Number>> reducedVertices;
-				reducedVertices.reserve(size);
-				for(const auto& vertex : points) {
-					vector_t<Number> reductor = vector_t<Number>(size);
-					for(unsigned d = 0; d < size; ++d)
-						reductor(d) = vertex.at(d);
-					reducedVertices.push_back(Point<Number>(std::move(reductor)));
-				}
-				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
-				//std::cout << "Conv Hull end" << std::endl;
-				for ( auto &facet : facets ) {
-					mHPlanes.push_back( facet->halfspace() );
-				}
+		mEmpty = TRIBOOL::FALSE;
+		if ( points.size() <= mDimension ) {
+			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
+			for(const auto& constraint : boxConstraints){
+				mHPlanes.emplace_back(constraint);
 			}
-			assert( false );
 		} else {
-			//std::cout << "Conv Hull" << std::endl;
 			// TODO: Chose suitable convex hull algorithm
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			//std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
 				assert(facet->halfspace().contains(points));
 				mHPlanes.push_back( facet->halfspace() );
