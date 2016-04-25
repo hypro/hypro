@@ -64,6 +64,13 @@ namespace parser {
 		qi::rule<Iterator, Aggregation()> agg;
 		qi::rule<Iterator, double()> timed;
 
+		void cleanup() {
+			mDiscreteGuards.clear();
+			mContinuousGuards.clear();
+			mContinuousResets.clear();
+			mDiscreteResets.clear();
+		}
+
 		std::pair<unsigned, unsigned> createEdge(unsigned start, unsigned target) {
 			//std::cout << "Found transition from " << start << " to " << target << std::endl;
 			return std::make_pair(start, target);
@@ -115,8 +122,8 @@ namespace parser {
 				// handle discrete guards
 				g.discreteOffset = _dim;
 				for(const auto& guardPair : mDiscreteGuards) {
-					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim);
-					reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim);
+					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);
+					reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim+1);
 					g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
 				}
 
@@ -166,6 +173,7 @@ namespace parser {
 			// update source location
 			mLocationManager.location(_transition.first)->addTransition(res);
 			//std::cout << "Parsed Transition: " << *res << std::endl;
+			cleanup();
 			return res;
 		}
 

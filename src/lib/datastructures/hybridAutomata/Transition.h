@@ -25,7 +25,10 @@ class Transition {
 		std::vector<std::pair<carl::Variable, hypro::matrix_t<Number>>> discreteGuard;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
-			_ostr << _g.mat << " + " << std::endl << _g.vec;
+			_ostr << _g.mat << " + " << std::endl << _g.vec << std::endl;
+			for(const auto& discretePair : _g.discreteGuard) {
+				_ostr << "guard dim " << discretePair.first << ": " << discretePair.second << std::endl;
+			}
 			return _ostr;
 		}
 	};
@@ -39,7 +42,8 @@ class Transition {
 		hypro::matrix_t<Number> discreteMat;  // Transformation Matrix
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
-			_ostr << _a.mat << " + " << std::endl << _a.vec;
+			_ostr << _a.mat << " + " << std::endl << _a.vec << std::endl;
+			_ostr << "Discrete Reset:" << _a.discreteMat << " + " << _a.discreteVec << std::endl;
 			return _ostr;
 		}
 	};

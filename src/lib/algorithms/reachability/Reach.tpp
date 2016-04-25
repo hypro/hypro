@@ -54,6 +54,7 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
 #ifdef REACH_DEBUG
+		std::cout << "Location: " << _state.location->id() << std::endl;
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		boost::get<Representation>(_state.set).print();
@@ -67,6 +68,50 @@ namespace reachability {
 #endif
 		if ( boost::get<0>(initialSetup) ) {
 			std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
+			bool noFlow = false;
+
+			// if the location does not have dynamic behaviour, check guards and exit loop.
+			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
+				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
+
+				// Collect potential new initial states from discrete behaviour.
+				if(mCurrentLevel < mSettings.jumpDepth) {
+					State<Number> guardSatisfyingState;
+					State<Number> currentState = _state;
+					currentState.set = boost::get<Representation>(boost::get<1>(initialSetup).set);
+					bool fireTimeTriggeredTransition = false;
+					for( auto transition : _state.location->transitions() ){
+						// handle time-triggered transitions
+						if(transition->isTimeTriggered()){
+							#ifdef REACH_DEBUG
+							std::cout << "Checking timed transitions for time interval [" << 0-mSettings.timeStep << "," << 0 << "]" << std::endl;
+							#endif
+							// As there is no continuous behaviour, simply check guard for whole time horizon
+							if(transition->triggerTime() <= mSettings.timeBound){
+								std::cout << "Time trigger enabled" << std::endl;
+								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+									nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									fireTimeTriggeredTransition = true;
+									noFlow = true;
+								}
+							}
+						} // handle normal transitions
+						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+							nextInitialSets.emplace_back(transition, guardSatisfyingState);
+							noFlow = true;
+						}
+					}
+					if(fireTimeTriggeredTransition){
+						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
+						#ifdef REACH_DEBUG
+						std::cout << "Fired time triggered transition." << std::endl;
+						#endif
+						flowpipe.push_back(boost::get<Representation>(boost::get<1>(initialSetup).set));
+					}
+				}
+
+			}
+
 			// insert first Segment into the empty flowpipe
 			Representation currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
 			flowpipe.push_back( currentSegment );
@@ -89,8 +134,42 @@ namespace reachability {
 			// the first segment covers one time step.
 			Number currentTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
-			while( currentTime <= mSettings.timeBound ) {
+			while( !noFlow && currentTime <= mSettings.timeBound ) {
 				std::cout << "\rTime: \t" << carl::toDouble(currentTime) << std::flush;
+
+				// Collect potential new initial states from discrete behaviour.
+				if(mCurrentLevel < mSettings.jumpDepth) {
+					State<Number> guardSatisfyingState;
+					State<Number> currentState = _state;
+					currentState.set = currentSegment;
+					bool fireTimeTriggeredTransition = false;
+					for( auto transition : _state.location->transitions() ){
+						// handle time-triggered transitions
+						if(transition->isTimeTriggered()){
+							#ifdef REACH_DEBUG
+							std::cout << "Checking timed transitions for time interval [" << currentTime-mSettings.timeStep << "," << currentTime << "]" << std::endl;
+							#endif
+							if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
+								std::cout << "Time trigger enabled" << std::endl;
+								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+									nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									fireTimeTriggeredTransition = true;
+								}
+							}
+						} // handle normal transitions
+						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+							nextInitialSets.emplace_back(transition, guardSatisfyingState);
+						}
+					}
+					if(fireTimeTriggeredTransition){
+						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
+						#ifdef REACH_DEBUG
+						std::cout << "Fired time triggered transition." << std::endl;
+						#endif
+						break;
+					}
+				}
+
 
 				// perform linear transformation on the last segment of the flowpipe
 				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
@@ -158,34 +237,6 @@ namespace reachability {
 							mWorkingQueue.pop();
 						}
 						return flowpipe;
-					}
-					// Collect potential new initial states from discrete behaviour.
-					if(mCurrentLevel < mSettings.jumpDepth) {
-						State<Number> guardSatisfyingState;
-						State<Number> currentState = _state;
-						currentState.set = newSegment.second;
-						bool fireTimeTriggeredTransition = false;
-						for( auto transition : _state.location->transitions() ){
-							// handle time-triggered transitions
-							if(transition->isTimeTriggered()){
-								if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
-									if(intersectGuard(transition, currentState, guardSatisfyingState)){
-										nextInitialSets.emplace_back(transition, guardSatisfyingState);
-										fireTimeTriggeredTransition = true;
-									}
-								}
-							} // handle normal transitions
-							else if(intersectGuard(transition, currentState, guardSatisfyingState)){
-								nextInitialSets.emplace_back(transition, guardSatisfyingState);
-							}
-						}
-						if(fireTimeTriggeredTransition){
-							// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
-							#ifdef REACH_DEBUG
-							std::cout << "Fired time triggered transition." << std::endl;
-							#endif
-							break;
-						}
 					}
 					// update currentSegment
 					currentSegment = newSegment.second;
@@ -278,20 +329,38 @@ namespace reachability {
 	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _state,
 							   State<Number>& result ) {
 		result = _state;
+
+		std::cout << "check transition " << *_trans << std::endl;
+
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
 		for(const auto& guardPair : _trans->guard().discreteGuard){
-			carl::Interval<Number> guardInterval(0);
+			carl::Interval<Number> guardInterval = carl::Interval<Number>::unboundedInterval();
+			carl::Interval<Number> substitution(0);
+			std::cout << "Guard row: " << guardPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
-			for(unsigned colIndex = 0; colIndex < guardPair.second.cols(); ++colIndex){
+			for(unsigned colIndex = 0; colIndex < guardPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(guardPair.first)-dOffset) {
-					if(_state.discreteAssignment.find(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset)) == _state.discreteAssignment.end() ){
-						guardInterval += guardPair.second(0, colIndex) * carl::Interval<Number>::unboundedInterval();
-					} else {
-						guardInterval += guardPair.second(0, colIndex) * _state.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
-					}
+					substitution += guardPair.second(0, colIndex) * _state.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
 				}
 			}
+			carl::Interval<Number> constPart(guardPair.second(0,guardPair.second.cols()-1));
+			substitution += constPart;
+			std::cout << "substitution interval " << substitution << std::endl;
+			if(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) > 0){
+				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == 1);
+				guardInterval.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
+				std::cout << "After setting upper bound new: " << guardInterval << std::endl;
+			} else {
+				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == -1);
+				guardInterval.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
+				std::cout << "After setting lower bound new: " << guardInterval << std::endl;
+			}
+
+			std::cout << "Guard Interval: " << guardInterval << std::endl;
+			std::cout << "Current assignment: " << _state.discreteAssignment.at(guardPair.first) << std::endl;
+			std::cout << "Intersected: " << _state.discreteAssignment.at(guardPair.first).intersect(guardInterval) << std::endl;
+
 			if(_state.discreteAssignment.find(guardPair.first) != _state.discreteAssignment.end()) {
 				result.discreteAssignment[guardPair.first] = _state.discreteAssignment.at(guardPair.first).intersect(guardInterval);
 			} else {
@@ -350,50 +419,41 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
-#ifdef REACH_DEBUG
-		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
-		std::cout << "Initial valuation: " << std::endl;
-		boost::get<Representation>(_state.set).print();
-#endif
 		// check if initial Valuation fulfills Invariant
 		// check discrete invariant first
 		State<Number> validState = _state;
 		const typename Location<Number>::Invariant& i = _state.location->invariant();
 		for(const auto& invariantPair : i.discreteInvariant) {
-			carl::Interval<Number> invariantInterval(0);
-			std::cout << "Invariant row: " << invariantPair.second << std::endl;
+			carl::Interval<Number> invariantInterval = carl::Interval<Number>::unboundedInterval();
+			carl::Interval<Number> substitution(0);
+			//std::cout << "Invariant row: " << invariantPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
-			std::cout << "insert all except col " << VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset << std::endl;
+			//std::cout << "insert all except col " << VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset << std::endl;
 			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) {
 					if(invariantPair.second(0, colIndex) != 0){
-						std::cout << "search for variable in dimension " << colIndex+i.discreteOffset << std::endl;
-						if(validState.discreteAssignment.find(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)) == validState.discreteAssignment.end() ){
-							validState.discreteAssignment[VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset)] = carl::Interval<Number>::unboundedInterval();
-							std::cout << "Not found." << std::endl;
-						}
-						invariantInterval += invariantPair.second(0, colIndex) * validState.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset));
-						std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+						substitution += invariantPair.second(0, colIndex) * validState.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset));
+						//std::cout << "Invariant Interval: " << substitution << std::endl;
 					}
 				}
 			}
 			// add constant term
-			carl::Interval<Number> constPart = carl::Interval<Number>::unboundedInterval();
-			std::cout << "Const part in col " << invariantPair.second.cols()-1 << std::endl;
+			carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
+			substitution += constPart;
+			//std::cout << "substitution interval " << substitution << std::endl;
 			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) > 0){
 				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == 1);
-				constPart = carl::Interval<Number>(-invariantPair.second(0,invariantPair.second.cols()-1));
-
+				invariantInterval.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
+				//std::cout << "After setting upper bound new: " << invariantInterval << std::endl;
 			} else {
 				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == -1);
-				constPart = carl::Interval<Number>(invariantPair.second(0,invariantPair.second.cols()-1));
+				invariantInterval.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
+				//std::cout << "After setting lower bound new: " << invariantInterval << std::endl;
 			}
-			std::cout << "const part interval: " << constPart << std::endl;
-			invariantInterval += constPart;
 
-			std::cout << "Invariant Interval: " << invariantInterval << std::endl;
-			std::cout << "Current assignment: " << validState.discreteAssignment[invariantPair.first] << std::endl;
-			std::cout << "Intersected: " << validState.discreteAssignment[invariantPair.first].intersect(invariantInterval) << std::endl;
+			//std::cout << "Invariant Interval: " << invariantInterval << std::endl;
+			//std::cout << "Current assignment: " << validState.discreteAssignment[invariantPair.first] << std::endl;
+			//std::cout << "Intersected: " << validState.discreteAssignment[invariantPair.first].intersect(invariantInterval) << std::endl;
 			if(validState.discreteAssignment.find(invariantPair.first) != validState.discreteAssignment.end()) {
 				validState.discreteAssignment[invariantPair.first] = validState.discreteAssignment[invariantPair.first].intersect(invariantInterval);
 			} else {
@@ -402,7 +462,7 @@ namespace reachability {
 			}
 			if(validState.discreteAssignment[invariantPair.first].isEmpty()){
 				#ifdef REACH_DEBUG
-				std::cout << "Valuation violates discrete invariant." << std::endl;
+				//std::cout << "Valuation violates discrete invariant." << std::endl;
 				#endif
 				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
 			}
@@ -431,6 +491,16 @@ namespace reachability {
 			vector_t<Number> translation = trafoMatrix.col( cols - 1 );
 			translation.conservativeResize( rows - 1 );
 			trafoMatrix.conservativeResize( rows - 1, cols - 1 );
+
+			// if the location has no flow, stop computation and exit.
+			if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
+				translation == vector_t<Number>::Zero(translation.rows()) ) {
+				std::cout << "Avoid further computation as the flow is zero." << std::endl;
+				validState.set = initialPair.second;
+				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
+			}
+
+
 			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
 
 #ifdef REACH_DEBUG
@@ -449,23 +519,24 @@ namespace reachability {
 #endif
 			// bloat hullPolytope (Hausdorff distance)
 			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
-			assert(radius > 0);
 
 #ifdef REACH_DEBUG
 			std::cout << "\n";
 			std::cout << "Hausdorff Approximation: ";
 			std::cout << radius << std::endl;
 #endif
+			Representation firstSegment = unitePolytope;
+			if(radius > 0){
+				Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
 
-			Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
-
-#ifdef REACH_DEBUG
-			std::cout << "Hausdorff Polytope (Box): ";
-			hausPoly.print();
-			std::cout << std::endl;
-#endif
-			// hullPolytope +_minkowski hausPoly
-			Representation firstSegment = unitePolytope.minkowskiSum( hausPoly );
+	#ifdef REACH_DEBUG
+				std::cout << "Hausdorff Polytope (Box): ";
+				hausPoly.print();
+				std::cout << std::endl;
+	#endif
+				// hullPolytope +_minkowski hausPoly
+				firstSegment = unitePolytope.minkowskiSum( hausPoly );
+			}
 
 			//plotter.plot2d();
 			//assert(firstSegment.contains(unitePolytope));
