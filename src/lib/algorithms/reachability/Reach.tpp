@@ -14,13 +14,14 @@ namespace reachability {
 
     template<typename Number, typename Representation>
 	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
-		// set up working queue
+		// set up working queue -> add initial states
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
 				State<Number> s = state.second;
 				cPair<Number> set = boost::get<cPair<Number>>(state.second.set);
 				s.set = Representation(set.first, set.second);
+				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
 				mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, s));
 			}
@@ -77,26 +78,30 @@ namespace reachability {
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
-					State<Number> currentState = _state;
-					currentState.set = boost::get<Representation>(boost::get<1>(initialSetup).set);
+					State<Number> currentState = boost::get<1>(initialSetup);
 					bool fireTimeTriggeredTransition = false;
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
 							#ifdef REACH_DEBUG
-							std::cout << "Checking timed transitions for time interval [" << 0-mSettings.timeStep << "," << 0 << "]" << std::endl;
+							std::cout << "Checking timed transitions for time interval [0," << mSettings.timeBound << "]" << std::endl;
 							#endif
 							// As there is no continuous behaviour, simply check guard for whole time horizon
 							if(transition->triggerTime() <= mSettings.timeBound){
 								std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+									// when taking a timed transition, reset timestamp
+									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
 									fireTimeTriggeredTransition = true;
 									noFlow = true;
 								}
 							}
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+							assert(guardSatisfyingState.timestamp == currentState.timestamp);
+							// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 							noFlow = true;
 						}
@@ -106,7 +111,7 @@ namespace reachability {
 						#ifdef REACH_DEBUG
 						std::cout << "Fired time triggered transition." << std::endl;
 						#endif
-						flowpipe.push_back(boost::get<Representation>(boost::get<1>(initialSetup).set));
+						assert(noFlow);
 					}
 				}
 
@@ -142,6 +147,7 @@ namespace reachability {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
+					currentState.timestamp = carl::Interval<Number>(currentTime-mSettings.timeStep, currentTime);
 					bool fireTimeTriggeredTransition = false;
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
@@ -152,12 +158,15 @@ namespace reachability {
 							if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
 								std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+									// when taking a timed transition, reset timestamp
+									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
 									fireTimeTriggeredTransition = true;
 								}
 							}
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+							assert(guardSatisfyingState.timestamp == currentState.timestamp);
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
 					}
@@ -601,8 +610,9 @@ namespace reachability {
 			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 			validState.set = fullSegment;
+			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
-		} // if satisfies invariant
+		} // if set does not satisfy the invariant, return false
 		else {
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
 		}
