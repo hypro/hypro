@@ -45,8 +45,27 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
+		// check affine independence - verify object dimension.
+		std::vector<vector_t<Number>> coordinates;
+		for(const auto& vertex : points){
+			coordinates.emplace_back(vertex.rawCoordinates());
+		}
+		int effectiveDim = effectiveDimension(coordinates);
+		assert(effectiveDim >= 0);
+
+		// For debugging
+		//std::cout << "effectiveDimension: " << effectiveDim << std::endl;
+		//if(effectiveDim < mDimension){
+		//	std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
+		//	HPolytopeT<Number,Converter> tmp(boxConstraints);
+		//	std::cout << "Theoretical oriented Box: " << tmp << std::endl;
+		//}
+
+		// End for debugging
+
 		mEmpty = TRIBOOL::FALSE;
-		if ( points.size() <= mDimension ) {
+		//if ( points.size() <= mDimension ) {
+		if ( effectiveDim < mDimension ) {
 			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
 			for(const auto& constraint : boxConstraints){
 				mHPlanes.emplace_back(constraint);
@@ -158,19 +177,16 @@ const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
-	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
+
+		std::cout << "Number hplanes: " << mHPlanes.size() << " and dimension: " << dim << std::endl;
 
 		Permutator permutator(mHPlanes.size(), dim);
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
-			//std::cout << "Use planes ";
-			//for(const auto item : permutation)
-			//	std::cout << item << ", ";
-			//std::cout << std::endl;
 
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
@@ -192,48 +208,34 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 			vector_t<Number> res = lu_decomp.solve( b );
 
-			// check for infinity
-			bool infty = false;
-			//for ( unsigned i = 0; i < res.rows(); ++i ) {
-			//	if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-			//		std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
-			//		infty = true;
-			//		break;
-			//	}
-			//}
-
-			if(!infty) {
-				//std::cout << "Solved to " << res.transpose() << std::endl;
-
-                ///// if it's not almost equal, then
-				// Check if the computed vertex is a real vertex
-				bool outside = false;
-				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
-					bool skip = false;
-					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
-						if(planePos == permutation.at(permPos)) {
-							//std::cout << "Skip plane " << planePos << std::endl;
-							skip = true;
-							break;
-						}
-					}
-
-					if(!skip) {
-						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-							//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
-							outside = true;
-							break;
-						}
+			// Check if the computed vertex is a real vertex
+			bool outside = false;
+			for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
+				bool skip = false;
+				for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
+					if(planePos == permutation.at(permPos)) {
+						//std::cout << "Skip plane " << planePos << std::endl;
+						skip = true;
+						break;
 					}
 				}
-				if(!outside) {
-					// insert, if no duplicate
-					Point<Number> tmp(res);
-					if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
-						vertices.push_back(tmp);
-					//std::cout << "Final vertex: " << res << std::endl;
+
+				if(!skip) {
+					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+						//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
+						outside = true;
+						break;
+					}
 				}
 			}
+			if(!outside) {
+				// insert, if no duplicate
+				Point<Number> tmp(res);
+				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
+					vertices.push_back(tmp);
+				//std::cout << "Final vertex: " << res << std::endl;
+			}
+
 		}
 	}
 	return vertices;
