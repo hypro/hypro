@@ -38,7 +38,7 @@ struct gnuplotSettings {
 	bool axes = true;					 // plot axes
 	double pointSize = 1.0;				 // pointsize
 	std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
-	bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex
+	bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
 };
 
 template <typename Number>
