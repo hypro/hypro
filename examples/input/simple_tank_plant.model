@@ -27,7 +27,7 @@ hybrid reachability
   adaptive orders { min 3 , max 5 }
   cutoff 1e-12
   output simple_tank_plant_dynamic
-  max jumps 40
+  max jumps 50
   print on
  }
 
@@ -45,6 +45,7 @@ hybrid reachability
    {
     P in [1,1]
     t >= 0
+    h <= 25
    }
   }
 
@@ -60,6 +61,7 @@ hybrid reachability
    {
     P in [0,0]
     t >= 0
+    h <= 25
    }
   }
 
@@ -211,6 +213,13 @@ hybrid reachability
    parallelotope aggregation {}
    time 0
 
+# hybrid transitions if the tank is too full
+
+	start P
+	end nP
+	guard { h >= 25 }
+	reset { P' := 0 }
+	parallelotope aggregation {}
 
  }
 

@@ -47,13 +47,13 @@ int main(int argc, char** argv) {
 	//	}
 	//}
 
-	std::cout << "Computed " << hpFlowpipes.size() << " flowpipes. Start plotting." << std::endl;
-	for(const auto& flowpipe : hpFlowpipes){
-		for(const auto& segment : flowpipe){
-			unsigned tmp = plotter.addObject(segment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
-		}
-	}
+	//std::cout << "Computed " << hpFlowpipes.size() << " flowpipes. Start plotting." << std::endl;
+	//for(const auto& flowpipe : hpFlowpipes){
+	//	for(const auto& segment : flowpipe){
+	//		unsigned tmp = plotter.addObject(segment.vertices());
+	//		plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
+	//	}
+	//}
 
 	plotter.plot2d();
 }
