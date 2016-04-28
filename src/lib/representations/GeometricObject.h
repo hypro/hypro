@@ -10,4 +10,8 @@
 #include "../config.h"
 #include "conversion/Converter.h"
 
+namespace hypro {
+
 enum representation_name { box, zonotope, polytope_h, polytope_v, support_function, taylor_model };
+
+} // namespace hypro
