@@ -54,6 +54,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
+		assert(!_state.timestamp.isUnbounded());
 #ifdef REACH_DEBUG
 		std::cout << "Location: " << _state.location->id() << std::endl;
 		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
@@ -68,12 +69,15 @@ namespace reachability {
 		std::cout << boost::get<0>(initialSetup) << std::endl;
 #endif
 		if ( boost::get<0>(initialSetup) ) {
+			assert(!boost::get<1>(initialSetup).timestamp.isUnbounded());
 			std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
 			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
+
+				noFlow = true;
 
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
@@ -84,7 +88,7 @@ namespace reachability {
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
 							#ifdef REACH_DEBUG
-							std::cout << "Checking timed transitions for time interval [0," << mSettings.timeBound << "]" << std::endl;
+							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
 							#endif
 							// As there is no continuous behaviour, simply check guard for whole time horizon
 							if(transition->triggerTime() <= mSettings.timeBound){
@@ -93,17 +97,18 @@ namespace reachability {
 									// when taking a timed transition, reset timestamp
 									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
-									flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
+									//flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
 									fireTimeTriggeredTransition = true;
-									noFlow = true;
 								}
 							}
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+							std::cout << "hybrid transition enabled" << std::endl;
+							std::cout << *transition << std::endl;
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
 							// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
+							assert(!guardSatisfyingState.timestamp.isUnbounded());
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
-							noFlow = true;
 						}
 					}
 					if(fireTimeTriggeredTransition){
@@ -111,7 +116,6 @@ namespace reachability {
 						#ifdef REACH_DEBUG
 						std::cout << "Fired time triggered transition." << std::endl;
 						#endif
-						assert(noFlow);
 					}
 				}
 
@@ -120,6 +124,10 @@ namespace reachability {
 			// insert first Segment into the empty flowpipe
 			Representation currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
 			flowpipe.push_back( currentSegment );
+
+			unsigned tmp = plotter.addObject(currentSegment.vertices());
+			plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(_state, currentSegment)){
 				// clear queue to stop whole algorithm
@@ -133,11 +141,13 @@ namespace reachability {
 			Representation nextSegment;
 
 #ifdef REACH_DEBUG
-			std::cout << "--- Loop entered ---" << std::endl;
+			if(!noFlow){
+				std::cout << "--- Loop entered ---" << std::endl;
+			}
 #endif
-			// for each time interval perform linear Transformation
-			// the first segment covers one time step.
-			Number currentTime = mSettings.timeStep;
+
+			// the first segment covers one time step already
+			Number currentTime = _state.timestamp.upper() + mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
 			while( !noFlow && currentTime <= mSettings.timeBound ) {
 				std::cout << "\rTime: \t" << carl::toDouble(currentTime) << std::flush;
@@ -147,15 +157,15 @@ namespace reachability {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
-					currentState.timestamp = carl::Interval<Number>(currentTime-mSettings.timeStep, currentTime);
+					currentState.timestamp += carl::Interval<Number>(currentTime-mSettings.timeStep,currentTime);
 					bool fireTimeTriggeredTransition = false;
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
 							#ifdef REACH_DEBUG
-							std::cout << "Checking timed transitions for time interval [" << currentTime-mSettings.timeStep << "," << currentTime << "]" << std::endl;
+							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
 							#endif
-							if(currentTime-mSettings.timeStep <= transition->triggerTime() && transition->triggerTime() <= currentTime){
+							if(currentState.timestamp.contains(transition->triggerTime())){
 								std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
 									// when taking a timed transition, reset timestamp
@@ -167,6 +177,8 @@ namespace reachability {
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
+							std::cout << "hybrid transition enabled" << std::endl;
+							std::cout << *transition << std::endl;
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
 					}
@@ -240,6 +252,10 @@ namespace reachability {
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
 					flowpipe.push_back( newSegment.second );
+
+					unsigned tmp = plotter.addObject(newSegment.second.vertices());
+					plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
 						while(!mWorkingQueue.empty()){
@@ -256,8 +272,11 @@ namespace reachability {
 				currentTime += mSettings.timeStep;
 			}
 #ifdef REACH_DEBUG
-			std::cout << "--- Loop left ---" << std::endl;
+			if(!noFlow){
+				std::cout << "--- Loop left ---" << std::endl;
+			}
 			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
+			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			processDiscreteBehaviour(nextInitialSets);
@@ -276,7 +295,9 @@ namespace reachability {
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
+				// copy state - as there is no aggregation, the containing set and timestamp is already valid
 				State<Number> s = boost::get<1>(tuple);
+				assert(!s.timestamp.isUnbounded());
 				s.location = boost::get<0>(tuple)->target();
 				// handle discrete reset assignment
 				typename Transition<Number>::Reset reset = boost::get<0>(tuple)->reset();
@@ -287,9 +308,10 @@ namespace reachability {
 						newAssignment += reset.discreteMat(rowIndex,colIndex) * boost::get<1>(tuple).discreteAssignment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
 					}
 					newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
+					std::cout << "Discrete Assignment: " << vpool.carlVarByIndex(rowIndex+reset.discreteOffset) << " set to " << newAssignment << std::endl;
 					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 				}
-
+				std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -307,13 +329,28 @@ namespace reachability {
 			// TODO: Currently aggregation is done by collecting vertices - future: use multi-unite.
 			// collect vertices.
 			std::vector<Point<Number>> collectedVertices;
+			carl::Interval<Number> aggregatedTimestamp;
+			std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
 			for(const auto& state : aggregationPair.second){
+				assert(!state.timestamp.isUnbounded());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull(state.timestamp);
+				std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
 				std::vector<Point<Number>> tmpVertices = boost::get<Representation>(state.set).vertices();
 				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 			}
+			std::cout << "Collected vertices: " << std::endl;
+			for(const auto& vertex : collectedVertices){
+				std::cout << "\t" << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
+			}
+
+
 			State<Number> s;
 			s.location = aggregationPair.first->target();
 			s.set = Representation(collectedVertices);
+			s.timestamp = aggregatedTimestamp;
+			std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+			std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
+
 			// handle discrete reset assignment
 			// ASSUMPTION: All discrete assignments are the same for this transition.
 			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
@@ -326,10 +363,12 @@ namespace reachability {
 					newAssignment += reset.discreteMat(rowIndex,colIndex) * aggregationPair.second.begin()->discreteAssignment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
 				}
 				newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
+				std::cout << "Discrete Assignment: " << vpool.carlVarByIndex(rowIndex+reset.discreteOffset) << " set to " << newAssignment << std::endl;
 				s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 			}
 			std::cout << "Discrete assignment size: " << s.discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
 			assert(reset.discreteMat.rows() == s.discreteAssignment.size());
+			std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 			mWorkingQueue.emplace(mCurrentLevel+1, s);
 		}
 	}
@@ -337,16 +376,16 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _state,
 							   State<Number>& result ) {
+		assert(!_state.timestamp.isUnbounded());
 		result = _state;
-
-		std::cout << "check transition " << *_trans << std::endl;
+		//std::cout << "check transition " << *_trans << std::endl;
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
 		for(const auto& guardPair : _trans->guard().discreteGuard){
 			carl::Interval<Number> guardInterval = carl::Interval<Number>::unboundedInterval();
 			carl::Interval<Number> substitution(0);
-			std::cout << "Guard row: " << guardPair.second << std::endl;
+			//std::cout << "Guard row: " << guardPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
 			for(unsigned colIndex = 0; colIndex < guardPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(guardPair.first)-dOffset) {
@@ -355,20 +394,20 @@ namespace reachability {
 			}
 			carl::Interval<Number> constPart(guardPair.second(0,guardPair.second.cols()-1));
 			substitution += constPart;
-			std::cout << "substitution interval " << substitution << std::endl;
+			//std::cout << "substitution interval " << substitution << std::endl;
 			if(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) > 0){
 				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == 1);
 				guardInterval.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
-				std::cout << "After setting upper bound new: " << guardInterval << std::endl;
+				//std::cout << "After setting upper bound new: " << guardInterval << std::endl;
 			} else {
 				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == -1);
 				guardInterval.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
-				std::cout << "After setting lower bound new: " << guardInterval << std::endl;
+				//std::cout << "After setting lower bound new: " << guardInterval << std::endl;
 			}
 
-			std::cout << "Guard Interval: " << guardInterval << std::endl;
-			std::cout << "Current assignment: " << _state.discreteAssignment.at(guardPair.first) << std::endl;
-			std::cout << "Intersected: " << _state.discreteAssignment.at(guardPair.first).intersect(guardInterval) << std::endl;
+			//std::cout << "Guard Interval: " << guardInterval << std::endl;
+			//std::cout << "Current assignment: " << _state.discreteAssignment.at(guardPair.first) << std::endl;
+			//std::cout << "Intersected: " << _state.discreteAssignment.at(guardPair.first).intersect(guardInterval) << std::endl;
 
 			if(_state.discreteAssignment.find(guardPair.first) != _state.discreteAssignment.end()) {
 				result.discreteAssignment[guardPair.first] = _state.discreteAssignment.at(guardPair.first).intersect(guardInterval);
@@ -392,6 +431,7 @@ namespace reachability {
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
+			std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 			result.set = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
 			return true;
 		} else {
@@ -428,6 +468,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
+		assert(!_state.timestamp.isUnbounded());
 		// check if initial Valuation fulfills Invariant
 		// check discrete invariant first
 		State<Number> validState = _state;
@@ -486,7 +527,7 @@ namespace reachability {
 		if ( initialPair.first ) {
 			// approximate R_[0,delta](X0)
 			// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
-			matrix_t<Number> trafoMatrix = computeTrafoMatrix(_state.location);
+			matrix_t<Number> trafoMatrix = computeTrafoMatrix(validState.location);
 
 #ifdef REACH_DEBUG
 			std::cout << "e^(deltaMatrix): " << std::endl;
@@ -547,7 +588,6 @@ namespace reachability {
 				firstSegment = unitePolytope.minkowskiSum( hausPoly );
 			}
 
-			//plotter.plot2d();
 			//assert(firstSegment.contains(unitePolytope));
 			//assert(firstSegment.contains(initialPair.second));
 			//assert(firstSegment.contains(deltaValuation));
@@ -620,6 +660,7 @@ namespace reachability {
 
 	template<typename Number, typename Representation>
 	bool Reach<Number,Representation>::intersectBadStates( const State<Number>& _state, const Representation& _segment ) const {
+		assert(!_state.timestamp.isUnbounded());
 		// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
 		auto badStateIterator = mAutomaton.localBadStates().find(_state.location);
 		if(badStateIterator != mAutomaton.localBadStates().end()){

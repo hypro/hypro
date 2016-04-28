@@ -23,7 +23,13 @@ namespace hypro {
 			Zonotope<Number>> set;
 
 		std::map<carl::Variable, carl::Interval<Number>> discreteAssignment;
-		carl::Interval<Number> timestamp;
+		carl::Interval<Number> timestamp = carl::Interval<Number>::unboundedInterval();
+
+		friend std::ostream& operator<<( std::ostream& _ostr, const State<Number>& s ) {
+			_ostr << "Loc: " << s.location->id() << ", time: " << s.timestamp << std::endl;
+			return _ostr;
+		}
+
 	};
 } // namespace
 

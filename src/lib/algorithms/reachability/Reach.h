@@ -44,6 +44,7 @@ private:
 
 	std::map<Location<Number>*, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number,Representation>> mWorkingQueue;
+	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
 	mutable bool mIntersectedBadStates;
 

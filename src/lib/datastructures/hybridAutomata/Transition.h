@@ -12,7 +12,7 @@
 
 namespace hypro {
 
-enum Aggregation {none,box,parallelotope};
+enum Aggregation {none,boxAgg,parallelotopeAgg};
 
 template <typename Number>
 class Transition {
