@@ -12,8 +12,8 @@ struct aggregation_ : qi::symbols<char, Aggregation>
     aggregation_()
     {
         add
-            ("interval"    , Aggregation::box)
-            ("parallelotope"   , Aggregation::parallelotope)
+            ("interval"    , Aggregation::boxAgg)
+            ("parallelotope"   , Aggregation::parallelotopeAgg)
         ;
     }
 
