@@ -52,16 +52,16 @@ namespace parser {
 
 		for(const auto index : mModeIds){
 			result.addLocation(locManag.location(index));
-			std::cout << "Added location " << *locManag.location(index) << std::endl;
+			//std::cout << "Added location " << *locManag.location(index) << std::endl;
 		}
 
 		for(const auto transition : mTransitions ){
 			result.addTransition(transition);
-			std::cout << "Added transition " << *transition << std::endl;
+			//std::cout << "Added transition " << *transition << std::endl;
 		}
 
 		for(const auto state : mInitialStates ){
-			std::cout << "Add initial state for location " << state.location->id() << std::endl;
+			//std::cout << "Add initial state for location " << state.location->id() << std::endl;
 			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 			result.addInitialState(state);
 		}

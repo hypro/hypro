@@ -181,8 +181,6 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
 
-		std::cout << "Number hplanes: " << mHPlanes.size() << " and dimension: " << dim << std::endl;
-
 		Permutator permutator(mHPlanes.size(), dim);
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
@@ -421,7 +419,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 
 	//reduceNumberRepresentation();
 
-	std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
+	//std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
@@ -620,7 +618,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));
-		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
+		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return result;
 	}

@@ -241,7 +241,7 @@ namespace parser {
 		void addDiscreteInvariant(const std::pair<unsigned, std::vector<matrix_t<Number>>>& _constraints) {
 			for(const auto& matrix : _constraints.second){
 				assert(matrix.rows() == 1);
-				std::cout << "Parsed invariant for dimension " << _constraints.first << " = " << matrix << std::endl;
+				//std::cout << "Parsed invariant for dimension " << _constraints.first << " = " << matrix << std::endl;
 				mDiscreteInvariants.emplace_back(_constraints.first, matrix);
 			}
 		}
@@ -268,8 +268,8 @@ namespace parser {
 			assert(_flow.rows() == _flow.cols());
 			if(mDiscreteInvariants.size() + mContinuousInvariants.size() > 0) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
-				std::cout << "creating location " << tmp->id() << std::endl;
-				std::cout << "flow: " << tmp->flow() << std::endl;
+				//std::cout << "creating location " << tmp->id() << std::endl;
+				//std::cout << "flow: " << tmp->flow() << std::endl;
 				typename Location<Number>::Invariant inv;
 				matrix_t<Number> invariantMat = matrix_t<Number>(mContinuousInvariants.size(), _flow.cols()-1);
 				vector_t<Number> constants = vector_t<Number>(mContinuousInvariants.size());
@@ -282,15 +282,15 @@ namespace parser {
 				}
 				inv.mat = invariantMat;
 				inv.vec = constants;
-				std::cout << "set continuous invariant to " << invariantMat << std::endl;
+				//std::cout << "set continuous invariant to " << invariantMat << std::endl;
 				for(const auto& invariantConstaintPair : mDiscreteInvariants) {
 					assert(invariantConstaintPair.second.rows() == 1);
 					// resize
-					std::cout << "new number of cols: " << _discreteDim-_flow.cols()+2 << std::endl;
+					//std::cout << "new number of cols: " << _discreteDim-_flow.cols()+2 << std::endl;
 					matrix_t<Number> resizedInvariant = matrix_t<Number>(1, _discreteDim-_flow.cols()+2);
 					resizedInvariant = invariantConstaintPair.second.block(0, _flow.cols()-1, 1, _discreteDim-_flow.cols()+2);
 					inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
-					std::cout << "added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant << std::endl;
+					//std::cout << "added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant << std::endl;
 				}
 				inv.discreteOffset = _flow.cols()-1;
 				tmp->setInvariant(inv);
