@@ -11,10 +11,22 @@ namespace reachability {
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 		}
+        
+    /*
+     *  TO-DO:
+     *      - Substitute state by node
+     */    
 
     template<typename Number, typename Representation>
 	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
 		// set up working queue -> add initial states
+                /* 
+                 *  TO-DO:
+                 *     - initialize NodeManager
+                 *     - Assign first 'real level' of the reachability tree with the initial states
+                 *       (including information about the location, current time step, first segment (probably later) and 
+                 *       the used representation)
+                 */ 
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
@@ -35,13 +47,20 @@ namespace reachability {
 			assert(mCurrentLevel <= mSettings.jumpDepth);
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
-			// TODO: Check for fixed point.
+			/*
+                         *  TO-DO: 
+                         *      - Check for fixed-points here using the overapproximations stored in the tree 
+                         */ 
 			if(mReachableStates.find(boost::get<1>(nextInitialSet).location) == mReachableStates.end())
 				mReachableStates[boost::get<1>(nextInitialSet).location] = std::vector<flowpipe_t<Representation>>();
 
 			mReachableStates[boost::get<1>(nextInitialSet).location].push_back(newFlowpipe);
 		}
-
+                
+                /*
+                 *  TO-DO:
+                 *      - Traverse tree and explicitly compute the reachable states
+                 */
 		// collect all computed reachable states
 		std::vector<flowpipe_t<Representation>> collectedReachableStates;
 		for(const auto& statePair : mReachableStates) {
@@ -51,6 +70,11 @@ namespace reachability {
 		}
 		return collectedReachableStates;
 	}
+    
+        /*
+         *  TO-DO:
+         *      - Modify the following method such that it does not return the explicit flowpipe 
+         */
 
 	template<typename Number, typename Representation>
 	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
@@ -63,6 +87,10 @@ namespace reachability {
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
+                /*
+                 *  TO-DO:
+                 *     - Insert first segment into the current node 
+                 */ 
 		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
@@ -134,6 +162,10 @@ namespace reachability {
 				while(!mWorkingQueue.empty()){
 					mWorkingQueue.pop();
 				}
+                                /*
+                                 * TO-DO.
+                                 *    - Employ backtracking here
+                                 */
 				return flowpipe;
 			}
 
@@ -149,8 +181,12 @@ namespace reachability {
 			// the first segment covers one time step already
 			Number currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
-			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << carl::toDouble(currentLocalTime) << std::flush;
+                        /*
+                         *  TO-DO:
+                         *    - Insert for each transition the guard satisfying intervals
+                         */
+			while( !noFlow && currentTime <= mSettings.timeBound ) {
+				std::cout << "\rTime: \t" << carl::toDouble(currentTime) << std::flush;
 
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
@@ -313,6 +349,15 @@ namespace reachability {
 					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 				}
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
+                                /*
+                                 *  TO-DO:
+                                 *       - Check whether for the current node and transition already a child-node
+                                 *         exists. If so, work on it. Otherwise, create a new child-node. 
+                                 *          If the last segment for some transition arrives:
+                                 *              - Construct overapproximation
+                                 *              - Set last segment
+                                 *      
+                                 */
 				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
