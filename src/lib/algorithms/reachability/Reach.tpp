@@ -57,7 +57,7 @@ namespace reachability {
 		assert(!_state.timestamp.isUnbounded());
 #ifdef REACH_DEBUG
 		std::cout << "Location: " << _state.location->id() << std::endl;
-		std::cout << "Time Interval: " << mSettings.timeStep << std::endl;
+		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		boost::get<Representation>(_state.set).print();
 #endif
@@ -147,17 +147,18 @@ namespace reachability {
 #endif
 
 			// the first segment covers one time step already
-			Number currentTime = _state.timestamp.upper() + mSettings.timeStep;
+			Number currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
-			while( !noFlow && currentTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << carl::toDouble(currentTime) << std::flush;
+			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
+				std::cout << "\rTime: \t" << carl::toDouble(currentLocalTime) << std::flush;
 
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
-					currentState.timestamp += carl::Interval<Number>(currentTime-mSettings.timeStep,currentTime);
+					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
+					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(0, mSettings.timeBound));
 					bool fireTimeTriggeredTransition = false;
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
@@ -269,7 +270,7 @@ namespace reachability {
 					// the flowpipe does not longer satisfy the invariant -> quit loop
 					break;
 				}
-				currentTime += mSettings.timeStep;
+				currentLocalTime += mSettings.timeStep;
 			}
 #ifdef REACH_DEBUG
 			if(!noFlow){
