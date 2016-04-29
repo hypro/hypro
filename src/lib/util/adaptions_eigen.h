@@ -216,6 +216,16 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 	}
 }
 
+template<typename Number>
+Number inftyNorm(const hypro::matrix_t<Number>& in) {
+	Number norm = carl::abs(*(in.data()));
+	for(size_t i = 1, size = in.size(); i < size; ++i){
+		Number value = carl::abs(*(in.data()+i));
+		norm = norm < value ? value : norm;
+	}
+	return norm;
+}
+
 } // namespace Eigen
 
 namespace hypro {

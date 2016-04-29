@@ -13,42 +13,19 @@ namespace hypro {
 
 template <typename Number>
 Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, const Number& _supremum ) {
-	using namespace Eigen;
-	// TODO: Can we omit conversion to Number and use Number instead?
 	Number result;
-	Number d = delta;
-	// TODO: What about the constant factor?
-	// Eigen::Matrix<Number, Dynamic, Dynamic> matrix = Eigen::Matrix<Number, Dynamic,
-	// Dynamic>(polytope::csSize(mPolyhedron.constraints()), polytope::pplDimension(mPolyhedron));
-	// matrix = hypro::polytope::polytopeToMatrix<Number>(this->mPolyhedron);
-	// std::cout << "in hausdorffError() - matrix: " << std::endl;
-	// std::cout << matrix << std::endl;
+	// calculate matrix infinity norm
+	Number norm = inftyNorm(matrix);
 
-	// TODO: Matrix lpNorm function of Eigen does not work ...
-	// Number t = matrix.lpNorm<Infinity>();
+	// Number tmp = delta * t;
+	Number tmp = delta * norm;
 
-	// calculate matrix infinity norm by hand
-	Number norm = 0;
-	for ( unsigned rowCnt = 0; rowCnt < matrix.rows(); ++rowCnt ) {
-		for ( unsigned colCnt = 0; colCnt < matrix.cols(); ++colCnt ) {
-			Number value = matrix( rowCnt, colCnt );
-			value = carl::abs(value);
-			norm = norm < value ? value : norm;
-		}
-	}
-
-	// Number tmp = d * t;
-	Number tmp = d * norm;
-
-	// TODO: THIS IS UNPRECISE!!
 	double tmpExp = std::exp(carl::toDouble(tmp));
 	result = carl::rationalize<Number>(tmpExp);
 
 	//tmp.exp( result );
 	result = result - 1 - tmp;
-
 	result *= _supremum;
-
 	return result;
 }
 
