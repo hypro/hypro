@@ -227,7 +227,7 @@ hybrid reachability
  {
   read
   {
-   h in [10,20]
+   h in [20,21]
    t in [0,0]
    P in [1,1]
    calP in [1,1]

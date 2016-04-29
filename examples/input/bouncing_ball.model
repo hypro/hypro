@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 1
+  max jumps 5
   print on
  }
 
@@ -53,11 +53,11 @@ hybrid reachability
 
 }
 
-unsafe set
-{
-  l
-  {
-   #x in [4,6]
-   #v in [-2.5,0]
-  }
-}
+#unsafe set
+#{
+#  l
+#  {
+#   #x in [4,6]
+#   #v in [-2.5,0]
+#  }
+#}
