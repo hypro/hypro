@@ -11,6 +11,7 @@ struct ReachabilitySettings {
 	std::string fileName;
 	unsigned long pplDenomimator;
 	std::vector<unsigned> plotDimensions;
+	bool uniformBloating = false;
 
 	ReachabilitySettings<Number>()
 		: timeBound(carl::rationalize<Number>(fReach_TIMEBOUND))
@@ -27,6 +28,7 @@ struct ReachabilitySettings {
 		fileName = _rhs.fileName;
 		pplDenomimator = _rhs.pplDenomimator;
 		plotDimensions = _rhs.plotDimensions;
+		uniformBloating = _rhs.uniformBloating;
 		assert(plotDimensions.size() <= 2);
 		return *this;
 	}

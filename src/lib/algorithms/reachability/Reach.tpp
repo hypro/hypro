@@ -301,7 +301,7 @@ namespace reachability {
 				s.location = boost::get<0>(tuple)->target();
 				// handle discrete reset assignment
 				typename Transition<Number>::Reset reset = boost::get<0>(tuple)->reset();
-				assert(reset.discreteMat.rows() == s.discreteAssignment.size());
+				assert(unsigned(reset.discreteMat.rows()) == s.discreteAssignment.size());
 				for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
 					carl::Interval<Number> newAssignment(0);
 					for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
@@ -355,7 +355,7 @@ namespace reachability {
 			// ASSUMPTION: All discrete assignments are the same for this transition.
 			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
 			std::cout << "Discrete assignment size: " << aggregationPair.second.begin()->discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
-			assert(reset.discreteMat.rows() == aggregationPair.second.begin()->discreteAssignment.size());
+			assert(unsigned(reset.discreteMat.rows()) == aggregationPair.second.begin()->discreteAssignment.size());
 			for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
 				carl::Interval<Number> newAssignment(0);
 				for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
@@ -367,7 +367,7 @@ namespace reachability {
 				s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 			}
 			std::cout << "Discrete assignment size: " << s.discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
-			assert(reset.discreteMat.rows() == s.discreteAssignment.size());
+			assert(unsigned(reset.discreteMat.rows()) == s.discreteAssignment.size());
 			std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 			mWorkingQueue.emplace(mCurrentLevel+1, s);
 		}
@@ -558,35 +558,46 @@ namespace reachability {
 			deltaValuation.print();
 #endif
 
-			// R_0(X0) U R_delta(X0)
-			Representation unitePolytope = initialPair.second.unite( deltaValuation );
-			//assert(unitePolytope.contains(initialPair.second));
-			//assert(unitePolytope.contains(deltaValuation));
-
-#ifdef REACH_DEBUG
-			std::cout << "Polytope after unite with R0: ";
-			unitePolytope.print();
-#endif
-			// bloat hullPolytope (Hausdorff distance)
-			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
-
-#ifdef REACH_DEBUG
-			std::cout << "\n";
-			std::cout << "Hausdorff Approximation: ";
-			std::cout << radius << std::endl;
-#endif
-			Representation firstSegment = unitePolytope;
-			if(radius > 0){
-				Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
+			Representation firstSegment;
+			if(mSettings.uniformBloating){
+				// R_0(X0) U R_delta(X0)
+				Representation unitePolytope = initialPair.second.unite( deltaValuation );
+				//assert(unitePolytope.contains(initialPair.second));
+				//assert(unitePolytope.contains(deltaValuation));
 
 	#ifdef REACH_DEBUG
-				std::cout << "Hausdorff Polytope (Box): ";
-				hausPoly.print();
-				std::cout << std::endl;
+				std::cout << "Polytope after unite with R0: ";
+				unitePolytope.print();
 	#endif
-				// hullPolytope +_minkowski hausPoly
-				firstSegment = unitePolytope.minkowskiSum( hausPoly );
+				// bloat hullPolytope (Hausdorff distance)
+				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
+
+	#ifdef REACH_DEBUG
+				std::cout << "\n";
+				std::cout << "Hausdorff Approximation: ";
+				std::cout << radius << std::endl;
+	#endif
+				firstSegment = unitePolytope;
+				if(radius > 0){
+					Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
+
+		#ifdef REACH_DEBUG
+					std::cout << "Hausdorff Polytope (Box): ";
+					hausPoly.print();
+					std::cout << std::endl;
+		#endif
+					// hullPolytope +_minkowski hausPoly
+					firstSegment = unitePolytope.minkowskiSum( hausPoly );
+				}
+			} else {
+				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
+				if(radius > 0) {
+					Representation hausPoly = hypro::computePolytope<Number, Representation>( initialPair.second.dimension(), radius );
+					deltaValuation = deltaValuation.minkowskiSum(hausPoly);
+				}
+				firstSegment = initialPair.second.unite(deltaValuation);
 			}
+
 
 			//assert(firstSegment.contains(unitePolytope));
 			//assert(firstSegment.contains(initialPair.second));
