@@ -1,0 +1,113 @@
+hybrid reachability
+{
+ state var x,t
+
+ setting
+ {
+  fixed steps 0.5
+  time 100
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon t,x
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output smoke_detectpr
+  max jumps 5
+  print on
+ }
+
+ modes
+ {
+  normal
+  {
+   poly ode 1
+   {
+    x' = -1
+    t' = 1
+   }
+
+   inv
+   {
+    x >= 30
+    t >= 0
+   }
+  }
+
+  warning
+  {
+   poly ode 1
+   {
+    x' = -2
+    t' = 1
+   }
+
+   inv
+   {
+    x >= 0
+    t >= 0
+   }
+  }
+
+  depleted
+  {
+   poly ode 1
+   {
+    x' = 0
+    t' = 1
+   }
+   inv
+   {
+   	t >= 0
+   }
+  }
+ }
+
+ jumps
+ {
+  normal -> normal
+  guard { }
+  reset { x' := 100 }
+  parallelotope aggregation {}
+
+  normal -> warning
+  guard { x = 30 }
+  reset {  }
+  parallelotope aggregation {}
+
+  warning -> normal
+  guard { }
+  reset { x' := 100 }
+  parallelotope aggregation {}
+
+  warning -> depleted
+  guard { x = 0 }
+  reset { }
+  parallelotope aggregation {}
+
+  depleted -> normal
+  guard { }
+  reset { x' := 100 }
+  parallelotope aggregation {}
+
+ }
+
+ init
+ {
+  normal
+  {
+   x in [100,100]
+   t in [0,0]
+  }
+ }
+
+}
+
+#unsafe set
+#{
+#  l
+#  {
+#   #x in [4,6]
+#   #v in [-2.5,0]
+#  }
+#}
