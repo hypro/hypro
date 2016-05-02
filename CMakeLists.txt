@@ -196,7 +196,7 @@ endif()
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 
 include_directories( ${GLPK_INCLUDE_DIR} )
-set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+set(libraries ${libraries} ${GLPK_LIBRARIES} pthread)
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

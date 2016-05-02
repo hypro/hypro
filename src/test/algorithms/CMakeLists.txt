@@ -20,7 +20,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     target_link_libraries(runAlgorithmTests
 			${PROJECT_NAME}
-                        ${libraries})
+			${GTEST_LIBRARIES}
+            ${libraries})
 
     cotire(runAlgorithmTests)
 

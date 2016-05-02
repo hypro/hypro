@@ -52,6 +52,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC
 		${libraries}
+		${GTEST_LIBRARIES}
 		${PROJECT_NAME}
 	)
 
