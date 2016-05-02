@@ -246,7 +246,11 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		pointSet.insert( this->mVertices.begin(), this->mVertices.end() );
 		pointSet.insert( rhs.mVertices.begin(), rhs.mVertices.end() );
 
-		int effDim = effectiveDimension(pointSet);
+		if(pointSet.empty()){
+			return VPolytopeT<Number,Converter>();
+		}
+
+		unsigned effDim = unsigned(effectiveDimension(pointSet));
 		points.insert( points.end(), pointSet.begin(), pointSet.end() );
 		assert(!points.empty());
 
