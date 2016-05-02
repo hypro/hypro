@@ -11,7 +11,7 @@
 
 //conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE mode ){
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE  ){
     return _source;
 }
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
@@ -31,7 +31,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolyt
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE mode ){
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE  ){
     unsigned dim = _source.dimension();                                             //gets dimension from source object
     std::vector<carl::Interval<Number>> intervals = _source.boundaries();           //gets intervals from source object
     matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);                 //defines an empty generator matrix for dim generators

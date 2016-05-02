@@ -46,7 +46,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool overapproximate) const {
+	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool ) const {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}

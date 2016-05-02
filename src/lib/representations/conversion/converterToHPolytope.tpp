@@ -12,7 +12,7 @@
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPolytope& _source, const CONV_MODE mode ){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPolytope& _source, const CONV_MODE ){
     return _source;
 }
 
@@ -37,7 +37,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 
 //conversion from Box to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE mode ){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE ){
      //gets dimension of box
      unsigned dim = _source.dimension();
      //only continue if dimension is at least 1
@@ -69,7 +69,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
 
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE ){
     //computes vertices from source object
     typename std::vector<Point<Number>> vertices = _source.vertices();
     //only continue if any actual vertices were received at all
@@ -80,7 +80,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE , unsigned numberOfDirections){
     //gets dimension of source object
     unsigned dim = _source.dimension();
 

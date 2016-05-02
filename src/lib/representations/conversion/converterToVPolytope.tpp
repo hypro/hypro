@@ -11,14 +11,14 @@
 
 //conversion from V-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytope& _source, const CONV_MODE mode ){
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytope& _source, const CONV_MODE  ){
 	return _source;
 }
 
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE mode ){
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE  ){
 	//exact conversion
 	VPolytope target;
 	target = VPolytope(_source.matrix(), _source.vector());
@@ -28,13 +28,13 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPol
 
 //conversion from Box to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Box& _source, const CONV_MODE mode ){
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Box& _source, const CONV_MODE  ){
 	return VPolytope(_source.vertices());
 }
 
 //conversion from Zonotope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zonotope& _source, const CONV_MODE mode ){
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zonotope& _source, const CONV_MODE  ){
 	return VPolytope(_source.vertices());
 }
 
@@ -97,7 +97,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 		for (unsigned i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
-                
+
                 //lets the support function evaluate the offset of the halfspaces for each direction
                 std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
                 assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
@@ -106,7 +106,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
                         if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
                                 boundedConstraints.push_back(offsetIndex);
                 }
-                
+
                 //builds a pointVector from boundary points with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
                 std::vector<Point<Number>> points = std::vector<Point<Number>>(boundedConstraints.size());
                 std::size_t pos = boundedConstraints.size()-1;
@@ -115,13 +115,13 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
                      boundedConstraints.pop_back();
                      --pos;
                 }
-                
+
                 //constructs a V-Polytope out of the computed points
-                target = VPolytope(points);   
+                target = VPolytope(points);
         }
-        
-        
-        
+
+
+
         if (mode == ALTERNATIVE){
                 //gets dimension of source object
 		unsigned dim = _source.dimension();
@@ -137,10 +137,10 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 		for (unsigned i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
-                
+
                 //computes some central boundary points based on the directions (pretty precise but expensive)
                 std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
-                
+
                 target = VPolytope(boundaryPoints);
 
         }
