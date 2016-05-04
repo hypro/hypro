@@ -19,7 +19,7 @@ private:
 
 public:
 
-	Permutator(std::size_t totalSize, std::size_t d, bool duplicates = false) : mCurrent(d,0), max(totalSize), mEnd(false) {
+	Permutator(std::size_t totalSize, std::size_t d) : mCurrent(d,0), max(totalSize), mEnd(false) {
 		assert(d <= totalSize);
 		if(d <= totalSize) {
 			for(unsigned i = 0; i < d; ++i) {

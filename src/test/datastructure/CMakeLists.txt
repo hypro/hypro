@@ -18,6 +18,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	target_link_libraries(runDatastructureTests
 							${PROJECT_NAME}
+							${GTEST_LIBRARIES}
 							${libraries})
 
 	cotire(runDatastructureTests)

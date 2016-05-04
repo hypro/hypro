@@ -238,22 +238,93 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 	if ( rhs.dimension() == 0 ) {
 		return VPolytopeT<Number, Converter>( mVertices );
 	} else {
+		VPolytopeT<Number,Converter> result;
+		//std::cout << __func__ << " : of " << *this << " and " << rhs << std::endl;
 		VPolytopeT<Number, Converter>::pointVector points;
-		points.insert( points.end(), this->mVertices.begin(), this->mVertices.end() );
-		points.insert( points.end(), rhs.mVertices.begin(), rhs.mVertices.end() );
 
-		std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-		std::set<Point<Number>> preresult;
-		for ( unsigned i = 0; i < facets.size(); i++ ) {
-			for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
-				preresult.insert( facets[i]->vertices().at( j ) );
+		std::set<Point<Number>> pointSet;
+		pointSet.insert( this->mVertices.begin(), this->mVertices.end() );
+		pointSet.insert( rhs.mVertices.begin(), rhs.mVertices.end() );
+
+		if(pointSet.empty()){
+			return VPolytopeT<Number,Converter>();
+		}
+
+		unsigned effDim = unsigned(effectiveDimension(pointSet));
+		points.insert( points.end(), pointSet.begin(), pointSet.end() );
+		assert(!points.empty());
+
+		if(effDim < points.begin()->dimension()){
+			pointSet.clear();
+			std::vector<Halfspace<Number>> orientedHalfspaces = computeOrientedBox(points);
+			std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
+			//assert(orientedHalfspaces.size() == points.begin()->dimension());
+
+			// vertex computation of the oriented box
+			unsigned dim = points.begin()->dimension();
+			Permutator permutator(orientedHalfspaces.size(), dim);
+			std::vector<unsigned> permutation;
+			while(!permutator.end()) {
+				permutation = permutator();
+
+				matrix_t<Number> A( dim, dim );
+				vector_t<Number> b( dim );
+				unsigned pos = 0;
+				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
+					A.row(pos) = orientedHalfspaces.at(*planeIt).normal().transpose();
+					b(pos) = orientedHalfspaces.at(*planeIt).offset();
+					++pos;
+				}
+				Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+				if ( lu_decomp.rank() < A.rows() ) {
+					continue;
+				}
+
+				vector_t<Number> res = lu_decomp.solve( b );
+
+				// Check if the computed vertex is a real vertex
+				bool outside = false;
+				for(unsigned planePos = 0; planePos < orientedHalfspaces.size(); ++planePos) {
+					bool skip = false;
+					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
+						if(planePos == permutation.at(permPos)) {
+							skip = true;
+							break;
+						}
+					}
+
+					if(!skip) {
+						if( orientedHalfspaces.at(planePos).offset() - orientedHalfspaces.at(planePos).normal().dot(res) < 0 ) {
+							//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
+							outside = true;
+							break;
+						}
+					}
+				}
+				if(!outside) {
+					pointSet.emplace(res);
+				}
 			}
+			for ( const auto &point : pointSet ) {
+				result.insert( point );
+			}
+		} else if(points.size() > points.begin()->dimension()){
+			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+			std::set<Point<Number>> preresult;
+			for ( unsigned i = 0; i < facets.size(); i++ ) {
+				for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
+					preresult.insert( facets[i]->vertices().at( j ) );
+				}
+			}
+			VPolytopeT<Number, Converter>::pointVector res;
+			for ( const auto &point : preresult ) {
+				res.push_back( point );
+			}
+			result = VPolytopeT<Number, Converter>( res );
+		} else {
+			result = VPolytopeT<Number, Converter>(points);
 		}
-		VPolytopeT<Number, Converter>::pointVector res;
-		for ( const auto &point : preresult ) {
-			res.push_back( point );
-		}
-		VPolytopeT<Number,Converter> result = VPolytopeT<Number, Converter>( res );
+
 		//assert(result.contains(*this));
 		//assert(result.contains(rhs));
 

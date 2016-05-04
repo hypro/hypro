@@ -19,7 +19,7 @@ template <typename Number>
 class pca{
     public:
 
-        static std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<vector_t<Number>>& samples);
+        static std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number>>& samples);
 
 };
 

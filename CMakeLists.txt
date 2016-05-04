@@ -76,7 +76,7 @@ if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION V
 endif()
 
 # general compiler and linker settings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -fPIC")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
@@ -170,6 +170,7 @@ if(smtrat_FOUND)
 endif()
 include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
+set(INCLUDES ${INCLUDES} ${smtrat_INCLUDE_DIR})
 endif()
 
 if(USE_Z3)
@@ -179,10 +180,12 @@ if(z3_FOUND)
 endif()
 include_directories(${z3_INCLUDE_DIR})
 set(libraries ${libraries} ${z3_LIBRARIES})
+set(INCLUDES ${INCLUDES} ${z3_INCLUDE_DIR})
 endif()
 
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
+set(INCLUDES ${INCLUDES} ${EIGEN3_INCLUDE_DIR})
 set(libraries ${libraries} ${EIGEN3_LIBRARY})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
@@ -193,7 +196,7 @@ endif()
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 
 include_directories( ${GLPK_INCLUDE_DIR} )
-set(libraries ${libraries} ${GTEST_LIBRARIES} ${GLPK_LIBRARIES} pthread)
+set(libraries ${libraries} ${GLPK_LIBRARIES} pthread)
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

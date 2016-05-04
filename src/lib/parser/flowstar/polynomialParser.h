@@ -204,7 +204,7 @@ namespace parser {
 			// convert to Number and transpose to create a row.
 			matrix_t<Number> newRhs = convert<double,Number>(_constraint.transpose());
 			assert(newRhs.rows() == 1);
-			std::cout << "create constraint for dimension " << _d << std::endl;
+			//std::cout << "create constraint for dimension " << _d << std::endl;
 			assert(_d < newRhs.cols()-1);
 			switch(_rel){
 				case RELATION::EQ: {
@@ -247,7 +247,7 @@ namespace parser {
 
 		std::pair<unsigned, std::vector<matrix_t<Number>>> createPairFromInterval( const unsigned& _d, const double& _lower, const double& _upper, unsigned _dimension ) {
 			std::vector<matrix_t<Number>> res;
-			std::cout << __func__ << ": passed dimension: " << _dimension << std::endl;
+			//std::cout << __func__ << ": passed dimension: " << _dimension << std::endl;
 			matrix_t<Number> lower = matrix_t<Number>::Zero(1,_dimension+1);
 			matrix_t<Number> upper = matrix_t<Number>::Zero(1,_dimension+1);
 			lower(0,_d) = -1;

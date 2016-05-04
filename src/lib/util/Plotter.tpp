@@ -44,20 +44,40 @@ void Plotter<Number>::plot2d() const {
 
 	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
 		// set object
-		vector_t<Number> min;
-		vector_t<Number> max;
-		if(!mObjects.begin()->second.empty()){
-			min = mObjects.begin()->second[0].rawCoordinates();
-			max = mObjects.begin()->second[0].rawCoordinates();
-		} else {
-			min = mPoints.begin()->second.rawCoordinates();
-			max = mPoints.begin()->second.rawCoordinates();
+		vector_t<Number> min = vector_t<Number>(2);
+		vector_t<Number> max = vector_t<Number>(2);
+		assert(mLimits.first.rows() >= 2);
+		assert(mLimits.second.rows() >= 2);
+		min(0) = mLimits.first(mSettings.dimensions.first);
+		min(1) = mLimits.first(mSettings.dimensions.second);
+		max(0) = mLimits.second(mSettings.dimensions.first);
+		max(1) = mLimits.second(mSettings.dimensions.second);
+		// extend ranges
+		std::map<unsigned, carl::Interval<double>> ranges;
+		for ( unsigned d = 0; d < min.rows(); ++d ) {
+			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
+			if(rangeExt != 0)
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
+			else
+				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 		}
+
 
 		mOutfile << "# settings\n";
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
 		mOutfile << "set output \"" << mFilename << ".eps\n";
+		if(mSettings.axes) {
+			mOutfile << "# axis settings\n";
+			mOutfile << "set xzeroaxis \n";
+			mOutfile << "set zeroaxis \n";
+            mOutfile << "set xtics axis \n";
+            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+			mOutfile << "set yzeroaxis \n";
+            mOutfile << "set ytics axis \n";
+            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		}
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
@@ -72,25 +92,13 @@ void Plotter<Number>::plot2d() const {
 			if(objectIt->second.size() > 0){
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
-					assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
+					assert( objectIt->second[pointIndex].dimension() == 2 );
 					if ( objectIt->second[pointIndex].dimension() == 0 ) {
 						continue;
 					}
 					mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
-
-					// update min and max
-					min( 0 ) =
-						  min( 0 ) < objectIt->second[pointIndex].at( 0 ) ? min( 0 ) : objectIt->second[pointIndex].at( 0 );
-					max( 0 ) =
-						  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
-
 					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
 						mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
-						// update min and max
-						min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
-																				   : objectIt->second[pointIndex].at( d );
-						max( d ) = max( d ) > objectIt->second[pointIndex].at( d ) ? max( d )
-																				   : objectIt->second[pointIndex].at( d );
 					}
 					mOutfile << " to \\\n";
 				}
@@ -114,37 +122,20 @@ void Plotter<Number>::plot2d() const {
 					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw 0.2 \n";
 				else
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw 0.2 \n";
+
+				if(mSettings.cummulative){
+					mOutfile << "\nplot ";
+					for ( unsigned d = 0; d < min.rows(); ++d ) {
+						mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+					}
+					mOutfile << "NaN notitle \n";
+				}
 			}
 			++objectCount;
 		}
 
-		// collect ranges
-		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			// update min and max
-			min(0) = min(0) > pointIt->second.at(0) ? pointIt->second.at(0) : min(0);
-			min(1) = min(1) > pointIt->second.at(1) ? pointIt->second.at(1) : min(1);
-			max(0) = max(0) < pointIt->second.at(0) ? pointIt->second.at(0) : max(0);
-			max(1) = max(1) < pointIt->second.at(1) ? pointIt->second.at(1) : max(1);
-		}
-		std::map<unsigned, carl::Interval<double>> ranges;
-		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
-			if(rangeExt != 0)
-				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-			else
-				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
-				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-		}
-		if(mSettings.axes) {
-			mOutfile << "# axis settings\n";
-			mOutfile << "set xzeroaxis \n";
-			mOutfile << "set zeroaxis \n";
-            mOutfile << "set xtics axis \n";
-            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-			mOutfile << "set yzeroaxis \n";
-            mOutfile << "set ytics axis \n";
-            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
-		}
+
+
 
 		if(mPlanes.empty() && mPoints.empty()){
 			mOutfile << "plot ";
@@ -367,6 +358,19 @@ template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points ) {
 	// reduce dimensions
 	if(!_points.empty()){
+		// initialize limits
+		if(mOriginalObjects.empty() && mOriginalPoints.empty()){
+			mLimits.first = _points.begin()->rawCoordinates();
+			mLimits.second = _points.begin()->rawCoordinates();
+		}
+		// update limits
+		for(const auto& point : _points) {
+			for(unsigned d = 0; d < mLimits.first.rows(); ++d){
+				mLimits.first(d) = mLimits.first(d) > point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.first(d);
+				mLimits.second(d) = mLimits.second(d) < point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.second(d);
+			}
+		}
+
 		mOriginalObjects.insert( std::make_pair( mId, _points ) );
 		mId++;
 		return (mId-1);
@@ -400,6 +404,17 @@ unsigned Plotter<Number>::addObject( const Halfspace<Number>& _plane ) {
 
 template<typename Number>
 unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
+	// initialize limits
+	if(mOriginalObjects.empty() && mOriginalPoints.empty()){
+		mLimits.first = _point.rawCoordinates();
+		mLimits.second = _point.rawCoordinates();
+	}
+	// update limits
+	for(unsigned d = 0; d < mLimits.first.rows(); ++d){
+		mLimits.first(d) = mLimits.first(d) > _point.rawCoordinates()(d) ? _point.rawCoordinates()(d) : mLimits.first(d);
+		mLimits.second(d) = mLimits.second(d) < _point.rawCoordinates()(d) ? _point.rawCoordinates()(d) : mLimits.second(d);
+	}
+
 	mOriginalPoints.insert( std::make_pair( mId, _point ) );
 	return mId++;
 }

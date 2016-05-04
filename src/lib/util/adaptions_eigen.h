@@ -216,6 +216,16 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 	}
 }
 
+template<typename Number>
+Number inftyNorm(const hypro::matrix_t<Number>& in) {
+	Number norm = carl::abs(*(in.data()));
+	for(size_t i = 1, size = in.size(); i < size; ++i){
+		Number value = carl::abs(*(in.data()+i));
+		norm = norm < value ? value : norm;
+	}
+	return norm;
+}
+
 } // namespace Eigen
 
 namespace hypro {
@@ -246,6 +256,25 @@ namespace hypro {
 		vector_t<Number> res = ((source.dot(target))/(targetLength*targetLength))*target;
 		return res;
 	}
+
+	template<typename Number>
+	int effectiveDimension(const std::vector<vector_t<Number>>& vertices) {
+		if(!vertices.empty()){
+			if(vertices.size() == 1) {
+				return 0;
+			}
+			unsigned maxDim = vertices.begin()->rows();
+			matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
+			// use first vertex as origin, start at second vertex
+			unsigned rowIndex = 0;
+			for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
+				matr.row(rowIndex) = (*vertexIt - *vertices.begin()).transpose();
+			}
+			return matr.fullPivLu().rank();
+		}
+		return -1;
+	}
+
 } // namespace hypro
 
 namespace std {

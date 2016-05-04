@@ -20,14 +20,14 @@ hybrid reachability
  setting
  {
   fixed steps 0.1
-  time 30
+  time 1
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon t, h
   adaptive orders { min 3 , max 5 }
   cutoff 1e-12
   output simple_tank_plant_dynamic
-  max jumps 1
+  max jumps 50
   print on
  }
 
@@ -44,7 +44,8 @@ hybrid reachability
    inv
    {
     P in [1,1]
-    t in [0,1]
+    t >= 0
+    h <= 25
    }
   }
 
@@ -59,151 +60,188 @@ hybrid reachability
    inv
    {
     P in [0,0]
-    t in [0,1]
+    t >= 0
+    h <= 25
    }
   }
+
+#plc locations
+  user
+  {
+	poly ode 1
+    {
+     h' = 0
+     t' = 0
+    }
+    inv
+    {
+    	t >= 0
+    }
+  }
+
+  read
+  {
+	poly ode 1
+    {
+     h' = 0
+     t' = 0
+    }
+    inv
+    {
+    	t >= 0
+    }
+  }
+
+  sfc_state_change
+  {
+	poly ode 1
+    {
+     h' = 0
+     t' = 0
+    }
+    inv
+    {
+    	t >= 0
+    }
+  }
+
+  dynamic_state_change
+  {
+	poly ode 1
+    {
+     h' = 0
+     t' = 0
+    }
+    inv
+    {
+    	t >= 0
+    }
+  }
+
 
  }
 
  jumps
  {
 
+#01 write transitions
    start P
-   end P
-   guard {calP >= 1}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   end user
+   guard {}
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
-   #priority 1
-
-   start P
-   end nP
-   guard {calP <= 0}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
-   parallelotope aggregation {}
-   time 1
-   #priority 1
 
    start nP
-   end nP
-   guard {calP <= 0}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
+   end user
+   guard {}
+   reset{ P+' := calP+ P-' := calP- P' := calP }
    parallelotope aggregation {}
    time 1
-   #priority 1
 
-   start nP
-   end P
-   guard {calP >= 1}
-   reset{ P+' = calP+ P-' = calP- P' = calP }
-   parallelotope aggregation {}
-   time 1
-   #priority 1
-
-
-   start P
-   end P
+#02 user input
+   start user
+   end read
    guard {P >= 1}
-   reset{ P+' = 0 P-' = 1 }
+   reset{ P+' := 0 P-' := 1 }
    parallelotope aggregation {}
-   time 1
-   #priority 2
+   time 0
 
-   start P
-   end P
+   start user
+   end read
    guard {P <= 0}
-   reset{ P+' = 1 P-' = 0 }
+   reset{ P+' := 1 P-' := 0 }
    parallelotope aggregation {}
-   time 1
-   #priority 2
+   time 0
 
-   start nP
-   end nP
-   guard {P >= 1}
-   reset{ P+' = 0 P-' = 1 }
-   parallelotope aggregation {}
-   time 1
-   #priority 2
-
-   start nP
-   end nP
-   guard {P <= 0}
-   reset{ P+' = 1 P-' = 0 }
-   parallelotope aggregation {}
-   time 1
-   #priority 2
-
-
-   start P
-   end P
+#03 read
+   start read
+   end sfc_state_change
    guard { }
-   reset{ calP+' = P+ calP-' = P- calP' = P }
+   reset{ calP+' := P+ calP-' := P- calP' := P }
    parallelotope aggregation {}
-   time 1
-   #priority 3
+   time 0
 
-   start nP
-   end nP
-   guard { }
-   reset{ calP+' = P+ calP-' = P- calP' = P }
-   parallelotope aggregation {}
-   time 1
-   #priority 3
-
-
-   start P
-   end P
+#04 sfc_state_change
+   start sfc_state_change
+   end dynamic_state_change
    guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 1 discreteLoc' := 1 }
    parallelotope aggregation {}
-   time 1
-   #priority 4
+   time 0
 
-   start P
+   start sfc_state_change
+   end dynamic_state_change
+   guard { discreteLoc >= 1 calP- >= 1 }
+   reset{ calP+' := 0 calP-' := 0 calP' := 0 discreteLoc' := 0 }
+   parallelotope aggregation {}
+   time 0
+
+   start sfc_state_change
+   end dynamic_state_change
+   guard { discreteLoc <= 0 calP+ <= 0  }
+   reset{ }
+   parallelotope aggregation {}
+   time 0
+
+   start sfc_state_change
+   end dynamic_state_change
+   guard { discreteLoc <= 0  calP- >= 1 }
+   reset{ }
+   parallelotope aggregation {}
+   time 0
+
+   start sfc_state_change
+   end dynamic_state_change
+   guard { discreteLoc >= 1 calP- <= 0 }
+   reset{ }
+   parallelotope aggregation {}
+   time 0
+
+#05 switch back to the correct location in the automaton for the dynamic
+   start dynamic_state_change
    end P
-   guard { discreteLoc >= 1 calP- >= 1 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
+   guard { P >= 1 }
+   reset{ }
    parallelotope aggregation {}
-   time 1
-   #priority 4
+   time 0
 
-   start nP
+   start dynamic_state_change
    end nP
-   guard { discreteLoc <= 0 calP+ >= 1 calP- <= 0 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 1 discreteLoc' = 1 }
+   guard { P <= 0 }
+   reset{ }
    parallelotope aggregation {}
-   time 1
-   #priority 4
+   time 0
 
-   start nP
-   end nP
-   guard { discreteLoc >= 1 calP- >= 1 }
-   reset{ calP+' = 0 calP-' = 0 calP' = 0 discreteLoc' = 0 }
-   parallelotope aggregation {}
-   time 1
-   #priority 4
+# hybrid transitions if the tank is too full
+
+	start P
+	end nP
+	guard { h >= 25 }
+	reset { P' := 0 }
+	parallelotope aggregation {}
 
  }
 
  init
  {
-  P
+  read
   {
-   h in [10,20]
+   h in [20,21]
    t in [0,0]
    P in [1,1]
    calP in [1,1]
    P+ in [1,1]
    P- in [0,0]
-   calP+ [1,1]
-   calP- [0,0]
-   discreteLoc [1,1]
+   calP+ in [1,1]
+   calP- in [0,0]
+   discreteLoc in [1,1]
   }
  }
 }
 
-unsafe set
-{
- P  { h in [40,40] }
- nP { h in [40,40] }
-}
+#unsafe set
+#{
+# P  { h in [40,40] }
+# nP { h in [40,40] }
+#}

@@ -1,15 +1,17 @@
-#include "../lib/config.h"
-#include "../lib/representations/Box/Box.h"
+
+#include "../lib/representations/GeometricObject.h"
+#include "../lib/datastructures/Halfspace.h"
+#include "../lib/util/Plotter.h"
 
 int main(int argc, char const *argv[])
 {
-	typedef double Number;
+	typedef cln::cl_RA Number;
 	hypro::matrix_t<Number> A = hypro::matrix_t<Number>::Zero(3,3);
 	A(0,0) = 1;
-	A(1,1) = carl::cos(45);
-	A(1,2) = -carl::sin(45);
-	A(2,1) = carl::sin(45);
-	A(2,2) = carl::cos(45);
+	A(1,1) = carl::convert<double,Number>(carl::cos(45));
+	A(1,2) = carl::convert<double,Number>(-carl::sin(45));
+	A(2,1) = carl::convert<double,Number>(carl::sin(45));
+	A(2,2) = carl::convert<double,Number>(carl::cos(45));
 
 	hypro::vector_t<Number> b = hypro::vector_t<Number>::Zero(3);
 
@@ -38,6 +40,24 @@ int main(int argc, char const *argv[])
 		std::cout << v << std::endl;
 	}
 
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+
+	hypro::Box<Number> testbox2(std::make_pair(hypro::Point<Number>({-2,-2}), hypro::Point<Number>({2,2})));
+	hypro::matrix_t<Number> normal = hypro::matrix_t<Number>(1,2);
+	hypro::vector_t<Number> offset = hypro::vector_t<Number>(1);
+	normal << 1,1;
+	offset << carl::rationalize<Number>(-0.5);
+	hypro::vector_t<Number> hsNormal = hypro::vector_t<Number>(2);
+	hsNormal << 1,1;
+	hypro::Halfspace<Number> cutter = hypro::Halfspace<Number>(hsNormal, carl::rationalize<Number>(-0.5));
+	plotter.addObject(cutter);
+	unsigned original = plotter.addObject(testbox2.vertices());
+	unsigned cutted = plotter.addObject(testbox2.satisfiesHalfspaces(normal, offset).second.vertices());
+
+	plotter.setObjectColor(original, hypro::colors[hypro::green]);
+	plotter.setObjectColor(cutted, hypro::colors[hypro::red]);
+
+	plotter.plot2d();
 
 
 	hypro::Box<Number> testResBox(originalVertices);

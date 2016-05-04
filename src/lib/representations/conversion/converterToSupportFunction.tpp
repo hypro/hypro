@@ -12,13 +12,13 @@
 
 // conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const SupportFunction& _source, const CONV_MODE mode){
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const SupportFunction& _source, const CONV_MODE ){
     return _source;
 }
 
 // conversion from box to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Box& _source, const CONV_MODE mode) {
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Box& _source, const CONV_MODE ) {
     unsigned dim = _source.dimension();                                                     //gets dimension of box
     assert( dim >= 1);                                                                      //only continue if dimension is at least 1
 
@@ -50,13 +50,13 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
 // conversion from H-polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const HPolytope& _source, const CONV_MODE mode) {
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const HPolytope& _source, const CONV_MODE ) {
     return SupportFunction( _source.constraints() );
 }
 
 // conversion from Zonotope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE mode) {
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE ) {
     typename std::vector<Point<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
     assert (!vertices.empty() );                                                           //checks if any vertices were received
 

@@ -14,12 +14,12 @@
 
 // conversion from box to box (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, const CONV_MODE mode ) {
+typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, const CONV_MODE  ) {
 	return _source;
 }
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE mode ) {
+typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE  ) {
 	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
@@ -59,7 +59,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 
 //conversion from V-Polytope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _source, const CONV_MODE mode ) {
+typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _source, const CONV_MODE  ) {
 	typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();               //gets vertices as a vector from the source object
 	assert( !vertices.empty() );                                                                    //only continue if any actual vertices were received at all
 	vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
@@ -171,7 +171,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE mode ) {
+typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE ) {
         typename std::vector<Point<Number>> vertices = _source.vertices();                                   //computes vertices from source object
 	assert( !vertices.empty() );                                                                            //only continue if any actual vertices were received at all
 	Point<Number> minima = vertices[0];                                                                  //creates a vector_t with the first vertex of the source object

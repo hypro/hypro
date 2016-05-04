@@ -10,29 +10,32 @@
 #include <fstream>
 #include <string>
 #include <map>
-#include <sys/time.h> 
+#include <sys/time.h>
 
 #include "../src/lib/config.h"
 #include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/Zonotope/Zonotope.h"
+#include "../src/lib/representations/GeometricObject.h"
 
 
 typedef int Number;
 
 int main(int argc, char** argv)
 {
-	typedef carl::FLOAT_T<double> Number;
+	typedef cln::cl_RA Number;
 
     // Just creates an empty Center
-    hypro::vector_t<Number> vCenter = hypro::vector_t<Number>(3);
-    vCenter << 0, 0, 0;
-    
+    hypro::vector_t<Number> vCenter = hypro::vector_t<Number>(2);
+    vCenter << 3,3;
+
     // Just creates the Generators (3 for now)
-    hypro::matrix_t<Number> vGenerators = hypro::matrix_t<Number>(3,4);
-    vGenerators << 1, 0, 0, 1,
-                   0, 1, 0, 1,
-                   0, 0, 1, 1;
-    
+    hypro::matrix_t<Number> vGenerators = hypro::matrix_t<Number>(2,3);
+    vGenerators << 1, 0, 1,
+                   1, 1, -2;
+
+hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
+    vGenerators2 << 1, 0,
+                   1, 1;
+
     //To test the uniteEqualVectors function!
     //
     //for (int i = 3; i < vGenerators.cols(); i++)
@@ -43,6 +46,13 @@ int main(int argc, char** argv)
     //}
 
     hypro::Zonotope<Number> zonoExample(vCenter, vGenerators); // Creates an Zonotope
+    hypro::Zonotope<Number> zonoExample2(vCenter, vGenerators2); // Creates an Zonotope
+    hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+
+    plotter.addObject(zonoExample.vertices());
+    plotter.addObject(zonoExample2.vertices());
+    plotter.plot2d();
+    plotter.plotTex();
 
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");

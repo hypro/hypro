@@ -44,40 +44,35 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
-		// degenerate cases
-		unsigned size = points.size();
 		mDimension = points.begin()->dimension();
-		if ( size == 1 ) {
-			// Return Box constraints.
-		} else if ( size < mDimension ) {
-			// ATTENTION: Assumption here: alien is reduced, such that the d points in alien span a d-1 dimensional object.
-			// find all hyperplanar descriptions by reducing to d dimensions (get the plane)
-			std::size_t size = points.size();
-			Permutator permutator(mDimension, size);
-			std::vector<unsigned> permutation;
-			while(!permutator.end()) {
-				permutation = permutator();
-				// project to chosen dimensions
-				std::vector<Point<Number>> reducedVertices;
-				reducedVertices.reserve(size);
-				for(const auto& vertex : points) {
-					vector_t<Number> reductor = vector_t<Number>(size);
-					for(unsigned d = 0; d < size; ++d)
-						reductor(d) = vertex.at(d);
-					reducedVertices.push_back(Point<Number>(std::move(reductor)));
-				}
-				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( reducedVertices ).first;
-				//std::cout << "Conv Hull end" << std::endl;
-				for ( auto &facet : facets ) {
-					mHPlanes.push_back( facet->halfspace() );
-				}
+		// check affine independence - verify object dimension.
+		std::vector<vector_t<Number>> coordinates;
+		for(const auto& vertex : points){
+			coordinates.emplace_back(vertex.rawCoordinates());
+		}
+		int effectiveDim = effectiveDimension(coordinates);
+		assert(effectiveDim >= 0);
+
+		// For debugging
+		//std::cout << "effectiveDimension: " << effectiveDim << std::endl;
+		//if(effectiveDim < mDimension){
+		//	std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
+		//	HPolytopeT<Number,Converter> tmp(boxConstraints);
+		//	std::cout << "Theoretical oriented Box: " << tmp << std::endl;
+		//}
+
+		// End for debugging
+
+		mEmpty = TRIBOOL::FALSE;
+		//if ( points.size() <= mDimension ) {
+		if ( unsigned(effectiveDim) < mDimension ) {
+			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
+			for(const auto& constraint : boxConstraints){
+				mHPlanes.emplace_back(constraint);
 			}
-			assert( false );
 		} else {
-			//std::cout << "Conv Hull" << std::endl;
 			// TODO: Chose suitable convex hull algorithm
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			//std::cout << "Conv Hull end" << std::endl;
 			for ( auto &facet : facets ) {
 				assert(facet->halfspace().contains(points));
 				mHPlanes.push_back( facet->halfspace() );
@@ -182,7 +177,6 @@ const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
-	//std::cout << "Compute vertices of " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -191,10 +185,6 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 		std::vector<unsigned> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
-			//std::cout << "Use planes ";
-			//for(const auto item : permutation)
-			//	std::cout << item << ", ";
-			//std::cout << std::endl;
 
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
@@ -216,48 +206,34 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 			vector_t<Number> res = lu_decomp.solve( b );
 
-			// check for infinity
-			bool infty = false;
-			//for ( unsigned i = 0; i < res.rows(); ++i ) {
-			//	if ( std::numeric_limits<Number>::infinity() == ( Number( res( i ) ) ) ) {
-			//		std::cout << ( Number( res( i ) ) ) << " is infty." << std::endl;
-			//		infty = true;
-			//		break;
-			//	}
-			//}
-
-			if(!infty) {
-				//std::cout << "Solved to " << res.transpose() << std::endl;
-
-                ///// if it's not almost equal, then
-				// Check if the computed vertex is a real vertex
-				bool outside = false;
-				for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
-					bool skip = false;
-					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
-						if(planePos == permutation.at(permPos)) {
-							//std::cout << "Skip plane " << planePos << std::endl;
-							skip = true;
-							break;
-						}
-					}
-
-					if(!skip) {
-						if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-							//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
-							outside = true;
-							break;
-						}
+			// Check if the computed vertex is a real vertex
+			bool outside = false;
+			for(unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos) {
+				bool skip = false;
+				for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
+					if(planePos == permutation.at(permPos)) {
+						//std::cout << "Skip plane " << planePos << std::endl;
+						skip = true;
+						break;
 					}
 				}
-				if(!outside) {
-					// insert, if no duplicate
-					Point<Number> tmp(res);
-					if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
-						vertices.push_back(tmp);
-					//std::cout << "Final vertex: " << res << std::endl;
+
+				if(!skip) {
+					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+						//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
+						outside = true;
+						break;
+					}
 				}
 			}
+			if(!outside) {
+				// insert, if no duplicate
+				Point<Number> tmp(res);
+				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
+					vertices.push_back(tmp);
+				//std::cout << "Final vertex: " << res << std::endl;
+			}
+
 		}
 	}
 	return vertices;
@@ -443,7 +419,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 
 	//reduceNumberRepresentation();
 
-	std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
+	//std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
 
 	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
 	opt.setMatrix(this->matrix());
@@ -642,7 +618,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));
-		std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
+		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
 
 		return result;
 	}

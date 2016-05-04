@@ -407,16 +407,41 @@ const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs 
 	return ( _rhs * _factor );
 }
 
-    #ifdef EXTERNALIZE_CLASSES
-    extern template class Point<double>;
+template<typename Number>
+int effectiveDimension(const std::vector<Point<Number>>& vertices) {
+	if(!vertices.empty()){
+		if(vertices.size() == 1) {
+			return 0;
+		}
+		unsigned maxDim = vertices.begin()->rawCoordinates().rows();
+		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
+		// use first vertex as origin, start at second vertex
+		unsigned rowIndex = 0;
+		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
+			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
+		}
+		return matr.fullPivLu().rank();
+	}
+	return -1;
+}
 
-    #ifdef USE_MPFR_FLOAT
-    extern template class Point<carl::FLOAT_T<mpfr_t>>;
-    #endif
-
-    extern template class Point<carl::FLOAT_T<double>>;
-    #endif
-
+template<typename Number>
+int effectiveDimension(const std::set<Point<Number>>& vertices) {
+	if(!vertices.empty()){
+		if(vertices.size() == 1) {
+			return 0;
+		}
+		unsigned maxDim = vertices.begin()->rawCoordinates().rows();
+		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
+		// use first vertex as origin, start at second vertex
+		unsigned rowIndex = 0;
+		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
+			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
+		}
+		return matr.fullPivLu().rank();
+	}
+	return -1;
+}
 
 }  // namespace hypro
 

@@ -110,44 +110,44 @@ struct flowstarParser
 	void insertContinuousSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
 			mVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimensionLimit;
 			++mDiscreteDimensionLimit;
-			std::cout << "New continuous dimension: " << mDimensionLimit << std::endl;
+			//std::cout << "New continuous dimension: " << mDimensionLimit << std::endl;
 		}
 	}
 
 	void insertDiscreteSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
 			mDiscreteVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mDiscreteVariableIds.push_back(mVariablePool.id(tmp));
 			++mDiscreteDimensionLimit;
-			std::cout << "New discrete dimension: " << mDiscreteDimensionLimit << std::endl;
+			//std::cout << "New discrete dimension: " << mDiscreteDimensionLimit << std::endl;
 		}
 	}
 
 	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number>>& _states) {
-		std::cout << "Add continuous state for location " << id << std::endl;
+		//std::cout << "Add continuous state for location " << id << std::endl;
 		bool found = false;
 		for(auto& state : _states) {
 			if(state.location->id() == id){
-				std::cout << "State already exists." << std::endl;
+				//std::cout << "State already exists." << std::endl;
 				found = true;
 				assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 				unsigned constraintsNum = boost::get<cPair<Number>>(state.set).first.rows();
-				std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+				//std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
 				cPair<Number> set = boost::get<cPair<Number>>(state.set);
-				std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << boost::get<cPair<Number>>(state.set).first.cols() << std::endl;
+				//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << boost::get<cPair<Number>>(state.set).first.cols() << std::endl;
 				set.first.conservativeResize(constraintsNum+_constraint.size(), boost::get<cPair<Number>>(state.set).first.cols());
 				set.second.conservativeResize(constraintsNum+_constraint.size());
-				std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
+				//std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
 				for(const auto& row : _constraint) {
 					assert(row.rows() == 1);
-					std::cout << "add row " << constraintsNum;
+					//std::cout << "add row " << constraintsNum;
 					set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
 					//std::cout << " " << convert<Number,double>(boost::get<cPair<Number>>(state.set).first.row(constraintsNum)) << " <= ";
 					set.second(constraintsNum) = -row(0,row.cols()-1);
@@ -155,7 +155,7 @@ struct flowstarParser
 					++constraintsNum;
 				}
 				state.set = set;
-				std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+				//std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
 			}
 		}
 		if(!found){
@@ -165,10 +165,10 @@ struct flowstarParser
 			set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
 			set.second = vector_t<Number>(_constraint.size());
 			unsigned constraintsNum = 0;
-			std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
+			//std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
 			for(const auto& row : _constraint) {
 				assert(row.rows() == 1);
-				std::cout << "add row " << constraintsNum;
+				//std::cout << "add row " << constraintsNum;
 				set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
 				//std::cout << " " << s.constraints.row(constraintsNum) << " <= ";
 				set.second(constraintsNum) = -row(0,row.cols()-1);
@@ -185,7 +185,7 @@ struct flowstarParser
 	}
 
 	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number>>& _states) {
-		std::cout << "Add discrete state for location " << id << std::endl;
+		//std::cout << "Add discrete state for location " << id << std::endl;
 		bool found = false;
 		for(auto& state : _states) {
 			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
