@@ -69,7 +69,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
 
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE ){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
     //computes vertices from source object
     typename std::vector<Point<Number>> vertices = _source.vertices();
     //only continue if any actual vertices were received at all
