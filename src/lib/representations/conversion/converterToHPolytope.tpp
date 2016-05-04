@@ -124,8 +124,9 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     typename std::vector<Point<Number>> vertices = _source.vertices();
     //only continue if any actual vertices were received at all
     assert( !vertices.empty() );
+    VPolytope vpoly = VPolytope(vertices);
 
-    return HPolytope(std::move(vertices));
+    return toHPolytope(vpoly, mode);
 }
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)

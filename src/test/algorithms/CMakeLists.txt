@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runAlgorithmTests
     		#BoxReachabilityTest.cpp
-    		ForwardReachabilityTest.cpp
+    		#ForwardReachabilityTest.cpp
 			#HyReachTest.cpp
             #MinkowskiSumTest.cpp
             #SumPerformanceTest.cpp
