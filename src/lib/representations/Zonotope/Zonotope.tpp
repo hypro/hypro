@@ -293,7 +293,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const hypro::matrix_t<Number> &A ) const {
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const hypro::matrix_t<Number> &A, const hypro::vector_t<Number>& b ) const {
 	assert( A.cols() == mCenter.rows() &&
 			"Matrix's dimensionality is different "
 			"from zonotope's center's "
@@ -304,6 +304,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( c
 			"generators' dimensionality." );
 	ZonotopeT<Number,Converter> result;
 	result.setCenter( A * this->mCenter );
+	result.setCenter( this->mCenter + b );
 	result.setGenerators( A * this->mGenerators );
 
 	return result;

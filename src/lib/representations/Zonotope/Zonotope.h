@@ -155,7 +155,7 @@ class ZonotopeT {
 	 * @param result The resulting stateset.
 	 * @return True if the operation has been successfully applied.
 	 */
-	ZonotopeT<Number,Converter> linearTransformation( const hypro::matrix_t<Number>& A ) const;
+	ZonotopeT<Number,Converter> linearTransformation( const hypro::matrix_t<Number>& A, const hypro::vector_t<Number>& b ) const;
 
 	/**
 	 * Compute boundaries of zonotopeT
