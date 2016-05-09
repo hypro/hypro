@@ -7,6 +7,7 @@
 #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../src/lib/util/helperFunctions.h"
 #include "../src/lib/representations/conversion/Converter.h"
+#include "../src/lib/util/Plotter.h"
 
 using namespace hypro;
 using namespace carl;
@@ -33,11 +34,22 @@ int main(int argc, char const *argv[])
         hypro::Box<Number> box;
         hypro::Box<Number> box2;
         hypro::Box<Number> box3;
+        Plotter<Number>& plotter = Plotter<Number>::getInstance();
+        
+        //third zonotope (chapter 3 example)
+        vector_t<Number> center3 = vector_t<Number>(2);
+        center3 << 3, 3;
+        matrix_t<Number> generators3 = matrix_t<Number>(2,3);
+        generators3.col(0) << 0, 1;
+        generators3.col(1) << 1, 1;
+        generators3.col(2) << 2, -1;
+        zonotope = hypro::Zonotope<Number>(center3, generators3);
+        //plotter.addPoints(zonotope.vertices());
         
         
         
-        std::vector<vector_t<Number>> directions = computeTemplate<Number>(3, 8);
-        matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(directions.size(), 3);
+        std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, 12);
+        matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(directions.size(), 2);
 
         //fills the matrix with the template directions
         for (unsigned i=0; i<directions.size();++i){
@@ -87,12 +99,14 @@ int main(int argc, char const *argv[])
         }
         
         hpolytope3 = hypro::HPolytope<Number>(templateDirectionMatrix3, distances3);
+        //plotter.addPoints(hpolytope.vertices());
         
         vpolytope = Converter<Number>::toVPolytope(hpolytope);
         vpolytope2 = Converter<Number>::toVPolytope(hpolytope2);
         vpolytope3 = Converter<Number>::toVPolytope(hpolytope3);
+        plotter.addPoints(vpolytope.vertices());
         
-        zonotope = Converter<Number>::toZonotope(hpolytope);
+        //zonotope = Converter<Number>::toZonotope(hpolytope);
         zonotope2 = Converter<Number>::toZonotope(hpolytope2);
         zonotope3 = Converter<Number>::toZonotope(hpolytope3);
         
@@ -103,6 +117,8 @@ int main(int argc, char const *argv[])
         support = Converter<Number>::toSupportFunction(hpolytope);
         support2 = Converter<Number>::toSupportFunction(hpolytope2);
         support3 = Converter<Number>::toSupportFunction(hpolytope3);
+        
+        
         
         
         
@@ -132,6 +148,31 @@ int main(int argc, char const *argv[])
         std::set<long int> results23;
         std::set<long int> results24;  
         
+        //v
+        Box<Number> result3;
+        HPolytope<Number> result6;
+        HPolytope<Number> result7;
+        Zonotope<Number> result17;
+        
+        //h
+        Box<Number> result;
+        Box<Number> result2;
+        VPolytope<Number> result11;
+        Zonotope<Number> result16;
+        
+        //sf
+        Box<Number> result5;
+        HPolytope<Number> result9;
+        VPolytope<Number> result13;
+        VPolytope<Number> result14;
+        Zonotope<Number> result18;
+        Zonotope<Number> result19;
+        
+        //zonotope
+        Box<Number> result4;
+        HPolytope<Number> result8;
+        VPolytope<Number> result12;
+        
         
         
         
@@ -141,31 +182,31 @@ int main(int argc, char const *argv[])
                 //tobox
                 clock::time_point start = clock::now();
                 
-                Converter<Number>::toBox(hpolytope);
+                result =Converter<Number>::toBox(hpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toBox(hpolytope, ALTERNATIVE);
+                result2 = Converter<Number>::toBox(hpolytope, ALTERNATIVE);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results2.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toBox(vpolytope);
+                result3 = Converter<Number>::toBox(vpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results3.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toBox(zonotope);
+                result4 = Converter<Number>::toBox(zonotope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results4.insert(testresult);   
                 
                 start = clock::now();
                 
-                Converter<Number>::toBox(support);
+                result5 = Converter<Number>::toBox(support);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results5.insert(testresult);
                 
@@ -173,25 +214,25 @@ int main(int argc, char const *argv[])
                 
                 start = clock::now();
                 
-                Converter<Number>::toHPolytope(vpolytope);
+                result6 = Converter<Number>::toHPolytope(vpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results6.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toHPolytope(vpolytope, OVER);
+                result7 = Converter<Number>::toHPolytope(vpolytope, OVER);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results7.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toHPolytope(zonotope);
+                result8 = Converter<Number>::toHPolytope(zonotope, OVER);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results8.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toHPolytope(support);
+                result9 = Converter<Number>::toHPolytope(support, OVER, 8);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results9.insert(testresult);
                 
@@ -205,25 +246,25 @@ int main(int argc, char const *argv[])
                 
                 start = clock::now();
                 
-                Converter<Number>::toVPolytope(hpolytope);
+                result11 = Converter<Number>::toVPolytope(hpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results11.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toVPolytope(zonotope);
+                result12 = Converter<Number>::toVPolytope(zonotope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results12.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toVPolytope(support, OVER);
+                result13 = Converter<Number>::toVPolytope(support, OVER, 8);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results13.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toVPolytope(support, UNDER);
+                result14 = Converter<Number>::toVPolytope(support, UNDER, 8);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results14.insert(testresult);
                 
@@ -236,25 +277,25 @@ int main(int argc, char const *argv[])
                 //tozonotope
                 start = clock::now();
                 
-                Converter<Number>::toZonotope(hpolytope);
+                result16 = Converter<Number>::toZonotope(hpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results16.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toZonotope(vpolytope);
+                result17 = Converter<Number>::toZonotope(vpolytope);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results17.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toZonotope(support);
+                result18 = Converter<Number>::toZonotope(support, OVER, 8);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results18.insert(testresult);
                 
                 start = clock::now();
                 
-                Converter<Number>::toZonotope(support, ALTERNATIVE);
+                result19 = Converter<Number>::toZonotope(support, ALTERNATIVE, 8);
                 testresult= std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
                 results19.insert(testresult);
                 
@@ -296,6 +337,42 @@ int main(int argc, char const *argv[])
 
           
         }
+        //v-plots
+        //plotter.addObject(result3.vertices());
+        //plotter.addObject(result6.vertices());
+        //plotter.addObject(result7.vertices());
+        //plotter.addObject(result17.vertices());
+        
+        //h.plots
+        //plotter.addObject(result.vertices());
+        //plotter.addObject(result2.vertices());
+        //plotter.addObject(result11.vertices());
+        //lotter.addObject(result16.vertices()); 
+        
+        //sf plots
+        //plotter.addObject(result5.vertices());
+        plotter.addObject(result9.vertices());
+        plotter.addObject(result13.vertices());
+        //plotter.addObject(result14.vertices()); 
+        //plotter.addObject(result18.vertices());
+        //plotter.addObject(result19.vertices());
+        
+        //z plots
+        //plotter.addObject(result4.vertices());
+        //plotter.addObject(result8.vertices());
+        //lotter.addObject(result12.vertices());        
+       
+        
+        
+        
+        
+        
+        
+        
+        plotter.plot2d();
+        plotter.plotTex();
+        
+        
 
         double avg1 = 0;
         double avg2 = 0;
