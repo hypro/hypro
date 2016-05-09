@@ -11,14 +11,20 @@
 #include <string>
 
 int main(int argc, char** argv) {
+
+	#ifdef USE_CLN_NUMBERS
 	typedef cln::cl_RA Number;
+	#else
+	typedef mpq_class Number;
+	#endif
 	typedef hypro::SupportFunction<Number> sfValuation;
 	typedef hypro::HPolytope<Number> hpValuation;
 	typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::microseconds timeunit;
 
-	//std::string filename = "../examples/input/bouncing_ball.model";
-	std::string filename = "../examples/input/simple_tank_plant.model";
+	std::string filename = "../examples/input/bouncing_ball.model";
+	//std::string filename = "../examples/input/simple_tank_plant.model";
+	//std::string filename = "../examples/input/smoke_detector.model";
 
 	clock::time_point start = clock::now();
 	hypro::parser::flowstarParser<Number> parser;
@@ -39,7 +45,7 @@ int main(int argc, char** argv) {
 	std::vector<unsigned> plottingDimensions = parser.mSettings.plotDimensions;
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
-	plotter.rSettings().cummulative = true;
+	plotter.rSettings().cummulative = false;
 
 	// bad states plotting
 	hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = ha.localBadStates();
@@ -64,4 +70,5 @@ int main(int argc, char** argv) {
 	//}
 
 	plotter.plot2d();
+	plotter.plotTex();
 }
