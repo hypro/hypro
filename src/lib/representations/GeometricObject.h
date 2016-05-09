@@ -12,6 +12,6 @@
 
 namespace hypro {
 
-enum representation_name { box, zonotope, polytope_h, polytope_v, support_function, taylor_model };
+enum representation_name { box, zonotope, polytope_h, polytope_v, support_function, taylor_model, cpair };
 
 } // namespace hypro
