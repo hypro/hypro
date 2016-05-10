@@ -15,25 +15,31 @@ using namespace hypro;
 
 int main(int argc, char** argv) {
 
-	Plotter<double>& plotter = Plotter<double>::getInstance();
+	#ifdef USE_CLN_NUMBERS
+	typedef cln::cl_RA Number;
+	#else
+	typedef double Number;
+	#endif
 
-	HPolytope<double> poly;
-	poly.insert(Halfspace<double>({1,1},1));
-	poly.insert(Halfspace<double>({-1,1},1));
-	poly.insert(Halfspace<double>({0,-1},1));
+	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
-	std::vector<Point<double>> vertices = poly.vertices();
+	HPolytope<Number> poly;
+	poly.insert(Halfspace<Number>({1,1},1));
+	poly.insert(Halfspace<Number>({-1,1},1));
+	poly.insert(Halfspace<Number>({0,-1},1));
+
+	std::vector<Point<Number>> vertices = poly.vertices();
 
 	plotter.addObject(vertices);
 
 	std::cout << "Added points." << std::endl;
 
 	plotter.addObject(poly.constraints());
-	plotter.addObject(Halfspace<double>({1,0},1));
+	plotter.addObject(Halfspace<Number>({1,0},1));
 
 	std::cout << "Added planes." << std::endl;
 
-	plotter.addPoint(Point<double>({-1.5,3}));
+	plotter.addPoint(Point<Number>({-1.5,3}));
 
 	std::cout << "Added point." << std::endl;
 
