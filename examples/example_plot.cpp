@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 
 	std::cout << "Added planes." << std::endl;
 
-	plotter.addPoint(Point<Number>({-1.5,3}));
+	plotter.addPoint(Point<Number>({carl::rationalize<Number>(-1.5),3}));
 
 	std::cout << "Added point." << std::endl;
 
