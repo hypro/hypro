@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include "../util.h"
+#include "../Cone.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/smtrat/SimplexSolver.h"
 #include "../../../util/Optimizer.h"
@@ -25,17 +25,13 @@ class VPolytopeT {
   public:
 
 	using pointVector = std::vector<Point<Number>>;
-	using Cone = hypro::polytope::Cone<Number>;
-	using Fan = hypro::polytope::Fan<Number>;
 
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
   private:
 	mutable pointVector mVertices;
-	Cone mCone;
-	mutable Fan mFan;
-	bool mFanSet;
+	Cone<Number> mCone;
 	bool mReduced;
 
 	std::vector<std::set<unsigned>> mNeighbors;
@@ -91,16 +87,9 @@ class VPolytopeT {
 
 	Number supremum() const;
 
-	const typename polytope::Fan<Number>& fan() const {
-		if ( !mFanSet ) {
-			calculateFan();
-		}
-		return mFan;
-	}
+	const Cone<Number>& cone() const { return mCone; }
 
-	const Cone& cone() const { return mCone; }
-
-	void setCone( const Cone& _cone ) { mCone = _cone; }
+	void setCone( const Cone<Number>& _cone ) { mCone = _cone; }
 
 	void setNeighbors( const Point<Number>& _point, const std::set<Point<Number>>& _neighbors ) {
 		unsigned pos = 0;
@@ -181,8 +170,6 @@ class VPolytopeT {
 	/***************************************************************************
 	 * Auxiliary functions
 	 **************************************************************************/
-	const Fan& calculateFan() const;
-	const Cone& calculateCone( const Point<Number>& vertex );
 	static bool belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
 	static bool abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
 	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);

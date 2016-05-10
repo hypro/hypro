@@ -11,14 +11,12 @@
 namespace hypro {
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT()
-	: mVertices(), mFan(), mFanSet( false ), mReduced( true ), mNeighbors() {
+	: mVertices(), mReduced( true ), mNeighbors() {
 }
 
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT( const Point<Number> &point ) {
 	mVertices.push_back( point );
-	mFan = polytope::Fan<Number>();
-	mFanSet = false;
 	mReduced = true;
 	mNeighbors.push_back( std::set<unsigned>() );
 }
@@ -29,8 +27,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const pointVector &points ) {
 		mVertices.push_back( point );
 		mNeighbors.push_back( std::set<unsigned>() );
 	}
-	mFan = polytope::Fan<Number>();
-	mFanSet = false;
 	mReduced = false;
 
 	reduceNumberRepresentation();
@@ -42,8 +38,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& 
 		mVertices.emplace_back( point );
 		mNeighbors.push_back( std::set<unsigned>() );
 	}
-	mFan = polytope::Fan<Number>();
-	mFanSet = false;
 	mReduced = false;
 
 	reduceNumberRepresentation();
@@ -108,8 +102,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 		// std::cout << "Real vertex " << point.transpose() << std::endl;
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	mFan = polytope::Fan<Number>();
-	mFanSet = false;
 	mReduced = false;
 
 	//reduceNumberRepresentation();
@@ -118,8 +110,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT( const VPolytopeT &orig ) {
 	mVertices.insert( mVertices.end(), orig.begin(), orig.end() );
-	mFan = polytope::Fan<Number>();
-	mFanSet = false;			// TODO: Include getter fpr this
 	mReduced = orig.reduced();  // TODO: Include getter fpr this
 	mCone = orig.cone();
 	mNeighbors = orig.mNeighbors;
@@ -193,7 +183,6 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace(
 			pointsOutside.insert(vertex.rawCoordinates());
 		}
 	}
-
 	assert(false);
 }
 
@@ -468,65 +457,65 @@ void VPolytopeT<Number, Converter>::updateNeighbors() {
  * Auxiliary functions
  **************************************************************************/
 
-template <typename Number, typename Converter>
-const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>::calculateFan() const {
-	if ( !mFanSet ) {
-		std::vector<Facet<Number>> facets = convexHull( mVertices ).first;
-		std::set<Point<Number>> preresult;
-		for ( unsigned i = 0; i < facets.size(); i++ ) {
-			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
-				preresult.insert( facets[i].vertices().at( j ) );
-			}
-		}
-		polytope::Fan<Number> fan;
-		for ( auto &point : preresult ) {
-			polytope::Cone<Number> *cone = new polytope::Cone<Number>();
-			for ( unsigned i = 0; i < facets.size(); i++ ) {
-				for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
-					if ( point == facets[i].vertices().at( j ) ) {
-						std::vector<Ridge<Number>> ridges = getRidges( facets[i] );
-						for ( unsigned m = 0; m < ridges.size(); m++ ) {
-							if ( checkInsideRidge( ridges[m], point ) ) {
-								std::vector<Facet<Number>> conefacets = shareRidge( facets, ridges[m] );
+//template <typename Number, typename Converter>
+//const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>::calculateFan() const {
+//	if ( !mFanSet ) {
+//		std::vector<Facet<Number>> facets = convexHull( mVertices ).first;
+//		std::set<Point<Number>> preresult;
+//		for ( unsigned i = 0; i < facets.size(); i++ ) {
+//			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
+//				preresult.insert( facets[i].vertices().at( j ) );
+//			}
+//		}
+//		polytope::Fan<Number> fan;
+//		for ( auto &point : preresult ) {
+//			polytope::Cone<Number> *cone = new polytope::Cone<Number>();
+//			for ( unsigned i = 0; i < facets.size(); i++ ) {
+//				for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
+//					if ( point == facets[i].vertices().at( j ) ) {
+//						std::vector<Ridge<Number>> ridges = getRidges( facets[i] );
+//						for ( unsigned m = 0; m < ridges.size(); m++ ) {
+//							if ( checkInsideRidge( ridges[m], point ) ) {
+//								std::vector<Facet<Number>> conefacets = shareRidge( facets, ridges[m] );
+//
+//								matrix_t<Number> matrix = matrix_t<Number>( conefacets.size(), point.size() );
+//								for ( unsigned k = 1; k < conefacets.size(); k++ ) {
+//									for ( unsigned l = 0; l < conefacets[k].getNormal().size(); l++ ) {
+//										matrix( k, l ) = conefacets[k].getNormal()( l );
+//									}
+//								}
+//
+//								for ( unsigned j = 0; j < point.size(); j++ ) {
+//									matrix( 0, j ) = 1;
+//
+//									if ( matrix.fullPivLu().rank() == point.size() ) {
+//										break;
+//									} else {
+//										matrix( 0, j ) = 0;
+//									}
+//								}
+//								vector_t<Number> b = vector_t<Number>::Zero( conefacets.size() );
+//								b( 0 ) = 1;
+//								vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
+//
+//								cone->add( std::shared_ptr<Halfspace<Number>>(
+//									  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
+//								// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
+//								// result.dot(point.rawCoordinates()))));
+//							}
+//						}
+//					}
+//				}
+//			}
+//			fan.add( cone );
+//		}
+//		mFanSet = true;
+//		mFan = fan;
+//	}
+//}
 
-								matrix_t<Number> matrix = matrix_t<Number>( conefacets.size(), point.size() );
-								for ( unsigned k = 1; k < conefacets.size(); k++ ) {
-									for ( unsigned l = 0; l < conefacets[k].getNormal().size(); l++ ) {
-										matrix( k, l ) = conefacets[k].getNormal()( l );
-									}
-								}
-
-								for ( unsigned j = 0; j < point.size(); j++ ) {
-									matrix( 0, j ) = 1;
-
-									if ( matrix.fullPivLu().rank() == point.size() ) {
-										break;
-									} else {
-										matrix( 0, j ) = 0;
-									}
-								}
-								vector_t<Number> b = vector_t<Number>::Zero( conefacets.size() );
-								b( 0 ) = 1;
-								vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
-
-								cone->add( std::shared_ptr<Halfspace<Number>>(
-									  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-								// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
-								// result.dot(point.rawCoordinates()))));
-							}
-						}
-					}
-				}
-			}
-			fan.add( cone );
-		}
-		mFanSet = true;
-		mFan = fan;
-	}
-}
-
-template <typename Number, typename Converter>
-const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter>::calculateCone( const Point<Number> &vertex ) {
+//template <typename Number, typename Converter>
+//const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter>::calculateCone( const Point<Number> &vertex ) {
 	// set up glpk
 	//glp_prob *cone;
 	//cone = glp_create_prob();
@@ -563,7 +552,7 @@ const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter
 	// TODO output & result interpretation
 
 	// glp_delete_prob(cone);
-}
+//}
 
 template<typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {

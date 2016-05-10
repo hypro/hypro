@@ -4,12 +4,8 @@
 
 #pragma once
 #include "HPolytope.h"
-#include <chrono>
 
 namespace hypro {
-
-	using clock = std::chrono::high_resolution_clock;
-	using timeunit = std::chrono::microseconds;
 
   /*
    * Compute all neighbors of a facet by calculating the participation at the vertices of the facet
@@ -250,8 +246,6 @@ namespace hypro {
    template<typename Number, typename Converter>
    HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::heuristic() const {
 
-	 clock::time_point start = clock::now();
-
 	 // 2D
 	 std::vector<Point<Number>> vertices = this->vertices();
 	 std::vector<std::vector<unsigned>> membersOfVertices = getMembersOfVertices(vertices);
@@ -461,9 +455,6 @@ namespace hypro {
 	   facet1=bestDropSmoothIndex;
 	   strat=REDUCTION_STRATEGY::DROP_SMOOTH;
 	 }
-
-	 double timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-	 std::cout << std::endl << "Total time for heuristic(HYPRO): " << timeOfReachReduction << std::endl;
 
 	 std::cout << std::endl;
 	 std::cout << "[Drop]       Chose facet " << bestDropIndex << " with " << bestDropValue << std::endl;

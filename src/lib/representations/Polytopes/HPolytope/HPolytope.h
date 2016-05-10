@@ -8,10 +8,8 @@
 
 #pragma once
 
-#include "util.h"
-#include "../util.h"
 #include "../../../util/convexHull.h"
-#include "../../../util/vertexEnumeration.h"
+//#include "../../../util/vertexEnumeration.h"
 #include "../../../util/Optimizer.h"
 #include "../../../util/Permutator.h"
 
@@ -41,8 +39,6 @@ public:
 
   private:
 	mutable HalfspaceVector mHPlanes;
-	bool mFanSet;
-	mutable polytope::Fan<Number> mFan;
 	unsigned mDimension;
 
 	// State flags
@@ -160,11 +156,11 @@ public:
 	 */
 	std::pair<matrix_t<Number>, vector_t<Number>> inequalities() const;
 
-	/**
-	 * @brief Getter for the polytopal fan of the current polytope.
-	 * @return A fan.
-	 */
-	const typename polytope::Fan<Number>& fan() const;
+	///**
+	// * @brief Getter for the polytopal fan of the current polytope.
+	// * @return A fan.
+	// */
+	//const typename polytope::Fan<Number>& fan() const;
 
 	/**
 	 * @brief Getter for the vertices of the current polytope
@@ -266,8 +262,7 @@ public:
 	 * Auxiliary functions
 	 */
 
-	void calculateFan() const;
-
+	//void calculateFan() const;
 
 	std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
 	std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;

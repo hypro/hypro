@@ -1,18 +1,19 @@
 #include "HPolytope.h"
+
 namespace hypro {
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT()
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
+	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 }
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& orig )
-	: mHPlanes(orig.mHPlanes), mFanSet( orig.mFanSet ), mFan( orig.mFan ), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
+	: mHPlanes(orig.mHPlanes), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
 }
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -24,7 +25,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), b( i ) ) );
@@ -34,7 +35,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), Number( 0 ) ) );
 	}
@@ -42,7 +43,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
-	: mHPlanes(), mFanSet( false ), mFan(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
 		// check affine independence - verify object dimension.
@@ -168,15 +169,8 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::ine
 }
 
 template <typename Number, typename Converter>
-const typename polytope::Fan<Number> &HPolytopeT<Number, Converter>::fan() const {
-	if ( !mFanSet ) {
-		calculateFan();
-	}
-	return mFan;
-}
-
-template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
+	std::cout << __func__ << " " << *this << std::endl;
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -204,7 +198,11 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 				continue;
 			}
 
+			std::cout << convert<Number,double>(A) << std::endl;
+			std::cout << convert<Number,double>(b) << std::endl;
+
 			vector_t<Number> res = lu_decomp.solve( b );
+			std::cout << "Vertex: " << convert<Number,double>(res).transpose() << std::endl;
 
 			// Check if the computed vertex is a real vertex
 			bool outside = false;
@@ -220,7 +218,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 				if(!skip) {
 					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-						//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
+						std::cout << "Drop vertex: " << convert<Number,double>(res).transpose() << " because of plane " << planePos << std::endl;
 						outside = true;
 						break;
 					}
@@ -231,7 +229,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 				Point<Number> tmp(res);
 				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
 					vertices.push_back(tmp);
-				//std::cout << "Final vertex: " << res << std::endl;
+				std::cout << "Final vertex: " << convert<Number,double>(res).transpose() << std::endl;
 			}
 
 		}
@@ -251,60 +249,60 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 	return max;
 }
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::calculateFan() const {
-	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( vertices() ).first;
-	std::set<Point<Number>> preresult;
-	for ( unsigned i = 0; i < facets.size(); i++ ) {
-		for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
-			preresult.insert( facets[i]->vertices().at( j ) );
-		}
-	}
-	polytope::Fan<Number> fan;
-	for ( auto &point : preresult ) {
-		polytope::Cone<Number> *cone = new polytope::Cone<Number>();
-		for ( unsigned i = 0; i < facets.size(); i++ ) {
-			for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
-				if ( point == facets[i]->vertices().at( j ) ) {
-					std::vector<Ridge<Number>> ridges = getRidges( *facets[i] );
-					for ( unsigned m = 0; m < ridges.size(); m++ ) {
-						if ( checkInsideRidge( ridges[m], point ) ) {
-							std::vector<Facet<Number>> conefacets = shareRidge( facets, ridges[m] );
-
-							matrix_t<Number> matrix = matrix_t<Number>( conefacets.size(), point.size() );
-							for ( unsigned k = 1; k < conefacets.size(); k++ ) {
-								for ( unsigned l = 0; l < conefacets[k].getNormal().size(); l++ ) {
-									matrix( k, l ) = conefacets[k].getNormal()( l );
-								}
-							}
-
-							for ( unsigned j = 0; j < point.size(); j++ ) {
-								matrix( 0, j ) = 1;
-
-								if ( matrix.fullPivLu().rank() == point.size() ) {
-									break;
-								} else {
-									matrix( 0, j ) = 0;
-								}
-							}
-							vector_t<Number> b = vector_t<Number>::Zero( conefacets.size() );
-							b( 0 ) = 1;
-							vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
-
-							cone->add( std::shared_ptr<Halfspace<Number>>(
-								  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-							// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
-							// result.dot(point.rawCoordinates()))));
-						}
-					}
-				}
-			}
-		}
-		fan.add( cone );
-	}
-	mFanSet = true;
-	mFan = fan;
-}
+//template <typename Number, typename Converter>
+//void HPolytopeT<Number, Converter>::calculateFan() const {
+//	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( vertices() ).first;
+//	std::set<Point<Number>> preresult;
+//	for ( unsigned i = 0; i < facets.size(); i++ ) {
+//		for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
+//			preresult.insert( facets[i]->vertices().at( j ) );
+//		}
+//	}
+//	polytope::Fan<Number> fan;
+//	for ( auto &point : preresult ) {
+//		polytope::Cone<Number> *cone = new polytope::Cone<Number>();
+//		for ( unsigned i = 0; i < facets.size(); i++ ) {
+//			for ( unsigned j = 0; j < facets[i]->vertices().size(); j++ ) {
+//				if ( point == facets[i]->vertices().at( j ) ) {
+//					std::vector<Ridge<Number>> ridges = getRidges( *facets[i] );
+//					for ( unsigned m = 0; m < ridges.size(); m++ ) {
+//						if ( checkInsideRidge( ridges[m], point ) ) {
+//							std::vector<Facet<Number>> conefacets = shareRidge( facets, ridges[m] );
+//
+//							matrix_t<Number> matrix = matrix_t<Number>( conefacets.size(), point.size() );
+//							for ( unsigned k = 1; k < conefacets.size(); k++ ) {
+//								for ( unsigned l = 0; l < conefacets[k].getNormal().size(); l++ ) {
+//									matrix( k, l ) = conefacets[k].getNormal()( l );
+//								}
+//							}
+//
+//							for ( unsigned j = 0; j < point.size(); j++ ) {
+//								matrix( 0, j ) = 1;
+//
+//								if ( matrix.fullPivLu().rank() == point.size() ) {
+//									break;
+//								} else {
+//									matrix( 0, j ) = 0;
+//								}
+//							}
+//							vector_t<Number> b = vector_t<Number>::Zero( conefacets.size() );
+//							b( 0 ) = 1;
+//							vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
+//
+//							cone->add( std::shared_ptr<Halfspace<Number>>(
+//								  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
+//							// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
+//							// result.dot(point.rawCoordinates()))));
+//						}
+//					}
+//				}
+//			}
+//		}
+//		fan.add( cone );
+//	}
+//	mFanSet = true;
+//	mFan = fan;
+//}
 
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
@@ -629,7 +627,6 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::clear() {
 	mHPlanes.clear();
-	mFanSet = false;
 	mDimension = 0;
 	mEmpty = FALSE;
 	mNonRedundant = true;
@@ -670,15 +667,15 @@ HPolytopeT<Number, Converter> &HPolytopeT<Number, Converter>::operator=( const H
 template<typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	#ifdef REDUCE_NUMBERS
-	std::vector<Point<Number>> vertices = this->vertices();
+	std::vector<Point<Number>> originalVertices = this->vertices();
 
 	// normal reduction
 	for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
-		//std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
+		std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
 		// find maximal value
 		Number largest = 0;
 		mHPlanes.at(planeIndex).makeInteger();
-		//std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
+		std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
 		largest = carl::abs(mHPlanes.at(planeIndex).offset());
 		for(unsigned i = 0; i < mDimension; ++i){
 			if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
@@ -699,7 +696,7 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 			Number newOffset = mHPlanes.at(planeIndex).offset();
 			newOffset = carl::ceil(Number((newOffset/largest)*limit));
 
-			for(const auto& vertex : vertices) {
+			for(const auto& vertex : originalVertices) {
 				Number tmp = newNormal.dot(vertex.rawCoordinates());
 				if(tmp > newOffset){
 					newOffset = newOffset + (tmp-newOffset);
@@ -709,8 +706,10 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 			newOffset = carl::ceil(newOffset);
 			mHPlanes.at(planeIndex).setOffset(newOffset);
 		}
-		//std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
+		std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
 	}
+
+	std::cout << "After Reduction: " << *this << std::endl;
 	#endif
 }
 

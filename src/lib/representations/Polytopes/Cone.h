@@ -9,7 +9,6 @@
 #include <memory>
 
 namespace hypro {
-namespace polytope {
 
 template<typename Number>
 using vectorSet = std::set<vector_t<Number>>;
@@ -67,7 +66,6 @@ std::ostream& operator<<( std::ostream& _out, Cone<Number>& _cone ) {
 	return _out;
 }
 
-}  // namespace polytope
 }  // namespace hypro
 
 #include "Cone.tpp"

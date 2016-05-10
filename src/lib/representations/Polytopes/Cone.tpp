@@ -3,7 +3,6 @@
  */
 
 namespace hypro {
-namespace polytope {
 
 template <typename Number>
 Cone<Number>::Cone()
@@ -239,5 +238,4 @@ Cone<Number> Cone<Number>::operator=( const Cone<Number> &_rhs ) {
 	mPlanes = _rhs.planes();
 	return *this;
 }
-}  // namespace polytope
 }  // namespace hypro
