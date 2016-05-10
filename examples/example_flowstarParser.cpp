@@ -22,7 +22,9 @@ int main(int argc, char** argv) {
 	typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::microseconds timeunit;
 
-	std::string filename = "../examples/input/bouncing_ball.model";
+	std::string filename = std::string(argv[1]);
+
+	//std::string filename = "../examples/input/bouncing_ball.model";
 	//std::string filename = "../examples/input/simple_tank_plant.model";
 	//std::string filename = "../examples/input/smoke_detector.model";
 
