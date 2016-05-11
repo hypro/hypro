@@ -203,7 +203,7 @@ namespace parser {
 			using qi::on_error;
 	        using qi::fail;
 
-	        start = (name > qi::lit('{') > flow(qi::_r1, qi::_r3) > -(invariant(qi::_r1, qi::_r2, qi::_r3, qi::_r4)) > qi::lit('}'))[ qi::_val = px::bind( &modeParser<Iterator,Number>::createLocation, px::ref(*this), qi::_1, qi::_2, qi::_r4)];
+	        start = (name > qi::lit('{') > flow(qi::_r1, qi::_r3) > -invariant(qi::_r1, qi::_r2, qi::_r3, qi::_r4) > qi::lit('}'))[ qi::_val = px::bind( &modeParser<Iterator,Number>::createLocation, px::ref(*this), qi::_1, qi::_2, qi::_r4)];
 
 			name = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
 			flow = *qi::space > qi::lexeme["poly ode 1"] > *qi::space > qi::lit('{') > *qi::space > qi::skip(qi::blank)[(mOdeParser(qi::_r1, qi::_r2) % qi::eol)][qi::_val = px::bind( &modeParser<Iterator, Number>::createFlow, px::ref(*this), qi::_1 )] > *qi::space > qi::lit('}');
