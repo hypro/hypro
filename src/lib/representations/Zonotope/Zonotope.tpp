@@ -1,7 +1,7 @@
 #include "Zonotope.h"
 #include <assert.h>
-#include <Eigen/src/Core/PlainObjectBase.h>
-#include <Eigen/LU>
+#include <eigen3/Eigen/src/Core/PlainObjectBase.h>
+#include <eigen3/Eigen/LU>
 #include <cmath>
 #include <algorithm>
 
