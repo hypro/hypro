@@ -19,7 +19,7 @@
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 
-#include "../../config.h"
+#include "config.h"
 #include "common.h"
 #include "../../algorithms/reachability/Settings.h"
 #include "../../datastructures/hybridAutomata/State.h"

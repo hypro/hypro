@@ -1,4 +1,5 @@
 #pragma once
+#include <carl/numbers/numbers.h>
 
 namespace hypro{
 
