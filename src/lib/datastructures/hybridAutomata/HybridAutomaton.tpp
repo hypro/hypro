@@ -9,6 +9,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton &_hybrid )
 	, mInitialStates( _hybrid.initialStates() )
 	, mLocalBadStates( _hybrid.localBadStates() )
 	, mGlobalBadStates( _hybrid.globalBadStates() )
+	, mReachabilitySettings( _hybrid.reachabilitySettings() )
 {}
 
 template <typename Number>
@@ -44,6 +45,11 @@ const typename HybridAutomaton<Number>::setVector& HybridAutomaton<Number>::glob
 	return mGlobalBadStates;
 }
 
+template<typename Number>
+const ReachabilitySettings<Number>& HybridAutomaton<Number>::reachabilitySettings() const {
+	return mReachabilitySettings;
+}
+
 template <typename Number>
 unsigned HybridAutomaton<Number>::dimension() const {
 	if(mInitialStates.empty()) return 0;
@@ -74,6 +80,11 @@ void HybridAutomaton<Number>::setLocalBadStates( const locationStateMap& _states
 template <typename Number>
 void HybridAutomaton<Number>::setGlobalBadStates( const setVector& _states ) {
 	mGlobalBadStates = _states;
+}
+
+template<typename Number>
+void HybridAutomaton<Number>::setReachabilitySettings( const ReachabilitySettings<Number>& _settings) {
+	mReachabilitySettings = _settings;
 }
 
 template <typename Number>

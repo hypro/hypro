@@ -18,7 +18,6 @@
 # E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
 
-
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -46,17 +45,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
-option(COMPARE_CDD "Validate and test against Komei Fukudas cddlib." OFF)
-option(COMPARE_POLYMAKE "Validate and test against polymake." OFF)
 option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
-option(USE_OPENGL_PLOTTING "Use OpenGL plotting." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." ON)
-option(USE_Z3 "Use Z3 for linear solving." OFF)
-option(EXTERNALIZE_CLASSES "Use EXTERNALIZE_CLASSES." OFF)
-option(EXTERNALIZE_CLASSES_ONLY_TO_TEST "An EXTERNALIZE_CLASSES for test purposes." OFF)
-option(FORWARD_REACHABILITY_METHOD_2 "Changes the Reachability Computation Method. Keep this OFF if the desired method is METHOD #1" OFF)
-option( CLANG_TIDY "Enable usage of clang-tidy" OFF )
+option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 
 # Include own macros.
 include( hypromacros )
@@ -72,7 +64,7 @@ set(BIN_INSTALL_DIR lib/ CACHE PATH "Installation directory for executables")
 ###########################################################################################
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
 endif()
 
 # general compiler and linker settings
@@ -89,11 +81,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-	#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--with-gcc-toolchain")
-  if(${STATICLIB_SWITCH} STREQUAL "OFF")
-    set(CMAKE_MACOSX_RPATH 1)
-  endif()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+	if(${STATICLIB_SWITCH} STREQUAL "OFF")
+		set(CMAKE_MACOSX_RPATH 1)
+	endif()
 endif()
 
 if(USE_COTIRE)
@@ -129,34 +120,6 @@ else()
     MESSAGE(FATAL_ERROR "Could not find carl")
 endif()
 
-#find_package(CLN REQUIRED)
-#include_directories(${CLN_INCLUDE_DIRS})
-#set(libraries ${libraries} ${CLN_LIBRARY})
-
-#if(SUPPORT_MPFR)
-#	find_package(MPFR REQUIRED)
-#	include_directories(${MPFR_INCLUDE_DIRS})
-#	set(libraries ${libraries} ${MPFR_LIBRARY})
-#endif()
-
-if(COMPARE_CDD)
-	find_package(cdd REQUIRED)
-endif()
-
-if(COMPARE_POLYMAKE)
-	find_package(Polymake REQUIRED)
-endif()
-
-if(USE_OPENGL_PLOTTING)
-	find_package(Glut REQUIRED)
-  include_directories(${Glut_INCLUDE_DIR})
-  set(libraries ${libraries} ${Glut_LIBRARY})
-endif()
-
-#find_package(GMP REQUIRED)
-#include_directories(${GMP_INCLUDE_DIRS} ${LIBCDD_INCLUDE_DIRS})
-#set(libraries ${libraries} ${GMP_LIBRARY} ${LIBCDD_LIBRARIES})
-
 if(USE_PPL)
 	find_package(PPL REQUIRED)
 	include_directories(${PPL_INCLUDES})
@@ -171,16 +134,6 @@ endif()
 include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
 set(INCLUDES ${INCLUDES} ${smtrat_INCLUDE_DIR})
-endif()
-
-if(USE_Z3)
-find_package(z3 REQUIRED)
-if(z3_FOUND)
-    MESSAGE(STATUS "Found z3: ${z3_INCLUDE_DIR}")
-endif()
-include_directories(${z3_INCLUDE_DIR})
-set(libraries ${libraries} ${z3_LIBRARIES})
-set(INCLUDES ${INCLUDES} ${z3_INCLUDE_DIR})
 endif()
 
 find_package(Eigen3 REQUIRED)
@@ -213,7 +166,7 @@ if(CLANG_TIDY)
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
 
-
+include_directories( src/lib )
 
 add_subdirectory(src)
 

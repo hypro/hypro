@@ -11,6 +11,7 @@
 
 #include "Location.h"
 #include "Transition.h"
+#include "algorithms/reachability/Settings.h"
 #include <map>
 
 namespace hypro {
@@ -35,6 +36,7 @@ class HybridAutomaton {
 	locationStateMap mInitialStates;
 	locationStateMap mLocalBadStates;
 	setVector mGlobalBadStates;
+	ReachabilitySettings<Number> mReachabilitySettings;
 
   public:
 	/**
@@ -55,6 +57,7 @@ class HybridAutomaton {
 	const locationStateMap& initialStates() const;
 	const locationStateMap& localBadStates() const;
 	const setVector& globalBadStates() const;
+	const ReachabilitySettings<Number>& reachabilitySettings() const;
 	unsigned dimension() const;
 
 	void setLocations( const locationSet& _locs );
@@ -62,6 +65,7 @@ class HybridAutomaton {
 	void setInitialStates( const locationStateMap& _states );
 	void setLocalBadStates( const locationStateMap& _states );
 	void setGlobalBadStates( const setVector& _states );
+	void setReachabilitySettings( const ReachabilitySettings<Number>& _settings);
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );

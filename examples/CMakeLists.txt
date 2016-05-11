@@ -1,8 +1,8 @@
 include_directories( ${PROJECT_SOURCE_DIR}/src/lib # in order to have all headers (even not installed ones)
 )
-link_directories( ${PROJECT_BINARY_DIR}/src/lib
-                  ${PROJECT_BINARY_DIR}
-)
+#link_directories( ${PROJECT_BINARY_DIR}/src/lib
+#                  ${PROJECT_BINARY_DIR}
+#)
 
 add_subdirectory(TwoTank)
 

@@ -1,4 +1,3 @@
-
 #pragma once
 
 namespace hypro{
@@ -14,24 +13,14 @@ struct ReachabilitySettings {
 	bool uniformBloating = false;
 
 	ReachabilitySettings<Number>()
-		: timeBound(carl::rationalize<Number>(fReach_TIMEBOUND))
-		, jumpDepth(fReach_JUMPDEPTH)
-		, timeStep(carl::rationalize<Number>(fReach_TIMESTEP))
+		: timeBound(0)
+		, jumpDepth(0)
+		, timeStep(0)
 		, fileName("out")
-		, pplDenomimator(fReach_DENOMINATOR)
+		, pplDenomimator(1)
 	{}
 
-	ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs){
-		timeBound = _rhs.timeBound;
-		jumpDepth = _rhs.jumpDepth;
-		timeStep = _rhs.timeStep;
-		fileName = _rhs.fileName;
-		pplDenomimator = _rhs.pplDenomimator;
-		plotDimensions = _rhs.plotDimensions;
-		uniformBloating = _rhs.uniformBloating;
-		assert(plotDimensions.size() <= 2);
-		return *this;
-	}
+	ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs) = default;
 
 	friend std::ostream& operator<<( std::ostream& lhs, const ReachabilitySettings<Number>& rhs ) {
 		lhs << "Local time-horizon: " << carl::toDouble(rhs.timeBound) << std::endl;

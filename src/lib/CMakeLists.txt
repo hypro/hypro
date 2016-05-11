@@ -21,7 +21,6 @@ set(lib_hypro_headers
 )
 
 set(lib_hypro_sources
-	#util/smtrat/SimplexSolver.cpp
 	${lib_hypro_datastructure_sources}
 	${lib_hypro_representation_sources}
     ${lib_hypro_parser_sources}
@@ -70,16 +69,19 @@ set(headers
 
 set(sources
 	${hypro_algorithms_sources}
-${hypro_datastructures_sources}
-${hypro_parser_sources}
-${hypro_representations_sources}
-${hypro_util_sources})
+	${hypro_datastructures_sources}
+	${hypro_parser_sources}
+	${hypro_representations_sources}
+	${hypro_util_sources})
 
 if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
 else()
 	set(STATICLIB "SHARED")
 endif()
+
+#message(STATUS ${sources})
+#message(STATUS ${headers})
 
 add_library(${PROJECT_NAME} ${STATICLIB}
 	${sources}
@@ -103,7 +105,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 #### EXPORT SETTINGS
 
 if(BUILD_STATIC)
-	message("-- linking BY static")
+	message("-- linking static")
 	add_library(lib_hypro_static STATIC ${sources})
 	set_target_properties( lib_hypro_static PROPERTIES
 		# create *nix style library versions + symbolic links
@@ -120,7 +122,6 @@ if(BUILD_STATIC)
 endif()
 
 # Options for static linking
-message("-- linking static")
 if (APPLE)
 		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mmacosx-version-min=10.7")
 else()
@@ -164,8 +165,6 @@ install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
 ### "${PROJECT_BINARY_DIR}" THE FOLLOWING CMD IS FROM CARL... HERE WE DO HAVE A PROBLEM, BUT I DUNNO WHAT IT IS
 
 ########################################################################################
-
-message(${sources})
 
 if (CLANG_TIDY)
 	add_custom_target(tidy

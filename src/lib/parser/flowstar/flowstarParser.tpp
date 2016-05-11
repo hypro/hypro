@@ -44,9 +44,9 @@ namespace parser {
 		std::fstream infile( pathToInputFile );
 		if ( !infile.good() ) {
 			std::cerr << "Could not open file: " << pathToInputFile << std::endl;
-			exit( 1 );  // TODO: Create HyPro-specific Errorcodes
+			exit( 1 );
 		}
-		bool parsingSuccessful = parse( infile, pathToInputFile, resultAutomaton );
+		bool parsingSuccessful = parse( infile, resultAutomaton );
 		if ( !parsingSuccessful ) {
 			std::cerr << "Parse error" << std::endl;
 			exit( 1 );
@@ -56,8 +56,7 @@ namespace parser {
 	}
 
 	template <typename Number>
-	bool flowstarParser<Number>::parse( std::istream &in, const std::string &filename,
-													HybridAutomaton<Number> &_result ) {
+	bool flowstarParser<Number>::parse( std::istream &in, HybridAutomaton<Number> &_result ) {
 		in.unsetf( std::ios::skipws );
 		BaseIteratorType basebegin( in );
 		Iterator begin( basebegin );
@@ -102,6 +101,8 @@ namespace parser {
 		for(const auto state : mLocalBadStates ){
 			result.addLocalBadState(state);
 		}
+
+		result.setReachabilitySettings(mSettings);
 
 		return result;
 	}

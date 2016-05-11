@@ -202,7 +202,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	}
 
 	HybridAutomaton<Number> parseInput( const std::string& pathToInputFile );
-	bool parse( std::istream& in, const std::string& filename, HybridAutomaton<Number>& _result );
+	bool parse( std::istream& in, HybridAutomaton<Number>& _result );
 	HybridAutomaton<Number> createAutomaton();
 };
 

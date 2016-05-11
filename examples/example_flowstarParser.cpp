@@ -2,11 +2,11 @@
  *
  */
 
-#include "../src/lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../src/lib/algorithms/reachability/Reach.h"
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/parser/flowstar/flowstarParser.h"
-#include "../src/lib/util/Plotter.h"
+#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "algorithms/reachability/Reach.h"
+#include "representations/GeometricObject.h"
+#include "parser/flowstar/ParserWrapper.h"
+#include "util/Plotter.h"
 #include <chrono>
 #include <string>
 
@@ -17,10 +17,18 @@ int main(int argc, char** argv) {
 	#else
 	typedef mpq_class Number;
 	#endif
-	typedef hypro::SupportFunction<Number> sfValuation;
+	//typedef hypro::SupportFunction<Number> sfValuation;
 	typedef hypro::HPolytope<Number> hpValuation;
 	typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::microseconds timeunit;
+
+    if(argc < 2) {
+    	std::cout << "No input file given." << std::endl;
+    	exit(0);
+    } else if (argc > 2) {
+    	std::cout << "Too many arguments, require only the path to the input file." << std::endl;
+    	exit(0);
+    }
 
 	std::string filename = std::string(argv[1]);
 
@@ -29,22 +37,19 @@ int main(int argc, char** argv) {
 	//std::string filename = "../examples/input/smoke_detector.model";
 
 	clock::time_point start = clock::now();
-	hypro::parser::flowstarParser<Number> parser;
-	hypro::HybridAutomaton<Number> ha = parser.parseInput(filename);
+	hypro::HybridAutomaton<Number> ha = hypro::parseFlowstarFile<Number>(filename);
 
 	//hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
 	//std::vector<std::vector<sfValuation>> sfFlowpipes = sfReach.computeForwardReachability();
 
-	parser.mSettings.uniformBloating = false;
-
-	hypro::reachability::Reach<Number,hpValuation> hpReach(ha, parser.mSettings);
+	hypro::reachability::Reach<Number,hpValuation> hpReach(ha, ha.reachabilitySettings());
 	std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	plotter.setFilename(parser.mSettings.fileName);
-	std::vector<unsigned> plottingDimensions = parser.mSettings.plotDimensions;
+	plotter.setFilename(ha.reachabilitySettings().fileName);
+	std::vector<unsigned> plottingDimensions = ha.reachabilitySettings().plotDimensions;
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
 	plotter.rSettings().cummulative = false;
