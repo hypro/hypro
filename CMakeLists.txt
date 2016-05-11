@@ -120,6 +120,8 @@ else()
     MESSAGE(FATAL_ERROR "Could not find carl")
 endif()
 
+message(STATUS ${INCLUDES})
+
 if(USE_PPL)
 	find_package(PPL REQUIRED)
 	include_directories(${PPL_INCLUDES})
@@ -136,10 +138,10 @@ set(libraries ${libraries} ${smtrat_LIBRARIES})
 set(INCLUDES ${INCLUDES} ${smtrat_INCLUDE_DIR})
 endif()
 
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-set(INCLUDES ${INCLUDES} ${EIGEN3_INCLUDE_DIR})
-set(libraries ${libraries} ${EIGEN3_LIBRARY})
+#find_package(Eigen3 REQUIRED)
+#include_directories(${EIGEN3_INCLUDE_DIR})
+#set(INCLUDES ${INCLUDES} ${EIGEN3_INCLUDE_DIR})
+#set(libraries ${libraries} ${EIGEN3_LIBRARY})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
 find_package(GTest)
@@ -167,11 +169,9 @@ if(CLANG_TIDY)
 endif()
 
 include_directories( src/lib )
-
 add_subdirectory(src)
 
 enable_testing()
-
 add_subdirectory(src/test)
 
 # # # # # # # # # # # # # # # # # # # # # #
