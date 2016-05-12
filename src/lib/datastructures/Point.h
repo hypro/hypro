@@ -200,7 +200,7 @@ class Point {
         static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
               std::set<Point<Number>> pointSet;
               //writes all the point entries into a set (set removes duplicates)
-              for (unsigned i; i<pointVec.size(); ++i){
+              for (unsigned i = 0; i<pointVec.size(); ++i){
                   pointSet.insert(pointVec.at(i));
               }
               //write all the set entries into the return vector

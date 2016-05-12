@@ -438,7 +438,7 @@ std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p
 	for ( unsigned pos = 0; pos < res.size(); ++pos ) {
 		res[pos] = _p1.at( pos ) < _p2.at( pos ) ? true : false;
 	}
-	return std::move( res );
+	return res;
 }
 
 template <typename Number>

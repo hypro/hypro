@@ -505,8 +505,11 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 	std::valarray<Number> dzbme( vertices.size() ), dzb( vertices.size() );
 	unsigned minIdx = 0, i;
 	for ( i = 0; i < vertices.size(); i++ ) {
-		dzbme[i] = ( Number(hp.normal().transpose() * vertices[i]) - hp.offset() );
-		dzb[i] = ( hp.normal().transpose() * vertices[i] );
+		assert(hp.normal().rows() == vertices[i].rows());
+		matrix_t<Number> res = hp.normal().transpose() * vertices[i];
+		assert(res.rows() == 1 && res.cols() == 1);
+		dzbme[i] = ( res(0,0) - hp.offset() );
+		dzb[i] = ( res(0,0) );
 	}
 
 	std::vector<int> ltZeroIdxArray, mtZeroIdxArray;
@@ -581,12 +584,12 @@ ZonotopeT<Number,Converter> intersectAlamo( const ZonotopeT<Number,Converter> &i
 	hypro::matrix_t<Number> HHT = H * H.transpose();
 	hypro::vector_t<Number> center = inputZonotope.center();
 	hypro::vector_t<Number> lambda =
-		  ( HHT * hp.normal() ) / ( Number(hp.normal().transpose() * HHT * hp.normal()) + sgm * sgm );
+		  ( HHT * hp.normal() ) / ( (hp.normal().transpose() * HHT * hp.normal())(0,0) + sgm * sgm );
 
 	hypro::matrix_t<Number> new_gen, identity;
 	ZonotopeT<Number,Converter> zg( inputZonotope.dimension() );
 
-	zg.setCenter( center + lambda * ( hp.offset() - Number(hp.normal().transpose() * center) ) );
+	zg.setCenter( center + lambda * ( hp.offset() - (hp.normal().transpose() * center)(0,0) ) );
 
 	identity.resize( inputZonotope.dimension(), inputZonotope.dimension() );
 
@@ -679,7 +682,9 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfsp
 	ZonotopeT<Number,Converter> result;
 
 	// Determine if intersection is found, according to Girard, Guernic, 2008
-	Number emdc = hp.offset() - Number(hp.normal().transpose() * mCenter);
+	matrix_t<Number> emdcTmp = hp.normal().transpose() * mCenter;
+	assert(emdcTmp.rows() == 1 && emdcTmp.cols() == 1);
+	Number emdc = hp.offset() - emdcTmp(0,0);
 	Number zs = ( hp.normal().transpose() * mGenerators ).array().abs().sum();
 
 	bool hasIntersect = ( emdc > -zs && zs > emdc );

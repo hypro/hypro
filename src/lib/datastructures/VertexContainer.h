@@ -47,7 +47,7 @@ class VertexContainer {
 	}
 
 	std::vector<carl::Variable> variables() const {
-		if ( mVertices.size() == 0 ) return std::move( std::vector<carl::Variable>() );
+		if ( mVertices.size() == 0 ) return std::vector<carl::Variable>();
 		return ( *mVertices.begin() ).variables();
 	}
 

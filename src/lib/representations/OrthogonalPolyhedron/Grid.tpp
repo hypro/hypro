@@ -56,7 +56,7 @@ std::vector<carl::Variable> Grid<Number>::variables() const {
 	if ( mGridMap.empty() ) return res;
 
 	res = mGridMap.begin()->first.variables();
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -70,7 +70,7 @@ std::vector<Vertex<Number>> Grid<Number>::vertices() const {
 			res.emplace_back( calculateOriginal( point.point() ), point.color() );
 		}
 	}
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -194,7 +194,7 @@ std::vector<Point<Number>> Grid<Number>::allBlack() const {
 	for ( const auto &pPair : mGridMap ) {
 		if ( pPair.second ) res.emplace_back( calculateOriginal( pPair.first ) );
 	}
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -241,14 +241,14 @@ std::vector<Point<unsigned>> Grid<Number>::iNeighborhoodInduced( const Point<uns
 	while ( !pIt.end ) {
 		result.emplace_back( std::move( ++pIt ) );
 	}
-	return std::move( result );
+	return ( result );
 }
 
 template <typename Number>
 Point<unsigned> Grid<Number>::iPredecessorInduced( const Point<unsigned> &_point, unsigned _dimension ) const {
 	Point<unsigned> res( _point );
 	res[_dimension] = res[_dimension] > 0 ? res[_dimension] - 1 : 0;
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -260,7 +260,7 @@ template <typename Number>
 Point<unsigned> Grid<Number>::iSuccessorInduced( const Point<unsigned> &_point, unsigned _dimension ) const {
 	Point<unsigned> res( _point );
 	res[_dimension] = res[_dimension] < mInducedGridPoints[_dimension].size() ? res[_dimension] + 1 : res[_dimension];
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -274,7 +274,7 @@ Point<unsigned> Grid<Number>::directPredecessorInduced( const Point<unsigned> &_
 	for ( unsigned dim = 0; dim < this->dimension(); ++dim ) {
 		directPredecessor[dim] = _point.at( dim ) > 0 ? _point.at( dim ) - 1 : 0;
 	}
-	return std::move( directPredecessor );
+	return ( directPredecessor );
 }
 
 template <typename Number>
@@ -289,7 +289,7 @@ Point<unsigned> Grid<Number>::directSuccessorInduced( const Point<unsigned> &_po
 		directSuccessor[dim] =
 			  _point.at( dim ) < mInducedGridPoints[dim].size() ? _point.at( dim ) + 1 : _point.at( dim );
 	}
-	return std::move( directSuccessor );
+	return ( directSuccessor );
 }
 
 template <typename Number>
@@ -318,7 +318,7 @@ std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i, int pos ) 
 	while ( !pIt.end ) {
 		result.emplace_back( std::move( ++pIt ) );
 	}
-	return std::move( result );
+	return ( result );
 }
 
 template <typename Number>
@@ -332,7 +332,7 @@ std::vector<Point<Number>> Grid<Number>::iSlice( unsigned i, Number pos ) const 
 	std::vector<Point<Number>> res;
 	for ( const auto &p : tmp ) res.emplace_back( calculateOriginal( p ) );
 
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -341,7 +341,7 @@ std::vector<Point<Number>> Grid<Number>::iNeighborhood( const Point<Number> &_po
 	std::vector<Point<Number>> res;
 	for ( const auto &n : neighborhood ) res.emplace_back( calculateOriginal( n ) );
 
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -368,7 +368,7 @@ std::vector<Point<unsigned>> Grid<Number>::neighborhoodInduced( const Point<unsi
 		result.emplace_back( std::move( neighbor ) );
 	}
 
-	return std::move( result );
+	return ( result );
 }
 
 template <typename Number>
@@ -377,7 +377,7 @@ std::vector<Point<Number>> Grid<Number>::neighborhood( const Point<Number> &_poi
 	std::vector<Point<Number>> res;
 	for ( const auto &p : tmp ) res.emplace_back( calculateOriginal( p ) );
 
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
@@ -513,7 +513,7 @@ Grid<Number> Grid<Number>::combine( const Grid<Number> &a, const Grid<Number> &b
 	// insert origin
 	res.insertInduced( Point<unsigned>::zero( a.dimension() ), false );
 
-	return std::move( res );
+	return ( res );
 }
 
 template <typename Number>
