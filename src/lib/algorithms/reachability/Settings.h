@@ -19,8 +19,10 @@ struct ReachabilitySettings {
 		, timeStep(0)
 		, fileName("out")
 		, pplDenomimator(1)
+		, plotDimensions()
 	{}
 
+	ReachabilitySettings<Number>(const ReachabilitySettings<Number>& _orig) = default;
 	ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs) = default;
 
 	friend std::ostream& operator<<( std::ostream& lhs, const ReachabilitySettings<Number>& rhs ) {

@@ -71,8 +71,9 @@ namespace parser {
 		//std::cout << "To parse: " << std::string( begin, end ) << std::endl;
 
 		// create automaton from parsed result.
-		if(result)
+		if(result) {
 			_result = createAutomaton();
+		}
 
 		return result;
 	}

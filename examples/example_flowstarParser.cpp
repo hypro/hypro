@@ -45,7 +45,9 @@ int main(int argc, char** argv) {
 	hypro::reachability::Reach<Number,hpValuation> hpReach(ha, ha.reachabilitySettings());
 	std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
 
-	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
+
+	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.setFilename(ha.reachabilitySettings().fileName);
@@ -55,7 +57,7 @@ int main(int argc, char** argv) {
 	plotter.rSettings().cummulative = false;
 
 	// bad states plotting
-	hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = ha.localBadStates();
+	//hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = ha.localBadStates();
 	//for(const auto& state : badStateMapping) {
 	//	unsigned bs = plotter.addObject(hpValuation(state.second.constraints, state.second.constants).vertices());
 	//	plotter.setObjectColor(bs, hypro::colors[hypro::red]);
@@ -78,4 +80,6 @@ int main(int argc, char** argv) {
 
 	plotter.plot2d();
 	plotter.plotTex();
+
+	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 }

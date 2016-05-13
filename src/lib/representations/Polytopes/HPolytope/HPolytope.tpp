@@ -170,7 +170,9 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::ine
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
+	#ifdef DEBUG_MSG
 	std::cout << __func__ << " " << *this << std::endl;
+	#endif
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -197,12 +199,15 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			if ( lu_decomp.rank() < A.rows() ) {
 				continue;
 			}
-
+			#ifdef DEBUG_MSG
 			std::cout << convert<Number,double>(A) << std::endl;
 			std::cout << convert<Number,double>(b) << std::endl;
+			#endif
 
 			vector_t<Number> res = lu_decomp.solve( b );
+			#ifdef DEBUG_MSG
 			std::cout << "Vertex: " << convert<Number,double>(res).transpose() << std::endl;
+			#endif
 
 			// Check if the computed vertex is a real vertex
 			bool outside = false;
@@ -218,7 +223,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 				if(!skip) {
 					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+						#ifdef DEBUG_MSG
 						std::cout << "Drop vertex: " << convert<Number,double>(res).transpose() << " because of plane " << planePos << std::endl;
+						#endif
 						outside = true;
 						break;
 					}
@@ -227,9 +234,13 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			if(!outside) {
 				// insert, if no duplicate
 				Point<Number> tmp(res);
-				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end())
+				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end()) {
 					vertices.push_back(tmp);
+				}
+
+				#ifdef DEBUG_MSG
 				std::cout << "Final vertex: " << convert<Number,double>(res).transpose() << std::endl;
+				#endif
 			}
 
 		}
@@ -671,11 +682,15 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 
 	// normal reduction
 	for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
+		#ifdef DEBUG_MSG
 		std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
+		#endif
 		// find maximal value
 		Number largest = 0;
 		mHPlanes.at(planeIndex).makeInteger();
+		#ifdef DEBUG_MSG
 		std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
+		#endif
 		largest = carl::abs(mHPlanes.at(planeIndex).offset());
 		for(unsigned i = 0; i < mDimension; ++i){
 			if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
@@ -706,10 +721,13 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 			newOffset = carl::ceil(newOffset);
 			mHPlanes.at(planeIndex).setOffset(newOffset);
 		}
+		#ifdef DEBUG_MSG
 		std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
+		#endif
 	}
-
+	#ifdef DEBUG_MSG
 	std::cout << "After Reduction: " << *this << std::endl;
+	#endif
 	#endif
 }
 

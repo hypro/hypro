@@ -81,7 +81,8 @@ namespace reachability {
 		assert(!_state.timestamp.isUnbounded());
 #ifdef REACH_DEBUG
 		std::cout << "Location: " << _state.location->id() << std::endl;
-		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
+		std::cout << "Location printed : " << *_state.location << std::endl;
+ 		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		boost::get<Representation>(_state.set).print();
 #endif

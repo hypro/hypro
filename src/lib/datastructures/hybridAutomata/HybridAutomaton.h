@@ -80,6 +80,7 @@ class HybridAutomaton {
 		mInitialStates = _rhs.initialStates();
 		mLocalBadStates = _rhs.localBadStates();
 		mGlobalBadStates = _rhs.globalBadStates();
+		mReachabilitySettings = _rhs.reachabilitySettings();
 		return *this;
 	}
 
