@@ -83,28 +83,14 @@ endif()
 #message(STATUS ${sources})
 #message(STATUS ${headers})
 
-add_library(${PROJECT_NAME} ${STATICLIB}
-	${sources}
-)
-
-if(STATICLIB_SWITCH)
-	set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-else()
-	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
-	else()
-		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-	endif()
-endif()
-
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+#add_library(${PROJECT_NAME} ${STATICLIB}
+#	${sources}
+#)
 
 ########################################################################################
 #### EXPORT SETTINGS
 
-if(BUILD_STATIC)
+if(STATICLIB_SWITCH)
 	message("-- linking static")
 	add_library(lib_hypro_static STATIC ${sources})
 	set_target_properties( lib_hypro_static PROPERTIES
@@ -119,6 +105,35 @@ if(BUILD_STATIC)
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		# we currently do not use public header option, as it doesnt support multi-directory headers
 	)
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
+	target_include_directories(lib_hypro_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+else()
+	message("-- linking dynamic")
+	add_library(${PROJECT_NAME} SHARED ${sources})
+	set_target_properties( ${PROJECT_NAME} PROPERTIES
+		# create *nix style library versions + symbolic links
+		VERSION "${PROJECT_VERSION}"
+		SOVERSION "${PROJECT_VERSION}"
+		# allow creating static and shared libs without conflicts
+		CLEAN_DIRECT_OUTPUT 1
+		# avoid conflicts between library and binary target names
+		OUTPUT_NAME hypro
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+		# we currently do not use public header option, as it doesnt support multi-directory headers
+	)
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
+	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(STATICLIB_SWITCH)
+	set_target_properties(${PROJECT_NAME}_static PROPERTIES LINKER_LANGUAGE CXX)
+else()
+	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
+	else()
+		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+	endif()
 endif()
 
 # Options for static linking

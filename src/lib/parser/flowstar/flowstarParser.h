@@ -1,4 +1,6 @@
+#ifndef BOOST_SPIRIT_USE_PHOENIX_V3
 #define BOOST_SPIRIT_USE_PHOENIX_V3
+#endif
 //#define BOOST_SPIRIT_DEBUG
 #include <iostream>
 #include <fstream>

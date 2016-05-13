@@ -46,7 +46,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(USE_PPL "Use PPl polytope wrapper." OFF)
-option(USE_COTIRE "Use the COmpilation TIme REducer." ON)
+option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." ON)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 
@@ -68,7 +68,7 @@ if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION V
 endif()
 
 # general compiler and linker settings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
@@ -115,12 +115,10 @@ include_directories(${carl_INCLUDE_DIR})
 set(libraries ${libraries} ${carl_LIBRARIES})
 set(INCLUDES ${INCLUDES} ${carl_INCLUDE_DIR})
 if(carl_FOUND)
-    MESSAGE(STATUS "Found carl: ${carl_INCLUDE_DIR}")
+    MESSAGE(STATUS "Found carl: ${carl_LIBRARIES}")
 else()
     MESSAGE(FATAL_ERROR "Could not find carl")
 endif()
-
-message(STATUS ${INCLUDES})
 
 if(USE_PPL)
 	find_package(PPL REQUIRED)
@@ -131,7 +129,7 @@ endif()
 if(USE_SMTRAT)
 find_package(smtrat REQUIRED)
 if(smtrat_FOUND)
-    MESSAGE(STATUS "Found smtrat: ${smtrat_INCLUDE_DIR}")
+    MESSAGE(STATUS "Found smtrat: ${smtrat_LIBRARIES}")
 endif()
 include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
@@ -211,6 +209,7 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
 set(CONF_INCLUDES ${INCLUDES})
 set(CONF_LINKER_LIBS ${libraries})
+#message(STATUS ${libraries})
 configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
 							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR

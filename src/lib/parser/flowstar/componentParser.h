@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef BOOST_SPIRIT_USE_PHOENIX_V3
 #define BOOST_SPIRIT_USE_PHOENIX_V3
+#endif
 
 namespace hypro {
 namespace parser {
