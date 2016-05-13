@@ -49,9 +49,8 @@ class BoxT {
 	 * Copy constructor.
 	 * @param orig The original box.
 	 */
-	BoxT( const BoxT& orig ) : mLimits( orig.limits() ) {}
-
-	BoxT( BoxT&& orig ) : mLimits( std::move(orig.mLimits )) {}
+	BoxT( const BoxT& orig ) = default;
+	BoxT( BoxT&& orig ) = default;
 
 	/*
 	 * Box constructor from one interval, results in a one-dimensional box.
@@ -254,25 +253,14 @@ class BoxT {
 	 *
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) {
-		if ( *this != rhs ) {
-			BoxT<Number,Converter> tmp(rhs);
-			std::swap(*this, tmp);
-		}
-		return *this;
-	}
+	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 *
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) {
-		if ( *this != rhs ) {
-			mLimits = std::move(rhs.limits());
-		}
-		return *this;
-	}
+	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
 
 	/**
 	 * @brief Outstream operator.

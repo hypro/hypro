@@ -7,11 +7,6 @@ HPolytopeT<Number, Converter>::HPolytopeT()
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const HPolytopeT<Number,Converter>& orig )
-	: mHPlanes(orig.mHPlanes), mDimension( orig.mDimension ), mEmpty(orig.mEmpty), mNonRedundant(orig.mNonRedundant) {
-}
-
-template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	if ( !planes.empty() ) {
@@ -646,29 +641,6 @@ void HPolytopeT<Number, Converter>::clear() {
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::print() const {
 	std::cout << *this << std::endl;
-}
-
-/*
- * Operators
- */
-
-//template <typename Number, typename Converter>
-//const Halfspace<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) const {
-//	return mHPlanes.at( i );
-//}
-//
-//template <typename Number, typename Converter>
-//Halfspace<Number>& HPolytopeT<Number, Converter>::operator[]( size_t i ) {
-//	return mHPlanes.at( i );
-//}
-
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> &HPolytopeT<Number, Converter>::operator=( const HPolytopeT<Number, Converter> &rhs ) {
-	if ( this != &rhs ) {
-		HPolytopeT<Number, Converter> tmp( rhs );
-		swap( *this, tmp );
-	}
-	return *this;
 }
 
 /*

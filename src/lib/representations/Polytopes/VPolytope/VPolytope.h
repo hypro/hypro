@@ -48,7 +48,7 @@ class VPolytopeT {
 	VPolytopeT( const std::vector<vector_t<Number>>& rawPoints );
 	VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
 
-	VPolytopeT( const VPolytopeT& orig );
+	VPolytopeT( const VPolytopeT& orig ) = default;
 	VPolytopeT( VPolytopeT&& _orig ) = default;
 
 	~VPolytopeT() {
@@ -178,7 +178,7 @@ class VPolytopeT {
 	 * Operators
 	 **************************************************************************/
   public:
-	VPolytopeT<Number, Converter>& operator=( const VPolytopeT<Number, Converter>& rhs );
+	VPolytopeT<Number, Converter>& operator=( const VPolytopeT<Number, Converter>& rhs ) = default;
 	VPolytopeT<Number, Converter>& operator=( VPolytopeT<Number, Converter>&& rhs ) = default;
 	bool operator==( const VPolytopeT<Number, Converter>& rhs ) const;
 };

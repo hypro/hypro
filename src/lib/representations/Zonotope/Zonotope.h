@@ -40,7 +40,7 @@ class ZonotopeT {
 	 * Constructor with dimension
 	 * @param dimension Dimensionality of ZonotopeT
 	 */
-	ZonotopeT( std::size_t dimension );
+	explicit ZonotopeT( std::size_t dimension );
 
 	/**
 	 * Constructs a ZonotopeT with center and generators.
@@ -53,7 +53,7 @@ class ZonotopeT {
 	 * Copy Constructor - constructs a zonotopeT from an existing one.
 	 * @param other Another ZonotopeT, from which a new zonotopeT is constructed
 	 */
-	ZonotopeT( const ZonotopeT<Number,Converter>& other );
+	ZonotopeT( const ZonotopeT<Number,Converter>& other ) = default;
 
 	/**
 	 * Copy Constructor - constructs a 2D-zonotopeT of from an existing ND one.

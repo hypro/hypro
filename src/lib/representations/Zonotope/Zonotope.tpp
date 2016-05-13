@@ -92,13 +92,6 @@ ZonotopeT<Number,Converter>::ZonotopeT( const hypro::vector_t<Number> &center, c
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter>::ZonotopeT( const ZonotopeT<Number,Converter> &other )
-	: mDimension( other.mDimension ), mCenter( other.mCenter ), mGenerators( other.mGenerators ) {
-        uniteEqualVectors();
-        removeEmptyGenerators();
-}
-
-template<typename Number, typename Converter>
 ZonotopeT<Number,Converter>::ZonotopeT( const ZonotopeT<Number,Converter> &other, unsigned d1, unsigned d2 ) {
 	assert( other.mDimension != 0 && d1 >= 0 && d1 < other.mDimension && d2 >= 0 && d1 < other.mDimension && d1 != d2 &&
 			"d1 and d2 have to be in range of copied zonotope." );

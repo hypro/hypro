@@ -8,16 +8,16 @@
 
 #pragma once
 
-#include "../../../util/convexHull.h"
-//#include "../../../util/vertexEnumeration.h"
-#include "../../../util/Optimizer.h"
-#include "../../../util/Permutator.h"
+#include "util/convexHull.h"
+//#include "util/vertexEnumeration.h"
+#include "util/Optimizer.h"
+#include "util/Permutator.h"
 
 #include <algorithm>
 #include <cassert>
 
 #define REDUCE_NUMBERS
-//#define DEBUG_MSG
+#define DEBUG_MSG
 
 namespace hypro {
 
@@ -58,7 +58,7 @@ public:
 	 *
 	 * @param orig Original H-polytope.
 	 */
-	HPolytopeT( const HPolytopeT& orig );
+	HPolytopeT( const HPolytopeT& orig ) = default;
 
 	/**
 	 * @brief Constructor from a vector of halfspaces.
@@ -234,10 +234,7 @@ public:
 	/*
 	 * Operators
 	 */
-
-	//const Halfspace<Number>& operator[]( size_t i ) const;
-	//Halfspace<Number>& operator[]( size_t i ) ;
-	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs );
+	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs ) = default;
 
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {

@@ -108,14 +108,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 }
 
 template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT( const VPolytopeT &orig ) {
-	mVertices.insert( mVertices.end(), orig.begin(), orig.end() );
-	mReduced = orig.reduced();  // TODO: Include getter fpr this
-	mCone = orig.cone();
-	mNeighbors = orig.mNeighbors;
-}
-
-template <typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
@@ -582,15 +574,6 @@ bool VPolytopeT<Number, Converter>::insidePlanes(const vector_t<Number>& vertex,
 		}
 	}
 	return true;
-}
-
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> &VPolytopeT<Number, Converter>::operator=( const VPolytopeT<Number, Converter> &rhs ) {
-	if ( this != &rhs ) {
-		VPolytopeT<Number, Converter> tmp( rhs );
-		std::swap( *this, tmp );
-	}
-	return *this;
 }
 
 template <typename Number, typename Converter>

@@ -90,6 +90,10 @@ namespace hypro{
         //std::cout << __func__ << " " << convert<Number,double>(_directions) << std::endl;
         std::vector<EvaluationResult<Number>> res = content->multiEvaluate(_directions);
         assert(res.size() == std::size_t(_directions.rows()));
+        //std::cout << __func__ << " Distances: " << std::endl;
+        //for(const auto& item : res){
+        //	std::cout << item.supportValue << std::endl;
+        //}
         return res;
     }
 
