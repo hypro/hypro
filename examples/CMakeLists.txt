@@ -35,7 +35,6 @@ set( EXAMPLES
     example_numberReduction
     example_openglPlotting
     example_orthogonalPolyhedron
-    example_parser
     example_pca
     example_plot
     example_point

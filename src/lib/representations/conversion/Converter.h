@@ -1,12 +1,12 @@
 #pragma once
 
 #include "util.h"
-#include "../Box/Box.h"
-#include "../Polytopes/HPolytope/HPolytope.h"
-#include "../Polytopes/VPolytope/VPolytope.h"
-#include "../SupportFunction/SupportFunction.h"
-#include "../Zonotope/Zonotope.h"
-#include "../../util/pca.h"
+#include "representations/Box/Box.h"
+#include "representations/Polytopes/HPolytope/HPolytope.h"
+#include "representations/Polytopes/VPolytope/VPolytope.h"
+#include "representations/SupportFunction/SupportFunction.h"
+#include "representations/Zonotope/Zonotope.h"
+#include "util/pca.h"
 //#include "../../util/Plotter.h"
 namespace hypro {
 
@@ -32,13 +32,13 @@ class Converter {
 		static HPolytope toHPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
-		static HPolytope toHPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = 8 );
+		static HPolytope toHPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = defaultTemplateDirectionCount );
 		static HPolytope toHPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		static VPolytope toVPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
-		static VPolytope toVPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::UNDER, unsigned numberOfDirections = 8 );
+		static VPolytope toVPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::UNDER, unsigned numberOfDirections = defaultTemplateDirectionCount );
 		static VPolytope toVPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		static SupportFunction toSupportFunction(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -50,7 +50,7 @@ class Converter {
 		static Zonotope toZonotope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
-		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = 8 );
+		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, unsigned numberOfDirections = defaultTemplateDirectionCount );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 };
 
