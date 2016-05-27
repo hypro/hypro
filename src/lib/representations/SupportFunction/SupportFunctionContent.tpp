@@ -81,7 +81,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfspace<Number>> &_planes, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			mPolytope = new PolytopeSupportFunction<Number>( _planes );
@@ -682,7 +682,7 @@ bool SupportFunctionContent<Number>::empty() const {
 		}
 		case SF_TYPE::INTERSECT: {
 			// TODO: Current implementation uses template evaluation.
-			std::vector<vector_t<Number>> directions = computeTemplate(this->dimension(), fReach_TEMPLATEDIRECTIONS);
+			std::vector<vector_t<Number>> directions = computeTemplate(this->dimension(), defaultTemplateDirectionCount);
 			for(const auto& direction : directions){
 				Number rhsPos = mIntersectionParameters->rhs.evaluate(direction);
 				Number lhsNeg = mIntersectionParameters->lhs.evaluate(-direction);
