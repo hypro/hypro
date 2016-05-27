@@ -61,7 +61,6 @@ protected:
  */
 TYPED_TEST(SupportFunctionTest, constructor) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
-	EXPECT_DEATH(SupportFunction<TypeParam>(this->constraints, this->constants), "c*");
 
 	SUCCEED();
 }
@@ -80,11 +79,12 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	matrix_t<TypeParam> rotation = matrix_t<TypeParam>(2,2);
-	TypeParam angle = 45;
-	rotation(0,0) = carl::cos(angle);
-	rotation(0,1) = -carl::sin(angle);
-	rotation(1,0) = carl::sin(angle);
-	rotation(1,1) = carl::cos(angle);
+	rotation(0,0) = 0;
+	rotation(0,1) = 1;
+	rotation(1,0) = -1;
+	rotation(1,1) = 0;
+
+	std::cout << "Rotation matrix: " << rotation << std::endl;
 
 	vector_t<TypeParam> v1Rot = rotation*(this->vec1);
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
