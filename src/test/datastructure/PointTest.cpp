@@ -6,8 +6,8 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/util/types.h"
 #include "../../lib/datastructures/Point.h"
+#include <carl/interval/Interval.h>
 
 using namespace hypro;
 
@@ -88,24 +88,27 @@ TYPED_TEST(PointTest, Constructor)
 TYPED_TEST(PointTest, PolarCoordinates)
 {
     std::vector<TypeParam> pc = this->p1.polarCoordinates(this->p1.origin(), false);
-    double expectedRes;
+    std::pair<TypeParam, TypeParam> expectedRes;
 
-    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(29.0)));
+    expectedRes = carl::sqrt_safe(TypeParam(29));
 
 	// special case: Use double comparison
-	EXPECT_EQ( carl::toDouble(pc.at(0)), expectedRes );
+	EXPECT_TRUE(carl::Interval<TypeParam>(expectedRes.first, expectedRes.second).contains( pc.at(0) ));
 
     pc = this->p2.polarCoordinates(this->p2.origin(), false);
-    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(113.0)));
+    expectedRes = carl::sqrt_safe(TypeParam(113));
 
-    EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
+    EXPECT_TRUE(carl::Interval<TypeParam>(expectedRes.first, expectedRes.second).contains( pc.at(0) ));
 
     pc = this->p3.polarCoordinates(this->p3.origin(), false);
-    expectedRes = carl::toDouble(carl::sqrt(carl::rationalize<TypeParam>(250.0)));
+    expectedRes = carl::sqrt_safe(TypeParam(250));
 
-	EXPECT_EQ(carl::toDouble(pc.at(0)), expectedRes);
+	EXPECT_TRUE(carl::Interval<TypeParam>(expectedRes.first, expectedRes.second).contains( pc.at(0) ));
 
-    pc = this->p4.polarCoordinates(this->p3, false);
+    pc = this->p4.polarCoordinates(this->p4.origin(), false);
+	expectedRes = carl::sqrt_safe(TypeParam(89));
+
+	EXPECT_TRUE(carl::Interval<TypeParam>(expectedRes.first, expectedRes.second).contains( pc.at(0) ));
 }
 
 /**
@@ -224,7 +227,6 @@ TYPED_TEST(PointTest, LinearTransformation) {
 	}));
 
 	typename hypro::vector_t<TypeParam> v = createVector(std::vector<TypeParam>({6, 1}));
-	typename Point<TypeParam>::coordinateMap coordinates;
 
 	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1.linearTransformation(A, v));
 	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2.linearTransformation(A, v));
