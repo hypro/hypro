@@ -31,10 +31,10 @@ namespace parser {
 			simpleEdge = (qi::lazy(qi::_r1) > qi::lexeme["->"] > qi::lazy(qi::_r1))[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
 			twoLineEdge = (qi::skip(qi::blank)[qi::lexeme["start"] > qi::lazy(qi::_r1)] > qi::eol >
 							qi::skip(qi::blank)[qi::lexeme["end"] > qi::lazy(qi::_r1)])[ qi::_val = px::bind(&transitionParser<Iterator, Number>::createEdge, px::ref(*this), qi::_1, qi::_2)];
-			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > (*(continuousGuard(qi::_r1, qi::_r3) | discreteGuard(qi::_r2,qi::_r4))) > *qi::blank > qi::lit('}');
+			guard = qi::lexeme["guard"] > *qi::blank > qi::lit('{') > *qi::blank > *(continuousGuard(qi::_r1, qi::_r3) | discreteGuard(qi::_r2,qi::_r4)) > *qi::space > qi::lit('}');
 			continuousGuard = constraint(qi::_r1,qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addContinuousGuard, px::ref(*this), qi::_1)];
 			discreteGuard = singleVariableConstraint(qi::_r1,qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addDiscreteGuard, px::ref(*this), qi::_1)];
-			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (* ( continuousReset(qi::_r1, qi::_r3) | discreteReset(qi::_r2, qi::_r4) )) > *qi::blank > qi::lit('}');
+			reset = qi::lexeme["reset"] > *qi::blank > qi::lit('{') > *qi::blank > (* ( continuousReset(qi::_r1, qi::_r3) | discreteReset(qi::_r2, qi::_r4) )) > *qi::space > qi::lit('}');
 			continuousReset = variableReset(qi::_r1, qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addContinuousReset, px::ref(*this), qi::_1)];
 			discreteReset = variableReset(qi::_r1, qi::_r2)[px::bind(&transitionParser<Iterator,Number>::addDiscreteReset, px::ref(*this), qi::_1)];
 			agg = qi::skip(qi::blank)[mAggregation > qi::lexeme["aggregation"] > -(qi::lit('{') > qi::lit('}'))];
