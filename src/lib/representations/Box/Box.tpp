@@ -288,6 +288,9 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 
 template<typename Number, typename Converter>
 std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	if(_mat.rows() == 0) {
+		return std::make_pair(true, *this);
+	}
 	assert(this->dimension() == unsigned(_mat.cols()));
 	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension()+_mat.rows(), this->dimension());
 	vector_t<Number> constants = vector_t<Number>::Zero(2*this->dimension()+_vec.rows());
