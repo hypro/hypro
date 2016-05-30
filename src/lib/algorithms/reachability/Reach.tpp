@@ -45,6 +45,7 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
+			std::cout << "Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id() << std::endl;
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			/*
@@ -187,7 +188,7 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << carl::toDouble(currentLocalTime) << std::flush;
+				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
@@ -309,6 +310,7 @@ namespace reachability {
 				}
 				currentLocalTime += mSettings.timeStep;
 			}
+			std::cout << std::endl;
 #ifdef REACH_DEBUG
 			if(!noFlow){
 				std::cout << "--- Loop left ---" << std::endl;
