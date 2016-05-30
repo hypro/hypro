@@ -209,7 +209,7 @@ namespace parser {
 
 			name = qi::lexeme[ (qi::alpha | qi::char_("~!@$%^&*_+=<>.?/-")) > *(qi::alnum | qi::char_("~!@$%^&*_+=<>.?/-"))];
 			flow = *qi::space > qi::lexeme["poly ode 1"] > *qi::space > qi::lit('{') > *qi::space > qi::skip(qi::blank)[(mOdeParser(qi::_r1, qi::_r2) % qi::eol)][qi::_val = px::bind( &modeParser<Iterator, Number>::createFlow, px::ref(*this), qi::_1 )] > *qi::space > qi::lit('}');
-			invariant = *qi::space > qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > ((continuousInvariant(qi::_r1, qi::_r3) | discreteInvariant(qi::_r2, qi::_r4)) % qi::eol) > *qi::space > qi::lit('}');
+			invariant = *qi::space >> qi::lexeme["inv"] > *qi::space > qi::lit('{') > *qi::space > -((continuousInvariant(qi::_r1, qi::_r3) | discreteInvariant(qi::_r2, qi::_r4)) % qi::eol) > *qi::space > qi::lit('}');
 			continuousInvariant = constraint(qi::_r1, qi::_r2)[px::bind( &modeParser<Iterator,Number>::addContinuousInvariant, px::ref(*this), qi::_1)];
 			discreteInvariant = singleVariableConstraint(qi::_r1, qi::_r2)[px::bind( &modeParser<Iterator,Number>::addDiscreteInvariant, px::ref(*this), qi::_1)];
 
