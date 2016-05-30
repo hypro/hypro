@@ -112,8 +112,9 @@ namespace reachability {
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
-					State<Number> currentState = boost::get<1>(initialSetup);
+					#ifdef REACH_DEBUG
 					bool fireTimeTriggeredTransition = false;
+					#endif
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
@@ -123,36 +124,45 @@ namespace reachability {
 							// As there is no continuous behaviour, simply check guard for whole time horizon
 							if(transition->triggerTime() <= mSettings.timeBound){
 								//std::cout << "Time trigger enabled" << std::endl;
-								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+								if(intersectGuard(transition, _state, guardSatisfyingState)){
 									// when taking a timed transition, reset timestamp
 									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
 									//flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
+									#ifdef REACH_DEBUG
 									fireTimeTriggeredTransition = true;
+									#endif
 								}
 							}
 						} // handle normal transitions
-						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+						else if(intersectGuard(transition, _state, guardSatisfyingState)){
 							//std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
-							assert(guardSatisfyingState.timestamp == currentState.timestamp);
+							assert(guardSatisfyingState.timestamp == _state.timestamp);
 							// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 							assert(!guardSatisfyingState.timestamp.isUnbounded());
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
 					}
+					#ifdef REACH_DEBUG
 					if(fireTimeTriggeredTransition){
-						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
-						#ifdef REACH_DEBUG
+						// as noFlow is already enabled, no explicit prevention of flow computation is needed in this case.
 						std::cout << "Fired time triggered transition." << std::endl;
-						#endif
 					}
+					#endif
 				}
 
 			}
 
 			// insert first Segment into the empty flowpipe
-			Representation currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
+			Representation currentSegment;
+			if(noFlow) {
+				currentSegment = boost::get<Representation>(_state.set);
+			}
+			else {
+				currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
+			}
+
 			flowpipe.push_back( currentSegment );
 
 			unsigned tmp = plotter.addObject(currentSegment.vertices());
