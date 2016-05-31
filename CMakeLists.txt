@@ -1,9 +1,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                             #
 # File: CMakeLists.txt                                        #
 #                                                             #
 # Project name: HyPro                                         #
-# Contact: Xin Chen chen@cs.rwth-aachen.de                    #
+# Contact:                  #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
 # Author: Sebastian Junges, Stefan Schupp                     #
