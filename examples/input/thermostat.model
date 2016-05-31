@@ -3,7 +3,7 @@ hybrid reachability
 	state var low, H_plc, H, high, global_time, cycle_time, Temp
 	setting
 	{
-		fixed steps 0.05
+		fixed steps 0.01
 		time 2
 		remainder estimation 1e-5
 		identity precondition
@@ -12,7 +12,7 @@ hybrid reachability
 		cutoff 1e-12
 		precision 53
 		output thermostat
-		max jumps 20
+		max jumps 5
 		print on
 	}
 	modes
