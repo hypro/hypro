@@ -89,10 +89,10 @@ namespace reachability {
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
-                /*
-                 *  TO-DO:
-                 *     - Insert first segment into the current node
-                 */
+		/*
+		 *  TO-DO:
+		 *     - Insert first segment into the current node
+		 */
 		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
@@ -106,15 +106,10 @@ namespace reachability {
 			// if the location does not have dynamic behaviour, check guards and exit loop.
 			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
-
 				noFlow = true;
-
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
-					#ifdef REACH_DEBUG
-					bool fireTimeTriggeredTransition = false;
-					#endif
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
@@ -128,10 +123,6 @@ namespace reachability {
 									// when taking a timed transition, reset timestamp
 									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
-									//flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
-									#ifdef REACH_DEBUG
-									fireTimeTriggeredTransition = true;
-									#endif
 								}
 							}
 						} // handle normal transitions
@@ -144,25 +135,16 @@ namespace reachability {
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
 					}
-					#ifdef REACH_DEBUG
-					if(fireTimeTriggeredTransition){
-						// as noFlow is already enabled, no explicit prevention of flow computation is needed in this case.
-						std::cout << "Fired time triggered transition." << std::endl;
-					}
-					#endif
 				}
-
 			}
 
 			// insert first Segment into the empty flowpipe
 			Representation currentSegment;
 			if(noFlow) {
 				currentSegment = boost::get<Representation>(_state.set);
-			}
-			else {
+			} else {
 				currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
 			}
-
 			flowpipe.push_back( currentSegment );
 
 			unsigned tmp = plotter.addObject(currentSegment.vertices());
@@ -174,10 +156,10 @@ namespace reachability {
 				while(!mWorkingQueue.empty()){
 					mWorkingQueue.pop();
 				}
-                                /*
-                                 * TO-DO.
-                                 *    - Employ backtracking here
-                                 */
+				/*
+				 * TO-DO.
+				 *    - Employ backtracking here
+				 */
 				return flowpipe;
 			}
 
@@ -199,9 +181,8 @@ namespace reachability {
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
 				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
-
-				// Collect potential new initial states from discrete behaviour.
-				if(mCurrentLevel < mSettings.jumpDepth) {
+				// Verify transitions on the current set.
+				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
@@ -217,14 +198,17 @@ namespace reachability {
 							if(currentState.timestamp.contains(transition->triggerTime())){
 								//std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
-									// when taking a timed transition, reset timestamp
-									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
-									nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									// only insert new Sets into working queue, when the current level allows it.
+									if(mCurrentLevel != mSettings.jumpDepth){
+										// when taking a timed transition, reset timestamp
+										guardSatisfyingState.timestamp = carl::Interval<Number>(0);
+										nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									}
 									fireTimeTriggeredTransition = true;
 								}
 							}
 						} // handle normal transitions
-						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+						else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
 							//std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
@@ -239,7 +223,6 @@ namespace reachability {
 						break;
 					}
 				}
-
 
 				// perform linear transformation on the last segment of the flowpipe
 				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
@@ -257,7 +240,6 @@ namespace reachability {
 				// clustering CONVEXHULL_CONST and reduction with directions generated before
 				unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
 				std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
-
 				bool use_reduce_memory=false, use_reduce_time=true;
 				if(use_reduce_memory){
 					if(CONVEXHULL_CONST==1){ // if no clustering is required
@@ -330,7 +312,6 @@ namespace reachability {
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			processDiscreteBehaviour(nextInitialSets);
-
 			return flowpipe;
 		} else {
 			// return an empty flowpipe
@@ -362,15 +343,15 @@ namespace reachability {
 					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 				}
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-                                /*
-                                 *  TO-DO:
-                                 *       - Check whether for the current node and transition already a child-node
-                                 *         exists. If so, work on it. Otherwise, create a new child-node.
-                                 *          If the last segment for some transition arrives:
-                                 *              - Construct overapproximation
-                                 *              - Set last segment
-                                 *
-                                 */
+				/*
+				 *  TO-DO:
+				 *       - Check whether for the current node and transition already a child-node
+				 *         exists. If so, work on it. Otherwise, create a new child-node.
+				 *          If the last segment for some transition arrives:
+				 *              - Construct overapproximation
+				 *              - Set last segment
+				 *
+				 */
 				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -397,11 +378,6 @@ namespace reachability {
 				std::vector<Point<Number>> tmpVertices = boost::get<Representation>(state.set).vertices();
 				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 			}
-			//std::cout << "Collected vertices: " << std::endl;
-			//for(const auto& vertex : collectedVertices){
-			//	std::cout << "\t" << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
-			//}
-
 
 			State<Number> s;
 			s.location = aggregationPair.first->target();
@@ -609,28 +585,24 @@ namespace reachability {
 				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
 			}
 
-
 			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
-
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
 #endif
-
 			Representation firstSegment;
+			// different approaches towards bloating
 			if(mSettings.uniformBloating){
 				// R_0(X0) U R_delta(X0)
 				Representation unitePolytope = initialPair.second.unite( deltaValuation );
 				//assert(unitePolytope.contains(initialPair.second));
 				//assert(unitePolytope.contains(deltaValuation));
-
 	#ifdef REACH_DEBUG
 				std::cout << "Polytope after unite with R0: ";
 				unitePolytope.print();
 	#endif
 				// bloat hullPolytope (Hausdorff distance)
 				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
-
 	#ifdef REACH_DEBUG
 				std::cout << "\n";
 				std::cout << "Hausdorff Approximation: ";
@@ -639,7 +611,6 @@ namespace reachability {
 				firstSegment = unitePolytope;
 				if(radius > 0){
 					Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
-
 		#ifdef REACH_DEBUG
 					std::cout << "Hausdorff Polytope (Box): ";
 					hausPoly.print();
@@ -656,17 +627,13 @@ namespace reachability {
 				}
 				firstSegment = initialPair.second.unite(deltaValuation);
 			}
-
-
 			//assert(firstSegment.contains(unitePolytope));
 			//assert(firstSegment.contains(initialPair.second));
 			//assert(firstSegment.contains(deltaValuation));
-
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
 #endif
-
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
 #ifdef USE_REDUCTION
