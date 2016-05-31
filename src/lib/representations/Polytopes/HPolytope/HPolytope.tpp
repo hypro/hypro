@@ -180,13 +180,16 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			matrix_t<Number> A( dim, dim );
 			vector_t<Number> b( dim );
 			unsigned pos = 0;
+			//std::cout << "Permute planes ";
 			for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
+				//std::cout << *planeIt << ", ";
 				A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
 				// std::cout << A.row(pos) << std::endl;
 				b(pos) = mHPlanes.at(*planeIt).offset();
 				// std::cout << b(pos) << std::endl;
 				++pos;
 			}
+			//std::cout << std::endl;
 
 			//std::cout << "Created first matrix" << std::endl;
 
@@ -672,6 +675,9 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 
 		// reduce, if reduction is required
 		if(largest > (limit*limit)) {
+			#ifdef DEBUG_MSG
+			std::cout << "Actual reduction" << std::endl;
+			#endif
 			vector_t<Number> newNormal(mDimension);
 			for(unsigned i = 0; i < mDimension; ++i){
 				newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*limit));
@@ -682,7 +688,6 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 			mHPlanes.at(planeIndex).setNormal(newNormal);
 			Number newOffset = mHPlanes.at(planeIndex).offset();
 			newOffset = carl::ceil(Number((newOffset/largest)*limit));
-
 			for(const auto& vertex : originalVertices) {
 				Number tmp = newNormal.dot(vertex.rawCoordinates());
 				if(tmp > newOffset){
@@ -691,6 +696,9 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 				}
 			}
 			newOffset = carl::ceil(newOffset);
+			#ifdef DEBUG_MSG
+			std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
+			#endif
 			mHPlanes.at(planeIndex).setOffset(newOffset);
 		}
 		#ifdef DEBUG_MSG

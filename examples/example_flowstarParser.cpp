@@ -18,7 +18,8 @@ int main(int argc, char** argv) {
 	typedef mpq_class Number;
 	#endif
 	//typedef hypro::SupportFunction<Number> sfValuation;
-	typedef hypro::HPolytope<Number> hpValuation;
+	typedef hypro::Box<Number> boxValuation;
+	//typedef hypro::HPolytope<Number> hpValuation;
 	typedef std::chrono::high_resolution_clock clock;
     typedef std::chrono::microseconds timeunit;
 
@@ -42,8 +43,11 @@ int main(int argc, char** argv) {
 	//hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
 	//std::vector<std::vector<sfValuation>> sfFlowpipes = sfReach.computeForwardReachability();
 
-	hypro::reachability::Reach<Number,hpValuation> hpReach(ha, ha.reachabilitySettings());
-	std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
+	//hypro::reachability::Reach<Number,hpValuation> hpReach(ha, ha.reachabilitySettings());
+	//std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
+
+	hypro::reachability::Reach<Number,boxValuation> hpReach(ha, ha.reachabilitySettings());
+	std::vector<std::vector<boxValuation>> hpFlowpipes = hpReach.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 

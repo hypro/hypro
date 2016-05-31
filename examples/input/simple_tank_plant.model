@@ -73,10 +73,6 @@ hybrid reachability
      h' = 0
      t' = 0
     }
-    inv
-    {
-    	t >= 0
-    }
   }
 
   read
@@ -88,7 +84,6 @@ hybrid reachability
     }
     inv
     {
-    	t >= 0
     }
   }
 

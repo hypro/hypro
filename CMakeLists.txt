@@ -1,9 +1,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                             #
 # File: CMakeLists.txt                                        #
 #                                                             #
 # Project name: HyPro                                         #
-# Contact: Xin Chen chen@cs.rwth-aachen.de                    #
+# Contact:                  #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
 # Author: Sebastian Junges, Stefan Schupp                     #
@@ -68,6 +67,11 @@ if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION V
 endif()
 
 # general compiler and linker settings
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo
+MinSizeRel." FORCE)
+endif()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
