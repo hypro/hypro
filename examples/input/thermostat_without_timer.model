@@ -1,0 +1,713 @@
+hybrid reachability
+{
+	state var low, H_plc, H, high, cycle_time, Temp
+	setting
+	{
+		fixed steps 0.05
+		time 2
+		remainder estimation 1e-5
+		identity precondition
+		gnuplot octagon global_time, Temp
+		fixed orders 5
+		cutoff 1e-12
+		precision 53
+		output thermostat_without_timer
+		max jumps 20
+		print on
+	}
+	modes
+	{
+		l1__switch_on__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+				H_plc = 1.0
+			}
+		}
+		l1__switch_on_in__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+				H_plc = 1.0
+			}
+		}
+		l1__switch_on_in__comm
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 1.0
+			}
+		}
+		l1__switch_off__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+				H_plc = 1.0
+			}
+		}
+		l1__switch_off_in__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+				H_plc = 1.0
+			}
+		}
+		l1__switch_off_in__comm
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp + 15
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 1.0
+			}
+		}
+		l2__switch_on__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				H_plc = 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+			}
+		}
+		l2__switch_on_in__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				H_plc = 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+			}
+		}
+		l2__switch_on_in__comm
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 0.0
+			}
+		}
+		l2__switch_off__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				H_plc = 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+			}
+		}
+		l2__switch_off_in__cycle
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				H_plc = 0.0
+				cycle_time >= 0.0
+				cycle_time <= 1.0
+			}
+		}
+		l2__switch_off_in__comm
+		{
+			poly ode 1
+			{
+				Temp' = -0.5*Temp
+				cycle_time' = 1
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 0.0
+			}
+		}
+	}
+	jumps
+	{
+		l2__switch_off_in__comm -> l2__switch_off__cycle
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__comm -> l2__switch_off__cycle
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__comm -> l2__switch_off__cycle
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__comm -> l1__switch_off_in__comm
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__cycle -> l2__switch_off_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__cycle -> l1__switch_off_in__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off_in__cycle -> l1__switch_off_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off__cycle -> l2__switch_off_in__cycle
+		guard
+		{
+			low = 1.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off__cycle -> l2__switch_on_in__cycle
+		guard
+		{
+			low = 0.0
+		}
+		reset {
+			H' := 1
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_off__cycle -> l1__switch_off__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__comm -> l2__switch_on__cycle
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__comm -> l2__switch_on__cycle
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__comm -> l2__switch_on__cycle
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__comm -> l1__switch_on_in__comm
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__cycle -> l2__switch_on_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__cycle -> l1__switch_on_in__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on_in__cycle -> l1__switch_on_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on__cycle -> l2__switch_off_in__cycle
+		guard
+		{
+			high = 1.0
+		}
+		reset {
+			H' := 0
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on__cycle -> l2__switch_on_in__cycle
+		guard
+		{
+			high = 0.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l2__switch_on__cycle -> l1__switch_on__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__comm -> l1__switch_off__cycle
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__comm -> l1__switch_off__cycle
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__comm -> l1__switch_off__cycle
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__comm -> l2__switch_off_in__comm
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__cycle -> l1__switch_off_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__cycle -> l2__switch_off_in__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off_in__cycle -> l2__switch_off_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off__cycle -> l1__switch_off_in__cycle
+		guard
+		{
+			low = 1.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off__cycle -> l1__switch_on_in__cycle
+		guard
+		{
+			low = 0.0
+		}
+		reset {
+			H' := 1
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_off__cycle -> l2__switch_off__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__comm -> l1__switch_on__cycle
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__comm -> l1__switch_on__cycle
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__comm -> l1__switch_on__cycle
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__comm -> l2__switch_on_in__comm
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__cycle -> l1__switch_on_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__cycle -> l2__switch_on_in__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on_in__cycle -> l2__switch_on_in__comm
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on__cycle -> l1__switch_off_in__cycle
+		guard
+		{
+			high = 1.0
+		}
+		reset {
+			H' := 0
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on__cycle -> l1__switch_on_in__cycle
+		guard
+		{
+			high = 0.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		l1__switch_on__cycle -> l2__switch_on__cycle
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+	}
+	init
+	{
+		l1__switch_on_in__comm
+		{
+			Temp in [20.0,20.0]
+			H in [1.0,1.0]
+			cycle_time in [0.0,0.0]
+			H_plc in [1.0,1.0]
+			high in [0.0,0.0]
+			low in [1.0,1.0]
+		}
+
+	}
+}

@@ -1,92 +1,750 @@
 hybrid reachability
 {
- state var x,t
+	state var low, H_plc, H, high, global_time, cycle_time, Temp
+	setting
+	{
+		fixed steps 0.05
+		time 2
+		remainder estimation 1e-5
+		identity precondition
+		gnuplot octagon global_time, Temp
+		fixed orders 5
+		cutoff 1e-12
+		precision 53
+		output thermostat
+		max jumps 20
+		print on
+	}
+	modes
+	{
+		clock__switch_on__cycle__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				H_plc = 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_on__cycle__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+		clock__switch_on_in__cycle__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				H_plc = 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_on_in__cycle__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+		clock__switch_on_in__comm__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 0.0
+				global_time <= 20.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_on_in__comm__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				global_time <= 20.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+		clock__switch_off__cycle__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				H_plc = 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_off__cycle__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time <= 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+		clock__switch_off_in__cycle__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				H_plc = 0.0
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_off_in__cycle__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				global_time <= 20.0
+				cycle_time <= 1.0
+				cycle_time >= 0.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+		clock__switch_off_in__comm__l2
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				H_plc = 0.0
+				global_time <= 20.0
+				global_time >= 0.0
+			}
+		}
+		clock__switch_off_in__comm__l1
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time' = 1
+				Temp' = -0.5*Temp + 15
+				low' = 0
+				H_plc' = 0
+				H' = 0
+				high' = 0
+			}
+			inv
+			{
+				cycle_time = 0.0
+				global_time <= 20.0
+				global_time >= 0.0
+				H_plc = 1.0
+			}
+		}
+	}
+	jumps
+	{
+		clock__switch_off_in__comm__l1 -> clock__switch_off_in__comm__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
 
- setting
- {
-  fixed steps 0.005
-  time 10
-  remainder estimation 1e-5
-  identity precondition
-  gnuplot octagon x,t
-  fixed orders 5
-  cutoff 1e-15
-  precision 128
-  output thermostat
-  max jumps 3
-  print on
- }
 
- modes
- {
-  on
-  {
-   poly ode 1
-   {
-    x' = -0.8*x+24
-    t' = 1
-   }
+		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
 
-   inv
-   {
-    x <= 23
-    x >= 17
-    t >= 0
-    t <= 10
-   }
-  }
 
-  off
-  {
-   poly ode 1
-   {
-    x' = -0.8*x
-    t' = 1
-   }
+		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
 
-   inv
-   {
-   	x <= 23
-    x >= 17
-    t >= 0
-    t <= 10
-   }
-  }
- }
 
- jumps
- {
-  on -> off
-  guard { x >=22 }
-  parallelotope aggregation {}
+		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
 
-  off -> on
-  guard { x <=18 }
-  parallelotope aggregation {}
- }
 
- init
- {
-  on
-  {
-   x in [20,20.001]
-   t in [0,0]
-  }
- }
+		clock__switch_off_in__comm__l2 -> clock__switch_off_in__comm__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
 
-}
 
-unsafe set
-{
-  on
-  {
-   x in [17,18]
-   t in [0,0.35]
-  }
+		clock__switch_off_in__comm__l2 -> clock__switch_off__cycle__l2
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
 
-  off
-  {
-   x in [17,18]
-   t in [0,0.35]
-  }
+
+		clock__switch_off_in__comm__l2 -> clock__switch_off__cycle__l2
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__comm__l2 -> clock__switch_off__cycle__l2
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l1 -> clock__switch_off_in__comm__l2
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l1 -> clock__switch_off_in__comm__l1
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l1 -> clock__switch_off_in__cycle__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l2 -> clock__switch_off_in__comm__l1
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l2 -> clock__switch_off_in__comm__l2
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off_in__cycle__l2 -> clock__switch_off_in__cycle__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l1 -> clock__switch_off__cycle__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l1 -> clock__switch_off_in__cycle__l1
+		guard
+		{
+			low = 1.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l1 -> clock__switch_on_in__cycle__l1
+		guard
+		{
+			low = 0.0
+		}
+		reset {
+			H' := 1
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l2 -> clock__switch_off__cycle__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l2 -> clock__switch_off_in__cycle__l2
+		guard
+		{
+			low = 1.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_off__cycle__l2 -> clock__switch_on_in__cycle__l2
+		guard
+		{
+			low = 0.0
+		}
+		reset {
+			H' := 1
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l1 -> clock__switch_on_in__comm__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l2 -> clock__switch_on_in__comm__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
+		guard
+		{
+			Temp >= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 1.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
+		guard
+		{
+			Temp >= 18.0
+			Temp <= 23.0
+		}
+		reset {
+			low' := 1.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
+		guard
+		{
+			Temp <= 18.0
+		}
+		reset {
+			low' := 0.0
+			high' := 0.0
+			H' := H_plc
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__comm__l2
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__comm__l1
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__cycle__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__comm__l1
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__comm__l2
+		guard
+		{
+			cycle_time = 1.0
+		}
+		reset {
+			cycle_time' := 0
+			H_plc' := H
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__cycle__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l1 -> clock__switch_on__cycle__l2
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l1 -> clock__switch_off_in__cycle__l1
+		guard
+		{
+			high = 1.0
+		}
+		reset {
+			H' := 0
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l1 -> clock__switch_on_in__cycle__l1
+		guard
+		{
+			high = 0.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l2 -> clock__switch_on__cycle__l1
+		guard
+		{
+			
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l2 -> clock__switch_off_in__cycle__l2
+		guard
+		{
+			high = 1.0
+		}
+		reset {
+			H' := 0
+		}
+		parallelotope aggregation { }
+
+
+		clock__switch_on__cycle__l2 -> clock__switch_on_in__cycle__l2
+		guard
+		{
+			high = 0.0
+		}
+		reset {
+		}
+		parallelotope aggregation { }
+
+
+	}
+	init
+	{
+		clock__switch_on_in__comm__l1
+		{
+			Temp in [20.0,20.0]
+			H in [1.0,1.0]
+			cycle_time in [0.0,0.0]
+			global_time in [0.0,0.0]
+			H_plc in [1.0,1.0]
+			high in [0.0,0.0]
+			low in [1.0,1.0]
+		}
+
+	}
 }
