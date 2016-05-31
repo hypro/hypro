@@ -68,6 +68,11 @@ void Plotter<Number>::plot2d() const {
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
 		mOutfile << "set output \"" << mFilename << ".eps\n";
+		if(mSettings.grid) {
+			mOutfile << "set xtics " << mSettings.tics << "\n";
+			mOutfile << "set ytics " << mSettings.tics << "\n";
+			mOutfile << "set grid back\n";
+		}
 		if(mSettings.axes) {
 			mOutfile << "# axis settings\n";
 			mOutfile << "set xzeroaxis \n";
