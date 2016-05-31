@@ -4,8 +4,9 @@
 #include "smtrat/SimplexSolver.h"
 #include <carl/util/Singleton.h>
 
-#define USE_PRESOLUTION
+//#define USE_PRESOLUTION
 #define RECREATE_SOLVER
+#define VERIFY_RESULT
 
 namespace hypro {
 
@@ -29,6 +30,9 @@ namespace hypro {
 		mutable smtrat::SimplexSolver mSmtratSolver;
 		mutable smtrat::FormulaT mCurrentFormula;
 		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
+		#ifdef VERIFY_RESULT
+		mutable unsigned fileCounter;
+		#endif
 		#endif
 		// Glpk as a presolver
 		mutable glp_prob* lp;
@@ -43,7 +47,11 @@ namespace hypro {
 			mConstraintVector(),
 			mInitialized(false),
 			mConstraintsSet(false)
-		{}
+		{
+			#ifdef VERIFY_RESULT
+			fileCounter = 0;
+			#endif
+		}
 
 	public:
 
@@ -65,7 +73,7 @@ namespace hypro {
 		void updateConstraints() const;
 		#ifdef USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
-		EvaluationResult<Number> extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
+		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
 		#endif
 
 		void createArrays( unsigned size ) const;

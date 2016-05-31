@@ -156,7 +156,6 @@ namespace hypro {
 					assert(smtratCheck == smtrat::Answer::UNSAT);
 					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-
 				#else // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				assert(smtratCheck == smtrat::Answer::UNSAT);
@@ -753,7 +752,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> Optimizer<Number>::extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
+	EvaluationResult<Number> Optimizer<Number>::extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
 		smtrat::ModelValue valuation = solver.optimum(objective);
 		EvaluationResult<Number> res;
 		assert(!valuation.isBool());
@@ -781,6 +780,16 @@ namespace hypro {
 				}
 			}
 			res.optimumValue = point;
+			#ifdef VERIFY_RESULT
+			solver.push();
+			smtrat::FormulaT inversedObjective(objective-valuation.asRational(), carl::Relation::GREATER);
+			solver.inform(inversedObjective);
+			solver.add(inversedObjective);
+			if(solver.check() != smtrat::Answer::UNSAT) {
+				outputToSmtlibFormat(solver,fileCounter++, objective);
+			}
+			solver.pop();
+			#endif
 		}
 		return res;
 	}
