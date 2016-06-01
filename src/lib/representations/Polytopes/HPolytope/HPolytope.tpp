@@ -66,6 +66,19 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			for(const auto& constraint : boxConstraints){
 				mHPlanes.emplace_back(constraint);
 			}
+			
+			/*
+			// Alternative version
+			Halfspace<Number> h; // = some hyperplane holding all points, i.e., a*p=b for all points p
+			std::vector<Point<Number>> auxiliaryPoints = points;
+			auxiliaryPoints.emplace_back(points.begin()->rawCoordinates() + h.normal());
+			// The effective dimension of the convex hull of auxiliaryPoints is effectiveDim + 1
+			// Furthermore, one of the faces of the convex hull is the polytope we are looking for.
+			mHPlanes = HPolytopeT<Number, Converter>(auxiliaryPoints).constraints();
+			// decrease the effective dimension back to effectiveDim
+			mHPlanes.push_back(std::move(h));
+			*/
+			
 		} else {
 			// TODO: Chose suitable convex hull algorithm
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
