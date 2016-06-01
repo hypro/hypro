@@ -67,16 +67,10 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 				mHPlanes.emplace_back(constraint);
 			}
 			
-			/*
-			// Alternative version
-			Halfspace<Number> h; // = some hyperplane holding all points, i.e., a*p=b for all points p
-			std::vector<Point<Number>> auxiliaryPoints = points;
-			auxiliaryPoints.emplace_back(points.begin()->rawCoordinates() + h.normal());
-			// The effective dimension of the convex hull of auxiliaryPoints is effectiveDim + 1
-			// Furthermore, one of the faces of the convex hull is the polytope we are looking for.
-			mHPlanes = HPolytopeT<Number, Converter>(auxiliaryPoints).constraints();
-			// decrease the effective dimension back to effectiveDim
-			mHPlanes.push_back(std::move(h));
+			/* Alternative version
+			// We need a copy of the set of points since auxiliary points will be added
+			std::vector<Point<Number>> auxiliaryPoints(points);
+			mHPlanes = computeConstraintsForDegeneratedPolytope(auxiliaryPoints, mDimension - effectiveDim);
 			*/
 			
 		} else {
@@ -662,6 +656,25 @@ void HPolytopeT<Number, Converter>::print() const {
 /*
  * Auxiliary functions
  */
+
+
+template <typename Number, typename Converter>
+typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Converter>::computeConstraintsForDegeneratedPolytope(std::vector<Point<Number>>& points, unsigned degeneratedDimensions) const {
+	if(degeneratedDimensions == 0) {
+		return std::move(HPolytopeT<Number, Converter>(points).mHPlanes);
+	}
+	assert(!points.empty());
+	Halfspace<Number> h; // TODO set h to some hyperplane holding all points, i.e., a*p=b for all points p
+	points.emplace_back(points.begin()->rawCoordinates() + h.normal());
+	// The effective dimension of the convex hull of points is now increased by one, i.e.,
+	// the number of degenerated dimensions is decreased by one.
+	// Furthermore, one of the faces of the convex hull of points is the polytope we are looking for.
+	// This is exactly the face we get when we intersect the convex hull with the halfspace h
+	HalfspaceVector result = commputeConstraintsForDegeneratedPolytope(points, degeneratedDimensions - 1);
+	result.push_back(std::move(h)); // decreases the effective dimension again
+	return result;
+}
+
 
 template<typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
