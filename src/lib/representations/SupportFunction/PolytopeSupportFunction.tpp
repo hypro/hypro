@@ -91,16 +91,18 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
-	opt.setMatrix(mConstraints);
-	opt.setVector(mConstraintConstants);
-	EvaluationResult<Number> res = opt.evaluate(l);
+	if(mConstraints.rows() > 0) {
+		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+		opt.setMatrix(mConstraints);
+		opt.setVector(mConstraintConstants);
+		result = opt.evaluate(l);
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
+		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << carl::toDouble(res.supportValue) << std::endl;
 #endif
-	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
-	assert( l.rows() == mDimension );
-	return res;
+		assert(result.errorCode != SOLUTION::FEAS || this->contains(result.optimumValue));
+		assert( l.rows() == mDimension );
+	}
+	return result;
 }
 
 template <typename Number>

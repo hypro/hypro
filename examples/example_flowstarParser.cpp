@@ -9,81 +9,112 @@
 #include "util/Plotter.h"
 #include <chrono>
 #include <string>
+#include <boost/program_options.hpp>
 
-int main(int argc, char** argv) {
 
-	#ifdef USE_CLN_NUMBERS
-	typedef cln::cl_RA Number;
-	#else
-	typedef mpq_class Number;
-	#endif
-	//typedef hypro::SupportFunction<Number> sfValuation;
-	typedef hypro::Box<Number> boxValuation;
-	//typedef hypro::HPolytope<Number> hpValuation;
-	typedef std::chrono::high_resolution_clock clock;
-    typedef std::chrono::microseconds timeunit;
-
-    if(argc < 2) {
-    	std::cout << "No input file given." << std::endl;
-    	exit(0);
-    } else if (argc > 2) {
-    	std::cout << "Too many arguments, require only the path to the input file." << std::endl;
-    	exit(0);
-    }
-
-	std::string filename = std::string(argv[1]);
-
-	//std::string filename = "../examples/input/bouncing_ball.model";
-	//std::string filename = "../examples/input/simple_tank_plant.model";
-	//std::string filename = "../examples/input/smoke_detector.model";
-
+template<typename Number, typename Representation>
+static void computeReachableStates(const std::string& filename) {
+	using clock = std::chrono::high_resolution_clock;
+	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
-	hypro::HybridAutomaton<Number> ha = hypro::parseFlowstarFile<Number>(filename);
 
-	//hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
-	//std::vector<std::vector<sfValuation>> sfFlowpipes = sfReach.computeForwardReachability();
-
-	//hypro::reachability::Reach<Number,hpValuation> hpReach(ha, ha.reachabilitySettings());
-	//std::vector<std::vector<hpValuation>> hpFlowpipes = hpReach.computeForwardReachability();
-
-	hypro::reachability::Reach<Number,boxValuation> hpReach(ha, ha.reachabilitySettings());
-	std::vector<std::vector<boxValuation>> hpFlowpipes = hpReach.computeForwardReachability();
-
+	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+	hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
+	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes = reacher.computeForwardReachability();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	plotter.setFilename(ha.reachabilitySettings().fileName);
-	std::vector<unsigned> plottingDimensions = ha.reachabilitySettings().plotDimensions;
+	plotter.setFilename(boost::get<0>(ha).reachabilitySettings().fileName);
+	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
 	plotter.rSettings().cummulative = false;
 
 	// bad states plotting
-	//hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = ha.localBadStates();
-	//for(const auto& state : badStateMapping) {
-	//	unsigned bs = plotter.addObject(hpValuation(state.second.constraints, state.second.constants).vertices());
-	//	plotter.setObjectColor(bs, hypro::colors[hypro::red]);
-	//}
+	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
+	for(const auto& state : badStateMapping) {
+		unsigned bs = plotter.addObject(Representation(boost::get<hypro::cPair<Number>>(state.second.set).first, boost::get<hypro::cPair<Number>>(state.second.set).second).vertices());
+		plotter.setObjectColor(bs, hypro::colors[hypro::red]);
+	}
 
-	//for(const auto& flowpipe : sfFlowpipes){
-	//	for(const auto& segment : flowpipe){
-	//		unsigned tmp = plotter.addObject(segment.vertices());
-	//		plotter.setObjectColor(tmp, hypro::colors[hypro::green]);
-	//	}
-	//}
-
-	//std::cout << "Computed " << hpFlowpipes.size() << " flowpipes. Start plotting." << std::endl;
-	//for(const auto& flowpipe : hpFlowpipes){
-	//	for(const auto& segment : flowpipe){
-	//		unsigned tmp = plotter.addObject(segment.vertices());
-	//		plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
-	//	}
-	//}
+	// segments plotting
+	for(const auto& flowpipePair : flowpipes){
+		for(const auto& segment : flowpipePair.second){
+			unsigned tmp = plotter.addObject(segment.vertices());
+			plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+		}
+	}
 
 	plotter.plot2d();
 	plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
+}
+
+int main(int argc, char** argv) {
+	namespace po = boost::program_options;
+	po::options_description desc("Allowed options");
+	desc.add_options()
+			("help", "produce help message")
+			("representation", po::value<int>(), "set representation (1=box, 2=hpoly, 3=supportFunction)")
+			("in", po::value<std::string>(), "specify input file path" )
+			;
+
+	po::variables_map vm;
+	po::store(po::parse_command_line(argc, argv, desc), vm);
+	po::notify(vm);
+
+	if (vm.count("help")) {
+		cout << desc << "\n";
+		return 1;
+	}
+
+	int rep = 0;
+	std::string filename;
+	if (vm.count("representation")) {
+		rep = vm["representation"].as<int>();
+	}
+
+	if( vm.count("in")) {
+		filename = vm["in"].as<std::string>();
+	} else {
+		std::cout << "No input file given, exiting. Try --help to obtain full list of options." << std::endl;
+		exit(0);
+	}
+
+#ifdef USE_CLN_NUMBERS
+	using Number = cln::cl_RA;
+#else
+	using Number = mpq_class;
+#endif
+
+	switch(rep){
+		case 3: {
+			using Representation = hypro::SupportFunction<Number>;
+			std::cout << "Using a support function representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename);
+			break;
+		}
+		case 2: {
+			using Representation = hypro::HPolytope <Number>;
+			std::cout << "Using a h-polytope representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename);
+			break;
+		}
+		case 1: {
+			using Representation = hypro::Box<Number>;
+			std::cout << "Using a box representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename);
+			break;
+		}
+		default:{
+			using Representation = hypro::Box<Number>;
+			std::cout << "Using a box representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename);
+		}
+	}
+
+	exit(0);
 }

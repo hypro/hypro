@@ -18,7 +18,7 @@ namespace reachability {
      */
 
     template<typename Number, typename Representation>
-	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
+	std::vector<std::pair<unsigned, flowpipe_t<Representation>>> Reach<Number,Representation>::computeForwardReachability() {
 		// set up working queue -> add initial states
                 /*
                  *  TO-DO:
@@ -27,6 +27,9 @@ namespace reachability {
                  *       (including information about the location, current time step, first segment (probably later) and
                  *       the used representation)
                  */
+		// collect all computed reachable states
+		std::vector<std::pair<unsigned, flowpipe_t<Representation>>> collectedReachableStates;
+
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
@@ -52,23 +55,9 @@ namespace reachability {
                          *  TO-DO:
                          *      - Check for fixed-points here using the overapproximations stored in the tree
                          */
-			if(mReachableStates.find(boost::get<1>(nextInitialSet).location) == mReachableStates.end())
-				mReachableStates[boost::get<1>(nextInitialSet).location] = std::vector<flowpipe_t<Representation>>();
-
-			mReachableStates[boost::get<1>(nextInitialSet).location].push_back(newFlowpipe);
+			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
 		}
 
-                /*
-                 *  TO-DO:
-                 *      - Traverse tree and explicitly compute the reachable states
-                 */
-		// collect all computed reachable states
-		std::vector<flowpipe_t<Representation>> collectedReachableStates;
-		for(const auto& statePair : mReachableStates) {
-			for(const auto& flowpipe : statePair.second){
-				collectedReachableStates.push_back(flowpipe);
-			}
-		}
 		return collectedReachableStates;
 	}
 
@@ -147,8 +136,8 @@ namespace reachability {
 			}
 			flowpipe.push_back( currentSegment );
 
-			unsigned tmp = plotter.addObject(currentSegment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+			//unsigned tmp = plotter.addObject(currentSegment.vertices());
+			//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
 
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(_state, currentSegment)){
@@ -284,8 +273,8 @@ namespace reachability {
 #endif
 					flowpipe.push_back( newSegment.second );
 
-					unsigned tmp = plotter.addObject(newSegment.second.vertices());
-					plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+					//unsigned tmp = plotter.addObject(newSegment.second.vertices());
+					//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
 
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm

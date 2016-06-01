@@ -78,7 +78,8 @@ foreach( example ${EXAMPLES} )
 #      	endif()
 #    else()
         add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
-        target_link_libraries( ${example} ${PROJECT_NAME} ${libraries} )
+        # TODO: Attention, here we link dirty against boost programOptions
+        target_link_libraries( ${example} ${PROJECT_NAME} ${libraries} boost_program_options )
 
         set( exampleFiles ${exampleFiles} ${example}.cpp )
 
