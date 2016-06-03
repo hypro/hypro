@@ -1,7 +1,7 @@
 hybrid reachability
 {
 	state var h, global_time
-	discrete var P_on_plc, wow, P_on, P_off, P, nextSfcLoc, low, P_plc, P_off_plc
+	discrete var P_on_plc, high, P_on, P_off, P, nextSfcLoc, low, P_plc, P_off_plc
 
 	setting
 	{
@@ -316,27 +316,27 @@ hybrid reachability
 
 		clock__switch_on_in__comm -> clock__switch_on__cycle
 		guard { h >= 15.0 }
-		reset { low' := 1.0 wow' := 1.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 1.0 high' := 1.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
 
 		clock__switch_on_in__comm -> clock__switch_on__cycle
 		guard { h <= 15.0 h >= 2.0 }
-		reset { low' := 1.0 wow' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 1.0 high' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
 
 		clock__switch_on_in__comm -> clock__switch_on__cycle
 		guard { h <= 2.0 }
-		reset { low' := 0.0 wow' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 0.0 high' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
 
 		clock__switch_on__cycle -> clock__switch_off_in__cycle
-		guard { wow = 1.0 }
+		guard { high = 1.0 }
 		reset { P' := 0 P_on' := 0 P_off' := 0 }
 		parallelotope aggregation { }
 
@@ -348,7 +348,7 @@ hybrid reachability
 
 
 		clock__switch_on__cycle -> clock__switch_on_in__cycle
-		guard { wow = 0.0 P_off = 0.0 }
+		guard { high = 0.0 P_off = 0.0 }
 		reset { }
 		parallelotope aggregation { }
 		time 0.0
@@ -370,21 +370,21 @@ hybrid reachability
 
 		clock__switch_off_in__comm -> clock__switch_off__cycle
 		guard { h >= 15.0 }
-		reset { low' := 1.0 wow' := 1.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 1.0 high' := 1.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
 
 		clock__switch_off_in__comm -> clock__switch_off__cycle
 		guard { h <= 15.0 h >= 2.0 }
-		reset { low' := 1.0 wow' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 1.0 high' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
 
 		clock__switch_off_in__comm -> clock__switch_off__cycle
 		guard { h <= 2.0 }
-		reset { low' := 0.0 wow' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
+		reset { low' := 0.0 high' := 0.0 P_off' := P_off_plc P' := P_plc P_on' := P_on_plc }
 		parallelotope aggregation { }
 		time 0.0
 
@@ -402,13 +402,13 @@ hybrid reachability
 
 
 		clock__switch_off__cycle -> clock__switch_off_in__cycle
-		guard { wow = 1.0 low = 0.0 }
+		guard { high = 1.0 low = 0.0 }
 		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle -> clock__switch_on_in__cycle
-		guard { P_on = 1.0 P_off = 0.0 wow = 0.0 }
+		guard { P_on = 1.0 P_off = 0.0 high = 0.0 }
 		reset { P' := 1 P_on' := 0 P_off' := 0 }
 		parallelotope aggregation { }
 
@@ -430,7 +430,7 @@ hybrid reachability
 			nextSfcLoc in [1.0,1.0]
 			P_plc in [1.0,1.0]
 			P_on in [0.0,0.0]
-			wow in [0.0,0.0]
+			high in [0.0,0.0]
 			h in [10.0,10.0]
 			global_time in [0.0,0.0]
 			P in [1.0,1.0]
