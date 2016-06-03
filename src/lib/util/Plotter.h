@@ -83,6 +83,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 */
 	void plot2d() const;
 	void plotTex() const;
+	void plotGen() const;
 
 	unsigned addObject( const std::vector<Point<Number>>& _points );
 	unsigned addObject( const std::vector<std::vector<Point<Number>>>& _points );

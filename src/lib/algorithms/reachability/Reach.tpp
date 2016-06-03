@@ -78,10 +78,43 @@ namespace reachability {
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
+		std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 		/*
 		 *  TO-DO:
 		 *     - Insert first segment into the current node
 		 */
+
+		// check for time triggered transitions once before any flowpipe is computed. TODO: put the check for transitions in the loop to the end?
+		if(mCurrentLevel <= mSettings.jumpDepth) {
+			State<Number> guardSatisfyingState;
+			bool locallyUrgent = false;
+			for( auto transition : _state.location->transitions() ){
+				// handle time-triggered transitions
+				if(transition->isTimeTriggered()){
+#ifdef REACH_DEBUG
+					std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
+#endif
+					// Check for direct urgent transitions
+					if(transition->triggerTime() == 0){
+						//std::cout << "Time trigger enabled" << std::endl;
+						if(intersectGuard(transition, _state, guardSatisfyingState)){
+							// when taking a timed transition, reset timestamp
+							if(mCurrentLevel != mSettings.jumpDepth) {
+								guardSatisfyingState.timestamp = carl::Interval<Number>(0);
+								nextInitialSets.push_back(boost::tuple<Transition<Number>*, State<Number>>(transition, guardSatisfyingState));
+								flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
+							}
+							locallyUrgent = true;
+						}
+					}
+				}
+			}
+			if(locallyUrgent){
+				processDiscreteBehaviour(nextInitialSets);
+				return flowpipe;
+			}
+		}
+
 		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
@@ -89,7 +122,6 @@ namespace reachability {
 #endif
 		if ( boost::get<0>(initialSetup) ) {
 			assert(!boost::get<1>(initialSetup).timestamp.isUnbounded());
-			std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
@@ -446,6 +478,35 @@ namespace reachability {
 				return false;
 			}
 		}
+		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
+		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
+			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
+			carl::Interval<Number> substitution(0);
+			unsigned dOffset = _trans->target()->invariant().discreteOffset;
+			//std::cout << "Guard row: " << guardPair.second << std::endl;
+			// insert all current discrete assignments except the constrained one.
+			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
+				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-dOffset) {
+					substitution += invariantPair.second(0, colIndex) * result.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+				}
+			}
+			carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
+			substitution += constPart;
+			//std::cout << "substitution interval " << substitution << std::endl;
+			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) > 0){
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == 1);
+				invariant.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
+				//std::cout << "After setting upper bound new: " << invariant << std::endl;
+			} else {
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == -1);
+				invariant.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
+				//std::cout << "After setting lower bound new: " << invariant << std::endl;
+			}
+
+			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
+				return false;
+			}
+		}
 
 		// check for continuous set guard intersection
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
@@ -456,8 +517,13 @@ namespace reachability {
 			#endif
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
-			result.set = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
-			return true;
+			Representation tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
+			if(invariantSatisfyingSet.first){
+				result.set = invariantSatisfyingSet.second;
+				return true;
+			}
+			return false;
 		} else {
 			return false;
 		}

@@ -359,6 +359,52 @@ void Plotter<Number>::plotTex() const {
 	mOutfile.close();
 }
 
+template<typename Number>
+void Plotter<Number>::plotGen() const {
+	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+
+	mOutfile.open( mFilename + ".gen" );
+
+	if(!mVectors.empty()){
+		// TODO: implement gen file plotting for vectors.
+	}
+
+	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
+		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
+			if(objectIt->second.size() > 0){
+				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
+					assert( objectIt->second[pointIndex].dimension() == 2 );
+					if ( objectIt->second[pointIndex].dimension() == 0 ) {
+						continue;
+					}
+					mOutfile << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
+					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+						mOutfile << " " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
+					}
+					mOutfile << "\n";
+				}
+				mOutfile << carl::toDouble( objectIt->second[0].at( 0 ) );
+				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
+					mOutfile << " " << carl::toDouble( objectIt->second[0].at( d ) );
+				}
+				mOutfile << "\n";
+			}
+			mOutfile << "\n\n\n";
+		}
+
+		// create plane functions
+		if(!mPlanes.empty()){
+			// TODO: implement.
+		}
+
+		if(!mPoints.empty()){
+			// TODO: implement.
+		}
+	}
+	mOutfile.close();
+	std::cout << std::endl << "Plotted to " << mFilename << ".gen" << std::endl;
+}
+
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points ) {
 	// reduce dimensions
@@ -526,6 +572,10 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 	// pair.second.rawCoordinates().transpose() << std::endl;
 
 	// prepare stack -> initialize with 2 points
+	if(sortedPoints.empty()) {
+		res.emplace_back(min);
+		return res;
+	}
 	assert( sortedPoints.size() >= 1 );
 	std::stack<Point<Number>> stack;
 	stack.push( min );

@@ -49,6 +49,7 @@ static void computeReachableStates(const std::string& filename) {
 
 	plotter.plot2d();
 	plotter.plotTex();
+	plotter.plotGen();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 }
