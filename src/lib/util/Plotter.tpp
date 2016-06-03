@@ -162,10 +162,10 @@ void Plotter<Number>::plot2d() const {
 					assert(plane.dimension() == 2);
 					vector_t<Number> normal = plane.normal();
 					if(normal(1) == 0){
-						mOutfile << "set arrow from " << carl::toDouble(plane.offset()/normal(0)) <<",graph(0,0) to " << carl::toDouble(plane.offset()/normal(0)) << ",graph(1,1) nohead\n";
+						mOutfile << "set arrow from " << carl::toDouble(Number(plane.offset()/normal(0))) <<",graph(0,0) to " << carl::toDouble(Number(plane.offset()/normal(0))) << ",graph(1,1) nohead\n";
 					} else {
-						mOutfile << "f_" << index << "(x) = " << carl::toDouble(-normal(0)/normal(1)) << "*x";
-						double off = carl::toDouble(plane.offset()/normal(1));
+						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
+						double off = carl::toDouble(Number(plane.offset()/normal(1)));
 						if(off > 0)
 							mOutfile << "+";
 
@@ -331,8 +331,8 @@ void Plotter<Number>::plotTex() const {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
 					mOutfile << "\t\\draw[domain="<< ranges[0].lower() << ":" << ranges[0].upper() <<", smooth, variable=\\x] plot ({\\x},";
-					mOutfile << "{" << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
-					double off = carl::toDouble(plane.offset()/plane.normal()(1));
+					mOutfile << "{" << carl::toDouble(Number(-plane.normal()(0)/plane.normal()(1))) << "*x";
+					double off = carl::toDouble(Number(plane.offset()/plane.normal()(1)));
 					if(off > 0)
 						mOutfile << "+" << off << "}";
 					else
