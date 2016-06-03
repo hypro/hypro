@@ -277,7 +277,7 @@ namespace parser {
 			relationSymbol.name("relation");
 			interval.name("interval constraint");
 
-			//qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)> start;
