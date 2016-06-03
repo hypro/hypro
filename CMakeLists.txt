@@ -113,7 +113,15 @@ endif()
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
-
+find_package(Boost REQUIRED)
+set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_MULTITHREADED      ON) 
+set(Boost_USE_STATIC_RUNTIME    OFF) 
+find_package(Boost 1.55.0 COMPONENTS program_options) 
+if(Boost_FOUND)   
+	include_directories(${Boost_INCLUDE_DIRS})   
+	set(libraries ${libraries} ${Boost_LIBRARIES})
+endif()
 find_package(carl REQUIRED)
 include_directories(${carl_INCLUDE_DIR})
 set(libraries ${libraries} ${carl_LIBRARIES})
