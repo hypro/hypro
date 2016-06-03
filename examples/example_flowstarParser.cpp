@@ -9,7 +9,7 @@
 #include "util/Plotter.h"
 #include <chrono>
 #include <string>
-#include <boost/program_options.hpp>
+//#include <boost/program_options.hpp>
 
 
 template<typename Number, typename Representation>
@@ -54,6 +54,7 @@ static void computeReachableStates(const std::string& filename) {
 }
 
 int main(int argc, char** argv) {
+	/*
 	namespace po = boost::program_options;
 	po::options_description desc("Allowed options");
 	desc.add_options()
@@ -82,6 +83,14 @@ int main(int argc, char** argv) {
 	} else {
 		std::cout << "No input file given, exiting. Try --help to obtain full list of options." << std::endl;
 		exit(0);
+	}
+	*/
+
+	int rep = 0;
+	std::string filename = argv[1];
+	if(argc > 2) {
+		char* p;
+		rep = strtol(argv[2], &p, 10);
 	}
 
 #ifdef USE_CLN_NUMBERS
