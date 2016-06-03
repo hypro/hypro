@@ -39,25 +39,13 @@ namespace parser {
 	    	using qi::on_error;
 	        using qi::fail;
 
-	        start = (var(qi::_r1) % '*')[qi::_val = px::bind( &monomialParser<Iterator>::printMonomial, px::ref(*this), qi::_1)];
-	        var = qi::skip(qi::blank)[qi::lazy(qi::_r1)];
+	        start = (qi::skip(qi::blank)[qi::lazy(qi::_r1)] % '*');
 
 	        start.name("monomial");
-	        var.name("variable");
 
-	        qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+	        //qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 	    }
 	    qi::rule<Iterator, std::vector<unsigned>(symbol_table const&)> start;
-	    qi::rule<Iterator, unsigned(symbol_table const&)> var;
-
-	    std::vector<unsigned> printMonomial( const std::vector<unsigned>& _in ) {
-	    	//std::cout << "Parsed monomial ";
-	    	//for(const auto& item : _in)
-	    	//	std::cout << item << " ";
-//
-	    	//std::cout << std::endl;
-	    	return _in;
-	    }
 	};
 
 	template<typename Iterator>
@@ -157,10 +145,10 @@ namespace parser {
 			using qi::on_error;
 	        using qi::fail;
 
-			start = qi::skip(qi::blank)[(qi::lazy(qi::_r1) > qi::lit("'") > qi::lit(":=") > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &resetParser<Iterator>::createRow, px::ref(*this), qi::_1, qi::_2 )]];
+			start = qi::skip(qi::blank)[(qi::lazy(qi::_r1) >> qi::lit("'") > qi::lit(":=") > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &resetParser<Iterator>::createRow, px::ref(*this), qi::_1, qi::_2 )]];
 			start.name("reset assignment");
 
-			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+			//qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::pair<unsigned, matrix_t<double>>(symbol_table const&, unsigned const&)> start;
@@ -278,7 +266,7 @@ namespace parser {
 	        using qi::fail;
 
 			start = qi::skip(qi::blank)[(interval(qi::_r1, qi::_r2) | inequation(qi::_r1, qi::_r2))];
-			inequation = qi::skip(qi::blank)[(mPolynomial(qi::_r1, qi::_r2) > relationSymbol > mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &constraintParser<Iterator,Number>::createRow, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
+			inequation = qi::eps >> qi::skip(qi::blank)[(mPolynomial(qi::_r1, qi::_r2) >> relationSymbol >> mPolynomial(qi::_r1, qi::_r2))[qi::_val = px::bind( &constraintParser<Iterator,Number>::createRow, px::ref(*this), qi::_1, qi::_2, qi::_3 )]];
 			relationSymbol = (qi::lexeme["<="][qi::_val = RELATION::LEQ]
 							| qi::lexeme[">="][qi::_val = RELATION::GEQ]
 							| qi::lit('=')[qi::_val = RELATION::EQ]);
@@ -289,7 +277,7 @@ namespace parser {
 			relationSymbol.name("relation");
 			interval.name("interval constraint");
 
-			qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
+			//qi::on_error<qi::fail>( start, errorHandler(qi::_1, qi::_2, qi::_3, qi::_4));
 		}
 
 		qi::rule<Iterator, std::vector<matrix_t<Number>>(symbol_table const&, unsigned const&)> start;
