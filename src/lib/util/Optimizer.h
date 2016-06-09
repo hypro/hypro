@@ -61,11 +61,11 @@ namespace hypro {
 				if(stat (name.c_str(), &buffer) != 0) {
 					break;
 				}
-				std::cout << "File " << name << " exists." << std::endl;
+				//std::cout << "File " << name << " exists." << std::endl;
 				++cnt;
 			}
 			fileCounter = cnt;
-			std::cout << "Set file number to " << fileCounter << std::endl;
+			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
 		}
 
