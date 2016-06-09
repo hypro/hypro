@@ -212,6 +212,42 @@ TYPED_TEST(HPolytopeTest, Union)
 			  } */ //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
 }
 
+TYPED_TEST(HPolytopeTest, Evaluate)
+{
+	std::cout << __func__ << std::endl;
+	matrix_t<TypeParam> A(4,2);
+	A(0,0) = 1;			//     1    1    
+	A(0,1) = 1;			//     1    0     
+	A(1,0) = 1;	        //     0    1
+	A(1,1) = 0;         //     0   -1
+	A(2,0) = 0;
+	A(2,1) = 1;
+	A(3,0) = 0;
+	A(3,1) = -1;
+	vector_t<TypeParam> b(4);
+	b(0) = 0;
+	b(1) = 1;	
+	b(2) = 0;
+	b(3) = 1;
+	
+	/* SMT-lib format:
+	(push)
+	(declare-fun _r_1 () Real)
+	(declare-fun _r_2 () Real)
+	(assert (and (<= (+ _r_2 _r_1) 0) (<= (+ _r_1 (- 1)) 0) (<= _r_2 0) (<= (+ (* (- 1) _r_2) (- 1)) 0)))
+
+	(maximize _r_1)
+	*/
+	
+	HPolytope<TypeParam> poly = HPolytope<TypeParam>(A,b);
+	vector_t<TypeParam> dir(2);
+	dir(0) = 1;
+	dir(1) = 0;
+	EvaluationResult<TypeParam> res = poly.evaluate(dir);
+	ASSERT_EQ(SOLUTION::FEAS, res.errorCode);
+	ASSERT_EQ(1, res.supportValue);
+}
+
 TYPED_TEST(HPolytopeTest, LinearTransformation)
 {
 	std::cout << __func__ << std::endl;
