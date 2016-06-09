@@ -786,7 +786,7 @@ namespace hypro {
 			solver.inform(inversedObjective);
 			solver.add(inversedObjective);
 			if(solver.check() != smtrat::Answer::UNSAT) {
-				outputToSmtlibFormat(solver,fileCounter++, objective);
+				outputToSmtlibFormat(solver,fileCounter++, objective, filenamePrefix);
 			}
 			solver.pop();
 			#endif

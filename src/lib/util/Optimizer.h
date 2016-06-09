@@ -8,6 +8,10 @@
 #define RECREATE_SOLVER
 #define VERIFY_RESULT
 
+#ifdef VERIFY_RESULT
+#include <sys/stat.h>
+#endif
+
 namespace hypro {
 
 	template<typename Number>
@@ -32,6 +36,7 @@ namespace hypro {
 		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
 		#ifdef VERIFY_RESULT
 		mutable unsigned fileCounter;
+		std::string filenamePrefix = "optimizer_error_out_";
 		#endif
 		#endif
 		// Glpk as a presolver
@@ -49,7 +54,18 @@ namespace hypro {
 			mConstraintsSet(false)
 		{
 			#ifdef VERIFY_RESULT
-			fileCounter = 0;
+			struct stat buffer;
+			unsigned cnt = 0;
+			while(true){
+				std::string name = filenamePrefix + std::to_string(cnt) + ".smt2";
+				if(stat (name.c_str(), &buffer) != 0) {
+					break;
+				}
+				std::cout << "File " << name << " exists." << std::endl;
+				++cnt;
+			}
+			fileCounter = cnt;
+			std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
 		}
 
