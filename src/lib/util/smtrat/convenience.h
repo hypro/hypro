@@ -99,8 +99,8 @@ namespace hypro {
 		return objective;
 	}
 
-	static void outputToSmtlibFormat(const smtrat::SimplexSolver& solver, unsigned count, const smtrat::Poly& objective) {
-		std::string filename = "optimizer_error_out_" + std::to_string(count) + ".smt2";
+	static void outputToSmtlibFormat(const smtrat::SimplexSolver& solver, unsigned count, const smtrat::Poly& objective, const std::string& _prefix) {
+		std::string filename = _prefix + std::to_string(count) + ".smt2";
 		std::ofstream ofs(filename, std::ofstream::out);
 		ofs << "(set-logic QF_LRA)\n" << "(set-info :smt-lib-version 2.0)\n";
 		ofs << ((smtrat::FormulaT)solver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;

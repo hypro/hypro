@@ -97,7 +97,7 @@ namespace hypro {
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
-		// std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 
 		#ifdef USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -126,11 +126,13 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		// std::cout << "(push)" << std::endl;
-		// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		std::cout << "(push)" << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
+
+		std::cout << "Done checking." << std::endl;
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
