@@ -177,7 +177,7 @@ Halfspace<Number> Halfspace<Number>::linearTransformation( const matrix_t<Number
 		return Halfspace<Number>(mNormal.transpose()*A.inverse(), newOffset + mScalar);
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
-
+		assert(false);
 		//TODO
 		return Halfspace<Number>();
 	}
@@ -271,7 +271,7 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 	Number eps = std::numeric_limits<Number>::epsilon();
 	std::size_t iterationCount = 0;
 	while (!belowIndices.empty()){
-		std::cout << "\r" << iterationCount << " Is below, ";
+		//std::cout << "\r" << iterationCount << " Is below, ";
 		// enlarge as long as point lies below one of the planes.
 		if(eps < threshold) {
 			eps = eps*2;
@@ -282,7 +282,7 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 		for(std::size_t index = 0; index < _planes.size(); ++index){
 			A.row(index) = _planes.at(index).normal().transpose();
 			//if(belowIndices.front() == index) {
-				std::cout << "Shift plane  + " << eps << ", dist: ";
+				//std::cout << "Shift plane  + " << eps << ", dist: ";
 				b(index) = _planes.at(index).offset() + eps;
 			//	belowIndices.erase(belowIndices.begin());
 			//} else {
@@ -296,11 +296,11 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 		for(std::size_t i = 0; i < _planes.size(); ++i){
 			Number dist = _planes.at(i).offset() - _planes.at(i).normal().dot(tmp);
 			if(dist > 0) {
-				std::cout << dist << " ";
+				//std::cout << dist << " ";
 				belowIndices.push_back(i);
 			}
 		}
-		std::cout << std::flush;
+		//std::cout << std::flush;
 		++iterationCount;
 		if(belowIndices.empty()) {
 			res = tmp;
