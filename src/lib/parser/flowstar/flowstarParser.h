@@ -105,35 +105,35 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 
 	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number>>& _states) {
 		if(_constraint.size() > 0) {
-			std::cout << "Add continuous state for location " << id << std::endl;
+			//std::cout << "Add continuous state for location " << id << std::endl;
 			bool found = false;
 			for(auto& state : _states) {
 				if(state.location->id() == id){
-					std::cout << "State already exists." << std::endl;
+					//std::cout << "State already exists." << std::endl;
 					found = true;
 					assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 					unsigned constraintsNum = boost::get<cPair<Number>>(state.set).first.rows();
 					unsigned dimension = constraintsNum > 0 ? boost::get<cPair<Number>>(state.set).first.cols() : (_constraint.begin()->cols())-1;
-					std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+					//std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
 					cPair<Number> set = boost::get<cPair<Number>>(state.set);
-					std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
+					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
 					set.first.conservativeResize(constraintsNum+_constraint.size(), dimension);
 					set.second.conservativeResize(constraintsNum+_constraint.size());
-					std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
+					//std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
 					for(const auto& row : _constraint) {
 						assert(row.rows() == 1);
 						assert(row.cols() > 0);
-						std::cout << "add row " << constraintsNum;
-						std::cout << "row properties: " << row.rows() << " , " << row.cols() << std::endl;
-						std::cout << "set properties: " << set.first.rows() << " , " << set.first.cols() << std::endl;
+						//std::cout << "add row " << constraintsNum;
+						//std::cout << "row properties: " << row.rows() << " , " << row.cols() << std::endl;
+						//std::cout << "set properties: " << set.first.rows() << " , " << set.first.cols() << std::endl;
 						set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
-						std::cout << " " << convert<Number,double>(set.first.row(constraintsNum)) << " <= ";
+						//std::cout << " " << convert<Number,double>(set.first.row(constraintsNum)) << " <= ";
 						set.second(constraintsNum) = -row(0,row.cols()-1);
-						std::cout << set.second(constraintsNum) << std::endl;
+						//std::cout << set.second(constraintsNum) << std::endl;
 						++constraintsNum;
 					}
 					state.set = set;
-					std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+					//std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
 				}
 			}
 			if(!found){
@@ -143,10 +143,10 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
 				set.second = vector_t<Number>(_constraint.size());
 				unsigned constraintsNum = 0;
-				std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
+				//std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
 				for(const auto& row : _constraint) {
 					assert(row.rows() == 1);
-					std::cout << "add row " << constraintsNum;
+					//std::cout << "add row " << constraintsNum;
 					set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
 					//std::cout << " " << set.first.row(constraintsNum) << " <= ";
 					set.second(constraintsNum) = -row(0,row.cols()-1);

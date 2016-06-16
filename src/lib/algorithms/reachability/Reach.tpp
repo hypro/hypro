@@ -207,6 +207,7 @@ namespace reachability {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
+					//std::cout << "Current Segment = " << currentSegment << std::endl;
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
 					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(0, mSettings.timeBound));
 					bool fireTimeTriggeredTransition = false;
@@ -217,7 +218,7 @@ namespace reachability {
 							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
 							#endif
 							if(currentState.timestamp.contains(transition->triggerTime())){
-								//std::cout << "Time trigger enabled" << std::endl;
+								std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
 									// only insert new Sets into working queue, when the current level allows it.
 									if(mCurrentLevel != mSettings.jumpDepth){
@@ -231,7 +232,7 @@ namespace reachability {
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
-							//std::cout << "hybrid transition enabled" << std::endl;
+							std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
@@ -435,6 +436,7 @@ namespace reachability {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
 		//std::cout << "check transition " << *_trans << std::endl;
+		//std::cout << "Staet set before guard: " << boost::get<Representation>(_state.set) << std::endl;
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
@@ -509,11 +511,13 @@ namespace reachability {
 		}
 
 		// check for continuous set guard intersection
+		//std::cout << "Staet set before guard: " << boost::get<Representation>(_state.set) << std::endl;
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
+			std::cout << "Apply reset on " << guardSatisfyingSet.second << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
@@ -738,9 +742,14 @@ namespace reachability {
 #endif
 			firstSegment.removeRedundancy();
 
+			//std::cout << "First segment after removing redundancy: " << firstSegment << std::endl;
+
+			//std::cout << "Invariant of the current location: " << _state.location->invariant().mat <<  _state.location->invariant().vec << std::endl;
+
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
+			//std::cout << "Full final first segment: " << fullSegment << std::endl;
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
