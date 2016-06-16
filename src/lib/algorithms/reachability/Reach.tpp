@@ -57,6 +57,7 @@ namespace reachability {
                          */
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
 		}
+		std::cout << "Finished at depth " << mCurrentLevel << std::endl;
 
 		return collectedReachableStates;
 	}
@@ -218,7 +219,7 @@ namespace reachability {
 							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
 							#endif
 							if(currentState.timestamp.contains(transition->triggerTime())){
-								std::cout << "Time trigger enabled" << std::endl;
+								//std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
 									// only insert new Sets into working queue, when the current level allows it.
 									if(mCurrentLevel != mSettings.jumpDepth){
@@ -232,7 +233,7 @@ namespace reachability {
 						} // handle normal transitions
 						else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
-							std::cout << "hybrid transition enabled" << std::endl;
+							//std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
@@ -435,7 +436,9 @@ namespace reachability {
 							   State<Number>& result ) {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
-		//std::cout << "check transition " << *_trans << std::endl;
+#ifdef REACH_DEBUG
+		std::cout << "check transition " << *_trans << std::endl;
+#endif
 		//std::cout << "Staet set before guard: " << boost::get<Representation>(_state.set) << std::endl;
 
 		// check discrete guard intersection.
@@ -480,6 +483,28 @@ namespace reachability {
 				return false;
 			}
 		}
+#ifdef REACH_DEBUG
+		std::cout << "discrete guard satisfied." << std::endl;
+#endif
+		// apply discrete reset.
+		assert(_trans->reset().discreteMat.rows() == _trans->reset().discreteVec.rows());
+		std::map<carl::Variable, carl::Interval<Number>> tmpAssignment = result.discreteAssignment;
+		for(unsigned rowIndex = 0; rowIndex < _trans->reset().discreteMat.rows(); ++rowIndex) {
+			carl::Interval<Number> assignment(0);
+			unsigned dOffset = _trans->reset().discreteOffset;
+			for(unsigned colIndex = 0; colIndex < _trans->reset().discreteMat.cols(); ++colIndex){
+				assignment += _trans->reset().discreteMat(rowIndex, colIndex) * tmpAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+			}
+			carl::Interval<Number> constPart(_trans->reset().discreteVec(rowIndex));
+			assignment += constPart;
+			result.discreteAssignment[VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset)] = assignment;
+#ifdef REACH_DEBUG
+			std::cout << "Reset applied to Variable " << VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset) << " -> " << assignment <<std::endl;
+#endif
+		}
+#ifdef REACH_DEBUG
+		std::cout << "Verifying discrete invariant." << std::endl;
+#endif
 		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
 		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
 			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
@@ -506,6 +531,9 @@ namespace reachability {
 			}
 
 			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
+#ifdef REACH_DEBUG
+				std::cout << "Discrete Invariant after reset is invalid." << std::endl;
+#endif
 				return false;
 			}
 		}
