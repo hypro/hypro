@@ -172,7 +172,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::ine
 
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() const {
-	#ifdef DEBUG_MSG
+	#ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << " " << *this << std::endl;
 	#endif
 	typename std::vector<Point<Number>> vertices;
@@ -204,13 +204,13 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			if ( lu_decomp.rank() < A.rows() ) {
 				continue;
 			}
-			#ifdef DEBUG_MSG
+			#ifdef HPOLY_DEBUG_MSG
 			std::cout << convert<Number,double>(A) << std::endl;
 			std::cout << convert<Number,double>(b) << std::endl;
 			#endif
 
 			vector_t<Number> res = lu_decomp.solve( b );
-			#ifdef DEBUG_MSG
+			#ifdef HPOLY_DEBUG_MSG
 			std::cout << "Vertex: " << convert<Number,double>(res).transpose() << std::endl;
 			#endif
 
@@ -228,7 +228,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 
 				if(!skip) {
 					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-						#ifdef DEBUG_MSG
+						#ifdef HPOLY_DEBUG_MSG
 						std::cout << "Drop vertex: " << convert<Number,double>(res).transpose() << " because of plane " << planePos << std::endl;
 						#endif
 						outside = true;
@@ -243,7 +243,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 					vertices.push_back(tmp);
 				}
 
-				#ifdef DEBUG_MSG
+				#ifdef HPOLY_DEBUG_MSG
 				std::cout << "Final vertex: " << convert<Number,double>(res).transpose() << std::endl;
 				#endif
 			}
@@ -386,6 +386,7 @@ void HPolytopeT<Number, Converter>::removeRedundancy() {
 		opt.setVector(this->vector());
 
 		std::vector<std::size_t> redundant = Optimizer<Number>::getInstance().redundantConstraints();
+		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
@@ -571,7 +572,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row( i ), _vec( i ) ) );
 	}
+	//std::cout << "After intersection: " << res << std::endl;
 	res.removeRedundancy();
+	//std::cout << "After removing redundancy: " << res << std::endl;
 	return res;
 }
 
@@ -683,13 +686,13 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 
 	// normal reduction
 	for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
-		#ifdef DEBUG_MSG
+		#ifdef HPOLY_DEBUG_MSG
 		std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
 		#endif
 		// find maximal value
 		Number largest = 0;
 		mHPlanes.at(planeIndex).makeInteger();
-		#ifdef DEBUG_MSG
+		#ifdef HPOLY_DEBUG_MSG
 		std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
 		#endif
 		largest = carl::abs(mHPlanes.at(planeIndex).offset());
@@ -701,7 +704,7 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 
 		// reduce, if reduction is required
 		if(largest > (limit*limit)) {
-			#ifdef DEBUG_MSG
+			#ifdef HPOLY_DEBUG_MSG
 			std::cout << "Actual reduction" << std::endl;
 			#endif
 			vector_t<Number> newNormal(mDimension);
@@ -722,16 +725,16 @@ void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) c
 				}
 			}
 			newOffset = carl::ceil(newOffset);
-			#ifdef DEBUG_MSG
+			#ifdef HPOLY_DEBUG_MSG
 			std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
 			#endif
 			mHPlanes.at(planeIndex).setOffset(newOffset);
 		}
-		#ifdef DEBUG_MSG
+		#ifdef HPOLY_DEBUG_MSG
 		std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
 		#endif
 	}
-	#ifdef DEBUG_MSG
+	#ifdef HPOLY_DEBUG_MSG
 	std::cout << "After Reduction: " << *this << std::endl;
 	#endif
 	#endif
