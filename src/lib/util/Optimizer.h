@@ -4,9 +4,10 @@
 #include "smtrat/SimplexSolver.h"
 #include <carl/util/Singleton.h>
 
-//#define USE_PRESOLUTION
+#define USE_PRESOLUTION
 #define RECREATE_SOLVER
 #define VERIFY_RESULT
+//#define DEBUG_MSG
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>

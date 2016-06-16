@@ -97,7 +97,7 @@ namespace hypro {
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
-		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+		//std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 
 		#ifdef USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -126,13 +126,13 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		std::cout << "(push)" << std::endl;
-		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		//std::cout << "(push)" << std::endl;
+		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 
 		smtrat::Answer smtratCheck = simplex.check();
 
-		std::cout << "Done checking." << std::endl;
+		//std::cout << "Done checking." << std::endl;
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
@@ -475,6 +475,9 @@ namespace hypro {
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		#endif
 		switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
 					return res;
@@ -490,31 +493,47 @@ namespace hypro {
 		}
 
 		std::size_t count = 0;
-		//std::cout << "Original Formula: " << std::endl;
-		//simplex.printAssertions();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original Formula: " << std::endl;
+		simplex.printAssertions();
+		#endif
 
 		std::size_t formulaSize = simplex.formula().size();
 		for(auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
-			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
-			formulaIt = simplex.remove(formulaIt);
+			#ifdef DEBUG_MSG
+			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			#endif
+			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::turnAroundRelation( (*formulaIt).formula().constraint().relation() ) );
+			unsigned currentFormulaSize = simplex.formula().size();
 			simplex.inform(negatedConstraint);
 			simplex.add(negatedConstraint, false);
 
-			//std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+			if(simplex.formula().size() > currentFormulaSize) {
+				formulaIt = simplex.remove(formulaIt);
+				#ifdef DEBUG_MSG
+				std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
+				#endif
 
-			smtrat::Answer isRedundant = simplex.check();
-			assert(isRedundant != smtrat::Answer::UNKNOWN);
-			if(isRedundant == smtrat::Answer::UNSAT){
-				assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
-				assert(unsigned(formulaMapping.at(originalConstraint)) < mConstraintMatrix.rows());
-				res.push_back(formulaMapping.at(originalConstraint));
+				smtrat::Answer isRedundant = simplex.check();
+				assert(isRedundant != smtrat::Answer::UNKNOWN);
+				if(isRedundant == smtrat::Answer::UNSAT){
+					#ifdef DEBUG_MSG
+					std::cout << __func__ << " is redundant." << std::endl;
+					#endif
+					assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
+					assert(unsigned(formulaMapping.at(originalConstraint)) < mConstraintMatrix.rows());
+					res.push_back(formulaMapping.at(originalConstraint));
+				}
+
+				assert(*(--(simplex.formula().end())) == negatedConstraint);
+				simplex.remove(--(simplex.formulaEnd()));
+				simplex.deinform(negatedConstraint);
+				simplex.add(originalConstraint, false);
+			}else{
+				formulaIt++;
 			}
 
-			assert(*(--(simplex.formula().end())) == negatedConstraint);
-			simplex.remove(--(simplex.formulaEnd()));
-			simplex.deinform(negatedConstraint);
-			simplex.add(originalConstraint, false);
 		}
 
 		#else // RECREATE_SOLVER
