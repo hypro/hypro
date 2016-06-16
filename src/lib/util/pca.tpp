@@ -45,7 +45,13 @@ std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number
 	    }
 
 	    //computes the sample covariance matrix (represents the distribution of the samples)
-	    matrix_t<Number> covMatrix = ( ((Number) 1)/(sSize-1))*sMatrix*sMatrix.transpose();
+	    matrix_t<Number> covMatrix;
+		if(sSize > 1) {
+			covMatrix = ( ((Number) 1)/(sSize-1))*sMatrix*sMatrix.transpose();
+		} else {
+			covMatrix = sMatrix*sMatrix.transpose();
+		}
+
 
 	    //conversion from the covariance matrix to double in order for JacobiSVD to work
 	    Eigen::MatrixXd doubleCovMatrix = convert<Number,double>(covMatrix);
