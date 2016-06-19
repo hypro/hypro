@@ -108,7 +108,7 @@ bool HPolytopeT<Number, Converter>::empty() const {
 
 	//std::cout << __func__ << ": CALL TO Optimizer" << std::endl;
 
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	Optimizer<Number> opt;
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
@@ -381,11 +381,11 @@ bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hpla
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::removeRedundancy() {
 	if(!mNonRedundant && mHPlanes.size() > 1){
-		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
-		std::vector<std::size_t> redundant = Optimizer<Number>::getInstance().redundantConstraints();
+		std::vector<std::size_t> redundant = opt.redundantConstraints();
 		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
 		if(!redundant.empty()){
@@ -436,7 +436,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 
 	//std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
 
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	Optimizer<Number> opt;
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
@@ -653,7 +653,7 @@ void HPolytopeT<Number, Converter>::clear() {
 
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::print() const {
-	std::cout << *this << std::endl;
+	//std::cout << *this << std::endl;
 }
 
 /*

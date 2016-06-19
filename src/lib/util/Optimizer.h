@@ -6,7 +6,7 @@
 
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
-#define VERIFY_RESULT
+//#define VERIFY_RESULT
 //#define DEBUG_MSG
 
 #ifdef VERIFY_RESULT
@@ -16,10 +16,8 @@
 namespace hypro {
 
 	template<typename Number>
-	class Optimizer : public carl::Singleton<Optimizer<Number>> {
+	class Optimizer {
 		using Poly = carl::MultivariatePolynomial<Number>;
-
-		friend carl::Singleton<Optimizer<Number>>;
 
 	private:
 		matrix_t<Number>	mConstraintMatrix;
@@ -46,7 +44,7 @@ namespace hypro {
 		mutable int* ja;
 		mutable double* ar;
 
-	protected:
+	public:
 
 		Optimizer() :
 			mConstraintMatrix(),

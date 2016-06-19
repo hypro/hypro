@@ -306,7 +306,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _vec.rows() << ",1" << std::endl;
 	constraints.block(2*this->dimension(),0,_mat.rows(), _mat.cols()) = _mat;
 	constants.block(2*this->dimension(),0, _vec.rows(),1) = _vec;
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	Optimizer<Number> opt;
 	opt.setMatrix(constraints);
 	opt.setVector(constants);
 
