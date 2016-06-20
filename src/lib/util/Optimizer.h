@@ -6,7 +6,7 @@
 
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
-#define VERIFY_RESULT
+//#define VERIFY_RESULT
 //#define DEBUG_MSG
 
 #ifdef VERIFY_RESULT

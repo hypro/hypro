@@ -53,6 +53,10 @@ namespace hypro {
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 		EvaluationResult<Number> res;
 
+#ifdef DEBUG_MSG
+		std::cout << __func__ << ": in direction " << _direction << std::endl;
+#endif
+
 		if( mConstraintMatrix.rows() == 0 ) {
 			res.supportValue = 0;
 			res.errorCode = SOLUTION::INFTY;
@@ -97,7 +101,9 @@ namespace hypro {
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
-		//std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+#ifdef DEBUG_MSG
+		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+#endif
 
 		#ifdef USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -126,13 +132,17 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		//std::cout << "(push)" << std::endl;
-		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		#ifdef DEBUG_MSG
+		std::cout << "(push)" << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		#endif
 
 		smtrat::Answer smtratCheck = simplex.check();
 
-		//std::cout << "Done checking." << std::endl;
+		#ifdef DEBUG_MSG
+		std::cout << "Done checking." << std::endl;
+		#endif
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
