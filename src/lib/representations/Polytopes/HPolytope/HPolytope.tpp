@@ -39,6 +39,9 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+#ifdef HPOLY_DEBUG_MSG
+	std::cout << __func__ << "Construct from vertices." << std::endl;
+#endif
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
 		// check affine independence - verify object dimension.
@@ -262,6 +265,9 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
+#ifdef HPOLY_DEBUG_MSG
+	std::cout << __func__ << ": " << max << std::endl;
+#endif
 	return max;
 }
 
@@ -475,7 +481,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			//std::cout << "Matrix: " << inequalities.first*A.inverse() << std::endl << "Vector: " << ((inequalities.first*A.inverse()*b) + (inequalities.second)) << std::endl;
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
-			//std::cout << "Use V-Conversion for linear transformation." << std::endl;
+#ifdef HPOLY_DEBUG_MSG
+			std::cout << "Use V-Conversion for linear transformation." << std::endl;
+#endif
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
@@ -491,7 +499,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
-	//std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+#ifdef HPOLY_DEBUG_MSG
+	std::cout << __func__ << " of " << *this << " and " << rhs << std::endl;
+#endif
 
 	// evaluation of rhs in directions of lhs
 	//std::cout << "evaluation of rhs in directions of lhs" << std::endl;
@@ -533,7 +543,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 			// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 		}
 	}
-	// std::cout << "Result: " << res << std::endl;
+#ifdef HPOLY_DEBUG_MSG
+	std::cout << "Result: " << res << std::endl;
+#endif
 	return res;
 }
 
@@ -682,6 +694,9 @@ typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Conve
 template<typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
 	#ifdef REDUCE_NUMBERS
+	#ifdef HPOLY_DEBUG_MSG
+	std::cout << "Attempt to reduce numbers." << std::endl;
+	#endif
 	std::vector<Point<Number>> originalVertices = this->vertices();
 
 	// normal reduction
