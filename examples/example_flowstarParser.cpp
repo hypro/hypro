@@ -13,20 +13,40 @@
 
 
 template<typename Number, typename Representation>
-static void computeReachableStates(const std::string& filename) {
+static void computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
+	std::cout << "Filename: " << filename << std::endl;
 	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
 	hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
+	std::cout << boost::get<1>(ha) << std::endl;
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes = reacher.computeForwardReachability();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	plotter.setFilename(boost::get<0>(ha).reachabilitySettings().fileName);
+	std::string extendedFilename = boost::get<0>(ha).reachabilitySettings().fileName;
+	switch (type) {
+		case hypro::representation_name::support_function:{
+			extendedFilename += "_supportFunction";
+			break;
+		}
+		case hypro::representation_name::polytope_h:{
+			extendedFilename += "_hpoly";
+			break;
+		}
+		case hypro::representation_name::box:{
+			extendedFilename += "_box";
+			break;
+		}
+		default:
+			extendedFilename += "_unknownRep";
+	}
+	std::cout << "filename is " << extendedFilename << std::endl;
+	plotter.setFilename(extendedFilename);
 	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
@@ -48,8 +68,8 @@ static void computeReachableStates(const std::string& filename) {
 	}
 
 	plotter.plot2d();
-	plotter.plotTex();
 	plotter.plotGen();
+	plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 }
@@ -104,25 +124,25 @@ int main(int argc, char** argv) {
 		case 3: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename);
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
 		case 2: {
 			using Representation = hypro::HPolytope <Number>;
 			std::cout << "Using a h-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename);
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
 			break;
 		}
 		case 1: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename);
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 			break;
 		}
 		default:{
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename);
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 		}
 	}
 
