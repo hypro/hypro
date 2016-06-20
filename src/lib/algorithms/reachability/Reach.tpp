@@ -111,6 +111,9 @@ namespace reachability {
 				}
 			}
 			if(locallyUrgent){
+#ifdef REACH_DEBUG
+				std::cout << "The location is urgent, skip flowpipe computation." << std::endl;
+#endif
 				processDiscreteBehaviour(nextInitialSets);
 				return flowpipe;
 			}
@@ -202,7 +205,7 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
@@ -347,6 +350,10 @@ namespace reachability {
 		std::map<Transition<Number>*, std::vector<State<Number>>> toAggregate;
 		VariablePool& vpool = VariablePool::getInstance();
 
+#ifdef REACH_DEBUG
+		std::cout << __func__ << " processing potential initial sets." << std::endl;
+#endif
+
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
@@ -406,7 +413,9 @@ namespace reachability {
 			s.location = aggregationPair.first->target();
 			s.set = Representation(collectedVertices);
 			s.timestamp = aggregatedTimestamp;
-			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+#ifdef REACH_DEBUG
+			std::cout << __func__ << ": Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+#endif
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
 
 			// handle discrete reset assignment
@@ -437,9 +446,10 @@ namespace reachability {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
 #ifdef REACH_DEBUG
-		std::cout << "check transition " << *_trans << std::endl;
+		std::cout << __func__ << " for transition " << *_trans << std::endl;
+		std::cout << __func__ << " Verify discrete guard ... ";
 #endif
-		//std::cout << "Staet set before guard: " << boost::get<Representation>(_state.set) << std::endl;
+		//std::cout << "State set before guard: " << boost::get<Representation>(_state.set) << std::endl;
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
@@ -478,13 +488,14 @@ namespace reachability {
 			}
 			if(result.discreteAssignment[guardPair.first].isEmpty()){
 				#ifdef REACH_DEBUG
-				std::cout << "Valuation violates discrete guard." << std::endl;
+				std::cout << "violated, transition DISABLED." << std::endl;
 				#endif
 				return false;
 			}
 		}
 #ifdef REACH_DEBUG
-		std::cout << "discrete guard satisfied." << std::endl;
+		std::cout << "satisfied." << std::endl;
+		std::cout << "Apply discrete reset." << std::endl;
 #endif
 		// apply discrete reset.
 		assert(_trans->reset().discreteMat.rows() == _trans->reset().discreteVec.rows());
@@ -503,14 +514,13 @@ namespace reachability {
 #endif
 		}
 #ifdef REACH_DEBUG
-		std::cout << "Verifying discrete invariant." << std::endl;
+		std::cout << "Verifying discrete invariant ... ";
 #endif
 		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
 		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
 			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
 			carl::Interval<Number> substitution(0);
 			unsigned dOffset = _trans->target()->invariant().discreteOffset;
-			//std::cout << "Guard row: " << guardPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
 			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-dOffset) {
@@ -532,31 +542,51 @@ namespace reachability {
 
 			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
 #ifdef REACH_DEBUG
-				std::cout << "Discrete Invariant after reset is invalid." << std::endl;
+				std::cout << "invalid after reset. Transition DISABLED." << std::endl;
 #endif
 				return false;
 			}
 		}
+#ifdef REACH_DEBUG
+		std::cout << "satisfied." << std::endl;
+#endif
 
 		// check for continuous set guard intersection
-		//std::cout << "Staet set before guard: " << boost::get<Representation>(_state.set) << std::endl;
+#ifdef REACH_DEBUG
+		std::cout << "Checking continuous set: " << boost::get<Representation>(_state.set) << std::endl;
+#endif
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 		// check if the intersection is empty
+#ifdef REACH_DEBUG
+		std::cout << "Verifying guard ... ";
+#endif
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			std::cout << "Transition enabled!" << std::endl;
+			std::cout << "satisfied, transition ENABLED." << std::endl;
 			std::cout << "Apply reset on " << guardSatisfyingSet.second << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 			Representation tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+#ifdef REACH_DEBUG
+			std::cout << "Verify constant invariant ... ";
+#endif
 			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 			if(invariantSatisfyingSet.first){
+#ifdef REACH_DEBUG
+				std::cout << "satisfied, transition ENABLED." << std::endl;
+#endif
 				result.set = invariantSatisfyingSet.second;
 				return true;
 			}
+#ifdef REACH_DEBUG
+			std::cout << "invalid, transition DISABLED." << std::endl;
+#endif
 			return false;
 		} else {
+#ifdef REACH_DEBUG
+			std::cout << "invalid, transition DISABLED." << std::endl;
+#endif
 			return false;
 		}
 	}
