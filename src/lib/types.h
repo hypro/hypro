@@ -7,9 +7,10 @@
 #include <set>
 #include <iostream>
 
-#include <carl/numbers/FLOAT_T.h>
+#include <carl/numbers/numbers.h>
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
+#include <carl/util/hash.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 
@@ -58,6 +59,26 @@ namespace Eigen {
         static inline carl::FLOAT_T<Number> highest() { return carl::FLOAT_T<Number>::maxVal(); }
         static inline carl::FLOAT_T<Number> lowest() { return carl::FLOAT_T<Number>::minVal(); }
     };
+
+    template<>
+    struct NumTraits<mpq_class> {
+        enum {
+            IsComplex = 0,
+            IsInteger = 0,
+            ReadCost = 1,
+            AddCost = 1,
+            MulCost = 10,
+            IsSigned = 1,
+            RequireInitialization = 1
+        };
+
+        using Real = mpq_class;
+        using NonInteger = mpq_class;
+        using Nested = mpq_class;
+
+        static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
+    };
+
 }
 
 // Hash function for Eigen matrix and vector.
@@ -70,13 +91,13 @@ namespace std {
 
             size_t seed = 0;
 
-            carl::hash_combine(seed, in.rows());
-            carl::hash_combine(seed, in.cols());
+            carl::hash_add(seed, in.rows());
+            carl::hash_add(seed, in.cols());
 
             for (unsigned int i = 0; i < in.size(); ++i) {
                 auto elem = *(in.data());
 
-                carl::hash_combine(seed, elem);
+                carl::hash_add(seed, elem);
             }
             return seed;
         }
@@ -88,14 +109,17 @@ namespace std {
 
             size_t seed = 0;
 
-            carl::hash_combine(seed, in.rows());
+            carl::hash_add(seed, in.rows());
 
             for (unsigned int i = 0; i < in.size(); ++i) {
                 auto elem = *(in.data());
 
-                carl::hash_combine(seed, elem);
+                carl::hash_add(seed, elem);
             }
             return seed;
         }
     };
 }
+
+
+#include "util/adaptions_eigen.h"
