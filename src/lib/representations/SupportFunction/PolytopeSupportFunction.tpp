@@ -114,7 +114,7 @@ template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
 	if(mConstraints.rows() > 0) {
-		Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+		Optimizer<Number> opt;
 		opt.setMatrix(mConstraints);
 		opt.setVector(mConstraintConstants);
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
