@@ -293,6 +293,23 @@ TYPED_TEST(BoxTest, MinkowskiSum)
 
 }
 
+TYPED_TEST(BoxTest, MinkowskiDecomposition)
+{
+	hypro::Box<TypeParam> result;
+	result = this->box2.minkowskiDecomposition(this->box1);
+	EXPECT_EQ(-3 , result.interval(0).lower());
+	EXPECT_EQ(0 , result.interval(0).upper());
+	EXPECT_EQ(3 , result.interval(1).lower());
+	EXPECT_EQ(4 , result.interval(1).upper());
+
+	result = this->box2.minkowskiDecomposition(this->box2);
+	EXPECT_EQ(0 , result.interval(0).lower());
+	EXPECT_EQ(0 , result.interval(0).upper());
+	EXPECT_EQ(0 , result.interval(1).lower());
+	EXPECT_EQ(0 , result.interval(1).upper());
+
+}
+
 TYPED_TEST(BoxTest, Intersection)
 {
     hypro::Box<TypeParam> result;

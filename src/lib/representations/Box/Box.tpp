@@ -369,8 +369,15 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiSum( const BoxT<Number,Converter> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-
 	return BoxT<Number,Converter>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const {
+	assert( dimension() == rhs.dimension() );
+	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
+	// assert( (BoxT<Number,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
+	return BoxT<Number,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max()));
 }
 
 template<typename Number, typename Converter>
