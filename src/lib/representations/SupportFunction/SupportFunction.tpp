@@ -165,8 +165,9 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     Number SupportFunctionT<Number,Converter>::supremum() const {
-		//std::cout << __func__ << std::endl;
+		std::cout << __func__ << std::endl;
         auto tmp = Converter::toHPolytope(*this);
+		std::cout << __func__ << ": Created HPoly" << std::endl;
         return tmp.supremum(); // TODO: Temporary!
     }
 
@@ -256,7 +257,7 @@ namespace hypro{
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
         		// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-        		std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+        		//std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
 	            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
 	               // std::cout << "fullyOutside" << std::endl;
 	                // the object lies fully outside one of the planes -> return false

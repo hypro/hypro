@@ -38,17 +38,22 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 
 template<typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
+	//std::cout << __func__ << std::endl;
 	if ( !_points.empty() ) {
+		//std::cout << "Points not empty" << std::endl;
 		mDimension = _points.begin()->dimension();
+		//std::cout << "Space dimension is " << mDimension << std::endl;
 		// check affine independence - verify object dimension.
 		std::vector<vector_t<Number>> coordinates;
 		for(const auto& vertex : _points){
 			coordinates.emplace_back(vertex.rawCoordinates());
 		}
 		int effectiveDim = effectiveDimension(coordinates);
+		//std::cout << "Effective dimension of the pointset: " << effectiveDim << std::endl;
 		assert(effectiveDim >= 0);
 
 		if ( unsigned(effectiveDim) < mDimension ) {
+			//std::cout << "Compute oriented box." << std::endl;
 			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(_points);
 
 			mConstraints = matrix_t<Number>(boxConstraints.size(), mDimension);
@@ -61,10 +66,15 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 				++rowCnt;
 			}
 		} else {
+			//std::cout << "Use convex hull algorithm." << std::endl;
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( _points ).first;
+
+			mConstraints = matrix_t<Number>(facets.size(), mDimension);
+			mConstraintConstants = vector_t<Number>(facets.size());
+
 			unsigned rowCnt = 0;
 			for ( auto &facet : facets ) {
-				assert(facet->halfspace().contains(points));
+				assert(facet->halfspace().contains(_points));
 				mConstraints.row(rowCnt) = facet->halfspace().normal();
 				mConstraintConstants(rowCnt) = facet->halfspace().offset();
 				++rowCnt;
@@ -136,7 +146,7 @@ template <typename Number>
 std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
-	std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
+	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
