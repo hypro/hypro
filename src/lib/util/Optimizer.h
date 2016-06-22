@@ -1,13 +1,13 @@
 #pragma once
 
-#include "EvaluationResult.h"
-#include "smtrat/SimplexSolver.h"
-#include <carl/util/Singleton.h>
-
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
+
+#include "EvaluationResult.h"
+#include "smtrat/SimplexSolver.h"
+#include <carl/util/Singleton.h>
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
