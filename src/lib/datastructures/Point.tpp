@@ -498,6 +498,11 @@ Point<Number> &Point<Number>::operator-=( const vector_t<Number> &_rhs ) {
 	return *this;
 }
 
+template<typename Number>
+Point<Number> Point<Number>::operator-() const {
+    return Point<Number>(-mCoordinates);
+}
+
 template <typename Number>
 Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {

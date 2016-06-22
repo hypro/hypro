@@ -310,6 +310,23 @@ TYPED_TEST(BoxTest, MinkowskiDecomposition)
 
 }
 
+TYPED_TEST(BoxTest, makeSymmetric)
+{
+	hypro::Box<TypeParam> result;
+	result = this->box1.makeSymmetric();
+	EXPECT_EQ(-6 , result.interval(0).lower());
+	EXPECT_EQ(6 , result.interval(0).upper());
+	EXPECT_EQ(-3 , result.interval(1).lower());
+	EXPECT_EQ(3 , result.interval(1).upper());
+
+	result = this->box2.makeSymmetric();
+	EXPECT_EQ(-6 , result.interval(0).lower());
+	EXPECT_EQ(6 , result.interval(0).upper());
+	EXPECT_EQ(-7 , result.interval(1).lower());
+	EXPECT_EQ(7 , result.interval(1).upper());
+
+}
+
 TYPED_TEST(BoxTest, Intersection)
 {
     hypro::Box<TypeParam> result;

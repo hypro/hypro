@@ -260,8 +260,17 @@ std::size_t BoxT<Number,Converter>::size() const {
 	if(this->empty()) {
 		return 0;
 	}
-
+	// TODO: What is this supposed to do???
 	return 2;
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
+	Point<Number> limit = mLimits.first;
+	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {
+		limit[d] = carl::abs(mLimits.first.at(d)) >= carl::abs(mLimits.second.at(d)) ? carl::abs(mLimits.first.at(d)) : carl::abs(mLimits.second.at(d));
+	}
+	return BoxT<Number,Converter>(std::make_pair(-limit, limit));
 }
 
 template<typename Number, typename Converter>

@@ -291,6 +291,7 @@ class BoxT {
 	void removeRedundancy() {}
 	std::size_t size() const;
 
+	BoxT<Number,Converter> makeSymmetric() const;
 	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
