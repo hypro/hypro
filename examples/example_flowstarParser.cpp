@@ -4,11 +4,7 @@
 
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
 #include "algorithms/reachability/Reach.h"
-#include "representations/GeometricObject.h"
 #include "parser/flowstar/ParserWrapper.h"
-#include "util/Plotter.h"
-#include <chrono>
-#include <string>
 //#include <boost/program_options.hpp>
 
 
