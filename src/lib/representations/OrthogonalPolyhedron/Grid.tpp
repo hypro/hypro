@@ -66,7 +66,7 @@ std::vector<Vertex<Number>> Grid<Number>::vertices() const {
 		// std::cout << "Calculated vertex " << calculateOriginal(point.point()) <<
 		// " from " << point.point() <<
 		// std::endl;
-		if ( point.point() != Point<unsigned>::zero( point.point().dimension() ) ) {  // do not add origin
+		if ( point.point() != Point<unsigned>::Zero( point.point().dimension() ) ) {  // do not add origin
 			res.emplace_back( calculateOriginal( point.point() ), point.color() );
 		}
 	}
@@ -415,7 +415,7 @@ bool Grid<Number>::isOnIFacet( const Point<Number> &_point, unsigned i ) const {
 	// << ") : ";
 
 	// special case: origin is never on a facet
-	if ( inducedPoint == Point<unsigned>::zero( inducedPoint.dimension() ) ) {
+	if ( inducedPoint == Point<unsigned>::Zero( inducedPoint.dimension() ) ) {
 		// std::cout << "false" << std::endl;
 		return false;
 	}
@@ -511,7 +511,7 @@ Grid<Number> Grid<Number>::combine( const Grid<Number> &a, const Grid<Number> &b
 	}
 
 	// insert origin
-	res.insertInduced( Point<unsigned>::zero( a.dimension() ), false );
+	res.insertInduced( Point<unsigned>::Zero( a.dimension() ), false );
 
 	return ( res );
 }
@@ -562,9 +562,9 @@ void Grid<Number>::induceGrid( const vSet<Number> &vertices ) {
 	}
 
 	// set color of origin manually (always white)
-	// this->insertInduced(Point<unsigned>::zero(mInducedGridPoints.size()),
+	// this->insertInduced(Point<unsigned>::Zero(mInducedGridPoints.size()),
 	// false);
-	mGridMap.insert( std::make_pair( Point<unsigned>::zero( mInducedGridPoints.size() ),
+	mGridMap.insert( std::make_pair( Point<unsigned>::Zero( mInducedGridPoints.size() ),
 									 false ) );  // insert only in gridmap to not affect the size
 
 	// set up datastructures for colors of vertices and vertices
