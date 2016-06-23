@@ -262,6 +262,8 @@ class BoxT {
 	 */
 	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
 
+	BoxT<Number,Converter> operator*(const Number& factor) const { return BoxT<Number,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+
 	/**
 	 * @brief Outstream operator.
 	 *
