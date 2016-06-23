@@ -44,6 +44,13 @@ SF_TYPE BallSupportFunction<Number>::type() const {
 	return mType;
 }
 
+template<typename Number>
+Point<Number> BallSupportFunction<Number>::supremumPoint() const {
+	Point<Number> res(vector_t<Number>::Zero(this->dimension()));
+	res[0] = mRadius;
+	return res;
+}
+
 template <typename Number>
 EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;

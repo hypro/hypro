@@ -11,8 +11,9 @@
 
 #pragma once
 
-#include "../../config.h"
 #include "util.h"
+#include "../../config.h"
+#include "../../datastructures/Point.h"
 
 namespace hypro {
 template <typename Number>
@@ -35,6 +36,8 @@ class BallSupportFunction {
 
 	Number radius() const;
 	SF_TYPE type() const;
+
+	Point<Number> supremumPoint() const;
 
 	/**
 	 * Evaluates the support function in the given direction.

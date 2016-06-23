@@ -120,6 +120,105 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 	return mConstraintConstants;
 }
 
+template<typename Number>
+std::vector<Point<Number>> PolytopeSupportFunction<Number>::vertices() const {
+	typename std::vector<Point<Number>> vertices;
+	if(mConstraints.rows() != 0) {
+		unsigned dim = this->dimension();
+
+		Permutator permutator(mConstraints.rows(), dim);
+		std::vector<unsigned> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
+
+			matrix_t<Number> A( dim, dim );
+			vector_t<Number> b( dim );
+
+			// set up linear problem
+			unsigned pos = 0;
+			for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
+				A.row(pos) = mConstraints.row(*planeIt);
+				b(pos) = mConstraintConstants(*planeIt);
+				++pos;
+			}
+
+			// solve
+			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+			if ( lu_decomp.rank() < A.rows() ) {
+				continue;
+			}
+
+			vector_t<Number> res = lu_decomp.solve( b );
+
+			// Check if the computed vertex is a real vertex
+			bool outside = false;
+			for(unsigned planePos = 0; planePos < mConstraints.rows(); ++planePos) {
+				bool skip = false;
+				for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
+					// naturally the computed vertex satisfies the planes we used for its computation -> skip the plane
+					if(planePos == permutation.at(permPos)) {
+						skip = true;
+						break;
+					}
+				}
+
+				if(!skip) {
+					// verify if the vertex is outside the current plane
+					if( mConstraintConstants(planePos) - mConstraints.row(planePos).dot(res) < 0 ) {
+						outside = true;
+						break;
+					}
+				}
+			}
+			if(!outside) {
+				// insert, if no duplicate
+				Point<Number> tmp(res);
+				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end()) {
+					vertices.push_back(tmp);
+				}
+			}
+		}
+	}
+	return vertices;
+}
+
+template<typename Number>
+Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
+	assert(!this->empty());
+	EvaluationResult<Number> sup;
+	sup.errorCode = SOLUTION::UNKNOWN;
+
+	for(unsigned d = 0; d < mDimension; ++d){
+		// evaluate in each main direction, positive and negative
+		vector_t<Number> posDir = vector_t<Number>::Zero(mDimension);
+		posDir(d) = 1;
+		vector_t<Number> negDir = vector_t<Number>::Zero(mDimension);
+		negDir(d) = -1;
+
+		EvaluationResult<Number> positive = this->evaluate(posDir);
+		EvaluationResult<Number> negative = this->evaluate(negDir);
+		assert(positive.errocode != SOLUTION::UNKNOWN);
+		assert(negative.errocode != SOLUTION::UNKNOWN);
+
+		// empty object
+		if(positive.errorCode == SOLUTION::INFEAS) {
+			return Point<Number>::Zero(mDimension);
+		}
+
+		// init once
+		if(sup.errorCode == SOLUTION::UNKNOWN){
+			sup = positive;
+		}
+
+		if(positive.supportValue > negative.supportValue) {
+			sup = sup.supportValue > positive.supportValue ? sup : positive;
+		} else {
+			sup = sup.supportValue > negative.supportValue ? sup : negative;
+		}
+	}
+	return Point<Number>(sup.optimumValue);
+}
+
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
