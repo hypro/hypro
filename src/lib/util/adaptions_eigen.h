@@ -183,6 +183,15 @@ Number inftyNorm(const hypro::matrix_t<Number>& in) {
 	return norm;
 }
 
+template<typename Number>
+hypro::matrix_t<Number> abs(const hypro::matrix_t<Number>& in) {
+	hypro::matrix_t<Number> result = in;
+	for(size_t i = 1, size = result.size(); i < size; ++i) {
+		*(result.data()+i) = carl::abs(*(result.data()+i));
+	}
+	return result;
+}
+
 } // namespace Eigen
 
 namespace hypro {
