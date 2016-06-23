@@ -53,6 +53,10 @@ namespace hypro {
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 		EvaluationResult<Number> res;
 
+#ifdef DEBUG_MSG
+		std::cout << __func__ << ": in direction " << _direction << std::endl;
+#endif
+
 		if( mConstraintMatrix.rows() == 0 ) {
 			res.supportValue = 0;
 			res.errorCode = SOLUTION::INFTY;
@@ -97,7 +101,9 @@ namespace hypro {
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
-		// std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+#ifdef DEBUG_MSG
+		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+#endif
 
 		#ifdef USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -126,11 +132,17 @@ namespace hypro {
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		// std::cout << "(push)" << std::endl;
-		// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		#ifdef DEBUG_MSG
+		std::cout << "(push)" << std::endl;
+		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		#endif
 
 		smtrat::Answer smtratCheck = simplex.check();
+
+		#ifdef DEBUG_MSG
+		std::cout << "Done checking." << std::endl;
+		#endif
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
@@ -156,7 +168,6 @@ namespace hypro {
 					assert(smtratCheck == smtrat::Answer::UNSAT);
 					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-
 				#else // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				assert(smtratCheck == smtrat::Answer::UNSAT);
@@ -474,6 +485,9 @@ namespace hypro {
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		#endif
 		switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
 					return res;
@@ -489,31 +503,47 @@ namespace hypro {
 		}
 
 		std::size_t count = 0;
-		//std::cout << "Original Formula: " << std::endl;
-		//simplex.printAssertions();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original Formula: " << std::endl;
+		simplex.printAssertions();
+		#endif
 
 		std::size_t formulaSize = simplex.formula().size();
 		for(auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
-			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::invertRelation( (*formulaIt).formula().constraint().relation() ) );
-			formulaIt = simplex.remove(formulaIt);
+			#ifdef DEBUG_MSG
+			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			#endif
+			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::turnAroundRelation( (*formulaIt).formula().constraint().relation() ) );
+			unsigned currentFormulaSize = simplex.formula().size();
 			simplex.inform(negatedConstraint);
 			simplex.add(negatedConstraint, false);
 
-			//std::cout << "Modified Formula: " << negatedConstraint << std::endl;
+			if(simplex.formula().size() > currentFormulaSize) {
+				formulaIt = simplex.remove(formulaIt);
+				#ifdef DEBUG_MSG
+				std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
+				#endif
 
-			smtrat::Answer isRedundant = simplex.check();
-			assert(isRedundant != smtrat::Answer::UNKNOWN);
-			if(isRedundant == smtrat::Answer::UNSAT){
-				assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
-				assert(unsigned(formulaMapping.at(originalConstraint)) < mConstraintMatrix.rows());
-				res.push_back(formulaMapping.at(originalConstraint));
+				smtrat::Answer isRedundant = simplex.check();
+				assert(isRedundant != smtrat::Answer::UNKNOWN);
+				if(isRedundant == smtrat::Answer::UNSAT){
+					#ifdef DEBUG_MSG
+					std::cout << __func__ << " is redundant." << std::endl;
+					#endif
+					assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
+					assert(unsigned(formulaMapping.at(originalConstraint)) < mConstraintMatrix.rows());
+					res.push_back(formulaMapping.at(originalConstraint));
+				}
+
+				assert(*(--(simplex.formula().end())) == negatedConstraint);
+				simplex.remove(--(simplex.formulaEnd()));
+				simplex.deinform(negatedConstraint);
+				simplex.add(originalConstraint, false);
+			}else{
+				formulaIt++;
 			}
 
-			assert(*(--(simplex.formula().end())) == negatedConstraint);
-			simplex.remove(--(simplex.formulaEnd()));
-			simplex.deinform(negatedConstraint);
-			simplex.add(originalConstraint, false);
 		}
 
 		#else // RECREATE_SOLVER
@@ -753,7 +783,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> Optimizer<Number>::extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
+	EvaluationResult<Number> Optimizer<Number>::extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const {
 		smtrat::ModelValue valuation = solver.optimum(objective);
 		EvaluationResult<Number> res;
 		assert(!valuation.isBool());
@@ -781,6 +811,16 @@ namespace hypro {
 				}
 			}
 			res.optimumValue = point;
+			#ifdef VERIFY_RESULT
+			solver.push();
+			smtrat::FormulaT inversedObjective(objective-valuation.asRational(), carl::Relation::GREATER);
+			solver.inform(inversedObjective);
+			solver.add(inversedObjective);
+			if(solver.check() != smtrat::Answer::UNSAT) {
+				outputToSmtlibFormat(solver,fileCounter++, objective, filenamePrefix);
+			}
+			solver.pop();
+			#endif
 		}
 		return res;
 	}

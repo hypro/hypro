@@ -17,7 +17,7 @@
 #include <cassert>
 
 #define REDUCE_NUMBERS
-#define DEBUG_MSG
+//#define HPOLY_DEBUG_MSG
 
 namespace hypro {
 
@@ -261,6 +261,13 @@ public:
 	 */
 
 	//void calculateFan() const;
+	  
+	/*
+     * Computes a set of constraints that correpsonds to the convex hull of the points
+	 * @param points The set of points. Note that auxilarry points might be added to this vector.
+	 * @param degeneratedDimensions the number of dimensions in which the convex hull of the points is degenerated, i.e., spaceDimension - effectiveDimension
+	 */
+	HalfspaceVector computeConstraintsForDegeneratedPolytope(std::vector<Point<Number>>& points, unsigned degeneratedDimensions) const;
 
 	std::vector<std::vector<unsigned>> getMembersOfVertices(std::vector<Point<Number>> vertices) const;
 	std::vector<unsigned> getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const;

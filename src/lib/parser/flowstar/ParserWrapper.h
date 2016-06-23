@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <boost/tuple/tuple.hpp>
 
 namespace hypro {
 
@@ -7,5 +8,8 @@ namespace hypro {
 	class HybridAutomaton;
 
 	template<typename Number>
-	HybridAutomaton<Number> parseFlowstarFile(const std::string& filename);
+	class ReachabilitySettings;
+
+	template<typename Number>
+	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> parseFlowstarFile(const std::string& filename);
 }

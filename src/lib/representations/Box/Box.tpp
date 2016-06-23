@@ -260,8 +260,17 @@ std::size_t BoxT<Number,Converter>::size() const {
 	if(this->empty()) {
 		return 0;
 	}
-
+	// TODO: What is this supposed to do???
 	return 2;
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
+	Point<Number> limit = mLimits.first;
+	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {
+		limit[d] = carl::abs(mLimits.first.at(d)) >= carl::abs(mLimits.second.at(d)) ? carl::abs(mLimits.first.at(d)) : carl::abs(mLimits.second.at(d));
+	}
+	return BoxT<Number,Converter>(std::make_pair(-limit, limit));
 }
 
 template<typename Number, typename Converter>
@@ -288,6 +297,9 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 
 template<typename Number, typename Converter>
 std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	if(_mat.rows() == 0) {
+		return std::make_pair(true, *this);
+	}
 	assert(this->dimension() == unsigned(_mat.cols()));
 	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension()+_mat.rows(), this->dimension());
 	vector_t<Number> constants = vector_t<Number>::Zero(2*this->dimension()+_vec.rows());
@@ -303,7 +315,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _vec.rows() << ",1" << std::endl;
 	constraints.block(2*this->dimension(),0,_mat.rows(), _mat.cols()) = _mat;
 	constants.block(2*this->dimension(),0, _vec.rows(),1) = _vec;
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	Optimizer<Number> opt;
 	opt.setMatrix(constraints);
 	opt.setVector(constants);
 
@@ -366,8 +378,15 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiSum( const BoxT<Number,Converter> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-
 	return BoxT<Number,Converter>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const {
+	assert( dimension() == rhs.dimension() );
+	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
+	// assert( (BoxT<Number,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
+	return BoxT<Number,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max()));
 }
 
 template<typename Number, typename Converter>

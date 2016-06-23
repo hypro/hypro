@@ -1,9 +1,16 @@
-#include "../src/lib/config.h"
+#include "../src/lib/types.h"
 
 int main(int argc, char** argv) {
-    typedef Eigen::Matrix<carl::FLOAT_T<double>, Eigen::Dynamic, Eigen::Dynamic> mpfr_matrix;
+    using namespace hypro;
 
-    mpfr_matrix test1;
+    using Number = mpq_class;
+    matrix_t<Number> A = matrix_t<Number>(1,2);
+
+    std::cout << "Rows at compile time: " << A.RowsAtCompileTime << std::endl;
+
+    A << 1,1;
+
+    std::cout << "Solution: " << convert<Number,double>(A.fullPivLu().kernel()) << std::endl;
 
 }
 

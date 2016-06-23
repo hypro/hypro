@@ -112,7 +112,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time
-             normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             normalDiff = carl::ceil(Number(normalDiff * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
              Number euclid = norm(normal, false);
 
              //eliminates some fractional digits for improved computation time
@@ -137,7 +137,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
              Number normalPow = normal.dot(normal);
              Number powDiv = distancePow/normalPow;
              //eliminates some fractional digits for improved computation time
-             powDiv = carl::ceil(powDiv* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             powDiv = carl::ceil(Number(powDiv * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
              std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
              //computes generators
              generators.col(i) = scaling.second*normal;
@@ -325,7 +325,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time
-             normalDiff = carl::ceil(normalDiff* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             normalDiff = carl::ceil(Number(normalDiff * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
              Number euclid = norm(normal, false);
 
              //eliminates some fractional digits for improved computation time
@@ -350,7 +350,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
              Number normalPow = normal.dot(normal);
              Number powDiv = distancePow/normalPow;
              //eliminates some fractional digits for improved computation time
-             powDiv = carl::ceil(powDiv* (Number) fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
+             powDiv = carl::ceil(Number(powDiv * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
              std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
              //computes generators
              generators.col(i) = scaling.second*normal;

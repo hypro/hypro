@@ -6,7 +6,6 @@
 
 #include <lib/solver/Manager.h>
 #include <lib/modules/LRAModule/LRAModule.h>
-#include "convenience.h"
 
 namespace smtrat
 {
@@ -31,4 +30,6 @@ namespace smtrat
     };
 
 } // namespace smtrat
+
+#include "convenience.h"
 #endif

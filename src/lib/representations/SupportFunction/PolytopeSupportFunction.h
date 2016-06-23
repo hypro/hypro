@@ -99,18 +99,19 @@ class PolytopeSupportFunction {
 
     friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number>& rhs ) {
     	lhs << "[ ";
-    	for(unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows()-1; ++rowIndex) {
+    	for(unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows(); ++rowIndex) {
     		lhs << "  ";
     		for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
     			lhs << carl::toDouble(rhs.mConstraints(rowIndex,d)) << " ";
     		}
     		lhs << "<= " << carl::toDouble(rhs.mConstraintConstants(rowIndex)) << std::endl;
     	}
-    	lhs << "  ";
-    	for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
-    			lhs << carl::toDouble(rhs.mConstraints(rhs.mConstraints.rows()-1,d)) << " ";
-    	}
-    	lhs << "<= " << carl::toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows()-1)) << " ]" << std::endl;
+    	//lhs << "  ";
+    	//for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
+    	//		lhs << carl::toDouble(rhs.mConstraints(rhs.mConstraints.rows()-1,d)) << " ";
+    	//}
+    	//lhs << "<= " << carl::toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows()-1)) << " ]" << std::endl;
+		lhs << "]";
     	return lhs;
 	}
 };

@@ -1,9 +1,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                             #
 # File: CMakeLists.txt                                        #
 #                                                             #
 # Project name: HyPro                                         #
-# Contact: Xin Chen chen@cs.rwth-aachen.de                    #
+# Contact:                  #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
 # Author: Sebastian Junges, Stefan Schupp                     #
@@ -63,11 +62,39 @@ set(BIN_INSTALL_DIR lib/ CACHE PATH "Installation directory for executables")
 
 ###########################################################################################
 
-if (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	if (APPLE)
+		message("-- Using clang on apple")
+		set(CMAKE_MACOSX_RPATH 1)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+	else()
+		message("-- Using clang")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	endif()
+	set(CMAKE_CXX_RELEASE_FLAGS "${CMAKE_CXX_RELEASE_FLAGS} -O3")
+	set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -g -O0")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	message("-- Using g++")
+	#if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
+#		message(FATAL_ERROR " g++ version must be at least 4.9!")
+	#endif()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	set(CMAKE_CXX_RELEASE_FLAGS "${CMAKE_CXX_RELEASE_FLAGS} -O3")
+	set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -g -O1")
+	if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+	endif()
+else()
+	message("-- Possibly unsupported compiler")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 # general compiler and linker settings
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo
+MinSizeRel." FORCE)
+endif()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1")
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
@@ -109,7 +136,15 @@ endif()
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
-
+find_package(Boost REQUIRED)
+set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_MULTITHREADED      ON) 
+set(Boost_USE_STATIC_RUNTIME    OFF) 
+find_package(Boost 1.55.0 COMPONENTS program_options) 
+if(Boost_FOUND)   
+	include_directories(${Boost_INCLUDE_DIRS})   
+	set(libraries ${libraries} ${Boost_LIBRARIES})
+endif()
 find_package(carl REQUIRED)
 include_directories(${carl_INCLUDE_DIR})
 set(libraries ${libraries} ${carl_LIBRARIES})

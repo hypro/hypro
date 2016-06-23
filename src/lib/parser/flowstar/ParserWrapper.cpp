@@ -6,16 +6,16 @@ namespace hypro {
 
 	#ifdef USE_CLN_NUMBERS
 	template<>
-	HybridAutomaton<cln::cl_RA> parseFlowstarFile<cln::cl_RA>(const std::string& filename) {
+	boost::tuple<HybridAutomaton<cln::cl_RA>, ReachabilitySettings<cln::cl_RA>> parseFlowstarFile<cln::cl_RA>(const std::string& filename) {
 		parser::flowstarParser<cln::cl_RA> parser;
-		return parser.parseInput(filename);
+		return boost::tuple<HybridAutomaton<cln::cl_RA>, ReachabilitySettings<cln::cl_RA>>(parser.parseInput(filename), parser.mSettings);
 	}
 	#endif
 
 	template<>
-	HybridAutomaton<mpq_class> parseFlowstarFile<mpq_class>(const std::string& filename) {
+	boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
 		parser::flowstarParser<mpq_class> parser;
-		return parser.parseInput(filename);
+		return boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>>(parser.parseInput(filename), parser.mSettings);
 	}
 }
 

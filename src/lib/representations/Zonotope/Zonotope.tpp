@@ -475,8 +475,8 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 		minVecY = *std::min_element( vertices.begin(), vertices.end(), ZUtility::compareYVal<Number> );
 		maxVecY = *std::max_element( vertices.begin(), vertices.end(), ZUtility::compareYVal<Number> );
 
-		xhp.row( 1 ) << ( minVecY( 1 ) - carl::abs( maxVecY( 1 ) - minVecY( 1 ) ) / 10 ),
-			  ( maxVecY( 1 ) + carl::abs( maxVecY( 1 ) - minVecY( 1 ) ) / 10 );
+		xhp.row( 1 ) << ( minVecY( 1 ) - carl::abs( Number(maxVecY( 1 ) - minVecY( 1 )) ) / 10 ),
+			  ( maxVecY( 1 ) + carl::abs( Number(maxVecY( 1 ) - minVecY( 1 )) ) / 10 );
 		Eigen::Matrix<Number, 1, 2> eVec = {hp.offset(), hp.offset()};
 		xhp.row( 0 ) = ( eVec - hp.normal()( 1 ) * xhp.row( 1 ) ) / hp.normal()( 0 );
 	} else {
@@ -484,8 +484,8 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 		minVecX = *std::min_element( vertices.begin(), vertices.end(), ZUtility::compareXVal<Number> );
 		maxVecX = *std::max_element( vertices.begin(), vertices.end(), ZUtility::compareXVal<Number> );
 
-		xhp.row( 0 ) << ( minVecX( 0 ) - carl::abs( maxVecX( 0 ) - minVecX( 0 ) ) / 10 ),
-			  ( maxVecX( 0 ) + carl::abs( maxVecX( 0 ) - minVecX( 0 ) ) / 10 );
+		xhp.row( 0 ) << ( minVecX( 0 ) - carl::abs( Number(maxVecX( 0 ) - minVecX( 0 )) ) / 10 ),
+			  ( maxVecX( 0 ) + carl::abs( Number(maxVecX( 0 ) - minVecX( 0 )) ) / 10 );
 		Eigen::Matrix<Number, 1, 2> eVec = {hp.offset(), hp.offset()};
 		xhp.row( 1 ) = ( eVec - hp.normal()( 0 ) * xhp.row( 0 ) ) / hp.normal()( 1 );
 	}

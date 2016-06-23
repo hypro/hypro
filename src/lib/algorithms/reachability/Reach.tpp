@@ -18,7 +18,7 @@ namespace reachability {
      */
 
     template<typename Number, typename Representation>
-	std::vector<flowpipe_t<Representation>> Reach<Number,Representation>::computeForwardReachability() {
+	std::vector<std::pair<unsigned, flowpipe_t<Representation>>> Reach<Number,Representation>::computeForwardReachability() {
 		// set up working queue -> add initial states
                 /*
                  *  TO-DO:
@@ -27,6 +27,9 @@ namespace reachability {
                  *       (including information about the location, current time step, first segment (probably later) and
                  *       the used representation)
                  */
+		// collect all computed reachable states
+		std::vector<std::pair<unsigned, flowpipe_t<Representation>>> collectedReachableStates;
+
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
@@ -45,29 +48,17 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
+			std::cout << "Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id() << std::endl;
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			/*
                          *  TO-DO:
                          *      - Check for fixed-points here using the overapproximations stored in the tree
                          */
-			if(mReachableStates.find(boost::get<1>(nextInitialSet).location) == mReachableStates.end())
-				mReachableStates[boost::get<1>(nextInitialSet).location] = std::vector<flowpipe_t<Representation>>();
-
-			mReachableStates[boost::get<1>(nextInitialSet).location].push_back(newFlowpipe);
+			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
 		}
+		std::cout << "Finished at depth " << mCurrentLevel << std::endl;
 
-                /*
-                 *  TO-DO:
-                 *      - Traverse tree and explicitly compute the reachable states
-                 */
-		// collect all computed reachable states
-		std::vector<flowpipe_t<Representation>> collectedReachableStates;
-		for(const auto& statePair : mReachableStates) {
-			for(const auto& flowpipe : statePair.second){
-				collectedReachableStates.push_back(flowpipe);
-			}
-		}
 		return collectedReachableStates;
 	}
 
@@ -88,10 +79,46 @@ namespace reachability {
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
-                /*
-                 *  TO-DO:
-                 *     - Insert first segment into the current node
-                 */
+		std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
+		/*
+		 *  TO-DO:
+		 *     - Insert first segment into the current node
+		 */
+
+		// check for time triggered transitions once before any flowpipe is computed. TODO: put the check for transitions in the loop to the end?
+		if(mCurrentLevel <= mSettings.jumpDepth) {
+			State<Number> guardSatisfyingState;
+			bool locallyUrgent = false;
+			for( auto transition : _state.location->transitions() ){
+				// handle time-triggered transitions
+				if(transition->isTimeTriggered()){
+#ifdef REACH_DEBUG
+					std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
+#endif
+					// Check for direct urgent transitions
+					if(transition->triggerTime() == 0){
+						//std::cout << "Time trigger enabled" << std::endl;
+						if(intersectGuard(transition, _state, guardSatisfyingState)){
+							// when taking a timed transition, reset timestamp
+							if(mCurrentLevel != mSettings.jumpDepth) {
+								guardSatisfyingState.timestamp = carl::Interval<Number>(0);
+								nextInitialSets.push_back(boost::tuple<Transition<Number>*, State<Number>>(transition, guardSatisfyingState));
+								flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
+							}
+							locallyUrgent = true;
+						}
+					}
+				}
+			}
+			if(locallyUrgent){
+#ifdef REACH_DEBUG
+				std::cout << "The location is urgent, skip flowpipe computation." << std::endl;
+#endif
+				processDiscreteBehaviour(nextInitialSets);
+				return flowpipe;
+			}
+		}
+
 		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
@@ -99,20 +126,15 @@ namespace reachability {
 #endif
 		if ( boost::get<0>(initialSetup) ) {
 			assert(!boost::get<1>(initialSetup).timestamp.isUnbounded());
-			std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
 			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
-
 				noFlow = true;
-
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
-					State<Number> currentState = boost::get<1>(initialSetup);
-					bool fireTimeTriggeredTransition = false;
 					for( auto transition : _state.location->transitions() ){
 						// handle time-triggered transitions
 						if(transition->isTimeTriggered()){
@@ -122,40 +144,36 @@ namespace reachability {
 							// As there is no continuous behaviour, simply check guard for whole time horizon
 							if(transition->triggerTime() <= mSettings.timeBound){
 								//std::cout << "Time trigger enabled" << std::endl;
-								if(intersectGuard(transition, currentState, guardSatisfyingState)){
+								if(intersectGuard(transition, _state, guardSatisfyingState)){
 									// when taking a timed transition, reset timestamp
 									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 									nextInitialSets.emplace_back(transition, guardSatisfyingState);
-									//flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
-									fireTimeTriggeredTransition = true;
 								}
 							}
 						} // handle normal transitions
-						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+						else if(intersectGuard(transition, _state, guardSatisfyingState)){
 							//std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
-							assert(guardSatisfyingState.timestamp == currentState.timestamp);
+							assert(guardSatisfyingState.timestamp == _state.timestamp);
 							// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 							assert(!guardSatisfyingState.timestamp.isUnbounded());
 							nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						}
 					}
-					if(fireTimeTriggeredTransition){
-						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
-						#ifdef REACH_DEBUG
-						std::cout << "Fired time triggered transition." << std::endl;
-						#endif
-					}
 				}
-
 			}
 
 			// insert first Segment into the empty flowpipe
-			Representation currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
+			Representation currentSegment;
+			if(noFlow) {
+				currentSegment = boost::get<Representation>(_state.set);
+			} else {
+				currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
+			}
 			flowpipe.push_back( currentSegment );
 
-			unsigned tmp = plotter.addObject(currentSegment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+			//unsigned tmp = plotter.addObject(currentSegment.vertices());
+			//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
 
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(_state, currentSegment)){
@@ -163,10 +181,10 @@ namespace reachability {
 				while(!mWorkingQueue.empty()){
 					mWorkingQueue.pop();
 				}
-                                /*
-                                 * TO-DO.
-                                 *    - Employ backtracking here
-                                 */
+				/*
+				 * TO-DO.
+				 *    - Employ backtracking here
+				 */
 				return flowpipe;
 			}
 
@@ -187,13 +205,13 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << carl::toDouble(currentLocalTime) << std::flush;
-
-				// Collect potential new initial states from discrete behaviour.
-				if(mCurrentLevel < mSettings.jumpDepth) {
+				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				// Verify transitions on the current set.
+				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
+					//std::cout << "Current Segment = " << currentSegment << std::endl;
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
 					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(0, mSettings.timeBound));
 					bool fireTimeTriggeredTransition = false;
@@ -206,14 +224,17 @@ namespace reachability {
 							if(currentState.timestamp.contains(transition->triggerTime())){
 								//std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
-									// when taking a timed transition, reset timestamp
-									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
-									nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									// only insert new Sets into working queue, when the current level allows it.
+									if(mCurrentLevel != mSettings.jumpDepth){
+										// when taking a timed transition, reset timestamp
+										guardSatisfyingState.timestamp = carl::Interval<Number>(0);
+										nextInitialSets.emplace_back(transition, guardSatisfyingState);
+									}
 									fireTimeTriggeredTransition = true;
 								}
 							}
 						} // handle normal transitions
-						else if(intersectGuard(transition, currentState, guardSatisfyingState)){
+						else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
 							assert(guardSatisfyingState.timestamp == currentState.timestamp);
 							//std::cout << "hybrid transition enabled" << std::endl;
 							//std::cout << *transition << std::endl;
@@ -228,7 +249,6 @@ namespace reachability {
 						break;
 					}
 				}
-
 
 				// perform linear transformation on the last segment of the flowpipe
 				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
@@ -246,7 +266,6 @@ namespace reachability {
 				// clustering CONVEXHULL_CONST and reduction with directions generated before
 				unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
 				std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
-
 				bool use_reduce_memory=false, use_reduce_time=true;
 				if(use_reduce_memory){
 					if(CONVEXHULL_CONST==1){ // if no clustering is required
@@ -291,8 +310,8 @@ namespace reachability {
 #endif
 					flowpipe.push_back( newSegment.second );
 
-					unsigned tmp = plotter.addObject(newSegment.second.vertices());
-					plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+					//unsigned tmp = plotter.addObject(newSegment.second.vertices());
+					//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
 
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
@@ -309,6 +328,7 @@ namespace reachability {
 				}
 				currentLocalTime += mSettings.timeStep;
 			}
+			std::cout << std::endl;
 #ifdef REACH_DEBUG
 			if(!noFlow){
 				std::cout << "--- Loop left ---" << std::endl;
@@ -318,7 +338,6 @@ namespace reachability {
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			processDiscreteBehaviour(nextInitialSets);
-
 			return flowpipe;
 		} else {
 			// return an empty flowpipe
@@ -330,6 +349,10 @@ namespace reachability {
 	void Reach<Number,Representation>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State<Number>>>& _newInitialSets ) {
 		std::map<Transition<Number>*, std::vector<State<Number>>> toAggregate;
 		VariablePool& vpool = VariablePool::getInstance();
+
+#ifdef REACH_DEBUG
+		std::cout << __func__ << " processing potential initial sets." << std::endl;
+#endif
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
@@ -350,15 +373,15 @@ namespace reachability {
 					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
 				}
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-                                /*
-                                 *  TO-DO:
-                                 *       - Check whether for the current node and transition already a child-node
-                                 *         exists. If so, work on it. Otherwise, create a new child-node.
-                                 *          If the last segment for some transition arrives:
-                                 *              - Construct overapproximation
-                                 *              - Set last segment
-                                 *
-                                 */
+				/*
+				 *  TO-DO:
+				 *       - Check whether for the current node and transition already a child-node
+				 *         exists. If so, work on it. Otherwise, create a new child-node.
+				 *          If the last segment for some transition arrives:
+				 *              - Construct overapproximation
+				 *              - Set last segment
+				 *
+				 */
 				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -385,17 +408,14 @@ namespace reachability {
 				std::vector<Point<Number>> tmpVertices = boost::get<Representation>(state.set).vertices();
 				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 			}
-			//std::cout << "Collected vertices: " << std::endl;
-			//for(const auto& vertex : collectedVertices){
-			//	std::cout << "\t" << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
-			//}
-
 
 			State<Number> s;
 			s.location = aggregationPair.first->target();
 			s.set = Representation(collectedVertices);
 			s.timestamp = aggregatedTimestamp;
-			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+#ifdef REACH_DEBUG
+			std::cout << __func__ << ": Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+#endif
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
 
 			// handle discrete reset assignment
@@ -425,7 +445,11 @@ namespace reachability {
 							   State<Number>& result ) {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
-		//std::cout << "check transition " << *_trans << std::endl;
+#ifdef REACH_DEBUG
+		std::cout << __func__ << " for transition " << *_trans << std::endl;
+		std::cout << __func__ << " Verify discrete guard ... ";
+#endif
+		//std::cout << "State set before guard: " << boost::get<Representation>(_state.set) << std::endl;
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
@@ -464,24 +488,105 @@ namespace reachability {
 			}
 			if(result.discreteAssignment[guardPair.first].isEmpty()){
 				#ifdef REACH_DEBUG
-				std::cout << "Valuation violates discrete guard." << std::endl;
+				std::cout << "violated, transition DISABLED." << std::endl;
 				#endif
 				return false;
 			}
 		}
+#ifdef REACH_DEBUG
+		std::cout << "satisfied." << std::endl;
+		std::cout << "Apply discrete reset." << std::endl;
+#endif
+		// apply discrete reset.
+		assert(_trans->reset().discreteMat.rows() == _trans->reset().discreteVec.rows());
+		std::map<carl::Variable, carl::Interval<Number>> tmpAssignment = result.discreteAssignment;
+		for(unsigned rowIndex = 0; rowIndex < _trans->reset().discreteMat.rows(); ++rowIndex) {
+			carl::Interval<Number> assignment(0);
+			unsigned dOffset = _trans->reset().discreteOffset;
+			for(unsigned colIndex = 0; colIndex < _trans->reset().discreteMat.cols(); ++colIndex){
+				assignment += _trans->reset().discreteMat(rowIndex, colIndex) * tmpAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+			}
+			carl::Interval<Number> constPart(_trans->reset().discreteVec(rowIndex));
+			assignment += constPart;
+			result.discreteAssignment[VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset)] = assignment;
+#ifdef REACH_DEBUG
+			std::cout << "Reset applied to Variable " << VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset) << " -> " << assignment <<std::endl;
+#endif
+		}
+#ifdef REACH_DEBUG
+		std::cout << "Verifying discrete invariant ... ";
+#endif
+		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
+		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
+			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
+			carl::Interval<Number> substitution(0);
+			unsigned dOffset = _trans->target()->invariant().discreteOffset;
+			// insert all current discrete assignments except the constrained one.
+			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
+				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-dOffset) {
+					substitution += invariantPair.second(0, colIndex) * result.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+				}
+			}
+			carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
+			substitution += constPart;
+			//std::cout << "substitution interval " << substitution << std::endl;
+			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) > 0){
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == 1);
+				invariant.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
+				//std::cout << "After setting upper bound new: " << invariant << std::endl;
+			} else {
+				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == -1);
+				invariant.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
+				//std::cout << "After setting lower bound new: " << invariant << std::endl;
+			}
+
+			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
+#ifdef REACH_DEBUG
+				std::cout << "invalid after reset. Transition DISABLED." << std::endl;
+#endif
+				return false;
+			}
+		}
+#ifdef REACH_DEBUG
+		std::cout << "satisfied." << std::endl;
+#endif
 
 		// check for continuous set guard intersection
+#ifdef REACH_DEBUG
+		std::cout << "Checking continuous set: " << boost::get<Representation>(_state.set) << std::endl;
+#endif
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 		// check if the intersection is empty
+#ifdef REACH_DEBUG
+		std::cout << "Verifying guard ... ";
+#endif
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			std::cout << "Transition enabled!" << std::endl;
+			std::cout << "satisfied, transition ENABLED." << std::endl;
+			std::cout << "Apply reset on " << guardSatisfyingSet.second << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
-			result.set = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
-			return true;
+			Representation tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+#ifdef REACH_DEBUG
+			std::cout << "Verify constant invariant ... ";
+#endif
+			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
+			if(invariantSatisfyingSet.first){
+#ifdef REACH_DEBUG
+				std::cout << "satisfied, transition ENABLED." << std::endl;
+#endif
+				result.set = invariantSatisfyingSet.second;
+				return true;
+			}
+#ifdef REACH_DEBUG
+			std::cout << "invalid, transition DISABLED." << std::endl;
+#endif
+			return false;
 		} else {
+#ifdef REACH_DEBUG
+			std::cout << "invalid, transition DISABLED." << std::endl;
+#endif
 			return false;
 		}
 	}
@@ -597,28 +702,24 @@ namespace reachability {
 				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
 			}
 
-
 			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
-
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
 #endif
-
 			Representation firstSegment;
+			// different approaches towards bloating
 			if(mSettings.uniformBloating){
 				// R_0(X0) U R_delta(X0)
 				Representation unitePolytope = initialPair.second.unite( deltaValuation );
 				//assert(unitePolytope.contains(initialPair.second));
 				//assert(unitePolytope.contains(deltaValuation));
-
 	#ifdef REACH_DEBUG
 				std::cout << "Polytope after unite with R0: ";
 				unitePolytope.print();
 	#endif
 				// bloat hullPolytope (Hausdorff distance)
 				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
-
 	#ifdef REACH_DEBUG
 				std::cout << "\n";
 				std::cout << "Hausdorff Approximation: ";
@@ -627,7 +728,6 @@ namespace reachability {
 				firstSegment = unitePolytope;
 				if(radius > 0){
 					Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
-
 		#ifdef REACH_DEBUG
 					std::cout << "Hausdorff Polytope (Box): ";
 					hausPoly.print();
@@ -644,17 +744,13 @@ namespace reachability {
 				}
 				firstSegment = initialPair.second.unite(deltaValuation);
 			}
-
-
 			//assert(firstSegment.contains(unitePolytope));
 			//assert(firstSegment.contains(initialPair.second));
 			//assert(firstSegment.contains(deltaValuation));
-
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
 			firstSegment.print();
 #endif
-
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
 #ifdef USE_REDUCTION
@@ -704,9 +800,14 @@ namespace reachability {
 #endif
 			firstSegment.removeRedundancy();
 
+			//std::cout << "First segment after removing redundancy: " << firstSegment << std::endl;
+
+			//std::cout << "Invariant of the current location: " << _state.location->invariant().mat <<  _state.location->invariant().vec << std::endl;
+
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
+			//std::cout << "Full final first segment: " << fullSegment << std::endl;
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);

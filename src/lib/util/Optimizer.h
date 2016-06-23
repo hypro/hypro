@@ -1,19 +1,23 @@
 #pragma once
 
+#define USE_PRESOLUTION
+#define RECREATE_SOLVER
+//#define VERIFY_RESULT
+//#define DEBUG_MSG
+
 #include "EvaluationResult.h"
 #include "smtrat/SimplexSolver.h"
 #include <carl/util/Singleton.h>
 
-#define USE_PRESOLUTION
-#define RECREATE_SOLVER
+#ifdef VERIFY_RESULT
+#include <sys/stat.h>
+#endif
 
 namespace hypro {
 
 	template<typename Number>
-	class Optimizer : public carl::Singleton<Optimizer<Number>> {
+	class Optimizer {
 		using Poly = carl::MultivariatePolynomial<Number>;
-
-		friend carl::Singleton<Optimizer<Number>>;
 
 	private:
 		matrix_t<Number>	mConstraintMatrix;
@@ -29,6 +33,10 @@ namespace hypro {
 		mutable smtrat::SimplexSolver mSmtratSolver;
 		mutable smtrat::FormulaT mCurrentFormula;
 		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
+		#ifdef VERIFY_RESULT
+		mutable unsigned fileCounter;
+		std::string filenamePrefix = "optimizer_error_out_";
+		#endif
 		#endif
 		// Glpk as a presolver
 		mutable glp_prob* lp;
@@ -36,14 +44,29 @@ namespace hypro {
 		mutable int* ja;
 		mutable double* ar;
 
-	protected:
+	public:
 
 		Optimizer() :
 			mConstraintMatrix(),
 			mConstraintVector(),
 			mInitialized(false),
 			mConstraintsSet(false)
-		{}
+		{
+			#ifdef VERIFY_RESULT
+			struct stat buffer;
+			unsigned cnt = 0;
+			while(true){
+				std::string name = filenamePrefix + std::to_string(cnt) + ".smt2";
+				if(stat (name.c_str(), &buffer) != 0) {
+					break;
+				}
+				//std::cout << "File " << name << " exists." << std::endl;
+				++cnt;
+			}
+			fileCounter = cnt;
+			//std::cout << "Set file number to " << fileCounter << std::endl;
+			#endif
+		}
 
 	public:
 
@@ -65,7 +88,7 @@ namespace hypro {
 		void updateConstraints() const;
 		#ifdef USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
-		EvaluationResult<Number> extractSolution(const smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
+		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
 		#endif
 
 		void createArrays( unsigned size ) const;

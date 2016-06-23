@@ -68,6 +68,11 @@ void Plotter<Number>::plot2d() const {
 		mOutfile << "set size ratio 1\n";
 		mOutfile << "set term post eps\n";
 		mOutfile << "set output \"" << mFilename << ".eps\n";
+		if(mSettings.grid) {
+			mOutfile << "set xtics " << mSettings.tics << "\n";
+			mOutfile << "set ytics " << mSettings.tics << "\n";
+			mOutfile << "set grid back\n";
+		}
 		if(mSettings.axes) {
 			mOutfile << "# axis settings\n";
 			mOutfile << "set xzeroaxis \n";
@@ -157,10 +162,10 @@ void Plotter<Number>::plot2d() const {
 					assert(plane.dimension() == 2);
 					vector_t<Number> normal = plane.normal();
 					if(normal(1) == 0){
-						mOutfile << "set arrow from " << carl::toDouble(plane.offset()/normal(0)) <<",graph(0,0) to " << carl::toDouble(plane.offset()/normal(0)) << ",graph(1,1) nohead\n";
+						mOutfile << "set arrow from " << carl::toDouble(Number(plane.offset()/normal(0))) <<",graph(0,0) to " << carl::toDouble(Number(plane.offset()/normal(0))) << ",graph(1,1) nohead\n";
 					} else {
-						mOutfile << "f_" << index << "(x) = " << carl::toDouble(-normal(0)/normal(1)) << "*x";
-						double off = carl::toDouble(plane.offset()/normal(1));
+						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
+						double off = carl::toDouble(Number(plane.offset()/normal(1)));
 						if(off > 0)
 							mOutfile << "+";
 
@@ -326,8 +331,8 @@ void Plotter<Number>::plotTex() const {
 				for( const auto& plane : planePair.second ) {
 					assert(plane.dimension() == 2);
 					mOutfile << "\t\\draw[domain="<< ranges[0].lower() << ":" << ranges[0].upper() <<", smooth, variable=\\x] plot ({\\x},";
-					mOutfile << "{" << carl::toDouble(-plane.normal()(0)/plane.normal()(1)) << "*x";
-					double off = carl::toDouble(plane.offset()/plane.normal()(1));
+					mOutfile << "{" << carl::toDouble(Number(-plane.normal()(0)/plane.normal()(1))) << "*x";
+					double off = carl::toDouble(Number(plane.offset()/plane.normal()(1)));
 					if(off > 0)
 						mOutfile << "+" << off << "}";
 					else
@@ -352,6 +357,52 @@ void Plotter<Number>::plotTex() const {
 	}
 	std::cout << std::endl << "Plotted to " << mFilename << ".tex" << std::endl;
 	mOutfile.close();
+}
+
+template<typename Number>
+void Plotter<Number>::plotGen() const {
+	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+
+	mOutfile.open( mFilename + ".gen" );
+
+	if(!mVectors.empty()){
+		// TODO: implement gen file plotting for vectors.
+	}
+
+	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
+		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
+			if(objectIt->second.size() > 0){
+				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
+					assert( objectIt->second[pointIndex].dimension() == 2 );
+					if ( objectIt->second[pointIndex].dimension() == 0 ) {
+						continue;
+					}
+					mOutfile << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
+					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+						mOutfile << " " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
+					}
+					mOutfile << "\n";
+				}
+				mOutfile << carl::toDouble( objectIt->second[0].at( 0 ) );
+				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
+					mOutfile << " " << carl::toDouble( objectIt->second[0].at( d ) );
+				}
+				mOutfile << "\n";
+			}
+			mOutfile << "\n\n\n";
+		}
+
+		// create plane functions
+		if(!mPlanes.empty()){
+			// TODO: implement.
+		}
+
+		if(!mPoints.empty()){
+			// TODO: implement.
+		}
+	}
+	mOutfile.close();
+	std::cout << std::endl << "Plotted to " << mFilename << ".gen" << std::endl;
 }
 
 template <typename Number>
@@ -521,6 +572,10 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 	// pair.second.rawCoordinates().transpose() << std::endl;
 
 	// prepare stack -> initialize with 2 points
+	if(sortedPoints.empty()) {
+		res.emplace_back(min);
+		return res;
+	}
 	assert( sortedPoints.size() >= 1 );
 	std::stack<Point<Number>> stack;
 	stack.push( min );

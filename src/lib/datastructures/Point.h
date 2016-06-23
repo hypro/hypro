@@ -314,6 +314,7 @@ class Point {
 	Point<Number>& operator+=( const vector_t<Number>& _rhs );
 	Point<Number>& operator-=( const Point<Number>& _rhs );
 	Point<Number>& operator-=( const vector_t<Number>& _rhs );
+	Point<Number> operator-() const;
 	Point<Number>& operator/=( unsigned _quotient );
 	Point<Number>& operator*=( const Number _factor );
 	Point<Number>& operator=( const Point<Number>& _in );

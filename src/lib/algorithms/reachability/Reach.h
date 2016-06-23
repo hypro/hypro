@@ -42,7 +42,7 @@ private:
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
 
-	std::map<Location<Number>*, std::vector<flowpipe_t<Representation>>> mReachableStates;
+	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number,Representation>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
@@ -62,7 +62,7 @@ public:
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	std::vector<flowpipe_t<Representation>> computeForwardReachability();
+	std::vector<std::pair<unsigned, flowpipe_t<Representation>>> computeForwardReachability();
 
 	/**
 	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
