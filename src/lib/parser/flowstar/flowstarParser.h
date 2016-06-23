@@ -2,6 +2,12 @@
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 #endif
 //#define BOOST_SPIRIT_DEBUG
+
+#pragma once
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-shift-op-parentheses"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -31,8 +37,6 @@
 #include "symbols.h"
 #include "polynomialParser.h"
 #include "componentParser.h"
-
-#pragma once
 
 namespace hypro {
 namespace parser {
@@ -218,3 +222,5 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 } // namespace hypro
 
 #include "flowstarParser.tpp"
+
+#pragma clang diagnostic pop

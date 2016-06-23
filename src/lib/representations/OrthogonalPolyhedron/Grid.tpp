@@ -233,13 +233,13 @@ std::vector<Point<unsigned>> Grid<Number>::iNeighborhoodInduced( const Point<uns
 			possibleCoords.emplace_back( std::move( tmp ) );
 		} else {
 			std::vector<unsigned> tmp( {_inducedPoint.at( j )} );
-			possibleCoords.emplace_back( std::move( tmp ) );
+			possibleCoords.emplace_back( tmp );
 		}
 	}
 	pointIt<unsigned> pIt( possibleCoords );
 
 	while ( !pIt.end ) {
-		result.emplace_back( std::move( ++pIt ) );
+		result.emplace_back( ++pIt  );
 	}
 	return ( result );
 }
@@ -298,7 +298,7 @@ Point<Number> Grid<Number>::directSuccessor( const Point<Number> &_point ) const
 }
 
 template <typename Number>
-std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i, int pos ) const {
+std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i ) const {
 	std::vector<Point<unsigned>> result;
 
 	std::vector<std::vector<unsigned>> tmp;
@@ -316,7 +316,7 @@ std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i, int pos ) 
 	pointIt<unsigned> pIt( tmp );
 
 	while ( !pIt.end ) {
-		result.emplace_back( std::move( ++pIt ) );
+		result.emplace_back( ++pIt );
 	}
 	return ( result );
 }
@@ -600,7 +600,7 @@ std::pair<Point<unsigned>, bool> Grid<Number>::calculateInduced( const Point<Num
 			precise = false;
 		}
 	}
-	return std::make_pair( std::move( Point<unsigned>( coordinates ) ), precise );  // return induced point
+	return std::make_pair( Point<unsigned>( coordinates ), precise );  // return induced point
 }
 
 template <typename Number>

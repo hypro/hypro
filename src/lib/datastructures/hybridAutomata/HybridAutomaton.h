@@ -17,7 +17,7 @@
 namespace hypro {
 
 template<typename Number>
-class State;
+struct State;
 
 template <typename Number>
 class HybridAutomaton {
