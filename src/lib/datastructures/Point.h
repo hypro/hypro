@@ -106,7 +106,7 @@ class Point {
 	void setComposition( const std::vector<Point<Number>>& _elements );
 	void addToComposition( const Point<Number>& _element );
 
-	static Point<Number> zero( unsigned _dim = 0 ) { return std::move(Point<Number>( vector_t<Number>::Zero( _dim )) ); }
+	static Point<Number> Zero( unsigned _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( _dim )); }
 
 	Point<Number> origin() const;
 
@@ -190,28 +190,28 @@ class Point {
 		return res;
 	}
 
-        /**
-         * removes any duplicate points in a given PointVector
-         * @author Simon Froitzheim
-         * @param PointVec the point vector which should get checked for duplicates
-         * @return A point vector that is just PointVec without duplicates
-         */
+	/**
+	 * removes any duplicate points in a given PointVector
+	 * @author Simon Froitzheim
+	 * @param PointVec the point vector which should get checked for duplicates
+	 * @return A point vector that is just PointVec without duplicates
+	 */
 
-        static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
-              std::set<Point<Number>> pointSet;
-              //writes all the point entries into a set (set removes duplicates)
-              for (unsigned i = 0; i<pointVec.size(); ++i){
-                  pointSet.insert(pointVec.at(i));
-              }
-              //write all the set entries into the return vector
-              std::vector<Point<Number>> res;
-              for (const auto& point : pointSet){
-                  res.push_back(point);
-              }
+	static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
+		  std::set<Point<Number>> pointSet;
+		  //writes all the point entries into a set (set removes duplicates)
+		  for (unsigned i = 0; i<pointVec.size(); ++i){
+			  pointSet.insert(pointVec.at(i));
+		  }
+		  //write all the set entries into the return vector
+		  std::vector<Point<Number>> res;
+		  for (const auto& point : pointSet){
+			  res.push_back(point);
+		  }
 
-              //std::copy(pointSet.begin(), pointSet.end(), res.begin());
-              return res;
-        }
+		  //std::copy(pointSet.begin(), pointSet.end(), res.begin());
+		  return res;
+	}
 
 
 	/**
