@@ -47,7 +47,13 @@ class HybridAutomaton {
 	HybridAutomaton( const locationSet& _locs, const transitionSet& _trans,
 					 const locationStateMap& _initialStates );
 
-	virtual ~HybridAutomaton() {}
+	virtual ~HybridAutomaton() {
+		while(!mTransitions.empty()) {
+			Transition<Number>* toDelete = *mTransitions.begin();
+			mTransitions.erase(mTransitions.begin());
+			delete toDelete;
+		}
+	}
 
 	/**
 	 * Getter & Setter

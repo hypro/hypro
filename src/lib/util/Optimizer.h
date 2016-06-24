@@ -39,6 +39,7 @@ namespace hypro {
 		#endif
 		#endif
 		// Glpk as a presolver
+		mutable bool arraysCreated=false;
 		mutable glp_prob* lp;
 		mutable int* ia;
 		mutable int* ja;
@@ -66,6 +67,10 @@ namespace hypro {
 			fileCounter = cnt;
 			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
+		}
+
+		~Optimizer() {
+			deleteArrays();
 		}
 
 	public:
