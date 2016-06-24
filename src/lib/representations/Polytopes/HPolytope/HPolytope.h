@@ -227,6 +227,7 @@ public:
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const HPolytopeT<Number, Converter>& rhs ) const;
 	HPolytopeT unite( const HPolytopeT& rhs ) const;
+	HPolytopeT unite( const std::vector<HPolytopeT>& rhs ) const;
 
 	void clear();
 	void print() const;

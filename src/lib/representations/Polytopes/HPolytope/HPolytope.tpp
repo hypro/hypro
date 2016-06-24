@@ -651,8 +651,15 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 
 		return result;
 	}
-	// if both are empty, return one of them
-	return *this;
+}
+
+template<typename Number, typename Converter>
+HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vector<HPolytopeT>& rhs ) const {
+	std::vector<Point<Number>> vertices = this->vertices();
+	for(const auto& poly : rhs) {
+		vertices.insert(vertices.end(), poly.vertices().begin(), poly.vertices().end());
+	}
+	return HPolytopeT(vertices);
 }
 
 template <typename Number, typename Converter>
