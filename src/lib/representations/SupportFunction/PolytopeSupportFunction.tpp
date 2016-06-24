@@ -197,8 +197,8 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 
 		EvaluationResult<Number> positive = this->evaluate(posDir);
 		EvaluationResult<Number> negative = this->evaluate(negDir);
-		assert(positive.errocode != SOLUTION::UNKNOWN);
-		assert(negative.errocode != SOLUTION::UNKNOWN);
+		assert(positive.errorCode != SOLUTION::UNKNOWN);
+		assert(negative.errorCode != SOLUTION::UNKNOWN);
 
 		// empty object
 		if(positive.errorCode == SOLUTION::INFEAS) {
@@ -275,7 +275,7 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::empty() const {
-	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	Optimizer<Number>& opt = Optimizer<Number>();
 	opt.setMatrix(mConstraints);
 	opt.setVector(mConstraintConstants);
 	return !opt.checkConsistency();
