@@ -305,6 +305,7 @@ class BoxT {
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const BoxT<Number,Converter>& box ) const;
 	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes ) const;
 
 	void clear();
 	void print() const;

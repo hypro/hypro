@@ -216,7 +216,7 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::intersect
 	potentialVertices.insert( potentialVertices.end(), v2.begin(), v2.end() );
 	for ( const auto &vA : v1 ) {
 		for ( const auto &vB : v2 ) {
-			potentialVertices.emplace_back( Point<Number>::coordinateMax( vA.point(), vB.point() ) );
+			potentialVertices.emplace_back( Point<Number>::coeffWiseMax( vA.point(), vB.point() ) );
 		}
 	}
 	std::unique( potentialVertices.begin(), potentialVertices.end() );
@@ -336,7 +336,7 @@ OrthogonalPolyhedron<Number, Type> OrthogonalPolyhedron<Number, Type>::unite(
 	potentialVertices.insert( potentialVertices.end(), v2.begin(), v2.end() );
 	for ( const auto &vA : v1 ) {
 		for ( const auto &vB : v2 ) {
-			potentialVertices.emplace_back( Point<Number>::coordinateMax( vA.point(), vB.point() ) );
+			potentialVertices.emplace_back( Point<Number>::coeffWiseMax( vA.point(), vB.point() ) );
 		}
 	}
 	std::unique( potentialVertices.begin(), potentialVertices.end() );

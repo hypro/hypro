@@ -92,7 +92,6 @@ class Point {
 		if(mHash == 0) {
 			mHash = std::hash<vector_t<Number>>()(mCoordinates);
 		}
-
 		return mHash;
 	}
 
@@ -169,13 +168,20 @@ class Point {
 	 * @param p2 Other point
 	 * @return A point with the coordinate-wise maximum of p1 and p2.
 	 */
-	static Point<Number> coordinateMax( const Point<Number>& _p1, const Point<Number>& _p2 ) {
+	static Point<Number> coeffWiseMax(const Point<Number> &_p1, const Point<Number> &_p2) {
 		assert( _p1.dimension() == _p2.dimension() );
 		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
-		vector_t<Number> p1Coord = _p1.rawCoordinates();
-		vector_t<Number> p2Coord = _p2.rawCoordinates();
 		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
-			coordinates( i ) = p1Coord( i ) >= p2Coord( i ) ? p1Coord( i ) : p2Coord( i );
+			coordinates( i ) = _p1.at( i ) >= _p2.at( i ) ? _p1.at( i ) : _p2.at( i );
+		}
+		return Point<Number>( coordinates );
+	}
+
+	static Point<Number> coeffWiseMin(const Point<Number> &_p1, const Point<Number> &_p2) {
+		assert( _p1.dimension() == _p2.dimension() );
+		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
+		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
+			coordinates( i ) = _p1.at( i ) <= _p2.at( i ) ? _p1.at( i ) : _p2.at( i );
 		}
 		return Point<Number>( coordinates );
 	}
