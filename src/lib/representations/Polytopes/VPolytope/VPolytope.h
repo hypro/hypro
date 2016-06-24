@@ -67,6 +67,7 @@ class VPolytopeT {
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const VPolytopeT<Number, Converter>& _other ) const;
 	VPolytopeT unite( const VPolytopeT& rhs ) const;
+	VPolytopeT unite( const std::vector<VPolytopeT>& rhs ) const;
 
 	void clear();
 
