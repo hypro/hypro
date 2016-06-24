@@ -5,8 +5,10 @@
 
 #pragma once
 
+#ifdef USE_CLANG
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Woverloaded-shift-op-parentheses"
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -223,4 +225,6 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 
 #include "flowstarParser.tpp"
 
+#ifdef USE_CLANG
 #pragma clang diagnostic pop
+#endif

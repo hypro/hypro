@@ -275,7 +275,7 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::empty() const {
-	Optimizer<Number>& opt = Optimizer<Number>();
+	Optimizer<Number> opt;
 	opt.setMatrix(mConstraints);
 	opt.setVector(mConstraintConstants);
 	return !opt.checkConsistency();
