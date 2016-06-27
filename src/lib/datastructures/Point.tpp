@@ -351,6 +351,8 @@ bool Point<Number>::move( const Point<Number> &_p ) {
 
 template <typename Number>
 Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+	//std::cout << "Linear trafo of " << mCoordinates << " with " << A << " and " << b << std::endl;
+	assert(A.cols() == mCoordinates.rows());
 	if ( A.cols() == b.rows() ) {
 		return Point<Number>( A * mCoordinates + b );
 	} else {
