@@ -229,7 +229,7 @@ namespace reachability {
 							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
 							#endif
 							if(currentState.timestamp.contains(transition->triggerTime())){
-								//std::cout << "Time trigger enabled" << std::endl;
+								std::cout << "Time trigger enabled" << std::endl;
 								if(intersectGuard(transition, currentState, guardSatisfyingState)){
 									// only insert new Sets into working queue, when the current level allows it.
 									if(mCurrentLevel != mSettings.jumpDepth){
@@ -423,17 +423,21 @@ namespace reachability {
 			std::vector<Point<Number>> collectedVertices;
 			carl::Interval<Number> aggregatedTimestamp;
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
-			for(const auto& state : aggregationPair.second){
-				assert(!state.timestamp.isUnbounded());
-				aggregatedTimestamp = aggregatedTimestamp.convexHull(state.timestamp);
+			Representation collectedSets = boost::get<Representation>(aggregationPair.second.begin()->set);
+			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
+				assert(!stateIt->timestamp.isUnbounded());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->timestamp);
 				//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
-				std::vector<Point<Number>> tmpVertices = boost::get<Representation>(state.set).vertices();
-				collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
+				//std::vector<Point<Number>> tmpVertices = boost::get<Representation>(stateIt->set).vertices();
+				//collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
+				Representation tmp = boost::get<Representation>(stateIt->set);
+				collectedSets = collectedSets.unite(tmp);
 			}
 
 			State<Number> s;
 			s.location = aggregationPair.first->target();
-			s.set = Representation(collectedVertices);
+			//s.set = Representation(collectedVertices);
+			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;

@@ -76,6 +76,25 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 	EXPECT_LE(TypeParam(17), psf1.evaluate(this->vec3).supportValue);
 }
 
+TYPED_TEST(SupportFunctionTest, Supremum) {
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
+	TypeParam supremum = psf1.supremum();
+
+	// compute intersection points.
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->constraints, this->constants);
+	EXPECT_EQ(hpt1.supremum(), supremum);
+
+	matrix_t<TypeParam> trafoMatrix = matrix_t<TypeParam>(2,2);
+	trafoMatrix << 1,2,3,4;
+	vector_t<TypeParam> trafoVector = vector_t<TypeParam>(2);
+	trafoVector << 5,6;
+
+	SupportFunction<TypeParam> psf2 = psf1.linearTransformation(trafoMatrix, trafoVector);
+	HPolytope<TypeParam> hpt2 = hpt1.linearTransformation(trafoMatrix, trafoVector);
+	EXPECT_EQ(psf2.supremum(), hpt2.supremum());
+}
+
+
 TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 	matrix_t<TypeParam> rotation = matrix_t<TypeParam>(2,2);

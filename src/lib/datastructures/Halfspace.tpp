@@ -386,9 +386,9 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 
 		// setup matrix coefficients
 		unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
-		int ia[1 + elements];
-		int ja[1 + elements];
-		double ar[1 + elements];
+		int* ia = new int[1 + elements];
+		int* ja = new int[1 + elements];
+		double* ar = new double[1 + elements];
 		unsigned pos = 1;
 
 		// to prevent bugs
@@ -422,6 +422,9 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		}
 
 		glp_delete_prob( normal );
+		delete ja;
+		delete ia;
+		delete ar;
 
 		return result;
 	}

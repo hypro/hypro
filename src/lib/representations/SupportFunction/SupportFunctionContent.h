@@ -205,6 +205,8 @@ class SupportFunctionContent {
 	std::size_t dimension() const;
 	SF_TYPE type() const;
 
+	Point<Number> supremumPoint() const;
+
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;

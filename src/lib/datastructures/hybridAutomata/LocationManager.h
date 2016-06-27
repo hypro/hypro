@@ -27,7 +27,13 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 	LocationManager() : mId( 0 ) {}
 
   public:
-	~LocationManager() {}
+	~LocationManager() {
+		mIds.clear();
+		for(auto mapIt = mLocations.begin(); mapIt != mLocations.end(); ++mapIt) {
+			delete mapIt->second;
+		}
+		mLocations.clear();
+	}
 
 	Location<Number>* create();
 	Location<Number>* create( const Location<Number>* _loc );

@@ -4,5 +4,6 @@
 #cmakedefine USE_PPL
 #cmakedefine USE_SMTRAT
 #cmakedefine USE_Z3
+#cmakedefine USE_CLANG
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine FORWARD_REACHABILITY_METHOD_2

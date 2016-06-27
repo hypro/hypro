@@ -1,13 +1,13 @@
 #pragma once
 
-#include "EvaluationResult.h"
-#include "smtrat/SimplexSolver.h"
-#include <carl/util/Singleton.h>
-
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
+
+#include "EvaluationResult.h"
+#include "smtrat/SimplexSolver.h"
+#include <carl/util/Singleton.h>
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
@@ -39,6 +39,7 @@ namespace hypro {
 		#endif
 		#endif
 		// Glpk as a presolver
+		mutable bool arraysCreated=false;
 		mutable glp_prob* lp;
 		mutable int* ia;
 		mutable int* ja;
@@ -66,6 +67,10 @@ namespace hypro {
 			fileCounter = cnt;
 			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
+		}
+
+		~Optimizer() {
+			deleteArrays();
 		}
 
 	public:

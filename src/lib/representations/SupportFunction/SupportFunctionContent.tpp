@@ -516,6 +516,52 @@ SF_TYPE SupportFunctionContent<Number>::type() const {
 	return mType;
 }
 
+template<typename Number>
+Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
+	switch ( mType ) {
+		case SF_TYPE::INFTY_BALL:
+		case SF_TYPE::TWO_BALL: {
+			return mBall->supremumPoint();
+		}
+		case SF_TYPE::LINTRAFO: {
+			return mLinearTrafoParameters->origin->supremumPoint().linearTransformation(mLinearTrafoParameters->a, mLinearTrafoParameters->b);
+		}
+		case SF_TYPE::POLY: {
+			return mPolytope->supremumPoint();
+		}
+		case SF_TYPE::SCALE: {
+			if ( mScaleParameters->factor == 0 )
+				return Point<Number>::Zero(mDimension);
+			else
+				return mScaleParameters->origin->supremumPoint()* mScaleParameters->factor;
+		}
+		case SF_TYPE::SUM: {
+			Point<Number> lhsPoint = mSummands->lhs->supremumPoint();
+			Point<Number> rhsPoint = mSummands->rhs->supremumPoint();
+			return lhsPoint+rhsPoint;
+		}
+		case SF_TYPE::UNION: {
+			Point<Number> lhsPoint = mUnionParameters->lhs->supremumPoint();
+			Point<Number> rhsPoint = mUnionParameters->rhs->supremumPoint();
+			if(Point<Number>::inftyNorm(lhsPoint) > Point<Number>::inftyNorm(rhsPoint)) {
+				return lhsPoint;
+			}
+			return rhsPoint;
+		}
+		case SF_TYPE::INTERSECT: {
+			Point<Number> lhsPoint = mIntersectionParameters->lhs->supremumPoint();
+			Point<Number> rhsPoint = mIntersectionParameters->rhs->supremumPoint();
+			if(Point<Number>::inftyNorm(lhsPoint) < Point<Number>::inftyNorm(rhsPoint)) {
+				return lhsPoint;
+			}
+			return rhsPoint;
+		}
+		default:
+			assert(false);
+			return Point<Number>();
+	}
+}
+
 template <typename Number>
 sumContent<Number> *SupportFunctionContent<Number>::summands() const {
 	switch ( mType ) {
@@ -668,11 +714,11 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 				return mScaleParameters->origin->contains( _point / mScaleParameters->factor );
 		}
 		case SF_TYPE::SUM: {
-			assert( false );  // Todo: Not implemented yet.
+			assert(false);
 			return false;
 		}
 		case SF_TYPE::UNION: {
-			return (mIntersectionParameters->rhs->contains(_point) || mIntersectionParameters->lhs->contains(_point));
+			return (mUnionParameters->rhs->contains(_point) || mUnionParameters->lhs->contains(_point));
 		}
 		case SF_TYPE::INTERSECT: {
 			return (mIntersectionParameters->rhs->contains(_point) && mIntersectionParameters->lhs->contains(_point));

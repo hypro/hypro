@@ -92,7 +92,6 @@ class Point {
 		if(mHash == 0) {
 			mHash = std::hash<vector_t<Number>>()(mCoordinates);
 		}
-
 		return mHash;
 	}
 
@@ -106,7 +105,7 @@ class Point {
 	void setComposition( const std::vector<Point<Number>>& _elements );
 	void addToComposition( const Point<Number>& _element );
 
-	static Point<Number> zero( unsigned _dim = 0 ) { return std::move(Point<Number>( vector_t<Number>::Zero( _dim )) ); }
+	static Point<Number> Zero( unsigned _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( _dim )); }
 
 	Point<Number> origin() const;
 
@@ -169,13 +168,20 @@ class Point {
 	 * @param p2 Other point
 	 * @return A point with the coordinate-wise maximum of p1 and p2.
 	 */
-	static Point<Number> coordinateMax( const Point<Number>& _p1, const Point<Number>& _p2 ) {
+	static Point<Number> coeffWiseMax(const Point<Number> &_p1, const Point<Number> &_p2) {
 		assert( _p1.dimension() == _p2.dimension() );
 		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
-		vector_t<Number> p1Coord = _p1.rawCoordinates();
-		vector_t<Number> p2Coord = _p2.rawCoordinates();
 		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
-			coordinates( i ) = p1Coord( i ) >= p2Coord( i ) ? p1Coord( i ) : p2Coord( i );
+			coordinates( i ) = _p1.at( i ) >= _p2.at( i ) ? _p1.at( i ) : _p2.at( i );
+		}
+		return Point<Number>( coordinates );
+	}
+
+	static Point<Number> coeffWiseMin(const Point<Number> &_p1, const Point<Number> &_p2) {
+		assert( _p1.dimension() == _p2.dimension() );
+		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
+		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
+			coordinates( i ) = _p1.at( i ) <= _p2.at( i ) ? _p1.at( i ) : _p2.at( i );
 		}
 		return Point<Number>( coordinates );
 	}
@@ -190,28 +196,28 @@ class Point {
 		return res;
 	}
 
-        /**
-         * removes any duplicate points in a given PointVector
-         * @author Simon Froitzheim
-         * @param PointVec the point vector which should get checked for duplicates
-         * @return A point vector that is just PointVec without duplicates
-         */
+	/**
+	 * removes any duplicate points in a given PointVector
+	 * @author Simon Froitzheim
+	 * @param PointVec the point vector which should get checked for duplicates
+	 * @return A point vector that is just PointVec without duplicates
+	 */
 
-        static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
-              std::set<Point<Number>> pointSet;
-              //writes all the point entries into a set (set removes duplicates)
-              for (unsigned i = 0; i<pointVec.size(); ++i){
-                  pointSet.insert(pointVec.at(i));
-              }
-              //write all the set entries into the return vector
-              std::vector<Point<Number>> res;
-              for (const auto& point : pointSet){
-                  res.push_back(point);
-              }
+	static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
+		  std::set<Point<Number>> pointSet;
+		  //writes all the point entries into a set (set removes duplicates)
+		  for (unsigned i = 0; i<pointVec.size(); ++i){
+			  pointSet.insert(pointVec.at(i));
+		  }
+		  //write all the set entries into the return vector
+		  std::vector<Point<Number>> res;
+		  for (const auto& point : pointSet){
+			  res.push_back(point);
+		  }
 
-              //std::copy(pointSet.begin(), pointSet.end(), res.begin());
-              return res;
-        }
+		  //std::copy(pointSet.begin(), pointSet.end(), res.begin());
+		  return res;
+	}
 
 
 	/**
@@ -314,6 +320,7 @@ class Point {
 	Point<Number>& operator+=( const vector_t<Number>& _rhs );
 	Point<Number>& operator-=( const Point<Number>& _rhs );
 	Point<Number>& operator-=( const vector_t<Number>& _rhs );
+	Point<Number> operator-() const;
 	Point<Number>& operator/=( unsigned _quotient );
 	Point<Number>& operator*=( const Number _factor );
 	Point<Number>& operator=( const Point<Number>& _in );

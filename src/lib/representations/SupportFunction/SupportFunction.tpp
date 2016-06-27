@@ -175,8 +175,8 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     Number SupportFunctionT<Number,Converter>::supremum() const {
-        auto tmp = Converter::toHPolytope(*this);
-        return tmp.supremum(); // TODO: Temporary!
+		Point<Number> supPoint = content->supremumPoint();
+        return Point<Number>::inftyNorm(supPoint);
     }
 
     template<typename Number, typename Converter>
@@ -256,15 +256,18 @@ namespace hypro{
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
         		return std::make_pair(false, *this);
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
+				//std::cout << "Object will be limited. " << std::endl;
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
-        		// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-        		// std::cout << "Push plane " << rowI << std::endl;
+				//std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+        		//std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
 	            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
-	                // std::cout << "fullyOutside" << std::endl;
+					//std::cout << "fullyOutside" << std::endl;
 	                // the object lies fully outside one of the planes -> return false
 	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
-	            }
+	            } else {
+					//std::cout << "Not fully outside." << std::endl;
+				}
         	} else if(planeEvalRes.supportValue <= _vec(rowI)) {
         		// object lies below this plane.
         		// std::cout << __func__ << " satisfies plane " << convert<Number,double>(_mat.row(rowI)) << std::endl;
@@ -276,22 +279,22 @@ namespace hypro{
     			std::cout << __func__ << " Object will stay the same" << std::endl;
     			return std::make_pair(true, *this);
     		}
-    		// std::cout << __func__ << " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" << std::endl;
+    		//std::cout << __func__ << " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" << std::endl;
     		// if the result is not fullyOutside, only add planes, which affect the object
         	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
         	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
         	for(unsigned i = 0; i < distances.rows(); ++i){
-        		// std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
+        		//std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
         		planes.row(i) = _mat.row(limitingPlanes.back());
         		distances(i) = _vec(limitingPlanes.back());
         		limitingPlanes.pop_back();
         	}
-        	// std::cout << "Intersect with " << planes << ", " << distances << std::endl;
+        	//std::cout << "Intersect with " << planes << ", " << distances << std::endl;
         	return std::make_pair(true, this->intersectHalfspaces(planes,distances));
     	} else {
-    		// std::cout << __func__ << " Object will be fully limited but not empty" << std::endl;
+    		//std::cout << __func__ << " Object will be fully limited but not empty" << std::endl;
     		assert(limitingPlanes.size() == unsigned(_mat.rows()));
-    		// std::cout << "Intersect with " << _mat << ", " << _vec << std::endl;
+    		//std::cout << "Intersect with " << _mat << ", " << _vec << std::endl;
     		return std::make_pair(true, this->intersectHalfspaces(_mat,_vec));
     	}
     }

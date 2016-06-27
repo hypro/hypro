@@ -8,7 +8,7 @@ namespace hypro {
 	class HybridAutomaton;
 
 	template<typename Number>
-	class ReachabilitySettings;
+	struct ReachabilitySettings;
 
 	template<typename Number>
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> parseFlowstarFile(const std::string& filename);

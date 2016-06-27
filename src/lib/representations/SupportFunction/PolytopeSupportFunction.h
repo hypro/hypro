@@ -16,8 +16,9 @@
 #include "../../config.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
-#include "../../util/Optimizer.h"
 #include "../../util/convexHull.h"
+#include "../../util/Optimizer.h"
+#include "../../util/Permutator.h"
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
@@ -56,6 +57,10 @@ class PolytopeSupportFunction {
 
 	matrix_t<Number> constraints() const;
 	vector_t<Number> constants() const;
+
+	std::vector<Point<Number>> vertices() const;
+
+	Point<Number> supremumPoint() const;
 
 	/**
 	 * Evaluates the support function in the given direction.

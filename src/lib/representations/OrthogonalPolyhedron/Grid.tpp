@@ -66,7 +66,7 @@ std::vector<Vertex<Number>> Grid<Number>::vertices() const {
 		// std::cout << "Calculated vertex " << calculateOriginal(point.point()) <<
 		// " from " << point.point() <<
 		// std::endl;
-		if ( point.point() != Point<unsigned>::zero( point.point().dimension() ) ) {  // do not add origin
+		if ( point.point() != Point<unsigned>::Zero( point.point().dimension() ) ) {  // do not add origin
 			res.emplace_back( calculateOriginal( point.point() ), point.color() );
 		}
 	}
@@ -233,13 +233,13 @@ std::vector<Point<unsigned>> Grid<Number>::iNeighborhoodInduced( const Point<uns
 			possibleCoords.emplace_back( std::move( tmp ) );
 		} else {
 			std::vector<unsigned> tmp( {_inducedPoint.at( j )} );
-			possibleCoords.emplace_back( std::move( tmp ) );
+			possibleCoords.emplace_back( tmp );
 		}
 	}
 	pointIt<unsigned> pIt( possibleCoords );
 
 	while ( !pIt.end ) {
-		result.emplace_back( std::move( ++pIt ) );
+		result.emplace_back( ++pIt  );
 	}
 	return ( result );
 }
@@ -298,7 +298,7 @@ Point<Number> Grid<Number>::directSuccessor( const Point<Number> &_point ) const
 }
 
 template <typename Number>
-std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i, int pos ) const {
+std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i ) const {
 	std::vector<Point<unsigned>> result;
 
 	std::vector<std::vector<unsigned>> tmp;
@@ -316,7 +316,7 @@ std::vector<Point<unsigned>> Grid<Number>::iSliceInduced( unsigned i, int pos ) 
 	pointIt<unsigned> pIt( tmp );
 
 	while ( !pIt.end ) {
-		result.emplace_back( std::move( ++pIt ) );
+		result.emplace_back( ++pIt );
 	}
 	return ( result );
 }
@@ -415,7 +415,7 @@ bool Grid<Number>::isOnIFacet( const Point<Number> &_point, unsigned i ) const {
 	// << ") : ";
 
 	// special case: origin is never on a facet
-	if ( inducedPoint == Point<unsigned>::zero( inducedPoint.dimension() ) ) {
+	if ( inducedPoint == Point<unsigned>::Zero( inducedPoint.dimension() ) ) {
 		// std::cout << "false" << std::endl;
 		return false;
 	}
@@ -511,7 +511,7 @@ Grid<Number> Grid<Number>::combine( const Grid<Number> &a, const Grid<Number> &b
 	}
 
 	// insert origin
-	res.insertInduced( Point<unsigned>::zero( a.dimension() ), false );
+	res.insertInduced( Point<unsigned>::Zero( a.dimension() ), false );
 
 	return ( res );
 }
@@ -562,9 +562,9 @@ void Grid<Number>::induceGrid( const vSet<Number> &vertices ) {
 	}
 
 	// set color of origin manually (always white)
-	// this->insertInduced(Point<unsigned>::zero(mInducedGridPoints.size()),
+	// this->insertInduced(Point<unsigned>::Zero(mInducedGridPoints.size()),
 	// false);
-	mGridMap.insert( std::make_pair( Point<unsigned>::zero( mInducedGridPoints.size() ),
+	mGridMap.insert( std::make_pair( Point<unsigned>::Zero( mInducedGridPoints.size() ),
 									 false ) );  // insert only in gridmap to not affect the size
 
 	// set up datastructures for colors of vertices and vertices
@@ -600,7 +600,7 @@ std::pair<Point<unsigned>, bool> Grid<Number>::calculateInduced( const Point<Num
 			precise = false;
 		}
 	}
-	return std::make_pair( std::move( Point<unsigned>( coordinates ) ), precise );  // return induced point
+	return std::make_pair( Point<unsigned>( coordinates ), precise );  // return induced point
 }
 
 template <typename Number>

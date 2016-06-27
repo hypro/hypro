@@ -828,15 +828,22 @@ namespace hypro {
 
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {
+		if(arraysCreated) {
+			deleteArrays();
+		}
 		ia = new int[size + 1];
 		ja = new int[size + 1];
 		ar = new double[size + 1];
+		arraysCreated = true;
 	}
 
 	template <typename Number>
 	void Optimizer<Number>::deleteArrays() const {
-		delete[] ia;
-		delete[] ja;
-		delete[] ar;
+		if(arraysCreated) {
+			delete[] ia;
+			delete[] ja;
+			delete[] ar;
+		}
+		arraysCreated = false;
 	}
 } // namespace hypro

@@ -262,6 +262,8 @@ class BoxT {
 	 */
 	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
 
+	BoxT<Number,Converter> operator*(const Number& factor) const { return BoxT<Number,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+
 	/**
 	 * @brief Outstream operator.
 	 *
@@ -291,16 +293,19 @@ class BoxT {
 	void removeRedundancy() {}
 	std::size_t size() const;
 
+	BoxT<Number,Converter> makeSymmetric() const;
 	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter> minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const;
 	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
 	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const BoxT<Number,Converter>& box ) const;
 	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes ) const;
 
 	void clear();
 	void print() const;
