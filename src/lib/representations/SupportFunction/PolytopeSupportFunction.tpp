@@ -38,39 +38,17 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 
 template<typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
-	if ( !_points.empty() ) {
-		mDimension = _points.begin()->dimension();
-		// check affine independence - verify object dimension.
-		std::vector<vector_t<Number>> coordinates;
-		for(const auto& vertex : _points){
-			coordinates.emplace_back(vertex.rawCoordinates());
-		}
-		int effectiveDim = effectiveDimension(coordinates);
-		assert(effectiveDim >= 0);
+	assert( !_points.empty() );
+	mDimension = _points[0].dimension();
 
-		if ( unsigned(effectiveDim) < mDimension ) {
-			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(_points);
-
-			mConstraints = matrix_t<Number>(boxConstraints.size(), mDimension);
-			mConstraintConstants = vector_t<Number>(boxConstraints.size());
-
-			unsigned rowCnt = 0;
-			for(const auto& constraint : boxConstraints){
-				mConstraints.row(rowCnt) = constraint.normal();
-				mConstraintConstants(rowCnt) = constraint.offset();
-				++rowCnt;
-			}
-		} else {
-			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( _points ).first;
-			unsigned rowCnt = 0;
-			for ( auto &facet : facets ) {
-				assert(facet->halfspace().contains(points));
-				mConstraints.row(rowCnt) = facet->halfspace().normal();
-				mConstraintConstants(rowCnt) = facet->halfspace().offset();
-				++rowCnt;
-			}
-			facets.clear();
-		}
+	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( _points ).first;
+	mConstraints = matrix_t<Number>( facets.size(), mDimension );
+	mConstraintConstants = vector_t<Number>( facets.size() );
+	unsigned pos = 0;
+	for ( auto &facet : facets ) {
+		mConstraints.row( pos ) = facet->halfspace().normal().transpose();
+		mConstraintConstants( pos ) = facet->halfspace().offset();
+		++pos;
 	}
 }
 
@@ -113,30 +91,23 @@ vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
-	if(mConstraints.rows() > 0) {
-		Optimizer<Number> opt;
-		opt.setMatrix(mConstraints);
-		opt.setVector(mConstraintConstants);
+	Optimizer<Number>& opt = Optimizer<Number>::getInstance();
+	opt.setMatrix(mConstraints);
+	opt.setVector(mConstraintConstants);
+	EvaluationResult<Number> res = opt.evaluate(l);
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << "Call to optimizer." << std::endl;
+	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
-		result = opt.evaluate(l);
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << carl::toDouble(result.supportValue) << std::endl;
-#endif
-		assert(result.errorCode != SOLUTION::FEAS || this->contains(result.optimumValue));
-		assert( l.rows() == mDimension );
-	} else {
-		result.errorCode = SOLUTION::INFTY;
-	}
-	return result;
+	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
+	assert( l.rows() == mDimension );
+	return res;
 }
 
 template <typename Number>
 std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
-	std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
+	// std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));

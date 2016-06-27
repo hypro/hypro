@@ -16,6 +16,10 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 	: mType( _orig.type() ), mDimension( _orig.dimension() ) {
 	// std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+                    mEllipsoid = _orig.ellipsoid();
+                    break;
+                }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			mBall = _orig.ball();
@@ -43,6 +47,20 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 		}
 		case SF_TYPE::UNION: {
 			mUnionParameters = _orig.unionParameters();
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
+template <typename Number>
+SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
+    	switch ( _type ) {
+		case SF_TYPE::ELLIPSOID: {
+			mEllipsoid = new EllipsoidSupportFunction<Number>( _shapeMatrix);
+			mType = SF_TYPE::ELLIPSOID;
+			mDimension = _shapeMatrix.cols();
 			break;
 		}
 		default:
@@ -193,6 +211,10 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::INTERSECT:
 			delete mIntersectionParameters;
 			break;
+                case SF_TYPE::ELLIPSOID:
+                        delete mEllipsoid;
+                        break;
+                     // TODO delete ellipsoid
 		default:
 			assert( false );
 	}
@@ -205,6 +227,9 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 	// std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
+                case SF_TYPE::ELLIPSOID:
+                        mEllipsoid = _other->ellipsoid();
+                        break;
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
 			mBall = _other->ball();
@@ -236,6 +261,9 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+                        return mEllipsoid->evaluate( _direction );
+                }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->evaluate( _direction );
@@ -328,6 +356,9 @@ template <typename Number>
 std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+                    return mEllipsoid->multiEvaluate( _directions );
+                }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->multiEvaluate( _directions );
@@ -558,6 +589,18 @@ PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() cons
 }
 
 template <typename Number>
+EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
+	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+			return mEllipsoid;
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
+template <typename Number>
 BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
@@ -605,6 +648,9 @@ bool SupportFunctionContent<Number>::contains( const Point<Number> &_point ) con
 template <typename Number>
 bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+                        return mEllipsoid->contains( _point );  
+                }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->contains( _point );
@@ -658,6 +704,9 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 template <typename Number>
 bool SupportFunctionContent<Number>::empty() const {
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+                        return mEllipsoid->empty();
+                }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->empty();
@@ -702,6 +751,9 @@ bool SupportFunctionContent<Number>::empty() const {
 template <typename Number>
 void SupportFunctionContent<Number>::print() const {
 	switch ( mType ) {
+		case SF_TYPE::ELLIPSOID: {
+			std::cout << "ELLIPSOID" << std::endl;
+		} break;
 		case SF_TYPE::INFTY_BALL: {
 			std::cout << "INFTY-BALL" << std::endl;
 		} break;

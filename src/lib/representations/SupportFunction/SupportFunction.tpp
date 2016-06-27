@@ -60,6 +60,11 @@ namespace hypro{
          //handled by initializer list
     }
 
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _shapeMatrix) : content(hypro::SupportFunctionContent<Number>::create(SF_TYPE::ELLIPSOID, _shapeMatrix)){
+         //handled by initializer list
+    }
+
     //destructor
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::~SupportFunctionT() {
@@ -141,6 +146,11 @@ namespace hypro{
     BallSupportFunction<Number> *SupportFunctionT<Number,Converter>::ball() const {
         return content->ball();
     }
+    
+    template<typename Number, typename Converter>
+    EllipsoidSupportFunction<Number> *SupportFunctionT<Number,Converter>::ellipsoid() const {
+        return content->ellipsoid();
+    }
 
     template<typename Number, typename Converter>
     void SupportFunctionT<Number,Converter>::removeRedundancy() {
@@ -165,7 +175,6 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     Number SupportFunctionT<Number,Converter>::supremum() const {
-		//std::cout << __func__ << std::endl;
         auto tmp = Converter::toHPolytope(*this);
         return tmp.supremum(); // TODO: Temporary!
     }
@@ -239,38 +248,32 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-        //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
+        // std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
         assert(_mat.rows() == _vec.rows());
-		if(_mat.rows() == 0) {
-			return std::make_pair(true, *this);
-		}
-
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI));
-			//std::cout << "Evaluated." << std::endl;
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
-				//std::cout << __func__ << ": Evalresult is INFEAS -> object is empty." << std::endl;
         		return std::make_pair(false, *this);
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
         		// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-        		std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+        		// std::cout << "Push plane " << rowI << std::endl;
 	            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
-	               // std::cout << "fullyOutside" << std::endl;
+	                // std::cout << "fullyOutside" << std::endl;
 	                // the object lies fully outside one of the planes -> return false
 	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
 	            }
         	} else if(planeEvalRes.supportValue <= _vec(rowI)) {
         		// object lies below this plane.
-        		//std::cout << __func__ << " satisfies plane " << convert<Number,double>(_mat.row(rowI)) << std::endl;
+        		// std::cout << __func__ << " satisfies plane " << convert<Number,double>(_mat.row(rowI)) << std::endl;
         		continue;
         	}
         }
     	if(limitingPlanes.size() < unsigned(_mat.rows())){
     		if(limitingPlanes.size() == 0 ){
-    			//std::cout << __func__ << " Object will stay the same" << std::endl;
+    			std::cout << __func__ << " Object will stay the same" << std::endl;
     			return std::make_pair(true, *this);
     		}
     		// std::cout << __func__ << " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" << std::endl;

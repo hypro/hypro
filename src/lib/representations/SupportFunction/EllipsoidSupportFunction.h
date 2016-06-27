@@ -1,12 +1,13 @@
 /*
  * This file contains the basic implementation of support functions of a ball according to the infinity norm and its
  *evaluation.
- * @file ElipsoidSupportFunction.h
+ * @file EllipsoidSupportFunction.h
  *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
+ * @author Phillip Florian 
+ * 
  * @since	2015-04-17
- * @version	2015-04-17
+ * @version	2016-05-04
  */
 
 #pragma once
@@ -15,16 +16,22 @@
 #include "util.h"
 
 namespace hypro {
+
+/*
+* This class defines a support Function object representing an ellipsoid 
+* SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
+*/
 template <typename Number>
-class ElipsoidSupportFunction {
+class EllipsoidSupportFunction {
   private:
 	unsigned mDimension;
-	matrix_t<Number> mMatrix;
-	Number mDistance;
+	matrix_t<Number> mShapeMatrix;
+	SF_TYPE mType;
 
   public:
-	ElipsoidSupportFunction( matrix_t<Number> _matrix, Number _distance );
-	~ElipsoidSupportFunction();
+	EllipsoidSupportFunction( const EllipsoidSupportFunction<Number>& _orig );
+	EllipsoidSupportFunction( matrix_t<Number> _shapeMatrix);
+	~EllipsoidSupportFunction();
 
 	/**
 	 * Returns the dimension of the object.
@@ -32,12 +39,15 @@ class ElipsoidSupportFunction {
 	 */
 	unsigned dimension() const;
 
+	matrix_t<Number> shapeMatrix() const;
+	SF_TYPE type() const;
+
 	/**
 	 * Evaluates the support function in the given direction.
 	 * @param l
 	 * @return
 	 */
-	evaluationResult<Number> evaluate( const vector_t<Number>& l ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const;
 
 	/**
 	 * @brief Evaluates the support function in the directions given in the passed matrix.
@@ -46,7 +56,7 @@ class ElipsoidSupportFunction {
 	 * @param _A Matrix holding the directions in which to evaluate.
 	 * @return Vector of support values.
 	 */
-	vector_t<Number> multiEvaluate( const matrix_t<Number>& _A ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A ) const;
 
 	/**
 	 * @brief Check if point is contained in the support function.
@@ -69,6 +79,7 @@ class ElipsoidSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
+        
 };
 }  // namespace
-#include "ElipsoidSupportFunction.tpp"
+#include "EllipsoidSupportFunction.tpp"
