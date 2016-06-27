@@ -505,7 +505,6 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 				return mScaleParameters->origin->supremumPoint()* mScaleParameters->factor;
 		}
 		case SF_TYPE::SUM: {
-			assert(false);
 			Point<Number> lhsPoint = mSummands->lhs->supremumPoint();
 			Point<Number> rhsPoint = mSummands->rhs->supremumPoint();
 			return lhsPoint+rhsPoint;
@@ -519,8 +518,12 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 			return rhsPoint;
 		}
 		case SF_TYPE::INTERSECT: {
-			assert(false);
-			return Point<Number>();
+			Point<Number> lhsPoint = mIntersectionParameters->lhs->supremumPoint();
+			Point<Number> rhsPoint = mIntersectionParameters->rhs->supremumPoint();
+			if(Point<Number>::inftyNorm(lhsPoint) < Point<Number>::inftyNorm(rhsPoint)) {
+				return lhsPoint;
+			}
+			return rhsPoint;
 		}
 		default:
 			assert(false);
