@@ -20,7 +20,7 @@
 
 //#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-//#define USE_LIN_TRANS_REDUCTION
+#define USE_LIN_TRANS_REDUCTION
 
 namespace hypro {
 template <typename Number>
@@ -42,7 +42,7 @@ struct trafoContent {
 	vector_t<Number> b;
         std::size_t successiveTransformations;
         // 2^power defines the max. number of successive lin.trans before reducing the SF
-        std::size_t power = 3; // TODO make me easy accessible
+        std::size_t power = 2; // TODO make me easy accessible
         
 	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, matrix_t<Number> _a, vector_t<Number> _b )
 		: origin( _origin ), a( _a ), b( _b ) {
@@ -131,6 +131,7 @@ class SupportFunctionContent {
 		BallSupportFunction<Number>* mBall;
 		EllipsoidSupportFunction<Number>* mEllipsoid;
 	};
+	bool mNonRedundant = false;
 
 	std::weak_ptr<SupportFunctionContent<Number>> pThis;
 
@@ -199,6 +200,7 @@ class SupportFunctionContent {
 
 	std::shared_ptr<SupportFunctionContent<Number>>& operator=( const std::shared_ptr<SupportFunctionContent<Number>>& _orig ) ;
 
+	void removeRedundancy();
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
@@ -261,6 +263,10 @@ class SupportFunctionContent {
 			} break;
 			case SF_TYPE::UNION: {
 				lhs << "UNION" << std::endl;
+				lhs << "of " << std::endl;
+				rhs->mUnionParameters->lhs->print();
+				lhs << "and" << std::endl;
+				rhs->mUnionParameters->rhs->print();
 			} break;
 			case SF_TYPE::INTERSECT: {
 				lhs << "INTERSECTION " << std::endl;

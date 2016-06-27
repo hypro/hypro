@@ -81,6 +81,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 			}
 			facets.clear();
 		}
+		mNonRedundant = true;
 	}
 }
 
@@ -98,6 +99,7 @@ PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(cons
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
     this->mDimension = _orig.mDimension;
+	this->mNonRedundant = _orig.mNonRedundant;
 }
 
 template <typename Number>
@@ -217,6 +219,38 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 		}
 	}
 	return Point<Number>(sup.optimumValue);
+}
+
+template<typename Number>
+void PolytopeSupportFunction<Number>::removeRedundancy() {
+	if(!mNonRedundant && mConstraints.rows() > 1){
+		Optimizer<Number> opt;
+		opt.setMatrix(this->mConstraints);
+		opt.setVector(this->mConstraintConstants);
+
+		std::vector<std::size_t> redundant = opt.redundantConstraints();
+		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
+
+		if(!redundant.empty()){
+			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
+			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
+			unsigned insertionIndex = newConstants.rows()-1;
+			for(unsigned rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
+				if(redundant.empty()){
+					break;
+				}
+
+				if(rowIndex != redundant.back()){
+					newConstraints.row(insertionIndex) = mConstraints.row(rowIndex);
+					newConstants(rowIndex) = mConstraintConstants(rowIndex);
+					--insertionIndex;
+				}
+			}
+			assert(insertionIndex == 0);
+		}
+		assert(redundant.empty());
+	}
+	mNonRedundant=true;
 }
 
 template <typename Number>

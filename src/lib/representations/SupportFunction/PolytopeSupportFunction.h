@@ -37,6 +37,7 @@ class PolytopeSupportFunction {
 	vector_t<Number> mConstraintConstants;
 
 	unsigned mDimension;
+	bool mNonRedundant = false;
 
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
@@ -61,6 +62,7 @@ class PolytopeSupportFunction {
 	std::vector<Point<Number>> vertices() const;
 
 	Point<Number> supremumPoint() const;
+	void removeRedundancy();
 
 	/**
 	 * Evaluates the support function in the given direction.

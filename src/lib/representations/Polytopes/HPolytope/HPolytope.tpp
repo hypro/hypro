@@ -23,7 +23,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
-		mHPlanes.push_back( Halfspace<Number>( A.row( i ), b( i ) ) );
+		mHPlanes.emplace_back( A.row( i ), b( i ) );
 	}
 	reduceNumberRepresentation();
 }
@@ -582,7 +582,12 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	assert( _mat.rows() == _vec.rows() );
 	HPolytopeT<Number, Converter> res( *this );
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
-		res.insert( Halfspace<Number>( _mat.row( i ), _vec( i ) ) );
+		vector_t<Number> tmpRow = vector_t<Number>(_mat.cols());
+		for(unsigned d = 0; d < _mat.cols(); ++d) {
+			tmpRow(d)=_mat(i,d);
+		}
+		Halfspace<Number> tmp = Halfspace<Number>( tmpRow, _vec( i ) );
+		res.insert( tmp );
 	}
 	//std::cout << "After intersection: " << res << std::endl;
 	res.removeRedundancy();

@@ -154,17 +154,7 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     void SupportFunctionT<Number,Converter>::removeRedundancy() {
-    	std::vector<vector_t<Number>> directionVector = computeTemplate<Number>(unsigned(this->dimension()), unsigned(8));
-    	matrix_t<Number> directions = matrix_t<Number>(directionVector.size(), this->dimension());
-    	for(unsigned i = 0; i < directionVector.size(); ++i) {
-    		directions.row(i) = directionVector.at(i);
-    	}
-    	std::vector<EvaluationResult<Number>> res = this->multiEvaluate(directions);
-    	vector_t<Number> distances = vector_t<Number>::Zero(directions.rows());
-    	for(unsigned i = 0; i < res.size(); ++i) {
-    		distances(i) = res.at(i).supportValue;
-    	}
-    	*this = SupportFunctionT<Number,Converter>(directions, distances);
+    	content->removeRedundancy();
     }
 
     template<typename Number, typename Converter>
