@@ -249,6 +249,10 @@ namespace hypro{
     template<typename Number, typename Converter>
     std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         // std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
+		if(_mat.rows() == 0) {
+			return std::make_pair(true, *this);
+		}
+
         assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
@@ -276,7 +280,7 @@ namespace hypro{
         }
     	if(limitingPlanes.size() < unsigned(_mat.rows())){
     		if(limitingPlanes.size() == 0 ){
-    			std::cout << __func__ << " Object will stay the same" << std::endl;
+    			//std::cout << __func__ << " Object will stay the same" << std::endl;
     			return std::make_pair(true, *this);
     		}
     		//std::cout << __func__ << " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" << std::endl;

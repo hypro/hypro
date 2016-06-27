@@ -20,7 +20,7 @@
 
 //#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-#define USE_LIN_TRANS_REDUCTION
+//#define USE_LIN_TRANS_REDUCTION
 
 namespace hypro {
 template <typename Number>
