@@ -57,7 +57,6 @@ namespace reachability {
                          */
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
 		}
-		std::cout << "Finished at depth " << mCurrentLevel << std::endl;
 
 		return collectedReachableStates;
 	}
@@ -111,9 +110,6 @@ namespace reachability {
 				}
 			}
 			if(locallyUrgent){
-#ifdef REACH_DEBUG
-				std::cout << "The location is urgent, skip flowpipe computation." << std::endl;
-#endif
 				processDiscreteBehaviour(nextInitialSets);
 				return flowpipe;
 			}
@@ -190,7 +186,19 @@ namespace reachability {
 
 			// Set after linear transformation
 			Representation nextSegment;
-
+#ifdef USE_SYSTEM_SEPARATION
+                        Representation autonomPart = currentSegment;
+    #ifdef USE_ELLIPSOIDS
+                        // Easy to addapt to any Representation use ellipsoid for the idea of my masterthesis here
+                        Ellipsoid<Number> nonautonomPart(mBloatingFactor, currentSegment.dimension());
+                        Ellipsoid<Number> totalBloating = nonautonomPart;
+    #else                        
+                        Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());  
+                        Representation nonautonomPart = Representation(nonautonomPartAsEllispsoid);
+                        std::cout << nonautonomPart << std::endl;
+                        Representation totalBloating = nonautonomPart;
+    #endif
+#endif
 #ifdef REACH_DEBUG
 			if(!noFlow){
 				std::cout << "--- Loop entered ---" << std::endl;
@@ -205,13 +213,12 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
-					//std::cout << "Current Segment = " << currentSegment << std::endl;
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
 					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(0, mSettings.timeBound));
 					bool fireTimeTriggeredTransition = false;
@@ -252,8 +259,27 @@ namespace reachability {
 
 				// perform linear transformation on the last segment of the flowpipe
 				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
-				nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
-
+#ifdef USE_SYSTEM_SEPARATION
+                                autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+    #ifdef USE_ELLIPSOIDS
+                                if (mBloatingFactor != 0){
+                                    Representation temp = Representation(totalBloating);
+                                    nextSegment = autonomPart.minkowskiSum(temp);
+                                } else {
+                                    nextSegment = autonomPart;
+                                }
+    #else                           
+                                if (mBloatingFactor != 0){
+                                    nextSegment = autonomPart.minkowskiSum(totalBloating);
+                                } else {
+                                    nextSegment = autonomPart;
+                                }
+    #endif
+                                //nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+                                totalBloating = totalBloating.minkowskiSum(nonautonomPart); 
+#else
+                                nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+#endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
@@ -350,10 +376,6 @@ namespace reachability {
 		std::map<Transition<Number>*, std::vector<State<Number>>> toAggregate;
 		VariablePool& vpool = VariablePool::getInstance();
 
-#ifdef REACH_DEBUG
-		std::cout << __func__ << " processing potential initial sets." << std::endl;
-#endif
-
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
@@ -417,9 +439,7 @@ namespace reachability {
 			//s.set = Representation(collectedVertices);
 			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
-#ifdef REACH_DEBUG
-			std::cout << __func__ << ": Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
-#endif
+			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
 
 			// handle discrete reset assignment
@@ -449,11 +469,7 @@ namespace reachability {
 							   State<Number>& result ) {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
-#ifdef REACH_DEBUG
-		std::cout << __func__ << " for transition " << *_trans << std::endl;
-		std::cout << __func__ << " Verify discrete guard ... ";
-#endif
-		//std::cout << "State set before guard: " << boost::get<Representation>(_state.set) << std::endl;
+		//std::cout << "check transition " << *_trans << std::endl;
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
@@ -492,39 +508,17 @@ namespace reachability {
 			}
 			if(result.discreteAssignment[guardPair.first].isEmpty()){
 				#ifdef REACH_DEBUG
-				std::cout << "violated, transition DISABLED." << std::endl;
+				std::cout << "Valuation violates discrete guard." << std::endl;
 				#endif
 				return false;
 			}
 		}
-#ifdef REACH_DEBUG
-		std::cout << "satisfied." << std::endl;
-		std::cout << "Apply discrete reset." << std::endl;
-#endif
-		// apply discrete reset.
-		assert(_trans->reset().discreteMat.rows() == _trans->reset().discreteVec.rows());
-		std::map<carl::Variable, carl::Interval<Number>> tmpAssignment = result.discreteAssignment;
-		for(unsigned rowIndex = 0; rowIndex < _trans->reset().discreteMat.rows(); ++rowIndex) {
-			carl::Interval<Number> assignment(0);
-			unsigned dOffset = _trans->reset().discreteOffset;
-			for(unsigned colIndex = 0; colIndex < _trans->reset().discreteMat.cols(); ++colIndex){
-				assignment += _trans->reset().discreteMat(rowIndex, colIndex) * tmpAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
-			}
-			carl::Interval<Number> constPart(_trans->reset().discreteVec(rowIndex));
-			assignment += constPart;
-			result.discreteAssignment[VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset)] = assignment;
-#ifdef REACH_DEBUG
-			std::cout << "Reset applied to Variable " << VariablePool::getInstance().carlVarByIndex(rowIndex+dOffset) << " -> " << assignment <<std::endl;
-#endif
-		}
-#ifdef REACH_DEBUG
-		std::cout << "Verifying discrete invariant ... ";
-#endif
 		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
 		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
 			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
 			carl::Interval<Number> substitution(0);
 			unsigned dOffset = _trans->target()->invariant().discreteOffset;
+			//std::cout << "Guard row: " << guardPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
 			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-dOffset) {
@@ -545,52 +539,27 @@ namespace reachability {
 			}
 
 			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
-#ifdef REACH_DEBUG
-				std::cout << "invalid after reset. Transition DISABLED." << std::endl;
-#endif
 				return false;
 			}
 		}
-#ifdef REACH_DEBUG
-		std::cout << "satisfied." << std::endl;
-#endif
 
 		// check for continuous set guard intersection
-#ifdef REACH_DEBUG
-		std::cout << "Checking continuous set: " << boost::get<Representation>(_state.set) << std::endl;
-#endif
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 		// check if the intersection is empty
-#ifdef REACH_DEBUG
-		std::cout << "Verifying guard ... ";
-#endif
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			std::cout << "satisfied, transition ENABLED." << std::endl;
-			std::cout << "Apply reset on " << guardSatisfyingSet.second << std::endl;
+			std::cout << "Transition enabled!" << std::endl;
 			#endif
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 			Representation tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
-#ifdef REACH_DEBUG
-			std::cout << "Verify constant invariant ... ";
-#endif
 			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 			if(invariantSatisfyingSet.first){
-#ifdef REACH_DEBUG
-				std::cout << "satisfied, transition ENABLED." << std::endl;
-#endif
 				result.set = invariantSatisfyingSet.second;
 				return true;
 			}
-#ifdef REACH_DEBUG
-			std::cout << "invalid, transition DISABLED." << std::endl;
-#endif
 			return false;
 		} else {
-#ifdef REACH_DEBUG
-			std::cout << "invalid, transition DISABLED." << std::endl;
-#endif
 			return false;
 		}
 	}
@@ -803,10 +772,6 @@ namespace reachability {
 			}
 #endif
 			firstSegment.removeRedundancy();
-
-			//std::cout << "First segment after removing redundancy: " << firstSegment << std::endl;
-
-			//std::cout << "Invariant of the current location: " << _state.location->invariant().mat <<  _state.location->invariant().vec << std::endl;
 
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );

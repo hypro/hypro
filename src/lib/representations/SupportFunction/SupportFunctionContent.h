@@ -15,10 +15,12 @@
 #include "util.h"
 #include "PolytopeSupportFunction.h"
 #include "BallSupportFunction.h"
+#include "EllipsoidSupportFunction.h"
 #include "../../config.h"
 
 //#define SUPPORTFUNCTION_VERBOSE
 //#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
+#define USE_LIN_TRANS_REDUCTION
 
 namespace hypro {
 template <typename Number>
@@ -38,9 +40,50 @@ struct trafoContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
 	matrix_t<Number> a;
 	vector_t<Number> b;
+        std::size_t successiveTransformations;
+        // 2^power defines the max. number of successive lin.trans before reducing the SF
+        std::size_t power = 3; // TODO make me easy accessible
+        
 	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, matrix_t<Number> _a, vector_t<Number> _b )
-		: origin( _origin ), a( _a ), b( _b ) {}
-	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), a( _origin.a ), b( _origin.b ) {}
+		: origin( _origin ), a( _a ), b( _b ) {
+#ifdef USE_LIN_TRANS_REDUCTION
+            // best points for reduction are powers of 2 thus we only use these points for possible reduction points
+            bool reduced;
+            do {
+                reduced = false;
+                if ( (_origin.get()->type() == SF_TYPE::LINTRAFO) && (_origin.get()->linearTrafoParameters()->a == a) && (_origin.get() ->linearTrafoParameters()->b == b) ) {
+                    successiveTransformations = _origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
+                } else {
+                    successiveTransformations = 0;
+                } 
+                if (successiveTransformations == carl::pow(2,power)-1) {
+                    reduced = true; 
+                    std::pair<matrix_t<Number>, vector_t<Number>> newParam = reduceLinTrans(a, b, power);
+                    a = newParam.first;
+                    b = newParam.second;
+                    for(std::size_t i = 0; i < carl::pow(2,power)-1; i++ ){
+                        origin = origin.get()->linearTrafoParameters()->origin;
+                    }
+                }
+            } while (reduced == true);
+#endif
+        }
+	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), a( _origin.a ), b( _origin.b ), successiveTransformations( _origin.successiveTransformations ) {}
+        
+        std::pair<matrix_t<Number>, vector_t<Number>> reduceLinTrans(const matrix_t<Number>& _a, const vector_t<Number>& _b, std::size_t _power){
+            std::size_t powerOfTwo = carl::pow(2, _power);
+                // first compute the new b
+            vector_t<Number> bTrans = _b;
+            matrix_t<Number> aTrans = _a;
+            for (std::size_t i = 1; i < powerOfTwo ; i++){
+                bTrans = _a*bTrans + _b;
+            }
+            // now compute a^i efficiently
+            for (std::size_t i = 0; i < _power; i++){
+                aTrans = aTrans*aTrans;
+            }
+            return std::make_pair(aTrans, bTrans);
+        }
 };
 
 template <typename Number>
@@ -86,10 +129,12 @@ class SupportFunctionContent {
 		intersectionContent<Number>* mIntersectionParameters;
 		PolytopeSupportFunction<Number>* mPolytope;
 		BallSupportFunction<Number>* mBall;
+		EllipsoidSupportFunction<Number>* mEllipsoid;
 	};
 
 	std::weak_ptr<SupportFunctionContent<Number>> pThis;
 
+	SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type = SF_TYPE::ELLIPSOID );
 	SupportFunctionContent( Number _radius, SF_TYPE _type = SF_TYPE::INFTY_BALL );
 	SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances,
 					 SF_TYPE _type = SF_TYPE::POLY );
@@ -107,6 +152,12 @@ class SupportFunctionContent {
 
 	static  std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, _type ) );
+		obj->pThis = obj;
+		return obj;
+	}	
+        
+	static  std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ) );
 		obj->pThis = obj;
 		return obj;
 	}
@@ -164,6 +215,7 @@ class SupportFunctionContent {
 	intersectionContent<Number>* intersectionParameters() const;
 	PolytopeSupportFunction<Number>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
+	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( const matrix_t<Number>& _A,
 																   const vector_t<Number>& _b ) const;
@@ -179,6 +231,9 @@ class SupportFunctionContent {
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {
 		switch ( rhs->mType ) {
+                    	case SF_TYPE::ELLIPSOID: {
+				lhs << "ELLIPSIOD" << std::endl;
+			} break;
 			case SF_TYPE::INFTY_BALL: {
 				lhs << "INFTY-BALL" << std::endl;
 			} break;

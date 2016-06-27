@@ -222,23 +222,16 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
-	if(mConstraints.rows() > 0) {
-		Optimizer<Number> opt;
-		opt.setMatrix(mConstraints);
-		opt.setVector(mConstraintConstants);
+	Optimizer<Number> opt;
+	opt.setMatrix(mConstraints);
+	opt.setVector(mConstraintConstants);
+	EvaluationResult<Number> res = opt.evaluate(l);
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << "Call to optimizer." << std::endl;
+	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
-		result = opt.evaluate(l);
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << carl::toDouble(result.supportValue) << std::endl;
-#endif
-		assert(result.errorCode != SOLUTION::FEAS || this->contains(result.optimumValue));
-		assert( l.rows() == mDimension );
-	} else {
-		result.errorCode = SOLUTION::INFTY;
-	}
-	return result;
+	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
+	assert( l.rows() == mDimension );
+	return res;
 }
 
 template <typename Number>

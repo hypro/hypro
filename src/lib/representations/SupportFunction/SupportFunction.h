@@ -28,6 +28,7 @@ class SupportFunctionT {
         SupportFunctionT (const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
         SupportFunctionT (const std::vector<Halfspace<Number>>& _planes);
         SupportFunctionT (SupportFunctionT<Number,Converter>&& other);
+        SupportFunctionT (const matrix_t<Number>& _shapeMatrix);
 
         virtual ~SupportFunctionT();
 
@@ -48,6 +49,7 @@ class SupportFunctionT {
 	intersectionContent<Number>* intersectionParameters() const;
 	PolytopeSupportFunction<Number>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
+	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	void removeRedundancy();
 	std::vector<Point<Number>> vertices() const;

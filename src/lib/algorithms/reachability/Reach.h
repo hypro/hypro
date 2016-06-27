@@ -4,9 +4,10 @@
  *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Christopher Kugler
+ * @author Phillip Florian
  *
  * @since	2014-04-30
- * @version	2015-10-15
+ * @version	2016-06-20
  */
 
 #pragma once
@@ -17,6 +18,7 @@
 #include "../../datastructures/hybridAutomata/State.h"
 #include "../../util/Plotter.h"
 #include "boost/tuple/tuple.hpp"
+#include "../lib/representations/Ellipsoids/Ellipsoid.h"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
@@ -25,6 +27,9 @@ CLANG_WARNING_RESET
 // Debug Flag, TODO: Add more debug levels.
 //#define REACH_DEBUG
 //#define USE_REDUCTION
+#define USE_SYSTEM_SEPARATION
+// Needs system separation to affect the computation
+#define USE_ELLIPSOIDS
 
 namespace hypro {
 namespace reachability {
@@ -41,7 +46,7 @@ private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
-
+        Number mBloatingFactor = 0.00001; 
 	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number,Representation>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -75,6 +80,7 @@ public:
 	 */
 	flowpipe_t<Representation> computeForwardTimeClosure( const hypro::State<Number>& _state );
 
+        
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
 	 * @details [long description]
