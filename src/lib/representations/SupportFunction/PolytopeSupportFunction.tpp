@@ -235,7 +235,7 @@ void PolytopeSupportFunction<Number>::removeRedundancy() {
 			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
 			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
 			unsigned insertionIndex = newConstants.rows()-1;
-			for(unsigned rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
+			for(unsigned rowIndex = mConstraints.rows()-1; ; --rowIndex) {
 				if(redundant.empty()){
 					break;
 				}

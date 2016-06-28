@@ -422,9 +422,9 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		}
 
 		glp_delete_prob( normal );
-		delete ja;
-		delete ia;
-		delete ar;
+		delete[] ja;
+		delete[] ia;
+		delete[] ar;
 
 		return result;
 	}
