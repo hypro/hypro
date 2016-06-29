@@ -218,7 +218,7 @@ void Point<Number>::swap( Point<Number> &_rhs ) {
 }
 
 template <typename Number>
-void Point<Number>::coordinatesFromVector( const vector_t<Number> &vector ) {
+void Point<Number>::setCoordinates( const vector_t<Number> &vector ) {
 	mCoordinates = vector;
 	mHash = 0;
 }

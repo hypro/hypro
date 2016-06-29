@@ -126,7 +126,7 @@ class Point {
 	/**
 	 * Sets the coordinates from the given vector
 	 */
-	void coordinatesFromVector( const vector_t<Number>& vector );
+	void setCoordinates(const vector_t<Number> &vector);
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
 	Point<Number> reduceToDimensions( std::vector<unsigned> _dimensions ) const;
