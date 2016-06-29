@@ -19,6 +19,7 @@ template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
 	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mDimension(mConstraints.cols()) {
+	this->removeRedundancy();
 }
 
 template <typename Number>
@@ -34,6 +35,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
+	this->removeRedundancy();
 }
 
 template<typename Number>
@@ -81,7 +83,6 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 			}
 			facets.clear();
 		}
-		mNonRedundant = true;
 	}
 }
 
@@ -221,41 +222,24 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 	return Point<Number>(sup.optimumValue);
 }
 
-template<typename Number>
-void PolytopeSupportFunction<Number>::removeRedundancy() {
-	if(!mNonRedundant && mConstraints.rows() > 1){
-		Optimizer<Number> opt;
-		opt.setMatrix(this->mConstraints);
-		opt.setVector(this->mConstraintConstants);
-
-		std::vector<std::size_t> redundant = opt.redundantConstraints();
-		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
-
-		if(!redundant.empty()){
-			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
-			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
-			unsigned insertionIndex = newConstants.rows()-1;
-			for(unsigned rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
-				if(redundant.empty()){
-					break;
-				}
-
-				if(rowIndex != redundant.back()){
-					newConstraints.row(insertionIndex) = mConstraints.row(rowIndex);
-					newConstants(rowIndex) = mConstraintConstants(rowIndex);
-					--insertionIndex;
-				}
-			}
-			assert(insertionIndex == 0);
-		}
-		assert(redundant.empty());
-	}
-	mNonRedundant=true;
-}
-
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
+	// catch half-space
+	if(mConstraints.rows() == 1) {
+		// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
+		if(l == vector_t<Number>(mConstraints.row(0))){
+			result.supportValue = mConstraintConstants(0);
+			result.errorCode = SOLUTION::FEAS;
+			Number dist = (mConstraintConstants(0) / mConstraints.row(0).sum()) - 1;
+			result.optimumValue = dist*l;
+		} else {
+			result.supportValue = 0;
+			result.errorCode = SOLUTION::INFTY;
+		}
+		return result;
+	}
+
 	Optimizer<Number> opt;
 	opt.setMatrix(mConstraints);
 	opt.setVector(mConstraintConstants);
@@ -313,4 +297,36 @@ void PolytopeSupportFunction<Number>::print() const{
     std::cout << convert<Number,double>(mConstraints) << std::endl;
     std::cout << convert<Number,double>(mConstraintConstants) << std::endl;
 }
+
+template<typename Number>
+void PolytopeSupportFunction<Number>::removeRedundancy() {
+	if(mConstraints.rows() > 1){
+		Optimizer<Number> opt;
+		opt.setMatrix(this->mConstraints);
+		opt.setVector(this->mConstraintConstants);
+
+		std::vector<std::size_t> redundant = opt.redundantConstraints();
+		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
+
+		if(!redundant.empty()){
+			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
+			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
+			unsigned insertionIndex = newConstants.rows()-1;
+			for(unsigned rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
+				if(redundant.empty()){
+					break;
+				}
+
+				if(rowIndex != redundant.back()){
+					newConstraints.row(insertionIndex) = mConstraints.row(rowIndex);
+					newConstants(rowIndex) = mConstraintConstants(rowIndex);
+					--insertionIndex;
+				}
+			}
+			assert(insertionIndex == 0);
+		}
+		assert(redundant.empty());
+	}
+}
+
 }  // namespace

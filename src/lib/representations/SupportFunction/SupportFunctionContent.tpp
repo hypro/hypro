@@ -258,45 +258,6 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
 }
 
-template<typename Number>
-void SupportFunctionContent<Number>::removeRedundancy() {
-	if(!mNonRedundant){
-		switch ( mType ) {
-			case SF_TYPE::ELLIPSOID:
-				// There is no redundancy in ellipsoids.
-				break;
-			case SF_TYPE::INFTY_BALL:
-			case SF_TYPE::TWO_BALL:
-				// There is no redundancy in balls.
-				break;
-			case SF_TYPE::LINTRAFO:
-				mLinearTrafoParameters->origin->removeRedundancy();
-				break;
-			case SF_TYPE::POLY:
-				mPolytope->removeRedundancy();
-				break;
-			case SF_TYPE::SCALE:
-				mScaleParameters->origin->removeRedundancy();
-				break;
-			case SF_TYPE::SUM:
-				mSummands->lhs->removeRedundancy();
-				mSummands->rhs->removeRedundancy();
-				break;
-			case SF_TYPE::UNION:
-				mSummands->lhs->removeRedundancy();
-				mSummands->rhs->removeRedundancy();
-				break;
-			case SF_TYPE::INTERSECT:
-				mIntersectionParameters->lhs->removeRedundancy();
-				mIntersectionParameters->rhs->removeRedundancy();
-				break;
-			default:
-				assert(false);
-		}
-		mNonRedundant = true;
-	}
-}
-
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction ) const {
 	switch ( mType ) {

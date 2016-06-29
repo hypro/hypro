@@ -154,7 +154,7 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     void SupportFunctionT<Number,Converter>::removeRedundancy() {
-    	content->removeRedundancy();
+        // Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
     }
 
     template<typename Number, typename Converter>
@@ -242,8 +242,7 @@ namespace hypro{
 		if(_mat.rows() == 0) {
 			return std::make_pair(true, *this);
 		}
-
-        assert(_mat.rows() == _vec.rows());
+		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI));
@@ -259,13 +258,7 @@ namespace hypro{
 					//std::cout << "fullyOutside" << std::endl;
 	                // the object lies fully outside one of the planes -> return false
 	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
-	            } else {
-					//std::cout << "Not fully outside." << std::endl;
-				}
-        	} else if(planeEvalRes.supportValue <= _vec(rowI)) {
-        		// object lies below this plane.
-        		// std::cout << __func__ << " satisfies plane " << convert<Number,double>(_mat.row(rowI)) << std::endl;
-        		continue;
+	            }
         	}
         }
     	if(limitingPlanes.size() < unsigned(_mat.rows())){
@@ -283,6 +276,7 @@ namespace hypro{
         		distances(i) = _vec(limitingPlanes.back());
         		limitingPlanes.pop_back();
         	}
+			assert(limitingPlanes.empty());
         	//std::cout << "Intersect with " << planes << ", " << distances << std::endl;
         	return std::make_pair(true, this->intersectHalfspaces(planes,distances));
     	} else {

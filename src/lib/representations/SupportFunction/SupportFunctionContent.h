@@ -131,7 +131,6 @@ class SupportFunctionContent {
 		BallSupportFunction<Number>* mBall;
 		EllipsoidSupportFunction<Number>* mEllipsoid;
 	};
-	bool mNonRedundant = false;
 
 	std::weak_ptr<SupportFunctionContent<Number>> pThis;
 
@@ -200,7 +199,6 @@ class SupportFunctionContent {
 
 	std::shared_ptr<SupportFunctionContent<Number>>& operator=( const std::shared_ptr<SupportFunctionContent<Number>>& _orig ) ;
 
-	void removeRedundancy();
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
