@@ -100,7 +100,6 @@ PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(cons
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
     this->mDimension = _orig.mDimension;
-	this->mNonRedundant = _orig.mNonRedundant;
 }
 
 template <typename Number>
