@@ -382,18 +382,7 @@ namespace reachability {
 				State<Number> s = boost::get<1>(tuple);
 				assert(!s.timestamp.isUnbounded());
 				s.location = boost::get<0>(tuple)->target();
-				// handle discrete reset assignment
-				typename Transition<Number>::Reset reset = boost::get<0>(tuple)->reset();
-				assert(unsigned(reset.discreteMat.rows()) == s.discreteAssignment.size());
-				for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
-					carl::Interval<Number> newAssignment(0);
-					for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
-						newAssignment += reset.discreteMat(rowIndex,colIndex) * boost::get<1>(tuple).discreteAssignment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
-					}
-					newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
-					//std::cout << "Discrete Assignment: " << vpool.carlVarByIndex(rowIndex+reset.discreteOffset) << " set to " << newAssignment << std::endl;
-					s.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
-				}
+
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 				/*
 				 *  TO-DO:
@@ -437,12 +426,15 @@ namespace reachability {
 			State<Number> s;
 			s.location = aggregationPair.first->target();
 			//s.set = Representation(collectedVertices);
+
+			// reduce new initial sets.
+			collectedSets.removeRedundancy();
+
 			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
 
-			// handle discrete reset assignment
 			// ASSUMPTION: All discrete assignments are the same for this transition.
 			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
 			//std::cout << "Discrete assignment size: " << aggregationPair.second.begin()->discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
@@ -470,6 +462,7 @@ namespace reachability {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
 		//std::cout << "check transition " << *_trans << std::endl;
+		VariablePool& vpool = VariablePool::getInstance();
 
 		// check discrete guard intersection.
 		unsigned dOffset = _trans->guard().discreteOffset;
@@ -480,18 +473,18 @@ namespace reachability {
 			// insert all current discrete assignments except the constrained one.
 			for(unsigned colIndex = 0; colIndex < guardPair.second.cols()-1; ++colIndex){
 				if(colIndex != VariablePool::getInstance().id(guardPair.first)-dOffset) {
-					substitution += guardPair.second(0, colIndex) * _state.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+					substitution += guardPair.second(0, colIndex) * _state.discreteAssignment.at(vpool.carlVarByIndex(colIndex+dOffset));
 				}
 			}
 			carl::Interval<Number> constPart(guardPair.second(0,guardPair.second.cols()-1));
 			substitution += constPart;
 			//std::cout << "substitution interval " << substitution << std::endl;
-			if(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) > 0){
-				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == 1);
+			if(guardPair.second(0,vpool.id(guardPair.first)-dOffset) > 0){
+				assert(guardPair.second(0,vpool.id(guardPair.first)-dOffset) == 1);
 				guardInterval.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
 				//std::cout << "After setting upper bound new: " << guardInterval << std::endl;
 			} else {
-				assert(guardPair.second(0,VariablePool::getInstance().id(guardPair.first)-dOffset) == -1);
+				assert(guardPair.second(0,vpool.id(guardPair.first)-dOffset) == -1);
 				guardInterval.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
 				//std::cout << "After setting lower bound new: " << guardInterval << std::endl;
 			}
@@ -513,6 +506,21 @@ namespace reachability {
 				return false;
 			}
 		}
+
+		// handle discrete reset assignment
+		typename Transition<Number>::Reset reset = _trans->reset();
+		assert(unsigned(reset.discreteMat.rows()) == result.discreteAssignment.size());
+		std::map<carl::Variable, carl::Interval<Number>> guardSatisfyingDiscreteAssingment = result.discreteAssignment;
+		for(unsigned rowIndex = 0; rowIndex < reset.discreteMat.rows(); ++rowIndex) {
+			carl::Interval<Number> newAssignment(0);
+			for(unsigned colIndex = 0; colIndex < reset.discreteMat.cols(); ++colIndex) {
+				newAssignment += reset.discreteMat(rowIndex,colIndex) * guardSatisfyingDiscreteAssingment.at(vpool.carlVarByIndex(colIndex+reset.discreteOffset));
+			}
+			newAssignment += carl::Interval<Number>(reset.discreteVec(rowIndex));
+			//std::cout << "Discrete Assignment: " << vpool.carlVarByIndex(rowIndex+reset.discreteOffset) << " set to " << newAssignment << std::endl;
+			result.discreteAssignment[vpool.carlVarByIndex(rowIndex+reset.discreteOffset)] = newAssignment;
+		}
+
 		// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
 		for(const auto& invariantPair : _trans->target()->invariant().discreteInvariant ) {
 			carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
@@ -521,24 +529,27 @@ namespace reachability {
 			//std::cout << "Guard row: " << guardPair.second << std::endl;
 			// insert all current discrete assignments except the constrained one.
 			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
-				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-dOffset) {
-					substitution += invariantPair.second(0, colIndex) * result.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+dOffset));
+				if(colIndex != vpool.id(invariantPair.first)-dOffset) {
+					substitution += invariantPair.second(0, colIndex) * result.discreteAssignment.at(vpool.carlVarByIndex(colIndex+dOffset));
 				}
 			}
 			carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
 			substitution += constPart;
 			//std::cout << "substitution interval " << substitution << std::endl;
-			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) > 0){
-				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == 1);
+			if(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) > 0){
+				assert(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) == 1);
 				invariant.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
 				//std::cout << "After setting upper bound new: " << invariant << std::endl;
 			} else {
-				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-dOffset) == -1);
+				assert(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) == -1);
 				invariant.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
 				//std::cout << "After setting lower bound new: " << invariant << std::endl;
 			}
 
 			if(!invariant.intersectsWith(result.discreteAssignment.at(invariantPair.first))) {
+#ifdef REACH_DEBUG
+				std::cout << "Valuation invalidates discrete target location invariant." << std::endl;
+#endif
 				return false;
 			}
 		}
@@ -558,8 +569,14 @@ namespace reachability {
 				result.set = invariantSatisfyingSet.second;
 				return true;
 			}
+#ifdef REACH_DEBUG
+			std::cout << "Valuation invalidates continuous target location invariant." << std::endl;
+#endif
 			return false;
 		} else {
+#ifdef REACH_DEBUG
+			std::cout << "Continuous guard invalidated." << std::endl;
+#endif
 			return false;
 		}
 	}
@@ -721,8 +738,8 @@ namespace reachability {
 			//assert(firstSegment.contains(initialPair.second));
 			//assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
-			std::cout << "first Flowpipe Segment (after minkowski Sum): ";
-			firstSegment.print();
+			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
+			std::cout << firstSegment << std::endl;
 #endif
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
