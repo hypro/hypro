@@ -48,6 +48,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
 	plotter.rSettings().cummulative = false;
 
+	/*
 	// bad states plotting
 	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
 	for(const auto& state : badStateMapping) {
@@ -66,7 +67,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	plotter.plot2d();
 	plotter.plotGen();
 	plotter.plotTex();
-
+	*/
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 }
 
