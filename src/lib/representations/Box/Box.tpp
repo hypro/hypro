@@ -301,47 +301,40 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		return std::make_pair(true, *this);
 	}
 	assert(this->dimension() == unsigned(_mat.cols()));
-	matrix_t<Number> constraints = matrix_t<Number>::Zero(2*this->dimension()+_mat.rows(), this->dimension());
-	vector_t<Number> constants = vector_t<Number>::Zero(2*this->dimension()+_vec.rows());
-	for(unsigned d = 0; d < this->dimension(); ++d) {
-		constraints(2*d, d) = 1;
-		constraints(2*d+1, d) = -1;
-		constants(2*d) = mLimits.second.at(d);
-		constants(2*d+1) = -mLimits.first.at(d);
-	}
-	//std::cout << "So far box constraints:" << std::endl << constraints << std::endl << constants << std::endl << "MAT: " << std::endl << _mat << std::endl << "VEC: " << std::endl << _vec << std::endl;
+	std::vector<unsigned> limitingPlanes;
 
-	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _mat.rows() << "," << _mat.cols() << std::endl;
-	//std::cout << "Block start at " << 2*this->dimension() << ", 0" << " \t size " << _vec.rows() << ",1" << std::endl;
-	constraints.block(2*this->dimension(),0,_mat.rows(), _mat.cols()) = _mat;
-	constants.block(2*this->dimension(),0, _vec.rows(),1) = _vec;
-	Optimizer<Number> opt;
-	opt.setMatrix(constraints);
-	opt.setVector(constants);
+	for(unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex) {
+		carl::Interval<Number> evaluatedBox = carl::Interval<Number>(0);
+		for(unsigned d = 0; d < _mat.cols(); ++d){
+			evaluatedBox += _mat(rowIndex,d)*carl::Interval<Number>(mLimits.first(d), mLimits.second(d));
+		}
 
-	if(!opt.checkConsistency()){
-		return std::make_pair(false, Empty());
-	}
+		if(evaluatedBox.lower() > _vec(rowIndex)){
+			return std::make_pair(false,*this);
+		}
 
-	std::vector<Point<Number>> vertices = this->vertices();
-	bool allVerticesContained = true;
-	unsigned outsideVertexCnt = 0;
-	for(const auto& vertex : vertices) {
-		if(!opt.checkPoint(vertex)) {
-			allVerticesContained = false;
-			outsideVertexCnt++;
+		if(evaluatedBox.upper() > _vec(rowIndex)){
+			limitingPlanes.push_back(rowIndex);
 		}
 	}
 
-	//std::cout << __func__ << ": #vertices outside: " << outsideVertexCnt << "/" << vertices.size() << std::endl;
-
-	if(allVerticesContained) {
+	// at this point the box cannot be empty.
+	if(limitingPlanes.empty()){
 		return std::make_pair(true, *this);
 	}
 
-	// cannot be empty, otherwise all points would have violated the planes.
-	assert(!this->intersectHalfspaces(_mat,_vec).empty());
-	return std::make_pair(true, this->intersectHalfspaces(_mat, _vec));
+	// at this point the box will be limited but not empty.
+	matrix_t<Number> newPlanes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
+	vector_t<Number> newDistances = vector_t<Number>(_mat.cols());
+	int rowPos = newPlanes.rows()-1;
+	while(!limitingPlanes.empty()){
+		assert(rowPos >= 0);
+		newPlanes.row(rowPos) = _mat.row(limitingPlanes.back());
+		newDistances(rowPos) = _vec(limitingPlanes.back());
+		--rowPos;
+		limitingPlanes.pop_back();
+	}
+	return std::make_pair(true, this->intersectHalfspaces(newPlanes,newDistances));
 }
 
 template<typename Number, typename Converter>
