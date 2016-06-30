@@ -306,7 +306,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	for(unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex) {
 		carl::Interval<Number> evaluatedBox = carl::Interval<Number>(0);
 		for(unsigned d = 0; d < _mat.cols(); ++d){
-			evaluatedBox += _mat(rowIndex,d)*carl::Interval<Number>(mLimits.first(d), mLimits.second(d));
+			evaluatedBox += _mat(rowIndex,d) * carl::Interval<Number>(mLimits.first.coordinate(d), mLimits.second.coordinate(d));
 		}
 
 		if(evaluatedBox.lower() > _vec(rowIndex)){
@@ -464,7 +464,7 @@ void BoxT<Number,Converter>::clear() {
 
 template<typename Number, typename Converter>
 void BoxT<Number,Converter>::print() const {
-	std::cout << *this << std::endl;
+	//std::cout << *this << std::endl;
 }
 
 }  // namespace hypro
