@@ -33,9 +33,10 @@ namespace reachability {
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
-				State<Number> s = state.second;
-				cPair<Number> set = boost::get<cPair<Number>>(state.second.set);
-				s.set = Representation(set.first, set.second);
+				State<Number> s;
+				s.location = state.second.location;
+				s.discreteAssignment = state.second.discreteAssignment;
+				s.set = Representation(state.second.set.first, state.second.set.second);
 				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
 				mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, s));
@@ -825,7 +826,7 @@ namespace reachability {
 			std::cout << "Intersection with local, discrete bad states" << std::endl;
 			#endif
 			// at this point all discrete bad states were already satisfied -> check continuous bad states.
-			if(_segment.satisfiesHalfspaces(boost::get<cPair<Number>>(badStateIterator->second.set).first, boost::get<cPair<Number>>(badStateIterator->second.set).second).first == true){
+			if(_segment.satisfiesHalfspaces(badStateIterator->second.set.first, badStateIterator->second.set.second).first == true){
 				#ifdef REACH_DEBUG
 				std::cout << "Intersection with all local bad states" << std::endl;
 				#endif

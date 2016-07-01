@@ -17,7 +17,7 @@
 namespace hypro {
 
 template<typename Number>
-struct State;
+struct RawState;
 
 template <typename Number>
 class HybridAutomaton {
@@ -25,7 +25,7 @@ class HybridAutomaton {
 
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	using locationStateMap = std::multimap<Location<Number>*, State<Number>, locPtrComp<Number>>;
+	using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
   private:
 	/**
@@ -75,8 +75,8 @@ class HybridAutomaton {
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );
-	void addInitialState( const State<Number>& _state );
-	void addLocalBadState( const State<Number>& _state );
+	void addInitialState( const RawState<Number>& _state );
+	void addLocalBadState( const RawState<Number>& _state );
 	void addGlobalBadState( const std::pair<matrix_t<Number>, vector_t<Number>>& _valuation );
 
 	// copy assignment operator, TODO: implement via swap

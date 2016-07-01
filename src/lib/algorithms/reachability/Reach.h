@@ -16,6 +16,7 @@
 #include "../../config.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../datastructures/hybridAutomata/State.h"
+#include "../../datastructures/hybridAutomata/RawState.h"
 #include "../../util/Plotter.h"
 #include "boost/tuple/tuple.hpp"
 #include "../lib/representations/Ellipsoids/Ellipsoid.h"
