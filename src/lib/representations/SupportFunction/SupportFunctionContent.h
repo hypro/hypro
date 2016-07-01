@@ -56,12 +56,12 @@ struct trafoContent {
                 } else {
                     successiveTransformations = 0;
                 } 
-                if (successiveTransformations == carl::pow(2,power)-1) {
+                if (successiveTransformations == unsigned(carl::pow(2,power)-1)) {
                     reduced = true; 
                     std::pair<matrix_t<Number>, vector_t<Number>> newParam = reduceLinTrans(a, b, power);
                     a = newParam.first;
                     b = newParam.second;
-                    for(std::size_t i = 0; i < carl::pow(2,power)-1; i++ ){
+                    for(std::size_t i = 0; i < unsigned(carl::pow(2,power)-1); i++ ){
                         origin = origin.get()->linearTrafoParameters()->origin;
                     }
                 }
