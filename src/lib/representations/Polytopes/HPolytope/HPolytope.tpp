@@ -590,7 +590,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 		res.insert( tmp );
 	}
 	//std::cout << "After intersection: " << res << std::endl;
-	res.removeRedundancy();
+	//res.removeRedundancy();
 	//std::cout << "After removing redundancy: " << res << std::endl;
 	return res;
 }

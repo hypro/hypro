@@ -580,7 +580,7 @@ void BoxT<Number,Converter>::clear() {
 
 template<typename Number, typename Converter>
 void BoxT<Number,Converter>::print() const {
-	std::cout << *this << std::endl;
+	//std::cout << *this << std::endl;
 }
 
 }  // namespace hypro
