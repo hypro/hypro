@@ -28,12 +28,13 @@ enum {
 	bordeaux,
 	violett,
 	lila,
+	blue
 };
 const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
-						0xCC071E, 0xA11035, 0x612158, 0x7A6FAC};
+						0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
 
 struct gnuplotSettings {
-	std::size_t color = colors[petrol];  // default petrol
+	std::size_t color = colors[blue];  // default petrol
 	bool fill = false;					 // do not fill
 	bool axes = true;					 // plot axes
 	bool grid = true;					 // plot grid
