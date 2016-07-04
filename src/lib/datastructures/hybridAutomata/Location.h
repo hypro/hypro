@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "../../typedefs.h"
+#include "../../types.h"
 #include <carl/interval/Interval.h>
 #include <iostream>
 

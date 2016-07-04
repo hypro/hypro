@@ -1,5 +1,5 @@
 #pragma once
-#include "../typedefs.h"
+#include "../types.h"
 
 namespace hypro {
 

@@ -32,6 +32,11 @@ namespace hypro {
 
     template <typename Number>
     using vectorSet = std::set<vector_t<Number>>;
+
+    enum TRIBOOL{TRUE,FALSE,NSET};
+
+    // Solution types
+    enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 }
 
 namespace Eigen {
