@@ -13,7 +13,7 @@
  */
 #pragma once
 
-#include "../typedefs.h"
+#include "../types.h"
 #include "../config.h"
 #include "../util/VariablePool.h"
 #include <set>

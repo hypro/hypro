@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../typedefs.h"
+#include "../types.h"
 #include "Halfspace.h"
 #include "../util/linearSolving.h"
 
