@@ -6,4 +6,5 @@
 #cmakedefine USE_Z3
 #cmakedefine USE_CLANG
 #cmakedefine EXTERNALIZE_CLASSES
+#cmakedefine LOGGING_HYPRO
 #cmakedefine FORWARD_REACHABILITY_METHOD_2
