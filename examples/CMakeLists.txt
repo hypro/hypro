@@ -25,6 +25,7 @@ set( EXAMPLES
     example_dynamicStrategies
     example_eigen_float_t
     example_facetEnumeration
+    example_firstSet
     example_flowstarParser
     example_heuristic
     example_hausdorffApprox

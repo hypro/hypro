@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 5
+  max jumps 4
   print on
  }
 
@@ -39,7 +39,7 @@ hybrid reachability
   l -> l
   guard { x = 0 v <= 0 }
   reset { v' := -0.75*v }
-  parallelotope aggregation {}
+  #parallelotope aggregation {}
  }
 
  init
