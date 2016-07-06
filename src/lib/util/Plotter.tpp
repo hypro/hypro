@@ -65,9 +65,11 @@ void Plotter<Number>::plot2d() const {
 
 
 		mOutfile << "# settings\n";
-		mOutfile << "set size ratio 1\n";
-		mOutfile << "set term post eps\n";
-		mOutfile << "set output \"" << mFilename << ".eps\n";
+		if(mSettings.keepAspectRatio) {
+			mOutfile << "set size square\n";
+		}
+		mOutfile << "set term pdf\n";
+		mOutfile << "set output \"" << mFilename << ".pdf\n";
 		if(mSettings.grid) {
 			mOutfile << "set xtics " << mSettings.tics << "\n";
 			mOutfile << "set ytics " << mSettings.tics << "\n";
@@ -124,9 +126,9 @@ void Plotter<Number>::plot2d() const {
 				}
 
 				if ( mSettings.fill )
-					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw 0.2 \n";
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 				else
-					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw 0.2 \n";
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 
 				if(mSettings.cummulative){
 					mOutfile << "\nplot ";
