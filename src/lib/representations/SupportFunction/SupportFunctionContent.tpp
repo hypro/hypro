@@ -524,25 +524,46 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 			return mBall->supremumPoint();
 		}
 		case SF_TYPE::LINTRAFO: {
-			return mLinearTrafoParameters->origin->supremumPoint().linearTransformation(mLinearTrafoParameters->a, mLinearTrafoParameters->b);
+			Point<Number> supPoint = mLinearTrafoParameters->origin->supremumPoint();
+			if(supPoint.dimension() == 0){
+				return supPoint;
+			}
+			return supPoint.linearTransformation(mLinearTrafoParameters->a, mLinearTrafoParameters->b);
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->supremumPoint();
 		}
 		case SF_TYPE::SCALE: {
-			if ( mScaleParameters->factor == 0 )
+			if ( mScaleParameters->factor == 0 ) {
 				return Point<Number>::Zero(mDimension);
-			else
-				return mScaleParameters->origin->supremumPoint()* mScaleParameters->factor;
+			} else {
+				Point<Number> supPoint = mScaleParameters->origin->supremumPoint();
+				if(supPoint.dimension() == 0){
+					return supPoint;
+				}
+				return supPoint* mScaleParameters->factor;
+			}
 		}
 		case SF_TYPE::SUM: {
 			Point<Number> lhsPoint = mSummands->lhs->supremumPoint();
 			Point<Number> rhsPoint = mSummands->rhs->supremumPoint();
+			if(lhsPoint.dimension() == 0) {
+				return rhsPoint;
+			}
+			if(rhsPoint.dimension() == 0) {
+				return lhsPoint;
+			}
 			return lhsPoint+rhsPoint;
 		}
 		case SF_TYPE::UNION: {
 			Point<Number> lhsPoint = mUnionParameters->lhs->supremumPoint();
 			Point<Number> rhsPoint = mUnionParameters->rhs->supremumPoint();
+			if(lhsPoint.dimension() == 0) {
+				return lhsPoint;
+			}
+			if(rhsPoint.dimension() == 0) {
+				return rhsPoint;
+			}
 			if(Point<Number>::inftyNorm(lhsPoint) > Point<Number>::inftyNorm(rhsPoint)) {
 				return lhsPoint;
 			}
@@ -551,6 +572,12 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		case SF_TYPE::INTERSECT: {
 			Point<Number> lhsPoint = mIntersectionParameters->lhs->supremumPoint();
 			Point<Number> rhsPoint = mIntersectionParameters->rhs->supremumPoint();
+			if(lhsPoint.dimension() == 0) {
+				return rhsPoint;
+			}
+			if(rhsPoint.dimension() == 0) {
+				return lhsPoint;
+			}
 			if(Point<Number>::inftyNorm(lhsPoint) < Point<Number>::inftyNorm(rhsPoint)) {
 				return lhsPoint;
 			}
