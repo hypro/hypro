@@ -48,6 +48,7 @@ option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." ON)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
+option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
 
 # Include own macros.
 include( hypromacros )
@@ -186,6 +187,11 @@ add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 
 include_directories( ${GLPK_INCLUDE_DIR} )
 set(libraries ${libraries} ${GLPK_LIBRARIES} pthread)
+
+if(LOGGING_HYPRO)
+	include_directories( ${LOG4CPLUS_INCLUDE_DIRS} )
+	set(libraries ${libraries} ${LOG4CPLUS_LIBRARIES} )
+endif()
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

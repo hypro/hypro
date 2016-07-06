@@ -16,6 +16,7 @@
 #include "../../config.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../datastructures/hybridAutomata/State.h"
+#include "../../datastructures/hybridAutomata/RawState.h"
 #include "../../util/Plotter.h"
 #include "boost/tuple/tuple.hpp"
 #include "../lib/representations/Ellipsoids/Ellipsoid.h"
@@ -27,9 +28,9 @@ CLANG_WARNING_RESET
 // Debug Flag, TODO: Add more debug levels.
 //#define REACH_DEBUG
 //#define USE_REDUCTION
-#define USE_SYSTEM_SEPARATION
+//#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
-#define USE_ELLIPSOIDS
+//#define USE_ELLIPSOIDS
 
 namespace hypro {
 namespace reachability {

@@ -32,7 +32,7 @@
 #include "config.h"
 #include "common.h"
 #include "../../algorithms/reachability/Settings.h"
-#include "../../datastructures/hybridAutomata/State.h"
+#include "../../datastructures/hybridAutomata/RawState.h"
 #include "../../datastructures/hybridAutomata/LocationManager.h"
 #include "../../datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../../util/types.h"
@@ -60,8 +60,8 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::vector<State<Number>> mInitialStates;
-	std::vector<State<Number>> mLocalBadStates;
+	std::vector<RawState<Number>> mInitialStates;
+	std::vector<RawState<Number>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	std::vector<unsigned> mDiscreteVariableIds;
@@ -109,7 +109,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		}
 	}
 
-	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number>>& _states) {
+	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<RawState<Number>>& _states) {
 		if(_constraint.size() > 0) {
 			//std::cout << "Add continuous state for location " << id << std::endl;
 			bool found = false;
@@ -118,10 +118,10 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 					//std::cout << "State already exists." << std::endl;
 					found = true;
 					assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
-					unsigned constraintsNum = boost::get<cPair<Number>>(state.set).first.rows();
-					unsigned dimension = constraintsNum > 0 ? boost::get<cPair<Number>>(state.set).first.cols() : (_constraint.begin()->cols())-1;
+					unsigned constraintsNum = state.set.first.rows();
+					unsigned dimension = constraintsNum > 0 ? state.set.first.cols() : (_constraint.begin()->cols())-1;
 					//std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
-					cPair<Number> set = boost::get<cPair<Number>>(state.set);
+					cPair<Number> set = state.set;
 					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
 					set.first.conservativeResize(constraintsNum+_constraint.size(), dimension);
 					set.second.conservativeResize(constraintsNum+_constraint.size());
@@ -143,7 +143,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				}
 			}
 			if(!found){
-				State<Number> s;
+				RawState<Number> s;
 				s.location = mLocationManager.location(id);
 				std::pair<matrix_t<Number>, vector_t<Number>> set;
 				set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
@@ -169,7 +169,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		}
 	}
 
-	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number>>& _states) {
+	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<RawState<Number>>& _states) {
 		//std::cout << "Add discrete state for location " << id << std::endl;
 		bool found = false;
 		for(auto& state : _states) {
@@ -181,7 +181,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 		}
 		if(!found){
-			State<Number> s;
+			RawState<Number> s;
 			s.location = mLocationManager.location(id);
 			// initialize all discrete assignments to unbounded, when a new state is created
 			for(const auto& id : mDiscreteVariableIds ){

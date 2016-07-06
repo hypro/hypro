@@ -216,7 +216,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
                         break;
                      // TODO delete ellipsoid
 		default:
-			assert( false );
+			break;
 	}
 }
 
@@ -564,99 +564,50 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 
 template <typename Number>
 sumContent<Number> *SupportFunctionContent<Number>::summands() const {
-	switch ( mType ) {
-		case SF_TYPE::SUM: {
-			return mSummands;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::SUM);
+	return mSummands;
 }
 
 template <typename Number>
 trafoContent<Number> *SupportFunctionContent<Number>::linearTrafoParameters() const {
-	switch ( mType ) {
-		case SF_TYPE::LINTRAFO: {
-			return mLinearTrafoParameters;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert(mType == SF_TYPE::LINTRAFO);
+	return mLinearTrafoParameters;
 }
 
 template <typename Number>
 scaleContent<Number> *SupportFunctionContent<Number>::scaleParameters() const {
-	switch ( mType ) {
-		case SF_TYPE::SCALE: {
-			return mScaleParameters;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::SCALE);
+	return mScaleParameters;
 }
 
 template <typename Number>
 unionContent<Number> *SupportFunctionContent<Number>::unionParameters() const {
-	switch ( mType ) {
-		case SF_TYPE::UNION: {
-			return mUnionParameters;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::UNION);
+	return mUnionParameters;
 }
 
 template <typename Number>
 intersectionContent<Number> *SupportFunctionContent<Number>::intersectionParameters() const {
-	switch ( mType ) {
-		case SF_TYPE::INTERSECT: {
-			return mIntersectionParameters;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::INTERSECT );
+	return mIntersectionParameters;
 }
 
 template <typename Number>
 PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() const {
-	switch ( mType ) {
-		case SF_TYPE::POLY: {
-			return mPolytope;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::POLY );
+	return mPolytope;
 }
 
 template <typename Number>
 EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
-	switch ( mType ) {
-		case SF_TYPE::ELLIPSOID: {
-			return mEllipsoid;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::ELLIPSOID );
+	return mEllipsoid;
 }
 
 template <typename Number>
 BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
-	switch ( mType ) {
-		case SF_TYPE::INFTY_BALL:
-		case SF_TYPE::TWO_BALL: {
-			return mBall;
-			break;
-		}
-		default:
-			assert( false );
-	}
+	assert( mType == SF_TYPE::INFTY_BALL || mType == SF_TYPE::TWO_BALL);
+	return mBall;
 }
 
 template <typename Number>

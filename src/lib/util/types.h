@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#include "../typedefs.h"
+#include "../types.h"
 #include "VariablePool.h"
 #include <vector>
 #include <cassert>

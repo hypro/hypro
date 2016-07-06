@@ -32,6 +32,11 @@ namespace hypro {
 
     template <typename Number>
     using vectorSet = std::set<vector_t<Number>>;
+
+    enum TRIBOOL{TRUE,FALSE,NSET};
+
+    // Solution types
+    enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 }
 
 namespace Eigen {
@@ -80,46 +85,5 @@ namespace Eigen {
     };
 
 }
-
-// Hash function for Eigen matrix and vector.
-// The code is from `hash_combine` function of the Boost library. See
-// http://www.boost.org/doc/libs/1_55_0/doc/html/hash/reference.html#boost.hash_combine .
-namespace std {
-    template<typename Number>
-    struct hash<hypro::matrix_t<Number>> {
-        size_t operator()(hypro::matrix_t<Number> const& in) const {
-
-            size_t seed = 0;
-
-            carl::hash_add(seed, in.rows());
-            carl::hash_add(seed, in.cols());
-
-            for (unsigned int i = 0; i < in.size(); ++i) {
-                auto elem = *(in.data());
-
-                carl::hash_add(seed, elem);
-            }
-            return seed;
-        }
-    };
-
-    template<typename Number>
-    struct hash<hypro::vector_t<Number>> {
-        size_t operator()(hypro::vector_t<Number> const& in) const {
-
-            size_t seed = 0;
-
-            carl::hash_add(seed, in.rows());
-
-            for (unsigned int i = 0; i < in.size(); ++i) {
-                auto elem = *(in.data());
-
-                carl::hash_add(seed, elem);
-            }
-            return seed;
-        }
-    };
-}
-
 
 #include "util/adaptions_eigen.h"

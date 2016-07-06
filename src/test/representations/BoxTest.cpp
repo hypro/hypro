@@ -382,12 +382,18 @@ TYPED_TEST(BoxTest, IntersectionHalfspace)
 	hypro::Box<TypeParam> res3 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},6));
 	hypro::Box<TypeParam> res4 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},9));
 	hypro::Box<TypeParam> res5 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},10));
+	hypro::Box<TypeParam> res6 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,0},3));
+	hypro::Box<TypeParam> res7 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,1},3));
+	hypro::Box<TypeParam> res8 = this->box1.intersectHalfspace(hypro::Halfspace<TypeParam>({1,0},2));
 
 	std::vector<carl::Interval<TypeParam>> i1;
 	std::vector<carl::Interval<TypeParam>> i2;
 	std::vector<carl::Interval<TypeParam>> i3;
 	std::vector<carl::Interval<TypeParam>> i4;
 	std::vector<carl::Interval<TypeParam>> i5;
+	std::vector<carl::Interval<TypeParam>> i6;
+	std::vector<carl::Interval<TypeParam>> i7;
+	std::vector<carl::Interval<TypeParam>> i8;
 
 	i1.push_back(carl::Interval<TypeParam>(2,3));
 	i1.push_back(carl::Interval<TypeParam>(1,2));
@@ -408,6 +414,18 @@ TYPED_TEST(BoxTest, IntersectionHalfspace)
 	i5.push_back(carl::Interval<TypeParam>(2,6));
 	i5.push_back(carl::Interval<TypeParam>(1,3));
 	EXPECT_EQ(res5, hypro::Box<TypeParam>(i5));
+
+	i6.push_back(carl::Interval<TypeParam>(2,3));
+	i6.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res6, hypro::Box<TypeParam>(i6));
+
+	i7.push_back(carl::Interval<TypeParam>(2,2));
+	i7.push_back(carl::Interval<TypeParam>(1,1));
+	EXPECT_EQ(res7, hypro::Box<TypeParam>(i7));
+
+	i8.push_back(carl::Interval<TypeParam>(2,2));
+	i8.push_back(carl::Interval<TypeParam>(1,3));
+	EXPECT_EQ(res8, hypro::Box<TypeParam>(i8));
 }
 
 TYPED_TEST(BoxTest, Membership)

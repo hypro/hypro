@@ -98,12 +98,12 @@ void HybridAutomaton<Number>::addTransition( Transition<Number> *_transition ) {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addInitialState( const State<Number>& _state ) {
+void HybridAutomaton<Number>::addInitialState( const RawState<Number>& _state ) {
 	mInitialStates.insert( std::make_pair(_state.location, _state));
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addLocalBadState( const State<Number>& _state ) {
+void HybridAutomaton<Number>::addLocalBadState( const RawState<Number>& _state ) {
 	mLocalBadStates.insert(std::make_pair(_state.location, _state));
 }
 

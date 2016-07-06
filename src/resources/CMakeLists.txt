@@ -69,3 +69,22 @@ else()
 
 	add_dependencies(resources glpk)
 endif()
+
+if(LOGGING_HYPRO)
+	if(LOG4CPLUS_FOUND)
+		message("-- Use system version of log4cplus")
+	else()
+		message("-- Download version of log4cplus")
+		ExternalProject_Add(log4cplus
+				DOWNLOAD_DIR "${CMAKE_SOURCE_DIR}/src/resources/log4cplus/"
+				GIT_REPOSITORY https://github.com/log4cplus/log4cplus.git
+				INSTALL_COMMAND ""
+				)
+
+		add_dependencies(resources log4cplus)
+
+		set(LOG4CPLUS_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/src/resources/src/log4cplus/include;${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/include" PARENT_SCOPE)
+		set(LOG4CPLUS_LIBRARIES "${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/src/liblog4cplus.so.2.0.0;${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/src/liblog4cplus.so.0" PARENT_SCOPE)
+		set(LOG4CPLUS_FOUND "TRUE" PARENT_SCOPE)
+	endif()
+endif()
