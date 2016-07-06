@@ -13,7 +13,7 @@ using namespace hypro;
 
 int main(int argc, char** argv)
 {
-	assert(argc == 2);
+	assert(argc == 3);
 
 	using Number = mpq_class;
 	Plotter<Number>& plt = Plotter<Number>::getInstance();
@@ -22,6 +22,9 @@ int main(int argc, char** argv)
 	settings.axes = true;
 	settings.grid = true;
 	settings.cummulative = true;
+	settings.tics = 0.1;
+	settings.linewidth = 1.5;
+	plt.setFilename("example_firstSet");
 
 	plt.updateSettings(settings);
 

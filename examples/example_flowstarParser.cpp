@@ -66,7 +66,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 	plotter.plot2d();
 	plotter.plotGen();
-	plotter.plotTex();
+	//plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 }

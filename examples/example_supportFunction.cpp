@@ -6,21 +6,25 @@
 using namespace hypro;
 
 int main(int argc, char** argv) {
-	typedef cln::cl_RA Number;
+	using Number = mpq_class;
 
 	// plotting
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	plotter.setFilename("out");
+	gnuplotSettings settings = plotter.settings();
+	settings.keepAspectRatio = false;
+	settings.linewidth = 1.5;
+	plotter.updateSettings(settings);
+	plotter.setFilename("example_sf");
 	std::vector<Point<Number>> points;
 
-
+	/*
 	vector_t<Number> a = vector_t<Number>(3);
 	vector_t<Number> b = vector_t<Number>(3);
 	a << 6,-6,7;
 	b << -3,2,-6;
 	std::cout << "Scalar projection a on b: " << scalarProjection(a,b) << std::endl;
 	std::cout << "Scalar projection b on a: " << scalarProjection(b,a) << std::endl;
-
+	*/
 
 	matrix_t<Number> matrix = matrix_t<Number>(4,2);
 	vector_t<Number> distances = vector_t<Number>(4);
@@ -28,7 +32,9 @@ int main(int argc, char** argv) {
 		1,0,
 		0,-1,
 		-1,0;
-	distances << 0,carl::rationalize<Number>(10.2),carl::rationalize<Number>(0.001),-10;
+	distances << 1,carl::rationalize<Number>(5),carl::rationalize<Number>(1),-4;
+
+	/*
 	matrix_t<Number> matrix2 = matrix_t<Number>(3,2);
 	vector_t<Number> distances2 = vector_t<Number>(3);
 	matrix2 << 1,1,
@@ -47,6 +53,8 @@ int main(int argc, char** argv) {
 	dir << 1,0;
 
 	std::cout << "Trafo: " << trafoMatrix << " + " << shift << std::endl;
+	*/
+
 
 	//matrix_t<Number> linearMap = matrix_t<Number>(2,2);
 	//linearMap << -1,-4,4,-1;
@@ -55,10 +63,13 @@ int main(int argc, char** argv) {
 //	//linearMap = linearMap*timestep;
 	//matrix_t<Number> exponential = linearMap.exp();
 
+	/*
 	matrix_t<Number> invariant = matrix_t<Number>(4,2);
 	vector_t<Number> invariantConstants = vector_t<Number>(4);
 	invariant << 1,0,-1,0,0,1,0,-1;
 	invariantConstants << 10,10,carl::rationalize<Number>(0.4), carl::rationalize<Number>(0.4);
+	*/
+
 	//unsigned id = plotter.addObject(HPolytope<Number>(invariant,invariantConstants).vertices());
 	//plotter.setObjectColor(id, colors[red]);
 
@@ -66,9 +77,9 @@ int main(int argc, char** argv) {
 
 	SupportFunction<Number> poly1(matrix, distances);
 	//SupportFunctionContent<Number> poly2(SF_TYPE::POLY, matrix2, distances2);
-	SupportFunction<Number> poly3(matrix, distances3);
+	//SupportFunction<Number> poly3(matrix, distances3);
 	SupportFunction<Number> ball(SF_TYPE::INFTY_BALL, carl::rationalize<Number>(.5));
-	SupportFunction<Number> shifted = poly1.linearTransformation(trafoMatrix, shift);
+	// SupportFunction<Number> shifted = poly1.linearTransformation(trafoMatrix, shift);
 
 	//HPolytope<Number> real(matrix, distances);
 	//auto trafo = real.linearTransformation(trafoMatrix, shift);
@@ -81,7 +92,7 @@ int main(int argc, char** argv) {
 	SupportFunction<Number> rounded1 = poly1.minkowskiSum(ball);
 
 	//SupportFunction<Number> intersectedInvariant = poly1.intersectHalfspaces(invariant, invariantConstants);
-	std::pair<bool, SupportFunction<Number>> intersectionPair = rounded1.satisfiesHalfspaces(invariant, invariantConstants);
+	//std::pair<bool, SupportFunction<Number>> intersectionPair = rounded1.satisfiesHalfspaces(invariant, invariantConstants);
 	//SupportFunction<Number> intersection = rounded1.intersectHalfspaces(invariant, invariantConstants);
 
 	//SupportFunctionContent<Number> rounded2 = poly2.minkowskiSum(ball);
@@ -94,22 +105,27 @@ int main(int argc, char** argv) {
 
 	// create array holding equaly distributed directions
 	int resolution = 180;
+	if(argc == 2) {
+		resolution = std::stoi(argv[1]);
+	}
+
 	matrix_t<Number> evaldirections = matrix_t<Number>(resolution, 2);
 	for(int pos = 0; pos < resolution; ++pos) {
 		double angle = pos*(360/resolution);
 		evaldirections(pos,0) = carl::rationalize<Number>(cos(angle*3.141592654/180));
 		evaldirections(pos,1) = carl::rationalize<Number>(sin(angle*3.141592654/180));
-		std::cout << "angle: " << angle <<  " . " << carl::toDouble(evaldirections(pos,0)) << ", " << carl::toDouble(evaldirections(pos,1)) << std::endl;
+		//std::cout << "angle: " << angle <<  " . " << carl::toDouble(evaldirections(pos,0)) << ", " << carl::toDouble(evaldirections(pos,1)) << std::endl;
 	}
 
 	//std::cout << "evaldirections " << evaldirections << std::endl << std::endl;
 
 	//vector_t<Number> result1 = rounded1.multiEvaluate(evaldirections);
-	std::vector<EvaluationResult<Number>> polyBox;
+	std::vector<EvaluationResult<Number>> ballEval = ball.multiEvaluate(evaldirections);
+	std::vector<EvaluationResult<Number>> polyBoxEval = poly1.multiEvaluate(evaldirections);
 	std::vector<EvaluationResult<Number>> trafoed;
 	std::vector<EvaluationResult<Number>> multiEvaledVerify;
 	std::vector<EvaluationResult<Number>> rounded1Eval = rounded1.multiEvaluate(evaldirections);
-	std::vector<EvaluationResult<Number>> rounded1IntersectEval = intersectionPair.second.multiEvaluate(evaldirections);
+	//std::vector<EvaluationResult<Number>> rounded1IntersectEval = intersectionPair.second.multiEvaluate(evaldirections);
 
 	//for(unsigned rowIndex = 0; rowIndex < evaldirections.rows(); ++rowIndex){
 	//	polyBox.push_back(poly1.evaluate(evaldirections.row(rowIndex)));
@@ -148,24 +164,23 @@ int main(int argc, char** argv) {
 	}
 	plotter.addObject(points);
 	*/
-	//{
-	//HPolytope<Number> tmp;
-	//for(int i = 0; i < resolution; ++i) {
-	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), polyBox[i].supportValue));
-	//}
-	//unsigned original = plotter.addObject(tmp.vertices());
-	//plotter.setObjectColor(original, colors[green]);
-	//}
-	//unsigned pTope = plotter.addObject(trafo.vertices());
-	//plotter.setObjectColor(pTope, colors[red]);
-	//{
-	//HPolytope<Number> tmp;
-	//for(int i = 0; i < resolution; ++i) {
-	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), trafoed[i].supportValue));
-	//}
-	//unsigned sf = plotter.addObject(tmp.vertices());
-	//plotter.setObjectColor(sf, colors[orange]);
-	//}
+	{
+	HPolytope<Number> tmp;
+	for(int i = 0; i < resolution; ++i) {
+		tmp.insert(Halfspace<Number>(evaldirections.row(i), polyBoxEval[i].supportValue));
+	}
+	unsigned original = plotter.addObject(tmp.vertices());
+	plotter.setObjectColor(original, colors[green]);
+	}
+
+	{
+	HPolytope<Number> tmp;
+	for(int i = 0; i < resolution; ++i) {
+		tmp.insert(Halfspace<Number>(evaldirections.row(i), ballEval[i].supportValue));
+	}
+	unsigned sf = plotter.addObject(tmp.vertices());
+	plotter.setObjectColor(sf, colors[orange]);
+	}
 	//{
 	//HPolytope<Number> tmp;
 	//for(int i = 0; i < resolution; ++i) {
@@ -181,10 +196,12 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), rounded1Eval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[lila]);
-	std::cout << "Object: " << std::endl << tmp << std::endl;
-	std::cout << "Number vertices: " << tmp.vertices().size() << std::endl;
+	plotter.setObjectColor(sf, colors[blue]);
+	//std::cout << "Object: " << std::endl << tmp << std::endl;
+	//std::cout << "Number vertices: " << tmp.vertices().size() << std::endl;
 	}
+
+	/*
 	{
 	HPolytope<Number> tmp;
 	for(int i = 0; i < resolution; ++i) {
@@ -196,6 +213,7 @@ int main(int argc, char** argv) {
 	std::cout << "Number vertices: " << tmp.vertices().size() << std::endl;
 	//std::cout << intersection << std::endl;
 	}
+	*/
 
 	/*
 	points.erase(points.begin(), points.end());
