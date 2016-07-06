@@ -143,6 +143,12 @@ Number Halfspace<Number>::evaluate( const vector_t<Number> &_direction ) const {
 }
 
 template <typename Number>
+Point<Number> Halfspace<Number>::project( const Point<Number> point ) const {
+	return Point<Number>( point.rawCoordinates() + 
+																				( (mScalar- point.rawCoordinates().dot(mNormal))/mNormal.dot(mNormal) ) * mNormal );
+}
+
+template <typename Number>
 bool Halfspace<Number>::intersection( Number &_result, const vector_t<Number> &_vector ) const {
 	bool intersect = false;
 	Number factor = 0;

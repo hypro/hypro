@@ -50,8 +50,9 @@ namespace hypro {
 				++rowCount;
 			}
 			// check if rank is full
-			if ( intersection.fullPivLu().rank() == intersection.cols() ) {
-				vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
+			Eigen::FullPivLU<matrix_t<Number>> luDecomposition = intersection.fullPivLu();
+			if ( luDecomposition.rank() == intersection.cols() ) {
+				vector_t<Number> vertex = luDecomposition.solve( intersectionConstants );
 				assert(vertex.rows() == _constraints.cols());
 				possibleVertices.emplace( std::move(vertex) );
 				// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;

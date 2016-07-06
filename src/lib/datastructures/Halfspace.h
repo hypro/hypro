@@ -56,6 +56,7 @@ class Halfspace {
 
 	Number signedDistance( const vector_t<Number>& _point ) const;
 	Number evaluate( const vector_t<Number>& _direction ) const;
+	Point<Number> project( const Point<Number> ) const;
 
 	bool intersection( Number& _result, const vector_t<Number>& _vector ) const;
 	bool intersection( Number& _result, const Point<Number>& _vector ) const;

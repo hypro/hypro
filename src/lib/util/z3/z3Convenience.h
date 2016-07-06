@@ -5,6 +5,7 @@
 #pragma once
 #ifdef USE_Z3
 #include "z3++.h"
+#include "z3Context.h"
 
 template<typename Number>
 static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, carl::Relation _rel = carl::Relation::LEQ) {
@@ -13,7 +14,7 @@ static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints
 
 	std::cout << __func__ << _constraints << " \n\n " << _constants << std::endl;
 
-	z3::context c;
+	z3::z3Context c;
 	z3::expr_vector constraints(c);
 	z3::expr_vector variables(c);
 	std::cout << "Variables.size() " << variables.size() << std::endl;
@@ -59,7 +60,7 @@ static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>
 
 	// TODO: Relation is ignored here.
 
-	z3::context c;
+	z3::z3Context c;
 	z3::expr formula(c);
 	z3::expr objective(c);
 	objective = c.int_val(0);
@@ -70,7 +71,7 @@ static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>
 	}
 
 	for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
-		objective = objective + c.real_val(carl::toString(carl::convert<Number,hypro::Rational>(_objective(colIndex))).c_str())*variables.at(colIndex);
+		objective = objective + c.real_val(_objective(colIndex))*variables.at(colIndex);
 	}
 
 	for(unsigned i = 0; i < _constraints.rows(); ++i){

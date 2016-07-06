@@ -31,6 +31,7 @@ public:
 	Dictionary() = default;
 	Dictionary(const Dictionary& rhs);
 	Dictionary(const matrix_t<Number>& rhs, std::vector<std::size_t> base, std::vector<std::size_t> cobase);
+	Dictionary(const matrix_t<Number>& rhs, std::vector<std::size_t> base, std::vector<std::size_t> cobase, ConstrainSet<Number> constrains);
 	/**
 	 * @brief Build a dictionary with mDictionary=rhs, mB=base and mN=cobase.
 	 */
@@ -49,7 +50,7 @@ public:
 	matrix_t<Number> tableau() const;
 	
 	Number get (std::size_t i,std::size_t j) const;
-		/**
+	/**
 	 * @return the number in the cell (i,j) of mDictionary.
 	 */
 	
@@ -101,11 +102,13 @@ public:
 	bool isDualFeasible();
 	
 	bool reverse(const std::size_t i, const std::size_t j);
+	bool reverse_old(const std::size_t i, const std::size_t j);//before optimization
 	/**
 	 * @brief is (i,j) the pivot given by the Bland's rule for the dictionary obtained by pivoting around (i,j).
 	 */ 
 	
 	bool reverseDual(const std::size_t i, const std::size_t j, const std::vector<std::size_t> availableIndices);
+	bool reverseDual_old(const std::size_t i, const std::size_t j, const std::vector<std::size_t> availableIndices);
 	
 	bool isLexMin();
 	
@@ -126,14 +129,15 @@ public:
 	/**
 	 * @brief Puts the non slack variable to the basis.
 	 */ 
+	void nonSlackToBase(std::vector<vector_t<Number>>& linealtySpace);
 	
-	std::set<unsigned> toCobase(const std::set<unsigned> saturatedIndices);
+	std::set<std::size_t> toCobase(const std::set<std::size_t> saturatedIndices);
 	/**
 	 * @brief Puts the saturated variable to the cobasis.
 	 */
 	
 	
-	void pushToBounds(unsigned colIndex);
+	void pushToBounds(std::size_t colIndex);
 	/**
 	 * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
 	 */

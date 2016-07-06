@@ -40,6 +40,8 @@ struct gnuplotSettings {
 	bool grid = true;					 // plot grid
 	double tics = 1.0; 					 // grid and axis tics (uniform)
 	double pointSize = 1.0;				 // pointsize
+	double linewidth = 0.2;				 // linewidth
+	bool keepAspectRatio = false; 		 // keep aspect ratio for both axes
 	std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
 	bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
 };
