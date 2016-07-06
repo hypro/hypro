@@ -12,6 +12,10 @@ class ConstrainSet {
 	public:
 		ConstrainSet() = default;
 	
+		std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number> get(std::size_t index) {
+			return constrainSet[index];
+		}
+	
 		void add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number> newElem) {
 			constrainSet.push_back(newElem);
 		}
@@ -60,7 +64,7 @@ class ConstrainSet {
 	 * @return True, if there is a suitable pivot.
 	 */ 
 		
-		void modifyAssignment (std::size_t& pivot,const Number& diff,const std::vector<std::size_t>& base, 
+		void modifyAssignment (const std::size_t& pivot,const Number& diff,const std::vector<std::size_t>& base, 
 						const std::vector<std::size_t>& cobase, const matrix_t<Number>& dictionary) {
 			std::get<2>(constrainSet[cobase[pivot]-1])+=diff;
 			for(std::size_t rowIndex=0;rowIndex<base.size()-1;++rowIndex) {
@@ -69,6 +73,14 @@ class ConstrainSet {
 					std::get<2>(constrainSet[base[rowIndex]-1]) += dictionary(rowIndex,colIndex)*std::get<2>(constrainSet[cobase[colIndex]-1]);
 				}
 			}
+		}
+	/**
+	 * @brief modify the assignment of "pivot" by adding "diff" and recomputes the value of the variables in the basis
+	 * 
+	 */ 
+		
+		void setLowerBoundToValue (const std::size_t index) {//not used
+			std::get<1>(std::get<0>(constrainSet[index]))=std::get<2>(constrainSet[index]);
 		}
 		
 		void print() const {
@@ -102,5 +114,8 @@ class ConstrainSet {
 		Number diffToLowerBound(unsigned var) const {
 			return std::get<1>(std::get<0>(constrainSet[var]))-std::get<2>(constrainSet[var]);
 		}
+	/**
+	 * @brief returns the difference between the current assignment and the lower bound
+	 */ 
 };
 }

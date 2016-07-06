@@ -2,7 +2,6 @@
 
 #include "Dictionary.h"
 
-#define FUKUDA_VERTEX_ENUM_DEBUG
 
 namespace hypro {
 
@@ -28,22 +27,31 @@ class VertexEnumeration {
 		std::vector<Dictionary<Number>> getDictionaries() const;
 		
 		std::vector<Point<Number>> getPositivePoints() const;
+		void printPositivePoints() const;
 		
 		std::vector<Point<Number>> getPoints() const;
+		void printPoints() const;
 		
 		std::vector<vector_t<Number>> getLinealtySpace() const;
+		void printLinealtySpace() const;
 	
 		std::vector<vector_t<Number>> getPositiveCones() const;
+		void printPositiveCones() const;
 	
 		std::vector<vector_t<Number>> getCones() const;
+		void printCones() const;
 		
 		void increment(unsigned& i, unsigned& j, unsigned maxJ);
 		
 		void enumerateVertices();
+	/**
+	 * @brief does everything with the halfspaces in mHsv
+	 * 
+	 */ 
 		
 		VertexEnumeration(const std::vector<Halfspace<Number>>& hsv);
 		/**
-		 * @brief mHsv=hsv, put the associated optimal dictionary in mDictionaries.
+		 * @brief mHsv:=hsv
 		 */
 		 
 		void enumerateVertices(Dictionary<Number>& dictionary);
@@ -62,6 +70,9 @@ class VertexEnumeration {
 		 */
 
 		Dictionary<Number> findFirstVertex();
+		/**
+		 * @brief Finds a fist vertex, detects the linealty spaces and adds the corresponding constrains.
+		 */
 		
 		int linearIndependance(std::map<int,vector_t<Number>> collection, vector_t<Number>& candidateRef) const;
 		/**
@@ -69,12 +80,12 @@ class VertexEnumeration {
 		 * -1 otherwise.
 		 */
 		
-		std::vector<unsigned> findIndepHs() const;
+		std::vector<unsigned> findIndepHs() const;//not used
 		/**
-		 * @return A set of the iDictionary<Number>ndex of d independant hyperplanes of mHsv.
+		 * @return A set of the index of d independant hyperplanes of mHsv.
 		 */
 		
-		Point<Number> findIntersection(const std::vector<unsigned>& selectionRef) const;
+		Point<Number> findIntersection(const std::vector<unsigned>& selectionRef) const;//not used
 		/**
 		 * @return the intersection of the hyperplanes in selectionRef.
 		 */
@@ -89,7 +100,7 @@ class VertexEnumeration {
 		 * @brief Converts the positive cones and points into the original system of coordinates.
 		 */
 		
-		void findLinealtySpace();
+		void findLinealtySpace();//not used
 		
 		void addLinealtyConstrains();
 		/**

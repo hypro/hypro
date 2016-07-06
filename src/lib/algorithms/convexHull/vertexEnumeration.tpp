@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-
+#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
@@ -20,23 +20,58 @@ namespace hypro {
 	
 	template<typename Number>
 	std::vector<Point<Number>> VertexEnumeration<Number>::getPositivePoints() const {return mPositivePoints;}
+	template<typename Number>
+	void VertexEnumeration<Number>::printPositivePoints() const {
+		for(const auto& p:mPositivePoints) {
+			cout<<p<<"\n";
+		}
+		cout<<"\n";
+	}
 	
 	template<typename Number>
 	std::vector<Point<Number>> VertexEnumeration<Number>::getPoints() const {return mPoints;}
+	template<typename Number>
+	void VertexEnumeration<Number>::printPoints() const {
+		for(const auto& p:mPoints) {
+			cout<<p<<"\n";
+		}
+		cout<<"\n";
+	}
 	
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getLinealtySpace() const {return mLinealtySpace;}
+	template<typename Number>
+	void VertexEnumeration<Number>::printLinealtySpace() const {
+	for(const auto& l:mLinealtySpace) {
+			cout<<l<<"\n";
+		}
+		cout<<"\n";
+	}
 	
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getPositiveCones() const {return mPositiveCones;}
+	template<typename Number>
+	void VertexEnumeration<Number>::printPositiveCones() const {
+	for(const auto& c:mPositiveCones) {
+			cout<<c<<"\n";
+		}
+		cout<<"\n";
+	}
 	
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getCones() const {return mCones;}
+	template<typename Number>
+	void VertexEnumeration<Number>::printCones() const {
+	for(const auto& c:mCones) {
+			cout<<c<<"\n";
+		}
+		cout<<"\n";
+	}
 	
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
-		findLinealtySpace();
-		addLinealtyConstrains();
+		//findLinealtySpace();
+		//addLinealtyConstrains();
 		if(findPositiveConstrains()) {
 			enumerateDictionaries();
 			enumerateVerticesEachDictionary();
@@ -47,7 +82,7 @@ namespace hypro {
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices(Dictionary<Number>& dictionary) {
 		std::set<vector_t<Number>> cones =dictionary.findCones(); 
-		for(const auto& cone: cones) {cout << "cone ---------------------------------------";
+		for(const auto& cone: cones) {
 			mPositiveCones.insert(cone);
 		}
 		unsigned a=0;
@@ -64,13 +99,18 @@ namespace hypro {
 			if(i<m){
 				dictionary.pivot(i,j);
 				if(dictionary.isLexMin()) {
-					cout << "\n new point: ";
-					//dictionary.printDictionary();
-					cout << dictionary.toPoint();
+					#ifdef CHULL_DBG
+						cout << "\n new point: ";
+						//dictionary.printDictionary();
+						cout << dictionary.toPoint();
+					#endif
 					mPositivePoints.push_back(dictionary.toPoint());
 				}
 				std::set<vector_t<Number>> cones =dictionary.findCones(); 
-				for(const auto& cone: cones) {cout << "cone ---------------------------------------";
+				for(const auto& cone: cones) {
+					#ifdef CHULL_DBG
+						cout << "cone found ---------------------------------------";
+					#endif
 					mPositiveCones.insert(cone);
 				}
 				i=0;j=0;++depth;
@@ -89,8 +129,10 @@ namespace hypro {
 	void VertexEnumeration<Number>::enumerateVerticesEachDictionary() {
 		mPositivePoints.push_back(mDictionaries[0].toPoint());
 		for(unsigned i = 0; i<mDictionaries.size(); ++i) {
-			cout<< "\n\n Next dictionary ---------------------\n";
-			mDictionaries[i].printDictionary();
+			#ifdef CHULL_DBG
+				cout<< "\n\n Next dictionary ---------------------\n";
+				mDictionaries[i].printDictionary();
+			#endif
 			enumerateVertices(mDictionaries[i]);
 		}
 	}
@@ -133,7 +175,9 @@ namespace hypro {
 				--depth;
 			} 
 		}
-		cout<<"\n nb dico = " << mDictionaries.size() <<"\n";
+		#ifdef CHULL_DBG
+			cout<<"\n nb dico = " << mDictionaries.size() <<"\n";
+		#endif
 	}
 	
 	template<typename Number>
@@ -142,20 +186,85 @@ namespace hypro {
 		unsigned n0 = mHsv.size();
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
 		while(dictionary.fixOutOfBounds()) {}
-		dictionary.nonSlackToBase();
+		dictionary.nonSlackToBase(mLinealtySpace);
+		addLinealtyConstrains();
+		matrix_t<Number> dictio = matrix_t<Number>::Zero(mHsv.size()+1, d+1);
+		for(unsigned colIndex=0;colIndex<=d;++colIndex) {//copy
+			for(unsigned rowIndex=0;rowIndex<n0;++rowIndex) {
+				dictio(rowIndex,colIndex) = dictionary.get(rowIndex,colIndex);
+			}
+			dictio(mHsv.size(),colIndex) = dictionary.get(n0,colIndex);
+		}
+		for(unsigned rowIndex=0;rowIndex<n0;++rowIndex) {//build the linealty constrains, the part with the var in the basis
+			if(dictionary.basis()[rowIndex]>=dictionary.basis().size()) {
+				for(unsigned colIndex=0;colIndex<d;++colIndex) {
+					for(unsigned rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
+						dictio(n0+2*rowIndexLinealty,colIndex)-=
+								dictionary.get(rowIndex,colIndex)*mLinealtySpace[rowIndexLinealty][dictionary.basis()[rowIndex]-dictionary.basis().size()];
+					}
+				}
+			}
+		}
+		for(unsigned colIndex=0;colIndex<d;++colIndex) {//build the linealty constrains, the part with the var in the cobasis
+			for(unsigned rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
+				if(dictionary.cobasis()[colIndex]>=dictionary.basis().size()) {
+					dictio(n0+2*rowIndexLinealty,colIndex)-=mLinealtySpace[rowIndexLinealty][colIndex];
+				}
+				dictio(n0+2*rowIndexLinealty+1,colIndex) = -dictio(n0+2*rowIndexLinealty,colIndex);
+			}
+		}
+		std::vector<std::size_t> basis = dictionary.basis();
+		std::vector<std::size_t> cobasis = dictionary.cobasis();
+		for(auto& index: basis) {
+			if(index>n0) {index+=2*mLinealtySpace.size();};
+		}
+		for(auto& index: cobasis) {
+			if(index>n0) {index+=2*mLinealtySpace.size();};
+		}
+		std::size_t back = basis.back();
+		basis.pop_back();
+		
+		for(unsigned index = n0+1;index<=mHsv.size();++index) {basis.push_back(index);}
+		basis.push_back(back);
+		ConstrainSet<Number> constrains;
+		for(unsigned index=0; index<n0;++index) {
+			constrains.add(dictionary.constrainSet().get(index));
+		}
+		for(unsigned index=0; index<2*mLinealtySpace.size();++index) {
+			constrains.add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
+					std::pair<bool,Number>(false,Number(0)),std::pair<bool,Number>(true,Number(0)),Number(0)));//fix
+		}
+		for(unsigned index=n0; index<n0+d;++index) {
+			constrains.add(dictionary.constrainSet().get(index));
+		}
+		/*std::size_t zero = 0;
+		constrains.modifyAssignment (zero,zero,basis, cobasis, dictio);
+		for(unsigned rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
+			constrains.setLowerBoundToValue(n0+2*rowIndexLinealty);
+			constrains.setLowerBoundToValue(n0+2*rowIndexLinealty+1);
+		}*/
+		Dictionary<Number> newDictionary = Dictionary<Number>(dictio,basis,cobasis,constrains);
+		while(newDictionary.fixOutOfBounds()) {}
+		#ifdef CHULL_DBG
+			cout <<"\nthe new dico\n";
+			newDictionary.printDictionary();
+			newDictionary.constrainSet().print();
+			cout <<"\n\n\n";
+		#endif
+		newDictionary.nonSlackToBase();
 		std::set<unsigned> hyperplanes;
-		for(unsigned index=0;index<n0;++index) {
-			if(dictionary.constrainSet().isSaturated(index)) {
+		for(unsigned index=0;index<basis.size();++index) {
+			if(newDictionary.constrainSet().isSaturated(index)) {
 				hyperplanes.insert(index);
 			}
 		}
-		std::set<unsigned> frozenCols = dictionary.toCobase(hyperplanes);
+		std::set<unsigned> frozenCols = newDictionary.toCobase(hyperplanes);
 		for(unsigned colIndex=0; colIndex<d;++colIndex) {
 			if(frozenCols.end()==frozenCols.find(colIndex)) {
-				dictionary.pushToBounds(colIndex);
+				newDictionary.pushToBounds(colIndex);
 			}
 		}
-		return dictionary;
+		return newDictionary;
 	}
 	
 	template<typename Number>
@@ -215,8 +324,13 @@ namespace hypro {
 	
 	template<typename Number>
 	bool VertexEnumeration<Number>::findPositiveConstrains() {
-		try{	
-			Dictionary<Number>dictionary(findFirstVertex());
+		try{
+			#ifdef CHULL_DBG
+				Dictionary<Number>dictionary(findFirstVertex());
+				dictionary.printDictionary();
+				dictionary.constrainSet().print();
+				cout<<"end\n";
+			#endif
 			unsigned dimension = dictionary.cobasis().size()-1;
 			unsigned constrainsCount = dictionary.basis().size()-1;
 			matrix_t<Number> A1 = matrix_t<Number>(dimension, dimension);
@@ -226,8 +340,6 @@ namespace hypro {
 			std::vector<std::size_t> mN;
 			for(unsigned rowIndex=0; rowIndex<dimension; ++rowIndex) {
 				for(unsigned colIndex=0; colIndex<dimension; ++colIndex) {
-				mHsv[dictionary.cobasis()[rowIndex]-1];
-				(mHsv[dictionary.cobasis()[rowIndex]-1]).normal();
 					A1(rowIndex,colIndex) = (mHsv[dictionary.cobasis()[rowIndex]-1]).normal()[colIndex];
 				}
 				b1[rowIndex] = (mHsv[dictionary.cobasis()[rowIndex]-1]).offset();
@@ -349,107 +461,5 @@ namespace hypro {
 			mHsv.push_back(Halfspace<Number>(Number(-1)*mLinealtySpace[linealtyIndex],Number(0)));
 		}
 	}
-	
-	
-	/*		pices of the first findFirstVertex
-	template<typename Number>
-	Point<Number> VertexEnumeration<Number>::findFirstVertex() {
-		unsigned d = mHsv[0].dimension();
-		unsigned n0 = mHsv.size();
-		std::vector<unsigned> violated;
-		unsigned indexViolated=0;
-		std::vector<unsigned> IndependantHalfspaces = findIndepHs();
-		std::vector<unsigned>& IndependantHalfspacesRef = IndependantHalfspaces;
-		Point<Number> externalPoint = findIntersection(IndependantHalfspacesRef);
-		cout << "\nexternalPoint:" << externalPoint <<"\n\n";
-		for(unsigned i=0;i<n0;++i) {
-			if(not(mHsv[i].holds(externalPoint.rawCoordinates()))) {
-				violated.push_back(i);
-			}
-		}
-		cout << "\nviolated:" << violated.size() <<"\n\n";
-		cout << "violated[0]:" << violated[0] <<"\n";
-		cout << "violated[1]:" << violated[1] <<"\n";
-		if(violated.size()==0) {
-			return externalPoint;
-		}
-		
-		matrix_t<Number> tab = matrix_t<Number>::Zero(n0+1, d*2+1+violated.size());
-		//coef
-		for(unsigned i=0;i<n0;++i) {
-			if(mHsv[i].holds(externalPoint.rawCoordinates())) {
-				tab(i,d*2+violated.size()) = mHsv[i].offset();
-				for(unsigned j=0;j<d;++j) {			
-					tab(i,j*2) = -mHsv[i].normal()[j];
-					tab(i,j*2+1) = mHsv[i].normal()[j]; 
-					tab(i,d*2+violated.size()) -= mHsv[i].normal()[j]*externalPoint.rawCoordinates()[j];
-				}
-
-			} else {
-				tab(i,d*2+violated.size()) = -mHsv[i].offset();
-				tab(i,d*2+indexViolated++) = 1;
-				for(unsigned j=0;j<d;++j) {
-					tab(i,j*2) = mHsv[i].normal()[j];
-					tab(i,j*2+1) = -mHsv[i].normal()[j];
-					tab(i,d*2+violated.size()) += mHsv[i].normal()[j]*externalPoint.rawCoordinates()[j]; 
-				}
-			}
-		}
-		
-		//cost function
-		for(unsigned j=0;j<d*2+violated.size();++j) {
-			for(unsigned i=0;i<violated.size();++i) {
-				tab(n0,j) -= tab(violated[i],j);
-			}
-		}
-	
-		for(unsigned i=0; i<unsigned(tab.rows()); ++i) {
-			for(unsigned j=0; j<unsigned(tab.cols()); ++j) {
-				cout << tab(i,j);
-				cout << ";";
-			}
-			cout << "\n";
-		}
-
-		std::vector<std::size_t> B;
-		std::vector<std::size_t> N;
-		
-		for(unsigned i=1; i<n0+1; ++i){
-			B.push_back(std::size_t(i));
-		}
-		B.push_back(std::size_t(n0+violated.size()+d*2+1));
-		for(unsigned i=n0+1; i<n0+violated.size()+d*2+1; ++i){
-			N.push_back(std::size_t(i));
-		}
-		N.push_back(std::size_t(n0+violated.size()+d*2+2));
-		Dictionary<Number> dictionary = Dictionary<Number>(tab, B, N);
-		
-		cout << "\nfirst dictionary:";
-		dictionary.printDictionary();
-		cout << "\n\n";
-		std::size_t a = std::size_t(0);
-		std::size_t b = std::size_t(0);
-		std::size_t& i = a;
-		std::size_t& j = b;
-		
-		cout << "\n ------------------------\n";
-		cout << "\n select\n";
-		while(dictionary.selectBlandPivot(i,j)) {
-			cout << "\n pivot\n";
-			dictionary.pivot(i,j);
-			dictionary.printDictionary();cout << "\n select\n";
-		}
-		cout << "\n ------------------------\n";
-		std::vector<Number> finalCoordinates;
-		for(unsigned coord = 0; coord<d; ++coord) {
-			finalCoordinates.push_back(dictionary.toPoint().rawCoordinates()[coord*2]-dictionary.toPoint().rawCoordinates()[coord*2+1]
-																		+ externalPoint.rawCoordinates()[coord]);
-		}
-		cout << "\nresulting point: " << Point<Number>(finalCoordinates) <<"\n";
-		return Point<Number>(finalCoordinates);
-	}*/
-	
-	
-	
 	
 } // namespace
