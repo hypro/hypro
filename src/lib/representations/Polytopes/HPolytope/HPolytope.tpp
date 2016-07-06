@@ -250,9 +250,24 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 				std::cout << "Final vertex: " << convert<Number,double>(res).transpose() << std::endl;
 				#endif
 			}
-
 		}
 	}
+	/*VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
+	ev.enumerateVertices();
+	for (const auto& point : ev.getPoints() ) {
+		bool found = false;
+		for (const auto& vert : vertices ) {
+			found=found||(point==vert);
+		}
+		assert(found);
+	}
+	for ( const auto &point : vertices ) {
+		bool found = false;
+		for ( const auto &vert : ev.getPoints() ) {
+			found=found||(point==vert);
+		}
+		assert(found);
+	}*/
 	return vertices;
 }
 

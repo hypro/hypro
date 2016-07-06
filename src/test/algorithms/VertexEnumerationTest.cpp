@@ -4,14 +4,11 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../src/lib/util/vertexEnumeration.h"
+#include "../../src/lib/algorithms/convexHull/Dictionary.h"
+#include "../../src/lib/algorithms/convexHull/vertexEnumeration.h"
+#include "../../src/lib/algorithms/convexHull/ConvexHull.h"
 
 #include "../../src/lib/config.h"
-#include "../../src/lib/representations/Polytope/Polytope.h"
-#include "../../src/lib/datastructures/Point.h"
-#include "../../src/lib/datastructures/Facet.h"
-#include "../../src/lib/datastructures/Ridge.h"
-#include "../../src/lib/util/convexHull.h"
 
 template<typename Number>
 class VertexEnumerationTest : public ::testing::Test
@@ -25,429 +22,290 @@ protected:
 		hypro::vector_t<Number> b = hypro::vector_t<Number>(5);
 		b << 4,5,2,1,2;
 
-		initial = hypro::VertexEnumeration<Number>(a,b);
 	}
 
 	virtual void TearDown()
-	{}
+	{	
+	cout<<"\n test \n";
+	std::size_t a = std::size_t(1);
+	std::size_t b = std::size_t(0);
+	std::size_t& i = a;
+	std::size_t& j = b;
+	hypro::vector_t<Number> v1 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v2 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v3 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v4 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v5 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v6 = hypro::vector_t<Number>(4);
+	hypro::vector_t<Number> v7 = hypro::vector_t<Number>(4);
+	hypro::vector_t<Number> v8 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v9 = hypro::vector_t<Number>(2);
+	v1 << 2,1;
+	v2 << 1,3;
+	v3 << 3,2;
+	v4 << 1,0;
+	v5 << -1,1;
+	v6 << 1,1;
+	v7 << -1,-1;
+	/*v8 << 1,-1;
+	v9 << 1,2;*/
+	Number n4 = 4;
+	Number n2 = 0.5;
+	Number n1 = 1;
+	Number nm2 = -2;
+	Number n0 = 0;
+	hypro::Halfspace<Number> h1 = hypro::Halfspace<Number>(v1,n4);
+	hypro::Halfspace<Number> h2 = hypro::Halfspace<Number>(v2,nm2);
+	hypro::Halfspace<Number> h3 = hypro::Halfspace<Number>(v3,n0);
+	hypro::Halfspace<Number> h4 = hypro::Halfspace<Number>(v4,n2);
+	hypro::Halfspace<Number> h5 = hypro::Halfspace<Number>(v5,n2);
+	hypro::Halfspace<Number> h6 = hypro::Halfspace<Number>(v6,n4);
+	hypro::Halfspace<Number> h7 = hypro::Halfspace<Number>(v7,n0);/*
+	hypro::Halfspace<Number> h8 = hypro::Halfspace<Number>(v8,n3);
+	hypro::Halfspace<Number> h9 = hypro::Halfspace<Number>(v9,n4);*/
+	std::vector<hypro::Halfspace<Number>> v;
+	std::vector<hypro::Point<Number>> p;
+	std::vector<hypro::vector_t<Number>> cone;
+	std::vector<hypro::vector_t<Number>> linealty;
+	hypro::Point<Number> p1 = hypro::Point<Number>(v1);
+	hypro::Point<Number> p2 = hypro::Point<Number>(v2);
+	hypro::Point<Number> p3 = hypro::Point<Number>(v3);
+	hypro::Point<Number> p4 = hypro::Point<Number>(v4);
+	//cone.push_back(v4);
+	//cone.push_back(v5);
+	//cone.push_back(v3);
+	linealty.push_back(v5);
+	p.push_back(p1);
+	//p.push_back(p2);
+	p.push_back(p3);
+	//p.push_back(p4);
+	v.push_back(h1);
+	v.push_back(h2);/*
+	v.push_back(h3);
+	v.push_back(h4);
+	v.push_back(h5);
+	v.push_back(h6);
+	v.push_back(h7);
+	v.push_back(h8);
+	v.push_back(h9);*/
+	//hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);
+	//d.printDictionary();
+	cout<<"\n beginning \n";
+	hypro::ConvexHull<Number> ch = hypro::ConvexHull<Number>(p,cone,linealty);
+	
+	//hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
+	//hypro::Dictionary<Number> d2 = ev.getDictionaries()[0];d2.printDictionary();
+	cout<<"\n test0 \n";
+	ch.polyhedriclHull();
+	
+	//ev.enumerateVertices();
+	//ev.findLinealtySpace();
+	cout<<"\n test1 \n";
+	//ch.conicHull();
+	//ev.addLinealtyConstrains();
+	cout<<"\n test2\n";
+	//ch.polyhedriclHull();
+	//ev.findPositiveConstrains();
+	/*for(const auto& hsv:ch.getConeHsv()) {
+		cout<<hsv<<"\n";
+	}*/
+	cout<<"\n test3 \n";
+	for(const auto& hsv:ch.getHsv()) {
+		cout<<hsv<<"\n";
+	}
+	//ev.enumerateDictionaries();
+	cout<<"\n test4 \n";
+	//ev.enumerateVerticesEachDictionary();
+	cout<<"\n test5 \n";
+	//ev.toGeneralCoordinates();
+	cout<<"\n test6 \n";
+	//for(unsigned i=0;i<ev.getPoints().size();++i) {cout<< ev.getPoints()[i]<<"\n";}
+	cout<<"\n test7 \n";
+	//for(unsigned i=0;i<ev.getCones().size();++i) {cout<< hypro::Point<Number>(ev.getCones()[i])<<"\n";}
+	cout<<"\n test8 \n";
+	/*for(const auto& l:ev.getLinealtySpace()) {
+		cout<<l<<"\n";
+	}*/
+	
+	/*std::vector<std::size_t> dispo;dispo.push_back(0);
+	dispo.push_back(1);
+	d2.setValue(1,3,Number(1));d2.setValue(0,3,Number(1));
+	i=0;j=1;
+	d2.pivot(i,j);d2.printDictionary();
+	i=0;j=0;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	i=0;j=1;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	i=0;j=2;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	i=1;j=0;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	i=1;j=1;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	i=1;j=2;
+	d2.pivot(i,j);d2.printDictionary();d2.pivot(i,j);
+	cout << "\n reverse dual bland: "<<d2.reverseDual(i,j,dispo);cout << "  i="<<i<<"  j="<<j<<"\n";
+	d2.pivot(i,j);*/
+	//cout << "\n select dual bland: "<<d2.selectDualBlandPivot(i,j,dispo);
+	//cout << "  i="<<i<<"  j="<<j<<"\n";
+	//d2.printDictionary();
+	cout<<"\n last test \n";
+	
+	
+	}
 
-	hypro::VertexEnumeration<Number> initial;
-};
+public:
+	void test (){
+	hypro::vector_t<Number> v1 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v2 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v3 = hypro::vector_t<Number>(2);
+	v1 << 1,0;
+	v2 << 0,1;
+	v3 << 1,1;
+	Number n2 = 4;
+	Number n4 = 4;
+	hypro::Halfspace<Number> h1 = hypro::Halfspace<Number>(v1,n2);
+	hypro::Halfspace<Number> h2 = hypro::Halfspace<Number>(v2,n2);
+	hypro::Halfspace<Number> h3 = hypro::Halfspace<Number>(v3,n4);
+	std::vector<hypro::Halfspace<Number>> v;
+	v.push_back(h1);
+	v.push_back(h2);
+	v.push_back(h3);
+	hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);
+	d.printDictionary();
+	std::size_t a = std::size_t(2);
+	std::size_t b = std::size_t(0);
+	std::size_t& i = a;
+	std::size_t& j = b;
+	cout<<"\n test \n";
+	d.pivot(i,j);
+	d.printDictionary();	
+	cout<<"\n test \n";
+	d.selectCrissCrossPivot(i,j);
+	cout << "\n";
+	cout << i;
+	cout << "\n";
+	cout << j;
+	cout << "\n";
+	cout.flush();
+	d.pivot(i,j);
+	d.printDictionary();
+	d.selectCrissCrossPivot(i,j);
+	cout << "\n";
+	cout << i;
+	cout << "\n";
+	cout << j;
+	cout << "\n";
+	cout.flush();
+	d.pivot(i,j);
+	d.printDictionary();	
+	
+	hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
+	ev.enumerateVertices();
+	
+	
+	
+	
+	
+	
+	/*hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);
+	cout<<"\n test1 \n";
+	d.printDictionary();
+	hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
+
+	std::vector<unsigned> basisAux = d.findZeros();
+	//d.setOnes(basisAux);
+	//d.pivot(i,j);
+	d.printDictionary();
+	cout<<"\n test2 \n";	ev.hypro::VertexEnumeration<Number>::findFirstVertex(v);
+	cout<<d.selectDualBlandPivot(i,j,basisAux);
+	cout<<"\ni="<<i<<";j="<<j<<";";d.pivot(i,j);d.printDictionary();
+	*/
+	cout<<"\n test3 \n";
+	//cout<<"\n"<< d.reverseDual(i,j,basisAux) <<"\n";
+	
+	/*i=0;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	d.pivot(i,j);
+	d.printDictionary();
+	i=1;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	d.pivot(i,j);
+	d.printDictionary();
+	cout<<"\n--------------\n";
+	cout << d.selectBlandPivot(i,j);
+	cout<<"\nselection  i="<<i<<";j="<<j<<"\n";
+	d.pivot(i,j);
+	d.printDictionary();
+	cout<<"\n--------------\n";
+	d.pivot(i,j);
+	i=0;j=1; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	d.pivot(i,j);
+	d.printDictionary();
+	d.pivot(i,j);
+	i=1;j=1; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	d.pivot(i,j);
+	d.printDictionary();
+	d.pivot(i,j);
+	//ev.enumerateDictionaries();	
+	cout<<"\n test4 \n";
+
+
+	//ev.enumerateVertices();*/
+	
+	
+	
+	
+	
+	/*
+	hypro::vector_t<Number> v1 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v2 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v3 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v4 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v5 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v6 = hypro::vector_t<Number>(2);
+	v1 << 0,1;
+	v2 << 0,-1;
+	v3 << 1,0;
+	v4 << -1,0;
+	v5 << -1,1;
+	v6 << -1,-1;
+	Number n2 = 2;
+	Number nm2 = -2;
+	Number nm1 = -1;
+	Number n3 = 3;
+	Number n0 = 0;
+	hypro::Halfspace<Number> h1 = hypro::Halfspace<Number>(v1,n2);
+	hypro::Halfspace<Number> h2 = hypro::Halfspace<Number>(v2,n2);
+	hypro::Halfspace<Number> h3 = hypro::Halfspace<Number>(v3,n3);
+	hypro::Halfspace<Number> h4 = hypro::Halfspace<Number>(v4,nm1);
+	hypro::Halfspace<Number> h5 = hypro::Halfspace<Number>(v5,n0);
+	hypro::Halfspace<Number> h6 = hypro::Halfspace<Number>(v6,n0);
+	std::vector<hypro::Halfspace<Number>> v;
+	v.push_back(h5);
+	v.push_back(h6);
+	v.push_back(h1);
+	v.push_back(h2);
+	v.push_back(h4);
+	v.push_back(h3);
+	hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);*/
+	
+	
+	
+	
+	
+	
+	
+	
+	}
+	};
 
 TYPED_TEST(VertexEnumerationTest, DictionaryAccess)
 {
-	std::map<std::size_t, std::size_t> expectedBasis;
-	expectedBasis[1] = 0;
-	expectedBasis[2] = 1;
-	expectedBasis[3] = 2;
-
-	EXPECT_EQ(expectedBasis, this->initial.dictionaries().begin()->basis());
-
-	std::map<std::size_t, std::size_t> expectedCoBasis;
-	expectedCoBasis[4] = 1;
-	expectedCoBasis[5] = 2;
-
-	EXPECT_EQ(expectedCoBasis, this->initial.dictionaries().begin()->cobasis());
+	SUCCEED();
 }
 
-TYPED_TEST(VertexEnumerationTest, DictionaryModification)
-{
 
-}
-
-TYPED_TEST(VertexEnumerationTest, DictionaryPivot)
-{
-
-}
-
-/*
- * Test simplex algorithm - constaints->vertices
- */
-TYPED_TEST(VertexEnumerationTest, ComputeVertices) {
-	// unity box in 3D
-	hypro::matrix_t<TypeParam> boxConstraints = hypro::matrix_t<TypeParam>(6,3);
-	boxConstraints << 1,0,0,
-					 -1,0,0,
-					  0,1,0,
-					  0,-1,0,
-					  0,0,1,
-					  0,0,-1;
-
-	hypro::vector_t<TypeParam> boxConstants = hypro::vector_t<TypeParam>(6);
-	boxConstants << 1,1,1,1,1,1;
-
-	hypro::VertexEnumeration<TypeParam> boxEnumerator(boxConstraints, boxConstants);
-	std::vector<hypro::Point<TypeParam>> boxVertices = boxEnumerator.search();
-
-	EXPECT_TRUE( boxVertices.size() == 8 );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,1,1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,1,-1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,-1,1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({1,-1,-1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({-1,1,1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({-1,1,-1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({-1,-1,1})) != boxVertices.end() );
-	EXPECT_TRUE( std::find(boxVertices.begin(), boxVertices.end(), hypro::Point<TypeParam>({-1,-1,-1})) != boxVertices.end() );
-
-	// pyramid with quadratic bottom -> test towards degenerated vertices.
-	hypro::matrix_t<TypeParam> pyramidConstraints = hypro::matrix_t<TypeParam>(5,3);
-	pyramidConstraints << 1,1,0,
-					 -1,1,0,
-					  0,1,1,
-					  0,1,-1,
-					  0,-1,0;
-
-	hypro::vector_t<TypeParam> pyramidConstants = hypro::vector_t<TypeParam>(5);
-	pyramidConstants << 1,1,1,1,0;
-
-	hypro::VertexEnumeration<TypeParam> pyramidEnumerator(pyramidConstraints, pyramidConstants);
-	std::vector<hypro::Point<TypeParam>> pyramidVertices = pyramidEnumerator.search();
-
-	std::cout << "Pyramid vertices: " << std::endl;
-	for(const auto& vertex : pyramidVertices)
-		std::cout << vertex << std::endl;
-
-	EXPECT_TRUE( pyramidVertices.size() == 5 );
-	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({1,0,1})) != pyramidVertices.end() );
-	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({1,0,-1})) != pyramidVertices.end() );
-	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({-1,0,1})) != pyramidVertices.end() );
-	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({-1,0,-1})) != pyramidVertices.end() );
-	EXPECT_TRUE( std::find(pyramidVertices.begin(), pyramidVertices.end(), hypro::Point<TypeParam>({0,1,0})) != pyramidVertices.end() );
-}
-
-/*
- * Test convexHull algorithm - vertices->constaints
- */
-TYPED_TEST(VertexEnumerationTest, ComputeConstraints) {
-	// unityBox in 2D
-	// init
-	hypro::vector_t<TypeParam> v01_box2 = hypro::vector_t<TypeParam>(2);
-	v01_box2(0) = 1; v01_box2(1) = 1;
-
-	hypro::vector_t<TypeParam> v02_box2 = hypro::vector_t<TypeParam>(2);
-	v02_box2(0) = 1; v02_box2(1) = -1;
-
-	hypro::vector_t<TypeParam> v03_box2 = hypro::vector_t<TypeParam>(2);
-	v03_box2(0) = -1; v03_box2(1) = 1;
-
-	hypro::vector_t<TypeParam> v04_box2 = hypro::vector_t<TypeParam>(2);
-	v04_box2(0) = -1; v04_box2(1) = -1;
-
-
-	std::vector<hypro::Point<TypeParam>> points_box2;
-	points_box2.push_back(hypro::Point<TypeParam>(v01_box2));
-	points_box2.push_back(hypro::Point<TypeParam>(v02_box2));
-	points_box2.push_back(hypro::Point<TypeParam>(v03_box2));
-	points_box2.push_back(hypro::Point<TypeParam>(v04_box2));
-
-
-	// compute constraints
-	auto facets_box2 = convexHull(points_box2);
-
-	// init test constraints
-	bool f1_box2=false, f2_box2=false, f3_box2=false, f4_box2=false, fail_box2=false;
-
-	hypro::vector_t<TypeParam> test_v01_box2 = hypro::vector_t<TypeParam>(2);
-	test_v01_box2(0) = 1; test_v01_box2(1) = 0;
-
-	hypro::vector_t<TypeParam> test_v02_box2 = hypro::vector_t<TypeParam>(2);
-	test_v02_box2(0) = -1; test_v02_box2(1) = 0;
-
-	hypro::vector_t<TypeParam> test_v03_box2 = hypro::vector_t<TypeParam>(2);
-	test_v03_box2(0) = 0; test_v03_box2(1) = 1;
-
-	hypro::vector_t<TypeParam> test_v04_box2 = hypro::vector_t<TypeParam>(2);
-	test_v04_box2(0) = 0; test_v04_box2(1) = -1;
-
-	// test
-	for(unsigned i = 0; i<facets_box2.first.size(); i++){
-		hypro::vector_t<TypeParam> normal = facets_box2.first.at(i)->getNormal();
-		TypeParam offset = facets_box2.first.at(i)->getScalar();
-
-		//std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
-		if(     normal == test_v01_box2 && offset==1) 	f1_box2=true;
-		else if(normal == test_v02_box2 && offset==1) 	f2_box2=true;
-		else if(normal == test_v03_box2 && offset==1) 	f3_box2=true;
-		else if(normal == test_v04_box2 && offset==1) 	f4_box2=true;
-		else fail_box2=true;
-	}
-
-	EXPECT_FALSE( fail_box2 );
-	EXPECT_TRUE( f1_box2 );
-	EXPECT_TRUE( f2_box2 );
-	EXPECT_TRUE( f3_box2 );
-	EXPECT_TRUE( f4_box2 );
-
-
-	// unity box in 3D
-	// init
-	hypro::vector_t<TypeParam> v01_box = hypro::vector_t<TypeParam>(3);
-	v01_box(0) = 1; v01_box(1) = 1; v01_box(2) = 1;
-
-	hypro::vector_t<TypeParam> v02_box = hypro::vector_t<TypeParam>(3);
-	v02_box(0) = 1; v02_box(1) = 1; v02_box(2) = -1;
-
-	hypro::vector_t<TypeParam> v03_box = hypro::vector_t<TypeParam>(3);
-	v03_box(0) = 1; v03_box(1) = -1; v03_box(2) = 1;
-
-	hypro::vector_t<TypeParam> v04_box = hypro::vector_t<TypeParam>(3);
-	v04_box(0) = 1; v04_box(1) = -1; v04_box(2) = -1;
-
-	hypro::vector_t<TypeParam> v05_box = hypro::vector_t<TypeParam>(3);
-	v05_box(0) = -1; v05_box(1) = 1; v05_box(2) = 1;
-
-	hypro::vector_t<TypeParam> v06_box = hypro::vector_t<TypeParam>(3);
-	v06_box(0) = -1; v06_box(1) = 1; v06_box(2) = -1;
-
-	hypro::vector_t<TypeParam> v07_box = hypro::vector_t<TypeParam>(3);
-	v07_box(0) = -1; v07_box(1) = -1; v07_box(2) = 1;
-
-	hypro::vector_t<TypeParam> v08_box = hypro::vector_t<TypeParam>(3);
-	v08_box(0) = -1; v08_box(1) = -1; v08_box(2) = -1;
-
-	std::vector<hypro::Point<TypeParam>> points_box;
-	points_box.push_back(hypro::Point<TypeParam>(v01_box));
-	points_box.push_back(hypro::Point<TypeParam>(v02_box));
-	points_box.push_back(hypro::Point<TypeParam>(v03_box));
-	points_box.push_back(hypro::Point<TypeParam>(v04_box));
-	points_box.push_back(hypro::Point<TypeParam>(v05_box));
-	points_box.push_back(hypro::Point<TypeParam>(v06_box));
-	points_box.push_back(hypro::Point<TypeParam>(v07_box));
-	points_box.push_back(hypro::Point<TypeParam>(v08_box));
-
-	// compute constraints
-	auto facets_box = convexHull(points_box);
-
-	// init test constraints
-	bool f1_box=false, f2_box=false, f3_box=false, f4_box=false, f5_box=false, f6_box=false, fail_box=false;
-	hypro::vector_t<TypeParam> test_v01_box = hypro::vector_t<TypeParam>(3);
-	test_v01_box(0) = 1; test_v01_box(1) = 0; test_v01_box(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v02_box = hypro::vector_t<TypeParam>(3);
-	test_v02_box(0) = -1; test_v02_box(1) = 0; test_v02_box(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v03_box = hypro::vector_t<TypeParam>(3);
-	test_v03_box(0) = 0; test_v03_box(1) = 1; test_v03_box(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v04_box = hypro::vector_t<TypeParam>(3);
-	test_v04_box(0) = 0; test_v04_box(1) = -1; test_v04_box(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v05_box = hypro::vector_t<TypeParam>(3);
-	test_v05_box(0) = 0; test_v05_box(1) = 0; test_v05_box(2) = 1;
-
-	hypro::vector_t<TypeParam> test_v06_box = hypro::vector_t<TypeParam>(3);
-	test_v06_box(0) = 0; test_v06_box(1) = 0; test_v06_box(2) = -1;
-
-	// test
-	for(unsigned i = 0; i<facets_box.first.size(); i++){
-		hypro::vector_t<TypeParam> normal = facets_box.first.at(i)->getNormal();
-		TypeParam offset = facets_box.first.at(i)->getScalar();
-
-		if(    normal == test_v01_box && offset==1)  f1_box=true;
-		else if(normal == test_v02_box && offset==1) f2_box=true;
-		else if(normal == test_v03_box && offset==1) f3_box=true;
-		else if(normal == test_v04_box && offset==1) f4_box=true;
-		else if(normal == test_v05_box && offset==1) f5_box=true;
-		else if(normal == test_v06_box && offset==1) f6_box=true;
-		else fail_box=true;
-	}
-
-	EXPECT_FALSE( fail_box );
-	EXPECT_TRUE( f1_box );
-	EXPECT_TRUE( f2_box );
-	EXPECT_TRUE( f3_box );
-	EXPECT_TRUE( f4_box );
-	EXPECT_TRUE( f5_box );
-	EXPECT_TRUE( f6_box );
-
-	// unity box in 4D
-	// init
-	hypro::vector_t<TypeParam> v01_box4 = hypro::vector_t<TypeParam>(4);
-	v01_box4(0) = 1; v01_box4(1) = 1; v01_box4(2) = 1; v01_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v02_box4 = hypro::vector_t<TypeParam>(4);
-	v02_box4(0) = 1; v02_box4(1) = 1; v02_box4(2) = 1; v02_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v03_box4 = hypro::vector_t<TypeParam>(4);
-	v03_box4(0) = 1; v03_box4(1) = 1; v03_box4(2) = -1; v03_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v04_box4 = hypro::vector_t<TypeParam>(4);
-	v04_box4(0) = 1; v04_box4(1) = 1; v04_box4(2) = -1; v04_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v05_box4 = hypro::vector_t<TypeParam>(4);
-	v05_box4(0) = 1; v05_box4(1) = -1; v05_box4(2) = 1; v05_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v06_box4 = hypro::vector_t<TypeParam>(4);
-	v06_box4(0) = 1; v06_box4(1) = -1; v06_box4(2) = 1; v06_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v07_box4 = hypro::vector_t<TypeParam>(4);
-	v07_box4(0) = 1; v07_box4(1) = -1; v07_box4(2) = -1; v07_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v08_box4 = hypro::vector_t<TypeParam>(4);
-	v08_box4(0) = 1; v08_box4(1) = -1; v08_box4(2) = -1; v08_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v09_box4 = hypro::vector_t<TypeParam>(4);
-	v09_box4(0) = -1; v09_box4(1) = 1; v09_box4(2) = 1; v09_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v10_box4 = hypro::vector_t<TypeParam>(4);
-	v10_box4(0) = -1; v10_box4(1) = 1; v10_box4(2) = 1; v10_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v11_box4 = hypro::vector_t<TypeParam>(4);
-	v11_box4(0) = -1; v11_box4(1) = 1; v11_box4(2) = -1; v11_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v12_box4 = hypro::vector_t<TypeParam>(4);
-	v12_box4(0) = -1; v12_box4(1) = 1; v12_box4(2) = -1; v12_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v13_box4 = hypro::vector_t<TypeParam>(4);
-	v13_box4(0) = -1; v13_box4(1) = -1; v13_box4(2) = 1; v13_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v14_box4 = hypro::vector_t<TypeParam>(4);
-	v14_box4(0) = -1; v14_box4(1) = -1; v14_box4(2) = 1; v14_box4(3) = -1;
-
-	hypro::vector_t<TypeParam> v15_box4 = hypro::vector_t<TypeParam>(4);
-	v15_box4(0) = -1; v15_box4(1) = -1; v15_box4(2) = -1; v15_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> v16_box4 = hypro::vector_t<TypeParam>(4);
-	v16_box4(0) = -1; v16_box4(1) = -1; v16_box4(2) = -1; v16_box4(3) = -1;
-
-	std::vector<hypro::Point<TypeParam>> points_box4;
-	points_box4.push_back(hypro::Point<TypeParam>(v01_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v02_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v03_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v04_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v05_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v06_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v07_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v08_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v09_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v10_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v11_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v12_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v13_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v14_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v15_box4));
-	points_box4.push_back(hypro::Point<TypeParam>(v16_box4));
-
-
-	// compute constraints
-	auto facets_box4 = convexHull(points_box4);
-
-	// init test constraints
-	bool f1_box4=false, f2_box4=false, f3_box4=false, f4_box4=false, f5_box4=false, f6_box4=false, f7_box4=false, f8_box4=false, fail_box4=false;
-	hypro::vector_t<TypeParam> test_v01_box4 = hypro::vector_t<TypeParam>(4);
-	test_v01_box4(0) = 1; test_v01_box4(1) = 0; test_v01_box4(2) = 0; test_v01_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v02_box4 = hypro::vector_t<TypeParam>(4);
-	test_v02_box4(0) = -1; test_v02_box4(1) = 0; test_v02_box4(2) = 0; test_v02_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v03_box4 = hypro::vector_t<TypeParam>(4);
-	test_v03_box4(0) = 0; test_v03_box4(1) = 1; test_v03_box4(2) = 0; test_v03_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v04_box4 = hypro::vector_t<TypeParam>(4);
-	test_v04_box4(0) = 0; test_v04_box4(1) = -1; test_v04_box4(2) = 0; test_v04_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v05_box4 = hypro::vector_t<TypeParam>(4);
-	test_v05_box4(0) = 0; test_v05_box4(1) = 0; test_v05_box4(2) = 1; test_v05_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v06_box4 = hypro::vector_t<TypeParam>(4);
-	test_v06_box4(0) = 0; test_v06_box4(1) = 0; test_v06_box4(2) = -1; test_v06_box4(3) = 0;
-
-	hypro::vector_t<TypeParam> test_v07_box4 = hypro::vector_t<TypeParam>(4);
-	test_v07_box4(0) = 0; test_v07_box4(1) = 0; test_v07_box4(2) = 0; test_v07_box4(3) = 1;
-
-	hypro::vector_t<TypeParam> test_v08_box4 = hypro::vector_t<TypeParam>(4);
-	test_v08_box4(0) = 0; test_v08_box4(1) = 0; test_v08_box4(2) = 0; test_v08_box4(3) = -1;
-
-	// test
-	for(unsigned i = 0; i<facets_box4.first.size(); i++){
-		hypro::vector_t<TypeParam> normal = facets_box4.first.at(i)->getNormal();
-		TypeParam offset = facets_box4.first.at(i)->getScalar();
-
-		//std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
-		if(    normal == test_v01_box4 && offset==1)  f1_box4=true;
-		else if(normal == test_v02_box4 && offset==1) f2_box4=true;
-		else if(normal == test_v03_box4 && offset==1) f3_box4=true;
-		else if(normal == test_v04_box4 && offset==1) f4_box4=true;
-		else if(normal == test_v05_box4 && offset==1) f5_box4=true;
-		else if(normal == test_v06_box4 && offset==1) f6_box4=true;
-		else if(normal == test_v07_box4 && offset==1) f7_box4=true;
-		else if(normal == test_v08_box4 && offset==1) f8_box4=true;
-		else fail_box4=true;
-	}
-
-	EXPECT_FALSE( fail_box4 );
-	EXPECT_TRUE( f1_box4 );
-	EXPECT_TRUE( f2_box4 );
-	EXPECT_TRUE( f3_box4 );
-	EXPECT_TRUE( f4_box4 );
-	EXPECT_TRUE( f5_box4 );
-	EXPECT_TRUE( f6_box4 );
-	EXPECT_TRUE( f7_box4 );
-	EXPECT_TRUE( f8_box4 );
-
-	// pyramid with quadratic bottom -> test towards degenerated vertices.
-	// init
-	hypro::vector_t<TypeParam> v01_pyramid = hypro::vector_t<TypeParam>(3);
-	v01_pyramid(0) = 1; v01_pyramid(1) = 0; v01_pyramid(2) = 1;
-
-	hypro::vector_t<TypeParam> v02_pyramid = hypro::vector_t<TypeParam>(3);
-	v02_pyramid(0) = 1; v02_pyramid(1) = 0; v02_pyramid(2) = -1;
-
-	hypro::vector_t<TypeParam> v03_pyramid = hypro::vector_t<TypeParam>(3);
-	v03_pyramid(0) = -1; v03_pyramid(1) = 0; v03_pyramid(2) = 1;
-
-	hypro::vector_t<TypeParam> v04_pyramid = hypro::vector_t<TypeParam>(3);
-	v04_pyramid(0) = -1; v04_pyramid(1) = 0; v04_pyramid(2) = -1;
-
-	hypro::vector_t<TypeParam> v05_pyramid = hypro::vector_t<TypeParam>(3);
-	v05_pyramid(0) = 0; v05_pyramid(1) = 1; v05_pyramid(2) = 0;
-
-	std::vector<hypro::Point<TypeParam>> points_pyramid;
-	points_pyramid.push_back(hypro::Point<TypeParam>(v01_pyramid));
-	points_pyramid.push_back(hypro::Point<TypeParam>(v02_pyramid));
-	points_pyramid.push_back(hypro::Point<TypeParam>(v03_pyramid));
-	points_pyramid.push_back(hypro::Point<TypeParam>(v04_pyramid));
-	points_pyramid.push_back(hypro::Point<TypeParam>(v05_pyramid));
-
-	// compute constraints
-	auto facets_pyramid = convexHull(points_pyramid);
-
-	// init test constraints
-	bool f1_pyramid=false, f2_pyramid=false, f3_pyramid=false, f4_pyramid=false, f5_pyramid=false, fail_pyramid=false;
-
-	hypro::vector_t<TypeParam> test_v01_pyramid = hypro::vector_t<TypeParam>(3);
-	test_v01_pyramid(0) = 1; test_v01_pyramid(1) = 1; test_v01_pyramid(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v02_pyramid = hypro::vector_t<TypeParam>(3);
-	test_v02_pyramid(0) = -1; test_v02_pyramid(1) = 1; test_v02_pyramid(2) = 0;
-
-	hypro::vector_t<TypeParam> test_v03_pyramid = hypro::vector_t<TypeParam>(3);
-	test_v03_pyramid(0) = 0; test_v03_pyramid(1) = 1; test_v03_pyramid(2) = 1;
-
-	hypro::vector_t<TypeParam> test_v04_pyramid = hypro::vector_t<TypeParam>(3);
-	test_v04_pyramid(0) = 0; test_v04_pyramid(1) = 1; test_v04_pyramid(2) = -1;
-
-	hypro::vector_t<TypeParam> test_v05_pyramid = hypro::vector_t<TypeParam>(3);
-	test_v05_pyramid(0) = 0; test_v05_pyramid(1) = -1; test_v05_pyramid(2) = 0;
-
-	// test
-	for(unsigned i = 0; i<facets_pyramid.first.size(); i++){
-		hypro::vector_t<TypeParam> normal = facets_pyramid.first.at(i)->getNormal();
-		TypeParam offset = facets_pyramid.first.at(i)->getScalar();
-
-		//std::cout << "Result Nr." << i << std::endl << "normal: "<< normal <<"\noffset: "<<offset << std::endl;
-		if(     normal == test_v01_pyramid && offset==1) 	f1_pyramid=true;
-		else if(normal == test_v02_pyramid && offset==1) 	f2_pyramid=true;
-		else if(normal == test_v03_pyramid && offset==1) 	f3_pyramid=true;
-		else if(normal == test_v04_pyramid && offset==1) 	f4_pyramid=true;
-		else if(normal == test_v05_pyramid && offset==0) 	f5_pyramid=true;
-		else fail_pyramid=true;
-	}
-
-	EXPECT_FALSE( fail_pyramid );
-	EXPECT_TRUE( f1_pyramid );
-	EXPECT_TRUE( f2_pyramid );
-	EXPECT_TRUE( f3_pyramid );
-	EXPECT_TRUE( f4_pyramid );
-	EXPECT_TRUE( f5_pyramid );
-}
