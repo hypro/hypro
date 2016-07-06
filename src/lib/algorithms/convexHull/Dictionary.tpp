@@ -376,14 +376,14 @@ namespace hypro {
 	bool Dictionary<Number>::reverseDual(const std::size_t i, const std::size_t j, const std::vector<std::size_t> availableIndices) {
 		if(mDictionary(i,mDictionary.cols()-1)<=0||mDictionary(i,j)<=0) {return false;}
 		Number maxRatio = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
-		for(int colIndex=0;colIndex<mDictionary.cols()-1;++colIndex) {
+		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
 			if(mDictionary(i,colIndex)>0&&maxRatio<mDictionary(mDictionary.rows()-1,colIndex)/mDictionary(i,colIndex)) {return false;}
 		}
-		for(int colIndex=0;colIndex<mDictionary.cols()-1;++colIndex) {
-			if(colIndex!=int(j)&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(i,colIndex)<0 )) {return false;}
+		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
+			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(i,colIndex)<0 )) {return false;}
 		}
-		for(int rowIndex=0;rowIndex<availableIndices.size();++rowIndex) {
-			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=int(i)) {
+		for(std::size_t rowIndex=0;rowIndex<availableIndices.size();++rowIndex) {
+			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i) {
 				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(i,mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(i,j)) {
 					return false;
 				}
@@ -486,16 +486,16 @@ namespace hypro {
 	
 	
 	template<typename Number>
-	std::set<unsigned> Dictionary<Number>::toCobase(const std::set<unsigned> saturatedIndices) {
-		std::set<unsigned> frozenCols;
-		for(unsigned colIndex=0; colIndex<mN.size()-1;++colIndex) {
+	std::set<std::size_t> Dictionary<Number>::toCobase(const std::set<std::size_t> saturatedIndices) {
+		std::set<std::size_t> frozenCols;
+		for(std::size_t colIndex=0; colIndex<mN.size()-1;++colIndex) {
 			if(saturatedIndices.end()!=saturatedIndices.find(mN[colIndex]-1)) {
 				frozenCols.insert(colIndex);
 			}
 		}
-		for(unsigned rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
+		for(std::size_t rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
 			if(saturatedIndices.end()!=saturatedIndices.find(mB[rowIndex]-1)) {
-				for(unsigned colIndex=0; colIndex<mN.size()-1;++colIndex) {
+				for(std::size_t colIndex=0; colIndex<mN.size()-1;++colIndex) {
 					if(frozenCols.end()==frozenCols.find(colIndex)&&mDictionary(rowIndex,colIndex)!=0
 								/*&&not(mConstrains.isSaturated(mB[rowIndex]-1))*/) {
 						this->pivot(rowIndex,colIndex);
@@ -509,7 +509,7 @@ namespace hypro {
 	}
 	
 	template<typename Number>
-	void Dictionary<Number>::pushToBounds(unsigned colIndex) {
+	void Dictionary<Number>::pushToBounds(std::size_t colIndex) {
 		assert(mConstrains.finiteLowerBound(mN[colIndex]-1));
 		Number diff = mConstrains.diffToLowerBound(mN[colIndex]-1);//diff<0
 		unsigned minDiffIndex = mDictionary.size();

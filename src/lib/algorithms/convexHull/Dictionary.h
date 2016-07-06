@@ -131,13 +131,13 @@ public:
 	 */ 
 	void nonSlackToBase(std::vector<vector_t<Number>>& linealtySpace);
 	
-	std::set<unsigned> toCobase(const std::set<unsigned> saturatedIndices);
+	std::set<std::size_t> toCobase(const std::set<std::size_t> saturatedIndices);
 	/**
 	 * @brief Puts the saturated variable to the cobasis.
 	 */
 	
 	
-	void pushToBounds(unsigned colIndex);
+	void pushToBounds(std::size_t colIndex);
 	/**
 	 * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
 	 */

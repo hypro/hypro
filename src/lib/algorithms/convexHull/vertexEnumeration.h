@@ -41,7 +41,7 @@ class VertexEnumeration {
 		std::vector<vector_t<Number>> getCones() const;
 		void printCones() const;
 		
-		void increment(unsigned& i, unsigned& j, unsigned maxJ);
+		void increment(std::size_t& i, std::size_t& j, std::size_t maxJ);
 		
 		void enumerateVertices();
 	/**
@@ -80,12 +80,12 @@ class VertexEnumeration {
 		 * -1 otherwise.
 		 */
 		
-		std::vector<unsigned> findIndepHs() const;//not used
+		std::vector<std::size_t> findIndepHs() const;//not used
 		/**
 		 * @return A set of the index of d independant hyperplanes of mHsv.
 		 */
 		
-		Point<Number> findIntersection(const std::vector<unsigned>& selectionRef) const;//not used
+		Point<Number> findIntersection(const std::vector<std::size_t>& selectionRef) const;//not used
 		/**
 		 * @return the intersection of the hyperplanes in selectionRef.
 		 */
