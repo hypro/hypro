@@ -1,3 +1,5 @@
+#ifdef USE_Z3
+
 #include "z3Context.h"
 
 namespace z3
@@ -8,3 +10,5 @@ namespace z3
 		// public member function doing this
 	}
 }
+
+#endif // USE_Z3

@@ -1,4 +1,5 @@
 #pragma once
+#ifdef USE_Z3
 
 #include <z3++.h>
 
@@ -15,3 +16,5 @@ namespace z3 {
 		z3::expr real_val (mpq_class val);
 	};
 }
+
+#endif // USE_Z3
