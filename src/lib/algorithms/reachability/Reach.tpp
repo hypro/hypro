@@ -39,12 +39,12 @@ namespace reachability {
 				s.set = Representation(state.second.set.first, state.second.set.second);
 				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
-				mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, s));
+				mWorkingQueue.emplace(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
 
 		while ( !mWorkingQueue.empty() ) {
-			initialSet<Number,Representation> nextInitialSet = mWorkingQueue.front();
+			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop();
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);

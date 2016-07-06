@@ -20,13 +20,14 @@
 #include "../../util/Plotter.h"
 #include "boost/tuple/tuple.hpp"
 #include "../lib/representations/Ellipsoids/Ellipsoid.h"
+#include "../../representations/GeometricObject.h"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
@@ -38,7 +39,7 @@ namespace reachability {
 template <typename Representation>
 using flowpipe_t = std::vector<Representation>;
 
-template<typename Number, typename Representation>
+template<typename Number>
 using initialSet = boost::tuple<unsigned, State<Number>>;
 
 template <typename Number, typename Representation>
@@ -49,7 +50,7 @@ private:
 	std::size_t mCurrentLevel;
         Number mBloatingFactor = 0.00001; 
 	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
-	std::queue<initialSet<Number,Representation>> mWorkingQueue;
+	std::queue<initialSet<Number>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
 	mutable bool mIntersectedBadStates;
@@ -133,3 +134,5 @@ private:
 }  // namespace hypro
 
 #include "Reach.tpp"
+
+#include "Reach_SF.h"
