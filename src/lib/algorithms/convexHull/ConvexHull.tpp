@@ -79,13 +79,15 @@ namespace hypro {
 		}
 	}
 	
-	template<typename Number>//output 00000 <=2
+	template<typename Number>
 	void ConvexHull<Number>::convexHullVertices() {//!!modify the points
 		if(mPoints.size()==0) {
 			vector_t<Number> h1 = vector_t<Number>(1);
-			vector_t<Number> h2 = vector_t<Number>(-1);
-			mHsv.push_back(Halfspace<Number>(h1,Number(0)));
-			mHsv.push_back(Halfspace<Number>(h2,Number(0)));
+			vector_t<Number> h2 = vector_t<Number>(1);
+			h1[0]=1;
+			h2[0]=-1;
+			mHsv.push_back(Halfspace<Number>(h1,Number(-1)));
+			mHsv.push_back(Halfspace<Number>(h2,Number(-1)));
 		} else {
 			unsigned dimension = mPoints[0].rawCoordinates().size();
 			findOffset();
@@ -115,16 +117,25 @@ namespace hypro {
 	
 	template<typename Number>
 	void ConvexHull<Number>::conicHull() {
-		std::vector<Point<Number>> points;
-		for(const auto& cone:mCone) {
-			points.push_back(Point<Number>(cone));
-		}
-		Point<Number> zero = Point<Number>::Zero(mCone[0].size());
-		points.push_back(zero);
-		ConvexHull<Number> ch = ConvexHull<Number>(points);
-		ch.convexHullVertices();
-		for(const auto& hs:ch.getHsv()) {
-			if(hs.offset()==0) {mConeHsv.push_back(hs);}
+		if(mCone.size()==0) {
+			vector_t<Number> h1 = vector_t<Number>(2);// in case the function is called in the polyhedric hull, the absurd answer is in dimension 2, so a dimension can be removed
+			vector_t<Number> h2 = vector_t<Number>(2);
+			h1[0]=1;h1[1]=1;
+			h2[0]=-1;h2[1]=-1;
+			mConeHsv.push_back(Halfspace<Number>(h1,Number(-1)));
+			mConeHsv.push_back(Halfspace<Number>(h2,Number(-1)));
+		} else {
+			std::vector<Point<Number>> points;
+			for(const auto& cone:mCone) {
+				points.push_back(Point<Number>(cone));
+			}
+			Point<Number> zero = Point<Number>::Zero(mCone[0].size());
+			points.push_back(zero);
+			ConvexHull<Number> ch = ConvexHull<Number>(points);
+			ch.convexHullVertices();
+			for(const auto& hs:ch.getHsv()) {
+				if(hs.offset()==0) {mConeHsv.push_back(hs);}
+			}
 		}
 	}
 	
@@ -160,9 +171,9 @@ namespace hypro {
 			newCone.push_back(aux2);
 		}
 		std::vector<Point<Number>> empty;
-		ConvexHull<Number> ch = ConvexHull<Number>(empty, newCone);
-		ch.conicHull();
-		std::vector<Halfspace<Number>> hsv = ch.getConeHsv();
+		ConvexHull<Number> ch = ConvexHull<Number>(empty, newCone);cout<< "debut cone\n";
+		ch.conicHull();cout<< "fin cone\n";
+		std::vector<Halfspace<Number>> hsv = ch.getConeHsv();cout<< "cone addition\n";
 		for(auto& hs:hsv) {
 			hs.setOffset(hs.offset()-hs.normal()[hs.normal().size()-1]);//projection fonction
 			vector_t<Number> aux=vector_t<Number>(hs.normal().size()-1);
