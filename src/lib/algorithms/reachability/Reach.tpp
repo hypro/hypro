@@ -214,7 +214,7 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
@@ -429,7 +429,7 @@ namespace reachability {
 			//s.set = Representation(collectedVertices);
 
 			// reduce new initial sets.
-			collectedSets.removeRedundancy();
+			//collectedSets.removeRedundancy();
 
 			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
