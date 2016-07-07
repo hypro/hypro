@@ -311,12 +311,12 @@ void PolytopeSupportFunction<Number>::removeRedundancy() {
 			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
 			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
 			unsigned insertionIndex = newConstants.rows()-1;
-			for(unsigned rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
+			for(int rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
 				if(redundant.empty()){
 					break;
 				}
 
-				if(rowIndex != redundant.back()){
+				if(unsigned(rowIndex) != redundant.back()){
 					newConstraints.row(insertionIndex) = mConstraints.row(rowIndex);
 					newConstants(rowIndex) = mConstraintConstants(rowIndex);
 					--insertionIndex;

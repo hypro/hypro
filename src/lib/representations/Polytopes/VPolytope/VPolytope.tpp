@@ -238,7 +238,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		if(effDim < points.begin()->dimension()){
 			pointSet.clear();
 			std::vector<Halfspace<Number>> orientedHalfspaces = computeOrientedBox(points);
-			std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
+			//std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
 			//assert(orientedHalfspaces.size() == points.begin()->dimension());
 
 			// vertex computation of the oriented box
@@ -339,7 +339,7 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vec
 		if(effDim < points.begin()->dimension()){
 			pointSet.clear();
 			std::vector<Halfspace<Number>> orientedHalfspaces = computeOrientedBox(points);
-			std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
+			//std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
 			//assert(orientedHalfspaces.size() == points.begin()->dimension());
 
 			// vertex computation of the oriented box

@@ -93,7 +93,6 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 		errorapprox = errorapprox.linearTransformation(firstErrorFactor, vector_t<Number>::Zero(dimension));
 
-		/*
 		Box<Number> error;
 		Box<Number> x0Error;
 

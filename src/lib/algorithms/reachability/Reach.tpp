@@ -39,12 +39,12 @@ namespace reachability {
 				s.set = Representation(state.second.set.first, state.second.set.second);
 				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
-				mWorkingQueue.emplace(initialSet<Number,Representation>(mCurrentLevel, s));
+				mWorkingQueue.emplace(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
 
 		while ( !mWorkingQueue.empty() ) {
-			initialSet<Number,Representation> nextInitialSet = mWorkingQueue.front();
+			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop();
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
@@ -214,7 +214,7 @@ namespace reachability {
                          *    - Insert for each transition the guard satisfying intervals
                          */
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
@@ -429,7 +429,7 @@ namespace reachability {
 			//s.set = Representation(collectedVertices);
 
 			// reduce new initial sets.
-			collectedSets.removeRedundancy();
+			//collectedSets.removeRedundancy();
 
 			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
