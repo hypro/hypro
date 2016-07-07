@@ -325,7 +325,12 @@ namespace hypro {
 	template<typename Number>
 	bool VertexEnumeration<Number>::findPositiveConstrains() {
 		try{
-			if(mHsv.size()==0) {throw string("\n WARNING: empty set. \n");}
+			if(mHsv.size()==0) {
+				vector_t<Number> one = vector_t<Number>(1);
+				one[0]=1;
+				mLinealtySpace.push_back(one);
+				throw string("\n WARNING: no constrains. \n");
+			}
 			Dictionary<Number>dictionary(findFirstVertex());
 			#ifdef CHULL_DBG
 				dictionary.printDictionary();
