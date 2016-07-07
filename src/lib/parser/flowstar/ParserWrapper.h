@@ -1,4 +1,5 @@
 #pragma once
+#include "../../flags.h"
 #include <string>
 #include <boost/tuple/tuple.hpp>
 
