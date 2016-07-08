@@ -155,8 +155,10 @@ namespace hypro {
 		}
 		dictionary.setOnes(basisAux);
 		while(i<m || depth>=0){
-			while(i<m && not(dictionary.reverseDual(i,j,basisAux))){
-				VertexEnumeration<Number>::increment(i,j,n);
+			while(i<m){
+				if(!dictionary.reverseDual(i,j,basisAux)) {
+					VertexEnumeration<Number>::increment(i,j,n);
+				} else {break;}
 			}
 			if(i<m){
 				dictionary.pivot(basisAux[i],j);
@@ -185,8 +187,23 @@ namespace hypro {
 		std::size_t d = mHsv[0].dimension();
 		std::size_t n0 = mHsv.size();
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
+		#ifdef CHULL_DBG
+			cout<< "\nfist dictionary\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
 		while(dictionary.fixOutOfBounds()) {}
+		#ifdef CHULL_DBG
+			cout<< "\nfixOutOfBounds\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
 		dictionary.nonSlackToBase(mLinealtySpace);
+		#ifdef CHULL_DBG
+			cout<< "\nnonSlackToBase\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
 		addLinealtyConstrains();
 		matrix_t<Number> dictio = matrix_t<Number>::Zero(mHsv.size()+1, d+1);
 		for(std::size_t colIndex=0;colIndex<=d;++colIndex) {//copy
@@ -333,6 +350,7 @@ namespace hypro {
 			}
 			Dictionary<Number>dictionary(findFirstVertex());
 			#ifdef CHULL_DBG
+				cout<<"findFirstVertex\n";
 				dictionary.printDictionary();
 				dictionary.constrainSet().print();
 				cout<<"end\n";
@@ -393,11 +411,17 @@ namespace hypro {
 		
 			mPivotingMatrix = invA1;
 			mOffset = b1;
-		} 
+		}
 		catch(string const& message) {
 			cout << message;
 			return false;
 		}
+		#ifdef CHULL_DBG
+			cout<<"positive constrains\n";
+			mDictionaries[0].printDictionary();
+			mDictionaries[0].constrainSet().print();
+			cout<<"end\n";
+		#endif
 		return true;
 	}
 	
