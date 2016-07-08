@@ -242,24 +242,24 @@ namespace hypro {
 		if(minIndex == unsigned(mDictionary.size())){return false;}
 		i = indexMin;
 		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {
-			if(mDictionary(i,colIndex) > 0)	{
+			if(mDictionary(availableIndices[i],colIndex) > 0)	{
 				goodIndices.push_back(colIndex);
 			}
 		}
 		minIndex = mN[goodIndices[0]];
 		j = goodIndices[0];
-		Number currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+		Number currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 		for(unsigned colIndex = 1; colIndex < unsigned(goodIndices.size()); ++colIndex) {
-			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(i,goodIndices[colIndex])	> currentLambda)	{
+			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(availableIndices[i],goodIndices[colIndex])	> currentLambda)	{
 				j = goodIndices[colIndex];
-				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 				minIndex = mN[goodIndices[colIndex]];
 			}
-			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(i,goodIndices[colIndex])	== currentLambda
+			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(availableIndices[i],goodIndices[colIndex])	== currentLambda
 						&& minIndex > mN[goodIndices[colIndex]]) {
 				minIndex = mN[goodIndices[colIndex]];
 				j = goodIndices[colIndex];
-				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 			}
 		}
 		return true;
@@ -372,19 +372,20 @@ namespace hypro {
 		pivot(availableIndices[i],j);
 		return (i==i3)&&(j==j3)&&existingPivot&&dual;
 	}
+	
 	template<typename Number>
 	bool Dictionary<Number>::reverseDual(const std::size_t i, const std::size_t j, const std::vector<std::size_t> availableIndices) {
-		if(mDictionary(i,mDictionary.cols()-1)<=0||mDictionary(i,j)<=0) {return false;}
-		Number maxRatio = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+		if(mDictionary(availableIndices[i],mDictionary.cols()-1)<=0||mDictionary(availableIndices[i],j)<=0) {return false;}
+		Number maxRatio = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
-			if(mDictionary(i,colIndex)>0&&maxRatio<mDictionary(mDictionary.rows()-1,colIndex)/mDictionary(i,colIndex)) {return false;}
+			if(mDictionary(availableIndices[i],colIndex)>0&&maxRatio<mDictionary(mDictionary.rows()-1,colIndex)/mDictionary(availableIndices[i],colIndex)) {return false;}
 		}
 		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
-			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(i,colIndex)<0 )) {return false;}
+			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(availableIndices[i],colIndex)<0 )) {return false;}
 		}
 		for(std::size_t rowIndex=0;rowIndex<availableIndices.size();++rowIndex) {
 			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i) {
-				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(i,mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(i,j)) {
+				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(availableIndices[i],mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(availableIndices[i],j)) {
 					return false;
 				}
 			}
