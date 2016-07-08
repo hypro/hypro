@@ -156,11 +156,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number> &_a,
-										  const vector_t<Number> &_b, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters
+			, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number>( _origin, _a, _b );
+			mLinearTrafoParameters = new trafoContent<Number>( _origin, _parameters );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			break;
@@ -269,7 +269,8 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mBall->evaluate( _direction );
 		}
 		case SF_TYPE::LINTRAFO: {
-			matrix_t<Number> tmp = mLinearTrafoParameters->a.transpose();
+			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			matrix_t<Number> tmp = parameterPair.first.transpose();
 			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
 			switch(res.errorCode){
 				case SOLUTION::INFTY:
@@ -278,7 +279,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				}
 				default:{
 					assert(res.errorCode == SOLUTION::FEAS);
-					res.optimumValue = mLinearTrafoParameters->a * res.optimumValue + mLinearTrafoParameters->b;
+					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					res.supportValue = res.optimumValue.dot(_direction);
 					return res;
@@ -365,12 +366,13 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 		case SF_TYPE::LINTRAFO: {
 			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(mLinearTrafoParameters->a) << std::endl;
-			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * mLinearTrafoParameters->a );
+			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * parameterPair.first );
 			if(res.begin()->errorCode != SOLUTION::INFEAS) {
 				unsigned directionCnt = 0;
 				for(auto& entry : res){
 					vector_t<Number> currentDir = _directions.row(directionCnt);
-					entry.optimumValue = mLinearTrafoParameters->a * entry.optimumValue + mLinearTrafoParameters->b;
+					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					entry.supportValue = entry.optimumValue.dot(currentDir);
 					++directionCnt;
@@ -528,7 +530,8 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 			if(supPoint.dimension() == 0){
 				return supPoint;
 			}
-			return supPoint.linearTransformation(mLinearTrafoParameters->a, mLinearTrafoParameters->b);
+			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			return supPoint.linearTransformation(parameterPair.first, parameterPair.second);
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->supremumPoint();
@@ -639,9 +642,9 @@ BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::linearTransformation(
-	  const matrix_t<Number> &_A, const vector_t<Number> &_b ) const {
+	  const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
-		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _A, _b, SF_TYPE::LINTRAFO ) );
+		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), parameters, SF_TYPE::LINTRAFO ) );
 	obj->pThis = obj;
 	return obj;
 }
@@ -680,7 +683,8 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 			return mBall->contains( _point );
 		}
 		case SF_TYPE::LINTRAFO: {
-			return mLinearTrafoParameters->origin->contains( mLinearTrafoParameters->a * _point + mLinearTrafoParameters->b );
+			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			return mLinearTrafoParameters->origin->contains( parameterPair.first * _point + parameterPair.second );
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->contains( _point );

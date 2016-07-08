@@ -18,11 +18,41 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 	template<typename Number>
 	struct lintrafoParameters {
 		unsigned power = 2; // 2^power operations are collected
-		std::map<unsigned, matrix_t<Number>> matrices;
-		std::map<unsigned, vector_t<Number>> vectors;
+		mutable std::map<unsigned, matrix_t<Number>> matrices;
+		mutable std::map<unsigned, vector_t<Number>> vectors;
 
+		lintrafoParameters() = delete;
+		lintrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = 2) :
+			power(_power)
+		{
+			std::cout << this << " Create Parameterset A: " << _A << " and b: " << _b << std::endl;
+			assert(_A.rows() == _b.rows());
+			matrices[1] = _A;
+			vectors[1] = _b;
+		}
 
-		void createNextReduct(){
+		matrix_t<Number> matrix() const {
+			return matrices.begin()->second;
+		}
+
+		vector_t<Number> vector() const {
+			return vectors.begin()->second;
+		}
+
+		std::pair<matrix_t<Number>, vector_t<Number>> getParameterSet(unsigned exponent) const {
+			std::cout << this << " Request parameter set for exponent " << exponent << std::endl;
+			if(matrices.find(exponent) != matrices.end()){
+				return std::make_pair(matrices.at(exponent), vectors.at(exponent));
+			}
+			// create new parameters
+			while((--matrices.end())->first < exponent) {
+				createNextReduct();
+			}
+			assert((--matrices.end())->first == exponent);
+			return std::make_pair(matrices.at(exponent), vectors.at(exponent));
+		};
+
+		void createNextReduct() const {
 			// the last created reduction pair is at the back, as a std::map is per default sorted ascending
 			assert(matrices.size() == vectors.size());
 			assert(matrices.size() > 0);
@@ -30,7 +60,7 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 			// first compute the new b
 			vector_t<Number> bTrans = (--vectors.end())->second;
 			matrix_t<Number> aTrans = (--matrices.end())->second;
-			unsigned exponent = carl::pow(2, (--matrices.end())->first);
+			unsigned exponent = ((--matrices.end())->first) * powerOfTwo;
 			// accumulate b
 			for (std::size_t i = 1; i < powerOfTwo ; i++){
 				// Note: aTrans hasn't changed yet.
@@ -42,6 +72,10 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 			}
 			matrices[exponent] = aTrans;
 			vectors[exponent] = bTrans;
+		}
+
+		bool operator== (const lintrafoParameters<Number>& rhs) const {
+			return (this->matrices.begin()->second == rhs.matrices.begin()->second && this->vectors.begin()->second == rhs.vectors.begin()->second);
 		}
 
 	};

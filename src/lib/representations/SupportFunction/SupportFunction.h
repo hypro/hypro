@@ -11,6 +11,7 @@
 
 #include "../../util/helperFunctions.h"
 #include "SupportFunctionContent.h"
+#include "util.h"
 
 namespace hypro {
 
@@ -54,7 +55,7 @@ class SupportFunctionT {
 	void removeRedundancy();
 	std::vector<Point<Number>> vertices() const;
 	Number supremum() const;
-	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
+	SupportFunctionT<Number,Converter> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
