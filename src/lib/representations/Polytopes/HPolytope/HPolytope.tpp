@@ -178,6 +178,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 	#ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << " " << *this << std::endl;
 	#endif
+		/*
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -252,9 +253,12 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			}
 		}
 	}
-	/*VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
+		 */
+
+	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
-	for (const auto& point : ev.getPoints() ) {
+	/*
+		for (const auto& point : ev.getPoints() ) {
 		bool found = false;
 		for (const auto& vert : vertices ) {
 			found=found||(point==vert);
@@ -267,8 +271,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices() co
 			found=found||(point==vert);
 		}
 		assert(found);
-	}*/
-	return vertices;
+	}
+	 */
+	return ev.getPoints();
 }
 
 template <typename Number, typename Converter>
@@ -605,7 +610,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 		res.insert( tmp );
 	}
 	//std::cout << "After intersection: " << res << std::endl;
-	//res.removeRedundancy();
+	res.removeRedundancy();
 	//std::cout << "After removing redundancy: " << res << std::endl;
 	return res;
 }
@@ -662,13 +667,19 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	} else if (this->empty() && !_rhs.empty()) {
 		return _rhs;
 	} else { // none is empty
+
 		auto lhs = Converter::toVPolytope( *this );
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
+
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));
 		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-
+		/*
+		ConvexHull<Number> ch = ConvexHull<Number>(this->vertices());
+		ch.convexHullVertices();
+		HPolytopeT<Number,Converter> result = HPolytopeT<Number,Converter>(ch.getHsv());
+		*/
 		return result;
 	}
 }

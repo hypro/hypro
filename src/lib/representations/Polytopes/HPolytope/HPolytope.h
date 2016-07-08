@@ -11,7 +11,7 @@
 #include "util/convexHull.h"
 #include "util/Optimizer.h"
 #include "util/Permutator.h"
-//#include "algorithms/convexHull/ConvexHull.h"
+#include "algorithms/convexHull/ConvexHull.h"
 
 #include <algorithm>
 #include <cassert>
