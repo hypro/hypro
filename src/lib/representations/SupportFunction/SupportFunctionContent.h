@@ -50,17 +50,31 @@ struct trafoContent {
 		bool reduced;
 		do {
 			reduced = false;
-			if ( (_origin.get()->type() == SF_TYPE::LINTRAFO) && (*_origin.get()->linearTrafoParameters()->parameters == *_parameters) && _origin->linearTrafoParameters()->currentExponent == currentExponent ) {
-				successiveTransformations = _origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
+			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *_parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+				//std::cout << "origin exponent: " << origin.get()->linearTrafoParameters()->currentExponent << std::endl;
+				//std::cout << "origin successive transformations: " << origin.get()->linearTrafoParameters()->successiveTransformations << std::endl;
+				successiveTransformations = origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
 			} else {
 				successiveTransformations = 0;
 			}
+			//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
 			if (successiveTransformations == unsigned(carl::pow(2,_parameters->power)-1)) {
+				//std::cout << "Enough successive transformations: " << successiveTransformations << std::endl;
 				reduced = true;
-				currentExponent = currentExponent*(_parameters->power);
+				currentExponent = currentExponent*(carl::pow(2,_parameters->power));
+				//std::cout << "After Reduction, new Exponent is " << currentExponent << std::endl;
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
+					/*
+					if(origin.get()->type() == SF_TYPE::LINTRAFO){
+						std::cout << "Shift origin by one. Origin exponent is: " << origin.get()->linearTrafoParameters()->currentExponent << std::endl;
+					} else {
+						std::cout << "Origin shifting should be done." << std::endl;
+					}
+					std::cout << "Origin: " << origin << std::endl;
+					*/
 				}
+				assert(origin.get()->type() != SF_TYPE::LINTRAFO || origin.get()->linearTrafoParameters()->currentExponent >= currentExponent);
 			}
 		} while (reduced == true);
 #endif
@@ -233,7 +247,7 @@ class SupportFunctionContent {
 				lhs << "2-BALL" << std::endl;
 			} break;
 			case SF_TYPE::LINTRAFO: {
-				lhs << "LINTRAFO" << std::endl;
+				lhs << "LINTRAFO A^" << rhs->mLinearTrafoParameters->currentExponent << std::endl;
 				lhs << "of" << std::endl;
 				rhs->mLinearTrafoParameters->origin->print();
 			} break;

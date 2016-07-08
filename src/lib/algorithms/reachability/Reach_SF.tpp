@@ -126,8 +126,8 @@ namespace hypro {
 				bool noFlow = false;
 
 				// if the location does not have dynamic behaviour, check guards and exit loop.
-				if(boost::get<2>(initialSetup)->matrix() == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
-				   boost::get<2>(initialSetup)->vector() == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
+				if(boost::get<2>(initialSetup)->matrix() == matrix_t<Number>::Identity(boost::get<2>(initialSetup)->matrix().rows(), boost::get<2>(initialSetup)->matrix().cols()) &&
+				   boost::get<2>(initialSetup)->vector() == vector_t<Number>::Zero(boost::get<2>(initialSetup)->vector().rows())) {
 					noFlow = true;
 					// Collect potential new initial states from discrete behaviour.
 					if(mCurrentLevel < mSettings.jumpDepth) {
@@ -214,7 +214,7 @@ namespace hypro {
 				 *    - Insert for each transition the guard satisfying intervals
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-					//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
 						State<Number> guardSatisfyingState;
@@ -259,7 +259,7 @@ namespace hypro {
 					}
 
 					// perform linear transformation on the last segment of the flowpipe
-					assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
+					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
 					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
     #ifdef USE_ELLIPSOIDS

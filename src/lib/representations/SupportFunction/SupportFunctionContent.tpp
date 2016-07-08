@@ -789,7 +789,7 @@ void SupportFunctionContent<Number>::print() const {
 			std::cout << "2-BALL" << std::endl;
 		} break;
 		case SF_TYPE::LINTRAFO: {
-			std::cout << "LINTRAFO" << std::endl;
+			std::cout << "LINTRAFO A^" << mLinearTrafoParameters->currentExponent << std::endl;
 			std::cout << "of" << std::endl;
 			mLinearTrafoParameters->origin->print();
 		} break;

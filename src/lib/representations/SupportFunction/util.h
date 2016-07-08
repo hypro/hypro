@@ -25,7 +25,7 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 		lintrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = 2) :
 			power(_power)
 		{
-			std::cout << this << " Create Parameterset A: " << _A << " and b: " << _b << std::endl;
+			//std::cout << this << " Create Parameterset A: " << _A << " and b: " << _b << std::endl;
 			assert(_A.rows() == _b.rows());
 			matrices[1] = _A;
 			vectors[1] = _b;
@@ -40,7 +40,7 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 		}
 
 		std::pair<matrix_t<Number>, vector_t<Number>> getParameterSet(unsigned exponent) const {
-			std::cout << this << " Request parameter set for exponent " << exponent << std::endl;
+			//std::cout << this << " Request parameter set for exponent " << exponent << std::endl;
 			if(matrices.find(exponent) != matrices.end()){
 				return std::make_pair(matrices.at(exponent), vectors.at(exponent));
 			}
@@ -48,7 +48,7 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 			while((--matrices.end())->first < exponent) {
 				createNextReduct();
 			}
-			assert((--matrices.end())->first == exponent);
+			assert(matrices.find(exponent) != matrices.end());
 			return std::make_pair(matrices.at(exponent), vectors.at(exponent));
 		};
 
@@ -60,11 +60,13 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 			// first compute the new b
 			vector_t<Number> bTrans = (--vectors.end())->second;
 			matrix_t<Number> aTrans = (--matrices.end())->second;
+			//std::cout << "Starting from exponent " << (--matrices.end())->first << std::endl;
 			unsigned exponent = ((--matrices.end())->first) * powerOfTwo;
+			//std::cout << "New exponent: " << exponent << std::endl;
 			// accumulate b
 			for (std::size_t i = 1; i < powerOfTwo ; i++){
-				// Note: aTrans hasn't changed yet.
-				bTrans = aTrans*((--vectors.end())->second) + (--vectors.end())->second;
+				// Note: aTrans hasn't changed yet -> we can use it for transformation.
+				bTrans = aTrans*bTrans + (--vectors.end())->second;
 			}
 			// accumulate A
 			for (std::size_t i = 0; i < power; i++){

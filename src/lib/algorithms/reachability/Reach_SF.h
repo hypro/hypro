@@ -94,7 +94,7 @@ namespace hypro {
 		private:
 
 			matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
-			boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State<Number>& _state ) const;
+			boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> computeFirstSegment( const State<Number>& _state ) const;
 			bool intersectBadStates( const State<Number>& _state, const SupportFunction<Number>& _segment ) const;
 		};
 
