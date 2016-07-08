@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-#define CHULL_DBG
+//#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
