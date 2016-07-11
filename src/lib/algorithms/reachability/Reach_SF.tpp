@@ -214,7 +214,7 @@ namespace hypro {
 				 *    - Insert for each transition the guard satisfying intervals
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
 						State<Number> guardSatisfyingState;
@@ -281,6 +281,7 @@ namespace hypro {
 #else
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
+                                        std::cout << "Current depth " << nextSegment.depth() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG

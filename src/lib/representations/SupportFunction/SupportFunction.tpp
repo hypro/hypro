@@ -113,6 +113,11 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
+    unsigned SupportFunctionT<Number,Converter>::depth() const {
+        return content->depth();
+    }
+
+    template<typename Number, typename Converter>
     sumContent<Number> *SupportFunctionT<Number,Converter>::summands() const {
        return content->summands();
     }

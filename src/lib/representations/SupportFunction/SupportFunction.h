@@ -41,7 +41,8 @@ class SupportFunctionT {
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?
 	SF_TYPE type() const;
-
+        unsigned depth() const;
+        
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;

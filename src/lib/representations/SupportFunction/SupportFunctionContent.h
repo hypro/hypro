@@ -133,6 +133,7 @@ template <typename Number>
 class SupportFunctionContent {
   private:
 	SF_TYPE mType;
+        unsigned mDepth;
 	unsigned mDimension;
 	union {
 		sumContent<Number>* mSummands;
@@ -211,6 +212,7 @@ class SupportFunctionContent {
 
 	std::size_t dimension() const;
 	SF_TYPE type() const;
+	unsigned depth() const;
 
 	Point<Number> supremumPoint() const;
 
