@@ -75,6 +75,7 @@ struct trafoContent {
 					*/
 				}
 				assert(origin.get()->type() != SF_TYPE::LINTRAFO || origin.get()->linearTrafoParameters()->currentExponent >= currentExponent);
+                                
 			}
 		} while (reduced == true);
 #endif
@@ -134,6 +135,7 @@ class SupportFunctionContent {
   private:
 	SF_TYPE mType;
         unsigned mDepth;
+        unsigned mOperationCount;
 	unsigned mDimension;
 	union {
 		sumContent<Number>* mSummands;
@@ -213,6 +215,7 @@ class SupportFunctionContent {
 	std::size_t dimension() const;
 	SF_TYPE type() const;
 	unsigned depth() const;
+	unsigned operationCount() const;
 
 	Point<Number> supremumPoint() const;
 

@@ -61,7 +61,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& 
 			mEllipsoid = new EllipsoidSupportFunction<Number>( _shapeMatrix);
 			mType = SF_TYPE::ELLIPSOID;
 			mDimension = _shapeMatrix.cols();
-                        mDepth = 1;
+                        mDepth = 0;
+                        mOperationCount = 1;
 			break;
 		}
 		default:
@@ -77,7 +78,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, SF_TYPE 
 			mBall = new BallSupportFunction<Number>( _radius, _type );
 			mType = _type;
 			mDimension = 0;
-                        mDepth = 1;
+                        mDepth = 0;
+                        mOperationCount = 0;
 			break;
 		}
 		default:
@@ -93,7 +95,9 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 			mPolytope = new PolytopeSupportFunction<Number>( _directions, _distances );
 			mType = SF_TYPE::POLY;
 			mDimension = _directions.cols();
-                        mDepth = 1;
+                        mDepth = 0;
+                        mOperationCount = 0;
+                        
 			break;
 		}
 		default:
@@ -108,7 +112,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfsp
 			mPolytope = new PolytopeSupportFunction<Number>( _planes );
 			mType = SF_TYPE::POLY;
 			mDimension = mPolytope->dimension();
-                        mDepth = 1;
+                        mDepth = 0;
+                        mOperationCount = 0;
 			break;
 		}
 		default:
@@ -123,7 +128,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 			mPolytope = new PolytopeSupportFunction<Number>( _points );
 			mType = SF_TYPE::POLY;
 			mDimension = mPolytope->dimension();
-                        mDepth = 1;
+                        mDepth = 0;
+                        mOperationCount = 0;
 			break;
 		}
 		default:
@@ -141,21 +147,36 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mType = SF_TYPE::SUM;
 			mDimension = _lhs->dimension();
 			assert( _lhs->type() == mSummands->lhs->type() && _rhs->type() == mSummands->rhs->type() );
-                        mDepth = _rhs->depth() + _lhs->depth()+1;
+                        if (_rhs->depth() > _lhs->depth()){
+                            mDepth = _rhs->depth();
+                        } else {
+                            mDepth = _lhs->depth();
+                        }
+                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::UNION: {
 			mUnionParameters = new unionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::UNION;
 			mDimension = _lhs->dimension();
-                        mDepth = _rhs->depth() + _lhs->depth()+1;
+                        if (_rhs->depth() > _lhs->depth()){
+                            mDepth = _rhs->depth();
+                        } else {
+                            mDepth = _lhs->depth();
+                        }
+                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
 			mIntersectionParameters = new intersectionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::INTERSECT;
 			mDimension = _lhs->dimension();
-                        mDepth = _rhs->depth() + _lhs->depth()+1;
+                        if (_rhs->depth() > _lhs->depth()){
+                            mDepth = _rhs->depth();
+                        } else {
+                            mDepth = _lhs->depth();
+                        }
+                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		default:
@@ -172,6 +193,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
                         mDepth = _origin->depth() +1; 
+                        mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -188,6 +210,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mType = SF_TYPE::SCALE;
 			mDimension = _origin->dimension();
                         mDepth = _origin->depth() +1; 
+                        mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -532,6 +555,11 @@ SF_TYPE SupportFunctionContent<Number>::type() const {
 template <typename Number>
 unsigned SupportFunctionContent<Number>::depth() const {
 	return mDepth;
+}
+
+template <typename Number>
+unsigned SupportFunctionContent<Number>::operationCount() const {
+	return mOperationCount;
 }
 template<typename Number>
 Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
