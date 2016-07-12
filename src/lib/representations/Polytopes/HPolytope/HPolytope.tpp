@@ -667,19 +667,24 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	} else if (this->empty() && !_rhs.empty()) {
 		return _rhs;
 	} else { // none is empty
-
+		/*
 		auto lhs = Converter::toVPolytope( *this );
 		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
-
+		*/
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));
 		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-		/*
-		ConvexHull<Number> ch = ConvexHull<Number>(this->vertices());
+
+		std::vector<Point<Number>> unitedVertices(this->vertices());
+		for(const auto& vertex : _rhs.vertices()) {
+			unitedVertices.emplace_back(vertex);
+		}
+
+		ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
 		ch.convexHullVertices();
 		HPolytopeT<Number,Converter> result = HPolytopeT<Number,Converter>(ch.getHsv());
-		*/
+
 		return result;
 	}
 }
