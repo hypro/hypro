@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-//#define CHULL_DBG
+#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
@@ -101,7 +101,7 @@ namespace hypro {
 				if(dictionary.isLexMin()) {
 					#ifdef CHULL_DBG
 						cout << "\n new point: ";
-						//dictionary.printDictionary();
+						dictionary.printDictionary();
 						cout << dictionary.toPoint();
 					#endif
 					mPositivePoints.push_back(dictionary.toPoint());
