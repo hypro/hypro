@@ -497,8 +497,7 @@ namespace hypro {
 		for(std::size_t rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
 			if(saturatedIndices.end()!=saturatedIndices.find(mB[rowIndex]-1)) {
 				for(std::size_t colIndex=0; colIndex<mN.size()-1;++colIndex) {
-					if(frozenCols.end()==frozenCols.find(colIndex)&&mDictionary(rowIndex,colIndex)!=0
-								/*&&not(mConstrains.isSaturated(mB[rowIndex]-1))*/) {
+					if(frozenCols.end()==frozenCols.find(colIndex)&&mDictionary(rowIndex,colIndex)!=0) {
 						this->pivot(rowIndex,colIndex);
 						frozenCols.insert(colIndex);
 						break;
@@ -511,12 +510,11 @@ namespace hypro {
 	
 	template<typename Number>
 	void Dictionary<Number>::pushToBounds(std::size_t colIndex) {
-		assert(mConstrains.finiteLowerBound(mN[colIndex]-1));
 		Number diff = mConstrains.diffToLowerBound(mN[colIndex]-1);//diff<0
 		unsigned minDiffIndex = mDictionary.size();
 		for(unsigned rowIndex=0; rowIndex<unsigned(mDictionary.rows())-1;++rowIndex) {
 			if(mConstrains.finiteLowerBound(mB[rowIndex]-1)&&mDictionary(rowIndex,colIndex)>0) {
-				if(diff<mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) {
+				if(diff< (mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) ) {
 					minDiffIndex = rowIndex;
 					diff = mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex);
 				}
@@ -524,7 +522,7 @@ namespace hypro {
 		}
 		if(minDiffIndex != unsigned(mDictionary.size())) {
 			this->pivot(minDiffIndex,colIndex);
-			mConstrains.modifyAssignment(colIndex, diff, mB, mN, mDictionary);
+			mConstrains.modifyAssignment(colIndex, mConstrains.diffToLowerBound(mB[minDiffIndex]-1), mB, mN, mDictionary);
 		} else {mConstrains.modifyAssignment(colIndex, diff, mB, mN, mDictionary);}
 	}
 	

@@ -171,9 +171,9 @@ namespace hypro {
 			newCone.push_back(aux2);
 		}
 		std::vector<Point<Number>> empty;
-		ConvexHull<Number> ch = ConvexHull<Number>(empty, newCone);cout<< "debut cone\n";
-		ch.conicHull();cout<< "fin cone\n";
-		std::vector<Halfspace<Number>> hsv = ch.getConeHsv();cout<< "cone addition\n";
+		ConvexHull<Number> ch = ConvexHull<Number>(empty, newCone);
+		ch.conicHull();
+		std::vector<Halfspace<Number>> hsv = ch.getConeHsv();
 		for(auto& hs:hsv) {
 			hs.setOffset(hs.offset()-hs.normal()[hs.normal().size()-1]);//projection fonction
 			vector_t<Number> aux=vector_t<Number>(hs.normal().size()-1);

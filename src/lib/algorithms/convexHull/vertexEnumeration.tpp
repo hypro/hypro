@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-#define CHULL_DBG
+//#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
@@ -276,6 +276,12 @@ namespace hypro {
 			}
 		}
 		std::set<std::size_t> frozenCols = newDictionary.toCobase(hyperplanes);
+		#ifdef CHULL_DBG
+			cout << "\n frozen \n";
+			for(const auto& hsv:frozenCols) {
+				cout<<hsv<<"\n";
+			}
+		#endif
 		for(std::size_t colIndex=0; colIndex<d;++colIndex) {
 			if(frozenCols.end()==frozenCols.find(colIndex)) {
 				newDictionary.pushToBounds(colIndex);
