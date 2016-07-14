@@ -44,10 +44,10 @@ class VertexEnumeration {
 		void increment(std::size_t& i, std::size_t& j, std::size_t maxJ);
 		
 		void enumerateVertices();
-	/**
-	 * @brief does everything with the halfspaces in mHsv
-	 * 
-	 */ 
+		/**
+		 * @brief does everything with the halfspaces in mHsv
+		 * 
+		 */ 
 		
 		VertexEnumeration(const std::vector<Halfspace<Number>>& hsv);
 		/**
@@ -74,7 +74,7 @@ class VertexEnumeration {
 		 * @brief Finds a fist vertex, detects the linealty spaces and adds the corresponding constrains.
 		 */
 		
-		int linearIndependance(std::map<int,vector_t<Number>> collection, vector_t<Number>& candidateRef) const;
+		int linearIndependance(std::map<int,vector_t<Number>> collection, vector_t<Number>& candidateRef) const;//not used
 		/**
 		 * @brief If the candidate is independant from the collection, returns the smallest non nul coordinate,
 		 * -1 otherwise.

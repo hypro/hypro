@@ -181,8 +181,8 @@ namespace hypro {
 		std::size_t indexRef = index;
 		std::size_t pivot = 0;
 		std::size_t pivotRef = pivot;
-		if(not(mConstrains.outside(indexRef,diff,mB))) {return false;}
-		if(not(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}
+		if(not(mConstrains.outside(indexRef,diff,mB))) {return false;}//is there any variable out of its bounds
+		if(not(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		this->pivot(indexRef,pivotRef);
 		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary);
 		return true;
@@ -194,7 +194,7 @@ namespace hypro {
 		unsigned indexMin = mDictionary.size()+1;
 		std::vector<std::size_t> goodIndices; 
 
-		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {
+		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {//select the col
 			if(mDictionary(mDictionary.rows()-1,colIndex)> 0 && mN[colIndex] < minIndex)	{
 				minIndex = mN[colIndex];
 				indexMin = colIndex;
@@ -211,7 +211,7 @@ namespace hypro {
 		i = goodIndices[0];
 		minIndex = mB[goodIndices[0]];
 		Number currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
-		for(unsigned rowIndex = 1; rowIndex < unsigned(goodIndices.size()); ++rowIndex) {
+		for(unsigned rowIndex = 1; rowIndex < unsigned(goodIndices.size()); ++rowIndex) {//select the row
 			if(mDictionary(goodIndices[rowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[rowIndex],j)	> currentLambda)	{
 				i = goodIndices[rowIndex];
 				currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
