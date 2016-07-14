@@ -1,8 +1,37 @@
 \section{Introduction}
+Computer scientists are used to deal with dicrete systems, i.e. systems whose evolution can be described by a sequence of discrete state changes. A widespread example is the program analisys: during the execution of a program, the system is abstracted into a machine which states changes every time an instruction is executed.
+Today, computer science is expected to be able to ensure the safety of very complex systems, such as planes or nuclear reactor, which state are decribed non only by a controler, wich is dicrete, but also by physical variables, which evolve coniously over the time. Such systems, with a continuous and a discrete component are called hybrid systems. These systems are omnipresent, whenever a computer interacts with continuous quantities there is an hybrid system, even for thing as simple as a thermostat with the temperature.
+
+An hybrid system is described by a set (potentially infinite) of posible dicrete states and a set of continuous variables. The evolution of the variables is dertermined by the curent discrete state. The curent state of the system is defined by the discrete state it is in and by the curent value of the continuous variables. A transition between two discrete states can be done under certain conditions (called a gard) over the variables, a well as staying in a given state (called the invariant of the state). A transition can reassign the variables.  
+
+\begin{example} heat controler
+\end{example}
+
+Analyse such systems is very difficult, in fact even when restricting the arithmetic of the description to the sum symbol (linear automaton), determine weither or not the system will reach a given state is not decidable. There exist several methods to deal with this problem (examples?). This paper contributes to the flowpipe-construction-based reachability analysis methods. The idea is to discretize the time and, at each time step, determine set containing all the possible values for the continuous variables for that time step. The successive representation of the set define a flowpipe.=> image
+
+
+
+
+
+
+
+
+reachability
+What?
+How?
+Hypro
+=> state representation
+polyhedra theory
+advantage/inconveniants of both representations
+
+
+
+
+
+
+
 
 TODO: Reachability analysis?
-
-Any pivot that keeps the primal feasibility stays inside the polytope.
 
 
 The principle of reachability analysis with hybid systems is being able to maintain a convex polyhedron containing all the possible states of the system at any given time. Some operations might have to be applied to the polyhedron such like intersections, unions ect. The difficulty of these opérations greatly depends on the description used for the polyhedron.
