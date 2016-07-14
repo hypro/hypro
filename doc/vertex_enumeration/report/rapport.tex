@@ -1,0 +1,43 @@
+% This is LLNCS.DEM the demonstration file of
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.4 for LaTeX2e as of 16. April 2010
+%
+\documentclass{llncs}
+%
+\usepackage[backend=biber]{biblatex}
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{amsfonts}
+%\usepackage{amsthm}
+%
+
+\bibliography{references.bib}
+
+\begin{document}
+
+\title{Title}
+
+\author{Owen Rouill\'e}
+
+\institute{}
+
+\maketitle
+
+\begin{abstract}
+abstract
+\end{abstract}
+
+%\tableofcontents
+
+\input{sections/introduction.tex}
+
+\input{sections/sota.tex}
+
+\input{sections/contrib.tex}
+
+\input{sections/conclusion.tex}
+
+\printbibliography
+
+
+\end{document}
