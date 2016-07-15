@@ -1,6 +1,6 @@
 \subsection{the Simplex Algorithm}
 \subsubsection{Linear optimization.}
-The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the positive optimal of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constrains $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximize the objective in an area defined by a set of hyperplanes (each constrain is the equation of an hyperplane). The example~\ref{lp1} is a two-dimensional linear optimization problem.
+The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the positive optimal of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constrains $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximize the objective in an area defined by a set of half-spaces (each constrain is the equation of an half-spaces). The example~\ref{lp1} is a two-dimensional linear optimization problem.
 
 \begin{example}
 	Maximize $x+y$ under $x\leq 2$ and $-x+y\leq 3$
@@ -9,7 +9,7 @@ The simplex algorithm is an algorithm that solves \emph{linear optimization prob
 
 To simplify the problem, the origin is assumed to respect all the constrains (equivalently: all the $b_i$ are positive). When a point is on a constrain, the constrain is said \emph{saturated}. The set of the points respecting all the constrains is called the feasible area. 
 
-The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables corresponds to a distance from the associated constrain. Note that every variable (slack or not) corresponds to a constrain and though to an hyperplane. The non-slack variables will be said original. The example~\ref{lp1} becomes the example~\ref{lp2}.
+The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables corresponds to a distance from the associated constrain. Note that every variable (slack or not) corresponds to a constrain and though to an half-spaces. The non-slack variables will be said original. The example~\ref{lp1} becomes the example~\ref{lp2}.
 
 \begin{example}
 	Maximize $x+y$ with $2-x=s_1$ and $3+x-y=s_2$. All the variables are positive.
@@ -33,7 +33,7 @@ By adding to these equalities an other equality corresponding to the cost functi
 	\label{lp3}
 \end{example}
 
-The dictionary allows to find the value of every variable knowing the value of those associated to the columns. The set of the variables associated to the columns is called the \emph{cobasis}, the set of the variables associated to the row is called the \emph{basis}. Setting all the variables of the cobasis to zero provides a valuation for all the original variables. Such valuation describes a point against n hyperplanes: a vertex of the hyperplane arrangement. The cobasis is a coordinates system composed by the normal vectors of the hyperplanes associated to the variables in the cobasis, with for origin point the intersection of these hyperplanes.
+The dictionary allows to find the value of every variable knowing the value of those associated to the columns. The set of the variables associated to the columns is called the \emph{cobasis}, the set of the variables associated to the row is called the \emph{basis}. Setting all the variables of the cobasis to zero provides a valuation for all the original variables. Such valuation describes a point against $d$ hyperplanes: a vertex of the hyperplane arrangement. The cobasis is a coordinates system composed by the normal vectors of the hyperplanes associated to the variables in the cobasis, with for origin point the intersection of these hyperplanes.
 In the following, the basis in called $B$, the cobasis $N$, the row corresponding to the objective function is $f$ ($\in B$) and the column containing the constants is $g$ ($\in N$).  
 
 \subsubsection{The pivot.} 
