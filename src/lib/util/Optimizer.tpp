@@ -506,7 +506,73 @@ namespace hypro {
 			return res;
 		}
 
-		#ifdef USE_SMTRAT
+#ifdef USE_Z3
+		z3Context c;
+		z3::solver z3Solver(c);
+		z3Solver.push();
+
+		// TODO: ATTENTION: This relies upon that Z3 maintains the order of the constraints!
+		z3::expr_vector formulas = createFormula(mConstraintMatrix, mConstraintVector, c );
+
+		if(formulas.size() == 1){
+			return res;
+		}
+
+		assert(unsigned(formulas.size() + res.size()) == mConstraintMatrix.rows());
+		for(unsigned i = 0; i < formulas.size(); ++i) {
+			z3Solver.add(formulas[i]);
+		}
+
+		// first call to check satisfiability
+		z3::check_result firstCheck = z3Solver.check();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		#endif
+		switch (firstCheck) {
+				case z3::check_result::unsat: {
+					return res;
+					break;
+				}
+				case z3::check_result::sat: {
+					break;
+				}
+				default: {
+					assert(false);
+					break;
+				}
+		}
+
+		z3Solver.pop();
+
+		for(unsigned constraintIndex = 0; constraintIndex < formulas.size(); ++constraintIndex) {
+			z3::expr originalConstraint = formulas[constraintIndex];
+			#ifdef DEBUG_MSG
+			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			#endif
+			z3::expr negatedConstraint = !originalConstraint;
+
+			z3Solver.push();
+			for(unsigned i = 0; i < formulas.size(); ++i){
+				if(i == constraintIndex) {
+					z3Solver.add(negatedConstraint);
+				} else {
+					z3Solver.add(formulas[i]);
+				}
+			}
+
+			z3::check_result isRedundant = z3Solver.check();
+			assert(isRedundant != z3::check_result::unknown);
+			if(isRedundant == z3::check_result::unsat){
+				#ifdef DEBUG_MSG
+				std::cout << __func__ << " is redundant." << std::endl;
+				#endif
+				res.push_back(constraintIndex);
+			}
+
+			z3Solver.pop();
+		}
+
+		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
