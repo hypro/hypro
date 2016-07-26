@@ -1,18 +1,23 @@
 //
 // Created by stefan on 30.06.16.
 //
+// TODO Johannes: clean me up!
+//
 
 #pragma once
 #include "../../flags.h"
 #ifdef USE_Z3
 #include "z3++.h"
-#include "z3Context.h"
+#include <carl/util/Singleton.h>
+#include <thread>
+
+//#include "z3Context.h"
 
 namespace hypro {
 
 
 	template<typename Number>
-	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c, carl::Relation _rel = carl::Relation::LEQ) {
+	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3::context& c, carl::Relation _rel = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 
@@ -37,7 +42,7 @@ namespace hypro {
 			polynomial = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				z3::expr coeff(c);
-				coeff=c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j)));
+				coeff=c.real_val((carl::convert<Number,mpq_class>(_constraints(i,j))).get_str().c_str());
 
 				//std::cout << "Coefficient is " << coeff << std::endl;
 
@@ -48,8 +53,8 @@ namespace hypro {
 				term=variables[j]*coeff;
 				polynomial = polynomial + term ;
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
-			z3::expr constraint(polynomial < constant);
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
+			z3::expr constraint(polynomial <= constant);
 			constraints.push_back(constraint);
 		}
 
@@ -57,7 +62,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static z3::expr createFormula(const Point<Number>& _point, const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c ) {
+	static z3::expr createFormula(const Point<Number>& _point, const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3::context& c ) {
 		z3::expr formula(c);
 		formula = c.bool_val(true);
 		z3::expr pointConstraint(c);
@@ -71,7 +76,7 @@ namespace hypro {
 
 		for(unsigned d = 0; d < _point.dimension(); ++d) {
 			if(_point.at(d) != carl::constant_zero<Number>::get()){
-				pointConstraint = pointConstraint + c.real_val(-carl::convert<Number,mpq_class>(_point.at(d))) + variables.at(d);
+				pointConstraint = pointConstraint + c.real_val(carl::convert<Number,mpq_class>(-_point.at(d)).get_str().c_str()) + variables.at(d);
 			}
 		}
 
@@ -82,10 +87,10 @@ namespace hypro {
 			constraint = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				if(_constraints(i,j) != carl::constant_zero<Number>::get()){
-					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j))));
+					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j)).get_str().c_str()));
 				}
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
 			constraint = constraint <= constant;
 			formula = formula && constraint;
 		}
@@ -94,7 +99,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, carl::Relation _rel = carl::Relation::LEQ) {
+	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3::context& c, carl::Relation _rel = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 
@@ -111,7 +116,7 @@ namespace hypro {
 		for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
 			if(_objective(colIndex) != carl::constant_zero<Number>::get()){
 				z3::expr var = variables.at(colIndex);
-				z3::expr coeff = c.real_val(carl::convert<Number,mpq_class>(_objective(colIndex)));
+				z3::expr coeff = c.real_val(carl::convert<Number,mpq_class>(_objective(colIndex)).get_str().c_str());
 				assert(coeff.is_arith());
 				z3::expr tmp = var * coeff;
 				objective = objective + tmp;
@@ -123,16 +128,55 @@ namespace hypro {
 			constraint = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				if(_constraints(i,j) != carl::constant_zero<Number>::get()){
-					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j))));
+					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j)).get_str().c_str()));
 				}
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
 			constraint = constraint <= constant;
 			formula = formula && constraint;
 		}
 
 		return std::make_pair(formula,objective);
 	}
+
+	class ContextProvider : public carl::Singleton<ContextProvider> {
+	    friend carl::Singleton<ContextProvider>;
+
+	    public:
+            ContextProvider () : mContextCollection(100), mFreeContextsBitmap(100, true) {}
+
+            z3::context& getFreeContext() {
+                lock.lock();
+                for (unsigned i = 0; i < mFreeContextsBitmap.size(); i++) {
+                    if (mFreeContextsBitmap[i] == true) {
+                        // found free
+                        mFreeContextsBitmap[i] = false; // mark as in use
+                        lock.unlock();
+                        return mContextCollection[i];
+                    }
+                }
+                lock.unlock();
+                std::cout << "WARN - You use more threads than concurrenty supported!" << std::endl;
+            }
+
+            void returnContext (z3::context& context) {
+                lock.lock();
+                for (unsigned i = 0; i < mContextCollection.size(); i++) {
+                    if (&context == &(mContextCollection[i])) {
+                        mFreeContextsBitmap[i] = true;
+                        break;
+                    }
+                }
+                lock.unlock();
+            }
+
+	    private:
+
+	        std::vector<z3::context> mContextCollection;
+	        std::vector<bool> mFreeContextsBitmap;
+	        unsigned mLastReturnedContext;
+	        mutable std::mutex lock;
+	};
 
 } // namespace hypro
 

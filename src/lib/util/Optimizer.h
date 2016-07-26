@@ -10,6 +10,7 @@
 #include "smtrat/SimplexSolver.h"
 #include "z3/z3Convenience.h"
 #include <carl/util/Singleton.h>
+#include <mutex>
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
@@ -22,6 +23,7 @@ namespace hypro {
 		using Poly = carl::MultivariatePolynomial<Number>;
 
 	private:
+		mutable std::mutex z3_constructor_mtx;
 		matrix_t<Number>	mConstraintMatrix;
 		vector_t<Number> 	mConstraintVector;
 		mutable bool		mInitialized;
@@ -96,6 +98,10 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
 		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
+        #endif
+		#ifdef USE_Z3
+    	mutable z3::context mContext;
+    	//z3::optimize mZ3Solver(mContext);
 		#endif
 
 		void createArrays( unsigned size ) const;

@@ -105,8 +105,8 @@ namespace hypro {
 		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 #endif
 		#ifdef USE_Z3
-
-		z3Context c;
+        // TODO protect context creation by mutex
+		z3::context& c = ContextProvider::getInstance().getFreeContext();
 		z3::optimize z3Optimizer(c);
 
 		// create formula and objective
@@ -142,6 +142,7 @@ namespace hypro {
 			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 			res.optimumValue = pointCoordinates;
 		}
+		ContextProvider::getInstance().returnContext(c);
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -291,13 +292,16 @@ namespace hypro {
 
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
+        //std::cout << mConstraintMatrix << std::endl << mConstraintVector << std::endl;
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
+			//std::cout << constraintPair.first << std::endl;
 		}
 		smtrat::Answer sol = simplex.check();
+		//std::cout << "smtrat says " << sol << std::endl;
 		return (sol == smtrat::Answer::SAT);
 
 		#else // RECREATE_SOLVER
@@ -321,6 +325,23 @@ namespace hypro {
 			mConsistencyChecked = true;
 		}
 		#endif // RECREATE_SOLVER
+        #elif defined(USE_Z3)
+		z3::context& c = ContextProvider::getInstance().getFreeContext();
+		z3::optimize z3Optimizer(c);
+
+		// create formula and objective
+		z3::expr_vector constraintsExpression = createFormula<Number>(mConstraintMatrix, mConstraintVector, c);
+		//std::cout << "constraints " << constraintsExpression << std::endl;
+		//std::cout << mConstraintMatrix << std::endl << mConstraintVector << std::endl;
+		for (unsigned i = 0; i < constraintsExpression.size(); i++) {
+			z3Optimizer.add(constraintsExpression[i]);
+			//std::cout << "constraint " << constraintsExpression[i] << std::endl;
+		}
+		z3::check_result res = z3Optimizer.check();
+		ContextProvider::getInstance().returnContext(c);
+		//std::cout << "result: " << res << std::endl;
+		return (z3::sat == res);
+
 		#else // USE_SMTRAT
 		if(!mConsistencyChecked){
 			glp_exact( lp, NULL );
@@ -342,8 +363,7 @@ namespace hypro {
 		}
 
 		#ifdef USE_Z3
-
-		z3Context c;
+		z3::context& c = ContextProvider::getInstance().getFreeContext();
 		z3::solver z3Solver(c);
 
 		// create formula and objective
@@ -354,8 +374,10 @@ namespace hypro {
 
 		// verify and set result
 		if(z3::sat == z3Solver.check()) {
+			ContextProvider::getInstance().returnContext(c);
 			return true;
 		}
+		ContextProvider::getInstance().returnContext(c);
 		return false;
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
@@ -506,6 +528,7 @@ namespace hypro {
 			return res;
 		}
 
+<<<<<<< Updated upstream
 #ifdef USE_Z3
 		z3Context c;
 		z3::solver z3Solver(c);
