@@ -50,11 +50,13 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 
 	// bad states plotting
+	/*
 	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
 	for(const auto& state : badStateMapping) {
 		unsigned bs = plotter.addObject(Representation(state.second.set.first, state.second.set.second).vertices());
 		plotter.setObjectColor(bs, hypro::colors[hypro::red]);
 	}
+	*/
 
 	// segments plotting
 	for(const auto& flowpipePair : flowpipes){
