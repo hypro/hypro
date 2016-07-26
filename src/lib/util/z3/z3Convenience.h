@@ -139,6 +139,9 @@ namespace hypro {
 		return std::make_pair(formula,objective);
 	}
 
+
+	// This has been a Test and should not be needed.
+	/*
 	class ContextProvider : public carl::Singleton<ContextProvider> {
 	    friend carl::Singleton<ContextProvider>;
 
@@ -177,7 +180,7 @@ namespace hypro {
 	        std::vector<bool> mFreeContextsBitmap;
 	        unsigned mLastReturnedContext;
 	        mutable std::mutex lock;
-	};
+	};*/
 
 } // namespace hypro
 
