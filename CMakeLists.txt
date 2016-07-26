@@ -47,6 +47,7 @@ option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF
 option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(USE_SMTRAT "Use SMT-RAT for linear solving." ON)
+option(USE_Z3 "Use Z3 for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
 
@@ -171,6 +172,13 @@ endif()
 include_directories(${smtrat_INCLUDE_DIR})
 set(libraries ${libraries} ${smtrat_LIBRARIES})
 set(INCLUDES ${INCLUDES} ${smtrat_INCLUDE_DIR})
+endif()
+
+if(USE_Z3)
+	find_package(z3 REQUIRED)
+	include_directories(${z3_INCLUDE_DIRS})
+		MESSAGE(${z3_LIBRARY})
+	set(libraries ${libraries} ${z3_LIBRARY})
 endif()
 
 #find_package(Eigen3 REQUIRED)

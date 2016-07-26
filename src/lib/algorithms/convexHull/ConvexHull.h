@@ -16,7 +16,7 @@ class ConvexHull {
 		std::vector<Halfspace<Number>> mConeHsv;
 		std::vector<Halfspace<Number>> mDualHsv;
 		std::vector<Halfspace<Number>> mHsv;
-		vector_t<Number> mOffset;
+		vector_t<Number> mOffset;//translqtion applied to all ertices such that 0 is inside the polyhedron
 		
 	public:
 		ConvexHull() = default;

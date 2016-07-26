@@ -1,0 +1,54 @@
+\subsection{Fukuda's algorihm}
+
+%vague overview
+Fukuda's algorithm allows to enumerate all the vertices of an $H$-polytope included in the positive orthant ($(\mathbb{R}_+)^d$, all its points have non-negative coordinates) for which the origin is a vertex. This algorithm uses the pivoting scheme of the simplex to explore the polytope. 
+
+It is based on a simple idea: starting from any vertex, the simplex algorithm allows to reach a vertex maximizing a linear function by a unique (thanks to Bland's rule) path among the vertices. The algorithm picks a function maximized only by the origin on the positive orthant and walks backward on all the paths leading to it from all the vertices. Every time a vertex is encountered, it is output.
+
+The first thing to do is to find the end of all these paths: the dictionary corresponding to the origin. It roughly consists in taking the canonical base as cobasis and the set constrains as the basis and setting $-\sum_{i=0}^d x_i$ as the cost function. All the possible pivots are tried from this dictionary. If a pivot leads to a primal feasible dictionary (defining a vertex inside the polytope) for which the Bland's method leads back to the previous point it is said to be a valid reverse Bland's pivot. It means that a step backward has been made on one of the paths, the new point is output, and the method has to be applied from this new point.
+
+However, if a vertex is defined by more hyperplanes than required, several dictionaries will describe the same point, which is said to be degenerated. Fukuda overcomes this problem by defining a partial order on the dictionaries. This order corresponds to a lexicographic order on the basis for the dictionaries defining the same point. A point is only output if its dictionary is lexicographical minimal. Note that the algorithm continues on the dictionary, even if it is not lexicographical minimal.
+
+If the origin is degenerated, then all the optimal dictionaries defining it have to be found. This is done by using a procedure very similar from the one above: by looking only at the hyperplanes redefining the origin, every pivot is tried. The difference is instead of using the Bland's rule, a variation of the dual Bland's rule is used. If the new dictionary is dual feasible (still an optimal for the cost function) and the dual Bland's rule brings it back to the previous one, then the new dictionary is valid with respect to the dual Bland's rule etc. This research presents the same uniqueness properties than the previous one. The previous research has to be launched from every dictionary obtained this way.
+
+The following example illustrates Fukuda's algorithm on a polytope with no degenerated vertex:
+
+\begin{example}
+	Let $h$ be the polytope included in the positive orthant and the half-space $x+2y\leq 4$ (plus the positve orthant, i.e. $-x\leq 0$ and $-y\leq 0$) in $\mathbb{R}^2$.\\
+	First step, the optimal dictionary:
+	\begin{tabular}{| c | c || c || c c |}
+	\hline	
+	$x$ & $y$ & const & & \\
+	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
+	\hline
+	\hline	
+   	$-1$ & $-2$ & $4$ & = & $s_1$\\ \hline \hline	
+   	$-1$ & $-1$ & $0$ & $\leftarrow$ & obj \\
+   	\hline	
+ 	\end{tabular}, 
+ 	$(x,s_1)$ and $(y,s_1)$ are both valid reverse Bland's pivot and gives respectively:
+ 	\begin{tabular}{| c | c || c || c c |}
+	\hline	
+	$s_1$ & $y$ & const & & \\
+	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
+	\hline
+	\hline	
+   	$-1$ & $-2$ & $4$ & = & $x$\\ \hline \hline	
+   	$1$ & $1$ & $-4$ & $\leftarrow$ & obj \\
+   	\hline	
+ 	\end{tabular}
+ 	for the point $(4,0)$ and
+ 	\begin{tabular}{| c | c || c || c c |}
+	\hline	
+	$x$ & $s_1$ & const & & \\
+	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
+	\hline
+	\hline	
+   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $2$ & = & $y$\\ \hline \hline	
+   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $-2$ & $\leftarrow$ & obj \\
+   	\hline	
+ 	\end{tabular}
+ 	for the point $(0,2)$. These two dictionaries have no valid reverse Bland's pivot, the enumeration is done.
+	\label{example-fukuda}
+\end{example}
+

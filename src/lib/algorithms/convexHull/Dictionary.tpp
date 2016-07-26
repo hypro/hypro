@@ -181,8 +181,8 @@ namespace hypro {
 		std::size_t indexRef = index;
 		std::size_t pivot = 0;
 		std::size_t pivotRef = pivot;
-		if(not(mConstrains.outside(indexRef,diff,mB))) {return false;}
-		if(not(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}
+		if(not(mConstrains.outside(indexRef,diff,mB))) {return false;}//is there any variable out of its bounds
+		if(not(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		this->pivot(indexRef,pivotRef);
 		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary);
 		return true;
@@ -194,7 +194,7 @@ namespace hypro {
 		unsigned indexMin = mDictionary.size()+1;
 		std::vector<std::size_t> goodIndices; 
 
-		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {
+		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {//select the col
 			if(mDictionary(mDictionary.rows()-1,colIndex)> 0 && mN[colIndex] < minIndex)	{
 				minIndex = mN[colIndex];
 				indexMin = colIndex;
@@ -211,7 +211,7 @@ namespace hypro {
 		i = goodIndices[0];
 		minIndex = mB[goodIndices[0]];
 		Number currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
-		for(unsigned rowIndex = 1; rowIndex < unsigned(goodIndices.size()); ++rowIndex) {
+		for(unsigned rowIndex = 1; rowIndex < unsigned(goodIndices.size()); ++rowIndex) {//select the row
 			if(mDictionary(goodIndices[rowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[rowIndex],j)	> currentLambda)	{
 				i = goodIndices[rowIndex];
 				currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
@@ -242,24 +242,24 @@ namespace hypro {
 		if(minIndex == unsigned(mDictionary.size())){return false;}
 		i = indexMin;
 		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {
-			if(mDictionary(i,colIndex) > 0)	{
+			if(mDictionary(availableIndices[i],colIndex) > 0)	{
 				goodIndices.push_back(colIndex);
 			}
 		}
 		minIndex = mN[goodIndices[0]];
 		j = goodIndices[0];
-		Number currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+		Number currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 		for(unsigned colIndex = 1; colIndex < unsigned(goodIndices.size()); ++colIndex) {
-			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(i,goodIndices[colIndex])	> currentLambda)	{
+			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(availableIndices[i],goodIndices[colIndex])	> currentLambda)	{
 				j = goodIndices[colIndex];
-				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 				minIndex = mN[goodIndices[colIndex]];
 			}
-			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(i,goodIndices[colIndex])	== currentLambda
+			if(mDictionary(mDictionary.rows()-1,goodIndices[colIndex])/mDictionary(availableIndices[i],goodIndices[colIndex])	== currentLambda
 						&& minIndex > mN[goodIndices[colIndex]]) {
 				minIndex = mN[goodIndices[colIndex]];
 				j = goodIndices[colIndex];
-				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+				currentLambda = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 			}
 		}
 		return true;
@@ -372,19 +372,20 @@ namespace hypro {
 		pivot(availableIndices[i],j);
 		return (i==i3)&&(j==j3)&&existingPivot&&dual;
 	}
+	
 	template<typename Number>
 	bool Dictionary<Number>::reverseDual(const std::size_t i, const std::size_t j, const std::vector<std::size_t> availableIndices) {
-		if(mDictionary(i,mDictionary.cols()-1)<=0||mDictionary(i,j)<=0) {return false;}
-		Number maxRatio = mDictionary(mDictionary.rows()-1,j)/mDictionary(i,j);
+		if(mDictionary(availableIndices[i],mDictionary.cols()-1)<=0||mDictionary(availableIndices[i],j)<=0) {return false;}
+		Number maxRatio = mDictionary(mDictionary.rows()-1,j)/mDictionary(availableIndices[i],j);
 		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
-			if(mDictionary(i,colIndex)>0&&maxRatio<mDictionary(mDictionary.rows()-1,colIndex)/mDictionary(i,colIndex)) {return false;}
+			if(mDictionary(availableIndices[i],colIndex)>0&&maxRatio<mDictionary(mDictionary.rows()-1,colIndex)/mDictionary(availableIndices[i],colIndex)) {return false;}
 		}
 		for(std::size_t colIndex=0;colIndex<std::size_t(mDictionary.cols()-1);++colIndex) {
-			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(i,colIndex)<0 )) {return false;}
+			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(availableIndices[i],colIndex)<0 )) {return false;}
 		}
 		for(std::size_t rowIndex=0;rowIndex<availableIndices.size();++rowIndex) {
 			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i) {
-				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(i,mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(i,j)) {
+				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(availableIndices[i],mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(availableIndices[i],j)) {
 					return false;
 				}
 			}
@@ -496,8 +497,7 @@ namespace hypro {
 		for(std::size_t rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
 			if(saturatedIndices.end()!=saturatedIndices.find(mB[rowIndex]-1)) {
 				for(std::size_t colIndex=0; colIndex<mN.size()-1;++colIndex) {
-					if(frozenCols.end()==frozenCols.find(colIndex)&&mDictionary(rowIndex,colIndex)!=0
-								/*&&not(mConstrains.isSaturated(mB[rowIndex]-1))*/) {
+					if(frozenCols.end()==frozenCols.find(colIndex)&&mDictionary(rowIndex,colIndex)!=0) {
 						this->pivot(rowIndex,colIndex);
 						frozenCols.insert(colIndex);
 						break;
@@ -510,12 +510,11 @@ namespace hypro {
 	
 	template<typename Number>
 	void Dictionary<Number>::pushToBounds(std::size_t colIndex) {
-		assert(mConstrains.finiteLowerBound(mN[colIndex]-1));
 		Number diff = mConstrains.diffToLowerBound(mN[colIndex]-1);//diff<0
 		unsigned minDiffIndex = mDictionary.size();
 		for(unsigned rowIndex=0; rowIndex<unsigned(mDictionary.rows())-1;++rowIndex) {
 			if(mConstrains.finiteLowerBound(mB[rowIndex]-1)&&mDictionary(rowIndex,colIndex)>0) {
-				if(diff<mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) {
+				if(diff< (mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) ) {
 					minDiffIndex = rowIndex;
 					diff = mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex);
 				}
@@ -523,7 +522,7 @@ namespace hypro {
 		}
 		if(minDiffIndex != unsigned(mDictionary.size())) {
 			this->pivot(minDiffIndex,colIndex);
-			mConstrains.modifyAssignment(colIndex, diff, mB, mN, mDictionary);
+			mConstrains.modifyAssignment(colIndex, mConstrains.diffToLowerBound(mB[minDiffIndex]-1), mB, mN, mDictionary);
 		} else {mConstrains.modifyAssignment(colIndex, diff, mB, mN, mDictionary);}
 	}
 	

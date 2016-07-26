@@ -36,19 +36,19 @@ protected:
 	hypro::vector_t<Number> v3 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v4 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v5 = hypro::vector_t<Number>(2);
-	hypro::vector_t<Number> v6 = hypro::vector_t<Number>(4);
-	hypro::vector_t<Number> v7 = hypro::vector_t<Number>(4);
+	hypro::vector_t<Number> v6 = hypro::vector_t<Number>(2);
+	hypro::vector_t<Number> v7 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v8 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v9 = hypro::vector_t<Number>(2);
-	v1 << 2,1;
-	v2 << 1,3;
-	v3 << 3,2;
+	v1 << 0,1;
+	v2 << 1,0;
+	v3 << 1,1;
 	v4 << 1,0;
 	v5 << -1,1;
-	v6 << 1,1;
-	v7 << -1,-1;
-	/*v8 << 1,-1;
-	v9 << 1,2;*/
+	v6 << -1,0;
+	v7 << 0,-1;
+	v8 << 1,2;
+	v9 << 0,-1;
 	Number n4 = 4;
 	Number n2 = 0.5;
 	Number n1 = 1;
@@ -59,10 +59,10 @@ protected:
 	hypro::Halfspace<Number> h3 = hypro::Halfspace<Number>(v3,n0);
 	hypro::Halfspace<Number> h4 = hypro::Halfspace<Number>(v4,n2);
 	hypro::Halfspace<Number> h5 = hypro::Halfspace<Number>(v5,n2);
-	hypro::Halfspace<Number> h6 = hypro::Halfspace<Number>(v6,n4);
-	hypro::Halfspace<Number> h7 = hypro::Halfspace<Number>(v7,n0);/*
-	hypro::Halfspace<Number> h8 = hypro::Halfspace<Number>(v8,n3);
-	hypro::Halfspace<Number> h9 = hypro::Halfspace<Number>(v9,n4);*/
+	hypro::Halfspace<Number> h6 = hypro::Halfspace<Number>(v6,n0);
+	hypro::Halfspace<Number> h7 = hypro::Halfspace<Number>(v7,n0);
+	hypro::Halfspace<Number> h8 = hypro::Halfspace<Number>(v8,n4);
+	hypro::Halfspace<Number> h9 = hypro::Halfspace<Number>(v9,n0);
 	std::vector<hypro::Halfspace<Number>> v;
 	std::vector<hypro::Point<Number>> p;
 	std::vector<hypro::vector_t<Number>> cone;
@@ -74,59 +74,64 @@ protected:
 	//cone.push_back(v4);
 	//cone.push_back(v5);
 	//cone.push_back(v3);
-	linealty.push_back(v5);
+	//linealty.push_back(v5);
 	p.push_back(p1);
-	//p.push_back(p2);
+	p.push_back(p2);
 	p.push_back(p3);
-	//p.push_back(p4);
-	v.push_back(h1);
-	v.push_back(h2);/*
-	v.push_back(h3);
+	p.push_back(p4);
+	//v.push_back(h1);
+	//v.push_back(h2);
+	/*v.push_back(h3);
 	v.push_back(h4);
-	v.push_back(h5);
+	v.push_back(h5);*/
 	v.push_back(h6);
 	v.push_back(h7);
 	v.push_back(h8);
-	v.push_back(h9);*/
-	//hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);
-	//d.printDictionary();
+	//v.push_back(h9);
+	hypro::Dictionary<Number> d = hypro::Dictionary<Number>(v);
+	d.printDictionary();
 	cout<<"\n beginning \n";
-	hypro::ConvexHull<Number> ch = hypro::ConvexHull<Number>(p,cone,linealty);
+	hypro::ConvexHull<Number> ch = hypro::ConvexHull<Number>(p);
 	
-	//hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
+	hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
 	//hypro::Dictionary<Number> d2 = ev.getDictionaries()[0];d2.printDictionary();
 	cout<<"\n test0 \n";
-	ch.polyhedriclHull();
+	//ch.convexHullVertices();
 	
-	//ev.enumerateVertices();
+	ev.enumerateVertices();
 	//ev.findLinealtySpace();
 	cout<<"\n test1 \n";
 	//ch.conicHull();
 	//ev.addLinealtyConstrains();
 	cout<<"\n test2\n";
 	//ch.polyhedriclHull();
-	//ev.findPositiveConstrains();
 	/*for(const auto& hsv:ch.getConeHsv()) {
 		cout<<hsv<<"\n";
 	}*/
 	cout<<"\n test3 \n";
-	for(const auto& hsv:ch.getHsv()) {
+	/*for(const auto& hsv:ch.getHsv()) {
 		cout<<hsv<<"\n";
-	}
-	//ev.enumerateDictionaries();
+	}*/
+	
 	cout<<"\n test4 \n";
 	//ev.enumerateVerticesEachDictionary();
+	
+	
 	cout<<"\n test5 \n";
 	//ev.toGeneralCoordinates();
 	cout<<"\n test6 \n";
-	//for(unsigned i=0;i<ev.getPoints().size();++i) {cout<< ev.getPoints()[i]<<"\n";}
+	for(unsigned i=0;i<ev.getPoints().size();++i) {cout<< ev.getPoints()[i]<<"\n";}
 	cout<<"\n test7 \n";
-	//for(unsigned i=0;i<ev.getCones().size();++i) {cout<< hypro::Point<Number>(ev.getCones()[i])<<"\n";}
+	for(unsigned i=0;i<ev.getCones().size();++i) {cout<< hypro::Point<Number>(ev.getCones()[i])<<"\n";}
 	cout<<"\n test8 \n";
-	/*for(const auto& l:ev.getLinealtySpace()) {
+	for(const auto& l:ev.getLinealtySpace()) {
 		cout<<l<<"\n";
-	}*/
-	
+	}
+	/*std::vector<std::size_t> availableIndices = std::vector<std::size_t>(1);
+	availableIndices[0]=1;
+	d.setValue(1,2,1);
+	d.printDictionary();
+	cout << "\n reversedual? " <<d.reverseDual(0,1,availableIndices)<<"\n";*/
 	/*std::vector<std::size_t> dispo;dispo.push_back(0);
 	dispo.push_back(1);
 	d2.setValue(1,3,Number(1));d2.setValue(0,3,Number(1));

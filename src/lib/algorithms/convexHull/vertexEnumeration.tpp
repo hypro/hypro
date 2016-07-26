@@ -70,9 +70,7 @@ namespace hypro {
 	
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
-		//findLinealtySpace();
-		//addLinealtyConstrains();
-		if(findPositiveConstrains()) {
+		if(findPositiveConstrains()) {//if non empty
 			enumerateDictionaries();
 			enumerateVerticesEachDictionary();
 			toGeneralCoordinates();
@@ -87,7 +85,7 @@ namespace hypro {
 		}
 		std::size_t a=0;
 		std::size_t b=0;
-		int depth=0;
+		int depth=0;//used to know when to stop
 		std::size_t& i=a;
 		std::size_t& j=b;
 		std::size_t m = dictionary.basis().size()-1;//different than the article
@@ -101,7 +99,7 @@ namespace hypro {
 				if(dictionary.isLexMin()) {
 					#ifdef CHULL_DBG
 						cout << "\n new point: ";
-						//dictionary.printDictionary();
+						dictionary.printDictionary();
 						cout << dictionary.toPoint();
 					#endif
 					mPositivePoints.push_back(dictionary.toPoint());
@@ -109,7 +107,7 @@ namespace hypro {
 				std::set<vector_t<Number>> cones =dictionary.findCones(); 
 				for(const auto& cone: cones) {
 					#ifdef CHULL_DBG
-						cout << "cone found ---------------------------------------";
+						cout << "cone found ---------------------------------------\n";
 					#endif
 					mPositiveCones.insert(cone);
 				}
@@ -151,12 +149,14 @@ namespace hypro {
 		std::size_t m2 = dictionary.basis().size()-1;
 		std::size_t n = dictionary.cobasis().size()-1;
 		for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
-			memory.push_back(dictionary.get(rowIndex,n));
+			memory.push_back(dictionary.get(rowIndex,n));// to restore the constant column
 		}
 		dictionary.setOnes(basisAux);
 		while(i<m || depth>=0){
-			while(i<m && not(dictionary.reverseDual(i,j,basisAux))){
-				VertexEnumeration<Number>::increment(i,j,n);
+			while(i<m){
+				if(!dictionary.reverseDual(i,j,basisAux)) {
+					VertexEnumeration<Number>::increment(i,j,n);
+				} else {break;}
 			}
 			if(i<m){
 				dictionary.pivot(basisAux[i],j);
@@ -185,8 +185,23 @@ namespace hypro {
 		std::size_t d = mHsv[0].dimension();
 		std::size_t n0 = mHsv.size();
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
-		while(dictionary.fixOutOfBounds()) {}
-		dictionary.nonSlackToBase(mLinealtySpace);
+		#ifdef CHULL_DBG
+			cout<< "\nfist dictionary\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
+		while(dictionary.fixOutOfBounds()) {}//tries to reach the feasible area, may throw empty exeption
+		#ifdef CHULL_DBG
+			cout<< "\nfixOutOfBounds\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
+		dictionary.nonSlackToBase(mLinealtySpace);//finds linealty
+		#ifdef CHULL_DBG
+			cout<< "\nnonSlackToBase\n";
+			dictionary.printDictionary();
+			dictionary.constrainSet().print();
+		#endif
 		addLinealtyConstrains();
 		matrix_t<Number> dictio = matrix_t<Number>::Zero(mHsv.size()+1, d+1);
 		for(std::size_t colIndex=0;colIndex<=d;++colIndex) {//copy
@@ -237,13 +252,7 @@ namespace hypro {
 		for(std::size_t index=n0; index<n0+d;++index) {
 			constrains.add(dictionary.constrainSet().get(index));
 		}
-		/*std::size_t zero = 0;
-		constrains.modifyAssignment (zero,zero,basis, cobasis, dictio);
-		for(std::size_t rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
-			constrains.setLowerBoundToValue(n0+2*rowIndexLinealty);
-			constrains.setLowerBoundToValue(n0+2*rowIndexLinealty+1);
-		}*/
-		Dictionary<Number> newDictionary = Dictionary<Number>(dictio,basis,cobasis,constrains);
+		Dictionary<Number> newDictionary = Dictionary<Number>(dictio,basis,cobasis,constrains);//creation of a new dictionary with the linealty constrains
 		while(newDictionary.fixOutOfBounds()) {}
 		#ifdef CHULL_DBG
 			cout <<"\nthe new dico\n";
@@ -253,12 +262,18 @@ namespace hypro {
 		#endif
 		newDictionary.nonSlackToBase();
 		std::set<std::size_t> hyperplanes;
-		for(std::size_t index=0;index<basis.size();++index) {
+		for(std::size_t index=0;index<basis.size();++index) {//search for already saturated constrains 
 			if(newDictionary.constrainSet().isSaturated(index)) {
 				hyperplanes.insert(index);
 			}
 		}
 		std::set<std::size_t> frozenCols = newDictionary.toCobase(hyperplanes);
+		#ifdef CHULL_DBG
+			cout << "\n frozen \n";
+			for(const auto& hsv:frozenCols) {
+				cout<<hsv<<"\n";
+			}
+		#endif
 		for(std::size_t colIndex=0; colIndex<d;++colIndex) {
 			if(frozenCols.end()==frozenCols.find(colIndex)) {
 				newDictionary.pushToBounds(colIndex);
@@ -333,6 +348,7 @@ namespace hypro {
 			}
 			Dictionary<Number>dictionary(findFirstVertex());
 			#ifdef CHULL_DBG
+				cout<<"findFirstVertex\n";
 				dictionary.printDictionary();
 				dictionary.constrainSet().print();
 				cout<<"end\n";
@@ -393,11 +409,17 @@ namespace hypro {
 		
 			mPivotingMatrix = invA1;
 			mOffset = b1;
-		} 
+		}
 		catch(string const& message) {
 			cout << message;
 			return false;
 		}
+		#ifdef CHULL_DBG
+			cout<<"positive constrains\n";
+			mDictionaries[0].printDictionary();
+			mDictionaries[0].constrainSet().print();
+			cout<<"end\n";
+		#endif
 		return true;
 	}
 	

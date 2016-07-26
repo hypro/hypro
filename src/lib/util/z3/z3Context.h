@@ -1,9 +1,13 @@
 #pragma once
+
+#include "../../flags.h"
 #ifdef USE_Z3
 
+#include <gmpxx.h>
 #include <z3++.h>
+#include <carl/numbers/numbers.h>
 
-namespace z3 {
+namespace hypro {
 	class z3Context : public z3::context
 	{
 	public:

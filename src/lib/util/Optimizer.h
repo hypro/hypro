@@ -5,8 +5,10 @@
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
 
+#include "../flags.h"
 #include "EvaluationResult.h"
 #include "smtrat/SimplexSolver.h"
+#include "z3/z3Convenience.h"
 #include <carl/util/Singleton.h>
 
 #ifdef VERIFY_RESULT
