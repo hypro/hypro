@@ -572,7 +572,8 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
             while(origin.get()->type() == SF_TYPE::LINTRAFO){
                 unsigned currentExponent = origin.get()->linearTrafoParameters()->currentExponent;
                 nextPair = origin.get()->linearTrafoParameters()->parameters->getParameterSet(currentExponent);
-                parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
+                //parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
+				parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second;
                 parameterPair.first = parameterPair.first * nextPair.first;
                 origin = origin.get()->linearTrafoParameters()->origin;
             }
