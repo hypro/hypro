@@ -72,6 +72,13 @@ class SupportFunctionT {
 	void print() const;
     void swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second);
 
+    /**
+     * forces the topmost chain of linear transformations to be reduced to a single lin.trans
+     * @return reduced SF
+     */
+    void forceLinTransReduction();
+
+    
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
     	lhs << rhs.content << std::endl;
     	return lhs;

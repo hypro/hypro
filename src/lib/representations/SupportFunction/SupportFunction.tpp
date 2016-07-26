@@ -312,6 +312,9 @@ namespace hypro{
          first.content.swap(second.content);
      }
 
-
+    template<typename Number, typename Converter>
+    void SupportFunctionT<Number,Converter>::forceLinTransReduction(){
+        content->forceLinTransReduction();
+    }
 
 } //namespace

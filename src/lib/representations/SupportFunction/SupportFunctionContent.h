@@ -216,6 +216,8 @@ class SupportFunctionContent {
 	SF_TYPE type() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
+        
+        void forceLinTransReduction();
 
 	Point<Number> supremumPoint() const;
 

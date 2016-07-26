@@ -561,6 +561,29 @@ template <typename Number>
 unsigned SupportFunctionContent<Number>::operationCount() const {
 	return mOperationCount;
 }
+
+template <typename Number>
+void SupportFunctionContent<Number>::forceLinTransReduction(){
+    if( mType == SF_TYPE::LINTRAFO) {
+	std::shared_ptr<SupportFunctionContent<Number>> origin = mLinearTrafoParameters->origin;
+        std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+        std::pair<matrix_t<Number>, vector_t<Number>> nextPair;
+        while(origin.get()->type() == SF_TYPE::LINTRAFO){
+            unsigned currentExponent = origin.get()->linearTrafoParameters()->currentExponent;
+            nextPair = origin.get()->linearTrafoParameters()->parameters->getParameterSet(currentExponent);
+            parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
+            parameterPair.first = parameterPair.first * nextPair.first;
+            origin = origin.get()->linearTrafoParameters()->origin;
+        }		
+        mLinearTrafoParameters = new trafoContent<Number>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
+    } else if (mType == SF_TYPE::SUM{
+        // TODO
+    }
+        std::cout << "Reduction failed. Topmost SF is not a linear transformation or mink.sum" << std::endl;
+    }
+}
+
+
 template<typename Number>
 Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 	switch ( mType ) {
