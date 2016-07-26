@@ -94,7 +94,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, carl::Relation _rel = carl::Relation::LEQ) {
+	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation _rel = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 
@@ -102,7 +102,6 @@ namespace hypro {
 		z3::expr objective(c);
 		objective = c.int_val(0);
 		formula = c.bool_val(true);
-		std::vector<z3::expr> variables;
 		for(unsigned i = 1; i <= _constraints.cols(); ++i){
 			std::string name = "x_" + std::to_string(i);
 			variables.push_back(c.real_const(name.c_str()));
