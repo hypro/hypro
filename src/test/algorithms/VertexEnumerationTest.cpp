@@ -40,15 +40,17 @@ protected:
 	hypro::vector_t<Number> v7 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v8 = hypro::vector_t<Number>(2);
 	hypro::vector_t<Number> v9 = hypro::vector_t<Number>(2);
-	v1 << 0,1;
-	v2 << 1,0;
-	v3 << 1,1;
-	v4 << 1,0;
-	v5 << -1,1;
-	v6 << -1,0;
-	v7 << 0,-1;
-	v8 << 1,2;
-	v9 << 0,-1;
+	hypro::vector_t<Number> v10 = hypro::vector_t<Number>(2);
+v1 << Number("0") , Number("1000000000") /Number("126666837") ;
+v2 << Number("0") , Number("1000000007") /Number("126145104") ;
+v3 << Number("62582634845368369") /Number("1603317339625000000") , Number("12563674389179812881") /Number("1603317339625000000") ;
+v4 << Number("31419623978746011") /Number("798268015375000000") , Number("6281333328741285239") /Number("798268015375000000") ;
+v5 << Number("94360732434603989") /Number("798268015375000000") , Number("6281333328741285239") /Number("798268015375000000") ;
+v6 << Number("943607394911037274008589") /Number("7982680156547665375000000") , Number("62813333284725480899008589") /Number("7982680156547665375000000") ;
+v7 << Number("943607394911037274008589") /Number("7982680156547665375000000") , Number("62183922199946313350991411") /Number("7982680156547665375000000") ;
+v8 << Number("62582634845368369") /Number("1603317339625000000") , Number("12437257485810474619") /Number("1603317339625000000") ;
+v9 << Number("188999538214706631") /Number("1603317339625000000") , Number("12437257485810474619") /Number("1603317339625000000") ;
+v10 << Number("1889995522900738536227331") /Number("16033173386750764625000000") , Number("124372574867978475088772669") /Number("16033173386750764625000000") ;
 	Number n4 = 4;
 	Number n2 = 0.5;
 	Number n1 = 1;
@@ -71,6 +73,12 @@ protected:
 	hypro::Point<Number> p2 = hypro::Point<Number>(v2);
 	hypro::Point<Number> p3 = hypro::Point<Number>(v3);
 	hypro::Point<Number> p4 = hypro::Point<Number>(v4);
+	hypro::Point<Number> p5 = hypro::Point<Number>(v5);
+	hypro::Point<Number> p6 = hypro::Point<Number>(v6);
+	hypro::Point<Number> p7 = hypro::Point<Number>(v7);
+	hypro::Point<Number> p8 = hypro::Point<Number>(v8);
+	hypro::Point<Number> p9 = hypro::Point<Number>(v9);
+	hypro::Point<Number> p10 = hypro::Point<Number>(v10);
 	//cone.push_back(v4);
 	//cone.push_back(v5);
 	//cone.push_back(v3);
@@ -79,6 +87,12 @@ protected:
 	p.push_back(p2);
 	p.push_back(p3);
 	p.push_back(p4);
+	p.push_back(p5);
+	p.push_back(p6);
+	p.push_back(p7);
+	p.push_back(p8);
+	p.push_back(p9);
+	p.push_back(p10);
 	//v.push_back(h1);
 	//v.push_back(h2);
 	/*v.push_back(h3);
@@ -93,12 +107,12 @@ protected:
 	cout<<"\n beginning \n";
 	hypro::ConvexHull<Number> ch = hypro::ConvexHull<Number>(p);
 	
-	hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
+	//hypro::VertexEnumeration<Number> ev = hypro::VertexEnumeration<Number>(v);
 	//hypro::Dictionary<Number> d2 = ev.getDictionaries()[0];d2.printDictionary();
 	cout<<"\n test0 \n";
-	//ch.convexHullVertices();
+	ch.convexHullVertices();
 	
-	ev.enumerateVertices();
+	//ev.enumerateVertices();
 	//ev.findLinealtySpace();
 	cout<<"\n test1 \n";
 	//ch.conicHull();
@@ -109,10 +123,16 @@ protected:
 		cout<<hsv<<"\n";
 	}*/
 	cout<<"\n test3 \n";
-	/*for(const auto& hsv:ch.getHsv()) {
+	for(const auto& hsv:ch.getHsv()) {
 		cout<<hsv<<"\n";
-	}*/
-	
+	}
+	for(const auto& hsv:ch.getHsv()) {
+		int count =0;
+		for(const auto& po:p) {
+			if(hsv.contains(po.rawCoordinates())){++count;}
+		}
+		cout << count <<"\n";
+	}
 	cout<<"\n test4 \n";
 	//ev.enumerateVerticesEachDictionary();
 	
@@ -120,13 +140,13 @@ protected:
 	cout<<"\n test5 \n";
 	//ev.toGeneralCoordinates();
 	cout<<"\n test6 \n";
-	for(unsigned i=0;i<ev.getPoints().size();++i) {cout<< ev.getPoints()[i]<<"\n";}
+	//for(unsigned i=0;i<ev.getPoints().size();++i) {cout<< ev.getPoints()[i]<<"\n";}
 	cout<<"\n test7 \n";
-	for(unsigned i=0;i<ev.getCones().size();++i) {cout<< hypro::Point<Number>(ev.getCones()[i])<<"\n";}
+	//for(unsigned i=0;i<ev.getCones().size();++i) {cout<< hypro::Point<Number>(ev.getCones()[i])<<"\n";}
 	cout<<"\n test8 \n";
-	for(const auto& l:ev.getLinealtySpace()) {
+	/*for(const auto& l:ev.getLinealtySpace()) {
 		cout<<l<<"\n";
-	}
+	}*/
 	/*std::vector<std::size_t> availableIndices = std::vector<std::size_t>(1);
 	availableIndices[0]=1;
 	d.setValue(1,2,1);
