@@ -235,17 +235,17 @@ namespace hypro {
 									std::cout << "Time trigger enabled" << std::endl;
 									if(intersectGuard(transition, currentState, guardSatisfyingState)){
 										// only insert new Sets into working queue, when the current level allows it.
-                                                                                transitionSatisfied = true;
-                                                                                if(!alreadyReduced) {
+											transitionSatisfied = true;
+											if(!alreadyReduced) {
 #ifdef USE_SYSTEM_SEPARATION
-                                                                                    autonomPart.forceLinTransReduction();
+												autonomPart.forceLinTransReduction();
 #endif
-                                                                                    currentSegment.forceLinTransReduction();
-                                                                                    currentState.set = currentSegment;
-                                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
-                                                                                    alreadyReduced = true;
-                                                                                }
-                                                                                if(mCurrentLevel != mSettings.jumpDepth){
+												currentSegment.forceLinTransReduction();
+												currentState.set = currentSegment;
+												intersectGuard(transition, currentState, guardSatisfyingState);
+												alreadyReduced = true;
+											}
+											if(mCurrentLevel != mSettings.jumpDepth){
 											// when taking a timed transition, reset timestamp
 											guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 											nextInitialSets.emplace_back(transition, guardSatisfyingState);
@@ -255,16 +255,16 @@ namespace hypro {
 								}
 							} // handle normal transitions
 							else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
-                                                                transitionSatisfied = true;
-                                                                if(!alreadyReduced) {
+								transitionSatisfied = true;
+								if(!alreadyReduced) {
 #ifdef USE_SYSTEM_SEPARATION
-                                                                    autonomPart.forceLinTransReduction();
+									autonomPart.forceLinTransReduction();
 #endif
-                                                                    currentSegment.forceLinTransReduction();
-                                                                    currentState.set = currentSegment;
-                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
-                                                                    alreadyReduced = true;
-                                                                }
+									currentSegment.forceLinTransReduction();
+									currentState.set = currentSegment;
+									intersectGuard(transition, currentState, guardSatisfyingState);
+									alreadyReduced = true;
+								}
 								assert(guardSatisfyingState.timestamp == currentState.timestamp);
 								//std::cout << "hybrid transition enabled" << std::endl;
 								//std::cout << *transition << std::endl;
@@ -280,35 +280,35 @@ namespace hypro {
 						}
 					}
 
-                                        if (!transitionSatisfied) {
-                                            alreadyReduced = false;
-                                        }
+					if (!transitionSatisfied) {
+						alreadyReduced = false;
+					}
 					// perform linear transformation on the last segment of the flowpipe
 					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
 					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
     #ifdef USE_ELLIPSOIDS
-                                if (mBloatingFactor != 0){
-                                    SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
-                                    nextSegment = autonomPart.minkowskiSum(temp);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #else
-                                if (mBloatingFactor != 0){
-                                    nextSegment = autonomPart.minkowskiSum(totalBloating);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #endif
-                                //nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-                                totalBloating = totalBloating.minkowskiSum(nonautonomPart);
+					if (mBloatingFactor != 0){
+						SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
+						nextSegment = autonomPart.minkowskiSum(temp);
+					} else {
+						nextSegment = autonomPart;
+					}
+#else
+					if (mBloatingFactor != 0){
+						nextSegment = autonomPart.minkowskiSum(totalBloating);
+					} else {
+						nextSegment = autonomPart;
+					}
+#endif
+					//nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+					totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
-                                        //nextSegment.forceLinTransReduction();
-                                        std::cout << "Current depth " << nextSegment.depth() << std::endl;
-                                        std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
+					//nextSegment.forceLinTransReduction();
+					std::cout << "Current depth " << nextSegment.depth() << std::endl;
+					std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
