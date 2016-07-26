@@ -106,7 +106,7 @@ namespace hypro {
 #endif
 		#ifdef USE_Z3
         // TODO protect context creation by mutex
-		z3::context& c = ContextProvider::getInstance().getFreeContext();
+		z3::context c;
 		z3::optimize z3Optimizer(c);
 		std::vector<z3::expr> variables;
 
@@ -330,7 +330,7 @@ namespace hypro {
 		}
 		#endif // RECREATE_SOLVER
         #elif defined(USE_Z3)
-		z3::context& c = ContextProvider::getInstance().getFreeContext();
+		z3::context c;
 		z3::optimize z3Optimizer(c);
 
 		// create formula and objective
@@ -367,7 +367,7 @@ namespace hypro {
 		}
 
 		#ifdef USE_Z3
-		z3::context& c = ContextProvider::getInstance().getFreeContext();
+		z3::context c;
 		z3::solver z3Solver(c);
 
 		// create formula and objective
@@ -533,7 +533,7 @@ namespace hypro {
 		}
 
 #ifdef USE_Z3
-		z3::context& c = ContextProvider::getInstance().getFreeContext();
+		z3::context c;
 		z3::solver z3Solver(c);
 		z3Solver.push();
 
