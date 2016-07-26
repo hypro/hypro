@@ -108,9 +108,10 @@ namespace hypro {
         // TODO protect context creation by mutex
 		z3::context& c = ContextProvider::getInstance().getFreeContext();
 		z3::optimize z3Optimizer(c);
+		std::vector<z3::expr> variables;
 
 		// create formula and objective
-		std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>(mConstraintMatrix, mConstraintVector, _direction, c);
+		std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>(mConstraintMatrix, mConstraintVector, _direction, c, variables);
 
 		// inform and add constraints
 		z3Optimizer.add(formulaObjectivePair.first);
@@ -132,12 +133,14 @@ namespace hypro {
 			z3::model m = z3Optimizer.get_model();
 			//std::cout << "Model: " << m << std::endl;
 			assert(m.num_consts() == mConstraintMatrix.cols());
+			assert(variables.size() == m.num_consts());
 			vector_t<Number> pointCoordinates = vector_t<Number>(mConstraintMatrix.cols());
-			for(unsigned i = 0; i < m.num_consts(); ++i ){
+			for( unsigned i = 0; i < variables.size(); ++i ){
+				z3::func_decl tmp = variables.at(i).decl();
 				//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
-				pointCoordinates[i] = Number(Z3_get_numeral_string(c,m.get_const_interp(m.get_const_decl(i))));
+				assert(Z3_model_get_const_interp(c,m,tmp) != nullptr);
+				pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
 			}
-
 			res.errorCode = SOLUTION::FEAS;
 			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 			res.optimumValue = pointCoordinates;
@@ -275,6 +278,7 @@ namespace hypro {
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
+		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		return res;
 	}
