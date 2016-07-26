@@ -1,134 +1,141 @@
-\subsection{the Simplex Algorithm}
+\subsection{The simplex algorithm}
+
 \subsubsection{Linear optimization.}
-The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the positive optimal of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constrains $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximize the objective in an area defined by a set of half-spaces (each constrain is the equation of an half-spaces). The example~\ref{lp1} is a two-dimensional linear optimization problem.
+The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the positive optimal of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constraints $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximizes the objective, which can be seen as a direction, in an area defined by a set of half-spaces (each constraint is the equation of a half-spaces).
 
-\begin{example}
-	Maximize $x+y$ under $x\leq 2$ and $-x+y\leq 3$
-	\label{lp1}
-\end{example}
 
-To simplify the problem, the origin is assumed to respect all the constrains (equivalently: all the $b_i$ are positive). When a point is on a constrain, the constrain is said \emph{saturated}. The set of the points respecting all the constrains is called the feasible area. 
+To simplify the problem, the origin is assumed to be contained in the intersection of all the half-spaces (equivalently: all the $b_i$ are positive). When a point is on a constraint (its coordinates turn the equality into an equality), the constraint is said \emph{saturated}. The set of the points respecting all the constraints is called the feasible area. 
 
-The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables corresponds to a distance from the associated constrain. Note that every variable (slack or not) corresponds to a constrain and though to an half-spaces. The non-slack variables will be said original. The example~\ref{lp1} becomes the example~\ref{lp2}.
+The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables corresponds to a distance from the associated constraint. Note that every variable (slack or not) correspond to a constraint and though to a half-space. Assigning a variable to a negative value means violating the corresponding constraint. In the following, the non-slack variables will be refereed as \emph{original}.
 
-\begin{example}
-	Maximize $x+y$ with $2-x=s_1$ and $3+x-y=s_2$. All the variables are positive.
-	\label{lp2}
-\end{example}
 \subsubsection{The dictionary.}
-By adding to these equalities an other equality corresponding to the cost function, a tableau of coefficients is obtained. This tableau is called a dictionary. So far, every row corresponds to a slack variable plus one for the objective function and every column corresponds to an initial variable, plus one for the constants. The case in the constants' column and objective's row is the current value of the. The tableau corresponding to the previous example is given in the example~\ref{lp3}. In the rest of this report, the coefficient in the row $i$ and column $j$ is named $a_{ij}$.
+By adding to these equalities an other equality corresponding to the cost function, a tableau of coefficients is obtained. This tableau is called a dictionary. So far, every row corresponds to a slack variable plus one for the objective function and every column corresponds to an initial variable, plus one for the constants. In the rest of this report, the coefficient in the row $i$ and column $j$ is named $a_{ij}$.
 
-\begin{example}
-	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$x$ & $y$ & constants & & \\
-	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-1$ & $0$ & $2$ & = & $s_1$\\ \hline	
-   	$1$ & $-1$ & $3$ & = & $s_2$\\ \hline \hline	
-   	$1$ & $1$ & $0$ & $\leftarrow$ & objective function \\
-   	\hline	
- 	\end{tabular}
-	\label{lp3}
-\end{example}
 
-The dictionary allows to find the value of every variable knowing the value of those associated to the columns. The set of the variables associated to the columns is called the \emph{cobasis}, the set of the variables associated to the row is called the \emph{basis}. Setting all the variables of the cobasis to zero provides a valuation for all the original variables. Such valuation describes a point against $d$ hyperplanes: a vertex of the hyperplane arrangement. The cobasis is a coordinates system composed by the normal vectors of the hyperplanes associated to the variables in the cobasis, with for origin point the intersection of these hyperplanes.
-In the following, the basis in called $B$, the cobasis $N$, the row corresponding to the objective function is $f$ ($\in B$) and the column containing the constants is $g$ ($\in N$).  
+The dictionary allows to find the value of every variable knowing the value of those associated to the columns. The set of the variables associated to the columns is called the \emph{cobasis}, the set of the variables associated to the row is called the \emph{basis}. Setting all the variables of the cobasis to zero provides a valuation for all the original variables. Such valuation describes a point against $d$ hyperplanes: a vertex of the hyperplane arrangement.% The cobasis is a coordinate system composed by the normal vectors of the hyperplanes associated to the variables in the cobasis, with for origin point the intersection of these hyperplanes.
+In the following, the basis is called $B$, the cobasis $N$, the row corresponding to the objective function is $f$ ($\in B$) and the column containing the constants is $g$ ($\in N$).  
 
 \subsubsection{The pivot.} 
-The idea of the simplex is to exchange the variables between the basis and the cobasis (and updating in consequence the coefficients of the dictionary) such that when the cobasis is set to zero, the objective function increases and no basic variable is set to a negative value. This operation is called a pivot. From a geometrical point of view this operations consist in keeping n-1 constrains saturated and exchanging the last one for an other, increasing the objective and staying in the feasible area. The vertices of the feasible area are explored until a maximum is reached.
+The idea of the simplex is to exchange the variables between the basis and the cobasis (and updating in consequence the coefficients of the dictionary) such that when the cobasis is set to zero, the objective function increases and no basic variable is set to a negative value. This operation is called a pivot. From a geometrical point of view this operations consist in keeping $d-1$ constraints saturated and exchanging the remaining one for an other.%, increasing the objective and staying in the feasible area..
+The vertices of the feasible area are explored until a maximum is reached. For a pivot occuring between the variables $r$ and $s$, $a_{rs}$ is refereed as the coefficient corresponding to the pivot. If it equals zero, the pivot is impossible and it means that the variable of the basis is independent from the variable from the cobasis. The most spread rule to select the pivot of a dictionary it Bland's rule, it ensures that the next dictionary describes a point in the feasible area and the termination of the algorithm.
 
-To maintain the fact that the cobasis expresses the vector of the basis, the following transformations are applied to the dictionary. The coefficients of the new dictionary are primed, the pivot occurs between $r \in B-f$ and $s \in N-f$ and the transformation is for all $(i,j)\in (B-r,N-s)$:
-$$ 
-a'_{sr}=\frac{1}{a_{rs}}, \hspace{1cm} a'_{ir}=\frac{a_{is}}{a_{rs}}, \hspace{1cm} a'_{sj}=-\frac{a_{rj}}{a_{rs}}, \hspace{1cm} a'_{ij}=a_{ij}-\frac{a_{is}a_{rj}}{a_{rs}}.
-$$
-$a_{rs}$ is refereed as the coefficient corresponding to the pivot. If it equal zero, the pivot is impossible and it means that the variable of the basis is independent from the variable from the cobasis.
+%To maintain the fact that the cobasis expresses the vector of the basis, the following transformations are applied to the dictionary. The coefficients of the new dictionary are primed, the pivot occurs between $r \in B-f$ and $s \in N-f$ and the transformation is for all $(i,j)\in (B-r,N-s)$:
+%$$ a'_{sr}=\frac{1}{a_{rs}}, \hspace{1cm} a'_{ir}=\frac{a_{is}}{a_{rs}}, \hspace{1cm} a'_{sj}=-\frac{a_{rj}}{a_{rs}}, \hspace{1cm} a'_{ij}=a_{ij}-\frac{a_{is}a_{rj}}{a_{rs}}.$$
 
-The Bland's rule is a deterministic rule to find around which variable pivot. It ensures the terminaison of the algorithm and keeps the dictionary inside the feasible area. This rules applied to the dictionary of example~\ref{lp3} calls for pivoting around the first row and the first column. Which sends $x$ to the basis and $s_1$ to the cobasis. Setting the cobasis to $0$ indicates that the dictionary represents the point $(2,0)$. The next pivoting is around the second row and the second column which leads to the point$(2,7)$, the Bland's rule then state that the optimum is reached. The example~\ref{lp4} provides the transformations of the dictionary.
 
-\begin{example}
-	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$x$ & $y$ & const & & \\
-	$\downarrow$ & $\downarrow$ &$\downarrow$  & & \\
-	\hline
-	\hline	
-   	$-1$ & $0$ & $2$ & = & $s_1$\\ \hline	
-   	$1$ & $-1$ & $3$ & = & $s_2$\\ \hline \hline	
-   	$1$ & $1$ & $0$ & $\leftarrow$ & obj  \\
-   	\hline	
- 	\end{tabular} $\rightarrow$ 
- 	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$s_1$ & $y$ & const & & \\
-	$\downarrow$ & $\downarrow$ & $\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-1$ & $0$ & $2$ & = & $x$\\ \hline	
-   	$-1$ & $-1$ & $5$ & = & $s_2$\\ \hline \hline	
-   	$-1$ & $1$ & $2$ & $\leftarrow$ & obj  \\
-   	\hline	
- 	\end{tabular} $\rightarrow$ 
- 	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$s_1$ & $s_2$ & const & & \\
-	$\downarrow$ & $\downarrow$ & $\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-1$ & $0$ & $2$ & = & $x$\\ \hline	
-   	$-1$ & $-1$ & $5$ & = & $y$\\ \hline \hline	
-   	$-2$ & $-1$ & $7$ & $\leftarrow$ & obj  \\
-   	\hline	
- 	\end{tabular}
-	\label{lp4}
-\end{example}
+%A major issue of the simplex is that it can loop, this is overcome with Bland's rule to pick a pivot. It ensures the termination of the algorithm and ensures the point represented by the dictionary stays inside the feasible area.
+
+%This rules applied to the dictionary of example~\ref{lp3} calls for pivoting around the first row and the first column. Which sends $x$ to the basis and $s_1$ to the cobasis. Setting the cobasis to $0$ indicates that the dictionary represents the point $(2,0)$. The next pivoting is around the second row and the second column which leads to the point$(2,7)$, the Bland's rule then state that the optimum is reached. The example~\ref{lp4} provides the transformations of the dictionary.
+
 
 
 \subsubsection{Some properties.}
-A basic variable is primal feasible if the associated constant is non negative, a cobasic variable is said dual feasible is the associated coefficient in the objective function is non positive. A dictionary is primal (resp. dual) feasible if all the variables is the basis (resp. cobasis) are primal (resp. dual) feasible. A dictionary is optimal if it is both primal and dual feasible. A dictionary is primal feasible if and only if it describes a point inside the feasible area. A dictionary is dual feasible if and only if there is no pivot able to increase the objective. Note that the dictionary obtained in the example~\ref{lp4} is optimal.
+A basic variable is primal feasible if the associated constant is non negative, a cobasic variable is said dual feasible is the associated coefficient in the objective function is non positive. A dictionary is primal (resp. dual) feasible if all the variables is the basis (resp. cobasis) are primal (resp. dual) feasible. A dictionary is optimal if it is both primal and dual feasible. A dictionary is primal feasible if and only if it describes a point inside the feasible area. A dictionary is dual feasible if and only if there is no pivot able to increase the objective.
 
 \begin{proposition}
 The normal vectors of the hyperplanes associated to the variables of the cobasis describe an independent family: the cobasis is, in fact, a basis.
 \end{proposition}
-This proposition is obtained by induction. At he beginning of the algorithm the cobasis is the canonic basis. The only operation applied to the dictionaries (the pivoting) maintain this property. If one tries to break this invariant, the new potential member of the cobasis is a linear combinaison of the others. This means the value of the corresponding variable is determined by the other member of cobasis which implies the pivoting provoked a division by zero.
+\vspace*{-0.4cm}
+This proposition is obtained by induction. At the beginning of the algorithm the cobasis is the canonic basis. The only operation applied to the dictionaries (the pivoting) maintain this property. If one tries to break this invariant, the new potential member of the cobasis is a linear combination of the others. This means the value of the corresponding variable is determined by the other member of cobasis which implies the pivoting provoked a division by zero.
 
 
-\subsubsection{Alternative form.}
+\subsubsection{Alternative forms.}
 \label{section_altsimplex}
-Instead of setting the cobasis to zero, lower and/or upper bounds can be kept for each variables, alongside with a valuation (initialized at $0$ for every variable). The original variables don't have bounds. Once again the valuation of the variables of the cobasis is sufficient to determine the valuation of the basis. The dictionary stays identical (only the constants' column becomes useless). Here the variables can be positive or negative.
+So far, the origin is assumed to be in the feasible area and all the variables were positive. There exist alternative forms of the simplex to handle these two cases.
 
-The first phase will be to reach the feasible area, i.e. ensure that for all the variables, the valuation respects the bounds. To do so, let's pick a variable $i$ in the basis which bounds are not satisfied, without loss of generality let's assume the upper bound is not satisfied. Then let's pivot it with a cobasic variable $j$ smaller than its upper bound if $a_{ij}>0$ or greater than its lower bound if $a_{ij}<0$. Then the variable $i$ is assigned to its upper bound and the new valuation of the basis is computed. This operation is to be repeated until all the variables are in their bounds, a feasible point is found, or until no suitable pivot can be found, the feasible area is empty. The example~\ref{lp5} gives a problem and executes this phase. Note that this does not find a vertex of the arrangement.
+\paragraph{If the origin is not in the feasible area,} the simplex functions in two phases: joining the feasible area, then optimizing. Joining the feasible area is done by an other simplex instance: 
+\vspace*{-0.3cm}
+\begin{itemize}
+\item the constraints are the complementary half-space of each violated constraints alongside with the non violated one;
+\item the function to maximize is the opposite of the sum of the slack variables corresponding to the violated constraints.
+\end{itemize}
+\vspace*{-0.3cm}
+The simplex then continues with the initial constraints and objective function, but the current basis and cobasis.
 
-\begin{example}
-	Reach the feasible area of $-x \leq -1$ and $-x-y\leq 2$.\\
-	Creation of slack variables: $x = s_1$ and $x+y=s_2$.\\
-	Constrains: $x\in ]-\infty;\infty[$, $y\in ]-\infty;\infty[$, $s_1\in ]1;\infty[$, $s_2\in ]-2;\infty[$.\\
-	Let $v$ be the valuation, mapping every variable to $0$ so far. 
-	\begin{tabular}{| c | c | c | c |}
-	\hline	
-	$x$ & $y$ & & \\
-	$\downarrow$ & $\downarrow$ & & \\
-	\hline
-	\hline	
-   	$1$ & $0$ & = & $s_1$\\ \hline	
-   	$1$ & $1$ & = & $s_2$\\ \hline 
- 	\end{tabular}\\
-	Step 1: $s_1$ is out of its bounds, $x$ is suitable for the pivot. The dictionary becomes:
-	\begin{tabular}{| c | c | c | c |}
-	\hline	
-	$s_1$ & y & & \\
-	$\downarrow$ & $\downarrow$ & & \\
-	\hline
-	\hline	
-   	$1$ & $0$ & = & $x$\\ \hline	
-   	$1$ & $1$ & = & $s_2$\\ \hline
- 	\end{tabular},
- 	and the valuation is $v(s_1)=v(x)=1$ and $v(s_2)=v(y)=0$, all the variables are in their bounds and $(1,0)$ is feasible.
-	\label{lp5}
-\end{example}
+\paragraph{If the variables are not all positive,} the idea of the simplex remains: pushing the cobasis to its bound to obtain a vertex. The sole difference is that the bounds are not $0$ anymore. Since the original variables might not be bounded, or that there might be both lower and upper bounds, a valuation for all the variables is kept (initialized at $0$ for all). The valuation is modified when a pivot occurs: the the new cobasic variable is push to its bound that maximizes the objective.
 
-The second phase, the optimization is very similar to the classic algorithm, instead of pushing the cobasis to zero, the valuation is fixed and the variables are pushed to their upper or lower bound (depending on the objective) when they are sent in the cobasis. This second phase will not be used in this paper.
+
+\subsubsection{An example of the simplex algorithm.} Here is given an example of use of the simplex algorithm on the linear optimization problem: maximize $x+y$ under $y\leq 2$ and $x-y\leq 2$.
+\vspace*{-0.4cm}
+\begin{multicols}{2}
+\paragraph{Creation of the dictionary:} the slack variables are defined $0 \leq s_1 = 2-y$ and $0\leq s_2=2-x+y$. These equalities are then put together in the dictionary:
+\begin{tabular}{| c | c || c || c c |}
+\hline	
+$x$ & $y$ & constants & & \\
+$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
+\hline
+\hline	
+$0$ & $-1$ & $2$ & = & $s_1$\\ \hline	
+$-1$ & $1$ & $2$ & = & $s_2$\\ \hline \hline	
+$1$ & $1$ & $0$ & $\leftarrow$ & objective function \\
+\hline	
+\end{tabular}
+
+Bland's rule tells to pick $x$ and $s_2$ for the first pivot, which leads to
+\begin{tabular}{| c | c || c || c c |}
+\hline
+$s_2$ & $y$ & const & & \\
+\hline
+\hline	
+$0$ & $-1$ & $2$ & = & $s_1$\\ \hline	
+$-1$ & $1$ & $2$ & = & $x$\\ \hline \hline	
+$-1$ & $2$ & $2$ & $\leftarrow$ & obj \\
+\hline	
+\end{tabular}.
+
+
+Then $y$ and $s_1$: 
+\begin{tabular}{| c | c || c || c c |}
+\hline
+$x$ & $y$ & const & & \\
+\hline
+\hline	
+$0$ & $-1$ & $2$ & = & $s_1$\\ \hline	
+$-1$ & $-1$ & $4$ & = & $s_2$\\ \hline \hline	
+$-1$ & $-2$ & $6$ & $\leftarrow$ & obj \\
+\hline	
+\end{tabular}.
+There is no other pivot selected by Bland's rule, note that the final dictionary is optimal.
+
+\columnbreak
+
+\figurecol{\includegraphics[width=\columnwidth]{images/simplex12.eps}%
+\figcaption{Geometrical interpretation of the maximization problem. The constraints are in red, the blue arrow corresponds to the objective function, the feasible area is shaded, the purple point is the origin (the point described by the first dictionary).}}
+
+\figurecol{\includegraphics[width=\columnwidth]{images/simplex15.eps}%
+\figcaption{The current point after the first pivot is $(2,0)$, and after the second $(4,2)$.}}
+
+
+
+\end{multicols}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%Instead of setting the cobasis to zero, lower and/or upper bounds can be kept for each variables, alongside with a valuation (initialized at $0$ for every variable). The original variables don't have bounds. Once again the valuation of the variables of the cobasis is sufficient to determine the valuation of the basis. The dictionary stays identical (only the constants' column becomes useless). Here the variables can be positive or negative.
+
+%The first phase will be to reach the feasible area, i.e. ensure that for all the variables, the valuation respects the bounds. To do so, let's pick a variable $i$ in the basis which bounds are not satisfied, without loss of generality let's assume the upper bound is not satisfied. Then let's pivot it with a cobasic variable $j$ smaller than its upper bound if $a_{ij}>0$ or greater than its lower bound if $a_{ij}<0$. Then the variable $i$ is assigned to its upper bound and the new valuation of the basis is computed. This operation is to be repeated until all the variables are in their bounds, a feasible point is found, or until no suitable pivot can be found, the feasible area is empty.
+
+%The second phase, the optimization is very similar to the classic algorithm, instead of pushing the cobasis to zero, the valuation is fixed and the variables are pushed to their upper or lower bound (depending on the objective) when they are sent in the cobasis. This second phase will not be used in this paper.
 
 
 

@@ -15,7 +15,7 @@ pdf: $(TARGET)
 
 $(TARGET): $(SOURCES) $(UML) $(IMGPDF) Makefile	
 	$(LATEX) $(MAIN)
-#	$(BIB) $(MAIN_BASENAME)
+	$(BIB) $(MAIN_BASENAME)
 	$(LATEX) $(MAIN) 
 	@while grep 'Rerun to get cross-references right.' $(MAIN_BASENAME).log; \
 		do $(LATEX) $(MAIN); done

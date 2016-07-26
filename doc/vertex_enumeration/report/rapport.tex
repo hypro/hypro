@@ -11,7 +11,19 @@
 \usepackage{wrapfig}
 \usepackage{amsmath}
 \usepackage{amssymb}
-%
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{graphicx}
+%\usepackage{caption}
+\usepackage{nonfloat}
+\usepackage{textcomp} 
+
+\newcommand\figurecol[1]{%
+\medskip\noindent\begin{minipage}{\columnwidth}
+\centering%
+#1%
+%figure,caption, and label go here
+\end{minipage}\medskip}
 
 \bibliography{references.bib}
 
@@ -19,9 +31,10 @@
 
 \title{Title}
 
-\author{Owen Rouill\'e}
+\author{Owen Rouill\'e\\ Supervised by Stefan Schupp and Erika \'Abr\'aham}
 
-\institute{}
+\institute{RWTH Aachen}
+
 
 \maketitle
 
