@@ -71,8 +71,8 @@ void Plotter<Number>::plot2d() const {
 		mOutfile << "set term pdf\n";
 		mOutfile << "set output \"" << mFilename << ".pdf\n";
 		if(mSettings.grid) {
-			mOutfile << "set xtics " << mSettings.tics << "\n";
-			mOutfile << "set ytics " << mSettings.tics << "\n";
+			mOutfile << "set xtics autofreq\n";
+			mOutfile << "set ytics autofreq\n";
 			mOutfile << "set grid back\n";
 		}
 		if(mSettings.axes) {
