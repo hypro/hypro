@@ -38,7 +38,6 @@ struct gnuplotSettings {
 	bool fill = false;					 // do not fill
 	bool axes = true;					 // plot axes
 	bool grid = true;					 // plot grid
-	double tics = 1.0; 					 // grid and axis tics (uniform)
 	double pointSize = 1.0;				 // pointsize
 	double linewidth = 0.2;				 // linewidth
 	bool keepAspectRatio = false; 		 // keep aspect ratio for both axes

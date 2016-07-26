@@ -104,8 +104,49 @@ namespace hypro {
 #ifdef DEBUG_MSG
 		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 #endif
+		#ifdef USE_Z3
+        // TODO protect context creation by mutex
+		z3::context c;
+		z3::optimize z3Optimizer(c);
+		std::vector<z3::expr> variables;
 
-		#ifdef USE_SMTRAT
+		// create formula and objective
+		std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>(mConstraintMatrix, mConstraintVector, _direction, c, variables);
+
+		// inform and add constraints
+		z3Optimizer.add(formulaObjectivePair.first);
+
+		// optimize with objective function
+		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
+
+		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
+
+		// verify and set result
+		if(z3::sat == z3Optimizer.check()) {
+			z3::expr z3res = z3Optimizer.upper(result);
+			assert(z3res.is_arith());
+			// TODO: Fixme!
+			//std::cout << "Result without string conversion: " << z3res << std::endl;
+			//std::cout << "Result without decimal: " << Z3_get_numeral_string(c,z3res) << std::endl;
+			//std::cout << "Result: " << Z3_get_numeral_decimal_string(c,z3res,1000) << std::endl;
+
+			z3::model m = z3Optimizer.get_model();
+			//std::cout << "Model: " << m << std::endl;
+			assert(m.num_consts() == mConstraintMatrix.cols());
+			assert(variables.size() == m.num_consts());
+			vector_t<Number> pointCoordinates = vector_t<Number>(mConstraintMatrix.cols());
+			for( unsigned i = 0; i < variables.size(); ++i ){
+				z3::func_decl tmp = variables.at(i).decl();
+				//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
+				assert(Z3_model_get_const_interp(c,m,tmp) != nullptr);
+				pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
+			}
+			res.errorCode = SOLUTION::FEAS;
+			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
+			res.optimumValue = pointCoordinates;
+		}
+
+		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
@@ -236,6 +277,7 @@ namespace hypro {
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
+		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		return res;
 	}
@@ -253,13 +295,16 @@ namespace hypro {
 
 		#ifdef USE_SMTRAT
 		#ifdef RECREATE_SOLVER
+        //std::cout << mConstraintMatrix << std::endl << mConstraintVector << std::endl;
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
+			//std::cout << constraintPair.first << std::endl;
 		}
 		smtrat::Answer sol = simplex.check();
+		//std::cout << "smtrat says " << sol << std::endl;
 		return (sol == smtrat::Answer::SAT);
 
 		#else // RECREATE_SOLVER
@@ -283,6 +328,22 @@ namespace hypro {
 			mConsistencyChecked = true;
 		}
 		#endif // RECREATE_SOLVER
+        #elif defined(USE_Z3)
+		z3::context c;
+		z3::optimize z3Optimizer(c);
+
+		// create formula and objective
+		z3::expr_vector constraintsExpression = createFormula<Number>(mConstraintMatrix, mConstraintVector, c);
+		//std::cout << "constraints " << constraintsExpression << std::endl;
+		//std::cout << mConstraintMatrix << std::endl << mConstraintVector << std::endl;
+		for (unsigned i = 0; i < constraintsExpression.size(); i++) {
+			z3Optimizer.add(constraintsExpression[i]);
+			//std::cout << "constraint " << constraintsExpression[i] << std::endl;
+		}
+		z3::check_result res = z3Optimizer.check();
+		//std::cout << "result: " << res << std::endl;
+		return (z3::sat == res);
+
 		#else // USE_SMTRAT
 		if(!mConsistencyChecked){
 			glp_exact( lp, NULL );
@@ -303,7 +364,24 @@ namespace hypro {
 			return true;
 		}
 
-		#ifdef USE_SMTRAT
+		#ifdef USE_Z3
+		z3::context c;
+		z3::solver z3Solver(c);
+
+		// create formula and objective
+		z3::expr formula = createFormula<Number>(_point,  mConstraintMatrix, mConstraintVector, c);
+
+		// inform and add constraints
+		z3Solver.add(formula);
+
+		// verify and set result
+		if(z3::sat == z3Solver.check()) {
+
+			return true;
+		}
+		return false;
+
+		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
@@ -451,7 +529,75 @@ namespace hypro {
 			return res;
 		}
 
-		#ifdef USE_SMTRAT
+#ifdef USE_Z3
+		z3::context c;
+		z3::solver z3Solver(c);
+		z3Solver.push();
+
+		// TODO: ATTENTION: This relies upon that Z3 maintains the order of the constraints!
+		z3::expr_vector formulas = createFormula(mConstraintMatrix, mConstraintVector, c );
+
+		if(formulas.size() == 1){
+
+			return res;
+		}
+
+		assert(unsigned(formulas.size() + res.size()) == mConstraintMatrix.rows());
+		for(unsigned i = 0; i < formulas.size(); ++i) {
+			z3Solver.add(formulas[i]);
+		}
+
+		// first call to check satisfiability
+		z3::check_result firstCheck = z3Solver.check();
+		#ifdef DEBUG_MSG
+		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		#endif
+		switch (firstCheck) {
+				case z3::check_result::unsat: {
+		
+					return res;
+					break;
+				}
+				case z3::check_result::sat: {
+					break;
+				}
+				default: {
+					assert(false);
+					break;
+				}
+		}
+
+		z3Solver.pop();
+
+		for(unsigned constraintIndex = 0; constraintIndex < formulas.size(); ++constraintIndex) {
+			z3::expr originalConstraint = formulas[constraintIndex];
+			#ifdef DEBUG_MSG
+			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			#endif
+			z3::expr negatedConstraint = !originalConstraint;
+
+			z3Solver.push();
+			for(unsigned i = 0; i < formulas.size(); ++i){
+				if(i == constraintIndex) {
+					z3Solver.add(negatedConstraint);
+				} else {
+					z3Solver.add(formulas[i]);
+				}
+			}
+
+			z3::check_result isRedundant = z3Solver.check();
+			assert(isRedundant != z3::check_result::unknown);
+			if(isRedundant == z3::check_result::unsat){
+				#ifdef DEBUG_MSG
+				std::cout << __func__ << " is redundant." << std::endl;
+				#endif
+				res.push_back(constraintIndex);
+			}
+
+			z3Solver.pop();
+		}
+
+		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);

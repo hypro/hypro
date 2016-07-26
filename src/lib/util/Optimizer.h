@@ -5,9 +5,12 @@
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
 
+#include "../flags.h"
 #include "EvaluationResult.h"
 #include "smtrat/SimplexSolver.h"
+#include "z3/z3Convenience.h"
 #include <carl/util/Singleton.h>
+#include <mutex>
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
@@ -94,7 +97,7 @@ namespace hypro {
 		#ifdef USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
 		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
-		#endif
+        #endif
 
 		void createArrays( unsigned size ) const;
 		void deleteArrays() const;
