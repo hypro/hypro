@@ -18,7 +18,7 @@ namespace hypro {
 
 	template<typename Number>
 	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3::context& c, carl::Relation _rel = carl::Relation::LEQ) {
-
+		(void)(_rel);
 		// TODO: Relation is ignored here.
 
 		//std::cout << __func__ << _constraints << " \n\n " << _constants << std::endl;
@@ -100,7 +100,7 @@ namespace hypro {
 
 	template<typename Number>
 	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3::context& c, carl::Relation _rel = carl::Relation::LEQ) {
-
+		(void) _rel;
 		// TODO: Relation is ignored here.
 
 		z3::expr formula(c);
@@ -157,6 +157,7 @@ namespace hypro {
                 }
                 lock.unlock();
                 std::cout << "WARN - You use more threads than concurrenty supported!" << std::endl;
+                assert(false);
             }
 
             void returnContext (z3::context& context) {

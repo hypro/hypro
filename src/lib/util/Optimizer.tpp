@@ -528,9 +528,8 @@ namespace hypro {
 			return res;
 		}
 
-<<<<<<< Updated upstream
 #ifdef USE_Z3
-		z3Context c;
+		z3::context& c = ContextProvider::getInstance().getFreeContext();
 		z3::solver z3Solver(c);
 		z3Solver.push();
 
@@ -538,6 +537,7 @@ namespace hypro {
 		z3::expr_vector formulas = createFormula(mConstraintMatrix, mConstraintVector, c );
 
 		if(formulas.size() == 1){
+			ContextProvider::getInstance().returnContext(c);
 			return res;
 		}
 
@@ -553,6 +553,7 @@ namespace hypro {
 		#endif
 		switch (firstCheck) {
 				case z3::check_result::unsat: {
+					ContextProvider::getInstance().returnContext(c);
 					return res;
 					break;
 				}
@@ -594,6 +595,7 @@ namespace hypro {
 
 			z3Solver.pop();
 		}
+		ContextProvider::getInstance().returnContext(c);
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		#ifdef RECREATE_SOLVER
