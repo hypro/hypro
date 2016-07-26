@@ -192,8 +192,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mLinearTrafoParameters = new trafoContent<Number>( _origin, _parameters );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
-                        mDepth = _origin->depth() +1; 
-                        mOperationCount = _origin->operationCount() + 1;
+			mDepth = _origin->depth() +1;
+            mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:

@@ -75,7 +75,6 @@ struct trafoContent {
 					*/
 				}
 				assert(origin.get()->type() != SF_TYPE::LINTRAFO || origin.get()->linearTrafoParameters()->currentExponent >= currentExponent);
-                                
 			}
 		} while (reduced == true);
 #endif
