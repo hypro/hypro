@@ -145,7 +145,6 @@ namespace hypro {
 			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 			res.optimumValue = pointCoordinates;
 		}
-		ContextProvider::getInstance().returnContext(c);
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
@@ -342,7 +341,6 @@ namespace hypro {
 			//std::cout << "constraint " << constraintsExpression[i] << std::endl;
 		}
 		z3::check_result res = z3Optimizer.check();
-		ContextProvider::getInstance().returnContext(c);
 		//std::cout << "result: " << res << std::endl;
 		return (z3::sat == res);
 
@@ -378,10 +376,9 @@ namespace hypro {
 
 		// verify and set result
 		if(z3::sat == z3Solver.check()) {
-			ContextProvider::getInstance().returnContext(c);
+
 			return true;
 		}
-		ContextProvider::getInstance().returnContext(c);
 		return false;
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
@@ -541,7 +538,7 @@ namespace hypro {
 		z3::expr_vector formulas = createFormula(mConstraintMatrix, mConstraintVector, c );
 
 		if(formulas.size() == 1){
-			ContextProvider::getInstance().returnContext(c);
+
 			return res;
 		}
 
@@ -557,7 +554,7 @@ namespace hypro {
 		#endif
 		switch (firstCheck) {
 				case z3::check_result::unsat: {
-					ContextProvider::getInstance().returnContext(c);
+		
 					return res;
 					break;
 				}
@@ -599,7 +596,6 @@ namespace hypro {
 
 			z3Solver.pop();
 		}
-		ContextProvider::getInstance().returnContext(c);
 
 		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
 		#ifdef RECREATE_SOLVER
