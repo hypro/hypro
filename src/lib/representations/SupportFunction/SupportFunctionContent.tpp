@@ -575,7 +575,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
                 parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
                 parameterPair.first = parameterPair.first * nextPair.first;
                 origin = origin.get()->linearTrafoParameters()->origin;
-            }		
+            }
             mLinearTrafoParameters = new trafoContent<Number>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
         }   break;
         case SF_TYPE::SUM: {
