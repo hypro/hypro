@@ -1,4 +1,4 @@
-#include "Reach.h"
+#include "Reach_SF.h"
 #include <chrono>
 
 namespace hypro {
@@ -187,6 +187,8 @@ namespace hypro {
 
 				// Set after linear transformation
 				SupportFunction<Number> nextSegment;
+                                bool transitionSatisfied = false;
+                                bool alreadyReduced = false;
 #ifdef USE_SYSTEM_SEPARATION
 				SupportFunction<Number> autonomPart = currentSegment;
     #ifdef USE_ELLIPSOIDS
@@ -196,7 +198,6 @@ namespace hypro {
     #else
                         Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());
                         SupportFunction<Number> nonautonomPart = SupportFunction<Number>(nonautonomPartAsEllispsoid);
-                        std::cout << nonautonomPart << std::endl;
                         SupportFunction<Number> totalBloating = nonautonomPart;
     #endif
 #endif
@@ -214,6 +215,7 @@ namespace hypro {
 				 *    - Insert for each transition the guard satisfying intervals
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
+                                        transitionSatisfied = false;
 					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
@@ -233,7 +235,17 @@ namespace hypro {
 									std::cout << "Time trigger enabled" << std::endl;
 									if(intersectGuard(transition, currentState, guardSatisfyingState)){
 										// only insert new Sets into working queue, when the current level allows it.
-										if(mCurrentLevel != mSettings.jumpDepth){
+                                                                                transitionSatisfied = true;
+                                                                                if(!alreadyReduced) {
+#ifdef USE_SYSTEM_SEPARATION
+                                                                                    autonomPart.forceLinTransReduction();
+#endif
+                                                                                    currentSegment.forceLinTransReduction();
+                                                                                    currentState.set = currentSegment;
+                                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
+                                                                                    alreadyReduced = true;
+                                                                                }
+                                                                                if(mCurrentLevel != mSettings.jumpDepth){
 											// when taking a timed transition, reset timestamp
 											guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 											nextInitialSets.emplace_back(transition, guardSatisfyingState);
@@ -243,6 +255,16 @@ namespace hypro {
 								}
 							} // handle normal transitions
 							else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
+                                                                transitionSatisfied = true;
+                                                                if(!alreadyReduced) {
+#ifdef USE_SYSTEM_SEPARATION
+                                                                    autonomPart.forceLinTransReduction();
+#endif
+                                                                    currentSegment.forceLinTransReduction();
+                                                                    currentState.set = currentSegment;
+                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
+                                                                    alreadyReduced = true;
+                                                                }
 								assert(guardSatisfyingState.timestamp == currentState.timestamp);
 								//std::cout << "hybrid transition enabled" << std::endl;
 								//std::cout << *transition << std::endl;
@@ -258,6 +280,9 @@ namespace hypro {
 						}
 					}
 
+                                        if (!transitionSatisfied) {
+                                            alreadyReduced = false;
+                                        }
 					// perform linear transformation on the last segment of the flowpipe
 					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
@@ -281,7 +306,9 @@ namespace hypro {
 #else
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
-					std::cout << "Current depth " << nextSegment.depth() << std::endl;
+                                        //nextSegment.forceLinTransReduction();
+                                        std::cout << "Current depth " << nextSegment.depth() << std::endl;
+                                        std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
