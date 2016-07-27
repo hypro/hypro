@@ -118,6 +118,11 @@ namespace hypro{
     }
     
     template<typename Number, typename Converter>
+    unsigned SupportFunctionT<Number,Converter>::multiplicationsPerEvaluation() const {
+        return content->multiplicationsPerEvaluation();
+    }
+    
+    template<typename Number, typename Converter>
     unsigned SupportFunctionT<Number,Converter>::operationCount() const {
         return content->operationCount();
     }

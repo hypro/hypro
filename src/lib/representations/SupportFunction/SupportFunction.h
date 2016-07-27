@@ -77,7 +77,12 @@ class SupportFunctionT {
      * @return reduced SF
      */
     void forceLinTransReduction();
-
+    
+    /**
+     * 
+     * @return number of mv multiplications needed for a single evaluation on the SF 
+     */
+    unsigned multiplicationsPerEvaluation() const;
     
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
     	lhs << rhs.content << std::endl;
