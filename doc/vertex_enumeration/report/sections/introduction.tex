@@ -63,9 +63,9 @@ Analyse such systems is very difficult, Table~\ref{tab_complexity} gives the com
 As the model checking becomes rapidly non-decidable, the idea of the flowpipe computation is to determine an over approximation of a pipe containing the continuous variables at any instant. To do so, the time is discretized and, at each time step, all the possible values of the continuous variables are determined (analytically if the system is linear, with approximation otherwise). The successive sets containing the potential values of the variables are then linked together with bigger sets that includes all the possible values between the two instants. The result is a connected set containing all the possible values for the variables at any time. Figure~\ref{fowpipeconstruction} illustrate the construction of the "linking" phase of the flowpipe construction and an example of flowpipe fully constructed. The construction of the flowpipe stops at a given time limit or when a fix point is reached.
 
 \begin{figure}
-\includegraphics[scale=1.2]{images/flowpipe.eps}
-missing
-\caption{On the left: an example of the construction of a containing set for all the possible values between two sets obtained by analytic solving (in green). First bloat one of the sets(in blue), then take the convex hull of the resulting sets (in red). On the right: an example of fully constructed flowpipe.}
+\includegraphics[scale=1]{images/flowpipe.eps}
+\includegraphics[scale=0.2]{images/zono.png}
+\caption{On the left: an example of the construction of a containing set for all the possible values between two sets obtained by analytic solving (in green). First bloat one of the sets(in blue), then take the convex hull of the resulting sets (in red). On the right: an example of flowpipe.}
 \label{fowpipeconstruction}
 \end{figure}
 
@@ -114,7 +114,7 @@ These two representations have their own advantages and disadvantages, which are
 The hosting research group develops, in the context of the HyPro project, an open-source stand-alone C++ library for the most relevant geometric state set representations like covering boxes, polytopes, zonotopes, support functions... 
 The library allows the combination of different representations and over-approximative conversion between them. So far it includes conversion between bounded $V$ and $H$-Polyhedra, the objective of the internship is to expand the library with the conversion between unbounded polyhedra.
 
-The method developed in this paper and the library is an extension of a method for to convert $\mathcal{H}$-polytopes into $\mathcal{V}$-polytopes. This method was not the one implemented in HyPro, its implementation was part of the contribution too.
+The method developed in this paper and the library is an extension of a method for to convert $\mathcal{H}$-polytopes into $\mathcal{V}$-polytopes. This method was not the one implemented in HyPro (the tool used to draw the flowpipe in Figure~\ref{fowpipeconstruction}), its implementation was part of the contribution too.
 
 Section~\ref{section_sota} is a state of the art, presenting a method containing the main idea used in this paper: the simplex algorithm, and an algorithm used for the conversion of bounded $\mathcal{H}$-polyhedra into $\mathcal{V}$-polyhedra: Fukuda's algorithm. Section~\ref{section_contrib} is the contribution: how to use Fukuda's algorithm on unbounded $\mathcal{H}$-polyhedra and how to reduce the conversion of unbounded $\mathcal{V}$-polyhedra into $\mathcal{H}$-polyhedra into the previously resolved problem. This reports ends by a summing up conclusion in Section~\ref{section_conclusion}. 
 

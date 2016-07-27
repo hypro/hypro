@@ -11,45 +11,14 @@ However, if a vertex is defined by more hyperplanes than required, several dicti
 
 If the origin is degenerated, then all the optimal dictionaries defining it have to be found. This is done by using a procedure very similar from the one above: by looking only at the hyperplanes redefining the origin, every pivot is tried. The difference is instead of using the Bland's rule, a variation of the dual Bland's rule is used. If the new dictionary is dual feasible (still an optimal for the cost function) and the dual Bland's rule brings it back to the previous one, then the new dictionary is valid with respect to the dual Bland's rule etc. This research presents the same uniqueness properties than the previous one. The previous research has to be launched from every dictionary obtained this way.
 
-The following example illustrates Fukuda's algorithm on a polytope with no degenerated vertex:
+Figure~\ref{ex_fuku} shows the paths to reach the origin for the vertices of the unit cube (constraints: $0\leq x,y,z \leq 1$) and the tree of the exploration made by the algorithm.
 
-\begin{example}
-	Let $h$ be the polytope included in the positive orthant and the half-space $x+2y\leq 4$ (plus the positive orthant, i.e. $-x\leq 0$ and $-y\leq 0$) in $\mathbb{R}^2$.\\
-	First step, the optimal dictionary:
-	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$x$ & $y$ & const & & \\
-	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-1$ & $-2$ & $4$ & = & $s_1$\\ \hline \hline	
-   	$-1$ & $-1$ & $0$ & $\leftarrow$ & obj \\
-   	\hline	
- 	\end{tabular}, 
- 	$(x,s_1)$ and $(y,s_1)$ are both valid reverse Bland's pivot and gives respectively:
- 	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$s_1$ & $y$ & const & & \\
-	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-1$ & $-2$ & $4$ & = & $x$\\ \hline \hline	
-   	$1$ & $1$ & $-4$ & $\leftarrow$ & obj \\
-   	\hline	
- 	\end{tabular}
- 	for the point $(4,0)$ and
- 	\begin{tabular}{| c | c || c || c c |}
-	\hline	
-	$x$ & $s_1$ & const & & \\
-	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
-	\hline
-	\hline	
-   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $2$ & = & $y$\\ \hline \hline	
-   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $-2$ & $\leftarrow$ & obj \\
-   	\hline	
- 	\end{tabular}
- 	for the point $(0,2)$. These two dictionaries have no valid reverse Bland's pivot, the enumeration is done.
-	\label{example-fukuda}
-\end{example}
+\begin{figure}
+\includegraphics[scale=1.1]{images/fukuda.eps}
+\hspace*{0.5cm}
+\includegraphics[scale=1]{images/fukugraph.eps}
+\caption{On the left:  the paths to reach the origin for the vertices of the unit cube (constraints: $0\leq x,y,z \leq 1$). On the right: the tree of the vertices given by Fukuda's algorithm.}
+\label{ex_fuku}
+\end{figure}
 
 \paragraph{Complexity:} for $n$ half-space in a space of dimension $d$, Fukuda gives a complexity of $O(nd(n+d)g)$, where $g$ is the number of vertices of the polyhedron, counted with their multiplicity (a degenerated vertex can be define in several ways, it is counted several times). 

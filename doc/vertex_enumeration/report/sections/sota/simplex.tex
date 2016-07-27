@@ -35,7 +35,7 @@ A basic variable is primal feasible if the associated constant is non negative, 
 \begin{proposition}
 The normal vectors of the hyperplanes associated to the variables of the cobasis describe an independent family: the cobasis is, in fact, a basis.
 \end{proposition}
-\vspace*{-0.4cm}
+\vspace*{-0.1cm}
 This proposition is obtained by induction. At the beginning of the algorithm the cobasis is the canonic basis. The only operation applied to the dictionaries (the pivoting) maintain this property. If one tries to break this invariant, the new potential member of the cobasis is a linear combination of the others. This means the value of the corresponding variable is determined by the other member of cobasis which implies the pivoting provoked a division by zero.
 
 
@@ -44,12 +44,12 @@ This proposition is obtained by induction. At the beginning of the algorithm the
 So far, the origin is assumed to be in the feasible area and all the variables were positive. There exist alternative forms of the simplex to handle these two cases.
 
 \paragraph{If the origin is not in the feasible area,} the simplex functions in two phases: joining the feasible area, then optimizing. Joining the feasible area is done by an other simplex instance: 
-\vspace*{-0.3cm}
+\vspace*{-0.1cm}
 \begin{itemize}
 \item the constraints are the complementary half-space of each violated constraints alongside with the non violated one;
 \item the function to maximize is the opposite of the sum of the slack variables corresponding to the violated constraints.
 \end{itemize}
-\vspace*{-0.3cm}
+\vspace*{-0.1cm}
 The simplex then continues with the initial constraints and objective function, but the current basis and cobasis.
 
 \paragraph{If the variables are not all positive,} the idea of the simplex remains: pushing the cobasis to its bound to obtain a vertex. The sole difference is that the bounds are not $0$ anymore. Since the original variables might not be bounded, or that there might be both lower and upper bounds, a valuation for all the variables is kept (initialized at $0$ for all). The valuation is modified when a pivot occurs: the the new cobasic variable is push to its bound that maximizes the objective.
