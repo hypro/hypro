@@ -9,31 +9,23 @@
 \subsection{The simplex algorithm}
 
 \begin{frame}{Linear optimization problems}
-A linear optimization problem is to maximise a linear function under linear constrains (inequalities). The variables are positive and $0$ is in all the constrains. 
-
-The constrains are in fact half-spaces.
-\begin{example}
-
-Maximize $x+y$ under $y\leq 2$ and $x-y\leq 2$.
-\vspace*{-0.5cm}
+\begin{block}{Assumptions}
+\begin{itemize}
+\item $0$ is in the intersection.
+\item All the variables are positives.
+\end{itemize}
+\end{block}
 \begin{figure}
-%\includegraphics[scale=0.6]{images/simplex1.pdf}
-\caption{Geometrical interpretation of the problem}
+\includegraphics[scale=1]{images/simplex1.eps}\\
+Example of linear optimization problem with the objective $x+y$ and the constraints $y\leq 1$ and $x-y\leq 1$.
 \end{figure}
-\vspace*{-0.5cm}
-\end{example}
-The set of points that respect all the constrains is the feasible area. If a point is on a constrain, the constrain is saturated by the point (the constrain becomes an equality). 
 \end{frame}
 
 \begin{frame}{How to simplex}
 \begin{theorem}
-A vertex maximizes the objective.
+For a problem in $\mathbb{R}^d$, the optimal is either unbounded or reached by the intersection of $d$ independent hyperplanes.
 \end{theorem}
-The concept is to explore the vertices to find the optimal one.
 
-To obtain a vertex: saturate $d$ constrains.
-
-To obtain a new vertex: switch a saturated constrain for another one.
 
 \begin{figure}
 \only<1>{\includegraphics[scale=1]{images/simplex12.eps}}
@@ -45,10 +37,8 @@ To obtain a new vertex: switch a saturated constrain for another one.
 \end{frame}
 
 \begin{frame}{The dictionary}
-The magic of the simplex happens with a powerful tool: the dictionary.
-A positive \emph{slack} variable is associated to each constrains. Setting a variable to $0$ saturates the constrain.
 \begin{block}{Construction of the slack variables}
-$-x+y\leq 3 \hspace*{1cm} \rightarrow \hspace*{1cm} 0 \leq x - y + 3 \hspace*{1cm} \rightarrow \hspace*{1cm} s_1 = x - y + 3$
+$-x+y\leq 3 \hspace*{1cm} \rightarrow \hspace*{1cm} 0 \leq x - y + 3 \hspace*{1cm} \rightarrow \hspace*{1cm} 0\leq s_1 = x - y + 3$
 \end{block}
 The dictionary keeps track of all the constrains.
 \begin{block}{Construction of the dictionary}
@@ -95,7 +85,7 @@ $\rightarrow$
 Two sets of variables:
 \begin{itemize}
 \item the cobasis, the variables in the columns;
-\item the basis, the variables in the rows;
+\item the basis, the variables in the rows.
 \end{itemize}
 \end{column}
 \end{columns}

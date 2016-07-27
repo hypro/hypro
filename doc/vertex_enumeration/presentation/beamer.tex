@@ -7,6 +7,8 @@
 \DeclareGraphicsRule{*}{mps}{*}{}
 \fi
 
+
+
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -45,6 +47,28 @@
 \author[Owen Rouillé]{Owen Rouillé\\[0.3cm]
 \footnotesize
 Supervised by \textbf{Erika Ábrahám} and \textbf{Stefan Schupp}
+}
+
+\newcommand{\thermostatcon}[2]{
+  \draw[->,thick] (#1,#2) -- (#1+10,#2) node[below] {$t$};
+  \draw[->,thick] (#1,#2-3.5) -- (#1,#2+3.5) node[above] {$x$};
+  \node at (#1-0.8,#2) {\scriptsize{$20$}};
+  \node at (#1-0.8,#2-2) {\scriptsize{$18$}};
+  \node at (#1-0.8,#2-3) {\scriptsize{$17$}};
+  \node at (#1-0.8,#2+2) {\scriptsize{$22$}};
+  \node at (#1-0.8,#2+3) {\scriptsize{$23$}};
+  \draw[dashed] (#1,#2-3) -- (#1+10,#2-3);
+  \draw[dashed] (#1,#2-2) -- (#1+10,#2-2);
+  \draw[dashed] (#1,#2+3) -- (#1+10,#2+3);
+  \draw[dashed] (#1,#2+2) -- (#1+10,#2+2);
+  \draw[thick,color=red] (#1,#2) .. controls (#1+0.5,#2+2) and 
+(#1+1.5,#2+2.5) .. (#1+2,#2+2.5) {};
+  \draw[thick,color=blue] (#1+2,#2+2.5) .. controls (#1+2.3,#2) and 
+(#1+3.5,#2-2.8) .. (#1+4,#2-2.8) {};
+  \draw[thick,color=red] (#1+4,#2-2.8) .. controls (#1+5,#2-0.5) and 
+(#1+6,#2+2) .. (#1+7,#2+2.3) {};
+  \draw[thick,color=blue] (#1+7,#2+2.3) .. controls (#1+7.3,#2) and 
+(#1+8.5,#2-2.2) .. (#1+9,#2-2.3) {};
 }
 
 %\titlegraphic{
