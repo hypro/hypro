@@ -1,7 +1,6 @@
 #include "../../flags.h"
-#ifdef USE_Z3
+#ifdef HYPRO_USE_Z3
 #include "z3Context.h"
-
 namespace hypro
 {
 	z3::expr z3Context::real_val (mpq_class val) {
@@ -13,8 +12,5 @@ namespace hypro
 		// problem: z3 wraps mpq using a "rational" class. we can't directly use mpq_class but need the value of mpq_class. There is no
 		// public member function doing this
 	}
-
-
 }
-
-#endif // USE_Z3
+#endif

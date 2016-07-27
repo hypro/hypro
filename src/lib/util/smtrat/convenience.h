@@ -1,8 +1,7 @@
 /**
  * Holds convenience functions when working with SMTRat.
  */
-
-#ifdef USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 
 #pragma once
 #include "../VariablePool.h"
