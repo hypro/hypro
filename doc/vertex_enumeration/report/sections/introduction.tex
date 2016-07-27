@@ -16,7 +16,21 @@ The thermostat can be described with the state of the heater, discrete, and the 
 The associated hybrid automata has the same discrete states as the system: ON and OFF. There will be only one continuous variable: the temperature. The evolution of the temperature is controlled by the current discrete state, being able to change or to stay in a state is controlled by the temperature. Figure~\ref{fig_thermostat} shows the evolution of the temperature for a system initialized with a heater on and $20$\textdegree C and the resulting hybrid automata.
 
 \begin{figure}
-\caption{On the right: the evolution of the temperature for the given thermostat initialized on the state (ON,$20$\textdegree C). On the left: the corresponding hybrid automata.}
+
+ \begin{tikzpicture}[scale=0.5]
+  %\thermostatcon{0}{0};
+  %\thermostatdis{12}{0};
+ \end{tikzpicture}
+missing pick
+\begin{tikzpicture}[scale=0.6]
+  \node[draw, circle, text width = 1.2cm, text centered, thick,color=red] (l1) at (0,0) {\scriptsize{ON\\ \ \\$\dot{x}=-x+50$\\ $x\leq 23$}};
+  \node[draw, circle, text width = 1.2cm, text centered, color=blue, thick] (l2) at (5,0) {\scriptsize{OFF\\ \ \\$\dot{x}=-x$\\ $x\geq 17$}};
+  \path[thick,->] (l1) edge[bend left] node[above] {\scriptsize{$22\leq x\leq 23$}} (l2);
+  \path[thick,->] (l2) edge[bend left] node[below] {\scriptsize{$17\leq x\leq 18$}} (l1);
+  \node (dummy) at (-2.5,0) {};
+  \path[thick,->] (dummy) edge node[above] {\scriptsize{$x:=20$}} (l1);
+ \end{tikzpicture}
+\caption{On the left: the evolution of the temperature for the given thermostat initialized on the state (ON,$20$\textdegree C). On the right: the corresponding hybrid automata. Illustrations taken from Erika \'Abr\'aham's presentation in Genoa, Octorber 2015.}
 \label{fig_thermostat}
 \end{figure}
 
@@ -52,7 +66,7 @@ As the model checking becomes rapidly non-decidable, the idea of the flowpipe co
 
 \begin{figure}
 \includegraphics[scale=1.2]{images/flowpipe.eps}
-\includegraphics[scale=1]{images/flowpipe.eps}
+missing
 \caption{On the left: an example of the construction of a containing set for all the possible values between two sets obtained by analytic solving (in green). First bloat one of the sets(in blue), then take the convex hull of the resulting sets (in red). On the right: an example of fully constructed flowpipe.}
 \label{fowpipeconstruction}
 \end{figure}
