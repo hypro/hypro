@@ -1,6 +1,6 @@
 \section{Introduction}
 Computer scientists are used to deal with discrete systems, i.e. systems whose evolution can be described by a sequence of discrete state changes. A widespread example is the program analysis: during the execution of a program, the system is abstracted into a machine which states changes every time an instruction is executed.
-Today, computer science is expected to be able to ensure the safety of very complex systems, such as planes or nuclear reactors. The states of these systems are described non only by a discrete one (flying, launching, exploding...), but also by physical variables, which evolve continuously over the time. Such systems, with a continuous and a discrete components are called hybrid systems. These systems are omnipresent, whenever a computer interacts with continuous quantities there is a hybrid system, even for thing as simple as a thermostat with the temperature.
+Today, computer science is expected to be able to ensure the safety of very complex systems, such as planes or nuclear reactors. The states of these systems are described not only by a discrete one (flying, launching, exploding...), but also by physical variables, which evolve continuously over the time. Such systems, with continuous and discrete components are called hybrid systems. These systems are omnipresent, whenever a digital controller interacts with continuous quantities there is a hybrid system, even for thing as simple as a thermostat with the temperature.
 
 To study these systems, they are abstracted into hybrid automata~\cite{colas}. These automata are then model checked. Example~\ref{exp_thermostat} describes a thermostat and the associated automaton.
 
@@ -35,7 +35,7 @@ The associated hybrid automata has the same discrete states as the system: ON an
 \label{exp_thermostat}
 \end{example}
 
-A hybrid automata is described by a set of possible discrete states and a set of continuous variables. The evolution of the variables is determined by the current discrete state. The current state of the system is defined by the discrete state it is in and by the current value of the continuous variables. A transition between two discrete states can be done under certain conditions (called a guard) over the variables, a well as staying in a given state (called the invariant of the state). A transition can reassign the variables.  
+A hybrid automata is described by a set of possible discrete states and a set of continuous variables. The evolution of the variables is determined by the current discrete state. The current state of the system is defined by the discrete state it is in and by the current value of the continuous variables. A transition between two discrete states can be done under certain conditions (called a guard) over the variables, a well as staying in a given state (called the invariant of the state). A transition can reassign the variables. All these parts can be seen in Figure~\ref{fig_thermostat}.
 
 
 
@@ -69,7 +69,7 @@ As the model checking becomes rapidly non-decidable, the idea of the flowpipe co
 \label{fowpipeconstruction}
 \end{figure}
 
-There exists different sub-methods for the flowpipe construction, each corresponding to different methods to describe the sets of the possible values of the variables. Zonotopes, support functions and boxes are examples of representations. Several operations have to be performed on these sets along the way, for instance intersections to detect a collision with a forbidden state. How these set are described in the machine has a heavy influence on the cost to do one or another operation. The internship is about a method to switch between two representations of polyhedra: the $\mathcal{V}$ representation and the $\mathcal{H}$ representation according to Theorem~\ref{thm_representation}. First some notations and definitions for the rest of the paper:
+There exists different sub-methods for the flowpipe construction, each corresponding to different methods to describe the sets of the possible values of the variables. Zonotopes (left part of Figure~\ref{fowpipeconstruction}), support functions and boxes are examples of representations. Several operations have to be performed on these sets along the way, for instance intersections to detect a collision with a forbidden state. How these set are described in the machine has a heavy influence on the cost to do one or another operation. The internship is about a method to switch between two representations of polyhedra: the $\mathcal{V}$ representation and the $\mathcal{H}$ representation according to Theorem~\ref{thm_representation}. First some notations and definitions for the rest of the paper:
  
 \begin{definition}[Some geometry]
 	The problem is studied in $\mathbb{R}^d$.
@@ -111,10 +111,10 @@ These two representations have their own advantages and disadvantages, which are
 \label{comparison tab}
 \end{table}
 
-The hosting research group develops, in the context of the HyPro project, an open-source stand-alone C++ library for the most relevant geometric state set representations like covering boxes, polytopes, zonotopes, support functions... 
-The library allows the combination of different representations and over-approximative conversion between them. So far it includes conversion between bounded $V$ and $H$-Polyhedra, the objective of the internship is to expand the library with the conversion between unbounded polyhedra.
+The hosting research group develops, in the context of the HyPro project, an open-source stand-alone C++ library (the tool used to draw the flowpipe in Figure~\ref{fowpipeconstruction}) for the most relevant geometric state set representations like covering boxes, polytopes, zonotopes, support functions... 
+The library allows the combination of different representations and over-approximative conversion between them. So far it includes conversion between bounded $\mathcal{V}$ and $\mathcal{H}$-Polyhedra, the objective of the internship is to expand the library with the conversion between unbounded polyhedra.
 
-The method developed in this paper and the library is an extension of a method for to convert $\mathcal{H}$-polytopes into $\mathcal{V}$-polytopes. This method was not the one implemented in HyPro (the tool used to draw the flowpipe in Figure~\ref{fowpipeconstruction}), its implementation was part of the contribution too.
+The method developed in this paper and the library is an extension of a method for to convert $\mathcal{H}$-polytopes into $\mathcal{V}$-polytopes. This method was not the one implemented in HyPro, its implementation is a part of the contribution.
 
 Section~\ref{section_sota} is a state of the art, presenting a method containing the main idea used in this paper: the simplex algorithm, and an algorithm used for the conversion of bounded $\mathcal{H}$-polyhedra into $\mathcal{V}$-polyhedra: Fukuda's algorithm. Section~\ref{section_contrib} is the contribution: how to use Fukuda's algorithm on unbounded $\mathcal{H}$-polyhedra and how to reduce the conversion of unbounded $\mathcal{V}$-polyhedra into $\mathcal{H}$-polyhedra into the previously resolved problem. This reports ends by a summing up conclusion in Section~\ref{section_conclusion}. 
 
