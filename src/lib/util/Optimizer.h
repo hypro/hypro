@@ -7,8 +7,12 @@
 
 #include "../flags.h"
 #include "EvaluationResult.h"
+#ifdef HYPRO_USE_SMTRAT
 #include "smtrat/SimplexSolver.h"
+#endif
+#ifdef HYPRO_USE_Z3
 #include "z3/z3Convenience.h"
+#endif
 #include <carl/util/Singleton.h>
 
 #ifdef VERIFY_RESULT
@@ -31,7 +35,7 @@ namespace hypro {
 		mutable SOLUTION 			mLastConsistencyAnswer;
 
 		// dependent members, all mutable
-		#ifdef USE_SMTRAT
+		#ifdef HYPRO_USE_SMTRAT
 		mutable smtrat::SimplexSolver mSmtratSolver;
 		mutable smtrat::FormulaT mCurrentFormula;
 		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
@@ -93,7 +97,7 @@ namespace hypro {
 	private:
 		void initialize() const;
 		void updateConstraints() const;
-		#ifdef USE_SMTRAT
+		#ifdef HYPRO_USE_SMTRAT
 		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
 		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
 		#endif

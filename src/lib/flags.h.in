@@ -2,8 +2,8 @@
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine USE_PPL
-#cmakedefine USE_SMTRAT
-#cmakedefine USE_Z3
+#cmakedefine HYPRO_USE_SMTRAT
+#cmakedefine HYPRO_USE_Z3
 #cmakedefine USE_CLANG
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine LOGGING_HYPRO

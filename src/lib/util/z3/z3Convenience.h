@@ -4,7 +4,8 @@
 
 #pragma once
 #include "../../flags.h"
-#ifdef USE_Z3
+
+#ifdef HYPRO_USE_Z3
 #include "z3++.h"
 #include "z3Context.h"
 
@@ -12,7 +13,7 @@ namespace hypro {
 
 
 	template<typename Number>
-	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c, carl::Relation _rel = carl::Relation::LEQ) {
+	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c, carl::Relation = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 
@@ -94,7 +95,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation _rel = carl::Relation::LEQ) {
+	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 

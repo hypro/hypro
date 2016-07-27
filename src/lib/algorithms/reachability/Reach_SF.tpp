@@ -236,17 +236,17 @@ namespace hypro {
 									std::cout << "Time trigger enabled" << std::endl;
 									if(intersectGuard(transition, currentState, guardSatisfyingState)){
 										// only insert new Sets into working queue, when the current level allows it.
-                                                                                transitionSatisfied = true;
-                                                                                if(!alreadyReduced) {
+											transitionSatisfied = true;
+											if(!alreadyReduced) {
 #ifdef USE_SYSTEM_SEPARATION
-                                                                                    autonomPart.forceLinTransReduction();
+												autonomPart.forceLinTransReduction();
 #endif
-                                                                                    currentSegment.forceLinTransReduction();
-                                                                                    currentState.set = currentSegment;
-                                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
-                                                                                    alreadyReduced = true;
-                                                                                }
-                                                                                if(mCurrentLevel != mSettings.jumpDepth){
+												currentSegment.forceLinTransReduction();
+												currentState.set = currentSegment;
+												intersectGuard(transition, currentState, guardSatisfyingState);
+												alreadyReduced = true;
+											}
+											if(mCurrentLevel != mSettings.jumpDepth){
 											// when taking a timed transition, reset timestamp
 											guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 											nextInitialSets.emplace_back(transition, guardSatisfyingState);
@@ -256,16 +256,16 @@ namespace hypro {
 								}
 							} // handle normal transitions
 							else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
-                                                                transitionSatisfied = true;
-                                                                if(!alreadyReduced) {
+								transitionSatisfied = true;
+								if(!alreadyReduced) {
 #ifdef USE_SYSTEM_SEPARATION
-                                                                    autonomPart.forceLinTransReduction();
+									autonomPart.forceLinTransReduction();
 #endif
-                                                                    currentSegment.forceLinTransReduction();
-                                                                    currentState.set = currentSegment;
-                                                                    intersectGuard(transition, currentState, guardSatisfyingState);
-                                                                    alreadyReduced = true;
-                                                                }
+									currentSegment.forceLinTransReduction();
+									currentState.set = currentSegment;
+									intersectGuard(transition, currentState, guardSatisfyingState);
+									alreadyReduced = true;
+								}
 								assert(guardSatisfyingState.timestamp == currentState.timestamp);
 								//std::cout << "hybrid transition enabled" << std::endl;
 								//std::cout << *transition << std::endl;
@@ -281,35 +281,35 @@ namespace hypro {
 						}
 					}
 
-                                        if (!transitionSatisfied) {
-                                            alreadyReduced = false;
-                                        }
+					if (!transitionSatisfied) {
+						alreadyReduced = false;
+					}
 					// perform linear transformation on the last segment of the flowpipe
 					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
 					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
     #ifdef USE_ELLIPSOIDS
-                                if (mBloatingFactor != 0){
-                                    SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
-                                    nextSegment = autonomPart.minkowskiSum(temp);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #else
-                                if (mBloatingFactor != 0){
-                                    nextSegment = autonomPart.minkowskiSum(totalBloating);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #endif
-                                //nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-                                totalBloating = totalBloating.minkowskiSum(nonautonomPart);
+					if (mBloatingFactor != 0){
+						SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
+						nextSegment = autonomPart.minkowskiSum(temp);
+					} else {
+						nextSegment = autonomPart;
+					}
+#else
+					if (mBloatingFactor != 0){
+						nextSegment = autonomPart.minkowskiSum(totalBloating);
+					} else {
+						nextSegment = autonomPart;
+					}
+#endif
+					//nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+					totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
-                                        //nextSegment.forceLinTransReduction();
-                                        std::cout << "Current depth " << nextSegment.depth() << std::endl;
-                                        std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
+					//nextSegment.forceLinTransReduction();
+					std::cout << "Current depth " << nextSegment.depth() << std::endl;
+					std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
@@ -459,10 +459,19 @@ namespace hypro {
 
 				// reduce new initial sets.
 				collectedSets.removeRedundancy();
-                                unsigned estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<int>(mSettings.timeBound/mSettings.timeStep);
-                                unsigned estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
-                                unsigned hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
-                                unsigned estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+                                Number temp =mSettings.timeBound/mSettings.timeStep;
+                                std::cout << "temp " << temp << std::endl;
+                                unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(temp);
+                                std::cout << "timebound " << mSettings.timeBound << std::endl;
+                                std::cout << "timeStep" << mSettings.timeStep << std::endl;
+                                std::cout << aggregationPair.first->guard().mat.rows() << std::endl;
+                                std::cout << aggregationPair.first->target()->invariant().mat.rows() << std::endl;
+                                std::cout << "estimated number" << estimatedNumberOfEvaluations << std::endl;
+                                unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
+                                unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
+                                unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+                                std::cout << " cost without reduction " << estimatedCostWithoutReduction << std::endl;
+                                std::cout << "cost with reduction" << estimatedCostWithReduction << std::endl;
                                 if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
                                     std::cout << "SF reduced after jump" << std::endl;
                                     auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
@@ -473,6 +482,7 @@ namespace hypro {
 				}
                                     s.timestamp = aggregatedTimestamp;
                                 //std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+
 				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
 
 				// ASSUMPTION: All discrete assignments are the same for this transition.

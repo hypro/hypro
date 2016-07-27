@@ -61,8 +61,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& 
 			mEllipsoid = new EllipsoidSupportFunction<Number>( _shapeMatrix);
 			mType = SF_TYPE::ELLIPSOID;
 			mDimension = _shapeMatrix.cols();
-                        mDepth = 0;
-                        mOperationCount = 1;
+			mDepth = 0;
+			mOperationCount = 1;
 			break;
 		}
 		default:
@@ -78,8 +78,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, SF_TYPE 
 			mBall = new BallSupportFunction<Number>( _radius, _type );
 			mType = _type;
 			mDimension = 0;
-                        mDepth = 0;
-                        mOperationCount = 0;
+			mDepth = 0;
+			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -95,9 +95,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 			mPolytope = new PolytopeSupportFunction<Number>( _directions, _distances );
 			mType = SF_TYPE::POLY;
 			mDimension = _directions.cols();
-                        mDepth = 0;
-                        mOperationCount = 0;
-                        
+			mDepth = 0;
+			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -112,8 +111,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfsp
 			mPolytope = new PolytopeSupportFunction<Number>( _planes );
 			mType = SF_TYPE::POLY;
 			mDimension = mPolytope->dimension();
-                        mDepth = 0;
-                        mOperationCount = 0;
+			mDepth = 0;
+			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -128,8 +127,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 			mPolytope = new PolytopeSupportFunction<Number>( _points );
 			mType = SF_TYPE::POLY;
 			mDimension = mPolytope->dimension();
-                        mDepth = 0;
-                        mOperationCount = 0;
+			mDepth = 0;
+			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -147,36 +146,36 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mType = SF_TYPE::SUM;
 			mDimension = _lhs->dimension();
 			assert( _lhs->type() == mSummands->lhs->type() && _rhs->type() == mSummands->rhs->type() );
-                        if (_rhs->depth() > _lhs->depth()){
-                            mDepth = _rhs->depth();
-                        } else {
-                            mDepth = _lhs->depth();
-                        }
-                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
+			} else {
+				mDepth = _lhs->depth();
+			}
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::UNION: {
 			mUnionParameters = new unionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::UNION;
 			mDimension = _lhs->dimension();
-                        if (_rhs->depth() > _lhs->depth()){
-                            mDepth = _rhs->depth();
-                        } else {
-                            mDepth = _lhs->depth();
-                        }
-                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
+			} else {
+				mDepth = _lhs->depth();
+			}
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
 			mIntersectionParameters = new intersectionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::INTERSECT;
 			mDimension = _lhs->dimension();
-                        if (_rhs->depth() > _lhs->depth()){
-                            mDepth = _rhs->depth();
-                        } else {
-                            mDepth = _lhs->depth();
-                        }
-                        mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
+			} else {
+				mDepth = _lhs->depth();
+			}
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		default:
@@ -192,8 +191,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mLinearTrafoParameters = new trafoContent<Number>( _origin, _parameters );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
-			mDepth = _origin->depth() +1;
-            mOperationCount = _origin->operationCount() + 1;
+			mDepth = mLinearTrafoParameters->origin.get()->depth() +1;
+            mOperationCount = mLinearTrafoParameters->origin.get()->operationCount() + 1;
 			break;
 		}
 		default:
@@ -209,8 +208,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mScaleParameters = new scaleContent<Number>( _origin, _factor );
 			mType = SF_TYPE::SCALE;
 			mDimension = _origin->dimension();
-                        mDepth = _origin->depth() +1; 
-                        mOperationCount = _origin->operationCount() + 1;
+			mDepth = _origin->depth() +1;
+			mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -244,10 +243,10 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::INTERSECT:
 			delete mIntersectionParameters;
 			break;
-                case SF_TYPE::ELLIPSOID:
-                        delete mEllipsoid;
-                        break;
-                     // TODO delete ellipsoid
+		case SF_TYPE::ELLIPSOID:
+				delete mEllipsoid;
+				break;
+				 // TODO delete ellipsoid
 		default:
 			break;
 	}
@@ -599,26 +598,37 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
             while(origin.get()->type() == SF_TYPE::LINTRAFO){
                 unsigned currentExponent = origin.get()->linearTrafoParameters()->currentExponent;
                 nextPair = origin.get()->linearTrafoParameters()->parameters->getParameterSet(currentExponent);
-                parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
+                //parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second + parameterPair.second;
+				parameterPair.second = parameterPair.second + parameterPair.first * nextPair.second;
                 parameterPair.first = parameterPair.first * nextPair.first;
                 origin = origin.get()->linearTrafoParameters()->origin;
             }
+			mDepth = origin.get()->depth() + 1;
+			mOperationCount = origin.get()->operationCount() +1;
             mLinearTrafoParameters = new trafoContent<Number>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
         }   break;
         case SF_TYPE::SUM: {
             mSummands->lhs.get()->forceLinTransReduction();
             mSummands->rhs.get()->forceLinTransReduction();
+			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
+			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
         case SF_TYPE::INTERSECT: {
             mIntersectionParameters->rhs.get()->forceLinTransReduction();
             mIntersectionParameters->lhs.get()->forceLinTransReduction();
+			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
+			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
         case SF_TYPE::UNION: {
             mUnionParameters->rhs.get()->forceLinTransReduction();
             mUnionParameters->lhs.get()->forceLinTransReduction();
+			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
+			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
         case SF_TYPE::SCALE: {
             mScaleParameters->origin.get()->forceLinTransReduction();
+			mDepth = mScaleParameters->origin.get()->depth() + 1;
+			mOperationCount = mScaleParameters->origin.get()->operationCount() +1;
         }   break;
         default:
             break;

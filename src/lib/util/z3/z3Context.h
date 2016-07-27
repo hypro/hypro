@@ -1,8 +1,6 @@
 #pragma once
-
 #include "../../flags.h"
-#ifdef USE_Z3
-
+#ifdef HYPRO_USE_Z3
 #include <gmpxx.h>
 #include <z3++.h>
 #include <carl/numbers/numbers.h>
@@ -21,4 +19,4 @@ namespace hypro {
 	};
 }
 
-#endif // USE_Z3
+#endif // HYPRO_USE_Z3
