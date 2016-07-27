@@ -245,6 +245,8 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
 
+include(export)
+
 # Add all targets to the build-tree export set
 export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
 
@@ -259,7 +261,7 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
 set(CONF_INCLUDES ${INCLUDES})
 set(CONF_LINKER_LIBS ${libraries})
-#message(STATUS ${libraries})
+
 configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
 							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
