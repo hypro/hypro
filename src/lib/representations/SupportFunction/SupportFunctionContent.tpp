@@ -563,6 +563,33 @@ unsigned SupportFunctionContent<Number>::operationCount() const {
 }
 
 template <typename Number>
+unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
+    switch ( mType ) {
+        case SF_TYPE::ELLIPSOID: {         
+            return 1;
+        }             
+        case SF_TYPE::INTERSECT: {         
+            return (mIntersectionParameters->rhs.get()->multiplicationsPerEvaluation() + mIntersectionParameters->lhs.get()->multiplicationsPerEvaluation());
+        }             
+        case SF_TYPE::LINTRAFO: {         
+            return mLinearTrafoParameters->origin.get()->multiplicationsPerEvaluation() + 1;
+        } 
+        case SF_TYPE::POLY: {         
+            unsigned maxValue = std::max(mPolytope->constraints().rows(), mPolytope->constraints().cols());
+            return carl::pow(maxValue,2);
+        } 
+        case SF_TYPE::SUM: {         
+            return (mSummands->lhs.get()->multiplicationsPerEvaluation() + mSummands->rhs.get()->multiplicationsPerEvaluation());
+        } 
+        case SF_TYPE::UNION: {         
+            return (mUnionParameters->rhs.get()->multiplicationsPerEvaluation() + mUnionParameters->lhs.get()->multiplicationsPerEvaluation());
+        }
+        default:
+            return 0;
+    }            
+}
+
+template <typename Number>
 void SupportFunctionContent<Number>::forceLinTransReduction(){
     switch ( mType ) {
         case SF_TYPE::LINTRAFO: {

@@ -216,6 +216,11 @@ class SupportFunctionContent {
 	unsigned depth() const;
 	unsigned operationCount() const;
         
+        /**
+         * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
+         */
+        unsigned multiplicationsPerEvaluation() const;
+
         void forceLinTransReduction();
 
 	Point<Number> supremumPoint() const;

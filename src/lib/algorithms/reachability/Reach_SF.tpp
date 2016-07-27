@@ -1,4 +1,5 @@
 #include "Reach_SF.h"
+#include "Settings.h"
 #include <chrono>
 
 namespace hypro {
@@ -458,12 +459,20 @@ namespace hypro {
 
 				// reduce new initial sets.
 				collectedSets.removeRedundancy();
-				auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
-				SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-
-				s.set = collectedSets;
-				s.timestamp = aggregatedTimestamp;
-				//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+                                unsigned estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<int>(mSettings.timeBound/mSettings.timeStep);
+                                unsigned estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
+                                unsigned hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
+                                unsigned estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+                                if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+                                    std::cout << "SF reduced after jump" << std::endl;
+                                    auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
+                                    SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+                                    s.set = newSet;
+                                } else {
+                                    s.set = collectedSets;
+				}
+                                    s.timestamp = aggregatedTimestamp;
+                                //std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
 
 				// ASSUMPTION: All discrete assignments are the same for this transition.
