@@ -1,1 +1,11 @@
 \section{Conclusion}
+\label{section_conclusion}
+The conversion between $V$ and $H$ polyhedra is crucial for the flowpipe based analysis using polyhedra, each representation having its own advantages/disadvantages.
+
+The library developed by the hosting group included two different algorithms for the conversion in the bounded case. The internship the report follows contributed to the library by implementing Fukuda's algorithm for the conversion $H$ to $V$ in the bounded case, and by implementing the following method for the unbounded problem.
+
+\paragraph{Unbounded $H$ to $V$:} the first thing is to find a vertex of the polyhedron to be able to express it with positive coordinates (for Fukuda's algorithm). Doing so, any affine subspace included in the polyhedron is found. Then Fukuda's algorithm is applied and every vertex is searched for vectors of the cone. The whole cone and the vertices of the polyhedron are found. 
+
+\paragraph{Unbounded $V$ to $H$:} the polyhedron is transformed into a cone of greater dimension. Thanks to properties of the geometrical dual, the vertices of the dual of this cone are found with the previous conversion ($H$ to $V$). Taking the dual gives the convex hull of the cone, the algorithm ends by extracting the polyhedron from the cone.
+
+The theoretical complexity of both conversion equals the complexity of Fukuda's algorithm.

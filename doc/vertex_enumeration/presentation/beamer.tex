@@ -1,0 +1,72 @@
+\documentclass[10pt]{beamer}
+
+\ifx\pdftexversion\undefined
+\usepackage[dvips]{graphicx}
+\else
+%\usepackage[pdftex]{graphicx}
+\DeclareGraphicsRule{*}{mps}{*}{}
+\fi
+
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{bbold}
+\usepackage[french]{algorithm2e}
+\usepackage{multimedia}
+\usepackage{tikz}
+
+\definecolor{dark-green}{rgb}{0.2,0.8,0.2}
+\useoutertheme{infolines}
+
+\usetheme{Berlin}
+\usecolortheme{dolphin}
+\beamertemplatenavigationsymbolsempty
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \normalsize
+    \insertframenumber/\inserttotalframenumber
+}
+
+\newcommand{\beginbackup}{
+   \newcounter{framenumbervorappendix}
+   \setcounter{framenumbervorappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumbervorappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumbervorappendix}} 
+}
+
+\setbeamercovered{transparent} 
+
+\title{State set representation for hybrid system reachability analysis}
+\author[Owen Rouillé]{Owen Rouillé\\[0.3cm]
+\footnotesize
+Supervised by \textbf{Erika Ábrahám} and \textbf{Stefan Schupp}
+}
+
+%\titlegraphic{
+%\scalebox{0.4}{
+%    		\includegraphics[scale=0.10]{images/LogoENS.eps} \hspace{1.0cm}
+%    		\includegraphics[scale=0.6]{images/LogoUnivRennes1.pdf} \hspace{0.5cm}
+%        	\includegraphics[scale=0.35]{images/LogoInria.eps} \hspace{0.5cm}
+%        	\includegraphics[scale=0.65]{images/LogoHybrid.eps}
+%        }
+%}
+
+\begin{document}
+\maketitle
+
+\input{sections/introduction.tex}
+\input{sections/sota.tex}
+\input{sections/contrib.tex}
+\input{sections/conclusion.tex}
+
+%\beginbackup
+%\input{annexes.tex}
+%\backupend
+
+\end{document}
+
