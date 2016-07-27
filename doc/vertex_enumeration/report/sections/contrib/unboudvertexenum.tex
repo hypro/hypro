@@ -1,6 +1,6 @@
 \subsection{Adaptation of Fukuda's algorithm for polyhedra}
 
-Is this section, Fukuda's algorithm is adapted for the vertex enumeration of unbounded polyhedra. For a given $H$-polyhedron, described by half-spaces, the objective is to find a set of vertices $V$ and a set of vectors $C$ such that $P = conv(V)+cone(C)$. Note that if a line directed by a vector $l$ is included in $P$, $\{l,-l\}\subset C$. 
+Is this section, Fukuda's algorithm is adapted for the vertex enumeration of unbounded polyhedra. For a given $\mathcal{H}$-polyhedron, described by half-spaces, the objective is to find a set of vertices $\mathcal{V}$ and a set of vectors $C$ such that $P = conv(V)+cone(C)$. Note that if a line directed by a vector $l$ is included in $P$, $\{l,-l\}\subset C$. 
 
 \subsubsection{Converting to positive coordinates and detecting the linealy space}
 
@@ -10,7 +10,7 @@ Finding a vertex of the polyhedron is done using a dictionary as presented in Se
 
 
 To do so, the first thing is to create a dictionary and to reach the feasible area, to check for emptiness. This is exactly the first phase of the simplex algorithm. Then, since the cobasis has to be composed only by slack variables, all the original variables in the cobasis are pivoted with a suitable slack variable (the corresponding coefficient has to be non null) but the assignments are not changed: it could bring the dictionary out of the polyhedron. 
-
+$\mathcal{H}$
 \paragraph*{Detection of the linealty space:} The linealty space is the biggest affine subspace included in the polyhedron. If an original variable has no suitable slack variable to be exchanged with, it means this variable has no influence on the distance to each constraints, there is a line included in the polyhedron: an affine subspace has been found. To overcome this problem, two constraints are added with opposed normal vectors, their directions being the affine subspace's one, and the constant is zero for both. This provides a suitable slack variable to pivot around and the linealty space is saved, Example~\ref{ex_detect_linalty} illustrate this procedure. A cobasis full of slack variables means there exists enough independent constraints to define a vertex, and there is no linealty space exists. Since this phase adds new constraints, the feasible area might have to be reached again.
 
 \begin{example} 
@@ -83,7 +83,7 @@ Proposition~\ref{prop_cone} states that to find all the vectors of the cone, it 
 
 \paragraph{Complexity:} for each vertex, the existence of a conic direction is to be tested. This adds $O(gnd)$ to the cost of Fukuda's algorithm, which cost remains the same.
 
-The algorithm enumerates the linealty space when looking for a first vertex, and the cone and the vertices during Fukuda's algorithm: it allows to switch from an $H$-polyhedron to a $V$-polyhedron.
+The algorithm enumerates the linealty space when looking for a first vertex, and the cone and the vertices during Fukuda's algorithm: it allows to switch from an $\mathcal{H}$-polyhedron to a $\mathcal{V}$-polyhedron.
 
 
 

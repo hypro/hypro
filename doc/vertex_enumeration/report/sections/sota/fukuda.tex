@@ -1,7 +1,7 @@
 \subsection{Fukuda's algorihm}
 
 %vague overview
-Fukuda's algorithm allows to enumerate all the vertices of an $H$-polytope included in the positive orthant ($(\mathbb{R}_+)^d$, all its points have non-negative coordinates) for which the origin is a vertex. This algorithm uses the pivoting scheme of the simplex to explore the polytope. 
+Fukuda's algorithm allows to enumerate all the vertices of an $\mathcal{H}$-polytope included in the positive orthant ($(\mathbb{R}_+)^d$, all its points have non-negative coordinates) for which the origin is a vertex. This algorithm uses the pivoting scheme of the simplex to explore the polytope. 
 
 It is based on a simple idea: starting from any vertex, the simplex algorithm allows to reach a vertex maximizing a linear function by a unique (thanks to Bland's rule) path among the vertices. The algorithm picks a function maximized only by the origin on the positive orthant and walks backward on all the paths leading to it from all the vertices. Every time a vertex is encountered, it is output.
 
@@ -14,7 +14,7 @@ If the origin is degenerated, then all the optimal dictionaries defining it have
 The following example illustrates Fukuda's algorithm on a polytope with no degenerated vertex:
 
 \begin{example}
-	Let $h$ be the polytope included in the positive orthant and the half-space $x+2y\leq 4$ (plus the positve orthant, i.e. $-x\leq 0$ and $-y\leq 0$) in $\mathbb{R}^2$.\\
+	Let $h$ be the polytope included in the positive orthant and the half-space $x+2y\leq 4$ (plus the positive orthant, i.e. $-x\leq 0$ and $-y\leq 0$) in $\mathbb{R}^2$.\\
 	First step, the optimal dictionary:
 	\begin{tabular}{| c | c || c || c c |}
 	\hline	
