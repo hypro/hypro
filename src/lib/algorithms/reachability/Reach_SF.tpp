@@ -461,7 +461,8 @@ namespace hypro {
 				auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
 				SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 
-				s.set = collectedSets;
+				//s.set = collectedSets;
+				s.set = newSet;
 				s.timestamp = aggregatedTimestamp;
 				//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
