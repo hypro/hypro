@@ -35,7 +35,7 @@ namespace hypro {
 	void Optimizer<Number>::clear() {
 		mConstraintMatrix = matrix_t<Number>::Zero(1,1);
 		mConstraintVector = vector_t<Number>::Zero(1);
-		#ifdef USE_SMTRAT
+		#ifdef HYPRO_USE_SMTRAT
 		if(lp != nullptr)
 			mSmtratSolver.clear();
 		#endif
@@ -104,9 +104,9 @@ namespace hypro {
 #ifdef DEBUG_MSG
 		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 #endif
-		#ifdef USE_Z3
-        // TODO protect context creation by mutex
-		z3::context c;
+		#ifdef HYPRO_USE_Z3
+
+		z3Context c;
 		z3::optimize z3Optimizer(c);
 		std::vector<z3::expr> variables;
 
@@ -146,7 +146,7 @@ namespace hypro {
 			res.optimumValue = pointCoordinates;
 		}
 
-		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
+		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		smtrat::Poly objective = createObjective(_direction);
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
@@ -273,7 +273,7 @@ namespace hypro {
 		// cleanup: Remove optimization function and glpk pre-results, if added
 		mSmtratSolver.pop();
 		#endif // RECREATE_SOLVER
-		#endif // USE_SMTRAT
+		#endif // HYPRO_USE_SMTRAT
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
@@ -293,7 +293,7 @@ namespace hypro {
 			return true;
 		}
 
-		#ifdef USE_SMTRAT
+		#ifdef HYPRO_USE_SMTRAT
 		#ifdef RECREATE_SOLVER
         //std::cout << mConstraintMatrix << std::endl << mConstraintVector << std::endl;
 		smtrat::SimplexSolver simplex;
@@ -344,7 +344,7 @@ namespace hypro {
 		//std::cout << "result: " << res << std::endl;
 		return (z3::sat == res);
 
-		#else // USE_SMTRAT
+		#else // HYPRO_USE_SMTRAT
 		if(!mConsistencyChecked){
 			glp_exact( lp, NULL );
 			mLastConsistencyAnswer = glp_get_status(lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
@@ -364,8 +364,9 @@ namespace hypro {
 			return true;
 		}
 
-		#ifdef USE_Z3
-		z3::context c;
+		#ifdef HYPRO_USE_Z3
+
+		z3Context c;
 		z3::solver z3Solver(c);
 
 		// create formula and objective
@@ -381,7 +382,7 @@ namespace hypro {
 		}
 		return false;
 
-		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
+		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
@@ -412,7 +413,7 @@ namespace hypro {
 		mSmtratSolver.pop();
 		return (tmp == smtrat::Answer::SAT);
 		#endif // RECREATE_SOLVER
-		#else // USE_SMTRAT
+		#else // HYPRO_USE_SMTRAT
 
 		// set point
 		assert(mConstraintMatrix.cols() == _point.rawCoordinates().rows());
@@ -440,7 +441,7 @@ namespace hypro {
 
 		EvaluationResult<Number> res;
 
-		#ifdef USE_SMTRAT
+		#ifdef HYPRO_USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
@@ -529,8 +530,8 @@ namespace hypro {
 			return res;
 		}
 
-#ifdef USE_Z3
-		z3::context c;
+#ifdef HYPRO_USE_Z3
+		z3Context c;
 		z3::solver z3Solver(c);
 		z3Solver.push();
 
@@ -597,7 +598,7 @@ namespace hypro {
 			z3Solver.pop();
 		}
 
-		#elif defined(USE_SMTRAT) // else if USE_SMTRAT
+		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
@@ -752,7 +753,7 @@ namespace hypro {
 			++count;
 		}
 		#endif // RECREATE_SOLVER
-		#endif // USE_SMTRAT
+		#endif // HYPRO_USE_SMTRAT
 
 		//TODO: Currently this test only works while using SMTRAT
 
@@ -792,7 +793,7 @@ namespace hypro {
 			glp_set_prob_name( lp, "hpoly" );
 			glp_set_obj_dir( lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
-			#ifdef USE_SMTRAT
+			#ifdef HYPRO_USE_SMTRAT
 			#ifndef RECREATE_SOLVER
 			mSmtratSolver.push();
 			#endif
@@ -823,7 +824,7 @@ namespace hypro {
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
-				#ifdef USE_SMTRAT
+				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
 				mSmtratSolver.pop();
 				if(!mSmtratSolver.formula().empty()){
@@ -876,7 +877,7 @@ namespace hypro {
 					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 				}
 
-				#ifdef USE_SMTRAT
+				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
 				mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
@@ -898,7 +899,7 @@ namespace hypro {
 		}
 	}
 
-#ifdef USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 	template<typename Number>
 	void Optimizer<Number>::addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const {
 		// add assignment from glpk

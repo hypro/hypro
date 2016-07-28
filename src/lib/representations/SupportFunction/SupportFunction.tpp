@@ -113,6 +113,21 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
+    unsigned SupportFunctionT<Number,Converter>::depth() const {
+        return content->depth();
+    }
+    
+    template<typename Number, typename Converter>
+    unsigned SupportFunctionT<Number,Converter>::multiplicationsPerEvaluation() const {
+        return content->multiplicationsPerEvaluation();
+    }
+    
+    template<typename Number, typename Converter>
+    unsigned SupportFunctionT<Number,Converter>::operationCount() const {
+        return content->operationCount();
+    }
+
+    template<typename Number, typename Converter>
     sumContent<Number> *SupportFunctionT<Number,Converter>::summands() const {
        return content->summands();
     }
@@ -170,8 +185,8 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation(const matrix_t<Number> &_A, const vector_t<Number> &_b ) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->linearTransformation(_A, _b));
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const {
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->linearTransformation(parameters));
         return res;
     }
 
@@ -302,6 +317,9 @@ namespace hypro{
          first.content.swap(second.content);
      }
 
-
+    template<typename Number, typename Converter>
+    void SupportFunctionT<Number,Converter>::forceLinTransReduction(){
+        content->forceLinTransReduction();
+    }
 
 } //namespace

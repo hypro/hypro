@@ -11,6 +11,7 @@
 
 #include "../../util/helperFunctions.h"
 #include "SupportFunctionContent.h"
+#include "util.h"
 
 namespace hypro {
 
@@ -40,7 +41,9 @@ class SupportFunctionT {
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?
 	SF_TYPE type() const;
-
+        unsigned depth() const;
+        unsigned operationCount() const;
+        
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;
@@ -54,7 +57,7 @@ class SupportFunctionT {
 	void removeRedundancy();
 	std::vector<Point<Number>> vertices() const;
 	Number supremum() const;
-	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
+	SupportFunctionT<Number,Converter> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
@@ -69,6 +72,18 @@ class SupportFunctionT {
 	void print() const;
     void swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second);
 
+    /**
+     * forces the topmost chain of linear transformations to be reduced to a single lin.trans
+     * @return reduced SF
+     */
+    void forceLinTransReduction();
+    
+    /**
+     * 
+     * @return number of mv multiplications needed for a single evaluation on the SF 
+     */
+    unsigned multiplicationsPerEvaluation() const;
+    
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
     	lhs << rhs.content << std::endl;
     	return lhs;

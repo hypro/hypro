@@ -1,4 +1,5 @@
-#include "Reach.h"
+#include "Reach_SF.h"
+#include "Settings.h"
 #include <chrono>
 
 namespace hypro {
@@ -116,7 +117,7 @@ namespace hypro {
 				}
 			}
 
-			boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
+			boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 			std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
@@ -126,8 +127,8 @@ namespace hypro {
 				bool noFlow = false;
 
 				// if the location does not have dynamic behaviour, check guards and exit loop.
-				if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
-				   boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
+				if(boost::get<2>(initialSetup)->matrix() == matrix_t<Number>::Identity(boost::get<2>(initialSetup)->matrix().rows(), boost::get<2>(initialSetup)->matrix().cols()) &&
+				   boost::get<2>(initialSetup)->vector() == vector_t<Number>::Zero(boost::get<2>(initialSetup)->vector().rows())) {
 					noFlow = true;
 					// Collect potential new initial states from discrete behaviour.
 					if(mCurrentLevel < mSettings.jumpDepth) {
@@ -187,6 +188,8 @@ namespace hypro {
 
 				// Set after linear transformation
 				SupportFunction<Number> nextSegment;
+                                bool transitionSatisfied = false;
+                                bool alreadyReduced = false;
 #ifdef USE_SYSTEM_SEPARATION
 				SupportFunction<Number> autonomPart = currentSegment;
     #ifdef USE_ELLIPSOIDS
@@ -196,7 +199,6 @@ namespace hypro {
     #else
                         Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());
                         SupportFunction<Number> nonautonomPart = SupportFunction<Number>(nonautonomPartAsEllispsoid);
-                        std::cout << nonautonomPart << std::endl;
                         SupportFunction<Number> totalBloating = nonautonomPart;
     #endif
 #endif
@@ -214,7 +216,8 @@ namespace hypro {
 				 *    - Insert for each transition the guard satisfying intervals
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-					//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+                                        transitionSatisfied = false;
+					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
 						State<Number> guardSatisfyingState;
@@ -233,7 +236,17 @@ namespace hypro {
 									std::cout << "Time trigger enabled" << std::endl;
 									if(intersectGuard(transition, currentState, guardSatisfyingState)){
 										// only insert new Sets into working queue, when the current level allows it.
-										if(mCurrentLevel != mSettings.jumpDepth){
+											transitionSatisfied = true;
+											if(!alreadyReduced) {
+#ifdef USE_SYSTEM_SEPARATION
+												autonomPart.forceLinTransReduction();
+#endif
+												currentSegment.forceLinTransReduction();
+												currentState.set = currentSegment;
+												intersectGuard(transition, currentState, guardSatisfyingState);
+												alreadyReduced = true;
+											}
+											if(mCurrentLevel != mSettings.jumpDepth){
 											// when taking a timed transition, reset timestamp
 											guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 											nextInitialSets.emplace_back(transition, guardSatisfyingState);
@@ -243,6 +256,16 @@ namespace hypro {
 								}
 							} // handle normal transitions
 							else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
+								transitionSatisfied = true;
+								if(!alreadyReduced) {
+#ifdef USE_SYSTEM_SEPARATION
+									autonomPart.forceLinTransReduction();
+#endif
+									currentSegment.forceLinTransReduction();
+									currentState.set = currentSegment;
+									intersectGuard(transition, currentState, guardSatisfyingState);
+									alreadyReduced = true;
+								}
 								assert(guardSatisfyingState.timestamp == currentState.timestamp);
 								//std::cout << "hybrid transition enabled" << std::endl;
 								//std::cout << *transition << std::endl;
@@ -258,29 +281,35 @@ namespace hypro {
 						}
 					}
 
+					if (!transitionSatisfied) {
+						alreadyReduced = false;
+					}
 					// perform linear transformation on the last segment of the flowpipe
-					assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
+					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
 					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
     #ifdef USE_ELLIPSOIDS
-                                if (mBloatingFactor != 0){
-                                    SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
-                                    nextSegment = autonomPart.minkowskiSum(temp);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #else
-                                if (mBloatingFactor != 0){
-                                    nextSegment = autonomPart.minkowskiSum(totalBloating);
-                                } else {
-                                    nextSegment = autonomPart;
-                                }
-    #endif
-                                //nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-                                totalBloating = totalBloating.minkowskiSum(nonautonomPart);
+					if (mBloatingFactor != 0){
+						SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
+						nextSegment = autonomPart.minkowskiSum(temp);
+					} else {
+						nextSegment = autonomPart;
+					}
 #else
-					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+					if (mBloatingFactor != 0){
+						nextSegment = autonomPart.minkowskiSum(totalBloating);
+					} else {
+						nextSegment = autonomPart;
+					}
 #endif
+					//nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+					totalBloating = totalBloating.minkowskiSum(nonautonomPart);
+#else
+					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
+#endif
+					//nextSegment.forceLinTransReduction();
+					//std::cout << "Current depth " << nextSegment.depth() << std::endl;
+					//std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
@@ -430,12 +459,21 @@ namespace hypro {
 
 				// reduce new initial sets.
 				collectedSets.removeRedundancy();
-				auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
-				SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-
-				s.set = collectedSets;
+				Number temp =mSettings.timeBound/mSettings.timeStep;
+				unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
+				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
+				unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
+				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
+					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+					s.set = newSet;
+				} else {
+					s.set = collectedSets;
+				}
 				s.timestamp = aggregatedTimestamp;
 				//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+
 				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
 
 				// ASSUMPTION: All discrete assignments are the same for this transition.
@@ -566,7 +604,8 @@ namespace hypro {
 #endif
 				// apply reset function to guard-satisfying set.
 				//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
-				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
+				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(_trans->reset().mat, _trans->reset().vec);
+				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( parameters );
 				std::pair<bool, SupportFunction<Number>> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 				if(invariantSatisfyingSet.first){
 					result.set = invariantSatisfyingSet.second;
@@ -612,7 +651,7 @@ namespace hypro {
 		}
 
 		template<typename Number>
-		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,SupportFunction<Number>>::computeFirstSegment( const State<Number>& _state ) const {
+		boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> Reach<Number,SupportFunction<Number>>::computeFirstSegment( const State<Number>& _state ) const {
 			assert(!_state.timestamp.isUnbounded());
 			// check if initial Valuation fulfills Invariant
 			// check discrete invariant first
@@ -659,7 +698,7 @@ namespace hypro {
 #ifdef REACH_DEBUG
 					//std::cout << "Valuation violates discrete invariant." << std::endl;
 #endif
-					return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
+					return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(false);
 				}
 			}
 
@@ -687,15 +726,17 @@ namespace hypro {
 				translation.conservativeResize( rows - 1 );
 				trafoMatrix.conservativeResize( rows - 1, cols - 1 );
 
+				std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(trafoMatrix, translation);
+
 				// if the location has no flow, stop computation and exit.
 				if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
 				   translation == vector_t<Number>::Zero(translation.rows()) ) {
 					//std::cout << "Avoid further computation as the flow is zero." << std::endl;
 					validState.set = initialPair.second;
-					return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
+					return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
 				}
 
-				SupportFunction<Number> deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
+				SupportFunction<Number> deltaValuation = initialPair.second.linearTransformation( parameters );
 #ifdef REACH_DEBUG
 				std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
@@ -799,10 +840,10 @@ namespace hypro {
 				assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 				validState.set = fullSegment;
 				validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
-				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
+				return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
 			} // if set does not satisfy the invariant, return false
 			else {
-				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
+				return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(false);
 			}
 		}
 

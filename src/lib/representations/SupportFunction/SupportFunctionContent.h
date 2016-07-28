@@ -38,38 +38,42 @@ struct sumContent {
 template <typename Number>
 struct trafoContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
-	matrix_t<Number> a;
-	vector_t<Number> b;
+	std::shared_ptr<const lintrafoParameters<Number>> parameters;
+	unsigned currentExponent;
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
-	std::size_t power = 2; // TODO make me easy accessible
         
-	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, matrix_t<Number> _a, vector_t<Number> _b )
-		: origin( _origin ), a( _a ), b( _b ) {
+	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters )
+		: origin( _origin ), parameters( _parameters ), currentExponent(1) {
+#define USE_LIN_TRANS_REDUCTION
 #ifdef USE_LIN_TRANS_REDUCTION
 		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 		bool reduced;
 		do {
 			reduced = false;
-			if ( (_origin.get()->type() == SF_TYPE::LINTRAFO) && (_origin.get()->linearTrafoParameters()->a == a) && (_origin.get() ->linearTrafoParameters()->b == b) ) {
-				successiveTransformations = _origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
+			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *_parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+				//std::cout << "origin exponent: " << origin.get()->linearTrafoParameters()->currentExponent << std::endl;
+				//std::cout << "origin successive transformations: " << origin.get()->linearTrafoParameters()->successiveTransformations << std::endl;
+				successiveTransformations = origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
 			} else {
 				successiveTransformations = 0;
 			}
-			if (successiveTransformations == unsigned(carl::pow(2,power)-1)) {
+			//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
+			if (successiveTransformations == unsigned(carl::pow(2,_parameters->power)-1)) {
+				//std::cout << "Enough successive transformations: " << successiveTransformations << std::endl;
 				reduced = true;
-				std::pair<matrix_t<Number>, vector_t<Number>> newParam = reduceLinTrans(a, b, power);
-				a = newParam.first;
-				b = newParam.second;
-				for(std::size_t i = 0; i < unsigned(carl::pow(2,power)-1); i++ ){
+				currentExponent = currentExponent*(carl::pow(2,_parameters->power));
+				//std::cout << "After Reduction, new Exponent is " << currentExponent << std::endl;
+				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}
+				assert(origin.get()->type() != SF_TYPE::LINTRAFO || origin.get()->linearTrafoParameters()->currentExponent >= currentExponent);
 			}
 		} while (reduced == true);
 #endif
 	}
 
-	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), a( _origin.a ), b( _origin.b ), successiveTransformations( _origin.successiveTransformations )
+	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), parameters(_origin.parameters), currentExponent(_origin.currentExponent), successiveTransformations( _origin.successiveTransformations )
 	{}
 
 	std::pair<matrix_t<Number>, vector_t<Number>> reduceLinTrans(const matrix_t<Number>& _a, const vector_t<Number>& _b, std::size_t _power){
@@ -122,6 +126,8 @@ template <typename Number>
 class SupportFunctionContent {
   private:
 	SF_TYPE mType;
+	unsigned mDepth;
+	unsigned mOperationCount;
 	unsigned mDimension;
 	union {
 		sumContent<Number>* mSummands;
@@ -144,8 +150,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& _a,
-					 const vector_t<Number>& _b, SF_TYPE _type );
+	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters, SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
 
@@ -188,11 +193,6 @@ class SupportFunctionContent {
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
 		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
-                //std::cout << "Old adress: " << &*orig << ", new adress: " << &*obj << "\n";
-                //std::cout << "Old object:" << "\n";
-                //orig->print();
-                //std::cout << "New object:" << "\n";
-                //obj->print();
 		obj->pThis = obj;
 		return obj;
 	}
@@ -206,6 +206,15 @@ class SupportFunctionContent {
 
 	std::size_t dimension() const;
 	SF_TYPE type() const;
+	unsigned depth() const;
+	unsigned operationCount() const;
+        
+        /**
+         * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
+         */
+        unsigned multiplicationsPerEvaluation() const;
+
+        void forceLinTransReduction();
 
 	Point<Number> supremumPoint() const;
 
@@ -219,8 +228,7 @@ class SupportFunctionContent {
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
-	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( const matrix_t<Number>& _A,
-																   const vector_t<Number>& _b ) const;
+	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> intersect( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
@@ -243,7 +251,7 @@ class SupportFunctionContent {
 				lhs << "2-BALL" << std::endl;
 			} break;
 			case SF_TYPE::LINTRAFO: {
-				lhs << "LINTRAFO" << std::endl;
+				lhs << "LINTRAFO A^" << rhs->mLinearTrafoParameters->currentExponent << std::endl;
 				lhs << "of" << std::endl;
 				rhs->mLinearTrafoParameters->origin->print();
 			} break;

@@ -2,6 +2,8 @@ set(hypro_VERSION @hypro_VERSION@)
 
 get_filename_component(hypro_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
+@DEPENDENT_TARGETS@
+
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET hypro AND NOT hypro_BINARY_DIR)
   include("${hypro_CMAKE_DIR}/hyproTargets.cmake")
