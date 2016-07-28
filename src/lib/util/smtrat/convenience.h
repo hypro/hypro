@@ -1,9 +1,9 @@
 /**
  * Holds convenience functions when working with SMTRat.
  */
-#ifdef HYPRO_USE_SMTRAT
-
 #pragma once
+#include "../../flags.h"
+#ifdef HYPRO_USE_SMTRAT
 #include "../VariablePool.h"
 #include "../../datastructures/Point.h"
 #include <carl/interval/Interval.h>

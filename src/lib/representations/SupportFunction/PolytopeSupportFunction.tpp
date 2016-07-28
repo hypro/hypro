@@ -310,19 +310,19 @@ void PolytopeSupportFunction<Number>::removeRedundancy() {
 		if(!redundant.empty()){
 			matrix_t<Number> newConstraints = matrix_t<Number>(mConstraints.rows()-redundant.size(), mConstraints.cols());
 			vector_t<Number> newConstants = vector_t<Number>(mConstraints.rows()-redundant.size());
-			unsigned insertionIndex = newConstants.rows()-1;
+			int insertionIndex = newConstants.rows()-1;
 			for(int rowIndex = mConstraints.rows()-1; rowIndex >=0; --rowIndex) {
-				if(redundant.empty()){
-					break;
-				}
-
-				if(unsigned(rowIndex) != redundant.back()){
+				if(redundant.empty() || unsigned(rowIndex) != redundant.back()){
 					newConstraints.row(insertionIndex) = mConstraints.row(rowIndex);
-					newConstants(rowIndex) = mConstraintConstants(rowIndex);
+					newConstants(insertionIndex) = mConstraintConstants(rowIndex);
 					--insertionIndex;
+				} else {
+					redundant.pop_back();
 				}
 			}
-			assert(insertionIndex == 0);
+			assert(insertionIndex == -1);
+			mConstraints = newConstraints;
+			mConstraintConstants = newConstants;
 		}
 		assert(redundant.empty());
 	}

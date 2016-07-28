@@ -308,8 +308,8 @@ namespace hypro {
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
 					//nextSegment.forceLinTransReduction();
-					std::cout << "Current depth " << nextSegment.depth() << std::endl;
-					std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
+					//std::cout << "Current depth " << nextSegment.depth() << std::endl;
+					//std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
@@ -459,29 +459,20 @@ namespace hypro {
 
 				// reduce new initial sets.
 				collectedSets.removeRedundancy();
-                                Number temp =mSettings.timeBound/mSettings.timeStep;
-                                std::cout << "temp " << temp << std::endl;
-                                unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(temp);
-                                std::cout << "timebound " << mSettings.timeBound << std::endl;
-                                std::cout << "timeStep" << mSettings.timeStep << std::endl;
-                                std::cout << aggregationPair.first->guard().mat.rows() << std::endl;
-                                std::cout << aggregationPair.first->target()->invariant().mat.rows() << std::endl;
-                                std::cout << "estimated number" << estimatedNumberOfEvaluations << std::endl;
-                                unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
-                                unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
-                                unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
-                                std::cout << " cost without reduction " << estimatedCostWithoutReduction << std::endl;
-                                std::cout << "cost with reduction" << estimatedCostWithReduction << std::endl;
-                                if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
-                                    std::cout << "SF reduced after jump" << std::endl;
-                                    auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
-                                    SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-                                    s.set = newSet;
-                                } else {
-                                    s.set = collectedSets;
+				Number temp =mSettings.timeBound/mSettings.timeStep;
+				unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
+				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
+				unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
+				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
+					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+					s.set = newSet;
+				} else {
+					s.set = collectedSets;
 				}
-                                    s.timestamp = aggregatedTimestamp;
-                                //std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
+				s.timestamp = aggregatedTimestamp;
+				//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 
 				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
 

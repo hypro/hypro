@@ -1,8 +1,9 @@
-#ifdef HYPRO_USE_SMTRAT
 /**
  * @file SimplexSolver.h
  */
 #pragma once
+#include "../../flags.h"
+#ifdef HYPRO_USE_SMTRAT
 #include <lib/solver/Manager.h>
 #include <lib/modules/LRAModule/LRAModule.h>
 
