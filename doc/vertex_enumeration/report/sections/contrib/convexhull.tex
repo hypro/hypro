@@ -1,13 +1,15 @@
 \subsection{From vertex enumeration to convex hull}
 
 
-In geometry, vertices and half-spaces are close concepts: a vertex $(a_i)_{i=0}^d$ can be associated to a half-space $\sum_{i=0}^d x_i a_i \leq 1$ et vice-versa. This association is the \emph{geometric duality} and it allows to use the vertex enumeration algorithm to find the convex hull of a polyhedron. The emptiness and the equality to a single point of a $\mathcal{V}$-polyhedron is trivial to check, in the following, the polyhedron and polytopes are assumed to be at least two-dimensional. Figure~\ref{ex_dual} shows a pair vertex/half-space and two triangles that are dual from each other.
+In geometry, vertices and half-spaces are close concepts: a vertex $(a_i)_{i=0}^d$ can be associated to a half-space $\sum_{i=0}^d x_i a_i \leq 1$ and vice-versa. This association is the \emph{geometric duality} and it allows to use the vertex enumeration algorithm to find the convex hull of a polyhedron. The emptiness and the equality to a single point of a $\mathcal{V}$-polyhedron is trivial to check, in the following, the polyhedron and polytopes are assumed to be at least two-dimensional. Figure~\ref{ex_dual} shows a pair vertex/half-space and two triangles that are dual from each other.
 
 \begin{figure}
 \includegraphics[scale=1]{images/dual.eps}
+\hspace*{1cm}
 \includegraphics[scale=1]{images/dual4.eps}
 \caption{Left: pair vertex/half-space that are dual from each other. Right: two triangles dual from each other.}
 \label{ex_dual}
+\vspace*{-0.7cm}
 \end{figure}
 
 \subsubsection{The convex hull of a polytope}
@@ -26,14 +28,14 @@ If $P$ is a polytope and $0\in P$, $P=(P^\Delta)^\Delta$.
 
 Starting with the set of the vertices of $P$, the algorithm begins by switching to $P^\Delta$, which is described by a set of half-spaces. The vertices of $P^\Delta$ enumerated and the dual is taken, which leads to a set of half-spaces describing $P$. Indicing by the description mean, the algorithm does $ P_V \rightarrow P_H^\Delta \rightarrow P_V^\Delta \rightarrow P_H^{\Delta\Delta} = P_H $. 
 
-The first step ($P_V \rightarrow P_H^\Delta$) does not hold any problem and is done with the theorem~\ref{thm_conv_dual}:
+The first step ($P_V \rightarrow P_H^\Delta$) does not hold any problem and is done with Theorem~\ref{thm_conv_dual}:
 \begin{theorem}
 For $P$ the convex hull of a given set $V$ of vertices, $P^\Delta=\{c | \forall x \in V, cx\leq 1\}$.
 \label{thm_conv_dual}
 \end{theorem}
 The second step ($P_H^\Delta \rightarrow P_V^\Delta$) is done by the vertex enumeration algorithm. 
 
-The third ($P_V^\Delta \rightarrow P_H^{\Delta\Delta}$) does not cause any problem if the origin is not on a facet of $P$ (or a face of other dimension, seen as an intersection of facets): then $P^\Delta$ is bounded and the theorem~\ref{thm_conv_dual} holds.
+The third ($P_V^\Delta \rightarrow P_H^{\Delta\Delta}$) does not cause any problem if the origin is not on a facet of $P$ (or a face of other dimension, seen as an intersection of facets): then $P^\Delta$ is bounded and Theorem~\ref{thm_conv_dual} holds.
 
 Otherwise, let $\{x|w.x \leq 0\}$ be a facet of $P$ (since $0$ is the iso-barycenter of $P$, $\{x| -w.x \leq 0\}$ is also a facet). Let $x\in P$, $y\in P^\Delta$ and $\alpha\in\mathbb{R}$, $(y+\alpha w).x=y.x+\alpha(w.x)=y.x$, this means that $vect(w)$ is a linealty space of $P^\Delta$. $P^\Delta=conv(V')+lineal(L')$ thus $P^{\Delta\Delta}=conv(V')^\Delta \cap L'^\bot$ by the proposition~\ref{prop_lineal_dual}. Which end the convex hull problem for a polytope.
 

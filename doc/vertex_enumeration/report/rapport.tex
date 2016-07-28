@@ -58,17 +58,17 @@
 
 \begin{document}
 
-\title{Unbounded polyhedra conversion for reachability analysis}
+\title{Unbounded polyhedra conversion for reachability analysis of hybrid systems}
 
 \author{Owen Rouill\'e\\ Supervised by Stefan Schupp and Erika \'Abr\'aham}
 
-\institute{RWTH Aachen}
+\institute{RWTH Aachen\\ June, the 16$^{th}$ -- August, the 29$^{th}$}
 
 
 \maketitle
 
 \begin{abstract}
-When a digital controller interacts with physical quantities, discrete behaviour is mixed with continuous behaviour. Such systems are called hybrid and they are omnipresent, e.g. planes, nuclear reactors, cars, just to name a few. Their analysis is hard and crucial, as they are often safety-critical. One way to ensure the safety of these systems is the reachability analysis via flowpipe construction: the construction of an over-approximation of all reachable states of the system within a possibly bounded time horizon. This method strongly relies on geometry for the representation of the states. This paper is a contribution to the HyPro project, a library dedicated to the state representation of hybrid systems by a variety of geometric shapes. Among other operations, the library provides conversions between bounded $\mathcal{H}$ and $\mathcal{V}$ polyhedra. The purpose of this paper is to extend the conversion to unbounded $\mathcal{H}$ and $\mathcal{V}$ polyhedra through the adaption of a pivoting algorithm: the Avis-Fukuda algorithm.
+When a digital controller interacts with physical quantities, discrete behaviour is mixed with continuous behaviour. Such systems are called hybrid and they are omnipresent, e.g. planes, nuclear reactors, cars, just to name a few. Their analysis and safety verification is crucial, as they are often safety-critical. One approach to verify safety of these systems is reachability analysis via flowpipe construction: the construction of an over-approximation of all reachable states of the system within a bounded time horizon. This method makes use of geometric shapes as a representation for state sets of a given system. This paper is a contribution to the HyPro project~\cite{hypro}, a library dedicated to the state representation of hybrid systems by a variety of geometric shapes. Among other operations, the library provides conversions between bounded $\mathcal{H}$ and $\mathcal{V}$ polyhedra. The purpose of this paper is to extend the conversion to unbounded $\mathcal{H}$ and $\mathcal{V}$ polyhedra through the adaption of a pivoting algorithm: the Avis-Fukuda algorithm.
 \end{abstract}
 
 \input{sections/introduction.tex}

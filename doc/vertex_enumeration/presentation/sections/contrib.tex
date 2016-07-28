@@ -1,14 +1,9 @@
 \section{Contribution}
 \subsection{The vertex enumeration for unbounded polyhedra}
 \begin{frame}{Changing coordinates}
-The goal is to use Fukuda's algorithm on unbounded and non positive polyhedra.
+Requirement: put $0$ in the feasible area and ensure the variables are positive.
 
-The first thing to do is changing the coordinates to be able to apply Fukuda:
-\begin{itemize}
-\item find a vertex of the polyhedron;
-\item translate the vertex on $0$;
-\item map the hyperplanes defining the vertex on the vector of the canonic base: the polyhedron is positive with $0$ as a vertex.
-\end{itemize}
+\vspace*{0.5cm}
 
 \begin{block}{Finding a vertex}
 \begin{itemize}
@@ -21,9 +16,8 @@ The first thing to do is changing the coordinates to be able to apply Fukuda:
 \end{frame}
 
 \begin{frame}{Detecting the linealty space}
-Reach the feasible area and push the cobasis to its bounds are always possible. Obtaining a cobasis constituted only by slack variables is not.
 
-The linear subspace included in the polyhedron is detected and constrains are added to be able to continue.
+The linealty space is the biggest affine subspace included in the polyhedron.
 
 \vspace*{0.2cm}
 
@@ -101,10 +95,10 @@ Example with $x-y\leq 1$.\\
 $(0,1)$ and $(1,1)$ are conic directions.}
 \end{column}
 \begin{column}{5cm}
-\only<1>{\includegraphics[scale=1]{images/cone1.eps}}
-\only<2>{\includegraphics[scale=1]{images/cone2.eps}}
-\only<3>{\includegraphics[scale=1]{images/cone3.eps}}
-\only<4>{\includegraphics[scale=1]{images/cone4.eps}}
+\only<1>{\includegraphics[width=4cm]{images/cone1.eps}}
+\only<2>{\includegraphics[width=4cm]{images/cone2.eps}}
+\only<3>{\includegraphics[width=4cm]{images/cone3.eps}}
+\only<4>{\includegraphics[width=4cm]{images/cone4.eps}}
 \end{column}
 \end{columns}
 
@@ -115,7 +109,8 @@ $(0,1)$ and $(1,1)$ are conic directions.}
 In geometry, vertices and half-space are dual notions. The transformation is $a \leftrightarrow a.x \leq 1 $.
 \begin{figure}
 \includegraphics[scale=0.7]{images/dual.eps}
-\caption{Duality between a vertex $(1,1)$ and an half-space $x+y \leq 1$}
+
+Duality between a vertex $(1,1)$ and an half-space $x+y \leq 1$
 \end{figure}
 
 \vspace*{-0.5cm}
@@ -129,9 +124,9 @@ Starting from $P$, finding the vertices of $P^\Delta$ gives the convex hull of $
 
 \begin{frame}{An example of the convex hull algorithm}
 \begin{itemize}
-\visible<2->{\item Compute $P^\Delta$;}
-\visible<3->{\item enumerate the vertices;}
-\visible<4->{\item Compute $P^{\Delta\Delta}$;}
+\visible<2->{\item Compute $P^\Delta$.}
+\visible<3->{\item Enumerate the vertices.}
+\visible<4->{\item Compute $P^{\Delta\Delta}$.}
 \end{itemize}
 
 \begin{figure}
@@ -141,7 +136,8 @@ Starting from $P$, finding the vertices of $P^\Delta$ gives the convex hull of $
 \only<3>{\includegraphics[scale=1]{images/dual3.eps}}
 \only<4>{\includegraphics[scale=1]{images/dual4.eps}}
 \only<5>{\includegraphics[scale=1]{images/dual5.eps}}
-\caption{An example in two dimensions.}
+
+An example in two dimensions.
 \end{figure}
 \end{frame}
 
@@ -153,12 +149,13 @@ Starting from $P$, finding the vertices of $P^\Delta$ gives the convex hull of $
 \end{itemize}
 \begin{figure}
 \includegraphics[scale=1]{images/conehull.eps}
-\caption{An example in two dimensions.}
+
+An example in two dimensions.
 \end{figure}
 \end{frame}
 
 \begin{frame}{The convex hull for polyhedron}
-Any $V$-polyhedron $P=conv(V)+Cone(C)$ can be written as the intersection of a cone and an hyperplane:
+Any $V$-polyhedron $P=conv(V)+cone(C)$ can be written as the intersection of a cone and an hyperplane:
 
 $P=Cone\left(
  \begin{pmatrix}
@@ -170,10 +167,29 @@ $P=Cone\left(
  V 
  \end{pmatrix}\right) \cap \{(1,x)|x\in\mathbb{R}^d\}$
  
- \vspace*{-0.7cm}
+ %\vspace*{-0.7cm}
  
 \begin{figure}
 \includegraphics[scale=1.5]{images/projection.eps}
-\caption{A $V$-polyhedron as an intersection}
+
+A $V$-polyhedron as an intersection.
 \end{figure}
+\end{frame}
+
+\begin{frame}{Complexity result}
+Theoretical complexity of Fukuda's algorithm: $nd(n+d)g$. $g\in \left[1;
+\begin{pmatrix}
+ d\\
+ n 
+ \end{pmatrix}\right]$
+
+Cost of the algorithms:
+\begin{itemize}
+\item detect the linealty: cost of the simplex;
+\item detect the cone: smaller than Fukuda's algorithm ($nd$ per vertex);
+\item switch to the dual: $nd$.
+\end{itemize} 
+
+Faster than the current implementation, even in small dimension.
+
 \end{frame}

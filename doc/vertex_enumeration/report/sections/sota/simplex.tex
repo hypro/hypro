@@ -1,15 +1,14 @@
 \subsection{The simplex algorithm}
 
 \subsubsection{Linear optimization.}
-The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the positive optimal of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constraints $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximizes the objective, which can be seen as a direction, in an area defined by a set of half-spaces (each constraint is the equation of a half-spaces).
+The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the maximum of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constraints $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximizes the objective, which can be seen as a direction, in an area defined by a set of half-spaces (each constraint is the equation of a half-spaces).
 
+The set of the points respecting all the constraints is called the feasible area. To simplify the problem, the origin is assumed to be in the feasible area (equivalently: all the $b_i$ are positive) and the feasible area is assumed to be contained in $(\mathbb{R}_+)^d$. When a point is on a constraint (its coordinates turn the inequality into an equality), the constraint is called \emph{saturated}. 
 
-To simplify the problem, the origin is assumed to be contained in the intersection of all the half-spaces (equivalently: all the $b_i$ are positive). When a point is on a constraint (its coordinates turn the equality into an equality), the constraint is said \emph{saturated}. The set of the points respecting all the constraints is called the feasible area. 
-
-The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables corresponds to a distance from the associated constraint. Note that every variable (slack or not) correspond to a constraint and though to a half-space. Assigning a variable to a negative value means violating the corresponding constraint. In the following, the non-slack variables will be refereed as \emph{original}.
+The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables correspond to a distance from the associated constraint. Note that every variable (slack or not) corresponds to a constraint and thus to a half-space. Assigning a variable to a negative value means violating the corresponding constraint. In the following, the non-slack variables will be refered as \emph{original}.
 
 \subsubsection{The dictionary.}
-By adding to these equalities an other equality corresponding to the cost function, a tableau of coefficients is obtained. This tableau is called a dictionary. So far, every row corresponds to a slack variable plus one for the objective function and every column corresponds to an initial variable, plus one for the constants. In the rest of this report, the coefficient in the row $i$ and column $j$ is named $a_{ij}$.
+By adding to these equalities an other equality corresponding to the cost function, a tableau of coefficients is obtained. This tableau is called a dictionary. So far, every row corresponds to a slack variable plus one for the objective function and every column corresponds to an initial variable, plus one for the constants. In the rest of this report, the entry in the row $i$ and column $j$ is named $a_{ij}$.
 
 
 The dictionary allows to find the value of every variable knowing the value of those associated to the columns. The set of the variables associated to the columns is called the \emph{cobasis}, the set of the variables associated to the row is called the \emph{basis}. Setting all the variables of the cobasis to zero provides a valuation for all the original variables. Such valuation describes a point against $d$ hyperplanes: a vertex of the hyperplane arrangement.% The cobasis is a coordinate system composed by the normal vectors of the hyperplanes associated to the variables in the cobasis, with for origin point the intersection of these hyperplanes.
@@ -17,7 +16,7 @@ In the following, the basis is called $B$, the cobasis $N$, the row correspondin
 
 \subsubsection{The pivot.} 
 The idea of the simplex is to exchange the variables between the basis and the cobasis (and updating in consequence the coefficients of the dictionary) such that when the cobasis is set to zero, the objective function increases and no basic variable is set to a negative value. This operation is called a pivot. From a geometrical point of view this operations consist in keeping $d-1$ constraints saturated and exchanging the remaining one for an other.%, increasing the objective and staying in the feasible area..
-The vertices of the feasible area are explored until a maximum is reached. For a pivot occuring between the variables $r$ and $s$, $a_{rs}$ is refereed as the coefficient corresponding to the pivot. If it equals zero, the pivot is impossible and it means that the variable of the basis is independent from the variable from the cobasis. The most spread rule to select the pivot of a dictionary it Bland's rule, it ensures that the next dictionary describes a point in the feasible area and the termination of the algorithm.
+The vertices of the feasible area are explored until a maximum is reached. For a pivot occuring between the variables $r$ and $s$, $a_{rs}$ is refereed as the coefficient corresponding to the pivot. If it equals zero, the pivot is impossible and it means that the variable of the basis is independent from the variable from the cobasis. The most spread rule to select the pivot of a dictionary is Bland's rule~\cite{bland}, it ensures that the next dictionary describes a point in the feasible area and the termination of the algorithm.
 
 %To maintain the fact that the cobasis expresses the vector of the basis, the following transformations are applied to the dictionary. The coefficients of the new dictionary are primed, the pivot occurs between $r \in B-f$ and $s \in N-f$ and the transformation is for all $(i,j)\in (B-r,N-s)$:
 %$$ a'_{sr}=\frac{1}{a_{rs}}, \hspace{1cm} a'_{ir}=\frac{a_{is}}{a_{rs}}, \hspace{1cm} a'_{sj}=-\frac{a_{rj}}{a_{rs}}, \hspace{1cm} a'_{ij}=a_{ij}-\frac{a_{is}a_{rj}}{a_{rs}}.$$
@@ -41,7 +40,7 @@ This proposition is obtained by induction. At the beginning of the algorithm the
 
 \subsubsection{Alternative forms.}
 \label{section_altsimplex}
-So far, the origin is assumed to be in the feasible area and all the variables were positive. There exist alternative forms of the simplex to handle these two cases.
+So far, the origin is assumed to be in the feasible area and all the variables were positive. There exist alternative forms of the simplex for problems where the above assumption does not hold:
 
 \paragraph{If the origin is not in the feasible area,} the simplex functions in two phases: joining the feasible area, then optimizing. Joining the feasible area is done by an other simplex instance: 
 \vspace*{-0.1cm}
@@ -87,11 +86,11 @@ $-1$ & $2$ & $2$ & $\leftarrow$ & obj \\
 Then $y$ and $s_1$: 
 \begin{tabular}{| c | c || c || c c |}
 \hline
-$x$ & $y$ & const & & \\
+$s_2$ & $s_1$ & const & & \\
 \hline
 \hline	
-$0$ & $-1$ & $2$ & = & $s_1$\\ \hline	
-$-1$ & $-1$ & $4$ & = & $s_2$\\ \hline \hline	
+$0$ & $-1$ & $2$ & = & $y$\\ \hline	
+$-1$ & $-1$ & $4$ & = & $x$\\ \hline \hline	
 $-1$ & $-2$ & $6$ & $\leftarrow$ & obj \\
 \hline	
 \end{tabular}.
