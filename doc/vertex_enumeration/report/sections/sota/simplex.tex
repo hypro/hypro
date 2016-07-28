@@ -1,11 +1,11 @@
 \subsection{The simplex algorithm}
 
 \subsubsection{Linear optimization.}
-The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the maximum of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of inequality constraints $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximizes the objective, which can be seen as a direction, in an area defined by a set of half-spaces (each constraint is the equation of a half-spaces).
+The simplex algorithm is an algorithm that solves \emph{linear optimization problems}. A linear optimization problem is finding the maximum of a linear function (the objective) $(x_i)_{i=1}^n \mapsto \sum_{i=1}^n c_i x_i$  under a set of linear inequality constraints $\sum_{i=1}^n a_i x_i \leq b_i$. Geometrically, such a problem is to find the point which coordinates maximizes the objective, which can be seen as a direction, in an area defined by a set of half-spaces (each constraint is the equation of a half-spaces).
 
 The set of the points respecting all the constraints is called the feasible area. To simplify the problem, the origin is assumed to be in the feasible area (equivalently: all the $b_i$ are positive) and the feasible area is assumed to be contained in $(\mathbb{R}_+)^d$. When a point is on a constraint (its coordinates turn the inequality into an equality), the constraint is called \emph{saturated}. 
 
-The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables correspond to a distance from the associated constraint. Note that every variable (slack or not) corresponds to a constraint and thus to a half-space. Assigning a variable to a negative value means violating the corresponding constraint. In the following, the non-slack variables will be refered as \emph{original}.
+The first step of the algorithm is to turn all the inequalities into equalities by the addition of positive \emph{slack} variables. These variables correspond to a distance from the associated constraint. Note that every variable (slack or not) corresponds to a constraint and thus to a half-space. Assigning a variable to a negative value means violating the corresponding constraint. In the following, the non-slack variables will be referred as \emph{original}.
 
 \subsubsection{The dictionary.}
 By adding to these equalities an other equality corresponding to the cost function, a tableau of coefficients is obtained. This tableau is called a dictionary. So far, every row corresponds to a slack variable plus one for the objective function and every column corresponds to an initial variable, plus one for the constants. In the rest of this report, the entry in the row $i$ and column $j$ is named $a_{ij}$.
@@ -29,7 +29,7 @@ The vertices of the feasible area are explored until a maximum is reached. For a
 
 
 \subsubsection{Some properties.}
-A basic variable is primal feasible if the associated constant is non negative, a cobasic variable is said dual feasible is the associated coefficient in the objective function is non positive. A dictionary is primal (resp. dual) feasible if all the variables is the basis (resp. cobasis) are primal (resp. dual) feasible. A dictionary is optimal if it is both primal and dual feasible. A dictionary is primal feasible if and only if it describes a point inside the feasible area. A dictionary is dual feasible if and only if there is no pivot able to increase the objective.
+A basic variable is primal feasible if the associated constant is non negative, a cobasic variable is said dual feasible if the associated coefficient in the objective function is non positive. A dictionary is primal (resp. dual) feasible if all the variables is the basis (resp. cobasis) are primal (resp. dual) feasible. A dictionary is optimal if it is both primal and dual feasible. A dictionary is primal feasible if and only if it describes a point inside the feasible area. A dictionary is dual feasible if and only if there is no pivot able to increase the objective.
 
 \begin{proposition}
 The normal vectors of the hyperplanes associated to the variables of the cobasis describe an independent family: the cobasis is, in fact, a basis.
@@ -42,7 +42,7 @@ This proposition is obtained by induction. At the beginning of the algorithm the
 \label{section_altsimplex}
 So far, the origin is assumed to be in the feasible area and all the variables were positive. There exist alternative forms of the simplex for problems where the above assumption does not hold:
 
-\paragraph{If the origin is not in the feasible area,} the simplex functions in two phases: joining the feasible area, then optimizing. Joining the feasible area is done by an other simplex instance: 
+\paragraph{If the origin is not in the feasible area,} the simplex works in two phases: joining the feasible area, then optimizing. Joining the feasible area is done by an other simplex instance: 
 \vspace*{-0.1cm}
 \begin{itemize}
 \item the constraints are the complementary half-space of each violated constraints alongside with the non violated one;
@@ -99,7 +99,7 @@ There is no other pivot selected by Bland's rule, note that the final dictionary
 \columnbreak
 
 \figurecol{\includegraphics[width=\columnwidth]{images/simplex12.eps}%
-\figcaption{Geometrical interpretation of the maximization problem. The constraints are in red, the blue arrow corresponds to the objective function, the feasible area is shaded, the purple point is the origin (the point described by the first dictionary).}}
+\figcaption{Geometrical interpretation of the maximization problem. The constraints are in red, the blue arrow corresponds to the gradient of the objective function, the feasible area is shaded, the purple point is the origin (the point described by the first dictionary).}}
 
 \figurecol{\includegraphics[width=\columnwidth]{images/simplex15.eps}%
 \figcaption{The current point after the first pivot is $(2,0)$, and after the second $(4,2)$.}}
