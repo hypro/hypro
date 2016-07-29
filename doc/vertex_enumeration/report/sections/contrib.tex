@@ -1,6 +1,6 @@
 \section{Contribution}
 \label{section_contrib}
-The purpose of this internship was to add two methods in HyPro: one to find the vertices, the cone and the linealty space of an $\mathcal{H}$-polyhedron and one to find the convex hull of a $\mathcal{V}$-polyhedron.\\
-Fukuda's algorithm allows to enumerate the vertices of an $\mathcal{H}$-polytope. The first thing to do was extending it into being able to handle non positive polytopes and then polyhedra. This method implemented, an other one had to be created to convert the convex hull problem such that he former method could handle the other problem.
+The purpose of this internship was to add two methods in HyPro: one to find the vertices, the cone and the linealty space of an $\mathcal{H}$-polyhedron and one to find the convex hull of a $\mathcal{V}$-polyhedron. In literature these problems are referred to as vertex enumeration problem and facet enumeration problem.\\
+Fukuda's algorithm allows to enumerate the vertices of an $\mathcal{H}$-polytope. The first thing to do was extending it into being able to handle non positive polytopes and then polyhedra. This method implemented, an other one had to be created to convert the convex hull problem such that he former method could handle the facet enumeration problem.
 \input{sections/contrib/unboudvertexenum.tex}
 \input{sections/contrib/convexhull.tex}

@@ -1,8 +1,8 @@
 \section{Conclusion}
 \label{section_conclusion}
-The conversion between $\mathcal{V}$ and $\mathcal{H}$ polyhedra is crucial for the flowpipe based analysis using polyhedra, each representation having its own advantages/disadvantages.
+The conversion between $\mathcal{V}$ and $\mathcal{H}$ polyhedra is crucial for the flowpipe based reachability analysis using polyhedra, each representation having its own advantages or disadvantages.
 
-The library developed by the hosting group included two different algorithms for the conversion in the bounded case. The internship the report follows contributed to the library by implementing Fukuda's algorithm for the conversion $\mathcal{H}$ to $\mathcal{V}$ in the bounded case, and by implementing the following method for the unbounded problem.
+The library developed by the hosting group included two different algorithms for the conversion in the bounded case. The report follows an internship that contributed to the library by implementing Fukuda's algorithm for the conversion $\mathcal{H}$ to $\mathcal{V}$ in the bounded case, and by implementing the following method for the unbounded problem.
 
 \paragraph{Unbounded $\mathcal{H}$ to $\mathcal{V}$:} the first thing is to find a vertex of the polyhedron to be able to express it with positive coordinates (for Fukuda's algorithm). Doing so, any affine subspace included in the polyhedron is found. Then Fukuda's algorithm is applied and every vertex is searched for vectors of the cone. The whole cone and the vertices of the polyhedron are found. 
 
