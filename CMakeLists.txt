@@ -46,8 +46,8 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(USE_SMTRAT "Use SMT-RAT for linear solving." ON)
-option(USE_Z3 "Use Z3 for linear solving." OFF)
+option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." ON)
+option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
 
@@ -139,62 +139,34 @@ endif()
 # # # # # # # # # # # # # # # # # # # # # #
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
-find_package(Boost REQUIRED)
+
+load_library(hypro Boost 1.55.0)
+#find_package(Boost REQUIRED)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON) 
 set(Boost_USE_STATIC_RUNTIME    OFF) 
-find_package(Boost 1.55.0 COMPONENTS program_options) 
-if(Boost_FOUND)   
-	include_directories(${Boost_INCLUDE_DIRS})   
-	set(libraries ${libraries} ${Boost_LIBRARIES})
-endif()
-find_package(carl REQUIRED)
-include_directories(${carl_INCLUDE_DIR})
-set(libraries ${libraries} ${carl_LIBRARIES})
-set(INCLUDES ${INCLUDES} ${carl_INCLUDE_DIR})
-if(carl_FOUND)
-    MESSAGE(STATUS "Found carl: ${carl_LIBRARIES}")
-else()
-    MESSAGE(FATAL_ERROR "Could not find carl")
-endif()
+
+load_library(hypro Boost 1.55.0 COMPONENTS program_options)
+load_library(hypro carl 0)
 
 if(USE_PPL)
-	find_package(PPL REQUIRED)
-	include_directories(${PPL_INCLUDES})
-	set(libraries ${libraries} ${PPL_LIBRARIES})
+	load_library(hypro PPL 0)
 endif()
 
-if(USE_SMTRAT)
-find_package(smtrat REQUIRED)
-if(smtrat_FOUND)
-    MESSAGE(STATUS "Found smtrat: ${smtrat_LIBRARIES}")
-endif()
-include_directories(${smtrat_INCLUDE_DIR})
-set(libraries ${libraries} ${smtrat_LIBRARIES})
-set(INCLUDES ${INCLUDES} ${smtrat_INCLUDE_DIR})
+if(HYPRO_USE_SMTRAT)
+load_library(hypro smtrat 0)
 endif()
 
-if(USE_Z3)
-	find_package(z3 REQUIRED)
-	include_directories(${z3_INCLUDE_DIRS})
-		MESSAGE(${z3_LIBRARY})
-	set(libraries ${libraries} ${z3_LIBRARY})
+if(HYPRO_USE_Z3)
+	load_library(hypro z3 0)
 endif()
-
-#find_package(Eigen3 REQUIRED)
-#include_directories(${EIGEN3_INCLUDE_DIR})
-#set(INCLUDES ${INCLUDES} ${EIGEN3_INCLUDE_DIR})
-#set(libraries ${libraries} ${EIGEN3_LIBRARY})
 
 if(NOT FORCE_SHIPPED_RESOURCES)
-find_package(GTest)
-find_package(GLPK)
+load_library(hypro GTest 0)
+load_library(hypro GLPK 0)
 endif()
 
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)
-
-include_directories( ${GLPK_INCLUDE_DIR} )
-set(libraries ${libraries} ${GLPK_LIBRARIES} pthread)
 
 if(LOGGING_HYPRO)
 	include_directories( ${LOG4CPLUS_INCLUDE_DIRS} )
@@ -215,6 +187,8 @@ if(CLANG_TIDY)
 	set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
+
+message("hypro_LIBRARIES_DYNAMIC: " ${hypro_LIBRARIES_DYNAMIC})
 
 include_directories( src/lib )
 add_subdirectory(src)
@@ -260,7 +234,7 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
 set(CONF_INCLUDES ${INCLUDES})
-set(CONF_LINKER_LIBS ${libraries})
+set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
 
 configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}

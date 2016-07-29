@@ -85,6 +85,9 @@ if (NOT PPL_FOUND)
   	SET(PPL_FOUND TRUE)
   endif()
 
+  set(PPL_LIBRARIES ${PPL_PPL_LIBRARY} )
+  set(PPL_INCLUDE_DIRS ${PPL_INCLUDE_DIR} )
+
   #find_package_handle_standard_args (PPL DEFAULT_MSG PPL_LIBRARIES PPL_INCLUDES)
 
   if (PPL_FOUND)
