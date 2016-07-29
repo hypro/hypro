@@ -1,2 +1,17 @@
 
-export_target(DEPENDENT_TARGETS ${carl_LIBRARIES})
+export_target(DEPENDENT_TARGETS carl_SHARED)
+export_target(DEPENDENT_TARGETS GLPK_SHARED)
+#export_target(DEPENDENT_TARGETS EIGEN3)
+#export_target(DEPENDENT_TARGETS GMP_SHARED)
+#export_target(DEPENDENT_TARGETS GMP_STATIC)
+#export_target(DEPENDENT_TARGETS GMPXX_SHARED)
+#export_target(DEPENDENT_TARGETS GMPXX_STATIC GMP_STATIC)
+if (HYPRO_USE_Z3)
+    export_target(DEPENDENT_TARGETS z3_SHARED)
+    export_target(DEPENDENT_TARGETS z3_STATIC)
+endif ()
+if(HYPRO_USE_SMTRAT)
+    export_target(DEPENDENT_TARGETS smtrat_SHARED)
+    export_target(DEPENDENT_TARGETS smtrat_STATIC)
+endif()
+

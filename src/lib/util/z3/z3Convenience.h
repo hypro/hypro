@@ -6,13 +6,10 @@
 
 #pragma once
 #include "../../flags.h"
-
 #ifdef HYPRO_USE_Z3
-#include "z3++.h"
 #include <carl/util/Singleton.h>
 #include <thread>
-
-//#include "z3Context.h"
+#include "z3Context.h"
 
 namespace hypro {
 
@@ -42,7 +39,7 @@ namespace hypro {
 			polynomial = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				z3::expr coeff(c);
-				coeff=c.real_val((carl::convert<Number,mpq_class>(_constraints(i,j))).get_str().c_str());
+				coeff=c.real_val((carl::convert<Number,mpq_class>(_constraints(i,j))));
 
 				//std::cout << "Coefficient is " << coeff << std::endl;
 
@@ -53,7 +50,7 @@ namespace hypro {
 				term=variables[j]*coeff;
 				polynomial = polynomial + term ;
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
 			z3::expr constraint(polynomial <= constant);
 			constraints.push_back(constraint);
 		}
@@ -62,7 +59,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static z3::expr createFormula(const Point<Number>& _point, const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3::context& c ) {
+	static z3::expr createFormula(const Point<Number>& _point, const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c ) {
 		z3::expr formula(c);
 		formula = c.bool_val(true);
 		z3::expr pointConstraint(c);
@@ -76,7 +73,7 @@ namespace hypro {
 
 		for(unsigned d = 0; d < _point.dimension(); ++d) {
 			if(_point.at(d) != carl::constant_zero<Number>::get()){
-				pointConstraint = pointConstraint + c.real_val(carl::convert<Number,mpq_class>(-_point.at(d)).get_str().c_str()) + variables.at(d);
+				pointConstraint = pointConstraint + c.real_val(carl::convert<Number,mpq_class>(-_point.at(d))) + variables.at(d);
 			}
 		}
 
@@ -87,10 +84,10 @@ namespace hypro {
 			constraint = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				if(_constraints(i,j) != carl::constant_zero<Number>::get()){
-					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j)).get_str().c_str()));
+					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j))));
 				}
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
 			constraint = constraint <= constant;
 			formula = formula && constraint;
 		}
@@ -115,7 +112,7 @@ namespace hypro {
 		for(unsigned colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
 			if(_objective(colIndex) != carl::constant_zero<Number>::get()){
 				z3::expr var = variables.at(colIndex);
-				z3::expr coeff = c.real_val(carl::convert<Number,mpq_class>(_objective(colIndex)).get_str().c_str());
+				z3::expr coeff = c.real_val(carl::convert<Number,mpq_class>(_objective(colIndex)));
 				assert(coeff.is_arith());
 				z3::expr tmp = var * coeff;
 				objective = objective + tmp;
@@ -127,10 +124,10 @@ namespace hypro {
 			constraint = c.int_val(0);
 			for(unsigned j = 0; j < _constraints.cols(); ++j){
 				if(_constraints(i,j) != carl::constant_zero<Number>::get()){
-					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j)).get_str().c_str()));
+					constraint = constraint + variables.at(j)*(c.real_val(carl::convert<Number,mpq_class>(_constraints(i,j))));
 				}
 			}
-			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)).get_str().c_str());
+			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
 			constraint = constraint <= constant;
 			formula = formula && constraint;
 		}

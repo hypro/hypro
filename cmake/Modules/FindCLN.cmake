@@ -25,6 +25,9 @@ find_library(CLN_LIBRARY
   HINTS ${CLN_PKGCONF_LIBRARY_DIRS}
 )
 
+set(CLN_LIBRARIES ${CLN_LIBRARY} )
+set(CLN_INCLUDE_DIRS ${CLN_INCLUDE_DIR} )
+
 # Set the include dir variables and the libraries and let libfind_process do the rest.
 # NOTE: Singular variables for this library, plural for libraries this this lib depends on.
 set(CLN_PROCESS_INCLUDES CLN_INCLUDE_DIR CLN_INCLUDE_DIR)

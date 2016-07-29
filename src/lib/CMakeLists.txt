@@ -105,8 +105,8 @@ if(STATICLIB_SWITCH)
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		# we currently do not use public header option, as it doesnt support multi-directory headers
 	)
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
-	target_include_directories(lib_hypro_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries} ${hypro_LIBRARIES_STATIC})
+	target_include_directories(lib_hypro_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
 else()
 	message("-- linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
@@ -120,10 +120,11 @@ else()
 		OUTPUT_NAME hypro
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		# we currently do not use public header option, as it doesnt support multi-directory headers
 	)
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${libraries})
-	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+	message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
+	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
+	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
 endif()
 
 if(STATICLIB_SWITCH)

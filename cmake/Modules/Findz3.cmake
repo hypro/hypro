@@ -16,13 +16,18 @@ find_path(z3_INCLUDE_DIR z3++.h
 find_library(z3_LIBRARY NAMES z3 z3
              HINTS ${PC_LIBz3_LIBDIR} ${PC_LIBz3_LIBRARY_DIRS} )
 
-set(z3_LIBRARIES ${z3_LIBRARY} )
-set(z3_INCLUDE_DIRS ${z3_INCLUDE_DIR} )
-
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set z3_FOUND to TRUE
 # if all listed variables are TRUE
-find_package_handle_standard_args(z3  DEFAULT_MSG
-                                  z3_LIBRARY z3_INCLUDE_DIR)
+find_package_handle_standard_args(z3  FOUND_VAR z3_FOUND
+                                  REQUIRED_VARS z3_LIBRARY z3_INCLUDE_DIR)
+
+set(z3_LIBRARIES ${z3_LIBRARY} )
+set(z3_INCLUDE_DIRS ${z3_INCLUDE_DIR} )
+
+message("FindZ3: LIBRARIES: " ${z3_LIBRARIES})
+message("FindZ3: LIBRARY: " ${z3_LIBRARY})
+message("FindZ3: INCLUDE_DIRS: " ${z3_INCLUDE_DIRS})
+message("FindZ3: INCLUDE_DIR: " ${z3_INCLUDE_DIR})
 
 mark_as_advanced(z3_INCLUDE_DIR z3_LIBRARY )
