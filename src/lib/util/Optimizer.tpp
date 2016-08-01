@@ -119,12 +119,18 @@ namespace hypro {
 		// optimize with objective function
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
-		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
+		std::cout << "Optimizer String: " << z3Optimizer << std::endl;
 
 		// verify and set result
 		if(z3::sat == z3Optimizer.check()) {
 			z3::expr z3res = z3Optimizer.upper(result);
 			assert(z3res.is_arith());
+
+			// check for infinity
+			if(Z3_get_numeral_string(c,z3res) == nullptr) {
+				std::cout << "INFTY !!!" << std::endl;
+			}
+
 			// TODO: Fixme!
 			//std::cout << "Result without string conversion: " << z3res << std::endl;
 			//std::cout << "Result without decimal: " << Z3_get_numeral_string(c,z3res) << std::endl;
@@ -142,6 +148,9 @@ namespace hypro {
 				pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
 			}
 			res.errorCode = SOLUTION::FEAS;
+			std::cout << z3res << std::endl;
+			std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
+			std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
 			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 			res.optimumValue = pointCoordinates;
 		}
@@ -278,7 +287,9 @@ namespace hypro {
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
+#endif
 		return res;
 	}
 

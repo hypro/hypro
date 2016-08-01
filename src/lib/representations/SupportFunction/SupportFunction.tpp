@@ -173,9 +173,18 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices() const {
-        auto tmp = Converter::toHPolytope(*this);
-        return tmp.vertices();
+    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const Location<Number>* loc) const {
+		if(loc != nullptr) {
+			std::vector<vector_t<Number>> additionalDirections;
+			for(unsigned rowIndex = 0; rowIndex < loc->invariant().mat.rows(); ++rowIndex){
+				additionalDirections.push_back(vector_t<Number>(loc->invariant().mat.row(rowIndex)));
+			}
+			auto tmp = Converter::toHPolytope(*this, additionalDirections);
+			return tmp.vertices();
+		} else {
+			auto tmp = Converter::toHPolytope(*this);
+			return tmp.vertices();
+		}
     }
 
     template<typename Number, typename Converter>

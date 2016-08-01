@@ -21,6 +21,9 @@
 
 namespace hypro {
 
+template<typename Number>
+class Location;
+
 template <typename Number, typename Converter>
 class HPolytopeT {
 public:
@@ -168,7 +171,7 @@ public:
 	 * @details Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description.
 	 * @return A vector of points.
 	 */
-	typename std::vector<Point<Number>> vertices() const;
+	typename std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
 
 	/**
 	 * @brief Getter for a number representing the supremum of the polytope.

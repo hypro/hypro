@@ -67,7 +67,12 @@ struct trafoContent {
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}
-				assert(origin.get()->type() != SF_TYPE::LINTRAFO || origin.get()->linearTrafoParameters()->currentExponent >= currentExponent);
+				if((origin.get()->type() != SF_TYPE::LINTRAFO)) {
+					std::cout << "Type of origin is not lintrafo." << std::endl;
+				} else {
+					std::cout << "currentExponent of origin: " << origin.get()->linearTrafoParameters()->currentExponent << ", this current exponent: " << currentExponent << std::endl;
+				}
+				assert(origin.get()->type() != SF_TYPE::LINTRAFO || (origin.get()->linearTrafoParameters()->parameters == this->parameters && origin.get()->linearTrafoParameters()->currentExponent >= currentExponent) );
 			}
 		} while (reduced == true);
 #endif
@@ -209,12 +214,12 @@ class SupportFunctionContent {
 	unsigned depth() const;
 	unsigned operationCount() const;
         
-        /**
-         * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
-         */
-        unsigned multiplicationsPerEvaluation() const;
+	/**
+	 * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
+	 */
+	unsigned multiplicationsPerEvaluation() const;
 
-        void forceLinTransReduction();
+	void forceLinTransReduction();
 
 	Point<Number> supremumPoint() const;
 
@@ -240,53 +245,172 @@ class SupportFunctionContent {
 
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {
-		switch ( rhs->mType ) {
-                    	case SF_TYPE::ELLIPSOID: {
-				lhs << "ELLIPSIOD" << std::endl;
-			} break;
-			case SF_TYPE::INFTY_BALL: {
-				lhs << "INFTY-BALL" << std::endl;
-			} break;
-			case SF_TYPE::TWO_BALL: {
-				lhs << "2-BALL" << std::endl;
-			} break;
-			case SF_TYPE::LINTRAFO: {
-				lhs << "LINTRAFO A^" << rhs->mLinearTrafoParameters->currentExponent << std::endl;
-				lhs << "of" << std::endl;
-				rhs->mLinearTrafoParameters->origin->print();
-			} break;
-			case SF_TYPE::POLY: {
-				lhs << "POLY" << std::endl;
-	            rhs->mPolytope->print();
-			} break;
-			case SF_TYPE::SCALE: {
-				lhs << "SCALE" << std::endl;
-			} break;
-			case SF_TYPE::SUM: {
-				lhs << "SUM" << std::endl;
-				lhs << "of: " << std::endl;
-				rhs->mSummands->rhs->print();
-				lhs << "and" << std::endl;
-				rhs->mSummands->lhs->print();
-			} break;
-			case SF_TYPE::UNION: {
-				lhs << "UNION" << std::endl;
-				lhs << "of " << std::endl;
-				rhs->mUnionParameters->lhs->print();
-				lhs << "and" << std::endl;
-				rhs->mUnionParameters->rhs->print();
-			} break;
-			case SF_TYPE::INTERSECT: {
-				lhs << "INTERSECTION " << std::endl;
-				lhs << "of" << std::endl;
-				rhs->mIntersectionParameters->lhs->print();
-				lhs << "and" << std::endl;
-				rhs->mIntersectionParameters->rhs->print();
-			} break;
-			default:
-				lhs << "NONE" << std::endl;
+		unsigned level = 0;
+		std::cout << "Depth: " << rhs->mDepth << std::endl;
+		while(true){
+			std::string tmp = rhs->printLevel(level, "   ");
+			if(!tmp.empty()) {
+				lhs << rhs->printLevel(level, "   ") << std::endl;
+				++level;
+			} else {
+				break;
+			}
 		}
 		return lhs;
+	}
+
+private:
+	std::vector<SF_TYPE> collectLevelEntries(unsigned level) const {
+		//std::cout << __func__ << ": level: " << level << std::endl;
+		std::vector<SF_TYPE> items;
+		if(level == 0) {
+			items.push_back(this->mType);
+			//std::cout << "items push " << this->mType << std::endl;
+			//std::cout << "items size: " << items.size() << std::endl;
+			return items;
+		}
+
+		// Note that at this point we can omit terminal cases, as the level is larger than the depht of this subtree.
+		switch ( mType ) {
+			case SF_TYPE::LINTRAFO: {
+				//std::cout << "Current: lintrafor" << std::endl;
+				std::vector<SF_TYPE> tmpItems = mLinearTrafoParameters->origin->collectLevelEntries(level-1);
+				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
+				return items;
+			}
+			case SF_TYPE::SCALE: {
+				//std::cout << "Current: scale" << std::endl;
+				std::vector<SF_TYPE> tmpItems = mScaleParameters->origin->collectLevelEntries(level-1);
+				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
+				return items;
+			}
+			case SF_TYPE::SUM: {
+				//std::cout << "Current: sum" << std::endl;
+				std::vector<SF_TYPE> lhsItems = mSummands->lhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> rhsItems = mSummands->rhs->collectLevelEntries(level-1);
+				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
+				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
+				return items;
+			}
+			case SF_TYPE::UNION: {
+				//std::cout << "Current: union" << std::endl;
+				std::vector<SF_TYPE> lhsItems = mUnionParameters->lhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> rhsItems = mUnionParameters->rhs->collectLevelEntries(level-1);
+				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
+				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
+				return items;
+			}
+			case SF_TYPE::INTERSECT: {
+				//std::cout << "Current: intersect" << std::endl;
+				std::vector<SF_TYPE> lhsItems = mIntersectionParameters->lhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> rhsItems = mIntersectionParameters->rhs->collectLevelEntries(level-1);
+				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
+				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
+				return items;
+			}
+			default:
+				return std::vector<SF_TYPE>();
+		}
+	}
+
+	std::string printLevel(unsigned l, std::string separator = "\t") const {
+		//std::cout << "Print level" << std::endl;
+		std::string level;
+		std::vector<SF_TYPE> items = this->collectLevelEntries(l);
+		if(items.empty())
+			return level;
+
+		//std::cout << "With " << items.size() << " entries." << std::endl;
+		std::string unaryLevelTransition 	= "  |  "; // 1
+		std::string binaryLevelTransition 	= "  |  " + separator + "\\    "; // 2
+		std::string emptyLevelTransition 	= "     "; // 0
+		std::vector<unsigned> transitionType;
+
+		for(unsigned index = 0; index < items.size(); ++index) {
+			switch ( items.at(index) ) {
+				case SF_TYPE::BOX: {
+					level += "BOX  " + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::ELLIPSOID: {
+					level += "ELLIP" + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::INFTY_BALL: {
+					level += "IBALL" + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::TWO_BALL: {
+					level += "2BALL" + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::LINTRAFO: {
+					level += "LINTR" + separator;
+					transitionType.push_back(1);
+					break;
+				}
+				case SF_TYPE::POLY: {
+					level += "POLY " + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::SCALE: {
+					level += "SCALE" + separator;
+					transitionType.push_back(1);
+					break;
+				}
+				case SF_TYPE::SUM: {
+					level += "SUM   " + separator + "     " + separator;
+					transitionType.push_back(2);
+					break;
+				}
+				case SF_TYPE::UNION: {
+					level += "UNION" + separator + "     " + separator;
+					transitionType.push_back(2);
+					break;
+				}
+				case SF_TYPE::INTERSECT: {
+					level += "INTSC" + separator + "     " + separator;
+					transitionType.push_back(2);
+					break;
+				}
+				case SF_TYPE::ZONOTOPE: {
+					level += "ZONO " + separator;
+					transitionType.push_back(0);
+					break;
+				}
+				default:
+					level += "NONE " + separator;
+					transitionType.push_back(0);
+			}
+		}
+
+		level += "\n";
+
+		for(unsigned index = 0; index < transitionType.size(); ++index){
+			switch (transitionType.at(index)){
+				case 0: {
+					level += emptyLevelTransition + separator;
+					break;
+				}
+				case 1: {
+					level += unaryLevelTransition + separator;
+					break;
+				}
+				case 2: {
+					level += binaryLevelTransition + separator;
+					break;
+				}
+				default:
+					assert(false);
+			}
+		}
+
+		return level;
 	}
 };
 }  // namespace

@@ -246,7 +246,9 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
-	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+	assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
+#endif
 	assert( l.rows() == mDimension );
 	return res;
 }
@@ -258,7 +260,9 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.push_back(evaluate( _A.row( index ) ));
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
+#endif
 		//assert(this->contains(res.back().optimumValue));
 	}
 	assert(res.size() == std::size_t(_A.rows()));

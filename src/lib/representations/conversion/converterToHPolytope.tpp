@@ -81,7 +81,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const CONV_MODE , unsigned numberOfDirections){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, unsigned numberOfDirections){
     //gets dimension of source object
     unsigned dim = _source.dimension();
 
@@ -90,11 +90,16 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
     assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
     //creates a matrix with one row for each direction and one column for each dimension
-    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
     //fills the matrix with the template directions
     for (unsigned i=0; i<templateDirections.size();++i){
         templateDirectionMatrix.row(i) = templateDirections[i];
+    }
+    std::size_t pos = 0;
+    for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+        ++pos;
     }
 
     //lets the support function evaluate the offset of the halfspaces for each direction
@@ -111,7 +116,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     }
     matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
     vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-    std::size_t pos = boundedConstraints.size()-1;
+    pos = boundedConstraints.size()-1;
     while(!boundedConstraints.empty()){
         constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
         constants(pos) = offsets[boundedConstraints.back()].supportValue;

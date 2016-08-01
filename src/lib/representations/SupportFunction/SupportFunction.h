@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include "../../util/helperFunctions.h"
-#include "SupportFunctionContent.h"
 #include "util.h"
+#include "SupportFunctionContent.h"
+#include "../../util/helperFunctions.h"
+#include "../../datastructures/hybridAutomata/Location.h"
 
 namespace hypro {
 
@@ -41,8 +42,8 @@ class SupportFunctionT {
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?
 	SF_TYPE type() const;
-        unsigned depth() const;
-        unsigned operationCount() const;
+	unsigned depth() const;
+	unsigned operationCount() const;
         
 	// getter for the union types
 	sumContent<Number>* summands() const;
@@ -55,7 +56,7 @@ class SupportFunctionT {
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	void removeRedundancy();
-	std::vector<Point<Number>> vertices() const;
+	std::vector<Point<Number>> vertices(const Location<Number>* loc = nullptr) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;

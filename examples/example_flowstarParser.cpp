@@ -3,6 +3,7 @@
  */
 
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
 //#include <boost/program_options.hpp>
@@ -59,8 +60,16 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	// segments plotting
 	for(const auto& flowpipePair : flowpipes){
 		for(const auto& segment : flowpipePair.second){
-			unsigned tmp = plotter.addObject(segment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+			switch (type) {
+				case hypro::representation_name::support_function:{
+					unsigned tmp = plotter.addObject(segment.vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
+					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					break;
+				}
+				default:
+					unsigned tmp = plotter.addObject(segment.vertices());
+					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+			}
 		}
 	}
 
@@ -72,38 +81,6 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 }
 
 int main(int argc, char** argv) {
-	/*
-	namespace po = boost::program_options;
-	po::options_description desc("Allowed options");
-	desc.add_options()
-			("help", "produce help message")
-			("representation", po::value<int>(), "set representation (1=box, 2=hpoly, 3=supportFunction)")
-			("in", po::value<std::string>(), "specify input file path" )
-			;
-
-	po::variables_map vm;
-	po::store(po::parse_command_line(argc, argv, desc), vm);
-	po::notify(vm);
-
-	if (vm.count("help")) {
-		cout << desc << "\n";
-		return 1;
-	}
-
-	int rep = 0;
-	std::string filename;
-	if (vm.count("representation")) {
-		rep = vm["representation"].as<int>();
-	}
-
-	if( vm.count("in")) {
-		filename = vm["in"].as<std::string>();
-	} else {
-		std::cout << "No input file given, exiting. Try --help to obtain full list of options." << std::endl;
-		exit(0);
-	}
-	*/
-
 	int rep = 0;
 	std::string filename = argv[1];
 	if(argc > 2) {

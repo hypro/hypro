@@ -314,7 +314,7 @@ namespace hypro {
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
 					std::cout << "Next Flowpipe Segment: ";
-				nextSegment.print();
+				std::cout << nextSegment << std::endl;
 				std::cout << "still within Invariant?: ";
 				std::cout << newSegment.first << std::endl;
 #endif
