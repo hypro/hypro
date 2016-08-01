@@ -37,14 +37,14 @@ The second step ($P_H^\Delta \rightarrow P_V^\Delta$) is done by the vertex enum
 
 The third ($P_V^\Delta \rightarrow P_H^{\Delta\Delta}$) does not cause any problem if the origin is not on a facet of $P$ (or a face of other dimension, seen as an intersection of facets): then $P^\Delta$ is bounded and Theorem~\ref{thm_conv_dual} holds.
 
-Otherwise, let $\{x|w.x \leq 0\}$ be a facet of $P$ (since $0$ is the iso-barycenter of $P$, $\{x| -w.x \leq 0\}$ is also a facet). Let $x\in P$, $y\in P^\Delta$ and $\alpha\in\mathbb{R}$, $(y+\alpha w).x=y.x+\alpha(w.x)=y.x$, this means that $lineal(w)$ is a linealty space of $P^\Delta$. $P^\Delta=conv(V')+lineal(L')$ thus $P^{\Delta\Delta}=conv(V')^\Delta \cap L'^\bot$ by the proposition~\ref{prop_lineal_dual}. Which end the convex hull problem for a polytope.
+Otherwise, let $\{x|w\cdot x \leq 0\}$ be a facet of $P$ (since $0$ is the iso-barycenter of $P$, $\{x| -w\cdot x \leq 0\}$ is also a facet). Let $x\in P$, $y\in P^\Delta$ and $\alpha\in\mathbb{R}$, $(y+\alpha w)\cdot x=y\cdot x+\alpha(w\cdot x)=y\cdot x$, this means that $lineal(w)$ is a linealty space of $P^\Delta$. $P^\Delta=conv(V')+lineal(L')$ thus $P^{\Delta\Delta}=conv(V')^\Delta \cap L'^\bot$ by the proposition~\ref{prop_lineal_dual}. Which end the convex hull problem for a polytope.
 
 \begin{proposition}
 For $V$ a set of vertices and $L$ a set of non null vectors $(conv(V)+lineal(L))^\Delta = conv(V')^\Delta \cap L'^\bot$. 
 \label{prop_lineal_dual}
 \end{proposition}
 \begin{proof}
-Let $y\in (conv(V)+lineal(L))^\Delta$, for all $v\in V$, $l \in L$ and $\alpha\in\mathbb{R}$, $y.(v+\alpha l)\leq 1$. The inequality holding for any $\alpha$,  $y.l=0$ and $y.v\leq 1$ and $y\in conv(V')^\Delta \cap L'^\bot$. Conversely, let $y \in conv(V')^\Delta \cap L'^\bot$ which means $y.\alpha l=0$ and $y.v\leq 1$ thus $y.(v+\alpha l)\leq 1$ for all $v\in V$, $l \in L$ and $\alpha\in\mathbb{R}$: $y\in (conv(V)+lineal(L))^\Delta$.
+Let $y\in (conv(V)+lineal(L))^\Delta$, for all $v\in V$, $l \in L$ and $\alpha\in\mathbb{R}$, $y\cdot (v+\alpha l)\leq 1$. The inequality holding for any $\alpha$,  $y\cdot l=0$ and $y\cdot v\leq 1$ and $y\in conv(V')^\Delta \cap L'^\bot$. Conversely, let $y \in conv(V')^\Delta \cap L'^\bot$ which means $y\cdot \alpha l=0$ and $y.v\leq 1$ thus $y\cdot (v+\alpha l)\leq 1$ for all $v\in V$, $l \in L$ and $\alpha\in\mathbb{R}$: $y\in (conv(V)+lineal(L))^\Delta$.
 \end{proof}
 
 \paragraph{Complexity:} taking the dual of a polytope costs $O(n)$ if the object is not totally rewritten, even if rewritten it costs $O(nd)$. Either way, the cost of the convex hull problem is the cost of Fukuda's algorithm.
