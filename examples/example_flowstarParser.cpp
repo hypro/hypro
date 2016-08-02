@@ -59,7 +59,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 	// segments plotting
 	for(const auto& flowpipePair : flowpipes){
+		std::cout << "Plot flowpipe " << flowpipePair.first << std::endl;
+		unsigned cnt = 0;
 		for(const auto& segment : flowpipePair.second){
+			std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
 			switch (type) {
 				case hypro::representation_name::support_function:{
 					unsigned tmp = plotter.addObject(segment.vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
@@ -70,9 +73,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 					unsigned tmp = plotter.addObject(segment.vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
 			}
+			++cnt;
 		}
 	}
-
+	std::cout << "Write to file." << std::endl;
 	plotter.plot2d();
 	plotter.plotGen();
 	//plotter.plotTex();

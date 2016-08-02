@@ -36,5 +36,4 @@ static const unsigned long MAX_DIMENSION_LIMIT = 100;
  */
 static const double EPSILON = 0.000001;
 static const long POS_CONSTANT = 100;
-// define for debugging: triggers console output
 //#define fukuda_DEBUG

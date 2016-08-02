@@ -252,14 +252,6 @@ namespace hypro{
         return res;
     }
 
-    //template<typename Number, typename Converter>
-    //std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset) const {
-    //    if(content->evaluate(normal) <= offset)
-    //        return true;
-//
-//    //    return ( -(content->evaluate(-normal)) <= offset);
-    //}
-
     template<typename Number, typename Converter>
     std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         // std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;

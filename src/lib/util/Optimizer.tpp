@@ -139,16 +139,6 @@ namespace hypro {
 			z3::expr z3res = z3Optimizer.upper(result);
 			assert(z3res.is_arith());
 
-			// check for infinity
-			if(Z3_get_numeral_string(c,z3res) == nullptr) {
-				std::cout << "INFTY !!!" << std::endl;
-			}
-
-			// TODO: Fixme!
-			//std::cout << "Result without string conversion: " << z3res << std::endl;
-			//std::cout << "Result without decimal: " << Z3_get_numeral_string(c,z3res) << std::endl;
-			//std::cout << "Result: " << Z3_get_numeral_decimal_string(c,z3res,1000) << std::endl;
-
 			z3::model m = z3Optimizer.get_model();
 			//std::cout << "Model: " << m << std::endl;
 			assert(m.num_consts() == mConstraintMatrix.cols());
@@ -168,7 +158,7 @@ namespace hypro {
 			std::cout << z3res << std::endl;
 			if (std::string("oo") == sstr.str()) {
 				std::cout << "upper is unbounded!!" << std::endl;
-				res = EvaluationResult<Number>( 1, INFTY );
+				res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
 			}
 			else {
 				std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
@@ -851,7 +841,8 @@ namespace hypro {
 				deleteArrays();
 
 				// TODO: can we directly reset stuff?
-				glp_erase_prob(lp);
+				glp_delete_prob(lp);
+				lp = glp_create_prob();
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
@@ -898,8 +889,6 @@ namespace hypro {
 					ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
-					// TODO:: Assuming ColMajor storage alignment.
-					assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}

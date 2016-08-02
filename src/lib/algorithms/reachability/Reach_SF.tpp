@@ -464,7 +464,8 @@ namespace hypro {
 				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
 				unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
 				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
-				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+				//if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+				if(true){
 					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
 					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 					s.set = newSet;
