@@ -223,26 +223,21 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 
 template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
-	EvaluationResult<Number> result;
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
 		if(l == vector_t<Number>(mConstraints.row(0))){
-			result.supportValue = mConstraintConstants(0);
-			result.errorCode = SOLUTION::FEAS;
 			Number dist = (mConstraintConstants(0) / mConstraints.row(0).sum()) - 1;
-			result.optimumValue = dist*l;
+			return EvaluationResult<Number>(mConstraintConstants(0),dist*l,SOLUTION::FEAS);
 		} else {
-			result.supportValue = 0;
-			result.errorCode = SOLUTION::INFTY;
+			return EvaluationResult<Number>(0,SOLUTION::INFTY);
 		}
-		return result;
 	}
 
 	Optimizer<Number> opt;
 	opt.setMatrix(mConstraints);
 	opt.setVector(mConstraintConstants);
-	EvaluationResult<Number> res = opt.evaluate(l);
+	EvaluationResult<Number> res(opt.evaluate(l));
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
@@ -259,7 +254,7 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	std::vector<EvaluationResult<Number>> res;
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.push_back(evaluate( _A.row( index ) ));
+		res.emplace_back(evaluate( _A.row( index ) ));
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
 #endif

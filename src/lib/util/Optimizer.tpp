@@ -51,19 +51,19 @@ namespace hypro {
 			updateConstraints();
 		}
 		assert( _direction.rows() == mConstraintMatrix.cols() );
-		EvaluationResult<Number> res;
 
 #ifdef DEBUG_MSG
 		std::cout << __func__ << ": in direction " << _direction << std::endl;
 #endif
 
 		if( mConstraintMatrix.rows() == 0 ) {
-			res.supportValue = 0;
-			res.errorCode = SOLUTION::INFTY;
-			res.optimumValue = vector_t<Number>::Zero(1);
 			// std::cout << "INFTY" << std::endl;
-			return res;
+			return EvaluationResult<Number>(0,vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
+
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+		EvaluationResult<Number> res;
+#endif
 
 		// setup glpk
 		for ( unsigned i = 0; i < mConstraintMatrix.cols(); i++ ) {
@@ -77,27 +77,39 @@ namespace hypro {
 		switch ( glp_get_status( lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
-				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
-				res.errorCode = FEAS;
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
 				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
 					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim(lp, i));
 				}
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
+				res.errorCode = FEAS;
 				res.optimumValue = glpkModel;
+#else
+				return EvaluationResult<Number>(carl::rationalize<Number>(glp_get_obj_val( lp )), glpkModel, SOLUTION::FEAS);
+#endif
 				break;
 			}
 			case GLP_UNBND: {
-				res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
 				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
 					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim(lp, i));
 				}
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+				res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 				res.optimumValue = glpkModel;
+#else
+				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
+#endif
 				// std::cout << "glpk INFTY " << std::endl;
 				break;
 			}
 			default:
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+#else
+				return EvaluationResult<Number>(0, vector_t<Number>::Zero(1), SOLUTION::INFEAS);
+#endif
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
@@ -284,13 +296,13 @@ namespace hypro {
 		#endif // RECREATE_SOLVER
 		#endif // HYPRO_USE_SMTRAT
 
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
-#endif
 		return res;
+#endif
 	}
 
 	template<typename Number>
@@ -801,7 +813,6 @@ namespace hypro {
 		if(!mInitialized) {
 			/* create glpk problem */
 			lp = glp_create_prob();
-			glp_set_prob_name( lp, "hpoly" );
 			glp_set_obj_dir( lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
 			#ifdef HYPRO_USE_SMTRAT
@@ -826,12 +837,10 @@ namespace hypro {
 
 			if(alreadyInitialized) { // clean up old setup.
 				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
-				glp_delete_prob(lp);
 				deleteArrays();
 
 				// TODO: can we directly reset stuff?
-				lp = glp_create_prob();
-				glp_set_prob_name( lp, "hpoly" );
+				glp_erase_prob(lp);
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
@@ -864,26 +873,29 @@ namespace hypro {
 				}
 				// add cols here
 				glp_add_cols( lp, mConstraintMatrix.cols() );
-				createArrays( numberOfConstraints * mConstraintMatrix.cols() );
+				unsigned cols = mConstraintMatrix.cols();
+				createArrays( numberOfConstraints * cols );
 
 				// convert constraint matrix
 				ia[0] = 0;
 				ja[0] = 0;
 				ar[0] = 0;
-				for ( unsigned i = 0; i < numberOfConstraints * mConstraintMatrix.cols(); ++i ) {
-					ia[i + 1] = ( int( i / mConstraintMatrix.cols() ) ) + 1;
+				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
+				for ( unsigned i = 0; i < numberOfConstraints * cols; ++i ) {
+					ia[i + 1] = ( int( i / cols ) ) + 1;
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-					ja[i + 1] = ( int( i % mConstraintMatrix.cols() ) ) + 1;
+					ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
-					//ar[i + 1] = double( mHPlanes[ia[i + 1] - 1].normal()( ja[i + 1] - 1 ) );
+					// TODO:: Assuming ColMajor storage alignment.
+					assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}
 
-				glp_load_matrix( lp, numberOfConstraints * mConstraintMatrix.cols(), ia, ja, ar );
+				glp_load_matrix( lp, numberOfConstraints * cols, ia, ja, ar );
 				glp_term_out(GLP_OFF);
-				for ( unsigned i = 0; i < mConstraintMatrix.cols(); ++i ) {
+				for ( unsigned i = 0; i < cols; ++i ) {
 					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
 					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 				}

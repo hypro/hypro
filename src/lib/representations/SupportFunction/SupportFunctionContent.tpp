@@ -302,9 +302,9 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mBall->evaluate( _direction );
 		}
 		case SF_TYPE::LINTRAFO: {
-			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			matrix_t<Number> tmp = parameterPair.first.transpose();
-			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
+			//std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			//matrix_t<Number> tmp = parameterPair.first.transpose();
+			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).first.transpose() * _direction );
 			switch(res.errorCode){
 				case SOLUTION::INFTY:
 				case SOLUTION::INFEAS:{
@@ -312,7 +312,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				}
 				default:{
 					assert(res.errorCode == SOLUTION::FEAS);
-					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
+					res.optimumValue = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).first * res.optimumValue + mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					res.supportValue = res.optimumValue.dot(_direction);
 					return res;
@@ -391,8 +391,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-                    return mEllipsoid->multiEvaluate( _directions );
-                }
+			return mEllipsoid->multiEvaluate( _directions );
+		}
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->multiEvaluate( _directions );
