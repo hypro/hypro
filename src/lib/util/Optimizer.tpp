@@ -1,5 +1,6 @@
 #include "Optimizer.h"
 #include "VariablePool.h"
+#include <sstream>
 
 namespace hypro {
 
@@ -160,11 +161,21 @@ namespace hypro {
 				pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
 			}
 			res.errorCode = SOLUTION::FEAS;
+			// check whether unbounded
+			std::stringstream sstr;
+			sstr << z3res;
+
 			std::cout << z3res << std::endl;
-			std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-			std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
-			res.optimumValue = pointCoordinates;
+			if (std::string("oo") == sstr.str()) {
+				std::cout << "upper is unbounded!!" << std::endl;
+				res = EvaluationResult<Number>( 1, INFTY );
+			}
+			else {
+				std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
+				std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
+				res.supportValue = Number(Z3_get_numeral_string(c,z3res));
+				res.optimumValue = pointCoordinates;
+			}
 		}
 
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
