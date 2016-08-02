@@ -23,3 +23,5 @@ src/resources/glpk-4.54/examples/.deps/glpsol.Po
 src/resources/glpk-4.54/libtool
 src/resources/glpk-4.54/config.log
 src/resources/glpk-4.54/src/.deps/
+
+*.sublime-*

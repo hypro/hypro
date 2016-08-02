@@ -247,7 +247,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
-	assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
+	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
 #endif
 	assert( l.rows() == mDimension );
 	return res;
