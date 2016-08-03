@@ -37,6 +37,10 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 			mPolytope = _orig.polytope();
 			break;
 		}
+		case SF_TYPE::PROJECTION: {
+			mProjectionParameters = _orig.projectionParameters();
+			break;
+		}
 		case SF_TYPE::SCALE: {
 			mScaleParameters = _orig.scaleParameters();
 			break;
@@ -217,6 +221,22 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 	}
 }
 
+template<typename Number>
+SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+	switch ( _type ) {
+		case SF_TYPE::PROJECTION: {
+			mProjectionParameters = new projectionContent<Number>(_origin,dimensions);
+			mType = SF_TYPE::PROJECTION;
+			mDimension = _origin->dimension();
+			mDepth = _origin->depth() + 1;
+			mOperationCount = _origin->operationCount() + 1;
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
 template <typename Number>
 SupportFunctionContent<Number>::~SupportFunctionContent() {
         //std::cout << "Destructor of type " << mType <<  std::endl;
@@ -230,6 +250,9 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 			break;
 		case SF_TYPE::POLY:
 			delete mPolytope;
+			break;
+		case SF_TYPE::PROJECTION:
+			delete mProjectionParameters;
 			break;
 		case SF_TYPE::SCALE:
 			delete mScaleParameters;
@@ -272,6 +295,9 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 		case SF_TYPE::POLY:
 			mPolytope = _other->polytope();
 			break;
+		case SF_TYPE::PROJECTION:
+			mProjectionParameters = _other->projectionParameters();
+			break;
 		case SF_TYPE::SCALE:
 			mScaleParameters = _other->scaleParameters();
 			break;
@@ -292,11 +318,10 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction ) const {
-    
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-                        return mEllipsoid->evaluate( _direction );
-                }
+			return mEllipsoid->evaluate( _direction );
+		}
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->evaluate( _direction );
@@ -321,6 +346,14 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->evaluate( _direction );
+		}
+		case SF_TYPE::PROJECTION: {
+			vector_t<Number> tmp = vector_t<Number>::Zero(mDimension);
+			for(const auto& entry : mProjectionParameters->dimensions) {
+				if(entry < mDimension)
+					tmp(entry) = _direction(entry);
+			}
+			return mProjectionParameters->origin->evaluate(tmp);
 		}
 		case SF_TYPE::SCALE: {
 			EvaluationResult<Number> res = mScaleParameters->origin->evaluate( _direction );
@@ -415,6 +448,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->multiEvaluate( _directions );
+		}
+		case SF_TYPE::PROJECTION: {
+			matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
+			for(const auto& entry : mProjectionParameters->dimensions) {
+				if(entry < mDimension)
+					tmp.col(entry) = _directions.col(entry);
+			}
+			return mProjectionParameters->origin->multiEvaluate(tmp);
 		}
 		case SF_TYPE::SCALE: {
 			std::vector<EvaluationResult<Number>> res = mScaleParameters->origin->multiEvaluate( _directions );
@@ -625,11 +666,18 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
 			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
 			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
-        case SF_TYPE::SCALE: {
+		case SF_TYPE::PROJECTION: {
+			mProjectionParameters->origin.get()->forceLinTransReduction();
+			mDepth = mProjectionParameters->origin.get()->depth() + 1;
+			mOperationCount = mProjectionParameters->origin.get()->operationCount() +1;
+			break;
+		}
+		case SF_TYPE::SCALE: {
             mScaleParameters->origin.get()->forceLinTransReduction();
 			mDepth = mScaleParameters->origin.get()->depth() + 1;
 			mOperationCount = mScaleParameters->origin.get()->operationCount() +1;
         }   break;
+
         default:
             break;
     }
@@ -653,6 +701,16 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->supremumPoint();
+		}
+		case SF_TYPE::PROJECTION: {
+			Point<Number> tmpRes = mProjectionParameters->origin->supremumPoint();
+			vector_t<Number> tmp = vector_t<Number>::Zero(mDimension);
+			for(const auto& entry : mProjectionParameters->dimensions){
+				if(entry < mDimension) {
+					tmp(entry) = tmpRes.at(entry);
+				}
+			}
+			return Point<Number>(tmp);
 		}
 		case SF_TYPE::SCALE: {
 			if ( mScaleParameters->factor == 0 ) {
@@ -710,6 +768,99 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 	}
 }
 
+template<typename Number>
+std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
+	switch ( mType ) {
+		case SF_TYPE::INFTY_BALL:
+		case SF_TYPE::TWO_BALL:
+		case SF_TYPE::POLY:
+		case SF_TYPE::ELLIPSOID: {
+			std::list<unsigned> res;
+			for(unsigned i = 0; i < mDimension; ++i)
+				res.emplace_back(i);
+
+			return res;
+		}
+		case SF_TYPE::LINTRAFO: {
+			return mLinearTrafoParameters->origin->collectProjections();
+		}
+		case SF_TYPE::PROJECTION: {
+			std::list<unsigned> res = mProjectionParameters->origin->collectProjections();
+			for(auto resIt = res.begin(); resIt != res.end(); ){
+				if(std::find(mProjectionParameters->dimensions.begin(), mProjectionParameters->dimensions.end(), *resIt) == mProjectionParameters->dimensions.end()) {
+					resIt = res.erase(resIt);
+				} else {
+					++resIt;
+				}
+			}
+			return res;
+		}
+		case SF_TYPE::SCALE: {
+			return mScaleParameters->origin->collectProjections();
+		}
+		case SF_TYPE::SUM: {
+			std::list<unsigned> lhsProjections = mSummands->lhs->collectProjections();
+			std::list<unsigned> rhsProjections = mSummands->rhs->collectProjections();
+			std::list<unsigned> res;
+			while(!lhsProjections.empty() && !rhsProjections.empty()){
+				if(lhsProjections.front() == rhsProjections.front()){
+					res.emplace_back(lhsProjections.front());
+					lhsProjections.pop_front();
+					rhsProjections.pop_front();
+				} else {
+					if(lhsProjections.front() < rhsProjections.front()){
+						lhsProjections.pop_front();
+					} else {
+						rhsProjections.pop_front();
+					}
+				}
+			}
+			return res;
+		}
+		case SF_TYPE::UNION: {
+			std::list<unsigned> lhsProjections = mUnionParameters->lhs->collectProjections();
+			std::list<unsigned> rhsProjections = mUnionParameters->rhs->collectProjections();
+			std::list<unsigned> res;
+			while(!lhsProjections.empty() && !rhsProjections.empty()){
+				if(lhsProjections.front() == rhsProjections.front()){
+					res.emplace_back(lhsProjections.front());
+					lhsProjections.pop_front();
+					rhsProjections.pop_front();
+				} else {
+					if(lhsProjections.front() < rhsProjections.front()){
+						lhsProjections.pop_front();
+					} else {
+						rhsProjections.pop_front();
+					}
+				}
+			}
+			return res;
+		}
+		case SF_TYPE::INTERSECT: {
+			std::list<unsigned> lhsProjections = mIntersectionParameters->lhs->collectProjections();
+			std::list<unsigned> rhsProjections = mIntersectionParameters->rhs->collectProjections();
+			std::list<unsigned> res;
+			while(!lhsProjections.empty() && !rhsProjections.empty()){
+				if(lhsProjections.front() == rhsProjections.front()){
+					res.emplace_back(lhsProjections.front());
+					lhsProjections.pop_front();
+					rhsProjections.pop_front();
+				} else {
+					if(lhsProjections.front() < rhsProjections.front()){
+						lhsProjections.pop_front();
+					} else {
+						rhsProjections.pop_front();
+					}
+				}
+			}
+			return res;
+		}
+		default:
+			assert(false);
+			return std::list<unsigned>();
+	}
+}
+
 template <typename Number>
 sumContent<Number> *SupportFunctionContent<Number>::summands() const {
 	assert( mType == SF_TYPE::SUM);
@@ -740,6 +891,12 @@ intersectionContent<Number> *SupportFunctionContent<Number>::intersectionParamet
 	return mIntersectionParameters;
 }
 
+template<typename Number>
+projectionContent<Number>* SupportFunctionContent<Number>::projectionParameters() const {
+	assert( mType == SF_TYPE::PROJECTION );
+	return mProjectionParameters;
+}
+
 template <typename Number>
 PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() const {
 	assert( mType == SF_TYPE::POLY );
@@ -756,6 +913,14 @@ template <typename Number>
 BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 	assert( mType == SF_TYPE::INFTY_BALL || mType == SF_TYPE::TWO_BALL);
 	return mBall;
+}
+
+template<typename Number>
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<unsigned>& dimensions) const {
+	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
+			std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), dimensions, SF_TYPE::PROJECTION ) );
+	obj->pThis = obj;
+	return obj;
 }
 
 template <typename Number>
@@ -806,6 +971,9 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->contains( _point );
+		}
+		case SF_TYPE::PROJECTION: {
+			return mProjectionParameters->origin->contains( _point ); // TODO: Correct?
 		}
 		case SF_TYPE::SCALE: {
 			if ( mScaleParameters->factor == 0 )
@@ -863,6 +1031,12 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::POLY: {
 			return mPolytope->empty();
 		}
+		case SF_TYPE::PROJECTION: {
+			if(mProjectionParameters->dimensions.empty()){
+				return true;
+			}
+			return mProjectionParameters->origin->empty();
+		}
 		case SF_TYPE::SCALE: {
 			if ( mScaleParameters->factor == 0 )
 				return true;
@@ -914,6 +1088,9 @@ void SupportFunctionContent<Number>::print() const {
 		case SF_TYPE::POLY: {
 			std::cout << "POLY" << std::endl;
                         mPolytope->print();
+		} break;
+		case SF_TYPE::PROJECTION: {
+			std::cout << "PROJECTION" << std::endl;
 		} break;
 		case SF_TYPE::SCALE: {
 			std::cout << "SCALE" << std::endl;

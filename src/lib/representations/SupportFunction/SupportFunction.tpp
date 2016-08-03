@@ -174,16 +174,91 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const Location<Number>* loc) const {
+		std::vector<vector_t<Number>> additionalDirections;
 		if(loc != nullptr) {
-			std::vector<vector_t<Number>> additionalDirections;
 			for(unsigned rowIndex = 0; rowIndex < loc->invariant().mat.rows(); ++rowIndex){
 				additionalDirections.push_back(vector_t<Number>(loc->invariant().mat.row(rowIndex)));
 			}
+		}
+		std::list<unsigned> projections = collectProjections();
+		if( projections.size() == this->dimension() ){
+			std::cout << "Full vertices" << std::endl;
 			auto tmp = Converter::toHPolytope(*this, additionalDirections);
 			return tmp.vertices();
 		} else {
-			auto tmp = Converter::toHPolytope(*this);
-			return tmp.vertices();
+			std::cout << "Projection" << std::endl;
+			std::list<unsigned> zeroDimensions;
+			for(unsigned i = 0; i < this->dimension(); ++i) {
+				if(std::find(projections.begin(), projections.end(), i) == projections.end()){
+					std::cout << "Dimension " << i << " is zero." << std::endl;
+					zeroDimensions.emplace_back(i);
+				}
+			}
+			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, 8, this->dimension()); // TODO: ATTENTION, 8 is hardcoded here.
+			matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , this->dimension());
+
+			//fills the matrix with the template directions
+			for (unsigned i=0; i<templateDirections.size();++i){
+				templateDirectionMatrix.row(i) = templateDirections[i];
+			}
+			std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+			unsigned pos = 0;
+			for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+				templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+				++pos;
+			}
+			std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+
+
+			std::vector<EvaluationResult<Number>> offsets = content->multiEvaluate(templateDirectionMatrix);
+			assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
+
+			std::cout << "Multi-Eval done, add zero constraints" << std::endl;
+
+			std::vector<unsigned> boundedConstraints;
+			for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+				if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+					boundedConstraints.push_back(offsetIndex);
+				}
+			}
+			matrix_t<Number> constraints = matrix_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size(), this->dimension());
+			vector_t<Number> constants = vector_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size());
+			pos = boundedConstraints.size()-1;
+			unsigned zeroDimensionPos = boundedConstraints.size();
+			while(!boundedConstraints.empty()){
+				constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+				constants(pos) = offsets[boundedConstraints.back()].supportValue;
+				boundedConstraints.pop_back();
+				--pos;
+			}
+
+			std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
+
+			// add zero dimension constraints
+			while(!zeroDimensions.empty()) {
+				std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
+				vector_t<Number> zDimConstraint = vector_t<Number>::Zero(this->dimension());
+				zDimConstraint(zeroDimensions.front()) = 1;
+				constraints.row(zeroDimensionPos) = zDimConstraint;
+				constants(zeroDimensionPos) = 0;
+				std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+
+				++zeroDimensionPos;
+
+				zDimConstraint(zeroDimensions.front()) = -1;
+				constraints.row(zeroDimensionPos) = zDimConstraint;
+				constants(zeroDimensionPos) = 0;
+				std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+
+				zeroDimensions.pop_front();
+				++zeroDimensionPos;
+			}
+
+			std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
+
+			VertexEnumeration<Number> ve(constraints, constants);
+			ve.enumerateVertices();
+			return ve.getPoints();
 		}
     }
 
@@ -192,6 +267,12 @@ namespace hypro{
 		Point<Number> supPoint = content->supremumPoint();
         return Point<Number>::inftyNorm(supPoint);
     }
+
+	template<typename Number, typename Converter>
+	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+		SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
+		return res;
+	}
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const {
@@ -322,5 +403,10 @@ namespace hypro{
     void SupportFunctionT<Number,Converter>::forceLinTransReduction(){
         content->forceLinTransReduction();
     }
+
+	template<typename Number, typename Converter>
+	std::list<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
+		return content->collectProjections();
+	}
 
 } //namespace

@@ -67,11 +67,13 @@ struct trafoContent {
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}
+				/*
 				if((origin.get()->type() != SF_TYPE::LINTRAFO)) {
 					std::cout << "Type of origin is not lintrafo." << std::endl;
 				} else {
 					std::cout << "currentExponent of origin: " << origin.get()->linearTrafoParameters()->currentExponent << ", this current exponent: " << currentExponent << std::endl;
 				}
+				*/
 				assert(origin.get()->type() != SF_TYPE::LINTRAFO || (origin.get()->linearTrafoParameters()->parameters == this->parameters && origin.get()->linearTrafoParameters()->currentExponent >= currentExponent) );
 			}
 		} while (reduced == true);
@@ -124,6 +126,15 @@ struct intersectionContent {
 	intersectionContent( const intersectionContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
 };
 
+template<typename Number>
+struct projectionContent {
+	std::shared_ptr<SupportFunctionContent<Number>> origin;
+	std::vector<unsigned> dimensions;
+	projectionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& _dimensions )
+		: origin(_origin), dimensions(_dimensions) {}
+	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
+};
+
 /*
 * This is the super class for all support function objects.
 */
@@ -140,6 +151,7 @@ class SupportFunctionContent {
 		scaleContent<Number>* mScaleParameters;
 		unionContent<Number>* mUnionParameters;
 		intersectionContent<Number>* mIntersectionParameters;
+		projectionContent<Number>* mProjectionParameters;
 		PolytopeSupportFunction<Number>* mPolytope;
 		BallSupportFunction<Number>* mBall;
 		EllipsoidSupportFunction<Number>* mEllipsoid;
@@ -158,17 +170,18 @@ class SupportFunctionContent {
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters, SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
+	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
 
   public:
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
 
-	static  std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, _type ) );
 		obj->pThis = obj;
 		return obj;
 	}	
         
-	static  std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ) );
 		obj->pThis = obj;
 		return obj;
@@ -223,24 +236,28 @@ class SupportFunctionContent {
 
 	Point<Number> supremumPoint() const;
 
+	std::list<unsigned> collectProjections() const;
+
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;
 	trafoContent<Number>* linearTrafoParameters() const;
 	unionContent<Number>* unionParameters() const;
 	intersectionContent<Number>* intersectionParameters() const;
+	projectionContent<Number>* projectionParameters() const;
 	PolytopeSupportFunction<Number>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
+	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<unsigned>& dimensions) const;
 	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> intersect( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> unite( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
-
 	std::shared_ptr<SupportFunctionContent<Number>> scale( const Number& _factor = 1 ) const;
+
 	bool empty() const;
 
 	void print() const;

@@ -13,30 +13,32 @@
 #include "SupportFunctionContent.h"
 #include "../../util/helperFunctions.h"
 #include "../../datastructures/hybridAutomata/Location.h"
+#include "../../algorithms/convexHull/vertexEnumeration.h"
+#include <list>
 
 namespace hypro {
 
 template <typename Number, typename Converter>
 class SupportFunctionT {
-    private:
-           std::shared_ptr<SupportFunctionContent<Number>> content;
-           SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
+private:
+	std::shared_ptr<SupportFunctionContent<Number>> content;
+	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
 
-    public:
-        SupportFunctionT ();
-        SupportFunctionT (const SupportFunctionT<Number,Converter>& _orig);
-        SupportFunctionT (SF_TYPE _type, Number _radius );
-        SupportFunctionT (const std::vector<Point<Number>>& _vertices);
-        SupportFunctionT (const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
-        SupportFunctionT (const std::vector<Halfspace<Number>>& _planes);
-        SupportFunctionT (SupportFunctionT<Number,Converter>&& other);
-        SupportFunctionT (const matrix_t<Number>& _shapeMatrix);
+public:
+	SupportFunctionT ();
+	SupportFunctionT (const SupportFunctionT<Number,Converter>& _orig);
+	SupportFunctionT (SF_TYPE _type, Number _radius );
+	SupportFunctionT (const std::vector<Point<Number>>& _vertices);
+	SupportFunctionT (const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
+	SupportFunctionT (const std::vector<Halfspace<Number>>& _planes);
+	SupportFunctionT (SupportFunctionT<Number,Converter>&& other);
+	SupportFunctionT (const matrix_t<Number>& _shapeMatrix);
 
-        virtual ~SupportFunctionT();
+	virtual ~SupportFunctionT();
 
-        SupportFunctionT<Number,Converter>& operator=(SupportFunctionT<Number,Converter> _orig );
+	SupportFunctionT<Number,Converter>& operator=(SupportFunctionT<Number,Converter> _orig );
 
-        EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
 
 	std::size_t dimension() const;
@@ -58,6 +60,7 @@ class SupportFunctionT {
 	void removeRedundancy();
 	std::vector<Point<Number>> vertices(const Location<Number>* loc = nullptr) const;
 	Number supremum() const;
+	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
 	SupportFunctionT<Number,Converter> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
@@ -89,6 +92,9 @@ class SupportFunctionT {
     	lhs << rhs.content << std::endl;
     	return lhs;
 	}
+
+private:
+	std::list<unsigned> collectProjections() const;
 };
 
 } //namespace
