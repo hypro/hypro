@@ -53,6 +53,8 @@ class VertexEnumeration {
 		/**
 		 * @brief mHsv:=hsv
 		 */
+
+		VertexEnumeration(const matrix_t<Number>& constraints, const vector_t<Number>& constants);
 		 
 		void enumerateVertices(Dictionary<Number>& dictionary);
 		/**

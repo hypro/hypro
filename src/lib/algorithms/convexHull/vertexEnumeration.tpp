@@ -11,6 +11,14 @@ namespace hypro {
 	VertexEnumeration<Number>::VertexEnumeration(const std::vector<Halfspace<Number>>& hsv) {
 		mHsv=hsv;
 	}
+
+	template<typename Number>
+	VertexEnumeration<Number>::VertexEnumeration(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+		assert(constraints.rows() == constants.rows());
+		for(unsigned i = 0; i < constraints.rows(); ++i) {
+			mHsv.emplace_back(Halfspace<Number>(constraints.row(i), constants(i)));
+		}
+	}
 	
 	template<typename Number>
 	std::vector<Halfspace<Number>> VertexEnumeration<Number>::getHsv() const {return mHsv;}
