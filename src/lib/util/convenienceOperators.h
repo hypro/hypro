@@ -37,6 +37,18 @@ namespace hypro {
 	}
 
 	template<typename T>
+	std::ostream& operator <<(std::ostream& _out, const std::vector<T>& _vector) {
+		if(!_vector.empty()) {
+			_out << *_vector.begin();
+			for(auto vectorIt = ++_vector.begin(); vectorIt != _vector.end(); ++vectorIt){
+				_out << ", " << *vectorIt;
+			}
+		}
+
+		return _out;
+	}
+
+	template<typename T>
 	std::ostream& operator <<(std::ostream& _out, const std::pair<T,T>& _pair) {
 		_out << _pair.first << ", " << _pair.second;
 
