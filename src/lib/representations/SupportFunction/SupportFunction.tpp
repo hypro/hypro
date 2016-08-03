@@ -182,15 +182,15 @@ namespace hypro{
 		}
 		std::list<unsigned> projections = collectProjections();
 		if( projections.size() == this->dimension() ){
-			std::cout << "Full vertices" << std::endl;
+			//std::cout << "Full vertices" << std::endl;
 			auto tmp = Converter::toHPolytope(*this, additionalDirections);
 			return tmp.vertices();
 		} else {
-			std::cout << "Projection" << std::endl;
+			//std::cout << "Projection" << std::endl;
 			std::list<unsigned> zeroDimensions;
 			for(unsigned i = 0; i < this->dimension(); ++i) {
 				if(std::find(projections.begin(), projections.end(), i) == projections.end()){
-					std::cout << "Dimension " << i << " is zero." << std::endl;
+					//std::cout << "Dimension " << i << " is zero." << std::endl;
 					zeroDimensions.emplace_back(i);
 				}
 			}
@@ -201,19 +201,19 @@ namespace hypro{
 			for (unsigned i=0; i<templateDirections.size();++i){
 				templateDirectionMatrix.row(i) = templateDirections[i];
 			}
-			std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+			//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 			unsigned pos = 0;
 			for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
 				templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 				++pos;
 			}
-			std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+			//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 
 
 			std::vector<EvaluationResult<Number>> offsets = content->multiEvaluate(templateDirectionMatrix);
 			assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
 
-			std::cout << "Multi-Eval done, add zero constraints" << std::endl;
+			//std::cout << "Multi-Eval done, add zero constraints" << std::endl;
 
 			std::vector<unsigned> boundedConstraints;
 			for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
@@ -232,29 +232,29 @@ namespace hypro{
 				--pos;
 			}
 
-			std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
+			//std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
 
 			// add zero dimension constraints
 			while(!zeroDimensions.empty()) {
-				std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
+				//std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
 				vector_t<Number> zDimConstraint = vector_t<Number>::Zero(this->dimension());
 				zDimConstraint(zeroDimensions.front()) = 1;
 				constraints.row(zeroDimensionPos) = zDimConstraint;
 				constants(zeroDimensionPos) = 0;
-				std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+				//std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
 
 				++zeroDimensionPos;
 
 				zDimConstraint(zeroDimensions.front()) = -1;
 				constraints.row(zeroDimensionPos) = zDimConstraint;
 				constants(zeroDimensionPos) = 0;
-				std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+				//std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
 
 				zeroDimensions.pop_front();
 				++zeroDimensionPos;
 			}
 
-			std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
+			//std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
 
 			VertexEnumeration<Number> ve(constraints, constants);
 			ve.enumerateVertices();

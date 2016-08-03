@@ -170,41 +170,41 @@ static std::vector<vector_t<Number>> computeTemplate(std::list<unsigned> dimensi
 		}
 	}
 
-	std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
+	//std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
 
 	//copy directions2d into directions
 	Permutator permutator(dimensions.size(), 2);
 	std::vector<unsigned> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();
-		std::cout << "Progress permutation " << permutation << std::endl;
+		//std::cout << "Progress permutation " << permutation << std::endl;
 		for(vector_t<Number> vectorOfdirections2d: directions2d) {
 			vector_t<Number> templateVector = vector_t<Number>::Zero(dim); // init templateVector
-			std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
+			//std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
 
 			auto pos = dimensions.begin();
 			unsigned permPos = permutation.at(0);
-			std::cout << "PermPos = " << permPos << std::endl;
+			//std::cout << "PermPos = " << permPos << std::endl;
 			while(permPos > 0 ){
 				++pos;
 				--permPos;
 			}
-			std::cout << "Real pos: " << *pos << std::endl;
+			//std::cout << "Real pos: " << *pos << std::endl;
 
 			templateVector(*pos) = vectorOfdirections2d(0);
 
 			pos = dimensions.begin();
 			permPos = permutation.at(1);
-			std::cout << "PermPos = " << permPos << std::endl;
+			//std::cout << "PermPos = " << permPos << std::endl;
 			while(permPos > 0 ){
 				++pos;
 				--permPos;
 			}
-			std::cout << "Real pos: " << *pos << std::endl;
+			//std::cout << "Real pos: " << *pos << std::endl;
 
 			templateVector(*pos) = vectorOfdirections2d(1);
 
-			std::cout << "New template vector: " << templateVector << std::endl;
+			//std::cout << "New template vector: " << templateVector << std::endl;
 
 			if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
 				directions.push_back(templateVector);
