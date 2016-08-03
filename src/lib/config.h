@@ -2,7 +2,6 @@
 
 #include "flags.h"
 #include "util/convenienceOperators.h"
-#include <carl/io/streamingOperators.h>
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
@@ -14,9 +13,6 @@ extern "C" {
 }
 #endif
 #endif
-
-// needed for vector outstream operator:
-using carl::operator<<;
 
 // Do we eliminate dimensions according to a dynamic heuristic.
 #define DYNAMICHEURISTIC 0

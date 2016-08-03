@@ -3,7 +3,6 @@
 #include "../../lib/representations/conversion/Converter.h"
 
 using namespace hypro;
-using namespace carl;
 
 template<typename Number>
 class HPolytopeTest : public ::testing::Test

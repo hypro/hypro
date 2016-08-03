@@ -27,7 +27,7 @@ CLANG_WARNING_DISABLE("-Wdeprecated-register")
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation

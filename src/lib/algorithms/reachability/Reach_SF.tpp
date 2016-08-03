@@ -170,8 +170,7 @@ namespace hypro {
 				}
 				flowpipe.push_back( currentSegment );
 
-				//unsigned tmp = plotter.addObject(currentSegment.vertices());
-				//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+				std::cout << "Current Set: " << std::endl << Converter<Number>::toHPolytope(currentSegment) << std::endl;
 
 				// Check for bad states intersection. The first segment is validated against the invariant, already.
 				if(intersectBadStates(_state, currentSegment)){
@@ -378,6 +377,9 @@ namespace hypro {
 						}
 						// update currentSegment
 						currentSegment = newSegment.second;
+
+						std::cout << "Current Set: " << std::endl << Converter<Number>::toHPolytope(currentSegment) << std::endl;
+
 					} else {
 						// the flowpipe does not longer satisfy the invariant -> quit loop
 						break;
@@ -387,10 +389,10 @@ namespace hypro {
 				std::cout << std::endl;
 #ifdef REACH_DEBUG
 				if(!noFlow){
-				std::cout << "--- Loop left ---" << std::endl;
-			}
-			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
-			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
+					std::cout << "--- Loop left ---" << std::endl;
+				}
+				std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
+				std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
 #endif
 				// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 				processDiscreteBehaviour(nextInitialSets);
@@ -446,10 +448,10 @@ namespace hypro {
 				for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
 					assert(!stateIt->timestamp.isUnbounded());
 					aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->timestamp);
-					//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
-					//std::vector<Point<Number>> tmpVertices = boost::get<SupportFunction<Number>>(stateIt->set).vertices();
-					//collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
 					SupportFunction<Number> tmp = boost::get<SupportFunction<Number>>(stateIt->set);
+
+					std::cout << "United hpoly: " << Converter<Number>::toHPolytope(tmp) << std::endl;
+
 					collectedSets = collectedSets.unite(tmp);
 				}
 
@@ -457,8 +459,6 @@ namespace hypro {
 				s.location = aggregationPair.first->target();
 				//s.set = SupportFunction<Number>(collectedVertices);
 
-				// reduce new initial sets.
-				collectedSets.removeRedundancy();
 				Number temp =mSettings.timeBound/mSettings.timeStep;
 				unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
 				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
@@ -466,7 +466,9 @@ namespace hypro {
 				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
 				//if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 				if(true){
+					std::cout << "conversion to hpoly." << std::endl;
 					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
+					std::cout << "conversion to hpoly done." << std::endl;
 					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 					s.set = newSet;
 				} else {
@@ -607,6 +609,9 @@ namespace hypro {
 				//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(_trans->reset().mat, _trans->reset().vec);
 				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( parameters );
+
+				std::cout << "Set after reset function: " << std::endl << Converter<Number>::toHPolytope(tmp) << std::endl;
+
 				std::pair<bool, SupportFunction<Number>> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 				if(invariantSatisfyingSet.first){
 					result.set = invariantSatisfyingSet.second;

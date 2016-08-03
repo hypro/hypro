@@ -102,14 +102,15 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
         ++pos;
     }
 
+    std::cout << "Template direction matrix: " << std::endl << templateDirectionMatrix << std::endl;
+
     //lets the support function evaluate the offset of the halfspaces for each direction
     std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    //std::vector<EvaluationResult<Number>> offsets;
-    //for(unsigned i = 0; i < templateDirectionMatrix.rows(); ++i)
-    //	offsets.push_back(_source.evaluate(templateDirectionMatrix.row(i)));
     assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
+
     std::vector<std::size_t> boundedConstraints;
     for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+		std::cout << "Result: " << offsets[offsetIndex] << std::endl;
         if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
             boundedConstraints.push_back(offsetIndex);
         }
@@ -123,6 +124,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
         boundedConstraints.pop_back();
         --pos;
     }
+
+    std::cout << "Constraints: " << std::endl << constraints << std::endl << "constants:" << std::endl << constants << std::endl;
 
     //constructs a H-Polytope out of the computed halfspaces
     return HPolytope(constraints, constants);

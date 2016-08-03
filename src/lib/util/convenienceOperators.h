@@ -1,10 +1,11 @@
+#pragma once
+
+#include "../types.h"
 #include <iostream>
 #include <map>
 #include <set>
 #include <utility>
 #include <vector>
-
-#pragma once
 
 namespace hypro {
 
