@@ -310,6 +310,7 @@ namespace hypro {
 					//std::cout << "Current depth " << nextSegment.depth() << std::endl;
 					//std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
+					std::cout << "Test invariant for new segment." << std::endl;
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
 					std::cout << "Next Flowpipe Segment: ";
@@ -599,19 +600,23 @@ namespace hypro {
 			}
 
 			// check for continuous set guard intersection
+			std::cout << "Test guard." << std::endl;
 			std::pair<bool, SupportFunction<Number>> guardSatisfyingSet = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
+
+			std::cout << "Guard satisfying set: " << std::endl << Converter<Number>::toHPolytope(guardSatisfyingSet.second) << std::endl;
+
 			// check if the intersection is empty
 			if ( guardSatisfyingSet.first ) {
 #ifdef REACH_DEBUG
 				std::cout << "Transition enabled!" << std::endl;
 #endif
 				// apply reset function to guard-satisfying set.
-				//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
+				std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(_trans->reset().mat, _trans->reset().vec);
 				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( parameters );
 
 				std::cout << "Set after reset function: " << std::endl << Converter<Number>::toHPolytope(tmp) << std::endl;
-
+				std::cout << "Test invariant of new location." << std::endl;
 				std::pair<bool, SupportFunction<Number>> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 				if(invariantSatisfyingSet.first){
 					result.set = invariantSatisfyingSet.second;
@@ -709,6 +714,7 @@ namespace hypro {
 			}
 
 			// check continuous set for invariant
+			std::cout << "Test invariant for first segment." << std::endl;
 			std::pair<bool, SupportFunction<Number>> initialPair = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec);
 #ifdef REACH_DEBUG
 			std::cout << "Valuation fulfills Invariant?: ";
@@ -843,6 +849,7 @@ namespace hypro {
 				// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 				SupportFunction<Number> fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 				//std::cout << "Full final first segment: " << fullSegment << std::endl;
+				std::cout << "Invariant assertion." << std::endl;
 				assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 				validState.set = fullSegment;
 				validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);

@@ -86,10 +86,10 @@ namespace hypro {
 				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 				res.errorCode = FEAS;
 				res.optimumValue = glpkModel;
+				break;
 #else
 				return EvaluationResult<Number>(carl::rationalize<Number>(glp_get_obj_val( lp )), glpkModel, SOLUTION::FEAS);
 #endif
-				break;
 			}
 			case GLP_UNBND: {
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
@@ -99,11 +99,10 @@ namespace hypro {
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 				res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 				res.optimumValue = glpkModel;
+				break;
 #else
 				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
 #endif
-				// std::cout << "glpk INFTY " << std::endl;
-				break;
 			}
 			default:
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
@@ -111,7 +110,6 @@ namespace hypro {
 #else
 				return EvaluationResult<Number>(0, vector_t<Number>::Zero(1), SOLUTION::INFEAS);
 #endif
-				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
 #ifdef DEBUG_MSG
@@ -132,7 +130,9 @@ namespace hypro {
 		// optimize with objective function
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
+		#ifdef DEBUG_MSG
 		std::cout << "Optimizer String: " << z3Optimizer << std::endl;
+		#endif
 
 		// verify and set result
 		if(z3::sat == z3Optimizer.check()) {
@@ -157,12 +157,12 @@ namespace hypro {
 
 			std::cout << z3res << std::endl;
 			if (std::string("oo") == sstr.str()) {
-				std::cout << "upper is unbounded!!" << std::endl;
+				//std::cout << "upper is unbounded!!" << std::endl;
 				res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
 			}
 			else {
-				std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-				std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
+				//std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
+				//std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
 				res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 				res.optimumValue = pointCoordinates;
 			}

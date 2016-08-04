@@ -239,7 +239,6 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 
 template <typename Number>
 SupportFunctionContent<Number>::~SupportFunctionContent() {
-        //std::cout << "Destructor of type " << mType <<  std::endl;
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
@@ -267,9 +266,8 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 			delete mIntersectionParameters;
 			break;
 		case SF_TYPE::ELLIPSOID:
-				delete mEllipsoid;
-				break;
-				 // TODO delete ellipsoid
+			delete mEllipsoid;
+			break;
 		default:
 			break;
 	}
@@ -327,9 +325,9 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mBall->evaluate( _direction );
 		}
 		case SF_TYPE::LINTRAFO: {
-			//std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			//matrix_t<Number> tmp = parameterPair.first.transpose();
-			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).first.transpose() * _direction );
+			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
+			matrix_t<Number> tmp = parameterPair.first.transpose();
+			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
 			switch(res.errorCode){
 				case SOLUTION::INFTY:
 				case SOLUTION::INFEAS:{
@@ -337,7 +335,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				}
 				default:{
 					assert(res.errorCode == SOLUTION::FEAS);
-					res.optimumValue = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).first * res.optimumValue + mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent).second;
+					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					res.supportValue = res.optimumValue.dot(_direction);
 					return res;
