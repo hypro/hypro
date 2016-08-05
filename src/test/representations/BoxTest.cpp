@@ -15,9 +15,6 @@
 #include "../../lib/datastructures/Point.h"
 #include "../../lib/representations/conversion/Converter.h"
 
-using namespace hypro;
-using namespace carl;
-
 template<typename Number>
 class BoxTest : public ::testing::Test
 {
@@ -53,10 +50,10 @@ TYPED_TEST(BoxTest, Constructor)
 	EXPECT_EQ(aBox, cBox);
 	EXPECT_EQ(bBox, cBox);
 
-	std::set<Point<TypeParam>> points;
-	Point<TypeParam> p1 = Point<TypeParam>({1,2});
-	Point<TypeParam> p2 = Point<TypeParam>({-3,4});
-	Point<TypeParam> p3 = Point<TypeParam>({0,3});
+	std::set<hypro::Point<TypeParam>> points;
+	hypro::Point<TypeParam> p1 = hypro::Point<TypeParam>({1,2});
+	hypro::Point<TypeParam> p2 = hypro::Point<TypeParam>({-3,4});
+	hypro::Point<TypeParam> p3 = hypro::Point<TypeParam>({0,3});
 	points.insert(p1);
 	points.insert(p2);
 	points.insert(p3);
@@ -67,7 +64,7 @@ TYPED_TEST(BoxTest, Constructor)
 	EXPECT_EQ(TypeParam(2), dBox.min().at(1));
 	EXPECT_EQ(TypeParam(1), dBox.max().at(0));
 	EXPECT_EQ(TypeParam(4), dBox.max().at(1));
-	EXPECT_EQ(true, dBox.contains(Point<TypeParam>({0,3})));
+	EXPECT_EQ(true, dBox.contains(hypro::Point<TypeParam>({0,3})));
     SUCCEED();
 }
 
@@ -83,8 +80,8 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_EQ((unsigned) 2, this->box2.dimension());
     EXPECT_EQ((unsigned) 0, this->box3.dimension());
 
-    EXPECT_EQ(Point<TypeParam>({6,3}), this->box1.max());
-    EXPECT_EQ(Point<TypeParam>({2,1}), this->box1.min());
+    EXPECT_EQ(hypro::Point<TypeParam>({6,3}), this->box1.max());
+    EXPECT_EQ(hypro::Point<TypeParam>({2,1}), this->box1.min());
 
     EXPECT_EQ(this->box1, this->box1);
     EXPECT_EQ(this->box2, this->box2);
@@ -127,17 +124,17 @@ TYPED_TEST(BoxTest, Vertices) {
 
 	hypro::Box<TypeParam> b1(intervals1);
 
-	std::vector<Point<TypeParam>> corners = b1.vertices();
+	std::vector<hypro::Point<TypeParam>> corners = b1.vertices();
 	EXPECT_EQ((unsigned) 8, corners.size());
 
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,2})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,1,5})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,3,2})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({3,3,5})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,1,2})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,1,5})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,3,2})) != corners.end());
-	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),Point<TypeParam>({5,3,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({3,1,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({3,1,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({3,3,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({3,3,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({5,1,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({5,1,5})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({5,3,2})) != corners.end());
+	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({5,3,5})) != corners.end());
 }
 
 TYPED_TEST(BoxTest, Union)
@@ -191,7 +188,7 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	// rotation
 	TypeParam angle = 90;
 
-	matrix_t<TypeParam> rotX = matrix_t<TypeParam>::Zero(3,3);
+	hypro::matrix_t<TypeParam> rotX = hypro::matrix_t<TypeParam>::Zero(3,3);
 	rotX(0,0) = 1;
 	rotX(1,1) = carl::cos(angle);
 	rotX(1,2) = -carl::sin(angle);
@@ -199,14 +196,14 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	rotX(2,2) = carl::cos(angle);
 
 
-	matrix_t<TypeParam> rotY = matrix_t<TypeParam>::Zero(3,3);
+	hypro::matrix_t<TypeParam> rotY = hypro::matrix_t<TypeParam>::Zero(3,3);
 	rotY(0,0) = carl::cos(angle);
 	rotY(0,2) = carl::sin(angle);
 	rotY(1,1) = 1;
 	rotY(2,0) = -carl::sin(angle);
 	rotY(2,2) = carl::cos(angle);
 
-	matrix_t<TypeParam> rotZ = matrix_t<TypeParam>::Zero(3,3);
+	hypro::matrix_t<TypeParam> rotZ = hypro::matrix_t<TypeParam>::Zero(3,3);
 	rotZ(0,0) = carl::cos(angle);
 	rotZ(0,1) = -carl::sin(angle);
 	rotZ(1,0) = carl::sin(angle);
@@ -215,37 +212,37 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 
 	// result
-	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX, vector_t<TypeParam>::Zero(rotX.rows()));
-	hypro::Box<TypeParam> resY = b1.linearTransformation(rotY, vector_t<TypeParam>::Zero(rotY.rows()));
-	hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ, vector_t<TypeParam>::Zero(rotZ.rows()));
+	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX, hypro::vector_t<TypeParam>::Zero(rotX.rows()));
+	hypro::Box<TypeParam> resY = b1.linearTransformation(rotY, hypro::vector_t<TypeParam>::Zero(rotY.rows()));
+	hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ, hypro::vector_t<TypeParam>::Zero(rotZ.rows()));
 
 
-	std::vector<Point<TypeParam>> cornersX = resX.vertices();
+	std::vector<hypro::Point<TypeParam>> cornersX = resX.vertices();
 
 	for(const auto& vertex : cornersX) {
 		std::cout << vertex << ", ";
 	}
 	std::cout << std::endl;
 
-	std::vector<Point<TypeParam>> originalCorners = b1.vertices();
-	std::vector<Point<TypeParam>> newCorners;
+	std::vector<hypro::Point<TypeParam>> originalCorners = b1.vertices();
+	std::vector<hypro::Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {
-		newCorners.push_back(Point<TypeParam>(rotX*point.rawCoordinates()));
+		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resX, hypro::Box<TypeParam>(newCorners));
 
 
 	newCorners.clear();
-	std::vector<Point<TypeParam>> cornersY = resY.vertices();
+	std::vector<hypro::Point<TypeParam>> cornersY = resY.vertices();
 	for(auto& point : originalCorners) {
-		newCorners.push_back(Point<TypeParam>(rotY*point.rawCoordinates()));
+		newCorners.push_back(hypro::Point<TypeParam>(rotY*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resY, hypro::Box<TypeParam>(newCorners));
 
 	newCorners.clear();
-	std::vector<Point<TypeParam>> cornersZ = resZ.vertices();
+	std::vector<hypro::Point<TypeParam>> cornersZ = resZ.vertices();
 	for(auto& point : originalCorners) {
-		newCorners.push_back(Point<TypeParam>(rotZ*point.rawCoordinates()));
+		newCorners.push_back(hypro::Point<TypeParam>(rotZ*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resZ, hypro::Box<TypeParam>(newCorners));
 }
@@ -280,16 +277,16 @@ TYPED_TEST(BoxTest, MinkowskiSum)
 	hypro::Box<TypeParam> b2(intervals2);
 
 	hypro::Box<TypeParam> res = b1.minkowskiSum(b2);
-	std::vector<Point<TypeParam>> corners = res.vertices();
+	std::vector<hypro::Point<TypeParam>> corners = res.vertices();
 
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,4,-6}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,4,1}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,8,-6}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({-1,8,1}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,4,-6}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,4,1}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,8,-6}) ) != corners.end());
-	EXPECT_TRUE(std::find( corners.begin(), corners.end(), Point<TypeParam>({3,8,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({-1,4,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({-1,4,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({-1,8,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({-1,8,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({3,4,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({3,4,1}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({3,8,-6}) ) != corners.end());
+	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({3,8,1}) ) != corners.end());
 
 }
 
@@ -430,6 +427,6 @@ TYPED_TEST(BoxTest, IntersectionHalfspace)
 
 TYPED_TEST(BoxTest, Membership)
 {
-    Point<TypeParam> p({4,2});
+    hypro::Point<TypeParam> p({4,2});
     EXPECT_TRUE(this->box1.contains(p));
 }

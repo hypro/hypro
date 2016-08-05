@@ -1,3 +1,5 @@
+#include "Point.h"
+
 namespace hypro {
 
 template <typename Number>

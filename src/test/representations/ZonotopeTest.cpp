@@ -34,7 +34,7 @@ protected:
 
 
 TYPED_TEST(ZonotopeTest, PlainConstructor) {
-    hypro::Zonotope<TypeParam> z1;
+    Zonotope<TypeParam> z1;
     EXPECT_EQ(z1.dimension(), (unsigned) 0);
     EXPECT_EQ(z1.center().rows(), 0);
     EXPECT_EQ(z1.center().cols(), 1);
@@ -44,7 +44,7 @@ TYPED_TEST(ZonotopeTest, PlainConstructor) {
 
 TYPED_TEST(ZonotopeTest, DimConstructor) {
     unsigned int dim = 4;
-    hypro::Zonotope<TypeParam> z1(dim);
+    Zonotope<TypeParam> z1(dim);
     EXPECT_EQ(z1.dimension(), (unsigned) 4);
 }
 
@@ -57,7 +57,7 @@ TYPED_TEST(ZonotopeTest, FullConstructor) {
     center << 1,
               2;
 
-    hypro::Zonotope<TypeParam> z2(center, gen);
+    Zonotope<TypeParam> z2(center, gen);
     EXPECT_EQ(z2.dimension(), (unsigned) 2);
     EXPECT_EQ(z2.center(), center);
     EXPECT_EQ(z2.generators(), gen);
@@ -70,8 +70,8 @@ TYPED_TEST(ZonotopeTest, CopyConstructor) {
     gen << 1,2,
             2,8,
             9,1;
-    hypro::Zonotope<TypeParam> z1(center, gen);
-    hypro::Zonotope<TypeParam> z_copy(z1);
+    Zonotope<TypeParam> z1(center, gen);
+    Zonotope<TypeParam> z_copy(z1);
 
     EXPECT_EQ(z_copy.dimension(),z1.dimension());
     EXPECT_EQ(z_copy.center(),z1.center());
@@ -79,7 +79,7 @@ TYPED_TEST(ZonotopeTest, CopyConstructor) {
 }
 
 TYPED_TEST(ZonotopeTest, ComputeZonotopeBoundary) {
-    hypro::Zonotope<TypeParam> z1(2);
+    Zonotope<TypeParam> z1(2);
     Eigen::Matrix<TypeParam,2,1> center = {carl::rationalize<TypeParam>(1.1941), carl::rationalize<TypeParam>(0.1068)};
     Eigen::Matrix<TypeParam, 2,6> generators;
     generators << carl::rationalize<TypeParam>(0.3993), carl::rationalize<TypeParam>(0.0160), carl::rationalize<TypeParam>(0.0020), carl::rationalize<TypeParam>(0.0035), 0, carl::rationalize<TypeParam>(-0.0017),

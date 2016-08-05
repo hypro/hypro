@@ -1017,8 +1017,8 @@ template <typename Number>
 bool SupportFunctionContent<Number>::empty() const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-                        return mEllipsoid->empty();
-                }
+			return mEllipsoid->empty();
+		}
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			return mBall->empty();

@@ -27,8 +27,8 @@ template<typename Number, typename Converter>
 class ZonotopeT {
   private:
 	std::size_t mDimension;
-	hypro::vector_t<Number> mCenter;
-	hypro::matrix_t<Number> mGenerators;
+	vector_t<Number> mCenter;
+	matrix_t<Number> mGenerators;
 
 	void removeGenerator( unsigned int colToRemove );
 
@@ -47,7 +47,7 @@ class ZonotopeT {
 	 * @param center A (nx1) vector
 	 * @param generators A (nxm) vector
 	 */
-	ZonotopeT( const hypro::vector_t<Number>& center, const hypro::matrix_t<Number>& generators );
+	ZonotopeT( const vector_t<Number>& center, const matrix_t<Number>& generators );
 
 	/**
 	 * Copy Constructor - constructs a zonotopeT from an existing one.
@@ -87,24 +87,24 @@ class ZonotopeT {
 	 * Replaces the current center with the parameter center
 	 * @param center a nx1 matrix
 	 */
-	void setCenter( const hypro::vector_t<Number>& center );
+	void setCenter( const vector_t<Number>& center );
 
 	/**
 	 * Replaces the current matrix of generators with the parameter generators
 	 * @param new_generators a nxm matrix
 	 */
-	void setGenerators( const hypro::matrix_t<Number>& generators_ );
+	void setGenerators( const matrix_t<Number>& generators_ );
 
 	/**
 	 * Add generators to ZonotopeT. Simply performs setGenerators if generators was previously not initialized.
 	 * @param generators
 	 * @return true if able to add generators
 	 */
-	bool addGenerators( const hypro::matrix_t<Number>& generators );
+	bool addGenerators( const matrix_t<Number>& generators );
 
 	// Getters and Setters for center and generators
-	hypro::vector_t<Number> center() const;
-	hypro::matrix_t<Number> generators() const;
+	vector_t<Number> center() const;
+	matrix_t<Number> generators() const;
 
 	/**
 	 * Number of generators
@@ -155,13 +155,13 @@ class ZonotopeT {
 	 * @param result The resulting stateset.
 	 * @return True if the operation has been successfully applied.
 	 */
-	ZonotopeT<Number,Converter> linearTransformation( const hypro::matrix_t<Number>& A, const hypro::vector_t<Number>& b ) const;
+	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * Compute boundaries of zonotopeT
 	 * @return array of points represented as vectors
 	 */
-	std::vector<hypro::vector_t<Number>> computeZonotopeBoundary();
+	std::vector<vector_t<Number>> computeZonotopeBoundary();
 
 	/**
 	 * @brief Compute a set of points containing the extreme points of a zonotopeT.
@@ -170,7 +170,7 @@ class ZonotopeT {
 	 * internal points.
 	 * @return vector of points.
 	 */
-	std::vector<hypro::Point<Number>> vertices() const;
+	std::vector<Point<Number>> vertices() const;
 
 	/**
 	 * Calculates zonotopeT intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n
@@ -180,7 +180,7 @@ class ZonotopeT {
 	 * @param e_scalar : Scalar representing the halfspace
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	ZonotopeT<Number,Converter> intersectWithHalfspace( const hypro::vector_t<Number>& d_vec, Number e_scalar ) const;
+	ZonotopeT<Number,Converter> intersectWithHalfspace( const vector_t<Number>& d_vec, Number e_scalar ) const;
 
 	#ifdef USE_PPL
 	/**
@@ -207,7 +207,7 @@ class ZonotopeT {
 	 * @param rhs : The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found.
 	 */
-	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, hypro::matrix_t<Number>& minMaxOfLine, int method );
+	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, matrix_t<Number>& minMaxOfLine, int method );
 
 	#ifdef USE_PPL
 	/**

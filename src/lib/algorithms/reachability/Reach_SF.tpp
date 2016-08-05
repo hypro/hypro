@@ -69,7 +69,7 @@ namespace hypro {
 		 */
 
 		template<typename Number>
-		flowpipe_t<SupportFunction<Number>> Reach<Number,SupportFunction<Number>>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
+		flowpipe_t<SupportFunction<Number>> Reach<Number,SupportFunction<Number>>::computeForwardTimeClosure( const State<Number>& _state ) {
 			assert(!_state.timestamp.isUnbounded());
 #ifdef REACH_DEBUG
 			std::cout << "Location: " << _state.location->id() << std::endl;
@@ -170,7 +170,7 @@ namespace hypro {
 				}
 				flowpipe.push_back( currentSegment );
 
-				std::cout << "Current Set: " << std::endl << Converter<Number>::toHPolytope(currentSegment) << std::endl;
+				//std::cout << "Current Set: " << std::endl << Converter<Number>::toHPolytope(currentSegment) << std::endl;
 
 				// Check for bad states intersection. The first segment is validated against the invariant, already.
 				if(intersectBadStates(_state, currentSegment)){
@@ -232,7 +232,6 @@ namespace hypro {
 								std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
 #endif
 								if(currentState.timestamp.contains(transition->triggerTime())){
-									std::cout << "Time trigger enabled" << std::endl;
 									if(intersectGuard(transition, currentState, guardSatisfyingState)){
 										// only insert new Sets into working queue, when the current level allows it.
 											transitionSatisfied = true;
@@ -310,7 +309,6 @@ namespace hypro {
 					//std::cout << "Current depth " << nextSegment.depth() << std::endl;
 					//std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
-					std::cout << "Test invariant for new segment." << std::endl;
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
 					std::cout << "Next Flowpipe Segment: ";
@@ -366,9 +364,6 @@ namespace hypro {
 #endif
 						flowpipe.push_back( newSegment.second );
 
-						//unsigned tmp = plotter.addObject(newSegment.second.vertices());
-						//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
-
 						if(intersectBadStates(_state, newSegment.second)){
 							// clear queue to stop whole algorithm
 							while(!mWorkingQueue.empty()){
@@ -378,9 +373,6 @@ namespace hypro {
 						}
 						// update currentSegment
 						currentSegment = newSegment.second;
-
-						std::cout << "Current Set: " << std::endl << Converter<Number>::toHPolytope(currentSegment) << std::endl;
-
 					} else {
 						// the flowpipe does not longer satisfy the invariant -> quit loop
 						break;
@@ -450,9 +442,6 @@ namespace hypro {
 					assert(!stateIt->timestamp.isUnbounded());
 					aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->timestamp);
 					SupportFunction<Number> tmp = boost::get<SupportFunction<Number>>(stateIt->set);
-
-					std::cout << "United hpoly: " << Converter<Number>::toHPolytope(tmp) << std::endl;
-
 					collectedSets = collectedSets.unite(tmp);
 				}
 
@@ -465,20 +454,14 @@ namespace hypro {
 				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
 				unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
 				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
-				//if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
-				if(true){
-					std::cout << "conversion to hpoly." << std::endl;
+				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
-					std::cout << "conversion to hpoly done." << std::endl;
 					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 					s.set = newSet;
 				} else {
 					s.set = collectedSets;
 				}
 				s.timestamp = aggregatedTimestamp;
-				//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
-
-				//std::cout << "Aggregated representation: " << boost::get<SupportFunction<Number>>(s.set) << std::endl;
 
 				// ASSUMPTION: All discrete assignments are the same for this transition.
 				typename Transition<Number>::Reset reset = aggregationPair.first->reset();
@@ -502,7 +485,7 @@ namespace hypro {
 		}
 
 		template<typename Number>
-		bool Reach<Number,SupportFunction<Number>>::intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _state,
+		bool Reach<Number,SupportFunction<Number>>::intersectGuard( Transition<Number>* _trans, const State<Number>& _state,
 														   State<Number>& result ) {
 			assert(!_state.timestamp.isUnbounded());
 			result = _state;
@@ -600,23 +583,21 @@ namespace hypro {
 			}
 
 			// check for continuous set guard intersection
-			std::cout << "Test guard." << std::endl;
+			//std::cout << "Test guard." << std::endl;
 			std::pair<bool, SupportFunction<Number>> guardSatisfyingSet = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
-
-			std::cout << "Guard satisfying set: " << std::endl << Converter<Number>::toHPolytope(guardSatisfyingSet.second) << std::endl;
 
 			// check if the intersection is empty
 			if ( guardSatisfyingSet.first ) {
 #ifdef REACH_DEBUG
 				std::cout << "Transition enabled!" << std::endl;
 #endif
+				//std::cout << "Guard satisfying set: " << std::endl << Converter<Number>::toHPolytope(guardSatisfyingSet.second) << std::endl;
+				assert(!Converter<Number>::toHPolytope(guardSatisfyingSet.second).empty());
 				// apply reset function to guard-satisfying set.
-				std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(_trans->reset().mat, _trans->reset().vec);
 				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( parameters );
 
-				std::cout << "Set after reset function: " << std::endl << Converter<Number>::toHPolytope(tmp) << std::endl;
-				std::cout << "Test invariant of new location." << std::endl;
+				assert(!Converter<Number>::toHPolytope(tmp).empty());
 				std::pair<bool, SupportFunction<Number>> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
 				if(invariantSatisfyingSet.first){
 					result.set = invariantSatisfyingSet.second;
@@ -635,8 +616,8 @@ namespace hypro {
 		}
 
 		template<typename Number>
-		matrix_t<Number> Reach<Number,SupportFunction<Number>>::computeTrafoMatrix( hypro::Location<Number>* _loc ) const {
-			hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
+		matrix_t<Number> Reach<Number,SupportFunction<Number>>::computeTrafoMatrix( Location<Number>* _loc ) const {
+			matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
 			deltaMatrix = _loc->flow() * mSettings.timeStep;
 
 #ifdef REACH_DEBUG
@@ -646,7 +627,7 @@ namespace hypro {
 #endif
 
 			// e^(At) = resultMatrix
-			hypro::matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
+			matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
 
 			//---
 			// Workaround for:
@@ -655,9 +636,9 @@ namespace hypro {
 			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(),
 																				deltaMatrix.cols() );
 			Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-			doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
+			doubleMatrix = convert<Number,double>( deltaMatrix );
 			expMatrix = doubleMatrix.exp();
-			resultMatrix = hypro::convert<double,Number>( expMatrix );
+			resultMatrix = convert<double,Number>( expMatrix );
 			return resultMatrix;
 		}
 
@@ -714,7 +695,6 @@ namespace hypro {
 			}
 
 			// check continuous set for invariant
-			std::cout << "Test invariant for first segment." << std::endl;
 			std::pair<bool, SupportFunction<Number>> initialPair = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec);
 #ifdef REACH_DEBUG
 			std::cout << "Valuation fulfills Invariant?: ";
@@ -773,7 +753,7 @@ namespace hypro {
 #endif
 					firstSegment = unitePolytope;
 					if(radius > 0){
-						SupportFunction<Number> hausPoly = hypro::computePolytope<Number, SupportFunction<Number>>( unitePolytope.dimension(), radius );
+						SupportFunction<Number> hausPoly = computePolytope<Number, SupportFunction<Number>>( unitePolytope.dimension(), radius );
 #ifdef REACH_DEBUG
 						std::cout << "Hausdorff Polytope (Box): ";
 					hausPoly.print();
@@ -785,7 +765,7 @@ namespace hypro {
 				} else {
 					Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
 					if(radius > 0) {
-						SupportFunction<Number> hausPoly = hypro::computePolytope<Number, SupportFunction<Number>>( initialPair.second.dimension(), radius );
+						SupportFunction<Number> hausPoly = computePolytope<Number, SupportFunction<Number>>( initialPair.second.dimension(), radius );
 						deltaValuation = deltaValuation.minkowskiSum(hausPoly);
 					}
 					firstSegment = initialPair.second.unite(deltaValuation);
@@ -849,7 +829,6 @@ namespace hypro {
 				// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 				SupportFunction<Number> fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 				//std::cout << "Full final first segment: " << fullSegment << std::endl;
-				std::cout << "Invariant assertion." << std::endl;
 				assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 				validState.set = fullSegment;
 				validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
@@ -923,7 +902,7 @@ namespace hypro {
 			std::cout << "(...)" << std::endl;
 			std::cout << *_flowpipe.back() << std::endl;
 		}
-	}
-}
+	} // namespace reachability
+} // namespace hypro
 #include "Reach_SF.h"
 #include <chrono>

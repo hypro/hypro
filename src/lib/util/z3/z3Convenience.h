@@ -15,7 +15,7 @@ namespace hypro {
 
 
 	template<typename Number>
-	static z3::expr_vector createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c, carl::Relation = carl::Relation::LEQ) {
+	static z3::expr_vector createFormula(const matrix_t<Number>& _constraints, const vector_t<Number> _constants, z3Context& c, carl::Relation = carl::Relation::LEQ) {
 		// TODO: Relation is ignored here.
 
 		//std::cout << __func__ << _constraints << " \n\n " << _constants << std::endl;
@@ -59,7 +59,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static z3::expr createFormula(const Point<Number>& _point, const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, z3Context& c ) {
+	static z3::expr createFormula(const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number> _constants, z3Context& c ) {
 		z3::expr formula(c);
 		formula = c.bool_val(true);
 		z3::expr pointConstraint(c);
@@ -96,7 +96,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static std::pair<z3::expr, z3::expr> createFormula(const hypro::matrix_t<Number>& _constraints, const hypro::vector_t<Number> _constants, const hypro::vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation = carl::Relation::LEQ) {
+	static std::pair<z3::expr, z3::expr> createFormula(const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation = carl::Relation::LEQ) {
 
 		// TODO: Relation is ignored here.
 

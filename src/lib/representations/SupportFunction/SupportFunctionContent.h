@@ -52,18 +52,14 @@ struct trafoContent {
 		do {
 			reduced = false;
 			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *_parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
-				std::cout << "origin exponent: " << origin.get()->linearTrafoParameters()->currentExponent << std::endl;
-				std::cout << "origin successive transformations: " << origin.get()->linearTrafoParameters()->successiveTransformations << std::endl;
 				successiveTransformations = origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
 			} else {
 				successiveTransformations = 0;
 			}
 			//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
 			if (successiveTransformations == unsigned(carl::pow(2,_parameters->power)-1)) {
-				std::cout << "Enough successive transformations: " << successiveTransformations << std::endl;
 				reduced = true;
 				currentExponent = currentExponent*(carl::pow(2,_parameters->power));
-				std::cout << "After Reduction, new Exponent is " << currentExponent << std::endl;
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}

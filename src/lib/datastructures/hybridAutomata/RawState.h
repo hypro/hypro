@@ -12,7 +12,7 @@ namespace hypro {
 	class Location;
 
 	template<typename Number>
-	using cPair = std::pair<hypro::matrix_t<Number>, hypro::vector_t<Number>>;
+	using cPair = std::pair<matrix_t<Number>, vector_t<Number>>;
 
 	template<typename Number>
 	struct RawState {

@@ -118,4 +118,4 @@ class ConstrainSet {
 	 * @brief returns the difference between the current assignment and the lower bound
 	 */ 
 };
-}
+} // namespace hypro

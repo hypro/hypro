@@ -154,7 +154,7 @@ if(USE_PPL)
 endif()
 
 if(HYPRO_USE_SMTRAT)
-load_library(hypro smtrat 0)
+	load_library(hypro smtrat 0)
 endif()
 
 if(HYPRO_USE_Z3)
@@ -162,8 +162,8 @@ if(HYPRO_USE_Z3)
 endif()
 
 if(NOT FORCE_SHIPPED_RESOURCES)
-load_library(hypro GTest 0)
-load_library(hypro GLPK 0)
+	load_library(hypro GTest 0)
+	load_library(hypro GLPK 0)
 endif()
 
 add_subdirectory(src/resources EXCLUDE_FROM_ALL)

@@ -36,7 +36,7 @@ bool eqTypes() {
 }
 
 template <typename Number>
-static hypro::matrix_t<Number> createMatrix( const std::vector<std::vector<Number> >& _in ) {
+static matrix_t<Number> createMatrix( const std::vector<std::vector<Number> >& _in ) {
 	assert( !_in.empty() );
 	matrix_t<Number> result( _in.size(), ( *_in.begin() ).size() );
 	for ( unsigned lineId = 0; lineId != _in.size(); ++lineId ) {
@@ -48,7 +48,7 @@ static hypro::matrix_t<Number> createMatrix( const std::vector<std::vector<Numbe
 }
 
 template <typename Number>
-static hypro::vector_t<Number> createVector( const std::vector<Number>& _in ) {
+static vector_t<Number> createVector( const std::vector<Number>& _in ) {
 	assert( !_in.empty() );
 	vector_t<Number> result( _in.size() );
 	for ( unsigned rowId = 0; rowId != _in.size(); ++rowId ) {
@@ -58,7 +58,7 @@ static hypro::vector_t<Number> createVector( const std::vector<Number>& _in ) {
 }
 
 template <typename Number>
-static hypro::vector_t<Number> createVector( const hypro::Point<Number>& _in ) {
+static vector_t<Number> createVector( const Point<Number>& _in ) {
 	vector_t<Number> result( _in.dimension() );
 	for ( unsigned rowId = 0; rowId != _in.dimension(); ++rowId ) {
 		result( rowId ) = Number( _in.at( VariablePool::getInstance().carlVarByIndex( rowId ) ) );
@@ -67,7 +67,7 @@ static hypro::vector_t<Number> createVector( const hypro::Point<Number>& _in ) {
 }
 
 template <typename Number>
-static hypro::vector_t<Number> createVector( std::initializer_list<Number> _coordinates ) {
+static vector_t<Number> createVector( std::initializer_list<Number> _coordinates ) {
 	vector_t<Number> res = vector_t<Number>( _coordinates.size() );
 	unsigned count = 0;
 	for ( auto& coordinate : _coordinates ) {

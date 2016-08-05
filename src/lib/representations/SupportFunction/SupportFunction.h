@@ -97,6 +97,5 @@ private:
 	std::list<unsigned> collectProjections() const;
 };
 
-} //namespace
-
+} //namespace hypro
 #include "SupportFunction.tpp"

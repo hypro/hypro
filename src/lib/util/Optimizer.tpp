@@ -1,6 +1,5 @@
 #include "Optimizer.h"
 #include "VariablePool.h"
-#include <sstream>
 
 namespace hypro {
 
@@ -86,10 +85,10 @@ namespace hypro {
 				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 				res.errorCode = FEAS;
 				res.optimumValue = glpkModel;
-				break;
 #else
 				return EvaluationResult<Number>(carl::rationalize<Number>(glp_get_obj_val( lp )), glpkModel, SOLUTION::FEAS);
 #endif
+				break;
 			}
 			case GLP_UNBND: {
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
@@ -99,10 +98,11 @@ namespace hypro {
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 				res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 				res.optimumValue = glpkModel;
-				break;
 #else
 				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
 #endif
+				// std::cout << "glpk INFTY " << std::endl;
+				break;
 			}
 			default:
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
@@ -110,6 +110,7 @@ namespace hypro {
 #else
 				return EvaluationResult<Number>(0, vector_t<Number>::Zero(1), SOLUTION::INFEAS);
 #endif
+				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
 #ifdef DEBUG_MSG
@@ -130,14 +131,22 @@ namespace hypro {
 		// optimize with objective function
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
-		#ifdef DEBUG_MSG
 		std::cout << "Optimizer String: " << z3Optimizer << std::endl;
-		#endif
 
 		// verify and set result
 		if(z3::sat == z3Optimizer.check()) {
 			z3::expr z3res = z3Optimizer.upper(result);
 			assert(z3res.is_arith());
+
+			// check for infinity
+			if(Z3_get_numeral_string(c,z3res) == nullptr) {
+				std::cout << "INFTY !!!" << std::endl;
+			}
+
+			// TODO: Fixme!
+			//std::cout << "Result without string conversion: " << z3res << std::endl;
+			//std::cout << "Result without decimal: " << Z3_get_numeral_string(c,z3res) << std::endl;
+			//std::cout << "Result: " << Z3_get_numeral_decimal_string(c,z3res,1000) << std::endl;
 
 			z3::model m = z3Optimizer.get_model();
 			//std::cout << "Model: " << m << std::endl;
@@ -151,21 +160,11 @@ namespace hypro {
 				pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
 			}
 			res.errorCode = SOLUTION::FEAS;
-			// check whether unbounded
-			std::stringstream sstr;
-			sstr << z3res;
-
 			std::cout << z3res << std::endl;
-			if (std::string("oo") == sstr.str()) {
-				//std::cout << "upper is unbounded!!" << std::endl;
-				res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
-			}
-			else {
-				//std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-				//std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-				res.supportValue = Number(Z3_get_numeral_string(c,z3res));
-				res.optimumValue = pointCoordinates;
-			}
+			std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
+			std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
+			res.supportValue = Number(Z3_get_numeral_string(c,z3res));
+			res.optimumValue = pointCoordinates;
 		}
 
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
@@ -841,8 +840,7 @@ namespace hypro {
 				deleteArrays();
 
 				// TODO: can we directly reset stuff?
-				glp_delete_prob(lp);
-				lp = glp_create_prob();
+				glp_erase_prob(lp);
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
@@ -889,6 +887,8 @@ namespace hypro {
 					ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
 					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
+					// TODO:: Assuming ColMajor storage alignment.
+					//assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}

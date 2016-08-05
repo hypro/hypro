@@ -11,7 +11,6 @@
 #include "../lib/config.h"
 #include "../lib/util/types.h"
 
-
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT
 	carl::FLOAT_T<mpfr_t>,

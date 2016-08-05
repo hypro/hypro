@@ -109,6 +109,6 @@ class VertexEnumeration {
 		 * @brief Adds to halfspace set two halfspaces for each linealty direction to block it.
 		 */
 	};
-} // namespace
+} // namespace hypro
 
 #include "vertexEnumeration.tpp"

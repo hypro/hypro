@@ -9,7 +9,6 @@
  */
 
 #pragma once
-
 #include "Point.h"
 #include "../util/VariablePool.h"
 #include "../util/linearSolving.h"
@@ -75,7 +74,7 @@ class Halfspace {
     Number scalar() const { return mScalar; }
     size_t hash() {
         if (this->mHash == 0) {
-            this->mHash = std::hash<hypro::Halfspace<Number>>()(*this);
+            this->mHash = std::hash<Halfspace<Number>>()(*this);
         }
         return mHash;
     }
@@ -97,7 +96,7 @@ class Halfspace {
 };
 
 template <typename Number>
-std::ostream& operator<<( std::ostream& _lhs, const hypro::Halfspace<Number>& _rhs ) {
+std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
 	_lhs << "( " << _rhs.normal() << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }

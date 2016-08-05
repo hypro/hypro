@@ -67,6 +67,6 @@ class ConvexHull {
 
 };
 
-}
+} // namespace hypro
 
 #include "ConvexHull.tpp"

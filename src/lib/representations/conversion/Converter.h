@@ -7,11 +7,13 @@
 #include "representations/SupportFunction/SupportFunction.h"
 #include "representations/Zonotope/Zonotope.h"
 #include "util/pca.h"
-//#include "../../util/Plotter.h"
+
 namespace hypro {
 
 //enum for differentiating between exact conversion and over-/underapproximation (some functions support an alternative computation method).
-enum CONV_MODE {EXACT, OVER, UNDER, ALTERNATIVE};
+	enum CONV_MODE {
+		EXACT, OVER, UNDER, ALTERNATIVE
+	};
 
 template<typename Number>
 class Converter {
@@ -75,5 +77,4 @@ using Zonotope = typename Converter<Number>::Zonotope;
 #include "converterToSupportFunction.tpp"
 #include "converterToZonotope.tpp"
 
-} // namespace
-
+} // namespace hypro

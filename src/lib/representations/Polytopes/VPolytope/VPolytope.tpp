@@ -420,7 +420,7 @@ template <typename Number, typename Converter>
 Number VPolytopeT<Number, Converter>::supremum() const {
 	Number max = 0;
 	for ( auto &point : mVertices ) {
-		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
+		Number inftyNorm = Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
 	return max;

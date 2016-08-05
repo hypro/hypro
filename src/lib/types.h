@@ -1,9 +1,5 @@
 #pragma once
 
-#define SUPPORT_MPFR
-/* #undef COMPARE_CDD */
-/* #undef COMPARE_POLYMAKE */
-
 #include <set>
 #include <iostream>
 
@@ -22,7 +18,7 @@ namespace hypro {
     using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
     template <typename Number>
-    using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+    using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
     template <typename Number>
     class Polytope;
@@ -37,7 +33,7 @@ namespace hypro {
 
     // Solution types
     enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
-}
+} // namespace hypro
 
 namespace Eigen {
     template <typename Number>
@@ -84,6 +80,6 @@ namespace Eigen {
         static inline Real epsilon() { return std::numeric_limits<Real>::epsilon(); }
     };
 
-}
+} // namespace Eigen
 
 #include "util/adaptions_eigen.h"

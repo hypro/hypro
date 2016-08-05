@@ -199,8 +199,8 @@ namespace hypro {
 	 * conversion of a matrix_t
 	 */
 	template <typename From, typename To>
-	hypro::matrix_t<To> convert( const hypro::matrix_t<From>& _mat ) {
-		hypro::matrix_t<To> resultMat( _mat.rows(), _mat.cols() );
+	matrix_t<To> convert( const matrix_t<From>& _mat ) {
+		matrix_t<To> resultMat( _mat.rows(), _mat.cols() );
 
 		for ( int i = 0; i < _mat.rows(); ++i ) {
 			for ( int j = 0; j < _mat.cols(); ++j ) {
@@ -212,12 +212,12 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	hypro::vector_t<Number> normalize(const hypro::vector_t<Number>& in) {
+	vector_t<Number> normalize(const vector_t<Number>& in) {
 		return in/norm(in);
 	}
 
 	template<typename Number>
-	hypro::vector_t<Number> scalarProjection(const vector_t<Number>& source, const vector_t<Number>& target) {
+	vector_t<Number> scalarProjection(const vector_t<Number>& source, const vector_t<Number>& target) {
 		Number targetLength = norm(target);
 		vector_t<Number> res = ((source.dot(target))/(targetLength*targetLength))*target;
 		return res;

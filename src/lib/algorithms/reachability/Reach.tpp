@@ -68,7 +68,7 @@ namespace reachability {
          */
 
 	template<typename Number, typename Representation>
-	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const hypro::State<Number>& _state ) {
+	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const State<Number>& _state ) {
 		assert(!_state.timestamp.isUnbounded());
 #ifdef REACH_DEBUG
 		std::cout << "Location: " << _state.location->id() << std::endl;
@@ -170,7 +170,7 @@ namespace reachability {
 			flowpipe.push_back( currentSegment );
 
 			//unsigned tmp = plotter.addObject(currentSegment.vertices());
-			//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+			//plotter.setObjectColor(tmp, colors[_state.location->id()]);
 
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(_state, currentSegment)){
@@ -338,7 +338,7 @@ namespace reachability {
 					flowpipe.push_back( newSegment.second );
 
 					//unsigned tmp = plotter.addObject(newSegment.second.vertices());
-					//plotter.setObjectColor(tmp, hypro::colors[_state.location->id()]);
+					//plotter.setObjectColor(tmp, colors[_state.location->id()]);
 
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
@@ -458,7 +458,7 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _state,
+	bool Reach<Number,Representation>::intersectGuard( Transition<Number>* _trans, const State<Number>& _state,
 							   State<Number>& result ) {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
@@ -583,8 +583,8 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	matrix_t<Number> Reach<Number,Representation>::computeTrafoMatrix( hypro::Location<Number>* _loc ) const {
-		hypro::matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
+	matrix_t<Number> Reach<Number,Representation>::computeTrafoMatrix( Location<Number>* _loc ) const {
+		matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
 		deltaMatrix = _loc->flow() * mSettings.timeStep;
 
 #ifdef REACH_DEBUG
@@ -594,7 +594,7 @@ namespace reachability {
 #endif
 
 		// e^(At) = resultMatrix
-		hypro::matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
+		matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
 
 		//---
 		// Workaround for:
@@ -603,9 +603,9 @@ namespace reachability {
 		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> doubleMatrix( deltaMatrix.rows(),
 																			deltaMatrix.cols() );
 		Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-		doubleMatrix = hypro::convert<Number,double>( deltaMatrix );
+		doubleMatrix = convert<Number,double>( deltaMatrix );
 		expMatrix = doubleMatrix.exp();
-		resultMatrix = hypro::convert<double,Number>( expMatrix );
+		resultMatrix = convert<double,Number>( expMatrix );
 		return resultMatrix;
 	}
 
@@ -718,7 +718,7 @@ namespace reachability {
 	#endif
 				firstSegment = unitePolytope;
 				if(radius > 0){
-					Representation hausPoly = hypro::computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
+					Representation hausPoly = computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
 		#ifdef REACH_DEBUG
 					std::cout << "Hausdorff Polytope (Box): ";
 					hausPoly.print();
@@ -730,7 +730,7 @@ namespace reachability {
 			} else {
 				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
 				if(radius > 0) {
-					Representation hausPoly = hypro::computePolytope<Number, Representation>( initialPair.second.dimension(), radius );
+					Representation hausPoly = computePolytope<Number, Representation>( initialPair.second.dimension(), radius );
 					deltaValuation = deltaValuation.minkowskiSum(hausPoly);
 				}
 				firstSegment = initialPair.second.unite(deltaValuation);

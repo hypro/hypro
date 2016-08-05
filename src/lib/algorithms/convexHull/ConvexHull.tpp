@@ -237,4 +237,4 @@ namespace hypro {
 		}
 	}
 	
-}
+} // namespace hypro

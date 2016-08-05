@@ -225,10 +225,14 @@ template <typename Number>
 EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	// catch half-space
 	if(mConstraints.rows() == 1) {
+		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
 		// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
 		if(l == vector_t<Number>(mConstraints.row(0))){
-			Number dist = (mConstraintConstants(0) / mConstraints.row(0).sum()) - 1;
-			return EvaluationResult<Number>(mConstraintConstants(0),dist*l,SOLUTION::FEAS);
+			//std::cout << "Managed to optimize into correct direction! which is: " << convert<Number,double>(mConstraints.row(0)).transpose() << std::endl;
+			//Number dist = (mConstraintConstants(0) / mConstraints.row(0).sum()) - 1;
+			//std::cout << "Distance is: " << dist << std::endl;
+			// The vectors are EXACTLY the same -> return the distance along with the vector as already stored.
+			return EvaluationResult<Number>(mConstraintConstants(0),l,SOLUTION::FEAS);
 		} else {
 			return EvaluationResult<Number>(0,SOLUTION::INFTY);
 		}
@@ -327,4 +331,4 @@ void PolytopeSupportFunction<Number>::removeRedundancy() {
 	}
 }
 
-}  // namespace
+}  // namespace hypro

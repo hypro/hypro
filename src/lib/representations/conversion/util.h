@@ -8,14 +8,13 @@
  */
 
 #pragma once
-
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
 #include "../SupportFunction/SupportFunction.h"
 
-namespace hypro{
 
 
+namespace hypro {
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
@@ -169,9 +168,4 @@ vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& po
     return vector_t<Number>::Zero(0);
 }
 
-
-
-
-} // namespace
-
-
+} // namespace hypro

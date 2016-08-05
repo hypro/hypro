@@ -498,4 +498,4 @@ namespace hypro {
 		}
 	}
 	
-} // namespace
+} // namespace hypro

@@ -7,6 +7,7 @@
  */
 
 #pragma once
+
 #include "../../config.h"
 #include "../../types.h"
 
@@ -29,12 +30,12 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 		}
 
 		matrix_t<Number> matrix() const {
-			assert(parameters.begin().first == 1);
+			assert(parameters.begin()->first == 1);
 			return parameters.begin()->second.first;
 		}
 
 		vector_t<Number> vector() const {
-			assert(parameters.begin().first == 1);
+			assert(parameters.begin()->first == 1);
 			return parameters.begin()->second.second;
 		}
 
@@ -79,4 +80,4 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNION, POLY, INFTY_BALL, TWO_BAL
 
 	};
 
-}
+} // namespace hypro

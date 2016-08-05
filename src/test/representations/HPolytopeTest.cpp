@@ -2,8 +2,9 @@
 #include "../defines.h"
 #include "../../lib/representations/conversion/Converter.h"
 
-using namespace hypro;
+//using namespace hypro;
 
+/*
 template<typename Number>
 class HPolytopeTest : public ::testing::Test
 {
@@ -38,6 +39,8 @@ protected:
 	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes1;
 	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes2;
 };
+*/
+/*
 
 TYPED_TEST(HPolytopeTest, Constructor)
 {
@@ -107,7 +110,7 @@ TYPED_TEST(HPolytopeTest, Corners)
 	std::cout << "Ping." << std::endl;
 
 	// test extremepoints
-	hypro::vector_t<TypeParam> p1(2);
+	vector_t<TypeParam> p1(2);
 	p1(0) = 2;
 	p1(1) = 0;
 	EXPECT_FALSE(hpt1.isExtremePoint(p1));
@@ -152,7 +155,7 @@ TYPED_TEST(HPolytopeTest, Union)
 		EXPECT_TRUE(res.contains(vertex));
 	}
 
-	/* std::cout<< "Part 2 starting: "	<< std::endl;
+	std::cout<< "Part 2 starting: "	<< std::endl;
 			  std::vector<Halfspace<TypeParam>> ps3;
 			  Halfspace<TypeParam> p01 = Halfspace<TypeParam>({0,-1,0},1);
 			  Halfspace<TypeParam> p02 = Halfspace<TypeParam>({0,1,0},-3);
@@ -208,7 +211,7 @@ TYPED_TEST(HPolytopeTest, Union)
 			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			  for(auto& vertex : res2.vertices()) {
 				  EXPECT_TRUE(res3.contains(vertex));
-			  } */ //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
+			  }  //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
 }
 
 TYPED_TEST(HPolytopeTest, Evaluate)
@@ -228,15 +231,7 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 	b(1) = 1;	
 	b(2) = 0;
 	b(3) = 1;
-	
-	/* SMT-lib format:
-	(push)
-	(declare-fun _r_1 () Real)
-	(declare-fun _r_2 () Real)
-	(assert (and (<= (+ _r_2 _r_1) 0) (<= (+ _r_1 (- 1)) 0) (<= _r_2 0) (<= (+ (* (- 1) _r_2) (- 1)) 0)))
 
-	(maximize _r_1)
-	*/
 	
 	HPolytope<TypeParam> poly = HPolytope<TypeParam>(A,b);
 	vector_t<TypeParam> dir(2);
@@ -415,3 +410,5 @@ TYPED_TEST(HPolytopeTest, Membership)
 	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), 0});
 	EXPECT_FALSE(hpt1.contains(p5));
 }
+
+*/

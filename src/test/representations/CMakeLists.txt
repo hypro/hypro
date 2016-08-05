@@ -1,5 +1,5 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib ${include_dirs} )
+	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib ${hypro_INCLUDE_DIRS} )
 	link_directories(${CMAKE_BINARY_DIR}/lib)
 
 	################################
@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	if(USE_PPL)
 		add_executable(runRepresentationTests
-			BoxTest.cpp
+			#BoxTest.cpp
 			ConverterTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
@@ -24,8 +24,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		)
 	else()
 		add_executable(runRepresentationTests
-			BoxTest.cpp
-			ConverterTest.cpp
+			#BoxTest.cpp
+			#ConverterTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
 			NeighborhoodContainerTest.cpp
@@ -51,7 +51,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#add_dependencies(runPTermTests googletest)
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC
-		${libraries}
+		${hypro_LIBRARIES_DYNAMIC}
 		${GTEST_LIBRARIES}
 		${PROJECT_NAME}
 	)

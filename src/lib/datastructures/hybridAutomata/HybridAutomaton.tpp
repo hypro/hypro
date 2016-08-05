@@ -21,12 +21,12 @@ HybridAutomaton<Number>::HybridAutomaton( const locationSet& _locs,
 {}
 
 template <typename Number>
-const std::set<hypro::Location<Number> *> &HybridAutomaton<Number>::locations() const {
+const std::set<Location<Number> *> &HybridAutomaton<Number>::locations() const {
 	return mLocations;
 }
 
 template <typename Number>
-const std::set<hypro::Transition<Number> *> &HybridAutomaton<Number>::transitions() const {
+const std::set<Transition<Number> *> &HybridAutomaton<Number>::transitions() const {
 	return mTransitions;
 }
 

@@ -48,7 +48,7 @@ namespace hypro {
 			 *
 			 * @return The id of the computed flowpipe.
 			 */
-			flowpipe_t<SupportFunction<Number>> computeForwardTimeClosure( const hypro::State<Number>& _state );
+			flowpipe_t<SupportFunction<Number>> computeForwardTimeClosure( const State<Number>& _state );
 
 
 			/**
@@ -76,7 +76,7 @@ namespace hypro {
 			 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 			 * @return True, if the transition is enabled, false otherwise.
 			 */
-			bool intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
+			bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
 
 			/**
 			 * @brief Printing method for a flowpipe. Prints every segment.
@@ -93,7 +93,7 @@ namespace hypro {
 			void printFlowpipeReduced( const flowpipe_t<SupportFunction<Number>>& _flowpipe ) const;
 		private:
 
-			matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
+			matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
 			boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> computeFirstSegment( const State<Number>& _state ) const;
 			bool intersectBadStates( const State<Number>& _state, const SupportFunction<Number>& _segment ) const;
 		};

@@ -27,7 +27,7 @@ CLANG_WARNING_DISABLE("-Wdeprecated-register")
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-#define REACH_DEBUG
+// #define REACH_DEBUG
 //#define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
@@ -80,7 +80,7 @@ public:
 	 *
 	 * @return The id of the computed flowpipe.
 	 */
-	flowpipe_t<Representation> computeForwardTimeClosure( const hypro::State<Number>& _state );
+	flowpipe_t<Representation> computeForwardTimeClosure( const State<Number>& _state );
 
         
 	/**
@@ -108,7 +108,7 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool intersectGuard( hypro::Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
+	bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
 
 	/**
 	 * @brief Printing method for a flowpipe. Prints every segment.
@@ -125,7 +125,7 @@ public:
 	void printFlowpipeReduced( const flowpipe_t<Representation>& _flowpipe ) const;
 private:
 
-	matrix_t<Number> computeTrafoMatrix( hypro::Location<Number>* _loc ) const;
+	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
 	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State<Number>& _state ) const;
 	bool intersectBadStates( const State<Number>& _state, const Representation& _segment ) const;
 };

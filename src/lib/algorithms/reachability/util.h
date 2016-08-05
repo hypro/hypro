@@ -35,8 +35,8 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
  */
 template <typename Number, typename Representation>
 Representation computePolytope( unsigned int _dim, Number _radius ) {
-	hypro::matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
-	hypro::vector_t<Number> vec( 2 * _dim, 1 );
+	matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
+	vector_t<Number> vec( 2 * _dim, 1 );
 	int i = 0;
 	for ( unsigned z = 0; z < _dim; ++z ) {
 		vec( i ) = _radius;
@@ -104,4 +104,4 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 	}
 	*/
-}
+} // namespace hypro

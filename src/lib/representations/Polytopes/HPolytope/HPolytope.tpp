@@ -285,7 +285,7 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 	assert(!this->empty());
 	assert(!this->vertices().empty());
 	for ( const auto &point : this->vertices() ) {
-		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
+		Number inftyNorm = Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
 #ifdef HPOLY_DEBUG_MSG
@@ -702,7 +702,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		*/
 		/*
 		for(const auto& vertex : owenTmpRes.vertices()) {
-			std::cout << "Result vertex " << hypro::convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
+			std::cout << "Result vertex " << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
 			//assert(std::find(unitedVertices.begin(), unitedVertices.end(), vertex) != unitedVertices.end());
 		}
 		std::cout << __func__ << " END." << std::endl;

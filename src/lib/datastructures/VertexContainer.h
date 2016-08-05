@@ -298,7 +298,7 @@ class VertexContainer {
 		return ostr;
 	}
 };
-}
+} // namespace hypro
 
 namespace std {
 	template<class Number>
@@ -307,9 +307,7 @@ namespace std {
 			return std::hash<hypro::vSet<Number>>()(vertexContainer.vertices());
 		}
 	};
-}
 
-namespace std {
 	template<class Number>
 	struct hash<set<hypro::Vertex<Number>>> {
 		std::size_t operator()(hypro::vSet<Number> const& set) const
@@ -322,4 +320,4 @@ namespace std {
 			return result;
 		}
 	};
-} //namespace
+} //namespace std

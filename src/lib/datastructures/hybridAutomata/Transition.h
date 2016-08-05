@@ -18,11 +18,11 @@ template <typename Number>
 class Transition {
   public:
 	struct Guard {
-		hypro::vector_t<Number> vec;
-		hypro::matrix_t<Number> mat;
+		vector_t<Number> vec;
+		matrix_t<Number> mat;
 
 		unsigned discreteOffset;
-		std::vector<std::pair<carl::Variable, hypro::matrix_t<Number>>> discreteGuard;
+		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteGuard;
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
 			_ostr << _g.mat << " + " << std::endl << _g.vec << std::endl;
@@ -34,12 +34,12 @@ class Transition {
 	};
 
 	struct Reset {
-		hypro::vector_t<Number> vec;  // Translation Vector
-		hypro::matrix_t<Number> mat;  // Transformation Matrix
+		vector_t<Number> vec;  // Translation Vector
+		matrix_t<Number> mat;  // Transformation Matrix
 
 		unsigned discreteOffset;
-		hypro::vector_t<Number> discreteVec;  // Translation Vector
-		hypro::matrix_t<Number> discreteMat;  // Transformation Matrix
+		vector_t<Number> discreteVec;  // Translation Vector
+		matrix_t<Number> discreteMat;  // Transformation Matrix
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
 			_ostr << _a.mat << " + " << std::endl << _a.vec << std::endl;
@@ -133,4 +133,4 @@ class Transition {
 		return _ostr;
 	}
 };
-}
+} // namespace hypro

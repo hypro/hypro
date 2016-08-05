@@ -11,7 +11,6 @@
 #include "../defines.h"
 
 #include "../../lib/datastructures/Halfspace.h"
-#include "../../lib/representations/GeometricObject.h"
 
 using namespace hypro;
 using namespace carl;

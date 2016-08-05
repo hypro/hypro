@@ -24,11 +24,11 @@ class Location {
 
   public:
 	struct Invariant {
-		hypro::vector_t<Number> vec;
-		hypro::matrix_t<Number> mat;
+		vector_t<Number> vec;
+		matrix_t<Number> mat;
 
 		unsigned discreteOffset;
-		std::vector<std::pair<carl::Variable, hypro::matrix_t<Number>>> discreteInvariant;
+		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteInvariant;
 	};
 
   protected:
@@ -36,19 +36,19 @@ class Location {
 
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );
-	Location( unsigned _id, const hypro::matrix_t<Number>& _mat );
-	Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
+	Location( unsigned _id, const matrix_t<Number>& _mat );
+	Location( unsigned _id, const matrix_t<Number>& _mat,
 			  const transitionSet& _trans, const Location<Number>::Invariant& _inv );
-	Location( unsigned _id, const hypro::matrix_t<Number>& _mat,
+	Location( unsigned _id, const matrix_t<Number>& _mat,
 			  const transitionSet& _trans, const Location<Number>::Invariant& _inv,
-			  const hypro::matrix_t<Number>& _extInputMat );
+			  const matrix_t<Number>& _extInputMat );
 
   private:
 	/**
 	 * Member
 	 */
-	mutable hypro::matrix_t<Number> mFlow;
-	hypro::matrix_t<Number> mExternalInput;
+	mutable matrix_t<Number> mFlow;
+	matrix_t<Number> mExternalInput;
 	transitionSet mTransitions;
 	Invariant mInvariant;
 	unsigned mId;
@@ -63,19 +63,19 @@ class Location {
 	/**
 	 * Getter & Setter
 	 */
-	const hypro::matrix_t<Number>& flow() const;
+	const matrix_t<Number>& flow() const;
 	const Invariant& invariant() const;
 	const transitionSet& transitions() const;
-	const hypro::matrix_t<Number>& externalInput() const;
+	const matrix_t<Number>& externalInput() const;
 	unsigned id() const { return mId; }
 
-	void setFlow( const hypro::matrix_t<Number>& _mat );
-	void setInvariant( const struct hypro::Location<Number>::Invariant& _inv );
-	void setInvariant( const hypro::matrix_t<Number>& _mat, const hypro::vector_t<Number>& _vec );
+	void setFlow( const matrix_t<Number>& _mat );
+	void setInvariant( const struct Location<Number>::Invariant& _inv );
+	void setInvariant( const matrix_t<Number>& _mat, const vector_t<Number>& _vec );
 	void setLocation( const struct locationContent& _loc );
 	void setTransitions( const transitionSet& _trans );
 	void addTransition( Transition<Number>* _trans );
-	void setExtInputMat( const hypro::matrix_t<Number>& _mat );
+	void setExtInputMat( const matrix_t<Number>& _mat );
 
 	inline bool operator<( const Location<Number>& _rhs ) const { return ( mId < _rhs.id() ); }
 	inline bool operator==( const Location<Number>& _rhs ) const { return ( mId == _rhs.id() ); }

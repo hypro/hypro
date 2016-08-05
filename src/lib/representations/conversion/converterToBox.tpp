@@ -169,6 +169,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     return target;
 }
 
+
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE ) {
@@ -203,6 +204,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 
 	return BoxT<Number,Converter>( std::make_pair(minima, maxima) );                                                 //creates a box with the computed intervals
 }
+
 
 //conversion from Polytope to box (different data structure)
 //template<typename Number>

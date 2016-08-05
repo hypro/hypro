@@ -36,7 +36,7 @@ class BoxT {
 	 * Members
 	 **************************************************************************/
   protected:
-    std::pair<hypro::Point<Number>, hypro::Point<Number>> mLimits;
+    std::pair<Point<Number>, Point<Number>> mLimits;
 
   public:
 	/***************************************************************************
@@ -60,8 +60,8 @@ class BoxT {
 	 * @param val Input interval.
 	 */
 	explicit BoxT( const carl::Interval<Number>& val ) {
-        mLimits.first = hypro::Point<Number>({val.lower()});
-        mLimits.second = hypro::Point<Number>({val.upper()});
+        mLimits.first = Point<Number>({val.lower()});
+        mLimits.second = Point<Number>({val.upper()});
 	}
 
 	/**
@@ -149,7 +149,7 @@ class BoxT {
 	 * @details Converts the two-points representation into a hyperplanar representation, i.e. a H-polytope.
 	 * @return A vector of hyperplanes.
 	 */
-	std::vector<hypro::Halfspace<Number>> constraints() const;
+	std::vector<Halfspace<Number>> constraints() const;
 
 	/**
 	 * @brief Extends the dimension of the current box by the given interval.

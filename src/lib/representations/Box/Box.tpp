@@ -230,7 +230,7 @@ template<typename Number, typename Converter>
 Number BoxT<Number,Converter>::supremum() const {
 	Number max = 0;
 	for ( auto &point : this->vertices() ) {
-		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
+		Number inftyNorm = Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
 	return max;
