@@ -48,6 +48,7 @@ option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." ON)
 option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
+option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
 
@@ -143,8 +144,8 @@ endif()
 load_library(hypro Boost 1.55.0)
 #find_package(Boost REQUIRED)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
-set(Boost_USE_MULTITHREADED      ON) 
-set(Boost_USE_STATIC_RUNTIME    OFF) 
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME    OFF)
 
 load_library(hypro Boost 1.55.0 COMPONENTS program_options)
 load_library(hypro carl 0)
@@ -159,6 +160,10 @@ endif()
 
 if(HYPRO_USE_Z3)
 	load_library(hypro z3 0)
+endif()
+
+if(HYPRO_USE_SOPLEX)
+	load_library(hypro soplex 0)
 endif()
 
 if(NOT FORCE_SHIPPED_RESOURCES)
