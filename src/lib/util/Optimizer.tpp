@@ -299,6 +299,57 @@ namespace hypro {
 		mSmtratSolver.pop();
 		#endif // RECREATE_SOLVER
 		#endif // HYPRO_USE_SMTRAT
+		#ifdef HYPRO_USE_SOPLEX
+
+		soplex::SoPlex solver;
+
+		/* set the objective sense */
+		solver.setIntParam(soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE);
+
+		soplex::DSVector dummycol(0);
+		for(unsigned varIndex = 0; varIndex <= _direction.rows(); ++varIndex ) {
+			solver.addColRational(soplex::LPColRational(carl::convert<Number,mpq_class>(_direction(varIndex)), dummycol, soplex::infinity, soplex::infinity));
+		}
+
+		/* then constraints one by one */
+		for(unsigned rowIndex = 0; rowIndex < mConstraintMatrix.rows(); ++rowIndex) {
+			soplex::DSVector row(mConstraintMatrix.cols());
+			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
+				row.add(colIndex, (carl::convert<Number, mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+			}
+			solver.addRowRational(soplex::LPRowRational(-1*soplex::infinity, row, (carl::convert<Number, mpq_class>(mConstraintVector(rowIndex))).get_mpq_t()));
+		}
+
+		/* solve LP */
+		soplex::SPxSolver::Status stat;
+		soplex::DVector prim(mConstraintMatrix.cols());
+		soplex::DVector dual(mConstraintMatrix.rows());
+		stat = solver.solve();
+
+		switch(stat) {
+			case soplex::SPxSolver::OPTIMAL:{
+				vector_t<Number> optimalPoint = vector_t<Number>(mConstraintMatrix.cols());
+				for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
+					optimalPoint(colIndex) = carl::convert<mpq_class,Number>(mpq_class((solver.objRational(colIndex)).getMpqPtr()));
+				}
+				return EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class((solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
+			}
+			case soplex::SPxSolver::UNBOUNDED:{
+				return EvaluationResult<Number>(SOLUTION::INFTY);
+			}
+			case soplex::SPxSolver::INFEASIBLE:{
+				return EvaluationResult<Number>(SOLUTION::INFEAS);
+			}
+			case soplex::SPxSolver::UNKNOWN:{
+				assert(false);
+				return EvaluationResult<Number>();
+				break;
+			}
+			default:
+				assert(false);
+				return EvaluationResult<Number>();
+		}
+		#endif // HYPRO_USE_SOPLEX
 
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
@@ -582,7 +633,7 @@ namespace hypro {
 		#endif
 		switch (firstCheck) {
 				case z3::check_result::unsat: {
-		
+
 					return res;
 					break;
 				}

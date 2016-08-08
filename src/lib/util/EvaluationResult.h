@@ -12,6 +12,9 @@ struct EvaluationResult {
 	EvaluationResult() : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(SOLUTION::INFEAS)
 		{}
 
+	EvaluationResult(SOLUTION err) : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
+		{}
+
 	EvaluationResult(const Number& val, SOLUTION err) : supportValue(val), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
 		{}
 
