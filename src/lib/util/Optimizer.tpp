@@ -304,35 +304,43 @@ namespace hypro {
 		soplex::SoPlex solver;
 
 		/* set the objective sense */
-		solver.setIntParam(soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE);
+		solver.setIntParam(soplex::SoPlex::CHECKMODE, soplex::SoPlex::CHECKMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
 
-		soplex::DSVector dummycol(0);
+		soplex::DSVectorRational dummycol(0);
 		for(unsigned varIndex = 0; varIndex <= _direction.rows(); ++varIndex ) {
-			solver.addColRational(soplex::LPColRational(*((carl::convert<Number,mpq_class>(_direction(varIndex))).get_mpq_t()), dummycol, soplex::infinity, soplex::infinity));
+			mpq_t a;
+			a[0] = *((carl::convert<Number,mpq_class>(_direction(varIndex))).get_mpq_t());
+			solver.addColRational(soplex::LPColRational(soplex::Rational(a), dummycol, soplex::infinity, soplex::infinity));
 		}
 
 		/* then constraints one by one */
 		for(unsigned rowIndex = 0; rowIndex < mConstraintMatrix.rows(); ++rowIndex) {
-			soplex::DSVector row(mConstraintMatrix.cols());
+			soplex::DSVectorRational row(mConstraintMatrix.cols());
 			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
-				row.add(colIndex, (carl::convert<Number, mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				mpq_t a;
+				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				row.add(colIndex, soplex::Rational(a));
 			}
-			solver.addRowRational(soplex::LPRowRational(-1*soplex::infinity, row, (carl::convert<Number, mpq_class>(mConstraintVector(rowIndex))).get_mpq_t()));
+			mpq_t a;
+			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
 		}
 
 		/* solve LP */
 		soplex::SPxSolver::Status stat;
-		soplex::DVector prim(mConstraintMatrix.cols());
-		soplex::DVector dual(mConstraintMatrix.rows());
+		soplex::DVectorRational prim(mConstraintMatrix.cols());
+		soplex::DVectorRational dual(mConstraintMatrix.rows());
 		stat = solver.solve();
 
 		switch(stat) {
 			case soplex::SPxSolver::OPTIMAL:{
 				vector_t<Number> optimalPoint = vector_t<Number>(mConstraintMatrix.cols());
 				for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
-					optimalPoint(colIndex) = carl::convert<mpq_class,Number>(mpq_class((solver.objRational(colIndex)).getMpqPtr()));
+					optimalPoint(colIndex) = carl::convert<mpq_class,Number>(mpq_class(*(solver.objRational(colIndex)).getMpqPtr()));
 				}
-				return EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class((solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
+				return EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
 			}
 			case soplex::SPxSolver::UNBOUNDED:{
 				return EvaluationResult<Number>(SOLUTION::INFTY);
@@ -429,6 +437,49 @@ namespace hypro {
 			mConsistencyChecked = true;
 		}
 		#endif
+
+		#ifdef HYPRO_USE_SOPLEX
+
+		soplex::SoPlex solver;
+
+		/* set the objective sense */
+   		solver.setIntParam(soplex::SoPlex::CHECKMODE, soplex::SoPlex::CHECKMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
+
+		soplex::DSVectorRational dummycol(mConstraintMatrix.cols());
+		for(unsigned varIndex = 0; varIndex <= mConstraintMatrix.cols(); ++varIndex ) {
+			solver.addColRational(soplex::LPColRational(soplex::Rational(1), dummycol, soplex::infinity, soplex::infinity));
+		}
+
+		/* then constraints one by one */
+		for(unsigned rowIndex = 0; rowIndex < mConstraintMatrix.rows(); ++rowIndex) {
+			soplex::DSVectorRational row(mConstraintMatrix.cols());
+			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
+				mpq_t a;
+				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				row.add(colIndex, soplex::Rational(a));
+				std::cout << "Before conversion: " << carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex)) << std::endl;
+				std::cout << "Test: " << (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t() << std::endl;
+				std::cout << "a(" << rowIndex << ", " << colIndex << ") = " << a << std::endl;
+			}
+			mpq_t a;
+			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
+			std::cout << "Row: " << row << std::endl;
+		}
+
+		solver.writeFileReal("dump.lp", NULL, NULL, NULL);
+
+		//std::cout << "NumRowsRational: " << solver.numRowsRational() << ", numColsRational: " << solver.numColsRational() << std::endl;
+
+		/* solve LP */
+		solver.solve();
+
+		mLastConsistencyAnswer = solver.hasPrimal() ? SOLUTION::FEAS : SOLUTION::INFEAS;
+
+		#endif
+
 		return (mLastConsistencyAnswer == SOLUTION::FEAS);
 	}
 
@@ -491,7 +542,42 @@ namespace hypro {
 		mSmtratSolver.pop();
 		return (tmp == smtrat::Answer::SAT);
 		#endif // RECREATE_SOLVER
-		#else // HYPRO_USE_SMTRAT
+		#endif
+
+		#ifdef HYPRO_USE_SOPLEX
+
+		soplex::SoPlex solver;
+
+		solver.setIntParam(soplex::SoPlex::CHECKMODE, soplex::SoPlex::CHECKMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
+   		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
+
+		soplex::DSVectorRational dummycol(0);
+		for(unsigned varIndex = 0; varIndex <= mConstraintMatrix.cols(); ++varIndex ) {
+			mpq_t a;
+			a[0] = *((carl::convert<Number,mpq_class>(_point.at(varIndex))).get_mpq_t());
+			solver.addColRational(soplex::LPColRational(soplex::Rational(1), dummycol, a, a));
+		}
+
+		/* then constraints one by one */
+		for(unsigned rowIndex = 0; rowIndex < mConstraintMatrix.rows(); ++rowIndex) {
+			soplex::DSVectorRational row(mConstraintMatrix.cols());
+			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
+				mpq_t a;
+				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				row.add(colIndex, soplex::Rational(a));
+			}
+			mpq_t a;
+			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
+		}
+
+		/* solve LP */
+		solver.solve();
+
+		return solver.hasPrimal();
+
+		#endif
 
 		// set point
 		assert(mConstraintMatrix.cols() == _point.rawCoordinates().rows());
@@ -502,7 +588,6 @@ namespace hypro {
 
 		glp_exact( lp, NULL );
 		return (glp_get_status(lp) != GLP_NOFEAS);
-		#endif
 	}
 
 	template<typename Number>
