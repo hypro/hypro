@@ -106,6 +106,7 @@ namespace hypro {
 			}
 			default:
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+				//std::cout << "GLPK infeas." << std::endl;
 				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 #else
 				return EvaluationResult<Number>(0, vector_t<Number>::Zero(1), SOLUTION::INFEAS);
@@ -186,11 +187,13 @@ namespace hypro {
 			addPresolution(simplex,res,_direction,objective);
 		} else if( res.errorCode == INFEAS) {
 			if(simplex.check() == smtrat::Answer::UNSAT){
+				//std::cout << "SMTRAT infeas." << std::endl;
 				return res; // glpk correctly detected infeasibility.
 			} // if glpk falsely detected infeasibility, we cope with this case below.
 		} else { // if glpk already detected unboundedness we return its result.
 			return res;
 		}
+		//std::cout << "SMTRAT: Without presolution." << std::endl;
 		#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
@@ -208,7 +211,7 @@ namespace hypro {
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
-				// std::cout << "smtrat: SAT" << std::endl;
+				//std::cout << "smtrat: SAT" << std::endl;
 				res = extractSolution(simplex,objective);
 				assert(checkPoint(Point<Number>(res.optimumValue)));
 				break;
@@ -233,6 +236,7 @@ namespace hypro {
 				#else // USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				assert(smtratCheck == smtrat::Answer::UNSAT);
+				//std::cout << "smtrat: UNSAT" << std::endl;
 				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				#endif // USE_PRESOLUTION
 				break;

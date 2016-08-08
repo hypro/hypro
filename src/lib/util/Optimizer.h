@@ -13,6 +13,9 @@
 #ifdef HYPRO_USE_Z3
 #include "z3/z3Convenience.h"
 #endif
+#ifdef HYPRO_USE_SOPLEX
+#include "soplex.h"
+#endif
 #include <carl/util/Singleton.h>
 #include <mutex>
 
