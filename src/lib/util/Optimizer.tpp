@@ -308,7 +308,7 @@ namespace hypro {
 
 		soplex::DSVector dummycol(0);
 		for(unsigned varIndex = 0; varIndex <= _direction.rows(); ++varIndex ) {
-			solver.addColRational(soplex::LPColRational(carl::convert<Number,mpq_class>(_direction(varIndex)), dummycol, soplex::infinity, soplex::infinity));
+			solver.addColRational(soplex::LPColRational(*((carl::convert<Number,mpq_class>(_direction(varIndex))).get_mpq_t()), dummycol, soplex::infinity, soplex::infinity));
 		}
 
 		/* then constraints one by one */
