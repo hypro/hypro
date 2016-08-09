@@ -311,8 +311,10 @@ namespace hypro {
 		soplex::DSVectorRational dummycol(0);
 		for(unsigned varIndex = 0; varIndex <= _direction.rows(); ++varIndex ) {
 			mpq_t a;
-			a[0] = *((carl::convert<Number,mpq_class>(_direction(varIndex))).get_mpq_t());
+			mpq_init(a);
+			mpq_set(a, (carl::convert<Number,mpq_class>(_direction(varIndex))).get_mpq_t());
 			solver.addColRational(soplex::LPColRational(soplex::Rational(a), dummycol, soplex::infinity, soplex::infinity));
+			mpq_clear(a);
 		}
 
 		/* then constraints one by one */
@@ -320,12 +322,16 @@ namespace hypro {
 			soplex::DSVectorRational row(mConstraintMatrix.cols());
 			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
 				mpq_t a;
-				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				mpq_init(a);
+				mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
 				row.add(colIndex, soplex::Rational(a));
+				mpq_clear(a);
 			}
 			mpq_t a;
-			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			mpq_init(a);
+			mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
 			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
+			mpq_clear(a);
 		}
 
 		/* solve LP */
@@ -457,16 +463,20 @@ namespace hypro {
 			soplex::DSVectorRational row(mConstraintMatrix.cols());
 			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
 				mpq_t a;
-				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				mpq_init(a);
+				mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
 				row.add(colIndex, soplex::Rational(a));
 				//std::cout << "Before conversion: " << carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex)) << std::endl;
 				//std::cout << "Test: " << (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t() << std::endl;
 				//std::cout << "a(" << rowIndex << ", " << colIndex << ") = " << a << std::endl;
+				mpq_clear(a);
 			}
 			mpq_t a;
-			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			mpq_init(a);
+			mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
 			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
 			//std::cout << "Row: " << row << std::endl;
+			mpq_clear(a);
 		}
 
 		//solver.writeFileReal("dump.lp", NULL, NULL, NULL);
@@ -555,8 +565,10 @@ namespace hypro {
 		soplex::DSVectorRational dummycol(0);
 		for(unsigned varIndex = 0; varIndex <= mConstraintMatrix.cols(); ++varIndex ) {
 			mpq_t a;
-			a[0] = *((carl::convert<Number,mpq_class>(_point.at(varIndex))).get_mpq_t());
+			mpq_init(a);
+			mpq_set(a, (carl::convert<Number,mpq_class>(_point.at(varIndex))).get_mpq_t());
 			solver.addColRational(soplex::LPColRational(soplex::Rational(1), dummycol, a, a));
+			mpq_clear(a);
 		}
 
 		/* then constraints one by one */
@@ -564,12 +576,16 @@ namespace hypro {
 			soplex::DSVectorRational row(mConstraintMatrix.cols());
 			for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
 				mpq_t a;
-				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
+				mpq_init(a);
+				mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
 				row.add(colIndex, soplex::Rational(a));
+				mpq_clear(a);
 			}
 			mpq_t a;
-			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
+			mpq_init(a);
+			mpq_set(a, (carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
 			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
+			mpq_clear(a);
 		}
 
 		/* solve LP */
