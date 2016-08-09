@@ -12,6 +12,7 @@
  */
 
 #include "PolytopeSupportFunction.h"
+#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 namespace hypro {
 
@@ -245,7 +246,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
-#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
 #endif
 	assert( l.rows() == mDimension );
@@ -259,7 +260,7 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.emplace_back(evaluate( _A.row( index ) ));
-#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
 #endif
 		//assert(this->contains(res.back().optimumValue));
@@ -279,7 +280,7 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 	//std::cout << "Matrix " << mConstraints << " contains " << _point << std::endl;
 	for ( unsigned rowIt = 0; rowIt < mConstraints.rows(); ++rowIt ) {
 		if( mConstraints.row(rowIt).dot(_point) > mConstraintConstants(rowIt) ){
-			//std::cout << __func__ << ": Value is " <<  mConstraints.row(rowIt).dot(_point) << " but has to be <= " << mConstraintConstants(rowIt) << std::endl;
+			std::cout << __func__ << ": Value is " <<  mConstraints.row(rowIt).dot(_point) << " but has to be <= " << mConstraintConstants(rowIt) << std::endl;
 			return false;
 		}
 	}
