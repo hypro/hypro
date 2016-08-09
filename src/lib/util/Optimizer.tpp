@@ -1013,7 +1013,8 @@ namespace hypro {
 				deleteArrays();
 
 				// TODO: can we directly reset stuff?
-				glp_erase_prob(lp);
+				glp_delete_prob(lp);
+				lp = glp_create_prob();
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
