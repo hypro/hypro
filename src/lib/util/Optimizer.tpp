@@ -459,17 +459,17 @@ namespace hypro {
 				mpq_t a;
 				a[0] = *((carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t());
 				row.add(colIndex, soplex::Rational(a));
-				std::cout << "Before conversion: " << carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex)) << std::endl;
-				std::cout << "Test: " << (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t() << std::endl;
-				std::cout << "a(" << rowIndex << ", " << colIndex << ") = " << a << std::endl;
+				//std::cout << "Before conversion: " << carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex)) << std::endl;
+				//std::cout << "Test: " << (carl::convert<Number,mpq_class>(mConstraintMatrix(rowIndex, colIndex))).get_mpq_t() << std::endl;
+				//std::cout << "a(" << rowIndex << ", " << colIndex << ") = " << a << std::endl;
 			}
 			mpq_t a;
 			a[0] = *((carl::convert<Number,mpq_class>(mConstraintVector(rowIndex))).get_mpq_t());
 			solver.addRowRational(soplex::LPRowRational(soplex::Rational(-1)*soplex::infinity, row, soplex::Rational(a) ));
-			std::cout << "Row: " << row << std::endl;
+			//std::cout << "Row: " << row << std::endl;
 		}
 
-		solver.writeFileReal("dump.lp", NULL, NULL, NULL);
+		//solver.writeFileReal("dump.lp", NULL, NULL, NULL);
 
 		//std::cout << "NumRowsRational: " << solver.numRowsRational() << ", numColsRational: " << solver.numColsRational() << std::endl;
 
