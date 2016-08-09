@@ -308,7 +308,9 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
-   		//solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
+   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
+   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
+   		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
@@ -343,7 +345,7 @@ namespace hypro {
 
 		// std::cout << solver.statisticString() << std::endl;
 		solver.writeFileRational("dump.lp", NULL, NULL, NULL);
-		exit(0);
+		//exit(0);
 
 		/* solve LP */
 		soplex::SPxSolver::Status stat;
@@ -354,10 +356,12 @@ namespace hypro {
 		switch(stat) {
 			case soplex::SPxSolver::OPTIMAL:{
 				vector_t<Number> optimalPoint = vector_t<Number>(mConstraintMatrix.cols());
+				solver.getPrimalRational(prim);
 				for(unsigned colIndex = 0; colIndex < mConstraintMatrix.cols(); ++colIndex) {
-					optimalPoint(colIndex) = carl::convert<mpq_class,Number>(mpq_class(*(solver.objRational(colIndex)).getMpqPtr()));
+					optimalPoint(colIndex) = carl::convert<mpq_class,Number>(mpq_class(*(prim[colIndex]).getMpqPtr()));
 				}
-				// std::cout << "Result evaluation (optimal): " << EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS) << std::endl;
+				//std::cout << "Result evaluation (optimal): " << EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS) << std::endl;
+				//std::cout << "Optimal point: " <<  optimalPoint << std::endl;
 				return EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
 			}
 			case soplex::SPxSolver::UNBOUNDED:{
@@ -466,6 +470,8 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
    		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
+   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
+   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
@@ -576,6 +582,8 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
    		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
+   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
+   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
