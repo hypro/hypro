@@ -308,8 +308,6 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
-   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
-   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
    		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
@@ -344,7 +342,7 @@ namespace hypro {
 		}
 
 		// std::cout << solver.statisticString() << std::endl;
-		solver.writeFileRational("dump.lp", NULL, NULL, NULL);
+		//solver.writeFileRational("dump.lp", NULL, NULL, NULL);
 		//exit(0);
 
 		/* solve LP */
@@ -470,8 +468,6 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
    		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
-   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
-   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
@@ -582,8 +578,6 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
    		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
-   		solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);
-   		solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 

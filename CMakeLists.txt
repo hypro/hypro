@@ -51,7 +51,6 @@ option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
-
 # Include own macros.
 include( hypromacros )
 
@@ -166,12 +165,15 @@ if(HYPRO_USE_SOPLEX)
 	load_library(hypro soplex 0)
 endif()
 
+add_subdirectory(src/resources EXCLUDE_FROM_ALL)
+
 if(NOT FORCE_SHIPPED_RESOURCES)
 	load_library(hypro GTest 0)
 	load_library(hypro GLPK 0)
+else()
+	include_directories( ${GLPK_INCLUDE_DIR} )
+	set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
 endif()
-
-add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 
 if(LOGGING_HYPRO)
 	include_directories( ${LOG4CPLUS_INCLUDE_DIRS} )
