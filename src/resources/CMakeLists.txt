@@ -52,7 +52,7 @@ if(GLPK_FOUND)
 else()
 	message("-- Use shipped version of GLPK")
 	ExternalProject_Add(
-		glpk
+		GLPK
 		DOWNLOAD_COMMAND ""
 		SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/glpk-4.54"
                 CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/src/resources/glpk-4.54/configure --prefix=${CMAKE_BINARY_DIR}/resources/glpk-4.54/ --with-gmp
@@ -67,7 +67,7 @@ else()
 	set( GLPK_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-4.54/include" PARENT_SCOPE )
 	set( GLPK_LIBRARIES "${CMAKE_BINARY_DIR}/resources/glpk-4.54/lib/libglpk.a" PARENT_SCOPE )
 
-	add_dependencies(resources glpk)
+	add_dependencies(resources GLPK)
 endif()
 
 if(LOGGING_HYPRO)
