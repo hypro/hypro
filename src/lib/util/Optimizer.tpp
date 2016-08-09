@@ -308,6 +308,7 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
+   		//solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
@@ -341,7 +342,8 @@ namespace hypro {
 		}
 
 		// std::cout << solver.statisticString() << std::endl;
-		// solver.writeFileRational("dump.lp", NULL, NULL, NULL);
+		solver.writeFileRational("dump.lp", NULL, NULL, NULL);
+		exit(0);
 
 		/* solve LP */
 		soplex::SPxSolver::Status stat;
@@ -463,12 +465,13 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
+   		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
 		soplex::DSVectorRational dummycol(mConstraintMatrix.cols());
 		for(unsigned varIndex = 0; varIndex < mConstraintMatrix.cols(); ++varIndex ) {
-			solver.addColRational(soplex::LPColRational(soplex::Rational(1), dummycol, soplex::infinity, soplex::infinity));
+			solver.addColRational(soplex::LPColRational(soplex::Rational(1), dummycol, soplex::infinity, soplex::Rational(-1)*soplex::infinity));
 		}
 
 		/* then constraints one by one */
@@ -492,12 +495,9 @@ namespace hypro {
 			mpq_clear(a);
 		}
 
-		//solver.writeFileReal("dump.lp", NULL, NULL, NULL);
-
-		//std::cout << "NumRowsRational: " << solver.numRowsRational() << ", numColsRational: " << solver.numColsRational() << std::endl;
-
 		/* solve LP */
 		solver.solve();
+		//solver.writeFileRational("dump.lp", NULL, NULL, NULL);
 
 		mLastConsistencyAnswer = solver.hasPrimal() ? SOLUTION::FEAS : SOLUTION::INFEAS;
 
@@ -575,6 +575,7 @@ namespace hypro {
    		solver.setIntParam(soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL);
    		solver.setIntParam(soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO);
+   		solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR);
    		solver.setRealParam(soplex::SoPlex::FEASTOL, 0.0);
    		solver.setRealParam(soplex::SoPlex::OPTTOL, 0.0);
 
