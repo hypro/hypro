@@ -48,7 +48,7 @@ private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
-        Number mBloatingFactor = 0.00001; 
+        Number mBloatingFactor = 0.00001;
 	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -82,7 +82,7 @@ public:
 	 */
 	flowpipe_t<Representation> computeForwardTimeClosure( const State<Number>& _state );
 
-        
+
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
 	 * @details [long description]

@@ -98,7 +98,9 @@ namespace hypro {
 #endif
 						// Check for direct urgent transitions
 						if(transition->triggerTime() == 0){
-							//std::cout << "Time trigger enabled" << std::endl;
+#ifdef REACH_DEBUG
+							std::cout << "Time trigger at time 0 enabled" << std::endl;
+#endif
 							if(intersectGuard(transition, _state, guardSatisfyingState)){
 								// when taking a timed transition, reset timestamp
 								if(mCurrentLevel != mSettings.jumpDepth) {
@@ -583,7 +585,8 @@ namespace hypro {
 			}
 
 			// check for continuous set guard intersection
-			//std::cout << "Test guard." << std::endl;
+			// std::cout << "Test guard." << std::endl;
+			assert(!Converter<Number>::toHPolytope(boost::get<SupportFunction<Number>>(_state.set)).empty());
 			std::pair<bool, SupportFunction<Number>> guardSatisfyingSet = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 
 			// check if the intersection is empty

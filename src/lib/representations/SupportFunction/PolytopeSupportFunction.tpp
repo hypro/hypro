@@ -12,7 +12,7 @@
  */
 
 #include "PolytopeSupportFunction.h"
-#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 namespace hypro {
 
@@ -230,11 +230,20 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
 		if(l == vector_t<Number>(mConstraints.row(0))){
 			//std::cout << "Managed to optimize into correct direction! which is: " << convert<Number,double>(mConstraints.row(0)).transpose() << std::endl;
-			//Number dist = (mConstraintConstants(0) / mConstraints.row(0).sum()) - 1;
-			//std::cout << "Distance is: " << dist << std::endl;
-			// The vectors are EXACTLY the same -> return the distance along with the vector as already stored.
-			return EvaluationResult<Number>(mConstraintConstants(0),l,SOLUTION::FEAS);
+			// The vectors are EXACTLY the same -> to find point on plane and to avoid squareroot computations, return vector
+			// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
+			vector_t<Number> pointOnPlane = vector_t<Number>::Zero(l.rows());
+			unsigned i = 0;
+			while(i<l.rows() && l(i) == 0) {
+				++i;
+			}
+			if(l(i) == 0) {
+				return EvaluationResult<Number>(); // TODO: Check if this is correct -> we evaluated something weird with a weird direction (both zero vertors).
+			}
+			pointOnPlane(i) = mConstraintConstants(0);
+			return EvaluationResult<Number>(mConstraintConstants(0),pointOnPlane,SOLUTION::FEAS);
 		} else {
+			//std::cout << "Eval to infty." << std::endl;
 			return EvaluationResult<Number>(0,SOLUTION::INFTY);
 		}
 	}
@@ -260,10 +269,6 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
 		res.emplace_back(evaluate( _A.row( index ) ));
-#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		assert(res.back().errorCode != SOLUTION::FEAS || this->contains(res.back().optimumValue));
-#endif
-		//assert(this->contains(res.back().optimumValue));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;
@@ -277,10 +282,11 @@ bool PolytopeSupportFunction<Number>::contains( const Point<Number> &_point ) co
 template <typename Number>
 bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
 	assert(mConstraints.rows() == mConstraintConstants.rows());
+	assert(mConstraints.cols() == _point.rows());
 	//std::cout << "Matrix " << mConstraints << " contains " << _point << std::endl;
 	for ( unsigned rowIt = 0; rowIt < mConstraints.rows(); ++rowIt ) {
 		if( mConstraints.row(rowIt).dot(_point) > mConstraintConstants(rowIt) ){
-			std::cout << __func__ << ": Value is " <<  mConstraints.row(rowIt).dot(_point) << " but has to be <= " << mConstraintConstants(rowIt) << std::endl;
+			//std::cout << __func__ << ": Value is " <<  mConstraints.row(rowIt).dot(_point) << " but has to be <= " << mConstraintConstants(rowIt) << std::endl;
 			return false;
 		}
 	}

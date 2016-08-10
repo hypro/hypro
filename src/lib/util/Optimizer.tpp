@@ -360,26 +360,26 @@ namespace hypro {
 				}
 				//std::cout << "Result evaluation (optimal): " << EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS) << std::endl;
 				//std::cout << "Optimal point: " <<  optimalPoint << std::endl;
-				return EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
+				res = EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS);
 			}
 			case soplex::SPxSolver::UNBOUNDED:{
-				return EvaluationResult<Number>(SOLUTION::INFTY);
+				res = EvaluationResult<Number>(SOLUTION::INFTY);
 			}
 			case soplex::SPxSolver::INFEASIBLE:{
-				return EvaluationResult<Number>(SOLUTION::INFEAS);
+				res = EvaluationResult<Number>(SOLUTION::INFEAS);
 			}
 			case soplex::SPxSolver::UNKNOWN:{
 				assert(false);
-				return EvaluationResult<Number>();
+				res = EvaluationResult<Number>();
 				break;
 			}
 			default:
 				assert(false);
-				return EvaluationResult<Number>();
+				res = EvaluationResult<Number>();
 		}
 		#endif // HYPRO_USE_SOPLEX
 
-#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3)
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
