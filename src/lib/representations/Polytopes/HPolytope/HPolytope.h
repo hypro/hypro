@@ -142,6 +142,8 @@ public:
 	 */
 	std::size_t size() const;
 
+	void unreduce() const { mNonRedundant = false;}
+
 	/**
 	 * @brief Getter for the matrix representation of the constraints.
 	 * @return A matrix.
@@ -199,7 +201,7 @@ public:
 
 	const HalfspaceVector& constraints() const;
 	bool hasConstraint( const Halfspace<Number>& hplane ) const;
-	void removeRedundancy();
+	const HPolytopeT<Number,Converter>& removeRedundancy();
 
 	HPolytopeT<Number, Converter> heuristic() const;
 	HPolytopeT<Number, Converter> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
@@ -265,7 +267,7 @@ public:
 	 */
 
 	//void calculateFan() const;
-	  
+
 	/*
      * Computes a set of constraints that correpsonds to the convex hull of the points
 	 * @param points The set of points. Note that auxilarry points might be added to this vector.

@@ -724,7 +724,7 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
-		if(mConstraintMatrix.rows() == 0) {
+		if(mConstraintMatrix.rows() <= 1) {
 			return res;
 		}
 

@@ -70,13 +70,13 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			for(const auto& constraint : boxConstraints){
 				mHPlanes.emplace_back(constraint);
 			}
-			
+
 			/* Alternative version
 			// We need a copy of the set of points since auxiliary points will be added
 			std::vector<Point<Number>> auxiliaryPoints(points);
 			mHPlanes = computeConstraintsForDegeneratedPolytope(auxiliaryPoints, mDimension - effectiveDim);
 			*/
-			
+
 		} else {
 			// TODO: Chose suitable convex hull algorithm
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
@@ -408,14 +408,16 @@ bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hpla
 }
 
 template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::removeRedundancy() {
+const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedundancy() {
+	std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
+		std::cout << "Not already reduced." << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
 		std::vector<std::size_t> redundant = opt.redundantConstraints();
-		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
+		std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
@@ -426,7 +428,7 @@ void HPolytopeT<Number, Converter>::removeRedundancy() {
 				if(redundant.back() == cnt){
 					mHPlanes.erase( --(rIt.base()) );
 					redundant.pop_back();
-					//std::cout << "Erase plane " << cnt << std::endl;
+					std::cout << "Erase plane " << cnt << std::endl;
 				}
 				--cnt;
 			}
@@ -435,6 +437,7 @@ void HPolytopeT<Number, Converter>::removeRedundancy() {
 		assert(redundant.empty());
 	}
 	mNonRedundant=true;
+	return *this;
 }
 
 template <typename Number, typename Converter>
@@ -495,7 +498,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << std::endl;
+	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
@@ -511,7 +514,17 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			assert(res.size() == this->size());
+			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
+			//std::cout << "Before: " << *this << " and after: " << res << std::endl;
+
+			HPolytopeT<Number,Converter> tmp = HPolytopeT<Number,Converter>(*this);
+			tmp.unreduce();
+			tmp.removeRedundancy();
+			//std::cout << "This reduced: " << tmp << std::endl;
+
+			//std::cout << "Done, now assert." << std::endl;
+
+			assert((res.removeRedundancy().size() <= HPolytopeT<Number,Converter>(*this).removeRedundancy().size()));
 			return res;
 		}
 	} else {
