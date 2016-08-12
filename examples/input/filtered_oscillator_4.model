@@ -1,0 +1,134 @@
+hybrid reachability
+{
+ state var x,y,x1,x2,x3,z
+
+ setting
+ {
+  fixed steps 0.05
+  time 4
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,z
+  fixed orders 8
+  cutoff 1e-15
+  precision 128
+  output filtered_oscillator_4
+  max jumps 5
+  print on
+ }
+ 
+ modes
+ {
+  l1
+  {
+   poly ode 1
+   {
+    x' = -2*x + 1.4
+    y' = -y - 0.7
+    x1' = 5*x - 5*x1
+    x2' = 5*x1 - 5*x2
+    x3' = 5*x2 - 5*x3
+    z' = 5*x3 - 5*z
+   }
+   
+   inv
+   {
+    x <= 0
+    y + 0.714286*x >= 0
+   }
+  }
+  
+  l2
+  {
+   poly ode 1
+   {
+    x' = -2*x - 1.4
+    y' = -y + 0.7
+    x1' = 5*x - 5*x1
+    x2' = 5*x1 - 5*x2
+    x3' = 5*x2 - 5*x3
+    z' = 5*x3 - 5*z
+   }
+   
+   inv
+   {
+    x <= 0
+    y + 0.714286*x <= 0
+   }
+  }
+  
+  l3
+  {
+   poly ode 1
+   {
+    x' = -2*x + 1.4
+    y' = -y - 0.7
+    x1' = 5*x - 5*x1
+    x2' = 5*x1 - 5*x2
+    x3' = 5*x2 - 5*x3
+    z' = 5*x3 - 5*z
+   }
+   
+   inv
+   {
+    x >= 0
+    y + 0.714286*x >= 0
+   }
+  }
+
+  l4
+  {
+   poly ode 1
+   {
+    x' = -2*x - 1.4
+    y' = -y + 0.7
+    x1' = 5*x - 5*x1
+    x2' = 5*x1 - 5*x2
+    x3' = 5*x2 - 5*x3
+    z' = 5*x3 - 5*z
+   }
+   
+   inv
+   {
+    x >= 0
+    y + 0.714286*x <= 0
+   }
+  }
+ }
+ 
+ jumps
+ {
+  l3 -> l4 
+  guard { y + 0.714286*x = 0   x >= 0 } 
+  reset { }
+  parallelotope aggregation {}
+  
+  l4 -> l2 
+  guard { x = 0   0.714286*x + y <= 0 } 
+  reset { }
+  parallelotope aggregation {}
+  
+  l2 -> l1 
+  guard { y + 0.714286*x = 0   x <= 0 } 
+  reset { }
+  parallelotope aggregation {}
+  
+  l1 -> l3 
+  guard { x = 0  0.714286*x + y >= 0 } 
+  reset { }
+  parallelotope aggregation {}
+ }
+ 
+ init
+ {
+  l3
+  {
+   x in [0.2,0.3]
+   y in [-0.1,0.1]
+   z in [0,0]
+   x1 in [0,0]
+   x2 in [0,0]
+   x3 in [0,0]
+  }
+ }
+}

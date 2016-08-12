@@ -1,0 +1,130 @@
+hybrid reachability
+{
+ state var x1, x2
+
+ setting
+ {
+  fixed steps 0.01
+  time 2
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x1,x2
+  fixed orders 10
+  cutoff 1e-15
+  precision 128
+  output two_tanks
+  max jumps 2
+  print on
+ }
+ 
+ modes
+ {
+  q1
+  {
+   poly ode 1
+   {
+    x1' = -x1 - 2 + [-0.01,0.01]
+    x2' = x1 + [-0.01,0.01]
+   }
+   
+   inv
+   {
+    x1 >= -1
+    x2 <= 1
+   }
+  }
+  
+  q2
+  {
+   poly ode 1
+   {
+    x1' = -x1 + 3 + [-0.01,0.01]
+    x2' = x1 + [-0.01,0.01]
+   }
+   
+   inv
+   {
+    x2 <= 1
+   }
+  }
+  
+  q3
+  {
+   poly ode 1
+   {
+    x1' = -x1 - 2 + [-0.01,0.01]
+    x2' = x1 - x2 - 5 + [-0.01,0.01]
+   }
+   
+   inv
+   {
+    x1 >= -1
+    x2 >= 0
+   }
+  }
+  
+  q4
+  {
+   poly ode 1
+   {
+    x1' = -x1 + 3 + [-0.01,0.01]
+    x2' = x1 - x2 - 5 + [-0.01,0.01]
+   }
+   
+   inv
+   {
+    x1 <= 1
+    x2 >= 0
+   }
+  }
+ }
+  
+ jumps
+ {
+  q1 -> q2
+  guard { x1 = -1 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q2 -> q3
+  guard { x2 = 1 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q3 -> q1
+  guard { x2 = 0 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q1 -> q3
+  guard { x2 = 1 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q3 -> q4
+  guard { x1 = -1 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q4 -> q3
+  guard { x1 = 1 }
+  reset {}
+  parallelotope aggregation {}
+  
+  q4 -> q2
+  guard { x2 = 0 }
+  reset {}
+  parallelotope aggregation {}
+ }
+ 
+ init
+ {
+  q3
+  {
+   x1 in [1.5,2.5]
+   x2 in [1,1]
+  }
+ }
+  
+}
+  

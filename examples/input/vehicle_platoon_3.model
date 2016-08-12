@@ -1,0 +1,112 @@
+hybrid reachability
+{
+ state var e1, e1prime, a1, e2, e2prime, a2, e3, e3prime, a3, t
+
+ setting
+ {
+  fixed steps 0.02
+  time 12
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon e1,e2
+  fixed orders 10
+  cutoff 1e-15
+  precision 128
+  output vehicle_platoon_3
+  max jumps 20
+  print on
+ }
+ 
+ modes
+ {
+  l1
+  {
+   poly ode 1
+   {
+    e1' = e1prime
+		e1prime' = -a1
+		a1' = 1.605*e1 + 4.868*e1prime - 3.5754*a1 - 0.8198*e2 + 0.427*e2prime - 0.045*a2 - 0.1942*e3 + 0.3626*e3prime - 0.0946*a3
+		e2' = e2prime
+		e2prime' = a1 - a2
+		a2' = 0.8718*e1 + 3.814*e1prime - 0.0754*a1 + 1.1936*e2 + 3.6258*e2prime - 3.2396*a2 - 0.595*e3 + 0.1294*e3prime - 0.0796*a3
+		e3' = e3prime
+		e3prime' = a2 - a3
+		a3' = 0.7132*e1 + 3.573*e1prime - 0.0964*a1 + 0.8472*e2 + 3.2568*e2prime - 0.0876*a2 + 1.2726*e3 + 3.072*e3prime - 3.1356*a3
+    t' = 1
+   }
+   
+   inv
+   {
+    t <= 2
+   }
+  }
+  
+  
+  l2
+  {
+   poly ode 1
+   {
+    e1' = e1prime
+    e1prime' = -a1
+    a1' = 1.605*e1 + 4.868*e1prime - 3.5754*a1
+    e2' = e2prime
+    e2prime' = a1 - a2
+    a2' = 1.1936*e2 + 3.6258*e2prime - 3.2396*a2
+    e3' = e3prime
+    e3prime' = a2 - a3
+    a3' = 0.7132*e1 + 3.573*e1prime - 0.0964*a1 + 0.8472*e2 + 3.2568*e2prime - 0.0876*a2 + 1.2726*e3 + 3.072*e3prime - 3.1356*a3
+    t' = 1
+   }
+   
+   inv
+   {
+    t <= 2
+   }
+  }
+ }
+  
+ jumps
+ {
+  l1 -> l2
+  guard { t >= 2 }
+  reset { t' := 0 }
+  parallelotope aggregation {}
+  
+  l2 -> l1
+  guard { t >= 2 }
+  reset { t' := 0 }
+  parallelotope aggregation {}
+ }
+ 
+ init
+ {
+  l1
+  {
+   e1 in [0.9,1.1]
+   e1prime in [0.9,1.1]
+   a1 in [0.9,1.1]
+   e2 in [0.9,1.1]
+   e2prime in [0.9,1.1]
+   a2 in [0.9,1.1]
+   e3 in [0.9,1.1]
+   e3prime in [0.9,1.1]
+   a3 in [0.9,1.1]
+   t in [0,0]
+  }
+ }
+  
+}
+
+#unsafe set
+#{
+# l1
+# {
+#  e1 >= 1.7
+# }
+# 
+# l2
+# {
+#  e1 >= 1.7
+# }
+#}
+
