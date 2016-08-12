@@ -524,7 +524,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 
 			//std::cout << "Done, now assert." << std::endl;
 
-			assert((res.removeRedundancy().size() <= HPolytopeT<Number,Converter>(*this).removeRedundancy().size()));
+			//assert((res.removeRedundancy().size() <= HPolytopeT<Number,Converter>(*this).removeRedundancy().size()));
 			return res;
 		}
 	} else {
