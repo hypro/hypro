@@ -23,7 +23,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = -t - 2.5
+    v' = -1*t + -2.5
     x' = 0
     t' = 1
    }
@@ -69,7 +69,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = -t - 1.2
+    v' = -1*t + -1.2
     x' = 0
     t' = 0.5
    }
@@ -85,7 +85,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = -0.001*x - 0.052*v
+    v' = -0.001*x + -0.052*v
     x' = v
     t' = 0
    }

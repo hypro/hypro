@@ -23,7 +23,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = 0.1*x - 56
+    x' = 0.1*x + -56
     c1' = 1
     c2' = 1
    }
@@ -38,7 +38,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = 0.1*x - 60
+    x' = 0.1*x + -60
     c1' = 1
     c2' = 1
    }
@@ -53,7 +53,7 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = 0.1*x - 50
+    x' = 0.1*x + -50
     c1' = 1
     c2' = 1
    }
