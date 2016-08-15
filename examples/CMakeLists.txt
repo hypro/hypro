@@ -35,6 +35,7 @@ set( EXAMPLES
     example_multiplication
     example_numberReduction
     example_openglPlotting
+    example_optimizer
     example_orthogonalPolyhedron
     example_pca
     example_plot
