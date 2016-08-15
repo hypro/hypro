@@ -53,7 +53,7 @@ namespace hypro {
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
 #ifdef DEBUG_MSG
-		std::cout << __func__ << ": in direction " << _direction << std::endl;
+		std::cout << __func__ << ": "<< mConstraintMatrix << " <= " << mConstraintVector << " in direction " << _direction << std::endl;
 #endif
 
 		if( mConstraintMatrix.rows() == 0 ) {
@@ -77,16 +77,42 @@ namespace hypro {
 		switch ( glp_get_status( lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
+				/*
 				vector_t<Number> glpkModel(mConstraintMatrix.cols());
 				for(unsigned i=1; i <= mConstraintMatrix.cols(); ++i) {
 					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim(lp, i));
 				}
+				*/
+
+				matrix_t<Number> exactSolutionMatrix = matrix_t<Number>(mConstraintMatrix.cols(), mConstraintMatrix.cols());
+				vector_t<Number> exactSolutionVector = vector_t<Number>(mConstraintMatrix.cols());
+				unsigned pos = 0;
+				for(unsigned i = 1; i <= mConstraintMatrix.rows(); ++i) {
+					// we search for d non-basic variables at their upper bound, which define the optimal point.
+					if( glp_get_row_stat( lp, i) == GLP_NU ) {
+						#ifdef DEBUG_MSG
+						std::cout << "Found non-basic row " << i << "." << std::endl;
+						#endif
+						exactSolutionMatrix.row(pos) = mConstraintMatrix.row(i-1);
+						exactSolutionVector(pos) = mConstraintVector(i-1);
+						++pos;
+					}
+				}
+				assert(pos = exactSolutionMatrix.rows());
+				vector_t<Number> exactSolution = Eigen::FullPivLU<matrix_t<Number>>(exactSolutionMatrix).solve(exactSolutionVector);
+				#ifdef DEBUG_MSG
+				std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
+				std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
+				#endif
+
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-				res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 				res.errorCode = FEAS;
-				res.optimumValue = glpkModel;
+				res.optimumValue = exactSolution;
+				// res.optimumValue = glpkModel;
+				res.supportValue = _direction.dot(exactSolution);
+				// res.supportValue = carl::rationalize<Number>(glp_get_obj_val( lp ));
 #else
-				return EvaluationResult<Number>(carl::rationalize<Number>(glp_get_obj_val( lp )), glpkModel, SOLUTION::FEAS);
+				return EvaluationResult<Number>(_direction.dot(exactSolution), exactSolution, SOLUTION::FEAS);
 #endif
 				break;
 			}
@@ -114,9 +140,12 @@ namespace hypro {
 				// std::cout << "glpk INFEAS " << std::endl;
 		}
 
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 #ifdef DEBUG_MSG
 		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 #endif
+#endif
+
 		#ifdef HYPRO_USE_Z3
 
 		z3Context c;
@@ -1020,7 +1049,6 @@ namespace hypro {
 				lp = glp_create_prob();
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
-				glp_create_index(lp);
 
 				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
@@ -1048,6 +1076,8 @@ namespace hypro {
 				glp_add_rows( lp, numberOfConstraints );
 				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
 					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+					const char* name = ("c" + std::to_string(i+1)).c_str();
+					glp_set_row_name( lp, i + 1, name);
 				}
 				// add cols here
 				glp_add_cols( lp, mConstraintMatrix.cols() );
@@ -1075,6 +1105,8 @@ namespace hypro {
 				glp_term_out(GLP_OFF);
 				for ( unsigned i = 0; i < cols; ++i ) {
 					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+					const char* name = ("x" + std::to_string(i+1)).c_str();
+					glp_set_col_name( lp, i + 1, name );
 					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 				}
 
