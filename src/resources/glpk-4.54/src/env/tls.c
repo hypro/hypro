@@ -23,7 +23,7 @@
 
 #include "env.h"
 
-static void *tls = NULL;
+static __thread void *tls = NULL;
 /* NOTE: in a re-entrant version of the package this variable should be
  * placed in the Thread Local Storage (TLS) */
 
