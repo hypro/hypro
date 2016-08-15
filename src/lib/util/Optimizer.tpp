@@ -990,6 +990,7 @@ namespace hypro {
 			lp = glp_create_prob();
 			glp_set_obj_dir( lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
+			glp_create_index(lp);
 			#ifdef HYPRO_USE_SMTRAT
 			#ifndef RECREATE_SOLVER
 			mSmtratSolver.push();
@@ -1019,6 +1020,7 @@ namespace hypro {
 				lp = glp_create_prob();
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
+				glp_create_index(lp);
 
 				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
