@@ -53,7 +53,8 @@ namespace hypro {
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
 #ifdef DEBUG_MSG
-		std::cout << __func__ << ": "<< mConstraintMatrix << " <= " << mConstraintVector << " in direction " << _direction << std::endl;
+		std::cout << __func__ << ": in direction " << _direction << std::endl;
+		std::cout << "Matrix: " << mConstraintMatrix << ", constants: " << mConstraintVector << std::endl;
 #endif
 
 		if( mConstraintMatrix.rows() == 0 ) {
@@ -71,9 +72,14 @@ namespace hypro {
 			glp_set_obj_coef( lp, i + 1, carl::toDouble( _direction( i ) ) );
 		}
 		/* solve problem */
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		glp_simplex( lp, NULL );
+#else
+		glp_exact( lp, NULL );
+#endif
 
 		// display potential problems
+		vector_t<Number> exactSolution;
 		switch ( glp_get_status( lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
@@ -89,17 +95,17 @@ namespace hypro {
 				unsigned pos = 0;
 				for(unsigned i = 1; i <= mConstraintMatrix.rows(); ++i) {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
-					if( glp_get_row_stat( lp, i) == GLP_NU ) {
+					int status = glp_get_row_stat( lp, i);
+					if( status == GLP_NU ) {
 						#ifdef DEBUG_MSG
-						std::cout << "Found non-basic row " << i << "." << std::endl;
+						std::cout << "Row " << i << " is at its upper bounds." << std::endl;
 						#endif
 						exactSolutionMatrix.row(pos) = mConstraintMatrix.row(i-1);
 						exactSolutionVector(pos) = mConstraintVector(i-1);
 						++pos;
 					}
 				}
-				assert(pos = exactSolutionMatrix.rows());
-				vector_t<Number> exactSolution = Eigen::FullPivLU<matrix_t<Number>>(exactSolutionMatrix).solve(exactSolutionVector);
+				exactSolution = Eigen::FullPivLU<matrix_t<Number>>(exactSolutionMatrix).solve(exactSolutionVector);
 				#ifdef DEBUG_MSG
 				std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
 				std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
@@ -413,6 +419,9 @@ namespace hypro {
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
+		#ifdef DEBUG_MSG
+		std::cout << "Final solition distance: " << res.supportValue << std::endl;
+		#endif
 		return res;
 #endif
 	}
