@@ -241,6 +241,27 @@ namespace hypro {
 		return -1;
 	}
 
+	template<typename Number>
+	bool linearDependent(const vector_t<Number>& lhs, const vector_t<Number>& rhs) {
+		unsigned firstNonZeroPos = 0;
+		if(lhs.nonZeros() == 0 || rhs.nonZeros() == 0){
+			return true;
+		}
+
+		// both are non-Zero vectors
+		while(lhs(firstNonZeroPos) != 0){
+			++firstNonZeroPos;
+		}
+		if(rhs(firstNonZeroPos) == 0) {
+			return false;
+		}
+		Number scalar = lhs(firstNonZeroPos)/rhs(firstNonZeroPos);
+		if(lhs == rhs*scalar) {
+			return true;
+		}
+		return false;
+	}
+
 } // namespace hypro
 
 namespace std {
