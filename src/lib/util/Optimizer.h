@@ -23,6 +23,8 @@
 #include <sys/stat.h>
 #endif
 
+#include <glpk.h>
+
 namespace hypro {
 
 	template<typename Number>

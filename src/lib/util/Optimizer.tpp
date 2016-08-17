@@ -697,7 +697,7 @@ namespace hypro {
 				point(d) = carl::convert<smtrat::Rational, Number>(assignment.find(hypro::VariablePool::getInstance().carlVarByIndex(d))->second.asRational());
 			}
 		}
-		assert(checkPoint(point));
+		assert(checkPoint(Point<Number>(point)));
 		return EvaluationResult<Number>(point, mLastConsistencyAnswer);
 
 		#else
@@ -856,7 +856,12 @@ namespace hypro {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
 		}
-
+		#ifdef DEBUG_MSG
+		std::cout << "The constraints of the simplex object" << std::endl;
+		for (const auto& constraintPair : formulaMapping) {
+			std::cout << constraintPair.first << std::endl;
+		}
+		#endif
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
 		#ifdef DEBUG_MSG
