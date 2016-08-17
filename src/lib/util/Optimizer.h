@@ -7,6 +7,8 @@
 
 #include "../flags.h"
 #include "EvaluationResult.h"
+#include "../datastructures/Point.h"
+
 #ifdef HYPRO_USE_SMTRAT
 #include "smtrat/SimplexSolver.h"
 #endif
@@ -29,7 +31,6 @@ namespace hypro {
 
 	template<typename Number>
 	class Optimizer {
-		using Poly = carl::MultivariatePolynomial<Number>;
 
 	private:
 		matrix_t<Number>	mConstraintMatrix;
