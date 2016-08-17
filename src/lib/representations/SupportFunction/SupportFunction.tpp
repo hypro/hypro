@@ -180,6 +180,9 @@ namespace hypro{
 				additionalDirections.push_back(vector_t<Number>(loc->invariant().mat.row(rowIndex)));
 			}
 		}
+
+		//std::cout << "Added " << additionalDirections.size() << " additional directions for evaluation." << std::endl;
+		/*
 		std::list<unsigned> projections = collectProjections();
 		if( projections.size() == this->dimension() ){
 			//std::cout << "Full vertices" << std::endl;
@@ -195,20 +198,24 @@ namespace hypro{
 				}
 			}
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, 8, this->dimension()); // TODO: ATTENTION, 8 is hardcoded here.
-			matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , this->dimension());
+			for(auto& direction : additionalDirections) {
+				// project direction
+				for(const auto& dir : zeroDimensions) {
+					direction(dir) = 0;
+				}
+				// add projected direction
+				if(direction != vector_t<Number>::Zero(this->dimension()) && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
+					templateDirections.insert(templateDirections.end(), std::move(direction));
+				}
+			}
+
+			matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), this->dimension());
 
 			//fills the matrix with the template directions
 			for (unsigned i=0; i<templateDirections.size();++i){
 				templateDirectionMatrix.row(i) = templateDirections[i];
 			}
 			//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-			unsigned pos = 0;
-			for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
-				templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
-				++pos;
-			}
-			//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-
 
 			std::vector<EvaluationResult<Number>> offsets = content->multiEvaluate(templateDirectionMatrix);
 			assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
@@ -223,7 +230,7 @@ namespace hypro{
 			}
 			matrix_t<Number> constraints = matrix_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size(), this->dimension());
 			vector_t<Number> constants = vector_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size());
-			pos = boundedConstraints.size()-1;
+			unsigned pos = boundedConstraints.size()-1;
 			unsigned zeroDimensionPos = boundedConstraints.size();
 			while(!boundedConstraints.empty()){
 				constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
@@ -232,7 +239,7 @@ namespace hypro{
 				--pos;
 			}
 
-			//std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
+			//std::cout << "Projected polytope without zero constraints: " << std::endl << convert<Number,double>(constraints) << std::endl << convert<Number,double>(constants) << std::endl;
 
 			// add zero dimension constraints
 			while(!zeroDimensions.empty()) {
@@ -254,12 +261,15 @@ namespace hypro{
 				++zeroDimensionPos;
 			}
 
-			//std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
+			std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
 
 			VertexEnumeration<Number> ve(constraints, constants);
 			ve.enumerateVertices();
 			return ve.getPoints();
 		}
+		*/
+		auto tmp = Converter::toHPolytope(*this, additionalDirections);
+		return tmp.vertices();
     }
 
     template<typename Number, typename Converter>

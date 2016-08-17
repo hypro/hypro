@@ -346,12 +346,17 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mPolytope->evaluate( _direction );
 		}
 		case SF_TYPE::PROJECTION: {
-			vector_t<Number> tmp = vector_t<Number>::Zero(mDimension);
-			for(const auto& entry : mProjectionParameters->dimensions) {
-				if(entry < mDimension)
-					tmp(entry) = _direction(entry);
+			vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
+			// reduce evaluation to projection dimensions
+			for(const auto& projectionDimension : mProjectionParameters->dimensions) {
+				if(projectionDimension < mDimension)
+					projectedDirection(projectionDimension) = _direction(projectionDimension);
 			}
-			return mProjectionParameters->origin->evaluate(tmp);
+			// in case the result direction is zero (i.e. it has no influence at all) return INFTY.
+			if(projectedDirection.nonZeros() == 0) {
+				return EvaluationResult<Number>(0,projectedDirection, SOLUTION::INFTY);
+			}
+			return mProjectionParameters->origin->evaluate(projectedDirection);
 		}
 		case SF_TYPE::SCALE: {
 			EvaluationResult<Number> res = mScaleParameters->origin->evaluate( _direction );
@@ -603,28 +608,28 @@ unsigned SupportFunctionContent<Number>::operationCount() const {
 template <typename Number>
 unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
     switch ( mType ) {
-        case SF_TYPE::ELLIPSOID: {         
+        case SF_TYPE::ELLIPSOID: {
             return 1;
-        }             
-        case SF_TYPE::INTERSECT: {         
+        }
+        case SF_TYPE::INTERSECT: {
             return (mIntersectionParameters->rhs.get()->multiplicationsPerEvaluation() + mIntersectionParameters->lhs.get()->multiplicationsPerEvaluation());
-        }             
-        case SF_TYPE::LINTRAFO: {         
+        }
+        case SF_TYPE::LINTRAFO: {
             return mLinearTrafoParameters->origin.get()->multiplicationsPerEvaluation() + 1;
-        } 
-        case SF_TYPE::POLY: {         
+        }
+        case SF_TYPE::POLY: {
             unsigned maxValue = std::max(mPolytope->constraints().rows(), mPolytope->constraints().cols());
             return carl::pow(maxValue,2);
-        } 
-        case SF_TYPE::SUM: {         
+        }
+        case SF_TYPE::SUM: {
             return (mSummands->lhs.get()->multiplicationsPerEvaluation() + mSummands->rhs.get()->multiplicationsPerEvaluation());
-        } 
-        case SF_TYPE::UNION: {         
+        }
+        case SF_TYPE::UNION: {
             return (mUnionParameters->rhs.get()->multiplicationsPerEvaluation() + mUnionParameters->lhs.get()->multiplicationsPerEvaluation());
         }
         default:
             return 0;
-    }            
+    }
 }
 
 template <typename Number>
@@ -957,7 +962,7 @@ template <typename Number>
 bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-                        return mEllipsoid->contains( _point );  
+                        return mEllipsoid->contains( _point );
                 }
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
