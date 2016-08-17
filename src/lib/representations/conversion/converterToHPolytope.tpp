@@ -208,7 +208,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 			zeroDimensions.pop_front();
 			++zeroDimensionPos;
 		}
-		std::cout << "CONVERTER Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
 
 		//constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);
