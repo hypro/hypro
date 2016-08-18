@@ -1,11 +1,23 @@
-
 #pragma once
 
-#include "../../representations/Box/Box.h"
-#include "../../representations/SupportFunction/SupportFunctionContent.h"
-#include "carl/core/VariablePool.h"
-
 namespace hypro {
+	namespace reachability {
+
+		template<typename Representation>
+		void printFlowpipe( const std::vector<Representation>& _flowpipe ) {
+			for ( const auto& segment : _flowpipe ) {
+				std::cout << segment << ", " << std::endl;
+			}
+		}
+
+		template<typename Representation>
+		void printFlowpipeReduced( const std::vector<Representation>& _flowpipe ) {
+			std::cout << *_flowpipe.begin() << ", " << std::endl;
+			std::cout << "(...)" << std::endl;
+			std::cout << *_flowpipe.back() << std::endl;
+		}
+
+	} // namespace reachability
 
 /*
  * Functionality for the reachability computation
@@ -51,57 +63,4 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 	return poly;
 }
 
-	/*
-	template<typename Number, typename Representation>
-	Representation computeFirstSegmentCLG(const matrix_t<Number>& A, const Representation& initialSet, const Number& delta){
-		// matrix precomputations
-		unsigned dimension = initialSet.dimension()+1;
-		assert(A.rows() == dimension && A.cols()==dimension );
-		matrix_t<Number> errormatrix = matrix_t<Number>::Zero(3*dimension, 3*dimension);
-		std::cout << "Dimension: " << dimension << std::endl;
-		std::cout << "A " << std::endl << A << "ABS(a)" << std::endl << abs(A) << std::endl;
-
-		errormatrix.block(0,0,dimension,dimension) = abs(A);
-		errormatrix.block(0, dimension, dimension, dimension) = matrix_t<Number>::Identity(dimension, dimension);
-		errormatrix.block(dimension, 2*dimension, dimension, dimension) = matrix_t<Number>::Identity(dimension, dimension);
-
-		std::cout << "Errormatrix before exponential: " << std::endl << errormatrix << std::endl;
-		matrix_t<double> doubleErrorMatrix = 0.5*convert<Number,double>(errormatrix);
-		doubleErrorMatrix = doubleErrorMatrix.exp();
-		std::cout << "Errormatrix exponential: " << std::endl << doubleErrorMatrix << std::endl;
-
-		matrix_t<Number> exponential = convert<double,Number>(matrix_t<double>(doubleErrorMatrix.block(0,0,dimension,dimension)));
-		matrix_t<Number> firstErrorFactor = convert<double,Number>(matrix_t<double>(doubleErrorMatrix.block(0,dimension,dimension,dimension)));
-		matrix_t<Number> secondErrorFactor = convert<double,Number>(matrix_t<double>(doubleErrorMatrix.block(0,2*dimension,dimension,dimension)));
-
-		std::cout << "exponential " << exponential << std::endl;
-
-		matrix_t<Number> tmp = matrix_t<Number>(A*(matrix_t<Number>::Identity(dimension,dimension) - exponential));
-		std::cout << "linear trafo matrix: " << tmp << std::endl;
-
-		std::cout << "initial set: " << initialSet << std::endl;
-		Representation transformed = initialSet.linearTransformation(tmp, vector_t<Number>::Zero(dimension));
-
-		std::cout << "transformed initial set: " << transformed << std::endl;
-
-		std::cout << "Set without box around: " << initialSet.linearTransformation(A*(matrix_t<Number>::Identity(dimension,dimension) - exponential), vector_t<Number>::Zero(dimension)) << std::endl;
-
-		Box<Number> errorapprox = Converter<Number>::toBox(initialSet.linearTransformation(A*(matrix_t<Number>::Identity(dimension,dimension) - exponential), vector_t<Number>::Zero(dimension)));
-		errorapprox.makeSymmetric();
-
-		std::cout << "Errorapprox box " << errorapprox << std::endl;
-
-		errorapprox = errorapprox.linearTransformation(firstErrorFactor, vector_t<Number>::Zero(dimension));
-
-		Box<Number> error;
-		Box<Number> x0Error;
-
-
-
-		Box<Number> scaledError = (Number(1)/Number(4)) * error;
-		Representation bloatedFirstSet = (firstSet.minkowskiSum(scaledExternalInput)).minkowskiSum(externalInputError);
-		return (initialSet.unite(bloatedFirstSet)).minkowskiSum(scaledError);
-
-	}
-	*/
 } // namespace hypro
