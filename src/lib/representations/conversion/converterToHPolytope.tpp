@@ -85,46 +85,131 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     //gets dimension of source object
     unsigned dim = _source.dimension();
 
-    //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
-    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
-    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
-    //creates a matrix with one row for each direction and one column for each dimension
-    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
+    std::list<unsigned> projections = _source.collectProjections();
+	if( projections.size() == dim ){
+		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+	    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+	    //creates a matrix with one row for each direction and one column for each dimension
+	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
-    //fills the matrix with the template directions
-    for (unsigned i=0; i<templateDirections.size();++i){
-        templateDirectionMatrix.row(i) = templateDirections[i];
-    }
-    std::size_t pos = 0;
-    for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
-        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
-        ++pos;
-    }
+	    //fills the matrix with the template directions
+	    for (unsigned i=0; i<templateDirections.size();++i){
+	        templateDirectionMatrix.row(i) = templateDirections[i];
+	    }
+	    std::size_t pos = 0;
+	    for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+	        ++pos;
+	    }
 
-    //std::cout << "Template direction matrix: " << std::endl << templateDirectionMatrix << std::endl;
+	    //std::cout << "Template direction matrix: " << std::endl << templateDirectionMatrix << std::endl;
 
-    //lets the support function evaluate the offset of the halfspaces for each direction
-    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
+	    //lets the support function evaluate the offset of the halfspaces for each direction
+	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+	    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
 
-    std::vector<std::size_t> boundedConstraints;
-    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-		//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
-        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
-            boundedConstraints.push_back(offsetIndex);
-        }
-    }
-    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
-    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-    pos = boundedConstraints.size()-1;
-    while(!boundedConstraints.empty()){
-        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
-        constants(pos) = offsets[boundedConstraints.back()].supportValue;
-        boundedConstraints.pop_back();
-        --pos;
-    }
+	    std::vector<std::size_t> boundedConstraints;
+	    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+	        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+	            boundedConstraints.push_back(offsetIndex);
+	        }
+	    }
+	    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+	    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+	    pos = boundedConstraints.size()-1;
+	    while(!boundedConstraints.empty()){
+	        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+	        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+	        boundedConstraints.pop_back();
+	        --pos;
+	    }
 
-    //constructs a H-Polytope out of the computed halfspaces
-    return HPolytope(constraints, constants);
+	    //constructs a H-Polytope out of the computed halfspaces
+    	return HPolytope(constraints, constants);
+
+	} else {
+		//std::cout << "Projection" << std::endl;
+		std::list<unsigned> zeroDimensions;
+		for(unsigned i = 0; i < dim; ++i) {
+			if(std::find(projections.begin(), projections.end(), i) == projections.end()){
+				//std::cout << "Dimension " << i << " is zero." << std::endl;
+				zeroDimensions.emplace_back(i);
+			}
+		}
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		for(auto direction : additionalDirections) {
+			// project direction
+			for(const auto& dir : zeroDimensions) {
+				direction(dir) = 0;
+			}
+			// add projected direction
+			if(direction.nonZeros() > 0 && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
+				templateDirections.emplace_back(std::move(direction));
+			}
+		}
+
+		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size() , dim);
+
+		//fills the matrix with the template directions
+		for (unsigned i=0; i<templateDirections.size();++i){
+			templateDirectionMatrix.row(i) = templateDirections[i];
+		}
+		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+		unsigned pos = 0;
+		for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+			++pos;
+		}
+		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+
+		std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+		assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
+
+		//std::cout << "Multi-Eval done, add zero constraints" << std::endl;
+
+		std::vector<unsigned> boundedConstraints;
+		for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+			if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+				boundedConstraints.push_back(offsetIndex);
+			}
+		}
+		matrix_t<Number> constraints = matrix_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size(), dim);
+		vector_t<Number> constants = vector_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size());
+		pos = boundedConstraints.size()-1;
+		unsigned zeroDimensionPos = boundedConstraints.size();
+		while(!boundedConstraints.empty()){
+			constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+			constants(pos) = offsets[boundedConstraints.back()].supportValue;
+			boundedConstraints.pop_back();
+			--pos;
+		}
+
+		//std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
+
+		// add zero dimension constraints
+		while(!zeroDimensions.empty()) {
+			//std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
+			vector_t<Number> zDimConstraint = vector_t<Number>::Zero(dim);
+			zDimConstraint(zeroDimensions.front()) = 1;
+			constraints.row(zeroDimensionPos) = zDimConstraint;
+			constants(zeroDimensionPos) = 0;
+			//std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+
+			++zeroDimensionPos;
+
+			zDimConstraint(zeroDimensions.front()) = -1;
+			constraints.row(zeroDimensionPos) = zDimConstraint;
+			constants(zeroDimensionPos) = 0;
+			//std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
+
+			zeroDimensions.pop_front();
+			++zeroDimensionPos;
+		}
+
+		//constructs a H-Polytope out of the computed halfspaces
+    	return HPolytope(constraints, constants);
+	}
 }

@@ -267,8 +267,20 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
+
+	// catch half-space
+	if(mConstraints.rows() == 1) {
+		for ( unsigned index = 0; index < _A.rows(); ++index ) {
+			res.emplace_back(evaluate( _A.row( index ) ));
+		}
+		return res;
+	}
+
+	Optimizer<Number> opt;
+	opt.setMatrix(mConstraints);
+	opt.setVector(mConstraintConstants);
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.emplace_back(evaluate( _A.row( index ) ));
+		res.emplace_back(opt.evaluate( _A.row( index ) ));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;

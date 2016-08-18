@@ -2,10 +2,10 @@
  * Holds convenience functions when working with SMTRat.
  */
 #pragma once
-#include "../../flags.h"
+#include "../../../flags.h"
 #ifdef HYPRO_USE_SMTRAT
-#include "../VariablePool.h"
-#include "../../datastructures/Point.h"
+#include "../../VariablePool.h"
+#include "../../../datastructures/Point.h"
 #include <carl/interval/Interval.h>
 #include <fstream>
 

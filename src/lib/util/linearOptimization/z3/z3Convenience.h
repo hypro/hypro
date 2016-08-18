@@ -5,7 +5,7 @@
 //
 
 #pragma once
-#include "../../flags.h"
+#include "../../../flags.h"
 #ifdef HYPRO_USE_Z3
 #include <carl/util/Singleton.h>
 #include <thread>

@@ -46,7 +46,8 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(FORCE_SHIPPED_RESOURCES "Make explicit use of the shipped resources." OFF)
 option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." ON)
+option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." ON)
+option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
@@ -163,6 +164,13 @@ endif()
 
 if(HYPRO_USE_SOPLEX)
 	load_library(hypro soplex 0)
+endif()
+
+if(HYPRO_USE_OPENMP)
+	load_library(hypro OpenMP 0)
+	if(OPENMP_FOUND)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+	endif()
 endif()
 
 if(NOT FORCE_SHIPPED_RESOURCES)

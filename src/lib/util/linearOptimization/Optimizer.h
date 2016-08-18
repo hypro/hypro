@@ -5,19 +5,21 @@
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
 
-#include "../flags.h"
+#include "../../flags.h"
+#include "Strategy.h"
 #include "EvaluationResult.h"
 #include "../datastructures/Point.h"
 
 #ifdef HYPRO_USE_SMTRAT
-#include "smtrat/SimplexSolver.h"
+#include "smtrat/adaptions_smtrat.h"
 #endif
 #ifdef HYPRO_USE_Z3
-#include "z3/z3Convenience.h"
+#include "z3/adaptions_z3.h"
 #endif
 #ifdef HYPRO_USE_SOPLEX
-#include "soplex.h"
+#include "soplex/adaptions_soplex.h"
 #endif
+#include "glpk/adaptions_glpk.h"
 #include <carl/util/Singleton.h>
 #include <mutex>
 
@@ -84,6 +86,7 @@ namespace hypro {
 
 		~Optimizer() {
 			deleteArrays();
+			glp_delete_prob(lp);
 		}
 
 	public:
@@ -104,10 +107,6 @@ namespace hypro {
 	private:
 		void initialize() const;
 		void updateConstraints() const;
-		#ifdef HYPRO_USE_SMTRAT
-		void addPresolution(smtrat::SimplexSolver& solver, const EvaluationResult<Number>& glpkResult, const vector_t<Number>& direction, const smtrat::Poly& objective) const;
-		EvaluationResult<Number> extractSolution(smtrat::SimplexSolver& solver, const smtrat::Poly& objective) const;
-        #endif
 
 		void createArrays( unsigned size ) const;
 		void deleteArrays() const;

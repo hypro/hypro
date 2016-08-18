@@ -46,7 +46,7 @@ public:
 	SF_TYPE type() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
-        
+
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;
@@ -81,19 +81,18 @@ public:
      * @return reduced SF
      */
     void forceLinTransReduction();
-    
+
     /**
-     * 
-     * @return number of mv multiplications needed for a single evaluation on the SF 
+     *
+     * @return number of mv multiplications needed for a single evaluation on the SF
      */
     unsigned multiplicationsPerEvaluation() const;
-    
+
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
     	lhs << rhs.content << std::endl;
     	return lhs;
 	}
 
-private:
 	std::list<unsigned> collectProjections() const;
 };
 

@@ -9,8 +9,8 @@
 #pragma once
 
 #include "util/convexHull.h"
-#include "util/Optimizer.h"
 #include "util/Permutator.h"
+#include "util/linearOptimization/Optimizer.h"
 #include "algorithms/convexHull/ConvexHull.h"
 
 #include <algorithm>

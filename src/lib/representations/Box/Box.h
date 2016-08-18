@@ -12,8 +12,8 @@
 
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
-#include "../../util/Optimizer.h"
 #include "../../util/Permutator.h"
+#include "../../util/linearOptimization/Optimizer.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>

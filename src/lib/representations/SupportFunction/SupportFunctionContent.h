@@ -42,7 +42,7 @@ struct trafoContent {
 	unsigned currentExponent;
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
-        
+
 	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters )
 		: origin( _origin ), parameters( _parameters ), currentExponent(1) {
 #define USE_LIN_TRANS_REDUCTION
@@ -134,6 +134,7 @@ class SupportFunctionContent {
 	unsigned mDepth;
 	unsigned mOperationCount;
 	unsigned mDimension;
+	bool mContainsProjection;
 	union {
 		sumContent<Number>* mSummands;
 		trafoContent<Number>* mLinearTrafoParameters;
@@ -168,8 +169,8 @@ class SupportFunctionContent {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, _type ) );
 		obj->pThis = obj;
 		return obj;
-	}	
-        
+	}
+
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ) );
 		obj->pThis = obj;
@@ -215,7 +216,7 @@ class SupportFunctionContent {
 	SF_TYPE type() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
-        
+
 	/**
 	 * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
 	 */

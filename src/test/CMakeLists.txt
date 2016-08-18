@@ -1,4 +1,4 @@
-add_subdirectory(algorithms)
+add_subdirectory(algorithms EXCLUDE_FROM_ALL)
 add_subdirectory(benchmark EXCLUDE_FROM_ALL)
-add_subdirectory(datastructure)
-add_subdirectory(representations)
+add_subdirectory(datastructure EXCLUDE_FROM_ALL)
+add_subdirectory(representations EXCLUDE_FROM_ALL)
