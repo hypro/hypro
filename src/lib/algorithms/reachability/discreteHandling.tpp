@@ -53,6 +53,7 @@ namespace reachability {
 			}
 		}
 
+		/*
 		// handle discrete reset assignment
 		typename Transition<Number>::Reset reset = _trans->reset();
 		assert(unsigned(reset.discreteMat.rows()) == result.discreteAssignment.size());
@@ -99,6 +100,7 @@ namespace reachability {
 				return false;
 			}
 		}
+		*/
 
 		// check for continuous set guard intersection
 		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
@@ -107,6 +109,9 @@ namespace reachability {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
+			result.set = guardSatisfyingSet.second;
+			return true;
+			/*
 			// apply reset function to guard-satisfying set.
 			//std::cout << "Apply reset: " << _trans->reset().mat << " " << _trans->reset().vec << std::endl;
 			Representation tmp = guardSatisfyingSet.second.linearTransformation( _trans->reset().mat, _trans->reset().vec );
@@ -115,14 +120,15 @@ namespace reachability {
 				result.set = invariantSatisfyingSet.second;
 				return true;
 			}
-#ifdef REACH_DEBUG
+			#ifdef REACH_DEBUG
 			std::cout << "Valuation invalidates continuous target location invariant." << std::endl;
-#endif
+			#endif
 			return false;
+			*/
 		} else {
-#ifdef REACH_DEBUG
+			#ifdef REACH_DEBUG
 			std::cout << "Continuous guard invalidated." << std::endl;
-#endif
+			#endif
 			return false;
 		}
 	}
@@ -139,16 +145,6 @@ namespace reachability {
 				assert(!s.timestamp.isUnbounded());
 				s.location = boost::get<0>(tuple)->target();
 
-				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-				/*
-				 *  TO-DO:
-				 *       - Check whether for the current node and transition already a child-node
-				 *         exists. If so, work on it. Otherwise, create a new child-node.
-				 *          If the last segment for some transition arrives:
-				 *              - Construct overapproximation
-				 *              - Set last segment
-				 *
-				 */
 				mWorkingQueue.emplace(mCurrentLevel+1, s);
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -163,9 +159,6 @@ namespace reachability {
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
 			assert(!aggregationPair.second.empty());
-			// TODO: Currently aggregation is done by collecting vertices - future: use multi-unite.
-			// collect vertices.
-			std::vector<Point<Number>> collectedVertices;
 			carl::Interval<Number> aggregatedTimestamp;
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
 			Representation collectedSets = boost::get<Representation>(aggregationPair.second.begin()->set);
@@ -173,15 +166,11 @@ namespace reachability {
 				assert(!stateIt->timestamp.isUnbounded());
 				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->timestamp);
 				//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
-				//std::vector<Point<Number>> tmpVertices = boost::get<Representation>(stateIt->set).vertices();
-				//collectedVertices.insert(collectedVertices.end(), tmpVertices.begin(), tmpVertices.end());
-				Representation tmp = boost::get<Representation>(stateIt->set);
-				collectedSets = collectedSets.unite(tmp);
+				collectedSets = collectedSets.unite(boost::get<Representation>(stateIt->set));
 			}
 
 			State<Number> s;
 			s.location = aggregationPair.first->target();
-			//s.set = Representation(collectedVertices);
 
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
@@ -190,6 +179,8 @@ namespace reachability {
 			s.timestamp = aggregatedTimestamp;
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
+
+			// Perform resets - discrete and continuous.
 
 			// ASSUMPTION: All discrete assignments are the same for this transition.
 			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
@@ -207,6 +198,50 @@ namespace reachability {
 			}
 			//std::cout << "Discrete assignment size: " << s.discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
 			assert(unsigned(reset.discreteMat.rows()) == s.discreteAssignment.size());
+
+			// check discrete invariant of target location
+
+			// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
+			for(const auto& invariantPair : aggregationPair.first->target()->invariant().discreteInvariant ) {
+				carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
+				carl::Interval<Number> substitution(0);
+				unsigned dOffset = aggregationPair.first->target()->invariant().discreteOffset;
+				//std::cout << "Guard row: " << guardPair.second << std::endl;
+				// insert all current discrete assignments except the constrained one.
+				for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
+					if(colIndex != vpool.id(invariantPair.first)-dOffset) {
+						substitution += invariantPair.second(0, colIndex) * s.discreteAssignment.at(vpool.carlVarByIndex(colIndex+dOffset));
+					}
+				}
+				carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
+				substitution += constPart;
+				//std::cout << "substitution interval " << substitution << std::endl;
+				if(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) > 0){
+					assert(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) == 1);
+					invariant.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
+					//std::cout << "After setting upper bound new: " << invariant << std::endl;
+				} else {
+					assert(invariantPair.second(0,vpool.id(invariantPair.first)-dOffset) == -1);
+					invariant.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
+					//std::cout << "After setting lower bound new: " << invariant << std::endl;
+				}
+
+				if(!invariant.intersectsWith(s.discreteAssignment.at(invariantPair.first))) {
+	#ifdef REACH_DEBUG
+					std::cout << "Valuation invalidates discrete target location invariant." << std::endl;
+	#endif
+					continue;
+				}
+			}
+
+			Representation tmp = collectedSets.linearTransformation(  aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec );
+			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
+			if(invariantSatisfyingSet.first){
+				s.set = invariantSatisfyingSet.second;
+			} else {
+				continue;
+			}
+
 			//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 			mWorkingQueue.emplace(mCurrentLevel+1, s);
 		}
