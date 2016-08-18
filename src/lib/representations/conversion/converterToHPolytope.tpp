@@ -25,12 +25,12 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 			target = HPolytope(_source.vertices());
 		}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
     } else if (mode == OVER) {
-    //gets vertices from source object
-    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
+	    //gets vertices from source object
+	    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
-    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
-    std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
-    target = HPolytope(planes);
+	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
+	    std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
+	    target = HPolytope(planes);
     }
     return target;
 }

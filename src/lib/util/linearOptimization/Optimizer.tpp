@@ -230,7 +230,6 @@ namespace hypro {
 				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
 				deleteArrays();
 
-				// TODO: can we directly reset stuff?
 				glp_delete_prob(lp);
 				lp = glp_create_prob();
 				glp_set_obj_dir( lp, GLP_MAX );
@@ -258,6 +257,7 @@ namespace hypro {
 
 			unsigned numberOfConstraints = mConstraintMatrix.rows();
 			if(numberOfConstraints > 0) {
+				assert(numberOfConstraints > 1);
 				// convert constraint constants
 				glp_add_rows( lp, numberOfConstraints );
 				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {

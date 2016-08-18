@@ -39,7 +39,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
-	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
+	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 #ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << "Construct from vertices." << std::endl;
 #endif
@@ -78,13 +78,18 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			*/
 
 		} else {
-			// TODO: Chose suitable convex hull algorithm
+			ConvexHull<Number> ch(points);
+			ch.convexHullVertices();
+			mHPlanes = ch.getHsv();
+
+			/*
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 			for ( auto &facet : facets ) {
 				assert(facet->halfspace().contains(points));
 				mHPlanes.push_back( facet->halfspace() );
 			}
 			facets.clear();
+			*/
 		}
 	}
 }
@@ -257,7 +262,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 	*/
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
-	//std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
+	// std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
 	assert(ev.getLinealtySpace().empty());
 	assert(ev.getCones().empty());
 	/*
@@ -409,15 +414,15 @@ bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hpla
 
 template <typename Number, typename Converter>
 const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedundancy() {
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
-		std::cout << "Not already reduced." << std::endl;
+		//std::cout << "Not already reduced." << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
 		std::vector<std::size_t> redundant = opt.redundantConstraints();
-		std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
+		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
@@ -428,7 +433,7 @@ const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedunda
 				if(redundant.back() == cnt){
 					mHPlanes.erase( --(rIt.base()) );
 					redundant.pop_back();
-					std::cout << "Erase plane " << cnt << std::endl;
+					//std::cout << "Erase plane " << cnt << std::endl;
 				}
 				--cnt;
 			}
@@ -503,7 +508,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			//std::cout << "Full rank, retransform!" << std::endl;
+			std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			//std::cout << "Matrix: " << inequalities.first*A.inverse() << std::endl << "Vector: " << ((inequalities.first*A.inverse()*b) + (inequalities.second)) << std::endl;
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
@@ -514,17 +519,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
-			//std::cout << "Before: " << *this << " and after: " << res << std::endl;
+			std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
 
-			HPolytopeT<Number,Converter> tmp = HPolytopeT<Number,Converter>(*this);
-			tmp.unreduce();
-			tmp.removeRedundancy();
-			//std::cout << "This reduced: " << tmp << std::endl;
-
-			//std::cout << "Done, now assert." << std::endl;
-
-			//assert((res.removeRedundancy().size() <= HPolytopeT<Number,Converter>(*this).removeRedundancy().size()));
+			assert(res.size() <= this->size());
+			res.setReduced();
 			return res;
 		}
 	} else {
@@ -620,12 +618,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	assert( _mat.rows() == _vec.rows() );
 	HPolytopeT<Number, Converter> res( *this );
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
-		vector_t<Number> tmpRow = vector_t<Number>(_mat.cols());
-		for(unsigned d = 0; d < _mat.cols(); ++d) {
-			tmpRow(d)=_mat(i,d);
-		}
-		Halfspace<Number> tmp = Halfspace<Number>( tmpRow, _vec( i ) );
-		res.insert( tmp );
+		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
 	//std::cout << "After intersection: " << res << std::endl;
 	res.removeRedundancy();

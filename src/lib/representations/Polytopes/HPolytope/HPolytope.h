@@ -143,6 +143,9 @@ public:
 	std::size_t size() const;
 
 	void unreduce() const { mNonRedundant = false;}
+	void setReduced() const { mNonRedundant = true; }
+
+	bool isNonRedundant() const { return mNonRedundant; }
 
 	/**
 	 * @brief Getter for the matrix representation of the constraints.

@@ -280,8 +280,19 @@ namespace hypro{
 
 	template<typename Number, typename Converter>
 	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
-		SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
-		return res;
+		// check for full projection
+		bool fullProjection = true;
+		for(unsigned i = 0; i < this->dimension(); ++i) {
+			if(std::find(dimensions.begin(), dimensions.end(), i) == dimensions.end()) {
+				fullProjection = false;
+				break;
+			}
+		}
+		if(!fullProjection){
+			SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
+			return res;
+		}
+		return *this;
 	}
 
     template<typename Number, typename Converter>
@@ -298,16 +309,13 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersect(SupportFunctionT<Number,Converter> &_rhs) const {
-        //std::cout << __func__ << std::endl;
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(_rhs.content));
         return res;
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        //std::cout << __func__ << std::endl;
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(_mat,_vec).content));
-        //std::cout << __func__ << " Res: " << res << std::endl;
         return res;
     }
 

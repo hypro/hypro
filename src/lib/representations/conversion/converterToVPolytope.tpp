@@ -20,10 +20,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPol
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE  ){
 	//exact conversion
-	VPolytope target;
-	target = VPolytope(_source.matrix(), _source.vector());
-
-	return target;
+	return VPolytope(_source.matrix(), _source.vector());
 }
 
 //conversion from Box to V-Polytope (no differentiation between conversion modes - always EXACT)
