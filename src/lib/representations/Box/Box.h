@@ -36,7 +36,7 @@ class BoxT {
 	 * Members
 	 **************************************************************************/
   protected:
-    std::pair<Point<Number>, Point<Number>> mLimits;
+    mutable std::pair<Point<Number>, Point<Number>> mLimits;
 
   public:
 	/***************************************************************************
@@ -294,6 +294,7 @@ class BoxT {
 
 	std::size_t dimension() const { return mLimits.first.dimension(); }
 	void removeRedundancy() {}
+	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
 	std::size_t size() const;
 
 	BoxT<Number,Converter> makeSymmetric() const;

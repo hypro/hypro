@@ -266,6 +266,14 @@ std::size_t BoxT<Number,Converter>::size() const {
 }
 
 template<typename Number, typename Converter>
+void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
+	for(unsigned d = 0; d < this->dimension(); ++d) {
+		mLimits.first[d] = carl::floor(mLimits.first.at(d)*limit)/limit;
+		mLimits.second[d] = carl::ceil(mLimits.second.at(d)*limit)/limit;
+	}
+}
+
+template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
 	Point<Number> limit = mLimits.first;
 	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {

@@ -213,10 +213,10 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::checkTransitions(const State<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const {
+	bool Reach<Number,Representation>::checkTransitions(const State<Number>& state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const {
 		bool timeTriggeredTransitionEnabled = false;
 		State<Number> guardSatisfyingState;
-		for( auto transition : _state.location()->transitions() ){
+		for( auto transition : state.location->transitions() ){
 			// handle time-triggered transitions
 			if(transition->isTimeTriggered()){
 				#ifdef REACH_DEBUG
@@ -225,7 +225,7 @@ namespace reachability {
 				// check if time trigger is enabled
 				if( currentTime.contains(transition->triggerTime()) ){
 					//std::cout << "Time trigger enabled" << std::endl;
-					if(intersectGuard(transition, _state, guardSatisfyingState)){
+					if(intersectGuard(transition, state, guardSatisfyingState)){
 						// when taking a timed transition, reset timestamp
 						guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 						nextInitialSets.emplace_back(transition, guardSatisfyingState);
@@ -233,10 +233,10 @@ namespace reachability {
 					}
 				}
 			} // handle normal transitions
-			else if(intersectGuard(transition, _state, guardSatisfyingState)){
+			else if(intersectGuard(transition, state, guardSatisfyingState)){
 				//std::cout << "hybrid transition enabled" << std::endl;
 				//std::cout << *transition << std::endl;
-				assert(guardSatisfyingState.timestamp == _state.timestamp);
+				assert(guardSatisfyingState.timestamp == state.timestamp);
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 				assert(!guardSatisfyingState.timestamp.isUnbounded());
 				nextInitialSets.emplace_back(transition, guardSatisfyingState);
