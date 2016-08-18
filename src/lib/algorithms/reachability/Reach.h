@@ -18,16 +18,16 @@
 #include "../../datastructures/hybridAutomata/State.h"
 #include "../../datastructures/hybridAutomata/RawState.h"
 #include "../../util/Plotter.h"
-#include "boost/tuple/tuple.hpp"
 #include "../lib/representations/Ellipsoids/Ellipsoid.h"
 #include "../../representations/GeometricObject.h"
+#include "boost/tuple/tuple.hpp"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-// #define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
@@ -48,7 +48,7 @@ private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
-        Number mBloatingFactor = 0.00001;
+    Number mBloatingFactor = 0.00001;
 	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -108,21 +108,10 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result );
+	bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result ) const;
 
-	/**
-	 * @brief Printing method for a flowpipe. Prints every segment.
-	 *
-	 * @param _flowpipe The flowpipe to be printed.
-	 */
-	void printFlowpipe( const flowpipe_t<Representation>& _flowpipe ) const;
+	bool checkTransitions(const State<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const;
 
-	/**
-	 * @brief Printing method for a flowpipe. Prints only the first and the last segment.
-	 *
-	 * @param _flowpipe The flowpipe to be printed.
-	 */
-	void printFlowpipeReduced( const flowpipe_t<Representation>& _flowpipe ) const;
 private:
 
 	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
@@ -134,4 +123,8 @@ private:
 }  // namespace hypro
 
 #include "Reach.tpp"
+#include "discreteHandling.tpp"
+#include "firstSegment.tpp"
+#include "terminationHandling.tpp"
+
 #include "Reach_SF.h"

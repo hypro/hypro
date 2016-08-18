@@ -31,8 +31,9 @@ class Location {
 		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteInvariant;
 	};
 
-  protected:
 	using transitionSet = std::set<Transition<Number>*>;
+
+  protected:
 
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );
