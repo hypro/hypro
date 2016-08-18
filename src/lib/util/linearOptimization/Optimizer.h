@@ -8,7 +8,7 @@
 #include "../../flags.h"
 #include "Strategy.h"
 #include "EvaluationResult.h"
-#include "../datastructures/Point.h"
+#include "../../datastructures/Point.h"
 
 #ifdef HYPRO_USE_SMTRAT
 #include "smtrat/adaptions_smtrat.h"
@@ -113,5 +113,14 @@ namespace hypro {
 
 	};
 } // namespace hypro
+
+#ifdef USE_CLN_NUMBERS
+#include <cln/cln.h>
+extern template class hypro::Optimizer<cln::cl_RA>;
+#else
+#include <gmp.h>
+#include <gmpxx.h>
+extern template class hypro::Optimizer<mpq_class>;
+#endif
 
 #include "Optimizer.tpp"

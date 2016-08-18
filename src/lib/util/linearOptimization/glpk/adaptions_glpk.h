@@ -3,6 +3,8 @@
  */
 #pragma once
 #include "../Optimizer.h"
+ 
+#include <glpk.h>
 
 namespace hypro {
 
