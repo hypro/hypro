@@ -91,7 +91,9 @@ namespace reachability {
 			}
 			*/
 			if(locallyUrgent){
-				processDiscreteBehaviour(nextInitialSets);
+				if(mCurrentLevel < mSettings.jumpDepth) {
+					processDiscreteBehaviour(nextInitialSets);
+				}
 				return flowpipe;
 			}
 		}
@@ -339,7 +341,9 @@ namespace reachability {
 			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
-			processDiscreteBehaviour(nextInitialSets);
+			if(mCurrentLevel < mSettings.jumpDepth){
+				processDiscreteBehaviour(nextInitialSets);
+			}
 			return flowpipe;
 		} else {
 			// return an empty flowpipe

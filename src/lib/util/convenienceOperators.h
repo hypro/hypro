@@ -8,7 +8,7 @@
 #include <vector>
 
 namespace hypro {
-
+	/*
 	template<typename T>
 	bool operator ==(const std::vector<T>& lhs, const std::vector<T>& rhs) {
 		std::cout << "Ping." << std::endl;
@@ -24,6 +24,7 @@ namespace hypro {
 
 		return true;
 	}
+	*/
 
 	template<typename T>
 	std::ostream& operator <<(std::ostream& _out, const std::set<T>& _set) {
