@@ -191,7 +191,7 @@ namespace hypro {
 				SupportFunction<Number> nextSegment;
                                 bool transitionSatisfied = false;
                                 bool alreadyReduced = false;
-#ifdef USE_SYSTEM_SEPARATION
+//#ifdef USE_SYSTEM_SEPARATION
 				SupportFunction<Number> autonomPart = currentSegment;
     #ifdef USE_ELLIPSOIDS
                         // Easy to addapt to any SupportFunction<Number> use ellipsoid for the idea of my masterthesis here
@@ -202,7 +202,7 @@ namespace hypro {
                         SupportFunction<Number> nonautonomPart = SupportFunction<Number>(nonautonomPartAsEllispsoid);
                         SupportFunction<Number> totalBloating = nonautonomPart;
     #endif
-#endif
+//#endif
 #ifdef REACH_DEBUG
 				if(!noFlow){
 				std::cout << "--- Loop entered ---" << std::endl;
@@ -218,7 +218,7 @@ namespace hypro {
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
                                         transitionSatisfied = false;
-					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
+					//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
 						State<Number> guardSatisfyingState;
@@ -238,10 +238,12 @@ namespace hypro {
 										// only insert new Sets into working queue, when the current level allows it.
 											transitionSatisfied = true;
 											if(!alreadyReduced) {
+#ifdef USE_FORCE_REDUCTION
 #ifdef USE_SYSTEM_SEPARATION
 												autonomPart.forceLinTransReduction();
 #endif
 												currentSegment.forceLinTransReduction();
+#endif
 												currentState.set = currentSegment;
 												intersectGuard(transition, currentState, guardSatisfyingState);
 												alreadyReduced = true;
@@ -258,10 +260,12 @@ namespace hypro {
 							else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
 								transitionSatisfied = true;
 								if(!alreadyReduced) {
+#ifdef USE_FORCE_REDUCTION
 #ifdef USE_SYSTEM_SEPARATION
 									autonomPart.forceLinTransReduction();
 #endif
 									currentSegment.forceLinTransReduction();
+#endif
 									currentState.set = currentSegment;
 									intersectGuard(transition, currentState, guardSatisfyingState);
 									alreadyReduced = true;
@@ -287,23 +291,25 @@ namespace hypro {
 					// perform linear transformation on the last segment of the flowpipe
 					//assert(currentSegment.linearTransformation(boost::get<2>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
-					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+					autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup));
     #ifdef USE_ELLIPSOIDS
 					if (mBloatingFactor != 0){
 						SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
 						nextSegment = autonomPart.minkowskiSum(temp);
+                                                nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup)->getParameterSet());
+                                                totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 					} else {
 						nextSegment = autonomPart;
 					}
-#else
+    #else
 					if (mBloatingFactor != 0){
 						nextSegment = autonomPart.minkowskiSum(totalBloating);
+                                                nonautonomPart = nonautonomPart.linearTransformation( std::make_shared<lintrafoParameters<Number>>(boost::get<2>(initialSetup)->getParameterSet(1).first, vector_t<Number>::Zero(autonomPart.dimension())));
+                                                totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 					} else {
 						nextSegment = autonomPart;
 					}
-#endif
-					//nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-					totalBloating = totalBloating.minkowskiSum(nonautonomPart);
+    #endif
 #else
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
@@ -450,12 +456,13 @@ namespace hypro {
 				State<Number> s;
 				s.location = aggregationPair.first->target();
 				//s.set = SupportFunction<Number>(collectedVertices);
-
+#ifdef USE_SMART_AGGREGATION
 				Number temp =mSettings.timeBound/mSettings.timeStep;
+				unsigned long multPerEval = collectedSets.multiplicationsPerEvaluation();
 				unsigned long estimatedNumberOfEvaluations =  (aggregationPair.first->guard().mat.rows() + aggregationPair.first->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
-				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * collectedSets.multiplicationsPerEvaluation();
-				unsigned long hyperplanesForReduction = 4* collectedSets.dimension() * (collectedSets.dimension()-1);
-				unsigned long estimatedCostWithReduction = hyperplanesForReduction + estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+				unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * multPerEval;
+				unsigned long hyperplanesForReduction = 2* collectedSets.dimension() * (collectedSets.dimension()-1)+ 2* collectedSets.dimension();
+				unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
 				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
 					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
@@ -463,7 +470,10 @@ namespace hypro {
 				} else {
 					s.set = collectedSets;
 				}
-				s.timestamp = aggregatedTimestamp;
+#else
+                                s.set = collectedSets;
+#endif
+                                s.timestamp = aggregatedTimestamp;
 
 				// ASSUMPTION: All discrete assignments are the same for this transition.
 				typename Transition<Number>::Reset reset = aggregationPair.first->reset();

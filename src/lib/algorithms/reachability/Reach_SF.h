@@ -16,7 +16,7 @@ namespace hypro {
 			HybridAutomaton<Number> mAutomaton;
 			ReachabilitySettings<Number> mSettings;
 			std::size_t mCurrentLevel;
-			Number mBloatingFactor = 0.00001;
+			Number mBloatingFactor = 0;
 			std::map<unsigned, std::vector<flowpipe_t<SupportFunction<Number>>>> mReachableStates;
 			std::queue<initialSet<Number>> mWorkingQueue;
 			Plotter<Number>& plotter = Plotter<Number>::getInstance();
