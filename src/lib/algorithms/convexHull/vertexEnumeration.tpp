@@ -1,15 +1,20 @@
 #include "vertexEnumeration.h"
-//#define CHULL_DBG
+#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::increment(std::size_t& i, std::size_t& j, std::size_t maxJ) {
 		++j; if(j>=maxJ){j=0;++i;};//cout<<"\nincr  i="<<i<<",j="<<j<<"\n";
 	}
-	
+
 	template<typename Number>
 	VertexEnumeration<Number>::VertexEnumeration(const std::vector<Halfspace<Number>>& hsv) {
 		mHsv=hsv;
+		std::cout << __func__ << ": constructor from " << hsv.size() << " halfspaces." << std::endl;
+		std::cout << "Halfspaces: " << std::endl;
+		for(const auto& hs : hsv) {
+			std::cout << hs << std::endl;
+		}
 	}
 
 	template<typename Number>
@@ -19,13 +24,13 @@ namespace hypro {
 			mHsv.emplace_back(Halfspace<Number>(constraints.row(i), constants(i)));
 		}
 	}
-	
+
 	template<typename Number>
 	std::vector<Halfspace<Number>> VertexEnumeration<Number>::getHsv() const {return mHsv;}
-	
+
 	template<typename Number>
 	std::vector<Dictionary<Number>> VertexEnumeration<Number>::getDictionaries() const {return mDictionaries;}
-	
+
 	template<typename Number>
 	std::vector<Point<Number>> VertexEnumeration<Number>::getPositivePoints() const {return mPositivePoints;}
 	template<typename Number>
@@ -35,7 +40,7 @@ namespace hypro {
 		}
 		cout<<"\n";
 	}
-	
+
 	template<typename Number>
 	std::vector<Point<Number>> VertexEnumeration<Number>::getPoints() const {return mPoints;}
 	template<typename Number>
@@ -45,7 +50,7 @@ namespace hypro {
 		}
 		cout<<"\n";
 	}
-	
+
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getLinealtySpace() const {return mLinealtySpace;}
 	template<typename Number>
@@ -55,7 +60,7 @@ namespace hypro {
 		}
 		cout<<"\n";
 	}
-	
+
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getPositiveCones() const {return mPositiveCones;}
 	template<typename Number>
@@ -65,7 +70,7 @@ namespace hypro {
 		}
 		cout<<"\n";
 	}
-	
+
 	template<typename Number>
 	std::vector<vector_t<Number>> VertexEnumeration<Number>::getCones() const {return mCones;}
 	template<typename Number>
@@ -75,7 +80,7 @@ namespace hypro {
 		}
 		cout<<"\n";
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
 		if(findPositiveConstrains()) {//if non empty
@@ -84,10 +89,10 @@ namespace hypro {
 			toGeneralCoordinates();
 		}
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices(Dictionary<Number>& dictionary) {
-		std::set<vector_t<Number>> cones =dictionary.findCones(); 
+		std::set<vector_t<Number>> cones =dictionary.findCones();
 		for(const auto& cone: cones) {
 			mPositiveCones.insert(cone);
 		}
@@ -112,7 +117,7 @@ namespace hypro {
 					#endif
 					mPositivePoints.push_back(dictionary.toPoint());
 				}
-				std::set<vector_t<Number>> cones =dictionary.findCones(); 
+				std::set<vector_t<Number>> cones =dictionary.findCones();
 				for(const auto& cone: cones) {
 					#ifdef CHULL_DBG
 						cout << "cone found ---------------------------------------\n";
@@ -120,17 +125,17 @@ namespace hypro {
 					mPositiveCones.insert(cone);
 				}
 				i=0;j=0;++depth;
-			} else { 
+			} else {
 				if(depth>0) {
 					dictionary.selectBlandPivot(i,j);
 					dictionary.pivot(i,j);
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
 				--depth;
-			} 
+			}
 		}
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVerticesEachDictionary() {
 		mPositivePoints.push_back(mDictionaries[0].toPoint());
@@ -142,7 +147,7 @@ namespace hypro {
 			enumerateVertices(mDictionaries[i]);
 		}
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateDictionaries() {
 		Dictionary<Number> dictionary = mDictionaries[0];
@@ -167,7 +172,11 @@ namespace hypro {
 				} else {break;}
 			}
 			if(i<m){
+				#ifdef CHULL_DBG
+				std::cout << "(Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot." << std::endl;
+				#endif
 				dictionary.pivot(basisAux[i],j);
+				dictionary.printDictionary();
 				Dictionary<Number> newDictionary = (Dictionary<Number>(dictionary));
 				for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
 					newDictionary.setValue(rowIndex,n,memory[rowIndex]);
@@ -177,17 +186,23 @@ namespace hypro {
 			} else {
 				if(depth>0) {
 					dictionary.selectDualBlandPivot(i,j,basisAux);
+					#ifdef CHULL_DBG
+					std::cout << "(Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot." << std::endl;
+					#endif
+					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
+					assert(i < basisAux.size());
 					dictionary.pivot(basisAux[i],j);
+					dictionary.printDictionary();
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
 				--depth;
-			} 
+			}
 		}
 		#ifdef CHULL_DBG
 			cout<<"\n nb dico = " << mDictionaries.size() <<"\n";
 		#endif
 	}
-	
+
 	template<typename Number>
 	Dictionary<Number> VertexEnumeration<Number>::findFirstVertex() {
 		std::size_t d = mHsv[0].dimension();
@@ -246,7 +261,7 @@ namespace hypro {
 		}
 		std::size_t back = basis.back();
 		basis.pop_back();
-		
+
 		for(std::size_t index = n0+1;index<=mHsv.size();++index) {basis.push_back(index);}
 		basis.push_back(back);
 		ConstrainSet<Number> constrains;
@@ -270,7 +285,7 @@ namespace hypro {
 		#endif
 		newDictionary.nonSlackToBase();
 		std::set<std::size_t> hyperplanes;
-		for(std::size_t index=0;index<basis.size();++index) {//search for already saturated constrains 
+		for(std::size_t index=0;index<basis.size();++index) {//search for already saturated constrains
 			if(newDictionary.constrainSet().isSaturated(index)) {
 				hyperplanes.insert(index);
 			}
@@ -289,7 +304,7 @@ namespace hypro {
 		}
 		return newDictionary;
 	}
-	
+
 	template<typename Number>
 	int VertexEnumeration<Number>::linearIndependance(std::map<int,vector_t<Number>> collection, vector_t<Number>& candidateRef) const {
 		for(typename std::map<int,vector_t<Number>>::iterator it=collection.begin(); it!=collection.end(); ++it) {
@@ -308,7 +323,7 @@ namespace hypro {
 		}
 		return nonNulIndex;
 	}
-	
+
 	template<typename Number>
 	std::vector<std::size_t> VertexEnumeration<Number>::findIndepHs() const {
 		std::size_t dim = mHsv[0].dimension();
@@ -329,7 +344,7 @@ namespace hypro {
 		}
 		return selection;
 	}
-	
+
 	template<typename Number>
 	Point<Number> VertexEnumeration<Number>::findIntersection(const std::vector<std::size_t>& selectionRef) const {
 		std::size_t dimension = selectionRef.size();
@@ -343,8 +358,8 @@ namespace hypro {
 		}
 		return Point<Number>(mat.fullPivLu().solve(vect));
 	}
-	
-	
+
+
 	template<typename Number>
 	bool VertexEnumeration<Number>::findPositiveConstrains() {
 		try{
@@ -380,7 +395,7 @@ namespace hypro {
 				if(dictionary.basis()[rowIndex]-1<constrainsCount) {
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 						A2(rowIndex-skiped,colIndex) = (mHsv[dictionary.basis()[rowIndex]-1]).normal()[colIndex];
-					} 
+					}
 				} else {++skiped;}
 			}
 			matrix_t<Number> newDictionary = matrix_t<Number>(constrainsCount-dimension+1, dimension+1);//faire la derniere ligne
@@ -399,11 +414,11 @@ namespace hypro {
 					}
 				} else {++skiped;}
 			}
-		
+
 			for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 				newDictionary(constrainsCount-dimension,colIndex)=Number(-1);
 			}
-		
+
 			for(std::size_t i=1; i<constrainsCount-dimension+1; ++i){
 				mB.push_back(std::size_t(i));
 			}
@@ -412,9 +427,9 @@ namespace hypro {
 				mN.push_back(std::size_t(i));
 			}
 			mN.push_back(std::size_t(constrainsCount+2));
-		
+
 			mDictionaries.push_back(Dictionary<Number>(newDictionary,mB,mN));
-		
+
 			mPivotingMatrix = invA1;
 			mOffset = b1;
 		}
@@ -430,7 +445,7 @@ namespace hypro {
 		#endif
 		return true;
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::toGeneralCoordinates() {
 		for(std::size_t index=0; index<mPositivePoints.size(); ++index) {
@@ -440,7 +455,7 @@ namespace hypro {
 			mCones.push_back((mPivotingMatrix*(-cone)));
 		}
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::findLinealtySpace() {
 		std::size_t dim = mHsv[0].dimension();
@@ -489,7 +504,7 @@ namespace hypro {
 			mLinealtySpace.push_back(collection[dim-index-1]);
 		}
 	}
-	
+
 	template<typename Number>
 	void VertexEnumeration<Number>::addLinealtyConstrains() {
 		for(std::size_t linealtyIndex=0;linealtyIndex<mLinealtySpace.size();++linealtyIndex) {
@@ -497,5 +512,5 @@ namespace hypro {
 			mHsv.push_back(Halfspace<Number>(Number(-1)*mLinealtySpace[linealtyIndex],Number(0)));
 		}
 	}
-	
+
 } // namespace hypro

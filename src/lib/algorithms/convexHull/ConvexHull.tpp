@@ -1,58 +1,94 @@
 #include "ConvexHull.h"
 
 namespace hypro {
-	
+
 	template<typename Number>
-	ConvexHull<Number>::ConvexHull(const std::vector<Point<Number>> points): mPoints(points) {}
-	
+	ConvexHull<Number>::ConvexHull(const std::vector<Point<Number>> points) {
+		// TODO: Avoid this by internally using set directly.
+		std::set<Point<Number>> tmp;
+		tmp.insert(points.begin(), points.end());
+		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
+		std::cout << "Constructed cHull from vertices: " << std::endl;
+		for(const auto& point : points) {
+			std::cout << point << std::endl;
+		}
+		std::cout << " Reduced set: " << std::endl;
+		for(const auto& point : mPoints) {
+			std::cout << point << std::endl;
+		}
+	}
+
 	template<typename Number>
-	ConvexHull<Number>::ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone):
-		mPoints(points),
-		mCone(cone) 
-		{}
-		
+	ConvexHull<Number>::ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone) :
+		mPoints(),
+		mCone(cone)
+	{
+		std::set<Point<Number>> tmp;
+		tmp.insert(points.begin(), points.end());
+		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
+		std::cout << "Constructed cHull from vertices: " << std::endl;
+		for(const auto& point : points) {
+			std::cout << point << std::endl;
+		}
+		std::cout << " Reduced set: " << std::endl;
+		for(const auto& point : mPoints) {
+			std::cout << point << std::endl;
+		}
+	}
+
 	template<typename Number>
 	ConvexHull<Number>::ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone,
 									const std::vector<vector_t<Number>> linealty):
-		mPoints(points),
+		mPoints(),
 		mCone(cone),
 		mLinealtySpace(linealty)
-		{}
-	
+	{
+		std::set<Point<Number>> tmp;
+		tmp.insert(points.begin(), points.end());
+		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
+		std::cout << "Constructed cHull from vertices: " << std::endl;
+		for(const auto& point : points) {
+			std::cout << point << std::endl;
+		}
+		std::cout << " Reduced set: " << std::endl;
+		for(const auto& point : mPoints) {
+			std::cout << point << std::endl;
+		}
+	}
+
 	template<typename Number>
 	std::vector<Point<Number>> ConvexHull<Number>::getPoints() const {
 		return mPoints;
 	}
-	
+
 	template<typename Number>
 	std::vector<vector_t<Number>> ConvexHull<Number>::getCone() const {
 		return mCone;
 	}
-	
+
 	template<typename Number>
 	std::vector<vector_t<Number>> ConvexHull<Number>::getLinealtySpace() const {
 		return mLinealtySpace;
 	}
-	
+
 	template<typename Number>
 	std::vector<Halfspace<Number>> ConvexHull<Number>::getConeHsv() const {
 		return mConeHsv;
 	}
-	
+
 	template<typename Number>
 	std::vector<Halfspace<Number>> ConvexHull<Number>::getDualHsv() const {
 		return mDualHsv;
 	}
-	
+
 	template<typename Number>
 	std::vector<Halfspace<Number>> ConvexHull<Number>::getHsv() const {
 		return mHsv;
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::findOffset() {
 		mOffset = vector_t<Number>::Zero(mPoints[0].rawCoordinates().size());
-		vector_t<Number> zero = vector_t<Number>::Zero(mPoints[0].rawCoordinates().size());
 		for(const auto& point: mPoints) {
 			mOffset+=point.rawCoordinates();
 		}
@@ -60,25 +96,30 @@ namespace hypro {
 		unsigned index = 0;
 		for(auto& point: mPoints) {
 			point.setCoordinates(point.rawCoordinates() - mOffset);
-			if(point.rawCoordinates()==zero) {mPoints.erase(mPoints.begin()+index);};
+			if(point.rawCoordinates().nonZeros() == 0) {
+				mPoints.erase(mPoints.begin()+index);
+			}
 			++index;
 		}
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::toDual() {
 		for(const auto& p:mPoints) {
 			mDualHsv.push_back(Halfspace<Number>(p.rawCoordinates(),Number(1)));
+			assert(mDualHsv.back().normal() == p.rawCoordinates());
 		}
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::toPrimal(const std::vector<Point<Number>> points) {
+		std::cout << __func__ << " created " << points.size() << " points in dual." << std::endl;
 		for(const auto& p:points) {
 			mHsv.push_back(Halfspace<Number>(p.rawCoordinates(),Number(1)));
+			assert(mHsv.back().normal() == p.rawCoordinates());
 		}
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::convexHullVertices() {//!!modify the points
 		if(mPoints.size()==0) {//emptyset
@@ -103,6 +144,7 @@ namespace hypro {
 				}
 			} else {
 				toDual();
+				std::cout << __func__ << ": Compute vertices in dual." << std::endl;
 				VertexEnumeration<Number> ev = VertexEnumeration<Number>(mDualHsv);
 				ev.enumerateVertices();
 				for(const auto& l:ev.getLinealtySpace()) {
@@ -114,7 +156,7 @@ namespace hypro {
 			translateHsv();
 		}
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::conicHull() {
 		if(mCone.size()==0) {
@@ -138,7 +180,7 @@ namespace hypro {
 			}
 		}
 	}
-	
+
 	template<typename Number>
 	void ConvexHull<Number>::polyhedriclHull() {
 		try{
@@ -201,7 +243,7 @@ namespace hypro {
 			}
 		}
 	}
-	
+
 	template<typename Number>//not used
 	void ConvexHull<Number>::projectOnLinealty() {
 		if(mPoints.size()!=0&&mLinealtySpace.size()!=0) {
@@ -236,5 +278,5 @@ namespace hypro {
 			}
 		}
 	}
-	
+
 } // namespace hypro
