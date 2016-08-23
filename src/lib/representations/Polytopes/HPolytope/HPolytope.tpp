@@ -536,7 +536,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			std::cout << "Full rank, retransform!" << std::endl;
+			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			std::cout << "Matrix: " << convert<Number,double>(inequalities.first*A.inverse()) << std::endl << "Vector: " << convert<Number,double>(((inequalities.first*A.inverse()*b) + (inequalities.second))) << std::endl;
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
@@ -548,7 +548,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
+			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
 
 			assert(res.size() <= this->size());
 			res.setReduced();
