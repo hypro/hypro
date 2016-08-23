@@ -17,7 +17,7 @@
 #include <cassert>
 
 #define REDUCE_NUMBERS
-//#define HPOLY_DEBUG_MSG
+#define HPOLY_DEBUG_MSG
 
 namespace hypro {
 
