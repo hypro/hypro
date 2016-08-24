@@ -203,7 +203,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 	#ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << " " << *this << std::endl;
 	#endif
-	/*
+	
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -277,8 +277,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				#endif
 			}
 		}
+                return vertices;
 	}
-	*/
+/*        
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
 	std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
@@ -292,7 +293,6 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 	}
 
 	assert(ev.getCones().empty());
-	/*
 	for (const auto& point : ev.getPoints() ) {
 		bool found = false;
 		for (const auto& vert : vertices ) {
@@ -307,8 +307,8 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 		}
 		assert(found);
 	}
-	*/
 	return ev.getPoints();
+*/
 }
 
 template <typename Number, typename Converter>
