@@ -75,25 +75,26 @@ namespace reachability {
 			unsigned rows = trafoMatrix.rows();
 			unsigned cols = trafoMatrix.cols();
 			vector_t<Number> translation = trafoMatrix.col( cols - 1 );
+			matrix_t<Number> trafoMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+			trafoMatrixResized = trafoMatrix.block(0,0,rows -1 ,cols -1);
 			translation.conservativeResize( rows - 1 );
-			trafoMatrix.conservativeResize( rows - 1, cols - 1 );
 
 			// if the location has no flow, stop computation and exit.
 			if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
 				translation == vector_t<Number>::Zero(translation.rows()) ) {
 				//std::cout << "Avoid further computation as the flow is zero." << std::endl;
 				validState.set = initialPair.second;
-				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
+				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);
 			}
 
-			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrix, translation );
+			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
 #ifdef REACH_DEBUG
 			std::cout << "Polytope at t=delta: ";
 			deltaValuation.print();
 #endif
 			Representation firstSegment;
 			// different approaches towards bloating
-			if(mSettings.uniformBloating){
+			if(mSettings.uniformBloating){ // GirardBloating
 				// R_0(X0) U R_delta(X0)
 				Representation unitePolytope = initialPair.second.unite( deltaValuation );
 				//assert(unitePolytope.contains(initialPair.second));
@@ -121,19 +122,44 @@ namespace reachability {
 					firstSegment = unitePolytope.minkowskiSum( hausPoly );
 				}
 			} else {
-				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
+				std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix);
+
+				Representation tmp =  deltaValuation;
+			    if(!errorBoxVector[1].empty()) {
+			    	tmp = deltaValuation.minkowskiSum(Representation(errorBoxVector[1].matrix(), errorBoxVector[1].vector()));
+			    }
+				firstSegment = tmp.unite(initialPair.second);
+				Box<Number> differenceBox = errorBoxVector[2];
+				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
+				firstSegment = firstSegment.minkowskiSum( Representation(differenceBox.matrix(), differenceBox.vector()) );
+
+				/*
+				Plotter<Number>& plt = Plotter<Number>::getInstance();
+				unsigned init = plt.addObject(initialPair.second.vertices());
+				plt.setObjectColor(init, colors[red]);
+
+				unsigned dVal = plt.addObject(deltaValuation.vertices());
+				plt.setObjectColor(dVal, colors[orange]);
+
+				unsigned bloat = plt.addObject(Representation(differenceBox.matrix(), differenceBox.vector()).vertices());
+				plt.setObjectColor(bloat, colors[green]);
+				*/
+				/*
+				Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum(), Representation<Number>::Empty(), trafoMatrix );
 				if(radius > 0) {
 					Representation hausPoly = computePolytope<Number, Representation>( initialPair.second.dimension(), radius );
 					deltaValuation = deltaValuation.minkowskiSum(hausPoly);
 				}
+				std::cout << "size after Minkowski_sum: " << deltaValuation.size() << std::endl;
 				firstSegment = initialPair.second.unite(deltaValuation);
+				*/
 			}
 			//assert(firstSegment.contains(unitePolytope));
 			//assert(firstSegment.contains(initialPair.second));
 			//assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
-			std::cout << firstSegment << std::endl;
+			std::cout << firstSegment << ", size: " << firstSegment.size() << std::endl;
 #endif
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
 // (use_reduce_time==true) apply reduction on firstSegment for time reduction
@@ -190,7 +216,7 @@ namespace reachability {
 			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
-			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrix, translation);
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);
 		} // if set does not satisfy the invariant, return false
 		else {
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);

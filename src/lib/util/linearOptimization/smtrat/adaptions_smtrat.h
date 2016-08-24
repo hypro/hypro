@@ -412,7 +412,7 @@ namespace hypro {
 			}
 		}
 		res.optimumValue = point;
-		assert(smtratCheckPoint(constraints,constants,point));
+		assert(smtratCheckPoint(constraints,constants,Point<Number>(point)));
 		return res;
 
 		//#else DO NOT RECREATE SOLVER

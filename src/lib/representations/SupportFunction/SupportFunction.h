@@ -24,6 +24,10 @@ private:
 	std::shared_ptr<SupportFunctionContent<Number>> content;
 	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
 
+	mutable matrix_t<Number> mMatrix;
+	mutable vector_t<Number> mVector;
+	mutable bool mTemplateSet = false;
+
 public:
 	SupportFunctionT ();
 	SupportFunctionT (const SupportFunctionT<Number,Converter>& _orig);
@@ -57,12 +61,15 @@ public:
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
+	matrix_t<Number> matrix() const;
+	vector_t<Number> vector() const;
+
 	void removeRedundancy();
 	std::vector<Point<Number>> vertices(const Location<Number>* loc = nullptr) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
 	SupportFunctionT<Number,Converter> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
-	SupportFunctionT<Number,Converter> minkowskiSum( SupportFunctionT<Number,Converter>& _rhs ) const;
+	SupportFunctionT<Number,Converter> minkowskiSum( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
@@ -94,6 +101,9 @@ public:
 	}
 
 	std::list<unsigned> collectProjections() const;
+
+private:
+	void evaluateTemplate() const;
 };
 
 } //namespace hypro

@@ -167,6 +167,22 @@ namespace hypro{
         return content->ellipsoid();
     }
 
+	template<typename Number, typename Converter>
+    matrix_t<Number> SupportFunctionT<Number,Converter>::matrix() const {
+    	if(!mTemplateSet) {
+    		evaluateTemplate();
+    	}
+    	return mMatrix;
+    }
+
+	template<typename Number, typename Converter>
+	vector_t<Number> SupportFunctionT<Number,Converter>::vector() const {
+		if(!mTemplateSet) {
+    		evaluateTemplate();
+    	}
+    	return mVector;
+	}
+
     template<typename Number, typename Converter>
     void SupportFunctionT<Number,Converter>::removeRedundancy() {
         // Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
@@ -302,7 +318,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::minkowskiSum( SupportFunctionT<Number,Converter> &_rhs ) const {
+    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::minkowskiSum( const SupportFunctionT<Number,Converter> &_rhs ) const {
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->minkowskiSum(_rhs.content));
         return res;
     }
@@ -429,5 +445,44 @@ namespace hypro{
 	std::list<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
 		return content->collectProjections();
 	}
+
+	template<typename Number, typename Converter>
+	void SupportFunctionT<Number,Converter>::evaluateTemplate() const {
+		if(!mTemplateSet) {
+			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), 8);
+
+		    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), this->dimension());
+
+		    //fills the matrix with the template directions
+		    for (unsigned i=0; i<templateDirections.size();++i){
+		        templateDirectionMatrix.row(i) = templateDirections[i];
+		    }
+
+		    //lets the support function evaluate the offset of the halfspaces for each direction
+		    std::vector<EvaluationResult<Number>> offsets = this->multiEvaluate(templateDirectionMatrix);
+
+		    std::vector<std::size_t> boundedConstraints;
+		    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+				//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+		        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+		            boundedConstraints.push_back(offsetIndex);
+		        }
+		    }
+		    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), this->dimension());
+		    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+		    unsigned pos = boundedConstraints.size()-1;
+		    while(!boundedConstraints.empty()){
+		        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+		        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+		        boundedConstraints.pop_back();
+		        --pos;
+		    }
+
+		    mMatrix = constraints;
+		    mVector = constants;
+		    mTemplateSet = true;
+		}
+	}
+
 
 } // namespace hypro

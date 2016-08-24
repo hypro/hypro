@@ -727,11 +727,13 @@ namespace hypro {
 				// e^(At)*X0 = polytope at t=delta
 				unsigned rows = trafoMatrix.rows();
 				unsigned cols = trafoMatrix.cols();
-				vector_t<Number> translation = trafoMatrix.col( cols - 1 );
-				translation.conservativeResize( rows - 1 );
-				trafoMatrix.conservativeResize( rows - 1, cols - 1 );
 
-				std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(trafoMatrix, translation);
+				vector_t<Number> translation = trafoMatrix.col( cols - 1 );
+				matrix_t<Number> trafoMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+				trafoMatrixResized = trafoMatrix.block(0,0,rows -1 ,cols -1);
+				translation.conservativeResize( rows - 1 );
+
+				std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(trafoMatrixResized, translation);
 
 				// if the location has no flow, stop computation and exit.
 				if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
@@ -776,6 +778,20 @@ namespace hypro {
 						firstSegment = unitePolytope.minkowskiSum( hausPoly );
 					}
 				} else {
+
+					std::vector<Box<Number>> errorBoxVector = errorBoxes<Number>( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix);
+
+					SupportFunction<Number> tmp =  deltaValuation;
+				    if(!errorBoxVector[1].empty()) {
+				    	SupportFunction<Number> a = SupportFunction<Number>(errorBoxVector[1].matrix(), errorBoxVector[1].vector());
+				    	tmp = deltaValuation.minkowskiSum(a);
+				    }
+					firstSegment = tmp.unite(initialPair.second);
+					Box<Number> differenceBox = errorBoxVector[2];
+					differenceBox = Number(Number(1)/Number(4)) * differenceBox;
+					firstSegment = firstSegment.minkowskiSum( SupportFunction<Number>(differenceBox.matrix(), differenceBox.vector()) );
+
+					/*
 					EvaluationResult<Number> errorNonlinearEvaluated;
 					EvaluationResult<Number> errorExternalEvaluated;
 					EvaluationResult<Number> externalEvaluated;
@@ -859,6 +875,7 @@ namespace hypro {
 						deltaValuation = deltaValuation.minkowskiSum(hausPoly);
 					}
 					firstSegment = initialPair.second.unite(deltaValuation);
+					*/
 				}
 				//assert(firstSegment.contains(unitePolytope));
 				//assert(firstSegment.contains(initialPair.second));

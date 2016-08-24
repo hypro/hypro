@@ -26,7 +26,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
 	}
-	std::cout << "Copy constructor, size: " << this->size() << std::endl;
+	std::cout << "Constructor from matrix, vector, size: " << this->size() << std::endl;
 	reduceNumberRepresentation();
 }
 
@@ -52,11 +52,13 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
 		assert(ch.getCone().empty());
 		assert(ch.getLinealtySpace().empty());
+		/*
 		std::cout << "Object constructed from vertices: " << *this << std::endl;
 		std::cout << "Vertices: " << std::endl;
 		for(const auto& vertex : points) {
 			std::cout << vertex << std::endl;
 		}
+		*/
 	}
 	/*
 
@@ -172,7 +174,7 @@ template <typename Number, typename Converter>
 matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
+		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
 	return res;
@@ -203,7 +205,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 	#ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << " " << *this << std::endl;
 	#endif
-	
+
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty()) {
 		unsigned dim = this->dimension();
@@ -277,9 +279,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				#endif
 			}
 		}
-                return vertices;
 	}
-/*        
+	return vertices;
+/*
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
 	std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
@@ -531,14 +533,14 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
-	std::cout << __func__ << " of " << *this << std::endl;
+	//std::cout << __func__ << " of " << *this << std::endl;
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			//std::cout << "Full rank, retransform!" << std::endl;
+			std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			std::cout << "Matrix: " << convert<Number,double>(inequalities.first*A.inverse()) << std::endl << "Vector: " << convert<Number,double>(((inequalities.first*A.inverse()*b) + (inequalities.second))) << std::endl;
+			//std::cout << "Matrix: " << convert<Number,double>(inequalities.first*A.inverse()) << std::endl << "Vector: " << convert<Number,double>(((inequalities.first*A.inverse()*b) + (inequalities.second))) << std::endl;
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
@@ -548,9 +550,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
+			std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
 
-			assert(res.size() <= this->size());
+			//assert(res.size() <= this->size());
 			res.setReduced();
 			return res;
 		}
