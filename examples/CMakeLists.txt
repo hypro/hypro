@@ -26,6 +26,7 @@ set( EXAMPLES
     example_eigen_float_t
     example_facetEnumeration
     example_firstSet
+    example_firstSegmentCLG
     example_flowstarParser
     example_heuristic
     example_hausdorffApprox
