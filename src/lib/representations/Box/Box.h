@@ -144,6 +144,9 @@ class BoxT {
 	 */
 	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
 
+	matrix_t<Number> matrix() const;
+	vector_t<Number> vector() const;
+
 	/**
 	 * @brief Getter for the hyperplanar representation of the current box.
 	 * @details Converts the two-points representation into a hyperplanar representation, i.e. a H-polytope.
@@ -197,6 +200,18 @@ class BoxT {
 			}
 		}
 		return false;
+	}
+
+	bool isSymmetric() const {
+		if ( mLimits.first.dimension() == 0 ) {
+			return true;
+		}
+		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
+			if ( mLimits.first.at(d) != -mLimits.second.at(d) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -314,6 +329,18 @@ class BoxT {
 	void clear();
 	void print() const;
 };
+
+template<typename Number,typename Converter>
+BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in) {
+	return in*factor;
+}
+
+template<typename From, typename To, typename Converter>
+BoxT<To,Converter> convert(const BoxT<From,Converter>& in) {
+	std::pair<Point<From>, Point<From>> limits = in.limits();
+	return BoxT<To,Converter>(std::make_pair(Point<To>(convert<From,To>(limits.first.rawCoordinates())), Point<To>(convert<From,To>(limits.second.rawCoordinates()))));
+}
+
 
 } // namespace hypro
 

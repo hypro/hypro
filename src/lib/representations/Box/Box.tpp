@@ -194,6 +194,26 @@ std::vector<carl::Interval<Number>> BoxT<Number,Converter>::boundaries() const {
 }
 
 template<typename Number, typename Converter>
+matrix_t<Number> BoxT<Number, Converter>::matrix() const {
+	matrix_t<Number> res = matrix_t<Number>::Zero(2*mLimits.first.dimension(), mLimits.first.dimension());
+	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
+		res(2*i,i) = 1;
+		res(2*i+1,i) = -1;
+	}
+	return res;
+}
+
+template<typename Number, typename Converter>
+vector_t<Number> BoxT<Number, Converter>::vector() const {
+	vector_t<Number> res = vector_t<Number>::Zero(2*mLimits.first.dimension());
+	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
+		res(2*i) = mLimits.second.at(i);
+		res(2*i+1) = mLimits.first.at(i);
+	}
+	return res;
+}
+
+template<typename Number, typename Converter>
 std::vector<Halfspace<Number>> BoxT<Number,Converter>::constraints() const {
 	std::vector<Halfspace<Number>> res;
 	if(this->dimension() != 0) {
@@ -384,7 +404,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	// create both limit matrices
-	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
+	std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
 	matrix_t<Number> ax(A);
 	matrix_t<Number> bx(A);
 	Point<Number> min;
@@ -420,6 +440,9 @@ BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiSum( const BoxT<Number,C
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const {
+	if(rhs.empty()) {
+		return *this;
+	}
 	assert( dimension() == rhs.dimension() );
 	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
 	// assert( (BoxT<Number,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
