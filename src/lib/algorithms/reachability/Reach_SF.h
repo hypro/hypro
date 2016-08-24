@@ -3,6 +3,9 @@
 //
 
 #pragma once
+#include <carl/core/UnivariatePolynomial.h>
+#include <carl/core/rootfinder/RootFinder.h>
+#include <carl/formula/model/ran/RealAlgebraicNumber.h>
 
 namespace hypro {
 	namespace reachability {

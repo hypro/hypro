@@ -766,7 +766,84 @@ namespace hypro {
 						firstSegment = unitePolytope.minkowskiSum( hausPoly );
 					}
 				} else {
+					EvaluationResult<Number> errorNonlinearEvaluated;
+					EvaluationResult<Number> errorExternalEvaluated;
+					EvaluationResult<Number> externalEvaluated;
+					EvaluationResult<Number> initialSetEvaluated;
+					EvaluationResult<Number> deltaSetEvaluated;
+					assert((errorExternalEvaluated.supportValue - errorNonlinearEvaluated.supportValue) != 0); // we want a truly quadratic function. TEMPORARY!
+					carl::Variable lambda = VariablePool::getInstance().carlVarByIndex(0); // we need any variable, so the var for dim 0 does the trick.
+					// we need to maximize a quadratic function in one variable -> find root and determine result depending on root.
+					carl::UnivariatePolynomial<Number> optFkt = carl::UnivariatePolynomial<Number>(lambda, 2*(errorExternalEvaluated.supportValue - errorNonlinearEvaluated.supportValue), 1);
+					optFkt += carl::UnivariatePolynomial<Number>(lambda, errorNonlinearEvaluated.supportValue + deltaSetEvaluated.supportValue - initialSetEvaluated.supportValue + mSettings.timeStep*errorExternalEvaluated.supportValue, 0);
+					std::list<carl::RealAlgebraicNumber<Number>> optima = carl::rootfinder::realRoots<Number,Number>(optFkt, carl::Interval<Number>::unboundedInterval());
+					assert(optima.size() == 1); // any truly quadratic function has a point where its derivative is zero.
+					// determine shape by case distinction of the quadratic part
+					if( (errorExternalEvaluated.supportValue - errorNonlinearEvaluated.supportValue) > 0 ) { // top open
+						if(optima.begin()->isNumeric()) {
+							Number optimum = optima.begin()->value();
+							if(carl::Interval<Number>(0,1).contains(optimum)) {
+								// We found the opt inside! -> case distinction
+								if(1-optimum < Number(1)/Number(2)) {
+									// Max is at 1
+								} else {
+									// Max is at 0
+								}
+							} else if( optimum < 0) {
+								// Max is 1 (farer away)
+							} else {
+								// Max is 0 (farer away)
+							}
+						} else { // optimum is interval
+							// We need lots of case distinctions, for a first estimate take center TEMPORARY!
+							Number optimum = (optima.begin()->upper() - optima.begin()->lower()) / 2;
+							if(carl::Interval<Number>(0,1).contains(optimum)) {
+								// We found the opt inside! -> case distinction
+								if(1-optimum < Number(1)/Number(2)) {
+									// Max is at 1
+								} else {
+									// Max is at 0
+								}
+							} else if( optimum < 0) {
+								// Max is 1 (farer away)
+							} else {
+								// Max is 0 (farer away)
+							}
+						}
+					} else { // bottom open
+						if(optima.begin()->isNumeric()) {
+							Number optimum = optima.begin()->value();
+							if(carl::Interval<Number>(0,1).contains(optimum)) {
+								// We found the opt inside!
+							} else if( optimum < 0) {
+								// Max is 0 (closer)
+							} else { // optimum > 1
+								assert(optimum > 1);
+								// Max is 1 (closer)
+							}
+						} else {
+							Number optimum = (optima.begin()->upper() - optima.begin()->lower()) / 2;
+							if(carl::Interval<Number>(0,1).contains(optimum)) {
+								// We found the opt inside!
+							} else if( optimum < 0) {
+								// Max is 0 (closer)
+							} else { // optimum > 1
+								assert(optimum > 1);
+								// Max is 1 (closer)
+							}
+						}
+					}
+
+
+
+
+
 					Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
+					#ifdef REACH_DEBUG
+					std::cout << "\n";
+					std::cout << "Hausdorff Approximation: ";
+					std::cout << radius << std::endl;
+					#endif
 					if(radius > 0) {
 						SupportFunction<Number> hausPoly = computePolytope<Number, SupportFunction<Number>>( initialPair.second.dimension(), radius );
 						deltaValuation = deltaValuation.minkowskiSum(hausPoly);
