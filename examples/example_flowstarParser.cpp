@@ -21,7 +21,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	std::cout << boost::get<1>(ha) << std::endl;
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes = reacher.computeForwardReachability();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
-/*
+
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
@@ -64,11 +64,13 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		for(const auto& segment : flowpipePair.second){
 			std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
 			switch (type) {
+				/*
 				case hypro::representation_name::support_function:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
 					break;
 				}
+				*/
 				default:
 					unsigned tmp = plotter.addObject(segment.vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
@@ -82,7 +84,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	//plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
- */
+
 }
 
 int main(int argc, char** argv) {
@@ -106,6 +108,7 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
+
 		case 2: {
 			using Representation = hypro::HPolytope <Number>;
 			std::cout << "Using a h-polytope representation." << std::endl;
@@ -123,6 +126,7 @@ int main(int argc, char** argv) {
 			std::cout << "Using a box representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 		}
+
 	}
 
 	exit(0);
