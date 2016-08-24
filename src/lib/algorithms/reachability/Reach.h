@@ -32,6 +32,8 @@ CLANG_WARNING_RESET
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
 //#define USE_ELLIPSOIDS
+#define USE_SMART_AGGREGATION
+//#define USE_FORCE_REDUCTION
 
 namespace hypro {
 namespace reachability {
@@ -48,7 +50,7 @@ private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
-    Number mBloatingFactor = 0.00001;
+        Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
 	std::queue<initialSet<Number>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
