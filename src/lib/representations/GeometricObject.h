@@ -8,6 +8,7 @@
 #pragma once
 #include "../datastructures/Point.h"
 #include "../config.h"
+#include "../util/adaptions_eigen.h"
 #include "conversion/Converter.h"
 
 namespace hypro {

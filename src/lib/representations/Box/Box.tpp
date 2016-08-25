@@ -56,15 +56,14 @@ namespace hypro {
 				vector_t<Number> vertex = luDecomposition.solve( intersectionConstants );
 				assert(vertex.rows() == _constraints.cols());
 				possibleVertices.emplace( std::move(vertex) );
-				// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
+				//std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
 			}
 		}
+		assert(!possibleVertices.empty());
 
 		// check if vertices are true vertices (i.e. they fulfill all constraints)
 		for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
-			// std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i <<
-			// std::endl;
-			// std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " <<
+			//std::cout  << "Refinement: Consider vertex : " << convert<Number,double>(*vertex).transpose() << std::endl;
 			// possibleVertices.size() << std::endl;
 			bool deleted = false;
 			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
@@ -72,6 +71,8 @@ namespace hypro {
 				if ( res > _constants( rowIndex ) ) {
 					vertex = possibleVertices.erase( vertex );
 					deleted = true;
+					//std::cout << "Deleted because of row " << convert<Number,double>(vector_t<Number>(_constraints.row(rowIndex))) << std::endl;
+					//std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
 					break;
 				}
 			}
@@ -81,21 +82,25 @@ namespace hypro {
 		}
 		// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		// finish initialization
-		assert(!possibleVertices.empty());
-		vector_t<Number> min = *possibleVertices.begin();
-		vector_t<Number> max = *possibleVertices.begin();
-		for ( const auto &point : possibleVertices ) {
-			for( unsigned d = 0; d < point.rows(); ++d){
-				if( min(d) > point(d)) {
-					min(d) = point(d);
-				}
-				if( max(d) < point(d)) {
-					max(d) = point(d);
+		if(possibleVertices.empty()) {
+			assert(false);
+			*this = BoxT<Number,Converter>::Empty();
+		} else {
+			vector_t<Number> min = *possibleVertices.begin();
+			vector_t<Number> max = *possibleVertices.begin();
+			for ( const auto &point : possibleVertices ) {
+				for( unsigned d = 0; d < point.rows(); ++d){
+					if( min(d) > point(d)) {
+						min(d) = point(d);
+					}
+					if( max(d) < point(d)) {
+						max(d) = point(d);
+					}
 				}
 			}
+			mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
+			reduceNumberRepresentation();
 		}
-		mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
-		reduceNumberRepresentation();
 	}
 
 template<typename Number, typename Converter>
@@ -208,7 +213,7 @@ vector_t<Number> BoxT<Number, Converter>::vector() const {
 	vector_t<Number> res = vector_t<Number>::Zero(2*mLimits.first.dimension());
 	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
 		res(2*i) = mLimits.second.at(i);
-		res(2*i+1) = mLimits.first.at(i);
+		res(2*i+1) = -mLimits.first.at(i);
 	}
 	return res;
 }
@@ -404,7 +409,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	// create both limit matrices
-	std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
+	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
 	matrix_t<Number> ax(A);
 	matrix_t<Number> bx(A);
 	Point<Number> min;
