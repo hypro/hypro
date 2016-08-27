@@ -192,7 +192,9 @@ namespace hypro {
 		res = z3RedundantConstraints(mConstraintMatrix, mConstraintVector);
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector);
-		#endif // HYPRO_USE_SMTRAT
+		#else
+		res = glpkRedundantConstraints(lp, mConstraintMatrix, mConstraintVector);
+		#endif
 
 		std::sort(res.begin(), res.end());
 

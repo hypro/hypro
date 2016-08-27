@@ -3,7 +3,7 @@
  */
 #pragma once
 #include "../Optimizer.h"
- 
+
 #include <glpk.h>
 
 namespace hypro {
@@ -71,5 +71,66 @@ namespace hypro {
 		glp_simplex( glpkProblem, NULL);
 		glp_exact( glpkProblem, NULL );
 		return (glp_get_status( glpkProblem ) != GLP_NOFEAS);
+	}
+
+	template<typename Number>
+	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+		std::vector<std::size_t> res;
+
+		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
+		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
+			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
+		}
+
+		// first call to check satisfiability
+		glp_simplex( glpkProblem, NULL);
+		glp_exact( glpkProblem, NULL );
+
+		switch (glp_get_status( glpkProblem )) {
+			case GLP_INFEAS:
+			case GLP_NOFEAS: {
+				return res;
+			}
+		}
+		int* ind = new int[constraints.cols()+1];
+		double* val = new double[constraints.cols()+1];
+		for(unsigned constraintIndex = 0; constraintIndex < constraints.rows(); ++constraintIndex) {
+			// create and add negated constraint
+			std::cout << "create negated constraint." << std::endl;
+
+			for(unsigned d = 0; d < constraints.cols(); ++d) {
+				ind[d+1] = d+1;
+				val[d+1] = -carl::convert<Number,double>(constraints(constraintIndex, d));
+				std::cout << d+1 << ": Index: " << ind[d+1] << " Val: " << val[d+1] << std::endl;
+			}
+			glp_set_mat_row(glpkProblem, constraintIndex+1, constraints.cols(), ind, val);
+			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP, -carl::convert<Number,double>(constants(constraintIndex)), 0.0 );
+
+			glp_term_out(GLP_ON);
+			glp_simplex( glpkProblem, NULL);
+			//glp_exact( glpkProblem, NULL );
+
+			if(glp_get_status(glpkProblem) == GLP_NOFEAS || glp_get_status(glpkProblem) == GLP_INFEAS) {
+				std::cout << "Redundant constraint no. " << constraintIndex << std::endl;
+				res.push_back(constraintIndex);
+			}
+
+			// revert constraint
+			std::cout << "revert constraint." << std::endl;
+			for(unsigned d = 0; d < constraints.cols(); ++d) {
+				ind[d+1] = d+1;
+				val[d+1] = carl::convert<Number,double>(constraints(constraintIndex, d));
+				std::cout << d+1 << ": Index: " << ind[d+1] << " Val: " << val[d+1] << std::endl;
+			}
+			glp_set_mat_row(glpkProblem, constraintIndex+1, constraints.cols(), ind, val);
+			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP, -carl::convert<Number,double>(constants(constraintIndex)), 0.0 );
+		}
+		delete[] ind;
+		delete[] val;
+
+		std::cout << "DONE." << std::endl;
+
+		return res;
 	}
 } // namespace hypro
