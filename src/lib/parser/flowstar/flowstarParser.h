@@ -113,15 +113,16 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		if(_constraint.size() > 0) {
 			//std::cout << "Add continuous state for location " << id << std::endl;
 			bool found = false;
-			for(auto& state : _states) {
-				if(state.location->id() == id){
-					//std::cout << "State already exists." << std::endl;
+			// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
+			for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
+				if(stateIt->location->id() == id){
+					//std::cout << "stateIt->already exists." << std::endl;
 					found = true;
-					assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
-					unsigned constraintsNum = state.set.first.rows();
-					unsigned dimension = constraintsNum > 0 ? state.set.first.cols() : (_constraint.begin()->cols())-1;
-					//std::cout << "current constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
-					cPair<Number> set = state.set;
+					assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
+					unsigned constraintsNum = stateIt->set.first.rows();
+					unsigned dimension = constraintsNum > 0 ? stateIt->set.first.cols() : (_constraint.begin()->cols())-1;
+					//std::cout << "current constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
+					cPair<Number> set = stateIt->set;
 					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
 					set.first.conservativeResize(constraintsNum+_constraint.size(), dimension);
 					set.second.conservativeResize(constraintsNum+_constraint.size());
@@ -138,8 +139,9 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 						//std::cout << set.second(constraintsNum) << std::endl;
 						++constraintsNum;
 					}
-					state.set = set;
-					//std::cout << "New constraints: " << boost::get<cPair<Number>>(state.set).first << std::endl;
+					stateIt->set = set;
+					//std::cout << "New constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
+					break;
 				}
 			}
 			if(!found){
@@ -172,13 +174,15 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<RawState<Number>>& _states) {
 		//std::cout << "Add discrete state for location " << id << std::endl;
 		bool found = false;
-		for(auto& state : _states) {
-			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
-			if(state.location == mLocationManager.location(id)){
+		// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
+		for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
+			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
+			if(stateIt->location == mLocationManager.location(id)){
 				found = true;
-				state.discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
 			}
-			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
+			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
+			break;
 		}
 		if(!found){
 			RawState<Number> s;
@@ -194,6 +198,18 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 			assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
 			_states.emplace_back(s);
 		}
+	}
+
+	unsigned addInitState(unsigned _id, std::vector<RawState<Number>>& _states) {
+		RawState<Number> s;
+		s.location = mLocationManager.location(_id);
+		// initial setup of the discrete assignment
+		for(const auto& id : mDiscreteVariableIds ){
+			s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
+		}
+		assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+		_states.emplace_back(s);
+		return _id;
 	}
 
 	void insertSettings(const ReachabilitySettings<Number>& _in) {
