@@ -20,7 +20,7 @@ template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
 	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mDimension(mConstraints.cols()) {
-	this->removeRedundancy();
+	//this->removeRedundancy();
 }
 
 template <typename Number>
@@ -36,7 +36,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
-	this->removeRedundancy();
+	//this->removeRedundancy();
 }
 
 template<typename Number>
