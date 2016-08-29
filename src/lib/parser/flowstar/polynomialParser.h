@@ -58,12 +58,13 @@ namespace parser {
 		polynomialParser() : polynomialParser::base_type( start, "polynomialParser" )
 		{
 			using qi::on_error;
-	        using qi::fail;
+        			using qi::fail;
 
 			term = (nonconstant(qi::_r1, qi::_r2) | constant(qi::_r1, qi::_r2));
 			constant = qi::skip(qi::blank)[ qi::double_ ][qi::_val = px::bind(&polynomialParser<Iterator>::createConstantTermMap, px::ref(*this), qi::_1, qi::_r2)];
-			nonconstant = qi::skip(qi::blank)[(-(qi::double_ >> qi::lit('*')) >> monomial(qi::_r1) )[qi::_val = px::bind(&polynomialParser<Iterator>::createTermMap, px::ref(*this), qi::_1, qi::_2)]];
-			start = qi::skip(qi::blank)[(term(qi::_r1, qi::_r2) % '+')][qi::_val = px::bind(&polynomialParser<Iterator>::createLinearPolynomial, px::ref(*this), qi::_1, qi::_r2)];
+			nonconstant = qi::skip(qi::blank)[( -((qi::double_ >> qi::lit('*')) | qi::char_("-")) >> monomial(qi::_r1) )[qi::_val = px::bind(&polynomialParser<Iterator>::createTermMap, px::ref(*this), qi::_1, qi::_2)]];
+			connector = qi::lit("+")[qi::_val = 1] | qi::lit("-") [qi::_val = -1];
+			start = qi::skip(qi::blank)[ term(qi::_r1, qi::_r2) >> *( connector > term(qi::_r1, qi::_r2))][qi::_val = px::bind(&polynomialParser<Iterator>::createLinearPolynomial, px::ref(*this), qi::_1, qi::_r2)];
 
 			start.name("polynomial");
 			constant.name("const polynomial");
@@ -75,39 +76,53 @@ namespace parser {
 
 		qi::rule<Iterator, std::pair<unsigned, double>(symbol_table const&, unsigned const&)> constant;
 		qi::rule<Iterator, std::pair<unsigned, double>(symbol_table const&, unsigned const&)> nonconstant;
-		qi::rule<Iterator, vector_t<double>(symbol_table const&, unsigned const&)> start;
 		qi::rule<Iterator, std::pair<unsigned, double>(symbol_table const&, unsigned const&)> term;
+		qi::rule<Iterator, int()> connector;
+		qi::rule<Iterator, vector_t<double>(symbol_table const&, unsigned const&)> start;
 
 		std::pair<unsigned, double> createConstantTermMap( double _in, unsigned _dim) {
-			//std::cout << "Found constant term with coefficient " << _in << " mapping to dimension " << _dim << std::endl;
+			std::cout << "Found constant term with coefficient " << _in << " mapping to dimension " << _dim << std::endl;
 			return std::make_pair(_dim, _in);
 		}
 
-		std::pair<unsigned, double> createTermMap(const boost::optional<double>& _coeff, const std::vector<unsigned>& _in ) {
+		std::pair<unsigned, double> createTermMap( boost::optional< boost::variant<double, char>>& _coeff, const std::vector<unsigned>& _in ) {
 			std::pair<unsigned,double> coefficentMap;
 			assert(_in.size() == 1 ); // currently we only support linear polynomials
 
-			if(_coeff)
-				coefficentMap = std::make_pair(_in.at(0), *_coeff);
+			if(_coeff) {
+				if((*_coeff).which() == 0) // which returns the index of the used type: double = 0, char = 1
+					coefficentMap = std::make_pair(_in.at(0), (boost::get<double>(*_coeff)));
+				else
+					coefficentMap = std::make_pair(_in.at(0), -1.0);
+			}
 			else
 				coefficentMap = std::make_pair(_in.at(0), 1.0);
 
-			//std::cout << "Found linear term with coefficient " << coefficentMap.second << " mapping to dimension " << coefficentMap.first << std::endl;
+			std::cout << "Found linear term with coefficient " << coefficentMap.second << " mapping to dimension " << coefficentMap.first << std::endl;
 			return coefficentMap;
 		}
 
-		vector_t<double> createLinearPolynomial(const std::vector<std::pair<unsigned,double>>& _in, unsigned _dim) {
+		vector_t<double> createLinearPolynomial(const boost::fusion::vector< std::pair<unsigned,double>, const std::vector<boost::fusion::vector<int, std::pair<unsigned,double>>>>& _in, unsigned _dim) {
 			vector_t<double> res = vector_t<double>::Zero(_dim+1);
-			//std::cout << "Maximal dimension is " << _dim << std::endl;
-			//std::cout << "Size: " << _in.size() << std::endl;
+			std::cout << "Maximal dimension is " << _dim << std::endl;
+			//std::cout << "Size: " << fs::at_c<1>(_in).size() + 1 << std::endl;
 
-			//std::cout << "Create constraint row: ";
-			for(const auto& pair : _in) {
-				assert(pair.first < res.size());
-				//std::cout << pair.first << " -> " << pair.second << std::endl;
-				res(pair.first) += pair.second;
+			std::cout << "Create constraint row: ";
+			std::pair<unsigned,double> tmp = fs::at_c<0>(_in);
+			res(tmp.first) += tmp.second;
+
+			std::vector<boost::fusion::vector<int, std::pair<unsigned,double>>> tmpVec = fs::at_c<1>(_in);
+			for(const auto& tuple : tmpVec) {
+				assert((fs::at_c<1>(tuple)).first < res.size());
+				//std::cout << tuple.first << " -> " << tuple.second << std::endl;
+				if(fs::at_c<0>(tuple)) {
+					res((fs::at_c<1>(tuple)).first) += (fs::at_c<1>(tuple)).second * (fs::at_c<0>(tuple));
+				} else {
+					res((fs::at_c<1>(tuple)).first) += (fs::at_c<1>(tuple)).second;
+				}
 			}
-			//std::cout << res.transpose() << std::endl;
+
+			std::cout << res.transpose() << std::endl;
 			return res;
 		}
 	};
@@ -302,23 +317,23 @@ namespace parser {
 					res.emplace_back(resLower);
 					res.emplace_back(resUpper);
 
-					//std::cout << "Created row from =: " << resLower << std::endl;
-					//std::cout << "Created row from =: " << resUpper << std::endl;
+					std::cout << "Created row from =: " << resLower << std::endl;
+					std::cout << "Created row from =: " << resUpper << std::endl;
 					return res;
 				}
 				case RELATION::GEQ: {
 					matrix_t<Number> resRow = matrix_t<Number>(1, newLhs.cols());
-					//std::cout << "GEQ: lhs:" << newLhs << " >= " << newRhs << std::endl;
+					std::cout << "GEQ: lhs:" << newLhs << " >= " << newRhs << std::endl;
 					resRow.row(0) = -1*(newLhs)+newRhs;
 					res.emplace_back(resRow);
-					//std::cout << "Created row from >=: " << resRow << std::endl;
+					std::cout << "Created row from >=: " << resRow << std::endl;
 					return res;
 				}
 				case RELATION::LEQ: {
 					matrix_t<Number> resRow= matrix_t<Number>(1, newLhs.cols());
 					resRow.row(0) = newLhs-newRhs;
 					res.emplace_back(resRow);
-					//std::cout << "Created row from <=: " << resRow << std::endl;
+					std::cout << "Created row from <=: " << resRow << std::endl;
 					return res;
 				}
 				default:{
