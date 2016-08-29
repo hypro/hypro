@@ -81,7 +81,7 @@ namespace parser {
 		qi::rule<Iterator, vector_t<double>(symbol_table const&, unsigned const&)> start;
 
 		std::pair<unsigned, double> createConstantTermMap( double _in, unsigned _dim) {
-			std::cout << "Found constant term with coefficient " << _in << " mapping to dimension " << _dim << std::endl;
+			//std::cout << "Found constant term with coefficient " << _in << " mapping to dimension " << _dim << std::endl;
 			return std::make_pair(_dim, _in);
 		}
 
@@ -98,20 +98,20 @@ namespace parser {
 			else
 				coefficentMap = std::make_pair(_in.at(0), 1.0);
 
-			std::cout << "Found linear term with coefficient " << coefficentMap.second << " mapping to dimension " << coefficentMap.first << std::endl;
+			//std::cout << "Found linear term with coefficient " << coefficentMap.second << " mapping to dimension " << coefficentMap.first << std::endl;
 			return coefficentMap;
 		}
 
-		vector_t<double> createLinearPolynomial(const boost::fusion::vector< std::pair<unsigned,double>, const std::vector<boost::fusion::vector<int, std::pair<unsigned,double>>>>& _in, unsigned _dim) {
+		vector_t<double> createLinearPolynomial(const boost::fusion::vector2< std::pair<unsigned,double>, const std::vector<boost::fusion::vector2<int, std::pair<unsigned,double>>>>& _in, unsigned _dim) {
 			vector_t<double> res = vector_t<double>::Zero(_dim+1);
-			std::cout << "Maximal dimension is " << _dim << std::endl;
+			//std::cout << "Maximal dimension is " << _dim << std::endl;
 			//std::cout << "Size: " << fs::at_c<1>(_in).size() + 1 << std::endl;
 
-			std::cout << "Create constraint row: ";
+			//std::cout << "Create constraint row: ";
 			std::pair<unsigned,double> tmp = fs::at_c<0>(_in);
 			res(tmp.first) += tmp.second;
 
-			std::vector<boost::fusion::vector<int, std::pair<unsigned,double>>> tmpVec = fs::at_c<1>(_in);
+			std::vector<boost::fusion::vector2<int, std::pair<unsigned,double>>> tmpVec = fs::at_c<1>(_in);
 			for(const auto& tuple : tmpVec) {
 				assert((fs::at_c<1>(tuple)).first < res.size());
 				//std::cout << tuple.first << " -> " << tuple.second << std::endl;
@@ -122,7 +122,7 @@ namespace parser {
 				}
 			}
 
-			std::cout << res.transpose() << std::endl;
+			//std::cout << res.transpose() << std::endl;
 			return res;
 		}
 	};
@@ -317,23 +317,23 @@ namespace parser {
 					res.emplace_back(resLower);
 					res.emplace_back(resUpper);
 
-					std::cout << "Created row from =: " << resLower << std::endl;
-					std::cout << "Created row from =: " << resUpper << std::endl;
+					//std::cout << "Created row from =: " << resLower << std::endl;
+					//std::cout << "Created row from =: " << resUpper << std::endl;
 					return res;
 				}
 				case RELATION::GEQ: {
 					matrix_t<Number> resRow = matrix_t<Number>(1, newLhs.cols());
-					std::cout << "GEQ: lhs:" << newLhs << " >= " << newRhs << std::endl;
+					//std::cout << "GEQ: lhs:" << newLhs << " >= " << newRhs << std::endl;
 					resRow.row(0) = -1*(newLhs)+newRhs;
 					res.emplace_back(resRow);
-					std::cout << "Created row from >=: " << resRow << std::endl;
+					//std::cout << "Created row from >=: " << resRow << std::endl;
 					return res;
 				}
 				case RELATION::LEQ: {
 					matrix_t<Number> resRow= matrix_t<Number>(1, newLhs.cols());
 					resRow.row(0) = newLhs-newRhs;
 					res.emplace_back(resRow);
-					std::cout << "Created row from <=: " << resRow << std::endl;
+					//std::cout << "Created row from <=: " << resRow << std::endl;
 					return res;
 				}
 				default:{

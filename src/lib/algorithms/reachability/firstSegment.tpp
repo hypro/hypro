@@ -78,6 +78,8 @@ namespace reachability {
 			matrix_t<Number> trafoMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
 			trafoMatrixResized = trafoMatrix.block(0,0,rows -1 ,cols -1);
 			translation.conservativeResize( rows - 1 );
+			// std::cout << "Matrices after resize: " << trafoMatrixResized << std::endl << " vec: " << translation << std::endl;
+			// std::cout << "Invariant satisfying set: " << initialPair.second << std::endl;
 
 			// if the location has no flow, stop computation and exit.
 			if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
@@ -89,8 +91,7 @@ namespace reachability {
 
 			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
 #ifdef REACH_DEBUG
-			std::cout << "Polytope at t=delta: ";
-			deltaValuation.print();
+			std::cout << "Polytope at t=delta: " << deltaValuation << std::endl;
 #endif
 			Representation firstSegment;
 			// different approaches towards bloating
@@ -122,15 +123,22 @@ namespace reachability {
 					firstSegment = unitePolytope.minkowskiSum( hausPoly );
 				}
 			} else {
-				std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix);
+				Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension())), Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension()))));
+				std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix, externalInput);
 
 				Representation tmp =  deltaValuation;
 			    if(!errorBoxVector[1].empty()) {
 			    	tmp = deltaValuation.minkowskiSum(Representation(errorBoxVector[1].matrix(), errorBoxVector[1].vector()));
 			    }
 				firstSegment = tmp.unite(initialPair.second);
+				assert(firstSegment.contains(initialPair.second));
+				assert(firstSegment.contains(deltaValuation));
 				Box<Number> differenceBox = errorBoxVector[2];
+				//std::cout << "DifferenceBox: " << differenceBox << std::endl;
 				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
+
+				//std::cout << "firstSegment befor Minkowski-sum: " << firstSegment << std::endl;
+
 				firstSegment = firstSegment.minkowskiSum( Representation(differenceBox.matrix(), differenceBox.vector()) );
 
 				/*
@@ -155,8 +163,8 @@ namespace reachability {
 				*/
 			}
 			//assert(firstSegment.contains(unitePolytope));
-			//assert(firstSegment.contains(initialPair.second));
-			//assert(firstSegment.contains(deltaValuation));
+			assert(firstSegment.contains(initialPair.second));
+			assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << ", size: " << firstSegment.size() << std::endl;
@@ -212,8 +220,8 @@ namespace reachability {
 
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 			Representation fullSegment = firstSegment.intersectHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
-			//std::cout << "Full final first segment: " << fullSegment << std::endl;
-			assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
+			// std::cout << "Full final first segment: " << fullSegment << std::endl;
+			assert(fullSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);

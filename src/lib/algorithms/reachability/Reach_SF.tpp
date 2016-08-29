@@ -779,7 +779,8 @@ namespace hypro {
 					}
 				} else {
 
-					std::vector<Box<Number>> errorBoxVector = errorBoxes<Number>( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix);
+					Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension())), Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension()))));
+					std::vector<Box<Number>> errorBoxVector = errorBoxes<Number>( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix, externalInput);
 
 					SupportFunction<Number> tmp =  deltaValuation;
 				    if(!errorBoxVector[1].empty()) {
@@ -860,10 +861,6 @@ namespace hypro {
 						}
 					}
 
-
-
-
-
 					Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), initialPair.second.supremum() );
 					#ifdef REACH_DEBUG
 					std::cout << "\n";
@@ -878,8 +875,8 @@ namespace hypro {
 					*/
 				}
 				//assert(firstSegment.contains(unitePolytope));
-				//assert(firstSegment.contains(initialPair.second));
-				//assert(firstSegment.contains(deltaValuation));
+				assert(firstSegment.contains(initialPair.second));
+				assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
 				std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << std::endl;

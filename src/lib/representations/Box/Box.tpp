@@ -368,6 +368,8 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	if(_mat.rows() == 0) {
 		return std::make_pair(true, *this);
 	}
+	// std::cout << __func__ << ": input matrix: " << _mat << std::endl << "input vector: " << _vec << std::endl;
+	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
 
@@ -433,6 +435,8 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 	}
 	min += b;
 	max += b;
+
+	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
 
 	return BoxT<Number,Converter>( std::make_pair(min, max) );
 }
@@ -608,7 +612,13 @@ bool BoxT<Number,Converter>::contains( const Point<Number> &point ) const {
 		return false;
 	}
 
-	return (point >= mLimits.first && point <= mLimits.second );
+	for(unsigned d = 0; d < this->dimension(); ++d) {
+		if(mLimits.first.at(d) > point.at(d))
+			return false;
+		if(mLimits.second.at(d) < point.at(d))
+			return false;
+	}
+	return true;
 }
 
 template<typename Number, typename Converter>
@@ -617,7 +627,13 @@ bool BoxT<Number,Converter>::contains( const BoxT<Number,Converter> &box ) const
 		return false;
 	}
 
-	return (box.min() >= mLimits.first && box.max() <= mLimits.second );
+	for(unsigned d = 0; d < this->dimension(); ++d) {
+		if(mLimits.first.at(d) > box.min().at(d))
+			return false;
+		if(mLimits.second.at(d) < box.max().at(d))
+			return false;
+	}
+	return true;
 }
 
 template<typename Number, typename Converter>

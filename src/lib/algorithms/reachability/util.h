@@ -45,7 +45,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 }
 
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
-std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput = Box<Number>::Empty() ) {
+std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput ) {
 	std::vector<Box<Number>> res;
 	unsigned dim = flow.cols();
 	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3*dim, 3*dim);
@@ -54,41 +54,43 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
 	matrixBlock = delta*matrixBlock;
 	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
 	convertedBlock = convertedBlock.exp();
-	std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
 	Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
 	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
+	// std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
+	// std::cout << __func__ << " TmpMtrix: " << tmpMatrix << std::endl;
 	b1 = b1.linearTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)),vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
 	b1 = b1.makeSymmetric();
-	//std::cout << "B1: " << std::endl << b1 << std::endl;
 	//Plotter<Number>::getInstance().addObject(b1.vertices());
 	assert(b1.isSymmetric());
 	b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
+	// std::cout << "B1: " << std::endl << b1 << std::endl;
 
 	matrix_t<Number> tmpTrafo = (flow*flow*trafoMatrix).block(0,0,dim-1,dim-1);
 	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
 	Representation tmp = initialSet.linearTransformation( tmpTrafo, tmpTrans );
 	Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
 	b2 = b2.makeSymmetric();
-	//std::cout << "B2: " << std::endl << b2 << std::endl;
 	//Plotter<Number>::getInstance().addObject(b2.vertices());
 	assert(b2.isSymmetric());
 	b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
+	// std::cout << "B2: " << std::endl << b2 << std::endl;
 
 	Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 
+	// std::cout << "External Input: " << externalInput << std::endl;
 	Box<Number> errorBoxExternalInput = Box<Number>( std::make_pair(Point<Number>(vector_t<Number>::Zero(dim-1)), Point<Number>(vector_t<Number>::Zero(dim-1))) );
-	if(!externalInput.empty()) {
-		errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
-		errorBoxExternalInput.makeSymmetric();
-		errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
-	}
+	errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
+	errorBoxExternalInput.makeSymmetric();
+	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
 
 	Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
+	assert(!externalInput.empty() || errorBoxX0 == differenceBox);
 
 	res.emplace_back(errorBoxX0);
 	res.emplace_back(errorBoxExternalInput);
@@ -98,7 +100,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 }
 
 template<typename Number>
-std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const SupportFunction<Number>& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput = Box<Number>::Empty() ) {
+std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const SupportFunction<Number>& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput ) {
 	std::vector<Box<Number>> res;
 	unsigned dim = flow.cols();
 	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3*dim, 3*dim);
@@ -107,9 +109,9 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
 	matrixBlock = delta*matrixBlock;
 	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
 	convertedBlock = convertedBlock.exp();
-	std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
@@ -136,11 +138,9 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 
 	Box<Number> errorBoxExternalInput = Box<Number>( std::make_pair(Point<Number>(vector_t<Number>::Zero(dim-1)), Point<Number>(vector_t<Number>::Zero(dim-1))) );
-	if(!externalInput.empty()) {
-		errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
-		errorBoxExternalInput.makeSymmetric();
-		errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
-	}
+	errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
+	errorBoxExternalInput.makeSymmetric();
+	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
 
 	Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
 
