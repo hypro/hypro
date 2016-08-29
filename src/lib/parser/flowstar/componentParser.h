@@ -252,7 +252,7 @@ namespace parser {
 			assert(!_in.empty());
 			// matrix template with additional row of zeroes for constants, no need for rows for discrete variables, as their flow is 0
 			unsigned rowCnt = _in.begin()->second.rows();
-			std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
+			//std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
 			assert(_in.size() == rowCnt-1);
 			matrix_t<double> res = matrix_t<double>::Zero(rowCnt, rowCnt);
 			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;

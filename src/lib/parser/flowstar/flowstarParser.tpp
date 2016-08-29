@@ -94,7 +94,7 @@ namespace parser {
 		}
 
 		for(const auto state : mInitialStates ){
-			std::cout << "Add initial state for location " << state.location->id() << std::endl;
+			//std::cout << "Add initial state for location " << state.location->id() << std::endl;
 			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 			result.addInitialState(state);
 		}
