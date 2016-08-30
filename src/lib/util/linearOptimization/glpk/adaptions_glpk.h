@@ -93,7 +93,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const Point<Number>& point) {
+	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point) {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
 		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
@@ -139,6 +139,11 @@ namespace hypro {
 			} else {
 				glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
 			}
+		}
+
+		// restore original problem
+		for(const auto item : res ) {
+			glp_set_row_bnds(glpkProblem, item+1, GLP_UP,  0.0, carl::toDouble( constants(item) ));
 		}
 
 		return res;
