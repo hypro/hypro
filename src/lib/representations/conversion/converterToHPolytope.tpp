@@ -48,8 +48,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
      //for every dimension:
      for ( unsigned i = 0; i < dim; ++i ) {
          //write fixed entries (because of box) into the normal matrix (2 each column)
-           directions( 2 * i, i ) = -1;
-           directions( 2 * i + 1, i ) = 1;
+           directions( 2 * i, i ) = Number(-1);
+           directions( 2 * i + 1, i ) = Number(1);
      }
 
      //initialize distance vector with 2*dim rows
@@ -143,7 +143,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 		for(auto direction : additionalDirections) {
 			// project direction
 			for(const auto& dir : zeroDimensions) {
-				direction(dir) = 0;
+				direction(dir) = Number(0);
 			}
 			// add projected direction
 			if(direction.nonZeros() > 0 && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
@@ -193,16 +193,16 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 		while(!zeroDimensions.empty()) {
 			//std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
 			vector_t<Number> zDimConstraint = vector_t<Number>::Zero(dim);
-			zDimConstraint(zeroDimensions.front()) = 1;
+			zDimConstraint(zeroDimensions.front()) = Number(1);
 			constraints.row(zeroDimensionPos) = zDimConstraint;
-			constants(zeroDimensionPos) = 0;
+			constants(zeroDimensionPos) = Number(0);
 			//std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
 
 			++zeroDimensionPos;
 
-			zDimConstraint(zeroDimensions.front()) = -1;
+			zDimConstraint(zeroDimensions.front()) = Number(-1);
 			constraints.row(zeroDimensionPos) = zDimConstraint;
-			constants(zeroDimensionPos) = 0;
+			constants(zeroDimensionPos) = Number(0);
 			//std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
 
 			zeroDimensions.pop_front();
