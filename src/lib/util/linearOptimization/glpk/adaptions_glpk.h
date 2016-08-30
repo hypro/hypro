@@ -8,7 +8,7 @@
 
 namespace hypro {
 
-	void printProblem(glp_prob* glpkProblem) {
+	inline void printProblem(glp_prob* glpkProblem) {
 		int cols = glp_get_num_cols(glpkProblem);
 		int* ind = new int[cols+1];
 		double* val = new double[cols+1];
