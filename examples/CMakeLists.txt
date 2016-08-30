@@ -47,6 +47,7 @@ set( EXAMPLES
     #example_probabilistic
     #example_ppl_nncPolyhedra
     example_reduction
+    example_redundantConstraints
     example_SFconversion
     example_sfh
     example_spiral
