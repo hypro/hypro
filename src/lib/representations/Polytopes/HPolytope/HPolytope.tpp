@@ -26,7 +26,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
 	}
-	std::cout << "Constructor from matrix, vector, size: " << this->size() << std::endl;
+	//std::cout << "Constructor from matrix, vector, size: " << this->size() << std::endl;
 	reduceNumberRepresentation();
 }
 
@@ -49,7 +49,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		ConvexHull<Number> ch(points);
 		ch.convexHullVertices();
 		mHPlanes = ch.getHsv();
-		std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
+		//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
 		assert(ch.getCone().empty());
 		assert(ch.getLinealtySpace().empty());
 		/*
@@ -532,13 +532,18 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
+	std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
+	if(A.nonZeros() == 0) {
+		std::vector<Point<Number>> points;
+		points.emplace_back(b);
+		return HPolytopeT<Number,Converter>(points);
+	}
 	//std::cout << __func__ << " of " << *this << std::endl;
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			std::cout << "Full rank, retransform!" << std::endl;
+			//std::cout << "Full rank, retransform!" << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			//std::cout << "Matrix: " << convert<Number,double>(inequalities.first*A.inverse()) << std::endl << "Vector: " << convert<Number,double>(((inequalities.first*A.inverse()*b) + (inequalities.second))) << std::endl;
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
@@ -550,7 +555,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
+			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
 
 			//assert(res.size() <= this->size());
 			res.setReduced();
@@ -571,7 +576,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 #endif
 
 	// evaluation of rhs in directions of lhs
-	std::cout << "evaluation of rhs in directions of lhs" << std::endl;
+	//std::cout << "evaluation of rhs in directions of lhs" << std::endl;
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		EvaluationResult<Number> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
 		if ( evalRes.errorCode == INFTY ) {
@@ -592,7 +597,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	}
 
 	// evaluation of lhs in directions of rhs
-	std::cout << "evaluation of lhs in directions of rhs" << std::endl;
+	//std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 		EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
 		if ( evalRes.errorCode == INFTY ) {

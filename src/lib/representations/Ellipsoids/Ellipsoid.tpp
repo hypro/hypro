@@ -14,23 +14,21 @@
 
 namespace hypro {
 
-	
 
-    
+
+
 template <typename Number>
 Ellipsoid<Number>::Ellipsoid( Number _radius, std::size_t _dimension ) {
-    matrix_t<Number> shapeMatrix(_dimension,_dimension);
-    shapeMatrix.Zero(_dimension,_dimension);
+    mShapeMatrix = matrix_t<Number>::Zero(_dimension,_dimension);
     for( std::size_t i = 0; i < _dimension; i++ ){
-        shapeMatrix(i,i) = _radius;
+        mShapeMatrix(i,i) = _radius;
     }
-    mShapeMatrix = shapeMatrix;
     mDimension = _dimension;
     mIsEmpty = empty();
-}   
+}
 
 template <typename Number>
-Ellipsoid<Number>::Ellipsoid( matrix_t<Number> _matrix)	
+Ellipsoid<Number>::Ellipsoid( matrix_t<Number> _matrix)
       : mDimension( _matrix.rows() ), mShapeMatrix( _matrix ) {
 	assert( _matrix.transpose() == _matrix );  // symmetric
         // Todo: _matrix is positive definite? x * Qx >= 0
@@ -38,7 +36,7 @@ Ellipsoid<Number>::Ellipsoid( matrix_t<Number> _matrix)
 }
 
 template <typename Number>
-Ellipsoid<Number>::Ellipsoid( const Ellipsoid<Number>& _orig ) 
+Ellipsoid<Number>::Ellipsoid( const Ellipsoid<Number>& _orig )
       : mDimension( _orig.dimension() ), mShapeMatrix( _orig.matrix() ) {
     mIsEmpty = empty();
 }
@@ -61,7 +59,7 @@ template <typename Number>
 bool Ellipsoid<Number>::empty() const {
     for (unsigned i = 0; i < mShapeMatrix.rows(); i++) {
         for (unsigned j = 0; j < mShapeMatrix.cols(); j++) {
-            if (mShapeMatrix(i,j) != 0) 
+            if (mShapeMatrix(i,j) != 0)
                 return false;
         }
     }
@@ -97,14 +95,14 @@ Ellipsoid<Number> Ellipsoid<Number>::minkowskiSum(const Ellipsoid<Number>& _rhs,
     } else {
         return Ellipsoid<Number>(matrix);
     }
-    
+
 }
 
 template <typename Number>
 matrix_t<Number> Ellipsoid<Number>::approxEllipsoidMatrix(const matrix_t<Number> _matrix) const {
     matrix_t<Number> roundetMatrix(_matrix.rows(), _matrix.cols());
     Number remains = 0;
-    Number roundedValue; 
+    Number roundedValue;
     std::size_t dim = _matrix.rows();
     for (std::size_t j = 0; j < dim -1; j++){
         for (std::size_t k = j + 1; k < dim; k++){
@@ -121,19 +119,19 @@ matrix_t<Number> Ellipsoid<Number>::approxEllipsoidMatrix(const matrix_t<Number>
             }
         }
     }
-    Number newEntry = 0; 
+    Number newEntry = 0;
     for (std::size_t i = 0; i < dim; i++){
-        newEntry = _matrix(i,i) + remains; 
+        newEntry = _matrix(i,i) + remains;
         if ( newEntry >= 0 ) {
             roundetMatrix(i,i) = carl::ceil(newEntry * (Number) fReach_DENOMINATOR) / (Number) fReach_DENOMINATOR;
-            
+
         } else {
             roundetMatrix(i,i) = carl::floor(newEntry * (Number) fReach_DENOMINATOR) / (Number) fReach_DENOMINATOR;
             assert(false); // TODO -fix me
         }
     }
     return roundetMatrix;
-    
+
 }
 
 template <typename Number>
