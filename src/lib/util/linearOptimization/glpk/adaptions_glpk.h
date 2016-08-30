@@ -8,8 +8,40 @@
 
 namespace hypro {
 
+	void printProblem(glp_prob* glpkProblem) {
+		int cols = glp_get_num_cols(glpkProblem);
+		int* ind = new int[cols+1];
+		double* val = new double[cols+1];
+		for(int i = 1; i <= glp_get_num_rows(glpkProblem); ++i) {
+			glp_get_mat_row(glpkProblem, i, ind, val);
+			//assert(glp_get_row_type(glpkProblem,i) == GLP_UP);
+			unsigned pos = 1;
+			for(int j = 1; j <= cols; ++j) {
+				if(ind[pos] == j) {
+					std::cout << val[pos] << "\t";
+					++pos;
+				} else {
+					std::cout << "0\t";
+				}
+			}
+			if( glp_get_row_type(glpkProblem,i) == GLP_UP ) {
+				std::cout << " <= " << glp_get_row_ub(glpkProblem,i) << std::endl;
+			} else if ( glp_get_row_type(glpkProblem,i) == GLP_FR ) {
+				std::cout << " <= +INF" << std::endl;
+			}
+		}
+		delete[] ind;
+		delete[] val;
+	}
+
 	template<typename Number>
 	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+		/*
+		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
+		std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
+		printProblem(glpkProblem);
+		*/
+
 		// setup glpk
 		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
@@ -74,7 +106,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, matrix_t<Number> constraints, vector_t<Number> constants) {
 		std::vector<std::size_t> res;
 
 		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
@@ -93,43 +125,21 @@ namespace hypro {
 				return res;
 			}
 		}
-		int* ind = new int[constraints.cols()+1];
-		double* val = new double[constraints.cols()+1];
-		for(unsigned constraintIndex = 0; constraintIndex < constraints.rows(); ++constraintIndex) {
-			// create and add negated constraint
-			std::cout << "create negated constraint." << std::endl;
 
-			for(unsigned d = 0; d < constraints.cols(); ++d) {
-				ind[d+1] = d+1;
-				val[d+1] = -carl::convert<Number,double>(constraints(constraintIndex, d));
-				std::cout << d+1 << ": Index: " << ind[d+1] << " Val: " << val[d+1] << std::endl;
-			}
-			glp_set_mat_row(glpkProblem, constraintIndex+1, constraints.cols(), ind, val);
-			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP, -carl::convert<Number,double>(constants(constraintIndex)), 0.0 );
+		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
+			// evaluate in current constraint direction
+			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
 
-			glp_term_out(GLP_ON);
-			glp_simplex( glpkProblem, NULL);
-			//glp_exact( glpkProblem, NULL );
+			// remove constraint by removing the boundaries
+			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
+			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
 
-			if(glp_get_status(glpkProblem) == GLP_NOFEAS || glp_get_status(glpkProblem) == GLP_INFEAS) {
-				std::cout << "Redundant constraint no. " << constraintIndex << std::endl;
+			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {
 				res.push_back(constraintIndex);
+			} else {
+				glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
 			}
-
-			// revert constraint
-			std::cout << "revert constraint." << std::endl;
-			for(unsigned d = 0; d < constraints.cols(); ++d) {
-				ind[d+1] = d+1;
-				val[d+1] = carl::convert<Number,double>(constraints(constraintIndex, d));
-				std::cout << d+1 << ": Index: " << ind[d+1] << " Val: " << val[d+1] << std::endl;
-			}
-			glp_set_mat_row(glpkProblem, constraintIndex+1, constraints.cols(), ind, val);
-			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP, -carl::convert<Number,double>(constants(constraintIndex)), 0.0 );
 		}
-		delete[] ind;
-		delete[] val;
-
-		std::cout << "DONE." << std::endl;
 
 		return res;
 	}

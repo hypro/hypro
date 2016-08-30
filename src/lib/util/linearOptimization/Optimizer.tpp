@@ -174,8 +174,8 @@ namespace hypro {
 		//return (glp_get_status(lp) != GLP_NOFEAS);
 
 		//TODO: Undone!
-		return res;
 		#endif
+		return res;
 	}
 
 	template<typename Number>
@@ -264,8 +264,6 @@ namespace hypro {
 				glp_add_rows( lp, numberOfConstraints );
 				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
 					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
-					const char* name = ("c" + std::to_string(i+1)).c_str();
-					glp_set_row_name( lp, i + 1, name);
 				}
 				// add cols here
 				glp_add_cols( lp, mConstraintMatrix.cols() );
@@ -293,8 +291,6 @@ namespace hypro {
 				glp_term_out(GLP_OFF);
 				for ( unsigned i = 0; i < cols; ++i ) {
 					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-					const char* name = ("x" + std::to_string(i+1)).c_str();
-					glp_set_col_name( lp, i + 1, name );
 					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 				}
 
