@@ -223,7 +223,7 @@ namespace reachability {
 			// std::cout << "Full final first segment: " << fullSegment << std::endl;
 			assert(fullSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 			validState.set = fullSegment;
-			validState.timestamp = carl::Interval<Number>(0,mSettings.timeStep);
+			validState.timestamp = carl::Interval<Number>(Number(0),mSettings.timeStep);
 			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);
 		} // if set does not satisfy the invariant, return false
 		else {

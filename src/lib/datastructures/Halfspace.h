@@ -43,7 +43,32 @@ class Halfspace {
 	unsigned dimension() const;
 	void reduceDimension( unsigned _dimension );
 	void reduceToDimensions( std::vector<unsigned> _dimensions );
-	void makeInteger();
+
+	template<typename N = Number, carl::DisableIf< std::is_same<N,double> > = carl::dummy>
+	void makeInteger() {
+		if(!mIsInteger){
+			Number scaling = Number(carl::getDenom(mScalar));
+			for(unsigned i = 0; i < mNormal.rows(); ++i) {
+				scaling = scaling * carl::getDenom(mNormal(i));
+			}
+
+			mScalar = mScalar*scaling;
+			assert(carl::isInteger(mScalar));
+
+			for(unsigned i = 0; i < mNormal.rows(); ++i) {
+				mNormal(i) = mNormal(i)*scaling;
+				assert(carl::isInteger(mNormal(i)));
+			}
+			mIsInteger = true;
+		}
+	}
+
+	template<typename N = Number, carl::EnableIf< std::is_same<N,double> > = carl::dummy>
+	void makeInteger() {
+		mIsInteger = true;
+		// TODO: As this function is currently only used for number reduction, do nothing for doubles -> fix!
+	}
+
 	bool isInteger() const { return mIsInteger; }
 
 	const vector_t<Number>& normal() const;

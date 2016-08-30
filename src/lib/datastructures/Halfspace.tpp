@@ -83,25 +83,6 @@ void Halfspace<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) 
 	this->mHash = 0;
 }
 
-template<typename Number>
-void Halfspace<Number>::makeInteger() {
-	if(!mIsInteger){
-		Number scaling = Number(carl::getDenom(mScalar));
-		for(unsigned i = 0; i < mNormal.rows(); ++i) {
-			scaling = scaling * carl::getDenom(mNormal(i));
-		}
-
-		mScalar = mScalar*scaling;
-		assert(carl::isInteger(mScalar));
-
-		for(unsigned i = 0; i < mNormal.rows(); ++i) {
-			mNormal(i) = mNormal(i)*scaling;
-			assert(carl::isInteger(mNormal(i)));
-		}
-		mIsInteger = true;
-	}
-}
-
 template <typename Number>
 const vector_t<Number> &Halfspace<Number>::normal() const {
 	return mNormal;
@@ -144,7 +125,7 @@ Number Halfspace<Number>::evaluate( const vector_t<Number> &_direction ) const {
 
 template <typename Number>
 Point<Number> Halfspace<Number>::project( const Point<Number> point ) const {
-	return Point<Number>( point.rawCoordinates() + 
+	return Point<Number>( point.rawCoordinates() +
 																				( (mScalar- point.rawCoordinates().dot(mNormal))/mNormal.dot(mNormal) ) * mNormal );
 }
 

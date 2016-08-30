@@ -17,6 +17,12 @@ namespace hypro {
 		parser::flowstarParser<mpq_class> parser;
 		return boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>>(parser.parseInput(filename), parser.mSettings);
 	}
+
+	template<>
+	boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+		parser::flowstarParser<double> parser;
+		return boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>>(parser.parseInput(filename), parser.mSettings);
+	}
 }
 
 

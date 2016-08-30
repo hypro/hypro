@@ -295,44 +295,6 @@ std::size_t BoxT<Number,Converter>::size() const {
 }
 
 template<typename Number, typename Converter>
-void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
-	Number limit2 = Number(limit)*Number(limit);
-	for(unsigned d = 0; d < this->dimension(); ++d) {
-		//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
-		if(mLimits.second.at(d) != 0) {
-			Number numerator = carl::getNum(mLimits.second.at(d));
-			Number denominator = carl::getDenom(mLimits.second.at(d));
-			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-			Number dividend = largest / Number(limit);
-			assert(largest/dividend == limit);
-			if(largest > limit2){
-				Number val = mLimits.second.at(d) > 0 ? Number(carl::ceil(numerator/dividend)) / Number(carl::floor(denominator/dividend)) : Number(carl::ceil(numerator/dividend)) / Number(carl::ceil(denominator/dividend));
-				//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
-				assert(val >= mLimits.second.at(d));
-				//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
-				mLimits.second[d] = val;
-			}
-		}
-
-		//std::cout << "(Lower Bound) Number: " << mLimits.first.at(d) << std::endl;
-		if(mLimits.first.at(d) != 0) {
-			Number numerator = carl::getNum(mLimits.first.at(d));
-			Number denominator = carl::getDenom(mLimits.first.at(d));
-			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-			Number dividend = largest / Number(limit);
-			assert(largest/dividend == limit);
-			if(largest > limit2){
-				Number val =  mLimits.first.at(d) > 0 ?  Number(carl::floor(numerator/dividend)) / Number(carl::ceil(denominator/dividend)) : Number(carl::floor(numerator/dividend)) / Number(carl::floor(denominator/dividend));
-				//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
-				assert(val <= mLimits.first.at(d));
-				//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
-				mLimits.first[d] = val;
-			}
-		}
-	}
-}
-
-template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
 	Point<Number> limit = mLimits.first;
 	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {

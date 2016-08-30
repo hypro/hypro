@@ -4,8 +4,8 @@
  * @file EllipsoidSupportFunction.h
  *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @author Phillip Florian 
- * 
+ * @author Phillip Florian
+ *
  * @since	2015-04-17
  * @version	2016-05-04
  */
@@ -18,7 +18,7 @@
 namespace hypro {
 
 /*
-* This class defines a support Function object representing an ellipsoid 
+* This class defines a support Function object representing an ellipsoid
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
 */
 template <typename Number>
@@ -47,7 +47,25 @@ class EllipsoidSupportFunction {
 	 * @param l
 	 * @return
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const;
+	//EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const;
+
+	template<typename N = Number, carl::DisableIf< std::is_same<N,double> > = carl::dummy>
+	EvaluationResult<Number> evaluate( const vector_t<Number> &_l ) const {
+	    EvaluationResult<Number> result ;
+	    result.supportValue = carl::sqrt_safe(_l.dot(this->mShapeMatrix * _l)).first;
+	    result.optimumValue = result.supportValue * _l;
+	    result.errorCode = SOLUTION::FEAS;
+	    return result;
+	}
+
+	template<typename N = Number, carl::EnableIf< std::is_same<N,double> > = carl::dummy>
+	EvaluationResult<Number> evaluate( const vector_t<Number> &_l ) const {
+	    EvaluationResult<Number> result ;
+	    result.supportValue = std::sqrt(_l.dot(this->mShapeMatrix * _l));
+	    result.optimumValue = result.supportValue * _l;
+	    result.errorCode = SOLUTION::FEAS;
+	    return result;
+	}
 
 	/**
 	 * @brief Evaluates the support function in the directions given in the passed matrix.
@@ -79,7 +97,7 @@ class EllipsoidSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
-        
+
 };
 }  // namespace
 #include "EllipsoidSupportFunction.tpp"

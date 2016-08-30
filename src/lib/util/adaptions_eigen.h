@@ -9,6 +9,7 @@
  */
 
 #pragma once
+
 #include <carl/numbers/numbers.h>
 #include <functional>
 #include <iostream>
@@ -171,6 +172,14 @@ Number norm(const hypro::vector_t<Number>& in, bool roundUp = true ) {
 	} else {
 		return dist.first;
 	}
+}
+
+template<>
+inline double norm(const hypro::vector_t<double>& in, bool roundUp ) {
+	if(roundUp)
+		return in.norm()+std::numeric_limits<double>::min();
+	else
+		return in.norm();
 }
 
 template<typename Number>

@@ -35,6 +35,7 @@ namespace hypro {
 
     // Solution types
     enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
+
 } // namespace hypro
 
 namespace Eigen {
@@ -109,5 +110,30 @@ namespace Eigen {
 	*/
 
 } // namespace Eigen
+
+
+namespace std {
+	inline std::ostream& operator<<(std::ostream& _out, const hypro::SOLUTION& _in) {
+    	switch(_in){
+    		case hypro::SOLUTION::FEAS: {
+    			_out << "FEAS";
+    			break;
+    		}
+    		case hypro::SOLUTION::INFEAS: {
+    			_out << "INFEAS";
+    			break;
+    		}
+    		case hypro::SOLUTION::INFTY: {
+    			_out << "INFTY";
+    			break;
+    		}
+    		case hypro::SOLUTION::UNKNOWN: {
+    			_out << "UNKNOWN";
+    			break;
+    		}
+    	}
+		return _out;
+	}
+} // namespace std
 
 #include "util/adaptions_eigen.h"

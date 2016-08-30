@@ -36,15 +36,6 @@ unsigned EllipsoidSupportFunction<Number>::dimension() const {
 }
 
 template <typename Number>
-EvaluationResult<Number> EllipsoidSupportFunction<Number>::evaluate( const vector_t<Number> &_l ) const {
-    EvaluationResult<Number> result ;
-    result.supportValue = carl::sqrt_safe(_l.dot(this->mShapeMatrix * _l)).first;
-    result.optimumValue = result.supportValue * _l; 
-    result.errorCode = SOLUTION::FEAS;
-    return result;
-}
-
-template <typename Number>
 std::vector<EvaluationResult<Number>> EllipsoidSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
@@ -70,14 +61,14 @@ bool EllipsoidSupportFunction<Number>::contains( const vector_t<Number> &_point 
         return true;
     }
     return false;
-   
+
 }
 
 template <typename Number>
 bool EllipsoidSupportFunction<Number>::empty() const {
     for (unsigned i = 0; i < mShapeMatrix.rows(); i++) {
         for (unsigned j = 0; j < mShapeMatrix.cols(); j++) {
-            if (mShapeMatrix(i,j) != 0) 
+            if (mShapeMatrix(i,j) != 0)
                 return false;
         }
     }

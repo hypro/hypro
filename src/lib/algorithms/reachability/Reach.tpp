@@ -113,7 +113,7 @@ namespace reachability {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
-					checkTransitions(_state, carl::Interval<Number>(0,mSettings.timeBound), nextInitialSets);
+					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
 				}
 				/*
 					State<Number> guardSatisfyingState;
@@ -195,7 +195,7 @@ namespace reachability {
 					State<Number> currentState = _state;
 					currentState.set = currentSegment;
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
-					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(0, mSettings.timeBound));
+					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
 					bool fireTimeTriggeredTransition = checkTransitions(currentState, currentState.timestamp, nextInitialSets);
 					/*
 					bool fireTimeTriggeredTransition = false;
