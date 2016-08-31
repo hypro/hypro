@@ -728,7 +728,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		*/
 
-		std::cout << "size after union: " << result.size() << std::endl;
+		//std::cout << "size after union: " << result.size() << std::endl;
 
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));

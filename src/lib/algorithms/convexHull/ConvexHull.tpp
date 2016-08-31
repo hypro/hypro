@@ -8,14 +8,6 @@ namespace hypro {
 		std::set<Point<Number>> tmp;
 		tmp.insert(points.begin(), points.end());
 		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
-		std::cout << "Constructed cHull from vertices: " << std::endl;
-		for(const auto& point : points) {
-			std::cout << point << std::endl;
-		}
-		std::cout << " Reduced set: " << std::endl;
-		for(const auto& point : mPoints) {
-			std::cout << point << std::endl;
-		}
 	}
 
 	template<typename Number>
@@ -26,14 +18,6 @@ namespace hypro {
 		std::set<Point<Number>> tmp;
 		tmp.insert(points.begin(), points.end());
 		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
-		std::cout << "Constructed cHull from vertices: " << std::endl;
-		for(const auto& point : points) {
-			std::cout << point << std::endl;
-		}
-		std::cout << " Reduced set: " << std::endl;
-		for(const auto& point : mPoints) {
-			std::cout << point << std::endl;
-		}
 	}
 
 	template<typename Number>
@@ -46,14 +30,6 @@ namespace hypro {
 		std::set<Point<Number>> tmp;
 		tmp.insert(points.begin(), points.end());
 		mPoints.insert(mPoints.end(), tmp.begin(), tmp.end());
-		std::cout << "Constructed cHull from vertices: " << std::endl;
-		for(const auto& point : points) {
-			std::cout << point << std::endl;
-		}
-		std::cout << " Reduced set: " << std::endl;
-		for(const auto& point : mPoints) {
-			std::cout << point << std::endl;
-		}
 	}
 
 	template<typename Number>
@@ -113,7 +89,7 @@ namespace hypro {
 
 	template<typename Number>
 	void ConvexHull<Number>::toPrimal(const std::vector<Point<Number>> points) {
-		std::cout << __func__ << " created " << points.size() << " points in dual." << std::endl;
+		//std::cout << __func__ << " created " << points.size() << " points in dual." << std::endl;
 		for(const auto& p:points) {
 			mHsv.push_back(Halfspace<Number>(p.rawCoordinates(),Number(1)));
 			assert(mHsv.back().normal() == p.rawCoordinates());
@@ -144,7 +120,7 @@ namespace hypro {
 				}
 			} else {
 				toDual();
-				std::cout << __func__ << ": Compute vertices in dual." << std::endl;
+				//std::cout << __func__ << ": Compute vertices in dual." << std::endl;
 				VertexEnumeration<Number> ev = VertexEnumeration<Number>(mDualHsv);
 				ev.enumerateVertices();
 				for(const auto& l:ev.getLinealtySpace()) {

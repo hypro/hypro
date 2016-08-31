@@ -139,7 +139,7 @@ namespace hypro {
 
 	template<typename Number>
 	void Dictionary<Number>::pivotDictionary(std::size_t i, std::size_t j) {
-		std::cout << "Cols: " << mDictionary.cols() << ", rows: " << mDictionary.rows() << ", i: " << i << ", j: " << j << std::endl;
+		//std::cout << "Cols: " << mDictionary.cols() << ", rows: " << mDictionary.rows() << ", i: " << i << ", j: " << j << std::endl;
 		// update other cells
 		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()); ++colIndex) {
 			for(unsigned rowIndex = 0; rowIndex < unsigned(mDictionary.rows()); ++rowIndex) {
