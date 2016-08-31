@@ -97,7 +97,7 @@ namespace hypro {
 						std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
 #endif
 						// Check for direct urgent transitions
-						if(transition->triggerTime() == 0){
+						if(transition->triggerTime() == Number(0.0)){
 #ifdef REACH_DEBUG
 							std::cout << "Time trigger at time 0 enabled" << std::endl;
 #endif
