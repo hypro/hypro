@@ -7,7 +7,7 @@ namespace reachability {
 							   State<Number>& result ) const {
 		assert(!_state.timestamp.isUnbounded());
 		result = _state;
-		//std::cout << "check transition " << *_trans << std::endl;
+		//std::cout << "check transition " << _trans->source()->id() << " -> " << _trans->target()->id() << std::endl;
 		VariablePool& vpool = VariablePool::getInstance();
 
 		// check discrete guard intersection.
@@ -110,6 +110,7 @@ namespace reachability {
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 			result.set = guardSatisfyingSet.second;
+			//std::cout << "Guard satisfying set: " <<  guardSatisfyingSet.second << std::endl;
 			return true;
 			/*
 			// apply reset function to guard-satisfying set.
@@ -159,7 +160,7 @@ namespace reachability {
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
 			assert(!aggregationPair.second.empty());
-			carl::Interval<Number> aggregatedTimestamp;
+			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->timestamp;
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
 			Representation collectedSets = boost::get<Representation>(aggregationPair.second.begin()->set);
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
@@ -178,7 +179,8 @@ namespace reachability {
 			s.set = collectedSets;
 			s.timestamp = aggregatedTimestamp;
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
-			//std::cout << "Aggregated representation: " << boost::get<Representation>(s.set) << std::endl;
+			//std::cout << "Aggregated representation: " << collectedSets << std::endl;
+			//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 			// Perform resets - discrete and continuous.
 
@@ -202,6 +204,7 @@ namespace reachability {
 			// check discrete invariant of target location
 
 			// At this point the discrete guard is satisfied and the result state contains all discrete assignments satisfying this guard -> verify against target location invariant.
+			bool discreteInvariantInvalidated = false;
 			for(const auto& invariantPair : aggregationPair.first->target()->invariant().discreteInvariant ) {
 				carl::Interval<Number> invariant = carl::Interval<Number>::unboundedInterval();
 				carl::Interval<Number> substitution(0);
@@ -230,20 +233,26 @@ namespace reachability {
 	#ifdef REACH_DEBUG
 					std::cout << "Valuation invalidates discrete target location invariant." << std::endl;
 	#endif
-					continue;
+					discreteInvariantInvalidated = true;
+					break;
 				}
 			}
 
-			Representation tmp = collectedSets.linearTransformation(  aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec );
-			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
-			if(invariantSatisfyingSet.first){
-				s.set = invariantSatisfyingSet.second;
-			} else {
-				continue;
-			}
+			if(!discreteInvariantInvalidated) {
+				Representation tmp = collectedSets.linearTransformation(  aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec );
+				std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
+				if(invariantSatisfyingSet.first){
+					unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
+					Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
+					s.set = invariantSatisfyingSet.second;
+					//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
+				} else {
+					continue;
+				}
 
-			//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-			mWorkingQueue.emplace(mCurrentLevel+1, s);
+				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
+				mWorkingQueue.emplace(mCurrentLevel+1, s);
+			}
 		}
 	}
 
@@ -262,6 +271,7 @@ namespace reachability {
 					//std::cout << "Time trigger enabled" << std::endl;
 					if(intersectGuard(transition, state, guardSatisfyingState)){
 						// when taking a timed transition, reset timestamp
+						//std::cout << "Time triggered transition enabled!" << std::endl;
 						guardSatisfyingState.timestamp = carl::Interval<Number>(0);
 						nextInitialSets.emplace_back(transition, guardSatisfyingState);
 						timeTriggeredTransitionEnabled = true;

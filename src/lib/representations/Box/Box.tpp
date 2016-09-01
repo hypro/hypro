@@ -330,7 +330,8 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	if(_mat.rows() == 0) {
 		return std::make_pair(true, *this);
 	}
-	// std::cout << __func__ << ": input matrix: " << _mat << std::endl << "input vector: " << _vec << std::endl;
+	//std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
+	//std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
 	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
@@ -340,6 +341,10 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		for(unsigned d = 0; d < _mat.cols(); ++d){
 			evaluatedBox += carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d)) * Number(_mat(rowIndex,d));
 		}
+
+		//std::cout << __func__ << " Row: " << convert<Number,double>(_mat.row(rowIndex)) << std::endl;
+		//std::cout << __func__ << " Evaluated box: " << evaluatedBox << std::endl;
+		//std::cout << __func__ << " Distance: " << carl::convert<Number,double>(_vec(rowIndex)) << std::endl;
 
 		if(evaluatedBox.lower() > _vec(rowIndex)){
 			return std::make_pair(false,*this);
@@ -367,7 +372,9 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		limitingPlanes.pop_back();
 	}
 	assert(newPlanes.rows() == newDistances.rows());
-	return std::make_pair(true, this->intersectHalfspaces(newPlanes,newDistances));
+	BoxT<Number,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
+	//std::cout << __func__ << " TRUE, " << convert<Number,double>(tmpBox) << std::endl;
+	return std::make_pair(true, tmpBox);
 }
 
 template<typename Number, typename Converter>
@@ -440,8 +447,10 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 		bool holdsMin = hspace.holds(mLimits.first.rawCoordinates());
 		bool holdsMax = hspace.holds(mLimits.second.rawCoordinates());
 		if(holdsMin && holdsMax){
+			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 			return *this;
 		}
+		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 		unsigned dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
@@ -468,13 +477,15 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 		}
 		// farestPointOutside is the point farest point in direction of the plane normal - if it is contained in the halfspace, there is no intersection.
 		if(hspace.holds(farestPointOutside.rawCoordinates())) {
+			//std::cout << __func__ << " Farest point outside is contained - return full box." << std::endl;
 			return *this;
 		}
 		if(!hspace.holds(farestPointInside.rawCoordinates())) {
+			//std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
 			return BoxT<Number,Converter>::Empty();
 		}
 
-		//std::cout << __func__ << " Point farest outside: " << farestPointOutside << std::endl;
+		//std::cout << __func__ << " Farest point outside: " << convert<Number,double>(farestPointOutside.rawCoordinates()).transpose() << std::endl;
 
 		// at this point farestPointOutside is outside and farestPointInside is inside - the plane intersects the box somehow.
 		std::vector<Point<Number>> discoveredPoints;
@@ -488,7 +499,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			//std::cout << "Queue size: " << workingQueue.size() << std::endl;
 			Point<Number> current = workingQueue.front();
 			workingQueue.pop();
-			//std::cout << "Current Point: " << current << std::endl;
+			//std::cout << "Current Point: " << convert<Number,double>(current.rawCoordinates()).transpose() << std::endl;
 			// create and test neighbors
 			for(unsigned d = 0; d < dim; ++d ) {
 				Point<Number> tmp = current;
@@ -499,12 +510,13 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 				} else if ( hspace.normal()(d) == 0 ) {
 					tmp[d] = tmp.at(d) == mLimits.first.at(d) ? mLimits.second.at(d) : mLimits.first.at(d);
 				} else {
+					// UNSINN!?
 					//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
 					assert(tmp == current);
 					continue;
 				}
 
-				//std::cout << "Created search-point: " << tmp << std::endl;
+				//std::cout << "Created search-point: " << convert<Number,double>(tmp.rawCoordinates()).transpose() << std::endl;
 				// if neighbor is new, test is, otherwise skip.
 				if(std::find(discoveredPoints.begin(), discoveredPoints.end(), tmp) == discoveredPoints.end()){
 					if(!hspace.holds(tmp.rawCoordinates())){
@@ -521,7 +533,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 						dCoord /= -hspace.normal()(d);
 						Point<Number> intersectionPoint = tmp;
 						intersectionPoint[d] = dCoord;
-						//std::cout << "is inside, intersection point is " << intersectionPoint << std::endl;
+						//std::cout << "is inside, intersection point is " << convert<Number,double>(intersectionPoint.rawCoordinates()).transpose() << std::endl;
 						intersectionPoints.push_back(intersectionPoint);
 					}
 				} else {
@@ -541,6 +553,10 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			} else {
 				intersectionPoints.push_back(mLimits.second);
 			}
+			//std::cout << __func__ << " Intersection points:" << std::endl;
+			//for(const auto& point : intersectionPoints) {
+			//	std::cout << convert<Number,double>(point.rawCoordinates()).transpose() << std::endl;
+			//}
 			return BoxT<Number,Converter>(intersectionPoints);
 		}
 	}
