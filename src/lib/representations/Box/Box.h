@@ -322,14 +322,23 @@ class BoxT {
 				Number numerator = carl::getNum(mLimits.second.at(d));
 				Number denominator = carl::getDenom(mLimits.second.at(d));
 				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-				Number dividend = largest / Number(limit);
-				assert(largest/dividend == limit);
 				if(largest > limit2){
-					Number val = mLimits.second.at(d) > 0 ? Number(carl::ceil(numerator/dividend)) / Number(carl::floor(denominator/dividend)) : Number(carl::ceil(numerator/dividend)) / Number(carl::ceil(denominator/dividend));
+					Number dividend = largest / Number(limit);
+					assert(largest/dividend == limit);
+					Number val = Number(carl::ceil(numerator/dividend));
+					Number newDenom;
+					if(mLimits.second.at(d) > 0) {
+						newDenom = Number(carl::floor(denominator/dividend));
+					} else {
+						newDenom = Number(carl::ceil(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val >= mLimits.second.at(d));
+						mLimits.second[d] = val;
+					}
 					//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
-					assert(val >= mLimits.second.at(d));
 					//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
-					mLimits.second[d] = val;
 				}
 			}
 
@@ -338,14 +347,23 @@ class BoxT {
 				Number numerator = carl::getNum(mLimits.first.at(d));
 				Number denominator = carl::getDenom(mLimits.first.at(d));
 				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-				Number dividend = largest / Number(limit);
-				assert(largest/dividend == limit);
 				if(largest > limit2){
-					Number val =  mLimits.first.at(d) > 0 ?  Number(carl::floor(numerator/dividend)) / Number(carl::ceil(denominator/dividend)) : Number(carl::floor(numerator/dividend)) / Number(carl::floor(denominator/dividend));
+					Number dividend = largest / Number(limit);
+					assert(largest/dividend == limit);
+					Number val = Number(carl::floor(numerator/dividend));
+					Number newDenom;
+					if( mLimits.first.at(d) > 0) {
+						newDenom = Number(carl::ceil(denominator/dividend));
+					} else {
+						newDenom = Number(carl::floor(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val <= mLimits.first.at(d));
+						mLimits.first[d] = val;
+					}
 					//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
-					assert(val <= mLimits.first.at(d));
 					//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
-					mLimits.first[d] = val;
 				}
 			}
 		}

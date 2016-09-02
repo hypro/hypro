@@ -111,7 +111,6 @@ int main(int argc, char** argv) {
 			break;
 		}
 
-#ifndef PLOT_FLOWPIPE
             case 2: {
 			using Representation = hypro::HPolytope <Number>;
 			std::cout << "Using a h-polytope representation." << std::endl;
@@ -124,7 +123,6 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 			break;
 		}
-#endif
 		default:{
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
