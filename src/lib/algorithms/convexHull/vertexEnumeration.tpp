@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-#define CHULL_DBG
+// #define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
@@ -10,11 +10,11 @@ namespace hypro {
 	template<typename Number>
 	VertexEnumeration<Number>::VertexEnumeration(const std::vector<Halfspace<Number>>& hsv) {
 		mHsv=hsv;
-		std::cout << __func__ << ": constructor from " << hsv.size() << " halfspaces." << std::endl;
-		std::cout << "Halfspaces: " << std::endl;
-		for(const auto& hs : hsv) {
-			std::cout << hs << std::endl;
-		}
+		//std::cout << __func__ << ": constructor from " << hsv.size() << " halfspaces." << std::endl;
+		//std::cout << "Halfspaces: " << std::endl;
+		//for(const auto& hs : hsv) {
+		//	std::cout << hs << std::endl;
+		//}
 	}
 
 	template<typename Number>
@@ -176,7 +176,7 @@ namespace hypro {
 				std::cout << "(Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot." << std::endl;
 				#endif
 				dictionary.pivot(basisAux[i],j);
-				dictionary.printDictionary();
+				//dictionary.printDictionary();
 				Dictionary<Number> newDictionary = (Dictionary<Number>(dictionary));
 				for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
 					newDictionary.setValue(rowIndex,n,memory[rowIndex]);
@@ -192,7 +192,7 @@ namespace hypro {
 					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
 					assert(i < basisAux.size());
 					dictionary.pivot(basisAux[i],j);
-					dictionary.printDictionary();
+					//dictionary.printDictionary();
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
 				--depth;

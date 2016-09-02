@@ -532,7 +532,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-	std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
+	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
 	if(A.nonZeros() == 0) {
 		std::vector<Point<Number>> points;
 		points.emplace_back(b);
@@ -728,7 +728,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
 		*/
 
-		std::cout << "size after union: " << result.size() << std::endl;
+		//std::cout << "size after union: " << result.size() << std::endl;
 
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));

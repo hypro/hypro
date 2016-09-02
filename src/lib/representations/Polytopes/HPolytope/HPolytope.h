@@ -269,7 +269,7 @@ public:
 		#ifdef HPOLY_DEBUG_MSG
 		std::cout << "Attempt to reduce numbers." << std::endl;
 		#endif
-		std::cout << __func__  << ": Nr. Planes: " << mHPlanes.size() << std::endl;
+		//std::cout << __func__  << ": Nr. Planes: " << mHPlanes.size() << std::endl;
 		std::vector<Point<Number>> originalVertices = this->vertices();
 
 		// normal reduction
