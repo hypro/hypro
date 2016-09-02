@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 2
+  max jumps 3
   print on
  }
 

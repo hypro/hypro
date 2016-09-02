@@ -619,7 +619,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
         }
         case SF_TYPE::POLY: {
             unsigned maxValue = std::max(mPolytope->constraints().rows(), mPolytope->constraints().cols());
-            return carl::pow(maxValue,2);
+            return carl::pow(maxValue,2)*mPolytope->constraints().cols();
         }
         case SF_TYPE::SUM: {
             return (mSummands->lhs.get()->multiplicationsPerEvaluation() + mSummands->rhs.get()->multiplicationsPerEvaluation());

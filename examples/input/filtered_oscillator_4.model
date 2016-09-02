@@ -4,7 +4,7 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.05
+  fixed steps 0.1
   time 4
   remainder estimation 1e-5
   identity precondition

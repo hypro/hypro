@@ -4,7 +4,7 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.1
+  fixed steps 2
   time 100
   remainder estimation 1e-5
   identity precondition
@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output cruise_control
-  max jumps 20
+  max jumps 5
   print on
  }
  

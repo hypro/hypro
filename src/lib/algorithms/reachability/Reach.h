@@ -33,7 +33,8 @@ CLANG_WARNING_RESET
 // Needs system separation to affect the computation
 //#define USE_ELLIPSOIDS
 #define USE_SMART_AGGREGATION
-//#define USE_FORCE_REDUCTION
+#define ALWAYS_USE_AGGREGATION
+#define USE_FORCE_REDUCTION
 
 namespace hypro {
 namespace reachability {
