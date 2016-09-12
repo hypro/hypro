@@ -24,7 +24,6 @@ namespace hypro {
 			}
 			mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 		}
-		reduceNumberRepresentation();
 	}
 
 	template<typename Number, typename Converter>
@@ -99,7 +98,6 @@ namespace hypro {
 				}
 			}
 			mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
-			reduceNumberRepresentation();
 		}
 	}
 
@@ -120,7 +118,6 @@ BoxT<Number,Converter>::BoxT( const std::set<Point<Number>> &_points ) {
 			}
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
-		reduceNumberRepresentation();
 	}
 }
 
@@ -141,7 +138,6 @@ BoxT<Number,Converter>::BoxT( const std::vector<Point<Number>> &_points ) {
 			}
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
-		reduceNumberRepresentation();
 	}
 }
 
@@ -444,8 +440,8 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
 		// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
-		bool holdsMin = hspace.holds(mLimits.first.rawCoordinates());
-		bool holdsMax = hspace.holds(mLimits.second.rawCoordinates());
+		bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
+		bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
 		if(holdsMin && holdsMax){
 			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 			return *this;
@@ -476,11 +472,11 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			}
 		}
 		// farestPointOutside is the point farest point in direction of the plane normal - if it is contained in the halfspace, there is no intersection.
-		if(hspace.holds(farestPointOutside.rawCoordinates())) {
+		if(hspace.contains(farestPointOutside.rawCoordinates())) {
 			//std::cout << __func__ << " Farest point outside is contained - return full box." << std::endl;
 			return *this;
 		}
-		if(!hspace.holds(farestPointInside.rawCoordinates())) {
+		if(!hspace.contains(farestPointInside.rawCoordinates())) {
 			//std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
 			return BoxT<Number,Converter>::Empty();
 		}

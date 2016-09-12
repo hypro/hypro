@@ -51,15 +51,15 @@ vectorSet<Number> Cone<Number>::vectors() const {
 		for ( const auto &plane : mPlanes ) {
 			// std::cout<<__func__ << " : " <<__LINE__ << " plane : " << plane <<
 			// std::endl;
-			if ( !plane->holds( *intersectionVectors.begin() ) ) {
+			if ( !plane->contains( *intersectionVectors.begin() ) ) {
 				// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 				vector_t<Number> tmp = ( *intersectionVectors.begin() ) * -1;
 				intersectionVectors.erase( intersectionVectors.begin() );
 				correctIntersectionVectors.insert( tmp );
 				changed = true;
 				// std::cout << tmp << " is contained in " << *plane << " : " <<
-				// plane->holds(tmp) << std::endl;
-				assert( plane->holds( tmp ) );
+				// plane->contains(tmp) << std::endl;
+				assert( plane->contains( tmp ) );
 				break;
 			}
 		}
@@ -201,7 +201,7 @@ Point<Number> Cone<Number>::getUnitAverageVector() const {
 template <typename Number>
 bool Cone<Number>::contains( const vector_t<Number> &_vector ) const {
 	for ( const auto &plane : mPlanes ) {
-		if ( !plane->holds( _vector ) ) return false;
+		if ( !plane->contains( _vector ) ) return false;
 	}
 	return true;
 }
@@ -211,7 +211,7 @@ bool Cone<Number>::contains( const vector_t<Number> &_vector, planeVector &_insi
 							 std::set<std::shared_ptr<Halfspace<Number>>> &_outsidePlanes ) const {
 	bool contains = true;
 	for ( const auto &plane : mPlanes ) {
-		if ( !plane->holds( _vector ) ) {
+		if ( !plane->contains( _vector ) ) {
 			_insidePlanes.push_back( plane );
 			contains = false;
 		} else {

@@ -227,7 +227,7 @@ public:
 	std::pair<bool, HPolytopeT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
 	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
+	HPolytopeT minkowskiSum( const HPolytopeT& rhs, bool oneWay = true ) const;
 	HPolytopeT intersect( const HPolytopeT& rhs ) const;
 	HPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
@@ -254,6 +254,14 @@ public:
 			lhs << rhs.constraints()[rhs.constraints().size() - 1] << " ]";
 		}
 		return lhs;
+	}
+
+	bool operator==(const HPolytopeT<Number,Converter>& rhs) const {
+		if(this->dimension() != rhs.dimension()) {
+			return false;
+		}
+
+		return this->constraints() == rhs.constraints();
 	}
 
 	friend void swap( HPolytopeT<Number, Converter>& a, HPolytopeT<Number, Converter>& b ) {
@@ -311,6 +319,7 @@ public:
 						newOffset = newOffset + (tmp-newOffset);
 						assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
 					}
+					assert(Halfspace<Number>(newNormal,newOffset).contains(vertex));
 				}
 				newOffset = carl::ceil(newOffset);
 				#ifdef HPOLY_DEBUG_MSG
