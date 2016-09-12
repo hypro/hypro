@@ -83,10 +83,31 @@ namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
+		std::cout << __func__ << ": Input: " << std::endl;
+		for(const auto& plane : mHsv) {
+			std::cout << convert<Number,double>(plane) << std::endl;
+		}
+
 		if(findPositiveConstrains()) {//if non empty
 			enumerateDictionaries();
 			enumerateVerticesEachDictionary();
 			toGeneralCoordinates();
+
+			std::cout << __func__ << ": Output: " << std::endl;
+			for(const auto& vertex : mPoints) {
+				std::cout << convert<Number,double>(vertex) << std::endl;
+			}
+
+			#ifndef NDEBUG
+			for(const auto& vertex : mPoints) {
+				for(const auto& plane : mHsv) {
+					if(!plane.contains(vertex)) {
+						std::cout << __func__ << ": plane " << convert<Number,double>(plane) << " does not contain " << convert<Number,double>(vertex) << std::endl;
+					}
+					assert(plane.contains(vertex));
+				}
+			}
+			#endif
 		}
 	}
 
@@ -385,16 +406,16 @@ namespace hypro {
 			std::vector<std::size_t> mN;
 			for(std::size_t rowIndex=0; rowIndex<dimension; ++rowIndex) {
 				for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
-					A1(rowIndex,colIndex) = (mHsv[dictionary.cobasis()[rowIndex]-1]).normal()[colIndex];
+					A1(rowIndex,colIndex) = (mHsv.at(dictionary.cobasis()[rowIndex]-1)).normal()[colIndex];
 				}
-				b1[rowIndex] = (mHsv[dictionary.cobasis()[rowIndex]-1]).offset();
+				b1[rowIndex] = (mHsv.at(dictionary.cobasis()[rowIndex]-1)).offset();
 			}
 			matrix_t<Number> invA1 = A1.inverse();
 			std::size_t skiped = 0;
 			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
 				if(dictionary.basis()[rowIndex]-1<constrainsCount) {
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
-						A2(rowIndex-skiped,colIndex) = (mHsv[dictionary.basis()[rowIndex]-1]).normal()[colIndex];
+						A2(rowIndex-skiped,colIndex) = (mHsv.at(dictionary.basis()[rowIndex]-1)).normal()[colIndex];
 					}
 				} else {++skiped;}
 			}
@@ -408,7 +429,7 @@ namespace hypro {
 							newDictionary(rowIndex-skiped,colIndex)+=A2(rowIndex-skiped,index)*invA1(index,colIndex);
 						}
 					}
-					newDictionary(rowIndex-skiped,dimension)= (mHsv[dictionary.basis()[rowIndex]-1]).offset();
+					newDictionary(rowIndex-skiped,dimension)= (mHsv.at(dictionary.basis()[rowIndex]-1)).offset();
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 						newDictionary(rowIndex-skiped,dimension)-=newDictionary(rowIndex-skiped,colIndex)*b1[colIndex];
 					}
@@ -448,9 +469,11 @@ namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::toGeneralCoordinates() {
+		assert(mPoints.empty());
 		for(std::size_t index=0; index<mPositivePoints.size(); ++index) {
-			mPoints.push_back(Point<Number>(mPivotingMatrix*(mOffset-mPositivePoints[index].rawCoordinates())));
+			mPoints.push_back(Point<Number>(mPivotingMatrix*(mOffset-mPositivePoints.at(index).rawCoordinates())));
 		}
+		assert(mCones.empty());
 		for(const auto& cone: mPositiveCones) {
 			mCones.push_back((mPivotingMatrix*(-cone)));
 		}

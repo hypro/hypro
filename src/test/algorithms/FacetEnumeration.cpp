@@ -98,3 +98,42 @@ public:
 			EXPECT_TRUE(resContainer.contains(point));
 		}
 	}
+
+	TEST_F(FacetEnumerationTest, DegenerateEnumeration2) {
+		// Actual (failing) problem from benchmark runs, which specifies an object described by 2 points in a 3D space.
+		std::vector<Point<mpq_class>> points;
+		points.push_back(Point<mpq_class>({mpq_class("1170371095970163531301353990512407462289424333177/11692013098647223345629478661730264157247460343808"), 0, 0}));
+		points.push_back(Point<mpq_class>({mpq_class("2340742191940321312133937153702758040756082833417/11692013098647223345629478661730264157247460343808"), 0, 0}));
+
+		ConvexHull<mpq_class> ch(points);
+		ch.convexHullVertices();
+
+		EXPECT_EQ(ch.getHsv().size(), 6);
+		HPolytope<mpq_class> resContainer(ch.getHsv());
+		for(const auto point : points) {
+			EXPECT_TRUE(resContainer.contains(point));
+		}
+	}
+
+	TEST_F(FacetEnumerationTest, DegenerateEnumeration3) {
+		// Actual (failing) problem from benchmark runs.
+		std::vector<Point<mpq_class>> points;
+		points.push_back(Point<mpq_class>( { mpq_class("510") , mpq_class("20") , mpq_class("20") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("500001253523251079/24987506500000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("250000626774106751/12493753000000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("250000626774106751/12493753000000000") , mpq_class("500001253523251079/24987506500000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("250000626774106751/12493753000000000") , mpq_class("250000626774106751/12493753000000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("520") , mpq_class("20") , mpq_class("20") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("249998801730340251/480750500000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("500001253523251079/24987506500000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("249998801730340251/480750500000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("250000626774106751/12493753000000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("249998801730340251/480750500000000") , mpq_class("250000626774106751/12493753000000000") , mpq_class("500001253523251079/24987506500000000") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("249998801730340251/480750500000000") , mpq_class("250000626774106751/12493753000000000") , mpq_class("250000626774106751/12493753000000000") } ));
+
+		ConvexHull<mpq_class> ch(points);
+		ch.convexHullVertices();
+
+		HPolytope<mpq_class> resContainer(ch.getHsv());
+		for(const auto point : points) {
+			EXPECT_TRUE(resContainer.contains(point));
+		}
+	}
