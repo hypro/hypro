@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/conversion/Converter.h"
+#include "../../lib/representations/GeometricObject.h"
 
-//using namespace hypro;
+using namespace hypro;
 
-/*
+
 template<typename Number>
 class HPolytopeTest : public ::testing::Test
 {
@@ -39,8 +39,6 @@ protected:
 	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes1;
 	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes2;
 };
-*/
-/*
 
 TYPED_TEST(HPolytopeTest, Constructor)
 {
@@ -218,8 +216,8 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 {
 	std::cout << __func__ << std::endl;
 	matrix_t<TypeParam> A(4,2);
-	A(0,0) = 1;			//     1    1    
-	A(0,1) = 1;			//     1    0     
+	A(0,0) = 1;			//     1    1
+	A(0,1) = 1;			//     1    0
 	A(1,0) = 1;	        //     0    1
 	A(1,1) = 0;         //     0   -1
 	A(2,0) = 0;
@@ -228,11 +226,11 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 	A(3,1) = -1;
 	vector_t<TypeParam> b(4);
 	b(0) = 0;
-	b(1) = 1;	
+	b(1) = 1;
 	b(2) = 0;
 	b(3) = 1;
 
-	
+
 	HPolytope<TypeParam> poly = HPolytope<TypeParam>(A,b);
 	vector_t<TypeParam> dir(2);
 	dir(0) = 1;
@@ -410,5 +408,3 @@ TYPED_TEST(HPolytopeTest, Membership)
 	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), 0});
 	EXPECT_FALSE(hpt1.contains(p5));
 }
-
-*/
