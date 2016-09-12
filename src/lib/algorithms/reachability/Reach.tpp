@@ -28,13 +28,13 @@ namespace reachability {
 				s.set = Representation(state.second.set.first, state.second.set.second);
 				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
-				mWorkingQueue.emplace(initialSet<Number>(mCurrentLevel, s));
+				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
 
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number> nextInitialSet = mWorkingQueue.front();
-			mWorkingQueue.pop();
+			mWorkingQueue.pop_front();
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
@@ -158,7 +158,7 @@ namespace reachability {
 			if(intersectBadStates(_state, currentSegment)){
 				// clear queue to stop whole algorithm
 				while(!mWorkingQueue.empty()){
-					mWorkingQueue.pop();
+					mWorkingQueue.pop_front();
 				}
 				return flowpipe;
 			}
@@ -319,7 +319,7 @@ namespace reachability {
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
 						while(!mWorkingQueue.empty()){
-							mWorkingQueue.pop();
+							mWorkingQueue.pop_front();
 						}
 						return flowpipe;
 					}

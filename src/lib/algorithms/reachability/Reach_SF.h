@@ -21,7 +21,7 @@ namespace hypro {
 			std::size_t mCurrentLevel;
 			Number mBloatingFactor = 0;
 			std::map<unsigned, std::vector<flowpipe_t<SupportFunction<Number>>>> mReachableStates;
-			std::queue<initialSet<Number>> mWorkingQueue;
+			std::list<initialSet<Number>> mWorkingQueue;
 			Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
 			mutable bool mIntersectedBadStates;

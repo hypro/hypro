@@ -40,13 +40,13 @@ namespace hypro {
 					s.set = SupportFunction<Number>(state.second.set.first, state.second.set.second);
 					s.timestamp = carl::Interval<Number>(0);
 					assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
-					mWorkingQueue.emplace(initialSet<Number>(mCurrentLevel, s));
+					mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 				}
 			}
 
 			while ( !mWorkingQueue.empty() ) {
 				initialSet<Number> nextInitialSet = mWorkingQueue.front();
-				mWorkingQueue.pop();
+				mWorkingQueue.pop_front();
 
 				mCurrentLevel = boost::get<0>(nextInitialSet);
 				assert(mCurrentLevel <= mSettings.jumpDepth);
@@ -178,7 +178,7 @@ namespace hypro {
 				if(intersectBadStates(_state, currentSegment)){
 					// clear queue to stop whole algorithm
 					while(!mWorkingQueue.empty()){
-						mWorkingQueue.pop();
+						mWorkingQueue.pop_front();
 					}
 					/*
 					 * TO-DO.
@@ -217,10 +217,13 @@ namespace hypro {
 				 *    - Insert for each transition the guard satisfying intervals
 				 */
 				while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-                                        transitionSatisfied = false;
-					//std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
+                    transitionSatisfied = false;
+					std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush << std::endl;
 					// Verify transitions on the current set.
 					if(mCurrentLevel <= mSettings.jumpDepth) {
+						#ifdef REACH_DEBUG
+						std::cout << "Verify transitions." << std::endl;
+						#endif
 						State<Number> guardSatisfyingState;
 						State<Number> currentState = _state;
 						currentState.set = currentSegment;
@@ -228,6 +231,9 @@ namespace hypro {
 						currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
 						bool fireTimeTriggeredTransition = false;
 						for( auto transition : _state.location->transitions() ){
+							#ifdef REACH_DEBUG
+							std::cout << "Checking transition " << transition->source()->id() << " -> " << transition->target()->id() << std::endl;
+							#endif
 							// handle time-triggered transitions
 							if(transition->isTimeTriggered()){
 #ifdef REACH_DEBUG
@@ -311,12 +317,18 @@ namespace hypro {
 					}
     #endif
 #else
+					#ifdef REACH_DEBUG
+					std::cout << "Lintrafo to next time step." << std::endl;
+					#endif
 					nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup) );
 #endif
 					//nextSegment.forceLinTransReduction();
 					//std::cout << "Current depth " << nextSegment.depth() << std::endl;
 					//std::cout << "Current OpCount " << nextSegment.operationCount() << std::endl;
 					// extend flowpipe (only if still within Invariant of location)
+					#ifdef REACH_DEBUG
+					std::cout << "Verify invariant." << std::endl;
+					#endif
 					std::pair<bool, SupportFunction<Number>> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
 					std::cout << "Next Flowpipe Segment: ";
@@ -375,7 +387,7 @@ namespace hypro {
 						if(intersectBadStates(_state, newSegment.second)){
 							// clear queue to stop whole algorithm
 							while(!mWorkingQueue.empty()){
-								mWorkingQueue.pop();
+								mWorkingQueue.pop_front();
 							}
 							return flowpipe;
 						}
@@ -417,16 +429,16 @@ namespace hypro {
 					s.location = boost::get<0>(tuple)->target();
 
 					//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-					/*
-					 *  TO-DO:
-					 *       - Check whether for the current node and transition already a child-node
-					 *         exists. If so, work on it. Otherwise, create a new child-node.
-					 *          If the last segment for some transition arrives:
-					 *              - Construct overapproximation
-					 *              - Set last segment
-					 *
-					 */
-					mWorkingQueue.emplace(mCurrentLevel+1, s);
+					bool duplicate = false;
+					for(const auto stateTuple : mWorkingQueue) {
+						if(boost::get<1>(stateTuple) == s){
+							duplicate = true;
+							break;
+						}
+					}
+					if(!duplicate){
+						mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+					}
 				} else { // aggregate all
 					// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 					// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
@@ -492,7 +504,16 @@ namespace hypro {
 				//std::cout << "Discrete assignment size: " << s.discreteAssignment.size() << " and reset matrix " << reset.discreteMat << std::endl;
 				assert(unsigned(reset.discreteMat.rows()) == s.discreteAssignment.size());
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-				mWorkingQueue.emplace(mCurrentLevel+1, s);
+				bool duplicate = false;
+				for(const auto stateTuple : mWorkingQueue) {
+					if(boost::get<1>(stateTuple) == s){
+						duplicate = true;
+						break;
+					}
+				}
+				if(!duplicate){
+					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+				}
 			}
 		}
 
@@ -594,8 +615,7 @@ namespace hypro {
 				}
 			}
 
-			// check for continuous set guard intersection
-			// std::cout << "Test guard." << std::endl;
+			// check for continuous set guard intersectionWW
 			assert(!Converter<Number>::toHPolytope(boost::get<SupportFunction<Number>>(_state.set)).empty());
 			std::pair<bool, SupportFunction<Number>> guardSatisfyingSet = boost::get<SupportFunction<Number>>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
 
@@ -781,6 +801,10 @@ namespace hypro {
 
 					Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension())), Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension()))));
 					std::vector<Box<Number>> errorBoxVector = errorBoxes<Number>( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix, externalInput);
+
+					#ifdef REACH_DEBUG
+					std::cout << "Computed error-boxes." << std::endl;
+					#endif
 
 					SupportFunction<Number> tmp =  deltaValuation;
 				    if(!errorBoxVector[1].empty()) {

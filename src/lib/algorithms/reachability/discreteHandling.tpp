@@ -145,8 +145,16 @@ namespace reachability {
 				State<Number> s = boost::get<1>(tuple);
 				assert(!s.timestamp.isUnbounded());
 				s.location = boost::get<0>(tuple)->target();
-
-				mWorkingQueue.emplace(mCurrentLevel+1, s);
+				bool duplicate = false;
+				for(const auto stateTuple : mWorkingQueue) {
+					if(boost::get<1>(stateTuple) == s){
+						duplicate = true;
+						break;
+					}
+				}
+				if(!duplicate){
+					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 				// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
@@ -251,7 +259,17 @@ namespace reachability {
 				}
 
 				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
-				mWorkingQueue.emplace(mCurrentLevel+1, s);
+				// find duplicate entries in work queue.
+				bool duplicate = false;
+				for(const auto stateTuple : mWorkingQueue) {
+					if(boost::get<1>(stateTuple) == s){
+						duplicate = true;
+						break;
+					}
+				}
+				if(!duplicate){
+					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+				}
 			}
 		}
 	}
