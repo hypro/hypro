@@ -450,6 +450,12 @@ int effectiveDimension(const std::set<Point<Number>>& vertices) {
 	return -1;
 }
 
+template<typename From, typename To>
+Point<To> convert(const Point<From>& in) {
+	return Point<To>(convert<From,To>(in.rawCoordinates()));
+}
+
+
 }  // namespace hypro
 
 namespace std{

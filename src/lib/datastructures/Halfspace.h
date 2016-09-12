@@ -93,6 +93,7 @@ class Halfspace {
 	static vector_t<Number> saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold = 0);
 
 	bool contains( const vector_t<Number> _vector ) const;
+	bool contains( const Point<Number> _vector ) const;
 	bool contains( const std::vector<Point<Number>>& _points) const;
 	bool holds( const vector_t<Number> _vector ) const;
 
@@ -119,6 +120,11 @@ class Halfspace {
 	 */
 	vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet ) const;
 };
+
+template<typename From, typename To>
+Halfspace<To> convert(const Halfspace<From>& in) {
+	return Halfspace<To>(convert<From,To>(in.normal()), carl::convert<From,To>(in.offset()));
+}
 
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
