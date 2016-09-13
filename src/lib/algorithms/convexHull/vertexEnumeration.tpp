@@ -4,7 +4,10 @@ namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::increment(std::size_t& i, std::size_t& j, std::size_t maxJ) {
-		++j; if(j>=maxJ){j=0;++i;};//cout<<"\nincr  i="<<i<<",j="<<j<<"\n";
+		++j; if(j>=maxJ){j=0;++i;};
+		#ifdef CHULL_DBG
+		std::cout<< __func__ << ": i=" << i << ", j=" << j << std::endl;
+		#endif
 	}
 
 	template<typename Number>

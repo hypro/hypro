@@ -16,6 +16,7 @@
 #include "ConstrainSet.h"
 
 #define FUKUDA_VERTEX_ENUM_DEBUG
+#define DICT_DBG
 
 namespace hypro {
 

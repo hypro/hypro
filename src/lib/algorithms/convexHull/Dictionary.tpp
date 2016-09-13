@@ -340,21 +340,46 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::reverse(const std::size_t i, const std::size_t j) {
-		if(mDictionary(mDictionary.rows()-1,j)>=0||mDictionary(i,j)>=0) {return false;}
-		Number maxRatio = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
+		#ifdef DICT_DBG
+		std::cout << __func__ << " i=" << i << ", j=" << j << "? ";
+		#endif
+		if(mDictionary(mDictionary.rows()-1,j)>=0||mDictionary(i,j)>=0) {
+			#ifdef DICT_DBG
+			std::cout << "False, cell content >= 0: " << (mDictionary(i,j)>=0) <<", constant >= 0: " << (mDictionary(mDictionary.rows()-1,j)>=0) << std::endl;
+			#endif
+			return false;
+		}
+		Number maxRatio = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j); // equivalent to the lambda in the paper (almost, it is inverted in the paper)
+		// check for minimality (maximality) of the ratio itself.
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
-			if(mDictionary(rowIndex,j)<0&&maxRatio<mDictionary(rowIndex,mDictionary.cols()-1)/mDictionary(rowIndex,j)) {return false;}
+			if(mDictionary(rowIndex,j)<0 && maxRatio<mDictionary(rowIndex,mDictionary.cols()-1)/mDictionary(rowIndex,j)) {
+				#ifdef DICT_DBG
+				std::cout << "False, not minimal ratio." << std::endl;
+				#endif
+				return false;
+			}
 		}
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
-			if(rowIndex!=int(i)&&mB[rowIndex]<mN[j]&&(mDictionary(rowIndex,mDictionary.cols()-1)==0 && mDictionary(rowIndex,j)>0 )) {return false;}
+			if(rowIndex!=int(i) && mB[rowIndex]<mN[j] && (mDictionary(rowIndex,mDictionary.cols()-1)==0 && mDictionary(rowIndex,j)>0 )) {
+				#ifdef DICT_DBG
+				std::cout << "False, third check fails." << std::endl;
+				#endif
+				return false;
+			}
 		}
 		for(int colIndex=0;colIndex<mDictionary.cols()-1;++colIndex) {
-			if(mN[colIndex]<mB[i]&&colIndex!=int(j)) {
-				if(mDictionary(mDictionary.rows()-1,colIndex)>mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j)) {
+			if(mN[colIndex]<mB[i] && colIndex!=int(j)) {
+				if(mDictionary(mDictionary.rows()-1,colIndex) > mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j) ) {
+					#ifdef DICT_DBG
+					std::cout << "False, fourth check fails." << std::endl;
+					#endif
 					return false;
 				}
 			}
 		}
+		#ifdef DICT_DBG
+		std::cout << "True." << std::endl;
+		#endif
 		return true;
 	}
 
