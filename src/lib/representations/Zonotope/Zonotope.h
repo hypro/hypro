@@ -134,7 +134,20 @@ class ZonotopeT {
 	 */
 	void clear();
 
-        void print() const;
+    void print() const;
+
+    bool operator==(const ZonotopeT<Number,Converter>& rhs) const {
+    	if(this->mDimension != rhs.dimension()) {
+    		return false;
+    	}
+    	if(this->mCenter != rhs.center()) {
+    		return false;
+    	}
+    	if(this->mGenerators != rhs.generators()) {
+    		return false;
+    	}
+    	return true;
+    }
 
 	/*****************************************************************************
 	*                                                                           *

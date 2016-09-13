@@ -100,6 +100,10 @@ public:
     	return lhs;
 	}
 
+	friend bool operator==(const SupportFunctionT<Number,Converter>& lhs, const SupportFunctionT<Number,Converter>& rhs) {
+		return lhs.content == rhs.content;
+	}
+
 	std::list<unsigned> collectProjections() const;
 
 private:

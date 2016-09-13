@@ -259,7 +259,6 @@ namespace hypro {
 
 			unsigned numberOfConstraints = mConstraintMatrix.rows();
 			if(numberOfConstraints > 0) {
-				assert(numberOfConstraints > 1);
 				// convert constraint constants
 				glp_add_rows( lp, numberOfConstraints );
 				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {

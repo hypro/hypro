@@ -143,6 +143,30 @@ public:
 	 */
 
 	std::set<vector_t<Number>> findCones();
+
+	friend bool operator==(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {
+		if(lhs.mB != rhs.mB) {
+			return false;
+		}
+
+		if(lhs.mN != rhs.mN) {
+			return false;
+		}
+
+		if(lhs.mConstrains != rhs.mConstrains) {
+			return false;
+		}
+
+		if(lhs.mDictionary != rhs.mDictionary) {
+			return false;
+		}
+
+		return true;
+	}
+
+	friend bool operator!=(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {
+		return !(lhs==rhs);
+	}
 };
 
 } // namespace hypro

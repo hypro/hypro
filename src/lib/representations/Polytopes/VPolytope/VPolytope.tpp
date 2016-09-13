@@ -169,7 +169,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace(
 	std::set<vector_t<Number>> pointsOutside;
 	std::vector<Point<Number>> newPoints;
 	for(const auto& vertex : mVertices) {
-		if(rhs.holds(vertex.rawCoordinates())) {
+		if(rhs.contains(vertex.rawCoordinates())) {
 			pointsInside.insert(vertex.rawCoordinates());
 		} else {
 			pointsOutside.insert(vertex.rawCoordinates());

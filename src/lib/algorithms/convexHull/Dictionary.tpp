@@ -63,15 +63,15 @@ namespace hypro {
 		matrix_t<Number> Ab = matrix_t<Number>::Zero(n0+1, n0+1);
 
 		for(i=0; i<n0; ++i){
-		 Ab(i, i+1) = -1;
-		 }
+			Ab(i, i+1) = -1;
+		}
 		Ab(n0,0)=-1;
 
 		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1);
 
 		for(i=0; i<d; ++i){
-		 An(0, i) = 1;
-		 }
+			An(0, i) = 1;
+		}
 		An(0, d) = 0;
 		for(i=1; i<n0+1; ++i){
 			An(i, d) = -1*hsv[i-1].offset();

@@ -567,7 +567,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs ) const {
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs, bool oneWay ) const {
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
@@ -596,23 +596,25 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 		}
 	}
 
-	// evaluation of lhs in directions of rhs
-	//std::cout << "evaluation of lhs in directions of rhs" << std::endl;
-	for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
-		EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
-		if ( evalRes.errorCode == INFTY ) {
-			// std::cout << __func__ << " Evaluated against " <<
-			// rhs.constraints().at( i ).normal() << std::endl;
-			// std::cout << "INFTY" << std::endl;
-			// Do nothing - omit inserting plane.
-		} else if ( evalRes.errorCode == INFEAS ) {
-			// std::cout << "EMPTY" << std::endl;
-			return Empty();
-		} else {
-			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
-			res.insert( Halfspace<Number>( rhs.constraints().at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
+	if(!oneWay) {
+		// evaluation of lhs in directions of rhs
+		//std::cout << "evaluation of lhs in directions of rhs" << std::endl;
+		for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
+			EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
+			if ( evalRes.errorCode == INFTY ) {
+				// std::cout << __func__ << " Evaluated against " <<
+				// rhs.constraints().at( i ).normal() << std::endl;
+				// std::cout << "INFTY" << std::endl;
+				// Do nothing - omit inserting plane.
+			} else if ( evalRes.errorCode == INFEAS ) {
+				// std::cout << "EMPTY" << std::endl;
+				return Empty();
+			} else {
+				result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
+				res.insert( Halfspace<Number>( rhs.constraints().at( i ).normal(), result ) );
+				// std::cout << __func__ << " Evaluated against " <<
+				// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
+			}
 		}
 	}
 #ifdef HPOLY_DEBUG_MSG

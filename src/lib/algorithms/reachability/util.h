@@ -109,17 +109,19 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
 	matrixBlock = delta*matrixBlock;
 	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+	std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
 	convertedBlock = convertedBlock.exp();
-	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+	std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
-	Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
+	std::cout << "get matrix." << std::endl;
+	auto b1 = Converter<Number>::toBox(initialSet);
+	std::cout << "get matrix DONE." << std::endl;
 	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
 	b1 = b1.linearTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)),vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
 	b1 = b1.makeSymmetric();
-	//std::cout << "B1: " << std::endl << b1 << std::endl;
+	std::cout << "B1: " << std::endl << b1 << std::endl;
 	//Plotter<Number>::getInstance().addObject(b1.vertices());
 	assert(b1.isSymmetric());
 	b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
@@ -128,9 +130,9 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
 	std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(tmpTrafo, tmpTrans);
 	SupportFunction<Number> tmp = initialSet.linearTransformation( parameters );
-	Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
+	auto b2 = Converter<Number>::toBox(tmp);
 	b2 = b2.makeSymmetric();
-	//std::cout << "B2: " << std::endl << b2 << std::endl;
+	std::cout << "B2: " << std::endl << b2 << std::endl;
 	//Plotter<Number>::getInstance().addObject(b2.vertices());
 	assert(b2.isSymmetric());
 	b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));

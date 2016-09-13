@@ -299,7 +299,12 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 
 template <typename Number>
 bool Halfspace<Number>::contains( const vector_t<Number> _vector ) const {
-	return ( _vector.dot( mNormal ) == mScalar );
+	return ( _vector.dot( mNormal ) <= mScalar );
+}
+
+template <typename Number>
+bool Halfspace<Number>::contains( const Point<Number> _vector ) const {
+	return this->contains(_vector.rawCoordinates());
 }
 
 template<typename Number>
@@ -314,7 +319,7 @@ bool Halfspace<Number>::contains( const std::vector<Point<Number>>& _points) con
 
 template <typename Number>
 bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
-	return ( _vector.dot( mNormal ) <= mScalar );
+	return ( _vector.dot( mNormal ) == mScalar );
 }
 
 template <typename Number>

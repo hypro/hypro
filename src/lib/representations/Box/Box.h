@@ -62,7 +62,6 @@ class BoxT {
 	explicit BoxT( const carl::Interval<Number>& val ) {
         mLimits.first = Point<Number>({val.lower()});
         mLimits.second = Point<Number>({val.upper()});
-        reduceNumberRepresentation();
 	}
 
 	/**
@@ -76,7 +75,6 @@ class BoxT {
 			mLimits(limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
-		reduceNumberRepresentation();
 	}
 
 	/**

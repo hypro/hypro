@@ -98,6 +98,15 @@ namespace hypro {
 
 	template<typename Number>
 	void ConvexHull<Number>::convexHullVertices() {//!!modify the points
+		#ifndef NDEBUG
+		std::cout << __func__ << ": Input:" << std::endl;
+		std::vector<Point<Number>> originalPoints;
+		for(const auto& vertex : mPoints) {
+			std::cout << vertex << std::endl;
+			originalPoints.push_back(vertex);
+		}
+		#endif
+
 		if(mPoints.size()==0) {//emptyset
 			vector_t<Number> h1 = vector_t<Number>(1);
 			vector_t<Number> h2 = vector_t<Number>(1);
@@ -120,16 +129,33 @@ namespace hypro {
 				}
 			} else {
 				toDual();
-				//std::cout << __func__ << ": Compute vertices in dual." << std::endl;
 				VertexEnumeration<Number> ev = VertexEnumeration<Number>(mDualHsv);
 				ev.enumerateVertices();
 				for(const auto& l:ev.getLinealtySpace()) {
 					mHsv.push_back(Halfspace<Number>(l,Number(0)));
 					mHsv.push_back(Halfspace<Number>(-1*l,Number(0)));
+					std::cout << "LinealtySpace NOT empty!" << std::endl;
 				}
 				toPrimal(ev.getPoints());
 			}
 			translateHsv();
+			std::cout << __func__ << ": Result: " << std::endl;
+			for(const auto& plane : mHsv) {
+				std::cout << plane << std::endl;
+			}
+
+			#ifndef NDEBUG
+			for(const auto plane : mHsv) {
+				std::cout << "Plane: " << plane << std::endl;
+				for(const auto point : originalPoints) {
+					std::cout << "contains " << point << std::endl;
+					if(!plane.contains(point)) {
+						std::cout << "diff: " << point.rawCoordinates().dot(plane.normal()) << " VS (<=) " << plane.offset() << std::endl;
+					}
+					assert(plane.contains(point));
+				}
+			}
+			#endif
 		}
 	}
 

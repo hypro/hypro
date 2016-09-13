@@ -128,17 +128,17 @@ namespace reachability {
 
 				Representation tmp =  deltaValuation;
 			    if(!errorBoxVector[1].empty()) {
+			    	std::cout << "Minkowski-Sum." << std::endl;
 			    	tmp = deltaValuation.minkowskiSum(Representation(errorBoxVector[1].matrix(), errorBoxVector[1].vector()));
 			    }
 				firstSegment = tmp.unite(initialPair.second);
-				assert(firstSegment.contains(initialPair.second));
-				assert(firstSegment.contains(deltaValuation));
 				Box<Number> differenceBox = errorBoxVector[2];
 				//std::cout << "DifferenceBox: " << differenceBox << std::endl;
 				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 
-				//std::cout << "firstSegment befor Minkowski-sum: " << firstSegment << std::endl;
-
+				std::cout << "firstSegment before Minkowski-sum: " << firstSegment << std::endl;
+				assert(firstSegment.contains(initialPair.second));
+				assert(firstSegment.contains(deltaValuation));
 				firstSegment = firstSegment.minkowskiSum( Representation(differenceBox.matrix(), differenceBox.vector()) );
 
 				/*
@@ -163,6 +163,10 @@ namespace reachability {
 				*/
 			}
 			//assert(firstSegment.contains(unitePolytope));
+			// std::cout << "First segment: " << firstSegment << std::endl;
+			// std::cout << "Init set: " << initialPair.second << std::endl;
+			// std::cout << "Set at delta: " << deltaValuation << std::endl;
+
 			assert(firstSegment.contains(initialPair.second));
 			assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
