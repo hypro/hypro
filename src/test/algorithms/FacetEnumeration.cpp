@@ -119,6 +119,29 @@ public:
 		// Actual (failing) problem from benchmark runs.
 		std::vector<Point<mpq_class>> points;
 		points.push_back(Point<mpq_class>( { mpq_class("510") , mpq_class("20") , mpq_class("20") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("511") , mpq_class("21") , mpq_class("21") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("511") , mpq_class("21") , mpq_class("22") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("511") , mpq_class("22") , mpq_class("21") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("511") , mpq_class("22") , mpq_class("22") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("520") , mpq_class("20") , mpq_class("20") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("521") , mpq_class("21") , mpq_class("21") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("521") , mpq_class("21") , mpq_class("22") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("521") , mpq_class("22") , mpq_class("21") } ));
+		points.push_back(Point<mpq_class>( { mpq_class("521") , mpq_class("22") , mpq_class("22") } ));
+
+		ConvexHull<mpq_class> ch(points);
+		ch.convexHullVertices();
+
+		HPolytope<mpq_class> resContainer(ch.getHsv());
+		for(const auto point : points) {
+			EXPECT_TRUE(resContainer.contains(point));
+		}
+	}
+
+	TEST_F(FacetEnumerationTest, DegenerateEnumeration4) {
+		// Actual (failing) problem from benchmark runs.
+		std::vector<Point<mpq_class>> points;
+		points.push_back(Point<mpq_class>( { mpq_class("510") , mpq_class("20") , mpq_class("20") } ));
 		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("500001253523251079/24987506500000000") } ));
 		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("500001253523251079/24987506500000000") , mpq_class("250000626774106751/12493753000000000") } ));
 		points.push_back(Point<mpq_class>( { mpq_class("499997556421277873/980373000000000") , mpq_class("250000626774106751/12493753000000000") , mpq_class("500001253523251079/24987506500000000") } ));
