@@ -9,7 +9,7 @@ Requirement: put $0$ in the feasible area and ensure the variables are positive.
 \begin{itemize}
 \item Reach the feasible area (simplex).
 \item Pivot the dictionary into obtaining a cobasis constituted only by slack variables.
-\item Push the cobasis to its bounds gives a vertex.
+%\item Push the cobasis to its bounds gives a vertex.
 \end{itemize}
 \end{block}
 
@@ -36,7 +36,7 @@ Example with $-1\leq x+y\leq 1$.\\
 
 \vspace*{0.2cm}
 
-\only<2,3>{\begin{tabular}{| c | c || c c |}
+\visible<2,3>{\begin{tabular}{| c | c || c c |}
 	\hline	
 	$s_1$ & $y$ & & \\
 	\hline
@@ -119,7 +119,7 @@ Duality between a vertex $(1,1)$ and an half-space $x+y \leq 1$
 Let $P$ be a bounded polyhedron, if $0\in P$ then $P=P^{\Delta\Delta}$.
 \end{theorem}
 
-Starting from $P$, finding the vertices of $P^\Delta$ gives the convex hull of $P^{\Delta\Delta}$.
+%Starting from $P$, finding the vertices of $P^\Delta$ gives the convex hull of $P^{\Delta\Delta}$.
 \end{frame}
 
 \begin{frame}{An example of the convex hull algorithm}
@@ -155,7 +155,7 @@ An example in two dimensions.
 \end{frame}
 
 \begin{frame}{The convex hull for polyhedron}
-Any $V$-polyhedron $P=conv(V)+cone(C)$ can be written as the intersection of a cone and an hyperplane:
+Any $\mathcal{V}$-polyhedron $P=conv(V)+cone(C)$ can be written as the intersection of a cone and an hyperplane:
 
 $P=Cone\left(
  \begin{pmatrix}
@@ -172,24 +172,6 @@ $P=Cone\left(
 \begin{figure}
 \includegraphics[scale=1.5]{images/projection.eps}
 
-A $V$-polyhedron as an intersection.
+A $\mathcal{V}$-polyhedron as an intersection.
 \end{figure}
-\end{frame}
-
-\begin{frame}{Complexity result}
-Theoretical complexity of Fukuda's algorithm: $nd(n+d)g$. $g\in \left[1;
-\begin{pmatrix}
- d\\
- n 
- \end{pmatrix}\right]$
-
-Cost of the algorithms:
-\begin{itemize}
-\item detect the linealty: cost of the simplex;
-\item detect the cone: smaller than Fukuda's algorithm ($nd$ per vertex);
-\item switch to the dual: $nd$.
-\end{itemize} 
-
-Faster than the current implementation, even in small dimension.
-
 \end{frame}

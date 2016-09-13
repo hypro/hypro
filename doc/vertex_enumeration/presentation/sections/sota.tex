@@ -1,4 +1,4 @@
-\section{State of the art}
+\section{State of the art: $\mathcal{H}$ to $\mathcal{V}$}
 \AtBeginSection[]
   {
      \begin{frame}<beamer>
@@ -21,7 +21,7 @@ Example of linear optimization problem with the objective $x+y$ and the constrai
 \end{figure}
 \end{frame}
 
-\begin{frame}{How to simplex}
+\begin{frame}{The simplex}
 \begin{theorem}
 For a problem in $\mathbb{R}^d$, the optimal is either unbounded or reached by the intersection of $d$ independent hyperplanes.
 \end{theorem}
@@ -127,8 +127,6 @@ Enumerates the vertices of a bounded $\mathcal{H}$-polyhedron.
 
 \begin{block}{Main idea}
 Reversed simplex for a function maximizing only the origin.
-
-From every vertex, the origin will be reached by a unique path, walking backward on these paths allow to find them all.
 \end{block}
 
 \begin{itemize}
@@ -148,6 +146,9 @@ Fukuda's Algorithm with the constraint $ x+2y \leq 4 $.
 \only<4>{\includegraphics[scale=0.9]{images/fukuda2.eps}}
 \end{column}
 \begin{column}{5cm}
+
+
+\only<1,2>{
 \begin{tabular}{| c | c || c || c c |}
 	\hline	
 	$x$ & $y$ & const & & \\
@@ -161,29 +162,42 @@ Fukuda's Algorithm with the constraint $ x+2y \leq 4 $.
 
 \vspace*{0.3cm}
 
-\only<2>{
-\begin{tabular}{| c | c || c || c c |}
+
+\visible<2>{\begin{tabular}{| c | c || c || c c |}
 	\hline	
-	$s_1$ & $y$ & const & & \\
+	\textcolor{red}{$s_1$} & $y$ & const & & \\
 	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
 	\hline
 	\hline	
-   	$-1$ & $-2$ & $4$ & = & $x$\\ \hline \hline	
+   	$-1$ & $-2$ & $4$ & = & \textcolor{red}{$x$}\\ \hline \hline	
    	$1$ & $1$ & $-4$ & $\leftarrow$ & obj \\
    	\hline	
 \end{tabular}
-}
-\only<4>{
+}}
+\only<3,4>{
 \begin{tabular}{| c | c || c || c c |}
 	\hline	
-	$x$ & $s_1$ & const & & \\
+	$x$ & $y$ & const & & \\
 	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
 	\hline
 	\hline	
-   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $2$ & = & $y$\\ \hline \hline	
-   	$-\frac{3}{2}$ & $\frac{1}{2}$ & $-2$ & $\leftarrow$ & obj \\
+   	$-1$ & $-2$ & $4$ & = & $s_1$\\ \hline \hline	
+   	$-1$ & $-1$ & $0$ & $\leftarrow$ & obj \\
    	\hline	
 \end{tabular}
+
+\vspace*{0.3cm}
+
+\visible<4>{\begin{tabular}{| c | c || c || c c |}
+	\hline	
+	$x$ & $\textcolor{red}{s_1}$ & const & & \\
+	$\downarrow$ &$\downarrow$ &$\downarrow$ & & \\
+	\hline
+	\hline	
+   	$-\frac{1}{2}$ & $-\frac{1}{2}$ & $2$ & = & \textcolor{red}{$y$}\\ \hline \hline	
+   	$-\frac{3}{2}$ & $\frac{1}{2}$ & $-2$ & $\leftarrow$ & obj \\
+   	\hline	
+\end{tabular}}
 }
 \end{column}
 \end{columns}

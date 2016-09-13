@@ -4,7 +4,16 @@
 
 
 \section{Introduction}
+
 \subsection{Hybrid systems}
+\begin{frame}{What is an hybrid system?}
+\begin{center}
+
+\includegraphics[width=0.9\columnwidth]{images/continuous.pdf}
+%ajouter photos?
+\end{center}
+\end{frame}
+
 \begin{frame}{What is an hybrid system?}
 \begin{center}
 \vspace*{-1.5cm}
@@ -54,8 +63,8 @@ An example of a flowpipe.
 
 \end{frame}
 
-\begin{frame}[t]{Two kind of polyhedra}
-Key issue for flowpipe computation: being able to manipulate these polyhedra. There are two kind of polyhedra:
+\begin{frame}[t]{Two definitions of polyhedra}
+Key issue for flowpipe computation: being able to manipulate these polyhedra. There are two definitions for polyhedra:
 \only<2,3>{\begin{block}{$\mathcal{V}$-polyhedron}
 A $\mathcal{V}$-polyhedron $P$ is the Minkowsky sum of the convex hull of a set $V$ of vertices and the conic hull of a set $C$ of vectors. $P= conv(V) + cone(C)$.
 \end{block}}
@@ -74,27 +83,34 @@ An $H$-polyhedron $P$ is the intersection of a set of half-spaces: $\cap_{i=0}^n
 \end{block}}
 \only<5>{
 \begin{figure}
-\includegraphics[scale=0.5]{images/hpoly.eps}\\
+\includegraphics[scale=0.7]{images/hpoly.eps}\\
 Construction of a $\mathcal{H}$-polytope
 \end{figure}
 }
-\visible<6,7,8>{
+\only<6>{
+\begin{figure}
+\includegraphics[scale=0.7]{images/poly.eps}\\
+$\mathcal{H}$ and $\mathcal{V}$ representations are equivalent.
+\end{figure}
+}
+\visible<7,8>{
 \begin{table}
 \centering
 \begin{tabular}{| c | c | c | c |}
 	\hline	
-				    & $.\ \cap\ .$ & $.\ \cup\ .$ & $.\ +\ .$ \\ \hline
+		    & $.\ \cap\ .$ & $.\ \cup\ .$ & $.\ +\ .$ \\ \hline
 	$\mathcal{V}$-Polyhedra   & $-$ & $+$ & $+$ \\ \hline
    	$\mathcal{H}$-Polyhedra   & $+$ & $-$ & $-$\\ \hline
-\end{tabular}
-\caption{Comparison of the two representations.}
+\end{tabular}\\
+\vspace*{0.1cm}
+Comparison of the two representations.
 \end{table}
-\vspace*{-0.5cm}
+\vspace*{-0.1cm}
 }
 
-\visible<7,8>{\begin{block}{Central theorem of polyhedra representation}
-A subset $P$ of $\mathbb{R}^d$ is a $\mathcal{V}$-polyhedron if and only if it is an $\mathcal{H}$-polyhedron.
-\end{block}}
+%\visible<7,8>{\begin{block}{Central theorem of polyhedra representation}
+%A subset $P$ of $\mathbb{R}^d$ is a $\mathcal{V}$-polyhedron if and only if it is an $\mathcal{H}$-polyhedron.
+%\end{block}}
 \visible<8>{The internship resulted in a contribution to HyPro.}
 \end{frame}
 
