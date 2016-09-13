@@ -79,13 +79,13 @@ class VertexEnumeration {
 
 		int linearIndependance(std::map<int,vector_t<Number>> collection, vector_t<Number>& candidateRef) const;//not used
 		/**
-		 * @brief If the candidate is independant from the collection, returns the smallest non nul coordinate,
+		 * @brief If the candidate is independent from the collection, returns the smallest non nul coordinate,
 		 * -1 otherwise.
 		 */
 
 		std::vector<std::size_t> findIndepHs() const;//not used
 		/**
-		 * @return A set of the index of d independant hyperplanes of mHsv.
+		 * @return A set of the index of d independent hyperplanes of mHsv.
 		 */
 
 		Point<Number> findIntersection(const std::vector<std::size_t>& selectionRef) const;//not used

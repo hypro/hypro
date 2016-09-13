@@ -87,7 +87,7 @@ public:
 	 * @brief Check for the satisfiability of the dictionary and finds a sutable assignement
 	 */
 
-	bool selectBlandPivot(std::size_t& i, std::size_t& j);
+	bool selectBlandPivot(std::size_t& i, std::size_t& j) const;
 	/**
 	 * @brief Puts in i and j the pivot, returns false iff none was sutable.
 	 */

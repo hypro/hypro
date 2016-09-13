@@ -189,7 +189,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Dictionary<Number>::selectBlandPivot(std::size_t& i, std::size_t& j) {
+	bool Dictionary<Number>::selectBlandPivot(std::size_t& i, std::size_t& j) const{
 		unsigned minIndex = mDictionary.size()+1;
 		unsigned indexMin = mDictionary.size()+1;
 		std::vector<std::size_t> goodIndices;

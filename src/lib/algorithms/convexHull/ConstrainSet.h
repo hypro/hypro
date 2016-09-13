@@ -20,6 +20,16 @@ class ConstrainSet {
 			constrainSet.push_back(newElem);
 		}
 
+		/**
+		 * @brief Checks if there is any variable out of bounds. The method returns the index of the next variable, which is out of bounds,
+		 * diff holds the distance to the respective bound.
+		 * @details [long description]
+		 *
+		 * @param index Index for the variable, which is out of bounds.
+		 * @param diff Distance to the bound.
+		 * @param baseIndices A vector of possible variable indices.
+		 * @return True, if there is any variable out of bounds.
+		 */
 		bool outside(std::size_t& index, Number& diff, const std::vector<std::size_t>& baseIndices) {
 			index = constrainSet.size()+1;
 			diff = 0;
@@ -37,13 +47,7 @@ class ConstrainSet {
 			return index!=constrainSet.size()+1;
 		}
 
-	/**
-	 * @brief Finds the next variable that is out of its bounds among the indices of the basis.
-	 * @param diff contains the distance to the bound.
-	 * @return True, if there is a violated bound.
-	 */
-
-		bool getPivot(std::size_t& index, Number& diff, std::size_t& pivot, const std::vector<std::size_t>& cobaseIndices,
+		bool getPivot(const std::size_t& index, const Number& diff, std::size_t& pivot, const std::vector<std::size_t>& cobaseIndices,
 						const matrix_t<Number>& dictionary) {
 			pivot = constrainSet.size()+1;
 			for(std::size_t i=0;i<cobaseIndices.size()-1;++i) {

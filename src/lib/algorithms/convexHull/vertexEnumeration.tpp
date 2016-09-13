@@ -1,5 +1,5 @@
 #include "vertexEnumeration.h"
-// #define CHULL_DBG
+#define CHULL_DBG
 namespace hypro {
 
 	template<typename Number>
@@ -129,7 +129,23 @@ namespace hypro {
 				VertexEnumeration<Number>::increment(i,j,n);
 			}
 			if(i<m){
+				std::cout << "Dictionary before step down: " << std::endl;
+				dictionary.printDictionary();
+				std::cout << "\n\n\n" << std::endl;
 				dictionary.pivot(i,j);
+				#ifndef NDEBUG
+				size_t tmpI,tmpJ;
+				dictionary.selectBlandPivot(tmpI,tmpJ);
+				if(!(tmpI == i && tmpJ == j)) {
+					std::cout << "Chosen pivot: " << tmpI << ", " << tmpJ << ", assumed was: " << i << ", " << j  << ", dict after pivot: " << std::endl;
+					dictionary.printDictionary();
+					std::cout << "\n\n\n" << std::endl;
+				}
+				assert(tmpI == i && tmpJ == j);
+				#endif
+				#ifdef CHULL_DBG
+				std::cout << "(Step down) Pivot " << i << ", " << j << " is a valid reverse pivot." << std::endl;
+				#endif
 				if(dictionary.isLexMin()) {
 					#ifdef CHULL_DBG
 						cout << "\n new point: ";
@@ -149,6 +165,9 @@ namespace hypro {
 			} else {
 				if(depth>0) {
 					dictionary.selectBlandPivot(i,j);
+					#ifdef CHULL_DBG
+					std::cout << "(Step up) Pivot " << i << ", " << j << " is a valid Bland pivot." << std::endl;
+					#endif
 					dictionary.pivot(i,j);
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
