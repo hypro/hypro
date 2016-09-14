@@ -106,6 +106,7 @@ namespace hypro {
 				for(const auto& plane : mHsv) {
 					if(!plane.contains(vertex)) {
 						std::cout << __func__ << ": plane " << convert<Number,double>(plane) << " does not contain " << convert<Number,double>(vertex) << std::endl;
+						std::cout << __func__ << ": distance: " << (plane.normal().dot(vertex.rawCoordinates()) - plane.offset()) << std::endl;
 					}
 					assert(plane.contains(vertex));
 				}

@@ -147,18 +147,22 @@ public:
 
 	friend bool operator==(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {
 		if(lhs.mB != rhs.mB) {
-			return false;
+			//std::cout << __func__ << " Basis not equal." << std::endl;
+ 			return false;
 		}
 
 		if(lhs.mN != rhs.mN) {
+			//std::cout << __func__ << " CoBasis not equal." << std::endl;
 			return false;
 		}
 
 		if(lhs.mConstrains != rhs.mConstrains) {
+			//std::cout << __func__ << " ConstraintSet not equal." << std::endl;
 			return false;
 		}
 
 		if(lhs.mDictionary != rhs.mDictionary) {
+			//std::cout << __func__ << " Tableau not equal." << std::endl;
 			return false;
 		}
 

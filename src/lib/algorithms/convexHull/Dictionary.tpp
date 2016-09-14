@@ -161,7 +161,13 @@ namespace hypro {
 		}
 
 		// update cell
+		#ifndef NDEBUG
+		Number tmpEntry = mDictionary(i,j);
+		#endif
 		mDictionary(i,j) = Number(1) / mDictionary(i,j);
+		#ifndef NDEBUG
+		assert((tmpEntry < 0 && mDictionary(i,j) < 0) || (tmpEntry >= 0 && mDictionary(i,j) >= 0));
+		#endif
 	}
 
 	template<typename Number>
@@ -171,6 +177,13 @@ namespace hypro {
 		int tmp = mB[i];
 		mB[i] = mN[j];
 		mN[j] = tmp;
+
+		#ifndef NDEBUG
+		Dictionary tmpDic(*this);
+		tmpDic.pivotDictionary(i,j);
+		tmpDic.pivotDictionary(i,j);
+		assert(this->mDictionary == tmpDic.tableau());
+		#endif
 	}
 
 	template<typename Number>
@@ -190,10 +203,11 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::selectBlandPivot(std::size_t& i, std::size_t& j) const{
-		unsigned minIndex = mDictionary.size()+1;
-		unsigned indexMin = mDictionary.size()+1;
-		std::vector<std::size_t> goodIndices;
+		unsigned minIndex = mDictionary.size()+1; // holds variable index of some candidate.
+		unsigned indexMin = mDictionary.size()+1; // holds position index of some candidate.
+		std::vector<std::size_t> goodIndices; // holds row indices for candidates for i.
 
+		// determine s.
 		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {//select the col
 			if(mDictionary(mDictionary.rows()-1,colIndex)> 0 && mN[colIndex] < minIndex)	{
 				minIndex = mN[colIndex];
@@ -201,6 +215,8 @@ namespace hypro {
 			}
 		}
 		if(minIndex == unsigned(mDictionary.size()+1)){return false;}
+
+		// determine candidates for r.
 		j = indexMin;
 		for(unsigned rowIndex = 0; rowIndex < unsigned(mDictionary.rows()-1); ++rowIndex) {
 			if(mDictionary(rowIndex,j) < 0)	{
@@ -208,22 +224,24 @@ namespace hypro {
 			}
 		}
 		if(goodIndices.size() == 0){return false;}
+
 		i = goodIndices[0];
 		minIndex = mB[goodIndices[0]];
 		Number currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
-		for(unsigned rowIndex = 1; rowIndex < unsigned(goodIndices.size()); ++rowIndex) {//select the row
-			if(mDictionary(goodIndices[rowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[rowIndex],j)	> currentLambda)	{
-				i = goodIndices[rowIndex];
+		for(unsigned candidateRowIndex = 1; candidateRowIndex < unsigned(goodIndices.size()); ++candidateRowIndex) {//select the candidate row
+			// improving candidate
+			if(mDictionary(goodIndices[candidateRowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[candidateRowIndex],j) > currentLambda)	{
+				i = goodIndices[candidateRowIndex];
 				currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
-				minIndex = mB[goodIndices[rowIndex]];
+				minIndex = mB[goodIndices[candidateRowIndex]];
 			}
-			if(mDictionary(goodIndices[rowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[rowIndex],j)	== currentLambda
-						&& minIndex > mB[goodIndices[rowIndex]])	{
-				i = goodIndices[rowIndex];
+			// equals-candidate with better variable index -> follow variable order
+			if(mDictionary(goodIndices[candidateRowIndex],mDictionary.cols()-1)/mDictionary(goodIndices[candidateRowIndex],j) == currentLambda
+						&& minIndex > mB[goodIndices[candidateRowIndex]])	{
+				i = goodIndices[candidateRowIndex];
 				currentLambda = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j);
-				minIndex = mB[goodIndices[rowIndex]];
+				minIndex = mB[goodIndices[candidateRowIndex]];
 			}
-
 		}
 		return true;
 	}
@@ -345,7 +363,7 @@ namespace hypro {
 		#endif
 		if(mDictionary(mDictionary.rows()-1,j)>=0||mDictionary(i,j)>=0) {
 			#ifdef DICT_DBG
-			std::cout << "False, cell content >= 0: " << (mDictionary(i,j)>=0) <<", constant >= 0: " << (mDictionary(mDictionary.rows()-1,j)>=0) << std::endl;
+			std::cout << "False, cell content >= 0: " << (mDictionary(i,j)>=0) <<", objective coefficient >= 0: " << (mDictionary(mDictionary.rows()-1,j)>=0) << std::endl;
 			#endif
 			return false;
 		}
@@ -354,19 +372,25 @@ namespace hypro {
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
 			if(mDictionary(rowIndex,j)<0 && maxRatio<mDictionary(rowIndex,mDictionary.cols()-1)/mDictionary(rowIndex,j)) {
 				#ifdef DICT_DBG
-				std::cout << "False, not minimal ratio." << std::endl;
+				std::cout << "False, not minimal ratio. (Condition on lambda)" << std::endl;
 				#endif
 				return false;
 			}
 		}
+
+		// TODO: What is the purpose of this test? It searches all other rows with variable index of the row being less than the var index of
+		// the selected column (some Bland stuff?) and checks, if their constant part is zero and the entry at (i,j) is larger than zero.
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
-			if(rowIndex!=int(i) && mB[rowIndex]<mN[j] && (mDictionary(rowIndex,mDictionary.cols()-1)==0 && mDictionary(rowIndex,j)>0 )) {
+			if(rowIndex!=int(i) && mB[rowIndex] < mN[j] && (mDictionary(rowIndex,mDictionary.cols()-1)==0 && mDictionary(rowIndex,j)>0 )) {
 				#ifdef DICT_DBG
 				std::cout << "False, third check fails." << std::endl;
 				#endif
 				return false;
 			}
 		}
+
+		// TODO: What is the purpose of this test? It searches all other cols, where the variable index is less than the variable index of the selected
+		// row and tests, if the objective coefficient is larger than
 		for(int colIndex=0;colIndex<mDictionary.cols()-1;++colIndex) {
 			if(mN[colIndex]<mB[i] && colIndex!=int(j)) {
 				if(mDictionary(mDictionary.rows()-1,colIndex) > mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j) ) {
@@ -377,8 +401,17 @@ namespace hypro {
 				}
 			}
 		}
+
+
 		#ifdef DICT_DBG
-		std::cout << "True." << std::endl;
+		std::cout << "True, manual check: ";
+		Dictionary<Number> tmp(*this);
+		tmp.pivot(i,j);
+		size_t ti,tj;
+		tmp.selectBlandPivot(ti,tj);
+		tmp.pivot(ti,tj);
+		std::cout << (tmp == *this) << std::endl;
+		assert(tmp == *this);
 		#endif
 		return true;
 	}
