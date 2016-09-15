@@ -98,9 +98,11 @@ public:
 	 * @param available indices is the set of indices the pivot is allowed to pick in.
 	 */
 
-	bool isPrimalFeasible();
+	bool isPrimalFeasible() const;
 
-	bool isDualFeasible();
+	bool isDualFeasible() const;
+
+	bool isOptimal() const;
 
 	bool reverse(const std::size_t i, const std::size_t j);
 	bool reverse_old(const std::size_t i, const std::size_t j);//before optimization

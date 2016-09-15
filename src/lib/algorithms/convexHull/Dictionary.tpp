@@ -325,21 +325,28 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Dictionary<Number>::isPrimalFeasible() {
-		bool b=true;
+	bool Dictionary<Number>::isPrimalFeasible() const {
 		for(unsigned rowIndex = 0; rowIndex < unsigned(mDictionary.rows()-1); ++rowIndex) {
-			b=b&&(mDictionary(rowIndex,mDictionary.cols()-1)>=0);
+			if( mDictionary(rowIndex,mDictionary.cols()-1) < 0 ) {
+				return false;
+			}
 		}
-		return b;
+		return true;
 	}
 
 	template<typename Number>
-	bool Dictionary<Number>::isDualFeasible() {
-		bool b=true;
+	bool Dictionary<Number>::isDualFeasible() const {
 		for(unsigned colIndex = 0; colIndex < unsigned(mDictionary.cols()-1); ++colIndex) {
-			b=b&&(mDictionary(mDictionary.rows()-1,colIndex)<=0);
+			if( mDictionary(mDictionary.rows()-1,colIndex) > 0 ) {
+				return false;
+			}
 		}
-		return b;
+		return true;
+	}
+
+	template<typename Number>
+	bool Dictionary<Number>::isOptimal() const {
+		return this->isPrimalFeasible() && this->isDualFeasible();
 	}
 
 	template<typename Number>
@@ -407,8 +414,13 @@ namespace hypro {
 		std::cout << "True, manual check: ";
 		Dictionary<Number> tmp(*this);
 		tmp.pivot(i,j);
+		std::cout << "Manual check: After pivot down:" << std::endl;
+		tmp.printDictionary();
+		std::cout << "Double version: " << std::endl;
+		std::cout << convert<Number,double>(tmp.mDictionary) << std::endl;
 		size_t ti,tj;
 		tmp.selectBlandPivot(ti,tj);
+		std::cout << "Selected pivots: " << ti << ", " << tj << std::endl;
 		tmp.pivot(ti,tj);
 		std::cout << (tmp == *this) << std::endl;
 		assert(tmp == *this);
@@ -509,12 +521,12 @@ namespace hypro {
 			if(mN[colIndex]>=mB.size()) {
 				unsigned rowIndex=0;
 				for(rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
-					if(mDictionary(rowIndex,colIndex)!=0&&mB[rowIndex]<mB.size()) {
+					if(mDictionary(rowIndex,colIndex)!=0 && mB[rowIndex]<mB.size()) {
 						this->pivot(rowIndex,colIndex);
 						break;
 					}
 				}
-				if(rowIndex==mB.size()-1) {
+				if(rowIndex==mB.size()-1) { //we did not find a suitable pivot
 					vector_t<Number> newLinealty = vector_t<Number>::Zero(mN.size()-1);
 					newLinealty[mN[colIndex]-mB.size()] = 1;
 					for(rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {

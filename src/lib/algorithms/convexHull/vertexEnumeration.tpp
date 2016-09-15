@@ -117,6 +117,7 @@ namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices(Dictionary<Number>& dictionary) {
+		assert(dictionary.isOptimal());
 		std::set<vector_t<Number>> cones =dictionary.findCones();
 		for(const auto& cone: cones) {
 			mPositiveCones.insert(cone);
@@ -133,10 +134,12 @@ namespace hypro {
 				VertexEnumeration<Number>::increment(i,j,n);
 			}
 			if(i<m){
+				assert(dictionary.isPrimalFeasible());
 				std::cout << "Dictionary before step down: " << std::endl;
 				dictionary.printDictionary();
 				std::cout << "\n\n\n" << std::endl;
 				dictionary.pivot(i,j);
+				assert(dictionary.isPrimalFeasible());
 				#ifndef NDEBUG
 				size_t tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
@@ -148,7 +151,7 @@ namespace hypro {
 				assert(tmpI == i && tmpJ == j);
 				#endif
 				#ifdef CHULL_DBG
-				std::cout << "(Step down) Pivot " << i << ", " << j << " is a valid reverse pivot." << std::endl;
+				std::cout << __func__ << " (Step down) Pivot " << i << ", " << j << " is a valid reverse pivot." << std::endl;
 				#endif
 				if(dictionary.isLexMin()) {
 					#ifdef CHULL_DBG
@@ -168,11 +171,13 @@ namespace hypro {
 				i=0;j=0;++depth;
 			} else {
 				if(depth>0) {
+					assert(dictionary.isPrimalFeasible());
 					dictionary.selectBlandPivot(i,j);
-					#ifdef CHULL_DBG
-					std::cout << "(Step up) Pivot " << i << ", " << j << " is a valid Bland pivot." << std::endl;
-					#endif
 					dictionary.pivot(i,j);
+					#ifdef CHULL_DBG
+					std::cout << __func__ << " (Step up) Pivot " << i << ", " << j << " is a valid Bland pivot." << std::endl;
+					#endif
+					assert(dictionary.isPrimalFeasible());
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
 				--depth;
@@ -195,6 +200,7 @@ namespace hypro {
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateDictionaries() {
 		Dictionary<Number> dictionary = mDictionaries[0];
+		assert(dictionary.isOptimal());
 		std::size_t a=0;
 		std::size_t b=0;
 		int depth=0;
@@ -216,10 +222,12 @@ namespace hypro {
 				} else {break;}
 			}
 			if(i<m){
+				assert(dictionary.isDualFeasible());
 				#ifdef CHULL_DBG
-				std::cout << "(Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot." << std::endl;
+				std::cout << __func__ << " (Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot." << std::endl;
 				#endif
 				dictionary.pivot(basisAux[i],j);
+				assert(dictionary.isDualFeasible());
 				//dictionary.printDictionary();
 				Dictionary<Number> newDictionary = (Dictionary<Number>(dictionary));
 				for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
@@ -229,13 +237,15 @@ namespace hypro {
 				i=0;j=0;++depth;
 			} else {
 				if(depth>0) {
+					assert(dictionary.isDualFeasible());
 					dictionary.selectDualBlandPivot(i,j,basisAux);
 					#ifdef CHULL_DBG
-					std::cout << "(Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot." << std::endl;
+					std::cout << __func__ << " (Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot." << std::endl;
 					#endif
 					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
 					assert(i < basisAux.size());
 					dictionary.pivot(basisAux[i],j);
+					assert(dictionary.isDualFeasible());
 					//dictionary.printDictionary();
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
@@ -253,7 +263,7 @@ namespace hypro {
 		std::size_t n0 = mHsv.size();
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
 		#ifdef CHULL_DBG
-			cout<< "\nfist dictionary\n";
+			cout<< "\nfirst dictionary\n";
 			dictionary.printDictionary();
 			dictionary.constrainSet().print();
 		#endif
@@ -268,8 +278,12 @@ namespace hypro {
 			cout<< "\nnonSlackToBase\n";
 			dictionary.printDictionary();
 			dictionary.constrainSet().print();
+			std::cout << "lineality space size: " << mLinealtySpace.size() << std::endl;
 		#endif
 		addLinealtyConstrains();
+
+		// At this point we need to start over again, as we added artificial constraints for the lineality space.
+
 		matrix_t<Number> dictio = matrix_t<Number>::Zero(mHsv.size()+1, d+1);
 		for(std::size_t colIndex=0;colIndex<=d;++colIndex) {//copy
 			for(std::size_t rowIndex=0;rowIndex<n0;++rowIndex) {
@@ -413,7 +427,7 @@ namespace hypro {
 				mLinealtySpace.push_back(one);
 				throw string("\n WARNING: no constrains. \n");
 			}
-			Dictionary<Number>dictionary(findFirstVertex());
+			Dictionary<Number> dictionary(findFirstVertex());
 			#ifdef CHULL_DBG
 				cout<<"findFirstVertex\n";
 				dictionary.printDictionary();
@@ -433,32 +447,43 @@ namespace hypro {
 				}
 				b1[rowIndex] = (mHsv.at(dictionary.cobasis()[rowIndex]-1)).offset();
 			}
+
+			// A1*y <= b1 describes the first vertex y? -> during find first vertex, non-original variables are guaranteed to be in the co-basis (nonSlackToBase).
+
 			matrix_t<Number> invA1 = A1.inverse();
-			std::size_t skiped = 0;
+			std::size_t skipped = 0;
 			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
-				if(dictionary.basis()[rowIndex]-1<constrainsCount) {
+				if(dictionary.basis()[rowIndex]-1<constrainsCount) { // pick indices, which correspond to an original constraint in mHsv and skip original variables.
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
-						A2(rowIndex-skiped,colIndex) = (mHsv.at(dictionary.basis()[rowIndex]-1)).normal()[colIndex];
+						A2(rowIndex-skipped,colIndex) = (mHsv.at(dictionary.basis()[rowIndex]-1)).normal()[colIndex];
 					}
-				} else {++skiped;}
-			}
-			matrix_t<Number> newDictionary = matrix_t<Number>(constrainsCount-dimension+1, dimension+1);//faire la derniere ligne
-			skiped = 0;
-			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
-				if(dictionary.basis()[rowIndex]-1<constrainsCount) {
-					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
-					newDictionary(rowIndex-skiped,colIndex)=0;
-						for(std::size_t index=0; index<dimension; ++index) {
-							newDictionary(rowIndex-skiped,colIndex)+=A2(rowIndex-skiped,index)*invA1(index,colIndex);
-						}
-					}
-					newDictionary(rowIndex-skiped,dimension)= (mHsv.at(dictionary.basis()[rowIndex]-1)).offset();
-					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
-						newDictionary(rowIndex-skiped,dimension)-=newDictionary(rowIndex-skiped,colIndex)*b1[colIndex];
-					}
-				} else {++skiped;}
+				} else {++skipped;}
 			}
 
+			// Original A is now split into A1 and A2, where A1 defines the initial vertex and A2 contains the rest of constraints.
+
+			std::cout << "A1: " << A1 << std::endl;
+			std::cout << "b1: " << b1 << std::endl;
+			std::cout << "A2: " << A2 << std::endl;
+
+			matrix_t<Number> newDictionary = matrix_t<Number>::Zero(constrainsCount-dimension+1, dimension+1);//faire la derniere ligne
+			skipped = 0;
+			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
+				if(dictionary.basis()[rowIndex]-1<constrainsCount) { // again only pick those indices, which correspond to original constraints.
+					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
+						//newDictionary(rowIndex-skipped,colIndex)=0; // Set all zero? -> removed by initiating all to zero in the creation of the matrix.
+						for(std::size_t index=0; index<dimension; ++index) {
+							newDictionary(rowIndex-skipped,colIndex)+=A2(rowIndex-skipped,index)*invA1(index,colIndex);
+						}
+					}
+					newDictionary(rowIndex-skipped,dimension)= (mHsv.at(dictionary.basis()[rowIndex]-1)).offset();
+					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
+						newDictionary(rowIndex-skipped,dimension)-=newDictionary(rowIndex-skipped,colIndex)*b1[colIndex];
+					}
+				} else {++skipped;}
+			}
+
+			// augment a row of all -1 as the optimization function
 			for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 				newDictionary(constrainsCount-dimension,colIndex)=Number(-1);
 			}
@@ -473,6 +498,9 @@ namespace hypro {
 			mN.push_back(std::size_t(constrainsCount+2));
 
 			mDictionaries.push_back(Dictionary<Number>(newDictionary,mB,mN));
+			std::cout << "The newly added dictionary: " << std::endl;
+			mDictionaries.back().printDictionary();
+			assert(mDictionaries.back().isOptimal());
 
 			mPivotingMatrix = invA1;
 			mOffset = b1;
