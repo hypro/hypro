@@ -97,10 +97,11 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 
 
 		} else {
+			/*
 			ConvexHull<Number> ch(points);
 			ch.convexHullVertices();
 			mHPlanes = ch.getHsv();
-
+			*/
 
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 			for ( auto &facet : facets ) {
