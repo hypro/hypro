@@ -233,3 +233,30 @@ public:
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,0,1})) != vertices.end());
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,0,-1})) != vertices.end());
 	}
+
+	TEST_F(VertexEnumerationTest, TransformationToPositive) {
+		// first simple test is a pyramid with quadratic foundation in a 3D space.
+		matrix_t<mpq_class> m = matrix_t<mpq_class>(6,3);
+		vector_t<mpq_class> c = vector_t<mpq_class>(m.rows());
+
+		m << 1,0,0,
+			-1,0,0,
+			0,1,0,
+			0,-1,0,
+			0,0,1,
+			0,0,-1;
+		c << -1,2,-1,2,-1,2;
+		VertexEnumeration<mpq_class> deg(m,c);
+		deg.enumerateVertices();
+
+		std::vector<Point<mpq_class>> vertices = deg.getPoints();
+		EXPECT_EQ(vertices.size(),8);
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-1,-1})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-1,-2})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-2,-1})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-2,-2})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-2,-1,-1})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-2,-1,-2})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-2,-2,-1})) != vertices.end());
+		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-2,-2,-2})) != vertices.end());
+	}

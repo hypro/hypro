@@ -116,7 +116,6 @@ public:
 	}
 
 	TEST_F(FacetEnumerationTest, DegenerateEnumeration3) {
-		// Actual (failing) problem from benchmark runs.
 		std::vector<Point<mpq_class>> points;
 		points.push_back(Point<mpq_class>( { mpq_class("510") , mpq_class("20") , mpq_class("20") } ));
 		points.push_back(Point<mpq_class>( { mpq_class("511") , mpq_class("21") , mpq_class("21") } ));

@@ -44,6 +44,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 #ifdef HPOLY_DEBUG_MSG
 	std::cout << __func__ << "Construct from vertices." << std::endl;
 #endif
+	/*
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
 		ConvexHull<Number> ch(points);
@@ -52,15 +53,14 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
 		assert(ch.getCone().empty());
 		assert(ch.getLinealtySpace().empty());
-		/*
-		std::cout << "Object constructed from vertices: " << *this << std::endl;
-		std::cout << "Vertices: " << std::endl;
-		for(const auto& vertex : points) {
-			std::cout << vertex << std::endl;
-		}
-		*/
+
+		//std::cout << "Object constructed from vertices: " << *this << std::endl;
+		//std::cout << "Vertices: " << std::endl;
+		//for(const auto& vertex : points) {
+		//	std::cout << vertex << std::endl;
+		//}
 	}
-	/*
+	*/
 
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
@@ -111,7 +111,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 
 		}
 	}
-	*/
+
 }
 
 template <typename Number, typename Converter>
