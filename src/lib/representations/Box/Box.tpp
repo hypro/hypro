@@ -234,15 +234,6 @@ std::vector<Halfspace<Number>> BoxT<Number,Converter>::constraints() const {
 	return res;
 }
 
-/*
-template<typename Number, typename Converter>
-void BoxT<Number,Converter>::insert( const std::vector<carl::Interval<Number>>& boundaries ) {
-	for(const auto& interval : boundaries) {
-		mLimits.first.extend(interval.lower());
-		mLimits.second.extend(interval.upper());
-	}
-}
-*/
 template<typename Number, typename Converter>
 carl::Interval<Number> BoxT<Number,Converter>::interval( std::size_t d ) const {
 	if ( d > mLimits.first.dimension() ) {
@@ -394,15 +385,12 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 					max[k] += b;
 					min[k] += a;
 				}
-
 			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
 		}
 	}
 	min += b;
 	max += b;
-
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-
 	return BoxT<Number,Converter>( std::make_pair(min, max) );
 }
 
@@ -515,7 +503,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 				//std::cout << "Created search-point: " << convert<Number,double>(tmp.rawCoordinates()).transpose() << std::endl;
 				// if neighbor is new, test is, otherwise skip.
 				if(std::find(discoveredPoints.begin(), discoveredPoints.end(), tmp) == discoveredPoints.end()){
-					if(!hspace.holds(tmp.rawCoordinates())){
+					if(!hspace.contains(tmp.rawCoordinates())){
 						//std::cout << "is also outside, enqueue." << std::endl;
 						workingQueue.push(tmp);
 					} else {

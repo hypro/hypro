@@ -112,7 +112,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 
 	    std::vector<std::size_t> boundedConstraints;
 	    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+			// std::cout << "Result: " << offsets[offsetIndex] << std::endl;
 	        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
 	            boundedConstraints.push_back(offsetIndex);
 	        }
@@ -126,6 +126,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 	        boundedConstraints.pop_back();
 	        --pos;
 	    }
+
+	    //std::cout << "Construct HPoly from " << constraints << " <= " << constants << std::endl;
 
 	    //constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);

@@ -441,10 +441,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				unsigned directionCnt = 0;
 				for(auto& entry : res){
 					vector_t<Number> currentDir(_directions.row(directionCnt));
-					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
-					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
-					entry.supportValue = entry.optimumValue.dot(currentDir);
+					if(entry.errorCode == SOLUTION::INFTY) {
+						entry.optimumValue = entry.optimumValue;
+						entry.supportValue = 1;
+					} else {
+						entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
+						// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
+						entry.supportValue = entry.optimumValue.dot(currentDir);
+					}
 					++directionCnt;
+					//std::cout << "Entry value: " << entry.supportValue << std::endl;
 				}
 			}
 			return res;

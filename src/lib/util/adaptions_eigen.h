@@ -251,24 +251,25 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool linearDependent(const vector_t<Number>& lhs, const vector_t<Number>& rhs) {
+	std::pair<bool,Number> linearDependent(const vector_t<Number>& lhs, const vector_t<Number>& rhs) {
 		unsigned firstNonZeroPos = 0;
 		if(lhs.nonZeros() == 0 || rhs.nonZeros() == 0){
-			return true;
+			return std::make_pair(true,0);
 		}
 
 		// both are non-Zero vectors
-		while(lhs(firstNonZeroPos) != 0){
+		while(lhs(firstNonZeroPos) == 0){
 			++firstNonZeroPos;
 		}
 		if(rhs(firstNonZeroPos) == 0) {
-			return false;
+			return std::make_pair(false,0);
 		}
 		Number scalar = lhs(firstNonZeroPos)/rhs(firstNonZeroPos);
 		if(lhs == rhs*scalar) {
-			return true;
+			//std::cout << __func__ << ": scalar: " << scalar << std::endl;
+			return std::make_pair(true,scalar);
 		}
-		return false;
+		return std::make_pair(false,0);
 	}
 
 } // namespace hypro

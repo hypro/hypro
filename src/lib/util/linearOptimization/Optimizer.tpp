@@ -92,7 +92,7 @@ namespace hypro {
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		#ifdef DEBUG_MSG
-		std::cout << "Final solition distance: " << res.supportValue << std::endl;
+		std::cout << "Final solution distance: " << res.supportValue << std::endl;
 		#endif
 		return res;
 		#endif
@@ -108,6 +108,8 @@ namespace hypro {
 			mLastConsistencyAnswer = SOLUTION::FEAS;
 			return true;
 		}
+
+		//std::cout << __func__ << ": matrix: " << mConstraintMatrix << std::endl << "Vector: " << mConstraintVector << std::endl;
 
 		#ifdef HYPRO_USE_SMTRAT
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;

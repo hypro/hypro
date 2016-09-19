@@ -65,31 +65,6 @@ namespace reachability {
 		// check for time triggered transitions once before any flowpipe is computed. TODO: put the check for transitions in the loop to the end?
 		if(mCurrentLevel <= mSettings.jumpDepth) {
 			bool locallyUrgent = checkTransitions(_state, carl::Interval<Number>(0), nextInitialSets);
-			/*
-			State<Number> guardSatisfyingState;
-			bool locallyUrgent = false;
-			for( auto transition : _state.location->transitions() ){
-				// handle time-triggered transitions
-				if(transition->isTimeTriggered()){
-#ifdef REACH_DEBUG
-					std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
-#endif
-					// Check for direct urgent transitions
-					if(transition->triggerTime() == 0){
-						//std::cout << "Time trigger enabled" << std::endl;
-						if(intersectGuard(transition, _state, guardSatisfyingState)){
-							// when taking a timed transition, reset timestamp
-							if(mCurrentLevel != mSettings.jumpDepth) {
-								guardSatisfyingState.timestamp = carl::Interval<Number>(0);
-								nextInitialSets.push_back(boost::tuple<Transition<Number>*, State<Number>>(transition, guardSatisfyingState));
-								flowpipe.push_back(boost::get<Representation>(guardSatisfyingState.set));
-							}
-							locallyUrgent = true;
-						}
-					}
-				}
-			}
-			*/
 			if(locallyUrgent){
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					processDiscreteBehaviour(nextInitialSets);
@@ -115,34 +90,6 @@ namespace reachability {
 				if(mCurrentLevel < mSettings.jumpDepth) {
 					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
 				}
-				/*
-					State<Number> guardSatisfyingState;
-					for( auto transition : _state.location->transitions() ){
-						// handle time-triggered transitions
-						if(transition->isTimeTriggered()){
-							#ifdef REACH_DEBUG
-							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval [0," << mSettings.timeBound << "]" << std::endl;
-							#endif
-							// As there is no continuous behaviour, simply check guard for whole time horizon
-							if(transition->triggerTime() <= mSettings.timeBound){
-								//std::cout << "Time trigger enabled" << std::endl;
-								if(intersectGuard(transition, _state, guardSatisfyingState)){
-									// when taking a timed transition, reset timestamp
-									guardSatisfyingState.timestamp = carl::Interval<Number>(0);
-									nextInitialSets.emplace_back(transition, guardSatisfyingState);
-								}
-							}
-						} // handle normal transitions
-						else if(intersectGuard(transition, _state, guardSatisfyingState)){
-							//std::cout << "hybrid transition enabled" << std::endl;
-							//std::cout << *transition << std::endl;
-							assert(guardSatisfyingState.timestamp == _state.timestamp);
-							// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
-							assert(!guardSatisfyingState.timestamp.isUnbounded());
-							nextInitialSets.emplace_back(transition, guardSatisfyingState);
-						}
-					}
-				*/
 			}
 
 			// insert first Segment into the empty flowpipe
@@ -197,35 +144,6 @@ namespace reachability {
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
 					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
 					bool fireTimeTriggeredTransition = checkTransitions(currentState, currentState.timestamp, nextInitialSets);
-					/*
-					bool fireTimeTriggeredTransition = false;
-					for( auto transition : _state.location->transitions() ){
-						// handle time-triggered transitions
-						if(transition->isTimeTriggered()){
-							#ifdef REACH_DEBUG
-							std::cout << "Checking timed transition " << transition->source()->id() << " -> " << transition->target()->id() << " for time interval " << currentState.timestamp << std::endl;
-							#endif
-							if(currentState.timestamp.contains(transition->triggerTime())){
-								std::cout << "Time trigger enabled" << std::endl;
-								if(intersectGuard(transition, currentState, guardSatisfyingState)){
-									// only insert new Sets into working queue, when the current level allows it.
-									if(mCurrentLevel != mSettings.jumpDepth){
-										// when taking a timed transition, reset timestamp
-										guardSatisfyingState.timestamp = carl::Interval<Number>(0);
-										nextInitialSets.emplace_back(transition, guardSatisfyingState);
-									}
-									fireTimeTriggeredTransition = true;
-								}
-							}
-						} // handle normal transitions
-						else if(intersectGuard(transition, currentState, guardSatisfyingState) && mCurrentLevel < mSettings.jumpDepth){
-							assert(guardSatisfyingState.timestamp == currentState.timestamp);
-							//std::cout << "hybrid transition enabled" << std::endl;
-							//std::cout << *transition << std::endl;
-							nextInitialSets.emplace_back(transition, guardSatisfyingState);
-						}
-					}
-					*/
 					if(fireTimeTriggeredTransition){
 						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
 						#ifdef REACH_DEBUG
@@ -312,9 +230,6 @@ namespace reachability {
 					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
 #endif
 					flowpipe.push_back( newSegment.second );
-
-					//unsigned tmp = plotter.addObject(newSegment.second.vertices());
-					//plotter.setObjectColor(tmp, colors[_state.location->id()]);
 
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm

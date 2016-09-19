@@ -270,8 +270,24 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 
 	// catch half-space
 	if(mConstraints.rows() == 1) {
+		vector_t<Number> pointOnPlane = vector_t<Number>::Zero(mDimension);
+		assert(mConstraints.row(0).nonZeros() != 0 );
+		unsigned nonZeroPos = 0;
+		while(mConstraints(0,nonZeroPos) == 0) { ++nonZeroPos; }
+		pointOnPlane(nonZeroPos) = mConstraintConstants(0);
 		for ( unsigned index = 0; index < _A.rows(); ++index ) {
-			res.emplace_back(evaluate( _A.row( index ) ));
+			std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(mConstraints.row(0)), vector_t<Number>(_A.row(index)));
+			if( dependent.first ) {
+				if( dependent.second > 0 ) {
+					//std::cout << "Vectors " << convert<Number,double>(vector_t<Number>(mConstraints.row(0))).transpose() << " and " << convert<Number,double>(vector_t<Number>(_A.row(index))).transpose() << " are dependent!" << std::endl;
+					//std::cout << "Factor: " << dependent.second << std::endl;
+					res.emplace_back(mConstraintConstants(0)*dependent.second, pointOnPlane, SOLUTION::FEAS);
+				} else {
+					res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+				}
+			} else {
+				res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+			}
 		}
 		return res;
 	}

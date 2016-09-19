@@ -39,7 +39,7 @@ namespace hypro {
 		/*
 		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
 		std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
-		printProblem(glpkProblem);
+		//printProblem(glpkProblem);
 		*/
 
 		// setup glpk
@@ -55,8 +55,8 @@ namespace hypro {
 			case GLP_OPT:
 			case GLP_FEAS: {
 				// if satisfiable, derive exact solution by intersecting all constraints, which are at their upper bounds (we always maximize).
-				matrix_t<Number> exactSolutionMatrix = matrix_t<Number>(constraints.cols(), constraints.cols());
-				vector_t<Number> exactSolutionVector = vector_t<Number>(constraints.cols());
+				matrix_t<Number> exactSolutionMatrix = matrix_t<Number>::Zero(constraints.cols(), constraints.cols());
+				vector_t<Number> exactSolutionVector = vector_t<Number>::Zero(constraints.cols());
 				unsigned pos = 0;
 				for(unsigned i = 1; i <= constraints.rows(); ++i) {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
@@ -75,7 +75,6 @@ namespace hypro {
 				std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
 				std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
 				#endif
-
 				return EvaluationResult<Number>(_direction.dot(exactSolution), exactSolution, SOLUTION::FEAS);
 				break;
 			}
