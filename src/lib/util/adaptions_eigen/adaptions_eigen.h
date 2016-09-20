@@ -289,4 +289,4 @@ namespace std {
 
 } // namespace std
 
-#include "adaptions_eigen_double.h"
+#include "adaptions_eigen_double.tpp"

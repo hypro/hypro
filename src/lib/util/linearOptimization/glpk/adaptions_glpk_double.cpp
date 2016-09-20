@@ -1,5 +1,3 @@
-#pragma once
-
 #include "adaptions_glpk.h"
 
 namespace hypro {

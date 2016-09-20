@@ -1,5 +1,16 @@
 #include "Optimizer.h"
 
+#ifdef HYPRO_USE_SMTRAT
+#include "smtrat/adaptions_smtrat.h"
+#endif
+#ifdef HYPRO_USE_Z3
+#include "z3/adaptions_z3.h"
+#endif
+#ifdef HYPRO_USE_SOPLEX
+#include "soplex/adaptions_soplex.h"
+#endif
+#include "glpk/adaptions_glpk.h"
+
 namespace hypro {
 
 	template<typename Number>
