@@ -1,12 +1,11 @@
 
 #pragma once
-#include <z3.h>
-#include "z3Convenience.h"
+#include "adaptions_z3.h"
 
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> z3OptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution = EvaluationResult<Number>()) {
+	EvaluationResult<Number> z3OptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
 		//std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
 		EvaluationResult<Number> res;
 		z3Context c;

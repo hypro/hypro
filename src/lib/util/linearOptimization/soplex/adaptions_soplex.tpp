@@ -1,6 +1,6 @@
 
 #pragma once
-#include <soplex.h>
+#include "adaptions_soplex.h"
 
 namespace hypro {
 

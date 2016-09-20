@@ -1,13 +1,10 @@
 #pragma once
-#include "SimplexSolver.h"
-#include "convenience.h"
-#include "helper_methods.h"
-#include "../../VariablePool.h"
+#include "adaptions_smtrat.h"
 
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution = EvaluationResult<Number>()) {
+	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>&) {
 		EvaluationResult<Number> res;
 		smtrat::Poly objective = createObjective(_direction);
 		//#ifdef RECREATE_SOLVER
