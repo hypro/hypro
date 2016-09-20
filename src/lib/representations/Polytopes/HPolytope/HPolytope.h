@@ -338,7 +338,7 @@ public:
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
-	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {}
+	void reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const {}
 
   private:
 	/*
