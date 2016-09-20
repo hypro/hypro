@@ -148,3 +148,5 @@ namespace hypro {
 		return res;
 	}
 } // namespace hypro
+
+#include "adaptions_glpk_double.h"

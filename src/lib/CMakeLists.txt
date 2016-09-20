@@ -9,7 +9,8 @@ set(lib_hypro_headers
 	config.h
 	util/Optimizer.h
     util/VariablePool.h
-    util/adaptions_eigen.h
+    util/adaptions_eigen/adaptions_eigen.h
+    util/adaptions_eigen/adaptions_eigen_double.h
 	util/types.h
 	util/convexHull.h
 	util/smtrat/SimplexSolver.h

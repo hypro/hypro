@@ -17,8 +17,8 @@
 
 namespace Eigen {
 
-template <typename Number>
-bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	template <typename Number>
+	inline bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ){
 		return false;
 	}
@@ -34,7 +34,7 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 }
 
 	template <typename Number>
-	bool operator<=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	inline bool operator<=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ) {
 			return false;
 		}
@@ -50,10 +50,10 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 	}
 
 	template<typename Number>
-	bool operator>( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs < lhs;}
+	inline bool operator>( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs < lhs;}
 
 	template<typename Number>
-	bool operator>=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs <= lhs;}
+	inline bool operator>=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) { return rhs <= lhs;}
 
 	/*!
 	 * computes a hash chain over a vector nx1 using carl::hash_add and returns it
@@ -91,7 +91,7 @@ bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number
 
 
 template <typename Number>
-bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+inline bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() ){
 		return false;
 	}
@@ -108,12 +108,12 @@ bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Numbe
 }
 
 template<typename Number>
-bool operator!=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+inline bool operator!=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
 	return !(lhs == rhs);
 }
 
 template <typename Number>
-bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+inline bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
 	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ){
 		return false;
 	}
@@ -132,12 +132,12 @@ bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Numbe
 }
 
 template <typename Number>
-bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+inline bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
 	return !(lhs == rhs);
 }
 
 template<typename Number>
-std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) {
+inline std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) {
 	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
 		_out << in(rowIndex) << std::endl;
 	}
@@ -145,7 +145,7 @@ std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) 
 }
 
 template<typename Number>
-std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
+inline std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
 	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
 		for(unsigned colIndex = 0; colIndex < in.cols(); ++colIndex) {
 			_out << in(rowIndex, colIndex) << " ";
@@ -251,7 +251,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::pair<bool,Number> linearDependent(const vector_t<Number>& lhs, const vector_t<Number>& rhs) {
+	inline std::pair<bool,Number> linearDependent(const vector_t<Number>& lhs, const vector_t<Number>& rhs) {
 		unsigned firstNonZeroPos = 0;
 		if(lhs.nonZeros() == 0 || rhs.nonZeros() == 0){
 			return std::make_pair(true,0);
@@ -288,3 +288,5 @@ namespace std {
 	inline mpq_class max(const mpq_class& x, const mpq_class& y) {return ( x > y ? x : y);}
 
 } // namespace std
+
+#include "adaptions_eigen_double.h"
