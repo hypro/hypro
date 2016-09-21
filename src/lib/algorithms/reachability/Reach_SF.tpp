@@ -302,7 +302,7 @@ namespace hypro {
 					if (mBloatingFactor != 0){
 						SupportFunction<Number> temp = SupportFunction<Number>(totalBloating);
 						nextSegment = autonomPart.minkowskiSum(temp);
-                                                nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup)->getParameterSet());
+                                                nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup)->getParameterSet(1).first, boost::get<2>(initialSetup)->getParameterSet(1).second);
                                                 totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 					} else {
 						nextSegment = autonomPart;
