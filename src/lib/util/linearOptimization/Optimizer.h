@@ -83,6 +83,15 @@ namespace hypro {
 			#endif
 		}
 
+		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants) :
+			mConstraintMatrix(constraints),
+			mConstraintVector(constants),
+			mInitialized(false),
+			mConstraintsSet(false)
+		{
+			updateConstraints();
+		}
+
 		~Optimizer() {
 			deleteArrays();
 			glp_delete_prob(lp);

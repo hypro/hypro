@@ -36,6 +36,8 @@ class PolytopeSupportFunction {
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
 
+	Optimizer<Number> mOpt;
+
 	unsigned mDimension;
 
   public:

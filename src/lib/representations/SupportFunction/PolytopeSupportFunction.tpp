@@ -19,7 +19,7 @@ namespace hypro {
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
-	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mDimension(mConstraints.cols()) {
+	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(constraints,constraintConstants), mDimension(mConstraints.cols()) {
 	//this->removeRedundancy();
 }
 
@@ -36,6 +36,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
+	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 	//this->removeRedundancy();
 }
 
@@ -85,11 +86,12 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 			facets.clear();
 		}
 	}
+	mOpt(mConstraints,mConstraintConstants);
 }
 
 template <typename Number>
 PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
-	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mDimension(mConstraints.cols() ) {
+	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(mConstraints,mConstraintConstants), mDimension(mConstraints.cols() ) {
 }
 
 template <typename Number>
@@ -100,6 +102,7 @@ template <typename Number>
 PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(const PolytopeSupportFunction<Number>& _orig){
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
+    this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
     this->mDimension = _orig.mDimension;
 }
 
@@ -248,10 +251,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		}
 	}
 
-	Optimizer<Number> opt;
-	opt.setMatrix(mConstraints);
-	opt.setVector(mConstraintConstants);
-	EvaluationResult<Number> res(opt.evaluate(l));
+	EvaluationResult<Number> res(mOpt.evaluate(l));
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
@@ -292,11 +292,8 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 		return res;
 	}
 
-	Optimizer<Number> opt;
-	opt.setMatrix(mConstraints);
-	opt.setVector(mConstraintConstants);
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.emplace_back(opt.evaluate( _A.row( index ) ));
+		res.emplace_back(mOpt.evaluate( _A.row( index ) ));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;
@@ -323,10 +320,7 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 
 template <typename Number>
 bool PolytopeSupportFunction<Number>::empty() const {
-	Optimizer<Number> opt;
-	opt.setMatrix(mConstraints);
-	opt.setVector(mConstraintConstants);
-	return !opt.checkConsistency();
+	return !mOpt.checkConsistency();
 }
 
 template <typename Number>
@@ -338,11 +332,8 @@ void PolytopeSupportFunction<Number>::print() const{
 template<typename Number>
 void PolytopeSupportFunction<Number>::removeRedundancy() {
 	if(mConstraints.rows() > 1){
-		Optimizer<Number> opt;
-		opt.setMatrix(this->mConstraints);
-		opt.setVector(this->mConstraintConstants);
 
-		std::vector<std::size_t> redundant = opt.redundantConstraints();
+		std::vector<std::size_t> redundant = mOpt.redundantConstraints();
 		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
 		if(!redundant.empty()){
@@ -361,6 +352,7 @@ void PolytopeSupportFunction<Number>::removeRedundancy() {
 			assert(insertionIndex == -1);
 			mConstraints = newConstraints;
 			mConstraintConstants = newConstants;
+			mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 		}
 		assert(redundant.empty());
 	}

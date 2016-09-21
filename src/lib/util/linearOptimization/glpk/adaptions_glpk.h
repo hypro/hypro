@@ -18,6 +18,16 @@ namespace hypro {
 
 	template<typename Number>
 	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, matrix_t<Number> constraints, vector_t<Number> constants);
+
+	// specializations
+	template<>
+	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants);
+
+	template<>
+	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<double>& constraints, const vector_t<double>& , const Point<double>& point);
+
+	template<>
+	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, matrix_t<double> constraints, vector_t<double> constants);
 } // namespace hypro
 
 #include "adaptions_glpk.tpp"
