@@ -171,7 +171,7 @@ namespace reachability {
 					nextSegment = autonomPart;
 				}
 #endif
-				//nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+				nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
 				nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
