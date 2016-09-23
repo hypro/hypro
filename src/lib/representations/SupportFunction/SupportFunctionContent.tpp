@@ -188,7 +188,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters
+SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, std::shared_ptr<const lintrafoParameters<Number>> _parameters
 			, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
@@ -269,6 +269,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 			delete mEllipsoid;
 			break;
 		default:
+			assert(false);
 			break;
 	}
 }
@@ -934,7 +935,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::linearTransformation(
-	  const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const {
+	  std::shared_ptr<lintrafoParameters<Number>> parameters ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
 		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), parameters, SF_TYPE::LINTRAFO ) );
 	obj->pThis = obj;

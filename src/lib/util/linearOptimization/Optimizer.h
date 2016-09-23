@@ -65,7 +65,8 @@ namespace hypro {
 			mConstraintMatrix(),
 			mConstraintVector(),
 			mInitialized(false),
-			mConstraintsSet(false)
+			mConstraintsSet(false),
+			mConsistencyChecked(false)
 		{
 			#ifdef VERIFY_RESULT
 			struct stat buffer;
@@ -87,7 +88,8 @@ namespace hypro {
 			mConstraintMatrix(constraints),
 			mConstraintVector(constants),
 			mInitialized(false),
-			mConstraintsSet(false)
+			mConstraintsSet(false),
+			mConsistencyChecked(false)
 		{
 			updateConstraints();
 		}

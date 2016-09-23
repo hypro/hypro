@@ -43,7 +43,7 @@ struct trafoContent {
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
 
-	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters )
+	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>> _parameters )
 		: origin( _origin ), parameters( _parameters ), currentExponent(1) {
 #define USE_LIN_TRANS_REDUCTION
 #ifdef USE_LIN_TRANS_REDUCTION
@@ -63,7 +63,8 @@ struct trafoContent {
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}
-				assert(origin.get()->type() != SF_TYPE::LINTRAFO || (origin.get()->linearTrafoParameters()->parameters == this->parameters && origin.get()->linearTrafoParameters()->currentExponent >= currentExponent) );
+				// Note: The following assertion does not hold in combination with the current reduction techniques.
+				//assert(origin.get()->type() != SF_TYPE::LINTRAFO || (origin.get()->linearTrafoParameters()->parameters == this->parameters && origin.get()->linearTrafoParameters()->currentExponent >= currentExponent) );
 			}
 		} while (reduced == true);
 #endif
@@ -157,7 +158,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>>& _parameters, SF_TYPE _type );
+	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>> _parameters, SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
@@ -240,7 +241,7 @@ class SupportFunctionContent {
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<unsigned>& dimensions) const;
-	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( const std::shared_ptr<const lintrafoParameters<Number>>& parameters ) const;
+	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( std::shared_ptr<lintrafoParameters<Number>> parameters ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> intersect( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;

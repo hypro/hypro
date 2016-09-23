@@ -499,36 +499,6 @@ void VPolytopeT<Number, Converter>::removeRedundancy() {
 	}
 }
 
-template<typename Number, typename Converter>
-void VPolytopeT<Number, Converter>::reduceNumberRepresentation(unsigned limit) const {
-	if(!mVertices.empty()) {
- 		// determine barycenter to set rounding directions
-		unsigned dimension = mVertices.begin()->rawCoordinates().rows();
-		vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
-		for(const auto& vertex : mVertices) {
-			barycenter = barycenter + (vertex.rawCoordinates()/mVertices.size());
-		}
-
-		for(auto& vertex : mVertices) {
-			vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
-			for(unsigned d = 0; d < dimension; ++d) {
-				assert(d < vertex.dimension());
-				if(carl::getDenom(vertex.at(d)) > limit) {
-					Number u = carl::getDenom(vertex.at(d))/(carl::getDenom(vertex.at(d)) - Number(limit));
-					Number roundedNumerator;
-					Number oldNumerator = carl::getNum(vertex.at(d));
-					if(roundingDirections(d) > 0) // round towards infinity
-						roundedNumerator = carl::ceil( Number(oldNumerator - (oldNumerator/u)) );
-					else // round towards -infinity
-						roundedNumerator = carl::floor( Number(oldNumerator - (oldNumerator/u)) );
-
-					vertex[d] = roundedNumerator / Number(limit);
-				}
-			}
-		}
-	}
-}
-
 template <typename Number, typename Converter>
 void VPolytopeT<Number, Converter>::updateNeighbors() {
 	std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mVertices ).second;
@@ -667,7 +637,8 @@ bool VPolytopeT<Number, Converter>::abovePlanes(const vector_t<Number>& vertex, 
 template<typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
-		if(vertex.dot(normals.row(rowIndex)) != offsets(rowIndex)){
+		// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
+		if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
 			return false;
 		}
 	}
