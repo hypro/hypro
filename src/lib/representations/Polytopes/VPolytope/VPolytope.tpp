@@ -517,103 +517,6 @@ void VPolytopeT<Number, Converter>::updateNeighbors() {
  * Auxiliary functions
  **************************************************************************/
 
-//template <typename Number, typename Converter>
-//const typename VPolytopeT<Number, Converter>::Fan &VPolytopeT<Number, Converter>::calculateFan() const {
-//	if ( !mFanSet ) {
-//		std::vector<Facet<Number>> facets = convexHull( mVertices ).first;
-//		std::set<Point<Number>> preresult;
-//		for ( unsigned i = 0; i < facets.size(); i++ ) {
-//			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
-//				preresult.insert( facets[i].vertices().at( j ) );
-//			}
-//		}
-//		polytope::Fan<Number> fan;
-//		for ( auto &point : preresult ) {
-//			polytope::Cone<Number> *cone = new polytope::Cone<Number>();
-//			for ( unsigned i = 0; i < facets.size(); i++ ) {
-//				for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
-//					if ( point == facets[i].vertices().at( j ) ) {
-//						std::vector<Ridge<Number>> ridges = getRidges( facets[i] );
-//						for ( unsigned m = 0; m < ridges.size(); m++ ) {
-//							if ( checkInsideRidge( ridges[m], point ) ) {
-//								std::vector<Facet<Number>> conefacets = shareRidge( facets, ridges[m] );
-//
-//								matrix_t<Number> matrix = matrix_t<Number>( conefacets.size(), point.size() );
-//								for ( unsigned k = 1; k < conefacets.size(); k++ ) {
-//									for ( unsigned l = 0; l < conefacets[k].getNormal().size(); l++ ) {
-//										matrix( k, l ) = conefacets[k].getNormal()( l );
-//									}
-//								}
-//
-//								for ( unsigned j = 0; j < point.size(); j++ ) {
-//									matrix( 0, j ) = 1;
-//
-//									if ( matrix.fullPivLu().rank() == point.size() ) {
-//										break;
-//									} else {
-//										matrix( 0, j ) = 0;
-//									}
-//								}
-//								vector_t<Number> b = vector_t<Number>::Zero( conefacets.size() );
-//								b( 0 ) = 1;
-//								vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
-//
-//								cone->add( std::shared_ptr<Halfspace<Number>>(
-//									  new Halfspace<Number>( result, result.dot( point.rawCoordinates() ) ) ) );
-//								// cone->add(std::make_shared<Halfspace<Number>>(Halfspace<Number>(result,
-//								// result.dot(point.rawCoordinates()))));
-//							}
-//						}
-//					}
-//				}
-//			}
-//			fan.add( cone );
-//		}
-//		mFanSet = true;
-//		mFan = fan;
-//	}
-//}
-
-//template <typename Number, typename Converter>
-//const typename VPolytopeT<Number, Converter>::Cone &VPolytopeT<Number, Converter>::calculateCone( const Point<Number> &vertex ) {
-	// set up glpk
-	//glp_prob *cone;
-	//cone = glp_create_prob();
-	//glp_set_obj_dir( cone, GLP_MIN );
-//
-//	//typename polytope::Cone<Number>::vectors vectors;
-//	//for ( auto &cone : mFan.get() ) {
-//	//	vectors.insert( vectors.end(), cone.begin(), cone.end() );
-//	//}
-//	//unsigned numVectors = vectors.size();
-//	//unsigned elements = this->dimension() * numVectors;
-//
-//	//glp_add_cols( cone, numVectors );
-//	//glp_add_rows( cone, this->dimension() );
-//
-//	//int ia[elements];
-//	//int ja[elements];
-//	//double ar[elements];
-//	//unsigned pos = 1;
-//
-//	//for ( unsigned i = 1; i <= this->dimension(); ++i ) {
-//	//	for ( unsigned j = 1; j <= numVectors; ++j ) {
-//	//		ia[pos] = i;
-//	//		ja[pos] = j;
-//	//		ar[pos] = carl::toDouble(vectors.at( j ).at( i ));
-//	//		++pos;
-//	//	}
-//	//}
-//	//assert( pos <= elements );
-//
-//	//glp_load_matrix( cone, elements, ia, ja, ar );
-	//glp_simplex( cone, NULL );
-
-	// TODO output & result interpretation
-
-	// glp_delete_prob(cone);
-//}
-
 template<typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
@@ -628,17 +531,6 @@ template<typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
 		if(vertex.dot(normals.row(rowIndex)) < offsets(rowIndex)){
-			return false;
-		}
-	}
-	return true;
-}
-
-template<typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
-	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
-		// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
-		if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
 			return false;
 		}
 	}

@@ -119,7 +119,7 @@ namespace hypro {
 				}
 			}
 
-			boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> initialSetup = computeFirstSegment(_state);
+			boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 			std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
@@ -676,7 +676,7 @@ namespace hypro {
 		}
 
 		template<typename Number>
-		boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>> Reach<Number,SupportFunction<Number>>::computeFirstSegment( const State<Number>& _state ) const {
+		boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>> Reach<Number,SupportFunction<Number>>::computeFirstSegment( const State<Number>& _state ) const {
 			assert(!_state.timestamp.isUnbounded());
 			// check if initial Valuation fulfills Invariant
 			// check discrete invariant first
@@ -723,7 +723,7 @@ namespace hypro {
 #ifdef REACH_DEBUG
 					//std::cout << "Valuation violates discrete invariant." << std::endl;
 #endif
-					return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(false);
+					return boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>>(false);
 				}
 			}
 
@@ -753,14 +753,14 @@ namespace hypro {
 				trafoMatrixResized = trafoMatrix.block(0,0,rows -1 ,cols -1);
 				translation.conservativeResize( rows - 1 );
 
-				std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(trafoMatrixResized, translation);
+				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(trafoMatrixResized, translation);
 
 				// if the location has no flow, stop computation and exit.
 				if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
 				   translation == vector_t<Number>::Zero(translation.rows()) ) {
 					//std::cout << "Avoid further computation as the flow is zero." << std::endl;
 					validState.set = initialPair.second;
-					return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
+					return boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
 				}
 
 				SupportFunction<Number> deltaValuation = initialPair.second.linearTransformation( parameters );
@@ -960,10 +960,10 @@ namespace hypro {
 				assert(firstSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 				validState.set = fullSegment;
 				validState.timestamp = carl::Interval<Number>(Number(0),mSettings.timeStep);
-				return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
+				return boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>>(initialPair.first, validState, parameters);
 			} // if set does not satisfy the invariant, return false
 			else {
-				return boost::tuple<bool, State<Number>, std::shared_ptr<const lintrafoParameters<Number>>>(false);
+				return boost::tuple<bool, State<Number>, std::shared_ptr<lintrafoParameters<Number>>>(false);
 			}
 		}
 

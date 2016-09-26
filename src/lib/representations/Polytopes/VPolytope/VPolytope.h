@@ -206,7 +206,28 @@ class VPolytopeT {
 	 **************************************************************************/
 	static bool belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
 	static bool abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
-	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
+
+	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
+	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+			// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
+			if( vertex.dot(normals.row(rowIndex)) != offsets(rowIndex) ){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
+	static bool insidePlanes(const vector_t<double>& vertex, const matrix_t<double>& normals, const vector_t<double>& offsets) {
+		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+			// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
+			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/***************************************************************************
 	 * Operators

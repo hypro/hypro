@@ -126,7 +126,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 
 	matrix_t<Number> tmpTrafo = (flow*flow*trafoMatrix).block(0,0,dim-1,dim-1);
 	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
-	std::shared_ptr<const lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(tmpTrafo, tmpTrans);
+	std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(tmpTrafo, tmpTrans);
 	SupportFunction<Number> tmp = initialSet.linearTransformation( parameters );
 	auto b2 = Converter<Number>::toBox(tmp);
 	b2 = b2.makeSymmetric();

@@ -50,7 +50,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
 	plotter.rSettings().cummulative = false;
 
-
+	/*
 	// bad states plotting
 	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
 	for(const auto& state : badStateMapping) {
@@ -65,13 +65,11 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		for(const auto& segment : flowpipePair.second){
 			std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
 			switch (type) {
-				/*
-				case hypro::representation_name::support_function:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
-					break;
-				}
-				*/
+				// case hypro::representation_name::support_function:{
+				// 	unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
+				// 	plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+				// 	break;
+				// }
 				default:
 					unsigned tmp = plotter.addObject(segment.vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
@@ -83,7 +81,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	plotter.plot2d();
 	plotter.plotGen();
 	//plotter.plotTex();
-
+	*/
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
 #endif
@@ -100,17 +98,17 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){
+
 		case 3: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
-
             case 2: {
 			using Representation = hypro::HPolytope <Number>;
 			std::cout << "Using a h-polytope representation." << std::endl;
@@ -124,9 +122,9 @@ int main(int argc, char** argv) {
 			break;
 		}
 		default:{
-			using Representation = hypro::SupportFunction<Number>;
-			std::cout << "Using a support function representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
+			using Representation = hypro::Box<Number>;
+			std::cout << "Using a box representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 		}
 
 	}
