@@ -59,21 +59,20 @@ namespace hypro
         // the number of neighbors is 2^(dimension) - 1
         int nrofNeighbors = (pow(2, dim) - 1);
 
-        Point<int>::coordinateMap coordinates, pointCoordinates = p.coordinates();
+        vector_t<int> coordinates, pointCoordinates = p.rawCoordinates();
 
         // iterate through all neighbors
         for (int neighborNr = 1; neighborNr <= nrofNeighbors; neighborNr++) {
             // then iterate through all dimensions
-            int i = 0;
-            for (auto& pointIt : pointCoordinates) {
+            for (unsigned i = 0; i < pointCoordinates.rows(); ++i) {
                 // look if the bit of the current coordinate is set
                 // thus the first point will have 1 less in every second dimension,
                 // the second point will have 1 less in every fourth dimension etc.
                 if ((neighborNr >> i++) & 1) {
-                    coordinates[pointIt.first] = pointIt.second - 1;
+                    coordinates(i) = pointCoordinates(i) - 1;
                 }
                 else {
-                    coordinates[pointIt.first] = pointIt.second;
+                    coordinates(i) = pointCoordinates(i);
                 }
             }
             Point<int> neighbor = Point<int>(coordinates);

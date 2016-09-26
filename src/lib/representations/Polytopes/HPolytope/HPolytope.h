@@ -286,7 +286,7 @@ public:
 			std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
 			#endif
 			// find maximal value
-			Number largest = 0;
+			Number largest = Number(0);
 			mHPlanes.at(planeIndex).makeInteger();
 			#ifdef HPOLY_DEBUG_MSG
 			std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
@@ -305,14 +305,14 @@ public:
 				#endif
 				vector_t<Number> newNormal(mDimension);
 				for(unsigned i = 0; i < mDimension; ++i){
-					newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*limit));
-					assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= 1);
+					newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));
+					assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= Number(1));
 					assert(carl::isInteger(newNormal(i)));
-					assert(newNormal(i) <= limit);
+					assert(newNormal(i) <= Number(limit));
 				}
 				mHPlanes.at(planeIndex).setNormal(newNormal);
 				Number newOffset = mHPlanes.at(planeIndex).offset();
-				newOffset = carl::ceil(Number((newOffset/largest)*limit));
+				newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));
 				for(const auto& vertex : originalVertices) {
 					Number tmp = newNormal.dot(vertex.rawCoordinates());
 					if(tmp > newOffset){

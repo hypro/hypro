@@ -48,25 +48,11 @@ class Vertex {
 
 	/**
 	 *
-	 * @param coordinates
-	 * @param color
-	 */
-	explicit Vertex( const typename Point<Number>::coordinateMap& coordinates, bool color = false )
-		: mPoint( coordinates ), mColor( color ) {}
-
-	/**
-	 *
 	 * @param p
 	 * @param color
 	 */
 	Vertex( const Point<Number>& p, bool color = false ) : mPoint( p ), mColor( color ) {}
-
-	/**
-	 *
-	 * @param coordinates
-	 * @param color
-	 */
-	explicit Vertex( std::initializer_list<Number> coordinates, bool color = false ) : mPoint( coordinates ), mColor( color ) {}
+	Vertex( const vector_t<Number>& p, bool color = false ) : mPoint( p ), mColor( color ) {}
 
 	/**
 	 *

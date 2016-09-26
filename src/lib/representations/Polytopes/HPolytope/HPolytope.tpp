@@ -149,8 +149,8 @@ bool HPolytopeT<Number, Converter>::empty() const {
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
-	Halfspace<Number> a({1},-1);
-	Halfspace<Number> b({-1},-1);
+	Halfspace<Number> a({Number(1)},Number(-1));
+	Halfspace<Number> b({Number(-1)},Number(-1));
 	HalfspaceVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
@@ -497,7 +497,7 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( const Point<Number> &point )
 template <typename Number, typename Converter>
 EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty())
-		return EvaluationResult<Number>( 1, INFTY );
+		return EvaluationResult<Number>( Number(1), INFTY );
 
 	//reduceNumberRepresentation();
 

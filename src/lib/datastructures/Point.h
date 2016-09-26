@@ -62,7 +62,6 @@ class Point {
 	 * Constructs a point with the passed coordinates
              * @param coordinates
 	 */
-	explicit Point( const coordinateMap& _coordinates );
 	explicit Point( const vector_t<Number>& _vector );
 	explicit Point( vector_t<Number>&& _vector );
 

@@ -26,23 +26,10 @@ protected:
 		pool.clear();
 		x = pool.newCarlVariable();
 		y = pool.newCarlVariable();
-		// p1
-		typename Point<Number>::coordinateMap coordinates1;
-		coordinates1.insert( std::make_pair(x, Number(2)) );
-		coordinates1.insert( std::make_pair(y, Number(5)) );
-		p1 = Point<Number>(coordinates1);
 
-		// p2
-		typename Point<Number>::coordinateMap coordinates2;
-		coordinates2.insert( std::make_pair(x, Number(7)) );
-		coordinates2.insert( std::make_pair(y, Number(8)) );
-		p2 = Point<Number>(coordinates2);
-
-		// p3
-		typename Point<Number>::coordinateMap coordinates3;
-		coordinates3.insert( std::make_pair(x, Number(-9)) );
-		coordinates3.insert( std::make_pair(y, Number(13)) );
-		p3 = Point<Number>(coordinates3);
+		p1 = Point<Number>({Number(2),Number(5)});
+        p2 = Point<Number>({Number(7),Number(8)});
+        p3 = Point<Number>({Number(-9),Number(-13)});
 	}
 
 	virtual void TearDown()

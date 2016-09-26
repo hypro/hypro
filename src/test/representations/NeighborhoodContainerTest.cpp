@@ -30,25 +30,13 @@ protected:
 		c = pool.newCarlVariable();
 		d = pool.newCarlVariable();
         // p1
-        typename Point<int>::coordinateMap coordinates1;
-        coordinates1.insert( std::make_pair(a, 2) );
-        coordinates1.insert( std::make_pair(b, 5) );
-        p1 = Point<int>(coordinates1);
+        p1 = Point<int>({2,5});
 
         // p2
-        typename Point<int>::coordinateMap coordinates2;
-        coordinates2.insert( std::make_pair(a, 7) );
-        coordinates2.insert( std::make_pair(b, 8) );
-        coordinates2.insert( std::make_pair(c, 3) );
-        p2 = Point<int>(coordinates2);
+        p2 = Point<int>({7,8,3});
 
         // p3
-        typename Point<int>::coordinateMap coordinates3;
-        coordinates3.insert( std::make_pair(a, 2) );
-        coordinates3.insert( std::make_pair(b, 7) );
-        coordinates3.insert( std::make_pair(c, 9) );
-        coordinates3.insert( std::make_pair(d, -13) );
-        p3 = Point<int>(coordinates3);
+        p3 = Point<int>({2,7,9,-13});
     }
 
     virtual void TearDown()

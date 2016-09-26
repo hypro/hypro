@@ -49,7 +49,7 @@ class Halfspace {
 		if(!mIsInteger){
 			Number scaling = Number(carl::getDenom(mScalar));
 			for(unsigned i = 0; i < mNormal.rows(); ++i) {
-				scaling = scaling * carl::getDenom(mNormal(i));
+				scaling = scaling * Number(carl::getDenom(mNormal(i)));
 			}
 
 			mScalar = mScalar*scaling;

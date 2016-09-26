@@ -23,7 +23,10 @@ typedef ::testing::Types<
 	#ifdef USE_CLN_NUMBERS
 	cln::cl_RA,
 	#endif
-	mpq_class
+	mpq_class,
+	double
+	//carl::FLOAT_T<double>,
+	//carl::FLOAT_T<mpq_class>
 > allTypes;
 
 typedef ::testing::Types<

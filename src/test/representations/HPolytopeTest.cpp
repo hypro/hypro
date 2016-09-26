@@ -12,15 +12,15 @@ protected:
 	virtual void SetUp()
 	{
 		// A rectangle
-		Halfspace<Number> hp1({1,0},2);
-		Halfspace<Number> hp2({0,1},2);
-		Halfspace<Number> hp3({-1,0},2);
-		Halfspace<Number> hp4({0,-1},2);
+		Halfspace<Number> hp1({Number(1),Number(0)},Number(2));
+		Halfspace<Number> hp2({Number(0),Number(1)},Number(2));
+		Halfspace<Number> hp3({Number(-1),Number(0)},Number(2));
+		Halfspace<Number> hp4({Number(0),-Number(1)},Number(2));
 
 		// A triangle
-		Halfspace<Number> hp5({1,1},1);
-		Halfspace<Number> hp6({-1,1},1);
-		Halfspace<Number> hp7({0,-1},1);
+		Halfspace<Number> hp5({Number(1),Number(1)},Number(1));
+		Halfspace<Number> hp6({Number(-1),Number(1)},Number(1));
+		Halfspace<Number> hp7({Number(0),Number(-1)},Number(1));
 
 		planes1.push_back(hp1);
 		planes1.push_back(hp2);
@@ -130,7 +130,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 {
 	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
-	Halfspace<TypeParam> p1({1,1}, 4);
+	Halfspace<TypeParam> p1({TypeParam(1),TypeParam(1)}, TypeParam(4));
 	hpt1.insert(p1);
 
 	EXPECT_TRUE(hpt1.hasConstraint(p1));
@@ -139,7 +139,6 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 TYPED_TEST(HPolytopeTest, Union)
 {
-	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 	HPolytope<TypeParam> res = hpt1.unite(hpt2);
@@ -153,63 +152,55 @@ TYPED_TEST(HPolytopeTest, Union)
 		EXPECT_TRUE(res.contains(vertex));
 	}
 
-	std::cout<< "Part 2 starting: "	<< std::endl;
-			  std::vector<Halfspace<TypeParam>> ps3;
-			  Halfspace<TypeParam> p01 = Halfspace<TypeParam>({0,-1,0},1);
-			  Halfspace<TypeParam> p02 = Halfspace<TypeParam>({0,1,0},-3);
-			  Halfspace<TypeParam> p03 = Halfspace<TypeParam>({-1,0,0},1);
-			  Halfspace<TypeParam> p04 = Halfspace<TypeParam>({1,0,0},-3);
-			  Halfspace<TypeParam> p05 = Halfspace<TypeParam>({0,0,-1},1);
-			  Halfspace<TypeParam> p06 = Halfspace<TypeParam>({0,0,1},-3);
+	std::vector<Halfspace<TypeParam>> ps3;
+	Halfspace<TypeParam> p01 = Halfspace<TypeParam>({TypeParam(0),TypeParam(-1),TypeParam(0)},TypeParam(1));
+	Halfspace<TypeParam> p02 = Halfspace<TypeParam>({TypeParam(0),TypeParam(1),TypeParam(0)},TypeParam(-3));
+	Halfspace<TypeParam> p03 = Halfspace<TypeParam>({TypeParam(-1),TypeParam(0),TypeParam(0)},TypeParam(1));
+	Halfspace<TypeParam> p04 = Halfspace<TypeParam>({TypeParam(1),TypeParam(0),TypeParam(0)},TypeParam(-3));
+	Halfspace<TypeParam> p05 = Halfspace<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(-1)},TypeParam(1));
+	Halfspace<TypeParam> p06 = Halfspace<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(1)},TypeParam(-3));
 
-			  ps3.push_back(p01);
-			  ps3.push_back(p02);
-			  ps3.push_back(p03);
-			  ps3.push_back(p04);
-			  ps3.push_back(p05);
-			  ps3.push_back(p06);
+	ps3.push_back(p01);
+	ps3.push_back(p02);
+	ps3.push_back(p03);
+	ps3.push_back(p04);
+	ps3.push_back(p05);
+	ps3.push_back(p06);
 
-			  HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
+	HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
 
-			  std::vector<Halfspace<TypeParam>> ps4;
-			  Halfspace<TypeParam> p07 = Halfspace<TypeParam>({0,-1,0},3);
-			  Halfspace<TypeParam> p08 = Halfspace<TypeParam>({0,1,0},-5);
-			  Halfspace<TypeParam> p09 = Halfspace<TypeParam>({-1,0,0},3);
-			  Halfspace<TypeParam> p10 = Halfspace<TypeParam>({1,0,0},-5);
-
-
-			  ps4.push_back(p05);
-			  ps4.push_back(p06);
-			  ps4.push_back(p07);
-			  ps4.push_back(p08);
-			  ps4.push_back(p09);
-			  ps4.push_back(p10);
+	std::vector<Halfspace<TypeParam>> ps4;
+	Halfspace<TypeParam> p07 = Halfspace<TypeParam>({TypeParam(0),TypeParam(-1),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p08 = Halfspace<TypeParam>({TypeParam(0),TypeParam(1),TypeParam(0)},TypeParam(-5));
+	Halfspace<TypeParam> p09 = Halfspace<TypeParam>({TypeParam(-1),TypeParam(0),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p10 = Halfspace<TypeParam>({TypeParam(1),TypeParam(0),TypeParam(0)},TypeParam(-5));
 
 
-			  HPolytope<TypeParam> pt4 = HPolytope<TypeParam>(ps4);
+	ps4.push_back(p05);
+	ps4.push_back(p06);
+	ps4.push_back(p07);
+	ps4.push_back(p08);
+	ps4.push_back(p09);
+	ps4.push_back(p10);
 
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 
-			  HPolytope<TypeParam> res2 = pt3.unite(pt4);
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			  for(auto& vertex : pt3.vertices()) {
-				  EXPECT_TRUE(res2.contains(vertex));
-			  }
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			  for(auto& vertex : pt4.vertices()) {
-				  EXPECT_TRUE(res2.contains(vertex));
-			  }
+	HPolytope<TypeParam> pt4 = HPolytope<TypeParam>(ps4);
 
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			  HPolytope<TypeParam> res3 = res2.unite(HPolytope<TypeParam>());
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			  for(auto& vertex : res3.vertices()) {
-				  EXPECT_TRUE(res2.contains(vertex));
-			  }
-			  std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			  for(auto& vertex : res2.vertices()) {
-				  EXPECT_TRUE(res3.contains(vertex));
-			  }  //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
+	HPolytope<TypeParam> res2 = pt3.unite(pt4);
+	for(auto& vertex : pt3.vertices()) {
+	  EXPECT_TRUE(res2.contains(vertex));
+	}
+	for(auto& vertex : pt4.vertices()) {
+	  EXPECT_TRUE(res2.contains(vertex));
+	}
+
+	HPolytope<TypeParam> res3 = res2.unite(HPolytope<TypeParam>());
+	for(auto& vertex : res3.vertices()) {
+	  EXPECT_TRUE(res2.contains(vertex));
+	}
+	for(auto& vertex : res2.vertices()) {
+	  EXPECT_TRUE(res3.contains(vertex));
+	}  //still needs HPolytope<TypeParam> to VPolytope conversion for higher dimensions !!!!
 }
 
 TYPED_TEST(HPolytopeTest, Evaluate)
@@ -237,7 +228,7 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 	dir(1) = 0;
 	EvaluationResult<TypeParam> res = poly.evaluate(dir);
 	ASSERT_EQ(SOLUTION::FEAS, res.errorCode);
-	ASSERT_EQ(1, res.supportValue);
+	ASSERT_EQ(TypeParam(1), res.supportValue);
 }
 
 TYPED_TEST(HPolytopeTest, LinearTransformation)
@@ -250,24 +241,10 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	A(1,0) = 3;
 	A(1,1) = 4;
 
-	std::cout << "linearTransformation begin." << std::endl;
 	HPolytope<TypeParam> res = hpt1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()));
-	std::cout << "linearTransformation end." << std::endl;
-	std::cout << "Linear Transformation result: " << res << std::endl;
-
-	std::cout << "Compute vertices for VPoly construction." << std::endl;
 	VPolytope<TypeParam> test(hpt1.vertices());
-	std::cout << "Test: " << test << std::endl;
-
-	std::cout << "Test linearTransformation begin." << std::endl;
 	test = test.linearTransformation(A,vector_t<TypeParam>::Zero(A.rows()));
-	std::cout << "Test linearTransformation end." << std::endl;
 
-	std::cout << "Res = " << res << std::endl;
-	std::cout << std::endl;
-	std::cout << "Res.vertices(): " << res.vertices() << std::endl;
-
-	std::cout << "Test: " << test << std::endl;
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));
 	}
@@ -284,15 +261,6 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 
 	HPolytope<TypeParam> res = hpt1.minkowskiSum(hpt2);
 
-	std::cout << "Result: " << std::endl << res << std::endl;
-
-	std::cout << "Result vertices: " << std::endl;
-	for(auto& vertex : res.vertices()) {
-		std::cout << vertex.rawCoordinates() << std::endl;
-	}
-
-	std::cout << "######" << std::endl;
-
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
 	//		std::cout << "Test: " << vector_t<TypeParam>(lhs+rhs).transpose() << std::endl;
@@ -300,16 +268,12 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 		}
 	}
 
-	std::cout << "######" << std::endl;
-
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
 	//		std::cout << "Test: " << vector_t<TypeParam>(TypeParam(0.99)*lhs+rhs).transpose() << std::endl;
 			EXPECT_TRUE(res.contains(TypeParam(carl::rationalize<TypeParam>(0.99))*lhs+rhs));
 		}
 	}
-
-	std::cout << "######" << std::endl;
 
 	vector_t<TypeParam> p1(2);
 	p1(0) = 3;
@@ -326,27 +290,19 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>(this->planes2);
 
-	std::cout << "Set up" << std::endl;
-
 	HPolytope<TypeParam> result = hpt1.intersect(hpt2);
-
-	std::cout << "A: " << hpt1 << std::endl;
-	std::cout << "B: " << hpt2 << std::endl;
-	std::cout << "Res: " << result << std::endl;
-
 
 	for(auto& plane : result.constraints()) {
 		EXPECT_TRUE(hpt1.hasConstraint(plane) || hpt2.hasConstraint(plane));
 	}
 
-	std::cout<< "Part 2 starting: "	<< std::endl;
 	std::vector<Halfspace<TypeParam>> ps3;
-	Halfspace<TypeParam> p01 = Halfspace<TypeParam>({0,-1,0},1);
-	Halfspace<TypeParam> p02 = Halfspace<TypeParam>({0,1,0},3);
-	Halfspace<TypeParam> p03 = Halfspace<TypeParam>({-1,0,0},1);
-	Halfspace<TypeParam> p04 = Halfspace<TypeParam>({1,0,0},3);
-	Halfspace<TypeParam> p05 = Halfspace<TypeParam>({0,0,-1},1);
-	Halfspace<TypeParam> p06 = Halfspace<TypeParam>({0,0,1},3);
+	Halfspace<TypeParam> p01 = Halfspace<TypeParam>({TypeParam(0),TypeParam(-1),TypeParam(0)},TypeParam(1));
+	Halfspace<TypeParam> p02 = Halfspace<TypeParam>({TypeParam(0),TypeParam(1),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p03 = Halfspace<TypeParam>({TypeParam(-1),TypeParam(0),TypeParam(0)},TypeParam(1));
+	Halfspace<TypeParam> p04 = Halfspace<TypeParam>({TypeParam(1),TypeParam(0),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p05 = Halfspace<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(-1)},TypeParam(1));
+	Halfspace<TypeParam> p06 = Halfspace<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(1)},TypeParam(3));
 
 	ps3.push_back(p01);
 	ps3.push_back(p02);
@@ -358,10 +314,10 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	HPolytope<TypeParam> pt3 = HPolytope<TypeParam>(ps3);
 
 	std::vector<Halfspace<TypeParam>> ps4;
-	Halfspace<TypeParam> p07 = Halfspace<TypeParam>({0,-1,0},3);
-	Halfspace<TypeParam> p08 = Halfspace<TypeParam>({0,1,0},5);
-	Halfspace<TypeParam> p09 = Halfspace<TypeParam>({-1,0,0},3);
-	Halfspace<TypeParam> p10 = Halfspace<TypeParam>({1,0,0},5);
+	Halfspace<TypeParam> p07 = Halfspace<TypeParam>({TypeParam(0),TypeParam(-1),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p08 = Halfspace<TypeParam>({TypeParam(0),TypeParam(1),TypeParam(0)},TypeParam(5));
+	Halfspace<TypeParam> p09 = Halfspace<TypeParam>({TypeParam(-1),TypeParam(0),TypeParam(0)},TypeParam(3));
+	Halfspace<TypeParam> p10 = Halfspace<TypeParam>({TypeParam(1),TypeParam(0),TypeParam(0)},TypeParam(5));
 
 
 	ps4.push_back(p05);
@@ -377,9 +333,7 @@ TYPED_TEST(HPolytopeTest, Intersection)
 	HPolytope<TypeParam> res2 = pt3.intersect(pt4);
 
 	for(auto& vertex : res2.vertices()) {
-		std::cout << "EXPECT_TRUE(pt3.contains(" << vertex <<  "))";
 	  EXPECT_TRUE(pt3.contains(vertex));
-	  std::cout << "EXPECT_TRUE(pt4.contains(" << vertex <<  "))";
 	  EXPECT_TRUE(pt4.contains(vertex));
 	}
 
@@ -393,18 +347,18 @@ TYPED_TEST(HPolytopeTest, Membership)
 {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 
-	Point<TypeParam> p1({0, 0});
+	Point<TypeParam> p1({TypeParam(0), TypeParam(0)});
 	EXPECT_TRUE(hpt1.contains(p1));
 
 	Point<TypeParam> p2({carl::rationalize<TypeParam>(1.5), carl::rationalize<TypeParam>(1.5)});
 	EXPECT_TRUE(hpt1.contains(p2));
 
-	Point<TypeParam> p3({-2,0});
+	Point<TypeParam> p3({TypeParam(-2),TypeParam(0)});
 	EXPECT_TRUE(hpt1.contains(p3));
 
-	Point<TypeParam> p4({2, 2});
+	Point<TypeParam> p4({TypeParam(2), TypeParam(2)});
 	EXPECT_TRUE(hpt1.contains(p4));
 
-	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), 0});
+	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), TypeParam(0)});
 	EXPECT_FALSE(hpt1.contains(p5));
 }

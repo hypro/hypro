@@ -47,17 +47,6 @@ Point<Number>::Point( std::vector<Number> _coordinates )
 }
 
 template <typename Number>
-Point<Number>::Point( const coordinateMap &_coordinates )
-	:  // mNeighbors(),
-	mHash(0),
-	mComposedOf() {
-	mCoordinates = vector_t<Number>( _coordinates.size() );
-	for ( auto &coordinatepair : _coordinates ) {
-		mCoordinates( hypro::VariablePool::getInstance().id( coordinatepair.first ) ) = coordinatepair.second;
-	}
-}
-
-template <typename Number>
 Point<Number>::Point( const vector_t<Number> &_vector )
 	: mCoordinates( _vector ),
 	mHash(0),

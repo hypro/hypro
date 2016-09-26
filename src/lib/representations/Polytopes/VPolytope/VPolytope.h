@@ -165,23 +165,23 @@ class VPolytopeT {
 
 	void removeRedundancy();
 
-	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
+	template<typename N = Number, carl::DisableIf< carl::is_float<N> > = carl::dummy>
 	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {
 		if(!mVertices.empty()) {
 	 		// determine barycenter to set rounding directions
 			unsigned dimension = mVertices.begin()->rawCoordinates().rows();
 			vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
 			for(const auto& vertex : mVertices) {
-				barycenter = barycenter + (vertex.rawCoordinates()/mVertices.size());
+				barycenter = barycenter + (vertex.rawCoordinates()/ Number(unsigned(mVertices.size())));
 			}
 			for(auto& vertex : mVertices) {
 				vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
 				for(unsigned d = 0; d < dimension; ++d) {
 					assert(d < vertex.dimension());
 					if(carl::getDenom(vertex.at(d)) > limit) {
-						Number u = carl::getDenom(vertex.at(d))/(carl::getDenom(vertex.at(d)) - Number(limit));
+						Number u = Number(carl::getDenom(vertex.at(d))/carl::getDenom(vertex.at(d))) - Number(limit);
 						Number roundedNumerator;
-						Number oldNumerator = carl::getNum(vertex.at(d));
+						Number oldNumerator = Number(carl::getNum(vertex.at(d)));
 						if(roundingDirections(d) > 0) // round towards infinity
 							roundedNumerator = carl::ceil( Number(oldNumerator - (oldNumerator/u)) );
 						else // round towards -infinity
@@ -194,9 +194,8 @@ class VPolytopeT {
 		}
 	}
 
-	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
+	template<typename N = Number, carl::EnableIf< carl::is_float<N> > = carl::dummy>
 	void reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const {}
-
 
 	void updateNeighbors();
 

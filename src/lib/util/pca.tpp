@@ -28,7 +28,7 @@ std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number
 	         mean += samples[i];
 	    }
 	    //computes the arithmetic mean of the sample points
-	    mean = mean.rawCoordinates()*( ((Number) 1)/sSize);
+	    mean = mean.rawCoordinates()*( ((Number) 1)/ Number(sSize));
 
 	    std::vector<Point<Number>> tSamples = samples;
 
@@ -47,7 +47,7 @@ std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number
 	    //computes the sample covariance matrix (represents the distribution of the samples)
 	    matrix_t<Number> covMatrix;
 		if(sSize > 1) {
-			covMatrix = ( ((Number) 1)/(sSize-1))*sMatrix*sMatrix.transpose();
+			covMatrix = ( ((Number) 1)/Number((sSize-1)))*sMatrix*sMatrix.transpose();
 		} else {
 			covMatrix = sMatrix*sMatrix.transpose();
 		}

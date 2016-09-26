@@ -190,16 +190,11 @@ TYPED_TEST(OrthogonalPolyhedronTest, Intersect)
 	OrthogonalPolyhedron<TypeParam> result;
 
 	VertexContainer<TypeParam> container;
-	typename Point<TypeParam>::coordinateMap coordinates;
 
-	coordinates[this->x] = 3; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-	coordinates[this->x] = 4; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), false);
-	coordinates[this->x] = 3; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), false);
-	coordinates[this->x] = 4; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), false);
+	container.insert(Point<TypeParam>({3,3}), true);
+	container.insert(Point<TypeParam>({4,3}), false);
+	container.insert(Point<TypeParam>({3,5}), false);
+	container.insert(Point<TypeParam>({4,5}), false);
 	OrthogonalPolyhedron<TypeParam> p3(container);
 
 	OrthogonalPolyhedron<TypeParam> expected(container);
@@ -212,19 +207,11 @@ TYPED_TEST(OrthogonalPolyhedronTest, Intersect)
 TYPED_TEST(OrthogonalPolyhedronTest, Hull)
 {
 	VertexContainer<TypeParam> container;
-	typename Point<TypeParam>::coordinateMap coordinates;
 
-	coordinates[this->x] = 3; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 3; coordinates[this->y] = 6;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 7; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 7; coordinates[this->y] = 6;
-	container.insert(Point<TypeParam>(coordinates), false);
+	container.insert(Point<TypeParam>({3,3}), true);
+	container.insert(Point<TypeParam>({3,6}), false);
+	container.insert(Point<TypeParam>({7,3}), false);
+	container.insert(Point<TypeParam>({7,6}), false);
 
 	OrthogonalPolyhedron<TypeParam> hull(container);
 	OrthogonalPolyhedron<TypeParam> result;
@@ -306,49 +293,21 @@ TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
 	OrthogonalPolyhedron<TypeParam> result;
 
 	VertexContainer<TypeParam> container;
-	typename Point<TypeParam>::coordinateMap coordinates;
 
-	coordinates[this->x] = 1; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 1; coordinates[this->y] = 4;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 2; coordinates[this->y] = 2;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 2; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 2; coordinates[this->y] = 4;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 2; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 3; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 3; coordinates[this->y] = 6;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 4; coordinates[this->y] = 2;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 4; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 5; coordinates[this->y] = 3;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 5; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), true);
-
-	coordinates[this->x] = 7; coordinates[this->y] = 5;
-	container.insert(Point<TypeParam>(coordinates), false);
-
-	coordinates[this->x] = 7; coordinates[this->y] = 6;
-	container.insert(Point<TypeParam>(coordinates), false);
+	container.insert(Point<TypeParam>({1,3}), true);
+	container.insert(Point<TypeParam>({1,4}), false);
+	container.insert(Point<TypeParam>({2,2}), true);
+	container.insert(Point<TypeParam>({2,3}), true);
+	container.insert(Point<TypeParam>({2,4}), true);
+	container.insert(Point<TypeParam>({2,5}), false);
+	container.insert(Point<TypeParam>({3,5}), true);
+	container.insert(Point<TypeParam>({3,6}), false);
+	container.insert(Point<TypeParam>({4,2}), false);
+	container.insert(Point<TypeParam>({4,3}), true);
+	container.insert(Point<TypeParam>({5,3}), false);
+	container.insert(Point<TypeParam>({5,5}), true);
+	container.insert(Point<TypeParam>({7,5}), false);
+	container.insert(Point<TypeParam>({7,6}), false);
 
 	OrthogonalPolyhedron<TypeParam> expected(container);
 

@@ -59,7 +59,7 @@ namespace hypro {
 
 		if( mConstraintMatrix.rows() == 0 ) {
 			// std::cout << "INFTY" << std::endl;
-			return EvaluationResult<Number>(0,vector_t<Number>::Zero(1), SOLUTION::INFTY);
+			return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
