@@ -227,7 +227,7 @@ public:
 	std::pair<bool, HPolytopeT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
 	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	HPolytopeT minkowskiSum( const HPolytopeT& rhs, bool oneWay = true ) const;
+	HPolytopeT minkowskiSum( const HPolytopeT& rhs, bool oneWay = false ) const;
 	HPolytopeT intersect( const HPolytopeT& rhs ) const;
 	HPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;

@@ -99,13 +99,10 @@ TYPED_TEST(HPolytopeTest, Corners)
 	}
 
 	corners = hpt2.vertices();
-	std::cout << "HPT2: " << hpt2 << std::endl;
 
 	for(const auto& corner : corners) {
 		EXPECT_TRUE(hpt2.isExtremePoint(corner));
 	}
-
-	std::cout << "Ping." << std::endl;
 
 	// test extremepoints
 	vector_t<TypeParam> p1(2);
@@ -113,22 +110,15 @@ TYPED_TEST(HPolytopeTest, Corners)
 	p1(1) = 0;
 	EXPECT_FALSE(hpt1.isExtremePoint(p1));
 
-	std::cout << "Ping." << std::endl;
-
 	// test overapproximation
 	HPolytope<TypeParam> reproduction(corners);
 
-	std::cout << "Ping LAST." << std::endl;
-
-
 	EXPECT_TRUE(hpt2.contains(reproduction));
-	std::cout << __func__ << std::endl;
 }
 
 
 TYPED_TEST(HPolytopeTest, Insertion)
 {
-	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	Halfspace<TypeParam> p1({TypeParam(1),TypeParam(1)}, TypeParam(4));
 	hpt1.insert(p1);
@@ -205,7 +195,6 @@ TYPED_TEST(HPolytopeTest, Union)
 
 TYPED_TEST(HPolytopeTest, Evaluate)
 {
-	std::cout << __func__ << std::endl;
 	matrix_t<TypeParam> A(4,2);
 	A(0,0) = 1;			//     1    1
 	A(0,1) = 1;			//     1    0
@@ -233,7 +222,6 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 
 TYPED_TEST(HPolytopeTest, LinearTransformation)
 {
-	std::cout << __func__ << std::endl;
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
 	matrix_t<TypeParam> A(2,2);
 	A(0,0) = 1;
@@ -263,14 +251,12 @@ TYPED_TEST(HPolytopeTest, MinkowskiSum)
 
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
-	//		std::cout << "Test: " << vector_t<TypeParam>(lhs+rhs).transpose() << std::endl;
 			EXPECT_TRUE(res.contains(lhs+rhs)); // Todo: Make this more restrictive
 		}
 	}
 
 	for(auto& lhs : hpt1.vertices()) {
 		for(auto& rhs : hpt2.vertices()) {
-	//		std::cout << "Test: " << vector_t<TypeParam>(TypeParam(0.99)*lhs+rhs).transpose() << std::endl;
 			EXPECT_TRUE(res.contains(TypeParam(carl::rationalize<TypeParam>(0.99))*lhs+rhs));
 		}
 	}
