@@ -103,8 +103,6 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	rotation(1,0) = -1;
 	rotation(1,1) = 0;
 
-	std::cout << "Rotation matrix: " << rotation << std::endl;
-
 	vector_t<TypeParam> v1Rot = rotation*(this->vec1);
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
 	vector_t<TypeParam> v3Rot = rotation*(this->vec3);

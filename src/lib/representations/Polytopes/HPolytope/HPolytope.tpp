@@ -667,13 +667,16 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
+	std::cout << __func__ << " of " << point << std::endl;
 	return this->contains( point.rawCoordinates() );
 }
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
 	for ( const auto &plane : mHPlanes ) {
-		if (plane.normal().dot( vec ) > plane.offset()) {
+		// The 2's complement check for equality is required to ensure double compatibility.
+		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) && plane.normal().dot( vec ) > plane.offset()) {
+			//std::cout << __func__ << " False, " << plane.normal().dot( vec ) << " > " << plane.offset() << " Almost equal: " << carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) << std::endl;
 			return false;
 		}
 	}

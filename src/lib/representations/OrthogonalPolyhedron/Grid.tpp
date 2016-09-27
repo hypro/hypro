@@ -499,12 +499,10 @@ Grid<Number> Grid<Number>::combine( const Grid<Number> &a, const Grid<Number> &b
 		std::vector<Number> bValues = b.inducedDimensionAt( d );
 
 		while ( !aValues.empty() ) {
-			std::cout << aValues.back() << std::endl;
 			res.addCoordinate( aValues.back(), d );
 			aValues.pop_back();
 		}
 		while ( !bValues.empty() ) {
-			std::cout << bValues.back() << std::endl;
 			res.addCoordinate( bValues.back(), d );
 			bValues.pop_back();
 		}

@@ -233,6 +233,16 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	VPolytope<TypeParam> test(hpt1.vertices());
 	test = test.linearTransformation(A,vector_t<TypeParam>::Zero(A.rows()));
 
+	std::cout << "Res vertices: " << std::endl;
+	for(const auto& vertex : res.vertices()) {
+		std::cout << vertex << std::endl;
+	}
+
+	std::cout << "Test vertices: " << std::endl;
+	for(const auto& vertex : test.vertices()) {
+		std::cout << vertex << std::endl;
+	}
+
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));
 	}
