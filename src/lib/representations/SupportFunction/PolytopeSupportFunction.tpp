@@ -86,7 +86,7 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 			facets.clear();
 		}
 	}
-	mOpt(mConstraints,mConstraintConstants);
+	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 }
 
 template <typename Number>
@@ -100,6 +100,7 @@ PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
 
 template <typename Number>
 PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(const PolytopeSupportFunction<Number>& _orig){
+	std::cout << __func__ << std::endl;
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
     this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);

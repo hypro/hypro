@@ -62,7 +62,7 @@ protected:
                 matrix_t<Number> generators2 = matrix_t<Number>(2,2);
                 generators2 << 0, 1, 1, 0;
                 zonotope2 = hypro::Zonotope<Number>(center2, generators2);
-                
+
                 //third zonotope (chapter 3 example)
                 //vector_t<Number> center3 = vector_t<Number>(2);
                 //center3 << 3, 3;
@@ -71,7 +71,7 @@ protected:
                 //generators3.col(1) << 1, 1;
                 //generators3.col(2) << 2, -1;
                 //zonotope3 = hypro::Zonotope<Number>(center3, generators3);
-                
+
                 //fourth zonotope (chapter 3 example)
                 //vector_t<Number> center4 = vector_t<Number>(2);
                 //center4 << 3, 3;
@@ -181,7 +181,7 @@ protected:
     hypro::Zonotope<Number> zonotope2;
     hypro::Zonotope<Number> zonotope3;
     hypro::Zonotope<Number> zonotope4;
-    
+
 
     typename hypro::HPolytope<Number>::HalfspaceVector planes;
     typename hypro::HPolytope<Number>::HalfspaceVector planes2;

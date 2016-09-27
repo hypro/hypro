@@ -24,8 +24,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		)
 	else()
 		add_executable(runRepresentationTests
-			#BoxTest.cpp
-			#ConverterTest.cpp
+			BoxTest.cpp
+			ConverterTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
 			NeighborhoodContainerTest.cpp

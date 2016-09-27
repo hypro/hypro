@@ -219,11 +219,6 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 	std::vector<hypro::Point<TypeParam>> cornersX = resX.vertices();
 
-	for(const auto& vertex : cornersX) {
-		std::cout << vertex << ", ";
-	}
-	std::cout << std::endl;
-
 	std::vector<hypro::Point<TypeParam>> originalCorners = b1.vertices();
 	std::vector<hypro::Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {

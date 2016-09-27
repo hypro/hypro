@@ -3,6 +3,16 @@
 namespace hypro {
 
 	template<typename Number>
+	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		mConstraintMatrix = orig.matrix();
+		mConstraintVector = orig.vector();
+		mConsistencyChecked = false;
+		mConstraintsSet = false;
+		mInitialized = false;
+		return *this;
+	}
+
+	template<typename Number>
 	const matrix_t<Number>& Optimizer<Number>::matrix() const {
 		return mConstraintMatrix;
 	}
@@ -236,6 +246,7 @@ namespace hypro {
 
 				glp_delete_prob(lp);
 				lp = glp_create_prob();
+
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 

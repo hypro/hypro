@@ -14,7 +14,7 @@ namespace hypro {
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionContent<Number> &_orig )
 	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
-	// std::cout << "Copy constructor, this->type:" << mType << std::endl;
+	std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
                     mEllipsoid = _orig.ellipsoid();
@@ -34,7 +34,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 			break;
 		}
 		case SF_TYPE::POLY: {
-			mPolytope = _orig.polytope();
+			mPolytope = new PolytopeSupportFunction<Number>(*_orig.polytope());
 			break;
 		}
 		case SF_TYPE::PROJECTION: {
@@ -278,7 +278,7 @@ template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
 	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
         // std::cout << "SupportFunctionContent Copy\n";
-	// std::cout << "Assignment, this->type:" << _other->type() << std::endl;
+	std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
                 case SF_TYPE::ELLIPSOID:
@@ -292,7 +292,8 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			mLinearTrafoParameters = _other->linearTrafoParameters();
 			break;
 		case SF_TYPE::POLY:
-			mPolytope = _other->polytope();
+			// explicitly invoke copy constructor to avoid pointer copy
+			mPolytope = new PolytopeSupportFunction<Number>(*_other->polytope());
 			break;
 		case SF_TYPE::PROJECTION:
 			mProjectionParameters = _other->projectionParameters();
