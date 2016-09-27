@@ -8,11 +8,11 @@
 #include "../../../flags.h"
 #ifdef HYPRO_USE_Z3
 #include <carl/util/Singleton.h>
+#include <carl/core/Relation.h>
 #include <thread>
 #include "z3Context.h"
 
 namespace hypro {
-
 
 	template<typename Number>
 	static z3::expr_vector createFormula(const matrix_t<Number>& _constraints, const vector_t<Number> _constants, z3Context& c, carl::Relation = carl::Relation::LEQ) {

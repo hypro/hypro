@@ -5,7 +5,7 @@
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> soplexOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
+	EvaluationResult<Number> soplexOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& ) {
 		soplex::SoPlex solver;
 
 		/* set the objective sense */

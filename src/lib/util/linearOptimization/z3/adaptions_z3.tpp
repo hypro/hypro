@@ -64,7 +64,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool z3CheckConsistency(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
-		z3::context c;
+		z3Context c;
 		z3::optimize z3Optimizer(c);
 
 		// create formula and objective
