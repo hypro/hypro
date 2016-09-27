@@ -81,13 +81,6 @@ else()
 	set(STATICLIB "SHARED")
 endif()
 
-#message(STATUS ${sources})
-#message(STATUS ${headers})
-
-#add_library(${PROJECT_NAME} ${STATICLIB}
-#	${sources}
-#)
-
 ########################################################################################
 #### EXPORT SETTINGS
 
@@ -122,8 +115,8 @@ else()
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 	)
-	message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
-	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	#message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
 endif()

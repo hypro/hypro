@@ -147,7 +147,7 @@ set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-load_library(hypro Boost 1.55.0 COMPONENTS program_options)
+#load_library(hypro Boost 1.55.0 COMPONENTS program_options)
 load_library(hypro carl 0)
 
 if(USE_PPL)
@@ -204,8 +204,6 @@ if(CLANG_TIDY)
 	set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
-
-message("hypro_LIBRARIES_DYNAMIC: " ${hypro_LIBRARIES_DYNAMIC})
 
 include_directories( src/lib )
 add_subdirectory(src)

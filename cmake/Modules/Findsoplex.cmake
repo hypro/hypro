@@ -25,9 +25,9 @@ find_package_handle_standard_args(soplex  FOUND_VAR soplex_FOUND
 set(soplex_LIBRARIES ${soplex_LIBRARY} )
 set(soplex_INCLUDE_DIRS ${soplex_INCLUDE_DIR} )
 
-message("FindSoplex: LIBRARIES: " ${soplex_LIBRARIES})
-message("FindSoplex: LIBRARY: " ${soplex_LIBRARY})
-message("FindSoplex: INCLUDE_DIRS: " ${soplex_INCLUDE_DIRS})
-message("FindSoplex: INCLUDE_DIR: " ${soplex_INCLUDE_DIR})
+#message("FindSoplex: LIBRARIES: " ${soplex_LIBRARIES})
+#message("FindSoplex: LIBRARY: " ${soplex_LIBRARY})
+#message("FindSoplex: INCLUDE_DIRS: " ${soplex_INCLUDE_DIRS})
+#message("FindSoplex: INCLUDE_DIR: " ${soplex_INCLUDE_DIR})
 
 mark_as_advanced(soplex_INCLUDE_DIR soplex_LIBRARY )
