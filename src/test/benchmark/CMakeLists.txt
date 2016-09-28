@@ -1,6 +1,5 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib ${include_dirs} )
-	link_directories(${CMAKE_BINARY_DIR}/lib)
+	include_directories(${GTEST_INCLUDE_DIR})
 
 	################################
 	# Unit Tests
@@ -14,8 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	target_link_libraries(runBenchmark
 							${PROJECT_NAME}
-							${GTEST_LIBRARIES}
-							${libraries})
+							${GTEST_LIBRARIES})
 
 	cotire(runBenchmark)
 

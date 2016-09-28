@@ -81,8 +81,17 @@ if(LOGGING_HYPRO)
 
 		add_dependencies(resources log4cplus)
 
-		set(LOG4CPLUS_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/src/resources/src/log4cplus/include;${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/include" PARENT_SCOPE)
-		set(LOG4CPLUS_LIBRARIES "${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/src/liblog4cplus.so.2.0.0;${CMAKE_BINARY_DIR}/src/resources/src/log4cplus-build/src/liblog4cplus.so.0" PARENT_SCOPE)
+		ExternalProject_Get_Property(log4cplus source_dir)
+		ExternalProject_Get_Property(log4cplus binary_dir)
+
+		message("source_dir: ${source_dir}")
+		message("binary_dir: ${binary_dir}")
+		message("shared library suffix: ${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
+		add_imported_library(log4cplus SHARED "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" "${binary_dir}/include")
+
+		set(LOG4CPLUS_INCLUDE_DIRS "${binary_dir}/include" PARENT_SCOPE)
+		set(LOG4CPLUS_LIBRARIES "${binary_dir}/src" PARENT_SCOPE)
 		set(LOG4CPLUS_FOUND "TRUE" PARENT_SCOPE)
 	endif()
 endif()

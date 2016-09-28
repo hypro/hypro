@@ -83,7 +83,7 @@ foreach( example ${EXAMPLES} )
 #    else()
         add_executable( ${example} EXCLUDE_FROM_ALL ${example}.cpp)
         # TODO: Attention, here we link dirty against boost programOptions
-        target_link_libraries( ${example} ${PROJECT_NAME} ${libraries} boost_program_options )
+        target_link_libraries( ${example} ${PROJECT_NAME})
 
         set( exampleFiles ${exampleFiles} ${example}.cpp )
 
@@ -99,7 +99,7 @@ endforeach( example )
 
 # ATTENTION: This is just used to test if all examples compile.
 add_executable( allExamples EXCLUDE_FROM_ALL ${exampleFiles} )
-target_link_libraries( allExamples ${PROJECT_NAME} ${libraries} )
+target_link_libraries( allExamples ${PROJECT_NAME} )
 
 if(${STATICLIB_SWITCH} STREQUAL "ON")
 	set_target_properties( allExamples PROPERTIES LINK_SEARCH_END_STATIC TRUE )
