@@ -189,7 +189,7 @@ class Point {
 		Number res = 0;
 		vector_t<Number> coord = _p.rawCoordinates();
 		for ( unsigned i = 0; i < _p.dimension(); ++i ) {
-			Number absolute = abs( coord( i ) );
+			Number absolute = coord(i) < 0 ? Number(-1)*coord(i) : coord(i); // workaround for abs
 			res = res > absolute ? res : absolute;
 		}
 		return res;

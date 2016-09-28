@@ -1,6 +1,5 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/src/lib ${hypro_INCLUDE_DIRS} )
-	link_directories(${CMAKE_BINARY_DIR}/lib)
+	include_directories(${GTEST_INCLUDE_DIR})
 
 	################################
 	# Unit Tests

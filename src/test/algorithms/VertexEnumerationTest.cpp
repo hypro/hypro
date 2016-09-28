@@ -99,7 +99,7 @@ public:
 
 
 
-	/*hypro::Dictionary<mpq_class> d = hypro::Dictionary<mpq_class>(v);
+	hypro::Dictionary<mpq_class> d = hypro::Dictionary<mpq_class>(v);
 	cout<<"\n test1 \n";
 	d.printDictionary();
 	hypro::VertexEnumeration<mpq_class> ev = hypro::VertexEnumeration<mpq_class>(v);
@@ -111,11 +111,11 @@ public:
 	cout<<"\n test2 \n";	ev.hypro::VertexEnumeration<mpq_class>::findFirstVertex(v);
 	cout<<d.selectDualBlandPivot(i,j,basisAux);
 	cout<<"\ni="<<i<<";j="<<j<<";";d.pivot(i,j);d.printDictionary();
-	*/
+
 	//cout<<"\n test3 \n";
 	//cout<<"\n"<< d.reverseDual(i,j,basisAux) <<"\n";
 
-	/*i=0;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	i=0;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
 	d.pivot(i,j);
 	d.printDictionary();
 	i=1;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
@@ -140,13 +140,9 @@ public:
 	cout<<"\n test4 \n";
 
 
-	//ev.enumerateVertices();*/
+	//ev.enumerateVertices();
 
 
-
-
-
-	/*
 	hypro::vector_t<mpq_class> v1 = hypro::vector_t<mpq_class>(2);
 	hypro::vector_t<mpq_class> v2 = hypro::vector_t<mpq_class>(2);
 	hypro::vector_t<mpq_class> v3 = hypro::vector_t<mpq_class>(2);
@@ -201,7 +197,7 @@ public:
 		EXPECT_EQ(vMatVec.getHsv(), vHsp.getHsv());
 		EXPECT_EQ(vMatVec.getDictionaries(), vHsp.getDictionaries());
 
-		EXPECT_EQ(vMatVec.getHsv().size(), a.rows());
+		EXPECT_EQ(vMatVec.getHsv().size(), unsigned(a.rows()));
 	}
 
 	TEST_F(VertexEnumerationTest, SimpleEnumeration) {
@@ -226,7 +222,7 @@ public:
 		deg.enumerateVertices();
 
 		std::vector<Point<mpq_class>> vertices = deg.getPoints();
-		EXPECT_EQ(vertices.size(),5);
+		EXPECT_EQ(vertices.size(),unsigned(5));
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({0,1,0})) != vertices.end());
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({1,0,1})) != vertices.end());
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({1,0,-1})) != vertices.end());
@@ -250,7 +246,7 @@ public:
 		deg.enumerateVertices();
 
 		std::vector<Point<mpq_class>> vertices = deg.getPoints();
-		EXPECT_EQ(vertices.size(),8);
+		EXPECT_EQ(vertices.size(), unsigned(8));
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-1,-1})) != vertices.end());
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-1,-2})) != vertices.end());
 		EXPECT_TRUE(std::find(vertices.begin(), vertices.end(), Point<mpq_class>({-1,-2,-1})) != vertices.end());

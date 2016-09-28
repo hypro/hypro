@@ -86,7 +86,7 @@ endif()
 
 if(STATICLIB_SWITCH)
 	message("-- linking static")
-	add_library(lib_hypro_static STATIC ${sources})
+	add_library(${PROJECT_NAME}_static STATIC ${sources})
 	set_target_properties( lib_hypro_static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"

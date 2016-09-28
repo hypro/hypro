@@ -75,7 +75,6 @@ if(LOGGING_HYPRO)
 	else()
 		message("-- Download version of log4cplus")
 		ExternalProject_Add(log4cplus
-				DOWNLOAD_DIR "${CMAKE_SOURCE_DIR}/src/resources/log4cplus/"
 				GIT_REPOSITORY https://github.com/log4cplus/log4cplus.git
 				INSTALL_COMMAND ""
 				)
