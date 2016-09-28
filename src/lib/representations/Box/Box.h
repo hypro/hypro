@@ -36,29 +36,35 @@ class BoxT {
 	 * Members
 	 **************************************************************************/
   protected:
-    mutable std::pair<Point<Number>, Point<Number>> mLimits;
+    mutable std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
 
   public:
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
 
-	/*
-	 * Creates an unbounded box.
+	/**
+	 * @brief      Creates an empty box.
+	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
 	BoxT() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
 
-	/*
-	 * Copy constructor.
-	 * @param orig The original box.
+	/**
+	 * @brief      Copy constructor.
+	 * @param[in]  orig  The original.
 	 */
 	BoxT( const BoxT& orig ) = default;
+
+	/**
+	 * @brief      Move constructor.
+	 * @param[in]  orig  The move-copyable original.
+	 */
 	BoxT( BoxT&& orig ) = default;
 
-	/*
-	 * Box constructor from one interval, results in a one-dimensional box.
-	 * @param val Input interval.
-	 */
+	 /**
+	  * @brief      Box constructor from one interval, results in a one-dimensional box.
+	  * @param[in]  val   An interval.
+	  */
 	explicit BoxT( const carl::Interval<Number>& val ) {
         mLimits.first = Point<Number>({val.lower()});
         mLimits.second = Point<Number>({val.upper()});
@@ -68,7 +74,6 @@ class BoxT {
 	 * @brief Box constructor from a pair of points.
 	 * @details The given parameters are considered as the maximal and minimal point.
 	 * The constructor does not check the order of points.
-	 *
 	 * @param limits Pair of points.
 	 */
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
@@ -80,8 +85,7 @@ class BoxT {
 	/**
 	 * @brief Constructor from a vector of intervals.
 	 * @details The vector is required to be sorted, i.e. the first interval maps to the first dimension etc..
-	 *
-	 * @param _intervals Vector of intervals.
+	 * @param _intervals A vector of intervals.
 	 */
 	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals );
 
@@ -89,7 +93,6 @@ class BoxT {
 	 * @brief Constructor from a matrix and a vector.
 	 * @details Constructs a box assuming each row of the matrix is the normal to a hyperplane and its corresponding
 	 * entry in the given vector is the offset.
-	 *
 	 * @param _constraints A matrix representing the constraint normals.
 	 * @param _constants A vector representing the offsets of the corresponting hyperplane.
 	 */
@@ -99,7 +102,6 @@ class BoxT {
 	 * @brief Constructor from a set of points.
 	 * @details The constructor does not rely on the operator < of the point class, thus each point is considered
 	 * for the construction of the maximal and minimal point.
-	 *
 	 * @param _points A set of points.
 	 */
 	explicit BoxT( const std::set<Point<Number>>& _points );
@@ -107,7 +109,6 @@ class BoxT {
 	/**
 	 * @brief A constructor from a vector of points.
 	 * @details Creates the maximal and minimal point by collecting all coordinates from all given points.
-	 *
 	 * @param _points A vector of points.
 	 */
 	explicit BoxT( const std::vector<Point<Number>>& _points );
@@ -123,7 +124,6 @@ class BoxT {
 
 	 /**
 	  * @brief Static method for the construction of an empty box of required dimension.
-	  *
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
@@ -157,7 +157,6 @@ class BoxT {
 	/**
 	 * @brief Extends the dimension of the current box by the given interval.
 	 * @details Effectively extends the dimension of the current box.
-	 *
 	 * @param val An interval.
 	 */
 	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
@@ -165,7 +164,6 @@ class BoxT {
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
 	 * @details Converts the d-th entries in the maximal and minimal point to an interval.
-	 *
 	 * @param d The queried dimension.
 	 * @return An interval.
 	 */
@@ -174,7 +172,6 @@ class BoxT {
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
 	 * @details Converts the d-th entries in the maximal and minimal point to an interval.
-	 *
 	 * @param d The queried dimension.
 	 * @return An interval.
 	 */
@@ -202,6 +199,12 @@ class BoxT {
 		return false;
 	}
 
+	/**
+	 * @brief      Determines if the current box is symmetric.
+	 * @details    A box is symmetric, if its centroid is the origin in the respective space, i.e. if the center of each interval in each
+	 * dimension is zero.
+	 * @return     True if symmetric, False otherwise.
+	 */
 	bool isSymmetric() const {
 		if ( mLimits.first.dimension() == 0 ) {
 			return true;
@@ -259,7 +262,6 @@ class BoxT {
 
 	/**
 	 * @brief Determines inequality of two boxes.
-	 *
 	 * @param b1 A box.
 	 * @param b2 A box.
 	 * @return False, if both boxes are equal.
@@ -268,23 +270,25 @@ class BoxT {
 
 	/**
 	 * @brief Assignment operator.
-	 *
 	 * @param rhs A box.
 	 */
 	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
-	 *
 	 * @param rhs A box.
 	 */
 	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
 
+	/**
+	 * @brief      Scaling operator.
+	 * @param[in]  factor  The scaling factor.
+	 * @return     The scaled box.
+	 */
 	BoxT<Number,Converter> operator*(const Number& factor) const { return BoxT<Number,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
 
 	/**
 	 * @brief Outstream operator.
-	 *
 	 * @param ostr Outstream.
 	 * @param b A box.
 	 */
@@ -297,7 +301,6 @@ class BoxT {
 
 	/**
 	 * @brief Access operator (const).
-	 *
 	 * @param i Dimension to access.
 	 * @return An interval.
 	 */
@@ -307,10 +310,33 @@ class BoxT {
 	 * General interface
 	 **************************************************************************/
 
+	 /**
+	  * @brief      Getter for the space dimension.
+	  * @return     The dimension of the space.
+	  */
 	std::size_t dimension() const { return mLimits.first.dimension(); }
+
+	/**
+	 * @brief      Removes redundancy (part of the general interface. Does nothing for boxes.)
+	 */
 	void removeRedundancy() {}
+
+	/**
+	 * @brief      Storage size determination.
+	 * @return     Size of the required memory.
+	 */
 	std::size_t size() const;
 
+	/**
+	 * @brief      Function to reduce the number representation (over-approximate).
+	 * @details    The function tries to reduce the size of each interval boundary in case it is larger than some specified limit.
+	 * This is done by outward rounding. Using SFINAE, the function only works in case the numeric type is different from double.
+	 *
+	 * @param[in]  limit      The limit
+	 *
+	 * @tparam     N          Template parameter to copy number type for SFINAE.
+	 * @tparam     <unnamed>  SFINAE-expression to disable function if N equals double.
+	 */
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
 	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {
 		Number limit2 = Number(limit)*Number(limit);
@@ -367,33 +393,150 @@ class BoxT {
 		}
 	}
 
+	/**
+	 * @brief      Empty number reduction function in case the number type is double.
+	 *
+	 * @param[in]  limit      The limit
+	 *
+	 * @tparam     N          Template parameter to copy number type for SFINAE.
+	 * @tparam     <unnamed>  SFINAE-expression to enable function if N equals double.
+	 */
 	template<typename N = Number, carl::EnableIf< std::is_same<N,double> > = carl::dummy>
 	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {}
 
-
+	/**
+	 * @brief      Makes a symmetric box from the current box.
+	 * @details    The symmetry is obtained by dimension-wise extension of the boundaries. The resulting boundaries for each dimension
+	 * are the maximal absolute values of the original boundaries mirrored positive and negative.
+	 * @return     The resulting symmetric box.
+	 */
 	BoxT<Number,Converter> makeSymmetric() const;
+
+	/**
+	 * @brief      Checks, if the box lies inside the given halfspace.
+	 * @details    This function combines the intersection with a given halfspace along with the emptiness test on the result, which is
+	 * often faster than the sequential execution of both commands.
+	 * @param[in]  normal  The normal of the halfspace.
+	 * @param[in]  offset  The offset of the halfspace.
+	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
+	 */
 	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+
+	/**
+	 * @brief      Checks, if the box lies inside the given set of halfspaces.
+	 * @details    This function combines the intersection with a given set of halfspaces along with the emptiness test on the result, which is
+	 * often faster than the sequential execution of both commands.
+	 * @param[in]  _mat  The normals of the halfspaces.
+	 * @param[in]  _vec  The offsets of the halfspaces.
+	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
+	 */
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Applies an affine transformation to the box.
+	 * @details    The transformation is done on the two limit points directly. TODO: Add more extensive description here.
+	 * @param[in]  A     A matrix for the affine transformation.
+	 * @param[in]  b     A vector for the offset.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+
+	/**
+	 * @brief      Computes the Minkowski sum of two boxes.
+	 * @param[in]  rhs   The right hand side box.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
+
+	/**
+	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
+	 * @param[in]  rhs   The right hand side box.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const;
+
+	/**
+	 * @brief      Computes the intersection of two boxes.
+	 * @param[in]  rhs   The right hand side box.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
+
+	/**
+	 * @brief      Computes the intersection of the current box with a given halfspace.
+	 * @param[in]  hspace  The halfspace.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hspace ) const;
+
+	/**
+	 * @brief      Computes the intersection of the current box with a set of halfspaces.
+	 * @param[in]  _mat  The matrix representing the normal vectors.
+	 * @param[in]  _vec  The vector representing the offsets.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Containment check for a point.
+	 * @param[in]  point  The point.
+	 * @return     True, if the point is contained inside the current box, false otherwise.
+	 */
 	bool contains( const Point<Number>& point ) const;
+
+	/**
+	 * @brief      Containment check for a box.
+	 * @param[in]  box   The box.
+	 * @return     True, if the given box is contained in the current box, false otherwise.
+	 */
 	bool contains( const BoxT<Number,Converter>& box ) const;
+
+	/**
+	 * @brief      Computes the union of two boxes.
+	 * @param[in]  rhs   The right hand side box.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;
+
+	/**
+	 * @brief      Computes the union of the current box with a set of boxes.
+	 * @param[in]  boxes  The boxes.
+	 * @return     The resulting box.
+	 */
 	BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes ) const;
 
+	/**
+	 * @brief      Makes this box the empty box.
+	 */
 	void clear();
+
+	/**
+	 * @brief      A deprecated print method. Use the outstream operator.
+	 */
 	void print() const;
 };
 
+/**
+ * @brief      Operator for scaling a box.
+ * @param[in]  factor     The scaling factor.
+ * @param[in]  in         The box which is to be scaled.
+ * @tparam     Number     The number type.
+ * @tparam     Converter  The passed representation converter.
+ * @return     The resulting box.
+ */
 template<typename Number,typename Converter>
 BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in) {
 	return in*factor;
 }
 
+/**
+ * @brief      Conversion function for different number types.
+ * @param[in]  in         The input box.
+ * @tparam     From       The current number type.
+ * @tparam     To         The number type the box is to be converted to.
+ * @tparam     Converter  The passed representation converter.
+ * @return     The resulting box.
+ */
 template<typename From, typename To, typename Converter>
 BoxT<To,Converter> convert(const BoxT<From,Converter>& in) {
 	std::pair<Point<From>, Point<From>> limits = in.limits();

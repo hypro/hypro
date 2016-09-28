@@ -52,6 +52,7 @@ option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(LOGGING_HYPRO "Allow log4cplus logging." OFF)
+option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 # Include own macros.
 include( hypromacros )
 
@@ -219,7 +220,9 @@ add_subdirectory(src/test)
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-add_subdirectory(doc EXCLUDE_FROM_ALL)
+if(CREATE_DOC)
+	add_subdirectory(doc EXCLUDE_FROM_ALL)
+endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
