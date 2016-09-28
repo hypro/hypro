@@ -66,6 +66,9 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 
         //converts computed box H -> V
         auto vpoly = toVPolytope(hpoly, mode);
+
+        std::cout << "Created box as hpoly: " << hpoly << ", with vertices " << vpoly << std::endl;
+
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
 

@@ -23,11 +23,6 @@ class pca{
 
 };
 
-
-
-
-
-
 } //namespace
 
 #include "pca.tpp"

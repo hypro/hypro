@@ -32,6 +32,7 @@ CLANG_WARNING_RESET
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
 //#define USE_ELLIPSOIDS
+
 #define USE_SMART_AGGREGATION
 #define ALWAYS_USE_AGGREGATION
 #define USE_FORCE_REDUCTION
