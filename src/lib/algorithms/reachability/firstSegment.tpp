@@ -137,8 +137,8 @@ namespace reachability {
 				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 
 				//std::cout << "firstSegment before Minkowski-sum: " << firstSegment << std::endl;
-				assert(firstSegment.contains(initialPair.second));
-				assert(firstSegment.contains(deltaValuation));
+				//assert(firstSegment.contains(initialPair.second));
+				//assert(firstSegment.contains(deltaValuation));
 				firstSegment = firstSegment.minkowskiSum( Representation(differenceBox.matrix(), differenceBox.vector()) );
 
 				/*
@@ -167,8 +167,8 @@ namespace reachability {
 			// std::cout << "Init set: " << initialPair.second << std::endl;
 			// std::cout << "Set at delta: " << deltaValuation << std::endl;
 
-			assert(firstSegment.contains(initialPair.second));
-			assert(firstSegment.contains(deltaValuation));
+			//assert(firstSegment.contains(initialPair.second));
+			//assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << ", size: " << firstSegment.size() << std::endl;

@@ -208,7 +208,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 	#endif
 
 	typename std::vector<Point<Number>> vertices;
-	if(!mHPlanes.empty()) {
+	if(!mHPlanes.empty() && !this->empty()) {
 		unsigned dim = this->dimension();
 
 		Permutator permutator(mHPlanes.size(), dim);
@@ -259,7 +259,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				}
 
 				if(!skip) {
-					if( mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+					if( !carl::AlmostEqual2sComplement(mHPlanes.at(planePos).offset(), mHPlanes.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
 						#ifdef HPOLY_DEBUG_MSG
 						std::cout << "Drop vertex: " << convert<Number,double>(res).transpose() << " because of plane " << planePos << std::endl;
 						#endif

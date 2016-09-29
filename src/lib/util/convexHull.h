@@ -17,20 +17,6 @@
 namespace hypro {
 
 template <typename Number>
-static unsigned dimensionCheck( const std::vector<Point<Number>>& points ) {
-	// std::cout << __func__ << std::endl;
-	matrix_t<Number> matrix = matrix_t<Number>(points.at(0).rawCoordinates().size(), points.size());
-
-	for (unsigned i=0; i < matrix.rows(); i++) {
-		for (unsigned j=0; j < matrix.cols(); j++) {
-			matrix(i, j) = points.at(j).rawCoordinates()(i);
-		}
-	}
-
-	return matrix.fullPivLu().rank();
-}
-
-template <typename Number>
 static bool maxRank( const std::vector<Point<Number>>& points, const Point<Number>& point ) {
 	// std::cout << __func__ << std::endl;
 	matrix_t<Number> matrix = matrix_t<Number>(point.rawCoordinates().size(), points.size());
@@ -55,7 +41,7 @@ static bool maxRank( const std::vector<Point<Number>>& points, const Point<Numbe
 template <typename Number>
 static void initConvexHull( const std::vector<Point<Number>>& points, std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
 	// std::cout << __func__ << std::endl;
-	unsigned dimCheck = dimensionCheck(points);
+	unsigned dimCheck = effectiveDimension(points);
 	unsigned dimension = points.at(0).dimension();
 
 	if (dimCheck == dimension) {
@@ -117,6 +103,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 
 	} else {
 		std::cout << __func__ << " : " << __LINE__ << "Error: Inconsistent point set " << std::endl;
+		assert(false);
 		facets = std::vector<std::shared_ptr<Facet<Number>>>();
 	}
 }

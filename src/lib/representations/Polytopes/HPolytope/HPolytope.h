@@ -17,7 +17,7 @@
 #include <cassert>
 
 #define REDUCE_NUMBERS
-// #define HPOLY_DEBUG_MSG
+#define HPOLY_DEBUG_MSG
 
 namespace hypro {
 
@@ -46,7 +46,7 @@ public:
 	unsigned mDimension;
 
 	// State flags
-	mutable TRIBOOL mEmpty;
+	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 	mutable bool mNonRedundant;
 
 
@@ -58,7 +58,6 @@ public:
 
 	/**
 	 * @brief Copy constructor.
-	 *
 	 * @param orig Original H-polytope.
 	 */
 	HPolytopeT( const HPolytopeT& orig ) = default;
@@ -67,7 +66,6 @@ public:
 	 * @brief Constructor from a vector of halfspaces.
 	 * @details The resulting object is the intersection of the given halfspaces, i.e. the conjunction of the linear
 	 * constraints representing the halfspaces.
-	 *
 	 * @param planes A vector of halfspaces.
 	 */
 	HPolytopeT( const HalfspaceVector& planes );
@@ -77,7 +75,6 @@ public:
 	 * @details Each row in the matrix is considered to represent a constraint, i.e. a normal to a bounding hyperplane.
 	 * Each corresponding entry in the passed vector is the offset of that plane, i.e. the constant part of the linear
 	 * constraint.
-	 *
 	 * @param A A matrix.
 	 * @param b A vector.
 	 */
@@ -88,7 +85,6 @@ public:
 	 * @details Each row in the matrix is considered to represent a constraint, i.e. a normal to a bounding hyperplane.
 	 * The offset of each plane is considered to be 0, i.e. if the number of affinely independent constraints
 	 * is larger or equal to d+1, the resulting polytope represents the origin point.
-	 *
 	 * @param A A matrix.
 	 */
 	HPolytopeT( const matrix_t<Number>& A );
@@ -97,7 +93,6 @@ public:
 	 * @brief Constructor from a vector of points.
 	 * @details Converts a vertex-representation into a hyperplanar representation, i.e. solving the plane enumeration
 	 * problem.
-	 *
 	 * @param points A vector of points.
 	 */
 	HPolytopeT( const std::vector<Point<Number>>& points );
@@ -107,10 +102,11 @@ public:
 	 */
 	~HPolytopeT();
 
-	/*
-	 * Getters and setters
+	/**
+	 * @brief Approximates the storage usage of the current polytope.
+	 * @details [long description]
+	 * @return The size.
 	 */
-
 	double sizeOfHPolytopeT(){
 		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHalfspace();
 	}
@@ -118,13 +114,13 @@ public:
 	/**
 	 * @brief Determines, if the polytope is empty.
 	 * @details Checks for satisfiability of the given constraints.
-	 * @return True, if the polytope is empty.
+	 * @return True if the polytope is empty, false otherwise.
 	 */
 	bool empty() const;
 
 	/**
 	 * @brief Static method for construction of an empty H-polytope.
-	 *
+	 * @details An empty H-polytope is constructed by creating two hyperplanes which falsify each other.
 	 * @return An empty polytope.
 	 */
 	static HPolytopeT<Number, Converter> Empty();
@@ -142,9 +138,23 @@ public:
 	 */
 	std::size_t size() const;
 
+	/**
+	 * @brief Resets the information if the current polytope contains redundant constraints.
+	 * @details This function may be used to allow a manual call to the redundancy removal method.
+	 */
 	void unreduce() const { mNonRedundant = false;}
+
+	/**
+	 * @brief Manually sets the polytope to behave as if it did not contain redundant constraints.
+	 * @details This function can avoid an expensive redundancy removal call in case the user already knows that this property holds.
+	 */
 	void setReduced() const { mNonRedundant = true; }
 
+	/**
+	 * @brief Returns, whether the current polytope contains redundant constraints.
+	 * @details Only reads the stored flag without.
+	 * @return True, if there are no redundant constraints, false otherwise.
+	 */
 	bool isNonRedundant() const { return mNonRedundant; }
 
 	/**
@@ -160,16 +170,10 @@ public:
 	vector_t<Number> vector() const;
 
 	/**
-	 * @brief Getter for the full description of the polytope as a matrix and a vector.
+	 * @brief Getter for the full description of the polytope as a pair of a matrix and a vector.
 	 * @return A pair of a matrix and a vector.
 	 */
 	std::pair<matrix_t<Number>, vector_t<Number>> inequalities() const;
-
-	///**
-	// * @brief Getter for the polytopal fan of the current polytope.
-	// * @return A fan.
-	// */
-	//const typename polytope::Fan<Number>& fan() const;
 
 	/**
 	 * @brief Getter for the vertices of the current polytope
@@ -179,14 +183,13 @@ public:
 	typename std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
 
 	/**
-	 * @brief Getter for a number representing the supremum of the polytope.
+	 * @brief Getter for a number representing the supremum according to the infinity norm of the polytope.
 	 * @return A number.
 	 */
 	Number supremum() const;
 
 	/**
 	 * @brief Inserts an additional bounding halfspace into the polytope.
-	 *
 	 * @param plane The plane to add.
 	 */
 	void insert( const Halfspace<Number>& plane );
@@ -194,12 +197,15 @@ public:
 
 	/**
 	 * @brief Inserts a range of halfspaces into the current polytope.
-	 *
 	 * @param iterator Iterator pointing to the start of the range.
 	 * @param iterator Iterator pointing to the end of the range.
 	 */
 	void insert( const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end );
 
+	/**
+	 * @brief Removes the constraint at position index.
+	 * @param index An index.
+	 */
   	void erase( const unsigned index);
 
 	const HalfspaceVector& constraints() const;
