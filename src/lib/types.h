@@ -12,8 +12,6 @@
 #include <eigen3/Eigen/Core>
 #include <boost/operators.hpp>
 
-static const unsigned TOLLERANCE_ULPS = 8192;
-
 // global typedefs
 namespace hypro {
     template <typename Number>
