@@ -30,7 +30,6 @@ namespace hypro{
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT( const SupportFunctionT<Number,Converter> &_orig ) : content(_orig.content){
         //handled by initializer list
-        std::cout << "Copy constructor SF top level." << std::endl;
     }
 
     //move constructor
