@@ -1,0 +1,11 @@
+branches:
+  only:
+  - master
+
+language: cpp
+
+compiler:
+  - clang
+  - gcc
+
+install: true
