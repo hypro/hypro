@@ -54,6 +54,7 @@ function(collect_files prefix name)
       configure_file(${CMAKE_SOURCE_DIR}/src/${prefix}/${name}/${subfile} ${CMAKE_SOURCE_DIR}/src/${prefix}/${name}/${subfile_name})
 
     elseif((${subfile} MATCHES ".*([.]h)") OR (${subfile} MATCHES ".*([.]tpp)"))
+      message("Filename component for ${subfile}")
       get_filename_component(subdir ${subfile} DIRECTORY)
       if(NOT ${subdir} STREQUAL "")
         LIST_APPEND_UNIQUE(${prefix}_${name}_subdir ${subdir})
