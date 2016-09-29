@@ -23,6 +23,7 @@ extern "C" {
 #define PI_DN 3.1415926535897932384626433832795028841971
 
 static const unsigned long fReach_DENOMINATOR = 1000000000;
+static const unsigned long default_double_comparison_ulps = 128;
 static const unsigned long defaultTemplateDirectionCount = 8;
 static const unsigned long MAX_DIMENSION_LIMIT = 100;
 
