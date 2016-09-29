@@ -29,7 +29,7 @@ namespace hypro {
 	template<typename Number, typename Converter>
 	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
-		//std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
+		// std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
 		assert(_constraints.rows() == _constants.rows());
@@ -63,7 +63,7 @@ namespace hypro {
 
 		// check if vertices are true vertices (i.e. they fulfill all constraints)
 		for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
-			//std::cout  << "Refinement: Consider vertex : " << convert<Number,double>(*vertex).transpose() << std::endl;
+			// std::cout  << "Refinement: Consider vertex : " << convert<Number,double>(*vertex).transpose() << std::endl;
 			// possibleVertices.size() << std::endl;
 			bool deleted = false;
 			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
@@ -71,8 +71,8 @@ namespace hypro {
 				if ( res > _constants( rowIndex ) ) {
 					vertex = possibleVertices.erase( vertex );
 					deleted = true;
-					//std::cout << "Deleted because of row " << convert<Number,double>(vector_t<Number>(_constraints.row(rowIndex))) << std::endl;
-					//std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
+					// std::cout << "Deleted because of row " << convert<Number,double>(vector_t<Number>(_constraints.row(rowIndex))) << std::endl;
+					// std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
 					break;
 				}
 			}
@@ -281,6 +281,62 @@ std::size_t BoxT<Number,Converter>::size() const {
 	// TODO: What is this supposed to do???
 	return 2;
 }
+
+template<typename Number, typename Converter>
+void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
+		Number limit2 = Number(limit)*Number(limit);
+		for(unsigned d = 0; d < this->dimension(); ++d) {
+			//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
+			if(mLimits.second.at(d) != 0) {
+				Number numerator = carl::getNum(mLimits.second.at(d));
+				Number denominator = carl::getDenom(mLimits.second.at(d));
+				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+				if(largest > limit2){
+					Number dividend = largest / Number(limit);
+					assert(largest/dividend == limit);
+					Number val = Number(carl::ceil(numerator/dividend));
+					Number newDenom;
+					if(mLimits.second.at(d) > 0) {
+						newDenom = Number(carl::floor(denominator/dividend));
+					} else {
+						newDenom = Number(carl::ceil(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val >= mLimits.second.at(d));
+						mLimits.second[d] = val;
+					}
+					//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
+					//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
+				}
+			}
+
+			//std::cout << "(Lower Bound) Number: " << mLimits.first.at(d) << std::endl;
+			if(mLimits.first.at(d) != 0) {
+				Number numerator = carl::getNum(mLimits.first.at(d));
+				Number denominator = carl::getDenom(mLimits.first.at(d));
+				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+				if(largest > limit2){
+					Number dividend = largest / Number(limit);
+					assert(largest/dividend == limit);
+					Number val = Number(carl::floor(numerator/dividend));
+					Number newDenom;
+					if( mLimits.first.at(d) > 0) {
+						newDenom = Number(carl::ceil(denominator/dividend));
+					} else {
+						newDenom = Number(carl::floor(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val <= mLimits.first.at(d));
+						mLimits.first[d] = val;
+					}
+					//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
+					//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
+				}
+			}
+		}
+	}
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {

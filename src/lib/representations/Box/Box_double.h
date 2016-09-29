@@ -10,33 +10,19 @@
 
 #pragma once
 
-#include "../../datastructures/Halfspace.h"
-#include "../../datastructures/Point.h"
-#include "../../util/Permutator.h"
-#include "../../util/linearOptimization/Optimizer.h"
-#include <carl/interval/Interval.h>
-#include <cassert>
-#include <map>
-#include <set>
-#include <vector>
+#include "Box.h"
 
 namespace hypro {
 
-template <typename Number>
-class Vertex;
-
-template<typename Number>
-class Location;
-
-template <typename Number, typename Converter>
-class BoxT {
+template <typename Converter>
+class BoxT<double,Converter> {
   private:
   public:
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
   protected:
-    mutable std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+    mutable std::pair<Point<double>, Point<double>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
 
   public:
 	/***************************************************************************
@@ -47,7 +33,7 @@ class BoxT {
 	 * @brief      Creates an empty box.
 	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
-	BoxT() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
+	BoxT() : mLimits(std::make_pair(Point<double>(vector_t<double>::Zero(0)), Point<double>(vector_t<double>::Zero(0)))) {}
 
 	/**
 	 * @brief      Copy constructor.
@@ -65,9 +51,9 @@ class BoxT {
 	  * @brief      Box constructor from one interval, results in a one-dimensional box.
 	  * @param[in]  val   An interval.
 	  */
-	explicit BoxT( const carl::Interval<Number>& val ) {
-        mLimits.first = Point<Number>({val.lower()});
-        mLimits.second = Point<Number>({val.upper()});
+	explicit BoxT( const carl::Interval<double>& val ) {
+        mLimits.first = Point<double>({val.lower()});
+        mLimits.second = Point<double>({val.upper()});
 	}
 
 	/**
@@ -76,7 +62,7 @@ class BoxT {
 	 * The constructor does not check the order of points.
 	 * @param limits Pair of points.
 	 */
-	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
+	explicit BoxT( const std::pair<Point<double>, Point<double>>& limits) :
 			mLimits(limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
@@ -87,7 +73,7 @@ class BoxT {
 	 * @details The vector is required to be sorted, i.e. the first interval maps to the first dimension etc..
 	 * @param _intervals A vector of intervals.
 	 */
-	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals );
+	explicit BoxT( const std::vector<carl::Interval<double>>& _intervals );
 
 	/**
 	 * @brief Constructor from a matrix and a vector.
@@ -96,7 +82,7 @@ class BoxT {
 	 * @param _constraints A matrix representing the constraint normals.
 	 * @param _constants A vector representing the offsets of the corresponting hyperplane.
 	 */
-	BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants );
+	BoxT( const matrix_t<double>& _constraints, const vector_t<double>& _constants );
 
 	/**
 	 * @brief Constructor from a set of points.
@@ -104,14 +90,14 @@ class BoxT {
 	 * for the construction of the maximal and minimal point.
 	 * @param _points A set of points.
 	 */
-	explicit BoxT( const std::set<Point<Number>>& _points );
+	explicit BoxT( const std::set<Point<double>>& _points );
 
 	/**
 	 * @brief A constructor from a vector of points.
 	 * @details Creates the maximal and minimal point by collecting all coordinates from all given points.
 	 * @param _points A vector of points.
 	 */
-	explicit BoxT( const std::vector<Point<Number>>& _points );
+	explicit BoxT( const std::vector<Point<double>>& _points );
 
 	/**
 	 * @brief Destructor.
@@ -127,8 +113,8 @@ class BoxT {
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT<Number,Converter> Empty(std::size_t dimension = 1) {
-		return BoxT<Number,Converter>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+	static BoxT<double,Converter> Empty(std::size_t dimension = 1) {
+		return BoxT<double,Converter>(std::make_pair(Point<double>(vector_t<double>::Ones(dimension)), Point<double>(vector_t<double>::Zero(dimension))));
 	}
 
 	/**
@@ -136,30 +122,30 @@ class BoxT {
 	 * @details Converts the two-points representation of the current box into a sorted vector of intervals.
 	 * @return A vector of intervals.
 	 */
-	std::vector<carl::Interval<Number>> boundaries() const;
+	std::vector<carl::Interval<double>> boundaries() const;
 
 	/**
 	 * @brief Getter for the limiting points.
 	 * @return A pair of points.
 	 */
-	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
+	const std::pair<Point<double>, Point<double>>& limits() const { return mLimits; }
 
-	matrix_t<Number> matrix() const;
-	vector_t<Number> vector() const;
+	matrix_t<double> matrix() const;
+	vector_t<double> vector() const;
 
 	/**
 	 * @brief Getter for the hyperplanar representation of the current box.
 	 * @details Converts the two-points representation into a hyperplanar representation, i.e. a H-polytope.
 	 * @return A vector of hyperplanes.
 	 */
-	std::vector<Halfspace<Number>> constraints() const;
+	std::vector<Halfspace<double>> constraints() const;
 
 	/**
 	 * @brief Extends the dimension of the current box by the given interval.
 	 * @details Effectively extends the dimension of the current box.
 	 * @param val An interval.
 	 */
-	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
+	void insert( const carl::Interval<double>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
 
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
@@ -167,7 +153,7 @@ class BoxT {
 	 * @param d The queried dimension.
 	 * @return An interval.
 	 */
-	carl::Interval<Number> interval( std::size_t d ) const;
+	carl::Interval<double> interval( std::size_t d ) const;
 
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
@@ -175,11 +161,11 @@ class BoxT {
 	 * @param d The queried dimension.
 	 * @return An interval.
 	 */
-	carl::Interval<Number> at( std::size_t _index ) const {
+	carl::Interval<double> at( std::size_t _index ) const {
 		if ( _index > mLimits.first.dimension() ) {
-			return carl::Interval<Number>::emptyInterval();
+			return carl::Interval<double>::emptyInterval();
 		}
-		return carl::Interval<Number>(mLimits.first.at(_index), mLimits.second.at(_index));
+		return carl::Interval<double>(mLimits.first.at(_index), mLimits.second.at(_index));
 	}
 
 	/**
@@ -221,7 +207,7 @@ class BoxT {
 	 * @brief Getter for the maximal point.
 	 * @return A point.
 	 */
-	Point<Number> max() const {
+	Point<double> max() const {
 		return mLimits.second;
 	}
 
@@ -229,7 +215,7 @@ class BoxT {
 	 * @brief Getter for the maximal point.
 	 * @return A point.
 	 */
-	Point<Number> min() const {
+	Point<double> min() const {
 		return mLimits.first;
 	}
 
@@ -237,7 +223,7 @@ class BoxT {
 	 * @brief Method returning the supremum point of the box, i.e. the maximal point.
 	 * @return A point representing the supremum of the current box.
 	 */
-	Number supremum() const;
+	double supremum() const;
 
 	/**
 	 * @brief Getter for a vertex-representation of the current box.
@@ -245,7 +231,7 @@ class BoxT {
 	 * The representation is generated by creating all possible combinations of upper and lower bounds of the box.
 	 * @return A vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<double>> vertices( const Location<double>* = nullptr ) const;
 
 	/**
 	 * @brief Checks if two boxes are equal.
@@ -253,7 +239,7 @@ class BoxT {
 	 * @param b2 Contains the second box.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) {
+	friend bool operator==( const BoxT<double,Converter>& b1, const BoxT<double,Converter>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -266,33 +252,33 @@ class BoxT {
 	 * @param b2 A box.
 	 * @return False, if both boxes are equal.
 	 */
-	friend bool operator!=( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const BoxT<double,Converter>& b1, const BoxT<double,Converter>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) = default;
+	BoxT<double,Converter>& operator=( const BoxT<double,Converter>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
+	BoxT<double,Converter>& operator=(BoxT<double,Converter>&& rhs) = default;
 
 	/**
 	 * @brief      Scaling operator.
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<Number,Converter> operator*(const Number& factor) const { return BoxT<Number,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+	BoxT<double,Converter> operator*(const double& factor) const { return BoxT<double,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
 
 	/**
 	 * @brief Outstream operator.
 	 * @param ostr Outstream.
 	 * @param b A box.
 	 */
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& b ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter>& b ) {
 		ostr << "{ ";
 		ostr << b.min() << "; " << b.max() << std::endl;
 		ostr << " }";
@@ -304,7 +290,7 @@ class BoxT {
 	 * @param i Dimension to access.
 	 * @return An interval.
 	 */
-	carl::Interval<Number> operator[]( unsigned i ) const { return carl::Interval<Number>(mLimits.first.at(i), mLimits.second.at(i)); }
+	carl::Interval<double> operator[]( unsigned i ) const { return carl::Interval<double>(mLimits.first.at(i), mLimits.second.at(i)); }
 
 	/***************************************************************************
 	 * General interface
@@ -328,13 +314,10 @@ class BoxT {
 	std::size_t size() const;
 
 	/**
-	 * @brief      Function to reduce the number representation (over-approximate).
-	 * @details    The function tries to reduce the size of each interval boundary in case it is larger than some specified limit.
-	 * This is done by outward rounding.
-	 *
-	 * @param[in]  limit      The limit
+	 * @brief Empty function for number size reduction, which is omitted when using native double numbers.
+	 * @param limit Parameter for a length estimation.
 	 */
-	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
+	void reducedoubleRepresentation(unsigned limit = fReach_DENOMINATOR) const {}
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.
@@ -342,7 +325,7 @@ class BoxT {
 	 * are the maximal absolute values of the original boundaries mirrored positive and negative.
 	 * @return     The resulting symmetric box.
 	 */
-	BoxT<Number,Converter> makeSymmetric() const;
+	BoxT<double,Converter> makeSymmetric() const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given halfspace.
@@ -352,7 +335,7 @@ class BoxT {
 	 * @param[in]  offset  The offset of the halfspace.
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<double>& normal, const double& offset ) const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given set of halfspaces.
@@ -362,7 +345,7 @@ class BoxT {
 	 * @param[in]  _vec  The offsets of the halfspaces.
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
 
 	/**
 	 * @brief      Applies an affine transformation to the box.
@@ -371,35 +354,35 @@ class BoxT {
 	 * @param[in]  b     A vector for the offset.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	BoxT<double,Converter> linearTransformation( const matrix_t<double>& A, const vector_t<double>& b ) const;
 
 	/**
 	 * @brief      Computes the Minkowski sum of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<double,Converter> minkowskiSum( const BoxT<double,Converter>& rhs ) const;
 
 	/**
 	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<double,Converter> minkowskiDecomposition( const BoxT<double,Converter>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<double,Converter> intersect( const BoxT<double,Converter>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of the current box with a given halfspace.
 	 * @param[in]  hspace  The halfspace.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	BoxT<double,Converter> intersectHalfspace( const Halfspace<double>& hspace ) const;
 
 	/**
 	 * @brief      Computes the intersection of the current box with a set of halfspaces.
@@ -407,35 +390,35 @@ class BoxT {
 	 * @param[in]  _vec  The vector representing the offsets.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	BoxT<double,Converter> intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
 
 	/**
 	 * @brief      Containment check for a point.
 	 * @param[in]  point  The point.
 	 * @return     True, if the point is contained inside the current box, false otherwise.
 	 */
-	bool contains( const Point<Number>& point ) const;
+	bool contains( const Point<double>& point ) const;
 
 	/**
 	 * @brief      Containment check for a box.
 	 * @param[in]  box   The box.
 	 * @return     True, if the given box is contained in the current box, false otherwise.
 	 */
-	bool contains( const BoxT<Number,Converter>& box ) const;
+	bool contains( const BoxT<double,Converter>& box ) const;
 
 	/**
 	 * @brief      Computes the union of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<double,Converter> unite( const BoxT<double,Converter>& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current box with a set of boxes.
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes ) const;
+	BoxT<double,Converter> unite( const std::vector<BoxT<double,Converter>>& boxes ) const;
 
 	/**
 	 * @brief      Makes this box the empty box.
@@ -448,34 +431,6 @@ class BoxT {
 	void print() const;
 };
 
-/**
- * @brief      Operator for scaling a box.
- * @param[in]  factor     The scaling factor.
- * @param[in]  in         The box which is to be scaled.
- * @tparam     Number     The number type.
- * @tparam     Converter  The passed representation converter.
- * @return     The resulting box.
- */
-template<typename Number,typename Converter>
-BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in) {
-	return in*factor;
-}
-
-/**
- * @brief      Conversion function for different number types.
- * @param[in]  in         The input box.
- * @tparam     From       The current number type.
- * @tparam     To         The number type the box is to be converted to.
- * @tparam     Converter  The passed representation converter.
- * @return     The resulting box.
- */
-template<typename From, typename To, typename Converter>
-BoxT<To,Converter> convert(const BoxT<From,Converter>& in) {
-	std::pair<Point<From>, Point<From>> limits = in.limits();
-	return BoxT<To,Converter>(std::make_pair(Point<To>(convert<From,To>(limits.first.rawCoordinates())), Point<To>(convert<From,To>(limits.second.rawCoordinates()))));
-}
-
 } // namespace hypro
 
-#include "Box.tpp"
-#include "Box_double.h"
+#include "Box_double.tpp"
