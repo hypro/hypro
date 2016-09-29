@@ -25,6 +25,6 @@ before_install:
 
 install: true
 
-before_script: make resources
+before_script: true
 
 script: mkdir build && cd build && cmake .. && make
