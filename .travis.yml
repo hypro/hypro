@@ -22,11 +22,13 @@ before_install:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
   - cd && mkdir carl && cd carl && git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake .. && make lib_carl
   - ls
-  - cd ../../../
+  - cd ../../
   - ls
 
 install: true
 
 before_script: true
 
-script: ls && mkdir build && cd build && cmake .. && make
+script:
+  - ls
+  - mkdir build && cd build && cmake .. && make
