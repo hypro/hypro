@@ -32,4 +32,4 @@ before_script: true
 
 script:
   - ls
-  - mkdir build && cd build && cmake .. && make
+  - mkdir build && cd build && cmake .. && make resources && make
