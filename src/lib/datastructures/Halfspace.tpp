@@ -72,13 +72,7 @@ unsigned Halfspace<Number>::dimension() const {
 }
 
 template<typename Number>
-void Halfspace<Number>::reduceDimension( unsigned _dimension ) {
-	// TODO
-	this->mHash = 0;
-}
-
-template<typename Number>
-void Halfspace<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) {
+void Halfspace<Number>::projectOnDimensions( std::vector<unsigned> _dimensions ) {
 	// TODO
 	this->mHash = 0;
 }
@@ -320,11 +314,6 @@ bool Halfspace<Number>::contains( const std::vector<Point<Number>>& _points) con
 template <typename Number>
 bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
-}
-
-template <typename Number>
-const Number &Halfspace<Number>::internalOffset() const {
-	return mScalar;
 }
 
 /**
