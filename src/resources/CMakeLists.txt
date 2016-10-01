@@ -49,10 +49,8 @@ else()
 	ExternalProject_Add(
 		glpk
 		URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
-		#SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}"
         CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/ --with-gmp
 		PREFIX ${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/
-                #BUILD_COMMAND make
                 BUILD_IN_SOURCE 1
                 INSTALL_DIR ${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/
                 INSTALL_COMMAND make install
@@ -60,6 +58,8 @@ else()
 
 	ExternalProject_Get_Property(googletest source_dir)
 	ExternalProject_Get_Property(googletest binary_dir)
+
+	message("GLPK include dir set to ${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include")
 
 	add_imported_library(GLPK SHARED "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/lib/libglpk.so" "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include")
 
