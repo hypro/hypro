@@ -143,13 +143,9 @@ endif()
 # # # # # # # # # # # # # # # # # # # # # #
 
 load_library(hypro Boost 1.55.0)
-#find_package(Boost REQUIRED)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
-
-#load_library(hypro Boost 1.55.0 COMPONENTS program_options)
-load_library(hypro carl 0)
 
 if(USE_PPL)
 	load_library(hypro PPL 0)
@@ -177,7 +173,8 @@ endif()
 if(NOT FORCE_DOWNLOAD_RESOURCES)
 	load_library(hypro GTest 0)
 	load_library(hypro GLPK 0)
-	if(NOT GLPK_FOUND OR NOT GTEST_FOUND)
+	load_library(hypro carl 0)
+	if(NOT GLPK_FOUND OR NOT GTEST_FOUND OR NOT carl_FOUND)
 		add_subdirectory(src/resources EXCLUDE_FROM_ALL)
 		if(NOT GLPK_FOUND)
 			set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
