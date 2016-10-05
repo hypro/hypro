@@ -3,7 +3,15 @@ ExternalProject_Add(
 	GIT_REPOSITORY http://github.com/smtrat/carl.git
 	INSTALL_COMMAND "")
 
-# use internal find mechanism to locate carl after building.
-load_library(hypro carl 0)
+find_package(carl QUIET)
+list(APPEND hypro_LIBRARIES_DYNAMIC ${carl_LIBRARIES})
+list(APPEND hypro_LIBRARIES_STATIC ${carl_LIBRARIES})
+list(APPEND hypro_INCLUDE_DIRS ${carl_INCLUDE_DIR})
+
+message("Current libraries (dynamic): ${hypro_LIBRARIES_DYNAMIC}")
+message("Current include directories: ${hypro_INCLUDE_DIRS}")
+
+add_imported_library(carl SHARED "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
+add_imported_library(carl STATIC "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
 
 add_dependencies(resources carl)
