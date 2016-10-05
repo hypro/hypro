@@ -17,6 +17,8 @@ ExternalProject_Get_Property(glpk binary_dir)
 
 add_imported_library(GLPK SHARED "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/lib/libglpk.so" "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include")
 
+message("Set glpk include dir to ${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include")
+
 set( GLPK_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include" PARENT_SCOPE )
 set( GLPK_LIBRARIES "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/lib/libglpk.so" PARENT_SCOPE )
 
