@@ -21,7 +21,7 @@ typedef int Number;
 
 int main(int argc, char** argv)
 {
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
 
     // Just creates an empty Center
     hypro::vector_t<Number> vCenter = hypro::vector_t<Number>(2);
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
 hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     vGenerators2 << 1, 0,
-                   1, 1;
+                    1, 1;
 
     //To test the uniteEqualVectors function!
     //
@@ -49,10 +49,32 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     hypro::Zonotope<Number> zonoExample2(vCenter, vGenerators2); // Creates an Zonotope
     hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
+    std::cout << "Zonotope: " << zonoExample2 << std::endl;
+    std::cout << "Vertices:" << std::endl;
+    std::vector<hypro::Point<Number>> vertices = zonoExample2.vertices();
+    for(const auto& vertex : vertices){
+    	std::cout << vertex << std::endl;
+    }
+
     plotter.addObject(zonoExample.vertices());
     plotter.addObject(zonoExample2.vertices());
+
+    plotter.addObject(zonoExample.unite(zonoExample2).vertices());
+
+    hypro::Zonotope<Number> intersectionResult = zonoExample2.intersect(hypro::Halfspace<Number>({0,-1},-4), 2);
+    std::cout << "Zonotope: " << intersectionResult << std::endl;
+    std::cout << "Vertices:" << std::endl;
+    vertices = intersectionResult.vertices();
+    for(const auto& vertex : vertices){
+    	std::cout << vertex << std::endl;
+    }
+
+
+    //plotter.addObject(intersectionResult.vertices());
+
     plotter.plot2d();
     plotter.plotTex();
+
 
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");

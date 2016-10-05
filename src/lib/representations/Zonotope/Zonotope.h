@@ -103,8 +103,8 @@ class ZonotopeT {
 	bool addGenerators( const matrix_t<Number>& generators );
 
 	// Getters and Setters for center and generators
-	vector_t<Number> center() const;
-	matrix_t<Number> generators() const;
+	const vector_t<Number>& center() const;
+	const matrix_t<Number>& generators() const;
 
 	/**
 	 * Number of generators
@@ -247,6 +247,26 @@ class ZonotopeT {
 	 */
 	ZonotopeT<Number,Converter> intervalHull() const;
 };
+
+template<typename Number, typename Converter>
+std::ostream& operator<<(std::ostream& out, const ZonotopeT<Number,Converter>& in ) {
+	out << "< c: " << convert<Number,double>(in.center()).transpose() << "," << std::endl;
+	for(unsigned i = 0; i < in.generators().rows(); ++i) {
+		for(unsigned j = 0; j < in.generators().cols(); ++j) {
+			if(i != in.generators().rows()-1) {
+				out << carl::convert<Number,double>(in.generators()(i,j)) << " ";
+			} else {
+				if(j != in.generators().cols()-1) {
+					out << carl::convert<Number,double>(in.generators()(i,j)) << ",";
+				} else {
+					out << carl::convert<Number,double>(in.generators()(i,j)) << " >";
+				}
+			}
+		}
+		out << std::endl;
+	}
+	return out;
+}
 
 }  // namespace
 
