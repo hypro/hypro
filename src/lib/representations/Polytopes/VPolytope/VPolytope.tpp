@@ -165,30 +165,46 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 
 template<typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
-	std::set<vector_t<Number>> pointsInside;
-	std::set<vector_t<Number>> pointsOutside;
-	std::vector<Point<Number>> newPoints;
-	for(const auto& vertex : mVertices) {
-		if(rhs.contains(vertex.rawCoordinates())) {
-			pointsInside.insert(vertex.rawCoordinates());
-		} else {
-			pointsOutside.insert(vertex.rawCoordinates());
-		}
-	}
-	assert(false);
-}
-
-template<typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	//std::cout << "This before intersection with Halfspaces: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
-	//std::cout << "this as a H-Polytope: " << intermediate << std::endl;
-	auto intersection = intermediate.intersectHalfspaces(_mat, _vec);
-	//std::cout << "Intersection H-Polytope: " << intersection << std::endl;
+	auto intersection = intermediate.intersectHalfspace(rhs);
 	intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
 	return res;
 }
+
+template<typename Number, typename Converter>
+VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	auto intermediate = Converter::toHPolytope(*this);
+	auto intersection = intermediate.intersectHalfspaces(_mat, _vec);
+	intersection.removeRedundancy();
+	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
+	return res;
+}
+
+template<typename Number, typename Converter>
+std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+	auto intermediate = Converter::toHPolytope(*this);
+	auto resultPair = intermediate.satisfiesHalfspace(rhs);
+	if(resultPair.first){
+		resultPair.second.removeRedundancy();
+		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
+		return std::make_pair(true, res);
+	}
+	return std::make_pair(false, VPolytopeT<Number,Converter>::Empty());
+}
+
+template<typename Number, typename Converter>
+std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	auto intermediate = Converter::toHPolytope(*this);
+	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
+	if(resultPair.first){
+		resultPair.second.removeRedundancy();
+		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
+		return std::make_pair(true, res);
+	}
+	return std::make_pair(false, VPolytopeT<Number,Converter>::Empty());
+}
+
 
 template <typename Number, typename Converter>
 bool VPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
