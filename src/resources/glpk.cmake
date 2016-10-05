@@ -12,8 +12,8 @@ ExternalProject_Add(
             INSTALL_COMMAND make install
 	)
 
-ExternalProject_Get_Property(googletest source_dir)
-ExternalProject_Get_Property(googletest binary_dir)
+ExternalProject_Get_Property(glpk source_dir)
+ExternalProject_Get_Property(glpk binary_dir)
 
 add_imported_library(GLPK SHARED "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/lib/libglpk.so" "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include")
 
