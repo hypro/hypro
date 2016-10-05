@@ -22,6 +22,9 @@ if(GLPK_FOUND)
 else()
 	message("-- Download version of glpk")
 	include(glpk.cmake)
+
+	message("GLPK_INCLUDE_DIR: ${GLPK_INCLUDE_DIR}")
+
 	set( GLPK_INCLUDE_DIR ${GLPK_INCLUDE_DIR} PARENT_SCOPE )
 	set( GLPK_LIBRARIES ${GLPK_LIBRARIES} PARENT_SCOPE )
 endif()
