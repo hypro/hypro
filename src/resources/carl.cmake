@@ -14,7 +14,7 @@ message("Current include directories: ${hypro_INCLUDE_DIRS}")
 message("Carl libraries (dynamic): ${carl_LIBRARIES}")
 message("Carl include directories: ${carl_INCLUDE_DIR}")
 
-add_imported_library(carl SHARED "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
+#add_imported_library(carl SHARED "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
 #add_imported_library(carl STATIC "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
 
 add_dependencies(resources carl)
