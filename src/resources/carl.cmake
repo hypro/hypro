@@ -1,7 +1,6 @@
 ExternalProject_Add(
 	carl
 	GIT_REPOSITORY http://github.com/smtrat/carl.git
-	BUILD_COMMAND "make lib_carl"
 	INSTALL_COMMAND "")
 
 # Specify include dir
