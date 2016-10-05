@@ -15,7 +15,6 @@ else()
 	# required for testing.
 	#set( GTEST_INCLUDE_DIR ${GTEST_INCLUDE_DIR} PARENT_SCOPE)
 	#set( GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
-	add_dependencies(resources googletest)
 endif()
 
 if(GLPK_FOUND)
@@ -25,7 +24,6 @@ else()
 	include(glpk.cmake)
 	set( GLPK_INCLUDE_DIR ${GLPK_INCLUDE_DIR} PARENT_SCOPE )
 	set( GLPK_LIBRARIES ${GLPK_LIBRARIES} PARENT_SCOPE )
-	add_dependencies(resources glpk)
 endif()
 
 if(LOGGING_HYPRO)

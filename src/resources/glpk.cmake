@@ -19,3 +19,5 @@ add_imported_library(GLPK SHARED "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_vers
 
 set( GLPK_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/include" PARENT_SCOPE )
 set( GLPK_LIBRARIES "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}/lib/libglpk.so" PARENT_SCOPE )
+
+add_dependencies(resources glpk)
