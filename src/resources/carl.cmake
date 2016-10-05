@@ -3,14 +3,7 @@ ExternalProject_Add(
 	GIT_REPOSITORY http://github.com/smtrat/carl.git
 	INSTALL_COMMAND "")
 
-# Specify include dir
-ExternalProject_Get_Property(carl source_dir)
-ExternalProject_Get_Property(carl binary_dir)
-
-if(STATICLIB_SWITCH)
-	add_imported_library(carl STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}carl${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/include")
-else()
-	add_imported_library(carl SHARED "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}carl${CMAKE_SHARED_LIBRARY_SUFFIX}" "${source_dir}/include")
-endif()
+# use internal find mechanism to locate carl after building.
+load_library(hypro carl 0)
 
 add_dependencies(resources carl)
