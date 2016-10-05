@@ -325,22 +325,6 @@ Point<Number> Point<Number>::newEmpty() const {
 }
 
 template <typename Number>
-bool Point<Number>::move( const Point<Number> &_p ) {
-	mCoordinates = mCoordinates + _p.rawCoordinates();
-	bool negative = false;
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
-		if ( mCoordinates( i ) < 0 ) {
-			negative = true;
-			break;
-		}
-	}
-	mHash = 0;
-	return negative;
-}
-
-
-
-template <typename Number>
 Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	//std::cout << "Linear trafo of " << mCoordinates << " with " << A << " and " << b << std::endl;
 	assert(A.cols() == mCoordinates.rows());

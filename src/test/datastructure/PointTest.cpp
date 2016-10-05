@@ -150,13 +150,14 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
  */
 TYPED_TEST(PointTest, OperationTest)
 {
-    EXPECT_FALSE(this->p1.move(this->p1));
-    EXPECT_EQ(this->p1[0], TypeParam(4));
-    EXPECT_EQ(this->p1[1], TypeParam(10));
+	Point<TypeParam> res;
+	res = this->p1.extAdd(this->p1);
+    EXPECT_EQ(res[0], TypeParam(4));
+    EXPECT_EQ(res[1], TypeParam(10));
 
-    EXPECT_TRUE(this->p2.move(this->p3));
-    EXPECT_EQ(this->p2[0], TypeParam(16));
-    EXPECT_EQ(this->p2[1], TypeParam(-5));
+    res = this->p2.extAdd(this->p3);
+    EXPECT_EQ(res[0], TypeParam(16));
+    EXPECT_EQ(res[1], TypeParam(-5));
 }
 
 /**

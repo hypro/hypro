@@ -27,22 +27,69 @@ class Halfspace {
     bool mIsInteger;
 
   public:
+  	/**
+  	 * @brief      Default constructor.
+  	 */
 	Halfspace();
+
+	/**
+	 * @brief      Copy constructor.
+	 * @param[in]  _orig  The original.
+	 */
 	Halfspace( const Halfspace<Number>& _orig );
+
+	/**
+	 * @brief      Constructor from a normal vector given as a point and an offset.
+	 * @param[in]  _vector  The vector.
+	 * @param[in]  _off     The offset.
+	 */
 	Halfspace( const Point<Number>& _vector, const Number& _off );
+
+	/**
+	 * @brief      Constructor from an initializer list for the normal vector and an offset.
+	 * @param[in]  _coordinates  The normal vector.
+	 * @param[in]  _off          The offset.
+	 */
 	Halfspace( std::initializer_list<Number> _coordinates, const Number& _off );
+
+	/**
+	 * @brief      Constructor from a normal vector and an offset.
+	 * @param[in]  _vector  The vector.
+	 * @param[in]  _off     The offset.
+	 */
 	Halfspace( const vector_t<Number>& _vector, const Number& _off );
+
+	/**
+	 * @brief      Constructor from an offset vector and a set of vectors lying in the plane.
+	 * @param[in]  _vec        The offset vector.
+	 * @param[in]  _vectorSet  The vector set defining the plane.
+	 */
 	Halfspace( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
 
+	/**
+	 * @brief      Destroys the object.
+	 */
 	~Halfspace();
 
+	/**
+	 * @brief      Size function returning the estimated storage usage of this plane.
+	 * @return     An estimated storage usage.
+	 */
 	double sizeOfHalfspace(){
 	return sizeof(*this) + this->mNormal.size()* sizeof(Number);
 	}
 
+	/**
+	 * @brief      Returns the space dimension.
+	 * @return     The space dimension.
+	 */
 	unsigned dimension() const;
-	void reduceDimension( unsigned _dimension );
-	void reduceToDimensions( std::vector<unsigned> _dimensions );
+
+	/**
+	 * @brief      Projects the plane on the given dimensions.
+	 * @param[in]  _dimensions  The dimensions as a vector.
+	 */
+	void projectOnDimensions( std::vector<unsigned> _dimensions );
 
 	template<typename N = Number, carl::DisableIf< std::is_same<N,double> > = carl::dummy>
 	void makeInteger() {
@@ -69,35 +116,130 @@ class Halfspace {
 		// TODO: As this function is currently only used for number reduction, do nothing for doubles -> fix!
 	}
 
+	/**
+	 * @brief      Determines if the plane coefficients are integers.
+	 * @return     True if integer, False otherwise.
+	 */
 	bool isInteger() const { return mIsInteger; }
 
+	/**
+	 * @brief      Returns the plane normal.
+	 * @return     The normal.
+	 */
 	const vector_t<Number>& normal() const;
+
+	/**
+	 * @brief      Sets the normal.
+	 * @param[in]  _normal  The normal.
+	 */
 	void setNormal( const vector_t<Number>& _normal );
+
+	/**
+	 * @brief      Inverts the halfspace by negating the plane normal and the offset.
+	 */
 	void invert();
 
+	/**
+	 * @brief      Returns the plane offset.
+	 * @return     The offset.
+	 */
 	Number offset() const;
+
+	/**
+	 * @brief      Sets the offset.
+	 * @param[in]  _offset  The offset.
+	 */
 	void setOffset( Number _offset );
 
+	/**
+	 * @brief      Returns the signed distance of a point to the hyperplane.
+	 * @param[in]  _point  The point.
+	 * @return     The signed distance.
+	 */
 	Number signedDistance( const vector_t<Number>& _point ) const;
+
+	/**
+	 * @brief      Evaluates the halfspace in the given direction.
+	 * @details    Note that all evaluations not in direction of the normal will result in infty.
+	 * @param[in]  _direction  The direction.
+	 * @return     The maximal distance to the limiting plane in the given direction.
+	 */
 	Number evaluate( const vector_t<Number>& _direction ) const;
+
+	/**
+	 * @brief      Projects a given point on the plane.
+	 * @param[in]  <unnamed>  The point.
+	 * @return     A point lying on the plane which is a projection of the input.
+	 */
 	Point<Number> project( const Point<Number> ) const;
 
+	/**
+	 * @brief      Computes the intersection of a vector with the plane.
+	 * @param      _result  The resulting scaling factor required to determine the intersection point.
+	 * @param[in]  _vector  The vector.
+	 * @return     True, if the vector intersects the plane, false otherwise.
+	 */
 	bool intersection( Number& _result, const vector_t<Number>& _vector ) const;
+
+	/**
+	 * @brief      Computes the intersection of a vector with the plane.
+	 * @param      _result  The resulting scaling factor required to determine the intersection point.
+	 * @param[in]  _vector  The vector.
+	 * @return     True, if the vector intersects the plane, false otherwise.
+	 */
 	bool intersection( Number& _result, const Point<Number>& _vector ) const;
 
+	/**
+	 * @brief      Computes the affine transformation of the plane.
+	 * @param[in]  A     The transformation matrix.
+	 * @param[in]  b     The transformation vector.
+	 * @return     The resulting halfspace.
+	 */
 	Halfspace<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	//HPolytope<Number> intersection( const Halfspace<Number>& _rhs ) const; /////////// TRAC
+
+	/**
+	 * @brief      Computes the vector describing the intersection of two hyperplanes.
+	 * @param[in]  _rhs  The right hand side.
+	 * @return     The intersection vector.
+	 */
 	vector_t<Number> intersectionVector( const Halfspace<Number>& _rhs ) const;
 
 	static vector_t<Number> fastIntersect( const std::vector<Halfspace<Number>>& _planes );
 	static vector_t<Number> saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold = 0);
 
+	/**
+	 * @brief      Determines, whether the point given as a vector is contained in the halfspace.
+	 * @param[in]  _vector  The vector.
+	 * @return     True, if it is contained, false otherwise.
+	 */
 	bool contains( const vector_t<Number> _vector ) const;
+
+	/**
+	 * @brief      Determines whether the given point is contained inside the halfspace.
+	 * @param[in]  _vector  The point.
+	 * @return     True, if it is contained, false otherwise.
+	 */
 	bool contains( const Point<Number> _vector ) const;
+
+	/**
+	 * @brief      Determines, whether the given set of points is contained inside the halfspace.
+	 * @param[in]  _points  The points.
+	 * @return     True, if all points are contained, false otherwise.
+	 */
 	bool contains( const std::vector<Point<Number>>& _points) const;
+
+	/**
+	 * @brief      Determines, whether the point given as a vector saturates the halfspace, i.e. lies on
+	 * its bounding plane.
+	 * @param[in]  _vector  The vector.
+	 * @return     True, if the point lies on the plane, false otherwise.
+	 */
 	bool holds( const vector_t<Number> _vector ) const;
 
-    Number scalar() const { return mScalar; }
+	/**
+	 * @brief      Computes and stores a hash value representing the plane for fast comparison.
+	 * @return     The hash value.
+	 */
     size_t hash() {
         if (this->mHash == 0) {
             this->mHash = std::hash<Halfspace<Number>>()(*this);
@@ -105,43 +247,86 @@ class Halfspace {
         return mHash;
     }
 
+    /**
+     * @brief      The swap operator.
+     * @param      a     The left-hand-side.
+     * @param      b     The right-hand-side.
+     */
 	friend void swap( Halfspace<Number>& a, Halfspace<Number>& b ) {
 		swap( a.mNormal, b.mNormal );
 		swap( a.mScalar, b.mScalar );
 	}
 
   private:
-	const Number& internalOffset() const;
 
 	/**
-	 * @author: Chris K
-	 * Method to compute the normal of a plane based on two direction vectors
-	 * simply computing the cross product does not work since the dimension is not necessarily 3
+	 * @author 	Chris K
+	 * @brief 	Method to compute the normal of a plane based on two direction vectors
+	 * simply computing the cross product does not work since the dimension is not necessarily 3.
+	 * @param[in] The set of vectors.
+	 * @return 		A vector representing the resulting plane normal.
 	 */
 	vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet ) const;
 };
 
+/**
+ * @brief      Conversion operator for the number type.
+ * @param[in]  in    The plane to convert
+ * @tparam     From  The original number type.
+ * @tparam     To    The target number type.
+ * @return     A halfspace in the desired number type.
+ */
 template<typename From, typename To>
 Halfspace<To> convert(const Halfspace<From>& in) {
 	return Halfspace<To>(convert<From,To>(in.normal()), carl::convert<From,To>(in.offset()));
 }
 
+/**
+ * @brief      Outstream operator.
+ * @param      _lhs    The outstream.
+ * @param[in]  _rhs    The halfspace.
+ * @tparam     Number  The number type of the halfspace.
+ * @return     A reference to the outstream.
+ */
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
 	_lhs << "( " << _rhs.normal() << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 
+/**
+ * @brief      Comparison operator.
+ * @param[in]  lhs     The left hand side.
+ * @param[in]  rhs     The right hand side.
+ * @tparam     Number  The number type.
+ * @return     True, if both halfspaces are equal in terms of coefficients, false otherwise.
+ */
 template <typename Number>
 bool operator==( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
 	return ( lhs.normal() == rhs.normal() && lhs.offset() == rhs.offset() );
 }
 
+/**
+ * @brief      Operator less.
+ * @details    Note that this operator uses SOME comparison (dimension wise) without any meaning. Only used
+ * for STL containers.
+ * @param[in]  lhs     The left hand side.
+ * @param[in]  rhs     The right hand side.
+ * @tparam     Number  The number type.
+ * @return     True, if lhs < rhs according to the normal vector and the scalar, false otherwise.
+ */
 template <typename Number>
 bool operator<( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
 	return ( lhs.normal() < rhs.normal() || ( lhs.normal() == rhs.normal() && lhs.offset() < rhs.offset() ) );
 }
 
+/**
+ * @brief      Operator unary minus.
+ * @details    Used to invert the halfspace.
+ * @param[in]  _in     The halfspace.
+ * @tparam     Number  The number type.
+ * @return     The inverted halfspace.
+ */
 template <typename Number>
 Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
 	return Halfspace<Number>(_in).invert();
@@ -159,6 +344,10 @@ Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
 }  // namespace hypro
 
 namespace std{
+	/**
+	 * @brief      Hash operator for halfspaces.
+	 * @tparam     Number  The number type.
+	 */
     template<class Number>
     struct hash<hypro::Halfspace<Number>> {
         std::size_t operator()(hypro::Halfspace<Number> const& Halfspace) const
