@@ -12,9 +12,6 @@ if(GTEST_FOUND)
 else()
 	message("-- Download version of GTest")
 	include(gtest.cmake)
-	# required for testing.
-	#set( GTEST_INCLUDE_DIR ${GTEST_INCLUDE_DIR} PARENT_SCOPE)
-	#set( GTEST_LIBRARIES ${GTEST_LIBRARIES} PARENT_SCOPE)
 endif()
 
 if(GLPK_FOUND)
@@ -22,11 +19,6 @@ if(GLPK_FOUND)
 else()
 	message("-- Download version of glpk")
 	include(glpk.cmake)
-
-	message("GLPK_INCLUDE_DIR: ${GLPK_INCLUDE_DIR}")
-
-	#set( GLPK_INCLUDE_DIR ${GLPK_INCLUDE_DIR} PARENT_SCOPE )
-	#set( GLPK_LIBRARIES ${GLPK_LIBRARIES} PARENT_SCOPE )
 endif()
 
 if(LOGGING_HYPRO)
