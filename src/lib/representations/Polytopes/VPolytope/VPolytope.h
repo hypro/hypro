@@ -61,11 +61,13 @@ class VPolytopeT {
 	VPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
-	VPolytopeT<Number, Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
-	VPolytopeT<Number, Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	VPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	VPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<bool, VPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<bool, VPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
-	bool contains( const VPolytopeT<Number, Converter>& _other ) const;
+	bool contains( const VPolytopeT& _other ) const;
 	VPolytopeT unite( const VPolytopeT& rhs ) const;
 	VPolytopeT unite( const std::vector<VPolytopeT>& rhs ) const;
 
@@ -76,6 +78,8 @@ class VPolytopeT {
 	 **************************************************************************/
 
 	bool empty() const { return mVertices.empty(); }
+
+	static VPolytopeT Empty() { return VPolytopeT(); }
 
 	std::size_t dimension() const {
 		if ( mVertices.empty() ) return 0;
