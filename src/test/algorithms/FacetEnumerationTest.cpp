@@ -3,7 +3,7 @@
 #include "../../src/hypro/algorithms/convexHull/ConvexHull.h"
 #include "../../src/hypro/representations/GeometricObject.h"
 
-#include "../../src/lib/config.h"
+#include "../../src/hypro/config.h"
 
 using namespace hypro;
 
