@@ -280,7 +280,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 	tmp.resize( mDimension, rhs.numGenerators() + numGenerators() );
 	tmp << mGenerators, rhs.generators();
 	result.setGenerators( tmp );
-        result.uniteEqualVectors();
+    result.uniteEqualVectors();
 	result.removeEmptyGenerators();
 	return result;
 }

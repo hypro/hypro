@@ -117,10 +117,10 @@ class ZonotopeT {
 	 */
 	void removeEmptyGenerators();
 
-        /*
-         * It's important to do it, so we can reduce the necessary amount of calls of corners!
-         */
-        void uniteEqualVectors();
+    /*
+     * It's important to do it, so we can reduce the necessary amount of calls of corners!
+     */
+    void uniteEqualVectors();
 
 	/**
 	 * Changes the dimension of a ZonotopeT. if new_dim > old dim, new rows are initialized with null
@@ -148,6 +148,8 @@ class ZonotopeT {
     	}
     	return true;
     }
+
+    void removeRedundancy() const {}
 
 	/*****************************************************************************
 	*                                                                           *
@@ -211,7 +213,15 @@ class ZonotopeT {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, int method );
+	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs, int method );
+
+	/**
+	 * Intersects the given stateset with a second one.
+	 * @param result The resulting stateset of the intersection.
+	 * @param rhs The right-hand-side stateset. Is not modified.
+	 * @return True if intersect is found
+	 */
+	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number> vec, int method );
 
 	/**
 	 * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
