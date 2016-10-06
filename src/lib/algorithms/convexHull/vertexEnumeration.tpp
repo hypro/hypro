@@ -116,6 +116,61 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	void VertexEnumeration<Number>::enumerateVerticesNaive() {
+		if(!mHsv.empty()) {
+			unsigned dim = mHsv.begin()->dimension();
+
+			Permutator permutator(mHsv.size(), dim);
+			std::vector<unsigned> permutation;
+			while(!permutator.end()) {
+				permutation = permutator();
+
+				matrix_t<Number> A( dim, dim );
+				vector_t<Number> b( dim );
+				unsigned pos = 0;
+				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
+					A.row(pos) = mHsv.at(*planeIt).normal().transpose();
+					b(pos) = mHsv.at(*planeIt).offset();
+					++pos;
+				}
+
+				Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+				if ( lu_decomp.rank() < A.rows() ) {
+					continue;
+				}
+
+				vector_t<Number> res = lu_decomp.solve( b );
+
+				// Check if the computed vertex is a real vertex
+				bool outside = false;
+				for(unsigned planePos = 0; planePos < mHsv.size(); ++planePos) {
+					bool skip = false;
+					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
+						if(planePos == permutation.at(permPos)) {
+							skip = true;
+							break;
+						}
+					}
+
+					if(!skip) {
+						if( !carl::AlmostEqual2sComplement(mHsv.at(planePos).offset(), mHsv.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHsv.at(planePos).offset() - mHsv.at(planePos).normal().dot(res) < 0 ) {
+							outside = true;
+							break;
+						}
+					}
+				}
+				if(!outside) {
+					// insert, if no duplicate
+					Point<Number> tmp(res);
+					if(std::find(mPoints.begin(), mPoints.end(), tmp) == mPoints.end()) {
+						mPoints.push_back(tmp);
+					}
+				}
+			}
+		}
+	}
+
+	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices(Dictionary<Number>& dictionary) {
 		assert(dictionary.isOptimal());
 		std::set<vector_t<Number>> cones =dictionary.findCones();

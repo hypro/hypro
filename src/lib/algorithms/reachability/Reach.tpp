@@ -25,7 +25,33 @@ namespace reachability {
 				State<Number> s;
 				s.location = state.second.location;
 				s.discreteAssignment = state.second.discreteAssignment;
-				s.set = Representation(state.second.set.first, state.second.set.second);
+				HPolytope<Number> tmpSet(state.second.set.first, state.second.set.second);
+				representation_name type = Representation::type();
+				switch(type){
+					case representation_name::box: {
+						s.set = Converter<Number>::toBox(tmpSet);
+						break;
+					}
+					case representation_name::polytope_h: {
+						s.set = tmpSet;
+						break;
+					}
+					case representation_name::polytope_v: {
+						s.set = Converter<Number>::toVPolytope(tmpSet);
+						break;
+					}
+					case representation_name::zonotope: {
+						s.set = Converter<Number>::toZonotope(tmpSet);
+						break;
+					}
+					case representation_name::support_function: {
+						s.set = Converter<Number>::toSupportFunction(tmpSet);
+						break;
+					}
+					default: {
+						s.set = Representation(state.second.set.first, state.second.set.second);
+					}
+				}
 				s.timestamp = carl::Interval<Number>(0);
 				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
 				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));

@@ -9,6 +9,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
 #include "util.h"
 #include "SupportFunctionContent.h"
 #include "../../util/helperFunctions.h"
@@ -47,7 +51,8 @@ public:
 
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?
-	SF_TYPE type() const;
+	static representation_name type() { return representation_name::support_function; }
+	SF_TYPE sfType() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
 

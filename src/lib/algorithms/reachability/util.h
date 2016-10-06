@@ -60,7 +60,8 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
-	Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
+	//Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
+	auto b1 = Converter<Number>::toBox(initialSet);
 	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
 	// std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
 	// std::cout << __func__ << " TmpMtrix: " << tmpMatrix << std::endl;
@@ -74,7 +75,8 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrix_t<Number> tmpTrafo = (flow*flow*trafoMatrix).block(0,0,dim-1,dim-1);
 	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
 	Representation tmp = initialSet.linearTransformation( tmpTrafo, tmpTrans );
-	Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
+	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
+	auto b2 = Converter<Number>::toBox(tmp);
 	b2 = b2.makeSymmetric();
 	//Plotter<Number>::getInstance().addObject(b2.vertices());
 	assert(b2.isSymmetric());

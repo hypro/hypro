@@ -12,8 +12,6 @@
 #include "../../datastructures/Halfspace.h"
 #include "../SupportFunction/SupportFunction.h"
 
-
-
 namespace hypro {
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)

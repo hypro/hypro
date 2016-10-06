@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
 #include "util.h"
 #include "representations/Box/Box.h"
 #include "representations/Polytopes/HPolytope/HPolytope.h"
@@ -11,9 +15,9 @@
 namespace hypro {
 
 //enum for differentiating between exact conversion and over-/underapproximation (some functions support an alternative computation method).
-	enum CONV_MODE {
-		EXACT, OVER, UNDER, ALTERNATIVE
-	};
+enum CONV_MODE {
+	EXACT, OVER, UNDER, ALTERNATIVE
+};
 
 template<typename Number>
 class Converter {

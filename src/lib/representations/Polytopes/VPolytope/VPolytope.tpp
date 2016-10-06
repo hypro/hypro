@@ -253,7 +253,8 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 
 		if(effDim < points.begin()->dimension()){
 			pointSet.clear();
-			std::vector<Halfspace<Number>> orientedHalfspaces = computeOrientedBox(points);
+			PrincipalComponentAnalysis<Number> pca(points);
+			std::vector<Halfspace<Number>> orientedHalfspaces = pca.box();
 			//std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
 			//assert(orientedHalfspaces.size() == points.begin()->dimension());
 

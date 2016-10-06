@@ -47,7 +47,15 @@ bool compareColumnVectors( const hypro::vector_t<Number>& colvec1, const hypro::
 
 template<typename Number>
 std::vector<hypro::vector_t<Number>> getCornersRecursive(const hypro::matrix_t<Number> _remainingGenerators, hypro::vector_t<Number>& _current) {
+	//std::cout << __func__ << ": remainingGenerators: " << _remainingGenerators << " and current: " << _current << std::endl;
 	std::vector<hypro::vector_t<Number>> res;
+	if(_remainingGenerators.cols() == 0) {
+		if(_current.rows() == 0) {
+			return res;
+		}
+		res.emplace_back(_current);
+		return res;
+	}
 
     if(_remainingGenerators.cols() == 1) {
 		res.push_back(hypro::vector_t<Number>(_current + _remainingGenerators.col(0)));

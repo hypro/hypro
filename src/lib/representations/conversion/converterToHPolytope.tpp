@@ -29,7 +29,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 	    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
 	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
-	    std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
+	    PrincipalComponentAnalysis<Number> pca(vertices);
+	    std::vector<Halfspace<Number>> planes = pca.box();
 	    target = HPolytope(planes);
     }
     return target;

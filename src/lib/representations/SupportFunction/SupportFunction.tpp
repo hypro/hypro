@@ -108,7 +108,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SF_TYPE SupportFunctionT<Number,Converter>::type() const {
+    SF_TYPE SupportFunctionT<Number,Converter>::sfType() const {
         return content->type();
     }
 

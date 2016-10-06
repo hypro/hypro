@@ -16,11 +16,35 @@
 namespace hypro {
 
 template <typename Number>
-class pca{
+class PrincipalComponentAnalysis{
+	private:
+		mutable Point<Number> mMean;
+		std::vector<Point<Number>> mSamples;
+		mutable std::vector<Halfspace<Number>> mBoxConstraints;
+		mutable bool mBoxComputed = false;
+		mutable bool mMeanComputed = false;
+
     public:
 
-        static std::vector<Halfspace<Number>> computeOrientedBox(const std::vector<Point<Number>>& samples);
+    	PrincipalComponentAnalysis() = default;
+    	PrincipalComponentAnalysis( const std::vector<Point<Number>>& samples ) :
+    		mMean(),
+    		mSamples(samples),
+    		mBoxConstraints(),
+    		mBoxComputed(false),
+    		mMeanComputed(false)
+    	{}
 
+    	PrincipalComponentAnalysis(const PrincipalComponentAnalysis<Number>& orig) = default;
+
+        const Point<Number>& mean() const;
+        const std::vector<Point<Number>>& samples() const { return mSamples; }
+        const std::vector<Halfspace<Number>> box() const;
+
+        void setSamples(const std::vector<Point<Number>>& samples);
+
+        void computeMean() const;
+        void computeOrientedBox() const;
 };
 
 } //namespace

@@ -13,7 +13,7 @@
 #include "../defines.h"
 #include <carl/core/VariablePool.h>
 #include "../../lib/datastructures/Point.h"
-#include "../../lib/representations/conversion/Converter.h"
+#include "../../lib/representations/GeometricObject.h"
 
 template<typename Number>
 class BoxTest : public ::testing::Test

@@ -10,6 +10,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Permutator.h"
@@ -326,6 +330,8 @@ class BoxT {
 	 * @return     Size of the required memory.
 	 */
 	std::size_t size() const;
+
+	static representation_name type() { return representation_name::box; }
 
 	/**
 	 * @brief      Function to reduce the number representation (over-approximate).

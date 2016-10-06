@@ -100,7 +100,7 @@ ZonotopeT<Number,Converter>::ZonotopeT( const ZonotopeT<Number,Converter> &other
 	Eigen::Matrix<Number, 2, Eigen::Dynamic> generators;
 	center = {other.center()( d1 ), other.center()( d2 )};
 
-	generators.resize( Eigen::NoChange, other.numGenerators() );
+	generators.resize( Eigen::NoChange, other.size() );
 	generators << other.generators().row( d1 ), other.generators().row( d2 );
 
 	mDimension = 2;
@@ -123,6 +123,20 @@ ZonotopeT<Number,Converter>::~ZonotopeT() {
 template<typename Number, typename Converter>
 std::size_t ZonotopeT<Number,Converter>::dimension() const {
 	return mDimension;
+}
+
+template<typename Number, typename Converter>
+Number ZonotopeT<Number,Converter>::supremum() const {
+	// evaluate center first to obtain a basic value
+	Number supremum = mCenter(0);
+	for(unsigned d = 1; d < mCenter.rows(); ++d){
+		supremum = mCenter(d) > supremum ? mCenter(d) : supremum;
+	}
+	// take generators into consideration (only consider the positive ones, as we are looking for the "largest point")
+	vector_t<Number> ones = vector_t<Number>::Ones(this->dimension());
+	Number zs = ( ones.transpose() * this->mGenerators ).array().abs().sum();
+
+	return supremum + zs;
 }
 
 template<typename Number, typename Converter>
@@ -184,7 +198,7 @@ bool ZonotopeT<Number,Converter>::addGenerators( const matrix_t<Number> &generat
 }
 
 template<typename Number, typename Converter>
-std::size_t ZonotopeT<Number,Converter>::numGenerators() const {
+std::size_t ZonotopeT<Number,Converter>::size() const {
 	return mGenerators.cols();
 }
 
@@ -277,7 +291,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 	ZonotopeT<Number,Converter> result;
 	result.setCenter( this->mCenter + rhs.mCenter );
 	matrix_t<Number> tmp;
-	tmp.resize( mDimension, rhs.numGenerators() + numGenerators() );
+	tmp.resize( mDimension, rhs.size() + size() );
 	tmp << mGenerators, rhs.generators();
 	result.setGenerators( tmp );
     result.uniteEqualVectors();
@@ -296,8 +310,8 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( c
 			"different from zonotope's "
 			"generators' dimensionality." );
 	ZonotopeT<Number,Converter> result;
-	result.setCenter( A * this->mCenter );
-	result.setCenter( this->mCenter + b );
+	result.setCenter( A * this->mCenter + b );
+	//result.setCenter( this->mCenter + b );
 	result.setGenerators( A * this->mGenerators );
 
 	return result;
@@ -370,11 +384,11 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 	assert( input.dimension() == hp.dimension() && input.dimension() == 2 &&
 			"zonotope dimension must be of same dimension (only dim 2 accepted) "
 			"as Halfspace" );
-	unsigned numGenerators = input.numGenerators();
+	unsigned size = input.size();
 	matrix_t<Number> g1, g2, generators = input.generators();
 	Eigen::Matrix<Number, 2, 1> s, s1, pmNext, pm = input.center();
 
-	for ( unsigned i = 0; i < numGenerators; i++ ) {
+	for ( unsigned i = 0; i < size; i++ ) {
 		if ( ( generators( 1, i ) > 0 || ( generators( 1, i ) == 0 && generators( 0, i ) > 0 ) ) && minOrMax == 1 )
 			generators.col( i ) = -1 * generators.col( i );
 		else if ( ( generators( 1, i ) < 0 || ( generators( 1, i ) == 0 && generators( 0, i ) < 0 ) ) && minOrMax == 0 )
@@ -732,8 +746,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constr
 #endif
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace( const vector_t<Number> &d_vec,
-														   Number e_scalar ) const {
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
 	ZonotopeT<Number,Converter> result;
 	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
 	 * generators
@@ -742,35 +755,105 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectWithHalfspace(
 	 * canceling)
 	 * -> this holds the farest we can go without leaving the zonotope
 	 */
-	Number zs = ( d_vec.transpose() * this->mGenerators ).array().abs().sum();
-	// projection of d_vec on center
-	Number dc = d_vec.dot( this->mCenter );
+	Number zs = ( rhs.normal().transpose() * this->mGenerators ).array().abs().sum();
+	// projection of normal on center -> offset induced by the center vector.
+	Number dc = rhs.normal().dot( this->mCenter );
 	// qu holds the maximal value one can go into direction of the Halfspace ->
 	// if this is less than the scalar, the
 	// zonotope is fully contained
 	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
 										// evaluated into the direction of the
 										// Halfspace (with respect to the center)
-	if ( qd <= e_scalar ) {				// the zonotope is below the Halfspace -> there is an
+	if ( qd <= rhs.offset() ) {				// the zonotope is below the Halfspace -> there is an
 										// intersection
-		if ( qu <= e_scalar ) {			// the zonotopes maximal evaluation is also below the
+		if ( qu <= rhs.offset() ) {			// the zonotopes maximal evaluation is also below the
 										// Halfspace -> it is fully contained
 			result = *this;
 		} else {  // partly contained
 			// sigma is half the distance between the Halfspace and the "lowest"
 			// point of the zonotope.
-			Number sigma = ( e_scalar - qd ) / 2, d = ( qd + e_scalar ) / 2;  // d holds ?
+			Number sigma = ( rhs.offset() - qd ) / 2, d = ( qd + rhs.offset() ) / 2;  // d holds ?
 			matrix_t<Number> HHT = this->mGenerators * this->mGenerators.transpose();
-			vector_t<Number> lambda = HHT * d_vec / ( ( d_vec.transpose() * HHT * d_vec ) + sigma * sigma );
+			vector_t<Number> lambda = HHT * rhs.normal() / ( ( rhs.normal().transpose() * HHT * rhs.normal() )(0,0) + sigma * sigma );
 			result.setCenter( this->mCenter + lambda * ( d - dc ) );
 			matrix_t<Number> identity;
 			identity.resize( mDimension, mDimension );
 			identity.setIdentity();
-			result.setGenerators( ( identity - lambda * d_vec.transpose() ) * this->mGenerators );
+			result.setGenerators( ( identity - lambda * rhs.normal().transpose() ) * this->mGenerators );
 			result.addGenerators( sigma * lambda );
 		}
 	}
 	return result;
+}
+
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
+	assert(mat.rows() == vec.rows());
+	ZonotopeT<Number,Converter> res = *this;
+
+	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
+		res = res.intersectHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
+		if(res.empty()) {
+			return res;
+		}
+	}
+	return res;
+}
+
+template<typename Number, typename Converter>
+std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+	ZonotopeT<Number,Converter> result;
+	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
+	 * generators
+	 *  -> we sum the projections of the direction onto the generators (take only
+	 * positive ones to prevent from
+	 * canceling)
+	 * -> this holds the farest we can go without leaving the zonotope
+	 */
+	Number zs = ( rhs.normal().transpose() * this->mGenerators ).array().abs().sum();
+	// projection of normal on center -> offset induced by the center vector.
+	Number dc = rhs.normal().dot( this->mCenter );
+	// qu holds the maximal value one can go into direction of the Halfspace ->
+	// if this is less than the scalar, the
+	// zonotope is fully contained
+	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
+										// evaluated into the direction of the
+										// Halfspace (with respect to the center)
+	if ( qd <= rhs.offset() ) {				// the zonotope is below the Halfspace -> there is an
+										// intersection
+		if ( qu <= rhs.offset() ) {			// the zonotopes maximal evaluation is also below the
+										// Halfspace -> it is fully contained
+			result = *this;
+		} else {  // partly contained
+			// sigma is half the distance between the Halfspace and the "lowest"
+			// point of the zonotope.
+			Number sigma = ( rhs.offset() - qd ) / 2, d = ( qd + rhs.offset() ) / 2;  // d holds ?
+			matrix_t<Number> HHT = this->mGenerators * this->mGenerators.transpose();
+			vector_t<Number> lambda = HHT * rhs.normal() / ( ( rhs.normal().transpose() * HHT * rhs.normal() )(0,0) + sigma * sigma );
+			result.setCenter( this->mCenter + lambda * ( d - dc ) );
+			matrix_t<Number> identity;
+			identity.resize( mDimension, mDimension );
+			identity.setIdentity();
+			result.setGenerators( ( identity - lambda * rhs.normal().transpose() ) * this->mGenerators );
+			result.addGenerators( sigma * lambda );
+		}
+		return std::make_pair(true,result);
+	}
+	return std::make_pair(false,result);
+}
+
+template<typename Number, typename Converter>
+std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
+	assert(mat.rows() == vec.rows());
+	std::pair<bool, ZonotopeT<Number,Converter>> resultPair = std::make_pair(true, *this);
+
+	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
+		resultPair = resultPair.second.satisfiesHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
+		if(resultPair.first == false) {
+			return resultPair;
+		}
+	}
+	return resultPair;
 }
 
 #ifdef USE_PPL
@@ -850,8 +933,8 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 			"convex hull operations." );
 	unsigned numGenCurrent, numGenOther;
 	ZonotopeT<Number,Converter> temp;
-	numGenCurrent = this->numGenerators();
-	numGenOther = other.numGenerators();
+	numGenCurrent = this->size();
+	numGenOther = other.size();
 	matrix_t<Number> R1, R2;
 	vector_t<Number> c1, c2;
 	R1 = this->mGenerators;

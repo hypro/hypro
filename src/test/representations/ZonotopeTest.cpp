@@ -151,11 +151,11 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 
 
     EXPECT_EQ(z1.center(), cen_res);
-    EXPECT_EQ(z1.numGenerators(), (unsigned) 4);
+    EXPECT_EQ(z1.size(), (unsigned) 4);
     EXPECT_EQ(z1.generators().rowwise().sum(), gen_sum);
 
     z1 = z2.minkowskiSum(z3);
-    EXPECT_EQ(z1.numGenerators(), (unsigned) 2);
+    EXPECT_EQ(z1.size(), (unsigned) 2);
     EXPECT_EQ(z1.generators(), gen2);
 
     // z1.minkowskiSum(*this, z2);

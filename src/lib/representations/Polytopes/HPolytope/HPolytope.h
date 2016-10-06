@@ -8,8 +8,13 @@
 
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
 #include "util/convexHull.h"
 #include "util/Permutator.h"
+#include "util/pca.h"
 #include "util/linearOptimization/Optimizer.h"
 #include "algorithms/convexHull/ConvexHull.h"
 
@@ -137,6 +142,8 @@ public:
 	 * @return The number of constraints.
 	 */
 	std::size_t size() const;
+
+	static representation_name type() { return representation_name::polytope_h; }
 
 	/**
 	 * @brief Resets the information if the current polytope contains redundant constraints.

@@ -20,13 +20,10 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolyt
     //converts source object into a v-polytope
     auto temp = toVPolytope(_source, mode);
 
-
     //conversion is from here done just like V -> Zonotope
     Zonotope res = toZonotope(temp, mode);
 
-
     return res;
-
 }
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
@@ -61,13 +58,12 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
 
         //computes an oriented Box as special Zonotope around the source object (returns Halfspaces)
-        std::vector<Halfspace<Number>> planes = computeOrientedBox(vertices);
+        PrincipalComponentAnalysis<Number> pca(vertices);
+        std::vector<Halfspace<Number>> planes = pca.box();
         HPolytope hpoly = HPolytope(planes);
 
         //converts computed box H -> V
         auto vpoly = toVPolytope(hpoly, mode);
-
-        std::cout << "Created box as hpoly: " << hpoly << ", with vertices " << vpoly << std::endl;
 
         //gets vertices of box
         typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
@@ -76,77 +72,74 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
 
-        //only continue if object is really an oriented box (i.e. it has 2^n vertices)
-        assert (newVertices.size() == std::pow(2 , dim));
+        //only continue if object is really an oriented box (i.e. it has 2^n vertices) -> NOT TRUE IF ORIGINAL IS DEGENERATED!
+        //assert (newVertices.size() == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
         center = computeArithmeticMeanPoint(newVertices);
 
         //defines empty distances vector for the generators
-         vector_t<Number> distances = vector_t<Number>::Zero(dim);
+		vector_t<Number> distances = vector_t<Number>::Zero(dim);
 
-         //defines a matrix with one exemplary point out of each set of halfspaces (on the border) for distance computation
-         matrix_t<Number> planePoints = matrix_t<Number>::Zero(dim, dim);
-         //for every dimension
-         for (unsigned i=0; i < dim; ++i){
-             //read out normal of current halfspace pair
-             vector_t<Number> normal = planes[2*i].normal();
+		//defines a matrix with one exemplary point out of each set of halfspaces (on the border) for distance computation
+		matrix_t<Number> planePoints = matrix_t<Number>::Zero(dim, dim);
+		//for every dimension
+		for (unsigned i=0; i < dim; ++i){
+			//read out normal of current halfspace pair
+			vector_t<Number> normal = planes[2*i].normal();
 
+			//only continue if normal is non-zero
+			assert (normal != vector_t<Number>::Zero(normal.rows()));
+			//for every dimension
+			for (unsigned j=0; j < dim; ++j){
+				//construct point on the Halfspace by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
+				if (normal(j) != 0){
+					vector_t<Number> p = vector_t<Number>::Zero(dim);
+					p(j) = 1;
+					planePoints.row(i) = p*(planes[2*i].offset()/normal(j));
+					break;
+				}
+			}
+		}
 
-             //only continue if normal is non-zero
-             assert (normal != vector_t<Number>::Zero(normal.rows()));
-             //for every dimension
-             for (unsigned j=0; j < dim; ++j){
-                 //construct point on the Halfspace by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
-                 if (normal(j) != 0){
-                     vector_t<Number> p = vector_t<Number>::Zero(dim);
-                     p(j) = 1;
-                     planePoints.row(i) = p*(planes[2*i].offset()/normal(j));
-                     break;
-                 }
-             }
+		//computes distances from center to each pair of halfspaces
+		for (unsigned i=0; i < dim; ++i){
+			vector_t<Number> normal = planes[2*i].normal();
 
-         }
-         //computes distances from center to each pair of halfspaces
+			Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
+			//eliminates some fractional digits for improved computation time
+			normalDiff = carl::ceil(Number(normalDiff * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
+			Number euclid = norm(normal, false);
 
-         for (unsigned i=0; i < dim; ++i){
-             vector_t<Number> normal = planes[2*i].normal();
+			//eliminates some fractional digits for improved computation time
+			Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
+			Number euclid2 = (Number) fReach_DENOMINATOR;
+			Number euclid3 = carl::ceil(euclid1);
+			euclid  = euclid3/euclid2;
+			//euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
 
+			assert (euclid > 0);
+			if (normalDiff < 0){
+				distances(i) = -1*(normalDiff)/euclid;
+			} else {
+				distances(i) = normalDiff/euclid;
+			}
+		}
 
-             Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
-             //eliminates some fractional digits for improved computation time
-             normalDiff = carl::ceil(Number(normalDiff * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
-             Number euclid = norm(normal, false);
+		for (unsigned i=0; i < dim; ++i){
+			//computes scaling factors for normals in order to compute the generators later on
+			vector_t<Number> normal = planes[2*i].normal();
+			Number distancePow = distances(i)*distances(i);
+			Number normalPow = normal.dot(normal);
+			Number powDiv = distancePow/normalPow;
+			//eliminates some fractional digits for improved computation time
+			powDiv = carl::ceil(Number(powDiv * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
+			std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
+			//computes generators
+			generators.col(i) = scaling.second*normal;
+		}
 
-             //eliminates some fractional digits for improved computation time
-             Number euclid1 = euclid* (Number) fReach_DENOMINATOR;
-             Number euclid2 = (Number) fReach_DENOMINATOR;
-             Number euclid3 = carl::ceil(euclid1);
-             euclid  = euclid3/euclid2;
-             //euclid = carl::ceil(euclid*fReach_DENOMINATOR)/ (Number) fReach_DENOMINATOR;
-
-             assert (euclid > 0);
-             if (normalDiff < 0){
-                 distances(i) = -1*(normalDiff)/euclid;
-             } else {
-                 distances(i) = normalDiff/euclid;
-             }
-         }
-
-         for (unsigned i=0; i < dim; ++i){
-             //computes scaling factors for normals in order to compute the generators later on
-             vector_t<Number> normal = planes[2*i].normal();
-             Number distancePow = distances(i)*distances(i);
-             Number normalPow = normal.dot(normal);
-             Number powDiv = distancePow/normalPow;
-             //eliminates some fractional digits for improved computation time
-             powDiv = carl::ceil(Number(powDiv * Number(fReach_DENOMINATOR)))/ Number(fReach_DENOMINATOR);
-             std::pair<Number, Number> scaling = carl::sqrt_safe(powDiv);
-             //computes generators
-             generators.col(i) = scaling.second*normal;
-         }
-
-         return Zonotope(center, generators);
+		return Zonotope(center, generators);
 
     //}
 }
@@ -236,7 +229,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         }
 
         //computes an oriented Box as special Zonotope around the boundary points(returns Halfspaces and may not be an overapproximation yet)
-        std::vector<Halfspace<Number>> planes = computeOrientedBox(points);
+        PrincipalComponentAnalysis<Number> pca(points);
+        std::vector<Halfspace<Number>> planes = pca.box();
 
         //gets number of planes
         unsigned numberOfPlanes = planes.size();

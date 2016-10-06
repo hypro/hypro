@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Dictionary.h"
-
+#include "util/Permutator.h"
 
 namespace hypro {
 
@@ -49,6 +49,8 @@ class VertexEnumeration {
 		 * @brief does everything with the halfspaces in mHsv
 		 *
 		 */
+
+		void enumerateVerticesNaive();
 
 		VertexEnumeration(const std::vector<Halfspace<Number>>& hsv);
 		/**

@@ -85,7 +85,8 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
+			PrincipalComponentAnalysis<Number> pca(points);
+			std::vector<Halfspace<Number>> boxConstraints = pca.box();
 			for(const auto& constraint : boxConstraints){
 				mHPlanes.emplace_back(constraint);
 			}

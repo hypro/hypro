@@ -12,8 +12,13 @@
 
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
 #include "ZUtility.h"
 #include "../../datastructures/Halfspace.h"
+#include "../../util/pca.h"
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
@@ -77,11 +82,15 @@ class ZonotopeT {
 	 */
 	std::size_t dimension() const;
 
+	Number supremum() const;
+
 	/**
 	* Returns, whether the zonotopeT is empty.
 	* @return
 	*/
 	bool empty() const;
+
+	static representation_name type() { return representation_name::zonotope; }
 
 	/**
 	 * Replaces the current center with the parameter center
@@ -110,7 +119,7 @@ class ZonotopeT {
 	 * Number of generators
 	 * @return number of generators
 	 */
-	std::size_t numGenerators() const;
+	std::size_t size() const;
 
 	/**
 	 * Removes empty (null) columns in generator matrix
@@ -195,7 +204,11 @@ class ZonotopeT {
 	 * @param e_scalar : Scalar representing the halfspace
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	ZonotopeT<Number,Converter> intersectWithHalfspace( const vector_t<Number>& d_vec, Number e_scalar ) const;
+	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
+
+	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
 	#ifdef USE_PPL
 	/**
@@ -213,7 +226,7 @@ class ZonotopeT {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs, int method );
+	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, int method );
 
 	/**
 	 * Intersects the given stateset with a second one.
