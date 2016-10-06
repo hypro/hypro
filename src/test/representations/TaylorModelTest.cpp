@@ -5,8 +5,8 @@
  *      Author: chen
  */
 
-#include "../../lib/representations/TaylorModel/continuous.h"
- #include "../../lib/util/VariablePool.h"
+#include "../../hypro/representations/TaylorModel/continuous.h"
+#include "../../hypro/util/VariablePool.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 

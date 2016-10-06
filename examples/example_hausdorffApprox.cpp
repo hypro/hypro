@@ -1,6 +1,6 @@
-#include "../src/lib/representations/Polytope/Polytope.h"
-#include "../src/lib/datastructures/Point.h"
-#include "../src/lib/algorithms/reachability/util.h"
+#include "../src/hypro/representations/Polytope/Polytope.h"
+#include "../src/hypro/datastructures/Point.h"
+#include "../src/hypro/algorithms/reachability/util.h"
 
 int main(int argc, char** argv) {
 

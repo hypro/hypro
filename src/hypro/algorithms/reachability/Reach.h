@@ -18,7 +18,7 @@
 #include "../../datastructures/hybridAutomata/State.h"
 #include "../../datastructures/hybridAutomata/RawState.h"
 #include "../../util/Plotter.h"
-#include "../lib/representations/Ellipsoids/Ellipsoid.h"
+#include "../hypro/representations/Ellipsoids/Ellipsoid.h"
 #include "../../representations/GeometricObject.h"
 #include "boost/tuple/tuple.hpp"
 

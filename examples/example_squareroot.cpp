@@ -6,7 +6,7 @@
  */
 
 #include <cstdlib>
-#include "../src/lib/config.h"
+#include "../src/hypro/config.h"
 #include <chrono>
 #include <mpfr.h>
 #include <set>

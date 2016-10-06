@@ -8,10 +8,10 @@
  * @version     2014-11-23
  */
 
-#include "../src/lib/config.h"
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/datastructures/Point.h"
+#include "../src/hypro/config.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/datastructures/Point.h"
 
 int main(int argc, char** argv) {
 

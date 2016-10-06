@@ -2,8 +2,8 @@
  * A simple example file to test the vertex enumeration algorithm.
  */
 
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/algorithms/convexHull/vertexEnumeration.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/algorithms/convexHull/vertexEnumeration.h"
 
 int main() {
 	using Number = mpq_class;

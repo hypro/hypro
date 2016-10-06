@@ -1,9 +1,9 @@
 /**
  * Typed tests to run all representations with all operations in a benchmark.
  * @file AllBenchmarkTest.cpp
- * 
+ *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since 	2015-03-20
  * @version 	2015-03-20
  */
@@ -11,8 +11,8 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "Benchmark.h"
- #include "../../src/lib/representations/Box/Box.h"
-#include "../../src/lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../../src/hypro/representations/Box/Box.h"
+#include "../../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
 
 
 template<typename Number>
@@ -22,7 +22,7 @@ protected:
 	virtual void SetUp()
 	{
 	}
-	
+
 	virtual void TearDown()
 	{
 	}

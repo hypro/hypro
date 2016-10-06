@@ -5,14 +5,14 @@
  * Created on April 18, 2016, 3:39 PM
  */
 
-#include "../src/lib/representations/Box/Box.h"
+#include "../src/hypro/representations/Box/Box.h"
 #include <cstdlib>
-#include "../src/lib/config.h"
+#include "../src/hypro/config.h"
 #include <chrono>
 #include <set>
-#include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
-#include "../src/lib/util/helperFunctions.h"
-#include "../src/lib/representations/conversion/Converter.h"
+#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../src/hypro/util/helperFunctions.h"
+#include "../src/hypro/representations/conversion/Converter.h"
 
 using namespace hypro;
 using namespace carl;

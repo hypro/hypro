@@ -11,8 +11,8 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/GeometricObject.h"
-#include "../../lib/util/Plotter.h"
+#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/util/Plotter.h"
 
 using namespace hypro;
 using namespace carl;

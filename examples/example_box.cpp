@@ -1,7 +1,7 @@
 
-#include "../lib/representations/GeometricObject.h"
-#include "../lib/datastructures/Halfspace.h"
-#include "../lib/util/Plotter.h"
+#include "../hypro/representations/GeometricObject.h"
+#include "../hypro/datastructures/Halfspace.h"
+#include "../hypro/util/Plotter.h"
 
 int main(int argc, char const *argv[])
 {

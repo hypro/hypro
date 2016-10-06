@@ -1,7 +1,7 @@
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/algorithms/reachability/Reach.h"
-#include "../src/lib/algorithms/reachability/util.h"
-#include "../src/lib/util/Plotter.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/algorithms/reachability/Reach.h"
+#include "../src/hypro/algorithms/reachability/util.h"
+#include "../src/hypro/util/Plotter.h"
 
 int main() {
 

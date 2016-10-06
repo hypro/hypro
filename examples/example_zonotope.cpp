@@ -12,9 +12,9 @@
 #include <map>
 #include <sys/time.h>
 
-#include "../src/lib/config.h"
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/GeometricObject.h"
+#include "../src/hypro/config.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 
 typedef int Number;

@@ -2,9 +2,9 @@
  * Your story.
  */
 
-#include "../src/lib/representations/SupportFunction/SupportFunctionContent.h"
-#include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
-//#include "../src/lib/datastructures/Halfspace.h"
+#include "../src/hypro/representations/SupportFunction/SupportFunctionContent.h"
+#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+//#include "../src/hypro/datastructures/Halfspace.h"
 
 using namespace hypro;
 

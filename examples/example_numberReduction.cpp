@@ -5,9 +5,9 @@
  *
  */
 
- #include "../src/lib/util/Plotter.h"
- #include "../src/lib/datastructures/Halfspace.h"
- #include "../src/lib/representations/Polytopes/HPolytope/HPolytope.h"
+ #include "../src/hypro/util/Plotter.h"
+ #include "../src/hypro/datastructures/Halfspace.h"
+ #include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
 
 using namespace hypro;
 

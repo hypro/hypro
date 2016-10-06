@@ -8,8 +8,8 @@
  * @version	2015-10-05
  */
 
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/GeometricObject.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
 

@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "../lib/config.h"
-#include "../lib/util/types.h"
+#include "../hypro/config.h"
+#include "../hypro/util/types.h"
 
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT

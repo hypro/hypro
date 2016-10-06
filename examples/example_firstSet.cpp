@@ -2,9 +2,9 @@
 // Created by stefan on 04.07.16.
 //
 
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/algorithms/reachability/util.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/algorithms/reachability/util.h"
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 CLANG_WARNING_RESET

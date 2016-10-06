@@ -9,7 +9,7 @@
  */
 
 #include <cstdlib>
-#include "../src/lib/config.h"
+#include "../src/hypro/config.h"
 
 using namespace std;
 

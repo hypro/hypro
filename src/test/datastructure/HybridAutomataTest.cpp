@@ -5,10 +5,10 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
-#include "../../lib/datastructures/hybridAutomata/Transition.h"
-#include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../../lib/representations/GeometricObject.h"
+#include "../../hypro/datastructures/hybridAutomata/LocationManager.h"
+#include "../../hypro/datastructures/hybridAutomata/Transition.h"
+#include "../../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../hypro/representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
 
 using namespace hypro;

@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/VertexContainer.h"
+#include "../../hypro/datastructures/VertexContainer.h"
 #include <carl/core/VariablePool.h>
 #include <cstdio>
 

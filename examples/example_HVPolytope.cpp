@@ -1,8 +1,8 @@
-#include "../src/lib/util/convexHull.h"
-#include "../src/lib/config.h"
-//#include "../src/lib/datastructures/Point.h"
-#include "../src/lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../src/lib/representations/Polytope/Polytope.h"
+#include "../src/hypro/util/convexHull.h"
+#include "../src/hypro/config.h"
+//#include "../src/hypro/datastructures/Point.h"
+#include "../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../src/hypro/representations/Polytope/Polytope.h"
 
 
 using namespace hypro;

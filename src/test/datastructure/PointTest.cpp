@@ -6,7 +6,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/Point.h"
+#include "../../hypro/datastructures/Point.h"
 #include <carl/interval/Interval.h>
 
 using namespace hypro;

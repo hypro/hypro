@@ -1,4 +1,4 @@
-#include "../src/lib/types.h"
+#include "../src/hypro/types.h"
 
 int main(int argc, char** argv) {
     using namespace hypro;

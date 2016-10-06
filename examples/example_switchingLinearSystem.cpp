@@ -1,13 +1,13 @@
 #include <chrono>
 
-#include "../lib/config.h"
-#include "../lib/datastructures/hybridAutomata/LocationManager.h"
-#include "../lib/datastructures/hybridAutomata/Transition.h"
-#include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../lib/datastructures/Point.h"
-#include "../lib/representations/conversion/Converter.h"
-#include "../lib/algorithms/reachability/Reach.h"
-#include "../lib/util/Plotter.h"
+#include "../hypro/config.h"
+#include "../hypro/datastructures/hybridAutomata/LocationManager.h"
+#include "../hypro/datastructures/hybridAutomata/Transition.h"
+#include "../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../hypro/datastructures/Point.h"
+#include "../hypro/representations/conversion/Converter.h"
+#include "../hypro/algorithms/reachability/Reach.h"
+#include "../hypro/util/Plotter.h"
 
 
 int main(int argc, char const *argv[])

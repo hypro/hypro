@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <iostream>
 #include "gtest/gtest.h"
-#include "../../lib/representations/Zonotope/ZUtility.h"
-#include "../../lib/representations/Zonotope/Zonotope.h"
-#include "../../lib/algorithms/reachability/RAHS.h"
+#include "../../hypro/representations/Zonotope/ZUtility.h"
+#include "../../hypro/representations/Zonotope/Zonotope.h"
+#include "../../hypro/algorithms/reachability/RAHS.h"
 //#include "../Visualizer.h"
 #include <fstream>
 //#include "mat.h"

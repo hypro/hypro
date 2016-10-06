@@ -12,8 +12,8 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include <carl/core/VariablePool.h>
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/representations/GeometricObject.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/representations/GeometricObject.h"
 
 template<typename Number>
 class BoxTest : public ::testing::Test

@@ -1,8 +1,8 @@
 
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/util/Plotter.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/util/Plotter.h"
 #include <carl/numbers/numbers.h>
-#include "../src/lib/representations/Ellipsoids/Ellipsoid.h"
+#include "../src/hypro/representations/Ellipsoids/Ellipsoid.h"
 using namespace hypro;
 
 int main(int argc, char** argv) {
@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 	unsigned original = plotter.addObject(tmp.vertices());
 	plotter.setObjectColor(original, colors[green]);
         }
-	
+
 
 	{
 	HPolytope<Number> tmp;
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), minkEval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[blue]);	
+	plotter.setObjectColor(sf, colors[blue]);
         }
         {
         HPolytope<Number> tmp;

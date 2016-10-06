@@ -13,8 +13,8 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/representations/PTermBox/PTermBox.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/representations/PTermBox/PTermBox.h"
 
 template<typename Number>
 class PTermBoxTest : public ::testing::Test

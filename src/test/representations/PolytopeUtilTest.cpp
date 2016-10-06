@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 
-#include "../../lib/representations/Polytopes/util.h"
+#include "../../hypro/representations/Polytopes/util.h"
 
 template<typename Number>
 class PolytopeUtilTest : public ::testing::Test

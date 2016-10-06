@@ -1,16 +1,16 @@
-#include "../lib/config.h"
-#include "../lib/datastructures/navigationAutomata/LocationManager.h"
-#include "../lib/datastructures/hybridAutomata/Transition.h"
-#include "../lib/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../hypro/config.h"
+#include "../hypro/datastructures/navigationAutomata/LocationManager.h"
+#include "../hypro/datastructures/hybridAutomata/Transition.h"
+#include "../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
 #include <carl/core/VariablePool.h>
-#include "../lib/datastructures/Point.h"
-#include "../lib/algorithms/reachability/forwardReachability.h"
-#include "../lib/representations/Polytope/Polytope.h"
-#include "../lib/representations/Polytopes/HPolytope/HPolytope.h"
-#include "../lib/representations/Polytopes/VPolytope/VPolytope.h"
-#include "../lib/representations/SupportFunction/SupportFunctionContent.h"
-#include "../lib/representations/Box/Box.h"
-#include "../lib/util/Plotter.h"
+#include "../hypro/datastructures/Point.h"
+#include "../hypro/algorithms/reachability/forwardReachability.h"
+#include "../hypro/representations/Polytope/Polytope.h"
+#include "../hypro/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../hypro/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../hypro/representations/SupportFunction/SupportFunctionContent.h"
+#include "../hypro/representations/Box/Box.h"
+#include "../hypro/util/Plotter.h"
 
 int main(int argc, char const *argv[])
 {

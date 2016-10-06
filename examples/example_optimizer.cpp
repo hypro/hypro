@@ -1,4 +1,4 @@
-#include "../src/lib/representations/GeometricObject.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 int main(int argc, char** argv) {
 
