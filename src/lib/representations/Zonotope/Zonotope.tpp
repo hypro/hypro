@@ -131,12 +131,12 @@ bool ZonotopeT<Number,Converter>::empty() const {
 }
 
 template<typename Number, typename Converter>
-vector_t<Number> ZonotopeT<Number,Converter>::center() const {
+const vector_t<Number>& ZonotopeT<Number,Converter>::center() const {
 	return mCenter;
 }
 
 template<typename Number, typename Converter>
-matrix_t<Number> ZonotopeT<Number,Converter>::generators() const {
+const matrix_t<Number>& ZonotopeT<Number,Converter>::generators() const {
 	return mGenerators;
 }
 
