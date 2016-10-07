@@ -19,13 +19,15 @@
 
 typedef int Number;
 
-int main(int argc, char** argv)
+int main()
 {
-	typedef mpq_class Number;
+	typedef double Number;
 
     // Just creates an empty Center
-    hypro::vector_t<Number> vCenter = hypro::vector_t<Number>(2);
-    vCenter << 3,3;
+    hypro::vector_t<Number> vCenter1 = hypro::vector_t<Number>(2);
+    vCenter1 << 3,3;
+    hypro::vector_t<Number> vCenter2 = hypro::vector_t<Number>(2);
+    vCenter2 << 1,1;
 
     // Just creates the Generators (3 for now)
     hypro::matrix_t<Number> vGenerators = hypro::matrix_t<Number>(2,3);
@@ -45,8 +47,8 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     //    vGenerators(2, i) = 0;
     //}
 
-    hypro::Zonotope<Number> zonoExample(vCenter, vGenerators); // Creates an Zonotope
-    hypro::Zonotope<Number> zonoExample2(vCenter, vGenerators2); // Creates an Zonotope
+    hypro::Zonotope<Number> zonoExample(vCenter1, vGenerators); // Creates an Zonotope
+    hypro::Zonotope<Number> zonoExample2(vCenter2, vGenerators2); // Creates an Zonotope
     hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
     std::cout << "Zonotope: " << zonoExample2 << std::endl;
@@ -56,12 +58,16 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     	std::cout << vertex << std::endl;
     }
 
-    plotter.addObject(zonoExample.vertices());
-    plotter.addObject(zonoExample2.vertices());
+    unsigned z1 = plotter.addObject(zonoExample.vertices());
+    plotter.setObjectColor(z1, hypro::colors[hypro::red]);
+    unsigned z2 = plotter.addObject(zonoExample2.vertices());
+    plotter.setObjectColor(z2, hypro::colors[hypro::orange]);
+    unsigned z3 = plotter.addObject(zonoExample.unite(zonoExample2).vertices());
+    plotter.setObjectColor(z3, hypro::colors[hypro::green]);
 
-    plotter.addObject(zonoExample.unite(zonoExample2).vertices());
-
-    hypro::Zonotope<Number> intersectionResult = zonoExample2.intersect(hypro::Halfspace<Number>({0,-1},-4), 2);
+    hypro::vector_t<Number> d = hypro::vector_t<Number>(2);
+    d << 0, -1;
+    hypro::Zonotope<Number> intersectionResult = zonoExample2.intersectHalfspace(hypro::Halfspace<Number>(d, -2));
     std::cout << "Zonotope: " << intersectionResult << std::endl;
     std::cout << "Vertices:" << std::endl;
     vertices = intersectionResult.vertices();
@@ -69,8 +75,27 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     	std::cout << vertex << std::endl;
     }
 
+    unsigned z4 = plotter.addObject(intersectionResult.vertices());
+	plotter.setObjectColor(z4, hypro::colors[hypro::lila]);
 
-    //plotter.addObject(intersectionResult.vertices());
+	hypro::matrix_t<Number> A = hypro::matrix_t<Number>(2,2);
+	A << 1,0.01,0,1;
+	hypro::vector_t<Number> b = hypro::vector_t<Number>(2);
+	b << -3,7;
+	hypro::vector_t<Number> b2 = hypro::vector_t<Number>(2);
+	//b2 << -0.0005, -0.0981;
+	b2 << 0,0;
+
+	std::cout << "A: " << A << " and b: " << b2 << std::endl;
+
+	hypro::Zonotope<Number> linearTrafoResult = zonoExample.linearTransformation(A,b);
+	unsigned z5 = plotter.addObject(linearTrafoResult.vertices());
+	plotter.setObjectColor(z5, hypro::colors[hypro::blue]);
+	for(unsigned i = 0; i < 39; ++i) {
+		linearTrafoResult = linearTrafoResult.linearTransformation(A,b2);
+		unsigned z6 = plotter.addObject(linearTrafoResult.vertices());
+	    plotter.setObjectColor(z6, hypro::colors[hypro::blue]);
+	}
 
     plotter.plot2d();
     plotter.plotTex();
@@ -79,11 +104,11 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");
 
-    results << "Dimension: " << zonoExample.dimension() << "\n\n\n" << "Center: " << vCenter << "\n\n\n" << "Generators: \n" << zonoExample.generators() << "\n\n\n";
+    results << "Dimension: " << zonoExample.dimension() << "\n\n\n" << "Center: " << vCenter1 << "\n\n\n" << "Generators: \n" << zonoExample.generators() << "\n\n\n";
 
     zonoExample.uniteEqualVectors();
 
-    results << "Number of Generators: " << zonoExample.numGenerators() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
+    results << "Number of Generators: " << zonoExample.size() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
 
     struct timeval t1, t2;
     double elapsedTime;
