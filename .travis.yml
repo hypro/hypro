@@ -9,7 +9,6 @@ notifications:
     recipients:
       - stefan.schupp@cs.rwth-aachen.de
   slack:
-    on_success: always
     rooms:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
@@ -38,3 +37,4 @@ before_script: true
 
 script:
   - mkdir build && cd build && cmake .. && make resources && make
+  - make test
