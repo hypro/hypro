@@ -73,7 +73,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			assert(vertex.rows() == _constraints.cols());
 			assert(insidePlanes(vertex, intersection, intersectionConstants));
 			possibleVertices.emplace( std::move(vertex) );
-			std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
+			std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
 		}
 	}
 
