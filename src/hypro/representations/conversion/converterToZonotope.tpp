@@ -72,9 +72,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
 
-        //only continue if object is really an oriented box (i.e. it has 2^n vertices) -> NOT TRUE IF ORIGINAL IS DEGENERATED!
-        //assert (newVertices.size() == std::pow(2 , dim));
-
         //computes the centroid of the Zonotope (arithmetic mean)
         center = computeArithmeticMeanPoint(newVertices);
 
@@ -235,9 +232,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         //gets number of planes
         unsigned numberOfPlanes = planes.size();
 
-        //the number of planes has to be two times the dimension (it should be an oriented rectangular hull)
-        assert(numberOfPlanes == 2*dim);
-
         //defines an empty vector for the oriented box normals
         matrix_t<Number> normals = matrix_t<Number>(numberOfPlanes, dim);
 
@@ -282,9 +276,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
         vector_t<Number> center = vector_t<Number>::Zero(dim);
-
-        //only continue if object is really an oriented box (i.e. it has 2^n vertices)
-        assert (newVertices.size() == std::pow(2 , dim));
 
         //computes the centroid of the Zonotope (arithmetic mean)
         center = computeArithmeticMeanPoint(newVertices);
