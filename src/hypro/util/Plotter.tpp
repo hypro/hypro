@@ -28,6 +28,7 @@ gnuplotSettings& Plotter<Number>::rSettings() {
 template <typename Number>
 void Plotter<Number>::plot2d() const {
 	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+	//std::cout << "Prepared objects." << std::endl;
 
 	mOutfile.open( mFilename + ".plt" );
 
@@ -90,6 +91,9 @@ void Plotter<Number>::plot2d() const {
 		unsigned tmpId = 0;
 		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
 		mOutfile << "\n# plotting sets\n";
+
+		//std::cout << "Start plotting sets." << std::endl;
+
 		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
@@ -141,8 +145,7 @@ void Plotter<Number>::plot2d() const {
 			++objectCount;
 		}
 
-
-
+		//std::cout << "Done plotting sets." << std::endl;
 
 		if(mPlanes.empty() && mPoints.empty()){
 			mOutfile << "plot ";
@@ -654,12 +657,14 @@ void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) cons
 
 		// reduce and sort objects
 		if(!mOriginalObjects.empty()){
+			// std::cout << "Prepare " << mOriginalObjects.size() << " objects." << std::endl;
 			for(const auto& objPair : mOriginalObjects){
 				vector<Point<Number>> tmp;
 				for(const auto& point : objPair.second)
 					tmp.push_back(point.reduceToDimensions(targetDimensions));
 
 				// sort
+				// std::cout << "sort (" << tmp.size() << " points)" << std::endl;
 				tmp = grahamScan(tmp);
 				mObjects.insert(std::make_pair(objPair.first, tmp));
 			}

@@ -178,6 +178,10 @@ namespace reachability {
 				collectedSets = collectedSets.unite(boost::get<Representation>(stateIt->set));
 			}
 
+			#ifdef REACH_DEBUG
+			std::cout << "Unified " << aggregationPair.second.size() << " sets for aggregation." << std::endl;
+			#endif
+
 			State<Number> s;
 			s.location = aggregationPair.first->target();
 
@@ -238,27 +242,29 @@ namespace reachability {
 				}
 
 				if(!invariant.intersectsWith(s.discreteAssignment.at(invariantPair.first))) {
-	#ifdef REACH_DEBUG
+					#ifdef REACH_DEBUG
 					std::cout << "Valuation invalidates discrete target location invariant." << std::endl;
-	#endif
+					#endif
 					discreteInvariantInvalidated = true;
 					break;
 				}
 			}
 
 			if(!discreteInvariantInvalidated) {
+				#ifdef REACH_DEBUG
+				std::cout << "Apply resets." << std::endl;
+				#endif
 				Representation tmp = collectedSets.linearTransformation(  aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec );
 				std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
 				if(invariantSatisfyingSet.first){
-					unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
-					Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
+					//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
+					//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
 					s.set = invariantSatisfyingSet.second;
 					//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 				} else {
 					continue;
 				}
 
-				//std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
 				// find duplicate entries in work queue.
 				bool duplicate = false;
 				for(const auto stateTuple : mWorkingQueue) {
@@ -268,6 +274,9 @@ namespace reachability {
 					}
 				}
 				if(!duplicate){
+					#ifdef REACH_DEBUG
+					std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
+					#endif
 					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
 				}
 			}
