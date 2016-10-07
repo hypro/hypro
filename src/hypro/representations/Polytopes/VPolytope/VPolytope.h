@@ -186,19 +186,35 @@ class VPolytopeT {
 				barycenter = barycenter + (vertex.rawCoordinates()/ Number(unsigned(mVertices.size())));
 			}
 			for(auto& vertex : mVertices) {
+				// distance vector to the barycenter - each component now determines its own rounding direction.
 				vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
 				for(unsigned d = 0; d < dimension; ++d) {
 					assert(d < vertex.dimension());
-					if(carl::getDenom(vertex.at(d)) > limit) {
-						Number u = Number(carl::getDenom(vertex.at(d))/carl::getDenom(vertex.at(d))) - Number(limit);
-						Number roundedNumerator;
-						Number oldNumerator = Number(carl::getNum(vertex.at(d)));
-						if(roundingDirections(d) > 0) // round towards infinity
-							roundedNumerator = carl::ceil( Number(oldNumerator - (oldNumerator/u)) );
-						else // round towards -infinity
-							roundedNumerator = carl::floor( Number(oldNumerator - (oldNumerator/u)) );
-
-						vertex[d] = roundedNumerator / Number(limit);
+					// determine, which is larger: numerator or denominator
+					Number denom = carl::getDenom(vertex.at(d));
+					Number num = carl::getNum(vertex.at(d));
+					if(denom > limit && carl::abs(num) > limit) {
+						if(denom > num) {
+							Number newNum = num/denom*limit;
+							if(roundingDirections(d) >= 0 ) { // round up
+								newNum = carl::ceil(newNum);
+								assert(newNum/limit >= vertex.at(d));
+							} else { // round down
+								newNum = carl::floor(newNum);
+								assert(newNum/limit <= vertex.at(d));
+							}
+							vertex[d] = newNum/limit;
+						} else { // num >= denom
+							Number newDenom = denom/num*limit;
+							if(roundingDirections(d) >= 0 ) { // round up
+								newDenom = carl::floor(newDenom);
+								assert(limit/newDenom >= vertex.at(d));
+							} else { // round down
+								newDenom = carl::ceil(newDenom);
+								assert(limit/newDenom <= vertex.at(d));
+							}
+							vertex[d] = limit/newDenom;
+						}
 					}
 				}
 			}
@@ -220,7 +236,6 @@ class VPolytopeT {
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
 	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
-			// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
 			if( vertex.dot(normals.row(rowIndex)) != offsets(rowIndex) ){
 				return false;
 			}
@@ -230,12 +245,14 @@ class VPolytopeT {
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
 	static bool insidePlanes(const vector_t<double>& vertex, const matrix_t<double>& normals, const vector_t<double>& offsets) {
+		/*
 		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
 			// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
-			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
+			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 4096) ){
 				return false;
 			}
 		}
+		*/
 		return true;
 	}
 

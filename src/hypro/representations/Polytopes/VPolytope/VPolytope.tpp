@@ -47,6 +47,8 @@ template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible Halfspace intersections -> TODO: dPermutation can
 	// be improved.
+
+	std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
 	assert(_constraints.rows() == _constants.rows());
 	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
@@ -71,7 +73,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			assert(vertex.rows() == _constraints.cols());
 			assert(insidePlanes(vertex, intersection, intersectionConstants));
 			possibleVertices.emplace( std::move(vertex) );
-			// std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
+			std::cout<< "Vertex computed: " << vertex.transpose() << std::endl;
 		}
 	}
 
@@ -84,7 +86,8 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 		bool deleted = false;
 		for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 			Number res = vertex->dot( _constraints.row( rowIndex ) );
-			if ( res > _constants( rowIndex ) ){
+			if ( !carl::AlmostEqual2sComplement(res, _constants( rowIndex ), 128) && res > _constants( rowIndex ) ){
+				std::cout << "Delete vertex " << *vertex << " because of plane " << rowIndex << std::endl;
 				vertex = possibleVertices.erase( vertex );
 				deleted = true;
 				break;
@@ -167,7 +170,7 @@ template<typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto intersection = intermediate.intersectHalfspace(rhs);
-	intersection.removeRedundancy();
+	//intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
 	return res;
 }
@@ -176,7 +179,7 @@ template<typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto intersection = intermediate.intersectHalfspaces(_mat, _vec);
-	intersection.removeRedundancy();
+	//intersection.removeRedundancy();
 	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
 	return res;
 }
@@ -186,7 +189,7 @@ std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::sa
 	auto intermediate = Converter::toHPolytope(*this);
 	auto resultPair = intermediate.satisfiesHalfspace(rhs);
 	if(resultPair.first){
-		resultPair.second.removeRedundancy();
+		//resultPair.second.removeRedundancy();
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
 		return std::make_pair(true, res);
 	}
@@ -195,11 +198,15 @@ std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::sa
 
 template<typename Number, typename Converter>
 std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	std::cout << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
+	std::cout << __func__ << ": Intermediate hpoly: " << intermediate << std::endl;
 	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
 	if(resultPair.first){
-		resultPair.second.removeRedundancy();
+		//resultPair.second.removeRedundancy();
+		std::cout << __func__ << ": Intermediate hpoly convert back: " << resultPair.second << std::endl;
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
+		std::cout << __func__ << ": Re-Converted v-poly: " << res << std::endl;
 		return std::make_pair(true, res);
 	}
 	return std::make_pair(false, VPolytopeT<Number,Converter>::Empty());
