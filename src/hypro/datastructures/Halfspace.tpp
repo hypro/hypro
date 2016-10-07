@@ -304,7 +304,7 @@ bool Halfspace<Number>::contains( const Point<Number> _vector ) const {
 template<typename Number>
 bool Halfspace<Number>::contains( const std::vector<Point<Number>>& _points) const {
 	for(const auto& point : _points){
-		if(point.rawCoordinates().dot(mNormal) > mScalar){
+		if(!carl::AlmostEqual2sComplement(point.rawCoordinates().dot(mNormal), mScalar, 128) && point.rawCoordinates().dot(mNormal) > mScalar){
 			return false;
 		}
 	}
