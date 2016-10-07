@@ -28,6 +28,8 @@
 
 namespace hypro {
 
+static const unsigned ZONOTOPE_ORDERLIMIT = 3;
+
 template<typename Number, typename Converter>
 class ZonotopeT {
   private:
@@ -114,6 +116,7 @@ class ZonotopeT {
 	// Getters and Setters for center and generators
 	const vector_t<Number>& center() const;
 	const matrix_t<Number>& generators() const;
+	Number order() const { return Number( mGenerators.cols()/Number(mGenerators.rows()) ); }
 
 	/**
 	 * Number of generators
@@ -159,6 +162,8 @@ class ZonotopeT {
     }
 
     void removeRedundancy() const {}
+
+    void reduceOrder( Number limit = Number(ZONOTOPE_ORDERLIMIT) );
 
 	/*****************************************************************************
 	*                                                                           *

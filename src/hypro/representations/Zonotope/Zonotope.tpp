@@ -279,6 +279,49 @@ void ZonotopeT<Number,Converter>::clear() {
 	mDimension = 0;
 }
 
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
+	std::cout << __func__ << ": Current order: " << this->order() << std::endl;
+	while(this->order() > limit) {
+		matrix_t<Number> generators = mGenerators;
+		unsigned dim = mGenerators.rows();
+
+		// create duplicates of generators to sort them
+		std::vector<hypro::vector_t<Number>> sortedGenerators;
+		for ( unsigned i = 0; i < generators.cols(); i++ ) {
+			sortedGenerators.push_back( generators.col( i ) );
+		}
+
+		// Sort generators according to the difference between 1-norm and infty-norm
+		// (i.e.: How suitable are the generators to
+		// be overapproximated by an interval hull)
+		std::sort( sortedGenerators.begin(), sortedGenerators.end(), ZUtility::compareVectors<Number> );
+
+		// Row-wise sum of all chosen generators (absolute value)
+		vector_t<Number> sumVector = vector_t<Number>::Zero(dim,1);
+		for ( unsigned i = 0; i < 2 * ( dim ); i++ ) {
+			sumVector += sortedGenerators[i].array().abs().matrix();
+		}
+
+		unsigned numRemainingGenerators = sortedGenerators.size() - ( 2 * dim + 1 );
+		matrix_t<Number> remainingGenerators = matrix_t<Number>(dim, numRemainingGenerators);
+
+		// inserts the original remaining vectors
+		for ( unsigned i = 0; i < numRemainingGenerators; i++ ) {
+			remainingGenerators.col( i ) = sortedGenerators[i + ( 2 * dim + 1 )];
+		}
+
+		// calculate interval hull of first 2n generators
+		matrix_t<Number> intervalHull = sumVector.asDiagonal();
+
+		matrix_t<Number> reducedGenerators = matrix_t<Number>(dim, remainingGenerators.cols() + dim);
+
+		reducedGenerators << intervalHull, remainingGenerators;
+		mGenerators = reducedGenerators;
+	}
+	std::cout << __func__ << ": Reduced order: " << this->order() << std::endl;
+}
+
 /*****************************************************************************
 *                                                                           *
 *                           Algorithm Functions                             *
@@ -296,6 +339,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 	result.setGenerators( tmp );
     result.uniteEqualVectors();
 	result.removeEmptyGenerators();
+	result.reduceOrder();
 	return result;
 }
 
@@ -783,6 +827,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspace( con
 			result.addGenerators( sigma * lambda );
 		}
 	}
+	result.reduceOrder();
 	return result;
 }
 
@@ -837,6 +882,7 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 			result.setGenerators( ( identity - lambda * rhs.normal().transpose() ) * this->mGenerators );
 			result.addGenerators( sigma * lambda );
 		}
+		result.reduceOrder();
 		return std::make_pair(true,result);
 	}
 	return std::make_pair(false,result);
@@ -969,6 +1015,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 		temp.addGenerators( ( c1 - c2 ) * carl::rationalize<Number>(0.5) );
 		temp.addGenerators( ( R1 - R2 ) * carl::rationalize<Number>(0.5) );
 	};
+	temp.reduceOrder();
 	return temp;
 }
 
