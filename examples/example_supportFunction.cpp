@@ -1,6 +1,6 @@
 
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/util/Plotter.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/util/Plotter.h"
 #include <carl/numbers/numbers.h>
 
 using namespace hypro;

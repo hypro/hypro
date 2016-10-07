@@ -5,12 +5,12 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/Location.h"
-#include "../../lib/datastructures/hybridAutomata/Transition.h"
-#include "../../lib/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../hypro/datastructures/hybridAutomata/Location.h"
+#include "../../hypro/datastructures/hybridAutomata/Transition.h"
+#include "../../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
 #include <carl/core/VariablePool.h>
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/algorithms/reachability/forwardReachability.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/algorithms/reachability/forwardReachability.h"
 
 
 using namespace hypro;

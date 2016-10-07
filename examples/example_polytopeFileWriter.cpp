@@ -2,9 +2,9 @@
  * This example file shows the basic usage of the fileWriter.
  */
 
-#include "../src/lib/config.h"
-#include "../src/lib/representations/Polytope/Polytope.h"
-#include "../src/lib/datastructures/Point.h"
+#include "../src/hypro/config.h"
+#include "../src/hypro/representations/Polytope/Polytope.h"
+#include "../src/hypro/datastructures/Point.h"
 
 
 int main(int argc, char** argv) {

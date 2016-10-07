@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../src/lib/algorithms/convexHull/ConvexHull.h"
-#include "../../src/lib/representations/GeometricObject.h"
+#include "../../src/hypro/algorithms/convexHull/ConvexHull.h"
+#include "../../src/hypro/representations/GeometricObject.h"
 
-#include "../../src/lib/config.h"
+#include "../../src/hypro/config.h"
 
 using namespace hypro;
 

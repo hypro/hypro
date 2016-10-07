@@ -179,6 +179,6 @@ install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
 if (CLANG_TIDY)
 	add_custom_target(tidy
 		COMMAND clang-tidy -p ../../build/compile_commands.json ${CLANG_TIDY_CHECKS} -header-filter='.*' ${sources}
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/lib/
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/hypro/
 	)
 endif()

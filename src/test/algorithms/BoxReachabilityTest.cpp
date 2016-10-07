@@ -5,10 +5,10 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/representations/Box/Box.h"
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/datastructures/hybridAutomata/LocationManager.h"
-#include "../../lib/algorithms/reachability/Reach.h"
+#include "../../hypro/representations/Box/Box.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/datastructures/hybridAutomata/LocationManager.h"
+#include "../../hypro/algorithms/reachability/Reach.h"
 
 template<typename Number>
 using Representation = hypro::Box<Number>;

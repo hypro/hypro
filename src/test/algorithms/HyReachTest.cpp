@@ -1,12 +1,12 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/algorithms/reachability/HyReach.h"
+#include "../../hypro/algorithms/reachability/HyReach.h"
 #include <string>
 
-//#include "../../lib/algorithms/reachability/SupportFunctionContent.h"
-//#include "../../lib/algorithms/reachability/PolytopeSupportfunction.h"
-//#include "../../lib/algorithms/reachability/NonLinearOmega0Supportfunction.h"
-#include "../../lib/algorithms/reachability/hyreach_utils.h"
+//#include "../../hypro/algorithms/reachability/SupportFunctionContent.h"
+//#include "../../hypro/algorithms/reachability/PolytopeSupportfunction.h"
+//#include "../../hypro/algorithms/reachability/NonLinearOmega0Supportfunction.h"
+#include "../../hypro/algorithms/reachability/hyreach_utils.h"
 
 using namespace hypro;
 using namespace carl;
@@ -17,7 +17,7 @@ class HyReachTest : public ::testing::Test
 protected:
     virtual void SetUp()
     {
-    	
+
     }
 
     virtual void TearDown()
@@ -54,7 +54,7 @@ TEST_F(HyReachTest, VectorgeneratorTest)
 		SUCCEED();
 	}
 	else
-	{	
+	{
 		cout << method << "vectorgeneratorEXT - FAIL\n";
 	}
 }
@@ -63,7 +63,7 @@ TEST_F(HyReachTest, VectorgeneratorTest)
 TEST_F(HyReachTest, SupportfunctionTest)
 {
 	std::string method = "PolytopeSupportfunction TEST: ";
-	
+
 	// constraints = [1 1; -1 1; 1 -1; -1 -1]
 	matrix_t<double> constraints(4,2);
 	constraints(0, 0) = 1;
@@ -105,8 +105,8 @@ TEST_F(HyReachTest, SupportfunctionTest)
 
 	cout << '\n';
 	cout << '\n';
-	
-	
+
+
 	// result = sp(constraints(2,:)')
 	result = sp.evaluate(constraints.row(1).transpose());
 	cout << "Evaluationresult for l=" << '\n' << constraints.row(1).transpose() << '\n' << " : " << result.supportValue << '\n';
@@ -115,14 +115,14 @@ TEST_F(HyReachTest, SupportfunctionTest)
 
 	cout << '\n';
 	cout << '\n';
-	
+
     // result = sp(constraints(3,:)')
 	result = sp.evaluate(constraints.row(2).transpose());
 	cout << "Evaluationresult for l=" << '\n' << constraints.row(2).transpose() << '\n' << " : " << result.supportValue << '\n';
 	// result == 1
 	success &= result.supportValue == 1;
-	
-	
+
+
 	// result = sp(constraints(4,:)')
 	result = sp.evaluate(constraints.row(3).transpose());
 	cout << "Evaluationresult for l=" << '\n' << constraints.row(3).transpose() << '\n' << " : " << result.supportValue << '\n';
@@ -131,13 +131,13 @@ TEST_F(HyReachTest, SupportfunctionTest)
 
 	cout << '\n';
 	cout << '\n';
-	
-	
+
+
 	// check evaluation result along axes
-	
+
 	// L = vectorgenerator(2)
 	std::vector<matrix_t<double>> L = vectorgenerator(2);
-	
+
 	// for i=1:1:size(L,1)
 	for(auto iterator = L.begin(); iterator != L.end(); ++iterator)
 	{
@@ -151,7 +151,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 
     // check multiplication
     cout << "multiplicationtest -------------------------------------------------------" << '\n' << '\n';
-    
+
     //B = [2 0;0 2] % will multiply the results with 2
     matrix_t<double> B(2,2);
     B(0,0) = 2;
@@ -159,8 +159,8 @@ TEST_F(HyReachTest, SupportfunctionTest)
     B(1,0) = 0;
     B(1,1) = 2;
     cout << "B =" << '\n' << B << '\n';
-      
-    
+
+
     //hypro::SupportFunctionContent Bsp = B * (&sp);
     //cout << "Bsp constructed" << '\n';
     MultiplicationSupportfunction* Bsp2 = sp.multiply(B);
@@ -171,12 +171,12 @@ TEST_F(HyReachTest, SupportfunctionTest)
              // result = sp(B' * L(i,:)')
 	         //result = Bsp.evaluate(*iterator);
 	         //cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
-	         
+
 	         result = Bsp2->evaluate(*iterator);
 	         cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
     }
     //
-    
+
 	if (success)
 	{
 		SUCCEED();
@@ -185,7 +185,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	{
 		cout << "TEST FAILED!";
 	}
-	
+
 	delete Bsp2;
 }
 
@@ -194,7 +194,7 @@ TEST_F(HyReachTest, NLOPTtest)
     cout << "TEST NLOPT" << '\n';
 	//NLOPTTEST test;
 	//test.test();
-	
+
 	// A = [-1 1; 0.5 -2.5]
 	matrix_t<double> A(2,2);
 	A(0,0) = -1;
@@ -203,49 +203,49 @@ TEST_F(HyReachTest, NLOPTtest)
 	A(1,1) = -2.5;
 	cout << "A: " << A << '\n';
 	cout << "-------------------" << '\n';
-	
+
 	// L = vectorgenerator(2)
 	// L = L([4;3;2;1],:)
 	std::vector<matrix_t<double>> L = vectorgenerator(2);
 	cout << "L" << '\n';
-	
+
 	matrix_t<double> LAsMatrix = directionList2Matrix(&L);
 	cout << "L matrix" << '\n';
-	
+
 	// V = calcPolytopeSP(L,[0;0;0;0],...)
 	PolytopeSupportFunction V(LAsMatrix,getZeroVector(4),LEQ,2);
 	cout << "V" << '\n';
-	
+
 	// range = [4;2;3;3]
 	matrix_t<double> range(4,1);
 	range(0,0) = 4;
 	range(1,0) = 2;
 	range(2,0) = 3;
 	range(3,0) = 3;
-	
+
 	cout << "box value vector" << '\n';
 	// X0 = calcPolytopeSP(L,range,'MediumScale','linprog',[0;0],[],[])
 	PolytopeSupportFunction X0(LAsMatrix,range,LEQ,2);
-     
-    cout << "Basic values initialized" << '\n'; 
-    
-    // omega0 = calcomega0delta() 
+
+    cout << "Basic values initialized" << '\n';
+
+    // omega0 = calcomega0delta()
     NonLinearOmega0Supportfunction omega0(&A, &V, &X0, 1);
-    
+
     cout << "Omega0 initialized" << '\n';
-    
+
     unsigned int count = 0;
 	for (auto iterator = L.begin(); iterator != L.end(); ++iterator)
 	{
             cout << "TEST: iteration " << count << '\n';
 			matrix_t<double> l = (*iterator);
-			
+
 		    evaluationResult res;
             res = omega0.evaluate(l);
 		    cout << "TEST: res.optimumValue:"<< '\n' << res.optimumValue << '\n' << " leads to the optimum value: "<< '\n' << res.supportValue << '\n';
 		    count++;
-	} 
-	
+	}
+
 	SUCCEED();
 }
 #endif
@@ -258,11 +258,11 @@ TEST_F(HyReachTest, NLOPTtest)
 TEST_F(HyReachTest, BouncingBallTest)
 {
         std::cout << "BouncingBallTest:" << BL;
-        
+
     // construct necessary analysis obejcts
     HyReach reachabilityAnalysis;
     HybridAutomaton<double, valuation_t<double>>* model = createBB(); // model (hard coded and provided by included BouncingBall.cpp)
-    
+
     // construct initial values
     std::vector<matrix_t<double>> directionsalongdimensions = vectorgenerator(2);
     matrix_t<double> initialConstraints = directionList2Matrix(&directionsalongdimensions);
@@ -275,25 +275,25 @@ TEST_F(HyReachTest, BouncingBallTest)
         std::cout << initialConstraints << BL;
         std::cout << "initialconstraintValues:" << BL;
         std::cout << initialconstraintValues << BL;
-    
+
     SupportFunctionContent* U = 0;
-    
+
     // configuration
     parameters p;
     p.numberOfTransitions = 2;
     p.setsToCompute = 2;
     p.timeHorizon = 0.2;
     p.timeStep = 0.1;
-    
+
     options opt;
     opt.angle = PI_UP/2;
     opt.precision = 10000;
-    
+
         std::cout << "reachabilityAnalysis.start(...)" << BL;
     // start analysis (preprocessing & flowpipe construction)
     reachabilityAnalysis.start(model, p, opt, initialConstraints, operator_e::LEQ, initialconstraintValues, U);
         std::cout << "reachabilityAnalysis terminated" << BL;
-    
+
     // clean heap
     delete U;
     delete model;    // TODO: delete all parts of the model

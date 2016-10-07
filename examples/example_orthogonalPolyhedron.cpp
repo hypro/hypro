@@ -8,9 +8,9 @@
  * @version	2015-03-01
  */
 
-#include "../src/lib/config.h"
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
+#include "../src/hypro/config.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 
 using namespace hypro;
 using namespace carl;

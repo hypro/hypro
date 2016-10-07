@@ -11,9 +11,9 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/datastructures/Vertex.h"
-#include "../../lib/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/datastructures/Vertex.h"
+#include "../../hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 #include <carl/core/VariablePool.h>
 
 using namespace hypro;

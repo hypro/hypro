@@ -3,11 +3,11 @@
  */
 
 #include <string>
-#include "../src/lib/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../src/lib/algorithms/reachability/Reach.h"
-#include "../src/lib/representations/GeometricObject.h"
-#include "../src/lib/parser/flowstar/flowstarParser.h"
-#include "../src/lib/util/Plotter.h"
+#include "../src/hypro/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../src/hypro/algorithms/reachability/Reach.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/parser/flowstar/flowstarParser.h"
+#include "../src/hypro/util/Plotter.h"
 
 int main(int argc, char** argv) {
 	typedef cln::cl_RA Number;

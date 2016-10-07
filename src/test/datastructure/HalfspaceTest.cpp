@@ -9,8 +9,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-
-#include "../../lib/datastructures/Halfspace.h"
+#include "../../hypro/datastructures/Halfspace.h"
 
 using namespace hypro;
 using namespace carl;

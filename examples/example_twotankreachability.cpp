@@ -8,10 +8,10 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include "../src/lib/representations/Zonotope/ZUtility.h"
-#include "../src/lib/representations/Zonotope/Zonotope.h"
-#include "../src/lib/datastructures/Halfspace.h"
-#include "../src/lib/algorithms/reachability/ZonotopeReachability.h"
+#include "../src/hypro/representations/Zonotope/ZUtility.h"
+#include "../src/hypro/representations/Zonotope/Zonotope.h"
+#include "../src/hypro/datastructures/Halfspace.h"
+#include "../src/hypro/algorithms/reachability/ZonotopeReachability.h"
 #include <fstream>
 
 #ifdef HAS_MATLAB

@@ -1,5 +1,5 @@
 
-#include "../src/lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
 #include "../src/test/benchmark/Benchmark.h"
 
 int main(int argc, char** argv) {

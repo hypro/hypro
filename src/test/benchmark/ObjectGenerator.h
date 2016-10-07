@@ -5,8 +5,8 @@
 #pragma once
 
 #include <random>
-#include "../../lib/datastructures/Point.h"
-#include "../../lib/util/types.h"
+#include "../../hypro/datastructures/Point.h"
+#include "../../hypro/util/types.h"
 
 namespace hypro {
 	template<typename Representation>

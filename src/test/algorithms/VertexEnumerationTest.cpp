@@ -1,8 +1,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../src/lib/algorithms/convexHull/vertexEnumeration.h"
-
-#include "../../src/lib/config.h"
+#include "../../src/hypro/algorithms/convexHull/vertexEnumeration.h"
+#include "../../src/hypro/config.h"
 
 using namespace hypro;
 

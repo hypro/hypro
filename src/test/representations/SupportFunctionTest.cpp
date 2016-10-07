@@ -6,7 +6,7 @@
  * @version		2015-02-25
  */
 
-#include "../../lib/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObject.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 

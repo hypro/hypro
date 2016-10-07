@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 
-#include "../../lib/representations/Polytope/Polytope.h"
+#include "../../hypro/representations/Polytope/Polytope.h"
 
 using namespace hypro;
 using namespace carl;

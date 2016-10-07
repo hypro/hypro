@@ -7,7 +7,7 @@
 
 #include <random>
 #include <chrono>
-#include "../src/lib/datastructures/Point.h"
+#include "../src/hypro/datastructures/Point.h"
 #include <mpfr.h>
 typedef carl::FLOAT_T<mpfr_t> number_t;
 

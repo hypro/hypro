@@ -6,7 +6,7 @@
  * @version		2015-01-22
  */
 
-#include "../../lib/representations/SupportFunction/PolytopeSupportFunction.h"
+#include "../../hypro/representations/SupportFunction/PolytopeSupportFunction.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 

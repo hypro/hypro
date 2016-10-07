@@ -3,7 +3,7 @@
  * @file example_useSMT.cpp
  */
 
-#include "../src/lib/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
 #include <random>
 
 using namespace hypro;

@@ -5,9 +5,9 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../lib/datastructures/hybridAutomata/util.h"
+#include "../../hypro/datastructures/hybridAutomata/util.h"
 #include <carl/core/VariablePool.h>
-#include "../../lib/datastructures/Point.h"
+#include "../../hypro/datastructures/Point.h"
 
 
 using namespace hypro;

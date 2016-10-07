@@ -1,5 +1,5 @@
-#include "../src/lib/util/Plotter.h"
-#include "../src/lib/representations/Converter.h"
+#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/representations/Converter.h"
 
 using namespace hypro;
 
