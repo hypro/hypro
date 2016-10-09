@@ -10,14 +10,17 @@ namespace hypro {
 		int* ind = new int[cols+1];
 		double* val = new double[cols+1];
 		for(int i = 1; i <= glp_get_num_rows(glpkProblem); ++i) {
-			glp_get_mat_row(glpkProblem, i, ind, val);
-			//assert(glp_get_row_type(glpkProblem,i) == GLP_UP);
-			unsigned pos = 1;
-			for(int j = 1; j <= cols; ++j) {
-				if(ind[pos] == j) {
-					std::cout << val[pos] << "\t";
-					++pos;
-				} else {
+			int nonZeroCount = glp_get_mat_row(glpkProblem, i, ind, val);
+			for(int colIndex = 1; colIndex <= cols; ++colIndex) {
+				bool found = false;
+				// glpk always starts indexing at 1 -> we can skip the element at 0
+				for(int arrayIndex = 1; arrayIndex < nonZeroCount+1; ++arrayIndex) {
+					if(ind[arrayIndex] == colIndex) {
+						found = true;
+						std::cout << val[arrayIndex] << "\t";
+					}
+				}
+				if(!found) {
 					std::cout << "0\t";
 				}
 			}
@@ -125,6 +128,7 @@ namespace hypro {
 		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
 			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
+			assert(actualRes.supportValue <= constants(constraintIndex));
 
 			// remove constraint by removing the boundaries
 			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);

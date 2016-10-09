@@ -275,6 +275,15 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Con
 	return out;
 }
 
+template<typename From, typename To, typename Converter>
+VPolytopeT<To,Converter> convert(const VPolytopeT<From,Converter>& in) {
+	std::vector<Point<To>> convertedVertices;
+	for(const auto& vertex : in.vertices()) {
+		convertedVertices.push_back(Point<To>(convert<From,To>(vertex.rawCoordinates())));
+	}
+	return VPolytopeT<To,Converter>(convertedVertices);
+}
+
 }  // namespace
 
 #include "VPolytope.tpp"

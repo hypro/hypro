@@ -476,7 +476,9 @@ namespace hypro {
 				unsigned long hyperplanesForReduction = 2* collectedSets.dimension() * (collectedSets.dimension()-1)+ 2* collectedSets.dimension();
 				unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
 				if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+					std::cout << "APPLY HPOLY-REDUCTION." << std::endl;
 					auto tmpHPoly = Converter<Number>::toHPolytope(collectedSets);
+					std::cout << "Resulting polytope: " << tmpHPoly << std::endl;
 					SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 					s.set = newSet;
 				} else {
@@ -624,11 +626,13 @@ namespace hypro {
 #ifdef REACH_DEBUG
 				std::cout << "Transition enabled!" << std::endl;
 #endif
-				//std::cout << "Guard satisfying set: " << std::endl << Converter<Number>::toHPolytope(guardSatisfyingSet.second) << std::endl;
+				std::cout << "Guard satisfying set: " << std::endl << convert<Number,double>(Converter<Number>::toVPolytope(guardSatisfyingSet.second)) << std::endl;
 				assert(!Converter<Number>::toHPolytope(guardSatisfyingSet.second).empty());
 				// apply reset function to guard-satisfying set.
 				std::shared_ptr<lintrafoParameters<Number>> parameters = std::make_shared<lintrafoParameters<Number>>(_trans->reset().mat, _trans->reset().vec);
 				SupportFunction<Number> tmp = guardSatisfyingSet.second.linearTransformation( parameters );
+
+				std::cout << "After reset: " << std::endl << convert<Number,double>(Converter<Number>::toVPolytope(tmp)) << std::endl;
 
 				assert(!Converter<Number>::toHPolytope(tmp).empty());
 				std::pair<bool, SupportFunction<Number>> invariantSatisfyingSet = tmp.satisfiesHalfspaces(_trans->target()->invariant().mat, _trans->target()->invariant().vec);
@@ -899,8 +903,8 @@ namespace hypro {
 					*/
 				}
 				//assert(firstSegment.contains(unitePolytope));
-				assert(firstSegment.contains(initialPair.second));
-				assert(firstSegment.contains(deltaValuation));
+				//assert(firstSegment.contains(initialPair.second));
+				//assert(firstSegment.contains(deltaValuation));
 #ifdef REACH_DEBUG
 				std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << std::endl;

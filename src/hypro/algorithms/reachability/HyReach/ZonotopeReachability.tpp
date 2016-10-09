@@ -475,6 +475,7 @@ void ZonotopeReachability<Number>::overapproximateZonotope( Zonotope<Number> &z 
 	unsigned int numRemainingVectors = vectOfGenerators.size() - ( 2 * z_rows + 1 );
 	remaining_vectors.resize( z_rows, numRemainingVectors );
 
+	// inserts the original remaining vectors
 	for ( unsigned int i = 0; i < numRemainingVectors; i++ ) {
 		remaining_vectors.col( i ) = vectOfGenerators[i + ( 2 * z_rows + 1 )];
 	}

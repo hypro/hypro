@@ -4,11 +4,11 @@ namespace hypro {
 
 	template<>
 	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>&) {
-		/*
-		std::cout << __func__ << " in direction " << convert<double,double>(_direction).transpose() << std::endl;
-		std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
+
+		//std::cout << __func__ << " in direction " << _direction.transpose() << std::endl;
+		//std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "Glpk Problem: " << std::endl;
 		//printProblem(glpkProblem);
-		*/
+
 
 		// setup glpk
 		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
@@ -77,10 +77,16 @@ namespace hypro {
 		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
 			EvaluationResult<double> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants);
+			//std::cout << "Actual res support Value: " << actualRes.supportValue << std::endl;
+			// Necessary to cope with glpk inexactness.
+			if(actualRes.supportValue > constants(constraintIndex)) {
+				actualRes.supportValue = constants(constraintIndex);
+			}
 
 			// remove constraint by removing the boundaries
 			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
 			EvaluationResult<double> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants);
+			//std::cout << "Updated res support Value: " << updatedRes.supportValue << std::endl;
 
 			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {
 				res.push_back(constraintIndex);

@@ -45,7 +45,6 @@ struct trafoContent {
 
 	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>> _parameters )
 		: origin( _origin ), parameters( _parameters ), currentExponent(1) {
-#define USE_LIN_TRANS_REDUCTION
 #ifdef USE_LIN_TRANS_REDUCTION
 		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 		bool reduced;

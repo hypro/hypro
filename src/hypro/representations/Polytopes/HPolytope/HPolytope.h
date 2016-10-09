@@ -285,13 +285,18 @@ public:
 	}
 
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
-	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {
+	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR) const {
 		#ifdef REDUCE_NUMBERS
 		#ifdef HPOLY_DEBUG_MSG
 		std::cout << "Attempt to reduce numbers." << std::endl;
 		#endif
 		//std::cout << __func__  << ": Nr. Planes: " << mHPlanes.size() << std::endl;
-		std::vector<Point<Number>> originalVertices = this->vertices();
+		std::vector<Point<Number>> originalVertices;
+		if(_vertices.empty()) {
+			originalVertices = this->vertices();
+		} else {
+			originalVertices = _vertices;
+		}
 
 		// normal reduction
 		for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
@@ -351,7 +356,7 @@ public:
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
-	void reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const {}
+	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned = fReach_DENOMINATOR) const {}
 
   private:
 	/*

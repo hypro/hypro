@@ -35,7 +35,7 @@ CLANG_WARNING_RESET
 
 #define USE_SMART_AGGREGATION
 #define ALWAYS_USE_AGGREGATION
-#define USE_FORCE_REDUCTION
+//#define USE_FORCE_REDUCTION
 
 namespace hypro {
 namespace reachability {
