@@ -119,7 +119,7 @@ public:
 private:
 
 	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
-	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State<Number>& _state ) const;
+	boost::tuple<bool, State<Number>, TrafoParameters<Number>> computeFirstSegment( const State<Number>& _state ) const;
 	bool intersectBadStates( const State<Number>& _state, const Representation& _segment ) const;
 };
 
@@ -131,4 +131,4 @@ private:
 #include "firstSegment.tpp"
 #include "terminationHandling.tpp"
 
-#include "Reach_SF.h"
+//#include "Reach_SF.h"

@@ -24,7 +24,6 @@ namespace reachability {
 				// Convert representation in state from matrix and vector to used representation type.
 				State<Number> s;
 				s.location = state.second.location;
-				s.discreteAssignment = state.second.discreteAssignment;
 				HPolytope<Number> tmpSet(state.second.set.first, state.second.set.second);
 				representation_name type = Representation::type();
 				switch(type){
@@ -53,7 +52,6 @@ namespace reachability {
 					}
 				}
 				s.timestamp = carl::Interval<Number>(0);
-				assert(s.discreteAssignment.size() == state.second.discreteAssignment.size());
 				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
@@ -88,18 +86,7 @@ namespace reachability {
 		flowpipe_t<Representation> flowpipe;
 		std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 
-		// check for time triggered transitions once before any flowpipe is computed. TODO: put the check for transitions in the loop to the end?
-		if(mCurrentLevel <= mSettings.jumpDepth) {
-			bool locallyUrgent = checkTransitions(_state, carl::Interval<Number>(0), nextInitialSets);
-			if(locallyUrgent){
-				if(mCurrentLevel < mSettings.jumpDepth) {
-					processDiscreteBehaviour(nextInitialSets);
-				}
-				return flowpipe;
-			}
-		}
-
-		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
+		boost::tuple<bool, State<Number>, TrafoParameters<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
@@ -109,8 +96,8 @@ namespace reachability {
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
-			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
-				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
+			if(boost::get<2>(initialSetup).matrix() == matrix_t<Number>::Identity(boost::get<2>(initialSetup).matrix().rows(), boost::get<2>(initialSetup).matrix().cols()) &&
+				boost::get<2>(initialSetup).vector() == vector_t<Number>::Zero(boost::get<2>(initialSetup).vector().rows())) {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
@@ -147,7 +134,6 @@ namespace reachability {
 #else
 			Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());
 			Representation nonautonomPart = Representation(nonautonomPartAsEllispsoid);
-			std::cout << nonautonomPart << std::endl;
 			Representation totalBloating = nonautonomPart;
 #endif
 #endif
@@ -169,20 +155,13 @@ namespace reachability {
 					currentState.set = currentSegment;
 					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
 					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
-					bool fireTimeTriggeredTransition = checkTransitions(currentState, currentState.timestamp, nextInitialSets);
-					if(fireTimeTriggeredTransition){
-						// quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
-						#ifdef REACH_DEBUG
-						std::cout << "Fired time triggered transition." << std::endl;
-						#endif
-						break;
-					}
+					checkTransitions(currentState, currentState.timestamp, nextInitialSets);
 				}
 
 				// perform linear transformation on the last segment of the flowpipe
-				assert(currentSegment.linearTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup)).size() == currentSegment.size());
 #ifdef USE_SYSTEM_SEPARATION
-				autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+				//autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+				autonomPart = applyLinearTransformation( autonomPart, boost::get<2>(initialSetup) );
 #ifdef USE_ELLIPSOIDS
 				if (mBloatingFactor != 0){
 					Representation temp = Representation(totalBloating);
@@ -197,10 +176,13 @@ namespace reachability {
 					nextSegment = autonomPart;
 				}
 #endif
-				nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+				// nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+				TrafoParameters<Number> tmpParameters(boost::get<2>(initialSetup));
+				tmpParameters.setVector(vector_t<Number>::Zero(autonomPart.dimension()));
+				nonautonomPart = applyLinearTransformation( nonautonomPart, tmpParameters);
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment = currentSegment.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+				nextSegment =  applyLinearTransformation(currentSegment, boost::get<2>(initialSetup) );
 #endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
@@ -209,54 +191,8 @@ namespace reachability {
 				std::cout << "still within Invariant?: ";
 				std::cout << newSegment.first << std::endl;
 #endif
-#ifdef USE_REDUCTION
-				// clustering CONVEXHULL_CONST and reduction with directions generated before
-				unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
-				std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
-				bool use_reduce_memory=false, use_reduce_time=true;
-				if(use_reduce_memory){
-					if(CONVEXHULL_CONST==1){ // if no clustering is required
-						if(newSegment.first){
-							Representation poly_smoothed = newSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							flowpipe.insert(flowpipe.begin(), poly_smoothed);
-						}
-					}
-					else{
-						if(newSegment.first){
-							// collect points
-							for(auto vertex: newSegment.vertices()){
-								if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
-									points_convexHull.push_back(vertex);
-								}
-							}
-							segment_count++;
-						}
-						// compute convexHull and reduction of clustered segments
-						if(!points_convexHull.empty() && (segment_count==CONVEXHULL_CONST || !newSegment.first)){
-							auto facets = convexHull(points_convexHull);
-
-							std::vector<Halfspace<Number>> Halfspaces;
-							for(unsigned i = 0; i<facets.first.size(); i++){
-								Halfspaces.push_back(facets.first.at(i)->Halfspace());
-							}
-							Representation convexHull = Representation(Halfspaces);
-
-							convexHull = convexHull.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-							convexHull.removeRedundancy();
-							flowpipe.insert(flowpipe.begin(), convexHull);
-
-							points_convexHull.clear();
-							segment_count = 0;
-						}
-					}
-				}
-#endif
 				if ( newSegment.first ) {
-#ifdef USE_REDUCTION
-					if(i>3 && use_reduce_memory) flowpipe.erase(flowpipe.end()-2); // keep segments necessary to compute a precise jump and delete others
-#endif
 					flowpipe.push_back( newSegment.second );
-
 					if(intersectBadStates(_state, newSegment.second)){
 						// clear queue to stop whole algorithm
 						while(!mWorkingQueue.empty()){

@@ -9,22 +9,6 @@ namespace reachability {
 		// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
 		auto badStateIterator = mAutomaton.localBadStates().find(_state.location);
 		if(badStateIterator != mAutomaton.localBadStates().end()){
-			// check discrete variables first -> faster.
-			for(const auto& assignmentPair : _state.discreteAssignment) {
-				// check if there is a constraint on the variable
-				if(badStateIterator->second.discreteAssignment.find(assignmentPair.first) != badStateIterator->second.discreteAssignment.end() ){
-					//std::cout << "Discrete guard: " << assignmentPair.first << " in " << badStateIterator->second.discreteAssignment.at(assignmentPair.first) << " Current assignment: " << assignmentPair.second << std::endl;
-					if(!badStateIterator->second.discreteAssignment.at(assignmentPair.first).intersectsWith(assignmentPair.second)){
-						// If one intersection is empty, the whole set does not intersect -> return false.
-						return false;
-					}
-				}
-				// if there is no constraint on the variable, the bad state is always satisfied for that dimension.
-			}
-			#ifdef REACH_DEBUG
-			std::cout << "Intersection with local, discrete bad states" << std::endl;
-			#endif
-			// at this point all discrete bad states were already satisfied -> check continuous bad states.
 			if(_segment.satisfiesHalfspaces(badStateIterator->second.set.first, badStateIterator->second.set.second).first == true){
 				#ifdef REACH_DEBUG
 				std::cout << "Intersection with all local bad states" << std::endl;
@@ -33,7 +17,7 @@ namespace reachability {
 				return true;
 			}
 			#ifdef REACH_DEBUG
-			std::cout << "No intersection with local, continuous bad states" << std::endl;
+			std::cout << "No intersection with local bad states" << std::endl;
 			#endif
 		}
 

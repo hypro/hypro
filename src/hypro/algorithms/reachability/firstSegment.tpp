@@ -14,47 +14,10 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
+	boost::tuple<bool, State<Number>, TrafoParameters<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
 		assert(!_state.timestamp.isUnbounded());
 		// check if initial Valuation fulfills Invariant
-		// check discrete invariant first
 		State<Number> validState = _state;
-		const typename Location<Number>::Invariant& i = _state.location->invariant();
-		for(const auto& invariantPair : i.discreteInvariant) {
-			carl::Interval<Number> invariantInterval = carl::Interval<Number>::unboundedInterval();
-			carl::Interval<Number> substitution(0);
-			// insert all current discrete assignments except the constrained one.
-			for(unsigned colIndex = 0; colIndex < invariantPair.second.cols()-1; ++colIndex){
-				if(colIndex != VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) {
-					if(invariantPair.second(0, colIndex) != 0){
-						substitution += invariantPair.second(0, colIndex) * validState.discreteAssignment.at(VariablePool::getInstance().carlVarByIndex(colIndex+i.discreteOffset));
-					}
-				}
-			}
-			// add constant term
-			carl::Interval<Number> constPart(invariantPair.second(0,invariantPair.second.cols()-1));
-			substitution += constPart;
-			if(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) > 0){
-				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == 1);
-				invariantInterval.setUpperBound(-substitution.lower(),carl::BoundType::WEAK);
-			} else {
-				assert(invariantPair.second(0,VariablePool::getInstance().id(invariantPair.first)-i.discreteOffset) == -1);
-				invariantInterval.setLowerBound(substitution.upper(), carl::BoundType::WEAK);
-			}
-
-			if(validState.discreteAssignment.find(invariantPair.first) != validState.discreteAssignment.end()) {
-				validState.discreteAssignment[invariantPair.first] = validState.discreteAssignment[invariantPair.first].intersect(invariantInterval);
-			} else {
-				// set discrete assignment to match invariant.
-				validState.discreteAssignment[invariantPair.first] = invariantInterval;
-			}
-			if(validState.discreteAssignment[invariantPair.first].isEmpty()){
-				#ifdef REACH_DEBUG
-				std::cout << "Valuation violates discrete invariant." << std::endl;
-				#endif
-				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
-			}
-		}
 
 		// check continuous set for invariant
 		std::pair<bool, Representation> initialPair = boost::get<Representation>(_state.set).satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec);
@@ -85,10 +48,17 @@ namespace reachability {
 			if(trafoMatrix == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()) &&
 				translation == vector_t<Number>::Zero(translation.rows()) ) {
 				validState.set = initialPair.second;
-				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);
+				return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(initialPair.first, validState, TrafoParameters<Number>(trafoMatrixResized, translation));
 			}
 
-			Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
+			// Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
+			Representation deltaValuation = applyLinearTransformation(initialPair.second, TrafoParameters<Number>(trafoMatrixResized, translation));
+
+			std::cout << "Vertices delta valuation: " << std::endl;
+			for(const auto& vertex : deltaValuation.vertices()) {
+				std::cout << convert<Number,double>(vertex) << std::endl;
+			}
+
 			#ifdef REACH_DEBUG
 			std::cout << "Set at t=delta: " << deltaValuation << std::endl;
 			#endif
@@ -127,11 +97,15 @@ namespace reachability {
 
 				Representation tmp = bloatBox<Number,Representation>(deltaValuation, errorBoxVector[1]);
 
+				std::cout << "Errorbox1: " << convert<Number,double>(errorBoxVector[1]) << std::endl;
+
 				firstSegment = tmp.unite(initialPair.second);
 				Box<Number> differenceBox = errorBoxVector[2];
 				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 				//assert(firstSegment.contains(initialPair.second));
 				//assert(firstSegment.contains(deltaValuation));
+
+				std::cout << "DifferenceBox: " << convert<Number,double>(differenceBox) << std::endl;
 
 				firstSegment = bloatBox<Number,Representation>(firstSegment, differenceBox);
 			}
@@ -142,53 +116,6 @@ namespace reachability {
 			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << std::endl;
 			#endif
-			// (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
-			// (use_reduce_time==true) apply reduction on firstSegment for time reduction
-			#ifdef USE_REDUCTION
-			unsigned CONVEXHULL_CONST = 20, REDUCE_CONST=8;
-			std::vector<vector_t<Number>> directions = computeTemplate<Number>(2, REDUCE_CONST);
-
-			bool use_reduce_memory=false, use_reduce_time=true;
-
-			// obejcts for use_reduce_memory
-			unsigned segment_count=0;
-			std::vector<Point<Number>> points_convexHull;
-
-			for(auto vertex: firstSegment.vertices()){ // cover firstSegment in clustering
-				if(std::find(points_convexHull.begin(),points_convexHull.end(), vertex)==points_convexHull.end()){
-					points_convexHull.push_back(vertex);
-				}
-			}
-
-			// option 1: use uniform distirbution of REDUCE_CONST directions in all dimension-pairs (use_reduce_memory or use_reduce_time)
-			// option 2: use directions of guards and invariants (use_reduce_time)
-			// option 3: use uniform distirbution of firstSegment.size/2 directions in all dimension-pairs (use_reduce_time)
-
-			if(use_reduce_time){
-				// option 2
-
-				//for(auto transition: _state.location->transitions()){	// reduction memory guard mode
-				//	auto guard= transition->guard();
-				//	for(unsigned i=0; i<guard.mat.rows(); i++){
-				//		vector_t<Number> guard_vector = vector_t<Number>(2);
-				//		guard_vector(0)=guard.mat(i,0);
-				//		guard_vector(1)=guard.mat(i,1);
-				//		directions.push_back(guard_vector);
-				//	}
-				//}
-				//for(unsigned inv_index=0; inv_index<invariant.size(); ++inv_index){ // reduction memory invariant mode
-				//	directions.push_back(invariant.constraints().at(inv_index).normal());
-				//}
-
-				firstSegment = firstSegment.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-
-				// option 3
-				//int reduce_calculated = ceil(firstSegment.size()/2);
-				//if(reduce_calculated>2){
-				//	firstSegment = firstSegment.reduce_directed(computeTemplate<Number>(2, reduce_calculated), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
-				//}
-			}
-			#endif
 			firstSegment.removeRedundancy();
 
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
@@ -196,10 +123,16 @@ namespace reachability {
 			assert(fullSegment.satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec).first);
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(Number(0),mSettings.timeStep);
-			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(initialPair.first, validState, trafoMatrixResized, translation);
+
+			std::cout << "Vertices first segment:" << std::endl;
+			for(const auto& vertex : fullSegment.vertices()) {
+				std::cout << convert<Number,double>(vertex) << std::endl;
+			}
+
+			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(initialPair.first, validState, TrafoParameters<Number>(trafoMatrixResized, translation));
 		} // if set does not satisfy the invariant, return false
 		else {
-			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
+			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(false);
 		}
 	}
 
