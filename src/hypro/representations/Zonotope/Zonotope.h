@@ -17,8 +17,9 @@
 #endif
 
 #include "ZUtility.h"
-#include "../../datastructures/Halfspace.h"
-#include "../../util/pca.h"
+#include "datastructures/Halfspace.h"
+#include "util/pca.h"
+#include "util/adaptions_eigen/adaptions_eigen.h"
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
@@ -164,6 +165,8 @@ class ZonotopeT {
     void removeRedundancy() const {}
 
     void reduceOrder( Number limit = Number(ZONOTOPE_ORDERLIMIT) );
+
+    void reduceNumberRepresentation();
 
 	/*****************************************************************************
 	*                                                                           *

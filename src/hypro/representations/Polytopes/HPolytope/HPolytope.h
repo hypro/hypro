@@ -262,9 +262,9 @@ public:
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
 			for ( unsigned i = 0; i < rhs.constraints().size() - 1; ++i ) {
-				lhs << rhs.constraints()[i] << "," << std::endl;
+				lhs << convert<Number,double>(rhs.constraints()[i]) << "," << std::endl;
 			}
-			lhs << rhs.constraints()[rhs.constraints().size() - 1] << " ]";
+			lhs << convert<Number,double>(rhs.constraints()[rhs.constraints().size() - 1]) << " ]";
 		}
 		return lhs;
 	}
@@ -386,7 +386,12 @@ public:
 
 };
 
-}  // namespace
+template<typename From, typename To, typename Converter>
+HPolytopeT<To,Converter> convert(const HPolytopeT<From,Converter>& in) {
+	return HPolytopeT<To,Converter>(convert<From,To>(in.matrix()), convert<From,To>(in.vector()));
+}
+
+}  // namespace hypro
 
 #include "HPolytope.tpp"
 #include "reduction.tpp"

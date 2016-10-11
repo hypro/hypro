@@ -322,6 +322,20 @@ void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 	std::cout << __func__ << ": Reduced order: " << this->order() << std::endl;
 }
 
+template<typename Number, typename Converter>
+void ZonotopeT<Number,Converter>::reduceNumberRepresentation() {
+	/*
+	std::vector<vector_t<Number>> tmpGenerators;
+	for(unsigned i = 0; i < mGenerators.cols(); ++i) {
+		vector_t<Number> tmp = hypro::reduceNumberRepresentation(vector_t<Number>(mGenerators.col(i)));
+		tmpGenerators.push_back( tmp );
+	}
+	for(unsigned i = 0; i < mGenerators.cols(); ++i) {
+		mGenerators.col(i) = tmpGenerators[i];
+	}
+	*/
+}
+
 /*****************************************************************************
 *                                                                           *
 *                           Algorithm Functions                             *

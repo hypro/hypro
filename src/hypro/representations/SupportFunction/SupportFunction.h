@@ -70,6 +70,7 @@ public:
 	vector_t<Number> vector() const;
 
 	void removeRedundancy();
+	void reduceNumberRepresentation() {}
 	std::vector<Point<Number>> vertices(const Location<Number>* loc = nullptr) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
@@ -80,7 +81,7 @@ public:
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
 	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = 8 ) const;
-	SupportFunctionT<Number,Converter> unite( SupportFunctionT<Number,Converter>& _rhs ) const;
+	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
 	//std::pair<bool, SupportFunctionT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
 	std::pair<bool, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;

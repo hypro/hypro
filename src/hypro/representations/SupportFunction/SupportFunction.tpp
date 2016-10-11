@@ -357,7 +357,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::unite( SupportFunctionT<Number,Converter> &_rhs ) const {
+    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::unite( const SupportFunctionT<Number,Converter> &_rhs ) const {
         return SupportFunctionT<Number,Converter>(content->unite(_rhs.content));
     }
 

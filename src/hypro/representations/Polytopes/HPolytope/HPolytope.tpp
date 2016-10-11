@@ -15,7 +15,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 		for ( const auto &plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
-		reduceNumberRepresentation();
+		//reduceNumberRepresentation();
 	}
 }
 
@@ -27,7 +27,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
 	}
 	//std::cout << "Constructor from matrix, vector, size: " << this->size() << std::endl;
-	reduceNumberRepresentation();
+	//reduceNumberRepresentation();
 }
 
 template <typename Number, typename Converter>
@@ -445,16 +445,16 @@ bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hpla
 
 template <typename Number, typename Converter>
 const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedundancy() {
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
-		std::cout << "Not already reduced." << std::endl;
+		//std::cout << "Not already reduced." << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
 		std::vector<std::size_t> redundant = opt.redundantConstraints();
-		std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
-		std::cout << __func__ << ": Redundant constraints: " << redundant << std::endl;
+		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
+		//std::cout << __func__ << ": Redundant constraints: " << redundant << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
@@ -465,7 +465,7 @@ const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedunda
 				if(redundant.back() == cnt){
 					mHPlanes.erase( --(rIt.base()) );
 					redundant.pop_back();
-					std::cout << "Erase plane " << cnt << std::endl;
+					//std::cout << "Erase plane " << cnt << std::endl;
 				}
 				--cnt;
 			}
@@ -528,9 +528,9 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 	if(_mat.rows() == 0) {
 		return std::make_pair(true, *this);
 	}
-	std::cout << typeid(*this).name() << "::" << __func__ << ": Before intersection: " << *this << std::endl;
+	//std::cout << typeid(*this).name() << "::" << __func__ << ": Before intersection: " << *this << std::endl;
 	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
-	std::cout << typeid(*this).name() << "::" << __func__ << ": After intersection: " << tmp << std::endl;
+	//std::cout << typeid(*this).name() << "::" << __func__ << ": After intersection: " << tmp << std::endl;
 	return std::make_pair(!(tmp).empty(),tmp);
 }
 
@@ -663,15 +663,15 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
-	std::cout << __func__ << ": After intersection (union of halfspaces): " << res << std::endl;
+	//std::cout << __func__ << ": After intersection (union of halfspaces): " << res << std::endl;
 	res.removeRedundancy();
-	std::cout << __func__ << ": After removing redundancy: " << res << std::endl;
+	//std::cout << __func__ << ": After removing redundancy: " << res << std::endl;
 	return res;
 }
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
-	std::cout << __func__ << " of " << point << std::endl;
+	//std::cout << __func__ << " of " << point << std::endl;
 	return this->contains( point.rawCoordinates() );
 }
 
