@@ -41,6 +41,9 @@ TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 // Benchmark
 TYPED_TEST_CASE(Benchmark, allTypes);
 
+// Core
+TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
+
 // Datastructure
 TYPED_TEST_CASE(HalfspaceTest, allTypes);
 TYPED_TEST_CASE(PointTest, allTypes);
