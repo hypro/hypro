@@ -549,7 +549,40 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
+	if(A.nonZeros() == 0) {
+		return HPolytopeT<Number,Converter>::Empty();
+	}
+	//std::cout << __func__ << " of " << *this << std::endl;
+	if(!this->empty() && !mHPlanes.empty()) {
+		Eigen::FullPivLU<matrix_t<Number>> lu(A);
+		// if A has full rank, we can simply re-transform, otherwise use v-representation.
+		if(lu.rank() == A.rows()) {
+			//std::cout << "Full rank, retransform!" << std::endl;
+			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
+			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second).size() == this->size()) );
+			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second);
+		} else {
+#ifdef HPOLY_DEBUG_MSG
+			std::cout << "Use V-Conversion for linear transformation." << std::endl;
+#endif
+			auto intermediate = Converter::toVPolytope( *this );
+			intermediate = intermediate.linearTransformation( A );
+			auto res = Converter::toHPolytope(intermediate);
+			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
+
+			//assert(res.size() <= this->size());
+			res.setReduced();
+			return res;
+		}
+	} else {
+		return *this;
+	}
+}
+
+template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
 	if(A.nonZeros() == 0) {
