@@ -2,6 +2,7 @@
  *
  */
 
+#include "representations/GeometricObject.h"
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
@@ -44,12 +45,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 			extendedFilename += "_hpoly";
 			break;
 		}
-		/*
 		case hypro::representation_name::box:{
 			extendedFilename += "_box";
 			break;
 		}
-		*/
 		default:
 			extendedFilename += "_unknownRep";
 	}
@@ -75,13 +74,26 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		for(const auto& segment : flowpipePair.second){
 			std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
 			switch (type) {
-				/*
 				case hypro::representation_name::support_function:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
+					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
+					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
 					break;
 				}
-				*/
+				case hypro::representation_name::zonotope:{
+					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.rSettings().dimensions.first = 0;
+					plotter.rSettings().dimensions.second = 1;
+					break;
+				}
+				case hypro::representation_name::box:{
+					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.rSettings().dimensions.first = 0;
+					plotter.rSettings().dimensions.second = 1;
+					break;
+				}
 				default:
 					unsigned tmp = plotter.addObject(segment.vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
@@ -90,6 +102,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		}
 	}
 	std::cout << "Write to file." << std::endl;
+	std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
 	plotter.plot2d();
 	plotter.plotGen();
 	//plotter.plotTex();
@@ -110,16 +123,18 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){
+		/*
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
 			break;
 		}
+		*/
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
@@ -138,21 +153,17 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
 			break;
 		}
-		/*
 		case 1: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 			break;
 		}
-		*/
-		/*
 		default:{
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 		}
-		*/
 	}
 
 	exit(0);
