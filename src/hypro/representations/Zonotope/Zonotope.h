@@ -6,7 +6,6 @@
  * @version 1.0 on June 19, 2014, 10:25 PM
  *
  * Reviewed by Leonardo Winter Pereira (leonardowinterpereira@gmail.com)
- * function corners now totally works! (Complexity now is O(2^n), but n is only the amount of different generators (which isn't too much))
  * version 1.1 on September 15, 2015
  */
 
@@ -92,6 +91,11 @@ class ZonotopeT {
 	* @return
 	*/
 	bool empty() const;
+
+
+	static ZonotopeT<Number,Converter> Empty(std::size_t dimension = 1) {
+		return ZonotopeT<Number,Converter>(vector_t<Number>::Zero(dimension), matrix_t<Number>(dimension,0));
+	}
 
 	static representation_name type() { return representation_name::zonotope; }
 
@@ -181,6 +185,13 @@ class ZonotopeT {
 	 * @return True if the operation has been successfully applied.
 	 */
 	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
+
+	/**
+	 * @brief      Projects the zonotope on the given dimensions.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected zonotope.
+	 */
+	ZonotopeT<Number,Converter> project( const std::vector<unsigned>& dimensions ) const;
 
 	/**
 	 * Applies a linear transformation on the given stateset.

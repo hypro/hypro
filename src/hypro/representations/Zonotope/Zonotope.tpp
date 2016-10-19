@@ -358,6 +358,27 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 }
 
 template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+	if(dimensions.empty()) {
+		return Empty();
+	}
+
+	matrix_t<Number> projectedGenerators = matrix_t<Number>::Zero(dimensions.size(), mGenerators.cols());
+
+	for(unsigned generatorIndex = 0; generatorIndex < mGenerators.cols(); ++generatorIndex) {
+		for(unsigned i = 0; i < dimensions.size(); ++i) {
+			if(dimensions.at(i) < this->dimension()) {
+				projectedGenerators(i,generatorIndex) = mGenerators(dimensions.at(i), generatorIndex);
+			}
+		}
+	}
+	ZonotopeT<Number,Converter> res = ZonotopeT<Number,Converter>(hypro::project(mCenter,dimensions), projectedGenerators);
+	res.reduceOrder();
+
+	return res;
+}
+
+template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number>& b ) const {
 	assert( A.cols() == mCenter.rows() &&
 			"Matrix's dimensionality is different "
