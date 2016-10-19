@@ -13,13 +13,13 @@
 #pragma once
 #include "util.h"
 #include "Settings.h"
-#include "../../config.h"
-#include "../../datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../../datastructures/hybridAutomata/State.h"
-#include "../../datastructures/hybridAutomata/RawState.h"
-#include "../../util/Plotter.h"
-#include "../hypro/representations/Ellipsoids/Ellipsoid.h"
-#include "../../representations/GeometricObject.h"
+#include "config.h"
+#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/hybridAutomata/State.h"
+#include "datastructures/hybridAutomata/RawState.h"
+#include "util/Plotter.h"
+#include "representations/Ellipsoids/Ellipsoid.h"
+#include "representations/GeometricObject.h"
 #include "boost/tuple/tuple.hpp"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
