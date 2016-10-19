@@ -13,7 +13,7 @@
 #endif
 
 #include "../Cone.h"
-#include "../../../algorithms/convexHull/ConvexHull.h"
+#include "algorithms/convexHull/ConvexHull.h"
 #include "util/convexHull.h"
 #include "util/linearOptimization/Optimizer.h"
 #include "util/Permutator.h"
@@ -64,7 +64,8 @@ class VPolytopeT {
 	**************************************************************************/
 
 	VPolytopeT project( const std::vector<unsigned>& dimensions ) const;
-	VPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
+	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
 	VPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;

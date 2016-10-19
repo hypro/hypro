@@ -128,7 +128,19 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::ve
 }
 
 template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
+VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
+	VPolytopeT<Number, Converter> result;
+	for ( const auto &vertex : mVertices ) {
+		result.insert( vertex.linearTransformation( A ) );
+	}
+	result.setCone( mCone.linearTransformation( A ) );
+	result.unsafeSetNeighbors( mNeighbors );
+	return result;
+}
+
+template <typename Number, typename Converter>
+VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::affineTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter> result;
