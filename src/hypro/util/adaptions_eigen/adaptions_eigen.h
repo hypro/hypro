@@ -226,6 +226,21 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	vector_t<Number> project(const vector_t<Number>& in, const std::vector<unsigned>& dimensions) {
+		if(dimensions.empty()) {
+			return vector_t<Number>::Zero(0);
+		}
+		vector_t<Number> projectedVector = vector_t<Number>::Zero(dimensions.size());
+
+		for(unsigned i = 0; i < dimensions.size(); ++i) {
+			if(dimensions.at(i) < in.rows() && dimensions.at(i) >= 0) {
+				projectedVector(i) = in(dimensions.at(i));
+			}
+		}
+		return projectedVector;
+	}
+
+	template<typename Number>
 	vector_t<Number> scalarProjection(const vector_t<Number>& source, const vector_t<Number>& target) {
 		Number targetLength = norm(target);
 		vector_t<Number> res = ((source.dot(target))/(targetLength*targetLength))*target;
