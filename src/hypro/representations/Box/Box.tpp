@@ -430,17 +430,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::project(const std::vector<unsigne
 	if(dimensions.empty()) {
 		return Empty();
 	}
-
-	vector_t<Number> projectedLower = vector_t<Number>::Zero(dimensions.size());
-	vector_t<Number> projectedUpper = vector_t<Number>::Zero(dimensions.size());
-
-	for(unsigned i = 0; i < dimensions.size(); ++i) {
-		if(dimensions.at(i) < this->dimension()) {
-			projectedLower(i) = mLimits.first(dimensions.at(i));
-			projectedUpper(i) = mLimits.second(dimensions.at(i));
-		}
-	}
-	return BoxT<Number,Converter>(projectedLower, projectedUpper);
+	return BoxT<Number,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
 }
 
 template<typename Number, typename Converter>

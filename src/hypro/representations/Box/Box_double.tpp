@@ -329,17 +329,8 @@ BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigne
 	if(dimensions.empty()) {
 		return Empty();
 	}
-
-	vector_t<double> projectedLower = vector_t<double>::Zero(dimensions.size());
-	vector_t<double> projectedUpper = vector_t<double>::Zero(dimensions.size());
-
-	for(unsigned i = 0; i < dimensions.size(); ++i) {
-		if(dimensions.at(i) < this->dimension()) {
-			projectedLower(i) = mLimits.first(dimensions.at(i));
-			projectedUpper(i) = mLimits.second(dimensions.at(i));
-		}
-	}
-	return BoxT<double,Converter>(projectedLower, projectedUpper);
+	std::cout << __func__ << ": dim: " << dimensions << ", original: " << *this << std::endl << "result: " << BoxT<double,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions))) << std::endl;
+	return BoxT<double,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
 }
 
 template<typename Converter>
