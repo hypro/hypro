@@ -265,6 +265,13 @@ class Point {
 	//bool move( const Point<Number>& _p );
 
 	/**
+	 * @brief      Projects the point on the given dimensions.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected point.
+	 */
+	Point<Number> project( const std::vector<unsigned>& dimensions ) const;
+
+	/**
 	 * @brief      Applies an affine transformation on the current point.
 	 * @param[in]  A     The transformation matrix.
 	 * @param[in]  b     The transformation vector.

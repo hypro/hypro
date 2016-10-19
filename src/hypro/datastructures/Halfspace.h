@@ -10,8 +10,9 @@
 
 #pragma once
 #include "Point.h"
-#include "../util/VariablePool.h"
-#include "../util/linearSolving.h"
+#include "util/VariablePool.h"
+#include "util/linearSolving.h"
+#include "util/adaptions_eigen/adaptions_eigen.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>
@@ -171,7 +172,7 @@ class Halfspace {
 	 * @param[in]  <unnamed>  The point.
 	 * @return     A point lying on the plane which is a projection of the input.
 	 */
-	Point<Number> project( const Point<Number> ) const;
+	Point<Number> projectPointOnPlane( const Point<Number> ) const;
 
 	/**
 	 * @brief      Computes the intersection of a vector with the plane.
@@ -188,6 +189,14 @@ class Halfspace {
 	 * @return     True, if the vector intersects the plane, false otherwise.
 	 */
 	bool intersection( Number& _result, const Point<Number>& _vector ) const;
+
+	/**
+	 * @brief      Projects the halfspace on the given dimensions. Note that this corresponds to a projection
+	 * of the normal vector without any re-scaling.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected halfspace.
+	 */
+	Halfspace<Number> project( const std::vector<unsigned>& dimensions ) const;
 
 	/**
 	 * @brief      Computes the affine transformation of the plane.

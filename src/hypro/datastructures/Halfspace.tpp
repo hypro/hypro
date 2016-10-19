@@ -118,9 +118,8 @@ Number Halfspace<Number>::evaluate( const vector_t<Number> &_direction ) const {
 }
 
 template <typename Number>
-Point<Number> Halfspace<Number>::project( const Point<Number> point ) const {
-	return Point<Number>( point.rawCoordinates() +
-																				( (mScalar- point.rawCoordinates().dot(mNormal))/mNormal.dot(mNormal) ) * mNormal );
+Point<Number> Halfspace<Number>::projectPointOnPlane( const Point<Number> point ) const {
+	return Point<Number>( point.rawCoordinates() + ( (mScalar- point.rawCoordinates().dot(mNormal))/mNormal.dot(mNormal) ) * mNormal );
 }
 
 template <typename Number>
@@ -146,6 +145,16 @@ bool Halfspace<Number>::intersection( Number &_result, const vector_t<Number> &_
 template <typename Number>
 bool Halfspace<Number>::intersection( Number &_result, const Point<Number> &_vector ) const {
 	return intersection( _result, _vector.rawCoordinates() );
+}
+
+template<typename Number>
+Halfspace<Number> Halfspace<Number>::project( const std::vector<unsigned>& dimensions ) const {
+	if(dimensions.empty()) {
+		return Halfspace<Number>();
+	}
+
+	vector_t<Number> projectedNormal = hypro::project(mNormal, dimensions);
+	return Halfspace<Number>(projectedNormal, mScalar);
 }
 
 template <typename Number>

@@ -239,6 +239,7 @@ Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensio
 	unsigned tPos = 0;
 	for ( const auto sPos : _dimensions ) {
 		assert(sPos < mCoordinates.rows());
+		assert(sPos >= 0);
 		newCoordinates( tPos ) = mCoordinates( sPos );
 		++tPos;
 	}
@@ -322,6 +323,22 @@ template <typename Number>
 Point<Number> Point<Number>::newEmpty() const {
 	vector_t<Number> origin = vector_t<Number>::Zero( this->dimension() );
 	return Point<Number>( origin );
+}
+
+template<typename Number>
+Point<Number> Point<Number>::project( const std::vector<unsigned>& dimensions ) const {
+	if(dimensions.empty()) {
+		return Point<Number>();
+	}
+
+	vector_t<Number> projectedCoordinates = vector_t<Number>::Zero(dimensions.size());
+
+	for(unsigned i = 0; i < dimensions.size(); ++i) {
+		if(dimensions.at(i) < this->dimension() && dimensions.at(i) >= 0) {
+			projectedCoordinates(i) = mCoordinates(dimensions.at(i));
+		}
+	}
+	return Point<Number>(projectedCoordinates);
 }
 
 template <typename Number>
