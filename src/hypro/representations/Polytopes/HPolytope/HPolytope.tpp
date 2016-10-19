@@ -535,6 +535,20 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 }
 
 template <typename Number, typename Converter>
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::vector<unsigned>& dimensions) const {
+	if(dimensions.empty()) {
+		return Empty();
+	}
+
+	HalfspaceVector projectedPlanes;
+
+	for(const auto& hspace : mHPlanes) {
+		projectedPlanes.emplace_back(hspace.project(dimensions));
+	}
+	return HPolytopeT<Number,Converter>(projectedPlanes);
+}
+
+template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	//std::cout << __func__ << ": Number Planes: "<< mHPlanes.size() << ", matrix: " << std::endl << A << std::endl << "b: " << std::endl << b << std::endl;
