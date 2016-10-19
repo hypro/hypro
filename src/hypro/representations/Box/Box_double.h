@@ -357,13 +357,21 @@ class BoxT<double,Converter> {
 	BoxT<double,Converter> project(const std::vector<unsigned>& dimensions) const;
 
 	/**
+	 * @brief      Applies a linear transformation to the box.
+	 * @details    The transformation is done on the two limit points directly. TODO: Add more extensive description here.
+	 * @param[in]  A     A matrix for the linear transformation.
+	 * @return     The resulting box.
+	 */
+	BoxT<double,Converter> linearTransformation( const matrix_t<double>& A ) const;
+
+	/**
 	 * @brief      Applies an affine transformation to the box.
 	 * @details    The transformation is done on the two limit points directly. TODO: Add more extensive description here.
 	 * @param[in]  A     A matrix for the affine transformation.
 	 * @param[in]  b     A vector for the offset.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> linearTransformation( const matrix_t<double>& A, const vector_t<double>& b ) const;
+	BoxT<double,Converter> affineTransformation( const matrix_t<double>& A, const vector_t<double>& b ) const;
 
 	/**
 	 * @brief      Computes the Minkowski sum of two boxes.

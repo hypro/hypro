@@ -334,7 +334,7 @@ BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigne
 }
 
 template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
+BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matrix_t<double> &A ) const {
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
@@ -358,10 +358,14 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
 		}
 	}
-	min += b;
-	max += b;
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
 	return BoxT<double,Converter>( std::make_pair(min, max) );
+}
+
+template<typename Converter>
+BoxT<double,Converter> BoxT<double,Converter>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
+	BoxT<double,Converter> res = this->linearTransformation(A);
+	return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
 }
 
 template<typename Converter>
