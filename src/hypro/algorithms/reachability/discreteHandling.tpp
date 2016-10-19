@@ -72,10 +72,10 @@ namespace reachability {
 
 			#ifdef REACH_DEBUG
 			std::cout << "Unified " << aggregationPair.second.size() << " sets for aggregation:" << std::endl << collectedSets << std::endl;
-			std::cout << "CollectedSets vertices: " << std::endl;
-			for(const auto& vertex : collectedSets.vertices()) {
-				std::cout << convert<Number,double>(vertex) << std::endl;
-			}
+			//std::cout << "CollectedSets vertices: " << std::endl;
+			//for(const auto& vertex : collectedSets.vertices()) {
+			//	std::cout << convert<Number,double>(vertex) << std::endl;
+			//}
 			#endif
 
 			State<Number> s;
@@ -99,10 +99,10 @@ namespace reachability {
 			std::cout << "Apply resets." << std::endl;
 			#endif
 			Representation tmp = applyLinearTransformation(collectedSets, TrafoParameters<Number>(aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec));
-			std::cout << "Vertices after reset: " << std::endl;
-			for(const auto& vertex : tmp.vertices()) {
-				std::cout << convert<Number,double>(vertex) << std::endl;
-			}
+			//std::cout << "Vertices after reset: " << std::endl;
+			//for(const auto& vertex : tmp.vertices()) {
+			//	std::cout << convert<Number,double>(vertex) << std::endl;
+			//}
 			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
 			if(invariantSatisfyingSet.first){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());

@@ -55,23 +55,25 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
 	matrixBlock = delta*matrixBlock;
 	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+	std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
 	convertedBlock = convertedBlock.exp();
-	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+	std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
 	//Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
 	auto b1 = Converter<Number>::toBox(initialSet);
 	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
-	// std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
-	// std::cout << __func__ << " TmpMtrix: " << tmpMatrix << std::endl;
+	std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
+	std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
 	b1 = b1.linearTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)),vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
 	b1 = b1.makeSymmetric();
-	//Plotter<Number>::getInstance().addObject(b1.vertices());
 	assert(b1.isSymmetric());
 	b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
-	// std::cout << "B1: " << std::endl << b1 << std::endl;
+	//Test: re-scale offset vector
+	//std::cout << "Use " << matrixBlock(dim-1,2*dim-1) << " for scaling (entry " << dim-1 << "," << 2*dim-1 << " in the matrix)." << std::endl;
+	//b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), (Number(1)/matrixBlock(dim-1,2*dim-1))*vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
+	std::cout << "B1: " << std::endl << b1 << std::endl;
 
 	matrix_t<Number> tmpTrafo = (flow*flow*trafoMatrix).block(0,0,dim-1,dim-1);
 	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
@@ -80,16 +82,18 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
 	auto b2 = Converter<Number>::toBox(tmp);
 	b2 = b2.makeSymmetric();
-	//Plotter<Number>::getInstance().addObject(b2.vertices());
 	assert(b2.isSymmetric());
 	b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
-	// std::cout << "B2: " << std::endl << b2 << std::endl;
+	//Test: re-scale offset vector.
+	//std::cout << "Use " << matrixBlock(dim-1,3*dim-1) << " for scaling (entry " << dim-1 << "," << 3*dim-1 << " in the matrix)." << std::endl;
+	//b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), (Number(1)/matrixBlock(dim-1,3*dim-1))*vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
+	std::cout << "B2: " << std::endl << b2 << std::endl;
 
 	Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 
 	// std::cout << "External Input: " << externalInput << std::endl;
-	Box<Number> errorBoxExternalInput = Box<Number>( std::make_pair(Point<Number>(vector_t<Number>::Zero(dim-1)), Point<Number>(vector_t<Number>::Zero(dim-1))) );
-	errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
+	Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
+	//std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " << convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
 	errorBoxExternalInput.makeSymmetric();
 	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
 
@@ -107,7 +111,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
  * based on the Hausdorff distance, constructs the box (also a polytope) that is used for bloating the initial
  * approximation
  */
-template <typename Number, typename Representation>
+template <typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, Zonotope<Number> > > = carl::dummy>
 Representation computePolytope( unsigned int _dim, Number _radius ) {
 	matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
 	vector_t<Number> vec( 2 * _dim, 1 );
@@ -121,8 +125,24 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 		i = i + 2;
 	}
-	Representation poly = Representation( mat, vec );
-	return poly;
+	return Representation(mat,vec);
+}
+
+template <typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, Zonotope<Number> > > = carl::dummy>
+Representation computePolytope( unsigned int _dim, Number _radius ) {
+	matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
+	vector_t<Number> vec( 2 * _dim, 1 );
+	int i = 0;
+	for ( unsigned z = 0; z < _dim; ++z ) {
+		vec( i ) = _radius;
+		vec( i + 1 ) = _radius;
+
+		mat( i, z ) = 1;
+		mat( i + 1, z ) = -1;
+
+		i = i + 2;
+	}
+	return Converter<Number>::toZonotope(Box<Number>( mat, vec ));
 }
 
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>

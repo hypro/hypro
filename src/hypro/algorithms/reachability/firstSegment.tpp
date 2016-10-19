@@ -54,10 +54,10 @@ namespace reachability {
 			// Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
 			Representation deltaValuation = applyLinearTransformation(initialPair.second, TrafoParameters<Number>(trafoMatrixResized, translation));
 
-			std::cout << "Vertices delta valuation: " << std::endl;
-			for(const auto& vertex : deltaValuation.vertices()) {
-				std::cout << convert<Number,double>(vertex) << std::endl;
-			}
+			//std::cout << "Vertices delta valuation: " << std::endl;
+			//for(const auto& vertex : deltaValuation.vertices()) {
+			//	std::cout << convert<Number,double>(vertex) << std::endl;
+			//}
 
 			#ifdef REACH_DEBUG
 			std::cout << "Set at t=delta: " << deltaValuation << std::endl;
@@ -95,27 +95,36 @@ namespace reachability {
 				Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension())), Point<Number>(vector_t<Number>::Zero(initialPair.second.dimension()))));
 				std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.location->flow(), initialPair.second, trafoMatrix, externalInput);
 
-				Representation tmp = bloatBox<Number,Representation>(deltaValuation, errorBoxVector[1]);
+				/*
 
-				std::cout << "Errorbox1: " << convert<Number,double>(errorBoxVector[1]) << std::endl;
+				//Representation tmp = bloatBox<Number,Representation>(deltaValuation, errorBoxVector[1]);
+				//std::cout << "Errorbox1: " << convert<Number,double>(errorBoxVector[1]) << std::endl;
 
-				firstSegment = tmp.unite(initialPair.second);
-				Box<Number> differenceBox = errorBoxVector[2];
-				differenceBox = Number(Number(1)/Number(4)) * differenceBox;
-				//assert(firstSegment.contains(initialPair.second));
-				//assert(firstSegment.contains(deltaValuation));
+				firstSegment = deltaValuation.unite(initialPair.second);
+				//Box<Number> differenceBox = errorBoxVector[2];
+				//differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 
-				std::cout << "DifferenceBox: " << convert<Number,double>(differenceBox) << std::endl;
+				//std::cout << "DifferenceBox: " << convert<Number,double>(differenceBox) << std::endl;
+				std::cout << "1/4 * X_0 box: " << convert<Number,double>(Number(Number(1)/Number(4)) * errorBoxVector[0]) << std::endl;
 
-				firstSegment = bloatBox<Number,Representation>(firstSegment, differenceBox);
+				//firstSegment = bloatBox<Number,Representation>(firstSegment, differenceBox);
+				// We directly use the errorBox for X_0, as in our setup, all systems are autonomous.
+				firstSegment = bloatBox<Number,Representation>(firstSegment, Number(Number(1)/Number(4)) * errorBoxVector[0]);
+
+				*/
+				// Experimental: We assume that there should be first a bloating and then a CH operation.
+				std::cout << "1/4 * X_0 box: " << convert<Number,double>(Number(Number(1)/Number(4)) * errorBoxVector[0]) << std::endl;
+				firstSegment = initialPair.second.unite(bloatBox<Number,Representation>(deltaValuation, Number(Number(1)/Number(4))*errorBoxVector[0]));
 			}
-			//assert(firstSegment.contains(unitePolytope));
-			//assert(firstSegment.contains(initialPair.second));
-			//assert(firstSegment.contains(deltaValuation));
+
 			#ifdef REACH_DEBUG
 			std::cout << "first Flowpipe Segment (after minkowski Sum): " << std::endl;
 			std::cout << firstSegment << std::endl;
 			#endif
+
+			//assert(firstSegment.contains(unitePolytope));
+			assert(firstSegment.contains(initialPair.second));
+			assert(firstSegment.contains(deltaValuation));
 			firstSegment.removeRedundancy();
 
 			// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
@@ -124,10 +133,10 @@ namespace reachability {
 			validState.set = fullSegment;
 			validState.timestamp = carl::Interval<Number>(Number(0),mSettings.timeStep);
 
-			std::cout << "Vertices first segment:" << std::endl;
-			for(const auto& vertex : fullSegment.vertices()) {
-				std::cout << convert<Number,double>(vertex) << std::endl;
-			}
+			//std::cout << "Vertices first segment:" << std::endl;
+			//for(const auto& vertex : fullSegment.vertices()) {
+			//	std::cout << convert<Number,double>(vertex) << std::endl;
+			//}
 
 			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(initialPair.first, validState, TrafoParameters<Number>(trafoMatrixResized, translation));
 		} // if set does not satisfy the invariant, return false
