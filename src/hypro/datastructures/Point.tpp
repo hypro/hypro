@@ -342,14 +342,18 @@ Point<Number> Point<Number>::project( const std::vector<unsigned>& dimensions ) 
 }
 
 template <typename Number>
-Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A ) const {
 	//std::cout << "Linear trafo of " << mCoordinates << " with " << A << " and " << b << std::endl;
 	assert(A.cols() == mCoordinates.rows());
-	if ( A.cols() == b.rows() ) {
-		return Point<Number>( A * mCoordinates + b );
-	} else {
-		return Point<Number>( A * mCoordinates );
-	}
+	return Point<Number>( A * mCoordinates );
+}
+
+template <typename Number>
+Point<Number> Point<Number>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+	//std::cout << "Linear trafo of " << mCoordinates << " with " << A << " and " << b << std::endl;
+	assert(A.cols() == mCoordinates.rows());
+	assert(b.rows() == mCoordinates.rows());
+	return Point<Number>( A * mCoordinates + b );
 }
 
 template <typename Number>

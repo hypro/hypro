@@ -708,7 +708,7 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 				return supPoint;
 			}
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			return supPoint.linearTransformation(parameterPair.first, parameterPair.second);
+			return supPoint.affineTransformation(parameterPair.first, parameterPair.second);
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->supremumPoint();

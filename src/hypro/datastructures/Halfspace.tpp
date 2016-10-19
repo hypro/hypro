@@ -158,7 +158,22 @@ Halfspace<Number> Halfspace<Number>::project( const std::vector<unsigned>& dimen
 }
 
 template <typename Number>
-Halfspace<Number> Halfspace<Number>::linearTransformation( const matrix_t<Number> &A,
+Halfspace<Number> Halfspace<Number>::linearTransformation( const matrix_t<Number> &A ) const {
+	Eigen::FullPivLU<matrix_t<Number>> lu(A);
+	// if A has full rank, we can simply retransform
+	if(lu.rank() == A.rows()) {
+		// Todo: Verify this.
+		return Halfspace<Number>(mNormal.transpose()*A.inverse(), mScalar);
+	} else {
+		// we cannot invert A - chose points on the plane surface and create new plane
+		assert(false);
+		//TODO
+		return Halfspace<Number>();
+	}
+}
+
+template <typename Number>
+Halfspace<Number> Halfspace<Number>::affineTransformation( const matrix_t<Number> &A,
 															 const vector_t<Number> &b ) const {
 	Eigen::FullPivLU<matrix_t<Number>> lu(A);
 	// if A has full rank, we can simply retransform

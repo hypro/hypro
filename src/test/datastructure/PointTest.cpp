@@ -221,7 +221,7 @@ TYPED_TEST(PointTest, BooleanTest)
 //    EXPECT_TRUE(this->p4.hasDimensions(this->p3.variables()));
 }
 
-TYPED_TEST(PointTest, LinearTransformation) {
+TYPED_TEST(PointTest, AffineTransformation) {
 	typename hypro::matrix_t<TypeParam> A = createMatrix(std::vector<std::vector<TypeParam> >({
 			std::vector<TypeParam>({4, 5}),
 			std::vector<TypeParam>({-2, 3})
@@ -229,8 +229,8 @@ TYPED_TEST(PointTest, LinearTransformation) {
 
 	typename hypro::vector_t<TypeParam> v = createVector(std::vector<TypeParam>({6, 1}));
 
-	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1.linearTransformation(A, v));
-	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2.linearTransformation(A, v));
-	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3.linearTransformation(A, v));
-	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4.linearTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({39,12}), this->p1.affineTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2.affineTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3.affineTransformation(A, v));
+	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4.affineTransformation(A, v));
 }

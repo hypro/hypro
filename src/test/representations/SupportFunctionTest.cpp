@@ -90,7 +90,7 @@ TYPED_TEST(SupportFunctionTest, Supremum) {
 	trafoVector << 5,6;
 
 	SupportFunction<TypeParam> psf2 = psf1.linearTransformation(std::make_shared<lintrafoParameters<TypeParam>>(trafoMatrix, trafoVector));
-	HPolytope<TypeParam> hpt2 = hpt1.linearTransformation(trafoMatrix, trafoVector);
+	HPolytope<TypeParam> hpt2 = hpt1.affineTransformation(trafoMatrix, trafoVector);
 
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(psf2.supremum(), hpt2.supremum(), 4));
 }

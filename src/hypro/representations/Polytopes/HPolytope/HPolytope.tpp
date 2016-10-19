@@ -605,7 +605,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 			std::cout << "Use V-Conversion for linear transformation." << std::endl;
 #endif
 			auto intermediate = Converter::toVPolytope( *this );
-			intermediate = intermediate.linearTransformation( A, b );
+			intermediate = intermediate.affineTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
 			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
 

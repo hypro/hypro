@@ -212,10 +212,9 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 
 	// result
-	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX, hypro::vector_t<TypeParam>::Zero(rotX.rows()));
-	hypro::Box<TypeParam> resY = b1.linearTransformation(rotY, hypro::vector_t<TypeParam>::Zero(rotY.rows()));
-	hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ, hypro::vector_t<TypeParam>::Zero(rotZ.rows()));
-
+	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX);
+	hypro::Box<TypeParam> resY = b1.linearTransformation(rotY);
+	hypro::Box<TypeParam> resZ = b1.linearTransformation(rotZ);
 
 	std::vector<hypro::Point<TypeParam>> cornersX = resX.vertices();
 

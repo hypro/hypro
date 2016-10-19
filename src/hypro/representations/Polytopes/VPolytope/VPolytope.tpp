@@ -145,9 +145,9 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::affineTransformatio
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter> result;
 	for ( const auto &vertex : mVertices ) {
-		result.insert( vertex.linearTransformation( A, b ) );
+		result.insert( vertex.affineTransformation( A, b ) );
 	}
-	result.setCone( mCone.linearTransformation( A, b ) );
+	result.setCone( mCone.affineTransformation( A, b ) );
 	result.unsafeSetNeighbors( mNeighbors );
 	return result;
 }

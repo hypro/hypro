@@ -9,8 +9,8 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../hypro/representations/GeometricObject.h"
-#include "../../hypro/datastructures/Halfspace.h"
+#include "representations/GeometricObject.h"
+#include "datastructures/Halfspace.h"
 
 /*
  * Google TYPED_TEST for Zonotope Implementation

@@ -277,7 +277,15 @@ class Point {
 	 * @param[in]  b     The transformation vector.
 	 * @return     The resulting point.
 	 */
-	Point<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	Point<Number> linearTransformation( const matrix_t<Number>& A ) const;
+
+	/**
+	 * @brief      Applies an affine transformation on the current point.
+	 * @param[in]  A     The transformation matrix.
+	 * @param[in]  b     The transformation vector.
+	 * @return     The resulting point.
+	 */
+	Point<Number> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * @brief      Returns the sum of all coordinates.

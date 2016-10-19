@@ -44,7 +44,8 @@ class Cone {
 	void add( std::shared_ptr<Halfspace<Number>> _plane );
 	void add( vector_t<Number> _vector );
 
-	Cone<Number> linearTransformation( const matrix_t<Number> A, const vector_t<Number>& b ) const;
+	Cone<Number> linearTransformation( const matrix_t<Number> A ) const;
+	Cone<Number> affineTransformation( const matrix_t<Number> A, const vector_t<Number>& b ) const;
 	Cone<Number> minkowskiSum( const Cone& _rhs ) const;
 	Point<Number> getUnitAverageVector() const;
 

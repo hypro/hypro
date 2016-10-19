@@ -229,9 +229,9 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	A(1,0) = 3;
 	A(1,1) = 4;
 
-	HPolytope<TypeParam> res = hpt1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows()));
+	HPolytope<TypeParam> res = hpt1.linearTransformation(A);
 	VPolytope<TypeParam> test(hpt1.vertices());
-	test = test.linearTransformation(A,vector_t<TypeParam>::Zero(A.rows()));
+	test = test.linearTransformation(A);
 
 	std::cout << "Res vertices: " << std::endl;
 	for(const auto& vertex : res.vertices()) {

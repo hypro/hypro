@@ -199,12 +199,19 @@ class Halfspace {
 	Halfspace<Number> project( const std::vector<unsigned>& dimensions ) const;
 
 	/**
+	 * @brief      Computes the linear transformation of the plane.
+	 * @param[in]  A     The transformation matrix.
+	 * @return     The resulting halfspace.
+	 */
+	Halfspace<Number> linearTransformation( const matrix_t<Number>& A ) const;
+
+	/**
 	 * @brief      Computes the affine transformation of the plane.
 	 * @param[in]  A     The transformation matrix.
 	 * @param[in]  b     The transformation vector.
 	 * @return     The resulting halfspace.
 	 */
-	Halfspace<Number> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	Halfspace<Number> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * @brief      Computes the vector describing the intersection of two hyperplanes.

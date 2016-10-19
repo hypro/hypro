@@ -169,11 +169,21 @@ void Cone<Number>::add( vector_t<Number> _vector ) {
 }
 
 template <typename Number>
-Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A, const vector_t<Number> &b ) const {
+Cone<Number> Cone<Number>::linearTransformation( const matrix_t<Number> A ) const {
 	Cone<Number> result;
 	for ( const auto &plane : mPlanes ) {
 		result.add(
-			  std::shared_ptr<Halfspace<Number>>( new Halfspace<Number>( plane->linearTransformation( A, b ) ) ) );
+			  std::shared_ptr<Halfspace<Number>>( new Halfspace<Number>( plane->linearTransformation( A ) ) ) );
+	}
+	return result;
+}
+
+template <typename Number>
+Cone<Number> Cone<Number>::affineTransformation( const matrix_t<Number> A, const vector_t<Number> &b ) const {
+	Cone<Number> result;
+	for ( const auto &plane : mPlanes ) {
+		result.add(
+			  std::shared_ptr<Halfspace<Number>>( new Halfspace<Number>( plane->affineTransformation( A, b ) ) ) );
 	}
 	return result;
 }
