@@ -198,7 +198,14 @@ class ZonotopeT {
 	 * @param result The resulting stateset.
 	 * @return True if the operation has been successfully applied.
 	 */
-	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A) const;
+
+	/**
+	 * Applies an affine transformation on the given stateset.
+	 * @param result The resulting stateset.
+	 * @return True if the operation has been successfully applied.
+	 */
+	ZonotopeT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * Compute boundaries of zonotopeT

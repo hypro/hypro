@@ -379,7 +379,23 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::project(const std::vect
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number>& b ) const {
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+	assert( A.cols() == mCenter.rows() &&
+			"Matrix's dimensionality is different "
+			"from zonotope's center's "
+			"dimensionality." );
+	assert( A.cols() == mGenerators.rows() &&
+			"Matrix's dimensionality is "
+			"different from zonotope's "
+			"generators' dimensionality." );
+	ZonotopeT<Number,Converter> result;
+	result.setCenter( A * this->mCenter );
+	result.setGenerators( A * this->mGenerators );
+	return result;
+}
+
+template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number>& b ) const {
 	assert( A.cols() == mCenter.rows() &&
 			"Matrix's dimensionality is different "
 			"from zonotope's center's "
