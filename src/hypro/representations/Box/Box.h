@@ -14,10 +14,10 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "../../datastructures/Halfspace.h"
-#include "../../datastructures/Point.h"
-#include "../../util/Permutator.h"
-#include "../../util/linearOptimization/Optimizer.h"
+#include "datastructures/Halfspace.h"
+#include "datastructures/Point.h"
+#include "util/Permutator.h"
+#include "util/linearOptimization/Optimizer.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>
@@ -369,6 +369,13 @@ class BoxT {
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Projects the box onto the given dimensions.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected box.
+	 */
+	BoxT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
 
 	/**
 	 * @brief      Applies an affine transformation to the box.

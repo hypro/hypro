@@ -325,6 +325,24 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 }
 
 template<typename Converter>
+BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigned>& dimensions) const {
+	if(dimensions.empty()) {
+		return Empty();
+	}
+
+	vector_t<double> projectedLower = vector_t<double>::Zero(dimensions.size());
+	vector_t<double> projectedUpper = vector_t<double>::Zero(dimensions.size());
+
+	for(unsigned i = 0; i < dimensions.size(); ++i) {
+		if(dimensions.at(i) < this->dimension()) {
+			projectedLower(i) = mLimits.first(dimensions.at(i));
+			projectedUpper(i) = mLimits.second(dimensions.at(i));
+		}
+	}
+	return BoxT<double,Converter>(projectedLower, projectedUpper);
+}
+
+template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;

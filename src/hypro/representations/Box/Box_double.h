@@ -302,6 +302,8 @@ class BoxT<double,Converter> {
 	  */
 	std::size_t dimension() const { return mLimits.first.dimension(); }
 
+	static representation_name type() { return representation_name::box; }
+
 	/**
 	 * @brief      Removes redundancy (part of the general interface. Does nothing for boxes.)
 	 */
@@ -346,6 +348,13 @@ class BoxT<double,Converter> {
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
+
+	/**
+	 * @brief      Projects the box onto the given dimensions.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected box.
+	 */
+	BoxT<double,Converter> project(const std::vector<unsigned>& dimensions) const;
 
 	/**
 	 * @brief      Applies an affine transformation to the box.

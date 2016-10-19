@@ -24,6 +24,7 @@ namespace hypro {
 			}
 			mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 		}
+		reduceNumberRepresentation();
 	}
 
 	template<typename Number, typename Converter>
@@ -100,6 +101,7 @@ namespace hypro {
 			}
 			mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
 		}
+		reduceNumberRepresentation();
 	}
 
 template<typename Number, typename Converter>
@@ -120,6 +122,7 @@ BoxT<Number,Converter>::BoxT( const std::set<Point<Number>> &_points ) {
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
+	reduceNumberRepresentation();
 }
 
 template<typename Number, typename Converter>
@@ -140,6 +143,7 @@ BoxT<Number,Converter>::BoxT( const std::vector<Point<Number>> &_points ) {
 		}
 		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
 	}
+	reduceNumberRepresentation();
 }
 
 /*
@@ -284,59 +288,59 @@ std::size_t BoxT<Number,Converter>::size() const {
 
 template<typename Number, typename Converter>
 void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
-		Number limit2 = Number(limit)*Number(limit);
-		for(unsigned d = 0; d < this->dimension(); ++d) {
-			//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
-			if(mLimits.second.at(d) != 0) {
-				Number numerator = carl::getNum(mLimits.second.at(d));
-				Number denominator = carl::getDenom(mLimits.second.at(d));
-				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-				if(largest > limit2){
-					Number dividend = largest / Number(limit);
-					assert(largest/dividend == limit);
-					Number val = Number(carl::ceil(numerator/dividend));
-					Number newDenom;
-					if(mLimits.second.at(d) > 0) {
-						newDenom = Number(carl::floor(denominator/dividend));
-					} else {
-						newDenom = Number(carl::ceil(denominator/dividend));
-					}
-					if(newDenom != 0) {
-						val = val / newDenom;
-						assert(val >= mLimits.second.at(d));
-						mLimits.second[d] = val;
-					}
-					//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
-					//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
+	Number limit2 = Number(limit)*Number(limit);
+	for(unsigned d = 0; d < this->dimension(); ++d) {
+		//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
+		if(mLimits.second.at(d) != 0) {
+			Number numerator = carl::getNum(mLimits.second.at(d));
+			Number denominator = carl::getDenom(mLimits.second.at(d));
+			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+			if(largest > limit2){
+				Number dividend = largest / Number(limit);
+				assert(largest/dividend == limit);
+				Number val = Number(carl::ceil(numerator/dividend));
+				Number newDenom;
+				if(mLimits.second.at(d) > 0) {
+					newDenom = Number(carl::floor(denominator/dividend));
+				} else {
+					newDenom = Number(carl::ceil(denominator/dividend));
 				}
+				if(newDenom != 0) {
+					val = val / newDenom;
+					assert(val >= mLimits.second.at(d));
+					mLimits.second[d] = val;
+				}
+				//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
+				//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
 			}
+		}
 
-			//std::cout << "(Lower Bound) Number: " << mLimits.first.at(d) << std::endl;
-			if(mLimits.first.at(d) != 0) {
-				Number numerator = carl::getNum(mLimits.first.at(d));
-				Number denominator = carl::getDenom(mLimits.first.at(d));
-				Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-				if(largest > limit2){
-					Number dividend = largest / Number(limit);
-					assert(largest/dividend == limit);
-					Number val = Number(carl::floor(numerator/dividend));
-					Number newDenom;
-					if( mLimits.first.at(d) > 0) {
-						newDenom = Number(carl::ceil(denominator/dividend));
-					} else {
-						newDenom = Number(carl::floor(denominator/dividend));
-					}
-					if(newDenom != 0) {
-						val = val / newDenom;
-						assert(val <= mLimits.first.at(d));
-						mLimits.first[d] = val;
-					}
-					//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
-					//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
+		//std::cout << "(Lower Bound) Number: " << mLimits.first.at(d) << std::endl;
+		if(mLimits.first.at(d) != 0) {
+			Number numerator = carl::getNum(mLimits.first.at(d));
+			Number denominator = carl::getDenom(mLimits.first.at(d));
+			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+			if(largest > limit2){
+				Number dividend = largest / Number(limit);
+				assert(largest/dividend == limit);
+				Number val = Number(carl::floor(numerator/dividend));
+				Number newDenom;
+				if( mLimits.first.at(d) > 0) {
+					newDenom = Number(carl::ceil(denominator/dividend));
+				} else {
+					newDenom = Number(carl::floor(denominator/dividend));
 				}
+				if(newDenom != 0) {
+					val = val / newDenom;
+					assert(val <= mLimits.first.at(d));
+					mLimits.first[d] = val;
+				}
+				//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
+				//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
 			}
 		}
 	}
+}
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
@@ -419,6 +423,24 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	BoxT<Number,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
 	//std::cout << __func__ << " TRUE, " << convert<Number,double>(tmpBox) << std::endl;
 	return std::make_pair(true, tmpBox);
+}
+
+template<typename Number, typename Converter>
+BoxT<Number,Converter> BoxT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+	if(dimensions.empty()) {
+		return Empty();
+	}
+
+	vector_t<Number> projectedLower = vector_t<Number>::Zero(dimensions.size());
+	vector_t<Number> projectedUpper = vector_t<Number>::Zero(dimensions.size());
+
+	for(unsigned i = 0; i < dimensions.size(); ++i) {
+		if(dimensions.at(i) < this->dimension()) {
+			projectedLower(i) = mLimits.first(dimensions.at(i));
+			projectedUpper(i) = mLimits.second(dimensions.at(i));
+		}
+	}
+	return BoxT<Number,Converter>(projectedLower, projectedUpper);
 }
 
 template<typename Number, typename Converter>
