@@ -246,14 +246,12 @@ class VPolytopeT {
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
 	static bool insidePlanes(const vector_t<double>& vertex, const matrix_t<double>& normals, const vector_t<double>& offsets) {
-		/*
 		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
-			// compare with tolerance of 128 ULPs. (Note: When type is different from double, this should do proper equivalence comparison)
-			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 4096) ){
+			// compare with tolerance of 128 ULPs.
+			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
 				return false;
 			}
 		}
-		*/
 		return true;
 	}
 

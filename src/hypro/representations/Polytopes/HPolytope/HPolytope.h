@@ -357,7 +357,7 @@ public:
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
-	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned = fReach_DENOMINATOR) const {}
+	void reduceNumberRepresentation(const std::vector<Point<Number>>& , unsigned = fReach_DENOMINATOR) const {}
 
   private:
 	/*
