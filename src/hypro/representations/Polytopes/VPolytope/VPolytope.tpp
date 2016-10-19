@@ -113,6 +113,20 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	//reduceNumberRepresentation();
 }
 
+template<typename Number, typename Converter>
+VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+	if(dimensions.empty()) {
+		return Empty();
+	}
+
+	std::vector<Point<Number>> projectedVertices;
+	for(const auto& vertex : mVertices) {
+		projectedVertices.emplace_back(vertex.project(dimensions));
+	}
+
+	return VPolytopeT<Number,Converter>(projectedVertices);
+}
+
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {

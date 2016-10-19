@@ -63,6 +63,7 @@ class VPolytopeT {
 	* General interface
 	**************************************************************************/
 
+	VPolytopeT project( const std::vector<unsigned>& dimensions ) const;
 	VPolytopeT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
