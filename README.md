@@ -4,17 +4,12 @@ Dependencies:
 
 Installation:
 - create some build folder in the root directory of the library (e.g. build) and enter it
-- run <pre><code> 
-cmake ..
-</code><pre>
+- run 
+<pre><code> cmake .. </code><pre>
 - (optional) configure the library via gui (requires cmake-curses-gui):
-<pre><code> 
-ccmake ..
-</code><pre>
-- build via: <pre><code>
-make resources
-make
-</code></pre>
+<pre><code> ccmake ..</code><pre>
+- build via: <pre><code> make resources
+make</code></pre>
 
 For information about Hypro take a look into the wiki:
 - http://ths.informatik.rwth-aachen.de/trac/hypro/wiki/
