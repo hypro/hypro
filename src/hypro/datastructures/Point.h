@@ -595,8 +595,16 @@ const Point<Number> operator+( const Point<Number>& _lhs, const Point<Number>& _
 	vector_t<Number> resCoord = vector_t<Number>( _lhs.dimension() );
 	vector_t<Number> p1Coord = _lhs.rawCoordinates();
 	vector_t<Number> p2Coord = _rhs.rawCoordinates();
-	;
 	resCoord = p1Coord + p2Coord;
+	return Point<Number>( resCoord );
+}
+
+template <typename Number>
+const Point<Number> operator+( const Point<Number>& _lhs, const vector_t<Number>& _rhs ) {
+	assert( _lhs.dimension() == _rhs.rows() );
+	vector_t<Number> resCoord = vector_t<Number>( _lhs.dimension() );
+	vector_t<Number> p1Coord = _lhs.rawCoordinates();
+	resCoord = p1Coord + _rhs;
 	return Point<Number>( resCoord );
 }
 
@@ -606,7 +614,6 @@ const Point<Number> operator-( const Point<Number>& _lhs, const Point<Number>& _
 	vector_t<Number> resCoord = vector_t<Number>( _lhs.dimension() );
 	vector_t<Number> p1Coord = _lhs.rawCoordinates();
 	vector_t<Number> p2Coord = _rhs.rawCoordinates();
-	;
 	resCoord = p1Coord - p2Coord;
 	return Point<Number>( resCoord );
 }

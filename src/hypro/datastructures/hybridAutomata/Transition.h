@@ -24,6 +24,12 @@ class Transition {
 		unsigned discreteOffset;
 		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteGuard;
 
+		void addArtificialDimension() {
+			matrix_t<Number> newConstraints = matrix_t<Number>::Zero(mat.rows(), mat.cols()+1);
+			newConstraints.block(0,0,mat.rows(), mat.cols()) = mat;
+			mat = newConstraints;
+		}
+
 		friend std::ostream& operator<<( std::ostream& _ostr, const Guard& _g ) {
 			_ostr << _g.mat << " + " << std::endl << _g.vec << std::endl;
 			for(const auto& discretePair : _g.discreteGuard) {
@@ -40,6 +46,17 @@ class Transition {
 		unsigned discreteOffset;
 		vector_t<Number> discreteVec;  // Translation Vector
 		matrix_t<Number> discreteMat;  // Transformation Matrix
+
+		void addArtificialDimension() {
+			matrix_t<Number> newConstraints = matrix_t<Number>::Zero(mat.rows()+1, mat.cols()+1);
+			newConstraints.block(0,0,mat.rows(), mat.cols()) = mat;
+			// The artificial dimension is not changed upon reset.
+			newConstraints(mat.rows(), mat.cols()) = 1;
+			vector_t<Number> newConstants = vector_t<Number>::Zero(vec.rows()+1);
+			newConstants.block(0,0,vec.rows(),1) = vec;
+			mat = newConstraints;
+			vec = newConstants;
+		}
 
 		friend std::ostream& operator<<( std::ostream& _ostr, const Reset& _a ) {
 			_ostr << _a.mat << " + " << std::endl << _a.vec << std::endl;
@@ -125,6 +142,11 @@ class Transition {
 	void setReset( const struct Reset& _val ) { mReset = _val; }
 	void setAggregation( const Aggregation& _aggregation ) { mAggregationSetting = _aggregation; }
 	void setTriggerTime( const Number& _triggerTime ) { mTriggerTime = _triggerTime; mTimeTriggered = mTriggerTime >= 0; }
+
+	void addArtificialDimension() {
+		mGuard.addArtificialDimension();
+		mReset.addArtificialDimension();
+	}
 
 	friend std::ostream& operator<<( std::ostream& _ostr, const Transition<Number>& _t ) {
 		_ostr << "transition(" << std::endl << "\t Source = " << _t.source()->id() << std::endl

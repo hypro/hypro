@@ -94,4 +94,14 @@ void Location<Number>::addTransition( Transition<Number>* _trans ) {
 	mTransitions.insert(_trans);
 }
 
+template<typename Number>
+void Location<Number>::addArtificialDimension() {
+	// Flow is already augmented.
+	// Todo: ExternalInput
+	for(auto transition : mTransitions) {
+		transition->addArtificialDimension();
+	}
+	mInvariant.addArtificialDimension();
+}
+
 } // namespace hypro

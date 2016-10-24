@@ -65,6 +65,7 @@ class HybridAutomaton {
 	const setVector& globalBadStates() const;
 	const ReachabilitySettings<Number>& reachabilitySettings() const;
 	unsigned dimension() const;
+	void addArtificialDimension();
 
 	void setLocations( const locationSet& _locs );
 	void setTransitions( const transitionSet& _trans );

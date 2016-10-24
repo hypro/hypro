@@ -29,6 +29,12 @@ class Location {
 
 		unsigned discreteOffset;
 		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteInvariant;
+
+		void addArtificialDimension() {
+			matrix_t<Number> newConstraints = matrix_t<Number>::Zero(mat.rows(), mat.cols()+1);
+			newConstraints.block(0,0,mat.rows(), mat.cols()) = mat;
+			mat = newConstraints;
+		}
 	};
 
 	using transitionSet = std::set<Transition<Number>*>;
@@ -77,6 +83,7 @@ class Location {
 	void setTransitions( const transitionSet& _trans );
 	void addTransition( Transition<Number>* _trans );
 	void setExtInputMat( const matrix_t<Number>& _mat );
+	void addArtificialDimension();
 
 	inline bool operator<( const Location<Number>& _rhs ) const { return ( mId < _rhs.id() ); }
 	inline bool operator==( const Location<Number>& _rhs ) const { return ( mId == _rhs.id() ); }

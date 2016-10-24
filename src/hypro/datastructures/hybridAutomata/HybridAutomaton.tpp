@@ -58,6 +58,25 @@ unsigned HybridAutomaton<Number>::dimension() const {
 }
 
 template <typename Number>
+void HybridAutomaton<Number>::addArtificialDimension() {
+	for(auto location : mLocations) {
+		location->addArtificialDimension();
+	}
+	// Note: We do not need to augment transitions, this is already done when augmenting locations.
+	for(auto initialState : mInitialStates) {
+		initialState.second.addArtificialDimension();
+	}
+	for(auto badState : mLocalBadStates) {
+		badState.second.addArtificialDimension();
+	}
+	for(auto badState : mGlobalBadStates) {
+		matrix_t<Number> newConstraints = matrix_t<Number>::Zero(badState.first.rows(), badState.first.cols()+1);
+		newConstraints.block(0,0,badState.first.rows(), badState.first.cols()) = badState.first;
+		badState.first = newConstraints;
+	}
+}
+
+template <typename Number>
 void HybridAutomaton<Number>::setLocations( const locationSet &_locs ) {
 	mLocations = _locs;
 }
