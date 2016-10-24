@@ -12,6 +12,7 @@ set(lib_hypro_headers
     util/adaptions_eigen/adaptions_eigen.h
     util/adaptions_eigen/adaptions_eigen_double.h
 	util/types.h
+	util/Logger.h
 	util/convexHull.h
 	util/smtrat/SimplexSolver.h
 	util/smtrat/convenience.h
@@ -148,8 +149,8 @@ set(HYPRO_TARGETS ${PROJECT_NAME} CACHE STRING INTERNAL FORCE)
 
 cotire(${PROJECT_NAME})
 
-install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
-##install(FILES ${headers} DESTINATION include)
+#install(FILES config.h flags.h typedefs.h DESTINATION include/hypro/lib/)
+install(FILES ${headers} DESTINATION include)
 
 #get_cmake_property(_variableNames VARIABLES)
 #foreach (_variableName ${_variableNames})

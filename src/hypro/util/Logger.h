@@ -1,7 +1,3 @@
-//
-// Created by stefan on 01.07.16.
-//
-
 #pragma once
 
 #ifdef LOGGING_HYPRO
@@ -29,8 +25,6 @@ namespace hypro {
 	};
 
 	extern log4cplus::Logger logger;
-
-
 } // namespace hypro
 
 
