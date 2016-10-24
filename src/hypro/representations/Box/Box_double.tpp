@@ -279,7 +279,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	}
 	//std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
 	//std::cout << __func__ << ": input matrix: " << convert<double,double>(_mat) << std::endl << "input vector: " << convert<double,double>(_vec) << std::endl;
-	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
+	//std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
 
