@@ -2,6 +2,14 @@ branches:
   only:
   - master
 
+# Environment variables
+env:
+  global:
+    - GH_REPO_NAME: hypro
+    - DOXYFILE: $TRAVIS_BUILD_DIR/doc/Doxygen.in
+    - GH_REPO_REF: github.com/hypro/hypro.git
+
+
 language: cpp
 
 notifications:
@@ -17,6 +25,15 @@ os:
 
 sudo: required
 dist: trusty
+
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
 
 compiler:
   - clang
@@ -38,3 +55,9 @@ before_script: true
 script:
   - mkdir build && cd build && cmake .. && make
   - make test
+
+# Generate and deploy documentation
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - chmod +x createAndDeployDocumentation.sh
+  - ./createAndDeployDocumentation.sh
