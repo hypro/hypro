@@ -3,8 +3,18 @@ Dependencies:
 - carl (https://github.com/smtrat/carl)
 
 Installation:
-- create some build folder in the root directory of the library (e.g. <pre><code>build</code></pre>)
-- from the build folder run <pre><code> cmake ..</code></pre>
+- create some build folder in the root directory of the library (e.g. build) and enter it
+- run <pre><code> 
+cmake ..
+</code><pre>
+- (optional) configure the library via gui (requires cmake-curses-gui):
+<pre><code> 
+ccmake ..
+</code><pre>
+- build via: <pre><code>
+make resources
+make
+</code></pre>
 
 For information about Hypro take a look into the wiki:
 - http://ths.informatik.rwth-aachen.de/trac/hypro/wiki/
