@@ -36,7 +36,7 @@ if(LOGGING_HYPRO)
 		include(log4cplus.cmake)
 
 		set(LOG4CPLUS_INCLUDE_DIRS "${binary_dir}/include" PARENT_SCOPE)
-		set(LOG4CPLUS_LIBRARIES "${binary_dir}/src" PARENT_SCOPE)
+		set(LOG4CPLUS_LIBRARIES "${source_dir}/src" PARENT_SCOPE)
 		set(LOG4CPLUS_FOUND "TRUE" PARENT_SCOPE)
 	endif()
 endif()
