@@ -97,6 +97,7 @@ namespace reachability {
 			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
 			#ifdef REACH_DEBUG
 			std::cout << "Apply resets." << std::endl;
+			std::cout << "Matrix: " << std::endl << aggregationPair.first->reset().mat << std::endl << "Vector " << std::endl << aggregationPair.first->reset().vec << std::endl;
 			#endif
 			Representation tmp = applyLinearTransformation(collectedSets, TrafoParameters<Number>(aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec));
 			//std::cout << "Vertices after reset: " << std::endl;

@@ -46,7 +46,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 }
 
 template<typename Number, typename Representation>
-std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput ) {
+std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& ) {
 	std::vector<Box<Number>> res;
 	unsigned dim = flow.cols();
 	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3*dim, 3*dim);
@@ -55,54 +55,71 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
 	matrixBlock = delta*matrixBlock;
 	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
 	convertedBlock = convertedBlock.exp();
-	std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
-	//Box<Number> b1 = Box<Number>(initialSet.matrix(), initialSet.vector());
-	auto b1 = Converter<Number>::toBox(initialSet);
-	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
-	std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
-	std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
-	b1 = b1.linearTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)),vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
+		matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
+	//std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
+	//std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
+	//assert(tmpMatrix.row(dim-1).nonZeros() == 0);
+	Representation transformedInitialSet = applyLinearTransformation(initialSet, TrafoParameters<Number>(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1))));
+	auto b1 = Converter<Number>::toBox(transformedInitialSet);
+	// augment b1 by a dimension for the constant parts.
+	vector_t<Number> augmentedUpperLimit = vector_t<Number>::Ones(b1.max().dimension()+1);
+	augmentedUpperLimit.block(0,0,dim-1,1) = b1.max().rawCoordinates();
+	vector_t<Number> augmentedLowerLimit = vector_t<Number>::Ones(b1.min().dimension()+1);
+	augmentedLowerLimit.block(0,0,dim-1,1) = b1.min().rawCoordinates();
+	b1 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));
+
 	b1 = b1.makeSymmetric();
 	assert(b1.isSymmetric());
-	b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
-	//Test: re-scale offset vector
-	//std::cout << "Use " << matrixBlock(dim-1,2*dim-1) << " for scaling (entry " << dim-1 << "," << 2*dim-1 << " in the matrix)." << std::endl;
-	//b1 = b1.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,dim,dim-1,dim-1))), (Number(1)/matrixBlock(dim-1,2*dim-1))*vector_t<Number>(matrixBlock.block(0,2*dim-1, dim-1,1)));
-	std::cout << "B1: " << std::endl << b1 << std::endl;
+	b1 = b1.linearTransformation(matrixBlock.block(0,dim,dim,dim));
+	//std::cout << "B1: " << std::endl << b1 << std::endl;
 
-	matrix_t<Number> tmpTrafo = (flow*flow*trafoMatrix).block(0,0,dim-1,dim-1);
-	vector_t<Number> tmpTrans = (flow*flow*trafoMatrix).block(0,dim-1,dim-1,1);
-	//Representation tmp = initialSet.linearTransformation( tmpTrafo, tmpTrans );
+	matrix_t<Number> fullTransformationMatrix = (flow*flow*trafoMatrix);
+	//assert(fullTransformationMatrix.row(dim-1).nonZeros() == 0);
+	matrix_t<Number> tmpTrafo = fullTransformationMatrix.block(0,0,dim-1,dim-1);
+	vector_t<Number> tmpTrans = fullTransformationMatrix.block(0,dim-1,dim-1,1);
+	// the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
+	//std::cout << "TmpTrafo Matrix: " << std::endl << tmpTrafo << std::endl;
 	Representation tmp = applyLinearTransformation(initialSet, TrafoParameters<Number>(tmpTrafo, tmpTrans));
 	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
 	auto b2 = Converter<Number>::toBox(tmp);
+	augmentedUpperLimit.block(0,0,dim-1,1) = b2.max().rawCoordinates();
+	augmentedLowerLimit.block(0,0,dim-1,1) = b2.min().rawCoordinates();
+	b2 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));
+
 	b2 = b2.makeSymmetric();
 	assert(b2.isSymmetric());
-	b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
-	//Test: re-scale offset vector.
-	//std::cout << "Use " << matrixBlock(dim-1,3*dim-1) << " for scaling (entry " << dim-1 << "," << 3*dim-1 << " in the matrix)." << std::endl;
-	//b2 = b2.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), (Number(1)/matrixBlock(dim-1,3*dim-1))*vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
-	std::cout << "B2: " << std::endl << b2 << std::endl;
+	b2 = b2.linearTransformation(matrixBlock.block(0,2*dim,dim,dim));
+	//std::cout << "B2: " << std::endl << b2 << std::endl;
 
 	Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 
+	/*
 	// std::cout << "External Input: " << externalInput << std::endl;
-	Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1), flow.block(0,dim-1,dim-1,1));
+	Box<Number> errorBoxExternalInput = externalInput.affineTransformation(flow.block(0,0,dim-1,dim-1), vector_t<Number>(flow.block(0,dim-1,dim-1,1)));
 	//std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " << convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
 	errorBoxExternalInput.makeSymmetric();
-	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1))), vector_t<Number>(matrixBlock.block(0,3*dim-1,dim-1,1)));
+	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1)));
 
 	Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
 	assert(!externalInput.empty() || errorBoxX0 == differenceBox);
+	*/
 
-	res.emplace_back(errorBoxX0);
-	res.emplace_back(errorBoxExternalInput);
-	res.emplace_back(differenceBox);
+
+	// projection to remove augmented dimension.
+	std::vector<unsigned> projectionDimensions;
+	for(unsigned i = 0; i < errorBoxX0.dimension()-1; ++i){
+		projectionDimensions.push_back(i);
+	}
+
+	res.emplace_back(errorBoxX0.project(projectionDimensions));
+	//res.emplace_back(errorBoxExternalInput.project(projectionDimensions));
+	//res.emplace_back(differenceBox.project(projectionDimensions));
 
 	return res;
 }
@@ -147,7 +164,8 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters ) {
-	return _in.linearTransformation(parameters.matrix(), parameters.vector());
+	//std::cout << __func__ << " in: " << _in << std::endl << "matrix: " << parameters.matrix() << std::endl << "vector " << std::endl << parameters.vector() << std::endl;
+	return _in.affineTransformation(parameters.matrix(), parameters.vector());
 }
 
 template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>

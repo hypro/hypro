@@ -10,6 +10,7 @@ namespace reachability {
 	template<typename Number, typename Representation>
 	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
+			//mAutomaton.addArtificialDimension();
 		}
 
 
@@ -24,6 +25,22 @@ namespace reachability {
 				// Convert representation in state from matrix and vector to used representation type.
 				State<Number> s;
 				s.location = state.second.location;
+
+				/*
+				// Augment initial set by one dimension to cope with constants in the flow
+				matrix_t<Number> newConstraints = matrix_t<Number>::Zero(state.second.set.first.rows()+2, state.second.set.first.cols()+1);
+				newConstraints.block(0,0,state.second.set.first.rows(),state.second.set.first.cols()) = state.second.set.first;
+				vector_t<Number> newConstants = vector_t<Number>::Zero(state.second.set.second.rows()+2);
+				newConstants.block(0,0,state.second.set.second.rows(),1) = state.second.set.second;
+				// set bounding constraints to assure the artificial dimension equals 1
+				newConstraints(newConstraints.rows()-2, newConstraints.cols()-1) = 1;
+				newConstraints(newConstraints.rows()-1, newConstraints.cols()-1) = -1;
+				newConstants(newConstants.rows()-2) = 1;
+				newConstants(newConstants.rows()-1) = -1;
+
+				std::cout << "augmented matrix: " << std::endl << newConstraints << std::endl << "Augmented vector: " << std::endl << newConstants << std::endl;
+				*/
+
 				HPolytope<Number> tmpSet(state.second.set.first, state.second.set.second);
 				representation_name type = Representation::type();
 				switch(type){

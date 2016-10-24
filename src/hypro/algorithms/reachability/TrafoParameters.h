@@ -14,6 +14,12 @@ namespace hypro {
 		public:
 			TrafoParameters() = default;
 
+			TrafoParameters(const matrix_t<Number>& A) :
+				mMatrix(A),
+				mVector(vector_t<Number>::Zero(A.cols())),
+				mLintrafoParameters(std::make_shared<lintrafoParameters<Number>>(A,vector_t<Number>::Zero(A.cols())))
+			{}
+
 			TrafoParameters(const matrix_t<Number>& A, const vector_t<Number>& b) :
 				mMatrix(A),
 				mVector(b),

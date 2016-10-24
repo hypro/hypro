@@ -102,7 +102,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		}
 	}
 	std::cout << "Write to file." << std::endl;
-	std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
+	//std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
 	plotter.plot2d();
 	plotter.plotGen();
 	//plotter.plotTex();
@@ -123,18 +123,16 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = double;
+	using Number = mpq_class;
 #endif
 
 	switch(rep){
-		/*
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
 			break;
 		}
-		*/
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
