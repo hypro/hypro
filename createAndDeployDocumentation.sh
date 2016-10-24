@@ -1,4 +1,4 @@
-te created  : 2016/02/22
+date created  : 2016/02/22
 # Notes         :
 __AUTHOR__="Jeroen de Bruijn"
 # Preconditions:
