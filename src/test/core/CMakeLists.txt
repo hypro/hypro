@@ -7,6 +7,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runCoreTests
 		EigenAdaptionsTest.cpp
+		#ifdef LOGGING_HYPRO
+		#LoggerTest.cpp
+		#endif
 	)
 
 	add_dependencies(runCoreTests googletest)
