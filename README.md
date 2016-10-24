@@ -1,8 +1,8 @@
-Dependencies:
+# Dependencies:
 - requires at least cmake 2.8, gcc-4.9, boost 1.55, eigen3, glpk
 - carl (https://github.com/smtrat/carl)
 
-Installation:
+# Installation:
 - create some build folder in the root directory of the library (e.g. build) and enter it
 - run 
 <pre><code>cmake ..</code><pre>
@@ -11,9 +11,8 @@ Installation:
 - build via: <pre><code>make resources
 make</code></pre>
 
-For information about Hypro take a look into the wiki:
-- http://ths.informatik.rwth-aachen.de/trac/hypro/wiki/
-
+# Documentation
+https://hypro.github.io/hypro/html/
 
 
 Current TravisCi build state: 
