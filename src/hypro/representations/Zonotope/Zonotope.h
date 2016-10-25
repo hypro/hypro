@@ -28,7 +28,7 @@
 
 namespace hypro {
 
-static const unsigned ZONOTOPE_ORDERLIMIT = 3;
+static const unsigned ZONOTOPE_ORDERLIMIT = 4;
 
 template<typename Number, typename Converter>
 class ZonotopeT {

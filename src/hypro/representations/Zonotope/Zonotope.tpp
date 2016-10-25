@@ -281,7 +281,7 @@ void ZonotopeT<Number,Converter>::clear() {
 
 template<typename Number, typename Converter>
 void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
-	std::cout << __func__ << ": Current order: " << this->order() << std::endl;
+	//std::cout << __func__ << ": Current order: " << this->order() << std::endl;
 	while(this->order() > limit) {
 		matrix_t<Number> generators = mGenerators;
 		unsigned dim = mGenerators.rows();
@@ -297,18 +297,19 @@ void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 		// be overapproximated by an interval hull)
 		std::sort( sortedGenerators.begin(), sortedGenerators.end(), ZUtility::compareVectors<Number> );
 
-		// Row-wise sum of all chosen generators (absolute value)
-		vector_t<Number> sumVector = vector_t<Number>::Zero(dim,1);
+		// Row-wise sum of all 2*dim chosen generators (absolute value)
+		vector_t<Number> sumVector = vector_t<Number>::Zero(dim);
 		for ( unsigned i = 0; i < 2 * ( dim ); i++ ) {
 			sumVector += sortedGenerators[i].array().abs().matrix();
 		}
 
-		unsigned numRemainingGenerators = sortedGenerators.size() - ( 2 * dim + 1 );
+		unsigned numRemainingGenerators = sortedGenerators.size() - ( 2 * dim );
+
 		matrix_t<Number> remainingGenerators = matrix_t<Number>(dim, numRemainingGenerators);
 
 		// inserts the original remaining vectors
 		for ( unsigned i = 0; i < numRemainingGenerators; i++ ) {
-			remainingGenerators.col( i ) = sortedGenerators[i + ( 2 * dim + 1 )];
+			remainingGenerators.col( i ) = sortedGenerators[i + ( 2 * dim )];
 		}
 
 		// calculate interval hull of first 2n generators
@@ -319,7 +320,7 @@ void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 		reducedGenerators << intervalHull, remainingGenerators;
 		mGenerators = reducedGenerators;
 	}
-	std::cout << __func__ << ": Reduced order: " << this->order() << std::endl;
+	//std::cout << __func__ << ": Reduced order: " << this->order() << std::endl;
 }
 
 template<typename Number, typename Converter>
