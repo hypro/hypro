@@ -42,6 +42,10 @@ class HybridAutomaton {
 	/**
 	 * Constructors & Destructor
 	 */
+
+	/**
+	 * @brief      Default constructor.
+	 */
 	HybridAutomaton() {}
 	HybridAutomaton( const HybridAutomaton& _hybrid );
 	HybridAutomaton( const locationSet& _locs, const transitionSet& _trans,
