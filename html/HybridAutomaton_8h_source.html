@@ -127,82 +127,83 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings&lt;Number&gt;</a> mReachabilitySettings;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">   45</a></span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>() {}</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&amp; _hybrid );</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>( <span class="keyword">const</span> locationSet&amp; _locs, <span class="keyword">const</span> transitionSet&amp; _trans,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                     <span class="keyword">const</span> locationStateMap&amp; _initialStates );</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>() {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">while</span>(!mTransitions.empty()) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>* toDelete = *mTransitions.begin();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            mTransitions.erase(mTransitions.begin());</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keyword">delete</span> toDelete;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">const</span> locationSet&amp; <a class="code" href="classhypro_1_1HybridAutomaton.html#a8b568dd18b81e563d66976a497d3f540">locations</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> transitionSet&amp; transitions() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">const</span> locationStateMap&amp; initialStates() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">const</span> locationStateMap&amp; localBadStates() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">const</span> setVector&amp; globalBadStates() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> ReachabilitySettings&lt;Number&gt;&amp; reachabilitySettings() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">unsigned</span> dimension() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> addArtificialDimension();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> setLocations( <span class="keyword">const</span> locationSet&amp; _locs );</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> setTransitions( <span class="keyword">const</span> transitionSet&amp; _trans );</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> setInitialStates( <span class="keyword">const</span> locationStateMap&amp; _states );</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> setLocalBadStates( <span class="keyword">const</span> locationStateMap&amp; _states );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> setGlobalBadStates( <span class="keyword">const</span> setVector&amp; _states );</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> setReachabilitySettings( <span class="keyword">const</span> ReachabilitySettings&lt;Number&gt;&amp; _settings);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> addLocation( Location&lt;Number&gt;* _location );</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> addTransition( Transition&lt;Number&gt;* _transition );</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> addInitialState( <span class="keyword">const</span> RawState&lt;Number&gt;&amp; _state );</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> addLocalBadState( <span class="keyword">const</span> RawState&lt;Number&gt;&amp; _state );</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span> addGlobalBadState( <span class="keyword">const</span> std::pair&lt;matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;&amp; _valuation );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">// copy assignment operator, TODO: implement via swap</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">inline</span> HybridAutomaton&lt;Number&gt;&amp; operator=( <span class="keyword">const</span> HybridAutomaton&lt;Number&gt;&amp; _rhs ) {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        mLocations = _rhs.locations();</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        mTransitions = _rhs.transitions();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        mInitialStates = _rhs.initialStates();</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        mLocalBadStates = _rhs.localBadStates();</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        mGlobalBadStates = _rhs.globalBadStates();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        mReachabilitySettings = _rhs.reachabilitySettings();</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const HybridAutomaton&lt;Number&gt;&amp; _a ) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;initial states: &quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span> initialIT = _a.initialStates().begin(); initialIT != _a.initialStates().end(); ++initialIT ) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            _ostr &lt;&lt; (*initialIT).first-&gt;id() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; (*initialIT).second.first &lt;&lt; <span class="stringliteral">&quot; &lt;= &quot;</span> &lt;&lt; (*initialIT).second.second &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;locations: &quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span> locationIT = _a.locations().begin(); locationIT != _a.locations().end(); ++locationIT ) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            _ostr &lt;&lt; **locationIT &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">   49</a></span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>() {}</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&amp; _hybrid );</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>( <span class="keyword">const</span> locationSet&amp; _locs, <span class="keyword">const</span> transitionSet&amp; _trans,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                     <span class="keyword">const</span> locationStateMap&amp; _initialStates );</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>() {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">while</span>(!mTransitions.empty()) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>* toDelete = *mTransitions.begin();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            mTransitions.erase(mTransitions.begin());</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">delete</span> toDelete;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">const</span> locationSet&amp; <a class="code" href="classhypro_1_1HybridAutomaton.html#a8b568dd18b81e563d66976a497d3f540">locations</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> transitionSet&amp; transitions() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">const</span> locationStateMap&amp; initialStates() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">const</span> locationStateMap&amp; localBadStates() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">const</span> setVector&amp; globalBadStates() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> ReachabilitySettings&lt;Number&gt;&amp; reachabilitySettings() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">unsigned</span> dimension() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> addArtificialDimension();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> setLocations( <span class="keyword">const</span> locationSet&amp; _locs );</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> setTransitions( <span class="keyword">const</span> transitionSet&amp; _trans );</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> setInitialStates( <span class="keyword">const</span> locationStateMap&amp; _states );</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> setLocalBadStates( <span class="keyword">const</span> locationStateMap&amp; _states );</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> setGlobalBadStates( <span class="keyword">const</span> setVector&amp; _states );</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> setReachabilitySettings( <span class="keyword">const</span> ReachabilitySettings&lt;Number&gt;&amp; _settings);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span> addLocation( Location&lt;Number&gt;* _location );</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">void</span> addTransition( Transition&lt;Number&gt;* _transition );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> addInitialState( <span class="keyword">const</span> RawState&lt;Number&gt;&amp; _state );</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> addLocalBadState( <span class="keyword">const</span> RawState&lt;Number&gt;&amp; _state );</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> addGlobalBadState( <span class="keyword">const</span> std::pair&lt;matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;&amp; _valuation );</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// copy assignment operator, TODO: implement via swap</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">inline</span> HybridAutomaton&lt;Number&gt;&amp; operator=( <span class="keyword">const</span> HybridAutomaton&lt;Number&gt;&amp; _rhs ) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        mLocations = _rhs.locations();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        mTransitions = _rhs.transitions();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        mInitialStates = _rhs.initialStates();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        mLocalBadStates = _rhs.localBadStates();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        mGlobalBadStates = _rhs.globalBadStates();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        mReachabilitySettings = _rhs.reachabilitySettings();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const HybridAutomaton&lt;Number&gt;&amp; _a ) {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;initial states: &quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span> initialIT = _a.initialStates().begin(); initialIT != _a.initialStates().end(); ++initialIT ) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            _ostr &lt;&lt; (*initialIT).first-&gt;id() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; (*initialIT).second.first &lt;&lt; <span class="stringliteral">&quot; &lt;= &quot;</span> &lt;&lt; (*initialIT).second.second &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;transitions: &quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">const</span> <span class="keyword">auto</span>&amp; transition : _a.transitions() ) {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            _ostr &lt;&lt; *transition &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;locations: &quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span> locationIT = _a.locations().begin(); locationIT != _a.locations().end(); ++locationIT ) {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            _ostr &lt;&lt; **locationIT &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> _ostr;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;};</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">#include &quot;HybridAutomaton.tpp&quot;</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;transitions: &quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">const</span> <span class="keyword">auto</span>&amp; transition : _a.transitions() ) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            _ostr &lt;&lt; *transition &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">return</span> _ostr;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;};</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#include &quot;HybridAutomaton.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00023">HybridAutomaton.h:23</a></div></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html_a8b568dd18b81e563d66976a497d3f540"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#a8b568dd18b81e563d66976a497d3f540">hypro::HybridAutomaton::locations</a></div><div class="ttdeci">const locationSet &amp; locations() const </div></div>
 <div class="ttc" id="structhypro_1_1ReachabilitySettings_html"><div class="ttname"><a href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a></div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00007">Settings.h:7</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00016">Location.h:16</a></div></div>
 <div class="ttc" id="structhypro_1_1RawState_html"><div class="ttname"><a href="structhypro_1_1RawState.html">hypro::RawState</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00020">HybridAutomaton.h:20</a></div></div>
-<div class="ttc" id="classhypro_1_1HybridAutomaton_html_ae3631199cb6dde7b79c69ac63c9ca274"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">hypro::HybridAutomaton::HybridAutomaton</a></div><div class="ttdeci">HybridAutomaton()</div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00045">HybridAutomaton.h:45</a></div></div>
+<div class="ttc" id="classhypro_1_1HybridAutomaton_html_ae3631199cb6dde7b79c69ac63c9ca274"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">hypro::HybridAutomaton::HybridAutomaton</a></div><div class="ttdeci">HybridAutomaton()</div><div class="ttdoc">Default constructor. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00049">HybridAutomaton.h:49</a></div></div>
 <div class="ttc" id="structhypro_1_1locPtrComp_html"><div class="ttname"><a href="structhypro_1_1locPtrComp.html">hypro::locPtrComp</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00110">Location.h:110</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
+<!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 24 2016 22:12:04 for HyPro by &#160;<a href="http://www.doxygen.org/index.html">
+<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
