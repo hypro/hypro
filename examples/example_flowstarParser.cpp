@@ -105,7 +105,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	//std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
 	plotter.plot2d();
 	plotter.plotGen();
-	//plotter.plotTex();
+	plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){

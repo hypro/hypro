@@ -25,14 +25,17 @@ template<typename Number>
 void removeGenerator( unsigned colToRemove, matrix_t<Number> &matrix ) {
 	unsigned numRows = matrix.rows();
 	unsigned numCols = matrix.cols() - 1;
-	assert( matrix.cols() > 1 && "cannot remove a generator from a one-generator generator" );
-	if ( colToRemove < numCols ) {
-		assert( numCols - colToRemove > 0 );
-		assert( colToRemove + 1 <= matrix.cols() - 1 );
-		matrix.block( 0, colToRemove, numRows, numCols - colToRemove ) =
-			  matrix.block( 0, colToRemove + 1, numRows, numCols - colToRemove );
+	if(matrix.cols() == 1 && colToRemove == 0) {
+		matrix.conservativeResize(Eigen::NoChange,0);
+	} else {
+		if ( colToRemove < numCols ) {
+			assert( numCols - colToRemove > 0 );
+			assert( colToRemove + 1 <= matrix.cols() - 1 );
+			matrix.block( 0, colToRemove, numRows, numCols - colToRemove ) =
+				  matrix.block( 0, colToRemove + 1, numRows, numCols - colToRemove );
+		}
+		matrix.conservativeResize( Eigen::NoChange, numCols );
 	}
-	matrix.conservativeResize( Eigen::NoChange, numCols );
 }
 
 template<typename Number>
@@ -207,9 +210,10 @@ void ZonotopeT<Number,Converter>::removeGenerator( unsigned colToRemove ) {
 	unsigned numRows = mGenerators.rows();
 	unsigned numCols = mGenerators.cols() - 1;
 
-	if ( colToRemove < numCols )
+	if ( colToRemove < numCols ) {
 		mGenerators.block( 0, colToRemove, numRows, numCols - colToRemove ) =
 			  mGenerators.block( 0, colToRemove + 1, numRows, numCols - colToRemove );
+	}
 
 	mGenerators.conservativeResize( numRows, numCols );
 }
@@ -407,7 +411,6 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::affineTransformation( c
 			"generators' dimensionality." );
 	ZonotopeT<Number,Converter> result;
 	result.setCenter( A * this->mCenter + b );
-	//result.setCenter( this->mCenter + b );
 	result.setGenerators( A * this->mGenerators );
 
 	return result;
@@ -482,17 +485,23 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 			"as Halfspace" );
 	unsigned size = input.size();
 	matrix_t<Number> g1, g2, generators = input.generators();
-	Eigen::Matrix<Number, 2, 1> s, s1, pmNext, pm = input.center();
+	matrix_t<Number> s, s1, pmNext, pm = input.center();
 
+	// ensure that all generators are pointing either upwards or all downwards (depends on minOrMax)
+	// minOrMax == 0 -> start from smallest point (cf. Algorithm Girard HSCC'08)
 	for ( unsigned i = 0; i < size; i++ ) {
-		if ( ( generators( 1, i ) > 0 || ( generators( 1, i ) == 0 && generators( 0, i ) > 0 ) ) && minOrMax == 1 )
+		// point downwards
+		if ( ( generators( 1, i ) > 0 || ( generators( 1, i ) == 0 && generators( 0, i ) > 0 ) ) && minOrMax == 1 ) {
 			generators.col( i ) = -1 * generators.col( i );
-		else if ( ( generators( 1, i ) < 0 || ( generators( 1, i ) == 0 && generators( 0, i ) < 0 ) ) && minOrMax == 0 )
+		} // point upwards
+		else if ( ( generators( 1, i ) < 0 || ( generators( 1, i ) == 0 && generators( 0, i ) < 0 ) ) && minOrMax == 0 ) {
 			generators.col( i ) = -1 * generators.col( i );
-
+		}
+		// set pm successively to be the largest or lowest point starting from the center
 		pm = pm - generators.col( i );
 	}
 
+	// Determine x-direction to forward - "we should look left or right", delete all generators pointing in the wrong direction.
 	std::vector<unsigned> indexToRemove;
 	if ( pm( 0 ) <= hp.offset() ) {
 		for ( unsigned i = 0; i < generators.cols(); i++ ) {
@@ -503,16 +512,15 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 			if ( generators.col( i )( 0 ) >= 0 ) indexToRemove.push_back( i );
 		}
 	}
-
 	for ( std::vector<unsigned>::reverse_iterator rit = indexToRemove.rbegin(); rit != indexToRemove.rend(); ++rit ) {
 		removeGenerator<Number>( *rit, generators );
 	}
 
 	s = 2 * generators.rowwise().sum();
 
-	std::vector<unsigned> idx_a1, idx_a2;
 	while ( generators.cols() > 1 ) {
-		// collecting indices to delete
+		std::vector<unsigned> idx_a1, idx_a2;
+		// splitting the generators according to trigonometric order in relation to s
 		// TODO: check if atan is available for FLOAT_T types
 		for ( unsigned i = 0; i < generators.cols(); i++ ) {
 			Number angle = atan( (Number)generators( 1, i ) / (Number)generators( 0, i ) );
@@ -522,28 +530,48 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 				idx_a2.push_back( i );
 		}
 
-		// clear generators of certain rows
+		// after splitting, establish two sets g1, g2 holding the splitting result.
+		g1 = generators;
+		g2 = generators;
+
+		std::cout << "MinOrMax: " << minOrMax << std::endl;
+		std::cout << " S is: " << s << std::endl;
+		std::cout << "Generators: "<< std::endl << generators << std::endl;
+		std::cout << "Indices idx_a1: " << idx_a1 << " and idx_a2: " << idx_a2 << std::endl;
+
 		for ( std::vector<unsigned>::reverse_iterator rit = idx_a1.rbegin(); rit != idx_a1.rend(); ++rit ) {
-			g1 = generators;
+			//g1 = generators; // TODO: This adds the removed generator in the next run?
 			removeGenerator<Number>( *rit, g1 );
 		}
 		for ( std::vector<unsigned>::reverse_iterator rit = idx_a2.rbegin(); rit != idx_a2.rend(); ++rit ) {
-			g2 = generators;
+			//g2 = generators; // TODO: This adds the removed generator in the next run?
 			removeGenerator<Number>( *rit, g2 );
 		}
+		assert(g1.cols() + g2.cols() == generators.cols()); // Verify correct splitting.
+		std::cout << "Split result g1: " << std::endl << g1 << std::endl << " and g2: " << g2 << std::endl;
 
-		if ( pm( 0 ) < hp.offset() )
+		std::cout << "Pm: " << pm << " and hp.offset: " << hp.offset() << std::endl;
+
+		// TODO: What does this case distinction do? There seems to be no equivalent to it in the algorithm ...
+		if ( pm( 0 ) < hp.offset() ){
+			std::cout << "Case1" << std::endl;
 			s1 = ( minOrMax == 1 ) ? 2 * g1.rowwise().sum() : 2 * g2.rowwise().sum();
-
-		else
+		} else {
+			std::cout << "Case2" << std::endl;
+			//std::cout << "s1 " << s1 << std::endl << "g2: " << g2 << std::endl;
 			s1 = ( minOrMax == 1 ) ? 2 * g2.rowwise().sum() : 2 * g1.rowwise().sum();
+		}
+
+		std::cout << "S1: " << s1 << std::endl;
 
 		pmNext = pm + s1;
 		if ( ( pm( 0 ) <= hp.offset() && pmNext( 0 ) >= hp.offset() ) ||
 			 ( pm( 0 ) >= hp.offset() && pmNext( 0 ) <= hp.offset() ) ) {
+			std::cout << "The line [p, p+s1] intersects the line segment." << std::endl;
 			generators = ( minOrMax == 1 ) ? g2 : g1;
 			s = s1;
 		} else {
+			std::cout << "The line [p, p+s1] does not intersect the line segment." << std::endl;
 			generators = ( minOrMax == 1 ) ? g1 : g2;
 			s = s - s1;
 			pm = pmNext;
@@ -794,20 +822,15 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfsp
 	if ( hasIntersect ) {
 		switch ( method ) {
 			case ZUtility::ALAMO:
-				//                std::cout << "Using Alamo's method with dimension " <<
-				//                mDimension << std::endl;
+				std::cout << "Using Alamo's method with dimension " << mDimension << std::endl;
 				result = intersectAlamo( *this, hp );
 				break;
 			case ZUtility::NDPROJECTION: {
 				if ( mDimension == 2 ) {
-					//                    std::cout << "Using Girard's method with dimension
-					//                    2 " << std::endl;
+					std::cout << "Using Girard's method with dimension 2 " << std::endl;
 					result = intersectZonotopeHalfspace( *this, hp, minMaxOfLine );
-
 				} else {
-					//                    std::cout << "Using Girard's method with dimension
-					//                    " << mDimension <<
-					//                    std::endl;
+					std::cout << "Using Girard's method with dimension " << mDimension << std::endl;
 					result = intersectNDProjection<Number>( *this, hp, minMaxOfLine );
 				}
 				break;
@@ -843,6 +866,9 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constr
 
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
+	if(this->empty()) {
+		return *this;
+	}
 	ZonotopeT<Number,Converter> result;
 	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
 	 * generators
@@ -885,20 +911,59 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspace( con
 
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
+	if(this->empty()) {
+		return *this;
+	}
 	assert(mat.rows() == vec.rows());
 	ZonotopeT<Number,Converter> res = *this;
 
-	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
-		res = res.intersectHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
-		if(res.empty()) {
-			return res;
+	std::cout << __func__ << " BEGIN: mat:"<< std::endl << mat << std::endl << "vec: " << vec << std::endl;
+
+	// first, detect intersections with lines modeled as intersections with two halfspaces -> improve precision by using line intersection
+	std::vector<std::pair<unsigned,unsigned>> linePairs;
+	std::set<unsigned> lineConstraints;
+	for(unsigned firstHalfspaceIndex = 0; firstHalfspaceIndex < mat.rows(); ++firstHalfspaceIndex) {
+		for(unsigned secondHalfspaceIndex = firstHalfspaceIndex+1; secondHalfspaceIndex < mat.rows(); ++secondHalfspaceIndex) {
+			// check condition for a line intersection - the 2nd normal is the negated 1st and the constants are the same, except the sign.
+			if(mat.row(firstHalfspaceIndex) == -mat.row(secondHalfspaceIndex) && vec(firstHalfspaceIndex) == -vec(secondHalfspaceIndex)) {
+				linePairs.emplace_back(firstHalfspaceIndex,secondHalfspaceIndex);
+				lineConstraints.insert(firstHalfspaceIndex);
+				lineConstraints.insert(secondHalfspaceIndex);
+			}
 		}
 	}
+
+	// perform line intersection first TODO: What is more precise?
+	for(unsigned lineIndex = 0; lineIndex < linePairs.size(); ++lineIndex) {
+		std::cout << "Line Intersection! linePair: " << linePairs.at(lineIndex) << std::endl;
+		unsigned firstConstraintIndex = linePairs.at(lineIndex).first;
+		res = res.intersect(Halfspace<Number>(vector_t<Number>(mat.row(firstConstraintIndex)), vec(firstConstraintIndex)), ZUtility::NDPROJECTION);
+	}
+
+	if(res.empty()) {
+		return res;
+	}
+
+	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
+		// just intersect with constraints not being part of a line
+		if(lineConstraints.find(constraintIndex) == lineConstraints.end()) {
+			std::cout << "HSP Intersection! Index: " << constraintIndex << std::endl;
+			res = res.intersectHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
+			if(res.empty()) {
+				std::cout << __func__ << " END" << std::endl;
+				return res;
+			}
+		}
+	}
+	std::cout << __func__ << " END" << std::endl;
 	return res;
 }
 
 template<typename Number, typename Converter>
 std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+	if(this->empty()) {
+		return std::make_pair(false,*this);
+	}
 	ZonotopeT<Number,Converter> result;
 	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
 	 * generators
@@ -942,15 +1007,23 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 
 template<typename Number, typename Converter>
 std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
+	if(this->empty()) {
+		return std::make_pair(false,*this);
+	}
 	assert(mat.rows() == vec.rows());
 	std::pair<bool, ZonotopeT<Number,Converter>> resultPair = std::make_pair(true, *this);
 
+	resultPair.second = resultPair.second.intersectHalfspaces(mat, vec);
+	resultPair.first = !resultPair.second.empty();
+
+	/*
 	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
 		resultPair = resultPair.second.satisfiesHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
 		if(resultPair.first == false) {
 			return resultPair;
 		}
 	}
+	*/
 	return resultPair;
 }
 

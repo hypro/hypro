@@ -5,7 +5,7 @@ hybrid reachability
  setting
  {
   fixed steps 0.1
-  time 50
+  time 17
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon x,c1
@@ -13,10 +13,10 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output rod_reactor
-  max jumps 5
+  max jumps 2
   print on
  }
- 
+
  modes
  {
   rod1
@@ -27,13 +27,13 @@ hybrid reachability
     c1' = 1
     c2' = 1
    }
-   
+
    inv
    {
     x >= 510
    }
   }
-  
+
   rod2
   {
    poly ode 1
@@ -42,13 +42,13 @@ hybrid reachability
     c1' = 1
     c2' = 1
    }
-   
+
    inv
    {
     x >= 510
    }
   }
-  
+
   norod
   {
    poly ode 1
@@ -57,13 +57,13 @@ hybrid reachability
     c1' = 1
     c2' = 1
    }
-   
+
    inv
    {
     x <= 550
    }
   }
-  
+
   shutdown
   {
    poly ode 1
@@ -72,36 +72,36 @@ hybrid reachability
     c1' = 0
     c2' = 0
    }
-   
+
    inv
    {
    }
   }
  }
-  
+
  jumps
  {
   norod -> rod1
   guard {x = 550  c1 >= 20 }
   reset { }
   parallelotope aggregation {}
-  
+
   norod -> rod2
   guard {x = 550  c2 >= 20 }
   reset { }
   parallelotope aggregation {}
-  
+
   rod1 -> norod
   guard {x = 510 }
   reset { c1' := 0 }
   parallelotope aggregation {}
-  
+
   rod2 -> norod
   guard {x = 510 }
   reset { c2' := 0 }
   parallelotope aggregation {}
  }
- 
+
  init
  {
   norod
