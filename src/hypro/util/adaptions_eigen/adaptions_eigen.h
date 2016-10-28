@@ -273,8 +273,11 @@ namespace hypro {
 		}
 
 		// both are non-Zero vectors
-		while(lhs(firstNonZeroPos) == 0){
+		while(firstNonZeroPos != lhs.rows() && lhs(firstNonZeroPos) == 0){
 			++firstNonZeroPos;
+		}
+		if(firstNonZeroPos == lhs.rows()) {
+			return std::make_pair(false,0);
 		}
 		if(rhs(firstNonZeroPos) == 0) {
 			return std::make_pair(false,0);
