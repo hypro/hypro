@@ -48,9 +48,6 @@ namespace Eigen {
 		if ( lhs.rows() != rhs.rows() ){
 			return false;
 		}
-		if ( VectorHashValue(lhs) != VectorHashValue(rhs) ){
-			return false;
-		}
 
 		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 			// compare with 128 ULPs
@@ -69,9 +66,6 @@ namespace Eigen {
 	template <>
 	inline bool operator==( const hypro::matrix_t<double>& lhs, const hypro::matrix_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ){
-			return false;
-		}
-		if ( MatrixHashValue(lhs) != MatrixHashValue(rhs) ){
 			return false;
 		}
 
@@ -100,17 +94,18 @@ namespace hypro {
 		if(lhs.nonZeros() == 0 || rhs.nonZeros() == 0){
 			return std::make_pair(true,0);
 		}
-
 		// both are non-Zero vectors
-		while(lhs(firstNonZeroPos) == 0){
+		while(firstNonZeroPos != lhs.rows() && lhs(firstNonZeroPos) == 0){
 			++firstNonZeroPos;
+		}
+		if(firstNonZeroPos == lhs.rows()) {
+			return std::make_pair(false,0);
 		}
 		if(rhs(firstNonZeroPos) == 0) {
 			return std::make_pair(false,0);
 		}
 		double scalar = lhs(firstNonZeroPos)/rhs(firstNonZeroPos);
 		if(lhs == rhs*scalar) {
-			//std::cout << __func__ << ": scalar: " << scalar << std::endl;
 			return std::make_pair(true,scalar);
 		}
 		return std::make_pair(false,0);
