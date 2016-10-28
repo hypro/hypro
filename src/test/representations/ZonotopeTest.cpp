@@ -393,6 +393,8 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
     result = z1.unite(z2);
 
     EXPECT_EQ(result.center(), expected_center);
+
+    std::cout << "Generators: " << hypro::convert<TypeParam,double>(result.generators()) << " and expected generators: " << hypro::convert<TypeParam,double>(expected_generators) << std::endl;
     EXPECT_EQ(result.generators(), expected_generators);
 }
 
