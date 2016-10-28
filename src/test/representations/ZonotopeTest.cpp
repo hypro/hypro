@@ -370,7 +370,7 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
     Eigen::Matrix<TypeParam, 2, 1> c1, c2, expected_center;
     Eigen::Matrix<TypeParam, 2, 2> g1;
     Eigen::Matrix<TypeParam, 2, 3> g2;
-    Eigen::Matrix<TypeParam, 2, 4> expected_generators;
+    Eigen::Matrix<TypeParam, 2, 3> expected_generators;
 
     c1 << 2,1;
     c2 << 1,1;
@@ -382,8 +382,8 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
           0,1,carl::rationalize<TypeParam>(0.2);
 
     expected_center << carl::rationalize<TypeParam>(1.5), 1;
-    expected_generators << 1, 1, carl::rationalize<TypeParam>(-0.5), carl::rationalize<TypeParam>(-0.5),
-                            0, 1, 0, carl::rationalize<TypeParam>(0.2);
+    expected_generators << carl::rationalize<TypeParam>(0.5), 1, carl::rationalize<TypeParam>(-0.5),
+                            0, 1, carl::rationalize<TypeParam>(0.2);
 
     z1.setCenter(c1);
     z1.setGenerators(g1);
@@ -393,8 +393,6 @@ TYPED_TEST(ZonotopeTest, ConvexHull) {
     result = z1.unite(z2);
 
     EXPECT_EQ(result.center(), expected_center);
-
-    std::cout << "Generators: " << hypro::convert<TypeParam,double>(result.generators()) << " and expected generators: " << hypro::convert<TypeParam,double>(expected_generators) << std::endl;
     EXPECT_EQ(result.generators(), expected_generators);
 }
 

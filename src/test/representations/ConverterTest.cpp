@@ -323,7 +323,6 @@ TYPED_TEST(ConverterTest, toVPolytope)
 
 TYPED_TEST(ConverterTest, toZonotope)
 {
-
         auto result = Converter<TypeParam>::toZonotope(this->zonotope);
         //result.print();
         auto result2 = Converter<TypeParam>::toZonotope(this->box);
