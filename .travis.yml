@@ -9,9 +9,6 @@ env:
     - DOXYFILE: $TRAVIS_BUILD_DIR/doc/Doxygen.in
     - GH_REPO_REF: github.com/hypro/hypro.git
 
-
-language: cpp
-
 notifications:
   email:
     recipients:
@@ -22,6 +19,7 @@ notifications:
 
 os:
   - linux
+  - osx
 
 sudo: required
 dist: trusty
