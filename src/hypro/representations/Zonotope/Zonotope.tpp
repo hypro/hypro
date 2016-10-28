@@ -243,7 +243,7 @@ void ZonotopeT<Number,Converter>::uniteEqualVectors() {
 
 	for ( unsigned i = 0; i < mGenerators.cols(); i++ ) {
 		for ( unsigned j = ( i + 1 ); j < mGenerators.cols(); j++ ) {
-			if ( mGenerators.col( i ) == mGenerators.col( j ) ) {
+			if ( mGenerators.col( i ) == mGenerators.col( j ) || linearDependent(vector_t<Number>(mGenerators.col(i)), vector_t<Number>(mGenerators.col(j))).first ) {
 				zeroIndex.push_back( j );
 			}
 		}
@@ -484,7 +484,7 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 			"zonotope dimension must be of same dimension (only dim 2 accepted) "
 			"as Halfspace" );
 	unsigned size = input.size();
-	matrix_t<Number> g1, g2, generators = input.generators();
+	matrix_t<Number> gUpper, gLower, generators = input.generators();
 	matrix_t<Number> s, s1, pmNext, pm = input.center();
 
 	// ensure that all generators are pointing either upwards or all downwards (depends on minOrMax)
@@ -519,62 +519,72 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 	s = 2 * generators.rowwise().sum();
 
 	while ( generators.cols() > 1 ) {
-		std::vector<unsigned> idx_a1, idx_a2;
-		// splitting the generators according to trigonometric order in relation to s
+		std::vector<unsigned> gLowerIndices, gUpperIndices;
+		// splitting the generators according to trigonometric order (angle) in relation to s
 		// TODO: check if atan is available for FLOAT_T types
+		Number sAngle = atan( (Number)s( 1 ) / (Number)s( 0 ) );
 		for ( unsigned i = 0; i < generators.cols(); i++ ) {
 			Number angle = atan( (Number)generators( 1, i ) / (Number)generators( 0, i ) );
-			if ( angle - atan( (Number)s( 1 ) / (Number)s( 0 ) ) <= 0 )
-				idx_a1.push_back( i );
-			else if ( angle - atan( (Number)s( 1 ) / (Number)s( 0 ) ) >= 0 )
-				idx_a2.push_back( i );
+			if ( angle - sAngle <= 0 ) {
+				gLowerIndices.push_back( i );
+			} else if ( angle - sAngle >= 0 ) {
+				gUpperIndices.push_back( i );
+			}
 		}
 
-		// after splitting, establish two sets g1, g2 holding the splitting result.
-		g1 = generators;
-		g2 = generators;
+		// after splitting, establish two sets gUpper, gLower holding the splitting result.
+		gUpper = generators;
+		gLower = generators;
 
-		std::cout << "MinOrMax: " << minOrMax << std::endl;
-		std::cout << " S is: " << s << std::endl;
-		std::cout << "Generators: "<< std::endl << generators << std::endl;
-		std::cout << "Indices idx_a1: " << idx_a1 << " and idx_a2: " << idx_a2 << std::endl;
+		// std::cout << "MinOrMax: " << minOrMax << std::endl;
+		// std::cout << " S is: " << s << std::endl;
+		// std::cout << " PM is: " << pm << std::endl;
+		// std::cout << "Generators: "<< std::endl << generators << std::endl;
+		// std::cout << "Indices gLowerIndices: " << gLowerIndices << " and gUpperIndices: " << gUpperIndices << std::endl;
 
-		for ( std::vector<unsigned>::reverse_iterator rit = idx_a1.rbegin(); rit != idx_a1.rend(); ++rit ) {
-			//g1 = generators; // TODO: This adds the removed generator in the next run?
-			removeGenerator<Number>( *rit, g1 );
+		for ( std::vector<unsigned>::reverse_iterator rit = gLowerIndices.rbegin(); rit != gLowerIndices.rend(); ++rit ) {
+			removeGenerator<Number>( *rit, gUpper );
 		}
-		for ( std::vector<unsigned>::reverse_iterator rit = idx_a2.rbegin(); rit != idx_a2.rend(); ++rit ) {
-			//g2 = generators; // TODO: This adds the removed generator in the next run?
-			removeGenerator<Number>( *rit, g2 );
+		for ( std::vector<unsigned>::reverse_iterator rit = gUpperIndices.rbegin(); rit != gUpperIndices.rend(); ++rit ) {
+			removeGenerator<Number>( *rit, gLower );
 		}
-		assert(g1.cols() + g2.cols() == generators.cols()); // Verify correct splitting.
-		std::cout << "Split result g1: " << std::endl << g1 << std::endl << " and g2: " << g2 << std::endl;
+		assert(gUpper.cols() + gLower.cols() == generators.cols()); // Verify correct splitting.
 
-		std::cout << "Pm: " << pm << " and hp.offset: " << hp.offset() << std::endl;
-
-		// TODO: What does this case distinction do? There seems to be no equivalent to it in the algorithm ...
+		// Advance from pm to s1 (Line 17). The case distinction is necessary, as the trigonometric ordering is inverted
+		// when advancing towards the negative direction ( pm(0) > hp.offset() ).
 		if ( pm( 0 ) < hp.offset() ){
-			std::cout << "Case1" << std::endl;
-			s1 = ( minOrMax == 1 ) ? 2 * g1.rowwise().sum() : 2 * g2.rowwise().sum();
+			s1 = ( minOrMax == 1 ) ? 2 * gUpper.rowwise().sum() : 2 * gLower.rowwise().sum();
 		} else {
-			std::cout << "Case2" << std::endl;
-			//std::cout << "s1 " << s1 << std::endl << "g2: " << g2 << std::endl;
-			s1 = ( minOrMax == 1 ) ? 2 * g2.rowwise().sum() : 2 * g1.rowwise().sum();
+			s1 = ( minOrMax == 1 ) ? 2 * gLower.rowwise().sum() : 2 * gUpper.rowwise().sum();
 		}
 
-		std::cout << "S1: " << s1 << std::endl;
-
+		// pmNext is the end of the line segment [p, p+s1]. Verify intersection.
 		pmNext = pm + s1;
 		if ( ( pm( 0 ) <= hp.offset() && pmNext( 0 ) >= hp.offset() ) ||
 			 ( pm( 0 ) >= hp.offset() && pmNext( 0 ) <= hp.offset() ) ) {
-			std::cout << "The line [p, p+s1] intersects the line segment." << std::endl;
-			generators = ( minOrMax == 1 ) ? g2 : g1;
+			// TODO: Check, if this is still independent from the direction we are advancing to (left/right).
+			generators = ( minOrMax == 1 ) ? gLower : gUpper;
+
+			// if there is no update, exit the loop -> copes with numeric problems regarding atan and linear dependence
+			// of generators
+			if(s == s1) {
+				break;
+			}
+
 			s = s1;
+			// This should not happen, otherwise we have an infinite loop.
+			assert(minOrMax!=1 || !gUpperIndices.empty());
+			assert(minOrMax!=0 || !gLowerIndices.empty());
 		} else {
-			std::cout << "The line [p, p+s1] does not intersect the line segment." << std::endl;
-			generators = ( minOrMax == 1 ) ? g1 : g2;
+			// TODO: Check, if this is still independent from the direction we are advancing to (left/right).
+			generators = ( minOrMax == 1 ) ? gUpper : gLower;
 			s = s - s1;
 			pm = pmNext;
+
+			// If there is no progress we can end the algorithm - it is an over-approximation, thus correct.
+			if(s == s - s1) {
+				break;
+			}
 		}
 	}
 	pmNext = pm + s;
@@ -583,17 +593,20 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> intersectZonotopeHalfspaceDSearch( ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp ) {
+ZonotopeT<Number,Converter> intersectZonotopeHalfspaceDSearch( const ZonotopeT<Number,Converter> &inputZonotope, const Halfspace<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() && inputZonotope.dimension() == 2 &&
 			"zonotope dimension must be of same "
 			"dimension (only dim 2 accepted) as "
 			"Halfspace" );
-	Number p1 = intersect2d<Number>( inputZonotope, hp, 1 );
+	ZonotopeT<Number,Converter> res(inputZonotope);
+	res.uniteEqualVectors();
+
+	Number p1 = intersect2d<Number>( res, hp, 1 );
 	Eigen::Matrix<Number, 2, 1> p1Vec = {0, p1};
-	Number p2 = intersect2d<Number>( inputZonotope, hp, 0 );
+	Number p2 = intersect2d<Number>( res, hp, 0 );
 	Eigen::Matrix<Number, 2, 1> p2Vec = {0, p2};
 
-	ZonotopeT<Number,Converter> res( ( p1Vec + p2Vec ) / 2, ( p1Vec - p2Vec ) / 2 );
+	res = ZonotopeT<Number,Converter>( ( p1Vec + p2Vec ) / 2, ( p1Vec - p2Vec ) / 2 );
 	return res;
 }
 
@@ -822,15 +835,15 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfsp
 	if ( hasIntersect ) {
 		switch ( method ) {
 			case ZUtility::ALAMO:
-				std::cout << "Using Alamo's method with dimension " << mDimension << std::endl;
+				//std::cout << "Using Alamo's method with dimension " << mDimension << std::endl;
 				result = intersectAlamo( *this, hp );
 				break;
 			case ZUtility::NDPROJECTION: {
 				if ( mDimension == 2 ) {
-					std::cout << "Using Girard's method with dimension 2 " << std::endl;
+					//std::cout << "Using Girard's method with dimension 2 " << std::endl;
 					result = intersectZonotopeHalfspace( *this, hp, minMaxOfLine );
 				} else {
-					std::cout << "Using Girard's method with dimension " << mDimension << std::endl;
+					//std::cout << "Using Girard's method with dimension " << mDimension << std::endl;
 					result = intersectNDProjection<Number>( *this, hp, minMaxOfLine );
 				}
 				break;
@@ -917,8 +930,6 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( co
 	assert(mat.rows() == vec.rows());
 	ZonotopeT<Number,Converter> res = *this;
 
-	std::cout << __func__ << " BEGIN: mat:"<< std::endl << mat << std::endl << "vec: " << vec << std::endl;
-
 	// first, detect intersections with lines modeled as intersections with two halfspaces -> improve precision by using line intersection
 	std::vector<std::pair<unsigned,unsigned>> linePairs;
 	std::set<unsigned> lineConstraints;
@@ -935,7 +946,6 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( co
 
 	// perform line intersection first TODO: What is more precise?
 	for(unsigned lineIndex = 0; lineIndex < linePairs.size(); ++lineIndex) {
-		std::cout << "Line Intersection! linePair: " << linePairs.at(lineIndex) << std::endl;
 		unsigned firstConstraintIndex = linePairs.at(lineIndex).first;
 		res = res.intersect(Halfspace<Number>(vector_t<Number>(mat.row(firstConstraintIndex)), vec(firstConstraintIndex)), ZUtility::NDPROJECTION);
 	}
@@ -947,15 +957,12 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( co
 	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {
 		// just intersect with constraints not being part of a line
 		if(lineConstraints.find(constraintIndex) == lineConstraints.end()) {
-			std::cout << "HSP Intersection! Index: " << constraintIndex << std::endl;
 			res = res.intersectHalfspace(Halfspace<Number>(vector_t<Number>(mat.row(constraintIndex)), vec(constraintIndex)));
 			if(res.empty()) {
-				std::cout << __func__ << " END" << std::endl;
 				return res;
 			}
 		}
 	}
-	std::cout << __func__ << " END" << std::endl;
 	return res;
 }
 
