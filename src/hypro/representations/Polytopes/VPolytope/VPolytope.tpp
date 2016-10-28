@@ -51,7 +51,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	// calculate all possible Halfspace intersections -> TODO: dPermutation can
 	// be improved.
 
-	std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
+	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
 	assert(_constraints.rows() == _constants.rows());
 	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
@@ -76,7 +76,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			assert(vertex.rows() == _constraints.cols());
 			assert(insidePlanes(vertex, intersection, intersectionConstants));
 			possibleVertices.emplace( std::move(vertex) );
-			std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
 		}
 	}
 
@@ -90,7 +89,6 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 		for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 			Number res = vertex->dot( _constraints.row( rowIndex ) );
 			if ( !carl::AlmostEqual2sComplement(res, _constants( rowIndex ), 128) && res > _constants( rowIndex ) ){
-				std::cout << "Delete vertex " << *vertex << " because of plane " << rowIndex << std::endl;
 				vertex = possibleVertices.erase( vertex );
 				deleted = true;
 				break;
