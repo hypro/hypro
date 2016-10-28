@@ -19,7 +19,10 @@ notifications:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
 sudo: required
-dist: trusty
+#dist: trusty
+os:
+  - linux
+  - osx
 
 matrix:
   include:
