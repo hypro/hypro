@@ -1,10 +1,3 @@
-/**
- * Abstract representation of a geometric object.
- * All representations of geometric objects should implement this abstract class.
- * @author Benedikt Seidl
- * @version 2013-09-01
- */
-
 #pragma once
 
 #define INCL_FROM_GOHEADER true
@@ -12,4 +5,20 @@
 #include "types.h"
 #include "../config.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
+
+/**
+ * @brief      Purely virtual class defining an interface for geometric objects.
+ * @tparam     Number  The used number type.
+ */
+template<typename Number>
+class GeometricObject {
+
+public:
+	virtual ~GeometricObject(){}
+
+	virtual std::size_t dimension() const = 0;
+
+};
+
+
 #include "conversion/Converter.h"
