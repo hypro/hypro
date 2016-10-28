@@ -1,3 +1,4 @@
+language: cpp
 branches:
   only:
   - master
