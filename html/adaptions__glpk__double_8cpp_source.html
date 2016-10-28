@@ -139,7 +139,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="comment">// set point</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        assert(constraints.cols() == point.rawCoordinates().rows());</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> i = 0; i &lt; constraints.cols(); ++i ) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, point.rawCoordinates()(i), 0.0 );</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); <span class="comment">// not needed?</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        }</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        glp_simplex( glpkProblem, NULL);</div>
