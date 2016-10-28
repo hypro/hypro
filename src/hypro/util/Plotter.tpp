@@ -43,12 +43,17 @@ void Plotter<Number>::plot2d() const {
 	}
 
 
-	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+		std::cout << "mObjects.empty(): " << mObjects.empty() << std::endl;
+		std::cout << "mPoints.empty(): " << mPoints.empty() << std::endl;
+		std::cout << "mObjects.begin()->second.empty(): " << mObjects.begin()->second.empty() << std::endl;
+		std::cout << "mObjects.size: " << mObjects.size() << " and mPoints.size() " << mPoints.size() << std::endl;
 		// set object
 		vector_t<Number> min = vector_t<Number>(2);
 		vector_t<Number> max = vector_t<Number>(2);
-		assert(mLimits.first.rows() >= 2);
-		assert(mLimits.second.rows() >= 2);
+		std::cout << mLimits.first << " and " << mLimits.second << std::endl;
+		assert(mLimits.first.rows() == 2);
+		assert(mLimits.second.rows() == 2);
 		min(0) = mLimits.first(mSettings.dimensions.first);
 		min(1) = mLimits.first(mSettings.dimensions.second);
 		max(0) = mLimits.second(mSettings.dimensions.first);
