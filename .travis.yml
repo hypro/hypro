@@ -21,9 +21,6 @@ notifications:
 sudo: required
 
 matrix:
-  os:
-    - linux
-    - osx
   include:
     - compiler: gcc
       addons:
