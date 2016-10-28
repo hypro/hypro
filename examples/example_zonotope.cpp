@@ -67,35 +67,29 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
 
     hypro::vector_t<Number> d = hypro::vector_t<Number>(2);
     d << 0, -1;
-    hypro::Zonotope<Number> intersectionResult = zonoExample2.intersectHalfspace(hypro::Halfspace<Number>(d, -2));
-    std::cout << "Zonotope: " << intersectionResult << std::endl;
-    std::cout << "Vertices:" << std::endl;
-    vertices = intersectionResult.vertices();
-    for(const auto& vertex : vertices){
-    	std::cout << vertex << std::endl;
-    }
 
+    hypro::Zonotope<Number> intersectionResult = zonoExample2.intersectHalfspace(hypro::Halfspace<Number>(d, -2));
     unsigned z4 = plotter.addObject(intersectionResult.vertices());
 	plotter.setObjectColor(z4, hypro::colors[hypro::lila]);
+
+	// Provoke intersection with a line by intersecting with two halfspaces.
+	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>(2,2);
+	constraints << 0,-1,0,1;
+	hypro::vector_t<Number> constants = hypro::vector_t<Number>(2);
+	constants << -6,6;
+	hypro::Zonotope<Number> intersectionResult2 = zonoExample.unite(zonoExample2).intersectHalfspaces(constraints,constants);
+    unsigned z5 = plotter.addObject(intersectionResult2.vertices());
+	plotter.setObjectColor(z5, hypro::colors[hypro::petrol]);
 
 	hypro::matrix_t<Number> A = hypro::matrix_t<Number>(2,2);
 	A << 1,0.01,0,1;
 	hypro::vector_t<Number> b = hypro::vector_t<Number>(2);
-	b << -3,7;
-	hypro::vector_t<Number> b2 = hypro::vector_t<Number>(2);
-	//b2 << -0.0005, -0.0981;
-	b2 << 0,0;
+	b << -3,3;
+	std::cout << "A: " << A << " and b: " << b << std::endl;
 
-	std::cout << "A: " << A << " and b: " << b2 << std::endl;
-
-	hypro::Zonotope<Number> linearTrafoResult = zonoExample.linearTransformation(A,b);
-	unsigned z5 = plotter.addObject(linearTrafoResult.vertices());
-	plotter.setObjectColor(z5, hypro::colors[hypro::blue]);
-	for(unsigned i = 0; i < 39; ++i) {
-		linearTrafoResult = linearTrafoResult.linearTransformation(A,b2);
-		unsigned z6 = plotter.addObject(linearTrafoResult.vertices());
-	    plotter.setObjectColor(z6, hypro::colors[hypro::blue]);
-	}
+	hypro::Zonotope<Number> linearTrafoResult = zonoExample.affineTransformation(A,b);
+	unsigned z6 = plotter.addObject(linearTrafoResult.vertices());
+	plotter.setObjectColor(z6, hypro::colors[hypro::blue]);
 
     plotter.plot2d();
     plotter.plotTex();
