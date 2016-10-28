@@ -177,8 +177,8 @@ void ZonotopeT<Number,Converter>::setGenerators( const matrix_t<Number> &new_gen
 	}
 	assert( (std::size_t)new_generators.rows() == mDimension && "Generators have to have same dimensionality as zonotope" );
 	mGenerators = new_generators;
-        uniteEqualVectors();
-        removeEmptyGenerators();
+    uniteEqualVectors();
+    removeEmptyGenerators();
 }
 
 template<typename Number, typename Converter>
