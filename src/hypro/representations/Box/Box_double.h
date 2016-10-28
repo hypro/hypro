@@ -15,7 +15,7 @@
 namespace hypro {
 
 template <typename Converter>
-class BoxT<double,Converter> {
+class BoxT<double,Converter> : public GeometricObject<double> {
   private:
   public:
 	/***************************************************************************

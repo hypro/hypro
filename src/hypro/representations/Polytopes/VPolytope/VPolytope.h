@@ -26,7 +26,7 @@
 namespace hypro {
 
 template <typename Number, typename Converter>
-class VPolytopeT {
+class VPolytopeT : public GeometricObject<Number> {
   public:
 
 	using pointVector = std::vector<Point<Number>>;

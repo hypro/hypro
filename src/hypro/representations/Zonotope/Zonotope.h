@@ -31,7 +31,7 @@ namespace hypro {
 static const unsigned ZONOTOPE_ORDERLIMIT = 4;
 
 template<typename Number, typename Converter>
-class ZonotopeT {
+class ZonotopeT : public GeometricObject<Number> {
   private:
 	std::size_t mDimension;
 	vector_t<Number> mCenter;

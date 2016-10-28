@@ -23,7 +23,7 @@
 namespace hypro {
 
 template <typename Number, typename Converter>
-class SupportFunctionT {
+class SupportFunctionT : public GeometricObject<Number> {
 private:
 	std::shared_ptr<SupportFunctionContent<Number>> content;
 	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);

@@ -1121,16 +1121,16 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 	c2 = other.mCenter;
 
 	// common traits of center and generators for all two zonotopes
-	temp.setCenter( ( c1 + c2 ) * carl::rationalize<Number>(0.5) );
+	temp.setCenter( ( c1 + c2 ) * Number(Number(1)/Number(2)) );
 
 	if ( numGenCurrent > numGenOther ) {
 		matrix_t<Number> R11, R12;
 		R11 = R1.block( 0, 0, mDimension, numGenOther );
 		R12 = R1.block( 0, numGenOther, mDimension, numGenCurrent - numGenOther );
 
-		temp.setGenerators( ( R2 + R11 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( c1 - c2 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( R11 - R2 ) * carl::rationalize<Number>(0.5) );
+		temp.setGenerators( ( R2 + R11 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( c1 - c2 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( R11 - R2 ) * Number(Number(1)/Number(2)) );
 		temp.addGenerators( R12 );
 	} else if ( numGenCurrent < numGenOther ) {
 		matrix_t<Number> R21, R22;
@@ -1138,16 +1138,15 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 		R21 = R2.block( 0, 0, mDimension, numGenCurrent );
 		R22 = R2.block( 0, numGenCurrent, mDimension, numGenOther - numGenCurrent );
 
-		temp.setGenerators( ( R1 + R21 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( c2 - c1 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( R21 - R1 ) * carl::rationalize<Number>(0.5) );
+		temp.setGenerators( ( R1 + R21 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( c2 - c1 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( R21 - R1 ) * Number(Number(1)/Number(2)) );
 		temp.addGenerators( R22 );
 	} else {
-		temp.setGenerators( ( R1 + R2 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( c1 - c2 ) * carl::rationalize<Number>(0.5) );
-		temp.addGenerators( ( R1 - R2 ) * carl::rationalize<Number>(0.5) );
+		temp.setGenerators( ( R1 + R2 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( c1 - c2 ) * Number(Number(1)/Number(2)) );
+		temp.addGenerators( ( R1 - R2 ) * Number(Number(1)/Number(2)) );
 	};
-	temp.reduceOrder();
 	return temp;
 }
 

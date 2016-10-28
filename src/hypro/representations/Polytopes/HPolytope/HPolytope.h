@@ -30,7 +30,7 @@ template<typename Number>
 class Location;
 
 template <typename Number, typename Converter>
-class HPolytopeT {
+class HPolytopeT : public GeometricObject<Number> {
 public:
   	enum REDUCTION_STRATEGY {
                               DROP = 0,
