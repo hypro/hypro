@@ -47,7 +47,7 @@ namespace hypro {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
 		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
-			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );
+			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, point.rawCoordinates()(i), 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}
 		glp_simplex( glpkProblem, NULL);
