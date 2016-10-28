@@ -174,6 +174,7 @@ class BoxT<double,Converter> {
 	 * @return True, if one interval is empty. False if the dimension is 0 or no interval is empty.
 	 */
 	bool empty() const {
+		assert(mLimits.first.dimension() == mLimits.second.dimension());
 		if ( mLimits.first.dimension() == 0 ) {
 			return false;
 		}

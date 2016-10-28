@@ -33,7 +33,7 @@ template<typename Number>
 class Location;
 
 template <typename Number, typename Converter>
-class BoxT {
+class BoxT : public GeometricObject<Number> {
   private:
   public:
 	/***************************************************************************

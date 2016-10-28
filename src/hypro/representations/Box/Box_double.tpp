@@ -329,7 +329,6 @@ BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigne
 	if(dimensions.empty()) {
 		return Empty();
 	}
-	std::cout << __func__ << ": dim: " << dimensions << ", original: " << *this << std::endl << "result: " << BoxT<double,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions))) << std::endl;
 	return BoxT<double,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
 }
 
