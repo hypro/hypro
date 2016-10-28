@@ -1,5 +1,4 @@
-language:
-  -c++
+language: cpp
 
 branches:
   only:
@@ -22,10 +21,6 @@ notifications:
 
 os:
   - linux
-
-compiler:
-  - clang
-  - gcc
 
 sudo: required
 dist: trusty
