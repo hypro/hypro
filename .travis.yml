@@ -19,12 +19,11 @@ notifications:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
 sudo: required
-#dist: trusty
-os:
-  - linux
-  - osx
 
 matrix:
+  os:
+    - linux
+    - osx
   include:
     - compiler: gcc
       addons:
