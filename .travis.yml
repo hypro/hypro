@@ -17,9 +17,6 @@ notifications:
     rooms:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
-os:
-  - linux
-
 sudo: required
 dist: trusty
 
