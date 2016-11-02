@@ -267,7 +267,7 @@ configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT
 							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
 			 )
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-								 VERSION 0.1.0
+								 VERSION ${hypro_VERSION}
 								 COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
 		DESTINATION ${PROJECT_BINARY_DIR} )
