@@ -1,3 +1,4 @@
+language: cpp
 branches:
   only:
   - master
@@ -9,9 +10,6 @@ env:
     - DOXYFILE: $TRAVIS_BUILD_DIR/doc/Doxygen.in
     - GH_REPO_REF: github.com/hypro/hypro.git
 
-
-language: cpp
-
 notifications:
   email:
     recipients:
@@ -20,32 +18,51 @@ notifications:
     rooms:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
-os:
-  - linux
-
 sudo: required
 dist: trusty
 
-addons:
-  apt:
-    packages:
-      - doxygen
-      - doxygen-doc
-      - doxygen-latex
-      - doxygen-gui
-      - graphviz
-
-compiler:
-  - clang
-  - gcc
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env: COMPILER=g++-4.9
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: COMPILER=g++-5
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+      env: COMPILER=clang++-3.6
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.7
+          packages:
+            - clang-3.7
+      env: COMPILER=clang++-3.7
 
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
   - sudo apt-get update
-  - sudo apt-get install cmake gcc-4.9 g++-4.9 libboost1.55-all-dev libeigen3-dev libglpk-dev
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
-  - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake .. && make lib_carl
+  - sudo apt-get install cmake libboost1.55-all-dev libeigen3-dev libglpk-dev doxygen graphviz
+  - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make lib_carl
   - cd ../../
 
 install: true
@@ -53,7 +70,7 @@ install: true
 before_script: true
 
 script:
-  - mkdir build && cd build && cmake .. && make
+  - mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
   - make test
 
 # Generate and deploy documentation
