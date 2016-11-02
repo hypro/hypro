@@ -7,7 +7,7 @@ branches:
 env:
   global:
     - GH_REPO_NAME: hypro
-    - DOXYFILE: $TRAVIS_BUILD_DIR/doc/Doxygen.in
+    - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
     - GH_REPO_REF: github.com/hypro/hypro.git
 
 notifications:
@@ -75,6 +75,7 @@ script:
 
 # Generate and deploy documentation
 after_success:
+  cmake -DCREATE_DOC=ON ..
   - cd $TRAVIS_BUILD_DIR
   - chmod +x createAndDeployDocumentation.sh
   - ./createAndDeployDocumentation.sh
