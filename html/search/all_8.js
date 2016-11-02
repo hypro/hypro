@@ -28,5 +28,6 @@ var searchData=
   ['isnonredundant',['isNonRedundant',['../classhypro_1_1HPolytopeT.html#a5c1c5cc7a3b4bb9e510fe2303284485e',1,'hypro::HPolytopeT']]],
   ['isprimalfeasible',['isPrimalFeasible',['../classhypro_1_1Dictionary.html#af5b45608cedaf14db298ff65d2424c4f',1,'hypro::Dictionary']]],
   ['issymmetric',['isSymmetric',['../classhypro_1_1BoxT.html#ac019d4625cb5b25c8e487e9abc701e60',1,'hypro::BoxT::isSymmetric()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a6105f0477213dd16e08ef1bda052017a',1,'hypro::BoxT&lt; double, Converter &gt;::isSymmetric()']]],
-  ['isvertex',['isVertex',['../classhypro_1_1VertexContainer.html#adb264780c985db6546218010b5e5a218',1,'hypro::VertexContainer']]]
+  ['isvertex',['isVertex',['../classhypro_1_1VertexContainer.html#adb264780c985db6546218010b5e5a218',1,'hypro::VertexContainer']]],
+  ['installation',['Installation',['../md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted_installation.html',1,'']]]
 ];

@@ -4,10 +4,17 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: The Project of HyPro</title>
+<title>HyPro: HyPro</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,9 +31,9 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">@hypro_VERSION@</span>
    </div>
-   <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations (HyPro)</div>
+   <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
  </tr>
  </tbody>
@@ -40,6 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -62,6 +70,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('index.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -78,31 +100,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">The Project of HyPro </div>  </div>
+<div class="title">HyPro </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The project mainly focus on the geometric representations for the reachable sets of linear hybrid system. A group of high-level reachability analysis techniques such as flowpipe and invariant construction will be investigated along with the representations. A toolbox will be provided afterwards such that users may easily implement their techniques based on it.</p>
-<h1><a class="anchor" id="sec2"></a>
-Reachable set representations</h1>
-<p>Since the reachability problem on general hybrid systems is undecidable, we consider to use over-approximation representations for the reachable set in safety checking tasks. The two popular ways to do that are</p>
-<ul>
-<li>flowpipe construction: we split the time horizon into small intervals and over-approximate the reachable set in each of them;</li>
-<li>invariant construction: we try to find one over-approximation for the reachable set in a bounded or unbounded time horizon.</li>
-</ul>
-<p>In order to generate over-approximations which are easy to manipulate, several geometric objects are proposed as the representations, such as convex polyhedra, rectangles, ellipsoids and zonotopes. There are also symbolic representations such as support functions. In the project, we will propose and implement several heuristics to (exactly or approximately) transform one representation to another such that users may apply combinations of them in their analysis work.</p>
-<h1><a class="anchor" id="sec3"></a>
-Support</h1>
-<ul>
-<li><a href="http://ths.rwth-aachen.de/research/hypro/">http://ths.rwth-aachen.de/research/hypro/</a></li>
-<li><a href="http://ths.informatik.rwth-aachen.de/trac/hypro/wiki">http://ths.informatik.rwth-aachen.de/trac/hypro/wiki</a> </li>
-</ul>
+<div class="textblock"><p>This is the documentation of HyPro, a C++ library for state set representations tailored for the analysis of hybrid automata. Information regarding the <a class="el" href="dependencies.html">dependencies</a> as well as installation can be found as well as a general information about the usage of the library.</p>
+<p>Further information about the theoretical background of the library can be found in the section state set representations and its subpages. There we present the general interface all provided state set representations implement as well as show usage examples. </p>
 </div></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

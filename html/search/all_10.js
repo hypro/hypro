@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['the_20project_20of_20hypro',['The Project of HyPro',['../index.html',1,'']]],
   ['taylormodel',['TaylorModel',['../classhypro_1_1TaylorModel.html',1,'hypro']]],
   ['taylormodelvec',['TaylorModelVec',['../classhypro_1_1TaylorModelVec.html',1,'hypro']]],
   ['todual',['toDual',['../classhypro_1_1ConvexHull.html#ad7cf4ffa337f35a465d84940f8b2f917',1,'hypro::ConvexHull']]],
