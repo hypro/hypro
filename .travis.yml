@@ -65,10 +65,6 @@ before_install:
   - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make lib_carl
   - cd ../../
 
-install: true
-
-before_script: true
-
 script:
   - mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
   - make test
