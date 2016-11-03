@@ -251,12 +251,12 @@ BoxT<double,Converter> BoxT<double,Converter>::makeSymmetric() const {
 }
 
 template<typename Converter>
-std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const vector_t<double>& normal, const double& offset ) const {
+std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
 	std::vector<Point<double>> vertices = this->vertices();
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
 	for(const auto& vertex : vertices) {
-		if(!carl::AlmostEqual2sComplement(vertex.rawCoordinates().dot(normal), offset, 128) && vertex.rawCoordinates().dot(normal) > offset){
+		if(!carl::AlmostEqual2sComplement(vertex.rawCoordinates().dot(rhs.normal()), rhs.offset(), 128) && vertex.rawCoordinates().dot(rhs.normal()) > rhs.offset()){
 			allVerticesContained = false;
 			outsideVertexCnt++;
 		}
@@ -269,7 +269,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		return std::make_pair(false, Empty());
 	}
 
-	return std::make_pair(true, this->intersectHalfspace(Halfspace<double>(normal,offset)));
+	return std::make_pair(true, this->intersectHalfspace(rhs));
 }
 
 template<typename Converter>

@@ -1171,6 +1171,32 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intervalHull() const {
 }
 
 template<typename Number, typename Converter>
+bool ZonotopeT<Number,Converter>::contains(const Point<Number>& point) const {
+	// create system of generators bounded by -1 and 1. We need to test whether the point can be
+	// described by a linear combination of the generators with coefficients -1 to 1. Each generator
+	// is modeled as a bounded variable. Do not forget the influence of the center.
+
+	unsigned dim = this->dimension();
+	matrix_t<Number> constraints = matrix_t<Number>::Zero(4*dim, this->mGenerators.cols());
+	vector_t<Number> constants = vector_t<Number>::Ones(4*dim);
+
+	// set generators
+	constraints.block(0,0,dim, this->mGenerators.cols()) = mGenerators;
+	constraints.block(dim,0,dim, this->mGenerators.cols()) = -mGenerators;
+	// set bounds for the generators
+	constraints.block(2*dim,0,dim,dim) = matrix_t<Number>::Identity(dim,dim);
+	constraints.block(3*dim,0,dim,dim) = -matrix_t<Number>::Identity(dim,dim);
+
+	// set point
+	constants.block(0,0,dim,1) = point.rawCoordinates() - this->mCenter;
+	constants.block(dim,0,dim,1) = -(point.rawCoordinates() - this->mCenter);
+
+	// check containment
+	Optimizer<Number> opt(constraints,constants);
+	return opt.checkConsistency();
+}
+
+template<typename Number, typename Converter>
 void ZonotopeT<Number,Converter>::print() const {
     std::cout << this->mCenter << std::endl;
     std::cout << this->mGenerators << std::endl;

@@ -15,7 +15,7 @@
 namespace hypro {
 
 template <typename Converter>
-class BoxT<double,Converter> : public GeometricObject<double> {
+class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Converter>> {
   private:
   public:
 	/***************************************************************************
@@ -334,11 +334,10 @@ class BoxT<double,Converter> : public GeometricObject<double> {
 	 * @brief      Checks, if the box lies inside the given halfspace.
 	 * @details    This function combines the intersection with a given halfspace along with the emptiness test on the result, which is
 	 * often faster than the sequential execution of both commands.
-	 * @param[in]  normal  The normal of the halfspace.
-	 * @param[in]  offset  The offset of the halfspace.
+	 * @param[in]  rhs  The halfspace.
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<double>& normal, const double& offset ) const;
+	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<double>& rhs ) const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given set of halfspaces.

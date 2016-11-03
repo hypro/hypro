@@ -31,7 +31,7 @@ namespace hypro {
 static const unsigned ZONOTOPE_ORDERLIMIT = 4;
 
 template<typename Number, typename Converter>
-class ZonotopeT : public GeometricObject<Number> {
+class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
   private:
 	std::size_t mDimension;
 	vector_t<Number> mCenter;
@@ -295,6 +295,8 @@ class ZonotopeT : public GeometricObject<Number> {
 	 * @return true for all cases
 	 */
 	ZonotopeT<Number,Converter> intervalHull() const;
+
+	bool contains(const Point<Number>& point) const;
 };
 
 template<typename Number, typename Converter>

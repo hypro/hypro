@@ -517,8 +517,8 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
  */
 
 template<typename Number, typename Converter>
-std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const {
-	HPolytopeT<Number,Converter> tmp = this->intersectHalfspace(Halfspace<Number>(normal, offset));
+std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+	HPolytopeT<Number,Converter> tmp = this->intersectHalfspace(rhs);
 	return std::make_pair(!(tmp).empty(), tmp);
 }
 
@@ -619,7 +619,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs, bool oneWay ) const {
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs ) const {
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
@@ -648,7 +648,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 		}
 	}
 
-	if(!oneWay) {
+	//if(!oneWay) { // Todo: push to settings.
 		// evaluation of lhs in directions of rhs
 		//std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 		for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
@@ -668,7 +668,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 				// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 			}
 		}
-	}
+	//}
 #ifdef HPOLY_DEBUG_MSG
 	std::cout << "Result: " << res << std::endl;
 #endif
@@ -696,7 +696,7 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
 	HPolytopeT<Number, Converter> res( *this );
 	// only insert the new Halfspace, if it is not already redundant.
-	if(res.evaluate(rhs.normal()) > rhs.offset())
+	if(res.evaluate(rhs.normal()).supportValue > rhs.offset())
 		res.insert( Halfspace<Number>( rhs ) );
 
 	return res;

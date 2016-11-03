@@ -30,7 +30,7 @@ template<typename Number>
 class Location;
 
 template <typename Number, typename Converter>
-class HPolytopeT : public GeometricObject<Number> {
+class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number,Converter>> {
 public:
   	enum REDUCTION_STRATEGY {
                               DROP = 0,
@@ -237,12 +237,12 @@ public:
 	 * General interface
 	 */
 
-	std::pair<bool, HPolytopeT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT project(const std::vector<unsigned>& dimensions) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	HPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	HPolytopeT minkowskiSum( const HPolytopeT& rhs, bool oneWay = false ) const;
+	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
 	HPolytopeT intersect( const HPolytopeT& rhs ) const;
 	HPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;

@@ -33,7 +33,7 @@ template<typename Number>
 class Location;
 
 template <typename Number, typename Converter>
-class BoxT : public GeometricObject<Number> {
+class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
   private:
   public:
 	/***************************************************************************
@@ -354,11 +354,10 @@ class BoxT : public GeometricObject<Number> {
 	 * @brief      Checks, if the box lies inside the given halfspace.
 	 * @details    This function combines the intersection with a given halfspace along with the emptiness test on the result, which is
 	 * often faster than the sequential execution of both commands.
-	 * @param[in]  normal  The normal of the halfspace.
-	 * @param[in]  offset  The offset of the halfspace.
+	 * @param[in]  rhs  The halfspace.
 	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given set of halfspaces.

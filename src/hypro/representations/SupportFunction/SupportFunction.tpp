@@ -324,8 +324,20 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersect(SupportFunctionT<Number,Converter> &_rhs) const {
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersect(const SupportFunctionT<Number,Converter> &_rhs) const {
         SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(_rhs.content));
+        return res;
+    }
+
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
+    	matrix_t<Number> mat = matrix_t<Number>(1,hs.normal().rows());
+    	for(unsigned i = 0; i < hs.normal().rows(); ++i){
+    		mat(0,i) = hs.normal()(i);
+    	}
+    	vector_t<Number> vec = vector_t<Number>(1);
+    	vec(0) = hs.offset();
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(mat,vec).content));
         return res;
     }
 
@@ -364,6 +376,40 @@ namespace hypro{
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::scale( const Number &_factor ) const {
         return SupportFunctionT<Number,Converter>(content->scale( _factor));
+    }
+
+    template<typename Number, typename Converter>
+    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+        //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
+		if(rhs.normal().nonZeros() == 0) {
+			return std::make_pair(true, *this);
+		}
+
+		bool limiting = false;
+    	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal());
+    	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
+			//std::cout << "Is infeasible (should not happen)." << std::endl;
+			//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
+			assert(Converter::toHPolytope(*this).empty());
+    		return std::make_pair(false, *this);
+    	} else if(planeEvalRes.supportValue > rhs.offset()){
+			//std::cout << "Object will be limited. " << std::endl;
+    		// the actual object will be limited by the new plane
+    		limiting = true;
+			// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+    		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+            if(content->evaluate(-(rhs.normal())).supportValue < -(rhs.offset())){
+				//std::cout << "fullyOutside" << std::endl;
+                // the object lies fully outside one of the planes -> return false
+                return std::make_pair(false, this->intersectHalfspace(rhs) );
+            }
+    	}
+
+    	if(limiting){
+        	return std::make_pair(true, this->intersectHalfspace(rhs));
+    	} else {
+    		return std::make_pair(true, *this);
+    	}
     }
 
     template<typename Number, typename Converter>

@@ -23,14 +23,15 @@
 namespace hypro {
 
 template <typename Number, typename Converter>
-class SupportFunctionT : public GeometricObject<Number> {
+class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter>> {
 private:
 	std::shared_ptr<SupportFunctionContent<Number>> content;
-	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
 
 	mutable matrix_t<Number> mMatrix;
 	mutable vector_t<Number> mVector;
 	mutable bool mTemplateSet = false;
+
+	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
 
 public:
 	SupportFunctionT ();
@@ -76,14 +77,15 @@ public:
 	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
 	SupportFunctionT<Number,Converter> linearTransformation( std::shared_ptr<lintrafoParameters<Number>> parameters ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( const SupportFunctionT<Number,Converter>& _rhs ) const;
-	SupportFunctionT<Number,Converter> intersect( SupportFunctionT<Number,Converter>& _rhs ) const;
+	SupportFunctionT<Number,Converter> intersect( const SupportFunctionT<Number,Converter>& _rhs ) const;
+	SupportFunctionT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hs ) const;
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
 	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = 8 ) const;
 	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
-	//std::pair<bool, SupportFunctionT> satisfiesHalfspace( const vector_t<Number>& normal, const Number& offset ) const;
+	std::pair<bool, SupportFunctionT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool empty() const;
 	void print() const;
