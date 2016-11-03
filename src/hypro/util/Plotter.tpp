@@ -662,7 +662,7 @@ void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) cons
 
 		// reduce and sort objects
 		if(!mOriginalObjects.empty()){
-			// std::cout << "Prepare " << mOriginalObjects.size() << " objects." << std::endl;
+			std::cout << "Prepare " << mOriginalObjects.size() << " objects. Reduce to dimensions " << targetDimensions << std::endl;
 			for(const auto& objPair : mOriginalObjects){
 				vector<Point<Number>> tmp;
 				for(const auto& point : objPair.second)

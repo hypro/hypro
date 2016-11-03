@@ -128,7 +128,7 @@ namespace hypro {
 		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
 			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
-			assert(actualRes.supportValue <= constants(constraintIndex));
+			//assert(actualRes.supportValue <= constants(constraintIndex));
 
 			// remove constraint by removing the boundaries
 			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
