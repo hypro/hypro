@@ -234,7 +234,6 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 
 template <typename Number>
 Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
-	std::cout << __func__ << ": " << _dimensions << std::endl;
 	assert(_dimensions.size() > 0);
 	vector_t<Number> newCoordinates = vector_t<Number>( _dimensions.size() );
 	unsigned tPos = 0;
@@ -244,7 +243,6 @@ Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensio
 		newCoordinates( tPos ) = mCoordinates( sPos );
 		++tPos;
 	}
-	std::cout << "Result: " << newCoordinates << std::endl;
 	return Point<Number>(newCoordinates);
 }
 
