@@ -26,6 +26,7 @@ class Converter {
 
 		using Box = BoxT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter>;
+		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter>;
 		using VPolytope = VPolytopeT<Number,Converter>;
 		using SupportFunction = SupportFunctionT<Number,Converter>;
 		using Zonotope = ZonotopeT<Number,Converter>;
@@ -66,6 +67,9 @@ using Box = typename Converter<Number>::Box;
 
 template<typename Number>
 using HPolytope = typename Converter<Number>::HPolytope;
+
+template<typename Number>
+using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
 
 template<typename Number>
 using VPolytope = typename Converter<Number>::VPolytope;
