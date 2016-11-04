@@ -1,6 +1,3 @@
-#include_directories( ${PROJECT_SOURCE_DIR}/src/lib # in order to have all headers (even not installed ones)
-#)
-
 file(GLOB EXAMPLES RELATIVE ${CMAKE_CURRENT_LIST_DIR} example_*.cpp)
 
 foreach( example ${EXAMPLES} )

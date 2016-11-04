@@ -114,13 +114,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-	if(${STATICLIB_SWITCH} STREQUAL "OFF")
-		set(CMAKE_MACOSX_RPATH 1)
-	endif()
-endif()
-
 if(USE_COTIRE)
 	# We use cotire, simply include it
 	message(STATUS "using cotire")
