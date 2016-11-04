@@ -6,8 +6,8 @@
 
  #include "../src/hypro/util/Plotter.h"
  #include "../src/hypro/datastructures/Halfspace.h"
- #include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
  #include "../src/hypro/representations/volumeApproximation.h"
+ #include "representations/GeometricObject.h"
 
 using namespace hypro;
 
@@ -211,7 +211,7 @@ int main(int argc, char const *argv[])
     prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
     std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
   }
-  std::cout << "size of reduce_from: " << reduce_from.sizeOfHPolytope() << std::endl;
+  //std::cout << "size of reduce_from: " << reduce_from.sizeOfHPolytope() << std::endl;
 
 
   // Reducing
@@ -223,7 +223,7 @@ int main(int argc, char const *argv[])
   std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl << std::endl;
 
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
+  //std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
   // End Reducing
 
 	return 0;

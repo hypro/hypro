@@ -8,7 +8,7 @@
 
  #include "../src/hypro/util/Plotter.h"
  #include "../src/hypro/datastructures/Halfspace.h"
- #include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+ #include "../src/hypro/representations/GeometricObject.h"
  #include "../src/hypro/representations/volumeApproximation.h"
 
 using namespace hypro;
@@ -269,7 +269,7 @@ int main(int argc, char const *argv[])
   prevVolume = approximateVolume<Number, hypro::HPolytope<Number>>(reduce_from);
   std::cout << "volume of reduce_from: " << prevVolume << std::endl << std::endl;
  }
- std::cout << "size of reduce_from: " << reduce_from.sizeOfHPolytope() << " with " << reduce_from.size() << " facets " << std::endl;
+ std::cout << "size of reduce_from: " << reduce_from.sizeOfHPolytopeT() << " with " << reduce_from.size() << " facets " << std::endl;
 
  reduce_from.reduce(1, 0, HPolytope<Number>::REDUCTION_STRATEGY::DROP);
 
@@ -288,7 +288,7 @@ int main(int argc, char const *argv[])
     timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
     std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
     if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-    std::cout << "size of reduction_drop_normal: " << reduction_drop_normal.sizeOfHPolytope() << std::endl;
+    std::cout << "size of reduction_drop_normal: " << reduction_drop_normal.sizeOfHPolytopeT() << std::endl;
 
     std::cout << "drop_smooth"<< std::endl;
     start = clock::now();
@@ -296,7 +296,7 @@ int main(int argc, char const *argv[])
     timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
     std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
     if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_drop_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-    std::cout << "size of reduction_drop_smooth: " << reduction_drop_smooth.sizeOfHPolytope() << std::endl;
+    std::cout << "size of reduction_drop_smooth: " << reduction_drop_smooth.sizeOfHPolytopeT() << std::endl;
 
     std::cout << std::endl;
   //}
@@ -318,7 +318,7 @@ int main(int argc, char const *argv[])
       timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
       std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
       if(volume && reduction_unite_normal.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_normal)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-      std::cout << "size of reduction_unite_normal: " << reduction_unite_normal.sizeOfHPolytope() << std::endl;
+      std::cout << "size of reduction_unite_normal: " << reduction_unite_normal.sizeOfHPolytopeT() << std::endl;
 
       std::cout << "unite_smooth"<< std::endl;
       start = clock::now();
@@ -326,7 +326,7 @@ int main(int argc, char const *argv[])
       timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
       std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction  << std::endl;
       if(volume && reduction_unite_smooth.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_smooth)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-      std::cout << "size of reduction_unite_smooth: " << reduction_unite_smooth.sizeOfHPolytope() << std::endl;
+      std::cout << "size of reduction_unite_smooth: " << reduction_unite_smooth.sizeOfHPolytopeT() << std::endl;
 
       std::cout << "unite_cut"<< std::endl;
       start = clock::now();
@@ -334,7 +334,7 @@ int main(int argc, char const *argv[])
       timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
       std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
       if(volume && reduction_unite_cut.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_cut)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-      std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytope() << std::endl;
+      std::cout << "size of reduction_unite_cut: " << reduction_unite_cut.sizeOfHPolytopeT() << std::endl;
 
       std::cout << "unite_norm"<< std::endl;
       start = clock::now();
@@ -342,7 +342,7 @@ int main(int argc, char const *argv[])
       timeOfReachReduction = (double) std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
       std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl;
       if(volume && reduction_unite_norm.size()<reduce_from.size()) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_unite_norm)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-      std::cout << "size of reduction_unite_norm: " << reduction_unite_norm.sizeOfHPolytope() << std::endl;
+      std::cout << "size of reduction_unite_norm: " << reduction_unite_norm.sizeOfHPolytopeT() << std::endl;
 
       std::cout << std::endl;
     }
@@ -373,17 +373,17 @@ int main(int argc, char const *argv[])
   reduction_directed_small = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_SMALL);
   std::cout << "directed_small"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_small)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  std::cout << "size of reduction_directed_small: " << reduction_directed_small.sizeOfHPolytope() << std::endl;
+  std::cout << "size of reduction_directed_small: " << reduction_directed_small.sizeOfHPolytopeT() << std::endl;
 
   reduction_directed_big = reduce_from.reduce_directed(directions, HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_BIG);
   std::cout << "directed_big"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_big)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytope() << std::endl;
+  std::cout << "size of reduction_directed_big: " << reduction_directed_big.sizeOfHPolytopeT() << std::endl;
 
   reduction_directed_template = reduce_from.reduce_directed(computeTemplate<Number>(dimension, 5), HPolytope<Number>::REDUCTION_STRATEGY::DIRECTED_TEMPLATE);
   std::cout << "directed_template"<< std::endl;
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction_directed_template)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytope() << std::endl;
+  std::cout << "size of reduction_directed_template: " << reduction_directed_template.sizeOfHPolytopeT() << std::endl;
 
   std::cout << std::endl;
 
@@ -395,7 +395,7 @@ int main(int argc, char const *argv[])
   std::cout << "Total time for reduction(HYPRO): " << timeOfReachReduction << std::endl << std::endl;
 
   if(volume) std::cout << "   +" << ((approximateVolume<Number, hypro::HPolytope<Number>>(reduction)-prevVolume)/prevVolume)*100 << "%" << std::endl;
-  std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytope() << std::endl;
+  std::cout << "size of reduction_drop_normal: " << reduction.sizeOfHPolytopeT() << std::endl;
   // End Reducing
 
 	return 0;

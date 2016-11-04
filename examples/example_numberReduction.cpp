@@ -5,15 +5,15 @@
  *
  */
 
- #include "../src/hypro/util/Plotter.h"
- #include "../src/hypro/datastructures/Halfspace.h"
- #include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+ #include "util/Plotter.h"
+ #include "datastructures/Halfspace.h"
+ #include "representations/GeometricObject.h"
 
 using namespace hypro;
 
 int main(int argc, char const *argv[])
 {
-	typedef carl::FLOAT_T<mpq_class> Number;
+	typedef mpq_class Number;
 
 	HPolytope<Number> box;
 	box.insert(Halfspace<Number>({1,0},1));
@@ -31,13 +31,13 @@ int main(int argc, char const *argv[])
 	vector_t<Number> b = vector_t<Number>(2);
 	b << 5,0;
 
-	box.removeRedundantPlanes();
+	box.removeRedundancy();
 
 	std::cout << "End removeRedundantPlanes" << std::endl;
 
-	HPolytope<Number> boxTrafoed = box.linearTransformation(A,b);
-	boxTrafoed = boxTrafoed.linearTransformation(A,b);
-	boxTrafoed = boxTrafoed.linearTransformation(A,b);
+	HPolytope<Number> boxTrafoed = box.affineTransformation(A,b);
+	boxTrafoed = boxTrafoed.affineTransformation(A,b);
+	boxTrafoed = boxTrafoed.affineTransformation(A,b);
 	std::cout << boxTrafoed << std::endl;
 
 	HPolytope<Number> boxReduced = boxTrafoed;

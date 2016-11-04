@@ -5,21 +5,19 @@
  * Created on April 18, 2016, 3:39 PM
  */
 
-#include "../src/hypro/representations/Box/Box.h"
 #include <cstdlib>
 #include "../src/hypro/config.h"
 #include <chrono>
 #include <set>
-#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../src/hypro/util/helperFunctions.h"
-#include "../src/hypro/representations/conversion/Converter.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
 using namespace carl;
 
 int main(int argc, char const *argv[])
 {
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
         typedef std::chrono::high_resolution_clock clock;
         typedef std::chrono::microseconds timeunit;
         const int runs = 50;

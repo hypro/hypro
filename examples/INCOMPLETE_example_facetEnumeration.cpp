@@ -2,8 +2,8 @@
  * A simple example file to test the vertex enumeration algorithm.
  */
 
-#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
-#include "../src/hypro/util/vertexEnumeration.h"
+#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/algorithms/convexHull/vertexEnumeration.h"
 
 int main(int argc, char** argv) {
 	typedef carl::FLOAT_T<cln::cl_RA> Number;

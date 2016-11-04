@@ -230,8 +230,8 @@ namespace hypro {
 	HPolytopeT<Number,Converter> hpolytope = *this;
 
 	for(vector_t<Number> evaluation: evaluations){
-		std::pair<Number, SOLUTION> evaluation_result = hpolytope.evaluate(evaluation);
-		if(evaluation_result.second == INFTY){
+		EvaluationResult<Number> evaluation_result = hpolytope.evaluate(evaluation);
+		if(evaluation_result.errorCode == INFTY){
 			return false;
 		}
 	}

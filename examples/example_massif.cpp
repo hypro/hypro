@@ -5,7 +5,7 @@
  */
 
  #include "../src/hypro/datastructures/Halfspace.h"
- #include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+ #include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
 
@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
     test_massif.insert(Halfspace<Number>(direction, 1));
   }
 
-  double sizeOfHPolytope = test_massif.sizeOfHPolytope();
+  double sizeOfHPolytope = test_massif.sizeOfHPolytopeT();
   double size = test_massif.size();
 
   std::cout << "Size of test_massif before reduction is " << sizeOfHPolytope << " and amount of facets is " << size << std::endl;

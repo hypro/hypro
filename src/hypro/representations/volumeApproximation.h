@@ -16,7 +16,7 @@ namespace hypro {
 		unsigned dimension = vertices[0].dimension();
 		std::vector<std::pair<Number,Number>> bounderies;
 		std::vector<bool> count_help;
-		std::vector<Number> count_point;
+		vector_t<Number> count_point = vector_t<Number>::Zero(dimension);
 		std::vector<Number> resolution;
 		bool running=true;
 		Number volumeUnit=1;
@@ -28,7 +28,6 @@ namespace hypro {
 		for(unsigned i = 0; i<dimension; i++){
 			bounderies.push_back(std::pair<Number,Number>(0,0));
 			count_help.push_back(false);
-			count_point.push_back(0);
 			resolution.push_back(0);
 		}
 
@@ -51,24 +50,24 @@ namespace hypro {
 			if(!carl::AlmostEqual2sComplement(resolution[i]+(Number)1,(Number) 1)){
 				volumeUnit*=resolution[i];
 			}
-			count_point[i]=bounderies[i].first;
+			count_point(i)=bounderies[i].first;
 	}
 
 		// Create a grid from bounderies and decide (count) for each point if _in contains it - recursive?
 		while(running){
 			for(unsigned i=0; i<dimension; i++){
 				if(i==0 || count_help[i]){
-						count_point[i]+=resolution[i];
+						count_point(i)+=resolution[i];
 						count_help[i]=false;
-						if(count_point[i]>bounderies[i].second && i<dimension-1){
-							count_point[i]=bounderies[i].first;
+						if(count_point(i)>bounderies[i].second && i<dimension-1){
+							count_point(i)=bounderies[i].first;
 							count_help[i+1]=true;
-						} else if(count_point[i]>bounderies[i].second && i==dimension-1){
+						} else if(count_point(i)>bounderies[i].second && i==dimension-1){
 							running=false;
 						}
 				}
 			}
-			if(_in.contains(count_point)){
+			if(_in.contains(Point<Number>(count_point))){
 				pointCount+=volumeUnit;
 			}
 		}

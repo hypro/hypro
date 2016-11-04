@@ -8,53 +8,53 @@
  * @version	2015-03-01
  */
 
-#include "../src/hypro/config.h"
-#include "../src/hypro/util/Plotter.h"
-#include "../src/hypro/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
+#include "config.h"
+#include "util/Plotter.h"
+#include "representations/GeometricObject.h"
 
 using namespace hypro;
 using namespace carl;
 
 int main(int argc, char** argv) {
 
-	VertexContainer<FLOAT_T<double>> container;
-	container.insert(Point<FLOAT_T<double>>({3,0}), true);
-	container.insert(Point<FLOAT_T<double>>({5,0}), false);
-	container.insert(Point<FLOAT_T<double>>({5,2}), true);
-	container.insert(Point<FLOAT_T<double>>({7,2}), true);
-	container.insert(Point<FLOAT_T<double>>({7,0}), true);
-	container.insert(Point<FLOAT_T<double>>({9,0}), false);
-	container.insert(Point<FLOAT_T<double>>({9,2}), true);
-	container.insert(Point<FLOAT_T<double>>({11,2}), false);
-	container.insert(Point<FLOAT_T<double>>({11,4}), false);
-	container.insert(Point<FLOAT_T<double>>({9,4}), false);
-	container.insert(Point<FLOAT_T<double>>({9,7}), false);
-	container.insert(Point<FLOAT_T<double>>({7,6}), true);
-	container.insert(Point<FLOAT_T<double>>({7,4}), true);
-	container.insert(Point<FLOAT_T<double>>({5,4}), false);
-	container.insert(Point<FLOAT_T<double>>({5,6}), true);
-	container.insert(Point<FLOAT_T<double>>({3,7}), false);
+	VertexContainer<double> container;
+	container.insert(Point<double>({3,0}), true);
+	container.insert(Point<double>({5,0}), false);
+	container.insert(Point<double>({5,2}), true);
+	container.insert(Point<double>({7,2}), true);
+	container.insert(Point<double>({7,0}), true);
+	container.insert(Point<double>({9,0}), false);
+	container.insert(Point<double>({9,2}), true);
+	container.insert(Point<double>({11,2}), false);
+	container.insert(Point<double>({11,4}), false);
+	container.insert(Point<double>({9,4}), false);
+	container.insert(Point<double>({9,7}), false);
+	container.insert(Point<double>({7,6}), true);
+	container.insert(Point<double>({7,4}), true);
+	container.insert(Point<double>({5,4}), false);
+	container.insert(Point<double>({5,6}), true);
+	container.insert(Point<double>({3,7}), false);
 
-	// container.insert(Point<FLOAT_T<double>>({2,0}), true);
-	// container.insert(Point<FLOAT_T<double>>({6,0}), false);
-	// container.insert(Point<FLOAT_T<double>>({2,6}), false);
-	// container.insert(Point<FLOAT_T<double>>({6,6}), false);
+	// container.insert(Point<double>({2,0}), true);
+	// container.insert(Point<double>({6,0}), false);
+	// container.insert(Point<double>({2,6}), false);
+	// container.insert(Point<double>({6,6}), false);
 
-	VertexContainer<FLOAT_T<double>> container2;
-	container2.insert(Point<FLOAT_T<double>>({4,2}), true);
-	container2.insert(Point<FLOAT_T<double>>({4,8}), false);
-	container2.insert(Point<FLOAT_T<double>>({8,2}), false);
-	container2.insert(Point<FLOAT_T<double>>({8,8}), false);
+	VertexContainer<double> container2;
+	container2.insert(Point<double>({4,2}), true);
+	container2.insert(Point<double>({4,8}), false);
+	container2.insert(Point<double>({8,2}), false);
+	container2.insert(Point<double>({8,8}), false);
 
-	OrthogonalPolyhedron<FLOAT_T<double>> test(container);
-	OrthogonalPolyhedron<FLOAT_T<double>> test2(container2);
+	OrthogonalPolyhedron<double, Converter<double>> test(container);
+	OrthogonalPolyhedron<double, Converter<double>> test2(container2);
 
 	// std::cout << "Color Test:" << std::endl;
-	// Point<FLOAT_T<double>> p1({6,4});
-	// Point<FLOAT_T<double>> p2({2,4});
-	// Point<FLOAT_T<double>> p3({4,6});
-	// Point<FLOAT_T<double>> p4({4,2});
-	// Point<FLOAT_T<double>> p5({5.9,4});
+	// Point<double> p1({6,4});
+	// Point<double> p2({2,4});
+	// Point<double> p3({4,6});
+	// Point<double> p4({4,2});
+	// Point<double> p5({5.9,4});
 	// assert(test.contains(p1));
 	// assert(test.contains(p2));
 	// assert(test.contains(p3));
@@ -62,13 +62,13 @@ int main(int argc, char** argv) {
 	// assert(test.contains(p5));
 	// std::cout << "Color Test End." << std::endl;
 
-	std::vector<Point<FLOAT_T<double>>> neighborhood = test.neighborhood(Point<FLOAT_T<double>>({20,40}));
+	std::vector<Point<double>> neighborhood = test.neighborhood(Point<double>({20,40}));
 	std::cout << "neighborhood: " << std::endl;
 	for(const auto& point : neighborhood) {
 		std::cout << point << std::endl;
 	}
 
-	std::vector<Point<FLOAT_T<double>>> islice = test.iSlice(0,2);
+	std::vector<Point<double>> islice = test.iSlice(0,2);
 	std::cout << "0-3-slice: " << std::endl;
 	for(const auto& point : islice) {
 		std::cout << point << std::endl;
@@ -76,22 +76,23 @@ int main(int argc, char** argv) {
 
 	// plot
 	std::cout << "Plotting." << std::endl;
-	hypro::Plotter<FLOAT_T<double>>& plotter = hypro::Plotter<FLOAT_T<double>>::getInstance();
+	hypro::Plotter<double>& plotter = hypro::Plotter<double>::getInstance();
 	plotter.setFilename("ortho");
 	gnuplotSettings settings;
 	settings.fill = true;
 	plotter.updateSettings(settings);
 
-	// OrthogonalPolyhedron<FLOAT_T<double>> united = test.unite(test2);
+	// OrthogonalPolyhedron<double> united = test.unite(test2);
 	// for(const auto& vertex : united.vertices()) {
 	// 	std::cout << vertex << std::endl;
 	// }
 
-	OrthogonalPolyhedron<FLOAT_T<double>> intersection = test.intersect(test2);
+	OrthogonalPolyhedron<double, Converter<double>> intersection = test.intersect(test2);
 	for(const auto& vertex : intersection.vertices()) {
 		std::cout << vertex << std::endl;
 	}
 
+	/* TODO: Fix plotter to allow direct object adding.
 	//unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
 	unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
 	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
@@ -101,6 +102,6 @@ int main(int argc, char** argv) {
 	//plotter.setObjectColor(unionObject, colors[orange]);
 
 	plotter.plot2d();
-
+	*/
 	return 0;
 }

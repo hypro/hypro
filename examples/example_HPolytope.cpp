@@ -1,6 +1,6 @@
 #include "../src/hypro/util/convexHull.h"
 #include "../src/hypro/config.h"
-#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
+#include "../src/hypro/representations/GeometricObject.h"
 #include "../src/hypro/representations/Polytope/Polytope.h"
 
 #include <iostream>

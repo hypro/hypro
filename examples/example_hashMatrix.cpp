@@ -13,12 +13,11 @@
 
 #include "../src/hypro/config.h"
 #include "../src/hypro/util/Plotter.h"
-#include "../src/hypro/representations/Zonotope/Zonotope.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
-using namespace carl;
 
-typedef int Number;
+typedef double Number;
 
 int main(int argc, char** argv)
 {
@@ -67,7 +66,7 @@ int main(int argc, char** argv)
 
     zonoExample.uniteEqualVectors();
 
-    results << "Number of Generators: " << zonoExample.numGenerators() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
+    results << "Number of Generators: " << zonoExample.generators().size() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
 
     //struct timeval t1, t2;
     //double elapsedTime;
@@ -75,7 +74,7 @@ int main(int argc, char** argv)
     // start timer
     //gettimeofday(&t1, NULL);
 
-    results << "Corners:\n" << zonoExample.corners() << "\n\n\n"; // Here we unite equal vectors (for optimization), and calculate (recursive) the corners!!
+    results << "Corners:\n" << zonoExample.vertices() << "\n\n\n"; // Here we unite equal vectors (for optimization), and calculate (recursive) the corners!!
 
     // stop timer
     //gettimeofday(&t2, NULL);

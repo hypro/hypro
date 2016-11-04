@@ -1,5 +1,5 @@
 #include "../src/hypro/util/Plotter.h"
-#include "../src/hypro/representations/Converter.h"
+#include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
 
@@ -11,10 +11,9 @@ int main(int argc, char** argv) {
 		0,-1,
 	distances2 << 1,1,0;
 
-	std::shared_ptr<SupportFunctionContent<double>> poly2 = SupportFunctionContent<double>::create(SF_TYPE::POLY, matrix2, distances2);
+	SupportFunction<double> poly2 = SupportFunction<double>(matrix2, distances2);
 
-	hypro::Box<double> res;
-	convert(poly2, res);
+	hypro::Box<double> res = Converter<double>::toBox(poly2);
 
 	std::cout << res << std::endl;
 
@@ -31,13 +30,13 @@ int main(int argc, char** argv) {
 	p4(0) = 1;
 	p4(1) = 4;
 	std::vector<hypro::Point<double>> points;
-	points.push_back(p1);
-	points.push_back(p2);
-	points.push_back(p3);
-	points.push_back(p4);
+	points.emplace_back(p1);
+	points.emplace_back(p2);
+	points.emplace_back(p3);
+	points.emplace_back(p4);
 
 	VPolytope<double> poly1 = VPolytope<double>(points);
-	convert(poly1,res);
+	res = Converter<double>::toBox(poly1);
 
 	std::cout << res << std::endl;
 
@@ -49,19 +48,5 @@ int main(int argc, char** argv) {
 
 	Zonotope<double> zono1 = Zonotope<double>(center, generators);
 
-	convert(zono1,res);
-
-	std::cout << res << std::endl;
-
-	std::vector<vector_t<double>> coordinates;
-	coordinates.push_back(p1);
-	coordinates.push_back(p2);
-	coordinates.push_back(p3);
-	coordinates.push_back(p4);
-
-	hypro::Polytope<double> poly3(coordinates);
-
-	convert(poly3,res);
-
-	std::cout << res << std::endl;
+	res = Converter<double>::toBox(zono1);
 }

@@ -1,9 +1,8 @@
-#include "../src/hypro/representations/Box/Box.h"
+#include "../src/hypro/representations/GeometricObject.h"
 #include <cstdlib>
 #include "../src/hypro/config.h"
 #include <chrono>
 #include <set>
-#include "../src/hypro/representations/Polytopes/HPolytope/HPolytope.h"
 #include "../src/hypro/util/helperFunctions.h"
 #include "../src/hypro/representations/conversion/Converter.h"
 #include "../src/hypro/util/Plotter.h"
@@ -13,7 +12,7 @@ using namespace carl;
 
 int main(int argc, char const *argv[])
 {
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
         typedef std::chrono::high_resolution_clock clock;
         typedef std::chrono::microseconds timeunit;
         const int runs = 1;
@@ -244,7 +243,7 @@ int main(int argc, char const *argv[])
 
                 std::cout << "#######################" << std::endl;
 
-                result9 = Converter<Number>::toHPolytope(support, OVER, 8);
+                result9 = Converter<Number>::toHPolytope(support);
 
                 std::cout << "#######################" << std::endl;
 

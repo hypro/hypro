@@ -299,7 +299,7 @@ private:
 				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
 				return items;
 			}
-			case SF_TYPE::UNION: {
+			case SF_TYPE::UNITE: {
 				//std::cout << "Current: union" << std::endl;
 				std::vector<SF_TYPE> lhsItems = mUnionParameters->lhs->collectLevelEntries(level-1);
 				std::vector<SF_TYPE> rhsItems = mUnionParameters->rhs->collectLevelEntries(level-1);
@@ -375,8 +375,8 @@ private:
 					transitionType.push_back(2);
 					break;
 				}
-				case SF_TYPE::UNION: {
-					level += "UNION" + separator + "     " + separator;
+				case SF_TYPE::UNITE: {
+					level += "UNITE" + separator + "     " + separator;
 					transitionType.push_back(2);
 					break;
 				}

@@ -6,6 +6,7 @@
 
 #include "util.h"
 #include "representations/Box/Box.h"
+#include "representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 #include "representations/Polytopes/HPolytope/HPolytope.h"
 #include "representations/Polytopes/VPolytope/VPolytope.h"
 #include "representations/SupportFunction/SupportFunction.h"

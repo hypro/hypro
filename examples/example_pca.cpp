@@ -6,11 +6,10 @@
  * Created on April 20, 2016, 3:43 PM
  */
 
-#include "../src/hypro/representations/Box/Box.h"
+#include "../src/hypro/representations/GeometricObject.h"
 #include <cstdlib>
 #include "../src/hypro/config.h"
 #include <chrono>
-#include <mpfr.h>
 #include <set>
 #include "../src/hypro/util/helperFunctions.h"
 
@@ -22,7 +21,7 @@ using namespace carl;
 
 int main(int argc, char const *argv[])
 {
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
         typedef std::chrono::high_resolution_clock clock;
         typedef std::chrono::microseconds timeunit;
         const int runs = 50;

@@ -49,7 +49,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 			mSummands = _orig.summands();
 			break;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			mUnionParameters = _orig.unionParameters();
 			break;
 		}
@@ -158,9 +158,9 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			mUnionParameters = new unionContent<Number>( _lhs, _rhs );
-			mType = SF_TYPE::UNION;
+			mType = SF_TYPE::UNITE;
 			mDimension = _lhs->dimension();
 			if (_rhs->depth() > _lhs->depth()){
 				mDepth = _rhs->depth();
@@ -259,7 +259,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::SUM:
 			delete mSummands;
 			break;
-		case SF_TYPE::UNION:
+		case SF_TYPE::UNITE:
 			delete mUnionParameters;
 			break;
 		case SF_TYPE::INTERSECT:
@@ -304,7 +304,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 		case SF_TYPE::SUM:
 			mSummands = _other->summands();
 			break;
-		case SF_TYPE::UNION:
+		case SF_TYPE::UNITE:
 			mUnionParameters = _other->unionParameters();
 			break;
 		case SF_TYPE::INTERSECT:
@@ -376,7 +376,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			resA.supportValue += resB.supportValue;
 			return resA;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction );
 			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction );
 			if(resA.errorCode == SOLUTION::INFTY || resB.errorCode == SOLUTION::INFTY){
@@ -507,7 +507,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			assert( res.size() == std::size_t(_directions.rows()));
 			return ( res );
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			std::vector<EvaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions );
 			std::vector<EvaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions );
 			assert( resA.size() == std::size_t(_directions.rows()));
@@ -632,7 +632,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
         case SF_TYPE::SUM: {
             return (mSummands->lhs.get()->multiplicationsPerEvaluation() + mSummands->rhs.get()->multiplicationsPerEvaluation());
         }
-        case SF_TYPE::UNION: {
+        case SF_TYPE::UNITE: {
             return (mUnionParameters->rhs.get()->multiplicationsPerEvaluation() + mUnionParameters->lhs.get()->multiplicationsPerEvaluation());
         }
         default:
@@ -671,7 +671,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
 			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
 			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
-        case SF_TYPE::UNION: {
+        case SF_TYPE::UNITE: {
             mUnionParameters->rhs.get()->forceLinTransReduction();
             mUnionParameters->lhs.get()->forceLinTransReduction();
 			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
@@ -745,7 +745,7 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 			}
 			return lhsPoint+rhsPoint;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			Point<Number> lhsPoint = mUnionParameters->lhs->supremumPoint();
 			Point<Number> rhsPoint = mUnionParameters->rhs->supremumPoint();
 			if(lhsPoint.dimension() == 0) {
@@ -828,7 +828,7 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 			}
 			return res;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			std::list<unsigned> lhsProjections = mUnionParameters->lhs->collectProjections();
 			std::list<unsigned> rhsProjections = mUnionParameters->rhs->collectProjections();
 			std::list<unsigned> res;
@@ -892,7 +892,7 @@ scaleContent<Number> *SupportFunctionContent<Number>::scaleParameters() const {
 
 template <typename Number>
 unionContent<Number> *SupportFunctionContent<Number>::unionParameters() const {
-	assert( mType == SF_TYPE::UNION);
+	assert( mType == SF_TYPE::UNITE);
 	return mUnionParameters;
 }
 
@@ -996,7 +996,7 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 			assert(false);
 			return false;
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			return (mUnionParameters->rhs->contains(_point) || mUnionParameters->lhs->contains(_point));
 		}
 		case SF_TYPE::INTERSECT: {
@@ -1013,7 +1013,7 @@ template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite(
 	  std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
-		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::UNION ) );
+		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::UNITE ) );
 	obj->pThis = obj;
 	return obj;
 }
@@ -1057,7 +1057,7 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::SUM: {
 			return ( mSummands->lhs->empty() && mSummands->rhs->empty() );
 		}
-		case SF_TYPE::UNION: {
+		case SF_TYPE::UNITE: {
 			return ( mUnionParameters->lhs->empty() && mUnionParameters->rhs->empty() );
 		}
 		case SF_TYPE::INTERSECT: {
@@ -1113,8 +1113,8 @@ void SupportFunctionContent<Number>::print() const {
 			std::cout << "and" << std::endl;
 			mSummands->lhs->print();
 		} break;
-		case SF_TYPE::UNION: {
-			std::cout << "UNION" << std::endl;
+		case SF_TYPE::UNITE: {
+			std::cout << "UNITE" << std::endl;
 		} break;
 		case SF_TYPE::INTERSECT: {
 			std::cout << "INTERSECTION " << std::endl;

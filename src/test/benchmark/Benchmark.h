@@ -1,9 +1,9 @@
 /**
  * File that holds the implementation of a benchmark, which consists of a set of benchmarks, an executor and some additional information.
  * @file Benchmark.h
- * 
+ *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since 	2015-03-19
  * @version 	2015-03-19
  */
@@ -39,7 +39,7 @@ namespace hypro {
 		polymake::Main mPolyMain;
 		#endif
 	public:
-		Benchmark(BenchmarkSetup<Number> _setup) : 
+		Benchmark(BenchmarkSetup<Number> _setup) :
 			mGenerator(_setup),
 			mResults(),
 			mExecutor(),
@@ -70,4 +70,4 @@ namespace hypro {
 
 } // namespace
 
- 
+

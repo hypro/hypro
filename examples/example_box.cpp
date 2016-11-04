@@ -5,7 +5,7 @@
 
 int main(int argc, char const *argv[])
 {
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
 	hypro::matrix_t<Number> A = hypro::matrix_t<Number>::Zero(3,3);
 	A(0,0) = 1;
 	A(1,1) = carl::convert<double,Number>(carl::cos(45));
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
 
 	std::cout << testbox << std::endl;
 
-	hypro::Box<Number> res = testbox.linearTransformation(A,b);
+	hypro::Box<Number> res = testbox.affineTransformation(A,b);
 
 	std::cout << res << std::endl;
 

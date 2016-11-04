@@ -328,7 +328,7 @@ std::vector<Point<Number>> Grid<Number>::iSlice( unsigned i, Number pos ) const 
 
 	if ( inducedPos > 0 ) --inducedPos;
 
-	std::vector<Point<unsigned>> tmp = iSliceInduced( i, inducedPos );
+	std::vector<Point<unsigned>> tmp = iSliceInduced( i );
 	std::vector<Point<Number>> res;
 	for ( const auto &p : tmp ) res.emplace_back( calculateOriginal( p ) );
 

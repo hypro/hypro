@@ -3,7 +3,7 @@
 #include "../hypro/datastructures/hybridAutomata/Transition.h"
 #include "../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
 #include "../hypro/datastructures/Point.h"
-#include "../hypro/representations/conversion/Converter.h"
+#include "../hypro/representations/GeometricObject.h"
 #include "../hypro/algorithms/reachability/Reach.h"
 #include "../hypro/util/Plotter.h"
 
@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 	using namespace hypro;
 	using namespace carl;
 
-	typedef cln::cl_RA Number;
+	typedef mpq_class Number;
 	//carl::FLOAT_T<double>::setDefaultPrecision(FLOAT_PRECISION);
 	//std::cout << "Set precision to " << carl::FLOAT_T<double>::defaultPrecision() << std::endl;
 	typedef hypro::HPolytope<Number> Representation;
@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
 	//Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 	Location<Number>* loc1 = lManager.create();
 	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
-	HybridAutomaton<Number, Representation> hybrid = HybridAutomaton<Number, Representation>();
+	HybridAutomaton<Number> hybrid = HybridAutomaton<Number>();
 
 	//Other Objects: Vectors, Matrices, Guards...
 
@@ -55,7 +55,6 @@ int main(int argc, char const *argv[])
 
 	//vector_t<Number> invariantVec = vector_t<Number>(6,1);
 	vector_t<Number> invariantVec = vector_t<Number>(4,1);
-	operator_e invariantOp;
 	//matrix_t<Number> invariantMat = matrix_t<Number>(6,3);
 	matrix_t<Number> invariantMat = matrix_t<Number>(4,2);
 	struct Location<Number>::Invariant inv;
@@ -67,8 +66,6 @@ int main(int argc, char const *argv[])
 	//invariantVec(4) = 1;
 	//invariantVec(5) = 1;
 
-	invariantOp = LEQ;
-
 	invariantMat(0,0) = Number(1);
 	invariantMat(0,1) = Number(0);
 	invariantMat(1,0) = Number(-1);
@@ -79,15 +76,10 @@ int main(int argc, char const *argv[])
 	invariantMat(3,1) = Number(-1);
 
 
-	loc1->setInvariant(invariantMat,invariantVec,invariantOp);
+	loc1->setInvariant(invariantMat,invariantVec);
 
-	inv.op = invariantOp;
 	inv.mat = invariantMat;
 	inv.vec = invariantVec;
-
-        /*locationMat << Number(0), Number(1), Number(0)
-         *               Number(0), Number(0), Number(-9.81)
-                         Number(0), Number(0), Number(0); */
 
 	locationMat(0,0) = Number(0);
 	locationMat(0,1) = Number(1);
@@ -100,21 +92,18 @@ int main(int argc, char const *argv[])
 	locationMat(2,2) = Number(0);
 
 
-	loc1->setActivityMat(locationMat);
+	loc1->setFlow(locationMat);
 
 	/*
 	 * Transition
 	 */
 
 	vector_t<Number> guardVec = vector_t<Number>(3,1);
-	operator_e guardOp;
 	matrix_t<Number> guardMat = matrix_t<Number>(3,2);
 
 	guardVec(0) = Number(0);
 	guardVec(1) = Number(carl::rationalize<Number>(0.1));
 	guardVec(2) = Number(0);
-
-	guardOp = LEQ;
 
 	guardMat(0,0) = Number(1);
 	guardMat(0,1) = Number(0);
@@ -123,8 +112,6 @@ int main(int argc, char const *argv[])
 	guardMat(2,0) = Number(0);
 	guardMat(2,1) = Number(1);
 
-
-	guard.op = guardOp;
 	guard.mat = guardMat;
 	guard.vec = guardVec;
 
@@ -139,8 +126,8 @@ int main(int argc, char const *argv[])
 	assignMat(1,0) = Number(0);
 	assignMat(1,1) = Number(carl::rationalize<Number>(-0.9));
 
-	reset.translationVec = assignVec;
-	reset.transformMat = assignMat;
+	reset.vec = assignVec;
+	reset.mat = assignMat;
 
 	trans->setGuard(guard);
 	trans->setSource(loc1);
@@ -154,12 +141,7 @@ int main(int argc, char const *argv[])
 
 	locSet = std::set<hypro::Location<Number>*>(locations, locations+1);
 
-	init[0] = loc1;
-
-	initLocSet = std::set<hypro::Location<Number>*>(init, init+1);
-
 	hybrid.setLocations(locSet);
-	hybrid.setInitialLocations(initLocSet);
 
 	transition[0] = trans;
 
@@ -187,20 +169,24 @@ int main(int argc, char const *argv[])
 
 	Representation poly(boxMat,boxVec);
 
-	hybrid.setInitialValuation(poly);
+	RawState<Number> initialState;
+	initialState.location = loc1;
+	initialState.set = std::make_pair(boxMat, boxVec);
+
+	hybrid.addInitialState(initialState);
 
 	std::vector<std::vector<Representation>> flowpipes;
 
 	hypro::reachability::Reach<Number, Representation> reacher(hybrid);
-	std::set<std::size_t> flowpipeIndices = reacher.computeForwardReachability();
+	std::vector<std::pair<unsigned, reachability::flowpipe_t<Representation>>> flowpipeIndices = reacher.computeForwardReachability();
 
 	std::cout << "Generated " << flowpipeIndices.size() << " flowpipe(s), start plotting." << std::endl;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("out");
 
-	for(auto& index : flowpipeIndices){
-		std::vector<Representation> flowpipe = reacher.getFlowpipe(index);
+	for(auto& indexPair : flowpipeIndices){
+		std::vector<Representation> flowpipe = indexPair.second;
 
 		// Plot flowpipe
 		unsigned count = 1;
@@ -219,7 +205,7 @@ int main(int argc, char const *argv[])
 					//std::cout << point << std::endl;
 				}
 				plotter.addObject(points);
-				std::cout << "\r Flowpipe "<< index <<": Added object " << count << "/" << maxCount << std::flush;
+				std::cout << "\r Flowpipe "<< indexPair.first <<": Added object " << count << "/" << maxCount << std::flush;
 				points.clear();
 				++count;
 			}
