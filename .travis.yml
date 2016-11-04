@@ -40,17 +40,23 @@ addons:
 
 matrix:
   include:
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: COMPILER=g++-4.9
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: COMPILER=g++-5
-    - compiler: gcc
+    - os: linux
+      compiler: gcc
       env: COMPILER=g++-6
-    - compiler: clang
+    - os: linux
+      compiler: clang
       env: COMPILER=clang++-3.6
-    - compiler: clang
+    - os: linux
+      compiler: clang
       env: COMPILER=clang++-3.7
-    - compiler: clang
+    - os: linux
+      compiler: clang
       env: COMPILER=clang++-3.8
 
 before_install:
