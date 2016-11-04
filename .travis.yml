@@ -26,7 +26,7 @@ sources:
   - llvm-toolchain-precise-3.6
   - llvm-toolchain-precise-3.7
   - llvm-toolchain-precise-3.8
-  - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main' key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+  #- sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main' key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
 
 matrix:
   include:
