@@ -28,43 +28,30 @@ sources:
   - llvm-toolchain-precise-3.8
   #- sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main' key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
 
+addons:
+  apt:
+    packages:
+      - g++-4.9
+      - g++-5
+      - g++-6
+      - g++-4.9
+      - clang-3.6
+      - clang-3.7
+      - clang-3.8
+
 matrix:
   include:
     - compiler: gcc
-      addons:
-        apt:
-          packages:
-            - g++-4.9
       env: COMPILER=g++-4.9
     - compiler: gcc
-      addons:
-        apt:
-          packages:
-            - g++-5
       env: COMPILER=g++-5
     - compiler: gcc
-      addons:
-        apt:
-          packages:
-            - g++-6
       env: COMPILER=g++-6
     - compiler: clang
-      addons:
-        apt:
-          packages:
-            - clang-3.6
       env: COMPILER=clang++-3.6
     - compiler: clang
-      addons:
-        apt:
-          packages:
-            - clang-3.7
       env: COMPILER=clang++-3.7
     - compiler: clang
-      addons:
-        apt:
-          packages:
-            - clang-3.8
       env: COMPILER=clang++-3.8
 
 before_install:
