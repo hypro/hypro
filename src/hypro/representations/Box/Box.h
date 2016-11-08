@@ -18,6 +18,7 @@
 #include "datastructures/Point.h"
 #include "util/Permutator.h"
 #include "util/linearOptimization/Optimizer.h"
+#include "util/logging/Logger.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>

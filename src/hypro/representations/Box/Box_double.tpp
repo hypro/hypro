@@ -29,7 +29,7 @@ namespace hypro {
 	template<typename Converter>
 	BoxT<double,Converter>::BoxT( const matrix_t<double>& _constraints, const vector_t<double>& _constants )
 	{
-		std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
+		//std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
 		assert(_constraints.rows() == _constants.rows());
@@ -63,7 +63,7 @@ namespace hypro {
 
 		// check if vertices are true vertices (i.e. they fulfill all constraints)
 		for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
-			std::cout  << "Refinement: Consider vertex : " << convert<double,double>(*vertex).transpose() << std::endl;
+			//std::cout  << "Refinement: Consider vertex : " << convert<double,double>(*vertex).transpose() << std::endl;
 			// possibleVertices.size() << std::endl;
 			bool deleted = false;
 			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
@@ -71,8 +71,8 @@ namespace hypro {
 				if ( !carl::AlmostEqual2sComplement(res, _constants( rowIndex ), 128) && res > _constants( rowIndex ) ) {
 					vertex = possibleVertices.erase( vertex );
 					deleted = true;
-					std::cout << "Deleted because of row " << convert<double,double>(vector_t<double>(_constraints.row(rowIndex))) << std::endl;
-					std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
+					//std::cout << "Deleted because of row " << convert<double,double>(vector_t<double>(_constraints.row(rowIndex))) << std::endl;
+					//std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
 					break;
 				}
 			}
@@ -80,7 +80,7 @@ namespace hypro {
 				++vertex;
 			}
 		}
-		std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+		//std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 		// finish initialization
 		if(possibleVertices.empty()) {
 			assert(false);
