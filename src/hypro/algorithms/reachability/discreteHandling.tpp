@@ -17,15 +17,6 @@ namespace reachability {
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
 			result.set = guardSatisfyingSet.second;
-			/*
-			Representation tmpset = guardSatisfyingSet.second;
-			std::vector<unsigned> projection;
-			projection.push_back(0);
-			projection.push_back(1);
-			unsigned gSet = Plotter<Number>::getInstance().addObject(tmpset.project(projection).vertices());
-			Plotter<Number>::getInstance().setObjectColor(gSet, colors[red]);
-			//std::cout << "Guard satisfying set: " <<  guardSatisfyingSet.second << std::endl;
-			*/
 			return true;
 		} else {
 			#ifdef REACH_DEBUG

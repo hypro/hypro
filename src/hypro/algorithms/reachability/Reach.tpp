@@ -26,21 +26,6 @@ namespace reachability {
 				State<Number> s;
 				s.location = state.second.location;
 
-				/*
-				// Augment initial set by one dimension to cope with constants in the flow
-				matrix_t<Number> newConstraints = matrix_t<Number>::Zero(state.second.set.first.rows()+2, state.second.set.first.cols()+1);
-				newConstraints.block(0,0,state.second.set.first.rows(),state.second.set.first.cols()) = state.second.set.first;
-				vector_t<Number> newConstants = vector_t<Number>::Zero(state.second.set.second.rows()+2);
-				newConstants.block(0,0,state.second.set.second.rows(),1) = state.second.set.second;
-				// set bounding constraints to assure the artificial dimension equals 1
-				newConstraints(newConstraints.rows()-2, newConstraints.cols()-1) = 1;
-				newConstraints(newConstraints.rows()-1, newConstraints.cols()-1) = -1;
-				newConstants(newConstants.rows()-2) = 1;
-				newConstants(newConstants.rows()-1) = -1;
-
-				std::cout << "augmented matrix: " << std::endl << newConstraints << std::endl << "Augmented vector: " << std::endl << newConstants << std::endl;
-				*/
-
 				HPolytope<Number> tmpSet(state.second.set.first, state.second.set.second);
 				representation_name type = Representation::type();
 				switch(type){
@@ -79,7 +64,7 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
-			std::cout << "Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id() << std::endl;
+			INFO("Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id());
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
@@ -164,7 +149,7 @@ namespace reachability {
 			Number currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				std::cout << "\rTime: \t" << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime) << std::flush;
+				INFO("Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;
