@@ -1,4 +1,4 @@
-add_custom_target(resources)
+add_custom_target(resources ALL)
 
 # Enable ExternalProject CMake module
 INCLUDE(ExternalProject)
@@ -28,15 +28,15 @@ else()
 	include(glpk.cmake)
 endif()
 
-if(LOGGING_HYPRO)
+if(HYPRO_LOGGING)
 	if(LOG4CPLUS_FOUND)
 		message("-- Use system version of log4cplus")
 	else()
 		message("-- Download version of log4cplus")
 		include(log4cplus.cmake)
 
-		set(LOG4CPLUS_INCLUDE_DIRS "${binary_dir}/include" PARENT_SCOPE)
-		set(LOG4CPLUS_LIBRARIES "${source_dir}/src" PARENT_SCOPE)
+		#set(LOG4CPLUS_INCLUDE_DIRS "${source_dir}/include" PARENT_SCOPE)
+		#set(LOG4CPLUS_LIBRARIES "${binary_dir}" PARENT_SCOPE)
 		set(LOG4CPLUS_FOUND "TRUE" PARENT_SCOPE)
 	endif()
 endif()
