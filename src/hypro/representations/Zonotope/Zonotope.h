@@ -121,7 +121,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	// Getters and Setters for center and generators
 	const vector_t<Number>& center() const;
 	const matrix_t<Number>& generators() const;
-	Number order() const { return Number( mGenerators.cols()/Number(mGenerators.rows()) ); }
+	Number order() const;
 
 	/**
 	 * Number of generators

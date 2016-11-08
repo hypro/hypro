@@ -158,6 +158,15 @@ const matrix_t<Number>& ZonotopeT<Number,Converter>::generators() const {
 }
 
 template<typename Number, typename Converter>
+Number ZonotopeT<Number,Converter>::order() const {
+	// object empty.
+	if(mGenerators.rows() == 0) {
+		return Number(0);
+	}
+	return Number( mGenerators.cols()/Number(mGenerators.rows()) );
+}
+
+template<typename Number, typename Converter>
 void ZonotopeT<Number,Converter>::setCenter( const vector_t<Number> &center ) {
 	if ( mDimension == 0 ) {
 		mDimension = center.rows();
