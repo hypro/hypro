@@ -4,8 +4,10 @@
 
 #include "Logger.h"
 
-#ifdef LOGGING_HYPRO
-namespace hypro{
+#ifdef HYPRO_LOGGING
+
+namespace hypro {
+
 	LogInitializer::LogInitializer() {
 		config.configure();
 	}
@@ -18,6 +20,9 @@ namespace hypro{
 	}
 
 	log4cplus::Logger& LogInitializer::getLogger() {
+		#ifdef HYPRO_LOG_TRACE
+			this->logger.setLogLevel(log4cplus::TRACE_LOG_LEVEL);
+		#endif
 		return this->logger;
 	}
 

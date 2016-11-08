@@ -16,6 +16,7 @@ set(lib_hypro_headers
 	util/convexHull.h
 	util/smtrat/SimplexSolver.h
 	util/smtrat/convenience.h
+	${lib_hypro_util_headers}
 	${lib_hypro_datastructure_headers}
 	${lib_hypro_representation_headers}
     ${lib_hypro_parser_headers}
@@ -23,6 +24,7 @@ set(lib_hypro_headers
 )
 
 set(lib_hypro_sources
+	${lib_hypro_util_sources}
 	${lib_hypro_datastructure_sources}
 	${lib_hypro_representation_sources}
     ${lib_hypro_parser_sources}
@@ -66,15 +68,15 @@ set(headers
 	${hypro_representations_headers}
 	${hypro_util_headers})
 
-##file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
-#MESSAGE(STATUS "Globbed header sources: ${test_sources}")
+file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+MESSAGE(STATUS "Globbed header sources: ${sources}")
 
-set(sources
-	${hypro_algorithms_sources}
-	${hypro_datastructures_sources}
-	${hypro_parser_sources}
-	${hypro_representations_sources}
-	${hypro_util_sources})
+#set(sources
+	#${hypro_algorithms_sources}
+	#${hypro_datastructures_sources}
+	#${hypro_parser_sources}
+	#${hypro_representations_sources}
+	#${hypro_util_sources})
 
 if(STATICLIB_SWITCH)
 	set(STATICLIB "STATIC")
@@ -118,6 +120,7 @@ else()
 	)
 	message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
 	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
 endif()

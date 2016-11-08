@@ -2,6 +2,7 @@
 
 #include "flags.h"
 #include "util/convenienceOperators.h"
+#include "util/logging/Logger.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus

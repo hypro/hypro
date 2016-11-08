@@ -4,7 +4,8 @@
 
 #include "types.h"
 #include "../config.h"
-#include "../util/adaptions_eigen/adaptions_eigen.h"
+#include "util/adaptions_eigen/adaptions_eigen.h"
+#include "util/logging/Logger.h"
 
 namespace hypro {
 
