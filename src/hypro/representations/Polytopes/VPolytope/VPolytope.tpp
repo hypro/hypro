@@ -225,17 +225,17 @@ std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::sa
 
 template<typename Number, typename Converter>
 std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	std::cout << typeid(*this).name() << "::" << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
-	std::cout << "This VPolytope: " << *this << std::endl;
+	//std::cout << typeid(*this).name() << "::" << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
+	//std::cout << "This VPolytope: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
 	intermediate.reduceNumberRepresentation(mVertices);
-	std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly: " << intermediate << std::endl;
+	//std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly: " << intermediate << std::endl;
 	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
 	if(resultPair.first){
 		//resultPair.second.removeRedundancy();
-		std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly convert back: " << resultPair.second << std::endl;
+		//std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly convert back: " << resultPair.second << std::endl;
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
-		std::cout << typeid(*this).name() << "::"<< __func__ << ": Re-Converted v-poly: " << res << std::endl;
+		//std::cout << typeid(*this).name() << "::"<< __func__ << ": Re-Converted v-poly: " << res << std::endl;
 		assert(!res.empty());
 		return std::make_pair(true, res);
 	}
