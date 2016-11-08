@@ -309,7 +309,7 @@ std::size_t Polytope<Number>::dimension() const {
 }
 
 template <typename Number>
-Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> &A ) const {
 	using namespace Parma_Polyhedra_Library;
 	Polytope<Number> result;
 
@@ -319,8 +319,7 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> 
 	const Generator_System generators = this->mPolyhedron.generators();
 
 	// Create Eigen::Matrix from Polytope
-	Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> polytopeMatrix( variables.size(),
-																		  polytope::gsSize( generators ) );
+	matrix_t<Number> polytopeMatrix( variables.size(), polytope::gsSize( generators ) );
 	unsigned gCount = 0;
 
 	Number coefficient;
@@ -342,38 +341,84 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> 
 		++gCount;
 	}
 
-	// std::cout << __func__ << ": PolytopeMatrix: " << std::endl <<
-	// polytopeMatrix << std::endl;
-
 	// apply lineartransformation
-	Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> res( variables.size(), polytope::gsSize( generators ) );
+	matrix_t<Number> res( variables.size(), polytope::gsSize( generators ) );
 
-	// std::cout << __func__ << ": ARows: " << A.rows() << ", ACols: " << A.cols()
-	// << ", polyRows: " <<
-	// polytopeMatrix.rows() << ", polyCols: " << polytopeMatrix.cols() << ",
-	// bRows: " << b.rows() << ", bCols: " <<
-	// b.cols() << std::endl;
-
-	// std::cout << __func__ << ": b:" << std::endl << b << std::endl;
-	if ( b.rows() != 0 ) {
-		res = ( A * polytopeMatrix );
-		Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> tmp( res.rows(), res.cols() );
-		for ( unsigned m = 0; m < tmp.rows(); ++m )
-			for ( unsigned n = 0; n < tmp.cols(); ++n ) {
-				tmp( m, n ) = b( m );
-			}
-		res += tmp;
-	} else {
-		res = ( A * polytopeMatrix );
-	}
-
-	// std::cout << "[EIGEN] linear transformation result: " << std::endl;
-	// std::cout << res << std::endl;
+	res = ( A * polytopeMatrix );
 
 	// clear actual generators and add new ones
 	std::vector<vector_t<Number>> ps;
 	for ( unsigned i = 0; i < res.cols(); ++i ) {
 		// std::cout << res.col(i) << std::endl;
+		vector_t<Number> t = vector_t<Number>( res.rows() );
+		for ( unsigned j = 0; j < res.rows(); ++j ) t( j ) = res.col( i )( j );
+		ps.push_back( t );
+	}
+	C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron( res.rows(), Parma_Polyhedra_Library::EMPTY );
+
+	std::vector<Point<Number>> newPoints;
+	std::vector<Point<Number>> tmpPoints;
+
+	for ( auto &pointSetIt : ps ) {
+		tmp.add_generator( polytope::pointToGenerator( pointSetIt ) );
+		Point<Number> tmpPoint = Point<Number>( pointSetIt );
+		newPoints.push_back( tmpPoint );  // for mPoints
+		tmpPoints.push_back( tmpPoint );  // for mNeighbors for each point
+	}
+	result.mPolyhedron = tmp;
+
+	result.setPointsUpToDate( false );
+
+	return result;
+}
+
+template <typename Number>
+Polytope<Number> Polytope<Number>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+	using namespace Parma_Polyhedra_Library;
+	Polytope<Number> result;
+
+	std::vector<Parma_Polyhedra_Library::Variable> variables;
+	for ( unsigned i = 0; i < A.rows(); ++i ) variables.push_back( VariablePool::getInstance().pplVarByIndex( i ) );
+
+	const Generator_System generators = this->mPolyhedron.generators();
+
+	// Create Eigen::Matrix from Polytope
+	matrix_t<Number> polytopeMatrix( variables.size(), polytope::gsSize( generators ) );
+	unsigned gCount = 0;
+
+	Number coefficient;
+	Number divisor;
+	Number value;
+
+	for ( Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end();
+		  ++generatorIt ) {
+		unsigned vCount = 0;
+		// Assuming the divisor stays the same in one generator
+		divisor = (int)raw_value( generatorIt->divisor() ).get_si();
+		for ( auto &var : variables ) {
+			coefficient = (int)raw_value( generatorIt->coefficient( var ) ).get_si();
+			value = coefficient / divisor;
+
+			polytopeMatrix( vCount, gCount ) = value;
+			++vCount;
+		}
+		++gCount;
+	}
+
+	// apply lineartransformation
+	matrix_t<Number> res( variables.size(), polytope::gsSize( generators ) );
+
+	res = ( A * polytopeMatrix );
+	matrix_t<Number> tmp( res.rows(), res.cols() );
+	for ( unsigned m = 0; m < tmp.rows(); ++m )
+		for ( unsigned n = 0; n < tmp.cols(); ++n ) {
+			tmp( m, n ) = b( m );
+		}
+	res += tmp;
+
+	// clear actual generators and add new ones
+	std::vector<vector_t<Number>> ps;
+	for ( unsigned i = 0; i < res.cols(); ++i ) {
 		vector_t<Number> t = vector_t<Number>( res.rows() );
 		for ( unsigned j = 0; j < res.rows(); ++j ) t( j ) = res.col( i )( j );
 		ps.push_back( t );
@@ -422,6 +467,12 @@ Polytope<Number> Polytope<Number>::linearTransformation( const matrix_t<Number> 
 	result.setPointsUpToDate( false );
 
 	return result;
+}
+
+template <typename Number>
+Polytope<Number> Polytope<Number>::project(const std::vector<unsigned>& dimensions) const {
+	using namespace Parma_Polyhedra_Library;
+	Polytope<Number> result;
 }
 
 template <typename Number>
@@ -715,6 +766,19 @@ Polytope<Number> Polytope<Number>::intersectHalfspaces( const matrix_t<Number> &
 														 const vector_t<Number> &_vec ) const {
 	Polytope<Number> tmp( _mat, _vec );
 	return this->intersect( tmp );
+}
+
+template <typename Number>
+std::pair<bool, Polytope<Number>> Polytope<Number>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
+	Polytope<Number> res = this->intersectHalfspace(rhs);
+	return std::make_pair(res.empty(), res);
+}
+
+template <typename Number>
+std::pair<bool, Polytope<Number>> Polytope<Number>::satisfiesHalfspaces( const matrix_t<Number> &_mat,
+														 const vector_t<Number> &_vec ) const {
+	Polytope<Number> res = this->intersectHalfspaces(_mat,_vec);
+	return std::make_pair(res.empty(), res);
 }
 
 template <typename Number>

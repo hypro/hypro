@@ -36,7 +36,7 @@ using namespace Parma_Polyhedra_Library::IO_Operators;
 namespace hypro
 {
 	template<typename Number>
-	class Polytope
+	class Polytope : public GeometricObject<Number, Polytope<Number>>
 	{
 	private:
 		C_Polyhedron mPolyhedron;
@@ -144,14 +144,17 @@ namespace hypro
 		 * Geometric Object interface
 		 */
 		std::size_t dimension() const;
-		Polytope<Number> linearTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
-
+		Polytope<Number> linearTransformation(const matrix_t<Number>& A) const;
+		Polytope<Number> affineTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
+		Polytope<Number> project(const std::vector<unsigned>& dimensions) const;
 		Polytope<Number> minkowskiSum(const Polytope<Number>& rhs) const;
 		// implemented according to Komei Fukuda 2004
 		Polytope<Number> altMinkowskiSum(Polytope<Number>& rhs);
 		Polytope<Number> intersect(const Polytope<Number>& rhs) const;
 		Polytope<Number> intersectHalfspace(const Halfspace<Number>& rhs) const;
 		Polytope<Number> intersectHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
+		std::pair<bool, Polytope<Number>> satisfiesHalfspace(const Halfspace<Number>& rhs) const;
+		std::pair<bool, Polytope<Number>> satisfiesHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
 		Polytope<Number> hull() const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const Polytope<Number>& poly) const;
