@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "../../config.h"
-#include "../../datastructures/Point.h"
-#include "../../datastructures/Halfspace.h"
+#include "config.h"
+#include "datastructures/Point.h"
+#include "datastructures/Halfspace.h"
 #include "ConstrainSet.h"
 
 #define FUKUDA_VERTEX_ENUM_DEBUG
@@ -173,6 +173,39 @@ public:
 
 	friend bool operator!=(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {
 		return !(lhs==rhs);
+	}
+
+	friend std::ostream& operator<<( std::ostream& _ostr, const Dictionary<Number>& d ) {
+		uint32_t i,j;
+		_ostr << "\n mB size=";
+		_ostr << mB.size();
+		_ostr << "\n mN size=";
+		_ostr << mN.size();
+		_ostr << "\n mDictionary size=";
+		_ostr << mDictionary.size();
+		_ostr << "\n \n";
+
+		_ostr <<"mB = ";
+		for(i=0; i<mB.size(); ++i){
+			_ostr << mB[i];
+			_ostr << ";  ";
+		}
+		_ostr <<"\nmN = ";
+		for(j=0; j<mN.size(); ++j){
+			_ostr << mN[j];
+			_ostr << ";  ";
+		}
+		_ostr << "\n \n";
+
+		for(i=0; i<mB.size(); ++i){
+			for(j=0; j<mN.size(); ++j){
+				_ostr << mDictionary(i,j);
+				_ostr << " ; ";
+			}
+			_ostr << "\n";
+		}
+		_ostr.flush();
+		return _ostr;
 	}
 };
 

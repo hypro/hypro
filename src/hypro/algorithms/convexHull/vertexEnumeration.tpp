@@ -5,20 +5,11 @@ namespace hypro {
 	template<typename Number>
 	void VertexEnumeration<Number>::increment(std::size_t& i, std::size_t& j, std::size_t maxJ) {
 		++j; if(j>=maxJ){j=0;++i;};
-		#ifdef CHULL_DBG
-		std::cout<< __func__ << ": i=" << i << ", j=" << j << std::endl;
-		#endif
+		DEBUG(": i=" << i << ", j=" << j);
 	}
 
 	template<typename Number>
-	VertexEnumeration<Number>::VertexEnumeration(const std::vector<Halfspace<Number>>& hsv) {
-		mHsv=hsv;
-		//std::cout << __func__ << ": constructor from " << hsv.size() << " halfspaces." << std::endl;
-		//std::cout << "Halfspaces: " << std::endl;
-		//for(const auto& hs : hsv) {
-		//	std::cout << hs << std::endl;
-		//}
-	}
+	VertexEnumeration<Number>::VertexEnumeration(const std::vector<Halfspace<Number>>& hsv) : mHsv(hsv) {}
 
 	template<typename Number>
 	VertexEnumeration<Number>::VertexEnumeration(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
@@ -29,66 +20,80 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<Halfspace<Number>> VertexEnumeration<Number>::getHsv() const {return mHsv;}
+	std::vector<Halfspace<Number>> VertexEnumeration<Number>::getHsv() const {
+		return mHsv;
+	}
 
 	template<typename Number>
-	std::vector<Dictionary<Number>> VertexEnumeration<Number>::getDictionaries() const {return mDictionaries;}
+	std::vector<Dictionary<Number>> VertexEnumeration<Number>::getDictionaries() const {
+		return mDictionaries;
+	}
 
 	template<typename Number>
-	std::vector<Point<Number>> VertexEnumeration<Number>::getPositivePoints() const {return mPositivePoints;}
+	std::vector<Point<Number>> VertexEnumeration<Number>::getPositivePoints() const {
+		return mPositivePoints;
+	}
+
 	template<typename Number>
 	void VertexEnumeration<Number>::printPositivePoints() const {
-		for(const auto& p:mPositivePoints) {
-			cout<<p<<"\n";
+		for(const auto& p : mPositivePoints) {
+			std::cout << p << std::endl;
 		}
-		cout<<"\n";
 	}
 
 	template<typename Number>
-	std::vector<Point<Number>> VertexEnumeration<Number>::getPoints() const {return mPoints;}
+	std::vector<Point<Number>> VertexEnumeration<Number>::getPoints() const {
+		return mPoints;
+	}
+
 	template<typename Number>
 	void VertexEnumeration<Number>::printPoints() const {
-		for(const auto& p:mPoints) {
-			cout<<p<<"\n";
+		for(const auto& p : mPoints) {
+			std::cout << p << std::endl;
 		}
-		cout<<"\n";
 	}
 
 	template<typename Number>
-	std::vector<vector_t<Number>> VertexEnumeration<Number>::getLinealtySpace() const {return mLinealtySpace;}
+	std::vector<vector_t<Number>> VertexEnumeration<Number>::getLinealtySpace() const {
+		return mLinealtySpace;
+	}
+
 	template<typename Number>
 	void VertexEnumeration<Number>::printLinealtySpace() const {
-	for(const auto& l:mLinealtySpace) {
-			cout<<l<<"\n";
+	for(const auto& l : mLinealtySpace) {
+			std::cout << l << std::endl;
 		}
-		cout<<"\n";
 	}
 
 	template<typename Number>
-	std::vector<vector_t<Number>> VertexEnumeration<Number>::getPositiveCones() const {return mPositiveCones;}
+	std::vector<vector_t<Number>> VertexEnumeration<Number>::getPositiveCones() const {
+		return mPositiveCones;
+	}
+
 	template<typename Number>
 	void VertexEnumeration<Number>::printPositiveCones() const {
-	for(const auto& c:mPositiveCones) {
-			cout<<c<<"\n";
+	for(const auto& c : mPositiveCones) {
+			std::cout << c << std::endl;
 		}
-		cout<<"\n";
 	}
 
 	template<typename Number>
-	std::vector<vector_t<Number>> VertexEnumeration<Number>::getCones() const {return mCones;}
+	std::vector<vector_t<Number>> VertexEnumeration<Number>::getCones() const {
+		return mCones;
+	}
+
 	template<typename Number>
 	void VertexEnumeration<Number>::printCones() const {
 	for(const auto& c:mCones) {
-			cout<<c<<"\n";
+			std::cout << c << std::endl;
 		}
-		cout<<"\n";
 	}
 
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
-		std::cout << __func__ << ": Input: " << std::endl;
+		DEBUG("Input:");
 		for(const auto& plane : mHsv) {
-			std::cout << convert<Number,double>(plane) << std::endl;
+			DEBUG(convert<Number,double>(plane));
 		}
 
 		if(findPositiveConstrains()) {//if non empty
@@ -96,17 +101,17 @@ namespace hypro {
 			enumerateVerticesEachDictionary();
 			toGeneralCoordinates();
 
-			std::cout << __func__ << ": Output: " << std::endl;
+			DEBUG("Output:");
 			for(const auto& vertex : mPoints) {
-				std::cout << convert<Number,double>(vertex) << std::endl;
+				DEBUG(convert<Number,double>(vertex));
 			}
 
 			#ifndef NDEBUG
 			for(const auto& vertex : mPoints) {
 				for(const auto& plane : mHsv) {
 					if(!plane.contains(vertex)) {
-						std::cout << __func__ << ": plane " << convert<Number,double>(plane) << " does not contain " << convert<Number,double>(vertex) << std::endl;
-						std::cout << __func__ << ": distance: " << (plane.normal().dot(vertex.rawCoordinates()) - plane.offset()) << std::endl;
+						WARN("plane " << convert<Number,double>(plane) << " does not contain " << convert<Number,double>(vertex));
+						WARN("distance: " << (plane.normal().dot(vertex.rawCoordinates()) - plane.offset()));
 					}
 					assert(plane.contains(vertex));
 				}
@@ -190,37 +195,31 @@ namespace hypro {
 			}
 			if(i<m){
 				assert(dictionary.isPrimalFeasible());
-				std::cout << "Dictionary before step down: " << std::endl;
+				DEBUG("Dictionary before step down:");
 				dictionary.printDictionary();
-				std::cout << "\n\n\n" << std::endl;
+				COUT("\n\n\n" << std::endl);
 				dictionary.pivot(i,j);
 				assert(dictionary.isPrimalFeasible());
 				#ifndef NDEBUG
 				size_t tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
 				if(!(tmpI == i && tmpJ == j)) {
-					std::cout << "Chosen pivot: " << tmpI << ", " << tmpJ << ", assumed was: " << i << ", " << j  << ", dict after pivot: " << std::endl;
+					WARN("Chosen pivot: " << tmpI << ", " << tmpJ << ", assumed was: " << i << ", " << j  << ", dict after pivot: ");
 					dictionary.printDictionary();
-					std::cout << "\n\n\n" << std::endl;
+					COUT("\n\n\n" << std::endl);
 				}
 				assert(tmpI == i && tmpJ == j);
 				#endif
-				#ifdef CHULL_DBG
-				std::cout << __func__ << " (Step down) Pivot " << i << ", " << j << " is a valid reverse pivot." << std::endl;
-				#endif
+				DEBUG("(Step down) Pivot " << i << ", " << j << " is a valid reverse pivot.");
 				if(dictionary.isLexMin()) {
-					#ifdef CHULL_DBG
-						cout << "\n new point: ";
-						dictionary.printDictionary();
-						cout << dictionary.toPoint();
-					#endif
+					DEBUG("new point:");
+					DEBUG(dictionary);
+					DEBUG(dictionary.toPoint());
 					mPositivePoints.push_back(dictionary.toPoint());
 				}
 				std::set<vector_t<Number>> cones =dictionary.findCones();
 				for(const auto& cone: cones) {
-					#ifdef CHULL_DBG
-						cout << "cone found ---------------------------------------\n";
-					#endif
+					DEBUG("cone found");
 					mPositiveCones.insert(cone);
 				}
 				i=0;j=0;++depth;
@@ -229,9 +228,7 @@ namespace hypro {
 					assert(dictionary.isPrimalFeasible());
 					dictionary.selectBlandPivot(i,j);
 					dictionary.pivot(i,j);
-					#ifdef CHULL_DBG
-					std::cout << __func__ << " (Step up) Pivot " << i << ", " << j << " is a valid Bland pivot." << std::endl;
-					#endif
+					DEBUG("(Step up) Pivot " << i << ", " << j << " is a valid Bland pivot.");
 					assert(dictionary.isPrimalFeasible());
 				}
 				VertexEnumeration<Number>::increment(i,j,n);
@@ -244,10 +241,8 @@ namespace hypro {
 	void VertexEnumeration<Number>::enumerateVerticesEachDictionary() {
 		mPositivePoints.push_back(mDictionaries[0].toPoint());
 		for(std::size_t i = 0; i<mDictionaries.size(); ++i) {
-			#ifdef CHULL_DBG
-				cout<< "\n\n Next dictionary ---------------------\n";
-				mDictionaries[i].printDictionary();
-			#endif
+			DEBUG("Next dictionary ---------------------");
+			DEBUG(mDictionaries[i]);
 			enumerateVertices(mDictionaries[i]);
 		}
 	}
@@ -278,9 +273,7 @@ namespace hypro {
 			}
 			if(i<m){
 				assert(dictionary.isDualFeasible());
-				#ifdef CHULL_DBG
-				std::cout << __func__ << " (Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot." << std::endl;
-				#endif
+				DEBUG("(Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot.");
 				dictionary.pivot(basisAux[i],j);
 				assert(dictionary.isDualFeasible());
 				//dictionary.printDictionary();
@@ -294,9 +287,7 @@ namespace hypro {
 				if(depth>0) {
 					assert(dictionary.isDualFeasible());
 					dictionary.selectDualBlandPivot(i,j,basisAux);
-					#ifdef CHULL_DBG
-					std::cout << __func__ << " (Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot." << std::endl;
-					#endif
+					DEBUG("(Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot.");
 					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
 					assert(i < basisAux.size());
 					dictionary.pivot(basisAux[i],j);
@@ -307,9 +298,7 @@ namespace hypro {
 				--depth;
 			}
 		}
-		#ifdef CHULL_DBG
-			cout<<"\n nb dico = " << mDictionaries.size() <<"\n";
-		#endif
+		DEBUG("nb dico = " << mDictionaries.size());
 	}
 
 	template<typename Number>
@@ -317,24 +306,18 @@ namespace hypro {
 		std::size_t d = mHsv[0].dimension();
 		std::size_t n0 = mHsv.size();
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
-		#ifdef CHULL_DBG
-			cout<< "\nfirst dictionary\n";
-			dictionary.printDictionary();
-			dictionary.constrainSet().print();
-		#endif
+		DEBUG("first dictionary");
+		DEBUG(dictionary);
+		DEBUG(dictionary.constrainSet());
 		while(dictionary.fixOutOfBounds()) {}//tries to reach the feasible area, may throw empty exeption
-		#ifdef CHULL_DBG
-			cout<< "\nfixOutOfBounds\n";
-			dictionary.printDictionary();
-			dictionary.constrainSet().print();
-		#endif
+		DEBUG("fixOutOfBounds");
+		DEBUG(dictionary);
+		DEBUG(dictionary.constrainSet());
 		dictionary.nonSlackToBase(mLinealtySpace);//finds linealty
-		#ifdef CHULL_DBG
-			cout<< "\nnonSlackToBase\n";
-			dictionary.printDictionary();
-			dictionary.constrainSet().print();
-			std::cout << "lineality space size: " << mLinealtySpace.size() << std::endl;
-		#endif
+		DEBUG("nonSlackToBase");
+		DEBUG(dictionary);
+		DEBUG(dictionary.constrainSet());
+		DEBUG("lineality space size: " << mLinealtySpace.size());
 		addLinealtyConstrains();
 
 		// At this point we need to start over again, as we added artificial constraints for the lineality space.
@@ -390,12 +373,9 @@ namespace hypro {
 		}
 		Dictionary<Number> newDictionary = Dictionary<Number>(dictio,basis,cobasis,constrains);//creation of a new dictionary with the linealty constrains
 		while(newDictionary.fixOutOfBounds()) {}
-		#ifdef CHULL_DBG
-			cout <<"\nthe new dico\n";
-			newDictionary.printDictionary();
-			newDictionary.constrainSet().print();
-			cout <<"\n\n\n";
-		#endif
+		DEBUG("the new dico");
+		DEBUG(dictionary);
+		DEBUG(dictionary.constrainSet());
 		newDictionary.nonSlackToBase();
 		std::set<std::size_t> hyperplanes;
 		for(std::size_t index=0;index<basis.size();++index) {//search for already saturated constrains
@@ -404,12 +384,8 @@ namespace hypro {
 			}
 		}
 		std::set<std::size_t> frozenCols = newDictionary.toCobase(hyperplanes);
-		#ifdef CHULL_DBG
-			cout << "\n frozen \n";
-			for(const auto& hsv:frozenCols) {
-				cout<<hsv<<"\n";
-			}
-		#endif
+		DEBUG("frozen cols:");
+		DEBUG(frozenCols);
 		for(std::size_t colIndex=0; colIndex<d;++colIndex) {
 			if(frozenCols.end()==frozenCols.find(colIndex)) {
 				newDictionary.pushToBounds(colIndex);
@@ -483,12 +459,9 @@ namespace hypro {
 				throw string("\n WARNING: no constrains. \n");
 			}
 			Dictionary<Number> dictionary(findFirstVertex());
-			#ifdef CHULL_DBG
-				cout<<"findFirstVertex\n";
-				dictionary.printDictionary();
-				dictionary.constrainSet().print();
-				cout<<"end\n";
-			#endif
+			DEBUG("findFirstVertex");
+			DEBUG(dictionary);
+			DEBUG(dictionary.constrainSet());
 			std::size_t dimension = dictionary.cobasis().size()-1;
 			std::size_t constrainsCount = dictionary.basis().size()-1;
 			matrix_t<Number> A1 = matrix_t<Number>(dimension, dimension);
@@ -517,9 +490,9 @@ namespace hypro {
 
 			// Original A is now split into A1 and A2, where A1 defines the initial vertex and A2 contains the rest of constraints.
 
-			std::cout << "A1: " << A1 << std::endl;
-			std::cout << "b1: " << b1 << std::endl;
-			std::cout << "A2: " << A2 << std::endl;
+			DEBUG("A1: " << A1);
+			DEBUG("b1: " << b1);
+			DEBUG("A2: " << A2);
 
 			matrix_t<Number> newDictionary = matrix_t<Number>::Zero(constrainsCount-dimension+1, dimension+1);//faire la derniere ligne
 			skipped = 0;
@@ -553,8 +526,8 @@ namespace hypro {
 			mN.push_back(std::size_t(constrainsCount+2));
 
 			mDictionaries.push_back(Dictionary<Number>(newDictionary,mB,mN));
-			std::cout << "The newly added dictionary: " << std::endl;
-			mDictionaries.back().printDictionary();
+			DEBUG("The newly added dictionary: ");
+			DEBUG(mDictionaries.back());
 			assert(mDictionaries.back().isOptimal());
 
 			mPivotingMatrix = invA1;
@@ -564,12 +537,9 @@ namespace hypro {
 			cout << message;
 			return false;
 		}
-		#ifdef CHULL_DBG
-			cout<<"positive constrains\n";
-			mDictionaries[0].printDictionary();
-			mDictionaries[0].constrainSet().print();
-			cout<<"end\n";
-		#endif
+		DEBUG("positive constrains");
+		DEBUG(mDictionaries[0]);
+		DEBUG(mDictionaries[0].constrainSet());
 		return true;
 	}
 
