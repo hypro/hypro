@@ -178,28 +178,28 @@ public:
 	friend std::ostream& operator<<( std::ostream& _ostr, const Dictionary<Number>& d ) {
 		uint32_t i,j;
 		_ostr << "\n mB size=";
-		_ostr << mB.size();
+		_ostr << d.basis().size();
 		_ostr << "\n mN size=";
-		_ostr << mN.size();
+		_ostr << d.cobasis().size();
 		_ostr << "\n mDictionary size=";
-		_ostr << mDictionary.size();
+		_ostr << d.tableau().size();
 		_ostr << "\n \n";
 
 		_ostr <<"mB = ";
-		for(i=0; i<mB.size(); ++i){
-			_ostr << mB[i];
+		for(i=0; i<d.basis().size(); ++i){
+			_ostr << d.basis()[i];
 			_ostr << ";  ";
 		}
 		_ostr <<"\nmN = ";
-		for(j=0; j<mN.size(); ++j){
-			_ostr << mN[j];
+		for(j=0; j<d.cobasis().size(); ++j){
+			_ostr << d.cobasis()[j];
 			_ostr << ";  ";
 		}
 		_ostr << "\n \n";
 
-		for(i=0; i<mB.size(); ++i){
-			for(j=0; j<mN.size(); ++j){
-				_ostr << mDictionary(i,j);
+		for(i=0; i<d.basis().size(); ++i){
+			for(j=0; j<d.cobasis().size(); ++j){
+				_ostr << d.tableau()(i,j);
 				_ostr << " ; ";
 			}
 			_ostr << "\n";

@@ -12,8 +12,12 @@ class ConstrainSet {
 	public:
 		ConstrainSet() = default;
 
-		std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number> get(std::size_t index) {
+		std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number> get(std::size_t index) const {
 			return constrainSet[index];
+		}
+
+		std::size_t size() const {
+			return constrainSet.size();
 		}
 
 		void add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number> newElem) {
@@ -137,5 +141,16 @@ class ConstrainSet {
 	 friend bool operator!=(const ConstrainSet<Number>& lhs, const ConstrainSet<Number>& rhs) {
 	 	return !(lhs == rhs);
 	 }
+
+	 friend std::ostream& operator<<( std::ostream& _ostr, const ConstrainSet<Number>& cs ) {
+		for(std::size_t i=0;i<cs.size();++i) {
+			_ostr << i+1 <<": (";
+			if(std::get<0>(std::get<0>(cs.get(i)))) {_ostr << "-infty";} else {_ostr << std::get<1>(std::get<0>(cs.get(i)));}
+			_ostr << ",";
+			if(std::get<0>(std::get<1>(cs.get(i)))) {_ostr << "infty";} else {_ostr << std::get<1>(std::get<1>(cs.get(i)));}
+			_ostr << ")    value: " << std::get<2>(cs.get(i))<<"\n";
+		}
+		return _ostr;
+	}
 };
 } // namespace hypro

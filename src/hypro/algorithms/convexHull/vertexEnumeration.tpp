@@ -93,7 +93,7 @@ namespace hypro {
 	void VertexEnumeration<Number>::enumerateVertices() {
 		DEBUG("Input:");
 		for(const auto& plane : mHsv) {
-			DEBUG(convert<Number,double>(plane));
+			DEBUG(plane);
 		}
 
 		if(findPositiveConstrains()) {//if non empty
@@ -103,7 +103,7 @@ namespace hypro {
 
 			DEBUG("Output:");
 			for(const auto& vertex : mPoints) {
-				DEBUG(convert<Number,double>(vertex));
+				DEBUG(vertex);
 			}
 
 			#ifndef NDEBUG

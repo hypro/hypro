@@ -10,6 +10,10 @@
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine HYPRO_LOGGING
 #cmakedefine HYPRO_LOG_TRACE
+#cmakedefine HYPRO_LOG_INFO
+#cmakedefine HYPRO_LOG_DEBUG
+#cmakedefine HYPRO_LOG_WARN
+#cmakedefine HYPRO_LOG_FATAL
 #cmakedefine FORWARD_REACHABILITY_METHOD_2
 
 #ifdef HYPRO_USE_SOPLEX

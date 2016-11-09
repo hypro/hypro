@@ -20,8 +20,18 @@ namespace hypro {
 	}
 
 	log4cplus::Logger& LogInitializer::getLogger() {
+		// Handle log levels
 		#ifdef HYPRO_LOG_TRACE
 			this->logger.setLogLevel(log4cplus::TRACE_LOG_LEVEL);
+		#elif defined(HYPRO_LOG_INFO)
+			this->logger.setLogLevel(log4cplus::INFO_LOG_LEVEL);
+		#elif defined(HYPRO_LOG_DEBUG)
+			this->logger.setLogLevel(log4cplus::DEBUG_LOG_LEVEL);
+		#elif defined(HYPRO_LOG_WARN)
+			this->logger.setLogLevel(log4cplus::WARN_LOG_LEVEL);
+		#elif defined(HYPRO_LOG_FATAL)
+			this->logger.setLogLevel(log4cplus::FATAL_LOG_LEVEL);
+		#else
 		#endif
 		return this->logger;
 	}
