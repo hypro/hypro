@@ -52,6 +52,7 @@ option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(HYPRO_LOGGING "Allow log4cplus logging." OFF)
 set(HYPRO_LOG_LEVEL "FATAL" CACHE STRING "Specify log levels, valid options are: TRACE, INFO, DEBUG, WARN, FATAL.")
+option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 # Include own macros.

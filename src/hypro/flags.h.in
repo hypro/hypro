@@ -14,6 +14,7 @@
 #cmakedefine HYPRO_LOG_DEBUG
 #cmakedefine HYPRO_LOG_WARN
 #cmakedefine HYPRO_LOG_FATAL
+#cmakedefine HYPRO_STATISTICS
 #cmakedefine FORWARD_REACHABILITY_METHOD_2
 
 #ifdef HYPRO_USE_SOPLEX
