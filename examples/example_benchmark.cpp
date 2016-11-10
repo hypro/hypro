@@ -15,7 +15,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::duration<long long unsigned, std::micro>;
 	std::cout << "Filename: " << filename << std::endl;
-	std::size_t numberRuns = 5;
+	std::size_t numberRuns = 1;
 	std::vector<timeunit> runtimes(numberRuns);
 	timeunit summedTime(0);
 	clock::time_point startParsing = clock::now();
@@ -31,7 +31,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		runtimes.push_back(std::chrono::duration_cast<timeunit>( clock::now() - start ));
 		summedTime += std::chrono::duration_cast<timeunit>( clock::now() - start )/(numberRuns*1000);
 		std::cout << "Summed time: " << std::chrono::duration_cast<timeunit>( summedTime ).count() << std::endl;
-		std::cout << "Run finished in " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms." << std::endl;
+		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<long long unsigned, std::milli>>( clock::now() - start ).count() << " ms." << std::endl;
+		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<long long unsigned, std::ratio<60>>>( clock::now() - start ).count() << " minutes." << std::endl;
 	}
 	std::cout << boost::get<1>(ha) << std::endl;
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>(summedTime).count()+parseTime.count()/1000.0 << " ms" << std::endl;

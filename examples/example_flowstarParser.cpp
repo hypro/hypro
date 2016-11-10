@@ -7,7 +7,6 @@
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
-//#include <boost/program_options.hpp>
 #define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>
@@ -16,7 +15,6 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::cout << "Filename: " << filename << std::endl;
 	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
 	hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
 	std::cout << boost::get<1>(ha) << std::endl;
@@ -123,7 +121,7 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){
