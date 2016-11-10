@@ -110,7 +110,7 @@ namespace hypro {
 			for(const auto& vertex : mPoints) {
 				for(const auto& plane : mHsv) {
 					if(!plane.contains(vertex)) {
-						WARN("plane " << convert<Number,double>(plane) << " does not contain " << convert<Number,double>(vertex));
+						WARN("plane " << plane << " does not contain " << vertex);
 						WARN("distance: " << (plane.normal().dot(vertex.rawCoordinates()) - plane.offset()));
 					}
 					assert(plane.contains(vertex));
