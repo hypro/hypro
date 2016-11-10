@@ -7,6 +7,7 @@
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
+#include "util/statistics/statistics.h"
 #define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>
@@ -99,6 +100,9 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 			++cnt;
 		}
 	}
+
+	PRINT_STATS()
+
 	std::cout << "Write to file." << std::endl;
 	//std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
 	plotter.plot2d();

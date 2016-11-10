@@ -7,6 +7,7 @@
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
+#include "util/statistics/CounterRepository.h"
 //#include <boost/program_options.hpp>
 #define PLOT_FLOWPIPE
 
@@ -15,7 +16,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::duration<long long unsigned, std::micro>;
 	std::cout << "Filename: " << filename << std::endl;
-	std::size_t numberRuns = 1;
+	std::size_t numberRuns = 5;
+	double timeout = 20.0;
 	std::vector<timeunit> runtimes(numberRuns);
 	timeunit summedTime(0);
 	clock::time_point startParsing = clock::now();
@@ -32,7 +34,13 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		summedTime += std::chrono::duration_cast<timeunit>( clock::now() - start )/(numberRuns*1000);
 		std::cout << "Summed time: " << std::chrono::duration_cast<timeunit>( summedTime ).count() << std::endl;
 		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<long long unsigned, std::milli>>( clock::now() - start ).count() << " ms." << std::endl;
-		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<long long unsigned, std::ratio<60>>>( clock::now() - start ).count() << " minutes." << std::endl;
+		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<double, std::ratio<60>>>( clock::now() - start ).count() << " minutes." << std::endl;
+		if(std::chrono::duration_cast<std::chrono::duration<double, std::ratio<60>>>( clock::now() - start ).count() > timeout) {
+			std::cout << "Timeout, runntime exceeded " << timeout << " minutes." << std::endl;
+			exit(0);
+		}
+		PRINT_STATS()
+		RESET_STATS()
 	}
 	std::cout << boost::get<1>(ha) << std::endl;
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>(summedTime).count()+parseTime.count()/1000.0 << " ms" << std::endl;
@@ -137,7 +145,7 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){
