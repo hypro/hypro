@@ -81,6 +81,27 @@ namespace Eigen {
 			MulCost = 100
 		};
 	};
+
+	template<typename Number>
+	struct NumTraits<carl::Interval<Number>> : GenericNumTraits<carl::Interval<Number>>
+	{
+		typedef carl::Interval<Number> Real;
+		typedef carl::Interval<Number> NonInteger;
+		typedef carl::Interval<Number> Nested;
+		static inline Real epsilon() { return 0; }
+		static inline Real dummy_precision() { return 0; }
+		static inline Real digits10() { return 0; }
+		enum {
+			IsInteger = 0,
+			IsSigned = 1,
+			IsComplex = 0,
+			RequireInitialization = 1,
+			ReadCost = 6,
+			AddCost = 150,
+			MulCost = 100
+		};
+	};
+
 	/*
 	namespace internal {
 	template<> struct scalar_score_coeff_op<mpq_class> {
