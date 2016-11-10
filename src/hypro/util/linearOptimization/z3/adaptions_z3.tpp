@@ -166,3 +166,5 @@ namespace hypro {
 
 
 } // namespace hypro
+
+#include "adaptions_z3_double.tpp"

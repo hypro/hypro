@@ -5,10 +5,10 @@
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
 
-#include "../../flags.h"
+#include "flags.h"
 #include "Strategy.h"
 #include "EvaluationResult.h"
-#include "../../datastructures/Point.h"
+#include "datastructures/Point.h"
 #ifdef HYPRO_USE_SMTRAT
 #include "smtrat/adaptions_smtrat.h"
 #endif
@@ -24,6 +24,10 @@
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
+#endif
+
+#ifdef HYPRO_STATISTICS
+#include "util/statistics/statistics.h"
 #endif
 
 #include <glpk.h>

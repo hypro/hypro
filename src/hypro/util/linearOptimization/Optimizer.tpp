@@ -76,6 +76,9 @@ namespace hypro {
 		EvaluationResult<Number> res;
 		#endif
 
+		#ifdef HYPRO_STATISTICS
+		++Statistician::getInstance().get("glpk");
+		#endif
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector);
 		#else
@@ -86,17 +89,39 @@ namespace hypro {
 		#ifdef DEBUG_MSG
 		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 		#endif
-		#endif
 
-		#ifdef HYPRO_USE_Z3
-		res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
-		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
-		res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
-		#elif defined(HYPRO_USE_SOPLEX)
-		res = soplexOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
-		#endif
+		// At this point we can check, whether the glpk result is already exact and optimal.
+		// We do this by inserting the solution into the constraints. The solution is exact,
+		// whenever it lies at least on one hyperplane (the respective constraint is saturated).
+		bool foundSaturatedConstraint = false;
+		for(unsigned constraintIndex = 0; constraintIndex < mConstraintMatrix.rows(); ++constraintIndex) {
+			Number optVal = mConstraintMatrix.row(constraintIndex).dot(res.optimumValue);
+			// check for saturation.
+			if( optVal == mConstraintVector(constraintIndex) ) {
+				foundSaturatedConstraint = true;
+				break;
+			}
+		}
 
-		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
+		if(!foundSaturatedConstraint) {
+			#ifdef HYPRO_USE_Z3
+			#ifdef HYPRO_STATISTICS
+			++Statistician::getInstance().get("z3");
+			#endif
+			res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
+			#ifdef HYPRO_STATISTICS
+			++Statistician::getInstance().get("smtrat");
+			#endif
+			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			#elif defined(HYPRO_USE_SOPLEX)
+			#ifdef HYPRO_STATISTICS
+			++Statistician::getInstance().get("soplex");
+			#endif
+			res = soplexOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			#endif
+		}
+
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;

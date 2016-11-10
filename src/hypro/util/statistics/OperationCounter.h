@@ -17,17 +17,23 @@ namespace hypro {
 	 * @brief      An operation counter based on stackoverflow.com/questions/11365351/how-to-implement-efficient-c-runtime-statistics
 	 */
 	struct OperationCounter {
-		std::mutex mtx;
+		std::mutex mMtx;
 		unsigned long val;
 		unsigned long operator++() { return ++val; }
 		operator unsigned long() const { return val; }
-		void reset() { ScopedLock(mtx); val = 0; }
-		OperationCounter(std::string name);
+		void reset() {
+			ScopedLock<std::mutex>(this->mMtx);
+			val = 0;
+		}
+
+		friend std::ostream& operator<<(std::ostream& ostr, const OperationCounter& opCnt) {
+			ostr << opCnt.val;
+			return ostr;
+		}
 	};
 
 	struct AtomicOperationCounter : public OperationCounter {
-		unsigned long operator++() { ScopedLock(mtx); return ++val; }
-		AtomicOperationCounter(std::string name) : OperationCounter(name) {}
+		unsigned long operator++() { ScopedLock<std::mutex>(this->mMtx); return ++val; }
 	};
 
 } // namespace hypro
