@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = double;
+	using Number = mpq_class;
 #endif
 
 	switch(rep){
