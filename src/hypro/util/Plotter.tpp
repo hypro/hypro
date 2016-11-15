@@ -100,7 +100,7 @@ void Plotter<Number>::plot2d() const {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
 				tmpId++;
-				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
+				INFO("Plotting object " << tmpId << "/" << maxObj);
 			}
 			if(objectIt->second.size() > 0){
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
@@ -659,7 +659,7 @@ void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) cons
 
 		// reduce and sort objects
 		if(!mOriginalObjects.empty()){
-			std::cout << "Prepare " << mOriginalObjects.size() << " objects. Reduce to dimensions " << targetDimensions << std::endl;
+			//std::cout << "Prepare " << mOriginalObjects.size() << " objects. Reduce to dimensions " << targetDimensions << std::endl;
 			for(const auto& objPair : mOriginalObjects){
 				vector<Point<Number>> tmp;
 				for(const auto& point : objPair.second)
