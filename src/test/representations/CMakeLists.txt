@@ -50,7 +50,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#add_dependencies(runPTermTests googletest)
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC
-		${hypro_LIBRARIES_DYNAMIC}
+		#${hypro_LIBRARIES_DYNAMIC}
 		${GTEST_LIBRARIES}
 		${PROJECT_NAME}
 	)
@@ -60,10 +60,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#	${PROJECT_NAME}
 	#)
 
-	if(USE_COTIRE)
-		cotire(runRepresentationTests)
+	cotire(runRepresentationTests)
 	#	cotire(runPTermTests)
-	endif()
 
 	add_test( NAME representations COMMAND runRepresentationTests )
 	#add_test( NAME practicalTerm COMMAND runPTermTests )
