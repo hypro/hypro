@@ -210,7 +210,6 @@ namespace reachability {
 				}
 				currentLocalTime += mSettings.timeStep;
 			}
-			std::cout << std::endl;
 #ifdef REACH_DEBUG
 			if(!noFlow){
 				std::cout << "--- Loop left ---" << std::endl;
