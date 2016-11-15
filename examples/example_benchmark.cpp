@@ -9,41 +9,38 @@
 #include "parser/flowstar/ParserWrapper.h"
 #include "util/statistics/CounterRepository.h"
 //#include <boost/program_options.hpp>
+#include <sys/wait.h>
+#include <signal.h>
 #define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>
 static void computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::duration<long long unsigned, std::micro>;
-	std::cout << "Filename: " << filename << std::endl;
-	std::size_t numberRuns = 5;
-	double timeout = 20.0;
-	std::vector<timeunit> runtimes(numberRuns);
-	timeunit summedTime(0);
+	//std::cout << "Filename: " << filename << std::endl;
+	std::size_t numberRuns = 1;
+	std::vector<std::chrono::duration<double, std::milli>> runtimes(numberRuns);
+	std::chrono::duration<double, std::milli> summedTime(0.0);
 	clock::time_point startParsing = clock::now();
 	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
-	timeunit parseTime = std::chrono::duration_cast<timeunit>(clock::now() - startParsing);
+	std::chrono::duration<double, std::milli> parseTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(clock::now() - startParsing);
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes;
-	std::cout << "Parse time is " << parseTime.count()/1000.0 << std::endl;
+	//std::cout << "Parse time is " << parseTime.count() << std::endl;
 
 	for(std::size_t run = 0; run < numberRuns; ++run) {
 		clock::time_point start = clock::now();
 		hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
 		flowpipes = reacher.computeForwardReachability();
 		runtimes.push_back(std::chrono::duration_cast<timeunit>( clock::now() - start ));
-		summedTime += std::chrono::duration_cast<timeunit>( clock::now() - start )/(numberRuns*1000);
-		std::cout << "Summed time: " << std::chrono::duration_cast<timeunit>( summedTime ).count() << std::endl;
-		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<long long unsigned, std::milli>>( clock::now() - start ).count() << " ms." << std::endl;
-		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<double, std::ratio<60>>>( clock::now() - start ).count() << " minutes." << std::endl;
-		if(std::chrono::duration_cast<std::chrono::duration<double, std::ratio<60>>>( clock::now() - start ).count() > timeout) {
-			std::cout << "Timeout, runntime exceeded " << timeout << " minutes." << std::endl;
-			exit(0);
-		}
+		summedTime += std::chrono::duration_cast<std::chrono::duration<double, std::milli>>( clock::now() - start )/(numberRuns);
+		//std::cout << "Summed time: " << std::chrono::duration_cast<std::chrono::duration<double, std::milli>>( summedTime ).count() << std::endl;
+		std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<double, std::milli>>( clock::now() - start ).count() << " ms." << std::endl;
+		//std::cout << "Run finished in " << std::chrono::duration_cast<std::chrono::duration<double, std::ratio<60>>>( clock::now() - start ).count() << " minutes." << std::endl;
 		PRINT_STATS()
 		RESET_STATS()
 	}
 	std::cout << boost::get<1>(ha) << std::endl;
-	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>(summedTime).count()+parseTime.count()/1000.0 << " ms" << std::endl;
+	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(summedTime).count()+std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(parseTime).count() << " ms" << std::endl;
 
 #ifdef PLOT_FLOWPIPE
 	clock::time_point startPlotting = clock::now();
@@ -74,7 +71,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		default:
 			extendedFilename += "_unknownRep";
 	}
-	std::cout << "filename is " << extendedFilename << std::endl;
+	//std::cout << "filename is " << extendedFilename << std::endl;
 	plotter.setFilename(extendedFilename);
 	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
@@ -123,11 +120,11 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 			++cnt;
 		}
 	}
-	std::cout << "Write to file." << std::endl;
+	//std::cout << "Write to file." << std::endl;
 	//std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
 	plotter.plot2d();
 	plotter.plotGen();
-	plotter.plotTex();
+	//plotter.plotTex();
 
 	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
@@ -135,6 +132,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 }
 
 int main(int argc, char** argv) {
+	using clock = std::chrono::high_resolution_clock;
+
 	int rep = 0;
 	std::string filename = argv[1];
 	if(argc > 2) {
@@ -142,11 +141,7 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-#ifdef USE_CLN_NUMBERS
-	using Number = cln::cl_RA;
-#else
-	using Number = double;
-#endif
+	using Number = mpq_class;
 
 	switch(rep){
 		case 5: {
@@ -185,6 +180,5 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 		}
 	}
-
 	exit(0);
 }
