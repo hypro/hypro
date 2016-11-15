@@ -4,7 +4,7 @@
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>&) {
+	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
 		EvaluationResult<Number> res;
 		smtrat::Poly objective = createObjective(_direction);
 		//#ifdef RECREATE_SOLVER
@@ -72,70 +72,13 @@ namespace hypro {
 				#else // NOT USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				assert(smtratCheck == smtrat::Answer::UNSAT);
-				//std::cout << "smtrat: UNSAT" << std::endl;
+				// std::cout << "smtrat: UNSAT" << std::endl;
 				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				#endif // USE_PRESOLUTION
 				break;
 			}
 		}
-
-		//#else // RECREATE_SOVER
-		/*
-		mSmtratSolver.push();
-		#ifdef USE_PRESOLUTION
-
-		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
-		if(res.errorCode == FEAS) {
-			addPreSolution(mSmtratSolver,res,_direction,objective);
-		} else if( res.errorCode == INFEAS) {
-			if(mSmtratSolver.check() == smtrat::Answer::UNSAT) {
-				return res;
-			}
-		} else { // if glpk detected unboundedness we return.
-			return res;
-		}
-		#endif // USE_PRESOLUTION
-		mSmtratSolver.addObjective(objective, false);
-		//std::cout << "(push)" << std::endl;
-		//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
-
-		smtrat::Answer smtratCheck = mSmtratSolver.check();
-		switch(smtratCheck) {
-			case smtrat::Answer::SAT:{
-				res = extractSolution<Number>(mSmtratSolver,objective);
-				assert(checkPoint(Point<Number>(res.optimumValue)));
-				break;
-			}
-			default:{
-				#ifdef USE_PRESOLUTION
-				// GLPK Solution was missleading, restart without it
-				mSmtratSolver.pop();
-				mSmtratSolver.addObjective(objective, false);
-				//std::cout << "Cleared formula: " << std::endl;
-				//std::cout << ((smtrat::FormulaT)mSmtratSolver.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-				//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
-
-				smtratCheck = mSmtratSolver.check();
-				assert(smtratCheck != smtrat::Answer::UNKNOWN);
-				if(smtratCheck == smtrat::Answer::SAT) {
-					res = extractSolution<Number>(mSmtratSolver,objective);
-					assert(checkPoint(Point<Number>(res.optimumValue)));
-				} else {
-					assert(smtratCheck == smtrat::Answer::UNSAT);
-					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-				}
-				#endif // USE_PRESOLUTION
-				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
-				assert(smtratCheck == smtrat::Answer::UNSAT);
-				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-				break;
-			}
-		}
-		// cleanup: Remove optimization function and glpk pre-results, if added
-		mSmtratSolver.pop();
-		*/
-		//#endif // RECREATE_SOLVER
+		return res;
 	}
 
 	template<typename Number>

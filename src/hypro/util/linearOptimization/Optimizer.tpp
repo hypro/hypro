@@ -76,9 +76,7 @@ namespace hypro {
 		EvaluationResult<Number> res;
 		#endif
 
-		#ifdef HYPRO_STATISTICS
-		++Statistician::getInstance().get("glpk");
-		#endif
+		COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector);
 		#else
@@ -92,32 +90,71 @@ namespace hypro {
 
 		// At this point we can check, whether the glpk result is already exact and optimal.
 		// We do this by inserting the solution into the constraints. The solution is exact,
-		// whenever it lies at least on one hyperplane (the respective constraint is saturated).
-		bool foundSaturatedConstraint = false;
+		// whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover
+		// the solution should always satisfy all constraints and if the direction is linear independent from
+		// all normals, at least d (d is the dimension) constraints are saturated.
+ 		unsigned saturatedPositiveConstraints = 0;
+ 		int closestLinearDependentConstraint = -1;
+ 		vector_t<Number> closestPointOnLinearDependentPlane;
+ 		bool invalidResult = false;
 		for(unsigned constraintIndex = 0; constraintIndex < mConstraintMatrix.rows(); ++constraintIndex) {
 			Number optVal = mConstraintMatrix.row(constraintIndex).dot(res.optimumValue);
-			// check for saturation.
-			if( optVal == mConstraintVector(constraintIndex) ) {
-				foundSaturatedConstraint = true;
+			if(optVal > mConstraintVector(constraintIndex)) {
+				invalidResult = true;
 				break;
+			}
+			// check for saturation. Only when not linear dependent and the normal points in the same direction.
+			if( closestLinearDependentConstraint >= 0 &&
+				mConstraintMatrix.row(constraintIndex).dot(_direction) > 0 &&
+			 	optVal == mConstraintVector(constraintIndex) )
+			{
+				++saturatedPositiveConstraints;
+			}
+			if( linearDependent(vector_t<Number>(mConstraintMatrix.row(constraintIndex)), _direction).first ) {
+				// obtain point on the plane: scale the normal with the factor of the difference of the
+				// length of the normal and the target distance.
+				Number factor = mConstraintVector(constraintIndex)/(mConstraintMatrix.row(constraintIndex).dot(mConstraintMatrix.row(constraintIndex)));
+				vector_t<Number> pointOnPlane = mConstraintMatrix.row(constraintIndex) * factor;
+				// update closest point if required (compare first nonZero component).
+				unsigned nonZeroPos = 0;
+				while(_direction(nonZeroPos) == Number(0)) {++nonZeroPos;}
+				// positive pointing direction - take the point with the smallest component in this dimension.
+				if(_direction(nonZeroPos) > 0) {
+					if(closestLinearDependentConstraint==-1 || closestPointOnLinearDependentPlane(nonZeroPos) > pointOnPlane(nonZeroPos)) {
+						closestPointOnLinearDependentPlane = pointOnPlane;
+						closestLinearDependentConstraint = constraintIndex;
+					}
+				} else {
+					if(closestLinearDependentConstraint==-1 || closestPointOnLinearDependentPlane(nonZeroPos) < pointOnPlane(nonZeroPos)) {
+						closestPointOnLinearDependentPlane = pointOnPlane;
+						closestLinearDependentConstraint = constraintIndex;
+					}
+				}
 			}
 		}
 
-		if(!foundSaturatedConstraint) {
+		// re-solve when: Either the result invalidates one constraint, or the direction is linear independent from all
+		// constraint-normals and there are not at least d constraints saturated or if the direction is linear
+		// dependent and the closest linear dependent constraint is not satisfied.
+		if( invalidResult ||
+			( closestLinearDependentConstraint == -1 && saturatedPositiveConstraints < mConstraintMatrix.cols() ) ||
+			( mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) {
+
+			// TODO: just for statistics, delete in productive code!
+			if(invalidResult) COUNT("invalid result");
+
+			if(( closestLinearDependentConstraint == -1 && saturatedPositiveConstraints < mConstraintMatrix.cols())) COUNT("saturation failure");
+
+			if(( closestLinearDependentConstraint != -1 && mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) COUNT("linear dependence failure");
+
 			#ifdef HYPRO_USE_Z3
-			#ifdef HYPRO_STATISTICS
-			++Statistician::getInstance().get("z3");
-			#endif
+			COUNT("z3");
 			res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
 			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
-			#ifdef HYPRO_STATISTICS
-			++Statistician::getInstance().get("smtrat");
-			#endif
+			COUNT("smtrat");
 			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
 			#elif defined(HYPRO_USE_SOPLEX)
-			#ifdef HYPRO_STATISTICS
-			++Statistician::getInstance().get("soplex");
-			#endif
+			COUNT("soplex");
 			res = soplexOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
 			#endif
 		}
@@ -125,7 +162,7 @@ namespace hypro {
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-		assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
+		//assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		#ifdef DEBUG_MSG
 		std::cout << "Final solution distance: " << res.supportValue << std::endl;
 		#endif

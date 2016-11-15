@@ -5,7 +5,10 @@
 //
 
 #pragma once
-#include "../../../flags.h"
+#include "flags.h"
+#include "types.h"
+#include "datastructures/Point.h"
+#include "util/linearOptimization/EvaluationResult.h"
 #ifdef HYPRO_USE_Z3
 #include <carl/util/Singleton.h>
 #include <carl/core/Relation.h>
@@ -134,49 +137,6 @@ namespace hypro {
 
 		return std::make_pair(formula,objective);
 	}
-
-
-	// This has been a Test and should not be needed.
-	/*
-	class ContextProvider : public carl::Singleton<ContextProvider> {
-	    friend carl::Singleton<ContextProvider>;
-
-	    public:
-            ContextProvider () : mContextCollection(100), mFreeContextsBitmap(100, true) {}
-
-            z3::context& getFreeContext() {
-                lock.lock();
-                for (unsigned i = 0; i < mFreeContextsBitmap.size(); i++) {
-                    if (mFreeContextsBitmap[i] == true) {
-                        // found free
-                        mFreeContextsBitmap[i] = false; // mark as in use
-                        lock.unlock();
-                        return mContextCollection[i];
-                    }
-                }
-                lock.unlock();
-                std::cout << "WARN - You use more threads than concurrenty supported!" << std::endl;
-                assert(false);
-            }
-
-            void returnContext (z3::context& context) {
-                lock.lock();
-                for (unsigned i = 0; i < mContextCollection.size(); i++) {
-                    if (&context == &(mContextCollection[i])) {
-                        mFreeContextsBitmap[i] = true;
-                        break;
-                    }
-                }
-                lock.unlock();
-            }
-
-	    private:
-
-	        std::vector<z3::context> mContextCollection;
-	        std::vector<bool> mFreeContextsBitmap;
-	        unsigned mLastReturnedContext;
-	        mutable std::mutex lock;
-	};*/
 
 } // namespace hypro
 

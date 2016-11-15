@@ -18,6 +18,20 @@ namespace hypro {
 		// inform and add constraints
 		z3Optimizer.add(formulaObjectivePair.first);
 
+		#ifdef USE_PRESOLUTION
+		z3Optimizer.push();
+		if(preSolution.errorCode == FEAS) {
+			addPreSolution(z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second);
+		} else if( preSolution.errorCode == INFEAS) {
+			if(z3Optimizer.check() == z3::unsat){
+				//std::cout << "SMTRAT infeas." << std::endl;
+				return preSolution; // glpk correctly detected infeasibility.
+			} // if glpk falsely detected infeasibility, we cope with this case below.
+		} else { // if glpk already detected unboundedness we return its result.
+			return preSolution;
+		}
+		#endif
+
 		// optimize with objective function
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
@@ -57,6 +71,51 @@ namespace hypro {
 		       res.supportValue = Number(Z3_get_numeral_string(c,z3res));
 		       res.optimumValue = pointCoordinates;
 			}
+		} else {
+			#ifdef USE_PRESOLUTION
+				// in this case the constraints introduced by the presolution made the problem infeasible
+
+				z3Optimizer.pop();
+				z3::optimize::handle z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
+				assert(z3::unknown != z3Optimizer.check());
+				if(z3::sat == z3Optimizer.check()) {
+					z3::expr z3res = z3Optimizer.upper(z3Check);
+					assert(z3res.is_arith());
+
+					z3::model m = z3Optimizer.get_model();
+					//std::cout << "Model: " << m << std::endl;
+					//std::cout << "Num consts in model: " << m.num_consts() << ", and dimension: " << constraints.cols() << " and variable size: " << variables.size() <<std::endl;
+					//assert(m.num_consts() == constraints.cols());
+					//assert(variables.size() == m.num_consts());
+					vector_t<Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+					for( unsigned i = 0; i < variables.size(); ++i ){
+						z3::func_decl tmp = variables.at(i).decl();
+						//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
+						if(Z3_model_get_const_interp(c,m,tmp) != nullptr){
+							pointCoordinates(i) = Number(Z3_get_numeral_string(c,m.get_const_interp(tmp)));
+						}
+					}
+		            res.errorCode = SOLUTION::FEAS;
+					// check whether unbounded
+					std::stringstream sstr;
+					sstr << z3res;
+
+					if (std::string("oo") == sstr.str()) {
+				       res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
+					}
+					else {
+				       // std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
+				       // std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
+				       res.supportValue = Number(Z3_get_numeral_string(c,z3res));
+				       res.optimumValue = pointCoordinates;
+					}
+				} else {
+					assert(z3::unsat == z3Optimizer.check());
+					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+				}
+			#else
+			return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+			#endif
 		}
 		return res;
 	}
@@ -166,5 +225,3 @@ namespace hypro {
 
 
 } // namespace hypro
-
-#include "adaptions_z3_double.tpp"
