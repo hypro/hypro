@@ -5,6 +5,7 @@
 
 #define PRINT_STATS()
 #define RESET_STATS()
+#define COUNT(expr)
 
 #ifdef HYPRO_STATISTICS
 
@@ -46,7 +47,9 @@ namespace hypro {
 
 #undef PRINT_STATS
 #undef RESET_STATS
+#undef COUNT
 #define PRINT_STATS() std::cout << hypro::Statistician::getInstance() << std::endl;
 #define RESET_STATS() hypro::Statistician::getInstance().reset();
+#define COUNT(expr) ++hypro::Statistician::getInstance().get(expr);
 
 #endif
