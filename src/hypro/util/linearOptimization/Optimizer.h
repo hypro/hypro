@@ -26,9 +26,7 @@
 #include <sys/stat.h>
 #endif
 
-#ifdef HYPRO_STATISTICS
 #include "util/statistics/statistics.h"
-#endif
 
 #include <glpk.h>
 

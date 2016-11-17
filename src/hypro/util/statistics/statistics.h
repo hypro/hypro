@@ -8,7 +8,6 @@
 #define COUNT(expr)
 
 #ifdef HYPRO_STATISTICS
-
 #define INCL_FROM_STATISTICS
 
 #include "CounterRepository.h"
