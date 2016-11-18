@@ -141,18 +141,9 @@ TYPED_TEST(PolytopeTest, Access)
     EXPECT_EQ(p1.dimension(), unsigned(2));
 
     std::vector<Point<TypeParam>> ps2;
-    typename Point<TypeParam>::coordinateMap coordinates;
-    coordinates.insert( std::make_pair(this->x, TypeParam(7)) );
-    coordinates.insert( std::make_pair(this->y, TypeParam(8)) );
-    Point<TypeParam> p5 = Point<TypeParam>(coordinates);
-    coordinates.clear();
-    coordinates.insert( std::make_pair(this->x, TypeParam(1)) );
-    coordinates.insert( std::make_pair(this->y, TypeParam(2)) );
-    Point<TypeParam> p6 = Point<TypeParam>(coordinates);
-    coordinates.clear();
-    coordinates.insert( std::make_pair(this->x, TypeParam(4)) );
-    coordinates.insert( std::make_pair(this->y, TypeParam(3)) );
-    Point<TypeParam> p7 = Point<TypeParam>(coordinates);
+    Point<TypeParam> p5 = Point<TypeParam>({TypeParam(7), TypeParam(8)});
+    Point<TypeParam> p6 = Point<TypeParam>({TypeParam(1), TypeParam(2)});
+    Point<TypeParam> p7 = Point<TypeParam>({TypeParam(4), TypeParam(3)});
     ps2.push_back(p5);
     ps2.push_back(p6);
     ps2.push_back(p7);
@@ -497,22 +488,10 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     Point<TypeParam> pt3;
     Point<TypeParam> pt4;
 
-    typename Point<TypeParam>::coordinateMap c1;
-    c1.insert( std::make_pair(this->x, TypeParam(0)) );
-    c1.insert( std::make_pair(this->y, TypeParam(0)) );
-    pt1 = Point<TypeParam>(c1);
-    typename Point<TypeParam>::coordinateMap c2;
-    c2.insert( std::make_pair(this->x, TypeParam(0)) );
-    c2.insert( std::make_pair(this->y, TypeParam(4)) );
-    pt2 = Point<TypeParam>(c2);
-    typename Point<TypeParam>::coordinateMap c3;
-    c3.insert( std::make_pair(this->x, TypeParam(4)) );
-    c3.insert( std::make_pair(this->y, TypeParam(4)) );
-    pt3 = Point<TypeParam>(c3);
-    typename Point<TypeParam>::coordinateMap c4;
-    c4.insert( std::make_pair(this->x, TypeParam(4)) );
-    c4.insert( std::make_pair(this->y, TypeParam(0)) );
-    pt4 = Point<TypeParam>(c4);
+    pt1 = Point<TypeParam>({TypeParam(0), TypeParam(0)});
+    pt2 = Point<TypeParam>({TypeParam(0), TypeParam(4)});
+    pt3 = Point<TypeParam>({TypeParam(4), TypeParam(4)});
+    pt4 = Point<TypeParam>({TypeParam(4), TypeParam(0)});
 
     std::vector<Point<TypeParam>> ps1;
     ps1.push_back(pt1);
@@ -535,7 +514,7 @@ TYPED_TEST(PolytopeTest, LinearTransformation)
     //b(1,0) = TypeParam(0);
 
     hypro::Polytope<TypeParam> result;
-    result = poly1.linearTransformation(A, vector_t<TypeParam>::Zero(A.rows())); //what kind of result is expected?
+    result = poly1.affineTransformation(A, vector_t<TypeParam>::Zero(A.rows())); //what kind of result is expected?
 //    result.print();
 }
 
@@ -559,40 +538,13 @@ TYPED_TEST(PolytopeTest, MinkowskiSum)
 
 //    result.print();
 
-    typename Point<TypeParam>::coordinateMap c1;
-    c1.insert( std::make_pair(this->x, TypeParam(9)) );
-    c1.insert( std::make_pair(this->y, TypeParam(12)) );
-    this->p1 = Point<TypeParam>(c1);
-
-    typename Point<TypeParam>::coordinateMap c2;
-    c2.insert( std::make_pair(this->x, TypeParam(11)) );
-    c2.insert( std::make_pair(this->y, TypeParam(12)) );
-    this->p2 = Point<TypeParam>(c2);
-
-    typename Point<TypeParam>::coordinateMap c3;
-    c3.insert( std::make_pair(this->x, TypeParam(8)) );
-    c3.insert( std::make_pair(this->y, TypeParam(10)) );
-    this->p3 = Point<TypeParam>(c3);
-
-    typename Point<TypeParam>::coordinateMap c4;
-    c4.insert( std::make_pair(this->x, TypeParam(12)) );
-    c4.insert( std::make_pair(this->y, TypeParam(10)) );
-    this->p4 = Point<TypeParam>(c4);
-
-    typename Point<TypeParam>::coordinateMap c5;
-    c5.insert( std::make_pair(this->x, TypeParam(7)) );
-    c5.insert( std::make_pair(this->y, TypeParam(7)) );
-    this->p5 = Point<TypeParam>(c5);
-
-    typename Point<TypeParam>::coordinateMap c6;
-    c6.insert( std::make_pair(this->x, TypeParam(13)) );
-    c6.insert( std::make_pair(this->y, TypeParam(7)) );
-    this->p6 = Point<TypeParam>(c6);
-
-    typename Point<TypeParam>::coordinateMap c7;
-    c7.insert( std::make_pair(this->x, TypeParam(13)) );
-    c7.insert( std::make_pair(this->y, TypeParam(8)) );
-    this->p7 = Point<TypeParam>(c7);
+    this->p1 = Point<TypeParam>({TypeParam(9), TypeParam(12)});
+    this->p2 = Point<TypeParam>({TypeParam(11), TypeParam(12)});
+    this->p3 = Point<TypeParam>({TypeParam(8), TypeParam(10)});
+    this->p4 = Point<TypeParam>({TypeParam(10), TypeParam(12)});
+    this->p5 = Point<TypeParam>({TypeParam(7), TypeParam(7)});
+    this->p6 = Point<TypeParam>({TypeParam(13), TypeParam(7)});
+    this->p7 = Point<TypeParam>({TypeParam(13), TypeParam(8)});
 
     EXPECT_TRUE(result.contains(this->p1));
     EXPECT_TRUE(result.contains(this->p2));

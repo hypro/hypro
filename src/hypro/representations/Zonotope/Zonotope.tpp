@@ -882,7 +882,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constr
 		dVec( i ) = -1 * halfspace.coefficient( Variable( i ) ).get_d();
 	}
 
-	return this->intersectWithHalfspace( dVec, e );
+	return this->intersectHalfspace( Halfspace<Number>(dVec, e) );
 }
 #endif
 

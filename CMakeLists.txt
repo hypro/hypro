@@ -44,7 +44,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_DOWNLOAD_RESOURCES "Explicitly download all external resources." OFF)
-#option(USE_PPL "Use PPl polytope wrapper." OFF)
+option(USE_PPL "Use PPl polytope wrapper." OFF)
 option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)

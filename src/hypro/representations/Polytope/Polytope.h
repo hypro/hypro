@@ -22,12 +22,14 @@ CLANG_WARNING_RESET
 #include <carl/core/Variable.h>
 
 #include "util.h"
-#include "../GeometricObject.h"
-#include "../../datastructures/Point.h"
-#include "../../datastructures/Facet.h"
-#include "../../datastructures/Ridge.h"
-#include "../../datastructures/Halfspace.h"
-#include "../../util/convexHull.h"
+#include "representations/GeometricObject.h"
+#include "representations/Polytopes/Cone.h"
+#include "representations/Polytopes/Fan.h"
+#include "datastructures/Point.h"
+#include "datastructures/Facet.h"
+#include "datastructures/Ridge.h"
+#include "datastructures/Halfspace.h"
+#include "util/convexHull.h"
 
 
 using namespace Parma_Polyhedra_Library;
@@ -42,7 +44,7 @@ namespace hypro
 		C_Polyhedron mPolyhedron;
 		mutable std::vector<Point<Number>> mPoints;
 		mutable bool mPointsUpToDate;
-		polytope::Fan<Number> mFan;
+		Fan<Number> mFan;
 
 	public:
 		Polytope();
@@ -94,17 +96,17 @@ namespace hypro
 		/*
 		 * returns the fan of the Polytope
 		 */
-		const polytope::Fan<Number>& fan();
+		const Fan<Number>& fan();
 
 		/*
 		 * returns a reference to the fan of the Polytope
 		 */
-		polytope::Fan<Number>& rFan();
+		Fan<Number>& rFan();
 
 		/*
 		 * sets the fan of the Polytope
 		 */
-		void setFan(const polytope::Fan<Number>& _fan);
+		void setFan(const Fan<Number>& _fan);
 
 		void calculateFan();
 

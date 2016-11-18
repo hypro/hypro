@@ -9,13 +9,12 @@
 #pragma once
 
 #include "Cone.h"
-#include "../../datastructures/Point.h"
+#include "datastructures/Point.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>
 
 namespace hypro {
-namespace polytope {
 
 template <typename Number>
 class Fan {
@@ -59,7 +58,7 @@ class Fan {
 		cones = glp_create_prob();
 		glp_set_obj_dir( cones, GLP_MAX );
 
-		typename polytope::Cone<Number>::vectors vectors;
+		typename Cone<Number>::vectors vectors;
 		for ( auto& cone : mCones ) {
 			vectors.insert( vectors.end(), cone.begin(), cone.end() );
 		}
@@ -69,9 +68,9 @@ class Fan {
 		glp_add_cols( cones, numPlanes );
 		glp_add_rows( cones, this->mDimension );
 
-		int ia[elements];
-		int ja[elements];
-		double ar[elements];
+		int* ia = new int[1 + elements];
+		int* ja = new int[1 + elements];
+		double* ar = new double[1 + elements];
 		unsigned pos = 1;
 
 		for ( unsigned i = 1; i <= this->mDimension; ++i ) {
@@ -106,5 +105,4 @@ class Fan {
 	}
 };
 
-}  // namespace polytope
 }  // namespace hypro

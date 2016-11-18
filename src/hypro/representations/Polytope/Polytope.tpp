@@ -206,18 +206,18 @@ std::vector<Point<Number>> &Polytope<Number>::rVertices() {
 
 // returns the fan of the Polytope
 template <typename Number>
-const polytope::Fan<Number> &Polytope<Number>::fan() {
+const Fan<Number> &Polytope<Number>::fan() {
 	return mFan;
 }
 
 template <typename Number>
-polytope::Fan<Number> &Polytope<Number>::rFan() {
+Fan<Number> &Polytope<Number>::rFan() {
 	return mFan;
 }
 
 // sets the fan of the Polytope
 template <typename Number>
-void Polytope<Number>::setFan( const polytope::Fan<Number> &_fan ) {
+void Polytope<Number>::setFan( const Fan<Number> &_fan ) {
 	mFan = _fan;
 }
 
@@ -230,9 +230,9 @@ void Polytope<Number>::calculateFan() {
 			preresult.insert( facets[i].vertices().at( j ) );
 		}
 	}
-	polytope::Fan<Number> fan;
+	Fan<Number> fan;
 	for ( auto &point : preresult ) {
-		polytope::Cone<Number> *cone = new polytope::Cone<Number>();
+		Cone<Number> *cone = new Cone<Number>();
 		for ( unsigned i = 0; i < facets.size(); i++ ) {
 			for ( unsigned j = 0; j < facets[i].vertices().size(); j++ ) {
 				if ( point == facets[i].vertices().at( j ) ) {
@@ -409,12 +409,12 @@ Polytope<Number> Polytope<Number>::affineTransformation( const matrix_t<Number> 
 	matrix_t<Number> res( variables.size(), polytope::gsSize( generators ) );
 
 	res = ( A * polytopeMatrix );
-	matrix_t<Number> tmp( res.rows(), res.cols() );
-	for ( unsigned m = 0; m < tmp.rows(); ++m )
-		for ( unsigned n = 0; n < tmp.cols(); ++n ) {
-			tmp( m, n ) = b( m );
+	matrix_t<Number> constantPart( res.rows(), res.cols() );
+	for ( unsigned m = 0; m < constantPart.rows(); ++m )
+		for ( unsigned n = 0; n < constantPart.cols(); ++n ) {
+			constantPart( m, n ) = b( m );
 		}
-	res += tmp;
+	res += constantPart;
 
 	// clear actual generators and add new ones
 	std::vector<vector_t<Number>> ps;
@@ -577,7 +577,7 @@ Polytope<Number> Polytope<Number>::altMinkowskiSum( Polytope<Number> &rhs ) {
 	vector_t<Number> sinkMaximizerVector = polytope::computeMaximizerVector( sinkMaximizerTarget, initVertex );
 
 	// compute the normal cone of the initial extreme point
-	polytope::Cone<Number> *cone = polytope::computeCone( initVertex, sinkMaximizerVector );
+	Cone<Number> *cone = polytope::computeCone( initVertex, sinkMaximizerVector );
 	// add this normal cone to the fan of the polytope
 	result.rFan().add( cone );
 
@@ -747,9 +747,9 @@ Polytope<Number> Polytope<Number>::intersectHalfspace( const Halfspace<Number> &
 		ls.set_space_dimension( rhs.dimension() );
 		for ( unsigned rowIndex = 0; rowIndex < rhs.dimension(); ++rowIndex ) {
 			ls.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( rowIndex ),
-								double( rhs.normal()( rowIndex ) * fReach_DENOMINATOR ) );
+								carl::convert<Number,double>( rhs.normal()( rowIndex ) * fReach_DENOMINATOR ) );
 		}
-		ls.set_inhomogeneous_term( -double( rhs.offset() * fReach_DENOMINATOR ) );
+		ls.set_inhomogeneous_term( carl::convert<Number,double>(-( rhs.offset() * fReach_DENOMINATOR )) );
 
 		Parma_Polyhedra_Library::Constraint constraint;
 		constraint = ls <= 0;
@@ -1020,7 +1020,7 @@ Point<Number> Polytope<Number>::localSearch( Point<Number> &_vertex, Point<Numbe
 #endif
 
 	// compute the normal cone of _vertex
-	polytope::Cone<Number> *cone = polytope::computeCone( _vertex, maximizerVector );
+	Cone<Number> *cone = polytope::computeCone( _vertex, maximizerVector );
 
 	// iterate through all planes and check which one intersects with the ray
 	Number factor;

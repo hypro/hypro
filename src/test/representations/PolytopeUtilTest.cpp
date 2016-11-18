@@ -10,7 +10,8 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 
-#include "../../hypro/representations/Polytopes/util.h"
+#include "../../hypro/representations/Polytopes/Cone.h"
+#include "../../hypro/representations/Polytopes/Fan.h"
 
 template<typename Number>
 class PolytopeUtilTest : public ::testing::Test
@@ -92,9 +93,7 @@ TYPED_TEST(PolytopeUtilTest, HalfspaceIntersection)
 
 TYPED_TEST(PolytopeUtilTest, ConeConstructor)
 {
-	namespace ptope = hypro::polytope;
-
-	ptope::Cone<TypeParam> cone1;
+	hypro::Cone<TypeParam> cone1;
 
 	hypro::vector_t<TypeParam> normal1 = hypro::vector_t<TypeParam>(3);
 	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
@@ -108,20 +107,18 @@ TYPED_TEST(PolytopeUtilTest, ConeConstructor)
 	normal3 << TypeParam(1), TypeParam(0), TypeParam(0);
 	std::shared_ptr<hypro::Halfspace<TypeParam>> hp3 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal3,TypeParam(0)));
 
-	typename ptope::Cone<TypeParam>::planeVector planes;
+	typename hypro::Cone<TypeParam>::planeVector planes;
 	planes.push_back(hp1);
 	planes.push_back(hp2);
 	planes.push_back(hp3);
 
-	ptope::Cone<TypeParam> cone2(planes);
+	hypro::Cone<TypeParam> cone2(planes);
 
     SUCCEED();
 }
 
 TYPED_TEST(PolytopeUtilTest, ConeAccess)
 {
-	namespace ptope = hypro::polytope;
-
 	hypro::vector_t<TypeParam> normal1 = hypro::vector_t<TypeParam>(3);
 	normal1 << TypeParam(1), TypeParam(0), TypeParam(0);
 	std::shared_ptr<hypro::Halfspace<TypeParam>> hp1 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal1,TypeParam(0)));
@@ -134,12 +131,12 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 	normal3 << TypeParam(0), TypeParam(0), TypeParam(1);
 	std::shared_ptr<hypro::Halfspace<TypeParam>> hp3 = std::shared_ptr<hypro::Halfspace<TypeParam>>(new hypro::Halfspace<TypeParam>(normal3,TypeParam(0)));
 
-	typename ptope::Cone<TypeParam>::planeVector planes;
+	typename hypro::Cone<TypeParam>::planeVector planes;
 	planes.push_back(hp1);
 	planes.push_back(hp2);
 	planes.push_back(hp3);
 
-	ptope::Cone<TypeParam> cone(planes);
+	hypro::Cone<TypeParam> cone(planes);
 
 	//std::cout << cone << std::endl;
 
@@ -160,19 +157,6 @@ TYPED_TEST(PolytopeUtilTest, ConeAccess)
 	//std::cout << "Result: " << cone << std::endl;
 
     SUCCEED();
-}
-
-TYPED_TEST(PolytopeUtilTest, dPermutation) {
-	// TODO: introduce test.
-	namespace ptope = hypro::polytope;
-
-	ptope::dPermutator dpermutator = ptope::dPermutator(5,3);
-	std::vector<unsigned> perm(3,0);
-
-	while(!dpermutator.end()) {
-		perm = dpermutator();
-		std::cout << perm << std::endl;
-	}
 }
 
 /*

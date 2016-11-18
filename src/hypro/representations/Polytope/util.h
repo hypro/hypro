@@ -10,10 +10,10 @@
 #pragma once
 
 #include <carl/core/Variable.h>
-#include "../../util/VariablePool.h"
+#include "util/VariablePool.h"
 
-#include "../Polytopes/util.h"
-#include "../../datastructures/Halfspace.h"
+#include "representations/Polytopes/Cone.h"
+#include "datastructures/Halfspace.h"
 
 namespace hypro {
 namespace polytope {
@@ -35,7 +35,7 @@ static inline std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Librar
 	return variables;
 }
 
-static inline const unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& gs ) {
+static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& gs ) {
 	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
 	for ( const auto& g : gs ) {
@@ -45,7 +45,7 @@ static inline const unsigned gsSize( const Parma_Polyhedra_Library::Generator_Sy
 	return i;
 }
 
-static inline const unsigned csSize( const Parma_Polyhedra_Library::Constraint_System& cs ) {
+static inline unsigned csSize( const Parma_Polyhedra_Library::Constraint_System& cs ) {
 	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
 	for ( const auto& c : cs ) {
@@ -391,9 +391,9 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 	std::cout << "other source Vertex: " << otherSource << std::endl;
 	std::cout << "considered Edge: " << edge << std::endl;
 #endif
-	int ia[1 + elements];
-	int ja[1 + elements];
-	double ar[1 + elements];
+	int* ia = new int[1 + elements];
+	int* ja = new int[1 + elements];
+	double* ar = new double[1 + elements];
 	unsigned pos = 1;
 
 	// to prevent bugs
@@ -556,9 +556,9 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 
 	// setup matrix coefficients
 	unsigned elements = ( edges.size() ) * ( tmpEdge.rows() + 1 );
-	int ia[1 + elements];
-	int ja[1 + elements];
-	double ar[1 + elements];
+	int* ia = new int[1 + elements];
+	int* ja = new int[1 + elements];
+	double* ar = new double[1 + elements];
 	unsigned pos = 1;
 
 	// to prevent bugs
@@ -654,9 +654,9 @@ vector_t<Number> computeNormalConeVector( std::vector<vector_t<Number>>& _edgeSe
 
 	// setup matrix coefficients
 	unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
-	int ia[1 + elements];
-	int ja[1 + elements];
-	double ar[1 + elements];
+	int* ia = new int[1 + elements];
+	int* ja = new int[1 + elements];
+	double* ar = new double[1 + elements];
 	unsigned pos = 1;
 
 	// to prevent bugs
@@ -728,7 +728,7 @@ std::vector<vector_t<Number>> computeEdgeSet( Point<Number>& _vertex ) {
  * computes the normal cone for a given vertex
  */
 template <typename Number>
-polytope::Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerVector ) {
+Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerVector ) {
 	std::vector<vector_t<Number>> edges = computeEdgeSet( _vertex );
 
 	std::vector<vector_t<Number>> tmpEdges;
@@ -756,7 +756,7 @@ polytope::Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _
 
 	// dimension-1 (edge) vectors define one Halfspace of our cone
 	// -> iterate over resultVectorSet & consider every edge with its direct neighbor
-	polytope::Cone<Number>* cone = new polytope::Cone<Number>();
+	Cone<Number>* cone = new Cone<Number>();
 	// set the origin of the cone
 	cone->setOrigin( _vertex );
 	std::vector<vector_t<Number>> vectorTuple;
