@@ -31,22 +31,32 @@ namespace reachability {
 				switch(type){
 					case representation_name::box: {
 						s.set = Converter<Number>::toBox(tmpSet);
+						DEBUG("Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_h: {
 						s.set = tmpSet;
+						DEBUG("Adding initial set " << boost::get<HPolytope<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_v: {
 						s.set = Converter<Number>::toVPolytope(tmpSet);
+						DEBUG("Adding initial set " << boost::get<VPolytope<Number>>(s.set));
 						break;
 					}
 					case representation_name::zonotope: {
 						s.set = Converter<Number>::toZonotope(tmpSet);
+						DEBUG("Adding initial set " << boost::get<Zonotope<Number>>(s.set));
 						break;
 					}
 					case representation_name::support_function: {
 						s.set = Converter<Number>::toSupportFunction(tmpSet);
+						DEBUG("Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
+						break;
+					}
+					case representation_name::ppl_polytope: {
+						s.set = Representation(state.second.set.first, state.second.set.second);
+						DEBUG("Adding initial set " << boost::get<Polytope<Number>>(s.set));
 						break;
 					}
 					default: {

@@ -9,8 +9,23 @@
  */
 
 #pragma once
-#ifdef USE_PPL
 
+#ifndef INCL_FROM_GOHEADER
+	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+#endif
+
+#include "flags.h"
+
+#ifdef USE_PPL
+#include "util.h"
+#include "representations/GeometricObject.h"
+#include "representations/Polytopes/Cone.h"
+#include "representations/Polytopes/Fan.h"
+#include "datastructures/Point.h"
+#include "datastructures/Facet.h"
+#include "datastructures/Ridge.h"
+#include "datastructures/Halfspace.h"
+#include "util/convexHull.h"
 #include <map>
 #include <cassert>
 #include <string>
@@ -21,24 +36,14 @@ CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 CLANG_WARNING_RESET
 #include <carl/core/Variable.h>
 
-#include "util.h"
-#include "representations/GeometricObject.h"
-#include "representations/Polytopes/Cone.h"
-#include "representations/Polytopes/Fan.h"
-#include "datastructures/Point.h"
-#include "datastructures/Facet.h"
-#include "datastructures/Ridge.h"
-#include "datastructures/Halfspace.h"
-#include "util/convexHull.h"
-
 
 using namespace Parma_Polyhedra_Library;
 using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro
 {
-	template<typename Number>
-	class Polytope : public GeometricObject<Number, Polytope<Number>>
+	template<typename Number, typename Converter>
+	class PolytopeT : public GeometricObject<Number, PolytopeT<Number,Converter>>
 	{
 	private:
 		C_Polyhedron mPolyhedron;
@@ -47,21 +52,23 @@ namespace hypro
 		Fan<Number> mFan;
 
 	public:
-		Polytope();
-		Polytope(const Polytope& orig);
-		Polytope(unsigned dimension);
-		Polytope(const Point<Number>& point);
-		Polytope(const typename std::vector<Point<Number>>& points);
-		Polytope(const typename std::vector<vector_t<Number>>& points);
-		Polytope(const matrix_t<Number>& A, const vector_t<Number>& b);
-		Polytope(const matrix_t<Number>& A);
-		Polytope(const C_Polyhedron& _rawPoly);
+		PolytopeT();
+		PolytopeT(const PolytopeT& orig);
+		PolytopeT(unsigned dimension);
+		PolytopeT(const Point<Number>& point);
+		PolytopeT(const typename std::vector<Point<Number>>& points);
+		PolytopeT(const typename std::vector<vector_t<Number>>& points);
+		PolytopeT(const matrix_t<Number>& A, const vector_t<Number>& b);
+		PolytopeT(const matrix_t<Number>& A);
+		PolytopeT(const C_Polyhedron& _rawPoly);
 
-		virtual ~Polytope();
+		virtual ~PolytopeT();
 
 		/**
 		 * Getters and Setters
 		 */
+
+		static representation_name type() {	return representation_name::ppl_polytope; }
 
 		/**
 		 * Returns true, if the generatorset is empty.
@@ -124,7 +131,7 @@ namespace hypro
 		/*
 		 *
 		 */
-		friend std::ostream& operator<<(std::ostream& lhs, const Polytope<Number>& rhs)
+		friend std::ostream& operator<<(std::ostream& lhs, const PolytopeT<Number,Converter>& rhs)
 		{
 			lhs << "[";
 			for(auto& generator : rhs.rawPolyhedron().generators())
@@ -146,21 +153,21 @@ namespace hypro
 		 * Geometric Object interface
 		 */
 		std::size_t dimension() const;
-		Polytope<Number> linearTransformation(const matrix_t<Number>& A) const;
-		Polytope<Number> affineTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
-		Polytope<Number> project(const std::vector<unsigned>& dimensions) const;
-		Polytope<Number> minkowskiSum(const Polytope<Number>& rhs) const;
+		PolytopeT<Number,Converter> linearTransformation(const matrix_t<Number>& A) const;
+		PolytopeT<Number,Converter> affineTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
+		PolytopeT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
+		PolytopeT<Number,Converter> minkowskiSum(const PolytopeT<Number,Converter>& rhs) const;
 		// implemented according to Komei Fukuda 2004
-		Polytope<Number> altMinkowskiSum(Polytope<Number>& rhs);
-		Polytope<Number> intersect(const Polytope<Number>& rhs) const;
-		Polytope<Number> intersectHalfspace(const Halfspace<Number>& rhs) const;
-		Polytope<Number> intersectHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
-		std::pair<bool, Polytope<Number>> satisfiesHalfspace(const Halfspace<Number>& rhs) const;
-		std::pair<bool, Polytope<Number>> satisfiesHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
-		Polytope<Number> hull() const;
+		PolytopeT<Number,Converter> altMinkowskiSum(PolytopeT<Number,Converter>& rhs);
+		PolytopeT<Number,Converter> intersect(const PolytopeT<Number,Converter>& rhs) const;
+		PolytopeT<Number,Converter> intersectHalfspace(const Halfspace<Number>& rhs) const;
+		PolytopeT<Number,Converter> intersectHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
+		std::pair<bool, PolytopeT<Number,Converter>> satisfiesHalfspace(const Halfspace<Number>& rhs) const;
+		std::pair<bool, PolytopeT<Number,Converter>> satisfiesHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
+		PolytopeT<Number,Converter> hull() const;
 		bool contains(const Point<Number>& point) const;
-		bool contains(const Polytope<Number>& poly) const;
-		Polytope<Number> unite(const Polytope<Number>& rhs) const;
+		bool contains(const PolytopeT<Number,Converter>& poly) const;
+		PolytopeT<Number,Converter> unite(const PolytopeT<Number,Converter>& rhs) const;
 	  //  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
 
@@ -169,15 +176,17 @@ namespace hypro
 		 */
 		Number supremum () const;
 
+		void removeRedundancy() {}
 
-		//Polytope<Number>& operator= (const Polytope<Number>& rhs);
+
+		//PolytopeT<Number,Converter>& operator= (const PolytopeT<Number,Converter>& rhs);
 
 		/**
 		 * Auxiliary functions
 		 */
 		int computeMaxVDegree();
 		Point<Number> computeMaxPoint();
-		Point<Number> computeInitVertex(Polytope<Number> _secondPoly);
+		Point<Number> computeInitVertex(PolytopeT<Number,Converter> _secondPoly);
 		Point<Number> localSearch(Point<Number>& _vertex,  Point<Number>& _sinkMaximizerTarget);
 
 	};

@@ -36,6 +36,7 @@ namespace hypro {
 		boost::variant<cPair<Number>,
 			VPolytope<Number>,
 			HPolytope<Number>,
+			Polytope<Number>,
 			Box<Number>,
 			SupportFunction<Number>,
 			Zonotope<Number>> set;

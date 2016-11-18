@@ -169,6 +169,12 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     return target;
 }
 
+#ifdef USE_PPL
+template<typename Number>
+typename Converter<Number>::Box Converter<Number>::toBox( const Polytope& _source, const CONV_MODE  ) {
+	return BoxT<Number,Converter>( _source.vertices() );
+}
+#endif
 
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>

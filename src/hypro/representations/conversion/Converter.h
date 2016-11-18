@@ -4,6 +4,7 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "flags.h"
 #include "util.h"
 #include "representations/Box/Box.h"
 #include "representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
@@ -29,12 +30,18 @@ class Converter {
 		using HPolytope = HPolytopeT<Number,Converter>;
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter>;
 		using VPolytope = VPolytopeT<Number,Converter>;
+		#ifdef USE_PPL
+		using Polytope = PolytopeT<Number,Converter>;
+		#endif
 		using SupportFunction = SupportFunctionT<Number,Converter>;
 		using Zonotope = ZonotopeT<Number,Converter>;
 
 		static Box toBox(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Box toBox(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Box toBox(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
+		#ifdef USE_PPL
+		static Box toBox(const Polytope& source, const CONV_MODE = CONV_MODE::OVER);
+		#endif
 		static Box toBox(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
 		static Box toBox(const Zonotope& source, const CONV_MODE = CONV_MODE::OVER);
 
@@ -74,6 +81,9 @@ using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
 
 template<typename Number>
 using VPolytope = typename Converter<Number>::VPolytope;
+
+template<typename Number>
+using Polytope = typename Converter<Number>::Polytope;
 
 template<typename Number>
 using SupportFunction = typename Converter<Number>::SupportFunction;

@@ -3,6 +3,7 @@
 #define INCL_FROM_GOHEADER true
 
 #include "types.h"
+#include "flags.h"
 #include "../config.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/logging/Logger.h"
