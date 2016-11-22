@@ -9,8 +9,8 @@
 #define WARN(expr)
 #define FATAL(expr)
 
-#define COUT(expr) (std::cout << expr)
-#define CERR(expr) (std::cerr << expr)
+#define COUT(expr) std::cout << expr
+#define CERR(expr) std::cerr << expr
 
 #ifdef HYPRO_LOGGING
 
