@@ -199,7 +199,7 @@ namespace reachability {
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
 #ifdef REACH_DEBUG
-				std::cout << "Next Flowpipe Segment: " << nextSegment << std::endl;
+				std::cout << "Next Flowpipe Segment: " << newSegment.second << std::endl;
 				std::cout << "still within Invariant?: ";
 				std::cout << newSegment.first << std::endl;
 #endif

@@ -50,6 +50,12 @@ namespace reachability {
 		// Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
 		Representation deltaValuation = applyLinearTransformation(boost::get<Representation>(_state.set), TrafoParameters<Number>(trafoMatrixResized, translation));
 
+		//Plotter<Number>::getInstance().addObject(boost::get<Representation>(_state.set).vertices());
+		//Plotter<Number>::getInstance().addObject(deltaValuation.vertices());
+
+		//std::cout << "Initial set vertices: " << boost::get<Representation>(_state.set).vertices() << std::endl;
+		//std::cout << "Delta Valuation vertices: " << deltaValuation.vertices() << std::endl;
+
 		#ifdef REACH_DEBUG
 		std::cout << "Set at t=delta: " << deltaValuation << std::endl;
 		#endif
@@ -106,6 +112,8 @@ namespace reachability {
 		std::cout << "first Flowpipe Segment (after bloating): " << std::endl;
 		std::cout << firstSegment << std::endl;
 		#endif
+
+		//Plotter<Number>::getInstance().addObject(firstSegment.vertices());
 
 		//assert(firstSegment.contains(unitePolytope));
 		//assert(firstSegment.contains(boost::get<Representation>(_state.set)));
