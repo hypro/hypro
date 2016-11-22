@@ -8,59 +8,38 @@
  * @version     2014-03-25
  */
 
+#include "representations/GeometricObject.h"
 #ifdef USE_PPL
 #include <ppl.hh>
 
 using namespace Parma_Polyhedra_Library;
-using namespace std;
-using namespace Parma_Polyhedra_Library::IO_Operators;
+using namespace hypro;
 
 int main(int argc, char** argv) {
-    Variable x(0);
-    Variable a(1);
-    Variable b(2);
-    Variable c(3);
-    Variable y(1);
+	using Number = double;
 
-    cout << "*** vars ***" << endl << x << ", " << y << ", " << b << ", " << c << endl;
+	matrix_t<Number> A = matrix_t<Number>(4,2);
+	A << 1,0,-1,0,0,1,0,-1;
+	vector_t<Number> b = vector_t<Number>(4);
+	b << 1,1,0,0;
 
-    C_Polyhedron polytope1;
+    Polytope<Number> aPoly(A,b);
 
-    C_Polyhedron ph(2, EMPTY);
-    ph.add_generator(point());
-    ph.add_generator(ray(x));
-    ph.add_generator(ray(y));
+    std::cout << aPoly << std::endl;
+    std::cout << aPoly.rawPolyhedron().generators() << std::endl;
 
-    std::cout << "*** ph ***" << std::endl;
-    std::cout << ph.generators() << std::endl;
+    std::cout << "Linear transformation." << std::endl;
 
-    Generator_System gs = ph.generators();
-    gs.insert(point(x));
-    gs.insert(point(y));
+    matrix_t<Number> trafo = matrix_t<Number>(2,2);
+    trafo << 2.5,0,0,2.5;
+    vector_t<Number> translation = vector_t<Number>(2);
+    translation << 1,2;
 
-    cout << "*** gs ***" << endl;
-    cout << gs << endl;
+    aPoly = aPoly.affineTransformation(trafo, translation);
 
-    C_Polyhedron known_result(2);
-    known_result.add_constraint(x >= 0);
-    known_result.add_constraint(y >= 0);
+    std::cout << "Result: " << std::endl;
+    std::cout << aPoly << std::endl;
+    std::cout << aPoly.rawPolyhedron().generators() << std::endl;
 
-    //return C_Polyhedron(gs) == known_result;
-
-    Generator_System nncGs;
-    nncGs.insert(point());
-    nncGs.insert(point(3*x));
-    nncGs.insert(point(3*x+3*y));
-    nncGs.insert(point(3*y));
-
-    cout << "Generator: " << nncGs << endl;
-
-    nncGs.add_corresponding_points();
-
-    cout << "Generator (with points): " << nncGs << endl;
-
-    NNC_Polyhedron nncPoly(nncGs);
-
-    cout << nncPoly << endl;
 }
 #endif

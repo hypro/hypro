@@ -64,6 +64,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 			extendedFilename += "_hpoly";
 			break;
 		}
+		case hypro::representation_name::ppl_polytope:{
+			extendedFilename += "_PPLpoly";
+			break;
+		}
 		case hypro::representation_name::box:{
 			extendedFilename += "_box";
 			break;
@@ -141,9 +145,15 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-	using Number = mpq_class;
+	using Number = double;
 
 	switch(rep){
+		case 6: {
+			using Representation = hypro::Polytope<Number>;
+			std::cout << "Using a PPL-Polytope representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
+			break;
+		}
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
