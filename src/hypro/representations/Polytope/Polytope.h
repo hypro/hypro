@@ -133,12 +133,9 @@ namespace hypro
 		 */
 		friend std::ostream& operator<<(std::ostream& lhs, const PolytopeT<Number,Converter>& rhs)
 		{
+			using Parma_Polyhedra_Library::IO_Operators::operator<<;
 			lhs << "[";
-			for(auto& generator : rhs.rawPolyhedron().generators())
-			{
-				// lhs << generator;
-				generator.print();
-			}
+			lhs << rhs.rawPolyhedron();
 			lhs << "]" << std::endl;
 			return lhs;
 		}

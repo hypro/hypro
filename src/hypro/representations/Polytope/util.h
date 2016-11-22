@@ -80,11 +80,12 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( const Point<N
  */
 template <typename Number>
 static inline Parma_Polyhedra_Library::Generator pointToGenerator( vector_t<Number> point ) {
+	using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	using namespace Parma_Polyhedra_Library;
 	double tmpValue;
 	Linear_Expression ls;
 	for ( unsigned i = 0; i < point.rows(); ++i ) {
-		tmpValue = carl::toDouble( point( i, 0 ) ) * fReach_DENOMINATOR;
+		tmpValue = carl::toDouble( point( i ) ) * fReach_DENOMINATOR;
 		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
 	}
@@ -93,36 +94,28 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( vector_t<Numb
 }
 
 template <typename Number>
-static inline Point<Number> generatorToPoint(
-	  const Parma_Polyhedra_Library::Generator& gen,
-	  const std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare>& variables ) {
-	Point<Number> result;
-	Number coefficient;
-	Number divisor;
+static inline Point<Number> generatorToPoint( const Parma_Polyhedra_Library::Generator& gen ) {
+	vector_t<Number> result = vector_t<Number>::Zero(gen.space_dimension());
+	mpz_class coefficient;
+	mpz_class divisor;
 	Number value;
-	std::cout << "Generator: ";
-	gen.print();
-	std::cout << endl;
-	for ( auto varIt = variables.begin(); varIt != variables.end(); ++varIt ) {
-		if ( gen.space_dimension() >= ( *varIt ).space_dimension() ) {
-			coefficient = (long)Parma_Polyhedra_Library::raw_value( gen.coefficient( *varIt ) ).get_si();
-			if ( gen.is_point() || gen.is_closure_point() )
-				divisor = (long)Parma_Polyhedra_Library::raw_value( gen.divisor() ).get_si();
-			else
-				divisor = 1;
-			value = coefficient / divisor;
-			 //std::cout << "Coordinates: " << value << std::endl;
-			 std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " <<
-			 value << std::endl;
-			result.setCoordinate( hypro::VariablePool::getInstance().variable( *varIt ), value );
-		} else {
-			// TODO: What about variables that have a greater space dimension? I guess this does not matter, as they do
-			// not seem to be part of the generator
-			result.setCoordinate( hypro::VariablePool::getInstance().variable( *varIt ), Number( 0 ) );
+	//std::cout << "Generator: ";
+	//gen.print();
+	//std::cout << " with space dimension: " << gen.space_dimension() << std::endl;
+	for(unsigned i = 0; i < gen.space_dimension(); ++i) {
+		assert(gen.is_point() || gen.is_closure_point());
+		coefficient = gen.coefficient( VariablePool::getInstance().pplVarByIndex(i) );
+		if ( gen.is_point() || gen.is_closure_point() ) {
+			divisor = gen.divisor();
 		}
+		value = carl::convert<mpq_class,Number>(mpq_class(coefficient,divisor));
+		//std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
+		result(i) =  value;
 	}
 
-	return result;
+	//std::cout << "created point " << result << std::endl;
+
+	return Point<Number>(result);
 }
 
 static inline unsigned pplDimension( const Parma_Polyhedra_Library::C_Polyhedron& poly ) {
@@ -180,15 +173,15 @@ static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::
 	unsigned columCount = 0;
 	// poly.print();
 	Parma_Polyhedra_Library::Constraint_System cs = poly.constraints();
-	std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables( poly );
-	matrix_t<Number> result = matrix_t<Number>( hypro::polytope::csSize( cs ), pplDimension( poly ) );
+	//std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> vars = variables( poly );
+	matrix_t<Number> result = matrix_t<Number>::Zero( hypro::polytope::csSize( cs ), poly.space_dimension() );
 	// std::cout << "CSSize: " << hypro::polytope::csSize(cs) << ", Dimension: " << pplDimension(poly) << std::endl;
 	for ( auto constraintIt = cs.begin(); constraintIt != cs.end(); ++constraintIt ) {
 		columCount = 0;
 		Parma_Polyhedra_Library::Constraint::expr_type t = ( *constraintIt ).expression();
-		for ( auto variableIt = vars.begin(); variableIt != vars.end(); ++variableIt ) {
-			Number val = (int)Parma_Polyhedra_Library::raw_value( t.get( *variableIt ) ).get_si();
-			std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl;
+		for ( unsigned varIndex = 0; varIndex < poly.space_dimension(); ++varIndex ) {
+			Number val = (int)Parma_Polyhedra_Library::raw_value( t.get( VariablePool::getInstance().pplVarByIndex(varIndex) ) ).get_si();
+			//std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl;
 			result( rowCount, columCount ) = val;
 			++columCount;
 		}
