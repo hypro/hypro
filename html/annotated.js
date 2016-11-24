@@ -2,7 +2,8 @@ var annotated =
 [
     [ "Eigen", null, [
       [ "NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4" ],
-      [ "NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", "structEigen_1_1NumTraits_3_01mpq__class_01_4" ]
+      [ "NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", "structEigen_1_1NumTraits_3_01mpq__class_01_4" ],
+      [ "NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4" ]
     ] ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
     [ "std", null, [
@@ -19,9 +20,9 @@ var annotated =
       [ "Line_t", "structZUtility_1_1Line__t.html", "structZUtility_1_1Line__t" ]
     ] ],
     [ "CleanupOnExit", "classCleanupOnExit.html", "classCleanupOnExit" ],
-    [ "GeometricObject", "classGeometricObject.html", "classGeometricObject" ],
     [ "LocationInfo", "classLocationInfo.html", "classLocationInfo" ],
     [ "PreprocessingObject", "classPreprocessingObject.html", "classPreprocessingObject" ],
+    [ "ScopedLock", "classScopedLock.html", "classScopedLock" ],
     [ "TransitionInfo", "classTransitionInfo.html", "classTransitionInfo" ],
     [ "ZonotopeReachability", "classZonotopeReachability.html", "classZonotopeReachability" ]
 ];

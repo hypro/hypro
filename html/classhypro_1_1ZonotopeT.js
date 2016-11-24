@@ -12,6 +12,7 @@ var classhypro_1_1ZonotopeT =
     [ "changeDimension", "classhypro_1_1ZonotopeT.html#a513bffb25c4e68e5672911b67c11384f", null ],
     [ "clear", "classhypro_1_1ZonotopeT.html#a0e6954635171b940bfdb7c7fa4c38ead", null ],
     [ "computeZonotopeBoundary", "classhypro_1_1ZonotopeT.html#a51365fb30d507f41f83c12d2ad01140c", null ],
+    [ "contains", "classhypro_1_1ZonotopeT.html#abdccc3b3c8a661710b36d80a780b2915", null ],
     [ "dimension", "classhypro_1_1ZonotopeT.html#adb91a88666e60ce95104b38270923be1", null ],
     [ "empty", "classhypro_1_1ZonotopeT.html#a77837c4a112fc3fb7a5bad7f133615f7", null ],
     [ "generators", "classhypro_1_1ZonotopeT.html#ab586cf1c52e5b1544348daed2983fe9e", null ],

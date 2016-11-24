@@ -9,6 +9,7 @@ var hierarchy =
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
     [ "hypro::convexSetOfFlowpipeSetIndexis", "structhypro_1_1convexSetOfFlowpipeSetIndexis.html", null ],
+    [ "hypro::CounterRepository", "classhypro_1_1CounterRepository.html", null ],
     [ "hypro::Dictionary< Number >", "classhypro_1_1Dictionary.html", null ],
     [ "hypro::Domain< Number >", "classhypro_1_1Domain.html", null ],
     [ "hypro::Ellipsoid< Number >", "classhypro_1_1Ellipsoid.html", null ],
@@ -17,21 +18,34 @@ var hierarchy =
     [ "hypro::evaluationResult", "structhypro_1_1evaluationResult.html", null ],
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
-    [ "hypro::polytope::Fan< Number >", "classhypro_1_1polytope_1_1Fan.html", null ],
+    [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
     [ "hypro::FlowpipeSegment", "classhypro_1_1FlowpipeSegment.html", null ],
     [ "GenericNumTraits", null, [
+      [ "Eigen::NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", null ],
       [ "Eigen::NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", null ]
     ] ],
-    [ "GeometricObject< Number >", "classGeometricObject.html", [
-      [ "hypro::BoxT< Number, Converter >", "classhypro_1_1BoxT.html", null ],
-      [ "hypro::HPolytopeT< Number, Converter >", "classhypro_1_1HPolytopeT.html", null ],
-      [ "hypro::SupportFunctionT< Number, Converter >", "classhypro_1_1SupportFunctionT.html", null ],
-      [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ],
-      [ "hypro::ZonotopeT< Number, Converter >", "classhypro_1_1ZonotopeT.html", null ]
-    ] ],
-    [ "GeometricObject< double >", "classGeometricObject.html", [
+    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< double, BoxT< double, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::BoxT< double, Converter >", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, BoxT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, Converter >", "classhypro_1_1BoxT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, hypro::Converter >", "classhypro_1_1BoxT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::HPolytopeT< Number, Converter >", "classhypro_1_1HPolytopeT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::SupportFunctionT< Number, Converter >", "classhypro_1_1SupportFunctionT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::ZonotopeT< Number, Converter >", "classhypro_1_1ZonotopeT.html", null ]
     ] ],
     [ "hypro::gnuplotSettings", "structhypro_1_1gnuplotSettings.html", null ],
     [ "grammar", null, [
@@ -73,12 +87,12 @@ var hierarchy =
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "ZUtility::Options", "structZUtility_1_1Options.html", null ],
-    [ "hypro::OrthogonalPolyhedron< Number, Type >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
+    [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
+    [ "hypro::OrthogonalPolyhedronT< Number, Converter, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::pointIt< Number >", "structhypro_1_1pointIt.html", null ],
     [ "hypro::PolynomialODE< Number >", "classhypro_1_1PolynomialODE.html", null ],
-    [ "hypro::Polytope< Number >", "classhypro_1_1Polytope.html", null ],
     [ "hypro::possibleTransition", "structhypro_1_1possibleTransition.html", null ],
     [ "PreprocessingObject", "classPreprocessingObject.html", [
       [ "LocationInfo", "classLocationInfo.html", null ],
@@ -100,6 +114,7 @@ var hierarchy =
     [ "hypro::parser::ErrorHandler::result< typename >", "structhypro_1_1parser_1_1ErrorHandler_1_1result.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
     [ "hypro::scaleContent< Number >", "structhypro_1_1scaleContent.html", null ],
+    [ "ScopedLock< Lockable >", "classScopedLock.html", null ],
     [ "Singleton", null, [
       [ "hypro::LocationManager< Number >", "classhypro_1_1LocationManager.html", null ],
       [ "hypro::Plotter< Number >", "classhypro_1_1Plotter.html", null ],

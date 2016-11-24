@@ -25,5 +25,6 @@ var searchData=
   ['origin',['origin',['../classhypro_1_1Point.html#a979a185006629786d429e1ce71ad3f0d',1,'hypro::Point']]],
   ['originisvertex',['originIsVertex',['../classhypro_1_1VertexContainer.html#aa4cc2840134554a84e53de4ab22959f5',1,'hypro::VertexContainer']]],
   ['orthogonalpolyhedron',['OrthogonalPolyhedron',['../classhypro_1_1OrthogonalPolyhedron.html',1,'hypro']]],
+  ['orthogonalpolyhedront',['OrthogonalPolyhedronT',['../classhypro_1_1OrthogonalPolyhedronT.html',1,'hypro']]],
   ['outside',['outside',['../classhypro_1_1ConstrainSet.html#aa6e5bbcf0f8caf988266da591df33e78',1,'hypro::ConstrainSet']]]
 ];

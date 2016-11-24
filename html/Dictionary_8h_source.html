@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">@hypro_VERSION@</span>
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -111,9 +111,9 @@ $(document).ready(function(){initNavTree('Dictionary_8h_source.html','');});
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;../../config.h&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/Point.h&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/Halfspace.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;config.h&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Point_8h.html">datastructures/Point.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Halfspace_8h.html">datastructures/Halfspace.h</a>&quot;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;ConstrainSet.h&quot;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define FUKUDA_VERTEX_ENUM_DEBUG</span></div>
@@ -207,11 +207,44 @@ $(document).ready(function(){initNavTree('Dictionary_8h_source.html','');});
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; rhs) {</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">return</span> !(lhs==rhs);</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;};</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;} <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">#include &quot;Dictionary.tpp&quot;</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const Dictionary&lt;Number&gt;&amp; d ) {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        uint32_t i,j;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mB size=&quot;</span>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        _ostr &lt;&lt; d.basis().size();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mN size=&quot;</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        _ostr &lt;&lt; d.cobasis().size();</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mDictionary size=&quot;</span>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        _ostr &lt;&lt; d.tableau().size();</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;mB = &quot;</span>;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            _ostr &lt;&lt; d.basis()[i];</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;\nmN = &quot;</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            _ostr &lt;&lt; d.cobasis()[j];</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                _ostr &lt;&lt; d.tableau()(i,j);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                _ostr &lt;&lt; <span class="stringliteral">&quot; ; &quot;</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        _ostr.flush();</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">return</span> _ostr;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;};</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="preprocessor">#include &quot;Dictionary.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_a49cd7e9d33a0cdbe4ba64f550f4a6718"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a49cd7e9d33a0cdbe4ba64f550f4a6718">hypro::Dictionary::setOnes</a></div><div class="ttdeci">void setOnes(const std::vector&lt; std::size_t &gt; &amp;indices)</div><div class="ttdoc">gives the list of the degenerated constrains in the dictionary. </div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_a230158deb491be062b9261a3b0624781"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a230158deb491be062b9261a3b0624781">hypro::Dictionary::setZeros</a></div><div class="ttdeci">void setZeros(const std::vector&lt; std::size_t &gt; &amp;indices)</div><div class="ttdoc">put 1 in the last column for the indices provided by </div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_a080e5972f02a5f9dadda11cc138bafcd"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a080e5972f02a5f9dadda11cc138bafcd">hypro::Dictionary::pivot</a></div><div class="ttdeci">void pivot(std::size_t i, std::size_t j)</div><div class="ttdoc">Pivot expected ‘)’ before ‘&lt;’ tokenthe dictionary, no modification made to mB and mN...</div></div>
@@ -219,7 +252,9 @@ $(document).ready(function(){initNavTree('Dictionary_8h_source.html','');});
 <div class="ttc" id="classhypro_1_1Dictionary_html_a733154280f2f3ffc1421415602be3eb6"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a733154280f2f3ffc1421415602be3eb6">hypro::Dictionary::basis</a></div><div class="ttdeci">std::vector&lt; std::size_t &gt; basis() const </div><div class="ttdoc">Build a dictionary based on the hyperplane set hsv. </div></div>
 <div class="ttc" id="classhypro_1_1ConstrainSet_html"><div class="ttname"><a href="classhypro_1_1ConstrainSet.html">hypro::ConstrainSet</a></div><div class="ttdef"><b>Definition:</b> <a href="ConstrainSet_8h_source.html#l00008">ConstrainSet.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00029">Point.h:29</a></div></div>
+<div class="ttc" id="Halfspace_8h_html"><div class="ttname"><a href="Halfspace_8h.html">Halfspace.h</a></div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_af5b45608cedaf14db298ff65d2424c4f"><div class="ttname"><a href="classhypro_1_1Dictionary.html#af5b45608cedaf14db298ff65d2424c4f">hypro::Dictionary::isPrimalFeasible</a></div><div class="ttdeci">bool isPrimalFeasible() const </div></div>
+<div class="ttc" id="Point_8h_html"><div class="ttname"><a href="Point_8h.html">Point.h</a></div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html"><div class="ttname"><a href="classhypro_1_1Dictionary.html">hypro::Dictionary</a></div><div class="ttdef"><b>Definition:</b> <a href="Dictionary_8h_source.html#l00024">Dictionary.h:24</a></div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_a5c080b9a3705ebb65b6a4f3f5239139f"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a5c080b9a3705ebb65b6a4f3f5239139f">hypro::Dictionary::selectBlandPivot</a></div><div class="ttdeci">bool selectBlandPivot(std::size_t &amp;i, std::size_t &amp;j) const </div><div class="ttdoc">Check for the satisfiability of the dictionary and finds a sutable assignement. </div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_a7142b23cb796dd2a8a0424a60e2a5fa8"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a7142b23cb796dd2a8a0424a60e2a5fa8">hypro::Dictionary::findCones</a></div><div class="ttdeci">std::set&lt; vector_t&lt; Number &gt; &gt; findCones()</div><div class="ttdoc">Tries to push the corresponding variable to its bound, if another bound is reached before...</div></div>

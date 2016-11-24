@@ -14,7 +14,6 @@ var searchData=
   ['polyhedriclhull',['polyhedriclHull',['../classhypro_1_1ConvexHull.html#ad211bd75ad9a017703f091fa8b1b3ce0',1,'hypro::ConvexHull']]],
   ['polynomialode',['PolynomialODE',['../classhypro_1_1PolynomialODE.html',1,'hypro']]],
   ['polynomialparser',['polynomialParser',['../structhypro_1_1parser_1_1polynomialParser.html',1,'hypro::parser']]],
-  ['polytope',['Polytope',['../classhypro_1_1Polytope.html',1,'hypro']]],
   ['polytopesupportfunction',['PolytopeSupportFunction',['../classhypro_1_1PolytopeSupportFunction.html',1,'hypro']]],
   ['possibletransition',['possibleTransition',['../structhypro_1_1possibleTransition.html',1,'hypro']]],
   ['preprocessingobject',['PreprocessingObject',['../classPreprocessingObject.html',1,'']]],

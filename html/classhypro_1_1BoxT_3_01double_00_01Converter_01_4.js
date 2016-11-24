@@ -41,7 +41,7 @@ var classhypro_1_1BoxT_3_01double_00_01Converter_01_4 =
     [ "project", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a979e3583b5610071f9fd291a4dd87487", null ],
     [ "reducedoubleRepresentation", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a9260264e72d8b355c2af89148491aeb4", null ],
     [ "removeRedundancy", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a55fe892445ce290a31e7c6a9d2637641", null ],
-    [ "satisfiesHalfspace", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ac7871ac8598c91caeff8af02a817f47c", null ],
+    [ "satisfiesHalfspace", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aea81711e7434b68bd6c708c1a7337ea1", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a580f0591119fce3e2873366a17b4905a", null ],
     [ "size", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a6aa867524a69aefad6a0609fbb3849de", null ],
     [ "supremum", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a43b004f2890484c451eb923a250c0de4", null ],

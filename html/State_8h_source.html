@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">@hypro_VERSION@</span>
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -146,43 +146,44 @@ $(document).ready(function(){initNavTree('State_8h_source.html','');});
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        boost::variant&lt;cPair&lt;Number&gt;,</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            VPolytope&lt;Number&gt;,</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            HPolytope&lt;Number&gt;,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            Box&lt;Number&gt;,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            SupportFunction&lt;Number&gt;,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            Zonotope&lt;Number&gt;&gt; set;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        std::map&lt;carl::Variable, carl::Interval&lt;Number&gt;&gt; discreteAssignment;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        carl::Interval&lt;Number&gt; timestamp = carl::Interval&lt;Number&gt;::unboundedInterval();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="structhypro_1_1State.html">State&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="comment">// compare location</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">if</span>(this-&gt;<a class="code" href="classhypro_1_1Location.html">location</a>-&gt;id() != rhs.location-&gt;id()) {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            }</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="comment">// compare discrete assignment</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> variableAssignmentPair : discreteAssignment) {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                <span class="keywordflow">if</span>(rhs.discreteAssignment.find(variableAssignmentPair.first) == rhs.discreteAssignment.end()) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                    <span class="keywordflow">if</span>(rhs.discreteAssignment.at(variableAssignmentPair.first) != variableAssignmentPair.second) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                    }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="comment">// compare continuous assignment</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">return</span> boost::apply_visitor(<a class="code" href="classhypro_1_1are__strict__equals.html">are_strict_equals</a>(), this-&gt;set, rhs.set);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const State&lt;Number&gt;&amp; s ) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;Loc: &quot;</span> &lt;&lt; s.location-&gt;id() &lt;&lt; <span class="stringliteral">&quot;, time: &quot;</span> &lt;&lt; s.timestamp &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">return</span> _ostr;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    };</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            Polytope&lt;Number&gt;,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            Box&lt;Number&gt;,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            SupportFunction&lt;Number&gt;,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            Zonotope&lt;Number&gt;&gt; set;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        std::map&lt;carl::Variable, carl::Interval&lt;Number&gt;&gt; discreteAssignment;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        carl::Interval&lt;Number&gt; timestamp = carl::Interval&lt;Number&gt;::unboundedInterval();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="structhypro_1_1State.html">State&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="comment">// compare location</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">if</span>(this-&gt;<a class="code" href="classhypro_1_1Location.html">location</a>-&gt;id() != rhs.location-&gt;id()) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="comment">// compare discrete assignment</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> variableAssignmentPair : discreteAssignment) {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                <span class="keywordflow">if</span>(rhs.discreteAssignment.find(variableAssignmentPair.first) == rhs.discreteAssignment.end()) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    <span class="keywordflow">if</span>(rhs.discreteAssignment.at(variableAssignmentPair.first) != variableAssignmentPair.second) {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="comment">// compare continuous assignment</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">return</span> boost::apply_visitor(<a class="code" href="classhypro_1_1are__strict__equals.html">are_strict_equals</a>(), this-&gt;set, rhs.set);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const State&lt;Number&gt;&amp; s ) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;Loc: &quot;</span> &lt;&lt; s.location-&gt;id() &lt;&lt; <span class="stringliteral">&quot;, time: &quot;</span> &lt;&lt; s.timestamp &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">return</span> _ostr;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// namespace</span></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
 <div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00022">Location.h:22</a></div></div>
 <div class="ttc" id="structhypro_1_1State_html"><div class="ttname"><a href="structhypro_1_1State.html">hypro::State</a></div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00034">State.h:34</a></div></div>
 <div class="ttc" id="classhypro_1_1are__strict__equals_html"><div class="ttname"><a href="classhypro_1_1are__strict__equals.html">hypro::are_strict_equals</a></div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00010">State.h:10</a></div></div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">@hypro_VERSION@</span>
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -118,11 +118,14 @@ $(document).ready(function(){initNavTree('classhypro_1_1ConstrainSet.html','');}
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a01c1fd12efe5a81843bfb388f56ed39d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01c1fd12efe5a81843bfb388f56ed39d"></a>
+<tr class="memitem:ad5a7563c31bf4db2287facb9b13077ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5a7563c31bf4db2287facb9b13077ff"></a>
 std::tuple&lt; std::pair&lt; bool, <br class="typebreak"/>
 Number &gt;, std::pair&lt; bool, <br class="typebreak"/>
-Number &gt;, Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (std::size_t index)</td></tr>
-<tr class="separator:a01c1fd12efe5a81843bfb388f56ed39d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+Number &gt;, Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (std::size_t index) const </td></tr>
+<tr class="separator:ad5a7563c31bf4db2287facb9b13077ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab81a62133cae8ae2497ebbe830c5fd89"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab81a62133cae8ae2497ebbe830c5fd89"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="separator:ab81a62133cae8ae2497ebbe830c5fd89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a379a820467cb2e9545cb2e3a855abdee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a379a820467cb2e9545cb2e3a855abdee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (std::tuple&lt; std::pair&lt; bool, Number &gt;, std::pair&lt; bool, Number &gt;, Number &gt; newElem)</td></tr>
 <tr class="separator:a379a820467cb2e9545cb2e3a855abdee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,6 +167,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:af8465173c94a19ea027cc8fb7101ab41"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8465173c94a19ea027cc8fb7101ab41"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1ConstrainSet.html">ConstrainSet</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1ConstrainSet.html">ConstrainSet</a>&lt; Number &gt; &amp;rhs)</td></tr>
 <tr class="separator:af8465173c94a19ea027cc8fb7101ab41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac967d7d904c2d93411d6cb4d15ab2494"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac967d7d904c2d93411d6cb4d15ab2494"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_ostr, const <a class="el" href="classhypro_1_1ConstrainSet.html">ConstrainSet</a>&lt; Number &gt; &amp;cs)</td></tr>
+<tr class="separator:ac967d7d904c2d93411d6cb4d15ab2494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
@@ -227,7 +233,7 @@ template&lt;typename Number&gt; </div>
 <p>Finds a suitable pivot to get the variable "index" to its bounds. </p>
 <dl class="section return"><dt>Returns</dt><dd>True, if there is a suitable pivot. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstrainSet_8h_source.html#l00071">71</a> of file <a class="el" href="ConstrainSet_8h_source.html">ConstrainSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstrainSet_8h_source.html#l00075">75</a> of file <a class="el" href="ConstrainSet_8h_source.html">ConstrainSet.h</a>.</p>
 
 </div>
 </div>
@@ -283,7 +289,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if there is any variable out of bounds. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstrainSet_8h_source.html#l00033">33</a> of file <a class="el" href="ConstrainSet_8h_source.html">ConstrainSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstrainSet_8h_source.html#l00037">37</a> of file <a class="el" href="ConstrainSet_8h_source.html">ConstrainSet.h</a>.</p>
 
 </div>
 </div>

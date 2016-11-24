@@ -17,9 +17,6 @@ var namespacehypro =
       [ "discreteConstraintParser", "structhypro_1_1parser_1_1discreteConstraintParser.html", "structhypro_1_1parser_1_1discreteConstraintParser" ],
       [ "aggregation_", "structhypro_1_1parser_1_1aggregation__.html", "structhypro_1_1parser_1_1aggregation__" ]
     ] ],
-    [ "polytope", null, [
-      [ "Fan", "classhypro_1_1polytope_1_1Fan.html", "classhypro_1_1polytope_1_1Fan" ]
-    ] ],
     [ "reachability", null, [
       [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ],
       [ "Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4" ]
@@ -66,11 +63,14 @@ var namespacehypro =
     [ "BoxT< double, Converter >", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4" ],
     [ "Converter", "classhypro_1_1Converter.html", "classhypro_1_1Converter" ],
     [ "Ellipsoid", "classhypro_1_1Ellipsoid.html", "classhypro_1_1Ellipsoid" ],
+    [ "GeometricObject", "classhypro_1_1GeometricObject.html", "classhypro_1_1GeometricObject" ],
     [ "pointIt", "structhypro_1_1pointIt.html", "structhypro_1_1pointIt" ],
     [ "Grid", "classhypro_1_1Grid.html", "classhypro_1_1Grid" ],
     [ "NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", "classhypro_1_1NeighborhoodContainer" ],
+    [ "OrthogonalPolyhedronT", "classhypro_1_1OrthogonalPolyhedronT.html", "classhypro_1_1OrthogonalPolyhedronT" ],
     [ "OrthogonalPolyhedron", "classhypro_1_1OrthogonalPolyhedron.html", "classhypro_1_1OrthogonalPolyhedron" ],
     [ "Cone", "classhypro_1_1Cone.html", "classhypro_1_1Cone" ],
+    [ "Fan", "classhypro_1_1Fan.html", "classhypro_1_1Fan" ],
     [ "HPolytopeT", "classhypro_1_1HPolytopeT.html", "classhypro_1_1HPolytopeT" ],
     [ "VPolytopeT", "classhypro_1_1VPolytopeT.html", "classhypro_1_1VPolytopeT" ],
     [ "PTermBox", "classhypro_1_1PTermBox.html", "classhypro_1_1PTermBox" ],
@@ -91,13 +91,13 @@ var namespacehypro =
     [ "TaylorModel", "classhypro_1_1TaylorModel.html", "classhypro_1_1TaylorModel" ],
     [ "Range", "classhypro_1_1Range.html", "classhypro_1_1Range" ],
     [ "ZonotopeT", "classhypro_1_1ZonotopeT.html", "classhypro_1_1ZonotopeT" ],
-    [ "Polytope", "classhypro_1_1Polytope.html", null ],
     [ "EvaluationResult", "structhypro_1_1EvaluationResult.html", "structhypro_1_1EvaluationResult" ],
     [ "Optimizer", "classhypro_1_1Optimizer.html", "classhypro_1_1Optimizer" ],
     [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ],
     [ "Permutator", "classhypro_1_1Permutator.html", "classhypro_1_1Permutator" ],
     [ "gnuplotSettings", "structhypro_1_1gnuplotSettings.html", "structhypro_1_1gnuplotSettings" ],
     [ "Plotter", "classhypro_1_1Plotter.html", "classhypro_1_1Plotter" ],
+    [ "CounterRepository", "classhypro_1_1CounterRepository.html", "classhypro_1_1CounterRepository" ],
     [ "is_same", "structhypro_1_1is__same.html", null ],
     [ "is_same< T, T >", "structhypro_1_1is__same_3_01T_00_01T_01_4.html", null ],
     [ "VariablePool", "classhypro_1_1VariablePool.html", "classhypro_1_1VariablePool" ]

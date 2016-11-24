@@ -29,5 +29,6 @@ var searchData=
   ['convexsetofflowpipesetindexis',['convexSetOfFlowpipeSetIndexis',['../structhypro_1_1convexSetOfFlowpipeSetIndexis.html',1,'hypro']]],
   ['coordinate',['coordinate',['../classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1Point.html#a34a6e8a0217243dcd811c595afdfd743',1,'hypro::Point::coordinate(unsigned _dimension) const '],['../classhypro_1_1Vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
   ['coordinates',['coordinates',['../classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3',1,'hypro::Point']]],
+  ['counterrepository',['CounterRepository',['../classhypro_1_1CounterRepository.html',1,'hypro']]],
   ['currentset',['currentSet',['../classZonotopeReachability.html#a40875d57e923501989700b4210dbcce5',1,'ZonotopeReachability']]]
 ];

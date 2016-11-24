@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">@hypro_VERSION@</span>
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -136,7 +136,7 @@ $(document).ready(function(){initNavTree('VPolytope_8h_source.html','');});
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>hypro {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Converter&gt;</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classhypro_1_1VPolytopeT.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> : <span class="keyword">public</span> <a class="code" href="classGeometricObject.html">GeometricObject</a>&lt;Number&gt; {</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classhypro_1_1VPolytopeT.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt;Number, VPolytopeT&lt;Number,Converter&gt;&gt; {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">using</span> pointVector = std::vector&lt;Point&lt;Number&gt;&gt;;</div>
@@ -398,7 +398,7 @@ $(document).ready(function(){initNavTree('VPolytope_8h_source.html','');});
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="preprocessor">#include &quot;VPolytope.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00029">Point.h:29</a></div></div>
-<div class="ttc" id="classGeometricObject_html"><div class="ttname"><a href="classGeometricObject.html">GeometricObject</a></div><div class="ttdoc">Purely virtual class defining an interface for geometric objects. </div><div class="ttdef"><b>Definition:</b> <a href="GeometricObject_8h_source.html#l00014">GeometricObject.h:14</a></div></div>
+<div class="ttc" id="classhypro_1_1GeometricObject_html"><div class="ttname"><a href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a></div><div class="ttdoc">Purely virtual class defining an interface for geometric objects. </div><div class="ttdef"><b>Definition:</b> <a href="GeometricObject_8h_source.html#l00025">GeometricObject.h:25</a></div></div>
 <div class="ttc" id="classhypro_1_1Point_html_aa299aa4647fb454b534fb93db59f7baa"><div class="ttname"><a href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point::dimension</a></div><div class="ttdeci">unsigned dimension() const </div><div class="ttdoc">Returns the space dimension. </div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
 <div class="ttc" id="namespacehypro_html_a430a74d1edbcc624d5e03c4ec111c24c"><div class="ttname"><a href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">hypro::convert</a></div><div class="ttdeci">Halfspace&lt; To &gt; convert(const Halfspace&lt; From &gt; &amp;in)</div><div class="ttdoc">Conversion operator for the number type. </div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00296">Halfspace.h:296</a></div></div>

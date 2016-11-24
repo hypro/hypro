@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1HybridAutomaton.html" title="hypro::HybridAutomaton\l\&lt; Number, Zonotope\&lt; Number \&gt; \&gt;" alt="" coords="5,5,229,46"/>
+<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; Number, HPolytopeT\&lt;\l Number, Converter \&gt; \&gt;" alt="" coords="5,4,171,60"/>
+<area shape="rect" id="node2" href="$classhypro_1_1HPolytopeT.html" title="hypro::HPolytopeT\&lt;\l Number, Converter \&gt;" alt="" coords="219,11,368,53"/>
 </map>

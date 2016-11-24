@@ -36,5 +36,6 @@ var classhypro_1_1Dictionary =
     [ "toCobase", "classhypro_1_1Dictionary.html#a4f6a12c0655ef5c408ef6dda235673fb", null ],
     [ "toPoint", "classhypro_1_1Dictionary.html#a2ecbd190ac1fe89502c50abc3521d83f", null ],
     [ "operator!=", "classhypro_1_1Dictionary.html#a7fecd6145405f389df9ebac7c7682bfd", null ],
+    [ "operator<<", "classhypro_1_1Dictionary.html#a8b5a384ca50979a5dd2be4257a72368a", null ],
     [ "operator==", "classhypro_1_1Dictionary.html#a3b0e82bbf03a5af6e36f84a48411531f", null ]
 ];

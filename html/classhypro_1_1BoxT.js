@@ -41,7 +41,7 @@ var classhypro_1_1BoxT =
     [ "project", "classhypro_1_1BoxT.html#aff3f2eb3059da28be163183966b55f45", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1BoxT.html#af956f2453fb7002cd0881946361e2783", null ],
     [ "removeRedundancy", "classhypro_1_1BoxT.html#a47c20ababb80a0c8f229afb64ae5635a", null ],
-    [ "satisfiesHalfspace", "classhypro_1_1BoxT.html#acadc541c527f62212af42822d7129c2b", null ],
+    [ "satisfiesHalfspace", "classhypro_1_1BoxT.html#abfacfb20a888b0fa540b46c1a4c28f56", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1BoxT.html#ac0f00b8aa88247e162dc4f91c120ae3f", null ],
     [ "size", "classhypro_1_1BoxT.html#af73b8298a461e6b1a7f83245eb3fb5a9", null ],
     [ "supremum", "classhypro_1_1BoxT.html#a79bc17eb96d58ccbc16749a7388190eb", null ],

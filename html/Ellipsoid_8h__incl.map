@@ -1,11 +1,12 @@
 <map id="/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h" name="/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h">
-<area shape="rect" id="node4" href="$Halfspace_8h.html" title="../../datastructures\l/Halfspace.h" alt="" coords="483,126,612,167"/>
-<area shape="rect" id="node5" href="$Point_8h.html" title="Point.h" alt="" coords="851,216,913,243"/>
-<area shape="rect" id="node17" href="$adaptions__eigen_8h_source.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="1526,522,1663,563"/>
-<area shape="rect" id="node26" href="$VariablePool_8h_source.html" title="../util/VariablePool.h" alt="" coords="347,291,485,317"/>
-<area shape="rect" id="node30" href="$linearSolving_8h.html" title="util/linearSolving.h" alt="" coords="535,216,663,243"/>
-<area shape="rect" id="node6" href="$types_8h_source.html" title="../types.h" alt="" coords="759,440,835,467"/>
-<area shape="rect" id="node21" href="$config_8h_source.html" title="../config.h" alt="" coords="704,291,783,317"/>
-<area shape="rect" id="node22" href="$flags_8h_source.html" title="flags.h" alt="" coords="576,365,637,392"/>
-<area shape="rect" id="node23" href="$convenienceOperators_8h_source.html" title="util/convenienceOperators.h" alt="" coords="661,365,845,392"/>
+<area shape="rect" id="node4" href="$Halfspace_8h.html" title="../../datastructures\l/Halfspace.h" alt="" coords="677,126,805,167"/>
+<area shape="rect" id="node5" href="$Point_8h.html" title="Point.h" alt="" coords="1167,216,1229,243"/>
+<area shape="rect" id="node17" href="$adaptions__eigen_8h_source.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="106,522,243,563"/>
+<area shape="rect" id="node27" href="$VariablePool_8h_source.html" title="../util/VariablePool.h" alt="" coords="668,291,807,317"/>
+<area shape="rect" id="node31" href="$linearSolving_8h.html" title="util/linearSolving.h" alt="" coords="1321,216,1449,243"/>
+<area shape="rect" id="node6" href="$types_8h_source.html" title="../types.h" alt="" coords="1085,440,1161,467"/>
+<area shape="rect" id="node21" href="$config_8h_source.html" title="../config.h" alt="" coords="1413,291,1492,317"/>
+<area shape="rect" id="node22" href="$flags_8h_source.html" title="flags.h" alt="" coords="1695,440,1756,467"/>
+<area shape="rect" id="node23" href="$convenienceOperators_8h_source.html" title="util/convenienceOperators.h" alt="" coords="1361,365,1545,392"/>
+<area shape="rect" id="node26" href="$Logger_8h_source.html" title="util/logging/Logger.h" alt="" coords="1569,365,1708,392"/>
 </map>

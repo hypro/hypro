@@ -7,5 +7,6 @@ var searchData=
   ['continuoussystem',['ContinuousSystem',['../classhypro_1_1ContinuousSystem.html',1,'hypro']]],
   ['converter',['Converter',['../classhypro_1_1Converter.html',1,'hypro']]],
   ['convexhull',['ConvexHull',['../classhypro_1_1ConvexHull.html',1,'hypro']]],
-  ['convexsetofflowpipesetindexis',['convexSetOfFlowpipeSetIndexis',['../structhypro_1_1convexSetOfFlowpipeSetIndexis.html',1,'hypro']]]
+  ['convexsetofflowpipesetindexis',['convexSetOfFlowpipeSetIndexis',['../structhypro_1_1convexSetOfFlowpipeSetIndexis.html',1,'hypro']]],
+  ['counterrepository',['CounterRepository',['../classhypro_1_1CounterRepository.html',1,'hypro']]]
 ];

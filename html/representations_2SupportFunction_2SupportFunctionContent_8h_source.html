@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">@hypro_VERSION@</span>
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -406,7 +406,7 @@ $(document).ready(function(){initNavTree('representations_2SupportFunction_2Supp
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                items.insert(items.end(), rhsItems.begin(), rhsItems.end());</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                <span class="keywordflow">return</span> items;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordflow">case</span> SF_TYPE::UNION: {</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordflow">case</span> SF_TYPE::UNITE: {</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                <span class="comment">//std::cout &lt;&lt; &quot;Current: union&quot; &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                std::vector&lt;SF_TYPE&gt; lhsItems = mUnionParameters-&gt;lhs-&gt;collectLevelEntries(level-1);</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                std::vector&lt;SF_TYPE&gt; rhsItems = mUnionParameters-&gt;rhs-&gt;collectLevelEntries(level-1);</div>
@@ -482,8 +482,8 @@ $(document).ready(function(){initNavTree('representations_2SupportFunction_2Supp
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                    transitionType.push_back(2);</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                <span class="keywordflow">case</span> SF_TYPE::UNION: {</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                    level += <span class="stringliteral">&quot;UNION&quot;</span> + separator + <span class="stringliteral">&quot;     &quot;</span> + separator;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                <span class="keywordflow">case</span> SF_TYPE::UNITE: {</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                    level += <span class="stringliteral">&quot;UNITE&quot;</span> + separator + <span class="stringliteral">&quot;     &quot;</span> + separator;</div>
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    transitionType.push_back(2);</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                }</div>
