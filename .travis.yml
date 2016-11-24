@@ -74,7 +74,7 @@ install:
 # install lcov to coveralls conversion + upload tool
 - gem install coveralls-lcov
 
-before_script: (optional: for paranoiacs only)
+before_script:
 - cd ${TRAVIS_BUILD_DIR}
 - lcov --directory . --zerocounters
 
