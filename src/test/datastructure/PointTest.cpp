@@ -83,6 +83,10 @@ TYPED_TEST(PointTest, Constructor)
     Point<TypeParam> tmp({123,456});
     EXPECT_EQ(tmp[0], TypeParam(123));
     EXPECT_EQ(tmp[1], TypeParam(456));
+
+    swap(p,tmp);
+	EXPECT_EQ(p[0], TypeParam(123));
+    EXPECT_EQ(p[1], TypeParam(456));
 }
 
 TYPED_TEST(PointTest, PolarCoordinates)
@@ -234,3 +238,23 @@ TYPED_TEST(PointTest, AffineTransformation) {
 	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3.affineTransformation(A, v));
 	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4.affineTransformation(A, v));
 }
+
+/*
+TYPED_TEST(PointTest, Neighbors) {
+	Point<TypeParam> a = Point<TypeParam>({1,1});
+	Point<TypeParam> b = Point<TypeParam>({1,1});
+	Point<TypeParam> c = Point<TypeParam>({1,1});
+	Point<TypeParam> d = Point<TypeParam>({1,1});
+
+	a.addNeighbor(b);
+	EXPECT_TRUE(a.isNeighbor(b));
+	EXPECT_TRUE(b.isNeighbor(a));
+	EXPECT_FALSE(a.isNeighbor(c));
+	EXPECT_TRUE(std::find(a.neighbors().begin(), a.neighbors().end(), b) != a.neighbors().end());
+	EXPECT_TRUE(std::find(a.neighbors().begin(), a.neighbors().end(), c) == a.neighbors().end());
+	a.removeNeighbor(b);
+	EXPECT_TRUE(a.neighbors().empty());
+	EXPECT_FALSE(a.isNeighbor(b));
+}
+*/
+
