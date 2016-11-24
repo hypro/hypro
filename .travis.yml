@@ -80,7 +80,7 @@ before_script: (optional: for paranoiacs only)
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make
+  - mkdir build && cd build && cmake -DHYPRO_COVERAGE -DCMAKE_CXX_COMPILER=$COMPILER .. && make
   - make test
 
 # Generate and deploy documentation
