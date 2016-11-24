@@ -78,7 +78,8 @@ before_script:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER .. && make
+  - mkdir build && cd build && cmake -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER ..
+  - travis_wait make
   - make test
 
 # Generate and deploy documentation
