@@ -53,6 +53,7 @@ option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(HYPRO_LOGGING "Allow log4cplus logging." OFF)
 set(HYPRO_LOG_LEVEL "FATAL" CACHE STRING "Specify log levels, valid options are: TRACE, INFO, DEBUG, WARN, FATAL.")
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
+option(HYPRO_COVERAGE "Log the test coverage." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 # Include own macros.
@@ -108,6 +109,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++14 -fPIC
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
+endif()
+
+if(HYPRO_COVERAGE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 endif()
 
 # path to put in the executables
