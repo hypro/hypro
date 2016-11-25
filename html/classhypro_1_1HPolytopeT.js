@@ -52,7 +52,7 @@ var classhypro_1_1HPolytopeT =
     [ "reduce_directed", "classhypro_1_1HPolytopeT.html#a3f5ea270087840dd6021bf812e4c758a", null ],
     [ "reduceAssign", "classhypro_1_1HPolytopeT.html#a44204d4626bf36a7cf2a48cc0f040d89", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1HPolytopeT.html#aa03659ec02ccdf7bace24eba6882812b", null ],
-    [ "reduceNumberRepresentation", "classhypro_1_1HPolytopeT.html#afe61eeae805252e3462eaae8f30a691a", null ],
+    [ "reduceNumberRepresentation", "classhypro_1_1HPolytopeT.html#a5797f8931e7a2f690769c4baac064349", null ],
     [ "removeRedundancy", "classhypro_1_1HPolytopeT.html#a94937893b2784a1967a97d773c8f0a99", null ],
     [ "satisfiesHalfspace", "classhypro_1_1HPolytopeT.html#a563820a00e337e8372fbc01de8518233", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1HPolytopeT.html#a0082b7e6e8ec4309cd82771763e646d3", null ],

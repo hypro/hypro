@@ -192,22 +192,24 @@ $(document).ready(function(){initNavTree('Converter_8h_source.html','');});
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">using</span> VPolytope = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1VPolytopeT.html">Converter&lt;Number&gt;::VPolytope</a>;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">using</span> Polytope = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1Converter.html">Converter&lt;Number&gt;::Polytope</a>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">using</span> SupportFunction = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1SupportFunctionT.html">Converter&lt;Number&gt;::SupportFunction</a>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">using</span> Zonotope = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1ZonotopeT.html">Converter&lt;Number&gt;::Zonotope</a>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#include &quot;converterToBox.tpp&quot;</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#include &quot;converterToHPolytope.tpp&quot;</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#include &quot;converterToVPolytope.tpp&quot;</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#include &quot;converterToSupportFunction.tpp&quot;</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#include &quot;converterToZonotope.tpp&quot;</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#ifdef USE_PPL</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">using</span> Polytope = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1Converter.html">Converter&lt;Number&gt;::Polytope</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">using</span> SupportFunction = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1SupportFunctionT.html">Converter&lt;Number&gt;::SupportFunction</a>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">using</span> Zonotope = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1ZonotopeT.html">Converter&lt;Number&gt;::Zonotope</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#include &quot;converterToBox.tpp&quot;</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#include &quot;converterToHPolytope.tpp&quot;</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#include &quot;converterToVPolytope.tpp&quot;</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#include &quot;converterToSupportFunction.tpp&quot;</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#include &quot;converterToZonotope.tpp&quot;</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;} <span class="comment">// namespace hypro</span></div>
 <div class="ttc" id="classhypro_1_1OrthogonalPolyhedronT_html"><div class="ttname"><a href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a></div><div class="ttdef"><b>Definition:</b> <a href="OrthogonalPolyhedron_8h_source.html#l00033">OrthogonalPolyhedron.h:33</a></div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a></div><div class="ttdef"><b>Definition:</b> <a href="HPolytope_8h_source.html#l00033">HPolytope.h:33</a></div></div>
 <div class="ttc" id="classhypro_1_1OrthogonalPolyhedron_html"><div class="ttname"><a href="classhypro_1_1OrthogonalPolyhedron.html">hypro::OrthogonalPolyhedron</a></div><div class="ttdef"><b>Definition:</b> <a href="Neighborhood_8h_source.html#l00015">Neighborhood.h:15</a></div></div>

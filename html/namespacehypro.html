@@ -260,6 +260,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1typeName.html">typeName</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1typeName_3_01double_01_4.html">typeName&lt; double &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1typeName_3_01mpq__class_01_4.html">typeName&lt; mpq_class &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html">Optimizer</a></td></tr>
@@ -341,10 +347,6 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a39e49ed88fa9599f8b04b6758a3103a2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>VPolytope</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::VPolytope</td></tr>
 <tr class="separator:a39e49ed88fa9599f8b04b6758a3103a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6af5ae15627e25d854eaacb1f4f96bf"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa6af5ae15627e25d854eaacb1f4f96bf"></a>
-template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:aa6af5ae15627e25d854eaacb1f4f96bf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Polytope</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::Polytope</td></tr>
-<tr class="separator:aa6af5ae15627e25d854eaacb1f4f96bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47344b22ce93940da4599cf2f2987321"><td class="memTemplParams" colspan="2"><a class="anchor" id="a47344b22ce93940da4599cf2f2987321"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a47344b22ce93940da4599cf2f2987321"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>SupportFunction</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::SupportFunction</td></tr>
@@ -919,7 +921,7 @@ template&lt;typename Number , typename Representation , carl::DisableIf&lt; std:
 </div><div class="memdoc">
 <p>based on the Hausdorff distance, constructs the box (also a polytope) that is used for bloating the initial approximation </p>
 
-<p>Definition at line <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00132">132</a> of file <a class="el" href="algorithms_2reachability_2util_8h_source.html">util.h</a>.</p>
+<p>Definition at line <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00145">145</a> of file <a class="el" href="algorithms_2reachability_2util_8h_source.html">util.h</a>.</p>
 
 </div>
 </div>
@@ -1015,7 +1017,7 @@ template&lt;typename From , typename To , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00494">494</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00499">499</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 <p>References <a class="el" href="Box_8h_source.html#l00150">hypro::BoxT&lt; Number, Converter &gt;::limits()</a>.</p>
 
@@ -1191,7 +1193,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00481">481</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00483">483</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+
+<p>References <a class="el" href="Box_8h_source.html#l00195">hypro::BoxT&lt; Number, Converter &gt;::empty()</a>.</p>
 
 </div>
 </div>
