@@ -292,11 +292,8 @@ public:
 		TRACE("Attempt to reduce numbers.");
 		std::vector<Point<Number>> originalVertices;
 		if(_vertices.empty()) {
-			TRACE("No passed vertices, computed vertices:");
+			TRACE("No passed vertices, computed vertices.");
 			originalVertices = this->vertices();
-			for(const auto& vertex : originalVertices) {
-				TRACE(vertex);
-			}
 		} else {
 			TRACE("Use passed vertices.");
 			originalVertices = _vertices;
