@@ -10,19 +10,17 @@
 
 #pragma once
 
+#include "flags.h"
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
 #include <carl/util/Singleton.h>
+#include <map>
+#include <vector>
 #include <cassert>
 #ifdef USE_PPL
-CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 #include <ppl.hh>
-CLANG_WARNING_RESET
 #endif
-#include <map>
 
-
-//using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro {
 class VariablePool : public carl::Singleton<VariablePool> {

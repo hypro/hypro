@@ -141,11 +141,11 @@ namespace hypro {
 			( mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) {
 
 			// TODO: just for statistics, delete in productive code!
-			if(invalidResult) COUNT("invalid result");
+			if(invalidResult) {COUNT("invalid result")};
 
-			if(( closestLinearDependentConstraint == -1 && saturatedPositiveConstraints < mConstraintMatrix.cols())) COUNT("saturation failure");
+			if(( closestLinearDependentConstraint == -1 && saturatedPositiveConstraints < mConstraintMatrix.cols())) {COUNT("saturation failure")};
 
-			if(( closestLinearDependentConstraint != -1 && mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) COUNT("linear dependence failure");
+			if(( closestLinearDependentConstraint != -1 && mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) {COUNT("linear dependence failure")};
 
 			#ifdef HYPRO_USE_Z3
 			COUNT("z3");
@@ -184,6 +184,7 @@ namespace hypro {
 		//std::cout << __func__ << ": matrix: " << mConstraintMatrix << std::endl << "Vector: " << mConstraintVector << std::endl;
 
 		#ifdef HYPRO_USE_SMTRAT
+		TRACE("Use smtrat for consistency check.");
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         #elif defined(HYPRO_USE_Z3)
 		mLastConsistencyAnswer = z3CheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
@@ -191,6 +192,7 @@ namespace hypro {
 		mLastConsistencyAnswer = soplexCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		#else // use glpk
 		if(!mConsistencyChecked){
+			TRACE("Use glpk for consistency check.");
 			glp_simplex( lp, NULL);
 			glp_exact( lp, NULL );
 			mLastConsistencyAnswer = glp_get_status(lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
