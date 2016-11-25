@@ -53,7 +53,6 @@ option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(HYPRO_LOGGING "Allow log4cplus logging." OFF)
 set(HYPRO_LOG_LEVEL "FATAL" CACHE STRING "Specify log levels, valid options are: TRACE, INFO, DEBUG, WARN, FATAL.")
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
-option(HYPRO_COVERAGE "Log the test coverage." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 # Include own macros.
@@ -109,10 +108,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++14 -fPIC
 if(${STATICLIB_SWITCH} STREQUAL "ON")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
-endif()
-
-if(HYPRO_COVERAGE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
 endif()
 
 # path to put in the executables
@@ -174,7 +169,7 @@ endif()
 
 if(HYPRO_LOGGING)
 	load_library(hypro log4cplus 0)
-	message("HYPRO_LOG_LEVEL: ${HYPRO_LOG_LEVEL}")
+	message( STATUS "Hypro log level: ${HYPRO_LOG_LEVEL}")
 	if(HYPRO_LOG_LEVEL STREQUAL "TRACE")
 		set(HYPRO_LOG_TRACE true)
 	elseif(HYPRO_LOG_LEVEL STREQUAL "INFO")
@@ -224,7 +219,7 @@ if(CLANG_TIDY)
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
 
-include_directories( src/lib )
+include_directories( src/hypro )
 add_subdirectory(src)
 
 enable_testing()
