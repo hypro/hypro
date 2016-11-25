@@ -76,6 +76,17 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		default:
 			extendedFilename += "_unknownRep";
 	}
+
+	extendedFilename += "_" + hypro::typeName<Number>().get();
+
+	extendedFilename += "_glpk";
+#ifdef USE_SMTRAT
+	extendedFilename += "_smtrat";
+#endif
+#ifdef USE_Z3
+	extendedFilename += "_z3";
+#endif
+
 	//std::cout << "filename is " << extendedFilename << std::endl;
 	plotter.setFilename(extendedFilename);
 	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
@@ -149,7 +160,7 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-	using Number = mpq_class;
+	using Number = double;
 
 	switch(rep){
 		#ifdef USE_PPL
