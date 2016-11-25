@@ -158,7 +158,7 @@ bool HPolytopeT<Number, Converter>::empty() const {
 	opt.setVector(this->vector());
 
 	bool res = !opt.checkConsistency();
-	//mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
+	mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
 	TRACE("Optimizer result: " << res);
 	return res;
 }
