@@ -7,7 +7,6 @@
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
-#include "util/statistics/CounterRepository.h"
 //#include <boost/program_options.hpp>
 #include <sys/wait.h>
 #include <signal.h>
@@ -64,10 +63,12 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 			extendedFilename += "_hpoly";
 			break;
 		}
+		#ifdef USE_PPL
 		case hypro::representation_name::ppl_polytope:{
 			extendedFilename += "_PPLpoly";
 			break;
 		}
+		#endif
 		case hypro::representation_name::box:{
 			extendedFilename += "_box";
 			break;
@@ -106,18 +107,22 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				case hypro::representation_name::zonotope:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
-					plotter.rSettings().dimensions.first = 0;
-					plotter.rSettings().dimensions.second = 1;
 					break;
 				}
 				case hypro::representation_name::box:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
-					plotter.rSettings().dimensions.first = 0;
-					plotter.rSettings().dimensions.second = 1;
 					break;
 				}
+				#ifdef USE_PPL
+				case hypro::representation_name::ppl_polytope:{
+					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					break;
+				}
+				#endif
 				default:
+					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
 					unsigned tmp = plotter.addObject(segment.vertices());
 					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
 			}
@@ -136,7 +141,6 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 }
 
 int main(int argc, char** argv) {
-	using clock = std::chrono::high_resolution_clock;
 
 	int rep = 0;
 	std::string filename = argv[1];
@@ -145,15 +149,17 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-	using Number = double;
+	using Number = mpq_class;
 
 	switch(rep){
+		#ifdef USE_PPL
 		case 6: {
 			using Representation = hypro::Polytope<Number>;
 			std::cout << "Using a PPL-Polytope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
 			break;
 		}
+		#endif
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
