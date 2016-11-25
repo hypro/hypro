@@ -289,76 +289,81 @@ public:
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
 	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR) const {
 		#ifdef REDUCE_NUMBERS
-		#ifdef HPOLY_DEBUG_MSG
-		std::cout << "Attempt to reduce numbers." << std::endl;
-		#endif
-		//std::cout << __func__  << ": Nr. Planes: " << mHPlanes.size() << std::endl;
+		TRACE("Attempt to reduce numbers.");
 		std::vector<Point<Number>> originalVertices;
 		if(_vertices.empty()) {
+			TRACE("No passed vertices, computed vertices:");
 			originalVertices = this->vertices();
+			for(const auto& vertex : originalVertices) {
+				TRACE(vertex);
+			}
 		} else {
+			TRACE("Use passed vertices.");
 			originalVertices = _vertices;
 		}
+		TRACE("Vertices empty: " << originalVertices.empty());
 
-		// normal reduction
-		for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
-			#ifdef HPOLY_DEBUG_MSG
-			std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
-			#endif
-			// find maximal value
-			Number largest = Number(0);
-			mHPlanes.at(planeIndex).makeInteger();
-			#ifdef HPOLY_DEBUG_MSG
-			std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
-			#endif
-			largest = carl::abs(mHPlanes.at(planeIndex).offset());
-			for(unsigned i = 0; i < mDimension; ++i){
-				if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
-					largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
-				}
-			}
-
-			// reduce, if reduction is required
-			if(largest > (limit*limit)) {
+		if(!this->empty()){
+			// normal reduction
+			for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
 				#ifdef HPOLY_DEBUG_MSG
-				std::cout << "Actual reduction" << std::endl;
+				std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
 				#endif
-				vector_t<Number> newNormal(mDimension);
+				// find maximal value
+				Number largest = Number(0);
+				mHPlanes.at(planeIndex).makeInteger();
+				#ifdef HPOLY_DEBUG_MSG
+				std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
+				#endif
+				largest = carl::abs(mHPlanes.at(planeIndex).offset());
 				for(unsigned i = 0; i < mDimension; ++i){
-					newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));
-					assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= Number(1));
-					assert(carl::isInteger(newNormal(i)));
-					assert(newNormal(i) <= Number(limit));
-				}
-				mHPlanes.at(planeIndex).setNormal(newNormal);
-				Number newOffset = mHPlanes.at(planeIndex).offset();
-				newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));
-				for(const auto& vertex : originalVertices) {
-					Number tmp = newNormal.dot(vertex.rawCoordinates());
-					if(tmp > newOffset){
-						newOffset = newOffset + (tmp-newOffset);
-						assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+					if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
+						largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
 					}
-					assert(Halfspace<Number>(newNormal,newOffset).contains(vertex));
 				}
-				newOffset = carl::ceil(newOffset);
+
+				// reduce, if reduction is required
+				if(largest > (limit*limit)) {
+					#ifdef HPOLY_DEBUG_MSG
+					std::cout << "Actual reduction" << std::endl;
+					#endif
+					vector_t<Number> newNormal(mDimension);
+					for(unsigned i = 0; i < mDimension; ++i){
+						newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));
+						assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= Number(1));
+						assert(carl::isInteger(newNormal(i)));
+						assert(newNormal(i) <= Number(limit));
+					}
+					mHPlanes.at(planeIndex).setNormal(newNormal);
+					Number newOffset = mHPlanes.at(planeIndex).offset();
+					newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));
+					for(const auto& vertex : originalVertices) {
+						Number tmp = newNormal.dot(vertex.rawCoordinates());
+						if(tmp > newOffset){
+							newOffset = newOffset + (tmp-newOffset);
+							assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+						}
+						assert(Halfspace<Number>(newNormal,newOffset).contains(vertex));
+					}
+					newOffset = carl::ceil(newOffset);
+					#ifdef HPOLY_DEBUG_MSG
+					std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
+					#endif
+					mHPlanes.at(planeIndex).setOffset(newOffset);
+				}
 				#ifdef HPOLY_DEBUG_MSG
-				std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
+				std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
 				#endif
-				mHPlanes.at(planeIndex).setOffset(newOffset);
 			}
 			#ifdef HPOLY_DEBUG_MSG
-			std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
+			std::cout << "After Reduction: " << *this << std::endl;
+			#endif
 			#endif
 		}
-		#ifdef HPOLY_DEBUG_MSG
-		std::cout << "After Reduction: " << *this << std::endl;
-		#endif
-		#endif
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
-	void reduceNumberRepresentation(const std::vector<Point<Number>>& , unsigned = fReach_DENOMINATOR) const {}
+	void reduceNumberRepresentation(const std::vector<Point<double>>& = std::vector<Point<double>>(), unsigned = fReach_DENOMINATOR) const {}
 
   private:
 	/*
