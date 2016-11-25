@@ -290,7 +290,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
              //read out normal of current halfspace pair
              vector_t<Number> normal = planes[2*i].normal();
 
-
              //only continue if normal is non-zero
              assert (normal != vector_t<Number>::Zero(normal.rows()));
              //for every dimension
@@ -309,7 +308,6 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
          for (unsigned i=0; i < dim; ++i){
              vector_t<Number> normal = planes[2*i].normal();
-
 
              Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
              //eliminates some fractional digits for improved computation time

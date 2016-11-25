@@ -82,8 +82,10 @@ using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
 template<typename Number>
 using VPolytope = typename Converter<Number>::VPolytope;
 
+#ifdef USE_PPL
 template<typename Number>
 using Polytope = typename Converter<Number>::Polytope;
+#endif
 
 template<typename Number>
 using SupportFunction = typename Converter<Number>::SupportFunction;

@@ -58,9 +58,11 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE ) {
     typename std::vector<Point<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
-    assert (!vertices.empty() );                                                           //checks if any vertices were received
+    if(vertices.empty()){
+    	return SupportFunctionT<Number,Converter>();
+    }
 
-    HPolytope temp = HPolytope(std::move(vertices));
+    HPolytope temp = HPolytope(vertices);
 
     return SupportFunction( temp.constraints() );
 }

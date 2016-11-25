@@ -73,8 +73,9 @@ template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
     //computes vertices from source object
     typename std::vector<Point<Number>> vertices = _source.vertices();
-    //only continue if any actual vertices were received at all
-    assert( !vertices.empty() );
+    if(vertices.empty()){
+    	return HPolytopeT<Number,Converter>();
+    }
     VPolytope vpoly = VPolytope(vertices);
 
     return toHPolytope(vpoly, mode);
