@@ -26,6 +26,7 @@
 #include "datastructures/Ridge.h"
 #include "datastructures/Halfspace.h"
 #include "util/convexHull.h"
+#include "util/VariablePool.h"
 #include <map>
 #include <cassert>
 #include <string>
@@ -85,20 +86,12 @@ namespace hypro
 
 
 		void updatePoints() const;
-		void setPointsUpToDate(bool _val = true){
-			mPointsUpToDate = _val;
-		}
 
 		/**initConvexHull
 		 * Returns the set of points which form the polytope.
 		 * @return Pointset.
 		 */
 		const std::vector<Point<Number>>& vertices() const;
-
-		/*
-		 *
-		 */
-		std::vector<Point<Number>>& rVertices();
 
 		/*
 		 * returns the fan of the Polytope
@@ -122,12 +115,6 @@ namespace hypro
 		 */
 		void print() const;
 
-		/**
-		 * Writes the polytope to a file in a matlab format.
-		 * @param _filename The filename of the output file.
-		 */
-		void writeToFile(std::string _filename) const;
-
 		/*
 		 *
 		 */
@@ -144,7 +131,6 @@ namespace hypro
 		 * PPL related functions
 		 */
 		const C_Polyhedron& rawPolyhedron() const;
-		C_Polyhedron& rRawPolyhedron();
 
 		/**
 		 * Geometric Object interface

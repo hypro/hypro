@@ -1,5 +1,6 @@
 if(USE_PPL)
 set(hypro_polytope_sources
+	Polytope/util.cpp
 	PARENT_SCOPE
 )
 

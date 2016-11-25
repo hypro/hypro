@@ -9,31 +9,20 @@
 
 #pragma once
 
-#include <carl/core/Variable.h>
-#include "util/VariablePool.h"
+#include "flags.h"
 
+#ifdef USE_PPL
+#include "util/VariablePool.h"
 #include "representations/Polytopes/Cone.h"
 #include "datastructures/Halfspace.h"
+#include <carl/core/Variable.h>
+CLANG_WARNING_DISABLE("-Wunused-local-typedef")
+#include <ppl.hh>
+CLANG_WARNING_RESET
 
 namespace hypro {
 namespace polytope {
 using carl::operator<<;
-
-static inline std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables(
-	  const Parma_Polyhedra_Library::C_Polyhedron& poly ) {
-	Parma_Polyhedra_Library::Generator_System gs = poly.generators();
-	std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
-	for ( auto& generator : gs ) {
-		Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
-
-		for ( auto& variableIt : VariablePool::getInstance().pplVariables() ) {
-			if ( (int)Parma_Polyhedra_Library::raw_value( l.coefficient( variableIt ) ).get_si() != 0 ) {
-				variables.insert( variableIt );
-			}
-		}
-	}
-	return variables;
-}
 
 static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& gs ) {
 	using namespace Parma_Polyhedra_Library;
@@ -56,30 +45,41 @@ static inline unsigned csSize( const Parma_Polyhedra_Library::Constraint_System&
 	return i;
 }
 
-template <typename Number>
-static inline Parma_Polyhedra_Library::Generator pointToGenerator( const Point<Number>& point ) {
-	// std::cout << "PTG." << std::endl;
-	using namespace Parma_Polyhedra_Library;
-	double tmpValue;
-	Linear_Expression ls;
-	//        for(auto pointIt = point.begin(); pointIt != point.end(); ++pointIt)
-	for ( unsigned i = 0; i != point.dimension(); ++i ) {
-		// std::cout << "Var: " << (*pointIt).first << " found as: " <<
-		// VariablePool::getInstance().variable((*pointIt).first) << std::endl;
-		tmpValue = carl::toDouble( point.at( i ) ) * fReach_DENOMINATOR;
-		// std::cout << "tmpValue: " << tmpValue << std::endl;
-		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
-		ls += tmp;
+template<typename Number>
+Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<Number>& constraint, Number constantPart) {
+	Parma_Polyhedra_Library::Linear_Expression polynom;
+	polynom.set_space_dimension( constraint.rows() );
+	for ( unsigned d = 0; d < constraint.rows(); ++d ) {
+		polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( d ),
+								  carl::convert<Number,double>(constraint(d) * fReach_DENOMINATOR) );
 	}
-	Generator result = Generator::point( ls, fReach_DENOMINATOR );
-	return result;
+	polynom.set_inhomogeneous_term( carl::convert<Number,double>(-constantPart * fReach_DENOMINATOR) );
+	Parma_Polyhedra_Library::Constraint res;
+	res = polynom <= 0;
+	return res;
 }
+
+/*
+template<>
+	Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<mpq_class>& constraint, mpq_class constantPart) {
+		std::cout << "MPQ_Version." << std::endl;
+		Parma_Polyhedra_Library::Linear_Expression polynom;
+		polynom.set_space_dimension( constraint.rows() );
+		for ( unsigned d = 0; d < constraint.rows(); ++d ) {
+			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( d ), carl::getNum(constraint(d)) * carl::getDenom(constraint(d))  );
+		}
+		polynom.set_inhomogeneous_term( -carl::getNum(constantPart) * carl::getDenom(constantPart) );
+		Parma_Polyhedra_Library::Constraint res;
+		res = polynom <= 0;
+		return res;
+	}
+*/
 
 /**
  * Creates a generator from a point, which is a colum-vector (mx1)
  */
 template <typename Number>
-static inline Parma_Polyhedra_Library::Generator pointToGenerator( vector_t<Number> point ) {
+static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_t<Number>& point ) {
 	using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	using namespace Parma_Polyhedra_Library;
 	double tmpValue;
@@ -91,6 +91,11 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( vector_t<Numb
 	}
 	Generator result = Generator::point( ls, fReach_DENOMINATOR );
 	return result;
+}
+
+template <typename Number>
+static inline Parma_Polyhedra_Library::Generator pointToGenerator( const Point<Number>& point ) {
+	return pointToGenerator(point.rawCoordinates());
 }
 
 template <typename Number>
@@ -118,23 +123,6 @@ static inline Point<Number> generatorToPoint( const Parma_Polyhedra_Library::Gen
 	return Point<Number>(result);
 }
 
-static inline unsigned pplDimension( const Parma_Polyhedra_Library::C_Polyhedron& poly ) {
-	Parma_Polyhedra_Library::Generator_System gs = poly.generators();
-	std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables;
-	if ( gs.empty() ) return poly.space_dimension();
-
-	for ( auto& generator : gs ) {
-		Parma_Polyhedra_Library::Generator::expr_type l = generator.expression();
-		for ( auto& variableIt : VariablePool::getInstance().pplVariables() ) {
-			if ( l.coefficient( variableIt ) != 0 ) {
-				// std::cout << "Add: " << (variableIt) << " (" << l.coefficient(variableIt) << ")" << std::endl;
-				variables.insert( variableIt );
-			}
-		}
-	}
-	return variables.size();
-}
-
 template <typename Number>
 static inline unsigned pplDimension( const Point<Number>& point ) {
 	unsigned result = 0;
@@ -158,15 +146,6 @@ static inline unsigned pplDimension( const typename std::vector<Point<Number>>& 
 }
 
 template <typename Number>
-static inline unsigned pplDimension( const typename std::vector<vector_t<Number>>& points ) {
-	unsigned result = 0;
-	for ( auto& point : points ) {
-		result = result < point.rows() ? point.rows() : result;
-	}
-	return result;
-}
-
-template <typename Number>
 static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::C_Polyhedron& poly ) {
 	// TODO: What about the constant factor?
 	unsigned rowCount = 0;
@@ -180,7 +159,7 @@ static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::
 		columCount = 0;
 		Parma_Polyhedra_Library::Constraint::expr_type t = ( *constraintIt ).expression();
 		for ( unsigned varIndex = 0; varIndex < poly.space_dimension(); ++varIndex ) {
-			Number val = (int)Parma_Polyhedra_Library::raw_value( t.get( VariablePool::getInstance().pplVarByIndex(varIndex) ) ).get_si();
+			Number val = (long)Parma_Polyhedra_Library::raw_value( t.get( VariablePool::getInstance().pplVarByIndex(varIndex) ) ).get_si();
 			//std::cout << "Insert " << val << " at (" << rowCount << ", " << columCount << ")" << std::endl;
 			result( rowCount, columCount ) = val;
 			++columCount;
@@ -199,15 +178,9 @@ static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::
  * computes the edge between two input points
  */
 template <typename Number>
-vector_t<Number> computeEdge( Point<Number>& _point1, Point<Number>& _point2 ) {
-	vector_t<Number> edge = vector_t<Number>( _point1.dimension(), 1 );
-	std::vector<carl::Variable> variables = _point1.variables();
-	int i = 0;
-
-	for ( auto it = variables.begin(); it != variables.end(); ++it ) {
-		edge( i ) = _point2.at( *it ) - _point1.at( *it );
-		i++;
-	}
+vector_t<Number> computeEdge( const Point<Number>& _point1, const Point<Number>& _point2 ) {
+	assert(_point1.dimension() == _point2.dimension());
+	vector_t<Number> edge = _point2.rawCoordinates() - _point1.rawCoordinates();
 	return edge;
 }
 
@@ -771,5 +744,8 @@ Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerV
 
 	return cone;
 }
-}
-}
+
+} // namespace polytope
+} // namespace hypro
+
+#endif

@@ -15,8 +15,8 @@ typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT
 	carl::FLOAT_T<mpfr_t>,
 	#endif
-	double,
-	carl::FLOAT_T<double>
+	double
+	//carl::FLOAT_T<double>
 > floatTypes;
 
 typedef ::testing::Types<
@@ -57,7 +57,7 @@ TYPED_TEST_CASE(ConverterTest, allTypes);
 TYPED_TEST_CASE(GridTest, allTypes);
 TYPED_TEST_CASE(HPolytopeTest, allTypes);
 TYPED_TEST_CASE(OrthogonalPolyhedronTest, allTypes);
-TYPED_TEST_CASE(PolytopeTest, allTypes);
+TYPED_TEST_CASE(PolytopeTest, floatTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, allTypes);
 TYPED_TEST_CASE(PolytopeSupportFunctionTest, allTypes);
 TYPED_TEST_CASE(SupportFunctionTest, allTypes);

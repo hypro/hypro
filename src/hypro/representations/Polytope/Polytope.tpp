@@ -11,7 +11,7 @@
 namespace hypro {
 template <typename Number, typename Converter>
 PolytopeT<Number, Converter>::PolytopeT()
-	: mPointsUpToDate( true ) {
+	: mPointsUpToDate( false ) {
 }
 
 template <typename Number, typename Converter>
@@ -69,45 +69,18 @@ PolytopeT<Number,Converter>::PolytopeT( const matrix_t<Number> &A, const vector_
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.cols(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
 		//std::cout << "Process row " << rowIndex << std::endl;
-		Parma_Polyhedra_Library::Linear_Expression polynom;
-		polynom.set_space_dimension( A.cols() );
-		for ( unsigned columIndex = 0; columIndex < A.cols(); ++columIndex ) {
-			//std::cout <<"(" << columIndex << ") Matrix Coefficient: " << (A(rowIndex,columIndex)*fReach_DENOMINATOR) << std::endl;
-			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
-									 carl::convert<Number,double>( A( rowIndex, columIndex ) * fReach_DENOMINATOR ) );
-			// polynom.set_coefficient(hypro::VariablePool::getInstance().pplVarByIndex(columIndex),
-			// A(rowIndex,columIndex).toDouble());
-			//std::cout << "Variable with index " << columIndex << " = " << carl::convert<Number,double>(A(rowIndex,columIndex)) << std::endl;
-		}
-		//std::cout << "Vector Coefficient: " << -(b(rowIndex,0)*fReach_DENOMINATOR) << std::endl;
-		polynom.set_inhomogeneous_term( - carl::convert<Number,double>( b( rowIndex, 0 ) * fReach_DENOMINATOR ) );
-		Parma_Polyhedra_Library::Constraint constraint;
-		constraint = polynom <= 0;
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(A.row(rowIndex)), b(rowIndex));
 
-		//std::cout << "Add constraint ";
-		constraint.print();
 		mPolyhedron.add_constraint( constraint );
-		// mPolyhedron.add_generator(gen);
 	}
 	mPointsUpToDate = false;
-
-	//std::cout << "MPolhedron: "<< std::endl;
-	//mPolyhedron.print();
-	//std::cout << "Constructor result: " << *this << std::endl;
 }
 
 template <typename Number, typename Converter>
 PolytopeT<Number,Converter>::PolytopeT( const matrix_t<Number> &A ) {
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.rows(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
-		Parma_Polyhedra_Library::Linear_Expression polynom;
-		polynom.set_space_dimension( A.cols() );
-		for ( unsigned columIndex = 0; columIndex < A.cols(); ++columIndex ) {
-			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
-									 carl::convert<Number,double>( A( rowIndex, columIndex ) ) );
-		}
-		Parma_Polyhedra_Library::Constraint constraint;
-		constraint = polynom <= 0;
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(A.row(rowIndex)), Number(0));
 
 		mPolyhedron.add_constraint( constraint );
 		// mPolyhedron.add_generator(gen);
@@ -141,8 +114,6 @@ void PolytopeT<Number,Converter>::updatePoints() const {
 	if ( !mPointsUpToDate ) {
 		//std::cout << __func__ << ": " << *this << std::endl;
 		mPoints.clear();
-		std::set<Parma_Polyhedra_Library::Variable, Parma_Polyhedra_Library::Variable::Compare> variables =
-			  hypro::polytope::variables( mPolyhedron );
 		for ( auto &generator : mPolyhedron.minimized_generators() ) {
 			Point<Number> tmp = polytope::generatorToPoint<Number>( generator );
 			mPoints.push_back( tmp );
@@ -156,15 +127,6 @@ const std::vector<Point<Number>> &PolytopeT<Number,Converter>::vertices() const 
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
-	return mPoints;
-}
-
-template <typename Number, typename Converter>
-std::vector<Point<Number>> &PolytopeT<Number,Converter>::rVertices() {
-	/*
-	if (!mPointsUpToDate) {
-			updatePoints();
-	}*/
 	return mPoints;
 }
 
@@ -244,22 +206,7 @@ void PolytopeT<Number,Converter>::print() const {
 }
 
 template <typename Number, typename Converter>
-void PolytopeT<Number,Converter>::writeToFile( std::string _filename ) const {
-	/*
-	std::ofstream outputFile;
-	outputFile.open(_filename);
-	outputFile << *this;
-	outputFile.close();
-	*/
-}
-
-template <typename Number, typename Converter>
 const C_Polyhedron &PolytopeT<Number,Converter>::rawPolyhedron() const {
-	return mPolyhedron;
-}
-
-template <typename Number, typename Converter>
-C_Polyhedron &PolytopeT<Number,Converter>::rRawPolyhedron() {
 	return mPolyhedron;
 }
 
@@ -317,7 +264,6 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::linearTransformation( c
 	}
 
 	result.mPolyhedron = tmp;
-	result.setPointsUpToDate( false );
 	return result;
 }
 
@@ -376,7 +322,6 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::affineTransformation( c
 	}
 
 	result.mPolyhedron = tmp;
-	result.setPointsUpToDate( false );
 
 	// update neighbor relations
 	/*
@@ -420,9 +365,9 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::project(const std::vect
 			vars.insert(VariablePool::getInstance().pplVarByIndex(i));
 		}
 	}
-	PolytopeT<Number,Converter> result(*this);
-	result.rRawPolyhedron().unconstrain(vars);
-	return result;
+	C_Polyhedron tmp = mPolyhedron;
+	tmp.remove_space_dimensions(vars);
+	return PolytopeT(tmp);
 }
 
 template <typename Number, typename Converter>
@@ -674,17 +619,7 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::intersectHalfspace( con
 		return PolytopeT<Number,Converter>();
 	} else {
 		C_Polyhedron res = mPolyhedron;
-		Parma_Polyhedra_Library::Linear_Expression ls;
-
-		ls.set_space_dimension( rhs.dimension() );
-		for ( unsigned rowIndex = 0; rowIndex < rhs.dimension(); ++rowIndex ) {
-			ls.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( rowIndex ),
-								carl::convert<Number,double>( rhs.normal()( rowIndex ) * fReach_DENOMINATOR ) );
-		}
-		ls.set_inhomogeneous_term( carl::convert<Number,double>(-( rhs.offset() * fReach_DENOMINATOR )) );
-
-		Parma_Polyhedra_Library::Constraint constraint;
-		constraint = ls <= 0;
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(rhs.normal(), rhs.offset());
 
 		res.add_constraint( constraint );
 		PolytopeT<Number,Converter> result = PolytopeT<Number,Converter>( res );
@@ -700,15 +635,7 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::intersectHalfspaces( co
 	assert( _mat.rows() == _vec.rows() );
 	C_Polyhedron res = this->mPolyhedron;
 	for ( unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex ) {
-		Parma_Polyhedra_Library::Linear_Expression polynom;
-		polynom.set_space_dimension( _mat.cols() );
-		for ( unsigned columIndex = 0; columIndex < _mat.cols(); ++columIndex ) {
-			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( columIndex ),
-									 carl::convert<Number,double>( _mat( rowIndex, columIndex ) * fReach_DENOMINATOR ) );
-		}
-		polynom.set_inhomogeneous_term( - carl::convert<Number,double>( _vec( rowIndex ) * fReach_DENOMINATOR ) );
-		Parma_Polyhedra_Library::Constraint constraint;
-		constraint = polynom <= 0;
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(_mat.row(rowIndex)), _vec(rowIndex));
 		res.refine_with_constraint( constraint );
 	}
 	return PolytopeT(res);
