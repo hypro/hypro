@@ -59,11 +59,12 @@ void Plotter<Number>::plot2d() const {
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
 			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
-			if(rangeExt != 0)
+			if(rangeExt != 0){
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-			else
+			} else{
 				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
+			}
 		}
 
 
@@ -91,7 +92,6 @@ void Plotter<Number>::plot2d() const {
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
-		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
 		mOutfile << "\n# plotting sets\n";
 
 		//std::cout << "Start plotting sets." << std::endl;
@@ -100,7 +100,7 @@ void Plotter<Number>::plot2d() const {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
 				tmpId++;
-				INFO("Plotting object " << tmpId << "/" << maxObj);
+				INFO("Plotting object " << tmpId << "/" << (mObjects.size() + mPoints.size() + mPlanes.size()));
 			}
 			if(objectIt->second.size() > 0){
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
