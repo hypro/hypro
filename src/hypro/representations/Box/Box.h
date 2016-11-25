@@ -194,7 +194,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	bool empty() const {
 		if ( mLimits.first.dimension() == 0 ) {
-			return false;
+			return true;
 		}
 		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
 			if ( mLimits.first.at(d) > mLimits.second.at(d) ) {
@@ -299,7 +299,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& b ) {
 		ostr << "{ ";
-		ostr << b.min() << "; " << b.max() << std::endl;
+		if(!b.empty()) {
+			ostr << b.min() << "; " << b.max() << std::endl;
+		}
 		ostr << " }";
 		return ostr;
 	}
@@ -479,6 +481,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
  */
 template<typename Number,typename Converter>
 BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in) {
+	if(in.empty()) {
+		return in;
+	}
 	return in*factor;
 }
 

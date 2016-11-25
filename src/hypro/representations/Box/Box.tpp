@@ -435,6 +435,9 @@ BoxT<Number,Converter> BoxT<Number,Converter>::project(const std::vector<unsigne
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+	#ifndef NDEBUG
+	bool empty = this->empty();
+	#endif
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
@@ -459,11 +462,17 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 		}
 	}
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
+	#ifndef NDEBUG
+	assert( (BoxT<Number,Converter>(std::make_pair(min, max)).empty() == empty) );
+	#endif
 	return BoxT<Number,Converter>( std::make_pair(min, max) );
 }
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+	if(this->empty()){
+		return *this;
+	}
 	BoxT<Number,Converter> res = this->linearTransformation(A);
 	return BoxT<Number,Converter>( std::make_pair(res.min()+b, res.max()+b) );
 }

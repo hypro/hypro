@@ -113,7 +113,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT<double,Converter> Empty(std::size_t dimension = 1) {
+	static BoxT<double,Converter> Empty(std::size_t dimension = 0) {
 		return BoxT<double,Converter>(std::make_pair(Point<double>(vector_t<double>::Ones(dimension)), Point<double>(vector_t<double>::Zero(dimension))));
 	}
 
@@ -174,9 +174,9 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @return True, if one interval is empty. False if the dimension is 0 or no interval is empty.
 	 */
 	bool empty() const {
-		assert(mLimits.first.dimension() == mLimits.second.dimension());
+		//assert(mLimits.first.dimension() == mLimits.second.dimension());
 		if ( mLimits.first.dimension() == 0 ) {
-			return false;
+			return true;
 		}
 		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
 			if ( mLimits.first.at(d) > mLimits.second.at(d) ) {
@@ -272,7 +272,12 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<double,Converter> operator*(const double& factor) const { return BoxT<double,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+	BoxT<double,Converter> operator*(const double& factor) const {
+		if(this->empty()){
+			return *this;
+		}
+		return BoxT<double,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));
+	}
 
 	/**
 	 * @brief Outstream operator.
@@ -281,7 +286,9 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter>& b ) {
 		ostr << "{ ";
-		ostr << b.min() << "; " << b.max() << std::endl;
+		if(!b.empty()){
+			ostr << b.min() << "; " << b.max() << std::endl;
+		}
 		ostr << " }";
 		return ostr;
 	}
