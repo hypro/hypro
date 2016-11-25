@@ -91,10 +91,10 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_NE(this->box3, this->box1);
 
     hypro::Box<TypeParam> emptyBox = hypro::Box<TypeParam>::Empty();
-    hypro::Box<TypeParam> universalBox;
+    hypro::Box<TypeParam> zeroDimBox;
     EXPECT_FALSE(this->box1.empty());
     EXPECT_TRUE(emptyBox.empty());
-    EXPECT_FALSE(universalBox.empty());
+    EXPECT_TRUE(zeroDimBox.empty());
 }
 
 TYPED_TEST(BoxTest, Insertion)

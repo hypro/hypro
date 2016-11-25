@@ -66,7 +66,7 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 
 	EXPECT_LE(TypeParam(20),psf1.evaluate(vec1).supportValue);
 	EXPECT_LE(TypeParam(5),psf1.evaluate(vec2).supportValue);
-	EXPECT_LE(TypeParam(17),psf1.evaluate(vec3).supportValue);
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17),psf1.evaluate(vec3).supportValue) || TypeParam(17) <= psf1.evaluate(vec3).supportValue);
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
@@ -82,7 +82,7 @@ TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
 	std::vector<EvaluationResult<TypeParam>> res = psf1.multiEvaluate(directions);
 	EXPECT_LE(TypeParam(20), res[0].supportValue);
 	EXPECT_LE(TypeParam(5), res[1].supportValue);
-	EXPECT_LE(TypeParam(17), res[2].supportValue);
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17),res[2].supportValue) || TypeParam(17) <= res[2].supportValue);
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {

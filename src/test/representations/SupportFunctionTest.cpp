@@ -73,7 +73,7 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 
 	EXPECT_LE(TypeParam(20), psf1.evaluate(this->vec1).supportValue);
 	EXPECT_LE(TypeParam(5), psf1.evaluate(this->vec2).supportValue);
-	EXPECT_LE(TypeParam(17), psf1.evaluate(this->vec3).supportValue);
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), psf1.evaluate(this->vec3).supportValue));
 }
 
 TYPED_TEST(SupportFunctionTest, Supremum) {
@@ -112,7 +112,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	EXPECT_LE(TypeParam(20), res.evaluate(v1Rot).supportValue);
 	EXPECT_LE(TypeParam(5), res.evaluate(v2Rot).supportValue);
-	EXPECT_LE(TypeParam(17), res.evaluate(v3Rot).supportValue);
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), res.evaluate(v3Rot).supportValue) || TypeParam(17) <= res.evaluate(v3Rot).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
@@ -123,7 +123,7 @@ TYPED_TEST(SupportFunctionTest, scale) {
 
 	EXPECT_LE(TypeParam(factor) * TypeParam(20), res.evaluate(this->vec1).supportValue);
 	EXPECT_LE(TypeParam(factor) * TypeParam(5), res.evaluate(this->vec2).supportValue);
-	EXPECT_LE(TypeParam(factor) * TypeParam(17), res.evaluate(this->vec3).supportValue);
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), res.evaluate(this->vec3).supportValue) || TypeParam(17) <= res.evaluate(this->vec3).supportValue);
 }
 
 TYPED_TEST(SupportFunctionTest, minkowskiSum) {
