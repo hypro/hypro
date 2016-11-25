@@ -7,22 +7,6 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 
 ########################################################################################
 
-# Simplified access to *.h and *.cpp
-foreach(name algorithms datastructures parser representations util)
-	collect_files(hypro ${name})
-endforeach()
-
-##file(GLOB_RECURSE headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
-##file(GLOB_RECURSE template_implementations RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.tpp)
-
-set(headers
-	${hypro_algorithms_headers}
-	${hypro_datastructures_headers}
-	${hypro_parser_headers}
-	${hypro_representations_headers}
-	${hypro_util_headers})
-
-
 file(GLOB_RECURSE headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${sources}")
@@ -110,5 +94,3 @@ if (CLANG_TIDY)
 endif()
 
 ########################################################################################
-
-include(${CMAKE_MODULE_PATH}/coverage.cmake)

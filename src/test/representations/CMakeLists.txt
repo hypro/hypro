@@ -50,7 +50,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#add_dependencies(runPTermTests googletest)
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC
-		#${hypro_LIBRARIES_DYNAMIC}
 		${GTEST_LIBRARIES}
 		${PROJECT_NAME}
 	)

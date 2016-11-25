@@ -48,7 +48,7 @@ matrix:
       env: COMPILER=g++-5
     - os: linux
       compiler: gcc
-      env: COMPILER=g++-6 CUSTOM_TARGET=hypro_coverage
+      env: COMPILER=g++-6 FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
       compiler: clang
       env: COMPILER=clang++-3.6
@@ -78,7 +78,7 @@ before_script:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make $CUSTOM_TARGET
+  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make $CUSTOM_TARGET
   - make test
 
 # Generate and deploy documentation
@@ -88,4 +88,5 @@ after_success:
   - chmod +x createAndDeployDocumentation.sh
   - ./createAndDeployDocumentation.sh
   # coveralls
-  - ./processCoverage
+  - chmod +x processCoverage.sh
+  - ./processCoverage.sh
