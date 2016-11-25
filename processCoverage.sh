@@ -2,7 +2,7 @@ __AUTHOR__="Stefan Schupp"
 
 echo 'Starting coverage script ...'
 
-if [ ${CUSTOM_TARGET}=="hypro_coverage" ]; then
+if [ "${FLAGS}" == "-DHYPRO_COVERAGE=ON" ]; then
 	echo 'Collecting files ...'
 	lcov --directory . --capture --output-file coverage.info # capture coverage info
 	lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info # filter out system and test code
