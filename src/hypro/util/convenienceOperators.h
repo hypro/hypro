@@ -68,4 +68,26 @@ namespace hypro {
 
 		return _out;
 	}
+
+	template<typename T>
+	struct typeName {
+		std::string get() {
+			return "unknown";
+		}
+	};
+
+	template<>
+	struct typeName<double> {
+		std::string get() {
+			return "double";
+		}
+	};
+
+	template<>
+	struct typeName<mpq_class> {
+		std::string get() {
+			return "mpq_class";
+		}
+	};
+
 } // namespace hypro
