@@ -8,6 +8,7 @@ Point<Number>::Point()
 	mHash(0),
 	// mNeighbors(),
 	mComposedOf() {
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -17,6 +18,7 @@ Point<Number>::Point( const Number &_value )
 	mComposedOf() {
 	mCoordinates = vector_t<Number>( 1 );
 	mCoordinates( 0 ) = _value;
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -31,6 +33,7 @@ Point<Number>::Point( std::initializer_list<Number> _coordinates )
 		mCoordinates( count ) = Number( coordinate );
 		++count;
 	}
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -44,6 +47,7 @@ Point<Number>::Point( std::vector<Number> _coordinates )
 		mCoordinates( count ) = _coordinates.at( count );
 		++count;
 	}
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -52,6 +56,7 @@ Point<Number>::Point( const vector_t<Number> &_vector )
 	mHash(0),
 	// mNeighbors(),
 	mComposedOf() {
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -59,6 +64,7 @@ Point<Number>::Point( vector_t<Number>&& _vector )
 	: mCoordinates( _vector ),
 	mHash(0),
 	mComposedOf() {
+	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -70,6 +76,7 @@ Point<Number>::Point( const Point<Number> &_p )
 	//std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
   	//std::cout << "This hash " << this->hash() << " vs. " << _p.hash() << std::endl;
   	assert(_p.hash() == this->hash());
+  	assert(this->dimension() >= 0);
 }
 
 template <typename Number>
@@ -78,6 +85,7 @@ Point<Number>::Point( Point<Number> &&_p )
 	mHash(0),
 	// mNeighbors(std::move(_p.neighbors())),
 	mComposedOf( std::move( _p.composedOf() ) ) {
+	assert(this->dimension() >= 0);
 }
 
 /*
