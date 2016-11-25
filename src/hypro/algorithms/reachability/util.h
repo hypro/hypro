@@ -48,6 +48,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 template<typename Number, typename Representation>
 std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& ) {
 	std::vector<Box<Number>> res;
+
 	unsigned dim = flow.cols();
 	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3*dim, 3*dim);
 	matrixBlock.block(0,0,dim,dim) = abs(flow);
@@ -61,14 +62,20 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrixBlock = convert<double,Number>(convertedBlock);
 
 	// TODO: Introduce better variable naming!
-		matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
+	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
 	//std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
 	//std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
 	//assert(tmpMatrix.row(dim-1).nonZeros() == 0);
 	Representation transformedInitialSet = applyLinearTransformation(initialSet, TrafoParameters<Number>(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1))));
 	auto b1 = Converter<Number>::toBox(transformedInitialSet);
+	if(b1.empty()) { // indicates that the initial set is empty.
+	    //std::cout << "B1.empty()!" << std::endl;
+		return res;
+	}
+
 	// augment b1 by a dimension for the constant parts.
 	vector_t<Number> augmentedUpperLimit = vector_t<Number>::Ones(b1.max().dimension()+1);
+	//std::cout << "Matrix: " << std::endl << augmentedUpperLimit << std::endl << " vector " << b1.max().rawCoordinates() << std::endl;
 	augmentedUpperLimit.block(0,0,dim-1,1) = b1.max().rawCoordinates();
 	vector_t<Number> augmentedLowerLimit = vector_t<Number>::Ones(b1.min().dimension()+1);
 	augmentedLowerLimit.block(0,0,dim-1,1) = b1.min().rawCoordinates();
@@ -84,10 +91,16 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	matrix_t<Number> tmpTrafo = fullTransformationMatrix.block(0,0,dim-1,dim-1);
 	vector_t<Number> tmpTrans = fullTransformationMatrix.block(0,dim-1,dim-1,1);
 	// the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
-	//std::cout << "TmpTrafo Matrix: " << std::endl << tmpTrafo << std::endl;
+	//std::cout << "TmpTrafo Matrix: " << std::endl << convert<Number,double>(tmpTrafo) << std::endl;
+	//std::cout << "TmpTrafo Vector: " << std::endl << convert<Number,double>(tmpTrans) << std::endl;
 	Representation tmp = applyLinearTransformation(initialSet, TrafoParameters<Number>(tmpTrafo, tmpTrans));
 	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
 	auto b2 = Converter<Number>::toBox(tmp);
+	if(b2.empty()) { // indicates that the initial set is empty.
+	    //std::cout << "B2.empty()!" << std::endl;
+		return res;
+	}
+
 	augmentedUpperLimit.block(0,0,dim-1,1) = b2.max().rawCoordinates();
 	augmentedLowerLimit.block(0,0,dim-1,1) = b2.min().rawCoordinates();
 	b2 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));

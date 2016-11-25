@@ -54,11 +54,13 @@ namespace reachability {
 						DEBUG("Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
 						break;
 					}
+					#ifdef USE_PPL
 					case representation_name::ppl_polytope: {
 						s.set = Representation(state.second.set.first, state.second.set.second);
 						DEBUG("Adding initial set " << boost::get<Polytope<Number>>(s.set));
 						break;
 					}
+					#endif
 					default: {
 						s.set = Representation(state.second.set.first, state.second.set.second);
 					}

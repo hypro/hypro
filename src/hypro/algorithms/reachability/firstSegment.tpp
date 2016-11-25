@@ -105,7 +105,12 @@ namespace reachability {
 
 			//firstSegment = bloatBox<Number,Representation>(firstSegment, differenceBox);
 			// We directly use the errorBox for X_0, as in our setup, all systems are autonomous.
-			firstSegment = bloatBox<Number,Representation>(firstSegment, Number(Number(1)/Number(4)) * errorBoxVector[0]);
+			if(!errorBoxVector.empty()){
+				firstSegment = bloatBox<Number,Representation>(firstSegment, Number(Number(1)/Number(4)) * errorBoxVector[0]);
+			} else {
+				// in the current setup, the errorboxVector is empty, when the initial set was empty - we can directly skip this.
+				return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(false);
+			}
 		}
 
 		#ifdef REACH_DEBUG
