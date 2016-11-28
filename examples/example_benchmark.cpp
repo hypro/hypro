@@ -53,7 +53,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	std::string extendedFilename = boost::get<0>(ha).reachabilitySettings().fileName;
-	csvString += "," + extendedFilename + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().jumpDepth) + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().timeStep);
+	csvString += "," + extendedFilename + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().jumpDepth) + "," + std::to_string(carl::convert<Number,double>(boost::get<0>(ha).reachabilitySettings().timeStep));
 	switch (Representation::type()) {
 		case hypro::representation_name::zonotope:{
 			extendedFilename += "_zonotope";
@@ -93,6 +93,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	}
 
 	extendedFilename += "_" + hypro::typeName<Number>().get();
+	csvString += "," + hypro::typeName<Number>().get();
 	extendedFilename += "_glpk";
 	csvString += ",glpk";
 #ifdef USE_SMTRAT
@@ -102,6 +103,9 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 #ifdef USE_Z3
 	extendedFilename += "_z3";
 	csvString += ",z3";
+#endif
+#if !defined USE_SMTRAT && !defined USE_Z3
+	csvString += ",";
 #endif
 
 	csvString += "," + std::to_string(runtime) + "\n";
@@ -186,7 +190,7 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-	using Number = double;
+	using Number = mpq_class;
 
 	switch(rep){
 		#ifdef USE_PPL
