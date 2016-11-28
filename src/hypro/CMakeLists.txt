@@ -22,7 +22,7 @@ endif()
 if(STATICLIB_SWITCH)
 	message("-- linking static")
 	add_library(${PROJECT_NAME}_static STATIC ${sources})
-	set_target_properties( lib_hypro_static PROPERTIES
+	set_target_properties( hypro_static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
 		SOVERSION "${PROJECT_VERSION}"
@@ -34,8 +34,12 @@ if(STATICLIB_SWITCH)
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		# we currently do not use public header option, as it doesnt support multi-directory headers
 	)
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_STATIC})
-	target_include_directories(lib_hypro_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
+	message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
+	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	#message("hypro sources: " ${sources})
+	#message("hypro headers: " ${headers})
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
+	target_include_directories(${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
 else()
 	message("-- linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
@@ -60,12 +64,14 @@ endif()
 
 if(STATICLIB_SWITCH)
 	set_target_properties(${PROJECT_NAME}_static PROPERTIES LINKER_LANGUAGE CXX)
+	set(HYPRO_TARGETS ${PROJECT_NAME}_static CACHE STRING INTERNAL FORCE)
 else()
 	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 	else()
 		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 	endif()
+	set(HYPRO_TARGETS ${PROJECT_NAME} CACHE STRING INTERNAL FORCE)
 endif()
 
 # Options for static linking
@@ -74,9 +80,6 @@ if (APPLE)
 else()
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif()
-
-set(HYPRO_TARGETS ${PROJECT_NAME} CACHE STRING INTERNAL FORCE)
-
 
 ########################################################################################
 

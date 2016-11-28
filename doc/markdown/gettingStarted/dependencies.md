@@ -5,7 +5,7 @@ The very basic dependencies include the libraries
 
 - [CMake](https://cmake.org/) (version >= 2.8.1), a build system,
 - [boost](http://www.boost.org/) (version >= 1.55), a collection of C++ libaries,
-- [glpk](https://www.gnu.org/software/glpk/) (version >= 4.6), a package for linear solving and
+- [glpk](https://www.gnu.org/software/glpk/) (version >= 4.6), a package for linear solving (compile with "--with-gmp" set) and
 - [CaRL](https://github.com/smtrat/carl), a C++ library for arithmetic.
 
 The first four dependencies can be obtained as Ubuntu packages or directly downloaded from the referenced websites.
