@@ -137,7 +137,6 @@ bool HPolytopeT<Number, Converter>::empty() const {
 	TRACE("");
 	if(mEmpty == TRIBOOL::TRUE){
 		TRACE("Already set to true.");
-		assert(false);
 		return true;
 	}
 	if(mEmpty == TRIBOOL::FALSE){
