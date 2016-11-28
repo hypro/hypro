@@ -16,6 +16,7 @@ template<typename Number, typename Representation>
 static void computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::duration<long long unsigned, std::micro>;
+	std::string csvString;
 	//std::cout << "Filename: " << filename << std::endl;
 	std::size_t numberRuns = 1;
 	std::vector<std::chrono::duration<double, std::milli>> runtimes(numberRuns);
@@ -39,53 +40,78 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		RESET_STATS()
 	}
 	std::cout << boost::get<1>(ha) << std::endl;
+	double runtime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(summedTime).count()+std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(parseTime).count();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(summedTime).count()+std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(parseTime).count() << " ms" << std::endl;
+	std::time_t end_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	std::tm tm = *std::localtime(&end_time);
+	std::stringstream str;
+	str << std::put_time(&tm, "%F %T");
+	csvString += str.str();
 
 #ifdef PLOT_FLOWPIPE
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	std::string extendedFilename = boost::get<0>(ha).reachabilitySettings().fileName;
+	csvString += "," + extendedFilename + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().jumpDepth) + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().timeStep);
 	switch (Representation::type()) {
 		case hypro::representation_name::zonotope:{
 			extendedFilename += "_zonotope";
+			csvString += ",zonotope";
 			break;
 		}
 		case hypro::representation_name::support_function:{
 			extendedFilename += "_supportFunction";
+			csvString += ",supportFunction";
 			break;
 		}
 		case hypro::representation_name::polytope_v:{
 			extendedFilename += "_vpoly";
+			csvString += ",vpoly";
 			break;
 		}
 		case hypro::representation_name::polytope_h:{
 			extendedFilename += "_hpoly";
+			csvString += ",hpoly";
 			break;
 		}
 		#ifdef USE_PPL
 		case hypro::representation_name::ppl_polytope:{
 			extendedFilename += "_PPLpoly";
+			csvString += ",pplPoly";
 			break;
 		}
 		#endif
 		case hypro::representation_name::box:{
 			extendedFilename += "_box";
+			csvString += ",box";
 			break;
 		}
 		default:
 			extendedFilename += "_unknownRep";
+			csvString += ",unknown";
 	}
 
 	extendedFilename += "_" + hypro::typeName<Number>().get();
-
 	extendedFilename += "_glpk";
+	csvString += ",glpk";
 #ifdef USE_SMTRAT
 	extendedFilename += "_smtrat";
+	csvString += ",smtrat";
 #endif
 #ifdef USE_Z3
 	extendedFilename += "_z3";
+	csvString += ",z3";
 #endif
+
+	csvString += "," + std::to_string(runtime) + "\n";
+
+	std::fstream resultFile;
+	resultFile.open("results.csv",std::fstream::app);
+	resultFile << csvString;
+	resultFile.close();
+
+	std::cout << csvString << std::endl;
 
 	//std::cout << "filename is " << extendedFilename << std::endl;
 	plotter.setFilename(extendedFilename);
