@@ -12,7 +12,16 @@ ExternalProject_Get_Property(log4cplus binary_dir)
 #message("binary_dir: ${binary_dir}")
 #message("shared library suffix: ${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
-set(LOG4CPLUS_LIBRARIES "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" PARENT_SCOPE)
+if(STATICLIB_SWITCH)
+	set(LOG4CPLUS_LIBRARIES "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_STATIC_LIBRARY_SUFFIX}" PARENT_SCOPE)
+else()
+	set(LOG4CPLUS_LIBRARIES "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" PARENT_SCOPE)
+endif()
+
 set(LOG4CPLUS_INCLUDE_DIRS "${source_dir}/include" PARENT_SCOPE)
 
-add_imported_library(log4cplus SHARED "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" "${source_dir}/include")
+if(STATICLIB_SWITCH)
+	add_imported_library(log4cplus STATIC "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" "${source_dir}/include")
+else()
+	add_imported_library(log4cplus SHARED "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}log4cplus${CMAKE_SHARED_LIBRARY_SUFFIX}" "${source_dir}/include")
+endif()
