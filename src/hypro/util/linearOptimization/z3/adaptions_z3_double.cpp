@@ -76,8 +76,9 @@ namespace hypro {
 
 				z3Optimizer.pop();
 				z3::optimize::handle z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
-				assert(z3::unknown != z3Optimizer.check());
-				if(z3::sat == z3Optimizer.check()) {
+				z3::check_result chck = z3Optimizer.check();
+				assert(z3::unknown != chck);
+				if(z3::sat == chck) {
 					z3::expr z3res = z3Optimizer.upper(z3Check);
 					assert(z3res.is_arith());
 
@@ -109,7 +110,7 @@ namespace hypro {
 				       res.optimumValue = pointCoordinates;
 					}
 				} else {
-					assert(z3Check == z3::unsat);
+					assert(z3::unsat == chck);
 					return EvaluationResult<double>( 0, SOLUTION::INFEAS );
 				}
 			#else

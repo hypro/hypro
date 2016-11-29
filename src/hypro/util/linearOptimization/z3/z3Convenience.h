@@ -53,6 +53,7 @@ namespace hypro {
 				term=variables[j]*coeff;
 				polynomial = polynomial + term ;
 			}
+			//std::cout << "Constant: " << _constants(i) << std::endl;
 			z3::expr constant = c.real_val(carl::convert<Number,mpq_class>(_constants(i)));
 			z3::expr constraint(polynomial <= constant);
 			constraints.push_back(constraint);
