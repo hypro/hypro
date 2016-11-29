@@ -78,7 +78,7 @@ before_script:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make
+  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make
   - make test
 
 # Generate and deploy documentation
