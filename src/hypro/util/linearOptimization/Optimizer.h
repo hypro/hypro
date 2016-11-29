@@ -27,6 +27,7 @@
 #endif
 
 #include "util/statistics/statistics.h"
+#include "util/logging/Logger.h"
 
 #include <glpk.h>
 
@@ -43,6 +44,9 @@ namespace hypro {
 
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
+		#ifdef HYPRO_LOGGING
+		mutable bool=false	mWarnInexact;
+		#endif
 
 		// dependent members, all mutable
 		#ifdef HYPRO_USE_SMTRAT
@@ -83,6 +87,13 @@ namespace hypro {
 			}
 			fileCounter = cnt;
 			//std::cout << "Set file number to " << fileCounter << std::endl;
+			#endif
+			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
+				if(carl::is_rational<Number>.value && !mWarnInexact){
+					// only warn once
+					mWarnInexact = true;
+					WARN("Atttention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
+				}
 			#endif
 		}
 
