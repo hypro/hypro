@@ -45,7 +45,7 @@ namespace hypro {
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
 		#ifdef HYPRO_LOGGING
-		mutable bool=false	mWarnInexact;
+		mutable bool		mWarnInexact = false;
 		#endif
 
 		// dependent members, all mutable
@@ -89,7 +89,7 @@ namespace hypro {
 			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
 			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
-				if(carl::is_rational<Number>.value && !mWarnInexact){
+				if(!mWarnInexact && carl::is_rational<Number>().value){
 					// only warn once
 					mWarnInexact = true;
 					WARN("Atttention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
