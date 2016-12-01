@@ -17,6 +17,9 @@ namespace hypro {
     template <typename Number>
     using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
+    /**
+     * \typedef Typedef for the used matrix type.
+     */
     template <typename Number>
     using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 

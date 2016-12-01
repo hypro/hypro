@@ -1,9 +1,5 @@
 /*
- * @file   HPolytope.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since 	2014-07-16
- * @version 	2015-03-16
+ * \example example_HPolytope.cpp
  */
 
 #pragma once

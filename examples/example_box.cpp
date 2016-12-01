@@ -1,11 +1,21 @@
 
+/**
+ * \example example_box.cpp
+ */
+
 #include "../hypro/representations/GeometricObject.h"
 #include "../hypro/datastructures/Halfspace.h"
 #include "../hypro/util/Plotter.h"
 
 int main(int argc, char const *argv[])
 {
+	// use rational arithmetic.
 	typedef mpq_class Number;
+
+	// get plotter reference.
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+
+	// create some transformation matrix.
 	hypro::matrix_t<Number> A = hypro::matrix_t<Number>::Zero(3,3);
 	A(0,0) = 1;
 	A(1,1) = carl::convert<double,Number>(carl::cos(45));
@@ -13,16 +23,20 @@ int main(int argc, char const *argv[])
 	A(2,1) = carl::convert<double,Number>(carl::sin(45));
 	A(2,2) = carl::convert<double,Number>(carl::cos(45));
 
+	// create some translation vector.
 	hypro::vector_t<Number> b = hypro::vector_t<Number>::Zero(3);
 
+	// create a box out of two given limit points.
 	hypro::Box<Number> testbox(std::make_pair(hypro::Point<Number>({-2,2,-4}), hypro::Point<Number>({2,4,-2})));
 
+	// compute all vertices of the box and output them.
 	std::vector<hypro::Point<Number>> tvertices = testbox.vertices();
 	for(const auto& vertex : tvertices)
 		std::cout << vertex << std::endl;
 
 	std::cout << testbox << std::endl;
 
+	// transform the initial box with the created matrix and vector (affine transformation).
 	hypro::Box<Number> res = testbox.affineTransformation(A,b);
 
 	std::cout << res << std::endl;
@@ -31,18 +45,10 @@ int main(int argc, char const *argv[])
 	for(const auto& vertex : vertices)
 		std::cout << vertex << std::endl;
 
-	std::cout << "Manual computation" << std::endl;
-
-	std::vector<hypro::Point<Number>> originalVertices = testbox.vertices();
-	for(auto& v : originalVertices){
-		std::cout << v << " -> ";
-		v = A*v.rawCoordinates();
-		std::cout << v << std::endl;
-	}
-
-	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-
+	// create a second box which is two dimensional.
 	hypro::Box<Number> testbox2(std::make_pair(hypro::Point<Number>({-2,-2}), hypro::Point<Number>({2,2})));
+
+	// create a halfspace (cutter) from a normal vector and an offset.
 	hypro::matrix_t<Number> normal = hypro::matrix_t<Number>(1,2);
 	hypro::vector_t<Number> offset = hypro::vector_t<Number>(1);
 	normal << 1,1;
@@ -50,16 +56,19 @@ int main(int argc, char const *argv[])
 	hypro::vector_t<Number> hsNormal = hypro::vector_t<Number>(2);
 	hsNormal << 1,1;
 	hypro::Halfspace<Number> cutter = hypro::Halfspace<Number>(hsNormal, carl::rationalize<Number>(-0.5));
+
+	// we can also plot halfspaces
 	plotter.addObject(cutter);
 	unsigned original = plotter.addObject(testbox2.vertices());
+
+	// add the intersection of the second box and the created halfspace to the plotter instance.
+	// Note: satisfiesHalfspaces returns a pair <bool, Representation>.
 	unsigned cutted = plotter.addObject(testbox2.satisfiesHalfspaces(normal, offset).second.vertices());
 
+	// set colors and plot (gnuplot).
 	plotter.setObjectColor(original, hypro::colors[hypro::green]);
 	plotter.setObjectColor(cutted, hypro::colors[hypro::red]);
-
 	plotter.plot2d();
 
-
-	hypro::Box<Number> testResBox(originalVertices);
-	std::cout << testResBox << std::endl;
+	return 0;
 }

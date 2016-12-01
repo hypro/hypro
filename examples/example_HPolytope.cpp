@@ -1,37 +1,40 @@
-#include "../src/hypro/util/convexHull.h"
-#include "../src/hypro/config.h"
+/** \example example_HPolytope.cpp
+ * 	This is an example file showing how to create and modify a polytope in H-representation.
+ */
+
+
 #include "../src/hypro/representations/GeometricObject.h"
-#include "../src/hypro/representations/Polytope/Polytope.h"
+#include "../src/hypro/util/Plotter.h"
 
-#include <iostream>
-#include <fstream>
-
-typedef float Number;
+typedef double Number;
 
 int main()
 {
-    hypro::matrix_t<Number> HPolyEquations = hypro::matrix_t<Number>(4,6);
-    HPolyEquations << 1.0, 1.0, 2/3.0, -2/3.0,     0.0,     0.0,
-                      0.0, 0.0,  0.0,     0.0,     1.0,    -1.0,
-                      0.0, 0.0,  1.0,    -1.0,   2/3.0,  -2/3.0,
-                      7.0, 5.0,  9.5,    -9.5,  13/3.0, -13/3.0;
+	// we create the constraints and constants defining a 2D-unit box.
+    hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>(4,2);
+    HPolyConstraints << 1	,0,
+    					-1	,0,
+    					0	,1,
+    					0	,-1;
+    hypro::vector_t<Number> HPolyConstants = hypro::vector_t<Number>(4);
+    HPolyConstants << 1,1,1,1;
 
-    // All we want now is write to see the results
-    std::ofstream results("example_HPolytope.txt");
+    // create the actual polytope and add its vertices to the global plotter (singleton).
+    hypro::HPolytope<Number> poly(HPolyConstraints,HPolyConstants);
+    hypro::Plotter<Number>::getInstance().addObject(poly.vertices());
 
-    results << HPolyEquations;
+    // create rotation matrix for +45 degrees (corresponds to ~0.785398 radians).
+    hypro::matrix_t<Number> rotation = hypro::matrix_t<Number>(2,2);
+    rotation << std::cos(0.785398), 	-std::sin(0.785398),
+    			std::sin(0.785398),		std::cos(0.785398);
 
-    results.close(); // Just closes the file
+    // perform linear transformation (rotation) and plot the new object in green (default = blue).
+    poly = poly.linearTransformation(rotation);
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(poly.vertices());
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::colors[hypro::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().plot2d();
 
     return 0;
 }
-
-/*
- * ax + by + cz + d = 0
- * x <= 7
- * x >= 5
- *  z + 2/3 x <=    9,5
- * -z - 2/3 x <=  - 9,5
- *  y + 2/3 z <=  4 1/3
- * -y - 2/3 z <= -4 1/3
- */
