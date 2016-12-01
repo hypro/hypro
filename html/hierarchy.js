@@ -2,25 +2,21 @@ var hierarchy =
 [
     [ "hypro::artificialDirections< Number >", "structhypro_1_1artificialDirections.html", null ],
     [ "hypro::BallSupportFunction< Number >", "classhypro_1_1BallSupportFunction.html", null ],
-    [ "CleanupOnExit", "classCleanupOnExit.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
     [ "hypro::ContinuousSystem< Number >", "classhypro_1_1ContinuousSystem.html", null ],
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
-    [ "hypro::convexSetOfFlowpipeSetIndexis", "structhypro_1_1convexSetOfFlowpipeSetIndexis.html", null ],
-    [ "hypro::CounterRepository", "classhypro_1_1CounterRepository.html", null ],
+    [ "hypro::statistics::CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", null ],
     [ "hypro::Dictionary< Number >", "classhypro_1_1Dictionary.html", null ],
     [ "hypro::Domain< Number >", "classhypro_1_1Domain.html", null ],
     [ "hypro::Ellipsoid< Number >", "classhypro_1_1Ellipsoid.html", null ],
     [ "hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1EllipsoidSupportFunction.html", null ],
     [ "hypro::parser::ErrorHandler", "structhypro_1_1parser_1_1ErrorHandler.html", null ],
-    [ "hypro::evaluationResult", "structhypro_1_1evaluationResult.html", null ],
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
     [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
-    [ "hypro::FlowpipeSegment", "classhypro_1_1FlowpipeSegment.html", null ],
     [ "GenericNumTraits", null, [
       [ "Eigen::NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", null ],
       [ "Eigen::NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", null ]
@@ -47,7 +43,7 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ZonotopeT< Number, Converter >", "classhypro_1_1ZonotopeT.html", null ]
     ] ],
-    [ "hypro::gnuplotSettings", "structhypro_1_1gnuplotSettings.html", null ],
+    [ "hypro::plotting::gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", null ],
     [ "grammar", null, [
       [ "hypro::parser::constraintParser< Iterator, Number >", "structhypro_1_1parser_1_1constraintParser.html", null ],
       [ "hypro::parser::discreteConstraintParser< Iterator, Number >", "structhypro_1_1parser_1_1discreteConstraintParser.html", null ],
@@ -74,7 +70,6 @@ var hierarchy =
     [ "std::hash< hypro::VertexContainer< Number > >", "structstd_1_1hash_3_01hypro_1_1VertexContainer_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< set< hypro::Vertex< Number > > >", "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", null ],
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
-    [ "hypro::HybridAutomaton< Number, Zonotope< Number > >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::intersectionContent< Number >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::Location< Number >::Invariant", "structhypro_1_1Location_1_1Invariant.html", null ],
     [ "hypro::is_same< T, U >", "structhypro_1_1is__same.html", null ],
@@ -93,19 +88,14 @@ var hierarchy =
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::pointIt< Number >", "structhypro_1_1pointIt.html", null ],
     [ "hypro::PolynomialODE< Number >", "classhypro_1_1PolynomialODE.html", null ],
-    [ "hypro::possibleTransition", "structhypro_1_1possibleTransition.html", null ],
-    [ "PreprocessingObject", "classPreprocessingObject.html", [
-      [ "LocationInfo", "classLocationInfo.html", null ],
-      [ "TransitionInfo", "classTransitionInfo.html", null ]
-    ] ],
+    [ "hypro::PolytopeSupportFunction< Number >", "classhypro_1_1PolytopeSupportFunction.html", null ],
     [ "hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1PrincipalComponentAnalysis.html", null ],
     [ "hypro::projectionContent< Number >", "structhypro_1_1projectionContent.html", null ],
-    [ "hypro::PTermBox< Number >", "classhypro_1_1PTermBox.html", null ],
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
     [ "hypro::RawState< Number >", "structhypro_1_1RawState.html", null ],
     [ "hypro::reachability::Reach< Number, Representation >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::reachability::Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::ReachabilitySettings< Number >", "structhypro_1_1ReachabilitySettings.html", null ],
+    [ "hypro::reachability::ReachabilitySettings< Number >", "structhypro_1_1reachability_1_1ReachabilitySettings.html", null ],
     [ "hypro::ReachTree< Number, Representation >", "classhypro_1_1ReachTree.html", null ],
     [ "hypro::ReachTreeNodeSimple< Number, Representation >", "classhypro_1_1ReachTreeNodeSimple.html", [
       [ "hypro::ReachTreeNode< Number, Representation >", "classhypro_1_1ReachTreeNode.html", null ]
@@ -126,16 +116,8 @@ var hierarchy =
     ] ],
     [ "hypro::sumContent< Number >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::SupportFunctionContent< Number >", "classhypro_1_1SupportFunctionContent.html", [
-      [ "hypro::InfinitySupportFunction", "classhypro_1_1InfinitySupportFunction.html", null ],
-      [ "hypro::MultiplicationSupportfunction", "classhypro_1_1MultiplicationSupportfunction.html", null ],
       [ "hypro::NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ],
-      [ "hypro::NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ],
-      [ "hypro::PolytopeSupportFunction< Number >", "classhypro_1_1PolytopeSupportFunction.html", null ],
-      [ "hypro::ScalarMultiplicationSupportfunction", "classhypro_1_1ScalarMultiplicationSupportfunction.html", null ],
-      [ "hypro::SummationSupportfunction", "classhypro_1_1SummationSupportfunction.html", null ],
-      [ "hypro::SymmetricCenteredBoxSupportFunction", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", null ],
-      [ "hypro::SymmetricCenteredBoxSupportFunction", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", null ],
-      [ "hypro::ZeroSupportFunction", "classhypro_1_1ZeroSupportFunction.html", null ]
+      [ "hypro::SymmetricCenteredBoxSupportFunction", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", null ]
     ] ],
     [ "symbols", null, [
       [ "hypro::parser::aggregation_", "structhypro_1_1parser_1_1aggregation__.html", null ]
@@ -151,6 +133,5 @@ var hierarchy =
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
-    [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ],
-    [ "ZonotopeReachability< Number >", "classZonotopeReachability.html", null ]
+    [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ]
 ];

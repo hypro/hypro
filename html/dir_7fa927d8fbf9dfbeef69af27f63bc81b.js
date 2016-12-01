@@ -6,7 +6,6 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
     [ "OrthogonalPolyhedron", "dir_c3a99445e85233736dff89b095acd8fe.html", "dir_c3a99445e85233736dff89b095acd8fe" ],
     [ "Polytope", "dir_dbbb4b37ecf24276c0f25796d6496cf7.html", "dir_dbbb4b37ecf24276c0f25796d6496cf7" ],
     [ "Polytopes", "dir_ad938787f25f17484dcf7b42a899a1a5.html", "dir_ad938787f25f17484dcf7b42a899a1a5" ],
-    [ "PTermBox", "dir_2ec43ebe6d329e6496b200590138ff41.html", "dir_2ec43ebe6d329e6496b200590138ff41" ],
     [ "SupportFunction", "dir_5cc8785239517cfd59e944398d6252f9.html", "dir_5cc8785239517cfd59e944398d6252f9" ],
     [ "TaylorModel", "dir_f299c51bddf4791e0a4b318d117b72c2.html", "dir_f299c51bddf4791e0a4b318d117b72c2" ],
     [ "Zonotope", "dir_97de49a5bc6f4f4b12a8405ff97bd656.html", "dir_97de49a5bc6f4f4b12a8405ff97bd656" ],

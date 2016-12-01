@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['getad',['getAD',['../classhypro_1_1SupportFunctionContent.html#a21cfc83dab81a40df114b37e464d0a46',1,'hypro::SupportFunctionContent']]],
   ['gethash',['getHash',['../classhypro_1_1VertexContainer.html#a144e240d9723fb1352dd222f1e15c722',1,'hypro::VertexContainer']]],
   ['getneighborhood',['getNeighborhood',['../classhypro_1_1NeighborhoodContainer.html#a3ccd1c9cc2534f45b4349f844ac75ed7',1,'hypro::NeighborhoodContainer']]],
   ['getneighborhoodfordimension',['getNeighborhoodForDimension',['../classhypro_1_1NeighborhoodContainer.html#acb94eae30d81ef3dd8c0ef56b5adabd9',1,'hypro::NeighborhoodContainer']]],

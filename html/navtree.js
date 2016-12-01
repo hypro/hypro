@@ -10,7 +10,8 @@ var NAVTREE =
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ]
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
     [ "Classes", null, [
@@ -35,14 +36,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a1aa854e8d5b7990a47549248fca9d0f2",
-"classhypro_1_1Facet.html#ac26a9439913d4d868a3cbf167e1c3430",
-"classhypro_1_1Location.html#a0514a760b4d41edab507cdfb7385a4f3",
-"classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac",
-"classhypro_1_1TaylorModel.html",
-"classhypro_1_1VertexContainer.html#afa722d7b9fd046bbe49fb4d79b412ec3",
-"namespacemembers.html",
-"structhypro_1_1parser_1_1modeParser.html#a44b0087529ab4067ad26b75542360905"
+"classhypro_1_1Cone.html#a2ad02cee1830f00a562459faf1a34414",
+"classhypro_1_1Grid.html#a498bc710715e01f596ede230d0524a6d",
+"classhypro_1_1OrthogonalPolyhedron.html#a33f1c69a354eba9944de592b876c3602",
+"classhypro_1_1Ridge.html#a4c78e41d001615f4acb54353ab31546e",
+"classhypro_1_1VPolytopeT.html#a6aaad82f80c7ae53d5fef36a3ae12406",
+"dir_d28a4824dc47e487b107a5db32ef43c4.html",
+"structhypro_1_1parser_1_1aggregation__.html#a2cac5411bac61a1ae7a82fe5555d60a4",
+"structhypro_1_1typeName.html#a47c64536c6a905f2a217f6dd8bcef539"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

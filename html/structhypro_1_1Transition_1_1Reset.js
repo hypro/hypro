@@ -1,5 +1,6 @@
 var structhypro_1_1Transition_1_1Reset =
 [
+    [ "~Reset", "structhypro_1_1Transition_1_1Reset.html#a40c7a91220d81675c6ec9546002f0bbb", null ],
     [ "addArtificialDimension", "structhypro_1_1Transition_1_1Reset.html#ad11558d59256e5274ce8706bde0f56c8", null ],
     [ "operator<<", "structhypro_1_1Transition_1_1Reset.html#aed674be8e22f4053d67d46442b4c8544", null ],
     [ "discreteMat", "structhypro_1_1Transition_1_1Reset.html#aa2b5454c5df795ddcd02a8fa54857551", null ],

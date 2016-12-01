@@ -6,6 +6,9 @@ var annotated =
       [ "NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4" ]
     ] ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
+    [ "plotting", "namespaceplotting.html", null ],
+    [ "reachability", "namespacereachability.html", null ],
+    [ "statistics", "namespacestatistics.html", null ],
     [ "std", null, [
       [ "hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4" ],
@@ -19,10 +22,5 @@ var annotated =
       [ "Options", "structZUtility_1_1Options.html", "structZUtility_1_1Options" ],
       [ "Line_t", "structZUtility_1_1Line__t.html", "structZUtility_1_1Line__t" ]
     ] ],
-    [ "CleanupOnExit", "classCleanupOnExit.html", "classCleanupOnExit" ],
-    [ "LocationInfo", "classLocationInfo.html", "classLocationInfo" ],
-    [ "PreprocessingObject", "classPreprocessingObject.html", "classPreprocessingObject" ],
-    [ "ScopedLock", "classScopedLock.html", "classScopedLock" ],
-    [ "TransitionInfo", "classTransitionInfo.html", "classTransitionInfo" ],
-    [ "ZonotopeReachability", "classZonotopeReachability.html", "classZonotopeReachability" ]
+    [ "ScopedLock", "classScopedLock.html", "classScopedLock" ]
 ];

@@ -12,9 +12,9 @@ var classhypro_1_1Plotter =
     [ "plot2d", "classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8", null ],
     [ "plotGen", "classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30", null ],
     [ "plotTex", "classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed", null ],
-    [ "rSettings", "classhypro_1_1Plotter.html#a1dc0c6b22ce102f675070d0ba7d306c3", null ],
+    [ "rSettings", "classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d", null ],
     [ "setFilename", "classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd", null ],
     [ "setObjectColor", "classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119", null ],
-    [ "settings", "classhypro_1_1Plotter.html#ae43de05bb98ed0df31cac6e6d498b5ba", null ],
-    [ "updateSettings", "classhypro_1_1Plotter.html#a6d1fccb918fe425eb00174c03d1dde18", null ]
+    [ "settings", "classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c", null ],
+    [ "updateSettings", "classhypro_1_1Plotter.html#ae70e9f2612ee938eebbdf278b6f79866", null ]
 ];

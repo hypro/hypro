@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -115,10 +115,15 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
 <div class="title">hypro::reachability::Reach&lt; Number, Representation &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class implementing a basic reachbility analysis algorithm for linear hybrid automata.  
+ <a href="classhypro_1_1reachability_1_1Reach.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Reach_8h_source.html">Reach.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae6813f11a094496a612f62d4bec38ca1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ae6813f11a094496a612f62d4bec38ca1">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;_automaton, const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_settings=<a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt;())</td></tr>
+<tr class="memitem:ae6813f11a094496a612f62d4bec38ca1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ae6813f11a094496a612f62d4bec38ca1">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;_automaton, const <a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_settings=<a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt;())</td></tr>
 <tr class="memdesc:ae6813f11a094496a612f62d4bec38ca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a basic reachability analysis algorithm for linear hybrid automata.  <a href="#ae6813f11a094496a612f62d4bec38ca1">More...</a><br/></td></tr>
 <tr class="separator:ae6813f11a094496a612f62d4bec38ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae22a56e3114b8d421785f9768f12c06b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair<br class="typebreak"/>
@@ -141,13 +146,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a564b496f261a7ba04e7c304b2245d74d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a564b496f261a7ba04e7c304b2245d74d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransitions</b> (const <a class="el" href="structhypro_1_1State.html">State</a>&lt; Number &gt; &amp;_state, const carl::Interval&lt; Number &gt; &amp;currentTime, std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="structhypro_1_1State.html">State</a>&lt; Number &gt;&gt;&gt; &amp;nextInitialSets) const </td></tr>
 <tr class="separator:a564b496f261a7ba04e7c304b2245d74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b290eded214530934a135329cf4cc3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5b290eded214530934a135329cf4cc3"></a>
+const <a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
+&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b> () const </td></tr>
+<tr class="separator:ac5b290eded214530934a135329cf4cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1910d04ad5790dc928d40016dc15a0cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1910d04ad5790dc928d40016dc15a0cd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSettings</b> (const <a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;settings)</td></tr>
+<tr class="separator:a1910d04ad5790dc928d40016dc15a0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename Representation&gt;<br/>
 class hypro::reachability::Reach&lt; Number, Representation &gt;</h3>
 
-
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00050">50</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+    <tr><td class="paramname">Representation</td><td>The used state set representation type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a0">example_benchmark.cpp</a>, and <a class="el" href="example_bouncingBall_8cpp-example.html#_a5">example_bouncingBall.cpp</a>.</dd>
+</dl>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00060">60</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae6813f11a094496a612f62d4bec38ca1"></a>
 <div class="memitem">
@@ -164,8 +185,8 @@ template&lt;typename Number, typename Representation&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_settings</em> = <code><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt;&#160;Number&#160;&gt;()</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_settings</em> = <code><a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt;&#160;Number&#160;&gt;()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -337,7 +358,7 @@ template&lt;typename Number, typename Representation&gt; </div>
 <p>[long description] </p>
 <dl class="section return"><dt>Returns</dt><dd>true, if the bad states were reachable. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00095">95</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00105">105</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

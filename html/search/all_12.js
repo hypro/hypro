@@ -14,6 +14,6 @@ var searchData=
   ['vertexenumeration',['VertexEnumeration',['../classhypro_1_1VertexEnumeration.html#a9aa02d679c1849aa2a0904d165c68497',1,'hypro::VertexEnumeration']]],
   ['vertexenumeration_2eh',['vertexEnumeration.h',['../vertexEnumeration_8h.html',1,'']]],
   ['vertexset',['vertexSet',['../classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a',1,'hypro::Ridge']]],
-  ['vertices',['vertices',['../classhypro_1_1BoxT.html#a52c7c5c52bf69b24f11389abdb1bb899',1,'hypro::BoxT::vertices()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a84ec9af8847898e5a80133f016871d90',1,'hypro::BoxT&lt; double, Converter &gt;::vertices()'],['../classhypro_1_1HPolytopeT.html#ab77db028b9a480259ff088e930d8782f',1,'hypro::HPolytopeT::vertices()'],['../classhypro_1_1PTermBox.html#a5398ed89ecd703bf9d007e8bc49ca945',1,'hypro::PTermBox::vertices()'],['../classhypro_1_1ZonotopeT.html#a82c286e1db5feba71d6b2688ae60a63c',1,'hypro::ZonotopeT::vertices()']]],
+  ['vertices',['vertices',['../classhypro_1_1BoxT.html#a52c7c5c52bf69b24f11389abdb1bb899',1,'hypro::BoxT::vertices()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a84ec9af8847898e5a80133f016871d90',1,'hypro::BoxT&lt; double, Converter &gt;::vertices()'],['../classhypro_1_1HPolytopeT.html#ab77db028b9a480259ff088e930d8782f',1,'hypro::HPolytopeT::vertices()'],['../classhypro_1_1ZonotopeT.html#a82c286e1db5feba71d6b2688ae60a63c',1,'hypro::ZonotopeT::vertices()']]],
   ['vpolytopet',['VPolytopeT',['../classhypro_1_1VPolytopeT.html',1,'hypro']]]
 ];

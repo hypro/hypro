@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['infinitysupportfunction',['InfinitySupportFunction',['../classhypro_1_1InfinitySupportFunction.html',1,'hypro']]],
   ['intersectioncontent',['intersectionContent',['../structhypro_1_1intersectionContent.html',1,'hypro']]],
   ['invariant',['Invariant',['../structhypro_1_1Location_1_1Invariant.html',1,'hypro::Location']]],
   ['is_5fsame',['is_same',['../structhypro_1_1is__same.html',1,'hypro']]],

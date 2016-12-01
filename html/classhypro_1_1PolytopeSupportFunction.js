@@ -1,9 +1,5 @@
 var classhypro_1_1PolytopeSupportFunction =
 [
-    [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#ad373fa0a9c990edbb222f200ed66dddc", null ],
-    [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a0932f2329f93aa25308bb06e48bfafdc", null ],
-    [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a664440e495df9b9981a63495d81e267c", null ],
-    [ "~PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#ada04b26a34ab4f109f1ca682fbef2acc", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a24cf785d38b77e689535b285e52390e0", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a6941594adcbed569dfafb31460e9ef49", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a7daaaf1124aa7696ae810066c7dd90f8", null ],
@@ -19,7 +15,6 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "multiEvaluate", "classhypro_1_1PolytopeSupportFunction.html#a836f9159ee9891c898191c833c8a0352", null ],
     [ "operator=", "classhypro_1_1PolytopeSupportFunction.html#a2e3cf01187217a3503fabfc9674c91b5", null ],
     [ "print", "classhypro_1_1PolytopeSupportFunction.html#a79b00cb182c91f47e787cf8b4426561e", null ],
-    [ "specificEvaluation", "classhypro_1_1PolytopeSupportFunction.html#a19affc3abd1b7f6a4709359c8f3f01f2", null ],
     [ "supremumPoint", "classhypro_1_1PolytopeSupportFunction.html#a4a8e244abd470060fc5313fe0c41d2e8", null ],
     [ "type", "classhypro_1_1PolytopeSupportFunction.html#a12346a7fb7b0669f6c17c92942d66acc", null ],
     [ "vertices", "classhypro_1_1PolytopeSupportFunction.html#a98bc7228f69efd1532f756a23f0f5760", null ],

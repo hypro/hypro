@@ -4,7 +4,7 @@ var searchData=
   ['rawstate',['RawState',['../structhypro_1_1RawState.html',1,'hypro']]],
   ['reach',['Reach',['../classhypro_1_1reachability_1_1Reach.html',1,'hypro::reachability']]],
   ['reach_3c_20number_2c_20supportfunction_3c_20number_20_3e_20_3e',['Reach&lt; Number, SupportFunction&lt; Number &gt; &gt;',['../classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html',1,'hypro::reachability']]],
-  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html',1,'hypro']]],
+  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1reachability_1_1ReachabilitySettings.html',1,'hypro::reachability']]],
   ['reachtree',['ReachTree',['../classhypro_1_1ReachTree.html',1,'hypro']]],
   ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html',1,'hypro']]],
   ['reachtreenodesimple',['ReachTreeNodeSimple',['../classhypro_1_1ReachTreeNodeSimple.html',1,'hypro']]],

@@ -5,8 +5,9 @@ var searchData=
   ['pivot',['pivot',['../classhypro_1_1Dictionary.html#a080e5972f02a5f9dadda11cc138bafcd',1,'hypro::Dictionary']]],
   ['plot2d',['plot2d',['../classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8',1,'hypro::Plotter']]],
   ['plotter',['Plotter',['../classhypro_1_1Plotter.html',1,'hypro']]],
-  ['point',['Point',['../classhypro_1_1Point.html#a764571d3fa4b52b390fb16027da75bd6',1,'hypro::Point::Point()'],['../classhypro_1_1Point.html#a6fc3e5b6c9f32a1b5b21d00edeb4c881',1,'hypro::Point::Point(const Number &amp;_value)'],['../classhypro_1_1Point.html#a0421d20611b10bbf74988a4528b20ae9',1,'hypro::Point::Point(std::initializer_list&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#aab86ea646e26c7f1a8662255cb04ce29',1,'hypro::Point::Point(std::vector&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#ae19c1e0062f7d973008ae995316e6ea2',1,'hypro::Point::Point(const vector_t&lt; Number &gt; &amp;_vector)'],['../classhypro_1_1Point.html#a5d224d568c762d46fd3d07b1ade676c0',1,'hypro::Point::Point(vector_t&lt; Number &gt; &amp;&amp;_vector)'],['../classhypro_1_1Point.html#af9e6ddf3b32a8831844e9cb97f1ee8a4',1,'hypro::Point::Point(const Point&lt; Number &gt; &amp;_p)'],['../classhypro_1_1Point.html#a63b02778fc0c9f356395ed81d30771af',1,'hypro::Point::Point(Point&lt; Number &gt; &amp;&amp;_p)'],['../classhypro_1_1Point.html#a9a8f96a49facbcc5706202e9a0e37b19',1,'hypro::Point::Point(const Point&lt; F &gt; &amp;_p)'],['../classhypro_1_1Vertex.html#abcd889574cdadf04c39ce65e3348d81f',1,'hypro::Vertex::point()']]],
+  ['plotting',['plotting',['../namespaceplotting.html',1,'']]],
   ['point',['Point',['../classhypro_1_1Point.html',1,'hypro']]],
+  ['point',['Point',['../classhypro_1_1Point.html#a764571d3fa4b52b390fb16027da75bd6',1,'hypro::Point::Point()'],['../classhypro_1_1Point.html#a6fc3e5b6c9f32a1b5b21d00edeb4c881',1,'hypro::Point::Point(const Number &amp;_value)'],['../classhypro_1_1Point.html#a0421d20611b10bbf74988a4528b20ae9',1,'hypro::Point::Point(std::initializer_list&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#aab86ea646e26c7f1a8662255cb04ce29',1,'hypro::Point::Point(std::vector&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#ae19c1e0062f7d973008ae995316e6ea2',1,'hypro::Point::Point(const vector_t&lt; Number &gt; &amp;_vector)'],['../classhypro_1_1Point.html#a5d224d568c762d46fd3d07b1ade676c0',1,'hypro::Point::Point(vector_t&lt; Number &gt; &amp;&amp;_vector)'],['../classhypro_1_1Point.html#af9e6ddf3b32a8831844e9cb97f1ee8a4',1,'hypro::Point::Point(const Point&lt; Number &gt; &amp;_p)'],['../classhypro_1_1Point.html#a63b02778fc0c9f356395ed81d30771af',1,'hypro::Point::Point(Point&lt; Number &gt; &amp;&amp;_p)'],['../classhypro_1_1Point.html#a9a8f96a49facbcc5706202e9a0e37b19',1,'hypro::Point::Point(const Point&lt; F &gt; &amp;_p)'],['../classhypro_1_1Vertex.html#abcd889574cdadf04c39ce65e3348d81f',1,'hypro::Vertex::point()']]],
   ['point_2eh',['Point.h',['../Point_8h.html',1,'']]],
   ['pointit',['pointIt',['../structhypro_1_1pointIt.html',1,'hypro']]],
   ['pointvector',['pointVector',['../classhypro_1_1Facet.html#ae08237c186f0e0c1fc6f8783969fa61a',1,'hypro::Facet']]],
@@ -15,8 +16,6 @@ var searchData=
   ['polynomialode',['PolynomialODE',['../classhypro_1_1PolynomialODE.html',1,'hypro']]],
   ['polynomialparser',['polynomialParser',['../structhypro_1_1parser_1_1polynomialParser.html',1,'hypro::parser']]],
   ['polytopesupportfunction',['PolytopeSupportFunction',['../classhypro_1_1PolytopeSupportFunction.html',1,'hypro']]],
-  ['possibletransition',['possibleTransition',['../structhypro_1_1possibleTransition.html',1,'hypro']]],
-  ['preprocessingobject',['PreprocessingObject',['../classPreprocessingObject.html',1,'']]],
   ['principalcomponentanalysis',['PrincipalComponentAnalysis',['../classhypro_1_1PrincipalComponentAnalysis.html',1,'hypro']]],
   ['print',['print',['../classhypro_1_1BoxT.html#ab004845119e7a1cc94907e0615524304',1,'hypro::BoxT::print()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ae462fc5b8e634c636da50d73199b3ae2',1,'hypro::BoxT&lt; double, Converter &gt;::print()']]],
   ['printdictionary',['printDictionary',['../classhypro_1_1Dictionary.html#af60c39f6eb9d35e23d1a9925a3ede97d',1,'hypro::Dictionary']]],
@@ -28,7 +27,5 @@ var searchData=
   ['projectondimensions',['projectOnDimensions',['../classhypro_1_1Halfspace.html#adfd292f7da8ddd63caca62837cee02fa',1,'hypro::Halfspace']]],
   ['projectonlinealty',['projectOnLinealty',['../classhypro_1_1ConvexHull.html#aec105b132fc95888343d2773a569c10b',1,'hypro::ConvexHull']]],
   ['projectpointonplane',['projectPointOnPlane',['../classhypro_1_1Halfspace.html#a608609251d6e74f69dc60ea69168a2e1',1,'hypro::Halfspace']]],
-  ['ptermbox',['PTermBox',['../classhypro_1_1PTermBox.html',1,'hypro']]],
-  ['ptermbox_2eh',['PTermBox.h',['../PTermBox_8h.html',1,'']]],
   ['pushtobounds',['pushToBounds',['../classhypro_1_1Dictionary.html#a3c3508bbef0fc7bee5f2acd717900642',1,'hypro::Dictionary']]]
 ];
