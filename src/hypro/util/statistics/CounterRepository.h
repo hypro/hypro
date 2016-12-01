@@ -16,8 +16,13 @@
 #include <map>
 
 namespace hypro {
+/**
+ * \namespace statistics
+ * \brief namespace encapsulating all statistics related code.
+ */
+namespace statistics {
 
-	class CounterRepository {
+		class CounterRepository {
 	private:
 		using CounterMapType = std::map<std::string, OperationCounter*>;
 
@@ -59,6 +64,7 @@ namespace hypro {
 		}
 	};
 
+} // namespace statistics
 } // namespace hypro
 
 //#endif

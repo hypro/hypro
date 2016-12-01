@@ -12,6 +12,7 @@
 #include <mutex>
 
 namespace hypro {
+namespace statistics{
 
 	/**
 	 * @brief      An operation counter based on stackoverflow.com/questions/11365351/how-to-implement-efficient-c-runtime-statistics
@@ -36,6 +37,7 @@ namespace hypro {
 		unsigned long operator++() { ScopedLock<std::mutex>(this->mMtx); return ++val; }
 	};
 
+} // namespace statistics
 } // namespace hypro
 
 #endif

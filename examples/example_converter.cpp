@@ -1,9 +1,17 @@
-#include "../src/hypro/util/Plotter.h"
+/**
+ * \example example_converter.cpp
+ * This example shows how to use the provided converter. We start by creating a support function representing some polytope.
+ * The resulting set is converted to a box representation. The same conversion is afterwards performed with a freshly created
+ * V-polytope and a zonotope.
+ */
+
 #include "../src/hypro/representations/GeometricObject.h"
 
 using namespace hypro;
 
-int main(int argc, char** argv) {
+int main() {
+
+	// create a matrix and a vector describing a H-polytope.
 	matrix_t<double> matrix2 = matrix_t<double>(3,2);
 	vector_t<double> distances2 = vector_t<double>(3);
 	matrix2 << 1,1,
@@ -11,12 +19,13 @@ int main(int argc, char** argv) {
 		0,-1,
 	distances2 << 1,1,0;
 
+	// create a support function.
 	SupportFunction<double> poly2 = SupportFunction<double>(matrix2, distances2);
 
+	// conversion of the support function to a box by using templated evaluation.
 	hypro::Box<double> res = Converter<double>::toBox(poly2);
 
-	std::cout << res << std::endl;
-
+	// creation of a vector of points to define a V-polytope.
 	vector_t<double> p1 = vector_t<double>(2);
 	p1(0) = 1;
 	p1(1) = 2;
@@ -35,18 +44,22 @@ int main(int argc, char** argv) {
 	points.emplace_back(p3);
 	points.emplace_back(p4);
 
+	// construction of a V-polytope.
 	VPolytope<double> poly1 = VPolytope<double>(points);
+
+	// conversion of the V-polytope to a box.
 	res = Converter<double>::toBox(poly1);
 
-	std::cout << res << std::endl;
-
+	// creation of a center and a set of generators for a zonotope.
 	vector_t<double> center = vector_t<double>(2);
 	center << 2.0, 2.0;
 
 	matrix_t<double> generators = matrix_t<double>(2,2);
 	generators << 0.0, 1.0, 1.0, -1.0;
 
+	// creation of a zonotope from a center vector and a set of generators.
 	Zonotope<double> zono1 = Zonotope<double>(center, generators);
 
+	// convert the zonotope to a box.
 	res = Converter<double>::toBox(zono1);
 }

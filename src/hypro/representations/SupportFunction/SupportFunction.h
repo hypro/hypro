@@ -1,11 +1,3 @@
-/**
- * Wrapper class for SupportFunctionContent for easier use.
- * @file   SupportFunction.h
- * @author Simon Froitzheim
- *
- * @since      2015-11-23
- * @version    2015-12-16
- */
 
 #pragma once
 
@@ -15,13 +7,19 @@
 
 #include "util.h"
 #include "SupportFunctionContent.h"
-#include "../../util/helperFunctions.h"
-#include "../../datastructures/hybridAutomata/Location.h"
-#include "../../algorithms/convexHull/vertexEnumeration.h"
+#include "util/helperFunctions.h"
+#include "datastructures/hybridAutomata/Location.h"
+#include "algorithms/convexHull/vertexEnumeration.h"
 #include <list>
 
 namespace hypro {
 
+/**
+ * @brief      Class wrapping the support function content.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ */
 template <typename Number, typename Converter>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter>> {
 private:

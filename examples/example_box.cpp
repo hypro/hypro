@@ -1,13 +1,14 @@
 
 /**
- * \example example_box.cpp
+ * \example example_box.cpp This example shows how to use a box representation. It covers creation of a box, an affine transformation
+ * of the created box as well as the intersection with a half space and an included test for emptiness of the resulting set.
  */
 
 #include "../hypro/representations/GeometricObject.h"
 #include "../hypro/datastructures/Halfspace.h"
 #include "../hypro/util/Plotter.h"
 
-int main(int argc, char const *argv[])
+int main()
 {
 	// use rational arithmetic.
 	typedef mpq_class Number;

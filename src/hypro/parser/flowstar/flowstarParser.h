@@ -65,7 +65,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	std::vector<unsigned> mDiscreteVariableIds;
-	ReachabilitySettings<Number> mSettings;
+	hypro::reachability::ReachabilitySettings<Number> mSettings;
 	unsigned mDimensionLimit;
 	unsigned mDiscreteDimensionLimit;
 
@@ -212,7 +212,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		return _id;
 	}
 
-	void insertSettings(const ReachabilitySettings<Number>& _in) {
+	void insertSettings(const hypro::reachability::ReachabilitySettings<Number>& _in) {
 		mSettings = _in;
 	}
 

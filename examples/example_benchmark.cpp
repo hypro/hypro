@@ -1,5 +1,7 @@
 /**
- *
+ * \example example_benchmark.cpp
+ * This is an example file holding a fully functional reachability analysis algorithm implementation with benchmarking features such as
+ * time measurements.
  */
 
 #include "representations/GeometricObject.h"
@@ -96,15 +98,15 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	csvString += "," + hypro::typeName<Number>().get();
 	extendedFilename += "_glpk";
 	csvString += ",glpk";
-#ifdef USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 	extendedFilename += "_smtrat";
 	csvString += ",smtrat";
 #endif
-#ifdef USE_Z3
+#ifdef HYPRO_USE_Z3
 	extendedFilename += "_z3";
 	csvString += ",z3";
 #endif
-#if !defined USE_SMTRAT && !defined USE_Z3
+#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3
 	csvString += ",";
 #endif
 

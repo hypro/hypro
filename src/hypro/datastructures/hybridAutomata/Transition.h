@@ -24,6 +24,8 @@ class Transition {
 		unsigned discreteOffset;
 		std::vector<std::pair<carl::Variable, matrix_t<Number>>> discreteGuard;
 
+		~Guard(){}
+
 		void addArtificialDimension() {
 			matrix_t<Number> newConstraints = matrix_t<Number>::Zero(mat.rows(), mat.cols()+1);
 			newConstraints.block(0,0,mat.rows(), mat.cols()) = mat;
@@ -46,6 +48,8 @@ class Transition {
 		unsigned discreteOffset;
 		vector_t<Number> discreteVec;  // Translation Vector
 		matrix_t<Number> discreteMat;  // Transformation Matrix
+
+		~Reset(){}
 
 		void addArtificialDimension() {
 			matrix_t<Number> newConstraints = matrix_t<Number>::Zero(mat.rows()+1, mat.cols()+1);
@@ -87,7 +91,7 @@ class Transition {
 		, mTarget( nullptr )
 		, mGuard()
 		, mReset()
-		, mAggregationSetting(Aggregation::none)
+		, mAggregationSetting(Aggregation::boxAgg)
 		, mTimeTriggered( false )
 		, mTriggerTime( -1 )
 	{}
@@ -107,7 +111,7 @@ class Transition {
 		, mTarget( _target )
 		, mGuard()
 		, mReset()
-		, mAggregationSetting(Aggregation::none)
+		, mAggregationSetting(Aggregation::boxAgg)
 		, mTimeTriggered( false )
 		, mTriggerTime( -1 )
 	{}
@@ -118,7 +122,7 @@ class Transition {
 		, mTarget( _target )
 		, mGuard( _guard )
 		, mReset( _reset )
-		, mAggregationSetting(Aggregation::none)
+		, mAggregationSetting(Aggregation::boxAgg)
 		, mTimeTriggered( false )
 		, mTriggerTime( -1 )
 	{}

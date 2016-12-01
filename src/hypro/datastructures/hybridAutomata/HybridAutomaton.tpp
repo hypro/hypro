@@ -46,7 +46,7 @@ const typename HybridAutomaton<Number>::setVector& HybridAutomaton<Number>::glob
 }
 
 template<typename Number>
-const ReachabilitySettings<Number>& HybridAutomaton<Number>::reachabilitySettings() const {
+const reachability::ReachabilitySettings<Number>& HybridAutomaton<Number>::reachabilitySettings() const {
 	return mReachabilitySettings;
 }
 
@@ -102,7 +102,7 @@ void HybridAutomaton<Number>::setGlobalBadStates( const setVector& _states ) {
 }
 
 template<typename Number>
-void HybridAutomaton<Number>::setReachabilitySettings( const ReachabilitySettings<Number>& _settings) {
+void HybridAutomaton<Number>::setReachabilitySettings( const reachability::ReachabilitySettings<Number>& _settings) {
 	mReachabilitySettings = _settings;
 }
 

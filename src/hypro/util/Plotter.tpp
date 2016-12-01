@@ -11,17 +11,17 @@ void Plotter<Number>::setFilename( const std::string &_filename ) {
 }
 
 template <typename Number>
-void Plotter<Number>::updateSettings( const gnuplotSettings& _settings ) {
+void Plotter<Number>::updateSettings( const plotting::gnuplotSettings& _settings ) {
 	mSettings = _settings;
 }
 
 template<typename Number>
-const gnuplotSettings& Plotter<Number>::settings() const {
+const plotting::gnuplotSettings& Plotter<Number>::settings() const {
 	return mSettings;
 }
 
 template<typename Number>
-gnuplotSettings& Plotter<Number>::rSettings() {
+plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 	return mSettings;
 }
 

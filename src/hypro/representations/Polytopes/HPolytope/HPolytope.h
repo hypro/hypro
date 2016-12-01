@@ -1,5 +1,6 @@
 /*
- * \example example_HPolytope.cpp
+ * example_HPolytope.cpp
+ *
  */
 
 #pragma once
@@ -25,6 +26,12 @@ namespace hypro {
 template<typename Number>
 class Location;
 
+/**
+ * @brief      Class for a H-polytope.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ */
 template <typename Number, typename Converter>
 class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number,Converter>> {
 public:

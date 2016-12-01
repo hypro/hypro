@@ -36,7 +36,7 @@ class HybridAutomaton {
 	locationStateMap mInitialStates;
 	locationStateMap mLocalBadStates;
 	setVector mGlobalBadStates;
-	ReachabilitySettings<Number> mReachabilitySettings;
+	reachability::ReachabilitySettings<Number> mReachabilitySettings;
 
   public:
 	/**
@@ -55,7 +55,7 @@ class HybridAutomaton {
 		while(!mTransitions.empty()) {
 			Transition<Number>* toDelete = *mTransitions.begin();
 			mTransitions.erase(mTransitions.begin());
-			delete toDelete;
+			//delete toDelete;
 		}
 	}
 
@@ -67,7 +67,7 @@ class HybridAutomaton {
 	const locationStateMap& initialStates() const;
 	const locationStateMap& localBadStates() const;
 	const setVector& globalBadStates() const;
-	const ReachabilitySettings<Number>& reachabilitySettings() const;
+	const reachability::ReachabilitySettings<Number>& reachabilitySettings() const;
 	unsigned dimension() const;
 	void addArtificialDimension();
 
@@ -76,7 +76,7 @@ class HybridAutomaton {
 	void setInitialStates( const locationStateMap& _states );
 	void setLocalBadStates( const locationStateMap& _states );
 	void setGlobalBadStates( const setVector& _states );
-	void setReachabilitySettings( const ReachabilitySettings<Number>& _settings);
+	void setReachabilitySettings( const reachability::ReachabilitySettings<Number>& _settings);
 
 	void addLocation( Location<Number>* _location );
 	void addTransition( Transition<Number>* _transition );

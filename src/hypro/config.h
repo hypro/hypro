@@ -15,6 +15,11 @@ extern "C" {
 #endif
 #endif
 
+/**
+ * \namespace hypro
+ * \brief The most general namespace for the HyPro library.
+ */
+
 // Do we eliminate dimensions according to a dynamic heuristic.
 #define DYNAMICHEURISTIC 0
 #define reachLin_PRIMITIVES_LOCATION "../polyhedra/"

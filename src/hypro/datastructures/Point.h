@@ -13,9 +13,9 @@
  */
 #pragma once
 
-#include "../types.h"
-#include "../config.h"
-#include "../util/VariablePool.h"
+#include "types.h"
+#include "config.h"
+#include "util/VariablePool.h"
 #include <set>
 #include <vector>
 
@@ -23,7 +23,7 @@ namespace hypro {
 
 /**
  * @brief      Class for a point.
- * @tparam     Number  The number type.
+ * @tparam     Number  The used number type.
  */
 template <class Number>
 class Point {

@@ -27,7 +27,7 @@ CLANG_WARNING_DISABLE("-Wdeprecated-register")
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 //#define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
@@ -38,6 +38,10 @@ CLANG_WARNING_RESET
 //#define USE_FORCE_REDUCTION
 
 namespace hypro {
+/**
+ * \namespace reachability
+ * \brief Namespace for all reachabiltiy analysis algorithm related code.
+ */
 namespace reachability {
 
 template <typename Representation>
@@ -46,6 +50,12 @@ using flowpipe_t = std::vector<Representation>;
 template<typename Number>
 using initialSet = boost::tuple<unsigned, State<Number>>;
 
+/**
+ * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
+ *
+ * @tparam     Number          The used number type.
+ * @tparam     Representation  The used state set representation type.
+ */
 template <typename Number, typename Representation>
 class Reach {
 private:
@@ -115,6 +125,9 @@ public:
 	bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result ) const;
 
 	bool checkTransitions(const State<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const;
+
+	const ReachabilitySettings<Number>& settings() const { return mSettings; }
+	void setSettings(const ReachabilitySettings<Number>& settings) { mSettings = settings; }
 
 private:
 

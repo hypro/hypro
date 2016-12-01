@@ -5,27 +5,60 @@
 #include <carl/util/SFINAE.h>
 
 namespace hypro {
-	namespace reachability {
+namespace reachability {
 
-		template<typename Representation>
-		void printFlowpipe( const std::vector<Representation>& _flowpipe ) {
-			for ( const auto& segment : _flowpipe ) {
-				std::cout << segment << ", " << std::endl;
-			}
-		}
+template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
+Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters ) {
+	//std::cout << __func__ << " in: " << _in << std::endl << "matrix: " << parameters.matrix() << std::endl << "vector " << std::endl << parameters.vector() << std::endl;
+	return _in.affineTransformation(parameters.matrix(), parameters.vector());
+}
 
-		template<typename Representation>
-		void printFlowpipeReduced( const std::vector<Representation>& _flowpipe ) {
-			std::cout << *_flowpipe.begin() << ", " << std::endl;
-			std::cout << "(...)" << std::endl;
-			std::cout << *_flowpipe.back() << std::endl;
-		}
+template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
+Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters) {
+	return _in.linearTransformation(parameters.parameters());
+}
 
-	} // namespace reachability
+template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
+void applyReduction( Representation& ) {
+}
 
-/*
- * Functionality for the reachability computation
- */
+template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
+void applyReduction( Representation& _in) {
+	_in.forceLinTransReduction();
+}
+
+template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
+void aggregationReduction( Representation&, Transition<Number>* , Number , Number  ) {
+}
+
+template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
+void aggregationReduction( Representation& _in, Transition<Number>* transition, Number timeBound, Number timeStep) {
+	Number temp = timeBound/timeStep;
+	unsigned long multPerEval = _in.multiplicationsPerEvaluation();
+	unsigned long estimatedNumberOfEvaluations =  (transition->guard().mat.rows() + transition->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
+	unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * multPerEval;
+	unsigned long hyperplanesForReduction = 2* _in.dimension() * (_in.dimension()-1)+ 2* _in.dimension();
+	unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
+	if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
+		auto tmpHPoly = Converter<Number>::toHPolytope(_in);
+		SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+		_in = newSet;
+	}
+}
+
+template<typename Representation>
+void printFlowpipe( const std::vector<Representation>& _flowpipe ) {
+	for ( const auto& segment : _flowpipe ) {
+		std::cout << segment << ", " << std::endl;
+	}
+}
+
+template<typename Representation>
+void printFlowpipeReduced( const std::vector<Representation>& _flowpipe ) {
+	std::cout << *_flowpipe.begin() << ", " << std::endl;
+	std::cout << "(...)" << std::endl;
+	std::cout << *_flowpipe.back() << std::endl;
+}
 
 template <typename Number>
 Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, const Number& _supremum ) {
@@ -175,45 +208,5 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 	return Converter<Number>::toZonotope(Box<Number>( mat, vec ));
 }
 
-template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters ) {
-	//std::cout << __func__ << " in: " << _in << std::endl << "matrix: " << parameters.matrix() << std::endl << "vector " << std::endl << parameters.vector() << std::endl;
-	return _in.affineTransformation(parameters.matrix(), parameters.vector());
-}
-
-template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters) {
-	return _in.linearTransformation(parameters.parameters());
-}
-
-template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-void applyReduction( Representation& ) {
-}
-
-template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-void applyReduction( Representation& _in) {
-	_in.forceLinTransReduction();
-}
-
-template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
-void aggregationReduction( Representation&, Transition<Number>* , Number , Number  ) {
-}
-
-template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
-void aggregationReduction( Representation& _in, Transition<Number>* transition, Number timeBound, Number timeStep) {
-	Number temp = timeBound/timeStep;
-	unsigned long multPerEval = _in.multiplicationsPerEvaluation();
-	unsigned long estimatedNumberOfEvaluations =  (transition->guard().mat.rows() + transition->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
-	unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * multPerEval;
-	unsigned long hyperplanesForReduction = 2* _in.dimension() * (_in.dimension()-1)+ 2* _in.dimension();
-	unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
-	if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
-		auto tmpHPoly = Converter<Number>::toHPolytope(_in);
-		SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-		_in = newSet;
-	}
-}
-
-
-
+} // namespace reachability
 } // namespace hypro

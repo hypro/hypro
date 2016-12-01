@@ -13,6 +13,7 @@
 #include "CounterRepository.h"
 
 namespace hypro {
+namespace statistics {
 
 	class Statistician : public carl::Singleton<Statistician> {
 		friend carl::Singleton<Statistician>;
@@ -42,13 +43,14 @@ namespace hypro {
 		}
 	};
 
-} // namespace
+} // namespace statistics
+} // namespace hypro
 
 #undef PRINT_STATS
 #undef RESET_STATS
 #undef COUNT
-#define PRINT_STATS() std::cout << hypro::Statistician::getInstance() << std::endl;
-#define RESET_STATS() hypro::Statistician::getInstance().reset();
-#define COUNT(expr) ++hypro::Statistician::getInstance().get(expr);
+#define PRINT_STATS() std::cout << hypro::statistics::Statistician::getInstance() << std::endl;
+#define RESET_STATS() hypro::statistics::Statistician::getInstance().reset();
+#define COUNT(expr) ++hypro::statistics::Statistician::getInstance().get(expr);
 
 #endif

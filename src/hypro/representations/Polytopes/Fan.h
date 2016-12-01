@@ -1,11 +1,3 @@
-/*
- * File:   util.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2014-08-11
- * @version 2016-03-22
- */
-
 #pragma once
 
 #include "Cone.h"
@@ -16,6 +8,11 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class for a polytopal fan.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class Fan {
   public:

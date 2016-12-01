@@ -2,6 +2,7 @@
 #include <carl/numbers/numbers.h>
 
 namespace hypro{
+namespace reachability {
 
 template<typename Number>
 struct ReachabilitySettings {
@@ -33,5 +34,6 @@ struct ReachabilitySettings {
 	}
 };
 
+} // namespace reachability
 } // namespace hypro
 

@@ -13,37 +13,47 @@
 #include <vector>
 #include <string>
 #include <stack>
-#include "../datastructures/Point.h"
-#include "../datastructures/Halfspace.h"
+#include "datastructures/Point.h"
+#include "datastructures/Halfspace.h"
 
 namespace hypro {
 
-enum {
-	petrol = 0,
-	turquoise,
-	green,
-	maygreen,
-	orange,
-	red,
-	bordeaux,
-	violett,
-	lila,
-	blue
-};
-const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
-						0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
 
-struct gnuplotSettings {
-	std::size_t color = colors[blue];  // default petrol
-	bool fill = false;					 // do not fill
-	bool axes = true;					 // plot axes
-	bool grid = true;					 // plot grid
-	double pointSize = 1.0;				 // pointsize
-	double linewidth = 0.2;				 // linewidth
-	bool keepAspectRatio = false; 		 // keep aspect ratio for both axes
-	std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
-	bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
-};
+/**
+ * \namespace plotting
+ * \brief Namespace holding plotting related code and structs.
+ */
+namespace plotting {
+
+	enum {
+		petrol = 0,
+		turquoise,
+		green,
+		maygreen,
+		orange,
+		red,
+		bordeaux,
+		violett,
+		lila,
+		blue
+	};
+	const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
+							0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
+
+	struct gnuplotSettings {
+		std::size_t color = colors[blue];  // default petrol
+		bool fill = false;					 // do not fill
+		bool axes = true;					 // plot axes
+		bool grid = true;					 // plot grid
+		double pointSize = 1.0;				 // pointsize
+		double linewidth = 0.2;				 // linewidth
+		bool keepAspectRatio = false; 		 // keep aspect ratio for both axes
+		std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
+		bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
+	};
+
+} // namespace plotting
+
 
 template <typename Number>
 class Plotter : public carl::Singleton<Plotter<Number>> {
@@ -63,7 +73,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::pair<int, int> mLastDimensions;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
 	std::map<unsigned, std::size_t> mObjectColors;
-	gnuplotSettings mSettings;
+	plotting::gnuplotSettings mSettings;
 	unsigned mId;
 
   protected:
@@ -73,9 +83,9 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	~Plotter();
 
 	void setFilename( const std::string& _filename = "out" );
-	void updateSettings( const gnuplotSettings& _settings );
-	const gnuplotSettings& settings() const;
-	gnuplotSettings& rSettings();
+	void updateSettings( const plotting::gnuplotSettings& _settings );
+	const plotting::gnuplotSettings& settings() const;
+	plotting::gnuplotSettings& rSettings();
 
 	// plotting functions
 
