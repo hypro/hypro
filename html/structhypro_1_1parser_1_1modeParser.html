@@ -123,17 +123,17 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>cleanup</b> ()</td></tr>
 <tr class="separator:adc145eb272c6de4286c8b6cee6afdd9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac765fa8a0be245dff294a62b4ba9386"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac765fa8a0be245dff294a62b4ba9386"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addContinuousInvariant</b> (const std::vector&lt; matrix_t&lt; Number &gt;&gt; &amp;_constraints)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addContinuousInvariant</b> (const std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&gt; &amp;_constraints)</td></tr>
 <tr class="separator:aac765fa8a0be245dff294a62b4ba9386"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ec62a4e76c5057c60df78e71928cce3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ec62a4e76c5057c60df78e71928cce3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addDiscreteInvariant</b> (const std::pair&lt; unsigned, std::vector&lt; matrix_t&lt; Number &gt;&gt;&gt; &amp;_constraints)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addDiscreteInvariant</b> (const std::pair&lt; unsigned, std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&gt;&gt; &amp;_constraints)</td></tr>
 <tr class="separator:a5ec62a4e76c5057c60df78e71928cce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09b91a16c07c5891f3dd43374e359e94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09b91a16c07c5891f3dd43374e359e94"></a>
-matrix_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createFlow</b> (const std::vector&lt; std::pair&lt; unsigned, vector_t&lt; double &gt;&gt;&gt; &amp;_in)</td></tr>
+<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createFlow</b> (const std::vector&lt; std::pair&lt; unsigned, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt;&gt;&gt; &amp;_in)</td></tr>
 <tr class="separator:a09b91a16c07c5891f3dd43374e359e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5645a5faabe688b1d6f9df3a2f112a93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5645a5faabe688b1d6f9df3a2f112a93"></a>
 std::pair&lt; std::string, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createLocation</b> (const std::string &amp;_name, const matrix_t&lt; Number &gt; &amp;_flow, unsigned _discreteDim)</td></tr>
+<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createLocation</b> (const std::string &amp;_name, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_flow, unsigned _discreteDim)</td></tr>
 <tr class="separator:a5645a5faabe688b1d6f9df3a2f112a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -160,11 +160,11 @@ Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>constraint</b>
 px::function&lt; <a class="el" href="structhypro_1_1parser_1_1ErrorHandler.html">ErrorHandler</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>errorHandler</b></td></tr>
 <tr class="separator:a44b0087529ab4067ad26b75542360905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a891c32ea4bcd3f2e32663035734b6005"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a891c32ea4bcd3f2e32663035734b6005"></a>
-std::vector&lt; matrix_t&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mContinuousInvariants</b></td></tr>
+std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mContinuousInvariants</b></td></tr>
 <tr class="separator:a891c32ea4bcd3f2e32663035734b6005"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeaa5c1f7ab23669e2c1670ea06abf02"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abeaa5c1f7ab23669e2c1670ea06abf02"></a>
 std::vector&lt; std::pair<br class="typebreak"/>
-&lt; unsigned, matrix_t&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDiscreteInvariants</b></td></tr>
+&lt; unsigned, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDiscreteInvariants</b></td></tr>
 <tr class="separator:abeaa5c1f7ab23669e2c1670ea06abf02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9510e62850648aed6736d4d718a8a0e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9510e62850648aed6736d4d718a8a0e7"></a>
 qi::rule&lt; Iterator, std::pair<br class="typebreak"/>
@@ -178,7 +178,7 @@ const &amp;), <a class="el" href="structhypro_1_1parser_1_1fsSkipper.html">Skipp
 qi::rule&lt; Iterator, std::string()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
 <tr class="separator:a2ac02b66073f873cab0dfd09665b40f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04e02ce6cd59189aefa47c17863d2fd0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04e02ce6cd59189aefa47c17863d2fd0"></a>
-qi::rule&lt; Iterator, matrix_t<br class="typebreak"/>
+qi::rule&lt; Iterator, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a><br class="typebreak"/>
 &lt; Number &gt;symbol_table const <br class="typebreak"/>
 &amp;, unsigned const &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>flow</b></td></tr>
 <tr class="separator:a04e02ce6cd59189aefa47c17863d2fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>

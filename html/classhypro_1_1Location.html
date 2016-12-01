@@ -119,10 +119,16 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
 <div class="title">hypro::Location&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for a single location of a hybrid automaton.  
+ <a href="classhypro_1_1Location.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Location_8h_source.html">Location.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct holding a description of the location invariant in form of a set of halfspaces.  <a href="structhypro_1_1Location_1_1Invariant.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -135,7 +141,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>transitionSet</b> = 
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6bc63470680fc9f68e250e74557d8d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#ac6bc63470680fc9f68e250e74557d8d0">~Location</a> ()</td></tr>
 <tr class="separator:ac6bc63470680fc9f68e250e74557d8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d83a60461ac086d0d3a7f3f17fbff9a"><td class="memItemLeft" align="right" valign="top">const matrix_t&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a2d83a60461ac086d0d3a7f3f17fbff9a">flow</a> () const </td></tr>
+<tr class="memitem:a2d83a60461ac086d0d3a7f3f17fbff9a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a2d83a60461ac086d0d3a7f3f17fbff9a">flow</a> () const </td></tr>
 <tr class="separator:a2d83a60461ac086d0d3a7f3f17fbff9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc75b31e4a99507a7eda672e3747d9c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc75b31e4a99507a7eda672e3747d9c2"></a>
 const <a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>invariant</b> () const </td></tr>
@@ -144,19 +150,19 @@ const <a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</
 const transitionSet &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>transitions</b> () const </td></tr>
 <tr class="separator:af28b3ef93b8496a82759c0fc4cfac704"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9147db45f91da5531c42b2a3fc17c4f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9147db45f91da5531c42b2a3fc17c4f4"></a>
-const matrix_t&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>externalInput</b> () const </td></tr>
+const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>externalInput</b> () const </td></tr>
 <tr class="separator:a9147db45f91da5531c42b2a3fc17c4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc942617605237dd55328994bb925efc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc942617605237dd55328994bb925efc"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> () const </td></tr>
 <tr class="separator:afc942617605237dd55328994bb925efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19f1f0894f16fa373e853fa998ebd00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa19f1f0894f16fa373e853fa998ebd00"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlow</b> (const matrix_t&lt; Number &gt; &amp;_mat)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlow</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat)</td></tr>
 <tr class="separator:aa19f1f0894f16fa373e853fa998ebd00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0514a760b4d41edab507cdfb7385a4f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0514a760b4d41edab507cdfb7385a4f3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const struct <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;_inv)</td></tr>
 <tr class="separator:a0514a760b4d41edab507cdfb7385a4f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa1222dafd7d03fceb265022c9ecafe8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa1222dafd7d03fceb265022c9ecafe8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const matrix_t&lt; Number &gt; &amp;_mat, const vector_t&lt; Number &gt; &amp;_vec)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec)</td></tr>
 <tr class="separator:aaa1222dafd7d03fceb265022c9ecafe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56982d538764e406938bf6adc633cf34"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56982d538764e406938bf6adc633cf34"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setLocation</b> (const struct locationContent &amp;_loc)</td></tr>
@@ -168,7 +174,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransitions</b> (c
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *_trans)</td></tr>
 <tr class="separator:ac3e7777677069850b5f1b86e7a51aee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bfdeb71614eeb538b8f43e07f862735"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bfdeb71614eeb538b8f43e07f862735"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInputMat</b> (const matrix_t&lt; Number &gt; &amp;_mat)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInputMat</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat)</td></tr>
 <tr class="separator:a5bfdeb71614eeb538b8f43e07f862735"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7095a45bbd5270736edfe7376722c2ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7095a45bbd5270736edfe7376722c2ed"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addArtificialDimension</b> ()</td></tr>
@@ -192,13 +198,13 @@ Protected Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const <a class="el" href="classhypro_1_1Location.html">Location</a> &amp;_loc)</td></tr>
 <tr class="separator:a8decddc4605274a5d9da02b1f064736b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21438e7625ec40f129bd23c58799144a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21438e7625ec40f129bd23c58799144a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const matrix_t&lt; Number &gt; &amp;_mat)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat)</td></tr>
 <tr class="separator:a21438e7625ec40f129bd23c58799144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06d01f3610cadf8c9c93aca596d82944"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06d01f3610cadf8c9c93aca596d82944"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const matrix_t&lt; Number &gt; &amp;_mat, const transitionSet &amp;_trans, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;_inv)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const transitionSet &amp;_trans, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;_inv)</td></tr>
 <tr class="separator:a06d01f3610cadf8c9c93aca596d82944"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f69ace608c158b1208cdff03cc7f224"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f69ace608c158b1208cdff03cc7f224"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const matrix_t&lt; Number &gt; &amp;_mat, const transitionSet &amp;_trans, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;_inv, const matrix_t&lt; Number &gt; &amp;_extInputMat)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (unsigned _id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const transitionSet &amp;_trans, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1Location_1_1Invariant.html">Invariant</a> &amp;_inv, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_extInputMat)</td></tr>
 <tr class="separator:a2f69ace608c158b1208cdff03cc7f224"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -211,9 +217,16 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Location&lt; Number &gt;</h3>
 
+<p>Class for a single location of a hybrid automaton. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a1">example_bouncingBall.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00022">22</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00024">24</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ac6bc63470680fc9f68e250e74557d8d0"></a>
 <div class="memitem">
@@ -239,7 +252,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <p>Constructors &amp; Destructor </p>
 
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00068">68</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00074">74</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +264,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">const matrix_t&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::flow </td>
+          <td class="memname">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::flow </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

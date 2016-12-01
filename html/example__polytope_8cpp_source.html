@@ -133,20 +133,20 @@ $(document).ready(function(){initNavTree('example__polytope_8cpp_source.html',''
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">//hypro::Polytope&lt;number_t&gt; polytope1 = hypro::Polytope&lt;number_t&gt;();</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">//hypro::Polytope&lt;number_t&gt; polytope2 = hypro::Polytope&lt;number_t&gt;(polytope1);</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    hypro::matrix_t&lt;number_t&gt; matrix = hypro::matrix_t&lt;number_t&gt;(6,2);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;number_t&gt;</a> matrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;number_t&gt;</a>(6,2);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    matrix &lt;&lt; -1,number_t(490576)/number_t(99100001),0,-1,0,1,1,0,1,number_t(-10000)/number_t(1000001),1, number_t(-480461)/number_t(97100000);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    hypro::vector_t&lt;number_t&gt; constants = hypro::vector_t&lt;number_t&gt;(6);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;number_t&gt;</a> constants = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;number_t&gt;</a>(6);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    constants &lt;&lt; number_t(-123874939928)/number_t(12387500125),number_t(98100001)/number_t(1000000000),number_t(1)/number_t(1000),number_t(51)/number_t(5),number_t(10200500738519539)/number_t(1000001000000000),number_t(51)/number_t(5);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::cout &lt;&lt; matrix &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    hypro::matrix_t&lt;number_t&gt; matrix2 = hypro::matrix_t&lt;number_t&gt;(4,2);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;number_t&gt;</a> matrix2 = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;number_t&gt;</a>(4,2);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    matrix2 &lt;&lt; 1000000000,0,-1000000000,0,0,1000000000,0,-1000000000;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    hypro::vector_t&lt;number_t&gt; constants2 = hypro::vector_t&lt;number_t&gt;(4);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;number_t&gt;</a> constants2 = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;number_t&gt;</a>(4);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    constants2 &lt;&lt; 50725487,50725487,50725487,50725487;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    hypro::HPolytope&lt;number_t&gt; hpoly(matrix, constants);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    hypro::HPolytope&lt;number_t&gt; hpoly2(matrix2, constants2);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    hypro::HPolytope&lt;number_t&gt; addition = hpoly.minkowskiSum(hpoly2);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;number_t&gt;</a> hpoly(matrix, constants);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;number_t&gt;</a> hpoly2(matrix2, constants2);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;number_t&gt;</a> addition = hpoly.minkowskiSum(hpoly2);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">unsigned</span> a = plotter.addObject(hpoly.vertices());</div>
@@ -217,7 +217,10 @@ $(document).ready(function(){initNavTree('example__polytope_8cpp_source.html',''
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">    }*/</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00059">Plotter.h:59</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00082">Converter.h:82</a></div></div>
+<div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00021">types.h:21</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a020e89ed0c39a091bf49a0b400e511f8"><div class="ttname"><a href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">hypro::Plotter::plot2d</a></div><div class="ttdeci">void plot2d() const </div><div class="ttdoc">Writes the actual plot to the output file. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

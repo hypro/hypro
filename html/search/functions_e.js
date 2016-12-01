@@ -5,6 +5,7 @@ var searchData=
   ['reachedbadstates',['reachedBadStates',['../classhypro_1_1reachability_1_1Reach.html#a63c7f82c08c215100b65e2df137baea8',1,'hypro::reachability::Reach::reachedBadStates()'],['../classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html#a3e705cd79e473ed73bcfe93a67664527',1,'hypro::reachability::Reach&lt; Number, SupportFunction&lt; Number &gt; &gt;::reachedBadStates()']]],
   ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html#a013061911e9e9be7b786fa6ff0f0b7c8',1,'hypro::ReachTreeNode']]],
   ['reachtreenodesimple',['ReachTreeNodeSimple',['../classhypro_1_1ReachTreeNodeSimple.html#a4a3b23e91e83d0bcb088b1e64e1bf300',1,'hypro::ReachTreeNodeSimple']]],
+  ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],
   ['reducedoublerepresentation',['reducedoubleRepresentation',['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a9260264e72d8b355c2af89148491aeb4',1,'hypro::BoxT&lt; double, Converter &gt;']]],
   ['reducenumberrepresentation',['reduceNumberRepresentation',['../classhypro_1_1BoxT.html#af956f2453fb7002cd0881946361e2783',1,'hypro::BoxT']]],

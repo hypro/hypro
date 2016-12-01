@@ -123,7 +123,7 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getEpsilonpsi</b> ()</td></tr>
 <tr class="separator:a7d45c734390f45b959f8b3f19ff93cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a137351f6af9092ed3b200ca9ee8082c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a137351f6af9092ed3b200ca9ee8082c7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NonLinearOmega0Supportfunction</b> (matrix_t&lt; double &gt; *A, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *V, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *X0, double delta, <a class="el" href="structhypro_1_1artificialDirections.html">artificialDirections</a> *aD)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NonLinearOmega0Supportfunction</b> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *A, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *V, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *X0, double delta, <a class="el" href="structhypro_1_1artificialDirections.html">artificialDirections</a> *aD)</td></tr>
 <tr class="separator:a137351f6af9092ed3b200ca9ee8082c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1SupportFunctionContent"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1SupportFunctionContent')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1SupportFunctionContent.html">hypro::SupportFunctionContent&lt; Number &gt;</a></td></tr>
 <tr class="memitem:ae663163a1508db76394a63500681df07 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae663163a1508db76394a63500681df07"></a>
@@ -135,11 +135,11 @@ std::shared_ptr<br class="typebreak"/>
 &lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const std::shared_ptr&lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>&lt; Number &gt;&gt; &amp;_orig)</td></tr>
 <tr class="separator:a1fa12326a3b416912fd6b2b706dfc1d2 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab203ec1df5338c12a6d8bdd7d27fa3e0 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab203ec1df5338c12a6d8bdd7d27fa3e0"></a>
-<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const vector_t&lt; Number &gt; &amp;_direction) const </td></tr>
+<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction) const </td></tr>
 <tr class="separator:ab203ec1df5338c12a6d8bdd7d27fa3e0 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc7eb58248917888401b2f86d017f1be inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc7eb58248917888401b2f86d017f1be"></a>
 std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const matrix_t&lt; Number &gt; &amp;_directions) const </td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions) const </td></tr>
 <tr class="separator:afc7eb58248917888401b2f86d017f1be inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5f9fdf4e4f9233398c5805975f76cea inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5f9fdf4e4f9233398c5805975f76cea"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
@@ -216,7 +216,7 @@ std::shared_ptr<br class="typebreak"/>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
 <tr class="separator:ab4f185008a1ec23a3cd6d5865e27c61a inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afabb1a95dceb6116c20f37a018ba90f8 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afabb1a95dceb6116c20f37a018ba90f8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const vector_t&lt; Number &gt; &amp;_point) const </td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_point) const </td></tr>
 <tr class="separator:afabb1a95dceb6116c20f37a018ba90f8 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeba8d6b23ec39ff070e4b381c8c1605 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaeba8d6b23ec39ff070e4b381c8c1605"></a>
 std::shared_ptr<br class="typebreak"/>
@@ -237,7 +237,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aac57c5f35eb65c9ed066ab4fbf90c2a2"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#aac57c5f35eb65c9ed066ab4fbf90c2a2">specificEvaluation</a> (matrix_t&lt; double &gt; l)</td></tr>
+<tr class="memitem:aac57c5f35eb65c9ed066ab4fbf90c2a2"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#aac57c5f35eb65c9ed066ab4fbf90c2a2">specificEvaluation</a> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; l)</td></tr>
 <tr class="separator:aac57c5f35eb65c9ed066ab4fbf90c2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -251,12 +251,12 @@ static std::shared_ptr<br class="typebreak"/>
 <tr class="memitem:a7b684c489a2744c204d8eb0c03639e51 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b684c489a2744c204d8eb0c03639e51"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, matrix_t&lt; Number &gt; _shapeMatrix)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _shapeMatrix)</td></tr>
 <tr class="separator:a7b684c489a2744c204d8eb0c03639e51 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef2622a136abb17d1adb3eab42ea5792 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef2622a136abb17d1adb3eab42ea5792"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, const matrix_t&lt; Number &gt; &amp;_directions, const vector_t&lt; Number &gt; &amp;_distances)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_distances)</td></tr>
 <tr class="separator:aef2622a136abb17d1adb3eab42ea5792 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab685c8b686d72df8dd4dca240957990d inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab685c8b686d72df8dd4dca240957990d"></a>
 static std::shared_ptr<br class="typebreak"/>
@@ -288,7 +288,7 @@ static std::shared_ptr<br class="typebreak"/>
         <tr>
           <td class="memname">evaluationResult hypro::NonLinearOmega0Supportfunction::specificEvaluation </td>
           <td>(</td>
-          <td class="paramtype">matrix_t&lt; double &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td>
           <td class="paramname"><em>l</em></td><td>)</td>
           <td></td>
         </tr>

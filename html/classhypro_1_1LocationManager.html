@@ -116,6 +116,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1LocationManager.html',''
 <div class="title">hypro::LocationManager&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for a location manager which holds all created locations.  
+ <a href="classhypro_1_1LocationManager.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="LocationManager_8h_source.html">LocationManager.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -126,13 +131,13 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *_loc)</td></tr>
 <tr class="separator:aac63b8c0411673d69cedce3fa587ccb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafd64c0017313faf178e2f724b95d605"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aafd64c0017313faf178e2f724b95d605"></a>
-<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const matrix_t&lt; Number &gt; _mat)</td></tr>
+<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _mat)</td></tr>
 <tr class="separator:aafd64c0017313faf178e2f724b95d605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae31fa17836a5877f585442debbf81ae1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae31fa17836a5877f585442debbf81ae1"></a>
-<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const matrix_t&lt; Number &gt; _mat, const typename <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::transitionSet _trans, const struct <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::Invariant _inv)</td></tr>
+<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _mat, const typename <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::transitionSet _trans, const struct <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::Invariant _inv)</td></tr>
 <tr class="separator:ae31fa17836a5877f585442debbf81ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fed4cd085a71a3677c5957410d8b849"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fed4cd085a71a3677c5957410d8b849"></a>
-<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const matrix_t&lt; Number &gt; _mat, const typename <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::transitionSet _trans, const struct <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::Invariant _inv, const matrix_t&lt; Number &gt; _extInputMat)</td></tr>
+<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _mat, const typename <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::transitionSet _trans, const struct <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;::Invariant _inv, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _extInputMat)</td></tr>
 <tr class="separator:a2fed4cd085a71a3677c5957410d8b849"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d6e1e1005065230d2d4f0396d4b6ff4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3d6e1e1005065230d2d4f0396d4b6ff4"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *_loc) const </td></tr>
@@ -150,9 +155,16 @@ Protected Member Functions</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::LocationManager&lt; Number &gt;</h3>
 
+<p>Class for a location manager which holds all created locations. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a0">example_bouncingBall.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00019">19</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00016">16</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aec87f13b24851e0089b0fb2b3dc0fc17"></a>
 <div class="memitem">
@@ -178,7 +190,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Default constructor and destructor </p>
 
-<p>Definition at line <a class="el" href="LocationManager_8h_source.html#l00027">27</a> of file <a class="el" href="LocationManager_8h_source.html">LocationManager.h</a>.</p>
+<p>Definition at line <a class="el" href="LocationManager_8h_source.html#l00030">30</a> of file <a class="el" href="LocationManager_8h_source.html">LocationManager.h</a>.</p>
 
 </div>
 </div>

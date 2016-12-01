@@ -35,7 +35,6 @@ var classhypro_1_1VPolytopeT =
     [ "operator=", "classhypro_1_1VPolytopeT.html#a935108a18336293d4a87e0cabec8665c", null ],
     [ "operator=", "classhypro_1_1VPolytopeT.html#ac03f9c05c0085d8e8123c1b1ab49a306", null ],
     [ "operator==", "classhypro_1_1VPolytopeT.html#a6b1b20d62c33ad421bfe55e0d5a3fb3d", null ],
-    [ "print", "classhypro_1_1VPolytopeT.html#a3a86ab3980f475d5cf2636bba6fb3a90", null ],
     [ "project", "classhypro_1_1VPolytopeT.html#aa0f568279ad700889dbe2d708b9ccccd", null ],
     [ "reduced", "classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1VPolytopeT.html#a608b9f4eb93c2bb7e21db8cc1a4c66f1", null ],

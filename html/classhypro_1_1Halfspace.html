@@ -117,6 +117,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1Halfspace.html','');});
 <div class="title">hypro::Halfspace&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Forward declaration of class <a class="el" href="classhypro_1_1Halfspace.html" title="Forward declaration of class Halfspace. ">Halfspace</a>.  
+ <a href="classhypro_1_1Halfspace.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="GeometricObject_8h_source.html">GeometricObject.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -133,10 +138,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed2afe405fe0a7925ef096d8681629b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#aed2afe405fe0a7925ef096d8681629b2">Halfspace</a> (std::initializer_list&lt; Number &gt; _coordinates, const Number &amp;_off)</td></tr>
 <tr class="memdesc:aed2afe405fe0a7925ef096d8681629b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from an initializer list for the normal vector and an offset.  <a href="#aed2afe405fe0a7925ef096d8681629b2">More...</a><br/></td></tr>
 <tr class="separator:aed2afe405fe0a7925ef096d8681629b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66b90ebe955352423d5b0035a883baa4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a66b90ebe955352423d5b0035a883baa4">Halfspace</a> (const vector_t&lt; Number &gt; &amp;_vector, const Number &amp;_off)</td></tr>
+<tr class="memitem:a66b90ebe955352423d5b0035a883baa4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a66b90ebe955352423d5b0035a883baa4">Halfspace</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector, const Number &amp;_off)</td></tr>
 <tr class="memdesc:a66b90ebe955352423d5b0035a883baa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a normal vector and an offset.  <a href="#a66b90ebe955352423d5b0035a883baa4">More...</a><br/></td></tr>
 <tr class="separator:a66b90ebe955352423d5b0035a883baa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6080674594e20bd83419e819a8c2340b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a6080674594e20bd83419e819a8c2340b">Halfspace</a> (const vector_t&lt; Number &gt; &amp;_vec, const std::vector&lt; vector_t&lt; Number &gt;&gt; &amp;_vectorSet)</td></tr>
+<tr class="memitem:a6080674594e20bd83419e819a8c2340b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a6080674594e20bd83419e819a8c2340b">Halfspace</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;_vectorSet)</td></tr>
 <tr class="memdesc:a6080674594e20bd83419e819a8c2340b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from an offset vector and a set of vectors lying in the plane.  <a href="#a6080674594e20bd83419e819a8c2340b">More...</a><br/></td></tr>
 <tr class="separator:a6080674594e20bd83419e819a8c2340b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc71891d16a4412a37355ba896255be4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc71891d16a4412a37355ba896255be4"></a>
@@ -163,10 +168,10 @@ template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double 
 <tr class="memitem:a901fdaca3f7e8742d613b7ee4c65c79b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a901fdaca3f7e8742d613b7ee4c65c79b">isInteger</a> () const </td></tr>
 <tr class="memdesc:a901fdaca3f7e8742d613b7ee4c65c79b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the plane coefficients are integers.  <a href="#a901fdaca3f7e8742d613b7ee4c65c79b">More...</a><br/></td></tr>
 <tr class="separator:a901fdaca3f7e8742d613b7ee4c65c79b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada47c49e9dca6befeef4c6fc2fac5a22"><td class="memItemLeft" align="right" valign="top">const vector_t&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">normal</a> () const </td></tr>
+<tr class="memitem:ada47c49e9dca6befeef4c6fc2fac5a22"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">normal</a> () const </td></tr>
 <tr class="memdesc:ada47c49e9dca6befeef4c6fc2fac5a22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the plane normal.  <a href="#ada47c49e9dca6befeef4c6fc2fac5a22">More...</a><br/></td></tr>
 <tr class="separator:ada47c49e9dca6befeef4c6fc2fac5a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37412da1ef224814a1bef59a76948d70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a37412da1ef224814a1bef59a76948d70">setNormal</a> (const vector_t&lt; Number &gt; &amp;_normal)</td></tr>
+<tr class="memitem:a37412da1ef224814a1bef59a76948d70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a37412da1ef224814a1bef59a76948d70">setNormal</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_normal)</td></tr>
 <tr class="memdesc:a37412da1ef224814a1bef59a76948d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the normal.  <a href="#a37412da1ef224814a1bef59a76948d70">More...</a><br/></td></tr>
 <tr class="separator:a37412da1ef224814a1bef59a76948d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4aa912984e200de42b4d36f413506de3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4aa912984e200de42b4d36f413506de3"></a>
@@ -179,16 +184,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:aa4a6ba034a64df0e75be1821707ae21d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#aa4a6ba034a64df0e75be1821707ae21d">setOffset</a> (Number _offset)</td></tr>
 <tr class="memdesc:aa4a6ba034a64df0e75be1821707ae21d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the offset.  <a href="#aa4a6ba034a64df0e75be1821707ae21d">More...</a><br/></td></tr>
 <tr class="separator:aa4a6ba034a64df0e75be1821707ae21d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ca6f32bb4d9bbce85be694bfbbeca7f"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a4ca6f32bb4d9bbce85be694bfbbeca7f">signedDistance</a> (const vector_t&lt; Number &gt; &amp;_point) const </td></tr>
+<tr class="memitem:a4ca6f32bb4d9bbce85be694bfbbeca7f"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a4ca6f32bb4d9bbce85be694bfbbeca7f">signedDistance</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_point) const </td></tr>
 <tr class="memdesc:a4ca6f32bb4d9bbce85be694bfbbeca7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the signed distance of a point to the hyperplane.  <a href="#a4ca6f32bb4d9bbce85be694bfbbeca7f">More...</a><br/></td></tr>
 <tr class="separator:a4ca6f32bb4d9bbce85be694bfbbeca7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62f270d8f1995e32d0ba12125142ab83"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a62f270d8f1995e32d0ba12125142ab83">evaluate</a> (const vector_t&lt; Number &gt; &amp;_direction) const </td></tr>
+<tr class="memitem:a62f270d8f1995e32d0ba12125142ab83"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a62f270d8f1995e32d0ba12125142ab83">evaluate</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction) const </td></tr>
 <tr class="memdesc:a62f270d8f1995e32d0ba12125142ab83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the halfspace in the given direction.  <a href="#a62f270d8f1995e32d0ba12125142ab83">More...</a><br/></td></tr>
 <tr class="separator:a62f270d8f1995e32d0ba12125142ab83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a608609251d6e74f69dc60ea69168a2e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a608609251d6e74f69dc60ea69168a2e1">projectPointOnPlane</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;) const </td></tr>
 <tr class="memdesc:a608609251d6e74f69dc60ea69168a2e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a given point on the plane.  <a href="#a608609251d6e74f69dc60ea69168a2e1">More...</a><br/></td></tr>
 <tr class="separator:a608609251d6e74f69dc60ea69168a2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e8e3ac6a8105361f8d4237a46948f38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a3e8e3ac6a8105361f8d4237a46948f38">intersection</a> (Number &amp;_result, const vector_t&lt; Number &gt; &amp;_vector) const </td></tr>
+<tr class="memitem:a3e8e3ac6a8105361f8d4237a46948f38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a3e8e3ac6a8105361f8d4237a46948f38">intersection</a> (Number &amp;_result, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector) const </td></tr>
 <tr class="memdesc:a3e8e3ac6a8105361f8d4237a46948f38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of a vector with the plane.  <a href="#a3e8e3ac6a8105361f8d4237a46948f38">More...</a><br/></td></tr>
 <tr class="separator:a3e8e3ac6a8105361f8d4237a46948f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cd50785f167eeca74122d1c489fe1ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a5cd50785f167eeca74122d1c489fe1ea">intersection</a> (Number &amp;_result, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_vector) const </td></tr>
@@ -197,16 +202,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:aab70d617cb946cda88d97ca12591ffbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#aab70d617cb946cda88d97ca12591ffbd">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:aab70d617cb946cda88d97ca12591ffbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the halfspace on the given dimensions. Note that this corresponds to a projection of the normal vector without any re-scaling.  <a href="#aab70d617cb946cda88d97ca12591ffbd">More...</a><br/></td></tr>
 <tr class="separator:aab70d617cb946cda88d97ca12591ffbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa93bb0bba3e6ae942ed15867a7d19f2a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#aa93bb0bba3e6ae942ed15867a7d19f2a">linearTransformation</a> (const matrix_t&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memitem:aa93bb0bba3e6ae942ed15867a7d19f2a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#aa93bb0bba3e6ae942ed15867a7d19f2a">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:aa93bb0bba3e6ae942ed15867a7d19f2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the linear transformation of the plane.  <a href="#aa93bb0bba3e6ae942ed15867a7d19f2a">More...</a><br/></td></tr>
 <tr class="separator:aa93bb0bba3e6ae942ed15867a7d19f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f716cde9e5a28208a14e53a2e6fcf32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a4f716cde9e5a28208a14e53a2e6fcf32">affineTransformation</a> (const matrix_t&lt; Number &gt; &amp;A, const vector_t&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memitem:a4f716cde9e5a28208a14e53a2e6fcf32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a4f716cde9e5a28208a14e53a2e6fcf32">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
 <tr class="memdesc:a4f716cde9e5a28208a14e53a2e6fcf32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the affine transformation of the plane.  <a href="#a4f716cde9e5a28208a14e53a2e6fcf32">More...</a><br/></td></tr>
 <tr class="separator:a4f716cde9e5a28208a14e53a2e6fcf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ff5825856dbcd3841ced99d12042490"><td class="memItemLeft" align="right" valign="top">vector_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a5ff5825856dbcd3841ced99d12042490">intersectionVector</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;_rhs) const </td></tr>
+<tr class="memitem:a5ff5825856dbcd3841ced99d12042490"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a5ff5825856dbcd3841ced99d12042490">intersectionVector</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;_rhs) const </td></tr>
 <tr class="memdesc:a5ff5825856dbcd3841ced99d12042490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the vector describing the intersection of two hyperplanes.  <a href="#a5ff5825856dbcd3841ced99d12042490">More...</a><br/></td></tr>
 <tr class="separator:a5ff5825856dbcd3841ced99d12042490"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac90b79b046c3881aea83113cbe0c1984"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ac90b79b046c3881aea83113cbe0c1984">contains</a> (const vector_t&lt; Number &gt; _vector) const </td></tr>
+<tr class="memitem:ac90b79b046c3881aea83113cbe0c1984"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ac90b79b046c3881aea83113cbe0c1984">contains</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; _vector) const </td></tr>
 <tr class="memdesc:ac90b79b046c3881aea83113cbe0c1984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the point given as a vector is contained in the halfspace.  <a href="#ac90b79b046c3881aea83113cbe0c1984">More...</a><br/></td></tr>
 <tr class="separator:ac90b79b046c3881aea83113cbe0c1984"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf52bdfc5023b2de4396e3b8577f49fb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#adf52bdfc5023b2de4396e3b8577f49fb">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; _vector) const </td></tr>
@@ -215,7 +220,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a751c7e58d55b313f6b1886e5524cfa77"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a751c7e58d55b313f6b1886e5524cfa77">contains</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points) const </td></tr>
 <tr class="memdesc:a751c7e58d55b313f6b1886e5524cfa77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the given set of points is contained inside the halfspace.  <a href="#a751c7e58d55b313f6b1886e5524cfa77">More...</a><br/></td></tr>
 <tr class="separator:a751c7e58d55b313f6b1886e5524cfa77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf3fc13e6e13d5d9d5666446cbdf27ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#acf3fc13e6e13d5d9d5666446cbdf27ba">holds</a> (const vector_t&lt; Number &gt; _vector) const </td></tr>
+<tr class="memitem:acf3fc13e6e13d5d9d5666446cbdf27ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#acf3fc13e6e13d5d9d5666446cbdf27ba">holds</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; _vector) const </td></tr>
 <tr class="memdesc:acf3fc13e6e13d5d9d5666446cbdf27ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the point given as a vector saturates the halfspace, i.e. lies on its bounding plane.  <a href="#acf3fc13e6e13d5d9d5666446cbdf27ba">More...</a><br/></td></tr>
 <tr class="separator:acf3fc13e6e13d5d9d5666446cbdf27ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab32438fc68ad58ab5932737abeefa884"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ab32438fc68ad58ab5932737abeefa884">hash</a> ()</td></tr>
@@ -225,10 +230,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e106dcc1e0036e3f01bb94eeee7a52e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e106dcc1e0036e3f01bb94eeee7a52e"></a>
-static vector_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fastIntersect</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
+static <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fastIntersect</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
 <tr class="separator:a5e106dcc1e0036e3f01bb94eeee7a52e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1c3fce6d75b02bfc763081c189400dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1c3fce6d75b02bfc763081c189400dd"></a>
-static vector_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>saveIntersect</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes, Number threshold=0)</td></tr>
+static <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>saveIntersect</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes, Number threshold=0)</td></tr>
 <tr class="separator:af1c3fce6d75b02bfc763081c189400dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -241,6 +246,13 @@ Friends</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Halfspace&lt; Number &gt;</h3>
 
+<p>Forward declaration of class <a class="el" href="classhypro_1_1Halfspace.html" title="Forward declaration of class Halfspace. ">Halfspace</a>. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_box_8cpp-example.html#_a2">example_box.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00023">23</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
@@ -354,7 +366,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a> </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vector</em>, </td>
         </tr>
         <tr>
@@ -391,13 +403,13 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a> </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vec</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; vector_t&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_vectorSet</em>&#160;</td>
         </tr>
         <tr>
@@ -429,13 +441,13 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt;Number&gt; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::affineTransformation </td>
           <td>(</td>
-          <td class="paramtype">const matrix_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
@@ -467,7 +479,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::contains </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td>
           <td class="paramname"><em>_vector</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -568,7 +580,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">Number <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::evaluate </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_direction</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -626,7 +638,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::holds </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td>
           <td class="paramname"><em>_vector</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -659,7 +671,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vector</em>&#160;</td>
         </tr>
         <tr>
@@ -727,7 +739,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">vector_t&lt;Number&gt; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::intersectionVector </td>
+          <td class="memname"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::intersectionVector </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_rhs</em></td><td>)</td>
@@ -786,7 +798,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt;Number&gt; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::linearTransformation </td>
           <td>(</td>
-          <td class="paramtype">const matrix_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -811,7 +823,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">const vector_t&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::normal </td>
+          <td class="memname">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::normal </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -937,7 +949,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::setNormal </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_normal</em></td><td>)</td>
           <td></td>
         </tr>
@@ -989,7 +1001,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">Number <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::signedDistance </td>
           <td>(</td>
-          <td class="paramtype">const vector_t&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_point</em></td><td>)</td>
           <td> const</td>
         </tr>

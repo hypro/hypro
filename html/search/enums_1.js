@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['representation_5fname',['representation_name',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86',1,'hypro']]]
+  ['conv_5fmode',['CONV_MODE',['../namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd',1,'hypro']]]
 ];

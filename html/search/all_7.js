@@ -17,10 +17,12 @@ var searchData=
   ['havesamedimensions',['haveSameDimensions',['../classhypro_1_1Point.html#a794a64cecf312dbac0bfdb4158bbb11d',1,'hypro::Point']]],
   ['helperfunctions_2eh',['helperFunctions.h',['../helperFunctions_8h.html',1,'']]],
   ['holds',['holds',['../classhypro_1_1Halfspace.html#acf3fc13e6e13d5d9d5666446cbdf27ba',1,'hypro::Halfspace']]],
+  ['hpolytope',['HPolytope',['../namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439',1,'hypro']]],
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1HPolytopeT.html',1,'hypro']]],
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1HPolytopeT.html#aa4fd3a82067c7f180f3113a983c53608',1,'hypro::HPolytopeT::HPolytopeT()'],['../classhypro_1_1HPolytopeT.html#ae4743e2394608e55256c804fe28819ec',1,'hypro::HPolytopeT::HPolytopeT(const HPolytopeT &amp;orig)=default'],['../classhypro_1_1HPolytopeT.html#a1d93632d680670a0e470f4f3d48bb8e7',1,'hypro::HPolytopeT::HPolytopeT(const HalfspaceVector &amp;planes)'],['../classhypro_1_1HPolytopeT.html#abc36944aab51676915bdd6c5f888bb52',1,'hypro::HPolytopeT::HPolytopeT(const matrix_t&lt; Number &gt; &amp;A, const vector_t&lt; Number &gt; &amp;b)'],['../classhypro_1_1HPolytopeT.html#ab86fd747f7da51f599b596d46ea50673',1,'hypro::HPolytopeT::HPolytopeT(const matrix_t&lt; Number &gt; &amp;A)'],['../classhypro_1_1HPolytopeT.html#a545935d2cc70b88dc0b78cf7dd071bcb',1,'hypro::HPolytopeT::HPolytopeT(const std::vector&lt; Point&lt; Number &gt;&gt; &amp;points)']]],
+  ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274',1,'hypro::HybridAutomaton::HybridAutomaton()'],['../classhypro_1_1HybridAutomaton.html#a9cb6c0831fb4b43fd97ac55f8912f52d',1,'hypro::HybridAutomaton::HybridAutomaton(const HybridAutomaton &amp;_hybrid)'],['../classhypro_1_1HybridAutomaton.html#ab89ff683cf3018424b47e6f41e4dca5a',1,'hypro::HybridAutomaton::HybridAutomaton(const locationSet &amp;_locs, const transitionSet &amp;_trans, const locationStateMap &amp;_initialStates)']]],
   ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html',1,'hypro']]],
-  ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274',1,'hypro::HybridAutomaton']]],
+  ['hybridautomaton_2eh',['HybridAutomaton.h',['../HybridAutomaton_8h.html',1,'']]],
   ['hypro',['hypro',['../namespacehypro.html',1,'']]],
   ['hypro',['HyPro',['../index.html',1,'']]]
 ];

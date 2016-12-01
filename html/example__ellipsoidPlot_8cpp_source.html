@@ -137,10 +137,10 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">    std::cout &lt;&lt; &quot;Scalar projection b on a: &quot; &lt;&lt; scalarProjection(b,a) &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">    */</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    matrix_t&lt;Number&gt; matrix = matrix_t&lt;Number&gt;(2,2);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> matrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(2,2);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    matrix &lt;&lt; 1,0,</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        0,9;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    matrix_t&lt;Number&gt; matrix2 = matrix_t&lt;Number&gt;(2,2);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> matrix2 = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(2,2);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    matrix2 &lt;&lt; 9,0,</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        0,1;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
@@ -185,13 +185,13 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Invariant: &quot; &lt;&lt; invariant &lt;&lt; &quot; &lt;= &quot; &lt;&lt; invariantConstants &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    SupportFunction&lt;Number&gt; elli1(matrix);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    SupportFunction&lt;Number&gt; elli2(matrix2);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    SupportFunction&lt;Number&gt; mink = elli2.minkowskiSum(elli1);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction&lt;Number&gt;</a> elli1(matrix);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction&lt;Number&gt;</a> elli2(matrix2);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction&lt;Number&gt;</a> mink = elli2.minkowskiSum(elli1);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="classhypro_1_1Ellipsoid.html">Ellipsoid&lt;Number&gt;</a> ellips1(matrix);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="code" href="classhypro_1_1Ellipsoid.html">Ellipsoid&lt;Number&gt;</a> ellips2(matrix2);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        ellips2 = ellips2.minkowskiSum(ellips1);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        SupportFunction&lt;Number&gt; mink2 = SupportFunction&lt;Number&gt;(ellips2);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction&lt;Number&gt;</a> mink2 = <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction&lt;Number&gt;</a>(ellips2);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="comment">//SupportFunction&lt;Number&gt; intersectedInvariant = poly1.intersectHalfspaces(invariant, invariantConstants);</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="comment">//std::pair&lt;bool, SupportFunction&lt;Number&gt;&gt; intersectionPair = rounded1.satisfiesHalfspaces(invariant, invariantConstants);</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="comment">//SupportFunction&lt;Number&gt; intersection = rounded1.intersectHalfspaces(invariant, invariantConstants);</span></div>
@@ -210,7 +210,7 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        resolution = std::stoi(argv[1]);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    matrix_t&lt;Number&gt; evaldirections = matrix_t&lt;Number&gt;(resolution, 2);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> evaldirections = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(resolution, 2);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> pos = 0; pos &lt; resolution; ++pos) {</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">double</span> angle = pos*(360/resolution);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        evaldirections(pos,0) = carl::rationalize&lt;Number&gt;(cos(angle*3.141592654/180));</div>
@@ -264,7 +264,7 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">    plotter.addObject(points);</span></div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">    */</span></div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    {</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    HPolytope&lt;Number&gt; tmp;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> tmp;</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; resolution; ++i) {</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        tmp.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>(evaldirections.row(i), elli1Eval[i].supportValue));</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    }</div>
@@ -274,7 +274,7 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    {</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    HPolytope&lt;Number&gt; tmp;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> tmp;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; resolution; ++i) {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        tmp.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>(evaldirections.row(i), elli2Eval[i].supportValue));</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    }</div>
@@ -291,7 +291,7 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="comment">//}</span></div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    HPolytope&lt;Number&gt; tmp;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> tmp;</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; resolution; ++i) {</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        tmp.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>(evaldirections.row(i), minkEval[i].supportValue));</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    }</div>
@@ -299,7 +299,7 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    plotter.setObjectColor(sf, colors[blue]);</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        }</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        {</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        HPolytope&lt;Number&gt; tmp;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> tmp;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; resolution; ++i) {</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        tmp.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>(evaldirections.row(i), mink2Eval[i].supportValue));</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    }</div>
@@ -438,9 +438,12 @@ $(document).ready(function(){initNavTree('example__ellipsoidPlot_8cpp_source.htm
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    plotter.<a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>();</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;}</div>
-<div class="ttc" id="classhypro_1_1Ellipsoid_html"><div class="ttname"><a href="classhypro_1_1Ellipsoid.html">hypro::Ellipsoid</a></div><div class="ttdef"><b>Definition:</b> <a href="Ellipsoid_8h_source.html#l00020">Ellipsoid.h:20</a></div></div>
+<div class="ttc" id="classhypro_1_1Ellipsoid_html"><div class="ttname"><a href="classhypro_1_1Ellipsoid.html">hypro::Ellipsoid</a></div><div class="ttdoc">Class for ellipsoids. </div><div class="ttdef"><b>Definition:</b> <a href="Ellipsoid_8h_source.html#l00020">Ellipsoid.h:20</a></div></div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00059">Plotter.h:59</a></div></div>
-<div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
+<div class="ttc" id="namespacehypro_html_a47344b22ce93940da4599cf2f2987321"><div class="ttname"><a href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::SupportFunction SupportFunction</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00102">Converter.h:102</a></div></div>
+<div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdoc">Forward declaration of class Halfspace. </div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00082">Converter.h:82</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a020e89ed0c39a091bf49a0b400e511f8"><div class="ttname"><a href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">hypro::Plotter::plot2d</a></div><div class="ttdeci">void plot2d() const </div><div class="ttdoc">Writes the actual plot to the output file. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

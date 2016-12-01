@@ -86,6 +86,8 @@ var hierarchy =
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
+    [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
+    [ "hypro::Point< unsigned >", "classhypro_1_1Point.html", null ],
     [ "hypro::pointIt< Number >", "structhypro_1_1pointIt.html", null ],
     [ "hypro::PolynomialODE< Number >", "classhypro_1_1PolynomialODE.html", null ],
     [ "hypro::PolytopeSupportFunction< Number >", "classhypro_1_1PolytopeSupportFunction.html", null ],
@@ -132,6 +134,7 @@ var hierarchy =
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
+    [ "hypro::Vertex< unsigned >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ]
 ];

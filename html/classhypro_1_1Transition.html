@@ -117,6 +117,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1Transition.html','');});
 <div class="title">hypro::Transition&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for a transition of a hybrid automaton.  
+ <a href="classhypro_1_1Transition.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Transition_8h_source.html">Transition.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -150,7 +155,7 @@ const <a class="el" href="structhypro_1_1Transition_1_1Guard.html">Guard</a> &am
 const <a class="el" href="structhypro_1_1Transition_1_1Reset.html">Reset</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> () const </td></tr>
 <tr class="separator:a9cc2edbcabe45844403494d4791d1cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d6f7cb52955562da293258f32700b07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d6f7cb52955562da293258f32700b07"></a>
-const Aggregation &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>aggregation</b> () const </td></tr>
+const <a class="el" href="namespacehypro.html#a03ed815dbbaab8a64776d7b39035977f">Aggregation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>aggregation</b> () const </td></tr>
 <tr class="separator:a8d6f7cb52955562da293258f32700b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea4ba4c26a920e4b5528799e74098b2f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea4ba4c26a920e4b5528799e74098b2f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isTimeTriggered</b> () const </td></tr>
@@ -171,7 +176,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setGuard</b> (const s
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setReset</b> (const struct <a class="el" href="structhypro_1_1Transition_1_1Reset.html">Reset</a> &amp;_val)</td></tr>
 <tr class="separator:ae8b1c30e349d7e00db4c0f2b7a056c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e3759ea2ba0786459da4d9150d47c0e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e3759ea2ba0786459da4d9150d47c0e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAggregation</b> (const Aggregation &amp;_aggregation)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAggregation</b> (const <a class="el" href="namespacehypro.html#a03ed815dbbaab8a64776d7b39035977f">Aggregation</a> &amp;_aggregation)</td></tr>
 <tr class="separator:a3e3759ea2ba0786459da4d9150d47c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d1106cde8d982e7ebbe24ab16e5a052"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d1106cde8d982e7ebbe24ab16e5a052"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTriggerTime</b> (const Number &amp;_triggerTime)</td></tr>
@@ -190,9 +195,16 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Transition&lt; Number &gt;</h3>
 
+<p>Class for a transition of a hybrid automaton. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a2">example_bouncingBall.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00016">16</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00013">13</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a961e5b764e45cd6e9a7765bb1223c667"></a>
 <div class="memitem">
@@ -218,7 +230,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <p>Constructors &amp; Destructor </p>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00089">89</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00094">94</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -247,7 +259,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <p>Getter &amp; Setter </p>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00135">135</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00140">140</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>

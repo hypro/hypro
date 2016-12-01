@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['simplexsolver_2eh',['SimplexSolver.h',['../SimplexSolver_8h.html',1,'']]]
+  ['pca_2eh',['pca.h',['../pca_8h.html',1,'']]],
+  ['point_2eh',['Point.h',['../Point_8h.html',1,'']]]
 ];

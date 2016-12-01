@@ -117,6 +117,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1Facet.html','');});
 <div class="title">hypro::Facet&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for a facet of a polytope.  
+ <a href="classhypro_1_1Facet.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Facet_8h_source.html">Facet.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -149,7 +154,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Facet</b> (std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; r, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;p, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; insidePoint1, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; insidePoint2)</td></tr>
 <tr class="separator:afea051e4e914b2d10e2378578454b92b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f14f62c2f9706a63bc08e8ab308ce17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f14f62c2f9706a63bc08e8ab308ce17"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Facet</b> (const std::set&lt; vector_t&lt; Number &gt;&gt; &amp;_vertices)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Facet</b> (const std::set&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;_vertices)</td></tr>
 <tr class="separator:a3f14f62c2f9706a63bc08e8ab308ce17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a12cdcdc12ea69455ec07f823bdf480"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Facet.html#a7a12cdcdc12ea69455ec07f823bdf480">empty</a> () const </td></tr>
 <tr class="separator:a7a12cdcdc12ea69455ec07f823bdf480"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +174,7 @@ const neighborsSet &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>n
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addNeighbor</b> (const std::shared_ptr&lt; <a class="el" href="classhypro_1_1Facet.html">Facet</a>&lt; Number &gt;&gt; &amp;facet)</td></tr>
 <tr class="separator:abaecf7d77f4252b5b9bcacc183031db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a434ffc1b2dc46012d1d6bcff2f4350c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a434ffc1b2dc46012d1d6bcff2f4350c1"></a>
-const vector_t&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormal</b> () const </td></tr>
+const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormal</b> () const </td></tr>
 <tr class="separator:a434ffc1b2dc46012d1d6bcff2f4350c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedc8575aff00b7d79ca9d1f196fb7dbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedc8575aff00b7d79ca9d1f196fb7dbc"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>getScalar</b> () const </td></tr>
@@ -193,7 +198,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPoints</b> (std::v
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addPoint</b> (<a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; p)</td></tr>
 <tr class="separator:a37b13ca839dd0fda24629ecaba277338"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae78a964ee77ae0c844a4839557a5e7bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae78a964ee77ae0c844a4839557a5e7bf"></a>
-vector_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormalVector</b> () const </td></tr>
+<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormalVector</b> () const </td></tr>
 <tr class="separator:ae78a964ee77ae0c844a4839557a5e7bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50394a1cd6f0599c8d5503619498b76a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50394a1cd6f0599c8d5503619498b76a"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>getScalarVector</b> () const </td></tr>
@@ -251,8 +256,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <div class="textblock"><h3>template&lt;class Number&gt;<br/>
 class hypro::Facet&lt; Number &gt;</h3>
 
+<p>Class for a facet of a polytope. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="Facet_8h_source.html#l00018">18</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
+<p>Definition at line <a class="el" href="Facet_8h_source.html#l00019">19</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="ae08237c186f0e0c1fc6f8783969fa61a"></a>
 <div class="memitem">
@@ -267,7 +279,7 @@ template&lt;class Number&gt; </div>
 </div><div class="memdoc">
 <p>Typedefs </p>
 
-<p>Definition at line <a class="el" href="Facet_8h_source.html#l00023">23</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
+<p>Definition at line <a class="el" href="Facet_8h_source.html#l00024">24</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
 
 </div>
 </div>
@@ -296,7 +308,7 @@ template&lt;class Number&gt; </div>
 </div><div class="memdoc">
 <p>Constructors &amp; Destructor </p>
 
-<p>Definition at line <a class="el" href="Facet_8h_source.html#l00041">41</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
+<p>Definition at line <a class="el" href="Facet_8h_source.html#l00042">42</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
 
 </div>
 </div>
@@ -325,7 +337,7 @@ template&lt;class Number&gt; </div>
 </div><div class="memdoc">
 <p>Getters and Setters </p>
 
-<p>Definition at line <a class="el" href="Facet_8h_source.html#l00126">126</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
+<p>Definition at line <a class="el" href="Facet_8h_source.html#l00127">127</a> of file <a class="el" href="Facet_8h_source.html">Facet.h</a>.</p>
 
 </div>
 </div>

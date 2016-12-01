@@ -202,8 +202,8 @@ $(document).ready(function(){initNavTree('vectorgenerator_8h_source.html','');})
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af">   97</a></span>&#160;matrix_t&lt;Number&gt; <a class="code" href="namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af">round</a>( matrix_t&lt;Number&gt; direction, <span class="keywordtype">double</span> precision ) {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    matrix_t&lt;Number&gt; result( direction.rows(), 1 );</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af">   97</a></span>&#160;<a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> <a class="code" href="namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af">round</a>( <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> direction, <span class="keywordtype">double</span> precision ) {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> result( direction.rows(), 1 );</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">// round the direction entries according to precision</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> i = 0; i &lt; direction.rows(); i++ ) {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        result( i, 0 ) = ( (long)( ( direction( i, 0 ) * precision ) ) ) / precision;</div>
@@ -311,12 +311,12 @@ $(document).ready(function(){initNavTree('vectorgenerator_8h_source.html','');})
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">// structure to store the 2 directions artificially introduced due to the augmentation by one artificial dimension</span></div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="structhypro_1_1artificialDirections.html">  205</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1artificialDirections.html">artificialDirections</a> {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    matrix_t&lt;Number&gt; dir1;  <span class="comment">// positive direction (0 ....0  1)</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    matrix_t&lt;Number&gt; dir2;  <span class="comment">// negative direction (0 ....0 -1)</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> dir1;  <span class="comment">// positive direction (0 ....0  1)</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> dir2;  <span class="comment">// negative direction (0 ....0 -1)</span></div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="comment">// pointer to the correspondent entries in the global directions list</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    matrix_t&lt;Number&gt;* dir1_pt;</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    matrix_t&lt;Number&gt;* dir2_pt;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>* dir1_pt;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>* dir2_pt;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="comment">// constant evaluation results</span></div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keyword">const</span> Number dir1_eval = Number( 1 );</div>
@@ -327,14 +327,14 @@ $(document).ready(function(){initNavTree('vectorgenerator_8h_source.html','');})
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">* replaces all directions by a direction of the original dimensionality+1 with the additional entry being 0</span></div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<a class="code" href="structhypro_1_1artificialDirections.html">artificialDirections&lt;Number&gt;</a> extendDimensions( std::vector&lt;matrix_t&lt;Number&gt;&gt;* directions,</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                                               std::vector&lt;matrix_t&lt;Number&gt;&gt;** extendedDirections ) {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<a class="code" href="structhypro_1_1artificialDirections.html">artificialDirections&lt;Number&gt;</a> extendDimensions( std::vector&lt;<a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&gt;* directions,</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                                               std::vector&lt;<a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&gt;** extendedDirections ) {</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    std::vector&lt;matrix_t&lt;Number&gt;&gt;* newDirections = <span class="keyword">new</span> std::vector&lt;matrix_t&lt;Number&gt;&gt;( directions-&gt;size() + 2 );</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    *extendedDirections = newDirections;</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    matrix_t&lt;Number&gt; l;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> l;</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    matrix_t&lt;Number&gt; newl( directions-&gt;at( 0 ).size() + 1, 1 );</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> newl( directions-&gt;at( 0 ).size() + 1, 1 );</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    newl( l.rows(), 0 ) = Number( 0 );  <span class="comment">// add final 0 entry</span></div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="comment">// replace directions by direction of higher dimensionality</span></div>
@@ -364,6 +364,7 @@ $(document).ready(function(){initNavTree('vectorgenerator_8h_source.html','');})
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;}</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;}</div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="structhypro_1_1artificialDirections_html"><div class="ttname"><a href="structhypro_1_1artificialDirections.html">hypro::artificialDirections</a></div><div class="ttdef"><b>Definition:</b> <a href="vectorgenerator_8h_source.html#l00205">vectorgenerator.h:205</a></div></div>
 <div class="ttc" id="namespacehypro_html_a82eb07c259552e80da49d1e297c5d5af"><div class="ttname"><a href="namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af">hypro::round</a></div><div class="ttdeci">matrix_t&lt; Number &gt; round(matrix_t&lt; Number &gt; direction, double precision)</div><div class="ttdef"><b>Definition:</b> <a href="vectorgenerator_8h_source.html#l00097">vectorgenerator.h:97</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

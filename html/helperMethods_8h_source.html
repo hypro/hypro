@@ -296,7 +296,7 @@ $(document).ready(function(){initNavTree('helperMethods_8h_source.html','');});
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="comment">        return result;</span></div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment">    } */</span></div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="namespacehypro.html#a2aed5a72dc4fed404e1f6af5e9115598">  191</a></span>&#160;matrix_t&lt;double&gt; <a class="code" href="namespacehypro.html#a2aed5a72dc4fed404e1f6af5e9115598">directionList2Matrix</a>( std::vector&lt;matrix_t&lt;double&gt;&gt;* list ) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="namespacehypro.html#a2aed5a72dc4fed404e1f6af5e9115598">  191</a></span>&#160;<a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;double&gt;</a> <a class="code" href="namespacehypro.html#a2aed5a72dc4fed404e1f6af5e9115598">directionList2Matrix</a>( std::vector&lt;<a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;double&gt;</a>&gt;* list ) {</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="comment">// get list size</span></div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> counter = 0;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> matrixlength = 0;</div>
@@ -307,14 +307,14 @@ $(document).ready(function(){initNavTree('helperMethods_8h_source.html','');});
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">if</span> ( matrixlength != 0 &amp;&amp; temp != matrixlength ) {</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Cannot convert a list of matrices with different length into a single matrix!&quot;</span>;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            matrix_t&lt;double&gt; null( 0, 0 );</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;double&gt;</a> null( 0, 0 );</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">return</span> null;</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            matrixlength = temp;</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    matrix_t&lt;double&gt; result( counter, matrixlength );</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;double&gt;</a> result( counter, matrixlength );</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    counter = 0;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keywordflow">for</span> ( <span class="keyword">auto</span> iterator = ( *list ).begin(); iterator != ( *list ).end(); ++iterator ) {</div>
@@ -433,6 +433,7 @@ $(document).ready(function(){initNavTree('helperMethods_8h_source.html','');});
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
 <div class="ttc" id="namespacehypro_html_a2aed5a72dc4fed404e1f6af5e9115598"><div class="ttname"><a href="namespacehypro.html#a2aed5a72dc4fed404e1f6af5e9115598">hypro::directionList2Matrix</a></div><div class="ttdeci">matrix_t&lt; double &gt; directionList2Matrix(std::vector&lt; matrix_t&lt; double &gt;&gt; *list)</div><div class="ttdef"><b>Definition:</b> <a href="helperMethods_8h_source.html#l00191">helperMethods.h:191</a></div></div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

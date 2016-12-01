@@ -117,6 +117,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1VPolytopeT.html','');});
 <div class="title">hypro::VPolytopeT&lt; Number, Converter &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The class implementing the vertex representation of a convex polytope.  
+ <a href="classhypro_1_1VPolytopeT.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -126,89 +131,98 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>pointVector</b> = st
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae59462aa5d326c0734e485d257fe19c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae59462aa5d326c0734e485d257fe19c8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point)</td></tr>
+<tr class="memitem:a786f1613241c12598643c197180b8f44"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a786f1613241c12598643c197180b8f44"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a786f1613241c12598643c197180b8f44">VPolytopeT</a> ()</td></tr>
+<tr class="memdesc:a786f1613241c12598643c197180b8f44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br/></td></tr>
+<tr class="separator:a786f1613241c12598643c197180b8f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae59462aa5d326c0734e485d257fe19c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ae59462aa5d326c0734e485d257fe19c8">VPolytopeT</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point)</td></tr>
+<tr class="memdesc:ae59462aa5d326c0734e485d257fe19c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a single point.  <a href="#ae59462aa5d326c0734e485d257fe19c8">More...</a><br/></td></tr>
 <tr class="separator:ae59462aa5d326c0734e485d257fe19c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c77c66c070398180f355ba0d355cea3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c77c66c070398180f355ba0d355cea3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (const pointVector &amp;points)</td></tr>
+<tr class="memitem:a4c77c66c070398180f355ba0d355cea3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a4c77c66c070398180f355ba0d355cea3">VPolytopeT</a> (const pointVector &amp;points)</td></tr>
+<tr class="memdesc:a4c77c66c070398180f355ba0d355cea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a vector of points.  <a href="#a4c77c66c070398180f355ba0d355cea3">More...</a><br/></td></tr>
 <tr class="separator:a4c77c66c070398180f355ba0d355cea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adeaaee4cb5afce3d8b627c3585506e0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adeaaee4cb5afce3d8b627c3585506e0a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (const std::vector&lt; vector_t&lt; Number &gt;&gt; &amp;rawPoints)</td></tr>
+<tr class="memitem:adeaaee4cb5afce3d8b627c3585506e0a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#adeaaee4cb5afce3d8b627c3585506e0a">VPolytopeT</a> (const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;rawPoints)</td></tr>
+<tr class="memdesc:adeaaee4cb5afce3d8b627c3585506e0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a vector of coordinates.  <a href="#adeaaee4cb5afce3d8b627c3585506e0a">More...</a><br/></td></tr>
 <tr class="separator:adeaaee4cb5afce3d8b627c3585506e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcbd5fcc7be4b5a19829385def9b7eba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcbd5fcc7be4b5a19829385def9b7eba"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (const matrix_t&lt; Number &gt; &amp;_constraints, const vector_t&lt; Number &gt; _constants)</td></tr>
+<tr class="memitem:afcbd5fcc7be4b5a19829385def9b7eba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#afcbd5fcc7be4b5a19829385def9b7eba">VPolytopeT</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; _constants)</td></tr>
+<tr class="memdesc:afcbd5fcc7be4b5a19829385def9b7eba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a constraint system represented by a matrix and a vector.  <a href="#afcbd5fcc7be4b5a19829385def9b7eba">More...</a><br/></td></tr>
 <tr class="separator:afcbd5fcc7be4b5a19829385def9b7eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa39364fda3302e53fbd19697e341dde0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa39364fda3302e53fbd19697e341dde0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;orig)=default</td></tr>
+<tr class="memitem:aa39364fda3302e53fbd19697e341dde0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#aa39364fda3302e53fbd19697e341dde0">VPolytopeT</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;orig)=default</td></tr>
+<tr class="memdesc:aa39364fda3302e53fbd19697e341dde0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#aa39364fda3302e53fbd19697e341dde0">More...</a><br/></td></tr>
 <tr class="separator:aa39364fda3302e53fbd19697e341dde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e6438c03fbfc8b1959537ae70cf65b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e6438c03fbfc8b1959537ae70cf65b9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytopeT</b> (<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;&amp;_orig)=default</td></tr>
+<tr class="memitem:a3e6438c03fbfc8b1959537ae70cf65b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a3e6438c03fbfc8b1959537ae70cf65b9">VPolytopeT</a> (<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;&amp;_orig)=default</td></tr>
+<tr class="memdesc:a3e6438c03fbfc8b1959537ae70cf65b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move constructor.  <a href="#a3e6438c03fbfc8b1959537ae70cf65b9">More...</a><br/></td></tr>
 <tr class="separator:a3e6438c03fbfc8b1959537ae70cf65b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0f568279ad700889dbe2d708b9ccccd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0f568279ad700889dbe2d708b9ccccd"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
+<tr class="memitem:ac8ef11edeefbb938a05c140ec72cfee5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8ef11edeefbb938a05c140ec72cfee5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ac8ef11edeefbb938a05c140ec72cfee5">~VPolytopeT</a> ()</td></tr>
+<tr class="memdesc:ac8ef11edeefbb938a05c140ec72cfee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
+<tr class="separator:ac8ef11edeefbb938a05c140ec72cfee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f568279ad700889dbe2d708b9ccccd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#aa0f568279ad700889dbe2d708b9ccccd">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:aa0f568279ad700889dbe2d708b9ccccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the polytope on the passed dimensions.  <a href="#aa0f568279ad700889dbe2d708b9ccccd">More...</a><br/></td></tr>
 <tr class="separator:aa0f568279ad700889dbe2d708b9ccccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7938e23ef4c0361b99bafe146d897302"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7938e23ef4c0361b99bafe146d897302"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (const matrix_t&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memitem:a7938e23ef4c0361b99bafe146d897302"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7938e23ef4c0361b99bafe146d897302">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memdesc:a7938e23ef4c0361b99bafe146d897302"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation.  <a href="#a7938e23ef4c0361b99bafe146d897302">More...</a><br/></td></tr>
 <tr class="separator:a7938e23ef4c0361b99bafe146d897302"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3feb55271529f227dcaf94454f22a694"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3feb55271529f227dcaf94454f22a694"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>affineTransformation</b> (const matrix_t&lt; Number &gt; &amp;A, const vector_t&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memitem:a3feb55271529f227dcaf94454f22a694"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a3feb55271529f227dcaf94454f22a694">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memdesc:a3feb55271529f227dcaf94454f22a694"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation.  <a href="#a3feb55271529f227dcaf94454f22a694">More...</a><br/></td></tr>
 <tr class="separator:a3feb55271529f227dcaf94454f22a694"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade8b9a84ea18f35f5765a43ddbd1580c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade8b9a84ea18f35f5765a43ddbd1580c"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memitem:ade8b9a84ea18f35f5765a43ddbd1580c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ade8b9a84ea18f35f5765a43ddbd1580c">minkowskiSum</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memdesc:ade8b9a84ea18f35f5765a43ddbd1580c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Minkowski sum of two V-polytopes.  <a href="#ade8b9a84ea18f35f5765a43ddbd1580c">More...</a><br/></td></tr>
 <tr class="separator:ade8b9a84ea18f35f5765a43ddbd1580c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa888fc005c1a971317d675dbf6441c49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa888fc005c1a971317d675dbf6441c49"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memitem:aa888fc005c1a971317d675dbf6441c49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#aa888fc005c1a971317d675dbf6441c49">intersect</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memdesc:aa888fc005c1a971317d675dbf6441c49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects the polytope with a second polytope.  <a href="#aa888fc005c1a971317d675dbf6441c49">More...</a><br/></td></tr>
 <tr class="separator:aa888fc005c1a971317d675dbf6441c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af950cba803eeaeee978c814332fdaadc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af950cba803eeaeee978c814332fdaadc"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>intersectHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:af950cba803eeaeee978c814332fdaadc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#af950cba803eeaeee978c814332fdaadc">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:af950cba803eeaeee978c814332fdaadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects the polytope with a halfspace.  <a href="#af950cba803eeaeee978c814332fdaadc">More...</a><br/></td></tr>
 <tr class="separator:af950cba803eeaeee978c814332fdaadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16f76074c04a24b9b5679ef28d66e185"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16f76074c04a24b9b5679ef28d66e185"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>intersectHalfspaces</b> (const matrix_t&lt; Number &gt; &amp;_mat, const vector_t&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:a16f76074c04a24b9b5679ef28d66e185"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a16f76074c04a24b9b5679ef28d66e185">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:a16f76074c04a24b9b5679ef28d66e185"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects the polytope with a set of halfspaces represented by constraints.  <a href="#a16f76074c04a24b9b5679ef28d66e185">More...</a><br/></td></tr>
 <tr class="separator:a16f76074c04a24b9b5679ef28d66e185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac628d7ce1a652981f220ebd83f62f997"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac628d7ce1a652981f220ebd83f62f997"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:ac628d7ce1a652981f220ebd83f62f997"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ac628d7ce1a652981f220ebd83f62f997">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:ac628d7ce1a652981f220ebd83f62f997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects the polytope with a halfspace and determines if the result is empty.  <a href="#ac628d7ce1a652981f220ebd83f62f997">More...</a><br/></td></tr>
 <tr class="separator:ac628d7ce1a652981f220ebd83f62f997"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c5b51da3a68d057492701cc0149f672"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c5b51da3a68d057492701cc0149f672"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const matrix_t&lt; Number &gt; &amp;_mat, const vector_t&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:a7c5b51da3a68d057492701cc0149f672"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7c5b51da3a68d057492701cc0149f672">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:a7c5b51da3a68d057492701cc0149f672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects the polytope with a set of halfspaces represented by a matrix and a vector. Determines if the result is empty.  <a href="#a7c5b51da3a68d057492701cc0149f672">More...</a><br/></td></tr>
 <tr class="separator:a7c5b51da3a68d057492701cc0149f672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bf5683c7447ca454c0f5e2c64db2ce4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6bf5683c7447ca454c0f5e2c64db2ce4"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
+<tr class="memitem:a6bf5683c7447ca454c0f5e2c64db2ce4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a6bf5683c7447ca454c0f5e2c64db2ce4">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
+<tr class="memdesc:a6bf5683c7447ca454c0f5e2c64db2ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a point is contained in the polytope.  <a href="#a6bf5683c7447ca454c0f5e2c64db2ce4">More...</a><br/></td></tr>
 <tr class="separator:a6bf5683c7447ca454c0f5e2c64db2ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97b984e3518c83e66e69a38047b8c972"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97b984e3518c83e66e69a38047b8c972"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const vector_t&lt; Number &gt; &amp;vec) const </td></tr>
+<tr class="memitem:a97b984e3518c83e66e69a38047b8c972"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a97b984e3518c83e66e69a38047b8c972">contains</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;vec) const </td></tr>
+<tr class="memdesc:a97b984e3518c83e66e69a38047b8c972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a point represented by its coordinates is contained in the polytope.  <a href="#a97b984e3518c83e66e69a38047b8c972">More...</a><br/></td></tr>
 <tr class="separator:a97b984e3518c83e66e69a38047b8c972"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4342de4de7883c5145c51e03e89ec8b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4342de4de7883c5145c51e03e89ec8b2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;_other) const </td></tr>
+<tr class="memitem:a4342de4de7883c5145c51e03e89ec8b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a4342de4de7883c5145c51e03e89ec8b2">contains</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;_other) const </td></tr>
+<tr class="memdesc:a4342de4de7883c5145c51e03e89ec8b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the other polytope is fully contained in this polytope.  <a href="#a4342de4de7883c5145c51e03e89ec8b2">More...</a><br/></td></tr>
 <tr class="separator:a4342de4de7883c5145c51e03e89ec8b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1121ee3ad173f9ed6c0be6b282c7622d"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memitem:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a1121ee3ad173f9ed6c0be6b282c7622d">unite</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
+<tr class="memdesc:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of this and the right hand side polytope.  <a href="#a1121ee3ad173f9ed6c0be6b282c7622d">More...</a><br/></td></tr>
 <tr class="separator:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf5d51b4434baff8cf6bc50b6cf37f97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf5d51b4434baff8cf6bc50b6cf37f97"></a>
-<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const std::vector&lt; <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:abf5d51b4434baff8cf6bc50b6cf37f97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#abf5d51b4434baff8cf6bc50b6cf37f97">unite</a> (const std::vector&lt; <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:abf5d51b4434baff8cf6bc50b6cf37f97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of this and a set of polytopes.  <a href="#abf5d51b4434baff8cf6bc50b6cf37f97">More...</a><br/></td></tr>
 <tr class="separator:abf5d51b4434baff8cf6bc50b6cf37f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1832593b8e138ab17a5f334e892112ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1832593b8e138ab17a5f334e892112ba"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a1832593b8e138ab17a5f334e892112ba">clear</a> ()</td></tr>
+<tr class="memdesc:a1832593b8e138ab17a5f334e892112ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the polytope. <br/></td></tr>
 <tr class="separator:a1832593b8e138ab17a5f334e892112ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3897fe113359146138d2c84abd06752"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3897fe113359146138d2c84abd06752"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </td></tr>
+<tr class="memitem:aa3897fe113359146138d2c84abd06752"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#aa3897fe113359146138d2c84abd06752">empty</a> () const </td></tr>
+<tr class="memdesc:aa3897fe113359146138d2c84abd06752"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the polytope represents the empty set.  <a href="#aa3897fe113359146138d2c84abd06752">More...</a><br/></td></tr>
 <tr class="separator:aa3897fe113359146138d2c84abd06752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6450c18712c409d3a17b8f4881476ae4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6450c18712c409d3a17b8f4881476ae4"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
+<tr class="memitem:a6450c18712c409d3a17b8f4881476ae4"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a6450c18712c409d3a17b8f4881476ae4">dimension</a> () const </td></tr>
+<tr class="memdesc:a6450c18712c409d3a17b8f4881476ae4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the space dimension.  <a href="#a6450c18712c409d3a17b8f4881476ae4">More...</a><br/></td></tr>
 <tr class="separator:a6450c18712c409d3a17b8f4881476ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad41f5cc3939afe9202dc4bf2bb3f7dbf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad41f5cc3939afe9202dc4bf2bb3f7dbf"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="memitem:ad41f5cc3939afe9202dc4bf2bb3f7dbf"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ad41f5cc3939afe9202dc4bf2bb3f7dbf">size</a> () const </td></tr>
+<tr class="memdesc:ad41f5cc3939afe9202dc4bf2bb3f7dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of vertices.  <a href="#ad41f5cc3939afe9202dc4bf2bb3f7dbf">More...</a><br/></td></tr>
 <tr class="separator:ad41f5cc3939afe9202dc4bf2bb3f7dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a348a9485ad052d94057c694664c2e59e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a348a9485ad052d94057c694664c2e59e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>reduced</b> () const </td></tr>
+<tr class="memitem:a348a9485ad052d94057c694664c2e59e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e">reduced</a> () const </td></tr>
+<tr class="memdesc:a348a9485ad052d94057c694664c2e59e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the polytope has been reduced (i.e. the set of vertices is minimal).  <a href="#a348a9485ad052d94057c694664c2e59e">More...</a><br/></td></tr>
 <tr class="separator:a348a9485ad052d94057c694664c2e59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3699a33022faceb6943a87b2e281d78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3699a33022faceb6943a87b2e281d78"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () const </td></tr>
+<tr class="memitem:ae3699a33022faceb6943a87b2e281d78"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ae3699a33022faceb6943a87b2e281d78">supremum</a> () const </td></tr>
+<tr class="memdesc:ae3699a33022faceb6943a87b2e281d78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the supremum of the set according to the infty norm.  <a href="#ae3699a33022faceb6943a87b2e281d78">More...</a><br/></td></tr>
 <tr class="separator:ae3699a33022faceb6943a87b2e281d78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ea8f9617dcaa57cabfd1384e2192082"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ea8f9617dcaa57cabfd1384e2192082"></a>
-const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>cone</b> () const </td></tr>
+<tr class="memitem:a0ea8f9617dcaa57cabfd1384e2192082"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a0ea8f9617dcaa57cabfd1384e2192082">cone</a> () const </td></tr>
+<tr class="memdesc:a0ea8f9617dcaa57cabfd1384e2192082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cone of this.  <a href="#a0ea8f9617dcaa57cabfd1384e2192082">More...</a><br/></td></tr>
 <tr class="separator:a0ea8f9617dcaa57cabfd1384e2192082"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a555a299c5b04f02fbbc6fc460fa8b2ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a555a299c5b04f02fbbc6fc460fa8b2ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCone</b> (const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt; Number &gt; &amp;_cone)</td></tr>
+<tr class="memitem:a555a299c5b04f02fbbc6fc460fa8b2ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a555a299c5b04f02fbbc6fc460fa8b2ab">setCone</a> (const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt; Number &gt; &amp;_cone)</td></tr>
+<tr class="memdesc:a555a299c5b04f02fbbc6fc460fa8b2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly sets the cone.  <a href="#a555a299c5b04f02fbbc6fc460fa8b2ab">More...</a><br/></td></tr>
 <tr class="separator:a555a299c5b04f02fbbc6fc460fa8b2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fae4597b027b20c84a1f96ccd49c011"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fae4597b027b20c84a1f96ccd49c011"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setNeighbors</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point, const std::set&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_neighbors)</td></tr>
@@ -223,7 +237,7 @@ std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Numb
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;i)</td></tr>
 <tr class="separator:a2c9234a5476a702d2160108d26aca0ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf37ba8952a5597971904c445d0f99c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf37ba8952a5597971904c445d0f99c9"></a>
-pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const vector_t&lt; Number &gt; &amp;_coord)</td></tr>
+pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_coord)</td></tr>
 <tr class="separator:adf37ba8952a5597971904c445d0f99c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d1019d396ee24f86e554d54555a69e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d1019d396ee24f86e554d54555a69e"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)</td></tr>
@@ -235,7 +249,7 @@ const pointVector &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ve
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;vertex) const </td></tr>
 <tr class="separator:ac5d46a5456072d2bb9c90862ab919447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea226f5ddc748bc0bee654e41704bdff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea226f5ddc748bc0bee654e41704bdff"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const vector_t&lt; Number &gt; &amp;vertex) const </td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;vertex) const </td></tr>
 <tr class="separator:aea226f5ddc748bc0bee654e41704bdff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05f4b3ca0eac543293cb0449023f02ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05f4b3ca0eac543293cb0449023f02ce"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
@@ -249,9 +263,6 @@ pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end<
 <tr class="memitem:a42cf05794c475b4ba1e6a53e2de7aedb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a42cf05794c475b4ba1e6a53e2de7aedb"></a>
 pointVector::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
 <tr class="separator:a42cf05794c475b4ba1e6a53e2de7aedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a86ab3980f475d5cf2636bba6fb3a90"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a86ab3980f475d5cf2636bba6fb3a90"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </td></tr>
-<tr class="separator:a3a86ab3980f475d5cf2636bba6fb3a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad939c7de16b8284a7004b44ad017c04b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad939c7de16b8284a7004b44ad017c04b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> ()</td></tr>
 <tr class="separator:ad939c7de16b8284a7004b44ad017c04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,20 +298,954 @@ virtual <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Nu
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a6634c23ade0771a68c2810fe37d3393c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6634c23ade0771a68c2810fe37d3393c"></a>
-static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Empty</b> ()</td></tr>
+<tr class="memitem:a6634c23ade0771a68c2810fe37d3393c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a6634c23ade0771a68c2810fe37d3393c">Empty</a> ()</td></tr>
+<tr class="memdesc:a6634c23ade0771a68c2810fe37d3393c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the empty polytope.  <a href="#a6634c23ade0771a68c2810fe37d3393c">More...</a><br/></td></tr>
 <tr class="separator:a6634c23ade0771a68c2810fe37d3393c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c1b97a9750fb1016766d82a8b135d3c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c1b97a9750fb1016766d82a8b135d3c"></a>
-static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
+<tr class="memitem:a7c1b97a9750fb1016766d82a8b135d3c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7c1b97a9750fb1016766d82a8b135d3c">type</a> ()</td></tr>
+<tr class="memdesc:a7c1b97a9750fb1016766d82a8b135d3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type.  <a href="#a7c1b97a9750fb1016766d82a8b135d3c">More...</a><br/></td></tr>
 <tr class="separator:a7c1b97a9750fb1016766d82a8b135d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename Converter&gt;<br/>
 class hypro::VPolytopeT&lt; Number, Converter &gt;</h3>
 
+<p>The class implementing the vertex representation of a convex polytope. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classhypro_1_1Converter.html">Converter</a></td><td>The used converter. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00029">29</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00031">31</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ae59462aa5d326c0734e485d257fe19c8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor from a single point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4c77c66c070398180f355ba0d355cea3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype">const pointVector &amp;&#160;</td>
+          <td class="paramname"><em>points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor from a vector of points. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">points</td><td>The points. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="adeaaee4cb5afce3d8b627c3585506e0a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>rawPoints</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor from a vector of coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rawPoints</td><td>The raw coordinates. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afcbd5fcc7be4b5a19829385def9b7eba"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_constraints</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td>
+          <td class="paramname"><em>_constants</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor from a constraint system represented by a matrix and a vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_constraints</td><td>The constraints. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_constants</td><td>The constants. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aa39364fda3302e53fbd19697e341dde0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">orig</td><td>The original. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3e6438c03fbfc8b1959537ae70cf65b9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::<a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>_orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Move constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">&lt;unnamed&gt;</td><td>The original. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a3feb55271529f227dcaf94454f22a694"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::affineTransformation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies an affine transformation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix describing the linear part of the transformation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The offset vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0ea8f9617dcaa57cabfd1384e2192082"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::cone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the cone of this. </p>
+<dl class="section return"><dt>Returns</dt><dd>The cone. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00263">263</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6bf5683c7447ca454c0f5e2c64db2ce4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if a point is contained in the polytope. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the polytope. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97b984e3518c83e66e69a38047b8c972"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if a point represented by its coordinates is contained in the polytope. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">vec</td><td>The point vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the polytope. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4342de4de7883c5145c51e03e89ec8b2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if the other polytope is fully contained in this polytope. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_other</td><td>The other polytope. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if the other polytope is contained. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6450c18712c409d3a17b8f4881476ae4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::dimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the space dimension. </p>
+<dl class="section return"><dt>Returns</dt><dd>The space dimension. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00230">230</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa3897fe113359146138d2c84abd06752"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::empty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if the polytope represents the empty set. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if there are no vertices. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00218">218</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6634c23ade0771a68c2810fe37d3393c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::Empty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs the empty polytope. </p>
+<dl class="section return"><dt>Returns</dt><dd>The polytope. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00224">224</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1VPolytopeT.html#a786f1613241c12598643c197180b8f44">hypro::VPolytopeT&lt; Number, Converter &gt;::VPolytopeT()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa888fc005c1a971317d675dbf6441c49"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::intersect </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Intersects the polytope with a second polytope. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af950cba803eeaeee978c814332fdaadc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::intersectHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intersects the polytope with a halfspace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a16f76074c04a24b9b5679ef28d66e185"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::intersectHalfspaces </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intersects the polytope with a set of halfspaces represented by constraints. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The constraint matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The constraint vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7938e23ef4c0361b99bafe146d897302"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::linearTransformation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a linear transformation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix representing the transformation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ade8b9a84ea18f35f5765a43ddbd1580c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::minkowskiSum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the Minkowski sum of two V-polytopes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa0f568279ad700889dbe2d708b9ccccd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dimensions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Projects the polytope on the passed dimensions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dimensions</td><td>The dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The projected polytope. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a348a9485ad052d94057c694664c2e59e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::reduced </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether the polytope has been reduced (i.e. the set of vertices is minimal). </p>
+<dl class="section return"><dt>Returns</dt><dd>True, if the set of vertices is minimal. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00251">251</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac628d7ce1a652981f220ebd83f62f997"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&gt; <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intersects the polytope with a halfspace and determines if the result is empty. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7c5b51da3a68d057492701cc0149f672"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;bool, <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&gt; <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspaces </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intersects the polytope with a set of halfspaces represented by a matrix and a vector. Determines if the result is empty. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a555a299c5b04f02fbbc6fc460fa8b2ab"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::setCone </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Cone.html">Cone</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_cone</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Explicitly sets the cone. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_cone</td><td>The cone. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00269">269</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad41f5cc3939afe9202dc4bf2bb3f7dbf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of vertices. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of vertices. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00239">239</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3699a33022faceb6943a87b2e281d78"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Number <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::supremum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the supremum of the set according to the infty norm. </p>
+<dl class="section return"><dt>Returns</dt><dd>The supremum. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7c1b97a9750fb1016766d82a8b135d3c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the type. </p>
+<dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00245">245</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1121ee3ad173f9ed6c0be6b282c7622d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of this and the right hand side polytope. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abf5d51b4434baff8cf6bc50b6cf37f97"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of this and a set of polytopes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The set of polytopes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/<a class="el" href="VPolytope_8h_source.html">VPolytope.h</a></li>
 </ul>
 </div><!-- contents -->

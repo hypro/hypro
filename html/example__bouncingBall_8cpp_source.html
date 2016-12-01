@@ -111,11 +111,11 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;config.h&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;datastructures/hybridAutomata/LocationManager.h&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;datastructures/hybridAutomata/Transition.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;datastructures/hybridAutomata/HybridAutomaton.h&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="LocationManager_8h.html">datastructures/hybridAutomata/LocationManager.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Transition_8h.html">datastructures/hybridAutomata/Transition.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="HybridAutomaton_8h.html">datastructures/hybridAutomata/HybridAutomaton.h</a>&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Point_8h.html">datastructures/Point.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;representations/GeometricObject.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="GeometricObject_8h.html">representations/GeometricObject.h</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Reach_8h.html">algorithms/reachability/Reach.h</a>&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;util/Plotter.h&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">// typedefs for simplification.</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">typedef</span> mpq_class Number;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">typedef</span> hypro::HPolytope&lt;Number&gt; Representation;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;Number&gt;</a> Representation;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// LocationManager holds all created locations and allows to create new locations.</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;</a>&amp; lManager = <a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;::getInstance</a>();</div>
@@ -137,12 +137,12 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a> bBallAutomaton = <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>();</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">// matrix defining the flow (note: 3rd dimension for constant parts).</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    matrix_t&lt;Number&gt; flowMatrix = matrix_t&lt;Number&gt;(3,3);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> flowMatrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(3,3);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">// location parameter setting.</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">// creation of the invariant.</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    matrix_t&lt;Number&gt; invariantMat = matrix_t&lt;Number&gt;(1,2);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    vector_t&lt;Number&gt; invariantVec = vector_t&lt;Number&gt;(1);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> invariantMat = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(1,2);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> invariantVec = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>(1);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">struct </span><a class="code" href="classhypro_1_1Location.html">Location</a>&lt;Number&gt;::Invariant inv;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    invariantVec(0) = Number(0);</div>
@@ -168,8 +168,8 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// setup of the transition.</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// guard</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    typename <a class="code" href="classhypro_1_1Transition.html">Transition</a>&lt;Number&gt;::Guard guard;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    matrix_t&lt;Number&gt; guardMat = matrix_t&lt;Number&gt;(3,2);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    vector_t&lt;Number&gt; guardVec = vector_t&lt;Number&gt;(3);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt; guardMat = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(3,2);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; guardVec = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt;(3);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    guardVec(0) = Number(0);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    guardVec(1) = Number(0);</div>
@@ -187,8 +187,8 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// reset function</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    typename <a class="code" href="classhypro_1_1Transition.html">Transition</a>&lt;Number&gt;::Reset reset;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    vector_t&lt;Number&gt; constantReset = vector_t&lt;Number&gt;(2,1);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    matrix_t&lt;Number&gt; linearReset = matrix_t&lt;Number&gt;(2,2);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; constantReset = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt;(2,1);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt; linearReset = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(2,2);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    constantReset(0) = Number(0);</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    constantReset(1) = Number(0);</div>
@@ -215,8 +215,8 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    loc1-&gt;addTransition(trans);</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">// create Box holding the initial set.</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    matrix_t&lt;Number&gt; boxMat = matrix_t&lt;Number&gt;(4,2);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    vector_t&lt;Number&gt; boxVec = vector_t&lt;Number&gt;(4);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt; boxMat = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(4,2);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; boxVec = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt;(4);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    boxVec(0) = Number(carl::rationalize&lt;Number&gt;(10.2));</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    boxVec(1) = Number(-10);</div>
@@ -275,16 +275,23 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;}</div>
-<div class="ttc" id="classhypro_1_1HybridAutomaton_html"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00023">HybridAutomaton.h:23</a></div></div>
-<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00022">Location.h:22</a></div></div>
+<div class="ttc" id="GeometricObject_8h_html"><div class="ttname"><a href="GeometricObject_8h.html">GeometricObject.h</a></div></div>
+<div class="ttc" id="classhypro_1_1HybridAutomaton_html"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a></div><div class="ttdoc">Class for hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00024">HybridAutomaton.h:24</a></div></div>
+<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for a single location of a hybrid automaton. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00024">Location.h:24</a></div></div>
+<div class="ttc" id="Transition_8h_html"><div class="ttname"><a href="Transition_8h.html">Transition.h</a></div></div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00059">Plotter.h:59</a></div></div>
 <div class="ttc" id="Point_8h_html"><div class="ttname"><a href="Point_8h.html">Point.h</a></div></div>
-<div class="ttc" id="classhypro_1_1LocationManager_html"><div class="ttname"><a href="classhypro_1_1LocationManager.html">hypro::LocationManager</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00019">Location.h:19</a></div></div>
-<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00016">Location.h:16</a></div></div>
-<div class="ttc" id="structhypro_1_1RawState_html"><div class="ttname"><a href="structhypro_1_1RawState.html">hypro::RawState</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00020">HybridAutomaton.h:20</a></div></div>
+<div class="ttc" id="classhypro_1_1LocationManager_html"><div class="ttname"><a href="classhypro_1_1LocationManager.html">hypro::LocationManager</a></div><div class="ttdoc">Class for a location manager which holds all created locations. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00016">Location.h:16</a></div></div>
+<div class="ttc" id="HybridAutomaton_8h_html"><div class="ttname"><a href="HybridAutomaton_8h.html">HybridAutomaton.h</a></div></div>
+<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for a transition of a hybrid automaton. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00013">Location.h:13</a></div></div>
+<div class="ttc" id="structhypro_1_1RawState_html"><div class="ttname"><a href="structhypro_1_1RawState.html">hypro::RawState</a></div><div class="ttdoc">Struct holding the raw information about a state. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00015">HybridAutomaton.h:15</a></div></div>
 <div class="ttc" id="Reach_8h_html"><div class="ttname"><a href="Reach_8h.html">Reach.h</a></div></div>
+<div class="ttc" id="LocationManager_8h_html"><div class="ttname"><a href="LocationManager_8h.html">LocationManager.h</a></div></div>
 <div class="ttc" id="namespacehypro_html_a430a74d1edbcc624d5e03c4ec111c24c"><div class="ttname"><a href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">hypro::convert</a></div><div class="ttdeci">Halfspace&lt; To &gt; convert(const Halfspace&lt; From &gt; &amp;in)</div><div class="ttdoc">Conversion operator for the number type. </div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00296">Halfspace.h:296</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00082">Converter.h:82</a></div></div>
 <div class="ttc" id="structhypro_1_1reachability_1_1ReachabilitySettings_html"><div class="ttname"><a href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings</a></div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00008">Settings.h:8</a></div></div>
+<div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00021">types.h:21</a></div></div>
 <div class="ttc" id="classhypro_1_1reachability_1_1Reach_html"><div class="ttname"><a href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a></div><div class="ttdoc">Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="Reach_8h_source.html#l00060">Reach.h:60</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

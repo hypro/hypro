@@ -120,18 +120,18 @@ $(document).ready(function(){initNavTree('example__linearTransformation_8cpp_sou
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">typedef</span> mpq_class Number;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    HPolytope&lt;Number&gt; box;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> box;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    box.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>({Number(1),Number(0)},Number(1)));</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    box.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>({Number(0),Number(1)},Number(1)));</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    box.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>({Number(-1),Number(0)},Number(1)));</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    box.insert(<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>({Number(0),Number(-1)},Number(1)));</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    matrix_t&lt;Number&gt; A = matrix_t&lt;Number&gt;(2,2);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> A = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(2,2);</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    A &lt;&lt; 2,0,0,2;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    vector_t&lt;Number&gt; b = vector_t&lt;Number&gt;(2);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> b = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>(2);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    b &lt;&lt; 5,0;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    HPolytope&lt;Number&gt; boxTrafoed = box.affineTransformation(A,b);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope&lt;Number&gt;</a> boxTrafoed = box.affineTransformation(A,b);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">//HPolytope&lt;Number&gt; boxTrafoed = box.linearTransformation(A,vector_t&lt;Number&gt;::Zero(2));</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    std::cout &lt;&lt; boxTrafoed &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
@@ -144,8 +144,11 @@ $(document).ready(function(){initNavTree('example__linearTransformation_8cpp_sou
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00059">Plotter.h:59</a></div></div>
-<div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
+<div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdoc">Forward declaration of class Halfspace. </div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00082">Converter.h:82</a></div></div>
+<div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00021">types.h:21</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a020e89ed0c39a091bf49a0b400e511f8"><div class="ttname"><a href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">hypro::Plotter::plot2d</a></div><div class="ttdeci">void plot2d() const </div><div class="ttdoc">Writes the actual plot to the output file. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

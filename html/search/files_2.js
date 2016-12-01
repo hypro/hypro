@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['halfspace_2eh',['Halfspace.h',['../Halfspace_8h.html',1,'']]],
-  ['helperfunctions_2eh',['helperFunctions.h',['../helperFunctions_8h.html',1,'']]]
+  ['facet_2eh',['Facet.h',['../Facet_8h.html',1,'']]]
 ];
