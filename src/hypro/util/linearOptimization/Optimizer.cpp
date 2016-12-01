@@ -17,3 +17,5 @@ using Number = mpq_class;
 #endif
 
 template class hypro::Optimizer<Number>;
+
+template class hypro::Optimizer<double>;
