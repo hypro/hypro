@@ -172,8 +172,8 @@ TYPED_TEST(PointTest, DimensionTest)
     std::vector<unsigned> dims;
     dims.push_back(0);
     dims.push_back(2);
-    this->p1.reduceToDimensions(dims);
-    EXPECT_EQ(this->p1.dimension(), 2);
+    this->p1 = this->p1.reduceToDimensions(dims);
+    EXPECT_EQ(2, this->p1.dimension());
 }
 
 /**
