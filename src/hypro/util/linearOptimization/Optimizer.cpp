@@ -7,6 +7,9 @@
 #include <gmpxx.h>
 #endif
 
+template<typename Number>
+bool hypro::Optimizer<Number>::mWarnInexact = false;
+
 #ifdef USE_CLN_NUMBERS
 using Number = cln::cl_RA;
 #else

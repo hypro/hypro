@@ -40,6 +40,10 @@ namespace hypro {
 		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 		#endif
 
+		#ifdef VERIFY_RESULT
+		outputToSmtlibFormat(simplex , 0, objective, "Collected_out_");
+		#endif
+
 		smtrat::Answer smtratCheck = simplex.check();
 
 		#ifdef DEBUG_MSG

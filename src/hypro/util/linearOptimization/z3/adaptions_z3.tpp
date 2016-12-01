@@ -24,11 +24,11 @@ namespace hypro {
 			addPreSolution(z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second);
 		} else if( preSolution.errorCode == INFEAS) {
 			if(z3Optimizer.check() == z3::unsat){
-				//std::cout << "SMTRAT infeas." << std::endl;
+				//std::cout << "Z3 infeas." << std::endl;
 				return preSolution; // glpk correctly detected infeasibility.
 			} // if glpk falsely detected infeasibility, we cope with this case below.
 		} else { // if glpk already detected unboundedness we return its result.
-			return preSolution;
+			return preSolution; // Todo: Check unboundedness
 		}
 		#endif
 

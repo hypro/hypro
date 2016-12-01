@@ -57,16 +57,16 @@ namespace hypro {
 				}
 			}
 			res.optimumValue = point;
-			#ifdef VERIFY_RESULT
-			solver.push();
-			smtrat::FormulaT inversedObjective(objective-valuation.asRational(), carl::Relation::GREATER);
-			solver.inform(inversedObjective);
-			solver.add(inversedObjective);
-			if(solver.check() != smtrat::Answer::UNSAT) {
-				outputToSmtlibFormat(solver,fileCounter++, objective, filenamePrefix);
-			}
-			solver.pop();
-			#endif
+			//#ifdef VERIFY_RESULT
+			//solver.push();
+			//smtrat::FormulaT inversedObjective(objective-valuation.asRational(), carl::Relation::GREATER);
+			//solver.inform(inversedObjective);
+			//solver.add(inversedObjective);
+			//if(solver.check() != smtrat::Answer::UNSAT) {
+			//	outputToSmtlibFormat(solver,fileCounter++, objective, filenamePrefix);
+			//}
+			//solver.pop();
+			//#endif
 		}
 		return res;
 	}

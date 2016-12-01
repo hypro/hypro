@@ -2,7 +2,7 @@
 
 #define USE_PRESOLUTION
 #define RECREATE_SOLVER
-//#define VERIFY_RESULT
+#define VERIFY_RESULT
 //#define DEBUG_MSG
 
 #include "flags.h"
@@ -44,9 +44,7 @@ namespace hypro {
 
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
-		#ifdef HYPRO_LOGGING
-		mutable bool		mWarnInexact = false;
-		#endif
+		static bool			mWarnInexact;
 
 		// dependent members, all mutable
 		#ifdef HYPRO_USE_SMTRAT
@@ -89,11 +87,11 @@ namespace hypro {
 			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
 			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
-				if(!mWarnInexact && carl::is_rational<Number>().value){
-					// only warn once
-					mWarnInexact = true;
-					WARN("Atttention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
-				}
+			if(!mWarnInexact && carl::is_rational<Number>().value){
+				// only warn once
+				mWarnInexact = true;
+				WARN("Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
+			}
 			#endif
 		}
 
