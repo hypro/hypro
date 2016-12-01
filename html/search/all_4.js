@@ -13,6 +13,8 @@ var searchData=
   ['errorhandler',['ErrorHandler',['../structhypro_1_1parser_1_1ErrorHandler.html',1,'hypro::parser']]],
   ['evaluate',['evaluate',['../classhypro_1_1Halfspace.html#a62f270d8f1995e32d0ba12125142ab83',1,'hypro::Halfspace::evaluate()'],['../classhypro_1_1Ellipsoid.html#a5a335aa9da6b7b6f78cb02ab34d681ae',1,'hypro::Ellipsoid::evaluate()'],['../classhypro_1_1BallSupportFunction.html#aec309f85003a283972a77a0fad91443d',1,'hypro::BallSupportFunction::evaluate()'],['../classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3',1,'hypro::EllipsoidSupportFunction::evaluate()'],['../classhypro_1_1PolytopeSupportFunction.html#a5e3ce748d0b4370d4016355db465663f',1,'hypro::PolytopeSupportFunction::evaluate()']]],
   ['evaluationresult',['evaluationResult',['../structhypro_1_1evaluationResult.html',1,'hypro::evaluationResult'],['../structhypro_1_1EvaluationResult.html',1,'hypro::EvaluationResult&lt; Number &gt;']]],
+  ['example_5fplot_2ecpp',['example_plot.cpp',['../example__plot_8cpp.html',1,'']]],
+  ['example_5fppl_5fnncpolyhedra_2ecpp',['example_ppl_nncPolyhedra.cpp',['../example__ppl__nncPolyhedra_8cpp.html',1,'']]],
   ['extadd',['extAdd',['../classhypro_1_1Point.html#aa559ec4ca8a5898e7cd8ef5fa9db69f5',1,'hypro::Point']]],
   ['extend',['extend',['../classhypro_1_1Point.html#a175184ee4ceb57261feb0a378fa7d42c',1,'hypro::Point']]]
 ];

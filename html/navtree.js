@@ -27,21 +27,22 @@ var NAVTREE =
     ] ],
     [ "Files", null, [
       [ "File List", "files.html", "files" ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
 ".html",
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a284c02d0e2014eda8a08a875d6cdc78f",
-"classhypro_1_1Facet.html#adc0b29894f055fe55757cd941c4698c8",
-"classhypro_1_1Location.html#a2d83a60461ac086d0d3a7f3f17fbff9a",
-"classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484",
-"classhypro_1_1TaylorModel.html#a099923b378d661f6f54b3837214006d0",
-"classhypro_1_1VertexEnumeration.html",
-"structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html#af0fcdbfc41fcb9f78f09c4759febe0df",
-"structhypro_1_1parser_1_1resetParser.html#a3894318c5ad8e78bce21e893966ce28f"
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a1aa854e8d5b7990a47549248fca9d0f2",
+"classhypro_1_1Facet.html#ac26a9439913d4d868a3cbf167e1c3430",
+"classhypro_1_1Location.html#a0514a760b4d41edab507cdfb7385a4f3",
+"classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac",
+"classhypro_1_1TaylorModel.html",
+"classhypro_1_1VertexContainer.html#afa722d7b9fd046bbe49fb4d79b412ec3",
+"namespacemembers.html",
+"structhypro_1_1parser_1_1modeParser.html#a44b0087529ab4067ad26b75542360905"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

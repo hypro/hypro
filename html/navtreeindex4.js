@@ -1,5 +1,8 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac":[6,0,1,33,65],
+"classhypro_1_1Point.html#aad789e3df3c327b7c22529c98445f56a":[6,0,1,33,72],
+"classhypro_1_1Point.html#ab4b6a9af3faf3bb94a017fdfe9828a16":[6,0,1,33,62],
 "classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484":[6,0,1,33,64],
 "classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3":[6,0,1,33,19],
 "classhypro_1_1Point.html#ac969abfddb689b162081648980a14396":[6,0,1,33,46],
@@ -246,8 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1SymmetricCenteredBoxSupportFunction.html#ace48a0103daa11f0a48a74da768aadf8":[6,0,1,6,7],
 "classhypro_1_1SymmetricCenteredBoxSupportFunction.html#ace48a0103daa11f0a48a74da768aadf8":[6,0,1,6,6],
 "classhypro_1_1SymmetricCenteredBoxSupportFunction.html#aeab11f1a0da887be1d9297c8a8c3f61d":[6,0,1,6,1],
-"classhypro_1_1SymmetricCenteredBoxSupportFunction.html#aeab11f1a0da887be1d9297c8a8c3f61d":[6,0,1,6,0],
-"classhypro_1_1TaylorModel.html":[6,0,1,69],
-"classhypro_1_1TaylorModel.html#a070f699793236652465675e36d3d7f3a":[6,0,1,69,13],
-"classhypro_1_1TaylorModel.html#a0900955090c93a4c2fc399b3ff335c79":[6,0,1,69,37]
+"classhypro_1_1SymmetricCenteredBoxSupportFunction.html#aeab11f1a0da887be1d9297c8a8c3f61d":[6,0,1,6,0]
 };

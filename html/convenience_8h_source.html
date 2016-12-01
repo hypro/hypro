@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -206,21 +207,20 @@ $(document).ready(function(){initNavTree('convenience_8h_source.html','');});
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">return</span> objective;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    }</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#ifdef VERIFY_RESULT</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> outputToSmtlibFormat(<span class="keyword">const</span> smtrat::SimplexSolver&amp; solver, <span class="keywordtype">unsigned</span> count, <span class="keyword">const</span> smtrat::Poly&amp; objective, <span class="keyword">const</span> std::string&amp; _prefix) {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        std::string filename = _prefix + std::to_string(count) + <span class="stringliteral">&quot;.smt2&quot;</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        std::ofstream ofs(filename, std::ofstream::out);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;(set-logic QF_LRA)\n&quot;</span> &lt;&lt; <span class="stringliteral">&quot;(set-info :smt-lib-version 2.0)\n&quot;</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        ofs &lt;&lt; ((smtrat::FormulaT)solver.formula()).toString( <span class="keyword">false</span>, 1, <span class="stringliteral">&quot;&quot;</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">true</span> ) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;;(maximize( &quot;</span> &lt;&lt; objective.toString(<span class="keyword">false</span>) &lt;&lt; <span class="stringliteral">&quot;))\n&quot;</span>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;(check-sat)\n(exit)&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        ofs.close();</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    }</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;} <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#ifdef VERIFY_RESULT</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor"></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> outputToSmtlibFormat(<span class="keyword">const</span> smtrat::SimplexSolver&amp; solver, <span class="keywordtype">unsigned</span> count, <span class="keyword">const</span> smtrat::Poly&amp; objective, <span class="keyword">const</span> std::string&amp; _prefix) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        std::string filename = _prefix + std::to_string(count) + <span class="stringliteral">&quot;.smt2&quot;</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        std::ofstream ofs(filename, std::ofstream::app);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;(set-logic QF_LRA)\n&quot;</span> &lt;&lt; <span class="stringliteral">&quot;(set-info :smt-lib-version 2.0)\n(push 1)&quot;</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        ofs &lt;&lt; ((smtrat::FormulaT)solver.formula()).toString( <span class="keyword">false</span>, 1, <span class="stringliteral">&quot;&quot;</span>, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">true</span> );</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;(maximize &quot;</span> &lt;&lt; objective.toString(<span class="keyword">false</span>) &lt;&lt; <span class="stringliteral">&quot; )\n&quot;</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        ofs &lt;&lt; <span class="stringliteral">&quot;(check-sat)\n(reset)&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        ofs.close();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    }</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

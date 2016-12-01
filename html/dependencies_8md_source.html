@@ -51,6 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,24 +114,26 @@ $(document).ready(function(){initNavTree('dependencies_8md.html','');});
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;The very basic dependencies include the libraries</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;- [CMake](https:<span class="comment">//cmake.org/) (version &gt;= 2.8.1), a build system,</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;- [boost](http:<span class="comment">//www.boost.org/) (version &gt;= 1.55), a collection of C++ libaries,</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;- [glpk](https:<span class="comment">//www.gnu.org/software/glpk/) (version &gt;= 4.6), a package for linear solving (compile with &quot;--with-gmp&quot; set) and</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;- [CaRL](https:<span class="comment">//github.com/smtrat/carl), a C++ library for arithmetic.</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;The first four dependencies can be obtained as Ubuntu packages or directly downloaded from the referenced websites.</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;To compile HyPro, a suitable C++ compiler is required, either g++ (at least version 4.9) or clang++ (at least version 3.5).</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;Additional (optional) dependencies</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;----------------------------------</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;Currently HyPro provides an extended interface for linear solving, which allows to _additionally_ add __one__ of the following linear optimizers:</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;- a C++ compiler, g++ (version &gt;= 4.9) or clang++ (version &gt;= 3.6),</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;- [gmpxx](https:<span class="comment">//gmplib.org/) the Gnu Multiprecision library C++ interface,</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;- [CMake](https:<span class="comment">//cmake.org/) (version &gt;= 2.8.1), a build system,</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;- [boost](http:<span class="comment">//www.boost.org/) (version &gt;= 1.55), a collection of C++ libaries,</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;- [glpk](https:<span class="comment">//www.gnu.org/software/glpk/) (version &gt;= 4.6), a package for linear solving (compile with &quot;--with-gmp&quot; set) and</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;- [CaRL](https:<span class="comment">//github.com/smtrat/carl), a C++ library for arithmetic.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;The first four dependencies can be obtained as Ubuntu packages or directly downloaded from the referenced websites.</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;To compile HyPro, a suitable C++ compiler is required, either g++ (at least version 4.9) or clang++ (at least version 3.5).</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;Additional (optional) dependencies</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;----------------------------------</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;- [SMT-RAT](https:<span class="comment">//github.com/smtrat/smtrat)</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;- [SoPlex](http:<span class="comment">//soplex.zib.de/)</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;- [Z3](https:<span class="comment">//github.com/Z3Prover/z3)</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;Using one of these solvers can be enabled by the respective cmake flag , i.e. HYPRO_USE_SMTRAT to enable SMT-RAT support. When using one of the previously mentioned solvers, the usage of rational types such as mpq_class is improved, as linear optimization now can be performed providing _exact_ results.</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;Currently HyPro provides an extended interface for linear solving, which allows to _additionally_ add __one__ of the following linear optimizers:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;- [SMT-RAT](https:<span class="comment">//github.com/smtrat/smtrat)</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;- [SoPlex](http:<span class="comment">//soplex.zib.de/)</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;- [Z3](https:<span class="comment">//github.com/Z3Prover/z3)</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;Using one of these solvers can be enabled by the respective cmake flag , i.e. HYPRO_USE_SMTRAT to enable SMT-RAT support. When using one of the previously mentioned solvers, the usage of rational types such as mpq_class is improved, as linear optimization now can be performed providing _exact_ results.</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
