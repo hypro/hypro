@@ -1,11 +1,7 @@
 /**
  * The class which represents a box. A box is represented by two points, its maximal and its minimal vertex.
  *
- * @file Box.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2014-01-16
- * @version 2015-02-27
+ * @file Box_double.h
  */
 
 #pragma once
@@ -14,6 +10,11 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class holding a specialization of the generic BoxT type with double numbers.
+ *
+ * @tparam     Converter  The used converter.
+ */
 template <typename Converter>
 class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Converter>> {
   private:

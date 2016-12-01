@@ -4,9 +4,9 @@
  * of the created box as well as the intersection with a half space and an included test for emptiness of the resulting set.
  */
 
-#include "../hypro/representations/GeometricObject.h"
-#include "../hypro/datastructures/Halfspace.h"
-#include "../hypro/util/Plotter.h"
+#include "representations/GeometricObject.h"
+#include "datastructures/Halfspace.h"
+#include "util/Plotter.h"
 
 int main()
 {

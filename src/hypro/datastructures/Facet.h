@@ -1,19 +1,20 @@
-/*
- * A file which contains the data for a facet needed by the algorithm for convex hulls.
- * File:   Facet.h
- * Author: stefan, tayfun
- *
- * Created on March 19, 2014, 4:08 PM
- * @version 2015-01-21
+/**
+ * @file Facet.h
  */
 
 #pragma once
 
 #include "../types.h"
 #include "Halfspace.h"
-#include "../util/linearSolving.h"
+#include "util/linearSolving.h"
 
 namespace hypro {
+
+/**
+ * @brief      Class for a facet of a polytope.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <class Number>
 class Facet {
   public:

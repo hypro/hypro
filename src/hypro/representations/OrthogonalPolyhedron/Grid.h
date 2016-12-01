@@ -2,9 +2,6 @@
  * @file    Grid.h
  * @author 	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author  Benedikt Seidl
- *
- * @since   2014-04-14
- * @version 2015-08-26
  */
 
 #pragma once
@@ -17,6 +14,12 @@
 #include <bitset>
 
 namespace hypro {
+
+/**
+ * @brief      Struct holding a point iterator allowing to iterate over a vector of points represented by their coordinates.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 struct pointIt {
 	typename std::vector<std::vector<Number>> v;
@@ -59,7 +62,9 @@ struct pointIt {
 };
 
 /**
- * Represents a grid which maps points to its color.
+ * @brief      Class for a grid which maps points to their assigned color.
+ *
+ * @tparam     Number  The used number type.
  */
 template <typename Number>
 class Grid {

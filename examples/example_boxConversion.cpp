@@ -78,35 +78,35 @@ int main(int argc, char const *argv[])
         std::set<std::pair<long int,long int> > results3;
 
         for( int index = 0 ; index < runs ; ++index){
-                std::pair<long int,long int> testresult;
+            std::pair<long int,long int> testresult;
 
-                //2nd polytope
-                clock::time_point start = clock::now();
+            //2nd polytope
+            clock::time_point start = clock::now();
 
-                Converter<Number>::toBox(hpolytope2);
+            Converter<Number>::toBox(hpolytope2);
 
-                std::cout << "Total time2(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+            std::cout << "Total time2(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+            testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
 
-                start = clock::now();
-                Converter<Number>::toBox(hpolytope2, ALTERNATIVE);
-                std::cout << "Total time2(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-                results2.insert(testresult);
+            start = clock::now();
+            Converter<Number>::toBox(hpolytope2, ALTERNATIVE);
+            std::cout << "Total time2(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+            testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+            results2.insert(testresult);
 
-                //3rd polytope
-                start = clock::now();
+            //3rd polytope
+            start = clock::now();
 
-                Converter<Number>::toBox(hpolytope3);
+            Converter<Number>::toBox(hpolytope3);
 
-                std::cout << "Total time3(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+            std::cout << "Total time3(ConvexHull): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+            testresult.first = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
 
-                start = clock::now();
-                Converter<Number>::toBox(hpolytope3, ALTERNATIVE);
-                std::cout << "Total time3(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
-                testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
-                results3.insert(testresult);
+            start = clock::now();
+            Converter<Number>::toBox(hpolytope3, ALTERNATIVE);
+            std::cout << "Total time3(Evaluation): " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000 << std::endl;
+            testresult.second = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000;
+            results3.insert(testresult);
         }
 
         double avgHull2 = 0;
@@ -116,14 +116,14 @@ int main(int argc, char const *argv[])
 
         for(auto resultIt = results2.begin(); resultIt != results2.end(); ++resultIt )
         {
-                avgHull2 += double((*resultIt).first/double(runs));
-                avgEval2 += double((*resultIt).second/double(runs));
+            avgHull2 += double((*resultIt).first/double(runs));
+            avgEval2 += double((*resultIt).second/double(runs));
         }
 
         for(auto resultIt = results3.begin(); resultIt != results3.end(); ++resultIt )
         {
-                avgHull3 += double((*resultIt).first/double(runs));
-                avgEval3 += double((*resultIt).second/double(runs));
+            avgHull3 += double((*resultIt).first/double(runs));
+            avgEval3 += double((*resultIt).second/double(runs));
         }
 
         std::cout << "AVGHull2: " << avgHull2 << ", AVGEval2: " << avgEval2 << std::endl;

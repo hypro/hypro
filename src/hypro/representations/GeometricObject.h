@@ -1,3 +1,7 @@
+/**
+ * @file GeometricObject.h
+ */
+
 #pragma once
 
 #define INCL_FROM_GOHEADER true
@@ -10,15 +14,22 @@
 
 namespace hypro {
 
-// forward declarations
+/**
+ * @brief      Forward declaration of class Point.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class Point;
 
+/**
+ * @brief      Forward declaration of class Halfspace.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class Halfspace;
 
 /**
- * @brief      Purely virtual class defining an interface for geometric objects.
+ * @brief      Purely virtual class defining a common interface for geometric objects.
  * @tparam     Number  The used number type.
  */
 template<typename Number, typename DerivedShape>

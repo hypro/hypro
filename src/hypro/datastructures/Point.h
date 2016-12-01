@@ -1,15 +1,9 @@
 /**
- * The point class is the basis for all implementation. It consists of a vector
- * of coordinates which forms a point in a n-dimensional space.
  * @file   Point.h
  *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Sebastian Junges
  * @author Benedikt Seidl
- *
- *
- * @since	2011-01-17
- * @version	2015-08-27
  */
 #pragma once
 
@@ -23,6 +17,8 @@ namespace hypro {
 
 /**
  * @brief      Class for a point.
+ * @details    The point class is the basis for all implementation. It consists of a vector
+ * of coordinates which forms a point in a n-dimensional space.
  * @tparam     Number  The used number type.
  */
 template <class Number>

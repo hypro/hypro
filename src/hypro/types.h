@@ -14,11 +14,14 @@
 
 // global typedefs
 namespace hypro {
+    /**
+     * typedef wrapping an Eigen::Matrix type with only one column.
+     */
     template <typename Number>
     using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
     /**
-     * \typedef Typedef for the used matrix type.
+     * typedef wrapping an Eigen::Matrix type.
      */
     template <typename Number>
     using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
@@ -26,9 +29,14 @@ namespace hypro {
     template <typename Number>
     using vectorSet = std::set<vector_t<Number>>;
 
+    /**
+     * @brief      Enum implementing a tribool.
+     */
     enum TRIBOOL{TRUE,FALSE,NSET};
 
-    // Solution types
+    /**
+     * @brief      Enum of possible solution types for linear optimization.
+     */
     enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 
 } // namespace hypro
@@ -129,6 +137,12 @@ namespace Eigen {
 
 
 namespace std {
+	/**
+	 * @brief      Outstream operator for the SOLUTION enum.
+	 * @param      _out  The outstream reference.
+	 * @param[in]  _in   The enum type.
+	 * @return     A reference to the outstream.
+	 */
 	inline std::ostream& operator<<(std::ostream& _out, const hypro::SOLUTION& _in) {
     	switch(_in){
     		case hypro::SOLUTION::FEAS: {

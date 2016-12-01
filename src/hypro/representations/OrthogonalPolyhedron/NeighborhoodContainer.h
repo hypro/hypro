@@ -1,19 +1,17 @@
 /*
  * @file    NeighborhoodContainer.h
  * @author  Benedikt Seidl
- *
- * @since   2014-03-17
- * @version 2014-05-18
  */
 
 #pragma once
 
-#include "../../datastructures/Vertex.h"
+#include "datastructures/Vertex.h"
 #include <map>
 
 namespace hypro {
+
 /**
- * A neighborhood container which maps points
+ * @brief      A neighborhood container which maps points
  * to their set of neighbor points.
  */
 class NeighborhoodContainer {

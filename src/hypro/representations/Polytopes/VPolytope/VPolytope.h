@@ -1,10 +1,6 @@
 /*
- * The class implementing the vertex representation of a convex polytope.
  * @file   VPolytope.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2014-02-25
- * @version 2014-02-25
  */
 #pragma once
 
@@ -25,6 +21,12 @@
 
 namespace hypro {
 
+/**
+ * @brief      The class implementing the vertex representation of a convex polytope.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ */
 template <typename Number, typename Converter>
 class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> {
   public:
@@ -46,16 +48,51 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 * Constructors
 	 **************************************************************************/
 
-	// constructors for bounded v-polyhedra -> v-polytopes
+	/**
+	 * @brief      Default constructor.
+	 */
 	VPolytopeT();
+
+	/**
+	 * @brief      Constructor from a single point.
+	 * @param[in]  point  The point.
+	 */
 	VPolytopeT( const Point<Number>& point );
+
+	/**
+	 * @brief      Constructor from a vector of points.
+	 * @param[in]  points  The points.
+	 */
 	VPolytopeT( const pointVector& points );
+
+	/**
+	 * @brief      Constructor from a vector of coordinates.
+	 * @param[in]  rawPoints  The raw coordinates.
+	 */
 	VPolytopeT( const std::vector<vector_t<Number>>& rawPoints );
+
+	/**
+	 * @brief      Constructor from a constraint system represented by a matrix and a  vector.
+	 * @param[in]  _constraints  The constraints.
+	 * @param[in]  _constants    The constants.
+	 */
 	VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
 
+	/**
+	 * @brief      Copy constructor.
+	 * @param[in]  orig  The original.
+	 */
 	VPolytopeT( const VPolytopeT& orig ) = default;
+
+	/**
+	 * @brief      Move constructor.
+	 * @param[in]  <unnamed>  The original.
+	 */
 	VPolytopeT( VPolytopeT&& _orig ) = default;
 
+	/**
+	 * @brief      Destroys the object.
+	 */
 	~VPolytopeT() {
 	}
 
@@ -63,46 +100,172 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	* General interface
 	**************************************************************************/
 
+	/**
+	 * @brief      Projects the polytope on the passed dimensions.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected polytope.
+	 */
 	VPolytopeT project( const std::vector<unsigned>& dimensions ) const;
+
+	/**
+	 * @brief      Applies a linear transformation.
+	 * @param[in]  A     The matrix representing the transformation.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
+
+	/**
+	 * @brief      Applies an affine transformation.
+	 * @param[in]  A     The matrix describing the linear part of the transformation.
+	 * @param[in]  b     The offset vector.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+
+	/**
+	 * @brief      Computes the Minkowski sum of two V-polytopes.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
+
+	/**
+	 * @brief      Intersects the polytope with a second polytope.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
+
+	/**
+	 * @brief      Intersects the polytope with a halfspace.
+	 * @param[in]  rhs   The halfspace.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
+
+	/**
+	 * @brief      Intersects the polytope with a set of halfspaces represented by constraints.
+	 * @param[in]  _mat  The constraint matrix.
+	 * @param[in]  _vec  The constraint vector.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Intersects the polytope with a halfspace and determines if the result is empty.
+	 * @param[in]  rhs   The halfspace.
+	 * @return     A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty.
+	 */
 	std::pair<bool, VPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+
+	/**
+	 * @brief      Intersects the polytope with a set of halfspaces represented by a matrix and a vector. Determines if the result is
+	 * empty.
+	 * @param[in]  _mat  The matrix.
+	 * @param[in]  _vec  The vector.
+	 * @return     A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty.
+	 */
 	std::pair<bool, VPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Checks if a point is contained in the polytope.
+	 * @param[in]  point  The point.
+	 * @return     True, if the point lies inside the polytope.
+	 */
 	bool contains( const Point<Number>& point ) const;
+
+	/**
+	 * @brief      Checks if a point represented by its coordinates is contained in the polytope.
+	 * @param[in]  vec  The point vector.
+	 * @return     True, if the point lies inside the polytope.
+	 */
 	bool contains( const vector_t<Number>& vec ) const;
+
+	/**
+	 * @brief      Checks if the other polytope is fully contained in this polytope.
+	 * @param[in]  _other  The other polytope.
+	 * @return     True, if the other polytope is contained.
+	 */
 	bool contains( const VPolytopeT& _other ) const;
+
+	/**
+	 * @brief      Computes the convex hull of this and the right hand side polytope.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT unite( const VPolytopeT& rhs ) const;
+
+	/**
+	 * @brief      Computes the convex hull of this and a set of polytopes.
+	 * @param[in]  rhs   The set of polytopes.
+	 * @return     The resulting object.
+	 */
 	VPolytopeT unite( const std::vector<VPolytopeT>& rhs ) const;
 
+	/**
+	 * @brief      Clears the polytope.
+	 */
 	void clear();
 
 	/***************************************************************************
 	 * Getters, Setters, Iterators
 	 **************************************************************************/
 
+	/**
+	 * @brief      Checks if the polytope represents the empty set.
+	 * @return     True if there are no vertices.
+	 */
 	bool empty() const { return mVertices.empty(); }
 
+	/**
+	 * @brief      Constructs the empty polytope.
+	 * @return     The polytope.
+	 */
 	static VPolytopeT Empty() { return VPolytopeT(); }
 
+	/**
+	 * @brief      Returns the space dimension.
+	 * @return     The space dimension.
+	 */
 	std::size_t dimension() const {
 		if ( mVertices.empty() ) return 0;
 		return mVertices[0].dimension();
 	}
 
+	/**
+	 * @brief      Returns the number of vertices.
+	 * @return     The number of vertices.
+	 */
 	std::size_t size() const { return mVertices.size(); }
 
+	/**
+	 * @brief      Returns the type.
+	 * @return     The type.
+	 */
 	static representation_name type() { return representation_name::polytope_v; }
 
+	/**
+	 * @brief      Returns whether the polytope has been reduced (i.e. the set of vertices is minimal).
+	 * @return     True, if the set of vertices is minimal.
+	 */
 	bool reduced() const { return mReduced; }
 
+	/**
+	 * @brief      Returns the supremum of the set according to the infty norm.
+	 * @return     The supremum.
+	 */
 	Number supremum() const;
 
+	/**
+	 * @brief      Returns the cone of this.
+	 * @return     The cone.
+	 */
 	const Cone<Number>& cone() const { return mCone; }
 
+	/**
+	 * @brief      Explicitly sets the cone.
+	 * @param[in]  _cone  The cone.
+	 */
 	void setCone( const Cone<Number>& _cone ) { mCone = _cone; }
 
 	void setNeighbors( const Point<Number>& _point, const std::set<Point<Number>>& _neighbors ) {
@@ -173,8 +336,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	typename pointVector::const_iterator begin() const { return mVertices.begin(); }
 	typename pointVector::iterator end() { return mVertices.end(); }
 	typename pointVector::const_iterator end() const { return mVertices.end(); }
-
-	void print() const { std::cout << *this << std::endl; }
 
 	void removeRedundancy();
 

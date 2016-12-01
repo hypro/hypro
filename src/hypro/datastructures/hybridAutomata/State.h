@@ -1,8 +1,11 @@
+/**
+ * @file State.h
+ */
 
 #pragma once
 
 #include "RawState.h"
-#include "../../representations/GeometricObject.h"
+#include "representations/GeometricObject.h"
 #include "boost/variant.hpp"
 
 namespace hypro {

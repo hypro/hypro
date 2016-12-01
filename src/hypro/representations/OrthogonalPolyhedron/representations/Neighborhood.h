@@ -1,16 +1,18 @@
-/* Specialization of orthogonal polyhedra by the neighborhood representation.
- *
+/**
  * @file    Neighborhood.h
  * @author	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2015-08-30
- * @version 2015-08-30
  */
 
 #include "../OrthogonalPolyhedron.h"
 
 namespace hypro {
 
+/**
+ * @brief      Specialization of orthogonal polyhedra by the neighborhood representation.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     <unnamed>  The specialized representation type.
+ */
 template <typename Number, ORTHO_TYPE::NEIGHBORHOOD>
 class OrthogonalPolyhedron {
   private:

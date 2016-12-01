@@ -3,8 +3,8 @@
  */
 
 
-#include "../src/hypro/representations/GeometricObject.h"
-#include "../src/hypro/util/Plotter.h"
+#include "representations/GeometricObject.h"
+#include "util/Plotter.h"
 
 typedef double Number;
 
@@ -31,7 +31,7 @@ int main()
     // perform linear transformation (rotation) and plot the new object in green (default = blue).
     poly = poly.linearTransformation(rotation);
     unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(poly.vertices());
-    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::colors[hypro::green]);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
 
     // create a *.plt file (gnuplot).
     hypro::Plotter<Number>::getInstance().plot2d();

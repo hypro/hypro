@@ -1,11 +1,6 @@
 /**
- * The class which represents a box. A box is represented by two points, its maximal and its minimal vertex.
- *
  * @file Box.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since   2014-01-16
- * @version 2015-02-27
+ * \example example_box.cpp
  */
 
 #pragma once
@@ -33,6 +28,13 @@ class Vertex;
 template<typename Number>
 class Location;
 
+/**
+ * @brief      The class which represents a box.
+ * @details    A box is represented by two points, its maximal and its minimal vertex.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ */
 template <typename Number, typename Converter>
 class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
   private:
@@ -231,7 +233,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	}
 
 	/**
-	 * @brief Getter for the maximal point.
+	 * @brief Getter for the minimal point.
 	 * @return A point.
 	 */
 	Point<Number> min() const {

@@ -1,11 +1,6 @@
 /**
- * The class which represents a ellipsoid with center in the origin.
- *
  * @file Ellipsoid.h
  * @author Phillip Florian
- *
- * @since   2016-05-12
- * @version 2016-05-12
  */
 
 #pragma once
@@ -16,6 +11,11 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class for ellipsoids.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class Ellipsoid {
   private:
@@ -34,7 +34,7 @@ class Ellipsoid {
 	 * @return
 	 */
 	matrix_t<Number> matrix() const;
-        
+
 	/**
 	 * @brief Returns the current dimension of the ellipsoid.
 	 * @return
@@ -46,7 +46,7 @@ class Ellipsoid {
 	 * @return True, if the ellipsoid is empty.
 	 */
 	bool empty() const;
-        
+
 	/**
 	 * @brief Assignment operator.
 	 *
@@ -63,36 +63,36 @@ class Ellipsoid {
 
 
 	/**
-         * 
-         * @param A a linear transformation matrix 
+         *
+         * @param A a linear transformation matrix
          * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
          * @return ellipsoid obtained by applying the linear transformation
          */
 	Ellipsoid<Number> linearTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b) const;
-        
+
         /**
-         * 
-         * @param rhs second ellipsoid used for the minkowskiSum, 
+         *
+         * @param rhs second ellipsoid used for the minkowskiSum,
          * @param l direction of tight approximation
          * @return ellipsoid overapproximating the mink sum of two ellipsoids
          */
 	Ellipsoid<Number> minkowskiSum( const Ellipsoid<Number>& _rhs, bool _approx = true) const;
 
         /**
-         * 
+         *
          * @param l direction in which to evaluate
          * @return vector to outmost point in direction l
          */
         vector_t<Number> evaluate(vector_t<Number> const l) const;
 
         /**
-         * 
+         *
          * @param _matrix a shapematrix of an ellipsoid
-         * @return matrix overapproximating the ellipsoid defined by _matrix 
+         * @return matrix overapproximating the ellipsoid defined by _matrix
          */
         matrix_t<Number> approxEllipsoidMatrix(const matrix_t<Number> _matrix) const;
-        
-        explicit operator Box<Number>() const { 
+
+        explicit operator Box<Number>() const {
             vector_t<Number> l(mDimension);
             vector_t<Number> evaluation;
             l.setZero();
@@ -106,10 +106,10 @@ class Ellipsoid {
             }
             return Box<Number>(intervals);
         }
-        
+
 	explicit operator SupportFunction<Number>() const { return SupportFunction<Number>(mShapeMatrix); }
-        
-	explicit operator HPolytope<Number>() const { 
+
+	explicit operator HPolytope<Number>() const {
             vector_t<Number> l(mDimension);
             l.setZero();
             vector_t<Number> evaluation;
@@ -140,7 +140,7 @@ class Ellipsoid {
                     constraints.push_back(evaluation);
                     constraints.push_back(-evaluation);
                     l(j) = 0;
-                }   
+                }
             }
             b.setOnes(constraints.size());
             matrix_t<Number> constraintMatrix(constraints.size(),mDimension);
@@ -149,8 +149,8 @@ class Ellipsoid {
             }
             return HPolytope<Number>(constraintMatrix, b);
         }
-        
-	explicit operator VPolytope<Number>() const { 
+
+	explicit operator VPolytope<Number>() const {
             vector_t<Number> l(mDimension);
             l.setZero();
             vector_t<Number> evaluation;
@@ -181,7 +181,7 @@ class Ellipsoid {
                     constraints.push_back(evaluation);
                     constraints.push_back(-evaluation);
                     l(j) = 0;
-                }   
+                }
             }
             b.setOnes(constraints.size());
             matrix_t<Number> constraintMatrix(constraints.size(),mDimension);
@@ -190,9 +190,9 @@ class Ellipsoid {
             }
             return VPolytope<Number> (constraintMatrix, b);
         }
-        
+
         // Can be done much better if main axis is known.
-	explicit operator Zonotope<Number>() const { 
+	explicit operator Zonotope<Number>() const {
             vector_t<Number> l(mDimension);
             l.setZero();
             vector_t<Number> evaluation;
@@ -208,7 +208,7 @@ class Ellipsoid {
                 constraintMatrix.row(i) = constraints(i);
             }
             return Zonotope<Number> (constraintMatrix);
-        
+
         }
 
 };

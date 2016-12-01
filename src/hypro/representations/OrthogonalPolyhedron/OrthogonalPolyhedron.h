@@ -3,9 +3,6 @@
  * @author  Sebastian Junges
  * @author	Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author  Benedikt Seidl
- *
- * @since   2014-03-17
- * @version 2015-07-09
  */
 
 #pragma once
@@ -27,8 +24,19 @@
 #include <carl/core/Variable.h>
 
 namespace hypro {
+
+/**
+ * @brief      Enum holding the type identification of the different representations of orthogonal polyhedra.
+ */
 enum ORTHO_TYPE { VERTEX, NEIGHBORHOOD, EXTREME_VERTEX };
 
+/**
+ * @brief      Class for orthogonal polyhedra.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ * @tparam     Type       The internal representation type.
+ */
 template <typename Number, typename Converter, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX>
 class OrthogonalPolyhedronT {
   private:

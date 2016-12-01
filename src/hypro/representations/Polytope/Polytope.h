@@ -1,11 +1,6 @@
 /*
- * The class which represents a polytope.
- *
  * @file   Polytope.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since       2014-03-20
- * @version     2015-01-21
  */
 
 #pragma once
@@ -43,6 +38,13 @@ using namespace Parma_Polyhedra_Library::IO_Operators;
 
 namespace hypro
 {
+
+	/**
+	 * @brief      A wrapper class encapsulating PPL-polytopes.
+	 *
+	 * @tparam     Number     The used number type.
+	 * @tparam     Converter  The used converter.
+	 */
 	template<typename Number, typename Converter>
 	class PolytopeT : public GeometricObject<Number, PolytopeT<Number,Converter>>
 	{

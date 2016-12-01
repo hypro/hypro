@@ -1,7 +1,5 @@
 /**
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- *
+ * @file LocationManager.h
  */
 
 #pragma once
@@ -11,6 +9,11 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class for a location manager which holds all created locations.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class LocationManager : public carl::Singleton<LocationManager<Number>> {
 	friend carl::Singleton<LocationManager>;

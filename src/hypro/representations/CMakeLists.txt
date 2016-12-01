@@ -1,4 +1,3 @@
-add_subdirectory(Box)
 add_subdirectory(Polytopes)
 add_subdirectory(Polytope)
 add_subdirectory(Zonotope)

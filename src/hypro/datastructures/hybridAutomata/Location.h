@@ -1,8 +1,5 @@
-/*
- * Class that describes one location of a hybrid automaton.
- * File:   location.h
- * Author: stefan & ckugler
- * Created on April 30, 2014, 9:06 AM
+/**
+ * @file Location.h
  */
 
 #pragma once
@@ -18,11 +15,20 @@ class Transition;
 template <typename Number>
 class LocationManager;
 
+/**
+ * @brief      Class for a single location of a hybrid automaton.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class Location {
 	friend LocationManager<Number>;
 
   public:
+
+  	/**
+  	 * @brief      Struct holding a description of the location invariant in form of a set of halfspaces.
+  	 */
 	struct Invariant {
 		vector_t<Number> vec;
 		matrix_t<Number> mat;

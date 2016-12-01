@@ -2,9 +2,6 @@
  * Contains utilities to wrap the ppl polyhedra to our datastructure.
  * @file   util.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since       2014-04-01
- * @version     2014-04-03
  */
 
 #pragma once
@@ -24,6 +21,11 @@ namespace hypro {
 namespace polytope {
 using carl::operator<<;
 
+/**
+ * @brief      Determines the size of a generator system (the number of generators).
+ * @param[in]  gs    The generator system.
+ * @return     The number of generators.
+ */
 static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& gs ) {
 	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
@@ -34,6 +36,11 @@ static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& 
 	return i;
 }
 
+/**
+ * @brief      Determines the size of a constraint system (the number of constraints).
+ * @param[in]  cs    The constraint system.
+ * @return     The number of constraints.
+ */
 static inline unsigned csSize( const Parma_Polyhedra_Library::Constraint_System& cs ) {
 	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
@@ -45,6 +52,13 @@ static inline unsigned csSize( const Parma_Polyhedra_Library::Constraint_System&
 	return i;
 }
 
+/**
+ * @brief      Creates a linear PPL-constraint from a vector and a constant.
+ * @param[in]  constraint    The constraint vector.
+ * @param[in]  constantPart  The constant part.
+ * @tparam     Number        The used number type.
+ * @return     A PPL-constraint.
+ */
 template<typename Number>
 Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<Number>& constraint, Number constantPart) {
 	Parma_Polyhedra_Library::Linear_Expression polynom;
@@ -76,7 +90,10 @@ template<>
 */
 
 /**
- * Creates a generator from a point, which is a colum-vector (mx1)
+ * @brief      Creates a generator from a point coordinate.
+ * @param[in]  point   The point coordinate.
+ * @tparam     Number  The used number type.
+ * @return     The generator.
  */
 template <typename Number>
 static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_t<Number>& point ) {
@@ -93,20 +110,29 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_
 	return result;
 }
 
+/**
+ * @brief      Creates a generator from a point.
+ * @param[in]  point   The point.
+ * @tparam     Number  The used number type.
+ * @return     The generator.
+ */
 template <typename Number>
 static inline Parma_Polyhedra_Library::Generator pointToGenerator( const Point<Number>& point ) {
 	return pointToGenerator(point.rawCoordinates());
 }
 
+/**
+ * @brief      Creates a point from a generator.
+ * @param[in]  gen     The generator.
+ * @tparam     Number  The used number type.
+ * @return     A point.
+ */
 template <typename Number>
 static inline Point<Number> generatorToPoint( const Parma_Polyhedra_Library::Generator& gen ) {
 	vector_t<Number> result = vector_t<Number>::Zero(gen.space_dimension());
 	mpz_class coefficient;
 	mpz_class divisor;
 	Number value;
-	//std::cout << "Generator: ";
-	//gen.print();
-	//std::cout << " with space dimension: " << gen.space_dimension() << std::endl;
 	for(unsigned i = 0; i < gen.space_dimension(); ++i) {
 		assert(gen.is_point() || gen.is_closure_point());
 		coefficient = gen.coefficient( VariablePool::getInstance().pplVarByIndex(i) );
@@ -114,15 +140,13 @@ static inline Point<Number> generatorToPoint( const Parma_Polyhedra_Library::Gen
 			divisor = gen.divisor();
 		}
 		value = carl::convert<mpq_class,Number>(mpq_class(coefficient,divisor));
-		//std::cout << __func__ << " Coefficient: " << coefficient << ", Divisor: " << divisor << ", Value: " << value << std::endl;
 		result(i) =  value;
 	}
-
-	//std::cout << "created point " << result << std::endl;
 
 	return Point<Number>(result);
 }
 
+/*
 template <typename Number>
 static inline unsigned pplDimension( const Point<Number>& point ) {
 	unsigned result = 0;
@@ -144,6 +168,7 @@ static inline unsigned pplDimension( const typename std::vector<Point<Number>>& 
 	}
 	return result;
 }
+*/
 
 template <typename Number>
 static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::C_Polyhedron& poly ) {

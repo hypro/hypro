@@ -1,6 +1,6 @@
-//
-// Created by stefan on 01.07.16.
-//
+/**
+ * @file RawState.h
+ */
 
 #pragma once
 
@@ -14,6 +14,13 @@ namespace hypro {
 	template<typename Number>
 	using cPair = std::pair<matrix_t<Number>, vector_t<Number>>;
 
+	/**
+	 * @brief      Struct holding the raw information about a state.
+ 	 * @details 		This struct is required for parsing and can directly be accessed
+	 * by the parser. A state for the reachability analysis is contained in the file State.h.
+	 *
+	 * @tparam     Number  The used number type.
+	 */
 	template<typename Number>
 	struct RawState {
 		Location<Number>* location;

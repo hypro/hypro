@@ -1,6 +1,6 @@
 /*
- * example_HPolytope.cpp
- *
+ * @file HPolytope.h
+ * \example example_HPolytope.cpp
  */
 
 #pragma once
@@ -28,7 +28,6 @@ class Location;
 
 /**
  * @brief      Class for a H-polytope.
- *
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
  */

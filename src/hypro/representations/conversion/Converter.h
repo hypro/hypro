@@ -75,12 +75,18 @@ class Converter {
 template<typename Number>
 using Box = typename Converter<Number>::Box;
 
+/**
+ * Typedef for HpolytopeT.
+ */
 template<typename Number>
 using HPolytope = typename Converter<Number>::HPolytope;
 
 template<typename Number>
 using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
 
+/**
+ * Typedef for VPolytopeT.
+ */
 template<typename Number>
 using VPolytope = typename Converter<Number>::VPolytope;
 
@@ -89,9 +95,15 @@ template<typename Number>
 using Polytope = typename Converter<Number>::Polytope;
 #endif
 
+/**
+ * Typedef for SupportFunctionT.
+ */
 template<typename Number>
 using SupportFunction = typename Converter<Number>::SupportFunction;
 
+/**
+ * Typedef for ZonotopeT.
+ */
 template<typename Number>
 using Zonotope = typename Converter<Number>::Zonotope;
 

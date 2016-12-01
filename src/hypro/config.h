@@ -22,8 +22,6 @@ extern "C" {
 
 // Do we eliminate dimensions according to a dynamic heuristic.
 #define DYNAMICHEURISTIC 0
-#define reachLin_PRIMITIVES_LOCATION "../polyhedra/"
-#define reachLin_NR_PRIMITIVES 100
 
 #define PI_UP 3.1415926535897932384626433832795028841972
 #define PI_DN 3.1415926535897932384626433832795028841971

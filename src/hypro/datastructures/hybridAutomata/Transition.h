@@ -1,9 +1,5 @@
-/*
- * Class that describes one transition of a hybrid automaton.
- * File:   transition.h
- * Author: stefan & ckugler
- *
- * Created on April 30, 2014, 9:06 AM
+/**
+ * @file Transition.h
  */
 
 #pragma once
@@ -12,8 +8,17 @@
 
 namespace hypro {
 
+/**
+ * @brief      Enum holding the different aggregation types.
+ * @details    None results in no aggregation upon taking a transition, both other settings result in a convex hull aggregation.
+ */
 enum Aggregation {none,boxAgg,parallelotopeAgg};
 
+/**
+ * @brief      Class for a transition of a hybrid automaton.
+ *
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class Transition {
   public:
