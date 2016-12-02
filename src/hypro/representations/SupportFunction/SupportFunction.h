@@ -7,7 +7,7 @@
 
 #include "util.h"
 #include "SupportFunctionContent.h"
-#include "util/helperFunctions.h"
+#include "util/templateDirections.h"
 #include "datastructures/hybridAutomata/Location.h"
 #include "algorithms/convexHull/vertexEnumeration.h"
 #include <list>
