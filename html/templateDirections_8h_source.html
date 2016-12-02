@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/util/helperFunctions.h Source File</title>
+<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/util/templateDirections.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('helperFunctions_8h_source.html','');});
+$(document).ready(function(){initNavTree('templateDirections_8h_source.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,10 +106,10 @@ $(document).ready(function(){initNavTree('helperFunctions_8h_source.html','');})
 
 <div class="header">
   <div class="headertitle">
-<div class="title">helperFunctions.h</div>  </div>
+<div class="title">templateDirections.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="helperFunctions_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;Permutator.h&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
@@ -318,65 +318,14 @@ $(document).ready(function(){initNavTree('helperFunctions_8h_source.html','');})
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="keywordflow">return</span> directions;</div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;}</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment"> * Compute a set of uniformly distributed directions that are orthogonal to a given normal and all lie in one Halfspace</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">//template&lt;typename Number&gt;</span></div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">//static matrix_t&lt;Number&gt; computeOrthogonalTemplateDirections( vector_t&lt;Number&gt; normal, unsigned numberOfDirections){</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">//    unsigned dim = normal.rows();</span></div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment">//    matrix_t&lt;Number&gt; res =matrix_t&lt;Number&gt;(numberOfDirections, dim);</span></div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">//    vector_t&lt;Number&gt; firstVec = vector_t&lt;Number&gt;::Zero(dim);</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="comment">//if dimension is at least 2</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">//    if (dim &gt; 1){</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">//        bool foundOne = false;</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">//        unsigned indexOne;</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">//        bool foundTwo = false;</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">//        unsigned indexTwo;</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="comment">//check every entry of the normal</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">//        for (unsigned i=0; i&lt; dim; ++i){</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                <span class="comment">//the first non-zero entry gets remembered (if it exists)</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">//                 if (normal(i) != 0 &amp;&amp; foundOne == false){</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">//                         foundOne = true;</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">//                         indexOne = i;</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                 <span class="comment">//the second non-zero entry gets remembered (if it exists)</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">//                 } else if (normal(i) != 0 &amp;&amp; foundOne == true &amp;&amp; foundTwo == false){</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">//                         foundTwo = true;</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">//                         indexTwo = i;</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">//                 }</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">//        }</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="comment">//if 2 non-zero entries were found</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">//        if (foundTwo == true &amp;&amp; foundOne == true){</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">//                firstVec(indexOne) = (Number) 1/normal(indexOne);</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">//                firstVec(indexTwo) = (Number) (-1)*1/normal(indexTwo);</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment">//if only one non-zero entry was found (is an axis-direction)</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">//        } else if (foundTwo == false &amp;&amp; foundOne == true){</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <span class="comment">//if the index before the non-zero entry exists</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">//                if (indexOne &gt; 0){</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">//                    firstVec(indexOne-1) = 1;</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="comment">//if the index before the non-zero entry doesn&#39;t exist (but after it)</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">//                } else {</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">//                    firstVec(indexOne+1) = 1;</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">//                }</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="comment">//if the normal is the 0-vector (is not allowed to happen</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">//        } else {</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">//            assert(false);</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">//        }</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">//    }</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">//    return res;</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">//}</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;} <span class="comment">// namespace hypro</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_879d833e0dfbe8f31a5e860bb94efb50.html">util</a></li><li class="navelem"><a class="el" href="helperFunctions_8h.html">helperFunctions.h</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_879d833e0dfbe8f31a5e860bb94efb50.html">util</a></li><li class="navelem"><b>templateDirections.h</b></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

@@ -65,8 +65,8 @@ var NAVTREEINDEX0 =
 "OrthogonalPolyhedron_8h_source.html":[7,0,1,0,3,3,4],
 "ParserWrapper_8cpp_source.html":[7,0,1,0,2,0,4],
 "ParserWrapper_8h_source.html":[7,0,1,0,2,0,5],
-"Permutator_8h_source.html":[7,0,1,0,4,10],
-"Plotter_8h_source.html":[7,0,1,0,4,11],
+"Permutator_8h_source.html":[7,0,1,0,4,9],
+"Plotter_8h_source.html":[7,0,1,0,4,10],
 "Point_8cpp_source.html":[7,0,1,0,1,4],
 "Point_8h.html":[7,0,1,0,1,5],
 "Point_8h.html#a033867efd71000b8cb7491fe1fd5e24d":[7,0,1,0,1,5,4],
@@ -91,10 +91,9 @@ var NAVTREEINDEX0 =
 "ReachTree_8h_source.html":[7,0,1,0,1,6],
 "Reach_8h.html":[7,0,1,0,0,1,0],
 "Reach_8h.html#a07fc2fa7bc1d0c49d8dcff660251e084":[7,0,1,0,0,1,0,1],
-"Reach_8h.html#a4e3f8751e51220ec78a5c079f4eef848":[7,0,1,0,0,1,0,3],
-"Reach_8h.html#a7219e4736d9efd52be76854ebccf9390":[7,0,1,0,0,1,0,2],
-"Reach_8h.html#acb837d35542f715728dfb902b2188b60":[7,0,1,0,0,1,0,4],
-"Reach_8h.html#ad2bb9387134db215d4e2af4260c08b44":[7,0,1,0,0,1,0,5],
+"Reach_8h.html#a4e3f8751e51220ec78a5c079f4eef848":[7,0,1,0,0,1,0,2],
+"Reach_8h.html#acb837d35542f715728dfb902b2188b60":[7,0,1,0,0,1,0,3],
+"Reach_8h.html#ad2bb9387134db215d4e2af4260c08b44":[7,0,1,0,0,1,0,4],
 "Reach_8h_source.html":[7,0,1,0,0,1,0],
 "Reach__SF_8h_source.html":[7,0,1,0,0,1,1],
 "Ridge_8h_source.html":[7,0,1,0,1,9],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aafd579db91001e197cedf7cc05065c76":[6,0,1,27,52],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab13394fc3678c74a582913dce40ea390":[6,0,1,27,35],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab7afcb410dfc489bad1ad279063061b0":[6,0,1,27,17],
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab98f614f79eecd033adf4c963f30c4b9":[6,0,1,27,2]
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab98f614f79eecd033adf4c963f30c4b9":[6,0,1,27,2],
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[6,0,1,27,15]
 };

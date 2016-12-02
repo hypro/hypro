@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460":[6,0,1,30,5],
 "classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938":[6,0,1,30,6],
 "classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2":[6,0,1,30,8],
 "classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c":[6,0,1,30,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX2 =
 "classhypro_1_1Optimizer.html#a89f350d8cec00223bdc10fac5dd69437":[6,0,1,67,8],
 "classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c":[6,0,1,67,4],
 "classhypro_1_1Optimizer.html#a9a40a723d2553a38a480e4ba18ad02db":[6,0,1,67,14],
-"classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7":[6,0,1,67,5]
+"classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7":[6,0,1,67,5],
+"classhypro_1_1Optimizer.html#ab2c2a7d9865ad1af02f61094a4320e74":[6,0,1,67,1]
 };

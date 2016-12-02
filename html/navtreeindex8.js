@@ -1,9 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"structhypro_1_1scaleContent.html#a6af5744edb66f9b41f9ea9833e65645f":[6,0,1,49,2],
-"structhypro_1_1scaleContent.html#a889463b9c2d8b7983b8753a9076a2275":[6,0,1,49,3],
-"structhypro_1_1scaleContent.html#aaf5f2692d015b3ee636b057c63e1dac6":[6,0,1,49,1],
-"structhypro_1_1sumContent.html":[6,0,1,47],
 "structhypro_1_1sumContent.html#a27d34aea34df853bcb1fa88528e89300":[6,0,1,47,0],
 "structhypro_1_1sumContent.html#a9979a1e3848208c1875f9cd65e07e4cc":[6,0,1,47,1],
 "structhypro_1_1sumContent.html#ab6bd8dceed2382bd94da89e2c5fd7d8d":[6,0,1,47,3],
@@ -42,6 +38,7 @@ var NAVTREEINDEX8 =
 "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html":[6,0,5,5],
 "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html#a84cd2d0a005c9ac3d8e6217d8f2c5f62":[6,0,5,5,0],
 "symbols_8h_source.html":[7,0,1,0,2,0,7],
+"templateDirections_8h_source.html":[7,0,1,0,4,11],
 "types_8h_source.html":[7,0,1,0,7],
 "util_2types_8h_source.html":[7,0,1,0,4,12],
 "util_8cpp_source.html":[7,0,1,0,3,4,1],

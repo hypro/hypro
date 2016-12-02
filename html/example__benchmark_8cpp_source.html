@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('example__benchmark_8cpp_source.html','
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    std::vector&lt;std::chrono::duration&lt;double, std::milli&gt;&gt; runtimes(numberRuns);</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    std::chrono::duration&lt;double, std::milli&gt; summedTime(0.0);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    clock::time_point startParsing = clock::now();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    boost::tuple&lt;hypro::HybridAutomaton&lt;Number&gt;, hypro::ReachabilitySettings&lt;Number&gt;&gt; ha = hypro::parseFlowstarFile&lt;Number&gt;(filename);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    boost::tuple&lt;hypro::HybridAutomaton&lt;Number&gt;, <a class="code" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings&lt;Number&gt;</a>&gt; ha = hypro::parseFlowstarFile&lt;Number&gt;(filename);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::chrono::duration&lt;double, std::milli&gt; parseTime = std::chrono::duration_cast&lt;std::chrono::duration&lt;double, std::milli&gt;&gt;(clock::now() - startParsing);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::vector&lt;std::pair&lt;unsigned, hypro::reachability::flowpipe_t&lt;Representation&gt;&gt;&gt; flowpipes;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Parse time is &quot; &lt;&lt; parseTime.count() &lt;&lt; std::endl;</span></div>
@@ -237,7 +237,7 @@ $(document).ready(function(){initNavTree('example__benchmark_8cpp_source.html','
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">typename</span> hypro::HybridAutomaton&lt;Number&gt;::locationStateMap badStateMapping = boost::get&lt;0&gt;(ha).localBadStates();</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state : badStateMapping) {</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">unsigned</span> bs = plotter.addObject(Representation(state.second.set.first, state.second.set.second).vertices());</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        plotter.setObjectColor(bs, hypro::colors[hypro::red]);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    }</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="comment">// segments plotting</span></div>
@@ -250,30 +250,30 @@ $(document).ready(function(){initNavTree('example__benchmark_8cpp_source.html','
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                <span class="keywordflow">case</span> hypro::representation_name::support_function:{</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                    <span class="comment">//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager&lt;Number&gt;::getInstance().location(flowpipePair.first)));</span></div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::colors)/<span class="keyword">sizeof</span>(*hypro::colors))]);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                }</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                <span class="keywordflow">case</span> hypro::representation_name::zonotope:{</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                    plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::colors)/<span class="keyword">sizeof</span>(*hypro::colors))]);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                }</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                <span class="keywordflow">case</span> hypro::representation_name::box:{</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                    plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::colors)/<span class="keyword">sizeof</span>(*hypro::colors))]);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                }</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">                #ifdef USE_PPL</span></div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">case</span> hypro::representation_name::ppl_polytope:{</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::colors)/<span class="keyword">sizeof</span>(*hypro::colors))]);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                }</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">                #endif</span></div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                    <span class="comment">//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</span></div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.vertices());</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                    plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::colors)/<span class="keyword">sizeof</span>(*hypro::colors))]);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            }</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            ++cnt;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        }</div>
@@ -298,7 +298,7 @@ $(document).ready(function(){initNavTree('example__benchmark_8cpp_source.html','
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        rep = strtol(argv[2], &amp;p, 10);</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keyword">using</span> Number = mpq_class;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keyword">using</span> Number = double;</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keywordflow">switch</span>(rep){</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="preprocessor">        #ifdef USE_PPL</span></div>
@@ -358,6 +358,7 @@ $(document).ready(function(){initNavTree('example__benchmark_8cpp_source.html','
 <div class="ttc" id="LocationManager_8h_html"><div class="ttname"><a href="LocationManager_8h.html">LocationManager.h</a></div></div>
 <div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00082">Converter.h:82</a></div></div>
 <div class="ttc" id="structhypro_1_1typeName_html"><div class="ttname"><a href="structhypro_1_1typeName.html">hypro::typeName</a></div><div class="ttdef"><b>Definition:</b> <a href="convenienceOperators_8h_source.html#l00073">convenienceOperators.h:73</a></div></div>
+<div class="ttc" id="structhypro_1_1reachability_1_1ReachabilitySettings_html"><div class="ttname"><a href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings</a></div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00008">Settings.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a020e89ed0c39a091bf49a0b400e511f8"><div class="ttname"><a href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">hypro::Plotter::plot2d</a></div><div class="ttdeci">void plot2d() const </div><div class="ttdoc">Writes the actual plot to the output file. </div></div>
 <div class="ttc" id="classhypro_1_1reachability_1_1Reach_html"><div class="ttname"><a href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a></div><div class="ttdoc">Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="Reach_8h_source.html#l00060">Reach.h:60</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
