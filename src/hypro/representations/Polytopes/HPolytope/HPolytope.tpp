@@ -33,10 +33,8 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	}
 	#ifndef NDEBUG
 	bool empty = this->empty();
-	TRACE("Before empty: " << empty );
 	#endif
 	reduceNumberRepresentation();
-	TRACE("AFTER, Empty: " << (this->empty()));
 	assert( empty == this->empty() );
 }
 
@@ -328,9 +326,6 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 		Number inftyNorm = Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
-#ifdef HPOLY_DEBUG_MSG
-	std::cout << __func__ << ": " << max << std::endl;
-#endif
 	return max;
 }
 
@@ -416,10 +411,6 @@ void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
 template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::insert( const typename HalfspaceVector::iterator begin,
 								const typename HalfspaceVector::iterator end ) {
-	assert( mDimension == 0 || mDimension == begin->dimension() );
-	if ( mDimension == 0 ) {
-		mDimension = begin->dimension();
-	}
 	auto it = begin;
 	while ( it != end ) {
 		this->insert( *it );
@@ -431,7 +422,9 @@ template <typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
-	mEmpty = TRIBOOL::NSET;
+	if(mEmpty == TRIBOOL::TRUE) {
+		mEmpty = TRIBOOL::NSET;
+	}
 }
 
 template <typename Number, typename Converter>
@@ -492,7 +485,7 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( const vector_t<Number>& poin
 			return false;
 		}
 	}
-	return cnt >= mDimension;
+	return (cnt >= mDimension);
 }
 
 template <typename Number, typename Converter>
@@ -502,12 +495,11 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( const Point<Number> &point )
 
 template <typename Number, typename Converter>
 EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
-	if(mHPlanes.empty())
+	if(mHPlanes.empty()) {
 		return EvaluationResult<Number>( Number(1), INFTY );
+	}
 
 	//reduceNumberRepresentation();
-
-	//std::cout << "Constraints: " << convert<Number,double>(this->matrix()) << std::endl << "Constants: " << this->vector() << std::endl;
 
 	Optimizer<Number> opt;
 	opt.setMatrix(this->matrix());
@@ -541,9 +533,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 	if(_mat.rows() == 0) {
 		return std::make_pair(true, *this);
 	}
-	//std::cout << typeid(*this).name() << "::" << __func__ << ": Before intersection: " << *this << std::endl;
 	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
-	//std::cout << typeid(*this).name() << "::" << __func__ << ": After intersection: " << tmp << std::endl;
 	return std::make_pair(!(tmp).empty(),tmp);
 }
 
@@ -568,24 +558,19 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 	if(A.nonZeros() == 0) {
 		return HPolytopeT<Number,Converter>::Empty();
 	}
-	//std::cout << __func__ << " of " << *this << std::endl;
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			//std::cout << "Full rank, retransform!" << std::endl;
+			TRACE("A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second).size() == this->size()) );
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second);
 		} else {
-#ifdef HPOLY_DEBUG_MSG
-			std::cout << "Use V-Conversion for linear transformation." << std::endl;
-#endif
+			TRACE("Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A );
 			auto res = Converter::toHPolytope(intermediate);
-			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
-
 			//assert(res.size() <= this->size());
 			res.setReduced();
 			return res;
@@ -604,26 +589,20 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 		points.emplace_back(b);
 		return HPolytopeT<Number,Converter>(points);
 	}
-	//std::cout << __func__ << " of " << *this << std::endl;
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			//std::cout << __func__ << ": Full rank, retransform!" << std::endl;
+			TRACE("A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			//std::cout << "Matrix: " << convert<Number,double>(inequalities.first*A.inverse()) << std::endl << "Vector: " << convert<Number,double>(((inequalities.first*A.inverse()*b) + (inequalities.second))) << std::endl;
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
 			assert( !(HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).empty()) );
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
-#ifdef HPOLY_DEBUG_MSG
-			std::cout << "Use V-Conversion for linear transformation." << std::endl;
-#endif
+			TRACE("Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.affineTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
-			//std::cout << "Size before linear transformation: " << this->size() << ", size after linear transformation: " << res.size() << std::endl;
-
 			//assert(res.size() <= this->size());
 			res.setReduced();
 			return res;
@@ -640,50 +619,32 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	Number result;
 
 	// evaluation of rhs in directions of lhs
-	//std::cout << "evaluation of rhs in directions of lhs" << std::endl;
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		EvaluationResult<Number> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
 		if ( evalRes.errorCode == INFTY ) {
-			//std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << std::endl;
-			//std::cout << "INFTY" << std::endl;
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == INFEAS ) {
-			// std::cout << "EMPTY" << std::endl;
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
 			res.insert( Halfspace<Number>( mHPlanes.at( i ).normal(), result ) );
-			// std::cout << __func__ << " Evaluated against " <<
-			// mHPlanes.at(i).normal() << " results in a distance " << evalRes.supportValue << std::endl;
-			// std::cout << "Old distance: " << carl::toDouble(mHPlanes.at(i).offset()) << ", new distance: " << carl::toDouble(result) << std::endl;
 		}
 	}
 
 	//if(!oneWay) { // Todo: push to settings.
 		// evaluation of lhs in directions of rhs
-		//std::cout << "evaluation of lhs in directions of rhs" << std::endl;
 		for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 			EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
 			if ( evalRes.errorCode == INFTY ) {
-				// std::cout << __func__ << " Evaluated against " <<
-				// rhs.constraints().at( i ).normal() << std::endl;
-				// std::cout << "INFTY" << std::endl;
 				// Do nothing - omit inserting plane.
 			} else if ( evalRes.errorCode == INFEAS ) {
-				// std::cout << "EMPTY" << std::endl;
 				return Empty();
 			} else {
 				result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
 				res.insert( Halfspace<Number>( rhs.constraints().at( i ).normal(), result ) );
-				// std::cout << __func__ << " Evaluated against " <<
-				// rhs.constraints().at( i ).normal() << " results in a distance " << evalRes.supportValue << std::endl;
 			}
 		}
 	//}
-#ifdef HPOLY_DEBUG_MSG
-	std::cout << "Result: " << res << std::endl;
-#endif
 	return res;
 }
 
@@ -725,9 +686,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
-	//std::cout << __func__ << ": After intersection (union of halfspaces): " << res << std::endl;
 	res.removeRedundancy();
-	//std::cout << __func__ << ": After removing redundancy: " << res << std::endl;
 	return res;
 }
 
@@ -742,7 +701,6 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility.
 		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) && plane.normal().dot( vec ) > plane.offset()) {
-			//std::cout << __func__ << " False, " << plane.normal().dot( vec ) << " > " << plane.offset() << " Almost equal: " << carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) << std::endl;
 			return false;
 		}
 	}
@@ -751,7 +709,6 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
-	//std::cout << __func__ << " : " << *this << " contains " << rhs << std::endl;
 	if(this->empty()){
 		return false;
 	}
@@ -761,18 +718,12 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 
 	for ( const auto &plane : rhs.constraints() ) {
 		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
-
-		//std::cout << __func__ << ": plane " << plane << " -> " << evalRes.supportValue  << " orig offset: " << plane.offset() << "\t" ;
 		if ( evalRes.errorCode == INFEAS ) {
-			//std::cout << "INFEAS" << std::endl;
-			assert(false);
 			return false;  // empty!
 		} else if ( evalRes.errorCode == INFTY ) {
-			//std::cout << "INFTY" << std::endl;
 			continue;
 		} else if ( evalRes.supportValue < plane.offset() ) {
 			assert(evalRes.errorCode == FEAS);
-			//std::cout << "Rhs offset is larger than result" << std::endl;
 			return false;
 		}
 	}
@@ -782,63 +733,92 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolytopeT &_rhs ) const {
 	TRACE("with " << _rhs << std::endl);
-	if ( _rhs.empty() && !this->empty()) {
-		return *this;
-	} else if (this->empty() && !_rhs.empty()) {
+	if( this->empty() ) {
+		// if this is empty, the result is _rhs, even if _rhs is empty, too.
 		return _rhs;
-	} else { // none is empty
-
-		std::vector<Point<Number>> vertices = this->vertices();
-		std::vector<Point<Number>> rhsVertices = _rhs.vertices();
-		vertices.insert(vertices.end(), rhsVertices.begin(), rhsVertices.end());
-		HPolytopeT<Number,Converter> result(vertices);
-
-		/*
-		auto lhs = Converter::toVPolytope( *this );
-		std::cout << "this as vpoly: " << lhs << std::endl;
-		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
-		std::cout << "rhs as vpoly : " << Converter::toVPolytope( _rhs ) << std::endl;
-		HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
-		*/
-
-		//std::cout << "size after union: " << result.size() << std::endl;
-
-		//assert(result.contains(*this));
-		//assert(result.contains(_rhs));
-		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-
-		/*
-		std::cout << __func__ << " BEGIN." << std::endl;
-		std::vector<Point<Number>> unitedVertices(this->vertices());
-		for(const auto& vertex : _rhs.vertices()) {
-			unitedVertices.emplace_back(vertex);
-		}
-
-
-		for(const auto vertex : unitedVertices) {
-			std::cout << "Vertex to unite: " << vertex << std::endl;
-		}
-
-
-		ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
-		ch.convexHullVertices();
-		HPolytopeT<Number,Converter> result = HPolytopeT<Number,Converter>(ch.getHsv());
-		assert(ch.getCone().empty());
-		assert(ch.getLinealtySpace().empty());
-		*/
-		/*
-		for(const auto& vertex : owenTmpRes.vertices()) {
-			std::cout << "Result vertex " << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
-			//assert(std::find(unitedVertices.begin(), unitedVertices.end(), vertex) != unitedVertices.end());
-		}
-		std::cout << __func__ << " END." << std::endl;
-		*/
-		return result;
 	}
+	// at this point *this is not empty.
+	if ( _rhs.empty() ) {
+		return *this;
+	}
+	// at this point, none is empty.
+	#ifdef AVOID_CONVERSION
+	unsigned numberOfDirections = 8;
+	TRACE("Unite using templated evaluation using " << numberOfDirections << " directions.");
+	assert(this->dimension() == _rhs.dimension());
+	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), numberOfDirections);
+	// as the template directions are ordered, we assume the same order for the results.
+	HalfspaceVector newHalfspaces;
+	for(const auto& direction : templateDirections) {
+		EvaluationResult<Number> thisResult = this->evaluate(direction);
+		EvaluationResult<Number> rhsResult = _rhs.evaluate(direction);
+		assert(thisResult.errorCode != SOLUTION::INFEAS);
+		assert(rhsResult.errorCode != SOLUTION::INFEAS);
+		// if one of the polytopes is unbounded, do not add this halfspace -> keep the unboundedness.
+		if(thisResult.errorCode == SOLUTION::FEAS && rhsResult.errorCode == SOLUTION::FEAS) {
+			if(thisResult.supportValue > rhsResult.supportValue) {
+				newHalfspaces.emplace_back(direction, thisResult.supportValue);
+			} else {
+				newHalfspaces.emplace_back(direction, rhsResult.supportValue);
+			}
+		}
+	}
+	assert(newHalfspaces.size() <= templateDirections.size());
+	return HPolytopeT<Number,Converter>(newHalfspaces);
+	#else
+	TRACE("Unite using V-polytope representation.");
+	std::vector<Point<Number>> vertices = this->vertices();
+	std::vector<Point<Number>> rhsVertices = _rhs.vertices();
+	vertices.insert(vertices.end(), rhsVertices.begin(), rhsVertices.end());
+	HPolytopeT<Number,Converter> result(vertices);
+
+	/*
+	auto lhs = Converter::toVPolytope( *this );
+	std::cout << "this as vpoly: " << lhs << std::endl;
+	auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
+	std::cout << "rhs as vpoly : " << Converter::toVPolytope( _rhs ) << std::endl;
+	HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
+	*/
+
+	//std::cout << "size after union: " << result.size() << std::endl;
+
+	//assert(result.contains(*this));
+	//assert(result.contains(_rhs));
+	//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
+
+	/*
+	std::cout << __func__ << " BEGIN." << std::endl;
+	std::vector<Point<Number>> unitedVertices(this->vertices());
+	for(const auto& vertex : _rhs.vertices()) {
+		unitedVertices.emplace_back(vertex);
+	}
+
+
+	for(const auto vertex : unitedVertices) {
+		std::cout << "Vertex to unite: " << vertex << std::endl;
+	}
+
+
+	ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
+	ch.convexHullVertices();
+	HPolytopeT<Number,Converter> result = HPolytopeT<Number,Converter>(ch.getHsv());
+	assert(ch.getCone().empty());
+	assert(ch.getLinealtySpace().empty());
+	*/
+	/*
+	for(const auto& vertex : owenTmpRes.vertices()) {
+		std::cout << "Result vertex " << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
+		//assert(std::find(unitedVertices.begin(), unitedVertices.end(), vertex) != unitedVertices.end());
+	}
+	std::cout << __func__ << " END." << std::endl;
+	*/
+	return result;
+	#endif
 }
 
 template<typename Number, typename Converter>
 HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vector<HPolytopeT>& rhs ) const {
+	// Todo: Implement alternative avoiding conversion.
 	std::vector<Point<Number>> vertices = this->vertices();
 	for(const auto& poly : rhs) {
 		vertices.insert(vertices.end(), poly.vertices().begin(), poly.vertices().end());

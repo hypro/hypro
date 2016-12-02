@@ -12,6 +12,7 @@
 #include "util/convexHull.h"
 #include "util/Permutator.h"
 #include "util/pca.h"
+#include "util/templateDirections.h"
 #include "util/linearOptimization/Optimizer.h"
 #include "algorithms/convexHull/ConvexHull.h"
 
@@ -19,6 +20,7 @@
 #include <cassert>
 
 #define REDUCE_NUMBERS
+#define AVOID_CONVERSION
 //#define HPOLY_DEBUG_MSG
 
 namespace hypro {
