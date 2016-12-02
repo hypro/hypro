@@ -60,15 +60,11 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
+		TRACE("Direction: " << _direction << ", constraintMatrix: " << std::endl << mConstraintMatrix << ", and vector:" << std::endl << mConstraintVector);
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
-		#ifdef DEBUG_MSG
-		std::cout << __func__ << ": in direction " << _direction << std::endl;
-		std::cout << "Matrix: " << mConstraintMatrix << ", constants: " << mConstraintVector << std::endl;
-		#endif
-
 		if( mConstraintMatrix.rows() == 0 ) {
-			// std::cout << "INFTY" << std::endl;
+			TRACE("System is unbounded.");
 			return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
 

@@ -68,8 +68,8 @@ namespace reachability {
 			//assert(unitePolytope.contains(initialPair.second));
 			//assert(unitePolytope.contains(deltaValuation));
 			#ifdef REACH_DEBUG
-			std::cout << "Set after unite with R0: ";
-			unitePolytope.print();
+			std::cout << "Set after unite with R0: " << std::endl;
+			std::cout << unitePolytope << std::endl;
 			#endif
 			// bloat hullPolytope (Hausdorff distance)
 			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.location->flow(), boost::get<Representation>(_state.set).supremum() );
@@ -82,9 +82,8 @@ namespace reachability {
 			if(radius > 0){
 				Representation hausPoly = computePolytope<Number, Representation>( unitePolytope.dimension(), radius );
 				#ifdef REACH_DEBUG
-				std::cout << "Hausdorff Box: ";
-				hausPoly.print();
-				std::cout << std::endl;
+				std::cout << "Hausdorff Box: " << std::endl;
+				std::cout << hausPoly << std::endl;
 				#endif
 				// hullPolytope +_minkowski hausPoly
 				firstSegment = unitePolytope.minkowskiSum( hausPoly );

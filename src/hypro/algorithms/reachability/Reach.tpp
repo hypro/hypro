@@ -94,7 +94,7 @@ namespace reachability {
 		std::cout << "Location printed : " << *_state.location << std::endl;
 		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
-		boost::get<Representation>(_state.set).print();
+		std::cout << boost::get<Representation>(_state.set) << std::endl;
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Representation> flowpipe;
