@@ -24,7 +24,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	std::vector<std::chrono::duration<double, std::milli>> runtimes(numberRuns);
 	std::chrono::duration<double, std::milli> summedTime(0.0);
 	clock::time_point startParsing = clock::now();
-	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+	boost::tuple<hypro::HybridAutomaton<Number>, hypro::reachability::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
 	std::chrono::duration<double, std::milli> parseTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(clock::now() - startParsing);
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes;
 	//std::cout << "Parse time is " << parseTime.count() << std::endl;
@@ -131,7 +131,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
 	for(const auto& state : badStateMapping) {
 		unsigned bs = plotter.addObject(Representation(state.second.set.first, state.second.set.second).vertices());
-		plotter.setObjectColor(bs, hypro::colors[hypro::red]);
+		plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);
 	}
 
 	// segments plotting
@@ -144,30 +144,30 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				case hypro::representation_name::support_function:{
 					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					break;
 				}
 				case hypro::representation_name::zonotope:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					break;
 				}
 				case hypro::representation_name::box:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					break;
 				}
 				#ifdef USE_PPL
 				case hypro::representation_name::ppl_polytope:{
 					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					break;
 				}
 				#endif
 				default:
 					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
 					unsigned tmp = plotter.addObject(segment.vertices());
-					plotter.setObjectColor(tmp, hypro::colors[flowpipePair.first % (sizeof(hypro::colors)/sizeof(*hypro::colors))]);
+					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 			}
 			++cnt;
 		}
@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
 		rep = strtol(argv[2], &p, 10);
 	}
 
-	using Number = mpq_class;
+	using Number = double;
 
 	switch(rep){
 		#ifdef USE_PPL
