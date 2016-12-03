@@ -15,7 +15,7 @@ Representation applyLinearTransformation( const Representation& _in, const Trafo
 
 template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters) {
-	return _in.linearTransformation(parameters.parameters());
+	return _in.affineTransformation(parameters.matrix(), parameters.vector());
 }
 
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>

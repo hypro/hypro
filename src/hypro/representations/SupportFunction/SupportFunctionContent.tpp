@@ -188,11 +188,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, std::shared_ptr<const lintrafoParameters<Number>> _parameters
+SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number>( _origin, _parameters );
+			mLinearTrafoParameters = new trafoContent<Number>( _origin, A, b );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			mDepth = mLinearTrafoParameters->origin.get()->depth() +1;
@@ -935,10 +935,10 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 }
 
 template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::linearTransformation(
-	  std::shared_ptr<lintrafoParameters<Number>> parameters ) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::affineTransformation(
+	  const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
-		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), parameters, SF_TYPE::LINTRAFO ) );
+		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), A, b, SF_TYPE::LINTRAFO ) );
 	obj->pThis = obj;
 	return obj;
 }

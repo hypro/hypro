@@ -312,8 +312,14 @@ namespace hypro{
 	}
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation( std::shared_ptr<lintrafoParameters<Number>> parameters ) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->linearTransformation(parameters));
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation( const matrix_t<Number>& A ) const {
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->affineTransformation(A, vector_t<Number>::Zero(A.rows())));
+        return res;
+    }
+
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->affineTransformation(A, b));
         return res;
     }
 

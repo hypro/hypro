@@ -73,7 +73,8 @@ public:
 	std::vector<Point<Number>> vertices(const Location<Number>* loc = nullptr) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
-	SupportFunctionT<Number,Converter> linearTransformation( std::shared_ptr<lintrafoParameters<Number>> parameters ) const;
+	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
+	SupportFunctionT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersect( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	SupportFunctionT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hs ) const;

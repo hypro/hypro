@@ -89,7 +89,7 @@ TYPED_TEST(SupportFunctionTest, Supremum) {
 	vector_t<TypeParam> trafoVector = vector_t<TypeParam>(2);
 	trafoVector << 5,6;
 
-	SupportFunction<TypeParam> psf2 = psf1.linearTransformation(std::make_shared<lintrafoParameters<TypeParam>>(trafoMatrix, trafoVector));
+	SupportFunction<TypeParam> psf2 = psf1.affineTransformation(trafoMatrix, trafoVector);
 	HPolytope<TypeParam> hpt2 = hpt1.affineTransformation(trafoMatrix, trafoVector);
 
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(psf2.supremum(), hpt2.supremum(), 4));
@@ -108,7 +108,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	vector_t<TypeParam> v2Rot = rotation*(this->vec2);
 	vector_t<TypeParam> v3Rot = rotation*(this->vec3);
 
-	SupportFunction<TypeParam> res = psf1.linearTransformation(std::make_shared<lintrafoParameters<TypeParam>>(rotation, vector_t<TypeParam>::Zero(rotation.rows())));
+	SupportFunction<TypeParam> res = psf1.linearTransformation(rotation);
 
 	EXPECT_LE(TypeParam(20), res.evaluate(v1Rot).supportValue);
 	EXPECT_LE(TypeParam(5), res.evaluate(v2Rot).supportValue);

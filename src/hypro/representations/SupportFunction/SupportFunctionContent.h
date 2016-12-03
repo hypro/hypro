@@ -43,23 +43,27 @@ struct trafoContent {
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
 
-	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>> _parameters )
-		: origin( _origin ), parameters( _parameters ), currentExponent(1) {
+	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b )
+		: origin( _origin ), currentExponent(1) {
+		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
+		parameters = std::make_shared<const lintrafoParameters<Number>>(A,b);
+		// in case this transformation has already been performed, parameters will be updated.
+		_origin->hasTrafo(parameters, A, b);
 #ifdef USE_LIN_TRANS_REDUCTION
 		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 		bool reduced;
 		do {
 			reduced = false;
-			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *_parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
 				successiveTransformations = origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
 			} else {
 				successiveTransformations = 0;
 			}
 			//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
-			if (successiveTransformations == unsigned(carl::pow(2,_parameters->power)-1)) {
+			if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
 				reduced = true;
-				currentExponent = currentExponent*(carl::pow(2,_parameters->power));
-				for(std::size_t i = 0; i < unsigned(carl::pow(2,_parameters->power)-1); i++ ){
+				currentExponent = currentExponent*(carl::pow(2,parameters->power));
+				for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
 					origin = origin.get()->linearTrafoParameters()->origin;
 				}
 				// Note: The following assertion does not hold in combination with the current reduction techniques.
@@ -124,11 +128,14 @@ struct projectionContent {
 	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
 };
 
-/*
-* This is the super class for all support function objects.
-*/
+/**
+ * @brief      Class for support function content.
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class SupportFunctionContent {
+	friend trafoContent<Number>;
+
   private:
 	SF_TYPE mType;
 	unsigned mDepth;
@@ -157,7 +164,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::shared_ptr<const lintrafoParameters<Number>> _parameters, SF_TYPE _type );
+	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
@@ -240,7 +247,7 @@ class SupportFunctionContent {
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<unsigned>& dimensions) const;
-	std::shared_ptr<SupportFunctionContent<Number>> linearTransformation( std::shared_ptr<lintrafoParameters<Number>> parameters ) const;
+	std::shared_ptr<SupportFunctionContent<Number>> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> intersect( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
@@ -267,6 +274,59 @@ class SupportFunctionContent {
 	}
 
 private:
+
+	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) {
+		switch ( mType ) {
+			case SF_TYPE::SUM: {
+				bool res = mSummands->lhs->hasTrafo(resNode, A, b);
+				if(!res) {
+					res = mSummands->rhs->hasTrafo(resNode, A, b);
+				}
+				return res;
+			}
+			case SF_TYPE::INTERSECT: {
+				bool res = mIntersectionParameters->lhs->hasTrafo(resNode, A, b);
+				if(!res) {
+					res = mIntersectionParameters->rhs->hasTrafo(resNode, A, b);
+				}
+				return res;
+			}
+			case SF_TYPE::LINTRAFO: {
+				if(mLinearTrafoParameters->parameters->matrix() == A && mLinearTrafoParameters->parameters->vector() == b) {
+					resNode = mLinearTrafoParameters->parameters;
+					return true;
+				}
+				return mLinearTrafoParameters->origin->hasTrafo(resNode, A, b);
+			}
+			case SF_TYPE::SCALE: {
+				return mScaleParameters->origin->hasTrafo(resNode, A, b);
+			}
+			case SF_TYPE::UNITE: {
+				bool res = mUnionParameters->lhs->hasTrafo(resNode, A, b);
+				if(!res) {
+					res = mUnionParameters->rhs->hasTrafo(resNode, A, b);
+				}
+				return res;
+			}
+			case SF_TYPE::POLY:
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL:
+			case SF_TYPE::ELLIPSOID:
+			case SF_TYPE::BOX:
+			case SF_TYPE::ZONOTOPE: {
+				return false;
+			}
+			case SF_TYPE::PROJECTION: {
+				return mProjectionParameters->origin->hasTrafo(resNode, A, b);
+				break;
+			}
+			case SF_TYPE::NONE:
+			default:
+				assert(false);
+				return false;
+		}
+	}
+
 	std::vector<SF_TYPE> collectLevelEntries(unsigned level) const {
 		//std::cout << __func__ << ": level: " << level << std::endl;
 		std::vector<SF_TYPE> items;
