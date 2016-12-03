@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -145,7 +145,7 @@ std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">Evalua
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
 <tr class="separator:ad5f9fdf4e4f9233398c5805975f76cea inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68b46352fd0785d620cf32753ac147e0 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68b46352fd0785d620cf32753ac147e0"></a>
-SF_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const </td></tr>
+<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const </td></tr>
 <tr class="separator:a68b46352fd0785d620cf32753ac147e0 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa96307eba3ea37d2625ec638cd8cb5bd inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa96307eba3ea37d2625ec638cd8cb5bd"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>depth</b> () const </td></tr>
@@ -197,11 +197,11 @@ std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
 <tr class="separator:ab4bb4a006fb5f954631497eb78c4dd6e inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf1ac8c81294ae09029194e18a6cbf92 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf1ac8c81294ae09029194e18a6cbf92"></a>
+<tr class="memitem:a7e4b16003fc17536bbabca4104636789 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e4b16003fc17536bbabca4104636789"></a>
 std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (std::shared_ptr&lt; <a class="el" href="structhypro_1_1lintrafoParameters.html">lintrafoParameters</a>&lt; Number &gt;&gt; parameters) const </td></tr>
-<tr class="separator:abf1ac8c81294ae09029194e18a6cbf92 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>affineTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="separator:a7e4b16003fc17536bbabca4104636789 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac87e6f665721e443e64fab8a9c080e0d inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac87e6f665721e443e64fab8a9c080e0d"></a>
 std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
@@ -246,27 +246,27 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a332e17a85fc28887c234d5bcac2b1308 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a332e17a85fc28887c234d5bcac2b1308"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, Number _radius)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, Number _radius)</td></tr>
 <tr class="separator:a332e17a85fc28887c234d5bcac2b1308 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b684c489a2744c204d8eb0c03639e51 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b684c489a2744c204d8eb0c03639e51"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _shapeMatrix)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _shapeMatrix)</td></tr>
 <tr class="separator:a7b684c489a2744c204d8eb0c03639e51 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef2622a136abb17d1adb3eab42ea5792 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef2622a136abb17d1adb3eab42ea5792"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_distances)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_distances)</td></tr>
 <tr class="separator:aef2622a136abb17d1adb3eab42ea5792 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab685c8b686d72df8dd4dca240957990d inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab685c8b686d72df8dd4dca240957990d"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
 <tr class="separator:ab685c8b686d72df8dd4dca240957990d inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c34a4684dff332fe8a891038867131 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6c34a4684dff332fe8a891038867131"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (SF_TYPE _type, const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
 <tr class="separator:ae6c34a4684dff332fe8a891038867131 inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab082a70e70713b917f0d2fbabf2e8d5d inherit pub_static_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab082a70e70713b917f0d2fbabf2e8d5d"></a>
 static std::shared_ptr<br class="typebreak"/>

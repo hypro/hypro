@@ -31,6 +31,7 @@ var searchData=
   ['settransitions',['setTransitions',['../classhypro_1_1HybridAutomaton.html#a9b1f87166698af483399b1ca3e535f68',1,'hypro::HybridAutomaton']]],
   ['setvalue',['setValue',['../classhypro_1_1Dictionary.html#ad0bddaf9d922dcc00e3e89386b6a66e4',1,'hypro::Dictionary']]],
   ['setzeros',['setZeros',['../classhypro_1_1Dictionary.html#a230158deb491be062b9261a3b0624781',1,'hypro::Dictionary']]],
+  ['sf_5ftype',['SF_TYPE',['../namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7',1,'hypro']]],
   ['signeddistance',['signedDistance',['../classhypro_1_1Halfspace.html#a4ca6f32bb4d9bbce85be694bfbbeca7f',1,'hypro::Halfspace']]],
   ['simplexsolver_2eh',['SimplexSolver.h',['../SimplexSolver_8h.html',1,'']]],
   ['singlevariableconstraintparser',['singleVariableConstraintParser',['../structhypro_1_1parser_1_1singleVariableConstraintParser.html',1,'hypro::parser']]],

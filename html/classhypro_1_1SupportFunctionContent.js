@@ -2,6 +2,7 @@ var classhypro_1_1SupportFunctionContent =
 [
     [ "SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html#ae663163a1508db76394a63500681df07", null ],
     [ "~SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html#a0278a630687051ef9bf1434dc3be09e4", null ],
+    [ "affineTransformation", "classhypro_1_1SupportFunctionContent.html#a7e4b16003fc17536bbabca4104636789", null ],
     [ "ball", "classhypro_1_1SupportFunctionContent.html#a6cd4c36298734ae1b3c38bf8884e0d99", null ],
     [ "collectProjections", "classhypro_1_1SupportFunctionContent.html#a4e32c2140ced5b23b32a9dd12f354789", null ],
     [ "contains", "classhypro_1_1SupportFunctionContent.html#ab4f185008a1ec23a3cd6d5865e27c61a", null ],
@@ -15,7 +16,6 @@ var classhypro_1_1SupportFunctionContent =
     [ "intersect", "classhypro_1_1SupportFunctionContent.html#a59736d5bf4695bd10b46dfceb3b70fe6", null ],
     [ "intersectionParameters", "classhypro_1_1SupportFunctionContent.html#a4df3c7489c8f81af23d8ddcd37192917", null ],
     [ "linearTrafoParameters", "classhypro_1_1SupportFunctionContent.html#a165e150c8e905aaa48ad842f96ff4642", null ],
-    [ "linearTransformation", "classhypro_1_1SupportFunctionContent.html#abf1ac8c81294ae09029194e18a6cbf92", null ],
     [ "minkowskiSum", "classhypro_1_1SupportFunctionContent.html#ac87e6f665721e443e64fab8a9c080e0d", null ],
     [ "multiEvaluate", "classhypro_1_1SupportFunctionContent.html#afc7eb58248917888401b2f86d017f1be", null ],
     [ "multiplicationsPerEvaluation", "classhypro_1_1SupportFunctionContent.html#abf48c78f07759d666fe241d54741fb98", null ],

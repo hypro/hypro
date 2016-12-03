@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"structhypro_1_1lintrafoParameters.html#a556d2c88b09451a27ad62b6abd2037ad":[6,0,1,53,1],
 "structhypro_1_1lintrafoParameters.html#a59ea2fd75e5b9b9a7aeca4c0afbb6b3a":[6,0,1,53,6],
 "structhypro_1_1lintrafoParameters.html#a7c17cc5d07c5e49003fc1872b507ae5f":[6,0,1,53,5],
 "structhypro_1_1lintrafoParameters.html#a8487957c333e47491d0f5369e8ed83d3":[6,0,1,53,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "structhypro_1_1scaleContent.html#a00e29c2dc8cbab60df74d2d7bddf7583":[6,0,1,49,0],
 "structhypro_1_1scaleContent.html#a6af5744edb66f9b41f9ea9833e65645f":[6,0,1,49,2],
 "structhypro_1_1scaleContent.html#a889463b9c2d8b7983b8753a9076a2275":[6,0,1,49,3],
-"structhypro_1_1scaleContent.html#aaf5f2692d015b3ee636b057c63e1dac6":[6,0,1,49,1],
-"structhypro_1_1sumContent.html":[6,0,1,47]
+"structhypro_1_1scaleContent.html#aaf5f2692d015b3ee636b057c63e1dac6":[6,0,1,49,1]
 };

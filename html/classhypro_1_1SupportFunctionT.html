@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">0.1.0</span>
+   &#160;<span id="projectnumber">1.0.0</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_orig)</td></tr>
 <tr class="separator:aefd078611ee83cd0a01ab44bc6f26d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3ba377c54590833ef043e9381c9d0f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3ba377c54590833ef043e9381c9d0f4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (SF_TYPE _type, Number _radius)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, Number _radius)</td></tr>
 <tr class="separator:ad3ba377c54590833ef043e9381c9d0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aade64ee224d0b096ab10c78666429558"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aade64ee224d0b096ab10c78666429558"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_vertices)</td></tr>
@@ -164,7 +164,7 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> 
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 <tr class="separator:a5e577685366129d54f1badb601035ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae6c428e5009c1622f8d04b9330d03c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae6c428e5009c1622f8d04b9330d03c2"></a>
-SF_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>sfType</b> () const </td></tr>
+<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sfType</b> () const </td></tr>
 <tr class="separator:aae6c428e5009c1622f8d04b9330d03c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d2092fc9cafbff6e2e0f4f9041cb08b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d2092fc9cafbff6e2e0f4f9041cb08b"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>depth</b> () const </td></tr>
@@ -219,10 +219,14 @@ Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () con
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
 <tr class="separator:ac86b70574582b04018f764d98ef5eca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa9d98aac031843d4fb4668b41ad9ffa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa9d98aac031843d4fb4668b41ad9ffa"></a>
+<tr class="memitem:a180a7366945d1a7936a50c745e30b53b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a180a7366945d1a7936a50c745e30b53b"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (std::shared_ptr&lt; <a class="el" href="structhypro_1_1lintrafoParameters.html">lintrafoParameters</a>&lt; Number &gt;&gt; parameters) const </td></tr>
-<tr class="separator:aaa9d98aac031843d4fb4668b41ad9ffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="separator:a180a7366945d1a7936a50c745e30b53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7728df10d18edc42f578a2c1a4e910b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7728df10d18edc42f578a2c1a4e910b2"></a>
+<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>affineTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="separator:a7728df10d18edc42f578a2c1a4e910b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c409c96f0c00954bb648239785c1b18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c409c96f0c00954bb648239785c1b18"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
