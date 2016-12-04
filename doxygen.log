@@ -1225,6 +1225,8 @@ Generati/home/travis/build/hypro/hypro/doc/markdown/gettingStarted.md:8: warning
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:43: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const =0 (function) of class hypro::GeometricObject is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:44: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const =0 (function) of class hypro::GeometricObject is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:45: warning: Member project(const std::vector< unsigned > &dimensions) const =0 (function) of class hypro::GeometricObject is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:46: warning: Member linearTransformation(const matrix_t< Number > &A) const =0 (function) of class hypro::GeometricObject is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:47: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const =0 (function) of class hypro::GeometricObject is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:48: warning: Member minkowskiSum(const DerivedShape &rhs) const =0 (function) of class hypro::GeometricObject is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:50: warning: Member intersectHalfspace(const Halfspace< Number > &rhs) const =0 (function) of class hypro::GeometricObject is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:51: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const =0 (function) of class hypro::GeometricObject is not documented.
@@ -2488,5 +2490,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4817/65536 hits=39853 misses=5501
+lookup cache used 4820/65536 hits=40033 misses=5504
 finished...
