@@ -43,8 +43,8 @@ public:
 	virtual std::pair<bool, DerivedShape> satisfiesHalfspace( const Halfspace<Number>& rhs ) const = 0;
 	virtual std::pair<bool, DerivedShape> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const = 0;
 	virtual DerivedShape project(const std::vector<unsigned>& dimensions) const = 0;
-	// virtual GeometricObject<Number> linearTransformation( const matrix_t<Number>& A ) const = 0;
-	// virtual GeometricObject<Number> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const = 0;
+	virtual DerivedShape linearTransformation( const matrix_t<Number>& A ) const = 0;
+	virtual DerivedShape affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const = 0;
 	virtual DerivedShape minkowskiSum( const DerivedShape& rhs ) const = 0;
 	// virtual DerivedShape intersect( const DerivedShape& rhs ) const = 0;
 	virtual DerivedShape intersectHalfspace( const Halfspace<Number>& rhs ) const = 0;

@@ -30,7 +30,7 @@ PolytopeT<Number,Converter>::PolytopeT( unsigned dimension )
 
 template <typename Number, typename Converter>
 PolytopeT<Number,Converter>::PolytopeT( const Point<Number> &_point )
-	: mPolyhedron( C_Polyhedron( polytope::pplDimension( _point ) + 1, Parma_Polyhedra_Library::EMPTY ) ) {
+	: mPolyhedron( C_Polyhedron( _point.dimension(), Parma_Polyhedra_Library::EMPTY ) ) {
 	// std::cout << "Try Ppint: " << _point << std::endl;
 	mPolyhedron.add_generator( polytope::pointToGenerator( _point ) );
 	mPoints.push_back( _point );
@@ -42,7 +42,7 @@ PolytopeT<Number,Converter>::PolytopeT( const typename std::vector<Point<Number>
 	// mPolyhedron.initialize();
 	// std::cout << "Try Points" << std::endl;
 	mPolyhedron =
-		  Parma_Polyhedra_Library::C_Polyhedron( polytope::pplDimension( points ) + 1, Parma_Polyhedra_Library::EMPTY );
+		  Parma_Polyhedra_Library::C_Polyhedron( points.begin()->dimension(), Parma_Polyhedra_Library::EMPTY );
 	for ( auto &point : points ) {
 		mPolyhedron.add_generator( polytope::pointToGenerator( point ) );
 		mPoints.push_back( point );
@@ -53,7 +53,7 @@ PolytopeT<Number,Converter>::PolytopeT( const typename std::vector<Point<Number>
 template <typename Number, typename Converter>
 PolytopeT<Number,Converter>::PolytopeT( const typename std::vector<vector_t<Number>> &points ) {
 	mPolyhedron =
-		  Parma_Polyhedra_Library::C_Polyhedron( polytope::pplDimension( points ), Parma_Polyhedra_Library::EMPTY );
+		  Parma_Polyhedra_Library::C_Polyhedron( points.begin()->rows(), Parma_Polyhedra_Library::EMPTY );
 	for ( auto pointIt = points.begin(); pointIt != points.end(); ++pointIt ) {
 		Generator tmp = polytope::pointToGenerator( *pointIt );
 		mPolyhedron.add_generator( tmp );
