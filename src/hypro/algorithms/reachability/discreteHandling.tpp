@@ -16,6 +16,12 @@ namespace reachability {
 			#ifdef REACH_DEBUG
 			std::cout << "Transition enabled!" << std::endl;
 			#endif
+
+			//for(unsigned rowIndex = 0; rowIndex < _trans->guard().mat.rows(); ++rowIndex) {
+			//	Halfspace<Number> tmp( vector_t<Number>(_trans->guard().mat.row(rowIndex)), _trans->guard().vec(rowIndex));
+			//	Plotter<Number>::getInstance().addObject( tmp );
+			//}
+
 			result.set = guardSatisfyingSet.second;
 			return true;
 		} else {
@@ -86,6 +92,10 @@ namespace reachability {
 			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
 			s.set = collectedSets;
+
+			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
+			//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
+
 
 			s.timestamp = aggregatedTimestamp;
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;

@@ -72,7 +72,7 @@ void Plotter<Number>::plot2d() const {
 		if(mSettings.keepAspectRatio) {
 			mOutfile << "set size square\n";
 		}
-		mOutfile << "set term pdf\n";
+		mOutfile << "set term pdf font ',10'\n";
 		mOutfile << "set output \"" << mFilename << ".pdf\n";
 		if(mSettings.grid) {
 			mOutfile << "set xtics autofreq\n";
