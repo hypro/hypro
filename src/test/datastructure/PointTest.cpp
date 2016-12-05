@@ -147,6 +147,11 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     this->p1.setCoordinate(this->y, 7);
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
+
+    this->p1[3] = 14;
+    EXPECT_EQ(this->p1[this->x], TypeParam(4));
+    EXPECT_EQ(this->p1[this->y], TypeParam(7));
+    EXPECT_EQ(this->p1[3], TypeParam(14));
 }
 
 /**
@@ -167,13 +172,13 @@ TYPED_TEST(PointTest, OperationTest)
 TYPED_TEST(PointTest, DimensionTest)
 {
 	this->p1.setCoordinate(this->a, 14);
-    EXPECT_EQ(this->p1.dimension(), 3);
+    EXPECT_EQ(this->p1.dimension(), unsigned(3));
 
     std::vector<unsigned> dims;
     dims.push_back(0);
     dims.push_back(2);
     this->p1 = this->p1.reduceToDimensions(dims);
-    EXPECT_EQ(2, this->p1.dimension());
+    EXPECT_EQ(unsigned(2), this->p1.dimension());
 }
 
 /**
@@ -249,6 +254,22 @@ TYPED_TEST(PointTest, AffineTransformation) {
 	EXPECT_EQ(Point<TypeParam>({74,11}), this->p2.affineTransformation(A, v));
 	EXPECT_EQ(Point<TypeParam>({-23,-56}), this->p3.affineTransformation(A, v));
 	EXPECT_EQ(Point<TypeParam>({66,15}), this->p4.affineTransformation(A, v));
+}
+
+TYPED_TEST(PointTest, Projection) {
+	Point<TypeParam> p1({1,2,3,4,5,6,7});
+	std::vector<unsigned> dims;
+	Point<TypeParam> empt = p1.project(dims);
+	EXPECT_EQ(empt.dimension(), unsigned(0));
+
+
+	dims.push_back(0);
+	dims.push_back(1);
+	dims.push_back(4);
+	dims.push_back(5);
+
+	p1 = p1.project(dims);
+	EXPECT_EQ(p1, Point<TypeParam>({1,2,5,6}));
 }
 
 /*
