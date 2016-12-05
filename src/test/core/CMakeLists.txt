@@ -10,6 +10,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#ifdef LOGGING_HYPRO
 		#LoggerTest.cpp
 		#endif
+		UtilityTest.cpp
 	)
 
 	add_dependencies(runCoreTests googletest)

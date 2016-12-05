@@ -32,12 +32,9 @@ protected:
 		 * Location Setup
 		 */
 
-		std::cout << "Set up." << std::endl;
-
 		loc1 = locMan.create();
     	loc2 = locMan.create();
 
-    	std::cout << "Created locations " << loc1->id() << " and " << loc2->id() << std::endl;
 
     	trans = new hypro::Transition<Number>();
 
@@ -114,7 +111,6 @@ protected:
 
     virtual void TearDown()
     {
-    	std::cout << "Tear down." << std::endl;
     	//delete loc1;
     	//delete loc2;
     	//delete trans;
@@ -189,6 +185,11 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 
 	//location: set of outgoing transitions
 	EXPECT_EQ(this->loc1->transitions(), this->transSet);
+
+	EXPECT_TRUE(*this->loc1 < *this->loc2);
+	EXPECT_FALSE(*this->loc2 < *this->loc1);
+
+	EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2));
 }
 
 /**
