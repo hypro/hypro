@@ -47,6 +47,7 @@ class Location {
 
   protected:
 
+  	Location();
 	Location( unsigned _id );
 	Location( unsigned _id, const Location& _loc );
 	Location( unsigned _id, const matrix_t<Number>& _mat );

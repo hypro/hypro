@@ -8,6 +8,7 @@
 #include "../../hypro/datastructures/hybridAutomata/LocationManager.h"
 #include "../../hypro/datastructures/hybridAutomata/Transition.h"
 #include "../../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../../hypro/datastructures/hybridAutomata/RawState.h"
 #include "../../hypro/representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
 
@@ -31,8 +32,13 @@ protected:
 		 * Location Setup
 		 */
 
+		std::cout << "Set up." << std::endl;
+
 		loc1 = locMan.create();
     	loc2 = locMan.create();
+
+    	std::cout << "Created locations " << loc1->id() << " and " << loc2->id() << std::endl;
+
     	trans = new hypro::Transition<Number>();
 
 		invariantVec(0) = 10;
@@ -93,7 +99,10 @@ protected:
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
-			hybrid.addInitialState(loc, std::make_pair(hpoly.matrix(), hpoly.vector()));
+			RawState<Number> initState;
+			initState.location = loc;
+			initState.set = std::make_pair(hpoly.matrix(), hpoly.vector());
+			hybrid.addInitialState(initState);
 		}
 
 		transition[0] = trans;
@@ -105,9 +114,10 @@ protected:
 
     virtual void TearDown()
     {
-    	delete loc1;
-    	delete loc2;
-    	delete trans;
+    	std::cout << "Tear down." << std::endl;
+    	//delete loc1;
+    	//delete loc2;
+    	//delete trans;
     }
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
@@ -219,5 +229,5 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	h1.addTransition(this->trans);
 	EXPECT_TRUE(std::find(h1.transitions().begin(), h1.transitions().end(), this->trans) != h1.transitions().end());
 
-	h1.addInitialState(RawState<Number>());
+	h1.addInitialState(RawState<TypeParam>());
 }
