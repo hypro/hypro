@@ -370,7 +370,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:163: warning: Compound hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:22: warning: Compound hypro::Cone is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:50: warning: Compound hypro::PolynomialODE is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:116: warning: Compound hypro::locPtrComp is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:117: warning: Compound hypro::locPtrComp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:240: warning: Compound std::hash< hypro::Vertex< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:92: warning: Compound std::hash< hypro::Ridge< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/polynomialParser.h:155: warning: Compound hypro::parser::resetParser is not documented.
@@ -978,33 +978,33 @@ Generati/home/travis/build/hypro/hypro/doc/markdown/gettingStarted.md:8: warning
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/LocationManager.h:52: warning: Member id(const Location< Number > *_loc) const  (function) of class hypro::LocationManager is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/LocationManager.h:53: warning: Member location(unsigned _id) const  (function) of class hypro::LocationManager is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:46: warning: Member transitionSet (typedef) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:80: warning: Member invariant() const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:81: warning: Member transitions() const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:82: warning: Member externalInput() const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:83: warning: Member id() const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:85: warning: Member setFlow(const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:86: warning: Member setInvariant(const struct Location< Number >::Invariant &_inv) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:87: warning: Member setInvariant(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:88: warning: Member setLocation(const struct locationContent &_loc) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:89: warning: Member setTransitions(const transitionSet &_trans) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:90: warning: Member addTransition(Transition< Number > *_trans) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:91: warning: Member setExtInputMat(const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:92: warning: Member addArtificialDimension() (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:94: warning: Member operator<(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:95: warning: Member operator==(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:96: warning: Member operator!=(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:50: warning: Member Location(unsigned _id) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:51: warning: Member Location(unsigned _id, const Location &_loc) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:52: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:53: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat, const transitionSet &_trans, const Location< Number >::Invariant &_inv) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:55: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat, const transitionSet &_trans, const Location< Number >::Invariant &_inv, const matrix_t< Number > &_extInputMat) (function) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:98: warning: Member operator<<(std::ostream &_ostr, const Location< Number > &_l) (friend) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:81: warning: Member invariant() const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:82: warning: Member transitions() const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:83: warning: Member externalInput() const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:84: warning: Member id() const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:86: warning: Member setFlow(const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:87: warning: Member setInvariant(const struct Location< Number >::Invariant &_inv) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:88: warning: Member setInvariant(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:89: warning: Member setLocation(const struct locationContent &_loc) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:90: warning: Member setTransitions(const transitionSet &_trans) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:91: warning: Member addTransition(Transition< Number > *_trans) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:92: warning: Member setExtInputMat(const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:93: warning: Member addArtificialDimension() (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:95: warning: Member operator<(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:96: warning: Member operator==(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:97: warning: Member operator!=(const Location< Number > &_rhs) const  (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:51: warning: Member Location(unsigned _id) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:52: warning: Member Location(unsigned _id, const Location &_loc) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:53: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:54: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat, const transitionSet &_trans, const Location< Number >::Invariant &_inv) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:56: warning: Member Location(unsigned _id, const matrix_t< Number > &_mat, const transitionSet &_trans, const Location< Number >::Invariant &_inv, const matrix_t< Number > &_extInputMat) (function) of class hypro::Location is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:99: warning: Member operator<<(std::ostream &_ostr, const Location< Number > &_l) (friend) of class hypro::Location is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:39: warning: Member addArtificialDimension() (function) of class hypro::Location::Invariant is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:33: warning: Member vec (variable) of class hypro::Location::Invariant is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:34: warning: Member mat (variable) of class hypro::Location::Invariant is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:36: warning: Member discreteOffset (variable) of class hypro::Location::Invariant is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:37: warning: Member discreteInvariant (variable) of class hypro::Location::Invariant is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:117: warning: Member operator()(const Location< Number > *lhs, const Location< Number > *rhs) const  (function) of class hypro::locPtrComp is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Location.h:118: warning: Member operator()(const Location< Number > *lhs, const Location< Number > *rhs) const  (function) of class hypro::locPtrComp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:19: warning: Member operator()(const T &, const U &) const  (function) of class hypro::are_strict_equals is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:25: warning: Member operator()(const T &lhs, const T &rhs) const  (function) of class hypro::are_strict_equals is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:52: warning: Member operator==(const State< Number > &rhs) const  (function) of class hypro::State is not documented.
@@ -2493,5 +2493,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4828/65536 hits=40104 misses=5512
+lookup cache used 4828/65536 hits=40106 misses=5512
 finished...

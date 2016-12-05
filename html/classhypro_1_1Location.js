@@ -2,6 +2,7 @@ var classhypro_1_1Location =
 [
     [ "Invariant", "structhypro_1_1Location_1_1Invariant.html", "structhypro_1_1Location_1_1Invariant" ],
     [ "transitionSet", "classhypro_1_1Location.html#a3b37e0dfcaa509cf7a46d51ed512d454", null ],
+    [ "Location", "classhypro_1_1Location.html#a5341ef657623c4188e479cf17c39ef11", null ],
     [ "Location", "classhypro_1_1Location.html#a834311b466e58d4a4a0b514450f2dd80", null ],
     [ "Location", "classhypro_1_1Location.html#a8decddc4605274a5d9da02b1f064736b", null ],
     [ "Location", "classhypro_1_1Location.html#a21438e7625ec40f129bd23c58799144a", null ],
