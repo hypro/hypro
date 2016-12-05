@@ -148,10 +148,10 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
 
-    this->p1[3] = 14;
+    this->p1[4] = 14;
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
-    EXPECT_EQ(this->p1[3], TypeParam(14));
+    EXPECT_EQ(this->p1[4], TypeParam(14));
 }
 
 /**
