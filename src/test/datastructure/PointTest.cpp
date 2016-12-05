@@ -152,6 +152,12 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
     EXPECT_EQ(this->p1[4], TypeParam(14));
+
+	this->p1[VariablePool::getInstance().carlVarByIndex(5)] = 3;
+    EXPECT_EQ(this->p1[this->x], TypeParam(4));
+    EXPECT_EQ(this->p1[this->y], TypeParam(7));
+    EXPECT_EQ(this->p1[4], TypeParam(14));
+    EXPECT_EQ(this->p1[5], TypeParam(3));
 }
 
 /**

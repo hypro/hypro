@@ -52,7 +52,8 @@ TYPED_TEST(HalfspaceTest, Constructor)
 
 TYPED_TEST(HalfspaceTest, Access)
 {
-
+	Halfspace<TypeParam> tmp ({1,2},3);
+	std::cout << tmp << std::endl;
 }
 
 TYPED_TEST(HalfspaceTest, Evaluation)

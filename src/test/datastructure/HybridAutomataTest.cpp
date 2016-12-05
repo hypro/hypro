@@ -207,22 +207,17 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
  */
 TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 {
-	//hybrid automaton: initial Location
-	//EXPECT_EQ(this->hybrid.initialLocations(), this->initLocSet);
-	//EXPECT_NE(this->hybrid.initialLocations(), this->locSet);
+	// construct a new hybrid automaton.
+	HybridAutomaton<TypeParam> h1;
 
-	//hybrid automaton: Location set
-	EXPECT_EQ(this->hybrid.locations(), this->locSet);
-	EXPECT_NE(this->hybrid.locations(), this->initLocSet);
+	h1.addLocation(this->loc1);
+	h1.addLocation(this->loc2);
 
-	//hybrid automaton: Transition set
-	EXPECT_EQ(this->hybrid.transitions(), this->transSet);
+	EXPECT_TRUE(std::find(h1.locations().begin(), h1.locations().end(), this->loc1) != h1.locations().end());
+	EXPECT_TRUE(std::find(h1.locations().begin(), h1.locations().end(), this->loc2) != h1.locations().end());
 
-	//hybrid automaton: initial Valuation
-	//equivalence has to be confirmed through console output
-#ifdef fReach_DEBUG
-	//this->hybrid.initialValuation().print();
-	this->poly.print();
-#endif
+	h1.addTransition(this->trans);
+	EXPECT_TRUE(std::find(h1.transitions().begin(), h1.transitions().end(), this->trans) != h1.transitions().end());
 
+	h1.addInitialState(RawState<Number>());
 }
