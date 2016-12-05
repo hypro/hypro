@@ -40,5 +40,5 @@ var classhypro_1_1ZonotopeT =
     [ "supremum", "classhypro_1_1ZonotopeT.html#a5f0edaa86017da294d6ccc608cebf30b", null ],
     [ "unite", "classhypro_1_1ZonotopeT.html#a0d2a1a24abd99f823a6e7872673b9d5d", null ],
     [ "uniteEqualVectors", "classhypro_1_1ZonotopeT.html#a2826dbe69a33cbcfb65fccbcf8943e4f", null ],
-    [ "vertices", "classhypro_1_1ZonotopeT.html#a82c286e1db5feba71d6b2688ae60a63c", null ]
+    [ "vertices", "classhypro_1_1ZonotopeT.html#ae8fcbde0c2acae76eff2d1365b958f2d", null ]
 ];

@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"structhypro_1_1scaleContent.html#a00e29c2dc8cbab60df74d2d7bddf7583":[6,0,1,49,0],
+"structhypro_1_1scaleContent.html#a6af5744edb66f9b41f9ea9833e65645f":[6,0,1,49,2],
 "structhypro_1_1scaleContent.html#a889463b9c2d8b7983b8753a9076a2275":[6,0,1,49,3],
 "structhypro_1_1scaleContent.html#aaf5f2692d015b3ee636b057c63e1dac6":[6,0,1,49,1],
 "structhypro_1_1sumContent.html":[6,0,1,47],

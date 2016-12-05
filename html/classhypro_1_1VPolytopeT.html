@@ -242,9 +242,9 @@ pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>inse
 <tr class="memitem:ac5d1019d396ee24f86e554d54555a69e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d1019d396ee24f86e554d54555a69e"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)</td></tr>
 <tr class="separator:ac5d1019d396ee24f86e554d54555a69e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc405f55ffdbc68a4c519260d65e7e6f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc405f55ffdbc68a4c519260d65e7e6f"></a>
-const pointVector &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> () const </td></tr>
-<tr class="separator:abc405f55ffdbc68a4c519260d65e7e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7af34bcb9e3d970727059224dcc3ef8c"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="separator:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d46a5456072d2bb9c90862ab919447"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d46a5456072d2bb9c90862ab919447"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;vertex) const </td></tr>
 <tr class="separator:ac5d46a5456072d2bb9c90862ab919447"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -723,13 +723,15 @@ template&lt;typename Number , typename Converter &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Checks if the polytope represents the empty set. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if there are no vertices. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00218">218</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 

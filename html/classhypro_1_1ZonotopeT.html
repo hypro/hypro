@@ -186,9 +186,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresent
 <tr class="separator:acab4bc81bda49d0e3d8c65c2762c90a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51365fb30d507f41f83c12d2ad01140c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a51365fb30d507f41f83c12d2ad01140c">computeZonotopeBoundary</a> ()</td></tr>
 <tr class="separator:a51365fb30d507f41f83c12d2ad01140c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82c286e1db5feba71d6b2688ae60a63c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a82c286e1db5feba71d6b2688ae60a63c">vertices</a> () const </td></tr>
-<tr class="memdesc:a82c286e1db5feba71d6b2688ae60a63c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a set of points containing the extreme points of a zonotopeT.  <a href="#a82c286e1db5feba71d6b2688ae60a63c">More...</a><br/></td></tr>
-<tr class="separator:a82c286e1db5feba71d6b2688ae60a63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8fcbde0c2acae76eff2d1365b958f2d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae8fcbde0c2acae76eff2d1365b958f2d">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="memdesc:ae8fcbde0c2acae76eff2d1365b958f2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a set of points containing the extreme points of a zonotopeT.  <a href="#ae8fcbde0c2acae76eff2d1365b958f2d">More...</a><br/></td></tr>
+<tr class="separator:ae8fcbde0c2acae76eff2d1365b958f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06326a8d391a121c5f3ab6e4baf76153"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a06326a8d391a121c5f3ab6e4baf76153">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a06326a8d391a121c5f3ab6e4baf76153"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acce622f1a244f5c882e64902dc7c12a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acce622f1a244f5c882e64902dc7c12a1"></a>
@@ -548,6 +548,9 @@ template&lt;typename Number, typename Converter&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::empty </td>
@@ -556,9 +559,16 @@ template&lt;typename Number, typename Converter&gt; </div>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Returns, whether the zonotopeT is empty. </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -983,24 +993,35 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a82c286e1db5feba71d6b2688ae60a63c"></a>
+<a class="anchor" id="ae8fcbde0c2acae76eff2d1365b958f2d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Compute a set of points containing the extreme points of a zonotopeT. </p>
 <p>Compute all possible extreme points of a zonotopeT by considering all combinations of generators. This gives a set of points, which contains also the real extreme points but also some internal points. </p>
 <dl class="section return"><dt>Returns</dt><dd>vector of points. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

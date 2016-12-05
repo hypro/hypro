@@ -30,7 +30,7 @@ var NAVTREEINDEX0 =
 "Facet_8h_source.html":[7,0,1,0,1,1],
 "Fan_8h_source.html":[7,0,1,0,3,5,3],
 "GeometricObject_8h.html":[7,0,1,0,3,9],
-"GeometricObject_8h.html#a77c748d2de8b266db9e5cc40d4674941":[7,0,1,0,3,9,3],
+"GeometricObject_8h.html#a77c748d2de8b266db9e5cc40d4674941":[7,0,1,0,3,9,4],
 "GeometricObject_8h_source.html":[7,0,1,0,3,9],
 "Grid_8h_source.html":[7,0,1,0,3,3,1],
 "HPolytope_8h_source.html":[7,0,1,0,3,5,0,0],

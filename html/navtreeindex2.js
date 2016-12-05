@@ -1,9 +1,11 @@
 var NAVTREEINDEX2 =
 {
-"classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460":[6,0,1,30,7],
-"classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938":[6,0,1,30,8],
-"classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55":[6,0,1,30,6],
-"classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2":[6,0,1,30,10],
+"classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858":[6,0,1,30,5],
+"classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a":[6,0,1,30,1],
+"classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460":[6,0,1,30,8],
+"classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938":[6,0,1,30,9],
+"classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55":[6,0,1,30,7],
+"classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2":[6,0,1,30,11],
 "classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c":[6,0,1,30,3],
 "classhypro_1_1Grid.html":[6,0,1,32],
 "classhypro_1_1Grid.html#a0f8fbbb680b47f65044897c5ce256190":[6,0,1,32,0],
@@ -129,8 +131,8 @@ var NAVTREEINDEX2 =
 "classhypro_1_1HPolytopeT.html#afac3ecf13ac1ff4ec7f8c993acbde80a":[6,0,1,38,46],
 "classhypro_1_1Halfspace.html":[6,0,1,10],
 "classhypro_1_1Halfspace.html#a06954f786a8c8d82a976cc9f82bff646":[6,0,1,10,2],
-"classhypro_1_1Halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[6,0,1,10,22],
 "classhypro_1_1Halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[6,0,1,10,21],
+"classhypro_1_1Halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[6,0,1,10,22],
 "classhypro_1_1Halfspace.html#a37412da1ef224814a1bef59a76948d70":[6,0,1,10,28],
 "classhypro_1_1Halfspace.html#a37d91b16922a80a1d02ce2ab9cceac50":[6,0,1,10,11],
 "classhypro_1_1Halfspace.html#a3e8e3ac6a8105361f8d4237a46948f38":[6,0,1,10,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045":[6,0,1,67,6],
 "classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa":[6,0,1,67,7],
 "classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d":[6,0,1,67,11],
-"classhypro_1_1Optimizer.html#a89f350d8cec00223bdc10fac5dd69437":[6,0,1,67,8],
-"classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c":[6,0,1,67,4],
-"classhypro_1_1Optimizer.html#a9a40a723d2553a38a480e4ba18ad02db":[6,0,1,67,14]
+"classhypro_1_1Optimizer.html#a89f350d8cec00223bdc10fac5dd69437":[6,0,1,67,8]
 };

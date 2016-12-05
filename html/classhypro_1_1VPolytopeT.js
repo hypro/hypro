@@ -50,5 +50,5 @@ var classhypro_1_1VPolytopeT =
     [ "unite", "classhypro_1_1VPolytopeT.html#abf5d51b4434baff8cf6bc50b6cf37f97", null ],
     [ "unsafeSetNeighbors", "classhypro_1_1VPolytopeT.html#a6aaad82f80c7ae53d5fef36a3ae12406", null ],
     [ "updateNeighbors", "classhypro_1_1VPolytopeT.html#a08246835822202d4c7498daff899588e", null ],
-    [ "vertices", "classhypro_1_1VPolytopeT.html#abc405f55ffdbc68a4c519260d65e7e6f", null ]
+    [ "vertices", "classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c", null ]
 ];
