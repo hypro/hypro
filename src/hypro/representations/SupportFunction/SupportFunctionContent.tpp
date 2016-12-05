@@ -1037,7 +1037,7 @@ bool SupportFunctionContent<Number>::empty() const {
 			return mBall->empty();
 		}
 		case SF_TYPE::LINTRAFO: {
-			return mLinearTrafoParameters->origin.empty();
+			return mLinearTrafoParameters->origin->empty();
 		}
 		case SF_TYPE::POLY: {
 			return mPolytope->empty();
@@ -1052,7 +1052,7 @@ bool SupportFunctionContent<Number>::empty() const {
 			if ( mScaleParameters->factor == 0 )
 				return true;
 			else
-				return mScaleParameters->origin.empty();  // Todo: What if factor is negative?
+				return mScaleParameters->origin->empty();  // Todo: What if factor is negative?
 		}
 		case SF_TYPE::SUM: {
 			return ( mSummands->lhs->empty() && mSummands->rhs->empty() );
@@ -1061,14 +1061,17 @@ bool SupportFunctionContent<Number>::empty() const {
 			return ( mUnionParameters->lhs->empty() && mUnionParameters->rhs->empty() );
 		}
 		case SF_TYPE::INTERSECT: {
+			if (mIntersectionParameters->rhs->empty() || mIntersectionParameters->lhs->empty()) {
+				return true;
+			}
 			// TODO: Current implementation uses template evaluation.
-			std::vector<vector_t<Number>> directions = computeTemplate(this->dimension(), defaultTemplateDirectionCount);
+			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 			for(const auto& direction : directions){
-				Number rhsPos = mIntersectionParameters->rhs.evaluate(direction);
-				Number lhsNeg = mIntersectionParameters->lhs.evaluate(-direction);
+				Number rhsPos = mIntersectionParameters->rhs->evaluate(direction).supportValue;
+				Number lhsNeg = mIntersectionParameters->lhs->evaluate(-direction).supportValue;
 				if(rhsPos < -lhsNeg) return true;
-				Number rhsNeg = mIntersectionParameters->rhs.evaluate(-direction);
-				Number lhsPos = mIntersectionParameters->lhs.evaluate(direction);
+				Number rhsNeg = mIntersectionParameters->rhs->evaluate(-direction).supportValue;
+				Number lhsPos = mIntersectionParameters->lhs->evaluate(direction).supportValue;
 				if(-rhsNeg > lhsPos) return true;
 			}
 			return false;

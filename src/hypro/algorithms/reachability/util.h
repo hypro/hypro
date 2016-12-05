@@ -8,17 +8,6 @@ namespace hypro {
 namespace reachability {
 
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters ) {
-	//std::cout << __func__ << " in: " << _in << std::endl << "matrix: " << parameters.matrix() << std::endl << "vector " << std::endl << parameters.vector() << std::endl;
-	return _in.affineTransformation(parameters.matrix(), parameters.vector());
-}
-
-template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
-Representation applyLinearTransformation( const Representation& _in, const TrafoParameters<Number>& parameters) {
-	return _in.affineTransformation(parameters.matrix(), parameters.vector());
-}
-
-template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 void applyReduction( Representation& ) {
 }
 
@@ -99,7 +88,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	//std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
 	//std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
 	//assert(tmpMatrix.row(dim-1).nonZeros() == 0);
-	Representation transformedInitialSet = applyLinearTransformation(initialSet, TrafoParameters<Number>(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1))));
+	Representation transformedInitialSet = initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
 	auto b1 = Converter<Number>::toBox(transformedInitialSet);
 	if(b1.empty()) { // indicates that the initial set is empty.
 	    //std::cout << "B1.empty()!" << std::endl;
@@ -126,7 +115,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	// the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
 	//std::cout << "TmpTrafo Matrix: " << std::endl << convert<Number,double>(tmpTrafo) << std::endl;
 	//std::cout << "TmpTrafo Vector: " << std::endl << convert<Number,double>(tmpTrans) << std::endl;
-	Representation tmp = applyLinearTransformation(initialSet, TrafoParameters<Number>(tmpTrafo, tmpTrans));
+	Representation tmp = initialSet.affineTransformation(tmpTrafo, tmpTrans);
 	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
 	auto b2 = Converter<Number>::toBox(tmp);
 	if(b2.empty()) { // indicates that the initial set is empty.

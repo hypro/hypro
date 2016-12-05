@@ -468,7 +468,7 @@ std::vector<vector_t<Number>> ZonotopeT<Number,Converter>::computeZonotopeBounda
 }
 
 template<typename Number, typename Converter>
-std::vector<Point<Number>> ZonotopeT<Number,Converter>::vertices() const {
+std::vector<Point<Number>> ZonotopeT<Number,Converter>::vertices( const Location<Number>* ) const {
 	//uniteEqualVectors();
 
 	//removeEmptyGenerators();

@@ -9,6 +9,7 @@
  */
 
 #include "Converter.h"
+#include "util/templateDirections.h"
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>

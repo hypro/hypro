@@ -15,7 +15,7 @@ namespace reachability {
 	}
 
 	template<typename Number, typename Representation>
-	boost::tuple<bool, State<Number>, TrafoParameters<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
+	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
 		assert(!_state.timestamp.isUnbounded());
 		// check if initial Valuation fulfills Invariant
 		State<Number> validState = _state;
@@ -44,11 +44,11 @@ namespace reachability {
 
 			std::pair<bool,Representation> fullSegment = boost::get<Representation>(_state.set).satisfiesHalfspaces(_state.location->invariant().mat, _state.location->invariant().vec);
 			validState.set = fullSegment.second;
-			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(fullSegment.first, validState, TrafoParameters<Number>(trafoMatrixResized, translation));
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(fullSegment.first, validState, trafoMatrixResized, translation);
 		}
 
 		// Representation deltaValuation = initialPair.second.linearTransformation( trafoMatrixResized, translation );
-		Representation deltaValuation = applyLinearTransformation(boost::get<Representation>(_state.set), TrafoParameters<Number>(trafoMatrixResized, translation));
+		Representation deltaValuation = boost::get<Representation>(_state.set).affineTransformation(trafoMatrixResized, translation);
 
 		//Plotter<Number>::getInstance().addObject(boost::get<Representation>(_state.set).vertices());
 		//Plotter<Number>::getInstance().addObject(deltaValuation.vertices());
@@ -108,7 +108,7 @@ namespace reachability {
 				firstSegment = bloatBox<Number,Representation>(firstSegment, Number(Number(1)/Number(4)) * errorBoxVector[0]);
 			} else {
 				// in the current setup, the errorboxVector is empty, when the initial set was empty - we can directly skip this.
-				return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(false);
+				return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
 			}
 		}
 
@@ -134,9 +134,9 @@ namespace reachability {
 		if(fullSegment.first) {
 			validState.set = fullSegment.second;
 			validState.timestamp = carl::Interval<Number>(Number(0),mSettings.timeStep);
-			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(true, validState, TrafoParameters<Number>(trafoMatrixResized, translation));
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(true, validState, trafoMatrixResized, translation);
 		} else {
-			return boost::tuple<bool, State<Number>, TrafoParameters<Number>>(false);
+			return boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>>(false);
 		}
 	}
 

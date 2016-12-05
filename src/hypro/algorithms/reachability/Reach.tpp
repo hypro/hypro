@@ -100,7 +100,7 @@ namespace reachability {
 		flowpipe_t<Representation> flowpipe;
 		std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
 
-		boost::tuple<bool, State<Number>, TrafoParameters<Number>> initialSetup = computeFirstSegment(_state);
+		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
@@ -110,8 +110,8 @@ namespace reachability {
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
-			if(boost::get<2>(initialSetup).matrix() == matrix_t<Number>::Identity(boost::get<2>(initialSetup).matrix().rows(), boost::get<2>(initialSetup).matrix().cols()) &&
-				boost::get<2>(initialSetup).vector() == vector_t<Number>::Zero(boost::get<2>(initialSetup).vector().rows())) {
+			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
+				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
 				if(mCurrentLevel < mSettings.jumpDepth) {
@@ -174,8 +174,7 @@ namespace reachability {
 
 				// perform linear transformation on the last segment of the flowpipe
 #ifdef USE_SYSTEM_SEPARATION
-				//autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
-				autonomPart = applyLinearTransformation( autonomPart, boost::get<2>(initialSetup) );
+				autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
 #ifdef USE_ELLIPSOIDS
 				if (mBloatingFactor != 0){
 					Representation temp = Representation(totalBloating);
@@ -191,12 +190,10 @@ namespace reachability {
 				}
 #endif
 				// nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-				TrafoParameters<Number> tmpParameters(boost::get<2>(initialSetup));
-				tmpParameters.setVector(vector_t<Number>::Zero(autonomPart.dimension()));
-				nonautonomPart = applyLinearTransformation( nonautonomPart, tmpParameters);
+				nonautonomPart = nonautonomPart.linearTransformation(boost::get<2>(initialSetup));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment =  applyLinearTransformation(currentSegment, boost::get<2>(initialSetup) );
+				nextSegment =  currentSegment.affineTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup));
 #endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );

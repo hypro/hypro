@@ -98,7 +98,7 @@ namespace reachability {
 			std::cout << "Apply resets." << std::endl;
 			std::cout << "Matrix: " << std::endl << aggregationPair.first->reset().mat << std::endl << "Vector " << std::endl << aggregationPair.first->reset().vec << std::endl;
 			#endif
-			Representation tmp = applyLinearTransformation(collectedSets, TrafoParameters<Number>(aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec));
+			Representation tmp = collectedSets.affineTransformation(aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec);
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;

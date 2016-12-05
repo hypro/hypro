@@ -29,6 +29,13 @@ template<typename Number>
 class Halfspace;
 
 /**
+ * @brief      Forward declaration of class Location.
+ * @tparam     Number  The used number type.
+ */
+template<typename Number>
+class Location;
+
+/**
  * @brief      Purely virtual class defining a common interface for geometric objects.
  * @tparam     Number  The used number type.
  */
@@ -39,6 +46,8 @@ public:
 	virtual ~GeometricObject(){}
 
 	virtual std::size_t dimension() const = 0;
+	virtual bool empty() const = 0;
+	virtual std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const = 0;
 
 	virtual std::pair<bool, DerivedShape> satisfiesHalfspace( const Halfspace<Number>& rhs ) const = 0;
 	virtual std::pair<bool, DerivedShape> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const = 0;
