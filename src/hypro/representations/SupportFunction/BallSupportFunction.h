@@ -37,6 +37,8 @@ class BallSupportFunction {
 	Number radius() const;
 	SF_TYPE type() const;
 
+	void setDimension(unsigned dim) { mDimension = dim; }
+
 	Point<Number> supremumPoint() const;
 
 	/**

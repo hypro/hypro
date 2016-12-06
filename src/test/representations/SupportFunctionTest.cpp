@@ -62,6 +62,11 @@ protected:
 TYPED_TEST(SupportFunctionTest, constructor) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
 
+	// Ball support function constructor
+	BallSupportFunction<TypeParam> ball(TypeParam(3), SF_TYPE::TWO_BALL);
+	ball.setDimension(3);
+	EXPECT_EQ(unsigned(3), ball.dimension());
+	EXPECT_FALSE(ball.empty());
 	SUCCEED();
 }
 
@@ -74,6 +79,16 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 	EXPECT_LE(TypeParam(20), psf1.evaluate(this->vec1).supportValue);
 	EXPECT_LE(TypeParam(5), psf1.evaluate(this->vec2).supportValue);
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), psf1.evaluate(this->vec3).supportValue));
+
+	BallSupportFunction<TypeParam> ball(TypeParam(3), SF_TYPE::TWO_BALL);
+	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
+	dir(0) = TypeParam(1);
+	EvaluationResult<TypeParam> res = ball.evaluate(dir);
+	EXPECT_EQ(res.supportValue, TypeParam(3));
+
+	BallSupportFunction<TypeParam> ball2(TypeParam(3), SF_TYPE::INFTY_BALL);
+	res = ball2.evaluate(dir);
+	EXPECT_EQ(res.supportValue, TypeParam(3));
 }
 
 TYPED_TEST(SupportFunctionTest, Supremum) {
@@ -93,6 +108,13 @@ TYPED_TEST(SupportFunctionTest, Supremum) {
 	HPolytope<TypeParam> hpt2 = hpt1.affineTransformation(trafoMatrix, trafoVector);
 
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(psf2.supremum(), hpt2.supremum(), 4));
+
+	// Ball support function supremum point
+	BallSupportFunction<TypeParam> ball(TypeParam(3), SF_TYPE::TWO_BALL);
+	ball.setDimension(3);
+	vector_t<TypeParam> expectedPointCoordinates = vector_t<TypeParam>::Zero(3);
+	expectedPointCoordinates(0) = 3;
+	EXPECT_EQ(ball.supremumPoint().rawCoordinates(), expectedPointCoordinates);
 }
 
 
@@ -195,7 +217,35 @@ TYPED_TEST(SupportFunctionTest, minkowskiSum) {
 }
 
 TYPED_TEST(SupportFunctionTest, intersect) {
-	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
+	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero(4,2);
+	constraints1 << 1,0,
+					-1,0,
+					0,1,
+					0,-1;
+	vector_t<TypeParam> constants1 = vector_t<TypeParam>::Zero(4);
+	constants1 << 1,1,1,1;
+
+	vector_t<TypeParam> constants2 =  vector_t<TypeParam>::Zero(4);
+	constants2 << 0,0,1,1;
+
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(constraints1, constants1);
+	SupportFunction<TypeParam> psf2 = SupportFunction<TypeParam>(constraints1, constants2);
+
+	SupportFunction<TypeParam> result = psf1.intersect(psf2);
+
+	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Zero(2);
+	dir1 << 1,0;
+	vector_t<TypeParam> dir2 = vector_t<TypeParam>::Zero(2);
+	dir2 << -1,0;
+	vector_t<TypeParam> dir3 = vector_t<TypeParam>::Zero(2);
+	dir3 << 0,1;
+	vector_t<TypeParam> dir4 = vector_t<TypeParam>::Zero(2);
+	dir4 << 0,-1;
+
+	EXPECT_EQ(result.evaluate(dir1).supportValue, TypeParam(0));
+	EXPECT_EQ(result.evaluate(dir2).supportValue, TypeParam(0));
+	EXPECT_EQ(result.evaluate(dir3).supportValue, TypeParam(1));
+	EXPECT_EQ(result.evaluate(dir4).supportValue, TypeParam(1));
 }
 
 TYPED_TEST(SupportFunctionTest, unite) {
@@ -254,6 +304,31 @@ TYPED_TEST(SupportFunctionTest, unite) {
 	EXPECT_LE(TypeParam(4), res.evaluate(vec2).supportValue);
 	EXPECT_LE(TypeParam(1), res.evaluate(vec3).supportValue);
 	EXPECT_LE(TypeParam(0), res.evaluate(vec4).supportValue);
+
+	// Box and open set
+	constraints1 = matrix_t<TypeParam>::Zero(4,2);
+	constraints1 << 1,0,
+					-1,0,
+					0,1,
+					0,-1;
+	constants1 = vector_t<TypeParam>::Zero(4);
+	constants1 << 1,1,1,1;
+
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(constraints1, constants1);
+
+	constraints2 = matrix_t<TypeParam>::Zero(2,2);
+	constraints2 << -1,0,
+					0,-1;
+	constants2 = vector_t<TypeParam>::Zero(2);
+	constants2 << 1,1;
+
+	SupportFunction<TypeParam> psf2 = SupportFunction<TypeParam>(constraints2, constants2);
+
+	SupportFunction<TypeParam> res2 = psf1.unite(psf2);
+
+	EXPECT_EQ(res2.evaluate(vector_t<TypeParam>(constraints1.row(0))).errorCode, SOLUTION::INFTY);
+	EXPECT_EQ(res2.evaluate(vector_t<TypeParam>(constraints1.row(2))).errorCode, SOLUTION::INFTY);
+
 }
 
 TYPED_TEST(SupportFunctionTest, contains) {
@@ -267,4 +342,23 @@ TYPED_TEST(SupportFunctionTest, contains) {
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
 	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+carl::rationalize<TypeParam>(0.001),yCoord+carl::rationalize<TypeParam>(0.001)})));
+}
+
+TYPED_TEST(SupportFunctionTest, projection) {
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
+	std::vector<unsigned> dims;
+	dims.push_back(0);
+
+	psf1 = psf1.project(dims);
+
+	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Zero(2);
+	dir1(0) = this->constraints(0,0);
+	vector_t<TypeParam> dir2 = vector_t<TypeParam>::Zero(2);
+	dir2(0) = this->constraints(1,0);
+	vector_t<TypeParam> dir3 = vector_t<TypeParam>::Zero(2);
+	dir3(0) = this->constraints(2,0);
+
+	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(0))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir1)).supportValue );
+	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(1))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir2)).supportValue );
+	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(2))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir3)).supportValue );
 }
