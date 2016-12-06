@@ -2,7 +2,7 @@ var classhypro_1_1Optimizer =
 [
     [ "Optimizer", "classhypro_1_1Optimizer.html#afeb06c66516776617e9508b24808e9d3", null ],
     [ "Optimizer", "classhypro_1_1Optimizer.html#ab2c2a7d9865ad1af02f61094a4320e74", null ],
-    [ "Optimizer", "classhypro_1_1Optimizer.html#afcb72dfba1f418f29b0ce4790198c03b", null ],
+    [ "Optimizer", "classhypro_1_1Optimizer.html#aef6b5f7e57bf63f07ce7afa588d01f39", null ],
     [ "Optimizer", "classhypro_1_1Optimizer.html#a1cfdd1e5b90db026835b7c6947a5c290", null ],
     [ "~Optimizer", "classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c", null ],
     [ "checkConsistency", "classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7", null ],
