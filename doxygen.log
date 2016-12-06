@@ -1466,8 +1466,9 @@ Generati/home/travis/build/hypro/hypro/doc/markdown/gettingStarted.md:8: warning
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:28: warning: Member BallSupportFunction(Number _radius, SF_TYPE _type) (function) of class hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:37: warning: Member radius() const  (function) of class hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:38: warning: Member type() const  (function) of class hypro::BallSupportFunction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:40: warning: Member supremumPoint() const  (function) of class hypro::BallSupportFunction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:78: warning: Member empty() const  (function) of class hypro::BallSupportFunction is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:40: warning: Member setDimension(unsigned dim) (function) of class hypro::BallSupportFunction is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:42: warning: Member supremumPoint() const  (function) of class hypro::BallSupportFunction is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:80: warning: Member empty() const  (function) of class hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportfunction.h:56: warning: Member copyToHeap() (function) of class hypro::SymmetricCenteredBoxSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportfunction.h:61: warning: Member SymmetricCenteredBoxSupportFunction(matrix_t< double > e, artificialDirections *aD) (function) of class hypro::SymmetricCenteredBoxSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportfunction.h:73: warning: Member getE() (function) of class hypro::SymmetricCenteredBoxSupportFunction is not documented.
@@ -2493,5 +2494,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4828/65536 hits=40106 misses=5512
+lookup cache used 4829/65536 hits=40116 misses=5513
 finished...

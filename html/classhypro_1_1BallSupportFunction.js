@@ -10,6 +10,7 @@ var classhypro_1_1BallSupportFunction =
     [ "evaluate", "classhypro_1_1BallSupportFunction.html#aec309f85003a283972a77a0fad91443d", null ],
     [ "multiEvaluate", "classhypro_1_1BallSupportFunction.html#a4058036e49850340ef2139aa987ef7de", null ],
     [ "radius", "classhypro_1_1BallSupportFunction.html#a3bad6a2d15c0425a8792fbbc84cff0b8", null ],
+    [ "setDimension", "classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471", null ],
     [ "supremumPoint", "classhypro_1_1BallSupportFunction.html#af1c35809d3f2474bc3e33f186e407d51", null ],
     [ "type", "classhypro_1_1BallSupportFunction.html#a4fb5d3f0f885344d05f42b9f373636a3", null ]
 ];
