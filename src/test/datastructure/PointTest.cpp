@@ -297,3 +297,29 @@ TYPED_TEST(PointTest, Neighbors) {
 }
 */
 
+TYPED_TEST(PointTest, RemoveDuplicates)
+{
+	std::vector<Point<TypeParam>> points;
+	points.emplace_back(Point<TypeParam>({1,2}));
+	points.emplace_back(Point<TypeParam>({1,2}));
+	points.emplace_back(Point<TypeParam>({1,1}));
+	points.emplace_back(Point<TypeParam>({0,2}));
+	points.emplace_back(Point<TypeParam>({3,2}));
+	points.emplace_back(Point<TypeParam>({0,2}));
+
+	points = Point<TypeParam>::removeDuplicatePoints(points);
+	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,2})) == 1);
+	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,1})) == 1);
+	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({0,2})) == 1);
+	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({3,2})) == 1);
+}
+
+TYPED_TEST(PointTest, Addition)
+{
+	Point<TypeParam> p1({1,2});
+	Point<TypeParam> p2({1,2});
+	EXPECT_EQ(p1+p2, Point<TypeParam>({2,4}));
+	Point<TypeParam> p3({-1,-2});
+	EXPECT_EQ(p1+p3, Point<TypeParam>({0,0}));
+}
+
