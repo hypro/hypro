@@ -145,8 +145,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				}
 			}
 			if(!found){
-				RawState<Number> s;
-				s.location = mLocationManager.location(id);
+				RawState<Number> s(mLocationManager.location(id));
 				std::pair<matrix_t<Number>, vector_t<Number>> set;
 				set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
 				set.second = vector_t<Number>(_constraint.size());
@@ -185,8 +184,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 			break;
 		}
 		if(!found){
-			RawState<Number> s;
-			s.location = mLocationManager.location(id);
+			RawState<Number> s(mLocationManager.location(id));
 			// initialize all discrete assignments to unbounded, when a new state is created
 			for(const auto& id : mDiscreteVariableIds ){
 				if(id == _initPair.first){
@@ -201,8 +199,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	}
 
 	unsigned addInitState(unsigned _id, std::vector<RawState<Number>>& _states) {
-		RawState<Number> s;
-		s.location = mLocationManager.location(_id);
+		RawState<Number> s(mLocationManager.location(_id));
 		// initial setup of the discrete assignment
 		for(const auto& id : mDiscreteVariableIds ){
 			s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();

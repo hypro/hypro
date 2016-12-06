@@ -48,7 +48,7 @@ Location<Number> *LocationManager<Number>::create( const matrix_t<Number> _mat,
 }
 
 template <typename Number>
-unsigned LocationManager<Number>::id(const Location<Number>* _loc) const {
+unsigned LocationManager<Number>::id(Location<Number>* _loc) const {
 	assert(mIds.find(_loc) != mIds.end());
 	return mIds.at(_loc);
 }

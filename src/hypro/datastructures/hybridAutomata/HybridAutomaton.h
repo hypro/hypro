@@ -175,6 +175,15 @@ class HybridAutomaton {
 		return *this;
 	}
 
+	bool operator==(const HybridAutomaton<Number>& rhs) const {
+		return (mLocations == rhs.locations() &&
+		mTransitions == rhs.transitions() &&
+		mInitialStates == rhs.initialStates() &&
+		mLocalBadStates == rhs.localBadStates() &&
+		mGlobalBadStates == rhs.globalBadStates() &&
+		mReachabilitySettings == rhs.reachabilitySettings());
+	}
+
 	/**
 	 * @brief      Outstream operator.
 	 *
@@ -186,7 +195,7 @@ class HybridAutomaton {
 	friend std::ostream& operator<<( std::ostream& _ostr, const HybridAutomaton<Number>& _a ) {
 		_ostr << "initial states: " << std::endl;
 		for ( auto initialIT = _a.initialStates().begin(); initialIT != _a.initialStates().end(); ++initialIT ) {
-			_ostr << (*initialIT).first->id() << ": " << (*initialIT).second.first << " <= " << (*initialIT).second.second << std::endl;
+			_ostr << (*initialIT).first->id() << ": " << (*initialIT).second.set.first << " <= " << (*initialIT).second.set.second << std::endl;
 		}
 		_ostr << "locations: " << std::endl;
 		for ( auto locationIT = _a.locations().begin(); locationIT != _a.locations().end(); ++locationIT ) {

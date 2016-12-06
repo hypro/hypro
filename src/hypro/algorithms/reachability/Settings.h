@@ -26,6 +26,16 @@ struct ReachabilitySettings {
 	ReachabilitySettings<Number>(const ReachabilitySettings<Number>& _orig) = default;
 	ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs) = default;
 
+	bool operator==(const ReachabilitySettings<Number>& rhs) const {
+		return ( timeBound == rhs.timeBound &&
+				jumpDepth == rhs.jumpDepth &&
+				timeStep == rhs.timeStep &&
+				fileName == rhs.fileName &&
+				pplDenomimator == rhs.pplDenomimator &&
+				plotDimensions == rhs.plotDimensions &&
+				uniformBloating == rhs.uniformBloating);
+	}
+
 	friend std::ostream& operator<<( std::ostream& lhs, const ReachabilitySettings<Number>& rhs ) {
 		lhs << "Local time-horizon: " << carl::toDouble(rhs.timeBound) << std::endl;
 		lhs << "Time-step size: " << carl::toDouble(rhs.timeStep) << std::endl;

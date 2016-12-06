@@ -96,9 +96,7 @@ protected:
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
-			RawState<Number> initState;
-			initState.location = loc;
-			initState.set = std::make_pair(hpoly.matrix(), hpoly.vector());
+			RawState<Number> initState(loc, std::make_pair(hpoly.matrix(), hpoly.vector()));
 			hybrid.addInitialState(initState);
 		}
 
@@ -201,7 +199,7 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	EXPECT_EQ(this->trans->source(), this->loc1);
 
 	//transition: End Location
-	EXPECT_EQ(this->trans->target(),this-> loc2);
+	EXPECT_EQ(this->trans->target(),this->loc2);
 
 	//transition: Assignment
 	EXPECT_EQ(this->trans->reset().vec, this->reset.vec);
@@ -211,6 +209,19 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	EXPECT_EQ(this->trans->guard().vec, this->guard.vec);
 	EXPECT_EQ(this->trans->guard().mat, this->guard.mat);
 
+	// creation of transitions from source and target
+	Transition<TypeParam>* t = new Transition<TypeParam>(this->loc1, this->loc2);
+	EXPECT_EQ(t->source(), this->loc1);
+	EXPECT_EQ(t->target(), this->loc2);
+	EXPECT_EQ(t->aggregation(), Aggregation::boxAgg);
+	EXPECT_FALSE(t->isTimeTriggered());
+
+	t->setAggregation(Aggregation::none);
+	EXPECT_EQ(t->aggregation(), Aggregation::none);
+
+	t->setTriggerTime(TypeParam(1));
+	EXPECT_TRUE(t->isTimeTriggered());
+	EXPECT_EQ(t->triggerTime(), TypeParam(1));
 }
 
 /**
@@ -230,5 +241,23 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	h1.addTransition(this->trans);
 	EXPECT_TRUE(std::find(h1.transitions().begin(), h1.transitions().end(), this->trans) != h1.transitions().end());
 
-	h1.addInitialState(RawState<TypeParam>());
+	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
+	vec << 1,2;
+
+	h1.addInitialState(RawState<TypeParam>(this->loc1, std::make_pair(matr, vec)));
+
+	// copy assignment operator
+	HybridAutomaton<TypeParam> h2 = h1;
+	EXPECT_EQ(h1, h2);
+}
+
+TYPED_TEST(HybridAutomataTest, LocationManagerTest)
+{
+	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity(2,2);
+	Location<TypeParam>* loc = this->locMan.create(flow);
+	EXPECT_EQ(loc->flow(), flow);
+
+	unsigned id = this->locMan.id(loc);
+	EXPECT_EQ(this->locMan.location(id), loc);
 }

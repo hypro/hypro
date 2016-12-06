@@ -35,11 +35,16 @@ protected:
 
 TYPED_TEST(ZonotopeTest, PlainConstructor) {
     Zonotope<TypeParam> z1;
+    EXPECT_TRUE(z1.empty());
+    EXPECT_EQ(z1.order(), TypeParam(0));
     EXPECT_EQ(z1.dimension(), (unsigned) 0);
     EXPECT_EQ(z1.center().rows(), 0);
     EXPECT_EQ(z1.center().cols(), 1);
     EXPECT_EQ(z1.generators().rows(), 0);
     EXPECT_EQ(z1.generators().cols(), 0);
+
+    Zonotope<TypeParam> emp = Zonotope<TypeParam>::Empty();
+    EXPECT_TRUE(emp.empty());
 }
 
 TYPED_TEST(ZonotopeTest, DimConstructor) {
@@ -328,6 +333,19 @@ TYPED_TEST(ZonotopeTest, AddGenerators) {
     concat_gens << generators, generators2;
     EXPECT_EQ(z.generators(), concat_gens);
 
+}
+
+TYPED_TEST(ZonotopeTest, RemoveGenerators) {
+    matrix_t<TypeParam> generators(2,3);
+    generators << 1,2,5,
+                  3,1,6;
+
+    matrix_t<TypeParam> expectedResult(2,2);
+    expectedResult << 	1,5,
+    					3,6;
+
+    hypro::removeGenerator(1,generators);
+    EXPECT_EQ(expectedResult, generators);
 }
 
 TYPED_TEST(ZonotopeTest, Intersection2) {

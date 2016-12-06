@@ -95,15 +95,8 @@ namespace hypro {
 			#endif
 		}
 
-		Optimizer(Optimizer<Number>&& orig) = delete; // TODO
-
-		Optimizer(const Optimizer<Number>& orig) :
-			mConstraintMatrix(orig.matrix()),
-			mConstraintVector(orig.vector()),
-			mInitialized(false),
-			mConstraintsSet(false),
-			mConsistencyChecked(false)
-		{	}
+		Optimizer(Optimizer<Number>&& orig) = delete;
+		Optimizer(const Optimizer<Number>& orig) = delete;
 
 		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants) :
 			mConstraintMatrix(constraints),

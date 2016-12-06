@@ -7,7 +7,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	if(USE_PPL)
 		add_executable(runRepresentationTests
-			#BoxTest.cpp
+			BoxTest.cpp
 			ConverterTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
