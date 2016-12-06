@@ -345,7 +345,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
+	const BoxT<Number,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.

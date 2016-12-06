@@ -261,3 +261,19 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 	unsigned id = this->locMan.id(loc);
 	EXPECT_EQ(this->locMan.location(id), loc);
 }
+
+
+TYPED_TEST(HybridAutomataTest, RawState) {
+	// Constructors
+	RawState<TypeParam> s1(this->loc1);
+
+	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
+	vec << 1,2;
+	RawState<TypeParam> s2(this->loc1, std::make_pair(matr, vec));
+
+	EXPECT_EQ(s1.location->id(), this->loc1->id());
+	EXPECT_EQ(s2.location->id(), this->loc1->id());
+	EXPECT_EQ(s2.set.first, matr);
+	EXPECT_EQ(s2.set.second, vec);
+}

@@ -196,7 +196,7 @@ std::vector<Halfspace<double>> BoxT<double,Converter>::constraints() const {
 
 template<typename Converter>
 carl::Interval<double> BoxT<double,Converter>::interval( std::size_t d ) const {
-	if ( d > mLimits.first.dimension() ) {
+	if ( d >= mLimits.first.dimension() ) {
 		return carl::Interval<double>::emptyInterval();
 	}
 	return carl::Interval<double>(mLimits.first.at(d), mLimits.second.at(d));
@@ -294,7 +294,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		//std::cout << __func__ << " Distance: " << carl::convert<double,double>(_vec(rowIndex)) << std::endl;
 
 		if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
-			return std::make_pair(false,*this);
+			return std::make_pair(false,Empty());
 		}
 
 		if(evaluatedBox.upper() > _vec(rowIndex)){

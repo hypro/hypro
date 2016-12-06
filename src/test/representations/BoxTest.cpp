@@ -76,6 +76,8 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_EQ(1, tmp[1].lower());
     EXPECT_EQ(3, tmp[1].upper());
 
+    EXPECT_EQ(this->box1.interval(2), carl::Interval<TypeParam>::emptyInterval());
+
     EXPECT_EQ((unsigned) 2, this->box1.dimension());
     EXPECT_EQ((unsigned) 2, this->box2.dimension());
     EXPECT_EQ((unsigned) 0, this->box3.dimension());
@@ -423,4 +425,57 @@ TYPED_TEST(BoxTest, Membership)
 {
     hypro::Point<TypeParam> p({4,2});
     EXPECT_TRUE(this->box1.contains(p));
+}
+
+TYPED_TEST(BoxTest, NumberReduction)
+{
+	carl::Interval<TypeParam> xInterval(TypeParam(0.01), TypeParam(0.02));
+	carl::Interval<TypeParam> yInterval(TypeParam(-1.02), TypeParam(-1.01));
+
+	hypro::Box<TypeParam> box;
+	box.insert(xInterval);
+	box.insert(yInterval);
+
+	std::cout << box.reduceNumberRepresentation(2) << " vs " << box << std::endl;
+	EXPECT_TRUE(box.reduceNumberRepresentation(2).contains(box) || box == box.reduceNumberRepresentation());
+}
+
+TYPED_TEST(BoxTest, SatisfiesHalfspace)
+{
+	carl::Interval<TypeParam> xInterval(TypeParam(1), TypeParam(2));
+	hypro::Box<TypeParam> box;
+	box.insert(xInterval);
+
+	hypro::Halfspace<TypeParam> hsp1({1},3);
+	hypro::Halfspace<TypeParam> hsp2({1},0);
+	hypro::Halfspace<TypeParam> hsp3({1},1);
+
+	EXPECT_TRUE(box.satisfiesHalfspace(hsp1).first);
+	EXPECT_FALSE(box.satisfiesHalfspace(hsp2).first);
+	EXPECT_TRUE(box.satisfiesHalfspace(hsp3).first);
+
+	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first);
+	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>(2,1);
+	mat << 1,-1;
+	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);
+	vec << 2,-2;
+	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).second, hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({2}), hypro::Point<TypeParam>({2}))));
+	vec << 3,-4;
+	EXPECT_FALSE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).second.empty());
+}
+
+TYPED_TEST(BoxTest, Projection)
+{
+	carl::Interval<TypeParam> xInterval(TypeParam(1), TypeParam(2));
+	carl::Interval<TypeParam> yInterval(TypeParam(-1.02), TypeParam(-1.01));
+	hypro::Box<TypeParam> box;
+	box.insert(xInterval);
+	box.insert(yInterval);
+
+	std::vector<unsigned> dims;
+	dims.push_back(0);
+
+	EXPECT_EQ(box.project(dims), hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({1}), hypro::Point<TypeParam>({2}))));
 }

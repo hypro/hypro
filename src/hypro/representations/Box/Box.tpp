@@ -241,7 +241,7 @@ std::vector<Halfspace<Number>> BoxT<Number,Converter>::constraints() const {
 
 template<typename Number, typename Converter>
 carl::Interval<Number> BoxT<Number,Converter>::interval( std::size_t d ) const {
-	if ( d > mLimits.first.dimension() ) {
+	if ( d >= mLimits.first.dimension() ) {
 		return carl::Interval<Number>::emptyInterval();
 	}
 	return carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d));
@@ -287,7 +287,7 @@ std::size_t BoxT<Number,Converter>::size() const {
 }
 
 template<typename Number, typename Converter>
-void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
+const BoxT<Number,Converter>& BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
 	Number limit2 = Number(limit)*Number(limit);
 	for(unsigned d = 0; d < this->dimension(); ++d) {
 		//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
@@ -340,6 +340,7 @@ void BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
 			}
 		}
 	}
+	return *this;
 }
 
 template<typename Number, typename Converter>
@@ -395,7 +396,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		//std::cout << __func__ << " Distance: " << carl::convert<Number,double>(_vec(rowIndex)) << std::endl;
 
 		if(evaluatedBox.lower() > _vec(rowIndex)){
-			return std::make_pair(false,*this);
+			return std::make_pair(false,Empty());
 		}
 
 		if(evaluatedBox.upper() > _vec(rowIndex)){

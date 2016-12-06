@@ -328,7 +328,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @brief Empty function for number size reduction, which is omitted when using native double numbers.
 	 * @param limit Parameter for a length estimation.
 	 */
-	void reducedoubleRepresentation(unsigned limit = fReach_DENOMINATOR) const {}
+	const BoxT<double,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const { return *this; }
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.
