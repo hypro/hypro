@@ -7,6 +7,7 @@ var classhypro_1_1LocationManager =
     [ "create", "classhypro_1_1LocationManager.html#aafd64c0017313faf178e2f724b95d605", null ],
     [ "create", "classhypro_1_1LocationManager.html#ae31fa17836a5877f585442debbf81ae1", null ],
     [ "create", "classhypro_1_1LocationManager.html#a2fed4cd085a71a3677c5957410d8b849", null ],
+    [ "erase", "classhypro_1_1LocationManager.html#abb146e0703408c7774f84082512395a0", null ],
     [ "id", "classhypro_1_1LocationManager.html#ada3fcd724e87cdb1859137b13391a50d", null ],
     [ "location", "classhypro_1_1LocationManager.html#a0e3b14dfef81c2b305df490fd77c5b6a", null ]
 ];

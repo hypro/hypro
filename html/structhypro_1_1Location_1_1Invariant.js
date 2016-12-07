@@ -1,6 +1,7 @@
 var structhypro_1_1Location_1_1Invariant =
 [
     [ "addArtificialDimension", "structhypro_1_1Location_1_1Invariant.html#a927c4940a415517537e6a08990ed0ec2", null ],
+    [ "operator<<", "structhypro_1_1Location_1_1Invariant.html#a7ef75faa2e1f242b7090ec2f1a3b2665", null ],
     [ "discreteInvariant", "structhypro_1_1Location_1_1Invariant.html#afb4330916f5eccf5a63e49331e634bf2", null ],
     [ "discreteOffset", "structhypro_1_1Location_1_1Invariant.html#a215230d306faf0f0cacf4668e4ef5de8", null ],
     [ "mat", "structhypro_1_1Location_1_1Invariant.html#a1728851466401acbaf22448fdf72d6d8", null ],

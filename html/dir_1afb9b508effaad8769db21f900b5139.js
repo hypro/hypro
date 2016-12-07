@@ -1,7 +1,6 @@
 var dir_1afb9b508effaad8769db21f900b5139 =
 [
     [ "HybridAutomaton.h", "HybridAutomaton_8h.html", [
-      [ "RawState", "structhypro_1_1RawState.html", "structhypro_1_1RawState" ],
       [ "HybridAutomaton", "classhypro_1_1HybridAutomaton.html", "classhypro_1_1HybridAutomaton" ]
     ] ],
     [ "Location.h", "Location_8h.html", [
