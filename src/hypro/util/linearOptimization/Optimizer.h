@@ -90,7 +90,7 @@ namespace hypro {
 			if(!mWarnInexact && carl::is_rational<Number>().value){
 				// only warn once
 				mWarnInexact = true;
-				WARN("Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
+				WARN("hypro.optimizer","Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
 			}
 			#endif
 		}

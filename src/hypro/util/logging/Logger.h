@@ -38,6 +38,27 @@ namespace hypro {
 		#endif
 		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
 		;
+
+	  	carl::logging::logger().configure("stdout", std::cout);
+		carl::logging::logger().filter("stdout")
+		#ifdef HYPRO_LOG_TRACE
+	      ("hypro", carl::logging::LogLevel::LVL_TRACE)
+		#endif
+		#ifdef HYPRO_LOG_INFO
+	      ("hypro", carl::logging::LogLevel::LVL_INFO)
+		#endif
+		#ifdef HYPRO_LOG_DEBUG
+	      ("hypro", carl::logging::LogLevel::LVL_DEBUG)
+		#endif
+		#ifdef HYPRO_LOG_WARN
+	      ("hypro", carl::logging::LogLevel::LVL_WARN)
+		#endif
+		#ifdef HYPRO_LOG_FATAL
+	      ("hypro", carl::logging::LogLevel::LVL_FATAL)
+		#endif
+		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
+		;
+
 	  	carl::logging::logger().resetFormatter();
 	  	return 0;
 	}
