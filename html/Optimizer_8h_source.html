@@ -201,7 +201,7 @@ $(document).ready(function(){initNavTree('Optimizer_8h_source.html','');});
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span>            <span class="keywordflow">if</span>(!mWarnInexact &amp;&amp; carl::is_rational&lt;Number&gt;().value){</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="comment">// only warn once</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                mWarnInexact = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                WARN(<span class="stringliteral">&quot;Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).&quot;</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                WARN(<span class="stringliteral">&quot;hypro.optimizer&quot;</span>,<span class="stringliteral">&quot;Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).&quot;</span>);</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">            #endif</span></div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span>        }</div>

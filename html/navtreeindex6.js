@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"dir_2c8758a5fdbf28946c502b471e14bb83.html":[7,0,1,0,2],
 "dir_2ce0cb9797b50c8d842bc50008b46cdd.html":[7,0,1,0],
 "dir_3100e148cb0b6b745355fdee31bcb5c6.html":[7,0,1,0,4,1],
 "dir_3595f83f5be0d6a3539bc1ea5a059474.html":[7,0,1,0,0,0],
@@ -77,8 +76,8 @@ var NAVTREEINDEX6 =
 "functions_d.html":[6,3,0,3],
 "functions_e.html":[6,3,0,4],
 "functions_f.html":[6,3,0,5],
-"functions_func.html":[6,3,1,0],
 "functions_func.html":[6,3,1],
+"functions_func.html":[6,3,1,0],
 "functions_func_b.html":[6,3,1,1],
 "functions_func_c.html":[6,3,1,2],
 "functions_func_d.html":[6,3,1,3],
@@ -122,20 +121,19 @@ var NAVTREEINDEX6 =
 "index.html":[],
 "linearSolving_8h.html":[7,0,1,0,4,7],
 "linearSolving_8h_source.html":[7,0,1,0,4,7],
-"macros_8h_source.html":[7,0,1,0,4,2,2],
 "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted.html":[1],
 "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted_installation.html":[0],
 "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_generalStateSets.html":[2],
 "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_usage.html":[3],
 "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html":[4],
-"namespacehypro.html":[6,0,1],
 "namespacehypro.html":[5,0,0],
+"namespacehypro.html":[6,0,1],
 "namespacemembers.html":[5,1,0],
 "namespacemembers_enum.html":[5,1,3],
 "namespacemembers_func.html":[5,1,1],
 "namespacemembers_type.html":[5,1,2],
-"namespaceplotting.html":[6,0,2],
 "namespaceplotting.html":[5,0,1],
+"namespaceplotting.html":[6,0,2],
 "namespacereachability.html":[5,0,2],
 "namespacereachability.html":[6,0,3],
 "namespaces.html":[5,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX6 =
 "structhypro_1_1artificialDirections.html#a18d091afa659a9d77aa4f757c1dfc892":[6,0,1,54,4],
 "structhypro_1_1artificialDirections.html#a3496973f8c9901711c005a6c0385fbca":[6,0,1,54,3],
 "structhypro_1_1artificialDirections.html#a5159a75802b7331aa14e0902d6415583":[6,0,1,54,5],
-"structhypro_1_1artificialDirections.html#a590f7bf3492666d985fd015e25b3a43f":[6,0,1,54,0]
+"structhypro_1_1artificialDirections.html#a590f7bf3492666d985fd015e25b3a43f":[6,0,1,54,0],
+"structhypro_1_1artificialDirections.html#a8c4ec4bd2ed880bcfecc62ff581c130e":[6,0,1,54,1],
+"structhypro_1_1intersectionContent.html":[6,0,1,51]
 };

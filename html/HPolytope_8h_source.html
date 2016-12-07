@@ -291,16 +291,16 @@ $(document).ready(function(){initNavTree('HPolytope_8h_source.html','');});
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> N = Number, carl::DisableIf&lt; std::is_same&lt;N, <span class="keywordtype">double</span>&gt; &gt; = carl::dummy&gt;</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordtype">void</span> reduceNumberRepresentation(<span class="keyword">const</span> std::vector&lt;Point&lt;Number&gt;&gt;&amp; _vertices = std::vector&lt;Point&lt;Number&gt;&gt;(), <span class="keywordtype">unsigned</span> limit = fReach_DENOMINATOR)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="preprocessor">        #ifdef REDUCE_NUMBERS</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="preprocessor"></span>        TRACE(<span class="stringliteral">&quot;Attempt to reduce numbers.&quot;</span>);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="preprocessor"></span>        TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Attempt to reduce numbers.&quot;</span>);</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        std::vector&lt;Point&lt;Number&gt;&gt; originalVertices;</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">if</span>(_vertices.empty()) {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            TRACE(<span class="stringliteral">&quot;No passed vertices, computed vertices.&quot;</span>);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;No passed vertices, computed vertices.&quot;</span>);</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            originalVertices = this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#ab77db028b9a480259ff088e930d8782f">vertices</a>();</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            TRACE(<span class="stringliteral">&quot;Use passed vertices.&quot;</span>);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Use passed vertices.&quot;</span>);</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            originalVertices = _vertices;</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        }</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        TRACE(<span class="stringliteral">&quot;Vertices empty: &quot;</span> &lt;&lt; originalVertices.empty());</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Vertices empty: &quot;</span> &lt;&lt; originalVertices.empty());</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">if</span>(!this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a1fcbee3371daf4590c4f2a961e52f15e">empty</a>()){</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="comment">// normal reduction</span></div>

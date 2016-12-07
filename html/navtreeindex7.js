@@ -1,7 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"structhypro_1_1artificialDirections.html#a8c4ec4bd2ed880bcfecc62ff581c130e":[6,0,1,54,1],
-"structhypro_1_1intersectionContent.html":[6,0,1,51],
 "structhypro_1_1intersectionContent.html#a012731981fbc6ced6925a409fdbe0fe5":[6,0,1,51,0],
 "structhypro_1_1intersectionContent.html#a6ae8e9d6bbc3a38200bbe79497b8c777":[6,0,1,51,2],
 "structhypro_1_1intersectionContent.html#a6b9b49c17c6647960f41cbac9175ce66":[6,0,1,51,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX7 =
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#a1018ec7d48b4d98e8b0d8c80420f37b6":[6,0,1,2,2,10],
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#a2e97fdb452c8592de8f54116d8dde7cb":[6,0,1,2,2,3],
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#a42e625813c8f43906d0ece68448a194f":[6,0,1,2,2,0],
-"structhypro_1_1reachability_1_1ReachabilitySettings.html#a4ed8bc5659909aa70ea4bbe5ceb9646c":[6,0,1,2,2,1]
+"structhypro_1_1reachability_1_1ReachabilitySettings.html#a4ed8bc5659909aa70ea4bbe5ceb9646c":[6,0,1,2,2,1],
+"structhypro_1_1reachability_1_1ReachabilitySettings.html#aa029b67b9839690e9bf8a7adfee963a7":[6,0,1,2,2,9],
+"structhypro_1_1reachability_1_1ReachabilitySettings.html#aa70b35bbeabe4853898b09fd0c5aab63":[6,0,1,2,2,8]
 };
