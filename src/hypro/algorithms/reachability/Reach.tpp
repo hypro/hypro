@@ -31,33 +31,33 @@ namespace reachability {
 				switch(type){
 					case representation_name::box: {
 						s.set = Converter<Number>::toBox(tmpSet);
-						DEBUG("Adding initial set " << boost::get<Box<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_h: {
 						s.set = tmpSet;
-						DEBUG("Adding initial set " << boost::get<HPolytope<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<HPolytope<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_v: {
 						s.set = Converter<Number>::toVPolytope(tmpSet);
-						DEBUG("Adding initial set " << boost::get<VPolytope<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<VPolytope<Number>>(s.set));
 						break;
 					}
 					case representation_name::zonotope: {
 						s.set = Converter<Number>::toZonotope(tmpSet);
-						DEBUG("Adding initial set " << boost::get<Zonotope<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<Zonotope<Number>>(s.set));
 						break;
 					}
 					case representation_name::support_function: {
 						s.set = Converter<Number>::toSupportFunction(tmpSet);
-						DEBUG("Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
 						break;
 					}
 					#ifdef USE_PPL
 					case representation_name::ppl_polytope: {
 						s.set = Representation(state.second.set.first, state.second.set.second);
-						DEBUG("Adding initial set " << boost::get<Polytope<Number>>(s.set));
+						DEBUG("hypro.reacher","Adding initial set " << boost::get<Polytope<Number>>(s.set));
 						break;
 					}
 					#endif
@@ -76,7 +76,7 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
-			INFO("Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id());
+			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id());
 			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
@@ -161,7 +161,7 @@ namespace reachability {
 			Number currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
-				INFO("Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
+				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
 					State<Number> guardSatisfyingState;

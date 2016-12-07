@@ -60,11 +60,11 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
-		TRACE("Direction: " << _direction << ", constraintMatrix: " << std::endl << mConstraintMatrix << ", and vector:" << std::endl << mConstraintVector);
+		TRACE("hypro.optimizer","Direction: " << _direction << ", constraintMatrix: " << std::endl << mConstraintMatrix << ", and vector:" << std::endl << mConstraintVector);
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
 		if( mConstraintMatrix.rows() == 0 ) {
-			TRACE("System is unbounded.");
+			TRACE("hypro.optimizer", "System is unbounded.");
 			return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
 
@@ -180,7 +180,7 @@ namespace hypro {
 		//std::cout << __func__ << ": matrix: " << mConstraintMatrix << std::endl << "Vector: " << mConstraintVector << std::endl;
 
 		#ifdef HYPRO_USE_SMTRAT
-		TRACE("Use smtrat for consistency check.");
+		TRACE("hypro.optimizer","Use smtrat for consistency check.");
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         #elif defined(HYPRO_USE_Z3)
 		mLastConsistencyAnswer = z3CheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
@@ -188,7 +188,7 @@ namespace hypro {
 		mLastConsistencyAnswer = soplexCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		#else // use glpk
 		if(!mConsistencyChecked){
-			TRACE("Use glpk for consistency check.");
+			TRACE("hypro.optimizer","Use glpk for consistency check.");
 			glp_simplex( lp, NULL);
 			glp_exact( lp, NULL );
 			mLastConsistencyAnswer = glp_get_status(lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;

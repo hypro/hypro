@@ -3,53 +3,61 @@
 #include "flags.h"
 #include <iostream>
 
-#define DEBUG(expr)
-#define TRACE(expr)
-#define INFO(expr)
-#define WARN(expr)
-#define FATAL(expr)
+#define DEBUG(channel,expr)
+#define TRACE(channel,expr)
+#define INFO(channel,expr)
+#define WARN(channel,expr)
+#define FATAL(channel,expr)
 
 #define COUT(expr) std::cout << expr
 #define CERR(expr) std::cerr << expr
 
 #ifdef HYPRO_LOGGING
 
-#include <log4cplus/logger.h>
-#include <log4cplus/loggingmacros.h>
-#include <log4cplus/configurator.h>
-#include <log4cplus/initializer.h>
+#include <carl/core/carlLogging.h>
 
 namespace hypro {
 
-	class LogInitializer {
-	public:
-		static log4cplus::Logger& get();
+	inline int initializeLogging() {
+		carl::logging::logger().configure("logfile", "hypro.log");
+		carl::logging::logger().filter("logfile")
+		#ifdef HYPRO_LOG_TRACE
+	      ("hypro", carl::logging::LogLevel::LVL_TRACE)
+		#endif
+		#ifdef HYPRO_LOG_INFO
+	      ("hypro", carl::logging::LogLevel::LVL_INFO)
+		#endif
+		#ifdef HYPRO_LOG_DEBUG
+	      ("hypro", carl::logging::LogLevel::LVL_DEBUG)
+		#endif
+		#ifdef HYPRO_LOG_WARN
+	      ("hypro", carl::logging::LogLevel::LVL_WARN)
+		#endif
+		#ifdef HYPRO_LOG_FATAL
+	      ("hypro", carl::logging::LogLevel::LVL_FATAL)
+		#endif
+		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
+		;
+	  	carl::logging::logger().resetFormatter();
+	  	return 0;
+	}
 
-	protected:
-		LogInitializer();
+	static int initvar = initializeLogging();
 
-	private:
-		log4cplus::Logger logger = log4cplus::Logger::getInstance(LOG4CPLUS_TEXT("main"));
-		static LogInitializer* instance;
-		log4cplus::Logger& getLogger ();
-		static ::log4cplus::Initializer initializer;
-		static ::log4cplus::BasicConfigurator config;
-	};
-
-	extern log4cplus::Logger logger;
 } // namespace hypro
-
-//#include "macros.h"
 
 #undef DEBUG
 #undef TRACE
 #undef INFO
 #undef WARN
 #undef FATAL
-#define TRACE(expr) LOG4CPLUS_TRACE(hypro::logger, "[" << __func__ << "] " << expr)
-#define DEBUG(expr) LOG4CPLUS_DEBUG(hypro::logger, "[" << __func__ << " " << __FILE__ << ":" << __LINE__ << "] " << expr)
-#define INFO(expr) LOG4CPLUS_INFO(hypro::logger, expr)
-#define WARN(expr) LOG4CPLUS_WARN(hypro::logger, expr)
-#define FATAL(expr) LOG4CPLUS_FATAL(hypro::logger, expr)
+
+#define __HYPRO_LOG(lvl,channel,expr) { std::stringstream __ss; __ss << expr; carl::logging::Logger::getInstance().log(lvl, channel, __ss, carl::logging::RecordInfo(__FILE__,__func__,__LINE__));}
+
+#define TRACE(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_TRACE, channel, expr)
+#define DEBUG(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_DEBUG, channel, expr)
+#define INFO(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_INFO, channel, expr)
+#define WARN(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_WARN, channel, expr)
+#define FATAL(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_FATAL, channel, expr)
 
 #endif

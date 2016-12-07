@@ -293,16 +293,16 @@ public:
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
 	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR) const {
 		#ifdef REDUCE_NUMBERS
-		TRACE("Attempt to reduce numbers.");
+		TRACE("hypro.hPolytope","Attempt to reduce numbers.");
 		std::vector<Point<Number>> originalVertices;
 		if(_vertices.empty()) {
-			TRACE("No passed vertices, computed vertices.");
+			TRACE("hypro.hPolytope","No passed vertices, computed vertices.");
 			originalVertices = this->vertices();
 		} else {
-			TRACE("Use passed vertices.");
+			TRACE("hypro.hPolytope","Use passed vertices.");
 			originalVertices = _vertices;
 		}
-		TRACE("Vertices empty: " << originalVertices.empty());
+		TRACE("hypro.hPolytope","Vertices empty: " << originalVertices.empty());
 
 		if(!this->empty()){
 			// normal reduction

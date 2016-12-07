@@ -100,7 +100,7 @@ void Plotter<Number>::plot2d() const {
 			if ( currId != objectIt->first ) {
 				currId = objectIt->first;
 				tmpId++;
-				INFO("Plotting object " << tmpId << "/" << (mObjects.size() + mPoints.size() + mPlanes.size()));
+				INFO("hypro.plotter","Plotting object " << tmpId << "/" << (mObjects.size() + mPoints.size() + mPlanes.size()));
 			}
 			if(objectIt->second.size() > 0){
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
