@@ -59,4 +59,13 @@ Location<Number>* LocationManager<Number>::location(unsigned _id) const {
 	return mLocations.at(_id);
 }
 
+template<typename Number>
+void LocationManager<Number>::erase(unsigned _id) {
+	auto locationMapPtr = mLocations.find(_id);
+	if(locationMapPtr != mLocations.end()) {
+		TRACE("hypro.locationManager", "Erase location " << _id);
+		mLocations.erase(locationMapPtr);
+	}
+}
+
 } // namespace hypro

@@ -174,7 +174,7 @@ namespace parser {
 
 			// update source location
 			mLocationManager.location(_transition.first)->addTransition(res);
-			//std::cout << "Parsed Transition: " << *res << std::endl;
+			TRACE("hypro.parser", "Parsed Transition: " << *res);
 			cleanup();
 			return res;
 		}

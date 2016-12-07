@@ -85,16 +85,16 @@ namespace parser {
 
 		for(const auto index : mModeIds){
 			result.addLocation(locManag.location(index));
-			//std::cout << "Added location " << *locManag.location(index) << std::endl;
+			TRACE("hypro.parser", "Added location " << *locManag.location(index));
 		}
 
 		for(const auto transition : mTransitions ){
 			result.addTransition(transition);
-			//std::cout << "Added transition " << *transition << std::endl;
+			TRACE("hypro.parser", "Added transition " << *transition);
 		}
 
 		for(const auto state : mInitialStates ){
-			//std::cout << "Add initial state for location " << state.location->id() << std::endl;
+			TRACE("hypro.parser", "Add initial state for location " << state.location->id());
 			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 			result.addInitialState(state);
 		}

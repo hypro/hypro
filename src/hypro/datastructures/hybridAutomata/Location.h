@@ -41,6 +41,17 @@ class Location {
 			newConstraints.block(0,0,mat.rows(), mat.cols()) = mat;
 			mat = newConstraints;
 		}
+
+		friend std::ostream& operator<<( std::ostream& _ostr, const Invariant& i ) {
+			assert(i.mat.rows() == i.vec.rows());
+			for(unsigned rowIndex = 0; rowIndex < i.mat.rows(); ++rowIndex){
+				for(unsigned colIndex = 0; colIndex < i.mat.cols(); ++ colIndex) {
+					_ostr << i.mat(rowIndex,colIndex) << " ";
+				}
+				_ostr << "<= " << i.vec(rowIndex) << std::endl;
+			}
+			return _ostr;
+		}
 	};
 
 	using transitionSet = std::set<Transition<Number>*>;
@@ -97,10 +108,8 @@ class Location {
 	inline bool operator!=( const Location<Number>& _rhs ) const { return ( mId != _rhs.id() ); }
 
 	friend std::ostream& operator<<( std::ostream& _ostr, const Location<Number>& _l ) {
-		matrix_t<Number> tmp = matrix_t<Number>(_l.invariant().mat.rows(), _l.invariant().mat.cols()+1);
-		tmp << _l.invariant().mat,_l.invariant().vec;
 		_ostr << "location( id: " << _l.id() << std::endl << "\t Flow: " << std::endl << _l.flow() << std::endl
-		<< "\t Inv: " << std::endl << tmp;
+		<< "\t Inv: " << std::endl << _l.invariant();
 		for(const auto& invPair : _l.invariant().discreteInvariant){
 			_ostr << invPair.first << " in " << invPair.second << std::endl;
 		}

@@ -51,6 +51,7 @@ class LocationManager : public carl::Singleton<LocationManager<Number>> {
 
 	unsigned id(Location<Number>* _loc) const;
 	Location<Number>* location(unsigned _id) const;
+	void erase(unsigned _id);
 };
 
 }  // namespace hypro

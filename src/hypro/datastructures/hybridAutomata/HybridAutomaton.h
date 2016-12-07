@@ -5,14 +5,12 @@
 #pragma once
 
 #include "Location.h"
+#include "RawState.h"
 #include "Transition.h"
 #include "algorithms/reachability/Settings.h"
 #include <map>
 
 namespace hypro {
-
-template<typename Number>
-struct RawState;
 
 
 /**
@@ -66,7 +64,7 @@ class HybridAutomaton {
 	 */
 	virtual ~HybridAutomaton() {
 		while(!mTransitions.empty()) {
-			Transition<Number>* toDelete = *mTransitions.begin();
+			//Transition<Number>* toDelete = *mTransitions.begin();
 			mTransitions.erase(mTransitions.begin());
 			//delete toDelete;
 		}

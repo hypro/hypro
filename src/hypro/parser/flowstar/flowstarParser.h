@@ -36,6 +36,7 @@
 #include "datastructures/hybridAutomata/LocationManager.h"
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
 #include "util/types.h"
+#include "util/logging/Logger.h"
 #include "symbols.h"
 #include "polynomialParser.h"
 #include "componentParser.h"
@@ -217,14 +218,34 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		for(const auto& modePair : _in) {
 			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
 			//std::cout << "Mode: " << *modePair.second << std::endl;
-			mModes.add(modePair.first, modePair.second->id());
-			mModeIds.push_back(modePair.second->id());
+
+			if(mModes.find(modePair.first) == nullptr) {
+				mModes.add(modePair.first, modePair.second->id());
+				mModeIds.push_back(modePair.second->id());
+				TRACE("hypro.parser","Add new mode " << modePair.first << " mapped to id " << modePair.second->id());
+			} else {
+				TRACE("hypro.parser","Overwrite mode " << modePair.first << " mapped to id " << mModes.at(modePair.first) << " with mode mapped to id " << modePair.second->id());
+				unsigned redundantId = mModes.at(modePair.first);
+				mModes.at(modePair.first) = modePair.second->id();
+				mLocationManager.erase(redundantId);
+				// update mModeIds
+				auto modeIdIt = mModeIds.begin();
+				while(modeIdIt != mModeIds.end() && *modeIdIt != redundantId) { ++modeIdIt; }
+				assert(modeIdIt != mModeIds.end());
+				if(modeIdIt != mModeIds.end()) {
+					mModeIds.erase(modeIdIt);
+				}
+				mModeIds.push_back(modePair.second->id());
+			}
 		}
 	}
 
 	void insertTransitions(const boost::optional<std::set<Transition<Number>*>>& _transitions) {
 		if(_transitions){
-			mTransitions = *_transitions;
+			TRACE("hypro.parser","insert "<< _transitions->size() << " transitions.");
+			for(const auto& transition :  *_transitions) {
+				mTransitions.insert(transition);
+			}
 		}
 	}
 
