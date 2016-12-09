@@ -39,7 +39,7 @@ namespace hypro {
 		boost::variant<cPair<Number>,
 			VPolytope<Number>,
 			HPolytope<Number>,
-			#ifdef USE_PPL
+			#ifdef HYPRO_USE_PPL
 			Polytope<Number>,
 			#endif
 			Box<Number>,

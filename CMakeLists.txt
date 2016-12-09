@@ -44,9 +44,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(FORCE_DOWNLOAD_RESOURCES "Explicitly download all external resources." OFF)
-option(USE_PPL "Use PPl polytope wrapper." OFF)
-option(USE_COTIRE "Use the COmpilation TIme REducer." OFF)
+option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
+option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
@@ -56,6 +56,9 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+mark_as_advanced(HYPRO_COVERAGE)
+mark_as_advanced(HYPRO_STATISTICS)
+mark_as_advanced(CLANG_TIDY)
 # Include own macros.
 include( hypromacros )
 
@@ -130,7 +133,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 
-if(USE_COTIRE)
+if(HYPRO_USE_COTIRE)
 	# We use cotire, simply include it
 	message(STATUS "using cotire")
 	include(cotire)
@@ -158,7 +161,7 @@ set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-if(USE_PPL)
+if(HYPRO_USE_PPL)
 	load_library(hypro PPL 0)
 endif()
 

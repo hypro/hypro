@@ -11,7 +11,7 @@
 
 #include "flags.h"
 
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 #include "util.h"
 #include "representations/GeometricObject.h"
 #include "representations/Polytopes/Cone.h"

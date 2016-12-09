@@ -869,7 +869,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Halfsp
 	return result;
 }
 
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const Constraint &halfspace ) const {
 	assert( halfspace.space_dimension() == this->mDimension );
@@ -1043,7 +1043,7 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 	return resultPair;
 }
 
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersect( const C_Polyhedron &rhs ) const {
 	// Get set of half spaces

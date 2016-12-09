@@ -8,7 +8,7 @@
 
 #include "flags.h"
 
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 #include "util/VariablePool.h"
 #include "representations/Polytopes/Cone.h"
 #include "datastructures/Halfspace.h"
@@ -73,22 +73,6 @@ Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<Number>& con
 	return res;
 }
 
-/*
-template<>
-	Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<mpq_class>& constraint, mpq_class constantPart) {
-		std::cout << "MPQ_Version." << std::endl;
-		Parma_Polyhedra_Library::Linear_Expression polynom;
-		polynom.set_space_dimension( constraint.rows() );
-		for ( unsigned d = 0; d < constraint.rows(); ++d ) {
-			polynom.set_coefficient( hypro::VariablePool::getInstance().pplVarByIndex( d ), carl::getNum(constraint(d)) * carl::getDenom(constraint(d))  );
-		}
-		polynom.set_inhomogeneous_term( -carl::getNum(constantPart) * carl::getDenom(constantPart) );
-		Parma_Polyhedra_Library::Constraint res;
-		res = polynom <= 0;
-		return res;
-	}
-*/
-
 /**
  * @brief      Creates a generator from a point coordinate.
  * @param[in]  point   The point coordinate.
@@ -146,29 +130,6 @@ static inline Point<Number> generatorToPoint( const Parma_Polyhedra_Library::Gen
 	return Point<Number>(result);
 }
 
-/*
-template <typename Number>
-static inline unsigned pplDimension( const Point<Number>& point ) {
-	unsigned result = 0;
-	//        for(auto& coordinate : point)
-	for ( unsigned i = 0; i != point.dimension(); ++i ) {
-		result = result > VariablePool::getInstance().pplVarByIndex( i ).id()
-					   ? result
-					   : VariablePool::getInstance().pplVarByIndex( i ).id();
-	}
-	return result;
-}
-
-template <typename Number>
-static inline unsigned pplDimension( const typename std::vector<Point<Number>>& points ) {
-	unsigned result = 0;
-	for ( auto& point : points ) {
-		unsigned tmp = pplDimension( point );
-		result = result > tmp ? result : tmp;
-	}
-	return result;
-}
-*/
 
 template <typename Number>
 static inline matrix_t<Number> polytopeToMatrix( const Parma_Polyhedra_Library::C_Polyhedron& poly ) {

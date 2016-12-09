@@ -168,7 +168,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
     return result;
 }
 
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Polytope& _source, const CONV_MODE  ) {
 	return BoxT<Number,Converter>( _source.vertices() );

@@ -54,7 +54,7 @@ namespace reachability {
 						DEBUG("hypro.reacher","Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
 						break;
 					}
-					#ifdef USE_PPL
+					#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
 						s.set = Representation(state.second.set.first, state.second.set.second);
 						DEBUG("hypro.reacher","Adding initial set " << boost::get<Polytope<Number>>(s.set));

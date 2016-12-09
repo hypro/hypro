@@ -236,7 +236,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
-	#ifdef USE_PPL
+	#ifdef HYPRO_USE_PPL
 	/**
 	 * Calculates zonotopeT intersect with halfspace represented as PPL constraint
 	 * @param result : The resulting stateset of the intersection
@@ -271,7 +271,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 */
 	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, matrix_t<Number>& minMaxOfLine, int method );
 
-	#ifdef USE_PPL
+	#ifdef HYPRO_USE_PPL
 	/**
 	 * Calculates zonotopeT intersect with a closed polyhedron as represented in PPL.
 	 * @param result : The resulting stateset of the intersection as zonotopeT.
