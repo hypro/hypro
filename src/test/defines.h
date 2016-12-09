@@ -30,8 +30,11 @@ typedef ::testing::Types<
 > allTypes;
 
 typedef ::testing::Types<
-	carl::FLOAT_T<mpq_class>
-> rationalTypesMPQ;
+	#ifdef USE_CLN_NUMBERS
+	cln::cl_RA,
+	#endif
+	mpq_class
+> rationalTypes;
 // List tests which should be typed
 
 // Algorithm
@@ -46,7 +49,7 @@ TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
 
 // Datastructure
 TYPED_TEST_CASE(HalfspaceTest, allTypes);
-TYPED_TEST_CASE(PointTest, allTypes);
+TYPED_TEST_CASE(PointTest, rationalTypes);
 TYPED_TEST_CASE(HybridAutomataTest, allTypes);
 TYPED_TEST_CASE(VertexContainerTest, allTypes);
 TYPED_TEST_CASE(VertexTest, allTypes);

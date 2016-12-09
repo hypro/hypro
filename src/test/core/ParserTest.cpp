@@ -23,6 +23,6 @@ TEST(ParserTest, ParseAutomaton)
 	reachability::ReachabilitySettings<mpq_class> settings = boost::get<1>(parseResult);
 	HybridAutomaton<mpq_class> automaton = boost::get<0>(parseResult);
 
-	EXPECT_EQ(automaton.locations().size(), 2);
-	EXPECT_EQ(automaton.transitions().size(), 3);
+	EXPECT_EQ(automaton.locations().size(), unsigned(2));
+	EXPECT_EQ(automaton.transitions().size(), unsigned(3));
 }

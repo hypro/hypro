@@ -84,11 +84,13 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
 	dir(0) = TypeParam(1);
 	EvaluationResult<TypeParam> res = ball.evaluate(dir);
-	EXPECT_EQ(res.supportValue, TypeParam(3));
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3),4));
+	//EXPECT_EQ(res.supportValue, TypeParam(3));
 
 	BallSupportFunction<TypeParam> ball2(TypeParam(3), SF_TYPE::INFTY_BALL);
 	res = ball2.evaluate(dir);
-	EXPECT_EQ(res.supportValue, TypeParam(3));
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3),4));
+	//EXPECT_EQ(res.supportValue, TypeParam(3));
 }
 
 TYPED_TEST(SupportFunctionTest, Supremum) {
