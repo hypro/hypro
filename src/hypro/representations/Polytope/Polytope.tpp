@@ -1,17 +1,10 @@
-/*
- * File:   Polytope.tpp
- * Author: Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since       2014-03-20
- * @version     2015-01-21
- */
 
 #include "Polytope.h"
 
 namespace hypro {
 template <typename Number, typename Converter>
 PolytopeT<Number, Converter>::PolytopeT()
-	: mPointsUpToDate( false ) {
+	: mPolyhedron( 0, Parma_Polyhedra_Library::EMPTY ), mPoints(), mPointsUpToDate( true ) {
 }
 
 template <typename Number, typename Converter>
@@ -717,10 +710,13 @@ bool PolytopeT<Number,Converter>::contains( const PolytopeT<Number,Converter> &p
 
 template <typename Number, typename Converter>
 PolytopeT<Number,Converter> PolytopeT<Number,Converter>::unite( const PolytopeT<Number,Converter> &rhs ) const {
+	if(rhs.empty()) {
+		return *this;
+	}
+
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
-
 
 	C_Polyhedron res = mPolyhedron;
 	res.poly_hull_assign(rhs.rawPolyhedron());
