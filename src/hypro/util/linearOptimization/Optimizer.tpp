@@ -68,6 +68,14 @@ namespace hypro {
 			return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
 
+		// there is no non-zero cost function -> check for emptiness.
+		if(_direction.rows() == 0 || _direction.nonZeros() == 0){
+			if( this->checkConsistency() ) {
+				return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::FEAS); // origin, feasible
+			}
+			return EvaluationResult<Number>(); // defaults to infeasible.
+		}
+
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		EvaluationResult<Number> res;
 		#endif

@@ -54,11 +54,22 @@ Point<Number> BallSupportFunction<Number>::supremumPoint() const {
 template <typename Number>
 EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
+	// the ball is empty.
+	if(mRadius < 0) {
+		return result;
+	}
+	// there is no cost function but the ball is not empty.
+	if(l.rows() == 0){
+		return EvaluationResult<Number>(SOLUTION::FEAS);
+	}
+	// there is a cost function, but it is zero (we know its dimension nonetheless) and the ball is not empty.
+	if(l.nonZeros() == 0) {
+		return EvaluationResult<Number>(l, SOLUTION::FEAS);
+	}
+
+	// there is a non-zero cost function and the ball is not empty.
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL: {
-			if(mRadius < 0){
-				return result;
-			}
 			unsigned max = 0;
 			for ( unsigned i = 1; i < l.rows(); ++i ) {
 				max = abs( l( i ) ) > abs( l( max ) ) ? i : max;
@@ -69,10 +80,11 @@ EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
-			if(mRadius < 0){
-				return result;
-			}
 			Number length = norm(l,true);
+			if(length == 0) {
+				return EvaluationResult<Number>(l, SOLUTION::FEAS);
+			}
+			DEBUG("hypro.representations.BallSupportFunction", "l: " << l << ", length: " << length);
 			result.supportValue = ( mRadius / length );
 			result.optimumValue = result.supportValue * normalize(l);
 			result.errorCode = SOLUTION::FEAS;

@@ -40,7 +40,7 @@ namespace hypro{
 
 
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, Number _radius ) : content(SupportFunctionContent<Number>::create(_type, _radius)){
+    SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, Number _radius, unsigned dimension ) : content(SupportFunctionContent<Number>::create(_type, _radius, dimension)){
         //handled by initializer list
     }
 
@@ -305,9 +305,11 @@ namespace hypro{
 			}
 		}
 		if(!fullProjection){
+			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
 			SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
 			return res;
 		}
+		DEBUG("hypro.represetations.supportFunction", "Full projection, copy.");
 		return *this;
 	}
 

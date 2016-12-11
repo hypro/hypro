@@ -11,6 +11,7 @@
 #pragma once
 
 #include "flags.h"
+#include "util/logging/Logger.h"
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
 #include <carl/util/Singleton.h>
@@ -124,6 +125,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	const carl::Variable& newCarlVariable( std::string _name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
 		#ifdef HYPRO_USE_PPL
+		DEBUG("hypro.variablePool", "mCarlVariables.size(): " << int(mCarlVariables.size()) << ", mPplVariables.size(): " << int(mPplVariables.size()) << ", pplId: " << int(mPplId) );
 		assert( mPplVariables.size() == mPplId );
 		#endif
 		carl::Variable cVar = carl::freshRealVariable( _name );
@@ -221,9 +223,12 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 
 	void clear() {
+		DEBUG("hypro.variablePool", "mCarlVariables.size(): " << int(mCarlVariables.size()) << ", mPplVariables.size(): " << int(mPplVariables.size()) << ", pplId: " << int(mPplId) );
+		assert( mCarlVariables.size() == mPplId );
 		mCarlVariables.clear();
 		#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
+		mPplVariables.clear();
 		#endif
 		mPool.clear();
 		mPplId = 0;

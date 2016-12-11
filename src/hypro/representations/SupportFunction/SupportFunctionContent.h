@@ -158,7 +158,7 @@ class SupportFunctionContent {
 	std::weak_ptr<SupportFunctionContent<Number>> pThis;
 
 	SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type = SF_TYPE::ELLIPSOID );
-	SupportFunctionContent( Number _radius, SF_TYPE _type = SF_TYPE::INFTY_BALL );
+	SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type = SF_TYPE::INFTY_BALL );
 	SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances,
 					 SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
@@ -173,8 +173,8 @@ class SupportFunctionContent {
   public:
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, _type ) );
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius, unsigned dimension ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, dimension, _type ) );
 		obj->pThis = obj;
 		return obj;
 	}
@@ -352,6 +352,12 @@ private:
 				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
 				return items;
 			}
+			case SF_TYPE::PROJECTION: {
+				//std::cout << "Current: projection" << std::endl;
+				std::vector<SF_TYPE> tmpItems = mProjectionParameters->origin->collectLevelEntries(level-1);
+				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
+				return items;
+			}
 			case SF_TYPE::SUM: {
 				//std::cout << "Current: sum" << std::endl;
 				std::vector<SF_TYPE> lhsItems = mSummands->lhs->collectLevelEntries(level-1);
@@ -424,6 +430,11 @@ private:
 				case SF_TYPE::POLY: {
 					level += "POLY " + separator;
 					transitionType.push_back(0);
+					break;
+				}
+				case SF_TYPE::PROJECTION: {
+					level += "PROJ " + separator;
+					transitionType.push_back(1);
 					break;
 				}
 				case SF_TYPE::SCALE: {

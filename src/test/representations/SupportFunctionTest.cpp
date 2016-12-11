@@ -10,6 +10,8 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 
+#include "util/Plotter.h"
+
 
 using namespace hypro;
 using namespace carl;
@@ -43,17 +45,46 @@ protected:
 
 		vec3(0) = Number(-4);
 		vec3(1) = Number(1);
+
+		// construction of complete chain
+		boxConstraints = matrix_t<Number>::Zero(4,2);
+		boxConstraints << 1,0,-1,0,0,1,0,-1;
+		vector_t<Number> boxConstants = vector_t<Number>::Zero(4);
+		boxConstants << 1,1,1,1;
+		vector_t<Number> boxConstants2 = vector_t<Number>::Zero(4);
+		boxConstants2 << 5,5,5,5;
+		vector_t<Number> boxConstants3 = vector_t<Number>::Zero(4);
+		boxConstants2 << 1,1,1,1;
+		matrix_t<Number> trafoMatrix = matrix_t<Number>(2,2);
+		trafoMatrix << 0,1,1,0;
+		vector_t<Number> trafoVector = vector_t<Number>(2);
+		trafoVector << 1,1;
+
+
+		SupportFunction<Number> box(boxConstraints,boxConstants);
+		SupportFunction<Number> ball(SF_TYPE::TWO_BALL, 2, 2);
+		SupportFunction<Number> mSum = box.minkowskiSum(ball);
+		SupportFunction<Number> box2(boxConstraints,boxConstants2);
+		SupportFunction<Number> united = mSum.unite(box2);
+		SupportFunction<Number> box3(boxConstraints,boxConstants3);
+		SupportFunction<Number> intersected = united.intersect(box3);
+		sfChainComplete = intersected.affineTransformation(trafoMatrix, trafoVector);
+		// At this point sfChainComplete holds the unit box shifted +1 unit towards each dimension.
+
     }
 
     virtual void TearDown(){
     }
 
 	matrix_t<Number> constraints;
+	matrix_t<Number> boxConstraints;
 	vector_t<Number> constants;
 
 	vector_t<Number> vec1;
 	vector_t<Number> vec2;
 	vector_t<Number> vec3;
+
+	SupportFunction<Number> sfChainComplete;
 };
 
 /**
@@ -344,6 +375,15 @@ TYPED_TEST(SupportFunctionTest, contains) {
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
 	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+carl::rationalize<TypeParam>(0.001),yCoord+carl::rationalize<TypeParam>(0.001)})));
+
+	EXPECT_TRUE(this->sfChainComplete.contains(Point<TypeParam>({1,1})));
+	EXPECT_FALSE(this->sfChainComplete.contains(Point<TypeParam>({-1,-1})));
+
+	Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.vertices());
+	for(const auto& vertex : this->sfChainComplete.vertices()) {
+		std::cout << vertex << std::endl;
+	}
+	Plotter<TypeParam>::getInstance().plot2d();
 }
 
 TYPED_TEST(SupportFunctionTest, projection) {
@@ -363,4 +403,12 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(0))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir1)).supportValue );
 	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(1))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir2)).supportValue );
 	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(2))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir3)).supportValue );
+
+	SupportFunction<TypeParam> projected = this->sfChainComplete.project(dims);
+
+	dir1 << 1,0;
+	dir2 << -1,0;
+
+	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir1)).supportValue, this->sfChainComplete.evaluate(dir1).supportValue );
+	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
 }

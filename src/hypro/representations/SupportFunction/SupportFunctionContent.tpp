@@ -75,13 +75,14 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& 
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
 			mBall = new BallSupportFunction<Number>( _radius, _type );
+			mBall->setDimension(dimension);
 			mType = _type;
-			mDimension = 0;
+			mDimension = dimension;
 			mDepth = 0;
 			mOperationCount = 0;
 			break;
@@ -787,20 +788,26 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 		case SF_TYPE::POLY:
 		case SF_TYPE::ELLIPSOID: {
 			std::list<unsigned> res;
-			for(unsigned i = 0; i < mDimension; ++i)
+			DEBUG("hypro.representations.supportFunction","mDimension " << mDimension);
+			for(unsigned i = 0; i < mDimension; ++i){
+				DEBUG("hypro.representations.supportFunction","Added dimension " << i);
 				res.emplace_back(i);
-
+			}
 			return res;
 		}
 		case SF_TYPE::LINTRAFO: {
 			return mLinearTrafoParameters->origin->collectProjections();
 		}
 		case SF_TYPE::PROJECTION: {
+			DEBUG("hypro.representations.supportFunction","Projection Object.");
 			std::list<unsigned> res = mProjectionParameters->origin->collectProjections();
+			DEBUG("hypro.representations.supportFunction","Projection Object: got " << res.size() << " dimensions.");
 			for(auto resIt = res.begin(); resIt != res.end(); ){
 				if(std::find(mProjectionParameters->dimensions.begin(), mProjectionParameters->dimensions.end(), *resIt) == mProjectionParameters->dimensions.end()) {
+					DEBUG("hypro.representations.supportFunction","Delete dim " << *resIt);
 					resIt = res.erase(resIt);
 				} else {
+					DEBUG("hypro.representations.supportFunction","Keep dim " << *resIt);
 					++resIt;
 				}
 			}
@@ -816,12 +823,15 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
+					DEBUG("hypro.representations.supportFunction","Sum, add dimension " << res.back());
 					lhsProjections.pop_front();
 					rhsProjections.pop_front();
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
+						DEBUG("hypro.representations.supportFunction","Sum, dimension " << lhsProjections.front() << " not part in rhs, drop.");
 						lhsProjections.pop_front();
 					} else {
+						DEBUG("hypro.representations.supportFunction","Sum, dimension " << rhsProjections.front() << " not part in lhs, drop.");
 						rhsProjections.pop_front();
 					}
 				}
@@ -835,12 +845,15 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
+					DEBUG("hypro.representations.supportFunction","Union, add dimension " << res.back());
 					lhsProjections.pop_front();
 					rhsProjections.pop_front();
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
+						DEBUG("hypro.representations.supportFunction","Union, dimension " << lhsProjections.front() << " not part in rhs, drop.");
 						lhsProjections.pop_front();
 					} else {
+						DEBUG("hypro.representations.supportFunction","Union, dimension " << rhsProjections.front() << " not part in lhs, drop.");
 						rhsProjections.pop_front();
 					}
 				}
@@ -854,12 +867,15 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
+					DEBUG("hypro.representations.supportFunction","Intersection, add dimension " << res.back());
 					lhsProjections.pop_front();
 					rhsProjections.pop_front();
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
+						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << lhsProjections.front() << " not part in rhs, drop.");
 						lhsProjections.pop_front();
 					} else {
+						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << rhsProjections.front() << " not part in lhs, drop.");
 						rhsProjections.pop_front();
 					}
 				}
@@ -931,6 +947,8 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
 			std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), dimensions, SF_TYPE::PROJECTION ) );
 	obj->pThis = obj;
+	DEBUG("hypro.representations.supportFunction","Created ");
+	obj->print();
 	return obj;
 }
 
@@ -1105,6 +1123,8 @@ void SupportFunctionContent<Number>::print() const {
 		} break;
 		case SF_TYPE::PROJECTION: {
 			std::cout << "PROJECTION" << std::endl;
+			std::cout << "of" << std::endl;
+			mProjectionParameters->origin->print();
 		} break;
 		case SF_TYPE::SCALE: {
 			std::cout << "SCALE" << std::endl;

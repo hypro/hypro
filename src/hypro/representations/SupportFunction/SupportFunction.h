@@ -34,7 +34,7 @@ private:
 public:
 	SupportFunctionT ();
 	SupportFunctionT (const SupportFunctionT<Number,Converter>& _orig);
-	SupportFunctionT (SF_TYPE _type, Number _radius );
+	SupportFunctionT (SF_TYPE _type, Number _radius, unsigned dimension );
 	SupportFunctionT (const std::vector<Point<Number>>& _vertices);
 	SupportFunctionT (const matrix_t<Number>& _directions, const vector_t<Number>& _distances);
 	SupportFunctionT (const std::vector<Halfspace<Number>>& _planes);

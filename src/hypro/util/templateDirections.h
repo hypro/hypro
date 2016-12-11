@@ -170,7 +170,7 @@ static std::vector<vector_t<Number>> computeTemplate(std::list<unsigned> dimensi
 		}
 	}
 
-	//std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
+	std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
 
 	//copy directions2d into directions
 	Permutator permutator(dimensions.size(), 2);

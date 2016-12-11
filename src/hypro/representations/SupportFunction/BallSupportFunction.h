@@ -19,7 +19,7 @@ namespace hypro {
 template <typename Number>
 class BallSupportFunction {
   private:
-	unsigned mDimension;
+	unsigned mDimension = 0;
 	Number mRadius;
 	SF_TYPE mType;
 
