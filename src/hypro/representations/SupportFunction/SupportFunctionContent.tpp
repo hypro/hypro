@@ -988,39 +988,63 @@ template <typename Number>
 bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-                        return mEllipsoid->contains( _point );
-                }
+			DEBUG("hypro.representations.supportFunction","ELLIPSOID, point: " << _point);
+		    return mEllipsoid->contains( _point );
+		}
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
+			DEBUG("hypro.representations.supportFunction","BALL, point: " << _point);
 			return mBall->contains( _point );
 		}
 		case SF_TYPE::LINTRAFO: {
+			// TODO: Verify.
+			DEBUG("hypro.representations.supportFunction","TRANSFORMATION, point: " << _point);
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			return mLinearTrafoParameters->origin->contains( parameterPair.first * _point + parameterPair.second );
+			return mLinearTrafoParameters->origin->contains( (parameterPair.first.transpose() * _point) - parameterPair.second );
 		}
 		case SF_TYPE::POLY: {
+			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
 			return mPolytope->contains( _point );
 		}
 		case SF_TYPE::PROJECTION: {
+			DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
 			return mProjectionParameters->origin->contains( _point ); // TODO: Correct?
 		}
 		case SF_TYPE::SCALE: {
+			DEBUG("hypro.representations.supportFunction","SCALE, point: " << _point);
 			if ( mScaleParameters->factor == 0 )
 				return false;
 			else
 				return mScaleParameters->origin->contains( _point / mScaleParameters->factor );
 		}
 		case SF_TYPE::SUM: {
-			assert(false);
-			return false;
+			DEBUG("hypro.representations.supportFunction","MINKOWSKI-SUM, point: " << _point);
+			// current approach: Use templated evaluation.
+			std::vector<vector_t<Number>> templates = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
+			// use single evaluation, as one invalid eval is enough to determine the point is not contained.
+			for(const auto& dir : templates) {
+				DEBUG("hypro.representations.supportFunction","Evaluate " << dir);
+				EvaluationResult<Number> rhsRes =  mSummands->rhs->evaluate(dir);
+				DEBUG("hypro.representations.supportFunction","Rhsres: " << rhsRes.supportValue);
+				EvaluationResult<Number> lhsRes =  mSummands->lhs->evaluate(dir);
+				DEBUG("hypro.representations.supportFunction","Lhsres: " << lhsRes.supportValue);
+				DEBUG("hypro.representations.supportFunction","Summed: " << rhsRes.supportValue + lhsRes.supportValue << " and point dist: " << dir.dot(_point));
+				if(dir.dot(_point) > (lhsRes.supportValue + rhsRes.supportValue)) {
+					return false;
+				}
+			}
+			return true;
 		}
 		case SF_TYPE::UNITE: {
+			DEBUG("hypro.representations.supportFunction","UNION, point: " << _point);
 			return (mUnionParameters->rhs->contains(_point) || mUnionParameters->lhs->contains(_point));
 		}
 		case SF_TYPE::INTERSECT: {
+			DEBUG("hypro.representations.supportFunction","INTERSECTION, point: " << _point);
 			return (mIntersectionParameters->rhs->contains(_point) && mIntersectionParameters->lhs->contains(_point));
 		}
 		default:
+			DEBUG("hypro.representations.supportFunction","UNKNOWN, point: " << _point);
 			assert( false );
 			return false;
 	}

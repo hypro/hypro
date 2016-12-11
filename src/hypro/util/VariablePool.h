@@ -223,7 +223,6 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 
 	void clear() {
-		DEBUG("hypro.variablePool", "mCarlVariables.size(): " << int(mCarlVariables.size()) << ", mPplVariables.size(): " << int(mPplVariables.size()) << ", pplId: " << int(mPplId) );
 		assert( mCarlVariables.size() == mPplId );
 		mCarlVariables.clear();
 		#ifdef HYPRO_USE_PPL

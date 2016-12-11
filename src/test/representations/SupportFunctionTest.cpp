@@ -54,7 +54,7 @@ protected:
 		vector_t<Number> boxConstants2 = vector_t<Number>::Zero(4);
 		boxConstants2 << 5,5,5,5;
 		vector_t<Number> boxConstants3 = vector_t<Number>::Zero(4);
-		boxConstants2 << 1,1,1,1;
+		boxConstants3 << 1,1,1,1;
 		matrix_t<Number> trafoMatrix = matrix_t<Number>(2,2);
 		trafoMatrix << 0,1,1,0;
 		vector_t<Number> trafoVector = vector_t<Number>(2);
@@ -379,11 +379,12 @@ TYPED_TEST(SupportFunctionTest, contains) {
 	EXPECT_TRUE(this->sfChainComplete.contains(Point<TypeParam>({1,1})));
 	EXPECT_FALSE(this->sfChainComplete.contains(Point<TypeParam>({-1,-1})));
 
-	Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.vertices());
-	for(const auto& vertex : this->sfChainComplete.vertices()) {
-		std::cout << vertex << std::endl;
-	}
-	Plotter<TypeParam>::getInstance().plot2d();
+	//Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.vertices());
+	//std::cout << "vertices: " << std::endl;
+	//for(const auto& vertex : this->sfChainComplete.vertices()) {
+	//	std::cout << vertex << std::endl;
+	//}
+	//Plotter<TypeParam>::getInstance().plot2d();
 }
 
 TYPED_TEST(SupportFunctionTest, projection) {
