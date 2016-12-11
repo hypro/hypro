@@ -39,7 +39,7 @@ var classhypro_1_1BoxT_3_01double_00_01Converter_01_4 =
     [ "operator[]", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a94dd74e38efe368931d8efc053901a09", null ],
     [ "print", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ae462fc5b8e634c636da50d73199b3ae2", null ],
     [ "project", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a979e3583b5610071f9fd291a4dd87487", null ],
-    [ "reduceNumberRepresentation", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a53b02f4042495810d146b666e8ce0e63", null ],
+    [ "reduceNumberRepresentation", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a269ae84e8ba28452cc0ccdff24b55325", null ],
     [ "removeRedundancy", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a55fe892445ce290a31e7c6a9d2637641", null ],
     [ "satisfiesHalfspace", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aea81711e7434b68bd6c708c1a7337ea1", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a580f0591119fce3e2873366a17b4905a", null ],

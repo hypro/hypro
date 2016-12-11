@@ -18,7 +18,7 @@ var searchData=
   ['reachtreenodesimple',['ReachTreeNodeSimple',['../classhypro_1_1ReachTreeNodeSimple.html#a4a3b23e91e83d0bcb088b1e64e1bf300',1,'hypro::ReachTreeNodeSimple']]],
   ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],
-  ['reducenumberrepresentation',['reduceNumberRepresentation',['../classhypro_1_1BoxT.html#a4891a9231926758764804c05bfb0e378',1,'hypro::BoxT::reduceNumberRepresentation()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a53b02f4042495810d146b666e8ce0e63',1,'hypro::BoxT&lt; double, Converter &gt;::reduceNumberRepresentation()']]],
+  ['reducenumberrepresentation',['reduceNumberRepresentation',['../classhypro_1_1BoxT.html#a4891a9231926758764804c05bfb0e378',1,'hypro::BoxT::reduceNumberRepresentation()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a269ae84e8ba28452cc0ccdff24b55325',1,'hypro::BoxT&lt; double, Converter &gt;::reduceNumberRepresentation()']]],
   ['reducetodimensions',['reduceToDimensions',['../classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac',1,'hypro::Point']]],
   ['removeduplicatepoints',['removeDuplicatePoints',['../classhypro_1_1Point.html#a7a8c12183c854b044cdfc6122ad385ed',1,'hypro::Point']]],
   ['removeemptygenerators',['removeEmptyGenerators',['../classhypro_1_1ZonotopeT.html#a8a724a58e36b633e0bf4d1a33374da9c',1,'hypro::ZonotopeT']]],
