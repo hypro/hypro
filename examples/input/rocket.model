@@ -1,0 +1,112 @@
+hybrid reachability
+{
+ state var height, velocity, acceleration, weight, time
+
+ setting
+ {
+  fixed steps 0.01
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon velocity,weight
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output rocket
+  max jumps 5
+  print on
+ }
+
+ modes
+ {
+  launchpad
+  {
+   poly ode 1
+   {
+    height' = 0
+    velocity' = 0
+    acceleration' = 0
+    weight' = 0
+    time' = 1
+   }
+
+   inv
+   {
+    time >= 0
+    time <= 1
+   }
+  }
+
+  stage_1
+  {
+   poly ode 1
+   {
+    height' = velocity
+    velocity' = acceleration
+    acceleration' = -9.81 + 162.91
+    weight' = -0.158
+    time' = 1
+   }
+
+   inv
+   {
+    time >= 0
+    weight >= 0.45
+   }
+  }
+
+  falling
+  {
+   poly ode 1
+   {
+    height' = velocity
+    velocity' = acceleration
+    acceleration' = -9.81
+    weight' = 0
+    time' = 1
+   }
+
+   inv
+   {
+    time >= 0
+    height >= 0
+   }
+  }
+
+ }
+
+ jumps
+ {
+  launchpad -> stage_1
+  guard { time >= 0.5 }
+  reset { }
+  parallelotope aggregation {}
+
+  stage_1 -> falling
+  guard { weight = 0.45 }
+  reset { }
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  launchpad
+  {
+   height = 0
+   velocity = 0
+   acceleration = 0
+   weight = 1.5
+   time = 0
+  }
+ }
+
+}
+
+#unsafe set
+#{
+#  l
+#  {
+#   #x in [4,6]
+#   #v in [-2.5,0]
+#  }
+#}
