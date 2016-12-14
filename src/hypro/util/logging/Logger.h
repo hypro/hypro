@@ -21,41 +21,13 @@ namespace hypro {
 	inline int initializeLogging() {
 		carl::logging::logger().configure("logfile", "hypro.log");
 		carl::logging::logger().filter("logfile")
-		#ifdef HYPRO_LOG_TRACE
-	      ("hypro", carl::logging::LogLevel::LVL_TRACE)
-		#endif
-		#ifdef HYPRO_LOG_INFO
-	      ("hypro", carl::logging::LogLevel::LVL_INFO)
-		#endif
-		#ifdef HYPRO_LOG_DEBUG
-	      ("hypro", carl::logging::LogLevel::LVL_DEBUG)
-		#endif
-		#ifdef HYPRO_LOG_WARN
-	      ("hypro", carl::logging::LogLevel::LVL_WARN)
-		#endif
-		#ifdef HYPRO_LOG_FATAL
-	      ("hypro", carl::logging::LogLevel::LVL_FATAL)
-		#endif
+	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
 		;
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
-		#ifdef HYPRO_LOG_TRACE
-	      ("hypro", carl::logging::LogLevel::LVL_TRACE)
-		#endif
-		#ifdef HYPRO_LOG_INFO
-	      ("hypro", carl::logging::LogLevel::LVL_INFO)
-		#endif
-		#ifdef HYPRO_LOG_DEBUG
-	      ("hypro", carl::logging::LogLevel::LVL_DEBUG)
-		#endif
-		#ifdef HYPRO_LOG_WARN
-	      ("hypro", carl::logging::LogLevel::LVL_WARN)
-		#endif
-		#ifdef HYPRO_LOG_FATAL
-	      ("hypro", carl::logging::LogLevel::LVL_FATAL)
-		#endif
+	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
 		;
 
