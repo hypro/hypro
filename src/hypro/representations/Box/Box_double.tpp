@@ -277,6 +277,11 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	if(_mat.rows() == 0) {
 		return std::make_pair(true, *this);
 	}
+
+	if(this->empty()) {
+		return std::make_pair(false, *this);
+	}
+
 	//std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
 	//std::cout << __func__ << ": input matrix: " << convert<double,double>(_mat) << std::endl << "input vector: " << convert<double,double>(_vec) << std::endl;
 	//std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
@@ -334,6 +339,9 @@ BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigne
 
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matrix_t<double> &A ) const {
+	if(this->empty()) {
+		return *this;
+	}
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
@@ -363,8 +371,11 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
-	BoxT<double,Converter> res = this->linearTransformation(A);
-	return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
+	if(!this->empty()){
+		BoxT<double,Converter> res = this->linearTransformation(A);
+		return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
+	}
+	return *this;
 }
 
 template<typename Converter>
