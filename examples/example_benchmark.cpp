@@ -140,45 +140,18 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		unsigned cnt = 0;
 		for(const auto& segment : flowpipePair.second){
 			//std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
-			switch (type) {
-				case hypro::representation_name::support_function:{
-					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
-					break;
-				}
-				case hypro::representation_name::zonotope:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
-					break;
-				}
-				case hypro::representation_name::box:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
-					break;
-				}
-				#ifdef USE_PPL
-				case hypro::representation_name::ppl_polytope:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
-					break;
-				}
-				#endif
-				default:
-					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
-					unsigned tmp = plotter.addObject(segment.vertices());
-					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
-			}
+			unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+			plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 			++cnt;
 		}
 	}
-	//std::cout << "Write to file." << std::endl;
+
 	//std::cout << "Use dimensions: " << plotter.settings().dimensions.first << ", " << plotter.settings().dimensions.second << std::endl;
+	INFO("hypro","Write to file.");
 	plotter.plot2d();
 	plotter.plotGen();
 	//plotter.plotTex();
-
-	std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
+	INFO("hypro","Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms");
 
 #endif
 }
