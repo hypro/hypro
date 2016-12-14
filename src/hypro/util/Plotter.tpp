@@ -27,7 +27,7 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 
 template <typename Number>
 void Plotter<Number>::plot2d() const {
-	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+	prepareObjects();
 	TRACE("hypro.plotter", "Prepared objects.");
 
 	mOutfile.open( mFilename + ".plt" );
@@ -228,7 +228,7 @@ void Plotter<Number>::plot2d() const {
 
 template<typename Number>
 void Plotter<Number>::plotTex() const {
-	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+	prepareObjects();
 
 	mOutfile.open( mFilename + ".tex" );
 
@@ -369,7 +369,7 @@ void Plotter<Number>::plotTex() const {
 
 template<typename Number>
 void Plotter<Number>::plotGen() const {
-	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
+	prepareObjects();
 
 	mOutfile.open( mFilename + ".gen" );
 
@@ -658,7 +658,7 @@ bool Plotter<Number>::isLeftTurn( const Point<Number> &a, const Point<Number> &b
 }
 
 template<typename Number>
-void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) const {
+void Plotter<Number>::prepareObjects() const {
 	// reduce and sort objects
 	if(!mObjects.empty()){
 		TRACE("hypro.plotter","Prepare " << mObjects.size() << " objects.");

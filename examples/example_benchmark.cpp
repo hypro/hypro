@@ -15,7 +15,7 @@
 #define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>
-static void computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
+static void computeReachableStates(const std::string& filename) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::duration<long long unsigned, std::micro>;
 	std::string csvString;
@@ -171,45 +171,38 @@ int main(int argc, char** argv) {
 		#ifdef USE_PPL
 		case 6: {
 			using Representation = hypro::Polytope<Number>;
-			std::cout << "Using a PPL-Polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
 		#endif
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
-			std::cout << "Using a zonotope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
-			std::cout << "Using a support function representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
 		case 3: {
 			using Representation = hypro::VPolytope<Number>;
-			std::cout << "Using a v-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_v);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
         case 2: {
 			using Representation = hypro::HPolytope<Number>;
-			std::cout << "Using a h-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
 		case 1: {
 			using Representation = hypro::Box<Number>;
-			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
+			computeReachableStates<Number, Representation>(filename);
 			break;
 		}
 		default:{
 			using Representation = hypro::Box<Number>;
-			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
+			computeReachableStates<Number, Representation>(filename);
 		}
 	}
 	exit(0);

@@ -9,11 +9,6 @@
 #cmakedefine USE_CLANG
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine HYPRO_LOGGING
-#cmakedefine HYPRO_LOG_TRACE
-#cmakedefine HYPRO_LOG_INFO
-#cmakedefine HYPRO_LOG_DEBUG
-#cmakedefine HYPRO_LOG_WARN
-#cmakedefine HYPRO_LOG_FATAL
 #cmakedefine HYPRO_STATISTICS
 #cmakedefine FORWARD_REACHABILITY_METHOD_2
 
