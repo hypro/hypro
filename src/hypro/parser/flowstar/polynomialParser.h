@@ -114,7 +114,7 @@ namespace parser {
 			std::vector<boost::fusion::vector2<int, std::pair<unsigned,double>>> tmpVec = fs::at_c<1>(_in);
 			for(const auto& tuple : tmpVec) {
 				assert((fs::at_c<1>(tuple)).first < res.size());
-				//std::cout << tuple.first << " -> " << tuple.second << std::endl;
+				// std::cout << (fs::at_c<1>(tuple)).first << " -> " << (fs::at_c<1>(tuple)).second << std::endl;
 				if(fs::at_c<0>(tuple)) {
 					res((fs::at_c<1>(tuple)).first) += (fs::at_c<1>(tuple)).second * (fs::at_c<0>(tuple));
 				} else {
