@@ -28,7 +28,7 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 template <typename Number>
 void Plotter<Number>::plot2d() const {
 	prepareObjects(mSettings.dimensions.first,mSettings.dimensions.second);
-	//std::cout << "Prepared objects." << std::endl;
+	TRACE("hypro.plotter", "Prepared objects.");
 
 	mOutfile.open( mFilename + ".plt" );
 
@@ -44,6 +44,7 @@ void Plotter<Number>::plot2d() const {
 
 
 	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+		TRACE("hypro.plotter","Start plotting objects.");
 		// std::cout << "mObjects.empty(): " << mObjects.empty() << std::endl;
 		// std::cout << "mPoints.empty(): " << mPoints.empty() << std::endl;
 		// std::cout << "mObjects.begin()->second.empty(): " << mObjects.begin()->second.empty() << std::endl;
@@ -51,10 +52,10 @@ void Plotter<Number>::plot2d() const {
 		// set object
 		vector_t<Number> min = vector_t<Number>(2);
 		vector_t<Number> max = vector_t<Number>(2);
-		min(0) = mLimits.first(mSettings.dimensions.first);
-		min(1) = mLimits.first(mSettings.dimensions.second);
-		max(0) = mLimits.second(mSettings.dimensions.first);
-		max(1) = mLimits.second(mSettings.dimensions.second);
+		min(0) = mLimits.first(0);
+		min(1) = mLimits.first(1);
+		max(0) = mLimits.second(0);
+		max(1) = mLimits.second(1);
 		// extend ranges
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
@@ -414,22 +415,25 @@ void Plotter<Number>::plotGen() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points ) {
+	TRACE("hypro.plotter","");
 	// reduce dimensions
 	if(!_points.empty()){
+		assert(_points.begin()->dimension() == 2);
 		// initialize limits
-		if(mOriginalObjects.empty() && mOriginalPoints.empty()){
+		if(mObjects.empty() && mPoints.empty()){
 			mLimits.first = _points.begin()->rawCoordinates();
 			mLimits.second = _points.begin()->rawCoordinates();
 		}
 		// update limits
 		for(const auto& point : _points) {
+			assert(point.dimension() == 2);
 			for(unsigned d = 0; d < mLimits.first.rows(); ++d){
 				mLimits.first(d) = mLimits.first(d) > point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.first(d);
 				mLimits.second(d) = mLimits.second(d) < point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.second(d);
 			}
 		}
 
-		mOriginalObjects.insert( std::make_pair( mId, _points ) );
+		mObjects.insert( std::make_pair( mId, _points ) );
 		mId++;
 		return (mId-1);
 	}
@@ -448,22 +452,24 @@ unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>
 
 template<typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Halfspace<Number>>& _planes ) {
-	mOriginalPlanes.insert( std::make_pair( mId++, _planes ) );
+	mPlanes.insert( std::make_pair( mId++, _planes ) );
 	return mId;
 }
 
 template<typename Number>
 unsigned Plotter<Number>::addObject( const Halfspace<Number>& _plane ) {
+	assert(_plane.dimension() == 2);
 	std::vector<Halfspace<Number>> tmp;
 	tmp.push_back(_plane);
-	mOriginalPlanes.insert( std::make_pair( mId++, tmp ) );
+	mPlanes.insert( std::make_pair( mId++, tmp ) );
 	return mId;
 }
 
 template<typename Number>
 unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
+	assert(_point.dimension() == 2);
 	// initialize limits
-	if(mOriginalObjects.empty() && mOriginalPoints.empty()){
+	if(mObjects.empty() && mPoints.empty()){
 		mLimits.first = _point.rawCoordinates();
 		mLimits.second = _point.rawCoordinates();
 	}
@@ -473,13 +479,14 @@ unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
 		mLimits.second(d) = mLimits.second(d) < _point.rawCoordinates()(d) ? _point.rawCoordinates()(d) : mLimits.second(d);
 	}
 
-	mOriginalPoints.insert( std::make_pair( mId, _point ) );
+	mPoints.insert( std::make_pair( mId, _point ) );
 	return mId++;
 }
 
 template<typename Number>
 unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for(const auto& p : _points){
+		assert(p.dimension() == 2);
 		addPoint(p);
 		--mId;
 	}
@@ -489,14 +496,14 @@ unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points )
 
 template<typename Number>
 void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
-	mOriginalVectors.insert( std::make_pair(mId++, _vector) );
+	mVectors.insert( std::make_pair(mId++, _vector) );
 }
 
 template <typename Number>
 void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
-	if ( _color != 0 && mOriginalObjects.find( _id ) != mOriginalObjects.end() ) {
+	if ( _color != 0 && mObjects.find( _id ) != mObjects.end() ) {
 		mObjectColors[_id] = _color;
-	} else if ( _color != 0 && mOriginalPlanes.find( _id ) != mOriginalPlanes.end() ) {
+	} else if ( _color != 0 && mPlanes.find( _id ) != mPlanes.end() ) {
 		mObjectColors[_id] = _color;
 	}
 }
@@ -652,51 +659,14 @@ bool Plotter<Number>::isLeftTurn( const Point<Number> &a, const Point<Number> &b
 
 template<typename Number>
 void Plotter<Number>::prepareObjects(unsigned firstDim, unsigned secondDim) const {
-	if(mLastDimensions.first < 0 || (unsigned(mLastDimensions.first) != firstDim && unsigned(mLastDimensions.second) != secondDim)){
-		std::vector<unsigned> targetDimensions;
-		targetDimensions.push_back(firstDim);
-		targetDimensions.push_back(secondDim);
-
-		// reduce and sort objects
-		if(!mOriginalObjects.empty()){
-			//std::cout << "Prepare " << mOriginalObjects.size() << " objects. Reduce to dimensions " << targetDimensions << std::endl;
-			for(const auto& objPair : mOriginalObjects){
-				vector<Point<Number>> tmp;
-				for(const auto& point : objPair.second)
-					tmp.push_back(point.reduceToDimensions(targetDimensions));
-
-				// sort
-				// std::cout << "sort (" << tmp.size() << " points)" << std::endl;
-				tmp = grahamScan(tmp);
-				mObjects.insert(std::make_pair(objPair.first, tmp));
-			}
+	// reduce and sort objects
+	if(!mObjects.empty()){
+		TRACE("hypro.plotter","Prepare " << mObjects.size() << " objects.");
+		for(auto objIt = mObjects.begin(); objIt != mObjects.end(); ++objIt){
+			// sort objects
+			TRACE("hypro.plotter","Sort vertices of object " << objIt->first);
+			objIt->second = grahamScan(objIt->second);
 		}
-
-		// reduce planes
-		if(!mOriginalPlanes.empty()){
-			for(const auto& planePair : mOriginalPlanes)
-				mPlanes.insert(planePair);
-		}
-
-		// reduce points
-		if(!mOriginalPoints.empty()){
-			for(const auto& pointPair : mOriginalPoints)
-				mPoints.insert(std::make_pair(pointPair.first, pointPair.second.reduceToDimensions(targetDimensions)));
-		}
-
-		// reduce vectors
-		if(!mOriginalVectors.empty()){
-			for(const auto& vectorPair : mOriginalVectors){
-				vector_t<Number> tmp = vector_t<Number>(2);
-				tmp(0) = vectorPair.second(mSettings.dimensions.first);
-				tmp(0) = vectorPair.second(mSettings.dimensions.second);
-				mVectors.insert(std::make_pair(vectorPair.first, tmp));
-			}
-		}
-
-		// update mLastDimensions
-		mLastDimensions.first = firstDim;
-		mLastDimensions.second = secondDim;
 	}
 }
 

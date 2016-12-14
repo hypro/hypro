@@ -62,10 +62,6 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
   private:
 	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
-	std::multimap<unsigned, std::vector<Point<Number>>> mOriginalObjects;
-	std::multimap<unsigned, std::vector<Halfspace<Number>>> mOriginalPlanes;
-	std::multimap<unsigned, Point<Number>> mOriginalPoints;
-	std::multimap<unsigned, vector_t<Number>> mOriginalVectors;
 	mutable std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
 	mutable std::multimap<unsigned, Point<Number>> mPoints;
