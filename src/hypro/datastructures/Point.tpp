@@ -242,10 +242,14 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 
 template <typename Number>
 Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
-	assert(_dimensions.size() > 0);
+	TRACE("hypro.datastructures.point","*this: " << *this);
+	if(_dimensions.size() == 0) {
+		return Point<Number>();
+	}
 	vector_t<Number> newCoordinates = vector_t<Number>( _dimensions.size() );
 	unsigned tPos = 0;
 	for ( const auto sPos : _dimensions ) {
+		TRACE("hypro.datastructures.point","consider dimension " << sPos);
 		assert(sPos < mCoordinates.rows());
 		assert(sPos >= 0);
 		newCoordinates( tPos ) = mCoordinates( sPos );
