@@ -429,8 +429,8 @@ TYPED_TEST(BoxTest, Membership)
 
 TYPED_TEST(BoxTest, NumberReduction)
 {
-	carl::Interval<TypeParam> xInterval(TypeParam(0.01), TypeParam(0.02));
-	carl::Interval<TypeParam> yInterval(TypeParam(-1.02), TypeParam(-1.01));
+	carl::Interval<TypeParam> xInterval(carl::rationalize<TypeParam>(0.01), carl::rationalize<TypeParam>(0.02));
+	carl::Interval<TypeParam> yInterval(carl::rationalize<TypeParam>(-1.02), carl::rationalize<TypeParam>(-1.01));
 
 	hypro::Box<TypeParam> box;
 	box.insert(xInterval);
@@ -469,7 +469,7 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 TYPED_TEST(BoxTest, Projection)
 {
 	carl::Interval<TypeParam> xInterval(TypeParam(1), TypeParam(2));
-	carl::Interval<TypeParam> yInterval(TypeParam(-1.02), TypeParam(-1.01));
+	carl::Interval<TypeParam> yInterval(carl::rationalize<TypeParam>(-1.02), carl::rationalize<TypeParam>(-1.01));
 	hypro::Box<TypeParam> box;
 	box.insert(xInterval);
 	box.insert(yInterval);
