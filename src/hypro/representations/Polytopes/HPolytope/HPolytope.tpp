@@ -217,7 +217,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::ine
 template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( const Location<Number>* ) const {
 	typename std::vector<Point<Number>> vertices;
-	if(!mHPlanes.empty() && !this->empty()) {
+	if(!mHPlanes.empty() && mHPlanes.size() >= this->dimension() && !this->empty()) {
 		unsigned dim = this->dimension();
 
 		Permutator permutator(mHPlanes.size(), dim);
