@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.cpp Source File</title>
+<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('Optimizer_8cpp_source.html','');});
+$(document).ready(function(){initNavTree('Logger_8cpp_source.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,35 +106,42 @@ $(document).ready(function(){initNavTree('Optimizer_8cpp_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Optimizer.cpp</div>  </div>
+<div class="title">Logger.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;Optimizer.h&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;flags.h&quot;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#ifdef USE_CLN_NUMBERS</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;cln/cln.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;gmp.h&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;gmpxx.h&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;Number&gt;::mWarnInexact</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifdef USE_CLN_NUMBERS</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;cln::cl_RA&gt;</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;mpq_class&gt;</a>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;double&gt;</a>;</div>
-<div class="ttc" id="classhypro_1_1Optimizer_html"><div class="ttname"><a href="classhypro_1_1Optimizer.html">hypro::Optimizer</a></div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00037">Optimizer.h:37</a></div></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;Logger.h&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>hypro {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">int</span> initializeLogging() {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        carl::logging::logger().configure(<span class="stringliteral">&quot;logfile&quot;</span>, <span class="stringliteral">&quot;hypro.log&quot;</span>);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        carl::logging::logger().filter(<span class="stringliteral">&quot;logfile&quot;</span>)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        (<span class="stringliteral">&quot;hypro&quot;</span>, carl::logging::LogLevel::LVL_TRACE)</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        (<span class="stringliteral">&quot;hypro.representations&quot;</span>, carl::logging::LogLevel::LVL_DEBUG)</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        ;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        carl::logging::logger().configure(<span class="stringliteral">&quot;stdout&quot;</span>, std::cout);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        carl::logging::logger().filter(<span class="stringliteral">&quot;stdout&quot;</span>)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        (<span class="stringliteral">&quot;hypro&quot;</span>, carl::logging::LogLevel::LVL_TRACE)</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        (<span class="stringliteral">&quot;hypro.representations&quot;</span>, carl::logging::LogLevel::LVL_DEBUG)</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        ;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        carl::logging::logger().resetFormatter();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_879d833e0dfbe8f31a5e860bb94efb50.html">util</a></li><li class="navelem"><a class="el" href="dir_3100e148cb0b6b745355fdee31bcb5c6.html">linearOptimization</a></li><li class="navelem"><b>Optimizer.cpp</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_879d833e0dfbe8f31a5e860bb94efb50.html">util</a></li><li class="navelem"><a class="el" href="dir_e44977c2db40c89968aef6d4236fe8a8.html">logging</a></li><li class="navelem"><b>Logger.cpp</b></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

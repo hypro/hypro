@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('example_benchmark_8cpp-example.html','
 <div class="line"><span class="preprocessor">#define PLOT_FLOWPIPE</span></div>
 <div class="line"><span class="preprocessor"></span></div>
 <div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Representation&gt;</div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> computeReachableStates(<span class="keyword">const</span> std::string&amp; filename, <span class="keyword">const</span> <a class="code" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a>&amp; type) {</div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> computeReachableStates(<span class="keyword">const</span> std::string&amp; filename) {</div>
 <div class="line">    <span class="keyword">using</span> clock = std::chrono::high_resolution_clock;</div>
 <div class="line">    <span class="keyword">using</span> timeunit = std::chrono::duration&lt;long long unsigned, std::micro&gt;;</div>
 <div class="line">    std::string csvString;</div>
@@ -242,45 +242,18 @@ $(document).ready(function(){initNavTree('example_benchmark_8cpp-example.html','
 <div class="line">        <span class="keywordtype">unsigned</span> cnt = 0;</div>
 <div class="line">        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; segment : flowpipePair.second){</div>
 <div class="line">            <span class="comment">//std::cout &lt;&lt; &quot;Plot segment &quot; &lt;&lt; cnt &lt;&lt; &quot;/&quot; &lt;&lt; flowpipePair.second.size() &lt;&lt; std::endl;</span></div>
-<div class="line">            <span class="keywordflow">switch</span> (type) {</div>
-<div class="line">                <span class="keywordflow">case</span> hypro::representation_name::support_function:{</div>
-<div class="line">                    <span class="comment">//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager&lt;Number&gt;::getInstance().location(flowpipePair.first)));</span></div>
-<div class="line">                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line">                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                }</div>
-<div class="line">                <span class="keywordflow">case</span> hypro::representation_name::zonotope:{</div>
-<div class="line">                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line">                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                }</div>
-<div class="line">                <span class="keywordflow">case</span> hypro::representation_name::box:{</div>
-<div class="line">                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line">                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                }</div>
-<div class="line"><span class="preprocessor">                #ifdef USE_PPL</span></div>
-<div class="line"><span class="preprocessor"></span>                <span class="keywordflow">case</span> hypro::representation_name::ppl_polytope:{</div>
-<div class="line">                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
-<div class="line">                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
-<div class="line">                    <span class="keywordflow">break</span>;</div>
-<div class="line">                }</div>
-<div class="line"><span class="preprocessor">                #endif</span></div>
-<div class="line"><span class="preprocessor"></span>                <span class="keywordflow">default</span>:</div>
-<div class="line">                    <span class="comment">//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</span></div>
-<div class="line">                    <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.vertices());</div>
-<div class="line">                    plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
-<div class="line">            }</div>
+<div class="line">            <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.project(plottingDimensions).vertices());</div>
+<div class="line">            plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (<span class="keyword">sizeof</span>(hypro::plotting::colors)/<span class="keyword">sizeof</span>(*hypro::plotting::colors))]);</div>
 <div class="line">            ++cnt;</div>
 <div class="line">        }</div>
 <div class="line">    }</div>
-<div class="line">    <span class="comment">//std::cout &lt;&lt; &quot;Write to file.&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"></div>
 <div class="line">    <span class="comment">//std::cout &lt;&lt; &quot;Use dimensions: &quot; &lt;&lt; plotter.settings().dimensions.first &lt;&lt; &quot;, &quot; &lt;&lt; plotter.settings().dimensions.second &lt;&lt; std::endl;</span></div>
+<div class="line">    INFO(<span class="stringliteral">&quot;hypro&quot;</span>,<span class="stringliteral">&quot;Write to file.&quot;</span>);</div>
 <div class="line">    plotter.<a name="a9"></a><a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>();</div>
 <div class="line">    plotter.<a name="a10"></a>plotGen();</div>
 <div class="line">    <span class="comment">//plotter.plotTex();</span></div>
-<div class="line"></div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Finished plotting: &quot;</span> &lt;&lt; std::chrono::duration_cast&lt;timeunit&gt;( clock::now() - startPlotting ).count()/1000.0 &lt;&lt; <span class="stringliteral">&quot; ms&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">    INFO(<span class="stringliteral">&quot;hypro&quot;</span>,<span class="stringliteral">&quot;Finished plotting: &quot;</span> &lt;&lt; std::chrono::duration_cast&lt;timeunit&gt;( clock::now() - startPlotting ).count()/1000.0 &lt;&lt; <span class="stringliteral">&quot; ms&quot;</span>);</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"><span class="preprocessor"></span>}</div>
@@ -300,45 +273,38 @@ $(document).ready(function(){initNavTree('example_benchmark_8cpp-example.html','
 <div class="line"><span class="preprocessor">        #ifdef USE_PPL</span></div>
 <div class="line"><span class="preprocessor"></span>        <span class="keywordflow">case</span> 6: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = hypro::Polytope&lt;Number&gt;;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a PPL-Polytope representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::ppl_polytope);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line"><span class="preprocessor">        #endif</span></div>
 <div class="line"><span class="preprocessor"></span>        <span class="keywordflow">case</span> 5: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">hypro::Zonotope&lt;Number&gt;</a>;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a zonotope representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::zonotope);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line">        <span class="keywordflow">case</span> 4: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction&lt;Number&gt;</a>;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a support function representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::support_function);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line">        <span class="keywordflow">case</span> 3: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">hypro::VPolytope&lt;Number&gt;</a>;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a v-polytope representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::polytope_v);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line">        <span class="keywordflow">case</span> 2: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;Number&gt;</a>;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a h-polytope representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::polytope_h);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line">        <span class="keywordflow">case</span> 1: {</div>
 <div class="line">            <span class="keyword">using</span> Representation = hypro::Box&lt;Number&gt;;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a box representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::box);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        }</div>
 <div class="line">        <span class="keywordflow">default</span>:{</div>
 <div class="line">            <span class="keyword">using</span> Representation = hypro::Box&lt;Number&gt;;</div>
-<div class="line">            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a box representation.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::box);</div>
+<div class="line">            computeReachableStates&lt;Number, Representation&gt;(filename);</div>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">    exit(0);</div>

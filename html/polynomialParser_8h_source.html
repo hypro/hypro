@@ -225,7 +225,7 @@ $(document).ready(function(){initNavTree('polynomialParser_8h_source.html','');}
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            std::vector&lt;boost::fusion::vector2&lt;int, std::pair&lt;unsigned,double&gt;&gt;&gt; tmpVec = fs::at_c&lt;1&gt;(_in);</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; tuple : tmpVec) {</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                assert((fs::at_c&lt;1&gt;(tuple)).first &lt; res.size());</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                <span class="comment">//std::cout &lt;&lt; tuple.first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; tuple.second &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                <span class="comment">// std::cout &lt;&lt; (fs::at_c&lt;1&gt;(tuple)).first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; (fs::at_c&lt;1&gt;(tuple)).second &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <span class="keywordflow">if</span>(fs::at_c&lt;0&gt;(tuple)) {</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                    res((fs::at_c&lt;1&gt;(tuple)).first) += (fs::at_c&lt;1&gt;(tuple)).second * (fs::at_c&lt;0&gt;(tuple));</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                } <span class="keywordflow">else</span> {</div>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[6,0,1,27,15],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ad7f69d76d84a82c79531679ecc180494":[6,0,1,27,21],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ae1cd62542502ab286b4a9d64c2d8af80":[6,0,1,27,7],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ae462fc5b8e634c636da50d73199b3ae2":[6,0,1,27,37],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927":[6,0,1,30,4],
 "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01":[6,0,1,30,12],
 "classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd":[6,0,1,30,6],
-"classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638":[6,0,1,30,2],
-"classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8":[6,0,1,30,10]
+"classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638":[6,0,1,30,2]
 };
