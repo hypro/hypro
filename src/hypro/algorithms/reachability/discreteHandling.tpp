@@ -1,4 +1,3 @@
-#include "util/Plotter.h"
 
 namespace hypro {
 namespace reachability {
