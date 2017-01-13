@@ -190,10 +190,13 @@ namespace hypro {
 		#ifdef HYPRO_USE_SMTRAT
 		TRACE("hypro.optimizer","Use smtrat for consistency check.");
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+		mConsistencyChecked = true;
         #elif defined(HYPRO_USE_Z3)
 		mLastConsistencyAnswer = z3CheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+		mConsistencyChecked = true;
 		#elif defined(HYPRO_USE_SOPLEX)
 		mLastConsistencyAnswer = soplexCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+		mConsistencyChecked = true;
 		#else // use glpk
 		if(!mConsistencyChecked){
 			TRACE("hypro.optimizer","Use glpk for consistency check.");
