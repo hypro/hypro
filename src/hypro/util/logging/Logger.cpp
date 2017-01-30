@@ -2,7 +2,7 @@
 
 namespace hypro {
 
-	int initializeLogging() {
+	int initializeLogging(int& i) {
 		carl::logging::logger().configure("logfile", "hypro.log");
 		carl::logging::logger().filter("logfile")
 	    ("hypro", carl::logging::LogLevel::LVL_WARN)
@@ -16,6 +16,10 @@ namespace hypro {
 		;
 
 	  	carl::logging::logger().resetFormatter();
+
+	  	// avoid warning of unused variable by casting it to void (thus it is used at least once).
+	  	(void)i;
+
 	  	return 0;
 	}
 

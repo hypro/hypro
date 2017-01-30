@@ -16,9 +16,9 @@
 
 namespace hypro {
 
-	int initializeLogging();
+	int initializeLogging(int& i);
 
-	static int initvar = initializeLogging();
+	static int initvar = initializeLogging(initvar);
 
 } // namespace hypro
 
