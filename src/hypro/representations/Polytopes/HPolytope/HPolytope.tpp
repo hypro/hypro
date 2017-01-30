@@ -49,7 +49,10 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
-	TRACE("hypro.hPolytope","Construct from vertices.");
+	TRACE("hypro.hPolytope","Construct from vertices: ");
+	for(const auto& vertex : points) {
+		TRACE("hypro.hPolytope", vertex);
+	}
 	/*
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();

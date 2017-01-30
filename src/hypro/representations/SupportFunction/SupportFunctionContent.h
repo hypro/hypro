@@ -261,7 +261,7 @@ class SupportFunctionContent {
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {
 		unsigned level = 0;
-		std::cout << "Depth: " << rhs->mDepth << std::endl;
+		//std::cout << "Depth: " << rhs->mDepth << std::endl;
 		while(true){
 			std::string tmp = rhs->printLevel(level, "   ");
 			if(!tmp.empty()) {

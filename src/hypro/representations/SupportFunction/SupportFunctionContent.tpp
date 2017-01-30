@@ -492,7 +492,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			// only process if both are feasible. If one result is infeasible, the others will be too, so stop processing.
 			if(resA.begin()->errorCode != SOLUTION::INFEAS && resB.begin()->errorCode != SOLUTION::INFEAS) {
 				for(unsigned index = 0; index < resA.size(); ++index){
-					assert(resA[index].errorCode != SOLUTION::INFEAS && resB[index].errorCode != SOLUTION::INFEAS);
+					assert(resA.at(index).errorCode != SOLUTION::INFEAS && resB.at(index).errorCode != SOLUTION::INFEAS);
 					EvaluationResult<Number> r;
 					if(resA[index].errorCode == SOLUTION::INFTY || resB[index].errorCode == SOLUTION::INFTY){
 						r.errorCode = SOLUTION::INFTY;
@@ -504,8 +504,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					res.push_back(r);
 				}
+				assert( res.size() == std::size_t(_directions.rows()));
 			}
-			assert( res.size() == std::size_t(_directions.rows()));
 			return ( res );
 		}
 		case SF_TYPE::UNITE: {
