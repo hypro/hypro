@@ -6,13 +6,13 @@ namespace hypro {
 		carl::logging::logger().configure("logfile", "hypro.log");
 		carl::logging::logger().filter("logfile")
 	    ("hypro", carl::logging::LogLevel::LVL_WARN)
-		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
+		("hypro.representations", carl::logging::LogLevel::LVL_WARN)
 		;
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
-	    ("hypro", carl::logging::LogLevel::LVL_WARN)
-		("hypro.representations", carl::logging::LogLevel::LVL_DEBUG)
+	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
+		("hypro.representations", carl::logging::LogLevel::LVL_WARN)
 		;
 
 	  	carl::logging::logger().resetFormatter();
