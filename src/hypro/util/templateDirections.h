@@ -18,6 +18,17 @@ namespace hypro {
 #define PI 3.14159265359
 template<typename Number>
 static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned numberDirections) {
+	if(dimension == 1) {
+		std::vector<vector_t<Number>> directions;
+		vector_t<Number> v0 = vector_t<Number>::Zero(1);
+		vector_t<Number> v1 = vector_t<Number>::Zero(1);
+		v0 << 1;
+		v1 << -1;
+		directions.emplace_back(v0);
+		directions.emplace_back(v1);
+		return directions;
+	}
+
 	double degree = (360/ (double) numberDirections)* PI / 180.0;
 	std::vector<vector_t<Number>> directions, directions2d;
 
