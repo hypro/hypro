@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"dir_2a022a7dd5883d249fd19381a9acb7ca.html":[7,0,1,0,3,0],
 "dir_2c8758a5fdbf28946c502b471e14bb83.html":[7,0,1,0,2],
 "dir_2ce0cb9797b50c8d842bc50008b46cdd.html":[7,0,1,0],
 "dir_3100e148cb0b6b745355fdee31bcb5c6.html":[7,0,1,0,4,1],
@@ -71,8 +70,8 @@ var NAVTREEINDEX6 =
 "files.html":[7,0],
 "flags_8h_source.html":[7,0,1,0,6],
 "flowstarParser_8h_source.html":[7,0,1,0,2,0,3],
-"functions.html":[6,3,0],
 "functions.html":[6,3,0,0],
+"functions.html":[6,3,0],
 "functions_b.html":[6,3,0,1],
 "functions_c.html":[6,3,0,2],
 "functions_d.html":[6,3,0,3],
@@ -139,8 +138,8 @@ var NAVTREEINDEX6 =
 "namespacereachability.html":[5,0,2],
 "namespacereachability.html":[6,0,3],
 "namespaces.html":[5,0],
-"namespacestatistics.html":[5,0,3],
 "namespacestatistics.html":[6,0,4],
+"namespacestatistics.html":[5,0,3],
 "pages.html":[],
 "pca_8h.html":[7,0,1,0,4,8],
 "pca_8h_source.html":[7,0,1,0,4,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "structhypro_1_1artificialDirections.html#a179f445fba06093bfadc949e7c74004e":[6,0,1,54,2],
 "structhypro_1_1artificialDirections.html#a18d091afa659a9d77aa4f757c1dfc892":[6,0,1,54,4],
 "structhypro_1_1artificialDirections.html#a3496973f8c9901711c005a6c0385fbca":[6,0,1,54,3],
-"structhypro_1_1artificialDirections.html#a5159a75802b7331aa14e0902d6415583":[6,0,1,54,5]
+"structhypro_1_1artificialDirections.html#a5159a75802b7331aa14e0902d6415583":[6,0,1,54,5],
+"structhypro_1_1artificialDirections.html#a590f7bf3492666d985fd015e25b3a43f":[6,0,1,54,0]
 };

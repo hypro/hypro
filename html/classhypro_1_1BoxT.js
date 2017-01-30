@@ -2,7 +2,6 @@ var classhypro_1_1BoxT =
 [
     [ "BoxT", "classhypro_1_1BoxT.html#a7ce325fc664e3090ce2a6a0e7bb10ca4", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#a6ac6a133ee699358ab2d0f16655d381d", null ],
-    [ "BoxT", "classhypro_1_1BoxT.html#afcbe41fc59a5f31048f610fb07a30b00", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#ab6916b0317b92681ab5f55206937bb43", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#afca844f1277679ba2ae14490be4c2383", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#a6b8bb582c6e9cef39b57eee07c1c44d8", null ],

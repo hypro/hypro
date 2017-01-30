@@ -794,7 +794,7 @@ Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSet
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/adaptions_z3.h:20: warning: Member z3CheckPoint(const matrix_t< Number > &constraints, const vector_t< Number > &constants, const Point< Number > &point) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/adaptions_z3.h:23: warning: Member z3RedundantConstraints(const matrix_t< Number > &constraints, const vector_t< Number > &constants) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h:7: warning: Member addPreSolution(z3::optimize &solver, z3Context &c, const EvaluationResult< Number > &preSolution, const vector_t< Number > &direction, const z3::expr &objective) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp:5: warning: Member initializeLogging() (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp:5: warning: Member initializeLogging(int &i) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/types.h:34: warning: Member eqTypes() (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:582: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:582: warning: The following parameters of hypro::operator*(const Point< Number > &_lhs, const Number &_factor) are not documented:
@@ -1164,11 +1164,11 @@ Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSet
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:198: warning: Member insertAtBack(const Vertex< Number > &v) (function) of class hypro::VertexContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:243: warning: Member set(const Point< Number > &p, bool c) (function) of class hypro::VertexContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:294: warning: Member operator<<(std::ostream &ostr, const VertexContainer< Number > &cont) (friend) of class hypro::VertexContainer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:154: warning: Member matrix() const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:155: warning: Member vector() const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:339: warning: Member type() (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:182: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:182: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:148: warning: Member matrix() const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:149: warning: Member vector() const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:333: warning: Member type() (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:176: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:176: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
   parameter '_index'
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:134: warning: Member matrix() const  (function) of class hypro::BoxT< double, Converter > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:135: warning: Member vector() const  (function) of class hypro::BoxT< double, Converter > is not documented.
@@ -2497,5 +2497,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4867/65536 hits=40143 misses=5545
+lookup cache used 4867/65536 hits=40147 misses=5545
 finished...

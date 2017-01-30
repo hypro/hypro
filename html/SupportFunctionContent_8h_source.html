@@ -365,7 +365,7 @@ $(document).ready(function(){initNavTree('SupportFunctionContent_8h_source.html'
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keywordtype">void</span> print() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const std::shared_ptr&lt;SupportFunctionContent&lt;Number&gt;&gt;&amp; rhs ) {</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordtype">unsigned</span> level = 0;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Depth: &quot;</span> &lt;&lt; rhs-&gt;mDepth &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Depth: &quot; &lt;&lt; rhs-&gt;mDepth &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">while</span>(<span class="keyword">true</span>){</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            std::string tmp = rhs-&gt;printLevel(level, <span class="stringliteral">&quot;   &quot;</span>);</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            <span class="keywordflow">if</span>(!tmp.empty()) {</div>
