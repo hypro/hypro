@@ -3,6 +3,16 @@
 namespace hypro {
 namespace reachability {
 
+	template<typename Number, typename Representation, typename R = Representation, carl::DisableIf< std::is_same<R, Zonotope<Number>> > = carl::dummy >
+Representation bloatBox( const Representation& in, const Box<Number>& bloatBox ) {
+	return in.minkowskiSum(Representation(bloatBox.matrix(), bloatBox.vector()));
+}
+
+template<typename Number, typename Representation, typename R = Representation, carl::EnableIf< std::is_same<R, Zonotope<Number>> > = carl::dummy >
+Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatBox ) {
+	return in.minkowskiSum(Converter<Number>::toZonotope(bloatBox));
+}
+
 	template<typename Number, typename Representation>
 	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> Reach<Number,Representation>::computeFirstSegment( const State<Number>& _state ) const {
 		assert(!_state.timestamp.isUnbounded());
