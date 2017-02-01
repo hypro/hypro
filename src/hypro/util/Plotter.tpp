@@ -363,7 +363,7 @@ void Plotter<Number>::plotTex() const {
 
 		mOutfile << "\\end{tikzpicture}\n";
 	}
-	std::cout << std::endl << "Plotted to " << mFilename << ".tex" << std::endl;
+	INFO("hypro.plotter","Plotted to " << mFilename << ".tex");
 	mOutfile.close();
 }
 

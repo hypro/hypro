@@ -14,7 +14,7 @@ namespace hypro {
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionContent<Number> &_orig )
 	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
-	std::cout << "Copy constructor, this->type:" << mType << std::endl;
+	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
                     mEllipsoid = _orig.ellipsoid();
@@ -279,7 +279,7 @@ template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
 	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
         // std::cout << "SupportFunctionContent Copy\n";
-	std::cout << "Assignment, this->type:" << _other->type() << std::endl;
+	//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
                 case SF_TYPE::ELLIPSOID:
@@ -948,7 +948,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 			std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), dimensions, SF_TYPE::PROJECTION ) );
 	obj->pThis = obj;
 	DEBUG("hypro.representations.supportFunction","Created ");
-	obj->print();
+	//obj->print();
 	return obj;
 }
 

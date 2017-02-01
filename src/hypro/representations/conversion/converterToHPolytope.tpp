@@ -136,14 +136,14 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     	return HPolytope(constraints, constants);
 
 	} else {
-		std::cout << "Projection" << std::endl;
-		for(const auto& dim : projections) {
-			std::cout << "projection dimension " << dim << std::endl;
-		}
+		//std::cout << "Projection" << std::endl;
+		//for(const auto& dim : projections) {
+		//	std::cout << "projection dimension " << dim << std::endl;
+		//}
 		std::list<unsigned> zeroDimensions;
 		for(unsigned i = 0; i < dim; ++i) {
 			if(std::find(projections.begin(), projections.end(), i) == projections.end()){
-				std::cout << "Dimension " << i << " is zero." << std::endl;
+				//std::cout << "Dimension " << i << " is zero." << std::endl;
 				zeroDimensions.emplace_back(i);
 			}
 		}
