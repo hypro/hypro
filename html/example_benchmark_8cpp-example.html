@@ -114,7 +114,10 @@ $(document).ready(function(){initNavTree('example_benchmark_8cpp-example.html','
 <div class="line"><span class="comment">//#include &lt;boost/program_options.hpp&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;sys/wait.h&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;signal.h&gt;</span></div>
-<div class="line"><span class="preprocessor">#define PLOT_FLOWPIPE</span></div>
+<div class="line"><span class="preprocessor">#ifdef HYPRO_USE_LACE</span></div>
+<div class="line"><span class="preprocessor"></span><span class="preprocessor">#include &lt;lace.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line"><span class="preprocessor"></span><span class="preprocessor">#define PLOT_FLOWPIPE</span></div>
 <div class="line"><span class="preprocessor"></span></div>
 <div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Representation&gt;</div>
 <div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> computeReachableStates(<span class="keyword">const</span> std::string&amp; filename) {</div>

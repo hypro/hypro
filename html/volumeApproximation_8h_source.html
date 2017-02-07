@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('volumeApproximation_8h_source.html',''
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">namespace </span>hypro {</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Representation&gt;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">static</span> Number approximateVolume(Representation _in, std::size_t sublevels = 0) {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">static</span> Number approximateVolume(Representation _in) {</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        Number pointCount = 0;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        std::vector&lt;Point&lt;Number&gt;&gt; vertices = _in.vertices();</div>

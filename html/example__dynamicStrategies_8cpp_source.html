@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('example__dynamicStrategies_8cpp_source
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../src/hypro/parser/flowstar/flowstarParser.h&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../src/hypro/util/Plotter.h&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordtype">int</span> main() {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">typedef</span> mpq_class Number;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">typedef</span> hypro::Box&lt;Number&gt; boxValuation;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction&lt;Number&gt;</a> sfValuation;</div>
@@ -146,28 +146,28 @@ $(document).ready(function(){initNavTree('example__dynamicStrategies_8cpp_source
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    hypro::HybridAutomaton&lt;Number&gt;::locationStateMap badStateMapping = ha.localBadStates();</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; bsPair : badStateMapping) {</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">unsigned</span> bs = plotter.addObject(hpValuation(bsPair.second.set.first, bsPair.second.set.second).vertices());</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        plotter.setObjectColor(bs, hypro::colors[hypro::red]);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// flowpipe plotting</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; flowpipe : boxFlowpipes){</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; segment : flowpipe.second){</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.vertices());</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::orange]);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; flowpipe : hpFlowpipes){</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; segment : flowpipe.second){</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.vertices());</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            plotter.setObjectColor(tmp, hypro::colors[hypro::lila]);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::lila]);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; flowpipe : sfFlowpipes){</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; segment : flowpipe.second){</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordtype">unsigned</span> tmp = plotter.addObject(segment.vertices());</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            plotter.setObjectColor(tmp, hypro::colors[hypro::green]);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::green]);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>

@@ -14,7 +14,6 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_linearTransformation.cpp", "example__linearTransformation_8cpp_source.html", null ],
     [ "example_logger.cpp", "example__logger_8cpp_source.html", null ],
     [ "example_massif.cpp", "example__massif_8cpp_source.html", null ],
-    [ "example_matrix_exponential.cpp", "example__matrix__exponential_8cpp_source.html", null ],
     [ "example_matrixPolyhedra.cpp", "example__matrixPolyhedra_8cpp_source.html", null ],
     [ "example_numberReduction.cpp", "example__numberReduction_8cpp_source.html", null ],
     [ "example_optimizer.cpp", "example__optimizer_8cpp_source.html", null ],

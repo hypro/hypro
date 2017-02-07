@@ -124,7 +124,7 @@ $(document).ready(function(){initNavTree('example__polytope_8cpp_source.html',''
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;../src/hypro/util/Plotter.h&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;../src/hypro/datastructures/Point.h&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">int</span> main() {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">typedef</span> mpq_class number_t;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
@@ -152,9 +152,9 @@ $(document).ready(function(){initNavTree('example__polytope_8cpp_source.html',''
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">unsigned</span> a = plotter.addObject(hpoly.vertices());</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">unsigned</span> b = plotter.addObject(hpoly2.vertices());</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">unsigned</span> c = plotter.addObject(addition.vertices());</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    plotter.setObjectColor(a, hypro::colors[hypro::green]);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    plotter.setObjectColor(b, hypro::colors[hypro::red]);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    plotter.setObjectColor(c, hypro::colors[hypro::orange]);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    plotter.setObjectColor(a, hypro::plotting::colors[hypro::plotting::green]);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    plotter.setObjectColor(b, hypro::plotting::colors[hypro::plotting::red]);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    plotter.setObjectColor(c, hypro::plotting::colors[hypro::plotting::orange]);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    plotter.<a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>();</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>

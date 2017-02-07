@@ -229,9 +229,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    boxMat(3,1) = Number(-1);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create initial state.</span></div>
-<div class="line">    <a name="_a4"></a><a class="code" href="structhypro_1_1RawState.html">RawState</a>&lt;Number&gt; initialState;</div>
-<div class="line">    initialState.location = loc1;</div>
-<div class="line">    initialState.set = std::make_pair(boxMat, boxVec);</div>
+<div class="line">    <a name="_a4"></a><a class="code" href="structhypro_1_1RawState.html">RawState</a>&lt;Number&gt; initialState(loc1, std::make_pair(boxMat, boxVec));</div>
 <div class="line">    bBallAutomaton.addInitialState(initialState);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// vector of sets to collect flowpipes (which are again a vector of sets).</span></div>
