@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source functions.sh
+
 if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
 
 	source setupLinux.sh

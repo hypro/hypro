@@ -7,32 +7,32 @@ sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
 if [[ ${COMPILER} == "g++-5" ]]; then
 	sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 	sudo apt-get update
-	sudo apt-get install --force=yes g++-5 -f
+	install_linux g++-5
 	defCXX gcc-5 g++-5
 elif [[ ${COMPILER} == "g++-6" ]]; then
 	sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 	sudo apt-get update
-	sudo apt-get install --force=yes --force=yes g++-6 -f
+	install_linux g++-6
 	defCXX gcc-6 g++-6
 elif [[ ${COMPILER} == "clang++-3.4" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.4 main"
 	sudo apt-get update
-	sudo apt-get install --force=yes clang++-3.4
+	install_linux clang++-3.4
 	defCXX clang-3.4 clang++-3.4
 elif [[ ${COMPILER} == "clang++-3.5" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main"
 	sudo apt-get update
-	sudo apt-get install --force=yes clang++-3.5
+	install_linux clang++-3.5
 	defCXX clang-3.5 clang++-3.5
 elif [[ ${COMPILER} == "clang++-3.6" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
 	sudo apt-get update
-	sudo apt-get install --force=yes clang++-3.6
+	install_linux clang++-3.6
 	defCXX clang-3.6 clang++-3.6
 elif [[ ${COMPILER} == "clang++-3.7" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.7 main"
 	sudo apt-get update
-	sudo apt-get install --force=yes clang++-3.7
+	install_linux clang++-3.7
 	defCXX clang-3.7 clang++-3.7
 fi
 
