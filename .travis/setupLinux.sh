@@ -14,23 +14,23 @@ elif [[ ${COMPILER} == "g++-6" ]]; then
 elif [[ ${COMPILER} == "clang++-3.4" ]]; then
 	#sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.4 main"
 	install_linux clang++-3.4
-	defCXX clang-3.4 clang-3.4
+	defCXX clang-3.4 clang++-3.4
 elif [[ ${COMPILER} == "clang-3.5" ]]; then
 	#sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main"
 	install_linux clang++-3.5
-	defCXX clang-3.5 clang-3.5
+	defCXX clang-3.5 clang++-3.5
 elif [[ ${COMPILER} == "clang++-3.6" ]]; then
 	#sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
 	install_linux clang++-3.6
-	defCXX clang-3.6 clang-3.6
+	defCXX clang-3.6 clang++-3.6
 elif [[ ${COMPILER} == "clang++-3.7" ]]; then
 	#sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.7 main"
 	install_linux clang++-3.7
-	defCXX clang-3.7 clang-3.7
+	defCXX clang-3.7 clang++-3.7
 elif [[ ${COMPILER} == "clang++-3.8" ]]; then
 	#sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.8 main"
 	install_linux clang++-3.8
-	defCXX clang-3.8 clang-3.8
+	defCXX clang-3.8 clang++-3.8
 fi
 
 sudo apt-get install cmake libboost1.55-all-dev libeigen3-dev libglpk-dev doxygen graphviz
