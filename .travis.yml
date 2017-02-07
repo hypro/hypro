@@ -61,7 +61,7 @@ matrix:
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
-  - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make lib_carl
+  - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make lib_carl
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
