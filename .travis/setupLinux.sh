@@ -17,22 +17,22 @@ elif [[ ${COMPILER} == "g++-6" ]]; then
 elif [[ ${COMPILER} == "clang++-3.4" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.4 main"
 	sudo apt-get update
-	sudo apt-get install clang-3.4
+	sudo apt-get install llvm-3.4-dev
 	defCXX clang-3.4 clang++-3.4
 elif [[ ${COMPILER} == "clang++-3.5" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main"
 	sudo apt-get update
-	sudo apt-get install clang-3.5
+	sudo apt-get install llvm-3.5-dev
 	defCXX clang-3.5 clang++-3.5
 elif [[ ${COMPILER} == "clang++-3.6" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
 	sudo apt-get update
-	sudo apt-get install clang-3.6
+	sudo apt-get install llvm-3.6-dev
 	defCXX clang-3.6 clang++-3.6
 elif [[ ${COMPILER} == "clang++-3.7" ]]; then
 	sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.7 main"
 	sudo apt-get update
-	sudo apt-get install clang-3.7
+	sudo apt-get install llvm-3.7-dev
 	defCXX clang-3.7 clang++-3.7
 fi
 
