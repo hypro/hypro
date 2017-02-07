@@ -20,6 +20,19 @@ notifications:
 
 sudo: required
 
+addons:
+  apt:
+    sources:
+      - boost-latest
+      - george-edison55-precise-backports
+      - llvm-toolchain-precise
+      - llvm-toolchain-precise-3.6
+      - llvm-toolchain-precise-3.7
+      - llvm-toolchain-precise-3.8
+      - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main'
+        key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+      - ubuntu-toolchain-r-test
+
 matrix:
   include:
     #- os: linux
