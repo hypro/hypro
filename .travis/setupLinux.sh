@@ -2,7 +2,6 @@
 
 #sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
 sudo apt-get update
-sudo apt-get install cmake libboost1.55-all-dev libeigen3-dev libglpk-dev doxygen graphviz
 
 if [[ ${COMPILER} == "g++-5" ]]; then
 	#sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -33,6 +32,8 @@ elif [[ ${COMPILER} == "clang++-3.8" ]]; then
 	install_linux clang-3.8
 	defCXX clang-3.8 clang++-3.8
 fi
+
+sudo apt-get install cmake libboost1.55-all-dev libeigen3-dev libglpk-dev doxygen graphviz
 
 if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
   cd ${TRAVIS_BUILD_DIR}
