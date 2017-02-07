@@ -11,7 +11,7 @@ namespace hypro {
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
-	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
+	    ("hypro", carl::logging::LogLevel::LVL_WARN)
 		("hypro.representations", carl::logging::LogLevel::LVL_WARN)
 		;
 

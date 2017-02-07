@@ -7,7 +7,7 @@ namespace hypro {
 	 * Approximate volume by creating a grid of points and update the total volume if the point is inside.
 	 */
 	template<typename Number, typename Representation>
-	static Number approximateVolume(Representation _in, std::size_t sublevels = 0) {
+	static Number approximateVolume(Representation _in) {
 		Number pointCount = 0;
 
 		std::vector<Point<Number>> vertices = _in.vertices();
