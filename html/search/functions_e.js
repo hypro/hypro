@@ -14,7 +14,6 @@ var searchData=
   ['removeredundancy',['removeRedundancy',['../classhypro_1_1BoxT.html#a47c20ababb80a0c8f229afb64ae5635a',1,'hypro::BoxT::removeRedundancy()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a55fe892445ce290a31e7c6a9d2637641',1,'hypro::BoxT&lt; double, Converter &gt;::removeRedundancy()']]],
   ['reversedual',['reverseDual',['../classhypro_1_1Dictionary.html#aa048f4697e93331c26be6a7c48511ec6',1,'hypro::Dictionary']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
-  ['round',['round',['../namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af',1,'hypro']]],
   ['rpoint',['rPoint',['../classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d',1,'hypro::Plotter']]],
   ['rvertices',['rVertices',['../classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge']]]

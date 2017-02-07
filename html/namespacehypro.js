@@ -78,7 +78,6 @@ var namespacehypro =
     [ "intersectionContent", "structhypro_1_1intersectionContent.html", "structhypro_1_1intersectionContent" ],
     [ "projectionContent", "structhypro_1_1projectionContent.html", "structhypro_1_1projectionContent" ],
     [ "lintrafoParameters", "structhypro_1_1lintrafoParameters.html", "structhypro_1_1lintrafoParameters" ],
-    [ "artificialDirections", "structhypro_1_1artificialDirections.html", "structhypro_1_1artificialDirections" ],
     [ "Flowpipe", "classhypro_1_1Flowpipe.html", "classhypro_1_1Flowpipe" ],
     [ "ContinuousSystem", "classhypro_1_1ContinuousSystem.html", "classhypro_1_1ContinuousSystem" ],
     [ "Domain", "classhypro_1_1Domain.html", "classhypro_1_1Domain" ],

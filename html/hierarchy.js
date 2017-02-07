@@ -1,6 +1,5 @@
 var hierarchy =
 [
-    [ "hypro::artificialDirections< Number >", "structhypro_1_1artificialDirections.html", null ],
     [ "hypro::BallSupportFunction< Number >", "classhypro_1_1BallSupportFunction.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],

@@ -16,6 +16,5 @@ var searchData=
   ['aggregation_5f',['aggregation_',['../structhypro_1_1parser_1_1aggregation__.html',1,'hypro::parser']]],
   ['approxellipsoidmatrix',['approxEllipsoidMatrix',['../classhypro_1_1Ellipsoid.html#a29c614f9833e4f16ebfc7be0a26145e1',1,'hypro::Ellipsoid']]],
   ['are_5fstrict_5fequals',['are_strict_equals',['../classhypro_1_1are__strict__equals.html',1,'hypro']]],
-  ['artificialdirections',['artificialDirections',['../structhypro_1_1artificialDirections.html',1,'hypro']]],
   ['at',['at',['../classhypro_1_1Point.html#adbd99d1c7ff9e355dec68d1b04447ab3',1,'hypro::Point::at(const carl::Variable &amp;_i) const '],['../classhypro_1_1Point.html#afa7af5b22ca86c7015de698dbee3a649',1,'hypro::Point::at(unsigned _index) const '],['../classhypro_1_1BoxT.html#a6c67e8dcf3196a500163edba99dbd587',1,'hypro::BoxT::at()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a65705e96f5edc888d8dde6b91017b91f',1,'hypro::BoxT&lt; double, Converter &gt;::at()']]]
 ];

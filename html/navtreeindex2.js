@@ -244,10 +244,10 @@ var NAVTREEINDEX2 =
 "classhypro_1_1NonLinearOmega0Supportfunction.html#a15427f52fb97d62f1549ecfeb21dd755":[6,0,1,43,1],
 "classhypro_1_1NonLinearOmega0Supportfunction.html#a7d45c734390f45b959f8b3f19ff93cb7":[6,0,1,43,2],
 "classhypro_1_1NonLinearOmega0Supportfunction.html#aac57c5f35eb65c9ed066ab4fbf90c2a2":[6,0,1,43,3],
-"classhypro_1_1Optimizer.html":[6,0,1,67],
-"classhypro_1_1Optimizer.html#a1cfdd1e5b90db026835b7c6947a5c290":[6,0,1,67,3],
-"classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7":[6,0,1,67,9],
-"classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084":[6,0,1,67,12],
-"classhypro_1_1Optimizer.html#a3af3093ab6949ce7448109036feacaa2":[6,0,1,67,13],
-"classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045":[6,0,1,67,6]
+"classhypro_1_1Optimizer.html":[6,0,1,66],
+"classhypro_1_1Optimizer.html#a1cfdd1e5b90db026835b7c6947a5c290":[6,0,1,66,3],
+"classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7":[6,0,1,66,9],
+"classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084":[6,0,1,66,12],
+"classhypro_1_1Optimizer.html#a3af3093ab6949ce7448109036feacaa2":[6,0,1,66,13],
+"classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045":[6,0,1,66,6]
 };
