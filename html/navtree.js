@@ -43,8 +43,8 @@ var NAVTREEINDEX =
 "classhypro_1_1ReachTreeNode.html#a76dd5f08800ccbe123dee9d32c9b0f3b",
 "classhypro_1_1Transition.html#ae377cff6cc50913a7aa45e4434cb13a3",
 "dir_2c8758a5fdbf28946c502b471e14bb83.html",
-"structhypro_1_1intersectionContent.html",
-"structhypro_1_1reachability_1_1ReachabilitySettings.html#aa70b35bbeabe4853898b09fd0c5aab63"
+"structhypro_1_1artificialDirections.html#a590f7bf3492666d985fd015e25b3a43f",
+"structhypro_1_1reachability_1_1ReachabilitySettings.html#a4ed8bc5659909aa70ea4bbe5ceb9646c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

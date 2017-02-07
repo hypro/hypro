@@ -124,7 +124,7 @@ $(document).ready(function(){initNavTree('example_HPolytope_8cpp-example.html','
 <div class="line"></div>
 <div class="line">    <span class="comment">// create the actual polytope and add its vertices to the global plotter (singleton).</span></div>
 <div class="line">    <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;Number&gt;</a> poly(HPolyConstraints,HPolyConstants);</div>
-<div class="line">    <a name="_a0"></a><a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a name="a1"></a>addObject(poly.vertices());</div>
+<div class="line">    <a name="_a0"></a><a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a name="a1"></a><a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(poly.vertices());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create rotation matrix for +45 degrees (corresponds to ~0.785398 radians).</span></div>
 <div class="line">    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;Number&gt;</a> rotation = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t&lt;Number&gt;</a>(2,2);</div>
@@ -133,8 +133,8 @@ $(document).ready(function(){initNavTree('example_HPolytope_8cpp-example.html','
 <div class="line"></div>
 <div class="line">    <span class="comment">// perform linear transformation (rotation) and plot the new object in green (default = blue).</span></div>
 <div class="line">    poly = poly.linearTransformation(rotation);</div>
-<div class="line">    <span class="keywordtype">unsigned</span> obj2 = <a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().addObject(poly.vertices());</div>
-<div class="line">    <a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a name="a2"></a>setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);</div>
+<div class="line">    <span class="keywordtype">unsigned</span> obj2 = <a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(poly.vertices());</div>
+<div class="line">    <a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a name="a2"></a><a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>(obj2, hypro::plotting::colors[hypro::plotting::green]);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create a *.plt file (gnuplot).</span></div>
 <div class="line">    <a class="code" href="classhypro_1_1Plotter.html">hypro::Plotter&lt;Number&gt;::getInstance</a>().<a name="a3"></a><a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>();</div>

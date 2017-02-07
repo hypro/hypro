@@ -160,16 +160,16 @@ $(document).ready(function(){initNavTree('example_box_8cpp-example.html','');});
 <div class="line">    <a name="_a2"></a><a class="code" href="classhypro_1_1Halfspace.html">hypro::Halfspace&lt;Number&gt;</a> cutter = <a class="code" href="classhypro_1_1Halfspace.html">hypro::Halfspace&lt;Number&gt;</a>(hsNormal, carl::rationalize&lt;Number&gt;(-0.5));</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// we can also plot halfspaces</span></div>
-<div class="line">    plotter.<a name="a3"></a>addObject(cutter);</div>
-<div class="line">    <span class="keywordtype">unsigned</span> original = plotter.addObject(testbox2.vertices());</div>
+<div class="line">    plotter.<a name="a3"></a><a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(cutter);</div>
+<div class="line">    <span class="keywordtype">unsigned</span> original = plotter.<a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(testbox2.vertices());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// add the intersection of the second box and the created halfspace to the plotter instance.</span></div>
 <div class="line">    <span class="comment">// Note: satisfiesHalfspaces returns a pair &lt;bool, Representation&gt;.</span></div>
-<div class="line">    <span class="keywordtype">unsigned</span> cutted = plotter.addObject(testbox2.satisfiesHalfspaces(normal, offset).second.vertices());</div>
+<div class="line">    <span class="keywordtype">unsigned</span> cutted = plotter.<a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(testbox2.satisfiesHalfspaces(normal, offset).second.vertices());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// set colors and plot (gnuplot).</span></div>
-<div class="line">    plotter.<a name="a4"></a>setObjectColor(original, hypro::plotting::colors[hypro::plotting::green]);</div>
-<div class="line">    plotter.setObjectColor(cutted, hypro::plotting::colors[hypro::plotting::red]);</div>
+<div class="line">    plotter.<a name="a4"></a><a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>(original, hypro::plotting::colors[hypro::plotting::green]);</div>
+<div class="line">    plotter.<a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>(cutted, hypro::plotting::colors[hypro::plotting::red]);</div>
 <div class="line">    plotter.<a name="a5"></a><a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>

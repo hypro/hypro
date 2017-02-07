@@ -15,13 +15,11 @@ Searching for dot files...
 Searching for msc files...
 Searching for dia files...
 Searching for files to exclude
-Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/HyReach
 Searching for files to process...
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability
-Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/HyReach
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/datastructures
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/parser
@@ -100,11 +98,11 @@ Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTree.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTree.h...
-Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNode./home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToHPolytope.tpp:12: warning: include file util/templateDirections.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNode.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNode.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNodeSimple.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNodeSimple.h...
+Parsing file /home/travi/home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToHPolytope.tpp:12: warning: include file util/templateDirections.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+s/build/hypro/hypro/src/hypro/datastructures/ReachTreeNodeSimple.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h...
@@ -326,7 +324,9 @@ Preprocessing /home/travis/build/hypro/hypro/examples/example_supportFunction.cp
 Parsing file /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
 Preprocessing /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
-Preprocessing /home/travis/buil/home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToBox.tpp:4: warning: the name `converterToBox.tpp' supplied as the second argument in the \file statement is not an input file
+Preprocessing /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp./home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToBox.tpp:4: warning: the name `converterToBox.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToHPolytope.tpp:4: warning: the name `converterToHPolytope.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToVPolytope.tpp:4: warning: the name `converterToVPolytope.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/converterToSupportFunction.tpp:4: warning: the name `converterToSupportFunction.tpp' supplied as the second argument in the \file statement is not an input file
@@ -363,7 +363,6 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:33: warning: Compound hypro::PolytopeSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/ReachTreeNodeSimple.h:22: warning: Compound hypro::ReachTreeNodeSimple is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:311: warning: Compound hypro::parser::settingsParser is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:59: warning: Compound hypro::Plotter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:124: warning: Compound hypro::projectionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/Transition.h:25: warning: Compound hypro::Transition::Guard is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:21: warning: Compound hypro::Domain is not documented.
@@ -391,7 +390,6 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:25: warning: Compound hypro::statistics::CounterRepository is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:19: warning: Compound hypro::VertexContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:194: warning: Compound hypro::parser::modeParser is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:43: warning: Compound hypro::plotting::gnuplotSettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/vertexEnumeration.h:9: warning: Compound hypro::VertexEnumeration is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:74: warning: Compound hypro::TaylorModel is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::typeName< double > is not documented.
@@ -440,11 +438,9 @@ Please use a more specific name by including a (larger) part of the path!
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:60: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:68: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-d/hypro/hypro/examples/example_zonotope.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
+..
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
@@ -640,7 +636,9 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOpt
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearSolving.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp...
-Generating code for file /home/travis/build/hypro/hypro/examples/example_plot.cpp:16: warning: Member main() (function) of file example_plot.cpp is not documented.
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
+Generating code for file /home/travis/build//home/travis/build/hypro/hypro/examples/example_plot.cpp:16: warning: Member main() (function) of file example_plot.cpp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:48: warning: Member flowpipe_t (typedef) of namespace hypro::reachability is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:51: warning: Member initialSet (typedef) of namespace hypro::reachability is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:485: warning: Member operator<<(std::ostream &_ostr, const Facet< Number > &_f) (function) of namespace hypro is not documented.
@@ -655,9 +653,21 @@ Generating code for file /home/travis/build/hypro/hypro/examples/example_plot.cp
 /home/travis/build/hypro/hypro/doc/markdown/gettingStarted.md:8: warning: unable to resolve reference to `installation' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/stateSets.md:7: warning: unable to resolve reference to `generalStateSets' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/stateSets.md:8: warning: unable to resolve reference to `usage' for \ref command
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/pca.h...
+/home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h:14: warning: Member ScopedLock(Lockable &mtx) (function) of class ScopedLock is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:61: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:67: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+hypro/hypro/src/hypro/util/pca.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
@@ -699,21 +709,11 @@ Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSet
 Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSets...
 Generating group documentation...
 Generating class documentation...
-Generat/home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h:14: warning: Member ScopedLock(Lockable &mtx) (function) of class ScopedLock is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:61: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:67: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class Eigen::NumTraits< carl::Interval< Number > > is not documented.
+Generating docs for compound ScopedLock...
+Generating namespace index...
+Generating docs for compound Eigen::NumTraits< carl::FLOAT_T< Number > >...
+Generating docs for compound Eigen::NumTraits< mpq_class >...
+Generati/home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:94: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:95: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:96: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::Interval< Number > > is not documented.
@@ -1913,25 +1913,18 @@ Generat/home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:22: warning: Member Permutator(std::size_t totalSize, std::size_t d) (function) of class hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:31: warning: Member operator()() (function) of class hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:58: warning: Member end() const  (function) of class hypro::Permutator is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:81: warning: Member setFilename(const std::string &_filename="out") (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:82: warning: Member updateSettings(const plotting::gnuplotSettings &_settings) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:83: warning: Member settings() const  (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:84: warning: Member rSettings() (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:93: warning: Member plotTex() const  (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:94: warning: Member plotGen() const  (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:96: warning: Member addObject(const std::vector< Point< Number >> &_points) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:97: warning: Member addObject(const std::vector< std::vector< Point< Number >>> &_points) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:98: warning: Member addObject(const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:99: warning: Member addObject(const Halfspace< Number > &_plane) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:100: warning: Member addPoint(const Point< Number > &_point) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:101: warning: Member addPoints(const std::vector< Point< Number >> &_points) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:102: warning: Member addVector(const vector_t< Number > &_vector) (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:104: warning: Member setObjectColor(unsigned _id, const std::size_t _color) (function) of class hypro::Plotter is not documented.
-ing docs for compound ScopedLock...
-Generating namespace index...
-Generating docs for compound Eigen::NumTraits< carl::FLOAT_T< Number > >...
-Generating docs for compound Eigen::NumTraits< mpq_class >...
-Generating docs for compound Eigen::NumTraits< carl::Interval< Number > >...
+/home/travis/build/hypro/hypro/src/hypro/util/types.h:25: warning: Member value (variable) of class hypro::is_same is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/types.h:30: warning: Member value (variable) of class hypro::is_same< T, T > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:101: warning: Member carlVarByIndex(unsigned _index) (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:125: warning: Member newCarlVariable(std::string _name="") (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:164: warning: Member hasDimension(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:188: warning: Member id(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:201: warning: Member carlVariables() const  (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:217: warning: Member size() const  (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:225: warning: Member clear() (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:236: warning: Member print() const  (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/parser/flowstar/common.h:23: warning: Member skip (variable) of class hypro::parser::fsSkipper is not documented.
+ng docs for compound Eigen::NumTraits< carl::Interval< Number > >...
 Generating docs for namespace hypro
 Generating docs for compound hypro::ConstrainSet...
 Generating docs for compound hypro::ConvexHull...
@@ -2003,18 +1996,11 @@ Generating docs for compound hypro::Optimizer...
 Generating docs for compound hypro::PrincipalComponentAnalysis...
 Generating docs for compound hypro::Permutator...
 Generating docs for compound hypro::Plotter...
-Generating docs for/home/travis/build/hypro/hypro/src/hypro/util/types.h:25: warning: Member value (variable) of class hypro::is_same is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/types.h:30: warning: Member value (variable) of class hypro::is_same< T, T > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:101: warning: Member carlVarByIndex(unsigned _index) (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:125: warning: Member newCarlVariable(std::string _name="") (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:164: warning: Member hasDimension(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:188: warning: Member id(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:201: warning: Member carlVariables() const  (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:217: warning: Member size() const  (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:225: warning: Member clear() (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:236: warning: Member print() const  (function) of class hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/parser/flowstar/common.h:23: warning: Member skip (variable) of class hypro::parser::fsSkipper is not documented.
-/home/travis/build/hypro/hypro/src/hypro/parser/flowstar/common.h:30: warning: Member operator()(T1 b, T2 e, T3 where, T4 const &what) const  (function) of class hypro::parser::ErrorHandler is not documented.
+Generating docs for compound hypro::is_same...
+Generating docs for compound hypro::is_same< T, T >...
+Generating docs for compound hypro::VariablePool...
+Generating docs for compound hypro::parser::fsSkipper...
+Generating docs for /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/common.h:30: warning: Member operator()(T1 b, T2 e, T3 where, T4 const &what) const  (function) of class hypro::parser::ErrorHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/common.h:28: warning: Member type (typedef) of class hypro::parser::ErrorHandler::result is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:69: warning: Member cleanup() (function) of class hypro::parser::transitionParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:76: warning: Member createEdge(unsigned start, unsigned target) (function) of class hypro::parser::transitionParser is not documented.
@@ -2184,15 +2170,15 @@ Generating docs for/home/travis/build/hypro/hypro/src/hypro/util/types.h:25: war
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/polynomialParser.h:394: warning: Member lhsVar (variable) of class hypro::parser::discreteConstraintParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/polynomialParser.h:395: warning: Member rhsVar (variable) of class hypro::parser::discreteConstraintParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/polynomialParser.h:396: warning: Member interval (variable) of class hypro::parser::discreteConstraintParser is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:44: warning: Member color (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:45: warning: Member fill (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:46: warning: Member axes (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:47: warning: Member grid (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:48: warning: Member pointSize (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:49: warning: Member linewidth (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:50: warning: Member keepAspectRatio (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:51: warning: Member dimensions (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:52: warning: Member cummulative (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:48: warning: Member color (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:49: warning: Member fill (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:50: warning: Member axes (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:51: warning: Member grid (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:52: warning: Member pointSize (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:53: warning: Member linewidth (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:54: warning: Member keepAspectRatio (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:55: warning: Member dimensions (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:56: warning: Member cummulative (variable) of class hypro::plotting::gnuplotSettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:127: warning: Member checkTransitions(const State< Number > &_state, const carl::Interval< Number > &currentTime, std::vector< boost::tuple< Transition< Number > *, State< Number >>> &nextInitialSets) const  (function) of class hypro::reachability::Reach is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:129: warning: Member settings() const  (function) of class hypro::reachability::Reach is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:130: warning: Member setSettings(const ReachabilitySettings< Number > &settings) (function) of class hypro::reachability::Reach is not documented.
@@ -2244,11 +2230,7 @@ Generating docs for/home/travis/build/hypro/hypro/src/hypro/util/types.h:25: war
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:91: warning: Member Line_t(Eigen::Matrix< Number, 2, 1 > pt_, Eigen::Matrix< Number, 2, 1 > direction_) (function) of class ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:96: warning: Member point (variable) of class ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:97: warning: Member direction (variable) of class ZUtility::Line_t is not documented.
- compound hypro::is_same...
-Generating docs for compound hypro::is_same< T, T >...
-Generating docs for compound hypro::VariablePool...
-Generating docs for compound hypro::parser::fsSkipper...
-Generating docs for compound hypro::parser::ErrorHandler...
+compound hypro::parser::ErrorHandler...
 Generating docs for nested compound hypro::parser::ErrorHandler::result...
 Generating docs for compound hypro::parser::transitionParser...
 Generating docs for compound hypro::parser::modeParser...
@@ -2268,6 +2250,7 @@ Generating docs for compound hypro::reachability::Reach...
 Generating docs for compound hypro::reachability::Reach< Number, SupportFunction< Number > >...
 Generating docs for compound hypro::reachability::ReachabilitySettings...
 Generating docs for compound hypro::statistics::CounterRepository...
+Generating docs for namespace parser
 Generating docs for namespace plotting
 Generating docs for namespace reachability
 Generating docs for namespace statistics
@@ -2299,11 +2282,11 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/logging
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/multithreading
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron
-Generating dependency graph for /home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `installation' for \ref command
-/home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
-directory /home/travis/build/hypro/hypro/src/hypro/parser
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytope
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes
+Generatin/home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `installation' for \ref command
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
+g dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations
@@ -2494,5 +2477,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4857/65536 hits=40107 misses=5535
+lookup cache used 4858/65536 hits=40194 misses=5536
 finished...

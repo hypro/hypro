@@ -115,64 +115,403 @@ $(document).ready(function(){initNavTree('classhypro_1_1Plotter.html','');});
 <div class="title">hypro::Plotter&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class implementing a plotter. The plotter is implemented using carl::Singleton.  
+ <a href="classhypro_1_1Plotter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Plotter_8h_source.html">Plotter.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a52ef9dfe2f19bc99090df94327f206fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52ef9dfe2f19bc99090df94327f206fd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFilename</b> (const std::string &amp;_filename=&quot;out&quot;)</td></tr>
+<tr class="memitem:a52ef9dfe2f19bc99090df94327f206fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">setFilename</a> (const std::string &amp;_filename=&quot;out&quot;)</td></tr>
+<tr class="memdesc:a52ef9dfe2f19bc99090df94327f206fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the filename.  <a href="#a52ef9dfe2f19bc99090df94327f206fd">More...</a><br/></td></tr>
 <tr class="separator:a52ef9dfe2f19bc99090df94327f206fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae70e9f2612ee938eebbdf278b6f79866"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae70e9f2612ee938eebbdf278b6f79866"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateSettings</b> (const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;_settings)</td></tr>
+<tr class="memitem:ae70e9f2612ee938eebbdf278b6f79866"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#ae70e9f2612ee938eebbdf278b6f79866">updateSettings</a> (const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;_settings)</td></tr>
+<tr class="memdesc:ae70e9f2612ee938eebbdf278b6f79866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the current plotting settings with the passed ones.  <a href="#ae70e9f2612ee938eebbdf278b6f79866">More...</a><br/></td></tr>
 <tr class="separator:ae70e9f2612ee938eebbdf278b6f79866"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d25a45e3dc66139c2e8ad85f2ee685c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d25a45e3dc66139c2e8ad85f2ee685c"></a>
-const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b> () const </td></tr>
+<tr class="memitem:a7d25a45e3dc66139c2e8ad85f2ee685c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c">settings</a> () const </td></tr>
+<tr class="memdesc:a7d25a45e3dc66139c2e8ad85f2ee685c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current plotting settings struct.  <a href="#a7d25a45e3dc66139c2e8ad85f2ee685c">More...</a><br/></td></tr>
 <tr class="separator:a7d25a45e3dc66139c2e8ad85f2ee685c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7fa3662c313daceb371c9e115d14e9d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7fa3662c313daceb371c9e115d14e9d"></a>
-<a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rSettings</b> ()</td></tr>
+<tr class="memitem:ae7fa3662c313daceb371c9e115d14e9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d">rSettings</a> ()</td></tr>
+<tr class="memdesc:ae7fa3662c313daceb371c9e115d14e9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a reference to the current plotting settings such that they can be changed in place.  <a href="#ae7fa3662c313daceb371c9e115d14e9d">More...</a><br/></td></tr>
 <tr class="separator:ae7fa3662c313daceb371c9e115d14e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a020e89ed0c39a091bf49a0b400e511f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a020e89ed0c39a091bf49a0b400e511f8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a> () const </td></tr>
-<tr class="memdesc:a020e89ed0c39a091bf49a0b400e511f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the actual plot to the output file. <br/></td></tr>
+<tr class="memdesc:a020e89ed0c39a091bf49a0b400e511f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a gnuplot file of the currently passed objects. <br/></td></tr>
 <tr class="separator:a020e89ed0c39a091bf49a0b400e511f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28dbb6edd1dce9156bd22d339f810fed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28dbb6edd1dce9156bd22d339f810fed"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>plotTex</b> () const </td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed">plotTex</a> () const </td></tr>
+<tr class="memdesc:a28dbb6edd1dce9156bd22d339f810fed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a LaTeX file of the currently passed objects. <br/></td></tr>
 <tr class="separator:a28dbb6edd1dce9156bd22d339f810fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04d0eec05e76743057fc6e2de615ce30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04d0eec05e76743057fc6e2de615ce30"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>plotGen</b> () const </td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30">plotGen</a> () const </td></tr>
+<tr class="memdesc:a04d0eec05e76743057fc6e2de615ce30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a .gen file of the currently passed objects, which can be used in gnuplot as well. <br/></td></tr>
 <tr class="separator:a04d0eec05e76743057fc6e2de615ce30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5993c1c7ece6f9f3c2c03b61a58d60ce"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addObject</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memdesc:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.  <a href="#a5993c1c7ece6f9f3c2c03b61a58d60ce">More...</a><br/></td></tr>
 <tr class="separator:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8ef90979468904cd117d87b6a85e575"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8ef90979468904cd117d87b6a85e575"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addObject</b> (const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:ab8ef90979468904cd117d87b6a85e575"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#ab8ef90979468904cd117d87b6a85e575">addObject</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt;&gt; &amp;_points)</td></tr>
+<tr class="memdesc:ab8ef90979468904cd117d87b6a85e575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds several objects represented as a vector of vectors of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.  <a href="#ab8ef90979468904cd117d87b6a85e575">More...</a><br/></td></tr>
 <tr class="separator:ab8ef90979468904cd117d87b6a85e575"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6e38efc9c90b715b66a0b11ccfb6ee5"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addObject</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
+<tr class="memitem:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6e38efc9c90b715b66a0b11ccfb6ee5">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
+<tr class="memdesc:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a set of halfspaces to the plotter.  <a href="#af6e38efc9c90b715b66a0b11ccfb6ee5">More...</a><br/></td></tr>
 <tr class="separator:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af707083cfce0adf7d6e88022efae3a99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af707083cfce0adf7d6e88022efae3a99"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addObject</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;_plane)</td></tr>
+<tr class="memitem:af707083cfce0adf7d6e88022efae3a99"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af707083cfce0adf7d6e88022efae3a99">addObject</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;_plane)</td></tr>
+<tr class="memdesc:af707083cfce0adf7d6e88022efae3a99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a halfspace to the plotter.  <a href="#af707083cfce0adf7d6e88022efae3a99">More...</a><br/></td></tr>
 <tr class="separator:af707083cfce0adf7d6e88022efae3a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6084a89f7e0b18be7141234f684d492"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6084a89f7e0b18be7141234f684d492"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addPoint</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point)</td></tr>
+<tr class="memitem:af6084a89f7e0b18be7141234f684d492"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">addPoint</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point)</td></tr>
+<tr class="memdesc:af6084a89f7e0b18be7141234f684d492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a point to the plotter.  <a href="#af6084a89f7e0b18be7141234f684d492">More...</a><br/></td></tr>
 <tr class="separator:af6084a89f7e0b18be7141234f684d492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa499a644438df4e310fac48b8637f831"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa499a644438df4e310fac48b8637f831"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addPoints</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:aa499a644438df4e310fac48b8637f831"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">addPoints</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memdesc:aa499a644438df4e310fac48b8637f831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds points to the plotter.  <a href="#aa499a644438df4e310fac48b8637f831">More...</a><br/></td></tr>
 <tr class="separator:aa499a644438df4e310fac48b8637f831"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa6b73d2194f0fa8b40da351f4d356ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addVector</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector)</td></tr>
+<tr class="memitem:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab">addVector</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector)</td></tr>
+<tr class="memdesc:afa6b73d2194f0fa8b40da351f4d356ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to the plotter.  <a href="#afa6b73d2194f0fa8b40da351f4d356ab">More...</a><br/></td></tr>
 <tr class="separator:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fca511abc240a333e905d4431627119"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1fca511abc240a333e905d4431627119"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setObjectColor</b> (unsigned _id, const std::size_t _color)</td></tr>
+<tr class="memitem:a1fca511abc240a333e905d4431627119"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a> (unsigned _id, const std::size_t _color)</td></tr>
+<tr class="memdesc:a1fca511abc240a333e905d4431627119"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the object color.  <a href="#a1fca511abc240a333e905d4431627119">More...</a><br/></td></tr>
 <tr class="separator:a1fca511abc240a333e905d4431627119"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Plotter&lt; Number &gt;</h3>
 
+<p>Class implementing a plotter. The plotter is implemented using carl::Singleton. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a3">example_benchmark.cpp</a>, <a class="el" href="example_bouncingBall_8cpp-example.html#_a8">example_bouncingBall.cpp</a>, <a class="el" href="example_box_8cpp-example.html#_a0">example_box.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#_a0">example_HPolytope.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00059">59</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00067">67</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a5993c1c7ece6f9f3c2c03b61a58d60ce"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_points</td><td>The points. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unique id, which allows to reference the object to change its colors. </dd></dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a9">example_bouncingBall.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a1">example_HPolytope.cpp</a>.</dd>
+</dl>
+</div>
+</div>
+<a class="anchor" id="ab8ef90979468904cd117d87b6a85e575"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds several objects represented as a vector of vectors of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_points</td><td>The points. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The id of the last added object, which allows to reference the object to change its colors. All other ids can be derived using the size of the passed vector (ids are assigned ascending). </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af6e38efc9c90b715b66a0b11ccfb6ee5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_planes</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a set of halfspaces to the plotter. </p>
+<p>Note that the plotting of planes requires that at least one proper object (a set of points) is added as well, because the plotter needs to determine the plotting dimensions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_planes</td><td>The planes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An id referencing the last plane. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af707083cfce0adf7d6e88022efae3a99"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_plane</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a halfspace to the plotter. </p>
+<p>Note that the plotting of planes requires that at least one proper object (a set of points) is added as well, because the plotter needs to determine the plotting dimensions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_plane</td><td>The plane. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An id referencing the plane. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af6084a89f7e0b18be7141234f684d492"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addPoint </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a point to the plotter. </p>
+<p>The point, in contrast to an object will be plotted as a cross. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An id referencing the point. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa499a644438df4e310fac48b8637f831"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addPoints </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>_points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds points to the plotter. </p>
+<p>The points will be plotted as crosses. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_points</td><td>The points. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An id referencing the last passed point. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afa6b73d2194f0fa8b40da351f4d356ab"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addVector </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a vector to the plotter. </p>
+<p>A vector will be plotted as an arrow starting from the origin. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_vector</td><td>The vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ae7fa3662c313daceb371c9e115d14e9d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::rSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Provides a reference to the current plotting settings such that they can be changed in place. </p>
+<dl class="section return"><dt>Returns</dt><dd>A reference to the current plotting settings. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a52ef9dfe2f19bc99090df94327f206fd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::setFilename </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>_filename</em> = <code>&quot;out&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the filename. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_filename</td><td>The filename (default = "out"). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a1fca511abc240a333e905d4431627119"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::setObjectColor </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t&#160;</td>
+          <td class="paramname"><em>_color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the object color. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_id</td><td>The identifier referencing the object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_color</td><td>The color. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_HPolytope_8cpp-example.html#a2">example_HPolytope.cpp</a>.</dd>
+</dl>
+</div>
+</div>
+<a class="anchor" id="a7d25a45e3dc66139c2e8ad85f2ee685c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::settings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the current plotting settings struct. </p>
+<dl class="section return"><dt>Returns</dt><dd>The current settings. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae70e9f2612ee938eebbdf278b6f79866"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::updateSettings </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td>
+          <td class="paramname"><em>_settings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overrides the current plotting settings with the passed ones. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_settings</td><td>The new settings. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/util/<a class="el" href="Plotter_8h_source.html">Plotter.h</a></li>
 </ul>
 </div><!-- contents -->

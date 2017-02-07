@@ -32,5 +32,6 @@ var searchData=
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html',1,'hypro']]],
   ['round',['round',['../namespacehypro.html#a82eb07c259552e80da49d1e297c5d5af',1,'hypro']]],
   ['rpoint',['rPoint',['../classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
+  ['rsettings',['rSettings',['../classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d',1,'hypro::Plotter']]],
   ['rvertices',['rVertices',['../classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge']]]
 ];

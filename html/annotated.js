@@ -6,6 +6,7 @@ var annotated =
       [ "NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4" ]
     ] ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
+    [ "parser", "namespaceparser.html", null ],
     [ "plotting", "namespaceplotting.html", null ],
     [ "reachability", "namespacereachability.html", null ],
     [ "statistics", "namespacestatistics.html", null ],

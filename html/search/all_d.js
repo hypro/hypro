@@ -1,10 +1,13 @@
 var searchData=
 [
+  ['parser',['parser',['../namespaceparser.html',1,'']]],
   ['pca_2eh',['pca.h',['../pca_8h.html',1,'']]],
   ['permutator',['Permutator',['../classhypro_1_1Permutator.html',1,'hypro']]],
   ['pivot',['pivot',['../classhypro_1_1Dictionary.html#a080e5972f02a5f9dadda11cc138bafcd',1,'hypro::Dictionary']]],
   ['plot2d',['plot2d',['../classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8',1,'hypro::Plotter']]],
+  ['plotgen',['plotGen',['../classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30',1,'hypro::Plotter']]],
   ['plotter',['Plotter',['../classhypro_1_1Plotter.html',1,'hypro']]],
+  ['plottex',['plotTex',['../classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed',1,'hypro::Plotter']]],
   ['plotting',['plotting',['../namespaceplotting.html',1,'']]],
   ['point',['point',['../classhypro_1_1Vertex.html#abcd889574cdadf04c39ce65e3348d81f',1,'hypro::Vertex::point()'],['../classhypro_1_1Point.html#a764571d3fa4b52b390fb16027da75bd6',1,'hypro::Point::Point()'],['../classhypro_1_1Point.html#a6fc3e5b6c9f32a1b5b21d00edeb4c881',1,'hypro::Point::Point(const Number &amp;_value)'],['../classhypro_1_1Point.html#a0421d20611b10bbf74988a4528b20ae9',1,'hypro::Point::Point(std::initializer_list&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#aab86ea646e26c7f1a8662255cb04ce29',1,'hypro::Point::Point(std::vector&lt; Number &gt; _coordinates)'],['../classhypro_1_1Point.html#ae19c1e0062f7d973008ae995316e6ea2',1,'hypro::Point::Point(const vector_t&lt; Number &gt; &amp;_vector)'],['../classhypro_1_1Point.html#a5d224d568c762d46fd3d07b1ade676c0',1,'hypro::Point::Point(vector_t&lt; Number &gt; &amp;&amp;_vector)'],['../classhypro_1_1Point.html#af9e6ddf3b32a8831844e9cb97f1ee8a4',1,'hypro::Point::Point(const Point&lt; Number &gt; &amp;_p)'],['../classhypro_1_1Point.html#a63b02778fc0c9f356395ed81d30771af',1,'hypro::Point::Point(Point&lt; Number &gt; &amp;&amp;_p)'],['../classhypro_1_1Point.html#a9a8f96a49facbcc5706202e9a0e37b19',1,'hypro::Point::Point(const Point&lt; F &gt; &amp;_p)']]],
   ['point',['Point',['../classhypro_1_1Point.html',1,'hypro']]],
