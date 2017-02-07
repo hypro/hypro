@@ -1,6 +1,6 @@
 #include "../src/hypro/representations/GeometricObject.h"
 
-int main(int argc, char** argv) {
+int main() {
 
 	using namespace hypro;
 	using Number = mpq_class;

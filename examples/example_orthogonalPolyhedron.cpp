@@ -15,7 +15,7 @@
 using namespace hypro;
 using namespace carl;
 
-int main(int argc, char** argv) {
+int main() {
 
 	VertexContainer<double> container;
 	container.insert(Point<double>({3,0}), true);
@@ -46,8 +46,8 @@ int main(int argc, char** argv) {
 	container2.insert(Point<double>({8,2}), false);
 	container2.insert(Point<double>({8,8}), false);
 
-	OrthogonalPolyhedron<double, Converter<double>> test(container);
-	OrthogonalPolyhedron<double, Converter<double>> test2(container2);
+	OrthogonalPolyhedron<double> test(container);
+	OrthogonalPolyhedron<double> test2(container2);
 
 	// std::cout << "Color Test:" << std::endl;
 	// Point<double> p1({6,4});
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
 	std::cout << "Plotting." << std::endl;
 	hypro::Plotter<double>& plotter = hypro::Plotter<double>::getInstance();
 	plotter.setFilename("ortho");
-	gnuplotSettings settings;
+	plotting::gnuplotSettings settings;
 	settings.fill = true;
 	plotter.updateSettings(settings);
 
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 	// 	std::cout << vertex << std::endl;
 	// }
 
-	OrthogonalPolyhedron<double, Converter<double>> intersection = test.intersect(test2);
+	OrthogonalPolyhedron<double> intersection = test.intersect(test2);
 	for(const auto& vertex : intersection.vertices()) {
 		std::cout << vertex << std::endl;
 	}
@@ -98,8 +98,8 @@ int main(int argc, char** argv) {
 	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
 	// unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
 
-	plotter.setObjectColor(intersectionObject, colors[orange]);
-	//plotter.setObjectColor(unionObject, colors[orange]);
+	plotter.setObjectColor(intersectionObject, plotting::colors[plotting::orange]);
+	//plotter.setObjectColor(unionObject, plotting::colors[plotting::orange]);
 
 	plotter.plot2d();
 	*/

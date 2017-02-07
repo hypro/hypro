@@ -5,16 +5,10 @@
  * @version 2015-09-09
  */
 
-#include <iostream>
-#include <unordered_map>
-#include <fstream>
-#include <string>
-#include <map>
-#include <sys/time.h>
-
 #include "../src/hypro/config.h"
 #include "../src/hypro/util/Plotter.h"
 #include "../src/hypro/representations/GeometricObject.h"
+#include <sys/time.h>
 
 
 typedef int Number;
@@ -59,18 +53,18 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
     }
 
     unsigned z1 = plotter.addObject(zonoExample.vertices());
-    plotter.setObjectColor(z1, hypro::colors[hypro::red]);
+    plotter.setObjectColor(z1, hypro::plotting::colors[hypro::plotting::red]);
     unsigned z2 = plotter.addObject(zonoExample2.vertices());
-    plotter.setObjectColor(z2, hypro::colors[hypro::orange]);
+    plotter.setObjectColor(z2, hypro::plotting::colors[hypro::plotting::orange]);
     unsigned z3 = plotter.addObject(zonoExample.unite(zonoExample2).vertices());
-    plotter.setObjectColor(z3, hypro::colors[hypro::green]);
+    plotter.setObjectColor(z3, hypro::plotting::colors[hypro::plotting::green]);
 
     hypro::vector_t<Number> d = hypro::vector_t<Number>(2);
     d << 0, -1;
 
     hypro::Zonotope<Number> intersectionResult = zonoExample2.intersectHalfspace(hypro::Halfspace<Number>(d, -2));
     unsigned z4 = plotter.addObject(intersectionResult.vertices());
-	plotter.setObjectColor(z4, hypro::colors[hypro::lila]);
+	plotter.setObjectColor(z4, hypro::plotting::colors[hypro::plotting::lila]);
 
 	// Provoke intersection with a line by intersecting with two halfspaces.
 	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>(2,2);
@@ -79,7 +73,7 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
 	constants << -6,6;
 	hypro::Zonotope<Number> intersectionResult2 = zonoExample.unite(zonoExample2).intersectHalfspaces(constraints,constants);
     unsigned z5 = plotter.addObject(intersectionResult2.vertices());
-	plotter.setObjectColor(z5, hypro::colors[hypro::petrol]);
+	plotter.setObjectColor(z5, hypro::plotting::colors[hypro::plotting::petrol]);
 
 	hypro::matrix_t<Number> A = hypro::matrix_t<Number>(2,2);
 	A << 1,0.01,0,1;
@@ -89,7 +83,7 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
 
 	hypro::Zonotope<Number> linearTrafoResult = zonoExample.affineTransformation(A,b);
 	unsigned z6 = plotter.addObject(linearTrafoResult.vertices());
-	plotter.setObjectColor(z6, hypro::colors[hypro::blue]);
+	plotter.setObjectColor(z6, hypro::plotting::colors[hypro::plotting::blue]);
 
     plotter.plot2d();
     plotter.plotTex();

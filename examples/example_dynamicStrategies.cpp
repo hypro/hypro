@@ -9,7 +9,7 @@
 #include "../src/hypro/parser/flowstar/flowstarParser.h"
 #include "../src/hypro/util/Plotter.h"
 
-int main(int argc, char** argv) {
+int main() {
 	typedef mpq_class Number;
 	typedef hypro::Box<Number> boxValuation;
 	typedef hypro::SupportFunction<Number> sfValuation;
@@ -38,28 +38,28 @@ int main(int argc, char** argv) {
 	hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = ha.localBadStates();
 	for(const auto& bsPair : badStateMapping) {
 		unsigned bs = plotter.addObject(hpValuation(bsPair.second.set.first, bsPair.second.set.second).vertices());
-		plotter.setObjectColor(bs, hypro::colors[hypro::red]);
+		plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);
 	}
 
 	// flowpipe plotting
 	for(const auto& flowpipe : boxFlowpipes){
 		for(const auto& segment : flowpipe.second){
 			unsigned tmp = plotter.addObject(segment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[hypro::orange]);
+			plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::orange]);
 		}
 	}
 
 	for(const auto& flowpipe : hpFlowpipes){
 		for(const auto& segment : flowpipe.second){
 			unsigned tmp = plotter.addObject(segment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[hypro::lila]);
+			plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::lila]);
 		}
 	}
 
 	for(const auto& flowpipe : sfFlowpipes){
 		for(const auto& segment : flowpipe.second){
 			unsigned tmp = plotter.addObject(segment.vertices());
-			plotter.setObjectColor(tmp, hypro::colors[hypro::green]);
+			plotter.setObjectColor(tmp, hypro::plotting::colors[hypro::plotting::green]);
 		}
 	}
 

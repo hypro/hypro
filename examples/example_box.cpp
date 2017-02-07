@@ -67,8 +67,8 @@ int main()
 	unsigned cutted = plotter.addObject(testbox2.satisfiesHalfspaces(normal, offset).second.vertices());
 
 	// set colors and plot (gnuplot).
-	plotter.setObjectColor(original, hypro::colors[hypro::green]);
-	plotter.setObjectColor(cutted, hypro::colors[hypro::red]);
+	plotter.setObjectColor(original, hypro::plotting::colors[hypro::plotting::green]);
+	plotter.setObjectColor(cutted, hypro::plotting::colors[hypro::plotting::red]);
 	plotter.plot2d();
 
 	return 0;

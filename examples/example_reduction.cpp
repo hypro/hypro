@@ -13,7 +13,7 @@
 
 using namespace hypro;
 
-int main(int argc, char const *argv[])
+int main()
 {
 	typedef double Number;
 

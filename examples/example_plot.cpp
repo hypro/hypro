@@ -13,7 +13,7 @@
 
 using namespace hypro;
 
-int main(int argc, char** argv) {
+int main() {
 
 	#ifdef USE_CLN_NUMBERS
 	typedef cln::cl_RA Number;

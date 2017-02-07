@@ -7,19 +7,14 @@
  */
 
 #include "../src/hypro/representations/GeometricObject.h"
-#include <cstdlib>
+#include "../src/hypro/util/Plotter.h"
 #include "../src/hypro/config.h"
 #include <chrono>
-#include <set>
-#include "../src/hypro/util/helperFunctions.h"
-
-#include "../src/hypro/representations/conversion/Converter.h"
-#include "../src/hypro/util/Plotter.h"
 
 using namespace hypro;
 using namespace carl;
 
-int main(int argc, char const *argv[])
+int main()
 {
 	typedef mpq_class Number;
         typedef std::chrono::high_resolution_clock clock;

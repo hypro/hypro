@@ -3,8 +3,8 @@
 
 int main()
 {
-	FATAL("Test");
-	TRACE("Trace Test");
-	DEBUG("Debug Test");
+	FATAL("hypro.examples","Test");
+	TRACE("hypro.examples","Trace Test");
+	DEBUG("hypro.examples","Debug Test");
 	COUT("Test" << std::endl);
 }

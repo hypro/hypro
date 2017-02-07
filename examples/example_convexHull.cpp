@@ -2,7 +2,7 @@
 #include "../src/hypro/datastructures/Point.h"
 #include "../src/hypro/algorithms/convexHull/ConvexHull.h"
 
-int main(int argc, char** argv) {
+int main() {
 
 	using Number = mpq_class;
 

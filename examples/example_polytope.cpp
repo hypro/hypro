@@ -13,7 +13,7 @@
 #include "../src/hypro/util/Plotter.h"
 #include "../src/hypro/datastructures/Point.h"
 
-int main(int argc, char** argv) {
+int main() {
 
 	typedef mpq_class number_t;
 
@@ -41,9 +41,9 @@ int main(int argc, char** argv) {
 	unsigned a = plotter.addObject(hpoly.vertices());
 	unsigned b = plotter.addObject(hpoly2.vertices());
 	unsigned c = plotter.addObject(addition.vertices());
-	plotter.setObjectColor(a, hypro::colors[hypro::green]);
-	plotter.setObjectColor(b, hypro::colors[hypro::red]);
-	plotter.setObjectColor(c, hypro::colors[hypro::orange]);
+	plotter.setObjectColor(a, hypro::plotting::colors[hypro::plotting::green]);
+	plotter.setObjectColor(b, hypro::plotting::colors[hypro::plotting::red]);
+	plotter.setObjectColor(c, hypro::plotting::colors[hypro::plotting::orange]);
 
 	plotter.plot2d();
 

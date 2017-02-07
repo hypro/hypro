@@ -4,8 +4,8 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.0001
-  time 0.13
+  fixed steps 0.001
+  time 0.2
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon x1,x2

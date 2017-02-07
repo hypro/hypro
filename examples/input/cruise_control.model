@@ -4,8 +4,8 @@ hybrid reachability
 
  setting
  {
-  fixed steps 2
-  time 100
+  fixed steps 0.1
+  time 10
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon v,x
@@ -16,7 +16,7 @@ hybrid reachability
   max jumps 5
   print on
  }
- 
+
  modes
  {
   l1
@@ -27,14 +27,14 @@ hybrid reachability
     x' = 0
     t' = 1
    }
-   
+
    inv
    {
     v in [15,40]
     t in [0,2.5]
    }
   }
-  
+
   l2
   {
    poly ode 1
@@ -43,13 +43,13 @@ hybrid reachability
     x' = 0
     t' = 0
    }
-   
+
    inv
    {
     v in [15,40]
    }
   }
-  
+
   l3
   {
    poly ode 1
@@ -58,13 +58,13 @@ hybrid reachability
     x' = 0
     t' = 0
    }
-   
+
    inv
    {
     v in [5,20]
    }
   }
-  
+
   l4
   {
    poly ode 1
@@ -73,14 +73,14 @@ hybrid reachability
     x' = 0
     t' = 0.5
    }
-   
+
    inv
    {
     v in [5,20]
     t in [0,1.3]
    }
   }
-  
+
   l5
   {
    poly ode 1
@@ -89,14 +89,14 @@ hybrid reachability
     x' = v
     t' = 0
    }
-   
+
    inv
    {
     v in [-15,15]
     x in [-500,500]
    }
   }
-  
+
   l6
   {
    poly ode 1
@@ -105,72 +105,72 @@ hybrid reachability
     x' = 0
     t' = 0
    }
-   
+
    inv
    {
     v in [-20,-5]
    }
   }
  }
-  
+
  jumps
  {
   l1 -> l2
   guard { t = 2.5 }
   reset { }
   parallelotope aggregation {}
-  
+
   l2 -> l4
   guard { t = 2.5 v in [15,16] }
   reset { t' := 0 }
   parallelotope aggregation {}
-  
+
   l3 -> l1
   guard { t = 1.3 v in [18,20] }
   reset { t' := 0 }
   parallelotope aggregation {}
-  
+
   l4 -> l3
   guard { t = 1.3  v in [5,20] }
   reset { }
   parallelotope aggregation {}
-  
+
   l1 -> l4
   guard { v in [15,16] }
   reset { t' := 0 }
   parallelotope aggregation {}
-  
+
   l4 -> l1
   guard { v in [18,20] }
   reset { t' := 0 }
   parallelotope aggregation {}
-  
+
   l4 -> l5
   guard { v in [5,11] }
   reset { x' := 0 }
   parallelotope aggregation {}
-  
+
   l5 -> l4
   guard { v in [13,15] }
   reset { t' := 0 }
   parallelotope aggregation {}
-  
+
   l3 -> l5
   guard { t = 1.3 v in [5,11] }
   reset { x' := 0 }
   parallelotope aggregation {}
-  
+
   l5 -> l6
   guard { v in [-15,-14] }
   reset {  }
   parallelotope aggregation {}
-  
+
   l6 -> l5
   guard { v in [-6,-5] }
   reset { x' := 0 }
   parallelotope aggregation {}
  }
- 
+
  init
  {
   l1
@@ -188,27 +188,27 @@ hybrid reachability
 # {
 #  x >= 146
 # }
-# 
+#
 # l2
 # {
 #  x >= 146
 # }
-# 
+#
 # l3
 # {
 #  x >= 146
 # }
-# 
+#
 # l4
 # {
 #  x >= 146
 # }
-# 
+#
 # l5
 # {
 #  x >= 146
 # }
-# 
+#
 # l6
 # {
 #  x >= 146

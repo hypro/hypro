@@ -5,17 +5,14 @@
  * Created on April 18, 2016, 3:39 PM
  */
 
-#include <cstdlib>
 #include "../src/hypro/config.h"
-#include <chrono>
-#include <set>
-#include "../src/hypro/util/helperFunctions.h"
 #include "../src/hypro/representations/GeometricObject.h"
+#include <chrono>
 
 using namespace hypro;
 using namespace carl;
 
-int main(int argc, char const *argv[])
+int main()
 {
 	typedef mpq_class Number;
         typedef std::chrono::high_resolution_clock clock;

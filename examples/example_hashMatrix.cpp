@@ -19,7 +19,7 @@ using namespace hypro;
 
 typedef double Number;
 
-int main(int argc, char** argv)
+int main()
 {
     // Just creates an empty Center
     vector_t<Number> vCenter = vector_t<Number>(3);

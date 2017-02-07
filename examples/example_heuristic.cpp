@@ -11,7 +11,7 @@
 
 using namespace hypro;
 
-int main(int argc, char const *argv[])
+int main()
 {
 	typedef double Number;
 
@@ -198,8 +198,6 @@ int main(int argc, char const *argv[])
   // init reduce_HPolytopes
   HPolytope<Number> reduce_from = nico;
 
-
-  unsigned dimension = reduce_from.dimension(); // set dimension for test object here
   bool volume=true;
   Number prevVolume=0;
 

@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 
 	// plotting
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	gnuplotSettings settings = plotter.settings();
+	plotting::gnuplotSettings settings = plotter.settings();
 	settings.keepAspectRatio = false;
 	settings.linewidth = 1.5;
 	plotter.updateSettings(settings);
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 	*/
 
 	//unsigned id = plotter.addObject(HPolytope<Number>(invariant,invariantConstants).vertices());
-	//plotter.setObjectColor(id, colors[red]);
+	//plotter.setObjectColor(id, plotting::colors[plotting::red]);
 
 	//std::cout << "Invariant: " << invariant << " <= " << invariantConstants << std::endl;
 
@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), elli1Eval[i].supportValue));
 	}
 	unsigned original = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(original, colors[green]);
+	plotter.setObjectColor(original, plotting::colors[plotting::green]);
         }
 
 
@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), elli2Eval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[orange]);
+	plotter.setObjectColor(sf, plotting::colors[plotting::orange]);
 	}
 	//{
 	//HPolytope<Number> tmp;
@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
 	//	tmp.insert(Halfspace<Number>(evaldirections.row(i), multiEvaledVerify[i].supportValue));
 	//}
 	//unsigned sf = plotter.addObject(tmp.vertices());
-	//plotter.setObjectColor(sf, colors[lila]);
+	//plotter.setObjectColor(sf, plotting::colors[plotting::lila]);
 	//}
 
 	{
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), minkEval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[blue]);
+	plotter.setObjectColor(sf, plotting::colors[plotting::blue]);
         }
         {
         HPolytope<Number> tmp;
@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), mink2Eval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[red]);
+	plotter.setObjectColor(sf, plotting::colors[plotting::red]);
 	//std::cout << "Object: " << std::endl << tmp << std::endl;
 	//std::cout << "Number vertices: " << tmp.vertices().size() << std::endl;
 	}
@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
 		tmp.insert(Halfspace<Number>(evaldirections.row(i), rounded1IntersectEval[i].supportValue));
 	}
 	unsigned sf = plotter.addObject(tmp.vertices());
-	plotter.setObjectColor(sf, colors[green]);
+	plotter.setObjectColor(sf, plotting::colors[plotting::green]);
 	std::cout << "Object: " << std::endl << tmp << std::endl;
 	std::cout << "Number vertices: " << tmp.vertices().size() << std::endl;
 	//std::cout << intersection << std::endl;

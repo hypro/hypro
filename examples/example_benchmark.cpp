@@ -12,6 +12,9 @@
 //#include <boost/program_options.hpp>
 #include <sys/wait.h>
 #include <signal.h>
+#ifdef HYPRO_USE_LACE
+#include <lace.h>
+#endif
 #define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>

@@ -11,7 +11,7 @@
 
 using namespace hypro;
 
-int main(int argc, char const *argv[])
+int main()
 {
 	typedef mpq_class Number;
 
@@ -31,9 +31,9 @@ int main(int argc, char const *argv[])
 	std::cout << boxTrafoed << std::endl;
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	unsigned obj1 = plotter.addObject(box.vertices());
+	plotter.addObject(box.vertices());
 	unsigned obj2 = plotter.addObject(boxTrafoed.vertices());
-	plotter.setObjectColor(obj2, colors[red]);
+	plotter.setObjectColor(obj2, plotting::colors[plotting::red]);
 
 	plotter.plot2d();
 

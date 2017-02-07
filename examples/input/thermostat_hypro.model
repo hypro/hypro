@@ -1,10 +1,11 @@
 hybrid reachability
 {
-	state var low, H_plc, H, high, global_time, cycle_time, Temp
+	state var cycle_time, global_time, Temp, low, H_plc, H, high
+
 	setting
 	{
 		fixed steps 0.01
-		time 2
+		time 20
 		remainder estimation 1e-5
 		identity precondition
 		gnuplot octagon global_time, Temp
@@ -12,11 +13,13 @@ hybrid reachability
 		cutoff 1e-12
 		precision 53
 		output thermostat
-		max jumps 5
+		max jumps 80
 		print on
 	}
+
 	modes
 	{
+
 		clock__switch_on__cycle__l2
 		{
 			poly ode 1
@@ -39,6 +42,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_on__cycle__l1
 		{
 			poly ode 1
@@ -61,6 +65,7 @@ hybrid reachability
 				H_plc = 1.0
 			}
 		}
+
 		clock__switch_on_in__cycle__l2
 		{
 			poly ode 1
@@ -82,6 +87,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_on_in__cycle__l1
 		{
 			poly ode 1
@@ -103,6 +109,7 @@ hybrid reachability
 				H_plc = 1.0
 			}
 		}
+
 		clock__switch_on_in__comm__l2
 		{
 			poly ode 1
@@ -123,6 +130,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_on_in__comm__l1
 		{
 			poly ode 1
@@ -143,6 +151,7 @@ hybrid reachability
 				H_plc = 1.0
 			}
 		}
+
 		clock__switch_off__cycle__l2
 		{
 			poly ode 1
@@ -165,6 +174,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_off__cycle__l1
 		{
 			poly ode 1
@@ -187,6 +197,7 @@ hybrid reachability
 				H_plc = 1.0
 			}
 		}
+
 		clock__switch_off_in__cycle__l2
 		{
 			poly ode 1
@@ -208,6 +219,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_off_in__cycle__l1
 		{
 			poly ode 1
@@ -229,6 +241,7 @@ hybrid reachability
 				H_plc = 1.0
 			}
 		}
+
 		clock__switch_off_in__comm__l2
 		{
 			poly ode 1
@@ -249,6 +262,7 @@ hybrid reachability
 				global_time >= 0.0
 			}
 		}
+
 		clock__switch_off_in__comm__l1
 		{
 			poly ode 1
@@ -270,17 +284,18 @@ hybrid reachability
 			}
 		}
 	}
+
 	jumps
 	{
 		clock__switch_off_in__comm__l1 -> clock__switch_off_in__comm__l2
-		guard {}
-		reset {}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
 		guard { Temp >= 23.0 }
-		reset {	low' := 1.0 high' := 1.0 H' := H_plc }
+		reset { low' := 1.0 high' := 1.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
@@ -297,7 +312,7 @@ hybrid reachability
 
 
 		clock__switch_off_in__comm__l2 -> clock__switch_off_in__comm__l1
-		guard { }
+		guard {  }
 		reset { }
 		parallelotope aggregation { }
 
@@ -333,8 +348,8 @@ hybrid reachability
 
 
 		clock__switch_off_in__cycle__l1 -> clock__switch_off_in__cycle__l2
-		guard {	}
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
@@ -345,185 +360,186 @@ hybrid reachability
 
 
 		clock__switch_off_in__cycle__l2 -> clock__switch_off_in__comm__l2
-		guard {	cycle_time = 1.0 }
-		reset {	cycle_time' := 0 H_plc' := H }
+		guard { cycle_time = 1.0 }
+		reset { cycle_time' := 0 H_plc' := H }
 		parallelotope aggregation { }
 
 
 		clock__switch_off_in__cycle__l2 -> clock__switch_off_in__cycle__l1
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l1 -> clock__switch_off__cycle__l2
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l1 -> clock__switch_off_in__cycle__l1
-		guard {	low = 1.0 }
-		reset {	}
+		guard { low = 1.0 }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l1 -> clock__switch_on_in__cycle__l1
-		guard {	low = 0.0 }
-		reset {	H' := 1	}
+		guard { low = 0.0 }
+		reset { H' := 1 }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l2 -> clock__switch_off__cycle__l1
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l2 -> clock__switch_off_in__cycle__l2
-		guard {	low = 1.0 }
-		reset {	}
+		guard { low = 1.0 }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_off__cycle__l2 -> clock__switch_on_in__cycle__l2
-		guard {	low = 0.0 }
-		reset {	H' := 1 }
+		guard { low = 0.0 }
+		reset { H' := 1 }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l1 -> clock__switch_on_in__comm__l2
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
-		guard {	Temp >= 23.0 }
-		reset {	low' := 1.0 high' := 1.0 H' := H_plc }
+		guard { Temp >= 23.0 }
+		reset { low' := 1.0 high' := 1.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
-		guard {	Temp >= 18.0 Temp <= 23.0 }
-		reset {	low' := 1.0	high' := 0.0 H' := H_plc }
+		guard { Temp >= 18.0 Temp <= 23.0 }
+		reset { low' := 1.0 high' := 0.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l1 -> clock__switch_on__cycle__l1
-		guard {	Temp <= 18.0 }
-		reset {	low' := 0.0 high' := 0.0 H' := H_plc }
+		guard { Temp <= 18.0 }
+		reset { low' := 0.0 high' := 0.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l2 -> clock__switch_on_in__comm__l1
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
-		guard {	Temp >= 23.0 }
-		reset {	low' := 1.0 high' := 1.0 H' := H_plc }
+		guard { Temp >= 23.0 }
+		reset { low' := 1.0 high' := 1.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
-		guard {	Temp >= 18.0 Temp <= 23.0 }
-		reset {	low' := 1.0 high' := 0.0 H' := H_plc }
+		guard { Temp >= 18.0 Temp <= 23.0 }
+		reset { low' := 1.0 high' := 0.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__comm__l2 -> clock__switch_on__cycle__l2
-		guard {	Temp <= 18.0 }
-		reset {	low' := 0.0 high' := 0.0 H' := H_plc }
+		guard { Temp <= 18.0 }
+		reset { low' := 0.0 high' := 0.0 H' := H_plc }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__comm__l2
-		guard {	cycle_time = 1.0 }
-		reset {	cycle_time' := 0 H_plc' := H }
+		guard { cycle_time = 1.0 }
+		reset { cycle_time' := 0 H_plc' := H }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__comm__l1
-		guard {	cycle_time = 1.0 }
-		reset {	cycle_time' := 0 H_plc' := H }
+		guard { cycle_time = 1.0 }
+		reset { cycle_time' := 0 H_plc' := H }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l1 -> clock__switch_on_in__cycle__l2
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__comm__l1
-		guard {	cycle_time = 1.0 }
-		reset {	cycle_time' := 0 H_plc' := H }
+		guard { cycle_time = 1.0 }
+		reset { cycle_time' := 0 H_plc' := H }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__comm__l2
-		guard {	cycle_time = 1.0 }
-		reset {	cycle_time' := 0 H_plc' := H }
+		guard { cycle_time = 1.0 }
+		reset { cycle_time' := 0 H_plc' := H }
 		parallelotope aggregation { }
 
 
 		clock__switch_on_in__cycle__l2 -> clock__switch_on_in__cycle__l1
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l1 -> clock__switch_on__cycle__l2
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l1 -> clock__switch_off_in__cycle__l1
-		guard {	high = 1.0 }
-		reset {	H' := 0 }
+		guard { high = 1.0 }
+		reset { H' := 0 }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l1 -> clock__switch_on_in__cycle__l1
-		guard {	high = 0.0 }
-		reset {	}
+		guard { high = 0.0 }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l2 -> clock__switch_on__cycle__l1
-		guard { }
-		reset {	}
+		guard {  }
+		reset { }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l2 -> clock__switch_off_in__cycle__l2
-		guard {	high = 1.0 }
-		reset {	H' := 0 }
+		guard { high = 1.0 }
+		reset { H' := 0 }
 		parallelotope aggregation { }
 
 
 		clock__switch_on__cycle__l2 -> clock__switch_on_in__cycle__l2
-		guard {	high = 0.0 }
-		reset {	}
+		guard { high = 0.0 }
+		reset { }
 		parallelotope aggregation { }
 
 
 	}
+
 	init
 	{
 		clock__switch_on_in__comm__l1
 		{
-			Temp in [20.0,20.0]
 			H in [1.0,1.0]
 			cycle_time in [0.0,0.0]
 			global_time in [0.0,0.0]
 			H_plc in [1.0,1.0]
 			high in [0.0,0.0]
 			low in [1.0,1.0]
+			Temp in [20.0,20.0]
 		}
 
 	}

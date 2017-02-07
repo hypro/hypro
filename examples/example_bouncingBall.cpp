@@ -127,9 +127,7 @@ int main()
 	boxMat(3,1) = Number(-1);
 
 	// create initial state.
-	RawState<Number> initialState;
-	initialState.location = loc1;
-	initialState.set = std::make_pair(boxMat, boxVec);
+	RawState<Number> initialState(loc1, std::make_pair(boxMat, boxVec));
 	bBallAutomaton.addInitialState(initialState);
 
 	// vector of sets to collect flowpipes (which are again a vector of sets).
