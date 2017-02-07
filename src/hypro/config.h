@@ -20,6 +20,21 @@ extern "C" {
  * \brief The most general namespace for the HyPro library.
  */
 
+/**
+ * \namespace parser
+ * \brief Namespace holding parsing related code and structs.
+ */
+
+/**
+ * \namespace plotting
+ * \brief Namespace holding plotting related code and structs.
+ */
+
+/**
+ * \namespace reachability
+ * \brief Namespace holding reachability analysis related code and structs.
+ */
+
 // Do we eliminate dimensions according to a dynamic heuristic.
 #define DYNAMICHEURISTIC 0
 
