@@ -19,23 +19,6 @@ notifications:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
 sudo: required
-dist: trusty
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.6
-      - llvm-toolchain-precise-3.7
-      - llvm-toolchain-precise-3.8
-      #- sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main' key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-    packages:
-      #- g++-4.9
-      - g++-5
-      - g++-6
-      - clang-3.6
-      - clang-3.7
-      - clang-3.8
 
 matrix:
   include:
@@ -43,33 +26,29 @@ matrix:
     #  compiler: gcc
     #  env: COMPILER=g++-4.9
     - os: linux
+      dist: trusty
       compiler: gcc
       env: COMPILER=g++-5
     - os: linux
+      dist: trusty
       compiler: gcc
       env: COMPILER=g++-6 FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
+      dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.6
     - os: linux
+      dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.7
     - os: linux
+      dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.8
 
 before_install:
-  - sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
-  - sudo apt-get update
-  - sudo apt-get install cmake libboost1.55-all-dev libeigen3-dev libglpk-dev doxygen graphviz
+  - cd .travis/ && source setupTravis.sh && cd ../
   - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make lib_carl
-
-install:
-  - cd ${TRAVIS_BUILD_DIR}
-  - wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
-  - tar xf lcov_1.11.orig.tar.gz
-  - sudo make -C lcov-1.11/ install
-  - gem install coveralls-lcov
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
