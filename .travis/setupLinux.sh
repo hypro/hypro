@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -ev
-
 #sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
 sudo apt-get update
 
