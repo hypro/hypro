@@ -44,4 +44,6 @@ if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
   tar xf lcov_1.11.orig.tar.gz
   sudo make -C lcov-1.11/ install
   gem install coveralls-lcov
+  cd ${TRAVIS_BUILD_DIR}
+  lcov --directory . --zerocounters
 fi
