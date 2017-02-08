@@ -288,6 +288,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
 
+	// For a rough estimate, insert box intervals into normal and check, whether the box is fully, partially or not contained.
 	for(unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex) {
 		carl::Interval<double> evaluatedBox = carl::Interval<double>(0);
 		for(unsigned d = 0; d < _mat.cols(); ++d){
@@ -298,7 +299,8 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		//std::cout << __func__ << " Evaluated box: " << evaluatedBox << std::endl;
 		//std::cout << __func__ << " Distance: " << carl::convert<double,double>(_vec(rowIndex)) << std::endl;
 
-		if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
+		//if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
+		if( evaluatedBox.lower() > _vec(rowIndex)){
 			return std::make_pair(false,Empty());
 		}
 
@@ -325,6 +327,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	}
 	assert(newPlanes.rows() == newDistances.rows());
 	BoxT<double,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
+	assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
 	return std::make_pair(true, tmpBox);
 }
